@@ -6,15 +6,13 @@ Before EMQX 5.0, this feature is called **Proxy Subscription**.
 
 ## Configure Auto Subscribe via Dashboard
 
-You can configure the auto subscribe feature using EMQX Dashboard.
-
 1. Open EMQX Dashboard. In the left navigation menu, click **Configuration**-> **MQTT**. 
 
 2. On the **MQTT** page, click the **Extension** tab. Select the **Auto Subscribe** tab.
 
 3. Click the **Add** button at the upper right corner. 
 
-   1. In the pop-up dialog box, type the test topic `a/1` in the **Topic** text box. Leave other settings as default. 
+3. In the pop-up dialog box, type the test topic `a/1` in the **Topic** text box. Leave other settings as default. 
 
    - **Topic**: Type the topic that is automatically subscribed for the client. 
 
@@ -28,9 +26,9 @@ You can configure the auto subscribe feature using EMQX Dashboard.
 
      <img src="./assets/config-auto-subscribe-dashboard.png" alt="config-auto-subscribe-dashboard" style="zoom:35%;" />
 
-   2. Click the **Add** button on the dialogue box. The auto subscribe topic "a/1" is created successfully.
+   Click the **Add** button on the dialogue box. The auto subscribe topic "a/1" is created successfully.
 
-      <img src="./assets/auto-sub-success.png" alt="auto-sub-success" style="zoom:45%;" />
+   <img src="./assets/auto-sub-success.png" alt="auto-sub-success" style="zoom:45%;" />
 
 ## Configure Auto Subscribe via Configuration File
 
@@ -122,15 +120,17 @@ nl: 0
 
 :::tip Prerequisite
 
-- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x) 
+- Basic publishing and subscribing operations using [MQTT X Client](./publish-and-subscribe.md) 
 
 :::
 
 1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named "Subscriber".
 
-   ::: tip Tip
+   - The localhost `127.0.0.1` is used as an example in this demonstration.
 
-   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md/#mqtt-x-client).
+   ::: tip
+
+   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md).
 
    :::
 
@@ -144,9 +144,9 @@ nl: 0
 
    - The client "Publisher" also receives the message as it is also a new connection. 
 
-     :::tip Tip
+     :::tip
 
-     In the Pub/Sub pattern, a client can be both sender and subscriber.
+     In the publish/subscribe pattern, a client can be both sender and subscriber.
      
      :::
 
@@ -160,7 +160,7 @@ nl: 0
 
 :::tip Prerequisite
 
-- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x) 
+- Basic publishing and subscribing operations using [MQTT X CLI](./publish-and-subscribe.md) 
 
 :::
 

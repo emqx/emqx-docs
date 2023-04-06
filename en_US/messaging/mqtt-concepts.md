@@ -1,14 +1,14 @@
 # MQTT Core Concepts
 
-Message Queue Telemetry Transport (MQTT) is the most commonly used lightweight messaging protocol for the Internet of Things (IoT). The protocol is based on a publish/subsribe (Pub/Sub) pattern for message communication. It allows devices and applications to exchange data in real-time using a simple and efficient message format, which minimizes network overhead and reduces power consumption. 
+MQTT (Message Queue Telemetry Transport) is the most commonly used lightweight messaging protocol for the IoT (Internet of Things). The protocol is based on a publish/subsribe (pub/sub) pattern for message communication. It allows devices and applications to exchange data in real-time using a simple and efficient message format, which minimizes network overhead and reduces power consumption. 
 
 Served as an MQTT messaging platform, EMQX Enterprise provides full support to a complete set of MQTT messaging features. This section provides brief introductions to the core conecpts of MQTT. You can learn further about each concept and more about MQTT by following the links to the [MQTT blog series](https://www.emqx.com/en/blog/category/mqtt). 
 
 ## Publish/Subscribe Pattern
 
-The protocol is event driven and connects devices using the Pub/Sub pattern. The sender (Publisher) and the receiver (Subscriber) communicate via Topics and are decoupled from each other. The connection between them is handled by the MQTT broker who routes and filters all incoming messages and distributes them correctly to the Subscribers.
+The protocol is event driven and connects devices using the pub/sub pattern. Different from the traditional client/server pattern, it is a messaging pattern in which senders (publishers) do not send messages directly to specific receivers (subscribers). Instead, publishers categorize messages into topics, and subscribers subscribe to specific topics that they are intereste in. When a publisher sends a message to a topic, the MQTT broker routes and filters all incoming messages, and then delivers the message to all the subscribers that have expressed interest in that topic.
 
-The publisher and subscriber do not need to know each other's existence. Their sole connection is based on a predetermined agreement regarding the message. The Pub/sub pattern enables flexible message communication, as subscribers and publishers can be dynamically added or removed as needed. It also makes the implementation of message broadcasting, multicasting, and unicasting more easier. 
+The publisher and subscriber are decoupled from each other and do not need to know each other's existence. Their sole connection is based on a predetermined agreement regarding the message. The Pub/sub pattern enables flexible message communication, as subscribers and publishers can be dynamically added or removed as needed. It also makes the implementation of message broadcasting, multicasting, and unicasting more easier. 
 
 For more information on the Pub/Sub pattern, see [Introduction to MQTT Publish-subscribe Pattern](https://www.emqx.com/en/blog/mqtt-5-introduction-to-publish-subscribe-model).
 

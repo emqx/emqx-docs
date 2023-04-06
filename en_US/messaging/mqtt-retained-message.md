@@ -1,11 +1,13 @@
 # Retained Message
 
-The EMQX implements the retained message feature of MQTT. You can use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to test this messaging service in EMQX. This section introduces how to publish a retained message and how the retained message is received. 
+The EMQX implements the retained message feature of MQTT. You can flag one message published under certain topic as `Retained` and save them as persistent messages on the EMQX server. When any new subscriber subscribes to a topic that matches the topic of a retained message, they immediately receive that message, even if it was published before they subscribed to the topic.
+
+You can use client tools to test this messaging service in EMQX. This section introduces how to use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to simulate clients and test how a retained message is published and received.
 
 :::tip Prerequisites
 
 - Knowledge about MQTT [Retained Message](./mqtt-concepts.md/#retained-message)
-- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x)
+- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md)
 
 :::
 
@@ -13,13 +15,15 @@ The EMQX implements the retained message feature of MQTT. You can use the [MQTT 
 
 1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named "Demo".
 
-   ::: tip Tip
+   - The localhost `127.0.0.1` is used as an example in this demonstration.
 
-   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md/#mqtt-x-client).
+   ::: tip
+
+   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md).
 
    :::
 
-   <img src="./assets/New-connection-fill-parameters.png" alt="New-connection-fill-parameters" style="zoom:35%;" />
+   <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
 
 3. After the success connection, type the topic heading `sensor/t1` in the text box and compose the message as shown in the screenshot. Click the send button. A message under the topic `sensor/t1` is send to the dialogue box.
 
@@ -27,7 +31,7 @@ The EMQX implements the retained message feature of MQTT. You can use the [MQTT 
 
 4. Publish two retained messages under the topic `sensor/t2`. 
 
-   1. Type the topic as `sensor/t2`. Type the first message as `1`. Select `Retain`. Click the send button.
+   1. Type the topic as `sensor/t2`. Type the first message as `1`. Select **Retain**. Click the send button.
    2. Type the second message as `2`. Click the send button.
 
    <img src="./assets/Publish-message-2.png" alt="Publish-message-2" style="zoom:35%;" />

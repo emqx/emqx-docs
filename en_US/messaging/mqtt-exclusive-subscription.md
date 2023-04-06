@@ -36,20 +36,22 @@ mqtt.exclusive_subscription {
 
 ::: tip Prerequisites
 
-- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x).
+- Basic publishing and subscribing operations using [MQTT X Client](./publish-and-subscribe.md)
 - Exclusive subscription is enabled.
 
 :::
 
 1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named "Demo".
 
-   ::: tip Tip
+   - The localhost `127.0.0.1` is used as an example in this demonstration.
+
+   ::: tip
 
    For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md).
 
    :::
 
-   <img src="./assets/New-connection-fill-parameters.png" alt="New-connection-fill-parameters" style="zoom:35%;" />
+   <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
 
 2. Create another 2 MQTT connections. Configure them as "Subscriber1" and "Subscriber2" respectively.
 
@@ -67,7 +69,7 @@ mqtt.exclusive_subscription {
 
 ::: tip Prerequisites
 
-- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x)
+- Basic publishing and subscribing operations using [MQTT X CLI](./publish-and-subscribe.md)
 - Exclusive subscription is enabled.
 
 :::

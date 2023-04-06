@@ -1,21 +1,25 @@
 # Will Message
 
-The EMQX implements the will message feature of MQTT. You can use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to test this messaging service in EMQX. This section introduces how to set a will message when a client establishes the connection to the server and how the will message is received by another client.
+The EMQX implements the will message feature of MQTT. If a will message is set for a client, EMQX sends the message to relevant subscribers when the client is accidentally disconnected, so that the subscribers can be informed and update the client status.
+
+You can use client tools to test this messaging service in EMQX. This section introduces how to use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to simulate clients and test how a will message is published and received.
 
 :::tip Prerequisites
 
 - Knowledge about MQTT [Will Message](./mqtt-concepts.md/#will-message)
-- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x)
+- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md)
 
 :::
 
-## Set Will Message with MQTT X Client
+## Publish Will Message with MQTT X Client
 
 1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named "Demo".
 
-   ::: tip Tip
+   - The localhost `127.0.0.1` is used as an example in this demonstration.
 
-   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md/#mqtt-x-client).
+   ::: tip
+
+   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md).
 
    :::
 
@@ -35,7 +39,7 @@ The EMQX implements the will message feature of MQTT. You can use the [MQTT X Cl
 
 2. Create a new connection for another client. Type the connection name as `Subscriber`.
 
-3. Click **+ New Subscription** in the **Subscribe** pane. Type `offline` in the **Topic** textbox. Leave the other settings as default. Click the **Confirm** button.
+3. Click **New Subscription** in the **Subscribe** pane. Type `offline` in the **Topic** textbox. Leave the other settings as default. Click the **Confirm** button.
 
    <img src="./assets/Subscribe-will-message.png" alt="Subscribe-will-message" style="zoom:35%;" />
 
@@ -49,7 +53,7 @@ The EMQX implements the will message feature of MQTT. You can use the [MQTT X Cl
 
    
 
-## Set Will Message with MQTT X CLI
+## Publish Will Message with MQTT X CLI
 
 1. Initiate a connection request with one client. Set the topic to `t/1` and payload to `A will message from MQTTX CLI`:
 

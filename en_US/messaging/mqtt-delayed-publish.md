@@ -20,8 +20,6 @@ Example:
 
 ## Configure Delayed Publish via Dashboard
 
-You can configure the delayed publish feature using EMQX Dashboard.
-
 1. Open EMQX Dashboard. In the left navigation menu, click **Configuration**-> **MQTT**. 
 
 2. On the **MQTT** page, click the **Extension**. Select the **Delayed Publish** tab.
@@ -33,7 +31,7 @@ You can configure the delayed publish feature using EMQX Dashboard.
 
    <img src="./assets/configure-delayed-publish-dashboard.png" alt="configure-delayed-publish-dashboard" style="zoom:45%;" />
 
-## Configure Delayed Message via Configuration File
+## Configure Delayed Publish via Configuration File
 
 Add the following configuration to the configuration file.
 
@@ -52,19 +50,21 @@ delayed {
 
 :::tip Prerequisite
 
-- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x) 
+- Basic publishing and subscribing operations using [MQTT X Client](./publish-and-subscribe.md) 
 
 :::
 
 1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named "Demo".
 
-   ::: tip Tip
+   - The localhost `127.0.0.1` is used as an example in this demonstration.
 
-   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md/#mqtt-x-client).
+   ::: tip 
+
+   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md).
 
    :::
 
-   <img src="./assets/New-connection-fill-parameters.png" alt="New-connection-fill-parameters" style="zoom:35%;" />
+   <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
 
 2. Create another MQTT connection. Configure it as a subscriber. 
 
@@ -90,7 +90,7 @@ delayed {
 
 ::: tip Prerequisite
 
-- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x) 
+- Basic publishing and subscribing operations using [MQTT X CLI](./publish-and-subscribe.md) 
 
 :::
 

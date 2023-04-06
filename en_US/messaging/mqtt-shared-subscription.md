@@ -1,25 +1,29 @@
 # Shared Subscription
 
-The EMQX implements the shared subscription feature of MQTT. You can use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to test this messaging service in EMQX. This section introduces how to create a shared subscription and how messages are received through a shared subscription. 
+The EMQX implements the shared subscription feature of MQTT. Shared subscription is a subscription mode to implement load balancing among multiple subscribers. Clients can be divided into multiple subscription groups, and messages are still forwarded to all subscription groups, but only one client within each subscription group receives the message at a time. You can add a `$share` prefix to the original topic to enable shared subscriptions for a group of subscribers.
+
+You can use client tools to test this messaging service in EMQX. This section introduces how to use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to simulate clients and test how messages are received through a shared subscription.
 
 :::tip Prerequisites
 
-- Knowledge about MQTT [Shared Subscription](./mqtt-concepts.md/#shared-subscription)
-- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x) 
+- Knowledge about MQTT [Shared Subscription](./mqtt-concepts.md)
+- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md) 
 
 :::
 
-## Create Shared Subscription with MQTT X Client
+## Try Shared Subscription with MQTT X Client
 
 1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named "Demo".
 
-   ::: tip Tip
+   - The localhost `127.0.0.1` is used as an example in this demonstration.
 
-   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md/#mqtt-x-client).
+   ::: tip 
+
+   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md).
 
    :::
 
-   <img src="./assets/New-connection-fill-parameters.png" alt="New-connection-fill-parameters" style="zoom:35%;" />
+   <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
 
 2. Click the **New Connection** to create 3 new connections with the **Name** set to `Subscriber1`, `Subscriber2` and `Subscriber3` respectively. Configure the new connections in the same way as described in Step 2.
 
@@ -56,7 +60,7 @@ When the message of the shared subscription is published, the EMQX server forwar
 
 :::
 
-## Create Shared Subscription with MQTT X CLI
+## Try Shared Subscription with MQTT X CLI
 
 1. Four subscribers are divided into 2 groups to subscribe to topic  `t/1`:
 
