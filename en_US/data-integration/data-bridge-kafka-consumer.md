@@ -20,7 +20,6 @@ The following steps guide you to create data bridge to Kafka in consumer mode.
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
-- Relevant Kafka topics should be created before creating the data bridge.
 
 :::
 

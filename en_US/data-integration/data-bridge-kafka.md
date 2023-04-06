@@ -1,10 +1,10 @@
 
 
-# Apache Kafka
+# Stream Data into Apache Kafka
 
 <!-- 提供一段简介，描述支数据桥接的基本工作方式、关键特性和价值，如果有局限性也应当在此处说明（如必须说明的版本限制、当前未解决的问题）。 -->
 
-Apache Kafka is a widely-used open-source distributed event streaming platform. EMQX's integration with Apache Kafka/Confluent presents our users with reliable bi-directional data transport and processing capability under high-throughput scenarios.
+[Apache Kafka](https://kafka.apache.org/) is a widely-used open-source distributed event streaming platform. EMQX's integration with Apache Kafka/Confluent presents our users with reliable bi-directional data transport and processing capability under high-throughput scenarios.
 
 Being a top IoT data infrastructure provider,  EMQX currently supports authenticating with Apache Kafka/Confluent via SASL/SCRAM or SASL/GSSAPI.
 
@@ -19,7 +19,6 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 <!-- 根据情况编写，包含必须的前置知识点、软件版本要求、需要预先创建/初始化的操作。 -->
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
-- Relevant Kafka topics should be created before creating the data bridge.
 
 <!-- 列举功能或性能方面的亮点，如支持批处理、支持异步模式、双向数据桥接，链接到对应的功能介绍章节。 -->
 
@@ -60,7 +59,7 @@ For detailed operation steps, you may refer to the [Quick Start section in Kafka
 
 ### Create Kafka Topics
 
-Create two topics in Kafka:  `testtopic-in` and `testtopic-out`
+Relevant Kafka topics should be created before creating the data bridge in EMQX. Use the command below to create two topics in Kafka:  `testtopic-in` and `testtopic-out`:
 
 ```bash
 bin/kafka-topics.sh --create --topic testtopic-in --bootstrap-server localhost:9092
@@ -68,13 +67,9 @@ bin/kafka-topics.sh --create --topic testtopic-in --bootstrap-server localhost:9
 bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:9092
 ```
 
-::: tip
-These topics must be created before we create the data bridge to Kafka.
-:::
-
 ### Configure Kafka Bridge via Dashboard
 
-There are two bridge roles for Kafka data bridge: Producer (sends messages to Kafka) and Consumer (receives messages from Kafka). The following steps guide you to create data bridge in either of the modes.
+The data bridge to Kafka takes two roles: Producer (sends messages to Kafka) and Consumer (receives messages from Kafka). The following steps guide you to create a data bridge in either of the modes.
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 
@@ -84,16 +79,16 @@ There are two bridge roles for Kafka data bridge: Producer (sends messages to Ka
 
    <img src="./assets/kafka_consumer/setup2.png" alt="setup2" style="zoom:67%;" />
 
-6. In **Bridge Role** field, select **Producer** or **Consumer**. 
+6. In **Bridge Role** field, select **Producer** or **Consumer**. Click the corresponding tabs for configuration of each role. 
    
    :::: tabs type:card
    
-   ::: tab Configure in Producer role
+   ::: tab Configure as Producer Role
    
-   - Fill the required fields (marked with an asterisk). 
-   - Input a name for the data bridge. Note: It should be a combination of upper/lower case letters or numbers.
+   - Fill in the required fields (marked with an asterisk). 
+   - Input a name for the data bridge. Note: It should be a combination of upper/lower case letters and numbers.
    - Input the connection information. Input **127.0.0.1:9092** for the **Bootstrap Hosts**. For the other fields set as the actual condition.
-   - **Source MQTT Topic**: The MQTT topics to create the data bridge for. Here we will input `t/#`, indicating all MQTT messages matching this topic will be sent to Kafka. You can also leave it blank, and create a rule to specify data to be sent to Kafka.
+   - **Source MQTT Topic**: Set the MQTT topics to create the data bridge. In this example, it is set to `t/#`, indicating all MQTT messages matching this topic will be sent to Kafka. You can also leave it blank, and create a [rule] to specify data to be sent to Kafka.
    - **Kafka Topic Name**: Input the Kafka topics we created before, that is, the  `testtopic-in`. Note: Variables are not supported here.
    - **Message Key**: Kafka message key. Insert a string here, either a plain string or a string containing placeholders (${var}).
    - **Message Value**: Kafka message value. Insert a string here, either a plain string or a string containing placeholders (${var}).
