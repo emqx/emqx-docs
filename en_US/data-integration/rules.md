@@ -6,7 +6,7 @@ The Rule Engine is EMQX's built-in data processing component, which works with [
 
 The Rule Engine is particularly useful when you need to transform or reroute incoming messages, for example, you can create rules that filter out irrelevant data, do transformations, and trigger alerts or notifications based on specific events or conditions.
 
-This chapter provides an in-depth exploration of the Rule Engine and its capabilities. A rule defines the data source and transformation, and then a set of actions that will be triggered every time when outputting a value.
+This chapter provides an in-depth exploration of the Rule Engine and its capabilities. A rule defines the data source and transformation, and a set of actions that will be triggered every time the rule outputs a value.
 
 ## What is the Rule Engine
 
