@@ -123,6 +123,78 @@ Message 3:
 }
 ```
 
+## More Examples
+
+The following example will also split a message into multiple messages. The `FOREACH` uses the JQ function to transform the input message's payload into an array. The `jq` function takes a JQ program as its first argument and the data to be processed by the JQ program as it's second argument. The JQ program in this example will transform the input message's payload into an array of objects with the following fields: `sensor_type`, `value`. The `DO` clause specifies that the `timestamp`, `clientid`, `sensor_type` and `value` fields should be included in the output message's payload. The `FROM` clause specifies that the rule should be applied to messages with a topic matching the [topic filter](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics) `car/measurements`.
+
+```sql
+FOREACH
+    ## The data must be an array
+    jq('
+       [{
+         sensor_type: "temprature",
+         value: .temprature
+        },
+        {
+         sensor_type: "humidity",
+         value: .humidity
+        },
+        {
+         sensor_type: "pressure",
+         value: .pressure
+        },
+        {
+         sensor_type: "light",
+         value: .light
+        },
+        {
+         sensor_type: "battery",
+         value: .battery
+        },
+        {
+         sensor_type: "speed",
+         value: .speed
+        }]',
+        payload) as sensor  
+DO
+    payload.client_id,
+    payload.timestamp,
+    sensor.sensor_type,
+    sensor.value
+FROM "car/measurements"
+```
+
+The following example is equivalent to the previous example, but uses a different JQ program and no `DO` clause. This example is meant to illustrate that the JQ programs are very powerful and can be used to do any type of transformation. That being said, one should avoid doing computationally expensive transformations in EMQX rules as this can affect the performance of the EMQX broker. 
+
+```sql
+FOREACH
+    jq('
+       # Save the input
+       . as $payload |
+       
+       # All sensor types
+       [ 
+         "temperature",
+         "humidity",
+         "pressure",
+         "light",
+         "battery",
+         "speed" 
+       ] as $sensor_types |
+       
+       # Output an object for each sensor type
+       $sensor_types[] |
+       {
+         client_id: $payload.client_id,
+         timestamp: $payload.timestamp,
+         sensor_type: .,
+         value: $payload[.] 
+       }
+       ',
+       payload) as sensor  
+FROM "car/measurements"
+```
+
 ## Notice
 
 JQ functions can be convenient for transformations that are difficult or impossible to do with only the rule SQL language and its simple functions.
