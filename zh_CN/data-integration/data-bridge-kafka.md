@@ -1,7 +1,7 @@
 # Apache Kafka
 
 <!-- 提供一段简介，描述支数据桥接的基本工作方式、关键特性和价值，如果有局限性也应当在此处说明（如必须说明的版本限制、当前未解决的问题）。 -->
-Apache Kafka 数据桥接实现了 EMQX 客户端消息和事件与 Apache Kafka (包括 Confluent) 的桥接，能够提供 EMQX 与企业应用之间高性能、高可靠的数据集成，有效降低应用复杂度并提升扩展性。
+Apache Kafka 数据桥接实现了 EMQX 客户端消息和事件与 Apache Kafka (包括 Confluent) 的桥接，能够提供 EMQX 与企业应用之间高性能、高可靠的数据集成，有效降低应用复杂度并提升扩展性。Apache Kafka 数据桥接涉及两种桥接角色：生产者（将数据发送到 Kafka ）和消费者（将数据从 Kafka 消费下发）。EMQX 支持创建任何一种角色的桥接或同时创建两种角色的桥接。
 
 同时，EMQX 与 Apache Kafka 的集成提供了极高的数据吞吐能力，支持 Apache Kafka 的 SASL/SCRAM、SASL/GSSAPI 等多种安全认证方式以及 TLS 连接，是物联网数据集成首选方案之一。
 
@@ -33,6 +33,14 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 ## 快速开始
 <!-- 从安装测试所需步骤，如果有不同的用法增加章节介绍。 -->
 
+本节将带您创建一个 Kafka 服务器以及 Kafka 主题，然后在 EMQX 创建 Kafka 生产者和消费者的数据桥接，之后再通过为 Kafka 生产者创建一条规则来将数据转发至 Kafka，以验证该数据桥接是否正常工作。
+
+::: tip
+
+本教程假定 EMQX 与 Kafka 均在本地运行，如您在远程运行 EMQX 及 Kafka，请根据实际情况调整相应配置。
+
+:::
+
 ### 安装 Kafka
 
 以 macOS 为例，安装并启动 Apache Kafka：
@@ -56,7 +64,7 @@ bin/kafka-server-start.sh config/kraft/server.properties
 
 ### 创建 Kafka 主题
 
-在 Kafka 中创建名为 `testtopic-in` 与 `testtopic-out` 的两个主题：
+在 EMQX 创建数据桥接前，必须首先在 Kafka 中创建好所需主题。使用下面的命令在 Kafka 中创建名为 `testtopic-in` 与 `testtopic-out` 的两个主题：
 
 ```bash
 bin/kafka-topics.sh --create --topic testtopic-in --bootstrap-server localhost:9092
@@ -64,13 +72,9 @@ bin/kafka-topics.sh --create --topic testtopic-in --bootstrap-server localhost:9
 bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:9092
 ```
 
-:::tip
-在 EMQX 创建数据桥接前，必须首先在 Kafka 中创建好所需主题。
-:::
+### 创建 Kafka 数据桥接
 
-### 通过 Dashboard 配置 Kafka 桥接
-
-Kafka 桥接有两种桥接角色: 生产者（将数据发送到 Kafka）和消费者（将数据从 Kafka 消费下发）。以下步骤将指导你如何分别以这两种角色创建 Kafka 桥接。
+本节将通过 Dashboard 演示如何创建到 Kafka 生产者和消费者的数据桥接。
 
 1. 转到 Dashboard **数据集成** -> **数据桥接**页面。
 
@@ -80,7 +84,7 @@ Kafka 桥接有两种桥接角色: 生产者（将数据发送到 Kafka）和消
 
    <img src="./assets/bridge-create-next.png" alt="bridge-create-next" style="zoom:67%;" />
 
-6. 在**桥接角色** 中选择**生产者**或**消费者**。
+4. 在**桥接角色** 中选择**生产者**或**消费者**。
    
    :::: tabs type:card
    
@@ -88,7 +92,7 @@ Kafka 桥接有两种桥接角色: 生产者（将数据发送到 Kafka）和消
    
    - 填写必填信息（标星号字段）。
    - 输入数据桥接名称，要求是大小写英文字母和数字的组合。
-   - 输入 Kafka 连接信息，**主机列表**填写 **127.0.0.1:9092**，其他参数根据实际情况填写。
+   - 输入 Kafka 连接信息，**主机列表**填写 `127.0.0.1:9092`，其他参数根据实际情况填写。
    - **源 MQTT 主题**：选择要为其建立桥接的 MQTT 主题，此处填写 `t/#` 表示将匹配此主题的 MQTT 消息转发至 Kafka。您也可以选择将此项留空，通过[新建规则]指定发往 Kafka 的数据。
    - **Kafka 主题名称**：填写 Kafka 中预先创建好的主题 `testtopic-in`，此处暂不支持使用变量。
      模版用于将规则或指定 MQTT 主题的消息转发到我们之前创建的 Kafka 主题。此处您可以使用默认配置，或通过变量构造消息模板。
@@ -102,7 +106,7 @@ Kafka 桥接有两种桥接角色: 生产者（将数据发送到 Kafka）和消
    
    - 填写必填信息（标星号字段）。
    - 输入数据桥接名称，要求是大小写英文字母或数字组合。
-   - 输入 Kafka 连接信息，**主机列表**填写 **127.0.0.1:9092**，其他参数根据实际情况填写。
+   - 输入 Kafka 连接信息，**主机列表**填写 `127.0.0.1:9092`，其他参数根据实际情况填写。
    - **主题映射关系**：必须包含至少一个 Kafka 主题和 MQTT 主题之间的映射。**MQTT Payload Template** 子字段指定应使用的 MQTT 载荷，并提供以下 Kafka 消息字段以进行模板化：
    
      | 字段名称  | 描述                                               |
@@ -137,114 +141,48 @@ Kafka 桥接有两种桥接角色: 生产者（将数据发送到 Kafka）和消
    
      ::::
    
-5. 点击**创建**，将提示是否使用该数据桥接创建规则。这可以通过规则进一步处理 Kafka 消息，然后再发送到 MQTT 客户端。有关创建规则的更多信息，请参阅[规则引擎](./rules.md)。
+5. 点击**创建**前，您可点击**测试连接**按钮确保能连接到 Kafuka 服务器。
 
-   :::tip 提示
+6. 点击**创建**，将提示是否使用该数据桥接创建规则。
 
-   创建关联的规则不是必需的。没有规则的情况下消息也可以发布到 **主题映射** 中设置的 MQTT 主题。
-
+   - 对于 Kafka 生产者桥接，点击**创建规则**或者到到 Dashboard **数据集成** -> **规则页面** [创建数据转发规则](创建数据转发规则)。
+   - 对于 Kafka 消费者桥接，创建关联的规则不是必需的。没有规则的情况下消息也可以发布到 **主题映射** 中设置的 MQTT 主题。
+   
+   ::: tip 提示
+   
+   创建关联的规则可以通过规则进一步处理 Kafka 消息，然后再发送到 MQTT 客户端。有关创建规则的更多信息，请参阅[规则引擎](./rules.md)。
+   
    :::
 
-### 通过配置文件配置 Kafka 桥接
+### 创建 Kafka 生产者数据转发规则
 
-想要通过配置文件配置 Kafka 生产者桥接，在 `emqx.conf` 文件的最后加入下列配置
+至此您已经完成数据桥接创建流程，接下来将继续创建一条规则来指定需要写入的数据：
 
-```js
-bridges.kafka.kproducer {
-  authentication {
-    mechanism = "plain"
-    password = "******"
-    username = "emqxuser"
-  }
-  bootstrap_hosts = "kafka-1.emqx.net:9093"
-  connect_timeout = "5s"
-  enable = false
-  kafka {
-    buffer {
-      memory_overload_protection = true
-      mode = "hybrid"
-      per_partition_limit = "2GB"
-      segment_bytes = "100MB"
-    }
-    compression = "no_compression"
-    max_batch_bytes = "896KB"
-    max_inflight = 10
-    message {
-      key = "${.clientid}"
-      timestamp = "${.timestamp}"
-      value = "${.}"
-    }
-    partition_count_refresh_interval = "60s"
-    partition_strategy = "random"
-    required_acks = "all_isr"
-    topic = "test-topic-two-partitions"
-  }
-  metadata_request_timeout = "5s"
-  min_metadata_refresh_interval = "3s"
-  socket_opts {
-    nodelay = true
-    recbuf = "1024KB"
-    sndbuf = "1024KB"
-  }
-  ssl {
-    ciphers = []
-    depth = 10
-    enable = false
-    hibernate_after = "5s"
-    reuse_sessions = true
-    secure_renegotiate = true
-    user_lookup_fun = "emqx_tls_psk:lookup"
-    verify = "verify_peer"
-    versions = ["tlsv1.3", "tlsv1.2", "tlsv1.1", "tlsv1"]
-  }
-}
-```
+1. 转到 Dashboard **数据集成** -> **规则页面**。
 
-想要通过配置文件配置 Kafka 消费者桥接，在 `emqx.conf` 文件的最后加入下列配置。
+2. 点击页面右上角的创建。
 
-```js
-bridges.kafka_consumer.my_consumer {
-  enable = true
-  bootstrap_hosts = "kafka-1.emqx.net:9092"
-  connect_timeout = 5s
-  min_metadata_refresh_interval = 3s
-  metadata_request_timeout = 5s
-  authentication = {
-    mechanism = plain
-    username = emqxuser
-    password = password
-  }
-  kafka {
-    max_batch_bytes = 896KB
-    max_rejoin_attempts = 5
-    offset_commit_interval_seconds = 3
-    offset_reset_policy = reset_to_latest
-  }
-  topic_mapping = [
-    {
-      kafka_topic = "kafka-topic-1"
-      mqtt_topic = "mqtt/topic/1"
-      qos = 1
-      payload_template = "${.}"
-    },
-    {
-      kafka_topic = "kafka-topic-2"
-      mqtt_topic = "mqtt/topic/2"
-      qos = 2
-      payload_template = "v = ${.value}"
-    }
-  ]
-  key_encoding_mode = none
-  value_encoding_mode = none
-  ssl {
-    enable = false
-    verify = verify_none
-    server_name_indication = "auto"
-  }
-}
-```
+3. 输入规则 ID，例如  `my_rule`，
 
-### 测试桥接
+4. 在 SQL 编辑器中输入规则，例如我们希望将 `t/#` 主题的 MQTT 消息存储至 Kafka，可通过如下规则实现。
+
+   注意：如果要自定义 SQL 语句，请确保 `SELECT` 字段包含数据桥接中所需的所有字段。
+
+
+  ```sql
+SELECT
+  *
+FROM
+  "t/#"
+  ```
+
+4. 点击**添加动作**按钮，在下拉框中选择**使用数据桥接转发**选项，选择先前创建好的 Kafka 数据桥接。
+5. 点击**添加**按钮确认添加动作。
+6. 点击最下方**创建**按钮完成规则创建。
+
+至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 Kafka 进行存储。
+
+### 测试数据桥接和规则
 
 使用 MQTTX 向 `t/1` 主题发布消息：
 
