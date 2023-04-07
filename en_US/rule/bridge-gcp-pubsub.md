@@ -1,4 +1,4 @@
-# Integrate with GCP PubSub
+# Ingest Data into GCP PubSub
 Starting from EMQX Enterprise e4.4.11, EMQX's Rule-Engine supports Google GCP PubSub integration.
 
 EMQX GCP PubSub integration can send MQTT messages and events to [Google Cloud PubSub](https://cloud.google.com/pubsub?hl=en-us), which can help you flexibly choose services on Google Cloud and build IoT applications more easily.

@@ -1,14 +1,14 @@
-# Integrate with SQLServer
+# Ingest Data into SQL Server
 
-Set up an SQLServer database and set the user name and password to sa/mqtt_public. Take MacOS X as an example:
+Set up an SQL Server database and set the user name and password to sa/mqtt_public. Take MacOS X as an example:
 
 ```bash
 docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=mqtt_public' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
 ```
 
-Enter the SQLServer container and initialize the SQLServer table:
+Enter the SQL Server container and initialize the SQL Server table:
 
-Setting up SQLServer `sa` password
+Setting up SQL Server `sa` password
 ```bash
 $ /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P mqtt_public -d master
 ```
@@ -91,13 +91,13 @@ On the "Response Action" interface, select "Add", and then select "Save Data to 
 Fill in the action parameters:
 
 The "Save data to SQLServer" action requires two parameters:
-1). SQL template. In this example, we insert a piece of data into SQLServer, and the SQL template is:
+1). SQL template. In this example, we insert a piece of data into SQL Server, and the SQL template is:
 
 ```sql
 insert into t_mqtt_msg(msgid, topic, qos, payload) values ('${id}', '${topic}', ${qos}, '${payload}')
 ```
 
-2). The ID of the associated resource. Now the resource drop-down box is empty, and you can click "New Resource" in the upper right corner to create a SQLServer resource. In the popup dialog box, configure as instructed below: input “mqtt” for database name, “sa” for user name, and “mqtt_public” for password. 
+2). The ID of the associated resource. Now the resource drop-down box is empty, and you can click "New Resource" in the upper right corner to create a SQL Server resource. In the popup dialog box, configure as instructed below: input “mqtt” for database name, “sa” for user name, and “mqtt_public” for password. 
 
 ![image](./assets/rule-engine/sqlserver4.png)
 
@@ -125,6 +125,6 @@ Here we can see that metrics has been increased.
 
 ![image](./assets/rule-engine/sqlserver7.png)
 
-Then check the SQLServer table to see whether the new record is added successfully:
+Then check the SQL Server table to see whether the new record is added successfully:
 
 ![image](./assets/rule-engine/sqlserver8.png)

@@ -1,5 +1,4 @@
-# Integrate with MongoDB
-
+# Ingest Data into MongoDB
 Setup a MongoDB database, and changes the username/password to root/public, taking Mac OSX for instance:
 
 In order to facilitate the demonstration of some functions, the follow-up content will be introduced based on MongoDB Cloud. However, users who deploy MongoDB in other ways still can use this document to learn how to use MongoDB resources and actions.

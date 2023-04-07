@@ -61,16 +61,6 @@ EMQX 企业版 4.4 的 Zip 包名格式为：
 emqx-[EMQX Type]-[EMQX Version]-[OTP Version]-[OS Type]-[Arch].zip
 ```
 
-<<<<<<< HEAD
-以 `emqx-ee-4.4.16-otp24.3.4.2-1-ubuntu20.04-amd64.zip` 为例，其中：
-
-- EMQX Type(`ee`): EMQX 类型。`ee` 代表企业版，开源版没有这一字段。请确保跟已安装的 EMQX 类型。
-- EMQX Version(`4.4.16`): EMQX 版本号。请确保已经安装的 EMQX 是 4.4.* 版本，而不是 4.3 或者 5.0 等版本。
-- OTP Version(`otp24.3.4.2-1`): Erlang OTP 版本号。请确保其首位 (例中为 24) 跟已安装的 EMQX 的 OTP 版本号一致。
-- OS Type(`ubuntu20.04`): 操作系统类型。请确保跟已安装的 EMQX 操作系统类型一致。
-- Arch(`amd64`): 架构类型。请确保跟已安装的 EMQX 架构类型一致。
-{% endemqxee %}
-=======
 :::
 EMQX 仅允许 Patch 版本（版本号的第三位）的热升级。
 即允许 x.y.z 热升级到 x.y.(z+N)，但不允许 x.y 热升级到 (x+N).(y+M)。
@@ -80,7 +70,6 @@ EMQX 仅允许 Patch 版本（版本号的第三位）的热升级。
 :::
 不允许 EMQX (开源版) 与 EMQX Enterprise 之间的热升级，请谨慎操作。
 :::
->>>>>>> release-4.3
 
 ## 热升级步骤
 

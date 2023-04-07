@@ -1,4 +1,4 @@
-# Integrate with TDengine
+# Ingest Data into TDengine
 
 [TDengine](https://github.com/taosdata/TDengine)
 </br>
