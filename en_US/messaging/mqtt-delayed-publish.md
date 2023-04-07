@@ -1,6 +1,6 @@
 # Delayed Publish
 
-Delayed publish is an extended MQTT feature supported by EMQX. When a client publishes a message to EMQX server with the topic prefix `$delayed/{DelayInteval}`, it triggers the delayed publish feature. The messages will be published after a period of time predefined by the user. 
+Delayed publish is an extended MQTT feature supported by EMQX. When a client publishes a message to EMQX broker with the topic prefix `$delayed/{DelayInteval}`, it triggers the delayed publish feature. The messages will be published after a period of time predefined by the user. 
 
 The specific format of the delay-publish topic is as below:
 
@@ -70,11 +70,11 @@ delayed {
 
 3. Select the connection named "Demo" in the **Connections** pane. Type the topic name `$delayed/10/x/y` in the topic textbox and type the message as "Delayed Message". 
 
-   - `$delayed` : Indicates it is a delay message.
+   - `$delayed`: Indicates it is a delay message.
    - `10`: Indicates the delayed interval is 10 seconds.
    - `x/y`: Indicates the topic name of the message.
 
-4. Select the connection named "Subscriber". Click the **New Subscription** button to create a subscription.  Type `x/y` in **Topic** textbox to subscribe to this topic.
+4. Select the connection named "Subscriber". Click the **New Subscription** button to create a subscription.  Type `x/y` in the **Topic** textbox to subscribe to this topic.
 
    <img src="./assets/subscribe-delayed-message.png" alt="subscribe-delayed-message" style="zoom:35%;" />
 
@@ -100,7 +100,7 @@ delayed {
    mqttx sub -t t/1 -v
    ```
 
-2. Open a new window in terminal for the client as publisher. Use the following command to send a delayed message. The subscriber will receive the message after 5 seconds.
+2. Open a new window in the terminal for the client as publisher. Use the following command to send a delayed message. The subscriber will receive the message after 5 seconds.
 
    ```bash
    mqttx pub -t "\$delayed/5/t/1" -m "Hello Delayed msg"

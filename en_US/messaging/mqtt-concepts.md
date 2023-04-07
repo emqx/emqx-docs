@@ -1,14 +1,14 @@
 # MQTT Core Concepts
 
-MQTT (Message Queue Telemetry Transport) is the most commonly used lightweight messaging protocol for the IoT (Internet of Things). The protocol is based on a publish/subsribe (pub/sub) pattern for message communication. It allows devices and applications to exchange data in real-time using a simple and efficient message format, which minimizes network overhead and reduces power consumption. 
+MQTT (Message Queue Telemetry Transport) is the most commonly used lightweight messaging protocol for the IoT (Internet of Things). The protocol is based on a publish/subscribe (pub/sub) pattern for message communication. It allows devices and applications to exchange data in real-time using a simple and efficient message format, which minimizes network overhead and reduces power consumption. 
 
-Served as an MQTT messaging platform, EMQX Enterprise provides full support to a complete set of MQTT messaging features. This section provides brief introductions to the core conecpts of MQTT. You can learn further about each concept and more about MQTT by following the links to the [MQTT blog series](https://www.emqx.com/en/blog/category/mqtt). 
+Served as an MQTT messaging platform, EMQX Enterprise provides full support to a complete set of MQTT messaging features. This section provides brief introductions to the core concepts of MQTT. You can learn further about each concept and more about MQTT by following the links to the [MQTT blog series](https://www.emqx.com/en/blog/category/mqtt). 
 
 ## Publish/Subscribe Pattern
 
-The protocol is event driven and connects devices using the pub/sub pattern. Different from the traditional client/server pattern, it is a messaging pattern in which senders (publishers) do not send messages directly to specific receivers (subscribers). Instead, publishers categorize messages into topics, and subscribers subscribe to specific topics that they are intereste in. When a publisher sends a message to a topic, the MQTT broker routes and filters all incoming messages, and then delivers the message to all the subscribers that have expressed interest in that topic.
+The protocol is event-driven and connects devices using the pub/sub pattern. Different from the traditional client/server pattern, it is a messaging pattern in which senders (publishers) do not send messages directly to specific receivers (subscribers). Instead, publishers categorize messages into topics, and subscribers subscribe to specific topics that they are interested in. When a publisher sends a message to a topic, the MQTT broker routes and filters all incoming messages, and then delivers the message to all the subscribers that have expressed interest in that topic.
 
-The publisher and subscriber are decoupled from each other and do not need to know each other's existence. Their sole connection is based on a predetermined agreement regarding the message. The Pub/sub pattern enables flexible message communication, as subscribers and publishers can be dynamically added or removed as needed. It also makes the implementation of message broadcasting, multicasting, and unicasting more easier. 
+The publisher and subscriber are decoupled from each other and do not need to know each other's existence. Their sole connection is based on a predetermined agreement regarding the message. The Pub/Sub pattern enables flexible message communication, as subscribers and publishers can be dynamically added or removed as needed. It also makes the implementation of message broadcasting, multicasting, and unicasting easier. 
 
 For more information on the Pub/Sub pattern, see [Introduction to MQTT Publish-subscribe Pattern](https://www.emqx.com/en/blog/mqtt-5-introduction-to-publish-subscribe-model).
 
@@ -18,7 +18,7 @@ The MQTT server acts as a broker between the publishing clients and subscribing 
 
 ## MQTT Client
 
-The clients refer to devices or applications who can connect to an MQTT server using the MQTT protocol. They can act as both publishers and subscribers, or in either of those roles separately.
+The clients refer to devices or applications that can connect to an MQTT server using the MQTT protocol. They can act as both publishers and subscribers or in either of those roles separately.
 
 ## Topic and Wildcards
 
@@ -72,7 +72,7 @@ To learn more about will message technologies, see [Use of MQTT Will Message](ht
 
 In common cases, messages are forwarded to all matching subscribers. However, in some cases, you may want to coordinate multiple clients to process received messages in a horizontally scalable way to increase load capacity. Alternatively, users may want to add a backup client for clients to seamlessly switch to when the primary client goes offline, ensuring high availability. 
 
-The shared subscription feature provides such capability. Clients can be divided into multiple subscription groups, and messages are still forwarded to all subscription groups, but only one client within each subscription group receives the message at a time.
+The shared subscription feature provides such a capability. Clients can be divided into multiple subscription groups, and messages are still forwarded to all subscription groups, but only one client within each subscription group receives the message at a time.
 
 You can try to create a shared subscription using the MQTT X Client by following the instructions in [Shared Subscription](./mqtt-shared-subscription.md).
 
@@ -82,4 +82,4 @@ To learn more about shared subscription technologies, see [Shared subscription -
 
 Topics prefixed with `$SYS/` are reserved for the server to publish specific messages, such as server uptime, client online/offline event notifications, and the current number of connected clients. These topics are commonly referred to as system topics, and clients can subscribe to these system topics to obtain information about the server.
 
-For more information on system topic, see [Understanding MQTT Topics & Wildcards by Case](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics).
+For more information on the system topic, see [Understanding MQTT Topics & Wildcards by Case](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics).

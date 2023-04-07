@@ -1,8 +1,8 @@
 # Retained Message
 
-The EMQX implements the retained message feature of MQTT. You can flag one message published under certain topic as `Retained` and save them as persistent messages on the EMQX server. When any new subscriber subscribes to a topic that matches the topic of a retained message, they immediately receive that message, even if it was published before they subscribed to the topic.
+EMQX implements the retained message feature of MQTT. You can flag one message published under a certain topic as `Retained` and save it as a persistent message on the EMQX broker. When any new subscribers subscribe to a topic that matches the topic of the retained message, they immediately receive that message, even if it was published before they subscribed to the topic.
 
-You can use client tools to test this messaging service in EMQX. This section introduces how to use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to simulate clients and test how a retained message is published and received.
+You can use client tools to test this messaging service in EMQX. This section introduces how to use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to simulate clients and try how a retained message is published and received.
 
 :::tip Prerequisites
 
@@ -25,7 +25,7 @@ You can use client tools to test this messaging service in EMQX. This section in
 
    <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
 
-3. After the success connection, type the topic heading `sensor/t1` in the text box and compose the message as shown in the screenshot. Click the send button. A message under the topic `sensor/t1` is send to the dialogue box.
+3. After the successful connection, type the topic heading `sensor/t1` in the text box and compose the message as shown in the screenshot. Click the send button. A message under the topic `sensor/t1` appears in the dialogue box.
 
    <img src="./assets/Publish-message-1.png" alt="Publish-message-1" style="zoom:35%;" />
 
@@ -44,29 +44,29 @@ You can use client tools to test this messaging service in EMQX. This section in
 
    :::
 
-   <img src="./assets/New-subscription-parameters.png" alt="New-subscription-parameters" style="zoom:35%;" />
-
    <img src="./assets/Receive-retained-message.png" alt="Receive-retained-message" style="zoom:35%;" />
 
    :::tip
 
-   The normal message under the topic `sensor/t1` and the first retained message under the topic `sensor/t2` are not received. The EMQX only stores the latest retained message for each topic. You can also check the latest retained message stored in the EMQX Dashboard, see [View Retained Message in Dashboard](##View Retained Message in Dashboard).
-
-   ![Retained-message-in-borker](./assets/Retained-message-in-borker.png)
+   The first message under the topic `sensor/t1` and the first retained message under the topic `sensor/t2` are not received. The EMQX only stores the latest retained message for each topic. You can also check the latest retained message stored in the EMQX Dashboard, see [View Retained Message in Dashboard](#view-retained-message-in-dashboard).
 
    :::  
 
-6. If you want to clear the retained message from the MQTT broker, send an empty retained message  under the topic.
+6. If you want to clear the retained message from the MQTT broker, send an empty retained message to the topic.
 
 ## Publish Retained Message with MQTT X CLI
 
-1. Initiate a connection request with one client. Set the topic to `t/1`, payload to `A retained message from MQTTX CLI`,  and `retain = true`：
+1. Initiate a connection request with one client. 
+
+1. If you want to publish a message with the payload "A retained message from MQTTX CLI" to the topic "t/1", you can use the command below. Set the topic to `t/1`, payload to `A retained message from MQTTX CLI`,  and `retain = true`：
 
    ```bash
    mqttx pub -t 't/1' -m 'A retained message from MQTTX CLI' --retain true -h 'localhost' -p 1883
    ```
 
-2. Subscribe to the topic `t/1` with another client. It will receive the retained message. Repeat this step and it will continuously receive the retained message:
+3. Subscribe to the topic `t/1` with another client. It will receive the retained message. 
+
+   If you continuously create new clients and let them subscribe to topic "t/1", all new clients you created will receive the retained message.
 
    ```bash
    $ mqttx sub -t 't/1' -h 'localhost' -p 1883 -v
@@ -85,24 +85,22 @@ You can use client tools to test this messaging service in EMQX. This section in
 
 ## View Retained Message in Dashboard
 
-Click the **Retained Messages** menu on the left to go to the **Retained Messages** list page. It lists all retained messages in the EMQX.
-
 When a user publishes a retained message, EMQX will save this message in the system. The user can view this message on the Retained Messages list page. When the user subscribes to the topic of this retained message, EMQX will publish this message to the topic, and users can receive this message immediately by subscribing to the topic.
 
 The default expiration time of the retained message is never expired unless the user manually deletes this message.
 
 ### Retained Messages List
 
-The user can view all retained messages in the system on the **Retained Messages** list page. The list includes the topic of the retained message, the QoS of the retained message, the time when the retained message was published, and the client ID of the retained message. In the list, the user can click the **Show Payload** and **Delete** buttons to view the Payload of the retained message and delete a retained message. Click the **Refresh** button in the upper right corner of the list to refresh the current retained message list, and click the **Settings** button to jump to the retained message settings page.
+On the **Retained Messages** list page, users can view all retained messages in the system, including the topic, QoS, publish time, and client ID. The page also provides options to view the payload of a retained message and delete it using the **Show Payload** and **Delete** buttons respectively. Users can refresh the list using the **Refresh** button and access the retained message settings page using the **Settings** button.
 
-The default will save three types of retained messages [system topics](./mqtt-concepts.md/#system topic). If it is a cluster environment, it will keep different system topics' retained messages according to other node names. They are:
+The default will save three types of retained messages [system topics](./mqtt-concepts.md). If it is a cluster environment, it will keep different system topics' retained messages according to other node names. They are:
 
-- $SYS/brokers/+/sysdescr - The system description of the current EMQX node
-- $SYS/brokers/+/version - The version number of the current EMQX node
-- $SYS/brokers - The number and name of all nodes of the current EMQX
+- $SYS/brokers/+/sysdescr: System description of the current EMQX node
+- $SYS/brokers/+/version: Version number of the current EMQX node
+- $SYS/brokers - Number and name of all nodes of the current EMQX
 
 ![retained-messages](./assets/retained-messages.png)
 
 ### Delete Retained Message
 
-In most cases, users can delete retained messages in the client by publishing an empty message to the topic of the retained message. In addition, users can also delete retained messages in EMQX Dashboard. Click the **Delete** button on the Retained Messages list page to delete a retained message. Users can also set the expiration time of the retained message on the Retained Messages configuration page. When the retained message expires, EMQX will automatically delete this retained message.
+To delete a retained message in EMQX, users can either publish an empty message to the topic of the retained message in the client or use the EMQX Dashboard. In the Dashboard, users can simply click the **Delete** button on the Retained Messages list page to remove a retained message. Additionally, users can also set the expiration time for retained messages on the Retained Messages configuration page, allowing EMQX to automatically delete them when they expire.

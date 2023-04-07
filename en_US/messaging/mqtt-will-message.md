@@ -1,6 +1,6 @@
 # Will Message
 
-The EMQX implements the will message feature of MQTT. If a will message is set for a client, EMQX sends the message to relevant subscribers when the client is accidentally disconnected, so that the subscribers can be informed and update the client status.
+EMQX implements the will message feature of MQTT. If a will message is set for a client, EMQX sends the message to relevant subscribers when the client is accidentally disconnected, so that the subscribers can be informed and update the client status.
 
 You can use client tools to test this messaging service in EMQX. This section introduces how to use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to simulate clients and test how a will message is published and received.
 
@@ -68,7 +68,7 @@ You can use client tools to test this messaging service in EMQX. This section in
    mqttx sub -t 't/1' -h 'localhost' -p 1883 -v
    ```
 
-3. Disconnect the client specified in Step 1, then the client specified in Step 2 will receive the will message:
+3. Disconnect the client specified in step 1, then the client specified in step 2 will receive the will message:
 
    ```bash
    topic:  t/1

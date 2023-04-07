@@ -138,7 +138,7 @@ nl: 0
 
 2. Create another MQTT connection named "Publisher".
 
-3. Type "a/1" as the topic. Send a message under this topic. 
+3. Type "a/1" as the topic. Send a message to this topic. 
 
    - The client "Subscriber" receives the message automatically without creating a new subscription. 
 
@@ -152,7 +152,7 @@ nl: 0
 
 4. Go to EMQX Dashboard. Click **Subscriptions** in the left navigation menu. 
 
-   - It shows two subscriptions automatically subscribe the topic "a/1".
+   - It shows two subscriptions automatically subscribe to the topic "a/1".
 
    <img src="./assets/view-auto-sub-dashboard.png" alt="view-auto-sub-dashboard" style="zoom:35%;" />
 
@@ -170,7 +170,7 @@ nl: 0
    mqttx conn -c emqx_c
    ```
 
-2. Go to EMQX Dashboard. Click **Subscriptions** in the left navigation menu. It show the client `emqx_c` subscribes to the topic `a/1`.
+2. Go to EMQX Dashboard. Click **Subscriptions** in the left navigation menu. It shows the client `emqx_c` subscribes to the topic `a/1`.
 
    <img src="./assets/auto-sub-emqx_c.png" alt="auto-sub-emqx_c" style="zoom:35%;" />
 
