@@ -1,4 +1,4 @@
-# Integrate with RPC
+# Ingest Data into RPC
 
 ::: tip
 

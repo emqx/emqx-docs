@@ -1,4 +1,4 @@
-# Integrate with RabbitMQ
+# Ingest Data into RabbitMQ
 
 Setup a RabbitMQ, taking Mac OSX for instance:
 

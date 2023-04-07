@@ -1,4 +1,4 @@
-# Integrate with MQTT Broker
+# Bridge Data into MQTT Broker
 
 ::: tip
 

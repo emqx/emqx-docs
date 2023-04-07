@@ -1,4 +1,4 @@
-# Integrate with Kafka
+# Steam Data into Kafka
 
 ::: tip
 
