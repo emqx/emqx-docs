@@ -36,4 +36,4 @@ fi
 
 # TODO i18n file check
 
-cat $SWAGGER_INPUT_FILE | jq --indent 2 . > $TARGET_FILE
+cat $SWAGGER_INPUT_FILE | jq --indent 2 'del(.paths[] | select(any(.[]; .deprecated == true)))' > $TARGET_FILE
