@@ -18,7 +18,13 @@ EMQX 中的 LwM2M 网关 可以接收 LwM2M 客户端连接并将其事件和消
 
 EMQX 5.0 中，可以通过 Dashboard 配置并启用 LwM2M 网关。
 
-也可以通过 HTTP API 或 emqx.conf 来启用，例如：
+### 通过 Dashboard 配置
+
+
+
+### 通过 HTTP API 或配置文件配置
+
+也可以通过 HTTP API 或 `emqx.conf` 来启用，例如：
 
 :::: tabs type:card
 
@@ -58,7 +64,7 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m' \
 ```
 :::
 
-::: tab Configuration
+::: tab 配置文件
 
 ```properties
 gateway.lwm2m {
@@ -105,7 +111,7 @@ LwM2M 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数�
 由于 LwM2M 协议仅提供了客户端的 Endpoint Name，而没有提供用户名和密码。因此，
 LwM2M 网关仅支持 [HTTP Server 认证](../access-control/authn/http.md)。
 
-例如，通过 HTTP API 或 emqx.conf 为 LwM2M 网关创建 HTTP 认证：
+例如，通过 HTTP API 或 `emqx.conf` 为 LwM2M 网关创建 HTTP 认证：
 
 :::: tabs type:card
 
@@ -139,7 +145,7 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m/authentication' \
 ```
 :::
 
-::: tab Configuration
+::: tab 配置文件
 
 ```properties
 gateway.lwm2m {
