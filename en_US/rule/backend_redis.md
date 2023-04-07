@@ -1,4 +1,4 @@
-# Integrate with Redis
+# Ingest Data into Redis
 
 Setup a Redis database, taking Mac OSX for instance:
 

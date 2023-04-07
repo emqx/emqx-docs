@@ -1,4 +1,4 @@
-# Integrate with Cassandra
+# Ingest Data into Cassandra
 
 Setup a Cassandra database, and changes the root/password to root/public, taking Mac OSX for instance:
 

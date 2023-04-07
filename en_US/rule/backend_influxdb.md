@@ -1,4 +1,4 @@
-# Integrate with InfluxDB
+# Ingest Data into InfluxDB
 
 Setup a InfluxDB database, taking Mac OSX for instance:
 
