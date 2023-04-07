@@ -36,7 +36,7 @@ See the table below for a complete list of mathematical functions supported.
 | ceil          | Round up (integer)                    | Operand                                    |
 | floor         | Round down (integer)                  | Operand                                    |
 | round         | Rounding (integer)                    | Operand                                    |
-| fmod          | modulo<br> (remainder)                | 1. left Operand <br />2.right Operand      |
+| fmod          | modulo<br> (remainder)                | 1. Left Operand <br />2. Right Operand     |
 | exp           | Exponentiation<br>x power of e        | Operand                                    |
 | power         | Exponential operation<br>y power of X | 1. Left operand x <br />2. Right operand y |
 | sqrt          | Square root                           | Operand                                    |
@@ -112,15 +112,15 @@ EMQX has built-in functions that allow you to convert the data type of a specifi
 
 See the table below for a complete list of data type judgment functions supported. 
 
-| Function Name | Description                                          | Parameter                    |
-| ------------- | ---------------------------------------------------- | ---------------------------- |
-| str *         | Convert data to String type                          | Data                         |
-| str_utf8      | Convert data to UTF-8 String type                    | Data                         |
-| bool          | Convert data to Boolean type                         | Data                         |
-| int           | Convert data to Integer type                         | Data                         |
-| float         | Convert data to Float type                           | Data                         |
-| float2str     | Convert a float to a string with the given precision | 1. Float Number 2. Precision |
-| map           | Convert data to Map type                             | Data                         |
+| Function Name | Description                                          | Parameter                        |
+| ------------- | ---------------------------------------------------- | -------------------------------- |
+| str *         | Convert data to String type                          | Data                             |
+| str_utf8      | Convert data to UTF-8 String type                    | Data                             |
+| bool          | Convert data to Boolean type                         | Data                             |
+| int           | Convert data to Integer type                         | Data                             |
+| float         | Convert data to Float type                           | Data                             |
+| float2str     | Convert a float to a string with the given precision | 1. Float Number <br>2. Precision |
+| map           | Convert data to Map type                             | Data                             |
 
 [^*]: When converting a floating-point type to a string, the output may need to be rounded.
 
@@ -157,8 +157,8 @@ See the table below for a complete list of string functions supported.
 | rtrim                      | Remove right space             | Input string                                                 |
 | reverse                    | String inversion               | Input string                                                 |
 | strlen                     | String length                  | Input string                                                 |
-| substr                     | Take a substring of characters | 1. Input string <br />2. Start position (starting at position 1). |
-| substr<br>(with end)       | Take a substring of characters | 1. Input string <br />2. Start position (starting at position 1). <br />3. End position. <br> |
+| substr                     | Take a substring of characters | 1. Input string <br />2. Start position (starting at position 1) |
+| substr<br>(with end)       | Take a substring of characters | 1. Input string <br />2. Start position (starting at position 1).<br />3. End position <br> |
 | split                      | String split                   | 1. Input string <br />2. Separator                           |
 | split <br>(with direction) | String split                   | 1. Input string <br />2. Separator <br />3. Direction, optional value: `leading` or `trailing` |
 
@@ -222,7 +222,7 @@ See the table below for a complete list of array functions supported.
 | `sublist`     | Returns a sub-array of length len starting from the nth element. <br>Subscripts start at 1. | 1. Array <br />2. n (integer) <br />3. len (integer) |
 | `first`       | Returns the first element of an array. <br>Subscripts start at 1. | Array                                                |
 | `last`        | Returns the last element of an array.                        | Array                                                |
-| `contains`    | Returns a boolean indicating if the data is in the array.    | 1. data <br />2. Array                               |
+| `contains`    | Returns a boolean indicating if the data is in the array.    | 1. Data <br />2. Array                               |
 
 **Examples:**
 
@@ -262,14 +262,14 @@ EMQX uses compression and decompression functions to reduce network bandwidth us
 
 See the table below for a complete list of compression and decompression functions supported. 
 
-| Function         | Purpose                                              | Parameters                                                  |
-| ---------------- | ---------------------------------------------------- | ----------------------------------------------------------- |
-| `gzip`           | Compresses with gzip headers and checksum.           | `raw_data` <br>(binary)                                     |
-| `gunzip`         | Decompresses with gzip headers and checksum.         | `compressed_data` <br>(binary)                              |
-| `zip`            | Compresses without zlib headers and checksum.        | `raw_data` <br>(binary), `compression_level` <br>(optional) |
-| `unzip`          | Decompresses data without zlib headers and checksum. | `compressed_data` <br>(binary)                              |
-| `zip_compress`   | Compresses with zlib headers and checksum.           | `raw_data`<br> (binary) `compression_level` <br>(optional)  |
-| `zip_uncompress` | Decompresses with zlib headers and checksum.         | `compressed_data` <br>(binary)                              |
+| Function         | Purpose                                              | Parameters                                                   |
+| ---------------- | ---------------------------------------------------- | ------------------------------------------------------------ |
+| `gzip`           | Compresses with gzip headers and checksum.           | `raw_data` <br>(binary)                                      |
+| `gunzip`         | Decompresses with gzip headers and checksum.         | `compressed_data` <br>(binary)                               |
+| `zip`            | Compresses without zlib headers and checksum.        | `raw_data`  (binary),<br> `compression_level` <br>(optional) |
+| `unzip`          | Decompresses data without zlib headers and checksum. | `compressed_data` <br>(binary)                               |
+| `zip_compress`   | Compresses with zlib headers and checksum.           | `raw_data ` (binary)<br> `compression_level` <br>(optional)  |
+| `zip_uncompress` | Decompresses with zlib headers and checksum.         | `compressed_data` <br>(binary)                               |
 
 
 **Examples:**
@@ -295,7 +295,7 @@ See the table below for the syntax supported.
 | --------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | `subbits`                                           | Returns an unsigned integer (big-endian) obtained by extracting a specified number of bits from the beginning of a binary input. | 1. Binary input <br />2. Number of bits to extract           |
 | `subbits`<br>(with offset)                          | Returns an unsigned integer (big-endian) obtained by extracting a specified number of bits starting from a given offset in a binary input. <br>Offsets are indexed starting from 1. | 1. Binary input  <br />2. Starting offset <br />3. Number of bits to extract |
-| `subbits`<br>(with offset and data type conversion) | Returns a data value obtained by extracting a specified number of bits starting from a given offset in a binary input and after data type conversion. <br>Offsets are indexed starting from 1. | 1. Binary input <br />2. Starting offset<br />3. Number of bits to extract <br />4. Data Type, can be `integer`, `float`, `bits`<br /><br>If set to `integer`, you can continue to set:<br>- Signedness: `unsigned`, `signed`, <br />6. Endianness: `big`, `little` |
+| `subbits`<br>(with offset and data type conversion) | Returns a data value obtained by extracting a specified number of bits starting from a given offset in a binary input and after data type conversion. <br>Offsets are indexed starting from 1. | 1. Binary input <br />2. Starting offset<br />3. Number of bits to extract <br />4. Data Type, can be `integer`, `float`, `bits`<br /><br>If set to `integer`, you can continue to set:<br>- Signedness: `unsigned`, `signed`, <br />- Endianness: `big`, `little` |
 
 **Examples:**
 
@@ -313,14 +313,14 @@ EMQX uses encoding and decoding functions to convert data from one format to ano
 
 See the table below for a complete list of encoding and decoding functions supported. 
 
-| Function        | Description          | Parameters                                |
-| --------------- | -------------------- | ----------------------------------------- |
-| `base64_encode` | BASE64 encode        | The binary to be encoded                  |
-| `base64_decode` | BASE64 decode        | The base64-formatted string to be decoded |
-| `json_encode`   | JSON encode          | The data to be encoded                    |
-| `json_decode`   | JSON decode          | The JSON string to be decoded             |
-| `bin2hexstr`    | Binary to Hex String | The binary                                |
-| `hexstr2bin`    | Binary to Hex String | The hex string                            |
+| Function        | Description          | Parameters                             |
+| --------------- | -------------------- | -------------------------------------- |
+| `base64_encode` | BASE64 encode        | Binary to be encoded                   |
+| `base64_decode` | BASE64 decode        | Bbase64-formatted string to be decoded |
+| `json_encode`   | JSON encode          | Data to be encoded                     |
+| `json_decode`   | JSON decode          | JSON string to be decoded              |
+| `bin2hexstr`    | Binary to Hex String | Binary                                 |
+| `hexstr2bin`    | Binary to Hex String | hex string                             |
 
 **Examples:**
 
@@ -335,10 +335,10 @@ bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 
 EMQX Enterprise also supports using schema encoding and decoding functions to encode and decode data according to a specified schema. See the table below for a detailed explanation of the functions. 
 
-| Function | Description | Parameters | Returned value |
-| -------- | ------------------------------------|------------------------- | --------------------------- |
-| `schema_encode` | Encode data according to a pre-defined schema. | 1. Schema ID defined by schema registry <br>2. Data to be encoded <br>3 ... N. Remaining arguments according to the schema type | The encoded data |
-| `schema_decode` | Decode data according to a pre-defined schema. | 1. Schema ID defined by schema registry<br> 2. Data to be decoded <br>3..N. Remaining arguments according to the schema type | The decoded data |
+| Function | Description | Parameters |
+| -------- | ------------------------------------|------------------------- |
+| `schema_encode` | Encode data according to a pre-defined schema. | 1. Schema ID defined by schema registry <br>2. Data to be encoded <br>3 ... N. Remaining arguments according to the schema type |
+| `schema_decode` | Decode data according to a pre-defined schema. | 1. Schema ID defined by schema registry<br> 2. Data to be decoded <br>3..N. Remaining arguments according to the schema type |
 
 <!-- For examples of schema_encode() and schema_decode(), see [schema registry](schema-registry.md) -->
 {% endemqxee %}
