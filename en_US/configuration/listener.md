@@ -2,10 +2,11 @@
 
 In EMQX, listener is configured to receive requests from MQTT clients. EMQX supports the following message transfer protocols, including:
 
-- TCP: port  `1883`
-- SSL: port `8883`
-- Websocket listener: `8083`
-- Secure websocket listener: `8084`
+- TCP:  `1883`
+- SSL:  `8883`
+- WebSocket listener: `8083`
+- Secure WebSocket listener: `8084`
+- QUIC: `14567`
 
 ## Configure TCP Listener
 
@@ -117,9 +118,56 @@ where:
 
 
 
-<!--To add QUIC-->
+## Configure QUIC Listener
 
-<!--To add code sample for adding multiple listeners.-->
+EMQX 5.0 introduces QUIC support (MQTT over QUIC) and designs a unique messaging mechanism and management approach.
+
+To configure the QUIC listener in EMQX, you can add the `listeners.quic` configuration items in the `emqx.conf` file within the `etc` folder of the EMQX installation directory.
+
+For example, to enable the QUIC listener on port `14567`, with a maximum 1,024,000 of concurrent connections allowed by the listener:
+
+```bash
+listeners.quic.default {
+ enabled = true
+ bind = "0.0.0.0:14567"
+ max_connections = 1024000
+ ssl_options {
+  verify = verify_none
+  keyfile = "etc/certs/key.pem"
+  certfile = "etc/certs/cert.pem"
+  cacertfile = "etc/certs/cacert.pem"
+ }
+}
+```
+
+## Add Multiple Listeners
+
+EMQX supports adding multiple listeners of different types and the syntax is as follows: 
+
+```bash
+listener.{type}.{name} { ... }
+```
+
+Where, 
+
+- `type` is the listener type: `ws`, `wss`, tcp, `ssl,` and `quic` are supported. 
+- `name` is the name of the listeners, the listener of the same type should be given unique names. 
+
+Here is an example of adding four listeners of different types: TCP, SSL, WebSocket, and WSS. 
+
+```bash
+listener.tcp.external = 1883
+listener.ssl.external = 8883
+listener.ws.external = 8083
+listener.wss.external = 8084
+```
+
+Where,
+
+- `listener.tcp.external` is assigned to the default MQTT port `1883`
+- `listener.ssl.external` is assigned to the default MQTT over SSL port `8883`
+- `listener.ws.external` is assigned to the default WebSocket port `8083`
+- `listener.wss.external` is assigned  to the default WebSocket over SSL port `8084`
 
 :::tip
 
