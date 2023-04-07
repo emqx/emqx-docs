@@ -1,4 +1,4 @@
-# Integrate with SAP Event Mesh
+# Ingest Data into SAP Event Mesh
 
 EMQX Rule Engine supports sending messages to [SAP Event Mesh](https://help.sap.com/viewer/bf82e6b26456494cbdd197057c09979f/Cloud/en-US) through HTTP request (`httprest`).
 

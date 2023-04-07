@@ -1,4 +1,4 @@
-# Integrate with Lindorm (since e3.3.6, and e4.4.1)
+# Ingest Data into Lindorm (since e3.3.6, and e4.4.1)
 
 First, make sure that the Lindorm database service is enabled.
 </br>

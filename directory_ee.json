@@ -396,7 +396,7 @@
       "children": 
       [
         {
-          "title": "集成 MQTT Broker",
+          "title": "桥接数据到 MQTT Broker",
           "path": "rule/bridge_mqtt"
         },
         {
@@ -504,11 +504,11 @@
           "path": "rule/backend_oracle"
         },
         {
-          "title": "集成 SQLServer",
+          "title": "集成 SQL Server",
           "path": "rule/backend_sqlserver"
         },
         {
-          "title": "集成多个 MQTT Broker",
+          "title": "桥接数据到多个 MQTT Broker",
           "path": "rule/bridge_emqx"
         }
       ]
@@ -1187,116 +1187,116 @@
       "children": 
       [
         {
-          "title": "Integrate with MQTT Broker",
+          "title": "Bridge Data into MQTT Broker",
           "path": "rule/bridge_mqtt"
         },
         {
-          "title": "Integrate with Kafka",
+          "title": "Steam Data into Kafka",
           "path": "rule/bridge_kafka"
         },    
         {
-          "title": "Integrate with InfluxDB",
+          "title": "Ingest Data into InfluxDB",
           "path": "rule/backend_influxdb"
         },
         {
-          "title": "Integrate with InfluxDB V2",
+          "title": "Ingest Data into InfluxDB V2",
           "path": "rule/backend_influxdb_v2"
         },    
         {
-          "title": "Integrate with MySQL",
+          "title": "Ingest Data into MySQL",
           "path": "rule/backend_mysql"
         },
         {
-          "title": "Integrate with PostgreSQL",
+          "title": "Ingest Data into PostgreSQL",
           "path": "rule/backend_pgsql"
         },
         {
-          "title": "Integrate with Redis",
+          "title": "Ingest Data into Redis",
           "path": "rule/backend_redis"
         },
         {
-          "title": "Integrate with MongoDB",
+          "title": "Ingest Data into MongoDB",
           "path": "rule/backend_mongodb"
         },
         {
-          "title": "Integrate with HStreamDB",
+          "title": "Steam Data into HStreamDB",
           "path": "rule/backend_hstreamdb"
         },
         {
-          "title": "Integrate with Pulsar",
+          "title": "Ingest Data into Pulsar",
           "path": "rule/bridge_pulsar"
         },
         {
-          "title": "Integrate with RabbitMQ",
+          "title": "Ingest Data into RabbitMQ",
           "path": "rule/bridge_rabbitmq"
         },
         {
-          "title": "Integrate with RocketMQ",
+          "title": "Ingest Data into RocketMQ",
           "path": "rule/bridge_rocketmq"
         },
       
         {
-          "title": "Integrate with Lindorm",
+          "title": "Ingest Data into Lindorm",
           "path": "rule/backend_lindorm"
         },
         {
-          "title": "Integrate with Tablestore",
+          "title": "Ingest Data into Tablestore",
           "path": "rule/backend_tablestore"
         },
         {
-          "title": "Integrate with DynamoDB",
+          "title": "Ingest Data into DynamoDB",
           "path": "rule/backend_dynamodb"
         },
         {
-          "title": "Integrate with GCP PubSub",
+          "title": "Ingest Data into GCP PubSub",
           "path": "rule/bridge-gcp-pubsub"
         },
         {
-          "title": "Integrate with TDengine",
+          "title": "Ingest Data into TDengine",
           "path": "rule/backend_tdengine"
         },
         {
-          "title": "Integrate with TimescaleDB",
+          "title": "Ingest Data into TimescaleDB",
           "path": "rule/backend_timescaledb"
         },
         {
-          "title": "Integrate with IoTDB",
+          "title": "Ingest Data into IoTDB",
           "path": "rule/backend_iotdb"
         },
         {
-          "title": "Integrate with MatrixDB",
+          "title": "Ingest Data into MatrixDB",
           "path": "rule/backend_matrixdb"
         },
         {
-          "title": "Integrate with OpenTSDB",
+          "title": "Ingest Data into OpenTSDB",
           "path": "rule/backend_opentsdb"
         },
         {
-          "title": "Integrate with DolphinDB",
+          "title": "Ingest Data into DolphinDB",
           "path": "rule/backend_dolphindb"
         },
         {
-          "title": "Integrate with ClickHouse",
+          "title": "Ingest Data into ClickHouse",
           "path": "rule/backend_clickhouse"
         },
         {
-          "title": "Integrate with Cassandra",
+          "title": "Ingest Data into Cassandra",
           "path": "rule/backend_cassandra"
         },
         {
-          "title": "Integrate with SAP Event Mesh",
+          "title": "Ingest Data into SAP Event Mesh",
           "path": "rule/bridge_sap_event_mesh"
         },
         {
-          "title": "Integrate with Oracle DB",
+          "title": "Ingest Data into Oracle DB",
           "path": "rule/backend_oracle"
         },
         {
-          "title": "Integrate with SQLServer",
+          "title": "Ingest Data into SQL Server",
           "path": "rule/backend_sqlserver"
         },
         {
-          "title": "Integrate with Multiple MQTT Brokers",
+          "title": "Bridge Data into Multiple MQTT Brokers",
           "path": "rule/bridge_emqx"
         }
       ]

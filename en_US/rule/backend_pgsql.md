@@ -1,4 +1,4 @@
-# Integrate with PostgreSQL
+# Ingest Data into PostgreSQL
 
 ::: tip
 

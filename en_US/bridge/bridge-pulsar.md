@@ -1,4 +1,4 @@
-# Integrate with Pulsar
+# Ingest Data into Pulsar
 
 ::: tip
 

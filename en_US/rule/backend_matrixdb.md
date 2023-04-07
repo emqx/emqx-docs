@@ -1,4 +1,4 @@
-# Integrate with MatrixDB
+# Ingest Data into MatrixDB
 
 Build the MatrixDB database, set the user name and password to root/public, and create a database named mqtt.
 
