@@ -128,26 +128,27 @@ This section demonstrates how to create Kafka producer and consumer data bridges
      | `value`    | Kafka message value (encoded by the chosen value encoding)   |
    
      The default value for **MQTT Payload Template** is `${.}`, which includes all available data encoded as a JSON object.  For example, choosing `${.}` as a template will produce the following for a Kafka message:
-   
+     
      ```json
      {
-      "value": "value",
-      "ts_type": "create",
-      "ts": 1679665968238,
-      "topic": "my-kafka-topic",
-      "offset": 2,
-      "key": "key",
-      "headers": {"header_key": "header_value"}
-     }
+           "value": "value",
+           "ts_type": "create",
+           "ts": 1679665968238,
+           "topic": "my-kafka-topic",
+           "offset": 2,
+           "key": "key",
+           "headers": {"header_key": "header_value"}
+          }
      ```
-   
+     
      Subfields from the Kafka message may be accessed with dot notation. For example: `${.value}` will resolve to the Kafka message value, and `${.headers.h1}` will resolve to the value of the `h1` Kafka header, if present.  Absent values will be replaced by empty strings.
-   
+     
      **Note**: Each Kafka-to-MQTT topic mapping must contain a unique Kafka topic name.  That is, the Kafka topic must not be present in more than one mapping.
+     
    
-     :::
+   :::
    
-     ::::
+   ::::
    
 5. Before clicking **Create**, you can click **Test Connection** to test that the bridge can connect to the Kafka server.
 
@@ -156,11 +157,11 @@ This section demonstrates how to create Kafka producer and consumer data bridges
    - For the Kafka producer data bridge, click **Create Rule** or go to [Create Rule for Kafka Producer Data Bridge](#create-rule-for-kafka-producer-data-bridge) to create an associated rule. 
    - For the Kafka consumer data bridge, It's not strictly necessary to create a rule.
 
-    ::: tip
+::: tip
 
    By creating a rule, it allows Kafka messages matching the rule to be further transformed and filtered if needed, and then forwarded to other rule actions, like different bridges. Refer to the [Rules](./rules.md) for more information on creating rules. The MQTT topics defined in **Topic Mapping** will start having messages published to them without further configuration.
 
-   :::
+:::
 
 Now the Kafka data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
@@ -176,15 +177,16 @@ Now the Kafka data bridge should appear in the data bridge list (**Data Integrat
 
    Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
 
-  ```sql
+```sql
 SELECT
   *
 FROM
   "t/#"
-  ```
+```
 
-4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge you just created under **Data bridge**. Then click the **Add** button.
-4. Click **Create** at the page bottom to finish the creation.
+5. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge you just created under **Data bridge**. Then click the **Add** button.
+
+6. Click **Create** at the page bottom to finish the creation.
 
 Now we have successfully created the data bridge to Kafka producer data bridge. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Kafka after parsing by rule  `my_rule`.
 
@@ -192,9 +194,9 @@ Now we have successfully created the data bridge to Kafka producer data bridge. 
 
  Use MQTTX to send messages to topic  `t/1`:
 
-   ```bash
+```bash
    mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Kafka" }'
-   ```
+```
 
 Check the running status of the two data bridges, there should be one new incoming and one new outgoing message.
 
