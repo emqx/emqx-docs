@@ -121,7 +121,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
    
    **MQTT Payload Template** 的默认值为`${.}`，其中包括编码为 JSON 对象的所有可用数据。例如，选择`${.}`作为模板将会产生以下 Kafka 消息内容：
    
-     ```json
+```json
      {
       "value": "value",
       "ts_type": "create",
@@ -131,21 +131,21 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
       "key": "key",
       "headers": {"header_key": "header_value"}
      }
-     ```
-   
-   可以使用点符号选择 Kafka 消息的子字段。例如：`${.value}` 将解析为 Kafka 消息的值，`${.headers.h1}` 将解析为 Kafka `h1` 标题的值（如果存在）。缺失的值将被替换为空字符串。
-   
-   **注意**：每一对 Kafka 和 MQTT 的主题映射关系只能有一个唯一的 Kafka 主题名称，即 Kafka 主题名称不能出现在一对以上的映射关系中。
-   
-     :::
-   
-     ::::
-   
+```
+
+可以使用点符号选择 Kafka 消息的子字段。例如：`${.value}` 将解析为 Kafka 消息的值，`${.headers.h1}` 将解析为 Kafka `h1` 标题的值（如果存在）。缺失的值将被替换为空字符串。
+
+ **注意**：每一对 Kafka 和 MQTT 的主题映射关系只能有一个唯一的 Kafka 主题名称，即 Kafka 主题名称不能出现在一对以上的映射关系中。
+
+:::
+
+::::
+
 5. 点击**创建**前，您可点击**测试连接**按钮确保能连接到 Kafuka 服务器。
 
 6. 点击**创建**，将提示是否使用该数据桥接创建规则。
 
-   - 对于 Kafka 生产者桥接，点击**创建规则**或者到到 Dashboard **数据集成** -> **规则页面** [创建数据转发规则](创建数据转发规则)。
+   - 对于 Kafka 生产者桥接，点击**创建规则**或者到到 Dashboard **数据集成** -> **规则页面** [创建数据转发规则](#创建 Kafka 生产者数据转发规则)。
    - 对于 Kafka 消费者桥接，创建关联的规则不是必需的。没有规则的情况下消息也可以发布到 **主题映射** 中设置的 MQTT 主题。
    
    ::: tip 提示
@@ -169,16 +169,18 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
    注意：如果要自定义 SQL 语句，请确保 `SELECT` 字段包含数据桥接中所需的所有字段。
 
 
-  ```sql
+```sql
 SELECT
   *
 FROM
   "t/#"
-  ```
+```
 
-4. 点击**添加动作**按钮，在下拉框中选择**使用数据桥接转发**选项，选择先前创建好的 Kafka 数据桥接。
-5. 点击**添加**按钮确认添加动作。
-6. 点击最下方**创建**按钮完成规则创建。
+5. 点击**添加动作**按钮，在下拉框中选择**使用数据桥接转发**选项，选择先前创建好的 Kafka 数据桥接。
+
+6. 点击**添加**按钮确认添加动作。
+
+7. 点击最下方**创建**按钮完成规则创建。
 
 至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 Kafka 进行存储。
 
