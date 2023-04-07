@@ -1,4 +1,4 @@
-# MQTT Python SDK 示例
+# 使用 Python SDK 连接
 
 
 [Eclipse Paho Python](https://github.com/eclipse/paho.mqtt.python) 为 Eclipse Paho 项目下的 Python 语言版客户端库，该库能够连接到 MQTT Broker 以发布消息，订阅主题并接收已发布的消息。

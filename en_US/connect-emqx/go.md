@@ -1,4 +1,4 @@
-# MQTT Go SDK Example
+# Connect via Go SDK
 
 [Eclipse Paho MQTT Go Client](https://github.com/eclipse/paho.mqtt.golang) is the Go language client library under the Eclipse Paho project, which can connect to the MQTT Broker to publish messages, subscribe to topics and receive the published message. It supports asynchronous operation mode completely.
 

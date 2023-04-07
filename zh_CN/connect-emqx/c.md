@@ -1,4 +1,4 @@
-# MQTT C SDK 示例
+# 通过 C SDK 连接
 
 [Eclipse Paho C](https://www.eclipse.org/paho/clients/c/) 与 [Eclipse Paho Embedded C](https://www.eclipse.org/paho/clients/c/embedded/) 均为 Eclipse Paho 项目下的 C 语言客户端库（MQTT C Client），均为使用 ANSI C 编写的功能齐全的 MQTT 客户端。
 
