@@ -1191,7 +1191,7 @@
           "path": "rule/bridge_mqtt"
         },
         {
-          "title": "Steam Data into Kafka",
+          "title": "Stream Data into Kafka",
           "path": "rule/bridge_kafka"
         },    
         {
@@ -1219,7 +1219,7 @@
           "path": "rule/backend_mongodb"
         },
         {
-          "title": "Steam Data into HStreamDB",
+          "title": "Stream Data into HStreamDB",
           "path": "rule/backend_hstreamdb"
         },
         {
