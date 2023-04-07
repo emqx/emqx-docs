@@ -1,4 +1,4 @@
-# MQTT 微信小程序接入
+# 使用微信小程序接入
 
 微信小程序支持通过 WebSocket 进行即时通信，EMQX 的 MQTT Over WebSocket 能够完全兼容使用在微信小程序上。
 
