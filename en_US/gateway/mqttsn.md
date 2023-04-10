@@ -86,11 +86,11 @@ The MQTT-SN protocol already defines the publish/subscribe behavior, e.g:
 
 ## Customize Your MQTT-SN Gateway
 
-Besides the default settings, EMQX also offers various fields to better serve your business needs. This section gives a detailed explanation of different fields on the Gateways page. 
+In addition to the default settings, EMQX provides a variety of configuration options to better accommodate your specific business requirements. This section offers an in-depth overview of the various fields available on the **Gateways** page.
 
 ### Basic Configuration
 
-In the **Basic Configuration** tab, you can customize your gateway ID, predefine the topic list for this gateway, and set the MountPoint for this gateway. See the texts below the screenshot for a detailed explanation of each field. 
+In the **Basic Configuration** tab, you can customize your gateway ID, predefine the topic list, and set the MountPoint string for this gateway. See the texts below the screenshot for a comprehensive explanation of each field. 
 
 ![Basic Configuration](./assets/mqttsn-basic-config.png)
 
@@ -139,7 +139,7 @@ If you click **Settings**, you will be directed to the **Add Listener** page, wh
 - **Buffer**: Set the size of the buffer used to store incoming and outgoing packets, unit: KB.
 - **Receive Buffer**: Set the size of the receive buffer,  unit: KB.
 - **Send Buffer**: Set the size of the send buffer,  unit: KB.
-- **SO_REUSEADDR**: Set whether to allow local reuse of port numbers, <!--not quite sure what this means-->
+- **SO_REUSEADDR**: Set whether to allow local reuse of port numbers. <!--not quite sure what this means-->
 
 ### Configure Authentication
 
