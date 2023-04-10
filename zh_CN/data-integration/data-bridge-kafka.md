@@ -157,7 +157,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 6. 点击**创建**，将提示是否使用该数据桥接创建规则。
 
-   - 对于 Kafka 生产者桥接，点击**创建规则**或者到到 Dashboard **数据集成** -> **规则页面** [创建数据转发规则](#创建 Kafka 生产者数据转发规则)。
+   - 对于 Kafka 生产者桥接，点击**创建规则**或者到 Dashboard **数据集成** -> **规则页面** [创建数据转发规则](#创建 Kafka 生产者数据转发规则)。
    - 对于 Kafka 消费者桥接，创建关联的规则不是必需的。没有规则的情况下消息也可以发布到 **主题映射** 中设置的 MQTT 主题。
    
 
