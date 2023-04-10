@@ -1,4 +1,4 @@
-# DynamoDB
+# Ingest Data into DynamoDB
 
 EMQX supports integration with DynamoDB, so you can save client messages and events to DynamoDB, or use events to trigger the update or removal of data to record the online status or online/offline of clients.
 
@@ -16,20 +16,22 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 ## Features List
 
-- [Connection pool](./data-bridges.md#Connection pool)
-- [Async mode](./data-bridges.md#Async mode)
-- [Batch mode](./data-bridges.md#Batch mode)
-- [Buffer queue](./data-bridges.md#Buffer queue)
-- [SQL preprocessing](./data-bridges.md#Prepared statement)
+- [Connection pool](./data-bridges.md)
+- [Async mode](./data-bridges.md)
+- [Batch mode](./data-bridges.md)
+- [Buffer queue](./data-bridges.md)
+- [SQL preprocessing](./data-bridges.md)
 
-## [Configuration Parameters](#Configuration)
-<!-- TODO LIKN TO THE CONFIG doc。 -->
+## Quick Start Tutorial
 
-## Quick Start
+This section introduces how to configure the DynamoDB data bridge, covering topics like how to set up the DynamoDB server, create data bridges and rules for forwarding data to DynamoDB and test the data bridges and rules.
+
+This tutorial assumes that you run both EMQX and DynamoDB on the local machine. If you have Dynamo and EMQX running remotely, adjust the settings accordingly.
 
 ### Install DynamoDB Local
 
-We need a docker compose file, `dynamo.yaml`, to setup the Dynamodb local
+1. Prepare a docker compose file, `dynamo.yaml`, to setup the Dynamodb local.
+
 ```json
 version: '3.8'
 services:
@@ -45,12 +47,13 @@ services:
       AWS_DEFAULT_REGION: us-west-2
 ```
 
-Start the server
+2. Start the server.
+
 ```bash
 docker-compose -f dynamo.yaml up
 ```
 
-Then prepare a table definition and save it to your home directory as `mqtt_msg.json`
+3. Prepare a table definition and save it to your home directory as `mqtt_msg.json`.
 
 ```json
 {
@@ -69,17 +72,19 @@ Then prepare a table definition and save it to your home directory as `mqtt_msg.
 
 ```
 
-Create a new table via this file.
+4. Create a new table via this file.
+
 ```bash
 docker run --rm -v ${HOME}:/dynamo_data -e AWS_ACCESS_KEY_ID=root -e AWS_SECRET_ACCESS_KEY=public -e AWS_DEFAULT_REGION=us-west-2 amazon/aws-cli dynamodb create-table --cli-input-json file:///dynamo_data/mqtt_msg.json --endpoint-url http://host.docker.internal:8000
 ```
 
-Check if the table was created successfully
+5. Check if the table was created successfully.
+
 ```bash
 docker run --rm -e AWS_ACCESS_KEY_ID=root -e AWS_SECRET_ACCESS_KEY=public -e AWS_DEFAULT_REGION=us-west-2 amazon/aws-cli dynamodb list-tables --endpoint-url http://host.docker.internal:8000
 ```
 
-The following JSON will be printed if the table was created successfully
+The following JSON will be printed if the table was created successfully.
 ```json
 {
     "TableNames": [
@@ -88,55 +93,87 @@ The following JSON will be printed if the table was created successfully
 }
 ```
 
-### Connect to DynamoDB
+### Create DynamoDB Data Bridge
 
-We will create a data bridge to DynamoDB with two rules for messages storage and event records respectively. 
+You need to create 2 data bridges to PostgreSQL for messages storage and event records respectively.
 
-#### [Messages Storage](#Storage)
+#### Messages Storage
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
+
 2. Click **Create** on the top right corner of the page.
+
 3. In the **Create Data Bridge** page, click to select **DynamoDB**, and then click **Next**.
-4. Input a name for the data bridge. Note: It should be a combination of upper/lower case letters and numbers.
-5. Input the connection information. Input **http://127.0.0.1:8000** as the **Database Url**,  **mqtt_msg** as the **Database Name**, **root** as the **Username**, and **public** as the **Password**.
-6. Advanced settings (optional):  Choose whether to use sync or async query mode as needed. For details, see [Configuration parameters](#Configuration).
-7. Then click **Create** to finish the creation of the data bridge.
 
-We have successfully created the data bridge to DynamoDB, now we can continue to create rules to specify the data to be saved into DynamoDB. 
+4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
+5. Input the connection information:
+
+   - **Database Url**: Input `http://127.0.0.1:8000`, or the actual URL if the DynamoDB server is running remotely.
+   - **Database Name**: Input `mqtt_msg`.
+   - **Username**: Input `root`.
+   - **Password**: Input `public`.
+
+6. Leave the **Template** empty by default.
+
+   ::: tip
+
+   When this value is empty the whole message will be stored in the database. The actual value is JSON template data.
+
+   :::
+
+7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md).
+
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the MySQL server.
+
+9. Then click **Create** to finish the creation of the data bridge.
+
+   A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into DynamoDB. You can also create rules by following the steps in [Create Rules for DynamoDB Data Bridge](#create-rules-for-dynamodb-data-bridge).
+
+Now the RocketMQ data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+
+### Create Rules for DynamoDB Data Bridge
+
+Now that you have successfully created the data bridge to DynamoDB, you can continue to create rules to specify the data to be saved into DynamoDB. You need to create two different rules for messages forward and event records. 
+
+1. Go to EMQX Dashboard, and click **Data Integration** -> **Rules**.
+
 2. Click **Create** on the top right corner of the page.
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `t/#`  to DynamoDB, we can use the SQL syntax below. Note: If you are testing with your SQL, please ensure you have included all required fields in the `SELECT` part. 
 
-  ```sql
-  SELECT 
-    *
-  FROM
-    "t/#"
-  ```
+3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
 
-4. Then click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data bridge**.  
-5. Then, click the **Add** button. 
-6. Then click the **Create** button to finish the setup. 
+   - To create a rule for message storage, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to DynamoDB.
 
-Now we have successfully created the data bridge to DynamoDB. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by rule  `my_rule`. 
+     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
 
-#### Online/Offline Status Recording
+     ```sql
+     SELECT 
+       *
+     FROM
+       "t/#"
+     ```
 
-The operating steps are similar to those at the [Message storage](#Storage) part expect for the SQL template and SQL rules. 
+   - To create a rule for online/offline status recording, input the following statement:
 
-For convenience, the `mqtt_msg` table will be reused to store online/offline events.
+     ```sql
+     SELECT
+       str(event) + timestamp as id, *
+     FROM 
+       "$events/client_connected", "$events/client_disconnected"
+     ```
 
-The SQL rule is as follows: 
+     ::: tip
 
-```sql
-SELECT
-  str(event) + timestamp as id, *
-FROM 
-  "$events/client_connected", "$events/client_disconnected"
-```
+     For convenience, the `mqtt_msg` topic will be reused to receive online/offline events.
 
-### Test
+     :::
+
+4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**.  Click the **Add** button. 
+5. Click the **Create** button to finish the setup. 
+
+Now you have successfully created the data bridge to DynamoDB. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to DynamoDB after parsing by rule `my_rule`. 
+
+### Test the Data Bridges and Rules
 
 Use MQTTX to send a message to topic `t/1` to trigger an online/offline event. 
 

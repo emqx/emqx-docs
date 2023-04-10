@@ -1,4 +1,4 @@
-# Data Bridges
+# Data Integration
 
 Data bridge is a channel used to connect EMQX and external data systems, for example, databases like MySQL, MongoDB, message brokers like Apache Kafka and RabbitMQ, or even an HTTP server.
 
@@ -60,7 +60,7 @@ bridges.mysql.foo {
 }
 ```
 
-### Batch mode
+### Batch Mode
 
 In batch mode, multiple pieces of data will be simultaneously written into the external data integrations. After enabling the Batching mode, EMQX will temporarily store the data of each request and put the data in batches into the target data system after reaching a specified batch time or size. You can configure the batch time and batch size as needed.
 
