@@ -114,7 +114,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
    
    - 填写必填信息（标星号字段）。
    
-   - 输入数据桥接名称，要求是大小写英文字母或数字组合。
+   - 输入数据桥接名称，要求是大小写英文字母和数字组合。
    
    - 输入 Kafka 连接信息，**主机列表**填写 `127.0.0.1:9092`，其他参数根据实际情况填写。
    
