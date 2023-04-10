@@ -1,4 +1,4 @@
-# MQTT JavaScript 客户端库
+# 使用 JavaScript SDK 连接
 
 [MQTT.js](https://www.npmjs.com/package/mqtt) 是 JavaScript 编写的，实现了 MQTT 协议客户端功能的模块，可以在浏览器 和 Node.js 环境中使用。
 

@@ -1,27 +1,45 @@
 # Rule Engine
 
-The Rules Engine is EMQX's built-in SQL-based data processing component, which works with [data-bridges](./data-bridges.md) can be used to help extract, filter, enrich, transform and store IoT data in real-time to accelerate application integration and business innovation.
+The Rule Engine is EMQX's built-in data processing component, which works with [data bridges](./data-bridges.md) and can be used to help extract, filter, enrich, transform and store IoT data to accelerate application integration and business innovation. 
 
-![image](./assets/rules/data-integration-arch.png)
+<img src="./assets/rule-engine.png" alt="SQL-based IoT Rule Engine" style="zoom:30%;" />
 
-## Composition of Rules
+The Rule Engine is particularly useful when you need to transform or reroute incoming messages, for example, you can create rules that filter out irrelevant data, do transformations, and trigger alerts or notifications based on specific events or conditions.
 
-The rules describe **data source**, **data processing process**, and **processing result destination**:
-
-- **data source**: the data source of a rule can be a message or event, or an external data system. Rules specify the source of data through the FROM clause of SQL;
-
-- **data processing**: rules describe the data processing process through SQL statements and functions. The WHERE clause of SQL is used to filter data, the SELECT clause and SQL function are used to extract and transform data;
-
-- **processing result destination**: a rule can define one or more actions to process SQL output results. If the SQL execution passes, the rules will perform corresponding actions in sequence, such as storing the processing results in the database or republishing them to another MQTT topic.
+This chapter provides an in-depth exploration of the Rule Engine and its capabilities. A rule defines the data source and transformation, and a set of actions that will be triggered every time the rule outputs a value.
 
 
-![sql_process](./assets/sql_process.png)
 
-### Introduction to Rule SQL Statements
 
-SQL statements are used to specify the data source of rules, define data processing procedures, and so on. An example of an SQL statement is given below:
 
-```SQL
+
+
+## How the Rule Engine Works
+
+Rules describe how to retrieve data from a **data source**, perform **data transformations**, and what actions should be applied to the results.
+
+<img src="./assets/sql_process.png" alt="sql_process" style="zoom:50%;" />
+
+- **Data Source**: The data source of a rule can be a message or event, or an external data system. You can use the `FROM` clause in the rule's SQL to specify the data source, and then use the `WHERE` clause to add additional constraints on which messages will be processed by the rule. 
+- **Data Transformation**: Data transformations describe how to transform an input message. You can use the `SELECT` part of the SQL to extract and transform data from the input message. You can use the embedded SQL sample statements to implement advanced transformations, for example, to add a time stamp to the output message.
+
+- **Actions**: After the input is processed as per the rules specified, you can continue to define one or more actions to process the SQL execution results. The Rule Engine will perform corresponding actions in sequence, such as storing the processing results in a database or republishing them to another MQTT topic.
+
+The below section introduces how to configure a rule with the Dashboard. 
+
+## Configure with EMQX Dashboard
+
+Log in to EMQX Dashboard, and click **Data Integration** -> **Rules** on the left navigation tree. Then click the **Create** button, and you will be directed to the **Rules** page, where you can customize your rules. Input a name for your rule and add a note to facilitate future management. 
+
+### Data processing
+
+Specify the data source and data processing method. 
+
+In the SQL Editor section, input your SQL statements based on your business needs.
+
+For example, if you want EMQX to retrieve input messages from an MQTT topic under topic `t/#` and with `clientid` equal to `foo`, then rename the `data` field to `d`, you can try the SQL statement below: 
+
+```sql
 SELECT
     payload.data as d
 FROM
@@ -30,55 +48,49 @@ WHERE
     clientid = "foo"
 ```
 
-In the above SQL:
+The above SQL statement specifies the following for the rule:
 
-- Data Source: the messages with topic `t/#`;
-- Data Processing: If the client ID of the message is `foo`, select the `data` field from the message content and assign it to the new variable `d`
-
-::: tip
-The dot (".") syntax requires that the data must be of JSON or Map type. If it is of other data types, SQL functions must be used for data type conversion.
-:::
-
-For the SQL syntax and usages, see [SQL syntax](./rule-sql-syntax.md).
-
-### Actions
-
-Actions are components used to process the output results of rules and determine the final destination of data.
-
-The current rule supports the following two actions:
-
-- Built-in Actions: Currently, there are only two supported built-in actions: `republish` and `console`.
-
-- Data Bridges: A data bridge is a channel to the external data system. Rules can directly use the ID of data bridge as the action, sending the output of the rule to the data bridge for further processing. For details of data bridge, see [data bridges](./data-bridges.md).
-
-## Republish Action
-
-The republish action is used to publish a new MQTT message, which is applicable to the scenarios where downlink messages need to be sent to the device.
+- **Data source**: Messages with topic `t/#` and client ID equals to `foo`
+- **Data transformation**: Extract the `data` field from the payload and rename the field from `data` to `d`. So in the above example, the output data will have the following structure `{d: "value of the payload's data field"}`.
 
 ::: tip
-The republish action does not prevent the delivery of the original message. For example, if a "a/1" message triggers a "republish" action through a rule and sends a new message "a/2", then the "a/1" message will still be delivered to the client subscribed to the topic.
+This example assumes the payload is structured data (such as JSON, avro, and protobuf), if the payload is formatted in some other way, you can convert the data type, for example, with the [jq function](./rule-sql-jq.md). 
+
+EMQX has embedded rich SQL statement samples to help you get started, you can click the **SQL Example** button under the **SQL Editor** to explore. For more details about the SQL syntax and usages, see [SQL Syntax](./rule-sql-syntax.md).
+
 :::
 
-In the republish action, you can customize the payload, topic, QoS and other parameters of the message,
-and fields in the rule output can be referenced as values of these parameters in the form of `${field name}`.
+### Add Actions
 
-## Console Action
+Actions are components used to process the output of the rule's SQL statement and determine the final destination of the data. On the **Rules** page,  click the **Add Actions** button under **Actions**, you can choose to:
 
-The console output action is used to view the output results of rules. The results will be printed to the console in the form of logs.
+- **Republish**: Republish the message to a new topic.
 
-If the emqx is started with `emqx console`, the results will be printed to the foreground.
-If the emqx is started with `emqx start`, the results will be printed to `erlang log.*` under the log dir of EMQX.
+* **Console Output**: Print the output of the rule to the console. This is mainly intended for debugging purposes.
 
-### Output Format
+- **Forwarding with Data Bridges**: Forward the processed results with data bridges. For details on how to create Data bridges in EMQX, see [the documentation for Data Bridges](./data-bridges.md).
 
-In the first line it prints the `[rule action]` header followed by the rule ID.
-The outputs from the second line is divided into two parts:
+#### Republish
 
-- The `Action Data` section is the output result of the rule. The fields contained in `Action Data` can be referenced in the form of `${field name}` in the action parameters.
+The republish action is used to publish a new MQTT message. For example, this can be useful when one wants to send an error message back to a device. If you choose to Republish as the action, the following configurations should also be set:
 
-- The `Envs` is the environment variable information available for the action. The environment variable information includes all available fields of the data source and other internal information related to the execution of this action.
+- **Topic**: Specify the target topic, that is, the messages that will be published to which topic. 
+- **QoS** (optional): Set the QoS of the republished messages.
+- **Retain** (optional): Whether republish it as a retained message, default: **false**, set it to **${flags.retain}** if you want to keep the setting from the original message. 
+- **Payload** (optional): Customize the message payload to republish, or leave it blank then EMQX will forward the message as it is. Support reading data using `${field}` syntax.
 
-Example of the outputs:
+::: tip
+The republishing action does not prevent the delivery of the original message. For example, according to the rule, messages under topic `a/1`  will be republished under topic `a/2`, in the meantime `a/1` message will still be delivered to the clients subscribed to topic  `a/1`.
+:::
+
+#### Console Output
+
+The console output action is used to print the result message of a rule to the console or log file. 
+
+* If EMQX is started with `emqx console`, the results will be printed to the terminal where `emqx console` was invoked.
+* If EMQX is started with `emqx start`, the results will be printed to a log file (`erlang log.*`) under the `log` dir of EMQX.
+
+The output will be in the format below
 
 ```bash
 [rule action] rule_id1
@@ -86,16 +98,48 @@ Example of the outputs:
     Envs: #{key1 => val1, key2 => val2}
 ```
 
+Where
+
+-  `[rule action]` is the rule ID where the republish action is triggered.
+- `Action Data` is the output result of the rule, indicating the data or parameter that should be passed to the action when it is executed, that is, the payload part when you set up the republish action. 
+- `Envs` is the environment variable that should be set when republishing, which could be the data source and other internal information related to the execution of this action.
+
 ::: tip
-The console output action is only used for debugging. If it is used in the production environment, it will cause performance degradation.
+The console output action should only be used for debugging. If it is used in the production environment, it may cause performance problems.
 :::
 
-## Typical Use Cases of Rules
+#### Forwarding with Data Bridge
 
-- Action monitoring: in the development of smart home smart door locks, the door locks will be offline due to network, power failure, man-made damage and other reasons, resulting in abnormal functions. Use rule configuration to monitor offline events and push the fault information to the application service, so as to realize the ability of fault detection at the access layer at the first time;
+If select **Forwarding with Data Bridge**, the target message will be republished to the selected data bridge. All you need is to select the target Data bridge from the Data bridge drop-down list. 
 
-- Data filtering: in the truck fleet management of the Internet of vehicles, vehicle sensors collect and report a large amount of operation data. The application platform only focuses on the data when the vehicle speed is greater than 40 km/h. In this scenario, rules can be used to filter messages conditionally and write data that meets the conditions to the business message queue;
+For more information on how to create a data bridge, see [Data bridge](../data-integration/data-bridges.md).
 
-- Message routing: in the intelligent billing application, the terminal equipment distinguishes the service types through different topics. The charging service messages can be connected to the charging message queue through the configuration rules and send a confirmation notice to the service system after the messages arrive at the device end. The non charging information is connected to other message queues to realize the service message routing configuration;
+## Typical Use Cases
 
-- Message encoding and decoding: in other public/private TCP protocol access, industrial control industry and other application scenarios, the encoding and decoding of binary/special format message bodies can be done through the regular local processing functions (which can be customized and developed on emqx); It can also flow relevant messages to external computing resources such as function calculation for processing through regular message routing (the processing logic can be developed by the user), and turn the messages into JSON format that is easy to handle, simplifying the difficulty of project integration and improving the ability of rapid application development and delivery.
+### Action Monitoring
+
+Rules can be used to monitor the status of clients connected to the broker. 
+
+For example, if a client representing a door in a smart home is disconnected, a rule can be used to send a notification to a dashboard for the smart home. This helps ensure that important events are promptly acted upon.
+
+### Data Filtering
+
+In certain scenarios, only specific types of data are relevant, and processing all incoming data may not be necessary. 
+
+For example, in truck fleet management, vehicle sensors collect and report a large amount of operation data. However, the application platform may only be interested in data when the vehicle speed is greater than 40 km/h. 
+
+In this case, rules can be used to filter messages conditionally and only write data that meets the conditions to a message queue. This can help optimize system performance and reduce storage requirements.
+
+### Message Routing
+
+Rules can also be used to route messages to different topics based on the content of the message. This allows for more fine-grained control over message distribution. 
+
+For example, a rule can be used to route messages containing a temperature greater than 100 degrees to a topic for high-temperature alarms. This can help ensure that messages are delivered to the appropriate destination for further processing.
+
+### Message Encoding and Decoding
+
+For cases where the message format needs to be changed, rules can be used to encode and decode messages as required.
+
+For example, a rule can be used to decode a message containing binary data into a JSON format. 
+
+If the built-in functionality is not enough for a specific encoding or decoding task, new built-in functions can be added that are implemented in Erlang. This provides great flexibility in handling message formats.

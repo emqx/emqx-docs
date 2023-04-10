@@ -1,4 +1,4 @@
-# MQTT Java 客户端库
+# 使用 Java SDK 连接
 
 [Eclipse Paho Java Client](https://www.eclipse.org/paho/clients/java/) 是用 Java 编写的 MQTT 客户端库（MQTT Java Client），可用于 JVM 或其他 Java 兼容平台（例如Android）。
 
@@ -115,8 +115,3 @@ public class OnMessageCallback implements MqttCallback {
     }
 }
 ```
-
-
-## Paho Java MQTT 5.0 支持
-
-目前 Paho Java 还在适配 MQTT 5.0，尚未全面支持。

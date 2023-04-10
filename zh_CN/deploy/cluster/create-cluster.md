@@ -233,8 +233,7 @@ cluster {
         apiserver = "http://10.110.111.204:8080"
         service_name = emqx
         address_type = ip
-        app_name = emqx
-        suffix = "pod.local"
+        suffix = "pod.local" # 此为可选项
         namespace = default
     }
 }

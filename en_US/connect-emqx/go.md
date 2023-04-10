@@ -1,16 +1,16 @@
-# MQTT Go 客户端库
+# Connect via Go SDK
 
-[Eclipse Paho MQTT Go Client](https://github.com/eclipse/paho.mqtt.golang) 为 Eclipse Paho 项目下的 Go 语言版客户端库，该库能够连接到 MQTT Broker 以发布消息，订阅主题并接收已发布的消息，支持完全异步的操作模式。
+[Eclipse Paho MQTT Go Client](https://github.com/eclipse/paho.mqtt.golang) is the Go language client library under the Eclipse Paho project, which can connect to the MQTT Broker to publish messages, subscribe to topics and receive the published message. It supports asynchronous operation mode completely.
 
-客户端依赖于 Google 的 [proxy](https://godoc.org/golang.org/x/net/proxy) 和 [websockets](https://godoc.org/github.com/gorilla/websocket) 软件包，通过以下命令完成安装：
+The client depends on Google's software Package of [proxy](https://godoc.org/golang.org/x/net/proxy) and [websockets](https://godoc.org/github.com/gorilla/websocket), which can be installed with the following command:
 
 ```bash
 go get github.com/eclipse/paho.mqtt.golang
 ```
 
-## MQTT Go 使用示例
+## MQTT Go usage example
 
-本示例包含 Go 语言的 Paho MQTT 连接 EMQX，并进行消息收发完整代码：
+This example contains the complete code for Paho MQTT in Go language connecting to EMQX, sending and receiving messages:
 
 ```go
 package main
@@ -35,7 +35,7 @@ func main() {
 	opts := mqtt.NewClientOptions().AddBroker("tcp://broker.emqx.io:1883").SetClientID("emqx_test_client")
 	
 	opts.SetKeepAlive(60 * time.Second)
-	// 设置消息回调处理函数
+	// Set the message callback handler
 	opts.SetDefaultPublishHandler(f)
 	opts.SetPingTimeout(1 * time.Second)
 
@@ -44,25 +44,25 @@ func main() {
 		panic(token.Error())
 	}
 
-	// 订阅主题
+	// Subscribe to a topic
 	if token := c.Subscribe("testtopic/#", 0, nil); token.Wait() && token.Error() != nil {
 		fmt.Println(token.Error())
 		os.Exit(1)
 	}
 	
-	// 发布消息
+	// Publish a message
 	token := c.Publish("testtopic/1", 0, false, "Hello World")
 	token.Wait()
 
 	time.Sleep(6 * time.Second)
 
-	// 取消订阅
+	// Unscribe
 	if token := c.Unsubscribe("testtopic/#"); token.Wait() && token.Error() != nil {
 		fmt.Println(token.Error())
 		os.Exit(1)
 	}
   
-  // 断开连接
+  // Disconnect
 	c.Disconnect(250)
 	time.Sleep(1 * time.Second)
 }
@@ -71,6 +71,6 @@ func main() {
 
 
 
-## Paho Golang MQTT 5.0 支持
+## Paho Golang MQTT 5.0 support
 
-目前 Paho Golang 还在适配 MQTT 5.0，尚未全面支持。
+Currently, Paho Golang is still adapting to MQTT 5.0 and has not yet fully supported it.

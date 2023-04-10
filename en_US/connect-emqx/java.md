@@ -1,4 +1,4 @@
-# MQTT Java client library
+# Connect via Java SDK
 
 [Eclipse Paho Java Client](https://www.eclipse.org/paho/clients/java/) is an MQTT client library written in Java(MQTT Java Client), which can be used in JVM or other Java compatible platforms (such as Android ).
 
