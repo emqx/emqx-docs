@@ -228,7 +228,9 @@ The result shows that all nodes are started normally and joined the cluster auto
 
 ### Autocluster on Kubernetes
 
-[Kubernetes (K8s)](https://kubernetes.io) is Google's open-source container management system. EMQX can use kubernetes API for node discovery and auto clustering.
+The [EMQX Kubernetes Operator](https://docs.emqx.com/en/emqx-operator/latest/) helps you quickly create and manage EMQX clusters on a Kubernetes environment quickly, greatly simplifying the EMQX cluster deployment and management process by turning deployment and management efforts into a low-cost, labeled, repeatable job.
+
+If you want to deploy and manage EMQX by yourself, you can still use Kubernetes API for node discovery and auto clustering. To use this feature,  you need first to create RBAC for the EMQX Pod to allow EMQX to get cluster node information from the Kubernetes APIServer via the endpoints resource. On how to configure, see [Using RBAC Authorization](https://kubernetes.io/docs/reference/access-authn-authz/rbac/).
 
 To enable EMQX autocluster on Kubernetes, you can work with the `cluster.k8s` configuration item in `emqx.conf`. 
 
