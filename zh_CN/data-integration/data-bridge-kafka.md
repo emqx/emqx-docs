@@ -1,9 +1,9 @@
 # Apache Kafka
 
 <!-- 提供一段简介，描述支数据桥接的基本工作方式、关键特性和价值，如果有局限性也应当在此处说明（如必须说明的版本限制、当前未解决的问题）。 -->
-Apache Kafka 数据桥接实现了 EMQX 客户端消息和事件与 Apache Kafka (包括 Confluent) 的桥接，能够提供 EMQX 与企业应用之间高性能、高可靠的数据集成，有效降低应用复杂度并提升扩展性。Apache Kafka 数据桥接涉及两种桥接角色：生产者（将数据发送到 Kafka ）和消费者（将数据从 Kafka 消费下发）。EMQX 支持创建任何一种角色的桥接或同时创建两种角色的桥接。
+Apache Kafka 数据桥接实现了 EMQX 客户端消息和事件与 Apache Kafka (包括 Confluent) 的桥接，能够提供 EMQX 与企业应用之间高性能、高可靠的数据集成，有效降低应用复杂度并提升扩展性。同时，EMQX 与 Apache Kafka 的集成提供了极高的数据吞吐能力，支持 Apache Kafka 的 SASL/SCRAM、SASL/GSSAPI 等多种安全认证方式以及 TLS 连接，是物联网数据集成首选方案之一。
 
-同时，EMQX 与 Apache Kafka 的集成提供了极高的数据吞吐能力，支持 Apache Kafka 的 SASL/SCRAM、SASL/GSSAPI 等多种安全认证方式以及 TLS 连接，是物联网数据集成首选方案之一。
+Apache Kafka 数据桥接涉及两种桥接角色：生产者（将数据发送到 Kafka ）和消费者（将数据从 Kafka 消费下发）。EMQX 支持创建任何一种角色的桥接或同时创建两种角色的桥接。
 
 {% emqxce %}
 :::tip
@@ -64,7 +64,7 @@ bin/kafka-server-start.sh config/kraft/server.properties
 
 ### 创建 Kafka 主题
 
-在 EMQX 创建数据桥接前，必须首先在 Kafka 中创建好所需主题。使用下面的命令在 Kafka 中创建名为 `testtopic-in` 与 `testtopic-out` 的两个主题：
+在 EMQX 创建数据桥接前，必须首先在 Kafka 中创建好所需主题。使用下面的命令在 Kafka 中创建名为 `testtopic-in` （用于生产者角色）与 `testtopic-out` （用于消费者角色）的两个主题：
 
 ```bash
 bin/kafka-topics.sh --create --topic testtopic-in --bootstrap-server localhost:9092
@@ -144,7 +144,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
           }
      ```
      
-     可以使用点符号选择 Kafka 消息的子字段。例如：`${.value}` 将解析为 Kafka 消息的值，`${.headers.h1}` 将解析为 Kafka `h1` 标题的值（如果存在）。缺失的值将被替换为空字符串。
+     可以使用点符号选择 Kafka 消息的子字段。例如：`${.value}` 将解析为 Kafka 消息的值，`${.headers.h1}` 将解析为 Kafka `h1` 标题的值（如果存在该子字段）。缺失的值将被替换为空字符串。
      
       **注意**：每一对 Kafka 和 MQTT 的主题映射关系只能有一个唯一的 Kafka 主题名称，即 Kafka 主题名称不能出现在一对以上的映射关系中。
      
