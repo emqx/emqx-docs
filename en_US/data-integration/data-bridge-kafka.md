@@ -111,7 +111,7 @@ This section demonstrates how to create Kafka producer and consumer data bridges
    
    - Fill the required fields (marked with an asterisk). 
    
-   - Input a name for the data bridge. The name should be a combination of upper/lower case letters or numbers.
+   - Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
    
    - Input the connection information. Input `127.0.0.1:9092` for the **Bootstrap Hosts**. For the other fields set as the actual condition.
    
