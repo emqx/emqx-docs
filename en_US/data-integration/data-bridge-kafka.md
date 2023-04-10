@@ -188,7 +188,7 @@ FROM
 
 6. Click **Create** at the page bottom to finish the creation.
 
-Now we have successfully created the data bridge to Kafka producer data bridge. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Kafka after parsing by rule  `my_rule`.
+Now you have successfully created the data bridge to Kafka producer data bridge. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Kafka after parsing by rule  `my_rule`.
 
 ### Test the Data Bridge and Rule
 
