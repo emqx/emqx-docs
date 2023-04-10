@@ -4,9 +4,9 @@
 
 <!-- 提供一段简介，描述支数据桥接的基本工作方式、关键特性和价值，如果有局限性也应当在此处说明（如必须说明的版本限制、当前未解决的问题）。 -->
 
-[Apache Kafka](https://kafka.apache.org/) is a widely-used open-source distributed event streaming platform. EMQX's integration with Apache Kafka/Confluent presents our users with reliable bi-directional data transport and processing capability under high-throughput scenarios. Streaming data into Apache Kafka involves creating data bridges to Kafka in two roles: producer (sends messages to Kafka) and consumer (receives messages from Kafuka). EMQX enables you to create data bridges in either or both of the roles.
+[Apache Kafka](https://kafka.apache.org/) is a widely-used open-source distributed event streaming platform. EMQX's integration with Apache Kafka/Confluent presents our users with reliable bi-directional data transport and processing capability under high-throughput scenarios. As a top IoT data infrastructure provider, EMQX currently supports authenticating with Apache Kafka/Confluent via SASL/SCRAM or SASL/GSSAPI. 
 
-As a top IoT data infrastructure provider, EMQX currently supports authenticating with Apache Kafka/Confluent via SASL/SCRAM or SASL/GSSAPI. 
+Streaming data into Apache Kafka involves creating data bridges to Kafka in two roles: producer (sends messages to Kafka) and consumer (receives messages from Kafuka). EMQX enables you to create data bridges in either or both of the roles.
 
 {% emqxce %}
 :::tip
@@ -63,7 +63,7 @@ For detailed operation steps, you may refer to the [Quick Start section in Kafka
 
 ### Create Kafka Topics
 
-Relevant Kafka topics should be created before creating the data bridge in EMQX. Use the commands below to create two topics in Kafka:  `testtopic-in` and `testtopic-out`. 
+Relevant Kafka topics should be created before creating the data bridge in EMQX. Use the commands below to create two topics in Kafka:  `testtopic-in` (for the producer role) and `testtopic-out` (for the consumer role). 
 
 ```bash
 bin/kafka-topics.sh --create --topic testtopic-in --bootstrap-server localhost:9092
@@ -75,7 +75,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 This section demonstrates how to create Kafka producer and consumer data bridges via Dashboard.
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -141,10 +141,9 @@ This section demonstrates how to create Kafka producer and consumer data bridges
           }
      ```
      
-     Subfields from the Kafka message may be accessed with dot notation. For example: `${.value}` will resolve to the Kafka message value, and `${.headers.h1}` will resolve to the value of the `h1` Kafka header, if present.  Absent values will be replaced by empty strings.
+     Subfields from the Kafka message may be accessed with dot notation. For example, `${.value}` will resolve to the Kafka message value, and `${.headers.h1}` will resolve to the value of the `h1` Kafka header if such a subfield exists.  Absent values will be replaced by empty strings.
      
      **Note**: Each Kafka-to-MQTT topic mapping must contain a unique Kafka topic name.  That is, the Kafka topic must not be present in more than one mapping.
-     
    
    :::
    
@@ -159,7 +158,7 @@ This section demonstrates how to create Kafka producer and consumer data bridges
 
 ::: tip
 
-   By creating a rule, it allows Kafka messages matching the rule to be further transformed and filtered if needed, and then forwarded to other rule actions, like different bridges. Refer to the [Rules](./rules.md) for more information on creating rules. The MQTT topics defined in **Topic Mapping** will start having messages published to them without further configuration.
+Creating a rule allows Kafka messages matching the rule to be further transformed and filtered if needed, and then forwarded to other rule actions, like different bridges. Refer to the [Rules](./rules.md) for more information on creating rules. The MQTT topics defined in **Topic Mapping** will start having messages published to them without further configuration.
 
 :::
 
@@ -167,7 +166,7 @@ Now the Kafka data bridge should appear in the data bridge list (**Data Integrat
 
 ### Create Rule for Kafka Producer Data Bridge
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
+1. Go to EMQX Dashboard, and click **Data Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
