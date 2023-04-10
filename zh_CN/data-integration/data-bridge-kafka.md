@@ -175,7 +175,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 2. 点击页面右上角的创建。
 
-3. 输入规则 ID，例如  `my_rule`，
+3. 输入规则 ID，例如  `my_rule`。
 
 4. 在 SQL 编辑器中输入规则，例如我们希望将 `t/#` 主题的 MQTT 消息存储至 Kafka，可通过如下规则实现：
 
