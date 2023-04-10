@@ -1,6 +1,6 @@
 # Exclusive Subscription
 
-Exclusive subscription is an extended MQTT feature supported by EMQX. It allows mutually exclusive subscriptions to topics. Only one subscriber is allowed to subscribe to a topic at a time. Other subscribers will not be able to subscribe to the corresponding topic until the current subscriber unsubscribe the subscription.
+Exclusive subscription is an extended MQTT feature supported by EMQX. It allows mutually exclusive subscriptions to topics. Only one subscriber is allowed to subscribe to a topic at a time. Other subscribers will not be able to subscribe to the corresponding topic until the current subscriber unsubscribe from the subscription.
 
 To make a subscription exclusive, you need to add a prefix to the topic heading. The table below shows an example:
 
@@ -8,7 +8,7 @@ To make a subscription exclusive, you need to add a prefix to the topic heading.
 | --------------- | ----------- | ------------ |
 | $exclusive/t/1 | $exclusive/ | t/1 |
 
-When client **A** subscribes to `$exclusive/t/1`, other clients will fail to subscribe to `$exclusive/t/1` until **A** cancels the subscription to `$exclusive/t/1` .
+When client **A** subscribes to `$exclusive/t/1`, other clients will fail to subscribe to `$exclusive/t/1` until **A** cancels the subscription to `$exclusive/t/1`.
 
 ::: tip Note
 
@@ -41,7 +41,7 @@ mqtt.exclusive_subscription {
 
 :::
 
-1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named "Demo".
+1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named `Demo`.
 
    - The localhost `127.0.0.1` is used as an example in this demonstration.
 
@@ -53,13 +53,13 @@ mqtt.exclusive_subscription {
 
    <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
 
-2. Create another 2 MQTT connections. Configure them as "Subscriber1" and "Subscriber2" respectively.
+2. Create another 2 MQTT connections. Configure them as `Subscriber1` and `Subscriber2` respectively.
 
-3. Select the connection named "Subscriber1" in the **Connections** pane. Click the **New Subscription** button to create a subscription.  Type `$exclusive/t/1` in the **Topic** text box to subscribe to this topic. Click **Confirm**.
+3. Select the connection named `Subscriber1` in the **Connections** pane. Click the **New Subscription** button to create a subscription.  Type `$exclusive/t/1` in the **Topic** text box to subscribe to this topic. Click **Confirm**.
 
    <img src="./assets/subscribe-exclusive-topic.png" alt="subscribe-exclusive-topic" style="zoom:35%;" />
 
-4. Select the connection named "Subscriber2" in the **Connections** pane. Click the **New Subscription** button to create a subscription.  Type `$exclusive/t/1` in the **Topic** text box to subscribe to this topic. Click **Confirm**.
+4. Select the connection named `Subscriber2` in the **Connections** pane. Click the **New Subscription** button to create a subscription.  Type `$exclusive/t/1` in the **Topic** text box to subscribe to this topic. Click **Confirm**.
 
    - An error message pops up.
 

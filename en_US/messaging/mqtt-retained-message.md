@@ -6,14 +6,14 @@ You can use client tools to test this messaging service in EMQX. This section in
 
 :::tip Prerequisites
 
-- Knowledge about MQTT [Retained Message](./mqtt-concepts.md/#retained-message)
+- Knowledge about MQTT [Retained Message](./mqtt-concepts.md)
 - Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md)
 
 :::
 
 ## Publish Retained Message with MQTT X Client
 
-1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named "Demo".
+1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named `Demo`.
 
    - The localhost `127.0.0.1` is used as an example in this demonstration.
 
@@ -29,7 +29,7 @@ You can use client tools to test this messaging service in EMQX. This section in
 
    <img src="./assets/Publish-message-1.png" alt="Publish-message-1" style="zoom:35%;" />
 
-4. Publish two retained messages under the topic `sensor/t2`. 
+4. Publish two retained messages with the topic `sensor/t2`. 
 
    1. Type the topic as `sensor/t2`. Type the first message as `1`. Select **Retain**. Click the send button.
    2. Type the second message as `2`. Click the send button.
@@ -40,7 +40,7 @@ You can use client tools to test this messaging service in EMQX. This section in
 
    :::tip
 
-   With topic set to `sensor/+`, both `sensor/t1` and `sensor/t2` are subscribed. For more information on topics and wildcards, see [Understanding MQTT Topics & Wildcards by Case](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics).
+   With the topic set to `sensor/+`, both `sensor/t1` and `sensor/t2` are subscribed. For more information on topics and wildcards, see [Understanding MQTT Topics & Wildcards by Case](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics).
 
    :::
 
@@ -48,7 +48,7 @@ You can use client tools to test this messaging service in EMQX. This section in
 
    :::tip
 
-   The first message under the topic `sensor/t1` and the first retained message under the topic `sensor/t2` are not received. The EMQX only stores the latest retained message for each topic. You can also check the latest retained message stored in the EMQX Dashboard, see [View Retained Message in Dashboard](#view-retained-message-in-dashboard).
+   The first message with the topic `sensor/t1` and the first retained message with the topic `sensor/t2` is not received. The EMQX only stores the latest retained message for each topic. You can also check the latest retained message stored in the EMQX Dashboard, see [View Retained Message in Dashboard](#view-retained-message-in-dashboard).
 
    :::  
 
@@ -58,15 +58,15 @@ You can use client tools to test this messaging service in EMQX. This section in
 
 1. Initiate a connection request with one client. 
 
-1. If you want to publish a message with the payload "A retained message from MQTTX CLI" to the topic "t/1", you can use the command below. Set the topic to `t/1`, payload to `A retained message from MQTTX CLI`,  and `retain = true`：
+1. Use the following command to publish a retained message with the payload "A retained message from MQTTX CLI" to the topic "t/1". Set the topic to `t/1`, payload to `A retained message from MQTTX CLI`,  and `retain = true`：
 
    ```bash
    mqttx pub -t 't/1' -m 'A retained message from MQTTX CLI' --retain true -h 'localhost' -p 1883
    ```
 
-3. Subscribe to the topic `t/1` with another client. It will receive the retained message. 
+3. Initiate another new client connection request to the same broker. Subscribe to the topic `t/1` with the new client. It will receive the retained message. 
 
-   If you continuously create new clients and let them subscribe to topic "t/1", all new clients you created will receive the retained message.
+   If you continuously create new clients and let them subscribe to the topic `t/1`, all new clients you created will receive the retained message.
 
    ```bash
    $ mqttx sub -t 't/1' -h 'localhost' -p 1883 -v
@@ -81,7 +81,7 @@ You can use client tools to test this messaging service in EMQX. This section in
    mqttx pub -t 't/1' -m '' --retain true -h 'localhost' -p 1883
    ```
 
-4. Repeat Step 2 and no retained messages are received, indicating the retained message is cleared. 
+4. Initiate a new client connection and subscribe to the topic `t/1`. No retained messages are received, indicating the retained message is cleared. 
 
 ## View Retained Message in Dashboard
 

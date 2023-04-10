@@ -15,7 +15,7 @@ This chapter introduces the commonly used MQTT 5.0 client tools and provides a s
 
 ## MQTT X
 
-[MQTT X](https://mqttx.app) is an elegant cross-platform MQTT 5.0 verification tool open sourced by EMQ. It includes 3 types of  tools. 
+[MQTT X](https://mqttx.app) is an elegant cross-platform MQTT 5.0 verification tool open-sourced by EMQ. It includes 3 types of tools. 
 
 - MQTT X Client
 - MQTT X CLI
@@ -23,9 +23,9 @@ This chapter introduces the commonly used MQTT 5.0 client tools and provides a s
 
 ### MQTT X Client
 
-[MQTT X Client](https://mqttx.app) is a cross-platform MQTT desktop client tool. It provides users with an easy-to-use graphic interface to allow users to quickly create and test MQTT connections, publish and subscribe MQTT messages. 
+[MQTT X Client](https://mqttx.app) is a cross-platform MQTT desktop client tool. It provides users with an easy-to-use graphic interface to allow users to quickly create, test MQTT connections, and publish/subscribe MQTT messages. 
 
-Before you test, download and install the MQTT X Client:
+Before you test, download, and install the MQTT X Client:
 
 1. Download the installation package from the application store or [MQTT X website](https://mqttx.app/) based on your operating system. 
 2. Install the MQTT X Client. For detailed instructions, see [MQTT X - Installation](https://mqttx.app/docs/downloading-and-installation).
@@ -49,13 +49,13 @@ Follow the instructions below to use the MQTT X desktop client for a simple test
 
    <img src="./assets/New-connection-fill-parameters.png" alt="New-connection-fill-parameters" style="zoom:35%;" />
 
-3. After the success connection, type the topic heading `test` in the text box and compose the message as shown in the screenshot. Click the send button. A message under the topic `test` appears in the dialogue box.
+3. After the successful connection, type the topic heading `test` in the text box and compose the message as shown in the screenshot. Click the send button. A message under the topic `test` appears in the dialogue box.
 
    <img src="./assets/Publish-test-message.png" alt="Publish-test-message" style="zoom:35%;" />
 
-4. Create another new connection following the configuration instruction in step 2 and set the name to "Subscriber". 
+4. Create another new connection following the configuration instruction in step 2 and set the name to `Subscriber`. 
 
-5. Select the connection named "Subscriber" in **Connections** pane. Click the **New Subscription**. 
+5. Select the connection named "Subscriber" in the **Connections** pane. Click the **New Subscription**. 
 
    **Topic**: Type `test` in the text box. 
 
@@ -69,11 +69,11 @@ Follow the instructions below to use the MQTT X desktop client for a simple test
 
    <img src="./assets/Subscribe-test-topic.png" alt="Subscribe-test-topic" style="zoom:35%;" />
 
-6. Select the client "Demo" at the **Connections** pane. Publish a new message under the topic "test". You can see the client named "Subscriber" receives a new message.
+6. Select the client `Demo` at the **Connections** pane. Publish a new message on the topic `test`. You can see the client named `Subscriber` receives a new message.
 
    <img src="./assets/Receive-test-again-message.png" alt="Receive-test-again-message" style="zoom:35%;" />
 
-Now you have tried the basic publishing and subscribing operations using the MQTT X Client. For detailed and advanced operations, see [MQTT X - Publish and subscription](https://mqttx.app/docs/get-started#publish-and-subscription).
+Now you have tried the basic publishing and subscribing operations using the MQTT X Client. For detailed and advanced operations, see [MQTT X - Publish and Subscription](https://mqttx.app/docs/get-started#publish-and-subscription).
 
 ### MQTT X CLI
 

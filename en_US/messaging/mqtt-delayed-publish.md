@@ -54,7 +54,7 @@ delayed {
 
 :::
 
-1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named "Demo".
+1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named `Demo`.
 
    - The localhost `127.0.0.1` is used as an example in this demonstration.
 
@@ -68,21 +68,21 @@ delayed {
 
 2. Create another MQTT connection. Configure it as a subscriber. 
 
-3. Select the connection named "Demo" in the **Connections** pane. Type the topic name `$delayed/10/x/y` in the topic textbox and type the message as "Delayed Message". 
+3. Select the connection named `Demo` in the **Connections** pane. Type the topic name `$delayed/10/x/y` in the topic text box and type the message as `Delayed Message`. 
 
    - `$delayed`: Indicates it is a delay message.
    - `10`: Indicates the delayed interval is 10 seconds.
    - `x/y`: Indicates the topic name of the message.
 
-4. Select the connection named "Subscriber". Click the **New Subscription** button to create a subscription.  Type `x/y` in the **Topic** textbox to subscribe to this topic.
+4. Select the connection named `Subscriber`. Click the **New Subscription** button to create a subscription.  Type `x/y` in the **Topic** textbox to subscribe to this topic.
 
    <img src="./assets/subscribe-delayed-message.png" alt="subscribe-delayed-message" style="zoom:35%;" />
 
-5. Select the connection named "Demo" in the **Connections** pane. Click the send button to send the "Delayed Message" with topic `$delayed/10/x/y`.
+5. Select the connection named `Demo` in the **Connections** pane. Click the send button to send the `Delayed Message` with topic `$delayed/10/x/y`.
 
    <img src="./assets/publish-delayed-message.png" alt="publish-delayed-message" style="zoom:35%;" />
 
-6. Wait for 10 seconds. You will see the connection named "Subscriber" receive the delayed message after 10 seconds.
+6. Wait for 10 seconds. You will see the connection named `Subscriber` receive the delayed message after 10 seconds.
 
    <img src="./assets/receive-delayed-message.png" alt="receive-delayed-message" style="zoom:35%;" />
 

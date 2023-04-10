@@ -13,7 +13,9 @@ You can use client tools to try this messaging service in EMQX. This section int
 
 ## Try Shared Subscription with MQTT X Client
 
-1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named "Demo".
+The following procedure demonstrates how to form groups for multiple subscribers and make them subscribe to the same topic. In this demonstration, you can create three subscribers `Subscriber1`, `Subscriber2` and `Subscriber3,` and divide them into groups `a` and `b`. Both groups subscribe to the topic `t/1`. 
+
+1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named `Demo`.
 
    - The localhost `127.0.0.1` is used as an example in this demonstration.
 
@@ -25,32 +27,34 @@ You can use client tools to try this messaging service in EMQX. This section int
 
    <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
 
-2. Click the **New Connection** to create 3 new connections with the **Name** set to `Subscriber1`, `Subscriber2` and `Subscriber3` respectively. Configure the new connections in the same way as described in step 2.
+2. Click the **New Connection** to create 3 new connections as subscribers. Set **Name** set to `Subscriber1`, `Subscriber2,` and `Subscriber3` respectively. 
 
-3. Select the connection named "Subscriber1" in the **Connections** pane. Click the **New Subscription** button to create a subscription. 
+3. Create shared subscriptions for subscribers. Select the specific connection in the **Connections** pane. Click the **New Subscription** button to create a subscription. Type the correct topic in the **Topic** text box by referring to the rules below.
 
-   To form a group for multiple subscribers, you need to add prefix `$share` and group name `{group}` before the subscribed topic `t/1`. In this demonstration, set the **Topic** name to `$share/a/t/1`. 
+   To form a group for multiple subscribers, you need to add group name `{group}` before the subscribed topic `t/1`. To make them all subscribe to the same topic, you need to add prefix `$share` before the group name. 
+
+   In the **New Subscription** window:
+
+   - Set the **Topic** to `$share/a/t/1` for `Subscribe1` and `Subscriber2`.
+   - Set the **Topic** to `$share/b/t/1` for `Subscriber3`.
+
+   In these example topics: 
 
    - The prefix `$share` indicates this is a shared subscription.
-   - `{group}` can be a customed name. Set to `a` in this example.
+   - `{group}` can be a customized name.
    - `t/1` indicates the original topic name.
 
    Leave other settings as default. Click the **Confirm** button.
 
    <img src="./assets/New-shared-subscription.png" alt="New-shared-subscription" style="zoom:35%;" />
 
-4. Create subscriptions for "Subscriber2" and "Subscriber3" in the same way. 
+5. Click the connection `Demo` you created before. 
 
-   - Set the **Topic** to `$share/a/t/1` for "Subscriber2".
-   - Set the **Topic** to `$share/b/t/1` for "Subscriber3".
-
-5. Click the client connection "Demo" created in step 2. 
-
-   - Send a message with the topic "t/1". "Subscriber1" and "Subscriber3" receive the message. 
+   - Send a message with the topic `t/1`. The clients `Subscriber1` and `Subscriber3` should receive the message. 
 
      <img src="./assets/Receive-message-shared-subscription1.png" alt="Receive-message-shared-subscription1" style="zoom:35%;" />
 
-   - Send the same message again. "Subscriber2" and "Subscriber3" receive the message.
+   - Send the same message again. The client `Subscriber2` and `Subscriber3` should receive the message.
 
      <img src="./assets/Receive-message-shared-subscription2.png" alt="Receive-message-shared-subscription2" style="zoom:35%;" />
 

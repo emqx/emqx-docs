@@ -6,14 +6,14 @@ You can use client tools to test this messaging service in EMQX. This section in
 
 :::tip Prerequisites
 
-- Knowledge about MQTT [Will Message](./mqtt-concepts.md/#will-message)
+- Knowledge about MQTT [Will Message](./mqtt-concepts.md)
 - Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md)
 
 :::
 
 ## Publish Will Message with MQTT X Client
 
-1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named "Demo".
+1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named `Demo`.
 
    - The localhost `127.0.0.1` is used as an example in this demonstration.
 
@@ -43,11 +43,11 @@ You can use client tools to test this messaging service in EMQX. This section in
 
    <img src="./assets/Subscribe-will-message.png" alt="Subscribe-will-message" style="zoom:35%;" />
 
-4. Select the client connection named "Demo" in the **Connections** pane. Right click and select **New Window**. In the new window, click the **Connect** button. 
+4. Select the client connection named `Demo` in the **Connections** pane. Right-click and select **New Window**. In the new window, click the **Connect** button. 
 
    <img src="./assets/Open-new-window.png" alt="Open-new-window" style="zoom:35%;" />
 
-5. Close the new window and wait for 5 seconds. The client connection "Subscriber" receive a will message `I'm offline`.
+5. Close the new window and wait for 5 seconds. The client `Subscriber` receives a will message `I'm offline`.
 
    <img src="./assets/Receive-will-message.png" alt="Receive-will-message" style="zoom:35%;" />
 
