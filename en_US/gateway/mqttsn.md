@@ -18,19 +18,79 @@ The MQTT-SN gateway is based on the [MQTT-SN v1.2](https://www.oasis-open.org/co
 
 ## Enable the MQTT-SN Gateway
 
-In EMQX 5.0, MQTT-SN gateways can be configured and enabled through the Dashboard and the configuration file `emqx.conf`. This section introduces takes the configuration with Dashboard as an example to illustrate how to configure and enable the MQTT-SN gateway. 
+In EMQX 5.0, MQTT-SN gateways can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
+
+On EMQX Dashboard, Click **Extensions** -> **Gateways** on the left navigation tree to open the configuration page. EMQX has already listed the gateways supported on this page, locate **MQTT-SN** and click **Setup** in the **Actions** column, then you will be directed to the **Initialize MQTT-SN** page.
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard will affect the cluster.
+If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, please configure with [`emqx.conf`](../configuration/configuration.md)
 
 :::
 
-On EMQX Dashboard, Click **Extensions** -> **Gateways** on the left navigation tree to open the configuration page. EMQX has default added the gateways supported, locate **MQTT-SN** and click **Setup** in the **Actions** column, then you will be directed to the **Initialize MQTT-SN** page, where will be asked to complete the [basic configuration](#basic-configuration), [add listeners](#add-listeners) for the gateway and perform the authentication 
+To simplify the configuration process, EMQX offers default values for all required fields on the **Gateways** page. If you don't need extensive customization, you can enable the MQTT-SN Gateway in just 3 clicks:
+
+1. Click **Next** in the **Basic Configuration** tab to accept all the default settings. 
+2. Then you will be directed to the **Listeners** tab, where EMQX has pre-configured a UDP listener on port 1884. Click **Next** again to confirm the setting.
+3. Then click the **Enable** button to activate the MQTT-SN Gateway.
+
+Upon completing the gateway activation process, you can return to the **Gateways** page and observe that the MQTT-SN Gateway now displays an **Enabled** status.
+
+<img src="./assets/mqttsn-enabled.png" alt="Enabled MQTT-SN gateway" style="zoom:50%;" />
+
+The above configuration can also be configured with HTTP API:
+
+**Example Code:**
+
+```bash
+curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
+  -u admin:public \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "mqttsn",
+  "enable": true,
+  "gateway_id": 1,
+  "mountpoint": "mqttsn/",
+  "listeners": [
+    {
+      "type": "udp",
+      "bind": "1884",
+      "name": "default",
+      "max_conn_rate": 1000,
+      "max_connections": 1024000
+    }
+  ]
+}'
+```
+
+For a detailed HTTP API description, see [HTTP API - Gateway](../admin/api.md)
+
+If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your MQTT-SN Gateway section](#customize-your-mqtt-sn-gateway).
+
+## Work with MQTT-SN Clients
+
+### Client Libraries
+
+After establishing the MQTT-SN gateway, you can use the MQTT-SN client tools to test the connections and ensure everything works as expected. Below are some of the recommended MQTT-SN client tools. 
+
+- [paho.mqtt-sn.embedded-c](https://github.com/eclipse/paho.mqtt-sn.embedded-c)
+- [mqtt-sn-tools](https://github.com/njh/mqtt-sn-tools)
+
+### Publish/Subscribe
+
+The MQTT-SN protocol already defines the publish/subscribe behavior, e.g:
+
+- The `PUBLISH` message of the MQTT-SN protocol is used as a publishing operation, whose topic and QoS are specified by this message.
+- The `SUBSCRIBE` message of the MQTT-SN protocol is used as a subscribing operation, whose topic and QoS are both specified by this message.
+- The `UNSUBSCRIBE` message of the MQTT-SN protocol is used as an unsubscribe operation, whose topic is specified by this message.
+
+## Customize Your MQTT-SN Gateway
+
+Besides the default settings, EMQX also offers various fields to better serve your business needs. This section gives a detailed explanation of different fields on the Gateways page. 
 
 ### Basic Configuration
 
-In the **Basic Configuration** tab, you can do some basic configurations. Refer to the texts below the image for a detailed explanation of each field. 
+In the **Basic Configuration** tab, you can customize your gateway ID, predefine the topic list for this gateway, and set the MountPoint for this gateway. See the texts below the screenshot for a detailed explanation of each field. 
 
 ![Basic Configuration](./assets/mqttsn-basic-config.png)
 
@@ -81,35 +141,6 @@ If you click **Settings**, you will be directed to the **Add Listener** page, wh
 - **Send Buffer**: Set the size of the send buffer,  unit: KB.
 - **SO_REUSEADDR**: Set whether to allow local reuse of port numbers, <!--not quite sure what this means-->
 
-After configuring the listeners, you can click **Next** to move to the Authentication tab, which you can just click **Enable** to enable the gateway and add authentication rules later. 
-
-The above configuration can also be configured with HTTP API:
-
-**Example Code:**
-
-```bash
-curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
-  -u admin:public \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "name": "mqttsn",
-  "enable": true,
-  "gateway_id": 1,
-  "mountpoint": "mqttsn/",
-  "listeners": [
-    {
-      "type": "udp",
-      "bind": "1884",
-      "name": "default",
-      "max_conn_rate": 1000,
-      "max_connections": 1024000
-    }
-  ]
-}'
-```
-
-For a detailed HTTP API description, see [HTTP API - Gateway](../admin/api.md)
-
 ### Configure Authentication
 
 Since the connection message of the MQTT-SN protocol only gives the Client ID of the Client, therefore, the MQTT-SN gateway only supports [HTTP Server Authentication](../access-control/authn/http.md).
@@ -130,8 +161,9 @@ Click **Create Authentication**, choose **Password-Based** as the **Mechanism**,
 
 For a detailed explanation of each field on the page, you can refer to [HTTP Server Authentication](../access-control/authn/http.md).
 
-Note: The above configuration can also be performed via HTTP API.
-**Example Code:**
+The above configuration can also be performed via HTTP API.
+
+**Example Code**
 
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/mqttsn/authentication' \
@@ -160,21 +192,3 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/mqttsn/authentication' \
 }'
 ```
 
-This has completed the enabling of the gateway, if you go back to the **Gateways** page, you can see the MQTT-SN gateway is now in the Enabled status, you can also check how many connections are currently available on this gateway and how many listeners are added. 
-
-## Work with MQTT-SN Clients
-
-### Client Libraries
-
-After establishing the MQTT-SN gateway, you can use the MQTT-SN client tools to test the connections and ensure everything works as expected. Below are some of the recommended MQTT-SN client tools. 
-
-- [paho.mqtt-sn.embedded-c](https://github.com/eclipse/paho.mqtt-sn.embedded-c)
-- [mqtt-sn-tools](https://github.com/njh/mqtt-sn-tools)
-
-### Publish/Subscribe
-
-The MQTT-SN protocol already defines the publish/subscribe behavior, e.g:
-
-- The `PUBLISH` message of the MQTT-SN protocol is used as a publishing operation, whose topic and QoS are specified by this message.
-- The `SUBSCRIBE` message of the MQTT-SN protocol is used as a subscribing operation, whose topic and QoS are both specified by this message.
-- The `UNSUBSCRIBE` message of the MQTT-SN protocol is used as an unsubscribe operation, whose topic is specified by this message.
