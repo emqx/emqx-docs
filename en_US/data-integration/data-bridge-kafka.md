@@ -119,12 +119,12 @@ This section demonstrates how to create Kafka producer or consumer data bridges 
      | Field Name | Description                                                  |
      | ---------- | ------------------------------------------------------------ |
      | `headers`  | An object containing string key-value pairs                  |
-     | `key`      | Kafka message key (encoded by the chosen key encoding)       |
+     | `key`      | Kafka message key (uses the same encoding method as the selected key)       |
      | `offset`   | Offset for the message in Kafka's topic partition            |
      | `topic`    | Originating Kafka topic                                      |
      | `ts`       | Message timestamp                                            |
      | `ts_type`  | Message timestamp type, which is one of `create`, `append` or `undefined` |
-     | `value`    | Kafka message value (encoded by the chosen value encoding)   |
+     | `value`    | Kafka message value (uses the same encoding method as the selected key)   |
    
      The default value for **MQTT Payload Template** is `${.}`, which includes all available data encoded as a JSON object.  For example, choosing `${.}` as a template will produce the following for a Kafka message:
      
