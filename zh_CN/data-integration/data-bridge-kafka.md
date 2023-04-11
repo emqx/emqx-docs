@@ -3,7 +3,7 @@
 <!-- 提供一段简介，描述支数据桥接的基本工作方式、关键特性和价值，如果有局限性也应当在此处说明（如必须说明的版本限制、当前未解决的问题）。 -->
 Apache Kafka 数据桥接实现了 EMQX 客户端消息和事件与 Apache Kafka (包括 Confluent) 的桥接，能够提供 EMQX 与企业应用之间高性能、高可靠的数据集成，有效降低应用复杂度并提升扩展性。同时，EMQX 与 Apache Kafka 的集成提供了极高的数据吞吐能力，支持 Apache Kafka 的 SASL/SCRAM、SASL/GSSAPI 等多种安全认证方式以及 TLS 连接，是物联网数据集成首选方案之一。
 
-Apache Kafka 数据桥接涉及两种桥接角色：生产者（将数据发送到 Kafka ）和消费者（将数据从 Kafka 消费下发）。EMQX 支持创建任何一种角色的桥接或同时创建两种角色的桥接。
+Apache Kafka 数据桥接涉及两种桥接角色：生产者（将数据发送到 Kafka ）和消费者（将数据从 Kafka 消费下发）。EMQX 支持创建任何一种角色的桥接。
 
 {% emqxce %}
 :::tip
@@ -23,10 +23,9 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 ## 功能清单
 
-- [连接池](./data-bridges.md#连接池)
-- [异步请求模式](./data-bridges.md#异步请求模式)
-- [批量模式](./data-bridges.md#批量模式)
-- [缓存队列](./data-bridges.md#缓存队列)
+- [异步请求模式](./data-bridges.md)
+- [批量模式](./data-bridges.md)
+- [缓存队列](./data-bridges.md)
 
 <!-- TODO 配置参数 需补充链接到配置手册对应配置章节。 -->
 
@@ -123,12 +122,12 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
      | 字段名称  | 描述                                               |
      | --------- | -------------------------------------------------- |
      | `headers` | 包含字符串键-值对的对象                            |
-     | `key`     | Kafka 消息键（由选择的键编码）                     |
+     | `key`     | Kafka 消息键（由选择的键编码方式进行编码）         |
      | `offset`  | Kafka 主题分区中消息的偏移量                       |
      | `topic`   | Kafka 源主题                                       |
      | `ts`      | 消息时间戳                                         |
      | `ts_type` | 消息时间戳类型,  `create`, `append` or `undefined` |
-     | `value`   | Kafka 消息值 (由选择的值编码)                      |
+     | `value`   | Kafka 消息值 (由选择的值编码方式进行编码)          |
      
      **MQTT Payload Template** 的默认值为`${.}`，其中包括编码为 JSON 对象的所有可用数据。例如，选择`${.}`作为模板将会产生以下 Kafka 消息内容：
      
