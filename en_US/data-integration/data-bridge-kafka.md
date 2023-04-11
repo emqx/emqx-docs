@@ -153,7 +153,7 @@ This section demonstrates how to create Kafka producer and consumer data bridges
 6. Click **Create**, you'll be offered the option of creating an associated rule. 
 
    - For the Kafka producer data bridge, click **Create Rule** to create an associated rule. For detailed operating steps, see [Create Rule for Kafka Producer Data Bridge](#create-rule-for-kafka-producer-data-bridge). 
-   - For the Kafka consumer data bridge, It's not strictly necessary to create a rule.
+   - For the Kafka consumer data bridge, it's not strictly necessary to create a rule.
 
 ::: tip
 
