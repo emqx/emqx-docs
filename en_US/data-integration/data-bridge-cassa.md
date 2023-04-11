@@ -73,7 +73,7 @@ docker exec -it cassa cqlsh "-e \
 1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
 2. Click **Create** on the top right corner of the page.
 3. In the **Create Data Bridge** page, click to select **Cassandra**, and then click **Next**.
-4. Input a name for the data bridge. The name should be a combination of upper/lower case letters or numbers.
+4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 5. Input the connection information. Input `127.0.0.1:9042` for the **Servers**, `mqtt` as the **Keyspace**, and leave others as default.
 6. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Redis server.
 7. Click **Create** to finish the creation of the data bridge. 
