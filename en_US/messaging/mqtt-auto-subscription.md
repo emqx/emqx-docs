@@ -118,7 +118,7 @@ rap: 0
 nl: 0
 ```
 
-## Try Auto Subscription using MQTT X Client
+## Try Auto Subscription Using MQTT X Client
 
 The topic `a/1` is configured as the auto subscribe topic in [Configure Auto Subscribe via Dashboard](#configure-auto-subscribe-via-dashboard). The following procedure demonstrates how a client subscribes to the topic `a/1` automatically once it is connected to the broker. 
 
