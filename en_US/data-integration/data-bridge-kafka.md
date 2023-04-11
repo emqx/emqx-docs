@@ -6,7 +6,7 @@
 
 [Apache Kafka](https://kafka.apache.org/) is a widely-used open-source distributed event streaming platform. EMQX's integration with Apache Kafka/Confluent presents our users with reliable bi-directional data transport and processing capability under high-throughput scenarios. As a top IoT data infrastructure provider, EMQX currently supports authenticating with Apache Kafka/Confluent via SASL/SCRAM or SASL/GSSAPI. 
 
-Streaming data into Apache Kafka involves creating data bridges to Kafka in two roles: producer (sends messages to Kafka) and consumer (receives messages from Kafuka). EMQX enables you to create data bridges in either or both of the roles.
+Streaming data into or from Apache Kafka involves creating data bridges to Kafka in two roles: producer (sends messages to Kafka) and consumer (receives messages from Kafka). EMQX enables you to create data bridges in either of the roles.
 
 {% emqxce %}
 :::tip
