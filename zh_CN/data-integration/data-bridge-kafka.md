@@ -32,7 +32,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 ## 快速开始
 <!-- 从安装测试所需步骤，如果有不同的用法增加章节介绍。 -->
 
-本节将带您创建一个 Kafka 服务器以及 Kafka 主题，然后在 EMQX 创建 Kafka 生产者和消费者的数据桥接，之后再通过为 Kafka 生产者创建一条规则来将数据转发至 Kafka，以验证该数据桥接是否正常工作。
+本节将带您创建一个 Kafka 服务器以及 Kafka 主题，然后在 EMQX 创建 Kafka 生产者或消费者的数据桥接，之后再通过为 Kafka 生产者创建一条规则来将数据转发至 Kafka，以验证该数据桥接是否正常工作。
 
 ::: tip
 
@@ -73,7 +73,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 ### 创建 Kafka 数据桥接
 
-本节将通过 Dashboard 演示如何创建到 Kafka 生产者和消费者的数据桥接。
+本节将通过 Dashboard 演示如何创建到 Kafka 生产者或消费者的数据桥接。
 
 1. 转到 Dashboard **数据集成** -> **数据桥接**页面。
 
