@@ -102,7 +102,7 @@ In the **Basic Configuration** tab, you can customize your gateway ID, predefine
 
 - **Idle Timeout**: Set the duration (in seconds) of inactivity after which a connected MQTT-SN client will be considered disconnected. Default: **30 s**.
 
-- **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics. default: **true**, optional values: **true**, **false**.
+- **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: **true**, optional values: **true**, **false**.
 
 - **Predefined Topic List**: Set the predefined topic IDs and corresponding topic names. Click **Add** to add a new entry. 
 
