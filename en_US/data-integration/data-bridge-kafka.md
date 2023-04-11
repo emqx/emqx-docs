@@ -35,7 +35,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 ## Quick Start Tutorial
 <!-- 从安装测试所需步骤，如果有不同的用法增加章节介绍。 -->
 
-This section introduces how to stream data into Kafka, covering topics like how to set up a Kafka server, how to create a bridge and a rule for forwarding data to the bridge and how to test the data bridge and rule.
+This section introduces how to stream data into or from Kafka, covering topics like how to set up a Kafka server, how to create a bridge and a rule for forwarding data to the bridge and how to test the data bridge and rule.
 
 This tutorial assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
 
@@ -72,7 +72,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 ### Create Kafka Data Bridge
 
-This section demonstrates how to create Kafka producer and consumer data bridges via Dashboard.
+This section demonstrates how to create Kafka producer or consumer data bridges via Dashboard.
 
 1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
 
