@@ -60,7 +60,7 @@ The following procedure demonstrates how to form groups for multiple subscribers
 
 :::tip
 
-When the message of the shared subscription is published, the EMQX broker forwards the message to different groups at the same time, but only one of the subscribers in the same group receives the message at a time.
+When the message of the shared subscription is published, the EMQX forwards the message to different groups at the same time, but only one of the subscribers in the same group receives the message at a time.
 
 :::
 
