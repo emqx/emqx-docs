@@ -20,7 +20,7 @@ The MQTT-SN gateway is based on the [MQTT-SN v1.2](https://www.oasis-open.org/co
 
 In EMQX 5.0, MQTT-SN gateways can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
 
-On EMQX Dashboard, Click **Extensions** -> **Gateways** on the left navigation tree to open the configuration page. EMQX has already listed the gateways supported on this page, locate **MQTT-SN** and click **Setup** in the **Actions** column, then you will be directed to the **Initialize MQTT-SN** page.
+On EMQX Dashboard, click **Extensions** -> **Gateways** on the left navigation menu. On the **Gateway** page, all supported gateways lare listed. Locate **MQTT-SN** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize MQTT-SN** page.
 
 ::: tip
 
