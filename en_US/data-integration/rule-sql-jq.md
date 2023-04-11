@@ -1,14 +1,10 @@
 # JQ functions
 
-[JQ](https://stedolan.github.io/jq/) is a powerful command line tool and
-programming language designed primarily for transforming and querying data
-encoded as [JSON](https://www.json.org/json-en.html).
+[JQ](https://stedolan.github.io/jq/) is a powerful command line tool and programming language designed primarily for transforming and querying data encoded as [JSON](https://www.json.org/json-en.html).
 
-Typical JQ programs describe simple
-transformations or filters for JSON data, but one can also use JQ to perform
-complex computations when needed.
+Typical JQ programs describe simple transformations or filters for JSON data, but one can also use JQ to perform complex computations when needed.
 
-## How to use
+## How It Works
 
 The rule's SQL language integrates JQ through two functions:
 
@@ -129,12 +125,6 @@ Message 3:
 
 ## Notice
 
-JQ functions can be convenient for transformations that are
-difficult or impossible to do with only the rule SQL language and its
-simple functions.
+JQ functions can be convenient for transformations that are difficult or impossible to do with only the rule SQL language and its simple functions.
 
-It is not recommended to do long-running computations in the rule as this can significantly slow
-down the rate at which EMQX can process new messages. The JQ functions have
-timeouts to prevent possibly buggy JQ programs (that may have gotten stuck in
-an infinite loop) from taking too much processing time from the rest of the
-EMQX system.
+It is not recommended to do long-running computations in the rule as this can significantly slow down the rate at which EMQX can process new messages. The JQ functions have timeouts to prevent possibly buggy JQ programs (that may have gotten stuck in an infinite loop) from taking too much processing time from the rest of the EMQX system.

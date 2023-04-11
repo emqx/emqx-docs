@@ -1,8 +1,59 @@
 # 性能测试
 
-[emqtt_bench](https://github.com/emqx/emqtt_bench) 是基于 Erlang 编写的，一个简洁强大的 MQTT 协议性能测试工具，如需大规模场景、深度定制化的测试服务推荐使用 [XMeter](https://www.emqx.com/zh/products/xmeter) 进行测试。
+当你部署了单个 EMQX 服务器或者建立了 EMQX 集群，你可以进行对你的部署进行性能测试以了解系统的能力。这个章节介绍了如何安装和使用 [eMQTT-Bench](https://www.emqx.com/zh/try?product=emqtt-bench) 来进行性能测试。eMQTT-Bench是基于 Erlang 编写的，一个简洁强大的 MQTT 协议基准测试工具。如需大规模场景、深度定制化的测试服务推荐使用 [XMeter](https://www.emqx.com/zh/products/xmeter) 进行测试。
 
-## 编译安装
+## 安装eMQTT-Bench
+
+你可以通过 3 种方式来安装 eMQTT-Bench：
+
+- 运行 Docker 镜像
+- 下载并安装二进制包
+- 从源代码构建
+
+### 运行 Docker 镜像
+
+你可以通过运行`emqtt_bench`镜像来安装测试工具。`emqtt_bench` docker 镜像已推送到 [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags), 且每个新版本都会更新`:latest`标签：
+
+```bash
+docker run -it emqx/emqtt-bench:latest
+Usage: emqtt_bench pub | sub | conn [--help]
+```
+
+注意，Docker 镜像名称使用连字符“-”，而二进制脚本名称使用下划线“_”。
+
+### 用二进制包安装
+
+你可以下载`emqtt_bench`的二进制包并在以下平台上安装测试工具：
+
+- Amazon Linux 2
+- CentOS 7
+- Rocky Linux 8
+- Rocky Linux 9
+- Debian 9
+- Debain 10
+- Debain 11
+- Ubuntu 16.04
+- Ubuntu 18.04
+- Ubuntu 20.04
+- Ubuntu 22.04
+- MacOS 11
+- MacOS 12
+
+前往 [Releases](https://github.com/emqx/emqtt-bench/releases) 页面查看具体的`emqtt_bench`发布版本信息。
+
+例如，以下是如何在 Ubuntu 20.04 上安装 `emqtt_bench`:
+
+```bash
+mkdir emqtt_bench && cd emqtt_bench
+wget https://github.com/emqx/emqtt-bench/releases/download/0.4.11/emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
+tar xfz emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
+rm emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
+
+./emqtt_bench
+Usage: emqtt_bench pub | sub | conn [--help]
+```
+
+### 源代码构建
 
 `emqtt_bench` 的运行依赖于 Erlang/OTP 21.2 以上版本运行环境，安装过程略过，详情请参考网上各个安装教程。
 
@@ -24,7 +75,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 输出以上内容，则证明 `emqtt_bench` 已正确安装到主机。
 
-## 使用
+## 用 eMQTT-Bench 进行性能测试
 
 `emqtt_bench` 共三个子命令：
 
@@ -59,7 +110,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 | --ws              | -    | true<br />false | false      | 是否以 Websocket 的方式建立连接                                                                          |
 | --ifaddr          | -    | -               | 无         | 指定客户端连接使用的本地网卡                                                                             |
 
-例如，我们启动 10 个连接，分别每秒向主题 `t` 发送 100 条 Qos0 消息，其中每个消息体的大小为 `16` 字节大小：
+例如，启动 10 个连接，分别每秒向主题 `t` 发送 100 条 Qos0 消息，其中每个消息体的大小为 `16` 字节大小：
 
 ```bash
 ./emqtt_bench pub -t t -h emqx-server -s 16 -q 0 -c 10 -I 10
@@ -69,7 +120,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 执行 `./emqtt_bench sub --help`可得到该子命令的所有的可用参数。它们的解释已包含在上表中，此处略过。
 
-例如，我们启动 500 个连接，每个都以 Qos0 订阅 `t` 主题：
+例如，启动 500 个连接，每个都以 Qos0 订阅 `t` 主题：
 
 ```bash
 ./emqtt_bench sub -t t -h emqx-server -c 500
@@ -79,7 +130,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 执行 `./emqtt_bench conn --help` 可得到该子命令所有可用的参数。它们的解释已包含在上表中，此处略过。
 
-例如，我们启动 1000 个连接：
+例如，启动 1000 个连接：
 
 ```bash
 ./emqtt_bench conn -h emqx-server -c 1000
@@ -107,7 +158,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### 场景说明
 
-此处我们以 2 类最典型的场景来验证工具的使用：
+此处以 2 类最典型的场景来验证工具的使用：
 
 1. 连接量：使用 `emqtt_bench` 创建百万连接到 EMQX Broker。
 2. 吞吐量：使用 `emqtt_bench` 在 EMQX 中创建出 `10W/s 的 Qos0` 消息吞吐量。
@@ -123,7 +174,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 - **服务端：**`emqx-centos7-v4.0.2.zip`
 
 - **压力机：**`emqtt-bench v0.3.1`
-  - 每台压力机分别配置 10 张网卡，用于连接测试中建立大量的 MQTT 客户端连接
+  - 每台压力机分别配置 10 张网卡，用于连接测试中建立大量的 MQTT 客户端连接。
 
 拓扑结构如下：
 

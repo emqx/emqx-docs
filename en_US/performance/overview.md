@@ -1,12 +1,12 @@
-# Performance tuning and test
+# Performance Tuning and Test
 
 This chapter will introduce how to run performance tuning and test for EMQX. 
 
-- [Performance tuning](./tune.md)
+- [Performance Tuning](./tune.md)
 
   This section will introduce how to run performance tuning in Linux, covering topics like the Linus kernel tuning, TCP network tuning, Erlang VM tuning, and EMQX tuning. 
 
-- [Performance test](./benchmark.md)
+- [Performance Test](./benchmark.md)
 
   This section will introduce how to install and use [emqtt_bench](https://github.com/emqx/emqtt_bench), the concise and powerful MQTT protocol performance testing tool. 
 

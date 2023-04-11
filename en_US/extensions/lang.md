@@ -4,7 +4,7 @@ EMQX extensions are implemented by adding callbacks to various hook points.
 
 See [Hooks](hooks.md) for more information.
 
-## Multi-language support
+## Multi-Language Support
 
 Since 4.1, EMQX provides **multi-language support**. It allows users to use Python, Java or other programming languages to handle EMQX [hooks](./hooks.md), or parse your private protocol on TCP/UDP transport. In this way, you can customize EMQX with other programming languages.
 

@@ -1,4 +1,4 @@
-# Access control
+# Access Control
 
 This chapter will introduce how to configure the access control policies in EMQX, covering the following topics:
 

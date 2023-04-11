@@ -7,7 +7,7 @@ Use cases:
 1. In cluster mode: If the node where the subscriber is located malfunctions, the publisher's messages will be lost (QoS 0 messages) or accumulated in the node (QoS 1 and QoS 2 messages). Though we can solve this problem by adding subscription nodes, this may affect the performance with lots of repeated messages and increase the complexity of the business.
 2. When the publisher's production capacity is strong, the subscriber's consumption capacity may not be able to keep up in time. In this case, we have to rely on the load-balancing capability of the subscriber, which again increases the development cost.
 
-## Mechanism
+## How It Works
 
 We can add a `$share` prefix to the original topic to enable shared subscriptions for a group of subscribers.
 
@@ -20,7 +20,7 @@ where ` topic` is the real topic name they subscribed to, and `$share/g/` is a s
 | --------------- | ----------- | ---------- |
 | $share/abc/t/1  | $share/abc/ | t/1        |
 
-## Shared subscriptions in group
+## Shared Subscriptions in Group
 
 Shared subscriptions prefixed with `$share/<group-name>` are shared subscriptions with groups.
 The group name can be any string.
@@ -56,14 +56,17 @@ broker.shared_subscription_strategy = random
 broker.shared_dispatch_ack_enabled = false
 ```
 
-| Load Balance | Description                                 |
-| :----------  | :------------------------------------------ |
-| random       | Random selection among all subscribers      |
-| round_robin  | In order of subscription                    |
-| sticky       | Always send to the last selected subscriber |
-| hash         | Hash by publisher ClientID                  |
+| Load Balance  | Description                                        |
+| :------------ | :------------------------------------------------- |
+| `random`        | Random selection among all subscribers             |
+| `round_robin`   | Select the subscribers in a round-robin manner                     |
+| `round_robin_per_group`   | Select the subscribers in round-robin fashion within each shared subscriber group                         |
+| `local`   | Select a random local subscriber, if cannot be found, then select a random subscriber within the cluster                       |
+| `sticky`        | Always send to the last selected subscriber until the subscriber disconnects        |
+| `hash_clientid` | Select the subscribers by hashing the `clientIds`  |
+| `hash_topic`    | Select the subscribers by hashing the source topic |
 
-### Discussion on message loss
+### Discussion on Message Loss
 
 EMQX sends messages to subscribers' sessions.
 

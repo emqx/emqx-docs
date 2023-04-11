@@ -4,7 +4,7 @@ When accepting an MQTT Client or connecting to external resources like a databas
 
 This chapter will cover the following topics:
 
-- [Enable SSL/TLS authentication](./emqx-mqtt-tls.md)
+- [Enable SSL/TLS Authentication](./emqx-mqtt-tls.md)
 
   This section will introduce how to enable SSL/TLS authentication for clients.
 

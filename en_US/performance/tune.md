@@ -1,8 +1,8 @@
-# Performance tuning (Linux)
+# Performance Tuning (Linux)
 
 This guide includes in general tuning suggestions for benchmark and deployment.
 
-## Turn off Swap
+## Turn Off Swap
 
 Linux swap partitions may cause nondeterministic memory latency to an Erlang virtual machine, significantly affecting the system stability.
 It is recommended to turn off the swap permanently.

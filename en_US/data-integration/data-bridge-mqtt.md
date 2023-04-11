@@ -13,7 +13,7 @@ The MQTT data bridge is a channel for EMQX to communicate with other MQTT servic
 
   :::
 
-## Feature list
+## Feature List
 
 - [Connection pool](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
 - [Async mode](./data-bridges.md#异步请求模式)
@@ -21,11 +21,11 @@ The MQTT data bridge is a channel for EMQX to communicate with other MQTT servic
 
 <!--  Configuration parameters TODO 链接到配置手册对应配置章节。 -->
 
-## Quick starts
+## Quick Start
 
-The following section will use EMQX [public MQTT broker](https://www.emqx.com/zh/mqtt/public-mqtt5-broker) as an example to illustrate how to build a data bridge between EMQX and this public MQTT broker.
+The following section will use EMQX [public MQTT broker](https://www.emqx.com/en/mqtt/public-mqtt5-broker) as an example to illustrate how to build a data bridge between EMQX and this public MQTT broker.
 
-### Data bridge rules
+### Data Bridge Rules
 
 The following topic mapping configuration is used here to implement message bridging between local and remote MQTT services:
 
@@ -42,7 +42,7 @@ And this is the message flow in **egress** direction:
 
 ![bridge_egerss](./assets/bridge_egerss.png)
 
-## Create an MQTT data bridge
+## Configure MQTT Data Bridge via Dashboard
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 
@@ -73,7 +73,7 @@ And this is the message flow in **egress** direction:
        - **Retain**: Confirm whether the message will be published as a retained message.
        - **Payload**: Payload template for the messages to be forwarded, and Supports reading data using `${field}` syntax.
 
-   - **Egress** (optional): Set the rules to publish messages from specific local MQTT topics to remote MQTT brokers. In this example, we want to publish the messages from `local/topic/ingress` to `remote/topic/ingress`:
+   - **Egress** (optional): Set the rules to publish messages from specific local MQTT topics to remote MQTT brokers. In this example, we want to publish the messages from `local/topic/egress` to `remote/topic/egress`:
 
      - **Local MQTT Broker**: Specify the local message topics.
        - **Topic**: Input `local/topic/egress`.
@@ -83,7 +83,7 @@ And this is the message flow in **egress** direction:
        - **Retain**: Confirm whether the message will be published as a retained message.
        - **Payload**: Payload template for the messages to be forwarded, and Supports reading data using `${field}` syntax.
 
-7. Then you can configure whether to use sync/async mode, your pool size and whether the enable queue mode as your business needs.
+7. Then you can configure whether to use sync/async mode and your buffer pool size as your business needs.
 
 8. Click **Create** to finish the setting.
 
@@ -99,7 +99,6 @@ bridges.mqtt.my_mqtt_bridge {
   clean_start = true
   keepalive = "60s"
 
-  reconnect_interval = "10s"
   egress {
     local {topic = "local/topic/egress"}
     remote {
@@ -120,7 +119,7 @@ bridges.mqtt.my_mqtt_bridge {
 }
 ```
 
-## Work with rules
+## Work with Rules
 
 MQTT Bridge can be used either alone or in conjunction with rules for more powerful and flexible data processing capabilities.
 

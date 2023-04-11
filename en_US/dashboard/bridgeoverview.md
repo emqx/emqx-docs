@@ -1,8 +1,8 @@
-# Data integration
+# Data Integration
 
 This chapter will introduce how to integrate different data systems with EMQX Dashboard:
 
-- [Data bridge](./bridge.md)
+- [Data Bridge](./bridge.md)
 - [Rules](./rules.md)
 - [Flows](./flows.md)
 

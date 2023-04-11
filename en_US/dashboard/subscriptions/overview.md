@@ -1,4 +1,4 @@
-# Topics and subscriptions
+# Topics and Subscriptions
 
 This chapter will introduce how to set and manage topics and subscriptions with EMQX Dashboard. 
 

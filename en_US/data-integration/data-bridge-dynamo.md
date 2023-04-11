@@ -14,7 +14,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
 
-## Features list
+## Features List
 
 - [Connection pool](./data-bridges.md#Connection pool)
 - [Async mode](./data-bridges.md#Async mode)
@@ -22,12 +22,12 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 - [Buffer queue](./data-bridges.md#Buffer queue)
 - [SQL preprocessing](./data-bridges.md#Prepared statement)
 
-## [Configuration parameters](#Configuration)
+## [Configuration Parameters](#Configuration)
 <!-- TODO LIKN TO THE CONFIG doc。 -->
 
-## Quick starts
+## Quick Start
 
-### Install DynamoDB local
+### Install DynamoDB Local
 
 We need a docker compose file, `dynamo.yaml`, to setup the Dynamodb local
 ```json
@@ -92,7 +92,7 @@ The following JSON will be printed if the table was created successfully
 
 We will create a data bridge to DynamoDB with two rules for messages storage and event records respectively. 
 
-#### [Messages storage](#Storage)
+#### [Messages Storage](#Storage)
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 2. Click **Create** on the top right corner of the page.
@@ -121,7 +121,7 @@ We have successfully created the data bridge to DynamoDB, now we can continue to
 
 Now we have successfully created the data bridge to DynamoDB. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by rule  `my_rule`. 
 
-#### Online/Offline status recording
+#### Online/Offline Status Recording
 
 The operating steps are similar to those at the [Message storage](#Storage) part expect for the SQL template and SQL rules. 
 

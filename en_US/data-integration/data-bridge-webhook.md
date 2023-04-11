@@ -12,14 +12,14 @@ or from the output of a rule.
 
   :::
 
-## Feature list
+## Feature List
 
-- [Connection pool](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
-- [Buffer queue](./data-bridges.md#缓存队列)
+- [Connection pool](./data-bridges.md#connection-pool)
+- [Buffer queue](./data-bridges.md#buffer-queue)
 
-## Quick Starts
+## Quick Start
 
-We will illustrate how to create an HTTP server and a Webhook, and then create a data bridge to connect the Webhook and the HTTP server. 
+We will illustrate how to create an HTTP server and a Webhook, and then create a data bridge to connect the Webhook and the HTTP server.
 
 ### Setup a Simple HTTP Server
 
@@ -58,7 +58,7 @@ python3 http_server.py
 
 ![image](./assets/rules/en-webhook-index.png)
 
-3. Input a name for the data bridge, for example, `my_webhook`. Note: It should be a combination of upper/lower case letters or numbers. and set **URL** to `http://localhost:5000`. For the rest, you can keep the default value. 
+3. Input a name for the data bridge, for example, `my_webhook`. Note: It should be a combination of upper/lower case letters or numbers. and set **URL** to `http://localhost:5000`. For the rest, you can keep the default value.
 
 ![image](./assets/rules/en-webhook-conf-1.png)
 
@@ -66,27 +66,27 @@ python3 http_server.py
 
 ![image](./assets/rules/en-webhook-create-dep-rule-1.png)
 
-5. Here we want to save the MQTT messages under topic `t/#`  to the HTTP server, we can use the SQL statements below. Note: If you are testing with your SQL, please ensure you have included all required fields in the `SELECT` part. 
+5. Here we want to save the MQTT messages under topic `t/#`  to the HTTP server, we can use the SQL statements below. Note: If you are testing with your SQL, please ensure you have included all required fields in the `SELECT` part.
 
    ```
-   SELECT 
+   SELECT
      *
    FROM
      "t/#"
    ```
 
 6. Then click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data bridge**. Then click **Add** button.
-7. Click **Create** at the page bottom to finish the creation. 
+7. Click **Create** at the page bottom to finish the creation.
 
 ### Test
 
-Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event. 
+Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello Webhook" }'
 ```
 
-Check the running status of the two data bridges, there should be one new incoming and one new outgoing message. 
+Check the running status of the two data bridges, there should be one new incoming and one new outgoing message.
 
 Verify whether the message has been sent to the HTTP server:
 

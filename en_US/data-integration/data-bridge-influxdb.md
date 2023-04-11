@@ -20,7 +20,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
   :::
 
-## Feature list
+## Feature List
 
 - [Connection pool](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
 - [Async mode](./data-bridges.md#异步请求模式)
@@ -29,7 +29,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 <!--[Configuration parameters](#Configuration) TODO 链接到配置手册对应配置章节。 -->
 
-## Quick starts
+## Quick Start
 
 ### [Install InfluxDB](#install)
 

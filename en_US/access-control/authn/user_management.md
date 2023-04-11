@@ -1,4 +1,4 @@
-# Use HTTP API to manage user data
+# Use HTTP API to Manage User Data
 
 For the authentication data stored in the built-in database, you can use EMQX Dashboard or HTTP API to create, update, delete and list user credentials, which are:
 

@@ -1,73 +1,88 @@
-# New Features
+# What's New
 
-EMQX 5.0 is a considerable advancement of MQTT technology. As verified by the [test scenarios](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0), EMQX 5.0 supports up to 100 million concurrent device connections, a critically important milestone for IoT designers. It also comes with plenty of exciting new features and substantial performance improvements, including a more robust rule engine, enhanced security management, Mria database extension, and much more to enhance the scalability of IoT applications.
+This section lists the new features introduced in EMQX 5.0.
 
-## Significant improvements in scalability and reliability
+## Mria Cluster Architecture
 
-The latest version adopts a new Mria extension for Erlang’s [Mnesia database](https://github.com/erlang/otp/pull/5926), increasing horizontal scalability by defining two different node types: core and replicant nodes. This new architecture allows EMQX 5.0 to better adapt to increasing demand in IoT networks.
+EMQX 5.0 adopts a new [Mria cluster architecture](../deploy/cluster/mria-introduction.md). With this Mria architecture, one EMQX cluster can support up to [100 million concurrent MQTT connections](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0), making it the world’s most scalable open-source MQTT broker.
 
-The latest performance testing shows it can easily support 100M connections with a single cluster—a 10-fold increase over previous versions—making it the world’s most scalable open-source MQTT broker.
+<img src="./assets/100m-benckmark.png" alt="100m-benckmark" style="zoom:50%;" />
 
-![100m-benckmark](./assets/100m-benckmark.png)
+Besides this obvious scalability improvement, the Mria cluster architecture is also capable of reducing the risk of brain-splitting and its effects in large-scale deployments, to empower our clients with more stable and reliable IoT data access services.
 
-## The world’s first implementation of MQTT over QUIC
+To speedily get started, see [Create an EMQX Cluster](../deploy/cluster/create-cluster.md).
 
-QUIC is an underlying transfer protocol for the next-generation HTTP/3 protocol used by modern web browsers. QUIC benefits IoT transmission scenarios by reducing connection overhead and latency compared to TCP, increasing overall throughput, and increasing stability for mobile connections.
+## MQTT over QUIC
 
-With support for QUIC, EMQ hopes to maintain EMQX’s ability to provide the most advanced and competitive MQTT servers for the next generation of internet connectivity.
+EMQX 5.0 introduces QUIC support (MQTT over QUIC) as an experimental feature and designs a unique messaging mechanism and management approach. 
 
-## New IoT data integration: Flow Editor & bidirectional data bridging
+As the underlying transport protocol of the next-generation Internet protocol HTTP/3,  [QUIC](https://datatracker.ietf.org/doc/html/rfc9000) can provide connectivity for the modern mobile Internet with less connection overhead and message latency compared to TCP/TLS protocols. Therefore, EMQX attempted to replace the transport layer of MQTT with QUIC, which led to the MQTT over QUIC.
 
-EMQX is designed for high-performance, real-time data processing and IoT applications integration. EMQX 5.0 is deeply refactored and optimized to make data integration easier and more flexible.
-EMQX 5.0 integrates Webhook and data storage/bridging plugins to manage northbound and southbound data flow in a unified interface. Users can also process southbound messages from the cloud to edge devices based on the same rule processing functions.
-Also, EMQX 5.0 provides data integration visualization capabilities (Flows). Through the Dashboard, users can see how the rules engine processes IoT data and how data flows to external data services or devices.
-Subsequent versions will also support drag-and-drop orchestration of rules and data bridges (Flow Editor) on the Dashboard to connect IoT hardware data flows together through a visual interface.
+TO evaluate MQTT over QUIC and verify how it could improve network connectivity, you can continue to read [Use MQTT over QUIC ](../mqtt-over-quic/getting-started.md).
+
+
+
+## Redesigned IoT data integration
+
+Besides SQL, [jq](https://stedolan.github.io/jq/) is also supported with EMQX Rule Engine, so it is capable of handling more complex JSON data formats.
+
+{% emqxce %}
+
+Support sending data to WebHook or establishing bidirectional data bridging with external MQTT services.
+
+{% endemqxce %}
+
+{% emqxee %}
+
+Leveraging the bidirectional data bridging feature, you can process and send your IoT data to over 40 cloud services and enterprise systems in real-time, or retrieve data from them and send it to designated MQTT topics after processing.
+
+{% endemqxee %}
+
+EMQX visualizes the data integration process with the Flows feature on Dashboard. Now you can easily check how the rules engine processes IoT data and how data flows to external data services or devices.
+
+In future releases, EMQX also plans to support drag-and-drop orchestration of rules and data bridges with Flows. 
 
 ![flow-editor](./assets/flow-editor.png)
 
-## Flexible authentication/authorization: Ensure IoT data security with zero development efforts
+On different data bridging that EMQX supports and how to configure, see [Data Bridges](../data-integration/data-bridges.md).
 
-EMQX 5.0 has offered a built-in client authentication/authorization feature, which greatly simplifies the configuration and authentication/authorization workflow. With EMQX 5.0, users only need to do some simple configuration work before integrating with various data sources for user authentication and ensuring data security under various scenarios. Enhanced security and improved development efficiency are achieved with zero coding efforts.
+## Flexible Authentication/Authorization
+
+EMQX 5.0 has offered a built-in client authentication/authorization feature, users only need to do some simple configuration work before integrating with various data sources for user authentication and ensuring data security under various scenarios. 
 
 **New features**
 
+- Support using Dashboard for the authentication/authorization configuration on the cluster level;
 - Support using Dashboard for configuration, commissioning and management;
 - Support adjusting the running order of the authenticators and authorization checkers;
-- Achieve complete observability for authentication/authorization with statistics on execution speed and number of times;
+- Achieve complete observability with statistics on execution speed and number of times;
 - Support authentication configuration on a listener-level, to provide more flexible access capabilities.
 
-## User-friendly EMQX Dashboard with better observability
+On how to run authentication/authorization configuration with EMQX Dashboard or configuration files, you can continue to read [Access Control](../access-control/overview.md).
 
-In EMQX 5.0, we have redesigned the EMQX Dashboard with a new UI design style, enhancing the visual experience and supporting more powerful and user-friendly features. Users can manage client connections, authenticate/authorize various subscribe/publish requests, and integrate with different data systems via data bridges and rule engine with our brand-new EMQX Dashboard.
+## User-friendly EMQX Dashboard
+
+In EMQX 5.0, we have redesigned the EMQX Dashboard with a new UI design style, enhancing the visual experience and supporting more powerful and user-friendly features. 
 
 **New features**
 
-- New UI/UX design: Great enhancement of real-time observability;
+- New UI/UX design: Great enhancement of real-time observability
 - Optimized menu structure: Fast and direct access to contents
 - Data monitoring and management: Important data at a glance
-- Visualized access control: Out-of-the-box authentication/authorization management;
-- Powerful data integration capabilities: Using Flow Editor in a visualized way and supporting two-way data bridging;
-- Configuration updates during runtime: Hot update that takes effect immediately;
-- Custom extension capabilities: Built-in gateways, plugins and Hooks;
-- More comprehensive diagnosis tools: Timely problem identifying and debugging
+- Visualized access control: Out-of-the-box authentication/authorization management
+- Powerful data integration capabilities: Using Flow Editor in a visualized way and supporting two-way data bridging
+- Configuration updates during runtime: Hot update that takes effect immediately
 
-## EMQX Operator - Welcome to the cloud-native EMQX 5.0
+## Cloud Native and EMQX Operator
 
 Horizontal expansion and elastic clusters are features that a cloud-native application must support.
 
 [EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator) lets you take full advantage of the Replicant node of EMQX 5.0. You can deploy a stateless EMQX node with Kubernetes Deployment and then build the EMQX cluster that supports large-scale MQTT connections and message throughput.
 
-EMQX Kubernetes Operator is a low-cost, standard and reusable deployment and managing tool. With EMQX Kubernetes Operator, users can efficiently manage their clusters, for example, capacity expansion, upgrade, commissioning and debugging, and monitoring.
+## New Gateway Framework
 
-![Kubernetes MQTT](./assets/emqx-operator-3935269.png)
+EMQX 5.0 presents a new extended gateway framework with reconstructed underlying architecture for multi-protocol access and a unified configuration format and management interface:
 
-## New gateway framework: better support to multiple IoT protocols
-
-EMQX 5.0 presents a new extended gateway framework with reconstructed underlying architecture for multi-protocol access and a unified configuration format and management interface. Meanwhile, we standardize the implementation of various gateways with more clearly-defined gateway functions.
-
-In EMQX 5.0, we use a unified framework to support the standard operations of different gateways:
-
-- **Unified user interface**:  The framework provides a unified configuration file, HTTP API and command line interface. For example, in EMQX 4.x, the listener parameters exposed by different protocol plugins are different, in EMQX 5.0, the naming is unified.
 - **Unified statistic and monitoring indicators:** EMQX 5.0 provides the gateway/client-level statistic indicators, for example, number of bytes sent and received, messages, etc.
 - **Independent connection and session management:** Different from EMQX 4.x, gateway clients are also managed under the MQTT client list, EMQX 5.0 has created an independent gateway page for each gateway, and one Client ID can be reused across gateways.
 - **Independent client authentication**: Different from EMQX 4.x, where the gateway authentication is also managed under the MQTT client, EMQX 5.0 supports configuring a unique authentication mechanism for each gateway.
@@ -77,14 +92,22 @@ The new gateway framework further improves EMQX's usability by unifying access a
 
 ## **More feature updates**
 
-**More Intuitive User Experience**: 
+**Simplified configuration**
 
-Ease-of-use improvements will be the most apparent change to users of EMQX 5.0. We redesigned the EMQX Dashboard according to users behavior. The concise and easy-to-read HOCON configuration file format, the OpenAPI 3.0 compliant REST API documents, more detailed monitoring metrics, log tracking, and slow subscription diagnostic tools will also bring developers a better experience.
+The `emqx.conf` configuration file has been changed to a concise and readable HOCON format, and contains commonly used configuration items by default, to improve the readability and maintainability.
 
-**Improved operability and observability**
+**Improved REST API**
 
-You can view the operating data in the last 7 days via EMQX Dashboard, or integrate other monitoring systems with one click, such as Prometheus, Grafana, and Datadog/StatsD. EMQX5.0 also offers features like slow subscription, log trace, structured logs, and logs in JSON format, to help users with diagnosis and troubleshooting in the production environment.
+Provide REST API compliant with the OpenAPI 3.0 specification, as well as clear and rich API documentation.
+
+**Rapid troubleshooting**
+
+Provide more diagnostic tools such as slow subscriptions and online tracing so users can quickly troubleshoot issues in production.
+
+**Structured logs**
+
+More user-friendly structured logs and JSON format is also supported. Error logs is flagged with 'msg' to facilitate locating the cause of the problem.
 
 **Flexible expansion and customization**
 
-EMQX 5.0 introduces a new plugin architecture, with which users can compile, distribute, and install their extension plugins in the form of independent plugin packages to customize and extend the usage of EMQX.
+Provide a new plugin architecture, with which users can compile, distribute, and install their extension plugins in the form of independent plugin packages to customize and extend the usage of EMQX.

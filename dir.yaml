@@ -19,7 +19,7 @@
   title_cn: 概览
   path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
 
-- title_en: Get started
+- title_en: Get Started
   title_cn: 快速开始
   path: getting-started/getting-started
   children:
@@ -32,8 +32,15 @@
   title_cn: 安装部署
   path: deploy/install
   children:
+    - title_en: EMQX on Kubernetes
+      title_cn: EMQX on Kubernetes
+      lang: en
+      path: "https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html"
+    - title_en: EMQX on Kubernetes
+      title_cn: EMQX on Kubernetes
+      lang: cn
+      path: "https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html"
     - deploy/install-docker
-    - deploy/install-k8s
     - deploy/install-debian
     - deploy/install-ubuntu
     - deploy/install-centos
@@ -61,8 +68,8 @@
   # - title_en: Migrate to Enterprise
   #   title_cn: 迁移到企业版
   #   path: deploy/migrate-to-enterprise
-    
-- title_en: EMQX cluster
+
+- title_en: Clustering
   title_cn: 构建集群
   path: deploy/cluster/introduction
   children:
@@ -70,14 +77,14 @@
     - deploy/cluster/create-cluster
     - deploy/cluster/security
     - deploy/cluster/lb
-    - title_en: Performance and tuning
+    - title_en: Performance and Tuning
       title_cn: 性能与调优
       path: performance/overview
       children:
         - performance/tune
         - performance/benchmark
 
-- title_en: Access control
+- title_en: Access Control
   title_cn: 访问控制
   path: access-control/overview
   children:
@@ -128,6 +135,20 @@
     # - messaging/nanomq
     # - messaging/neuron
 
+- title_en: Use SDK to Connect Clients
+  title_cn: 使用 SDK 连接客户端
+  path: connect-emqx/introduction
+  children:
+    - connect-emqx/c
+    - connect-emqx/java
+    - connect-emqx/go
+    - connect-emqx/python
+    - connect-emqx/javascript
+    - title_en: MQTT Wechat miniprogram example
+      title_cn: MQTT 微信小程序示例
+      lang: cn
+      path: connect-emqx/wechat-miniprogram
+
 # MQTT over QUIC
 
 - title_en: MQTT over QUIC
@@ -140,7 +161,7 @@
 ## Data integration
 # - data-integration/introduction
 
-- title_en: Rule engine
+- title_en: Rule Engine
   title_cn: 规则引擎
   path: data-integration/rules
   children:
@@ -150,7 +171,7 @@
     - data-integration/rule-sql-jq
     # - data-integration/rule-sql-user-defined-function
 
-- title_en: Data bridges
+- title_en: Data Bridges
   title_cn: 数据桥接
   path: data-integration/data-bridges
   children:
@@ -164,7 +185,10 @@
     - data-integration/data-bridge-mongodb
     - data-integration/data-bridge-pgsql
     - data-integration/data-bridge-dynamo
-
+    - data-integration/data-bridge-cassa
+    - data-integration/data-bridge-tdengine
+    - data-integration/data-bridge-rocketmq
+    
     # TODO
     # - title_en: Examples and Tutorials
     #   title_cn: 示例和教程
@@ -275,18 +299,17 @@
     # - operations/diagnostic-mode
     # - operations/production-notes
 
-- title_en: Rate limit
+- title_en: Rate Limit
   title_cn: 速率限制
   path: rate-limit/rate-limit
 
-- title_en: Log and observability
+- title_en: Log and Observability
   title_cn: 日志及可观测性
   path: observability/overview
   children:
     - observability/log
     - observability/metrics-and-stats
     - observability/prometheus
-    - observability/statsd
     - observability/tracer
     - observability/alarms
     - observability/topic-metrics
@@ -294,7 +317,7 @@
 
 ## Device connectivity
 
-- title_en: Extended protocol gateway
+- title_en: Extended Protocol Gateway
   title_cn: 扩展协议网关
   path: gateway/gateway
   children:
@@ -321,7 +344,7 @@
 
 ## Developers & Testers
 
-- title_en: Plugin and extension
+- title_en: Plugin and Extension
   title_cn: 插件与扩展
   path: extensions/introduction
   children:
@@ -329,6 +352,7 @@
     - extensions/plugins
     # - extensions/lang-lua
     - extensions/exhook
+
 
 - title_en: MQTT Essentials
   title_cn: MQTT 协议
@@ -354,13 +378,17 @@
   title_cn: 常见问题解答
   path: faq/faq
 
-- title_en: Design and implementation
+- title_en: Design and Implementation
   title_cn: 设计与实现
-  path: advanced/overview
+  path: design/overview
   children:
+    - title_en: EMQX Clustering
+      title_zh: EMQX 集群
+      lang: en
+      path: design/clustering
+    - design/inflight-window-and-message-queue
+    - design/retransmission
     # - design/design
-    - advanced/inflight-window-and-message-queue
-    - advanced/retransmission
     # - title_en: SDK & Tools
     #   title_cn: SDK 与工具
     #   children:
@@ -377,6 +405,6 @@
 #   title_cn: 版本发布记录
 #   path: changes/changes-5.0
 
-- title_en: Technical support
+- title_en: Technical Support
   title_cn: 技术支持
   path: support/technical-support

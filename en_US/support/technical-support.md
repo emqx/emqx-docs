@@ -31,7 +31,7 @@ If you have any questions about EMQX products or our IoT solutions, you are welc
 
 
 
-## EMQX Enterprise edition 
+## EMQX Enterprise Edition 
 
 For EMQX Enterprise edition users:
 
@@ -54,7 +54,7 @@ For EMQX Enterprise edition users:
 
 
 
-## EMQX open source edition
+## EMQX Open Source Edition
 
 For EMQX developers and users, you are welcome to join EMQX forum, slack channel or visit Github pages to ask questions, find answers, and share ideas and best practices:
 

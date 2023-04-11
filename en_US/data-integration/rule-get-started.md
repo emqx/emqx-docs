@@ -1,4 +1,4 @@
-# Get Started with Rules
+# Get Started With Rules
 
 We use an example to show how to use dashboard to create a simple rule.
 This rule listens to the message with the topic `t/#` and sends another message with the topic `a/1`:
@@ -8,7 +8,7 @@ On the dashboard, select "Data Integration" - "Rules" - "Create" to enter the ru
 
 ![image](./assets/rules/en_rule_overview_basic_sql.png)
 
-## Add a "republish" Action
+## Add "Republish" Action
 
 Keep the default rule name and SQL statement unchanged, click the "add action" button, and add a `republish` action according to the following parameters:
 

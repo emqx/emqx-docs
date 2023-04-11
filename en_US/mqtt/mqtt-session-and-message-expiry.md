@@ -1,5 +1,5 @@
 # Session and Message Expiration
-## MQTT session
+## MQTT Session
 
 According to the MQTT protocol, messages of QoS 1 and QoS 2 will first be stored on the client and the broker, and will not be deleted until it is confirmed that the message is successfully delivered to the subscriber. This process, where the Broker needs to associate the state with the client, is called a session state. Session state is composed of the message storage and subscription information (a topic list that the client subscribes to). 
 
@@ -27,7 +27,7 @@ For advanced EMQX session design guide, you may refer to:
 - Priority design
 -->
 
-## MQTT persistent sessions
+## MQTT Persistent Sessions
 
 To minimize the impact of network disconnection on communications, the MQTT protocol provides a persistent session function. You can set whether to enable persistent sessions with Clean Session (MQTT v3.1.1) or Clean Start + session expiration interval (MQTT v5.0) of the client. 
 
