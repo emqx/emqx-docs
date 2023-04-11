@@ -1,6 +1,6 @@
 # Test with MQTT Clients 
 
-It is more safe and efficient for the developers to test the EMQX messaging services using client tools before connecting the real-time devices to the EMQX broker and developing the IoT applications. If some errors are detected during the testing, the developers can troubleshoot them in the test environment rather than in production.
+It is more safe and efficient for the developers to test the EMQX messaging services using client tools before connecting the real-time devices to the EMQX and developing the IoT applications.
 
 Even before a local deployment of EMQX, you can also leverage the free online public [MQTT broker](https://www.emqx.com/en/mqtt/public-mqtt5-broker) and MQTT client tools provided by [EMQ](https://www.emqx.com) as verification tools for quick testing of the MQTT messaging services and application development. 
 
