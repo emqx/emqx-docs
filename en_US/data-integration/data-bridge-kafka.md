@@ -26,7 +26,6 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 ## Feature List
 
-- [Connection pool](./data-bridges.md#connection-pool) <!-- TODO 确认改版后知否支持-->
 - [Async mode](./data-bridges.md#async-mode)
 - [Batch mode](./data-bridges.md#batch-mode)
 - [Buffer queue](./data-bridges.md#buffer-queue)
