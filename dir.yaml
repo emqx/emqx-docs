@@ -330,7 +330,7 @@
     # - extensions/lang-lua
     - extensions/exhook
 
-- title_en: MQTT specific
+- title_en: MQTT Essentials
   title_cn: MQTT 协议
   path: mqtt/mqtt-specific
   children:

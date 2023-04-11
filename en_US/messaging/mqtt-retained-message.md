@@ -31,8 +31,8 @@ You can use client tools to try this messaging service in EMQX. This section int
 
 4. Publish two retained messages with the topic `sensor/t2`. 
 
-   1. Type the topic as `sensor/t2`. Type the first message as `1`. Select **Retain**. Click the send button.
-   2. Type the second message as `2`. Click the send button.
+   - Type the topic as `sensor/t2`. Type the first message as `1`. Select **Retain**. Click the send button.
+   - Type the second message as `2`. Click the send button.
 
    <img src="./assets/Publish-message-2.png" alt="Publish-message-2" style="zoom:35%;" />
 
@@ -58,7 +58,7 @@ You can use client tools to try this messaging service in EMQX. This section int
 
 1. Initiate a connection request with one client. 
 
-1. Use the following command to publish a retained message with the payload "A retained message from MQTTX CLI" to the topic "t/1". Set the topic to `t/1`, payload to `A retained message from MQTTX CLI`,  and `retain = true`：
+1. Use the following command to publish a retained message. Set the topic to `t/1`, payload to `A retained message from MQTTX CLI`,  and `retain = true`：
 
    ```bash
    mqttx pub -t 't/1' -m 'A retained message from MQTTX CLI' --retain true -h 'localhost' -p 1883

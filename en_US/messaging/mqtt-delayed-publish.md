@@ -31,21 +31,6 @@ Example:
 
    <img src="./assets/configure-delayed-publish-dashboard.png" alt="configure-delayed-publish-dashboard" style="zoom:45%;" />
 
-## Configure Delayed Publish via Configuration File
-
-Add the following configuration to the configuration file.
-
-```bash
-delayed {
-    enable = true
-    max_delayed_messages = 12435
-}
-```
-
-`enable`: Enable or disable delayed publish.
-
-`max_delayed_messages`: The max number of delayed messages.
-
 ## Try Delayed Publish with MQTT X Client
 
 :::tip Prerequisite

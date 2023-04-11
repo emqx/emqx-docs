@@ -1,4 +1,4 @@
-# MQTT Specific
+# MQTT Essentials
 
 ## Overview
 
