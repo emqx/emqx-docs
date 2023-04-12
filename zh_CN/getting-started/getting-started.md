@@ -146,13 +146,13 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 1. 在命令行工具中输入如下命令，下载 zip 文件。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-macos11-amd64.zip
+   wget https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-macos11-amd64.zip
    ```
 
 2. 通过以下命令安装 EMQX。
 
    ```bash
-   mkdir -p emqx && unzip emqx-5.0.19-macos11-amd64.zip -d emqx
+   mkdir -p emqx && unzip emqx-@CE_VERSION@-macos11-amd64.zip -d emqx
    ```
 
 {% endemqxce %}

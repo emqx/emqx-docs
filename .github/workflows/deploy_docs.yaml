@@ -92,6 +92,13 @@ jobs:
         else
           python3 .github/scripts/remove_unused.py directory_ee.json $(pwd)
         fi
+    
+    - name: set current emqx version
+      run: |
+        cd docs-files
+        source current-version.env
+        find ./en_US ./zh_CN -type f -name "*.md" -exec sed -i 's/@CE_VERSION@/'"$CE_VERSION"'/g' {} +
+        find ./en_US ./zh_CN -type f -name "*.md" -exec sed -i 's/@EE_VERSION@/'"$EE_VERSION"'/g' {} +
 
     - name: move ce files
       if: env.DOCS_TYPE == 'broker'
