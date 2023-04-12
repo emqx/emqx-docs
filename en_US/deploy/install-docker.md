@@ -19,7 +19,7 @@ This section will introduce how to use the Docker image to install the latest ve
 {% emqxce %}
 
 ```bash
-docker pull emqx/emqx:5.0.20
+docker pull emqx/emqx:@CE_VERSION@
 ```
 
 {% endemqxce %}
@@ -27,7 +27,7 @@ docker pull emqx/emqx:5.0.20
 {% emqxee %}
 
 ```bash
-docker pull emqx/emqx-enterprise:5.0.1
+docker pull emqx/emqx-enterprise:@EE_VERSION@
 ```
 
 {% endemqxee %}
@@ -37,7 +37,7 @@ docker pull emqx/emqx-enterprise:5.0.1
 {% emqxce %}
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx:5.0.20
+docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx:@CE_VERSION@
 ```
 
 For more information about EMQX official docker image, see [Docker Hub - emqx](https://hub.docker.com/_/emqx). 
@@ -47,7 +47,7 @@ For more information about EMQX official docker image, see [Docker Hub - emqx](h
 {% emqxee %}
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx/emqx-enterprise:5.0.1
+docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx/emqx-enterprise:@EE_VERSION@
 ```
 
 For more information about EMQX official docker image, see [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise).
@@ -73,7 +73,7 @@ version: '3'
 
 services:
   emqx1:
-    image: emqx:5.0.20
+    image: emqx:@CE_VERSION@
     container_name: emqx1
     environment:
     - "EMQX_NODE_NAME=emqx@node1.emqx.io"
@@ -98,7 +98,7 @@ services:
     #   - $PWD/emqx1_data:/opt/emqx/data
 
   emqx2:
-    image: emqx:5.0.20
+    image: emqx:@CE_VERSION@
     container_name: emqx2
     environment:
     - "EMQX_NODE_NAME=emqx@node2.emqx.io"
@@ -130,7 +130,7 @@ version: '3'
 
 services:
   emqx1:
-    image: emqx/emqx-enterprise:5.0.1
+    image: emqx/emqx-enterprise:@EE_VERSION@
     container_name: emqx1
     environment:
     - "EMQX_NODE_NAME=emqx@node1.emqx.com"
@@ -155,7 +155,7 @@ services:
     #   - $PWD/emqx1_data:/opt/emqx/data
 
   emqx2:
-    image: emqx/emqx-enterprise:5.0.1
+    image: emqx/emqx-enterprise:@EE_VERSION@
     container_name: emqx2
     environment:
     - "EMQX_NODE_NAME=emqx@node2.emqx.com"
