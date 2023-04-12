@@ -271,7 +271,10 @@
     - configuration/logs
     - configuration/prometheus
     - configuration/dashboard
-    - configuration/license
+    - title_en: License
+      title_cn: License
+      edition: ee
+      path: configuration/license
     - configuration/configuration-manual
 
 # - title_en: Back
