@@ -182,10 +182,12 @@
     - data-integration/data-bridge-mongodb
     - data-integration/data-bridge-pgsql
     - data-integration/data-bridge-dynamo
-    - data-integration/data-bridge-cassa
+    - data-integration/data-bridge-clickhouse
+    # - data-integration/data-bridge-cassa
     - data-integration/data-bridge-tdengine
     - data-integration/data-bridge-rocketmq
     
+
     # TODO
     # - title_en: Examples and Tutorials
     #   title_cn: 示例和教程
