@@ -1,6 +1,6 @@
 # Integrate with MongoDB
 
-This authorizer implements authorization checks through matching pubublish/subscription requests against lists of rules stored in the MongoDB database.
+This authorizer implements authorization checks by matching publish/subscribe requests against lists of rules stored in the MongoDB database.
 
 ::: tip Tip
 

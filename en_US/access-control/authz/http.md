@@ -1,6 +1,6 @@
 # Use HTTP Service
 
-EMQX supports the authorization based on the HTTP service. The user needs to build an external HTTP application as a data source by themselves. EMQX make requests to the HTTP service and determine the authorization result based on the data returned by the HTTP API, thus achieving complex authorization logic.
+EMQX supports the authorization based on the HTTP service. The user needs to build an external HTTP application as a data source by themselves. EMQX makes requests to the HTTP service and determines the authorization result based on the data returned by the HTTP API, thus achieving complex authorization logic.
 
 ::: tip Tip
 
@@ -18,6 +18,7 @@ When the client initiates a subscription or publishing operation, the HTTP Autho
   - `deny`: Deny Publish or Subscribe.
   - `ignore`: Ignore this request, it will be handed over to the next authorizer.
 - If the HTTP Status Code is `204`, it means that this Publish or Subscribe request is allowed.
+- HTTP Status Codes other than `200` and `204`, mean "not match", for example, this authorizer is not applied.
 
 <!--- NOTE: the code supports `application/x-www-form-urlencoded` too, but it is not very easy to extend in the future, hence hidden from doc -->
 
@@ -41,7 +42,7 @@ In version 4.x, EMQX only used the status code returned by the HTTP API, while t
 
 ::: tip 
 
-It is recommend using the `POST` method. When using the `GET` method, some sensitive information may be exposed through HTTP server logs.
+It is recommended to use the `POST` method. When using the `GET` method, some sensitive information may be exposed through HTTP server logs.
 
 For untrusted environments, HTTPS should be used.
 
@@ -75,7 +76,7 @@ For untrusted environments, HTTPS should be used.
 
 4. Click **Create** to finish the setting.
 
-## Configure with Confiuration Items
+## Configure with Configuration Items
 
 The HTTP authorization requires configuration with `type=http`.
 

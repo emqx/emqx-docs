@@ -22,7 +22,13 @@ The process of the authorization check is as follows:
    - If yes, EMQX switches to the next authenticator to continue the process.
    - If it is already the last authorizer, EMQX follows the setting of `no_match` to determine whether to allow or reject the client operation.
 
-For information on how to adjust the sequence of the authorizer in an authorization chain and how to check the running metrics, see [Manage authorizers](#manage-authorizers).
+::: tip Warning
+
+To avoid problems with the authorization, you need to remember to remove the authorizer using ACL file when necessary because it has `{allow, all}` at the end by default. 
+
+:::
+
+For information on how to adjust the sequence of the authorizer in an authorization chain and how to check the running metrics, see [Manage Authorizers](#manage-authorizers).
 
 ### Authorization Cache
 
@@ -81,7 +87,7 @@ EMQX also allows placeholders to be used in topics to support dynamic themes. Th
 * `${clientid}`
 * `${username}`
 
-Placeholders can be used as topic segments, like `a/b/${username}/c/d`, but not `a/b${username}c/d`.
+Placeholders can be used as topic segments, like `a/b/${username}/c/d`.
 
 To avoid placeholder interpolation, one may use special `eq` syntax: `eq a/b/${username}/c/d`. This topic is treated as `a/b/${username}/c/d` literally, without interpolation.
 
@@ -89,7 +95,7 @@ To avoid placeholder interpolation, one may use special `eq` syntax: `eq a/b/${u
 
 Besides the cache and authorization checker, the authorization result may also be affected by the [Super User Role and Permission](../authn/authn.md) set during the authentication phase.
 
-For super users, all their operations will be skipped from authorization check; if the permission list is set, EMQX will first follow the client's permission data to run the  authorization checker. The priority is as follows:
+For super users, all their operations will be skipped from the authorization check; if the permission list is set, EMQX will first follow the client's permission data to run the authorization checker. The priority is as follows:
 
 ```bash
 Super user > permission data > authorization check
@@ -99,7 +105,7 @@ Super user > permission data > authorization check
 
 You can view and manage authorizers in the **Access Control**->**Authorization** page in the Dashboard.
 
-### Adjust Sequence of Authorizers
+### Adjust the Sequence of Authorizers
 
 As mentioned in [Authorization chain](#authorization-chain), authorizers are executed according to the configured sequence. You can select **Up**, **Down**, **Move to top**, and **Move to bottom** from the **More** dropdown list to move the authorizer. You can also adjust the authorizer positions in the `authorization.sources` configuration item.
 
@@ -115,11 +121,11 @@ You can check the connection status in the **Status** column:
 
 ### Running Metrics
 
-You can view the statistic metrics of each authorizer in the Overview page of the authorizer. The following metrics are listed:
+You can view the statistic metrics of each authorizer on the Overview page of the authorizer. The following metrics are listed:
 
 - **Allow**: Number of authorizations passed
 - **Deny**: Number of authorizations failed
-- **No match**: Number of times client authorizations data not found
+- **No match**: Number of times client authorizations data is not found
 
 - **Rate(tps)**: Execution rates of authorizations
 
@@ -151,7 +157,7 @@ Example:
 
 ```bash
 {
-    enable => true
+    enable = true
 
     type = mysql
     database = "mqtt"
@@ -165,11 +171,11 @@ Example:
 
 ## Configure Authorization Mechanisms
 
-EMQX provides 3 ways to use authorization, namely: Dashboard, Configuration file and HTTP API.
+EMQX provides 3 ways to configure authorization, namely: Dashboard, Configuration file, and HTTP API.
 
 ### Configure with Dashboard
 
-EMQX Dashboard is an intuitive way to configure EMQX authorizer, where you can configure relevant parameters, check their working status, adjust their position in the authorization chain.
+EMQX Dashboard is an intuitive way to configure EMQX authorizer, where you can configure relevant parameters, check their working status, and adjust their position in the authorization chain.
 
 <img src="./assets/authentication-with-dashboard.png" alt="authentication-with-dashboard" style="zoom:80%;" />
 
@@ -197,7 +203,7 @@ Where,
 
 - `sources` (optional): An ordered array; each array element defines the data source of the corresponding authorizer. For detailed configurations, see the corresponding configuration file.
 
-- `no_match`: Determines the default action for a publish/subscribe request if none of the configured authorizers find any authorization rules; optional value: `allow` or `deny`; default:  `allow`. The setting  also triggers the enabling of black/white list. 
+- `no_match`: Determines the default action for a publish/subscribe request if none of the configured authorizers find any authorization rules; optional value: `allow` or `deny`; default:  `allow`. The setting also triggers the enabling of black/white list. 
 
 - `deny_action`: Determines the next step if a publish/subscribe operation is rejected; optional value: `ignore` or `disconnect`; default:  `ignore`. If set to `ignore`, the operation is silently ignored; if set to `disconnect`, the client connection is dropped.
 
@@ -218,7 +224,6 @@ There are several API endpoints for managing authorization:
 * `/api/v5/authorization/sources/built_in_database`:  for managing authorization rules of `built_in_database` authorizer.
 
 For detailed operation steps, see [HTTP API](../../admin/api.md).
-
 
 
 

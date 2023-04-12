@@ -26,7 +26,7 @@ On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Con
    - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. You can keep the default value unless you are migrating user credentials from external storage into EMQX built-in database. Note: If you choose **plain**, the **Salt Position** should be set to **disable**.  
 2. If **bcrypt** is selected, we also need to configure:
 
-   - **Salt Rounds**: Specify the calculation times of Hush function (2^Salt Rounds). Default value: **10**; Value range **4~31**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by 1 doubles the necessary time. 
+   - **Salt Rounds**: Specify the calculation times of Hush function (2^Salt Rounds). Default value: **10**; Value range **4~31**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by one doubles the necessary time for authentication. 
 3. If **pkbdf2** is selected, we also need to configure: 
 
    - **Pseudorandom Function**: Specify the Hush function for generating the key, for example,  sha256. 

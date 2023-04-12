@@ -16,7 +16,7 @@ This section covers the basic concepts of identity authentication and the settin
 
 ### Password Authentication
 
-EMQX supports the simplest and most popular password authentication, which requires the client to provide credentials that can indicate identities, such as username, client ID, and the corresponding password. In some cases, users may choose to use some fields in the TLS certificate (such as the certificate's Common Name) as the client's identity credentials. Either way, these credentials are stored in advance in a database, where passwords are usually stored in salted and hashed form.
+EMQX supports the simplest and most popular password authentication, which requires the client to provide credentials that can indicate identities, such as username, client ID, and the corresponding password. In some cases, users may choose to use some fields in the TLS certificate (such as the certificate's Common Name) as the client's identity credentials. Either way, these credentials are stored in advance in a database, where passwords are usually stored in salted and hashed forms.
 
 This is how password authentication in EMQX works: The client will carry the identity credentials when initiating a connect request, EMQX will query the database for the hashed password corresponding to the identity credentials provided by the client, and will only accept the connection after the match is successful.
 ![emqx-authn-flow](./assets/emqx-authn-flow.png)
@@ -33,7 +33,7 @@ The client carries the JWT in the connection request, and EMQX uses the pre-conf
 
 ### MQTT 5.0 Enhanced Authentication
 
-[MQTT 5.0 enhanced authentication](https://www.emqx.com/en/blog/mqtt5-enhanced-authentication) extends the basic authentication to include challenge/response style authentication. It is more like an authentication framework that allows the use of various more secure authentication mechanisms, such as SCRAM authentication, Kerberos authentication, etc. EMQX supports SCRAM authentication and provides support for SCRAM user management through our built-in database.
+[MQTT 5.0 enhanced authentication](https://www.emqx.com/en/blog/mqtt5-enhanced-authentication) extends the basic authentication to include challenge/response style authentication. The implementation of enhanced authentication allows the use of various more secure authentication mechanisms, such as Salted Challenge Response Authentication Mechanism (SCRAM) authentication, Kerberos authentication, and etc. The concrete EMQX implementation of the enhanced authentication supports SCRAM and provides support for SCRAM user management through our built-in database.
 
 ## EMQX Authenticator
 
@@ -75,10 +75,15 @@ Taking the password-based authentication as an example, EMQX tries to retrieve t
 1. If the username is the same, and:
    - the authentication information matches, the client will be allowed to connect.
    - the authentication information does not match, the client will not be allowed to connect.
-
 1. If multiple authenticators are configured, and EMQX fails to retrieve the information from the current authenticator, it will:
    - continue to retrieve the information from other authenticators.
    - refuse the connection if this is already the last authenticator.
+
+::: tip 
+
+Please note that malfunctioning authentication is also treated as "Not Found".
+
+:::
 
 
 

@@ -1,20 +1,18 @@
-# Blacklist
+# Banned Client
 
-EMQX provides users with a blacklisting/banning functionality.
+EMQX provides users with a banning functionality.
 
-The administrator can deny the access of clients by add the specified clients to the blacklist. In addition to the client identifier, it also supports direct ban by user names or source IP addresses.
+The administrator can deny the access of clients by adding the specified clients to the banned list. In addition to the client identifier, it also supports direct ban by user names or source IP addresses.
 
 ::: tip
-The blacklist is only applicable to a small number of client bans. If there are a large number of clients requiring authentication management, use the [authentication](./authn/authn.md) function.
+The banned list is only applicable to a small number of client bans. If there are a large number of clients requiring authentication management, use the [authentication](./authn/authn.md) function.
 :::
 
-## Create Blacklist with Dashboard
+## Create Banned Clients via Dashboard
 
-1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Blacklist** on the left navigation tree to enter the **Blacklist** page. 
+1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Banned Client** on the left navigation menu to enter the **Banned Client** page. 
 
-2. Click **Create** at the top right corner. The **Create** dialog is show as below.
-
-   ![image](./assets/blacklist_create_ee.png)
+2. Click **Create** at the top right corner. The **Create** dialog is shown as below.
 
 3. Follow the instructions below to specify a client to be banned.
 
@@ -25,9 +23,9 @@ The blacklist is only applicable to a small number of client bans. If there are 
 
 ## Flapping Clients
 
-Based on the blacklist function, EMQX automatically bans frequently logging clients to prevent them from consuming server resources that may affect other clients. Those clients will be banned for a period of time.
+Based on the banned client function, EMQX automatically bans frequently logging clients to prevent them from consuming server resources that may affect other clients. Those clients will be banned for a period of time.
 
-It should be noted that the automatic ban only bans the client by the identifier, not by the user name and IP address. That is to say, a malicious client may still able to attack if they change client identifier for each attempt.
+It should be noted that the automatic ban only bans the client by the identifier, not by the user name and IP address. That is to say, a malicious client may still be able to attack if they change the client identifier for each attempt.
 
 This feature is disabled by default, and users can enable it by adding the following configuration to the `emqx.conf` file:
 
