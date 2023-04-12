@@ -43,8 +43,8 @@ The above configuration can also be configured with HTTP API:
 **Example Code:**
 
 ```bash
-curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
-  -u admin:public \
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/mqttsn' \
+  -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{
   "name": "mqttsn",
@@ -167,7 +167,7 @@ The above configuration can also be performed via HTTP API.
 
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/mqttsn/authentication' \
-  -u admin:public \
+  -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{
   "method": "post",

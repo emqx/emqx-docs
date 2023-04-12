@@ -15,8 +15,8 @@ It can also be enabled via the HTTP API or emqx.conf,  e.g:
 ::: tab HTTP API
 
 ```bash
-curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
-  -u admin:public \
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/stomp' \
+  -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{
   "name": "stomp",
@@ -91,7 +91,7 @@ For example, to create a built-in database authentication for a Stomp gateway vi
 ```bash
 curl -X 'POST' \
   'http://127.0.0.1:18083/api/v5/gateway/stomp/authentication' \
-  -u admin:public
+  -u <your-application-key>:<your-security-key> \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

@@ -318,10 +318,10 @@
   title_cn: 扩展协议网关
   path: gateway/gateway
   children:
-    - gateway/mqttsn
-   #- gateway/lwm2m
-    - gateway/coap
     - gateway/stomp
+    - gateway/mqttsn
+    - gateway/coap
+    - gateway/lwm2m
    #- gateway/ocpp
    #- gateway/jt808
    #- gateway/gbt32960
