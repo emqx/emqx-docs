@@ -13,7 +13,7 @@ You can use client tools to try this messaging service in EMQX. This section int
 
 ## Try Shared Subscription with MQTT X Client
 
-The following procedure demonstrates how to form groups for multiple subscribers and share the subscription to the same topic and how subscribers will receive the messages from the shared subscription.
+The following procedure demonstrates how to form groups for multiple subscribers that can share the subscription to the same topic and how these subscribers will receive the messages from the shared subscription.
 
 In this demonstration, you can create one client connection `demo` as a publisher to publish messages on the topic `t/1`. Then, you can create three client connections as subscribers, such as `Subscriber1`, `Subscriber2` and `Subscriber3`.  The subscribers can be divided into groups `a` and `b`, and both groups subscribe to the topic `t/1`. 
 
