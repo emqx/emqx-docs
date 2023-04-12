@@ -122,7 +122,7 @@ Data bridges for message storage and event recording require different SQL templ
 
 7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md).
 
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the TDengine.
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the MySql.
 
 9. Click **Create** to finish the creation of the data bridge.
 
