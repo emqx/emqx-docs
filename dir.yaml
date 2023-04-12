@@ -168,8 +168,8 @@
     - data-integration/rule-sql-jq
     # - data-integration/rule-sql-user-defined-function
 
-- title_en: Data Bridges
-  title_cn: 数据桥接
+- title_en: Data Integration
+  title_cn: 数据集成
   path: data-integration/data-bridges
   children:
     - data-integration/data-bridge-webhook
