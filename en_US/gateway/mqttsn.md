@@ -20,7 +20,7 @@ The MQTT-SN gateway is based on the [MQTT-SN v1.2](https://www.oasis-open.org/co
 
 In EMQX 5.0, MQTT-SN gateways can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
 
-On EMQX Dashboard, click **Extensions** -> **Gateways** on the left navigation menu. On the **Gateway** page, all supported gateways lare listed. Locate **MQTT-SN** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize MQTT-SN** page.
+On EMQX Dashboard, click **Extensions** -> **Gateways** on the left navigation menu. On the **Gateway** page, all supported gateways are listed. Locate **MQTT-SN** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize MQTT-SN** page.
 
 ::: tip
 
@@ -119,7 +119,7 @@ By default, one UPD listener with the name of **default** is already configured 
 
 <img src="./assets/mqttsn-listerner.png" alt="MQTTSN listener" style="zoom:50%;" />
 
-If you click **Settings**, you will be directed to the **Add Listener** page, where you can continue with the following configuration fields:
+Click **Add Listener** to open **Add Listener** page, where you can continue with the following configuration fields:
 
 **Basic settings**
 
@@ -130,16 +130,28 @@ If you click **Settings**, you will be directed to the **Add Listener** page, wh
 
 **Listener Settings** 
 
-- **Max Connections**: Set the maximum number of concurrent connections that the listener can handle, default: 1024000.
-- **Max Connection Rate**: Set the maximum rate of new connections the listener can accept per second, default: 1000.
+- **Acceptor **(for DTLS listeners only): Set the size of the acceptor pool, default: **16**. 
+- **Max Connections**: Set the maximum number of concurrent connections that the listener can handle, default: **1024000**.
+- **Max Connection Rate**: Set the maximum rate of new connections the listener can accept per second, default: **1000**.
 
 **UDP Settings** 
 
 - **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://erlang.org/doc/man/inet.html#setopts-2).
 - **Buffer**: Set the size of the buffer used to store incoming and outgoing packets, unit: KB.
 - **Receive Buffer**: Set the size of the receive buffer,  unit: KB.
-- **Send Buffer**: Set the size of the send buffer,  unit: KB.
+- **Send Buffer**: Set the size of the send buffer,  unit: KB. 
 - **SO_REUSEADDR**: Set whether to allow local reuse of port numbers. <!--not quite sure what this means-->
+
+**DTLS Settings** (for DTLS listeners only)
+
+You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
+
+Then you can continue to set:
+
+- **DTLS Versions**: Set the DTLS versions supported, default, **dtlsv1.2** and **dtlsv1**. 
+- **Fail If No Peer Cert**: Set whether EMQX will reject the connection if the client sends an empty certificate, default: **false**, optional values: **true**, **false**. 
+- **Intermediate Certificate Depth**: Set the maximum number of non-self-issued intermediate certificates that can be included in a valid certification path following the peer certificate, default, **10**.
+- **Key Password**: Set the user's password, used only when the private key is password-protected. 
 
 ### Configure Authentication
 
