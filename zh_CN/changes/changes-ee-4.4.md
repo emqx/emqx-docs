@@ -28,7 +28,7 @@
   但是，IoTDB 仍会返回 200 OK，导致 IoTDB 动作递增发送成功计数。
   此次修复后，当所有物理量都为 null 时，IoTDB 动作将丢弃此请求，并递增发送失败计数。
 
-- 修复无法使用带有换行符的 TDEngine SQL 语句创建规则的问题 [#1778](https://github.com/emqx/emqx-enterprise/pull/1778)。
+- 修复当 TDEngine SQL 语句带有换行符时创建规则失败的问题 [#1778](https://github.com/emqx/emqx-enterprise/pull/1778)。
   在此修复之前，TDEngine SQL 语句不能包含换行符，如果使用如下语句作为 TDEngine 动作的 `SQL 模板` 参数，创建规则将会失败：
   ```
   INSERT INTO ${devid}
