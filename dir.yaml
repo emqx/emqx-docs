@@ -158,7 +158,7 @@
 ## Data integration
 # - data-integration/introduction
 
-- title_en: Rule Engine
+- title_en: EMQX Rules
   title_cn: 规则引擎
   path: data-integration/rules
   children:
