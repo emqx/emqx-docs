@@ -1,6 +1,6 @@
 # Built-in SQL Functions
 
-The EMQX rule engine's SQL-like language supports a variety of built-in functions for doing basic data transformation, including [mathematical](#mathematical-functions), [data type judgment](#data-type-judgment-function), [conversion](#data-type-conversion-functions), [string](#string-functions), [map](#map-functions), [array](#array-functions), [hash](#hash-function), [compression and decompression](#compression-and-decompression-functions), [bit](#bit-functions), [decoding and encoding](#decoding-and-encoding-functions), and [time and date](#time-and-date-functions) functions that are available in EMQX.
+EMQX rules use a SQL-like syntax and support a variety of built-in functions for doing basic data transformation, including [mathematical](#mathematical-functions), [data type judgment](#data-type-judgment-function), [conversion](#data-type-conversion-functions), [string](#string-functions), [map](#map-functions), [array](#array-functions), [hash](#hash-function), [compression and decompression](#compression-and-decompression-functions), [bit](#bit-functions), [decoding and encoding](#decoding-and-encoding-functions), and [time and date](#time-and-date-functions) functions that are available in EMQX.
 
 :::tip
 
