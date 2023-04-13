@@ -10,7 +10,7 @@ The banned list is only applicable to a small number of client bans. If there ar
 
 ## Create Banned Clients via Dashboard
 
-1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Banned Client** on the left navigation menu to enter the **Banned Client** page. 
+1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Blacklist** on the left navigation menu to enter the **Blacklist** page. 
 
 2. Click **Create** at the top right corner. The **Create** dialog is shown as below.
 
