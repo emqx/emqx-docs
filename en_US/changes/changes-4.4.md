@@ -1,5 +1,53 @@
 # Releases
 
+## v4.4.17
+
+*Release Date: 2023-04-13*
+
+### Enhancements
+
+- When the listener enabled with `Proxy Protocol` receives a TCP port probe, no error logs will be printed anymore [emqx/esockd#172](https://github.com/emqx/esockd/pull/172).
+
+  Before the fix, if the listener had enabled the proxy protocol (`listener.tcp.external.proxy_protocol=on`), but the connection was disconnected after the TCP handshake was completed and before the proxy information was received, the following error log would be printed:
+
+  ```
+  [error] supervisor: 'esockd_connection_sup - <0.3265.0>', errorContext: connection_shutdown, reason: {recv_proxy_info_error,tcp_closed}, offender:
+  ```
+  After the fix, no logs will be printed, but you can still view the error reason statistics through the `emqx_ctl listeners` command.
+
+- Improved the error logs of the listener for file descriptor exhaustion [emqx/esockd#173](https://github.com/emqx/esockd/pull/173).
+
+  Before the improvement, the log was:
+  ```
+  [error] Accept error on 0.0.0.0:1883: emfile
+  ```
+  After the improvement, the log became:
+  ```
+  [error] Accept error on 0.0.0.0:1883: EMFILE (Too many open files)
+  ```
+
+- Improved the performance of the rule engine when there are many rules [#10283](https://github.com/emqx/emqx/pull/10283)
+
+  Before the improvement, when there were many rules, the rule engine would consume a lot of CPU time on rule queries and matching, becoming a performance bottleneck.
+  In this optimization, by simply adding a cache to the rule list, the rule execution efficiency in this scenario was greatly improved.
+  In our test, we created 700 rules that did not perform any actions (bound to the "do_nothing" debugging action) on a 32-core 32G virtual machine, and sent MQTT messages to EMQX at a rate of 1000 messages per second (that is, the rule trigger frequency was 700 * 1000 times per second).
+  In the above scenario, the CPU usage of the optimized rule engine dropped to 55% ~ 60% of the previous level.
+
+### Fixes
+
+- Fixed the issue where `Erlang distribution` could not use TLS [#9981](https://github.com/emqx/emqx/pull/9981).
+
+  For more information on `Erlang distribution`, see [here](https://www.emqx.io/docs/en/v4.4/advanced/cluster.html).
+
+- Fixed the issue where MQTT bridging could not verify TLS certificates with wildcard domains on the peer side [#10094](https://github.com/emqx/emqx/pull/10094).
+
+- Fixed the issue where EMQX could not timely clear the information of disconnected MQTT connections when there were too many messages backlogged in the retainer. [#10189](https://github.com/emqx/emqx/pull/10189).
+
+  Before the fix, the `emqx_retainer` plugin and the EMQX connection information cleanup task shared a process pool. Therefore, if the process pool was blocked by a large number of retain message distribution tasks, many disconnected MQTT connection information would not be cleared in time. See [#9409](https://github.com/emqx/emqx/issues/9409) for details.
+  After the fix, the `emqx_retainer` plugin uses a separate process pool to avoid this problem.
+
+- Fixed the issue where the path of the template file `service-monitor.yaml` in the Helm Chart was incorrect. [#10229](https://github.com/emqx/emqx/pull/10229)
+
 ## v4.4.16
 
 *Release Date: 2023-03-10*
