@@ -70,7 +70,7 @@ Standalone Redis:
     sentinel = "mymaster"
 
     cmd = "HGETALL mqtt_user:${username}"
-    database => 1
+    database = 1
     password = public
 
 }
@@ -87,7 +87,6 @@ Standalone Redis:
     servers = "10.123.13.11:6379,10.123.13.12:6379"
 
     cmd = "HGETALL mqtt_user:${username}"
-    database => 1
     password = public
 }
 ```

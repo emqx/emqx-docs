@@ -53,6 +53,7 @@ EMQX 支持基于 HTTP 应用进行授权。此时，用户需在外部自行搭
 - 响应编码格式 `content-type` 必须是 `application/json`
 - 认证结果通过 body 中的 `result` 标示，可选 `allow`、`deny`、`ignore`
 - 响应状态码 `Status Code` 应当为 `200` 或 `204`，返回 4xx/5xx 状态码时将忽略 body 并判定结果为 `ignore`，继续执行认证链
+- 除了 `200` 和 `204` 以外的其他 HTTP 状态码均表示“不匹配”，比如该认证器不适用。  
 
 请求示例：
 
