@@ -132,8 +132,8 @@
     # - messaging/nanomq
     # - messaging/neuron
 
-- title_en: Use SDK to Connect Clients
-  title_cn: 使用 SDK 连接客户端
+- title_en: Client SDK
+  title_cn: 客户端 SDK
   path: connect-emqx/introduction
   children:
     - connect-emqx/c
