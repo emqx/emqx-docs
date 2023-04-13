@@ -6,18 +6,61 @@
 
 ### 增强
 
+- 启用了 `Proxy Protocol` 的监听器在收到 TCP 端口探测时，不再打印错误日志 [emqx/esockd#172](https://github.com/emqx/esockd/pull/172)。
+
+  修复前，如果监听器已启用了代理协议（`listener.tcp.external.proxy_protocol=on`），但连接在 TCP 握手完成后、接收到代理信息之前断开，则会打印以下错误日志：
+
+  ```
+  [error] supervisor: 'esockd_connection_sup - <0.3265.0>', errorContext: connection_shutdown, reason: {recv_proxy_info_error,tcp_closed}, offender:
+  ```
+  修复后不再打印任何日志，但仍然可以通过 `emqx_ctl listeners` 命令来查看错误原因的统计。
+
+- 改进监听器针对文件描述符耗尽的错误日志 [emqx/esockd#173](https://github.com/emqx/esockd/pull/173)。
+
+  改进前的日志：
+  ```
+  [error] Accept error on 0.0.0.0:1883: emfile
+  ```
+  改进后的日志：
+  ```
+  [error] Accept error on 0.0.0.0:1883: EMFILE (Too many open files)
+  ```
+
+- 提升规则引擎在规则数量较多时的性能 [#10283](https://github.com/emqx/emqx/pull/10283)
+
+  改进前，当规则数量较多时，规则引擎将需要耗费大量 CPU 在规则的查询和匹配上，并成为性能瓶颈。
+  本次优化中，通过简单地给规则列表添加一个缓存，大幅提升了此场景下的规则执行效率。
+  在我们的测试中，在一个 32 核 32G 的虚拟机上，我们创建了 700 条不执行任何动作的规则（绑定了 "do_nothing" 调试动作），
+  并以 1000 条每秒的速度向 EMQX 发送 MQTT 消息（即，规则触发频率为 700 * 1000 次每秒），
+  在上述场景下，优化后的规则引擎 CPU 使用率下降到了之前的 55% ~ 60%。
+
 - 改进从旧版本（4.2或更早）导入数据时的告警日志。
 
-  改进前，如果从旧版本（4.2及之前）导入到4.4版本，由于缺少认证类型，内置认证部分的数据将会被丢弃，但用户无法从日志中清楚地获知失败原因。
+  改进前，如果从旧版本（4.2及之前）导入到4.4版本，由于缺少认证类型，内置认证部分的数据将会被丢弃，日志对失败原因的描述不够清楚。
   改进后，EMQX 日志会提示用户改用命令行工具进行数据导入，并指定认证类型：
-  
+
   ```
   $ emqx_ctl data import <filename> --env '{"auth.mnesia.as":"username"}'
   ```
 
 ### 修复
 
-- 当 EMQX 从 4.3 升级至4.4 版本时，EMQX 会在升级完成重启时迁移“内置认证”模块中的 ACL 表。
+- 修复 `Erlang distribution` 无法使用 TLS 的问题 [#9981](https://github.com/emqx/emqx/pull/9981)。
+
+  关于 `Erlang distribution`, 详见 [这里](https://www.emqx.io/docs/zh/v4.4/advanced/cluster.html)。
+
+- 修复 MQTT 桥接无法验证对端带通配符的 TLS 证书的问题 [#10094](https://github.com/emqx/emqx/pull/10094)。
+
+- 修复当 retainer 中积压的消息过多时，EMQX 无法及时清除已掉线的 MQTT 连接信息的问题。[#10189](https://github.com/emqx/emqx/pull/10189)。
+
+  修复前，`emqx_retainer` 插件和 EMQX 连接信息清理任务共用一个进程池，因此，
+  如果该进程池被大量的 retain 消息下发任务阻塞时，许多已经掉线的 MQTT 连接信息将得不到及时清理。
+  详见 [#9409](https://github.com/emqx/emqx/issues/9409)。
+  修复后，`emqx_retainer` 插件使用单独的进程池，从而避免了该问题。
+
+- 修复了 Helm Chart 中模板文件 `service-monitor.yaml` 路径不正确的问题。[#10229](https://github.com/emqx/emqx/pull/10229)
+
+- 当 EMQX 从 4.3 升级至 4.4 版本时，EMQX 会在重启时迁移“内置认证”模块中的 ACL 表。
 
   修复前，如通过拷贝 `data/mnesia/<node-name>` 目录的方式将数据从 4.3 版本迁移到 4.4 版本，迁移完成后，
   当通过 Dashboard 查看“内置认证”模块时，由于 ACL 表未迁移到新版格式，将出现 500 错误。
@@ -26,9 +69,9 @@
 
 - 修复 IoTDB 动作的计数统计错误的问题。
 
-  修复前，如果所有物理量（Measurement）都为 null，IoTDB 会将其忽略，不插入任何数据，但会同步返回 200 OK，造成递增发送成功计数错误。
-  修复后，当所有物理量都为 null 时，IoTDB 动作将丢弃此请求，并按照递增发送失败计数。
-  
+  修复前，如果所有物理量（Measurement）都为 null，IoTDB 会将其忽略，不插入任何数据但会返回 200 OK，造成递增发送成功计数错误。
+  修复后，当所有物理量都为 null 时，IoTDB 动作将丢弃此请求，并按照发送失败计数。
+
 - 修复当 TDEngine SQL 语句中带有换行符时，创建规则会失败的问题。
 
   修复前，TDEngine SQL 语句不能包含换行符，例如，当使用如下语句作为 TDEngine 动作的 `SQL 模板` 参数时，创建规则将会失败：
@@ -41,11 +84,12 @@
   VALUES (${ts}, ${value})
   ```
 
-- 修复 HTTP 接口 `/load_rebalance/:node/start` 返回的错误信息没有被正确编码的问题。
+- 修复 HTTP API `/load_rebalance/:node/start` 返回的错误信息没有被正确编码的问题。
 
 - 修复 EMQX 中 RocketMQ 客户端的进程泄漏问题 [rocketmq-client-erl#24](https://github.com/emqx/rocketmq-client-erl/pull/24)。
 
-  修复前，EMQX 的 RocketMQ 客户端会周期性获取 RocketMQ 的节点信息，并检查节点信息是否有更新，并根据返回结果更新或者添加生产者进程。由于对比节点信息的方法有问题，某些情况下会造成进程泄漏问题，即新建过多生产者进程。
+  EMQX 的 RocketMQ 客户端会周期性获取 RocketMQ 的节点信息，并检查节点信息是否有更新，并根据返回结果更新或者添加生产者进程。
+  修复前，由于对比节点信息的方法有问题，某些情况下会造成进程泄漏问题。
 
 ## e4.4.16
 

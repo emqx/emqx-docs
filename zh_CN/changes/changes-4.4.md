@@ -26,7 +26,7 @@
   [error] Accept error on 0.0.0.0:1883: EMFILE (Too many open files)
   ```
 
-- 提升规则引擎在规则数量较多时的执行性能 [#10283](https://github.com/emqx/emqx/pull/10283)
+- 提升规则引擎在规则数量较多时的性能 [#10283](https://github.com/emqx/emqx/pull/10283)
 
   改进前，当规则数量较多时，规则引擎将需要耗费大量 CPU 在规则的查询和匹配上，并成为性能瓶颈。
   本次优化中，通过简单地给规则列表添加一个缓存，大幅提升了此场景下的规则执行效率。

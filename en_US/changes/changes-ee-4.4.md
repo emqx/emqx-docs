@@ -6,10 +6,37 @@
 
 ### Enhancements
 
-- Improve the warning logs when importing data from old versions (4.2 or earlier).
+- When the listener enabled with `Proxy Protocol` receives a TCP port probe, no error logs will be printed anymore [emqx/esockd#172](https://github.com/emqx/esockd/pull/172).
 
-  Before this change, if data was imported from versions 4.2 or earlier to version 4.4, the data in the built-in authentication section would be discarded due to the lack of authentication type, but the user could not clearly know the reason for the failure from the logs.
-  After this modification, the EMQX log will prompt the user to use the command line tool for data import and specify the authentication type:
+  Before the fix, if the listener had enabled the proxy protocol (`listener.tcp.external.proxy_protocol=on`), but the connection was disconnected after the TCP handshake was completed and before the proxy information was received, the following error log would be printed:
+
+  ```
+  [error] supervisor: 'esockd_connection_sup - <0.3265.0>', errorContext: connection_shutdown, reason: {recv_proxy_info_error,tcp_closed}, offender:
+  ```
+  After the fix, no logs will be printed, but you can still view the error reason statistics through the `emqx_ctl listeners` command.
+
+- Improved the error logs of the listener for file descriptor exhaustion [emqx/esockd#173](https://github.com/emqx/esockd/pull/173).
+
+  Before the improvement, the log was:
+  ```
+  [error] Accept error on 0.0.0.0:1883: emfile
+  ```
+  After the improvement, the log became:
+  ```
+  [error] Accept error on 0.0.0.0:1883: EMFILE (Too many open files)
+  ```
+
+- Improved the performance of the rule engine when there are many rules [#10283](https://github.com/emqx/emqx/pull/10283)
+
+  Before the improvement, when there were many rules, the rule engine would consume a lot of CPU time on rule queries and matching, becoming a performance bottleneck.
+  In this optimization, by simply adding a cache to the rule list, the rule execution efficiency in this scenario was greatly improved.
+  In our test, we created 700 rules that did not perform any actions (bound to the "do_nothing" debugging action) on a 32-core 32G virtual machine, and sent MQTT messages to EMQX at a rate of 1000 messages per second (that is, the rule trigger frequency was 700 * 1000 times per second).
+  In the above scenario, the CPU usage of the optimized rule engine dropped to 55% ~ 60% of the previous level.
+
+- Improve the alarm logs when importing data from old versions (4.2 or earlier).
+
+  Before this change, if data was imported from versions 4.2 or earlier to version 4.4, the built-in authentication part of the data would be discarded due to the lack of authentication type, and the log description of the failure reason was not clear enough.
+  After this change, the EMQX log will prompt the user to use the command line tool for data import and specify the authentication type:
 
   ```
   $ emqx_ctl data import <filename> --env '{"auth.mnesia.as":"username"}'
@@ -17,17 +44,34 @@
 
 ### Bug fixes
 
-- Migrate the ACL table of the "built-in authentication" module when EMQX starts.
+- Fixed the issue where `Erlang distribution` could not use TLS [#9981](https://github.com/emqx/emqx/pull/9981).
 
-  Before this improvement, if data was migrated from version 4.3 to version 4.4 by copying the `data/mnesia/<node-name>` directory, after the migration was completed, when viewing the "built-in authentication" module through the Dashboard, a 500 error would occur because the ACL table was not migrated to the new format. This issue only occurs when the module is disabled and can be resolved by manually enabling the module. After this fix, EMQX will attempt to migrate the ACL table when starting up to avoid this issue.
+  For more information on `Erlang distribution`, see [here](https://www.emqx.io/docs/en/v4.4/advanced/cluster.html).
 
-- Fix the issue of counting errors in the IoTDB action.
+- Fixed the issue where MQTT bridging could not verify TLS certificates with wildcard domains on the peer side [#10094](https://github.com/emqx/emqx/pull/10094).
 
-  Before this change, if all measurements were null, IoTDB would ignore them and not insert any data, but IoTDB would still return 200 OK, causing the IoTDB action to increment the send success count. After this fix, when all measurements are null, the IoTDB action will discard the request and increment the send failure count.
+- Fixed the issue where EMQX could not timely clear the information of disconnected MQTT connections when there were too many messages backlogged in the retainer. [#10189](https://github.com/emqx/emqx/pull/10189).
 
-- Fix the issue of rule creation failure when the TDEngine SQL statement contains line breaks.
+  Before the fix, the `emqx_retainer` plugin and the EMQX connection information cleanup task shared a process pool. Therefore, if the process pool was blocked by a large number of retain message distribution tasks, many disconnected MQTT connection information would not be cleared in time. See [#9409](https://github.com/emqx/emqx/issues/9409) for details.
+  After the fix, the `emqx_retainer` plugin uses a separate process pool to avoid this problem.
 
-  Before this fix, the TDEngine SQL statement could not contain line breaks. If the following statement was used as the `SQL template` parameter of the TDEngine action, rule creation would fail:
+- Fixed the issue where the path of the template file `service-monitor.yaml` in the Helm Chart was incorrect. [#10229](https://github.com/emqx/emqx/pull/10229)
+
+- When upgrading from EMQX 4.3 to 4.4, EMQX will migrate the ACL table in the "built-in authentication" module upon restart.
+
+  Before the fix, if data was migrated from version 4.3 to 4.4 by copying the `data/mnesia/<node-name>` directory, after the migration was completed,
+  when viewing the "built-in authentication" module through the Dashboard, a 500 error would occur because the ACL table was not migrated to the new format.
+  Note: This issue only occurs when the module is disabled, and users can manually enable the module to resolve it.
+  After the fix, EMQX will attempt to migrate the ACL table upon restart after upgrading, thus avoiding this issue.
+
+- Fix the issue of incorrect counting statistics for the IoTDB action.
+
+  Before the fix, if all measurements were null, IoTDB would ignore them, not insert any data but return 200 OK, causing the increment of the successful sending count to be incorrect.
+  After the fix, when all measurements are null, the IoTDB action will discard the request and count it as a sending failure.
+
+- Fix the issue of rule creation failure when TDEngine SQL statements contain line breaks.
+
+  Before the fix, TDEngine SQL statements could not contain line breaks. For example, when using the following statement as the `SQL template` parameter for the TDEngine action, rule creation would fail:
   ```
   INSERT INTO ${devid}
   USING
@@ -37,11 +81,12 @@
   VALUES (${ts}, ${value})
   ```
 
-- Fix the problem that the error message returned by the HTTP API `/load_rebalance/:node/start` is not correctly encoded.
+- Fix the issue of incorrect encoding of error messages returned by the HTTP API `/load_rebalance/:node/start`.
 
-- Fix the problem of RocketMQ client process leakage in EMQX [rocketmq-client-erl#24](https://github.com/emqx/rocketmq-client-erl/pull/24).
+- Fix the process leak issue of the RocketMQ client in EMQX [rocketmq-client-erl#24](https://github.com/emqx/rocketmq-client-erl/pull/24).
 
-  Before this fix, the RocketMQ client of EMQX periodically obtained the node information of RocketMQ and checked whether the node information was updated. If it was, the producer process was updated or added. Due to a problem with the method of comparing node information, in some cases, the RocketMQ client would create too many producer processes.
+  EMQX's RocketMQ client periodically obtains node information from RocketMQ, checks whether the node information has been updated, and updates or adds producer processes based on the returned results.
+  Before the fix, due to problems with the method of comparing node information, process leaks could occur in certain situations.
 
 ## e4.4.16
 

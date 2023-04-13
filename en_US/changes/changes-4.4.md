@@ -15,37 +15,38 @@
   ```
   After the fix, no logs will be printed, but you can still view the error reason statistics through the `emqx_ctl listeners` command.
 
-- Improve the error logs of the listener for file descriptor exhaustion [emqx/esockd#173](https://github.com/emqx/esockd/pull/173).
+- Improved the error logs of the listener for file descriptor exhaustion [emqx/esockd#173](https://github.com/emqx/esockd/pull/173).
 
-  Before the improvement, the logs were as follows:
+  Before the improvement, the log was:
   ```
   [error] Accept error on 0.0.0.0:1883: emfile
   ```
-  After the improvement, the logs are as follows:
+  After the improvement, the log became:
   ```
   [error] Accept error on 0.0.0.0:1883: EMFILE (Too many open files)
   ```
 
-- Improve the execution performance of the rule engine when there are many rules [#10283](https://github.com/emqx/emqx/pull/10283)
+- Improved the performance of the rule engine when there are many rules [#10283](https://github.com/emqx/emqx/pull/10283)
 
-  Before the improvement, when there were many rules, the rule engine would consume a lot of CPU time on rule queries and matches, becoming a performance bottleneck.
-  In this optimization, the rule list is simply added with a cache, which greatly improves the efficiency of rule execution in this scenario.
-  In our test, we created 700 rules that do nothing (bound to the "do_nothing" debugging action) on a 32-core 32G virtual machine, and sent MQTT messages to EMQX at a rate of 1000 per second (that is, the rule trigger frequency is 700 * 1000 times per second).
+  Before the improvement, when there were many rules, the rule engine would consume a lot of CPU time on rule queries and matching, becoming a performance bottleneck.
+  In this optimization, by simply adding a cache to the rule list, the rule execution efficiency in this scenario was greatly improved.
+  In our test, we created 700 rules that did not perform any actions (bound to the "do_nothing" debugging action) on a 32-core 32G virtual machine, and sent MQTT messages to EMQX at a rate of 1000 messages per second (that is, the rule trigger frequency was 700 * 1000 times per second).
   In the above scenario, the CPU usage of the optimized rule engine dropped to 55% ~ 60% of the previous level.
 
 ### Fixes
 
-- Fix the problem that `Erlang distribution` cannot use TLS [#9981](https://github.com/emqx/emqx/pull/9981).
+- Fixed the issue where `Erlang distribution` could not use TLS [#9981](https://github.com/emqx/emqx/pull/9981).
 
-  For `Erlang distribution`, see [here](https://www.emqx.io/docs/en/v4.4/advanced/cluster.html).
+  For more information on `Erlang distribution`, see [here](https://www.emqx.io/docs/en/v4.4/advanced/cluster.html).
 
-- Fix the problem that MQTT bridging cannot verify the TLS certificate of the peer with a wildcard [#10094](https://github.com/emqx/emqx/pull/10094).
+- Fixed the issue where MQTT bridging could not verify TLS certificates with wildcard domains on the peer side [#10094](https://github.com/emqx/emqx/pull/10094).
 
-- Fix the problem that when there are too many messages in the retainer, EMQX cannot timely clear the disconnected MQTT connection information. [#10189](https://github.com/emqx/emqx/pull/10189).
+- Fixed the issue where EMQX could not timely clear the information of disconnected MQTT connections when there were too many messages backlogged in the retainer. [#10189](https://github.com/emqx/emqx/pull/10189).
 
-  Before the fix, the `emqx_retainer` plugin and the EMQX connection information cleaning task shared a process pool. Therefore, if the process pool was blocked by a large number of retain message distribution tasks, many disconnected MQTT connection information would not be cleared in time.
-  See [#9409](https://github.com/emqx/emqx/issues/9409) for details.
+  Before the fix, the `emqx_retainer` plugin and the EMQX connection information cleanup task shared a process pool. Therefore, if the process pool was blocked by a large number of retain message distribution tasks, many disconnected MQTT connection information would not be cleared in time. See [#9409](https://github.com/emqx/emqx/issues/9409) for details.
   After the fix, the `emqx_retainer` plugin uses a separate process pool to avoid this problem.
+
+- Fixed the issue where the path of the template file `service-monitor.yaml` in the Helm Chart was incorrect. [#10229](https://github.com/emqx/emqx/pull/10229)
 
 ## v4.4.16
 
