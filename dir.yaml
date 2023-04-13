@@ -281,25 +281,44 @@
   title_cn: 配置文件参数
   path: configuration/configuration
   children:
+    - title_en: Cluster
+      title_cn: Cluster
+      path: configuration/cluster
       lang: en
-    - configuration/cluster
+    - title_en: Listener
+      title_cn: Listener
+      path: configuration/listener
       lang: en
-    - configuration/listener
+    - title_en: MQTT
+      title_cn: MQTT
+      path: configuration/mqtt
       lang: en
-    - configuration/mqtt
+    - title_en: Flapping
+      title_cn: Flapping
+      path: configuration/flapping
       lang: en
-    - configuration/flapping
+    - title_en: Limiter
+      title_cn: Limiter
+      path: configuration/limiter
       lang: en
-    - configuration/limiter   
+    - title_en: Logs
+      title_cn: Logs
+      path: configuration/logs
       lang: en
-    - configuration/logs
+    - title_en: Prometheus
+      title_cn: Prometheus
+      path: configuration/prometheus
       lang: en
-    - configuration/prometheus
-      lang: en
-    - configuration/dashboard
+    - title_en: Dashboard
+      title_cn: Dashboard
+      path: configuration/dashboard
       lang: en
       edition: ce
-    - configuration/license
+    - title_en: License
+      title_cn: License
+      path: configuration/license
+      lang: en
+      edition: ee
     - configuration/configuration-manual
 
 # - title_en: Back
