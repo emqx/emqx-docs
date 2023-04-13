@@ -1,5 +1,48 @@
 # Releases
 
+## e4.4.17
+
+### Enhancements
+
+- Improved warning logs when importing data from 4.2 or older versions [#1775](https://github.com/emqx/emqx-enterprise/pull/1775).
+  Prior to this enhancement, if data was exported from EMQX versions 4.2 and earlier and then imported into version 4.4,
+  the data of the internal authentication module might be ignored due to the lack of authentication type,
+  but the log did not clearly indicate the reason for the failure.
+  After this modification, users will be prompted to import with the command line instead and specify the authentication type:
+  ```
+  $ emqx_ctl data import <filename> --env '{"auth.mnesia.as":"username"}'
+  ```
+
+### Bug fixes
+
+- When starting EMQX, migrate the ACL table of the "internal authentication" module [#1776](https://github.com/emqx/emqx-enterprise/pull/1776).
+  Prior to this change, if data was migrated from version 4.3 to version 4.4 by copying the `data/mnesia/<node-name>` directory,
+  when viewing the "internal authentication" module through the Dashboard, a 500 error would occur because the ACL table was not migrated to the new format.
+  This problem only occurs when the module is disabled and can be resolved by manually enabling the module.
+  After this fix, EMQX will attempt to migrate the ACL table when starting up, thus avoiding this problem.
+
+- Fixed the counting statistics problem of IoTDB actions [#1777](https://github.com/emqx/emqx-enterprise/pull/1777).
+  Prior to this change, if all measurements were null, IoTDB would ignore them and not insert any data,
+  but the IotDB would still return 200 OK, so the IoTDB action would increment the send success count.
+  After this fix, in the case where all measurements are null, the IoTDB action will discard this request and increment the send failure count.
+
+- Fixed the issue of being unable to create rules using TDEngine SQL statements with line breaks [#1778](https://github.com/emqx/emqx-enterprise/pull/1778).
+  Prior to this fix, TDEngine SQL statements could not contain line breaks. If the following statement was used as the `SQL Template` parameter for the TDEngine action, rule creation would fail:
+  ```
+  INSERT INTO ${devid}
+  USING
+    tsdb.profit
+  TAGS
+    ('${custid}', '${devid}')
+  VALUES (${ts}, ${value})
+  ```
+
+- Fixed the issue where the error message returned by the HTTP API `/load_rebalance/:node/start` was not formatted correctly [#1779](https://github.com/emqx/emqx-enterprise/pull/1779).
+
+- Fixed the problem of RocketMQ producer process leakage [rocketmq-client-erl#24](https://github.com/emqx/rocketmq-client-erl/pull/24).
+  EMQX's RocketMQ client periodically retrieves broker information from RocketMQ and checks whether the broker information has been updated.
+  If so, it updates or adds producer processes. Prior to this fix, due to issues with the method of comparing broker information, the RocketMQ client would create too many producer processes in certain situations.
+
 ## e4.4.16
 
 *Release Date: 2023-03-10*

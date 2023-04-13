@@ -1,12 +1,56 @@
 # 版本发布
 
-## v4.4.16
+## e4.4.17
+
+*发布日期: 2023-04-13*
+
+### 增强
+
+- 改进从 4.2 或者更老版本导入数据时的告警日志 [#1775](https://github.com/emqx/emqx-enterprise/pull/1775)。
+  在此改进之前，如果从 4.2 及之前版本的 EMQX 导出数据，并导入到 4.4 版本，内置认证部分的数据
+  可能会因为缺少认证类型而被忽略，但日志没有清楚地指出失败原因。
+  在此修改之后，将会提示用户使用命令行并指定认证类型导入：
+  ```
+  $ emqx_ctl data import <filename> --env '{"auth.mnesia.as":"username"}'
+  ```
+
+### 修复
+
+- 在 EMQX 启动的时候，迁移 “内置认证” 模块的 ACL 表 [#1776](https://github.com/emqx/emqx-enterprise/pull/1776).
+  在此改动之前，如果通过拷贝 `data/mnesia/<node-name>` 目录的方式，把数据从 4.3 版本迁移到 4.4 版本，迁移完成之后，
+  在通过 Dashboard 查看 “内置认证” 模块时，将会因为 ACL 表没有迁移到新版的格式而出现 500 错误。
+  此问题只有当模块处于禁用状态的时候才会出现，并且可以通过手动启用模块来解决。
+  在此修复之后，EMQX 会在启动的时候尝试做 ACL 表的迁移，从而避免了此问题。
+
+- 修复 IoTDB 动作的计数统计问题 [#1777](https://github.com/emqx/emqx-enterprise/pull/1777).
+  在此改动之前，如果所有物理量（Measurement）都为 null，IoTDB 会将其忽略，不插入任何数据，
+  但 IoTDB 仍然会返回 200 OK，所以 IoTDB 动作会递增发送成功计数。
+  在此修复之后，在所有物理量都为 null 的情况下，IoTDB 动作会将此请求丢弃，并递增发送失败计数。
+
+- 修复无法使用带有换行符的 TDEngine SQL 语句创建规则的问题 [#1778](https://github.com/emqx/emqx-enterprise/pull/1778)。
+  在此修复之前，TDEngine SQL 语句不能包含换行符，如果使用如下语句作为 TDEngine 动作的 `SQL 模板` 参数，创建规则将会失败：
+  ```
+  INSERT INTO ${devid}
+  USING
+    tsdb.profit
+  TAGS
+    ('${custid}', '${devid}')
+  VALUES (${ts}, ${value})
+  ```
+
+- 修复 HTTP 接口 `/load_rebalance/:node/start` 返回的错误信息没有正确格式化的问题 [#1779](https://github.com/emqx/emqx-enterprise/pull/1779)。
+
+- 修复 RocketMQ 生产者进程泄漏的问题 [rocketmq-client-erl#24](https://github.com/emqx/rocketmq-client-erl/pull/24)。
+  EMQX 的 RocketMQ 客户端会周期性获取 RocketMQ 的节点信息，并检查节点信息是否有更新，
+  如果是则更新或者添加生产者进程。在此修复之前，由于对比节点信息的方法有问题，导致某些情况下 RocketMQ 客户端会新建过多的生产者进程。
+
+## e4.4.16
 
 *发布日期: 2023-03-10*
 
 本次版本更新包含了 4 个增强和 7 个修复。
 
-## 增强
+### 增强
 
 - 改进 IoTDB 资源的日志输出。
   之前如果配置的 `iotdb_version` 字段跟安装的 IoTDB 版本不一样，发送消息到 IoTDB 会出错，但从日志很难看出原因。
@@ -16,7 +60,7 @@
 
 - 从命令行的输出里和插件的名字中，把 "EMQ X" 改成 "EMQX"。
 
-## 修复
+### 修复
 
 - 在版本热升级的时候自动开启 `emqx_schema_registry` 插件。
   当使用规则解码序列化的二进制数据（比如 protobuf 或 avro）的时候，`emqx_schema_registry` 插件是必须的。
@@ -44,7 +88,7 @@
   2023-03-08T14:26:50.935575+08:00 [debug] mqttx_e34bd582@127.0.0.1:54020 [MQTT] RECV PUBLISH(Q1, R0, D0, Topic=t/1, PacketId=39467, Payload=<<"e\ne\nc\nc\n2\n\n\n">>)
   ```
 
-## v4.4.15
+## e4.4.15
 
 *发布日期: 2023-03-03*
 
