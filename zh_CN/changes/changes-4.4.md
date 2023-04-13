@@ -37,7 +37,7 @@
 - 修复 `Erlang distribution` 无法使用 TLS 的问题 [#9981](https://github.com/emqx/emqx/pull/9981)。
   关于 `Erlang distribution`, 详见 [这里](https://www.emqx.io/docs/zh/v4.4/advanced/cluster.html)。
 
-- 修正了 MQTT 桥接 TLS 连接无法验证对端的带通配符的证书 [#10094](https://github.com/emqx/emqx/pull/10094)。
+- 修复 MQTT TLS 桥接无法验证对端的带通配符的证书的问题 [#10094](https://github.com/emqx/emqx/pull/10094)。
 
 - 修复 EMQX 由于大量 retain 消息而无法及时清除已掉线的 MQTT 连接信息的问题。[#10189](https://github.com/emqx/emqx/pull/10189)。
   在此修复之前，`emqx_retainer` 插件和 EMQX 的连接信息清理过程共用了同一个进程池，因此，
