@@ -1,6 +1,6 @@
 ---
 {
-  'title': '使用 SDK 连接客户端',
+  'title': '客户端 SDK',
   'categoryList':
     [
       {
