@@ -23,7 +23,7 @@
   此问题仅在模块处于禁用状态时才会出现，并且可以通过手动启用模块来解决。
   此修复后，EMQX 将在启动时尝试迁移 ACL 表，从而避免此问题。
 
-- 修复 IoTDB 动作的计数统计问题 [#1777](https://github.com/emqx/emqx-enterprise/pull/1777).
+- 修复 IoTDB 动作的计数统计错误的问题 [#1777](https://github.com/emqx/emqx-enterprise/pull/1777).
   在此改动之前，如果所有物理量（Measurement）都为 null，IoTDB 会将其忽略，不插入任何数据，
   但是，IoTDB 仍会返回 200 OK，导致 IoTDB 动作递增发送成功计数。
   此次修复后，当所有物理量都为 null 时，IoTDB 动作将丢弃此请求，并递增发送失败计数。
