@@ -6,8 +6,8 @@
 
 - Remove the error logs from the listeners with `Proxy Protocol` enabled when receiving TCP port probes [emqx/esockd#172](https://github.com/emqx/esockd/pull/172).
 
-  Before this change, if the listener has enabled the Proxy Protocol (`listener.tcp.external.proxy_protocol=on`),
-  and if the connection get disconnected right after the TCP handshake is completed and before the ProxyInfo is received, the following error log will be printed:
+  Before this change, when the listener had enabled the Proxy Protocol (`listener.tcp.external.proxy_protocol=on`), and the connection got disconnected immediately after the TCP handshake was completed but before receiving the ProxyInfo, the following error log was printed:
+  
   ```
   [error] supervisor: 'esockd_connection_sup - <0.3265.0>', errorContext: connection_shutdown, reason: {recv_proxy_info_error,tcp_closed}, offender:
   ```
