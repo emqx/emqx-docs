@@ -39,7 +39,7 @@
 
 - 修复 MQTT 桥接无法验证对端带通配符的 TLS 证书的问题 [#10094](https://github.com/emqx/emqx/pull/10094)。
 
-- 修复 EMQX 由于 retainer 中积压的消息过多，无法及时清除已掉线的 MQTT 连接信息的问题。[#10189](https://github.com/emqx/emqx/pull/10189)。
+- 修复当 retainer 中积压的消息过多时，EMQX 无法及时清除已掉线的 MQTT 连接信息的问题。[#10189](https://github.com/emqx/emqx/pull/10189)。
   修复前，`emqx_retainer` 插件和 EMQX 连接信息清理进程共用一个进程池，因此，
   如果该进程池被大量的 retain 消息下发任务阻塞时，许多已经掉线的 MQTT 连接将得不到及时清理。
   详见 [#9409](https://github.com/emqx/emqx/issues/9409)。
