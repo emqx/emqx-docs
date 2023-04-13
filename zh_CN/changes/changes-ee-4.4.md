@@ -6,26 +6,27 @@
 
 ### 增强
 
-- 改进从 4.2 或者更老版本导入数据时的告警日志 [#1775](https://github.com/emqx/emqx-enterprise/pull/1775)。
-  在此改进之前，如果从 4.2 及之前版本的 EMQX 导出数据，并导入到 4.4 版本，内置认证部分的数据
+- 改进从旧版本（4.2或更早）导入数据时的告警日志 [#1775](https://github.com/emqx/emqx-enterprise/pull/1775)。
+  在此改进之前，如果从旧版本（4.2及之前）的 EMQX 导出数据，并导入到4.4版本，内置认证部分的数据
   可能会因为缺少认证类型而被忽略，但日志没有清楚地指出失败原因。
   在此修改之后，将会提示用户使用命令行并指定认证类型导入：
+
   ```
   $ emqx_ctl data import <filename> --env '{"auth.mnesia.as":"username"}'
   ```
 
 ### 修复
 
-- 在 EMQX 启动的时候，迁移 “内置认证” 模块的 ACL 表 [#1776](https://github.com/emqx/emqx-enterprise/pull/1776).
-  在此改动之前，如果通过拷贝 `data/mnesia/<node-name>` 目录的方式，把数据从 4.3 版本迁移到 4.4 版本，迁移完成之后，
-  在通过 Dashboard 查看 “内置认证” 模块时，将会因为 ACL 表没有迁移到新版的格式而出现 500 错误。
-  此问题只有当模块处于禁用状态的时候才会出现，并且可以通过手动启用模块来解决。
-  在此修复之后，EMQX 会在启动的时候尝试做 ACL 表的迁移，从而避免了此问题。
+- 在 EMQX 启动时迁移“内置认证”模块的 ACL 表 [#1776](https://github.com/emqx/emqx-enterprise/pull/1776)。
+  在此改进之前，如果通过拷贝 `data/mnesia/<node-name>` 目录的方式，将数据从 4.3 版本迁移到 4.4 版本，迁移完成后，
+  当通过 Dashboard 查看“内置认证”模块时，由于 ACL 表未迁移到新版格式，将出现 500 错误。
+  此问题仅在模块处于禁用状态时才会出现，并且可以通过手动启用模块来解决。
+  此修复后，EMQX 将在启动时尝试迁移 ACL 表，从而避免此问题。
 
 - 修复 IoTDB 动作的计数统计问题 [#1777](https://github.com/emqx/emqx-enterprise/pull/1777).
   在此改动之前，如果所有物理量（Measurement）都为 null，IoTDB 会将其忽略，不插入任何数据，
-  但 IoTDB 仍然会返回 200 OK，所以 IoTDB 动作会递增发送成功计数。
-  在此修复之后，在所有物理量都为 null 的情况下，IoTDB 动作会将此请求丢弃，并递增发送失败计数。
+  但是，IoTDB 仍会返回 200 OK，导致 IoTDB 动作递增发送成功计数。
+  此次修复后，当所有物理量都为 null 时，IoTDB 动作将丢弃此请求，并递增发送失败计数。
 
 - 修复无法使用带有换行符的 TDEngine SQL 语句创建规则的问题 [#1778](https://github.com/emqx/emqx-enterprise/pull/1778)。
   在此修复之前，TDEngine SQL 语句不能包含换行符，如果使用如下语句作为 TDEngine 动作的 `SQL 模板` 参数，创建规则将会失败：
@@ -41,8 +42,9 @@
 - 修复 HTTP 接口 `/load_rebalance/:node/start` 返回的错误信息没有正确格式化的问题 [#1779](https://github.com/emqx/emqx-enterprise/pull/1779)。
 
 - 修复 RocketMQ 生产者进程泄漏的问题 [rocketmq-client-erl#24](https://github.com/emqx/rocketmq-client-erl/pull/24)。
-  EMQX 的 RocketMQ 客户端会周期性获取 RocketMQ 的节点信息，并检查节点信息是否有更新，
-  如果是则更新或者添加生产者进程。在此修复之前，由于对比节点信息的方法有问题，导致某些情况下 RocketMQ 客户端会新建过多的生产者进程。
+  在此修复之前，EMQX 的 RocketMQ 客户端会周期性获取 RocketMQ 的节点信息，并检查节点信息是否有更新，
+  如果是则更新或者添加生产者进程。由于对比节点信息的方法有问题，某些情况下 RocketMQ 客户端会新建过多的生产者进程。
+  此次修复后，RocketMQ 客户端的生产者进程将会更加稳定。
 
 ## e4.4.16
 

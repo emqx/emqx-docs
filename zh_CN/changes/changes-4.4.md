@@ -8,7 +8,7 @@
 
 - 启用了 `Proxy Protocol` 的监听器在收到 TCP 端口探测时，不再打印错误日志 [emqx/esockd#172](https://github.com/emqx/esockd/pull/172)。
   修复前，如果监听器已启用了代理协议（`listener.tcp.external.proxy_protocol=on`），但连接在 TCP 握手完成后、接收到代理信息之前断开，则会打印以下错误日志：
-  
+
   ```
   [error] supervisor: 'esockd_connection_sup - <0.3265.0>', errorContext: connection_shutdown, reason: {recv_proxy_info_error,tcp_closed}, offender:
   ```
@@ -16,7 +16,7 @@
 
 - 改进监听器针对文件描述符耗尽的错误日志 [emqx/esockd#173](https://github.com/emqx/esockd/pull/173)。
   改进前的日志：
-  
+
   ```
   [error] Accept error on 0.0.0.0:1883: emfile
   ```
@@ -24,8 +24,8 @@
   ```
   [error] Accept error on 0.0.0.0:1883: EMFILE (Too many open files)
   ```
-  
-- 提升规则数量较多时规则引擎的执行性能 [#10283](https://github.com/emqx/emqx/pull/10283)
+
+- 提升规则引擎在规则数量较多时的执行性能 [#10283](https://github.com/emqx/emqx/pull/10283)
   在此改动之前，当规则数量比较多的时候，规则引擎的执行会成为瓶颈，规则引擎将耗费大量 CPU 在规则的查询和匹配上。
   本次优化中，通过简单地给规则列表添加一个缓存，大幅提升了此场景下的规则执行效率。
   在我们的测试中，在一个 32 核 32G 的虚拟机上，我们创建了 700 条不执行任何动作的规则（绑定了 "do_nothing" 调试动作），
@@ -39,11 +39,11 @@
 
 - 修正了 MQTT 桥接 TLS 连接无法验证对端的带通配符的证书 [#10094](https://github.com/emqx/emqx/pull/10094)。
 
-- 修复由于大量 retain 消息导致 EMQX 无法及时清除已掉线的 MQTT 连接信息的问题。[#10189](https://github.com/emqx/emqx/pull/10189)。
-  在此修复之前，`emqx_retainer` 插件和 EMQX 的连接信息清理过程共用了同一个进程池，所以
+- 修复 EMQX 由于大量 retain 消息而无法及时清除已掉线的 MQTT 连接信息的问题。[#10189](https://github.com/emqx/emqx/pull/10189)。
+  在此修复之前，`emqx_retainer` 插件和 EMQX 的连接信息清理过程共用了同一个进程池，因此，
   如果该进程池被大量的 retain 消息下发任务阻塞时，许多已经掉线的 MQTT 连接将得不到及时清理。
-  问题详情见 [#9409](https://github.com/emqx/emqx/issues/9409)。
-  在此修复中，我们给 `emqx_retainer` 插件创建了单独的进程池，从而避免了该问题。
+  详见 [#9409](https://github.com/emqx/emqx/issues/9409)。
+  此修复中，我们为 `emqx_retainer` 插件创建了单独的进程池，从而避免了该问题。
 
 - 修复了 Helm Chart 中模板文件路径的错误。[#10229](https://github.com/emqx/emqx/pull/10229)
 
