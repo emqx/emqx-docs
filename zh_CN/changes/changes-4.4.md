@@ -43,7 +43,7 @@
   修复前，`emqx_retainer` 插件和 EMQX 连接信息清理进程共用一个进程池，因此，
   如果该进程池被大量的 retain 消息下发任务阻塞时，许多已经掉线的 MQTT 连接将得不到及时清理。
   详见 [#9409](https://github.com/emqx/emqx/issues/9409)。
-  此修复中，我们为 `emqx_retainer` 插件创建了单独的进程池，从而避免了该问题。
+  修复后，EMQX 为 `emqx_retainer` 插件创建了单独的进程池，从而避免了该问题。
 
 - 修复了 Helm Chart 中模板文件路径的错误。[#10229](https://github.com/emqx/emqx/pull/10229)
 
