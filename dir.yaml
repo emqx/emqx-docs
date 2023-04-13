@@ -281,14 +281,24 @@
   title_cn: 配置文件参数
   path: configuration/configuration
   children:
+      lang: en
     - configuration/cluster
+      lang: en
     - configuration/listener
+      lang: en
     - configuration/mqtt
+      lang: en
     - configuration/flapping
+      lang: en
     - configuration/limiter   
+      lang: en
     - configuration/logs
+      lang: en
     - configuration/prometheus
+      lang: en
     - configuration/dashboard
+      lang: en
+      edition: ce
     - configuration/license
     - configuration/configuration-manual
 
