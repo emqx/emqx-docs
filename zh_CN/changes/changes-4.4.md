@@ -7,6 +7,7 @@
 ### 增强
 
 - 启用了 `Proxy Protocol` 的监听器在收到 TCP 端口探测时，不再打印错误日志 [emqx/esockd#172](https://github.com/emqx/esockd/pull/172)。
+
   修复前，如果监听器已启用了代理协议（`listener.tcp.external.proxy_protocol=on`），但连接在 TCP 握手完成后、接收到代理信息之前断开，则会打印以下错误日志：
 
   ```
@@ -15,8 +16,8 @@
   修复后不再打印任何日志，但仍然可以通过 `emqx_ctl listeners` 命令来查看错误原因的统计。
 
 - 改进监听器针对文件描述符耗尽的错误日志 [emqx/esockd#173](https://github.com/emqx/esockd/pull/173)。
-  改进前的日志：
 
+  改进前的日志：
   ```
   [error] Accept error on 0.0.0.0:1883: emfile
   ```
@@ -26,6 +27,7 @@
   ```
 
 - 提升规则引擎在规则数量较多时的执行性能 [#10283](https://github.com/emqx/emqx/pull/10283)
+
   改进前，当规则数量较多时，规则引擎将需要耗费大量 CPU 在规则的查询和匹配上，并成为性能瓶颈。
   本次优化中，通过简单地给规则列表添加一个缓存，大幅提升了此场景下的规则执行效率。
   在我们的测试中，在一个 32 核 32G 的虚拟机上，我们创建了 700 条不执行任何动作的规则（绑定了 "do_nothing" 调试动作），
@@ -35,11 +37,13 @@
 ### 修复
 
 - 修复 `Erlang distribution` 无法使用 TLS 的问题 [#9981](https://github.com/emqx/emqx/pull/9981)。
+
   关于 `Erlang distribution`, 详见 [这里](https://www.emqx.io/docs/zh/v4.4/advanced/cluster.html)。
 
 - 修复 MQTT 桥接无法验证对端带通配符的 TLS 证书的问题 [#10094](https://github.com/emqx/emqx/pull/10094)。
 
 - 修复当 retainer 中积压的消息过多时，EMQX 无法及时清除已掉线的 MQTT 连接信息的问题。[#10189](https://github.com/emqx/emqx/pull/10189)。
+
   修复前，`emqx_retainer` 插件和 EMQX 连接信息清理任务共用一个进程池，因此，
   如果该进程池被大量的 retain 消息下发任务阻塞时，许多已经掉线的 MQTT 连接信息将得不到及时清理。
   详见 [#9409](https://github.com/emqx/emqx/issues/9409)。
