@@ -1,24 +1,24 @@
-# STOPM Gateway
+# STOMP Gateway
 
 ## Introduction
 
 <!--**Add an introductory section**: Begin the page briefly introducing the relevant protocol and the Gateway. This will provide context for users who are new to the concept.-->
 
-EMQX STOPM Gateway is a messaging protocol translator that bridges the gap between [STOPM](https://stomp.github.io/stomp-specification-1.2.html) and MQTT protocols, allowing clients using these protocols to communicate with each other.
+EMQX STOMP Gateway is a messaging protocol translator that bridges the gap between [STOMP](https://stomp.github.io/stomp-specification-1.2.html) and MQTT protocols, allowing clients using these protocols to communicate with each other.
 
-This STOPM Gateway provides a lightweight and simple messaging solution for clients and servers, enabling message exchange in a variety of messaging environments. With its support for TCP and SSL type listeners, the STOPM gateway is a flexible and versatile tool for building messaging systems.
+This STOMP Gateway provides a lightweight and simple messaging solution for clients and servers, enabling message exchange in a variety of messaging environments. With its support for TCP and SSL type listeners, the STOMP gateway is a flexible and versatile tool for building messaging systems.
 
 ::: tip
 
-The STOPM gateway is based on [Stomp v1.2](https://stomp.github.io/stomp-specification-1.2.html) and is compatible with STOPM v1.0 and v1.1 specifications.
+The STOMP gateway is based on [Stomp v1.2](https://stomp.github.io/stomp-specification-1.2.html) and is compatible with STOMP v1.0 and v1.1 specifications.
 
 :::
 
-## Enable the STOPM Gateway
+## Enable the STOMP Gateway
 
-In EMQX 5.0, STOPM gateways can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
+In EMQX 5.0, STOMP gateways can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
 
-On EMQX Dashboard, click **Extensions** -> **Gateways** on the left navigation menu. On the **Gateway** page, all supported gateways are listed. Locate **STOPM** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize STOPM** page.
+On EMQX Dashboard, click **Extensions** -> **Gateways** on the left navigation menu. On the **Gateway** page, all supported gateways are listed. Locate **STOMP** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize STOMP** page.
 
 ::: tip
 
