@@ -41,7 +41,7 @@
 
 - 修复 HTTP 接口 `/load_rebalance/:node/start` 返回的错误信息没有正确编码的问题 [#1779](https://github.com/emqx/emqx-enterprise/pull/1779)。
 
-- 修复 RocketMQ 生产者进程泄漏的问题 [rocketmq-client-erl#24](https://github.com/emqx/rocketmq-client-erl/pull/24)。
+- 修复 EMQX 中 RocketMQ 客户端进程泄漏的问题 [rocketmq-client-erl#24](https://github.com/emqx/rocketmq-client-erl/pull/24)。
   在此修复之前，EMQX 的 RocketMQ 客户端会周期性获取 RocketMQ 的节点信息，并检查节点信息是否有更新，
   如果是则更新或者添加生产者进程。由于对比节点信息的方法有问题，某些情况下 RocketMQ 客户端会新建过多的生产者进程。
 
