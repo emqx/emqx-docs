@@ -16,7 +16,7 @@ A will message is the last stored message that is defined in advance and is sent
 
 - I/O error or network failure occurs on the server.
 - The client loses contact during a defined heartbeat period.
-- The client closes the network connection before sending offline packets.
+- The client closes the network connection before sending DISCONNECT packet.
 - The server closes the network connection before receiving the offline packet.
 
 If a client wants to set a will message, it sets the topic and payload of the will message when it initiates the connect request. When another client subscribes to the topic of the will message, it receives the will message if the client disconnects to the server unexpectedly. For more information, see [Will Message](../mqtt/mqtt-last-will-and-testament.md) and [Use of MQTT Will Message](https://www.emqx.com/en/blog/use-of-mqtt-will-message).
