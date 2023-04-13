@@ -39,7 +39,7 @@
 
 - Fixed the problem that EMQX could not timely clear the disconnected MQTT connection information due to a large number of retained messages [#10189](https://github.com/emqx/emqx/pull/10189).
   Before this fix, the `emqx_retainer` plugin and the connection cleanup process of EMQX shared the same process pool.
-  Therefore, if the process pool was blocked by a large number of retain messages, many disconnected MQTT connections would not be cleaned up in time.
+  Therefore, if the process pool was blocked by a large number of retain messages, many disconnected MQTT connections could not be cleaned up in time.
   For more details, see [#9409](https://github.com/emqx/emqx/issues/9409).
   In this fix, we created a separate process pool for the `emqx_retainer` plugin to avoid this problem.
 
