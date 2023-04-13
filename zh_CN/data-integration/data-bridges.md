@@ -23,7 +23,8 @@ EMQX 开源版中仅支持 MQTT 桥接 和 Webhook，企业版支持的数据桥
 - 已丢弃
 - 已缓存
 - 已重试
-- 当前速率 
+- 当前速率
+- 延迟回复
 
 ## 数据桥接特性
 
@@ -134,4 +135,4 @@ INSERT INTO msg(topic, qos, payload) VALUES('${topic}', ${qos}, '${payload}');
 INSERT INTO msg(topic, qos, payload) VALUES(${topic}, ${qos}, ${payload});
 ```
 
-除了自动推到字段类型外，SQL 预处理技术还能避免 SQL 注入以提高安全性。
+除了自动推导字段类型外，SQL 预处理技术还能避免 SQL 注入以提高安全性。

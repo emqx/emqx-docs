@@ -50,7 +50,7 @@ EMQX 目前提供开源和企业版两个版本，您可根据需要点击下方
 
 ## 安装 EMQX
 
-EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker.md)，通过 [EMQX Kubernetes Operator](../deploy/install-k8s.md) 安装部署、或通过安装包的形式部署在物理服务器或虚拟机上，针对安装包部署形式，目前我们支持以下操作系统：
+EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker.md)，通过 [EMQX Kubernetes Operator](https://www.emqx.com/zh/emqx-kubernetes-operator) 安装部署、或通过安装包的形式部署在物理服务器或虚拟机上，针对安装包部署形式，目前我们支持以下操作系统：
 
 {% emqxce %}
 
@@ -146,13 +146,13 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 1. 在命令行工具中输入如下命令，下载 zip 文件。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-macos11-amd64.zip
+   wget https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-macos11-amd64.zip
    ```
 
 2. 通过以下命令安装 EMQX。
 
    ```bash
-   mkdir -p emqx && unzip emqx-5.0.19-macos11-amd64.zip -d emqx
+   mkdir -p emqx && unzip emqx-@CE_VERSION@-macos11-amd64.zip -d emqx
    ```
 
 {% endemqxce %}

@@ -220,7 +220,10 @@ $ etcdctl ls /emqxcl/emqxcl --recursive
 
 ## 基于 kubernetes 自动集群
 
-[Kubernetes（K8s）](https://kubernetes.io) 是 Google 的开源容器集群管理系统，是一个完备的分布式系统支撑平台，EMQX 可以使用 kubernetes 的服务发现功能组建集群。
+[EMQX Kubernetes Operator](https://docs.emqx.com/zh/emqx-operator/latest/) 可以帮您快速在 Kubernetes 的环境中创建和管理 EMQX 集群，极大简化了 EMQX 集群的部署和管理流程，将部署和管理变为一种低成本、标注化、可复用的工作。
+
+如果你希望自行部署和管理 EMQX，依然可以通过 Kubernetes API 进行节点发现和自动集群。如希望使用此功能，需要先为 EMQX Pod 配置 RBAC，允许 EMQX 通过 endpoints 资源从 Kubernetes APIServer 获取集群节点信息，具体配置步骤，请参考 [使用 RBAC 鉴权](https://kubernetes.io/zh-cn/docs/reference/access-authn-authz/rbac/)。
+
 
 您需要为所有节点指定 Kubernetes API 服务器，EMQX 在 K8s 上的服务名，地址类型:
 
@@ -233,8 +236,7 @@ cluster {
         apiserver = "http://10.110.111.204:8080"
         service_name = emqx
         address_type = ip
-        app_name = emqx
-        suffix = "pod.local"
+        suffix = "pod.local" # 此为可选项
         namespace = default
     }
 }

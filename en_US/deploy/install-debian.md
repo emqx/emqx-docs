@@ -41,32 +41,32 @@ EMQX offers different installation packages for different CPU architectures.
 
 ::: tab amd64
 
-1. Download [emqx-5.0.20-debian11-amd64.deb](https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-debian11-amd64.deb).
+1. Download [emqx-@CE_VERSION@-debian11-amd64.deb](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-amd64.deb).
 
    ```bash
-   wget https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-debian11-amd64.deb
+   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-amd64.deb
    ```
 
 2. Install EMQX.
 
    ```bash
-   sudo apt install ./emqx-5.0.20-debian11-amd64.deb
+   sudo apt install ./emqx-@CE_VERSION@-debian11-amd64.deb
    ```
 
 :::
 
 ::: tab arm64
 
-1. Download [emqx-5.0.20-debian11-arm64.deb](https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-debian11-arm64.deb). 
+1. Download [emqx-@CE_VERSION@-debian11-arm64.deb](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-arm64.deb). 
 
    ```bash
-   wget https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-debian11-arm64.deb
+   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-arm64.deb
    ```
 
 2. Install EMQX.
 
    ```bash
-   sudo apt install ./emqx-5.0.20-debian11-arm64.deb
+   sudo apt install ./emqx-@CE_VERSION@-debian11-arm64.deb
    ```
 
 :::
@@ -81,10 +81,10 @@ EMQX offers 3 different options to start EMQX:
 
   ```bash
   $ emqx start
-  EMQX 5.0.20 is started successfully!
+  EMQX @CE_VERSION@ is started successfully!
   
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.20 is started
+  Node 'emqx@127.0.0.1' @CE_VERSION@ is started
   ```
 
 - To start EMQX with systemctl, run:
@@ -115,32 +115,32 @@ EMQX offers different installation packages for different CPU architectures.
 
 ::: tab amd64
 
-1. Download [emqx-5.0.20-debian11-amd64.tar.gz](https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-debian11-amd64.tar.gz). 
+1. Download [emqx-@CE_VERSION@-debian11-amd64.tar.gz](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-amd64.tar.gz). 
 
    ```bash
-   wget https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-debian11-amd64.tar.gz
+   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-amd64.tar.gz
    ```
 
 2. Install EMQX. 
 
    ```bash
-   mkdir -p emqx && tar -zxvf emqx-5.0.20-debian11-amd64.tar.gz -C emqx
+   mkdir -p emqx && tar -zxvf emqx-@CE_VERSION@-debian11-amd64.tar.gz -C emqx
    ```
 
 :::
 
 ::: tab arm64
 
-1. Download [emqx-5.0.20-debian11-arm64.tar.gz](https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-debian11-arm64.tar.gz). 
+1. Download [emqx-@CE_VERSION@-debian11-arm64.tar.gz](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-arm64.tar.gz). 
 
    ```bash
-   wget https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-debian11-arm64.tar.gz
+   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-arm64.tar.gz
    ```
 
 2. Install EMQX. 
 
    ```bash
-   mkdir -p emqx && tar -zxvf emqx-5.0.20-debian11-arm64.tar.gz -C emqx
+   mkdir -p emqx && tar -zxvf emqx-@CE_VERSION@-debian11-arm64.tar.gz -C emqx
    ```
 
 :::
@@ -169,32 +169,32 @@ EMQX offers different installation packages for different CPU architectures.
 
 ::: tab amd64
 
-1. Download [emqx-enterprise-5.0.1-debian11-amd64.deb](https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-debian11-amd64.deb). 
+1. Download [emqx-enterprise-@EE_VERSION@-debian11-amd64.deb](https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-debian11-amd64.deb). 
 
    ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-debian11-amd64.deb
+   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-debian11-amd64.deb
    ```
 
 2. Install EMQX.
 
    ```bash
-   sudo apt install ./emqx-enterprise-5.0.1-debian11-amd64.deb
+   sudo apt install ./emqx-enterprise-@EE_VERSION@-debian11-amd64.deb
    ```
 
 :::
 
 ::: tab arm64
 
-1. Download [emqx-enterprise-5.0.1-debian11-arm64.deb](https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-debian11-arm64.deb). 
+1. Download [emqx-enterprise-@EE_VERSION@-debian11-arm64.deb](https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-debian11-arm64.deb). 
 
    ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-debian11-arm64.deb
+   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-debian11-arm64.deb
    ```
 
 2. Install EMQX. 
 
    ```bash
-   sudo apt install ./emqx-enterprise-5.0.1-debian11-arm64.deb
+   sudo apt install ./emqx-enterprise-@EE_VERSION@-debian11-arm64.deb
    ```
 
 :::
@@ -209,10 +209,10 @@ EMQX offers 3 different options to start EMQX:
 
   ```bash
   $ emqx start
-  EMQX 5.0.1 is started successfully!
+  EMQX @EE_VERSION@ is started successfully!
   
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.1 is started
+  Node 'emqx@127.0.0.1' @EE_VERSION@ is started
   ```
 
 - To start EMQX with systemctl, run:
@@ -243,32 +243,32 @@ sudo apt remove --purge emqx
 
 ::: tab amd64
 
-1. Download [emqx-enterprise-5.0.1-debian11-amd64.tar.gz](https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-debian11-amd64.tar.gz). 
+1. Download [emqx-enterprise-@EE_VERSION@-debian11-amd64.tar.gz](https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-debian11-amd64.tar.gz). 
 
    ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-debian11-amd64.tar.gz
+   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-debian11-amd64.tar.gz
    ```
 
 2. Install EMQX.
 
    ```bash
-   mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.1-debian11-amd64.tar.gz -C emqx
+   mkdir -p emqx && tar -zxvf emqx-enterprise-@EE_VERSION@-debian11-amd64.tar.gz -C emqx
    ```
 
 :::
 
 ::: tab arm64
 
-1. Download [emqx-enterprise-5.0.1-debian11-arm64.tar.gz](https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-debian11-arm64.tar.gz)
+1. Download [emqx-enterprise-@EE_VERSION@-debian11-arm64.tar.gz](https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-debian11-arm64.tar.gz)
 
    ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-debian11-arm64.tar.gz
+   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-debian11-arm64.tar.gz
    ```
 
 2. Install EMQX.
 
    ```bash
-   mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.1-debian11-arm64.tar.gz -C emqx
+   mkdir -p emqx && tar -zxvf emqx-enterprise-@EE_VERSION@-debian11-arm64.tar.gz -C emqx
    ```
 
 :::

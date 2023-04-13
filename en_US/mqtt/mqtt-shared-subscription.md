@@ -56,12 +56,15 @@ broker.shared_subscription_strategy = random
 broker.shared_dispatch_ack_enabled = false
 ```
 
-| Load Balance | Description                                 |
-| :----------  | :------------------------------------------ |
-| random       | Random selection among all subscribers      |
-| round_robin  | In order of subscription                    |
-| sticky       | Always send to the last selected subscriber |
-| hash         | Hash by publisher ClientID                  |
+| Load Balance  | Description                                        |
+| :------------ | :------------------------------------------------- |
+| `random`        | Random selection among all subscribers             |
+| `round_robin`   | Select the subscribers in a round-robin manner                     |
+| `round_robin_per_group`   | Select the subscribers in round-robin fashion within each shared subscriber group                         |
+| `local`   | Select a random local subscriber, if cannot be found, then select a random subscriber within the cluster                       |
+| `sticky`        | Always send to the last selected subscriber until the subscriber disconnects        |
+| `hash_clientid` | Select the subscribers by hashing the `clientIds`  |
+| `hash_topic`    | Select the subscribers by hashing the source topic |
 
 ### Discussion on Message Loss
 

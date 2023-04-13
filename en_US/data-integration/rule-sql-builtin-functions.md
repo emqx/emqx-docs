@@ -1,32 +1,50 @@
 # Built-in SQL Functions
 
+The EMQX rule engine's SQL-like language supports a variety of built-in functions for doing basic data transformation, including [mathematical](#mathematical-functions), [data type judgment](#data-type-judgment-function), [conversion](#data-type-conversion-functions), [string](#string-functions), [map](#map-functions), [array](#array-functions), [hash](#hash-function), [compression and decompression](#compression-and-decompression-functions), [bit](#bit-functions), [decoding and encoding](#decoding-and-encoding-functions), and [time and date](#time-and-date-functions) functions that are available in EMQX.
+
+:::tip
+
+Since EMQX 5.0 version, EMQX also supports using  [JQ language](https://stedolan.github.io/jq/manual/) for complex data transformation, you may read the [JQ Fucntion](./rule-sql-jq.md) section for more information.
+
+:::
+
 ## Mathematical Functions
 
-| Function Name | Purpose                         | Parameter                                  | Returned Value                   |
-| ------------- | ------------------------------- | ------------------------------------------ | -------------------------------- |
-| abs           | Absolute value                  | Operand                                    | absolute value                   |
-| cos           | Cosine                          | Operand                                    | Cosine value                     |
-| cosh          | Hyperbolic cosine               | Operand                                    | Hyperbolic cosine value          |
-| acos          | Inverse cosine                  | Operand                                    | Inverse cosine value             |
-| acosh         | Inverse hyperbolic cosine       | Operand                                    | Inverse hyperbolic cosine value  |
-| sin           | Sine                            | Operand                                    | Sine value                       |
-| sinh          | Hyperbolic sine                 | Operand                                    | Hyperbolic sine value            |
-| asin          | Arcsine                         | Operand                                    | Arcsine value                    |
-| asinh         | inverse hyperbolic sine         | Operand                                    | inverse hyperbolic sine value    |
-| tan           | tangent                         | Operand                                    | tangent value                    |
-| tanh          | Hyperbolic tangent              | Operand                                    | Hyperbolic tangent value         |
-| atan          | Arc tangent                     | Operand                                    | Arc tangent value                |
-| atanh         | Inverse hyperbolic tangent      | Operand                                    | Inverse hyperbolic tangent value |
-| ceil          | Round up                        | Operand                                    | Integer value                    |
-| floor         | Round down                      | Operand                                    | Integer value                    |
-| round         | rounding                        | Operand                                    | Integer value                    |
-| exp           | Exponentiation                  | Operand                                    | X power of e                     |
-| power         | Exponential operation           | 1. Left operand x <br />2. Right operand y | Y power of X                     |
-| sqrt          | Square root operation           | Operand                                    | Square root                      |
-| fmod          | Floating point modulus function | 1. left Operand <br />2.right Operand      | module                           |
-| log           | Logarithm to e                  | Operand                                    | value                            |
-| log10         | Logarithm to 10                 | Operand                                    | value                            |
-| log2          | Logarithm to 2                  | Operand                                    | value                            |
+EMQX supports a wide range of mathematical functions:
+
+- Trigonometric and hyperbolic functions: include sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, asinh, acosh, atanh
+- Numerical functions: include abs, ceil, floor, round, sqrt, fmod
+- Exponential and logarithmic functions: including exp, power, log, log10, and log2
+
+See the table below for a complete list of mathematical functions supported. 
+
+| Function Name | Description                           | Parameter                                  |
+| ------------- | ------------------------------------- | ------------------------------------------ |
+| abs           | Absolute value                        | Operand                                    |
+| cos           | Cosine value                          | Operand                                    |
+| cosh          | Hyperbolic cosine value               | Operand                                    |
+| acos          | Inverse cosine value                  | Operand                                    |
+| acosh         | Inverse hyperbolic cosine value       | Operand                                    |
+| sin           | Sine value                            | Operand                                    |
+| sinh          | Hyperbolic sine value                 | Operand                                    |
+| asin          | Arcsine value                         | Operand                                    |
+| asinh         | Inverse hyperbolic sine value         | Operand                                    |
+| tan           | Tangent value                         | Operand                                    |
+| tanh          | Hyperbolic tangent value              | Operand                                    |
+| atan          | Arc tangent value                     | Operand                                    |
+| atanh         | Inverse hyperbolic tangent value      | Operand                                    |
+| ceil          | Round up (integer)                    | Operand                                    |
+| floor         | Round down (integer)                  | Operand                                    |
+| round         | Rounding (integer)                    | Operand                                    |
+| fmod          | modulo<br> (remainder)                | 1. Left Operand <br />2. Right Operand     |
+| exp           | Exponentiation<br>x power of e        | Operand                                    |
+| power         | Exponential operation<br>y power of X | 1. Left operand x <br />2. Right operand y |
+| sqrt          | Square root                           | Operand                                    |
+| log           | Logarithm to e                        | Operand                                    |
+| log10         | Logarithm to 10                       | Operand                                    |
+| log2          | Logarithm to 2                        | Operand                                    |
+
+**Examples:**
 
 ```erlang
 abs(-12) = 12
@@ -54,19 +72,26 @@ log10(1000) = 3
 log2(1024) = 10
 ```
 
-## Data type judgment function
+## Data Type Judgment Function
 
-| Function name | Purpose                                                                         | parameter | Returned value                                                               |
-| ------------- | ------------------------------------------------------------------------------- | --------- | ---------------------------------------------------------------------------- |
-| is_null       | Judge if the variable is null                                                   | Data      | Boolean data.if it is empty (undefined), return true, otherwise return false |
-| is_not_null   | Judge if the variable is not null                                               | Data      | Boolean data.if it is empty (undefined), return false, otherwise return true |
-| is_str        | Judge whether the variable is String type                                       | Data      | Boolean data.                                                                |
-| is_bool       | Judge if the variable is Boolean type                                           | Data      | Boolean data.                                                                |
-| is_int        | Judge whether the variable is Integer type                                      | Data      | Boolean data.                                                                |
-| is_float      | Judge whether the variable is Float type                                        | Data      | Boolean data.                                                                |
-| is_num        | Judge whether the variable is a numeric type, including Integer and Float types | Data      | Boolean data.                                                                |
-| is_map        | Judge whether the variable is Map type                                          | Data      | Boolean data.                                                                |
-| is_array      | Judge whether the variable is Array type                                        | Data      | Boolean data.                                                                |
+EMQX has built-in functions for data type judgments. These functions are used to check the data type of a specific field in a message and return a boolean value indicating whether or not the field conforms to the specified data type. 
+
+See the table below for a complete list of data type judgment functions supported. 
+
+| Function Name | Description                                                  | Parameter |
+| ------------- | ------------------------------------------------------------ | --------- |
+| is_null       | Check if a field is undefined<br>Boolean                     | Data      |
+| is_not_null   | Check if a field is defined<br/>Boolean                      | Data      |
+| is_str        | Check if the value is of String type<br/>Boolean             | Data      |
+| is_bool       | Check if the value is of Boolean type<br/>Boolean            | Data      |
+| is_int        | Check if the value is of Integer type<br/>Boolean            | Data      |
+| is_float      | Check if the value is of Float type<br/>Boolean              | Data      |
+| is_num        | Check if the value is of numeric type<br>Integer or Float<br/>Boolean | Data      |
+| is_map        | Check if the value is of Map type<br/>Boolean                | Data      |
+| is_array      | Check if the value is of Array type<br/>Boolean              | Data      |
+
+**Examples:**
+
 
 ```erlang
 is_null(undefined) = true
@@ -81,17 +106,25 @@ is_num(2.3) = true
 is_num('val') = false
 ```
 
-## Data type conversion function
+## Data Type Conversion Functions
 
-| function name | purpose                                             | parameter                    | returned value                                                             |
-| ------------- | --------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------- |
-| str           | Convert data to String type                         | Data                         | Data of type String. Failure to convert will cause SQL matching to fail    |
-| str_utf8      | Convert data to UTF-8 String type                   | Data                         | UTF-8 String type data. Failure to convert will cause SQL matching to fail |
-| bool          | Convert data to Boolean type                        | Data                         | Boolean data. Failure to convert will cause SQL matching to fail           |
-| int           | Convert data to integer type                        | Data                         | Integer type data. Failure to convert will cause SQL matching to fail      |
-| float         | Convert data to floating type                       | Data                         | Floating type data. Failure to convert will cause SQL matching to fail     |
-| float2str     | Convert a float to string using the given precision | 1. Float Number 2. Precision | String                                                                     |
-| map           | Convert data to Map type                            | Data                         | Map type data. Failure to convert will cause SQL matching to fail          |
+EMQX has built-in functions that allow you to convert the data type of a specific field in a message to a new data type.
+
+See the table below for a complete list of data type judgment functions supported. 
+
+| Function Name | Description                                          | Parameter                        |
+| ------------- | ---------------------------------------------------- | -------------------------------- |
+| str *         | Convert data to String type                          | Data                             |
+| str_utf8      | Convert data to UTF-8 String type                    | Data                             |
+| bool          | Convert data to Boolean type                         | Data                             |
+| int           | Convert data to Integer type                         | Data                             |
+| float         | Convert data to Float type                           | Data                             |
+| float2str     | Convert a float to a string with the given precision | 1. Float Number <br>2. Precision |
+| map           | Convert data to Map type                             | Data                             |
+
+[^*]: When converting a floating-point type to a string, the output may need to be rounded.
+
+**Examples:**
 
 ```erlang
 str(1234) = '1234'
@@ -103,25 +136,33 @@ float2str(20.2, 10) = '20.2'
 float2str(20.2, 17) = '20.19999999999999928'
 ```
 
-Note that when converting a floating-point type to a string, the output result will be affected by the precision.
-For details, see: [floating-point-guide](https://floating-point-gui.de/)
+:::tip
 
-## String functions
+Data type conversion failures will cause SQL matching to fail, please proceed with caution. 
 
-| Function name | Purpose                        | parameter                                                                                                                               | returned value     |
-| ------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| lower         | convert to lowercase           | input string                                                                                                                            | Lowercase string   |
-| upper         | convert to uppercase           | input string                                                                                                                            | uppercase string   |
-| trim          | Remove left and right space    | input string                                                                                                                            | output string      |
-| ltrim         | Remove the left space          | input string                                                                                                                            | output string      |
-| rtrim         | Remove the right space         | input string                                                                                                                            | output string      |
-| reverse       | String inversion               | input string                                                                                                                            | output string      |
-| strlen        | string length                  | input string                                                                                                                            | Integer value      |
-| substr        | Take a substring of characters | 1. input string <br />2. Start position. Note: Subscripts start at 1                                                                    | substring          |
-| substring     | Take a substring of characters | 1. input string <br />2. Start position <br />3. End position. Note: Subscripts start at 1                                              | substring          |
-| split         | String splitting               | 1. input string <br />2. split string                                                                                                   | Split string array |
-| split         | String splitting               | 1. input string <br />2. split string <br />3. Find the first separator on the left or right, optional value is 'leading' or 'trailing' | Split string array |
-| split         | split string                   | 1. input string <br />2. split string <br />3. Find the first separator on the left or right, optional value is 'leading' or 'trailing' | Split string array |
+:::
+
+## String Functions
+
+EMQX provides several built-in functions for manipulating strings in the rule engine, for example, case conversion, space removing, and sting length count. 
+
+See the table below for a complete list of string functions supported. 
+
+| Function Name              | Description                    | Parameter                                                    |
+| -------------------------- | ------------------------------ | ------------------------------------------------------------ |
+| lower                      | Convert to lowercase           | Input string                                                 |
+| upper                      | Convert to uppercase           | Input string                                                 |
+| trim                       | Remove left and right space    | Input string                                                 |
+| ltrim                      | Remove left space              | Input string                                                 |
+| rtrim                      | Remove right space             | Input string                                                 |
+| reverse                    | String inversion               | Input string                                                 |
+| strlen                     | String length                  | Input string                                                 |
+| substr                     | Take a substring of characters | 1. Input string <br />2. Start position (starting at position 1) |
+| substr<br>(with end)       | Take a substring of characters | 1. Input string <br />2. Start position (starting at position 1).<br />3. End position <br> |
+| split                      | String split                   | 1. Input string <br />2. Separator                           |
+| split <br>(with direction) | String split                   | 1. Input string <br />2. Separator <br />3. Direction, optional value: `leading` or `trailing` |
+
+**Examples:**
 
 ```erlang
 lower('AbC') = 'abc'
@@ -145,16 +186,21 @@ substr('abcdef', 2, 3) = 'cde'
 split('a/b/ c', '/') = ['a', 'b', ' c']
 split('a/b/ c', '/', 'leading') = ['a', 'b/ c']
 split('a/b/ c', '/', 'trailing') = ['a/b', ' c']
-
 ```
 
-## Map function
+## Map Functions
 
-| function name | purpose                                                                           | parameter                                  | returned value                                                      |
-| ------------- | --------------------------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------- |
-| map_get       | Take the value of a Key in the Map, or return a null value if failed              | 1. Key <br />2. Map                        | The value of a Key in the Map. Support nested keys, such as "a.b.c" |
-| map_get       | Take the value of a Key in the Map, if failed, return the specified default value | 1. Key <br />2. Map <br />3. Default Value | The value of a Key in the Map. Support nested keys, such as "a.b.c" |
-| map_put       | Insert value into Map                                                             | 1. Key <br />2. Value <br />3. Map         | The inserted Map. Support nested keys, such as "a.b.c"              |
+EMQX has built-in functions that allow you to manipulate maps, and perform operations such as adding key-value pairs to a map and retrieving values. <!--is this only applicable to erlang maps? shall we add a note here?-->
+
+See the table below for a complete list of map functions supported. 
+
+| Function Name              | Description                                                  | Parameter                                  |
+| -------------------------- | ------------------------------------------------------------ | ------------------------------------------ |
+| map_get                    | Retrieve the value associated with a specified key in the Map <br>Or return null if the key is not found | 1. Key <br />2. Map                        |
+| map_get<br> (with default) | Retrieve the value associated with a specified key in the Map, <br>Or return the specified default value if the key is not found | 1. Key <br />2. Map <br />3. Default Value |
+| map_put                    | Insert a key-value pair into the Map                         | 1. Key <br />2. Value <br />3. Map         |
+
+**Examples:**
 
 ```erlang
 map_get('a', json_decode( '{ "a" : 1 }' )) = 1
@@ -162,17 +208,23 @@ map_get('b', json_decode( '{ "a" : 1 }' ), 2) = 2
 map_get('a', map_put('a', 2, json_decode( '{ "a" : 1 }' ))) = 2
 ```
 
-## Array function
+## Array Functions
 
-| function name | purpose                                                                               | parameter                                                       | returned value         |
-| ------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ---------------------- |
-| nth           | Take the nth element, and subscripts start at 1                                       | Original array                                                  | Nth element            |
-| length        | Get the length of an array                                                            | Original array                                                  | the length of an array |
-| sublist       | Take a sub-array of length len starting from the first element. Subscripts start at 1 | 1. length len <br />2. Original array                           | sub-array              |
-| sublist       | Take a sub-array of length len starting from the nth element. Subscripts start at 1   | 1. start position n <br />2. length len <br />3. Original array | sub-array              |
-| first         | Take the first element. Subscripts start at 1                                         | Original array                                                  | 1st element            |
-| last          | take the last element                                                                 | Original array                                                  | the last element       |
-| contains      | Determine whether the data is in the array                                            | 1. data <br />2. Original array                                 | Boolean value          |
+EMQX provides several built-in functions for working with arrays in the rule engine. These functions allow you to perform operations such as filtering, mapping, and reducing on arrays within incoming messages. 
+
+See the table below for a complete list of array functions supported. 
+
+| Function Name | Purpose                                                      | Parameters                                           |
+| ------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
+| `nth`         | Returns the nth element of an array. <br>Subscripts start at 1. | 1. Array <br />2. n (integer)                        |
+| `length`      | Returns the length of an array.                              | Array                                                |
+| `sublist`     | Returns a sub-array of length len starting from the first element. <br>Subscripts start at 1. <br><!--what does Subscripts start at 1 mean?--> | 1. Array <br />2. len (integer)                      |
+| `sublist`     | Returns a sub-array of length len starting from the nth element. <br>Subscripts start at 1. | 1. Array <br />2. n (integer) <br />3. len (integer) |
+| `first`       | Returns the first element of an array. <br>Subscripts start at 1. | Array                                                |
+| `last`        | Returns the last element of an array.                        | Array                                                |
+| `contains`    | Returns a boolean indicating if the data is in the array.    | 1. Data <br />2. Array                               |
+
+**Examples:**
 
 ```erlang
 nth(2, [1,2,3,4]) = 2
@@ -184,13 +236,19 @@ last([1,2,3,4]) = 4
 contains(2, [1,2,3,4]) = true
 ```
 
-## Hash function
+## Hash Function
 
-| function name | purpose         | parameter | returned value |
-| ------------- | --------------- | --------- | -------------- |
-| md5           | evaluate MD5    | data      | MD5 value      |
-| sha           | evaluate SHA    | data      | SHA value      |
-| sha256        | evaluate SHA256 | data      | SHA256 value   |
+EMQX supports using D5, SHA, and SHA256 to ensure data integrity and security.
+
+See the table below for a complete list of Hush functions supported. 
+
+| Function Name | Description                     | Parameter |
+| ------------- | ------------------------------- | --------- |
+| md5           | Calculate the MD5 hash value    | Data      |
+| sha           | Calculate the SHA hash value    | Data      |
+| sha256        | Calculate the SHA256 hash value | Data      |
+
+**Examples:**
 
 ```erlang
 md5('some val') = '1b68352b3e9c2de52ffd322e30bffcc4'
@@ -198,16 +256,23 @@ sha('some val') = 'f85ba28ff5ea84a0cbfa118319acb0c5e58ee2b9'
 sha256('some val') = '67f97635d8a0e064f60ba6e8846a0ac0be664f18f0c1dc6445cd3542d2b71993'
 ```
 
-## Compresses and Uncompresses functions
+## Compression and Decompression Functions
 
-| Function         | Purpose                                              | Parameters             | Returned value         |
-| ---------------- | ---------------------------------------------------- | ---------------------- | ---------------------- |
-| `gzip`           | Compresses data with gz headers and checksum.        | Raw binary data        | Compressed binary data |
-| `gunzip`         | Uncompresses data with gz headers and checksum.      | Compressed binary data | Raw binary data        |
-| `zip`            | Compresses data without zlib headers and checksum.   | Raw binary data        | Compressed binary data |
-| `unzip`          | Uncompresses data without zlib headers and checksum. | Compressed binary data | Raw binary data        |
-| `zip_compress`   | Compresses data with zlib headers and checksum.      | Raw binary data        | Compressed binary data |
-| `zip_uncompress` | Uncompresses data with zlib headers and checksum.    | Compressed binary data | Raw binary data        |
+EMQX uses compression and decompression functions to reduce network bandwidth usage and improve system performance, where, the compression functions are used to reduce the amount of data that needs to be transmitted over the network,  the decompression functions are used to decompress the compressed payload data of MQTT messages. 
+
+See the table below for a complete list of compression and decompression functions supported. 
+
+| Function         | Purpose                                              | Parameters                                                   |
+| ---------------- | ---------------------------------------------------- | ------------------------------------------------------------ |
+| `gzip`           | Compresses with gzip headers and checksum.           | `raw_data` <br>(binary)                                      |
+| `gunzip`         | Decompresses with gzip headers and checksum.         | `compressed_data` <br>(binary)                               |
+| `zip`            | Compresses without zlib headers and checksum.        | `raw_data`  (binary),<br> `compression_level` <br>(optional) |
+| `unzip`          | Decompresses data without zlib headers and checksum. | `compressed_data` <br>(binary)                               |
+| `zip_compress`   | Compresses with zlib headers and checksum.           | `raw_data ` (binary)<br> `compression_level` <br>(optional)  |
+| `zip_uncompress` | Decompresses with zlib headers and checksum.         | `compressed_data` <br>(binary)                               |
+
+
+**Examples:**
 
 ```erlang
 bin2hexstr(gzip('hello world')) = '1F8B0800000000000003CB48CDC9C95728CF2FCA49010085114A0D0B000000'
@@ -220,13 +285,19 @@ bin2hexstr(zip_compress('hello world')) = '789CCB48CDC9C95728CF2FCA4901001A0B045
 zip_uncompress(hexstr2bin('789CCB48CDC9C95728CF2FCA4901001A0B045D')) = 'hello world'
 ```
 
-## Bit functions
+## Bit Functions
 
-| Function  | Purpose                                                                                                                                                                   | Parameters                                                                                                                                                                                                                                                                                      | Returned value               |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `subbits` | Get a given length of bits from the beginning of a binary, and then convert it to an unsigned integer (big-endian).                                                       | 1. The binary <br />2. The length of bits to get                                                                                                                                                                                                                                                | The unsigned integer         |
-| `subbits` | Get a given length of bits start from the specified offset of a binary, and then convert it to an unsigned integer (big-endian). Offsets are start from 1.                | 1. The binary <br />2. The offset <br />3. The length of bits to get                                                                                                                                                                                                                            | The unsigned integer         |
-| `subbits` | Get a given length of bits start from the specified offset of a binary, and then convert it to a data type according to the arguments provided. Offsets are start from 1. | 1. The binary <br />2. The offset <br />3. The length of bits to get <br />4. Data Type, can be one of 'integer', 'float', 'bits' <br />5. Signedness, only works for integers, can be one of 'unsigned', 'signed', <br />6. Endianness, only works for integers, can be one of 'big', 'little' | The data got from the binary |
+EMQX uses the `subbits` function to extract a sequence of bits from a binary or bitstring and convert it to a specified data type. 
+
+See the table below for the syntax supported. 
+
+| Function                                            | Description                                                  | Parameters                                                   |
+| --------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `subbits`                                           | Returns an unsigned integer (big-endian) obtained by extracting a specified number of bits from the beginning of a binary input. | 1. Binary input <br />2. Number of bits to extract           |
+| `subbits`<br>(with offset)                          | Returns an unsigned integer (big-endian) obtained by extracting a specified number of bits starting from a given offset in a binary input. <br>Offsets are indexed starting from 1. | 1. Binary input  <br />2. Starting offset <br />3. Number of bits to extract |
+| `subbits`<br>(with offset and data type conversion) | Returns a data value obtained by extracting a specified number of bits starting from a given offset in a binary input and after data type conversion. <br>Offsets are indexed starting from 1. | 1. Binary input <br />2. Starting offset<br />3. Number of bits to extract <br />4. Data Type, can be `integer`, `float`, `bits`<br /><br>If set to `integer`, you can continue to set:<br>- Signedness: `unsigned`, `signed`, <br />- Endianness: `big`, `little` |
+
+**Examples:**
 
 ```erlang
 subbits('abc', 8) = 97
@@ -236,16 +307,22 @@ subbits('abc', 9, 16, 'integer', 'signed', 'big') = 25187
 subbits('abc', 9, 16, 'integer', 'signed', 'little') = 25442
 ```
 
-## Decoding and encoding functions
+## Decoding and Encoding Functions
 
-| Function        | Purpose              | Parameters                                | Returned value                      |
-| --------------- | -------------------- | ----------------------------------------- | ----------------------------------- |
-| `base64_encode` | BASE64 encode        | The binary to be encoded                  | The encoded base64-formatted string |
-| `base64_decode` | BASE64 decode        | The base64-formatted string to be decoded | The decoded binary                  |
-| `json_encode`   | JSON encode          | The data to be encoded                    | The JSON string                     |
-| `json_decode`   | JSON decode          | The JSON string to be decoded             | The decoded data                    |
-| `bin2hexstr`    | Binary to Hex String | The binary                                | The hex string                      |
-| `hexstr2bin`    | Binary to Hex String | The hex string                            | The binary                          |
+EMQX uses encoding and decoding functions to convert data from one format to another.
+
+See the table below for a complete list of encoding and decoding functions supported. 
+
+| Function        | Description          | Parameters                             |
+| --------------- | -------------------- | -------------------------------------- |
+| `base64_encode` | BASE64 encode        | Binary to be encoded                   |
+| `base64_decode` | BASE64 decode        | Bbase64-formatted string to be decoded |
+| `json_encode`   | JSON encode          | Data to be encoded                     |
+| `json_decode`   | JSON decode          | JSON string to be decoded              |
+| `bin2hexstr`    | Binary to Hex String | Binary                                 |
+| `hexstr2bin`    | Binary to Hex String | hex string                             |
+
+**Examples:**
 
 ```erlang
 base64_encode('some val') = 'c29tZSB2YWw='
@@ -255,39 +332,35 @@ bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 ```
 
 {% emqxee %}
-| Function | Purpose | Parameters | Returned value |
-| -------- | ------------------------------------|------------------------- | --------------------------- |
-| `schema_encode` | Encode according to schema. The schema should be created before using this function | 1. The Schema ID defined by schema registry 2. The data to be encoded 3..N. The remaining arguments according to the schema type | The encoded data |
-| `schema_decode` | Decode according to schema. The schema should be created before using this function | 1. The Schema ID defined by schema registry 2. The data to be decoded 3..N. The remaining arguments according to the schema type | The decoded data |
+
+EMQX Enterprise also supports using schema encoding and decoding functions to encode and decode data according to a specified schema. See the table below for a detailed explanation of the functions. 
+
+| Function | Description | Parameters |
+| -------- | ------------------------------------|------------------------- |
+| `schema_encode` | Encode data according to a pre-defined schema. | 1. Schema ID defined by schema registry <br>2. Data to be encoded <br>3 ... N. Remaining arguments according to the schema type |
+| `schema_decode` | Decode data according to a pre-defined schema. | 1. Schema ID defined by schema registry<br> 2. Data to be decoded <br>3..N. Remaining arguments according to the schema type |
 
 <!-- For examples of schema_encode() and schema_decode(), see [schema registry](schema-registry.md) -->
 {% endemqxee %}
 
-## Time and date functions
+## Time and Date Functions
 
-| Function             | Purpose                                                                 | Parameters                                                                                                                                                                                                                                                                                              | Returned value                    |
-| -------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
-| `now_timestamp`      | Return the unix epoch of now in second                                  | -                                                                                                                                                                                                                                                                                                       | The unix epoch                    |
-| `now_timestamp`      | Return the unix epoch of now, in given time unit                        | 1. The time unit                                                                                                                                                                                                                                                                                        | The unix epoch                    |
-| `now_rfc3339`        | Create a RFC3339 time string of now in second                           | -                                                                                                                                                                                                                                                                                                       | The time string of format RFC3339 |
-| `now_rfc3339`        | Create a RFC3339 time string of now, in given time unit                 | 1. The time unit                                                                                                                                                                                                                                                                                        | The time string of format RFC3339 |
-| `unix_ts_to_rfc3339` | Convert an unix epoch (in second) to RFC3339 time string                | 1. The unix epoch in second                                                                                                                                                                                                                                                                             | The time string of format RFC3339 |
-| `unix_ts_to_rfc3339` | Convert an unix epoch to RFC3339 time string, using the given time unit | 1. The unix epoch </br>2. The time unit                                                                                                                                                                                                                                                                 | The time string of format RFC3339 |
-| `rfc3339_to_unix_ts` | Convert a RFC3339 time string (in second) to unix epoch                 | 1. The time string of format RFC3339                                                                                                                                                                                                                                                                    | The unix epoch                    |
-| `rfc3339_to_unix_ts` | Convert a RFC3339 time string to unix epoch, using the given time unit  | 1. The time string of format RFC3339 </br>2. The time unit                                                                                                                                                                                                                                              | The unix epoch                    |
-| `format_date`        | Timestamp to formatted time                                             | 1. The time unit (refer to The time unit)</br>2. The time offset (refer to time offset definition)</br>3. The date format (refer to time string codec format)</br>4. The timestamp (optional parameter, default is current time)                                                                        | Formatted time                    |
-| `date_to_unix_ts`    | Formatted time to timestamp                                             | 1. The time unit (refer to the following table for definition) </br>2. The time offset (optional, when not filled, use the time offset in the formatted time string, refer to the time offset definition) </br>3. The date format (refer to time string codec format) </br>4. The formatted time string | The unix epoch                    |
+EMQX uses the following functions for handling time and date, and the time unit supported by these functions are `second`, `millisecond`, `microsecond`, and `nanosecond`.
 
-The time unit
+| Function             | Purpose                                                      | Parameters                                                   |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `now_timestamp`      | Return the current unix epoch timestamp<br>Unit: `second`    | -                                                            |
+| `now_timestamp`      | Return the current unix epoch timestamp with a self-defined unit | Time unit                                                    |
+| `now_rfc3339`        | Create the current RFC3339 time string<br/>Unit: `second`    | -                                                            |
+| `now_rfc3339`        | Create the current RFC3339 time string with a self-defined unit | Time unit                                                    |
+| `unix_ts_to_rfc3339` | Convert an unix epoch (in second) to RFC3339 time string     | Unix epoch in second                                         |
+| `unix_ts_to_rfc3339` | Convert an unix epoch to RFC3339 time string                 | 1. Unix epoch <br>2. Time unit                               |
+| `rfc3339_to_unix_ts` | Convert an RFC3339 time string (in second) to unix epoch     | 1. Time string of format RFC3339                             |
+| `rfc3339_to_unix_ts` | Convert an RFC3339 time string to unix epoch with a self-defined unit | 1. Time string of format RFC3339 <br>2. Time unit            |
+| `format_date`        | Timestamp to formatted time                                  | 1. Time unit (can be `second`, `millisecond`, `microsecond` or `nanosecond`)<br>2. Time offset (refer to [Time Offset definition](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=11%3A59%3A59-,Time%20Offset,-Offset))<br>3. Date format (refer to [Time String Codec Format](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=Syntax%20of%20Time%20String%20Format)) <br>4. Timestamp (optional parameter, default is current time) |
+| `date_to_unix_ts`    | Formatted time to timestamp                                  | 1. Time unit (can be `second`, `millisecond`, `microsecond` or `nanosecond`) <br>2. Time offset (optional, when not filled, use the time offset in the formatted time string, refer to the refer to [Time Offset definition](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=11%3A59%3A59-,Time%20Offset,-Offset) <br>3. Date format (refer to [Time String Codec Format](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=Syntax%20of%20Time%20String%20Format) <br>4. Formatted time string |
 
-| Name          | Precision   | Example             |
-| ------------- | ----------- | ------------------- |
-| `second`      | second      | 1653557821          |
-| `millisecond` | millisecond | 1653557852982       |
-| `microsecond` | microsecond | 1653557892926417    |
-| `nanosecond`  | nanosecond  | 1653557916474793000 |
-
-Time string format
+**Syntax of Time String Format**
 
 | Placeholder | Definition                 | Range                  |
 | ----------- | -------------------------- | ---------------------- |
@@ -304,17 +377,19 @@ Time string format
 | `%:z`       | time offset [+\|-]HH:MM    | -11:59 to +11:59       |
 | `%::z`      | time offset [+\|-]HH:MM:SS | -11:59:59 to +11:59:59 |
 
-The time offset
+**Time Offset**
 
-| Offset           | Definition                 | Examples                                                                                                     |
-| ---------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `z`              | UTC Zulu Time              | `+00:00`                                                                                                     |
-| `Z`              | UTC Zulu Time. Same as `z` | `+00:00`                                                                                                     |
-| `local`          | System Time                | Automatic </br>Beijing `+08:00`</br> Zulu `+00:00` </br>Stockholm, Sweden `+02:00` </br>Los Angeles `-08:00` |
-| `[+\|-]HHMM`     | `%z`                       | Beijing `+0800` </br>Zulu `+0000` </br>Stockholm, Sweden `+0200` </br>Los Angeles `-0800`                    |
-| `[+\|-]HH:MM`    | `%:z`                      | Beijing `+08:00` </br>Zulu `+00:00` </br>Stockholm, Sweden `+02:00` </br>Los Angeles `-08:00`                |
-| `[+\|-]HH:MM:SS` | `%::z`                     | Beijing `+08:00:00` </br>Zulu `+00:00:00` </br>Stockholm, Sweden `+02:00:00` </br>Los Angeles `-08:00:00`    |
-| integer()        | Seconds                    | Beijing 28800 </br>Zulu 0 </br>Stockholm, Sweden 7200 </br>Los Angeles -28800                                |
+| Offset           | Definition                 | Examples                                                     |
+| ---------------- | -------------------------- | ------------------------------------------------------------ |
+| `z`              | UTC Zulu Time              | `+00:00`                                                     |
+| `Z`              | UTC Zulu Time. Same as `z` | `+00:00`                                                     |
+| `local`          | System Time                | Automatic <br>Beijing `+08:00`<br>Zulu `+00:00` <br>Stockholm, Sweden `+02:00` <br>Los Angeles `-08:00` |
+| `[+\|-]HHMM`     | `%z`                       | Beijing `+0800` <br>Zulu `+0000` <br>Stockholm, Sweden `+0200` <br>Los Angeles `-0800` |
+| `[+\|-]HH:MM`    | `%:z`                      | Beijing `+08:00` <br>Zulu `+00:00` <br>Stockholm, Sweden `+02:00` <br>Los Angeles `-08:00` |
+| `[+\|-]HH:MM:SS` | `%::z`                     | Beijing `+08:00:00` <br>Zulu `+00:00:00` <br>Stockholm, Sweden `+02:00:00` <br>Los Angeles `-08:00:00` |
+| integer()        | Seconds                    | Beijing 28800 <br>Zulu 0 <br>Stockholm, Sweden 7200 <br>Los Angeles -28800 |
+
+**Examples:**
 
 ```SQL
 now_timestamp() = 1650874276
@@ -333,12 +408,14 @@ date_to_unix_ts('second', 'local', '%Y-%m-%d %H-%M-%S', '2022-05-26 18:40:12') =
 date_to_unix_ts('second', '%Y-%m-%d %H-%M-%S', '2022-05-26 10:40:12') = 1653561612
 ```
 
+**MongoDB Time Functions**
+
 {% emqxee %}
-| Function | Purpose | Parameters | Returned value |
-| -------- | ------------------------------------|-------------------------- | --------------------------- |
-| `mongo_date` | Create a mongodb ISODate type of now | - | the ISODate |
-| `mongo_date` | Create a mongodb ISODate type from the given unix epoch in millisecond | 1. unix epoch in millisecond | the ISODate |
-| `mongo_date` | Create a mongodb ISODate type from the given unix epoch in given time unit | 1. unix epoch 2. time unit, can be one of 'second', 'millisecond', 'microsecond' or 'nanosecond' | the ISODate |
+| Function | Purpose | Parameters |
+| -------- | ------------------------------------|-------------------------- |
+| `mongo_date` | Create a mongodb ISODate type of now | - |
+| `mongo_date` | Create a mongodb ISODate type from the given unix epoch in millisecond | 1. Unix epoch in millisecond |
+| `mongo_date` | Create a mongodb ISODate type from the given unix epoch in given time unit | 1. Unix epoch <br>2. Time unit, can be one of 'second', 'millisecond', 'microsecond' or 'nanosecond' |
 
 The time unit can be one of 'second', 'millisecond', 'microsecond' or 'nanosecond'.
 
@@ -349,7 +426,3 @@ mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
 ```
 
 {% endemqxee %}
-
-## JQ Functions for Transforming JSON Data
-
-In addition to the above built-in functions, EMQX also integrates JQ functions for processing JSON data, please refer to [JQ Functions](./rule-sql-jq.md).

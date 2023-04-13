@@ -12,7 +12,7 @@ EMQX 为用户提供了丰富的指标来帮助用户与因为人员了解当前
 
 ## 与监控系统集成
 
-EMQX 指标支持与 [Prometheus](./prometheus.md) 以及 [StatsD](./statsd.md) 集成。使用第三方监控系统对 EMQX 进行监控有如下好处：
+EMQX 指标支持与 [Prometheus](./prometheus.md) 集成。使用第三方监控系统对 EMQX 进行监控有如下好处：
 
 - 可以将 EMQX 的监控数据与其他系统的监控数据进行整合，形成一个完整的监控系统，如监控服务器主机的相关信息；
 - 可以使用更加丰富的监控图表，更直观地展示监控数据，如使用 Grafana 的仪表盘；
@@ -162,4 +162,4 @@ EMQX 将指标分为了 Metrics 与 Stats 两种。
 | retained.count             | Integer   | 当前保留消息数量           |
 | retained.max               | Integer   | 保留消息的历史最大值       |
 | delayed.count              | Integer   | 当前延迟发布消息数量       |
-| delayed.max                | Integer   | 延迟发布下行哦的历史最大值 |
+| delayed.max                | Integer   | 延迟发布消息数量的历史最大值 |
