@@ -45,7 +45,7 @@
   详见 [#9409](https://github.com/emqx/emqx/issues/9409)。
   修复后，`emqx_retainer` 插件使用单独的进程池，从而避免了该问题。
 
-- 修复了 Helm Chart 中模板文件路径的错误。[#10229](https://github.com/emqx/emqx/pull/10229)
+- 修复了 Helm Chart 中模板文件 `service-monitor.yaml` 路径不正确的问题。[#10229](https://github.com/emqx/emqx/pull/10229)
 
 ## v4.4.16
 
