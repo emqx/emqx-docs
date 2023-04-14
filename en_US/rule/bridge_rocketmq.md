@@ -36,7 +36,7 @@ In the **Action** pane, click **Add action**. Select **Data bridge to RocketMQ**
 
 <img src="./assets/rule-engine/rocketmq_action_type.png" alt="rocketmq_action_type" style="zoom:50%;" />
 
-Provide the arguments for the action:
+You then need to specify the resource and topic that the rule applies :
 
 1. Use of resources. Click **Create** right to the **Use of Resources** text box to create a RocketMQ resource.
 
