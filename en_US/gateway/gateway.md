@@ -1,4 +1,4 @@
-# Extended protocol gateway
+# Multi-Protocol Gateway
 
 The Gateway is responsible for handling all non-MQTT protocol connections,
 authentication and message sending and receiving.
