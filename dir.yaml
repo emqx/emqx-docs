@@ -32,6 +32,12 @@
   title_cn: 安装部署
   path: deploy/install
   children:
+    - deploy/install-docker
+    - deploy/install-debian
+    - deploy/install-ubuntu
+    - deploy/install-centos
+    - deploy/install-amazon-linux
+    - deploy/install-macOS
     - title_en: EMQX on Kubernetes
       title_cn: EMQX on Kubernetes
       lang: en
@@ -40,12 +46,6 @@
       title_cn: EMQX on Kubernetes
       lang: cn
       path: "https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html"
-    - deploy/install-docker
-    - deploy/install-debian
-    - deploy/install-ubuntu
-    - deploy/install-centos
-    - deploy/install-amazon-linux
-    - deploy/install-macOS
     - title_en: Windows
       title_cn: Windows
       path: deploy/install-windows
@@ -158,7 +158,7 @@
 ## Data integration
 # - data-integration/introduction
 
-- title_en: EMQX Rules
+- title_en: Rules
   title_cn: 规则引擎
   path: data-integration/rules
   children:
@@ -354,8 +354,8 @@
 
 ## Device connectivity
 
-- title_en: Extended Protocol Gateway
-  title_cn: 扩展协议网关
+- title_en: Multi-Protocol Gateway
+  title_cn: 多协议网关
   path: gateway/gateway
   children:
     - gateway/stomp
