@@ -82,5 +82,3 @@ $ ./bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer TopicTest
 In the rule list, click the icon in **Monitor** column. In **Metrics**, you can see the number for **matched** has increased by 1:
 
 <img src="./assets/rule-engine/rocketmq_rule_crreated.png" alt="rocketmq_rule_crreated" style="zoom:50%;" />
-
-![image](/Users/emqx/Documents/assets/rule-engine/rocket-rulelist-0@2x.png)
