@@ -1,7 +1,6 @@
 # Enable SSL/TLS Connection
 
-When accepting an MQTT Client or connecting to external resources like a database,
-EMQX can establish secure connections via SSL/TLS.
+EMQX can establish secure connections via SSL/TLS when accepting the access of an MQTT Client or connecting to external resources such as a database. You can enable SSL/TLS encrypted connections for all connections, including MQTT, to ensure the security of access and message transmission.
 
 ## SSL Listener for MQTT
 
