@@ -17,13 +17,15 @@ By default, all nodes assume the Core node role, so the cluster behaves like tha
 To enable the  Core + Replicant mode, the backend database (`db_backend`) should be set to `rlog`, some nodes should assume the replicant role (`node.db_role`), and the core node (`core_node`) should be specified, as shown below:
 
 ```bash
+node { 
+    ##To set a node as a replicant node
+	db_role = replicant
+}
 cluster {
 		## Default setting, suitable for very large backend
-		db_backend = rlog
-		##To set a node as a replicant node
-		node.db_role = replicant
+		db_backend = rlog	
 		##List of core nodes that the replicant will connect to, different nodes can be seperated with a comma
-		core_node = [node1, node2, ...]
+		core_nodes = ["emqx1@192.168.0.1", "emqx2@192.168.0.2", ...]
 }
 ```
 
@@ -74,6 +76,7 @@ After starting the first node, use the following command to start the second nod
 
 ```bash
 EMQX_NODE__NAME='emqx2@127.0.0.1' \
+    EMQX_LOG__FILE_HANDLERS__DEFAULT__FILE='log2/emqx.log' \
     EMQX_STATSD__SERVER='127.0.0.1:8124' \
     EMQX_LISTENERS__TCP__DEFAULT__BIND='0.0.0.0:1882' \
     EMQX_LISTENERS__SSL__DEFAULT__BIND='0.0.0.0:8882' \
@@ -87,5 +90,7 @@ EMQX_NODE__NAME='emqx2@127.0.0.1' \
 ```
 
 The above code example is to create a cluster manually, you can also refer to the [auto clustering](#auto-clustering) section on how to create a cluster automatically. 
+
+The dashboard is designed under the assumption that all cluster nodes use the same port number. Using distinct ports on a single computer may cause Dashboard UI issues, therefore, it is not recommended in production.
 
 <!--to add a quickstart with the pseudo-distributed cluster @WIVWIV -->

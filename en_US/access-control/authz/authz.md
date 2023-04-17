@@ -125,7 +125,7 @@ You can view the statistic metrics of each authorizer in the Overview page of th
 
 You can also check the authorization status and execution status on each node through **Node Status**.
 
-If you want to view the overall running metrics of authorization, see [Metrics - Authentication & Authorization](../../observability/metrics-and-stats.md#Authentication & Authorization).
+If you want to view the overall running metrics of authorization, see [Metrics - Authentication & Authorization](../../observability/metrics-and-stats.md#Metrics+-+Authentication+%26+Authorization).
 
 ## Integrate with Data Storage Objects
 
