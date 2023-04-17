@@ -195,6 +195,7 @@
     - data-integration/data-bridge-webhook
     - data-integration/data-bridge-mqtt
     - data-integration/data-bridge-kafka
+    - data-integration/data-bridge-pulsar
     - data-integration/data-bridge-influxdb
     - data-integration/data-bridge-mysql
     - data-integration/data-bridge-redis
@@ -392,7 +393,7 @@
     - observability/tracer
     - observability/mqtt-system-topics
     - observability/prometheus
-    
+
 
 ## Device connectivity
 
