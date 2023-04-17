@@ -34,7 +34,7 @@ To provide our customers with a better cluster salability performance, EMQX 5.0 
 
 
 
-To better understand how clustering in EMQX works, you can continue to read the [EMQX clustering](../../design/clustering.md) will update when pr 1730 is merged. 
+To better understand how clustering in EMQX works, you can continue to read the [EMQX clustering](../../design/clustering.md). 
 
 ## Key Features
 
@@ -59,13 +59,13 @@ EMQX supports several node discovery strategies:
 
 Network partition autoheal is a feature of EMQX that allows the broker to recover automatically from network partitions without requiring any manual intervention, suitable for mission-critical applications where downtime is not acceptable.
 
-To enable EMQX network partition autoheal, you can work with `cluster.autoheal` configuration item in `emqx.conf`:
+The network partition autoheal (`cluster.autoheal`) feature is enabled by default. With this feature, EMQX will continuously monitor the connectivity between nodes in the cluster.
 
 ```bash
-cluster.autoheal = on
+cluster.autoheal = true
 ```
 
-Once enabled, EMQX will continuously monitor the connectivity between nodes in the cluster. If a network partition is detected, EMQX will isolate the affected nodes and continue to operate with the remaining nodes. Once the network partition is resolved, the broker will automatically re-integrate the isolated nodes into the cluster.
+If a network partition is detected, EMQX will isolate the affected nodes and continue to operate with the remaining nodes. Once the network partition is resolved, the broker will automatically re-integrate the isolated nodes into the cluster.
 
 ### Cluster Node Autoclean
 

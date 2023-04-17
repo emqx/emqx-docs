@@ -62,8 +62,6 @@ To configure the HAProxy or Nginx on port 1883, you first need to enable the con
 ```
 listeners.tcp.default {
   bind = "0.0.0.0:1883"
-  max_connections = 1024000
-
   proxy_protocol = true
 }
 ```
