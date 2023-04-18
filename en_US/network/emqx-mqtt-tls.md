@@ -12,7 +12,7 @@ and set its `ssl_options.verify` option to `verify_peer`.
 
 The default `ssl` MQTT listener runs on the 8883 port:
 
-```
+```hcl
 listeners.ssl.default {
   bind = "0.0.0.0:8883"
 
@@ -47,7 +47,7 @@ For production use, securely issued certificates must be used.
 
 To enable PSK authentication, one should enable `psk_authentication` section in `emqx.conf`:
 
-```
+```hcl
 psk_authentication {
     ## Whether to enable the PSK feature.
     enable = true
@@ -77,7 +77,7 @@ myclient2:d1e617d3b963757bfc21dad3fea169716c3a2f053f23decaea5cdfaabd04bfc4
 
 `ssl` listener should be configured to use PSK ciphers:
 
-```
+```hcl
 listeners.ssl.default {
   ...
   ssl_options.versions = ["tlsv1.2"]
@@ -91,6 +91,36 @@ listeners.ssl.default {
 
 If the `RSA-PSK` cipher suites are used, the `RSA` certificate is still required, see [RFC4279](https://www.rfc-editor.org/rfc/rfc4279#section-4) for details.
 
+### OCSP Stapling
+
+Since EMQX version v5.0.23 and e5.0.3, Online Certificate Status Protocol (OCSP) Stapling is supported for MQTT SSL listeners.  Note that those do not include Secure WebSocket nor QUIC listeners: only listeners of type `ssl` support this feature.
+
+With this feature enabled, the listener will send an OCSP Stapling response to connecting clients about EMQX's server certificate.  This OCSP data is periodically fetched from a configured OCSP Responder server and cached for a period of time (5 minutes by default).
+
+In order to enable this feature, we need to both enable the corresponding option in the listener, and also specify the OCSP Issuer certificate and OCSP Responder URL from which EMQX should download and cache the OCSP response for its own server certificate.
+
+Example configuration to enable OCSP Stapling:
+
+```hcl
+listeners.ssl.default {
+  bind = "0.0.0.0:8883"
+  max_connections = 512000
+  ssl_options {
+    keyfile = "/etc/emqx/certs/server.key"
+    certfile = "/etc/emqx/certs/server.pem"
+    cacertfile = "/etc/emqx/certs/ca.pem"
+    ocsp {
+      enable_ocsp_stapling = true
+      issuer_pem = "/etc/emqx/certs/ocsp-issuer.pem"
+      responder_url = "http://ocsp.responder.com:9877"
+      refresh_interval = 15m
+      refresh_http_timeout = 15s
+    }
+  }
+}
+```
+
+Be sure to change the certificate/private key paths above with your corresponding files, and also to set your OCSP Responder URL accordingly.
 
 ## SSL Client for External Resources
 
@@ -108,7 +138,7 @@ When creating any connection to an external resource, you can choose to enable T
 
 In addition, it is also can be configured in the `emqx.conf`:
 
-```
+```hcl
 authentication {
   url = "https://127.0.0.1:8080"
   backend = "http"
