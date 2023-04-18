@@ -155,7 +155,9 @@ Settings in environment variables that begin with 'EMQX_' have the highest prior
 
 Changes made through the EMQX dashboard UI, management HTTP API, or CLI will be written into the `data/configs/cluster.hocon` file at runtime and will take effect immediately.
 
-However, if the same configuration items are set differently in the `etc/emqx.conf` file, the runtime updates will be overridden by the settings in `etc/emqx.conf` during a restart.
+However, if the same configuration items are set differently in the `etc/emqx.conf` file, the runtime updates will be overridden by the settings in `etc/emqx.conf` after the node restarts.
+
+To avoid confusion, it is highly recommend NOT to have the same config keys in both `cluster.conf` and `emqx.conf`.
 
 ### Override
 
