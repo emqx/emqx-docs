@@ -36,7 +36,7 @@
 - Improve the alarm logs when importing data from old versions (4.2 or earlier).
 
   Before this change, if data was imported from versions 4.2 or earlier to version 4.4, the built-in authentication part of the data would be discarded due to the lack of authentication type, and the log description of the failure reason was not clear enough.
-  After this change, the EMQX log will prompt the user to use the command line tool for data import and specify the authentication type:
+  After this change, the importing will fail, and the EMQX log will prompt the user to use the command line tool for data import and specify the authentication type:
 
   ```
   $ emqx_ctl data import <filename> --env '{"auth.mnesia.as":"username"}'
