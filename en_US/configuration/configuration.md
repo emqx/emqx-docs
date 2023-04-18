@@ -149,14 +149,29 @@ The value of HOCON will be overridden hierarchically, the rules are as follows:
 - In the same file, the value defined in the later section will override any previous key value.
 - A higher-level value will replace that of a lower-level.
 
-the priority of configuration is Environment Variables, `etc/emqx.conf` file and HTTP API.
-This means that for a newly started EMQX, the configuration settings in environment variables and
-`etc/emqx.conf` will always override any configurations made in HTTP API.
+The EMQX configuration is prioritized in the following order: `environment variables > emqx.conf > API(cluster.hocon)`.
+```
+                    Start
+                      |
+            Check Environment Variables
+                 /          \
+             Found         Not Found
+              |                  |
+           Use Env        Check emqx.conf
+                           /             \
+                        Found           Not Found
+                          |                  |
+                    Use emqx.conf    Check cluster.hocon
+                                          /          \
+                            Use cluster.hocon      Use Default Values
 
-If the configuration is modified through the HTTP API while EMQX is running, it will take effect immediately in the cluster. However, if EMQX is restarted, these modified configurations may be overwritten by the Environment Variables or etc/emqx.conf
+```
 
-Configurations modified via the HTTP API will take effect during EMQX running. However, after
-restarting EMQX, they may be overwritten by higher priority Environment Variables or `etc/emqx.conf`, resulting in lost these configurations. Therefore, the best approach is to manually persist all configurations modified via HTTP API to the `etc/emqx.conf` file to prevent them lost.
+Settings in environment variables that begin with 'EMQX_' have the highest priority and will override any settings in the `etc/emqx.conf` file.
+
+Changes made through the EMQX dashboard UI, management HTTP API, or CLI will be written into the `data/configs/cluster.hocon` file at runtime and will take effect immediately.
+
+However, if the same configuration items are set differently in the `etc/emqx.conf` file, the runtime updates will be overridden by the settings in `etc/emqx.conf` during a restart.
 
 ### Override
 
