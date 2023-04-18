@@ -160,7 +160,7 @@ To avoid confusion, it is highly recommend NOT to have the same config keys in b
 ::: tip
 1. If you're using an older version of EMQX, specifically version e5.0.2/v5.0.22 or earlier(i.e. the `cluster-override.conf` file still exists in EMQX's data directory),
    then the order of priority for configuring your settings is as follows: `emqx.conf < ENV < HTTP API(cluster-override.conf)`.
-2. If you're upgrading from e5.0.3/v5.0.22 or earlier to the latest version of EMQX, 
+2. If you're upgrading from e5.0.2/v5.0.22 or earlier to the latest version of EMQX, 
    the configuration priority will remain consistent with the previous version in order to maintain compatibility.  
 3. The `cluster-override.conf` mechanism is scheduled to be removed in version 5.1.   
 :::   
