@@ -23,7 +23,7 @@ EMQX uses the default settings if a config item is not found in the config files
 
 ### Configuration Rewrite File
 
-`emqx.conf` defines settings at a global level, for cases where you need to customize the settings for a cluster or a node, EMQX also provides a configuration rewrite file implicitly under `emqx.conf`:
+`emqx.conf` defines settings at a global level, for cases where you need to customize the settings for a cluster or a node, EMQX also provides a configuration rewrite file which extends but does not override `emqx.conf`:
 
 **`cluster.hocon`**
 
