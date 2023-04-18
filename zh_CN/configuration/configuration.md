@@ -19,7 +19,7 @@ EMQX 主配置文件为 `emqx.conf`，根据安装方式其所在位置有所不
 
 主配置文件隐式地嵌套了一个重写配置文件：
 
-**`cluster-override.conf`**
+**`cluster.hocon`**
 
 包含集群共有的配置项，通过 REST API、CLI 与 Dashboard 提交的配置将写入其中，并覆盖 `emqx.conf` 中的同名配置项。
 
@@ -38,12 +38,12 @@ EMQX 主配置文件为 `emqx.conf`，根据安装方式其所在位置有所不
 但是在集群环境下，所有节点的 data_dir 必须保持一致。
 :::
 
-通常情况下大多数配置项都在主配置文件中定义，需要通过 REST API、CLI 与 Dashboard 配置的内容（热配置）将写入到 `cluster-override.conf` 中，一经配置将覆盖主配置文件的内容。覆盖规则参考 [配置覆盖规则](#配置覆盖规则)。
+通常情况下大多数配置项都在主配置文件中定义，需要通过 REST API、CLI 与 Dashboard 配置的内容（热配置）将写入到 `cluster.hocon` 中，一经配置将覆盖主配置文件的内容。覆盖规则参考 [配置覆盖规则(#配置覆盖规则)。
 
 :::tip
 有些配置项是不能被覆盖的（例如 `node.name`）。
 <!-- TODO 确认规则 配置项如果有 `mapping: path.to.boot.config.key` 这个属性，
-则不能被添加到重载文件 `*-override.conf` 中。 -->
+则不能被添加到重载文件 `cluster.hocon` 中。 -->
 :::
 
 ## HOCON 配置格式

@@ -23,9 +23,9 @@ EMQX uses the default settings if a config item is not found in the config files
 
 ### Configuration Rewrite File
 
-`emqx.conf` defines settings at a global level, for cases where you need to customize the settings for a cluster or a node, EMQX also provides a configuration rewrite file implicitly overlaying `emqx.conf`:
+`emqx.conf` defines settings at a global level, for cases where you need to customize the settings for a cluster or a node, EMQX also provides a configuration rewrite file implicitly under `emqx.conf`:
 
-**`cluster-override.conf`**
+**`cluster.hocon`**
 
 Contains configuration items for the entire cluster, configuration changes made from Dashboard, REST API, and CLI will be persisted to this file.
 
@@ -43,9 +43,9 @@ The configuration rewrite files are located in the `$data/configs/` directory, a
 It is possible to change data directory from config `node.data_dir` or environment variable `EMQX_NODE__DATA_DIR`, however, when running a cluster, all nodes should have the same path.
 :::
 
-By default, most global settings are defined in the `emqx.conf` file, if you perform certain operations on the cluster level with Dashboard, REST API or CLI, the changes will be synced with the `cluster-override.conf` as configuration files and overide the corresponding settings in `emqx.conf`. And this whole process is called hot reload.
+By default, most global settings are defined in the `emqx.conf` file, if you perform certain operations on the cluster level with Dashboard, REST API or CLI, the changes will be synced with the `cluster.hocon` as configuration files and overide the corresponding settings in `emqx.conf`. And this whole process is called hot reload.
 
-For override rules, see [Configure override rules](#Configure override rules).
+For override rules, see [Configure override rules](#Configure+override+rules).
 
 ::: tip
 
@@ -148,6 +148,15 @@ The value of HOCON will be overridden hierarchically, the rules are as follows:
 
 - In the same file, the value defined in the later section will override any previous key value.
 - A higher-level value will replace that of a lower-level.
+
+the priority of configuration is Environment Variables, `etc/emqx.conf` file and HTTP API.
+This means that for a newly started EMQX, the configuration settings in environment variables and
+`etc/emqx.conf` will always override any configurations made in HTTP API.
+
+If the configuration is modified through the HTTP API while EMQX is running, it will take effect immediately in the cluster. However, if EMQX is restarted, these modified configurations may be overwritten by the Environment Variables or etc/emqx.conf
+
+Configurations modified via the HTTP API will take effect during EMQX running. However, after
+restarting EMQX, they may be overwritten by higher priority Environment Variables or `etc/emqx.conf`, resulting in lost these configurations. Therefore, the best approach is to manually persist all configurations modified via HTTP API to the `etc/emqx.conf` file to prevent them lost.
 
 ### Override
 
