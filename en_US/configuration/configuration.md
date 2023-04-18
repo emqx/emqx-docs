@@ -149,23 +149,7 @@ The value of HOCON will be overridden hierarchically, the rules are as follows:
 - In the same file, the value defined in the later section will override any previous key value.
 - A higher-level value will replace that of a lower-level.
 
-The EMQX configuration is prioritized in the following order: `environment variables > emqx.conf > API(cluster.hocon)`.
-```
-                    Start
-                      |
-            Check Environment Variables
-                 /          \
-             Found         Not Found
-              |                  |
-           Use Env        Check emqx.conf
-                           /             \
-                        Found           Not Found
-                          |                  |
-                    Use emqx.conf    Check cluster.hocon
-                                          /          \
-                            Use cluster.hocon      Use Default Values
-
-```
+The EMQX configuration is prioritized (overlayed) in the following order: `cluster.hocon < emqx.conf < environment variables`.
 
 Settings in environment variables that begin with 'EMQX_' have the highest priority and will override any settings in the `etc/emqx.conf` file.
 
