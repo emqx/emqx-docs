@@ -43,7 +43,7 @@ The configuration rewrite files are located in the `$data/configs/` directory, a
 It is possible to change data directory from config `node.data_dir` or environment variable `EMQX_NODE__DATA_DIR`, however, when running a cluster, all nodes should have the same path.
 :::
 
-By default, most global settings are defined in the `emqx.conf` file, if you perform certain operations on the cluster level with Dashboard, REST API or CLI, the changes will be synced with the `cluster.hocon` as configuration files and overide the corresponding settings in `emqx.conf`. And this whole process is called hot reload.
+By default, most global settings are defined in the `emqx.conf` file, if you perform certain operations on the cluster level from Dashboard, REST API or CLI, the changes will be stored in `cluster.hocon`. And this whole process is called hot reload.
 
 For override rules, see [Configure override rules](#Configure+override+rules).
 
