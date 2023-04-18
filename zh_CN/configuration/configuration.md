@@ -150,6 +150,13 @@ EMQX 配置按以下顺序进行优先级排序：环境变量 > emqx.conf > API
 但是，如果相同的配置项在 `etc/emqx.conf` 文件中设置不同值，则在重新启动后，最终生效的是 `etc/emqx.conf` 中的配置。
 为避免混淆，强烈建议不要在 `cluster.hocon` 和 `emqx.conf` 中具有相同的配置键。
 
+::: tip
+1. 如果您正在使用较旧的 EMQX 版本，特别是 e5.0.3/v5.0.22 或更早的版本（即 cluster-override.conf 文件仍存在于 EMQX 的数据目录中），
+2. 那么配置设置的优先顺序如下：`emqx.conf < ENV < HTTP API(cluster-override.conf)`。
+3. 如果您正在从 e5.0.3/v5.0.22 或更早的版本升级到最新版本的 EMQX，配置的优先级将与以前的版本保持一致，以保持兼容性。
+4. `cluster-override.conf` 机制计划在 5.1 版本中删除。
+:::
+
 ### 合并覆盖
 
 在如下配置中，最后一行的 `debug` 值会覆盖原先 `level` 字段的 `error` 值，但是 `enable` 字段保持不变：
