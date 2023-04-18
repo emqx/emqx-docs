@@ -38,7 +38,7 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的密
 
 示例配置：
 
-```hocon
+```hcl
 {
    backend = "built_in_database"
    mechanism = "password_based"

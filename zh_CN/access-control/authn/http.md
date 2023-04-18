@@ -78,7 +78,7 @@ Body:
 
 ::: tab POST 请求示例
 
-```hocon
+```hcl
 {
     mechanism = password_based
     backend = http
@@ -101,7 +101,7 @@ Body:
 
 ::: tab GET 请求示例
 
-```hocon
+```hcl
 {
     mechanism = password_based
     backend = http

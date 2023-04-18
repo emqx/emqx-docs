@@ -79,7 +79,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 ::: tab 单节点
 
-```hocon
+```hcl
 {
   mechanism = password_based
   backend = redis
@@ -104,7 +104,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 ::: tab Redis Sentinel 部署模式
 
-```hocon
+```hcl
 {
   mechanism = password_based
   backend = redis
@@ -130,7 +130,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 ::: tab Redis Cluster 部署模式
 
-```hocon
+```hcl
 {
   mechanism = password_based
   backend = redis

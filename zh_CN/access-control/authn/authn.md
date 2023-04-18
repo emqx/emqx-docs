@@ -128,7 +128,7 @@ EMQX 允许在认证阶段为客户端设置**超级用户**角色以及预设**
 
 以下为 EMQX 目前支持的散列算法：
 
-```hocon
+```hcl
 # simple algorithms
 password_hash_algorithm {
   name = sha256             # plain, md5, sha, sha512
@@ -193,10 +193,10 @@ Dashboard 底层调用了 HTTP API，提供了相对更加易用的可视化操�
 
 EMQX 支持为 MQTT 客户端配置多个认证器以组成认证链 <!--连接到对应概念-->，如以下代码示例中的 `authentication` 字段所示，认证器在数组中的顺序便是在认证链中执行的顺序：
 
-```hocon
+```hcl
 # emqx.conf
 
-# Specific global authentication chain for all MQTT listeners 
+# Specific global authentication chain for all MQTT listeners
 authentication = [
   ...
 ]

@@ -56,7 +56,7 @@ HOCON（Human-Optimized Config Object Notation）是一种可扩展的配置语�
 
 HOCON 值可以被记为类似 JSON 的对象，例如：
 
-```hocon
+```hcl
 node {
   name = "emqx@127.0.0.1"
   cookie = "mysecret"

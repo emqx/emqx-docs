@@ -54,7 +54,7 @@ PostgreSQL authorizer 由 `type=postgresql` 标识。
 
 配置示例：
 
-```hocon
+```hcl
 {
   type = postgresql
   enable = true
