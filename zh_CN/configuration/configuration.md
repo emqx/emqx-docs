@@ -141,6 +141,14 @@ HOCON 的值是分层覆盖的，最简单的规则如下：
 
 - 在同一个文件中，后（在文件底部）定义的值，覆盖前（在文件顶部）到值。
 - 当按层级覆盖时，高层级的值覆盖低层级的值。
+EMQX 配置按以下顺序进行优先级排序：环境变量 > emqx.conf > API(cluster.hocon)。
+
+以“EMQX_”开头的环境变量设置具有最高优先级，并将覆盖 etc/emqx.conf 文件中的任何设置。
+
+通过 Dashboard、HTTP API 或 CLI 进行的更改将在运行时写入 `data/configs/cluster.hocon` 文件并立即生效。
+
+但是，如果相同的配置项在 `etc/emqx.conf` 文件中设置不同值，则在重新启动后，最终生效的是 `etc/emqx.conf` 中的配置。
+为避免混淆，强烈建议不要在 `cluster.hocon` 和 `emqx.conf` 中具有相同的配置键。
 
 ### 合并覆盖
 
