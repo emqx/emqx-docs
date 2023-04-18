@@ -23,9 +23,9 @@ EMQX uses the default settings if a config item is not found in the config files
 
 ### Configuration Rewrite File
 
-`emqx.conf` defines settings at a global level, for cases where you need to customize the settings for a cluster or a node, EMQX also provides a configuration rewrite file implicitly overlaying `emqx.conf`:
+`emqx.conf` defines settings at a global level, for cases where you need to customize the settings for a cluster or a node, EMQX also provides a configuration rewrite file which extends but does not override `emqx.conf`:
 
-**`cluster-override.conf`**
+**`cluster.hocon`**
 
 Contains configuration items for the entire cluster, configuration changes made from Dashboard, REST API, and CLI will be persisted to this file.
 
@@ -43,9 +43,9 @@ The configuration rewrite files are located in the `$data/configs/` directory, a
 It is possible to change data directory from config `node.data_dir` or environment variable `EMQX_NODE__DATA_DIR`, however, when running a cluster, all nodes should have the same path.
 :::
 
-By default, most global settings are defined in the `emqx.conf` file, if you perform certain operations on the cluster level with Dashboard, REST API or CLI, the changes will be synced with the `cluster-override.conf` as configuration files and overide the corresponding settings in `emqx.conf`. And this whole process is called hot reload.
+By default, most global settings are defined in the `emqx.conf` file, if you perform certain operations on the cluster level from Dashboard, REST API or CLI, the changes will be stored in `cluster.hocon`. And this whole process is called hot reload.
 
-For override rules, see [Configure override rules](#Configure override rules).
+For override rules, see [Configure override rules](#Configure+override+rules).
 
 ::: tip
 
@@ -148,6 +148,22 @@ The value of HOCON will be overridden hierarchically, the rules are as follows:
 
 - In the same file, the value defined in the later section will override any previous key value.
 - A higher-level value will replace that of a lower-level.
+
+The EMQX configuration is prioritized (overlayed) in the following order: `cluster.hocon < emqx.conf < environment variables`.
+
+Settings in environment variables that begin with 'EMQX_' have the highest priority and will override any settings in the `etc/emqx.conf` file.
+
+Changes made through EMQX Dashboard UI, HTTP API, or CLI are persisted in `data/configs/cluster.hocon` at runtime and will take effect immediately. However, if the same configuration items are set differently in the `etc/emqx.conf` file, the runtime updates will be overridden by the settings in `etc/emqx.conf` after the node restarts.
+
+To avoid confusion, it is highly recommend NOT to have the same config keys in both `cluster.hocon` and `emqx.conf`.
+
+::: tip
+1. If you're using an older version of EMQX, specifically version e5.0.2/v5.0.22 or earlier(i.e. the `cluster-override.conf` file still exists in EMQX's data directory),
+   then the order of priority for configuring your settings is as follows: `emqx.conf < ENV < HTTP API(cluster-override.conf)`.
+2. If you're upgrading from e5.0.2/v5.0.22 or earlier to the latest version of EMQX, 
+   the configuration overriding order will remain unchanged, `cluster.hocon` will not be created to keep compatibility.  
+3. The `cluster-override.conf` mechanism is scheduled to be removed in version 5.1.   
+:::   
 
 ### Override
 

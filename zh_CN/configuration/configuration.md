@@ -19,7 +19,7 @@ EMQX 主配置文件为 `emqx.conf`，根据安装方式其所在位置有所不
 
 主配置文件隐式地嵌套了一个重写配置文件：
 
-**`cluster-override.conf`**
+**`cluster.hocon`**
 
 包含集群共有的配置项，通过 REST API、CLI 与 Dashboard 提交的配置将写入其中，并覆盖 `emqx.conf` 中的同名配置项。
 
@@ -38,12 +38,12 @@ EMQX 主配置文件为 `emqx.conf`，根据安装方式其所在位置有所不
 但是在集群环境下，所有节点的 data_dir 必须保持一致。
 :::
 
-通常情况下大多数配置项都在主配置文件中定义，需要通过 REST API、CLI 与 Dashboard 配置的内容（热配置）将写入到 `cluster-override.conf` 中，一经配置将覆盖主配置文件的内容。覆盖规则参考 [配置覆盖规则](#配置覆盖规则)。
+通常情况下大多数配置项都在主配置文件中定义，需要通过 REST API、CLI 与 Dashboard 配置的内容（热配置）将写入到 `cluster.hocon` 中，一经配置将覆盖主配置文件的内容。覆盖规则参考 [配置覆盖规则(#配置覆盖规则)。
 
 :::tip
 有些配置项是不能被覆盖的（例如 `node.name`）。
 <!-- TODO 确认规则 配置项如果有 `mapping: path.to.boot.config.key` 这个属性，
-则不能被添加到重载文件 `*-override.conf` 中。 -->
+则不能被添加到重载文件 `cluster.hocon` 中。 -->
 :::
 
 ## HOCON 配置格式
@@ -141,6 +141,21 @@ HOCON 的值是分层覆盖的，最简单的规则如下：
 
 - 在同一个文件中，后（在文件底部）定义的值，覆盖前（在文件顶部）到值。
 - 当按层级覆盖时，高层级的值覆盖低层级的值。
+EMQX 配置按以下顺序进行优先级排序：环境变量 > emqx.conf > API(cluster.hocon)。
+
+以“EMQX_”开头的环境变量设置具有最高优先级，并将覆盖 etc/emqx.conf 文件中的任何设置。
+
+通过 Dashboard、HTTP API 或 CLI 进行的更改将在运行时写入 `data/configs/cluster.hocon` 文件并立即生效。
+
+但是，如果相同的配置项在 `etc/emqx.conf` 文件中设置不同值，则在重新启动后，最终生效的是 `etc/emqx.conf` 中的配置。
+为避免混淆，强烈建议不要在 `cluster.hocon` 和 `emqx.conf` 中具有相同的配置键。
+
+::: tip
+1. 如果您正在使用较旧的 EMQX 版本，特别是 e5.0.2/v5.0.22 或更早的版本（即 cluster-override.conf 文件仍存在于 EMQX 的数据目录中），
+2. 那么配置设置的优先顺序如下：`emqx.conf < ENV < HTTP API(cluster-override.conf)`。
+3. 如果您正在从 e5.0.2/v5.0.22 或更早的版本升级到最新版本的 EMQX，配置的优先级将与以前的版本保持一致，以保持兼容性。
+4. `cluster-override.conf` 机制计划在 5.1 版本中删除。
+:::
 
 ### 合并覆盖
 
