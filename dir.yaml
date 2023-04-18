@@ -121,14 +121,17 @@
 
 - title_en: Publish/Subscribe
   title_cn: 发布订阅
-  path: messaging/mqtt-publish-and-subscribe
+  path: messaging/introduction
   children:
-    # - messaging/introduction
-    - messaging/explore-mqtt
-    - mqtt/mqtt-exclusive-subscription
-    - mqtt/mqtt-delayed-publish
-    - mqtt/mqtt-auto-subscription
-    - mqtt/mqtt-topic-rewrite
+    - messaging/mqtt-concepts
+    - messaging/publish-and-subscribe
+    # - messaging/explore-mqtt
+    - messaging/mqtt-shared-subscription
+    - messaging/mqtt-retained-message
+    - messaging/mqtt-will-message
+    - messaging/mqtt-delayed-publish
+    - messaging/mqtt-auto-subscription
+    - messaging/mqtt-exclusive-subscription
     # - messaging/nanomq
     # - messaging/neuron
 
@@ -390,7 +393,8 @@
     # - extensions/lang-lua
     - extensions/exhook
 
-- title_en: MQTT Specific
+
+- title_en: MQTT Essentials
   title_cn: MQTT 协议
   path: mqtt/mqtt-specific
   children:
@@ -403,6 +407,7 @@
     - mqtt/mqtt-last-will-and-testament
     - mqtt/mqtt-shared-subscription
     - mqtt/mqtt-system-topics
+    - mqtt/mqtt-topic-rewrite
 
 - title_en: Telemetry
   title_cn: 遥测
