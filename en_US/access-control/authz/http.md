@@ -18,7 +18,7 @@ When the client initiates a subscription or publishing operation, the HTTP Autho
   - `deny`: Deny Publish or Subscribe.
   - `ignore`: Ignore this request, it will be handed over to the next authorizer.
 - If the HTTP Status Code is `204`, it means that this Publish or Subscribe request is allowed.
-- HTTP Status Codes other than `200` and `204`, mean "not match", for example, this authorizer is not applied.
+- HTTP Status Codes other than `200` and `204`, mean "ignore", for example, this HTTP service not available.
 
 <!--- NOTE: the code supports `application/x-www-form-urlencoded` too, but it is not very easy to extend in the future, hence hidden from doc -->
 
