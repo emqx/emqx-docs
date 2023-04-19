@@ -1,6 +1,6 @@
 # Create Rules
 
-This guide introduces how to configure a rule using the EMQX Dashboard. Log in to the EMQX Dashboard and click **Data Integration** -> **Rules** in the left navigation tree. Then click the **Create** button, which directs you to the **Rules** page. Here, you can define the data source for your rule and determine the subsequent actions for the filtered messages, such as republishing, printing the result to the Console, or forwarding with data bridges.
+This guide introduces how to create a rule using the EMQX Dashboard. Log in to the EMQX Dashboard and click **Data Integration** -> **Rules** in the left navigation tree. Then click the **Create** button, which directs you to the **Rules** page. Here, you can define the data source for your rule and determine the subsequent actions for the filtered messages, such as republishing, printing the result to the Console, or forwarding with data bridges.
 
 The following steps demonstrate how to create a rule that listens to messages with the topic `t/#` and forwards the received messages to the topic `a/1`.
 
@@ -10,7 +10,10 @@ On the **Rules** page, input a name for your rule and add a note to facilitate f
 In the **SQL Editor**, you can customize the statements to add a data source that suits your business needs. For this tutorial, keep the default setting, which selects and returns all messages under topics that follow the `"t/#"` pattern (e.g., `t/a`, `t/a/b`, `t/a/b/c`, etc.).
 
 ::: tip
-This tutorial assumes the payload is structured data (such as JSON, avro, and protobuf), if the payload is formatted in some other way, you can convert the data type, for example, with the [jq function](./rule-sql-jq.md). 
+This tutorial assumes the payload is JSON.
+
+<!--If the payload is formatted in some other way, you can convert the data type, for example, with the Schema Registry TODO. 
+-->
 
 EMQX has embedded rich SQL statement samples to help you get started, you can click the **SQL Example** button under the **SQL Editor** to explore. For more details about the SQL syntax and usages, see [SQL Syntax](./rule-sql-syntax.md).
 
