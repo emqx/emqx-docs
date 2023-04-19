@@ -1,4 +1,4 @@
-# Ingest Data into RocketMQ
+# Bridge Data into RocketMQ
 
 Set up RocketMQ, taking MacOS X for instance:
 
