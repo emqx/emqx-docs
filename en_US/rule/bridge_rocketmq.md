@@ -1,76 +1,67 @@
-# Ingest Data into RocketMQ
+# Bridge Data into RocketMQ
 
-搭建 RocketMQ 环境，以 MacOS X
-​       为例:
+Set up RocketMQ, taking MacOS X for instance:
 
 ```bash
 $ wget https://mirrors.bfsu.edu.cn/apache/rocketmq/4.8.0/rocketmq-all-4.8.0-bin-release.zip
 $ unzip rocketmq-all-4.8.0-bin-release.zip
 $ cd rocketmq-all-4.8.0-bin-release/
 
-# 在conf/broker.conf添加了2个配置
+# Add 2 configuration items in conf/broker.conf
 brokerIP1 = 127.0.0.1
 autoCreateTopicEnable = true
 
-# 启动 RocketMQ NameServer
+# Start RocketMQ NameServer
 $ ./bin/mqnamesrv
 
-# 启动 RocketMQ Broker
+# Start RocketMQ Broker
 $ ./bin/mqbroker -n localhost:9876 -c conf/broker.conf
 ```
 
-创建规则:
+Create a rule:
 
-打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), and select **Rule Engine** -> **Rule** on the left navigation menu. Click **Create**.
 
-填写规则 SQL:
+Type the following SQL:
 
 ```sql
 SELECT * FROM "t/#"
 ```
 
-![image](./assets/rule-engine/rule_sql.png)
+<img src="./assets/rule-engine/rocketmq_rule_sql.png" alt="image" style="zoom:50%;" />
 
-关联动作:
+Add action:
 
-在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “桥接数据到 RocketMQ”。
+In the **Action** pane, click **Add action**. Select **Data bridge to RocketMQ** from the drop-down list.
 
-![image](./assets/rule-engine/rocket-action-0@2x.png)
+<img src="./assets/rule-engine/rocketmq_action_type.png" alt="rocketmq_action_type" style="zoom:50%;" />
 
-填写动作参数:
+You then need to specify the resource and topic that the rule applies :
 
-“保存数据到 RocketMQ 动作需要两个参数：
+1. Use of resources. Click **Create** right to the **Use of Resources** text box to create a RocketMQ resource.
 
-1). RocketMQ 的消息主题
+   Fill in the information according to the configurations in RocketMQ ACL.
+   Consult the service provider for the ACL information. For local or private deployment, you can check the ACL information in the configuration file. Change the prefix of the configuration file path based on the way of your deployment. 
 
-2). 关联资源。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 RocketMQ 资源:
+   ```bash
+   ${rocket_path}/conf/plain_acl.yml
+   ```
 
-![image](./assets/rule-engine/rocket-resource-0@2x.png)
+   Fill in the resource configuration:
 
-按照 RocketMQ ACL 的配置填写。
-ACL 信息请咨询服务提供商，本地或私有部署，可以在配置文件中查看，配置文件路径需要按照部署方式的不同改变前缀。
+   Fill in the actual RocketMQ server address. Use `,` to separate multiple addresses. Keep other values as default. Click **Test** to make sure the connection is successful.
 
-```bash
-${rocket_path}/conf/plain_acl.yml
-```
+   Then, click **Confirm**.
 
-填写资源配置:
+<img src="./assets/rule-engine/rocketmq_create_resource.png" alt="rocketmq_create_resource" style="zoom:50%;" />
 
-   填写真实的 RocketMQ 服务器地址，多个地址用,分隔，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
+2. RocketMQ topic. Type `TopicTest` in **RocketMQ Topic** text box. Click **Confirm**.
 
-最后点击 “新建” 按钮。
+   An action is added in the **Action** pane. Click **Create**.
 
-![image](./assets/rule-engine/rocket-resource-2@2x.png)
+<img src="./assets/rule-engine/rocketmq_action_added.png" alt="rocketmq_action_added" style="zoom:50%;" />
 
-返回响应动作界面，点击 “确认”。
-
-![image](./assets/rule-engine/rocket-action-1@2x.png)
-
-返回规则创建界面，点击 “新建”。
-
-![image](./assets/rule-engine/rocket-rulesql-1@2x.png)
-
-规则已经创建完成，现在发一条数据:
+A rule for ingesting data into RocketMQ is created. Now you can use the statement below to send a message:
 
 ```bash
 Topic: "t/1"
@@ -80,13 +71,14 @@ QoS: 0
 Payload: "hello"
 ```
 
-然后通过 RocketMQ 命令去查看消息是否生产成功:
+Use the RocketMQ command line to check if the message is sent successfully:
+
 ```bash
 $ ./bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer TopicTest
 ```
 
 ![image](./assets/rule-engine/rocket-consumer.png)
 
-在规则列表里，可以看到刚才创建的规则的命中次数已经增加了 1:
+In the rule list, click the icon in **Monitor** column. In **Metrics**, you can see the number for **matched** has increased by 1:
 
-![image](./assets/rule-engine/rocket-rulelist-0@2x.png)
+<img src="./assets/rule-engine/rocketmq_rule_crreated.png" alt="rocketmq_rule_crreated" style="zoom:50%;" />
