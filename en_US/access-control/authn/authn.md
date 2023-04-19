@@ -82,7 +82,7 @@ If no credentials are found in the current authenticator, it will:
 
 ::: tip 
 
-Please note that malfunctioning authentication is also treated as "Not Found".
+The current authenticator will also be skipped when the authenticator is in a disabled state or there are errors in the process of authentication, for example, the database is not available.
 
 :::
 
