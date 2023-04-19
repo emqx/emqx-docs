@@ -20,7 +20,7 @@ SCRAM 认证仅支持使用 MQTT v5.0 的连接。
 
 配置示例如下：
 
-```hocon
+```hcl
 {
     mechanism = scram
     backend = built_in_database
