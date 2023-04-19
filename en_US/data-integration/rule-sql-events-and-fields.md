@@ -361,7 +361,7 @@ Below are detailed explanations of each field.
 
 This event topic can be used to trigger a rule when a client is connected successfully.
 
-For example, to extract data from the `"$events/client_connected"` event topic that includes the following data fields: client ID and username, keepalive interval, and wheter the connected MQTT client is acting as a bridge, you can use the statement below: 
+For example, to extract data from the `"$events/client_connected"` event topic that includes the following data fields: client ID and username, keepalive interval, and whether the connected MQTT client is acting as a bridge, you can use the statement below: 
 
 Example:
 ```sql
@@ -407,7 +407,7 @@ Refer to the table below for fields that can be selected from the received MQTT 
 
 This event topic can be used to trigger a rule when a client is disconnected.
 
-For example, you can use the statement below to extract data from the `"$events/client_disconnected"` event topic that includes the following data fields: client ID, username, disconnect reason, disconnect time and EMQX node where the event is triggered.
+For example, you can use the statement below to extract data from the `"$events/client_disconnected"` event topic that includes the following data fields: client ID, username, disconnect reason, disconnect time, and EMQX node where the event is triggered.
 
 Example:
 ```sql
