@@ -74,7 +74,7 @@ Taking the password-based authentication as an example, EMQX tries to retrieve t
 
 1. If authentication credentials exist, and:
    - the authentication information matches(e.g. password is correct, JWT is valid), the client will be allowed to connect.
-   - the authentication information does not match, the client will not be allowed to connect.
+   - the authentication information does not match, and the client will be denied to connect.
 2. When multiple authenticators are configured, EMQX will look for credentials in order. Once the match is successful it will allow the client to connect.
 If no credentials are found in the current authenticator, it will:
    - continue to retrieve the information from other authenticators.
