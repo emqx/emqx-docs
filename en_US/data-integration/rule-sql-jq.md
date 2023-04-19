@@ -210,9 +210,9 @@ FROM "car/measurements"
 
 ## References
 
-If you are new to JQ function, the following materials are recommended: 
+If you are new to the JQ function, the following materials are recommended: 
 
 -  [JQ documentation](https://stedolan.github.io/jq/manual/)
-- [Online JQ programing playground](https://jqplay.org/)
+- [Online JQ programming playground](https://jqplay.org/)
 - [EMQX's JQ introduction video](https://www.youtube.com/watch?v=_GwF8zvhNcQ)
 
