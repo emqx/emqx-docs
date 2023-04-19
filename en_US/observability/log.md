@@ -1,10 +1,12 @@
-# Log
+# Logs
 
 Logs provide a reliable source of information for troubleshooting and system performance optimization. You can find the record about the access, operating or network issues from EMQX logs. 
 
+EMQX supports both console logs and file logs. They are two different ways of outputting log data. You can choose the output method as needed or keep both. Console log refers to outputting log data to the console or command line interface. It is typically used during development and debugging, as it allows developers to quickly view log data in real-time as EMQX runs. File log refers to outputting log data to a file. This is typically used in production environments, where it is important to persist log data over time for analysis and troubleshooting.
+
 To minimize the impact of logs on system operation, for example, when the log data is too much or the log writing is too slow, EMQX activates the overload protection mechanism by default to better serve our users.
 
-## Log Level
+## Log Levels
 
 EMQX log has 8 levels ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt)), with warning as the default level, from low to high these 8 levels are:
 
@@ -12,97 +14,113 @@ EMQX log has 8 levels ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt)), with w
 debug < info < notice < warning < error < critical < alert < emergency
 ```
 
-You can change the log configuration with either of the following methods:
+<!--Add information for each log level-->
 
-1. **[Recommended]** Configure with EMQX Dashboard, click **Configuration** -> **Log** on the left navigation tree to configure. Save the changes and they will take effect immediately without needing to restart the node.
-1. Modify the configuration items under `log` in `emqx.conf`, which will take effect after the node restarts.
+## Configure Logging
 
-EMQX supports outputting logs to the console or log file. These are 2 independent features, you can choose the output method as needed or keep both.
+You can configure EMQX logging with Dashboard or configuration files. For example, if you want to export the logs of warning levels as both a file and output with a console, you modify the configuration items under `log` in `emqx.conf` as shown below. The configuration takes effect after the node restarts. For more information on configuring logging with configuration files, see [Logs](../configuration/logs.md). 
 
-## Output Logs to the Console
-
-After the EMQX is started with command line `./bin/emqx console` or `/bin/emqx/foreground`, EMQX will output the logs (`warning` level) to the console and disable the log file output option. You can use the console logs for development debugging. Its configuration path is `log.console_handler`, and all configuration items are described as follows:
-
-| Configuration item  | Description                                                  |
-| ------------------- | ------------------------------------------------------------ |
-| log.console_handler | Console log handler                                          |
-| ⌞_ enable           | Whether to enable this log handler.                          |
-| ⌞_ level            | Log level, default:`warning`                                 |
-| ⌞_ time_offset      | Time offset to be used when formatting the timestamp：<br/><br />Options: <br />    - system: the time offset used by the local system<br/>    - utc: the UTC time offset<br/>     - +-[hh]:[mm]: user specified time offset, such as "-02:00" or "+00:00" |
-| ⌞_ chars_limit      | Maximum length of a single log message. If message length exceeds this value, the log message will be truncated; Default: 100 |
-| ⌞_ formatter        | Log format; `text` for free text, and `json` for structured logging. |
-| ⌞_ single_line      | Print logs in a single line if set to `true`. Otherwise, log messages may span multiple lines. |
-| ⌞_ sync_mode_qlen   | Threshold for overload protection; Default: 100<br />ThrIf the number of buffered log events is lower than this value, all log events are handled asynchronously. This means that after the client process calls the Logger API to send a log function, it need not wait for a response from the handler but can continue with other operations. Therefore the working procedure will not be affected. <br/> <br/>If the message queue grows larger than this value, the handler starts handling log events synchronously instead, meaning that after the client process sends the event, it must wait for a response. When the handler reduces the message queue to a level below the `sync_mode_qlen` threshold, it will switch back to the asynchronous mode. |
-| ⌞_ drop_mode_qlen   | When the number of buffered log events is larger than this value, the new log events are dropped. When drop mode is activated or deactivated, a message is printed in the logs. |
-| ⌞_ flush_qlen       | If the number of buffered log events grows larger than this threshold, a flush (delete) operation occurs. The handler discards the buffered log messages without logging. |
-| ⌞_ overload_kill    | Overload kill feature                                        |
-| ⌞_ _ enable         | Whether to enable log handler overload kill feature.         |
-| ⌞_ _ mem_size       | Maximum memory size that the log handler process can use.    |
-| ⌞_ _ qlen           | Maximum allowed queue length.                                |
-| ⌞_ _ restart_after  | If the handler is terminated, it restarts automatically after a delay specified in milliseconds. The value `infinity` prevents restarts. |
-| ⌞_  burst_limit     | Log burst control feature                                    |
-| ⌞_ _ enable         | Whether to enable log burst control feature.                 |
-| ⌞_ _ max_count      | Maximum number of log events to handle within a `window_time` interval. After the limit is reached, successive events are dropped until the end of the `window_time`. |
-| ⌞_ _ window_time    | Window time                                                  |
-| ⌞_ max_depth        | Maximum depth for Erlang term log formatting and Erlang process message queue inspection. |
-
-Code example:
-
-```
-log.console_handler {
-    enable = false
+```bash
+log {
+  file_handlers.default {
     level = warning
-    time_offset = system
-    chars_limit = unlimited
+    file = "log/emqx.log"
+    count = 10
+    max_size = 50MB
     formatter = text
-    single_line = true
-    sync_mode_qlen = 100
-    drop_mode_qlen = 3000
-    flush_qlen = 8000
-    overload_kill {
-      enable = true
-      mem_size = 30MB
-      qlen = 20000
-      restart_after = 5s
-     }
-    burst_limit {
-      enable = true
-      max_count = 10000
-      window_time  =  1s
-     }   
-    max_depth  =  100
-   }
+  }
+  console_handler {
+    level = warning
+    formatter = text
+  }
+}
 ```
 
-## File Log Handler
+This section mainly describes how to configure logging with EMQX Dashboard. Changes take effect immediately without restarting the node.
 
-The default log file directory of EMQX is `./log` (for zip package installation) or `/var/log/emqx` (for RPM or DEB package installation). The configuration of the file  log handler is mostly the same as that of the console handler, except for the additional file write control configuration, which is listed below.
+Go to EMQX Dashboard. Click **Management** -> **Log** on the left navigation menu. Select the corresponding tab for configurations on console log or file log.
 
-| Configuration item  | Type | Description                                                  |
-| ------------------- | ---- | ------------------------------------------------------------ |
-| log.console_handler | File log output handler                                      |
-| ⌞_ enable           | Whether to enable this file logging handler                  |
-| ⌞_ level            | Log level, default:`warning`                                 |
-| ⌞_ file             | File path                                                    |
-| ⌞_ rotation         | Log rotation                                                 |
-| ⌞_ _ enable         | Whether to enable log rotation feature                       |
-| ⌞_ _ count          | Maximum number of log files to rotate                        |
-| ⌞_ _ max_size       | This parameter controls log file rotation. `infinity` means the log file will grow indefinitely, otherwise the log file will be rotated when it reaches `max_size` (in bytes); used together with `rotation.count` |
+### Configure Console Log
 
-Code example:
+On the **Log** page, select the **Console Log** tab. 
 
-```
- log.file_handlers.default {  
-      enable = true
-      level = warning
-      file = "log/emqx.log"     
-      rotation {            
-        enable = true
-        count = 10
-        }
-      max_size = 50MB 
- }
-```
+<img src="./assets/config-console-log-1-ee.png" alt="config-console-log-1-ee" style="zoom: 40%;" /> 
+
+Configure the following fields for general settings of the console log handler:
+
+- **Enable Log Handler**: Click the toggle switch to enable the console log handler. 
+
+- **Log Level**: Select the log level to use from the drop-down list. Optional values are: `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency`. Default value is: `warning`.
+
+- **Time Offset**: Define the format of the timestamp in the log. `system` is typed by default.
+
+- **Single Log Max Length**: Disabled by default, which means the maximum length of a single log message is unlimited. If you enable the toggle switch, you can specify the maximum length. When the length exceeds the limit, the log message will be truncated.
+
+- **Log Formatter**: Select the log format from the drop-down list. Optional values are: `text` and `json`. Default value is `text`. 
+
+  Note: If you select `json`, it is recommended to disable the toggle switch for **Single Log Max Length**, otherwise you will get incomplete json data.
+
+- **Single Line Mode**: Enabled by default. If you disable the toggle switch, log messages wrap around when being printed.
+
+- **Queue Length before Entering Sync Mode**: Set the number limit of buffered log events. If the message queue grows larger than the set value, the handler starts handling log events synchronously, which means that the client process sending the event must wait for a response. It is set to `100` by default. 
+
+- **Queue Length before Entering Drop Mode**: Set the number limit of buffered log events. If the message queue grows larger than the set value, the handler starts to drop new log events. It is set to `3000` by default.
+
+- **Flush Threshold**: Set the number limit of buffered log events. If the number of events exceeds the set value, the handler starts to discard the buffered log messages. It is set to `8000` by default.
+
+Scroll down the page, and continue to configure the options for log file overload kill feature and log burst control feature.
+
+<img src="./assets/config-console-log-2-ee.png" alt="config-console-log-2-ee" style="zoom:40%;" />
+
+- **Log Handler Overload Kill**: Enabled by default, which means the log handler process will be terminated when it is overload.
+- **Log Handler Max Memory Size**: Type the value to specify the maximum memory size that the log handler process is allowed to use. Select the units from the drop-down list. Optional values are: `MB`, `GB` and `KB`. Default value is `30 MB`.
+- **Max Queue Length**: Type the value in the text box to specify the maximum allowed queue length. Default value is `2000`. 
+- **Handler Restart Timer**: Enabled by default, which means the handler restarts automatically after a delay in the event of termination. You can specify the time for delay in the text box. Select the units from the drop-down list. Optional values are `milliseconds`, `second`, `minute` and `hour`. Default value is `5 second`. If you disable the toggle switch, the value will be `infinity`, it will block any subsequent restarts.
+- **Enable Burst**: Enabled by default.
+- **Events Number**: Specify the maximum number of log events to handle within a `window_time` interval. Default value is `10000`.
+- **Window Time**: Specify the window time for handling the log events. Select the units from the drop-down list. Optional values are `milliseconds`, `second`, `minute` and `hour`. Default value is `1 second`.
+- **Report Type**: Select the type from the drop-down list. Optional values: `error` and `progress`. Default value is `error`.
+- **Max Depth**: Enabled by default. You can specify the maximum depth for Erlang term log formatting and Erlang process message queue inspection. You can increase or decrease the value using the number spinner. 
+
+After you finished the configurations, click **Save Changes**.
+
+### Configure File Log
+
+On the **Log** page, select the **File Log** tab. 
+
+<img src="./assets/config-file-log-1-ee.png" alt="config-file-log-1-ee" style="zoom:40%;" />
+
+Configure the following fields for the general settings of the console log handler:
+
+- **Enable Log Handler**: Click the toggle switch to enable the file log handler.
+
+- **Log File Name**: Type the name of the log file. The default name is `log/emqx.log`.
+
+- **Rotation Enable**: The rotation feature is by default enabled. The generated log files will have corresponding index numbers added to their file suffixes.
+
+- **Max Log Files Number**: Specify the maximum number of rotated log files. Default value is `10`.
+
+- **Rotation Size**: Log file will be rotated once it reaches the specified size. It is by default enabled. You can type the specific value in the text box below. Select the units from the drop-down list. Optional values are: `MB`, `GB`, `KB`. Default value is `MB`. If you disable it, the value will be `infinity`, which means the log file will grow indefinitely.
+
+- **Log Level**: Select the log level to use from the drop-down list. Optional values are: `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency`. Default value is: `warning`.
+
+- **Time Offset**: Define the format of the timestamp in the log. `system` is typed by default.
+
+- **Single Log Max Length**: Disabled by default, which means the maximum length of a single log message is unlimited. If you enable the toggle switch, you can specify the maximum length. When the length exceeds the limit, the log message will be truncated.
+
+- **Log Formatter**: Select the log format from the drop-down list. Optional values are: `text` and `json`. Default value is `text`. 
+
+  Note: If you select `json`, it is recommended to disable the toggle switch for **Single Log Max Length**, otherwise you will get incomplete json data.
+
+- **Single Line Mode**: Enabled by default. If you disable the toggle switch, log messages will be printed into multiple lines.
+
+- **Queue Length before Entering Sync Mode**: Set the number limit of buffered log events. If the message queue grows larger than the set value, the handler starts handling log events synchronously, which means that the client process sending the event must wait for a response. It is set to `100` by default. 
+
+- **Queue Length before Entering Drop Mode**: Set the number limit of buffered log events. If message queue grous larger than the set value, the handler starts to drop new log events. It is set to `3000` by default.
+
+- **Flush Threshold**: Set the number limit of buffered log events. The handler starts to discard the buffered log messages. It is set to `8000` by default.
+
+Configuration options for log file overload kill feature and log burst control feature are the same as for [**Console Log**](#Configure Console Log).
 
 When file logging is enabled (log.to = file or both), the following files will appear in the log directory:
 
@@ -110,23 +128,6 @@ When file logging is enabled (log.to = file or both), the following files will a
 - **emqx.log.siz and emqx.log.idx:** System files used to record log rotation information. **Do not change manually**. 
 - **run_erl.log:** System file used to record startup information when starting EMQX in the background with `emqx start`.
 - **erlang.log.N:** Log file prefixed with erlang.log, which is a copy file of the console log when EMQX is started in the background with `emqx start`, such as `erlang.log.1`,` erlang.log.2` ...
-
-## Output Log Files by Log Level
-
-If you want to write logs greater than or equal to a certain level to a separate file, you can configure `emqx.conf`  as :
-
-```
-log.file_handlers.my_info_log {  
-      enable = true
-      level = info
-      file = "log/info.log"     
-      rotation {        
-        enable = true
-        count = 10
-        }
-      max_size = 50MB      
- }
-```
 
 ## Log Format
 
@@ -170,3 +171,4 @@ The fields in this log message are:
 - **level:** `[debug]`
 - **flat log-content:** `line: 150, mfa: emqx_retainer_mnesia:store_retained/2, msg: message_retained, topic: $SYS/brokers/emqx@127.0.0.1/sysdescr`
 
+## 
