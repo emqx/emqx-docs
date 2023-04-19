@@ -165,6 +165,10 @@
   title_cn: 规则引擎
   path: data-integration/rules
   children:
+    - title_en: Create Rules
+      title_cn: 创建规则
+      lang: en
+      path: data-integration/rule-get-started
     - data-integration/rule-sql-syntax
     - data-integration/rule-sql-events-and-fields
     - data-integration/rule-sql-builtin-functions
