@@ -1,4 +1,4 @@
-# Rule Syntax
+# Rule SQL Syntax
 
 EMQX uses SQL-based rules for data extraction, filtering, enriching, and transformation in real-time. The EMQX rule syntax also supports embedding [JQ programs](https://stedolan.github.io/jq/) in expressions, which allows you to do complex data transformations when it is needed.
 

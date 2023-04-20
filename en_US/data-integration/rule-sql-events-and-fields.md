@@ -2,74 +2,7 @@
 
 Rules in EMQX can process data from various data sources, including **MQTT Messages**, **MQTT Events**, or **Data Bridges**.
 
-As discussed in the [Rule Engine Syntax](./rule-sql-syntax.md) section, you can use the `FROM` clause to specify the data source and the corresponding fields can be referenced in the `SELECT` and `where` clauses. This section will introduce the fields for [Data Bridges](#data-bridges), [MQTT Messages](#mqtt-message), and [MQTT Events](#mqtt-events). 
-
-## Data Bridges
-
-Rules use topics prefixed by `$bridges/` to present messages or events triggered by a data bridge. The format is:
-
- `$bridges/<type>:<name>`
-
-Where
-
--  `<type>:<name>` is the bridge Id, 
-- `<type>` is the bridge type, 
-- `<name>` is the bridge name.
-
-For example, the MQTT Bridge events can be referred to in the format of  `"$bridges/mqtt:*`. To set a rule for all messages sent by the MQTT data bridge named `my_mqtt_bridge`, you can use the statement below:
-
-**Example:**
-
-```sql
-SELECT
-  *
-FROM
-  "$bridges/mqtt:my_mqtt_bridge"
-```
-
-**Output:**
-
-```json
-{
-  "id": "0005E27C1D24E44FF440000017520000",
-  "server": "broker.emqx.io:1883",
-  "payload": "hello",
-  "topic": "t/a",
-  "qos": 1,
-  "dup": false,
-  "retain": false,
-  "pub_props": {
-    "Message-Expiry-Interval": 30,
-    "Payload-Format-Indicator": 0,
-    "User-Property": {
-      "foo": "bar"
-    },
-    "User-Property-Pairs": [
-      {
-        "key": "foo"
-      },
-      {
-        "value": "bar"
-      }
-    ]
-  },
-  "message_received_at": 1645002753259,
-}
-```
-
-For each field in the returned output:
-
-| Field                 | Explanation                                                  |
-| :-------------------- | :----------------------------------------------------------- |
-| `id`                  | MQTT message ID                                              |
-| `server`              | Server name of the remote MQTT broker, such as "broker.emqx.io:1883" |
-| `payload`             | MQTT payload                                                 |
-| `topic`               | MQTT topic                                                   |
-| `qos`                 | MQTT QoS                                                     |
-| `dup`                 | MQTT DUP flag                                                |
-| `retain`              | MQTT Retain flag                                             |
-| `pub_props`           | PUBLISH Properties (MQTT 5.0 clients only)                   |
-| `message_received_at` | Timestamp when the message is received (unit: ms)            |
+As discussed in the [Rule Engine Syntax](./rule-sql-syntax.md) section, you can use the `FROM` clause to specify the data source and the corresponding fields can be referenced in the `SELECT` and `where` clauses. This section will introduce the fields for [MQTT Messages](#mqtt-message), [MQTT Events](#mqtt-events), and [Data Bridges](#data-bridges). 
 
 ## MQTT Message
 
@@ -663,3 +596,70 @@ Refer to the table below for fields that can be extracted.
 | `unsub_props` | UNSUBSCRIBE Properties (MQTT 5.0 clients only) |
 | `timestamp`   | Event trigger time (unit: ms)                  |
 | `node`        | EMQX node where the event is triggered         |
+
+## Data Bridges
+
+Rules use topics prefixed by `$bridges/` to present messages or events triggered by a data bridge. The format is:
+
+ `$bridges/<type>:<name>`
+
+Where
+
+-  `<type>:<name>` is the bridge Id, 
+-  `<type>` is the bridge type, 
+-  `<name>` is the bridge name.
+
+For example, the MQTT Bridge events can be referred to in the format of  `"$bridges/mqtt:*`. To set a rule for all messages sent by the MQTT data bridge named `my_mqtt_bridge`, you can use the statement below:
+
+**Example:**
+
+```sql
+SELECT
+  *
+FROM
+  "$bridges/mqtt:my_mqtt_bridge"
+```
+
+**Output:**
+
+```json
+{
+  "id": "0005E27C1D24E44FF440000017520000",
+  "server": "broker.emqx.io:1883",
+  "payload": "hello",
+  "topic": "t/a",
+  "qos": 1,
+  "dup": false,
+  "retain": false,
+  "pub_props": {
+    "Message-Expiry-Interval": 30,
+    "Payload-Format-Indicator": 0,
+    "User-Property": {
+      "foo": "bar"
+    },
+    "User-Property-Pairs": [
+      {
+        "key": "foo"
+      },
+      {
+        "value": "bar"
+      }
+    ]
+  },
+  "message_received_at": 1645002753259,
+}
+```
+
+For each field in the returned output:
+
+| Field                 | Explanation                                                  |
+| :-------------------- | :----------------------------------------------------------- |
+| `id`                  | MQTT message ID                                              |
+| `server`              | Server name of the remote MQTT broker, such as "broker.emqx.io:1883" |
+| `payload`             | MQTT payload                                                 |
+| `topic`               | MQTT topic                                                   |
+| `qos`                 | MQTT QoS                                                     |
+| `dup`                 | MQTT DUP flag                                                |
+| `retain`              | MQTT Retain flag                                             |
+| `pub_props`           | PUBLISH Properties (MQTT 5.0 clients only)                   |
+| `message_received_at` | Timestamp when the message is received (unit: ms)            |
