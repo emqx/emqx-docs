@@ -210,7 +210,7 @@ Unlike the MQTT protocol, **the gateway only supports the creation of an authent
 
 :::
 
-## Reference: CoAP Client Guide in Connection Mode
+## Reference: CoAP Client Guide
 
 ### Create Connection
 
