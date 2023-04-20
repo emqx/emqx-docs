@@ -1,4 +1,4 @@
-# Ingest Data into RabbitMQ
+# Bridge Data into RabbitMQ
 
 ::: tip
 
