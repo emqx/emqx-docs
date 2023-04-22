@@ -768,6 +768,10 @@
         {
           "title": "Stomp 网关",
           "path": "modules/stomp_protocol"
+        },
+        {
+          "title": "OCPP 网关",
+          "path": "modules/ocpp_protocol"
         }
       ]
     },
@@ -1565,6 +1569,10 @@
         {
           "title": "Stomp gateway",
           "path": "modules/stomp_protocol"
+        },
+        {
+          "title": "OCPP gateway",
+          "path": "modules/ocpp_protocol"
         }
       ]
     }
