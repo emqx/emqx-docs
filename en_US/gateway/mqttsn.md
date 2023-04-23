@@ -109,9 +109,9 @@ In the **Basic Configuration** tab, you can customize your gateway ID, predefine
   - **Topic ID**: Set the topic ID, which should be an integer between 1 and 65535.
   - **Topic**: Set the topic names.<!--, multiple topics can be added here, separated with a `,`-->
 
-- **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, *MQTT-SN*.
+- **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, `mqttsn/`.
 
-  **Note**: This topic prefix is managed by the gateway. CoAP clients do not need to add this prefix explicitly when publishing and subscribing.
+  **Note**: This topic prefix is managed by the gateway. MQTT-SN clients do not need to add this prefix explicitly when publishing and subscribing.
 
 ### Add Listeners 
 
