@@ -106,7 +106,7 @@ Super user > permission data > authorization check
 
 You can view and manage authorizers in the **Access Control**->**Authorization** page in the Dashboard.
 
-### Adjust the Sequence of Authorizers
+### Manage Authorizers
 
 As mentioned in [Authorization chain](#authorization-chain), authorizers are executed according to the configured sequence. You can select **Up**, **Down**, **Move to top**, and **Move to bottom** from the **More** dropdown list to move the authorizer. You can also adjust the authorizer positions in the `authorization.sources` configuration item.
 
