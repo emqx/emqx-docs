@@ -120,7 +120,7 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 - **Name**: Set a unique identifier for the listener.
 - **Type**: Select the protocol type, for STOMP, this can be either **tcp** or **ssl**.
 - **Bind**: Set the port number on which the listener accepts incoming connections.
-- **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different listeners.
+- **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols.
 
 **Listener Settings** 
 
