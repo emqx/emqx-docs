@@ -123,7 +123,7 @@ In addition to the default settings, EMQX provides a variety of configuration op
 
 - **Publish QoS**: Set the default QoS level for publish requests, default: **coap**, optional values: **coap**, **qos0**, **qos1**, **qos2**; the values here 
 
-- **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, *MQTT-SN*.
+- **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, *CoAP*.
 
   **Note**: This topic prefix is managed by the gateway. CoAP clients do not need to add this prefix explicitly when publishing and subscribing.
 
@@ -140,7 +140,7 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 - **Name**: Set a unique identifier for the listener.
 - **Type**: Select the protocol type, for CoAP, this can be either **udp** or **dtls**.
 - **Bind**: Set the port number on which the listener accepts incoming connections.
-- **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different listeners.
+- **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols.
 
 **Listener Settings** 
 
