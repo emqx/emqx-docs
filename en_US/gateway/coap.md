@@ -24,7 +24,7 @@ Below is the feature list supported in connection mode and connectionless mode.
 
 ## Enable the CoAP Gateway
 
-In EMQX 5.0, CoAP gateways can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
+In EMQX 5.0, CoAP gateway can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
 
 On EMQX Dashboard, click **Extensions** -> **Gateways** on the left navigation menu. On the **Gateway** page, all supported gateways are listed. Locate **CoAP** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize CoAP** page.
 
@@ -108,7 +108,7 @@ In addition to the default settings, EMQX provides a variety of configuration op
     - QoS 0, no acknowledgment is required from the client, 
     - QoS 1/2, acknowledgment is required from the client. 
   - **con**: The CoAP notification should be acknowledged by the client. 
-  - **non**: The CoAP Notification need not be acknowledged by the client. 
+  - **non**: The CoAP notification need not be acknowledged by the client. 
 
 - **Heatbeat**: Only needed if **Connection Required** is set to **true**, set the minimum heartbeat interval to keep the connection alive; default: 30s. 
 
@@ -123,15 +123,15 @@ In addition to the default settings, EMQX provides a variety of configuration op
 
 - **Publish QoS**: Set the default QoS level for publish requests, default: **coap**, optional values: **coap**, **qos0**, **qos1**, **qos2**; the values here 
 
-- **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different listeners, for example, *mqttsn*.
+- **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, *MQTT-SN*.
 
-  **Note**: The prefixed string will be removed from the topic name when the message is delivered to the subscriber. 
+  **Note**: This topic prefix is managed by the gateway. CoAP clients do not need to add this prefix explicitly when publishing and subscribing.
 
 ### Add Listeners 
 
-By default, one UPD listener with the name of **default** is already configured on port `5683`, which supports up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings for **Delete** to delete the listener. Or click **Add Listener** to add a new listener.
+By default, one UDP listener with the name of **default** is already configured on port `5683`, which supports up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings for **Delete** to delete the listener. Or click **Add Listener** to add a new listener.
 
-<img src="/Users/lena/Documents/GitHub/rebalancing/emqx-docs/en_US/gateway/assets/mqttsn-listerner.png" alt="MQTTSN listener" style="zoom:50%;" />
+<img src="./assets/mqttsn-listerner.png" alt="MQTTSN listener" style="zoom:50%;" />
 
 Click **Add Listener** to open **Add Listener** page, where you can continue with the following configuration fields:
 
