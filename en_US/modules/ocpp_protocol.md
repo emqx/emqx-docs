@@ -76,9 +76,9 @@ ocpp.upstream.topic.BootNotification = ocpp/cp/${cid}/Notify/${action}
 
 The message content (Payload) is a JSON string with a fixed pattern, which includes the following fields:
 
-| Field             | Type        | Mandatory | Description |
+| Field             | Type        | Required | Description |
 | ----------------- | ----------- | -------- | ---- |
-| `MessageTypeId`   | MessageType | Y       | Define the type of Message, optional values:  `Call`, `CallResult`, or `CallError ` <!--这里我看返回的是1,2，3，需要说明下这些字段和1,2，3 的关系--> |
+| `MessageTypeId`   | MessageType | Y       | Define the type of Message, optional values: <br><br/>`2 ` for Call<br>`3` for CallRequest<br>`4` for CallError |
 | `UniqueId`        | String      | Y       | Must be the same ID  as carried in the `call` request so the receiver can match the request and result |
 | `Action`          | String      | N       | Name of OCPP message, for example, authorize |
 | `ErrorCode`       | ErrorType   | N       | Optional, but required for `CallError` messages, |
@@ -100,8 +100,6 @@ ocpp.upstream.error_topic = ocpp/cp/Error/${cid}
 ### Messaging from Third-Party Services to OCPP Gateway (Downstream)
 
 Third-party services can issue control messages for the Charge Point by utilizing the topics configured in the OCPP gateway. This **Downstream** data flow facilitates seamless interaction and improved management of charging stations through external service integration.
-
-
 
 You can define a downstream topic for receiving the control messages. The OCPP gateway auto-subscribes to this topic for each connected Charge Point. During the messaging process, the placeholders `${cid}` (Charge Point ID) will be replaced with the actual values.
 
