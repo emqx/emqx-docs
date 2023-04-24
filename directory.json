@@ -60,7 +60,7 @@
           "title": "共享订阅",
           "path": "advanced/shared-subscriptions"
         },
-	{
+    {
           "title": "排它订阅",
           "path": "advanced/exclusive-subscriptions"
         },
@@ -576,7 +576,7 @@
           "title": "Shared subscription",
           "path": "advanced/shared-subscriptions"
         },
-	{
+    {
           "title": "Exclusive subscriptions",
           "path": "advanced/exclusive-subscriptions"
         },
