@@ -4,7 +4,7 @@
 
 [OCPP (Open Charge Point Protocol)](https://www.openchargealliance.org/) is a communication protocol used between Charge Points and a Central System to enable the monitoring and control of EV (Electric Vehicle) charging sessions.
 
-Since e4.4.18, EMQX has implemented the `emqx_ocpp` plugin based on the [OCCP-J 1.6](https://www.openchargealliance.org/protocols/ocpp-16/) standard, providing the ability to connect to Charge Point devices. Its primary function is to handle formatting conversion and forwarding of upstream and downstream messages. 
+Since e4.4.18, EMQX has implemented the `emqx_ocpp` plugin based on the [OCPP-J 1.6](https://www.openchargealliance.org/protocols/ocpp-16/) standard, providing the ability to connect to Charge Point devices. Its primary function is to handle formatting conversion and forwarding of upstream and downstream messages.
 
 However, it's important to note that while the OCPP Gateway handles formatting conversion and forwarding of upstream/downstream messages, any business-related implementation such as charging initiation and billing must be handled by third-party systems. Additionally, for this version, the OCPP Protocol Gateway functions as a plugin rather than a module.
 
@@ -43,7 +43,7 @@ You can refer to [Authentication](../advanced/auth.md) for detailed configuratio
 
 ## Messaging Flow
 
-The flowchart represents the communication between a Charge Point and a third-party service via EMQX OCPP gateway. 
+The flowchart represents the communication between a Charge Point and a third-party service via EMQX OCPP gateway.
 
 ```
                                 +--------------+  upstream publish    +--------------+
@@ -54,7 +54,7 @@ The flowchart represents the communication between a Charge Point and a third-pa
 ```
 
 As shown in the figure:
-- The Charge Point communicates with EMQX OCPP Gateway using WebSockets or secure WebSockets (ws/wss) protocol. 
+- The Charge Point communicates with EMQX OCPP Gateway using WebSockets or secure WebSockets (ws/wss) protocol.
 - The OCPP gateway converts Charge Point messages into a standard MQTT Publish message. The topic and message connect are defined by the OCPP gateway.
 - Third-party systems receive messages from Charge Points by subscribing to upstream topics;
   they also push control messages to Charge Points by sending messages to downstream topics.
@@ -67,7 +67,7 @@ For instance, by setting a default upstream topic using the following configurat
 
 ```hcl
 ## plugins/emqx_ocpp.conf
-##OCPP gateway will publish all Charge Point messages to this topic.
+## OCPP gateway will publish all Charge Point messages to this topic.
 ocpp.upstream.topic = ocpp/cp/${cid}/${action}
 
 ## Supports overriding the default topic by message name
@@ -76,21 +76,29 @@ ocpp.upstream.topic.BootNotification = ocpp/cp/${cid}/Notify/${action}
 
 The message content (Payload) is a JSON string with a fixed pattern, which includes the following fields:
 
-| Field             | Type        | Required | Description |
-| ----------------- | ----------- | -------- | ---- |
-| `MessageTypeId`   | MessageType | Y       | Define the type of Message, optional values: <br><br/>`2 ` for Call<br>`3` for CallRequest<br>`4` for CallError |
-| `UniqueId`        | String      | Y       | Must be the same ID  as carried in the `call` request so the receiver can match the request and result |
-| `Action`          | String      | N       | Name of OCPP message, for example, authorize |
-| `ErrorCode`       | ErrorType   | N       | Optional, but required for `CallError` messages, |
+| Field              | Type        | Required | Description |
+| ------------------ | ----------- | -------- | ---- |
+| `MessageTypeId`    | MessageType | Y       | Define the type of Message, optional values: <br><br/>`2` for Call<br>`3` for CallRequest<br>`4` for CallError |
+| `UniqueId`         | String      | Y       | Must be the same ID  as carried in the `call` request so the receiver can match the request and result |
+| `Action`           | String      | N       | Name of OCPP message, for example, authorize |
+| `ErrorCode`        | ErrorType   | N       | Optional, but required for `CallError` messages |
 | `ErrorDescription` | String      | N       | Error details |
-| `Payload`         | Bytes       | N       | Payload field with the serialized data of the OCPP message in protobuf format |
+| `Payload`          | Object      | N       | Payload field with the serialized data of the OCPP message in protobuf format |
 
-<!--can we also add a returned example here?-->
+For example, the message format of `BootNotification` on upstream is
+```json
+Topic: ocpp/cp/CP001/Notify/BootNotifiaction
+Payload:
+  {"MessageTypeId": 2,
+   "UniqueId": "1",
+   "Payload": {"chargePointVendor":"vendor1","chargePointModel":"model1"}
+  }
+```
 
 Similarly, for response messages and error notifications sent by Charge Point to third-party services,
 their topic formats can also be customized as follows:
 
-```
+```hcl
 ## plugins/emqx_ocpp.conf
 
 ocpp.upstream.reply_topic = ocpp/cp/Reply/${cid}
@@ -112,7 +120,7 @@ ocpp.dnstream.topic = ocpp/${cid}/+/+
 
 Note: The use of the wildcard `+` in this example provides flexibility in the topic structure. However, it's not necessary and can be adjusted according to your requirements.
 
-The payload of a downstream message is a JSON string with a fixed pattern, similar to upstream messaging, for example, below is a downstream response to Charge Point CP001.   
+The payload of a downstream message is a JSON string with a fixed pattern, similar to upstream messaging, for example, below is a downstream send to Charge Point CP001.
 
 ```
 Topic: ocpp/cp/CP001/Reply/BootNotification

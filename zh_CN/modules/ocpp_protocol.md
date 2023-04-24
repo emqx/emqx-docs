@@ -3,21 +3,22 @@
 ## 协议介绍
 
 [OCPP (Open Charge Point Protocol)](https://www.openchargealliance.org/)
-是用于充电站（Charge Points）和 Central System 之间进行通信的协议，以实现对电动汽车（Electric Vehicle）
+是用于充电站（Charge Point）和 Central System 之间进行通信的协议，以实现对电动汽车（Electric Vehicle）
 充电会话的监控和控制。
 
-自 e4.4.18 以来，EMQX 已经基于[OCCP-J 1.6](https://www.openchargealliance.org/protocols/ocpp-16/)
-标准实现了 `emqx_ocpp` 插件，以提供连接 Charge Point 设备的能力。
+自从e4.4.18版本以来，EMQX 实现了基于[OCPP-J 1.6](https://www.openchargealliance.org/protocols/ocpp-16/)
+标准的 `emqx_ocpp` 插件，提供了连接充电桩（Charge Point）设备的能力
 
-::: note
-当前实现仅作为插件提供，目前暂不支持模块。
-:::
+需要注意的是，该插件的主要功能是接收 OCPP 客户端的连接、处理上下行消息的格式转换和转发。
+任何与业务相关的实现（如启动充电和计费）必须由第三方系统处理。
+
+此外，在这个版本中，OCPP 协议网关作为一个插件而不是模块运行。
 
 ## 快速开始
 
-所有的 OCPP 网关的配置都位于EMQX etc 目录下的 `plugins/emqx_ocpp.conf` 文件中。
+所有的 OCPP 网关的配置都位于 EMQX `etc` 目录下的 `plugins/emqx_ocpp.conf` 文件中。
 
-以默认配置文件启动 OCPP 插件，只需执行以下命令：
+执行以下命令，以默认配置文件启动 OCPP 插件：
 ```bash
 emqx_ctl plugins load emqx_ocpp
 ```
@@ -28,23 +29,17 @@ emqx_ctl plugins load emqx_ocpp
 
 请先按照 ocpp-go 文档提供的方式完成编译，然后执行以下命令即可连接到 EMQX 的 OCPP 网关。
 
-注：`<host>` 需要修改为您真实的 EMQX 节点的地址。
+注：请修改 `<host>` 为您真实的 EMQX 节点的地址。
 ```bash
 CLIENT_ID=chargePointSim CENTRAL_SYSTEM_URL=ws://<host>:33033/ocpp go run example/1.6/cp/*.go
 ```
 
-## 连接
+## 客户端连接
 
 OCPP 网关仅提供以 Websocket 的方式接收客户端的链接。这也是 OCPP-J 1.6 协议中定义的方式。
 
 在成功建立连接后，EMQX 将其看做一个标准的客户端。这意味着您可以通过 Client ID 在 Dashboard/HTTP-API/CLI
 对该客户端进行管理。
-
-其中，客户端信息的映射关系如下：
-- Client ID：Charge Point 的唯一标识。
-- Username：由 Charge Point 在连接时提供的 HTTP Basic 认证解析得来。
-- Password：同样由 HTTP Basic 认证解析得来。
-
 
 ### 认证
 
@@ -55,61 +50,57 @@ OCPP 网关从中提取 Username 和 Password，并通过 EMQX 的认证系统�
 
 你可以参考 [认证](../advanced/auth.md) 进行配置。
 
-## 消息格式
+## 消息流程
+
+以下流程图表示一个充电点与第三方服务之间通过 EMQX OCPP 网关进行通信的过程：
 
 ```
-                                +--------------+  upstream publish  +---------+
-+--------------+   Req/Resp     | OCPP Gateway | -----------------> | Third   |
-| Charge Point | <------------> | over         |     over Topic     | Service |
-+--------------+   over ws/wss  | EMQX         | <----------------- |         |
-                                +--------------+  dnstream publish  +---------+
+                                +--------------+  upstream publish     +-----------+
++--------------+   Req/Resp     | OCPP Gateway | --------------------> | 3rd-party |
+| Charge Point | <------------> | over         |     over Topic        | Service   |
++--------------+   over ws/wss  | EMQX         | <-------------------- |           |
+                                +--------------+  downnstream publish  +-----------+
 ```
 
 如图所示：
-- Charge Point 和 OCPP 网关之间通过 OCPP-J 规范、基于 Websocket 或 Websocket over TLS 进行通信。
+- Charge Point 和 OCPP 网关之间基于 Websocket 或 Websocket over TLS （ws/wss）进行通信。
 - OCPP 网关会把 Charge Point 产生的消息转化为一个标准的 MQTT Publish 消息，其消息的主题、和消息的
   内容及格式，均由 OCPP 网关进行定义。
 - 三方系统通过订阅上行流（Upstream）的主题来接收 Charge Point 的消息；也通过向下行流（Dnstream）的主题
   发生消息来向 Charge Point 推送控制消息。
-- OCPP 网关仅负责处理上下行消息的格式转换，和转发。任何和业务相关的实现都需要三方系统来负责，例如
-  启动充电和计费等。
+- 第三方系统通过订阅 Upstream 主题从充电点接收消息；
+  通过向 Downstream 主题发送消息向充电点推送控制消息。
 
+### OCPP 网关到三方系统的消息 (Upstream)
 
-### Up Stream (emqx-ocpp -> third-services)
+OCPP 网关将 Charge Point 所有的消息、事件通过 EMQX 进行发布。这个数据流称为 **Upstream**。
 
-OCPP 网关将 Charge Point 所有的消息、事件通过 EMQX 进行发布。这个数据流称为 **Up Stream**。
+例如，一个默认的 Upstream 的主题可以配置为如下所示。OCPP 网关会将所有来自 Charge Point 的消息发布到该主题。
+在消息处理过程中，占位符 `${cid}` Charge Point ID  和 `${action}` 消息名称会被替换为实际的值。
 
-其主题支持按任意格式进行配置，例如：
-```
+```hcl
 ## plugins/emqx_ocpp.conf
-##
-## 上行默认主题。emqx-ocpp 网关会将所有 Charge Point 的消息发布到该主题上。
-##
-## 可用占位符为：
-## - cid: Charge Point ID
-## - action: The Message Name for OCPP
-##
+## OCPP gateway will publish all Charge Point messages to this topic.
 ocpp.upstream.topic = ocpp/cp/${cid}/${action}
 
-## 支持按消息名称对默认主题进行重载
-##
+## Supports overriding the default topic by message name
 ocpp.upstream.topic.BootNotification = ocpp/cp/${cid}/Notify/${action}
 ```
 
 消息内容（Payload）为具有固定模式的 JSON 字符串，它包括字段：
 
-| Field             | Type        | Required | Desc                                             |
-| ----------------- | ----------- | -------- | ------------------------------------------------ |
-| MessageTypeId     | MessageType | R        | 消息类型，为 "Call", "CallResult" 或 "CallError" |
-| UniqueId          | String      | R        | 消息唯一 ID，用于匹配 Call 和 Call Result 消息   |
-| Action            | String      | O        | OCPP 消息的消息名称，例如 "Authorize"            |
-| ErrorCode         | ErrorType   | O        | 错误码                                           |
-| ErrorDescription  | String      | O        | 详细错误描述                                     |
-| Payload           | Object      | O        | 消息内容                                         |
+| Field              | Type        | Required | Desc                                             |
+| ------------------ | ----------- | -------- | ------------------------------------------------ |
+| `MessageTypeId`    | MessageType | Y        | 消息类型，可选值：<br><br/>为 `2` 表示 Call 消息<br> `3` 表示 CallResult 消息<br>`4` 表示 CallError 消息 |
+| `UniqueId`         | String      | Y        | 消息唯一 ID，用于匹配 Call 和 CallResult 消息    |
+| `Action`           | String      | N        | OCPP 消息的消息名称，例如 "Authorize"            |
+| `ErrorCode`        | ErrorType   | N        | 错误码，在 CallError 消息中为必填                |
+| `ErrorDescription` | String      | N        | 错误描述                                         |
+| `Payload`          | Object      | N        | 消息内容                                         |
 
-例如，一条在 upstream 上的 BootNotifiaction.req 的消息格式为：
+例如，一条在 upstream 上的 `BootNotifiaction` 的消息格式为：
 
-```
+```json
 Topic: ocpp/cp/CP001/Notify/BootNotifiaction
 Payload:
   {"MessageTypeId": 2,
@@ -118,25 +109,25 @@ Payload:
   }
 ```
 
-同样，对于 Charge Point 发送到 Central System 的 `*.conf` 的应答消息和错误通知，
+同样，对于 Charge Point 发送到 Central System 的应答消息和错误通知，
 也可以定制其主题格式：
 
-```
+```hcl
 ## plugins/emqx_ocpp.conf
 
 ocpp.upstream.reply_topic = ocpp/cp/Reply/${cid}
 ocpp.upstream.error_topic = ocpp/cp/Error/${cid}
 ```
 
-### Down Stream (third-services -> emqx-ocpp)
+### 三方系统到 OCPP 网关的消息 (Downstream)
 
-三方系统可以通过在 OCPP 网关中配置的主题来下发对 Charge Point 的控制消息。
-这个数据流被称为 **Down Stream**。
+第三方系统可以利用在 OCPP 网关中配置的主题向充电点发出控制消息，这个数据流被称为 **Downstream**。
 
-其主题支持按任意格式进行配置，例如：
+例如，默认的 Downstream 配置如下所示。其中，占位符 `${cid}` Charge Point ID 会被替换为实际的值。
 ```
 ## plugins/emqx_ocpp.conf
-##
+## Topic to receive downstream control commands.
+ocpp.dnstream.topic = ocpp/${cid}/+/+
 ## 下行主题。网关会为每个连接的 Charge Point 网关自动订阅该主题，
 ## 以接收下行的控制命令。
 ##
@@ -147,6 +138,7 @@ ocpp.upstream.error_topic = ocpp/cp/Error/${cid}
 ##     2. 通配符 `+` 不是必须的，此处仅是一个示例
 ocpp.dnstream.topic = ocpp/${cid}/+/+
 ```
+注：在此示例中使用通配符 `+` 可提供主题结构的灵活性。但是，这不是必需的，可以根据您的要求进行调整。
 
 下行消息的消息内容（Payload）为具有固定模式的 JSON 字符串，格式同 upstream。
 
