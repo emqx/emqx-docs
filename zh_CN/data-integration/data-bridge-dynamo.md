@@ -108,7 +108,7 @@ docker run --rm -e AWS_ACCESS_KEY_ID=root -e AWS_SECRET_ACCESS_KEY=public -e AWS
 2. 点击页面右上角的创建。
 3. 在数据桥接类型中选择 DynamoDB，点击下一步。
 4. 输入数据桥接名称，要求是大小写英文字母或数字组合。
-5. 输入 DynamoDB 连接信息，Url 地址填写 **http://127.0.0.1:8000**，数据库填写 `mqtt_msg`，用户名为 `root`，密码为 `public`。
+5. 输入 DynamoDB 连接信息，Url 地址填写 **http://127.0.0.1:8000**，表名填写 `mqtt_msg`，连接访问 ID 为 `root`，连接访问密钥为 `public`。
 6. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](#配置参数)。
 7. 点击创建按钮完成数据桥接创建。
 
