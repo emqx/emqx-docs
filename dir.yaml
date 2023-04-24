@@ -344,13 +344,14 @@
   title_cn: 日志及可观测性
   path: observability/overview
   children:
-    - observability/log
     - observability/metrics-and-stats
-    - observability/prometheus
-    - observability/tracer
     - observability/alarms
+    - observability/log
+    - observability/prometheus
     - observability/topic-metrics
     - observability/slow-subscribers-statistics
+    - observability/tracer
+    
 
 ## Device connectivity
 

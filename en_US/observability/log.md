@@ -6,19 +6,28 @@ EMQX supports both console logs and file logs. They are two different ways of ou
 
 To minimize the impact of logs on system operation, for example, when the log data is too much or the log writing is too slow, EMQX activates the overload protection mechanism by default to better serve our users.
 
-## Log Levels
+## Log Level
 
 EMQX log has 8 levels ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt)), with warning as the default level, from low to high these 8 levels are:
 
 ```bash
 debug < info < notice < warning < error < critical < alert < emergency
 ```
+The table below describes the meaning and output contents for each log level. 
 
-<!--Add information for each log level-->
+| Log Level | Meaning                                                      | Output Contents                                              |
+| --------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| debug     | This level of logging is commonly used to help developers debug and diagnose issues in the code. It is typically used to provide detailed information about the internal workings of a program. </br>It is not recommended to output this level of logging directly to the production environment. Instead, logging can be enabled for a specific client using [Log Trace](./tracer.md). | Usually contains the most detailed debugging information, such as variable values, function call stacks, and other detailed debugging data. |
+| info      | Provides useful information that is more general than debug-level logs. | For example, client connections, subscriptions, publishes, QoS levels, and message delivery status. |
+| notice    | Provides important system information indicating that an event has occurred, but no action is required. | For example, the number of clients connected to the proxy server, the number of reconnections attempted, and the number of crashed nodes. |
+| warning   | Indicates the existence of potential issues or errors that require action. This level of logging is typically used for proactive monitoring and detecting potential problems before they become critical issues. | For example, disconnections, connection timeouts, authentication failures, and other similar events. |
+| error     | Indicates the occurrence of an error that requires error handling. This level of logging is typically used to flag errors so that administrators can quickly detect and resolve issues. | For example, failure to connect to an external database, subscription to a non-existent topic, failure to parse a configuration file and similar events. |
+| critical  | Indicates the occurrence of a critical error that results in system crashes or prevents it from functioning. This level of logging is typically used to flag severe problems so that administrators can take immediate action. | For example, proxy server crashes, database unavailability, and similar events. |
+| alert     | Indicates the need for immediate action to prevent further losses. This level of logging will trigger an alert notification and may cause the application to stop. | For example, the application has reached a critical threshold, such as running out of disk space or memory, or a critical system process has crashed or stopped responding. |
 
 ## Configure Logging
 
-You can configure EMQX logging with Dashboard or configuration files. For example, if you want to export the logs of warning levels as both a file and output with a console, you modify the configuration items under `log` in `emqx.conf` as shown below. The configuration takes effect after the node restarts. For more information on configuring logging with configuration files, see [Logs](../configuration/logs.md). 
+You can configure EMQX logging through Dashboard or configuration files. For example, if you want to export the warning-level logs to a file or output with a console, you can modify the configuration items under `log` in `emqx.conf` as shown below. The configuration takes effect after the node restarts. For more information on configuring logging with configuration files, see [Logs](../configuration/logs.md). 
 
 ```bash
 log {
@@ -170,5 +179,3 @@ The fields in this log message are:
 - **date-time:** `2022-06-30T16:25:32.446873+08:00`
 - **level:** `[debug]`
 - **flat log-content:** `line: 150, mfa: emqx_retainer_mnesia:store_retained/2, msg: message_retained, topic: $SYS/brokers/emqx@127.0.0.1/sysdescr`
-
-## 
