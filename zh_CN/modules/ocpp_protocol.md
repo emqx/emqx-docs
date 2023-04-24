@@ -89,7 +89,7 @@ ocpp.upstream.topic.BootNotification = ocpp/cp/${cid}/Notify/${action}
 
 | Field              | Type        | Required | Desc                                             |
 | ------------------ | ----------- | -------- | ------------------------------------------------ |
-| `MessageTypeId`    | MessageType | Y        | 消息类型，可选值：<br><br/>为 `2` 表示 Call 消息<br> `3` 表示 CallResult 消息<br>`4` 表示 CallError 消息 |
+| `MessageTypeId`    | MessageType | Y        | 消息类型，可选值：<br><br/>`2` 表示 Call 消息<br> `3` 表示 CallResult 消息<br>`4` 表示 CallError 消息 |
 | `UniqueId`         | String      | Y        | 消息唯一 ID，用于匹配 Call 和 CallResult 消息    |
 | `Action`           | String      | N        | OCPP 消息的消息名称，例如 "Authorize"            |
 | `ErrorCode`        | ErrorType   | N        | 错误码，在 CallError 消息中为必填                |
