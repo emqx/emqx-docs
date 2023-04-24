@@ -102,7 +102,7 @@ EMQX_NODE__NAME='emqx2@127.0.0.1' \
 
 节点发现是创建集群的必要过程，它允许单个 EMQX 节点发现对方并互相通信，无论其位置或 IP 地址如何。
 
-EMQX 支持基于 [Ekka](https://github.com/emqx/ekka) 库自动创建集群。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、脑裂自动愈合 (Network Partition Autoheal)、自动删除宕机节点 (Autoclean)。
+EMQX 支持基于 [Ekka](https://github.com/emqx/ekka) 库自动创建集群。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、 网络分区自动愈合 (Network Partition Autoheal)、自动删除宕机节点 (Autoclean)。
 
 EMQX 支持多种节点发现策略：
 
