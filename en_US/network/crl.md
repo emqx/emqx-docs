@@ -8,7 +8,7 @@ Since EMQX 5.0.22, CRL(Certification Revocation List) Check is supported for MQT
 
 {% emqxee %}
 
-Since EMQX 5.0.3, Certification Revocation List (CRL) Check is supported for MQTT SSL listeners.  Note that those do not include Secure WebSocket nor QUIC listeners: only listeners of type `ssl` support this feature.
+Since EMQX 5.0.3,  CRL(Certification Revocation List) Check is supported for MQTT SSL listeners.  Note that those do not include Secure WebSocket nor QUIC listeners: only listeners of type `ssl` support this feature.
 
 {% endemqxee %}
 
