@@ -2,13 +2,13 @@
 
 {% emqxce %}
 
-The OCSP(Online Certificate Status Protocol ) is an Internet protocol used to obtain the revocation status of SSL/TLS certificates, ensuring secure communication. EMQX, as a prominent MQTT broker in IoT applications, places a strong emphasis on security. From version 5.0.23 onwards, EMQX supports OCSP Stapling for MQTT SSL listeners to bolster security.
+OCSP (Online Certificate Status Protocol ) is an Internet protocol used to obtain the revocation status of SSL/TLS certificates, ensuring secure communication. EMQX, as a prominent MQTT broker in IoT applications, places a strong emphasis on security. From version 5.0.23 onwards, EMQX supports OCSP Stapling for MQTT SSL listeners to bolster security.
 
 {% endemqxce %}
 
 {% emqxee %}
 
-The OCSP(Online Certificate Status Protocol) is an Internet protocol used to obtain the revocation status of SSL/TLS certificates, ensuring secure communication. EMQX, as a prominent MQTT broker in IoT applications, places a strong emphasis on security. From version 5.0.3 onwards, EMQX supports OCSP Stapling for MQTT SSL listeners to bolster security.
+OCSP (Online Certificate Status Protocol) is an Internet protocol used to obtain the revocation status of SSL/TLS certificates, ensuring secure communication. EMQX, as a prominent MQTT broker in IoT applications, places a strong emphasis on security. From version 5.0.3 onwards, EMQX supports OCSP Stapling for MQTT SSL listeners to bolster security.
 
 {% endemqxee %}
 
@@ -26,7 +26,7 @@ OCSP Issuer Certificate should be ready before the configuration.
 
 ## Configure with Dashboard
 
-In the EMQX Dashboard, navigate to **Management** -> **Listeners** to access the **Listener** page. To enable the OCSP feature for the default SSL listener, click its name to open the **Edit Listener** page. Scroll to the bottom of the dialog that appears on the right and find the **Enable OCSP Stapling** toggle switch. <!--with screenshot to be added-->
+In the EMQX Dashboard, navigate to **Management** -> **Listeners** to access the **Listener** page. To enable the OCSP feature for the default SSL listener, click its name to open the **Edit Listener** page. Scroll to the bottom of the dialog that appears on the right and find the **Enable OCSP Stapling** toggle switch. 
 
 <img src="./assets/OCSP.png" alt="OCSP" style="zoom:50%;" />
 
@@ -39,9 +39,9 @@ Configure the fields as follows:
 
 Click **Update** to confirm the changes. 
 
-## Configure with `emqx.conf`
+## Configure with Configuration File
 
-EMQX also provides the option to enable OCSP Stapling through configuration files. 
+EMQX also provides the option to enable OCSP Stapling through configuration files `emqx.conf`. 
 
 To activate this feature, simply append the relative configuration items to the end of the `emqx.conf` file. Restart EMQX for changes to take effect.
 
