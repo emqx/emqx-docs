@@ -1,6 +1,6 @@
-# Ingest Data into RocketMQ
+# Bridge Data into RocketMQ
 
-EMQX supports integration with RocketMQ, so you can forward client messages and events to RocketMQ, for example, use events to trigger the update of data to record the online status or online/offline of clients.
+EMQX supports bridging data into RocketMQ, so you can forward client messages and events to RocketMQ, for example, use events to trigger the update of data to record the online status or online/offline of clients.
 
 {% emqxce %}
 :::tip
@@ -134,13 +134,13 @@ In Linux, you should change the `host.docker.internal` to your real IP address.
 
    ::: tip
 
-   When this value is empty the whole message will be stored in the database. The actual value is JSON template data.
+   When this value is empty the whole message will be forwarded to the RocketMQ. The actual value is JSON template data.
 
    :::
 
 7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed.
 
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the MySQL server.
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the RocketMQ server.
 
 9. Then click **Create** to finish the creation of the data bridge.
 

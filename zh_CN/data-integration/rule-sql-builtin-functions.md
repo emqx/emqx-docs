@@ -394,6 +394,9 @@ date_to_unix_ts('second', '%Y-%m-%d %H-%M-%S', '2022-05-26 10:40:12') = 16535616
 ```
 
 {% emqxee %}
+
+**专用于 MongoDB 的时间函数**
+
 | Function | Purpose | Parameters | Returned value |
 | -------- | ------------------------------------|-------------------------- | --------------------------- |
 | `mongo_date` | 生成当前时间的 mongodb ISODate 类型 | - | ISODate 类型的时间 |

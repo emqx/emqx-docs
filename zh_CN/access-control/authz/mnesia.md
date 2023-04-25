@@ -16,7 +16,7 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的授
 
 代码示例：
 
-```hocon
+```hcl
 {
     type = built_in_database
     enable = true

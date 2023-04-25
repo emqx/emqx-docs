@@ -110,9 +110,9 @@ You need to create 2 data bridges to PostgreSQL for messages storage and event r
 5. Input the connection information:
 
    - **Database Url**: Input `http://127.0.0.1:8000`, or the actual URL if the DynamoDB server is running remotely.
-   - **Database Name**: Input `mqtt_msg`.
-   - **Username**: Input `root`.
-   - **Password**: Input `public`.
+   - **Table Name**: Input `mqtt_msg`.
+   - **AWS Access Key ID**: Input `root`.
+   - **AWS Secret Access Key**: Input `public`.
 
 6. Leave the **Template** empty by default.
 

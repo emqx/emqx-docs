@@ -68,7 +68,7 @@ mkdir rocketmq/logs
 mkdir rocketmq/store
 mkdir rocketmq/conf
 ```
-将下面的内容存入到 `rocketmq/conf/broker/conf` 中去
+将下面的内容存入到 `rocketmq/conf/broker.conf` 中去
 
 ```bash
 brokerClusterName=DefaultCluster
