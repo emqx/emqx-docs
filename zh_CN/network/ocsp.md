@@ -1,4 +1,4 @@
-### OCSP Stapling
+# OCSP Stapling
 
 {% emqxce %}
 
