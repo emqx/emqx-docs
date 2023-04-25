@@ -225,7 +225,7 @@
     - network/emqx-mqtt-tls
     - network/mqtt-client-tls
     # - network/crl
-    # - network/oscp
+    - network/oscp
     - title_en: GMSSL
       title_cn: 国密 SSL
       lang: cn
