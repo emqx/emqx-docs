@@ -393,7 +393,7 @@
     },
     {
       "title": "数据集成",
-      "children": 
+      "children":
       [
         {
           "title": "桥接数据到 MQTT Broker",
@@ -402,7 +402,7 @@
         {
           "title": "集成 Kafka",
           "path": "rule/bridge_kafka"
-        },    
+        },
         {
           "title": "集成 InfluxDB",
           "path": "rule/backend_influxdb"
@@ -410,7 +410,7 @@
         {
           "title": "集成 InfluxDB V2",
           "path": "rule/backend_influxdb_v2"
-        },    
+        },
         {
           "title": "集成 MySQL",
           "path": "rule/backend_mysql"
@@ -446,7 +446,7 @@
         {
           "title": "集成 Tablestore",
           "path": "rule/backend_tablestore"
-        },     
+        },
         {
           "title": "集成 Lindorm",
           "path": "rule/backend_lindorm"
@@ -474,10 +474,6 @@
         {
           "title": "集成 MatrixDB",
           "path": "rule/backend_matrixdb"
-        },
-        {
-          "title": "集成 OpenTSDB",
-          "path": "rule/backend_opentsdb"
         },
         {
           "title": "集成 OpenTSDB",
@@ -1184,7 +1180,7 @@
     },
     {
       "title": "Data Integration",
-      "children": 
+      "children":
       [
         {
           "title": "Bridge Data into MQTT Broker",
@@ -1193,7 +1189,7 @@
         {
           "title": "Stream Data into Kafka",
           "path": "rule/bridge_kafka"
-        },    
+        },
         {
           "title": "Ingest Data into InfluxDB",
           "path": "rule/backend_influxdb"
@@ -1201,7 +1197,7 @@
         {
           "title": "Ingest Data into InfluxDB V2",
           "path": "rule/backend_influxdb_v2"
-        },    
+        },
         {
           "title": "Ingest Data into MySQL",
           "path": "rule/backend_mysql"
@@ -1234,7 +1230,7 @@
           "title": "Ingest Data into RocketMQ",
           "path": "rule/bridge_rocketmq"
         },
-      
+
         {
           "title": "Ingest Data into Lindorm",
           "path": "rule/backend_lindorm"
