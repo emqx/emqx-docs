@@ -31,32 +31,31 @@ This section introduces how to configure the SQL Server data bridge, covering to
 
 This tutorial assumes that you run both EMQX and SQL Server on the local machine. If you have SQL Server and EMQX running remotely, adjust the settings accordingly.
 
-### 1. Install SQL Server Server
+### Install and Connect to SQL Server
 
-This section describes how to start SQL Server 2019 on Linux/MacOS installation using Docker images.
-And use `sqlcmd` to connect to SQL Server and create databases and data tables.
-For other installation methods of SQL Server, please refer to [SQL Server Installation Guide](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16).
+This section describes how to start SQL Server 2019 on Linux/MacOS using Docker images and use `sqlcmd` to connect to SQL Server and create databases and data tables. For other installation methods of SQL Server, please refer to [SQL Server Installation Guide](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16).
 
-#### 2. Install SQL Server server via Docker, and then run the docker image.
+1. Install SQL Server via Docker, and then run the docker image.
 
-SQL Server requires using complex passwords, see also [Password Complexity](https://learn.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-ver16#password-complexity)</br>
-By starting a Docker container with the environment variable `ACCEPT_EULA=Y` you agree to the terms of Microsoft's EULA, see also
-[MICROSOFT SOFTWARE LICENSE TERMS MICROSOFT SQL SERVER 2019 STANDARD(EN_US)](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm)
+   SQL Server requires using complex passwords, see also [Password Complexity](https://learn.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-ver16#password-complexity).
+   By starting a Docker container with the environment variable `ACCEPT_EULA=Y` you agree to the terms of Microsoft's EULA, see also [MICROSOFT SOFTWARE LICENSE TERMS MICROSOFT SQL SERVER 2019 STANDARD(EN_US)](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm).
+
 ```bash
 # To start the SQL Server docker image and set the password as `mqtt_public1`
 $ docker run --name sqlserver -p 1433:1433 -e ACCEPT_EULA=Y -e SQLSERVER_ROOT_PASSWORD=mqtt_public1 -d mcr.microsoft.com/mssql/server:2019-CU19-ubuntu-20.04
 ```
 
-#### 3. Access the container
-```
+2. Access the container.
+
+```bash
 docker exec -it sqlserver bash
 ```
 
-#### 4. To connect to the SQL Server server in the container, you need to enter the preset password.
-`mssql-tools` has been installed in the SQL Server container provided by Microsoft, but the executable file is not in `$PATH`, and the executable file path needs to be specified.
-For security reasons, the characters are not echoed when entering the password. Please enter the password and directly type `Enter`.
-For more usage of `mssql-tools`, please refer to related documents provided by Microsoft: [sqlcmd-utility](https://learn.microsoft.com/en-us/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16).
-```
+3. Enter the preset password to connect to the server in the container.
+   - `mssql-tools` has been installed in the SQL Server container provided by Microsoft, but the executable file is not in `$PATH`. You need to specify the executable file path for `mssql-tools`. For more usage information on `mssql-tools`, refer to related documents provided by Microsoft: [sqlcmd-utility](https://learn.microsoft.com/en-us/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16).
+   - For security reasons, the characters are not echoed when entering the password. Click `Enter` directly after entering the password.
+
+```bash
 $ /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa
 $ Password:
 1>
@@ -64,12 +63,11 @@ $ Password:
 
 So far, the SQL Server 2019 instance has been deployed and can be connected.
 
-### Use EMQX Data Bridge connect to SQL Server and write mqtt message
+### Create Data Tables
 
-In this section we will create a SQL Server data bridge to store client-published messages.
+1. Create the database `mqtt` in SQL Server using the connection created from the previous section.
 
-#### 1. First create the database `mqtt` in SQL Server using this connection from the previous section.
-```
+```bash
 ...
 Password:
 1> USE master
@@ -79,8 +77,8 @@ Changed database context to 'master'.
 2> GO
 ```
 
-#### 2. Use the follow sql statement to create a table in database `mqtt` to stroe the mqtt message.
-This table stores the MsgID, Subject, QoS, Payload, and publish time of each message:
+2. Use the following SQL statements to create a data table in database `mqtt` for storing the MQTT message, including the message ID, topic, QoS, payload, and publish time of each message. 
+
 ```sql
 CREATE TABLE mqtt.dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
                                   msgid   VARCHAR(64) NULL,
@@ -91,7 +89,11 @@ CREATE TABLE mqtt.dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT 
 GO
 ```
 
-#### 3. Store MQTT Message
+### Create SQL Server Data Bridge
+
+This section demonstrates how to create a SQL Server data bridge to store client-published messages.
+
+#### Store MQTT Message
 
 <!-- Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to SQL Server for messages storage and event recording. -->
 
@@ -99,7 +101,7 @@ GO
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **SQL Server**, and then click **Next**.
+3. In the **Create Data Bridge** page, click to select **Microsoft SQL Server**, and then click **Next**.
 
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
@@ -117,47 +119,50 @@ GO
    insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
    ```
 
-7. Configure odbc driver
-You can use freetds or msodbcsql17 released by Microsoft as odbc driver.
-To use the msodbcsql17 driver, please refer to [Install the Microsoft ODBC driver for SQL Server (Linux)](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16&tabs=alpine18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline)
+7. Configure odbc driver.
+  You can use freetds or msodbcsql17 released by Microsoft as odbc driver.
+  To use the msodbcsql17 driver, please refer to [Install the Microsoft ODBC driver for SQL Server (Linux)](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16&tabs=alpine18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline)
 
-Configure FreeTDS odbc driver on MacOS:
-```
-$ brew install unixodbc freetds
-$ vim /usr/local/etc/odbcinst.ini
-# add the following lines
-[ms-sql]
-Description = ODBC for FreeTDS
-Driver      = /usr/local/lib/libtdsodbc.so
-Setup       = /usr/local/lib/libtdsodbc.so
-FileUsage   = 1
-```
+  - Configure FreeTDS odbc driver on MacOS:
 
-Configure FreeTDS odbc driver configuration on Centos:
-```
-$ yum install unixODBC unixODBC-devel freetds freetds-devel perl-DBD-ODBC perl-local-lib
-$ vim /etc/odbcinst.ini
-# add the following lines
-[ms-sql]
-Description = ODBC for FreeTDS
-Driver      = /usr/lib64/libtdsodbc.so
-Setup       = /usr/lib64/libtdsS.so.2
-Driver64    = /usr/lib64/libtdsodbc.so
-Setup64     = /usr/lib64/libtdsS.so.2
-FileUsage   = 1
-```
+    ```bash
+    $ brew install unixodbc freetds
+    $ vim /usr/local/etc/odbcinst.ini
+    # add the following lines
+    [ms-sql]
+    Description = ODBC for FreeTDS
+    Driver      = /usr/local/lib/libtdsodbc.so
+    Setup       = /usr/local/lib/libtdsodbc.so
+    FileUsage   = 1
+    ```
 
-Configure FreeTDS odbc driver configuration on Ubuntu (Take Ubuntu20.04 as an example, for other versions, please refer to the official odbc documentation):
-```
-$ apt-get install unixodbc unixodbc-dev tdsodbc freetds-bin freetds-common freetds-dev libdbd-odbc-perl liblocal-lib-perl
-$ vim /etc/odbcinst.ini
-# add the following lines
-[ms-sql]
-Description = ODBC for FreeTDS
-Driver      = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so
-Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
-FileUsage   = 1
-```
+  - Configure FreeTDS odbc driver configuration on Centos:
+
+    ```bash
+    $ yum install unixODBC unixODBC-devel freetds freetds-devel perl-DBD-ODBC perl-local-lib
+    $ vim /etc/odbcinst.ini
+    # add the following lines
+    [ms-sql]
+    Description = ODBC for FreeTDS
+    Driver      = /usr/lib64/libtdsodbc.so
+    Setup       = /usr/lib64/libtdsS.so.2
+    Driver64    = /usr/lib64/libtdsodbc.so
+    Setup64     = /usr/lib64/libtdsS.so.2
+    FileUsage   = 1
+    ```
+
+  - Configure FreeTDS odbc driver configuration on Ubuntu (Take Ubuntu20.04 as an example, for other versions, please refer to the official odbc documentation):
+
+    ```bash
+    $ apt-get install unixodbc unixodbc-dev tdsodbc freetds-bin freetds-common freetds-dev libdbd-odbc-perl liblocal-lib-perl
+    $ vim /etc/odbcinst.ini
+    # add the following lines
+    [ms-sql]
+    Description = ODBC for FreeTDS
+    Driver      = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so
+    Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
+    FileUsage   = 1
+    ```
 
 8. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md).
 
