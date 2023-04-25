@@ -12,7 +12,7 @@ OCSP (Online Certificate Status Protocol) is an Internet protocol used to obtain
 
 {% endemqxee %}
 
-Note: Secure WebSocket for QUIC listeners is currently not supported.
+Note: Secure WebSocket for QUIC listeners is currently not supported. 
 
 To enable OCSP stapling in a listener, activate the respective option within the listener's settings and provide the necessary OCSP Issuer certificate and OCSP Responder URL. EMQX then fetches and caches the OCSP response for its own server certificate, ensuring a secure and efficient SSL/TLS connection.
 
