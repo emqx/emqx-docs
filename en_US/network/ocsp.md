@@ -2,13 +2,13 @@
 
 {% emqxce %}
 
-The Online Certificate Status Protocol (OCSP) is an Internet protocol used to obtain the revocation status of SSL/TLS certificates, ensuring secure communication. EMQX, as a prominent MQTT broker in IoT applications, places a strong emphasis on security. From version 5.0.23 onwards, EMQX supports OCSP Stapling for MQTT SSL listeners to bolster security.
+The OCSP(Online Certificate Status Protocol ) is an Internet protocol used to obtain the revocation status of SSL/TLS certificates, ensuring secure communication. EMQX, as a prominent MQTT broker in IoT applications, places a strong emphasis on security. From version 5.0.23 onwards, EMQX supports OCSP Stapling for MQTT SSL listeners to bolster security.
 
 {% endemqxce %}
 
 {% emqxee %}
 
-The Online Certificate Status Protocol (OCSP) is an Internet protocol used to obtain the revocation status of SSL/TLS certificates, ensuring secure communication. EMQX, as a prominent MQTT broker in IoT applications, places a strong emphasis on security. From version 5.0.3 onwards, EMQX supports OCSP Stapling for MQTT SSL listeners to bolster security.
+The OCSP(Online Certificate Status Protocol) is an Internet protocol used to obtain the revocation status of SSL/TLS certificates, ensuring secure communication. EMQX, as a prominent MQTT broker in IoT applications, places a strong emphasis on security. From version 5.0.3 onwards, EMQX supports OCSP Stapling for MQTT SSL listeners to bolster security.
 
 {% endemqxee %}
 
