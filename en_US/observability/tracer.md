@@ -2,7 +2,7 @@
 
 EMQX 5.0 provides the Log Trace feature, allowing users to enable real-time debug-level log outputs for specific client IDs, topics or IP addresses. Usually, debug-level logging is not enabled in the production environment, because the number of generated logs may affect the system performance. With the Log Trace feature implemented, it is feasible to provide the most detailed debug information even with intensive connecting and messaging services running. This significantly increases the efficiency of debugging and diagnosing issues in EMQX.
 
-## Working Principle 
+## How It Works 
 
 The Log Trace feature is implemented using the built-in Erlang Logger Filter function, which has a negligible impact on the overall message throughput. EMQX uses independent File Handlers to persist Trace disk logs and creates a separate process for each client connection to process its messages.
 

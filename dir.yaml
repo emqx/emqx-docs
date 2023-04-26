@@ -351,6 +351,7 @@
     - observability/topic-metrics
     - observability/slow-subscribers-statistics
     - observability/tracer
+    - observability/mqtt-system-topics
     
 
 ## Device connectivity
@@ -403,7 +404,7 @@
     - mqtt/mqtt-retained-messages
     - mqtt/mqtt-last-will-and-testament
     - mqtt/mqtt-shared-subscription
-    - mqtt/mqtt-system-topics
+    
 
 - title_en: Telemetry
   title_cn: 遥测

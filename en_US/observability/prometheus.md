@@ -10,7 +10,7 @@ EMQX supports integration with third-party monitoring systems, such as [Promethe
 
 EMQX provides the following endpoints to integrate with Prometheus to collect system metrics: `http://127.0.0.1:18083/api/v5/prometheus/stats`. 
 
-## Configure with Dashboard
+## Configure via Dashboard
 
 {% emqxce %}
 
@@ -28,34 +28,7 @@ You can click the **Help** button at the bottom to see the instructions on how t
 
 ### Enable Pushgateway
 
-EMQX also supports pushing metrics to `pushgateway`, which is disabled by default. You can enable the option by adding the following configurations to `etc/emqx.conf`:
-
-```bash
-prometheus {
-
-  ## URL of Prometheus server
-  ## @path prometheus.push_gateway_server
-  ## @type string()
-  ## @default "http://127.0.0.1:9091"
-  push_gateway_server: "http://127.0.0.1:9091"
-
-
-  ## Data reporting interval.
-  ## @path prometheus.interval
-  ## @type emqx_schema:duration_ms()
-  ## @default 15s
-  interval: 15s
-
-
-  ## Turn Prometheus data pushing on or off
-  ## @path prometheus.enable
-  ## @type boolean()
-  ## @default false
-  enable: true
-}
-```
-
-You can also enable Pushgateway on Dashboard by clicking the toggle switch. When Pushgateway is enabled, you can configure the following items for the service:
+EMQX also supports pushing metrics to Pushgateway server, which is disabled by default. You can also enable Pushgateway on Dashboard by clicking the toggle switch. When Pushgateway is enabled, you can configure the following items for the service:
 
 <img src="./assets/enable-push-gateway.png" alt="enable-push-gateway" style="zoom:40%;" />
 
@@ -68,6 +41,20 @@ After you complete the configuration, click **Save Changes**.
 
 {% endemqxee %}
 
+## Configure via Configuration File
+
+You can also configure integration with Prometheus through configuration files. You can modify the configuration items under `prometheus` in `emqx.conf` as shown below.  
+
+You can enable the Pushgateway server by adding the following configurations to `etc/emqx.conf`. For more information on configuration items, see [Prometheus](../configuration/prometheus.md).
+
+```bash
+prometheus {
+  push_gateway_server = "http://127.0.0.1:9091"
+  interval = 15s
+  headers {}
+  job_name = "${name}/instance/${name}~${host}"
+}
+```
 
 ## Use Grafana to Visualize EMQX Metrics
 

@@ -15,35 +15,18 @@ debug < info < notice < warning < error < critical < alert < emergency
 ```
 The table below describes the meaning and output contents for each log level. 
 
-| Log Level | Meaning                                                      | Output Contents                                              |
-| --------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| debug     | This level of logging is commonly used to help developers debug and diagnose issues in the code. It is typically used to provide detailed information about the internal workings of a program. </br>It is not recommended to output this level of logging directly to the production environment. Instead, logging can be enabled for a specific client using [Log Trace](./tracer.md). | Usually contains the most detailed debugging information, such as variable values, function call stacks, and other detailed debugging data. |
-| info      | Provides useful information that is more general than debug-level logs. | For example, client connections, subscriptions, publishes, QoS levels, and message delivery status. |
-| notice    | Provides important system information indicating that an event has occurred, but no action is required. | For example, the number of clients connected to the proxy server, the number of reconnections attempted, and the number of crashed nodes. |
-| warning   | Indicates the existence of potential issues or errors that require action. This level of logging is typically used for proactive monitoring and detecting potential problems before they become critical issues. | For example, disconnections, connection timeouts, authentication failures, and other similar events. |
-| error     | Indicates the occurrence of an error that requires error handling. This level of logging is typically used to flag errors so that administrators can quickly detect and resolve issues. | For example, failure to connect to an external database, subscription to a non-existent topic, failure to parse a configuration file and similar events. |
-| critical  | Indicates the occurrence of a critical error that results in system crashes or prevents it from functioning. This level of logging is typically used to flag severe problems so that administrators can take immediate action. | For example, proxy server crashes, database unavailability, and similar events. |
-| alert     | Indicates the need for immediate action to prevent further losses. This level of logging will trigger an alert notification and may cause the application to stop. | For example, the application has reached a critical threshold, such as running out of disk space or memory, or a critical system process has crashed or stopped responding. |
+| Log Level  | Meaning                                                      | Output Examples                                              |
+| ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| debug      | Detailed information about the internal workings of a program, helping to debug and diagnose issues in the code. <br>It is not recommended to output this level of logging directly to the production environment. Instead, enable [Log Trace](./tracer.md) for a specific client. | Variable values, function call stacks, and other detailed debugging data. |
+| info       | Useful information that is more general than debug-level logs. | Client connections, subscriptions, publishes, QoS levels, and message delivery status. |
+| notice     | Important system information indicating that an event has occurred, but no action is required. | Number of clients connected to the proxy server, number of reconnections attempted, and number of crashed nodes. |
+| warning    | The existence of potential issues or errors that require action; typically used for proactive monitoring and detecting potential problems before they become critical issues. | Disconnections, connection timeouts, authentication failures, and other similar events. |
+| error      | The occurrence of an error that requires error handling; typically used to flag errors so that administrators can quickly detect and resolve issues. | Fails to connect to an external database, to subscribe to a non-existent topic, or to parse a configuration file, or other similar events. |
+| critical   | Critical error that results in system crashes or prevents it from functioning; typically used to flag severe problems so that administrators can take immediate action. | Proxy server crashes, database unavailability, and other similar events. |
+| alert      | The need for immediate action to prevent further losses. This level of logging will trigger an alert notification and may cause the application to stop. | The application has reached a critical threshold, such as running out of disk space or memory, or a critical system process has crashed or stopped responding. |
+| Emergency? |                                                              |                                                              |
 
-## Configure Logging
-
-You can configure EMQX logging through Dashboard or configuration files. For example, if you want to export the warning-level logs to a file or output with a console, you can modify the configuration items under `log` in `emqx.conf` as shown below. The configuration takes effect after the node restarts. For more information on configuring logging with configuration files, see [Logs](../configuration/logs.md). 
-
-```bash
-log {
-  file_handlers.default {
-    level = warning
-    file = "log/emqx.log"
-    count = 10
-    max_size = 50MB
-    formatter = text
-  }
-  console_handler {
-    level = warning
-    formatter = text
-  }
-}
-```
+## Configure Logging via Dashboard
 
 This section mainly describes how to configure logging with EMQX Dashboard. Changes take effect immediately without restarting the node.
 
@@ -59,7 +42,7 @@ Configure the following fields for general settings of the console log handler:
 
 - **Enable Log Handler**: Click the toggle switch to enable the console log handler. 
 
-- **Log Level**: Select the log level to use from the drop-down list. Optional values are: `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency`. Default value is: `warning`.
+- **Log Level**: Select the log level to use from the drop-down list. Default value is: `warning`.
 
 - **Time Offset**: Define the format of the timestamp in the log. `system` is typed by default.
 
@@ -82,12 +65,12 @@ Scroll down the page, and continue to configure the options for log file overloa
 <img src="./assets/config-console-log-2-ee.png" alt="config-console-log-2-ee" style="zoom:40%;" />
 
 - **Log Handler Overload Kill**: Enabled by default, which means the log handler process will be terminated when it is overload.
-- **Log Handler Max Memory Size**: Type the value to specify the maximum memory size that the log handler process is allowed to use. Select the units from the drop-down list. Optional values are: `MB`, `GB` and `KB`. Default value is `30 MB`.
+- **Log Handler Max Memory Size**: Type the value to specify the maximum memory size that the log handler process is allowed to use. Select the units from the drop-down list. Default value is `30 MB`.
 - **Max Queue Length**: Type the value in the text box to specify the maximum allowed queue length. Default value is `2000`. 
-- **Handler Restart Timer**: Enabled by default, which means the handler restarts automatically after a delay in the event of termination. You can specify the time for delay in the text box. Select the units from the drop-down list. Optional values are `milliseconds`, `second`, `minute` and `hour`. Default value is `5 second`. If you disable the toggle switch, the value will be `infinity`, it will block any subsequent restarts.
+- **Handler Restart Timer**: Enabled by default, which means the handler restarts automatically after a delay in the event of termination. You can specify the time for delay in the text box. Select the units from the drop-down list. If you disable the toggle switch, the value will be `infinity`, it will block any subsequent restarts.
 - **Enable Burst**: Enabled by default.
 - **Events Number**: Specify the maximum number of log events to handle within a `window_time` interval. Default value is `10000`.
-- **Window Time**: Specify the window time for handling the log events. Select the units from the drop-down list. Optional values are `milliseconds`, `second`, `minute` and `hour`. Default value is `1 second`.
+- **Window Time**: Specify the window time for handling the log events. Default value is `1 second`.
 - **Report Type**: Select the type from the drop-down list. Optional values: `error` and `progress`. Default value is `error`.
 - **Max Depth**: Enabled by default. You can specify the maximum depth for Erlang term log formatting and Erlang process message queue inspection. You can increase or decrease the value using the number spinner. 
 
@@ -109,7 +92,7 @@ Configure the following fields for the general settings of the console log handl
 
 - **Max Log Files Number**: Specify the maximum number of rotated log files. Default value is `10`.
 
-- **Rotation Size**: Log file will be rotated once it reaches the specified size. It is by default enabled. You can type the specific value in the text box below. Select the units from the drop-down list. Optional values are: `MB`, `GB`, `KB`. Default value is `MB`. If you disable it, the value will be `infinity`, which means the log file will grow indefinitely.
+- **Rotation Size**: Log file will be rotated once it reaches the specified size. It is by default enabled. You can type the specific value in the text box below. If you disable it, the value will be `infinity`, which means the log file will grow indefinitely.
 
 - **Log Level**: Select the log level to use from the drop-down list. Optional values are: `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency`. Default value is: `warning`.
 
@@ -121,7 +104,7 @@ Configure the following fields for the general settings of the console log handl
 
   Note: If you select `json`, it is recommended to disable the toggle switch for **Single Log Max Length**, otherwise you will get incomplete json data.
 
-- **Single Line Mode**: Enabled by default. If you disable the toggle switch, log messages will be printed into multiple lines.
+- **Single Line Mode**: Enabled by default. When disabled, log messages wrap around when being printed.
 
 - **Queue Length before Entering Sync Mode**: Set the number limit of buffered log events. If the message queue grows larger than the set value, the handler starts handling log events synchronously, which means that the client process sending the event must wait for a response. It is set to `100` by default. 
 
@@ -138,7 +121,27 @@ When file logging is enabled (log.to = file or both), the following files will a
 - **run_erl.log:** System file used to record startup information when starting EMQX in the background with `emqx start`.
 - **erlang.log.N:** Log file prefixed with erlang.log, which is a copy file of the console log when EMQX is started in the background with `emqx start`, such as `erlang.log.1`,` erlang.log.2` ...
 
-## Log Format
+## Configure Logging via Configuration File
+
+You can also configure EMQX logging through configuration files. For example, if you want to export the warning-level logs to a file or output with a console, you can modify the configuration items under `log` in `emqx.conf` as shown below. The configuration takes effect after the node restarts. For more information on configuring logging with configuration files, see [Logs](../configuration/logs.md). 
+
+```bash
+log {
+  file_handlers.default {
+    level = warning
+    file = "log/emqx.log"
+    count = 10
+    max_size = 50MB
+    formatter = text
+  }
+  console_handler {
+    level = warning
+    formatter = text
+  }
+}
+```
+
+## Log Examples
 
 The format of the log message (with different fields separated by spaces) is as follows:
 

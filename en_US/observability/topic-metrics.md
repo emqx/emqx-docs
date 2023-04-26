@@ -19,7 +19,7 @@ The topic metrics list contains the following fields:
 - **Start at**: Time you created this topic monitoring record.
 - **Actions**: Operations you can do on this topic monitoring record.
   - **View**: View detailed metrics of the topic by different QoS levels.
-  - **Reset**: <!--what will happen after reset?-->
+  - **Reset**: Click this button will get the monitoring restarted.
   - **Delete**: Remove the record.
 
 ## Request Topic Metrics via HTTP API

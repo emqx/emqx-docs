@@ -34,8 +34,6 @@ Factors affecting message latency:
 
 On EMQX Dashboard, click **Diagnose** -> **Slow Subscriptions** from the left navigation menu. On the **Slow Subscriptions** page, click the **Enable** button.
 
-![image](./assets/slow_subscribers_statistics_1.png)
-
 Follow the instruction below for configuration:
 
 - **Stats Threshold**:  Latency threshold for statistics, only messages information with latency exceeding the value will be collected. Minimum value: 100ms
@@ -57,8 +55,5 @@ The Slow Subscriptions list contains the following fields:
 - **Node**: Node with the slow subscriptions issue
 - **Updated**: Creation/update time of the record
 
-![image](./assets/slow_subscribers_statistics_3.png)
-
 You can click on the Client ID to view the details and troubleshoot the issue. 
 
-![image](./assets/slow_subscribers_statistics_4.png)
