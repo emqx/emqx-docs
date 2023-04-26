@@ -134,7 +134,7 @@ In Linux, you should change the `host.docker.internal` to your real IP address.
 
    ::: tip
 
-   When this value is empty the whole message will be stored in the database. The actual value is JSON template data.
+   When this value is empty the whole message will be forwarded to the RocketMQ. The actual value is JSON template data.
 
    :::
 

@@ -72,7 +72,8 @@ mkdir rocketmq/logs
 mkdir rocketmq/store
 mkdir rocketmq/conf
 ```
-3. 将下面的内容存入到 `rocketmq/conf/broker.conf` 中。
+
+3. 将下面的内容存入到 `rocketmq/conf/broker.conf` 文件中。
 
 ```bash
 brokerClusterName=DefaultCluster
