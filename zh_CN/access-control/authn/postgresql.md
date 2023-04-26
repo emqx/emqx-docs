@@ -37,7 +37,7 @@ CREATE TABLE mqtt_user (
 例如我们希望添加一位名为 `emqx_u`、密码为 `public`、盐值为 `slat_foo123`、散列方式为 `sha256` 且超级用户标志为 `true` 的用户，SQL 如下：
 
 ```sql
-INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('emqx_u', encode(digest('public' || 'slat_foo123', 'sha256'), 'hex'), 'slat_foo123', true);
+INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('emqx_u', '44edc2d57cde8d79c98145003e105b90a14f1460b79186ea9cfe83942fc5abb5', 'slat_foo123', true);
 INSERT 0 1
 ```
 
