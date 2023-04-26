@@ -28,9 +28,9 @@ This section introduces how to configure the DynamoDB data bridge, covering topi
 
 This tutorial assumes that you run both EMQX and DynamoDB on the local machine. If you have Dynamo and EMQX running remotely, adjust the settings accordingly.
 
-### Install DynamoDB Local
+### Install DynamoDB Local Server
 
-1. Prepare a docker compose file, `dynamo.yaml`, to setup the Dynamodb local.
+1. Prepare a docker-compose file, `dynamo.yaml`, to set up the Dynamodb local server.
 
 ```json
 version: '3.8'
@@ -95,10 +95,6 @@ The following JSON will be printed if the table was created successfully.
 
 ### Create DynamoDB Data Bridge
 
-You need to create 2 data bridges to PostgreSQL for messages storage and event records respectively.
-
-#### Messages Storage
-
 1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
 
 2. Click **Create** on the top right corner of the page.
@@ -110,9 +106,9 @@ You need to create 2 data bridges to PostgreSQL for messages storage and event r
 5. Input the connection information:
 
    - **Database Url**: Input `http://127.0.0.1:8000`, or the actual URL if the DynamoDB server is running remotely.
-   - **Database Name**: Input `mqtt_msg`.
-   - **Username**: Input `root`.
-   - **Password**: Input `public`.
+   - **Table Name**: Input `mqtt_msg`.
+   - **AWS Access Key ID**: Input `root`.
+   - **AWS Secret Access Key**: Input `public`.
 
 6. Leave the **Template** empty by default.
 
@@ -122,7 +118,7 @@ You need to create 2 data bridges to PostgreSQL for messages storage and event r
 
    :::
 
-7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md).
+7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
 
 8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the MySQL server.
 
@@ -173,15 +169,15 @@ Now that you have successfully created the data bridge to DynamoDB, you can cont
 
 Now you have successfully created the data bridge to DynamoDB. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to DynamoDB after parsing by rule `my_rule`. 
 
-### Test the Data Bridges and Rules
+### Test Data Bridge and Rule
 
-Use MQTTX to send a message to topic `t/1` to trigger an online/offline event. 
+Use MQTT X to send a message to topic `t/1` to trigger an online/offline event. 
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello DynamoDB" }'
 ```
 
-Check the running status of the two data bridges, there should be one new incoming and one new outgoing message. 
+Check the running status of the data bridge, there should be one new incoming and one new outgoing message. 
 
 Check whether the data is written into the `mqtt_msg`  data table. 
 
@@ -189,7 +185,7 @@ Check whether the data is written into the `mqtt_msg`  data table.
 docker run --rm -e AWS_ACCESS_KEY_ID=root -e AWS_SECRET_ACCESS_KEY=public -e AWS_DEFAULT_REGION=us-west-2 amazon/aws-cli dynamodb scan --table-name=mqtt_msg --endpoint-url http://host.docker.internal:8000
 ```
 
-The output will be
+The output will be:
 ```json
 {
     "Items": [

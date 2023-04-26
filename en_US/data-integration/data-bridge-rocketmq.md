@@ -138,9 +138,9 @@ In Linux, you should change the `host.docker.internal` to your real IP address.
 
    :::
 
-7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed.
+7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
 
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the MySQL server.
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the RocketMQ server.
 
 9. Then click **Create** to finish the creation of the data bridge.
 
@@ -189,7 +189,7 @@ Now that you have successfully created the data bridge to RocketMQ, you can cont
 
 Now you have successfully created the data bridge to RocketMQ. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to RocketMQ after parsing by rule `my_rule`. 
 
-### Test the Data Bridge and Rule
+### Test Data Bridge and Rule
 
 Use MQTTX to send a message to topic `t/1` to trigger an online/offline event. 
 
@@ -197,7 +197,7 @@ Use MQTTX to send a message to topic `t/1` to trigger an online/offline event.
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello RocketMQ" }'
 ```
 
-Check the running status of the two data bridges, there should be one new incoming and one new outgoing message. 
+Check the running status of the data bridge, there should be one new incoming and one new outgoing message. 
 
 Check whether the data is forwarded to the `TopicTest` topic. 
 
