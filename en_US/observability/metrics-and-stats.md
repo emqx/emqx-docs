@@ -15,7 +15,7 @@ On EMQX Dashboard, click **Monitoring** -> **Cluster Overview** from the left na
 
 <img src="./assets/node-statistics-ee.png" alt="node-statistics-ee" style="zoom:45%;" />
 
-<!--Edit--> Statistics appear in pairs, including current values and historical maximums, such as the current number of subscriptions and the historical maximum number of subscriptions. Here is the EMQX statistics list:
+Statistics include two values: current values and historical maximums, for example, the current number of subscriptions and the historical maximum number of subscriptions. Here is the EMQX statistics list:
 
 
 | Statistics                 | Description                                                  |

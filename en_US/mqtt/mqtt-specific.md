@@ -33,7 +33,7 @@ Below is a list of MQTT protocols and the EMQX extended concepts:
 - [Delayed Publish](./mqtt-delayed-publish.md)
 - [Auto Subscribe](./mqtt-auto-subscription.md)
 - [Topic Rewrite](./mqtt-topic-rewrite.md)
-- [System Topic](./mqtt-system-topics.md)
+- [System Topic](../observability/mqtt-system-topics.md)
 
 ## Comparison With Other Protocols
 

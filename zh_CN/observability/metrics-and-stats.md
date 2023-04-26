@@ -8,7 +8,7 @@ EMQX 为用户提供了丰富的指标来帮助用户与因为人员了解当前
 
 ![Metrics in Dashboard](./assets/dashboard-metrics.png)
 
-如果不方便访问 Dashboard，你还可以通过 HTTP API 和系统主题消息来获取这些数据，参见 [HTTP API](../admin/api.md) 与 [$SYS 系统主题](../mqtt/mqtt-system-topics.md)。
+如果不方便访问 Dashboard，你还可以通过 HTTP API 和系统主题消息来获取这些数据，参见 [HTTP API](../admin/api.md) 与 [$SYS 系统主题](./mqtt-system-topics.md)。
 
 ## 与监控系统集成
 
