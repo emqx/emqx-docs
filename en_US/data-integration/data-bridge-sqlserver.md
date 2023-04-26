@@ -38,7 +38,7 @@ This section describes how to start SQL Server 2019 on Linux/MacOS using Docker 
 1. Install SQL Server via Docker, and then run the docker image.
 
    SQL Server requires using complex passwords, see also [Password Complexity](https://learn.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-ver16#password-complexity).
-   By starting a Docker container with the environment variable `ACCEPT_EULA=Y` you agree to the terms of Microsoft's EULA, see also [MICROSOFT SOFTWARE LICENSE TERMS MICROSOFT SQL SERVER 2019 STANDARD(EN_US)](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm).
+   By starting a Docker container with the environment variable `ACCEPT_EULA=Y` you agree to the terms of Microsoft EULA, see also [MICROSOFT SOFTWARE LICENSE TERMS MICROSOFT SQL SERVER 2019 STANDARD(EN_US)](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm).
 
 ```bash
 # To start the SQL Server docker image and set the password as `mqtt_public1`
@@ -89,11 +89,59 @@ CREATE TABLE mqtt.dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT 
 GO
 ```
 
+### Configuration ODBC Driver
+
+Before proceeding with other steps, you need to configure the ODBC driver.
+
+- You can use either FreeTDS or the msodbcsql17 driver provided by Microsoft as the ODBC driver (The connection properties for msodbcsql18 have not been adapted yet).
+- Below are several ways to install and configure FreeTDS as an ODBC driver on mainstream distributions.
+- To use the msodbcsql17 driver, please refer to [Install the Microsoft ODBC driver for SQL Server (Linux)](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16&tabs=alpine18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline) for instructions.
+- Due to Microsoft EULA terms, the Docker image provided by EMQX does not include the msodbcsql17 driver. To use in Docker or Kubernetes, please create an image with the ODBC driver based on the image provided by [EMQX-Enterprise](https://hub.docker.com/r/emqx/emqx-enterprise). For details, please refer to [Build New Image](#Build New Image).
+
+The DSN Name specified in the `odbcinst.ini` configuration is used by EMQX to determine the path of the driver's dynamic library. For more information, please refer to [Connection Properties](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/connection-string-keywords-and-data-source-names-dsns?view=sql-server-ver16#connection-properties).
+In the examples provided here, the DSN Name is `ms-sql`. You can choose your own name according to your preference, but it is recommended to use only English letters. Additionally, the DSN Name is case-sensitive.
+
+Configure FreeTDS odbc driver on MacOS:
+```bash
+$ brew install unixodbc freetds
+$ vim /usr/local/etc/odbcinst.ini
+# add the following lines
+[ms-sql]
+Description = ODBC for FreeTDS
+Driver      = /usr/local/lib/libtdsodbc.so
+Setup       = /usr/local/lib/libtdsodbc.so
+FileUsage   = 1
+```
+
+Configure FreeTDS odbc driver configuration on Centos:
+```bash
+$ yum install unixODBC unixODBC-devel freetds freetds-devel perl-DBD-ODBC perl-local-lib
+$ vim /etc/odbcinst.ini
+# add the following lines
+[ms-sql]
+Description = ODBC for FreeTDS
+Driver      = /usr/lib64/libtdsodbc.so
+Setup       = /usr/lib64/libtdsS.so.2
+Driver64    = /usr/lib64/libtdsodbc.so
+Setup64     = /usr/lib64/libtdsS.so.2
+FileUsage   = 1
+```
+
+Configure FreeTDS odbc driver configuration on Ubuntu (Take Ubuntu20.04 as an example, for other versions, please refer to the official odbc documentation):
+```bash
+$ apt-get install unixodbc unixodbc-dev tdsodbc freetds-bin freetds-common freetds-dev libdbd-odbc-perl liblocal-lib-perl
+$ vim /etc/odbcinst.ini
+# add the following lines
+[ms-sql]
+Description = ODBC for FreeTDS
+Driver      = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so
+Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
+FileUsage   = 1
+```
+
 ### Create SQL Server Data Bridge
 
 This section demonstrates how to create a SQL Server data bridge to store client-published messages.
-
-#### Store MQTT Message
 
 <!-- Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to SQL Server for messages storage and event recording. -->
 
@@ -111,6 +159,7 @@ This section demonstrates how to create a SQL Server data bridge to store client
    - **Database Name**: Input `mqtt`.
    - **Username**: Input `sa`.
    - **Password**: Input preset password `mqtt_public1`, or use the actual password.
+   - **Driver**: Input `ms-sql`, as the DSN Name configured in `odbcinst.ini`
 
 6. Configure the **SQL Template** based on the feature to use:
 
@@ -119,56 +168,11 @@ This section demonstrates how to create a SQL Server data bridge to store client
    insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
    ```
 
-7. Configure odbc driver.
-  You can use freetds or msodbcsql17 released by Microsoft as odbc driver.
-  To use the msodbcsql17 driver, please refer to [Install the Microsoft ODBC driver for SQL Server (Linux)](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16&tabs=alpine18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline)
+7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md).
 
-  - Configure FreeTDS odbc driver on MacOS:
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the SQL Server.
 
-    ```bash
-    $ brew install unixodbc freetds
-    $ vim /usr/local/etc/odbcinst.ini
-    # add the following lines
-    [ms-sql]
-    Description = ODBC for FreeTDS
-    Driver      = /usr/local/lib/libtdsodbc.so
-    Setup       = /usr/local/lib/libtdsodbc.so
-    FileUsage   = 1
-    ```
-
-  - Configure FreeTDS odbc driver configuration on Centos:
-
-    ```bash
-    $ yum install unixODBC unixODBC-devel freetds freetds-devel perl-DBD-ODBC perl-local-lib
-    $ vim /etc/odbcinst.ini
-    # add the following lines
-    [ms-sql]
-    Description = ODBC for FreeTDS
-    Driver      = /usr/lib64/libtdsodbc.so
-    Setup       = /usr/lib64/libtdsS.so.2
-    Driver64    = /usr/lib64/libtdsodbc.so
-    Setup64     = /usr/lib64/libtdsS.so.2
-    FileUsage   = 1
-    ```
-
-  - Configure FreeTDS odbc driver configuration on Ubuntu (Take Ubuntu20.04 as an example, for other versions, please refer to the official odbc documentation):
-
-    ```bash
-    $ apt-get install unixodbc unixodbc-dev tdsodbc freetds-bin freetds-common freetds-dev libdbd-odbc-perl liblocal-lib-perl
-    $ vim /etc/odbcinst.ini
-    # add the following lines
-    [ms-sql]
-    Description = ODBC for FreeTDS
-    Driver      = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so
-    Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
-    FileUsage   = 1
-    ```
-
-8. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md).
-
-9. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the SQL Server.
-
-10. Click **Create** to finish the creation of the data bridge.
+9. Click **Create** to finish the creation of the data bridge.
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into SQL Server. You can also create rules by following the steps in [Create Rules for SQL Server Data Bridge](#create-rules-for-sqlserver-data-bridge).
 
@@ -225,4 +229,37 @@ id          msgid                                                            top
 
 (1 rows affected)
 1>
+```
+
+### Build New Image
+
+For EMQX versions that have supported Microsoft SQL Server Bridge, that is, EMQX-Enterprise 5.0.3 and later versions, you can find the corresponding [Dockerfile](https://github.com/emqx/emqx/blob/master/deploy/docker/Dockerfile.msodbc).
+<!-- TODO: update tag version in command and dockerfile -->
+You can save the file to the local area, and use the command `docker build -f=deploy/docker/Dockerfile.msodbc -t emqx-enterprise-with-msodbc:5.0.3-alpha.2 .` directly to make the mirror image.
+After building, you can use docker image ls to obtain a list of local images. You can also upload or save the image for later use.
+
+::: tip
+The image version in this Dockerfile is `emqx/emqx-enterprise:5.0.3-alpha.2`. You can build the image based on the EMQX-Enterprise version you need, or use the latest version image `emqx/emqx-enterprise:latest` to  build.
+In addition, if you use this Dockerfile to build an image, it means that you agree to the Microsoft SQL Server EULA.
+See also [MICROSOFT SOFTWARE LICENSE TERMS MICROSOFT SQL SERVER 2019 STANDARD(EN_US)](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm) for more details about EULA.
+:::
+
+```
+# FROM emqx/emqx-enterprise:latest
+FROM emqx/emqx-enterprise:5.0.3-alpha.2
+
+USER root
+
+RUN apt-get update \
+    && apt-get install -y gnupg2 curl apt-utils \
+    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-mkc crelease.list \
+    && apt-get update \
+    && ACCEPT_EULA=Y apt-get install -y msodbcsql17 unixodbc-dev \
+    && sed -i 's/ODBC Driver 17 for SQL Server/ms-sql/g' /etc/odbcinst.ini
+
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/*;
+
+USER emqx
 ```

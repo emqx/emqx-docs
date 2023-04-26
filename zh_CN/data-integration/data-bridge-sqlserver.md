@@ -91,27 +91,16 @@ $ Password:
    ```
 
 
-### 创建 SQL Server 数据桥接
+### 配置 ODBC 驱动
 
-本节我们将创建一个 SQL Server 数据桥接来实现对客户端发布消息的存储。
+在开始其他步骤之前，需要您配置 ODBC 驱动。
+- 您可以使用 freetds 或 Microsoft 发布的 msodbcsql17 作为 odbc 驱动。( msodbcsql18 的连接属性并仍未进行适配 )
+- 以下为几种主流发行版上安装配置 FreeTDS 作为 ODBC 驱动的方式。
+- 要使用 msodbcsql17 驱动，请参考 [安装 Microsoft ODBC Driver for SQL Server (Linux)](https://learn.microsoft.com/zh-cn/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16&tabs=alpine18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline)。
+- 因为 Microsoft EULA 条款，EMQX 提供的 Docker 镜像不带有 msodbcsql17 驱动，要在 Docker 或 Kubernetes 中使用，请基于 [EMQX-Enterprise](https://hub.docker.com/r/emqx/emqx-enterprise) 提供的镜像制作带有 ODBC 驱动的镜像。细节请参考 [制作新镜像](#制作新镜像)
 
-1. 在 Dashboard 点击 **数据集成** -> **数据桥接**。
-2. 点击页面右上角的**创建**。
-3. 在数据桥接类型中选择 Microsoft SQL Server，点击**下一步**。
-4. 输入数据桥接名称，要求是大小写英文字母或数字组合。
-5. 输入 SQL Server 连接信息。
-   - **服务器地址**： `127.0.0.1:1433`，或使用实际的 SQL Server 地址和端口
-   - **数据库名字**： `mqtt`
-   - **用户名**： `sa`
-   - **密码**： `mqtt_public1`
-6. 配置 SQL 模板，使用如下 SQL 完成数据插入，此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`:
-
-  ```sql
-  insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
-  ```
-7. 配置 odbc 驱动。
-您可以使用 freetds 或 Microsoft 发布的 msodbcsql17 作为 odbc 驱动。
-要使用 msodbcsql17 驱动，请参考 [安装 Microsoft ODBC Driver for SQL Server (Linux)](https://learn.microsoft.com/zh-cn/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16&tabs=alpine18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline)。
+EMQX 使用 `odbcinst.ini` 配置中的 DSN Name 来确定驱动动态库的路径，有关的详细信息请参考 [连接属性](https://learn.microsoft.com/zh-cn/sql/connect/odbc/linux-mac/connection-string-keywords-and-data-source-names-dsns?view=sql-server-ver16#connection-properties)。
+在此处给出的示例中，DSN Name 均为 `ms-sql`，您可根据自己的喜好进行命名，但建议只使用英文字母。此外 DSN Name 大小写敏感。
 
 MacOS 上配置 FreeTDS odbc 驱动:
 ```
@@ -151,14 +140,34 @@ Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
 FileUsage   = 1
 ```
 
-8. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](#配置参数)。
-9. 在点击 **创建** 按钮完成数据桥接创建之前，您可以使用 **测试连接** 来测试当前 EMQX 到 SQL Server 的连接是否成功。
-10. 点击创建按钮完成数据桥接创建。
+### 创建 SQL Server 数据桥接
+
+本节我们将创建一个 SQL Server 数据桥接来实现对客户端发布消息的存储。
+
+1. 在 Dashboard 点击 **数据集成** -> **数据桥接**。
+2. 点击页面右上角的**创建**。
+3. 在数据桥接类型中选择 Microsoft SQL Server，点击**下一步**。
+4. 输入数据桥接名称，要求是大小写英文字母或数字组合。
+5. 输入 SQL Server 连接信息。
+   - **服务器地址**： `127.0.0.1:1433`，或使用实际的 SQL Server 地址和端口
+   - **数据库名字**： `mqtt`
+   - **用户名**： `sa`
+   - **密码**： `mqtt_public1`
+   - **驱动名**： `ms-sql`，即您在 `odbcinst.ini` 中配置的 DSN Name
+6. 配置 SQL 模板，使用如下 SQL 完成数据插入，此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`:
+
+  ```sql
+  insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
+  ```
+
+7. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](#配置参数)。
+8. 在点击 **创建** 按钮完成数据桥接创建之前，您可以使用 **测试连接** 来测试当前 EMQX 到 SQL Server 的连接是否成功。
+9. 点击创建按钮完成数据桥接创建。
 
 至此您已经完成数据桥接创建，SQL Server 数据桥接应该出现在数据桥接列表（**数据集成** -> **数据桥接**）中，**资源状态**为**已连接**。
 接下来将继续创建一条规则来指定需要写入的数据。
 
-## 为 SQL Server 创建规则
+### 为 SQL Server 创建规则
 
 1. 转到 Dashboard **数据集成** -> **规则**页面。
 2. 点击页面右上角的**创建**。
@@ -176,7 +185,7 @@ FileUsage   = 1
 
 至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 SQL Server 存储。
 
-## 测试连接和规则
+### 测试连接和规则
 
 使用 MQTTX 向 `t/1` 主题发布消息。
 
@@ -197,4 +206,37 @@ id          msgid                                                            top
 
 (1 rows affected)
 1>
+```
+
+### 制作新镜像
+
+对于已经支持 Microsoft SQL Server 的 EMQX 版本，即 EMQX-Enterprise 5.0.3 及以后的版本，您可以在 EMQX 的仓库中找到对应的 [Dockerfile](https://github.com/emqx/emqx/blob/master/deploy/docker/Dockerfile.msodbc)。
+<!-- TODO: update tag version in command and dockerfile -->
+您可以将该文件保存至本地，直接使用命令 `docker build -f=deploy/docker/Dockerfile.msodbc -t emqx-enterprise-with-msodbc:5.0.3-alpha.2 .` 制作镜像。
+构建完成后可以使用 `docker image ls` 来获取本地的 image 列表，您也可以将镜像上传或保存以另作他用。
+
+::: tip
+该 Dockerfile 中的镜像版本为 `emqx/emqx-enterprise:5.0.3-alpha.2`，您可以根据您需要的 EMQX-Enterprise 版本构建镜像，也可使用 EMQX-Enterprise 最新版本镜像 `emqx/emqx-enterprise:latest` 进行构建。
+此外，如您使用此 Dockerfile 构建镜像，代表您同意 Microsoft SQL Server EULA。
+关于 EULA 详情，请参阅 [MICROSOFT 软件许可条款 MICROSOFT SQL SERVER 2019 STANDARD(ZH_CN)](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_ChineseSimplified.htm)。
+:::
+
+```
+# FROM emqx/emqx-enterprise:latest
+FROM emqx/emqx-enterprise:5.0.3-alpha.2
+
+USER root
+
+RUN apt-get update \
+    && apt-get install -y gnupg2 curl apt-utils \
+    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-mkc crelease.list \
+    && apt-get update \
+    && ACCEPT_EULA=Y apt-get install -y msodbcsql17 unixodbc-dev \
+    && sed -i 's/ODBC Driver 17 for SQL Server/ms-sql/g' /etc/odbcinst.ini
+
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/*;
+
+USER emqx
 ```
