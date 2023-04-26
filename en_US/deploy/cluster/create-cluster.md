@@ -140,6 +140,9 @@ cluster {
 }
 ```
 
+<!--v5.0.23 e5.0.4 之前仅支持: ["emqx1", "emqx2"]
+v5.0.23e5.0.4 之后是都支持-->
+
 Where, 
 
 - `discovery_strategy` is the node discovery strategy, set it to `static`
