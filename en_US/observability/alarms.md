@@ -86,7 +86,7 @@ One system multifunction will be repeatedly reported. That is, if one alarm on h
 ### Obtain Alarms from Log
 
 The activation and deactivation of alarms can be written to log (console or file). When failures occur during message transmission or event processing, detailed information can be logged, and the logging system can also be used to capture alerts through log analysis. The following example shows the detailed alarm information printed in the log:
-
+The log level is `warning`, and the `msg` field is `alarm_is_activated` and `alarm_is_deactivated`.
 <img src="./assets/view-alarms-log.png" alt="view-alarms-log" style="zoom:50%;" />
 
 ### Obtain Alarms via HTTP API
