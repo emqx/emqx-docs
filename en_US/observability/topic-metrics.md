@@ -13,7 +13,7 @@ Click the **View** button in **Actions** column and you will see detailed inform
 The topic metrics list contains the following fields:
 
 - **Topic**: The name of the topic that you want to monitor.
-- **Incoming messages**: Messages received by EMQX every second on the monitored topic.
+- **Incoming messages**:  The total number of message incoming on the current topic and the number of message incoming per second.
 - **Outgoing Messages**: Messages routed by EMQX every second on the monitored topic.
 - **Dropped Messages**: Messages are dropped by EMQX every second on the monitored topic.
 - **Start at**: Time you created this topic monitoring record.
