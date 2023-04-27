@@ -7,7 +7,7 @@ EMQX's integration with Apache Cassandra provides the ability to store messages 
 
 In the current implementation:
 - Only supports Cassandra v3.x, not yet compatible with v4.x.
-- Only supports storing data in synchronous manner.
+The current implementation only supports storing data in synchronous manner.
 
 {% emqxce %}
 :::tip
