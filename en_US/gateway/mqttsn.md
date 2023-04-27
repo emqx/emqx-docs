@@ -18,7 +18,7 @@ The MQTT-SN gateway is based on the [MQTT-SN v1.2](https://www.oasis-open.org/co
 
 ## Enable the MQTT-SN Gateway
 
-In EMQX 5.0, MQTT-SN gateways can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
+In EMQX 5.0, MQTT-SN gateway can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
 
 On EMQX Dashboard, click **Extensions** -> **Gateways** on the left navigation menu. On the **Gateway** page, all supported gateways are listed. Locate **MQTT-SN** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize MQTT-SN** page.
 
@@ -109,13 +109,13 @@ In the **Basic Configuration** tab, you can customize your gateway ID, predefine
   - **Topic ID**: Set the topic ID, which should be an integer between 1 and 65535.
   - **Topic**: Set the topic names.<!--, multiple topics can be added here, separated with a `,`-->
 
-- **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different listeners, for example, *mqttsn*.
+- **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, `mqttsn/`.
 
-  **Note**: The prefixed string will be removed from the topic name when the message is delivered to the subscriber. 
+  **Note**: This topic prefix is managed by the gateway. MQTT-SN clients do not need to add this prefix explicitly when publishing and subscribing.
 
 ### Add Listeners 
 
-By default, one UPD listener with the name of **default** is already configured on port `1884`, which allows a maximum of 1,000 connections per second, and support up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings for **Delete** to delete the listener. Or click **Add Listener** to add a new listener.
+By default, one UDP listener with the name of **default** is already configured on port `1884`, which allows a maximum of 1,000 connections per second, and support up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings for **Delete** to delete the listener. Or click **Add Listener** to add a new listener.
 
 <img src="./assets/mqttsn-listerner.png" alt="MQTTSN listener" style="zoom:50%;" />
 
@@ -126,7 +126,7 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 - **Name**: Set a unique identifier for the listener.
 - **Type**: Select the protocol type, for MQTT-SN, this can be either **udp** or **dtls**.
 - **Bind**: Set the port number on which the listener accepts incoming connections.
-- **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different listeners.
+- **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols
 
 **Listener Settings** 
 
