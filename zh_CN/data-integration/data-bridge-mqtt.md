@@ -33,11 +33,11 @@ MQTT 数据桥接是一种连接多个 EMQX 集群或其他 MQTT 服务的方式
 
 **ingress 模式下的消息服务流程**
 
-![MQTT 数据桥接 igress 示意图](./assets/bridge_mqtt_igress.png)
+<img src="./assets/bridge_mqtt_igress.png" alt="MQTT 数据桥接 igress 示意图" style="zoom:67%;" />
 
 **egress 模式下的消息服务流程**
 
-![MQTT 数据桥接 egress 示意图](./assets/bridge_mqtt_egerss.png)
+<img src="./assets/bridge_mqtt_egerss.png" alt="MQTT 数据桥接 egress 示意图" style="zoom:67%;" />
 
 ### 通过 Dashboard 配置
 
@@ -123,8 +123,8 @@ bridges.mqtt.my_mqtt_bridge {
 
 在 **ingress** 方向下，可以将远程 MQTT 服务订阅得到的消息作为规则的数据源：
 
-![bridge_igress_rule_link](./assets/bridge_igress_rule_link.png)
+<img src="./assets/bridge_igress_rule_link.png" alt="bridge_igress_rule_link" style="zoom:67%;" />
 
 在 **egress** 方向下，可以将规则处理结果作为消息，转发到远程 MQTT 服务的指定主题下：
 
-![bridge_egress_rule](./assets/bridge_egress_rule.png)
+<img src="./assets/bridge_egress_rule.png" alt="bridge_egress_rule" style="zoom:67%;" />

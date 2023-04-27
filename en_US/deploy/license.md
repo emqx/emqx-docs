@@ -29,11 +29,11 @@ You can upload your License file with EMQX Dashboard or configuration file.
 
 ### Import with Dashboard
 
-1. On EMQX Dasboard, click **Dashboard** on the left navigation tree. You can check the current license information at the bottom of the page, where you can check the **License usage** and **Expire At** of the current license file.
+1. On EMQX Dasboard, click **Monitoring** -> **Cluster Overview** on the left navigation menu. You can check the current license information at the bottom of the page, where you can check the **License usage** and **Expire At** of the current license file.
 2. Click the **Update License** button. Paste your License Key in the popup dialog box, and click **Save**. The page data automatically refreshes following your submission.
 3. Confirm that the new license file has taken effect.
 
-### Import with configuration file
+### Import with the configuration file
 
 You can also configure the license file with the configuration file. After the configuration, you can run `emqx_ctl license reload` in [EMQX command line tool](../admin/cli.md) to reload the license. 
 

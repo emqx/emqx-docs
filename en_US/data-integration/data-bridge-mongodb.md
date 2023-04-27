@@ -52,7 +52,7 @@ use emqx_data
 db.createCollection('emqx_messages')
 ```
 
-### Create MongoDB Data Bridge
+### Create a MongoDB Data Bridge
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 

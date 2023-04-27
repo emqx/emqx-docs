@@ -6,7 +6,7 @@ Through simple and visual configuration, message flow and device events can be i
 EMQX provides a real-time, concise and efficient data integration scheme by combining **Rules** and **Data Bridges**.
 The rules are used to process messages or events, and the data bridge is used to connect the data system.
 
-![image](./assets/rules/data-integration-arch.png)
+<img src="./assets/rules/data-integration-arch.png" alt="image" style="zoom:50%;" />
 
 ## Rules
 
@@ -26,4 +26,4 @@ For more information about data bridges, see [Data Bridges](./data-bridges.md).
 
 After data bridges and rules are created, we can see the topology of data integration on the dashboard:
 
-![image](./assets/rules/en_introduction_flow.png)
+<img src="./assets/rules/en_introduction_flow.png" alt="image" style="zoom:50%;" />

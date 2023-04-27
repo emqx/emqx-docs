@@ -8,7 +8,7 @@
 
 ## 网关
 
-点击左侧插件扩展菜单下的网关，可以来到网关页面。网关提供了非 MQTT 协议接入的能力。目前支持的协议包括
+点击**管理**，在**插件扩展**区域找到的**网关**，可以来到网关页面。网关提供了非 MQTT 协议接入的能力。目前支持的协议包括
 
 - [Stomp](https://stomp.github.io/stomp-specification-1.2.html)
 - [MQTT-SN](https://www.oasis-open.org/committees/download.php/66091/MQTT-SN_spec_v1.2.pdf)
@@ -18,7 +18,7 @@
 
 启用网关前，需要先对网关进行配置；配置完成后，可以在网关页面上查看通过各已启用的协议网关接入的连接数，启用/停用网关。
 
-![image](./assets/gateways.png)
+<img src="./assets/gateways.png" alt="image" style="zoom:67%;" />
 
 ::: tip
 停用一个网关，会导致该网关下的所有连接断开，需要重新建立连接。请谨慎操作。
@@ -34,7 +34,7 @@
 
 各个配置项都会因为协议网关的不同而不一样；配置项可在初始化完成后，进入网关详情页面进行更改。
 
-![image](./assets/gateway-init.png)
+<img src="./assets/gateway-init.png" alt="image" style="zoom:67%;" />
 
 > 通过 Dashboard 配置的网关会在整个集群中生效
 
@@ -78,7 +78,7 @@
 
 页面上方可点击`设置`、`接入认证`或`监听器`菜单按钮，切换至对应的页面修改相应的配置。
 
-![image](./assets/gateway-clients.png)
+<img src="./assets/gateway-clients.png" alt="image" style="zoom:67%;" />
 
 ## ExHook
 
@@ -86,23 +86,23 @@
 
 关于 ExHook 的定义和开发指南可查阅[钩子](../extensions/hooks.md)。
 
-![image](./assets/exhook.png)
+<img src="./assets/exhook.png" alt="image" style="zoom:67%;" />
 
 ### 添加 ExHook
 
 点击页面右上方的`添加`按钮，进入添加 ExHook 页面。在表单中填写需要添加的 ExHook 的基本信息及连接参数，点击`创建`按钮提交数据。创建成功后将跳转回 ExHook 列表页。
 
-![image](./assets/exhook-add.png)
+<img src="./assets/exhook-add.png" alt="image" style="zoom:67%;" />
 
 ### 查看详情
 
 创建成功后，可在 ExHook 列表页面，点击 ExHook 名称进入 ExHook 详情页。在详情页中，可查看当前 ExHook 的指标数据，包括当前 ExHook 的已注册钩子总数，所有钩子的执行成功总数、失败总数、当前执行速率。下方为 ExHook 的基本信息，可以对基本信息进行编辑然后点击`更新`按钮进行保存。
 
-![image](./assets/exhook-detail.png)
+<img src="./assets/exhook-detail.png" alt="image" style="zoom:67%;" />
 
 页面上方点击`已注册钩子`可查看当前 ExHook 实现的钩子列表，及各个钩子参数和执行指标数据。
 
-![image](./assets/exhook-hooks.png)
+<img src="./assets/exhook-hooks.png" alt="image" style="zoom:67%;" />
 
 ## 插件
 
@@ -110,8 +110,8 @@
 
 点击页面右上角的`安装插件`按钮，进入安装插件页面。上传安装包或将安装包拖拽到页面的虚线框中，点击`安装`按钮提交安装包。安装包提交成功后页面将返回至插件列表页，安装成功的插件默认为停止状态，如需启用需点击相应插件右侧的`启动`按钮进行启用，当有多个插件时，启用顺序即为插件的执行顺序；也可在页面上拖拽或点击插件右侧`更多`菜单下对应的按钮对插件进行排序，排序结果即为下次节点重启后插件的执行顺序。如果某个插件已不再需要，可点击插件右侧`更多`菜单下的`卸载`按钮卸载插件。
 
-![image](./assets/plugins.png)
+<img src="./assets/plugins.png" alt="image" style="zoom:67%;" />
 
 点击插件名称将跳转至插件详情页，详情页左侧展示插件安装包中 `README.md` 的文档内容，右侧展示插件安装包中 `release.json` 文件中提供的插件的相关信息，如果文件中还提供了插件开发者的相关网站，可以点击页面右上角的`了解更多`跳转至相关页面。
 
-![image](./assets/plugin-detail.png)
+<img src="./assets/plugin-detail.png" alt="image" style="zoom:67%;" />

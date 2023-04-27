@@ -65,15 +65,9 @@ Additionally, there are two special rules. These rules are usually used as defau
 
 ## Configure with Dashboard
 
-On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
-
-Click **Create** at the top right corner, select **File** as **Backend**, and click **Next**. The **Configuration** tab is shown as below:
-
-![authz-file_ee](./assets/authz-file_ee.png)
-
 EMQX configures file-based authorizer by default. You can click **Settings** button in **Actions** column to view or edit the authorization rules configured in the **ACL File** area. For more information on file format and fields descriptions, see [ACL file format](#acl-file-format).
 
-![dashboard-edit-ACL-file_ee](./assets/dashboard-edit-ACL-file_ee.png)
+<img src="./assets/dashboard-edit-ACL-file_ee.png" alt="dashboard-edit-ACL-file_ee" style="zoom:67%;" />
 
 ## Configure with Configuration File
 

@@ -1,6 +1,6 @@
 # Extensions
 
-With the Extension module, users can use the gateway to access non-MQTT protocol connections and message publishing and receiving, and use the Plugin or ExHook to modify and extend the system.
+With the Extension module, users can use the gateway to access non-MQTT protocol connections and message publishing and receiving, and use the Plugin or ExHook to modify and extend the system. Click **Management** and scroll down to the **Extension** section, where you will find:
 
 - **Gateways**: Handles connections, authentication and message sending and receiving for all non-MQTT protocols and provides a unified user layer interface and concept for them.
 - **ExHook**: Provides the ability to modify or extend the system functionality of EMQX using other languages.
@@ -18,7 +18,7 @@ Click on the Gateways under the Extensions menu on the left to be taken to the G
 
 Before enabling the gateway, the gateway needs to setup; after setup, you can view the number of connections through each enabled protocol gateway, and enable/disable gateways on the Gateways page.
 
-![image](./assets/gateways.png)
+<img src="./assets/gateways.png" alt="image" style="zoom:67%;" />
 
 ::: tip
 Disable a gateway will cause all connections under the gateway to be disconnected, and the connections need to be re-established. Please be careful.
@@ -34,7 +34,7 @@ On the Gateways page, select the protocol gateway you wish to enable and click t
 
 Each configuration item will be different depending on the protocol gateway; the configuration items can be updated after the initialization is complete by going to the gateway details page.
 
-![image](./assets/gateway-init.png)
+<img src="./assets/gateway-init.png" alt="image" style="zoom:67%;" />
 
 > Gateways configured via Dashboard will take effect across the cluster
 
@@ -79,7 +79,7 @@ After the protocol gateway setup and be enabled, it will return to the gateway p
 
 The client list can be searched using the client ID, username and node. On the top of the page you can click on the `Settings`, `Authentication`' or `Listener` menu buttons to switch to the corresponding page to modify the corresponding configuration.
 
-![image](./assets/gateway-clients.png)
+<img src="./assets/gateway-clients.png" alt="image" style="zoom:67%;" />
 
 ## ExHook
 
@@ -87,23 +87,23 @@ Click ExHook under the extension menu on the left to come to the ExHook page, Ex
 
 Definitions and development guidelines for ExHooks can be found in [hooks](../extensions/hooks.md).
 
-![image](./assets/exhook.png)
+<img src="./assets/exhook.png" alt="image" style="zoom:67%;" />
 
 ### Add ExHook
 
 Click the `Add` button at the top right of the page to go to the Add ExHook page. Fill in the form with the basic information and connection parameters of the ExHook to be added and click the `Create` button to submit the data. After successful creation, you will be redirected to the ExHook list page.
 
-![image](./assets/exhook-add.png)
+<img src="./assets/exhook-add.png" alt="image" style="zoom:67%;" />
 
 ### View details
 
 After successful creation, you can access the ExHook details page by clicking on the ExHook name on the ExHook list page. On the details page, you can view the current ExHook metrics, including the total number of registered hooks, the total number of successful executions, the total number of failed executions and the current execution rate of all hooks. You can edit the basic information and click the `Update` button to save it.
 
-![image](./assets/exhook-detail.png)
+<img src="./assets/exhook-detail.png" alt="image" style="zoom:67%;" />
 
 Click on `Registered hooks` at the top of the page to view the list of hooks currently implemented by ExHook, as well as the parameters and execution metrics of each hook.
 
-![image](./assets/exhook-hooks.png)
+<img src="./assets/exhook-hooks.png" alt="image" style="zoom:67%;" />
 
 ## Plugins
 
@@ -111,8 +111,8 @@ Click on Plugins under the extension menu on the left to go to the Plugins page;
 
 Click the `Install Plugin` button in the top right corner of the page to enter the plugin installation page. Upload the installation package or drag and drop the package into the dotted box on the page and click the `Install` button to submit the package. After the installation package is submitted successfully, the page will return to the plugin list page, the successfully installed plugin is stopped by default, if you want to enable it, you need to click the `Start` button on the right of the corresponding plugin to enable it, when there are more than one plugin, the order of enabling is the order of execution of the plugin; you can also drag and drop on the page or click the corresponding button under the `More` menu on the right of the plugin to sort the plugin, the sorting result is the order of execution of the plugin after the next node restart. If a plugin is no longer needed, you can uninstall it by clicking the `Uninstall` button under the `More` menu to the right of the plugin.
 
-![image](./assets/plugins.png)
+<img src="./assets/plugins.png" alt="image" style="zoom:67%;" />
 
 Clicking on the plugin name will redirect you to the plugin details page. The left side of the details page displays the `README.md` documentation from the plugin installation package, and the right side displays the plugin information provided in the `release.json` file from the plugin installation package. If the documentation also provides the relevant website of the plugin developer, you can jump to the relevant page by clicking `Read More` in the top right corner of the page.
 
-![image](./assets/plugin-detail.png)
+<img src="./assets/plugin-detail.png" alt="image" style="zoom:67%;" />

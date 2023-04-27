@@ -54,7 +54,7 @@ For untrusted environments, HTTPS should be used.
 
 2. Click **Create** at the top right corner, select **HTTP Server** as **Backend**, and click **Next**. The **Configuration** tab is shown as below.
 
-   ![authz-http_ee](./assets/authz-http_ee.png)
+   <img src="./assets/authz-http_ee.png" alt="authz-http_ee" style="zoom:67%;" />
 
 3. Follow the instructions below to do the configuration.
 

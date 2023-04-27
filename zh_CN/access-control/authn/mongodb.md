@@ -50,7 +50,7 @@ MongoDB 认证器支持将认证数据存储为 MongoDB 文档。用户需要提
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，依次选择**认证方式**为 `Password-Based`，**数据源**为 `MongoDB`，进入**配置参数**页签：
 
-![use mongodb to authenticate](./assets/authn-mongodb.png)
+<img src="./assets/authn-mongodb.png" alt="use mongodb to authenticate" style="zoom:67%;" />
 
 您可根据如下说明完成相关配置：
 

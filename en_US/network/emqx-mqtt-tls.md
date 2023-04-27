@@ -97,7 +97,7 @@ Apart from allowing to receive a two-way SSL MQTT client, EMQX also provides acc
 
 For example, to access a web server via HTTPS:
 
-![Configure HTTPS Client](./assets/http-tls.jpg)
+<img src="./assets/http-tls.jpg" alt="image-20230426175556674" style="zoom:50%;" />
 
 When creating any connection to an external resource, you can choose to enable TLS and configure its SSL certificate. As shown above:
 

@@ -84,7 +84,7 @@ EMQX 已默认配置了基于文件的授权检查器。您可点击 **File** �
 
 在 **授权**页面，单击**创建**，选择**数据源**为 **File**，点击**下一步**，进入**配置参数**页签：
 
-![file authentication](./assets/authz-file.png)
+<img src="./assets/authz-file.png" alt="file authentication" style="zoom:67%;" />
 
 您可在 **ACL File** 区域编辑客户端访问规则，有关文件格式和对应字段的说明，可参考 [文件格式](#文件格式) 部分。
 

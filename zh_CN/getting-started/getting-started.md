@@ -240,7 +240,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 回到 EMQX Dashboard 的**仪表盘**部分，可以看到**连接数**、**主题数**、和**订阅数**部分数据的变化，在下方的可视化窗格，还可以看到这段时间流入的消息数量曲线。
 
-![EMQX dashboard](./assets/emqx-dashboard.png)
+<img src="./assets/emqx-dashboard.png" alt="EMQX dashboard" style="zoom:67%;" />
 
 ## 进阶操作
 
@@ -249,8 +249,6 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 ### 更多主题
 
 本章节还包含了 EMQX 5.x 版本引入的全新功能介绍和已知的使用限制，可点击下方链接继续阅读。
-
-<!-- - [全新功能](./new-features.md) -->
 
 - [使用限制](./restrictions.md)
 

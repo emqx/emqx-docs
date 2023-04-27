@@ -58,7 +58,7 @@ You can use EMQX Dashboard to configure how to use PostgreSQL for user authoriza
 
 2. Click **Create** at the top right corner, then click to select **PostgreSQL** as **Backend**. Click **Next**. The **Configuration** tab is shown as below.
 
-   ![authz-PostgreSQL_ee](./assets/authz-PostgreSQL_ee.png)
+   <img src="./assets/authz-PostgreSQL_ee.png" alt="authz-PostgreSQL_ee" style="zoom:67%;" />
 
 3. Follow the instructions below to do the configuration.
 

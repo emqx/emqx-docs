@@ -37,7 +37,7 @@ EMQX also supports pushing metrics to Pushgateway server, which is disabled by d
 - **Job Name**: Specify variables that include the EMQX node name and hostname. The default value is `${name}/instance/${name}~${host}`. For example, when the EMQX node name is `emqx@127.0.0.1`, the `name` variable takes the value `emqx` and the `host` variable takes the value `127.0.0.1`.
 - **Headers**: Type the key and value of the HTTP headers for the monitoring metrics that pushed to Pushgateway. You can add a list of headers by clicking the **Add** button. The type is string, for example, { Authorization = "some-authz-tokens"}.
 
-After you complete the configuration, click **Save Changes**.
+You can use EMQX Dashboard to configure monitoring data integration to the Prometheus platform. In the EMQX Dashboard, click **Management** -> **Monitoring** on the left navigation tree, then click the **Integration** tab for the configuration.
 
 {% endemqxee %}
 
