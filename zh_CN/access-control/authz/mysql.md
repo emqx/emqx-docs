@@ -56,7 +56,7 @@ MySQL authorizer 由 `type=mysql` 标识。
 
 配置示例：
 
-```hocon
+```hcl
 {
   type = mysql
   enable = true

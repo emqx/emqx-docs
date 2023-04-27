@@ -14,7 +14,6 @@ The Erlang/OTP platform application is composed of distributed Erlang nodes (pro
 
   Unique name of the EMQX node. It must follow <code>%name%@FQDN</code> or
 <code>%name%@IPv4</code> format.
-          
 
 
 **node.cookie**
@@ -37,7 +36,6 @@ belong to different clusters from accidentally connecting to each other.
   Maximum number of simultaneously existing processes for this Erlang system.
 The actual maximum chosen may be much larger than the Number passed.
 For more information, see: https://www.erlang.org/doc/man/erl.html
-          
 
 
 **node.max_ports**
@@ -51,7 +49,6 @@ For more information, see: https://www.erlang.org/doc/man/erl.html
   Maximum number of simultaneously existing ports for this Erlang system.
 The actual maximum chosen may be much larger than the Number passed.
 For more information, see: https://www.erlang.org/doc/man/erl.html
-          
 
 
 **node.dist_buffer_size**
@@ -78,8 +75,7 @@ For more information, see: https://www.erlang.org/doc/man/erl.html
 
   *Type*: `string`
 
-
-Path to the persistent data directory.<br/>
+  Path to the persistent data directory.<br/>
 Possible auto-created subdirectories are:<br/>
 - `mnesia/<node_name>`: EMQX's built-in database directory.<br/>
 For example, `mnesia/emqx@127.0.0.1`.<br/>
@@ -91,7 +87,6 @@ the old dir should be deleted first.<br/>
 - `trace`: Trace log files.<br/>
 
 **NOTE**: One data dir cannot be shared by two or more EMQX nodes.
-
 
 
 **node.global_gc_interval**
@@ -118,11 +113,10 @@ the old dir should be deleted first.<br/>
 
   *Default*: `30s`
 
-  This variable gives the number of seconds that the emulator is allowed to spend writing a crash dump. When the given number of seconds have elapsed, the emulator is terminated.
-- If setting to 0 seconds, the runtime system does not even attempt to write the crash dump file. It only terminates.
-- If setting to a positive value S, wait for S seconds to complete the crash dump file and then terminates the runtime system with a SIGALRM signal.
+  This variable gives the number of seconds that the emulator is allowed to spend writing a crash dump. When the given number of seconds have elapsed, the emulator is terminated.<br/>
+- If setting to 0 seconds, the runtime system does not even attempt to write the crash dump file. It only terminates.<br/>
+- If setting to a positive value S, wait for S seconds to complete the crash dump file and then terminates the runtime system with a SIGALRM signal.<br/>
 - A negative value causes the termination of the runtime system to wait indefinitely until the crash dump file has been completely written.
-
 
 
 **node.crash_dump_bytes**
@@ -134,7 +128,6 @@ the old dir should be deleted first.<br/>
   This variable sets the maximum size of a crash dump file in bytes.
 The crash dump will be truncated if this limit is exceeded.
 If setting it to 0, the runtime system does not even attempt to write a crash dump file.
-
 
 
 **node.dist_net_ticktime**
@@ -154,7 +147,6 @@ If setting it to 0, the runtime system does not even attempt to write a crash du
 
   Maximum depth of the call stack printed in error messages and
 <code>process_info</code>.
-          
 
 
 **node.applications**
@@ -163,8 +155,7 @@ If setting it to 0, the runtime system does not even attempt to write a crash du
 
   *Default*: `[]`
 
-  List of Erlang applications that shall be rebooted when EMQX joins the cluster.
-          
+  List of Erlang applications that shall be rebooted when the EMQX broker joins the cluster.
 
 
 **node.etc_dir**
@@ -187,12 +178,10 @@ If setting it to 0, the runtime system does not even attempt to write a crash du
 
   *Optional*: `mnesia | rlog`
 
-
-Select the backend for the embedded database.<br/>
+  Select the backend for the embedded database.<br/>
 <code>rlog</code> is the default backend,
 that is suitable for very large clusters.<br/>
 <code>mnesia</code> is a backend that offers decent performance in small clusters.
-
 
 
 **node.db_role**
@@ -203,8 +192,7 @@ that is suitable for very large clusters.<br/>
 
   *Optional*: `core | replicant`
 
-
-Select a node role.<br/>
+  Select a node role.<br/>
 <code>core</code> nodes provide durability of the data, and take care of writes.
 It is recommended to place core nodes in different racks or different availability zones.<br/>
 <code>replicant</code> nodes are ephemeral worker nodes. Removing them from the cluster
@@ -212,7 +200,6 @@ doesn't affect database redundancy<br/>
 It is recommended to have more replicant nodes than core nodes.<br/>
 Note: this parameter only takes effect when the <code>backend</code> is set
 to <code>rlog</code>.
-
 
 
 **node.rpc_module**
@@ -234,10 +221,8 @@ to <code>rlog</code>.
 
   *Optional*: `sync | async`
 
-
-In sync mode the core node waits for an ack from the replicant nodes before sending the next
+  In sync mode the core node waits for an ack from the replicant nodes before sending the next
 transaction log entry.
-
 
 
 
@@ -279,7 +264,6 @@ this is where to look.
 
   The maximum number of batch messages sent in asynchronous mode.
       Note that this configuration does not work in synchronous mode.
-      
 
 
 **rpc.port_discovery**
@@ -343,7 +327,6 @@ and <code>driver</code> is set to <code>ssl</code>.
 
   Path to TLS certificate file used to validate identity of the cluster nodes.
 Note that this config only takes effect when <code>rpc.driver</code> is set to <code>ssl</code>.
-      
 
 
 **rpc.keyfile**
@@ -466,7 +449,8 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
 
   *Default*: `emqxcl`
 
-  Human-friendly name of EMQX cluster.
+  Human-friendly name of the EMQX cluster.
+
 
 **cluster.discovery_strategy**
 
@@ -476,7 +460,12 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
 
   *Optional*: `manual | static | mcast | dns | etcd | k8s`
 
-  Service discovery method for the cluster nodes.
+  Service discovery method for the cluster nodes. Possible values are:
+- manual: Use <code>emqx ctl cluster</code> command to manage cluster.<br/>
+- static: Configure static nodes list by setting <code>seeds</code> in config file.<br/>
+- dns: Use DNS A record to discover peer nodes.<br/>
+- etcd: Use etcd to discover peer nodes.<br/>
+- k8s: Use Kubernetes API to discover peer pods.
 
 
 **cluster.core_nodes**
@@ -485,14 +474,12 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
 
   *Default*: `[]`
 
-
-List of core nodes that the replicant will connect to.<br/>
+  List of core nodes that the replicant will connect to.<br/>
 Note: this parameter only takes effect when the <code>backend</code> is set
 to <code>rlog</code> and the <code>role</code> is set to <code>replicant</code>.<br/>
 This value needs to be defined for manual or static cluster discovery mechanisms.<br/>
 If an automatic cluster discovery mechanism is being used (such as <code>etcd</code>),
 there is no need to set this value.
-
 
 
 **cluster.autoclean**
@@ -521,7 +508,9 @@ there is no need to set this value.
 
   *Optional*: `inet_tcp | inet6_tcp | inet_tls`
 
-  The Erlang distribution protocol for the cluster.
+  The Erlang distribution protocol for the cluster.<br/>
+- inet_tcp: IPv4 TCP <br/>
+- inet_tls: IPv4 TLS, works together with <code>etc/ssl_dist.conf</code>
 
 
 **cluster.static**
@@ -610,7 +599,6 @@ Service discovery via UDP multicast.
 
   List of UDP ports used for service discovery.<br/>
 Note: probe messages are broadcast to all the specified ports.
-          
 
 
 **cluster.mcast.iface**
@@ -685,7 +673,6 @@ Service discovery via DNS SRV records.
 Applicable when <code>cluster.discovery_strategy = dns</code>
 
 
-
 **cluster.dns.record_type**
 
   *Type*: `enum`
@@ -694,7 +681,7 @@ Applicable when <code>cluster.discovery_strategy = dns</code>
 
   *Optional*: `a | srv`
 
-  DNS record type. 
+  DNS record type.
 
 
 
@@ -727,7 +714,6 @@ Service discovery using 'etcd' service.
 
   Expiration time of the etcd key associated with the node.
 It is refreshed automatically, as long as the node is alive.
-          
 
 
 **cluster.etcd.ssl**
@@ -758,7 +744,7 @@ Service discovery via Kubernetes API server.
 
   *Default*: `emqx`
 
-  EMQX service name.
+  EMQX broker service name.
 
 
 **cluster.k8s.address_type**
@@ -772,7 +758,6 @@ Service discovery via Kubernetes API server.
   Address type used for connecting to the discovered nodes.
 Setting <code>cluster.k8s.address_type</code> to <code>ip</code> will
 make EMQX to discover IP addresses of peer nodes from Kubernetes API.
-
 
 
 **cluster.k8s.namespace**
@@ -877,10 +862,8 @@ Log handler that prints log events to files.
 
   *Default*: `warning`
 
-
-The log level for the current log handler.
+  The log level for the current log handler.
 Defaults to warning.
-
 
 
 **log.file_handlers.$name.time_offset**
@@ -889,14 +872,12 @@ Defaults to warning.
 
   *Default*: `system`
 
-
-The time offset to be used when formatting the timestamp.
+  The time offset to be used when formatting the timestamp.
 Can be one of:
   - <code>system</code>: the time offset used by the local system
   - <code>utc</code>: the UTC time offset
   - <code>+-[hh]:[mm]</code>: user specified time offset, such as "-02:00" or "+00:00"
 Defaults to: <code>system</code>.
-
 
 
 **log.file_handlers.$name.chars_limit**
@@ -905,10 +886,8 @@ Defaults to: <code>system</code>.
 
   *Default*: `unlimited`
 
-
-Set the maximum length of a single log message. If this length is exceeded, the log message will be truncated.
+  Set the maximum length of a single log message. If this length is exceeded, the log message will be truncated.
 NOTE: Restrict char limiter if formatter is JSON , it will get a truncated incomplete JSON data, which is not recommended.
-
 
 
 **log.file_handlers.$name.formatter**
@@ -949,7 +928,6 @@ When the handler reduces the message queue to a level below the sync_mode_qlen t
 asynchronous operation is resumed.
 
 
-
 **log.file_handlers.$name.drop_mode_qlen**
 
   *Type*: `pos_integer`
@@ -988,11 +966,9 @@ To flush events, the handler discards the buffered log messages without logging.
 
   *Optional*: `error | progress`
 
-
-Type of supervisor reports that are logged. Defaults to <code>error</code>
-  - <code>error</code>: only log errors in the Erlang processes.
+  Type of supervisor reports that are logged. Defaults to <code>error</code><br/>
+  - <code>error</code>: only log errors in the Erlang processes<br/>.
   - <code>progress</code>: log process startup.
-
 
 
 **log.file_handlers.$name.max_depth**
@@ -1008,7 +984,7 @@ Type of supervisor reports that are logged. Defaults to <code>error</code>
 ### Console Output Log
 
 
-Log handler that prints log events to EMQX console.
+Log handler that prints log events to the EMQX console.
 
 **log.console_handler.enable**
 
@@ -1025,10 +1001,8 @@ Log handler that prints log events to EMQX console.
 
   *Default*: `warning`
 
-
-The log level for the current log handler.
+  The log level for the current log handler.
 Defaults to warning.
-
 
 
 **log.console_handler.time_offset**
@@ -1037,14 +1011,12 @@ Defaults to warning.
 
   *Default*: `system`
 
-
-The time offset to be used when formatting the timestamp.
+  The time offset to be used when formatting the timestamp.
 Can be one of:
   - <code>system</code>: the time offset used by the local system
   - <code>utc</code>: the UTC time offset
   - <code>+-[hh]:[mm]</code>: user specified time offset, such as "-02:00" or "+00:00"
 Defaults to: <code>system</code>.
-
 
 
 **log.console_handler.chars_limit**
@@ -1053,10 +1025,8 @@ Defaults to: <code>system</code>.
 
   *Default*: `unlimited`
 
-
-Set the maximum length of a single log message. If this length is exceeded, the log message will be truncated.
+  Set the maximum length of a single log message. If this length is exceeded, the log message will be truncated.
 NOTE: Restrict char limiter if formatter is JSON , it will get a truncated incomplete JSON data, which is not recommended.
-
 
 
 **log.console_handler.formatter**
@@ -1097,7 +1067,6 @@ When the handler reduces the message queue to a level below the sync_mode_qlen t
 asynchronous operation is resumed.
 
 
-
 **log.console_handler.drop_mode_qlen**
 
   *Type*: `pos_integer`
@@ -1136,11 +1105,9 @@ To flush events, the handler discards the buffered log messages without logging.
 
   *Optional*: `error | progress`
 
-
-Type of supervisor reports that are logged. Defaults to <code>error</code>
-  - <code>error</code>: only log errors in the Erlang processes.
+  Type of supervisor reports that are logged. Defaults to <code>error</code><br/>
+  - <code>error</code>: only log errors in the Erlang processes<br/>.
   - <code>progress</code>: log process startup.
-
 
 
 **log.console_handler.max_depth**
@@ -1156,10 +1123,8 @@ Type of supervisor reports that are logged. Defaults to <code>error</code>
 ### Log rotation
 
 
-
 By default, the logs are stored in `./log` directory (for installation from zip file) or in `/var/log/emqx` (for binary installation).<br/>
 This section of the configuration controls the number of files kept for each log handler.
-
 
 **log.file_handlers.$name.rotation.enable**
 
@@ -1223,10 +1188,8 @@ Log burst limit feature can temporarily disable logging to avoid these issues.
 ### Log overload kill
 
 
-
 Log overload kill features an overload protection that activates when the log handlers use too much memory or have too many buffered log messages.<br/>
 When the overload is detected, the log handler is terminated and restarted after a cooldown period.
-
 
 **log_overload_kill.enable**
 
@@ -1275,7 +1238,7 @@ EMQX supports the creation of multiple listeners, and the default MQTT/TCP liste
 
   *Default*: `true`
 
-  Enable listener. 
+  Enable listener.
 
 
 **listeners.tcp.$name.bind**
@@ -1284,9 +1247,7 @@ EMQX supports the creation of multiple listeners, and the default MQTT/TCP liste
 
   *Default*: `1883`
 
-
-IP address and port for the listening socket.
-
+  IP address and port for the listening socket.
 
 
 **listeners.tcp.$name.acceptors**
@@ -1304,7 +1265,7 @@ IP address and port for the listening socket.
 
   *Default*: `infinity`
 
-  The maximum number of concurrent connections allowed by the listener. 
+  The maximum number of concurrent connections allowed by the listener.
 
 
 **listeners.tcp.$name.mountpoint**
@@ -1313,8 +1274,7 @@ IP address and port for the listening socket.
 
   *Default*: `""`
 
-
-When publishing or subscribing, prefix all topics with a mountpoint string.
+  When publishing or subscribing, prefix all topics with a mountpoint string.
 The prefixed string will be removed from the topic name when the message
 is delivered to the subscriber. The mountpoint is a way that users can use
 to implement isolation of message routing between different listeners.
@@ -1331,27 +1291,20 @@ Variables in mountpoint string:
   - <code>${username}</code>: username
 
 
-
 **listeners.tcp.$name.zone**
 
   *Type*: `atom`
 
   *Default*: `default`
 
-
-The configuration zone to which the listener belongs.
-
+  The configuration zone to which the listener belongs.
 
 
 **listeners.tcp.$name.limiter**
 
   *Type*: `limiter:listener_fields`
 
-  *Default*: `{"connection":{"capacity":1000,"rate":"1000/s"}}`
-
-
-Type of the rate limit.
-
+  Type of the rate limit.
 
 
 **listeners.tcp.$name.enable_authn**
@@ -1362,14 +1315,12 @@ Type of the rate limit.
 
   *Optional*: `true | false | quick_deny_anonymous`
 
-
-Set <code>true</code> (default) to enable client authentication on this listener, the authentication
+  Set <code>true</code> (default) to enable client authentication on this listener, the authentication
 process goes through the configured authentication chain.
 When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
 When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be
 denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
 anonymous clients early.
-
 
 
 **listeners.tcp.$name.access_rules**
@@ -1378,9 +1329,7 @@ anonymous clients early.
 
   *Default*: `["allow all"]`
 
-
-The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
-
+  The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
 
 
 **listeners.tcp.$name.proxy_protocol**
@@ -1389,10 +1338,8 @@ The access control rules for this listener.<br/>See: https://github.com/emqtt/es
 
   *Default*: `false`
 
-
-Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/>
+  Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/>
 See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
-
 
 
 **listeners.tcp.$name.proxy_protocol_timeout**
@@ -1401,21 +1348,16 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
   *Default*: `3s`
 
-
-Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
-
+  Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
 **listeners.tcp.$name.authentication**
 
   *Type*: `array`
 
-
-Per-listener authentication override.
+  Per-listener authentication override.
 Authentication can be one single authenticator instance or a chain of authenticators as an array.
-When authenticating a login (username, client ID, etc.) the authenticators are checked in the configured order.<br/>
-
-
+When authenticating a login (username, client ID, etc.) the authenticators are checked in the configured order.
 
 
 **listeners.tcp.$name.tcp_options**
@@ -1435,7 +1377,7 @@ Settings for the MQTT over SSL listener.
 
   *Default*: `true`
 
-  Enable listener. 
+  Enable listener.
 
 
 **listeners.ssl.$name.bind**
@@ -1444,9 +1386,7 @@ Settings for the MQTT over SSL listener.
 
   *Default*: `8883`
 
-
-IP address and port for the listening socket.
-
+  IP address and port for the listening socket.
 
 
 **listeners.ssl.$name.acceptors**
@@ -1464,7 +1404,7 @@ IP address and port for the listening socket.
 
   *Default*: `infinity`
 
-  The maximum number of concurrent connections allowed by the listener. 
+  The maximum number of concurrent connections allowed by the listener.
 
 
 **listeners.ssl.$name.mountpoint**
@@ -1473,8 +1413,7 @@ IP address and port for the listening socket.
 
   *Default*: `""`
 
-
-When publishing or subscribing, prefix all topics with a mountpoint string.
+  When publishing or subscribing, prefix all topics with a mountpoint string.
 The prefixed string will be removed from the topic name when the message
 is delivered to the subscriber. The mountpoint is a way that users can use
 to implement isolation of message routing between different listeners.
@@ -1491,27 +1430,20 @@ Variables in mountpoint string:
   - <code>${username}</code>: username
 
 
-
 **listeners.ssl.$name.zone**
 
   *Type*: `atom`
 
   *Default*: `default`
 
-
-The configuration zone to which the listener belongs.
-
+  The configuration zone to which the listener belongs.
 
 
 **listeners.ssl.$name.limiter**
 
   *Type*: `limiter:listener_fields`
 
-  *Default*: `{"connection":{"capacity":1000,"rate":"1000/s"}}`
-
-
-Type of the rate limit.
-
+  Type of the rate limit.
 
 
 **listeners.ssl.$name.enable_authn**
@@ -1522,14 +1454,12 @@ Type of the rate limit.
 
   *Optional*: `true | false | quick_deny_anonymous`
 
-
-Set <code>true</code> (default) to enable client authentication on this listener, the authentication
+  Set <code>true</code> (default) to enable client authentication on this listener, the authentication
 process goes through the configured authentication chain.
 When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
 When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be
 denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
 anonymous clients early.
-
 
 
 **listeners.ssl.$name.access_rules**
@@ -1538,9 +1468,7 @@ anonymous clients early.
 
   *Default*: `["allow all"]`
 
-
-The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
-
+  The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
 
 
 **listeners.ssl.$name.proxy_protocol**
@@ -1549,9 +1477,8 @@ The access control rules for this listener.<br/>See: https://github.com/emqtt/es
 
   *Default*: `false`
 
-Enable the Proxy Protocol V1/2 if EMQX cluster is deployed behind HAProxy or Nginx.<br/>
+  Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/>
 See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
-
 
 
 **listeners.ssl.$name.proxy_protocol_timeout**
@@ -1560,21 +1487,16 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
   *Default*: `3s`
 
-
-Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
-
+  Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
 **listeners.ssl.$name.authentication**
 
   *Type*: `array`
 
-
-Per-listener authentication override.
+  Per-listener authentication override.
 Authentication can be one single authenticator instance or a chain of authenticators as an array.
-When authenticating a login (username, client ID, etc.) the authenticators are checked in the configured order.<br/>
-
-
+When authenticating a login (username, client ID, etc.) the authenticators are checked in the configured order.
 
 
 **listeners.ssl.$name.tcp_options**
@@ -1601,14 +1523,14 @@ Settings for the MQTT over QUIC listener.
 
   *Type*: `string`
 
-  Path to the certificate file.
+  Path to the certificate file. Will be deprecated in 5.1, use .ssl_options.certfile instead.
 
 
 **listeners.quic.$name.keyfile**
 
   *Type*: `string`
 
-  Path to the secret key file. 
+  Path to the secret key file. Will be deprecated in 5.1, use .ssl_options.keyfile instead.
 
 
 **listeners.quic.$name.ciphers**
@@ -1617,8 +1539,7 @@ Settings for the MQTT over QUIC listener.
 
   *Default*: `["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256","TLS_CHACHA20_POLY1305_SHA256"]`
 
-
-This config holds TLS cipher suite names separated by comma,
+  This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
@@ -1646,8 +1567,7 @@ RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
 RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
-NOTE: QUIC listener supports only 'tlsv1.3' ciphers<br/>
-
+NOTE: QUIC listener supports only 'tlsv1.3' ciphers
 
 
 **listeners.quic.$name.idle_timeout**
@@ -1665,7 +1585,7 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers<br/>
 
   *Default*: `10s`
 
-  How long a handshake can idle before it is discarded. 
+  How long a handshake can idle before it is discarded.
 
 
 **listeners.quic.$name.keep_alive_interval**
@@ -1674,9 +1594,14 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers<br/>
 
   *Default*: `0`
 
+  How often to send PING frames to keep a connection alive. 0 means disabled.
 
-How often to send PING frames to keep a connection alive. 0 means disabled.
 
+**listeners.quic.$name.ssl_options**
+
+  *Type*: `broker:listener_quic_ssl_opts`
+
+  TLS options for QUIC transport
 
 
 **listeners.quic.$name.enabled**
@@ -1685,7 +1610,7 @@ How often to send PING frames to keep a connection alive. 0 means disabled.
 
   *Default*: `true`
 
-  Enable listener. 
+  Enable listener.
 
 
 **listeners.quic.$name.bind**
@@ -1694,9 +1619,7 @@ How often to send PING frames to keep a connection alive. 0 means disabled.
 
   *Default*: `14567`
 
-
-IP address and port for the listening socket.
-
+  IP address and port for the listening socket.
 
 
 **listeners.quic.$name.acceptors**
@@ -1714,7 +1637,7 @@ IP address and port for the listening socket.
 
   *Default*: `infinity`
 
-  The maximum number of concurrent connections allowed by the listener. 
+  The maximum number of concurrent connections allowed by the listener.
 
 
 **listeners.quic.$name.mountpoint**
@@ -1723,8 +1646,7 @@ IP address and port for the listening socket.
 
   *Default*: `""`
 
-
-When publishing or subscribing, prefix all topics with a mountpoint string.
+  When publishing or subscribing, prefix all topics with a mountpoint string.
 The prefixed string will be removed from the topic name when the message
 is delivered to the subscriber. The mountpoint is a way that users can use
 to implement isolation of message routing between different listeners.
@@ -1741,27 +1663,20 @@ Variables in mountpoint string:
   - <code>${username}</code>: username
 
 
-
 **listeners.quic.$name.zone**
 
   *Type*: `atom`
 
   *Default*: `default`
 
-
-The configuration zone to which the listener belongs.
-
+  The configuration zone to which the listener belongs.
 
 
 **listeners.quic.$name.limiter**
 
   *Type*: `limiter:listener_fields`
 
-  *Default*: `{"connection":{"capacity":1000,"rate":"1000/s"}}`
-
-
-Type of the rate limit.
-
+  Type of the rate limit.
 
 
 **listeners.quic.$name.enable_authn**
@@ -1772,14 +1687,12 @@ Type of the rate limit.
 
   *Optional*: `true | false | quick_deny_anonymous`
 
-
-Set <code>true</code> (default) to enable client authentication on this listener, the authentication
+  Set <code>true</code> (default) to enable client authentication on this listener, the authentication
 process goes through the configured authentication chain.
 When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
 When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be
 denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
 anonymous clients early.
-
 
 
 
@@ -1794,7 +1707,7 @@ Settings for the MQTT over WebSocket listener.
 
   *Default*: `true`
 
-  Enable listener. 
+  Enable listener.
 
 
 **listeners.ws.$name.bind**
@@ -1803,9 +1716,7 @@ Settings for the MQTT over WebSocket listener.
 
   *Default*: `8083`
 
-
-IP address and port for the listening socket.
-
+  IP address and port for the listening socket.
 
 
 **listeners.ws.$name.acceptors**
@@ -1823,7 +1734,7 @@ IP address and port for the listening socket.
 
   *Default*: `infinity`
 
-  The maximum number of concurrent connections allowed by the listener. 
+  The maximum number of concurrent connections allowed by the listener.
 
 
 **listeners.ws.$name.mountpoint**
@@ -1832,8 +1743,7 @@ IP address and port for the listening socket.
 
   *Default*: `""`
 
-
-When publishing or subscribing, prefix all topics with a mountpoint string.
+  When publishing or subscribing, prefix all topics with a mountpoint string.
 The prefixed string will be removed from the topic name when the message
 is delivered to the subscriber. The mountpoint is a way that users can use
 to implement isolation of message routing between different listeners.
@@ -1850,27 +1760,20 @@ Variables in mountpoint string:
   - <code>${username}</code>: username
 
 
-
 **listeners.ws.$name.zone**
 
   *Type*: `atom`
 
   *Default*: `default`
 
-
-The configuration zone to which the listener belongs.
-
+  The configuration zone to which the listener belongs.
 
 
 **listeners.ws.$name.limiter**
 
   *Type*: `limiter:listener_fields`
 
-  *Default*: `{"connection":{"capacity":1000,"rate":"1000/s"}}`
-
-
-Type of the rate limit.
-
+  Type of the rate limit.
 
 
 **listeners.ws.$name.enable_authn**
@@ -1881,14 +1784,12 @@ Type of the rate limit.
 
   *Optional*: `true | false | quick_deny_anonymous`
 
-
-Set <code>true</code> (default) to enable client authentication on this listener, the authentication
+  Set <code>true</code> (default) to enable client authentication on this listener, the authentication
 process goes through the configured authentication chain.
 When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
 When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be
 denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
 anonymous clients early.
-
 
 
 **listeners.ws.$name.access_rules**
@@ -1897,9 +1798,7 @@ anonymous clients early.
 
   *Default*: `["allow all"]`
 
-
-The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
-
+  The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
 
 
 **listeners.ws.$name.proxy_protocol**
@@ -1908,9 +1807,8 @@ The access control rules for this listener.<br/>See: https://github.com/emqtt/es
 
   *Default*: `false`
 
-Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/>
+  Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/>
 See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
-
 
 
 **listeners.ws.$name.proxy_protocol_timeout**
@@ -1919,21 +1817,16 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
   *Default*: `3s`
 
-
-Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
-
+  Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
 **listeners.ws.$name.authentication**
 
   *Type*: `array`
 
-
-Per-listener authentication override.
+  Per-listener authentication override.
 Authentication can be one single authenticator instance or a chain of authenticators as an array.
-When authenticating a login (username, client ID, etc.) the authenticators are checked in the configured order.<br/>
-
-
+When authenticating a login (username, client ID, etc.) the authenticators are checked in the configured order.
 
 
 **listeners.ws.$name.tcp_options**
@@ -1958,7 +1851,7 @@ Settings for the MQTT over WebSocket/SSL listener.
 
   *Default*: `true`
 
-  Enable listener. 
+  Enable listener.
 
 
 **listeners.wss.$name.bind**
@@ -1967,9 +1860,7 @@ Settings for the MQTT over WebSocket/SSL listener.
 
   *Default*: `8084`
 
-
-IP address and port for the listening socket.
-
+  IP address and port for the listening socket.
 
 
 **listeners.wss.$name.acceptors**
@@ -1987,7 +1878,7 @@ IP address and port for the listening socket.
 
   *Default*: `infinity`
 
-  The maximum number of concurrent connections allowed by the listener. 
+  The maximum number of concurrent connections allowed by the listener.
 
 
 **listeners.wss.$name.mountpoint**
@@ -1996,8 +1887,7 @@ IP address and port for the listening socket.
 
   *Default*: `""`
 
-
-When publishing or subscribing, prefix all topics with a mountpoint string.
+  When publishing or subscribing, prefix all topics with a mountpoint string.
 The prefixed string will be removed from the topic name when the message
 is delivered to the subscriber. The mountpoint is a way that users can use
 to implement isolation of message routing between different listeners.
@@ -2014,27 +1904,20 @@ Variables in mountpoint string:
   - <code>${username}</code>: username
 
 
-
 **listeners.wss.$name.zone**
 
   *Type*: `atom`
 
   *Default*: `default`
 
-
-The configuration zone to which the listener belongs.
-
+  The configuration zone to which the listener belongs.
 
 
 **listeners.wss.$name.limiter**
 
   *Type*: `limiter:listener_fields`
 
-  *Default*: `{"connection":{"capacity":1000,"rate":"1000/s"}}`
-
-
-Type of the rate limit.
-
+  Type of the rate limit.
 
 
 **listeners.wss.$name.enable_authn**
@@ -2045,14 +1928,12 @@ Type of the rate limit.
 
   *Optional*: `true | false | quick_deny_anonymous`
 
-
-Set <code>true</code> (default) to enable client authentication on this listener, the authentication
+  Set <code>true</code> (default) to enable client authentication on this listener, the authentication
 process goes through the configured authentication chain.
 When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
 When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be
 denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
 anonymous clients early.
-
 
 
 **listeners.wss.$name.access_rules**
@@ -2061,9 +1942,7 @@ anonymous clients early.
 
   *Default*: `["allow all"]`
 
-
-The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
-
+  The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
 
 
 **listeners.wss.$name.proxy_protocol**
@@ -2072,10 +1951,8 @@ The access control rules for this listener.<br/>See: https://github.com/emqtt/es
 
   *Default*: `false`
 
-
-Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/>
+  Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/>
 See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
-
 
 
 **listeners.wss.$name.proxy_protocol_timeout**
@@ -2084,21 +1961,16 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
   *Default*: `3s`
 
-
-Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
-
+  Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
 **listeners.wss.$name.authentication**
 
   *Type*: `array`
 
-
-Per-listener authentication override.
+  Per-listener authentication override.
 Authentication can be one single authenticator instance or a chain of authenticators as an array.
-When authenticating a login (username, client ID, etc.) the authenticators are checked in the configured order.<br/>
-
-
+When authenticating a login (username, client ID, etc.) the authenticators are checked in the configured order.
 
 
 **listeners.wss.$name.tcp_options**
@@ -2363,7 +2235,6 @@ To configure <code>"topic/1" > "topic/2"</code>:
 <code>mqueue_priorities: {"topic/1": 10, "topic/2": 8}</code>
 
 
-
 **mqtt.mqueue_default_priority**
 
   *Type*: `enum`
@@ -2394,7 +2265,6 @@ To configure <code>"topic/1" > "topic/2"</code>:
 This setting takes effect later than <code>Use Peer Certificate as Username</code> (<code>peer_cert_as_username</code>) and <code>Use peer certificate as Client ID</code> (<code>peer_cert_as_clientid</code>).
 
 
-
 **mqtt.peer_cert_as_username**
 
   *Type*: `enum`
@@ -2412,7 +2282,6 @@ Supported configurations are the following:
 - <code>md5</code>: Take the MD5 value of the content of the <code>DER</code> or <code>PEM</code> certificate as Username
 
 
-
 **mqtt.peer_cert_as_clientid**
 
   *Type*: `enum`
@@ -2428,7 +2297,6 @@ Supported configurations are the following:
 - <code>crt</code>: Take the content of the <code>DER</code> or <code>PEM</code> certificate as Client ID
 - <code>pem</code>: Convert <code>DER</code> certificate content to <code>PEM</code> format as Client ID
 - <code>md5</code>: Take the MD5 value of the content of the <code>DER</code> or <code>PEM</code> certificate as Client ID
-
 
 
 
@@ -2467,7 +2335,6 @@ Configuration related to handling `PUBLISH` packets with a `retain` flag set to 
 
   Periodic interval for cleaning up expired messages.
 Never clear if the value is 0.
-      
 
 
 **retainer.flow_control**
@@ -2611,10 +2478,10 @@ subscriber was not found, send to a random subscriber cluster-wide
 
 
 
-
 ### System topics
 
-EMQX periodically publishes its own status, message statistics,
+
+The EMQX Broker periodically publishes its own status, message statistics,
 client online and offline events to the system topic starting with `$SYS/`.
 
 The following options control the behavior of `$SYS` topics.
@@ -2637,7 +2504,6 @@ The following options control the behavior of `$SYS` topics.
   Time interval for publishing following heartbeat messages:
   - `$SYS/brokers/<node>/uptime`
   - `$SYS/brokers/<node>/datetime`
-
 
 
 **sys_topics.sys_event_messages**
@@ -2814,14 +2680,11 @@ Real-time filtering logs for the ClientID or Topic or IP for debugging.
 
   *Optional*: `hex | text | hidden`
 
-
-Determine the format of the payload format in the trace file.<br/>
+  Determine the format of the payload format in the trace file.<br/>
 `text`: Text-based protocol or plain text protocol.
  It is recommended when payload is JSON encoded.<br/>
 `hex`: Binary hexadecimal encode. It is recommended when payload is a custom binary protocol.<br/>
 `hidden`: payload is obfuscated as `******`
-
-
 
 
 
@@ -2867,10 +2730,8 @@ For example, <code> { Authorization = "some-authz-tokens"}</code>
   Job Name that is pushed to the Push Gateway. Available variables:<br/>
 - ${name}: Name of EMQX node.<br/>
 - ${host}: Host name of EMQX node.<br/>
-For example, when EMQX node name is <code>emqx@127.0.0.1</code> then the <code>name</code> variable takes value <code>emqx</code> and the <code>host</code> variable takes value <code>127.0.0.1</code>.<br/>
-
+For example, when the EMQX node name is <code>emqx@127.0.0.1</code> then the <code>name</code> variable takes value <code>emqx</code> and the <code>host</code> variable takes value <code>127.0.0.1</code>.<br/>
 Default value is: <code>${name}/instance/${name}~${host}</code>
-
 
 
 **prometheus.enable**
@@ -3030,7 +2891,6 @@ Settings for the alarms.
   The maximum total number of deactivated alarms to keep as history.<br/>When this limit is exceeded, the oldest deactivated alarms are deleted to cap the total number.
 
 
-
 **alarm.validity_period**
 
   *Type*: `duration`
@@ -3039,7 +2899,6 @@ Settings for the alarms.
 
   Retention time of deactivated alarms. Alarms are not deleted immediately
 when deactivated, but after the retention time.
-
 
 
 
@@ -3148,7 +3007,7 @@ in the VM exceeds this value
 
   *Type*: `string`
 
-  *Default*: `[]`
+  *Default*: `""`
 
   Hostname of the PostgreSQL database that collects the data points
 
@@ -3236,7 +3095,6 @@ This part of the configuration is responsible for collecting
 and an MQTT message is published to the system topic <code>$SYS/sysmon/long_gc</code>.
 
 
-
 **sysmon.vm.long_schedule**
 
   *Type*: `disabled | duration`
@@ -3245,7 +3103,6 @@ and an MQTT message is published to the system topic <code>$SYS/sysmon/long_gc</
 
   When the Erlang VM detect a task scheduled for too long, a warning level 'long_schedule' log is emitted,
 and an MQTT message is published to the system topic <code>$SYS/sysmon/long_schedule</code>.
-
 
 
 **sysmon.vm.large_heap**
@@ -3259,7 +3116,6 @@ the system will write a warning level <code>large_heap</code> log, and an MQTT m
 the system topic <code>$SYS/sysmon/large_heap</code>.
 
 
-
 **sysmon.vm.busy_dist_port**
 
   *Type*: `boolean`
@@ -3271,7 +3127,6 @@ there will be a <code>busy_dist_port</code> warning log,
 and an MQTT message is published to system topic <code>$SYS/sysmon/busy_dist_port</code>.
 
 
-
 **sysmon.vm.busy_port**
 
   *Type*: `boolean`
@@ -3280,7 +3135,6 @@ and an MQTT message is published to system topic <code>$SYS/sysmon/busy_dist_por
 
   When a port (e.g. TCP socket) is overloaded, there will be a <code>busy_port</code> warning log,
 and an MQTT message is published to the system topic <code>$SYS/sysmon/busy_port</code>.
-
 
 
 
@@ -3371,32 +3225,6 @@ limiter.message_in {
 }
 ```
 
-***.limiter.\$type.rate**
-
-  *Type*: `rate`
-
-  *Default*: `infinity`
-
-  Rate for this bucket.
-
-
-***.limiter.\$type.capacity**
-
-  *Type*: `capacity`
-
-  *Default*: `infinity`
-
-  The capacity of this token bucket.
-
-
-***.limiter.\$type.initial**
-
-  *Type*: `initial`
-
-  *Default*: `0`
-
-  The initial number of tokens for this bucket.
-
 
 
 ### Node-level rate limiting
@@ -3432,7 +3260,7 @@ Settings for the limiter of the node level.
 
 **listeners.\$type.$name.limiter.bytes_in**
 
-  *Type*: `limiter:bucket_opts`
+  *Type*: `limiter:bucket_infinity`
 
   The bytes_in limiter.
 This is used to limit the inbound bytes rate for this EMQX node.
@@ -3441,7 +3269,7 @@ Once the limit is reached, the restricted client will be slow down even be hung 
 
 **listeners.\$type.$name.limiter.message_in**
 
-  *Type*: `limiter:bucket_opts`
+  *Type*: `limiter:bucket_infinity`
 
   The message in limiter.
 This is used to limit the inbound message numbers for this EMQX node
@@ -3450,7 +3278,7 @@ Once the limit is reached, the restricted client will be slow down even be hung 
 
 **listeners.\$type.$name.limiter.connection**
 
-  *Type*: `limiter:bucket_opts`
+  *Type*: `limiter:bucket_limit`
 
   The connection limiter.
 This is used to limit the connection rate for this EMQX node.
@@ -3459,7 +3287,7 @@ Once the limit is reached, new connections will be refused
 
 **listeners.\$type.$name.limiter.message_routing**
 
-  *Type*: `limiter:bucket_opts`
+  *Type*: `limiter:bucket_infinity`
 
   The message routing limiter.
 This is used to limit the forwarding rate for this EMQX node.
@@ -3708,7 +3536,6 @@ NOTE: when changing from/to `global` lock, it requires all nodes in the cluster 
   - `global`: updates are protected with a global lock. Recommended for large clusters.
 
 
-
 **broker.perf.trie_compaction**
 
   *Type*: `boolean`
@@ -3720,7 +3547,6 @@ Enabling it significantly improves wildcard topic subscribe rate, if wildcard to
 Topic match performance (when publishing) may degrade if messages are mostly published to topics with large number of levels.
 
 NOTE: This is a cluster-wide configuration. It requires all nodes to be stopped before changing it.
-
 
 
 
@@ -3913,7 +3739,6 @@ This makes it possible to migrate a client connection to another
 cluster node if a node is stopped.
 
 
-
 **persistent_session_store.on_disc**
 
   *Type*: `boolean`
@@ -3955,7 +3780,6 @@ is stored before being garbage collected if the node the previous
 session was handled on restarts of is stopped.
 
 
-
 **persistent_session_store.message_gc_interval**
 
   *Type*: `duration`
@@ -3967,7 +3791,6 @@ a persistent session. This affects how often the "max_retain_undelivered"
 is checked for removal.
 
 
-
 **persistent_session_store.session_message_gc_interval**
 
   *Type*: `duration`
@@ -3977,7 +3800,6 @@ is checked for removal.
   The starting interval for garbage collection of transient data for
 persistent session messages. This does not affect the lifetime length
 of persistent session messages.
-
 
 
 
@@ -4088,7 +3910,6 @@ but use the same port.
 For safety, it should be changed as soon as possible.
 This value is not valid when you log in to Dashboard for the first time via the web
 and change to a complex password as prompted.
-
 
 
 **dashboard.sample_interval**
@@ -4218,6 +4039,15 @@ Configuration for the dashboard listener (plaintext).
 The configuration is only valid when the inet6 is true.
 
 
+**dashboard.listeners.http.proxy_header**
+
+  *Type*: `boolean`
+
+  *Default*: `false`
+
+  Enable support for `HAProxy` header. Be aware once enabled regular HTTP requests can't be handled anymore.
+
+
 
 
 Configuration for the dashboard listener (TLS).
@@ -4295,12 +4125,20 @@ Configuration for the dashboard listener (TLS).
 The configuration is only valid when the inet6 is true.
 
 
+**dashboard.listeners.https.proxy_header**
+
+  *Type*: `boolean`
+
+  *Default*: `false`
+
+  Enable support for `HAProxy` header. Be aware once enabled regular HTTP requests can't be handled anymore.
+
+
 **dashboard.listeners.https.cacertfile**
 
   *Type*: `string`
 
-
-Trusted PEM format CA certificates bundle file.<br/>
+  Trusted PEM format CA certificates bundle file.<br/>
 The certificates in this file are used to verify the TLS peer's certificates.
 Append new certificates to the file if new CAs are to be trusted.
 There is no need to restart EMQX to have the updated file loaded, because
@@ -4309,13 +4147,11 @@ NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
 
-
 **dashboard.listeners.https.certfile**
 
   *Type*: `string`
 
-
-PEM format certificates chain file.<br/>
+  PEM format certificates chain file.<br/>
 The certificates in this file should be in reversed order of the certificate
 issue chain. That is, the host's certificate should be placed in the beginning
 of the file, followed by the immediate issuer certificate and so on.
@@ -4323,12 +4159,11 @@ Although the root CA certificate is optional, it should be placed at the end of
 the file if it is to be added.
 
 
-
 **dashboard.listeners.https.keyfile**
 
   *Type*: `string`
 
-  PEM format private key file. 
+  PEM format private key file.
 
 
 **dashboard.listeners.https.verify**
@@ -4339,7 +4174,7 @@ the file if it is to be added.
 
   *Optional*: `verify_peer | verify_none`
 
-  Enable or disable peer verification. 
+  Enable or disable peer verification.
 
 
 **dashboard.listeners.https.reuse_sessions**
@@ -4348,7 +4183,7 @@ the file if it is to be added.
 
   *Default*: `true`
 
-  Enable TLS session reuse. 
+  Enable TLS session reuse.
 
 
 **dashboard.listeners.https.depth**
@@ -4357,22 +4192,17 @@ the file if it is to be added.
 
   *Default*: `10`
 
-
-Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
+  Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
 So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/>
 if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
-if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.<br/>
-
+if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
 **dashboard.listeners.https.password**
 
   *Type*: `string`
 
-
-String containing the user's password.
-Only used if the private key file is password-protected.
-
+  String containing the user's password. Only used if the private key file is password-protected.
 
 
 **dashboard.listeners.https.versions**
@@ -4381,12 +4211,10 @@ Only used if the private key file is password-protected.
 
   *Default*: `["tlsv1.3","tlsv1.2","tlsv1.1","tlsv1"]`
 
-
-All TLS/DTLS versions to be supported.<br/>
+  All TLS/DTLS versions to be supported.<br/>
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
 In case PSK cipher suites are intended, make sure to configure
 <code>['tlsv1.2', 'tlsv1.1']</code> here.
-
 
 
 **dashboard.listeners.https.ciphers**
@@ -4395,8 +4223,7 @@ In case PSK cipher suites are intended, make sure to configure
 
   *Default*: `[]`
 
-
-This config holds TLS cipher suite names separated by comma,
+  This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
@@ -4422,8 +4249,7 @@ If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versi
 PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
-
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **dashboard.listeners.https.user_lookup_fun**
@@ -4432,7 +4258,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
   *Default*: `emqx_tls_psk:lookup`
 
-  EMQX-internal callback that is used to lookup pre-shared key (PSK) identity. 
+  EMQX-internal callback that is used to lookup pre-shared key (PSK) identity.
 
 
 **dashboard.listeners.https.secure_renegotiate**
@@ -4441,25 +4267,30 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
   *Default*: `true`
 
-
-SSL parameter renegotiation is a feature that allows a client and a server
+  SSL parameter renegotiation is a feature that allows a client and a server
 to renegotiate the parameters of the SSL connection on the fly.
 RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
 you drop support for the insecure renegotiation, prone to MitM attacks.
 
+
+**dashboard.listeners.https.hibernate_after**
+
+  *Type*: `duration`
+
+  *Default*: `5s`
+
+   Hibernate the SSL process after idling for amount of time reducing its memory footprint. 
 
 
 **dashboard.listeners.https.dhfile**
 
   *Type*: `string`
 
-
-Path to a file containing PEM-encoded Diffie-Hellman parameters
+  Path to a file containing PEM-encoded Diffie-Hellman parameters
 to be used by the server if a cipher suite using Diffie-Hellman
 key exchange is negotiated. If not specified, default parameters
 are used.<br/>
 NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
-
 
 
 **dashboard.listeners.https.honor_cipher_order**
@@ -4468,12 +4299,10 @@ NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
 
   *Default*: `true`
 
-
-An important security setting, it forces the cipher to be set based
+  An important security setting, it forces the cipher to be set based
  on the server-specified order instead of the client-specified order,
  hence enforcing the (usually more properly configured) security
  ordering of the server administrator.
-
 
 
 **dashboard.listeners.https.client_renegotiation**
@@ -4482,8 +4311,7 @@ An important security setting, it forces the cipher to be set based
 
   *Default*: `true`
 
-
-In protocols that support client-initiated renegotiation,
+  In protocols that support client-initiated renegotiation,
 the cost of resources of such an operation is higher for the server than the client.
 This can act as a vector for denial of service attacks.
 The SSL application already takes measures to counter-act such attempts,
@@ -4493,16 +4321,13 @@ long-lived connections becoming unusable due to limits on
 the number of messages the underlying cipher suite can encipher.
 
 
-
 **dashboard.listeners.https.handshake_timeout**
 
   *Type*: `duration`
 
   *Default*: `15s`
 
-
-Maximum time duration allowed for the handshake to complete
-
+  Maximum time duration allowed for the handshake to complete
 
 
 
@@ -4544,7 +4369,6 @@ API Key, can be used to request API other than the management API key and the Da
 
 
 
-
 ## Authentication
 
 ### Password-based - Built-in database
@@ -4579,7 +4403,7 @@ Configuration of authenticator using built-in database as data source.
 
 **authn-builtin_db:authentication.password_hash_algorithm**
 
-  *Type*: [authn-hash:bcrypt_rw](#authn-hash:bcrypt_rw) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:other_algorithms](#authn-hash:other_algorithms)
+  *Type*: [authn-hash:bcrypt_rw](#authn-hash:bcrypt_rw) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
 
@@ -4617,7 +4441,7 @@ Configuration of authenticator using MySQL as authentication data source.
 
 **authn-mysql:authentication.password_hash_algorithm**
 
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:other_algorithms](#authn-hash:other_algorithms)
+  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
 
@@ -4653,11 +4477,9 @@ Configuration of authenticator using MySQL as authentication data source.
 
   *Type*: `string`
 
-
-The IPv4 or IPv6 address or the hostname to connect to.<br/>
+  The IPv4 or IPv6 address or the hostname to connect to.<br/>
 A host entry has the following form: `Host[:Port]`.<br/>
 The MySQL default port 3306 is used if `[:Port]` is not specified.
-
 
 
 **authn-mysql:authentication.database**
@@ -4732,7 +4554,7 @@ Configuration of authenticator using PostgreSQL as authentication data source.
 
 **authn-postgresql:authentication.password_hash_algorithm**
 
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:other_algorithms](#authn-hash:other_algorithms)
+  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
 
@@ -4759,11 +4581,9 @@ Configuration of authenticator using PostgreSQL as authentication data source.
 
   *Type*: `string`
 
-
-The IPv4 or IPv6 address or the hostname to connect to.<br/>
+  The IPv4 or IPv6 address or the hostname to connect to.<br/>
 A host entry has the following form: `Host[:Port]`.<br/>
 The PostgreSQL default port 5432 is used if `[:Port]` is not specified.
-
 
 
 **authn-postgresql:authentication.database**
@@ -4843,7 +4663,7 @@ Configuration of authenticator using Redis (Standalone) as authentication data s
 
 **authn-redis:standalone.password_hash_algorithm**
 
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:other_algorithms](#authn-hash:other_algorithms)
+  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
 
@@ -4863,11 +4683,9 @@ Configuration of authenticator using Redis (Standalone) as authentication data s
 
   *Type*: `string`
 
-
-The IPv4 or IPv6 address or the hostname to connect to.<br/>
+  The IPv4 or IPv6 address or the hostname to connect to.<br/>
 A host entry has the following form: `Host[:Port]`.<br/>
 The Redis default port 6379 is used if `[:Port]` is not specified.
-
 
 
 **authn-redis:standalone.redis_type**
@@ -4949,7 +4767,7 @@ Configuration of authenticator using Redis (Cluster) as authentication data sour
 
 **authn-redis:cluster.password_hash_algorithm**
 
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:other_algorithms](#authn-hash:other_algorithms)
+  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
 
@@ -4969,12 +4787,10 @@ Configuration of authenticator using Redis (Cluster) as authentication data sour
 
   *Type*: `string`
 
-
-A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
+  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
 For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
 A host entry has the following form: `Host[:Port]`.
 The Redis default port 6379 is used if `[:Port]` is not specified.
-
 
 
 **authn-redis:cluster.redis_type**
@@ -5047,7 +4863,7 @@ Configuration of authenticator using Redis (Sentinel) as authentication data sou
 
 **authn-redis:sentinel.password_hash_algorithm**
 
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:other_algorithms](#authn-hash:other_algorithms)
+  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
 
@@ -5067,12 +4883,10 @@ Configuration of authenticator using Redis (Sentinel) as authentication data sou
 
   *Type*: `string`
 
-
-A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
+  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
 For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
 A host entry has the following form: `Host[:Port]`.
 The Redis default port 6379 is used if `[:Port]` is not specified.
-
 
 
 **authn-redis:sentinel.redis_type**
@@ -5167,12 +4981,10 @@ Configuration of authenticator using MongoDB (Standalone) as authentication data
 
   *Default*: `{}`
 
-
-Conditional expression that defines the filter condition in the query.
+  Conditional expression that defines the filter condition in the query.
 Filter supports the following placeholders:
 - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
 - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-
 
 
 **authn-mongodb:standalone.password_hash_field**
@@ -5204,7 +5016,7 @@ Filter supports the following placeholders:
 
 **authn-mongodb:standalone.password_hash_algorithm**
 
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:other_algorithms](#authn-hash:other_algorithms)
+  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
 
@@ -5233,11 +5045,9 @@ Filter supports the following placeholders:
 
   *Type*: `string`
 
-
-The IPv4 or IPv6 address or the hostname to connect to.<br/>
+  The IPv4 or IPv6 address or the hostname to connect to.<br/>
 A host entry has the following form: `Host[:Port]`.<br/>
 The MongoDB default port 27017 is used if `[:Port]` is not specified.
-
 
 
 **authn-mongodb:standalone.w_mode**
@@ -5344,12 +5154,10 @@ Configuration of authenticator using MongoDB (Replica Set) as authentication dat
 
   *Default*: `{}`
 
-
-Conditional expression that defines the filter condition in the query.
+  Conditional expression that defines the filter condition in the query.
 Filter supports the following placeholders:
 - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
 - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-
 
 
 **authn-mongodb:replica-set.password_hash_field**
@@ -5381,7 +5189,7 @@ Filter supports the following placeholders:
 
 **authn-mongodb:replica-set.password_hash_algorithm**
 
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:other_algorithms](#authn-hash:other_algorithms)
+  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
 
@@ -5410,12 +5218,10 @@ Filter supports the following placeholders:
 
   *Type*: `string`
 
-
-A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
+  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
 For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
 A host entry has the following form: `Host[:Port]`.
 The MongoDB default port 27017 is used if `[:Port]` is not specified.
-
 
 
 **authn-mongodb:replica-set.w_mode**
@@ -5540,12 +5346,10 @@ Configuration of authenticator using MongoDB (Sharded Cluster) as authentication
 
   *Default*: `{}`
 
-
-Conditional expression that defines the filter condition in the query.
+  Conditional expression that defines the filter condition in the query.
 Filter supports the following placeholders:
 - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
 - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-
 
 
 **authn-mongodb:sharded-cluster.password_hash_field**
@@ -5577,7 +5381,7 @@ Filter supports the following placeholders:
 
 **authn-mongodb:sharded-cluster.password_hash_algorithm**
 
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:other_algorithms](#authn-hash:other_algorithms)
+  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
 
@@ -5606,12 +5410,10 @@ Filter supports the following placeholders:
 
   *Type*: `string`
 
-
-A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
+  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
 For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
 A host entry has the following form: `Host[:Port]`.
 The MongoDB default port 27017 is used if `[:Port]` is not specified.
-
 
 
 **authn-mongodb:sharded-cluster.w_mode**
@@ -5696,8 +5498,6 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 **authn-http:get.method**
 
   *Type*: `get`
-
-  *Default*: `get`
 
   HTTP request method.
 
@@ -5823,8 +5623,6 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 **authn-http:post.method**
 
   *Type*: `post`
-
-  *Default*: `post`
 
   HTTP request method.
 
@@ -6003,13 +5801,11 @@ Configuration when the JWT for authentication is issued using the HMAC algorithm
 
   *Default*: `{}`
 
-
-A list of custom claims to validate, which is a list of name/value pairs.
+  A list of custom claims to validate, which is a list of name/value pairs.
 Values can use the following placeholders:
 - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
 - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
 Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.
-
 
 
 **authn-jwt:hmac-based.from**
@@ -6101,13 +5897,11 @@ Configuration when JWTs used for authentication need to be fetched from the JWKS
 
   *Default*: `{}`
 
-
-A list of custom claims to validate, which is a list of name/value pairs.
+  A list of custom claims to validate, which is a list of name/value pairs.
 Values can use the following placeholders:
 - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
 - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
 Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.
-
 
 
 **authn-jwt:jwks.from**
@@ -6181,13 +5975,11 @@ Configuration when the JWT for authentication is issued using RSA or ECDSA algor
 
   *Default*: `{}`
 
-
-A list of custom claims to validate, which is a list of name/value pairs.
+  A list of custom claims to validate, which is a list of name/value pairs.
 Values can use the following placeholders:
 - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
 - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
 Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.
-
 
 
 **authn-jwt:public-key.from**
@@ -6273,7 +6065,6 @@ configured, such as <code>RSA-PSK-AES256-GCM-SHA384</code>.
 See listener SSL options config for more details.
 
 The IDs and secrets can be provided from a file which is configurable by the <code>init_file</code> field.
-
 
 **psk_authentication.enable**
 
@@ -6380,6 +6171,28 @@ Settings for PBKDF2 password hashing algorithm.
 
 
 
+Settings for simple algorithms.
+
+**authn-hash:simple.name**
+
+  *Type*: `enum`
+
+  *Optional*: `plain | md5 | sha | sha256 | sha512`
+
+  Simple password hashing algorithm.
+
+
+**authn-hash:simple.salt_position**
+
+  *Type*: `enum`
+
+  *Default*: `prefix`
+
+  *Optional*: `disable | prefix | suffix`
+
+  Salt position for PLAIN, MD5, SHA, SHA256 and SHA512 algorithms.
+
+
 
 ## Authorization
 
@@ -6396,12 +6209,10 @@ Settings that control client authorization.
 
   *Optional*: `allow | deny`
 
-
-Default access control action if the user or client matches no ACL rules,
+  Default access control action if the user or client matches no ACL rules,
 or if no such user or client is found by the configurable authorization
 sources such as built_in_database, an HTTP API, or a query against PostgreSQL.
 Find more details in 'authorization.sources' config.
-
 
 
 **authorization.deny_action**
@@ -6426,8 +6237,7 @@ Find more details in 'authorization.sources' config.
 
   *Default*: `[]`
 
-
-Authorization data sources.<br/>
+  Authorization data sources.<br/>
 An array of authorization (ACL) data providers.
 It is designed as an array, not a hash-map, so the sources can be
 ordered to form a chain of access controls.<br/>
@@ -6444,7 +6254,6 @@ the default action configured in 'authorization.no_match' is applied.<br/>
 NOTE:
 The source elements are identified by their 'type'.
 It is NOT allowed to configure two or more sources of the same type.
-
 
 
 
@@ -6477,7 +6286,7 @@ Settings for the authorization cache.
 
   *Default*: `1m`
 
-  Time to live for the cached data.  
+  Time to live for the cached data.
 
 
 
@@ -6506,8 +6315,7 @@ Authorization using a static file.
 
   *Type*: `string`
 
-
-Path to the file which contains the ACL rules.
+  Path to the file which contains the ACL rules.
 If the file provisioned before starting EMQX node,
 it can be placed anywhere as long as EMQX has read access to it.
 That is, EMQX will treat it as read only.
@@ -6515,7 +6323,6 @@ That is, EMQX will treat it as read only.
 In case the rule-set is created or updated from EMQX Dashboard or HTTP API,
 a new file will be created and placed in `authz` subdirectory inside EMQX's `data_dir`,
 and the old file will not be used anymore.
-
 
 
 
@@ -6566,11 +6373,9 @@ Authorization using a MySQL database.
 
   *Type*: `string`
 
-
-The IPv4 or IPv6 address or the hostname to connect to.<br/>
+  The IPv4 or IPv6 address or the hostname to connect to.<br/>
 A host entry has the following form: `Host[:Port]`.<br/>
 The MySQL default port 3306 is used if `[:Port]` is not specified.
-
 
 
 **authorization.sources.$INDEX.database**
@@ -6661,11 +6466,9 @@ Authorization using a PostgreSQL database.
 
   *Type*: `string`
 
-
-The IPv4 or IPv6 address or the hostname to connect to.<br/>
+  The IPv4 or IPv6 address or the hostname to connect to.<br/>
 A host entry has the following form: `Host[:Port]`.<br/>
 The PostgreSQL default port 5432 is used if `[:Port]` is not specified.
-
 
 
 **authorization.sources.$INDEX.database**
@@ -6754,11 +6557,9 @@ Authorization using a single Redis instance.
 
   *Type*: `string`
 
-
-The IPv4 or IPv6 address or the hostname to connect to.<br/>
+  The IPv4 or IPv6 address or the hostname to connect to.<br/>
 A host entry has the following form: `Host[:Port]`.<br/>
 The Redis default port 6379 is used if `[:Port]` is not specified.
-
 
 
 **authorization.sources.$INDEX.redis_type**
@@ -6842,12 +6643,10 @@ Authorization using a Redis cluster.
 
   *Type*: `string`
 
-
-A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
+  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
 For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
 A host entry has the following form: `Host[:Port]`.
 The Redis default port 6379 is used if `[:Port]` is not specified.
-
 
 
 **authorization.sources.$INDEX.redis_type**
@@ -6922,12 +6721,10 @@ Authorization using a Redis Sentinel.
 
   *Type*: `string`
 
-
-A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
+  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
 For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
 A host entry has the following form: `Host[:Port]`.
 The Redis default port 6379 is used if `[:Port]` is not specified.
-
 
 
 **authorization.sources.$INDEX.redis_type**
@@ -7018,7 +6815,7 @@ Authorization using a single MongoDB instance.
 
 **authorization.sources.$INDEX.collection**
 
-  *Type*: `atom`
+  *Type*: `string`
 
   `MongoDB` collection containing the authorization data.
 
@@ -7029,12 +6826,10 @@ Authorization using a single MongoDB instance.
 
   *Default*: `{}`
 
-
-Conditional expression that defines the filter condition in the query.
-Filter supports the following placeholders:
- - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
+  Conditional expression that defines the filter condition in the query.
+Filter supports the following placeholders<br/>
+ - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>
  - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-
 
 
 **authorization.sources.$INDEX.mongo_type**
@@ -7050,11 +6845,9 @@ Filter supports the following placeholders:
 
   *Type*: `string`
 
-
-The IPv4 or IPv6 address or the hostname to connect to.<br/>
+  The IPv4 or IPv6 address or the hostname to connect to.<br/>
 A host entry has the following form: `Host[:Port]`.<br/>
 The MongoDB default port 27017 is used if `[:Port]` is not specified.
-
 
 
 **authorization.sources.$INDEX.w_mode**
@@ -7150,7 +6943,7 @@ Authorization using a MongoDB replica set.
 
 **authorization.sources.$INDEX.collection**
 
-  *Type*: `atom`
+  *Type*: `string`
 
   `MongoDB` collection containing the authorization data.
 
@@ -7161,12 +6954,10 @@ Authorization using a MongoDB replica set.
 
   *Default*: `{}`
 
-
-Conditional expression that defines the filter condition in the query.
-Filter supports the following placeholders:
- - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
+  Conditional expression that defines the filter condition in the query.
+Filter supports the following placeholders<br/>
+ - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>
  - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-
 
 
 **authorization.sources.$INDEX.mongo_type**
@@ -7182,12 +6973,10 @@ Filter supports the following placeholders:
 
   *Type*: `string`
 
-
-A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
+  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
 For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
 A host entry has the following form: `Host[:Port]`.
 The MongoDB default port 27017 is used if `[:Port]` is not specified.
-
 
 
 **authorization.sources.$INDEX.w_mode**
@@ -7301,7 +7090,7 @@ Authorization using a sharded MongoDB cluster.
 
 **authorization.sources.$INDEX.collection**
 
-  *Type*: `atom`
+  *Type*: `string`
 
   `MongoDB` collection containing the authorization data.
 
@@ -7312,12 +7101,10 @@ Authorization using a sharded MongoDB cluster.
 
   *Default*: `{}`
 
-
-Conditional expression that defines the filter condition in the query.
-Filter supports the following placeholders:
- - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
+  Conditional expression that defines the filter condition in the query.
+Filter supports the following placeholders<br/>
+ - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>
  - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-
 
 
 **authorization.sources.$INDEX.mongo_type**
@@ -7333,12 +7120,10 @@ Filter supports the following placeholders:
 
   *Type*: `string`
 
-
-A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
+  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
 For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
 A host entry has the following form: `Host[:Port]`.
 The MongoDB default port 27017 is used if `[:Port]` is not specified.
-
 
 
 **authorization.sources.$INDEX.w_mode**
@@ -7759,10 +7544,8 @@ Configuration for a rule.
 
   *Type*: `string`
 
-
-SQL query to transform the messages.
+  SQL query to transform the messages.
 Example: <code>SELECT * FROM "test/topic" WHERE payload.x = 1</code>
-
 
 
 **rule_engine.rules.$id.actions**
@@ -7771,8 +7554,7 @@ Example: <code>SELECT * FROM "test/topic" WHERE payload.x = 1</code>
 
   *Default*: `[]`
 
-
-A list of actions of the rule.
+  A list of actions of the rule.
 An action can be a string that refers to the channel ID of an EMQX bridge, or an object
 that refers to a function.
 There a some built-in functions like "republish" and "console", and we also support user
@@ -7784,7 +7566,6 @@ If one of the action crashed, all other actions come after it will still be exec
 original order.
 If there's any error when running an action, there will be an error message, and the 'failure'
 counter of the function action or the bridge channel will increase.
-
 
 
 **rule_engine.rules.$id.enable**
@@ -7820,14 +7601,12 @@ Configuration for a built-in action.
 
   *Type*: `string`
 
-
-The user provided function. Should be in the format: '{module}:{function}'.
+  The user provided function. Should be in the format: '{module}:{function}'.
 Where {module} is the Erlang callback module and {function} is the Erlang function.
 
 To write your own function, checkout the function <code>console</code> and
 <code>republish</code> in the source file:
 <code>apps/emqx_rule_engine/src/emqx_rule_actions.erl</code> as an example.
-
 
 
 **rule_engine.rules.$id.actions.$INDEX.args**
@@ -7836,11 +7615,9 @@ To write your own function, checkout the function <code>console</code> and
 
   *Default*: `{}`
 
-
-The args will be passed as the 3rd argument to module:function/3,
+  The args will be passed as the 3rd argument to module:function/3,
 checkout the function <code>console</code> and <code>republish</code> in the source file:
 <code>apps/emqx_rule_engine/src/emqx_rule_actions.erl</code> as an example.
-
 
 
 
@@ -7898,10 +7675,8 @@ payload = `msg: hello`, and `qos = 1`.
 
   *Type*: `string`
 
-
-The target topic of message to be re-published.
+  The target topic of message to be re-published.
 Template with variables is allowed, see description of the 'republish_args'.
-
 
 
 **rule_engine.rules.$id.actions.$INDEX.args.qos**
@@ -7910,12 +7685,10 @@ Template with variables is allowed, see description of the 'republish_args'.
 
   *Default*: `${qos}`
 
-
-The qos of the message to be re-published.
+  The qos of the message to be re-published.
 Template with variables is allowed, see description of the 'republish_args'.
 Defaults to ${qos}. If variable ${qos} is not found from the selected result of the rule,
 0 is used.
-
 
 
 **rule_engine.rules.$id.actions.$INDEX.args.retain**
@@ -7924,12 +7697,10 @@ Defaults to ${qos}. If variable ${qos} is not found from the selected result of 
 
   *Default*: `${retain}`
 
-
-The 'retain' flag of the message to be re-published.
+  The 'retain' flag of the message to be re-published.
 Template with variables is allowed, see description of the 'republish_args'.
 Defaults to ${retain}. If variable ${retain} is not found from the selected result
 of the rule, false is used.
-
 
 
 **rule_engine.rules.$id.actions.$INDEX.args.payload**
@@ -7938,12 +7709,10 @@ of the rule, false is used.
 
   *Default*: `${payload}`
 
-
-The payload of the message to be re-published.
+  The payload of the message to be re-published.
 Template with variables is allowed, see description of the 'republish_args'.
 Defaults to ${payload}. If variable ${payload} is not found from the selected result
 of the rule, then the string "undefined" is used.
-
 
 
 **rule_engine.rules.$id.actions.$INDEX.args.user_properties**
@@ -7952,8 +7721,7 @@ of the rule, then the string "undefined" is used.
 
   *Default*: `${user_properties}`
 
-
-From which variable should the MQTT message's User-Property pairs be taken from.
+  From which variable should the MQTT message's User-Property pairs be taken from.
 The value must be a map.
 You may configure it to <code>${pub_props.'User-Property'}</code> or
 use <code>SELECT *,pub_props.'User-Property' as user_properties</code>
@@ -7962,7 +7730,6 @@ You may also call <code>map_put</code> function like
 <code>map_put('my-prop-name', 'my-prop-value', user_properties) as user_properties</code>
 to inject user properties.
 NOTE: MQTT spec allows duplicated user property names, but EMQX Rule-Engine does not.
-
 
 
 
@@ -7999,16 +7766,13 @@ The config for MQTT Bridges.
 
   *Optional*: `cluster_shareload`
 
-
-The mode of the MQTT Bridge.<br/>
-
-- cluster_shareload: create an MQTT connection on each node in the EMQX cluster.<br/>
+  The mode of the MQTT Bridge.<br/>
+- cluster_shareload: create an MQTT connection on each node in the emqx cluster.<br/>
 In 'cluster_shareload' mode, the incoming load from the remote broker is shared by
 using shared subscription.<br/>
 Note that the 'clientid' is suffixed by the node name, this is to avoid
 clientid conflicts between different nodes. And we can only use shared subscription
 topic filters for <code>remote.topic</code> of ingress connections.
-
 
 
 **bridges.mqtt.$name.server**
@@ -8023,6 +7787,13 @@ topic filters for <code>remote.topic</code> of ingress connections.
   *Type*: `string`
 
   Optional prefix to prepend to the clientid used by egress bridges.
+
+
+**bridges.mqtt.$name.reconnect_interval**
+
+  *Type*: `string`
+
+  Deprecated since v5.0.16.
 
 
 **bridges.mqtt.$name.proto_ver**
@@ -8042,11 +7813,11 @@ topic filters for <code>remote.topic</code> of ingress connections.
 
   *Default*: `false`
 
-
-If enable bridge mode.
+  If enable bridge mode.
 NOTE: This setting is only for MQTT protocol version older than 5.0, and the remote MQTT
 broker MUST support this feature.
-    
+If bridge_mode is set to true, the bridge will indicate to the remote broker that it is a bridge not an ordinary client.
+This means that loop detection will be more effective and that retained messages will be propagated correctly.
 
 
 **bridges.mqtt.$name.username**
@@ -8061,6 +7832,15 @@ broker MUST support this feature.
   *Type*: `string`
 
   The password of the MQTT protocol
+
+
+**bridges.mqtt.$name.clean_start**
+
+  *Type*: `boolean`
+
+  *Default*: `true`
+
+  Whether to start a clean session when reconnecting a remote broker for ingress bridge
 
 
 **bridges.mqtt.$name.keepalive**
@@ -8197,7 +7977,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
   *Default*: `15s`
 
-  Timeout for requests.  If <code>query_mode</code> is <code>sync</code>, calls to the resource will be blocked for this amount of time before timing out.
+  Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
 
 
 **bridges.mqtt.$name.resource_opts.async_inflight_window**
@@ -8312,14 +8092,12 @@ Configuration for an HTTP bridge.
 
   *Type*: `string`
 
-
-The URL of the HTTP Bridge.<br/>
+  The URL of the HTTP Bridge.<br/>
 Template with variables is allowed in the path, but variables cannot be used in the scheme, host,
 or port part.<br/>
 For example, <code> http://localhost:9901/${topic} </code> is allowed, but
 <code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code>
 is not allowed.
-
 
 
 **bridges.webhook.$name.direction**
@@ -8333,13 +8111,11 @@ is not allowed.
 
   *Type*: `string`
 
-
-The MQTT topic filter to be forwarded to the HTTP server. All MQTT 'PUBLISH' messages with the topic
+  The MQTT topic filter to be forwarded to the HTTP server. All MQTT 'PUBLISH' messages with the topic
 matching the local_topic will be forwarded.<br/>
 NOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is
 configured, then both the data got from the rule and the MQTT messages that match local_topic
 will be forwarded.
-
 
 
 **bridges.webhook.$name.method**
@@ -8350,10 +8126,8 @@ will be forwarded.
 
   *Optional*: `post | put | get | delete`
 
-
-The method of the HTTP request. All the available methods are: post, put, get, delete.<br/>
-Template with variables is allowed.<br/>
-
+  The method of the HTTP request. All the available methods are: post, put, get, delete.<br/>
+Template with variables is allowed.
 
 
 **bridges.webhook.$name.headers**
@@ -8362,25 +8136,21 @@ Template with variables is allowed.<br/>
 
   *Default*: `{"accept":"application/json","cache-control":"no-cache","connection":"keep-alive","content-type":"application/json","keep-alive":"timeout=5"}`
 
-
-The headers of the HTTP request.<br/>
+  The headers of the HTTP request.<br/>
 Template with variables is allowed.
-
 
 
 **bridges.webhook.$name.body**
 
   *Type*: `string`
 
-
-The body of the HTTP request.<br/>
+  The body of the HTTP request.<br/>
 If not provided, the body will be a JSON object of all the available fields.<br/>
 There, 'all the available fields' means the context of a MQTT message when
 this webhook is triggered by receiving a MQTT message (the `local_topic` is set),
 or the context of the event when this webhook is triggered by a rule (i.e. this
 webhook is used as an action of a rule).<br/>
 Template with variables is allowed.
-
 
 
 **bridges.webhook.$name.max_retries**
@@ -8468,7 +8238,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
   *Default*: `15s`
 
-  Timeout for requests.  If <code>query_mode</code> is <code>sync</code>, calls to the resource will be blocked for this amount of time before timing out.
+  Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
 
 
 **bridges.webhook.$name.resource_opts.async_inflight_window**
@@ -8585,10 +8355,8 @@ The configs about sending message to the remote broker.
 
   *Type*: `string`
 
-
-Forward to which topic of the remote broker.<br/>
+  Forward to which topic of the remote broker.<br/>
 Template with variables is allowed.
-
 
 
 **bridges.mqtt.$name.egress.remote.qos**
@@ -8597,10 +8365,8 @@ Template with variables is allowed.
 
   *Default*: `1`
 
-
-The QoS of the MQTT message to be sent.<br/>
+  The QoS of the MQTT message to be sent.<br/>
 Template with variables is allowed.
-
 
 
 **bridges.mqtt.$name.egress.remote.retain**
@@ -8609,20 +8375,16 @@ Template with variables is allowed.
 
   *Default*: `false`
 
-
-The 'retain' flag of the MQTT message to be sent.<br/>
+  The 'retain' flag of the MQTT message to be sent.<br/>
 Template with variables is allowed.
-
 
 
 **bridges.mqtt.$name.egress.remote.payload**
 
   *Type*: `string`
 
-
-The payload of the MQTT message to be sent.<br/>
+  The payload of the MQTT message to be sent.<br/>
 Template with variables is allowed.
-
 
 
 
@@ -8656,10 +8418,8 @@ The configs about sending message to the local broker.
 
   *Type*: `string`
 
-
-Send messages to which topic of the local broker.<br/>
+  Send messages to which topic of the local broker.<br/>
 Template with variables is allowed.
-
 
 
 **bridges.mqtt.$name.ingress.local.qos**
@@ -8668,10 +8428,8 @@ Template with variables is allowed.
 
   *Default*: `${qos}`
 
-
-The QoS of the MQTT message to be sent.<br/>
+  The QoS of the MQTT message to be sent.<br/>
 Template with variables is allowed.
-
 
 
 **bridges.mqtt.$name.ingress.local.retain**
@@ -8680,20 +8438,16 @@ Template with variables is allowed.
 
   *Default*: `${retain}`
 
-
-The 'retain' flag of the MQTT message to be sent.<br/>
+  The 'retain' flag of the MQTT message to be sent.<br/>
 Template with variables is allowed.
-
 
 
 **bridges.mqtt.$name.ingress.local.payload**
 
   *Type*: `string`
 
-
-The payload of the MQTT message to be sent.<br/>
+  The payload of the MQTT message to be sent.<br/>
 Template with variables is allowed.
-
 
 
 
@@ -8709,7 +8463,7 @@ The configs about subscribing to the remote broker.
 
 **bridges.mqtt.$name.ingress.remote.qos**
 
-  *Type*: `qos | string`
+  *Type*: `qos`
 
   *Default*: `1`
 
@@ -8842,11 +8596,10 @@ Connection mode is a feature of non-standard protocols. When connection mode is 
   *Optional*: `non | con | qos`
 
   The Notification Message will be delivered to the CoAP client if a new message received on an observed topic.
-The type of delivered coap message can be set to:
-  - non: Non-confirmable;
-  - con: Confirmable;
+The type of delivered coap message can be set to:<br/>
+  - non: Non-confirmable;<br/>
+  - con: Confirmable;<br/>
   - qos: Mapping from QoS type of received message, QoS0 -> non, QoS1,2 -> con
-
 
 
 **gateway.coap.subscribe_qos**
@@ -8858,12 +8611,11 @@ The type of delivered coap message can be set to:
   *Optional*: `qos0 | qos1 | qos2 | coap`
 
   The Default QoS Level indicator for subscribe request.
-This option specifies the QoS level for the CoAP Client when establishing a subscription membership, if the subscribe request is not carried `qos` option. The indicator can be set to:
-  - qos0, qos1, qos2: Fixed default QoS level
-  - coap: Dynamic QoS level by the message type of subscribe request
-    * qos0: If the subscribe request is non-confirmable
+This option specifies the QoS level for the CoAP Client when establishing a subscription membership, if the subscribe request is not carried `qos` option. The indicator can be set to:<br/>
+  - qos0, qos1, qos2: Fixed default QoS level<br/>
+  - coap: Dynamic QoS level by the message type of subscribe request<br/>
+    * qos0: If the subscribe request is non-confirmable<br/>
     * qos1: If the subscribe request is confirmable
-
 
 
 **gateway.coap.publish_qos**
@@ -8875,10 +8627,10 @@ This option specifies the QoS level for the CoAP Client when establishing a subs
   *Optional*: `qos0 | qos1 | qos2 | coap`
 
   The Default QoS Level indicator for publish request.
-This option specifies the QoS level for the CoAP Client when publishing a message to EMQX PUB/SUB system, if the publish request is not carried `qos` option. The indicator can be set to:
-  - qos0, qos1, qos2: Fixed default QoS level
-  - coap: Dynamic QoS level by the message type of publish request
-    * qos0: If the publish request is non-confirmable
+This option specifies the QoS level for the CoAP Client when publishing a message to EMQX PUB/SUB system, if the publish request is not carried `qos` option. The indicator can be set to:<br/>
+  - qos0, qos1, qos2: Fixed default QoS level<br/>
+  - coap: Dynamic QoS level by the message type of publish request<br/>
+    * qos0: If the publish request is non-confirmable<br/>
     * qos1: If the publish request is confirmable
 
 
@@ -8887,8 +8639,6 @@ This option specifies the QoS level for the CoAP Client when publishing a messag
   *Type*: `string`
 
   *Default*: `""`
-
-   
 
 
 **gateway.coap.listeners**
@@ -8967,8 +8717,6 @@ Settings for EMQX extension protocol (exproto).
   *Type*: `string`
 
   *Default*: `""`
-
-   
 
 
 **gateway.exproto.listeners**
@@ -9116,10 +8864,9 @@ For example, after receiving an update message from a client, any messages withi
 
   *Optional*: `always | contains_object_list`
 
-  Policy for publishing UPDATE event message.
-  - always: send update events as long as the UPDATE request is received.
+  Policy for publishing UPDATE event message.<br/>
+  - always: send update events as long as the UPDATE request is received.<br/>
   - contains_object_list: send update events only if the UPDATE request carries any Object List
-
 
 
 **gateway.lwm2m.translators**
@@ -9134,8 +8881,6 @@ For example, after receiving an update message from a client, any messages withi
   *Type*: `string`
 
   *Default*: `lwm2m/${endpoint_name}/`
-
-   
 
 
 **gateway.lwm2m.listeners**
@@ -9290,8 +9035,6 @@ A 'pre-defined' topic ID is a topic ID whose mapping to a topic name is known in
 
   *Default*: `""`
 
-   
-
 
 **gateway.mqttsn.listeners**
 
@@ -9382,8 +9125,6 @@ The STOMP protocol gateway provides EMQX with the ability to access STOMP
   *Type*: `string`
 
   *Default*: `""`
-
-   
 
 
 **gateway.stomp.listeners**
@@ -9567,12 +9308,16 @@ When set to <code>false</code> clients will be allowed to connect without authen
   *Type*: `string`
 
   When publishing or subscribing, prefix all topics with a mountpoint string.
-The prefixed string will be removed from the topic name when the message is delivered to the subscriber. The mountpoint is a way that users can use to implement isolation of message routing between different listeners.
-For example if a client A subscribes to `t` with `listeners.tcp.\<name>.mountpoint` set to `some_tenant`, then the client actually subscribes to the topic `some_tenant/t`. Similarly, if another client B (connected to the same listener as the client A) sends a message to topic `t`, the message is routed to all the clients subscribed `some_tenant/t`, so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
-Variables in mountpoint string:
-  - <code>${clientid}</code>: clientid
+The prefixed string will be removed from the topic name when the message is delivered to the subscriber.
+The mountpoint is a way that users can use to implement isolation of message routing between different listeners.
+For example if a client A subscribes to `t` with `listeners.tcp.\<name>.mountpoint` set to `some_tenant`,
+then the client actually subscribes to the topic `some_tenant/t`.
+Similarly, if another client B (connected to the same listener as the client A) sends a message to topic `t`,
+the message is routed to all the clients subscribed `some_tenant/t`,
+so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
+Variables in mountpoint string:<br/>
+  - <code>${clientid}</code>: clientid<br/>
   - <code>${username}</code>: username
-
 
 
 **gateway:tcp_listener.access_rules**
@@ -9593,14 +9338,10 @@ Settings for the TCP listeners.
 
   *Type*: `name`
 
-   
-
 
 **gateway.stomp.listeners.ssl**
 
   *Type*: `name`
-
-   
 
 
 
@@ -9611,28 +9352,20 @@ Settings for the listeners.
 
   *Type*: `name`
 
-   
-
 
 **gateway.exproto.listeners.ssl**
 
   *Type*: `name`
-
-   
 
 
 **gateway.exproto.listeners.udp**
 
   *Type*: `name`
 
-   
-
 
 **gateway.exproto.listeners.dtls**
 
   *Type*: `name`
-
-   
 
 
 
@@ -9710,12 +9443,16 @@ When set to <code>false</code> clients will be allowed to connect without authen
   *Type*: `string`
 
   When publishing or subscribing, prefix all topics with a mountpoint string.
-The prefixed string will be removed from the topic name when the message is delivered to the subscriber. The mountpoint is a way that users can use to implement isolation of message routing between different listeners.
-For example if a client A subscribes to `t` with `listeners.tcp.\<name>.mountpoint` set to `some_tenant`, then the client actually subscribes to the topic `some_tenant/t`. Similarly, if another client B (connected to the same listener as the client A) sends a message to topic `t`, the message is routed to all the clients subscribed `some_tenant/t`, so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
-Variables in mountpoint string:
-  - <code>${clientid}</code>: clientid
+The prefixed string will be removed from the topic name when the message is delivered to the subscriber.
+The mountpoint is a way that users can use to implement isolation of message routing between different listeners.
+For example if a client A subscribes to `t` with `listeners.tcp.\<name>.mountpoint` set to `some_tenant`,
+then the client actually subscribes to the topic `some_tenant/t`.
+Similarly, if another client B (connected to the same listener as the client A) sends a message to topic `t`,
+the message is routed to all the clients subscribed `some_tenant/t`,
+so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
+Variables in mountpoint string:<br/>
+  - <code>${clientid}</code>: clientid<br/>
   - <code>${username}</code>: username
-
 
 
 **gateway:dtls_listener.access_rules**
@@ -9743,8 +9480,7 @@ Settings for the DTLS protocol.
 
   *Type*: `string`
 
-
-Trusted PEM format CA certificates bundle file.<br/>
+  Trusted PEM format CA certificates bundle file.<br/>
 The certificates in this file are used to verify the TLS peer's certificates.
 Append new certificates to the file if new CAs are to be trusted.
 There is no need to restart EMQX to have the updated file loaded, because
@@ -9753,13 +9489,11 @@ NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
 
-
 **gateway:dtls_opts.certfile**
 
   *Type*: `string`
 
-
-PEM format certificates chain file.<br/>
+  PEM format certificates chain file.<br/>
 The certificates in this file should be in reversed order of the certificate
 issue chain. That is, the host's certificate should be placed in the beginning
 of the file, followed by the immediate issuer certificate and so on.
@@ -9767,12 +9501,11 @@ Although the root CA certificate is optional, it should be placed at the end of
 the file if it is to be added.
 
 
-
 **gateway:dtls_opts.keyfile**
 
   *Type*: `string`
 
-  PEM format private key file. 
+  PEM format private key file.
 
 
 **gateway:dtls_opts.verify**
@@ -9783,7 +9516,7 @@ the file if it is to be added.
 
   *Optional*: `verify_peer | verify_none`
 
-  Enable or disable peer verification. 
+  Enable or disable peer verification.
 
 
 **gateway:dtls_opts.reuse_sessions**
@@ -9792,7 +9525,7 @@ the file if it is to be added.
 
   *Default*: `true`
 
-  Enable TLS session reuse. 
+  Enable TLS session reuse.
 
 
 **gateway:dtls_opts.depth**
@@ -9801,22 +9534,17 @@ the file if it is to be added.
 
   *Default*: `10`
 
-
-Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
+  Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
 So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/>
 if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
-if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.<br/>
-
+if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
 **gateway:dtls_opts.password**
 
   *Type*: `string`
 
-
-String containing the user's password.
-Only used if the private key file is password-protected.
-
+  String containing the user's password. Only used if the private key file is password-protected.
 
 
 **gateway:dtls_opts.versions**
@@ -9825,12 +9553,10 @@ Only used if the private key file is password-protected.
 
   *Default*: `["dtlsv1.2","dtlsv1"]`
 
-
-All TLS/DTLS versions to be supported.<br/>
+  All TLS/DTLS versions to be supported.<br/>
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
 In case PSK cipher suites are intended, make sure to configure
 <code>['tlsv1.2', 'tlsv1.1']</code> here.
-
 
 
 **gateway:dtls_opts.ciphers**
@@ -9839,8 +9565,7 @@ In case PSK cipher suites are intended, make sure to configure
 
   *Default*: `[]`
 
-
-This config holds TLS cipher suite names separated by comma,
+  This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
@@ -9866,8 +9591,7 @@ If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versi
 PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
-
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **gateway:dtls_opts.user_lookup_fun**
@@ -9876,7 +9600,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
   *Default*: `emqx_tls_psk:lookup`
 
-  EMQX-internal callback that is used to lookup pre-shared key (PSK) identity. 
+  EMQX-internal callback that is used to lookup pre-shared key (PSK) identity.
 
 
 **gateway:dtls_opts.secure_renegotiate**
@@ -9885,25 +9609,30 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
   *Default*: `true`
 
-
-SSL parameter renegotiation is a feature that allows a client and a server
+  SSL parameter renegotiation is a feature that allows a client and a server
 to renegotiate the parameters of the SSL connection on the fly.
 RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
 you drop support for the insecure renegotiation, prone to MitM attacks.
 
+
+**gateway:dtls_opts.hibernate_after**
+
+  *Type*: `duration`
+
+  *Default*: `5s`
+
+   Hibernate the SSL process after idling for amount of time reducing its memory footprint. 
 
 
 **gateway:dtls_opts.dhfile**
 
   *Type*: `string`
 
-
-Path to a file containing PEM-encoded Diffie-Hellman parameters
+  Path to a file containing PEM-encoded Diffie-Hellman parameters
 to be used by the server if a cipher suite using Diffie-Hellman
 key exchange is negotiated. If not specified, default parameters
 are used.<br/>
 NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
-
 
 
 **gateway:dtls_opts.fail_if_no_peer_cert**
@@ -9912,13 +9641,11 @@ NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
 
   *Default*: `false`
 
-
-Used together with {verify, verify_peer} by an TLS/DTLS server.
+  Used together with {verify, verify_peer} by an TLS/DTLS server.
 If set to true, the server fails if the client does not have a
 certificate to send, that is, sends an empty certificate.
 If set to false, it fails only if the client sends an invalid
 certificate (an empty certificate is considered valid).
-
 
 
 **gateway:dtls_opts.honor_cipher_order**
@@ -9927,12 +9654,10 @@ certificate (an empty certificate is considered valid).
 
   *Default*: `true`
 
-
-An important security setting, it forces the cipher to be set based
+  An important security setting, it forces the cipher to be set based
  on the server-specified order instead of the client-specified order,
  hence enforcing the (usually more properly configured) security
  ordering of the server administrator.
-
 
 
 **gateway:dtls_opts.client_renegotiation**
@@ -9941,8 +9666,7 @@ An important security setting, it forces the cipher to be set based
 
   *Default*: `true`
 
-
-In protocols that support client-initiated renegotiation,
+  In protocols that support client-initiated renegotiation,
 the cost of resources of such an operation is higher for the server than the client.
 This can act as a vector for denial of service attacks.
 The SSL application already takes measures to counter-act such attempts,
@@ -9952,16 +9676,13 @@ long-lived connections becoming unusable due to limits on
 the number of messages the underlying cipher suite can encipher.
 
 
-
 **gateway:dtls_opts.handshake_timeout**
 
   *Type*: `duration`
 
   *Default*: `15s`
 
-
-Maximum time duration allowed for the handshake to complete
-
+  Maximum time duration allowed for the handshake to complete
 
 
 **gateway:dtls_opts.gc_after_handshake**
@@ -9970,10 +9691,7 @@ Maximum time duration allowed for the handshake to complete
 
   *Default*: `false`
 
-
-Memory usage tuning. If enabled, will immediately perform a garbage collection after
-the TLS/SSL handshake.
-
+  Memory usage tuning. If enabled, will immediately perform a garbage collection after the TLS/SSL handshake.
 
 
 
@@ -10042,12 +9760,16 @@ When set to <code>false</code> clients will be allowed to connect without authen
   *Type*: `string`
 
   When publishing or subscribing, prefix all topics with a mountpoint string.
-The prefixed string will be removed from the topic name when the message is delivered to the subscriber. The mountpoint is a way that users can use to implement isolation of message routing between different listeners.
-For example if a client A subscribes to `t` with `listeners.tcp.\<name>.mountpoint` set to `some_tenant`, then the client actually subscribes to the topic `some_tenant/t`. Similarly, if another client B (connected to the same listener as the client A) sends a message to topic `t`, the message is routed to all the clients subscribed `some_tenant/t`, so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
-Variables in mountpoint string:
-  - <code>${clientid}</code>: clientid
+The prefixed string will be removed from the topic name when the message is delivered to the subscriber.
+The mountpoint is a way that users can use to implement isolation of message routing between different listeners.
+For example if a client A subscribes to `t` with `listeners.tcp.\<name>.mountpoint` set to `some_tenant`,
+then the client actually subscribes to the topic `some_tenant/t`.
+Similarly, if another client B (connected to the same listener as the client A) sends a message to topic `t`,
+the message is routed to all the clients subscribed `some_tenant/t`,
+so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
+Variables in mountpoint string:<br/>
+  - <code>${clientid}</code>: clientid<br/>
   - <code>${username}</code>: username
-
 
 
 **gateway:udp_listener.access_rules**
@@ -10068,14 +9790,10 @@ Settings for the UDP listeners.
 
   *Type*: `name`
 
-   
-
 
 **gateway:udp_listeners.dtls**
 
   *Type*: `name`
-
-   
 
 
 
@@ -10219,12 +9937,16 @@ When set to <code>false</code> clients will be allowed to connect without authen
   *Type*: `string`
 
   When publishing or subscribing, prefix all topics with a mountpoint string.
-The prefixed string will be removed from the topic name when the message is delivered to the subscriber. The mountpoint is a way that users can use to implement isolation of message routing between different listeners.
-For example if a client A subscribes to `t` with `listeners.tcp.\<name>.mountpoint` set to `some_tenant`, then the client actually subscribes to the topic `some_tenant/t`. Similarly, if another client B (connected to the same listener as the client A) sends a message to topic `t`, the message is routed to all the clients subscribed `some_tenant/t`, so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
-Variables in mountpoint string:
-  - <code>${clientid}</code>: clientid
+The prefixed string will be removed from the topic name when the message is delivered to the subscriber.
+The mountpoint is a way that users can use to implement isolation of message routing between different listeners.
+For example if a client A subscribes to `t` with `listeners.tcp.\<name>.mountpoint` set to `some_tenant`,
+then the client actually subscribes to the topic `some_tenant/t`.
+Similarly, if another client B (connected to the same listener as the client A) sends a message to topic `t`,
+the message is routed to all the clients subscribed `some_tenant/t`,
+so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
+Variables in mountpoint string:<br/>
+  - <code>${clientid}</code>: clientid<br/>
   - <code>${username}</code>: username
-
 
 
 **gateway:ssl_listener.access_rules**
@@ -10252,8 +9974,7 @@ SSL configuration for the server.
 
   *Type*: `string`
 
-
-Trusted PEM format CA certificates bundle file.<br/>
+  Trusted PEM format CA certificates bundle file.<br/>
 The certificates in this file are used to verify the TLS peer's certificates.
 Append new certificates to the file if new CAs are to be trusted.
 There is no need to restart EMQX to have the updated file loaded, because
@@ -10262,13 +9983,11 @@ NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
 
-
 **gateway.exproto.server.ssl_options.certfile**
 
   *Type*: `string`
 
-
-PEM format certificates chain file.<br/>
+  PEM format certificates chain file.<br/>
 The certificates in this file should be in reversed order of the certificate
 issue chain. That is, the host's certificate should be placed in the beginning
 of the file, followed by the immediate issuer certificate and so on.
@@ -10276,12 +9995,11 @@ Although the root CA certificate is optional, it should be placed at the end of
 the file if it is to be added.
 
 
-
 **gateway.exproto.server.ssl_options.keyfile**
 
   *Type*: `string`
 
-  PEM format private key file. 
+  PEM format private key file.
 
 
 **gateway.exproto.server.ssl_options.verify**
@@ -10292,7 +10010,7 @@ the file if it is to be added.
 
   *Optional*: `verify_peer | verify_none`
 
-  Enable or disable peer verification. 
+  Enable or disable peer verification.
 
 
 **gateway.exproto.server.ssl_options.reuse_sessions**
@@ -10301,7 +10019,7 @@ the file if it is to be added.
 
   *Default*: `true`
 
-  Enable TLS session reuse. 
+  Enable TLS session reuse.
 
 
 **gateway.exproto.server.ssl_options.depth**
@@ -10310,22 +10028,17 @@ the file if it is to be added.
 
   *Default*: `10`
 
-
-Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
+  Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
 So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/>
 if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
-if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.<br/>
-
+if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
 **gateway.exproto.server.ssl_options.password**
 
   *Type*: `string`
 
-
-String containing the user's password.
-Only used if the private key file is password-protected.
-
+  String containing the user's password. Only used if the private key file is password-protected.
 
 
 **gateway.exproto.server.ssl_options.versions**
@@ -10334,12 +10047,10 @@ Only used if the private key file is password-protected.
 
   *Default*: `["tlsv1.3","tlsv1.2","tlsv1.1","tlsv1"]`
 
-
-All TLS/DTLS versions to be supported.<br/>
+  All TLS/DTLS versions to be supported.<br/>
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
 In case PSK cipher suites are intended, make sure to configure
 <code>['tlsv1.2', 'tlsv1.1']</code> here.
-
 
 
 **gateway.exproto.server.ssl_options.ciphers**
@@ -10348,8 +10059,7 @@ In case PSK cipher suites are intended, make sure to configure
 
   *Default*: `[]`
 
-
-This config holds TLS cipher suite names separated by comma,
+  This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
@@ -10375,8 +10085,7 @@ If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versi
 PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
-
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **gateway.exproto.server.ssl_options.user_lookup_fun**
@@ -10385,7 +10094,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
   *Default*: `emqx_tls_psk:lookup`
 
-  EMQX-internal callback that is used to lookup pre-shared key (PSK) identity. 
+  EMQX-internal callback that is used to lookup pre-shared key (PSK) identity.
 
 
 **gateway.exproto.server.ssl_options.secure_renegotiate**
@@ -10394,25 +10103,30 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
   *Default*: `true`
 
-
-SSL parameter renegotiation is a feature that allows a client and a server
+  SSL parameter renegotiation is a feature that allows a client and a server
 to renegotiate the parameters of the SSL connection on the fly.
 RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
 you drop support for the insecure renegotiation, prone to MitM attacks.
 
+
+**gateway.exproto.server.ssl_options.hibernate_after**
+
+  *Type*: `duration`
+
+  *Default*: `5s`
+
+   Hibernate the SSL process after idling for amount of time reducing its memory footprint. 
 
 
 **gateway.exproto.server.ssl_options.dhfile**
 
   *Type*: `string`
 
-
-Path to a file containing PEM-encoded Diffie-Hellman parameters
+  Path to a file containing PEM-encoded Diffie-Hellman parameters
 to be used by the server if a cipher suite using Diffie-Hellman
 key exchange is negotiated. If not specified, default parameters
 are used.<br/>
 NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
-
 
 
 **gateway.exproto.server.ssl_options.fail_if_no_peer_cert**
@@ -10421,13 +10135,11 @@ NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
 
   *Default*: `false`
 
-
-Used together with {verify, verify_peer} by an TLS/DTLS server.
+  Used together with {verify, verify_peer} by an TLS/DTLS server.
 If set to true, the server fails if the client does not have a
 certificate to send, that is, sends an empty certificate.
 If set to false, it fails only if the client sends an invalid
 certificate (an empty certificate is considered valid).
-
 
 
 **gateway.exproto.server.ssl_options.honor_cipher_order**
@@ -10436,12 +10148,10 @@ certificate (an empty certificate is considered valid).
 
   *Default*: `true`
 
-
-An important security setting, it forces the cipher to be set based
+  An important security setting, it forces the cipher to be set based
  on the server-specified order instead of the client-specified order,
  hence enforcing the (usually more properly configured) security
  ordering of the server administrator.
-
 
 
 **gateway.exproto.server.ssl_options.client_renegotiation**
@@ -10450,8 +10160,7 @@ An important security setting, it forces the cipher to be set based
 
   *Default*: `true`
 
-
-In protocols that support client-initiated renegotiation,
+  In protocols that support client-initiated renegotiation,
 the cost of resources of such an operation is higher for the server than the client.
 This can act as a vector for denial of service attacks.
 The SSL application already takes measures to counter-act such attempts,
@@ -10461,21 +10170,17 @@ long-lived connections becoming unusable due to limits on
 the number of messages the underlying cipher suite can encipher.
 
 
-
 **gateway.exproto.server.ssl_options.handshake_timeout**
 
   *Type*: `duration`
 
   *Default*: `15s`
 
-
-Maximum time duration allowed for the handshake to complete
-
+  Maximum time duration allowed for the handshake to complete
 
 
 
 ## Plugin
-
 
 
 Manage EMQX plugins.<br/>
@@ -10483,7 +10188,6 @@ Plugins can be pre-built as a part of EMQX package,
 or installed as a standalone package in a location specified by
 <code>install_dir</code> config key<br/>
 The standalone-installed plugins are referred to as 'external' plugins.
-
 
 **plugins.states**
 
@@ -10501,14 +10205,12 @@ The plugins are started in the defined order
 
   *Default*: `plugins`
 
-
-The installation directory for the external plugins.
+  The installation directory for the external plugins.
 The plugin beam files and configuration files should reside in
 the subdirectory named as <code>emqx_foo_bar-0.1.0</code>.
 <br/>
 NOTE: For security reasons, this directory should **NOT** be writable
 by anyone except <code>emqx</code> (or any user which runs EMQX).
-
 
 
 **plugins.check_interval**
@@ -10523,7 +10225,6 @@ if the results of 3 consecutive checks are not consistent, then alarm.
 
 
 
-
 A per-plugin config to describe the desired state of the plugin.
 
 **plugins.states.$INDEX.name_vsn**
@@ -10533,7 +10234,6 @@ A per-plugin config to describe the desired state of the plugin.
   The {name}-{version} of the plugin.<br/>
 It should match the plugin application name-version as the for the plugin release package name<br/>
 For example: my_plugin-0.1.0.
-
 
 
 **plugins.states.$INDEX.enable**
@@ -10682,8 +10382,7 @@ SSL client configuration.
 
   *Type*: `string`
 
-
-Trusted PEM format CA certificates bundle file.<br/>
+  Trusted PEM format CA certificates bundle file.<br/>
 The certificates in this file are used to verify the TLS peer's certificates.
 Append new certificates to the file if new CAs are to be trusted.
 There is no need to restart EMQX to have the updated file loaded, because
@@ -10692,13 +10391,11 @@ NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
 
-
 **exhook.servers.$INDEX.ssl.certfile**
 
   *Type*: `string`
 
-
-PEM format certificates chain file.<br/>
+  PEM format certificates chain file.<br/>
 The certificates in this file should be in reversed order of the certificate
 issue chain. That is, the host's certificate should be placed in the beginning
 of the file, followed by the immediate issuer certificate and so on.
@@ -10706,12 +10403,11 @@ Although the root CA certificate is optional, it should be placed at the end of
 the file if it is to be added.
 
 
-
 **exhook.servers.$INDEX.ssl.keyfile**
 
   *Type*: `string`
 
-  PEM format private key file. 
+  PEM format private key file.
 
 
 **exhook.servers.$INDEX.ssl.verify**
@@ -10722,7 +10418,7 @@ the file if it is to be added.
 
   *Optional*: `verify_peer | verify_none`
 
-  Enable or disable peer verification. 
+  Enable or disable peer verification.
 
 
 **exhook.servers.$INDEX.ssl.reuse_sessions**
@@ -10731,7 +10427,7 @@ the file if it is to be added.
 
   *Default*: `true`
 
-  Enable TLS session reuse. 
+  Enable TLS session reuse.
 
 
 **exhook.servers.$INDEX.ssl.depth**
@@ -10740,22 +10436,17 @@ the file if it is to be added.
 
   *Default*: `10`
 
-
-Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
+  Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
 So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/>
 if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
-if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.<br/>
-
+if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
 **exhook.servers.$INDEX.ssl.password**
 
   *Type*: `string`
 
-
-String containing the user's password.
-Only used if the private key file is password-protected.
-
+  String containing the user's password. Only used if the private key file is password-protected.
 
 
 **exhook.servers.$INDEX.ssl.versions**
@@ -10764,12 +10455,10 @@ Only used if the private key file is password-protected.
 
   *Default*: `["tlsv1.3","tlsv1.2","tlsv1.1","tlsv1"]`
 
-
-All TLS/DTLS versions to be supported.<br/>
+  All TLS/DTLS versions to be supported.<br/>
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
 In case PSK cipher suites are intended, make sure to configure
 <code>['tlsv1.2', 'tlsv1.1']</code> here.
-
 
 
 **exhook.servers.$INDEX.ssl.ciphers**
@@ -10778,8 +10467,7 @@ In case PSK cipher suites are intended, make sure to configure
 
   *Default*: `[]`
 
-
-This config holds TLS cipher suite names separated by comma,
+  This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
@@ -10805,8 +10493,7 @@ If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versi
 PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
-
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **exhook.servers.$INDEX.ssl.secure_renegotiate**
@@ -10815,12 +10502,19 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
   *Default*: `true`
 
-
-SSL parameter renegotiation is a feature that allows a client and a server
+  SSL parameter renegotiation is a feature that allows a client and a server
 to renegotiate the parameters of the SSL connection on the fly.
 RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
 you drop support for the insecure renegotiation, prone to MitM attacks.
 
+
+**exhook.servers.$INDEX.ssl.hibernate_after**
+
+  *Type*: `duration`
+
+  *Default*: `5s`
+
+   Hibernate the SSL process after idling for amount of time reducing its memory footprint. 
 
 
 **exhook.servers.$INDEX.ssl.enable**
@@ -10829,15 +10523,14 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
   *Default*: `false`
 
-  Enable TLS. 
+  Enable TLS.
 
 
 **exhook.servers.$INDEX.ssl.server_name_indication**
 
   *Type*: `disable | string`
 
-
-Specify the host name to be used in TLS Server Name Indication extension.<br/>
+  Specify the host name to be used in TLS Server Name Indication extension.<br/>
 For instance, when connecting to "server.example.net", the genuine server
 which accepts the connection and performs TLS handshake may differ from the
 host the TLS client initially connects to, e.g. when connecting to an IP address
@@ -10848,7 +10541,6 @@ The host name is then also used in the host name verification of the peer
 certificate.<br/> The special value 'disable' prevents the Server Name
 Indication extension from being sent and disables the hostname
 verification check.
-
 
 
 
@@ -10863,8 +10555,7 @@ Socket options for SSL clients.
 
   *Type*: `string`
 
-
-Trusted PEM format CA certificates bundle file.<br/>
+  Trusted PEM format CA certificates bundle file.<br/>
 The certificates in this file are used to verify the TLS peer's certificates.
 Append new certificates to the file if new CAs are to be trusted.
 There is no need to restart EMQX to have the updated file loaded, because
@@ -10873,13 +10564,11 @@ NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
 
-
 **ssl_client_opts.certfile**
 
   *Type*: `string`
 
-
-PEM format certificates chain file.<br/>
+  PEM format certificates chain file.<br/>
 The certificates in this file should be in reversed order of the certificate
 issue chain. That is, the host's certificate should be placed in the beginning
 of the file, followed by the immediate issuer certificate and so on.
@@ -10887,12 +10576,11 @@ Although the root CA certificate is optional, it should be placed at the end of
 the file if it is to be added.
 
 
-
 **ssl_client_opts.keyfile**
 
   *Type*: `string`
 
-  PEM format private key file. 
+  PEM format private key file.
 
 
 **ssl_client_opts.verify**
@@ -10903,7 +10591,7 @@ the file if it is to be added.
 
   *Optional*: `verify_peer | verify_none`
 
-  Enable or disable peer verification. 
+  Enable or disable peer verification.
 
 
 **ssl_client_opts.reuse_sessions**
@@ -10912,7 +10600,7 @@ the file if it is to be added.
 
   *Default*: `true`
 
-  Enable TLS session reuse. 
+  Enable TLS session reuse.
 
 
 **ssl_client_opts.depth**
@@ -10921,22 +10609,17 @@ the file if it is to be added.
 
   *Default*: `10`
 
-
-Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
+  Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
 So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/>
 if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
-if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.<br/>
-
+if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
 **ssl_client_opts.password**
 
   *Type*: `string`
 
-
-String containing the user's password.
-Only used if the private key file is password-protected.
-
+  String containing the user's password. Only used if the private key file is password-protected.
 
 
 **ssl_client_opts.versions**
@@ -10945,12 +10628,10 @@ Only used if the private key file is password-protected.
 
   *Default*: `["tlsv1.3","tlsv1.2","tlsv1.1","tlsv1"]`
 
-
-All TLS/DTLS versions to be supported.<br/>
+  All TLS/DTLS versions to be supported.<br/>
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
 In case PSK cipher suites are intended, make sure to configure
 <code>['tlsv1.2', 'tlsv1.1']</code> here.
-
 
 
 **ssl_client_opts.ciphers**
@@ -10959,8 +10640,7 @@ In case PSK cipher suites are intended, make sure to configure
 
   *Default*: `[]`
 
-
-This config holds TLS cipher suite names separated by comma,
+  This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
@@ -10986,8 +10666,7 @@ If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versi
 PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
-
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **ssl_client_opts.user_lookup_fun**
@@ -10996,7 +10675,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
   *Default*: `emqx_tls_psk:lookup`
 
-  EMQX-internal callback that is used to lookup pre-shared key (PSK) identity. 
+  EMQX-internal callback that is used to lookup pre-shared key (PSK) identity.
 
 
 **ssl_client_opts.secure_renegotiate**
@@ -11005,12 +10684,19 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
   *Default*: `true`
 
-
-SSL parameter renegotiation is a feature that allows a client and a server
+  SSL parameter renegotiation is a feature that allows a client and a server
 to renegotiate the parameters of the SSL connection on the fly.
 RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
 you drop support for the insecure renegotiation, prone to MitM attacks.
 
+
+**ssl_client_opts.hibernate_after**
+
+  *Type*: `duration`
+
+  *Default*: `5s`
+
+   Hibernate the SSL process after idling for amount of time reducing its memory footprint. 
 
 
 **ssl_client_opts.enable**
@@ -11019,15 +10705,14 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
   *Default*: `false`
 
-  Enable TLS. 
+  Enable TLS.
 
 
 **ssl_client_opts.server_name_indication**
 
   *Type*: `disable | string`
 
-
-Specify the host name to be used in TLS Server Name Indication extension.<br/>
+  Specify the host name to be used in TLS Server Name Indication extension.<br/>
 For instance, when connecting to "server.example.net", the genuine server
 which accepts the connection and performs TLS handshake may differ from the
 host the TLS client initially connects to, e.g. when connecting to an IP address
@@ -11041,7 +10726,6 @@ verification check.
 
 
 
-
 ### SSL/TLS configuration for the listener
 
 
@@ -11051,8 +10735,7 @@ Socket options for SSL connections.
 
   *Type*: `string`
 
-
-Trusted PEM format CA certificates bundle file.<br/>
+  Trusted PEM format CA certificates bundle file.<br/>
 The certificates in this file are used to verify the TLS peer's certificates.
 Append new certificates to the file if new CAs are to be trusted.
 There is no need to restart EMQX to have the updated file loaded, because
@@ -11061,13 +10744,11 @@ NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
 
-
 **listener_ssl_opts.certfile**
 
   *Type*: `string`
 
-
-PEM format certificates chain file.<br/>
+  PEM format certificates chain file.<br/>
 The certificates in this file should be in reversed order of the certificate
 issue chain. That is, the host's certificate should be placed in the beginning
 of the file, followed by the immediate issuer certificate and so on.
@@ -11075,12 +10756,11 @@ Although the root CA certificate is optional, it should be placed at the end of
 the file if it is to be added.
 
 
-
 **listener_ssl_opts.keyfile**
 
   *Type*: `string`
 
-  PEM format private key file. 
+  PEM format private key file.
 
 
 **listener_ssl_opts.verify**
@@ -11091,7 +10771,7 @@ the file if it is to be added.
 
   *Optional*: `verify_peer | verify_none`
 
-  Enable or disable peer verification. 
+  Enable or disable peer verification.
 
 
 **listener_ssl_opts.reuse_sessions**
@@ -11100,7 +10780,7 @@ the file if it is to be added.
 
   *Default*: `true`
 
-  Enable TLS session reuse. 
+  Enable TLS session reuse.
 
 
 **listener_ssl_opts.depth**
@@ -11109,22 +10789,17 @@ the file if it is to be added.
 
   *Default*: `10`
 
-
-Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
+  Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
 So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/>
 if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
-if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.<br/>
-
+if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
 **listener_ssl_opts.password**
 
   *Type*: `string`
 
-
-String containing the user's password.
-Only used if the private key file is password-protected.
-
+  String containing the user's password. Only used if the private key file is password-protected.
 
 
 **listener_ssl_opts.versions**
@@ -11133,12 +10808,10 @@ Only used if the private key file is password-protected.
 
   *Default*: `["tlsv1.3","tlsv1.2","tlsv1.1","tlsv1"]`
 
-
-All TLS/DTLS versions to be supported.<br/>
+  All TLS/DTLS versions to be supported.<br/>
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
 In case PSK cipher suites are intended, make sure to configure
 <code>['tlsv1.2', 'tlsv1.1']</code> here.
-
 
 
 **listener_ssl_opts.ciphers**
@@ -11147,8 +10820,7 @@ In case PSK cipher suites are intended, make sure to configure
 
   *Default*: `[]`
 
-
-This config holds TLS cipher suite names separated by comma,
+  This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
@@ -11174,8 +10846,7 @@ If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versi
 PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
-
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **listener_ssl_opts.user_lookup_fun**
@@ -11184,7 +10855,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
   *Default*: `emqx_tls_psk:lookup`
 
-  EMQX-internal callback that is used to lookup pre-shared key (PSK) identity. 
+  EMQX-internal callback that is used to lookup pre-shared key (PSK) identity.
 
 
 **listener_ssl_opts.secure_renegotiate**
@@ -11193,25 +10864,30 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
   *Default*: `true`
 
-
-SSL parameter renegotiation is a feature that allows a client and a server
+  SSL parameter renegotiation is a feature that allows a client and a server
 to renegotiate the parameters of the SSL connection on the fly.
 RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
 you drop support for the insecure renegotiation, prone to MitM attacks.
 
+
+**listener_ssl_opts.hibernate_after**
+
+  *Type*: `duration`
+
+  *Default*: `5s`
+
+   Hibernate the SSL process after idling for amount of time reducing its memory footprint. 
 
 
 **listener_ssl_opts.dhfile**
 
   *Type*: `string`
 
-
-Path to a file containing PEM-encoded Diffie-Hellman parameters
+  Path to a file containing PEM-encoded Diffie-Hellman parameters
 to be used by the server if a cipher suite using Diffie-Hellman
 key exchange is negotiated. If not specified, default parameters
 are used.<br/>
 NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
-
 
 
 **listener_ssl_opts.fail_if_no_peer_cert**
@@ -11220,13 +10896,11 @@ NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
 
   *Default*: `false`
 
-
-Used together with {verify, verify_peer} by an TLS/DTLS server.
+  Used together with {verify, verify_peer} by an TLS/DTLS server.
 If set to true, the server fails if the client does not have a
 certificate to send, that is, sends an empty certificate.
 If set to false, it fails only if the client sends an invalid
 certificate (an empty certificate is considered valid).
-
 
 
 **listener_ssl_opts.honor_cipher_order**
@@ -11235,12 +10909,10 @@ certificate (an empty certificate is considered valid).
 
   *Default*: `true`
 
-
-An important security setting, it forces the cipher to be set based
+  An important security setting, it forces the cipher to be set based
  on the server-specified order instead of the client-specified order,
  hence enforcing the (usually more properly configured) security
  ordering of the server administrator.
-
 
 
 **listener_ssl_opts.client_renegotiation**
@@ -11249,8 +10921,7 @@ An important security setting, it forces the cipher to be set based
 
   *Default*: `true`
 
-
-In protocols that support client-initiated renegotiation,
+  In protocols that support client-initiated renegotiation,
 the cost of resources of such an operation is higher for the server than the client.
 This can act as a vector for denial of service attacks.
 The SSL application already takes measures to counter-act such attempts,
@@ -11260,16 +10931,13 @@ long-lived connections becoming unusable due to limits on
 the number of messages the underlying cipher suite can encipher.
 
 
-
 **listener_ssl_opts.handshake_timeout**
 
   *Type*: `duration`
 
   *Default*: `15s`
 
-
-Maximum time duration allowed for the handshake to complete
-
+  Maximum time duration allowed for the handshake to complete
 
 
 **listener_ssl_opts.gc_after_handshake**
@@ -11278,10 +10946,7 @@ Maximum time duration allowed for the handshake to complete
 
   *Default*: `false`
 
-
-Memory usage tuning. If enabled, will immediately perform a garbage collection after
-the TLS/SSL handshake.
-
+  Memory usage tuning. If enabled, will immediately perform a garbage collection after the TLS/SSL handshake.
 
 
 
@@ -11296,10 +10961,8 @@ TCP listener options.
 
   *Default*: `100`
 
-
-Specify the {active, N} option for this Socket.<br/>
+  Specify the {active, N} option for this Socket.<br/>
 See: https://erlang.org/doc/man/inet.html#setopts-2
-
 
 
 **tcp_opts.backlog**
@@ -11308,10 +10971,8 @@ See: https://erlang.org/doc/man/inet.html#setopts-2
 
   *Default*: `1024`
 
-
-TCP backlog defines the maximum length that the queue of
- pending connections can grow to.
-
+  TCP backlog defines the maximum length that the queue of
+pending connections can grow to.
 
 
 **tcp_opts.send_timeout**
@@ -11320,7 +10981,7 @@ TCP backlog defines the maximum length that the queue of
 
   *Default*: `15s`
 
-  The TCP send timeout for the connections. 
+  The TCP send timeout for the connections.
 
 
 **tcp_opts.send_timeout_close**
@@ -11329,27 +10990,21 @@ TCP backlog defines the maximum length that the queue of
 
   *Default*: `true`
 
-
-Close the connection if send timeout.
-
+  Close the connection if send timeout.
 
 
 **tcp_opts.recbuf**
 
   *Type*: `bytesize`
 
-
-The TCP receive buffer (OS kernel) for the connections.
-
+  The TCP receive buffer (OS kernel) for the connections.
 
 
 **tcp_opts.sndbuf**
 
   *Type*: `bytesize`
 
-
-The TCP send buffer (OS kernel) for the connections.
-
+  The TCP send buffer (OS kernel) for the connections.
 
 
 **tcp_opts.buffer**
@@ -11358,9 +11013,7 @@ The TCP send buffer (OS kernel) for the connections.
 
   *Default*: `4KB`
 
-
-The size of the user-space buffer used by the driver.
-
+  The size of the user-space buffer used by the driver.
 
 
 **tcp_opts.high_watermark**
@@ -11369,10 +11022,8 @@ The size of the user-space buffer used by the driver.
 
   *Default*: `1MB`
 
-
-The socket is set to a busy state when the amount of data queued internally
-  by the VM socket implementation reaches this limit.
-
+  The socket is set to a busy state when the amount of data queued internally
+by the VM socket implementation reaches this limit.
 
 
 **tcp_opts.nodelay**
@@ -11381,9 +11032,7 @@ The socket is set to a busy state when the amount of data queued internally
 
   *Default*: `true`
 
-
-The TCP_NODELAY flag for the connections.
-
+  The TCP_NODELAY flag for the connections.
 
 
 **tcp_opts.reuseaddr**
@@ -11392,9 +11041,7 @@ The TCP_NODELAY flag for the connections.
 
   *Default*: `true`
 
-
-The SO_REUSEADDR flag for the connections.
-
+  The SO_REUSEADDR flag for the connections.
 
 
 
@@ -11409,10 +11056,8 @@ WebSocket listener options.
 
   *Default*: `/mqtt`
 
-
-WebSocket's MQTT protocol path. So the address of EMQX's WebSocket is:
+  WebSocket's MQTT protocol path. So the address of EMQX Broker's WebSocket is:
 <code>ws://{ip}:{port}/mqtt</code>
-
 
 
 **ws_opts.mqtt_piggyback**
@@ -11423,9 +11068,7 @@ WebSocket's MQTT protocol path. So the address of EMQX's WebSocket is:
 
   *Optional*: `single | multiple`
 
-
-Whether a WebSocket message is allowed to contain multiple MQTT packets.
-
+  Whether a WebSocket message is allowed to contain multiple MQTT packets.
 
 
 **ws_opts.compress**
@@ -11434,10 +11077,8 @@ Whether a WebSocket message is allowed to contain multiple MQTT packets.
 
   *Default*: `false`
 
-
-If <code>true</code>, compress WebSocket messages using <code>zlib</code>.<br/>
+  If <code>true</code>, compress WebSocket messages using <code>zlib</code>.<br/>
 The configuration items under <code>deflate_opts</code> belong to the compression-related parameter configuration.
-
 
 
 **ws_opts.idle_timeout**
@@ -11446,10 +11087,7 @@ The configuration items under <code>deflate_opts</code> belong to the compressio
 
   *Default*: `7200s`
 
-
-Close transport-layer connections from the clients that have not sent MQTT CONNECT
-message within this interval.
-
+  Close transport-layer connections from the clients that have not sent MQTT CONNECT message within this interval.
 
 
 **ws_opts.max_frame_size**
@@ -11458,9 +11096,7 @@ message within this interval.
 
   *Default*: `infinity`
 
-
-The maximum length of a single MQTT packet.
-
+  The maximum length of a single MQTT packet.
 
 
 **ws_opts.fail_if_no_subprotocol**
@@ -11469,11 +11105,9 @@ The maximum length of a single MQTT packet.
 
   *Default*: `true`
 
-
-If <code>true</code>, the server will return an error when
+  If <code>true</code>, the server will return an error when
  the client does not carry the <code>Sec-WebSocket-Protocol</code> field.
  <br/>Note: WeChat applet needs to disable this verification.
-
 
 
 **ws_opts.supported_subprotocols**
@@ -11482,9 +11116,7 @@ If <code>true</code>, the server will return an error when
 
   *Default*: `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5`
 
-
-Comma-separated list of supported subprotocols.
-
+  Comma-separated list of supported subprotocols.
 
 
 **ws_opts.check_origin_enable**
@@ -11493,11 +11125,9 @@ Comma-separated list of supported subprotocols.
 
   *Default*: `false`
 
-
-If <code>true</code>, <code>origin</code> HTTP header will be
+  If <code>true</code>, <code>origin</code> HTTP header will be
  validated against the list of allowed origins configured in <code>check_origins</code>
  parameter.
-
 
 
 **ws_opts.allow_origin_absence**
@@ -11506,11 +11136,9 @@ If <code>true</code>, <code>origin</code> HTTP header will be
 
   *Default*: `true`
 
-
-If <code>false</code> and <code>check_origin_enable</code> is
+  If <code>false</code> and <code>check_origin_enable</code> is
  <code>true</code>, the server will reject requests that don't have <code>origin</code>
  HTTP header.
-
 
 
 **ws_opts.check_origins**
@@ -11519,9 +11147,7 @@ If <code>false</code> and <code>check_origin_enable</code> is
 
   *Default*: `http://localhost:18083, http://127.0.0.1:18083`
 
-
-List of allowed origins.<br/>See <code>check_origin_enable</code>.
-
+  List of allowed origins.<br/>See <code>check_origin_enable</code>.
 
 
 **ws_opts.proxy_address_header**
@@ -11530,10 +11156,8 @@ List of allowed origins.<br/>See <code>check_origin_enable</code>.
 
   *Default*: `x-forwarded-for`
 
-
-HTTP header used to pass information about the client IP address.
+  HTTP header used to pass information about the client IP address.
 Relevant when the EMQX cluster is deployed behind a load-balancer.
-
 
 
 **ws_opts.proxy_port_header**
@@ -11542,10 +11166,7 @@ Relevant when the EMQX cluster is deployed behind a load-balancer.
 
   *Default*: `x-forwarded-port`
 
-
-HTTP header used to pass information about the client port.
-Relevant when the EMQX cluster is deployed behind a load-balancer.
-
+  HTTP header used to pass information about the client port. Relevant when the EMQX cluster is deployed behind a load-balancer.
 
 
 **ws_opts.deflate_opts**
@@ -11563,8 +11184,7 @@ Socket options for WebSocket/SSL connections.
 
   *Type*: `string`
 
-
-Trusted PEM format CA certificates bundle file.<br/>
+  Trusted PEM format CA certificates bundle file.<br/>
 The certificates in this file are used to verify the TLS peer's certificates.
 Append new certificates to the file if new CAs are to be trusted.
 There is no need to restart EMQX to have the updated file loaded, because
@@ -11573,13 +11193,11 @@ NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
 
-
 **listeners.wss.$name.ssl_options.certfile**
 
   *Type*: `string`
 
-
-PEM format certificates chain file.<br/>
+  PEM format certificates chain file.<br/>
 The certificates in this file should be in reversed order of the certificate
 issue chain. That is, the host's certificate should be placed in the beginning
 of the file, followed by the immediate issuer certificate and so on.
@@ -11587,12 +11205,11 @@ Although the root CA certificate is optional, it should be placed at the end of
 the file if it is to be added.
 
 
-
 **listeners.wss.$name.ssl_options.keyfile**
 
   *Type*: `string`
 
-  PEM format private key file. 
+  PEM format private key file.
 
 
 **listeners.wss.$name.ssl_options.verify**
@@ -11603,7 +11220,7 @@ the file if it is to be added.
 
   *Optional*: `verify_peer | verify_none`
 
-  Enable or disable peer verification. 
+  Enable or disable peer verification.
 
 
 **listeners.wss.$name.ssl_options.reuse_sessions**
@@ -11612,7 +11229,7 @@ the file if it is to be added.
 
   *Default*: `true`
 
-  Enable TLS session reuse. 
+  Enable TLS session reuse.
 
 
 **listeners.wss.$name.ssl_options.depth**
@@ -11621,22 +11238,17 @@ the file if it is to be added.
 
   *Default*: `10`
 
-
-Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
+  Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
 So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/>
 if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
-if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.<br/>
-
+if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
 **listeners.wss.$name.ssl_options.password**
 
   *Type*: `string`
 
-
-String containing the user's password.
-Only used if the private key file is password-protected.
-
+  String containing the user's password. Only used if the private key file is password-protected.
 
 
 **listeners.wss.$name.ssl_options.versions**
@@ -11645,12 +11257,10 @@ Only used if the private key file is password-protected.
 
   *Default*: `["tlsv1.3","tlsv1.2","tlsv1.1","tlsv1"]`
 
-
-All TLS/DTLS versions to be supported.<br/>
+  All TLS/DTLS versions to be supported.<br/>
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
 In case PSK cipher suites are intended, make sure to configure
 <code>['tlsv1.2', 'tlsv1.1']</code> here.
-
 
 
 **listeners.wss.$name.ssl_options.ciphers**
@@ -11659,8 +11269,7 @@ In case PSK cipher suites are intended, make sure to configure
 
   *Default*: `[]`
 
-
-This config holds TLS cipher suite names separated by comma,
+  This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
@@ -11686,8 +11295,7 @@ If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versi
 PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
-
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **listeners.wss.$name.ssl_options.user_lookup_fun**
@@ -11696,7 +11304,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
   *Default*: `emqx_tls_psk:lookup`
 
-  EMQX-internal callback that is used to lookup pre-shared key (PSK) identity. 
+  EMQX-internal callback that is used to lookup pre-shared key (PSK) identity.
 
 
 **listeners.wss.$name.ssl_options.secure_renegotiate**
@@ -11705,25 +11313,30 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
   *Default*: `true`
 
-
-SSL parameter renegotiation is a feature that allows a client and a server
+  SSL parameter renegotiation is a feature that allows a client and a server
 to renegotiate the parameters of the SSL connection on the fly.
 RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
 you drop support for the insecure renegotiation, prone to MitM attacks.
 
+
+**listeners.wss.$name.ssl_options.hibernate_after**
+
+  *Type*: `duration`
+
+  *Default*: `5s`
+
+   Hibernate the SSL process after idling for amount of time reducing its memory footprint. 
 
 
 **listeners.wss.$name.ssl_options.dhfile**
 
   *Type*: `string`
 
-
-Path to a file containing PEM-encoded Diffie-Hellman parameters
+  Path to a file containing PEM-encoded Diffie-Hellman parameters
 to be used by the server if a cipher suite using Diffie-Hellman
 key exchange is negotiated. If not specified, default parameters
 are used.<br/>
 NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
-
 
 
 **listeners.wss.$name.ssl_options.fail_if_no_peer_cert**
@@ -11732,13 +11345,11 @@ NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
 
   *Default*: `false`
 
-
-Used together with {verify, verify_peer} by an TLS/DTLS server.
+  Used together with {verify, verify_peer} by an TLS/DTLS server.
 If set to true, the server fails if the client does not have a
 certificate to send, that is, sends an empty certificate.
 If set to false, it fails only if the client sends an invalid
 certificate (an empty certificate is considered valid).
-
 
 
 **listeners.wss.$name.ssl_options.honor_cipher_order**
@@ -11747,12 +11358,10 @@ certificate (an empty certificate is considered valid).
 
   *Default*: `true`
 
-
-An important security setting, it forces the cipher to be set based
+  An important security setting, it forces the cipher to be set based
  on the server-specified order instead of the client-specified order,
  hence enforcing the (usually more properly configured) security
  ordering of the server administrator.
-
 
 
 **listeners.wss.$name.ssl_options.client_renegotiation**
@@ -11761,8 +11370,7 @@ An important security setting, it forces the cipher to be set based
 
   *Default*: `true`
 
-
-In protocols that support client-initiated renegotiation,
+  In protocols that support client-initiated renegotiation,
 the cost of resources of such an operation is higher for the server than the client.
 This can act as a vector for denial of service attacks.
 The SSL application already takes measures to counter-act such attempts,
@@ -11772,16 +11380,13 @@ long-lived connections becoming unusable due to limits on
 the number of messages the underlying cipher suite can encipher.
 
 
-
 **listeners.wss.$name.ssl_options.handshake_timeout**
 
   *Type*: `duration`
 
   *Default*: `15s`
 
-
-Maximum time duration allowed for the handshake to complete
-
+  Maximum time duration allowed for the handshake to complete
 
 
 
@@ -11796,7 +11401,7 @@ Compression options.
 
   *Optional*: `none | default | best_compression | best_speed`
 
-  Compression level. 
+  Compression level.
 
 
 **deflate_opts.mem_level**
@@ -11807,10 +11412,8 @@ Compression options.
 
   *Optional*: `1-9`
 
-
-Specifies the size of the compression state.<br/>
+  Specifies the size of the compression state.<br/>
 Lower values decrease memory usage per connection.
-
 
 
 **deflate_opts.strategy**
@@ -11832,7 +11435,7 @@ Lower values decrease memory usage per connection.
 
   *Optional*: `takeover | no_takeover`
 
-  Takeover means the compression state is retained between server messages. 
+  Takeover means the compression state is retained between server messages.
 
 
 **deflate_opts.client_context_takeover**
@@ -11843,7 +11446,7 @@ Lower values decrease memory usage per connection.
 
   *Optional*: `takeover | no_takeover`
 
-  Takeover means the compression state is retained between client messages. 
+  Takeover means the compression state is retained between client messages.
 
 
 **deflate_opts.server_max_window_bits**
@@ -11866,4 +11469,5 @@ Lower values decrease memory usage per connection.
   *Optional*: `8-15`
 
   Specifies the size of the compression context for the client.
+
 

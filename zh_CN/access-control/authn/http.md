@@ -78,7 +78,7 @@ Body:
 
 ::: tab POST 请求示例
 
-```hocon
+```hcl
 {
     mechanism = password_based
     backend = http
@@ -103,7 +103,7 @@ Body:
 
 注意： body 将被转换为查询字符串。
 
-```hocon
+```hcl
 {
     mechanism = password_based
     backend = http

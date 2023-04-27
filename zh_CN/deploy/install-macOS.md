@@ -11,16 +11,16 @@
 
 下文将以 macOS 12 系统为例演示如何下载最新版 EMQX。如希望在其他系统中进行安装，可前往 [EMQX 下载页面](https://www.emqx.io/zh/downloads?os=macOS) 获取详细的安装信息。
 
-1. 下载 [emqx-5.0.20-macos12-arm64.zip](https://www.emqx.com/zh/downloads/broker/5.0.20/emqx-5.0.20-macos12-arm64.zip)。
+1. 下载 [emqx-@CE_VERSION@-macos12-arm64.zip](https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-macos12-arm64.zip)。
 
 ```bash
-wget https://www.emqx.com/zh/downloads/broker/5.0.20/emqx-5.0.20-macos12-arm64.zip
+wget https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-macos12-arm64.zip
 ```
 
 2. 安装 EMQX。
 
 ```bash
-mkdir -p emqx && unzip emqx-5.0.20-macos12-arm64.zip -d emqx
+mkdir -p emqx && unzip emqx-@CE_VERSION@-macos12-arm64.zip -d emqx
 ```
 
 ## 启动 EMQX
@@ -31,10 +31,10 @@ mkdir -p emqx && unzip emqx-5.0.20-macos12-arm64.zip -d emqx
 
   ```bash
   $ emqx start
-  EMQX 5.0.20 is started successfully!
+  EMQX @CE_VERSION@ is started successfully!
   
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.20 is started
+  Node 'emqx@127.0.0.1' @CE_VERSION@ is started
   ```
 
 - systemctl 启动：
@@ -65,16 +65,16 @@ sudo apt remove --purge emqx
 
 下文将以 macOS 12 系统为例演示如何下载最新版 EMQX。如希望在其他系统中进行安装，可前往 [EMQX 下载页面](https://www.emqx.com/zh/try?product=enterprise) 获取详细的安装信息。
 
-1. 下载 [emqx-enterprise-5.0.1-macos12-arm64.zip](https://www.emqx.com/zh/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-macos12-arm64.zip)。
+1. 下载 [emqx-enterprise-@EE_VERSION@-macos12-arm64.zip](https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-macos12-arm64.zip)。
 
 ```bash
-wget https://www.emqx.com/zh/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-macos12-arm64.zip
+wget https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-macos12-arm64.zip
 ```
 
 2. 安装 EMQX。
 
 ```bash
-mkdir -p emqx && unzip emqx-enterprise-5.0.1-macos12-arm64.zip -d emqx
+mkdir -p emqx && unzip emqx-enterprise-@EE_VERSION@-macos12-arm64.zip -d emqx
 ```
 
 ## 启动 EMQX
@@ -85,10 +85,10 @@ mkdir -p emqx && unzip emqx-enterprise-5.0.1-macos12-arm64.zip -d emqx
 
   ```bash
   $ emqx start
-  EMQX 5.0.1 is started successfully!
+  EMQX @EE_VERSION@ is started successfully!
   
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.1 is started
+  Node 'emqx@127.0.0.1' @EE_VERSION@ is started
   ```
 
 - systemctl 启动：

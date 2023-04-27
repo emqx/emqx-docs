@@ -1,6 +1,6 @@
 ---
 {
-  'title': 'Use SDK to Connect Clients',
+  'title': 'Client SDKs',
   'categoryList':
     [
       {

@@ -1,4 +1,4 @@
-# TDengine
+# Ingest Data into TDengine
 
 EMQX supports integration with TDengine so you can save client messages and events to TDengine, or use events to trigger the update or removal of data from TDengine to record the online status or online/offline of clients.
 
@@ -9,13 +9,17 @@ EMQX supports integration with TDengine so you can save client messages and even
 
 ## Features List
 
-- [Connection pool](./data-bridges.md#Connection pool)
-- [Async mode](./data-bridges.md#Async mode)
-- [Batch mode](./data-bridges.md#Batch mode)
-- [Buffer queue](./data-bridges.md#Buffer queue)
-- [SQL preprocessing](./data-bridges.md#Prepared statement)
+- [Connection pool](./data-bridges.md)
+- [Async mode](./data-bridges.md)
+- [Batch mode](./data-bridges.md)
+- [Buffer queue](./data-bridges.md)
+- [SQL preprocessing](./data-bridges.md)
 
-## Quick Starts
+## Quick Start Tutorial
+
+This section introduces how to configure the TDengine data bridge, covering topics like how to set up the EDengine server, create data bridges and rules for forwarding data to TDengine and test the data bridges and rules.
+
+This tutorial assumes that you run both EMQX and TDengine on the local machine. If you have TDengine and EMQX running remotely, adjust the settings accordingly.
 
 ### Install TDengine
 
@@ -37,95 +41,122 @@ CREATE DATABASE mqtt;
 use mqtt;
 ```
 
-### Connect to TDengine
+### Create Data Tables in TDengine
 
-The following session creates 2 data bridges to TDengine for messages storage and event records respectively. 
+Before you create data bridges for TDengine, you need to create two data tables in TDengine database for message storage and status recording. 
 
-#### [Messages Storage](#Storage)
+1. Use the following SQL statements to create data table `t_mqtt_msg` in TDengine database. The data table is used to store the client ID, topic, payload, and creation time of every message. 
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
+   ```sql
+   CREATE TABLE t_mqtt_msg (
+       ts timestamp,
+       msgid NCHAR(64),
+       mqtt_topic NCHAR(255),
+       qos TINYINT,
+       payload BINARY(1024),
+       arrived timestamp
+     );
+   ```
+
+2. Use the following SQL statements to create data table `emqx_client_events` in TDengine database. This data table is used to store the client ID, event type, and creation time of every event. 
+
+   ```sql
+     CREATE TABLE emqx_client_events (
+         ts timestamp,
+         clientid VARCHAR(255),
+         event VARCHAR(255)
+       );
+   ```
+
+### Create TDengine Data Bridges
+
+Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to TDengine for messages storage and event recording.
+
+1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
+
 2. Click **Create** on the top right corner of the page.
+
 3. In the **Create Data Bridge** page, click to select **TDengine**, and then click **Next**.
-4. Input a name for the data bridge. Note: It should be a combination of upper/lower case letters and numbers.
-5. Input the connection information. Input **127.0.0.1:6041** as the **Server Host**,  **mqtt** as the **Database Name**, **root** as the **Username**, and **taosdata** as the **Password**.
-6. Configure the **SQL Template**. Use the SQL statements below to insert data. Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements. 
 
-  ```sql
-    INSERT INTO mqtt.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
-      VALUES (${ts}, ${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
-  ```
+4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
-Before creating the above data bridge, please use the following SQL statements to create data table `t_mqtt_msg` in TDengine database for storing the client ID, topic, payload, and creating time of every message. 
+5. Input the connection information. 
 
-  ```sql
-    CREATE TABLE t_mqtt_msg (
-      ts timestamp,
-      msgid NCHAR(64),
-      mqtt_topic NCHAR(255),
-      qos TINYINT,
-      payload BINARY(1024),
-      arrived timestamp
-    );
-  ```
+   - **Server Host**: Input `http://127.0.0.1:6041`, or the actual URL if the TDengine server is running remotely.
+   - **Database Name**: Input `mqtt`.
+   - **Username**: Input `root`.
+   - **Password**: Input `taosdata`.
 
-7. Advanced settings (optional):  Choose whether to use sync or async query mode as needed.
-8. Then click **Create** to finish the creation of the data bridge.
+6. Configure the **SQL Template** based on the feature to use: 
 
-Now that you have successfully created the data bridge to TDengine, you can continue to create rules to specify the data to be saved into TDengine. 
+   Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements. 
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
+   - To create a data bridge for message storage, use the statement below:
+
+     ```sql
+     INSERT INTO mqtt.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
+         VALUES (${ts}, ${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
+     ```
+
+   - To create a data bridge for online/offline status recording, use the statement below:
+
+     ```sql
+     INSERT INTO emqx_client_events(ts, clientid, event) VALUES (
+           ${ts},
+           ${clientid},
+           ${event}
+         )
+     ```
+
+7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed.
+
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the TDengine.
+
+9. Click **Create** to finish the creation of the data bridge.
+
+   A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into TDengine. You can also create rules by following the steps in [Create Rules for TDengine Data Bridge](#create-rules-for-tdengine-data-bridge).
+
+Now the TDengine data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+
+### Create Rules for TDengine Data Bridge
+
+Now that you have successfully created the data bridge to TDengine, you can continue to create rules to specify the data to be saved into TDengine. You need to create two different rules for messages forward and event records.
+
+1. Go to EMQX Dashboard, and click **Data Integration** -> **Rules**.
+
 2. Click **Create** on the top right corner of the page.
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Suppose you want to save the MQTT messages under topic `t/#`  to TDengine, you can use the SQL syntax below. Note: If you are testing with your SQL, please ensure you have included all required fields in the `SELECT` part. 
 
-  ```sql
-    SELECT
-      *,
-      now_timestamp('millisecond')  as ts
-    FROM
-      "t/#"
-  ```
+3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
 
-4. Then click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data bridge**.  
-5. Then, click the **Add** button. 
-6. Then click the **Create** button to finish the setup. 
+   - To create a rule for message storage, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to TDengine.
 
-After the creating of the data bridge to TDengine. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by rule  `my_rule`. 
+     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
 
-#### Online/Offline Status Recording
+     ```sql
+       SELECT
+         *,
+         now_timestamp('millisecond')  as ts
+       FROM
+         "t/#"
+     ```
 
-The operating steps are similar to those at the [Message storage](#Storage) part expect for the SQL template and SQL rules. 
+   - To create a rule for online/offline status recording, input the following statement:
 
-The SQL template for online/offline status recording is as follows. Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+     ```sql
+     SELECT
+           *,
+           now_timestamp('millisecond')  as ts
+         FROM 
+           "$events/client_connected", "$events/client_disconnected"
+     ```
 
-```sql
-    INSERT INTO emqx_client_events(ts, clientid, event) VALUES (
-      ${ts},
-      ${clientid},
-      ${event}
-    )
-```
+5. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**. Click the **Add** button. 
 
-Before creating this data bridge, please use the following SQL statements to create data table `emqx_client_events` in TDengine database for storing the client ID, event type, and creating time of every event. 
+5. Click the **Create** button to finish the setup. 
 
-```sql
-    CREATE TABLE emqx_client_events (
-      ts timestamp,
-      clientid VARCHAR(255),
-      event VARCHAR(255)
-    );
-```
+Now you have successfully created the data bridge to TDengine. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to TDengine after parsing by rule `my_rule`. 
 
-The SQL rule is as follows: 
-
-```sql
-    SELECT
-      *,
-      now_timestamp('millisecond')  as ts
-    FROM 
-      "$events/client_connected", "$events/client_disconnected"
-```
-
-### Test
+### Test the Data Bridge and Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event. 
 

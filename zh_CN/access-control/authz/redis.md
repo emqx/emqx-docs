@@ -42,7 +42,7 @@ Redis authorizer 由 `type=redis` 标识。
 
 Standalone Redis:
 
-```hocon
+```hcl
 {
     type = redis
     enable = true
@@ -60,7 +60,7 @@ Standalone Redis:
 
 [Redis Sentinel](https://redis.io/docs/manual/sentinel/):
 
-```hocon
+```hcl
 {
     type = redis
     enable = true
@@ -78,7 +78,7 @@ Standalone Redis:
 
 [Redis Cluster](https://redis.io/docs/manual/scaling/):
 
-```hocon
+```hcl
 {
     type = redis
     enable = true

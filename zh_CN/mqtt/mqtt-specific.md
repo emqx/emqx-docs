@@ -29,9 +29,9 @@ MQTT 协议广泛应用于物联网、移动互联网、智能硬件、车联网
 - [保留消息](./mqtt-retained-messages.md)
 - [遗嘱消息](./mqtt-last-will-and-testament.md)
 - [共享订阅](./mqtt-shared-subscription.md)
-- [排它订阅](./mqtt-exclusive-subscription.md)
-- [延迟发布](./mqtt-delayed-publish.md)
-- [自动订阅](./mqtt-auto-subscription.md)
+- [排它订阅](../messaging/mqtt-exclusive-subscription.md)
+- [延迟发布](../messaging/mqtt-delayed-publish.md)
+- [自动订阅](../messaging/mqtt-auto-subscription.md)
 - [主题重写](./mqtt-topic-rewrite.md)
 - [系统主题](./mqtt-system-topics.md)
 

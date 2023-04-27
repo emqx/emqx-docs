@@ -131,59 +131,87 @@ authentication {
 Complete SSL listener option refer to: [broker:listener_ssl_opts](../configuration/configuration-manual.md#broker-listener-ssl-opts)
 SSL Client options can refer to: [broker:ssl_client_opts](../configuration/configuration-manual.md#broker-ssl-client-opts)
 
-### Ciphers
+## Ciphers
 
-As a SSL listener or SSL client, the ciphers can be configured by the following suites:
+### TLS ciphers
 
+{% emqxce %}
+
+Starting from v5.0.6, EMQX no longer pre-populates the ciphers list with a default set of cipher suite names. Instead, the default ciphers are applied at runtime when starting the listener for servers, or when establishing a TLS connection as a client.
+
+{% endemqxce %}
+
+{% emqxee %}
+
+Starting from 5.0, EMQX no longer pre-populates the ciphers list with a default set of cipher suite names. Instead, the default ciphers are applied at runtime when starting the listener for servers, or when establishing a TLS connection as a client.
+
+{% endemqxee %}
+
+Below are the default ciphers selected by EMQX.
+
+For tlsv1.3:
+
+```bash
+ciphers =
+  [ "TLS_AES_256_GCM_SHA384",
+  	"TLS_AES_128_GCM_SHA256",
+    "TLS_CHACHA20_POLY1305_SHA256",
+    "TLS_AES_128_CCM_SHA256",
+    "TLS_AES_128_CCM_8_SHA256"
+  ]
 ```
-# TLS 1.3:
-TLS_AES_256_GCM_SHA384
-TLS_AES_128_GCM_SHA256
-TLS_CHACHA20_POLY1305_SHA256
-TLS_AES_128_CCM_SHA256
-TLS_AES_128_CCM_8_SHA256
 
-# TLS 1.2 and below:
-ECDHE-ECDSA-AES256-GCM-SHA384
-ECDHE-RSA-AES256-GCM-SHA384
-ECDHE-ECDSA-AES256-SHA384
-ECDHE-RSA-AES256-SHA384
-ECDH-ECDSA-AES256-GCM-SHA384
-ECDH-RSA-AES256-GCM-SHA384
-ECDH-ECDSA-AES256-SHA384
-ECDH-RSA-AES256-SHA384
-DHE-DSS-AES256-GCM-SHA384
-DHE-DSS-AES256-SHA256
-AES256-GCM-SHA384
-AES256-SHA256
-ECDHE-ECDSA-AES128-GCM-SHA256
-ECDHE-RSA-AES128-GCM-SHA256
-ECDHE-ECDSA-AES128-SHA256
-ECDHE-RSA-AES128-SHA256
-ECDH-ECDSA-AES128-GCM-SHA256
-ECDH-RSA-AES128-GCM-SHA256
-ECDH-ECDSA-AES128-SHA256
-ECDH-RSA-AES128-SHA256
-DHE-DSS-AES128-GCM-SHA256
-DHE-DSS-AES128-SHA256
-AES128-GCM-SHA256
-AES128-SHA256
-ECDHE-ECDSA-AES256-SHA
-ECDHE-RSA-AES256-SHA
-DHE-DSS-AES256-SHA
-ECDH-ECDSA-AES256-SHA
-ECDH-RSA-AES256-SHA
-ECDHE-ECDSA-AES128-SHA
-ECDHE-RSA-AES128-SHA
-DHE-DSS-AES128-SHA
-ECDH-ECDSA-AES128-SHA
-ECDH-RSA-AES128-SHA
+For tlsv1.2 or earlier
 
-# PSK ciphers:
-RSA-PSK-AES256-GCM-SHA384
-RSA-PSK-AES256-CBC-SHA384
-RSA-PSK-AES128-GCM-SHA256
-RSA-PSK-AES128-CBC-SHA256
-RSA-PSK-AES256-CBC-SHA
-RSA-PSK-AES128-CBC-SHA
+```bash
+ciphers =
+  [ "ECDHE-ECDSA-AES256-GCM-SHA384",
+    "ECDHE-RSA-AES256-GCM-SHA384",
+    "ECDHE-ECDSA-AES256-SHA384",
+    "ECDHE-RSA-AES256-SHA384",
+    "ECDH-ECDSA-AES256-GCM-SHA384",
+    "ECDH-RSA-AES256-GCM-SHA384",
+    "ECDH-ECDSA-AES256-SHA384",
+    "ECDH-RSA-AES256-SHA384",
+    "DHE-DSS-AES256-GCM-SHA384",
+    "DHE-DSS-AES256-SHA256",
+    "AES256-GCM-SHA384",
+    "AES256-SHA256",
+    "ECDHE-ECDSA-AES128-GCM-SHA256",
+    "ECDHE-RSA-AES128-GCM-SHA256",
+    "ECDHE-ECDSA-AES128-SHA256",
+    "ECDHE-RSA-AES128-SHA256",
+    "ECDH-ECDSA-AES128-GCM-SHA256",
+    "ECDH-RSA-AES128-GCM-SHA256",
+    "ECDH-ECDSA-AES128-SHA256",
+    "ECDH-RSA-AES128-SHA256",
+    "DHE-DSS-AES128-GCM-SHA256",
+    "DHE-DSS-AES128-SHA256",
+    "AES128-GCM-SHA256",
+    "AES128-SHA256",
+    "ECDHE-ECDSA-AES256-SHA",
+    "ECDHE-RSA-AES256-SHA",
+    "DHE-DSS-AES256-SHA",
+    "ECDH-ECDSA-AES256-SHA",
+    "ECDH-RSA-AES256-SHA",
+    "ECDHE-ECDSA-AES128-SHA",
+    "ECDHE-RSA-AES128-SHA",
+    "DHE-DSS-AES128-SHA",
+    "ECDH-ECDSA-AES128-SHA",
+    "ECDH-RSA-AES128-SHA"
+  ]
 ```
+
+For PSK-enabled listeners
+
+```bash
+ciphers =
+  [ "RSA-PSK-AES256-GCM-SHA384",
+    "RSA-PSK-AES256-CBC-SHA384",
+    "RSA-PSK-AES128-GCM-SHA256",
+    "RSA-PSK-AES128-CBC-SHA256",
+    "RSA-PSK-AES256-CBC-SHA",
+    "RSA-PSK-AES128-CBC-SHA"
+  ]
+```
+

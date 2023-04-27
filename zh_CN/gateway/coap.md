@@ -17,8 +17,8 @@ EMQX 5.0 可以通过 Dashboard 配置并启用 CoAP 网关。
 ::: tab HTTP API
 
 ```bash
-curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
-  -u admin:public \
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/coap' \
+  -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{
   "name": "coap",
@@ -119,7 +119,7 @@ gateway.coap {
 ```bash
 curl -X 'POST' \
   'http://127.0.0.1:18083/api/v5/gateway/coap/authentication' \
-  -u admin:public
+  -u <your-application-key>:<your-security-key> \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

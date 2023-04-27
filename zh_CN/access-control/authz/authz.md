@@ -95,7 +95,7 @@ EMQX 授权支持的数据查询占位符如下：
 
 - `${cert_subject}`: 将在运行时被替换为客户端 TLS 证书的主题（Subject），仅适用于 TLS 连接。
 
-<!-- TODO 
+<!-- TODO
 确认 HTTP AuthZ 为什么会多出几个
 ?PH_PROTONAME,
 ?PH_MOUNTPOINT,
@@ -183,7 +183,7 @@ EMQX 授权支持与多种数据源集成，包括内置数据库、文件、MyS
 
 例如，MySQL 授权检查器的配置文件为：
 
-```hocon
+```hcl
 {
     enable = true
 
@@ -213,7 +213,7 @@ EMQX 提供了 3 种使用权限的配置方式，分别为：Dashboard、配置
 
 配置结构如下：
 
-```hocon
+```hcl
 authorization {
   sources = [
     { ...   },

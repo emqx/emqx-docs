@@ -1,4 +1,4 @@
-# Redis
+# Ingest Data into Redis
 
 EMQX supports integration with Redis so you can save client messages and events to Redis. With Redis data bridge, you can use Redis for message caching and statistics of published/subscribed/discarded messages.
 
@@ -20,21 +20,24 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 ## Feature List
 
-- [Connection pool](./data-bridges.md#Connection pool)
-- [Batch mode](./data-bridges.md#Batch mode)
-- [Buffer queue](./data-bridges.md#缓存队列)
-
+- [Connection pool](./data-bridges.md)
+- [Batch mode](./data-bridges.md)
+- [Buffer queue](./data-bridges.md)
 
 <!-- TODO 配置参数 需要补充链接到配置手册对应配置章节。 -->
 
-## Quick Start
+## Quick Start Tutorial
 
-In this section, we will illustrate how to leverage Redis to:
+This section introduces how to configure the Redis data bridges to:
 
-1. Cache the last message of every client;
-2. Collect the message discard statistics.
+- Cache the last message of every client.
+- Collect the message discard statistics.
 
-### Install Redis
+The covering topics include how to set up the Redis server, create data bridges and rules for forwarding data to TDengine and test the data bridges and rules.
+
+This tutorial assumes that you run both EMQX and Redis on the local machine. If you have Redis and EMQX running remotely, adjust the settings accordingly.
+
+### Install Redis Server
 
 Install and run Redis via Docker:
 
@@ -59,89 +62,90 @@ OK
 
 Now you have successfully installed Redis and verified the installation with the `SET` and `GET` commands. For more Redis commands, see [Redis Commands](https://redis.io/commands/).
 
-### Connect to Redis
+### Create Redis Data Bridge
 
-We will create two Redis data bridges to illustrate the messaging caching and statistics features. The connection configurations for both data bridges are the same.
+You need to create 2 separate Redis data bridges for the messaging caching and statistics features. Follow the same connection configurations for both data bridges types, but you need to configure different **Redis Command Template** in the specific configuration step.
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
-2. Click **Create** on the top right corner of the page.
-3. In the **Create Data Bridge** page, click to select **Redis**, and then click **Next**.
-4. Input a name for the data bridge. Note: It should be a combination of upper/lower case letters and numbers.
+1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
+2. Click **Create** on the top right corner of the page. In the **Create Data Bridge** page, click to select **Redis**, and then click **Next**.
+4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 5. Set **Redis Mode** as the business needs, for example, **single**.
-6. Input the connection information. Input **127.0.0.1:6379** as the **Server Host**, **public** as the **Password**, and **0** for **Database ID**.
+6. Input the connection information. Input `127.0.0.1:6379` as the **Server Host**, `public` as the **Password**, and `0` for **Database ID**.
 
-Now we have configured the connection information, for the Redis Command template, the setting differs a little depending on the feature to use.
+6. Configure **Redis Command Template** based on the feature to use: 
 
-### Message Caching
+   - To create data bridge for message caching, use the Redis [HSET](https://redis.io/commands/hset/) command and hash data structure to store messages, the data format uses `clientid` as the key, and stores fields such as `username`, `payload`, and `timestamp`. To distinguish it from other keys in Redis, add an `emqx_messages` prefix to the message and separate it with `:`
 
-This section will illustrate how to use Redis to cache the last message from every client.
+     ```bash
+     # HSET key filed value [field value...]
+     HSET emqx_messages:${clientid} username ${username} payload ${payload} timestamp ${timestamp}
+     ```
 
-1. Finish the Redis connection configuration.
-2. Configure **Redis Command Template**: Use the Redis [HSET](https://redis.io/commands/hset/) command and hash data structure to store messages, the data format uses `clientid` as the key, and stores fields such as `username`, `payload`, and `timestamp`. To distinguish it from other keys in Redis, we add an `emqx_messages` prefix to the message and separate it with `:`
+     <!-- TODO 同时执行多个 Redis 命令? -->
 
-```bash
-# HSET key filed value [field value...]
-HSET emqx_messages:${clientid} username ${username} payload ${payload} timestamp ${timestamp}
-```
+   - To create data bridge for message discard statistics, use [HINCRBY](https://redis.io/commands/hincrby/) command below to collect the discarded messages under every topic.
 
-  <!-- TODO 同时执行多个 Redis 命令? -->
+     ```bash
+     # HINCRBY key field increment
+     HINCRBY emqx_message_dropped_count ${topic} 1
+     ```
 
-3. Advanced settings (optional):  Choose whether to use sync or async query mode as needed. For details, see [Configuration parameters](#Configuration).
-4. Then click **Create** to finish the creation of the data bridge. A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Redis. You can also access the Rule page by clicking **Data Integration** -> **Rules **on EMQX dashboard.
+     Each time the command is executed, the corresponding counter is incremented by 1.
 
-#### Create Rules
+7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md#configuration).
 
-1. Click **Create** on the top right corner of the page.
-2. Input `cache_to_redis` as the rule ID, and set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `t/#`  to PostgreSQL, we can use the SQL syntax below. Note: If you are testing with your SQL, please ensure you have included all required fields in the `SELECT` part.
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Redis server.
 
-```sql
-SELECT
-  *
-FROM
-  "t/#"
-```
+9. Click **Create** to finish the creation of the data bridge. 
 
-4. Then click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data bridge**. Then, click the **Add** button.
-4. Then click the **Create** button to finish the setup.
+   A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Redis. You can also create rules by following the steps in [Create Rules for Redis Data Bridge](#create-rules-for-redis-data-bridge).
 
-Now we have successfully finished the configuration for message caching.
+Now the Redis data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
 
-### Message Discard Statistics
+### Create Rules for Redis Data Bridge
 
-This section will illustrate how to use Redis for message discard statistics.
+After you successfully created the data bridge to Redis, you can continue to create rules for message caching and message discard statistics. 
 
-Note: Except for the Redis Command template and rules, the other settings are the same as the [Message caching](#消息暂存) section.
+1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
 
-**Redis Command template**
+2. Click **Create** on the top right corner of the page.
 
-Use [HINCRBY](https://redis.io/commands/hincrby/) command below to collect the discarded messages under every topic.
+4. Input `cache_to_redis` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
 
-```bash
-# HINCRBY key field increment
-HINCRBY emqx_message_dropped_count ${topic} 1
-```
+   - To create a rule for message caching, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to Redis. 
 
-Each time the command is executed, the corresponding counter is incremented by 1.
+     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
 
-**Rule SQL**
+     ```bash
+     SELECT
+       *
+     FROM
+       "t/#"
+     ```
 
-EMQX rules define 2 message discarding events, through which the rules can be triggered and recorded in Redis:
+   - To create a rule for message discard statistics, input the following statement.
 
-| Event                                    | Topic                    | Parameter                                                    |
-| ---------------------------------------- | ------------------------ | ------------------------------------------------------------ |
-| Messages are discarded during forwarding | $events/message_dropped | [$events/message_dropped](./rule-sql-events-and-fields.md#events-message-dropped) |
-| Messages are discarded during delivery   | $events/delivery_dropped | [$events/delivery_dropped](./rule-sql-events-and-fields.md#events-delivery-dropped) |
+     ```bash
+     SELECT
+       *
+     FROM
+       "$events/message_dropped", "$events/delivery_dropped"
+     ```
 
-The corresponding SQL is as follows:
+     EMQX rules define 2 message discarding events, through which the rules can be triggered and recorded in Redis:
 
-```sql
-SELECT
-  *
-FROM
-  "$events/message_dropped", "$events/delivery_dropped"
-```
+     | Event                                    | Topic                    | Parameter                                                    |
+     | ---------------------------------------- | ------------------------ | ------------------------------------------------------------ |
+     | Messages are discarded during forwarding | $events/message_dropped  | [$events/message_dropped](./rule-sql-events-and-fields.md#events-message-dropped) |
+     | Messages are discarded during delivery   | $events/delivery_dropped | [$events/delivery_dropped](./rule-sql-events-and-fields.md#events-delivery-dropped) |
 
-### Test
+5. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data Bridge**. Click the **Add** button.
+
+6. Click the **Create** button to finish the setup.
+
+Now you have successfully finished creating the rules for the Redis data bridge. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to Redis.
+
+### Test the Data Bridge and Rule
 
 Use MQTT X  to send a message to topic  `t/1`  to trigger a message caching event. If topic  `t/1`  does not have any subscribers, the message will be discarded and trigger the message discard rule.
 

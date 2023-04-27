@@ -13,16 +13,16 @@ The section takes macOS 12 as an example to illustrate how to download the lates
 
 ## Install EMQX
 
-1. Download [emqx-5.0.20-macos12-arm64.zip](https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-macos12-arm64.zip). 
+1. Download [emqx-@CE_VERSION@-macos12-arm64.zip](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-macos12-arm64.zip). 
 
    ```bash
-   wget https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-macos11-amd64.zip
+   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-macos11-amd64.zip
    ```
    
 2. Install EMQX. 
 
    ```bash
-   mkdir -p emqx && unzip emqx-5.0.20-macos11-amd64.zip -d emqx
+   mkdir -p emqx && unzip emqx-@CE_VERSION@-macos11-amd64.zip -d emqx
    ```
 
 ## Start EMQX
@@ -33,10 +33,10 @@ EMQX offers 3 different options to start EMQX:
 
   ```bash
   $ emqx start
-  EMQX 5.0.20 is started successfully!
+  EMQX @CE_VERSION@ is started successfully!
   
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.20 is started
+  Node 'emqx@127.0.0.1' @CE_VERSION@ is started
   ```
 
 - To start EMQX with systemctl, run:
@@ -68,16 +68,16 @@ The section below will take macOS 12 as an example to illustrate how to download
 
 ## Install EMQX
 
-1.  Download [emqx-enterprise-5.0.1-macos12-arm64.zip](https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-macos12-arm64.zip). 
+1.  Download [emqx-enterprise-@EE_VERSION@-macos12-arm64.zip](https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-macos12-arm64.zip). 
 
    ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-macos12-arm64.zip
+   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-macos12-arm64.zip
    ```
 
 2. Install EMQX.
 
    ```bash
-   mkdir -p emqx && unzip emqx-enterprise-5.0.1-macos12-arm64.zip -d emqx
+   mkdir -p emqx && unzip emqx-enterprise-@EE_VERSION@-macos12-arm64.zip -d emqx
    ```
 
 ## Start EMQX
@@ -88,10 +88,10 @@ EMQX offers 3 different options to start EMQX:
 
   ```bash
   $ emqx start
-  EMQX 5.0.1 is started successfully!
+  EMQX @EE_VERSION@ is started successfully!
   
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.1 is started
+  Node 'emqx@127.0.0.1' @EE_VERSION@ is started
   ```
 
 - To start EMQX with systemctl, run:

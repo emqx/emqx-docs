@@ -1,10 +1,12 @@
-# Apache Kafka
+
+
+# Stream Data into Apache Kafka
 
 <!-- 提供一段简介，描述支数据桥接的基本工作方式、关键特性和价值，如果有局限性也应当在此处说明（如必须说明的版本限制、当前未解决的问题）。 -->
 
-Apache Kafka is a widely-used open-source distributed event streaming platform. EMQX's integration with Apache Kafka/Confluent presents our users with reliable bi-directional data transport and processing capability under high-throughput scenarios.
+[Apache Kafka](https://kafka.apache.org/) is a popular open-source distributed event streaming platform. EMQX's integration with Apache Kafka/Confluent offers users dependable bi-directional data transport and processing capabilities in high-throughput situations. Furthermore, EMQX currently supports authentication with Apache Kafka/Confluent using SASL/SCRAM or SASL/GSSAPI.
 
-Being a top IOT data infrastructure provider,  EMQX currently supports authenticating with Apache Kafka/Confluent via SASL/SCRAM, SASL/GSSAPI, or TLS.
+Streaming data into or from Apache Kafka involves creating data bridges to Kafka in two roles: producer (sends messages to Kafka) and consumer (receives messages from Kafka). EMQX enables you to create data bridges in either of the roles.
 
 {% emqxce %}
 :::tip
@@ -17,7 +19,6 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 <!-- 根据情况编写，包含必须的前置知识点、软件版本要求、需要预先创建/初始化的操作。 -->
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
-- Relevant Kafka topics should be created before creating the data bridge in Producer or Consumer mode. 
 
 <!-- 列举功能或性能方面的亮点，如支持批处理、支持异步模式、双向数据桥接，链接到对应的功能介绍章节。 -->
 
@@ -25,15 +26,18 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 ## Feature List
 
-- [Connection pool](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
-- [Async mode](./data-bridges.md#异步请求模式)
-- [Batch mode](./data-bridges.md#批量模式)
-- [Buffer queue](./data-bridges.md#缓存队列)
+- [Async mode](./data-bridges.md)
+- [Batch mode](./data-bridges.md)
+- [Buffer queue](./data-bridges.md)
 
 <!--  Configuration parameters TODO 链接到配置手册对应配置章节。 -->
 
-## Quick Start
+## Quick Start Tutorial
 <!-- 从安装测试所需步骤，如果有不同的用法增加章节介绍。 -->
+
+This section introduces how to stream data into or from Kafka, covering topics like how to set up a Kafka server, how to create a bridge and a rule for forwarding data to the bridge and how to test the data bridge and rule.
+
+This tutorial assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
 
 ### Install Kafka
 
@@ -54,11 +58,11 @@ bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properti
 bin/kafka-server-start.sh config/kraft/server.properties
 ```
 
-For detailed operation steps, you may refer to the [*Quick Start section in Kafka Documentation*](https://kafka.apache.org/documentation/#quickstart). 
+For detailed operation steps, you may refer to the [Quick Start section in Kafka Documentation](https://kafka.apache.org/documentation/#quickstart).
 
 ### Create Kafka Topics
 
-Create two topics in Kafka:  `testtopic-in` and `testtopic-out`
+Relevant Kafka topics should be created before creating the data bridge in EMQX. Use the commands below to create two topics in Kafka:  `testtopic-in` (for the producer role) and `testtopic-out` (for the consumer role). 
 
 ```bash
 bin/kafka-topics.sh --create --topic testtopic-in --bootstrap-server localhost:9092
@@ -66,42 +70,138 @@ bin/kafka-topics.sh --create --topic testtopic-in --bootstrap-server localhost:9
 bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:9092
 ```
 
-:::tip
-These topics must be created before we create the data bridge to Kafka.
-:::
+### Create Kafka Data Bridge
 
-### Configure a Data Bridge to Kafka via Dashboard
+This section demonstrates how to create Kafka producer or consumer data bridges via Dashboard.
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
+
 2. Click **Create** on the top right corner of the page.
+
 3. In the **Create Data Bridge** page, click to select **Kafka**, and then click **Next**.
 
-4. Input a name for the data bridge. Note: It should be a combination of upper/lower case letters or numbers.
-5. Input the connection information. Input **127.0.0.1:9092** for the **Bootstrap Hosts**. For the other fields set as the actual condition. 
-6. Configure the data bridge in **Producer** mode. 
-   1. **Topic**: The MQTT topics to create the data bridge for. Here we will input `t/#`, indicating all MQTT messages matching this topic will be sent to Kafka. You can also leave it blank, and create a rule to specify data to be sent to Kafka. 
+   <img src="./assets/kafka_consumer/setup2.png" alt="setup2" style="zoom:67%;" />
+
+4. In **Bridge Role** field, select **Producer** or **Consumer**. Click the corresponding tabs for the configuration of each role. 
    
-   1. **Kafka Topic Name**: Input the Kafka topics we created before, that is, the  `testtopic-in`. Note: Variables are not supported here.
-   2. **Kafka Message Template**: Template will specify the rule or MQTT topics with messages to be sent to the Kafka topic. You can keep the default setting or use  variables to create the template. 
-7. Advanced settings (optional): Set the **Max Batch Bytes**, **Compression**, and **Partition Strategy** as your business needs. For details, see [Configuration parameters](#Configuration).
+   :::: tabs type:card
+   
+   ::: tab Configure as Producer Role
+   
+   - Fill in the required fields (marked with an asterisk).
+   
+   - Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
+   
+   - Input the connection information. Input `127.0.0.1:9092` for the **Bootstrap Hosts**. For the other fields set as the actual condition.
+   
+   - **Source MQTT Topic**: Set the MQTT topics to create the data bridge. In this example, it is set to `t/#`, indicating all MQTT messages matching this topic will be sent to Kafka. You can also leave it blank, and create a [rule](#create-rule-for-kafka-producer-data-bridge) to specify data to be sent to Kafka.
+   
+   - **Kafka Topic Name**: Input `testtopic-in` (the Kafka topic created before). Note: Variables are not supported here.
+   
+   - **Message Key**: Kafka message key. Insert a string here, either a plain string or a string containing placeholders (${var}).
+   
+   - **Message Value**: Kafka message value. Insert a string here, either a plain string or a string containing placeholders (${var}).
+   
+   - Advanced settings (optional): Set the **Max Batch Bytes**, **Compression**, and **Partition Strategy** as your business needs.
+   
+   :::
+   
+   ::: tab Configure as Consumer Role
+   
+   - Fill the required fields (marked with an asterisk). 
+   
+   - Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
+   
+   - Input the connection information. Input `127.0.0.1:9092` for the **Bootstrap Hosts**. For the other fields set as the actual condition.
+   
+   - The **Topic Mapping** field must contain at least one Kafka-to-MQTT topic mapping. The **MQTT Payload Template** subfield specifies the MQTT payload that should be used, and has the following Kafka message fields available for templating:
+   
+     | Field Name | Description                                                  |
+     | ---------- | ------------------------------------------------------------ |
+     | `headers`  | An object containing string key-value pairs                  |
+     | `key`      | Kafka message key (uses the same encoding method as the selected key)       |
+     | `offset`   | Offset for the message in Kafka's topic partition            |
+     | `topic`    | Originating Kafka topic                                      |
+     | `ts`       | Message timestamp                                            |
+     | `ts_type`  | Message timestamp type, which is one of `create`, `append` or `undefined` |
+     | `value`    | Kafka message value (uses the same encoding method as the selected key)   |
+   
+     The default value for **MQTT Payload Template** is `${.}`, which includes all available data encoded as a JSON object.  For example, choosing `${.}` as a template will produce the following for a Kafka message:
+     
+     ```json
+     {
+           "value": "value",
+           "ts_type": "create",
+           "ts": 1679665968238,
+           "topic": "my-kafka-topic",
+           "offset": 2,
+           "key": "key",
+           "headers": {"header_key": "header_value"}
+          }
+     ```
+     
+     Subfields from the Kafka message may be accessed with dot notation. For example, `${.value}` will resolve to the Kafka message value, and `${.headers.h1}` will resolve to the value of the `h1` Kafka header if such a subfield exists.  Absent values will be replaced by empty strings.
+     
+     **Note**: Each Kafka-to-MQTT topic mapping must contain a unique Kafka topic name.  That is, the Kafka topic must not be present in more than one mapping.
+   
+   :::
+   
+   ::::
+   
+5. Before clicking **Create**, you can click **Test Connection** to test that the bridge can connect to the Kafka server.
+
+6. Click **Create**, you'll be offered the option of creating an associated rule. 
+
+   - For the Kafka producer data bridge, click **Create Rule** to create an associated rule. For detailed operating steps, see [Create Rule for Kafka Producer Data Bridge](#create-rule-for-kafka-producer-data-bridge). 
+   - For the Kafka consumer data bridge, it's not strictly necessary to create a rule.
 
 ::: tip
-Currently EMQX only supports creating data bridges to Kafka in **Producer** mode. 
+
+Creating a rule allows Kafka messages matching the rule to be further transformed and filtered if needed, and then forwarded to other rule actions, like different bridges. Refer to the [Rules](./rules.md) for more information on creating rules. The MQTT topics defined in **Topic Mapping** will start having messages published to them without further configuration.
+
 :::
 
-### Test
+Now the Kafka data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
-Use MQTTX to send messages to topic  `t/1`:
+### Create Rule for Kafka Producer Data Bridge
 
-```bash
-mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Kafka" }'
+1. Go to EMQX Dashboard, and click **Data Integration** -> **Rules**.
+
+2. Click **Create** on the top right corner of the page.
+
+3. Input, for example, `my_rule` as the rule ID.
+
+4.  Input the following statement in the **SQL Editor** if you want to save the MQTT messages under topic `t/#`  to Kafka. 
+
+   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
+
+```sql
+SELECT
+  *
+FROM
+  "t/#"
 ```
 
-Check the running status of the two data bridges, there should be one new incoming and one new outgoing message. 
+5. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge you just created under **Data bridge**. Then click the **Add** button.
+
+6. Click **Create** at the page bottom to finish the creation.
+
+Now you have successfully created the data bridge to Kafka producer data bridge. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Kafka after parsing by rule  `my_rule`.
+
+### Test the Data Bridge and Rule
+
+ Use MQTTX to send messages to topic  `t/1`:
+
+```bash
+   mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Kafka" }'
+```
+
+Check the running status of the two data bridges, there should be one new incoming and one new outgoing message.
 
 Check whether messages are written into the topic `testtopic-in`  with the following Kafka command:
 
-```bash
-bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092  --topic testtopic-in --from-beginning
-```
+   ```bash
+   bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092  --topic testtopic-in --from-beginning
+   ```
 
+   

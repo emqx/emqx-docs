@@ -14,7 +14,7 @@ EMQX 规则 SQL 通过以下函数集成了 JQ：
 
 > 默认执行超时可通过 `rule_engine.jq_function_default_timeout` 配置。
 
-JQ 同时也是一个图灵完备的编程语言，JQ 官方文档](https://stedolan.github.io/jq/manual/) 是学习如何编写 JQ 的最佳指南，您也可以[在 JQ Playground](https://jqplay.org/) 或本地安装后进行学习与测试。
+JQ 同时也是一个图灵完备的编程语言，[JQ 官方文档](https://stedolan.github.io/jq/manual/) 是学习如何编写 JQ 的最佳指南，您也可以[在 JQ Playground](https://jqplay.org/) 或本地安装后进行学习与测试。
 
 以下是一些简单的 `jq` 函数调用及其结果的示例。
 

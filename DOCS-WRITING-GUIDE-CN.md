@@ -17,8 +17,7 @@
     - [资源引用](#资源引用)
     - [特殊语法](#特殊语法)
     - [差异化编译](#差异化编译)
-    - [OpenAPI](#openapi)
-      - [EMQX 的 API 文档](#emqx-的-api-文档)
+    - [EMQX 的 API 文档](#emqx-的-api-文档)
     - [配置文档更新](#配置文档更新)
       - [Commands to copy generated markdown](#commands-to-copy-generated-markdown)
 
@@ -221,35 +220,20 @@ or
 contents {% endemqxee %}
 ```
 
-### OpenAPI
+### EMQX 的 API 文档
 
-EMQX API 文档是自动生成的。
-文档其实是一个 OpenAPI 3.0 规范的 JSON 格式的描述文件。
+EMQX 首先自动生成了一个 OpenAPI 3.0 规范的 JSON 格式的描述文件(swagger.json)，之后将其通过 [Redocly](https://github.com/Redocly/redoc) 渲染展示。
 
-在 vue.js 插件的帮助下，OpenAPI 的文档可以像下面这个例子一样嵌入到 markdown 文档中的任意位置。
-
-```markdown
-<ClientOnly>
-  <OpenApi path="swagger.json" />
-</ClientOnly>
-```
-
-路径（ path ） 参数用于指定使用哪个文件。
-文件必需放置在 `swagger` 这个子目录中。
-
-#### EMQX 的 API 文档
-
-EMQX 的 API 文档嵌入到了 `admin/api.md` 中。
-
-`swagger.json` 的内容最初是 EMQX 中的 HTTP 服务组件自动生成的，
-当前 git 仓库里的文件则是通过 EMQX 生成的文件做一定的改写生成的。
-
-如果需要更新 API 文档，步骤如下：
+swagger.json 文件保存在 `./redocly` 目录下，在每个 EMQX 正式版本发布后需要更新 API 文档，步骤如下：
 
 - 启动最新的 EMQX v5 的节点
-- 执行当前仓库里的脚本 `./rewrite-swagger.sh ce | ee`
+  - 需要区分开源版/企业版
+  - 需要通过 `dashboard.i18n_lang = en | zh` 配置项设置 swagger.json 输出语言
+- 根据版本以及语言执行当前仓库里的脚本 `./rewrite-swagger.sh <ce | ee> [en | zh]`
 - 将修改后的文件提交到 git 版本中
 - 发送一个 GitHub PR
+
+你也可以上传 swagger.json 到 <https://redocly.github.io/redoc/> 预览 API 文档渲染结果。
 
 ### 配置文档更新
 

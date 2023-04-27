@@ -1,21 +1,21 @@
+# Rule Syntax
 
-
-# Rule Engine Language
-
-EMQX uses a SQL-based rule engine for data extraction, filtering, enriching, and transformation in real time. The rule engine language also supports embedding [JQ programs](https://stedolan.github.io/jq/) in expressions, which allows you to do complex data transformations when it is needed.
+EMQX uses SQL-based rules for data extraction, filtering, enriching, and transformation in real-time. The EMQX rule syntax also supports embedding [JQ programs](https://stedolan.github.io/jq/) in expressions, which allows you to do complex data transformations when it is needed.
 
 <img src="./assets/rules/data-integration-arch.png" alt="image" style="zoom:40%;" />
 
 EMQX has provided a rich set of built-in functions that you can access by clicking **Data Integration** -> **Rules** -> **SQL Example** on EMQX Dashboard. For more customized needs, EMQX also supports creating your own SQL-like statements. This section will introduce the SQL-like language. 
 
-This SQL-like language has two types of statements: `SELECT` and `FOREACH`. Each rule can have exactly one statement. 
+This SQL-like syntax has two types of statements: `SELECT` and `FOREACH`. Each rule can have exactly one statement. 
 
 | Statement | Description                                                  |
 | --------- | ------------------------------------------------------------ |
 | `SELECT`  | For situations where the result of the SQL statement is a single message. |
 | `FOREACH` | For producing zero or more messages from a single input message. |
 
-The rule engine language also supports complex expressions that can be embedded within the `SELECT` and `FOREACH` statements. 
+The rule syntax also supports complex expressions that can be embedded within the `SELECT` and `FOREACH` statements. 
+
+For the fields that can be referenced in the `SELECT` and `FOREACH` statements, see [Data Sources and Fields](./rule-sql-events-and-fields.md).
 
 ## The `SELECT` Statement 
 
@@ -204,7 +204,7 @@ To use this feature, click **Data Integration** -> **Rules** on the left navigat
 
 ## Expressions and Operations 
 
-The rule engine language allows using expressions to transform data and filter messages, which can be used in various clauses, including `SELECT`, `FOREACH`, `DO`, `INCASE`, and `WHERE`. This section offers more information on using these expressions. The following are the operations that can be used to form expressions, and remember that there is a wide range of built-in functions that can also be used in expressions.
+EMQX rule syntax allows using expressions to transform data and filter messages, which can be used in various clauses, including `SELECT`, `FOREACH`, `DO`, `INCASE`, and `WHERE`. This section offers more information on using these expressions. The following are the operations that can be used to form expressions, and remember that there is a wide range of built-in functions that can also be used in expressions.
 
 
 ### Arithmetic Operations

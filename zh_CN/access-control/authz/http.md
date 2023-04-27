@@ -89,7 +89,7 @@ HTTP 授权必需使用 `type=http`的配置。
 
 使用 POST 请求配置的示例：
 
-```hocon
+```hcl
 {
     type = http
     enable = true
@@ -110,7 +110,7 @@ HTTP 授权必需使用 `type=http`的配置。
 
 使用 GET 请求配置的示例：
 
-```hocon
+```hcl
 {
     type = http
     enable = true
@@ -147,7 +147,7 @@ HTTP 授权必需使用 `type=http`的配置。
 
 如果 URL 为 `https`，必须同时启用 `ssl`：
 
-```hocon
+```hcl
 {
     ...
     url = "https://127.0.0.1:8080/authz?clientid=${clientid}"
@@ -169,7 +169,7 @@ HTTP 授权必需使用 `type=http`的配置。
 
 1. `GET` 请求配置如下：
 
-```hocon
+```hcl
 {
     method = get
     url = "http://127.0.0.1:8080/authz/${clientid}"
@@ -190,7 +190,7 @@ GET /authz/emqx_c?username=emqx_u&topic=t%2F1&action=publish HTTP/1.1
 
 2. `POST` JSON 格式的请求配置如下：
 
-```hocon
+```hcl
 {
     method = post
     url = "http://127.0.0.1:8080/authz/${clientid}"
@@ -221,7 +221,7 @@ Content-Type: application/json
 
 对于 `GET` 请求有以下默认 Headers：
 
-```hocon
+```hcl
 {
     "accept" = "application/json"
     "cache-control" = "no-cache"
@@ -234,7 +234,7 @@ Content-Type: application/json
 
 对于 `POST` 请求有以下默认 Headers：
 
-```hocon
+```hcl
 {
     "accept" = "application/json"
     "cache-control" = "no-cache"
@@ -254,7 +254,7 @@ Content-Type: application/json
 
 以下都是可选字段，
 
-```hocon
+```hcl
   connect_timeout = 15s # 连接超时
   max_retries = 5 # 最大重试次数
   request_timeout = 30s # 请求超时限制

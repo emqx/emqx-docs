@@ -23,7 +23,7 @@ docker run -d --name emqx \
   -e EMQX_LISTENERS__QUIC__DEFAULT__keyfile="etc/certs/key.pem" \
   -e EMQX_LISTENERS__QUIC__DEFAULT__certfile="etc/certs/cert.pem" \
   -e EMQX_LISTENERS__QUIC__DEFAULT__ENABLED=true \
-emqx/emqx:5.0.19
+emqx/emqx:@CE_VERSION@
 ```
 
 有关 Docker 安装更多内容请参考 [Docker 部署指南](../deploy/install-docker.md)。

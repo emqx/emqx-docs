@@ -55,7 +55,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 **连接配置**：在此部分设置并发连接。
 
-- **Pool size**（可选）：填入一个整数用于指定从 EMQX 节点到 MySQL 数据库的并发连接数；默认值：**8**。
+- **Pool size**（可选）：填入一个整数用于指定从 EMQX 节点到 Redis 数据库的并发连接数；默认值：**8**。
 
 **认证配置**：在此部分进行认证加密算法相关的配置。
 
@@ -80,7 +80,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 ::: tab 单节点
 
-```hocon
+```hcl
 {
   mechanism = password_based
   backend = redis
@@ -105,7 +105,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 ::: tab Redis Sentinel 部署模式
 
-```hocon
+```hcl
 {
   mechanism = password_based
   backend = redis
@@ -131,7 +131,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 ::: tab Redis Cluster 部署模式
 
-```hocon
+```hcl
 {
   mechanism = password_based
   backend = redis
