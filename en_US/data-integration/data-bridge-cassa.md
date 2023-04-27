@@ -5,9 +5,7 @@
 Cassandra is a popular open-source, distributed NoSQL database management system.
 EMQX's integration with Apache Cassandra provides the ability to store messages and events in Cassandra database.
 
-In the current implementation:
-- Only supports Cassandra v3.x, not yet compatible with v4.x.
-The current implementation only supports storing data in synchronous manner.
+The current implementation only supports Cassandra v3.x, not yet compatible with v4.x.
 
 {% emqxce %}
 :::tip
@@ -22,8 +20,6 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 - Knowledge about [data bridge](./data-bridges.md)
 
 <!-- 列举功能或性能方面的亮点，如支持批处理、支持异步模式、双向数据桥接，链接到对应的功能介绍章节。 -->
-
-:::
 
 ## Feature List
 
@@ -70,7 +66,7 @@ docker exec -it cassa cqlsh "-e \
         PRIMARY KEY(msgid, topic));"
 ```
 
-### Create a Cassandra Data Bridge
+### Create Cassandra Data Bridge
 
 1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
 
@@ -85,7 +81,7 @@ docker exec -it cassa cqlsh "-e \
 6. Configure the **CQL template** to save `topic`, `id`, `clientid`, `qos`, `palyload`, `timestamp`, and `flags.retain` to Cassandra. This template will be executed via Cassandra Query Language, and the sample code is as follows:
 
    ```sql
-   insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})
+   insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
    ```
 
 7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
