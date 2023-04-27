@@ -85,8 +85,7 @@ docker exec -it cassa cqlsh "-e \
 6. Configure the **CQL template** to save `topic`, `id`, `clientid`, `qos`, `palyload`, `timestamp`, and `flags.retain` to Cassandra. This template will be executed via Cassandra Query Language, and the sample code is as follows:
 
    ```sql
-   insert into mqtt_msg(msgid, topic, qos, payload, arrived) "
-       "values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})
+   insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})
    ```
 
 7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
