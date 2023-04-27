@@ -84,8 +84,7 @@ docker exec -it cassa cqlsh "-e \
 6. 配置 CQL 模版，将字段 `topic`, `id`, `clientid`, `qos`, `palyload`, `timestamp`, 和 `flags.retain` 存储到 Cassandra 数据库中。该模板将通过 Cassandra 查询语言执行，对应模板如下：
 
    ```sql
-   insert into mqtt_msg(msgid, topic, qos, payload, arrived) "
-       "values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})
+   insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})
    ```
 
 7. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[数据桥接简介](./data-bridges.md)。
