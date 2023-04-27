@@ -19,7 +19,7 @@ SSL/TLS 加密功能会在传输层对网络连接进行加密，它能在提升
 | 直接在客户端与 EMQX 之间开启 SSL/TLS 连接 | 简单易用，不需要额外的组件。               | 会增加 EMQX 的资源消耗，如果连接数量巨大，可能会导致较高的 CPU 和内存消耗。                                         |
 | 通过代理或负载均衡终结 TLS 连接           | 不影响 EMQX 性能，同时提供了负载均衡能力。 | 只有少数云厂商的负载均衡器支持 TCP SSL/TLS 终结，此外，用户还需自己部署 [HAProxy](http://www.haproxy.org/) 等软件。 |
 
-本章节将重点介绍如何直接在客户端与 EMQX 之间开启 SSL/TLS 连接，有关如何通过代理或负载均衡终结 TLS 连接，请参考 [集群负载均衡](../../zh_CN/deploy/cluster/lb.md)。
+本章节将重点介绍如何直接在客户端与 EMQX 之间开启 SSL/TLS 连接，有关如何通过代理或负载均衡终结 TLS 连接，请参考 [集群负载均衡](../deploy/cluster/lb.md)。
 
 ## 通过配置文件开启 SSL/TLS 连接
 
@@ -70,6 +70,88 @@ listeners.ssl.default {
 ```
 
 3. 重启 EMQX，应用以上配置。
+
+## Ciphers
+
+### TLS ciphers
+
+{% emqxce %}
+
+从 v5.0.6 开始， EMQX 不在配置文件中详细列出所有默认的密码套件名称，而是会在配置文件中使用一个空列表，然后在运行时替换成默认的密码套件。
+
+{% endemqxce %}
+
+{% emqxee %}
+
+从 5.0 版本开始，EMQX 不在配置文件中详细列出所有默认的密码套件名称，而是会在配置文件中使用一个空列表，然后在运行时替换成默认的密码套件。
+
+{% endemqxee %}
+
+EMQX 默认支持以下密码套件：
+
+tlsv1.3:
+
+```bash
+ciphers =
+  [ "TLS_AES_256_GCM_SHA384", "TLS_AES_128_GCM_SHA256",
+    "TLS_CHACHA20_POLY1305_SHA256", "TLS_AES_128_CCM_SHA256",
+    "TLS_AES_128_CCM_8_SHA256"
+  ]
+```
+
+tlsv1.2 或更早:
+
+```bash
+ciphers =
+  [ "ECDHE-ECDSA-AES256-GCM-SHA384",
+    "ECDHE-RSA-AES256-GCM-SHA384",
+    "ECDHE-ECDSA-AES256-SHA384",
+    "ECDHE-RSA-AES256-SHA384",
+    "ECDH-ECDSA-AES256-GCM-SHA384",
+    "ECDH-RSA-AES256-GCM-SHA384",
+    "ECDH-ECDSA-AES256-SHA384",
+    "ECDH-RSA-AES256-SHA384",
+    "DHE-DSS-AES256-GCM-SHA384",
+    "DHE-DSS-AES256-SHA256",
+    "AES256-GCM-SHA384",
+    "AES256-SHA256",
+    "ECDHE-ECDSA-AES128-GCM-SHA256",
+    "ECDHE-RSA-AES128-GCM-SHA256",
+    "ECDHE-ECDSA-AES128-SHA256",
+    "ECDHE-RSA-AES128-SHA256",
+    "ECDH-ECDSA-AES128-GCM-SHA256",
+    "ECDH-RSA-AES128-GCM-SHA256",
+    "ECDH-ECDSA-AES128-SHA256",
+    "ECDH-RSA-AES128-SHA256",
+    "DHE-DSS-AES128-GCM-SHA256",
+    "DHE-DSS-AES128-SHA256",
+    "AES128-GCM-SHA256",
+    "AES128-SHA256",
+    "ECDHE-ECDSA-AES256-SHA",
+    "ECDHE-RSA-AES256-SHA",
+    "DHE-DSS-AES256-SHA",
+    "ECDH-ECDSA-AES256-SHA",
+    "ECDH-RSA-AES256-SHA",
+    "ECDHE-ECDSA-AES128-SHA",
+    "ECDHE-RSA-AES128-SHA",
+    "DHE-DSS-AES128-SHA",
+    "ECDH-ECDSA-AES128-SHA",
+    "ECDH-RSA-AES128-SHA"
+  ]
+```
+
+配置 PSK 认证的监听器
+
+```bash
+ciphers = [
+  [ "RSA-PSK-AES256-GCM-SHA384",
+    "RSA-PSK-AES256-CBC-SHA384",
+    "RSA-PSK-AES128-GCM-SHA256",
+    "RSA-PSK-AES128-CBC-SHA256",
+    "RSA-PSK-AES256-CBC-SHA",
+    "RSA-PSK-AES128-CBC-SHA"
+  ]
+```
 
 ## 扩展阅读：如何获取 SSL/TLS 证书
 

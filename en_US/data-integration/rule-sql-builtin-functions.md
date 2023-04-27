@@ -408,9 +408,10 @@ date_to_unix_ts('second', 'local', '%Y-%m-%d %H-%M-%S', '2022-05-26 18:40:12') =
 date_to_unix_ts('second', '%Y-%m-%d %H-%M-%S', '2022-05-26 10:40:12') = 1653561612
 ```
 
+{% emqxee %}
+
 **MongoDB Time Functions**
 
-{% emqxee %}
 | Function | Purpose | Parameters |
 | -------- | ------------------------------------|-------------------------- |
 | `mongo_date` | Create a mongodb ISODate type of now | - |

@@ -17,6 +17,151 @@ EMQX's REST API uses [HTTP Basic Authentication](https://developer.mozilla.org/e
 
 To create an API key, you can click **System** -> **API Key** page on the left navigation tree of the Dashboard, Please refer to [Dashboard - API Keys](../dashboard/system.md#api-keys).
 
+You can use the generated API Key and Secret Key as the username and password for Basic authentication:
+
+:::: tabs type:card
+:::tab cURL
+
+```bash
+curl -X GET http://localhost:18083/api/v5/nodes \
+     -u 4f33d24d7b8e448d:gwtbmFJZrnzUu8mPK1BxUkBA66PygETiDEegkf1q8dD \
+     -H "Content-Type: application/json"
+```
+
+:::
+::: tab Java
+
+```java
+import okhttp3.*;
+
+import java.io.IOException;
+
+public class EMQXNodesAPIExample {
+    public static void main(String[] args) {
+        try {
+            String username = "4f33d24d7b8e448d";
+            String password = "gwtbmFJZrnzUu8mPK1BxUkBA66PygETiDEegkf1q8dD";
+
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url("http://localhost:18083/api/v5/nodes")
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", Credentials.basic(username, password))
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            System.out.println(response.body().string());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+```
+
+:::
+::: tab Python
+
+```python
+import urllib.request
+import json
+import base64
+
+username = '4f33d24d7b8e448d'
+password = 'gwtbmFJZrnzUu8mPK1BxUkBA66PygETiDEegkf1q8dD'
+
+url = 'http://localhost:18083/api/v5/nodes'
+
+req = urllib.request.Request(url)
+req.add_header('Content-Type', 'application/json')
+
+auth_header = "Basic " + base64.b64encode((username + ":" + password).encode()).decode()
+req.add_header('Authorization', auth_header)
+
+with urllib.request.urlopen(req) as response:
+    data = json.loads(response.read().decode())
+
+print(data)
+
+```
+
+:::
+::: tab Go
+
+```go
+package main
+
+import (
+    "fmt"
+    "net/http"
+    "bytes"
+    "encoding/json"
+)
+
+func main() {
+    username := "4f33d24d7b8e448d"
+    password := "gwtbmFJZrnzUu8mPK1BxUkBA66PygETiDEegkf1q8dD"
+
+    url := "http://localhost:18083/api/v5/nodes"
+
+    req, err := http.NewRequest("GET", url, nil)
+    if err != nil {
+        panic(err)
+    }
+    req.SetBasicAuth(username, password)
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        panic(err)
+    }
+    defer resp.Body.Close()
+
+    buf := new(bytes.Buffer)
+    _, err = buf.ReadFrom(resp.Body)
+    if err != nil {
+        panic(err)
+    }
+
+    var data interface{}
+    json.Unmarshal(buf.Bytes(), &data)
+    fmt.Println(data)
+}
+
+```
+
+:::
+::: tab JavaScript
+
+```js
+const axios = require('axios')
+
+const username = '4f33d24d7b8e448d'
+const password = 'gwtbmFJZrnzUu8mPK1BxUkBA66PygETiDEegkf1q8dD'
+
+axios
+  .get('http://localhost:18083/api/v5/nodes', {
+    auth: {
+      username: username,
+      password: password,
+    },
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then((response) => {
+    console.log(response.data)
+  })
+  .catch((error) => {
+    console.log(error)
+  })
+```
+
+:::
+::::
+
 ## HTTP Headers
 
 Unless otherwise specified, most API requests require the `Accept` header to be set to `application/json`, and then the response will be returned in JSON format.

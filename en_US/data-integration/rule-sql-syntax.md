@@ -1,4 +1,4 @@
-# Rule Engine Syntax
+# Rule Syntax
 
 EMQX uses SQL-based rules for data extraction, filtering, enriching, and transformation in real-time. The EMQX rule syntax also supports embedding [JQ programs](https://stedolan.github.io/jq/) in expressions, which allows you to do complex data transformations when it is needed.
 
@@ -14,6 +14,8 @@ This SQL-like syntax has two types of statements: `SELECT` and `FOREACH`. Each r
 | `FOREACH` | For producing zero or more messages from a single input message. |
 
 The rule syntax also supports complex expressions that can be embedded within the `SELECT` and `FOREACH` statements. 
+
+For the fields that can be referenced in the `SELECT` and `FOREACH` statements, see [Data Sources and Fields](./rule-sql-events-and-fields.md).
 
 ## The `SELECT` Statement 
 

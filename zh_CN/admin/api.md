@@ -12,7 +12,152 @@ EMQX 在 REST API 上做了版本控制，EMQX 5.0.0 以后的所有 API 调用�
 
 ## 认证
 
-EMQX 的 REST API 使用 [HTTP Basic 认证](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication#%E9%80%9A%E7%94%A8%E7%9A%84_http_%E8%AE%A4%E8%AF%81%E6%A1%86%E6%9E%B6) 携带认证凭据，您可以在 Dashboard **系统设置** -> **API 密钥** 界面中创建用于认证的 API 密钥，详细操作请参考 [Dashboard - API 密钥](../dashboard/system.md#api-密钥)
+EMQX 的 REST API 使用 [HTTP Basic 认证](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication#%E9%80%9A%E7%94%A8%E7%9A%84_http_%E8%AE%A4%E8%AF%81%E6%A1%86%E6%9E%B6) 携带认证凭据，您可以在 Dashboard **系统设置** -> **API 密钥** 界面中创建用于认证的 API 密钥，详细操作请参考 [Dashboard - API 密钥](../dashboard/system.md#api-密钥)。
+
+使用生成的 API Key 以及 Secret Key 分别作为 Basic 认证的用户名与密码，请求示例如下：
+
+:::: tabs type:card
+:::tab cURL
+
+```bash
+curl -X GET http://localhost:18083/api/v5/nodes \
+     -u 4f33d24d7b8e448d:gwtbmFJZrnzUu8mPK1BxUkBA66PygETiDEegkf1q8dD \
+     -H "Content-Type: application/json"
+```
+
+:::
+::: tab Java
+
+```java
+import okhttp3.*;
+
+import java.io.IOException;
+
+public class EMQXNodesAPIExample {
+    public static void main(String[] args) {
+        try {
+            String username = "4f33d24d7b8e448d";
+            String password = "gwtbmFJZrnzUu8mPK1BxUkBA66PygETiDEegkf1q8dD";
+
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url("http://localhost:18083/api/v5/nodes")
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", Credentials.basic(username, password))
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            System.out.println(response.body().string());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+```
+
+:::
+::: tab Python
+
+```python
+import urllib.request
+import json
+import base64
+
+username = '4f33d24d7b8e448d'
+password = 'gwtbmFJZrnzUu8mPK1BxUkBA66PygETiDEegkf1q8dD'
+
+url = 'http://localhost:18083/api/v5/nodes'
+
+req = urllib.request.Request(url)
+req.add_header('Content-Type', 'application/json')
+
+auth_header = "Basic " + base64.b64encode((username + ":" + password).encode()).decode()
+req.add_header('Authorization', auth_header)
+
+with urllib.request.urlopen(req) as response:
+    data = json.loads(response.read().decode())
+
+print(data)
+
+```
+
+:::
+::: tab Go
+
+```go
+package main
+
+import (
+    "fmt"
+    "net/http"
+    "bytes"
+    "encoding/json"
+)
+
+func main() {
+    username := "4f33d24d7b8e448d"
+    password := "gwtbmFJZrnzUu8mPK1BxUkBA66PygETiDEegkf1q8dD"
+
+    url := "http://localhost:18083/api/v5/nodes"
+
+    req, err := http.NewRequest("GET", url, nil)
+    if err != nil {
+        panic(err)
+    }
+    req.SetBasicAuth(username, password)
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        panic(err)
+    }
+    defer resp.Body.Close()
+
+    buf := new(bytes.Buffer)
+    _, err = buf.ReadFrom(resp.Body)
+    if err != nil {
+        panic(err)
+    }
+
+    var data interface{}
+    json.Unmarshal(buf.Bytes(), &data)
+    fmt.Println(data)
+}
+
+```
+
+:::
+::: tab JavaScript
+
+```js
+const axios = require('axios')
+
+const username = '4f33d24d7b8e448d'
+const password = 'gwtbmFJZrnzUu8mPK1BxUkBA66PygETiDEegkf1q8dD'
+
+axios
+  .get('http://localhost:18083/api/v5/nodes', {
+    auth: {
+      username: username,
+      password: password,
+    },
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then((response) => {
+    console.log(response.data)
+  })
+  .catch((error) => {
+    console.log(error)
+  })
+```
+
+:::
+::::
 
 ## HTTP 请求头
 
@@ -47,35 +192,35 @@ HTTP 响应状态码能够直观的判断可能存在的问题，在此基础上
 }
 ```
 
-| 错误码                                         | 描述                                                         |
-| ---------------------------------------------- | ------------------------------------------------------------ |
-| WRONG_USERNAME_OR_PWD                          | Wrong username or password <img width=200/>                  |
-| WRONG_USERNAME_OR_PWD_OR_API_KEY_OR_API_SECRET | Wrong username & password or key & secret                    |
-| BAD_REQUEST                                    | Request parameters not legal                                 |
-| NOT_MATCH                                      | Conditions not matched                                       |
-| ALREADY_EXISTS                                 | Resources already exist                                      |
-| BAD_CONFIG_SCHEMA                              | Configuration data not legal                                 |
-| BAD_LISTENER_ID                                | Bad listener ID                                              |
-| BAD_NODE_NAME                                  | Bad Node Name                                                |
-| BAD_RPC                                        | RPC Failed. Check the cluster status and the requested node status |
+| 错误码                                         | 描述                                                                      |
+| ---------------------------------------------- | ------------------------------------------------------------------------- |
+| WRONG_USERNAME_OR_PWD                          | Wrong username or password <img width=200/>                               |
+| WRONG_USERNAME_OR_PWD_OR_API_KEY_OR_API_SECRET | Wrong username & password or key & secret                                 |
+| BAD_REQUEST                                    | Request parameters not legal                                              |
+| NOT_MATCH                                      | Conditions not matched                                                    |
+| ALREADY_EXISTS                                 | Resources already exist                                                   |
+| BAD_CONFIG_SCHEMA                              | Configuration data not legal                                              |
+| BAD_LISTENER_ID                                | Bad listener ID                                                           |
+| BAD_NODE_NAME                                  | Bad Node Name                                                             |
+| BAD_RPC                                        | RPC Failed. Check the cluster status and the requested node status        |
 | BAD_TOPIC                                      | Topic syntax error, topic needs to comply with the MQTT protocol standard |
-| EXCEED_LIMIT                                   | Resources to be created exceed the maximum limit or minimum limit |
-| INVALID_PARAMETER                              | Request parameters not legal and exceed the boundary value   |
-| CONFLICT                                       | Conflicting request resources                                |
-| NO_DEFAULT_VALUE                               | Request parameters do not use default values                 |
-| DEPENDENCY_EXISTS                              | Resource depends on other resources                          |
-| MESSAGE_ID_SCHEMA_ERROR                        | Message ID parsing error                                     |
-| INVALID_ID                                     | Bad ID schema                                                |
-| MESSAGE_ID_NOT_FOUND                           | Message ID does not exist                                    |
-| NOT_FOUND                                      | Resource not found or does not exist                         |
-| CLIENTID_NOT_FOUND                             | Client ID not found or does not exist                        |
-| CLIENT_NOT_FOUND                               | Client not found or does not exist(usually not an MQTT client) |
-| RESOURCE_NOT_FOUND                             | Resource not found                                           |
-| TOPIC_NOT_FOUND                                | Topic not found                                              |
-| USER_NOT_FOUND                                 | User not found                                               |
-| INTERNAL_ERROR                                 | Server inter error                                           |
-| SERVICE_UNAVAILABLE                            | Service unavailable                                          |
-| SOURCE_ERROR                                   | Source error                                                 |
-| UPDATE_FAILED                                  | Update fails                                                 |
-| REST_FAILED                                    | Reset source or configuration fails                          |
-| CLIENT_NOT_RESPONSE                            | Client not responding                                        |
+| EXCEED_LIMIT                                   | Resources to be created exceed the maximum limit or minimum limit         |
+| INVALID_PARAMETER                              | Request parameters not legal and exceed the boundary value                |
+| CONFLICT                                       | Conflicting request resources                                             |
+| NO_DEFAULT_VALUE                               | Request parameters do not use default values                              |
+| DEPENDENCY_EXISTS                              | Resource depends on other resources                                       |
+| MESSAGE_ID_SCHEMA_ERROR                        | Message ID parsing error                                                  |
+| INVALID_ID                                     | Bad ID schema                                                             |
+| MESSAGE_ID_NOT_FOUND                           | Message ID does not exist                                                 |
+| NOT_FOUND                                      | Resource not found or does not exist                                      |
+| CLIENTID_NOT_FOUND                             | Client ID not found or does not exist                                     |
+| CLIENT_NOT_FOUND                               | Client not found or does not exist(usually not an MQTT client)            |
+| RESOURCE_NOT_FOUND                             | Resource not found                                                        |
+| TOPIC_NOT_FOUND                                | Topic not found                                                           |
+| USER_NOT_FOUND                                 | User not found                                                            |
+| INTERNAL_ERROR                                 | Server inter error                                                        |
+| SERVICE_UNAVAILABLE                            | Service unavailable                                                       |
+| SOURCE_ERROR                                   | Source error                                                              |
+| UPDATE_FAILED                                  | Update fails                                                              |
+| REST_FAILED                                    | Reset source or configuration fails                                       |
+| CLIENT_NOT_RESPONSE                            | Client not responding                                                     |

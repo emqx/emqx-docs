@@ -55,7 +55,7 @@ MongoDB Authorizer 必需有 `type = mongodb`。
 有三种不同的连接模式：
 
 Standalone：
-```hocon
+```hcl
 {
   type = mongodb
   enable = true
@@ -74,7 +74,7 @@ Standalone：
 
 [ReplicaSet](https://www.mongodb.com/docs/manual/reference/replica-configuration/)：
 
-```hocon
+```hcl
 {
   type = mongodb
   enable = true
@@ -94,7 +94,7 @@ Standalone：
 
 [Sharded Cluster](https://www.mongodb.com/docs/manual/sharding/)：
 
-```hocon
+```hcl
 {
   type = mongodb
   enable = true

@@ -1,5 +1,17 @@
 # Integrate with StatsD
 
+{% emqxce %}
+:::tip
+Depreciated since version 5.0.22, please use [Prometheus](./prometheus.md) instead.
+:::
+{% endemqxce %}
+
+{% emqxee %}
+:::tip
+Depreciated since version 5.0.2, please use [Prometheus](./prometheus.md) instead.
+:::
+{% endemqxee %}
+
 [StatsD](https://github.com/statsd/statsd) is a network daemon that listens for statistics. EMQX supports periodic push system metrics to the [StatsD](https://github.com/statsd/statsd) server. 
 
 The push feature is disabled by default, you can enable the option by adding the following configurations to `etc/emqx.conf`:

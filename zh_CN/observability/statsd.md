@@ -1,5 +1,17 @@
 # 集成 StatsD
 
+{% emqxce %}
+:::tip
+该功能自 5.0.22 版本起已弃用，建议使用 [Prometheus](./prometheus.md) 代替。
+:::
+{% endemqxce %}
+
+{% emqxee %}
+:::tip
+该功能自 5.0.2 版本起已弃用，建议使用 [Prometheus](./prometheus.md) 代替。
+:::
+{% endemqxee %}
+
 EMQX 支持向 [StatsD](https://github.com/statsd/statsd) 服务器周期性推送系统指标。
 
 StatsD 推送功能默认为关闭状态，可以通过在 `etc/emqx.conf` 中添加以下配置来启用：
@@ -36,4 +48,3 @@ EMQX 在 v5.0.4 后，也支持通过 Dashboard 中的**功能配置** -> **监�
 您可在 EMQX Dashboard 设置集成 StatsD，点击左侧导航目录中的**功能配置** -> **监控**，在**监控集成**页签，设置启用 StatsD。
 
 {% endemqxee %}
-
