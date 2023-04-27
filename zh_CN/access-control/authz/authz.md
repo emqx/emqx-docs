@@ -45,7 +45,7 @@ EMQX 支持对授权数据进行缓存，以便缓解由于大量客户端的订
 
 <!--TODO @Lena页面有更新，后续要跟着更新-->
 
-<img src="./assets/anthz-cache.png" alt="Enable authorization cache" style="zoom:50%;" />
+<img src="./assets/anthz-cache.png" alt="Enable authorization cache" style="zoom:40%;" />
 
 **启用缓存**：设置是否启用授权数据缓存。
 
@@ -205,7 +205,7 @@ EMQX 提供了 3 种使用权限的配置方式，分别为：Dashboard、配置
 
 在 Dashboard 的授权页面，您可直接完成相关授权检查器的配置，查看授权检查器状态，以及调整授权检查器在授权链中的位置。
 
-![authz dashboard](./assets/authentication-with-dashboard.png)
+<img src="./assets/authentication-with-dashboard.png" alt="authz dashboard" style="zoom:33%;" />
 
 #### 配置文件
 

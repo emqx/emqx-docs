@@ -14,7 +14,7 @@ You can use EMQX Dashboard to set the built-in database for password authenticat
 
 On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **Password-Based** as **Mechanism**, and **Built-in Database** as **Backend**, this will lead us to the **Configuration** tab, as shown below.
 
-![Built-in-database](./assets/authn-built-in-database.png)
+<img src="./assets/authn-built-in-database.png" alt="Built-in-database" style="zoom:67%;" />
 
 
 

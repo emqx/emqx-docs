@@ -6,11 +6,9 @@ Before EMQX 5.0, this feature is called **Proxy Subscription**.
 
 ## Configure Auto Subscribe via Dashboard
 
-1. Open EMQX Dashboard. In the left navigation menu, click **Configuration**-> **MQTT**.
+1. Open EMQX Dashboard. In the left navigation menu, click **Management** -> **Delayed Publish**. 
 
-2. On the **MQTT** page, click the **Extension** tab. Select the **Auto Subscribe** tab.
-
-3. Click the **Add** button at the upper right corner.
+2. On the **Delayed Publish** page, click the **Add** button at the upper right corner. 
 
 3. In the pop-up dialog box, type the test topic `a/1` in the **Topic** text box. Leave other settings as default.
 
@@ -24,11 +22,11 @@ Before EMQX 5.0, this feature is called **Proxy Subscription**.
 
    - **Retained Handling**: Options: `0`, `1`, and `2`.
 
-     <img src="./assets/config-auto-subscribe-dashboard.png" alt="config-auto-subscribe-dashboard" style="zoom:35%;" />
+     <img src="./assets/config-auto-subscribe-dashboard.png" alt="config-auto-subscribe-dashboard" style="zoom:35%;" /> 
 
    Click the **Add** button on the dialogue box. The auto subscribe topic `a/1` is created successfully.
 
-   <img src="./assets/auto-sub-success.png" alt="auto-sub-success" style="zoom:45%;" />
+   <img src="./assets/auto-sub-success.png" alt="auto-sub-success" style="zoom:50%;" />
 
 Now the auto subscription function is enabled. New subscribers will subscribe to the topic `a/1` automatically once they are connected to the broker.
 
@@ -68,11 +66,9 @@ The topic `a/1` is configured as the auto subscribe topic in [Configure Auto Sub
 
      :::
 
-4. Go to EMQX Dashboard. Click **Subscriptions** in the left navigation menu.
+4. Go to EMQX Dashboard. Click **Monitoring** -> **Subscriptions** in the left navigation menu. It shows two subscriptions automatically subscribe to the topic "a/1".
 
-   - It shows two subscriptions automatically subscribe to the topic "a/1".
-
-   <img src="./assets/view-auto-sub-dashboard.png" alt="view-auto-sub-dashboard" style="zoom:35%;" />
+   <img src="./assets/view-auto-sub-dashboard.png" alt="view-auto-sub-dashboard" style="zoom:65%;" />
 
 ## Try Auto Subscription using MQTTX CLI
 
@@ -88,7 +84,7 @@ The topic `a/1` is configured as the auto subscribe topic in [Configure Auto Sub
    mqttx conn -c emqx_c
    ```
 
-2. Go to EMQX Dashboard. Click **Subscriptions** in the left navigation menu. It shows the client `emqx_c` subscribes to the topic `a/1`.
+2. Go to EMQX Dashboard. Click **Monitoring** ->**Subscriptions** in the left navigation menu. It shows the client `emqx_c` subscribes to the topic `a/1`.
 
-   <img src="./assets/auto-sub-emqx_c.png" alt="auto-sub-emqx_c" style="zoom:35%;" />
+   <img src="./assets/auto-sub-emqx_c.png" alt="auto-sub-emqx_c" style="zoom:60%;" />
 

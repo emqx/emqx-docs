@@ -15,7 +15,7 @@ EMQX 支持基于 HTTP 应用进行授权。此时，用户需在外部自行搭
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **授权**，在随即打开的**授权**页面，单击**创建**，选择**数据源**为 `HTTP Server`，点击**下一步**，进入**配置参数**页签：
 
-![HTTP authorization](./assets/authz-http.png)
+<img src="./assets/authz-http.png" alt="HTTP authorization" style="zoom:67%;" />
 
 **HTTP**：<!--插入简要说明，这快要配置什么-->
 

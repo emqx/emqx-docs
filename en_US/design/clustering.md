@@ -70,7 +70,7 @@ In contrast, the message delivery channel employs a connection pool and each nod
 
 A Mnesia cluster is designed using a full mesh topology where each node in the cluster connects to every other node and continuously checks their liveliness.
 
-<img src="./assets/mnesia-cluster.png" alt="Mnesia Cluster" style="zoom: 20%;" />
+<img src="./assets/mnesia-cluster.png" alt="Mnesia Cluster" style="zoom: 40%;" />
 
 However, the full mesh topology imposes a practical limit on the cluster size.
 For EMQX versions prior to 5, it is recommended to keep the cluster size under 5 nodes.
@@ -84,7 +84,7 @@ One of the major challenges of managing a large Mnesia cluster is the risk of a 
 
 In version 5, we have greatly improved the cluster scalability by introducing [Mria](https://github.com/emqx/mria) (an enhanced version of Mnesia with async transaction log replication). Mria uses a new network topology which consists two type of node roles: `core` and `replicant` (sometimes referred to as `replica` for short).
 
-<img src="./assets/mria-cluster.png" alt="Mnesia Cluster" style="zoom: 20%;" />
+<img src="./assets/mria-cluster.png" alt="Mnesia Cluster" style="zoom: 40%;" />
 
 In a EMQX Enterprise version 5 cluster, the `core` nodes still form the same full-mesh network as in older versions. The `replicant` nodes, however, only connects to one or more core nodes, but not to each other.
 

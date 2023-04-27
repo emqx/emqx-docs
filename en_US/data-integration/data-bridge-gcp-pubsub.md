@@ -44,7 +44,7 @@ You need to create a service account and a service account key to use the GCP Pu
 
    <img src="./assets/gcp_pubsub/service-account-key.png" alt="service-account-key" style="zoom:50%;" />
 
-### Create and Manage Topic in GCP
+### Create and Manage Topics in GCP
 
 Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic and be familiar with the basic management operation in GCP.
 
@@ -75,7 +75,7 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
    <img src="./assets/gcp_pubsub/subscriptions-id-pull.png" alt="subscriptions-id-pull" style="zoom:50%;" />
 
-### Create GCP Pub/Sub Bridge
+### Create a GCP Pub/Sub Bridge
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 
@@ -102,7 +102,7 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
     A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into GCP PubSub. You can also create rules by following the steps in [Create Rules for GCP PubSub Data Bridge](#create-rules-for-GCP-PubSub-data-bridge).
 
-### Create Rule for GCP PubSub Data Bridge
+### Create a Rule for GCP PubSub Data Bridge
 
 You can continue to create rules to specify the data to be saved into GCP PubSub.
 

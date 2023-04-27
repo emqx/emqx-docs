@@ -80,7 +80,7 @@ docker exec -it cassa cqlsh "-e \
 
 Now the Cassandra data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
 
-### Create Rule for Cassandra Data Bridge
+### Create a Rule for Cassandra Data Bridge
 
 Now that you have successfully created the data bridge to Cassandra, you can continue to create rules to specify the data to be stored in Cassandra. 
 

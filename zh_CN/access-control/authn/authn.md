@@ -18,7 +18,7 @@ EMQX 默认未开启认证功能，即允许所有客户端链接，如在生产
 
 EMQX 支持通过密码进行身份验证。启用密码认证后，当客户端尝试连接时，需按要求提供身份凭证信息，EMQX 会在数据库中发起查询，并将返回得到的密码与客户端提供的信息进行匹配，匹配成功后，EMQX 将接受该客户端的连接请求。
 
-![EMQX 密码认证流程](./assets/emqx-authn-flow.png)
+<img src="./assets/emqx-authn-flow.png" alt="EMQX 密码认证流程" style="zoom:67%;" />
 
 除简单便捷的内置数据库外，EMQX 还支持通过与多类后端数据库的集成提供密码认证，包括 MySQL、PostgreSQL、MongoDB 和 Redis。
 
