@@ -8,7 +8,7 @@
 
 {% emqxee %}
 
-从 5.0.3 版本开始，EMQX 支持针对 MQTT SSL 监听器设置证书撤销列表（CRL）检查功能。
+从 5.0.3 版本开始，EMQX 支持针对 MQTT SSL 监听器设置证书吊销列表（CRL）检查功能。
 
 {% endemqxee %}
 
