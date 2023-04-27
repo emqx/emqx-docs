@@ -57,7 +57,7 @@ You need to create keyspace and tables before you create the data bridge for Cas
 docker exec -it cassa cqlsh "-e CREATE KEYSPACE mqtt WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1}"
 ```
 
-2. Create a table in Cassandra: `mqtt_msg`：
+2. Create a table in Cassandra: `mqtt_msg`:
 
 ```bash
 docker exec -it cassa cqlsh "-e \
