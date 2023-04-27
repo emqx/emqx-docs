@@ -105,7 +105,7 @@ The settings for alarms can only be configured by modifying the configuration it
 
 | Configuration Item    | Description                                                  | Default Value        | Optional Values |
 | --------------------- | ------------------------------------------------------------ | -------------------- | --------------- |
-| alarm.actions         | Actions of writing the alarm to log (console or file) and publishing the alarm as an MQTT message to the system topics `$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate` and `$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate`. The actions are triggered when the alarm is activated or deactivated. | `["log", "publish"]` | -               |
+| alarm.actions         | Actions of writing the alarm to log (console or file) and publishing the alarm as an MQTT message to the system topics `$SYS/brokers/<node_name>/alarms/activate` and `$SYS/brokers/<node_name>/alarms/deactivate`. The actions are triggered when the alarm is activated or deactivated. | `["log", "publish"]` | -               |
 | alarm.size_limit      | The maximum total number of deactivated alarms to be kept as history. When this limit is exceeded, the oldest deactivated alarms are deleted. | `1000`               | `1-3000`        |
 | alarm.validity_period | Retention time of deactivated alarms. Alarms are not deleted immediately when deactivated but after a period of time. | `24h`                | -               |
 
