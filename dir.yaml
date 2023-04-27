@@ -205,7 +205,7 @@
   children:
     - network/emqx-mqtt-tls
     - network/mqtt-client-tls
-    # - network/crl
+    - network/crl
     - network/ocsp
     - title_en: GMSSL
       title_cn: 国密 SSL
