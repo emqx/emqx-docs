@@ -124,11 +124,23 @@
   path: messaging/introduction
   children:
     - messaging/mqtt-concepts
-    - messaging/publish-and-subscribe
+    - title_en: Test with MQTT Clients
+      title_cn: Test with MQTT Clients
+      path: messaging/publish-and-subscribe
+      lang: en
     # - messaging/explore-mqtt
-    - messaging/mqtt-shared-subscription
-    - messaging/mqtt-retained-message
-    - messaging/mqtt-will-message
+    - title_en: Shared Subscription
+      title_cn: Shared Subscription
+      path: messaging/mqtt-shared-subscription
+      lang: en
+    - title_en: Retained Message
+      title_cn: Retained Message
+      path: messaging/mqtt-retained-message
+      lang: en
+    - title_en: Will Message
+      title_cn: Will Message
+      path: messaging/mqtt-will-message
+      lang: en
     - messaging/mqtt-delayed-publish
     - messaging/mqtt-auto-subscription
     - messaging/mqtt-exclusive-subscription
