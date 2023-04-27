@@ -26,7 +26,7 @@ export EMQX_TELEMETRY__ENABLE=false && ./bin/emqx start
 
 ### Disable While Running EMQX
 
-From Dashboard: click the Settings icon on the ribbon, and turn off the **Enable telemetry** option to permanently disable telemetry.
+From Dashboard: click the Settings icon on the ribbon area, and turn off the **Enable telemetry** option to permanently disable telemetry.
 
 ## Telemetry Metrics
 
