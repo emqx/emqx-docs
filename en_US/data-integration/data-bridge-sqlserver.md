@@ -1,9 +1,19 @@
-# Ingest Data into SQL Server
+# Ingest Data into Microsoft SQL Server
 
-EMQX supports integration with SQL Server. You can save client messages and events to SQL Server, or record the online status or online/offline of clients by using events to trigger the data update or removal.
+EMQX supports integration with Microsoft SQL Server. You can save client messages and events to Microsoft SQL Server, or record the online status or online/offline of clients by using events to trigger the data update or removal.
+
+{% emqxee %}
+
+::: tip
+
+The data integration with Microsoft SQL Server is currently only supported in EMQX Enterprise 5.0.3 and above.
+
+:::
+
+{% endemqxee %}
 
 {% emqxce %}
-:::tip
+::: tip
 EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 :::
 {% endemqxce %}
@@ -27,13 +37,13 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 ## Quick Start Tutorial
 
-This section introduces how to configure the SQL Server data bridge, covering topics like how to set up the SQL Server server, create data bridges and rules for forwarding data to SQL Server and test the data bridges and rules.
+This section introduces how to configure the Microsoft SQL Server data bridge, covering topics on how to install and connect to the Microsoft SQL Server, create database and data tables, install and configure ODBC driver, create data bridges and rules for forwarding data to Microsoft SQL Server, and test the data bridges and rules.
 
-This tutorial assumes that you run both EMQX and SQL Server on the local machine. If you have SQL Server and EMQX running remotely, adjust the settings accordingly.
+This tutorial assumes that you run both EMQX and Microsoft SQL Server on the local machine. If you have Microsoft SQL Server and EMQX running remotely, adjust the settings accordingly.
 
-### Install and Connect to SQL Server
+### Install and Connect to Microsoft SQL Server
 
-This section describes how to start SQL Server 2019 on Linux/MacOS using Docker images and use `sqlcmd` to connect to SQL Server and create databases and data tables. For other installation methods of SQL Server, please refer to [SQL Server Installation Guide](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16).
+This section describes how to start Microsoft SQL Server 2019 on Linux/MacOS using Docker images and use `sqlcmd` to connect to SQL Server. For other installation methods of SQL Server, please refer to [SQL Server Installation Guide](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16).
 
 1. Install SQL Server via Docker, and then run the docker image.
 
@@ -42,7 +52,7 @@ This section describes how to start SQL Server 2019 on Linux/MacOS using Docker 
 
 ```bash
 # To start the SQL Server docker image and set the password as `mqtt_public1`
-$ docker run --name sqlserver -p 1433:1433 -e ACCEPT_EULA=Y -e SQLSERVER_ROOT_PASSWORD=mqtt_public1 -d mcr.microsoft.com/mssql/server:2019-CU19-ubuntu-20.04
+$ docker run --name sqlserver -p 1433:1433 -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD=mqtt_public1 -d mcr.microsoft.com/mssql/server:2019-CU19-ubuntu-20.04
 ```
 
 2. Access the container.
@@ -61,11 +71,13 @@ $ Password:
 1>
 ```
 
-So far, the SQL Server 2019 instance has been deployed and can be connected.
+So far, the Microsoft SQL Server 2019 instance has been deployed and can be connected.
 
-### Create Data Tables
+### Create Database and Data Tables
 
-1. Create the database `mqtt` in SQL Server using the connection created from the previous section.
+This section describes how to create a database and data table in Microsoft SQL Server.
+
+1. Create a database `mqtt` in SQL Server using the connection created from the previous section.
 
 ```bash
 ...
@@ -77,31 +89,93 @@ Changed database context to 'master'.
 2> GO
 ```
 
-2. Use the following SQL statements to create a data table in database `mqtt` for storing the MQTT message, including the message ID, topic, QoS, payload, and publish time of each message. 
+2. Use the following SQL statements to create a data table.
 
-```sql
-CREATE TABLE mqtt.dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
-                                  msgid   VARCHAR(64) NULL,
-                                  topic   VARCHAR(100) NULL,
-                                  qos     tinyint NOT NULL DEFAULT 0,
-                                  payload VARCHAR(100) NULL,
-                                  arrived DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
-GO
-```
+   - Create the following data table for storing the MQTT message, including the message ID, topic, QoS, payload, and publish time of each message. 
 
-### Configuration ODBC Driver
+     ```sql
+     CREATE TABLE mqtt.dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
+                                       msgid   VARCHAR(64) NULL,
+                                       topic   VARCHAR(100) NULL,
+                                       qos     tinyint NOT NULL DEFAULT 0,
+                                       payload VARCHAR(100) NULL,
+                                       arrived DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
+     GO
+     ```
 
-Before proceeding with other steps, you need to configure the ODBC driver.
+   - Create the following data table for recording the online/offline status of clients.
 
-- You can use either FreeTDS or the msodbcsql17 driver provided by Microsoft as the ODBC driver (The connection properties for msodbcsql18 have not been adapted yet).
-- Below are several ways to install and configure FreeTDS as an ODBC driver on mainstream distributions.
-- To use the msodbcsql17 driver, please refer to [Install the Microsoft ODBC driver for SQL Server (Linux)](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16&tabs=alpine18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline) for instructions.
-- Due to Microsoft EULA terms, the Docker image provided by EMQX does not include the msodbcsql17 driver. To use in Docker or Kubernetes, please create an image with the ODBC driver based on the image provided by [EMQX-Enterprise](https://hub.docker.com/r/emqx/emqx-enterprise). For details, please refer to [Build New Image](#Build New Image).
+     ```sql
+     CREATE TABLE mqtt.dbo.t_mqtt_events (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
+                                          clientid VARCHAR(255) NULL,
+                                          event_type VARCHAR(255) NULL,
+                                          event_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
+     GO
+     ```
 
-The DSN Name specified in the `odbcinst.ini` configuration is used by EMQX to determine the path of the driver's dynamic library. For more information, please refer to [Connection Properties](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/connection-string-keywords-and-data-source-names-dsns?view=sql-server-ver16#connection-properties).
-In the examples provided here, the DSN Name is `ms-sql`. You can choose your own name according to your preference, but it is recommended to use only English letters. Additionally, the DSN Name is case-sensitive.
+### Install and Configure ODBC Driver
 
-Configure FreeTDS odbc driver on MacOS:
+You need to configure the ODBC driver to be able to access the SQL Server database. You can use either FreeTDS or the msodbcsql17 driver provided by Microsoft as the ODBC driver (The connection properties for msodbcsql18 have not been adapted yet). 
+
+EMQX uses the DSN Name specified in the `odbcinst.ini` configuration to determine the path to the driver dynamic library. In the examples below, the DSN Name is `ms-sql`. For more information, refer to [Connection Properties](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/connection-string-keywords-and-data-source-names-dsns?view=sql-server-ver16#connection-properties).
+
+::: tip Note:
+
+You can choose your own DSN name according to your preference, but it is recommended to use only English letters. Additionally, the DSN Name is case-sensitive.
+
+:::
+
+#### Install and Configure msodbcsql17 Driver as ODBC Driver
+
+<!-- TODO: update tag version in command and dockerfile -->
+
+If you need to use msodbcsql17 driver as the ODBC driver, refer to the Microsoft instructions:
+
+- [Install the Microsoft ODBC driver for SQL Server (Linux)](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16&tabs=alpine18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline)
+- [Install the Microsoft ODBC driver for SQL Server (macOS)](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/install-microsoft-odbc-driver-sql-server-macos?view=sql-server-ver16)
+
+Restricted by [Microsoft EULA terms](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm), the Docker image provided by EMQX does not include the msodbcsql17 driver. To use it in Docker or Kubernetes, you need to create a new image installed with ODBC driver based on the image provided by [EMQX-Enterprise](https://hub.docker.com/r/emqx/emqx-enterprise) to access the SQL Server database. Using the new image means that you agree to the [Microsoft SQL Server EULA](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm).
+
+Follow the instructions below to build a new image:
+
+1. Get the corresponding EMQX [Dockerfile](https://github.com/emqx/emqx/blob/master/deploy/docker/Dockerfile.msodbc). You can save the file locally.
+
+   The image version in this example is `emqx/emqx-enterprise:5.0.3-alpha.2`. You can build the image based on the EMQX-Enterprise version you need, or use the latest version image `emqx/emqx-enterprise:latest`.
+
+   ```bash
+   # FROM emqx/emqx-enterprise:latest
+   FROM emqx/emqx-enterprise:5.0.3-alpha.2
+   
+   USER root
+   
+   RUN apt-get update \
+       && apt-get install -y gnupg2 curl apt-utils \
+       && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+       && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-mkc crelease.list \
+       && apt-get update \
+       && ACCEPT_EULA=Y apt-get install -y msodbcsql17 unixodbc-dev \
+       && sed -i 's/ODBC Driver 17 for SQL Server/ms-sql/g' /etc/odbcinst.ini \
+       && apt-get clean \
+       && rm -rf /var/lib/apt/lists/*
+   
+   USER emqx
+   ```
+
+2. Build a new image using the command `docker build -f=Dockerfile.msodbc -t emqx-enterprise-with-msodbc:5.0.3-alpha.2 .` 
+
+3. After building, you can use `docker image ls` to obtain a list of local images. You can also upload or save the image for later use.
+
+::: tip
+
+Check that the DSN Name in `odbcinst.ini` should be `ms-sql` if you install the msodbcsql17 driver using this example. You can change the DSN Name according to your needs.
+
+:::
+
+#### Install and Configure FreeTDS as ODBC driver
+
+This section introduces how to install and configure FreeTDS as an ODBC driver on some of the mainstream distributions. 
+
+Install and configure FreeTDS ODBC driver on MacOS:
 ```bash
 $ brew install unixodbc freetds
 $ vim /usr/local/etc/odbcinst.ini
@@ -113,7 +187,7 @@ Setup       = /usr/local/lib/libtdsodbc.so
 FileUsage   = 1
 ```
 
-Configure FreeTDS odbc driver configuration on Centos:
+Install and configure FreeTDS ODBC driver on Centos:
 ```bash
 $ yum install unixODBC unixODBC-devel freetds freetds-devel perl-DBD-ODBC perl-local-lib
 $ vim /etc/odbcinst.ini
@@ -127,7 +201,7 @@ Setup64     = /usr/lib64/libtdsS.so.2
 FileUsage   = 1
 ```
 
-Configure FreeTDS odbc driver configuration on Ubuntu (Take Ubuntu20.04 as an example, for other versions, please refer to the official odbc documentation):
+Install and configure FreeTDS ODBC driver on Ubuntu (Take Ubuntu20.04 as an example, for other versions, please refer to the official ODBC documentation):
 ```bash
 $ apt-get install unixodbc unixodbc-dev tdsodbc freetds-bin freetds-common freetds-dev libdbd-odbc-perl liblocal-lib-perl
 $ vim /etc/odbcinst.ini
@@ -139,13 +213,11 @@ Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
 FileUsage   = 1
 ```
 
-### Create SQL Server Data Bridge
+### Create Microsoft SQL Server Data Bridge
 
-This section demonstrates how to create a SQL Server data bridge to store client-published messages.
+This section introduces how to create Microsoft SQL Server data bridge for message storage and events recording.
 
-<!-- Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to SQL Server for messages storage and event recording. -->
-
-1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -155,18 +227,27 @@ This section demonstrates how to create a SQL Server data bridge to store client
 
 5. Input the connection information:
 
-   - **Server Host**: Input **127.0.0.1:1433**, or the actual URL if the SQL Server server is running remotely.
+   - **Server Host**: Input **127.0.0.1:1433**, or the URL if the SQL server is running remotely.
    - **Database Name**: Input `mqtt`.
    - **Username**: Input `sa`.
    - **Password**: Input preset password `mqtt_public1`, or use the actual password.
-   - **Driver**: Input `ms-sql`, as the DSN Name configured in `odbcinst.ini`
+   - **SQL Server Driver Name**: Input `ms-sql`, as the DSN Name configured in `odbcinst.ini`
 
 6. Configure the **SQL Template** based on the feature to use:
 
-   Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
-   ```sql
-   insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
-   ```
+   - To configure the SQL template for message storage, use the following SQL statement:
+
+     Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+
+     ```sql
+     insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
+     ```
+
+   - To configure the SQL template for online/offline status recording, use the following SQL statement:
+
+     ```sql
+     insert into t_mqtt_events(clientid, event_type, event_time) values ( ${clientid}, ${event}, DATEADD(MS, ${ms_shift}, DATEADD(S, ${s_shift}, '19700101 00:00:00:000') ) )
+     ```
 
 7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md).
 
@@ -178,10 +259,8 @@ This section demonstrates how to create a SQL Server data bridge to store client
 
 Now that you have created the data bridge, and the SQL Server data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
-You will continue to create a rule to specify the data that needs to be written:
 
-
-### Create Rules for SQL Server Data Bridge
+### Create Rules for Microsoft SQL Server Data Bridge
 
 After you have successfully created the data bridge to SQL Server, you can continue to create rules to specify the data to be saved into SQL Server and rules for the online/offline status recording.
 
@@ -202,13 +281,24 @@ After you have successfully created the data bridge to SQL Server, you can conti
        "t/#"
      ```
 
-4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data Bridge**. Click the **Add** button.
+   - To create a rule for online/offline status recording, input the following statement:
+
+     ```sql
+     SELECT
+       *,
+       floor(timestamp / 1000) as s_shift,
+       timestamp div 1000 as ms_shift
+     FROM 
+       "$events/client_connected", "$events/client_disconnected"
+     ```
+
+4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge we just created under **Data Bridge**. Click the **Add** button.
 
 5. Click the **Create** button to finish the setup.
 
-Now you have successfully created the rule for SQL Server data bridge. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to SQL Server after parsing by rule  `my_rule`.
+Now you have successfully created the rule for Microsoft SQL Server data bridge. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to SQL Server after parsing by rule  `my_rule`.
 
-### Test the Data Bridge and Rule
+### Test Data Bridge and Rule
 
 Use MQTT X  to send a message to topic  `t/1`  to trigger an online/offline event.
 
@@ -216,9 +306,9 @@ Use MQTT X  to send a message to topic  `t/1`  to trigger an online/offline even
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello SQL Server" }'
 ```
 
-Check the running status of the SQL Server data bridges, there should be one new matching and one new outgoing message.
+Check the running statistics of the SQL Server data bridges.
 
-Check whether the data is written into the `mqtt.dbo.t_mqtt_msg` data table.
+- For the data bridge used to store messages, there should be one new matching and one new outgoing message. Check whether the data is written into the `mqtt.dbo.t_mqtt_msg` data table.
 
 ```bash
 1> SELECT * from mqtt.dbo.t_mqtt_msg
@@ -231,35 +321,17 @@ id          msgid                                                            top
 1>
 ```
 
-### Build New Image
+- For the data bridge used to record online/offline status, there should be two new events recorded: client connected and client disconnected. Check whether the status recording is written into the `mqtt.dbo.t_mqtt_events` data table.
 
-For EMQX versions that have supported Microsoft SQL Server Bridge, that is, EMQX-Enterprise 5.0.3 and later versions, you can find the corresponding [Dockerfile](https://github.com/emqx/emqx/blob/master/deploy/docker/Dockerfile.msodbc).
-<!-- TODO: update tag version in command and dockerfile -->
-You can save the file to the local area, and use the command `docker build -f=deploy/docker/Dockerfile.msodbc -t emqx-enterprise-with-msodbc:5.0.3-alpha.2 .` directly to make the mirror image.
-After building, you can use docker image ls to obtain a list of local images. You can also upload or save the image for later use.
+```bash
+1> SELECT * from mqtt.dbo.t_mqtt_events
+2> GO
+id          clientid                                                         event_type                                                                                                                                                                                                    event_time
+----------- ---------------------------------------------------------------- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----------------------
+ 1000000001 emqx_c                                                           client.connected                                                                                                                                                                                              2023-04-18 04:49:47.140
+ 1000000002 emqx_c                                                           client.disconnected                                                                                                                                                                                           2023-04-18 04:49:47.180
 
-::: tip
-The image version in this Dockerfile is `emqx/emqx-enterprise:5.0.3-alpha.2`. You can build the image based on the EMQX-Enterprise version you need, or use the latest version image `emqx/emqx-enterprise:latest` to  build.
-In addition, if you use this Dockerfile to build an image, it means that you agree to the Microsoft SQL Server EULA.
-See also [MICROSOFT SOFTWARE LICENSE TERMS MICROSOFT SQL SERVER 2019 STANDARD(EN_US)](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm) for more details about EULA.
-:::
-
+(2 rows affected)
+1>
 ```
-# FROM emqx/emqx-enterprise:latest
-FROM emqx/emqx-enterprise:5.0.3-alpha.2
 
-USER root
-
-RUN apt-get update \
-    && apt-get install -y gnupg2 curl apt-utils \
-    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-mkc crelease.list \
-    && apt-get update \
-    && ACCEPT_EULA=Y apt-get install -y msodbcsql17 unixodbc-dev \
-    && sed -i 's/ODBC Driver 17 for SQL Server/ms-sql/g' /etc/odbcinst.ini
-
-RUN apt-get clean && \
-    rm -rf /var/lib/apt/lists/*;
-
-USER emqx
-```
