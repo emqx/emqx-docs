@@ -1,5 +1,40 @@
 # 版本发布
 
+## e4.4.18
+
+*发布日期: 2023-04-28*
+
+增强
+----
+
+-   新增` emqx_ocpp` 插件，支持 OCPP 1.6-J 协议连接 。
+
+    OCPP（Open Charge Point
+    Protocol）是用于电动汽车充电站和中央管理系统之间的通信协议。该插件作为
+    EMQX 的 OCPP 协议网关，使充电桩能够通过 OCPP over Websocket 方式接入
+    EMQX，并进行 OCPP 和 MQTT 协议的相互转换。
+
+    您可以通过 `emqx_ctl plugins load emqx_ocpp` 命令或者 EMQX Dashboard
+    启动该插件，并使用
+    [ocpp-go](https://github.com/lorenzodonini/ocpp-go)
+    等工具模拟充电桩进行消息收发测试。
+
+-   改进规则引擎的占位符语法。
+
+    规则引擎的动作支持通过占位符语法来动态的填充字符串的内容，占位符语法的格式为
+    `${key}`。
+    优化前，`${key}` 中的 `key`
+    只能包含字母、数字和下划线。优化后支持任意 UTF8 字符。
+
+修复
+----
+
+-   修复 `data/load_plugins` 里必选插件缺失的问题。
+
+    修复前，如果手动删除了 `data/load_plugins` 文件并重启
+    EMQX，有三个必选的插件没有自动开启：`emqx_schema_registry`，`emqx_eviction_agent`，`emqx_node_rebalance`，并且这三个插件也没有记录到新生成的
+    `data/load_plugins` 文件里。
+
 ## e4.4.17
 
 *发布日期: 2023-04-13*
