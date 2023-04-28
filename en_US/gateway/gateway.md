@@ -1,8 +1,8 @@
 # Multi-Protocol Gateway
 
-EMQX Multi-Protocol Gateway enables the handling of all non-MQTT protocol connections, authentication, and message sending and receiving. It provides a unified conceptual model for various protocols.
+EMQX Multi-Protocol Gateway enables handling all non-MQTT protocol connections, authentication, and message sending and receiving. It provides a unified conceptual model for various protocols.
 
-Prior to EMQX 5.0, non-MQTT protocol access was implemented by separate protocol plugins. These plugins had different design and implementation differences, making it challenging to use them.
+Before EMQX 5.0, non-MQTT protocol access was implemented by separate protocol plugins. These plugins had different design and implementation differences, making it challenging to use them.
 
 Starting from 5.0, EMQX offers the Multi-Protocol Gateway defines a unified conceptual and operational model to make it easier to use. 
 
@@ -15,7 +15,7 @@ The Multi-Protocol Gateway supports the MQTT-SN, STOMP, CoAP, and LwM2M protocol
 
 ## How the Multi-Protocol Gateway Works
 
-EMQX Multi-Protocol Gateway defines a unified conceptual and operational model for several key components, including listeners, connections/sessions, publish/subscribe, and authentication, and authorization. 
+EMQX Multi-Protocol Gateway defines a unified conceptual and operational model for several key components, including listeners, connections/sessions, publish/subscribe, authentication, and authorization. 
 
 <img src="./assets/gateway_struct.png" alt="gateway_struct" style="zoom:50%;" />
 
@@ -23,11 +23,22 @@ Here's a brief overview of each component:
 
 - **Listener**: Support listener types: TCP, SSL, UDP, DTLS. Each gateway can create multiple listeners.
 - **Connection/Session**: Gateway creates a session for each accepted client connection, which manages the subscription list, deliver/receive queue, and retransmission logic of client messages.
-- **Publish/Subscribe**: Each type of gateway defines how to adapt to the PUB/SUB message model of the MQTT protocol. Non-PUB/SUB protocols require configuring message topics and payloads, and each type of gateway may use a different message format.
+- **Publish/Subscribe**: Each type of gateway defines how to adapt to the MQTT protocol's PUB/SUB message model. Non-PUB/SUB protocols require configuring message topics and payloads, and each type of gateway may use a different message format.
 
 - **Authentication**: Each gateway can be configured with authenticators to use the client information for login authorization.
 
 ## Key Features
+
+### Listener
+
+Each gateway can have multiple listeners enabled, and different protocol gateways support the following listener types:
+
+|         | TCP  | UDP  | SSL  | DTLS |
+| ------- | ---- | ---- | ---- | ---- |
+| MQTT-SN |      | ✔︎    |      | ✔︎    |
+| STOMP   | ✔︎    |      | ✔︎    |      |
+| CoAP    |      | ✔︎    |      | ✔︎    |
+| LwM2M   |      | ✔︎    |      | ✔︎    |
 
 ### Message format
 
@@ -44,9 +55,16 @@ For protocols without a PUB/SUB concept, such as [CoAP](./coap.md) and [LwM2M](.
 
 Authentication is the process of verifying the identity of a client attempting to connect to a system. Starting from version 5.0, the gateway supports authenticators for login authorization. 
 
-Different gateways may support different types of authenticators, but all gateways support HTTP-based authentication. [HTTP-based authentication](../access-control/authn/http.md). 
+Different gateways may support different types of authenticators, but all gateways support HTTP-based authentication. [HTTP-based authentication](../access-control/authn/http.md). See the table below for the authentication types supported:
 
-Note: If no authenticator is configured, any client is allowed to log in. 
+|         | HTTP Server | Built-in Database | MySQL | MongoDB | PostgreSQL | Redis | DTLS | JWT  | Scram |
+| ------- | ----------- | ----------------- | ----- | ------- | ---------- | ----- | ---- | ---- | ----- |
+| MQTT-SN | ✔︎           |                   |       |         |            |       |      |      |       |
+| STOMP   | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |       |
+| CoAP    | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |       |
+| LwM2M   | ✔︎           |                   |       |         |            |       |      |      |       |
+
+Note: Any client can log in if no authenticator is configured. 
 
 #### How Authentication Works on the Gateway
 
@@ -107,7 +125,7 @@ gateway.stomp {
 "Applying different authenticators to each listener is currently only supported in the configuration file `emqx.conf` and is not yet available in the HTTP API and Dashboard."
 :::
 
-### <!--Authorization-->
+#### <!--Authentication-->
 
 <!--this part should be rewritten, not sure what should be here-->
 
