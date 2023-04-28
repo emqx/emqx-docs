@@ -43,33 +43,39 @@ This tutorial assumes that you run both EMQX and Microsoft SQL Server on the loc
 
 ### Install and Connect to Microsoft SQL Server
 
-This section describes how to start Microsoft SQL Server 2019 on Linux/MacOS using Docker images and use `sqlcmd` to connect to SQL Server. For other installation methods of SQL Server, please refer to [SQL Server Installation Guide](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16).
+This section describes how to start Microsoft SQL Server 2019 on Linux/MacOS using Docker images and use `sqlcmd` to connect to Microsoft SQL Server. For other installation methods of Microsoft SQL Server, please refer to [Microsoft SQL Server Installation Guide](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16).
 
-1. Install SQL Server via Docker, and then run the docker image.
+1. Install Microsoft SQL Server via Docker, and then run the docker image.
 
-   SQL Server requires using complex passwords, see also [Password Complexity](https://learn.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-ver16#password-complexity).
+   Microsoft SQL Server requires using complex passwords, see also [Password Complexity](https://learn.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-ver16#password-complexity).
    By starting a Docker container with the environment variable `ACCEPT_EULA=Y` you agree to the terms of Microsoft EULA, see also [MICROSOFT SOFTWARE LICENSE TERMS MICROSOFT SQL SERVER 2019 STANDARD(EN_US)](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm).
-
-```bash
-# To start the SQL Server docker image and set the password as `mqtt_public1`
-$ docker run --name sqlserver -p 1433:1433 -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD=mqtt_public1 -d mcr.microsoft.com/mssql/server:2019-CU19-ubuntu-20.04
-```
+   
+   ```bash
+   # To start the Microsoft SQL Server docker image and set the password as `mqtt_public1`
+   $ docker run --name sqlserver -p 1433:1433 -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD=mqtt_public1 -d mcr.microsoft.com/mssql/server:2019-CU19-ubuntu-20.04
+   ```
 
 2. Access the container.
 
-```bash
-docker exec -it sqlserver bash
-```
+   ```bash
+   docker exec -it sqlserver bash
+   ```
 
-3. Enter the preset password to connect to the server in the container.
-   - `mssql-tools` has been installed in the SQL Server container provided by Microsoft, but the executable file is not in `$PATH`. You need to specify the executable file path for `mssql-tools`. For more usage information on `mssql-tools`, refer to related documents provided by Microsoft: [sqlcmd-utility](https://learn.microsoft.com/en-us/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16).
-   - For security reasons, the characters are not echoed when entering the password. Click `Enter` directly after entering the password.
-
-```bash
-$ /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa
-$ Password:
-1>
-```
+3. Enter the preset password to connect to the server in the container. For security reasons, the characters are not echoed when entering the password. Click `Enter` directly after entering the password.
+   
+   ```bash
+   $ /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa
+   $ Password:
+   1>
+   ```
+   
+   ::: tip
+   
+   `mssql-tools` has been installed in the Microsoft SQL Server container provided by Microsoft, but the executable file is not in `$PATH`. You need to specify the executable file path for `mssql-tools`. As for the Docker deployment in this example, the file path should be `opt`.
+   
+   For more usage information on `mssql-tools`, refer to related documents provided by Microsoft: [sqlcmd-utility](https://learn.microsoft.com/en-us/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16). 
+   
+   :::
 
 So far, the Microsoft SQL Server 2019 instance has been deployed and can be connected.
 
@@ -77,17 +83,17 @@ So far, the Microsoft SQL Server 2019 instance has been deployed and can be conn
 
 This section describes how to create a database and data table in Microsoft SQL Server.
 
-1. Create a database `mqtt` in SQL Server using the connection created from the previous section.
+1. Create a database `mqtt` in Microsoft SQL Server using the connection created from the previous section.
 
-```bash
-...
-Password:
-1> USE master
-2> GO
-Changed database context to 'master'.
-1> IF NOT EXISTS(SELECT name FROM sys.databases WHERE name = 'mqtt') BEGIN CREATE DATABASE mqtt END
-2> GO
-```
+   ```bash
+   ...
+   Password:
+   1> USE master
+   2> GO
+   Changed database context to 'master'.
+   1> IF NOT EXISTS(SELECT name FROM sys.databases WHERE name = 'mqtt') BEGIN CREATE DATABASE mqtt END
+   2> GO
+   ```
 
 2. Use the following SQL statements to create a data table.
 
@@ -115,7 +121,7 @@ Changed database context to 'master'.
 
 ### Install and Configure ODBC Driver
 
-You need to configure the ODBC driver to be able to access the SQL Server database. You can use either FreeTDS or the msodbcsql17 driver provided by Microsoft as the ODBC driver (The connection properties for msodbcsql18 have not been adapted yet).
+You need to configure the ODBC driver to be able to access the Microsoft SQL Server database. You can use either FreeTDS or the msodbcsql17 driver provided by Microsoft as the ODBC driver (The connection properties for msodbcsql18 have not been adapted yet). 
 
 EMQX uses the DSN Name specified in the `odbcinst.ini` configuration to determine the path to the driver dynamic library. In the examples below, the DSN Name is `ms-sql`. For more information, refer to [Connection Properties](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/connection-string-keywords-and-data-source-names-dsns?view=sql-server-ver16#connection-properties).
 
@@ -134,7 +140,7 @@ If you need to use msodbcsql17 driver as the ODBC driver, refer to the Microsoft
 - [Install the Microsoft ODBC driver for SQL Server (Linux)](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16&tabs=alpine18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline)
 - [Install the Microsoft ODBC driver for SQL Server (macOS)](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/install-microsoft-odbc-driver-sql-server-macos?view=sql-server-ver16)
 
-Restricted by [Microsoft EULA terms](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm), the Docker image provided by EMQX does not include the msodbcsql17 driver. To use it in Docker or Kubernetes, you need to create a new image installed with ODBC driver based on the image provided by [EMQX-Enterprise](https://hub.docker.com/r/emqx/emqx-enterprise) to access the SQL Server database. Using the new image means that you agree to the [Microsoft SQL Server EULA](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm).
+Restricted by [Microsoft EULA terms](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm), the Docker image provided by EMQX does not include the msodbcsql17 driver. To use it in Docker or Kubernetes, you need to create a new image installed with ODBC driver based on the image provided by [EMQX-Enterprise](https://hub.docker.com/r/emqx/emqx-enterprise) to access the Microsoft SQL Server database. Using the new image means that you agree to the [Microsoft SQL Server EULA](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm).
 
 Follow the instructions below to build a new image:
 
@@ -227,7 +233,7 @@ This section introduces how to create Microsoft SQL Server data bridge for messa
 
 5. Input the connection information:
 
-   - **Server Host**: Input **127.0.0.1:1433**, or the URL if the SQL server is running remotely.
+   - **Server Host**: Input **127.0.0.1:1433**, or the URL if the Microsoft SQL Server is running remotely.
    - **Database Name**: Input `mqtt`.
    - **Username**: Input `sa`.
    - **Password**: Input preset password `mqtt_public1`, or use the actual password.
@@ -251,18 +257,18 @@ This section introduces how to create Microsoft SQL Server data bridge for messa
 
 7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md).
 
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the SQL Server.
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Microsoft SQL Server.
 
 9. Click **Create** to finish the creation of the data bridge.
 
-   A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into SQL Server. You can also create rules by following the steps in [Create Rules for SQL Server Data Bridge](#create-rules-for-sqlserver-data-bridge).
+   A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Microsoft SQL Server. You can also create rules by following the steps in [Create Rules for Microsoft SQL Server Data Bridge](#create-rules-for-sqlserver-data-bridge).
 
-Now that you have created the data bridge, and the SQL Server data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
+Now that you have created the data bridge, and the Microsoft SQL Server data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
 
 ### Create Rules for Microsoft SQL Server Data Bridge
 
-After you have successfully created the data bridge to SQL Server, you can continue to create rules to specify the data to be saved into SQL Server and rules for the online/offline status recording.
+After you have successfully created the data bridge to Microsoft SQL Server, you can continue to create rules to specify the data to be saved into Microsoft SQL Server and rules for the online/offline status recording.
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
 
@@ -270,7 +276,7 @@ After you have successfully created the data bridge to SQL Server, you can conti
 
 3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
 
-   - To create a rule for message storage, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to SQL Server.
+   - To create a rule for message storage, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to Microsoft SQL Server.
 
      Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
 
@@ -296,7 +302,7 @@ After you have successfully created the data bridge to SQL Server, you can conti
 
 5. Click the **Create** button to finish the setup.
 
-Now you have successfully created the rule for Microsoft SQL Server data bridge. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to SQL Server after parsing by rule  `my_rule`.
+Now you have successfully created the rule for Microsoft SQL Server data bridge. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Microsoft SQL Server after parsing by rule  `my_rule`.
 
 ### Test Data Bridge and Rule
 
@@ -306,7 +312,7 @@ Use MQTT X  to send a message to topic  `t/1`  to trigger an online/offline even
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello SQL Server" }'
 ```
 
-Check the running statistics of the SQL Server data bridges.
+Check the running statistics of the Microsoft SQL Server data bridges.
 
 - For the data bridge used to store messages, there should be one new matching and one new outgoing message. Check whether the data is written into the `mqtt.dbo.t_mqtt_msg` data table.
 

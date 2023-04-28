@@ -1,6 +1,6 @@
 # Microsoft SQL Server
 
-通过 Microsoft SQL Server 数据桥接可以将客户端消息和事件存储到 Microsoft SQL Server 中，从而实现对诸如客户端消息、上下线历史等的记录。
+通过 Microsoft SQL Server 数据桥接可以将客户端消息和事件存储到 Microsoft SQL Server 中，也可以通过事件触发对 Microsoft SQL Server 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
 
 {% emqxee %}
 
@@ -41,35 +41,39 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 ### 安装并连接到 Microsoft SQL Server
 
-本节描述如何使用 Docker 镜像在 Linux/MacOS 安装启动 SQL Server 2019 以及如何使用 `sqlcmd` 连接到 SQL Server。关于其他 SQL Server 的安装方式，请参阅微软提供的 [SQL Server 安装指南](https://learn.microsoft.com/zh-cn/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16)。
+本节描述如何使用 Docker 镜像在 Linux/MacOS 安装启动 Microsoft SQL Server 2019 以及如何使用 `sqlcmd` 连接到 Microsoft SQL Server。关于其他 Microsoft SQL Server 的安装方式，请参阅微软提供的 [Microsoft SQL Server 安装指南](https://learn.microsoft.com/zh-cn/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16)。
 
-1. 通过 Docker 安装并启动 SQL Server。
+1. 通过 Docker 安装并启动 Microsoft SQL Server。
 
-   SQL Server 要求使用复杂密码，请参阅 [使用复杂密码](https://learn.microsoft.com/zh-cn/sql/relational-databases/security/password-policy?view=sql-server-ver16#password-complexity)。
+   Microsoft SQL Server 要求使用复杂密码，请参阅[使用复杂密码](https://learn.microsoft.com/zh-cn/sql/relational-databases/security/password-policy?view=sql-server-ver16#password-complexity)。
    使用环境变量 `ACCEPT_EULA=Y` 启动 Docker 容器代表您同意 Microsoft 的 EULA 条款，详情请参阅 [MICROSOFT 软件许可条款 MICROSOFT SQL SERVER 2019 STANDARD(ZH_CN)](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_ChineseSimplified.htm)。
-
-```bash
-# 启动一个 SQL Server 容器并设置密码为 `mqtt_public1`
-$ docker run --name sqlserver -p 1433:1433 -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD=mqtt_public1 -d mcr.microsoft.com/mssql/server:2019-CU19-ubuntu-20.04
-```
+   
+   ```bash
+   # 启动一个 Microsoft SQL Server 容器并设置密码为 `mqtt_public1`
+   $ docker run --name sqlserver -p 1433:1433 -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD=mqtt_public1 -d mcr.microsoft.com/mssql/server:2019-CU19-ubuntu-20.04
+   ```
 
 2. 进入 Docker 容器。
 
-```bash
-$ docker exec -it sqlserver bash
-```
+   ```bash
+   $ docker exec -it sqlserver bash
+   ```
 
-3. 在容器中连接到 SQL Server 服务器，需要输入预设的密码。
+3. 在容器中连接到 Microsoft SQL Server 服务器，需要输入预设的密码。因为安全原因，输入密码时字符不会回显。请输入密码后直接键入 `Enter`。
 
-   - Microsoft 提供的 SQL Server 容器内已安装 `mssql-tools`，但可执行文件并不在 `$PATH` 中，因此您需要指定可执行文件路径。关于更多 `mssql-tools` 的使用，请参与 Microsoft 提供的相关文档： [sqlcmd 实用工具](https://learn.microsoft.com/zh-cn/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16)。
-
-   - 因为安全原因，输入密码时字符不会回显。请输入密码后直接键入 `Enter` 。
-
-```bash
-$ /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa
-$ Password:
-1>
-```
+   ```bash
+   $ /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa
+   $ Password:
+   1>
+   ```
+   
+   ::: tip
+   
+   Microsoft 提供的 Microsoft SQL Server 容器内已安装 `mssql-tools`，但可执行文件并不在 `$PATH` 中，因此您需要指定可执行文件路径。在上述连接示例中，可执行文件路径为 `opt`。
+   
+   关于更多 `mssql-tools` 的使用，请参与 Microsoft 提供的相关文档： [sqlcmd 实用工具](https://learn.microsoft.com/zh-cn/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16)。
+   
+   :::
 
 至此 Microsoft SQL Server 2019 实例已经完成部署并可以连接。
 
@@ -77,7 +81,7 @@ $ Password:
 
 本节描述如何在 Microsoft SQL Server 中创建数据库与数据表。
 
-1. 使用已创建的连接在 SQL Server 中创建数据库 `mqtt`。
+1. 使用已创建的连接在 Microsoft SQL Server 中创建数据库 `mqtt`。
 
    ```bash
    ...
@@ -117,7 +121,7 @@ $ Password:
 
 ### 安装并配置 ODBC 驱动程序
 
-为了能够访问 SQL Server 数据库，您需要安装并配置 ODBC 驱动程序。您可以使用 Microsoft 发布的 msodbcsql17 (msodbcsql18 的连接属性仍未进行适配) 或者 FreeTDS 作为 ODBC 驱动程序。
+为了能够访问 Microsoft SQL Server 数据库，您需要安装并配置 ODBC 驱动程序。您可以使用 Microsoft 发布的 msodbcsql17 (msodbcsql18 的连接属性仍未进行适配) 或者 FreeTDS 作为 ODBC 驱动程序。
 
 EMQX 使用 `odbcinst.ini` 配置中的 DSN Name 来确定驱动动态库的路径，有关的详细信息请参考[连接属性](https://learn.microsoft.com/zh-cn/sql/connect/odbc/linux-mac/connection-string-keywords-and-data-source-names-dsns?view=sql-server-ver16#connection-properties)。
 
@@ -136,7 +140,7 @@ EMQX 使用 `odbcinst.ini` 配置中的 DSN Name 来确定驱动动态库的路�
 - [安装 Microsoft ODBC Driver for SQL Server (Linux)](https://learn.microsoft.com/zh-cn/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16&tabs=alpine18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline)
 - [安装 Microsoft ODBC Driver for SQL Server (macOS)](https://learn.microsoft.com/zh-cn/sql/connect/odbc/linux-mac/install-microsoft-odbc-driver-sql-server-macos?view=sql-server-ver16)
 
-受限于 [Microsoft EULA 条款](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_ChineseSimplified.htm)，EMQX 提供的 Docker 镜像不带有 msodbcsql17 驱动程序，如需在 Docker 或 Kubernetes 中使用该驱动程序，您需要基于 [EMQX-Enterprise](https://hub.docker.com/r/emqx/emqx-enterprise) 提供的镜像构建带有 ODBC 驱动程序的新镜像以便在连接 SQL Server 数据库时使用 msodbcsql17 驱动程序。使用构建的新镜像，代表您同意 Microsoft SQL Server EULA。
+受限于 [Microsoft EULA 条款](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_ChineseSimplified.htm)，EMQX 提供的 Docker 镜像不带有 msodbcsql17 驱动程序，如需在 Docker 或 Kubernetes 中使用该驱动程序，您需要基于 [EMQX-Enterprise](https://hub.docker.com/r/emqx/emqx-enterprise) 提供的镜像构建带有 ODBC 驱动程序的新镜像以便在连接 Microsoft SQL Server 数据库时使用 msodbcsql17 驱动程序。使用构建的新镜像，代表您同意 Microsoft SQL Server EULA。
 
 1. 在 EMQX 的仓库中找到对应的 [Dockerfile](https://github.com/emqx/emqx/blob/master/deploy/docker/Dockerfile.msodbc)。您可以将该文件保存至本地。
 
@@ -225,8 +229,8 @@ FileUsage   = 1
 
 4. 输入数据桥接名称，要求是大小写英文字母或数字组合。
 
-5. 输入 SQL Server 连接信息。
-   - **服务器地址**： `127.0.0.1:1433`，或使用实际的 SQL Server 地址和端口
+5. 输入 Microsoft SQL Server 连接信息。
+   - **服务器地址**： `127.0.0.1:1433`，或使用实际的 Microsoft SQL Server 地址和端口
    - **数据库名字**： `mqtt`
    - **用户名**： `sa`
    - **密码**： `mqtt_public1`
@@ -247,11 +251,14 @@ FileUsage   = 1
      ```
 
 7. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](./data-bridges.md)。
-8. 在点击 **创建** 按钮完成数据桥接创建之前，您可以使用 **测试连接** 来测试当前 EMQX 到 SQL Server 的连接是否成功。
-9. 点击创建按钮完成数据桥接创建。
 
-至此您已经完成数据桥接创建，SQL Server 数据桥接应该出现在数据桥接列表（**数据集成** -> **数据桥接**）中，**资源状态**为**已连接**。
-接下来将继续创建一条规则来指定需要写入的数据。
+8. 在点击 **创建** 按钮完成数据桥接创建之前，您可以使用 **测试连接** 来测试当前 EMQX 到 Microsoft SQL Server 的连接是否成功。
+
+9. 点击**创建**按钮完成数据桥接创建。
+
+   在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 RocketMQ 的数据。您也可以按照[创建 Microsoft SQL Server 数据桥接规则](#创建-microsoft-sql-server-数据桥接规则)章节的步骤来创建规则。
+
+至此您已经完成数据桥接创建，Microsoft SQL Server 数据桥接应该出现在数据桥接列表（**数据集成** -> **数据桥接**）中，**资源状态**为**已连接**。
 
 ### 创建 Microsoft SQL Server 数据桥接规则
 
@@ -263,19 +270,18 @@ FileUsage   = 1
 
 3. 输入规则 ID `my_rule`，在 **SQL 编辑器**中根据业务实现需要输入规则：
 
-   - 如需实现对指定主题消息的转发，例如将 `t/#` 主题的 MQTT 消息存储至 SQL Server，输入以下 SQL 语法：
-
-     注意：如果您希望制定自己的 SQL 语法，需要确保规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量。
-
+   - 如需实现对指定主题消息的转发，例如将 `t/#` 主题的 MQTT 消息存储至 Microsoft SQL Server，输入以下 SQL 语句：
+     注意：如果您希望制定自己的 SQL 语句，需要确保规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量。
+   
      ```sql
-     SELECT
-       *
-     FROM
-       "t/#"
+      SELECT
+        *
+      FROM
+        "t/#"
      ```
-
-   - 如需实现设备上下线状态记录，输入以下 SQL 语法：
-
+   
+   - 如需实现设备上下线状态记录，输入以下 SQL 语句：
+   
      ```sql
      SELECT
        *,
@@ -285,11 +291,11 @@ FileUsage   = 1
        "$events/client_connected", "$events/client_disconnected"
      ```
 
-4. 添加动作，在动作下拉框中选择**使用数据桥接转发**选项，选择先前创建好的 SQL Server 数据桥接。
+4. 点击**添加动作**，在动作下拉框中选择**使用数据桥接转发**选项，选择先前创建好的 Microsoft SQL Server 数据桥接。
 
 5. 点击最下方**创建**按钮完成规则创建。
 
-至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 SQL Server 存储。
+至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 Microsoft SQL Server 存储。
 
 ### 测试连接和规则
 
@@ -314,7 +320,7 @@ id          msgid                                                            top
 1>
 ```
 
-- 用于存储上下线事件的 SQL Server 数据桥接，命中、发送次数均 +2，即一次上线和一次下线。查看设备状态是否已经写入 `mqtt.dbo.t_mqtt_events` 表中：
+- 用于存储上下线事件的 Microsoft SQL Server 数据桥接，命中、发送次数均 +2，即一次上线和一次下线。查看设备状态是否已经写入 `mqtt.dbo.t_mqtt_events` 表中：
 
 ```bash
 1> SELECT * from mqtt.dbo.t_mqtt_events
