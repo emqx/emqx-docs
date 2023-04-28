@@ -193,7 +193,8 @@
     # - data-integration/data-bridge-cassa
     - data-integration/data-bridge-tdengine
     - data-integration/data-bridge-rocketmq
-    
+    - data-integration/data-bridge-oracle
+
 
     # TODO
     # - title_en: Examples and Tutorials
