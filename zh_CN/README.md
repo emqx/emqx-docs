@@ -27,7 +27,7 @@ EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规�
 - **[海量连接](https://www.emqx.com/zh/blog/reaching-100m-mqtt-connections-with-emqx-5-0)**：单节点支持 500 万 MQTT 设备连接，集群可扩展至 1 亿并发 MQTT 连接。
 - **高性能**：单节点支持每秒实时接收、移动、处理与分发数百万条的 MQTT 消息。
 - **低时延**：基于 Erlang/OTP 软实时的运行时系统设计，消息分发与投递时延低于 1 毫秒。
-- **[高可用](./deploy/cluster/mria-introduction)**：采用 Masterless 的大规模分布式集群架构，实现系统高可用和水平扩展。
+- **[高可用](./deploy/cluster/mria-introduction.md)**：采用 Masterless 的大规模分布式集群架构，实现系统高可用和水平扩展。
 
 {% endemqxce %}
 
