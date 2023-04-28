@@ -1,5 +1,46 @@
 # Releases
 
+## e4.4.18
+
+*Release Date: 2023-04-28*
+
+### Enhancements
+
+-   Added plugin `emqx_ocpp` to support the OCPP 1.6-J protocol.
+
+    OCPP (Open Charge Point Protocol) is a protocol used for
+    communication between electric vehicle charging stations and central
+    management systems. This plugin serves as an OCPP gateway for EMQX,
+    enabling seamless integration between OCPP and MQTT protocols. It
+    facilitates the smooth connection of charging stations to EMQX
+    through OCPP over WebSocket.".
+
+    To start the plugin, you can use the
+    `emqx_ctl plugins load emqx_ocpp` command or EMQX Dashboard.
+    Additionally, tools such as
+    [ocpp-go](https://github.com/lorenzodonini/ocpp-go) can be used to
+    simulate charging points for message exchange testing.
+
+-   Improved the placeholder syntax of rule engine.
+
+    The parameters of actions support using placeholder syntax to
+    dynamically fill in the content of strings. The format of the
+    placeholder syntax is `${key}`.\
+    Before this improvement, the `key` in `${key}` could only contain
+    letters, numbers, and underscores. Now the `key` supports any UTF8
+    characters.
+
+### Bug fixes
+
+-   Fixed the issue where required plugins were missing in
+    `data/load_plugins`.
+
+    Before this fix, if the `data/load_plugins` file was manually
+    deleted and EMQX was restarted, three required plugins
+    (`emqx_schema_registry`, `emqx_eviction_agent`,
+    `emqx_node_rebalance`) would not be automatically enabled and would
+    not be recorded in the newly generated `data/load_plugins` file.
+
 ## e4.4.17
 
 *Release Date: 2023-04-13*

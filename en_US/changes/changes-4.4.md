@@ -1,5 +1,17 @@
 # Releases
 
+## v4.4.18
+
+*Release Date: 2023-04-28*
+
+### Enhancements
+
+- Improved the placeholder syntax of the rule engine [#10470](https://github.com/emqx/emqx/pull/10470).
+
+  The parameters of certain actions support using placeholder syntax to dynamically fill in the content of strings. The format of the placeholder syntax is `${key}`.\
+  Prior to the improvement, the `key` in `${key}` could only contain letters, numbers, and underscores. Now the `key` supports any UTF8 character after the improvement.
+
+
 ## v4.4.17
 
 *Release Date: 2023-04-13*
