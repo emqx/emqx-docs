@@ -24,7 +24,7 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 - **High Performance**: Move and process millions of MQTT messages per second in a single broker.
 - **Low Latency**: Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
 - **[Fully MQTT 5.0](https://www.emqx.com/en/blog/introduction-to-mqtt-5)**: 100% compliant with MQTT 5.0 and 3.x standard for better scalability, security, and reliability.
-- **[High Availability](./deploy/cluster/mria-introduction)**: Achieve high availability and horizontal scalability through a masterless distributed architecture.
+- **[High Availability](./deploy/cluster/mria-introduction.md)**: Achieve high availability and horizontal scalability through a masterless distributed architecture.
 - **[Cloud-Native & K8s](https://www.emqx.com/en/emqx-kubernetes-operator)**: Easy to deploy on-premises or in public clouds with Kubernetes Operator and Terraform.
 
 {% endemqxce %}
