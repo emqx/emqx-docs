@@ -1,12 +1,12 @@
 # Ingest Data into Microsoft SQL Server
 
-EMQX supports integration with Microsoft SQL Server. You can save client messages and events to Microsoft SQL Server, or record the online status or online/offline of clients by using events to trigger the data update or removal.
+EMQX supports integration with Microsoft SQL Server. You can save client messages and online/offline events to Microsoft SQL Server.
 
 {% emqxee %}
 
 ::: tip
 
-The data integration with Microsoft SQL Server is currently only supported in EMQX Enterprise 5.0.3 and above.
+The data integration with Microsoft SQL Server is supported in EMQX Enterprise 5.0.3 and above.
 
 :::
 
@@ -91,7 +91,7 @@ Changed database context to 'master'.
 
 2. Use the following SQL statements to create a data table.
 
-   - Create the following data table for storing the MQTT message, including the message ID, topic, QoS, payload, and publish time of each message. 
+   - Create the following data table for storing the MQTT message, including the message ID, topic, QoS, payload, and publish time of each message.
 
      ```sql
      CREATE TABLE mqtt.dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
@@ -115,7 +115,7 @@ Changed database context to 'master'.
 
 ### Install and Configure ODBC Driver
 
-You need to configure the ODBC driver to be able to access the SQL Server database. You can use either FreeTDS or the msodbcsql17 driver provided by Microsoft as the ODBC driver (The connection properties for msodbcsql18 have not been adapted yet). 
+You need to configure the ODBC driver to be able to access the SQL Server database. You can use either FreeTDS or the msodbcsql17 driver provided by Microsoft as the ODBC driver (The connection properties for msodbcsql18 have not been adapted yet).
 
 EMQX uses the DSN Name specified in the `odbcinst.ini` configuration to determine the path to the driver dynamic library. In the examples below, the DSN Name is `ms-sql`. For more information, refer to [Connection Properties](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/connection-string-keywords-and-data-source-names-dsns?view=sql-server-ver16#connection-properties).
 
@@ -142,12 +142,12 @@ Follow the instructions below to build a new image:
 
    The image version in this example is `emqx/emqx-enterprise:5.0.3-alpha.2`. You can build the image based on the EMQX-Enterprise version you need, or use the latest version image `emqx/emqx-enterprise:latest`.
 
-   ```bash
+   ```docker
    # FROM emqx/emqx-enterprise:latest
    FROM emqx/emqx-enterprise:5.0.3-alpha.2
-   
+
    USER root
-   
+
    RUN apt-get update \
        && apt-get install -y gnupg2 curl apt-utils \
        && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
@@ -157,11 +157,11 @@ Follow the instructions below to build a new image:
        && sed -i 's/ODBC Driver 17 for SQL Server/ms-sql/g' /etc/odbcinst.ini \
        && apt-get clean \
        && rm -rf /var/lib/apt/lists/*
-   
+
    USER emqx
    ```
 
-2. Build a new image using the command `docker build -f=Dockerfile.msodbc -t emqx-enterprise-with-msodbc:5.0.3-alpha.2 .` 
+2. Build a new image using the command `docker build -f=Dockerfile.msodbc -t emqx-enterprise-with-msodbc:5.0.3-alpha.2 .`
 
 3. After building, you can use `docker image ls` to obtain a list of local images. You can also upload or save the image for later use.
 
@@ -173,7 +173,7 @@ Check that the DSN Name in `odbcinst.ini` should be `ms-sql` if you install the 
 
 #### Install and Configure FreeTDS as ODBC driver
 
-This section introduces how to install and configure FreeTDS as an ODBC driver on some of the mainstream distributions. 
+This section introduces how to install and configure FreeTDS as an ODBC driver on some of the mainstream distributions.
 
 Install and configure FreeTDS ODBC driver on MacOS:
 ```bash
@@ -288,7 +288,7 @@ After you have successfully created the data bridge to SQL Server, you can conti
        *,
        floor(timestamp / 1000) as s_shift,
        timestamp div 1000 as ms_shift
-     FROM 
+     FROM
        "$events/client_connected", "$events/client_disconnected"
      ```
 
@@ -315,7 +315,7 @@ Check the running statistics of the SQL Server data bridges.
 2> GO
 id          msgid                                                            topic                                                                                                qos payload                                                                                              arrived
 ----------- ---------------------------------------------------------------- ---------------------------------------------------------------------------------------------------- --- ---------------------------------------------------------------------------------------------------- -----------------------
- 1000000002 0005F995096D9466F442000010520002                                 t/1                                                                                                    0 { "msg": "Hello SQL Server" }                                                                        2023-04-18 04:49:47.170
+ 1000000001 0005F995096D9466F442000010520002                                 t/1                                                                                                    0 { "msg": "Hello SQL Server" }                                                                        2023-04-18 04:49:47.170
 
 (1 rows affected)
 1>
@@ -334,4 +334,3 @@ id          clientid                                                         eve
 (2 rows affected)
 1>
 ```
-

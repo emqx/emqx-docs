@@ -1,12 +1,12 @@
 # Microsoft SQL Server
 
-通过 Microsoft SQL Server 数据桥接可以将客户端消息和事件存储到 Microsoft SQL Server 中，也可以通过事件触发对 SQL Server 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
+通过 Microsoft SQL Server 数据桥接可以将客户端消息和事件存储到 Microsoft SQL Server 中，从而实现对诸如客户端消息、上下线历史等的记录。
 
 {% emqxee %}
 
 ::: tip
 
-目前仅 EMQX 5.0.3 及以上版本支持 Microsoft SQL Server 数据桥接功能。
+仅 EMQX 5.0.3 及以上版本支持 Microsoft SQL Server 数据桥接功能。
 
 :::
 
@@ -93,7 +93,7 @@ $ Password:
 2. 使用 SQL 语句在此数据库中创建数据表。
 
    - 如需用于 MQTT 消息存储，创建数据表 `t_mqtt_msg`。该表存储每条消息的 MsgID、主题、QoS、Payload 以及发布时间。
-   
+
      ```sql
      CREATE TABLE mqtt.dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
                                        msgid   VARCHAR(64) NULL,
@@ -103,9 +103,9 @@ $ Password:
                                        arrived DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
      GO
      ```
-   
+
    - 如需用于设备上下线状态记录，创建数据表 `t_mqtt_events`。
-   
+
      ```sql
      CREATE TABLE mqtt.dbo.t_mqtt_events (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
                                           clientid VARCHAR(255) NULL,
@@ -142,12 +142,12 @@ EMQX 使用 `odbcinst.ini` 配置中的 DSN Name 来确定驱动动态库的路�
 
    下面的示例中 Dockerfile 中的镜像版本为 `emqx/emqx-enterprise:5.0.3-alpha.2`，对于 EMQX-Enterprise 5.0.3 以后的版本，可以根据您需要的 EMQX-Enterprise 版本构建镜像，也可以使用 EMQX-Enterprise 最新版本镜像 `emqx/emqx-enterprise:latest` 进行构建。
 
-   ```bash
+   ```dockerfile
    # FROM emqx/emqx-enterprise:latest
    FROM emqx/emqx-enterprise:5.0.3-alpha.2
-   
+
    USER root
-   
+
    RUN apt-get update \
        && apt-get install -y gnupg2 curl apt-utils \
        && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
@@ -157,7 +157,7 @@ EMQX 使用 `odbcinst.ini` 配置中的 DSN Name 来确定驱动动态库的路�
        && sed -i 's/ODBC Driver 17 for SQL Server/ms-sql/g' /etc/odbcinst.ini \
        && apt-get clean \
        && rm -rf /var/lib/apt/lists/*
-   
+
    USER emqx
    ```
 
@@ -231,7 +231,7 @@ FileUsage   = 1
    - **用户名**： `sa`
    - **密码**： `mqtt_public1`
    - **SQL Server Driver 名称**： `ms-sql`，即您在 `odbcinst.ini` 中配置的 DSN Name
-   
+
 6. 根据业务实现需要配置 SQL 模板：
 
    - 如需实现对指定主题消息的转发，使用如下 SQL 语句完成数据插入。此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`:
@@ -262,29 +262,29 @@ FileUsage   = 1
 2. 点击页面右上角的**创建**。
 
 3. 输入规则 ID `my_rule`，在 **SQL 编辑器**中根据业务实现需要输入规则：
-   
+
    - 如需实现对指定主题消息的转发，例如将 `t/#` 主题的 MQTT 消息存储至 SQL Server，输入以下 SQL 语法：
-   
+
      注意：如果您希望制定自己的 SQL 语法，需要确保规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量。
-     
+
      ```sql
      SELECT
        *
      FROM
        "t/#"
      ```
-   
+
    - 如需实现设备上下线状态记录，输入以下 SQL 语法：
-   
+
      ```sql
      SELECT
        *,
        floor(timestamp / 1000) as s_shift,
        timestamp div 1000 as ms_shift
-     FROM 
+     FROM
        "$events/client_connected", "$events/client_disconnected"
      ```
-   
+
 4. 添加动作，在动作下拉框中选择**使用数据桥接转发**选项，选择先前创建好的 SQL Server 数据桥接。
 
 5. 点击最下方**创建**按钮完成规则创建。
@@ -308,7 +308,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello SQL Server" }'
 2> GO
 id          msgid                                                            topic                                                                                                qos payload                                                                                              arrived
 ----------- ---------------------------------------------------------------- ---------------------------------------------------------------------------------------------------- --- ---------------------------------------------------------------------------------------------------- -----------------------
- 1000000002 0005F995096D9466F442000010520002                                 t/1                                                                                                    0 { "msg": "Hello SQL Server" }                                                                        2023-04-18 04:49:47.170
+ 1000000001 0005F995096D9466F442000010520002                                 t/1                                                                                                    0 { "msg": "Hello SQL Server" }                                                                        2023-04-18 04:49:47.170
 
 (1 rows affected)
 1>
