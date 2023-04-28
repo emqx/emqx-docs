@@ -122,7 +122,7 @@ docker run --rm -e AWS_ACCESS_KEY_ID=root -e AWS_SECRET_ACCESS_KEY=public -e AWS
 
 9. 点击**创建**按钮完成数据桥接创建。
 
-   在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 DynamoDB 的数据。您也可以按照[创建 DynamoDB 数据桥接规则](#创建 DynamoDB 数据桥接规则)章节的步骤来创建规则。
+   在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 DynamoDB 的数据。您也可以按照[创建 DynamoDB 数据桥接规则](#创建-dynamodb-数据桥接规则)章节的步骤来创建规则。
 
 ### 创建 DynamoDB 数据桥接规则
 

@@ -141,7 +141,7 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
 9. 点击**创建**按钮完成数据桥接创建。
 
-   在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 RocketMQ 的数据。您也可以按照[创建 RocketMQ 数据桥接规则](#创建 RocketMQ 数据桥接规则)章节的步骤来创建规则。
+   在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 RocketMQ 的数据。您也可以按照[创建 RocketMQ 数据桥接规则](#创建-rocketmq-数据桥接规则)章节的步骤来创建规则。
 
 ### 创建 RocketMQ 数据桥接规则
 
