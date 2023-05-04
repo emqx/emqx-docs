@@ -76,7 +76,6 @@ bridges.mysql.foo {
 bridges.mysql.foo {
   server = "localhost"
   database = "emqx"
-  enable = true
   ...
   resource_opts {
     enable_batch = true
@@ -109,7 +108,6 @@ bridges.mysql.foo {
   enable = true
   ...
   resource_opts {
-    enable_queue = true
     max_queue_bytes = "100MB"
     query_mode = "async"
     ...
