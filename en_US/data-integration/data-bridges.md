@@ -30,7 +30,7 @@ EMQX will provide the running statistics of data integration in the following ca
 
 ## Features Supported
 
-You can further improve the performance and reliability of data integration with the following easy-to-use data integration features. Note: Depending on the data system you are connecting to, the features supported may differ. You may refer to the document about different data systems for feature support.
+You can further improve the performance and reliability of data integration with the following easy-to-use data integration features. Note: The features supported may differ depending on the data system you are connecting to. You may refer to the document about different data systems for feature support.
 
 ### Connection Pool
 
@@ -56,6 +56,10 @@ bridges.mysql.foo {
   # sync | async
     query_mode = "sync"
     ...
+  }
+  mqtt {
+  max_inflight = 1
+  ...
   }
 }
 ```

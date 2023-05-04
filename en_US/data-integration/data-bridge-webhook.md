@@ -14,8 +14,9 @@ or from the output of a rule.
 
 ## Feature List
 
-- [Connection pool](./data-bridges.md)
-- [Buffer queue](./data-bridges.md)
+- [Connection pool](./data-bridges.md#connection-pool)
+- [Buffer queue](./data-bridges.md#buffer-queue)
+- [Async mode](./data-bridges.md#async-mode)
 
 ## Quick Start Tutorial
 
