@@ -97,11 +97,9 @@ bridges.mysql.foo {
 
 When external resources are unavailable, for example, due to network fluctuations or service downtime, the buffer queue feature can help to save the message generated during this period as memory or disk cache and then resume the messaging after the service is restored.
 
-It is recommended to enable this feature to improve the fault tolerance capability of the data integration. The configuration items include:
+It is recommended to enable this feature to improve the fault tolerance capability of the data integration. 
 
-- Whether to enable Buffer Queue;
-- For data integration connecting certain data systems, you can set the cache medium as memory, disk, or memory-disk.
-- For each resource connection (not MQTT connection), you can specify the cache queue size based on the storage size. If the cached size exceeds the limit, data will be discarded following the First In First Out (FIFO) rule.
+For each resource connection (not MQTT connection), you can specify the cache queue size based on the storage size. If the cached size exceeds the limit, data will be discarded following the First In First Out (FIFO) rule.
 
 #### Configuration
 
