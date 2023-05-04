@@ -76,7 +76,7 @@ bridges.mysql.foo {
 bridges.mysql.foo {
   server = "localhost"
   database = "emqx"
-  database = "emqx"
+  enable = true
   ...
   resource_opts {
     batch_size = 100
