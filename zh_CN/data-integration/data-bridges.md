@@ -78,7 +78,6 @@ bridges.mysql.foo {
   database = "emqx"
   ...
   resource_opts {
-    enable_batch = true
     batch_size = 100
     batch_time = "20ms"
     ...
