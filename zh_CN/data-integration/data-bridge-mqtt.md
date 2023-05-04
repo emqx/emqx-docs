@@ -14,7 +14,6 @@ MQTT 数据桥接是一种连接多个 EMQX 集群或其他 MQTT 服务的方式
 
 ## 功能清单
 
-- [连接池](./data-bridges.md#连接池)
 - [异步请求模式](./data-bridges.md#异步请求模式)
 - [缓存队列](./data-bridges.md#缓存队列)
 

@@ -42,7 +42,6 @@ In **egress** direction, it can be used as the actions of the rule:
 
 ## Feature List
 
-- [Connection pool](./data-bridges.md#connection-pool) <!-- TODO 确认改版后知否支持-->
 - [Async mode](./data-bridges.md#async-mode)
 - [Buffer queue](./data-bridges.md#buffer-queue)
 
