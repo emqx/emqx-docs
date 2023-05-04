@@ -109,7 +109,7 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
 *注意*: 如果是在 Linux 中，需要将 `host.docker.internal` 换成你的真实 IP 地址。
 
-### 连接到 RocketMQ
+### 创建 RocketMQ 数据桥接
 
 接下来将会创建一个 RocketMQ 数据桥接和两条规则，来实现消息转发与事件记录：
 
@@ -127,7 +127,7 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
 至此您已经完成数据桥接创建，接下来将继续创建一条规则来指定需要写入的数据
 
-#### 创建规则
+#### 创建数据转发规则
 
 1. 转到 Dashboard **数据集成** -> **规则**页面。
 2. 点击页面右上角的**创建**。
@@ -162,7 +162,7 @@ FROM
   "$events/client_connected", "$events/client_disconnected"
 ```
 
-### 测试
+### 测试数据桥接与规则
 
 使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
 

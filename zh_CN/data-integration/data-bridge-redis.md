@@ -89,7 +89,7 @@ HSET emqx_messages:${clientid} username ${username} payload ${payload} timestamp
 
 至此我们已经完成了数据桥接创建，接下来将继续创建一条规则来指定需要写入的数据。
 
-#### 创建规则
+### 创建数据转发规则
 
 1. 转到 Dashboard **数据集成** -> **规则**页面。此外在完成数据桥接的创建后，EMQX 会弹窗询问是否创建相应规则，您也可点击弹窗中的**创建规则**按钮前往规则页面。
 2. 点击页面右上角的**创建**。
@@ -142,7 +142,7 @@ FROM
   "$events/message_dropped", "$events/delivery_dropped"
 ```
 
-### 测试
+### 测试数据桥接与规则
 
 使用 MQTTX 向 `t/1` 主题发布消息，此操作会触发消息暂存规则，如果 `t/1` 主题没有订阅者，消息将被丢弃并触发消息丢弃规则：
 

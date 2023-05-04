@@ -114,18 +114,20 @@ docker run --rm -e AWS_ACCESS_KEY_ID=root -e AWS_SECRET_ACCESS_KEY=public -e AWS
 
 至此您已经完成数据桥接创建，接下来将继续创建一条规则来指定需要写入的数据。
 
-#### 创建规则
+#### 创建数据转发规则
 
 1. 转到 Dashboard **数据集成** -> **规则**页面。
+
 2. 点击页面右上角的**创建**。
+
 3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息存储至 DynamoDB，请确规则选择出来的字段（SELECT 部分）包含所有 SQL 模板中用到的变量，此处规则 SQL 如下：
 
-  ```sql
-  SELECT 
-    *
-  FROM
-    "t/#"
-  ```
+   ```sql
+   SELECT 
+     *
+   FROM
+     "t/#"
+   ```
 
 4. 添加动作，在动作下拉框中选择 **使用数据桥接转发** 选项，选择先前创建好的 DynamoDB 数据桥接。
 5. 点击最下方**创建**按钮完成规则创建。
@@ -149,7 +151,7 @@ FROM
   "$events/client_connected", "$events/client_disconnected"
 ```
 
-### 测试
+### 测试数据桥接与规则
 
 使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
 

@@ -100,7 +100,7 @@ CREATE TABLE emqx_client_events (
 
 至此您已经完成数据桥接创建，接下来将继续创建一条规则来指定需要写入的数据。
 
-#### 创建规则
+#### 创建数据转发规则
 
 1. 转到 Dashboard **数据集成** -> **规则**页面。
 
@@ -147,7 +147,7 @@ FROM
   "$events/client_connected", "$events/client_disconnected"
 ```
 
-### 测试
+### 测试数据桥接与规则
 
 使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
 

@@ -57,7 +57,7 @@ clientid, topic, payload, 等等。 否则，它将使用用户定义的
 <img src="./assets/gcp_pubsub/setup4.png" alt="为GCP PubSub桥创建一个规则"></img>
 </center>
 
-## 通过配置文件的GCP PubSub桥使用实例
+## 通过配置文件的 GCP PubSub 桥使用实例
 
 在`emqx.conf`文件的末尾添加以下配置。
 将`service_account_json`的内容替换为
