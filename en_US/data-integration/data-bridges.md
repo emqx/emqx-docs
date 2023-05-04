@@ -54,7 +54,7 @@ bridges.mysql.foo {
   ...
   resource_opts {
   # sync | async
-    query_mode = "async"
+    query_mode = "sync"
     ...
   }
 }
