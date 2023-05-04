@@ -57,12 +57,14 @@ bridges.mysql.foo {
     query_mode = "sync"
     ...
   }
-  mqtt {
-  max_inflight = 1
-  ...
-  }
 }
 ```
+
+::: tip
+
+To ensure the time series of messages, please also add `max_inflight = 1` to the configuration file `emqx.conf`.  
+
+:::
 
 ### Batch Mode
 
