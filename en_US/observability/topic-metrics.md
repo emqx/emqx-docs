@@ -14,7 +14,7 @@ The topic metrics list contains the following fields:
 
 - **Topic**: The name of the topic that you want to monitor.
 - **Incoming messages**:  The total number of message incoming on the current topic and the number of message incoming per second.
-- **Outgoing Messages**: Messages routed by EMQX every second on the monitored topic.
+- **Outgoing Messages**: The total number of message outgoing on the current topic and the number of message outgoing per second.
 - **Dropped Messages**: The total number of message dropped on the current topic and the number of message dropped per second.
 - **Start at**: Time you created this topic monitoring record.
 - **Actions**: Operations you can do on this topic monitoring record.
@@ -22,7 +22,7 @@ The topic metrics list contains the following fields:
   - **Reset**: Click this button will get the monitoring restarted.
   - **Delete**: Remove the record.
 
-## Request Topic Metrics via HTTP API
+## Get Topic Metrics via REST API
 
 You can also get the topic metrics through the [API Docs](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html). Click **MQTT** -> **Topic Metrics** on the left navigation menu on the UI to execute this API request. For how to work with EMQX API, see [REST API](../admin/api.md).
 

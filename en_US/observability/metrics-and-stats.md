@@ -1,4 +1,4 @@
-# Statistics and Metrics
+# the Statistics and Metrics
 
 EMQX provides metrics monitoring functions, based on which the operation and maintenance personnel can monitor the current service status and troubleshoot possible system malfunctions. 
 
@@ -7,7 +7,7 @@ EMQX divides monitoring status into Statistics and Metrics.
 - Statistics are integer-type gauges used to return a single value at the point of time the metric was requested. 
 - Metrics are integer-type counters used to measure simple incrementing and decrementing numbers, such as the number of sent bytes and messages.  
 
-EMQX provides users with multiple ways to view statistics and metrics. Most directly, you can view these data on the EMQX Dashboard. When it is not convenient to access the Dashboard, you can also obtain these data through [HTTP API](#request-metrics-and-statitics-via-rest-api) and [system topic](#obtain-metrics-and-statistics-via-system-topics) messages. 
+EMQX provides users with multiple ways to view statistics and metrics. Most directly, you can view these data on the EMQX Dashboard. When it is not convenient to access the Dashboard, you can also get the data through [HTTP API](#request-metrics-and-statitics-via-rest-api) and [system topic](#obtain-metrics-and-statistics-via-system-topics) messages. Additionally, you can easily integrate the monitoring functions with your own monitoring system, see [Integrate with Prometheus](./prometheus.md). 
 
 ## View Statistics on Dashboard
 
@@ -20,28 +20,28 @@ Statistics include two values: current values and historical maximums, for examp
 
 | Statistics                 | Description                                                  |
 | -------------------------- | ------------------------------------------------------------ |
-| connections.count          | Current connections                                          |
-| connections.max            | Historical maximum number of connections                     |
-| live_connections.count     | Number of currently live connections                         |
-| live_connections.max       | Historical maximum number of live connections                |
-| channels.count             | same as `sessions.count`                                     |
-| channels.max               | same as `sessions.max`                                       |
-| sessions.count             | Number of current sessions                                   |
-| sessions.max               | Historical maximum number of sessions                        |
-| topics.count               | Number of current topics                                     |
-| topics.max                 | Historical maximum number of topics                          |
-| suboptions.count           | same as `subscriptions.count`                                |
-| suboptions.max             | same as `subscriptions.max`                                  |
-| subscribers.count          | Number of current subscribers                                |
-| subscribers.max            | Historical maximum number of subscribers                     |
-| subscriptions.count        | Number of current subscriptions, including shared subscriptions |
-| subscriptions.max          | Historical maximum number of subscriptions                   |
-| subscriptions.shared.count | Number of current shared subscriptions                       |
-| subscriptions.shared.max   | Historical maximum number of shared subscriptions            |
-| retained.count             | Number of currently retained messages                        |
-| retained.max               | Historical maximum number of retained messages               |
-| delayed.count              | Number of currently delayed messages                         |
-| delayed.max                | Historical maximum number of delayed  messages               |
+| connections.count          | The number of current connections                            |
+| connections.max            | The historical maximum number of connections                 |
+| live_connections.count     | The number of currently live connections                     |
+| live_connections.max       | The historical maximum number of live connections            |
+| channels.count             | The same as `sessions.count`                                 |
+| channels.max               | The same as `sessions.max`                                   |
+| sessions.count             | The number of current sessions                               |
+| sessions.max               | The historical maximum number of sessions                    |
+| topics.count               | The number of current topics                                 |
+| topics.max                 | The historical maximum number of topics                      |
+| suboptions.count           | The same as `subscriptions.count`                            |
+| suboptions.max             | The same as `subscriptions.max`                              |
+| subscribers.count          | The number of current subscribers                            |
+| subscribers.max            | The historical maximum number of subscribers                 |
+| subscriptions.count        | The number of current subscriptions, including shared subscriptions |
+| subscriptions.max          | The historical maximum number of subscriptions               |
+| subscriptions.shared.count | The number of current shared subscriptions                   |
+| subscriptions.shared.max   | The historical maximum number of shared subscriptions        |
+| retained.count             | The number of currently retained messages                    |
+| retained.max               | The historical maximum number of retained messages           |
+| delayed.count              | The number of currently delayed messages                     |
+| delayed.max                | The historical maximum number of delayed  messages           |
 
 ## View Metrics on Dashboard
 
@@ -55,50 +55,43 @@ You can see the event-related metrics for the cluster or node, such as client co
 
 #### Connections
 
-| Metrics             | Description                              |
-| ------------------- | ---------------------------------------- |
-| client.connect      | `client.connect` hook trigger times      |
-| client.authenticate | `client.authenticate` hook trigger times |
-| client.connack      | `client.connack` hook trigger times      |
-| client.connected    | `client.connected` hook trigger times    |
-| client.disconnected | `client.disconnected` hook trigger times |
-| client.authorize    | `client.authorize` hook trigger times    |
-| client.subscribe    | `client.subscribe` hook trigger times    |
-| client.unsubscribe  | `client.unsubscribe` hook trigger times  |
-| session.created     | `session.created` hook trigger times     |
-| session.discarded   | `session.discarded` hook trigger times   |
-| session.resumed     | `session.resumed` hook trigger times     |
-| session.takenover   | `session.takenover` hook trigger times   |
-| session.terminated  | `session.terminated` hook trigger times  |
+| Metrics             | Description                                        |
+| ------------------- | -------------------------------------------------- |
+| client.connack      | The number of CONNACK messages sent by clients     |
+| client.connect      | The number of client connection                    |
+| client.connected    | The number of clients that have connected          |
+| client.disconnected | The number of clients that have disconnected       |
+| client.subscribe    | The number of clients that subscribe to topics     |
+| client.unsubscribe  | The number of clients that unsubscribe from topics |
 
 #### Sessions
 
-| Metrics            | Description                           |
-| ------------------ | ------------------------------------- |
-| session.created    | session.created hook trigger times    |
-| session.discarded  | session.discarded hook trigger times  |
-| session.resumed    | session.resumed hook trigger times    |
-| session.takenover  | session.takenover hook trigger times  |
-| session.terminated | session.terminated hook trigger times |
+| Metrics            | Description                                      |
+| ------------------ | ------------------------------------------------ |
+| session.created    | The number of sessions that have been created    |
+| session.discarded  | The number of sessions that have been discarded  |
+| session.resumed    | The number of sessions that have been resumed    |
+| session.takenover  | The number of sessions that have been taken over |
+| session.terminated | The number of sessions that have been terminated |
 
 #### Access
 
 | Metrics                     | Description                                                  |
 | --------------------------- | ------------------------------------------------------------ |
-| authorization.allow         | Number of client authorization passes                        |
-| authorization.deny          | Number of client authorization failures                      |
-| authorization.matched.allow | Number of client authorization passes due to authorized by some rules |
-| authorization.matched.deny  | Number of client authorization failures due to being rejected by some rules |
-| authorization.nomatch       | Number of client authorization request not be matched any rules |
-| authorization.cache_hit     | Number of client getting authorization result (allow or deny) by cache |
-| authorization.superuser     | Superuser                                                    |
-| client.auth.anonymous       | Number of clients who log in anonymously                     |
-| client.authenticate         | client.authenticate hook trigger times                       |
-| client.authorize            | client.authorize hook trigger times                          |
+| authorization.allow         | The number of client authorization passes                    |
+| authorization.deny          | The number of client authorization fails                     |
+| authorization.matched.allow | The number of client authorization passes due to authorized by some rules |
+| authorization.matched.deny  | The number of client authorization fails due to being rejected by some rules |
+| authorization.nomatch       | The number of client authorization requests not matched by any rules |
+| authorization.cache_hit     | The number of clients getting authorization results (allow or deny) by cache |
+| authorization.superuser     | The number of clients be authorized as Superuser             |
+| client.auth.anonymous       | The number of clients who log in anonymously                 |
+| client.authenticate         | The number of clients passing the authentication             |
+| client.authorize            | The number of clients being authorized                       |
 
 ### Messaging
 
-Scroll down the **Metrics** page, and you can see message related metrics, including bytes, packets, messages, and delivery. 
+Scroll down the **Metrics** page, and you can see message-related metrics, including bytes, packets, messages, and delivery. 
 
 <img src="./assets/dashboard-messaging-metrics-ee.png" alt="dashboard-messaging-metrics-ee" style="zoom:50%;" />
 
@@ -106,91 +99,85 @@ Scroll down the **Metrics** page, and you can see message related metrics, inclu
 
 | Metrics    | Description              |
 | -------------- | ------------------------ |
-| bytes.received | Number of received bytes |
-| bytes.sent     | Number of send bytes     |
+| bytes.received | The number of received bytes |
+| bytes.sent     | The umber of sent bytes |
 
 #### Packets
 
 | Metrics                      | Description                                                  |
 | ---------------------------- | ------------------------------------------------------------ |
-| packets.received             | Number of received packets                                   |
-| packets.sent                 | Number of sent packets                                       |
-| packets.connect.received     | Number of received CONNECT packets                           |
-| packets.connack.auth_error   | Number of sent CONNACK messages with reason codes 0x86 and 0x87 |
-| packets.connack.error        | Number of sent CONNACK packets where reason code is not 0x00. The value of this indicator is greater than or equal to the value of `packets.connack.auth_error` |
-| packets.connack.sent         | Number of sent CONNACK packets                               |
-| packets.publish.received     | Number of received PUBLISH packets                           |
-| packets.publish.sent         | Number of sent PUBLISH packets                               |
-| packets.publish.inuse        | Number of received PUBLISH packets with occupied packet identifiers |
-| packets.publish.auth_error   | Number of received PUBLISH packets that failed the ACL check |
-| packets.publish.error        | Number of received PUBLISH packets that cannot be published  |
-| packets.publish.dropped      | Number of PUBLISH packets that were discarded due to the receiving limit |
-| packets.puback.received      | Number of received PUBACK packets                            |
-| packets.puback.sent          | Number of sent PUBACK packets                                |
-| packets.puback.inuse         | Number of received PUBACK messages with occupied identifiers |
-| packets.puback.missed        | Number of received PUBACK packets with unknown identifiers   |
-| packets.pubrec.received      | Number of received PUBREC packets                            |
-| packets.pubrec.sent          | Number of sent PUBREC packets                                |
-| packets.pubrec.inuse         | Number of received PUBREC messages with occupied identifiers |
-| packets.pubrec.missed        | Number of received PUBREC packets with unknown identifiers   |
-| packets.pubrel.received      | Number of received PUBREL packets                            |
-| packets.pubrel.sent          | Number of sent PUBREL packets                                |
-| packets.pubrel.missed        | Number of received PUBREL packets with unknown identifiers   |
-| packets.pubcomp.received     | Number of received PUBCOMP packets                           |
-| packets.pubcomp.sent         | Number of sent PUBCOMP packets                               |
-| packets.pubcomp.inuse        | Number of received PUBCOMP messages with occupied identifiers |
-| packets.pubcomp.missed       | Number of missed PUBCOMP packets                             |
-| packets.subscribe.received   | Number of received SUBSCRIBE packets                         |
-| packets.subscribe.error      | Number of received SUBSCRIBE packets with failed subscriptions |
-| packets.subscribe.auth_error | Number of received SUBACK packets that failed the ACL check  |
-| packets.suback.sent          | Number of sent SUBACK packets                                |
-| packets.unsubscribe.received | Number of received UNSUBSCRIBE packets                       |
-| packets.unsubscribe.error    | Number of received UNSUBSCRIBE packets with failed unsubscriptions |
-| packets.unsuback.sent        | Number of sent UNSUBACK packets                              |
-| packets.pingreq.received     | Number of received PINGREQ packets                           |
-| packets.pingresp.sent        | Number of sent PUBRESP packets                               |
-| packets.disconnect.received  | Number of received DISCONNECT packets                        |
-| packets.disconnect.sent      | Number of sent DISCONNECT packets                            |
-| packets.auth.received        | Number of received AUTH packets                              |
-| packets.auth.sent            | Number of sent AUTH packets                                  |
+| packets.received             | The number of received packets                               |
+| packets.sent                 | The number of sent packets                                   |
+| packets.connect.received     | The number of received CONNECT packets                       |
+| packets.connack.auth_error   | The number of sent CONNACK messages with reason codes 0x86 and 0x87 |
+| packets.connack.error        | The number of sent CONNACK packets with reason codes apart from 0x00. The value of this indicator is greater than or equal to the value of `packets.connack.auth_error` |
+| packets.connack.sent         | The number of sent CONNACK packets                           |
+| packets.publish.received     | The number of received PUBLISH packets                       |
+| packets.publish.sent         | The number of sent PUBLISH packets                           |
+| packets.publish.inuse        | The number of received PUBLISH packets with occupied packet identifiers |
+| packets.publish.auth_error   | The number of received PUBLISH packets that failed the ACL check |
+| packets.publish.error        | The number of received PUBLISH packets that cannot be published |
+| packets.publish.dropped      | The number of PUBLISH packets that are discarded due to the receiving limit |
+| packets.puback.received      | The number of received PUBACK packets                        |
+| packets.puback.sent          | The number of sent PUBACK packets                            |
+| packets.puback.inuse         | The number of received PUBACK messages with occupied identifiers |
+| packets.puback.missed        | The number of received PUBACK packets with unknown identifiers |
+| packets.pubrec.received      | The number of received PUBREC packets                        |
+| packets.pubrec.sent          | The number of sent PUBREC packets                            |
+| packets.pubrec.inuse         | The number of received PUBREC messages with occupied identifiers |
+| packets.pubrec.missed        | The number of received PUBREC packets with unknown identifiers |
+| packets.pubrel.received      | The number of received PUBREL packets                        |
+| packets.pubrel.sent          | The number of sent PUBREL packets                            |
+| packets.pubrel.missed        | The number of received PUBREL packets with unknown identifiers |
+| packets.pubcomp.received     | The number of received PUBCOMP packets                       |
+| packets.pubcomp.sent         | The number of sent PUBCOMP packets                           |
+| packets.pubcomp.inuse        | The number of received PUBCOMP messages with occupied identifiers |
+| packets.pubcomp.missed       | The number of missed PUBCOMP packets                         |
+| packets.subscribe.received   | The number of received SUBSCRIBE packets                     |
+| packets.subscribe.error      | The number of received SUBSCRIBE packets with failed subscriptions |
+| packets.subscribe.auth_error | The number of received SUBACK packets that failed the ACL check |
+| packets.suback.sent          | The number of sent SUBACK packets                            |
+| packets.unsubscribe.received | The number of received UNSUBSCRIBE packets                   |
+| packets.unsubscribe.error    | The number of received UNSUBSCRIBE packets with failed unsubscriptions |
+| packets.unsuback.sent        | The number of sent UNSUBACK packets                          |
+| packets.pingreq.received     | The number of received PINGREQ packets                       |
+| packets.pingresp.sent        | The number of sent PUBRESP packets                           |
+| packets.disconnect.received  | The number of received DISCONNECT packets                    |
+| packets.disconnect.sent      | The number of sent DISCONNECT packets                        |
+| packets.auth.received        | The number of received AUTH packets                          |
+| packets.auth.sent            | The number of sent AUTH packets                              |
 
 #### Message (PUBLISH packet)
 
 | Metrics                   | Description                                                  |
 | ------------------------------- | ------------------------------------------------------------ |
-| delivery.dropped.too_large      | Number of messages dropped because the length exceeded the limit when sending |
-| delivery.dropped.queue_full     | Number of messages with a non-zero QoS that were dropped because the message queue was full when sending |
-| delivery.dropped.qos0_msg       | Number of messages with QoS of 0 that were dropped because the message queue was full when sending |
-| delivery.dropped.expired        | Number of messages that were dropped due to message expiration when sending |
-| delivery.dropped.no_local       | Number of messages dropped due to the `No Local` subscription option when sending |
-| delivery.dropped                | Total number of messages that were dropped when sent         |
-| messages.delayed                | Number of delay-published messages stored by EMQX    |
-| messages.delivered              | Number of messages forwarded to the subscription process internally by EMQX |
-| messages.dropped                | Total number of messages dropped by EMQX before forwarding to the subscription process |
-| messages.dropped.no_subscribers | Number of messages dropped due to no subscribers             |
-| messages.dropped.await_pubrel_timeout | Number of messages dropped due to await PUBREL timeout |
-| messages.forward                | Number of messages forwarded to other nodes                  |
-| messages.publish                | Number of messages published in addition to system messages  |
-| messages.qos0.received          | Number of QoS 0 messages received from clients               |
-| messages.qos1.received          | Number of QoS 2 messages received from clients               |
-| messages.qos2.received          | Number of QoS 1 messages received from clients               |
-| messages.qos0.sent              | Number of QoS 0 messages sent to clients                     |
-| messages.qos1.sent              | Number of QoS 1 messages sent to clients                     |
-| messages.qos2.sent              | Number of QoS 2 messages sent to clients                     |
-| messages.received               | Number of messages received from the client, which is equal to the sum of `messages.qos0.received`,` messages.qos1.received`, and `messages.qos2.received` |
+| messages.acked | The number of acked messages |
+| messages.delayed                | The number of messages for delayed publish that are stored by EMQX |
+| messages.delivered              | The number of messages forwarded to the subscription process internally by EMQX |
+| messages.dropped                | The total number of messages dropped by EMQX before forwarding to the subscription process |
+| messages.dropped.no_subscribers | The number of messages dropped due to no subscribers  |
+| messages.dropped.await_pubrel_timeout | The number of messages dropped due to await PUBREL timeout |
+| messages.forward                | The number of messages forwarded to other nodes       |
+| messages.publish                | The number of messages published in addition to system messages |
+| messages.qos0.received          | The number of QoS 0 messages received from clients    |
+| messages.qos1.received          | The number of QoS 2 messages received from clients    |
+| messages.qos2.received          | The number of QoS 1 messages received from clients    |
+| messages.qos0.sent              | The number of QoS 0 messages sent to clients          |
+| messages.qos1.sent              | The number of QoS 1 messages sent to clients          |
+| messages.qos2.sent              | The number of QoS 2 messages sent to clients          |
+| messages.received               | The number of messages received from the client, which is equal to the sum of `messages.qos0.received`,` messages.qos1.received`, and `messages.qos2.received` |
 | messages.sent                   | The number of messages sent to the client, which is equal to the sum of `messages.qos0.sent`,` messages.qos1.sent`, and `messages.qos2.sent` |
-| messages.acked                  | Number of acked messages                                     |
 
 #### Delivery
 
 | Metrics                     | Description                                                  |
 | --------------------------- | ------------------------------------------------------------ |
-| delivery.dropped            | Total number of messages that were dropped when sent         |
-| delivery.dropped.expired    | Number of messages that were dropped due to message expiration when sending |
-| delivery.dropped.no_local   | Number of messages that were dropped due to the `No Local` subscription option when sending |
-| delivery.dropped.qos0_msg   | Number of messages with QoS of 0 that were dropped because the message queue was full when sending |
-| delivery.dropped.queue_full | Number of messages with a non-zero QoS that were dropped because the message queue was full when sending |
-| delivery.dropped.too_large  | The number of messages that were dropped because the length exceeded the limit when sending |
+| delivery.dropped            | The total number of messages that have been dropped when being sent |
+| delivery.dropped.expired    | The number of messages that have been dropped because the message expired when being sent |
+| delivery.dropped.no_local   | The number of messages that have been dropped due to the `No Local` subscription option when being sent |
+| delivery.dropped.qos0_msg   | The number of messages with QoS of 0 that have been dropped because the message queue was full when being sent |
+| delivery.dropped.queue_full | The number of messages with a non-zero level of QoS that have been dropped because the message queue was full when being sent |
+| delivery.dropped.too_large  | The number of messages that have been dropped because the length exceeded the limit when being sent |
 
 ## Request Monitoring Status via REST API
 

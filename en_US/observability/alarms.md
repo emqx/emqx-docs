@@ -52,9 +52,9 @@ The levels are defined from development perspectives and are only for a recommen
 
 {% endemqxee %}
 
-## Obtain Alarms
+## Get Alarms
 
-EMQX provides you with various ways to obtain alarms and check the detailed alarm formation. One way is to access the alarms on EMQX Dashboard, where you can view a list of active or historical alarms. However, it is only a central place for easy access to an overview of alarms that have been triggered. Another way is to subscribe to system topics through MQTT to receive real-time notifications of alarms with detailed alarm information. Alarms can also be obtained from the log or via HTTP API. 
+EMQX provides you with various ways to get alarms and check the detailed alarm formation. One way is to view the alarms on EMQX Dashboard, where you can view a list of active or historical alarms. However, it is only a central place for easy access to an overview of alarms that have been triggered. Another way is to subscribe to system topics through MQTT to receive real-time notifications of alarms with detailed alarm information. Alarms can also be accessed from the log or via HTTP API. 
 
 ### View Alarms in Dashboard
 
@@ -62,7 +62,7 @@ On EMQX Dashboard, click **Monitoring** -> **Alarms**. Select the **Active** or 
 
 <img src="./assets/view-alarms.png" alt="view-alarms" style="zoom:50%;" />
 
-### Obtain Alarms via System Topic
+### Get Alarms via System Topic
 
 EMQX will publish an MQTT message to system topics `$SYS/brokers/<Node>/alarms/activate` or `$SYS/brokers/<Node>/alarms/deactivate` when an alarm is triggered or cleared. Users can subscribe to the topic to receive alarm notifications.
 
@@ -83,13 +83,13 @@ Taking the alarm of high system memory usage as an example, you will receive an 
 
 One system multifunction will be repeatedly reported. That is, if one alarm on high CPU usage is activated, the system will not generate another alarm of the same type. The generated alarm will be automatically deactivated when the monitored metric returns to normal, or you can manually deactivate the alarm.
 
-### Obtain Alarms from Log
+### Get Alarms from Log
 
 The activation and deactivation of alarms can be written to log (console or file). When failures occur during message transmission or event processing, detailed information can be logged, and the logging system can also be used to capture alerts through log analysis. The following example shows the detailed alarm information printed in the log:
 The log level is `warning`, and the `msg` field is `alarm_is_activated` and `alarm_is_deactivated`.
 <img src="./assets/view-alarms-log.png" alt="view-alarms-log" style="zoom:50%;" />
 
-### Obtain Alarms via HTTP API
+### Get Alarms via REST API
 
 You can query and manage alarms through the [API Docs](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html). Click **Alarms** on the left navigation menu on the UI to execute this API request. For how to work with EMQX API, see [REST API](../admin/api.md).
 
