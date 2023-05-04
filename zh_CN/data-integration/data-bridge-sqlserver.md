@@ -47,7 +47,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
    Microsoft SQL Server 要求使用复杂密码，请参阅[使用复杂密码](https://learn.microsoft.com/zh-cn/sql/relational-databases/security/password-policy?view=sql-server-ver16#password-complexity)。
    使用环境变量 `ACCEPT_EULA=Y` 启动 Docker 容器代表您同意 Microsoft 的 EULA 条款，详情请参阅 [MICROSOFT 软件许可条款 MICROSOFT SQL SERVER 2019 STANDARD(ZH_CN)](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_ChineseSimplified.htm)。
-   
+
    ```bash
    # 启动一个 Microsoft SQL Server 容器并设置密码为 `mqtt_public1`
    $ docker run --name sqlserver -p 1433:1433 -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD=mqtt_public1 -d mcr.microsoft.com/mssql/server:2019-CU19-ubuntu-20.04
@@ -66,13 +66,13 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
    $ Password:
    1>
    ```
-   
+
    ::: tip
-   
+
    Microsoft 提供的 Microsoft SQL Server 容器内已安装 `mssql-tools`，但可执行文件并不在 `$PATH` 中，因此您需要指定可执行文件路径。在上述连接示例中，可执行文件路径为 `opt`。
-   
+
    关于更多 `mssql-tools` 的使用，请参与 Microsoft 提供的相关文档： [sqlcmd 实用工具](https://learn.microsoft.com/zh-cn/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16)。
-   
+
    :::
 
 至此 Microsoft SQL Server 2019 实例已经完成部署并可以连接。
@@ -256,7 +256,7 @@ FileUsage   = 1
 
 9. 点击**创建**按钮完成数据桥接创建。
 
-   在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 RocketMQ 的数据。您也可以按照[创建 Microsoft SQL Server 数据桥接规则](#创建-microsoft-sql-server-数据桥接规则)章节的步骤来创建规则。
+   在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 Microsoft SQL Server 的数据。您也可以按照[创建 Microsoft SQL Server 数据桥接规则](#创建-microsoft-sql-server-数据桥接规则)章节的步骤来创建规则。
 
 至此您已经完成数据桥接创建，Microsoft SQL Server 数据桥接应该出现在数据桥接列表（**数据集成** -> **数据桥接**）中，**资源状态**为**已连接**。
 
@@ -272,16 +272,16 @@ FileUsage   = 1
 
    - 如需实现对指定主题消息的转发，例如将 `t/#` 主题的 MQTT 消息存储至 Microsoft SQL Server，输入以下 SQL 语句：
      注意：如果您希望制定自己的 SQL 语句，需要确保规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量。
-   
+
      ```sql
       SELECT
         *
       FROM
         "t/#"
      ```
-   
+
    - 如需实现设备上下线状态记录，输入以下 SQL 语句：
-   
+
      ```sql
      SELECT
        *,
