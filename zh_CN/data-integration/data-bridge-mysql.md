@@ -45,7 +45,32 @@ CREATE DATABASE emqx_data CHARACTER SET utf8mb4;
 use emqx_data;
 ```
 
-### 连接到 MySQL
+我们需要在 MySQL 中创建两张表：
+
+数据表 `emqx_messages` 存储每条消息的发布者客户端 ID、主题、Payload 以及发布时间：
+
+  ```sql
+CREATE TABLE emqx_messages (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  clientid VARCHAR(255),
+  topic VARCHAR(255),
+  payload BLOB,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+  ```
+
+数据表 `emqx_client_events` 存储上下线的客户端 ID、事件类型以及事件发生时间：
+
+```sql
+CREATE TABLE emqx_client_events (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  clientid VARCHAR(255),
+  event VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### 创建 MySQL 数据桥接
 
 需要创建两个 MySQL 数据桥接分别完成消息存储与事件记录：
 
@@ -69,35 +94,29 @@ use emqx_data;
   )
   ```
 
-  请在 MySQL 中使用以下 SQL 创建存储消息的数据表 `emqx_messages`，该表存储每条消息的发布者客户端 ID、主题、Payload 以及发布时间：
+  请在 MySQL 中使用以下 SQL 创建存储消息的高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](#配置参数)。
 
-  ```sql
-  CREATE TABLE emqx_messages (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    clientid VARCHAR(255),
-    topic VARCHAR(255),
-    payload BLOB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-  );
-  ```
+8. 点击**创建**按钮完成数据桥接创建。
 
-7. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](#配置参数)。
-8. 点击创建按钮完成数据桥接创建。
+至此您已经完成数据桥接创建，接下来将继续创建一条规则来指定需要写入的数据。
 
-至此您已经完成数据桥接创建，接下来将继续创建一条规则来指定需要写入的数据：
+#### 创建规则
 
 1. 转到 Dashboard **数据集成** -> **规则**页面。
-2. 点击页面右上角的创建。
+
+2. 点击页面右上角的**创建**。
+
 3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息存储至 MySQL，请确规则选择出来的字段（SELECT 部分）包含所有 SQL 模板中用到的变量，此处规则 SQL 如下：
 
-  ```sql
-  SELECT 
-    *
-  FROM
-    "t/#"
-  ```
-4. 添加动作，在动作下拉框中选择 使用数据桥接转发 选项，选择先前创建好的 MySQL 数据桥接。
-5. 点击最下方创建按钮完成规则创建。
+   ```sql
+   SELECT 
+     *
+   FROM
+     "t/#"
+   ```
+
+4. 添加动作，在动作下拉框中选择 **使用数据桥接转发** 选项，选择先前创建好的 MySQL 数据桥接。
+5. 点击最下方**创建**按钮完成规则创建。
 
 至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 MySQL 存储。
 
@@ -117,16 +136,7 @@ INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
 )
 ```
 
-  请在 MySQL 中使用以下 SQL 创建存储消息的数据表 `emqx_client_events`，该表存储上下线的客户端 ID、事件类型以及事件发生时间：
-
-```sql
-CREATE TABLE emqx_client_events (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  clientid VARCHAR(255),
-  event VARCHAR(255),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
+**规则 SQL**
 
 规则 SQL 如下：
 
