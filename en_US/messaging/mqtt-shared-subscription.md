@@ -6,7 +6,7 @@ You can use client tools to try this messaging service in EMQX. This section int
 
 :::tip Prerequisites
 
-- Knowledge about MQTT [Shared Subscription](./mqtt-concepts.md)
+- Knowledge about MQTT [Shared Subscription](./mqtt-concepts.md#shared-subscription)
 - Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md) 
 
 :::

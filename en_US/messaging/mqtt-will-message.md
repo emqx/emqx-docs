@@ -6,7 +6,7 @@ You can use client tools to try this messaging service in EMQX. This section int
 
 :::tip Prerequisites
 
-- Knowledge about MQTT [Will Message](./mqtt-concepts.md)
+- Knowledge about MQTT [Will Message](./mqtt-concepts.md#will-message)
 - Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md)
 
 :::

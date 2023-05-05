@@ -1,6 +1,6 @@
 # EMQX Rules
 
-EMQX provides users with the Rules feature for data processing, which works in conjunction with [data bridges](https://chat.openai.com/data-bridges.md) to extract, filter, enrich, transform, and store IoT data. This accelerates application integration and drives business innovation.
+EMQX provides users with the Rules feature for data processing, which works in conjunction with [data bridges](./data-bridges.md) to extract, filter, enrich, transform, and store IoT data. This accelerates application integration and drives business innovation.
 
 <img src="./assets/rule-engine.png" alt="SQL-based IoT Rule Engine" style="zoom:30%;" />
 
@@ -16,15 +16,15 @@ Rules specify how to retrieve data from a **data source**, perform **data transf
 
 - **Data Source**: The data source of a rule can be a message, event, or external data system. The `FROM` clause in the rule's SQL specifies the data source, while the `WHERE` clause adds additional constraints on which messages the rule processes.
 
-  For more information on the various types of supported data sources and fields that can be referenced in the `WHERE` clause, see [Data Sources and Fields](https://chat.openai.com/rule-sql-events-and-fields.md).
+  For more information on the various types of supported data sources and fields that can be referenced in the `WHERE` clause, see [Data Sources and Fields](./rule-sql-events-and-fields.md).
 
 - **Data Transformation**: Data transformations describe the process of transforming an input message. The `SELECT` part of the SQL extracts and transforms data from the input message. Embedded SQL sample statements can be used to implement advanced transformations, such as adding a timestamp to the output message.
 
-  For a detailed explanation of the syntax and built-in SQL functions, see [Rule Syntax](https://chat.openai.com/rule-sql-syntax.md) and [Built-in SQL Functions](https://chat.openai.com/rule-sql-builtin-functions.md).
+  For a detailed explanation of the syntax and built-in SQL functions, see [Rule Syntax](./rule-sql-syntax.md) and [Built-in SQL Functions](./rule-sql-builtin-functions.md).
 
 - **Actions**: After the input is processed according to the specified rules, one or more actions can be defined to process the SQL execution results. The Rule Engine will sequentially perform corresponding actions, such as storing the processing results in a database or republishing them to another MQTT topic.
 
-  For a step-by-step guide on creating a rule with the EMQX dashboard, see [Create Rules](https://chat.openai.com/rule-get-started).
+  For a step-by-step guide on creating a rule with the EMQX dashboard, see [Create Rules](./rule-get-started).
 
 ## Key Benefits
 
