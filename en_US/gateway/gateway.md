@@ -94,14 +94,16 @@ However, due to the differences in semantics among various gateways, only a subs
 
 | Name                  | Required or Not | Description                                                  | Supported Protocols |
 | --------------------- | --------------- | ------------------------------------------------------------ | ------------------- |
-| `client.connect`      | Optional        | Originally used for MQTT protocol <!--not sure about why we have it here--> | partial gateways    |
-| `client.connack`      | Optional        | Originally used for MQTT protocol                            | partial gateways    |
-| `client.authenticate` | Required        | Client authentication request                                | All gateways        |
-| `client.connected`    | Required        | Client connected successfully                                | All gateways        |
-| `client.disconnected` | Required        | Client disconnected                                          | All gateways        |
-| `client.authorize`    | Required        | Client publish/subscribe authorization request               | All gateways        |
-| `client.subscribe`    | Optional        | Originally used for MQTT protocol                            | partial gateways    |
-| `client.unsubscribe`  | Optional        | Originally used for MQTT protocol                            | partial gateways    |
+| `client.connect`      | Optional        | Number of client connection requests, including successful or failed connection requests. | All gateways        |
+| `client.connack`      | Optional        | Number of `CONNACK` messages received by the clients         | All gateways        |
+| `client.authenticate` | Required        | Number of clients authenticated                              |                     |
+| `client.connected`    | Required        | Number of clients connected successfully                     | All gateways        |
+| `client.disconnected` | Required        | Number of clients disconnected, including active or abnormal disconnections | All gateways        |
+| `client.authorize`    | Required        | Number of authorized clients publish/subscribe requests      | All gateways        |
+| `client.subscribe`    | Optional        | Number of client's attempts to subscribe to a topic          | MQTT-SN<br>STOMP    |
+| `client.unsubscribe`  | Optional        | Number of client's attempts to unsubscribe from a topic      | MQTT-SN<br/>STOMP   |
 
 Session and message-related hooks have no heterogeneity issues between protocols, so these hooks are fully supported for each type of gateway.
+
+For a detailed explanation of hooks, see [Hooks](../extensions/hooks.md).
 
