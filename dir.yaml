@@ -125,20 +125,20 @@
   children:
     - messaging/mqtt-concepts
     - title_en: Test with MQTT Clients
-      title_cn: Test with MQTT Clients
+      title_cn: 使用 MQTT Client 工具测试
       path: messaging/publish-and-subscribe
       lang: en
     # - messaging/explore-mqtt
     - title_en: Shared Subscription
-      title_cn: Shared Subscription
+      title_cn: 共享订阅
       path: messaging/mqtt-shared-subscription
       lang: en
     - title_en: Retained Message
-      title_cn: Retained Message
+      title_cn: 保留消息
       path: messaging/mqtt-retained-message
       lang: en
     - title_en: Will Message
-      title_cn: Will Message
+      title_cn: 遗嘱消息
       path: messaging/mqtt-will-message
       lang: en
     - messaging/mqtt-delayed-publish
