@@ -45,16 +45,15 @@ This tutorial assumes that you run both EMQX and Microsoft SQL Server on the loc
 
 This section describes how to start Microsoft SQL Server 2019 on Linux/MacOS using Docker images and use `sqlcmd` to connect to Microsoft SQL Server. For other installation methods of Microsoft SQL Server, please refer to [Microsoft SQL Server Installation Guide](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16).
 
-1. Install Microsoft SQL Server via Docker, and then run the docker image.
+1. Install Microsoft SQL Server via Docker, and then start the docker image with the command below. Use `mqtt_public1` as the password. For the password policy of Microsoft SQL Server, see [Password Complexity](https://learn.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-ver16#password-complexity).
 
-   Microsoft SQL Server requires using complex passwords, see also [Password Complexity](https://learn.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-ver16#password-complexity).
-   By starting a Docker container with the environment variable `ACCEPT_EULA=Y` you agree to the terms of Microsoft EULA, see also [MICROSOFT SOFTWARE LICENSE TERMS MICROSOFT SQL SERVER 2019 STANDARD(EN_US)](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm).
+   Note: By starting a Docker container with the environment variable `ACCEPT_EULA=Y` you agree to the terms of Microsoft EULA, see also [MICROSOFT SOFTWARE LICENSE TERMS MICROSOFT SQL SERVER 2019 STANDARD(EN_US)](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm).
    
    ```bash
    # To start the Microsoft SQL Server docker image and set the password as `mqtt_public1`
    $ docker run --name sqlserver -p 1433:1433 -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD=mqtt_public1 -d mcr.microsoft.com/mssql/server:2019-CU19-ubuntu-20.04
    ```
-
+   
 2. Access the container.
 
    ```bash
@@ -71,9 +70,9 @@ This section describes how to start Microsoft SQL Server 2019 on Linux/MacOS usi
    
    ::: tip
    
-   `mssql-tools` has been installed in the Microsoft SQL Server container provided by Microsoft, but the executable file is not in `$PATH`. You need to specify the executable file path for `mssql-tools`. As for the Docker deployment in this example, the file path should be `opt`.
+   The `mssql-tools` have been installed in the Microsoft SQL Server container provided by Microsoft, but the executable file is not in `$PATH`. Therefore, you need to specify the executable file path for `mssql-tools` before proceeding. As for the Docker deployment in this example, the file path should be `opt`.
    
-   For more usage information on `mssql-tools`, see [sqlcmd-utility](https://learn.microsoft.com/en-us/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16). 
+   For more information on how to use `mssql-tools`, see [sqlcmd-utility](https://learn.microsoft.com/en-us/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16). 
    
    :::
 
