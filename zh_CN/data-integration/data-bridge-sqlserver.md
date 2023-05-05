@@ -244,7 +244,7 @@ FileUsage   = 1
      insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
      ```
 
-   - 如需实现实现设备上下线状态记录，使用如下 SQL 语句完成数据插入：
+   - 如需实现实现设备上下线状态记录，可使用如下 SQL 语句完成数据插入：
 
      ```sql
      insert into t_mqtt_events(clientid, event_type, event_time) values ( ${clientid}, ${event}, DATEADD(MS, ${ms_shift}, DATEADD(S, ${s_shift}, '19700101 00:00:00:000') ) )
