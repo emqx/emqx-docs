@@ -70,7 +70,7 @@ Note: Any client can log in if no authenticator is configured.
 
 The EMQX Multi-Protocol Gateway is responsible for authenticating clients that connect to it. This is accomplished through the creation of a `ClientInfo` for each connection.
 
-The `ClientInfo` includes generic fields such as `Username` and `Password`, which are commonly used for authentication purposes. Additionally, each gateway has its own specific client information fields, such as `Endpoint Name` and `Life Time` for LwM2M, which may also be used for authentication.
+The `ClientInfo` includes generic fields such as `Username` and `Password`, which are commonly used for authentication purposes. Additionally, each gateway has its own specific client information fields, such as `Endpoint Name` for LwM2M, which may also be used for authentication.
 
 When an authenticator is configured, the gateway compares the client's Username and Password fields with those stored in its database. If they match, the client is authenticated and granted access to the gateway.
 
