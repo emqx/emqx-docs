@@ -25,8 +25,8 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 ## 特性
 
-- [连接池](./data-bridges.md)
-- [SQL 预处理](./data-bridges.md)
+- [连接池](./data-bridges.md#连接池)
+- [SQL 预处理](./data-bridges.md#sql-预处理)
 
 <!--  Configuration parameters TODO 链接到配置手册对应配置章节。 -->
 
