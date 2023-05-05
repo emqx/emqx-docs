@@ -54,8 +54,7 @@ The levels are defined from development perspectives and are only for a recommen
 
 ## Get Alarms
 
-EMQX provides you with various ways to get alarms and check the detailed alarm formation. One way is to view the alarms on EMQX Dashboard, where you can view a list of active or historical alarms. However, it is only a central place for easy access to an overview of alarms that have been triggered. Another way is to subscribe to system topics through MQTT to receive real-time notifications of alarms with detailed alarm information. Alarms can also be accessed from the log or via REST API.
-
+EMQX provides you with various ways to get alarms and check detailed alarm information. One way is to view the alarms on EMQX Dashboard, where you can view a list of active or historical alarms. However, it is only a central place for easy access to an overview of alarms that have been triggered. Another way is to subscribe to system topics through MQTT to receive real-time notifications of alarms with detailed alarm information. Alarms can also be accessed from the log or via REST API. 
 ### View Alarms in Dashboard
 
 On EMQX Dashboard, click **Monitoring** -> **Alarms**. Select the **Active** or **History** tab, and you can see the list of currently active alarms and historical alarms.

@@ -15,16 +15,16 @@ debug < info < notice < warning < error < critical < alert < emergency
 ```
 The table below describes the meaning and output contents for each log level. 
 
-| Log Level  | Meaning                                                      | Output Examples                                              |
-| ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| debug      | Detailed information about the internal workings of a program, helping to debug and diagnose issues in the code. <br>It is not recommended to output this level of logging directly to the production environment. Instead, enable [Log Trace](./tracer.md) for a specific client. | Variable values, function call stacks, and other detailed debugging data. |
-| info       | Useful information that is more general than debug-level logs. | Client connections, subscriptions, publishes, QoS levels, and message delivery status. |
-| notice     | Important system information indicating that an event has occurred, but no action is required. | Number of clients connected to the proxy server, number of reconnections attempted, and number of crashed nodes. |
-| warning    | Potential issues or errors that require action; typically used for proactive monitoring and detecting potential problems before they become critical issues. | Disconnections, connection timeouts, authentication failures, and other similar events. |
-| error      | The occurrence of an error that requires error handling; typically used to flag errors so that administrators can quickly detect and resolve issues. | Fails to connect to an external database, to subscribe to a non-existent topic, or to parse a configuration file, or other similar events. |
-| critical   | Critical error that results in system crashes or prevents it from functioning; typically used to flag severe problems so that administrators can take immediate action. | Proxy server crashes, database unavailability, and other similar events. |
-| alert      | Severe problems that may cause the application to stop and need to take immediate action to prevent further losses. | The application has reached a critical threshold, such as running out of disk space or memory, or a critical system process has crashed or stopped responding. |
-| emergency? |                                                              |                                                              |
+| Log Level | Meaning                                                      | Output Examples                                              |
+| --------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| debug     | Detailed information about the internal workings of a program, helping to debug and diagnose issues in the code. <br>It is not recommended to output this level of logging directly to the production environment. Instead, enable [Log Trace](./tracer.md) for a specific client. | Variable values, function call stacks, and other detailed debugging data. |
+| info      | Useful information that is more general than debug-level logs. | Client connections, subscriptions, publishes, QoS levels, and message delivery status. |
+| notice    | Important system information indicating that an event has occurred, but no action is required. | Number of clients connected to the proxy server, number of reconnections attempted, and number of crashed nodes. |
+| warning   | Potential issues or errors that require action; typically used for proactive monitoring and detecting potential problems before they become critical issues. | Disconnections, connection timeouts, authentication failures, and other similar events. |
+| error     | The occurrence of an error that requires error handling; typically used to flag errors so that administrators can quickly detect and resolve issues. | Fails to connect to an external database, to subscribe to a non-existent topic, or to parse a configuration file, or other similar events. |
+| critical  | Critical error that results in system crashes or prevents it from functioning; typically used to flag severe problems so that administrators can take immediate action. | Proxy server crashes, database unavailability, and other similar events. |
+| alert     | Severe problems that may cause the application to stop and need to take immediate action to prevent further losses. | The application has reached a critical threshold, such as running out of disk space or memory, or a critical system process has crashed or stopped responding. |
+| emergency | Extremely serious problems that prevent the application from running and require immediate action; happen in rare circumstances. | Failure in data synchronizing between different nodes.       |
 
 ## Configure Logging via Dashboard
 

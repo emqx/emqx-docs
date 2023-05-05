@@ -55,14 +55,14 @@ You can see the event-related metrics for the cluster or node, such as client co
 
 #### Connections
 
-| Metrics             | Description                                        |
-| ------------------- | -------------------------------------------------- |
-| client.connack      | The number of CONNACK messages sent by clients     |
-| client.connect      | The number of client connection                    |
-| client.connected    | The number of clients that have connected          |
-| client.disconnected | The number of clients that have disconnected       |
-| client.subscribe    | The number of clients that subscribe to topics     |
-| client.unsubscribe  | The number of clients that unsubscribe from topics |
+| Metrics             | Description                                                  |
+| ------------------- | ------------------------------------------------------------ |
+| client.connack      | The number of connection acknowledgment (CONNACK) messages received by clients, including both successful and failed connection requests. |
+| client.connect      | The number of connection requests from the client, including both successful and failed connection requests. |
+| client.connected    | The number of client connections that have succeeded         |
+| client.disconnected | The number of client disconnections, including active and abrupt disconnection |
+| client.subscribe    | The number of successful subscriptions                       |
+| client.unsubscribe  | The number of successful unsubscriptions                     |
 
 #### Sessions
 
@@ -78,13 +78,13 @@ You can see the event-related metrics for the cluster or node, such as client co
 
 | Metrics                     | Description                                                  |
 | --------------------------- | ------------------------------------------------------------ |
-| authorization.allow         | The number of client authorization passes                    |
-| authorization.deny          | The number of client authorization fails                     |
+| authorization.allow         | The total number of client authorization passes, including getting authorization results by cache and authorization requests not matched by any rules |
+| authorization.deny          | The total number of client authorization fails, including getting authorization results by cache and authorization requests not matched by any rules |
 | authorization.matched.allow | The number of client authorization passes due to authorized by some rules |
 | authorization.matched.deny  | The number of client authorization fails due to being rejected by some rules |
 | authorization.nomatch       | The number of client authorization requests not matched by any rules |
 | authorization.cache_hit     | The number of clients getting authorization results (allow or deny) by cache |
-| authorization.superuser     | The number of clients be authorized as Superuser             |
+| authorization.superuser     | The number of clients being authorized as superuser          |
 | client.auth.anonymous       | The number of clients who log in anonymously                 |
 | client.authenticate         | The number of clients passing the authentication             |
 | client.authorize            | The number of clients being authorized                       |
@@ -151,7 +151,7 @@ Scroll down the **Metrics** page, and you can see message-related metrics, inclu
 
 | Metrics                   | Description                                                  |
 | ------------------------------- | ------------------------------------------------------------ |
-| messages.acked | The number of acked messages |
+| messages.acked | The number of connection acknowledgment messages |
 | messages.delayed                | The number of messages for delayed publish that are stored by EMQX |
 | messages.delivered              | The number of messages forwarded to the subscription process internally by EMQX |
 | messages.dropped                | The total number of messages dropped by EMQX before forwarding to the subscription process |
