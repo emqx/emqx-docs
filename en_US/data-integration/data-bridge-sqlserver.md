@@ -73,7 +73,7 @@ This section describes how to start Microsoft SQL Server 2019 on Linux/MacOS usi
    
    `mssql-tools` has been installed in the Microsoft SQL Server container provided by Microsoft, but the executable file is not in `$PATH`. You need to specify the executable file path for `mssql-tools`. As for the Docker deployment in this example, the file path should be `opt`.
    
-   For more usage information on `mssql-tools`, refer to related documents provided by Microsoft: [sqlcmd-utility](https://learn.microsoft.com/en-us/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16). 
+   For more usage information on `mssql-tools`, see [sqlcmd-utility](https://learn.microsoft.com/en-us/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16). 
    
    :::
 
