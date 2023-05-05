@@ -94,7 +94,7 @@ However, due to the differences in semantics among various gateways, only a subs
 
 | Name                  | Required or Not | Description                                                  | Supported Protocols |
 | --------------------- | --------------- | ------------------------------------------------------------ | ------------------- |
-| `client.connect`      | Optional        | Number of client connection requests, including successful or failed connection requests. | All gateways        |
+| `client.connect`      | Optional        | Number of client connection requests, including successful or failed connection requests | All gateways        |
 | `client.connack`      | Optional        | Number of `CONNACK` messages received by the clients         | All gateways        |
 | `client.authenticate` | Required        | Number of clients authenticated                              |                     |
 | `client.connected`    | Required        | Number of clients connected successfully                     | All gateways        |
