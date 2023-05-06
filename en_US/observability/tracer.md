@@ -1,6 +1,6 @@
 # Log Trace
 
-EMQX 5.0 provides the Log Trace feature, allowing users to enable real-time debug-level log outputs for specific client IDs, topics or IP addresses. Usually, debug-level logging is not enabled in the production environment, because the number of generated logs may affect the system performance. With the Log Trace feature implemented, it is feasible to provide the most detailed debug information even with intensive connecting and messaging services running. This significantly increases the efficiency of debugging and diagnosing issues in EMQX.
+EMQX 5.0 introduces the Log Trace feature, enabling real-time debug-level log outputs for specific client IDs, topics, or IP addresses. This allows detailed debugging in production environments without affecting system performance due to excessive logs, increasing the efficiency of diagnosing and resolving EMQX issues.
 
 ## How It Works 
 
