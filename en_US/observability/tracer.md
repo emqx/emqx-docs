@@ -66,7 +66,7 @@ This section demonstrates how to create Log Trace rules by client ID, Topic, or 
 
 ## View Log Trace 
 
-The created trace records will be listed. You can create up to 30 traced logs. The log file size viewed in the list is the sum of the uncompressed file sizes. You can click the **Stop** button to stop logging manually or wait until the end time to stop automatically.
+The created trace records will be listed. You can create up to 30 traced logs. The log file size viewed in the list is the sum of the uncompressed file sizes. You can click the **Stop** button to stop logging manually or wait until the specified end time.
 
 <img src="./assets/log-trace-list-ee.png" alt="log-trace-list-ee" style="zoom:67%;" />
 
