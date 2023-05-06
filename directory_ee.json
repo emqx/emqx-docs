@@ -6,11 +6,8 @@
     },
     {
       "title": "开始使用",
+      "path": "getting-started/getting-started",
       "children": [
-        {
-          "title": "开始使用",
-          "path": "getting-started/getting-started"
-        },
         {
           "title": "安装",
           "path": "getting-started/install-ee"
@@ -51,6 +48,7 @@
     },
     {
       "title": "用户指南",
+      "path": "advanced/user-guide",
       "children": [
         {
           "title": "认证鉴权",
@@ -61,8 +59,8 @@
           "path": "advanced/acl"
         },
         {
-          "title": "数据存储",
-          "path": "backend/backend"
+          "title": "黑名单",
+          "path": "advanced/blacklist"
         },
         {
           "title": "消息桥接",
@@ -77,44 +75,40 @@
           "path": "advanced/exclusive-subscriptions"
         },
         {
-          "title": "$SYS 系统主题",
-          "path": "advanced/system-topic"
+          "title": "消息重传",
+          "path": "advanced/retransmission"
         },
         {
-          "title": "黑名单",
-          "path": "advanced/blacklist"
-        },
-        {
-          "title": "WebHook",
-          "path": "advanced/webhook"
+          "title": "数据存储",
+          "path": "backend/backend"
         },
         {
           "title": "分布集群",
           "path": "advanced/cluster"
         },
         {
-          "title": "钩子",
-          "path": "advanced/hooks"
+          "title": "$SYS 系统主题",
+          "path": "advanced/system-topic"
         },
         {
           "title": "指标监控",
           "path": "advanced/metrics-and-stats"
         },
         {
+          "title": "告警",
+          "path": "advanced/alarms"
+        },
+        {
           "title": "速率限制",
           "path": "advanced/rate-limit"
         },
         {
-          "title": "飞行窗口与消息队列",
-          "path": "advanced/inflight-window-and-message-queue"
+          "title": "WebHook",
+          "path": "advanced/webhook"
         },
         {
-          "title": "消息重传",
-          "path": "advanced/retransmission"
-        },
-        {
-          "title": "告警",
-          "path": "advanced/alarms"
+          "title": "钩子",
+          "path": "advanced/hooks"
         },
         {
           "title": "数据导入导出",
@@ -123,16 +117,17 @@
         {
           "title": "集群负载重平衡与节点疏散",
           "path": "advanced/rebalancing"
+        },
+        {
+          "title": "飞行窗口与消息队列",
+          "path": "advanced/inflight-window-and-message-queue"
         }
       ]
     },
     {
       "title": "模块管理",
+      "path": "modules/modules",
       "children": [
-        {
-          "title": "模块介绍",
-          "path": "modules/modules"
-        },
         {
           "title": "内置访问控制",
           "path": "modules/internal_acl"
@@ -273,11 +268,8 @@
     },
     {
       "title": "规则引擎",
+      "path": "rule/rule-engine",
       "children": [
-        {
-          "title": "规则引擎",
-          "path": "rule/rule-engine"
-        },
         {
           "title": "规则引擎语法与示列",
           "path": "rule/rule-engine_grammar_and_examples"
@@ -366,11 +358,8 @@
         },
         {
           "title": "编解码",
+          "path": "rule/schema-registry",
           "children": [
-            {
-              "title": "编解码简介",
-              "path": "rule/schema-registry"
-            },
             {
               "title": "Avro 编解码举例",
               "path": "rule/schema-registry-examp-avro"
@@ -393,7 +382,8 @@
     },
     {
       "title": "数据集成",
-      "children":
+      "path": "rule/integration",
+      "children": 
       [
         {
           "title": "桥接数据到 MQTT Broker",
@@ -511,11 +501,8 @@
     },
     {
       "title": "插件管理",
+      "path": "advanced/plugins",
       "children": [
-        {
-          "title": "插件介绍",
-          "path": "advanced/plugins"
-        },
         {
           "title": "数据存储插件",
           "children": [
@@ -563,11 +550,8 @@
         },
         {
           "title": "消息桥接插件",
+          "path": "bridge/bridge",
           "children": [
-            {
-              "title": "消息桥接简介",
-              "path": "bridge/bridge"
-            },
             {
               "title": "MQTT 桥接",
               "path": "bridge/bridge-mqtt"
@@ -598,6 +582,7 @@
     },
     {
       "title": "运维操作",
+      "path": "tutorial/devops",
       "children": [
         {
           "title": "设备管理",
@@ -627,6 +612,7 @@
     },
     {
       "title": "参数配置",
+      "path": "configuration/config-overview",
       "children": [
         {
           "title": "参数配置列表",
@@ -649,12 +635,7 @@
     },
     {
       "title": "命令行接口",
-      "children": [
-        {
-          "title": "命令行",
-          "path": "advanced/cli"
-        }
-      ]
+      "path": "advanced/cli"
     },
     {
       "title": "版本热升级",
@@ -666,11 +647,8 @@
     },
     {
       "title": "FAQ 常见问题解答",
+      "path": "faq/faq",
       "children": [
-        {
-          "title": "入门概念",
-          "path": "faq/faq"
-        },
         {
           "title": "使用教程",
           "path": "faq/use-guide"
@@ -695,11 +673,8 @@
     },
     {
       "title": "SDK & Tools",
+      "path": "development/client",
       "children": [
-        {
-          "title": "MQTT Client Library",
-          "path": "development/client"
-        },
         {
           "title": "MQTT C Client Library",
           "path": "development/c"
@@ -735,35 +710,36 @@
       ]
     },
     {
-      "title": "协议介绍",
+      "title": "多协议网关",
+      "path": "modules/gateway",
       "children": [
         {
           "title": "MQTT 协议",
           "path": "development/protocol"
         },
         {
-          "title": "LwM2M 网关",
-          "path": "modules/lwm2m_protocol"
+          "title": "Stomp 网关",
+          "path": "modules/stomp_protocol"
         },
         {
           "title": "MQTT-SN 网关",
           "path": "modules/mqtt_sn_protocol"
         },
         {
-          "title": "TCP 网关",
-          "path": "modules/tcp_protocol"
+          "title": "CoAP 网关",
+          "path": "modules/coap_protocol"
+        },
+        {
+          "title": "LwM2M 网关",
+          "path": "modules/lwm2m_protocol"
         },
         {
           "title": "JT/T808 网关",
           "path": "modules/jt808_protocol"
         },
         {
-          "title": "CoAP 网关",
-          "path": "modules/coap_protocol"
-        },
-        {
-          "title": "Stomp 网关",
-          "path": "modules/stomp_protocol"
+          "title": "TCP 网关",
+          "path": "modules/tcp_protocol"
         },
         {
           "title": "OCPP 网关",
@@ -773,6 +749,7 @@
     },
     {
       "title": "版本发布",
+      "path": "changes/changes",
       "children": [
         {
           "title": "变更日志",
@@ -790,6 +767,7 @@
     },
     {
       "title": "相关资料",
+      "path": "design/resources",
       "children": [
         {
           "title": "架构设计",
@@ -809,11 +787,8 @@
     },
     {
       "title": "Get Started",
+      "path": "getting-started/getting-started",
       "children": [
-        {
-          "title": "Getting Started",
-          "path": "getting-started/getting-started"
-        },
         {
           "title": "Installation",
           "path": "getting-started/install-ee"
@@ -854,6 +829,7 @@
     },
     {
       "title": "User Guide",
+      "path": "advanced/user-guide",
       "children": [
         {
           "title": "Authentication",
@@ -864,12 +840,8 @@
           "path": "advanced/acl"
         },
         {
-          "title": "Backend",
-          "path": "backend/backend"
-        },
-        {
-          "title": "Bridge",
-          "path": "bridge/bridge"
+          "title": "Blacklist",
+          "path": "advanced/blacklist"
         },
         {
           "title": "Shared subscription",
@@ -880,44 +852,44 @@
           "path": "advanced/exclusive-subscriptions"
         },
         {
-          "title": "$SYS - System Topic",
-          "path": "advanced/system-topic"
+          "title": "Message retransmission",
+          "path": "advanced/retransmission"
         },
         {
-          "title": "Blacklist",
-          "path": "advanced/blacklist"
+          "title": "Bridge",
+          "path": "bridge/bridge"
         },
         {
-          "title": "WebHook",
-          "path": "advanced/webhook"
+          "title": "Backend",
+          "path": "backend/backend"
         },
         {
           "title": "Distributed Cluster",
           "path": "advanced/cluster"
         },
         {
-          "title": "Hook",
-          "path": "advanced/hooks"
+          "title": "$SYS - System Topic",
+          "path": "advanced/system-topic"
         },
         {
           "title": "Metrics",
           "path": "advanced/metrics-and-stats"
         },
         {
+          "title": "Alarm",
+          "path": "advanced/alarms"
+        },
+        {
           "title": "Rate limit",
           "path": "advanced/rate-limit"
         },
         {
-          "title": "Inflight and Queue",
-          "path": "advanced/inflight-window-and-message-queue"
+          "title": "WebHook",
+          "path": "advanced/webhook"
         },
         {
-          "title": "Message retransmission",
-          "path": "advanced/retransmission"
-        },
-        {
-          "title": "Alarm",
-          "path": "advanced/alarms"
+          "title": "Hook",
+          "path": "advanced/hooks"
         },
         {
           "title": "Import/Export Data",
@@ -926,16 +898,17 @@
         {
           "title": "Cluster Rebalancing",
           "path": "advanced/rebalancing"
+        },
+        {
+          "title": "Inflight and Queue",
+          "path": "advanced/inflight-window-and-message-queue"
         }
       ]
     },
     {
       "title": "Modules",
+      "path": "modules/modules",
       "children": [
-        {
-          "title": "Modules Introduction",
-          "path": "modules/modules"
-        },
         {
           "title": "Internal ACL",
           "path": "modules/internal_acl"
@@ -1072,11 +1045,8 @@
     },
     {
       "title": "Rule Engine",
+      "path": "rule/rule-engine",
       "children": [
-        {
-          "title": "Rule Engine",
-          "path": "rule/rule-engine"
-        },
         {
           "title": "Rule engine SQL statement",
           "path": "rule/rule-engine_grammar_and_examples"
@@ -1157,11 +1127,8 @@
         },
         {
           "title": "Schema Codecs",
+          "path": "rule/schema-registry",
           "children": [
-            {
-              "title": "Introduction to Schema Codecs",
-              "path": "rule/schema-registry"
-            },
             {
               "title": "Custom codec example - Avro",
               "path": "rule/schema-registry-examp-avro"
@@ -1184,7 +1151,8 @@
     },
     {
       "title": "Data Integration",
-      "children":
+      "path": "rule/integration",
+      "children": 
       [
         {
           "title": "Bridge Data into MQTT Broker",
@@ -1303,11 +1271,8 @@
     },
     {
       "title": "Plugin",
+      "path": "advanced/plugins",
       "children": [
-        {
-          "title": "Plugin introduction",
-          "path": "advanced/plugins"
-        },
         {
           "title": "Backend plugins",
           "children": [
@@ -1355,11 +1320,8 @@
         },
         {
           "title": "Bridges",
+          "path": "bridge/bridge",
           "children": [
-            {
-              "title": "Bridge Introduction",
-              "path": "bridge/bridge"
-            },
             {
               "title": "MQTT Bridge",
               "path": "bridge/bridge-mqtt"
@@ -1386,6 +1348,7 @@
     },
     {
       "title": "DevOps",
+      "path": "tutorial/devops",
       "children": [
         {
           "title": "Device management",
@@ -1428,12 +1391,7 @@
     },
     {
       "title": "Command",
-      "children": [
-        {
-          "title": "CLI",
-          "path": "advanced/cli"
-        }
-      ]
+      "path": "advanced/cli"
     },
     {
       "title": "Release Hot Upgrade",
@@ -1445,11 +1403,8 @@
     },
     {
       "title": "FAQ",
+      "path": "faq/faq",
       "children": [
-        {
-          "title": "Introduction",
-          "path": "faq/faq"
-        },
         {
           "title": "Use guide",
           "path": "faq/use-guide"
@@ -1474,11 +1429,8 @@
     },
     {
       "title": "SDK & Tools",
+      "path": "development/client",
       "children": [
-        {
-          "title": "MQTT Client Library",
-          "path": "development/client"
-        },
         {
           "title": "MQTT C Client Library",
           "path": "development/c"
@@ -1511,6 +1463,7 @@
     },
     {
       "title": "Changes",
+      "path": "changes/changes",
       "children": [
         {
           "title": "Change log",
@@ -1528,6 +1481,7 @@
     },
     {
       "title": "Resource",
+      "path": "design/resources",
       "children": [
         {
           "title": "Design",
@@ -1540,27 +1494,28 @@
       ]
     },
     {
-      "title": "Protocol Introduction",
+      "title": "Multi-Protocol Gateway",
+      "path": "modules/gateway",
       "children": [
         {
-          "title": "LwM2M gateway",
-          "path": "modules/lwm2m_protocol"
+          "title": "Stomp Gateway",
+          "path": "modules/stomp_protocol"
         },
         {
-          "title": "MQTT-SN gateway",
+          "title": "MQTT-SN Gateway",
           "path": "modules/mqtt_sn_protocol"
         },
         {
-          "title": "TCP gateway",
-          "path": "modules/tcp_protocol"
-        },
-        {
-          "title": "JT/T808 gateway",
-          "path": "modules/jt808_protocol"
-        },
-        {
-          "title": "CoAP gateway",
+          "title": "CoAP Gateway",
           "path": "modules/coap_protocol"
+        },
+        {
+          "title": "LwM2M Gateway",
+          "path": "modules/lwm2m_protocol"
+        },
+        {
+          "title": "JT/T808 Gateway",
+          "path": "modules/jt808_protocol"
         },
         {
           "title": "Stomp gateway",
@@ -1569,6 +1524,10 @@
         {
           "title": "OCPP gateway",
           "path": "modules/ocpp_protocol"
+        },
+        {
+          "title": "TCP Gateway",
+          "path": "modules/tcp_protocol"
         }
       ]
     }
