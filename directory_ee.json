@@ -63,10 +63,6 @@
           "path": "advanced/blacklist"
         },
         {
-          "title": "消息桥接",
-          "path": "bridge/bridge"
-        },
-        {
           "title": "共享订阅",
           "path": "advanced/shared-subscriptions"
         },
@@ -473,49 +469,44 @@
       "path": "advanced/plugins",
       "children": [
         {
-          "title": "数据存储插件",
-          "children": [
-            {
-              "title": "数据存储设计",
-              "path": "backend/backend"
-            },
-            {
-              "title": "Redis 数据存储",
-              "path": "backend/backend_redis"
-            },
-            {
-              "title": "MySQL 数据存储",
-              "path": "backend/backend_mysql"
-            },
-            {
-              "title": "PostgreSQL 数据存储",
-              "path": "backend/backend_pgsql"
-            },
-            {
-              "title": "MongoDB 消息存储",
-              "path": "backend/backend_mongodb"
-            },
-            {
-              "title": "Cassandra 消息存储",
-              "path": "backend/backend_cassandra"
-            },
-            {
-              "title": "DynamoDB 消息存储",
-              "path": "backend/backend_dynamodb"
-            },
-            {
-              "title": "InfluxDB 消息存储",
-              "path": "backend/backend_influxdb"
-            },
-            {
-              "title": "OpenTSDB 消息存储",
-              "path": "backend/backend_opentsdb"
-            },
-            {
-              "title": "Timescale 消息存储",
-              "path": "backend/backend_timescale"
-            }
-          ]
+           "title": "数据存储设计",
+          "path": "backend/backend"
+        },
+        {
+          "title": "Redis 数据存储",
+          "path": "backend/backend_redis"
+        },
+        {
+          "title": "MySQL 数据存储",
+          "path": "backend/backend_mysql"
+        },
+        {
+          "title": "PostgreSQL 数据存储",
+           "path": "backend/backend_pgsql"
+        },
+        {
+          "title": "MongoDB 消息存储",
+          "path": "backend/backend_mongodb"
+        },
+        {
+          "title": "Cassandra 消息存储",
+          "path": "backend/backend_cassandra"
+        },
+        {
+          "title": "DynamoDB 消息存储",
+          "path": "backend/backend_dynamodb"
+        },
+        {
+          "title": "InfluxDB 消息存储",
+          "path": "backend/backend_influxdb"
+        },
+        {
+          "title": "OpenTSDB 消息存储",
+          "path": "backend/backend_opentsdb"
+        },
+        {
+          "title": "Timescale 消息存储",
+          "path": "backend/backend_timescale"
         },
         {
           "title": "消息桥接插件",
@@ -812,10 +803,6 @@
           "path": "advanced/retransmission"
         },
         {
-          "title": "Bridge",
-          "path": "bridge/bridge"
-        },
-        {
           "title": "Backend",
           "path": "backend/backend"
         },
@@ -992,23 +979,23 @@
       "path": "rule/rule-engine",
       "children": [
         {
-          "title": "Rule engine SQL statement",
+          "title": "Rule Engine SQL Statement",
           "path": "rule/rule-engine_grammar_and_examples"
         },
         {
-          "title": "Available fields in rule engine SQL statements",
+          "title": "Available Fields in Rule Engine SQL Statements",
           "path": "rule/rule-engine_field"
         },
         {
-          "title": "Functions available in SQL statements",
+          "title": "Functions Available in SQL Statements",
           "path": "rule/rule-engine_buildin_function"
         },
         {
-          "title": "Create rules",
+          "title": "Create Rules",
           "path": "rule/rule-create"
         },
         {
-          "title": "Update resource",
+          "title": "Update Resource",
           "path": "rule/how_to_update_resources"
         },
         {
@@ -1023,23 +1010,23 @@
           "title": "Save Offline Message",
           "children": [
             {
-              "title": "Save offline Message to Redis",
+              "title": "Save Offline Message to Redis",
               "path": "rule/offline_msg_to_redis"
             },
             {
-              "title": "Save offline Message to MySQL",
+              "title": "Save Offline Message to MySQL",
               "path": "rule/offline_msg_to_mysql"
             },
             {
-              "title": "Save offline Message to PostgreSQL",
+              "title": "Save Offline Message to PostgreSQL",
               "path": "rule/offline_msg_to_pgsql"
             },
             {
-              "title": "Save offline Message to Cassandra",
+              "title": "Save Offline Message to Cassandra",
               "path": "rule/offline_msg_to_cassandra"
             },
             {
-              "title": "Save offline Message to MongoDB",
+              "title": "Save Offline Message to MongoDB",
               "path": "rule/offline_msg_to_mongodb"
             }
           ]
@@ -1048,23 +1035,23 @@
           "title": "Get Subscriptions",
           "children": [
             {
-              "title": "Get subscription from Redis",
+              "title": "Get Subscription from Redis",
               "path": "rule/get_subs_from_redis"
             },
             {
-              "title": "Get subscription from MySQL",
+              "title": "Get Subscription from MySQL",
               "path": "rule/get_subs_from_mysql"
             },
             {
-              "title": "Get subscription from PostgreSQL",
+              "title": "Get Subscription from PostgreSQL",
               "path": "rule/get_subs_from_pgsql"
             },
             {
-              "title": "Get subscription from Cassandra",
+              "title": "Get Subscription from Cassandra",
               "path": "rule/get_subs_from_cassandra"
             },
             {
-              "title": "Get subscription from MongoDB",
+              "title": "Get Subscription from MongoDB",
               "path": "rule/get_subs_from_mongodb"
             }
           ]
@@ -1074,19 +1061,19 @@
           "path": "rule/schema-registry",
           "children": [
             {
-              "title": "Custom codec example - Avro",
+              "title": "Custom Codec Example - Avro",
               "path": "rule/schema-registry-examp-avro"
             },
             {
-              "title": "Custom codec example - Protobuf",
+              "title": "Custom Codec Example - Protobuf",
               "path": "rule/schema-registry-examp-protobuf"
             },
             {
-              "title": "3rd-Party Custom codec example - HTTP",
+              "title": "Third-Party Custom Codec Example - HTTP",
               "path": "rule/schema-registry-examp-3rdparty-http"
             },
             {
-              "title": "3rd-Party Custom codec example - gRPC",
+              "title": "Third-Party Custom Codec Example - gRPC",
               "path": "rule/schema-registry-examp-3rdparty-grpc"
             }
           ]
@@ -1198,49 +1185,44 @@
       "path": "advanced/plugins",
       "children": [
         {
-          "title": "Backend plugins",
-          "children": [
-            {
-              "title": "MQTT Message Persistence",
-              "path": "backend/backend"
-            },
-            {
-              "title": "Redis Backend",
-              "path": "backend/backend_redis"
-            },
-            {
-              "title": "MySQL Backend",
-              "path": "backend/backend_mysql"
-            },
-            {
-              "title": "PostgreSQL Backend",
-              "path": "backend/backend_pgsql"
-            },
-            {
-              "title": "MongoDB Backend",
-              "path": "backend/backend_mongodb"
-            },
-            {
-              "title": "Cassandra Backend",
-              "path": "backend/backend_cassandra"
-            },
-            {
-              "title": "DynamoDB Backend",
-              "path": "backend/backend_dynamodb"
-            },
-            {
-              "title": "InfluxDB Backend",
-              "path": "backend/backend_influxdb"
-            },
-            {
-              "title": "OpenTSDB Backend",
-              "path": "backend/backend_opentsdb"
-            },
-            {
-              "title": "Timescale Backend",
-              "path": "backend/backend_timescale"
-            }
-          ]
+          "title": "MQTT Message Persistence",
+          "path": "backend/backend"
+        },
+        {
+          "title": "Redis Backend",
+          "path": "backend/backend_redis"
+        },
+        {
+           "title": "MySQL Backend",
+           "path": "backend/backend_mysql"
+        },
+        {
+           "title": "PostgreSQL Backend",
+           "path": "backend/backend_pgsql"
+        },
+        {
+           "title": "MongoDB Backend",
+           "path": "backend/backend_mongodb"
+        },
+        {
+           "title": "Cassandra Backend",
+           "path": "backend/backend_cassandra"
+        },
+        {
+           "title": "DynamoDB Backend",
+           "path": "backend/backend_dynamodb"
+        },
+        {
+            "title": "InfluxDB Backend",
+            "path": "backend/backend_influxdb"
+        },
+        {
+            "title": "OpenTSDB Backend",
+            "path": "backend/backend_opentsdb"
+        },
+        {
+            "title": "Timescale Backend",
+            "path": "backend/backend_timescale"
         },
         {
           "title": "Bridges",
@@ -1275,15 +1257,15 @@
       "path": "tutorial/devops",
       "children": [
         {
-          "title": "Device management",
+          "title": "Device Management",
           "path": "tutorial/device-management"
         },
         {
-          "title": "System tuning",
+          "title": "System Tuning",
           "path": "tutorial/tune"
         },
         {
-          "title": "Production deployment",
+          "title": "Production Deployment",
           "path": "tutorial/deploy"
         },
         {
@@ -1321,19 +1303,19 @@
       "path": "faq/faq",
       "children": [
         {
-          "title": "Use guide",
+          "title": "Use Guide",
           "path": "faq/use-guide"
         },
         {
-          "title": "Installation and deployment",
+          "title": "Installation and Deployment",
           "path": "faq/deployment"
         },
         {
-          "title": "Common errors",
+          "title": "Common Errors",
           "path": "faq/error"
         },
         {
-          "title": "Business services",
+          "title": "Business Services",
           "path": "faq/enterprise"
         },
         {
@@ -1381,21 +1363,21 @@
       "path": "changes/changes",
       "children": [
         {
-          "title": "Change log",
+          "title": "Change Log",
           "path": "changes/changes-ee-4.3"
         },
         {
-          "title": "End of life dates",
+          "title": "End of Life Dates",
           "path": "changes/eol-ee"
         },
         {
-          "title": "Upgrade guide",
+          "title": "Upgrade Guide",
           "path": "changes/upgrade-4.3"
         }
       ]
     },
     {
-      "title": "Resource",
+      "title": "Resources",
       "path": "design/resources",
       "children": [
         {
