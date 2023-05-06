@@ -48,7 +48,7 @@
     },
     {
       "title": "用户指南",
-      "path": "advanced/user-guide",
+      "path": "advanced/user-guide-4.4",
       "children": [
         {
           "title": "认证鉴权",
@@ -87,6 +87,10 @@
           "path": "advanced/cluster"
         },
         {
+          "title": "集群负载重平衡与节点疏散",
+          "path": "advanced/rebalancing"
+        },
+        {
           "title": "$SYS 系统主题",
           "path": "advanced/system-topic"
         },
@@ -113,10 +117,6 @@
         {
           "title": "数据导入导出",
           "path": "advanced/data-import-and-export"
-        },
-        {
-          "title": "集群负载重平衡与节点疏散",
-          "path": "advanced/rebalancing"
         },
         {
           "title": "飞行窗口与消息队列",
@@ -626,12 +626,7 @@
     },
     {
       "title": "安全",
-      "children": [
-        {
-          "title": "CRL/OCSP Stapling",
-          "path": "security/crl-ocsp-stapling"
-        }
-      ]
+      "path": "security/crl-ocsp-stapling"
     },
     {
       "title": "命令行接口",
@@ -829,7 +824,7 @@
     },
     {
       "title": "User Guide",
-      "path": "advanced/user-guide",
+      "path": "advanced/user-guide-4.4",
       "children": [
         {
           "title": "Authentication",
@@ -868,6 +863,10 @@
           "path": "advanced/cluster"
         },
         {
+          "title": "Cluster Rebalancing",
+          "path": "advanced/rebalancing"
+        },
+        {
           "title": "$SYS - System Topic",
           "path": "advanced/system-topic"
         },
@@ -894,10 +893,6 @@
         {
           "title": "Import/Export Data",
           "path": "advanced/data-import-and-export"
-        },
-        {
-          "title": "Cluster Rebalancing",
-          "path": "advanced/rebalancing"
         },
         {
           "title": "Inflight and Queue",
@@ -1378,12 +1373,7 @@
     },
     {
       "title": "Security",
-      "children": [
-        {
-          "title": "CRL/OCSP Stapling",
-          "path": "security/crl-ocsp-stapling"
-        }
-      ]
+      "path": "security/crl-ocsp-stapling"
     },
     {
       "title": "Configuration",
