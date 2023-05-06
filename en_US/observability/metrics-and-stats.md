@@ -11,7 +11,7 @@ EMQX provides users with multiple ways to view statistics and metrics. Most dire
 
 ## View Statistics on Dashboard
 
-On EMQX Dashboard, click **Monitoring** -> **Cluster Overview** from the left navigation menu. On the **Cluster Overview** page, click the **Nodes** tab. Click the name of the node to see the details about the node statistics of the specific node on the right.
+On EMQX Dashboard, click **Monitoring** -> **Cluster Overview** from the left navigation menu. On the **Cluster Overview** page, click the **Nodes** tab. Click the name of the node to see the statistics details on the right.
 
 <img src="./assets/node-statistics-ee.png" alt="node-statistics-ee" style="zoom:45%;" />
 
