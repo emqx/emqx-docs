@@ -77,6 +77,12 @@ jobs:
       with:
         node-version: 14.15
 
+    - name: generate directory.json
+      run: |
+        cd docs-files
+        ./gen.py ce | tee directory.json
+        ./gen.py ee | tee directory_ee.json
+
     - name: remove unused files
       run: |
         cd docs-files
@@ -86,6 +92,13 @@ jobs:
         else
           python3 .github/scripts/remove_unused.py directory_ee.json $(pwd)
         fi
+    
+    - name: set current emqx version
+      run: |
+        cd docs-files
+        source current-version.env
+        find ./en_US ./zh_CN -type f -name "*.md" -exec sed -i 's/@CE_VERSION@/'"$CE_VERSION"'/g' {} +
+        find ./en_US ./zh_CN -type f -name "*.md" -exec sed -i 's/@EE_VERSION@/'"$EE_VERSION"'/g' {} +
 
     - name: move ce files
       if: env.DOCS_TYPE == 'broker'
@@ -97,8 +110,10 @@ jobs:
         mkdir -p frontend/docs/en/${VERSION}/
         mkdir -p frontend/docs/zh/${VERSION}/
         mkdir -p frontend/docs/.vuepress/public/api/
+        mkdir -p frontend/redoc/
         cp -r docs-files/en_US/* frontend/docs/en/${VERSION}/
         cp -r docs-files/zh_CN/* frontend/docs/zh/${VERSION}/
+        cp -r docs-files/redocly/*.json frontend/redoc/
         cp docs-files/directory.json frontend/docs/.vuepress/config/directory.json
 
     - name: move ee files
@@ -111,8 +126,10 @@ jobs:
         mkdir -p frontend/docs/en/${DOCS_TYPE}/${VERSION}/
         mkdir -p frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
         mkdir -p frontend/docs/.vuepress/public/api/
+        mkdir -p frontend/redoc/
         cp -r docs-files/en_US/* frontend/docs/en/${DOCS_TYPE}/${VERSION}/
         cp -r docs-files/zh_CN/* frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
+        cp -r docs-files/redocly/*.json frontend/redoc/
         cp docs-files/directory_ee.json frontend/docs/.vuepress/config/directory.json
 
     - name: generate version config
@@ -131,6 +148,40 @@ jobs:
       run: |
         cd frontend
         yarn && yarn build
+
+    - name: build ce redoc
+      if: env.DOCS_TYPE == 'broker'
+      run: |
+        cd frontend
+        yarn global add redoc-cli
+        LANGS=(zh en)
+        for lang in "${LANGS[@]}"; do
+          redoc-cli bundle redoc/ce-${lang}.json -t redoc/template.hbs \
+            --output docs/.vuepress/dist/${lang}/${VERSION}/admin/api-docs.html \
+            --options.theme.colors.primary.main=#00b173 \
+            --options.theme.typography.headings.fontFamily='Roboto, sans-serif' \
+            --options.hide-hostname --templateOptions.title "EMQX ${VERSION} API Documentation" \
+            --templateOptions.description "EMQX ${VERSION} API Documentation" \
+            --templateOptions.version "${VERSION}" \
+            $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
+        done
+
+    - name: build ee redoc
+      if: env.DOCS_TYPE == 'enterprise'
+      run: |
+        cd frontend
+        yarn global add redoc-cli
+        LANGS=(zh en)
+        for lang in "${LANGS[@]}"; do
+          redoc-cli bundle redoc/ee-${lang}.json -t redoc/template.hbs \
+            --output docs/.vuepress/dist/${lang}/enterprise/${VERSION}/admin/api-docs.html \
+            --options.theme.colors.primary.main=#5e4eff \
+            --options.theme.typography.headings.fontFamily='Roboto, sans-serif' \
+            --options.hide-hostname --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \
+            --templateOptions.description "EMQX Enterprise ${VERSION} API Documentation" \
+            --templateOptions.version "${VERSION}" \
+            $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
+        done
 
     - name: upload ce files
       if: env.DOCS_TYPE == 'broker'
