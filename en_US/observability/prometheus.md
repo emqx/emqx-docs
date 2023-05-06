@@ -45,7 +45,7 @@ After you complete the configuration, click **Save Changes**.
 
 You can also configure integration with Prometheus through configuration files. You can modify the configuration items under `prometheus` in `emqx.conf` as shown below.  
 
-You can enable the Pushgateway server by adding the following configurations to `etc/emqx.conf`. For more information on configuration items, see [Prometheus](../configuration/prometheus.md).
+You can enable the Pushgateway server by adding the following configurations to `etc/emqx.conf`. For more information on configuration items, see [Configuration - Prometheus](../configuration/prometheus.md).
 
 ```bash
 prometheus {
