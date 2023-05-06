@@ -16,7 +16,7 @@ EMQX MongoDB authenticator supports storing authentication data as MongoDB docum
 - `salt`: optional; `salt = ""` or just remove this field to indicate no salt value will be added; this field supports renaming;
 - `is_superuser`: optional; flag if the current client is a superuser; default: `false`; this field supports renaming.
 
-For example, if we want to add a document for a superuser (`is_superuser`: `true`) with username `user123`, password `secret`, prefixed salt `slat_foo123`, and password hash `sha256`, the query statement should be:
+For example, if we want to add a document for a superuser (`is_superuser`: `true`) with username `user123`, password `secret`, suffixed salt `slat_foo123`, and password hash `sha256`, the query statement should be:
 
 ```
 > db.mqtt_user.insertOne(
@@ -35,7 +35,7 @@ For example, if we want to add a document for a superuser (`is_superuser`: `true
 
 :::tip 
 
-When there is a significant number of users in the system, please optimize and index the collection to be queried beforehand to shorten the query response time and reduce the load for EMQX.
+When there is a significant number of users in the system, please optimize and index the tables to be queried beforehand to shorten the query response time and reduce the load for EMQX.
 
  :::
 
@@ -84,16 +84,15 @@ Follow the instruction below on how to configure:
 **Authentication configuration**: Fill in the authentication-related settings:
 
 - **Password Hash Field**: Specify the field name of the password.
-- **Password Hash**: Select the Hash function for storing the password in the database, for example, plain, md5, sha, bcrypt, pbkdf2. 
-  - If **plain**, **md5**, **sha**, **sha256** or **sha512** are selected, we also need to configure:
-    - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. Note: If **plain** is selected, the **Salt Position** should be **disable**. 
-
-  - If **bcrypt** is selected, no extra configurations are needed. 
-  - If **pkbdf2** is selected, we also need to configure:
+- **Password Hash**: Select the Hash function for storing the password in the database, for example, plain, md5, sha, bcrypt, pbkdf2. There are some extra items to be configured based on the function you selected: 
+  - If **plain**, **md5**, **sha**, **sha256** or **sha512** are selected, you also need to configure:
+    - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. You can keep the default value unless you are migrating user credentials from external storage into EMQX built-in database. Note: If **plain** is selected, the **Salt Position** should be **disable**. 
+  - If **bcrypt** is selected, you also need to configure:
+    - **Salt Rounds**: Specify the calculation times of Hush function (2^Salt Rounds). Default value: **10**; Value range **4~31**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by 1 doubles the necessary time. 
+  - If **pkbdf2** is selected, you also need to configure:
     - **Pseudorandom Function**: Specify the Hush functions to generate the key, such as sha256. 
     - **Iteration Count**: Specify the iteration times; Default: 4096
-    - **Derived Key Length**: Specify the length of the generated password, if left blank, the password length will be determined by the pseudorandom function you selected. 
-
+    - **Derived Key Length** (optional): Specify the generated key length. You can leave this field blank, then the key length will be determined by the pseudorandom function you selected.  
 - **Salt Field**: Salt field in MongoDB. 
 - **is_superuser Field**: Specify if the user is a super user. 
 - **Filter**: A map interpreted as MongoDB selector for credential lookup. [Placeholders](./authn.md#authentication-placeholders) are supported. 
@@ -110,7 +109,7 @@ Below are code examples you may refer to:
 
 ::: tab Single mode
 
-```
+```bash
 {
   mechanism = password_based
   backend = mongodb
@@ -137,7 +136,7 @@ Below are code examples you may refer to:
 
 ::: tab Replica set
 
-```
+```bash
 {
   mechanism = password_based
   backend = mongodb
@@ -165,7 +164,7 @@ Below are code examples you may refer to:
 
 ::: tab Sharding
 
-```
+```bash
 {
   mechanism = password_based
   backend = mongodb

@@ -29,24 +29,15 @@ CREATE TABLE mqtt_user (
 ```
 
 :::tip
-上面的示例创建了一个隐式的 `UNIQUE` 索引，当系统中有大量用户时，请确保查询使用的表已优化并使用有效的索引，以提升大量连接时的数据查找速度并降低 EMQX 负载。
+上面的示例创建了一个有助于查询的隐式 `UNIQUE` 索引字段（ `username` ）。当系统中有大量用户时，请确保查询使用的表已优化并使用有效的索引，以提升大量连接时的数据查找速度并降低 EMQX 负载。
 :::
 
 在此表中使用 `username` 作为查找条件。
 
-例如我们希望添加一位名为 `emqx_u`、密码为 `public`、盐值为 `slat_foo123`、散列方式为 `sha256` 且超级用户标志为 `true` 的用户：
-
-> PostgreSQL 中使用加密函数需要启用 pgcrypto 扩展。
+例如我们希望添加一位名为 `emqx_u`、密码为 `public`、盐值为 `slat_foo123`、散列方式为 `sha256` 且超级用户标志为 `true` 的用户，SQL 如下：
 
 ```sql
-postgres=# create extension pgcrypto;
-CREATE EXTENSION
-```
-
-SQL 如下：
-
-```sql
-INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('emqx_u', encode(digest('public' || 'slat_foo123', 'sha256'), 'hex'), 'slat_foo123', true);
+INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('emqx_u', '44edc2d57cde8d79c98145003e105b90a14f1460b79186ea9cfe83942fc5abb5', 'slat_foo123', true);
 INSERT 0 1
 ```
 
@@ -88,9 +79,8 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 - 选择 **plain**、**md5**、**sha**、**sha256** 或 **sha512** 算法，需配置：
 
   - **加盐方式**：用于指定盐和密码的组合方式，除需将访问凭据从外部存储迁移到 EMQX 内置数据库中外，一般不需要更改此选项；可选值：**suffix**（在密码尾部加盐）、**prefix**（在密码头部加盐）、**disable**（不启用）。注意：如选择 **plain**，加盐方式应设为 **disable**。
-
-- 选择 **bcrypt** 算法，无需额外配置。
-
+- 选择 **bcrypt** 算法，需配置:
+- **Salt Rounds**：指定散列需要的计算次数（2^Salt Rounds），也称成本因子。默认值：**10**，可选值：**4～31**；数值越高，加密的安全性越高，因此建议采用较大的值，但相应的用户验证的耗时也会增加，您可根据业务需求进行配置。
 - 选择 **pkbdf2** 算法，需配置：
 
   - **伪随机函数**：指定生成密钥使用的散列函数，如 sha256 等。
@@ -107,7 +97,7 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
 配置示例：
 
-```
+```bash
 {
   mechanism = password_based
   backend = postgresql

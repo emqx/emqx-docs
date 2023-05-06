@@ -34,13 +34,13 @@ CREATE TABLE `mqtt_user` (
 ```
 
 ::: tip
-The above example has created an implicit `UNIQUE` index.
-When there is a significant number of users in the system, please optimize and index the collection to be queried beforehand to shorten the query response time and reduce the load for EMQX.
+The above example has created an implicit `UNIQUE` index field (username) that is helpful for the queries.
+When there is a significant number of users in the system, please optimize and index the tables to be queried beforehand to shorten the query response time and reduce the load for EMQX.
 :::
 
 In this table, MQTT users are identified by `username`.
 
-For example, if we want to add a document for a superuser (`is_superuser`: `true`) with username `emqx_u`, password `public`, prefixed salt `slat_foo123`, and password hash `sha256`, the query statement should be:
+For example, if we want to add a document for a superuser (`is_superuser`: `true`) with username `emqx_u`, password `public`, suffixed salt `slat_foo123`, and password hash `sha256`, the query statement should be:
 
 ```bash
 mysql> INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('emqx_u', SHA2(concat('public', 'slat_foo123'), 256), 'slat_foo123', 1);
@@ -52,7 +52,7 @@ The corresponding configuration parameters are:
 ```sql
 password_hash_algorithm {
     name = sha256
-    salt_position = prefix
+    salt_position = suffix
 }
 
 query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
@@ -84,16 +84,15 @@ Follow the instruction below on how to configure:
 
 **Authentication configuration**: Fill in the authentication-related settings:
 
-- **Password Hash Field**: Specify the field name of the password.
 - **Password Hash**: Select the Hash function for storing the password in the database, for example, plain, md5, sha, bcrypt, pbkdf2. 
   - If **plain**, **md5**, **sha**, **sha256** or **sha512** are selected, we also need to configure:
-    - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. Note: If **plain** is selected, the **Salt Position** should be **disable**. 
-
-  - If **bcrypt** is selected, no extra configurations are needed. 
+    - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. You can keep the default value unless you are migrating user credentials from external storage into EMQX built-in database. Note: If **plain** is selected, the **Salt Position** should be **disable**. 
+  - If **bcrypt** is selected, you also need to configure:
+    - **Salt Rounds**: Specify the calculation times of Hush function (2^Salt Rounds). Default value: **10**; Value range **4~31**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by 1 doubles the necessary time. 
   - If **pkbdf2** is selected, we also need to configure:
     - **Pseudorandom Function**: Specify the Hush functions to generate the key, such as sha256. 
     - **Iteration Count**: Specify the iteration times; Default: 4096
-    - **Derived Key Length**: Specify the length of the generated password, if left blank, the password length will be determined by the pseudorandom function you selected. 
+    - **Derived Key Length** (optional): Specify the length of the generated password. You can leave this field blank, then the key length will be determined by the pseudorandom function you selected. 
 - **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
 
 Now we can click **Create** to finish the settings. 

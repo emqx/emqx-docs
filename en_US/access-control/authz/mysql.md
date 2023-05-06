@@ -34,7 +34,7 @@ CREATE TABLE `mqtt_acl` (
 ```
 
 ::: tip
-The example above creates an index. When there is a significant number of users in the system, optimize and index the collection to be queried beforehand to shorten the query response time and reduce the load for EMQX.
+When there is a significant number of users in the system, optimize and index the tables to be queried beforehand to shorten the query response time and reduce the load for EMQX.
 :::
 
 In this table, MQTT users are identified by `username`.

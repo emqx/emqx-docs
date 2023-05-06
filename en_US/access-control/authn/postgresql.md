@@ -32,22 +32,13 @@ CREATE TABLE mqtt_user (
 ```
 
 ::: tip
-The above example has created an implicit `UNIQUE` index.
-When there is a significant number of users in the system, please optimize and index the collection to be queried beforehand to shorten the query response time and reduce the load for EMQX.
+The above example has created an implicit `UNIQUE` index field (username) that is helpful for the queries.
+When there is a significant number of users in the system, please optimize and index the tables to be queried beforehand to shorten the query response time and reduce the load for EMQX.
 :::
 
 In this table, MQTT users are identified by `username`.
 
-For example, if we want to add a document for a superuser (`is_superuser`: `true`) with username `user123`, password `secret`, and prefixed salt `salt`, the query statement should be:
-
-> Using crypto functions in PostgreSQL requires the pgcrypto extension to be enabled.
-
-```sql
-postgres=# create extension pgcrypto;
-CREATE EXTENSION
-```
-
-SQL:
+For example, if you want to add a document for a superuser (`is_superuser`: `true`) with username `user123`, password `secret`, and suffixed salt `salt`, the query statement should be:
 
 ```bash
 INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('user123', 'bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35', 'salt', true);
@@ -57,7 +48,7 @@ INSERT 0 1
 The corresponding configuration parameters are:
 
 - password_hash_algorithm: `sha256`
-- salt_position: `prefix`
+- salt_position: `suffix`
 
 SQL: 
 
@@ -90,16 +81,15 @@ Follow the instruction below on how to configure:
 
 **Authentication configuration**: Fill in the authentication-related settings:
 
-- **Password Hash Field**: Specify the field name of the password.
 - **Password Hash**: Select the Hash function for storing the password in the database, for example, plain, md5, sha, bcrypt, pbkdf2. 
   - If **plain**, **md5**, **sha**, **sha256** or **sha512** are selected, we also need to configure:
-    - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. Note: If **plain** is selected, the **Salt Position** should be **disable**. 
-
-  - If **bcrypt** is selected, no extra configurations are needed. 
+    - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. You can keep the default value unless you are migrating user credentials from external storage into EMQX built-in database. Note: If **plain** is selected, the **Salt Position** should be **disable**. 
+  - If **bcrypt** is selected, you also need to configure:
+    - **Salt Rounds**: Specify the calculation times of Hush function (2^Salt Rounds). Default value: **10**; Value range **4~31**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by 1 doubles the necessary time. 
   - If **pkbdf2** is selected, we also need to configure:
     - **Pseudorandom Function**: Specify the Hush functions to generate the key, such as sha256. 
-    - **Iteration Count**: Specify the iteration times; Default: **4096**
-    - **Derived Key Length**: Specify the length of the generated password, if left blank, the password length will be determined by the pseudorandom function you selected. 
+    - **Iteration Count**: Specify the iteration times; Default: **4096**.
+    - **Derived Key Length**: Specify the length of the generated password. You can leave this field blank, then the key length will be determined by the pseudorandom function you selected.
 - **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
 
 Now we can click **Create** to finish the settings. 
@@ -112,7 +102,7 @@ PostgreSQL authentication is identified with `mechanism = password_based` and `b
 
 Sample configuration:
 
-```
+```bash
 {
   mechanism = password_based
   backend = postgresql

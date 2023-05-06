@@ -59,8 +59,7 @@ On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Con
    :::
 
 - **URL**: Enter the URL address of the HTTP service.
-
-- **Headers** (optional): HTTP request header.
+- **Headers** (optional): HTTP request header. You can add several headers.
 
 **Connection Configuration**:
 
@@ -109,6 +108,8 @@ Below are the HTTP `POST` and `GET` request examples:
 :::
 
 ::: tab GET request
+
+Note: The "body" will be converted to a query string.
 
 ```hcl
 {
