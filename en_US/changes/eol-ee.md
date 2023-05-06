@@ -13,7 +13,7 @@ category:
 ref:
 ---
 
-# End of life dates
+# End of Life Dates
 
 ## Summary
 

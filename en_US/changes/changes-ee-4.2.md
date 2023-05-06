@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# Release version
+# Release Version
 
 ## 4.2.6 version
 

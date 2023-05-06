@@ -13,7 +13,7 @@ category:
 ref: undefinedBasic concept
 ---
 
-# Introduction
+# FAQs
 
 ## What's EMQX?
 
