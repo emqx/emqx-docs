@@ -57,7 +57,7 @@ You can see the event-related metrics for the cluster or node, such as [client c
 
 | Metrics             | Description                                                  |
 | ------------------- | ------------------------------------------------------------ |
-| client.connack      | The number of connection acknowledgment (CONNACK) messages received by clients |
+| client.connack      | The number of connection acknowledgment (`CONNACK`) messages received by clients |
 | client.connect      | The number of connection requests from the client, including both successful and failed connection requests |
 | client.connected    | The number of client connections that have succeeded         |
 | client.disconnected | The number of client disconnections, including active and abrupt disconnection |
