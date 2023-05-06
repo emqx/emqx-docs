@@ -49,7 +49,7 @@ On EMQX Dashboard, click **Monitoring** -> **Cluster Overview** from the left na
 
 ### Connection and Session Metrics
 
-You can see the event-related metrics for the cluster or node, such as client connection, connection sessions, and client access.
+You can see the event-related metrics for the cluster or node, such as [client connection](#connections), [connection sessions](#sessions), and [client access](#access).
 
 <img src="./assets/dashboard-event-metrics-ee.png" alt="dashboard-event-metrics-ee" style="zoom:50%;" />
 
@@ -91,7 +91,7 @@ You can see the event-related metrics for the cluster or node, such as client co
 
 ### Messaging
 
-Scroll down the **Metrics** page, and you can see message-related metrics, including bytes, packets, messages, and delivery. 
+Scroll down the **Metrics** page, and you can see message-related metrics, including [bytes](#bytes), [packets](#packets), [messages](#message-publish-packet), and [delivery](#delivery). 
 
 <img src="./assets/dashboard-messaging-metrics-ee.png" alt="dashboard-messaging-metrics-ee" style="zoom:50%;" />
 
@@ -100,7 +100,7 @@ Scroll down the **Metrics** page, and you can see message-related metrics, inclu
 | Metrics    | Description              |
 | -------------- | ------------------------ |
 | bytes.received | The number of received bytes |
-| bytes.sent     | The umber of sent bytes |
+| bytes.sent     | The number of sent bytes |
 
 #### Packets
 
@@ -181,11 +181,11 @@ Scroll down the **Metrics** page, and you can see message-related metrics, inclu
 
 ## Request Monitoring Status via REST API
 
-You can also get the metrics and statistics through the [API Docs](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html). Click **Metrics** on the left navigation menu on the UI to execute this API request. For how to work with EMQX API, see [REST API](../admin/api.md).
+You can also get the metrics and statistics through the API. Click **Metrics** on the left navigation menu on the UI to execute this API request. For how to work with EMQX API, see [REST API](../admin/api.md).
 
 <img src="./assets/metrics-api-doc.png" alt="metrics-api-doc" style="zoom:35%;" />
 
-## Obtain Monitoring Status via System Topics
+## Get Monitoring Status via System Topics
 
 EMQX periodically publishes messages about the running status, message statistics, and client online and offline events through system topics. Clients can subscribe to system topics by adding the prefix `$SYS/` before the topic name. For more information on different types of system topics, see [System Topic](./mqtt-system-topics.md).
 
