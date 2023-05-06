@@ -1,4 +1,4 @@
-# the Statistics and Metrics
+# Statistics and Metrics
 
 EMQX provides metrics monitoring functions, based on which the operation and maintenance personnel can monitor the current service status and troubleshoot possible system malfunctions. 
 
@@ -7,7 +7,7 @@ EMQX divides monitoring status into Statistics and Metrics.
 - Statistics are integer-type gauges used to return a single value at the point of time the metric was requested. 
 - Metrics are integer-type counters used to measure simple incrementing and decrementing numbers, such as the number of sent bytes and messages.  
 
-EMQX provides users with multiple ways to view statistics and metrics. Most directly, you can view these data on the EMQX Dashboard. When it is not convenient to access the Dashboard, you can also get the data through [HTTP API](#request-metrics-and-statitics-via-rest-api) and [system topic](#obtain-metrics-and-statistics-via-system-topics) messages. Additionally, you can easily integrate the monitoring functions with your own monitoring system, see [Integrate with Prometheus](./prometheus.md). 
+EMQX provides users with multiple ways to view statistics and metrics. Most directly, you can view these data on the EMQX Dashboard. When it is not convenient to access the Dashboard, you can also get the data through [REST API](#request-metrics-and-statitics-via-rest-api) and [system topic](#obtain-metrics-and-statistics-via-system-topics) messages. Additionally, you can easily integrate the monitoring functions with your own monitoring system, see [Integrate with Prometheus](./prometheus.md). 
 
 ## View Statistics on Dashboard
 
@@ -57,8 +57,8 @@ You can see the event-related metrics for the cluster or node, such as client co
 
 | Metrics             | Description                                                  |
 | ------------------- | ------------------------------------------------------------ |
-| client.connack      | The number of connection acknowledgment (CONNACK) messages received by clients, including both successful and failed connection requests. |
-| client.connect      | The number of connection requests from the client, including both successful and failed connection requests. |
+| client.connack      | The number of connection acknowledgment (CONNACK) messages received by clients |
+| client.connect      | The number of connection requests from the client, including both successful and failed connection requests |
 | client.connected    | The number of client connections that have succeeded         |
 | client.disconnected | The number of client disconnections, including active and abrupt disconnection |
 | client.subscribe    | The number of successful subscriptions                       |
@@ -86,8 +86,8 @@ You can see the event-related metrics for the cluster or node, such as client co
 | authorization.cache_hit     | The number of clients getting authorization results (allow or deny) by cache |
 | authorization.superuser     | The number of clients being authorized as superuser          |
 | client.auth.anonymous       | The number of clients who log in anonymously                 |
-| client.authenticate         | The number of clients passing the authentication             |
-| client.authorize            | The number of clients being authorized                       |
+| client.authenticate         | The number of triggered authentication                       |
+| client.authorize            | The number of triggered authorization                        |
 
 ### Messaging
 
@@ -151,7 +151,7 @@ Scroll down the **Metrics** page, and you can see message-related metrics, inclu
 
 | Metrics                   | Description                                                  |
 | ------------------------------- | ------------------------------------------------------------ |
-| messages.acked | The number of connection acknowledgment messages |
+| messages.acked | The number of acknowledged messages |
 | messages.delayed                | The number of messages for delayed publish that are stored by EMQX |
 | messages.delivered              | The number of messages forwarded to the subscription process internally by EMQX |
 | messages.dropped                | The total number of messages dropped by EMQX before forwarding to the subscription process |
