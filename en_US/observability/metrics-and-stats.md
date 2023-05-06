@@ -5,7 +5,7 @@ EMQX provides metrics monitoring functions, based on which the operation and mai
 EMQX divides monitoring status into Statistics and Metrics. 
 
 - Statistics are integer-type gauges used to return a single value at the point of time the metric was requested. 
-- Metrics are integer-type counters used to measure simple incrementing and decrementing numbers, such as the number of sent bytes and messages.  
+- Metrics are integer-type counters used to measure simple incrementing and decrementing numbers, such as the number of bytes and messages sent or received.  
 
 EMQX provides users with multiple ways to view statistics and metrics. Most directly, you can view these data on the EMQX Dashboard. When it is not convenient to access the Dashboard, you can also get the data through [REST API](#request-metrics-and-statitics-via-rest-api) and [system topic](#obtain-metrics-and-statistics-via-system-topics) messages. Additionally, you can easily integrate the monitoring functions with your own monitoring system, see [Integrate with Prometheus](./prometheus.md). 
 
