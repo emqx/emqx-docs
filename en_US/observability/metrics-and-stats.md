@@ -79,7 +79,7 @@ You can see the event-related metrics for the cluster or node, such as [client c
 | Metrics                     | Description                                                  |
 | --------------------------- | ------------------------------------------------------------ |
 | authorization.allow         | Total number of client authorization passes, that is, the sum of cache hits (retrieved authorization results) and matched authorization requests (those corresponding to the policy rules). |
-| authorization.deny          | The total number of client authorization fails, including getting authorization results by cache and authorization requests not matched by any rules |
+| authorization.deny          | Total number of client authorization fails, that is, the sum of cache hits (retrieved authorization results) and unmatched authorization requests (those not corresponding to any policy rules).  |
 | authorization.matched.allow | The number of client authorization passes due to authorized by some rules |
 | authorization.matched.deny  | The number of client authorization fails due to being rejected by some rules |
 | authorization.nomatch       | The number of client authorization requests not matched by any rules |
