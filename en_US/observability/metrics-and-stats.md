@@ -166,7 +166,7 @@ Scroll down the **Metrics** page, and you can see message-related metrics, inclu
 | messages.qos1.sent              | The number of QoS 1 messages sent to clients          |
 | messages.qos2.sent              | The number of QoS 2 messages sent to clients          |
 | messages.received               | The number of messages received from the client, which is equal to the sum of `messages.qos0.received`, ` messages.qos1.received`, and `messages.qos2.received` |
-| messages.sent                   | The number of messages sent to the client, which is equal to the sum of `messages.qos0.sent`,` messages.qos1.sent`, and `messages.qos2.sent` |
+| messages.sent                   | The number of messages sent to the client, which is equal to the sum of `messages.qos0.sent`, ` messages.qos1.sent`, and `messages.qos2.sent` |
 
 #### Delivery
 
