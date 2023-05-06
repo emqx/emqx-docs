@@ -4,7 +4,7 @@ EMQX supports integration with third-party monitoring systems, such as [Promethe
 
 - A complete monitoring system, where the monitoring data of EMQX will be integrated with that of the other systems. For example, you can get the monitoring information of the server host;
 - More intuitive monitoring report with figures and charts, such as using [Grafana dashboard](#use-grafana-to-visualize-EMQX-metrics);
-- Various alarm notification means, such as using Prometheus Alertmanager.
+- Various alarm notification options, such as using Prometheus Alertmanager.
 
 [Prometheus](https://prometheus.io/) is the monitoring solution open-sourced by SoundCloud. It offers a versatile set of features including support for multidimensional data models, flexible query language, and powerful alarm management.
 
