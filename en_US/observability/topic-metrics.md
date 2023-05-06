@@ -24,6 +24,6 @@ The topic metrics list contains the following fields:
 
 ## Get Topic Metrics via REST API
 
-You can also get the topic metrics through the [API Docs](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html). Click **MQTT** -> **Topic Metrics** on the left navigation menu on the UI to execute this API request. For how to work with EMQX API, see [REST API](../admin/api.md).
+You can also get the topic metrics through the API. On how to work with EMQX APIS, see [REST API](../admin/api.md).
 
 <img src="./assets/topic-metrics-api-ee.png" alt="topic-metrics-api-ee" style="zoom:45%;" />
