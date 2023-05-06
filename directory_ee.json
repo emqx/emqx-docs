@@ -581,7 +581,7 @@
     },
     {
       "title": "参数配置",
-      "path": "configuration/overview",
+      "path": "configuration/config-overview",
       "children": [
         {
           "title": "参数配置列表",
