@@ -72,9 +72,9 @@ Follow the instruction below on how to configure:
   - **master**: Indicate each query in a sequence must only read fresh data (from a master/primary server). If the connected server is not a master then the first read will fail, and the remaining operations will be aborted. 
   - **slave_ok**: Indicate every query is allowed to read stale data from a slave/secondary (or fresh data from a master).
 
-- **Write Mode **(optional): Only needed if you set **MongoDB Mode** to **Replica Set**; Options: **unsafe**, **safe**; Default: **safe**.
+- **Write Mode** (optional): Only needed if you set **MongoDB Mode** to **Replica Set**; Options: **unsafe**, **safe**; Default: **safe**.
 
-**TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
+**TLS Configuration**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
 
 **Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
 

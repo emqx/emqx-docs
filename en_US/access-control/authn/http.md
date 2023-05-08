@@ -69,7 +69,7 @@ On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Con
 - **HTTP Pipelining** (optional): Input a positive integer to specify the maximum number of HTTP requests that can be sent without waiting for a response; default value: **100**.
 - **Request Timeout** (optional): Specify the waiting period before EMQX assumes the request is timed out. Units supported include milliseconds, second, minute, and hour.
 
-**TLS Configuration**: Turn on the toggle switch if you want to enable TLS.
+**TLS Configuration**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
 
 **Authentication configuration**:
 
