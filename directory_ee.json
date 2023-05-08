@@ -197,7 +197,7 @@
           "path": "modules/pulsar_consumer"
         },
         {
-          "title": "MQTT Subscriber",
+          "title": "MQTT 订阅者",
           "path": "modules/mqtt_subscriber"
         },
         {
@@ -223,10 +223,6 @@
         {
           "title": "主题指标统计",
           "path": "modules/topic_metrics"
-        },
-        {
-          "title": "MQTT 增强认证",
-          "path": "modules/auth_sasl"
         },
         {
           "title": "上下线通知",
@@ -929,7 +925,7 @@
           "path": "modules/exproto"
         },
         {
-          "title": "Extension Language hook",
+          "title": "Extension Language Hook",
           "path": "modules/exhook"
         },
         {
@@ -949,15 +945,11 @@
           "path": "modules/topic_metrics"
         },
         {
-          "title": "MQTT Enhanced Auth",
-          "path": "modules/auth_sasl"
-        },
-        {
-          "title": "Presence",
+          "title": "Online and Offline Notification",
           "path": "modules/presence"
         },
         {
-          "title": "MQTT Subscription",
+          "title": "MQTT Proxy Subscription",
           "path": "modules/subscription"
         },
         {

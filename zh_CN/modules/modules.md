@@ -8,40 +8,43 @@ EMQX 发行包中提供了丰富了功能模块，包括 认证鉴权、协议�
 目前 EMQX 发行包提供的模块包括：
 
 - 认证鉴权
-  - 内置访问控制文件
-  - MySQL 认证/访问控制
-  - PostgreSQL 认证/访问控制
-  - Redis 认证/访问控制
-  - HTTP 认证/访问控制
-  - 内置数据库 认证/访问控制
-  - MongoDB 认证/访问控制
-  - LDAP 认证/访问控制
-  - JWT 认证
+  - [内置访问控制文件](./internal_acl.md)
+  - [MySQL 认证/访问控制](./mysql_authentication.md)
+  - [PostgreSQL 认证/访问控制](./pgsql_authentication.md)
+  - [Redis 认证/访问控制](./redis_authentication.md)
+  - [HTTP 认证/访问控制](./http_authentication.md)
+  - [内置数据库 认证/访问控制](./mnesia_authentication.md)
+  - [MongoDB 认证/访问控制](./mongo_authentication.md)
+  - [PSK File 认证](./psk_authentication.md)
+  - [LDAP 认证/访问控制](./ldap_authentication.md)
+  - [JWT 认证](./jwt_authentication.md)
 - 协议接入
-  - LwM2M 协议网关
-  - MQTT-SN 协议网关
-  - TCP 协议网关
-  - JT/T808 协议网关
-  - CoAP 协议网关
-  - Stomp 协议网关
+  - [LwM2M 协议网关](./lwm2m_protocol.md)
+  - [MQTT-SN 协议网关](./mqtt_sn_protocol.md)
+  - [TCP 协议网关](./tcp_protocol.md)
+  - [JT/T808 协议网关](./jt808_protocol.md)
+  - [GB/T32960 网关](./gbt32960_protocol.md)
+  - [CoAP 协议网关](./coap_protocol.md)
+  - [Stomp 协议网关](./stomp_protocol.md)
 - 消息下发
-  - Kafka 消费组
-  - Pulsar 消费组
-  - MQTT 订阅者
+  - [Kafka 消费组](./kafka_consumer.md)
+  - [Pulsar 消费组](./pulsar_consumer.md)
+  - [MQTT 订阅者](./mqtt_subscriber.md)
 - 多语言扩展
-  - 协议接入
-  - 钩子
+  - [协议接入](./exproto.md)
+  - [钩子](./exhook.md)
 - 运维监控
-  - Recon
-  - Prometheus Agent
+  - [Recon](./recon.md)
+  - [Prometheus Agent](./prometheus.md)
 - 内部模块
-  - 主题监控
-  - MQTT 增强认证
-  - MQTT 上下线通知
-  - MQTT 代理订阅
-  - MQTT 主题重写
-  - MQTT 保留消息
-  - MQTT 延迟发布
+  - [热配置](./hot_confs.md)
+  - [主题监控](./topic_metrics.md)
+  - [MQTT 上下线通知](./presence.md)
+  - [MQTT 代理订阅](./subscription.md)
+  - [MQTT 主题重写](./topic_rewrite.md)
+  - [MQTT 保留消息](./retainer.md)
+  - [MQTT 延迟发布](./delayed_publish.md)
+  
 
 
 ## 启停模块
