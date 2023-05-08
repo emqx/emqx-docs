@@ -119,21 +119,19 @@ On the  **Monitoring** page, click the **Erlang** tab, you can configure the fol
 
 <img src="./assets/monitoring-system-ee.png" alt="monitoring-system" style="zoom:40%;" />
 
-**Process limit check interval**: Specify the time interval for checking the periodic process limit. The default value is `30` seconds.
+- **Process limit check interval**: Specify the time interval for checking the periodic process limit. The default value is `30` seconds.
+- **Process high watermark**: Specify the threshold value of processes that can simultaneously exist at the local node. When the percentage exceeds the specified number, an alarm is raised. The default value is `80` percent.
 
-**Process high watermark**: Specify the threshold value of processes that can simultaneously exist at the local node. When the percentage exceeds the specified number, an alarm is raised. The default value is `80` percent.
+- **Process low watermark**: Specify the threshold value of processes that can simultaneously exist at the local node. When the percentage is lowered to the specified number, an alarm is cleared. The default value is `60` percent.
 
-**Process low watermark**: Specify the threshold value of processes that can simultaneously exist at the local node. When the percentage is lowered to the specified number, an alarm is cleared. The default value is `60` percent.
+- **Enable Long GC monitoring**: Disabled by default. When enabled, a warning-level log `long_gc` is emitted and an MQTT message is published to the system topic `$SYS/sysmon/long_gc` when an Erlang process spends long time performing garbage collection.
+- **Enable Long Schedule monitoring**: Enabled by default, which means when the Erlang VM detects a task scheduled for too long, a warning level log `long_schedule` is emitted. You can set the proper time scheduled for a task in the text box. The default value is `240` milliseconds. 
 
-**Enable Long GC monitoring**: Disabled by default. When enabled, a warning-level log `long_gc` is emitted and an MQTT message is published to the system topic `$SYS/sysmon/long_gc` when an Erlang process spends long time performing garbage collection.
+- **Enable Large Heap monitoring**: Enabled by default, which means when an Erlang process consumed a large amount of memory for its heap space, a warning level log `large_heap` is emitted, and an MQTT message is published to the system topic `$SYS/sysmon/large_heap`. You can set the limit of space bytesize in the text box. The default value is `32` MB.
 
-**Enable Long Schedule monitoring**: Enabled by default, which means when the Erlang VM detects a task scheduled for too long, a warning level log `long_schedule` is emitted. You can set the proper time scheduled for a task in the text box. The default value is `240` milliseconds. 
+- **Enable Busy Distribution Port monitoring**: Enabled by default, which means when the Remote Procedure Call (RPC) connection used to communicate with other nodes in the cluster is overloaded, a warning level log `busy_dis_port` log is emitted, and an MQTT message is published to system topic `$SYS/sysmon/busy_dist_port`.
 
-**Enable Large Heap monitoring**: Enabled by default, which means when an Erlang process consumed a large amount of memory for its heap space, a warning level log `large_heap` is emitted, and an MQTT message is published to the system topic `$SYS/sysmon/large_heap`. You can set the limit of space bytesize in the text box. The default value is `32` MB.
-
-**Enable Busy Distribution Port monitoring**: Enabled by default, which means when the Remote Procedure Call (RPC) connection used to communicate with other nodes in the cluster is overloaded, a warning level log `busy_dis_port` log is emitted, and an MQTT message is published to system topic `$SYS/sysmon/busy_dist_port`.
-
-**Enable Busy Port monitory**: Enabled by default, which means when a port is overloaded, a warning level log `busy_port` is emitted, and an MQTT message is published to the system topic `$SYS/sysmon/busy_port`.
+- **Enable Busy Port monitory**: Enabled by default, which means when a port is overloaded, a warning level log `busy_port` is emitted, and an MQTT message is published to the system topic `$SYS/sysmon/busy_port`.
 
 After you complete the configurations, click **Save Changes**.
 
@@ -141,17 +139,18 @@ Click the **Operating System** tab, you can configure the following items for th
 
 <img src="./assets/monitoring-operating-system-ee.png" alt="monitoring-operating-system-ee" style="zoom:40%;" />
 
-**The time interval of the periodic CPU check**: Specify the time interval for checking the CPU usage. The default value is `60` seconds.
+- **The time interval of the periodic CPU check**: Specify the time interval for checking the CPU usage. The default value is `60` seconds.
+- **CPU high watermark**: Specify the threshold value of how much system CPU can be used. When the percentage exceeds the specified value, a corresponding alarm is raised. The default value is `80` percent.
 
-**CPU high watermark**: Specify the threshold value of how much system CPU can be used. When the percentage exceeds the specified value, a corresponding alarm is raised. The default value is `80` percent.
+- **CPU low watermark**: Specify the threshold value of how much system CPU can be used. When the percentage is lowered to the specified value, a corresponding alarm is released. The default value is `60` percent.
 
-**CPU low watermark**: Specify the threshold value of how much system CPU can be used. When the percentage is lowered to the specified value, a corresponding alarm is released. The default value is `60` percent.
+- **Mem check interval**: Enabled by default. You can specify the time interval for periodic memory checks. The default value is `60` seconds.
 
-**Mem check interval**: Enabled by default. You can specify the time interval for periodic memory checks. The default value is `60` seconds.
+- **SysMem high watermark**: Specify the threshold for how much system memory can be allocated. When the percentage exceeds the specified value, a corresponding alarm is raised. The default value is `70`%.
 
-**SysMem high watermark**: Specify the threshold for how much system memory can be allocated. When the percentage exceeds the specified value, a corresponding alarm is raised. The default value is `70`%.
+- **ProcMem high watermark**: Specify the threshold for how much system memory can be allocated by one Erlang process. When the percentage exceeds the specified value, a corresponding alarm is raised. The default value is `5`%.
 
-**ProcMem high watermark**: Specify the threshold for how much system memory can be allocated by one Erlang process. When the percentage exceeds the specified value, a corresponding alarm is raised. The default value is `5`%.
+After you complete the configurations, click **Save Changes**.
 
 ### Configure Alarm Thresholds via Configuration Items
 
