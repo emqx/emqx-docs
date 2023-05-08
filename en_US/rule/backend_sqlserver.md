@@ -1,4 +1,4 @@
-# Ingest Data into SQL Server
+# Ingest Data into Microsoft SQL Server
 
 Set up an SQL Server database and set the user name and password to sa/mqtt_public. Take MacOS X as an example:
 

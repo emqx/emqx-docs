@@ -14,7 +14,6 @@
 
 **消息服务和订阅**：包括所有与消息处理和订阅管理相关的主题。
 
-- [消息桥接](../bridge/bridge.md)
 - [共享订阅](./shared-subscriptions.md)
 - [排它订阅](./exclusive-subscriptions.md)
 - [消息重传](./retransmission.md)

@@ -17,7 +17,6 @@ This chapter is designed to help users get started with EMQX, and it covers a wi
 - [Shared Subscriptions](./shared-subscriptions.md)
 - [Exclusive Subscriptions](./exclusive-subscriptions.md)
 - [Message Retransmission](./retransmission.md)
-- [Message Bridging](../bridge/bridge.md)
 
 
 

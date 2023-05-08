@@ -8,41 +8,41 @@ On the module management page of dashboard, modules can be started and stopped, 
 The modules currently provided by the EMQX include:
 
 - Authentication & Authorization
-  - Builtin ACL file
-  - MySQL Authentication/ACL
-  - PostgreSQL Authentication/ACL
-  - Redis Authentication/ACL
-  - HTTP Authentication/ACL
-  - Builtin database Authentication/ACL
-  - MongoDB Authentication/ACL
-  - LDAP Authentication/ACL
-  - JWT Authentication
+  - [Builtin ACL File](./internal_acl.md)
+  - [MySQL AUTH/ACL](./mysql_authentication.md)
+  - [PostgreSQL AUTH/ACL](./pgsql_authentication.md)
+  - [Redis AUTH/ACL](./redis_authentication.md)
+  - [HTTP AUTH/ACL](./http_authentication.md)
+  - [Builtin Database AUTH/ACL](./mnesia_authentication.md)
+  - [MongoDB AUTH/ACL](./mongo_authentication.md)
+  - [PSK File AUTH](./psk_authentication.md)
+  - [LDAP AUTH/ACL](./ldap_authentication.md)
+  - [JWT AUTH](./jwt_authentication.md)
 - Protocol Access
-  - LwM2M protocol gateway
-  - MQTT-SN protocol gateway
-  - TCP protocol gateway
-  - JT/T808 Protocol Gateway
-  - CoAP protocol gateway
-  - Stomp protocol gateway
+  - [LwM2M Gateway](./lwm2m_protocol.md)
+  - [MQTT-SN Gateway](./mqtt_sn_protocol.md)
+  - [TCP Gateway](./tcp_protocol.md)
+  - [JT/T808 Gateway](./jt808_protocol.md)
+  - [CoAP Gateway](./coap_protocol.md)
+  - [Stomp Gateway](./stomp_protocol.md)
 - Message Delivery
-  - Kafka consumer group
-  - Pulsar Consumer Group
-  - MQTT subscribers
+  - [Kafka Consumer Group](./kafka_consumer.md)
+  - [Pulsar Consumer Group](./pulsar_consumer.md)
+  - [MQTT Subscriber](./mqtt_subscriber.md)
 - Language Extension
-  - Protocol access
-  - Hook
+  - [Protocol Access](./exproto.md)
+  - [Hook](./exhook.md)
 - Develop and Maintenance 
-  - Recon
-  - Prometheus Agent
-  - Trace
+  - [Recon](./recon.md)
+  - [Prometheus Agent](./prometheus.md)
 - Internal Modules
-  - Topic metrics
-  - MQTT enhanced certification
-  - MQTT online and offline notification
-  - MQTT broker subscription
-  - MQTT topic rewrite
-  - MQTT retainr messages
-  - MQTT delayed publish
+  - [Hot Configuration](./hot_confs.md)
+  - [Topic Metrics](./topic_metrics.md)
+  - [Online and Offline Notification](./presence.md)
+  - [MQTT Proxy Subscription](./subscription.md)
+  - [MQTT Topic Rewrite](./topic_rewrite.md)
+  - [MQTT Retainer Message](./retainer.md)
+  - [MQTT Delayed Publish](./delayed_publish.md)
 
 
 ## Start and Stop Modules
