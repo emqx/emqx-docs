@@ -359,17 +359,19 @@
   title_cn: 速率限制
   path: rate-limit/rate-limit
 
-- title_en: Log and Observability
+- title_en: Logs and Observability
   title_cn: 日志及可观测性
   path: observability/overview
   children:
-    - observability/log
     - observability/metrics-and-stats
-    - observability/prometheus
-    - observability/tracer
     - observability/alarms
+    - observability/log
     - observability/topic-metrics
     - observability/slow-subscribers-statistics
+    - observability/tracer
+    - observability/mqtt-system-topics
+    - observability/prometheus
+    
 
 ## Device connectivity
 
@@ -422,7 +424,6 @@
     - mqtt/mqtt-retained-messages
     - mqtt/mqtt-last-will-and-testament
     - mqtt/mqtt-shared-subscription
-    - mqtt/mqtt-system-topics
     - mqtt/mqtt-topic-rewrite
 
 - title_en: Telemetry

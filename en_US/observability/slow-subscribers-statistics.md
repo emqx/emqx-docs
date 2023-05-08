@@ -1,6 +1,6 @@
 # Slow Subscriptions
 
-Typically, EMQX will finish the message transmission within milliseconds, affected mainly by the network. However, there are cases where the latency of subscription messages is very high on the client side. To solve this problem, EMQX provides a Slow subscriptions feature.
+Typically, EMQX will finish the message transmission within milliseconds, affected mainly by the network. However, there are cases where the latency of subscription messages is very high on the client side. To solve this problem, EMQX provides a slow subscriptions feature.
 
 ## How It Works
 
@@ -8,11 +8,11 @@ EMQX will start calculating the time (delay) it takes for the message to be proc
 
 If the delay exceeds the specified threshold, EMQX will insert the corresponding **subscriber and topic** into the **slow subscriptions list** or update the existing record. 
 
-Slow subscriptions list:
+In the slow subscriptions list:
 
-- The data in the list are in descending order by the time delay and can save up to 1000 records.
+- The record data are presented in descending order by the time delay and can save up to 1000 records.
 - The list records the **subscriber-topic** data rather than the messages that exceed the threshold.
-- When a record is generated, if it is a new record, it will be inserted into the list; if not, the occurrence time of the existing record will be updated, and in both cases, the entire list will be re-ranked.
+- When a record is generated, it will be inserted into the list if it is a new record. If it is an existing record, the occurrence time will be updated. In both cases, the entire list will be re-ranked.
 - After the record is generated, it will be removed from the list if it is not triggered again within the effective period (default: 300 seconds).
 
 The definition of message transfer complete varies with the message QoS level:
@@ -25,16 +25,14 @@ Factors affecting message latency:
 
 - The network between the publisher and EMQX is slow (will be available in future releases).
 - The execution speed of the Hooks is slow, which blocks message publishing, such as ACL checks, ExHooks, rule engines, etc. 
-- Too many messages accumulate in the queue, resulting in significant latency, for example, PUBLISH and SUBSCRIBE share the same connection, and many PUBLISH messages are accumulated in the queue. 
+- Too many messages accumulate in the queue, resulting in significant latency. For example, PUBLISH and SUBSCRIBE share the same connection, and many PUBLISH messages are accumulated in the queue. 
 - The receiving speed of the subscribers is too slow. 
 
-## Configure and Enable Slow Subscriptions
+## Enable and Configure Slow Subscriptions
 
 <!-- TODO 补充配置文件配置方式，目前该方式有 BUG 暂时不在文档中提供。 -->
 
-On EMQX Dashboard, click `Diagnose` and select `Slow Subscriptions`, then `Enable` it.
-
-![image](./assets/slow_subscribers_statistics_1.png)
+On EMQX Dashboard, click **Diagnose** -> **Slow Subscriptions** from the left navigation menu. On the **Slow Subscriptions** page, click the **Enable** button.
 
 Follow the instruction below for configuration:
 
@@ -50,15 +48,12 @@ Follow the instruction below for configuration:
 
 The Slow Subscriptions list contains the following fields:
 
-- Client ID: client with the slow subscriptions issue
+- **Client ID**: Client with the slow subscriptions issue
 
-- Topic: topic with the slow subscriptions issue
-- Duration: message latency
-- Node:  node with the slow subscriptions issue
-- Updated: creation/update time of the record
-
-![image](./assets/slow_subscribers_statistics_3.png)
+- **Topic**: Topic with the slow subscriptions issue
+- **Duration**: Message latency
+- **Node**: Node with the slow subscriptions issue
+- **Updated**: Creation/update time of the record
 
 You can click on the Client ID to view the details and troubleshoot the issue. 
 
-![image](./assets/slow_subscribers_statistics_4.png)
