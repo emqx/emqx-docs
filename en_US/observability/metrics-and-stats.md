@@ -177,7 +177,7 @@ Scroll down the **Metrics** page, and you can see message-related metrics, inclu
 | delivery.dropped.no_local   | The number of messages that have been dropped due to the `No Local` subscription option when being sent |
 | delivery.dropped.qos0_msg   | The number of messages with QoS of 0 that have been dropped because the message queue was full when being sent |
 | delivery.dropped.queue_full | The number of dropped non-zero QoS level messages due to a full message queue during transmission. |
-| delivery.dropped.too_large  | The number of messages that have been dropped because the length exceeded the limit when being sent |
+| delivery.dropped.too_large  | The number of dropped messages due to exceeding length limits during transmission. |
 
 ## Request Monitoring Status via REST API
 
