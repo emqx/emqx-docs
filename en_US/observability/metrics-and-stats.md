@@ -78,14 +78,14 @@ You can see the event-related metrics for the cluster or node, such as [client c
 
 | Metrics                     | Description                                                  |
 | --------------------------- | ------------------------------------------------------------ |
-| authorization.allow         | Total number of client authorization passes, that is, the sum of cache hits (retrieved authorization results) and matched authorization requests (those corresponding to the policy rules). |
-| authorization.deny          | Total number of client authorization fails, that is, the sum of cache hits (retrieved authorization results) and unmatched authorization requests (those not corresponding to any policy rules).  |
-| authorization.matched.allow | Number of client authorization passes as per the rules |
+| authorization.allow         | The total number of client authorization passes, that is, the sum of cache hits (retrieved authorization results) and matched authorization requests (those corresponding to the policy rules). |
+| authorization.deny          | The total number of client authorization fails, that is, the sum of cache hits (retrieved authorization results) and unmatched authorization requests (those not corresponding to any policy rules). |
+| authorization.matched.allow | The number of client authorization passes as per the rules   |
 | authorization.matched.deny  | The number of client authorization fails as rejected by the rules |
 | authorization.nomatch       | The number of client authorization requests not matching any rules |
 | authorization.cache_hit     | The number of clients getting authorization results (allow or deny) by cache |
 | authorization.superuser     | The number of clients being authorized as superuser          |
-| client.auth.anonymous       | The number of clients that log in anonymously                 |
+| client.auth.anonymous       | The number of clients that log in anonymously                |
 | client.authenticate         | The number of triggered authentication                       |
 | client.authorize            | The number of triggered authorization                        |
 
@@ -99,8 +99,8 @@ Scroll down the **Metrics** page, and you can see message-related metrics, inclu
 
 | Metrics    | Description              |
 | -------------- | ------------------------ |
-| bytes.received | The number of received bytes |
-| bytes.sent     | The number of sent bytes |
+| bytes.received | The number of bytes received |
+| bytes.sent     | The number of bytes sent |
 
 #### Packets
 
@@ -172,12 +172,12 @@ Scroll down the **Metrics** page, and you can see message-related metrics, inclu
 
 | Metrics                     | Description                                                  |
 | --------------------------- | ------------------------------------------------------------ |
-| delivery.dropped            | The total number of messages that have been dropped when being sent |
-| delivery.dropped.expired    | The number of messages that have been dropped because the message expired when being sent |
-| delivery.dropped.no_local   | The number of messages that have been dropped due to the `No Local` subscription option when being sent |
-| delivery.dropped.qos0_msg   | The number of messages with QoS of 0 that have been dropped because the message queue was full when being sent |
-| delivery.dropped.queue_full | The number of dropped non-zero QoS level messages due to a full message queue during transmission. |
-| delivery.dropped.too_large  | The number of dropped messages due to exceeding length limits during transmission. |
+| delivery.dropped            | The total number of dropped messages during transmission     |
+| delivery.dropped.expired    | The number of dropped messages during transmission because the message is expired |
+| delivery.dropped.no_local   | The number of messages that have been dropped during transmission due to the `No Local` subscription option |
+| delivery.dropped.qos0_msg   | The number of dropped QoS 0 messages during transmission due to a full message queue |
+| delivery.dropped.queue_full | The number of dropped non-zero QoS level messages during transmission due to a full message queue |
+| delivery.dropped.too_large  | The number of dropped messages during transmission due to exceeding length limits |
 
 ## Request Monitoring Status via REST API
 

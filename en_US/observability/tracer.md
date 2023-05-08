@@ -72,11 +72,9 @@ The created trace records will be listed. You can create up to 30 traced logs. T
 
 Click a specific trace record by the name, you can select to download the log on different nodes. 
 
-Trace logs can generate a maximum of 512MB logs per node. If the generated log file reaches the maximum, it will stop appending logs and give an alert in the main log file. If the Dashboard download timeout, you can find the log file directly on the server's data/trace.
+Trace logs have a maximum capacity of 512MB logs per node. Once the generated log file reaches the maximum limit, it stops appending any further logs and raises an alert in the primary log file. In the event of a timeout during Dashboard downloading, you can locate the log file in the `/data/trace` directory on the server. When an EMQX cluster is restarted, the unfinished log trace will be resumed.
 
 <img src="./assets/log-trace-node-ee.png" alt="log-trace-node-ee" style="zoom:50%;" />
-
-The EMQX cluster will continue an outstanding trace after the restart. <!--What does it mean?-->
 
 
 
