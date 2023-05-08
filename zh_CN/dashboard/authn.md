@@ -98,7 +98,7 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 ![image](./assets/authn-list.png)
 
 :::tip
-关闭认证器后，EMQ X Broker 将不再对客户端进行认证，所有客户端都可以连接到 EMQ X Broker。请谨慎操作。
+关闭认证器后，EMQX Broker 将不再对客户端进行认证，所有客户端都可以连接到 EMQX Broker。请谨慎操作。
 :::
 
 ## 用户管理
