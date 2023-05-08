@@ -85,7 +85,7 @@ You can see the event-related metrics for the cluster or node, such as [client c
 | authorization.nomatch       | The number of client authorization requests not matching any rules |
 | authorization.cache_hit     | The number of clients getting authorization results (allow or deny) by cache |
 | authorization.superuser     | The number of clients being authorized as superuser          |
-| client.auth.anonymous       | The number of clients who log in anonymously                 |
+| client.auth.anonymous       | The number of clients that log in anonymously                 |
 | client.authenticate         | The number of triggered authentication                       |
 | client.authorize            | The number of triggered authorization                        |
 
