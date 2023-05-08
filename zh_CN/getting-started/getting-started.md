@@ -101,7 +101,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 ::: tab 通过 Docker 容器运行
 
-容器化部署是体验 EMQX 的最快方式，因此本节将以容器化部署为例，带您开始完整的 EMQX 使用旅程。 
+容器化部署是体验 EMQX 的最快方式，因此本节将以容器化部署为例，带您开始完整的 EMQX 使用旅程。
 
 1. 在命令行工具中输入如下命令，下载并运行最新版 EMQX。
 
@@ -199,10 +199,10 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 ::::
 
-## 通过 MQTT X 快速验证
-[MQTT X](https://mqttx.app/zh) 是 EMQX 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS、Linux、Windows，并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。您可通过 MQTT X 一键式的连接方式和图形界面，您可轻松测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。
+## 通过 MQTTX 快速验证
+[MQTTX](https://mqttx.app/zh) 是 EMQX 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS、Linux、Windows，并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。您可通过 MQTTX 一键式的连接方式和图形界面，您可轻松测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。
 
-本节讲介绍如何通过 [MQTT X Web 端](https://mqttx.app/zh) 快速验证 MQTT 连接，无需下载或安装任何程序。
+本节讲介绍如何通过 [MQTTX Web 端](https://mqttx.app/zh) 快速验证 MQTT 连接，无需下载或安装任何程序。
 
 :::tip 前置准备
 
@@ -213,7 +213,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 :::
 
-1. 访问  [MQTT X Web](http://www.emqx.io/online-mqtt-client#/recent_connections) 页面。
+1. 访问  [MQTTX Web](http://www.emqx.io/online-mqtt-client#/recent_connections) 页面。
 
 2. 配置并建立 MQTT 连接。点击 **+** **新建连接** 进入配置页面，您只需配置：
 
@@ -221,7 +221,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
    - **服务器地址**
 
-     - 通过选择该连接的协议类型，如 WebSockets 协议，**ws://**；目前 MQTT X Web 端仅支持 WebSocket 协议，如希望测试 SSL/TLS 认证连接，请下载 [MQTT 客户端](https://mqttx.app/zh)；
+     - 通过选择该连接的协议类型，如 WebSockets 协议，**ws://**；目前 MQTTX Web 端仅支持 WebSocket 协议，如希望测试 SSL/TLS 认证连接，请下载 [MQTT 客户端](https://mqttx.app/zh)；
      - 填入之前获取的 EMQX 地址，如 **emqx@127.0.0.1**
 
    - **端口**：如 WebSockets 协议对应的 **8083** 端口
@@ -230,13 +230,13 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
    配置完成后，点击页面右上角的**连接**按钮建立连接。
 
-3. 订阅相关主题。连接成功后即可快速订阅多个主题。点击页面中部的**添加订阅**按钮，按照默认配置，我们将订阅匹配 testtopic/# 主题的所有消息，QoS 等级为 0。您可多次重复该项操作以订阅不同主题，MQTT X Web 会通过不同颜色区分各主题。
+3. 订阅相关主题。连接成功后即可快速订阅多个主题。点击页面中部的**添加订阅**按钮，按照默认配置，我们将订阅匹配 testtopic/# 主题的所有消息，QoS 等级为 0。您可多次重复该项操作以订阅不同主题，MQTTX Web 会通过不同颜色区分各主题。
 
 4. 测试消息的发送与接收。点击页面右下角聊天区域的发送按钮，可以在上方的聊天窗口中看到消息已成功发送。
 
-![MQTT X Web test](./assets/MQTTXWeb-test.png)
+![MQTTX Web test](./assets/MQTTXWeb-test.png)
 
-除上述测试外，您也可以通过 MQTT X 进行单/双向 SSL 认证、或通过自定义脚本模拟测试数据。更多消息，可访问 [MQTT X 官方网页](https://mqttx.app/zh)。
+除上述测试外，您也可以通过 MQTTX 进行单/双向 SSL 认证、或通过自定义脚本模拟测试数据。更多消息，可访问 [MQTTX 官方网页](https://mqttx.app/zh)。
 
 回到 EMQX Dashboard 的**仪表盘**部分，可以看到**连接数**、**主题数**、和**订阅数**部分数据的变化，在下方的可视化窗格，还可以看到这段时间流入的消息数量曲线。
 

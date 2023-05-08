@@ -35,5 +35,5 @@ Click the **Show Payload** button on the Retained Messages list page to view the
 Click the **Settings** button in the upper right corner of the **Retained Messages** list page to quickly jump to **Configuration** -> **MQTT** -> **Retainer** tab to modify the configuration of the retained message. On the **Retainer** tab, you can view the current configuration information of the retained message, including the maximum number of retained messages and the expiration time of the retained message. For details, please visit [Retainer](./configuration.md#Retainer).
 
 :::tip
-When the retained message feature is disabled, EMQ X Dashboard will display the **Enable** button on the retained message list page and prompt that the retained message feature has been disabled. You can click to jump to the configuration page to open it.
+When the retained message feature is disabled, EMQX Dashboard will display the **Enable** button on the retained message list page and prompt that the retained message feature has been disabled. You can click to jump to the configuration page to open it.
 :::
