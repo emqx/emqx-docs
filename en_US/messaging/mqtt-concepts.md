@@ -1,14 +1,14 @@
 # MQTT Core Concepts
 
-MQTT (Message Queue Telemetry Transport) is the most commonly used lightweight messaging protocol for the IoT (Internet of Things). The protocol is based on a publish/subscribe (pub/sub) pattern for message communication. It allows devices and applications to exchange data in real-time using a simple and efficient message format, which minimizes network overhead and reduces power consumption. 
+MQTT (Message Queue Telemetry Transport) is the most commonly used lightweight messaging protocol for the IoT (Internet of Things). The protocol is based on a publish/subscribe (pub/sub) pattern for message communication. It allows devices and applications to exchange data in real-time using a simple and efficient message format, which minimizes network overhead and reduces power consumption.
 
-Served as an MQTT messaging platform, EMQX Enterprise provides full support to a complete set of MQTT messaging features. This section provides brief introductions to the core concepts of MQTT. You can learn further about each concept and more about MQTT by following the links to the [MQTT blog series](https://www.emqx.com/en/blog/category/mqtt). 
+Served as an MQTT messaging platform, EMQX Enterprise provides full support to a complete set of MQTT messaging features. This section provides brief introductions to the core concepts of MQTT. You can learn further about each concept and more about MQTT by following the links to the [MQTT blog series](https://www.emqx.com/en/blog/category/mqtt).
 
 ## Publish/Subscribe Pattern
 
 The protocol is event-driven and connects devices using the pub/sub pattern. Different from the traditional client/server pattern, it is a messaging pattern in which senders (publishers) do not send messages directly to specific receivers (subscribers). Instead, publishers categorize messages into topics, and subscribers subscribe to specific topics that they are interested in. When a publisher sends a message to a topic, the MQTT broker routes and filters all incoming messages, and then delivers the message to all the subscribers that have expressed interest in that topic.
 
-The publisher and subscriber are decoupled from each other and do not need to know each other's existence. Their sole connection is based on a predetermined agreement regarding the message. The Pub/Sub pattern enables flexible message communication, as subscribers and publishers can be dynamically added or removed as needed. It also makes the implementation of message broadcasting, multicasting, and unicasting easier. 
+The publisher and subscriber are decoupled from each other and do not need to know each other's existence. Their sole connection is based on a predetermined agreement regarding the message. The Pub/Sub pattern enables flexible message communication, as subscribers and publishers can be dynamically added or removed as needed. It also makes the implementation of message broadcasting, multicasting, and unicasting easier.
 
 For more information on the Pub/Sub pattern, see [Introduction to MQTT Publish-subscribe Pattern](https://www.emqx.com/en/blog/mqtt-5-introduction-to-publish-subscribe-model).
 
@@ -30,11 +30,11 @@ For more information on topics and wildcards, see [Understanding MQTT Topics & W
 
 ## Quality of Service (QoS)
 
-MQTT defines three levels of QoS to provide different levels of message reliability. Each message can independently set its own QoS when published. 
+MQTT defines three levels of QoS to provide different levels of message reliability. Each message can independently set its own QoS when published.
 
-- QoS 0: delivers a message at most once and may be lost; 
-- QoS 1: delivers a message at least once and guarantees arrival, but may be duplicated; 
-- QoS 2: delivers a message exactly once and guarantees arrival without duplication. 
+- QoS 0: delivers a message at most once and may be lost;
+- QoS 1: delivers a message at least once and guarantees arrival, but may be duplicated;
+- QoS 2: delivers a message exactly once and guarantees arrival without duplication.
 
 As the QoS level increases, the complexity of message transmission also increases. You need to choose the appropriate QoS level based on the actual scenario.
 
@@ -70,7 +70,7 @@ To learn more about will message technologies, see [Use of MQTT Will Message](ht
 
 ## Shared Subscription
 
-In common cases, messages are forwarded to all matching subscribers. However, in some cases, you may want to coordinate multiple clients to process received messages in a horizontally scalable way to increase load capacity. Alternatively, users may want to add a backup client for clients to seamlessly switch to when the primary client goes offline, ensuring high availability. 
+In common cases, messages are forwarded to all matching subscribers. However, in some cases, you may want to coordinate multiple clients to process received messages in a horizontally scalable way to increase load capacity. Alternatively, users may want to add a backup client for clients to seamlessly switch to when the primary client goes offline, ensuring high availability.
 
 The shared subscription feature provides such a capability. Clients can be divided into multiple subscription groups, and messages are still forwarded to all subscription groups, but only one client within each subscription group receives the message at a time.
 

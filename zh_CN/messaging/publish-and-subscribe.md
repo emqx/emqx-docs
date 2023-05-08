@@ -43,15 +43,15 @@ MQTTX 提供了一键式的连接方式和简洁的图形界面，能够测试 M
 以下是使用 MQTTX CLI 完成连接、发布订阅并查看消息全流程：
 
 1. 下载安装 MQTT CLI，此处以 macOS 为例，其他操作系统请参考 [MQTTX CLI 下载与安装](https://mqttx.app/zh/docs/cli/downloading-and-installation)。
-  
+
    ```bash
    # Homebrew
    brew install emqx/mqttx/mqttx-cli
-   
+
    # Intel Chip
    curl -LO https://www.emqx.com/zh/downloads/MQTTX/v1.9.0/mqttx-cli-macos-x64
    sudo install ./mqttx-cli-macos-x64 /usr/local/bin/mqttx
-   
+
    # Apple Silicon
    curl -LO https://www.emqx.com/zh/downloads/MQTTX/v1.9.0/mqttx-cli-macos-arm64
    sudo install ./mqttx-cli-macos-arm64 /usr/local/bin/mqttx

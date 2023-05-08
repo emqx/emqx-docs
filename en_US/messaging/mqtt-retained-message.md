@@ -29,14 +29,14 @@ You can use client tools to try this messaging service in EMQX. This section int
 
    <img src="./assets/Publish-message-1.png" alt="Publish-message-1" style="zoom:35%;" />
 
-4. Publish two retained messages with the topic `sensor/t2`. 
+4. Publish two retained messages with the topic `sensor/t2`.
 
    - Type the topic as `sensor/t2`. Type the first message as `1`. Select **Retain**. Click the send button.
    - Type the second message as `2`. Click the send button.
 
    <img src="./assets/Publish-message-2.png" alt="Publish-message-2" style="zoom:35%;" />
 
-5. Click the **New Subscription** button to create a subscription. Input `sensor/+` in the **Topic** text box. Click the **Confirm** button. The subscription only receives the last retained message. 
+5. Click the **New Subscription** button to create a subscription. Input `sensor/+` in the **Topic** text box. Click the **Confirm** button. The subscription only receives the last retained message.
 
    :::tip
 
@@ -50,13 +50,13 @@ You can use client tools to try this messaging service in EMQX. This section int
 
    The first message with the topic `sensor/t1` and the first retained message with the topic `sensor/t2` is not received. The EMQX only stores the latest retained message for each topic. You can also check the latest retained message stored in the EMQX Dashboard, see [View Retained Message in Dashboard](#view-retained-message-in-dashboard).
 
-   :::  
+   :::
 
 6. If you want to clear the retained message from the MQTT broker, send an empty retained message to the topic.
 
 ## Publish Retained Message with MQTTX CLI
 
-1. Initiate a connection request with one client. 
+1. Initiate a connection request with one client.
 
 1. Use the following command to publish a retained message. Set the topic to `t/1`, payload to `A retained message from MQTTX CLI`,  and `retain = true`：
 
@@ -64,7 +64,7 @@ You can use client tools to try this messaging service in EMQX. This section int
    mqttx pub -t 't/1' -m 'A retained message from MQTTX CLI' --retain true -h 'localhost' -p 1883
    ```
 
-3. Initiate another new client connection request to the same broker. Subscribe to the topic `t/1` with the new client. It will receive the retained message. 
+3. Initiate another new client connection request to the same broker. Subscribe to the topic `t/1` with the new client. It will receive the retained message.
 
    If you continuously create new clients and let them subscribe to the topic `t/1`, all new clients you created will receive the retained message.
 
@@ -81,7 +81,7 @@ You can use client tools to try this messaging service in EMQX. This section int
    mqttx pub -t 't/1' -m '' --retain true -h 'localhost' -p 1883
    ```
 
-4. Initiate a new client connection and subscribe to the topic `t/1`. No retained messages are received, indicating the retained message is cleared. 
+4. Initiate a new client connection and subscribe to the topic `t/1`. No retained messages are received, indicating the retained message is cleared.
 
 ## View Retained Message in Dashboard
 

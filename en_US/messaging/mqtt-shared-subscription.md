@@ -7,7 +7,7 @@ You can use client tools to try this messaging service in EMQX. This section int
 :::tip Prerequisites
 
 - Knowledge about MQTT [Shared Subscription](./mqtt-concepts.md#shared-subscription)
-- Basic publishing and subscribing operations using [MQTTX](./publish-and-subscribe.md) 
+- Basic publishing and subscribing operations using [MQTTX](./publish-and-subscribe.md)
 
 :::
 
@@ -15,13 +15,13 @@ You can use client tools to try this messaging service in EMQX. This section int
 
 The following procedure demonstrates how to form groups for multiple subscribers that can share the subscription to the same topic and how these subscribers will receive the messages from the shared subscription.
 
-In this demonstration, you can create one client connection `demo` as a publisher to publish messages on the topic `t/1`. Then, you can create three client connections as subscribers, such as `Subscriber1`, `Subscriber2` and `Subscriber3`.  The subscribers can be divided into groups `a` and `b`, and both groups subscribe to the topic `t/1`. 
+In this demonstration, you can create one client connection `demo` as a publisher to publish messages on the topic `t/1`. Then, you can create three client connections as subscribers, such as `Subscriber1`, `Subscriber2` and `Subscriber3`.  The subscribers can be divided into groups `a` and `b`, and both groups subscribe to the topic `t/1`.
 
 1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection named `Demo`.
 
    - The localhost `127.0.0.1` is used as an example in this demonstration.
 
-   ::: tip 
+   ::: tip
 
    For detailed instructions on creating an MQTT connection, see [MQTTX Client](./publish-and-subscribe.md).
 
@@ -29,18 +29,18 @@ In this demonstration, you can create one client connection `demo` as a publishe
 
    <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
 
-2. Click the **New Connection** to create 3 new connections as subscribers. Set **Name** set to `Subscriber1`, `Subscriber2,` and `Subscriber3` respectively. 
+2. Click the **New Connection** to create 3 new connections as subscribers. Set **Name** set to `Subscriber1`, `Subscriber2,` and `Subscriber3` respectively.
 
 3. Create shared subscriptions for subscribers. Select the specific connection in the **Connections** pane. Click the **New Subscription** button to create a subscription. Type the correct topic in the **Topic** text box by referring to the rules below.
 
-   To form a group for multiple subscribers, you need to add group name `{group}` before the subscribed topic `t/1`. To make them all subscribe to the same topic, you need to add prefix `$share` before the group name. 
+   To form a group for multiple subscribers, you need to add group name `{group}` before the subscribed topic `t/1`. To make them all subscribe to the same topic, you need to add prefix `$share` before the group name.
 
    In the **New Subscription** window:
 
    - Set the **Topic** to `$share/a/t/1` for `Subscribe1` and `Subscriber2`.
    - Set the **Topic** to `$share/b/t/1` for `Subscriber3`.
 
-   In these example topics: 
+   In these example topics:
 
    - The prefix `$share` indicates this is a shared subscription.
    - `{group}` can be a customized name.
@@ -50,9 +50,9 @@ In this demonstration, you can create one client connection `demo` as a publishe
 
    <img src="./assets/New-shared-subscription.png" alt="New-shared-subscription" style="zoom:35%;" />
 
-5. Click the connection `Demo` you created before. 
+5. Click the connection `Demo` you created before.
 
-   - Send a message with the topic `t/1`. The clients `Subscriber1` and `Subscriber3` should receive the message. 
+   - Send a message with the topic `t/1`. The clients `Subscriber1` and `Subscriber3` should receive the message.
 
      <img src="./assets/Receive-message-shared-subscription1.png" alt="Receive-message-shared-subscription1" style="zoom:35%;" />
 
@@ -73,7 +73,7 @@ When the message of the shared subscription is published, the EMQX forwards the 
    ```bash
    # Client A and B subscribe to topic `$share/my_group1/t/1`
    mqttx sub -t '$share/my_group1/t/1' -h 'localhost' -p 1883
-   
+
    ## Client C and D subscribe to topic  `$share/my_group2/t/1`
    mqttx sub -t '$share/my_group2/t/1' -h 'localhost' -p 1883
    ```

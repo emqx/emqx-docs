@@ -2,7 +2,7 @@
 
 With `Retained` message, you can flag one message published under certain topic as `Retained` and save them as persistent messages on the broker. So when new clients subscribe to this topic, they will receive the messages flagged as `Retained`.
 
-Only one retained message can exist under each topic, if you want to flag another message as `Retained`, the existing message will be replaced by the new message. 
+Only one retained message can exist under each topic, if you want to flag another message as `Retained`, the existing message will be replaced by the new message.
 
 For example, use MQTTX CLI to publish a `Retained` message to topic `a/b/c`:
 
@@ -28,8 +28,8 @@ mqttx pub -r -q 1 -t a/b/c -m ''
 ```
 
 2. Number of `Retained` messages exceeds the specified maximum `Retained` messages.
-3. Use REST API to delete the `Retained` message. 
-4. For MQTT 5.0 compatible clients, set an expiration duration, then the `Retained` messages will be deleted if the duration expired. 
+3. Use REST API to delete the `Retained` message.
+4. For MQTT 5.0 compatible clients, set an expiration duration, then the `Retained` messages will be deleted if the duration expired.
 
 ::: tip
 
@@ -44,7 +44,7 @@ The service stores and manages retained messages sent by clients and sends them 
 
 ## Configure With Dashboard
 
-Open the Dashboard, click **Configuration** -> **MQTT** on the left navigation tree. Then click the **Retainer** tab, and you can customize the setting for Retained messages. 
+Open the Dashboard, click **Configuration** -> **MQTT** on the left navigation tree. Then click the **Retainer** tab, and you can customize the setting for Retained messages.
 
 ![image](./assets/retainer_1.png)
 

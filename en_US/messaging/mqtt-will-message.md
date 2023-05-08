@@ -43,7 +43,7 @@ You can use client tools to try this messaging service in EMQX. This section int
 
    <img src="./assets/Subscribe-will-message.png" alt="Subscribe-will-message" style="zoom:35%;" />
 
-4. Select the client connection named `Demo` in the **Connections** pane. Right-click and select **New Window**. In the new window, click the **Connect** button. 
+4. Select the client connection named `Demo` in the **Connections** pane. Right-click and select **New Window**. In the new window, click the **Connect** button.
 
    <img src="./assets/Open-new-window.png" alt="Open-new-window" style="zoom:35%;" />
 
@@ -51,7 +51,7 @@ You can use client tools to try this messaging service in EMQX. This section int
 
    <img src="./assets/Receive-will-message.png" alt="Receive-will-message" style="zoom:35%;" />
 
-   
+
 
 ## Publish Will Message with MQTTX CLI
 
