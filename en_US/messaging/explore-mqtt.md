@@ -3,7 +3,7 @@
 EMQX provides full support to a complete set of MQTT messaging features, for example, will messages, retained messages, and shared subscriptions. All these features can facilitate the IoT application development and management. <!--Add a link to MQTT Specific?-->
 
 
-This section introduces how to use these features and verify them using [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to help you get familiar with the MQTT messaging services.
+This section introduces how to use these features and verify them using [MQTTX Client](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to help you get familiar with the MQTT messaging services.
 
 :::tip Prerequisites:
 
@@ -21,11 +21,11 @@ A will message is the last stored message that is defined in advance and is sent
 
 If a client wants to set a will message, it sets the topic and payload of the will message when it initiates the connect request. When another client subscribes to the topic of the will message, it receives the will message if the client disconnects to the server unexpectedly. For more information, see [Will Message](../mqtt/mqtt-last-will-and-testament.md) and [Use of MQTT Will Message](https://www.emqx.com/en/blog/use-of-mqtt-will-message).
 
-### Use MQTT X Client to Verify
+### Use MQTTX Client to Verify
 
 1. Run the EMQX server. 
 
-2. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection.
+2. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection.
 
 3. Configue the new connection. 
 
@@ -67,7 +67,7 @@ If a client wants to set a will message, it sets the topic and payload of the wi
 
    <img src="./assets/Receive-will-message.png" alt="Receive-will-message" style="zoom:25%;" />
 
-### Use MQTT X CLI to Verify
+### Use MQTTX CLI to Verify
 
 1. Initiate a connection request with one client. Set the topic to `t/1` and payload to `A will message from MQTTX CLI`:
 
@@ -97,9 +97,9 @@ The illustration below shows how a retained message is received.
 
 <img src="./assets/retained-message.png" alt="retained-message" style="zoom:60%;" />  
 
-### Use MQTT X Client to Verify
+### Use MQTTX Client to Verify
 
-1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection.
+1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection.
 
 2. Configue the new connection. 
 
@@ -148,7 +148,7 @@ The illustration below shows how a retained message is received.
 
 6. If you want to clear the retained message from the MQTT broker, send an empty retained message  under the topic.
 
-### Use MQTT X CLI to Verify
+### Use MQTTX CLI to Verify
 
 1. Initiate a connection request with one client. Set the topic to `t/1`, payload to `A retained message from MQTTX CLI`,  and `retain = true`：
 
@@ -177,9 +177,9 @@ The illustration below shows how a retained message is received.
 
 When multiple clients subscribe to a same topic, they can form a group and receive messages with load balancing. With a shared subscription, the message is only sent to one of the subscribing clients. The next message published is sent to one of the other subscribing clients thus balancing the load on the clients and server. For more information on shared subscription, see [Shared Subscription](../mqtt/mqtt-shared-subscription.md).
 
-### Use MQTT X Client to Verify
+### Use MQTTX Client to Verify
 
-1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection.
+1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection.
 
 2. Configue the new connection. 
 
@@ -229,7 +229,7 @@ When the message of the shared subscription is published, the EMQX server forwar
 
 :::
 
-### Use MQTT X CLI to verify
+### Use MQTTX CLI to verify
 
 1. Four subscribers are divided into 2 groups to subscribe to topic  `t/1`:
 

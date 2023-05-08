@@ -31,21 +31,21 @@ Example:
 
    <img src="./assets/configure-delayed-publish-dashboard.png" alt="configure-delayed-publish-dashboard" style="zoom:45%;" />
 
-## Try Delayed Publish with MQTT X Client
+## Try Delayed Publish with MQTTX Client
 
 :::tip Prerequisite
 
-- Basic publishing and subscribing operations using [MQTT X Client](./publish-and-subscribe.md) 
+- Basic publishing and subscribing operations using [MQTTX Client](./publish-and-subscribe.md) 
 
 :::
 
-1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named `Demo`.
+1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection named `Demo`.
 
    - The localhost `127.0.0.1` is used as an example in this demonstration.
 
    ::: tip 
 
-   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md).
+   For detailed instructions on creating an MQTT connection, see [MQTTX Client](./publish-and-subscribe.md).
 
    :::
 
@@ -71,11 +71,11 @@ Example:
 
    <img src="./assets/receive-delayed-message.png" alt="receive-delayed-message" style="zoom:35%;" />
 
-## Try Delayed Publish with MQTT X CLI
+## Try Delayed Publish with MQTTX CLI
 
 ::: tip Prerequisite
 
-- Basic publishing and subscribing operations using [MQTT X CLI](./publish-and-subscribe.md) 
+- Basic publishing and subscribing operations using [MQTTX CLI](./publish-and-subscribe.md) 
 
 :::
 

@@ -81,9 +81,9 @@ You can also add actions to forward the processed results with data bridges. All
 
 ## Test the Rule
 
-Now you can use [MQTT X](https://mqttx.app/) to test this rule. Create one client, and then use this client to subscribe to the "a/1" topic and send a "t/1" message. You will see in the dialog box that this message is also republished to the topic "a/1".
+Now you can use [MQTTX](https://mqttx.app/) to test this rule. Create one client, and then use this client to subscribe to the "a/1" topic and send a "t/1" message. You will see in the dialog box that this message is also republished to the topic "a/1".
 
-For details on how to build the connection between the MQTT X client tool and EMQX, see [MQTT X - Get Started](https://mqttx.app/docs/get-started). 
+For details on how to build the connection between the MQTTX client tool and EMQX, see [MQTTX - Get Started](https://mqttx.app/docs/get-started). 
 
 <img src="./assets/rules/en_rule_overview_mqttx.png" alt="image" style="zoom: 50%;" />
 

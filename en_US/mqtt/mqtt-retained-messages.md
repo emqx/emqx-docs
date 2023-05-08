@@ -4,7 +4,7 @@ With `Retained` message, you can flag one message published under certain topic 
 
 Only one retained message can exist under each topic, if you want to flag another message as `Retained`, the existing message will be replaced by the new message. 
 
-For example, use MQTT X CLI to publish a `Retained` message to topic `a/b/c`:
+For example, use MQTTX CLI to publish a `Retained` message to topic `a/b/c`:
 
 ```bash
 mqttx pub -r -q 1 -t a/b/c -m 'hello'

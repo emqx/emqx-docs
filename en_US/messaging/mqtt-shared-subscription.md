@@ -2,28 +2,28 @@
 
 EMQX implements the shared subscription feature of MQTT. A shared subscription is a subscription mode to implement load balancing among multiple subscribers. Clients can be divided into multiple subscription groups, and messages are still forwarded to all subscription groups, but only one client within each subscription group receives the message at a time. You can add a `$share` prefix to the original topic to enable shared subscriptions for a group of subscribers.
 
-You can use client tools to try this messaging service in EMQX. This section introduces how to use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to simulate clients and try how messages are received through a shared subscription.
+You can use client tools to try this messaging service in EMQX. This section introduces how to use the [MQTTX Client](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and try how messages are received through a shared subscription.
 
 :::tip Prerequisites
 
 - Knowledge about MQTT [Shared Subscription](./mqtt-concepts.md#shared-subscription)
-- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md) 
+- Basic publishing and subscribing operations using [MQTTX](./publish-and-subscribe.md) 
 
 :::
 
-## Try Shared Subscription with MQTT X Client
+## Try Shared Subscription with MQTTX Client
 
 The following procedure demonstrates how to form groups for multiple subscribers that can share the subscription to the same topic and how these subscribers will receive the messages from the shared subscription.
 
 In this demonstration, you can create one client connection `demo` as a publisher to publish messages on the topic `t/1`. Then, you can create three client connections as subscribers, such as `Subscriber1`, `Subscriber2` and `Subscriber3`.  The subscribers can be divided into groups `a` and `b`, and both groups subscribe to the topic `t/1`. 
 
-1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named `Demo`.
+1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection named `Demo`.
 
    - The localhost `127.0.0.1` is used as an example in this demonstration.
 
    ::: tip 
 
-   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md).
+   For detailed instructions on creating an MQTT connection, see [MQTTX Client](./publish-and-subscribe.md).
 
    :::
 
@@ -66,7 +66,7 @@ When the message of the shared subscription is published, the EMQX forwards the 
 
 :::
 
-## Try Shared Subscription with MQTT X CLI
+## Try Shared Subscription with MQTTX CLI
 
 1. Four subscribers are divided into 2 groups and subscribe to topic  `t/1`:
 

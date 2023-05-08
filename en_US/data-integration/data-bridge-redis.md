@@ -147,7 +147,7 @@ Now you have successfully finished creating the rules for the Redis data bridge.
 
 ### Test the Data Bridge and Rule
 
-Use MQTT X  to send a message to topic  `t/1`  to trigger a message caching event. If topic  `t/1`  does not have any subscribers, the message will be discarded and trigger the message discard rule.
+Use MQTTX  to send a message to topic  `t/1`  to trigger a message caching event. If topic  `t/1`  does not have any subscribers, the message will be discarded and trigger the message discard rule.
 
 ```bash
 mqttx pub -i emqx_c -u emqx_u -t t/1 -m '{ "msg": "hello Redis" }'

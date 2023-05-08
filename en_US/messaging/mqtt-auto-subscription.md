@@ -32,23 +32,23 @@ Before EMQX 5.0, this feature is called **Proxy Subscription**.
 
 Now the auto subscription function is enabled. New subscribers will subscribe to the topic `a/1` automatically once they are connected to the broker. 
 
-## Try Auto Subscription Using MQTT X Client
+## Try Auto Subscription Using MQTTX Client
 
 The topic `a/1` is configured as the auto subscribe topic in [Configure Auto Subscribe via Dashboard](#configure-auto-subscribe-via-dashboard). The following procedure demonstrates how a client subscribes to the topic `a/1` automatically once it is connected to the broker. 
 
 :::tip Prerequisite
 
-- Basic publishing and subscribing operations using [MQTT X Client](./publish-and-subscribe.md) 
+- Basic publishing and subscribing operations using [MQTTX Client](./publish-and-subscribe.md) 
 
 :::
 
-1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named `Subscriber`.
+1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection named `Subscriber`.
 
    - The localhost `127.0.0.1` is used as an example in this demonstration.
 
    ::: tip
 
-   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md).
+   For detailed instructions on creating an MQTT connection, see [MQTTX Client](./publish-and-subscribe.md).
 
    :::
 
@@ -74,11 +74,11 @@ The topic `a/1` is configured as the auto subscribe topic in [Configure Auto Sub
 
    <img src="./assets/view-auto-sub-dashboard.png" alt="view-auto-sub-dashboard" style="zoom:35%;" />
 
-## Try Auto Subscription using MQTT X CLI
+## Try Auto Subscription using MQTTX CLI
 
 :::tip Prerequisite
 
-- Basic publishing and subscribing operations using [MQTT X CLI](./publish-and-subscribe.md) 
+- Basic publishing and subscribing operations using [MQTTX CLI](./publish-and-subscribe.md) 
 
 :::
 

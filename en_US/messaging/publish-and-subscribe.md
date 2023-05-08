@@ -13,26 +13,26 @@ This chapter introduces the commonly used MQTT 5.0 client tools and provides a s
 - Publish messages
 - Receive and view messages
 
-## MQTT X
+## MQTTX
 
-[MQTT X](https://mqttx.app) is an elegant cross-platform MQTT 5.0 verification tool open-sourced by EMQ. It includes 3 types of tools. 
+[MQTTX](https://mqttx.app) is an elegant cross-platform MQTT 5.0 verification tool open-sourced by EMQ. It includes 3 types of tools. 
 
-- MQTT X Client
-- MQTT X CLI
+- MQTTX Client
+- MQTTX CLI
 - MQTT Web
 
-### MQTT X Client
+### MQTTX Client
 
-[MQTT X Client](https://mqttx.app) is a cross-platform MQTT desktop client tool. It provides users with an easy-to-use graphic interface to allow users to quickly create, test MQTT connections, and publish/subscribe MQTT messages. 
+[MQTTX Client](https://mqttx.app) is a cross-platform MQTT desktop client tool. It provides users with an easy-to-use graphic interface to allow users to quickly create, test MQTT connections, and publish/subscribe MQTT messages. 
 
-Before you test, download, and install the MQTT X Client:
+Before you test, download, and install the MQTTX Client:
 
-1. Download the installation package from the application store or [MQTT X website](https://mqttx.app/) based on your operating system. 
-2. Install the MQTT X Client. For detailed instructions, see [MQTT X - Installation](https://mqttx.app/docs/downloading-and-installation).
+1. Download the installation package from the application store or [MQTTX website](https://mqttx.app/) based on your operating system. 
+2. Install the MQTTX Client. For detailed instructions, see [MQTTX - Installation](https://mqttx.app/docs/downloading-and-installation).
 
-Follow the instructions below to use the MQTT X desktop client for a simple test:
+Follow the instructions below to use the MQTTX desktop client for a simple test:
 
-1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection.
+1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection.
 
 2. Configure the new connection. 
 
@@ -73,15 +73,15 @@ Follow the instructions below to use the MQTT X desktop client for a simple test
 
    <img src="./assets/Receive-test-again-message.png" alt="Receive-test-again-message" style="zoom:35%;" />
 
-Now you have tried the basic publishing and subscribing operations using the MQTT X Client. For detailed and advanced operations, see [MQTT X - Publish and Subscription](https://mqttx.app/docs/get-started#publish-and-subscription).
+Now you have tried the basic publishing and subscribing operations using the MQTTX Client. For detailed and advanced operations, see [MQTTX - Publish and Subscription](https://mqttx.app/docs/get-started#publish-and-subscription).
 
-### MQTT X CLI
+### MQTTX CLI
 
-[MQTT X CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command line tool provided by EMQ. It is an [MQTT X](https://mqttx.app) tool running on the command line tool so users can test and debug MQTT services and applications with no need for a graphic interface. 
+[MQTTX CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command line tool provided by EMQ. It is an [MQTTX](https://mqttx.app) tool running on the command line tool so users can test and debug MQTT services and applications with no need for a graphic interface. 
 
-Follow the instructions below to connect, publish/subscribe, and view messages using MQTT X CLI:
+Follow the instructions below to connect, publish/subscribe, and view messages using MQTTX CLI:
 
-1. Download and install MQTT CLI. The demonstration takes macOS as an example, for the other operating systems, see [MQTT X CLI - Installation](https://mqttx.app/docs/cli/downloading-and-installation). 
+1. Download and install MQTT CLI. The demonstration takes macOS as an example, for the other operating systems, see [MQTTX CLI - Installation](https://mqttx.app/docs/cli/downloading-and-installation). 
 
    ```bash
    # Homebrew
@@ -111,7 +111,7 @@ Follow the instructions below to connect, publish/subscribe, and view messages u
    
    After successful execution, the command line will be in blocking receive state and will print the message after receiving the message.
 
-   For information on more parameters, see  [MQTT X CLI - Subscribe](https://mqttx.app/docs/cli/get-started#subscribe).
+   For information on more parameters, see  [MQTTX CLI - Subscribe](https://mqttx.app/docs/cli/get-started#subscribe).
 
 3. Open a new command line window, execute the command below to connect to EMQX, and publish a message to topic `testtopic/#`:
 
@@ -134,11 +134,11 @@ Follow the instructions below to connect, publish/subscribe, and view messages u
    payload:  from MQTTX CLI
    ```
 
-   For information on more parameters, see  [MQTT X CLI - Publish](https://mqttx.app/docs/cli/get-started#publish).
+   For information on more parameters, see  [MQTTX CLI - Publish](https://mqttx.app/docs/cli/get-started#publish).
 
-### MQTT X Web
+### MQTTX Web
 
-[MQTT X Web](https://mqttx.app/web) is a browser-based MQTT 5.0 WebSocket client tool. You can use it to complete the development and debugging via MQTT over WebSocket, with no need to download or install any tools. The testing operations using the MQTT X Web is basically the same as using the [MQTT X Client](#mqtt-x-client).
+[MQTTX Web](https://mqttx.app/web) is a browser-based MQTT 5.0 WebSocket client tool. You can use it to complete the development and debugging via MQTT over WebSocket, with no need to download or install any tools. The testing operations using the MQTTX Web is basically the same as using the [MQTTX Client](#mqtt-x-client).
 
 <img src="./assets/mqtt-x-web.png" alt="mqtt-x-web" style="zoom:35%;" />
 

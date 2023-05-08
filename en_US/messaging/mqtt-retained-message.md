@@ -2,24 +2,24 @@
 
 EMQX implements the retained message feature of MQTT. You can flag one message published under a certain topic as `Retained` and save it as a persistent message on the EMQX. When any new subscribers subscribe to a topic that matches the topic of the retained message, they immediately receive that message, even if it was published before they subscribed to the topic.
 
-You can use client tools to try this messaging service in EMQX. This section introduces how to use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to simulate clients and see how a retained message is published and received.
+You can use client tools to try this messaging service in EMQX. This section introduces how to use the [MQTTX Client](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and see how a retained message is published and received.
 
 :::tip Prerequisites
 
 - Knowledge about MQTT [Retained Message](./mqtt-concepts.md)
-- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md)
+- Basic publishing and subscribing operations using [MQTTX](./publish-and-subscribe.md)
 
 :::
 
-## Publish Retained Message with MQTT X Client
+## Publish Retained Message with MQTTX Client
 
-1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named `Demo`.
+1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection named `Demo`.
 
    - The localhost `127.0.0.1` is used as an example in this demonstration.
 
    ::: tip
 
-   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md).
+   For detailed instructions on creating an MQTT connection, see [MQTTX Client](./publish-and-subscribe.md).
 
    :::
 
@@ -54,7 +54,7 @@ You can use client tools to try this messaging service in EMQX. This section int
 
 6. If you want to clear the retained message from the MQTT broker, send an empty retained message to the topic.
 
-## Publish Retained Message with MQTT X CLI
+## Publish Retained Message with MQTTX CLI
 
 1. Initiate a connection request with one client. 
 

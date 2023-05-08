@@ -32,22 +32,22 @@ mqtt.exclusive_subscription {
 }
 ```
 
-## Try Exclusive Subscription with MQTT X Client
+## Try Exclusive Subscription with MQTTX Client
 
 ::: tip Prerequisites
 
-- Basic publishing and subscribing operations using [MQTT X Client](./publish-and-subscribe.md)
+- Basic publishing and subscribing operations using [MQTTX Client](./publish-and-subscribe.md)
 - Exclusive subscription is enabled.
 
 :::
 
-1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named `Demo`.
+1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection named `Demo`.
 
    - The localhost `127.0.0.1` is used as an example in this demonstration.
 
    ::: tip
 
-   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md).
+   For detailed instructions on creating an MQTT connection, see [MQTTX Client](./publish-and-subscribe.md).
 
    :::
 
@@ -65,11 +65,11 @@ mqtt.exclusive_subscription {
 
    <img src="./assets/fail-to-exclusive-subscription.png" alt="fail-to-exclusive-subscription" style="zoom:35%;" />
 
-## Try Exclusive Subscription with MQTT X CLI
+## Try Exclusive Subscription with MQTTX CLI
 
 ::: tip Prerequisites
 
-- Basic publishing and subscribing operations using [MQTT X CLI](./publish-and-subscribe.md)
+- Basic publishing and subscribing operations using [MQTTX CLI](./publish-and-subscribe.md)
 - Exclusive subscription is enabled.
 
 :::

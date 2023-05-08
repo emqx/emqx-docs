@@ -209,7 +209,7 @@ To uninstall EMQX after your testing, you only need to delete the EMQX folders.
 ::::
 
 
-## Use MQTT X to Verify Connection
+## Use MQTTX to Verify Connection
 
 Now that you have successfully started EMQX, you can continue to test the connection and message services with MQTT X
 

@@ -4,7 +4,7 @@ MQTT 客户端向服务器发布 (PUBLISH) 消息时，可以设置保留消息 
 
 每个主题下只能存在一份保留消息，因此如果已经存在相同主题的保留消息，则该保留消息被替换。
 
-例如 MQTT X CLI 发布一条保留消息到主题 'a/b/c':
+例如 MQTTX CLI 发布一条保留消息到主题 'a/b/c':
 
 ```bash
 mqttx pub -r -q 1 -t a/b/c -m 'hello'
