@@ -7,7 +7,7 @@ EMQX divides monitoring status into Statistics and Metrics.
 - Statistics are integer-type gauges used to return a single value at the point of time the metric was requested. 
 - Metrics are integer-type counters used to measure simple incrementing and decrementing numbers, such as the number of bytes and messages sent or received.  
 
-EMQX provides users with multiple ways to view statistics and metrics. Most directly, you can view these data on the EMQX Dashboard. When it is not convenient to access the Dashboard, you can also get the data through [REST API](#request-metrics-and-statitics-via-rest-api) and [system topic](#obtain-metrics-and-statistics-via-system-topics) messages. Additionally, you can easily integrate the monitoring functions with your own monitoring system, see [Integrate with Prometheus](./prometheus.md). 
+EMQX provides users with multiple ways to view statistics and metrics. Most directly, you can view these data on the EMQX Dashboard. When it is not convenient to access the Dashboard, you can also get the data through [REST API](#request-monitoring-status-via-rest-api) and [system topic](#get-monitoring-status-via-system-topics) messages. Additionally, you can easily integrate the monitoring functions with your own monitoring system, see [Integrate with Prometheus](./prometheus.md). 
 
 ## View Statistics on Dashboard
 
@@ -174,7 +174,7 @@ Scroll down the **Metrics** page, and you can see message-related metrics, inclu
 | --------------------------- | ------------------------------------------------------------ |
 | delivery.dropped            | The total number of dropped messages during transmission     |
 | delivery.dropped.expired    | The number of dropped messages during transmission because the message is expired |
-| delivery.dropped.no_local   | The number of messages that have been dropped during transmission due to the `No Local` subscription option |
+| delivery.dropped.no_local   | The number of dropped messages during transmission due to the `No Local` subscription option |
 | delivery.dropped.qos0_msg   | The number of dropped QoS 0 messages during transmission due to a full message queue |
 | delivery.dropped.queue_full | The number of dropped non-zero QoS level messages during transmission due to a full message queue |
 | delivery.dropped.too_large  | The number of dropped messages during transmission due to exceeding length limits |
