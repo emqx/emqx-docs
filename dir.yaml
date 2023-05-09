@@ -131,6 +131,7 @@
   title_cn: MQTT over QUIC
   path: mqtt-over-quic/introduction
   children:
+    - mqtt-over-quic/features-mqtt-over-quic
     - mqtt-over-quic/getting-started
     # - mqtt-over-quic/client
 
