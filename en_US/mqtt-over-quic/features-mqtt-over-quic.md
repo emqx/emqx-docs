@@ -90,5 +90,3 @@ The order of data is maintained per stream, hence, if there are two topics whose
      A client does not need to wait for MQTT CONNACK before sending the subscribe or publish packets.
 
      However, EMQX will only begin processing them after the client has established a connection and while the connection is allowed.
-
-####   

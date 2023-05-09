@@ -42,7 +42,7 @@ In comparison with TCP/TLS testing, the performance of MQTT over QUIC is summari
 - When NAT rebinding, client reconnection response under TCP/TLS is very slow and the message transmission is broken, while QUIC handles it more smoothly and the messages are sent without any impact.
 - In a weak network packet loss and packet transmission disorder environment, TLS shows message congestion and loss due to a poor network environment, while the QUIC server receives slightly jittery data but does not lose messages.
 
-##  Limitations
+## Limitations
 
 Currently, MQTT over QUIC has the following limitations:
 
