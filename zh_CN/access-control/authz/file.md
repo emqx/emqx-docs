@@ -116,5 +116,5 @@ authorization {
 - `enable`：是否激活该检查器，可选值：`true`、`false`
 - `path`：配置文件路径，默认为：`etc/acl.conf`。 如果通过 Dashboard 或 REST API 对 File 授权检查器进行过修改，EMQX 会把新的文件保存到 `data/authz/acl.conf`，并且不再读取原文件中的配置。
 
-详细参数列表，可参考 [authz-file](../../configuration/configuration-manual.md#authz-file)。
+详细参数列表，可参考 [authz-file](../../configuration/configuration-manual.html#authz-file)。
 

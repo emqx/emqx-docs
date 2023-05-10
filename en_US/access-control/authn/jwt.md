@@ -99,5 +99,5 @@ So as shown above, we now have two brand-new configuration items:
 
 ## <!--Configure with Configuration Items-->
 
-<!--You can also configuration items for the configuration. For detailed steps, see [authn-jwt:*](../../configuration/configuration-manual.md#authn-jwt:hmac-based). -->
+<!--You can also configuration items for the configuration. For detailed steps, see [authn-jwt:*](../../configuration/configuration-manual.html#authn-jwt:hmac-based). -->
 

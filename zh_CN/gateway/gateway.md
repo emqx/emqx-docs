@@ -114,7 +114,7 @@ gateway.stomp {
 
 详细参考：
 - [HTTP API - Gateway](../admin/api.md)
-- [配置文档-网关配置](../configuration/configuration-manual.md)
+- [配置文档-网关配置](../configuration/configuration-manual.html)
 
 ::: tip
 通过配置文件配置网关，需要在每个节点中进行修改，但通过 Dashboard 或者 HTTP API 进行配置则会在整个集群中生效。

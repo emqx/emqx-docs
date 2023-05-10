@@ -78,7 +78,7 @@ Now we can click **Create** to finish the settings.
 
 ## Configure with Configuration Items
 
-You can configure the EMQX HTTP authenticator with EMQX configuration items. <!--For details, see [authn-http:post](../../configuration/configuration-manual.md#authn-http:post) and [authn-http:get](../../configuration/configuration-manual.md#authn-http:get). -->
+You can configure the EMQX HTTP authenticator with EMQX configuration items. <!--For details, see [authn-http:post](../../configuration/configuration-manual.html#authn-http:post) and [authn-http:get](../../configuration/configuration-manual.html#authn-http:get). -->
 
 Below are the HTTP `POST` and `GET` request examples:
 

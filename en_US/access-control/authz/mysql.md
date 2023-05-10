@@ -86,7 +86,7 @@ You can use EMQX Dashboard to configure how to use MySQL for user authorization.
 
 You can configure the EMQX MySQL authorizer with EMQX configuration items.
 
-The MySQL authorizer is identified by type `mysql`. <!--For detailed configuration, see [authz:mysql](../../configuration/configuration-manual.md#authz:mysql).-->
+The MySQL authorizer is identified by type `mysql`. <!--For detailed configuration, see [authz:mysql](../../configuration/configuration-manual.html#authz:mysql).-->
 
 Sample configuration:
 

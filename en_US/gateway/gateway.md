@@ -123,7 +123,7 @@ gateway.stomp {
 
 Detailed reference:
 - [HTTP API - Gateway](../admin/api.md)
-- [Configuration - Gateway](../configuration/configuration-manual.md)
+- [Configuration - Gateway](../configuration/configuration-manual.html)
 
 ::: tip
 Configuring the gateway via emqx.conf requires changes on a per-node basis, but configuring it via Dashboard or the HTTP API will take effect across the cluster.

@@ -121,4 +121,4 @@ For example, we can change the MQTT/TCP listening port from the default 1883 to 
 
 See a shell [script](https://github.com/terry-xiaoyu/one_more_emqx) that makes this process.
 
-Refer to [cfg](../../configuration/configuration-manual.md).
+Refer to [cfg](../../configuration/configuration-manual.html).

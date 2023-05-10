@@ -101,7 +101,7 @@ Now we can click **Create** to finish the settings.
 
 ## Configure with Configuration Items
 
-You can configure the EMQX MongoDB authenticator with EMQX configuration items. <!--for detailed operating steps, see [authn-mongodb:standalone](../../configuration/configuration-manual.md#authn-mongodb:standalone), [authn-mongodb:sharded-cluster](../../configuration/configuration-manual.md#authn-mongodb:sharded-cluster) and [authn-mongodb:replica-set](../../configuration/configuration-manual.md#authn-mongodb:replica-set).-->
+You can configure the EMQX MongoDB authenticator with EMQX configuration items. <!--for detailed operating steps, see [authn-mongodb:standalone](../../configuration/configuration-manual.html#authn-mongodb:standalone), [authn-mongodb:sharded-cluster](../../configuration/configuration-manual.html#authn-mongodb:sharded-cluster) and [authn-mongodb:replica-set](../../configuration/configuration-manual.html#authn-mongodb:replica-set).-->
 
 Below are code examples you may refer to:
 

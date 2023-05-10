@@ -95,9 +95,9 @@ MongoDB 认证器支持将认证数据存储为 MongoDB 文档。用户需要提
 
 您也可以通过配置文件完成相关配置，关于 单节点、ReplicaSet 和 Sharding 的详细配置方式，可参考：
 
-- [authn-mongodb:standalone](../../configuration/configuration-manual.md#authn-mongodb:standalone)
-- [authn-mongodb:sharded-cluster](../../configuration/configuration-manual.md#authn-mongodb:sharded-cluster)
-- [authn-mongodb:replica-set](../../configuration/configuration-manual.md#authn-mongodb:replica-set)
+- [authn-mongodb:standalone](../../configuration/configuration-manual.html#authn-mongodb:standalone)
+- [authn-mongodb:sharded-cluster](../../configuration/configuration-manual.html#authn-mongodb:sharded-cluster)
+- [authn-mongodb:replica-set](../../configuration/configuration-manual.html#authn-mongodb:replica-set)
 
 以下为各部署模式下的配置文件示例：
 

@@ -24,7 +24,7 @@ Click add listener button, you can see a form for adding a listener on the right
 
 ![image](./assets/config-listener-add.png)
 
-More about the listener configuration, please refer to [Listener Configuration](../configuration/configuration-manual.md#brokerlisteners).
+More about the listener configuration, please refer to [Listener Configuration](../configuration/configuration-manual.html#brokerlisteners).
 
 ### Manager Listener
 
@@ -90,7 +90,7 @@ Click the log under the configuration menu on the left to go to the log configur
 
 ![image](./assets/config-log.png)
 
-More about the log configuration, please refer to [Log Configuration](../configuration/configuration-manual.md#log).
+More about the log configuration, please refer to [Log Configuration](../configuration/configuration-manual.html#log).
 
 ## Monitoring
 

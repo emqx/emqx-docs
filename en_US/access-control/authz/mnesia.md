@@ -35,7 +35,7 @@ Sample configuration:
 
 - `enable`: Whether to activate this checker; optional values: `true`, `false`.
 
-<!--For detailed parameter list, see [authz-mnesia](../../configuration/configuration-manual.md#authz-mnesia).-->
+<!--For detailed parameter list, see [authz-mnesia](../../configuration/configuration-manual.html#authz-mnesia).-->
 
 ## Create Authorization Rules
 

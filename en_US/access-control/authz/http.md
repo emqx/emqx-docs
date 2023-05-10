@@ -80,7 +80,7 @@ For untrusted environments, HTTPS should be used.
 
 The HTTP authorization requires configuration with `type=http`.
 
-HTTP `POST` and `GET` requests are supported. Each of them has some specific options. <!--For detailed information, see [authz:http_post](../../configuration/configuration-manual.md#authz:http_post) and [authz:http_get](../../configuration/configuration-manual.md#authz:http_get).-->
+HTTP `POST` and `GET` requests are supported. Each of them has some specific options. <!--For detailed information, see [authz:http_post](../../configuration/configuration-manual.html#authz:http_post) and [authz:http_get](../../configuration/configuration-manual.html#authz:http_get).-->
 
 Example of an HTTP authorizer configured with `POST` request:
 

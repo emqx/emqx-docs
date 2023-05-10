@@ -68,7 +68,7 @@ You can use EMQX Dashboard to configure how to use Redis for user authorization.
 
 You can configure the EMQX Redis authorizer with EMQX configuration items.
 
-The Redis authorizer is identified by type `redis`. The authorizer supports connecting to Redis running in 3 types of deployment modes. <!--For detailed configuration information, see: [redis_single](../../configuration/configuration-manual.md#authz:redis_single), [authz:redis_sentinel](../../configuration/configuration-manual.md#authz:redis_sentinel), and [authz:redis_cluster](../../configuration/configuration-manual.md#authz:redis_cluster).-->
+The Redis authorizer is identified by type `redis`. The authorizer supports connecting to Redis running in 3 types of deployment modes. <!--For detailed configuration information, see: [redis_single](../../configuration/configuration-manual.html#authz:redis_single), [authz:redis_sentinel](../../configuration/configuration-manual.html#authz:redis_sentinel), and [authz:redis_cluster](../../configuration/configuration-manual.html#authz:redis_cluster).-->
 
 Sample configuration:
 

@@ -82,7 +82,7 @@ Now we can click **Create** to finish the settings.
 
 ## Configure with Configuration Items
 
-You can configure the EMQX Redis authenticator with EMQX configuration items. <!--For detailed operation steps, see  [authn-redis:standalone](../../configuration/configuration-manual.md#authn-redis:standalone), [authn-redis:sentinel](../../configuration/configuration-manual.md#authn-redis:sentinel), and  [authn-redis:cluster](../../configuration/configuration-manual.md#authn-redis:cluster).-->
+You can configure the EMQX Redis authenticator with EMQX configuration items. <!--For detailed operation steps, see  [authn-redis:standalone](../../configuration/configuration-manual.html#authn-redis:standalone), [authn-redis:sentinel](../../configuration/configuration-manual.html#authn-redis:sentinel), and  [authn-redis:cluster](../../configuration/configuration-manual.html#authn-redis:cluster).-->
 
 Redis authentication is identified with `mechanism = password_based` and `backend = redis`.
 

@@ -42,11 +42,11 @@
 
 基础参数配置表单会因为协议网关的不同而不同，各协议配置参数的详情可点击跳转至配置文件说明页面查看。
 
-- [Stomp](../configuration/configuration-manual.md#gatewaystomp)
-- [MQTT-SN](../configuration/configuration-manual.md#gatewaymqttsn)
-- [CoAP](../configuration/configuration-manual.md#gatewaycoap)
-- [ExProto](../configuration/configuration-manual.md#gatewayexproto)
-- [LwM2M](../configuration/configuration-manual.md#gatewaylwm2m)
+- [Stomp](../configuration/configuration-manual.html#gatewaystomp)
+- [MQTT-SN](../configuration/configuration-manual.html#gatewaymqttsn)
+- [CoAP](../configuration/configuration-manual.html#gatewaycoap)
+- [ExProto](../configuration/configuration-manual.html#gatewayexproto)
+- [LwM2M](../configuration/configuration-manual.html#gatewaylwm2m)
 
 #### 监听器
 
