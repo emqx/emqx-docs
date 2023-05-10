@@ -45,7 +45,7 @@ URI:http://crl4.digicert.com/RapidSSLGlobalTLSRSA4096SHA2562022CA1.crl
 下面将以自签名客户端证书为例，演示客户端证书的吊销与在 EMQX 部署操作流程。
 
 ::: tip 先决条件
-假设您启用了 SSL/TLS 安全连接，使用自签名 CA 生成客户端证书，并且持有 CA 的私钥。
+您已启用 SSL/TLS 安全连接，使用自签名 CA 生成客户端证书，并且持有 CA 私钥。
 
 有关 EMQX 启用 SSL/TLS 的详细操作请参照 [EMQX MQTT 服务器启用 SSL/TLS 安全连接](https://www.emqx.com/zh/blog/emqx-server-ssl-tls-secure-connection-configuration-guide)。
 :::
