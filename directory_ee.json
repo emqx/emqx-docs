@@ -588,7 +588,7 @@
         {
           "title": "GB/T32960 网关",
           "path": "modules/gbt32960_protocol"
-        }
+        },
         {
           "title": "TCP 网关",
           "path": "modules/tcp_protocol"
