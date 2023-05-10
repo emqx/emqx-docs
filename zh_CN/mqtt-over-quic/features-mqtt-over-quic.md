@@ -47,7 +47,7 @@ EMQX 目前的实现将传输层换成 QUIC 流，由客户端发起连接和创
 作为消息代理，EMQX 执行流数据包绑定：
 
 - 它将 PUBACK 数据包发送到接收 QoS 1 的 PUBLISH 的流中，对于 QoS 2 数据包也是如此。
-- 它将 PUBLISH 数据包发送到接收主题订阅的流中，并期望从同一流中收到 QoS 1 的 PUBACK。
+- 将 PUBLISH 数据包发送到相对订阅（subscribe）的流中，并期望从同一流中收到 QoS 1 的 PUBACK。
 
 ::: tip
 
