@@ -24,7 +24,7 @@ The process of the authorization check is as follows:
 
 ::: tip Warning
 
-```suggestion
+suggestion
 To avoid problems with the authorization, you need to remember to remove the ACL file authorizer when necessary because it has `{allow, all}` at the end by default. 
 
 :::
