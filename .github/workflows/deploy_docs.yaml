@@ -114,8 +114,8 @@ jobs:
         cp -r docs-files/en_US/* frontend/docs/en/${VERSION}/
         cp -r docs-files/zh_CN/* frontend/docs/zh/${VERSION}/
         cp -r docs-files/redocly/*.json frontend/redoc/
-        cp -r docs-files/cfg-manual-docgen/ce-zh.json frontend/docs/zh/${VERSION}/configuration/
-        cp -r docs-files/cfg-manual-docgen/ce-en.json frontend/docs/en/${VERSION}/configuration/
+        cp -r docs-files/cfg-manual-docgen/ce-zh.json frontend/docs/zh/${VERSION}/configuration/configuration-manual.json
+        cp -r docs-files/cfg-manual-docgen/ce-en.json frontend/docs/en/${VERSION}/configuration/configuration-manual.json
         cp docs-files/directory.json frontend/docs/.vuepress/config/directory.json
 
     - name: move ee files
@@ -132,8 +132,8 @@ jobs:
         cp -r docs-files/en_US/* frontend/docs/en/${DOCS_TYPE}/${VERSION}/
         cp -r docs-files/zh_CN/* frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
         cp -r docs-files/redocly/*.json frontend/redoc/
-        cp -r docs-files/cfg-manual-docgen/ee-zh.json frontend/docs/zh/${VERSION}/configuration/
-        cp -r docs-files/cfg-manual-docgen/ee-en.json frontend/docs/en/${VERSION}/configuration/
+        cp -r docs-files/cfg-manual-docgen/ee-zh.json frontend/docs/zh/${VERSION}/configuration/configuration-manual.json
+        cp -r docs-files/cfg-manual-docgen/ee-en.json frontend/docs/en/${VERSION}/configuration/configuration-manual.json
         cp docs-files/directory_ee.json frontend/docs/.vuepress/config/directory.json
 
     - name: generate version config
