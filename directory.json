@@ -33,7 +33,7 @@
         },
         {
           "title": "分布式集群",
-          "path": "getting-started/create-cluster"
+          "path": "advanced/create-cluster"
         },
         {
           "title": "目录结构",
