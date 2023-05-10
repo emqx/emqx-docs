@@ -38,7 +38,7 @@ listeners.tcp.default {
 
 :::tip
 
-To configure the license via Dashboard,  click **Configuration** -> **Limiter** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+To configure the license via Dashboard,  click **Management** -> **Limiter** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
 
 EMQX has offered more configuration items to better serve customized needs, you can continue to read [Configuration Manual](./configuration-manual.md).
 

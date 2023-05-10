@@ -53,7 +53,7 @@ python3 http_server.py
 2. 点击页面右上角的创建。
 3. 在数据桥接类型中选择 Webhook，点击下一步。
 
-![image](./assets/rules/cn-webhook-index.png)
+<img src="./assets/rules/cn-webhook-index.png" alt="image" style="zoom:67%;" />
 
 4. 输入数据桥接名称，要求是大小写英文字母或数字组合，这里我们输入 `my_webhook`。
 5. 请求方法选择 POST，URL 为 `http://localhost:5000`，其他使用默认值即可。

@@ -64,7 +64,7 @@ JWT 权限列表定义了 `pub`、`sub` 和 `all` 3 个可选字段，分别用�
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，选择**认证方式**为 `JWT`，跳过**数据源**设置部分，进入**配置参数**页签：
 
-![EMQX JWT 认证](./assets/authn-jwt-3.png)
+<img src="./assets/authn-jwt-3.png" alt="EMQX JWT 认证" style="zoom:67%;" />
 
 您可根据如下说明完成相关配置：
 

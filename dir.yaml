@@ -224,7 +224,8 @@
   children:
     - network/emqx-mqtt-tls
     - network/mqtt-client-tls
-    # - network/crl-and-ocsp-stapling
+    - network/crl
+    - network/ocsp
     - title_en: GMSSL
       title_cn: 国密 SSL
       lang: cn

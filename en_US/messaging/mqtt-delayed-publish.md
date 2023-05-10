@@ -20,9 +20,9 @@ Example:
 
 ## Configure Delayed Publish via Dashboard
 
-1. Open EMQX Dashboard. In the left navigation menu, click **Configuration**-> **MQTT**.
+1. Open EMQX Dashboard. In the left navigation menu, click **Management**-> **Delayed Publish**. 
 
-2. On the **MQTT** page, click the **Extension**. Select the **Delayed Publish** tab.
+2. On the **Delayed Publish** page, you can configure as follows:
 
    - **Enable**: Enable or disable delayed publish. By default, it is enabled.
    - **Max Delayed Messages**: The max number of delayed messages.
@@ -64,8 +64,6 @@ Example:
    <img src="./assets/subscribe-delayed-message.png" alt="subscribe-delayed-message" style="zoom:35%;" />
 
 5. Select the connection named `Demo` in the **Connections** pane. Click the send button to send the `Delayed Message` with topic `$delayed/10/x/y`.
-
-   <img src="./assets/publish-delayed-message.png" alt="publish-delayed-message" style="zoom:35%;" />
 
 6. Wait for 10 seconds. You will see the connection named `Subscriber` receive the delayed message after 10 seconds.
 

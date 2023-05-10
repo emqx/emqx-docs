@@ -15,7 +15,7 @@ EMQX has version control on the REST API, all API paths from EMQX 5.0.0 start wi
 
 EMQX's REST API uses [HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#the_general_http_authentication_framework).
 
-To create an API key, you can click **System** -> **API Key** page on the left navigation tree of the Dashboard, Please refer to [Dashboard - API Keys](../dashboard/system.md#api-keys).
+To create an API key, you can click **System** -> **API Key** page on the left navigation menu of the Dashboard, Please refer to [Dashboard - API Keys](../dashboard/system.md#api-keys).
 
 You can use the generated API Key and Secret Key as the username and password for Basic authentication:
 

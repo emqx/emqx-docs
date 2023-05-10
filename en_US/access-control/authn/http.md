@@ -45,7 +45,7 @@ You can use EMQX Dashboard to finish the relevant configuration.
 
 On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **Password-Based** as **Mechanism**, and **HTTP Server** as **Backend**, this will lead us to the **Configuration** tab, as shown below.
 
-![HTTP](./assets/authn-http.png)
+<img src="./assets/authn-http.png" alt="HTTP" style="zoom:67%;" />
 
 
 

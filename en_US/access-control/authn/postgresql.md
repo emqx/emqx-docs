@@ -62,7 +62,7 @@ You can use EMQX Dashboard to configure how to use PostgreSQL for password authe
 
 On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **Password-Based** as **Mechanism**, and **PostgreSQL** as **Backend**, this will lead us to the **Configuration** tab, as shown below. 
 
-![Authentication with postgresql](./assets/authn-postgresql.png)
+<img src="./assets/authn-postgresql.png" alt="Authentication with postgresql" style="zoom:67%;" />
 
 Follow the instruction below on how to configure:
 

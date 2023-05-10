@@ -140,13 +140,13 @@ The illustration below shows how a retained message is received.
 
    :::tip
 
-   The normal message under the topic `sensor/t1` and the first retained message under the topic `sensor/t2` are not received. The EMQX only stores the latest retained message for each topic. You can also check the latest retained message stored in the EMQX Dashboard.
+   The normal message under the topic `sensor/t1` and the first retained message under the topic `sensor/t2` are not received. The EMQX only stores the latest retained message for each topic. You can also check the latest retained message stored in the EMQX Dashboard. Click **Monitoring** -> **Retained Messages**. 
 
-   ![Retained-message-in-borker](./assets/Retained-message-in-borker.png)
+   <img src="./assets/Retained-message-in-borker.png" alt="Retained-message-in-borker" style="zoom:67%;" />
 
    :::
 
-6. If you want to clear the retained message from the MQTT broker, send an empty retained message  under the topic.
+6. If you want to clear the retained message from the MQTT broker, send an empty retained message under the topic.
 
 ### Use MQTTX CLI to Verify
 

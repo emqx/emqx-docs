@@ -99,7 +99,7 @@ The default will save three types of retained messages [system topics](./mqtt-co
 - $SYS/brokers/+/version: Version number of the current EMQX node
 - $SYS/brokers - Number and name of all nodes of the current EMQX
 
-![retained-messages](./assets/retained-messages.png)
+<img src="./assets/retained-messages.png" alt="retained-messages" style="zoom:67%;" />
 
 ### Delete Retained Message
 

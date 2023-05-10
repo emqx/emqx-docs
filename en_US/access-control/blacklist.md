@@ -34,7 +34,7 @@ flapping_detect {
 
   enable = true
 
-  ## The max disconnect allowed of a MQTT Client in `window_time`
+  ## The max disconnect allowed of an MQTT Client in `window_time`
   max_count = 15
 
   ## The time window for flapping detect
@@ -45,5 +45,4 @@ flapping_detect {
 
 }
 ```
-
 These settings may be specified individually for each zone.

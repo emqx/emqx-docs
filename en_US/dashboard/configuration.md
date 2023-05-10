@@ -1,4 +1,4 @@
-# Configuration
+# Management
 
 EMQX provides hot configuration capabilities, which can dynamically modify the configuration at runtime without restarting the EMQX node. In the Dashboard page, we provide a visual configuration page for the hot configuration function, which can easily modify the configuration of EMQX. The following configuration items are currently provided:
 
@@ -60,13 +60,11 @@ The retainer menu is the Retained Message related configuration items of the MQT
 
 The system Topic menu is the system topic related configuration items of EMQX; EMQX will periodically publish the running status, usage statistics, and instant client events to the system topic starting with `$SYS/`. The configuration items of the system topic include the Messages Publish Interval, the Heartbeat Interval, etc. When the client subscribes to this topic, EMQX will publish the relevant information on this topic.
 
-### Extension
+### Advanced MQTT
 
-The extension menu is the extension-related configuration item of EMQX, which provides some extension functions for MQTT clients, including Topic Rewrite. You can manually add the topic to be rewritten, select the action type--publish/subscribe, enter the original topic, regular expression, and destination topic. Auto Subscribe, you can manually add a Auto Subscribe. For the already added Auto Subscribe, you can delete and edit it. Finally, you can set the Delayed Publish, view the delayed published messages, etc.
+Besides, the EMQX Dashboard also offers advanced MQTT features like Topic Rewrite, Auto Subscribe, and Delayed Publish. You can click Management and browse to Advanced MQTT section for configurations we supported. 
 
-More about the MQTT configuration, please refer to [MQTT Configuration](../configuration/configuration-manual.md#brokermqtt).
 
-![image](./assets/config-mqtt.png)
 
 ## Limiter
 

@@ -12,7 +12,7 @@ and set its `ssl_options.verify` option to `verify_peer`.
 
 The default `ssl` MQTT listener runs on the 8883 port:
 
-```
+```hcl
 listeners.ssl.default {
   bind = "0.0.0.0:8883"
 
@@ -47,7 +47,7 @@ For production use, securely issued certificates must be used.
 
 To enable PSK authentication, one should enable `psk_authentication` section in `emqx.conf`:
 
-```
+```hcl
 psk_authentication {
     ## Whether to enable the PSK feature.
     enable = true
@@ -77,7 +77,7 @@ myclient2:d1e617d3b963757bfc21dad3fea169716c3a2f053f23decaea5cdfaabd04bfc4
 
 `ssl` listener should be configured to use PSK ciphers:
 
-```
+```hcl
 listeners.ssl.default {
   ...
   ssl_options.versions = ["tlsv1.2"]
@@ -91,14 +91,13 @@ listeners.ssl.default {
 
 If the `RSA-PSK` cipher suites are used, the `RSA` certificate is still required, see [RFC4279](https://www.rfc-editor.org/rfc/rfc4279#section-4) for details.
 
-
 ## SSL Client for External Resources
 
 Apart from allowing to receive a two-way SSL MQTT client, EMQX also provides access to external resources via SSL.
 
 For example, to access a web server via HTTPS:
 
-![Configure HTTPS Client](./assets/http-tls.jpg)
+<img src="./assets/http-tls.jpg" alt="image-20230426175556674" style="zoom:50%;" />
 
 When creating any connection to an external resource, you can choose to enable TLS and configure its SSL certificate. As shown above:
 
@@ -108,7 +107,7 @@ When creating any connection to an external resource, you can choose to enable T
 
 In addition, it is also can be configured in the `emqx.conf`:
 
-```
+```hcl
 authentication {
   url = "https://127.0.0.1:8080"
   backend = "http"

@@ -26,7 +26,7 @@ export EMQX_TELEMETRY__ENABLE=false && ./bin/emqx start
 
 ### 运行中禁用
 
-在 Dashboard 系统设置 -> 设置 页面，关闭“启动遥测”选项即可永久性禁用遥测。
+在 Dashboard 点击页面顶部功能区的 设置 按钮，关闭**启动遥测**选项即可永久性禁用遥测。
 
 ## 指标收集
 

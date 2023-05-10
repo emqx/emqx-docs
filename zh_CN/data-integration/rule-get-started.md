@@ -6,7 +6,7 @@
 ## 创建规则
 在 Dashboard 上，选择数据集成 -> 规则 -> 创建，进入创建规则的界面：
 
-![image](./assets/rules/cn_rule_overview_basic_sql.png)
+<img src="./assets/rules/cn_rule_overview_basic_sql.png" alt="image" style="zoom:67%;" />
 
 ## 添加消息重发布动作
 保持默认的规则名和 SQL 语句不变，点击 “添加动作” 按钮，按照如下参数添加一个 `消息重发布` 动作：
@@ -15,7 +15,7 @@
 - QoS：0
 - Payload：${payload}
 
-![image](./assets/rules/cn_rule_overview_add_action_republish.png)
+<img src="./assets/rules/cn_rule_overview_add_action_republish.png" alt="image" style="zoom:67%;" />
 
 最后回到规则创建页面，点击页面下方的创建按钮，规则就创建完成了。
 
@@ -30,6 +30,6 @@
 
 Dashboard 提供了测试 SQL 语句的功能。在规则创建页面，点击 “执行 SQL”，通过给定的 SQL 语句和事件参数，即时展示 SQL 的测试结果。
 
-![image](./assets/rules/cn_rule_testsql.png)
+<img src="./assets/rules/cn_rule_testsql.png" alt="image" style="zoom:67%;" />
 
 SQL 的处理结果会以 JSON 的形式呈现在 **输出结果** 文本框里。在后续的动作（内置动作或者数据桥接）里面，可以 `${key}` 的形式引用 SQL 处理结果里的字段。
