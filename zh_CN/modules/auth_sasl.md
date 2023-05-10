@@ -10,30 +10,15 @@ SCRAM 认证仅支持使用 MQTT v5.0 的连接。
 
 :::
 
-## <!--通过 Dashboard 配置-->
+## 通过 Dashboard 配置
 
-<!--在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication)页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，依次选择**认证方式**为 `SCRAM`，**数据源**为 `Built-in Database`，进入**配置参数**页签：-->
+在 [EMQX Dashboard ](http://127.0.0.1:18083/#/authentication)页面，点击左侧导航栏的**模块**，点击**添加模块**。
 
-<!--![SCRAM](https://docs.emqx.com/docs-assets/img/authn-scram.abab74fe.png)-->
+在**模块/选择**页面，通过关键词检索找到 **MQTT 增强认证**模块。将鼠标指向 MQTT 增强认证，点击 选择。在随后的**参数设置**页面，点击**添加**。
 
-<!--按照实际需求选择**密码加密方式**为 **sha256** 或 **sha512**，点击**创建**完成设置。-->
+![image-20230510174205663](./assets/mqtt-enchanged-auth.png)
 
-## 通过配置文件配置
+**MQTT 增强认证**功能无需进一步的参数配置，在随后打开的模块/详情页，点击**添加**即可启用 MQTT 增强认证。后续您可在**模块**页面停止该模块，或点击**管理**配置认证信息。在随后打开的 **MQTT 增强认证**页面，点击**认证信息**页签，随后点击**添加**，即可创建相关认证信息。
 
-配置示例如下：
+![image-20230510174648376](./assets/MQTT-enhanced-auth-create.png)
 
-```hcl
-{
-    mechanism = scram
-    backend = built_in_database
-    enable = true
-
-    algorithm = sha512
-    iteration_count = 4096
-}
-```
-
-其中：
-
-- `algorithm`：对应 Dashboard 的密码加密方式；可选值：**sha256** 或 **sha512**
-- `iteration_count`（可选）：输入一个整数以指定迭代次数，默认值： **4096**

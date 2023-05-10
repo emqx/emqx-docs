@@ -43,16 +43,12 @@
 
 EMQX 支持 MQTT 消息直接存储 Redis、MySQL、PostgreSQL、MongoDB、Cassandra、DynamoDB、InfluxDB、OpenTSDB 数据库:
 
-| 存储插件              | 配置文件                   | 说明                                                |
-| --------------------- | -------------------------- | --------------------------------------------------- |
-| emqx_backend_redis    | emqx_backend_redis.conf    | [Redis 消息存储](./offline_msg_to_redis.md)         |
-| emqx_backend_mysql    | emqx_backend_mysql.conf    | [MySQL 消息存储](./offline_msg_to_mysql.md)         |
-| emqx_backend_pgsql    | emqx_backend_pgsql.conf    | [PostgreSQL 消息存储](./offline_msg_to_pgsql.md)    |
-| emqx_backend_mongo    | emqx_backend_mongo.conf    | [MongoDB 消息存储](./offline_msg_to_mongodb.md)     |
-| emqx_backend_cassa    | emqx_backend_cassa.conf    | [Cassandra 消息存储](./offline_msg_to_cassandra.md) |
-| emqx_backend_dynamo   | emqx_backend_dynamo.conf   | DynamoDB 消息存储                                   |
-| emqx_backend_influxdb | emqx_backend_influxdb.conf | InfluxDB 消息存储                                   |
-| emqx_backend_opentsdb | emqx_backend_opentsdb.conf | OpenTSDB 消息存储                                   |
+- [Cassandra 消息存储](./offline_msg_to_cassandra.md)
+- [ClickHouse 消息存储](./offline_msg_to_clickhouse.md)
+- [MongoDB 消息存储](./offline_msg_to_mongodb.md)
+- [MySQL 消息存储](./offline_msg_to_mysql.md)
+- [PostgreSQL 消息存储](./offline_msg_to_pgsql.md)
+- [Redis 消息存储](./offline_msg_to_redis.md)
 
 
 ### 配置步骤
@@ -61,10 +57,3 @@ EMQX 中支持不同类型的数据库的持久化，虽然在一些细节的配
 
 - 数据源连接配置：这部分主要用于配置数据库的连接信息，包括服务器地址，数据库名称，以及用户名和密码等信息，针对每种不同的数据库，这部分配置可能会有所不同；
 - 事件注册与行为：根据不同的事件，你可以在配置文件中配置相关的行为（action），相关的行为可以是函数，也可以是SQL语句。
-
-- [离线消息保存到 Redis](./offline_msg_to_redis.md)
-- [离线消息保存到 MySQL](./offline_msg_to_mysql.md)
-- [离线消息保存到 PostgreSQL](./offline_msg_to_pgsql.md)
-- [离线消息保存到 Cassandra](./offline_msg_to_cassandra.md)
-- [离线消息保存到 MongoDB](./offline_msg_to_mongodb.md)
-- [离线消息保存到 ClickHouse](./offline_msg_to_clickhouse.md)

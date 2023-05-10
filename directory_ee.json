@@ -522,10 +522,6 @@
           "path": "advanced/system-topic"
         },
         {
-          "title": "调试/调优",
-          "path": "modules/recon"
-        },
-        {
           "title": "主题指标统计",
           "path": "modules/topic_metrics"
         },
@@ -548,12 +544,12 @@
       "path": "advanced/plugins",
       "children": [
         {
-          "title": "钩子",
-          "path": "advanced/hooks"
+          "title": "插件开发与管理",
+          "path": "advanced/start-stop-plugins"
         },
         {
-          "title": "插件开发与启停",
-          "path": "advanced/start-stop-plugins"
+          "title": "钩子",
+          "path": "advanced/hooks"
         },
         {
           "title": "多语言扩展钩子",

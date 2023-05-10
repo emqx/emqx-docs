@@ -31,25 +31,13 @@ EMQX 随安装包提供了一组仅用于测试的 SSL/TLS 证书（位于 `etc/
 
 :::
 
-1. 将 SSL/TLS 证书文件移动到 EMQX `etc/cert` 目录。
-2. 打开配置文件 `emqx.conf` （根据您的安装方式，可能位于 `./etc` 或 `/etc/emqx/etc` 目录），修改 `listeners.ssl.default` 配置组，将证书替换为您的证书，并添加 `verify = verify_none`：
+1. 将 SSL/TLS 证书文件移动到 EMQX `etc/certs` 目录。
+2. 打开配置文件 `listeners.conf` ，将证书替换为您的证书，并添加 `verify = verify_none`：
 
 ```bash
-listeners.ssl.default {
-  bind = "0.0.0.0:8883"
-  max_connections = 512000
-  ssl_options {
-    # keyfile = "etc/certs/key.pem"
-    keyfile = "etc/certs/server.key"
-    # certfile = "etc/certs/cert.pem"
-    certfile = "etc/certs/server.crt"
-    # cacertfile = "etc/certs/cacert.pem"
-    cacertfile = "etc/certs/rootCA.crt"
-
-    # 不开启对端验证
-    verify = verify_none
-  }
-}
+listener.ssl.external.keyfile = etc/certs/key.pem
+listener.ssl.external.certfile = etc/certs/cert.pem
+listener.ssl.external.cacertfile = etc/certs/cacert.pem
 ```
 
 至此您已经完成 EMQX 上的 SSL/TLS 单向认证配置，单向认证仅保证通信已经被加密，无法验证客户端身份。
@@ -57,101 +45,10 @@ listeners.ssl.default {
 如需启用双向认证，请在 `listeners.ssl.default` 配置组中添加如下配置：
 
 ```bash
-listeners.ssl.default {
-  ...
-  ssl_options {
-    ...
-    # 开启对端验证
-    verify = verify_peer
-    # 强制开启双向认证，如果客户端无法提供证书，则 SSL/TLS 连接将被拒绝
-    fail_if_no_peer_cert = true
-  }
-}
+listener.ssl.external.verify = verify_peer
 ```
 
 3. 重启 EMQX，应用以上配置。
-
-## Ciphers
-
-### TLS ciphers
-
-{% emqxce %}
-
-从 v5.0.6 开始， EMQX 不在配置文件中详细列出所有默认的密码套件名称，而是会在配置文件中使用一个空列表，然后在运行时替换成默认的密码套件。
-
-{% endemqxce %}
-
-{% emqxee %}
-
-从 5.0 版本开始，EMQX 不在配置文件中详细列出所有默认的密码套件名称，而是会在配置文件中使用一个空列表，然后在运行时替换成默认的密码套件。
-
-{% endemqxee %}
-
-EMQX 默认支持以下密码套件：
-
-tlsv1.3:
-
-```bash
-ciphers =
-  [ "TLS_AES_256_GCM_SHA384", "TLS_AES_128_GCM_SHA256",
-    "TLS_CHACHA20_POLY1305_SHA256", "TLS_AES_128_CCM_SHA256",
-    "TLS_AES_128_CCM_8_SHA256"
-  ]
-```
-
-tlsv1.2 或更早:
-
-```bash
-ciphers =
-  [ "ECDHE-ECDSA-AES256-GCM-SHA384",
-    "ECDHE-RSA-AES256-GCM-SHA384",
-    "ECDHE-ECDSA-AES256-SHA384",
-    "ECDHE-RSA-AES256-SHA384",
-    "ECDH-ECDSA-AES256-GCM-SHA384",
-    "ECDH-RSA-AES256-GCM-SHA384",
-    "ECDH-ECDSA-AES256-SHA384",
-    "ECDH-RSA-AES256-SHA384",
-    "DHE-DSS-AES256-GCM-SHA384",
-    "DHE-DSS-AES256-SHA256",
-    "AES256-GCM-SHA384",
-    "AES256-SHA256",
-    "ECDHE-ECDSA-AES128-GCM-SHA256",
-    "ECDHE-RSA-AES128-GCM-SHA256",
-    "ECDHE-ECDSA-AES128-SHA256",
-    "ECDHE-RSA-AES128-SHA256",
-    "ECDH-ECDSA-AES128-GCM-SHA256",
-    "ECDH-RSA-AES128-GCM-SHA256",
-    "ECDH-ECDSA-AES128-SHA256",
-    "ECDH-RSA-AES128-SHA256",
-    "DHE-DSS-AES128-GCM-SHA256",
-    "DHE-DSS-AES128-SHA256",
-    "AES128-GCM-SHA256",
-    "AES128-SHA256",
-    "ECDHE-ECDSA-AES256-SHA",
-    "ECDHE-RSA-AES256-SHA",
-    "DHE-DSS-AES256-SHA",
-    "ECDH-ECDSA-AES256-SHA",
-    "ECDH-RSA-AES256-SHA",
-    "ECDHE-ECDSA-AES128-SHA",
-    "ECDHE-RSA-AES128-SHA",
-    "DHE-DSS-AES128-SHA",
-    "ECDH-ECDSA-AES128-SHA",
-    "ECDH-RSA-AES128-SHA"
-  ]
-```
-
-配置 PSK 认证的监听器
-
-```bash
-ciphers = [
-  [ "RSA-PSK-AES256-GCM-SHA384",
-    "RSA-PSK-AES256-CBC-SHA384",
-    "RSA-PSK-AES128-GCM-SHA256",
-    "RSA-PSK-AES128-CBC-SHA256",
-    "RSA-PSK-AES256-CBC-SHA",
-    "RSA-PSK-AES128-CBC-SHA"
-  ]
-```
 
 ## 扩展阅读：如何获取 SSL/TLS 证书
 
