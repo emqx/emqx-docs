@@ -106,7 +106,7 @@
     },    
     {
       "title": "访问控制",
-      "path": "advanced/Access-Control",
+      "path": "advanced/access-control",
       "children": [
         {
           "title": "认证" ,
@@ -172,7 +172,7 @@
       "children": [
         {
           "title": "核心概念",
-          "path": "advanced/mqtt-mqtt-concepts"
+          "path": "advanced/mqtt-concepts"
         },
         {
           "title": "共享订阅",
@@ -342,7 +342,7 @@
         },
         {
           "title": "Kafka 消费组",
-          "path": "module/kafka_consumer"
+          "path": "modules/kafka_consumer"
         },            
         {
           "title": "集成 InfluxDB",
@@ -378,7 +378,7 @@
         },
         {
           "title": "Pulsar 消费者",
-          "path": "module/pulsar_consumer"
+          "path": "modules/pulsar_consumer"
         },
         {
           "title": "集成 RabbitMQ",
