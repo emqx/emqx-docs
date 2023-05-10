@@ -73,11 +73,11 @@ The order of data is maintained per stream, hence, if there are two topics whose
    - Prioritize different data
      MQTT over QUIC also provides the ability to prioritize data from different MQTT topics through multi-streams. This means that topic data can be prioritized and delivered accordingly, improving the overall performance and responsiveness of the connection. 
 
-   - Improve the parallelism of processing on the client/EMQX side
+   - Improve the parallelism of processing on the client and EMQX side
 
-     With the use of data streams, EMQX is able to process multiple streams in parallel, improving the overall efficiency and responsiveness of the system.
+     With the use of data streams, EMQX and clients are able to process multiple streams in parallel, improving the overall efficiency and resource utilization of the system, resulting in lower latency and improved application layer response speed.
 
-   - More robust handling of MQTT data
+   - Reduce overhead for error handling
 
      If a single data stream is aborted due to an application error, it will not cause the entire connection to close. Instead, the application is free to recreate the stream and recover the data. This allows for more reliable and resilient MQTT communication.
 
