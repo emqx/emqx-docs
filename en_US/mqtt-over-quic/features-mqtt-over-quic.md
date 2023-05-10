@@ -1,4 +1,4 @@
-# Features and Benefits of MQTT over QUIC 
+# Features and Benefits
 
 EMQX 5.0 designs a unique message transmission mechanism and management method for MQTT over QUIC, providing a more efficient and secure way to transmit MQTT messages over modern complex networks, thus improving the performance of MQTT in certain scenarios. 
 

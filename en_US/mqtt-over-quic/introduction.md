@@ -4,7 +4,7 @@ The MQTT protocol has commonly used in messaging services of the IoT and Interne
 
 To overcome the limitations of MQTT over TCP, EMQX 5.0 innovatively introduces a new protocol, MQTT over QUIC, that enables MQTT clients and EMQX to communicate over Quick UDP Internet Connections (QUIC). The protocol offers the same functionality as the existing MQTT protocol but with the additional benefits of QUIC. 
 
-This chapter explains why and how MQTT over QUIC is implemented in EMQX. In [Features and Benefits of MQTT over QUIC](./features-mqtt-over-quic.md), it introduces two interaction modes between clients and EMQX on the QUIC stream and the features and benefits of each mode. In [Use MQTT over QUIC](./getting-started.md), it demonstrates how to enable MQTT over QUIC in EMQX using client SDKs and tools.
+This chapter explains why and how MQTT over QUIC is implemented in EMQX. In [Features and Benefits](./features-mqtt-over-quic.md), it introduces two interaction modes between clients and EMQX on the QUIC stream and the features and benefits of each mode. In [Use MQTT over QUIC](./getting-started.md), it demonstrates how to enable MQTT over QUIC in EMQX using client SDKs and tools.
 
 ::: tip
 
@@ -30,7 +30,7 @@ MQTT over QUIC is particularly suitable for businesses with high requirements fo
 - No awareness of the upper layer protocols
   TCP treats all data transmission equally, without distinguishing between different types of data or businesses that may be using the same network connection.
 
-For more information on the features and benefits of MQTT over QUIC to enhance the user experience in weak and unstable network environments, see [Features and Benefits of MQTT over QUIC](./features-mqtt-over-quic.md).
+For more information on the features and benefits of MQTT over QUIC to enhance the user experience in weak and unstable network environments, see [Features and Benefits](./features-mqtt-over-quic.md).
 
 ## QUIC vs TCP/TLS Test Comparisons
 
