@@ -445,7 +445,7 @@
         },
         {
           "title": "国密",
-          "path": "network/gmsll"
+          "path": "network/gmssl"
         }
       ]
     },
@@ -585,6 +585,10 @@
           "title": "JT/T808 网关",
           "path": "modules/jt808_protocol"
         },
+        {
+          "title": "GB/T32960 网关",
+          "path": "modules/gbt32960_protocol"
+        }
         {
           "title": "TCP 网关",
           "path": "modules/tcp_protocol"
