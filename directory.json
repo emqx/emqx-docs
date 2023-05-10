@@ -32,6 +32,10 @@
           "path": "getting-started/cluster"
         },
         {
+          "title": "分布式集群",
+          "path": "getting-started/create-cluster"
+        },
+        {
           "title": "目录结构",
           "path": "getting-started/directory"
         },
