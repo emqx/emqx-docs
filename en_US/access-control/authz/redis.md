@@ -1,6 +1,6 @@
 # Integrate with Redis
 
-This authorizer implements authorization checks through matching publish/subscription requests against lists of rules stored in the Redis database.
+This authorizer implements authorization checks by matching publish/subscription requests against lists of rules stored in the Redis database.
 
 ::: tip Tip
 
@@ -27,7 +27,7 @@ The corresponding config parameters are:
 cmd = "HGET users:${username}"
 ```
 
-Fetched rules are used as permissive ones, i.e., a request is accepted if topic filter and action match.
+Fetched rules are used as permissive ones, i.e., a request is accepted if the topic filter and action match.
 
 :::tip
 All rules added in Redis Authorizer are **allow** rules, which means Redis Authorizer needs to be used in whitelist mode.
@@ -41,7 +41,7 @@ You can use EMQX Dashboard to configure how to use Redis for user authorization.
 
 2. Click **Create** at the top right corner, then click to select **Redis** as **Backend**. Click **Next**. The **Configuration** tab is shown as below.
 
-   ![authz-Redis_ee](./assets/authz-Redis_ee.png)
+   <img src="./assets/authz-Redis_ee.png" alt="authz-Redis_ee" style="zoom:67%;" />
 
 3. Follow the instructions below to do the configuration.
 
@@ -85,7 +85,7 @@ Sample configuration:
     server = "127.0.0.1:6379"
 
     cmd = "HGETALL mqtt_user:${username}"
-    database => 1
+    database = 1
     password = public
     server = "127.0.0.1:6379"
 
@@ -106,7 +106,7 @@ Sample configuration:
     sentinel = "mymaster"
 
     cmd = "HGETALL mqtt_user:${username}"
-    database => 1
+    database = 1
     password = public
 
 }
@@ -125,7 +125,6 @@ Sample configuration:
     servers = "10.123.13.11:6379,10.123.13.12:6379"
 
     cmd = "HGETALL mqtt_user:${username}"
-    database => 1
     password = public
 }
 ```

@@ -31,6 +31,12 @@ EMQX 已经默认配置一个基于文件的授权检查器，将基于 ACL 文�
 
 有关如何调整授权链中授权检查器顺序以及查看其运行统计指标，可查看 [管理授权检查器](#管理授权检查器) 章节。
 
+::: warning
+
+为避免授权检查出错，必须记得在必要时删除基于 ACL 文件的授权检查器，因为 ACL 文件末尾包含的特殊规则 `{allow, all}` 默认允许所有请求。
+
+:::
+
 <!-- TODO 补充流程图 -->
 
 ### 授权数据缓存
@@ -39,7 +45,7 @@ EMQX 支持对授权数据进行缓存，以便缓解由于大量客户端的订
 
 <!--TODO @Lena页面有更新，后续要跟着更新-->
 
-<img src="./assets/anthz-cache.png" alt="Enable authorization cache" style="zoom:50%;" />
+<img src="./assets/anthz-cache.png" alt="Enable authorization cache" style="zoom:40%;" />
 
 **启用缓存**：设置是否启用授权数据缓存。
 
@@ -109,7 +115,6 @@ EMQX 还允许在主题中使用占位符，在匹配规则时将当前客户端
 <!-- TODO 调查与 4.x 版本是否存在差异-->
 
 为了避免占位符跟想要的主题冲突的问题，EMQX 5.0 中引入了一个 `eq` 语法，例如 `eq a/b/${username}/c/d`。
-这样规则将会不做替换，而是保持 MQTT 主题 `a/b/${username}/c/d` 不变。
 
 ### 授权检查优先级
 
@@ -200,7 +205,7 @@ EMQX 提供了 3 种使用权限的配置方式，分别为：Dashboard、配置
 
 在 Dashboard 的授权页面，您可直接完成相关授权检查器的配置，查看授权检查器状态，以及调整授权检查器在授权链中的位置。
 
-![authz dashboard](./assets/authentication-with-dashboard.png)
+<img src="./assets/authentication-with-dashboard.png" alt="authz dashboard" style="zoom:33%;" />
 
 #### 配置文件
 

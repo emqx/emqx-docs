@@ -10,7 +10,7 @@ This section will introduce the configuration settings that determine how the MQ
 
 :::tip
 
-You can also find the corresponding configuration items in EMQX Dashboard (**Configuration** -> **MQTT** -> **General**). Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+You can also find the corresponding configuration items in EMQX Dashboard (**Management** -> **MQTT Settings** -> **General**). Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
 
 :::
 

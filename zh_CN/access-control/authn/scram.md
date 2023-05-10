@@ -12,7 +12,7 @@ SCRAM 认证仅支持使用 MQTT v5.0 的连接。
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，依次选择**认证方式**为 `SCRAM`，**数据源**为 `Built-in Database`，进入**配置参数**页签：
 
-![SCRAM](./assets/authn-scram.png)
+<img src="./assets/authn-scram.png" alt="SCRAM" style="zoom:67%;" />
 
 按照实际需求选择**密码加密方式**为 **sha256** 或 **sha512**，点击**创建**完成设置。
 

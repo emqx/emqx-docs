@@ -16,9 +16,9 @@ The STOMP gateway is based on [Stomp v1.2](https://stomp.github.io/stomp-specifi
 
 ## Enable the STOMP Gateway
 
-In EMQX 5.0, STOMP gateways can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
+In EMQX 5.0, STOMP gateway can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
 
-On EMQX Dashboard, click **Extensions** -> **Gateways** on the left navigation menu. On the **Gateway** page, all supported gateways are listed. Locate **STOMP** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize STOMP** page.
+On EMQX Dashboard, click **Management** -> **Gateways** on the left navigation menu. On the **Gateways** page, all supported gateways are listed. Locate **STOMP** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize STOMP** page.
 
 ::: tip
 
@@ -99,9 +99,9 @@ In the **Basic Configuration** tab, you can set the maximum header allowed, the 
 
 5. **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: **true**, optional values: **true**, **false**.
 
-6. **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different listeners, for example, *stomp*.
+6. **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, *stomp/*.
 
-   **Note**: The prefixed string will be removed from the topic name when the message is delivered to the subscriber. 
+   **Note**: This topic prefix is managed by the gateway. Clients do not need to add this prefix explicitly when publishing and subscribing.
 
 ### Add Listeners 
 
@@ -120,7 +120,7 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 - **Name**: Set a unique identifier for the listener.
 - **Type**: Select the protocol type, for STOMP, this can be either **tcp** or **ssl**.
 - **Bind**: Set the port number on which the listener accepts incoming connections.
-- **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different listeners.
+- **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols.
 
 **Listener Settings** 
 

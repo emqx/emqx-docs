@@ -10,7 +10,7 @@ debug < info < notice < warning < error < critical < alert < emergency
 
 <!-- for a more detailed description of each log level, see [Log and observability - Log](https://docs.emqx.com/en/enterprise/v5.0/observability/log.html). -->
 
-You can configure EMQX logs with Dashboard or configuration files. To configure with EMQX Dashboard, you can click **Configuration** -> **Log** on the left navigation menu to configure. 
+You can configure EMQX logs with Dashboard or configuration files. To configure with EMQX Dashboard, you can click **Management** -> **Log** on the left navigation menu to configure. 
 
 :::tip
 

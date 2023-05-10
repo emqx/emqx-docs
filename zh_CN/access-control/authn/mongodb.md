@@ -50,7 +50,7 @@ MongoDB 认证器支持将认证数据存储为 MongoDB 文档。用户需要提
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，依次选择**认证方式**为 `Password-Based`，**数据源**为 `MongoDB`，进入**配置参数**页签：
 
-![use mongodb to authenticate](./assets/authn-mongodb.png)
+<img src="./assets/authn-mongodb.png" alt="use mongodb to authenticate" style="zoom:67%;" />
 
 您可根据如下说明完成相关配置：
 
@@ -76,19 +76,15 @@ MongoDB 认证器支持将认证数据存储为 MongoDB 文档。用户需要提
 **认证配置**：在此部分进行认证加密算法相关的配置。
 
 - **Password Hash 字段名**：指定密码的字段名称。
-
 - **密码加密方式**：选择存储密码时使用的散列算法，如 plain、md5、sha、bcrypt、pbkdf2 等。
   - 选择 **plain**、**md5**、**sha**、**sha256** 或 **sha512** 算法，需配置：
     - **加盐方式**：用于指定盐和密码的组合方式，除需将访问凭据从外部存储迁移到 EMQX 内置数据库中外，一般不需要更改此选项；可选值：**suffix**（在密码尾部加盐）、**prefix**（在密码头部加盐）、**disable**（不启用）。注意：如选择 **plain**，加盐方式应设为 **disable**。
-
-  - 选择 **bcrypt** 算法，无需额外配置。
-
+  - 选择 **bcrypt** 算法，需配置:
+  - **Salt Rounds**：指定散列需要的计算次数（2^Salt Rounds），也称成本因子。默认值：**10**，可选值：**4～31**；数值越高，加密的安全性越高，因此建议采用较大的值，但相应的用户验证的耗时也会增加，您可根据业务需求进行配置。
   - 选择 **pkbdf2** 算法，需配置：
-
   - **伪随机函数**：指定生成密钥使用的散列函数，如 sha256 等。
   - **迭代次数**：指定散列次数，默认值：**4096**。<!--后续补充取值范围-->
   - **密钥长度**（可选）：指定希望得到的密钥长度。如不指定，密钥长度将由**伪随机函数**确定。
-
 - **is_superuser 字段名**：指定 MongoDB 数据中超级用户标志位字段。
 - **salt 字段名**：指定 MongoDB 数据中盐的字段。
 - **查询 Filter**：MongoDB filter，用于过滤数据，支持[认证占位符](../authn/authn.md#认证占位符)

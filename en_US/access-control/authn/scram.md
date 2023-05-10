@@ -18,7 +18,7 @@ Set **Password Hash** as **sha256** or **sha512** and click **Create** to finish
 
 Sample configuration:
 
-```
+```hcl
 {
     mechanism = scram
     backend = built_in_database

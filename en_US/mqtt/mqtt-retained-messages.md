@@ -2,9 +2,9 @@
 
 With `Retained` message, you can flag one message published under certain topic as `Retained` and save them as persistent messages on the broker. So when new clients subscribe to this topic, they will receive the messages flagged as `Retained`.
 
-Only one retained message can exist under each topic, if you want to flag another message as `Retained`, the existing message will be replaced by the new message. 
+Only one retained message can exist under each topic, if you want to flag another message as `Retained`, the existing message will be replaced by the new message.
 
-For example, use MQTT X CLI to publish a `Retained` message to topic `a/b/c`:
+For example, use MQTTX CLI to publish a `Retained` message to topic `a/b/c`:
 
 ```bash
 mqttx pub -r -q 1 -t a/b/c -m 'hello'
@@ -28,8 +28,8 @@ mqttx pub -r -q 1 -t a/b/c -m ''
 ```
 
 2. Number of `Retained` messages exceeds the specified maximum `Retained` messages.
-3. Use REST API to delete the `Retained` message. 
-4. For MQTT 5.0 compatible clients, set an expiration duration, then the `Retained` messages will be deleted if the duration expired. 
+3. Use REST API to delete the `Retained` message.
+4. For MQTT 5.0 compatible clients, set an expiration duration, then the `Retained` messages will be deleted if the duration expired.
 
 ::: tip
 
@@ -44,18 +44,19 @@ The service stores and manages retained messages sent by clients and sends them 
 
 ## Configure With Dashboard
 
-Open the Dashboard, click **Configuration** -> **MQTT** on the left navigation tree. Then click the **Retainer** tab, and you can customize the setting for Retained messages. 
+Open the Dashboard, click **Management** -> **MQTT Settings** on the left navigation menu. Then click the **Retainer** tab, and you can customize the setting for Retained messages. 
 
-![image](./assets/retainer_1.png)
+<img src="./assets/retainer_1.png" alt="image-20230427113953764" style="zoom:50%;" />
 
-## Configuration Items
+Below are detailed descriptions of each field
 
 | Configuration item       | Type  | Optional value      | Default value | Description                                               |
 | ------------------------------ | -------- | ------------------------ | ------ | ------------------------------------------------------------ |
-| Storage         | enum     | `ram`, `disc` | ram |ram: only stored in memory; <br /> disc: stored in memory and hard disk. |
-| Max Retained Messages | integer  | \>= 0                    | 0      | The maximum number of retained messages, and 0 means no limit. After the number of retained messages exceeds the maximum limit, you can replace the existing retained messages, but cannot store retained messages for new topics. |
+| Storage Type | - | Built-in Database | - | - |
+| Storage Method | enum     | `ram`, `disc` | `ram` |`ram`: only stored in memory; <br/><br/> `disc`: stored in memory and hard disk. |
+| Max Retained Messages | integer  | ≥ 0                   | 0 (Unlimited) | 0: Unlimit. <br>When you set a limit on the maximum number of retained messages, EMQX replaces existing messages once the limit is reached. However, you cannot store retained messages for new topics beyond the limit. |
 | Max Payload Size      | bytesize |                          | 1MB    | Retain the maximum Payload value of the message. After the Payload value exceeds the maximum value, the EMQX will treat the retained reserved message as a normal message. |
-| Expire       | duration |                          | 0    | The expiration time of retaining message, and 0 means never expire. If the message expiration interval is set in the PUBLISH packet, the message expiration interval in the PUBLISH packet shall prevail. |
+| Expire       | duration |                          | 0    | The expiration time of the retained message, and 0 means never expire. If the message expiration interval is set in the PUBLISH packet, the message expiration interval in the PUBLISH packet shall prevail. |
 | Clean Interval  | duration |                          | 0    | Interval to clean up expired messages. |
 
 ## Flow Control

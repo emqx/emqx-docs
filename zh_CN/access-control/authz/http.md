@@ -15,7 +15,7 @@ EMQX 支持基于 HTTP 应用进行授权。此时，用户需在外部自行搭
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **授权**，在随即打开的**授权**页面，单击**创建**，选择**数据源**为 `HTTP Server`，点击**下一步**，进入**配置参数**页签：
 
-![HTTP authorization](./assets/authz-http.png)
+<img src="./assets/authz-http.png" alt="HTTP authorization" style="zoom:67%;" />
 
 **HTTP**：<!--插入简要说明，这快要配置什么-->
 
@@ -51,8 +51,12 @@ EMQX 支持基于 HTTP 应用进行授权。此时，用户需在外部自行搭
 当客户端发起订阅、发布操作时，HTTP Authorizer 会根据配置的请求模板构造并发送请求。用户需要在授权服务中实现授权逻辑并按以下要求返回结果：
 
 - 响应编码格式 `content-type` 必须是 `application/json`
-- 认证结果通过 body 中的 `result` 标示，可选 `allow`、`deny`、`ignore`
-- 响应状态码 `Status Code` 应当为 `200` 或 `204`，返回 4xx/5xx 状态码时将忽略 body 并判定结果为 `ignore`，继续执行认证链
+- 如果返回的 HTTP 状态码为 `200`，认证结果通过 Body 中的 `result` 标示，可选值为：
+  - `allow`：允许发布或订阅
+  - `deny`：禁止发布或订阅
+  - `ignore`： 忽略请求，移交下一个认证器以继续执行认证链
+- 如果返回的 HTTP 状态码为 `204`，认证结果标示为允许发布或订阅
+- 除了 `200` 和 `204` 以外的其他 HTTP 状态码均标示为 ignore，比如 HTTP 服务不可用。  
 
 请求示例：
 

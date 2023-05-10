@@ -31,7 +31,7 @@ CREATE TABLE `mqtt_user` (
 ```
 
 ::: tip
-上面的示例创建了一个隐式的 `UNIQUE` 索引，当系统中有大量用户时，请确保查询使用的表已优化并使用有效的索引，以提升大量连接时的数据查找速度并降低 EMQX 负载。
+上面的示例创建了一个有助于查询的隐式 `UNIQUE` 索引字段（ `username` ）。当系统中有大量用户时，请确保查询使用的表已优化并使用有效的索引，以提升大量连接时的数据查找速度并降低 EMQX 负载。
 :::
 
 在此表中使用 `username` 作为查找条件。
@@ -57,7 +57,7 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication)页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，依次选择**认证方式**为 `Password-Based`，**数据源**为 `MySQL`，进入**配置参数**页签：
 
-![Authentication with mysql](./assets/authn-mysql.png)
+<img src="./assets/authn-mysql.png" alt="Authentication with mysql" style="zoom:67%;" />
 
 您可按照如下说明完成相关配置：
 
@@ -82,14 +82,13 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
   - 选择 **plain**、**md5**、**sha**、**sha256** 或 **sha512** 算法，需配置：
 
     - **加盐方式**：用于指定盐和密码的组合方式，除需将访问凭据从外部存储迁移到 EMQX 内置数据库中外，一般不需要更改此选项；可选值：**suffix**（在密码尾部加盐）、**prefix**（在密码头部加盐）、**disable**（不启用）。注意：如选择 **plain**，加盐方式应设为 **disable**。
-
-  - 选择 **bcrypt** 算法，无需额外配置。
-
+  - 选择 **bcrypt** 算法，需配置:
+  - **Salt Rounds**：指定散列需要的计算次数（2^Salt Rounds），也称成本因子。默认值：**10**，可选值：**4～31**；数值越高，加密的安全性越高，因此建议采用较大的值，但相应的用户验证的耗时也会增加，您可根据业务需求进行配置。
   - 选择 **pkbdf2** 算法，需配置：
     - **伪随机函数**：指定生成密钥使用的散列函数，如 sha256 等。
     - **迭代次数**：指定散列次数，默认值：**4096**。<!--后续补充取值范围-->
     - **密钥长度**（可选）：指定希望得到的密钥长度。如不指定，密钥长度将由**伪随机函数**确定。
-
+  
 - **SQL**：根据表结构填入查询 SQL，具体要求见 [SQL 表结构与查询语句](#sql-表结构与查询语句)。
 
 ### 通过配置文件配置

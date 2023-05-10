@@ -93,7 +93,7 @@ The following JSON will be printed if the table was created successfully.
 }
 ```
 
-### Create DynamoDB Data Bridge
+### Create a DynamoDB Data Bridge
 
 1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
 
@@ -126,9 +126,9 @@ The following JSON will be printed if the table was created successfully.
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into DynamoDB. You can also create rules by following the steps in [Create Rules for DynamoDB Data Bridge](#create-rules-for-dynamodb-data-bridge).
 
-Now the RocketMQ data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+Now the data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
 
-### Create Rules for DynamoDB Data Bridge
+### Create a Rule for DynamoDB Data Bridge
 
 Now that you have successfully created the data bridge to DynamoDB, you can continue to create rules to specify the data to be saved into DynamoDB. You need to create two different rules for messages forward and event records. 
 

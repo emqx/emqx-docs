@@ -24,12 +24,14 @@ node {
 cluster {
 		## Default setting, suitable for very large backend
 		db_backend = rlog	
-		##List of core nodes that the replicant will connect to, different nodes can be seperated with a comma
-		core_nodes = ["emqx1@192.168.0.1", "emqx2@192.168.0.2", ...]
+		##List of core nodes that the replicant will connect to, different nodes can be separated with a comma
+		core_nodes = "emqx1@192.168.0.1, emqx2@192.168.0.2 ..."
 }
 ```
 
-<!--Configure with environment variables should also be added-->
+<!---cluster.core_nodes:
+<!--v5.0.23 之前仅支持 "emqx1,emqx2" ["emqx1@192.168.0.1", "emqx2@192.168.0.2", ...]-->
+<!--v5.0.23 之后 ["emqx1@192.168.0.1", "emqx2@192.168.0.2", ...]和"emqx1,emqx2" 都支持-->
 
 ## Monitor and Debug
 
