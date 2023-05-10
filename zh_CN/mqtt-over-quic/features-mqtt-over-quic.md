@@ -59,7 +59,7 @@ EMQX 目前的实现将传输层换成 QUIC 流，由客户端发起连接和创
 
 - 分离连接控制和 MQTT 数据交换
 
-  MQTT 连接控制包（如 CONNECT、CONNACK 和 PING）在控制流上处理，而发布和订阅等数据交换在数据流上进行。即使数据流较慢，也可以通过处理 PINGREQ 和 PINGRESP 来保持连接处于活动状态。
+  使用控制流（control stream）承载连接控制包（如 CONNECT、CONNACK 和 PING），而用数据流（data stream）承载发布和订阅等数据。即使数据流（data stream）处理较慢，也可以通过在控制流上收发 PINGREQ 和 PINGRESP 来保活连接，减少断连的几率。
 
 - 避免主题之间的顺序阻塞问题
 
