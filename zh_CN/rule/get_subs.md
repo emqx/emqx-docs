@@ -8,7 +8,7 @@
 
 选择 MQTT 代理订阅模块
 
-![image-20200927213049265](/Users/lena/Documents/GitHub/rebalancing/emqx-docs/zh_CN/modules/assets/mod_subscriptions_1.png)
+![image-20200927213049265](./assets/mod_subscriptions_1.png)
 
 配置相关参数
 

@@ -34,7 +34,6 @@ EMQX 发行包中提供了丰富了功能模块，包括 认证鉴权、协议�
   - [协议接入](./exproto.md)
   - [钩子](./exhook.md)
 - 运维监控
-  - [Recon](./recon.md)
   - [Prometheus Agent](../tutorial/prometheus.md)
 - 内部模块
   - [热配置](./hot_confs.md)
