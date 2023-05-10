@@ -114,13 +114,13 @@ EMQX 提供了一个容器镜像，您可以在 [Docker Hub](https://hub.docker.
 1. 获取 Docker 镜像
 
 ```bash
-docker pull emqx/emqx-ee:latest
+docker pull emqx/emqx-ee:4.3.19
 ```
 
 1. 启动 Docker 容器
 
 ```bash
-docker run -d --name emqx-ee -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-ee:latest
+docker run -d --name emqx-ee -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-ee:4.3.19
 ```
 
 {% endemqxee %}
@@ -260,10 +260,7 @@ MQTT 客户端库接入示例工程项目代码，涵盖 [Android](https://githu
 
 ### 认证鉴权
 
-身份认证与是大多数应用的重要组成部分，启用身份认证能有效阻止非法客户端的连接。发布订阅 ACL 可以对客户端发布 /订阅操作进行权限控制。
-
-- [认证简介](../advanced/auth.md)：选择内置插件、外部数据库、JWT 或者 HTTP 服务作为认证数据源，验证客户端连接合法性。
-- [发布订阅 ACL](../advanced/acl.md)：选择内置插件、外部数据库、或者 HTTP 服务作为 ACL 数据源，验证客户端发布订阅权限。
+身份认证与是大多数应用的重要组成部分，启用身份认证能有效阻止非法客户端的连接。发布订阅 ACL 可以对客户端发布 /订阅操作进行权限控制，具体可阅读 [认证页面](../advanced/auth.md)，了解如何选择内置插件、外部数据库、JWT 或者 HTTP 服务作为认证/ACL 数据源，验证客户端连接合法性或发布订阅权限。
 
 ### 规则引擎
 
@@ -293,9 +290,8 @@ HTTP API 是物联网平台开发与 EMQX 运维中频繁使用的功能，HTTP 
 
 包含官方使用指南、最佳实践等信息。
 
-- [设备管理](../tutorial/device-management.md)
 - [系统调优](../tutorial/tune.md)
-- [生产部署](../tutorial/deploy.md)
+- [集群负载均衡](../tutorial/deploy.md)
 - [Prometheus 监控告警](../tutorial/prometheus.md)
 - [性能测试](../tutorial/benchmark.md)
 

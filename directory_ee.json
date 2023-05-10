@@ -6,15 +6,35 @@
     },
     {
       "title": "开始使用",
-      "path": "getting-started/getting-started",
+      "path": "getting-started/getting-started"
+    },
+    {
+      "title": "安装",
+      "path": "getting-started/install-ee",
       "children": [
         {
-          "title": "安装",
-          "path": "getting-started/install-ee"
+          "title": "基于 Docker 部署",
+          "path": "getting-started/docker"
+        },
+        {
+          "title": "Debian",
+          "path": "getting-started/debian"
+        },
+        {
+          "title": "Ubuntu",
+          "path": "getting-started/ubuntu"
+        },
+        {
+          "title": "CentOS",
+          "path": "getting-started/centos"
+        },
+        {
+          "title": "macOS",
+          "path": "getting-started/macos"
         },
         {
           "title": "基于 k8s 部署 EMQX 集群",
-          "path": "getting-started/install-on-k8s"
+          "path": "https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html"
         },
         {
           "title": "启动 EMQX",
@@ -25,10 +45,6 @@
           "path": "getting-started/command-line"
         },
         {
-          "title": "分布式集群",
-          "path": "getting-started/cluster"
-        },
-        {
           "title": "目录结构",
           "path": "getting-started/directory"
         },
@@ -37,92 +53,76 @@
           "path": "getting-started/config"
         },
         {
-          "title": "日志与追踪",
-          "path": "getting-started/log"
+          "title": "热配置",
+          "path": "modules/hot_confs"
         },
         {
-          "title": "Dashboard",
-          "path": "getting-started/dashboard-ee"
+          "title": "版本热升级",
+          "path": "advanced/relup"
+        },
+        {
+           "title": "安装补丁包",
+           "path": "advanced/patches"
+        },
+        {
+          "title": "升级指南",
+          "path": "changes/upgrade-4.3"
         }
       ]
     },
     {
-      "title": "用户指南",
-      "path": "advanced/user-guide",
+      "title": "分布集群",
+      "path": "advanced/cluster",
       "children": [
         {
-          "title": "认证鉴权",
-          "path": "advanced/auth"
+          "title": "创建集群",
+          "path": "advanced/create-cluster"
         },
         {
-          "title": "发布订阅 ACL",
-          "path": "advanced/acl"
+          "title": "集群安全",
+          "path": "advanced/cluster-security"
+        },             
+        {
+          "title": "集群负载均衡",
+          "path": "tutorial/deploy"
         },
         {
-          "title": "黑名单",
-          "path": "advanced/blacklist"
+          "title": "系统调优",
+          "path": "tutorial/tune"
         },
         {
-          "title": "共享订阅",
-          "path": "advanced/shared-subscriptions"
-        },
-        {
-          "title": "排它订阅",
-          "path": "advanced/exclusive-subscriptions"
-        },
-        {
-          "title": "消息重传",
-          "path": "advanced/retransmission"
-        },
-        {
-          "title": "数据存储",
-          "path": "backend/backend"
-        },
-        {
-          "title": "数据导入导出",
-          "path": "advanced/data-import-and-export"
-        },
-        {
-          "title": "分布集群",
-          "path": "advanced/cluster"
-        },
-        {
-          "title": "$SYS 系统主题",
-          "path": "advanced/system-topic"
-        },
-        {
-          "title": "指标监控",
-          "path": "advanced/metrics-and-stats"
-        },
-        {
-          "title": "告警",
-          "path": "advanced/alarms"
-        },
-        {
-          "title": "速率限制",
-          "path": "advanced/rate-limit"
-        },
-        {
-          "title": "WebHook",
-          "path": "advanced/webhook"
-        },
-        {
-          "title": "钩子",
-          "path": "advanced/hooks"
-        },
-        {
-          "title": "飞行窗口与消息队列",
-          "path": "advanced/inflight-window-and-message-queue"
+          "title": "性能测试",
+          "path": "tutorial/benchmark"
         }
       ]
+    },
+    {
+      "title": "Dashboard",
+      "path": "getting-started/dashboard-ee"
     },
     {
       "title": "模块管理",
-      "path": "modules/modules",
+      "path": "modules/modules"
+    },    
+    {
+      "title": "访问控制",
+      "path": "advanced/Access-Control",
       "children": [
         {
-          "title": "内置访问控制",
+          "title": "认证" ,
+          "path": "advanced/auth"
+        },      
+        {
+          "title": "授权" ,
+          "path": "advanced/acl"
+        },
+        {
+          "title": "基于 ACL 文件进行认证" ,
           "path": "modules/internal_acl"
+        },
+        {
+          "title": "内置数据库 认证/访问控制",
+          "path": "modules/mnesia_authentication"
         },
         {
           "title": "MySQL 认证/访问控制",
@@ -141,10 +141,6 @@
           "path": "modules/http_authentication"
         },
         {
-          "title": "内置数据库 认证/访问控制",
-          "path": "modules/mnesia_authentication"
-        },
-        {
           "title": "MongoDB 认证/访问控制",
           "path": "modules/mongo_authentication"
         },
@@ -161,155 +157,55 @@
           "path": "modules/jwt_authentication"
         },
         {
-          "title": "LwM2M 网关",
-          "path": "modules/lwm2m_protocol"
+          "title": "MQTT 增强认证",
+          "path": "modules/auth_sasl"
         },
         {
-          "title": "MQTT-SN 网关",
-          "path": "modules/mqtt_sn_protocol"
+          "title": "黑名单",
+          "path": "advanced/blacklist"
+        }
+      ]
+    },
+    {
+      "title": "发布订阅",
+      "path": "development/protocol",
+      "children": [
+        {
+          "title": "核心概念",
+          "path": "advanced/mqtt-mqtt-concepts"
         },
         {
-          "title": "TCP 网关",
-          "path": "modules/tcp_protocol"
-        },
-        {
-          "title": "JT/T808 网关",
-          "path": "modules/jt808_protocol"
-        },
-        {
-          "title": "GB/T32960 网关",
-          "path": "modules/gbt32960_protocol"
-        },
-        {
-          "title": "CoAP 网关",
-          "path": "modules/coap_protocol"
-        },
-        {
-          "title": "Stomp 网关",
-          "path": "modules/stomp_protocol"
-        },
-        {
-          "title": "Kafka 消费组",
-          "path": "modules/kafka_consumer"
-        },
-        {
-          "title": "Pulsar 消费组",
-          "path": "modules/pulsar_consumer"
-        },
-        {
-          "title": "MQTT 订阅者",
-          "path": "modules/mqtt_subscriber"
-        },
-        {
-          "title": "多语言扩展协议接入",
-          "path": "modules/exproto"
-        },
-        {
-          "title": "多语言扩展钩子",
-          "path": "modules/exhook"
-        },
-        {
-          "title": "Recon",
-          "path": "modules/recon"
-        },
-        {
-          "title": "EMQX Prometheus Agent",
-          "path": "modules/prometheus"
-        },
-        {
-          "title": "热配置",
-          "path": "modules/hot_confs"
-        },
-        {
-          "title": "主题指标统计",
-          "path": "modules/topic_metrics"
-        },
-        {
-          "title": "上下线通知",
-          "path": "modules/presence"
-        },
-        {
-          "title": "MQTT 代理订阅",
-          "path": "modules/subscription"
-        },
-        {
-          "title": "主题重写",
-          "path": "modules/topic_rewrite"
+          "title": "共享订阅",
+          "path": "advanced/shared-subscriptions"
         },
         {
           "title": "MQTT 保留消息",
           "path": "modules/retainer"
         },
         {
-          "title": "MQTT 消息延迟发布",
+          "title": "上下线通知",
+          "path": "modules/presence"
+        },
+        {
+          "title": "延迟发布",
           "path": "modules/delayed_publish"
-        }
-      ]
-    },
-    {
-      "title": "规则引擎",
-      "path": "rule/rule-engine",
-      "children": [
-        {
-          "title": "规则引擎语法与示列",
-          "path": "rule/rule-engine_grammar_and_examples"
         },
         {
-          "title": "规则 SQL 语句中可用的字段",
-          "path": "rule/rule-engine_field"
+          "title": "排它订阅",
+          "path": "advanced/exclusive-subscriptions"
         },
         {
-          "title": "SQL 语句中可用的函数",
-          "path": "rule/rule-engine_buildin_function"
+          "title": "主题重写",
+          "path": "modules/topic_rewrite"
         },
         {
-          "title": "创建规则",
-          "path": "rule/rule-create"
-        },
-        {
-          "title": "更新资源",
-          "path": "rule/how_to_update_resources"
-        },
-        {
-          "title": "检查 (调试)",
-          "path": "rule/rule-example"
-        },
-        {
-          "title": "消息重新发布",
-          "path": "rule/action_republish"
-        },
-        {
-          "title": "离线消息",
+          "title": "MQTT 代理订阅",
+          "path": "modules/subscription",
           "children": [
             {
-              "title": "离线消息保存到 Redis",
-              "path": "rule/offline_msg_to_redis"
+              "title": "通过规则预设订阅关系",
+              "path": "rule/get_subs"
             },
-            {
-              "title": "离线消息保存到 MySQL",
-              "path": "rule/offline_msg_to_mysql"
-            },
-            {
-              "title": "离线消息保存到 PostgreSQL",
-              "path": "rule/offline_msg_to_pgsql"
-            },
-            {
-              "title": "离线消息保存到 Cassandra",
-              "path": "rule/offline_msg_to_cassandra"
-            },
-            {
-              "title": "离线消息保存到 MongoDB",
-              "path": "rule/offline_msg_to_mongodb"
-            },
-            {
-              "title": "离线消息保存到 ClickHouse",
-              "path": "rule/offline_msg_to_clickhouse"
-            }
-          ]
-        },
-        {
-          "title": "获取订阅关系",
-          "children": [
             {
               "title": "从 Redis 中获取订阅关系",
               "path": "rule/get_subs_from_redis"
@@ -335,6 +231,74 @@
               "path": "rule/get_subs_from_clickhouse"
             }
           ]
+        }
+      ]
+    },
+    {
+      "title": "SDK & Tools",
+      "path": "development/client",
+      "children": [
+        {
+          "title": "MQTT C Client Library",
+          "path": "development/c"
+        },
+        {
+          "title": "MQTT Java Client Library",
+          "path": "development/java"
+        },
+        {
+          "title": "MQTT Go Client Library",
+          "path": "development/go"
+        },
+        {
+          "title": "MQTT Erlang Client Library",
+          "path": "development/erlang"
+        },
+        {
+          "title": "MQTT JavaScript Client Library",
+          "path": "development/javascript"
+        },
+        {
+          "title": "MQTT Python Client Library",
+          "path": "development/python"
+        },
+        {
+          "title": "MQTT 微信小程序接入",
+          "path": "development/wechat-miniprogram"
+        },
+        {
+          "title": "其他资源",
+          "path": "development/resource"
+        }
+      ]
+    },
+    {
+      "title": "规则引擎",
+      "path": "rule/rule-engine",
+      "children": [
+        {
+          "title": "创建规则",
+          "path": "rule/rule-create"
+        },
+        {
+          "title": "消息重新发布",
+          "path": "rule/action_republish"
+        },
+        {
+          "title": "检查 (调试)",
+          "path": "rule/rule-example"
+        },
+        {
+          "title": "规则引擎语法与示列",
+          "path": "rule/rule-engine_grammar_and_examples"
+        },
+        {
+          "title": "规则 SQL 语句中可用的字段",
+          "path": "rule/rule-engine_field"
+        },
+        {
+          "title": "SQL 语句中可用的函数",
+          "path": "rule/rule-engine_buildin_function"
         },
         {
           "title": "编解码",
@@ -363,16 +327,23 @@
     {
       "title": "数据集成",
       "path": "rule/integration",
-      "children": 
-      [
+      "children": [
         {
           "title": "桥接数据到 MQTT Broker",
           "path": "rule/bridge_mqtt"
         },
         {
+          "title": "MQTT 订阅者",
+          "path": "modules/mqtt_subscriber"
+        },
+        {
           "title": "集成 Kafka",
           "path": "rule/bridge_kafka"
-        },    
+        },
+        {
+          "title": "Kafka 消费组",
+          "path": "module/kafka_consumer"
+        },            
         {
           "title": "集成 InfluxDB",
           "path": "rule/backend_influxdb"
@@ -404,6 +375,10 @@
         {
           "title": "集成 Pulsar",
           "path": "rule/bridge_pulsar"
+        },
+        {
+          "title": "Pulsar 消费者",
+          "path": "module/pulsar_consumer"
         },
         {
           "title": "集成 RabbitMQ",
@@ -461,104 +436,16 @@
       ]
     },
     {
-      "title": "插件管理",
-      "path": "advanced/plugins",
+      "title": "网络与TLS",
+      "path": "network/network",
       "children": [
         {
-           "title": "数据存储设计",
-          "path": "backend/backend"
+          "title": "TLS",
+          "path": "network/tls"
         },
         {
-          "title": "Redis 数据存储",
-          "path": "backend/backend_redis"
-        },
-        {
-          "title": "MySQL 数据存储",
-          "path": "backend/backend_mysql"
-        },
-        {
-          "title": "PostgreSQL 数据存储",
-           "path": "backend/backend_pgsql"
-        },
-        {
-          "title": "MongoDB 消息存储",
-          "path": "backend/backend_mongodb"
-        },
-        {
-          "title": "Cassandra 消息存储",
-          "path": "backend/backend_cassandra"
-        },
-        {
-          "title": "DynamoDB 消息存储",
-          "path": "backend/backend_dynamodb"
-        },
-        {
-          "title": "InfluxDB 消息存储",
-          "path": "backend/backend_influxdb"
-        },
-        {
-          "title": "OpenTSDB 消息存储",
-          "path": "backend/backend_opentsdb"
-        },
-        {
-          "title": "Timescale 消息存储",
-          "path": "backend/backend_timescale"
-        },
-        {
-          "title": "消息桥接插件",
-          "path": "bridge/bridge",
-          "children": [
-            {
-              "title": "MQTT 桥接",
-              "path": "bridge/bridge-mqtt"
-            },
-            {
-              "title": "RPC 桥接",
-              "path": "bridge/bridge-rpc"
-            },
-            {
-              "title": "Kafka 桥接",
-              "path": "bridge/bridge-kafka"
-            },
-            {
-              "title": "RabbitMQ 桥接",
-              "path": "bridge/bridge-rabbitmq"
-            },
-            {
-              "title": "Pulsar 桥接",
-              "path": "bridge/bridge-pulsar"
-            },
-            {
-              "title": "RocketMQ 桥接",
-              "path": "bridge/bridge-rocketmq"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "运维操作",
-      "path": "tutorial/devops",
-      "children": [
-        {
-          "title": "设备管理",
-          "path": "tutorial/device-management"
-        },
-        {
-          "title": "系统调优",
-          "path": "tutorial/tune"
-        },
-        {
-          "title": "生产部署",
-          "path": "tutorial/deploy"
-        },
-        {
-          "title": "Prometheus 监控告警",
-          "path": "tutorial/prometheus"
-        },
-        {
-          "title": "性能测试",
-          "path": "tutorial/benchmark"
+          "title": "国密",
+          "path": "network/gmsll"
         }
       ]
     },
@@ -567,11 +454,11 @@
       "path": "advanced/http-api"
     },
     {
-      "title": "参数配置",
+      "title": "配置文件",
       "path": "configuration/config-overview",
       "children": [
         {
-          "title": "参数配置列表",
+          "title": "配置文件参数列表",
           "path": "configuration/configuration"
         },
         {
@@ -585,12 +472,132 @@
       "path": "advanced/cli"
     },
     {
-      "title": "版本热升级",
-      "path": "advanced/relup"
+      "title": "离线消息",
+      "path": "rule/offline_msg",
+      "children": [
+          {
+            "title": "离线消息保存到 Redis",
+            "path": "rule/offline_msg_to_redis"
+          },
+          {
+            "title": "离线消息保存到 MySQL",
+            "path": "rule/offline_msg_to_mysql"
+          },
+          {
+            "title": "离线消息保存到 PostgreSQL",
+            "path": "rule/offline_msg_to_pgsql"
+          },
+          {
+            "title": "离线消息保存到 Cassandra",
+            "path": "rule/offline_msg_to_cassandra"
+          },
+          {
+            "title": "离线消息保存到 MongoDB",
+            "path": "rule/offline_msg_to_mongodb"
+          },
+          {
+            "title": "离线消息保存到 ClickHouse",
+            "path": "rule/offline_msg_to_clickhouse"
+          }
+      ]
     },
     {
-       "title": "安装补丁包",
-       "path": "advanced/patches"
+      "title": "日志及可观测性",
+      "path": "tutorial/devops-ee",
+      "children": [
+        {
+          "title": "日志与追踪",
+          "path": "getting-started/log"
+        },
+        {
+          "title": "指标监控",
+          "path": "advanced/metrics-and-stats"
+        },
+        {
+          "title": "告警",
+          "path": "advanced/alarms"
+        },
+        {
+          "title": "$SYS 系统主题",
+          "path": "advanced/system-topic"
+        },
+        {
+          "title": "调试/调优",
+          "path": "modules/recon"
+        },
+        {
+          "title": "主题指标统计",
+          "path": "modules/topic_metrics"
+        },
+        {
+          "title": "Prometheus 监控告警",
+          "path": "tutorial/prometheus"
+        }
+      ]
+    },
+    {
+      "title": "速率限制",
+      "path": "advanced/rate-limit"
+    },
+    {
+      "title": "备份及恢复",
+      "path": "advanced/data-import-and-export"
+    },
+    {
+      "title": "扩展与插件",
+      "path": "advanced/plugins",
+      "children": [
+        {
+          "title": "钩子",
+          "path": "advanced/hooks"
+        },
+        {
+          "title": "插件开发与启停",
+          "path": "advanced/start-stop-plugins"
+        },
+        {
+          "title": "多语言扩展钩子",
+          "path": "modules/exhook"
+        },
+        {
+          "title": "WebHook",
+          "path": "advanced/webhook"
+        }
+      ]
+    },
+    {
+      "title": "多协议网关",
+      "path": "modules/gateway",
+      "children": [
+        {
+          "title": "Stomp 网关",
+          "path": "modules/stomp_protocol"
+        },
+        {
+          "title": "MQTT-SN 网关",
+          "path": "modules/mqtt_sn_protocol"
+        },
+        {
+          "title": "CoAP 网关",
+          "path": "modules/coap_protocol"
+        },
+        {
+          "title": "LwM2M 网关",
+          "path": "modules/lwm2m_protocol"
+        },
+        {
+          "title": "JT/T808 网关",
+          "path": "modules/jt808_protocol"
+        },
+        {
+          "title": "TCP 网关",
+          "path": "modules/tcp_protocol"
+        },
+        {
+          "title": "多语言扩展协议接入",
+          "path": "modules/exproto"
+        }
+      ]
     },
     {
       "title": "FAQ 常见问题解答",
@@ -619,78 +626,6 @@
       ]
     },
     {
-      "title": "SDK & Tools",
-      "path": "development/client",
-      "children": [
-        {
-          "title": "MQTT C Client Library",
-          "path": "development/c"
-        },
-        {
-          "title": "MQTT Java Client Library",
-          "path": "development/java"
-        },
-        {
-          "title": "MQTT Go Client Library",
-          "path": "development/go"
-        },
-        {
-          "title": "MQTT Erlang Client Library",
-          "path": "development/erlang"
-        },
-        {
-          "title": "MQTT JavaScript Client Library",
-          "path": "development/javascript"
-        },
-        {
-          "title": "MQTT Python Client Library",
-          "path": "development/python"
-        },
-        {
-          "title": "MQTT 微信小程序接入",
-          "path": "development/wechat-miniprogram"
-        },
-        {
-          "title": "其他资源",
-          "path": "development/resource"
-        }
-      ]
-    },
-    {
-      "title": "多协议网关",
-      "path": "modules/gateway",
-      "children": [
-        {
-          "title": "MQTT 协议",
-          "path": "development/protocol"
-        },
-        {
-          "title": "Stomp 网关",
-          "path": "modules/stomp_protocol"
-        },
-        {
-          "title": "MQTT-SN 网关",
-          "path": "modules/mqtt_sn_protocol"
-        },
-        {
-          "title": "CoAP 网关",
-          "path": "modules/coap_protocol"
-        },
-        {
-          "title": "LwM2M 网关",
-          "path": "modules/lwm2m_protocol"
-        },
-        {
-          "title": "JT/T808 网关",
-          "path": "modules/jt808_protocol"
-        },
-        {
-          "title": "TCP 网关",
-          "path": "modules/tcp_protocol"
-        }
-      ]
-    },
-    {
       "title": "版本发布",
       "path": "changes/changes",
       "children": [
@@ -701,15 +636,11 @@
         {
           "title": "生命周期 EOL",
           "path": "changes/eol-ee"
-        },
-        {
-          "title": "升级指南",
-          "path": "changes/upgrade-4.3"
         }
       ]
     },
     {
-      "title": "相关资料",
+      "title": "设计与实现",
       "path": "design/resources",
       "children": [
         {
@@ -717,8 +648,12 @@
           "path": "design/design"
         },
         {
-          "title": "资源",
-          "path": "awesome/awesome"
+          "title": "消息重传",
+          "path": "advanced/retransmission"
+        },
+        {
+          "title": "飞行窗口与消息队列",
+          "path": "advanced/inflight-window-and-message-queue"
         }
       ]
     }
