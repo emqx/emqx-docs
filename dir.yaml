@@ -343,22 +343,22 @@
       title_cn: 配置手册
       lang: zh
       edition: ce
-      path: https://www.emqx.io/docs/zh/v5.0/configutation/configuration-manual.html?s=ce-zh.json
+      path: https://www.emqx.io/docs/zh/v5.0/configutation/configuration-manual.html
     - title_en: Configuration Manual
       title_cn: 配置手册
       lang: en
       edition: ce
-      path: https://www.emqx.io/docs/en/v5.0/configuration/configuration-manual.html?s=ce-en.json
+      path: https://www.emqx.io/docs/en/v5.0/configuration/configuration-manual.html
     - title_en: Configuration Manual
       title_cn: 配置手册
       lang: zh
       edition: ee
-      path: https://docs.emqx.com/zh/enterprise/v5.0/configuration/configuration-manual.html?s=ee-zh.json
+      path: https://docs.emqx.com/zh/enterprise/v5.0/configuration/configuration-manual.html
     - title_en: Configuration Manual
       title_cn: 配置手册
       lang: en
       edition: ee
-      path: https://docs.emqx.com/zh/enterprise/v5.0/configuration/configuration-manual.html?s=ee-en.json
+      path: https://docs.emqx.com/zh/enterprise/v5.0/configuration/configuration-manual.html
 
 # - title_en: Back
 #   title_cn: 运维操作
