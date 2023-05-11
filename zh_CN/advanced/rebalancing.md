@@ -4,7 +4,7 @@ MQTT 是有状态的长连接接入协议，连接建立后不会轻易断开，
 
 ## 节点疏散
 
-如需要对集群中的某个节点进行维护或升级操作时，如果直接关闭节点，节点上的连接和会话将会丢失，造成数据丢失；此外此类操作还会造成段时间内大量设备的下线重连，增加服务器的负载压力并可能影响整体业务。
+在需要对集群中的某个节点进行维护或升级操作时，如果直接关闭节点，节点上的连接和会话将会丢失，造成数据丢失；此外此类操作还会造成这段时间内大量设备的下线重连，增加服务器的负载压力并可能影响整体业务。
 
 因此 EMQX 提供了节点疏散功能，以帮助您在关闭节点前将节点所有连接与会话数据迁移到集群其他节点，降低对整体业务的影响。
 
@@ -25,7 +25,11 @@ MQTT 是有状态的长连接接入协议，连接建立后不会轻易断开，
 
 您可随时停止疏散流程。如果待疏散节点在疏散过程中关闭，重启后将继续以上疏散过程。
 
-### 通过CLI 命令开启节点疏散
+### 通过CLI 命令启停节点疏散
+
+您可以使用 CLI 命令来开启节点疏散、获取节点疏散状态和停止节点疏散。
+
+#### 开启节点疏散
 
 您可以通过如下命令执行节点的疏散任务：
 
@@ -46,7 +50,6 @@ emqx_ctl rebalance start --evacuation \
 | `--wait-takeover` | 正整数 | 所有连接断开后，等待客户端重连以接管会话的时间；单位： 秒，默认为 60 秒 |
 | `--sess-evict-rate` | 正整数 | `wait-takeover` 之后每秒会话疏散速度。 默认为 500 会话/秒 |
 
-
 **代码示例**
 
 如希望将 `emqx@127.0.0.1` 节点的客户端迁移到 `emqx2@127.0.0.1` 与 `emqx3@127.0.0.1` 节点，可在 `emqx@127.0.0.1` 节点执行以下命令：
@@ -62,9 +65,9 @@ Rebalance(evacuation) started
 
 该命令会以每秒 `30` 个连接的速度断开现有客户端，所有连接断开后将等待 `200` 秒，期间会将客户端会话迁移到重连节点，之后以每秒 `30` 个会话的速度迁移剩余会话到 `emqx2@127.0.0.1` 与 `emqx3@127.0.0.1` 节点。
 
-#### 查询节点疏散状态
+#### 获取节点疏散状态
 
-您可通过如下命令查询节点疏散状态：
+您可通过如下命令获取节点疏散状态：
 
 ```bash
 emqx_ctl rebalance node-status
@@ -89,7 +92,7 @@ Channel statistics:
   initial_sessions: 1000
 ```
 
-#### 停止节点疏散任务
+#### 停止节点疏散
 
 您可通过如下命令终止节点疏散任务：
 
@@ -104,11 +107,11 @@ emqx_ctl rebalance stop
 Rebalance(evacuation) stopped
 ```
 
-### 通过 HTTP API 开启节点疏散
+### 通过 HTTP API 启停节点疏散
 
 您也可通过 API 开启节点疏散任务，此时需要在参数中指定操作节点。
 
-#### 开启疏散任务
+#### 开启疏散
 
 如希望将 `emqx1@127.0.0.1` 节点的连接和会话疏散至  `emqx2@127.0.0.1`  和 `emqx3@127.0.0.1` 节点， 按照每秒 `5` 个的速度断开现有客户端和会话，并将其转移至`emqx2@127.0.0.1` 与 `emqx3@127.0.0.1` 。
 
@@ -131,7 +134,7 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 | `wait_takeover`   | 正整数 | 否         | 所有连接断开后，等待客户端重连以接管会话的时间；单位： 秒 ，默认为 60 秒。   |
 | `sess_evict_rate` | 正整数 | 否         | `wait-takeover` 之后每秒会话疏散速度。默认为 500 会话/秒。                       |
 
-#### 停止疏散任务
+#### 停止疏散
 
 **代码示例：**
 
@@ -170,9 +173,13 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 
 :::
 
-### 通过 CLI 启动动重平衡任务
+### 通过 CLI 启停重平衡
 
-您可以通过如下命令启动重平衡任务：
+您可以使用 CLI 命令来开启重平衡、获取重平衡状态和停止重平衡。
+
+#### 开启重平衡
+
+开启重平衡任务的命令可包含下列配置项：
 
 ```bash
 rebalance start \
@@ -202,7 +209,7 @@ rebalance start \
 
 <!-- TODO 参数默认值，*conn_threshold 对结果的影响，详细的计算过程-->
 
-### 连接平衡判断条件
+**判断连接是否平衡**
 
 当满足以下条件时，我们认为连接是平衡的：
 
@@ -214,7 +221,7 @@ avg(源节点连接数) < avg(目标节点连接数) * rel_conn_threshold
 
 类似的规则也适用于会话的连接断开。
 
-#### 示例
+**示例**
 
 如希望在 `emqx@127.0.0.1`、`emqx2@127.0.0.1` 与 `emqx3@127.0.0.1` 三个节点之间实现负载重平衡，可使用如下命令操作：
 
@@ -230,13 +237,15 @@ avg(源节点连接数) < avg(目标节点连接数) * rel_conn_threshold
 Rebalance started
 ```
 
+#### 获取重平衡状态
+
 获取重平衡状态的命令如下：
 
 ```
 emqx_ctl rebalance node-status
 ```
 
-示例：
+**示例**：
 
 ```bash
 ./bin/emqx_ctl rebalance node-status
@@ -251,20 +260,117 @@ Connection goal: 0.0
 Current average donor node connection count: 300.0
 ```
 
+#### 停止重平衡
+
 停止重平衡任务的命令如下：
 
 ```bash
 emqx_ctl rebalance stop
 ```
 
-示例：
+**示例**：
 
 ```bash
 ./bin/emqx_ctl rebalance stop
 Rebalance stopped
 ```
 
+## 通过 HTTP API 启停重平衡
 
+所有关于重平衡的操作也可以通过 API 进行。开启和停止重平衡需要在参数中指定操作节点。
+
+#### 开启重平衡
+
+开启重平衡的请求体中应该包含以下字段： 
+
+- `nodes`
+- `conn_evict_rate`
+- `sess_evict_rate`
+- `wait_takeover`
+- `wait_health_check`
+- `abs_conn_threshold`
+- `rel_conn_threshold`
+- `abs_sess_threshold` 
+- `rel_sess_threshold`
+
+字段含义同对应的[ CLI 命令配置项](#开启重平衡)。
+
+**代码示例**：
+
+```bash
+curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.0.0.1:8081/api/v4/load_rebalance/emqx1@127.0.0.1/start' -d '{"conn_evict_rate": 5, "sess_evict_rate": 5, "nodes": ["emqx1@127.0.0.1", "emqx2@127.0.0.1"]}'
+
+{"data":[],"code":0}
+```
+
+#### 获取当前请求节点状态
+
+获取当前请求节点重平衡状态的示例如下：
+
+```bash
+curl -s -u admin:public -H "Content-Type: application/json" -X GET 'http://127.0.0.1:8081/api/v4/load_rebalance/status'
+
+{
+  "status": "enabled",
+  "stats": {
+    "initial_sessions": 0,
+    "initial_connected": 0,
+    "current_sessions": 0,
+    "current_connected": 0
+  },
+  "state": "waiting_takeover",
+  "session_recipients": [
+    "emqx3@127.0.0.1",
+    "emqx2@127.0.0.1"
+  ],
+  "session_goal": 0,
+  "session_eviction_rate": 5,
+  "process": "evacuation",
+  "connection_goal": 0,
+  "connection_eviction_rate": 5
+}
+```
+
+#### 获取集群状态
+
+获取集群重平衡状态的示例如下：
+
+```bash
+curl -s -u admin:public -H "Content-Type: application/json" -X GET 'http://127.0.0.1:8081/api/v4/load_rebalance/global_status'
+{
+  "rebalances": [],
+  "evacuations": [
+    {
+      "node": "emqx1@127.0.0.1",
+      "stats": {
+        "initial_sessions": 0,
+        "initial_connected": 0,
+        "current_sessions": 0,
+        "current_connected": 0
+      },
+      "state": "waiting_takeover",
+      "session_recipients": [
+        "emqx3@127.0.0.1",
+        "emqx2@127.0.0.1"
+      ],
+      "session_goal": 0,
+      "session_eviction_rate": 5,
+      "connection_goal": 0,
+      "connection_eviction_rate": 5
+    }
+  ]
+}
+```
+
+#### 停止重平衡
+
+停止重平衡任务的示例如下：
+
+```bash
+curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.0.0.1:8081/api/v4/load_rebalance/emqx1@127.0.0.1/stop'
+
+{"data":[],"code":0}
+```
 
 ## 集成负载均衡器
 
@@ -304,93 +410,3 @@ backend emqx_cluster
 ```
 
 我们有三个节点，对应的 MQTT 监听器分别位于  3001、3002 和 3003 端口，HTTP 监听器则分别位于 5001、5002 和 5003 端口。
-
-
-
-## REST API
-
-集群负载重平衡和节点疏散开启重平衡任务
-
-```bash
-curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.0.0.1:8081/api/v4/load_rebalance/emqx1@127.0.0.1/start' -d '{"conn_evict_rate": 5, "sess_evict_rate": 5, "nodes": ["emqx1@127.0.0.1", "emqx2@127.0.0.1"]}'
-
-{"data":[],"code":0}
-```
-
-请求体中应该以下字段： 
-
-- `nodes`
-- `conn_evict_rate`
-- `sess_evict_rate`
-- `wait_takeover`
-- `wait_health_check`
-- `abs_conn_threshold`
-- `rel_conn_threshold`
-- `abs_sess_threshold` 
-- `rel_sess_threshold`
-
-字段含义同对应的[命令行命令](#evacuation)相同。
-
-### 停止重平衡任务
-
-```
-curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.0.0.1:8081/api/v4/load_rebalance/emqx1@127.0.0.1/stop'
-
-{"data":[],"code":0}
-```
-
-### 获取当前请求节点状态
-
-```
-curl -s -u admin:public -H "Content-Type: application/json" -X GET 'http://127.0.0.1:8081/api/v4/load_rebalance/status'
-
-{
-  "status": "enabled",
-  "stats": {
-    "initial_sessions": 0,
-    "initial_connected": 0,
-    "current_sessions": 0,
-    "current_connected": 0
-  },
-  "state": "waiting_takeover",
-  "session_recipients": [
-    "emqx3@127.0.0.1",
-    "emqx2@127.0.0.1"
-  ],
-  "session_goal": 0,
-  "session_eviction_rate": 5,
-  "process": "evacuation",
-  "connection_goal": 0,
-  "connection_eviction_rate": 5
-}
-```
-
-### 获取集群状态
-
-```
-curl -s -u admin:public -H "Content-Type: application/json" -X GET 'http://127.0.0.1:8081/api/v4/load_rebalance/global_status'
-{
-  "rebalances": [],
-  "evacuations": [
-    {
-      "node": "emqx1@127.0.0.1",
-      "stats": {
-        "initial_sessions": 0,
-        "initial_connected": 0,
-        "current_sessions": 0,
-        "current_connected": 0
-      },
-      "state": "waiting_takeover",
-      "session_recipients": [
-        "emqx3@127.0.0.1",
-        "emqx2@127.0.0.1"
-      ],
-      "session_goal": 0,
-      "session_eviction_rate": 5,
-      "connection_goal": 0,
-      "connection_eviction_rate": 5
-    }
-  ]
-}
-```
-
