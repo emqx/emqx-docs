@@ -186,18 +186,20 @@ jobs:
     - name: generate ce configuration manual
       if: env.DOCS_TYPE == 'broker'
       run: |
-        cp -r docs-files/cfg-manual-docgen/configuration-manual.html frontend/docs/.vuepress/dist/zh/broker/${REAL_VERSION}/configuration/configuration-manual.html
-        cp -r docs-files/cfg-manual-docgen/configuration-manual.html frontend/docs/.vuepress/dist/en/broker/${REAL_VERSION}/configuration/configuration-manual.html
-        cp -r docs-files/cfg-manual-docgen/ce-zh.json frontend/docs/.vuepress/dist/zh/broker/${REAL_VERSION}/configuration/configuration.json
-        cp -r docs-files/cfg-manual-docgen/ce-en.json frontend/docs/.vuepress/dist/en/broker/${REAL_VERSION}/configuration/configuration.json
+        LANGS=(zh en)
+        for lang in "${LANGS[@]}"; do
+          cp -r docs-files/cfg-manual-docgen/configuration-manual.html frontend/docs/.vuepress/dist/${lang}/${VERSION}/configuration/configuration-manual.html
+          cp -r docs-files/cfg-manual-docgen/ce-${lang}.json frontend/docs/.vuepress/dist/${lang}/${VERSION}/configuration/configuration.json
+        done
 
     - name: generate ee configuration manual
       if: env.DOCS_TYPE == 'enterprise'
       run: |
-        cp -r docs-files/cfg-manual-docgen/configuration-manual.html frontend/docs/.vuepress/dist/zh/enterprise/${REAL_VERSION}/configuration/configuration-manual.html
-        cp -r docs-files/cfg-manual-docgen/configuration-manual.html frontend/docs/.vuepress/dist/en/enterprise/${REAL_VERSION}/configuration/configuration-manual.html
-        cp -r docs-files/cfg-manual-docgen/ee-zh.json frontend/docs/.vuepress/dist/zh/enterprise/${REAL_VERSION}/configuration/configuration.json
-        cp -r docs-files/cfg-manual-docgen/ee-en.json frontend/docs/.vuepress/dist/en/enterprise/${REAL_VERSION}/configuration/configuration.json
+        LANGS=(zh en)
+        for lang in "${LANGS[@]}"; do
+          cp -r docs-files/cfg-manual-docgen/configuration-manual.html frontend/docs/.vuepress/dist/${lang}/enterprise/${VERSION}/configuration/configuration-manual.html
+          cp -r docs-files/cfg-manual-docgen/ee-${lang}.json frontend/docs/.vuepress/dist/${lang}/enterprise/${VERSION}/configuration/configuration.json
+        done
 
     - name: upload ce files
       if: env.DOCS_TYPE == 'broker'
