@@ -485,17 +485,8 @@
       ]
     },
     {
-      "title": "相关资料",
-      "children": [
-        {
-          "title": "架构设计",
-          "path": "design/design"
-        },
-        {
-          "title": "资源",
-          "path": "awesome/awesome"
-        }
-      ]
+      "title": "架构设计",
+      "path": "design/design"
     }
   ],
   "en": [
@@ -950,17 +941,8 @@
       ]
     },
     {
-      "title": "Resource",
-      "children": [
-        {
-          "title": "Design",
-          "path": "design/design"
-        },
-        {
-          "title": "Awsome",
-          "path": "awesome/awesome"
-        }
-      ]
+      "title": "Design",
+      "path": "design/design"
     },
     {
       "title": "Protocol Introduction",
