@@ -10,7 +10,7 @@ MQTT 是有状态的长连接接入协议，连接建立后不会轻易断开，
 
 ### 工作原理
 
- EMQX 节点疏散功能的工作原理如下：
+EMQX 节点疏散功能的工作原理如下：
 
 1. 待疏散节点停止接收新的连接请求；
 2. 待疏散节点按照预设速度（由 `conn-evict-rate` 指定）逐渐断开当前连接的客户端，断开连接的客户端会通过重连机制连接到集群其他节点（目标节点），重连成功后会话将迁移到新节点上。不同协议版本重连机制如下：
@@ -136,7 +136,7 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 
 #### 停止疏散
 
-**代码示例：**
+**代码示例**:
 
 ```bash
 curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.0.0.1:8081/api/v4/load_rebalance/emqx1@127.0.0.1/evacuation/stop'
@@ -275,7 +275,7 @@ emqx_ctl rebalance stop
 Rebalance stopped
 ```
 
-## 通过 HTTP API 启停重平衡
+### 通过 HTTP API 启停重平衡
 
 所有关于重平衡的操作也可以通过 API 进行。开启和停止重平衡需要在参数中指定操作节点。
 
