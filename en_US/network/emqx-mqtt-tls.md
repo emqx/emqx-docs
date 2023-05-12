@@ -23,7 +23,7 @@ Enabling SSL/TLS connection provides the following safety benefits.
 
 ## Prerequisite
 
-Before you start, you need to prepare the SSL/TLS certificates. EMQX only provides a set of SSL/TLS certificates (located in the `etc/certs` directory of the installation package) for testing purposes. When used in a production environment, reliable certificates signed by a trusted CA should be used. For information on how to apply for relevant certificates, see [Obtain SSL/TLS Certificates](./reference.md#obtain-ssl-tls-certificates).
+Before you start, you need to prepare the SSL/TLS certificates. EMQX only provides a set of SSL/TLS certificates (located in the `etc/certs` directory of the installation package) for testing purposes. When used in a production environment, reliable certificates signed by a trusted CA should be used. For information on how to apply for relevant certificates, see [Obtain SSL/TLS Certificates](./tls-certificate.md).
 
 ## Enable SSL/TLS Connection via Dashboard
 
