@@ -14,9 +14,7 @@ SSL and TSL protocols are often adopted in network communications to ensure that
 
 :::
 
-This chapter mainly provides instructions on how to enable the SSL/TLS connection when an MQTT client connects to EMQX and when EMQX needs to access external resources. It also introduces how to enable TLS PSK support in EMQX in [Enable PSK Authentication](./psk-authentication.md).
-
-The [Reference](./reference.md) page in this chapter covers the topics of configuration for cipher and obtaining SSL/TLS certificates. It provides you with additional information if you need some advanced configuration and instructions on creating self-signed certificates.
+This chapter mainly provides instructions on how to enable the SSL/TLS connection when an MQTT client connects to EMQX and when EMQX needs to access external resources. It also introduces how to enable TLS PSK support in EMQX in [Enable PSK Authentication](./psk-authentication.md). The [Obtain SSL/TLS Certificates](./tls-certificate.md) page provides you with instructions on creating self-signed certificates.
 
 ## TLS for Client Connection
 

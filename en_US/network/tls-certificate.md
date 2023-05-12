@@ -1,99 +1,11 @@
-# Reference
-
-The page provides reference information on [TLS Ciphers](#tls-ciphers) and [Obtaining SSL/TLS Certificates](#obtain-ssl-tls-certificates).
-
-## TLS Ciphers
-
-<!--Briefly introduce the function of ciphers in EMQX-->
-
-{% emqxce %}
-
-Starting from v5.0.6, EMQX no longer pre-populates the ciphers list with a default set of cipher suite names. Instead, the default ciphers are applied at runtime when starting the listener for servers, or when establishing a TLS connection as a client.
-
-{% endemqxce %}
-
-{% emqxee %}
-
-Starting from 5.0, EMQX no longer pre-populates the ciphers list with a default set of cipher suite names. Instead, the default ciphers are applied at runtime when starting the listener for servers, or when establishing a TLS connection as a client.
-
-{% endemqxee %}
-
-Below are the default ciphers selected by EMQX.
-
-For tlsv1.3:
-
-```bash
-ciphers =
-  [ "TLS_AES_256_GCM_SHA384",
-  	"TLS_AES_128_GCM_SHA256",
-    "TLS_CHACHA20_POLY1305_SHA256",
-    "TLS_AES_128_CCM_SHA256",
-    "TLS_AES_128_CCM_8_SHA256"
-  ]
-```
-
-For tlsv1.2 or earlier:
-
-```bash
-ciphers =
-  [ "ECDHE-ECDSA-AES256-GCM-SHA384",
-    "ECDHE-RSA-AES256-GCM-SHA384",
-    "ECDHE-ECDSA-AES256-SHA384",
-    "ECDHE-RSA-AES256-SHA384",
-    "ECDH-ECDSA-AES256-GCM-SHA384",
-    "ECDH-RSA-AES256-GCM-SHA384",
-    "ECDH-ECDSA-AES256-SHA384",
-    "ECDH-RSA-AES256-SHA384",
-    "DHE-DSS-AES256-GCM-SHA384",
-    "DHE-DSS-AES256-SHA256",
-    "AES256-GCM-SHA384",
-    "AES256-SHA256",
-    "ECDHE-ECDSA-AES128-GCM-SHA256",
-    "ECDHE-RSA-AES128-GCM-SHA256",
-    "ECDHE-ECDSA-AES128-SHA256",
-    "ECDHE-RSA-AES128-SHA256",
-    "ECDH-ECDSA-AES128-GCM-SHA256",
-    "ECDH-RSA-AES128-GCM-SHA256",
-    "ECDH-ECDSA-AES128-SHA256",
-    "ECDH-RSA-AES128-SHA256",
-    "DHE-DSS-AES128-GCM-SHA256",
-    "DHE-DSS-AES128-SHA256",
-    "AES128-GCM-SHA256",
-    "AES128-SHA256",
-    "ECDHE-ECDSA-AES256-SHA",
-    "ECDHE-RSA-AES256-SHA",
-    "DHE-DSS-AES256-SHA",
-    "ECDH-ECDSA-AES256-SHA",
-    "ECDH-RSA-AES256-SHA",
-    "ECDHE-ECDSA-AES128-SHA",
-    "ECDHE-RSA-AES128-SHA",
-    "DHE-DSS-AES128-SHA",
-    "ECDH-ECDSA-AES128-SHA",
-    "ECDH-RSA-AES128-SHA"
-  ]
-```
-
-For PSK-enabled listeners:
-
-```bash
-ciphers =
-  [ "RSA-PSK-AES256-GCM-SHA384",
-    "RSA-PSK-AES256-CBC-SHA384",
-    "RSA-PSK-AES128-GCM-SHA256",
-    "RSA-PSK-AES128-CBC-SHA256",
-    "RSA-PSK-AES256-CBC-SHA",
-    "RSA-PSK-AES128-CBC-SHA"
-  ]
-```
-
-## Obtain SSL/TLS Certificates
+# Obtain SSL/TLS Certificates
 
 You can obtain the SSL/TLS certificate in the following two ways:
 
 1. Self-signed certificate: It means using a certificate that is issued by yourself. However, self-signed certificates have many security risks and are only recommended for testing and verification environments.
 2. Apply or purchase a certificate: You can apply for a free certificate from [Let's Encrypt](https://letsencrypt.org) or cloud vendors such as Huawei Cloud and Tencent Cloud, or purchase a paid certificate from organizations such as [DigiCert](https://www.digicert.com/). For enterprise users, it is generally recommended to apply for paid OV or above certificates to obtain a higher level of security protection.
 
-### Create Self-Signed Certificate
+## Create Self-Signed Certificate
 
 ::: tip Prerequisite
 

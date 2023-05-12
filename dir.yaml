@@ -213,7 +213,7 @@
     - network/emqx-mqtt-tls
     - network/mqtt-client-tls
     - network/psk-authentication
-    - network/reference
+    - network/tls-certificate
     # - network/crl-and-ocsp-stapling
     - title_en: GMSSL
       title_cn: 国密 SSL

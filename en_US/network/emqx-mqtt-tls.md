@@ -38,7 +38,7 @@ The SSL listener enabled on port `8883` is used to encrypt the transmission data
    - **TLS Verify**: Disabled by default. If peer verification is required to verify the client's identity, click the toggle switch to enable the option. 
 
    - **TLS Cert**, **TLS Key** and **CA Cert**: Replace the current certificate files with your private certificate files by clicking the **Reset** button.
-   - **SSL Versions**: All TLS/DTLS versions are supported by default. If PSK cipher suits are used for PSK authentication, make sure to configure `tlsv1.2` and `tlsv1.1` here. For more information on PSK authentication, see [Enable PSK Authentication](./psk-authentication.md).
+   - **SSL Versions**: All TLS/DTLS versions are supported by default. If PSK cipher suits are used for PSK authentication, make sure to configure `tlsv1.2` , `tlsv1.1` and `tlsv1` here. For more information on PSK authentication, see [Enable PSK Authentication](./psk-authentication.md).
    - **Fail If No Peer Cert**: Used together with **TLS Verify** is enabled. Set to `false` by default.
      - If set to `true`, verification of the client's identity fails if the client sends an empty certificate. The SSL/TLS connection will be rejected.
      - If set to `false`, verification of the client's identity fails only if the client sends an invalid certificate (An empty certificate is considered to be valid). The SSL/TLS connection will be rejected.
