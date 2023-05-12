@@ -43,19 +43,10 @@ clientid, topic, payload, 等等。 否则，它将使用用户定义的
 在_GCP服务账户凭证_字段中，上传你的JSON格式的服务账户凭证。
 帐户凭证的JSON格式，你在设置步骤中导出的。
 
-![创建一个GCP PubSub桥](./assets/gcp_pubsub/setup1.png)
-
-![创建GCP公共子网桥](./assets/gcp_pubsub/setup2.png)
-
-![创建一个GCP公共子桥](./assets/gcp_pubsub/setup3.png)
-
 最后，在点击_"Create"_后，你会得到一个选项，即创建一个相关规则。创建一
 个相关的规则。 这将允许符合规则的MQTT消息被转发到GCP PubSub。 关于创建
 规则的更多信息，请参考 [_规则_](./rules.md)。
 
-<center>
-<img src="./assets/gcp_pubsub/setup4.png" alt="为GCP PubSub桥创建一个规则"></img>
-</center>
 
 ## 通过配置文件的 GCP PubSub 桥使用实例
 

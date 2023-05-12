@@ -22,15 +22,16 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 - [Buffer queue](./data-bridges.md#buffer-queue)
 - [SQL prepared statement](./data-bridges.md#prepared-statement)
 
+
 ## Quick Start Tutorial
 
 This section introduces how to configure the DynamoDB data bridge, covering topics like how to set up the DynamoDB server, create data bridges and rules for forwarding data to DynamoDB and test the data bridges and rules.
 
 This tutorial assumes that you run both EMQX and DynamoDB on the local machine. If you have Dynamo and EMQX running remotely, adjust the settings accordingly.
 
-### Install DynamoDB Local
+### Install DynamoDB Local Server
 
-1. Prepare a docker compose file, `dynamo.yaml`, to setup the Dynamodb local.
+1. Prepare a docker-compose file, `dynamo.yaml`, to set up the Dynamodb local server.
 
 ```json
 version: '3.8'
@@ -93,11 +94,7 @@ The following JSON will be printed if the table was created successfully.
 }
 ```
 
-### Create DynamoDB Data Bridge
-
-You need to create 2 data bridges to PostgreSQL for messages storage and event records respectively.
-
-#### Messages Storage
+### Create a DynamoDB Data Bridge
 
 1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
 
@@ -122,7 +119,7 @@ You need to create 2 data bridges to PostgreSQL for messages storage and event r
 
    :::
 
-7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md).
+7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
 
 8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the MySQL server.
 
@@ -130,9 +127,9 @@ You need to create 2 data bridges to PostgreSQL for messages storage and event r
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into DynamoDB. You can also create rules by following the steps in [Create Rules for DynamoDB Data Bridge](#create-rules-for-dynamodb-data-bridge).
 
-Now the RocketMQ data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+Now the data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
 
-### Create Rules for DynamoDB Data Bridge
+### Create a Rule for DynamoDB Data Bridge
 
 Now that you have successfully created the data bridge to DynamoDB, you can continue to create rules to specify the data to be saved into DynamoDB. You need to create two different rules for messages forward and event records. 
 
@@ -173,15 +170,15 @@ Now that you have successfully created the data bridge to DynamoDB, you can cont
 
 Now you have successfully created the data bridge to DynamoDB. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to DynamoDB after parsing by rule `my_rule`. 
 
-### Test the Data Bridges and Rules
+### Test Data Bridge and Rule
 
-Use MQTTX to send a message to topic `t/1` to trigger an online/offline event. 
+Use MQTT X to send a message to topic `t/1` to trigger an online/offline event. 
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello DynamoDB" }'
 ```
 
-Check the running status of the two data bridges, there should be one new incoming and one new outgoing message. 
+Check the running status of the data bridge, there should be one new incoming and one new outgoing message. 
 
 Check whether the data is written into the `mqtt_msg`  data table. 
 
@@ -189,7 +186,7 @@ Check whether the data is written into the `mqtt_msg`  data table.
 docker run --rm -e AWS_ACCESS_KEY_ID=root -e AWS_SECRET_ACCESS_KEY=public -e AWS_DEFAULT_REGION=us-west-2 amazon/aws-cli dynamodb scan --table-name=mqtt_msg --endpoint-url http://host.docker.internal:8000
 ```
 
-The output will be
+The output will be:
 ```json
 {
     "Items": [

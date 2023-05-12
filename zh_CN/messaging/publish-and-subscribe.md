@@ -17,41 +17,41 @@ MQTT 基于[发布订阅模式](../mqtt/mqtt-publish-and-subscribe.md)进行消�
 
 :::: tabs type:card
 
-::: tab MQTT X
-[MQTT X](https://mqttx.app/zh) 是 EMQ 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS, Linux, Windows，并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。
+::: tab MQTTX
+[MQTTX](https://mqttx.app/zh) 是 EMQ 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS, Linux, Windows，并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。
 
-MQTT X 提供了一键式的连接方式和简洁的图形界面，能够测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。
+MQTTX 提供了一键式的连接方式和简洁的图形界面，能够测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。
 
 ![mqttx over view](./assets/mqttx-gif.gif)
 
-> 您也可以使用浏览器打开 [MQTT X Web](http://www.emqx.io/online-mqtt-client#/recent_connections)，无需下载与安装即可通过 MQTT over WebSocket 完成 MQTT 开发和调试操作。
+> 您也可以使用浏览器打开 [MQTTX Web](http://www.emqx.io/online-mqtt-client#/recent_connections)，无需下载与安装即可通过 MQTT over WebSocket 完成 MQTT 开发和调试操作。
 
-以下是使用 MQTT X 完成连接、发布订阅并查看消息全流程：
+以下是使用 MQTTX 完成连接、发布订阅并查看消息全流程：
 
-1. 下载并安装 MQTT X：前往 [MQTT X 官网](https://mqttx.app/zh)，通过应用商店或直接下载对应操作系统安装包进行安装。详细操作请参考 [MQTT X - 下载与安装](https://mqttx.app/zh/docs/downloading-and-installation)。
-2. 配置 MQTT 连接以及消息发布订阅测试：在 MQTT X 中填入 EMQX 连接信息并建立连接，详细操作请参考 [MQTT X - 快速建立连接](https://mqttx.app/zh/docs/get-started#%E5%BF%AB%E9%80%9F%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5)。**服务器地址** 选择 `mqtt://` 协议并填入对应监听器的 IP 地址，默认 IP 地址为 `localhost`，**端口**为 1883，根据情况填入用户名密码，没有启用访问控制的情况下留空即可。
-3. 消息发布订阅以及查看消息：连接到 EMQX 后，使用 MQTT X 收发消息，详细操作请参考 [MQTT X - 消息的发布订阅](https://mqttx.app/zh/docs/get-started#%E6%B6%88%E6%81%AF%E7%9A%84%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85)。
+1. 下载并安装 MQTTX：前往 [MQTTX 官网](https://mqttx.app/zh)，通过应用商店或直接下载对应操作系统安装包进行安装。详细操作请参考 [MQTTX - 下载与安装](https://mqttx.app/zh/docs/downloading-and-installation)。
+2. 配置 MQTT 连接以及消息发布订阅测试：在 MQTTX 中填入 EMQX 连接信息并建立连接，详细操作请参考 [MQTTX - 快速建立连接](https://mqttx.app/zh/docs/get-started#%E5%BF%AB%E9%80%9F%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5)。**服务器地址** 选择 `mqtt://` 协议并填入对应监听器的 IP 地址，默认 IP 地址为 `localhost`，**端口**为 1883，根据情况填入用户名密码，没有启用访问控制的情况下留空即可。
+3. 消息发布订阅以及查看消息：连接到 EMQX 后，使用 MQTTX 收发消息，详细操作请参考 [MQTTX - 消息的发布订阅](https://mqttx.app/zh/docs/get-started#%E6%B6%88%E6%81%AF%E7%9A%84%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85)。
 
 :::
 
-::: tab MQTT X CLI
+::: tab MQTTX CLI
 
-[MQTT X CLI](https://mqttx.app/zh/cli) 是 [EMQ](https://www.emqx.com/zh) 开源的一款 MQTT 5.0 命令行客户端工具，也是命令行上的 [MQTT X](https://mqttx.app/zh)，旨在帮助开发者在不需要使用图形化界面的基础上，也能更快的开发和调试 MQTT 服务与应用。
+[MQTTX CLI](https://mqttx.app/zh/cli) 是 [EMQ](https://www.emqx.com/zh) 开源的一款 MQTT 5.0 命令行客户端工具，也是命令行上的 [MQTTX](https://mqttx.app/zh)，旨在帮助开发者在不需要使用图形化界面的基础上，也能更快的开发和调试 MQTT 服务与应用。
 
-除了跨平台、无依赖、支持完成 MQTT 各项特性之外，MQTT X CLI 还提供了性能测试功能，能够快速测试 MQTT 服务的性能。
+除了跨平台、无依赖、支持完成 MQTT 各项特性之外，MQTTX CLI 还提供了性能测试功能，能够快速测试 MQTT 服务的性能。
 
-以下是使用 MQTT X CLI 完成连接、发布订阅并查看消息全流程：
+以下是使用 MQTTX CLI 完成连接、发布订阅并查看消息全流程：
 
-1. 下载安装 MQTT CLI，此处以 macOS 为例，其他操作系统请参考 [MQTT X CLI 下载与安装](https://mqttx.app/zh/docs/cli/downloading-and-installation)。
-  
+1. 下载安装 MQTT CLI，此处以 macOS 为例，其他操作系统请参考 [MQTTX CLI 下载与安装](https://mqttx.app/zh/docs/cli/downloading-and-installation)。
+
    ```bash
    # Homebrew
    brew install emqx/mqttx/mqttx-cli
-   
+
    # Intel Chip
    curl -LO https://www.emqx.com/zh/downloads/MQTTX/v1.9.0/mqttx-cli-macos-x64
    sudo install ./mqttx-cli-macos-x64 /usr/local/bin/mqttx
-   
+
    # Apple Silicon
    curl -LO https://www.emqx.com/zh/downloads/MQTTX/v1.9.0/mqttx-cli-macos-arm64
    sudo install ./mqttx-cli-macos-arm64 /usr/local/bin/mqttx
@@ -74,7 +74,7 @@ MQTT X 提供了一键式的连接方式和简洁的图形界面，能够测试 
    - `-p`：服务器端口，默认为 `1883`。
    - `-v`：在接收到的 Payload 前显示当前 Topic。
 
-   更多参数请参考 [MQTT X CLI - 订阅](https://mqttx.app/zh/docs/cli/get-started#%E8%AE%A2%E9%98%85)。
+   更多参数请参考 [MQTTX CLI - 订阅](https://mqttx.app/zh/docs/cli/get-started#%E8%AE%A2%E9%98%85)。
 
 3. 打开新的命令行窗口，执行一下命令连接到 EMQX 并发布一条消息到 `testtopic/#` 主题：
 
@@ -97,7 +97,7 @@ MQTT X 提供了一键式的连接方式和简洁的图形界面，能够测试 
    - `-p`：服务器端口，默认为 `1883`。
    - `-m`：消息 Payload。
 
-   更多参数请参考 [MQTT X CLI - 发布](https://mqttx.app/zh/docs/cli/get-started#%E5%8F%91%E5%B8%83)。
+   更多参数请参考 [MQTTX CLI - 发布](https://mqttx.app/zh/docs/cli/get-started#%E5%8F%91%E5%B8%83)。
 
 :::
 

@@ -127,7 +127,7 @@ FROM
 
 ### 测试数据桥接与规则
 
-使用 MQTT X 向 `t/1` 主题发布消息：
+使用 MQTTX 向 `t/1` 主题发布消息：
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello MongoDB" }'

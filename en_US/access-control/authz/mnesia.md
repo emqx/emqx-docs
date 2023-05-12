@@ -14,7 +14,7 @@ EMQX provides users with a low-cost, out-of-the-box authorization rule storage m
 
 2. Click **Create** at the top right corner, select **Built-in Database** as **Backend**, and click **Next**. 
 
-   ![authz-mnesia_ee](./assets/authz-mnesia_ee.png)
+   <img src="./assets/authz-mnesia_ee.png" alt="authz-mnesia_ee" style="zoom:40%;" />
 
 3. As built-in database authorization does not require configuration parameters, you can click **Create** to finish.
 
@@ -35,7 +35,7 @@ Sample configuration:
 
 - `enable`: Whether to activate this checker; optional values: `true`, `false`.
 
-<!--For detailed parameter list, see [authz-mnesia](../../configuration/configuration-manual.md#authz-mnesia).-->
+<!--For detailed parameter list, see [authz-mnesia](../../configuration/configuration-manual.html#authz-mnesia).-->
 
 ## Create Authorization Rules
 
@@ -45,7 +45,7 @@ You can create authorization rules through Dashboard or API.
 
 On the **Authorization** page in Dashboard, click the **Permissions** button in the **Actions** column of the **Built-in Database** backend.
 
-![authz-config-built-in-rules_ee](./assets/authz-config-built-in-rules_ee.png)
+<img src="./assets/authz-config-built-in-rules_ee.png" alt="authz-config-built-in-rules_ee" style="zoom:50%;" />
 
 You can set authorization checks based on the client ID, username, or topic as needed.
 

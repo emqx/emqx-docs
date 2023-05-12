@@ -1,4 +1,4 @@
-# Plugin and extension
+# Plugin and Extension
 
 EMQX 5.0 supports extensions in the form of plugins, multilingual gRPC hooks and protocol extensions to facilitate your development workflow, and you can choose the extension method according to your needs.
 

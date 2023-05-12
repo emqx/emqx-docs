@@ -48,8 +48,8 @@ This section introduces how to start a ClickHouse server using [Docker](https://
    ) ENGINE = MergeTree();
    SQL_INIT
    ```
-
-2. Then, start a ClickHouse server using the following command, which defines the database name, port number, user name and password. And it will also mount the `init.sql` file in the current directory to the docker directory.
+   
+1. Then, start a ClickHouse server using the following command, which defines the database name, port number, user name and password. And it will also mount the `init.sql` file in the current directory to the docker directory.
 
    ```bash
    docker run \

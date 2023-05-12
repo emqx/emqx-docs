@@ -31,15 +31,6 @@ def is_edition_match(i, ce_or_ee):
     else:
         return True
 
-def copy_cfg_md(lang):
-    if lang == 'en':
-        dir = 'en_US'
-    else:
-        dir = 'zh_CN'
-    src = dir + '/admin/cfg-' + EDITION + '.md'
-    dst = dir + '/configuration/configuration-manual.md'
-    shutil.copyfile(src, dst)
-
 def read_title_from_md(lang, path):
     if lang == 'en':
         dir = 'en_US'
@@ -80,9 +71,6 @@ def parse(children, lang, edition):
 
         acc.append(_child)
     return acc
-
-copy_cfg_md('en')
-copy_cfg_md('cn')
 
 with open(r'dir.yaml', encoding='utf-8') as file:
     # The FullLoader parameter handles the conversion from YAML

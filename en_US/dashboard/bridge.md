@@ -15,7 +15,7 @@ Current data bridging types include:
 - Webhook, which uses a Webhook to forward data to an HTTP service.
 - MQTT, which uses an MQTT broker as a data source to fetch external MQTT messages, or publish EMQX messages to an external MQTT broker.
 
-![image](./assets/bridge-create.png)
+<img src="./assets/bridge-create.png" alt="image" style="zoom:50%;" />
 
 ### Webhook
 
@@ -23,7 +23,7 @@ Using Webhook is actually sending the data received and processed by EMQX to an 
 
 The same user needs a pre-built HTTP service, we need to configure the HTTP URL, select a request method POST, GET, PUT or DELETE, configure the request header and fill in the request body with the data to be sent using the template syntax.
 
-![image](./assets/bridge-webhook.png)
+<img src="./assets/bridge-webhook.png" alt="image" style="zoom:50%;" />
 
 For more details about how to use of Webhook data bridge, please visit [Webhook](../data-integration/data-bridge-webhook.md)
 
@@ -33,7 +33,7 @@ For using MQTT data bridge, users can publish EMQX messages to an external MQTT 
 
 In MQTT data bridge, users first need to configure the connection information of the MQTT broker, including the broker endpoint, port, username, password, etc.
 
-![image](./assets/bridge-mqtt-connect.png)
+<img src="./assets/bridge-mqtt-connect.png" alt="image" style="zoom:50%;" />
 
 Then, users can configure the ingress or egress of the MQTT broker as needed. The ingress configuration is manually turned on if the service is to be used as a data source. If it is a destination, the egress configuration is manually turned on. For example, if the ingress is configured, it means that the data is pulled from the external MQTT broker and published to a topic on EMQX. If the egress is configured, the EMQX MQTT message is published to the external MQTT broker.
 
@@ -45,7 +45,7 @@ When ingress config is enabled, the MQTT data bridge can be used as a data sourc
 
 In addition to the remote MQTT broker, there is also a local MQTT broker configuration, EMQX. Users can configure the topic, QoS, retain flag, and message payload template of the service (all of which support template syntax). If the user configures the local MQTT broker topic, the user does not need to use the rule. After connecting to EMQX and subscribing to the local topic, the user can receive messages from the remote broker.
 
-![image](./assets/bridge-mqtt-source.png)
+<img src="./assets/bridge-mqtt-source.png" alt="image" style="zoom:50%;" />
 
 ### Egress
 
@@ -53,7 +53,7 @@ When the egress config is enabled, the MQTT data bridge can be used as a destina
 
 In addition to the remote MQTT broker, there is also a local MQTT broker configuration, EMQX. Users can configure the topic of the service. If the user configures the local MQTT broker topic, the user does not need to use the rule. After connecting to EMQX and sending messages to the local topic, the user can also send messages to the remote broker.
 
-![image](./assets/bridge-mqtt-sink.png)
+<img src="./assets/bridge-mqtt-sink.png" alt="image" style="zoom:50%;" />
 
 The local MQTT broker is optional regardless of the ingress configuration or egress configuration. Users need to determine whether they need it according to business needs. For scenarios that require rules to process complex data, users do not need to configure the local MQTT broker and can directly use the data bridge in the rule. Otherwise, users can now subscribe to or send messages to the topic of the local MQTT broker to complete the reception of messages from the remote service or sending message data to the remote service.
 
@@ -71,7 +71,7 @@ Note: Each data bridge must enter a name, which users can use to customize the i
 
 In the data bridge list, we can view the name of the data bridge that has been successfully created, the status of the resources configured in the bridge, connected or disconnected, and switch to enable or disable the data bridge, in the action bar you can quickly delete the data bridge, click `Create Rule`, you can use the data bridge to quickly create a rule, that is, after entering the create rule page, automatically add the data bridge.
 
-![image](./assets/bridge-list.png)
+<img src="./assets/bridge-list.png" alt="image" style="zoom:50%;" />
 
 ## Overview
 
@@ -79,10 +79,10 @@ On the data bridge list page, click on the data bridge `name` to go to the data 
 
 The node status at the bottom of the page allows you to view the metrics data under each node from the list.
 
-![image](./assets/bridge-overview.png)
+<img src="./assets/bridge-overview.png" alt="image" style="zoom:50%;" />
 
 ## Settings
 
 In the data bridge list page, click `Settings` in the action bar to enter the data bridge settings page, which is the same as the parameter configuration page at creation. When the resources of the data bridge change, you can go to the settings page to make changes, or you need to modify the topic of the MQTT bridge, etc. Each time the settings are updated, the resources within the bridge will be reconnected. Note: that the name of the data bridge cannot be modified.
 
-![image](./assets/bridge-settings.png)
+<img src="./assets/bridge-settings.png" alt="image" style="zoom:50%;" />

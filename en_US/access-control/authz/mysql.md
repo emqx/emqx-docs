@@ -1,6 +1,6 @@
 # Integrate with MySQL
 
-This authorizer implements authorization checks through matching publish/subscription requests against lists of rules stored in the MySQL database.
+This authorizer implements authorization checks by matching publish/subscription requests against lists of rules stored in the MySQL database.
 
 ::: tip Tip
 
@@ -34,7 +34,7 @@ CREATE TABLE `mqtt_acl` (
 ```
 
 ::: tip
-The example above creates an index. When there is a significant number of users in the system, optimize and index the collection to be queried beforehand to shorten the query response time and reduce the load for EMQX.
+When there is a significant number of users in the system, optimize and index the tables to be queried beforehand to shorten the query response time and reduce the load for EMQX.
 :::
 
 In this table, MQTT users are identified by `username`.
@@ -57,9 +57,9 @@ You can use EMQX Dashboard to configure how to use MySQL for user authorization.
 
 1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
 
-2. Click **Create** at the top right corner, then click to select **MySQL** as **Backend**. Click **Next**. The **Configuration** tab is shown as below.
+2. Click **Create** at the top right corner, then click to select **MySQL** as **Backend**. Click **Next**. The **Configuration** tab is shown below.
 
-   ![authz-MySQL_ee](./assets/authz-MySQL_ee.png)
+   <img src="./assets/authz-MySQL_ee.png" alt="authz-MySQL_ee" style="zoom:67%;" />
 
 3. Follow the instructions below to do the configuration.
 
@@ -86,7 +86,7 @@ You can use EMQX Dashboard to configure how to use MySQL for user authorization.
 
 You can configure the EMQX MySQL authorizer with EMQX configuration items.
 
-The MySQL authorizer is identified by type `mysql`. <!--For detailed configuration, see [authz:mysql](../../configuration/configuration-manual.md#authz:mysql).-->
+The MySQL authorizer is identified by type `mysql`. <!--For detailed configuration, see [authz:mysql](../../configuration/configuration-manual.html#authz:mysql).-->
 
 Sample configuration:
 

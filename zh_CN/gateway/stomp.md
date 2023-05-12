@@ -60,7 +60,7 @@ gateway.stomp {
 通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
 :::
 
-Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](../configuration/configuration-manual.md)
+Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](../configuration/configuration-manual.html)
 
 
 ## 认证
@@ -141,7 +141,7 @@ Stomp 协议完全兼容发布订阅的消息模式，Stomp 网关使用：
 
 ## 用户层接口
 
-- 详细配置说明参考：[网关配置 - Stomp 网关](../configuration/configuration-manual.md)
+- 详细配置说明参考：[网关配置 - Stomp 网关](../configuration/configuration-manual.html)
 - 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
 
 ## 客户端库

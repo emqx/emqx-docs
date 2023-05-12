@@ -1,6 +1,6 @@
 # 配置文件简介
 
-EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX，本章节将介绍 EMQX 配置文件基本信息，配置项以及详细的介绍请参考 [配置手册](./configuration-manual.md)
+EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX，本章节将介绍 EMQX 配置文件基本信息，配置项以及详细的介绍请参考 [配置手册](./configuration-manual.html)
 
 ## 配置文件介绍
 

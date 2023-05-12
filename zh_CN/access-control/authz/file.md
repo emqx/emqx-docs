@@ -84,7 +84,7 @@ EMQX 已默认配置了基于文件的授权检查器。您可点击 **File** �
 
 在 **授权**页面，单击**创建**，选择**数据源**为 **File**，点击**下一步**，进入**配置参数**页签：
 
-![file authentication](./assets/authz-file.png)
+<img src="./assets/authz-file.png" alt="file authentication" style="zoom:67%;" />
 
 您可在 **ACL File** 区域编辑客户端访问规则，有关文件格式和对应字段的说明，可参考 [文件格式](#文件格式) 部分。
 
@@ -116,5 +116,5 @@ authorization {
 - `enable`：是否激活该检查器，可选值：`true`、`false`
 - `path`：配置文件路径，默认为：`etc/acl.conf`。 如果通过 Dashboard 或 REST API 对 File 授权检查器进行过修改，EMQX 会把新的文件保存到 `data/authz/acl.conf`，并且不再读取原文件中的配置。
 
-详细参数列表，可参考 [authz-file](../../configuration/configuration-manual.md#authz-file)。
+详细参数列表，可参考 [authz-file](../../configuration/configuration-manual.html#authz-file)。
 

@@ -20,7 +20,7 @@ EMQX 提供了强大的权限控制能力，而 EMQX Dashboard 提供了开箱�
 
 使用预先定义好的 HTTP 服务，将授权的请求委托给外部 HTTP 服务器。外部的 HTTP 服务需要包含了验证权限的能力。
 
-![image](./assets/authz-create.png)
+<img src="./assets/authz-create.png" alt="image" style="zoom:67%;" />
 
 ### 配置参数
 
@@ -30,7 +30,7 @@ EMQX 提供了强大的权限控制能力，而 EMQX Dashboard 提供了开箱�
 
 选择使用 ACL 文件后，在配置参数页面提供了一个文本编辑框，需要编辑文件的授权规则内容，是一个 Erlang 元组数据的列表。（注意每条规则后面必需有一个点号 .）元组是用花括号包起来的一个列表，各个元素用逗号分隔。
 
-![image](./assets/authz-file-config.png)
+<img src="./assets/authz-file-config.png" alt="image" style="zoom:67%;" />
 
 更多关于文件授权规则内容的编辑方法，请访问 [File](../access-control/authz/file.md)。
 
@@ -42,7 +42,7 @@ EMQX 提供了强大的权限控制能力，而 EMQX Dashboard 提供了开箱�
 
 选择外部数据库的话，需要配置能访问到的数据库地址，数据库名称，用户名密码，以及认证相关配置，填写如何从数据库中获取授权数据的 SQL 语句或其它查询语句等。当发布和订阅操作时，会从数据库中查询相关的授权数据来判断是否能通过权限规则。以 MySQL 为例：
 
-![image](./assets/authz-mysql-config.png)
+<img src="./assets/authz-mysql-config.png" alt="image" style="zoom:67%;" />
 
 更多关于 MySQL 或其它外部数据库的配置详情，请访问 [MySQL](../access-control/authz/mysql.md) 或查看使用其它数据库。
 
@@ -52,7 +52,7 @@ EMQX 提供了强大的权限控制能力，而 EMQX Dashboard 提供了开箱�
 
 因此我们需要配置请求服务的地址和方法包括 POST 或 GET 方法，请求服务的 Headers，将发布订阅时需要的授权信息配置到 `Body` 字段中，例如将 `username`、`topic` 和 `action` 填写到 JSON 数据中。
 
-![image](./assets/authz-http-config.png)
+<img src="./assets/authz-http-config.png" alt="image" style="zoom:67%;" />
 
 更多关于 HTTP Server 授权规则的配置方法，请访问 [HTTP](../access-control/authz/http.md)。
 
@@ -64,7 +64,7 @@ EMQX 提供了强大的权限控制能力，而 EMQX Dashboard 提供了开箱�
 
 授权列表与认证列表相似，每一栏都可以通过鼠标来拖动调整顺序，或通过操作栏调整列表顺序，因为 EMQX 允许创建多个授权机制，当一个客户端进行发布或者订阅操作的时候，EMQX 会按顺序逐个检查， 如果一个授权配置能够找到该客户端的授权规则（ACL），那么就会对这个规则进行匹配。 匹配的结果要么是允许（allow），要么是拒绝（deny）。如果没有找到适用于该客户端的规则， 那么就会继续到授权链中的下一个授权配置中进行检查。
 
-![image](./assets/authz-list.png)
+<img src="./assets/authz-list.png" alt="image" style="zoom:67%;" />
 
 在操作栏中还可以点击设置或删除授权配置等。
 
@@ -74,7 +74,7 @@ EMQX 提供了强大的权限控制能力，而 EMQX Dashboard 提供了开箱�
 
 使用方法为，输入一个需要配置授权规则的主题，选择是在订阅该主题时或向该主题发布消息时，配置其权限是允许还是拒绝。
 
-![image](./assets/authz-users.png)
+<img src="./assets/authz-users.png" alt="image" style="zoom:67%;" />
 
 更多关于内置数据库的授权规则的配置方法，请访问[内置数据库](../access-control/authz/mnesia.md)。
 
@@ -88,7 +88,7 @@ EMQX 提供了强大的权限控制能力，而 EMQX Dashboard 提供了开箱�
 
 页面最下方的节点状态，可以从列表中查看每个节点下的授权指标数据。
 
-![image](./assets/authz-overview.png)
+<img src="./assets/authz-overview.png" alt="image" style="zoom:67%;" />
 
 ## 授权设置
 
@@ -100,6 +100,6 @@ EMQX 提供了强大的权限控制能力，而 EMQX Dashboard 提供了开箱�
 
 设置当授权不匹配时的操作，允许或拒绝，拒绝后是忽略消息还是断开连接。是否开启授权数据的缓存，开启后可以减少对授权数据后端产生访问压力。右侧点击 `清除缓存`，可以快速清除当前所有授权结果缓存。
 
-![image](./assets/authz-settings.png)
+<img src="./assets/authz-settings.png" alt="image" style="zoom:67%;" />
 
 更多关于授权的详细解释与使用，请访问[授权](../access-control/authz/authz.md)。

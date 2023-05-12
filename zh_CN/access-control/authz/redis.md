@@ -36,7 +36,7 @@ Redis Authorizer 中添加的所有规则都是**允许**规则，即 Redis Auth
 
 ## 配置项
 
-Redis Authorizer 支持 3 种部署模式的 Redis，详细配置请参考 [redis_standalone](../../configuration/configuration-manual.md#authz:redis_standalone)、[authz:redis_sentinel](../../configuration/configuration-manual.md#authz:redis_sentinel) 与 [authz:redis_cluster](../../configuration/configuration-manual.md#authz:redis_cluster)。
+Redis Authorizer 支持 3 种部署模式的 Redis，详细配置请参考 [redis_standalone](../../configuration/configuration-manual.html#authz:redis_standalone)、[authz:redis_sentinel](../../configuration/configuration-manual.html#authz:redis_sentinel) 与 [authz:redis_cluster](../../configuration/configuration-manual.html#authz:redis_cluster)。
 
 Redis authorizer 由 `type=redis` 标识。
 
@@ -51,7 +51,7 @@ Standalone Redis:
     server = "127.0.0.1:6379"
 
     cmd = "HGETALL mqtt_user:${username}"
-    database => 1
+    database = 1
     password = public
     server = "127.0.0.1:6379"
 
@@ -70,7 +70,7 @@ Standalone Redis:
     sentinel = "mymaster"
 
     cmd = "HGETALL mqtt_user:${username}"
-    database => 1
+    database = 1
     password = public
 
 }
@@ -87,7 +87,6 @@ Standalone Redis:
     servers = "10.123.13.11:6379,10.123.13.12:6379"
 
     cmd = "HGETALL mqtt_user:${username}"
-    database => 1
     password = public
 }
 ```

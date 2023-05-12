@@ -106,7 +106,7 @@ The main development steps are as following:
 
 Once the development is complete, the service needs to be deployed to a server that can communicate with EMQX and ensure that the ports are open.
 
-You can use the [EMQX Dashboard](http://127.0.0.1:18083/#/exhook) to manage and monitor the ExHook service
+You can use the [EMQX Dashboard](http://127.0.0.1:18083/#/exhook) to manage and monitor the ExHook service.
 
 One of the gRPC frameworks for each language can be found at: [grpc-ecosystem/awesome-grpc](https://github.com/grpc-ecosystem/awesome-grpc)
 
