@@ -45,7 +45,7 @@ You can use EMQX Dashboard to finish the relevant configuration.
 
 On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **Password-Based** as **Mechanism**, and **HTTP Server** as **Backend**, this will lead us to the **Configuration** tab, as shown below.
 
-![HTTP](./assets/authn-http.png)
+<img src="./assets/authn-http.png" alt="HTTP" style="zoom:67%;" />
 
 
 
@@ -59,8 +59,7 @@ On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Con
    :::
 
 - **URL**: Enter the URL address of the HTTP service.
-
-- **Headers** (optional): HTTP request header.
+- **Headers** (optional): HTTP request header. You can add several headers.
 
 **Connection Configuration**:
 
@@ -79,7 +78,7 @@ Now we can click **Create** to finish the settings.
 
 ## Configure with Configuration Items
 
-You can configure the EMQX HTTP authenticator with EMQX configuration items. <!--For details, see [authn-http:post](../../configuration/configuration-manual.md#authn-http:post) and [authn-http:get](../../configuration/configuration-manual.md#authn-http:get). -->
+You can configure the EMQX HTTP authenticator with EMQX configuration items. <!--For details, see [authn-http:post](../../configuration/configuration-manual.html#authn-http:post) and [authn-http:get](../../configuration/configuration-manual.html#authn-http:get). -->
 
 Below are the HTTP `POST` and `GET` request examples:
 
@@ -109,6 +108,8 @@ Below are the HTTP `POST` and `GET` request examples:
 :::
 
 ::: tab GET request
+
+Note: The "body" will be converted to a query string.
 
 ```hcl
 {

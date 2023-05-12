@@ -20,9 +20,10 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 ## Feature List
 
-- [Connection pool](./data-bridges.md)
-- [Batch mode](./data-bridges.md)
-- [Buffer queue](./data-bridges.md)
+- [Connection pool](./data-bridges.md#connection-pool)
+- [Batch mode](./data-bridges.md#batch-mode)
+- [Async mode](./data-bridges.md#async-mode)
+- [Buffer queue](./data-bridges.md#buffer-queue)
 
 <!-- TODO 配置参数 需要补充链接到配置手册对应配置章节。 -->
 
@@ -72,7 +73,7 @@ You need to create 2 separate Redis data bridges for the messaging caching and s
 5. Set **Redis Mode** as the business needs, for example, **single**.
 6. Input the connection information. Input `127.0.0.1:6379` as the **Server Host**, `public` as the **Password**, and `0` for **Database ID**.
 
-6. Configure **Redis Command Template** based on the feature to use: 
+6. Configure **Redis Command Template** based on the feature to use:
 
    - To create data bridge for message caching, use the Redis [HSET](https://redis.io/commands/hset/) command and hash data structure to store messages, the data format uses `clientid` as the key, and stores fields such as `username`, `payload`, and `timestamp`. To distinguish it from other keys in Redis, add an `emqx_messages` prefix to the message and separate it with `:`
 
@@ -96,15 +97,15 @@ You need to create 2 separate Redis data bridges for the messaging caching and s
 
 8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Redis server.
 
-9. Click **Create** to finish the creation of the data bridge. 
+9. Click **Create** to finish the creation of the data bridge.
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Redis. You can also create rules by following the steps in [Create Rules for Redis Data Bridge](#create-rules-for-redis-data-bridge).
 
-Now the Redis data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+Now the Redis data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
 ### Create Rules for Redis Data Bridge
 
-After you successfully created the data bridge to Redis, you can continue to create rules for message caching and message discard statistics. 
+After you successfully created the data bridge to Redis, you can continue to create rules for message caching and message discard statistics.
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
 
@@ -112,7 +113,7 @@ After you successfully created the data bridge to Redis, you can continue to cre
 
 4. Input `cache_to_redis` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
 
-   - To create a rule for message caching, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to Redis. 
+   - To create a rule for message caching, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to Redis.
 
      Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
 
@@ -147,7 +148,7 @@ Now you have successfully finished creating the rules for the Redis data bridge.
 
 ### Test the Data Bridge and Rule
 
-Use MQTT X  to send a message to topic  `t/1`  to trigger a message caching event. If topic  `t/1`  does not have any subscribers, the message will be discarded and trigger the message discard rule.
+Use MQTTX  to send a message to topic  `t/1`  to trigger a message caching event. If topic  `t/1`  does not have any subscribers, the message will be discarded and trigger the message discard rule.
 
 ```bash
 mqttx pub -i emqx_c -u emqx_u -t t/1 -m '{ "msg": "hello Redis" }'

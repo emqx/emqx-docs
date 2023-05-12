@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import re
+from urllib.parse import urlparse
 
 directory_file = sys.argv[1]
 docs_path = sys.argv[2]
@@ -29,6 +30,8 @@ def check_md_content(md_file):
         if url[0].endswith('!'):
             continue
         if url[2].startswith(('http://', 'https://', '<', '#', 'mailto:', 'tel:')):
+            continue
+        if urlparse(url[2]).path.endswith('.html'):
             continue
         url_path = url[2].split('.md')[0]
         ref_md_path = os.path.join(f'{"/".join(md_file.split("/")[:-1])}/', f'{url_path}.md')

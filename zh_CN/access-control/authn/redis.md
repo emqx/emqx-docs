@@ -39,7 +39,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication)页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，依次选择**认证方式**为 `Password-Based`，**数据源**为 `Redis`，进入**配置参数**页签：
 
-![Authentication with redis](./assets/authn-redis.png)
+<img src="./assets/authn-redis.png" alt="Authentication with redis" style="zoom:67%;" />
 
 您可按照如下说明完成相关配置：
 
@@ -62,7 +62,8 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 - **密码加密方式**：选择存储密码时使用的散列算法，如 plain、md5、sha、bcrypt、pbkdf2 等。
 - 选择 **plain**、**md5**、**sha**、**sha256** 或 **sha512** 算法，需配置：
   - **加盐方式**：用于指定盐和密码的组合方式，除需将访问凭据从外部存储迁移到 EMQX 内置数据库中外，一般不需要更改此选项；可选值：**suffix**（在密码尾部加盐）、**prefix**（在密码头部加盐）、**disable**（不启用）。注意：如选择 **plain**，加盐方式应设为 **disable**。
-- 选择 **bcrypt** 算法，无需额外配置。
+- 选择 **bcrypt** 算法，需配置:
+  - **Salt Rounds**：指定散列需要的计算次数（2^Salt Rounds），也称成本因子。默认值：**10**，可选值：**4～31**；数值越高，加密的安全性越高，因此建议采用较大的值，但相应的用户验证的耗时也会增加，您可根据业务需求进行配置。
 - 选择 **pkbdf2** 算法，需配置：
   - **伪随机函数**：指定生成密钥使用的散列函数，如 sha256 等。
   - **迭代次数**：指定散列次数，默认值：**4096**。<!--后续补充取值范围-->
@@ -71,7 +72,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 ## 通过配置文件配置
 
-您可通过配置文件完成相关配置，详细配置步骤请参考 [authn-redis:standalone](../../configuration/configuration-manual.md#authn-redis:standalone)、[authn-redis:sentinel](../../configuration/configuration-manual.md#authn-redis:sentinel) 与 [authn-redis:cluster](../../configuration/configuration-manual.md#authn-redis:cluster)。
+您可通过配置文件完成相关配置，详细配置步骤请参考 [authn-redis:standalone](../../configuration/configuration-manual.html#authn-redis:standalone)、[authn-redis:sentinel](../../configuration/configuration-manual.html#authn-redis:sentinel) 与 [authn-redis:cluster](../../configuration/configuration-manual.html#authn-redis:cluster)。
 
 以下为各部署模式下的配置文件示例：
 
@@ -145,7 +146,6 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
   }
 
   cmd = "HMGET mqtt_user:${username} password_hash salt is_superuser"
-  database = 1
   password = "public"
   auto_reconnect = true
 }

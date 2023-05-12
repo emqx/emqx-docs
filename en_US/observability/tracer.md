@@ -1,64 +1,82 @@
 # Log Trace
 
-Though enabling the `debug` level log can significantly increase the efficiency for debugging, the number of generated logs may affect the system performance, especially in the production environments with intensive connecting and messaging services, so it is not feasible. 
+EMQX 5.0 introduces the Log Trace feature, enabling real-time debug-level log outputs for specific client IDs, topics, or IP addresses. This allows detailed debugging in production environments without affecting system performance due to excessive logs, increasing the efficiency of diagnosing and resolving EMQX issues.
 
-Therefore, EMQX 5.0 has added the Log Trace feature, allowing users only to enable debug level logs output for specific client IDs, topics or IPs in real-time. 
+## How It Works 
 
-## Introduction
+The Log Trace feature is implemented using the built-in Erlang Logger Filter function, which has a negligible impact on the overall message throughput. EMQX uses independent File Handlers to persist Trace disk logs and creates a separate process for each client connection to process its messages.
 
-Log Trace is based on the built-in Erlang Logger Filter function, which only has a negligible impact on overall message throughput:
+When a client sends a message, the independent process responsible for that connection will first check if the message complies with the rules set by the customized Trace Filter. For example, the process may check if the message is from a specified client ID:
 
-- EMQX uses independent File Handlers to persist Trace disk logs.
-- EMQX will create an independent process for each client connection to process its messages.
-- When receiving a client message, this independent process will check whether it complies with the rules according to the customized Trace Filter, for example, whether it is from the specified client ID; if not, EMQX will execute the original transfer logic; if yes, this process will convert the message into a binary data, and then asynchronously sends the message to the File Handler.
-- Then the File Handlers will persist the binary data into Trace files.
+- If the message is from the specified client ID, the process will convert the message into binary data and then asynchronously send it to the appropriate File Handler. 
+- If it is not from the specified client ID, EMQX will execute the original transfer logic. 
 
-Therefore, all filtering actions are completed by the independent process of each client. As most logs will be filtered out, the File Handler will not be overloaded by the incoming messages, and it is safe for the production environments.
+The File Handlers are responsible for persisting the binary data into Trace files on disk. 
 
-Log Trace can be used for various scenarios, such as debugging abnormal messages or data losses, client disconnection, subscription failure, etc. For system malfunctions that occur at a specific time, Trace allows users to set the task start/stop time for automatic log collection, which is very convenient for users.
+## Benefits
 
-On EMQX Dashboard, you can click **Diagnose** -> **Log Trace**, and then click **Create** to set your rules. Below will introduce the operating steps.  
+The Log Trace feature has the following benefits:
+
+- **Safety**: The filtering process is performed independently for each client, which prevents the File Handler from being overloaded with incoming messages. Since most of the logs are filtered out, this approach is safe for production environments. 
+- **Reliability**: This feature ensures that trace logging does not impact the overall message throughput of EMQX and provides a reliable and efficient way to store and retrieve log data.
+- **Agility**: Log Trace can be used for various scenarios, such as debugging abnormal messages or data losses, client disconnection, subscription failure, and etc. For system malfunctions that occur at a specific time, you can set the task start/stop time for automatic log collection, which is very convenient.
 
 <!-- TODO 下面的内容先凑合使用，后续更新 -->
 
-## Trace by Client IDs
+## Create Log Trace
 
-1. Select the **Type** as `ClientID`.
-2. Fill in the Client IDs to be traced.
+This section demonstrates how to create Log Trace rules by client ID, Topic, or IP address in Dashboard. Click **Diagnose** -> **Log Trace** on the left navigation menu. On the **Log Trace** page, click **Create** to set your rules. 
+
+### Trace by Client IDs
+
+1. Select `Client ID` from the drop-down list of **Type**.
+
+2. Type the Client IDs to be traced.
+
+3. Select the start and end times. If the start time is earlier than or the same as the current time, it will start from the current time.
+<img src="./assets/create-trace-client-ee.png" alt="create-trace-client-ee" style="zoom:67%;" />
+
+4. Click **Create**. You can see the trace record after successful creation. You can view it or choose to download the log. The log contains the current Client ID interaction with the EMQX connection.
+
+   ![create-trace-client-created-ee](./assets/create-trace-client-created-ee.png)
+
+### Trace by Topics
+
+1. Select `Topic` from the drop-down list of **Type**.
+
+2. Type the topic to be traced. Wildcard characters are supported.
+
 3. Select the start and end time. If the start time is earlier than or the same as the current time, it will start from the current time.
-![image-202112140002](./assets/trace_create_clientid.png)
-![image-202112140003](./assets/trace_clientid.png)
 
-You can see the Trace record after successful creation in the list, where you can view it or choose to download the log. The log contains the current ClientID interaction with the EMQX connection.
+   <img src="./assets/create-trace-topic-ee.png" alt="create-trace-topic-ee" style="zoom:67%;" />
 
-## Trace by Topics
+4. Click **Create**. You can see the trace record after successful creation. You can view it or choose to download the log. The log contains information about publishing, subscription and unsubscription of the current topic.
 
-1. Select the **Type** as `Topic`;
-2. Fill in the topics to be traced and wildcard characters are supported;
+### Trace by IP Address
+
+1. Select `IP Addess` from the drop-down list of **Type**.
+
+2. Type the IP address to be traced.
+
 3. Select the start and end time. If the start time is earlier than or the same as the current time, it will start from the current time.
 
-![image-202112140004](./assets/trace_create_topic.png)
+   <img src="./assets/create-trace-ip-ee.png" alt="create-trace-ip-ee" style="zoom:67%;" />
 
-You can see the Trace record after successful creation in the list, where you can view it or choose to download the log. The log contains Publish/Subscribe/UnSubscribe information for the current topic on EMQX.
+4. Click **Create**. You can see the trace record after successful creation. You can view it or choose to download the log. The log contains the current IP interaction with the EMQX connection.
 
-## Trace by IPs
+## View Log Trace 
 
-1. Select the **Type** as `IP Address`;
-2. Fill in the IP addresses to be traced;
-3. Select the start and end time. If the start time is earlier than or the same as the current time, it will start from the current time.
+The created trace records will be listed. You can create up to 30 traced logs. The log file size viewed in the list is the sum of the uncompressed file sizes. You can click the **Stop** button to stop logging manually or wait until the specified end time.
 
-![image-202112140005](./assets/trace_create_ip.png)
+<img src="./assets/log-trace-list-ee.png" alt="log-trace-list-ee" style="zoom:67%;" />
 
-You can see the Trace record after successful creation in the list, where you can view it or choose to download the log. The log contains the current IP interaction with the EMQX connection.
+Click a specific trace record by the name, you can select to download the log on different nodes. 
 
-![image-202112140006](./assets/trace_list.png)
+Trace logs have a maximum capacity of 512MB logs per node. Once the generated log file reaches the maximum limit, it stops appending any further logs and raises an alert in the primary log file. In the event of a timeout during Dashboard downloading, you can locate the log file in the `/data/trace` directory on the server. When an EMQX cluster is restarted, the unfinished log trace will be resumed.
 
-### Notes
+<img src="./assets/log-trace-node-ee.png" alt="log-trace-node-ee" style="zoom:50%;" />
 
-1. You can create up to 30 trace logs. 
-2. Trace logs can generate a maximum of 512MB logs per node. If the generated log file reaches the maximum, it will stop appending logs and give an alert in the main log file.
-3. You can stop logging manually or wait until the end time to stop automatically.
-4. The log file size viewed in the list is the sum of the uncompressed file sizes.
-5. The EMQX cluster will continue an outstanding trace after the restart.
-6. If the dashboard download timeout, you can find the log file directly on the server's data/trace.
+
+
+
 

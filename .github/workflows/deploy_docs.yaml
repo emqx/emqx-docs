@@ -182,6 +182,24 @@ jobs:
             --templateOptions.version "${VERSION}" \
             $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
         done
+    
+    - name: generate ce configuration manual
+      if: env.DOCS_TYPE == 'broker'
+      run: |
+        LANGS=(zh en)
+        for lang in "${LANGS[@]}"; do
+          cp -r docs-files/cfg-manual-docgen/configuration-manual.html frontend/docs/.vuepress/dist/${lang}/${VERSION}/configuration/configuration-manual.html
+          cp -r docs-files/cfg-manual-docgen/ce-${lang}.json frontend/docs/.vuepress/dist/${lang}/${VERSION}/configuration/configuration.json
+        done
+
+    - name: generate ee configuration manual
+      if: env.DOCS_TYPE == 'enterprise'
+      run: |
+        LANGS=(zh en)
+        for lang in "${LANGS[@]}"; do
+          cp -r docs-files/cfg-manual-docgen/configuration-manual.html frontend/docs/.vuepress/dist/${lang}/enterprise/${VERSION}/configuration/configuration-manual.html
+          cp -r docs-files/cfg-manual-docgen/ee-${lang}.json frontend/docs/.vuepress/dist/${lang}/enterprise/${VERSION}/configuration/configuration.json
+        done
 
     - name: upload ce files
       if: env.DOCS_TYPE == 'broker'

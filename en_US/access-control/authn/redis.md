@@ -47,7 +47,7 @@ You can use EMQX Dashboard to configure how to use Redis for password authentica
 
 On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **Password-Based** as **Mechanism**, and **Redis** as **Backend**, this will lead us to the **Configuration** tab, as shown below. 
 
-![Authentication with redis](./assets/authn-redis.png)
+<img src="./assets/authn-redis.png" alt="Authentication with redis" style="zoom:67%;" />
 
 Follow the instruction below on how to configure:
 
@@ -67,24 +67,22 @@ Follow the instruction below on how to configure:
 
 **Authentication configuration**: Fill in the authentication-related settings:
 
-- **Password Hash Field**: Specify the field name of the password.
 - **Password Hash**: Select the Hash function for storing the password in the database, for example, plain, md5, sha, bcrypt, pbkdf2. 
   - If **plain**, **md5**, **sha**, **sha256** or **sha512** are selected, we also need to configure:
-    - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. Note: If **plain** is selected, the **Salt Position** should be **disable**. 
-
-  - If **bcrypt** is selected, no extra configurations are needed. 
+    - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. You can keep the default value unless you are migrating user credentials from external storage into EMQX built-in database. Note: If **plain** is selected, the **Salt Position** should be **disable**. 
+  - If **bcrypt** is selected, you also need to configure:
+    - **Salt Rounds**: Specify the calculation times of Hush function (2^Salt Rounds). Default value: **10**; Value range **4~31**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by 1 doubles the necessary time. 
   - If **pkbdf2** is selected, we also need to configure:
     - **Pseudorandom Function**: Specify the Hush functions to generate the key, such as sha256. 
     - **Iteration Count**: Specify the iteration times; Default: 4096
-    - **Derived Key Length** (optional): Specify the length of the generated password, if left blank, the password length will be determined by the pseudorandom function you selected. 
-
+    - **Derived Key Length** (optional): Specify the length of the generated password. You can leave this field blank, then the key length will be determined by the pseudorandom function you selected. 
 - **CMD**: Redis query command. 
 
 Now we can click **Create** to finish the settings. 
 
 ## Configure with Configuration Items
 
-You can configure the EMQX Redis authenticator with EMQX configuration items. <!--For detailed operation steps, see  [authn-redis:standalone](../../configuration/configuration-manual.md#authn-redis:standalone), [authn-redis:sentinel](../../configuration/configuration-manual.md#authn-redis:sentinel), and  [authn-redis:cluster](../../configuration/configuration-manual.md#authn-redis:cluster).-->
+You can configure the EMQX Redis authenticator with EMQX configuration items. <!--For detailed operation steps, see  [authn-redis:standalone](../../configuration/configuration-manual.html#authn-redis:standalone), [authn-redis:sentinel](../../configuration/configuration-manual.html#authn-redis:sentinel), and  [authn-redis:cluster](../../configuration/configuration-manual.html#authn-redis:cluster).-->
 
 Redis authentication is identified with `mechanism = password_based` and `backend = redis`.
 
@@ -94,7 +92,7 @@ EMQX supports working with three kinds of Redis installation.
 
 ::: tab Standalone Redis.
 
-```
+```bash
 {
   mechanism = password_based
   backend = redis
@@ -119,7 +117,7 @@ EMQX supports working with three kinds of Redis installation.
 
 ::: tab Redis Sentinel 
 
-```
+```bash
 {
   mechanism = password_based
   backend = redis
@@ -145,7 +143,7 @@ EMQX supports working with three kinds of Redis installation.
 
 ::: tab Redis Cluster 
 
-```
+```bash
 {
   mechanism = password_based
   backend = redis
@@ -160,7 +158,6 @@ EMQX supports working with three kinds of Redis installation.
   }
 
   cmd = "HMGET mqtt_user:${username} password_hash salt is_superuser"
-  database = 1
   password = "public"
   auto_reconnect = true
 }

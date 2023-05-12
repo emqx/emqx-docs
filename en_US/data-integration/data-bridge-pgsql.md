@@ -19,11 +19,11 @@ This section is also applicable to TimescaleDB and MatrixDB.
 
 ## Features List
 
-- [Connection pool](./data-bridges.md)
-- [Async mode](./data-bridges.md)
-- [Batch mode](./data-bridges.md)
-- [Buffer queue](./data-bridges.md)
-- [SQL preprocessing](./data-bridges.md)
+- [Connection pool](./data-bridges.md#connection-pool)
+- [Async mode](./data-bridges.md#async-mode)
+- [Batch mode](./data-bridges.md#batch-mode)
+- [Buffer queue](./data-bridges.md#buffer-queue)
+- [SQL prepared statement](./data-bridges.md#prepared-statement)
 
 ## Quick Start Tutorial
 

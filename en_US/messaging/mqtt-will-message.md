@@ -2,24 +2,24 @@
 
 EMQX implements the will message feature of MQTT. If a will message is set for a client, EMQX sends the message to relevant subscribers when the client is accidentally disconnected, so that the subscribers can be informed and update the client status.
 
-You can use client tools to try this messaging service in EMQX. This section introduces how to use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to simulate clients and see how a will message is published and received.
+You can use client tools to try this messaging service in EMQX. This section introduces how to use the [MQTTX Client](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and see how a will message is published and received.
 
 :::tip Prerequisites
 
-- Knowledge about MQTT [Will Message](./mqtt-concepts.md)
-- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md)
+- Knowledge about MQTT [Will Message](./mqtt-concepts.md#will-message)
+- Basic publishing and subscribing operations using [MQTTX](./publish-and-subscribe.md)
 
 :::
 
-## Publish Will Message with MQTT X Client
+## Publish Will Message with MQTTX Client
 
-1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection named `Demo`.
+1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection named `Demo`.
 
    - The localhost `127.0.0.1` is used as an example in this demonstration.
 
    ::: tip
 
-   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md).
+   For detailed instructions on creating an MQTT connection, see [MQTTX Client](./publish-and-subscribe.md).
 
    :::
 
@@ -43,7 +43,7 @@ You can use client tools to try this messaging service in EMQX. This section int
 
    <img src="./assets/Subscribe-will-message.png" alt="Subscribe-will-message" style="zoom:35%;" />
 
-4. Select the client connection named `Demo` in the **Connections** pane. Right-click and select **New Window**. In the new window, click the **Connect** button. 
+4. Select the client connection named `Demo` in the **Connections** pane. Right-click and select **New Window**. In the new window, click the **Connect** button.
 
    <img src="./assets/Open-new-window.png" alt="Open-new-window" style="zoom:35%;" />
 
@@ -51,9 +51,9 @@ You can use client tools to try this messaging service in EMQX. This section int
 
    <img src="./assets/Receive-will-message.png" alt="Receive-will-message" style="zoom:35%;" />
 
-   
 
-## Publish Will Message with MQTT X CLI
+
+## Publish Will Message with MQTTX CLI
 
 1. Initiate a connection request with one client. Set the topic to `t/1` and payload to `A will message from MQTTX CLI`:
 

@@ -1,6 +1,6 @@
 # Create an Cluster
 
-With EMQX cluster, you can enjoy the benefits of fault tolerance and high availability by allowing the cluster to continue operating even if one or more nodes fail. You can create an EMQX cluster either manually or automatically. Before the actual clustering step, let's first get familiar with 2 key concepts, node names and node discovery. 
+With EMQX cluster, you can enjoy the benefits of fault tolerance and high availability by allowing the cluster to continue operating even if one or more nodes fail. You can create an EMQX cluster either manually or automatically. Before the actual clustering step, let's first get familiar with 2 key concepts, node names and node discovery.
 
 ## Concepts
 
@@ -8,8 +8,8 @@ With EMQX cluster, you can enjoy the benefits of fault tolerance and high availa
 
 Before starting the cluster creation step, let's first get familiar with the concept of node names in EMQX. EMQX nodes are identified by their names. A node name consists of two parts, node name and host, separated with `@`, for example, `emqx@s1.emqx.io`. The host part must either be the IP address or a fully qualified domain name (FQDN), such as `myhost.example.tld`, for example:
 
-- For EMQX node deployed on server `s1.emqx.io`, the node name should be `emqx@s1.emqx.io`; 
-- If this server has a static IP (`192.168.0.10`), the node name should be `emqx@192.168.0.10`. 
+- For EMQX node deployed on server `s1.emqx.io`, the node name should be `emqx@s1.emqx.io`;
+- If this server has a static IP (`192.168.0.10`), the node name should be `emqx@192.168.0.10`.
 
 ::: tip Tip
 EMQX node names are immutable, as they are baked into the database schema and data files. Therefore, it is recommended to use static FQDNs for EMQX node names.
@@ -19,7 +19,7 @@ EMQX node names are immutable, as they are baked into the database schema and da
 
 EMQX's clustering feature is based on the [Ekka](https://github.com/emqx/ekka) library, a cluster management library developed for Erlang/OTP applications.
 
-One of the crucial steps for EMQX clustering is node discovery, which enables individual EMQ X nodes with different IP addresses or locations to discover and communicate with each other. EMQX supports multiple node discovery strategies:
+One of the crucial steps for EMQX clustering is node discovery, which enables individual EMQX nodes with different IP addresses or locations to discover and communicate with each other. EMQX supports multiple node discovery strategies:
 
 | Strategy | Description                               |
 | -------- | ----------------------------------------- |
@@ -36,11 +36,11 @@ One of the crucial steps for EMQX clustering is node discovery, which enables in
 
 Before creating an EMQX cluster, the following prerequisites should first be met:
 
-1. All nodes are set with a unique node name in the format of `name@host`, where host must be an IP address or fully qualified domain name (FQDN). For more information on configuring node names, see [Configure Node Names](#configure-node-names). 
+1. All nodes are set with a unique node name in the format of `name@host`, where host must be an IP address or fully qualified domain name (FQDN). For more information on configuring node names, see [Configure Node Names](#configure-node-names).
 
 2. If there is a firewall or security group between nodes, ensure the cluster communication port has been opened. For details, see [Intra-cluster communication port](./security.md).
 
-3. For security concerns, you should change the default cookie settings to a Secret cookie in `emqx.conf` on all nodes to join the cluster. Note: All nodes to join the cluster should use the same Secret cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
+3. For security concerns, you should change the default cookie settings to a Secret cookie in `emqx.conf` on all nodes to join the cluster. Note: All nodes to join the cluster should use the same Secret cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security).
 
    ```
    node {
@@ -50,11 +50,11 @@ Before creating an EMQX cluster, the following prerequisites should first be met
 
 :::
 
-Now you can begin your journey to create an EMQX cluster. 
+Now you can begin your journey to create an EMQX cluster.
 
 ## Configure Node Names
 
-Before creating a cluster, you need first to name the nodes to join the cluster. Suppose you want to create a cluster for 2 nodes deployed in `s1.emqx.io` and `s2.emqx.io` respectively, you can follow the steps below to create the cluster. 
+Before creating a cluster, you need first to name the nodes to join the cluster. Suppose you want to create a cluster for 2 nodes deployed in `s1.emqx.io` and `s2.emqx.io` respectively, you can follow the steps below to create the cluster.
 
 Configure the node name in the `emqx.conf` configuration file of the 1st node, for example:
 
@@ -68,19 +68,19 @@ You can also override the node name with an environment variable:
 env EMQX_NODE__NAME='emqx@s1.emqx.io' ./bin/emqx start
 ```
 
-Repeat the above step for the other node to join the cluster. 
+Repeat the above step for the other node to join the cluster.
 
-Now you have named 2 nodes to join the cluster, `emqx@s1.emqx.io` and `emqx@s2.emqx.io`. You can create a cluster either manually or automatically. 
+Now you have named 2 nodes to join the cluster, `emqx@s1.emqx.io` and `emqx@s2.emqx.io`. You can create a cluster either manually or automatically.
 
 ## Manual Clustering
 
 ### Set Node Discovery Strategy
 
-EMQX supports creating clusters manually and automatically. This section will introduce the manual clustering feature in EMQX. 
+EMQX supports creating clusters manually and automatically. This section will introduce the manual clustering feature in EMQX.
 
 Set node discovery strategy
 
-Manual clustering is the method to configure an EMQX cluster by manually specifying which nodes should be part of the cluster. By default, EMQX adopts a manual clustering strategy, which can also be set in `emqx.conf`. Besides, you also need to configure the default 
+Manual clustering is the method to configure an EMQX cluster by manually specifying which nodes should be part of the cluster. By default, EMQX adopts a manual clustering strategy, which can also be set in `emqx.conf`. Besides, you also need to configure the default
 
 ```bash
 cluster {
@@ -113,13 +113,13 @@ Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 
    :::
 
-Now you have successfully created a cluster with two nodes, you can read the [Query Cluster Status](#query-cluster-status), [Manage Cluster Nodes](#manage-cluster-nodes), and [Configure Network Protocols](#configure-network-protocols) sections on how to monitor the cluster status and how to manage the cluster. 
+Now you have successfully created a cluster with two nodes, you can read the [Query Cluster Status](#query-cluster-status), [Manage Cluster Nodes](#manage-cluster-nodes), and [Configure Network Protocols](#configure-network-protocols) sections on how to monitor the cluster status and how to manage the cluster.
 
 ## Auto Clustering
 
 Auto clustering in EMQX is another feature that allows multiple EMQX nodes to form a cluster automatically without manual configuration. Auto clustering simplifies the process of setting up an EMQX cluster and makes it easier to add or remove nodes from the cluster dynamically.
 
-EMQX supports auto clustering based on static node list, DNS Record, etcd, and Kubernetes. Continue to read to learn how to work with these features. 
+EMQX supports auto clustering based on static node list, DNS Record, etcd, and Kubernetes. Continue to read to learn how to work with these features.
 
 ### Autocluster by Static Node List
 
@@ -140,7 +140,10 @@ cluster {
 }
 ```
 
-Where, 
+<!--v5.0.23 e5.0.4 之前仅支持: ["emqx1", "emqx2"]
+v5.0.23e5.0.4 之后是都支持-->
+
+Where,
 
 - `discovery_strategy` is the node discovery strategy, set it to `static`
 - `seeds` is an array, where you can add the node to join the cluster, multiple nodes can be separated with `,`
@@ -172,13 +175,13 @@ cluster {
     discovery_strategy = dns
     dns {
         name = "localhost"
-        ## support DNS A record and DNS SRV record 
+        ## support DNS A record and DNS SRV record
         record_type = a
     }
 }
 ```
 
-Where, 
+Where,
 
 - `discovery_strategy` is the node discovery strategy, set it to `dns`
 - `cluster.dns.name` is a a string, input the localhost
@@ -192,7 +195,7 @@ After all nodes are started, the cluster will be automatically established.
 
 After you deploy an etcd server (cluster) in your network, EMQX can automatically create the cluster via etcd. For how to install and configure etcd, see [etcd Install](https://etcd.io/docs/latest/install/).
 
-To enable autocluster using etcd, you can work with the `cluster.etcd` configuration items in `emqx.conf`. 
+To enable autocluster using etcd, you can work with the `cluster.etcd` configuration items in `emqx.conf`.
 
 **Example code:**
 
@@ -232,7 +235,7 @@ The [EMQX Kubernetes Operator](https://docs.emqx.com/en/emqx-operator/latest/) h
 
 If you want to deploy and manage EMQX by yourself, you can still use Kubernetes API for node discovery and auto clustering. To use this feature,  you need first to create RBAC for the EMQX Pod to allow EMQX to get cluster node information from the Kubernetes APIServer via the endpoints resource. On how to configure, see [Using RBAC Authorization](https://kubernetes.io/docs/reference/access-authn-authz/rbac/).
 
-To enable EMQX autocluster on Kubernetes, you can work with the `cluster.k8s` configuration item in `emqx.conf`. 
+To enable EMQX autocluster on Kubernetes, you can work with the `cluster.k8s` configuration item in `emqx.conf`.
 
 ```bash
 cluster {
@@ -259,10 +262,10 @@ Start all nodes one by one after the configuration, and the cluster will be auto
 
 ::: tip
 
-When working EMQX autocluster on Kubernetes, [Calico](https://kubernetes.io/docs/tasks/administer-cluster/network-policy-provider/calico-network-policy/) rather than Fannel plugin is recommended. 
+When working EMQX autocluster on Kubernetes, [Calico](https://kubernetes.io/docs/tasks/administer-cluster/network-policy-provider/calico-network-policy/) rather than Fannel plugin is recommended.
 :::
 
-After the cluster is succefully created, you can refer to the section below on how to monitor the cluster status and how to manage cluster nodes. 
+After the cluster is succefully created, you can refer to the section below on how to monitor the cluster status and how to manage cluster nodes.
 
 ## Query Cluster Status
 
@@ -280,7 +283,7 @@ You can remove a node from a cluster with `cluster leave` or ``cluster force-lea
 
 When an EMQX node issues the `cluster leave` command, it notifies the other nodes in the cluster that it intends to leave, and it stops participating in cluster operations, it will complete any ongoing tasks before leaving.
 
-When an EMQX node issues the `cluster force-leave <node@host>` command, the target node will be forcefully removed from a cluster. This command is typically used when a node fails or becomes unresponsive. 
+When an EMQX node issues the `cluster force-leave <node@host>` command, the target node will be forcefully removed from a cluster. This command is typically used when a node fails or becomes unresponsive.
 
 For example, in the previously built cluster, if `emqx@s2.emqx.io` wants to leave the cluster, you can run the command below on `emqx@s2.emqx.io`:
 
@@ -300,11 +303,11 @@ After the cluster is created, you can continue to set the network protocols for 
 
 Each Erlang node can be connected via TCP or TLS, and the connection method can be configured in `emqx.conf`:
 
-To use TCP IPv4 and TCP IPv6, you can set with the `cluster.proto_dist` in `emqx.conf`. 
+To use TCP IPv4 and TCP IPv6, you can set with the `cluster.proto_dist` in `emqx.conf`.
 
 - TCP IPv4: `inet_tcp ` (Default)
 - TCP IPv6: `inet6_tcp`
 
-To enable SSL, you first need to set the `cluster.proto_dist` to `inet_tls`, then configure the `ssl_dist.conf` file in the `etc` folder and specify the TLS certificate. For details, see [Using TLS for Erlang Distribution](https://www.erlang.org/doc/apps/ssl/ssl_distribution.html). 
+To enable SSL, you first need to set the `cluster.proto_dist` to `inet_tls`, then configure the `ssl_dist.conf` file in the `etc` folder and specify the TLS certificate. For details, see [Using TLS for Erlang Distribution](https://www.erlang.org/doc/apps/ssl/ssl_distribution.html).
 
 <!--need an example code here-->
