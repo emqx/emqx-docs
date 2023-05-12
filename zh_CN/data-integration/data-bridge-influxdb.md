@@ -40,7 +40,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
 3. 前往 InfluxDB UI **Load Data** -> **API Token**，按照 [Create All-Access tokens](https://docs.influxdata.com/influxdb/v2.5/install/#create-all-access-tokens) 指引创建 Token。
 
-### 连接到 InfluxDB
+### 创建 InfluxDB 数据桥接
 
 1. 转到 Dashboard **数据集成** -> **数据桥接**页面。
 
@@ -99,7 +99,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
 至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 InfluxDB 进行存储。
 
-### 测试
+### 测试数据桥接与规则
 
 使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
 

@@ -153,6 +153,7 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
 3. 输入规则 ID `my_rule`，在 **SQL 编辑器**中根据业务实现需要输入规则：
 
+
    - 如需实现对指定主题消息的转发，例如将 `t/#` 主题的 MQTT 消息转发至 RocketMQ，输入以下 SQL 语法：
 
      注意：如果您希望制定自己的 SQL 语法，需要确保规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量。
@@ -172,19 +173,14 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
      :::
 
-     ```sql
-     SELECT
-       *
-     FROM 
-       "$events/client_connected", "$events/client_disconnected"
-     ```
-
 4. 点击**添加动作**，在动作下拉框中选择**使用数据桥接转发**选项，选择先前创建好的 RocketMQ 数据桥接。点击**添加**。
-5. 点击最下方**创建**按钮完成规则创建。
+
+6. 点击最下方**创建**按钮完成规则创建。
 
 至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果转发至 RocketMQ。
 
 ### 测试桥接和规则
+
 
 使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
 

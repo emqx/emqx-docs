@@ -22,10 +22,10 @@ The ClickHouse bridge is an EMQX Enterprise Edition feature. EMQX Enterprise Edi
 
 ## Feature List
 
-- [Connection pool](./data-bridges.md)
-- [Async mode](./data-bridges.md)
-- [Batch mode](./data-bridges.md)
-- [Buffer mode](./data-bridges.md)
+- [Connection pool](./data-bridges.md#connection-pool)
+- [Async mode](./data-bridges.md#async-mode)
+- [Batch mode](./data-bridges.md#batch-mode)
+- [Buffer queue](./data-bridges.md#buffer-queue)
 
 ## Quick Start Tutorial
 

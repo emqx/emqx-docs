@@ -26,7 +26,9 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 ## 特性
 
 - [连接池](./data-bridges.md#连接池)
-- [SQL 预处理](./data-bridges.md#sql-预处理)
+- [异步请求模式](./data-bridges.md#异步请求模式)
+- [SQL 预处理](./data-bridges.md#SQL-预处理)
+
 
 <!--  Configuration parameters TODO 链接到配置手册对应配置章节。 -->
 
@@ -117,7 +119,8 @@ docker exec -it cassa cqlsh "-e \
 
 至此已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果转发至 Cassandra。
 
-### 测试桥接和规则
+
+### 测试数据桥接与规则
 
 使用 MQTTX 向 `t/1` 主题发布消息：
 
