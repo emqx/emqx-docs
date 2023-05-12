@@ -23,7 +23,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 - [Batch mode](./data-bridges.md#batch-mode)
 - [Async mode](./data-bridges.md#async-mode)
 - [Buffer queue](./data-bridges.md#buffer-queue)
-- [SQL preprocessing](./data-bridges.md#prepared-statement)
+- [SQL prepared statement](./data-bridges.md#prepared-statement)
 
 <!-- [Configuration parameters](#Configuration) TODO 链接到配置手册对应配置章节。 -->
 

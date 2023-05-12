@@ -23,7 +23,7 @@ This section is also applicable to TimescaleDB and MatrixDB.
 - [Async mode](./data-bridges.md#async-mode)
 - [Batch mode](./data-bridges.md#batch-mode)
 - [Buffer queue](./data-bridges.md#buffer-queue)
-- [SQL preprocessing](./data-bridges.md#prepared-statement)
+- [SQL prepared statement](./data-bridges.md#prepared-statement)
 
 ## Quick Start Tutorial
 

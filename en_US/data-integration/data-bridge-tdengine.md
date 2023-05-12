@@ -13,7 +13,7 @@ EMQX supports integration with TDengine so you can save client messages and even
 - [Async mode](./data-bridges.md#async-mode)
 - [Batch mode](./data-bridges.md#batch-mode)
 - [Buffer queue](./data-bridges.md#buffer-queue)
-- [SQL preprocessing](./data-bridges.md#prepared-statement)
+- [SQL prepared statement](./data-bridges.md#prepared-statement)
 
 ## Quick Start Tutorial
 
