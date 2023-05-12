@@ -59,7 +59,7 @@ Docker Compose 是一个用于编排和运行多容器的工具，下面将指�
 
 :::tip
 
-目前 Docker Compose 已经包含在 Docker 安装包中无需单独安装，如果您的 Docker 中没有包含 Compose 请参考 [Install Docker Compos](https://docs.docker.com/compose/install/) 进行安装。
+目前 Docker Compose 已经包含在 Docker 安装包中无需单独安装，如果您的 Docker 中没有包含 Compose 请参考 [Install Docker Compose](https://docs.docker.com/compose/install/) 进行安装。
 
 :::
 
