@@ -1,59 +1,85 @@
 # 命令行
 
+本章节向您介绍 EMQX 支持的各类启动与管理命令，并详细介绍 ctl 管理命令。
+
 ## 启动命令
 
-EMQX 的主启动脚本也支持运行一些基本的管理命令。
-帮助信息如下：
+<!-- TODO  启动命令应该放到单独的一个章节，本章节只介绍 ctl 管理命令 -->
 
-```bash
-$ emqx help
-Usage: emqx COMMAND [help]
+EMQX 支持一些基本的启动和管理命令，您可以通过 `emqx <command>` 命令执行。
 
-Commonly used COMMANDs:
-  start:      Start EMQX in daemon mode
-  console:    Start EMQX in an interactive Erlang or Elixir shell
-  foreground: Start EMQX in foreground mode without an interactive shell
-  stop:       Stop the running EMQX node
-  ctl:        Administration commands, execute 'emqx ctl help' for more details
+以下是常用的启动和管理命令：
 
-More:
-  Shell attach:  remote_console | attach
-  Up/Down-grade: upgrade | downgrade | install | uninstall
-  Install info:  ertspath | root_dir | versions | root_dir
-  Runtime info:  pid | ping | versions
-  Advanced:      console_clean | escript | rpc | rpcterms | eval | eval-erl
+| 命令       | 介绍                                                         |
+| ---------- | ------------------------------------------------------------ |
+| start      | 以守护进程模式启动 EMQX，运行期间不需要交互式 shell          |
+| console    | 在 Erlang 或 Elixir 交互式 shell 中启动 EMQX。用于在开发环境中调试 EMQX，需要与 EMQX 进行交互 |
+| foreground | 在前台模式下启动 EMQX，不使用交互式 shell。用于在开发环境中启动 EMQX，但不需要后台运行 |
+| stop       | 停止运行中的 EMQX 节点                                       |
+| ctl        | 管理和监控 EMQX，执行 'emqx ctl help' 可以获取更多详细信息   |
 
-Execute 'emqx COMMAND help' for more information
-```
+以下是用于开发调试的高级命令，普通用户通常无需关心：
+
+| 命令           | 介绍                                       |
+| -------------- | ------------------------------------------ |
+| remote_console | 连接到远程 EMQX 节点的交互式 shell         |
+| attach         | 附加到正在运行的 EMQX 节点上执行交互式操作 |
+| ertspath       | 获取 EMQX Erlang 库的路径                  |
+| root_dir       | 获取 EMQX 根目录的路径                     |
+| pid            | 获取正在运行的 EMQX 节点的进程 ID          |
+| ping           | 检查 EMQX 节点是否正在运行                 |
+| check_config   | 验证 EMQX 配置文件是否正确                 |
+| console_clean  | 清空交互式 shell 控制台输出                |
+| escript        | 在 EMQX 节点上执行 Escript 脚本            |
 
 ## ctl 命令介绍
 
-所有的 `ctl` 命令 `emqx ctl COMMAND ARGS ...` (或者等效地： `emqx_ctl COMMAND ARGS ...`) 
-都需要 EMQX 服务启动之后才能运行。
+EMQX `ctl` 命令提供了多个用于管理和监控 EMQX 的子命令。`ctl` 命令需要在 EMQX 服务启动之后才能运行。
 
-`ctl` 命令通过启动一个隐藏的 Erlang 节点的方式，远程连接到指定的 EMQX 节点，并执行
-一个 Erlang 远程调用然后打印返回的结果。
+> EMQX 也提供了 `emqx_ctl` 命令，它是 `emqx ctl` 的别名。
+> `ctl` 命令通过启动一个隐藏的 Erlang 节点的方式，远程连接到指定的 EMQX 节点，并执行一个 Erlang 远程调用然后打印返回的结果，因此需要避免大量的使用 `ctl` 命令。
 
-下面列举了所有 `ctl` 命令的子命令，和相应的简介。
-本文档旨在介绍命令的功能。命令的详细参数介绍可以用 `help` 指令查看。
+下面列举了所有 `ctl` 命令的子命令和相应的简介，本文档旨在介绍命令的功能，命令的详细参数介绍可以用 `help` 指令查看。
+
 
 ## status
 
-`emqx ctl status`
-
 快速查看当前运行的节点是否运行。
+
+```bash
+$ emqx ctl status
+Node 'emqx@127.0.0.1' 5.0.3 is started
+```
 
 ## broker
 
-`emqx ctl broker`
-
 查看当前节点的运行的版本状态以及运行时长。
+
+```bash
+$ emqx ctl broker
+sysdescr  : EMQX Enterprise
+version   : 5.0.3
+datetime  : 2023-05-12T10:21:50.095047713+08:00
+uptime    : 52 seconds
+```
 
 ## observer
 
-`emqx ctl observer`
+可以用于查看运行时状态。展示一个类似于 linux 的 `top` 命令的界面，子命令如下：
 
-可以用于查看运行时状态。展示一个类似于 linux 的 `top` 命令的界面。
+| 命令              | 描述                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| observer status   | 在当前控制台启动观察器，用于监视和调试 EMQX 节点的状态和活动。 |
+| observer bin_leak | 强制所有进程执行垃圾回收，并打印释放最大数量二进制数据的前 100 个进程，可能会显示出潜在的内存泄漏问题。 |
+| observer load Mod | 确保指定的模块在 EMQX 集群中的所有节点上都已加载。当需要确保模块在整个集群中都可用时，可以使用此命令来加载模块。 |
+
+### observer status
+<!-- TODO -->
+### observer bin_leak
+<!-- TODO -->
+
+### observer load Mod
+<!-- TODO -->
 
 ## cluster_call
 
