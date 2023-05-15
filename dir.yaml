@@ -341,9 +341,9 @@
       edition: ee
     - title_en: Configuration Manual
       title_cn: 配置手册
-      lang: zh
+      lang: cn
       edition: ce
-      path: https://www.emqx.io/docs/zh/v5.0/configutation/configuration-manual.html
+      path: https://www.emqx.io/docs/zh/v5.0/configuration/configuration-manual.html
     - title_en: Configuration Manual
       title_cn: 配置手册
       lang: en
@@ -351,7 +351,7 @@
       path: https://www.emqx.io/docs/en/v5.0/configuration/configuration-manual.html
     - title_en: Configuration Manual
       title_cn: 配置手册
-      lang: zh
+      lang: cn
       edition: ee
       path: https://docs.emqx.com/zh/enterprise/v5.0/configuration/configuration-manual.html
     - title_en: Configuration Manual
