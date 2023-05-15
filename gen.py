@@ -72,10 +72,20 @@ def parse(children, lang, edition):
         acc.append(_child)
     return acc
 
+def move_manual(lang, edition):
+    if lang == 'cn':
+        lang = 'zh'
+    baseDir = 'en_US' if lang == 'en' else 'zh_CN'
+    source_path = f'cfg-manual-docgen/configuration-manual-{edition}-{lang}.md'
+    target_path = f'{baseDir}/configuration/configuration-manual.md'
+    shutil.copyfile(source_path, target_path)
+
 with open(r'dir.yaml', encoding='utf-8') as file:
     # The FullLoader parameter handles the conversion from YAML
     # scalar values to Python the dictionary format
     all = yaml.load(file, Loader=yaml.FullLoader)
+    move_manual('en', EDITION)
+    move_manual('cn', EDITION)
     en = parse(all, 'en', EDITION)
     cn = parse(all, 'cn', EDITION)
     res ={'en': en, 'cn': cn}
