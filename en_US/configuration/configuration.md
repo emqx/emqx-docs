@@ -1,6 +1,16 @@
 # Configuration Files
 
-Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual](./configuration-manual.html).
+{% emqxee %}
+
+Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html).
+
+{% endemqxee %}
+
+{% emqxce %}
+
+Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual](https://www.emqx.io/docs/en/v5.0/configuration/configuration-manual.html).
+
+{% endemqxce %}
 
 ## Configuration Files
 
@@ -306,5 +316,4 @@ node.name = "emqx.127.0.0.1"
 zone.zone1.max_packet_size = "10M"
 authentication.1.enable = true
 ```
-
 

@@ -93,7 +93,17 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
 ### 通过配置文件配置
 
-您也可以通过配置文件完成以上配置，具体操作，请参考[配置手册](../../configuration/configuration-manual.html)。
+{% emqxee %}
+
+您也可以通过配置文件完成以上配置，具体操作，请参考[配置手册](https://www.emqx.com/docs/zh/v5.0/configuration/configuration.html)。
+
+{% endemqxee %}
+
+{% emqxce %}
+
+您也可以通过配置文件完成以上配置，具体操作，请参考[配置手册](https://www.emqx.io/docs/zh/v5.0/configuration/configuration.html)。
+
+{% endemqxce %}
 
 ```bash
 {

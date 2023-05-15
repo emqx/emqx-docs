@@ -64,6 +64,17 @@ Where,
 
 :::tip
 
-EMQX has offered more configuration items to better serve customized needs, you can continue to read [Configuration Manual](./configuration-manual.html).
+{% emqxee %}
+
+EMQX has offered more configuration items to better serve customized needs. For more configuration items, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html).
+
+{% endemqxee %}
+
+{% emqxce %}
+
+EMQX has offered more configuration items to better serve customized needs. For more configuration items, see [Configuration Manual](https://www.emqx.io/docs/en/v5.0/configuration/configuration-manual.html).
+
+{% endemqxce %}
 
 :::
+
