@@ -358,7 +358,7 @@
       title_cn: 配置手册
       lang: en
       edition: ee
-      path: https://docs.emqx.com/zh/enterprise/v5.0/configuration/configuration-manual.html
+      path: https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html
 
 # - title_en: Back
 #   title_cn: 运维操作
