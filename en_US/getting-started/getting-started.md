@@ -1,39 +1,16 @@
-# Getting Started
+# Get Started
 
-Starting from download and installation, this document is to guide you to quickly get a EMQX node up and running.
+Starting from download and installation, this document is to guide you to quickly get an EMQX node up and running.
 
 {% emqxce %}
 
 ## Choose EMQX Software Edition or Service
 
-EMQX as a software is released in different editions.
-
-- [EMQX](https://www.emqx.com/en/try?product=broker)
-- [EMQX Enterprise](https://www.emqx.com/en/try?product=enterprise)
-
-EMQ as a company offers a fully managed MQTT cloud service [EMQX Cloud](https://www.emqx.com/en/try?product=cloud)
-which runs EMQX Enterprise.
-You can customize the deployment to suit your business development plans the best and get started quickly.
-
-{% endemqxce %}
-
-{% emqxee %}
-
-## Choose Your Hosting Mode
-
-EMQX Enterprise as a software provides a free-of-charge non-expiry trail license. You are welcome to [download it](https://www.emqx.com/en/try?product=enterprise).
-
-EMQ as a company offers a fully managed MQTT cloud service [EMQX Cloud](https://www.emqx.com/en/try?product=cloud)
-which runs EMQX Enterprise.
-You can customize the deployment to suit your business development plans the best and get started quickly.
-
-{% endemqxee %}
-
-:::: tabs type:card
+EMQX is released in different editions.
 
 {% emqxce %}
 
-::: tab EMQX
+::: tab EMQX type:card
 The world's most scalable distributed MQTT broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at a massive scale.
 
 - Fully open-sourced under APL 2.0
@@ -44,20 +21,6 @@ The world's most scalable distributed MQTT broker with a high-performance real-t
 - Data integration by calling HTTP APIs
 
 [Download](https://www.emqx.com/en/try?product=broker)
-:::
-
-{% endemqxce %}
-
-::: tab EMQX Cloud
-Connecting your IoT devices to everything with reliable, real-time IoT data transport, processing, and integration. Accelerating your IoT application development without the burden of self-managing the infrastructure.
-
-- Fully managed MQTT 5.0 service
-- Powerful SQL-based rule engine
-- Integration with various databases
-- Highly available, fault-tolerant
-- Run anywhere, pay as you go
-
-[Get Started Free](https://www.emqx.com/en/try?product=cloud)
 :::
 
 ::: tab EMQX Enterprise
@@ -76,19 +39,27 @@ reliable data transport, processing, and integration for business-critical IoT s
 
 ::::
 
+You can customize the deployment to suit your business development plans the best and get started quickly.
+
+{% endemqxce %}
+
+{% emqxee %}
+
+## Download EMQX
+
+EMQX stands as the world's premier Cloud-Native IoT Messaging Platform. It incorporates a comprehensive distributed MQTT broker and a SQL-based IoT rule engine, all in one package. This powerful combination enables EMQX to facilitate robust, high-performance data transportation, processing, and integration, thereby driving business-critical IoT solutions.
+
+- Support for multiple IoT protocols
+- Powerful SQL-based rule engine
+- Rich data persistence and bridging choices
+- Management & monitoring center
+- Global technical support team
+
+[Try Free](https://www.emqx.com/en/try?product=enterprise)
+
+{% endemqxee %}
+
 ## Install EMQX
-
-### Start EMQX Cloud
-
-EMQX Cloud is the first fully managed MQTT 5.0 public cloud service in the world.
-With the support of EMQX Cloud, you can create an EMQX cluster on the cloud and use
-all the features of EMQX Enterprise.
-
-This allows you to spend more time on business connections and less time for EMQX operation,
-maintenance, and management.
-
-- [Create and login EMQX cloud account](https://docs.emqx.com/en/cloud/latest/quick_start/introduction.html)
-- [Create a free trial deployment](https://docs.emqx.com/en/cloud/latest/quick_start/create_free_trial.html)
 
 ### Running EMQX in containers
 

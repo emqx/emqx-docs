@@ -43,7 +43,7 @@ version: '3'
 
 services:
   emqx1:
-    image: emqx/emqx-ee:v4.3.19
+    image: emqx/emqx-ee:4.3.19
     environment:
     - "EMQX_NAME=emqx"
     - "EMQX_HOST=node1.emqx.io"
@@ -62,7 +62,7 @@ services:
         - node1.emqx.io
 
   emqx2:
-    image: emqx/emqx-ee:v4.3.19
+    image: emqx/emqx-ee:4.3.19
     environment:
     - "EMQX_NAME=emqx"
     - "EMQX_HOST=node2.emqx.io"

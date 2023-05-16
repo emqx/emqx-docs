@@ -1,5 +1,5 @@
 
-## Release Upgrade
+## Hot Upgrade
 
 {% emqxce %}
 

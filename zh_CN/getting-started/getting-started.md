@@ -17,25 +17,13 @@ ref:
 
 本章节将指导您从下载安装开始，快速开始使用 EMQX。
 
-{% emqxce %}
+## 部署方式
 
-## 版本选择
+{% emqxce %}
 
 EMQX 提供开源版和企业版下载安装，也提供了全托管的 MQTT 云服务 EMQX Cloud，您可以选择合适您的部署方式，快速开始使用。
 
-{% endemqxce %}
-
-{% emqxee %}
-
-## 部署方式选择
-
-EMQX 提供私有部署的企业版，也提供了全托管的 MQTT 云服务 EMQX Cloud，您可以选择合适您的部署方式，快速开始使用。
-
-{% endemqxee %}
-
 :::: tabs type:card
-
-{% emqxce %}
 ::: tab EMQX 开源版
 大规模可弹性伸缩的云原生分布式物联网 MQTT 消息服务器，高效可靠连接海量物联网设备，高性能实时处理消息与事件流数据，助力构建关键业务的物联网平台与应用。
 
@@ -46,20 +34,6 @@ EMQX 提供私有部署的企业版，也提供了全托管的 MQTT 云服务 EM
 - 可扩展的网关和插件体系
 
 [下载安装](https://www.emqx.io/zh/downloads)
-:::
-
-{% endemqxce %}
-
-::: tab EMQX Cloud
-通过可靠、实时的物联网数据移动、处理和集成，连接您的海量物联网设备。加快您的物联网应用开发，免除基础设施管理维护负担。
-
-- 全托管的 MQTT 5.0 服务
-- 基于 SQL 的 IoT 规则引擎
-- 多种数据库与云服务集成
-- 关键业务的高可用高可靠
-- 在任何地方运行，随用随付
-
-[免费试用](https://www.emqx.com/zh/try?product=cloud)
 :::
 
 ::: tab EMQX 企业版
@@ -76,14 +50,23 @@ EMQX 提供私有部署的企业版，也提供了全托管的 MQTT 云服务 EM
 :::
 ::::
 
+{% endemqxce %}
+
+{% emqxee %}
+
+**「随处运行，无限连接，任意集成」** 云原生分布式物联网接入平台，一体化的分布式 MQTT 消息服务和强大的 IoT 规则引擎，为高可靠、高性能的物联网实时数据移动、处理和集成提供动力，助力企业快速构建关键业务的 IoT 平台与应用。
+
+- 标准或专有多协议支持
+- 基于 SQL 的 IoT 规则引擎
+- 数据持久化与数据桥接
+- 管理与监控中心
+- 7x24 小时技术支持服务
+
+[**免费试用**](
+
+{% endemqxee %}
+
 ## 安装 EMQX
-
-### 在 EMQX Cloud 中运行
-
-EMQX Cloud 是全球首个全托管的 MQTT 5.0 公有云服务。在 [EMQX Cloud](https://www.emqx.com/zh/cloud) 支持下，您可以在云上创建 EMQX 集群并使用 EMQX 企业版全部功能。这使您可以将更多的时间花费在业务对接上，而将较少的时间用于 EMQX 的运维和管理。
-
-- [创建并登录 EMQX Cloud 账户](https://docs.emqx.com/zh/cloud/latest/quick_start/introduction.html#创建和登录-emq-x-cloud-账户)
-- [创建免费试用部署](https://docs.emqx.com/zh/cloud/latest/quick_start/create_free_trial.html)
 
 ### 通过 Docker 容器运行
 

@@ -716,7 +716,7 @@
           "path": "modules/hot_confs"
         },
         {
-          "title": "Release Upgrade",
+          "title": "Hot Upgrade",
           "path": "advanced/relup"
         },
         {
@@ -968,11 +968,11 @@
               "path": "rule/schema-registry-examp-protobuf"
             },
             {
-              "title": "Custom Codec Example - HTTP",
+              "title": "Third-Parry Custom Codec - HTTP",
               "path": "rule/schema-registry-examp-3rdparty-http"
             },
             {
-              "title": "Custom Codec Example - gRPC",
+              "title": "Third-Parry Custom Codec - gRPC",
               "path": "rule/schema-registry-examp-3rdparty-grpc"
             }
           ]

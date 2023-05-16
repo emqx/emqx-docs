@@ -9,7 +9,7 @@
 
 EMQX 支持通过下载包进行安装。下文将以 Debian 10 系统为例演示如何下载 EMQX 4.3.19。如希望在其他支持系统中进行安装，或体验其他版本，可前往 [EMQX 下载页面](https://www.emqx.io/zh/downloads?os=CentOS) 获取详细安装信息。
 
-## 通过 rpm 安装
+## 通过 deb 安装
 
 请根据 CPU 架构选择对应安装方式。
 
