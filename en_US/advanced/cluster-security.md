@@ -1,58 +1,58 @@
-# 集群安全
+# Cluster Security
 
-## 设置节点 Cookie
+EMQX provides several security mechanisms to ensure the confidentiality, integrity, and availability of data, including [authentication](../advanced/auth.md) and [authorization](../advanced/acl.md) mechanisms on the node level, [a secret cookie](#set-node-cookie) to ensure secure communication between nodes in a cluster, and [firewall settings](#firewall-settings) to regulate cluster node communication. And we will also touch on the [EMQX cluster protocol setting](#emqx-cluster-protocol-setting).
 
-Erlang 节点间通过 cookie 进行互连认证。cookie 是一个字符串，只有 cookie 相同的两个节点才能建立连接。[上节](#node-and-distributed-erlang) 中我们曾经使用 `-setcookie my_nodes` 参数给四个节点设置了相同的 cookie: `my_nodes`。
+## Set Node Cookie
 
-详见: <http://erlang.org/doc/reference_manual/distributed.html>
+Cookies are used for interconnection authentication between Erlang nodes. A cookie is a string, and only two nodes with the same cookie can establish a connection. For details, see [Distributed Erlang](http://erlang.org/doc/reference_manual/distributed.html).
 
-## 防火墙设置
+For security concerns, you should change the default cookie settings to a Secret cookie in `emqx.conf` on all nodes to join the cluster.
 
-### 集群节点发现端口
-
-若预先设置了环境变量 WITH_EPMD=1, 启动 emqx 时会使用启动 epmd (监听端口 4369) 做节点发现。称为 `epmd 模式`。
-
-若环境变量 WITH_EPMD 没有设置，则启动 emqx 时不启用 epmd，而使用 emqx ekka 的节点发现，这也是 4.0 之后的默认节点发现方式。称为 `ekka 模式`。
-
-**epmd 模式：**
-
-如果集群节点间存在防火墙，防火墙需要为每个节点开通 TCP 4369 端口，用来让各节点能互相访问。
-
-防火墙还需要开通一个 TCP 从 `node.dist_listen_min`(包含) 到 `node.dist_listen_max`(包含) 的端口段，
-这两个配置的默认值都是 `6369`。
-
-**ekka 模式（4.0 版本之后的默认模式）：**
-
-跟`empd 模式`不同，在`ekka 模式`下，集群发现端口的映射关系是约定好的，而不是动态的。
-`node.dist_listen_min` and `node.dist_listen_max` 两个配置在`ekka 模式`下不起作用。
-
-如果集群节点间存在防火墙，防火墙需要放开这个约定的端口。约定端口的规则如下：
-
-```
-ListeningPort = BasePort + Offset
+```hcl
+node {
+  cookie = "<a Secret cookie>"
+}
 ```
 
-其中 `BasePort` 为 4370 (不可配置), `Offset` 为节点名的数字后缀. 如果节点名没有数字后缀的话，
-`Offsset` 为 0。
+## Firewall Settings
 
-举例来说, 如果 `emqx.conf` 里配置了节点名：`node.name = emqx@192.168.0.12`，那么监听端口为 `4370`，
-但对于 `emqx1` (或者 `emqx-1`) 端口就是 `4371`，以此类推。
+### Node Discovery Ports
 
-### 集群 PRC 端口
+If the environment variable `WITH_EPMD=1` is set in advance, the epmd (listening port 4369) will be enabled for node discovery when EMQX is started, which is called `epmd mode`.
 
-每个节点还需要监听一个 RPC 端口，也需要被防火墙也放开。跟上面说的`ekka 模式`下的集群发现端口一样，这个 RPC 端口也是约定式的。
+If the environment variable `WITH_EPMD` is not set, epmd is not enabled when EMQX is started, and EMQX ekka is used for node discovery, which is also the default method of node discovery since version 4.0. This is called `ekka mode`.
 
-RPC 端口的规则跟`ekka 模式`下的集群发现端口类似，只不过 `BasePort = 5370`。
+**epmd Mode**
 
-就是说，如果 `emqx.conf` 里配置了节点名：`node.name = emqx@192.168.0.12`，那么监听端口为 `5370`，
-但对于 `emqx1` (或者 `emqx-1`) 端口就是 `5371`，以此类推。
+If there is a firewall between cluster nodes, the firewall needs to open TCP port 4369 for each node, to allow peers to query each other's listening port. The firewall should also allow nodes to connect to the port in the configurable range from `node.dist_listen_min` to `node.dist_listen_max` (inclusive, default is `6369` for both)
 
-## EMQX 集群协议设置
+**ekka Mode (Default Mode Since Version 4.0：**
 
-Erlang 集群中各节点可通过 TCPv4、TCPv6 或 TLS 方式连接，可在 `etc/emqx.conf`
-中配置连接方式:
+In `ekka` mode, the port mapping is conventional, but not dynamic as in `epmd` mode.
+The configurations of `node.dist_listen_min` and `node.dist_listen_max` take no effect in this case.
 
-| 配置名                | 类型     | 默认值              | 描述                                                         |
-| --------------------- | -------- | ------------------- | ------------------------------------------------------------ |
-| cluster.proto_dist    | enum     | `inet_tcp`          | 分布式协议，可选值：<br />  - inet_tcp: 使用 TCP IPv4<br/>  - inet6_tcp: 使用 TCP IPv6<br/>  - inet_tls: 使用 TLS |
-| node.ssl_dist_optfile | 文件路径 | `etc/ssl_dist.conf` | 当 `cluster.proto_dist` 选定为 inet_tls 时，需要配置 `etc/ssl_dist.conf` 文件，指定 TLS 证书等 |
+If there is a firewall between the cluster nodes, the conventional listening port should be allowed
+for nodes to connect to each other. See below for the port mapping rule in `ekka` mode.
+
+Erlang distribution port mapping rule in `ekka` mode: `ListeningPort = BasePort + Offset`,
+where `BasePort` is 4370 (which is not made configurable), and `Offset` is the numeric suffix of the node's name. If the node name does not have a numeric suffix, `Offsset` is 0.
+
+For example, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make the node listen on port `4370`, and port  `4371` for `emqx1` (or `emqx-1`), and so on.
+
+### Cluster RPC Port
+
+Each EMQX node also listens on a (conventional) port for the RPC channels, which should also be allowed by the firewall. The port mapping rule is similar to the node discovery ports in `ekka mode`, but with the `BasePort = 5370`. That is, having
+`node.name = emqx@192.168.0.12` in `emqx.conf` should make the node listen on port `5370` and port `5371` for `emqx1` (or `emqx-1`), and so on.
+
+### EMQX Cluster Protocol Setting
+
+Each node in the Erlang cluster can be connected through TCPv4, TCPv6 or TLS, and the connection method can be configured in`etc/emqx.conf`:
+
+| Configuration name    | Type      | Default value       | Description                                                  |
+| --------------------- | --------- | ------------------- | ------------------------------------------------------------ |
+| cluster.proto_dist    | enum      | `inet_tcp`          | Distributed protocol with optional values are as follows:<br />  - inet_tcp: use TCP IPv4<br/>  - inet6_tcp: use TCP IPv6<br/>  - inet_tls: use TLS |
+| node.ssl_dist_optfile | file path | `etc/ssl_dist.conf` | When `cluster.proto_dist` is selected as inet_tls, you need to configure the ` etc/ssl_dist.conf` file, and specify the TLS certificate. |
+
+
+
+

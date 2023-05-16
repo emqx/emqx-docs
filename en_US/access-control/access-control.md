@@ -1,13 +1,13 @@
-# 访问控制
+# Access Control
 
-本章将介绍如何进行访问控制设定，包括：
+This chapter will introduce how to configure the access control policies in EMQX, covering the following topics:
 
-- [认证 ](./auth.md)及 [授权](./acl.md)
+- [Authentication ](../advanced/auth.md) and [Authorization](../advanced/acl.md)
 
-  身份认证是物联网应用的重要组成部分，可以帮助有效阻止非法客户端的连接。为了提供更好的安全保障，EMQX 支持多种认证机制，如密码认证，JWT 认证，以及基于 MQTT 5.0 协议的增强认证。本章将介绍 EMQX 支持的密码认证、 JWT 认证和 MQTT 5.0 增强认证。
+  Authentication is the process of verifying the identity of a client. It is an essential part of most applications and can help to protect our services from illegal client connections. EMQX supports several authentication mechanisms to better protect our clients, including username/password authentication,  JWT authentication, and enhanced authentication of MQTT 5.0
 
-  授权是指对 MQTT 客户端的发布和订阅操作进行权限控制。本节将介绍如何通过内置数据库、文件、或通过集成 MySQL、PostgreSQL、MongoDB 和 Redis 进行授权相关操作。
+  While authorization refers to the permission control over the publish/subscribe operation of the MQTT clients. This chapter will introduce how to use the built-in database, ACL file, or how to integrate with external systems to configure the authorization rules.
 
-- [黑名单](https://docs.emqx.com/zh/enterprise/v5.0/access-control/blacklist.html)
+- [Black List](../advanced/blacklist.md)
 
-  EMQX 为用户提供了黑名单功能，用户可以通过 Dashboard 和 HTTP API 将指定客户端加入黑名单以拒绝该客户端访问，除了客户端标识符以外，还支持直接封禁用户名甚至 IP 地址。
+  EMQX provides a blacklisting/banning functionality. System admins can block certain clients from accessing EMQX via Dashboard or HTTP API with their client ID, user name, or IP address.

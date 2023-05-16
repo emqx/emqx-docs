@@ -1,10 +1,8 @@
-# Production deployment
+# Configure Load Balancer
 
 During development, we usually use compressed packages to start services with the form of a single node. However, production operation requires a simpler and more stable way. This page mainly explains how to deploy your EMQX service from best practices of deployment architecture.
 
-
-
-## Deployment architecture
+## Deployment Architecture
 
 EMQX cluster can be deployed as an IoT access service (IoT Hub). Currently, EMQ provides free software images out of the box on cloud service providers such as QingCloud, Aliyun, and AWS. For special hardware platforms and system versions such as Raspberry Pi and Linux ARM, source code compilation and installation can be used.
 
@@ -129,9 +127,9 @@ If deployed between nodes, firewalls should be configured that the above ports a
 
 
 
-## Deploying on private network
+## Deploying on Private Network
 
-### Direct connection of EMQX cluster
+### Direct Connection of EMQX Cluster
 
  *EMQX* cluster should be DNS-resolvable and the clients access the cluster via domain name or IP list: 
 

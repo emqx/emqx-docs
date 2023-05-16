@@ -2,7 +2,13 @@
 
 ## 设置节点 Cookie
 
-Erlang 节点间通过 cookie 进行互连认证。cookie 是一个字符串，只有 cookie 相同的两个节点才能建立连接。[上节](#node-and-distributed-erlang) 中我们曾经使用 `-setcookie my_nodes` 参数给四个节点设置了相同的 cookie: `my_nodes`。
+Erlang 节点间通过 cookie 进行互连认证。cookie 是一个字符串，只有 cookie 相同的两个节点才能建立连接，您可参照如下格式设置节点 Cookie
+
+```
+erl -name node1@127.0.0.1 -setcookie my_nodes
+```
+
+[上节](#node-and-distributed-erlang) 中我们曾经使用 `-setcookie my_nodes` 参数给四个节点设置了相同的 cookie: `my_nodes`。
 
 详见: <http://erlang.org/doc/reference_manual/distributed.html>
 
@@ -38,7 +44,7 @@ ListeningPort = BasePort + Offset
 举例来说, 如果 `emqx.conf` 里配置了节点名：`node.name = emqx@192.168.0.12`，那么监听端口为 `4370`，
 但对于 `emqx1` (或者 `emqx-1`) 端口就是 `4371`，以此类推。
 
-### 集群 PRC 端口
+### 集群 RPC 端口
 
 每个节点还需要监听一个 RPC 端口，也需要被防火墙也放开。跟上面说的`ekka 模式`下的集群发现端口一样，这个 RPC 端口也是约定式的。
 

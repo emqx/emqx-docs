@@ -734,7 +734,7 @@
       "path": "advanced/cluster",
       "children": [
         {
-          "title": "Create an Cluster",
+          "title": "Create a Cluster",
           "path": "advanced/create-cluster"
         },
         {

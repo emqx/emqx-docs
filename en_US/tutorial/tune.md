@@ -1,6 +1,6 @@
-# Tuning guide
+# Performance Tuning
 
-This guide includes in general tuning suggestions for Linux and EMQX.
+This guide includes general tuning suggestions for Linux and EMQX.
 
 ## Turn off swap
 

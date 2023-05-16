@@ -1,7 +1,7 @@
 # Module Management
 
 The EMQX provides abundant functional modules, including authentication and authorization, protocol access, message delivery, language extension, operation and maintenance monitoring, and internal modules.
-On the module management page of dashboard, modules can be started and stopped, as well as their configuration and data can be managed.
+On the Dashboard's module management page, modules can be started and stopped, as well as their configuration and data can be managed.
 
 ## Module list
 

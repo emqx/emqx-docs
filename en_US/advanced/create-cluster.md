@@ -1,99 +1,92 @@
-# 创建集群
+# Create a Cluster
 
-EMQX 集群可为您带来高容错及高可用性等优势，即使集群中的一个或多个节点出现故障，集群仍可继续运行。您可以手动或自动创建EMQX集群。创建集群前，我们需要先熟悉两个关键概念，节点名称和节点发现。
+With EMQX cluster, you can enjoy the benefits of fault tolerance and high availability by allowing the cluster to continue operating even if one or more nodes fail. You can create an EMQX cluster either manually or automatically. Before the actual clustering step, let's first get familiar with 2 key concepts: node names and node discovery.
 
-## 概念
+## Concepts
 
-### 节点名称
+### Node Names
 
-EMQX 节点通过其名称进行标识。节点名称由两部分组成，节点名称和主机，用@分隔，例如，[emqx@s1.emqx.io](mailto:emqx@s1.emqx.io)。主机部分必须是IP地址或完全限定域名（FQDN），例如 myhost.example.tld，例如：
+Before starting the cluster creation step, let's first get familiar with the concept of node names in EMQX. EMQX nodes are identified by their names. A node name consists of two parts: node name and host, separated with `@`, for example, `emqx@s1.emqx.io`. The host part must either be the IP address or a fully qualified domain name (FQDN), such as `myhost.example.tld`, for example:
 
-- 对于部署在服务器s1.emqx.io上的EMQX节点，节点名称应为[emqx@s1.emqx.io](mailto:emqx@s1.emqx.io)；
--  如果该服务器具有静态IP（192.168.0.10），则节点名称应为emqx@192.168.0.10。
+- For EMQX node deployed on server `s1.emqx.io`, the node name should be `emqx@s1.emqx.io`;
+- If this server has a static IP (`192.168.0.10`), the node name should be `emqx@192.168.0.10`.
 
-::: tip
+Tip
 
-EMQX节点名称是不可变的，因此建议使用静态 FQDN 作为 EMQX 节点名称。
+EMQX node names are immutable, as they are baked into the database schema and data files. Therefore, it is recommended to use static FQDNs for EMQX node names.
 
-:::
+### Node Discovery
 
-### 节点发现 
+One of the crucial steps for EMQX clustering is node discovery, which enables individual EMQX nodes with different IP addresses or locations to discover and communicate with each other. EMQX supports multiple node discovery strategies:
 
-EMQX 的集群功能的关键步骤之一是节点发现，节点发现在不同 IP 或位置的单个 EMQX 节点之间实现了相互发现和通信。EMQX支持多种节点发现策略：
+| Strategy | Description                                  |
+| -------- | -------------------------------------------- |
+| `manual` | Create a cluster through manual command      |
+| `static` | Create a cluster using a static node list    |
+| `mcast`* | Create a cluster through UDP multicast       |
+| `dns`    | Create a cluster using DNS A and SRV records |
+| `etcd`   | Create a cluster via etcd                    |
+| `k8s`    | Create a cluster via Kubernetes service      |
 
-| 策略   | 说明                    |
-| ------ | ----------------------- |
-| manual | 手动命令创建集群        |
-| static | 静态节点列表自动集群    |
-| dns    | DNS A 记录自动集群      |
-| etcd   | 通过 etcd 自动集群      |
-| k8s    | Kubernetes 服务自动集群 |
+[^*]: The multicast discovery strategy has been deprecated and will be removed in future releases.
 
-注意：mcast发现策略已被废弃，在未来的版本中会被删除。
+## Before You Begin
 
-EMQX 默认配置为手动创建集群，节点须通过 ./bin/emqx\_ctl join <Node\> 命令加入:
+Before creating an EMQX cluster, the following prerequisites should first be met:
 
-```bash
-cluster.discovery = manual
-```
+1. All nodes are set with a unique node name in the format of `name@host`, where host must be an IP address or fully qualified domain name (FQDN). For more information on configuring node names, see [Configure Node Names](#configure-node-names).
 
-## 前置准备
+2. If there is a firewall or security group between nodes, ensure the cluster communication port has been opened. For details, see [Firewall Settings](./cluster-security.md#firewall-settings).
 
-在创建 EMQX 集群之前，必须先满足以下先决条件：
+3. For security concerns, you should change the default cookie settings to a Secret cookie in `emqx.conf` on all nodes to join the cluster. Note: All nodes to join the cluster should use the same Secret cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security).
 
-- 所有节点都以 `name@host` 的格式设置了唯一的节点名称，其中主机必须是 FQDN 或者 IP 地址。
+   ```text
+   node {
+     cookie = "<a Secret cookie>"
+   }
+   ```
 
-- 如果在节点之间存在防火墙或安全组，请确保已打开集群通信端口。有关详细信息，参见[集群安全](./cluster-security.md)。
+Now you can begin your journey to create an EMQX cluster.
 
-- 出于安全考虑，您应该在所有节点的默认 cookie 设置为 Secret cookie 。注意：所有加入集群的节点都应使用相同的 Secret cookie。具体信息，参见[集群安全](./cluster-security.md)。
+## Configure Node Names
 
-  ```bash
-  node.cookie = emqxsecretcookie
-  ```
+Before creating a cluster, you need first to name the nodes to join the cluster. Suppose you want to create a cluster for 2 nodes deployed in `s1.emqx.io` and `s2.emqx.io` respectively, you can follow the steps below to create the cluster.
 
-## 配置节点名称
-
-假设要为分别部署在服务器 s1.emqx.io 和 s2.emqx.io 上的两个 EMQX 节点创建集群，您可按照如下步骤配置节点名称：
-
-### 配置 emqx@s1.emqx.io 节点
-
-在配置文件 emqx/etc/emqx.conf 添加如下配置：
+Configure the node name in the `emqx.conf` configuration file of the 1st node, for example:
 
 ```bash
 node.name = emqx@s1.emqx.io
-# 或
-node.name = emqx@192.168.0.10
 ```
 
-也可通过环境变量:
+You can also override the node name with an environment variable:
 
 ```bash
 export EMQX_NODE_NAME=emqx@s1.emqx.io && ./bin/emqx start
 ```
 
-**注意:** 节点启动加入集群后，节点名称不能变更。
+Repeat the above step for the other node to join the cluster.
 
-### 配置 emqx@s2.emqx.io 节点
+Now you have named 2 nodes to join the cluster, `emqx@s1.emqx.io` and `emqx@s2.emqx.io`. You can create a cluster either manually or automatically.
 
-emqx/etc/emqx.conf:
+::: tip Tip
+After a node starts to join the cluster, the node name cannot be changed.
+:::
 
-```bash
-node.name = emqx@s2.emqx.io
-# 或
-node.name = emqx@192.168.0.20
-```
+## Manual Clustering
 
-## 手动集群
+### Set Node Discovery Strategy
 
-EMQX 支持通过手动或自动方式创建 EMQX 集群。本节将介绍如何通过手动的方式创建集群。在配置文件 `cluster.conf` 中设置通过手动方式配置集群。
+EMQX supports creating clusters manually and automatically. This section will introduce the manual clustering feature in EMQX.
+
+Manual clustering is the method to configure an EMQX cluster by manually specifying which nodes should be part of the cluster. By default, EMQX adopts a manual clustering strategy, which can also be set in `cluster.conf`. 
 
 ```bash
 cluster.discovery = manual
 ```
 
-## 节点加入集群
+### Configure Nodes to Join a Cluster
 
-启动两台节点后，在 s2.emqx.io 上执行:
+After the nodes are started, you can run the `cluster join` command on the node that you want to join the cluster. For example, you want `emqx@s2.emqx.io` to join `emqx@s1.emqx.io`, run the command below on `emqx@s2.emqx.io`：
 
 ```bash
 $ ./bin/emqx_ctl cluster join emqx@s1.emqx.io
@@ -102,7 +95,7 @@ Join the cluster successfully.
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
 
-或者在 s1.emqx.io 上执行:
+Or executed on s1.emqx.io:
 
 ```bash
 $ ./bin/emqx_ctl cluster join emqx@s2.emqx.io
@@ -111,7 +104,7 @@ Join the cluster successfully.
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
 
-在任意节点上查询集群状态:
+Query the cluster status on any node:
 
 ```bash
 $ ./bin/emqx_ctl cluster status
@@ -119,59 +112,24 @@ $ ./bin/emqx_ctl cluster status
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
 
-## 退出集群
+## Auto Clustering
 
-节点退出集群，两种方式:
+Auto clustering in EMQX is another feature that allows multiple EMQX nodes to form a cluster automatically without manual configuration. Auto clustering simplifies the process of setting up an EMQX cluster and makes it easier to add or remove nodes from the cluster dynamically.
 
-1. leave: 让本节点退出集群
-2. force-leave: 从集群删除其他节点
+EMQX supports auto clustering based on static node list, DNS Record, etcd, and Kubernetes. Continue to read to learn how to work with these features.
 
-让 emqx@s2.emqx.io 主动退出集群:
+### Autocluster by Static Node List
 
-```bash
-$ ./bin/emqx_ctl cluster leave
-```
-
-或在 s1.emqx.io 上，从集群删除 emqx@s2.emqx.io 节点:
-
-```bash
-$ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
-```
-
-
-
-## 自动集群
-
-EMQX 支持基于以下节点发现策略自动集群：
-
-| 策略   | 说明                    |
-| ------ | ----------------------- |
-| static | 静态节点列表自动集群    |
-| dns    | DNS A 记录自动集群      |
-| etcd   | 通过 etcd 自动集群      |
-| k8s    | Kubernetes 服务自动集群 |
-
-注意：mcast发现策略已被废弃，在未来的版本中会被删除。
-
-在配置文件 `cluster.conf` 中设置节点发现方式。
-
-```bash
-cluster.discovery = static
-# static, dns, etcd, k8s
-```
-
-### 基于 static 节点列表自动集群
-
-配置固定的节点列表，自动发现并创建集群:
+Configure a fixed node list to automatically discover and create clusters:
 
 ```bash
 cluster.discovery = static
 cluster.static.seeds = emqx1@127.0.0.1,emqx2@127.0.0.1
 ```
 
-### 基于 mcast 组播自动集群
+### Autocluster by mcast  
 
-基于 UDP 组播自动发现并创建集群:
+Automatically discover and create clusters based on UDP multicast:
 
 ```bash
 cluster.discovery = mcast
@@ -182,9 +140,9 @@ cluster.mcast.ttl = 255
 cluster.mcast.loop = on
 ```
 
-### 基于 DNS A 记录自动集群
+### Autocluster based on DNS Records 
 
-基于 DNS A 记录自动发现并创建集群:
+Automatically discover and create clusters based on DNS A records:
 
 ```bash
 cluster.discovery = dns
@@ -192,9 +150,9 @@ cluster.dns.name = localhost
 cluster.dns.app  = ekka
 ```
 
-### 基于 etcd 自动集群
+### Autocluster Using etcd 
 
-基于 [etcd](https://coreos.com/etcd/) 自动发现并创建集群:
+Automatically discover and create clusters based on [etcd](https://coreos.com/etcd/):
 
 ```bash
 cluster.discovery = etcd
@@ -203,9 +161,9 @@ cluster.etcd.prefix = emqcl
 cluster.etcd.node_ttl = 1m
 ```
 
-### 基于 kubernetes 自动集群
+### Autocluster on Kubernetes 
 
-[Kubernetes](https://kubernetes.io/) 下自动发现并创建集群:
+Automatically discover and create clusters based on [Kubernetes](https://kubernetes.io/):
 
 ```bash
 cluster.discovery = k8s
@@ -215,10 +173,27 @@ cluster.k8s.address_type = ip
 cluster.k8s.app_name = ekka
 ```
 
-> Kubernetes 不建议使用 Fannel 网络插件，推荐使用 Calico 网络插件。
+## Manage Cluster Nodes
 
-## 单机伪分布式
+There are two ways for a node to exit the cluster:
 
-对于只有个人电脑或者一台服务器的用户来说，可以使用伪分布式集群。请注意，我们若要在单机上启动两个或多个 emqx 实例，为避免端口冲突，我们需要对其它节点的监听端口做出调整。
+1. leave: This node actively leaves the cluster
+2. force-leave: Remove other nodes from the cluster
 
-基本思路是复制一份 emqx 文件夹然后命名为 emqx2 ，将原先所有 emqx 节点监听的端口 port 加上一个偏移 offset 作为新的 emqx2 节点的监听端口。例如，将原先 emqx 的MQTT/TCP 监听端口由默认的 1883 改为了 2883 作为 emqx2 的 MQTT/TCP 监听端口。完成以上操作的自动化脚本可以参照 [集群脚本](https://github.com/terry-xiaoyu/one_more_emqx)，具体配置请参见 [配置说明](../getting-started/config.md) 与 [配置项](../configuration/configuration.md)。
+Let emqx@s2.emqx.io actively exit the cluster:
+
+```bash
+$ ./bin/emqx_ctl cluster leave
+```
+
+Or remove the emqx@s2.emqx.io node from the cluster on s1.emqx.io:
+
+```bash
+$ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
+```
+
+## Pseudo-Distributed Cluster
+
+For users who only have one server, the pseudo-distributed starting mode can be used. Please notice that if we want to start two or more nodes on one machine, we must adjust the listening port of the other node to avoid port conflicts.
+
+The basic process is to copy another emqx folder and name it emqx2. After that, we let all the listening ports of the original emqx to be added by an offset as the listening ports of the emqx2 node. For example, we can change the MQTT/TCP listening port from the default 1883 to 2883 as the MQTT/TCP listening port for emqx2. Please refer to [Cluster Script](https://github.com/terry-xiaoyu/one_more_emqx) regarding to the above operations and also refer to [Configuration Instructions](../getting-started/config.md) and  [Configuration Items](../configuration/configuration.md) for details.
