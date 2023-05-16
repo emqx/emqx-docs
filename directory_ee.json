@@ -1,19 +1,19 @@
 {
   "cn": [
     {
-      "title": "产品概览",
+      "title": "概览",
       "path": "./"
     },
     {
-      "title": "开始使用",
+      "title": "快速开始",
       "path": "getting-started/getting-started"
     },
     {
-      "title": "安装",
+      "title": "安装部署",
       "path": "getting-started/install-ee",
       "children": [
         {
-          "title": "基于 Docker 部署",
+          "title": "Docker 部署指南",
           "path": "getting-started/docker"
         },
         {
@@ -33,7 +33,7 @@
           "path": "getting-started/macos"
         },
         {
-          "title": "基于 k8s 部署 EMQX 集群",
+          "title": "Kubernetes 部署指南",
           "path": "https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html"
         },
         {
@@ -65,17 +65,17 @@
            "path": "advanced/patches"
         },
         {
-          "title": "升级指南",
+          "title": "从 v4.3 版本升级",
           "path": "changes/upgrade-4.3"
         }
       ]
     },
     {
-      "title": "分布集群",
+      "title": "构建集群",
       "path": "advanced/cluster",
       "children": [
         {
-          "title": "创建集群",
+          "title": "创建与管理集群",
           "path": "advanced/create-cluster"
         },
         {
@@ -179,7 +179,7 @@
           "path": "advanced/shared-subscriptions"
         },
         {
-          "title": "MQTT 保留消息",
+          "title": "保留消息",
           "path": "modules/retainer"
         },
         {
@@ -199,7 +199,7 @@
           "path": "modules/topic_rewrite"
         },
         {
-          "title": "MQTT 代理订阅",
+          "title": "代理订阅",
           "path": "modules/subscription",
           "children": [
             {
@@ -235,35 +235,35 @@
       ]
     },
     {
-      "title": "SDK & Tools",
+      "title": "客户端 SDK",
       "path": "development/client",
       "children": [
         {
-          "title": "MQTT C Client Library",
+          "title": "MQTT C 客户端库",
           "path": "development/c"
         },
         {
-          "title": "MQTT Java Client Library",
+          "title": "MQTT Java 客户端库",
           "path": "development/java"
         },
         {
-          "title": "MQTT Go Client Library",
+          "title": "MQTT Go 客户端库",
           "path": "development/go"
         },
         {
-          "title": "MQTT Erlang Client Library",
+          "title": "MQTT Erlang 客户端库",
           "path": "development/erlang"
         },
         {
-          "title": "MQTT JavaScript Client Library",
+          "title": "MQTT JavaScript 客户端库",
           "path": "development/javascript"
         },
         {
-          "title": "MQTT Python Client Library",
+          "title": "MQTT Python 客户端库",
           "path": "development/python"
         },
         {
-          "title": "MQTT 微信小程序接入",
+          "title": "MQTT 微信小程序",
           "path": "development/wechat-miniprogram"
         },
         {
@@ -281,23 +281,23 @@
           "path": "rule/rule-create"
         },
         {
-          "title": "消息重新发布",
-          "path": "rule/action_republish"
-        },
-        {
           "title": "检查 (调试)",
           "path": "rule/rule-example"
         },
         {
-          "title": "规则引擎语法与示列",
+          "title": "消息重新发布",
+          "path": "rule/action_republish"
+        },
+        {
+          "title": "SQL 语法与示列",
           "path": "rule/rule-engine_grammar_and_examples"
         },
         {
-          "title": "规则 SQL 语句中可用的字段",
+          "title": "SQL 字段说明",
           "path": "rule/rule-engine_field"
         },
         {
-          "title": "SQL 语句中可用的函数",
+          "title": "内置 SQL 函数",
           "path": "rule/rule-engine_buildin_function"
         },
         {
@@ -305,19 +305,19 @@
           "path": "rule/schema-registry",
           "children": [
             {
-              "title": "Avro 编解码举例",
+              "title": "Avro 编解码",
               "path": "rule/schema-registry-examp-avro"
             },
             {
-              "title": "Protobuf 编解码举例",
+              "title": "Protobuf 编解码",
               "path": "rule/schema-registry-examp-protobuf"
             },
             {
-              "title": "HTTP 编解码举例",
+              "title": "HTTP 编解码",
               "path": "rule/schema-registry-examp-3rdparty-http"
             },
             {
-              "title": "gRPC 编解码举例",
+              "title": "gRPC 编解码",
               "path": "rule/schema-registry-examp-3rdparty-grpc"
             }
           ]
@@ -436,7 +436,7 @@
       ]
     },
     {
-      "title": "网络与TLS",
+      "title": "网络与 TLS",
       "path": "network/network",
       "children": [
         {
@@ -458,7 +458,7 @@
       "path": "configuration/config-overview",
       "children": [
         {
-          "title": "配置文件参数列表",
+          "title": "配置项列表",
           "path": "configuration/configuration"
         },
         {
@@ -476,30 +476,34 @@
       "path": "rule/offline_msg",
       "children": [
           {
-            "title": "离线消息保存到 Redis",
+            "title": "保存离线消息到 Redis",
             "path": "rule/offline_msg_to_redis"
           },
           {
-            "title": "离线消息保存到 MySQL",
+            "title": "保存离线消息到 MySQL",
             "path": "rule/offline_msg_to_mysql"
           },
           {
-            "title": "离线消息保存到 PostgreSQL",
+            "title": "保存离线消息到 PostgreSQL",
             "path": "rule/offline_msg_to_pgsql"
           },
           {
-            "title": "离线消息保存到 Cassandra",
+            "title": "保存离线消息到 Cassandra",
             "path": "rule/offline_msg_to_cassandra"
           },
           {
-            "title": "离线消息保存到 MongoDB",
+            "title": "保存离线消息到 MongoDB",
             "path": "rule/offline_msg_to_mongodb"
           },
           {
-            "title": "离线消息保存到 ClickHouse",
+            "title": "保存离线消息到 ClickHouse",
             "path": "rule/offline_msg_to_clickhouse"
           }
       ]
+    },
+    {
+      "title": "速率限制",
+      "path": "advanced/rate-limit"
     },
     {
       "title": "日志及可观测性",
@@ -530,10 +534,6 @@
           "path": "tutorial/prometheus"
         }
       ]
-    },
-    {
-      "title": "速率限制",
-      "path": "advanced/rate-limit"
     },
     {
       "title": "备份及恢复",
@@ -600,7 +600,7 @@
       ]
     },
     {
-      "title": "FAQ 常见问题解答",
+      "title": "常见问题解答",
       "path": "faq/faq",
       "children": [
         {
@@ -665,27 +665,43 @@
     },
     {
       "title": "Get Started",
-      "path": "getting-started/getting-started",
+      "path": "getting-started/getting-started"
+    },
+    {
+      "title": "Installation",
+      "path": "getting-started/install-ee",
       "children": [
         {
-          "title": "Installation",
-          "path": "getting-started/install-ee"
+          "title": "Deploy with Docker",
+          "path": "getting-started/docker"
         },
         {
-          "title": "Install EMQX Cluster On K8s",
-          "path": "getting-started/install-on-k8s"
+          "title": "Debian",
+          "path": "getting-started/debian"
+        },
+        {
+          "title": "Ubuntu",
+          "path": "getting-started/ubuntu"
+        },
+        {
+          "title": "CentOS",
+          "path": "getting-started/centos"
+        },
+        {
+          "title": "macOS",
+          "path": "getting-started/macos"
+        },
+        {
+          "title": "EMQX on Kubernetes",
+          "path": "https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html"
         },
         {
           "title": "Start EMQX",
           "path": "getting-started/start"
         },
         {
-          "title": "Basic Command",
+          "title": "Basic Commands",
           "path": "getting-started/command-line"
-        },
-        {
-          "title": "Distributed Cluster",
-          "path": "getting-started/cluster"
         },
         {
           "title": "Directory",
@@ -696,295 +712,251 @@
           "path": "getting-started/config"
         },
         {
-          "title": "Log & Trace",
-          "path": "getting-started/log"
-        },
-        {
-          "title": "Dashboard",
-          "path": "getting-started/dashboard-ee"
-        }
-      ]
-    },
-    {
-      "title": "User Guide",
-      "path": "advanced/user-guide",
-      "children": [
-        {
-          "title": "Authentication",
-          "path": "advanced/auth"
-        },
-        {
-          "title": "ACL",
-          "path": "advanced/acl"
-        },
-        {
-          "title": "Blacklist",
-          "path": "advanced/blacklist"
-        },
-        {
-          "title": "Shared subscription",
-          "path": "advanced/shared-subscriptions"
-        },
-        {
-          "title": "Exclusive subscriptions",
-          "path": "advanced/exclusive-subscriptions"
-        },
-        {
-          "title": "Message retransmission",
-          "path": "advanced/retransmission"
-        },
-        {
-          "title": "Backend",
-          "path": "backend/backend"
-        },
-        {
-          "title": "Import/Export Data",
-          "path": "advanced/data-import-and-export"
-        },
-        {
-          "title": "Distributed Cluster",
-          "path": "advanced/cluster"
-        },
-        {
-          "title": "$SYS - System Topic",
-          "path": "advanced/system-topic"
-        },
-        {
-          "title": "Metrics",
-          "path": "advanced/metrics-and-stats"
-        },
-        {
-          "title": "Alarm",
-          "path": "advanced/alarms"
-        },
-        {
-          "title": "Rate limit",
-          "path": "advanced/rate-limit"
-        },
-        {
-          "title": "WebHook",
-          "path": "advanced/webhook"
-        },
-        {
-          "title": "Hook",
-          "path": "advanced/hooks"
-        },
-        {
-          "title": "Inflight and Queue",
-          "path": "advanced/inflight-window-and-message-queue"
-        }
-      ]
-    },
-    {
-      "title": "Modules",
-      "path": "modules/modules",
-      "children": [
-        {
-          "title": "Internal ACL",
-          "path": "modules/internal_acl"
-        },
-        {
-          "title": "MySQL AUTH/ACL",
-          "path": "modules/mysql_authentication"
-        },
-        {
-          "title": "PostgreSQL AUTH/ACL",
-          "path": "modules/pgsql_authentication"
-        },
-        {
-          "title": "Redis AUTH/ACL",
-          "path": "modules/redis_authentication"
-        },
-        {
-          "title": "HTTP AUTH/ACL",
-          "path": "modules/http_authentication"
-        },
-        {
-          "title": "Builtin DB AUTH/ACL",
-          "path": "modules/mnesia_authentication"
-        },
-        {
-          "title": "MongoDB AUTH/ACL",
-          "path": "modules/mongo_authentication"
-        },
-        {
-          "title": "PSK File AUTH",
-          "path": "modules/psk_authentication"
-        },
-        {
-          "title": "LDAP AUTH/ACL",
-          "path": "modules/ldap_authentication"
-        },
-        {
-          "title": "JWT AUTH",
-          "path": "modules/jwt_authentication"
-        },
-        {
-          "title": "LwM2M Gateway",
-          "path": "modules/lwm2m_protocol"
-        },
-        {
-          "title": "MQTT-SN Gateway",
-          "path": "modules/mqtt_sn_protocol"
-        },
-        {
-          "title": "TCP Gateway",
-          "path": "modules/tcp_protocol"
-        },
-        {
-          "title": "JT/T808 Gateway",
-          "path": "modules/jt808_protocol"
-        },
-        {
-          "title": "CoAP Gateway",
-          "path": "modules/coap_protocol"
-        },
-        {
-          "title": "Stomp Gateway",
-          "path": "modules/stomp_protocol"
-        },
-        {
-          "title": "Kafka Consumer Group",
-          "path": "modules/kafka_consumer"
-        },
-        {
-          "title": "Pulsar Consumer Group",
-          "path": "modules/pulsar_consumer"
-        },
-        {
-          "title": "MQTT Subscriber",
-          "path": "modules/mqtt_subscriber"
-        },
-        {
-          "title": "Extension Language Gateway",
-          "path": "modules/exproto"
-        },
-        {
-          "title": "Extension Language Hook",
-          "path": "modules/exhook"
-        },
-        {
-          "title": "Recon",
-          "path": "modules/recon"
-        },
-        {
-          "title": "EMQX Prometheus Agent",
-          "path": "modules/prometheus"
-        },
-        {
-          "title": "Hot Configs",
+          "title": "Hot Configuration",
           "path": "modules/hot_confs"
         },
         {
-          "title": "Topic Metrics",
-          "path": "modules/topic_metrics"
+          "title": "Release Upgrade",
+          "path": "advanced/relup"
+        },
+        {
+           "title": "Hot Patches",
+           "path": "advanced/patches"
+        },
+        {
+          "title": "Upgrade from v4.2",
+          "path": "changes/upgrade-4.3"
+        }
+      ]
+    },
+    {
+      "title": "Clustering",
+      "path": "advanced/cluster",
+      "children": [
+        {
+          "title": "Create an Cluster",
+          "path": "advanced/create-cluster"
+        },
+        {
+          "title": "Cluster Security",
+          "path": "advanced/cluster-security"
+        },             
+        {
+          "title": "Configure Load Balancer",
+          "path": "tutorial/deploy"
+        },
+        {
+          "title": "Performance Tuning",
+          "path": "tutorial/tune"
+        },
+        {
+          "title": "Performance Test",
+          "path": "tutorial/benchmark"
+        }
+      ]
+    },
+    {
+      "title": "Dashboard",
+      "path": "getting-started/dashboard-ee"
+    },
+    {
+      "title": "Modules",
+      "path": "modules/modules"
+    },    
+    {
+      "title": "Access Control",
+      "path": "advanced/access-control",
+      "children": [
+        {
+          "title": "Authentication" ,
+          "path": "advanced/auth"
+        },      
+        {
+          "title": "Authorization" ,
+          "path": "advanced/acl"
+        },
+        {
+          "title": "Authorize with ACL File" ,
+          "path": "modules/internal_acl"
+        },
+        {
+          "title": "Access Control with Built-In Database",
+          "path": "modules/mnesia_authentication"
+        },
+        {
+          "title": "Access Control with MySQL",
+          "path": "modules/mysql_authentication"
+        },
+        {
+          "title": "Access Control with PostgreSQL",
+          "path": "modules/pgsql_authentication"
+        },
+        {
+          "title": "Access Control with Redis",
+          "path": "modules/redis_authentication"
+        },
+        {
+          "title": "Access Control with HTTP",
+          "path": "modules/http_authentication"
+        },
+        {
+          "title": "Access Control with MongoDB",
+          "path": "modules/mongo_authentication"
+        },
+        {
+          "title": "Use PSK File to Authenticate",
+          "path": "modules/psk_authentication"
+        },
+        {
+          "title": "Access Control with LDAP",
+          "path": "modules/ldap_authentication"
+        },
+        {
+          "title": "JWT AUthentication",
+          "path": "modules/jwt_authentication"
+        },
+        {
+          "title": "MQTT Enhanced Authentication",
+          "path": "modules/auth_sasl"
+        },
+        {
+          "title": "Black List",
+          "path": "advanced/blacklist"
+        }
+      ]
+    },
+    {
+      "title": "Publish/Subscribe",
+      "path": "development/protocol",
+      "children": [
+        {
+          "title": "MQTT Core Concepts",
+          "path": "advanced/mqtt-concepts"
+        },
+        {
+          "title": "Shared Subscription",
+          "path": "advanced/shared-subscriptions"
+        },
+        {
+          "title": "Retained Message",
+          "path": "modules/retainer"
         },
         {
           "title": "Online and Offline Notification",
           "path": "modules/presence"
         },
         {
-          "title": "MQTT Proxy Subscription",
-          "path": "modules/subscription"
+          "title": "Deplayed Publish",
+          "path": "modules/delayed_publish"
+        },
+        {
+          "title": "Exclusive Subscription",
+          "path": "advanced/exclusive-subscriptions"
         },
         {
           "title": "Topic Rewrite",
           "path": "modules/topic_rewrite"
         },
         {
-          "title": "MQTT Retainer",
-          "path": "modules/retainer"
-        },
-        {
-          "title": "MQTT Delayed Publish",
-          "path": "modules/delayed_publish"
+          "title": "MQTT Proxy Subscription",
+          "path": "modules/subscription",
+          "children": [
+            {
+              "title": "Set Subscription Rules",
+              "path": "rule/get_subs"
+            },
+            {
+              "title": "Retrieve from Redis",
+              "path": "rule/get_subs_from_redis"
+            },
+            {
+              "title": "Retrieve from MySQL",
+              "path": "rule/get_subs_from_mysql"
+            },
+            {
+              "title": "Retrieve from PostgreSQL",
+              "path": "rule/get_subs_from_pgsql"
+            },
+            {
+              "title": "Retrieve from Cassandra",
+              "path": "rule/get_subs_from_cassandra"
+            },
+            {
+              "title": "Retrieve from MongoDB",
+              "path": "rule/get_subs_from_mongodb"
+            },
+            {
+              "title": "Retrieve from ClickHouse",
+              "path": "rule/get_subs_from_clickhouse"
+            }
+          ]
         }
       ]
     },
     {
-      "title": "Rule Engine",
-      "path": "rule/rule-engine",
+      "title": "SDK & Tools",
+      "path": "development/client",
       "children": [
         {
-          "title": "Rule Engine SQL Statement",
-          "path": "rule/rule-engine_grammar_and_examples"
+          "title": "MQTT C Client Library",
+          "path": "development/c"
         },
         {
-          "title": "Available Fields in Rule Engine SQL Statements",
-          "path": "rule/rule-engine_field"
+          "title": "MQTT Java Client Library",
+          "path": "development/java"
         },
         {
-          "title": "Functions Available in SQL Statements",
-          "path": "rule/rule-engine_buildin_function"
+          "title": "MQTT Go Client Library",
+          "path": "development/go"
         },
+        {
+          "title": "MQTT Erlang Client Library",
+          "path": "development/erlang"
+        },
+        {
+          "title": "MQTT JavaScript Client Library",
+          "path": "development/javascript"
+        },
+        {
+          "title": "MQTT Python Client Library",
+          "path": "development/python"
+        },
+        {
+          "title": "Other Resources",
+          "path": "development/resource"
+        }
+      ]
+    },
+    {
+      "title": "EMQX Rules",
+      "path": "rule/rule-engine",
+      "children": [
         {
           "title": "Create Rules",
           "path": "rule/rule-create"
         },
         {
-          "title": "Update Resource",
-          "path": "rule/how_to_update_resources"
-        },
-        {
-          "title": "Create Inspect Rules",
+          "title": "Test the Rule",
           "path": "rule/rule-example"
         },
         {
-          "title": "Republish",
+          "title": "Message Republish",
           "path": "rule/action_republish"
         },
         {
-          "title": "Save Offline Message",
-          "children": [
-            {
-              "title": "Save Offline Message to Redis",
-              "path": "rule/offline_msg_to_redis"
-            },
-            {
-              "title": "Save Offline Message to MySQL",
-              "path": "rule/offline_msg_to_mysql"
-            },
-            {
-              "title": "Save Offline Message to PostgreSQL",
-              "path": "rule/offline_msg_to_pgsql"
-            },
-            {
-              "title": "Save Offline Message to Cassandra",
-              "path": "rule/offline_msg_to_cassandra"
-            },
-            {
-              "title": "Save Offline Message to MongoDB",
-              "path": "rule/offline_msg_to_mongodb"
-            }
-          ]
+          "title": "Rule SQL Syntax",
+          "path": "rule/rule-engine_grammar_and_examples"
         },
         {
-          "title": "Get Subscriptions",
-          "children": [
-            {
-              "title": "Get Subscription from Redis",
-              "path": "rule/get_subs_from_redis"
-            },
-            {
-              "title": "Get Subscription from MySQL",
-              "path": "rule/get_subs_from_mysql"
-            },
-            {
-              "title": "Get Subscription from PostgreSQL",
-              "path": "rule/get_subs_from_pgsql"
-            },
-            {
-              "title": "Get Subscription from Cassandra",
-              "path": "rule/get_subs_from_cassandra"
-            },
-            {
-              "title": "Get Subscription from MongoDB",
-              "path": "rule/get_subs_from_mongodb"
-            }
-          ]
+          "title": "SQL Statement Fields",
+          "path": "rule/rule-engine_field"
         },
         {
-          "title": "Schema Codecs",
+          "title": "Built-In SQL Functions",
+          "path": "rule/rule-engine_buildin_function"
+        },
+        {
+          "title": "Schema Registryg",
           "path": "rule/schema-registry",
           "children": [
             {
@@ -996,11 +968,11 @@
               "path": "rule/schema-registry-examp-protobuf"
             },
             {
-              "title": "Third-Party Custom Codec Example - HTTP",
+              "title": "Custom Codec Example - HTTP",
               "path": "rule/schema-registry-examp-3rdparty-http"
             },
             {
-              "title": "Third-Party Custom Codec Example - gRPC",
+              "title": "Custom Codec Example - gRPC",
               "path": "rule/schema-registry-examp-3rdparty-grpc"
             }
           ]
@@ -1010,16 +982,23 @@
     {
       "title": "Data Integration",
       "path": "rule/integration",
-      "children": 
-      [
+      "children": [
         {
           "title": "Bridge Data into MQTT Broker",
           "path": "rule/bridge_mqtt"
         },
         {
-          "title": "Steam Data into Kafka",
+          "title": "Work with MQTT Subscriber",
+          "path": "modules/mqtt_subscriber"
+        },
+        {
+          "title": "Stream Data into Kafka",
           "path": "rule/bridge_kafka"
-        },    
+        },
+        {
+          "title": "Work with Kafka Consumer",
+          "path": "modules/kafka_consumer"
+        },            
         {
           "title": "Ingest Data into InfluxDB",
           "path": "rule/backend_influxdb"
@@ -1053,11 +1032,15 @@
           "path": "rule/bridge_pulsar"
         },
         {
-          "title": "Ingest Data into RabbitMQ",
+          "title": "Work with Pulsar Consumer",
+          "path": "modules/pulsar_consumer"
+        },
+        {
+          "title": "Bridge Data into RabbitMQ",
           "path": "rule/bridge_rabbitmq"
         },
         {
-          "title": "Ingest Data into RocketMQ",
+          "title": "Bridge Data into RocketMQ",
           "path": "rule/bridge_rocketmq"
         },
       
@@ -1098,112 +1081,18 @@
           "path": "rule/backend_oracle"
         },
         {
-          "title": "Ingest Data into SQL Server",
+          "title": "Ingest Data into Microsoft SQL Server",
           "path": "rule/backend_sqlserver"
         },
         {
-          "title": "Bridge Data into Multiple MQTT Brokers",
+          "title": "Bridge Data into Multiple MQTT Broker",
           "path": "rule/bridge_emqx"
         }
       ]
     },
     {
-      "title": "Plugin",
-      "path": "advanced/plugins",
-      "children": [
-        {
-          "title": "MQTT Message Persistence",
-          "path": "backend/backend"
-        },
-        {
-          "title": "Redis Backend",
-          "path": "backend/backend_redis"
-        },
-        {
-           "title": "MySQL Backend",
-           "path": "backend/backend_mysql"
-        },
-        {
-           "title": "PostgreSQL Backend",
-           "path": "backend/backend_pgsql"
-        },
-        {
-           "title": "MongoDB Backend",
-           "path": "backend/backend_mongodb"
-        },
-        {
-           "title": "Cassandra Backend",
-           "path": "backend/backend_cassandra"
-        },
-        {
-           "title": "DynamoDB Backend",
-           "path": "backend/backend_dynamodb"
-        },
-        {
-            "title": "InfluxDB Backend",
-            "path": "backend/backend_influxdb"
-        },
-        {
-            "title": "OpenTSDB Backend",
-            "path": "backend/backend_opentsdb"
-        },
-        {
-            "title": "Timescale Backend",
-            "path": "backend/backend_timescale"
-        },
-        {
-          "title": "Bridges",
-          "path": "bridge/bridge",
-          "children": [
-            {
-              "title": "MQTT Bridge",
-              "path": "bridge/bridge-mqtt"
-            },
-            {
-              "title": "RPC Bridge",
-              "path": "bridge/bridge-rpc"
-            },
-            {
-              "title": "Kafka Bridge",
-              "path": "bridge/bridge-kafka"
-            },
-            {
-              "title": "RabbitMQ Bridge",
-              "path": "bridge/bridge-rabbitmq"
-            },
-            {
-              "title": "Pulsar Bridge",
-              "path": "bridge/bridge-pulsar"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "DevOps",
-      "path": "tutorial/devops",
-      "children": [
-        {
-          "title": "Device Management",
-          "path": "tutorial/device-management"
-        },
-        {
-          "title": "System Tuning",
-          "path": "tutorial/tune"
-        },
-        {
-          "title": "Production Deployment",
-          "path": "tutorial/deploy"
-        },
-        {
-          "title": "Prometheus Monitoring",
-          "path": "tutorial/prometheus"
-        },
-        {
-          "title": "Benchmark",
-          "path": "tutorial/benchmark"
-        }
-      ]
+      "title": "Network and TLS",
+      "path": "network/tls"
     },
     {
       "title": "HTTP API",
@@ -1211,109 +1100,109 @@
     },
     {
       "title": "Configuration",
-      "path": "configuration/configuration"
+      "path": "configuration/config-overview",
+      "children": [
+        {
+          "title": "Configuration Items",
+          "path": "configuration/configuration"
+        },
+        {
+          "title": "Environment Variables",
+          "path": "configuration/environment-variable"
+        }
+      ]
     },
     {
-      "title": "Command",
+      "title": "Command Line Interface",
       "path": "advanced/cli"
     },
     {
-      "title": "Release Hot Upgrade",
-      "path": "advanced/relup"
+      "title": "Save Offline Messages",
+      "path": "rule/offline_msg",
+      "children": [
+          {
+            "title": "Save to Redis",
+            "path": "rule/offline_msg_to_redis"
+          },
+          {
+            "title": "Save to MySQL",
+            "path": "rule/offline_msg_to_mysql"
+          },
+          {
+            "title": "Save to PostgreSQL",
+            "path": "rule/offline_msg_to_pgsql"
+          },
+          {
+            "title": "Save to Cassandra",
+            "path": "rule/offline_msg_to_cassandra"
+          },
+          {
+            "title": "Save to MongoDB",
+            "path": "rule/offline_msg_to_mongodb"
+          },
+          {
+            "title": "Save to ClickHouse",
+            "path": "rule/offline_msg_to_clickhouse"
+          }
+      ]
     },
     {
-       "title": "Apply Patches",
-       "path": "advanced/patches"
+      "title": "Rate Limit",
+      "path": "advanced/rate-limit"
     },
     {
-      "title": "FAQ",
-      "path": "faq/faq",
+      "title": "Logs and Observability",
+      "path": "tutorial/devops-ee",
       "children": [
         {
-          "title": "Use Guide",
-          "path": "faq/use-guide"
+          "title": "Statistics and Metrics",
+          "path": "advanced/metrics-and-stats"
         },
         {
-          "title": "Installation and Deployment",
-          "path": "faq/deployment"
+          "title": "Alarms",
+          "path": "advanced/alarms"
         },
         {
-          "title": "Common Errors",
-          "path": "faq/error"
+          "title": "Logs",
+          "path": "getting-started/log"
         },
         {
-          "title": "Business Services",
-          "path": "faq/enterprise"
+          "title": "$SYS Topic",
+          "path": "advanced/system-topic"
         },
         {
-          "title": "Tags",
-          "path": "faq/tags"
+          "title": "Topic Metrics",
+          "path": "modules/topic_metrics"
+        },
+        {
+          "title": "Integrate with Prometheus",
+          "path": "tutorial/prometheus"
         }
       ]
     },
     {
-      "title": "SDK & Tools",
-      "path": "development/client",
-      "children": [
-        {
-          "title": "MQTT C Client Library",
-          "path": "development/c"
-        },
-        {
-          "title": "MQTT Java Client Library",
-          "path": "development/java"
-        },
-        {
-          "title": "MQTT Go Client Library",
-          "path": "development/go"
-        },
-        {
-          "title": "MQTT Erlang Client Library",
-          "path": "development/erlang"
-        },
-        {
-          "title": "MQTT JavaScript Client Library",
-          "path": "development/javascript"
-        },
-        {
-          "title": "MQTT Python Client Library",
-          "path": "development/python"
-        },
-        {
-          "title": "Others",
-          "path": "development/resource"
-        }
-      ]
+      "title": "备份及恢复",
+      "path": "advanced/data-import-and-export"
     },
     {
-      "title": "Changes",
-      "path": "changes/changes",
+      "title": "扩展与插件",
+      "path": "advanced/plugins",
       "children": [
         {
-          "title": "Change Log",
-          "path": "changes/changes-ee-4.3"
+          "title": "插件开发与管理",
+          "path": "advanced/start-stop-plugins"
         },
         {
-          "title": "End of Life Dates",
-          "path": "changes/eol-ee"
+          "title": "钩子",
+          "path": "advanced/hooks"
         },
         {
-          "title": "Upgrade Guide",
-          "path": "changes/upgrade-4.3"
-        }
-      ]
-    },
-    {
-      "title": "Resources",
-      "path": "design/resources",
-      "children": [
-        {
-          "title": "Design",
-          "path": "design/design"
+          "title": "多语言扩展钩子",
+          "path": "modules/exhook"
         },
         {
-          "title": "Awsome",
-          "path": "awesome/awesome"
+          "title": "WebHook",
+          "path": "advanced/webhook"
         }
       ]
     },
@@ -1342,8 +1231,74 @@
           "path": "modules/jt808_protocol"
         },
         {
+          "title": "GB/T32960 Gateway",
+          "path": "modules/gbt32960_protocol"
+        },
+        {
           "title": "TCP Gateway",
           "path": "modules/tcp_protocol"
+        },
+        {
+          "title": "Multi-Language Extension-Protocol Access",
+          "path": "modules/exproto"
+        }
+      ]
+    },
+    {
+      "title": "FAQ",
+      "path": "faq/faq",
+      "children": [
+        {
+          "title": "User Guide",
+          "path": "faq/use-guide"
+        },
+        {
+          "title": "Installation",
+          "path": "faq/deployment"
+        },
+        {
+          "title": "Common Errors",
+          "path": "faq/error"
+        },
+        {
+          "title": "Business Services",
+          "path": "faq/enterprise"
+        },
+        {
+          "title": "Tags",
+          "path": "faq/tags"
+        }
+      ]
+    },
+    {
+      "title": "Version History",
+      "path": "changes/changes",
+      "children": [
+        {
+          "title": "Release History",
+          "path": "changes/changes-ee-4.3"
+        },
+        {
+          "title": "Service LifeCycle",
+          "path": "changes/eol-ee"
+        }
+      ]
+    },
+    {
+      "title": "Design and Implementation",
+      "path": "design/resources",
+      "children": [
+        {
+          "title": "Architecture",
+          "path": "design/design"
+        },
+        {
+          "title": "Retransmission",
+          "path": "advanced/retransmission"
+        },
+        {
+          "title": "Inflight Window and Message Queue",
+          "path": "advanced/inflight-window-and-message-queue"
         }
       ]
     }
