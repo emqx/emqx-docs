@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# MongoDB
+# Access Control with MongoDB
 
 MongoDB authentication uses an external MongoDB database as the authentication data source, which can store a large amount of data and facilitate integration with external device management systems.
 

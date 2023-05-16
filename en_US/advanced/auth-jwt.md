@@ -15,7 +15,7 @@ ref: undefined
 
 # JWT
 
-[JWT](https://jwt.io/) is a Token-based authentication mechanism. It does not rely on the server to retain client authentication information or session information. It can issue authentication information in batches while holding keys, which is an easiest authentication method.
+[JWT](https://jwt.io/) is a Token-based authentication mechanism. It does not rely on the server to retain client authentication information or session information. It can issue authentication information in batches while holding keys, which is the easiest authentication method.
 
 Plugin:
 

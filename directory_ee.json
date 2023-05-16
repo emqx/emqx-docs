@@ -765,55 +765,83 @@
     },    
     {
       "title": "Access Control",
-      "path": "advanced/access-control",
+      "path": "access-control/access-control",
       "children": [
         {
           "title": "Authentication" ,
-          "path": "advanced/auth"
+          "path": "advanced/auth",
+          "children":[
+            {
+              "title": "Built-In Database",
+              "path": "advanced/auth-mnesia"
+            },
+          {
+            "title": "HTTP Server",
+            "path": "auth-http"
+          }
+            {
+              "title": "MySQL",
+              "path": "advanced/auth-mysql"
+            },
+            {
+              "title": "PostgreSQL",
+              "path": "advaced/acl-postgres"
+            },
+            {
+              "title": "MongoDB",
+              "path": "acl-mongodb.md"
+            },
+            {
+              "title": "Redis",
+              "path": "advanced/auth-redis"
+            },
+            {
+              "title": "LDPA",
+              "path": "advanced/auth-ldap"
+            }
+            {
+              "title": "JWT",
+              "path": "auth-jwt"
+            }
+          ]
         },      
         {
           "title": "Authorization" ,
-          "path": "advanced/acl"
-        },
-        {
-          "title": "Authorize with ACL File" ,
-          "path": "modules/internal_acl"
-        },
-        {
-          "title": "Access Control with Built-In Database",
-          "path": "modules/mnesia_authentication"
-        },
-        {
-          "title": "Access Control with MySQL",
-          "path": "modules/mysql_authentication"
-        },
-        {
-          "title": "Access Control with PostgreSQL",
-          "path": "modules/pgsql_authentication"
-        },
-        {
-          "title": "Access Control with Redis",
-          "path": "modules/redis_authentication"
-        },
-        {
-          "title": "Access Control with HTTP",
-          "path": "modules/http_authentication"
-        },
-        {
-          "title": "Access Control with MongoDB",
-          "path": "modules/mongo_authentication"
-        },
-        {
-          "title": "Use PSK File to Authenticate",
-          "path": "modules/psk_authentication"
-        },
-        {
-          "title": "Access Control with LDAP",
-          "path": "modules/ldap_authentication"
-        },
-        {
-          "title": "JWT AUthentication",
-          "path": "modules/jwt_authentication"
+          "path": "advanced/acl",
+          "children":[
+            {
+              "title": "ACL File",
+              "path": "advanced/acl-file"
+            },
+            {
+              "title": "Built-in Database",
+              "path": "advanced/acl-mnesia"
+            },
+            {
+              "title": "HTTP Server",
+              "path": "advanced/acl-http"
+            },
+            {
+              "title": "MySQL",
+              "path": "advanced/acl-mysql"
+            },
+            {
+              "title": "PostgreSQL",
+              "path": "advanced/acl-postgres"
+            },
+            {
+              "title": "MongoDB",
+              "path": "advanced/acl-mongodb"
+            },
+            {
+              "title": "Redis",
+              "path": "advanced/acl-redis"
+            },
+            {
+              "title": "JWT",
+              "path": "advanced/acl-jwt"
+            }
+          ]
         },
         {
           "title": "MQTT Enhanced Authentication",

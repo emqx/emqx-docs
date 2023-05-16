@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# Mnesia ACL
+# Built-in Database
 
 Mnesia ACL uses the built-in Mnesia database of EMQX to store ACL rules, which can store data and dynamically manage ACLs to facilitate integration with external device management systems.
 
@@ -68,7 +68,7 @@ Mnesia ACL does not set rules by default, and you can use the HTTP API to manage
     "action":"pub",
     "access": "allow"
   }
-
+  
   # Response
   {
       "data": {
@@ -92,7 +92,7 @@ Mnesia ACL does not set rules by default, and you can use the HTTP API to manage
     "action":"pub",
     "access": "allow"
   }
-
+  
   # Response
   {
       "data": {
@@ -115,7 +115,7 @@ Mnesia ACL does not set rules by default, and you can use the HTTP API to manage
     "action":"pub",
     "access": "allow"
   }
-
+  
   # Response
   {
       "data": {
@@ -263,7 +263,7 @@ POST api/v4/acl
   ```bash
   # Request
   GET api/v4/acl/$all
-
+  
   # Response
   {
     "meta": {
@@ -296,7 +296,7 @@ POST api/v4/acl
   ```bash
   # Request
   GET api/v4/acl/clientid/emqx_c
-
+  
   # Response
   {
       "data": [
@@ -321,7 +321,7 @@ POST api/v4/acl
   ```bash
   # Request
   GET api/v4/acl/username/emqx_u
-
+  
   # Response
   {
       "data": [
@@ -350,7 +350,7 @@ POST api/v4/acl
   # Request
   # Please note that ${topic} needs to be encoded with UrlEncode
   DELETE api/v4/acl/clientid/${clientid}/topic/${topic}
-
+  
   # Response
   {
       "code": 0
@@ -362,7 +362,7 @@ POST api/v4/acl
   # Request
   # Please note that ${topic} needs to be encoded with UrlEncode
   DELETE api/v4/acl/username/${username}/topic/${topic}
-
+  
   # Response
   {
       "code": 0
@@ -374,7 +374,7 @@ POST api/v4/acl
   # Request
   # Please note that ${topic} needs to be encoded with UrlEncode
   DELETE api/v4/acl/$all/topic/${topic}
-
+  
   # Response
   {
       "code": 0

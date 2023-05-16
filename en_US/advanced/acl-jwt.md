@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# JWT ACL
+# JWT
 
 JWT ACL uses ACL rules from JWTs provided by a client during authentication. To keep JWTs reasonably small, clients using JWT ACL are not supposed to have many ACL rules.
 

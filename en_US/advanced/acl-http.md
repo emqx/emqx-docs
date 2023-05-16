@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# HTTP ACL
+# HTTP Server
 
 An external self-built HTTP application authentication data source is used for HTTP authentication, and the authentication result is judged based on the data returned by the HTTP API, which can implement complex ACL verification logic.
 

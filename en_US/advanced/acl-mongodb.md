@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# MongoDB ACL
+# MongoDB
 
 For MongoDB ACL, an external MongoDB database is used to store ACL rules, which can store a large amount of data and dynamically manage ACLs for easy integration with external device management systems
 

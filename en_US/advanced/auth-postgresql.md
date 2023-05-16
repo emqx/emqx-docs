@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# PostgreSQL
+# Access Control with PostgreSQL
 
 PostgreSQL authentication uses an external PostgreSQL database as the authentication data source, which can store a large amount of data and facilitate integration with external device management systems.
 

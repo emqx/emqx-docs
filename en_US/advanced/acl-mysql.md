@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# MySQL ACL
+# Access Control with MySQL
 
 An external MySQL database is used to store ACL rules for MySQL ACL, which can store a large amount of data and dynamically manage ACLs for easy integration with external device management systems.
 

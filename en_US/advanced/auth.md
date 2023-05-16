@@ -1,15 +1,15 @@
-# Introduction
+# Authentication
 
 Authentication is an important part of most applications. MQTT protocol supports username/password authentication. Enabling authentication can effectively prevent illegal client connections.
 
-Authentication in EMQX Broker means that when a client connects to EMQX Broker, the server configuration  is used to control the client's permission to connect to the server.
+Authentication in EMQX Broker means that when a client connects to EMQX Broker, the server configuration is used to control the client's permission to connect to the server.
 
 EMQX Broker's authentication support includes two levels:
 
 - The MQTT protocol specifies the user name and password in the CONNECT packet by itself. EMQX Broker supports multiple forms of authentication based on Username, ClientID, HTTP, JWT, LDAP, and various databases such as MongoDB, MySQL, PostgreSQL, Redis through plugins.
 - At the transport layer, TLS guarantees client-to-server authentication using client certificates and ensures that the server verifies the server certificate to the client. PSK-based TLS/DTLS authentication is also supported.
 
-This authentication methods supported by EMQX and the configuration methods of the corresponding plugins are introduced in this article.
+Authentication methods supported by EMQX and the configuration methods of the corresponding plugins are introduced in this article.
 
 ## Authentication method
 

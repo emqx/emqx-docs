@@ -1,76 +1,85 @@
-# MQTT核心概念
+# MQTT Core Concepts
 
-<!--内容待加入-->
+MQTT (Message Queue Telemetry Transport) is the most commonly used lightweight messaging protocol for the IoT (Internet of Things). The protocol is based on a publish/subscribe (pub/sub) pattern for message communication. It allows devices and applications to exchange data in real-time using a simple and efficient message format, which minimizes network overhead and reduces power consumption.
 
-## 发布订阅
+Served as an MQTT messaging platform, EMQX Enterprise provides full support to a complete set of MQTT messaging features. This section provides brief introductions to the core concepts of MQTT. You can learn further about each concept and more about MQTT by following the links to the [MQTT blog series](https://www.emqx.com/en/blog/category/mqtt).
 
-MQTT 基于发布订阅模式，它解耦了消息的发送方（发布者）和接收方（订阅者），引入了一个中间代理的角色来完成消息的路由和分发。
+## Publish/Subscribe Pattern
 
-发布者和订阅者不需要知道彼此的存在，他们之间唯一的联系就是对消息的一致约定，例如消息将使用什么主题、消息将包含哪些字段等等。这让 MQTT 的通信更加灵活，因为我们可以随时动态地增加或减少订阅者和发布者。
+The protocol is event-driven and connects devices using the pub/sub pattern. Different from the traditional client/server pattern, it is a messaging pattern in which senders (publishers) do not send messages directly to specific receivers (subscribers). Instead, publishers categorize messages into topics, and subscribers subscribe to specific topics that they are interested in. When a publisher sends a message to a topic, the MQTT broker routes and filters all incoming messages, and then delivers the message to all the subscribers that have expressed interest in that topic.
 
-通过发布订阅，我们可以轻易地实现消息的广播、组播和单播。
+The publisher and subscriber are decoupled from each other and do not need to know each other's existence. Their sole connection is based on a predetermined agreement regarding the message. The Pub/Sub pattern enables flexible message communication, as subscribers and publishers can be dynamically added or removed as needed. It also makes the implementation of message broadcasting, multicasting, and unicasting easier.
 
-关于 MQTT 发布订阅模式的更多介绍，我们可以参考 MQTT 系列博客中的 [发布订阅模式介绍](https://www.emqx.com/zh/blog/mqtt-5-introduction-to-publish-subscribe-model)。
+For more information on the Pub/Sub pattern, see [Introduction to MQTT Publish-subscribe Pattern](https://www.emqx.com/en/blog/mqtt-5-introduction-to-publish-subscribe-model).
 
-## 服务端
+## MQTT Server
 
-在发布消息的客户端和订阅的客户端之间充当中介，将所有接收到的消息转发到匹配的订阅客户端。所以有时我们也会直接将服务端称为 Broker。
+The MQTT server acts as a broker between the publishing clients and subscribing clients, forwarding all received messages to the matching subscribing clients. Therefore, sometimes the server is directly referred to as the MQTT Broker.
 
-## 客户端
+## MQTT Client
 
-使用 MQTT 协议连接到 MQTT 服务端的设备或应用程序。它既可以是发布者，也可以是订阅者，也可以具备这两种身份。
+The clients refer to devices or applications that can connect to an MQTT server using the MQTT protocol. They can act as both publishers and subscribers or in either of those roles separately.
 
-## 主题
+## Topic and Wildcards
 
-主题被用来标识和区分不同的消息，它是 MQTT 消息路由的基础。发布者可以在发布时指定消息的主题，订阅者则可以选择订阅自己感兴趣的主题来接收相关的消息。
+Topics are used to identify and differentiate between different messages, forming the basis of MQTT message routing. Publishers can specify the topic of a message when publishing, while subscribers can choose to subscribe to topics of interest to receive relevant messages.
 
-## 通配符
+Subscribers can use wildcards in the subscribed topics to achieve the goal of subscribing to multiple topics at once. MQTT provides two types of topic wildcards, single-level wildcard and multi-level wildcard, to meet different subscription needs.
 
-订阅者可以在订阅的主题中使用通配符来达到一次订阅多个主题的目的。MQTT 提供了单层通配符和多层通配符两种主题通配符，以满足不同的订阅需要。
+For more information on topics and wildcards, see [Understanding MQTT Topics & Wildcards by Case](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics).
 
-关于 MQTT 主题和通配符的更多介绍，我们可以参考 MQTT 系列博客中的 [主题与通配符](https://www.emqx.com/zh/blog/advanced-features-of-mqtt-topics)。
+## Quality of Service (QoS)
 
-## QoS
+MQTT defines three levels of QoS to provide different levels of message reliability. Each message can independently set its own QoS when published.
 
-MQTT 定义了三种 QoS 等级，来分别提供不同的消息可靠性保证。每条消息都可以在发布时独立设置自己的 QoS。QoS 0 最多交付一次，消息可能丢失；QoS 1 至少交付一次，消息可以保证到达，但是可能重复；QoS 2 只交付一次，消息保证到达，并且不会重复。QoS 越大，消息的传输复杂程度也越高，我们需要根据实际场景来选择合适的 QoS。
+- QoS 0: delivers a message at most once and may be lost;
+- QoS 1: delivers a message at least once and guarantees arrival, but may be duplicated;
+- QoS 2: delivers a message exactly once and guarantees arrival without duplication.
 
-关于 MQTT QoS 的更多介绍，我们可以参考 MQTT 系列博客中的 [MQTT QoS 0, 1, 2 介绍](https://www.emqx.com/zh/blog/introduction-to-mqtt-qos)。
+As the QoS level increases, the complexity of message transmission also increases. You need to choose the appropriate QoS level based on the actual scenario.
 
-## 会话
+For more information on QoS, see [Introduction to MQTT QoS 0, 1, 2](https://www.emqx.com/en/blog/introduction-to-mqtt-qos).
 
-QoS 只是设计了消息可靠到达的理论机制，而会话则确保了 QoS 1、2 的协议流程得以真正实现。
+## Session
 
-会话是客户端与服务端之间的有状态交互，它可以仅持续和网络连接一样长的时间，也可以跨越多个网络连接存在，我们通常将后者称为持久会话。我们可以选择让连接从已存在的会话中恢复，也可以选择从一个全新的会话开始。
+QoS is a theoretical mechanism designed to ensure reliable message delivery, while a session ensures the proper implementation of QoS 1 and 2 protocol procedures.
 
-关于 MQTT 会话的更多介绍，我们可以参考 MQTT 系列博客中的 [MQTT 会话](https://www.emqx.com/zh/blog/mqtt-session)。
+A session refers to the stateful interaction between a client and a server, which can persist for the same duration as the network connection or span across multiple network connections, commonly known as a persistent session. The connection can either resume from an existing session or start from a new session.
 
+For more information on sessions, see [MQTT Persistent Session and Clean Session Explained](https://www.emqx.com/en/blog/mqtt-session).
 
-## 保留消息
+## Retained Message
 
-与普通消息不同，保留消息可以保留在 MQTT 服务器中。任何新的订阅者订阅与该保留消息中的主题匹配的主题时，都会立即接收到该消息，即使这个消息是在它们订阅主题之前发布的。
+Unlike regular messages, retained messages can be stored on an MQTT server. When any new subscriber subscribes to a topic that matches the topic of a retained message, they immediately receive that message, even if it was published before they subscribed to the topic.
 
-这使订阅者在上线后可以立即获得数据更新，而不必等待发布者再次发布消息。在某种程度上，我们可以把保留消息当作是一个消息 “云盘” 来使用：随时上传消息到 “云盘”，然后在任意时刻从 “云盘” 获取消息。当然，这个 “云盘” 还有一个主题下只能存储一条最新的保留消息的限制。
+The retained message feature allows subscribers to receive data updates immediately upon connecting, without having to wait for the publisher to re-publish the message. Retained messages can be thought of as a message "cloud drive" in some ways: upload messages to the "cloud drive" at any time, and retrieve messages from the "cloud drive" at any time. However, this "cloud drive" is limited to storing only one latest retained message per topic.
 
-关于 MQTT 保留消息的更多介绍，我们可以参考 MQTT 系列博客中的 [保留消息](https://www.emqx.com/zh/blog/mqtt5-features-retain-message)。
+You can try to publish a retained message using the MQTTX Client by following the instructions in [Retained Message](./mqtt-retained-message.md).
 
-## 遗嘱消息
+To learn more about retained message technologies, see [The Beginner's Guide to MQTT Retained Messages](https://www.emqx.com/en/blog/mqtt5-features-retain-message).
 
-发布订阅模式的特性决定了，除了服务器以外没有客户端能够感知到某个客户端从通信网络中离开。而遗嘱消息则为连接意外断开的客户端提供了向其他客户端发出通知的能力。
+## Will Message
 
-客户端可以在连接时向服务器设置自己的遗嘱消息，服务器将在客户端异常断开后立即或延迟一段时间后发布这个遗嘱消息。而订阅了对应遗嘱主题的客户端，将收到这个遗嘱消息，并且采取相应的措施，例如更新该客户端的在线状态等等。
+The feature of Pub/Sub pattern determines that no client, other than the server, is aware of a client leaving the communication network. However, a will message provides the ability for a disconnected client to notify other clients.
 
-关于 MQTT 遗嘱消息的更多介绍，我们可以参考 MQTT 系列博客中的 [遗嘱消息](https://www.emqx.com/zh/blog/use-of-mqtt-will-message)。
+Clients can set their own will message with the server when they establish a connection, and the server publishes this message immediately or after a specified delay if the client disconnects unexpectedly. Clients subscribed to the corresponding will message topic will receive this message and take appropriate action, such as updating the online status of that client, etc.
 
-## 共享订阅
+You can try to publish a will message using the MQTTX Client by following the instructions in [Will Message](./mqtt-will-message.md).
 
-默认情况下，消息会被转发给所有匹配的订阅者。但有时，我们可能希望多个客户端协同处理接收到的消息，以便以水平扩展的方式来提高负载能力。又或者，我们希望为客户端增加一个备份客户端，当主客户端离线时，能够无缝切换到备份客户端继续接收消息，以确保高可用性。。
+To learn more about will message technologies, see [Use of MQTT Will Message](https://www.emqx.com/en/blog/use-of-mqtt-will-message).
 
-而 MQTT 的共享订阅特性，则提供了这一能力。我们可以将客户端划分为多个订阅组，消息仍然会被转发给所有订阅组，但每个订阅组内每次只会有一个客户端收到消息。
+## Shared Subscription
 
-关于 MQTT 共享订阅的更多介绍，我们可以参考 MQTT 系列博客中的 [共享订阅](https://www.emqx.com/zh/blog/introduction-to-mqtt5-protocol-shared-subscription)。
+In common cases, messages are forwarded to all matching subscribers. However, in some cases, you may want to coordinate multiple clients to process received messages in a horizontally scalable way to increase load capacity. Alternatively, users may want to add a backup client for clients to seamlessly switch to when the primary client goes offline, ensuring high availability.
 
-## $SYS 主题
+The shared subscription feature provides such a capability. Clients can be divided into multiple subscription groups, and messages are still forwarded to all subscription groups, but only one client within each subscription group receives the message at a time.
 
-以 `$SYS/` 为前缀的主题被保留给服务器用来发布一些特定的消息，比如服务器的运行时间、客户端的上下线事件通知、当前连接的客户端数量等等。我们一般将这些主题称为系统主题，客户端可以订阅这些系统主题来获取服务器的有关信息。
+You can try to create a shared subscription using the MQTTX Client by following the instructions in [Shared Subscription](./mqtt-shared-subscription.md).
 
-关于 MQTT 系统主题的更多介绍，我们可以参考 MQTT 系列博客中的 [MQTT 主题与通配符](https://www.emqx.com/zh/blog/advanced-features-of-mqtt-topics)。
+To learn more about shared subscription technologies, see [Shared subscription - MQTT 5.0 new features](https://www.emqx.com/en/blog/introduction-to-mqtt5-protocol-shared-subscription).
+
+## System Topic
+
+Topics prefixed with `$SYS/` are reserved for the server to publish specific messages, such as server uptime, client online/offline event notifications, and the current number of connected clients. These topics are commonly referred to as system topics, and clients can subscribe to these system topics to obtain information about the server.
+
+For more information on the system topic, see [Understanding MQTT Topics & Wildcards by Case](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics).

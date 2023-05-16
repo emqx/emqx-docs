@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# LDAP
+# Access Control with LDAP
 
 LDAP authentication uses an external LDAP server as the authentication data source, which can store a large amount of data and facilitate integration with external device management systems.
 
