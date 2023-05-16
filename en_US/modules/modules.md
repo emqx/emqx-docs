@@ -33,8 +33,7 @@ The modules currently provided by the EMQX include:
   - [Protocol Access](./exproto.md)
   - [Hook](./exhook.md)
 - Develop and Maintenance 
-  - [Recon](./recon.md)
-  - [Prometheus Agent](./prometheus.md)
+  - [Prometheus Agent](../tutorial/prometheus.md)
 - Internal Modules
   - [Hot Configuration](./hot_confs.md)
   - [Topic Metrics](./topic_metrics.md)

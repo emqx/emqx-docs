@@ -341,7 +341,6 @@ managing client information, broker subscription, publishing messages and creati
 
 It contains official usage guidelines and best practices.
 
-- [Device Management](../tutorial/device-management.md)
 - [System Tuning](../tutorial/tune.md)
 - [Production Deployment](../tutorial/deploy.md)
 - [Prometheus Monitoring and alert](../tutorial/prometheus.md)
