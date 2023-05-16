@@ -1,7 +1,6 @@
 # Ingest Data into OpenTSDB
 
-EMQX supports integration with OpenTSDB, so you can save client messages to OpenTSDB for
-subsequent analysis and retrieval.
+EMQX supports integration with OpenTSDB. You can save client messages to OpenTSDB for subsequent analysis and retrieval.
 
 {% emqxce %}
 :::tip
@@ -17,11 +16,11 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 ## Features List
 
-- [Connection pool](./data-bridges.md)
-- [Async mode](./data-bridges.md)
-- [Batch mode](./data-bridges.md)
-- [Buffer queue](./data-bridges.md)
-- [SQL preprocessing](./data-bridges.md)
+- [Connection pool](./data-bridges.md#connection-pool)
+- [Async mode](./data-bridges.md#async-mode)
+- [Batch mode](./data-bridges.md#batch-mode)
+- [Buffer queue](./data-bridges.md#buffer-queue)
+- [SQL preprocessing](./data-bridges.md#prepared-statement)
 
 ## Quick Start Tutorial
 
@@ -40,7 +39,7 @@ The data reported by the client in this tutorial is as follows:
   },
   "value":12
 }
-``` 
+```
 
 ### Install OpenTSDB
 
@@ -65,9 +64,10 @@ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
 
 5. Input the connection information:
 
-   - **Server Url**: Input `http://127.0.0.1:4242`, or the actual URL if the OpenTSDB server is running remotely.
+   - **URL**: Input `http://127.0.0.1:4242`, or the actual URL if the OpenTSDB server runs remotely.
+   - Leave other options as default.
 
-6. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md).
+6. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see the relevant configuration information in [Data Integration](./data-bridges.md).
 
 7. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the OpenTSDB server.
 
@@ -83,20 +83,18 @@ Now that you have successfully created the data bridge to OpenTSDB, you can cont
 
 1. Go to EMQX Dashboard, and click **Data Integration** -> **Rules**.
 
-2. Click **Create** on the top right corner of the page.
+2. Click **Create** at the upper right corner of the page.
 
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
+3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor** using the following statement, which means the MQTT messages under topic `t/#`  will be saved to OpenTSDB.
 
-   - To create a rule for message storage, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to OpenTSDB.
+   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
 
-     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
-
-```sql
-	SELECT
-  		payload.metric as metric, payload.tags as tags, payload.value as value
-	FROM
-  		"t/#"
-```
+   ```sql
+   	SELECT
+     		payload.metric as metric, payload.tags as tags, payload.value as value
+   	FROM
+     		"t/#"
+   ```
 
 4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**.  Click the **Add** button. 
 5. Click the **Create** button to finish the setup. 
@@ -105,7 +103,7 @@ Now you have successfully created the data bridge to OpenTSDB. You can click **D
 
 ### Test the Data Bridges and Rules
 
-Use MQTTX to send a message to topic `t/opents` to trigger an publish event. 
+Use MQTTX to publish a message on topic `t/opents`. 
 
 ```bash
 mqttx pub -i emqx_c -t t/opents -m '{"metric":"cpu","tags":{"host":"serverA"},"value":12}'
@@ -133,7 +131,7 @@ curl -X POST -H "Accept: Application/json" -H "Content-Type: application/json" h
 }'
 ```
 
-The query output in pretty format will be like this:
+The formatted output of the query result is as follows:
 ```json
 [
   {
