@@ -106,14 +106,14 @@ SELECT
 FROM
     "message.publish"
 ```
-![image](./assets/rule-engine/mysql_sql_1.png)
+<img src="./assets/rule-engine/mysql_sql_1.png" alt="image" style="zoom:50%;" />
 
 Bind an action:
 
 Click on the "+ Add" button under "Action Handler", and then select
 "Data to Web Server" in the pop-up dialog window.
 
-![image](./assets/rule-engine/webhook_action_0.png)
+<img src="./assets/rule-engine/webhook_action_0.png" alt="image" style="zoom:50%;" />
 
 Bind a resource to the action:
 
@@ -121,7 +121,7 @@ Since the dropdown list "Resource" is empty for now, we create a new
 resource by clicking on the "New Resource" to the top right, and then
 select "WebHook":
 
-![image](./assets/rule-engine/webhook_action_1.png)
+<img src="./assets/rule-engine/webhook_action_1.png" alt="image" style="zoom:50%;" />
 
 Configure the resource:
 
@@ -133,17 +133,17 @@ And click on the "Testing Connection" button to make sure the
 connection can be created successfully, and then click on the "Create"
 button.
 
-![image](./assets/rule-engine/webhook_resource_0.png)
+<img src="./assets/rule-engine/webhook_resource_0.png" alt="image" style="zoom:50%;" />
 
 Back to the "Actions" dialog, and then click on the "Confirm"
     button.
 
-![image](./assets/rule-engine/webhook_action_2.png)
+<img src="./assets/rule-engine/webhook_action_2.png" alt="image" style="zoom:50%;" />
 
 Back to the creating rule page, then click on "Create" button. The
     rule we created will be show in the rule list:
 
-![image](./assets/rule-engine/webhook_rule_rule_overview_0.png)
+<img src="./assets/rule-engine/webhook_rule_rule_overview_0.png" alt="image" style="zoom:50%;" />
 
 We have finished, testing the rule by sending an MQTT message to
     emqx:
@@ -159,9 +159,9 @@ Payload: "Hello web server"
 Then inspect the Web Service table, verify a new record has been
 received:
 
-![image](./assets/rule-engine/webhook_result.png)
+<img src="./assets/rule-engine/webhook_result.png" alt="image" style="zoom:50%;" />
 
 And from the rule list, verify that the "Matched" column has increased
 to 1:
 
-![image](./assets/rule-engine/webhook_rule_rule_overview_1.png)
+<img src="./assets/rule-engine/webhook_rule_rule_overview_1.png" alt="image" style="zoom:50%;" />

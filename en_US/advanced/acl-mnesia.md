@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# Built-in Database
+# Built-in Database AUTH/ACL
 
 Mnesia ACL uses the built-in Mnesia database of EMQX to store ACL rules, which can store data and dynamically manage ACLs to facilitate integration with external device management systems.
 

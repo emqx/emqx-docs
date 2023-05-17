@@ -1,4 +1,4 @@
-# TCP protocol gateway
+# TCP Protocol Gateway
 
 ## Protocol Introduction
 

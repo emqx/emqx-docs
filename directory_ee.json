@@ -696,8 +696,8 @@
           "path": "https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html"
         },
         {
-          "title": "Start EMQX",
-          "path": "getting-started/start"
+          "title": "Work with License",
+          "path": "getting-started/license"
         },
         {
           "title": "Basic Commands",
@@ -768,39 +768,39 @@
       "path": "access-control/access-control",
       "children": [
         {
-          "title": "Authentication" ,
+          "title": "Authentication",
           "path": "advanced/auth"
         },      
         {
-          "title": "Authorization" ,
+          "title": "Authorization",
           "path": "advanced/acl"
         },
         {
-          "title": "ACL File" ,
+          "title": "Internal ACL File",
           "path": "modules/internal_acl"
         },
         {
-          "title": "Built-In Database AUTH/ACL",
+          "title": "Internal Database",
           "path": "modules/mnesia_authentication"
         },
         {
-          "title": "MySQL AUTH/ACL",
+          "title": "MySQL",
           "path": "modules/mysql_authentication"
         },
         {
-          "title": "PostgreSQL AUTH/ACL",
+          "title": "PostgreSQL",
           "path": "modules/pgsql_authentication"
         },
         {
-          "title": "Redis AUTH/ACL",
+          "title": "Redis",
           "path": "modules/redis_authentication"
         },
         {
-          "title": "HTTP AUTH/ACL",
+          "title": "HTTP Server",
           "path": "modules/http_authentication"
         },
         {
-          "title": "MongoDB AUTH/ACL",
+          "title": "MongoDB",
           "path": "modules/mongo_authentication"
         },
         {
@@ -808,7 +808,7 @@
           "path": "modules/psk_authentication"
         },
         {
-          "title": "LDAP AUTH/ACL",
+          "title": "LDAP Authentication",
           "path": "modules/ldap_authentication"
         },
         {
@@ -862,31 +862,31 @@
           "path": "modules/subscription",
           "children": [
             {
-              "title": "Use Rules to Set MQTT Proxy Subscription",
+              "title": "Set MQTT Proxy Subscription Rules",
               "path": "rule/get_subs"
             },
             {
-              "title": "Get Subscription Relationship from Redis",
+              "title": "Redis",
               "path": "rule/get_subs_from_redis"
             },
             {
-              "title": "Get Subscription Relationship from MySQL",
+              "title": "MySQL",
               "path": "rule/get_subs_from_mysql"
             },
             {
-              "title": "Get Subscription Relationship from PostgreSQL",
+              "title": "PostgreSQL",
               "path": "rule/get_subs_from_pgsql"
             },
             {
-              "title": "Get Subscription Relationship from Cassandra",
+              "title": "Cassandra",
               "path": "rule/get_subs_from_cassandra"
             },
             {
-              "title": "RGet Subscription Relationship from MongoDB",
+              "title": "MongoDB",
               "path": "rule/get_subs_from_mongodb"
             },
             {
-              "title": "Get Subscription Relationship from ClickHouse",
+              "title": "ClickHouse",
               "path": "rule/get_subs_from_clickhouse"
             }
           ]

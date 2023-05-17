@@ -1,4 +1,4 @@
-# Get subscription relationship from PostgreSQL 
+# PostgreSQL 
 
 Set up the PostgreSQL database, and take MacOS X as an example:
 ```bash

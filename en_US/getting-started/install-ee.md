@@ -18,13 +18,13 @@ ref: undefined
 This chapter provides a comprehensive guide for installing and configuring EMQ X. It includes the following key topics:
 
 - Installation: Step-by-step instructions for installing EMQ X on supported operating systems. For details on the supported operating systems, see [Supported operating systems](#supported-operating-systems)
-- [Start EMQX and configure license](./start.md): Instructions on how to start EMQX after the installation and how to configure the license.
+- [Configure license](./start.md): Instructions on how to start EMQX after the installation and how to configure the license.
 - [Directory](./directory.md): Overview of important file and directory locations for future configuration and maintenance tasks.
 - [Basic commands](./command-line.md): Essential commands for working with EMQX and managing its operations.
 - [Configuration](./config.md): Exploring configuration options and how to customize EMQX to meet your specific requirements.
 - [Hot configuration](../modules/hot_confs.md): With the hot configuration feature, most of EMQX's configuration items can be modified at runtime through the Dashboard.
 - [Hot upgrade](../advanced/relup.md): By using the hot upgrade feature, users can quickly and safely upgrade the EMQX in the production environment, and avoid the decrease in system availability caused by restarting the service.
-- [Install Hot Patches](../advanced/patches.md): EMQX provides an ad-hoc patch mechanism to address critical issues promptly, even before they are officially released in future updates. the fix is included in a (future) official release.
+- [Hot patches](../advanced/patches.md): EMQX provides an ad-hoc patch mechanism to address critical issues promptly, even before they are officially released in future updates. the fix is included in a (future) official release.
 - [Upgrade from 4.2](../changes/upgrade-4.3.md): Guidance on how to upgrade from v4.2
 
 ## Download
@@ -33,7 +33,7 @@ EMQX releases the corresponding Docker image and the installation packages for d
 
 EMQX website: https://www.emqx.com/en/try?product=enterprise
 
-::: tip TIP
+:::tip TIP
 
 Besides the above deployment methods, you are also welcome to try our [EMQX Cloud](https://www.emqx.com/en/cloud), a fully managed MQTT service for IoT. You only need to [register for an account](https://www.emqx.com/en/signup?continue=https://www.emqx.com/en/cloud) before starting your MQTT services and connecting your IoT devices to any cloud with zero need for infrastructure maintenance.
 

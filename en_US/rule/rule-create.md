@@ -23,23 +23,23 @@
            qos = 1
    ```
 
-   ![image](../assets/webhook-rulesql-1.png)
+   <img src="../assets/webhook-rulesql-1.png" alt="image" style="zoom:50%;" />
 
 2. Bind an action:
 
     Click on the “+ Add” button under “Action Handler”, and then select “Data to Web Server” in the pop-up dialog window.
 
-  ![image](../assets/webhook-action-1.png)
+  <img src="../assets/webhook-action-1.png" alt="image" style="zoom:50%;" />
 
 3. Bind a resource to the action:
 
    Since the dropdown list “Resource” is empty for now, we create a new resource by clicking on the “New Resource” to the top right:
 
-   ![image](../assets/webhook-action-2.png)
+   <img src="../assets/webhook-action-2.png" alt="image" style="zoom:50%;" />
 
    then select “WebHook”:
 
-   ![image](../assets/webhook-resource-1.png)
+   <img src="../assets/webhook-resource-1.png" alt="image" style="zoom:50%;" />
 
 4. Configure the resource:
 
@@ -49,19 +49,19 @@
 
     And click on the “Testing Connection” button to make sure the connection can be created successfully, and then click on the “Create” button.
 
-   ![image](../assets/webhook-resource-2.png)
+   <img src="../assets/webhook-resource-2.png" alt="image" style="zoom:50%;" />
 
 5. Back to the “Actions” dialog, and then click on the “Confirm” button.
 
-   ![image](../assets/webhook-action-3.png)
+   <img src="../assets/webhook-action-3.png" alt="image" style="zoom:50%;" />
 
 6.  Back to the creating rule page, then click on “Create” button. The rule we created will be show in the rule list
 
-   ![image](../assets/webhook-rule-create.png)
+   <img src="../assets/webhook-rule-create.png" alt="image" style="zoom:50%;" />
 
    We have finished, testing the rule by sending an MQTT message to emqx:
 
-   ![image](../assets/webhook-rulelist-1.png)
+   <img src="../assets/webhook-rulelist-1.png" alt="image" style="zoom:50%;" />
 
 7. send a message
 
@@ -73,7 +73,7 @@
 
  Then check if the web service receives the message:
 
-  ![image](../assets/webhook-result-1.png)
+  <img src="../assets/webhook-result-1.png" alt="image" style="zoom:50%;" />
 
 {% emqxee %}
 ::: tip
@@ -193,7 +193,7 @@ Create a rule: Forward all the messages that send from clientid=’Steven’, to
 
       ```bash
       $ ./bin/emqx_ctl rule-actions list
-
+    
       action(name='data_to_webserver', app='emqx_web_hook', for='$any', types=[web_hook], params=#{'$resource' => ...}, title ='Data to Web Server', description='Forward Messages to Web Server')
       ...
       ```

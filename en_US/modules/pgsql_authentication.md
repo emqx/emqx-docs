@@ -1,4 +1,4 @@
-# PostgreSQL Authentication/ACL
+# PostgreSQL
 
 PostgreSQL Authentication/ACL uses an external PostgreSQL database as a data source, which can store a large amount of data and at the same time integrate with external device management systems.
 

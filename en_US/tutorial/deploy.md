@@ -8,7 +8,7 @@ EMQX cluster can be deployed as an IoT access service (IoT Hub). Currently, EMQ 
 
 Typical deployment architecture:
 
-![](./_assets/deploy_1.png)
+<img src="./_assets/deploy_1.png" style="zoom:50%;" />
 
 
 
@@ -90,11 +90,11 @@ If deployed between nodes, firewalls should be configured that the above ports a
 5. Create LB and assign the public IP address.
 6. Create MQTT TCP listener:
 
-![image](./_assets/deploy_2.png)
+<img src="./_assets/deploy_2.png" alt="image" style="zoom:50%;" />
 
  Or create SSL listener and terminate the SSL connections on LB: 
 
-![image](./_assets/deploy_3.png)
+<img src="./_assets/deploy_3.png" alt="image" style="zoom:50%;" />
 
 7. Connect the MQTT clients to the LB using the public IP address and test the deployment.
 
@@ -117,11 +117,11 @@ If deployed between nodes, firewalls should be configured that the above ports a
 6. Create ELB (Classic Load Balancer), assign the VPC network, and assign the public IP address.
 7. Create MQTT TCP listener on the ELB:
 
-![image](./_assets/deploy_4-20200225175403693.png)
+<img src="./_assets/deploy_4-20200225175403693.png" alt="image" style="zoom:50%;" />
 
  Or create SSL listener and terminate the SSL connections on the ELB: 
 
-![image](./_assets/deploy_5.png)
+<img src="./_assets/deploy_5.png" alt="image" style="zoom:50%;" />
 
 8. Connect the MQTT clients to the ELB using the public IP address and test the deployment.
 

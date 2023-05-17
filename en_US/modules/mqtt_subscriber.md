@@ -1,4 +1,4 @@
-# MQTT subscriber
+# MQTT Subscriber
 
 ## Create module
 

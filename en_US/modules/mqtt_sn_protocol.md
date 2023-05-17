@@ -1,4 +1,4 @@
-# MQTT-SN protocol gateway
+# MQTT-SN Protocol Gateway
 
 ## Protocol Introduction
 

@@ -1,11 +1,11 @@
-# Builtin ACL File
+# Internal ACL File
 
-The builtin ACL sets rules through files, which is simple and lightweight enough to use, and is suitable for projects with predictable number of rules, no changes in demand, or small changes.
+The built-in ACL sets rules through files, which is simple and lightweight enough to use, and is suitable for projects with a predictable number of rules, no changes in demand, or small changes.
 
 
-## Builtin ACL File
+## built-in ACL File
 
-Builtin ACL module is enabled by default, it could be updated or stoped by dashboard but can not be deleted.
+built-in ACL module is enabled by default, it could be updated or stopped by Dashboard but can not be deleted.
 
 ![image-20200927213049265](./assets/acl_file4.png)
 
@@ -15,7 +15,7 @@ Editing ACL file content directly, or select a file to replace
 
 ## Define ACL
 
-The builtin ACL is the rule table with the lowest priority. After all ACL checks are completed, if there are still no matches, the default ACL rules will be checked.
+The built-in ACL is the rule table with the lowest priority. After all ACL checks are completed, if there are still no matches, the default ACL rules will be checked.
 
 The rules file is described in the format of Erlang syntax:
 
@@ -59,33 +59,33 @@ The grammar rules of ʻacl.conf` are contained in the comments at the top. Those
 
 -The first place of the tuple: indicates that the permission control operation is performed after the rule is successfully hit. The possible values ​​are:
 
-​ * `allow`: means `allow`
+ * `allow`: means `allow`
 
-​ * `deny`: means `deny`
+ * `deny`: means `deny`
 
 -The second digit of the tuple: indicates the user whose rule takes effect, and the available formats are:
 
-​ * `{user, "dashboard"}`: indicates that the rule only takes effect for the user whose *Username (Username)* is "dashboard"
+ * `{user, "dashboard"}`: indicates that the rule only takes effect for the user whose *Username (Username)* is "dashboard"
 
-​ * `{client, "dashboard"}`: indicates that the rule only takes effect for users whose *client ID (ClientId)* is "dashboard"
+ * `{client, "dashboard"}`: indicates that the rule only takes effect for users whose *client ID (ClientId)* is "dashboard"
 
-​ * `{ipaddr, "127.0.0.1"}`: indicates that the rule only takes effect for users whose source address is "127.0.0.1"
+ * `{ipaddr, "127.0.0.1"}`: indicates that the rule only takes effect for users whose source address is "127.0.0.1"
 
-​ * `all`: indicates that the rule is effective for all users
+ * `all`: indicates that the rule is effective for all users
 
 -The third position of the tuple: indicates the operation controlled by the rule, and the possible values ​​are:
 
-​ * `publish`: indicates that the rule is applied to PUBLISH operations
+ * `publish`: indicates that the rule is applied to PUBLISH operations
 
-​ * `subscribe`: indicates that the rule is applied to the SUBSCRIBE operation
+ * `subscribe`: indicates that the rule is applied to the SUBSCRIBE operation
 
-​ * `pubsub`: indicates that the rule is valid for both PUBLISH and SUBSCRIBE operations
+ * `pubsub`: indicates that the rule is valid for both PUBLISH and SUBSCRIBE operations
 
 -The fourth place of the tuple: indicates the list of topics restricted by the rule, the content is given in the format of an array, for example:
 
-​ * `$SYS/#`: It is a **topic filter (Topic Filter)**; it means that the rule can hit the topic that matches `$SYS/#`; for example, it can hit "$SYS/#" , You can also hit "$SYS/a/b/c"
+ * `$SYS/#`: It is a **topic filter (Topic Filter)**; it means that the rule can hit the topic that matches `$SYS/#`; for example, it can hit "$SYS/#" , You can also hit "$SYS/a/b/c"
 
-​ * `{eq, "#"}`: indicates the congruence of characters. The rule can only hit the string with subject `#`, not `/a/b/c` etc.
+ * `{eq, "#"}`: indicates the congruence of characters. The rule can only hit the string with subject `#`, not `/a/b/c` etc.
 
 -In addition, there are two special rules:
 

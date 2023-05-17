@@ -11,9 +11,11 @@ Before starting the cluster creation step, let's first get familiar with the con
 - For EMQX node deployed on server `s1.emqx.io`, the node name should be `emqx@s1.emqx.io`;
 - If this server has a static IP (`192.168.0.10`), the node name should be `emqx@192.168.0.10`.
 
-Tip
+:::tip
 
 EMQX node names are immutable, as they are baked into the database schema and data files. Therefore, it is recommended to use static FQDNs for EMQX node names.
+
+:::
 
 ### Node Discovery
 

@@ -1,4 +1,4 @@
-# Use Rules to Set MQTT Proxy Subscription
+# Set MQTT Proxy Subscription Rules
 
 ## Create module
 

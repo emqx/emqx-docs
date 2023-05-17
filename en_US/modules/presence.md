@@ -1,4 +1,4 @@
-# Online and Offline notification
+# Online and Offline Notification
 EMQX online and offline system message notification function automatically sends a system topic message when the client connection is successful or the client is disconnected, and EMQX turns on the online and offline notification module by default.
 
 ## Create module

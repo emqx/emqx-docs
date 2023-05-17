@@ -1,4 +1,4 @@
-# MySQL Authentication/ACL
+# MySQL
 
 MySQL Authentication/ACL uses an external MySQL database as a data source, which can store a large amount of data and at the same time integrate with external equipment management systems.
 

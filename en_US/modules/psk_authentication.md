@@ -1,4 +1,4 @@
-# PSKFile Authentication
+# PSK File Authentication
 
 ## PSK certification
 

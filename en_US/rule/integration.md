@@ -9,7 +9,9 @@ This chapter introduces the supported external data systems, how to set up the d
 Currently, the following are supported:
 
 - [Bridge Data into MQTT Broker](../rule/bridge_mqtt.md)
+- [MQTT Subscriber](../modules/mqtt_subscriber.md)
 - [Steam Data into Kafka](../rule/bridge_kafka.md)
+- [Kafka Consumer](../modules/kafka_consumer.md)
 - [Ingest Data into InfluxDB](../rule/backend_influxdb.md)
 - [Ingest Data into InfluxDB V2](../rule/backend_influxdb_v2.md)
 - [Ingest Data into MySQL](../rule/backend_mysql.md)
@@ -18,6 +20,7 @@ Currently, the following are supported:
 - [Ingest Data into MongoDB](../rule/backend_mongodb.md)
 - [Steam Data into HStreamDB](../rule/backend_hstreamdb.md)
 - [Ingest Data into Pulsar](../rule/bridge_pulsar.md)
+- [Pulsar Consumer](../modules/pulsar_consumer.md)
 - [Ingest Data into RabbitMQ](../rule/bridge_rabbitmq.md)
 - [Ingest Data into RocketMQ](../rule/bridge_rocketmq.md)
 - [Ingest Data into Lindorm](../rule/backend_lindorm.md)

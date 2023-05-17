@@ -1,4 +1,4 @@
-# Hot-Patch EMQX at Runtime
+# Hot Patch
 
 Starting from 4.3, EMQX supports an easier (comparing to 4.2) hot-patch mechanism.
 Hot-patch is an ad-hoc patch mechanism comparing to [Hot Upgrade](./relup.md#hot-upgrade-steps).

@@ -1,4 +1,4 @@
-# Get subscription relationship from  Redis
+# Redis
 
 Set up the Redis environment, and take MacOS X as an example:
 

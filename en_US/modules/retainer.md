@@ -1,4 +1,4 @@
-# MQTT retainer message
+# Retainer Message
 
 ## Introduction
 

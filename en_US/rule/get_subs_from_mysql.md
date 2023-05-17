@@ -1,4 +1,4 @@
-# Get subscription relationship from MySQL 
+# MySQL 
 
 Set up the MySQL database and set the user name and password to root/public. Take MacOS X as an example:
 
