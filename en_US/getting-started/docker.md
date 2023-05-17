@@ -2,7 +2,7 @@
 
 This chapter introduces how to use the official Docker image to install and run EMQX, and how to use Docker Compose to build an EMQX cluster.
 
-:::tip Note
+:::tip
 
 When starting EMQ X in a container, use the hostname or FQDN to form the node name. This prevents data loss by ensuring data is stored in the correct directory ('data/mnesia/<node name>').
 :::
@@ -87,9 +87,7 @@ When starting EMQ X in a container, use the hostname or FQDN to form the node na
                      stopped_nodes => []}
    ```
 
-For more information about EMQX Broker Docker, please visit [Docker Hub](https://hub.docker.com/r/emqx/emqx-ee)
-
-
+For more information about EMQX Broker Docker, please visit [Docker Hub](https://hub.docker.com/r/emqx/emqx-ee
 
 ## Next Step
 

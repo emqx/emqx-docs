@@ -61,7 +61,7 @@ EMQX stands as the world's premier Cloud-Native IoT Messaging Platform. It incor
 
 ## Install EMQX
 
-### Running EMQX in containers
+### Deplot EMQX with Docker
 
 {% emqxce %}
 
@@ -74,7 +74,7 @@ Container deployment is the quickest way to start experimenting with EMQX
 docker pull emqx/emqx:latest
 ```
 
-1. Start Docker container
+2. Start Docker container
 
 ```bash
 docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
@@ -105,7 +105,7 @@ docker run -d --name emqx-ee -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084
 
 {% endemqxee %}
 
-### Running EMQX in Kubernetes
+### Deploy EMQX with Kubernetes
 
 For Kubernetes, EMQ offers [EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator).
 
@@ -122,18 +122,16 @@ one click through Terraform.
 The fastest way to deploy EMQX Enterprise clusters on the public cloud
 
 - [Deploy on AWS](https://github.com/emqx/tf-aws)
-- [Deploy on Alibaba Cloud](https://github.com/emqx/tf-alicloud)
 
 For more information about Terraform installation and deployment, please refer to
 [EMQX Terraform](https://www.emqx.com/en/emqx-terraform)
 
-### Run in a VM or on bare metal
+### Run in a VM or on Bare Metal
 
 EMQX can be deployed directly to bare metal servers or virtual machines.
 A minimum of 2 cores and 4GB RAM can run the EMQX.
 
-EMQX has prebuilt packages downloadable for Linux(RedHat, CentOS, Rockylinux)
-as well as Debian, Ubuntu, and MacOS.
+EMQX has prebuilt packages downloadable for Linux (RedHat, CentOS, Rockylinux) as well as Debian, Ubuntu, and MacOS.
 
 {% emqxce %}
 
@@ -142,14 +140,14 @@ as well as Debian, Ubuntu, and MacOS.
 - [MacOS, Windows, Linux ZIP installation](./install.md#zip-linux-macos-windows)
 
 For other platforms which are not in the prebuilt list,
-you may [build the runnables from source code](./install.md#source-code-compilation-and-installation).
+you may [build the runnable from source code](./install.md#source-code-compilation-and-installation).
 
 {% endemqxce %}
 
 {% emqxee %}
 
-For other platforms which are not in the prebuilt list,
-you may simply [contact EMQ](https://www.emqx.com/en/contact) for support.
+For other platforms which are not in the prebuilt list, you may simply [contact EMQ](https://www.emqx.com/en/contact) for support.
+
 {% endemqxee %}
 
 {% emqxce %}
@@ -160,7 +158,7 @@ simply [contact EMQ](https://www.emqx.com/en/contact) for support.
 
 ## Start EMQX
 
-After the installation, you can start EMQX through the command of systemctl or emqx.
+After the installation, you can start EMQX through the command of systemctl or EMQX.
 
  {% emqxce %}
 After EMQX is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/) (replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](./dashboard.md) for device connection and related indicator monitoring and management.
@@ -168,12 +166,11 @@ After EMQX is started successfully, you can visit [http://localhost:18083/](http
 {% endemqxce %}
 
 {% emqxee %}
-After EMQX is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/)
-(replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](./dashboard-ee.md) for device connection and related indicator monitoring and management.
+After EMQX is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/) (replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](./dashboard-ee.md) for device connection and related indicator monitoring and management.
 
 {% endemqxee %}
 
-### Start EMQX in the background
+To start EMQX directly, run:
 
 ```bash
 emqx start
@@ -186,7 +183,7 @@ If pong is returned, it means the running status is OK:
 emqx ping
 ```
 
-### Start EMQX using systemctl
+To start EMQX using systemctl, run:
 
 ```bash
 sudo systemctl start emqx
@@ -198,7 +195,7 @@ Check if the service is working properly:
 sudo systemctl status emqx
 ```
 
-### Start EMQX using ZIP installation package
+Start EMQX when installed with ZIP installation package
 
 Switch to the EMQX decompression directory and execute the following command to start EMQX:
 
@@ -213,40 +210,36 @@ the startup and runtime logs printed to the console.
 ./bin/emqx console
 ```
 
-## Quick verification using an MQTT client
+## Quick Verification Using an MQTT client
 
 After startup, you can quickly verify if EMQX is working by any MQTT client.
 You can use the following client tools or client libraries to access EMQX
 
-### Dashboard Websocket Tool
+### Dashboard WebSocket Tool
 
-EMQX dashboard comes with a built-in, websocket based MQTT client.
+EMQX dashboard comes with a built-in, WebSocket-based MQTT client.
 
-Open Dashboard and enter the page of **Tools -> Websocket**, where you can use the MQTT over WebSokcet client to quickly access EMQX.
+Open Dashboard and enter the page of **Tools -> Websocket**, where you can use the MQTT over WebSocket client to quickly access EMQX.
 
-The Websocket page provides you with a simple but effective WebSocket client tool, which can be used for publishing, subscribing, and inspecting the messages.
+The Websocket page provides you with a simple but effective WebSocket client tool, which can be used for publishing, subscribing, and inspecting messages.
 
 ![emqx-mqtt-websocket-tool-en](./assets/emqx-mqtt-websocket-tool-en.png)
 
 ### MQTTX desktop client tool
 
-MQTTX is an elegant cross-platform MQTT 5.0 open source desktop client tool that
-supports running on macOS, Linux, and Windows.
+MQTTX is an elegant cross-platform MQTT 5.0 open source desktop client tool that supports running on macOS, Linux, and Windows.
 
-MQTTX has many features, provides a concise graphical interface and operation logic,
-supports MQTT/MQTT over WebSocket access and one-way/two-way SSL authentication,
-and supports Payload format conversion, simulation of test data with a custom script,
-automatic subscription of $SYS topic, viewing Traffic statistics and so on.
+MQTTX has many features, provides a concise graphical interface and operation logic, supports MQTT/MQTT over WebSocket access and one-way/two-way SSL authentication, and supports Payload format conversion, simulation of test data with a custom script, automatic subscription of $SYS topic, viewing Traffic statistics and so on.
 
-For download and use, please refer to the [MQTT X website](https://mqttx.app).
+For download and use, please refer to the [MQTTX website](https://mqttx.app).
 
 ![emqx-mqttx](./assets/emqx-mqttx.jpeg)
 
-## EMQX client library
+## EMQX Client Library
 
 For developers, we have compiled a list of popular MQTT clients for your reference.
 
-### MQTT Client libraries
+### MQTT Client Libraries
 
 - [MQTT C client library](../development/c.md)
 - [MQTT Java client library](../development/java.md)
@@ -255,7 +248,7 @@ For developers, we have compiled a list of popular MQTT clients for your referen
 - [MQTT JavaScript client library](../development/javascript.md)
 - [MQTT Python client library](../development/python.md)
 
-### Client example code
+### Client Example Code
 
 For MQTT client library example code, we try to cover as many mainstream programming languages
 and platforms as possible, including
@@ -290,18 +283,18 @@ and enabling authentication can effectively fence off malicious client connectio
 Authorization rules, or Access Control List (ACL) can be configured to ensure only
 legit clients are permitted to publish or subscribe to certain topics.
 
-- [Authentication Introduction](../advanced/auth.md): Select a built-in plugin, to integrate with internal or external database, JWT or HTTP service as the authentication data source.
-- [Authorization / ACL](../advanced/acl.md): Select a built-in plugin, to integrate with internal or external database, or HTTP service as the ACL data source.
+- [Authentication](../advanced/auth.md): Select a built-in plugin, to integrate with an internal or external database, JWT, or HTTP service as the authentication data source.
+- [Authorization / ACL](../advanced/acl.md): Select a built-in plugin, to integrate with an internal or external database, or HTTP service as the ACL data source.
 
 ### Rule Engine
 
-The built-in SQL based rule-engine can extract, filter, enrich, and convert messages between devices and data platofrms in real-time, and forward the data to Webhooks or other MQTT Brokers without having to implement MQTT clients to do the job.
+The built-in SQL based rule-engine can extract, filter, enrich, and convert messages between devices and data platforms in real-time, and forward the data to Webhooks or other MQTT Brokers without having to implement MQTT clients to do the job.
 
-EMQX enterprise eidtion can also integrate with Kafka, various SQL / NoSQL / time-series databases and enterprise systems, such as SAP.
+EMQX enterprise edition can also integrate with Kafka, various SQL / NoSQL / time-series databases, and enterprise systems, such as SAP.
 
-- [Rule Engine](../rule/rule-engine.md): The concept and basic usage of rule engine.
+- [Rule Engine](../rule/rule-engine.md): The concept and basic usage of the rule engine.
 - [Create Rule](../rule/rule-create.md): How to create a rule.
-- [Example](../rule/rule-example.md): Tutorial on using various data sources for rule engine.
+- [Example](../rule/rule-example.md): Tutorial on using various data sources for a rule engine.
 
 ### HTTP API
 
@@ -318,21 +311,17 @@ HTTP API is a frequently used function in IoT platform development and EMQX oper
   subscription/unsubscription.
 - [Plugins](../advanced/http-api.md#endpoint-plugins): Status management of plugins with start and stop operations.
 
-### Operation, maintenance and deployment
+### Operation and Maintenance
 
 It contains official usage guidelines and best practices.
 
 - [System Tuning](../tutorial/tune.md)
-- [Production Deployment](../tutorial/deploy.md)
+- [Load balancing](../tutorial/deploy.md)
 - [Prometheus Monitoring and alert](../tutorial/prometheus.md)
-- [Benchmark](../tutorial/benchmark.md)
+- [Performance Test](../tutorial/benchmark.md)
 
 ### FAQ
 
-In [FAQ (Frequently Asked Questions)](../faq/faq.md), we regularly collect and sort out the
-common problems and frequently encountered errors of EMQX users, such as topic number limit,
-external resource connection errors, startup failure reasons, etc.
+In [FAQ (Frequently Asked Questions)](../faq/faq.md), we regularly collect and sort out the common problems and frequently encountered errors of EMQX users, such as topic number limit, external resource connection errors, startup failure reasons, etc.
 
-In addition, you can visit [EMQ Q&A Community](https://askemq.com/) to put forward and answer
-questions about the use of EMQX and EMQ-related products, and exchange experience of IoT-related
-technologies with EMQX users.
+In addition, you can visit [EMQ Q&A Community](https://askemq.com/) to put forward and answer questions about the use of EMQX and EMQ-related products, and exchange experience of IoT-related technologies with EMQX users.
