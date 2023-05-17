@@ -769,83 +769,55 @@
       "children": [
         {
           "title": "Authentication" ,
-          "path": "advanced/auth",
-          "children":[
-            {
-              "title": "Built-In Database",
-              "path": "advanced/auth-mnesia"
-            },
-            {
-              "title": "HTTP Server",
-              "path": "auth-http"
-            },
-            {
-              "title": "MySQL",
-              "path": "advanced/auth-mysql"
-            },
-            {
-              "title": "PostgreSQL",
-              "path": "advaced/acl-postgres"
-            },
-            {
-              "title": "MongoDB",
-              "path": "acl-mongodb.md"
-            },
-            {
-              "title": "Redis",
-              "path": "advanced/auth-redis"
-            },
-            {
-              "title": "LDPA",
-              "path": "advanced/auth-ldap"
-            },
-            {
-              "title": "JWT",
-              "path": "auth-jwt"
-            },
-            {
-              "title": "MQTT Enhanced Authentication",
-              "path": "modules/auth_sasl"
-            }
-          ]
-        },  
+          "path": "advanced/auth"
+        },      
         {
           "title": "Authorization" ,
-          "path": "advanced/acl",
-          "children":[
-            {
-              "title": "ACL File",
-              "path": "advanced/acl-file"
-            },
-            {
-              "title": "Built-in Database",
-              "path": "advanced/acl-mnesia"
-            },
-            {
-              "title": "HTTP Server",
-              "path": "advanced/acl-http"
-            },
-            {
-              "title": "MySQL",
-              "path": "advanced/acl-mysql"
-            },
-            {
-              "title": "PostgreSQL",
-              "path": "advanced/acl-postgres"
-            },
-            {
-              "title": "MongoDB",
-              "path": "advanced/acl-mongodb"
-            },
-            {
-              "title": "Redis",
-              "path": "advanced/acl-redis"
-            },
-            {
-              "title": "JWT",
-              "path": "advanced/acl-jwt"
-            }
-          ]
+          "path": "advanced/acl"
+        },
+        {
+          "title": "ACL File" ,
+          "path": "modules/internal_acl"
+        },
+        {
+          "title": "Built-In Database AUTH/ACL",
+          "path": "modules/mnesia_authentication"
+        },
+        {
+          "title": "MySQL AUTH/ACL",
+          "path": "modules/mysql_authentication"
+        },
+        {
+          "title": "PostgreSQL AUTH/ACL",
+          "path": "modules/pgsql_authentication"
+        },
+        {
+          "title": "Redis AUTH/ACL",
+          "path": "modules/redis_authentication"
+        },
+        {
+          "title": "HTTP AUTH/ACL",
+          "path": "modules/http_authentication"
+        },
+        {
+          "title": "MongoDB AUTH/ACL",
+          "path": "modules/mongo_authentication"
+        },
+        {
+          "title": "PSK File Authentication",
+          "path": "modules/psk_authentication"
+        },
+        {
+          "title": "LDAP AUTH/ACL",
+          "path": "modules/ldap_authentication"
+        },
+        {
+          "title": "JWT Authentication",
+          "path": "modules/jwt_authentication"
+        },
+        {
+          "title": "MQTT Enhanced Authentication",
+          "path": "modules/auth_sasl"
         },
         {
           "title": "Black List",
