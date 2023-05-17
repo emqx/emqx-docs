@@ -1,4 +1,4 @@
-# Get subscription relationship from Cassandra
+# Get Subscription Relationship from Cassandra
 
 Set up the Cassandra database and set the user name and password to root/public. Take MacOS X as an example:
 ```bash

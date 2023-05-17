@@ -1,32 +1,33 @@
-# 运维操作
+# Logs and Observability
 
-EMQX 通过包括日志在内的一系列的可观测性功能帮助用户进行系统监控和调试支持，具体包括：
+EMQX provides a series of observability-related features to help with system monitoring, management, and diagnosing. All these features can be accessed and configured on Dashboard under the following menu items:
 
-- [日志](../getting-started/log.md)
+**Monitoring**
 
-  EMQX 的日志中记录了客户端访问、操作系统或网络异常等问题。您可基于日志信息进行问题排查或系统性能优化。
+- [Metrics](../advanced/metrics-and-stats.md)
 
-- [指标](../advanced/metrics-and-stats.md)
+  EMQX provides metrics monitoring functions, based on which the operation and maintenance personnel can monitor the current service status and troubleshoot possible system malfunctions. Users can use the EMQX Dashboard, HTTP API, and system topics to trace the metrics data.
 
-  EMQX 为用户提供了丰富的指标来帮助用户与因为人员了解当前服务状态，监测和排除系统的性能问题。
+  [Alarm](../advanced/alarms.md)
 
-  您可通过 EMQX Dashboard 或 HTTP API 和系统主题来获取 EMQX 指标信息。
+  EMQX has offered a built-in monitoring and alarm functionality for monitoring the CPU occupancy, system and process memory occupancy, number of processes, rule engine resource status, cluster partition and healing, and will raise an alarm in case of system malfunctions.
 
-- [告警](../advanced/alarms.md)
+**Management**
 
-  EMQX 内置监控与告警功能，目前支持监控 CPU 占用率、系统与进程的内存占用率、进程数量、规则引擎资源状态、网络分区与愈合，并会在发现异常时进行告警。
+- [Log](../getting-started/log.md)
 
-- [$SYS 系统主题](../advanced/system-topic.md)
+  Logs provide a reliable source of information for troubleshooting and system performance optimization. You can find the record about the access, operating or network issues from EMQX logs.
 
-  EMQX 周期性发布自身运行状态、消息统计、客户端上下线事件到以 `$SYS/` 开头系统主题。
+- [Integragte with Prometheus](../tutorial/prometheus.md)
 
-- [主题指标统计](../modules/topic_metrics.md)
+  [Prometheus](https://prometheus.io/) is the monitoring solution open-sourced by SoundCloud, featuring its support to multidimensional data model, flexible query language, and powerful alarm management. EMQX supports integrating with Prometheus to collect system metrics and as well as pushing metrics to `pushgateway`.
 
-  EMQX 提供了主题指标统计功能，可以统计指定主题下的消息收发数量、速率等指标。
+**Diagnose**
 
-- [集成 Prometheus](https://docs.emqx.com/zh/enterprise/v5.0/observability/prometheus.html)
+- [Topic Metrics](../modules/topic_metrics.md)
 
-  [Prometheus](https://prometheus.io/)是由 SoundCloud 开源的监控告警解决方案，支持多维数据模型、灵活的查询语言、强大的告警管理等特性。EMQX 支持集成 Prometheus 用于监测系统指标，同时还支持向 `pushgateway` 推送指标。
+  EMQX provides a topic monitoring feature (called Topic Metrics) that allows you to count the number of messages sent and received, the rate and other metrics for a given topic.
 
+- [$SYS Topic](../advanced/system-topic.md)
 
-
+  The EMQX Broker periodically publishes its running status, message statistics, client online and offline events to the system topic starting with `$SYS/`.

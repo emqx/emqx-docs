@@ -1,61 +1,61 @@
-# 通过规则预设订阅关系
+# Use Rules to Set MQTT Proxy Subscription
 
-## 创建模块
+## Create module
 
-打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
-![image-20200927213049265](./assets/modules.png)
+![image-20200927213049265](/Users/lena/Documents/GitHub/rebalancing/emqx-docs/en_US/modules/assets/modules.png)
 
-选择 MQTT 代理订阅模块
+Select MQTT broker subscription module
 
-![image-20200927213049265](./assets/mod_subscriptions_1.png)
+![image-20200927213049265](/Users/lena/Documents/GitHub/rebalancing/emqx-docs/en_US/modules/assets/mod_subscriptions_1.png)
 
-配置相关参数
+Configure related parameters
 
-![image-20200927213049265](./assets/mod_subscriptions_2.png)
+![image-20200927213049265](/Users/lena/Documents/GitHub/rebalancing/emqx-docs/en_US/modules/assets/mod_subscriptions_2.png)
 
-点击添加后，模块添加完成
+After clicking add, the module is added
 
-![image-20200927213049265](./assets/mod_subscriptions_3.png)
+![image-20200927213049265](/Users/lena/Documents/GitHub/rebalancing/emqx-docs/en_US/modules/assets/mod_subscriptions_3.png)
 
-## 订阅选项
+## Subscription options
 
-+ 服务质量（ QoS ）
++ Quality of Service (QoS)
 
-  服务端可以向客户端发送的应用消息的最大 QoS 等级。
+  The maximum QoS level of application messages that the server can send to the client.
 
-+ NL（ No Local ）
++ NL (No Local)
 
-  应用消息是否能够被转发到发布此消息的客户端。
+  Whether application messages can be forwarded to the client that posted this message.
 
-  - NL 值为 0 时，表示应用消息可以被转发给发布此消息的客户端。
+  -When the NL value is 0, it means that the application message can be forwarded to the client that published the message.
 
-  - NL 值为 1 时，表示应用消息不能被转发给发布此消息的客户端。
+  -When the NL value is 1, it means that the application message cannot be forwarded to the client that published the message.
 
-+ RAP（ Retain As Published ）
++ RAP (Retain As Published)
 
-  向此订阅转发应用消息时，是否保持消息被发布时设置的保留(RETAIN)标志。
+  When forwarding application messages to this subscription, whether to keep the RETAIN flag set when the message is published.
 
-  - RAP 值为 0 时，表示向此订阅转发应用消息时把保留标志设置为 0。
+  -When the RAP value is 0, it means that the reserved flag is set to 0 when forwarding application messages to this subscription.
 
-  - RAP 值为 1 时，表示向此订阅转发应用消息时保持消息被发布时设置的保留标志。
+  -When the RAP value is 1, it means to keep the reserved flag set when the message is published when the application message is forwarded to this subscription.
 
-+ RH（ Retain Handling ）
++ RH (Retain Handling)
 
-  当订阅建立时，是否发送保留消息
+  Whether to send a hold message when the subscription is established
 
-  - 0：订阅建立时发送保留消息
+  -0: Send a reserved message when the subscription is established
 
-  - 1：订阅建立时，若该订阅当前不存在则发送保留消息
+  -1: When the subscription is established, if the subscription does not currently exist, a reserved message will be sent
 
-  - 2：订阅建立时不要发送保留消息
+  -2: Do not send reserved messages when the subscription is established
 
-## 代理订阅规则
+## Agent Subscription Rules
 
-在配置代理订阅的主题时，EMQX 提供了 `%c` 和 `%u` 两个占位符供用户使用，EMQX 会在执行代理订阅时将配置中的 `%c` 和 `%u` 分别替换为客户端的 `Client ID` 和 `Username`，需要注意的是，`%c` 和 `%u` 必须占用一整个主题层级。
+When configuring the topic subscribed by the agent, EMQX provides two placeholders `%c` and `%u` for users to use. EMQX will configure the `%c` and `%u` `Replaced with the client's `Client ID` and ʻUsername` respectively. It should be noted that `%c` and `%u` must occupy an entire topic level.
 
-例如，添加上文图中的规则后：配置 A、B 两个客户端，客户端 A 的 `Client ID` 为 `testclientA`，`Username` 为 `testerA`，客户端 B 的 `Client ID` 为 `testclientB`，`Username` 为 `testerB`。
+For example, after adding the rules in the above figure: configure two clients A and B, the `Client ID` of client A is `testclientA`, the `Username` is `testerA`, and the `Client ID` of client B is `testclientB`, ʻUsername` is `testerB`.
 
-A 客户端使用 MQTT V3.1.1 协议连接 EMQX，根据上文的配置规则，代理订阅功能会主动帮客户端订阅 QoS 为 1 的 `client/testclientA` 和 QoS 为 2 的 `user/testerA` 这两个主题，因为连接协议为 MQTT V3.1.1，所以配置中的 No Local、Retain As Published、Retain Handling 不生效。
+The client A uses the MQTT V3.1.1 protocol to connect to EMQX. According to the above configuration rules, the proxy subscription function will actively help the client subscribe to the two `client/testclientA` with QoS 1 and ʻuser/testerA` with QoS 2. For this topic, because the connection protocol is MQTT V3.1.1, No Local, Retain As Published, and Retain Handling in the configuration are not effective.
 
-B 客户端使用 MQTT V5 协议连接 EMQX，根据上文的配置规则，代理订阅功能会主动帮客户端订阅 `client/testclientB` 和 `user/testerB` 这两个主题，其中 `client/testclientB` 的订阅选项为 Qos = 1，No Local、Retain As Published、Retain Handling 均为 0；`user/testerB` 的订阅选项为 Qos = 2、No Local = 1、Retain As Published = 1 、Retain Handling = 1。
+Client B uses the MQTT V5 protocol to connect to EMQX. According to the configuration rules above, the proxy subscription function will actively help the client to subscribe to the two topics `client/testclientB` and ʻuser/testerB`, among which `client/testclientB` The subscription options are Qos = 1, No Local, Retain As Published, and Retain Handling are all 0; the subscription options of ʻuser/testerB` are Qos = 2, No Local = 1, Retain As Published = 1 and Retain Handling = 1.

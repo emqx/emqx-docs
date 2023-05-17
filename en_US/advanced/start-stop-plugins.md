@@ -13,23 +13,23 @@ category:
 ref:
 ---
 
-# 插件开发与管理
+# Develop and Manage
 
-## 启停插件
+## Start and stop plugin
 
-目前启动插件有以下四种方式：
+ There are four ways to load plugins: 
 
-1.  默认加载
-2.  命令行启停插件
-3.  使用 Dashboard 启停插件
-4.  调用管理 API 启停插件
+1.  Default loading
+2.  Start and stop plugin on command line
+3.  Start and stop plugin on Dashboard
+4.  Start and stop plugin by calling management API
 
 
-**开启默认加载**
+ **Default loading** 
 
-如需在 EMQX 启动时就默认启动某插件，则直接在 `data/loaded_plugins` 添加需要启动的插件名称。
+ If a plugin needs to start with the broker, add this plugin in `data/loaded_plugins`.  
 
-例如，目前 EMQX 自动加载的插件有：
+ For example, the plugins that are loaded by default are: 
 
 ```erlang
 {emqx_management, true}.
@@ -41,32 +41,33 @@ ref:
 ```
 
 
-**命令行启停插件**
+ **Start and stop plugin on command line**
 
-在 EMQX 运行过程中，可通过 [CLI - Load/Unload Plugin](cli.md#load_plugin) 的方式查看、和启停某插件。
+When the EMQX is running, plugins can be checked, loaded/unloaded by [CLI - Load/Unload Plugin](cli.md#load_plugin):
 
-**使用 Dashboard 启停插件**
+ **Start and stop plugin on Dashboard**
 
-若开启了 Dashbord 的插件，可以直接通过访问 `http://localhost:18083/plugins` 中的插件管理页面启停插件。
+If Dashboard plugin is started (by default), the plugins can be start or stopped by visiting the managing page that can be found under `http://localhost:18083/plugins`.
 
-**使用管理 API 启停插件**
+**Start and stop plugins using management API**
 
-在 EMQX 运行过程中，可通过 [管理监控 API - Load Plugin](./http-api.md#load_plugin) 的方式查看、和启停某插件。
+When EMQX Broker is running, you can view, start and stop a plugin through [Managing and Monitoring API - Load Plugin](http-api.md#load_plugin).
 
+## Plugin development
 
-## 插件开发
+### Create plugin project
 
-### 创建插件项目
+Refer to the [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) plugin template to create a new plugin project.
 
-参考 [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) 插件模版创建新的插件项目。
-
-备注：在 `<plugin name>_app.erl` 文件中必须加上标签 `-emqx_plugin(?MODULE).` 以表明这是一个 EMQX 的插件。
-
-
-### 创建 认证/访问控制 模块
+::: tip Tip
+The tag of` -emqx_plugin (? MODULE)`should be added to `<plugin name>_app.erl` file to indicate that this is an EMQX Broker plugin.
+:::
 
 
-接入认证示例代码 - `emqx_auth_demo.erl`：
+### Create Authentication / Access Control Module
+
+
+Authentication/Access sample code - `emqx_auth_demo.erl`：
 
 ```erlang
 -module(emqx_auth_demo).
@@ -86,7 +87,7 @@ description() -> "Auth Demo Module".
 ```
 
 
-访问控制示例代码 - `emqx_acl_demo.erl`：
+Access control sample code - `emqx_acl_demo.erl`：
 
 ```erlang
 -module(emqx_acl_demo).
@@ -114,7 +115,7 @@ description() -> "ACL Demo Module".
 ```
 
 
-挂载认证、访问控制钩子示例代码 - `emqx_plugin_template_app.erl`：
+Example code for mounting authentication and access control hooks - `emqx_plugin_template_app.erl`：
 
 ```erlang
 ok = emqx:hook('client.authenticate', fun emqx_auth_demo:check/2, []),
@@ -122,11 +123,11 @@ ok = emqx:hook('client.check_acl', fun emqx_acl_demo:check_acl/5, []).
 ```
 
 
-### 挂载钩子
+### Load hook
 
-在扩展插件中，可通过挂载 [钩子](hooks.md) 来处理客户端上下线、主题订阅、消息收发等事件。
+During the plugin extension, you can load [hooks](hooks.md) to handle events such as client online and offline, topic subscription, and message sending and receiving.
 
-钩子挂载示例代码 - `emqx_plugin_template.erl`：
+Hook load sample code - `emqx_plugin_template.erl`：
 
 ```erlang
 load(Env) ->
@@ -152,9 +153,9 @@ load(Env) ->
 ```
 
 
-### 注册 CLI 命令
+### Register CLI commands
 
-处理命令行命令示例代码 - `emqx_cli_demo.erl`：
+Processing command line sample code - `emqx_cli_demo.erl`：
 
 ```erlang
 -module(emqx_cli_demo).
@@ -168,23 +169,23 @@ cmd(_) ->
     emqx_cli:usage ([{"cmd arg1 arg2", "cmd demo"}]).
 ```
 
-注册命令行示例代码 - `emqx_plugin_template_app.erl`：
+Register command line sample code - `emqx_plugin_template_app.erl`：
 
 ```erlang
 ok = emqx_ctl:register_command(cmd, {emqx_cli_demo, cmd}, []),
 ```
 
-插件加载后，使用`./bin/emqx_ctl` 验证新增的命令行：
+After the plugin is loaded, use `./bin/emqx_ctl`  to verify the new command line:
 
 ```bash
 ./bin/emqx_ctl cmd arg1 arg2
 ```
 
-### 插件配置文件
+### Plugin configuration file
 
-插件自带配置文件放置在 `etc/${plugin_name}.conf|config`。 EMQX 支持两种插件配置格式：
+Plug-in configuration files are placed in  `etc/${plugin_name}.conf|config`. EMQX Broker supports two plugin configuration formats:
 
-1. Erlang 原生配置文件格式 - `${plugin_name}.config`：
+1. Erlang native configuration file format-`${plugin_name}.config`:
 
 ```erlang
 [
@@ -194,27 +195,29 @@ ok = emqx_ctl:register_command(cmd, {emqx_cli_demo, cmd}, []),
 ].
 ```
 
-2. sysctl 的 `k = v` 通用格式 - `${plugin_name}.conf`：
+2. Common format of `k = v`   for sysctl-`${plugin_name}.conf`:
 
 ```erlang
 plugin_name.key = value
 ```
 
-注：`k = v` 格式配置需要插件开发者创建 `priv/plugin_name.schema` 映射文件。
+::: tip Tip
+`k = v` format configuration requires the plugin developer to create `priv/plugin_name.schema` mapping file.
+:::
 
 
-### 编译和发布插件
+### Compile and publish the plugin
 
-clone emqx-rel 项目：
+#### clone emqx project
 
 ```bash
-git clone https://github.com/emqx/emqx-rel.git
+git clone https://github.com/emqx/emqx.git
 ```
 
-rebar.config 添加依赖：
+Add `plugin_name` as a dependency by describing it in `lib-extra/plugins`:
 
 ```erlang
-{deps,
+{erlang_plugins,
    [ {plugin_name, {git, "url_of_plugin", {tag, "tag_of_plugin"}}}
    , ....
    ....
@@ -222,17 +225,27 @@ rebar.config 添加依赖：
 }
 ```
 
-rebar.config 中 relx 段落添加：
+#### Build a release
 
-```erlang
-{relx,
-    [...
-    , ...
-    , {release, {emqx, git_describe},
-       [
-         {plugin_name, load},
-       ]
-      }
-    ]
-}
 ```
+$ export EMQX_EXTRA_PLUGINS=plugin_name
+$ make
+```
+
+#### Run your code
+
+Start the node (interactive mode)
+
+```
+./_build/emqx/rel/emqx/bin/emqx console
+```
+
+Load the plugin with the command:
+
+```
+./_build/emqx/rel/emqx/bin/emqx_ctl plugins load plugin_name
+```
+
+::: tip Tip
+To have the plugin enabled/loaded by default, you can include it in `data/loaded_plugins.tmpl`.
+:::

@@ -775,10 +775,10 @@
               "title": "Built-In Database",
               "path": "advanced/auth-mnesia"
             },
-          {
-            "title": "HTTP Server",
-            "path": "auth-http"
-          }
+            {
+              "title": "HTTP Server",
+              "path": "auth-http"
+            },
             {
               "title": "MySQL",
               "path": "advanced/auth-mysql"
@@ -890,31 +890,31 @@
           "path": "modules/subscription",
           "children": [
             {
-              "title": "Set Subscription Rules",
+              "title": "Use Rules to Set MQTT Proxy Subscription",
               "path": "rule/get_subs"
             },
             {
-              "title": "Retrieve from Redis",
+              "title": "Get Subscription Relationship from Redis",
               "path": "rule/get_subs_from_redis"
             },
             {
-              "title": "Retrieve from MySQL",
+              "title": "Get Subscription Relationship from MySQL",
               "path": "rule/get_subs_from_mysql"
             },
             {
-              "title": "Retrieve from PostgreSQL",
+              "title": "Get Subscription Relationship from PostgreSQL",
               "path": "rule/get_subs_from_pgsql"
             },
             {
-              "title": "Retrieve from Cassandra",
+              "title": "Get Subscription Relationship from Cassandra",
               "path": "rule/get_subs_from_cassandra"
             },
             {
-              "title": "Retrieve from MongoDB",
+              "title": "RGet Subscription Relationship from MongoDB",
               "path": "rule/get_subs_from_mongodb"
             },
             {
-              "title": "Retrieve from ClickHouse",
+              "title": "Get Subscription Relationship from ClickHouse",
               "path": "rule/get_subs_from_clickhouse"
             }
           ]
@@ -1195,37 +1195,37 @@
           "path": "getting-started/log"
         },
         {
+          "title": "Integrate with Prometheus",
+          "path": "tutorial/prometheus"
+        },
+        {
           "title": "$SYS Topic",
           "path": "advanced/system-topic"
         },
         {
           "title": "Topic Metrics",
           "path": "modules/topic_metrics"
-        },
-        {
-          "title": "Integrate with Prometheus",
-          "path": "tutorial/prometheus"
         }
       ]
     },
     {
-      "title": "备份及恢复",
+      "title": "Backup and Restore",
       "path": "advanced/data-import-and-export"
     },
     {
-      "title": "扩展与插件",
+      "title": "Plugin and Extension",
       "path": "advanced/plugins",
       "children": [
         {
-          "title": "插件开发与管理",
+          "title": "Plugin Development and Management",
           "path": "advanced/start-stop-plugins"
         },
         {
-          "title": "钩子",
+          "title": "Hook",
           "path": "advanced/hooks"
         },
         {
-          "title": "多语言扩展钩子",
+          "title": "Multi-Language Extension Hook",
           "path": "modules/exhook"
         },
         {
@@ -1257,10 +1257,6 @@
         {
           "title": "JT/T808 Gateway",
           "path": "modules/jt808_protocol"
-        },
-        {
-          "title": "GB/T32960 Gateway",
-          "path": "modules/gbt32960_protocol"
         },
         {
           "title": "TCP Gateway",
