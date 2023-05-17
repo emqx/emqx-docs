@@ -31,7 +31,7 @@ EMQX provides [Command Line Interface](./cli.md#endpoint-data-import-and-export)
 
 {% endemqxee %}
 
-### ## Work with Command Line Interface
+## Work with Command Line Interface
 
 1. Export data. The file name format of the exported file is `emqx-export-YYYY-MM-DD-HH-mm-SS.json`, and the default export path is the data directory (Refer to  [Directory structure](../getting-started/directory.md))
 
