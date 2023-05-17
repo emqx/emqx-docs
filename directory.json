@@ -97,6 +97,10 @@
           "path": "advanced/cluster"
         },
         {
+          "title": "创建集群",
+          "path": "advanced/create-cluster"
+        },
+        {
           "title": "集群安全",
           "path": "advanced/cluster-security"
         },
