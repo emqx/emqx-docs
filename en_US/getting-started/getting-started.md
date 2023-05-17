@@ -161,7 +161,6 @@ simply [contact EMQ](https://www.emqx.com/en/contact) for support.
 ## Start EMQX
 
 After the installation, you can start EMQX through the command of systemctl or emqx.
-For more startup methods and precautions, please refer to [Starting EMQX](./start.md).
 
  {% emqxce %}
 After EMQX is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/)
