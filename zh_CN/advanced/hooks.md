@@ -99,7 +99,7 @@ ref:
 
 {% emqxee %}
 
-- 钩子和 HTTP 服务器的应用，参见： [WebHook](webhook.md)
+- 钩子和 HTTP 服务器的应用，参见： WebHook
 
 {% endemqxee %}
 
