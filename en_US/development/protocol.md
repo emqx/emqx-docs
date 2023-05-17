@@ -15,7 +15,7 @@ ref:
 
 # Publish/Subscribe
 
-As a world-class MQTT broker, EMQX supports the [publish/subscribe messaging pattern](./mqtt-concepts.md#publish-subscribe-pattern), which is a key feature of the MQTT protocol. EMQX's publish/subscribe functionality offers a variety of features that make it well-suited for complex and high-performance messaging applications. These features include support for wildcard topics, topic-based message filtering, message persistence, and Quality of Service (QoS) settings. 
+As a world-class MQTT broker, EMQX supports the [publish/subscribe messaging pattern](../advanced/mqtt-concepts.md#publish-subscribe-pattern), which is a key feature of the MQTT protocol. EMQX's publish/subscribe functionality offers a variety of features that make it well-suited for complex and high-performance messaging applications. These features include support for wildcard topics, topic-based message filtering, message persistence, and Quality of Service (QoS) settings. 
 
 The publish function allows devices that are connected to the EMQX broker to send messages to a particular topic. The message can contain any type of data, such as sensor readings, status updates, or commands. When a device publishes a message to a topic, EMQX receives the message and forwards it to all devices that have subscribed to that topic.
 

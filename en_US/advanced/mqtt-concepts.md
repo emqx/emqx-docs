@@ -54,7 +54,7 @@ Unlike regular messages, retained messages can be stored on an MQTT server. When
 
 The retained message feature allows subscribers to receive data updates immediately upon connecting, without having to wait for the publisher to re-publish the message. Retained messages can be thought of as a message "cloud drive" in some ways: upload messages to the "cloud drive" at any time, and retrieve messages from the "cloud drive" at any time. However, this "cloud drive" is limited to storing only one latest retained message per topic.
 
-You can try to publish a retained message using the MQTTX Client by following the instructions in [Retained Message](./mqtt-retained-message.md).
+You can try to publish a retained message using the MQTTX Client by following the instructions in [Retained Message](../modules/retainer.md).
 
 To learn more about retained message technologies, see [The Beginner's Guide to MQTT Retained Messages](https://www.emqx.com/en/blog/mqtt5-features-retain-message).
 
@@ -64,8 +64,6 @@ The feature of Pub/Sub pattern determines that no client, other than the server,
 
 Clients can set their own will message with the server when they establish a connection, and the server publishes this message immediately or after a specified delay if the client disconnects unexpectedly. Clients subscribed to the corresponding will message topic will receive this message and take appropriate action, such as updating the online status of that client, etc.
 
-You can try to publish a will message using the MQTTX Client by following the instructions in [Will Message](./mqtt-will-message.md).
-
 To learn more about will message technologies, see [Use of MQTT Will Message](https://www.emqx.com/en/blog/use-of-mqtt-will-message).
 
 ## Shared Subscription
@@ -74,7 +72,7 @@ In common cases, messages are forwarded to all matching subscribers. However, in
 
 The shared subscription feature provides such a capability. Clients can be divided into multiple subscription groups, and messages are still forwarded to all subscription groups, but only one client within each subscription group receives the message at a time.
 
-You can try to create a shared subscription using the MQTTX Client by following the instructions in [Shared Subscription](./mqtt-shared-subscription.md).
+You can try to create a shared subscription using the MQTTX Client by following the instructions in [Shared Subscription](../advanced/shared-subscriptions.md).
 
 To learn more about shared subscription technologies, see [Shared subscription - MQTT 5.0 new features](https://www.emqx.com/en/blog/introduction-to-mqtt5-protocol-shared-subscription).
 

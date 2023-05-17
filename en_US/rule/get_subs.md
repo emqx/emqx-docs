@@ -4,19 +4,19 @@
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
-![image-20200927213049265](/Users/lena/Documents/GitHub/rebalancing/emqx-docs/en_US/modules/assets/modules.png)
+![image-20200927213049265](./assets/modules.png)
 
 Select MQTT broker subscription module
 
-![image-20200927213049265](/Users/lena/Documents/GitHub/rebalancing/emqx-docs/en_US/modules/assets/mod_subscriptions_1.png)
+![image-20200927213049265](./assets/mod_subscriptions_1.png)
 
 Configure related parameters
 
-![image-20200927213049265](/Users/lena/Documents/GitHub/rebalancing/emqx-docs/en_US/modules/assets/mod_subscriptions_2.png)
+![image-20200927213049265](./assets/mod_subscriptions_2.png)
 
 After clicking add, the module is added
 
-![image-20200927213049265](/Users/lena/Documents/GitHub/rebalancing/emqx-docs/en_US/modules/assets/mod_subscriptions_3.png)
+![image-20200927213049265](./assets/mod_subscriptions_3.png)
 
 ## Subscription options
 

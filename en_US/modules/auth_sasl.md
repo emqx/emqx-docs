@@ -20,7 +20,5 @@ On the **Modules/Select** page, search for the **Enhanced Auth** module. Hover o
 
 The **Enhanced Auth** feature does not require further parameter configuration. On the subsequent **Parameter Settings** page, click on **Add** to enable the module. You can later stop the module on the **Modules** page or click on **Manage** to configure authentication information. On the subsequent **Enhanced Auth** page, click on the **Authentication Info** tab, then click on **Add** to create relevant authentication information.
 
-![mqtt-enchanged-auth-add](./assets/mqtt-enchanged-auth-add.png)
-
-![image-20230516211407559](/Users/lena/Documents/GitHub/rebalancing/emqx-docs/en_US/modules/MQTT-enhanced-auth-create.png)
+<img src="./assets/MQTT-enhanced-auth-create.png" alt="MQTT-enhanced-auth-create" style="zoom:50%;" />
 
