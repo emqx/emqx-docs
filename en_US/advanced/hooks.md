@@ -92,7 +92,6 @@ In the following two sections of [HookPoint](#hookpoint) and [callback function]
 
 {% emqxee %}
 
-- For hooks and HTTP server applications, Refer to: [WebHook](webhook.md)
 - For hooks and other language applications, Refer to: [Modules - Extensions](../modules/exhook.md)
 
 {% endemqxee %}

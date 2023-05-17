@@ -18,7 +18,7 @@ ref: undefined
 This chapter provides a comprehensive guide for installing and configuring EMQ X. It includes the following key topics:
 
 - Installation: Step-by-step instructions for installing EMQ X on supported operating systems. For details on the supported operating systems, see [Supported operating systems](#supported-operating-systems)
-- [Configure license](./start.md): Instructions on how to start EMQX after the installation and how to configure the license.
+- [Configure license](./license.md): Instructions on how to start EMQX after the installation and how to configure the license.
 - [Directory](./directory.md): Overview of important file and directory locations for future configuration and maintenance tasks.
 - [Basic commands](./command-line.md): Essential commands for working with EMQX and managing its operations.
 - [Configuration](./config.md): Exploring configuration options and how to customize EMQX to meet your specific requirements.
