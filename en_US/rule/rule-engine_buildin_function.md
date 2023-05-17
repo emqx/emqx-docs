@@ -1,4 +1,4 @@
-# Functions available in SQL statements
+# Built-in SQL Functions
 ## Mathematical functions
 
 |function name|Purpose|parameter|Returned value|

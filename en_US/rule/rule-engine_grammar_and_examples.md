@@ -1,6 +1,6 @@
-# Rule engine SQL statement
-## SQL syntax
-### FROM, SELECT, and WHERE clauses
+# Rule SQL Statement
+## SQL Syntax
+### FROM, SELECT, and WHERE Clauses
 
 The basic format of the SQL statement of the rule engine is:
 ```sql
@@ -46,7 +46,7 @@ The FROM statement is used to select the source of the event. If the message is 
 
 
 
-### FOREACH, DO, and INCASE clauses
+### FOREACH, DO, and INCASE Clauses
 
 If you want to perform some operations and actions for each element of an array data, you need to use the `FOREACH-DO-INCASE` syntax. The basic format is:
 
@@ -75,7 +75,7 @@ FROM "t/#"              ## mounts rules to a topic
 The DO and INCASE clauses are optional. 
 
 
-#### Operational symbol
+#### Operational Symbol
 | Function | Purpose                                                      | Returned value              |      |
 | -------- | ------------------------------------------------------------ | --------------------------- | ---- |
 | `+`      | addition, or string concatenation                            | Sum, or concatenated string |      |
@@ -88,7 +88,7 @@ The DO and INCASE clauses are optional.
 | `=~`     | Compare whether the topic can match the topic filter. It can only be used for topic matching | true/false                  |      |
 
 
-### Compare symbol
+### Compare Symbol
 
 | Function | Purpose | Returned value |
 | ------ | ------------------- | ---------- |
@@ -101,7 +101,7 @@ The DO and INCASE clauses are optional.
 
 
 ## SQL statement example: 
-### Basic syntax examples
+### Basic Syntax Examples
 
 -  Extract all fields from the messages with a topic of "t/a": 
     ```sql
@@ -158,7 +158,7 @@ The DO and INCASE clauses are optional.
 - You can use the `"." `Symbol to nest select payloads
 - If possible, don't create alias for payload, as this would cause performance degradations.
   i.e. Do not use `SELECT payload as p`
-:::
+  :::
 
 ### Examples of FOREACH-DO-INCASE
 
@@ -325,7 +325,7 @@ FOREACH
 ...
 ```
 
-### CASE-WHEN Syntax example
+### CASE-WHEN Syntax Example
 
 **Example 1: Limit the value of the x field in the message to the range of 0 ~ 7.**
 

@@ -24,10 +24,10 @@ EMQX provides a series of observability-related features to help with system mon
 
 **Diagnose**
 
-- [Topic Metrics](../modules/topic_metrics.md)
-
-  EMQX provides a topic monitoring feature (called Topic Metrics) that allows you to count the number of messages sent and received, the rate and other metrics for a given topic.
-
 - [$SYS Topic](../advanced/system-topic.md)
 
   The EMQX Broker periodically publishes its running status, message statistics, client online and offline events to the system topic starting with `$SYS/`.
+
+- [Topic Metrics](../modules/topic_metrics.md)
+
+  EMQX provides a topic monitoring feature (called Topic Metrics) that allows you to count the number of messages sent and received, the rate and other metrics for a given topic.

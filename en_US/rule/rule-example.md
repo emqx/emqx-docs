@@ -1,4 +1,4 @@
-# Rule engine example
+# Example - Create a Test Rule
 
 {% emqxce %}
 ::: tip
@@ -20,10 +20,8 @@ The rest are exclusive to EMQX Enterprise.
 Create a rule for testing: print the content of the message and all the
 args of the action, when a MQTT message is sent to topic 't/a'.
 
-- The filter SQL is: SELECT \* FROM "message.publish" WHERE topic =
-  't/a';
-- The action is: "print the content of the message and all the args of
-  the action", the action we need is 'inspect'.
+- The filter SQL is: SELECT \* FROM "message.publish" WHERE topic = 't/a';
+- The action is: "print the content of the message and all the args of the action", the action we need is 'inspect'.
 
 <!-- end list -->
 
@@ -41,15 +39,11 @@ The CLI above created a rule with ID='Rule rule:803de6db'.
 The first two args are mandatory:
 
 - SQL: SELECT \* FROM "message.publish" WHERE topic = 't/a'
-- Action List: \[{"name":"inspect", "params": {"a": 1}}\]. Action List
-  is of type JSON Array. "name" is the name of the action, "params" is
-  the parameters of the action. Note that the action `inspect` does
-  not need a resource.
+- Action List: \[{"name":"inspect", "params": {"a": 1}}\]. Action List is of type JSON Array. "name" is the name of the action, "params" is the parameters of the action. Note that the action `inspect` does not need a resource.
 
 The last arg is an optional description of the rule: 'Rule for debug'.
 
-If a MQTT message "hello" is sent to topic 't/a', the rule "Rule
-rule:803de6db" will be matched, and then action "inspect" will be
+If a MQTT message "hello" is sent to topic 't/a', the rule "Rule rule:803de6db" will be matched, and then action "inspect" will be
 triggered, the following info will be printed to the emqx console:
 
 ```bash
@@ -77,26 +71,23 @@ Envs: #{event => 'message.publish',
 Action Init Params: #{<<"a">> => 1}
 ```
 
-- `Selected Data` listed the fields that selected by the SQL.All
-  available fields will be listed here, as we used `select *`.
-- `Envs` is the environment varibles that can be used internally in
-  the action.
-- `Action Init Params` is the params we passed to the action.
+- `Selected Data` listed the fields that were selected by the SQL. All available fields will be listed here, as we used `select *`.
+- `Envs` is the environment variables that can be used internally in the action.
+- `Action Init Params` is the parameter we passed to the action.
 
 
 
 
-## Send data to WebHook
+## Send Data to WebHook
 
-Setup a Web Service, here we setup a simple web service using the linux tool `nc`:
+Setup a Web Service, here we set up a simple web service using the Linux tool `nc`:
 ```bash
 $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9901; done;
 ```
 
 Create a rule:
 
-Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
-"rule" tab on the menu to the left.
+Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left.
 
 Select "message.publish", then type in the following SQL:
 
@@ -110,16 +101,13 @@ FROM
 
 Bind an action:
 
-Click on the "+ Add" button under "Action Handler", and then select
-"Data to Web Server" in the pop-up dialog window.
+Click on the "+ Add" button under "Action Handler", and then select "Data to Web Server" in the pop-up dialog window.
 
 <img src="./assets/rule-engine/webhook_action_0.png" alt="image" style="zoom:50%;" />
 
 Bind a resource to the action:
 
-Since the dropdown list "Resource" is empty for now, we create a new
-resource by clicking on the "New Resource" to the top right, and then
-select "WebHook":
+Since the dropdown list "Resource" is empty for now, we create a new resource by clicking on the "New Resource" to the top right, and then select "WebHook":
 
 <img src="./assets/rule-engine/webhook_action_1.png" alt="image" style="zoom:50%;" />
 
@@ -129,19 +117,15 @@ Fill in the "Request URL" and "Request Header"(Optional):
 ```
 http://127.0.0.1:9901
 ```
-And click on the "Testing Connection" button to make sure the
-connection can be created successfully, and then click on the "Create"
-button.
+And click on the "Testing Connection" button to make sure the connection can be created successfully, and then click on the "Create" button.
 
 <img src="./assets/rule-engine/webhook_resource_0.png" alt="image" style="zoom:50%;" />
 
-Back to the "Actions" dialog, and then click on the "Confirm"
-    button.
+Back to the "Actions" dialog, and then click on the "Confirm" button.
 
 <img src="./assets/rule-engine/webhook_action_2.png" alt="image" style="zoom:50%;" />
 
-Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+Back to the creating rule page, then click on "Create" button. The rule we created will be show in the rule list:
 
 <img src="./assets/rule-engine/webhook_rule_rule_overview_0.png" alt="image" style="zoom:50%;" />
 
@@ -161,7 +145,6 @@ received:
 
 <img src="./assets/rule-engine/webhook_result.png" alt="image" style="zoom:50%;" />
 
-And from the rule list, verify that the "Matched" column has increased
-to 1:
+And from the rule list, verify that the "Matched" column has increased to 1:
 
 <img src="./assets/rule-engine/webhook_rule_rule_overview_1.png" alt="image" style="zoom:50%;" />

@@ -18,7 +18,7 @@ The diagram below shows an example of a Schema Registry application. Multiple de
 ![schema-registry](./assets/schema-registry.png)
 
 
-### Binary format support
+### Binary Format Support
 
 Schema Registry data formats include [Avro](https://avro.apache.org) and [Protobuf](https://developers.google.com/protocol-buffers/). Avro and Protobuf are Schema-dependent data formats and encoded as binary data. The internal data format (Map, explained later) decoded using the Schema Registry can be used directly by rule engines and other plugins. Besides, Schema Registry supports user-defined (3rd-party) coding and decoding services that can perform coding and decoding more closely to business needs via HTTP or TCP callbacks.
 
@@ -54,7 +54,7 @@ EMQX's PUB/SUB system routes messages to specified topics. The rule engine has t
 ![SchemaAndRuleEngine](./assets/SchemaAndRuleEngine.png)
 
 
-### Rule engine internal data format (Map)
+### Rule Engine Internal Data Format (Map)
 
 The data format used in the internal rule engine is Erlang Map, so if the original data is in binary or other formats, it must be converted to Map using codec functions (such as schema_decode and json_decode as mentioned above).
 

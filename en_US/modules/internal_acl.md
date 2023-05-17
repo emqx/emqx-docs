@@ -47,9 +47,9 @@ The rules file is described in the format of Erlang syntax:
 
 It can be seen that the default ACL is mainly to restrict the client's authority to the system topic `$SYS/#` and the all-wildcard topic `#`.
 
-## acl.conf writing rules
+## ACL File Format
 
-The rules in the ʻacl.conf` file are matched from top to bottom in the order of writing.
+The rules in the `acl.conf` file are matched from top to bottom in the order of writing.
 
 The grammar rules of ʻacl.conf` are contained in the comments at the top. Those familiar with Erlang grammar can directly read the comments at the top of the file. Or refer to the following interpretation:
 

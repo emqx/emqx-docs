@@ -7,8 +7,8 @@ Since version 4.2.0, EMQX supports hot upgrade.
 
 By using the hot upgrade feature, users can quickly and safely upgrade the EMQX in the production environment, and avoid the decrease in system availability caused by restarting the service.
 
-::: tip
-Currently EMQX for Windows and MacOSX does not support hot upgrade feature.
+:::tip
+Currently, EMQX for Windows and MacOSX does not support hot upgrade.
 :::
 
 :::

@@ -1,6 +1,6 @@
-# 3rd-Party Custom codec example - HTTP
+# Third-Party Custom Codec - HTTP
 
-## Rule requirements
+## Rule Requirements
 
 The device publishes an arbitrary message to verify that the self-deployed codec service is working normally.
 
@@ -10,7 +10,7 @@ In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of 
 
 1. Name: my_parser
 2. Codec Type: 3rd-party
-3. Third Party Type: HTTP
+3. Third-Party Type: HTTP
 4. URL: http://127.0.0.1:9003/parser
 5. Codec Configuration: xor
 
@@ -18,7 +18,7 @@ All other configurations remain default.
 
 Item 5 (i.e. codec configuration) above is optional and is a string, the content of which is related to the service of the codec service.
 
-## Creating rules
+## Create Rules
 
 **Use the Schema you have just created to write the rule SQL statement:**
 
@@ -45,7 +45,7 @@ This check action prints the results filtered by the SQL statement to the emqx c
 
 If the service is started with emqx console, the print will be displayed directly in the console; if the service is started with emqx start, the print will be output to the erlang.log.N file in the log directory, where "N" is an integer, e.g. "erlang.log.1", " erlang.log.2".
 
-## Codec server-side code
+## Codec Server-Side Code
 
 Once the rules have been created, it is time to simulate the data for testing. Therefore, the first thing you need to do is write your own codec service.
 
@@ -103,7 +103,7 @@ $ python3 http_parser_server.py
  * Running on http://127.0.0.1:9003/ (Press CTRL+C to quit)
 ```
 
-## Checking rule execution results
+## Check Rule Execution Results
 
 Since this example is relatively simple, we'll use the MQTT Websocket client directly to simulate sending a message on the device side.
 

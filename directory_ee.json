@@ -554,10 +554,6 @@
         {
           "title": "多语言扩展钩子",
           "path": "modules/exhook"
-        },
-        {
-          "title": "WebHook",
-          "path": "advanced/webhook"
         }
       ]
     },
@@ -708,14 +704,6 @@
           "path": "getting-started/directory"
         },
         {
-          "title": "Configuration",
-          "path": "getting-started/config"
-        },
-        {
-          "title": "Hot Configuration",
-          "path": "modules/hot_confs"
-        },
-        {
           "title": "Hot Upgrade",
           "path": "advanced/relup"
         },
@@ -784,6 +772,10 @@
           "path": "modules/mnesia_authentication"
         },
         {
+          "title": "HTTP Service",
+          "path": "modules/http_authentication"
+        },
+        {
           "title": "MySQL",
           "path": "modules/mysql_authentication"
         },
@@ -796,20 +788,16 @@
           "path": "modules/redis_authentication"
         },
         {
-          "title": "HTTP Server",
-          "path": "modules/http_authentication"
-        },
-        {
           "title": "MongoDB",
           "path": "modules/mongo_authentication"
         },
         {
-          "title": "PSK File Authentication",
-          "path": "modules/psk_authentication"
+          "title": "LDAP",
+          "path": "modules/ldap_authentication"
         },
         {
-          "title": "LDAP Authentication",
-          "path": "modules/ldap_authentication"
+          "title": "PSK File Authentication",
+          "path": "modules/psk_authentication"
         },
         {
           "title": "JWT Authentication",
@@ -862,7 +850,7 @@
           "path": "modules/subscription",
           "children": [
             {
-              "title": "Set MQTT Proxy Subscription Rules",
+              "title": "Set Auto Subscription Rules",
               "path": "rule/get_subs"
             },
             {
@@ -936,7 +924,7 @@
           "path": "rule/rule-create"
         },
         {
-          "title": "Test the Rule",
+          "title": "Example - Create a Test Rule",
           "path": "rule/rule-example"
         },
         {
@@ -956,7 +944,7 @@
           "path": "rule/rule-engine_buildin_function"
         },
         {
-          "title": "Schema Registryg",
+          "title": "Schema Registry",
           "path": "rule/schema-registry",
           "children": [
             {
@@ -1100,8 +1088,12 @@
     },
     {
       "title": "Configuration",
-      "path": "configuration/config-overview",
+      "path": "getting-started/config",
       "children": [
+        {
+         "title": "Hot Configuration",
+        "path": "modules/hot_confs"
+        },
         {
           "title": "Configuration Items",
           "path": "configuration/configuration"
@@ -1199,10 +1191,6 @@
         {
           "title": "Multi-Language Extension Hook",
           "path": "modules/exhook"
-        },
-        {
-          "title": "WebHook",
-          "path": "advanced/webhook"
         }
       ]
     },
@@ -1275,7 +1263,7 @@
           "path": "changes/changes-ee-4.3"
         },
         {
-          "title": "Service LifeCycle",
+          "title": "End of Life Dates",
           "path": "changes/eol-ee"
         }
       ]

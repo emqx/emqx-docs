@@ -1,45 +1,41 @@
 # Create rules
 
+This section introduces how to create rules.
+
+:::tip Prerequisites
+
+Set up a web service, here we set up a simple web service using the Linux tool `nc`:
+
+```bash
+$ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 8081; done;
+```
+
+:::
+
 ## Create rules using Dashboard
-### Create WebHook rules
-0.  Setup a Web Service, here we setup a simple web service using the linux tool `nc`:
 
-   ```bash
-   $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 8081; done;
-   ```
+1. Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the “rule” tab on the menu to the left.
 
-1. Create a rule:
+ Select “message.publish”, then type in the following SQL:
 
-   Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the “rule” tab on the menu to the left.
-
-    Select “message.publish”, then type in the following SQL:
-
-   ```sql
-      SELECT
-        *
-      FROM
-          "t/#"
-      WHERE
-           qos = 1
-   ```
-
-   <img src="../assets/webhook-rulesql-1.png" alt="image" style="zoom:50%;" />
+```sql
+   SELECT
+     *
+   FROM
+       "t/#"
+   WHERE
+        qos = 1
+```
 
 2. Bind an action:
 
-    Click on the “+ Add” button under “Action Handler”, and then select “Data to Web Server” in the pop-up dialog window.
+Click on the “+ Add” button under “Action Handler”, and then select “Data to Web Server” in the pop-up dialog window.
 
-  <img src="../assets/webhook-action-1.png" alt="image" style="zoom:50%;" />
+<img src="./assets/add-action.png" alt="add action" style="zoom:50%;" />
 
 3. Bind a resource to the action:
 
-   Since the dropdown list “Resource” is empty for now, we create a new resource by clicking on the “New Resource” to the top right:
-
-   <img src="../assets/webhook-action-2.png" alt="image" style="zoom:50%;" />
-
-   then select “WebHook”:
-
-   <img src="../assets/webhook-resource-1.png" alt="image" style="zoom:50%;" />
+   Since the dropdown list “Resource” is empty for now, we create a new resource by clicking on the “New Resource” to the top right, then select “WebHook”:
 
 4. Configure the resource:
 
@@ -49,19 +45,11 @@
 
     And click on the “Testing Connection” button to make sure the connection can be created successfully, and then click on the “Create” button.
 
-   <img src="../assets/webhook-resource-2.png" alt="image" style="zoom:50%;" />
-
 5. Back to the “Actions” dialog, and then click on the “Confirm” button.
-
-   <img src="../assets/webhook-action-3.png" alt="image" style="zoom:50%;" />
 
 6.  Back to the creating rule page, then click on “Create” button. The rule we created will be show in the rule list
 
-   <img src="../assets/webhook-rule-create.png" alt="image" style="zoom:50%;" />
-
    We have finished, testing the rule by sending an MQTT message to emqx:
-
-   <img src="../assets/webhook-rulelist-1.png" alt="image" style="zoom:50%;" />
 
 7. send a message
 
@@ -88,9 +76,7 @@ From EMQX Open Source Version 4.4.11 and 4.3.22, we can use placeholders in `${v
 {% endemqxce %}
 
 :::
-The webhook always normalized the *keys* of the HTTP headers, replacing the underscores `_` to
-hyphens `-`, and also ensure the keys are lowercases.
-e.g. The key `Content_Type` will be replaced with `content-type`.
+The webhook always normalized the *keys* of the HTTP headers, replacing the underscores `_` to hyphens `-`, and also ensure the keys are lowercases. e.g. The key `Content_Type` will be replaced with `content-type`.
 :::
 
 ## Create Simple Rules using CLI
@@ -158,60 +144,60 @@ Create a rule: Forward all the messages that send from clientid=’Steven’, to
 - Resource Type: web_hook;
 - Resource: “The WebHook resource at ‘[http://127.0.0.1:9910](http://127.0.0.1:9910/)’”.
 
-0.  Create a simpile Web service using linux tool `nc`:
+1. Create a simpile Web service using linux tool `nc`:
 
-    ```bash
-    $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9910; done;
-    ```
+```bash
+$ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9910; done;
+```
 
-1.  Create a resource of resource type “WebHook”, and configure the url:
+2. Create a resource of resource type “WebHook”, and configure the url:
 
-    1).  List all available resource types, make sure ‘web_hook’ exists:
+   - List all available resource types, make sure ‘web_hook’ exists:
 
-    ```bash
-    $ ./bin/emqx_ctl resource-types list
+     ```bash
+     $ ./bin/emqx_ctl resource-types list
+     
+     resource_type(name='web_hook', provider='emqx_web_hook', params=#{...}}, on_create={emqx_web_hook_actions,on_resource_create}, description='WebHook Resource')
+     ...
+     ```
 
-    resource_type(name='web_hook', provider='emqx_web_hook', params=#{...}}, on_create={emqx_web_hook_actions,on_resource_create}, description='WebHook Resource')
-    ...
-    ```
+   - Create a new resource using resource type ‘web_hook’, configure “url”=”[http://127.0.0.1:9910](http://127.0.0.1:9910/)”:
 
-    2).  Create a new resource using resource type ‘web_hook’, configure “url”=”[http://127.0.0.1:9910](http://127.0.0.1:9910/)”:
+     ```bash
+     $ ./bin/emqx_ctl resources create \
+       'web_hook' \
+       -c '{"url": "http://127.0.0.1:9910", "headers": {"token":"axfw34y235wrq234t4ersgw4t"}, "method": "POST"}'
+     
+     Resource resource:691c29ba created
+     ```
 
-    ```bash
-    $ ./bin/emqx_ctl resources create \
-      'web_hook' \
-      -c '{"url": "http://127.0.0.1:9910", "headers": {"token":"axfw34y235wrq234t4ersgw4t"}, "method": "POST"}'
+     Above CLI created a resource with ID=’resource:691c29ba’, the first arg is mandatory - The resource type (web_hook). HTTP method is POST, and an HTTP Header is set: “token”.
 
-    Resource resource:691c29ba created
-    ```
+3. Create a rule, and bind action ‘data_to_webserver’ to it:
 
-    Above CLI created a resource with ID=’resource:691c29ba’, the first arg is mandatory - The resource type (web_hook). HTTP method is POST, and an HTTP Header is set: “token”.
+   - List all available actions, make sure ‘data_to_webserver’ exists:
 
-2.  Create a rule, and bind action ‘data_to_webserver’ to it:
+     ```bash
+       $ ./bin/emqx_ctl rule-actions list
+     
+       action(name='data_to_webserver', app='emqx_web_hook', for='$any', types=[web_hook], params=#{'$resource' => ...}, title ='Data to Web Server', description='Forward Messages to Web Server')
+       ...
+     ```
 
-    1).  List all available actions, make sure ‘data_to_webserver’ exists:
+   - Create the rule, bind the action data_to_webserver, and bind resource resource:691c29ba to the action via the arg “$resource”:\
 
-      ```bash
-      $ ./bin/emqx_ctl rule-actions list
-    
-      action(name='data_to_webserver', app='emqx_web_hook', for='$any', types=[web_hook], params=#{'$resource' => ...}, title ='Data to Web Server', description='Forward Messages to Web Server')
-      ...
-      ```
+     ```bash
+           $ ./bin/emqx_ctl rules create \
+             "SELECT username as u, payload FROM \"message.publish\" where u='Steven'" \
+             '[{"name":"data_to_webserver", "params": {"$resource":  "resource:691c29ba"}}]' \
+             -d "Forward publish msgs from steven to webserver"
+     
+       rule:26d84768
+     ```
 
-    2).  Create the rule, bind the action data_to_webserver, and bind resource resource:691c29ba to the action via the arg “$resource”:
+     Above CLI is simlar to the first Inspect rule, with exception that the resource ‘resource:691c29ba’ is bound to ‘data_to_webserver’. The binding is done by a special arg named ‘$resource’. What the action ‘data_to_webserver’ does is sending messages to the specified web server.
 
-  ```bash
-      $ ./bin/emqx_ctl rules create \
-        "SELECT username as u, payload FROM \"message.publish\" where u='Steven'" \
-        '[{"name":"data_to_webserver", "params": {"$resource":  "resource:691c29ba"}}]' \
-        -d "Forward publish msgs from steven to webserver"
-
-  rule:26d84768
-  ```
-
- Above CLI is simlar to the first Inspect rule, with exception that the resource ‘resource:691c29ba’ is bound to ‘data_to_webserver’. The binding is done by a special arg named ‘$resource’. What the action ‘data_to_webserver’ does is sending messages to the specified web server.
-
-3. Now let’s send a message “hello” to an arbitrary topic using username “Steven”, this will trigger the rule we created above, and the Web Server will receive an message and return 200 OK:
+4. Now let’s send a message “hello” to an arbitrary topic using username “Steven”, this will trigger the rule we created above, and the Web Server will receive an message and return 200 OK:
 
   ```bash
   $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9910; done;

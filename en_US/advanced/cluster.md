@@ -16,7 +16,7 @@ EMQX clusters bring the users the following benefits.
 
 The basic function of a distributed EMQX cluster is to forward and publish messages to different subscribers. EMQX utilizes Erlang/OTP's built-in database, Mnesia, to store MQTT session states. The database replication channel is powered by the "Erlang distribution" protocol, enabling each node to function as both a client and server. 
 
-![image](../assets/cluster_1.png)
+<img src="./assets/mnesia-cluster.png" alt="mnesia-cluster" style="zoom:33%;" />
 
 ## Key Features
 

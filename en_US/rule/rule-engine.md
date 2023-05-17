@@ -12,7 +12,7 @@ Applicable version:**EMQX Broker v3.1.0+**
 Compatibility Tip: EMQX Broker v4.0 makes major adjustments to the SQL syntax of the rule engine. For v3.x upgrade users, please refer to  [Migration Guide](./rule-engine.md#migration-guide) for compatibility.
 :::
 
-## Publish message
+## Publish Message
 
 The rule engine can store the message processing results of a specific topic to the database with the response action, send it to the HTTP server, forward it to the message queue of Kafka or RabbitMQ, and republish to a new topic or even another Broker cluster. Each rule can be configured with multiple response actions.
 
@@ -28,7 +28,7 @@ Select the message posted to the t/a topic, and filter out the "x" field from th
 SELECT payload.x as x FROM "t/a"
 ```
 
-## Event trigger
+## Event Trigger
 
 The rule engine uses a virtual topic beginning with **$events/** to process EMQX Broker built-in events. The built-in events provide finer message control and client action processing capabilities, which can be used in the business of QoS 1 QoS 2 messages arrival recording, device online and offline recording.
 
@@ -40,7 +40,7 @@ SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = '
 
 For rule engine data, SQL statement format and [event topic](./rule-engine_field.md#event-topic-available-for-from-clause) list, please refer to [SQL manual](./rule-engine_grammar_and_examples.md#rule-engine-sql-statement) for detailed tutorials.
 
-## Rule engine composition
+## Rule Engine Composition
 
 The rule describes the three configurations of **where data comes from,  how to filter and process data, and where processed results go to**, which means an available rule contains three elements:
 
@@ -50,9 +50,7 @@ The rule describes the three configurations of **where data comes from,  how to 
 
 The following figure is a simple rule, which is used to process the data at the time of **message publishing**, filter out the `msg` field,  messages `topic`, ` qos` of all topic messages, and send them to the Web Server and /uplink topics:
 
-![image-20190604103907875](../assets/image-20190604103907875.png)
-
-EMQX Broker's rule engine can be used to flexibly process messages and events. By using the rule engine, it can easily achieve such function as converting the message into a specified format, and then stored in a database table, or sent to the message queue.
+EMQX rule engine can be used to flexibly process messages and events. By using the rule engine, it can easily achieve such functions as converting the message into a specified format, and then stored in a database table, or sent to the message queue.
 
 The concepts related to the EMQX Broker rule engine include: rules, actions, resources, and resource-types.
 
@@ -89,27 +87,17 @@ Rule: {
 Actions and resource types are provided by emqx or plugin code and cannot be created dynamically through API and CLI.
 :::
 
-## Examples of typical application scenarios for rule engine
-
-- Action listening: In the development of intelligent door lock for smart home, the function of the door lock will be abnormal because of offline resulting by the network or power failure, man-made damage and other reasons. Through using rule engine configuration to monitor offline events, it can push the fault information to the application service and realize the ability of first time fault detection in the access layer.
-- Data filtering: Truck fleet management of vehicle network. Vehicle sensors collect and report a large amount of operational data. The application platform only focuses on data with a vehicle speed greater than 40 km/h. In this scenario, the rule engine can be used to conditionally filter messages to the service, and data that satisfies the condition can be written to the business message queue .
-- Message routing: In the intelligent billing application, the terminal device distinguishes the service type by different topics. The message of billing service can be connected to the billing message queue by configuring the rule engine, and the non-billing information can be connected to other message queues to realize the routing configuration of business messages.
-- Message encoding and decoding: In the application scenarios such as public protocol/proprietary TCP protocol access and industrial control, the encoding and decoding of binary/special format message body can be done through the local processing function of the rule engine (which can be customized and developed on EMQX). Relevant messages can also be routed through the rule engine to external computing resources such as function computing for processing (processing logic can be developed by users), and the messages can be converted into JSON format that is easy for business processing, which simplifies the difficulty of project integration and improves the ability of rapid development and delivery of applications.
-
-### Test SQL statements in Dashboard
+### Test SQL Statements in Dashboard
 The SQL statement test function is provided in the Dashboard interface, and the SQL test results are shown through the given SQL statement and event parameters.
 
 1.  On the rule creating interface, enter **rule SQL** and enable the **SQL test** switch:
 
-    ![image](../assets/sql-test-1@2x.png)
+    ![SQL-test](./assets/SQL-test.png)
 
 2. Modify the field of the simulated event, or use the default configuration, and click the **Test** button:
 
-   ![image](../assets/sql-test-2@2x.png)
-
 3. The result of SQL processing will be displayed in the **Test Output** text box:
 
-   ![image](../assets/sql-test-3@2x.png)
 
 ## Migration Guide
 

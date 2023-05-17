@@ -1,4 +1,4 @@
-# HTTP Server
+# HTTP Service
 
 HTTP Authentication/ACL uses an external self-built HTTP application authentication data source, and judges the authentication result based on the data returned by the HTTP API, which can implement complex authentication logic and complex ACL verification logic.
 
@@ -20,14 +20,13 @@ After clicking add, the module is added
 
 ![image-20200927213049265](./assets/auth_http4.png)
 
-
-## HTTP authentication principle
+## Authentication principle
 
 EMQX uses the relevant information of the current client as parameters in the device connection event, initiates a request for query permissions to the user-defined authentication service, and processes the authentication request through the returned HTTP **response status code** (HTTP statusCode).
 
- -Authentication failed: The API returns status codes other than 200
- -Successful authentication: API returns 200 status code
- -Ignore authentication: API returns 200 status code and response body is `ignore`
+-  Authentication failed: The API returns status codes other than 200
+-  Successful authentication: API returns 200 status code
+-  Ignore authentication: API returns 200 status code and response body is `ignore`
 
 
 ## Authentication request
@@ -51,16 +50,17 @@ When the HTTP request method is GET, the request parameters will be passed in th
 
 You can use the following placeholders in the authentication request. EMQX will automatically fill in the client information when requesting:
 
--%u: username
--%c: Client ID
--%a: Client IP address
--%r: Client access protocol
--%P: Plain text password
--%p: client port
--%C: TLS certificate common name (domain name or subdomain name of the certificate), valid only when TLS connection
--%d: TLS certificate subject, only valid when TLS connection
+- %u: username
 
-::: tip
+- %c: Client ID
+- %a: Client IP address
+- %r: Client access protocol
+- %P: Plain text password
+- %p: client port
+- %C: TLS certificate common name (domain name or subdomain name of the certificate), valid only when TLS connection
+- %d: TLS certificate subject, only valid when TLS connection
+
+:::tip
 It is recommended to use the POST and PUT methods. When using the GET method, the plaintext password may be recorded in the server log during the transmission along with the URL.
 :::
 
@@ -69,9 +69,10 @@ It is recommended to use the POST and PUT methods. When using the GET method, th
 
 EMQX uses current client-related information as parameters in device publishing and subscription events to initiate a request for permissions to a user-defined authentication service, and process ACL authorization requests through the returned HTTP **response status code** (HTTP statusCode).
 
- -No permission: The API returns status codes other than 200
- -Authorization is successful: API returns 200 status code
- -Ignore authorization: API returns 200 status code and response body is `ignore`
+-  No permission: The API returns status codes other than 200
+
+-  Authorization is successful: API returns 200 status code
+-  Ignore authorization: API returns 200 status code and response body is `ignore`
 
 ## HTTP request information
 
@@ -119,14 +120,15 @@ When the HTTP request method is GET, the request parameters will be passed in th
 
 You can use the following placeholders in the authentication request. EMQX will automatically fill in the client information when requesting:
 
--%A: Operation type, '1' subscription; '2' release
--%u: client user name
--%c: Client ID
--%a: Client IP address
--%r: Client access protocol
--%m: Mountpoint
--%t: Subject
+- %A: Operation type, '1' subscription; '2' release
 
-::: tip
+- %u: client user name
+- %c: Client ID
+- %a: Client IP address
+- %r: Client access protocol
+- %m: Mountpoint
+- %t: Subject
+
+:::tip
 It is recommended to use the POST and PUT methods. When using the GET method, the plaintext password may be recorded in the server log during the transmission along with the URL.
 :::

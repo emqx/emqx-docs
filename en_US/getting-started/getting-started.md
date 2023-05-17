@@ -110,7 +110,7 @@ docker run -d --name emqx-ee -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084
 For Kubernetes, EMQ offers [EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator).
 
 EMQX Kubernetes Operator is an application orchestration tool based on Kubernetes native API,
-which is used for automatic deployment and lifecycle management of EMQX clusters.
+which is used for the automatic deployment and lifecycle management of EMQX clusters.
 You can refer to the [documentation](https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html)
 to learn how to deploy EMQX using the Operator.
 
@@ -163,14 +163,13 @@ simply [contact EMQ](https://www.emqx.com/en/contact) for support.
 After the installation, you can start EMQX through the command of systemctl or emqx.
 
  {% emqxce %}
-After EMQX is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/)
-(replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](./dashboard.md)for device connection and related indicator monitoring and management.
+After EMQX is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/) (replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](./dashboard.md) for device connection and related indicator monitoring and management.
 
 {% endemqxce %}
 
 {% emqxee %}
 After EMQX is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/)
-(replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](./dashboard-ee.md)for device connection and related indicator monitoring and management.
+(replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](./dashboard-ee.md) for device connection and related indicator monitoring and management.
 
 {% endemqxee %}
 
@@ -219,15 +218,13 @@ the startup and runtime logs printed to the console.
 After startup, you can quickly verify if EMQX is working by any MQTT client.
 You can use the following client tools or client libraries to access EMQX
 
-### Dashboard Websocket tool
+### Dashboard Websocket Tool
 
-EMQX dashboard comes with a builtin, websocket based MQTT client.
+EMQX dashboard comes with a built-in, websocket based MQTT client.
 
-Open Dashboard and enter the page of **Tools -> Websocket**,
-where you can use the MQTT over Websokcet client to quickly access EMQX.
+Open Dashboard and enter the page of **Tools -> Websocket**, where you can use the MQTT over WebSokcet client to quickly access EMQX.
 
-The Websocket page provides you with a simple but effective WebSocket client tool,
-which can be used for publishing, subscribing, and inspecting the messages.
+The Websocket page provides you with a simple but effective WebSocket client tool, which can be used for publishing, subscribing, and inspecting the messages.
 
 ![emqx-mqtt-websocket-tool-en](./assets/emqx-mqtt-websocket-tool-en.png)
 
@@ -237,7 +234,7 @@ MQTTX is an elegant cross-platform MQTT 5.0 open source desktop client tool that
 supports running on macOS, Linux, and Windows.
 
 MQTTX has many features, provides a concise graphical interface and operation logic,
-supports MQTT/MQTT over Websocket access and one-way/two-way SSL authentication,
+supports MQTT/MQTT over WebSocket access and one-way/two-way SSL authentication,
 and supports Payload format conversion, simulation of test data with a custom script,
 automatic subscription of $SYS topic, viewing Traffic statistics and so on.
 
@@ -280,7 +277,7 @@ and platforms as possible, including
 
 For a more detailed list, please refer to [MQTT-Client-Examples](https://github.com/emqx/MQTT-Client-Examples)
 
-## Advanced operation
+## Advanced Operation
 
 After completing the installation, startup, and access test,
 you can now continue to read the following documents for a proper in-production setup.
@@ -293,48 +290,33 @@ and enabling authentication can effectively fence off malicious client connectio
 Authorization rules, or Access Control List (ACL) can be configured to ensure only
 legit clients are permitted to publish or subscribe to certain topics.
 
-- [Authentication Introduction](../advanced/auth.md): Select a built-in plugin, to integrate
-  with internal or external database, JWT or HTTP service as the authentication data source.
-- [Authorization / ACL](../advanced/acl.md): Select a built-in plugin, to integrate with
-  internal or external database, or HTTP service as the ACL data source.
+- [Authentication Introduction](../advanced/auth.md): Select a built-in plugin, to integrate with internal or external database, JWT or HTTP service as the authentication data source.
+- [Authorization / ACL](../advanced/acl.md): Select a built-in plugin, to integrate with internal or external database, or HTTP service as the ACL data source.
 
 ### Rule Engine
 
-The built-in SQL based rule-engine can extract, filter, enrich, and convert messages between
-devices and data platofrms in real-time, and forward the data to Webhooks or other MQTT Brokers
-without having to implement MQTT clients to do the job.
+The built-in SQL based rule-engine can extract, filter, enrich, and convert messages between devices and data platofrms in real-time, and forward the data to Webhooks or other MQTT Brokers without having to implement MQTT clients to do the job.
 
-EMQX enterprise eidtion can also integrate with Kafka,
-various SQL / NoSQL / time-series databases and enterprise systems, such as SAP.
+EMQX enterprise eidtion can also integrate with Kafka, various SQL / NoSQL / time-series databases and enterprise systems, such as SAP.
 
 - [Rule Engine](../rule/rule-engine.md): The concept and basic usage of rule engine.
 - [Create Rule](../rule/rule-create.md): How to create a rule.
-- [Example](../rule/rule-example.md#send data to-web-service): Tutorial on using various data
-  sources for rule engine.
+- [Example](../rule/rule-example.md): Tutorial on using various data sources for rule engine.
 
 ### HTTP API
 
-HTTP API is a frequently used function in IoT platform development and EMQX operation and
-maintenance. HTTP API can realize integration with external systems, such as querying and
-managing client information, broker subscription, publishing messages and creating rules.
+HTTP API is a frequently used function in IoT platform development and EMQX operation and maintenance. HTTP API can realize integration with external systems, such as querying and managing client information, broker subscription, publishing messages and creating rules.
 
-- [HTTP API](../advanced/http-api.md): include HTTP API access point and access
-  authentication method.
-- [Basic Information](../advanced/http-api.md#endpoint-brokers): Get basic information such as
-  EMQX version and running status.
+- [HTTP API](../advanced/http-api.md): include HTTP API access point and access authentication method.
+- [Basic Information](../advanced/http-api.md#endpoint-brokers): Get basic information such as EMQX version and running status.
 - [Node](../advanced/http-api.md#endpoint-nodes): Get the information of EMQX node.
-- [Client](../advanced/http-api.md#endpoint-clients): View online client information and support
-  kicking out the client.
-- [Subscription Information](../advanced/http-api.md#endpoint-subscriptions): View the
-  subscription topic list and subscription relationship.
+- [Client](../advanced/http-api.md#endpoint-clients): View online client information and support kicking out the client.
+- [Subscription Information](../advanced/http-api.md#endpoint-subscriptions): View the subscription topic list and subscription relationship.
 - [Routes](../advanced/http-api.md#endpoint-routes): View subscribed topics.
-- [Message Publishing](../advanced/http-api.md#endpoint-publish): Call EMQX through HTTP to
-  publish MQTT messages, with a reliable way for applications to communicate with clients.
-- [Topic Subscription](../advanced/http-api.md#endpoint-subscribe): Dynamically manage the client
-  subscription list, without the need for the client to actively initiate
+- [Message Publishing](../advanced/http-api.md#endpoint-publish): Call EMQX through HTTP to publish MQTT messages, with a reliable way for applications to communicate with clients.
+- [Topic Subscription](../advanced/http-api.md#endpoint-subscribe): Dynamically manage the client subscription list, without the need for the client to actively initiate
   subscription/unsubscription.
-- [Plugins](../advanced/http-api.md#endpoint-plugins): Status management of plugins with
-  start and stop operations.
+- [Plugins](../advanced/http-api.md#endpoint-plugins): Status management of plugins with start and stop operations.
 
 ### Operation, maintenance and deployment
 

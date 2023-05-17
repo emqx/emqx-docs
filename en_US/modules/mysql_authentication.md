@@ -10,7 +10,7 @@ Open the official MySQL website: https://dev.MySQL.com/downloads/MySQL/5.7.html#
 
 After the installation is complete, start MySQL.
 
-## Create module
+## Create Module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
@@ -28,7 +28,7 @@ Finally click the "Add" button, the module can be added successfully
 
 ![image-20200928095050885](./assets/auth_mysql4.png)
 
-### Certification Form:
+## Authentication
 
 ```sql
 CREATE TABLE `mqtt_user` (
@@ -45,10 +45,10 @@ CREATE TABLE `mqtt_user` (
 
 Field description:
 
--username: The username for connecting to the client. If the value here is set to `$all`, it means that the rule applies to all users
--password: password parameter for connecting to the client
--salt: password and salt string
--is_superuser: Is it a superuser
+- username: The username for connecting to the client. If the value here is set to `$all`, it means that the rule applies to all users
+- password: password parameter for connecting to the client
+- salt: password and salt string
+- is_superuser: Is it a superuser
 
 When performing identity authentication, EMQX will use the current client information to fill and execute the authentication SQL configured by the user, and query the authentication data of the client in the database.
 
@@ -58,11 +58,11 @@ select password from mqtt_user where username ='%u' limit 1
 
 Field description
 
--%u: username
--%c: clientid
--%P: Plain text password
--%C: TLS certificate common name (domain name or subdomain name of the certificate), valid only when TLS connection
--%d: TLS certificate subject, only valid when TLS connection
+- %u: username
+- %c: clientid
+- %P: Plain text password
+- %C: TLS certificate common name (domain name or subdomain name of the certificate), valid only when TLS connection
+- %d: TLS certificate subject, only valid when TLS connection
 
 The authentication SQL can be adjusted according to business needs, such as adding multiple query conditions and using database preprocessing functions to implement more business-related functions. But in any case, the authentication SQL needs to meet the following conditions:
 
@@ -86,91 +86,11 @@ You can use AS syntax in SQL to specify a password for field renaming, or set th
 
 :::
 
-#### Advanced
-
-In the default table structure, we set the username field as a unique index (UNIQUE), and use it with the default query statement (`select password from mqtt_user where username ='%u' limit 1`) to get very good query performance.
+Note: In the default table structure, we set the username field as a unique index (UNIQUE), and use it with the default query statement (`select password from mqtt_user where username ='%u' limit 1`) to get very good query performance.
 
 If the default query conditions do not meet your needs, for example, you need to query the corresponding `Password Hash` and `Salt` based on the `Client ID`, please make sure to set the `Client ID` as an index; Or you want to perform multi-condition queries on `Username`, `Client ID`, or other fields. It is recommended to set the correct single-column index or multiple-column index. In short, set the correct table structure and query statement, and try not to let the index fail and affect the query performance.
 
-### Access Control List
-
-```sql
-CREATE TABLE `mqtt_acl` (
-  ʻId` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  ʻAllow` int(1) DEFAULT 1 COMMENT '0: deny, 1: allow',
-  ʻIpaddr` varchar(60) DEFAULT NULL COMMENT'IpAddress',
-  ʻUsername` varchar(100) DEFAULT NULL COMMENT'Username',
-  `clientid` varchar(100) DEFAULT NULL COMMENT'ClientId',
-  ʻAccess` int(2) NOT NULL COMMENT '1: subscribe, 2: publish, 3: pubsub',
-  `topic` varchar(100) NOT NULL DEFAULT'' COMMENT'Topic Filter',
-  PRIMARY KEY (ʻid`),
-  INDEX (ipaddr),
-  INDEX (username),
-  INDEX (clientid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-```
-
-Field description:
-
--allow: prohibit (0), allow (1)
--ipaddr: set IP address
--username: The username for connecting to the client. If the value here is set to `$all`, it means that the rule applies to all users
--clientid: clientid of the connected client
--access: Allowed operations: subscribe (1), publish (2), subscribe to publish (3)
--topic: The controlled topic, wildcards can be used, and placeholders can be added to the topic to match the client information, for example, `t/%c` will replace the topic with the clientid of the current client when matching
-
-The principle of access control is to find entries related to the client from MySQL, and then perform authentication. The default query SQL is as follows:
-
-```sql
-select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr ='%a' or username ='%u' or username ='$all' or clientid ='%c'
-```
-
-The following placeholders can be used in the authentication SQL, and EMQX will be automatically filled with client information when executed:
-
--%u: username
--%c: clientid
--%a: Client IP address
--%P: Plain text password
--%C: TLS certificate common name (domain name or subdomain name of the certificate), valid only when TLS connection
--%d: TLS certificate subject, only valid when TLS connection
-
-Sample data in the default configuration:
-
-```sql
-- All users cannot subscribe to system topics
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (0, NULL,'$all', NULL, 1,'$SYS/#');
-
-- Allow clients on 10.59.1.100 to subscribe to system topics
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, '10.59.1.100', NULL, NULL, 1,'$SYS/#');
-
-- Prohibit clients from subscribing to the /smarthome/+/temperature topic
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (0, NULL, '$all', NULL, 1,'/smarthome/+/temperature');
-
-- Allow clients to subscribe to the topic /smarthome/${clientid}/temperature containing their Client ID
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, NULL, '$all', NULL, 1,'/smarthome/%c/temperature');
-```
-
-## root
-
-Super users can subscribe and publish any topic. The default SQL is as follows:
-
-```sql
-select is_superuser from mqtt_user where username ='%u' limit 1
-```
-
-You can use the following placeholders in SQL, and EMQX will be automatically filled with client information during execution:
-
--%u: username
--%c: clientid
--%C: TLS certificate common name (domain name or subdomain name of the certificate), valid only when TLS connection
--%d: TLS certificate subject, only valid when TLS connection
-
-You can adjust the super user SQL according to business needs, such as adding multiple query conditions and using database preprocessing functions to achieve more business-related functions. But in any case, super user SQL needs to meet the following conditions:
-
-1. The query result must include the is_superuser field, and is_superuser should be explicitly true
-2. There can only be one query result, if there are multiple results, only the first one is taken as valid data
-
-## Encryption rules
+### Encryption rules
 
 ```shell
 ## No salt, plain text
@@ -196,10 +116,81 @@ Refer to: [Salt rules and hash methods](https://docs.emqx.cn/cn/broker/latest/cn
 
 :::
 
-## Special Instructions
-
-MySQL 8.0 and later versions use `caching_sha2_password` as the default authentication module. Due to the client driver, you must change it to the `MySQL_native_password` module:
+## Access Control
 
 ```sql
-ALTER USER'your_username'@'your_host' IDENTIFIED WITH MySQL_native_password BY'your_password';
+CREATE TABLE `mqtt_acl` (
+  ʻId` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  ʻAllow` int(1) DEFAULT 1 COMMENT '0: deny, 1: allow',
+  ʻIpaddr` varchar(60) DEFAULT NULL COMMENT'IpAddress',
+  ʻUsername` varchar(100) DEFAULT NULL COMMENT'Username',
+  `clientid` varchar(100) DEFAULT NULL COMMENT'ClientId',
+  ʻAccess` int(2) NOT NULL COMMENT '1: subscribe, 2: publish, 3: pubsub',
+  `topic` varchar(100) NOT NULL DEFAULT'' COMMENT'Topic Filter',
+  PRIMARY KEY (ʻid`),
+  INDEX (ipaddr),
+  INDEX (username),
+  INDEX (clientid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
+
+Field description:
+
+- allow: prohibit (0), allow (1)
+- ipaddr: set IP address
+- username: The username for connecting to the client. If the value here is set to `$all`, it means that the rule applies to all users
+- clientid: clientid of the connected client
+- access: Allowed operations: subscribe (1), publish (2), subscribe to publish (3)
+- topic: The controlled topic, wildcards can be used, and placeholders can be added to the topic to match the client information, for example, `t/%c` will replace the topic with the clientid of the current client when matching
+
+The principle of access control is to find entries related to the client from MySQL, and then perform authentication. The default query SQL is as follows:
+
+```sql
+select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr ='%a' or username ='%u' or username ='$all' or clientid ='%c'
+```
+
+The following placeholders can be used in the authentication SQL, and EMQX will be automatically filled with client information when executed:
+
+- %u: username
+- %c: clientid
+- %a: Client IP address
+- %P: Plain text password
+- %C: TLS certificate common name (domain name or subdomain name of the certificate), valid only when TLS connection
+- %d: TLS certificate subject, only valid when TLS connection
+
+Sample data in the default configuration:
+
+```sql
+- All users cannot subscribe to system topics
+INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (0, NULL,'$all', NULL, 1,'$SYS/#');
+
+- Allow clients on 10.59.1.100 to subscribe to system topics
+INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, '10.59.1.100', NULL, NULL, 1,'$SYS/#');
+
+- Prohibit clients from subscribing to the /smarthome/+/temperature topic
+INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (0, NULL, '$all', NULL, 1,'/smarthome/+/temperature');
+
+- Allow clients to subscribe to the topic /smarthome/${clientid}/temperature containing their Client ID
+INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, NULL, '$all', NULL, 1,'/smarthome/%c/temperature');
+```
+
+## Super User
+
+Super users can subscribe and publish any topic. The default SQL is as follows:
+
+```sql
+select is_superuser from mqtt_user where username ='%u' limit 1
+```
+
+You can use the following placeholders in SQL, and EMQX will be automatically filled with client information during execution:
+
+- %u: username
+- %c: clientid
+- %C: TLS certificate common name (domain name or subdomain name of the certificate), valid only when TLS connection
+- %d: TLS certificate subject, only valid when TLS connection
+
+You can adjust the super user SQL according to business needs, such as adding multiple query conditions and using database preprocessing functions to achieve more business-related functions. But in any case, super user SQL needs to meet the following conditions:
+
+1. The query result must include the is_superuser field, and is_superuser should be explicitly true
+2. There can only be one query result, if there are multiple results, only the first one is taken as valid data
+

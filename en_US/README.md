@@ -86,7 +86,6 @@ Below is a brief/incomplete feature list, highlighting the features EMQX provide
   - Stomp
   - GB/T 32960 (Enterprise edition) <!--cannot use 'emqxee' macro inside list-->
   - JT/T 808 (Enterprise edition)
-  - OCPP (Enterprise edition)
 
 Advanced features for MQTT:
 

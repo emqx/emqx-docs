@@ -1,6 +1,6 @@
 # Custom codec example - Avro
 
-## Rule requirements
+## Rule Requirements
 
 The device publishes a binary message encoded using Avro, which needs to be matched by the rule engine and then republished to the topic associated with the "name" field. The format of the topic is "avro_user/${name}".
 
@@ -27,7 +27,7 @@ In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of 
 }
 ```
 
-## Creating rules
+## Creating Rules
 
 **Use the Schema you have just created to write the rule SQL statement:**
 
@@ -53,7 +53,7 @@ The key point here is `schema_decode('avro_user', payload)`:
 
 This action sends the decoded "user" to the topic `avro_user/${avro_user.name}` in JSON format. `${avro_user.name}` is a variable placeholder that will be replaced at runtime with the value of the "name" field in the message content.
 
-## Device side code
+## Device Side Code
 
 Once the rules have been created, it is time to simulate the data for testing.
 
@@ -71,11 +71,11 @@ def publish_msg(client):
     client.publish(topic, payload=message, qos=0, retain=False)
 ```
 
-## Checking rule execution results
+## Check Rule Execution Results
 
 1)  In the Dashboard's [Websocket](http://127.0.0.1:18083/#/websocket) tools, log in to an MQTT Client and subscribe to "avro_user/#".
 
-2)  Install the python dependency and execute the device-side code:
+2)  Install the Python dependency and execute the device-side code:
 
 ```shell
 $ pip3 install protobuf

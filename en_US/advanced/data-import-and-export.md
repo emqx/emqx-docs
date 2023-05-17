@@ -1,4 +1,4 @@
-# Data import and export
+# Backup and Restore
 
 EMQX provides users with data import and export function to meet the needs of server upgrade, migration and data backup. The data import and export function supports exporting the data (such as the blacklist, rule engine configuration) stored in Mnesia , the default database of EMQ x broker, to the local file in JSON format. Of course, the user does not need to care about the data content in the exported file. The exported file can be imported into other running instances of EMQ x broker. The EMQ x broker can be the same version or different versions, but it currently only supports `4.1.0` and later versions..
 
@@ -31,10 +31,7 @@ EMQX provides [Command Line Interface](./cli.md#endpoint-data-import-and-export)
 
 {% endemqxee %}
 
-
-## Example
-
-### Command line interface
+### ## Work with Command Line Interface
 
 1. Export data. The file name format of the exported file is `emqx-export-YYYY-MM-DD-HH-mm-SS.json`, and the default export path is the data directory (Refer to  [Directory structure](../getting-started/directory.md))
 
@@ -70,7 +67,7 @@ EMQX provides [Command Line Interface](./cli.md#endpoint-data-import-and-export)
     The emqx data has been imported successfully.
     ```
 
-### HTTP API
+## Work with HTTP API
 
 1. Export data.
 
@@ -92,7 +89,7 @@ EMQX provides [Command Line Interface](./cli.md#endpoint-data-import-and-export)
 
    ```
    $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d @/tmp/emqx-export-2020-9-4-10-24-16.json
-
+   
    {"code":0}
    ```
 

@@ -1,6 +1,6 @@
 # MQTT 5.0 Enhanced Authentication
 
-EMQX also supports the MQTT 5.0 enhanced authentication. This authenticator implements [Salted Challenge Response Authentication Mechanism (SCRAM) (opens new window)](https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism)authentication and uses the built-in database of EMQX to store client credentials (*users*).
+EMQX also supports the MQTT 5.0 enhanced authentication. This authenticator implements [Salted Challenge Response Authentication Mechanism (SCRAM)](https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism)authentication and uses the built-in database of EMQX to store client credentials (*users*).
 
 SCRAM is a more complicated mechanism than password verification. It requires exchanging additional MQTT packages during connection. SCRAM authentication does not depend on external data sources, and it is simple and lightweight to use.
 

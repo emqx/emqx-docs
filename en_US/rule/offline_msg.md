@@ -1,11 +1,13 @@
 # Save Offline Messages
 
-
 Offline message storage primarily logs operations like client connectivity status, topic subscriptions, message content, and delivery receipts into databases like Redis, MySQL, PostgreSQL, MongoDB, or Cassandra. Although users can achieve similar functions by subscribing to relevant topics, EMQX Enterprise edition has built-in support for these, boosting efficiency and reducing developer workload.
 
-## MQTT Message Persistence
+- Client Connection State: EMQX supports retaining the client's connection state in Redis or DB.
+- Client Subscription by Broker: EMQX Persistence supports subscription by broker. When a client goes online, the persistence module loads the subscriptions of the client from Redis or Databases.
 
-### One-to-one message Persistence
+## How It Works
+
+### One-to-One Message Persistence
 
 1. PUB publishes a message;
 2. Backend records this message in DB;
@@ -17,7 +19,7 @@ Offline message storage primarily logs operations like client connectivity statu
 
 <img src="./assets/backends_1.png" alt="image" style="zoom: 67%;" />
 
-### Many-to-many message Persistence
+### Many-to-Many Message Persistence
 
 1. PUB publishes a message;
 2. Backend records the message in DB;
@@ -29,18 +31,7 @@ Offline message storage primarily logs operations like client connectivity statu
 
 <img src="./assets/backends_2.png" alt="image" style="zoom:67%;" />
 
-### Client Connection State
-
-EMQX supports retaining the client's connection state in Redis or DB.
-
-### Client Subscription by Broker
-
-EMQX Persistence supports subscription by broker. When a client goes
-online, the persistence module loads the subscriptions of the client
-from Redis or Databases.
-
-
-### Supported Data Systems
+## Supported Data Systems
 
 EMQX supports saving offline messages to the following databases. 
 
@@ -51,7 +42,7 @@ EMQX supports saving offline messages to the following databases.
 - [PostgreSQL](./offline_msg_to_pgsql.md)
 - [Redis](./offline_msg_to_redis.md)
 
-### Configuration Steps
+## Configuration Steps
 
 EMQX supports various types of database persistence. While the specifics may vary, configuring any persistence type generally involves two main steps:
 

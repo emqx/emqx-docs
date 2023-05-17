@@ -9,7 +9,7 @@ Supported versions:
 
 The section below will take  Debian 10 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.com/en/try?product=enterprise).
 
-## Install with rpm
+## Install with deb
 
 EMQX offers different installation packages for different CPU architectures.
 

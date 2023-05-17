@@ -1,4 +1,4 @@
-# Changes
+# Version History
 
 This chapter provides a comprehensive guide to the lifecycle of our product versions, aimed at helping users understand the release history, end-of-life dates, and the steps involved in upgrading to a new version.
 

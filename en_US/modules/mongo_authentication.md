@@ -28,8 +28,7 @@ After clicking Add, the module is added:
 
 ![image-20200928133916267](./assets/auth_mongo4.png)
 
-
-## Authentication Collection
+## Authentication
 
 ```json
 {
@@ -53,10 +52,10 @@ MongoDB supports the configuration of collection names, authentication fields, a
 
 You can use the following placeholders in the authentication query placeholders, and EMQX will automatically fill in the client information when executed:
 
--%u: username
--%c: clientid
--%C: TLS certificate common name (domain name or subdomain name of the certificate), valid only when TLS connection
--%d: TLS certificate subject, valid only when TLS connection
+- %u: username
+- %c: clientid
+- %C: TLS certificate common name (domain name or subdomain name of the certificate), valid only when TLS connection
+- %d: TLS certificate subject, valid only when TLS connection
 
 You can adjust the authentication query according to your business needs, such as adding multiple query conditions and using database preprocessing functions to achieve more business-related functions. But in any case, the authentication query needs to meet the following conditions:
 
@@ -64,69 +63,13 @@ You can adjust the authentication query according to your business needs, such a
 2. If the salting configuration is enabled, the salt field must be included in the query result, and EMQX uses this field as the salt value
 3. MongoDB uses the findOne query command to ensure that the query results you expect can appear in the first data
 
-::: tip
+:::tip
 
 This is the set structure used by the default configuration. After you are familiar with the use of the plug-in, you can use any set that meets the conditions for authentication.
 
 :::
 
-## Access Control Collection
-
-```json
-{
-    username: "username",
-    clientid: "clientid",
-    publish: ["topic1", "topic2", ...],
-    subscribe: ["subtop1", "subtop2", ...],
-    pubsub: ["topic/#", "topic1", ...]
-}
-```
-
-MongoDB ACL rules define publish, subscribe, and publish/subscribe information, and all the rules in the rules are **allow** lists.
-
-Rule field description:
-
-
-| Configuration                   | Description                                                  |
-| ------------------------------- | ------------------------------------------------------------ |
-| Access control query collection | Access control query MongoDB collection                      |
-| Access control query field name | Field to be queried from the collection                      |
-| Access control condition field  | Access control query conditions, support and and or operations, and operations are separated by commas, for example: username=%u,clientid=%c, or operations need to add multiple data |
-
-## Super User Query
-
-When performing ACL authentication, EMQX will use the current client information to fill and execute the super user query configured by the user to check whether the client is a super user. When the client is a super user, ACL query will be skipped.
-Multiple conditions of the same selector use MongoDB and query in the actual query:
-
-```
-db.mqtt_user.find({
-  "username": "wivwiv"
-  "clientid": "$all"
-})
-```
-You can use the following placeholders in the query conditions, and EMQX will automatically fill in the client information when executed:
-
--%u: username
-
--%c: clientid
-
-You can adjust the super user query according to business needs, such as adding multiple query conditions and using database preprocessing functions to achieve more business-related functions. But in any case, the super user query needs to meet the following conditions:
-The query result must include the is_superuser field, and is_superuser should be explicitly true.
-MongoDB supports the configuration of collection names, authentication fields, authentication placeholders and other parameters.
-
-| Configuration               | Description                                                  |
-| --------------------------- | ------------------------------------------------------------ |
-| Super User Query Collection | Super User Query MongoDB Collection                          |
-| Super user query field name | Field to be queried from the collection                      |
-| Super user condition field  | Super user query conditions, if you need to query more than one, use commas to separate them. For example username=%u,clientid=%c |
-
-::: tip
-
-MongoDB ACL rules must strictly use the above data structure. All the rules added in MongoDB ACL are allowed rules and can be used with ʻacl_nomatch = deny` in ʻetc/emqx.conf`.
-
-:::
-
-## Encryption rules
+### Encryption rules
 
 ```shell
 ## No salt, plain text
@@ -149,5 +92,61 @@ pbkdf2,sha256,1000,20
 ::: tip
 
 Refer to: [Salt rules and hash methods](https://docs.emqx.io/en/broker/latest/advanced/auth.html#password-salting-rules-and-hash-methods).
+
+:::
+
+## Access Control
+
+```json
+{
+    username: "username",
+    clientid: "clientid",
+    publish: ["topic1", "topic2", ...],
+    subscribe: ["subtop1", "subtop2", ...],
+    pubsub: ["topic/#", "topic1", ...]
+}
+```
+
+MongoDB ACL rules define publish, subscribe, and publish/subscribe information, and all the rules in the rules are **allow** lists.
+
+Rule field description:
+
+
+| Configuration                   | Description                                                  |
+| ------------------------------- | ------------------------------------------------------------ |
+| Access control query collection | Access control query MongoDB collection                      |
+| Access control query field name | Field to be queried from the collection                      |
+| Access control condition field  | Access control query conditions, support and and or operations, and operations are separated by commas, for example: username=%u,clientid=%c, or operations need to add multiple data |
+
+## Super User
+
+When performing ACL authentication, EMQX will use the current client information to fill and execute the super user query configured by the user to check whether the client is a super user. When the client is a super user, ACL query will be skipped.
+Multiple conditions of the same selector use MongoDB and query in the actual query:
+
+```
+db.mqtt_user.find({
+  "username": "wivwiv"
+  "clientid": "$all"
+})
+```
+You can use the following placeholders in the query conditions, and EMQX will automatically fill in the client information when executed:
+
+- %u: username
+
+- %c: clientid
+
+You can adjust the super user query according to business needs, such as adding multiple query conditions and using database preprocessing functions to achieve more business-related functions. But in any case, the super user query needs to meet the following conditions:
+The query result must include the is_superuser field, and is_superuser should be explicitly true.
+MongoDB supports the configuration of collection names, authentication fields, authentication placeholders and other parameters.
+
+| Configuration               | Description                                                  |
+| --------------------------- | ------------------------------------------------------------ |
+| Super User Query Collection | Super User Query MongoDB Collection                          |
+| Super user query field name | Field to be queried from the collection                      |
+| Super user condition field  | Super user query conditions, if you need to query more than one, use commas to separate them. For example username=%u,clientid=%c |
+
+:::tip
+
+MongoDB ACL rules must strictly use the above data structure. All the rules added in MongoDB ACL are allowed rules and can be used with ʻacl_nomatch = deny` in ʻetc/emqx.conf`.
 
 :::

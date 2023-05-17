@@ -44,7 +44,7 @@ For example, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make t
 Each EMQX node also listens on a (conventional) port for the RPC channels, which should also be allowed by the firewall. The port mapping rule is similar to the node discovery ports in `ekka mode`, but with the `BasePort = 5370`. That is, having
 `node.name = emqx@192.168.0.12` in `emqx.conf` should make the node listen on port `5370` and port `5371` for `emqx1` (or `emqx-1`), and so on.
 
-### EMQX Cluster Protocol Setting
+## EMQX Cluster Protocol Setting
 
 Each node in the Erlang cluster can be connected through TCPv4, TCPv6 or TLS, and the connection method can be configured in`etc/emqx.conf`:
 
@@ -52,7 +52,6 @@ Each node in the Erlang cluster can be connected through TCPv4, TCPv6 or TLS, an
 | --------------------- | --------- | ------------------- | ------------------------------------------------------------ |
 | cluster.proto_dist    | enum      | `inet_tcp`          | Distributed protocol with optional values are as follows:<br />  - inet_tcp: use TCP IPv4<br/>  - inet6_tcp: use TCP IPv6<br/>  - inet_tls: use TLS |
 | node.ssl_dist_optfile | file path | `etc/ssl_dist.conf` | When `cluster.proto_dist` is selected as inet_tls, you need to configure the ` etc/ssl_dist.conf` file, and specify the TLS certificate. |
-
 
 
 

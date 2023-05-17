@@ -1,4 +1,4 @@
-# Set MQTT Proxy Subscription Rules
+# Set Auto Subscription Rules
 
 ## Create module
 
@@ -20,37 +20,35 @@ After clicking add, the module is added
 
 ## Subscription options
 
-+ Quality of Service (QoS)
+Quality of Service (QoS)
 
-  The maximum QoS level of application messages that the server can send to the client.
+The maximum QoS level of application messages that the server can send to the client.
 
-+ NL (No Local)
+NL (No Local)
 
-  Whether application messages can be forwarded to the client that posted this message.
+Whether application messages can be forwarded to the client that posted this message.
 
-  -When the NL value is 0, it means that the application message can be forwarded to the client that published the message.
+- When the NL value is 0, it means that the application message can be forwarded to the client that published the message.
 
-  -When the NL value is 1, it means that the application message cannot be forwarded to the client that published the message.
+- When the NL value is 1, it means that the application message cannot be forwarded to the client that published the message.
 
-+ RAP (Retain As Published)
+RAP (Retain As Published)
 
-  When forwarding application messages to this subscription, whether to keep the RETAIN flag set when the message is published.
+When forwarding application messages to this subscription, whether to keep the RETAIN flag set when the message is published.
 
-  -When the RAP value is 0, it means that the reserved flag is set to 0 when forwarding application messages to this subscription.
+- When the RAP value is 0, it means that the reserved flag is set to 0 when forwarding application messages to this subscription.
 
-  -When the RAP value is 1, it means to keep the reserved flag set when the message is published when the application message is forwarded to this subscription.
+- When the RAP value is 1, it means to keep the reserved flag set when the message is published when the application message is forwarded to this subscription.
 
-+ RH (Retain Handling)
+RH (Retain Handling)
 
-  Whether to send a hold message when the subscription is established
+Whether to send a hold message when the subscription is established
 
-  -0: Send a reserved message when the subscription is established
+- 0: Send a reserved message when the subscription is established
+- 1: When the subscription is established, if the subscription does not currently exist, a reserved message will be sent
+- 2: Do not send reserved messages when the subscription is established
 
-  -1: When the subscription is established, if the subscription does not currently exist, a reserved message will be sent
-
-  -2: Do not send reserved messages when the subscription is established
-
-## Agent Subscription Rules
+## Auto Subscription Rules
 
 When configuring the topic subscribed by the agent, EMQX provides two placeholders `%c` and `%u` for users to use. EMQX will configure the `%c` and `%u` `Replaced with the client's `Client ID` and ʻUsername` respectively. It should be noted that `%c` and `%u` must occupy an entire topic level.
 
