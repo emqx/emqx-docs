@@ -798,13 +798,17 @@
             {
               "title": "LDPA",
               "path": "advanced/auth-ldap"
-            }
+            },
             {
               "title": "JWT",
               "path": "auth-jwt"
+            },
+            {
+              "title": "MQTT Enhanced Authentication",
+              "path": "modules/auth_sasl"
             }
           ]
-        },      
+        },  
         {
           "title": "Authorization" ,
           "path": "advanced/acl",
@@ -842,10 +846,6 @@
               "path": "advanced/acl-jwt"
             }
           ]
-        },
-        {
-          "title": "MQTT Enhanced Authentication",
-          "path": "modules/auth_sasl"
         },
         {
           "title": "Black List",
