@@ -1,38 +1,50 @@
-# 开启 SSL/TLS 连接
+# Network and TLS
 
-SSL/TLS 加密功能会在传输层对网络连接进行加密，它能在提升通信数据安全性的同时，保证数据的完整性。EMQX 提供了非常完整的 SSL/TLS 能力支持，包括支持单/双向认证、X.509 证书认证，您可以为包括 MQTT 在内的所有连接启用 SSL/TLS 加密连接，保证接入与消息传输安全。
+EMQX provides comprehensive SSL/TLS capability support, including support for one-way/two-way authentication and X.509 certificate authentication, which is applicable in the following scenarios:
 
-本章节将向您详细介绍 SSL/TLS 加密连接以及如何在 EMQX 中开启 SSL/TLS 连接。
+- Establishing a connection between MQTT clients and EMQX
+- Connecting to external resources, such as a database
+- Different EMQX nodes in a cluster communicate with each other
 
-## 安全优势
+::: tip
 
-1. 强认证：开启 TLS 连接后，通讯双方将互相检查对方的身份，比如通过检查对方持有的 X.509 数字证书；这类数字证书通常是由受信机构 CA（Certificate Authority）颁发，不可伪造。
-
-2. 机密性：开启 TLS 连接后，每次会话都会根据双方协商得到的会话密钥进行加密。任何第三方都无法知晓通讯内容，因此即使一次会话的密钥泄露，也不影响其他会话的安全性。
-
-3. 完整性：加密通讯中的数据被篡改的可能性极低。
-
-对于客户端的 SSL/TLS 连接，您可以根据使用场景选择以下两种使用方式之一：
-
-| 使用方式                                  | 优势                                       | 缺点                                                         |
-| ----------------------------------------- | ------------------------------------------ | ------------------------------------------------------------ |
-| 直接在客户端与 EMQX 之间开启 SSL/TLS 连接 | 简单易用，不需要额外的组件。               | 会增加 EMQX 的资源消耗，如果连接数量巨大，可能会导致较高的 CPU 和内存消耗。 |
-| 通过代理或负载均衡终结 TLS 连接           | 不影响 EMQX 性能，同时提供了负载均衡能力。 | 只有少数云厂商的负载均衡器支持 TCP SSL/TLS 终结，此外，用户还需自己部署 [HAProxy](http://www.haproxy.org/) 等软件。 |
-
-本章节将重点介绍如何直接在客户端与 EMQX 之间开启 SSL/TLS 连接，有关如何通过代理或负载均衡终结 TLS 连接，请参考 [集群负载均衡](../tutorial/deploy.md)。
-
-## 通过配置文件开启 SSL/TLS 连接
-
-:::tip 前置准备：
-
-已具备 SSL/TLS 证书。
-
-EMQX 随安装包提供了一组仅用于测试的 SSL/TLS 证书（位于 `etc/certs` 目录），并在 `8883` 端口启用了 SSL/TLS 连接。当应用于生产环境时，应切换至由可靠 CA 签发的证书。有关如何申请相关证书，请阅读拓展阅读 [如何获取 SSL/TLS 证书](#扩展阅读-如何获取-ssl-tls-证书)部分。
+SSL and TSL protocols are often adopted in network communications to ensure that the data transmission remains confidential and cannot be intercepted or modified by an attacker. 
 
 :::
 
-1. 将 SSL/TLS 证书文件移动到 EMQX `etc/certs` 目录。
-2. 打开配置文件 `listeners.conf` ，将证书替换为您的证书，并添加 `verify = verify_none`：
+This chapter mainly provides instructions on how to enable the SSL/TLS connection when an MQTT client connects to EMQX and when EMQX needs to access external resources. 
+
+## Enable SSL/TLS Connection
+
+EMQX can establish secure connections via SSL/TLS when accepting the access of an MQTT Client. You can enable SSL/TLS encrypted connections for all connections, including MQTT connection, to ensure the security of access and message transmission.
+
+### Safety Benefits
+
+Enabling SSL/TLS connection provides the following safety benefits.
+
+1. **Strong Authentication**: Both communicating parties will verify each other's identities by checking the X.509 digital certificate held by the other party. These types of digital certificates are usually issued by trusted Certificate Authorities (CAs) and cannot be forged.
+2. **Confidentiality**: Each session will be encrypted using the session key negotiated by both parties. No third party can know the communication content, so even if the session key is compromised, it does not affect the security of other sessions.
+3. **Integrity**: The possibility of data being tampered with in encrypted communication is extremely low.s
+
+For client SSL/TLS connections, you can choose one of the following two modes based on your usage scenario:
+
+| Usage Mode                                                   | Advantages                                                   | Disadvantages                                                |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Directly establish SSL/TLS connection between the client and EMQX. | Easy to use, no additional components required               | It will increase EMQX's resource consumption, and if the number of connections is huge, it may lead to high CPU and memory consumption. |
+| Terminate TLS connection through a proxy or load balancer.   | No impact on EMQX performance, and provides load balancing capabilities. | Only a few cloud vendors' load balancers support TCP SSL/TLS termination. In addition, users need to deploy software such as HAProxy themselves. |
+
+For information on how to terminate TLS connections through a proxy or load balancer, refer to [Cluster Load Balancing](../tutorial/deploy.md).
+
+## Configure with Configuration File
+
+::: tip
+
+Before you start, you need to prepare the SSL/TLS certificates. EMQX only provides a set of SSL/TLS certificates (located in the `etc/certs` directory of the installation package) for testing purposes. When used in a production environment, reliable certificates signed by a trusted CA should be used. For information on how to apply for relevant certificates, see [Obtain SSL/TLS Certificates](#further-reading).
+
+:::
+
+1. Place your private SSL/TLS certificate files in the `etc/certs` directory of EMQX.
+2. Replace the certificate into your own certificate in  `listeners.conf`. If you need to enable one-way authentication, add `verify = verify_none`:
 
 ```bash
 listener.ssl.external.keyfile = etc/certs/key.pem
@@ -40,92 +52,88 @@ listener.ssl.external.certfile = etc/certs/cert.pem
 listener.ssl.external.cacertfile = etc/certs/cacert.pem
 ```
 
-至此您已经完成 EMQX 上的 SSL/TLS 单向认证配置，单向认证仅保证通信已经被加密，无法验证客户端身份。
-
-如需启用双向认证，请在 `listeners.ssl.default` 配置组中添加如下配置：
+If you need to enable two-way authentication, add the following configuration:
 
 ```bash
 listener.ssl.external.verify = verify_peer
 ```
 
-3. 重启 EMQX，应用以上配置。
+3. Restart EMQX to apply the configuration.
 
-## 扩展阅读：如何获取 SSL/TLS 证书
+## Further Reading
 
-您可通过以下两种方式获取相关 SSL/TLS 证书：
+You can obtain the SSL/TLS certificate in the following two ways:
 
-1. 自签名证书：即使用自己签发的证书，由于自签名证书存在较多的安全隐患，因此只建议用于测试验证环境。
-2. 申请或购买证书：您可以向 [Let's Encrypt](https://letsencrypt.org/zh-cn/) 或华为云、腾讯云等云厂商申请免费证书，也可以向 [DigiCert](https://www.digicert.com/) 等机构购买收费证书。对于企业级用户，一般建议申请收费的 OV 及以上类型的证书，以获取更高等级的安全保护。
+1. Self-signed certificate: It means using a certificate that is issued by yourself. However, self-signed certificates have many security risks and are only recommended for testing and verification environments.
+2. Apply or purchase a certificate: You can apply for a free certificate from [Let's Encrypt](https://letsencrypt.org) or cloud vendors such as Huawei Cloud and Tencent Cloud, or purchase a paid certificate from organizations such as [DigiCert](https://www.digicert.com/). For enterprise users, it is generally recommended to apply for paid OV or above certificates to obtain a higher level of security protection.
 
-### 创建自签名证书
+### Create Self-Signed Certificate
 
-:::tip 前置准备
+::: tip Prerequisite
 
-已安装 [OpenSSL](https://www.openssl.org/)。
+[OpenSSL](https://www.openssl.org/) is installed.
 
 :::
 
-1. 运行以下命令生成密钥对，该命令随即会提示您输入密钥保护密码，后续在生成、签发、验证证书时均需要此密码。请妥善相关密钥及密码。
+1. Run the following command to generate a key pair. The command will prompt you to enter a password to protect the key, which will be required for generating, issuing, and verifying the certificate. Keep the key and password secure.
 
-```bash
-openssl genrsa -des3 -out rootCA.key 2048
-```
+   ```bash
+   openssl genrsa -des3 -out rootCA.key 2048
+   ```
 
-2. 运行以下命令通过密钥对中的私有密钥生成 CA 证书，该命令随即会提示您设置证书的唯一标识名称 DN（Distinguished Name）。
+2. Run the following command to generate a CA certificate using the private key from the key pair. The command will prompt you to set the certificate's Distinguished Name (DN).
 
-```bash
-openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 3650 -out rootCA.crt
-```
+   ```bash
+   openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 3650 -out rootCA.crt
+   ```
 
-3.  使用步骤 2 中的 CA 证书来签发服务端证书，用于验证服务器所有者的身份，服务端证书通常颁发给主机名、服务器名称或域名（如 www.emqx.com）。我们需要 CA 密钥（rootCA.key）、CA 证书（ rootCA.crt）和服务端 CSR （server.csr）生成服务端证书。
+3. Use the CA certificate from step 2 to issue a server certificate, which is used to verify the identity of the server owner. The server certificate is usually issued to the hostname, server name, or domain name (such as [www.emqx.com](http://www.emqx.com/)). We need to use the CA key (rootCA.key), CA certificate (rootCA.crt), and server CSR (server.csr) to generate the server certificate.
 
-  3.1 运行以下命令生成服务端证书密钥对：
+   - Run the following command to generate a key pair for the server certificate:
 
-  ```bash
-  openssl genrsa -out server.key 2048
-  ```
+     ```bash
+     openssl genrsa -out server.key 2048
+     ```
 
-  3.2 运行以下命令使用 Server 密钥对制作 CSR。经 CA 根证书私钥签名后，CSR 可生成颁发给用户的证书公钥文件。该命令随即也会要求设置证书的唯一标识名称。
+   - Run the following command to create a CSR using the server key pair. After the CSR is signed by the CA root certificate private key, a certificate public key file can be generated and issued to the user. This command will also prompt you to set the Distinguished Name (DN) for the certificate.
 
-  ```bash
-  openssl req -new -key server.key -out server.csr
-  ```
+     ```bash
+     openssl req -new -key server.key -out server.csr
+     ```
 
-  系统将提示以下信息，对应的含义如下：
+   - The system will prompt the following information, with corresponding meanings explained as below:
 
-  ```bash
-  You are about to be asked to enter information that will be incorporated
-  into your certificate request.
-  What you are about to enter is what is called a Distinguished Name or a DN.
-  There are quite a few fields but you can leave some blank
-  For some fields there will be a default value,
-  If you enter '.', the field will be left blank.
-  -----
-  Country Name (2 letter code) [AU]: # 国家/地区
-  State or Province Name (full name) [Some-State]: # 省/市
-  Locality Name (eg, city) []: # 城市
-  Organization Name (eg, company) [Internet Widgits Pty Ltd]: # 组织机构（或公司名），如 EMQ
-  Organizational Unit Name (eg, section) []: # 机构部门，如 EMQX
-  Common Name (e.g. server FQDN or YOUR name) []: # 通用名称，此处应当设置为服务器域名如 mqtt.emqx.com
-  ...
-  ```
+     ```bash
+     You are about to be asked to enter information that will be incorporated
+     into your certificate request.
+     What you are about to enter is what is called a Distinguished Name or a DN.
+     There are quite a few fields but you can leave some blank
+     For some fields there will be a default value,
+     If you enter '.', the field will be left blank.
+     -----
+     Country Name (2 letter code) [AU]: # country/region
+     State or Province Name (full name) [Some-State]: # state/province
+     Locality Name (eg, city) []: # The city or locality
+     Organization Name (eg, company) [Internet Widgits Pty Ltd]: # The full name of the organization (or company name), e.g. EMQ
+     Organizational Unit Name (eg, section) []: # The name of the department or division within the organization，e.g. EMQX
+     Common Name (e.g. server FQDN or YOUR name) []: # The fully-qualified domain name (FQDN) of the server that will use the certificate, e.g. mqtt.emqx.com
+     ...
+     ```
 
-  3.3 生成服务端证书，此时也可指定证书的有效天数，此处为 365 天：
+   - Generate the server certificate and specify the validity period of the certificate, which is set to 365 days in this case:
 
-  ```bash
-  openssl x509 -req -in server.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out server.crt -days 365
-  ```
+     ```bash
+     openssl x509 -req -in server.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out server.crt -days 365
+     ```
 
-至此您就得到了一组证书。
+   You now have a set of certificates.
 
-```bash
-.
-├── rootCA.crt
-├── rootCA.key
-├── rootCA.srl
-├── server.crt
-├── server.csr
-└── server.key
-```
-
-<!--申请或购买证书 -->
+   ```bash
+   .
+   ├── rootCA.crt
+   ├── rootCA.key
+   ├── rootCA.srl
+   ├── server.crt
+   ├── server.csr
+   └── server.key
+   ```
