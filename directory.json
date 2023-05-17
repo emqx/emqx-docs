@@ -32,10 +32,6 @@
           "path": "getting-started/cluster"
         },
         {
-          "title": "分布式集群",
-          "path": "advanced/create-cluster"
-        },
-        {
           "title": "目录结构",
           "path": "getting-started/directory"
         },
@@ -99,6 +95,10 @@
         {
           "title": "分布集群",
           "path": "advanced/cluster"
+        },
+        {
+          "title": "集群安全",
+          "path": "advanced/cluster-security"
         },
         {
           "title": "钩子",
