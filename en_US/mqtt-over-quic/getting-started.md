@@ -45,7 +45,6 @@ MQTT over QUIC is disabled by default, you need to enable this listener with the
    listeners.quic.default {
      enabled = true
      bind = "0.0.0.0:14567"
-     max_connections = 1024000
      keyfile = "etc/certs/key.pem"
      certfile = "etc/certs/cert.pem"
    }

@@ -26,7 +26,6 @@ MQTT 监听器认证数据管理 API： `/api/v5/listeners/{listener_id}/authent
 用于导入数据的 API 为:
 
 - `/api/v5/authentication/{id}/import_users`
-- `/api/v5/listeners/{listener_id}/authentication/{id}/import_users`
 - `/api/v5/gateway/{protocol}/authentication/import_users`
 - `/api/v5/gateway/{protocol}/listeners/{listener_id}/import_users`
 

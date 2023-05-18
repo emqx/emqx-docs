@@ -10,13 +10,7 @@ $SYS/brokers/emqx@127.0.0.1/uptime
 ```
 
 
-$SYS system message publish interval is configured in `etc/emqx.conf`:
-
-```bash
-broker {
-  sys_interval: 1m
-}
-```
+$SYS system message publish interval is configured via Dashboard‘s `Management/MQTT Setting/System Topic`.
 
 ::: tip
 By default, only MQTT clients on localhost are allowed to subscribe to the $SYS topic.

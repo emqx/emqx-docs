@@ -224,14 +224,6 @@ gateway.stomp {
     ...
   }
 
-  listeners.tcp.default {
-    ...
-    enable_authn = true
-    # Specific authenticator for the specified STOMP listener
-    authentication = {
-      ...
-    }
-  }
 }
 ```
 
@@ -246,11 +238,7 @@ gateway.stomp {
 EMQX 提供的认证 API 允许对认证链和认证器进行管理，例如为全局认证创建一个认证器，以及更新指定认证器的配置。
 
 - `/api/v5/authentication`: 管理 MQTT 全局认证
-
-- `/api/v5/listeners/{listener_id}/authentication`: 管理 MQTT 监听器认证
-
 - `/api/v5/gateway/{protocol}/authentication`: 管理网关的全局认证
-
 - `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`: 管理网关监听器认证
 
 #### **认证器 ID**

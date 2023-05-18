@@ -22,7 +22,6 @@ Example configuration to enable CRL Check:
 ```hcl
 listeners.ssl.default {
   bind = "0.0.0.0:8883"
-  max_connections = 512000
   ssl_options {
     keyfile = "/etc/emqx/certs/server.key"
     certfile = "/etc/emqx/certs/server.pem"
