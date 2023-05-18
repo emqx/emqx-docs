@@ -26,7 +26,7 @@ Example:
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
 
 %% Allow users with IP address "127.0.0.1" to publish/subscribe to topics "$SYS/#", "#"
-{allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
+{allow, {ipaddr, "127.0.0.1"}, all, ["$SYS/#", "#"]}.
 
 %% Deny "All Users" subscribe to "$SYS/#" "#" Topics
 {deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.

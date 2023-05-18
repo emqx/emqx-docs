@@ -227,13 +227,6 @@ gateway.stomp {
     ...
   }
 
-  listeners.tcp.default {
-    ...
-    # Specific authenticator for the specified STOMP listener
-    authentication = {
-      ...
-    }
-  }
 }
 ```
 
@@ -246,7 +239,6 @@ Compared with the configuration file, the HTTP API is more convenient to use and
 You can manage EMQX authentication chains and authenticators via EMQX authentication API, for example, to create a global authenticator, or to update the configuration of a specific authenticator.
 
 - `/api/v5/authentication`: API endpoint for managing global MQTT authentications;
-- `/api/v5/listeners/{listener_id}/authentication`:  API endpoint for managing authentication of MQTT listener;
 - `/api/v5/gateway/{protocol}/authentication`: API endpoint for managing global authentication for other access protocols;
 - `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`: API endpoint for managing authentication of listeners for other access protocols;
 
