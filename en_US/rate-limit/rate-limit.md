@@ -21,7 +21,6 @@ It's easy to set limiters for listeners by adding the type directly to the liste
 ```bash
 listeners.tcp.default {
   bind = "0.0.0.0:1883"
-  max_connections = 1024000
   ## Set the limit of connection rate for this listener to 1000 per second
   max_conn_rate = "1000/s"
   ## Set the limit of inbound message numbers per second for each client connected to this listener to 1000
