@@ -22,7 +22,6 @@ EMQX 目前支持以下几种类型的限制器:
 ```bash
 listeners.tcp.default {
   bind = "0.0.0.0:1883"
-  max_connections = 1024000
   ## 将此监听器的连接速率限制设置为每秒 1000
   max_conn_rate = "1000/s"
   ## 将连接到此监听器的每个客户端的每秒发送消息数限制设置为 1000
