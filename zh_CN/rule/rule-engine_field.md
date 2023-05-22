@@ -399,7 +399,7 @@ MQTT v5.0
 SELECT
   clientid,
   username,
-  reason,
+  reason_code,
   node
 FROM
   "$events/client_connack"
@@ -408,7 +408,7 @@ FROM
 ```json
 {
   "username": "u_emqx",
-  "reason": "success",
+  "reason_code": "success",
   "node": "emqx@127.0.0.1",
   "connected_at": 1645003578536,
   "clientid": "c_emqx"
