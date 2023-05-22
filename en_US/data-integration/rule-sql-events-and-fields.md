@@ -388,7 +388,7 @@ Example:
 SELECT
   clientid,
   username,
-  reason,
+  reason_code,
   node
 FROM
   "$events/client_connack"
@@ -399,7 +399,7 @@ Output:
 ```json
 {
   "username": "u_emqx",
-  "reason": "success",
+  "reason_code": "success",
   "node": "emqx@127.0.0.1",
   "connected_at": 1645003578536,
   "clientid": "c_emqx"
@@ -486,7 +486,7 @@ SELECT
   topic,
   action,
   result,
-  is_cache,
+  authz_source,
   node
 FROM
   "$events/client_check_authz_complete"
@@ -500,7 +500,7 @@ Output:
   "topic": "t/a",
   "action": "publish",
   "result": "allow",
-  "is_cache": "false",
+  "authz_source": "cache",
   "node": "emqx@127.0.0.1",
   "clientid": "c_emqx"
 }
@@ -516,7 +516,7 @@ Refer to the table below for fields that can be extracted.
 | `topic`     | MQTT topic                                                   |
 | `action`    | Publish or subscribe action                                  |
 | `result`    | Access control check result                                  |
-| `is_cache`  | Whether to use the data from the cache for authorization check. |
+| `authz_source `  | The authorization source |
 | `timestamp` | Timestamp (unit: ms)                                         |
 | `node`      | EMQX node where the event is triggered.                      |
 
