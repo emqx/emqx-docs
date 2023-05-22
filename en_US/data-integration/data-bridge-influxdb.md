@@ -22,10 +22,10 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 ## Feature List
 
-- [Connection pool](./data-bridges.md) <!-- TODO 确认改版后知否支持-->
-- [Async mode](./data-bridges.md)
-- [Batch mode](./data-bridges.md)
-- [Buffer queue](./data-bridges.md)
+- [Connection pool](./data-bridges.md#connection-pool) <!-- TODO 确认改版后知否支持-->
+- [Async mode](./data-bridges.md#async-mode)
+- [Batch mode](./data-bridges.md#batch-mode)
+- [Buffer queue](./data-bridges.md#buffer-queue)
 
 <!--[Configuration parameters](#Configuration) TODO 链接到配置手册对应配置章节。 -->
 
@@ -47,7 +47,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 2. With InfluxDB running, visit [http://localhost:8086](http://localhost:8086). Set the **Username**, **Password**, **Organization Name**, and **Bucket Name**.
 3. In the InfluxDB UI, click **Load Data** -> **API Token** and then follow the instructions to [create all-access tokens](https://docs.influxdata.com/influxdb/v2.5/install/#create-all-access-tokens).
 
-### Create InfluxDB Data Bridge
+### Create a InfluxDB Data Bridge
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 
@@ -59,30 +59,32 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers. Select the InfluxDB version as needed, by default v2 is selected.
 
-6. Input the connection information.
+5. Input the connection information.
    - For **Server Host**, input `127.0.0.1:8086`. If you are creating a connection to InfluxDB Cloud, use 443 as the port No., that is, input `{url}:443` and enable TLS  connection.
-   - Input the **Organization**, **Bucket**, and **Token** you set in the [Install InfluxDB](#install) step.
+   - Input the **Organization**, **Bucket**, and **Token** you set in the [Install InfluxDB](#install-influxdb-server) step. Note: If you chose v1 as **Version of InfluxDB**, please set the **Database**, **Username** and **Password** as required. 
+
+6. Set the **Time Precision**, it is set to millisecond by default. 
+
+7. Choose whether to enable TLS by clicking the **Enable TLS** toggle switch.
+
+8. Select **Data Format** as **JSON** or **LINE PROTOCOL**. 
+
+   - For **JSON** format, define data parsing method, including **Measurement**, **Timestamp**, **Fields,** and **Tags**. Note: All key values can be variables and you can also follow the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/) to set them.
+
+   - For **LINE PROTOCOL** format, specify a text-based format that provides the measurement, tag set, field set, timestamp of a data point, and placeholder supported according to the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) syntax.
    
-6. In **Define Data Parsing** section, select **Data Format** as **JSON** or **LINE PROTOCOL**. 
-
-   - For **JSON** format, define data parsing method, including **Measurement**, **Timestamp**, **Fields** and **Tags**. 
-
-     Note: All key values can be variables and you can also follow the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/) to set them.
-
      ::: tip
 
-     - To write an integer type value to InfluxDB 1.x or 2.x, add `i` as the type identifier after the placeholder, for example `${payload.int}i`. See also [InfluxDB 1.8 write integer value](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
-     - To write an integer type value to InfluxDB 1.x or 2.x, add `i` as the type identifier after the placeholder, for example `${payload.int}i`. See also [InfluxDB 1.8 write integer value](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
+     - To write a signed integer type value to InfluxDB 1.x or 2.x, add `i` as the type identifier after the placeholder, for example, `${payload.int}i`. See also [InfluxDB 1.8 write integer value](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
+     - To write an unsigned integer type value to InfluxDB 1.x or 2.x, add `u` as the type identifier after the placeholder, for example, `${payload.int}u`. See also [InfluxDB 1.8 write integer value](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
 
      :::
 
-   - For **LINE PROTOCOL** format, specify a text-based format that provides the measurement, tag set, field set, timestamp of a data point, and placeholder supported according to the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) syntax.
+9. Advanced settings (optional): Choose whether to use **sync** or **async** query mode, and whether to enable queue or batch. For details, see [Configuration](./data-bridges.md).
 
-7. Advanced settings (optional): Choose whether to use **sync** or **async** query mode, and whether to enable queue or batch. For details, see [Configuration](./data-bridges.md).
+10. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the InfluxDB server.
 
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the InfluxDB server.
-
-9. Click the **Create** button to finish the setup.
+11. Click the **Create** button to finish the setup.
 
 Now the InFluxDB data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
@@ -118,6 +120,6 @@ Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello InfluxDB" }'
 ```
 
-Check the running status of the two data bridges, there should be one new incoming and one new outgoing message.
+Check the running status of the data bridge, there should be one new incoming and one new outgoing message.
 
 In the InfluxDB UI, you can confirm whether the message is written into the InfluxDB via the **Data Explorer** window.

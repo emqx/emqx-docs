@@ -65,7 +65,7 @@ gateway.mqttsn {
 注：通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
 :::
 
-MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](../configuration/configuration-manual.md)
+MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](../configuration/configuration-manual.html)
 
 ## 认证
 
@@ -150,7 +150,7 @@ MQTT-SN 协议已经定了发布/订阅的行为，MQTT-SN 网关未对其进行
 
 ## 用户层接口
 
-- 详细配置说明参考：[网关配置 - MQTT-SN 网关](../configuration/configuration-manual.md)
+- 详细配置说明参考：[网关配置 - MQTT-SN 网关](../configuration/configuration-manual.html)
 - 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
 
 ## 客户端库

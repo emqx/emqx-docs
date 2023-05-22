@@ -167,6 +167,7 @@
   title_cn: MQTT over QUIC
   path: mqtt-over-quic/introduction
   children:
+    - mqtt-over-quic/features-mqtt-over-quic
     - mqtt-over-quic/getting-started
     # - mqtt-over-quic/client
 
@@ -202,11 +203,11 @@
     - data-integration/data-bridge-pgsql
     - data-integration/data-bridge-dynamo
     - data-integration/data-bridge-clickhouse
-    # - data-integration/data-bridge-cassa
+    - data-integration/data-bridge-cassa
     - data-integration/data-bridge-tdengine
     - data-integration/data-bridge-rocketmq
+    - data-integration/data-bridge-sqlserver
     - data-integration/data-bridge-iotdb
-    
 
     # TODO
     # - title_en: Examples and Tutorials
@@ -225,7 +226,8 @@
   children:
     - network/emqx-mqtt-tls
     - network/mqtt-client-tls
-    # - network/crl-and-ocsp-stapling
+    - network/crl
+    - network/ocsp
     - title_en: GMSSL
       title_cn: 国密 SSL
       lang: cn
@@ -340,6 +342,26 @@
       lang: en
       edition: ee
     - configuration/configuration-manual
+    # - title_en: Configuration Manual
+    #   title_cn: 配置手册
+    #   lang: cn
+    #   edition: ce
+    #   path: https://www.emqx.io/docs/zh/v5.0/configuration/configuration-manual.html
+    # - title_en: Configuration Manual
+    #   title_cn: 配置手册
+    #   lang: en
+    #   edition: ce
+    #   path: https://www.emqx.io/docs/en/v5.0/configuration/configuration-manual.html
+    # - title_en: Configuration Manual
+    #   title_cn: 配置手册
+    #   lang: cn
+    #   edition: ee
+    #   path: https://docs.emqx.com/zh/enterprise/v5.0/configuration/configuration-manual.html
+    # - title_en: Configuration Manual
+    #   title_cn: 配置手册
+    #   lang: en
+    #   edition: ee
+    #   path: https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html
 
 # - title_en: Back
 #   title_cn: 运维操作
@@ -360,17 +382,19 @@
   title_cn: 速率限制
   path: rate-limit/rate-limit
 
-- title_en: Log and Observability
+- title_en: Logs and Observability
   title_cn: 日志及可观测性
   path: observability/overview
   children:
-    - observability/log
     - observability/metrics-and-stats
-    - observability/prometheus
-    - observability/tracer
     - observability/alarms
+    - observability/log
     - observability/topic-metrics
     - observability/slow-subscribers-statistics
+    - observability/tracer
+    - observability/mqtt-system-topics
+    - observability/prometheus
+    
 
 ## Device connectivity
 
@@ -423,7 +447,6 @@
     - mqtt/mqtt-retained-messages
     - mqtt/mqtt-last-will-and-testament
     - mqtt/mqtt-shared-subscription
-    - mqtt/mqtt-system-topics
     - mqtt/mqtt-topic-rewrite
 
 - title_en: Telemetry

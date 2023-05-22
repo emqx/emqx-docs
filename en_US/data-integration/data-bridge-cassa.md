@@ -5,9 +5,7 @@
 Cassandra is a popular open-source, distributed NoSQL database management system.
 EMQX's integration with Apache Cassandra provides the ability to store messages and events in Cassandra database.
 
-In the currently implementation:
-- Only supports Cassandra v3.x, not yet compatible with v4.x.
-- Only supports storing data in synchronous manner.
+The current implementation only supports Cassandra v3.x, not yet compatible with v4.x.
 
 {% emqxce %}
 :::tip
@@ -23,12 +21,11 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 <!-- 列举功能或性能方面的亮点，如支持批处理、支持异步模式、双向数据桥接，链接到对应的功能介绍章节。 -->
 
-:::
-
 ## Feature List
 
-- [Connection pool](./data-bridges.md)
-- [SQL preprocessing](./data-bridges.md)
+- [Connection pool](./data-bridges.md#connection-pool)
+- [Async mode](./data-bridges.md#async-mode)
+- [SQL prepared statement](./data-bridges.md#prepared-statement)
 
 <!--  Configuration parameters TODO 链接到配置手册对应配置章节。 -->
 
@@ -36,6 +33,8 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 <!-- 从安装测试所需步骤，如果有不同的用法增加章节介绍。 -->
 
 This section introduces how to configure a Cassandra data bridge, including how to set up a Cassandra server, configure a Cassandra data bridge to connect to the Cassandra server, and test the data bridge and rule.
+
+This tutorial assumes that you run both EMQX and Cassandra on the local machine. If you have Cassandra and EMQX running remotely, adjust the settings accordingly.
 
 ### Install Cassandra Server
 
@@ -55,7 +54,7 @@ You need to create keyspace and tables before you create the data bridge for Cas
 docker exec -it cassa cqlsh "-e CREATE KEYSPACE mqtt WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1}"
 ```
 
-2. Create a table in Cassandra: `mqtt_msg`
+2. Create a table in Cassandra: `mqtt_msg`:
 
 ```bash
 docker exec -it cassa cqlsh "-e \
@@ -68,21 +67,37 @@ docker exec -it cassa cqlsh "-e \
         PRIMARY KEY(msgid, topic));"
 ```
 
-### Create a Cassandra Data Bridge
+### Create Cassandra Data Bridge
 
 1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
+
 2. Click **Create** on the top right corner of the page.
+
 3. In the **Create Data Bridge** page, click to select **Cassandra**, and then click **Next**.
+
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
+
 5. Input the connection information. Input `127.0.0.1:9042` for the **Servers**, `mqtt` as the **Keyspace**, and leave others as default.
-6. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Redis server.
-7. Click **Create** to finish the creation of the data bridge. 
+
+6. Configure the **CQL template** to save `topic`, `id`, `clientid`, `qos`, `palyload`, `timestamp`, and `flags.retain` to Cassandra. This template will be executed via Cassandra Query Language, and the sample code is as follows:
+
+   ```sql
+   insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
+   ```
+
+7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
+
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Cassandra server.
+
+9. Click **Create** to finish the creation of the data bridge. 
+
+   A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Cassandra. You can also create rules by following the steps in [Create Rules for Cassandra Data Bridge](#create-rules-for-cassandra-data-bridge).
 
 Now the Cassandra data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
 
-### Create Rule for Cassandra Data Bridge
+### Create a Rule for Cassandra Data Bridge
 
-Now that you have successfully created the data bridge to Cassandra, you can continue to create rules to specify the data to be stored in Cassandra. 
+Now that you have successfully created the data bridge, you can continue to create rules to specify the data to be stored in Cassandra. 
 
 1. Go to EMQX Dashboard, and click **Data Integration** -> **Rules**.
 
@@ -91,20 +106,20 @@ Now that you have successfully created the data bridge to Cassandra, you can con
 3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Suppose you want to forward the MQTT messages under topic `t/#` to Cassandra, you can use the SQL syntax below. 
 
    Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
+   
+   ```sql
+   SELECT 
+     *
+   FROM
+     "t/#"
+   ```
 
-  ```sql
-  SELECT 
-    *
-  FROM
-    "t/#"
-  ```
-
-4. Then click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge we just created under **Data Bridge**. Click the **Add** button. 
-6. Then click the **Create** button to finish the setup. 
+4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**. Click the **Add** button. 
+6. Click the **Create** button to finish the setup. 
 
 After creating the data bridge to Cassandra. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Cassandra after parsing by rule `my_rule`.
 
-### Test the Data Bridge and Rule
+### Test Data Bridge and Rule
 
 Use MQTTX to send messages to topic  `t/1`:
 
@@ -114,7 +129,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Cassandra" }'
 
 Check the running status of the rule and bridge, the statistical count here should increase somewhat.
 
-Check whether messages are stored into the Cassandra with the following command:
+Check whether messages are stored into Cassandra with the following command:
 
 ```bash
 docker exec -it cassa cqlsh "-e SELECT * FROM mqtt.mqtt_msg;"

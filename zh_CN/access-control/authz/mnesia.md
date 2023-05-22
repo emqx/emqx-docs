@@ -28,7 +28,7 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的授
 - `type`：授权检查器的数据源类型，此处填入 `built_in_database`
 - `enable`：是否激活该检查器，可选值：`true`、`false`
 
-详细参数列表，请参考 [authz-mnesia](../../configuration/configuration-manual.md#authz-mnesia)。
+详细参数列表，请参考 [authz-mnesia](../../configuration/configuration-manual.html#authz-mnesia)。
 
 ## 配置授权检查规则
 

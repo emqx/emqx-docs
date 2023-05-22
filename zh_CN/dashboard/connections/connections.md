@@ -1,6 +1,6 @@
 # 连接管理
 
-用户可在管理连接中，查看当前连接至服务器或会话尚未过期的客户端及某一连接的详细信息和指标统计。可使用 [MQTT X](https://mqttx.app/zh) 作为客户端连接到 EMQX 进行发布订阅。也可使用[各语言提供的客户端库](https://www.emqx.io/docs/zh/v5.0/development/client.html)快速实现客户端连接至 EMQX。
+用户可在管理连接中，查看当前连接至服务器或会话尚未过期的客户端及某一连接的详细信息和指标统计。可使用 [MQTTX](https://mqttx.app/zh) 作为客户端连接到 EMQX 进行发布订阅。也可使用[各语言提供的客户端库](https://www.emqx.io/docs/zh/v5.0/development/client.html)快速实现客户端连接至 EMQX。
 
 ## 连接管理列表
 

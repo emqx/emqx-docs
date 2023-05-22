@@ -1,4 +1,4 @@
-# Blacklist
+# Banned Clients
 
 In addition to authentication and authorization, EMQX also provides blacklisting capabilities to directly deny connections to malicious or aggressive clients. Blacklisting is suitable for blocking a small number of client connections.
 

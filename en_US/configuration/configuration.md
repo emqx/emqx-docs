@@ -1,6 +1,6 @@
 # Configuration Files
 
-Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual](./configuration-manual.md).
+Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual](./configuration-manual.html).
 
 ## Configuration Files
 
@@ -115,15 +115,14 @@ Conversion example:
 export EMQX_LISTENERS__SSL__DEFAULT__BIND='"127.0.0.1:8883"'
 
 ## Pass the HOCON array directly by character
-export EMQX_LISTENERS__SSL__DEFAULT__AUTHENTICATION__SSL__CIPHERS='["TLS_AES_256_GCM_SHA384"]'
+export EMQX_LISTENERS__SSL__DEFAULT__SSL_OPTIONS__CIPHERS='["TLS_AES_256_GCM_SHA384"]'
 
 
 # Configuration file
 listeners.ssl.default {
-  ...
-  authentication {
+  ...  
     bind = "127.0.0.1:8883"
-    ssl {
+    ssl_options {
       ciphers = ["TLS_AES_256_GCM_SHA384"]
     }
   }
@@ -306,5 +305,4 @@ node.name = "emqx.127.0.0.1"
 zone.zone1.max_packet_size = "10M"
 authentication.1.enable = true
 ```
-
 

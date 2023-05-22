@@ -20,7 +20,7 @@ EMQX provides three mechanisms, including:
 2. JWT, where the client can carry a JWT Token in the username or password.
 3. SCRAM, enhanced authentication in MQTT 5.0, which enables two-way authentication between client and server.
 
-![image](./assets/create-authn.png)
+<img src="./assets/create-authn.png" alt="image" style="zoom:50%;" />
 
 ### Backend
 
@@ -33,7 +33,7 @@ When the `Password-Based` is selected, the user can choose either the database t
 
 You can also directly use HTTP services that can provide authentication data, i.e., the `HTTP Server`.
 
-![image](./assets/authn-data-source.png)
+<img src="./assets/authn-data-source.png" alt="image" style="zoom:50%;" />
 
 #### JWT
 
@@ -55,7 +55,7 @@ The final step in creating authentication is to configure the selected backend. 
 
 For example, if you use the `Built-in Database`, you need to choose whether to use the Username or the Client ID, seting the encryption method of the password, etc. If you use the enhanced authentication of MQTT 5.0 and use the built-in database, you only need to configure the encryption method.
 
-![image](./assets/authn-built-db-config.png)
+<img src="./assets/authn-built-db-config.png" alt="image" style="zoom:50%;" />
 
 For more details about Built-in Database, please visit [Password Authentication Using Built-in Database](../access-control/authn/mnesia.md).
 
@@ -63,7 +63,7 @@ For more details about Built-in Database, please visit [Password Authentication 
 
 If you use an external database, you need to configure the server address of the database, the database name, username and password, the authentication configuration, and the SQL statements or other query statements on how to get data from the database. Take MySQL as an example.
 
-![image](./assets/authn-mysql-config.png)
+<img src="./assets/authn-mysql-config.png" alt="image" style="zoom:50%;" />
 
 For more details about MySQL or other external databases, please visit [Password Authentication Using MySQL](../access-control/authn/mysql.md) or see Using other databases.
 
@@ -71,7 +71,7 @@ For more details about MySQL or other external databases, please visit [Password
 
 To use HTTP Server, you need to configure the request method of the HTTP service, POST or GET. The request URL, note that the URL needs to fill in the protocol is http or https. Then there is the configuration of the HTTP request Headers. The authentication information is entered into the `Body` field, e.g. `username` and `password` are filled in the JSON data.
 
-![image](./assets/authn-http-config.png)
+<img src="./assets/authn-http-config.png" alt="image" style="zoom:50%;" />
 
 For more details about HTTP Server, please visit [Password Authentication Using HTTP](../access-control/authn/http.md).
 
@@ -81,7 +81,7 @@ To use JWT, you can configure JWT directly without selecting a backend, and set 
 
 You can get the latest JWKS from the `JWKS Endpoint` periodically, which is essentially a set of public keys that will be used to verify any JWT issued by the authorization server and signed using RSA or ECDSA algorithms, and configure the refresh interval (in seconds) for the JWKS. Finally, configure the `Payload` entry to complete the JWKS configuration.
 
-![image](./assets/authn-jwt-config.png)
+<img src="./assets/authn-jwt-config.png" alt="image" style="zoom:50%;" />
 
 For more details about JWT, please visit [JWT Authentication](../access-control/authn/jwt.md).
 
@@ -97,7 +97,7 @@ Each column of the certification list can be dragged by the mouse to adjust the 
 
 In the action bar you can also click to settings or delete the authenticator, etc.
 
-![image](./assets/authn-list.png)
+<img src="./assets/authn-list.png" alt="image" style="zoom:50%;" />
 
 :::tip
 Disabled authentication will not authenticate any client, all clients can connect to EMQX. Please be careful.
@@ -107,7 +107,7 @@ Disabled authentication will not authenticate any client, all clients can connec
 
 For users using the built-in database, click `Users` to get to the user management page, where you can manage authentication information, such as adding or deleting users, or you can download a template, fill in the template with relevant authentication information, and click `Import` to create authentication data in bulk.
 
-![image](./assets/authn-users.png)
+<img src="./assets/authn-users.png" alt="image" style="zoom:50%;" />
 
 ## Overview
 
@@ -115,7 +115,7 @@ Click on backend and mechanism in the list page to go to the Authenticator overv
 
 You can monitor the metrics data under each node from the list at the bottom of the page.
 
-![image](./assets/authn-overview.png)
+<img src="./assets/authn-overview.png" alt="image" style="zoom:50%;" />
 
 ## Settings
 
@@ -127,6 +127,6 @@ In the settings page, you can modify the current authenticator configuration, su
 When using the built-in database, updating the password `Password Hash` or `Salt Position` will cause the added authentication data to be unavailable, please be careful.
 :::
 
-![image](./assets/authn-settings.png)
+<img src="./assets/authn-settings.png" alt="image" style="zoom:50%;" />
 
 For more details about Authentication, please visit [Authentication Introduction](../access-control/authn/authn.md).

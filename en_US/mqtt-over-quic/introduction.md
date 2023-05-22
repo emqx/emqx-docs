@@ -1,68 +1,60 @@
 # MQTT over QUIC
 
-In traditional IoT application scenarios, MQTT relies on TCP for messaging services. However, under complex network conditions with frequent connection interruptions and slow connection establishment, the user experience may be affected, for example, vehicles may run in mountainous areas, mines, tunnels, etc., which can cause connection interruptions when entering signal dead zones or passively switching base stations (also referred to as spotty networks). 
+The MQTT protocol has commonly used in messaging services of the IoT and Internet of Vehicles (IoV) applications. It is designed to work on top of a transport protocol that provides a reliable, ordered, and lossless stream of bytes in both directions. This reliable transport protocol guarantees that messages are delivered accurately and in the order in which they were sent. Traditionally, IoT applications apply MQTT over TCP-based protocols, such as raw TCP, TCP/TLS (for security), and WebSocket (for web browser adaption). However, there are limitations in some scenarios when the network conditions can be complex, such as high latency, high packet loss, and weak or spotty networks.
 
-As the underlying transport protocol of the next-generation Internet protocol HTTP/3,  [QUIC](https://datatracker.ietf.org/doc/html/rfc9000) can provide connectivity for the modern mobile Internet with less connection overhead and message latency compared to TCP/TLS protocols. Therefore, it is highly suitable for IoT messaging scenarios. 
+To overcome the limitations of MQTT over TCP, EMQX 5.0 innovatively introduces a new protocol, MQTT over QUIC, that enables MQTT clients and EMQX to communicate over Quick UDP Internet Connections (QUIC). The protocol offers the same functionality as the existing MQTT protocol but with the additional benefits of QUIC. 
 
-Therefore, EMQX 5.0 introduces QUIC support (MQTT over QUIC) and designs a unique messaging mechanism and management approach.
+This chapter explains why and how MQTT over QUIC is implemented in EMQX. In [Features and Benefits](./features-mqtt-over-quic.md), it introduces two interaction modes between clients and EMQX on the QUIC stream and the features and benefits of each mode. In [Use MQTT over QUIC](./getting-started.md), it demonstrates how to enable MQTT over QUIC in EMQX using client SDKs and tools.
 
-:::tip
+::: tip
 
-For now, MQTT over QUIC is still an experimental feature, EMQX is preparing a draft proposal about MQTT over QUIC for submission to the OASIS MQTT Technical Committee.
+For now, MQTT over QUIC is still an experimental feature. EMQX is preparing a draft proposal about MQTT over QUIC for submission to the OASIS MQTT Technical Committee. 
 
 :::
 
-## Scenarios for MQTT over QUIC
+## Introduction of QUIC
 
-MQTT over QUIC is suitable for complex network environments, for example:
+QUIC, initially developed by Google, was later adopted as a worldwide standard by the Internet Engineering Task Force (IETF). It is a new transport protocol that provides faster connection establishment.  By using a more efficient algorithm that allows for a quicker ramp-up of data transmission rates, it improves congestion control. Additionally, QUIC uses a stream-based multiplexing architecture that allows for independent transmission of data streams, which helps to avoid head-of-line blocking and can improve performance in high packet loss or delay scenarios.
 
-- Frequent network switching that causes connection interruptions;
-- Difficult to re-establish connection after disconnection: The operating system is slow to release resources after disconnection, the application layer cannot sense the disconnection status in time, and the Server/Client overhead is high when reconnecting;
-- Weak spotty network: Data transmission is blocked by congestion, packet loss, and retransmission.
+QUIC is also the only transport protocol of the latest version of the HTTP protocol, HTTP/3. Compared to TCP, as the underlying transport protocol for the next-generation internet protocol HTTP/3, QUIC can significantly improve overall throughput and mobile connection stability while reducing connection overhead and message delay. Therefore, it is more suitable than the TCP protocol for solving communication problems in complex network environments.
 
-To sum up, MQTT over QUIC is suitable for services with high requirements for real-time data transmission and stability, such as the L4 driverless vehicle. 
+## Application Scenarios of MQTT over TCP
 
-In these scenarios, the low connection overhead and multi-path support of QUIC shows its strengths. After deeper exploration, we believe that MQTT over QUIC is a great solution to this dilemma - based on QUIC's 0 RTT/1 RTT reconnect/new capability and migration support, it can effectively improve user experience in weak networks and irregular network paths.
+MQTT over QUIC is particularly suitable for businesses with high requirements for real-time and stable data transmission. For example, connected vehicles driving in mountains, mines, and tunnels, where connection can be interrupted when entering signal blind spots or switching base stations passively. With the advantages of QUIC, MQTT over QUIC can overcome the shortcomings of traditional MQTT over TCP in the following scenarios: 
 
-## Features and Implementation
+- Slow connection establishment for TCP/TLS
+  The initial handshake between the client and server requires multiple round trips to establish a connection. The round trip time (RTT)  is critical for the connection establishment speed. A longer RTT can result in increased latency and slower connection establishment.
+- A slow ramp-up of traffic due to a slow start using a congestion window 
+- Head of line blocking
+  When a packet is lost, the whole transmission is blocked until it is recovered. This increases the latency significantly.
+- No awareness of the upper layer protocols
+  TCP treats all data transmission equally, without distinguishing between different types of data or businesses that may be using the same network connection.
 
-The current implementation of EMQX replaces the transport layer with a QUIC Stream, where the client initiates the connection and creates a bi-directional Stream. EMQX and the client interact on it.
-
-Considering the complex network environment, if for some reason the client fails to complete QUIC connection handshake, it is recommended that the client automatically fall back to a traditional TCP connection to ensure connectivity.
-
-<img src="./assets/mqtt-over-quic.png" alt="MQTT over QUIC" style="zoom:33%;" />
-
-MQTT protocol can benefit from using QUIC as its transport as follows:
-
-- **More advanced congestion control**: As verified by the tests, MQTT over QUIC can effectively reduce packet loss and enable continuous and stable data transmission despite network fluctuations;
-- **Operation and maintenance friendly**: Reduce overhead (time overhead, client/server performance overhead) caused by massive reconnection and reduce system overload caused by unnecessary application layer state migration (0 RTT);
-- **More flexible architectural innovations:** Adopt Direct server return (DSR) mode, where only ingress/request traffic passes through the LB and egress and response traffic will bypass the LB and goes directly back to the client, reducing bottlenecks in the LB;
-- **Reduce handshake latency**: Reduce from 2 个 RTT Round trip time to 1 RTT.
-- **Multi-path support for smooth connection migration**: For mobile devices where the network changes frequently, for example, handover from 4G to WIFI or NAT Rebinding, QUIC can maintain a connection via Connection ID with no need to reestablish the connection, thus reducing the network overhead and handshake latency. 
-- **More agile development and deployment:** The QUIC protocol stack can be implemented in the userspace, enabling fast iterations, quick bugfix rollout, and reducing the lead time from PoC to production.
-- **End-to-end encryption:** QUIC packet leaves minimal information unencrypted in the headers to make communication secure and uninterceptable by middleboxes.
-
-There are also more opportunities to be explored:
-
-- **Streams with different topics:** We could use parallel streams in the same connection to carry different topics to make sending/receiving process parallelized with different priorities and mitigate the HOL (Head Of Line) blocking issue.
-- **Streams with different QoS:** For example, in "Flow Control", QoS 0 messages should give way to high QoS messages.
-- **Separate control messages into different streams:** MQTT control messages can be sent in one or two directions. For example, the client can send UNSUBSCRIBE requests asynchronously through a short-lived unidirectional stream to request the server to stop sending data that is no longer of interest.
-- **Finer-grained send and receive collaborative flow control:** Flow control is performed on a per-flow basis or across the entire connection, enabling finer-grained flow control.
+For more information on the features and benefits of MQTT over QUIC to enhance the user experience in weak and unstable network environments, see [Features and Benefits](./features-mqtt-over-quic.md).
 
 ## QUIC vs TCP/TLS Test Comparisons
 
-In comparison with TCP/TLS testing, MQTT over QUIC performs as follows:
+In comparison with TCP/TLS testing, the performance of MQTT over QUIC is summarized as follows:
 
-1. When network latency is high, QUIC is able to establish connections and subscribe faster.
-2. After disconnecting, it takes less latency to re-establish the connection and reconnect to QUIC.
-3. QUIC is better than TLS for both server CPU and memory usage when connecting/reconnecting on a large scale.
-4. When NAT rebinding, client reconnection response under TCP/TLS is very slow and the message transmission is broken, while QUIC handles it more smoothly and the messages are sent without any impact.
-5. In a weak network packet loss and packet transmission disorder environment, TLS shows message congestion and loss due to a poor network environment, while the QUIC server receives slightly jittery data but does not lose messages.
+- When network latency is high, QUIC is able to establish connections and subscribe faster.
+- After disconnecting, with 0-RTT, it could re-establish the connection much quicker than TCP/TLS.
+- QUIC is better than TLS for both server CPU and memory usage when connecting/reconnecting on a large scale.
+- When NAT rebinding, client reconnection response under TCP/TLS is very slow and the message transmission is broken, while QUIC handles it more smoothly and the messages are sent without any impact.
+- In a weak network packet loss and packet transmission disorder environment, TLS shows message congestion and loss due to a poor network environment, while the QUIC server receives slightly jittery data but does not lose messages.
+
+## Limitations
+
+Currently, MQTT over QUIC has the following limitations:
+
+  - Preserving session state is currently not supported. This means that if a client needs to reconnect, it must resubscribe to the topics it previously subscribed to over a data stream.
+
+
+- If the data stream is closed unexpectedly by either peer, the QoS 1 and QoS 2 message states are not preserved. 
 
 ## Future Work
 
 As of now, the MQTT over QUIC is ready for production, users are already testing it in depth and giving good feedback, see [Getting Started](./getting-started.md) to experience it now.
 
-Still, EMQX has not utilized all the features provided by QUIC, such as multi streams, stream prioritization, flow control and unreliable datagram.
+Still, EMQX has not utilized all the features provided by QUIC, such as broker-side stream prioritization, broker-side flow control, and unreliable datagram. These features will be addressed in the later releases and, hopefully, become an OASIS standard.
 
-These features will be addressed in the later releases and, hopefully, become an OASIS standard.
+Further investigation is also required on how to preserve the message states and resume the subscription without reconnection, as mentioned in [Limitations](#limitations). 

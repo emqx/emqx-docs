@@ -471,7 +471,7 @@ MQTT v5.0
 SELECT
   clientid,
   username,
-  reason,
+  reason_code,
   node
 FROM
   "$events/client_connack"
@@ -480,7 +480,7 @@ FROM
 ```json
 {
   "username": "u_emqx",
-  "reason": "success",
+  "reason_code": "success",
   "node": "emqx@127.0.0.1",
   "connected_at": 1645003578536,
   "clientid": "c_emqx"
@@ -499,7 +499,7 @@ FROM
 | topic     | MQTT 主题                                                                                                               |
 | action    | publish or subscribe，发布或者订阅事件                                                                                  |
 | result    | allow or deny，鉴权完成                                                                                                 |
-| is\_cache | true or false，鉴权时数据的来源 <br/>is\_cache为true时，鉴权数据来源于cache <br/>is\_cache为false时，鉴权数据来源于插件 |
+| authz\_source | 认证源 |
 | timestamp | 事件触发时间 (ms)                                                                                                       |
 | node      | 事件触发所在节点                                                                                                        |
 
@@ -511,7 +511,7 @@ SELECT
   topic,
   action,
   result,
-  is_cache,
+  authz_source,
   node
 FROM
   "$events/client_check_authz_complete"
@@ -523,7 +523,7 @@ FROM
   "topic": "t/a",
   "action": "publish",
   "result": "allow",
-  "is_cache": "false",
+  "authz_source": "cache",
   "node": "emqx@127.0.0.1",
   "clientid": "c_emqx"
 }

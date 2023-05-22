@@ -33,7 +33,7 @@ MQTT 协议广泛应用于物联网、移动互联网、智能硬件、车联网
 - [延迟发布](../messaging/mqtt-delayed-publish.md)
 - [自动订阅](../messaging/mqtt-auto-subscription.md)
 - [主题重写](./mqtt-topic-rewrite.md)
-- [系统主题](./mqtt-system-topics.md)
+- [系统主题](../observability/mqtt-system-topics.md)
 
 ## 与其他协议对比
 

@@ -1,4 +1,4 @@
-# Rule Syntax
+# Rule SQL Syntax
 
 EMQX uses SQL-based rules for data extraction, filtering, enriching, and transformation in real-time. The EMQX rule syntax also supports embedding [JQ programs](https://stedolan.github.io/jq/) in expressions, which allows you to do complex data transformations when it is needed.
 
@@ -192,15 +192,9 @@ DO item.field_1, item.field_2
 FROM "t/#"
 ```
 
-EMQX supports using the `jq` function for advanced operations, you can refer to the [documentation page for the build-in `jq` function](./rule-sql-jq) for more code example.
+EMQX supports using the `jq` function for advanced operations, you can refer to the [documentation page for the build-in `jq` function](./rule-sql-jq) for more code examples.
 
-## Test the Rules 
-
-After creating your rules, it's always recommended testing your rules before putting into product. The Dashboard UI contains a test feature that allows you to test your rules with sample messages. 
-
-To use this feature, click **Data Integration** -> **Rules** on the left navigation menu, and turn on the **Enable Test** switch).
-
-<img src="./assets/test-rules.png" alt="test rules" style="zoom:40%;" />
+After creating your rules, it's always recommended to test your rules before putting them into production. The Dashboard UI contains a test feature that allows you to test your rules with sample messages. For details on how to test the SQL statements, see [Test the Rule](./rule-get-started.md#test-the-rule).
 
 ## Expressions and Operations 
 
