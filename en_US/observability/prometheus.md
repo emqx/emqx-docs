@@ -22,6 +22,8 @@ Since EMQX 5.0.4, you can use EMQX Dashboard for configuration. In the EMQX Dash
 
 You can use EMQX Dashboard to configure monitoring data integration to Prometheus platform. In the EMQX Dashboard, click **Management** -> **Monitoring** on the left navigation menu, then click the **Integration** tab for the configuration.
 
+{% endemqxee %}
+
 You can click the **Help** button at the bottom to see the instructions on how to set up Prometheus and Grafana, a monitoring dashboard of Prometheus.
 
 <img src="./assets/prometheus-setup-help-ee.png" alt="prometheus-setup-help-ee" style="zoom:35%;" />
@@ -38,8 +40,6 @@ EMQX also supports pushing metrics to Pushgateway server, which is disabled by d
 - **Headers**: Type the key and value of the HTTP headers for the monitoring metrics that pushed to Pushgateway. You can add a list of headers by clicking the **Add** button. The type is string, for example, { Authorization = "some-authz-tokens"}.
 
 You can use EMQX Dashboard to configure monitoring data integration to the Prometheus platform. In the EMQX Dashboard, click **Management** -> **Monitoring** on the left navigation tree, then click the **Integration** tab for the configuration.
-
-{% endemqxee %}
 
 ## Configure via Configuration File
 
