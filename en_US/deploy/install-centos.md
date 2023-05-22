@@ -7,6 +7,8 @@ Supported versions:
 - CentOS 8
 - CentOS 7
 
+{% emqxce %}
+
 ## Install with Yum source
 
 EMQX supports installing with Yum source to provide our users with a convenient and reliable way to manage EMQX installation and updates. Here is how to install EMQX with Yum source:
