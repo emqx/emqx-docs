@@ -146,7 +146,7 @@ docker run -d --name iotdb-service \
 4. 前往发布区域，并进行如下配置：
 
    * **主题**：`t/test`
-   * **Payload**: 确保选择 `JSON` 作为 payload 编码并输入以下信息：
+   * **Payload**: 确保使用 `JSON` 作为 payload 编码并输入以下信息：
 
    ```json
    {

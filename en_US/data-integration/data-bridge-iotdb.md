@@ -141,7 +141,7 @@ You can use the built-in WebSocket client in the EMQX dashboard to test your rul
 
 3. Scroll down to the publish area and type in the following:
    * **Topic**:`t/test`
-   * **Payload**: Make sure to select `JSON` as the payload encoding and then enter:
+   * **Payload**: Make sure to use `JSON` as the payload encoding and then enter:
    ```json
    {
      "measurement": "temp",
