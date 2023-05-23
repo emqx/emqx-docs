@@ -78,7 +78,7 @@ docker run -d --name iotdb-service \
 
 5. 输入 Apache IoTDB 服务器链接信息：
 
-   * **基础 URL**: 输入 `http//localhost:18080`；如果服务器在远程运行，须输入实际 IoTDB 服务器地址和端口。
+   * **基础 URL**: 输入 `http://localhost:18080`；如果服务器在远程运行，须输入实际 IoTDB 服务器地址和端口。
    * **用户名**: 输入 IoTDB 用户名; 默认值为 `root`。
    * **密码**: 输入 IoTDB 密码; 默认值为 `root`。
 
