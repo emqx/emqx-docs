@@ -74,7 +74,7 @@ This section introduces how to create an EMQX data bridge to Apache IoTDB throug
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
 5. Input the connection information:
-   * **Base URL**: Input `http//localhost:18080`, or the actual hostname/IP if the IoTDB server is running remotely.
+   * **Base URL**: Input `http://localhost:18080`, or the actual hostname/IP if the IoTDB server is running remotely.
    * **Username**: Input the IoTDB username; The default value is `root`.
    * **Password**: Input the IoTDB password; The default value is `root`.
    
