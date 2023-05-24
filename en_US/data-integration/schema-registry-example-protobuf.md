@@ -1,73 +1,70 @@
-# Schema Registry + Rule Engine Example - Protobuf
+# Schema Registry Example - Protobuf
+
+This page demonstrates how the schema registry and rule engine support message encoding and decoding in Protobuf format.
 
 ## Decoding Scenario
 
-A device publishes a binary message encoded using Protobuf, which needs to be matched by
-the rule engine and then republished to the topic associated with the `name` field. The
-format of the topic is `person/${name}`.
+A device publishes a binary message encoded using Protobuf, which needs to be matched by the rule engine and then republished to the topic associated with the `name` field. The format of the topic is `person/${name}`.
 
-For example, let's see how to republish a message with the `name` field equal to "Shawn"
-to the topic `person/Shawn`.
+For example, you to republish a message with the `name` field equal to "Shawn" to the topic `person/Shawn`.
 
 ### Create Schema
 
-In the [Dashboard](http://127.0.0.1:18083/#/schema/create) interface of EMQX,
-create a Protobuf Schema using the following parameters:
+1. Go to the Dashboard, select **Integration** -> **Schema** from the left navigation menu.
 
-1. Name: `protobuf_person`
+2. Create a Protobuf schema using the following parameters:
 
-2. Schema Type: `Protobuf`
+   - **Name**: `protobuf_person`
 
-3. Schema:
+   - **Type**: `Protobuf`
 
-```protobuf
-message Person {
-  required string name = 1;
-  required int32 id = 2;
-  optional string email = 3;
-}
-```
+   - **Schema**:
+
+     ```protobuf
+     message Person {
+       required string name = 1;
+       required int32 id = 2;
+       optional string email = 3;
+     }
+     ```
+
+3. Click **Create**.
 
 ![](./assets/schema_registry/protobuf_create1.png)
 
-### Creating the rule
+### Create the Rule
+1. In the Dashboard, select **Integration** -> **Rules** from the navigation menu.
 
-**Use the Schema you have just created to write the rule SQL statement:**
+2. On the **Rules** page, click **Create** at the top right corner.
 
-```sql
-SELECT
-  schema_decode('protobuf_person', payload, 'Person') as person, payload
-FROM
-  "t/#"
-WHERE
-  person.name = 'Shawn'
-```
+3. Use the schema you have just created to write the rule SQL statement:
 
-The key point here is `schema_decode('protobuf_person', payload, 'Person')`:
+   ```sql
+   SELECT
+     schema_decode('protobuf_person', payload, 'Person') as person, payload
+   FROM
+     "t/#"
+   WHERE
+     person.name = 'Shawn'
+   ```
 
-- The `schema_decode` function decodes the contents of the payload field according to the
-  Schema `protobuf_person`;
-- `as person` stores the decoded value in the variable `person`;
-- The last argument `Person` specifies that the message type in the payload is the
-  `Person` type defined in the Protobuf schema.
+   The key point here is `schema_decode('protobuf_person', payload, 'Person')`:
 
-**Then add the action using the following parameters:**
+   - The `schema_decode` function decodes the contents of the payload field according to the schema `protobuf_person`;
+   - `as person` stores the decoded value in the variable `person`;
+   - The last argument `Person` specifies that the message type in the payload is the `Person` type defined in the Protobuf schema.
 
-- Action Type: `Republish`
-- Destination Topic: `person/${person.name}`
-- Message Content Template: `${person}`
+4. Click **Add Action**.  Select `Republish` from the drop-down list of the **Action** field. 
+5. In the **Topic** field, type `person/${person.name}` as the destination topic.
+6. In the **Payload** field, type message content template: `${person}`.
 
-This action sends the decoded user to the topic `person/${person.name}` in JSON
-format. `${person.name}` is a variable placeholder that will be replaced at runtime with
-the value of the `name` field from the decoded message.
+This action sends the decoded "person" message to the topic `person/${person.name}` in JSON format. `${person.name}` is a variable placeholder that will be replaced at runtime with the value of the `name` field from the decoded message.
 
-### Device side code
+### Prepare Device-Side Code
 
-Once the rules have been created, it is time to simulate the data for testing.
+Once the rule is created, you can simulate the data for testing.
 
-The following code uses the Python language to fill a User message, encode it as binary
-data, then send it to the `t/1` topic. See [full
-code](https://gist.github.com/thalesmg/3c5fdbae2843d63c2380886e69d6123c) for details.
+The following code uses the Python language to fill a user message, encode it as binary data, then send it to the `t/1` topic. See [full code](https://gist.github.com/thalesmg/3c5fdbae2843d63c2380886e69d6123c) for details.
 
 ```python
 def publish_msg(client):
@@ -81,75 +78,73 @@ def publish_msg(client):
     client.publish(topic, payload=message, qos=0, retain=False)
 ```
 
-### Checking rule execution results
+### Check Rule Execution Results
+1) In the Dashboard, select **Diagnose** -> **WebSocket Client**. 
+2) Fill in the connection information for the current EMQX instance.
+   - If you run EMQX locally, you can use the default value.
+   - If you have changed EMQX's default configuration. For example, the configuration change on authentication can require you to type in a username and password.
 
-1) In the Dashboard's [Websocket](http://127.0.0.1:18083/#/websocket) tools, log in to a
-MQTT Client and subscribe to `person/#`.
+3. Click **Connect** to connect to the EMQX instance as an MQTT client.
+4. In the **Subscription** area, type `person/#` in the **Topic** field and click **Subscribe**.
 
-2) Install the Python dependencies and execute the device-side code:
+5. Install the Python dependencies and execute the device-side code:
 
-```shell
-$ pip3 install protobuf paho-mqtt
-$ protoc --python_out=. person.proto
+   ```shell
+   $ pip3 install protobuf paho-mqtt
+   $ protoc --python_out=. person.proto
+   
+   $ python3 protobuf_mqtt.py
+   Connected with result code 0
+   publish to topic: t/1, payload: b'\n\x05Shawn\x10\x01\x1a\x11shawn@example.com'
+   ```
 
-$ python3 protobuf_mqtt.py
-Connected with result code 0
-publish to topic: t/1, payload: b'\n\x05Shawn\x10\x01\x1a\x11shawn@example.com'
-```
+6. Check that a message with the topic `person/Shawn` is received on the Websocket side:
 
-3) Check that a message with the topic `person/Shawn` is received on the Websocket
-side:
-
-```
-{"name":"Shawn","id":1,"email":"shawn@example.com"}
-```
+   ```json
+   {"name":"Shawn","id":1,"email":"shawn@example.com"}
+   ```
 
 ## Encoding Scenario
 
-A device subscribes to a topic `protobuf_out` expecting a binary message encoded using
-Protobuf. The Rule Engine is used to encode such message and publish it to the associated
-topic.
+A device subscribes to a topic `protobuf_out` expecting a binary message encoded using Protobuf. The rule engine is used to encode such a message and publish it to the associated topic.
 
 ### Create Schema
 
 Use the same schema as described in the [decoding scenario](#decoding-scenario).
 
-### Creating the rule
+### Create the rule
 
-**Use the Schema you have just created to write the rule SQL statement:**
+1. In the Dashboard, select **Integration** -> **Rules** from the navigation menu.
 
-```sql
-SELECT
-  schema_encode('protobuf_person', json_decode(payload), 'Person') as protobuf_person
-FROM
-  "protobuf_in"
-```
+2. On the **Rules** page, click **Create** at the top right corner.
 
-The key point here is `schema_encode('protobuf_person', payload)`:
+3. Use the schema you have just created to write the rule SQL statement:
 
-- The `schema_encode` function encodes the contents of the payload field according to the
-  Schema `protobuf_person`, and `Person` specifies the message type to be used;
-- `as protobuf_person` stores the decoded value in the variable `protobuf_person`;
-- `json_decode(payload)` is needed because `payload` is generally a JSON-encoded binary,
-  and `schema_encode` requires a Map as its input.
+   ```sql
+   SELECT
+     schema_encode('protobuf_person', json_decode(payload), 'Person') as protobuf_person
+   FROM
+     "protobuf_in"
+   ```
 
-**Then add the action using the following parameters:**
+   The key point here is `schema_encode('protobuf_person', json_decode(payload), 'Person')`:
 
-- Action Type: `Republish`
-- Destination Topic: `protobuf_out`
-- Message Content Template: `${protobuf_person}`
+   - The `schema_encode` function encodes the contents of the payload field according to the schema `protobuf_person`;
+   - `as person` stores the encoded value in the variable `person`;
+   - The last argument `Person` specifies that the message type in the payload is the `Person` type defined in the Protobuf schema.
+   - `json_decode(payload)` is needed because `payload` is generally a JSON-encoded binary, and `schema_encode` requires a Map as its input.
 
-This action sends the Avro encoded user to the topic `protobuf_out`. `${protobuf_person}` is a
-variable placeholder that will be replaced at runtime with the value of the result of
-`schema_encode` (a binary value).
+4. Click **Add Action**.  Select `Republish` from the drop-down list of the **Action** field. 
+5. In the **Topic** field, type `protobuf_out` as the destination topic.
+6. In the **Payload** field, type message content template: `${protobuf_person}`.
 
-### Device side code
+This action sends the Protobuf encoded user message to the topic `protobuf_out`. `${protobuf_person}` is a variable placeholder that will be replaced at runtime with the value of the result of `schema_encode` (a binary value).
 
-Once the rules have been created, it is time to simulate the data for testing.
+### Prepare Device-Side Code
 
-The following code uses the Python language to fill a User message, encode it as binary
-data, then send it to the `protobuf_in` topic. See [full
-code](https://gist.github.com/thalesmg/c5f03f99f982401d16ef6583e30144fa) for details.
+Once the rules have been created, you can simulate the data for testing.
+
+The following code uses the Python language to fill a user message, encode it as binary data, then send it to the `protobuf_in` topic. See [full code](https://gist.github.com/thalesmg/c5f03f99f982401d16ef6583e30144fa) for details.
 
 ```python
 def on_message(client, userdata, msg):
@@ -158,25 +153,33 @@ def on_message(client, userdata, msg):
     print(msg.topic+" "+str(p))
 ```
 
-### Checking rule execution results
+### Check Rule Execution Results
 
-1) In the Dashboard's [Websocket](http://127.0.0.1:18083/#/websocket) tools, log in to a
-MQTT Client.
+1) In the Dashboard, select **Diagnose** -> **WebSocket Client**. 
+2) Fill in the connection information for the current EMQX instance.
+   - If you run EMQX locally, you can use the default value.
+   - If you have changed EMQX's default configuration. For example, the configuration change on authentication can require you to type in a username and password.
 
-2) Publish a message to the `protobuf_out` topic:
+3. Click **Connect** to connect to the EMQX instance as an MQTT client.
 
-```json
-{"name":"Shawn","id":1,"email":"shawn@example.com"}
-```
+4. In the **Publish** area, type `protobuf_out` in the **Topic** field and type the following message in the **Payload** field:
 
-3) Install the Python dependencies and execute the device-side code:
+   ```json
+   {"name":"Shawn","id":1,"email":"shawn@example.com"}
+   ```
 
-```shell
-$ pip3 install protobuf paho-mqtt
+5.  Click **Publish**.
 
-$ python3 protobuf_mqtt_sub.py
-Connected with result code 0
-protobuf_out name: "Shawn"
-id: 1
-email: "shawn@example.com"
-```
+6. Install the Python dependencies and execute the device-side code:
+
+   ```shell
+   $ pip3 install protobuf paho-mqtt
+   
+   $ python3 protobuf_mqtt_sub.py
+   Connected with result code 0
+   protobuf_out name: "Shawn"
+   id: 1
+   email: "shawn@example.com"
+   ```
+
+   
