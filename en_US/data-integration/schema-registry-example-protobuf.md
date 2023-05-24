@@ -54,7 +54,7 @@ For example, you to republish a message with the `name` field equal to "Shawn" t
    - `as person` stores the decoded value in the variable `person`;
    - The last argument `Person` specifies that the message type in the payload is the `Person` type defined in the Protobuf schema.
 
-4. Click **Add Action**.  Select `Republish` from the drop-down list of the **Action** field. 
+4. Click **Add Action**.  Select `Republish` from the drop-down list of the **Action** field.
 5. In the **Topic** field, type `person/${person.name}` as the destination topic.
 6. In the **Payload** field, type message content template: `${person}`.
 
@@ -79,7 +79,7 @@ def publish_msg(client):
 ```
 
 ### Check Rule Execution Results
-1) In the Dashboard, select **Diagnose** -> **WebSocket Client**. 
+1) In the Dashboard, select **Diagnose** -> **WebSocket Client**.
 2) Fill in the connection information for the current EMQX instance.
    - If you run EMQX locally, you can use the default value.
    - If you have changed EMQX's default configuration. For example, the configuration change on authentication can require you to type in a username and password.
@@ -92,7 +92,7 @@ def publish_msg(client):
    ```shell
    $ pip3 install protobuf paho-mqtt
    $ protoc --python_out=. person.proto
-   
+
    $ python3 protobuf_mqtt.py
    Connected with result code 0
    publish to topic: t/1, payload: b'\n\x05Shawn\x10\x01\x1a\x11shawn@example.com'
@@ -134,7 +134,7 @@ Use the same schema as described in the [decoding scenario](#decoding-scenario).
    - The last argument `Person` specifies that the message type in the payload is the `Person` type defined in the Protobuf schema.
    - `json_decode(payload)` is needed because `payload` is generally a JSON-encoded binary, and `schema_encode` requires a Map as its input.
 
-4. Click **Add Action**.  Select `Republish` from the drop-down list of the **Action** field. 
+4. Click **Add Action**.  Select `Republish` from the drop-down list of the **Action** field.
 5. In the **Topic** field, type `protobuf_out` as the destination topic.
 6. In the **Payload** field, type message content template: `${protobuf_person}`.
 
@@ -148,6 +148,7 @@ The following code uses the Python language to fill a user message, encode it as
 
 ```python
 def on_message(client, userdata, msg):
+    print("msg payload", msg.payload)
     p = person_pb2.Person()
     p.ParseFromString(msg.payload)
     print(msg.topic+" "+str(p))
@@ -155,7 +156,7 @@ def on_message(client, userdata, msg):
 
 ### Check Rule Execution Results
 
-1) In the Dashboard, select **Diagnose** -> **WebSocket Client**. 
+1) In the Dashboard, select **Diagnose** -> **WebSocket Client**.
 2) Fill in the connection information for the current EMQX instance.
    - If you run EMQX locally, you can use the default value.
    - If you have changed EMQX's default configuration. For example, the configuration change on authentication can require you to type in a username and password.
@@ -174,12 +175,11 @@ def on_message(client, userdata, msg):
 
    ```shell
    $ pip3 install protobuf paho-mqtt
-   
+
    $ python3 protobuf_mqtt_sub.py
    Connected with result code 0
+   msg payload b'\n\x05Shawn\x10\x01\x1a\x11shawn@example.com'
    protobuf_out name: "Shawn"
    id: 1
    email: "shawn@example.com"
    ```
-
-   
