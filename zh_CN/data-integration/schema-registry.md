@@ -14,7 +14,7 @@ EMQX Schema Registry 目前可支持两种格式的编解码：[Avro](https://av
 
 Schema Registry 既可以解码，也可以编码。Schema Registry 为 Avro 和 Protobuf 内置编码格式维护 Schema 文本。Schema API 提供了通过 Schema Name 的添加、查询和删除操作，因此编码和解码时需要指定 Schema Name。
 
-![schema_registry1](/Users/emqx/Documents/GitHub/emqx-docs/zh_CN/data-integration/assets/schema_registry1.svg)
+![schema_registry1](./assets/schema_registry1.svg)
 
 常见的使用案例是，使用规则引擎来调用 Schema Registry 提供的编码和解码接口，然后将编码或解码后的数据作为后续动作的输入。
 
