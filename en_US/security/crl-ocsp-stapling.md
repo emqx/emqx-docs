@@ -9,7 +9,7 @@ In this case, you can use the CRL or OCSP Stapling feature to achieve a more sec
 
 The Certificate Revocation List (CRL) is a list maintained by the CA that contains the serial numbers and revocation times of certificates that have been revoked. 
 
-You can configure the request endpoint of the CA on EMQX and refresh the CRLs regularly. Different from the browser's mechanism for using CRLs, the MQTT client does not need to manage CRL and only needs to verify via EMQX during the connection handshake.
+You can configure the request endpoint of the CA on EMQX and refresh the CRLs regularly. Unlike CRLs on the browser, the MQTT client need not manage CRLs and EMQX is in charge of the verification during the connection handshake.
 
 All operations are run by EMQX, no special scripts or adaptations to the client are required.
 
