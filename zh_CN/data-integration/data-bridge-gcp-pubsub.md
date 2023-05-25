@@ -1,9 +1,8 @@
 # GCP PubSub
 
-EMQX GCP PubSub 集成可以发送 MQTT 消息和事件到
-[Google Cloud PubSub](https://cloud.google.com/pubsub?hl=en-us)，这
-可以帮助你灵活地选择谷歌云上的服务并更容易地建立物联网
-应用。
+[Google Cloud PubSub](https://cloud.google.com/pubsub?hl=en-us) 是一种异步消息传递服务，旨在实现极高的可靠性和可扩缩性。
+
+借助 EMQX GCP PubSub 集成，你可以将 MQTT 消息和事件发送到 GCP PubSub 中，这能够帮助您更快的基于 GCP 构建物联网应用，助力你从 GCP IoT Core 迁移到 EMQX 中。
 
 {% emqxce %}
 :::tip
@@ -13,77 +12,88 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 下面的步骤将指导你使用这个配置。
 
-## 设置
+## 功能清单
 
-在配置GCP PubSub之前，必须先在GCP方面进行一些配置步骤
-在EMQX上配置GCP PubSub桥。
+- [异步请求模式](./data-bridges.md#异步请求模式)
+- [缓存队列](./data-bridges.md#缓存队列)
 
-1. 创建一个[服务账户](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount)
-   在你的GCP账户中。 确保该服务账户有
-   权限，至少可以向感兴趣的主题发布消息。
-2. 为该账户创建一个服务账户密钥，并以JSON格式下载它。
-   JSON格式。
-3. 创建一个PubSub主题（记住，服务帐户必须有
-   权限来发布到该主题）。
+## 快速开始
 
-## GCP PubSub桥通过仪表盘使用的例子
+在配置 GCP PubSub 之前，必须先在 GCP 上创建好对应的服务账户凭证以及 PubSub 主题。
 
-进入EMQX仪表板，选择左边菜单上的_"数据集成"_项目，然后选择_"数据桥"_。
-在左边的菜单上选择_"数据集成"_，然后选择_"数据桥"_。 然后，点击_"+创建"_。
+### 创建服务账户凭证
 
-在对话框中，选择_Google PubSub_桥类型，点击下一步。
-填写该桥的必要字段（这些字段标有
-星号）。 _payload模板_字段，如果留空，将编码
-所有来自MQTT消息的可见输入都使用JSON格式，例如
-clientid, topic, payload, 等等。 否则，它将使用用户定义的
-模板，用MQTT上下文中的相应值来填充`${变量_名称}`形式的占位符。
-对应的MQTT上下文中的值。 例如，`${topic}`
-将被替换为`my/topic`，如果这是MQTT消息的主题。
+服务账户凭证是用于身份验证和授权的 JSON 文件，EMQX 需要通过它访问 PubSub 资源。
 
-在_GCP服务账户凭证_字段中，上传你的JSON格式的服务账户凭证。
-帐户凭证的JSON格式，你在设置步骤中导出的。
+1. 进入 GCP 控制台，在搜索框中输入 **IAM** 并进入 **IAM & Admin** 页面。
+2. 在 IAM & Admin 页面中点击 **Service Accounts** -> **Email** 中对应的邮箱，选择 **KEYS** 标签页，点击 **ADD KEY** 添加以生成用于身份认证 JSON 格式的 key，请妥善保管该文件。
 
-最后，在点击_"Create"_后，你会得到一个选项，即创建一个相关规则。创建一
-个相关的规则。 这将允许符合规则的MQTT消息被转发到GCP PubSub。 关于创建
-规则的更多信息，请参考 [_规则_](./rules.md)。
+![GCP 服务账户凭证](assets/gcp_pubsub/assets/gcp-service-account.png)
+
+### 在 GCP PubSub 中创建主题
+
+1. 打开 [Pub/Sub 控制台](https://console.cloud.google.com/cloudpubsub)，点击 **CREATE TOPIC，**输入自定义的 **Topic ID，**点击 **CREATE** 即可完成创建。
+
+![GCP PubSub 创建主题](./assets/gcp_pubsub/gcp-pubsub-topic-create.png)
+
+2. 点击列表页对应的 **Topic ID** 即可进入 Topic 详情页面，您需要创建一个 **subscription** 来保存消息，有关 subscription 详细介绍请参考 [CCP Pub/Sub subscription](https://cloud.google.com/pubsub/docs/subscriber)，此处选择 Pull 类型，保留 7 天历史消息。
+
+![GCP PubSub 创建订阅](./assets/gcp_pubsub/gcp-pubsub-subscription-create.png)
+
+3. 点击 **Subscription ID** → **MESSAGES** → **PULL** 可以在线查看发送到主题中的消息。
+
+### 创建 GCP PubSub 数据桥接
+
+1. 转到 Dashboard **数据集成** -> **数据桥接**页面。
+
+2. 点击页面右上角的**创建**。
+
+3. 在**数据桥接类型**中选择 GCP PubSub，点击**下一步**。
+
+4. 输入数据桥接名称，要求是大小写英文字母和数字的组合。
+
+5. 输入 **GCP PubSub 主题**，此处填写上述步骤中创建好的 **my-iot-core** 主题。
+
+6. 填写 **HTTP 请求消息体模板**，此处留空，使用 JSON 格式发送所有可用的上下文。你也可以使用 `${field}` 形式的占位符来构造消息。
+
+7. 在 **GCP 服务账户凭证** 字段中，上传你的 JSON 格式的服务账户凭证。
+
+8. 高级配置（可选），根据情况配置同步/异步模式，队列等参数。
+
+9.  设置完成后，您可点击**测试连接**按钮进行验证。
+
+10. 点击**创建**按钮完成数据桥接创建。
+
+至此您已经完成数据桥接创建流程，接下来将继续创建一条规则来指定需要写入的数据：
+
+### 创建规则
+
+1. 转到 Dashboard **数据集成** -> **规则页面**。
+2. 点击页面右上角的**创建**。
+3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `/devices/+/events` 主题的 MQTT 消息集成到 GCP PubSub，请确规则选择出来的字段（SELECT 部分）包含第 6 步中用到的变量，此处规则 SQL 如下：
 
 
-## 通过配置文件的 GCP PubSub 桥使用实例
+  ```sql
+  SELECT
+    *
+  FROM
+    "/devices/+/events"
+  ```
 
-在`emqx.conf`文件的末尾添加以下配置。
-将`service_account_json`的内容替换为
-你的服务帐户JSON文件的相应内容。
+4. 添加动作，在动作下拉框中选择 使用数据桥接转发 选项，选择先前创建好的 GCP PubSub 数据桥接。
 
-```js
-bridges.gcp_pubsub.my_gcp_pubsub_bridge {
-  connect_timeout = "15s"
-  enable = true
-  max_retries = 2
-  pipelining = 100
-  pool_size = 8
-  pubsub_topic = "my-topic"
-  request_timeout = "15s"
-  resource_opts {
-    async_inflight_window = 100
-    auto_restart_interval = "60s"
-    batch_size = 1
-    batch_time = "20ms"
-    health_check_interval = "15s"
-    max_queue_bytes = "100MB"
-    query_mode = "async"
-    worker_pool_size = 16
-  }
-  service_account_json {
-    "auth_provider_x509_cert_url" = "https://www.googleapis.com/oauth2/v1/certs"
-    auth_uri = "https://accounts.google.com/o/oauth2/auth"
-    client_email = "test-516@emqx-cloud-pubsub.iam.gserviceaccount.com"
-    client_id = "0000000000000000000"
-    "client_x509_cert_url" = "https://www.googleapis.com/robot/v1/metadata/x509/test-pubsub.iam.gserviceaccount.com"
-    private_key = "-----BEGIN PRIVATE KEY-----nMIIEvAIBA...\n-----END PRIVATE KEY-----\n"
-    private_key_id = "000000000000000000000000000000000000"
-    project_id = "my-project-id"
-    token_uri = "https://oauth2.googleapis.com/token"
-    type = "service_account"
-  }
-}
+5. 点击最下方创建按钮完成规则创建。
+
+至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `/devices/+/events` 主题的消息经过名为 `my_rule` 的规则处理，处理结果写入到 GCP PubSub 中。
+
+### 测试数据桥接与规则
+
+使用 MQTTX 向 `/devices/+/events` 主题发布消息：
+
+```bash
+mqttx pub -i emqx_c -t /devices/+/events -m '{ "msg": "hello GCP PubSub" }'
 ```
+
+分别查看两个数据桥接运行统计，命中、发送成功次数均 +1。
+
+前往 GCP PubSub 控制台查看数据是否已经发送成功。
