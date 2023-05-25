@@ -175,7 +175,7 @@ def on_message(client, userdata, msg):
 
    ```shell
    $ pip3 install protobuf paho-mqtt
-
+   
    $ python3 protobuf_mqtt_sub.py
    Connected with result code 0
    msg payload b'\n\x05Shawn\x10\x01\x1a\x11shawn@example.com'

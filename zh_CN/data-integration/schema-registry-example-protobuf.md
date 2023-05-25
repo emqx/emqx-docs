@@ -192,6 +192,7 @@ def publish_msg(client):
    
    $ python3 protobuf_mqtt_sub.py
    Connected with result code 0
+   msg payload b'\n\x05Shawn\x10\x01\x1a\x11shawn@example.com'
    protobuf_out name: "Shawn"
    id: 1
    email: "shawn@example.com"
