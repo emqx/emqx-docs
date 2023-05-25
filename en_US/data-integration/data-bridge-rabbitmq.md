@@ -134,5 +134,5 @@ If everything has gone according to plan, a message should have been published t
 
 If everything is working correctly, you should see the message Hello World RabbitMQ from EMQX in the appropriate queue(s) in RabbitMQ.
 
-
+![bridge_igress](./assets/rabbitmq/rabbit_mq_management_ui_got_message.png)
 
