@@ -61,7 +61,7 @@ EMQX stands as the world's premier Cloud-Native IoT Messaging Platform. It incor
 
 ## Install EMQX
 
-### Deplot EMQX with Docker
+### Deploy EMQX with Docker
 
 {% emqxce %}
 
@@ -152,7 +152,7 @@ For other platforms which are not in the prebuilt list, you may simply [contact 
 
 {% emqxce %}
 For other platforms which are not in the prebuilt list,
-you may [build the runnables from source code](./install.md#source-code-compilation-and-installation) or
+you may [build the runnable from source code](./install.md#source-code-compilation-and-installation) or
 simply [contact EMQ](https://www.emqx.com/en/contact) for support.
 {% endemqxce %}
 
@@ -225,7 +225,7 @@ The WebSocket page provides you with a simple but effective WebSocket client too
 
 ![emqx-mqtt-websocket-tool-en](./assets/emqx-mqtt-websocket-tool-en.png)
 
-### MQTTX desktop client tool
+### MQTTX Desktop Client Tool
 
 MQTTX is an elegant cross-platform MQTT 5.0 open source desktop client tool that supports running on macOS, Linux, and Windows.
 
@@ -290,11 +290,10 @@ legit clients are permitted to publish or subscribe to certain topics.
 
 The built-in SQL based rule-engine can extract, filter, enrich, and convert messages between devices and data platforms in real-time, and forward the data to Webhooks or other MQTT Brokers without having to implement MQTT clients to do the job.
 
-EMQX enterprise edition can also integrate with Kafka, various SQL / NoSQL / time-series databases, and enterprise systems, such as SAP.
+EMQX enterprise edition can also integrate with Kafka, various SQL / NoSQL / time-series databases, and enterprise systems like SAP.
 
 - [Rule Engine](../rule/rule-engine.md): The concept and basic usage of the rule engine.
 - [Create Rule](../rule/rule-create.md): How to create a rule.
-- [Example](../rule/rule-example.md): Tutorial on using various data sources for a rule engine.
 
 ### HTTP API
 

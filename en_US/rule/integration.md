@@ -23,7 +23,6 @@ Currently, the following are supported:
 - [Pulsar Consumer](../modules/pulsar_consumer.md)
 - [Ingest Data into RabbitMQ](../rule/bridge_rabbitmq.md)
 - [Ingest Data into RocketMQ](../rule/bridge_rocketmq.md)
-- [Ingest Data into Lindorm](../rule/backend_lindorm.md)
 - [Ingest Data into DynamoDB](../rule/backend_dynamodb.md)
 - [Ingest Data into TDengine](../rule/backend_tdengine.md)
 - [Ingest Data into TimescaleDB](../rule/backend_timescaledb.md)
