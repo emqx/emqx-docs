@@ -21,8 +21,6 @@ This chapter provides a comprehensive guide for installing and configuring EMQ X
 - [Configure license](./license.md): Instructions on how to start EMQX after the installation and how to configure the license.
 - [Directory](./directory.md): Overview of important file and directory locations for future configuration and maintenance tasks.
 - [Basic commands](./command-line.md): Essential commands for working with EMQX and managing its operations.
-- [Configuration](./config.md): Exploring configuration options and how to customize EMQX to meet your specific requirements.
-- [Hot configuration](../modules/hot_confs.md): With the hot configuration feature, most of EMQX's configuration items can be modified at runtime through the Dashboard.
 - [Hot upgrade](../advanced/relup.md): By using the hot upgrade feature, users can quickly and safely upgrade the EMQX in the production environment, and avoid the decrease in system availability caused by restarting the service.
 - [Hot patches](../advanced/patches.md): EMQX provides an ad-hoc patch mechanism to address critical issues promptly, even before they are officially released in future updates. the fix is included in a (future) official release.
 - [Upgrade from 4.2](../changes/upgrade-4.3.md): Guidance on how to upgrade from v4.2
@@ -43,12 +41,12 @@ Besides the above deployment methods, you are also welcome to try our [EMQX Clou
 
 EMQX Enterprise binary packages are released on below operating systems:
 
-| Operating system                                             | Versions supported                              | x86_64/amd64 | arm64 |
-| ------------------------------------------------------------ | ----------------------------------------------- | ------------ | ----- |
-| [Debian](https://github.com/emqx/emqx-docs/blob/release-5.0/zh_CN/deploy/install-debian.md) | Debian 9<br>Debian 10                           | Yes          | Yes   |
-| [CentOS](./centos.md)                                        | CentOS 6<br>CentOS 7 <br>CentOS 8               | Yes          | Yes   |
-| [Ubuntu](https://github.com/emqx/emqx-docs/blob/release-5.0/zh_CN/deploy/install-ubuntu.md) | Ubuntu 16.04  <br>Ubuntu 18.04 <br>Ubuntu 20.04 | Yes          | Yes   |
-| [macOS](https://github.com/emqx/emqx-docs/blob/release-5.0/zh_CN/deploy/install-macOS.md) |                                                 | Yes          | No    |
+| Operating System      | Versions Supported                              | x86_64/amd64 | arm64 |
+| --------------------- | ----------------------------------------------- | ------------ | ----- |
+| [Debian](./debian.md) | Debian 9<br>Debian 10                           | Yes          | Yes   |
+| [CentOS](./centos.md) | CentOS 6<br>CentOS 7 <br>CentOS 8               | Yes          | Yes   |
+| [Ubuntu](./ubuntu.md) | Ubuntu 16.04  <br>Ubuntu 18.04 <br>Ubuntu 20.04 | Yes          | Yes   |
+| [macOS](./macos.md)   |                                                 | Yes          | No    |
 
 
 

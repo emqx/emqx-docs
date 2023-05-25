@@ -33,7 +33,7 @@ The configuration files of EMQX Broker usually have the suffix `.conf`. You can 
 
 It should be noted that for the EMQX Broker installed by different methods, the path of the `etc` directory may be different. For details, please refer to [directory structure](directory.md#).
 
-## Grammar rules
+## Grammar Rules
 
 - Use k = v common format like sysctl
 - All information for a single configuration item is on the same line, and a new line means creating a new configuration item
@@ -47,7 +47,7 @@ It should be noted that for the EMQX Broker installed by different methods, the 
 mqtt.max_packet_size = 1MB
 ```
 
-## Data type
+## Data Type
 
 **integer**
 
@@ -107,7 +107,7 @@ You can arbitrarily combine these time units, such as `1w13ms`, or you can use f
 
 `bytesize` supports configuration of message size and buffer size in a more readable way, and the unit can be `KB`, `MB` and `GB`. You can also use lower case, for example `kb`, but mixed case, such as `Kb`, is not supported. It will eventually be converted to bytes. If you do not specify any units, then it is used directly as the number of bytes.
 
-## Default configuration
+## Default Configuration
 
 In the configuration file of EMQX Broker, you will see a lot of configuration items that are commented out, which means that these configuration items will use their default values. Usually we will list the default values of these configurations.
 
@@ -123,8 +123,8 @@ Listener is mainly used to configure listening ports and related parameters of d
 | ------------------------- | ------------------------------------------------------- |
 | TCP Listener              | A listener for MQTT which uses TCP                      |
 | SSL Listener              | A secure listener for MQTT which uses TLS               |
-| Websocket Listener        | A listener for MQTT over WebSockets                     |
-| Secure Websocket Listener | A secure listener for MQTT over secure WebSockets (TLS) |
+| WebSocket Listener        | A listener for MQTT over WebSockets                     |
+| Secure WebSocket Listener | A secure listener for MQTT over secure WebSockets (TLS) |
 
 EMQX Broker provides 5 Listeners by default, and they will occupy the following ports:
 

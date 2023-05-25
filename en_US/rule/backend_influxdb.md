@@ -1,6 +1,8 @@
 # Ingest Data into InfluxDB
 
-Setup a InfluxDB database, taking Mac OSX for instance:
+## Setup InfluxDB Database
+
+Setup an InfluxDB database, taking Mac OSX for instance:
 
 ```bash
 $ docker pull influxdb
@@ -12,7 +14,7 @@ $ cd influx_udp
 $ docker run --name=influxdb --rm -d -p 8086:8086 -p 8089:8089/udp -v ${PWD}/files/influxdb.conf:/etc/influxdb/influxdb.conf:ro -e INFLUXDB_DB=db influxdb:latest
 ```
 
-Create a rule:
+## Create a rule
 
 Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
 "rule" tab on the menu to the left.
@@ -29,14 +31,14 @@ FROM
     "message.publish"
 ```
 
-![image](./assets/rule-engine/influxdb_sql_1.png)
+<img src="./assets/rule-engine/influxdb_sql_1.png" alt="image" style="zoom:50%;" />
 
-Bind an action:
+## Add an Action
 
 Click on the "+ Add" button under "Action Handler", and then select
 "Data to InfluxDB" in the pop-up dialog window.
 
-![image](./assets/rule-engine/influxdb_action_0.png)
+<img src="./assets/rule-engine/influxdb_action_0.png" alt="image" style="zoom:50%;" />
 
 Fill in the parameters required by the action:
 
@@ -54,13 +56,13 @@ point.
 5). Set Timestamp. Whether to generate a timestamp if 'Timestamp Key'
 is not configured.
 
-![image](./assets/rule-engine/influxdb_action_1.png)
+<img src="./assets/rule-engine/influxdb_action_1.png" alt="image" style="zoom:50%;" />
 
 6). Bind a resource to the action. Since the dropdown list "Resource"
 is empty for now, we create a new resource by clicking on the "New
 Resource" to the top right, and then select "InfluxDB":
 
-![image](./assets/rule-engine/influxdb_action_2.png)
+<img src="./assets/rule-engine/influxdb_action_2.png" alt="image" style="zoom:50%;" />
 
 Configure the resource:
 
@@ -68,18 +70,19 @@ Keep all the configs as default, and click on the "Testing Connection"
 button to make sure the connection can be created successfully, and
 then click on the "Create" button.
 
-![image](./assets/rule-engine/influxdb_resource_0.png)
+<img src="./assets/rule-engine/influxdb_resource_0.png" alt="image" style="zoom:50%;" />
 
 Back to the "Actions" dialog, and then click on the "Confirm" button.
 
-![image](./assets/rule-engine/influxdb_action_3.png)
+<img src="./assets/rule-engine/influxdb_action_3.png" alt="image" style="zoom:50%;" />
 
 Back to the creating rule page, then click on "Create" button. The rule we created will be show in the rule list:
 
-![image](./assets/rule-engine/influxdb_rule_overview_0.png)
+<img src="./assets/rule-engine/influxdb_rule_overview_0.png" alt="image" style="zoom:50%;" />
 
-We have finished, testing the rule by sending an MQTT message to
-    emqx:
+## Test the Rule
+
+We have finished creating the rule, test the rule by sending an MQTT message to EMQX:
 
 ```bash
 > Topic: "t/1"

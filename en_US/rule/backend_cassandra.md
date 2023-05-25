@@ -1,6 +1,8 @@
 # Ingest Data into Cassandra
 
-Setup a Cassandra database, and changes the root/password to root/public, taking Mac OSX for instance:
+## Install Cassandra Server and Create Keyspace and Tables
+
+Setup a Cassandra database, and change the root/password to root/public, taking Mac OSX for instance:
 
 ```bash
 $ brew install cassandra
@@ -47,10 +49,9 @@ CREATE TABLE t_mqtt_msg (
 );
 ```
 
-Create a rule:
+## Create a Rule
 
-Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
-"rule" tab on the menu to the left.
+Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left.
 
 Select "message.publish", then type in the following SQL:
 
@@ -63,7 +64,7 @@ FROM
 
 ![image](./assets/rule-engine/mysql_sql_1.png)
 
-Bind an action:
+## Add an Action
 
 Click on the "+ Add" button under "Action Handler", and then select
 "Data to Cassandra" in the pop-up dialog window.
@@ -72,11 +73,11 @@ Click on the "+ Add" button under "Action Handler", and then select
 
 Fill in the parameters required by the action:
 
-Two parameters is required by action "Data to Cassandra":
+Two parameters are required by action "Data to Cassandra":
 
-1). SQL template. SQL template is the sql command you'd like to run
-when the action is triggered. In this example we'll insert a message
-into Cassandra, so type in the following sql
+1). SQL template. SQL template is the SQL command you'd like to run
+when the action is triggered. In this example, we'll insert a message
+into Cassandra, so type in the following SQL
 template:
 
 ```sql
@@ -113,7 +114,9 @@ Back to the creating rule page, then click on "Create" button. The rule we creat
 
 ![image](./assets/rule-engine/cass_rule_overview_0.png)
 
-We have finished, testing the rule by sending an MQTT message to emqx:
+## Test the Rule
+
+We have finished, test the rule by sending an MQTT message to EMQX:
 
 ```bash
 > Topic: "t/cass"

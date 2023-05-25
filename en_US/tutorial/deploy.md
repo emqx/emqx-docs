@@ -113,7 +113,7 @@ Note: The file path may differ based on your installation mode. <!--should we al
 
 **Prerequisite**: NGINX installed. For detailed introduction and installation of HAProxy, see [Nginx website](https://www.nginx.com/).
 
-In this example, you want to configure the NGINX LB that listens for incoming connections on port `8883` encrypted in SSL and also to terminate the SSL connection, and then it will forward those connections to one of two upstream servers using the `stream` module. <!--the explanation to be reviewed and whether it is sufficient-->
+In this example, you want to configure the NGINX LB that listens for incoming connections on port `8883` encrypted in SSL and also terminates the SSL connection, and then it will forward those connections to one of two upstream servers using the `stream` module. <!--the explanation to be reviewed and whether it is sufficient-->
 
 To configure NGINX as the LB for EMQX and terminate the SSL connection, you can modify `/etc/nginx/nginx.conf` following the code example below. 
 

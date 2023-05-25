@@ -692,7 +692,7 @@
           "path": "https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html"
         },
         {
-          "title": "Work with License",
+          "title": "License",
           "path": "getting-started/license"
         },
         {
@@ -846,7 +846,7 @@
           "path": "modules/topic_rewrite"
         },
         {
-          "title": "MQTT Proxy Subscription",
+          "title": "Auto Subscription",
           "path": "modules/subscription",
           "children": [
             {
@@ -854,27 +854,27 @@
               "path": "rule/get_subs"
             },
             {
-              "title": "Redis",
+              "title": "Auto Subscribe with Redis",
               "path": "rule/get_subs_from_redis"
             },
             {
-              "title": "MySQL",
+              "title": "Auto Subscribe with MySQL",
               "path": "rule/get_subs_from_mysql"
             },
             {
-              "title": "PostgreSQL",
+              "title": "Auto Subscribe with PostgreSQL",
               "path": "rule/get_subs_from_pgsql"
             },
             {
-              "title": "Cassandra",
+              "title": "Auto Subscribe with Cassandra",
               "path": "rule/get_subs_from_cassandra"
             },
             {
-              "title": "MongoDB",
+              "title": "Auto Subscribe with MongoDB",
               "path": "rule/get_subs_from_mongodb"
             },
             {
-              "title": "ClickHouse",
+              "title": "Auto Subscribe with ClickHouse",
               "path": "rule/get_subs_from_clickhouse"
             }
           ]
@@ -916,16 +916,12 @@
       ]
     },
     {
-      "title": "EMQX Rules",
+      "title": "Rule Engine",
       "path": "rule/rule-engine",
       "children": [
         {
           "title": "Create Rules",
           "path": "rule/rule-create"
-        },
-        {
-          "title": "Example - Create a Test Rule",
-          "path": "rule/rule-example"
         },
         {
           "title": "Message Republish",
@@ -940,7 +936,7 @@
           "path": "rule/rule-engine_field"
         },
         {
-          "title": "Built-In SQL Functions",
+          "title": "Built-in SQL Functions",
           "path": "rule/rule-engine_buildin_function"
         },
         {
@@ -976,7 +972,7 @@
           "path": "rule/bridge_mqtt"
         },
         {
-          "title": "Work with MQTT Subscriber",
+          "title": "Integrate with MQTT Subscriber",
           "path": "modules/mqtt_subscriber"
         },
         {
@@ -984,7 +980,7 @@
           "path": "rule/bridge_kafka"
         },
         {
-          "title": "Work with Kafka Consumer",
+          "title": "Integrate with Kafka Consumer",
           "path": "modules/kafka_consumer"
         },            
         {
@@ -1020,7 +1016,7 @@
           "path": "rule/bridge_pulsar"
         },
         {
-          "title": "Work with Pulsar Consumer",
+          "title": "Integrate with Pulsar Consumer",
           "path": "modules/pulsar_consumer"
         },
         {
@@ -1030,11 +1026,6 @@
         {
           "title": "Bridge Data into RocketMQ",
           "path": "rule/bridge_rocketmq"
-        },
-      
-        {
-          "title": "Ingest Data into Lindorm",
-          "path": "rule/backend_lindorm"
         },
         {
           "title": "Ingest Data into DynamoDB",
@@ -1075,7 +1066,11 @@
         {
           "title": "Bridge Data into Multiple MQTT Broker",
           "path": "rule/bridge_emqx"
-        }
+        },
+        {
+          "title": "Update Resource",
+          "path": "rule/how_to_update_resources"
+        },
       ]
     },
     {
@@ -1223,7 +1218,7 @@
           "path": "modules/tcp_protocol"
         },
         {
-          "title": "Multi-Language Extension-Protocol Access",
+          "title": "ExProto Gateway",
           "path": "modules/exproto"
         }
       ]

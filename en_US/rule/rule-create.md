@@ -1,8 +1,8 @@
-# Create rules
+# Create Rules
 
 This section introduces how to create rules.
 
-:::tip Prerequisites
+## Prerequisites
 
 Set up a web service, here we set up a simple web service using the Linux tool `nc`:
 
@@ -10,28 +10,28 @@ Set up a web service, here we set up a simple web service using the Linux tool `
 $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 8081; done;
 ```
 
-:::
 
-## Create rules using Dashboard
+
+## Create Rules Using Dashboard
 
 1. Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the “rule” tab on the menu to the left.
 
- Select “message.publish”, then type in the following SQL:
+   Select “message.publish”, then type in the following SQL:
 
-```sql
-   SELECT
-     *
-   FROM
-       "t/#"
-   WHERE
-        qos = 1
-```
+   ```bash
+      SELECT
+        *
+      FROM
+          "t/#"
+      WHERE
+           qos = 1
+   ```
 
 2. Bind an action:
 
-Click on the “+ Add” button under “Action Handler”, and then select “Data to Web Server” in the pop-up dialog window.
+   Click on the “+ Add” button under “Action Handler”, and then select “Data to Web Server” in the pop-up dialog window.
 
-<img src="./assets/add-action.png" alt="add action" style="zoom:50%;" />
+   <img src="./assets/add-action.png" alt="add action" style="zoom:50%;" />
 
 3. Bind a resource to the action:
 
@@ -47,9 +47,9 @@ Click on the “+ Add” button under “Action Handler”, and then select “D
 
 5. Back to the “Actions” dialog, and then click on the “Confirm” button.
 
-6.  Back to the creating rule page, then click on “Create” button. The rule we created will be show in the rule list
+6. Back to the creating rule page, then click on “Create” button. The rule we created will be shown in the rule list
 
-   We have finished, testing the rule by sending an MQTT message to emqx:
+   We have finished creating the rule, test the rule by sending an MQTT message to EMQX:
 
 7. send a message
 
@@ -79,7 +79,7 @@ From EMQX Open Source Version 4.4.11 and 4.3.22, we can use placeholders in `${v
 The webhook always normalized the *keys* of the HTTP headers, replacing the underscores `_` to hyphens `-`, and also ensure the keys are lowercases. e.g. The key `Content_Type` will be replaced with `content-type`.
 :::
 
-## Create Simple Rules using CLI
+## Create Rules Using CLI
 ### Create Inspect Rules
 Create a rule for testing: print the content of the message and all the args of the action, when a MQTT message is sent to topic ‘t/a’.
 
@@ -199,16 +199,18 @@ $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9910; d
 
 4. Now let’s send a message “hello” to an arbitrary topic using username “Steven”, this will trigger the rule we created above, and the Web Server will receive an message and return 200 OK:
 
-  ```bash
-  $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9910; done;
+   ```bash
+     $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9910; done;
+   
+     POST / HTTP/1.1
+     content-type: application/json
+     content-length: 32
+     te:
+     host: 127.0.0.1:9910
+     connection: keep-alive
+     token: axfw34y235wrq234t4ersgw4t
+   
+     {"payload":"hello","u":"Steven"}
+   ```
 
-  POST / HTTP/1.1
-  content-type: application/json
-  content-length: 32
-  te:
-  host: 127.0.0.1:9910
-  connection: keep-alive
-  token: axfw34y235wrq234t4ersgw4t
-
-  {"payload":"hello","u":"Steven"}
-  ```
+   

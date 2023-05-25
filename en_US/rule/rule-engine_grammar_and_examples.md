@@ -100,7 +100,7 @@ The DO and INCASE clauses are optional.
 | `!=` | not equal | true/false |
 
 
-## SQL statement example: 
+## SQL Statement Examples
 ### Basic Syntax Examples
 
 -  Extract all fields from the messages with a topic of "t/a": 
@@ -149,14 +149,14 @@ The DO and INCASE clauses are optional.
     ```
 
 ::: tip
-- Topic after the FROM clause need to be enclosed in double quotes `""` or single quotes `''`.
+- Topic after the FROM clause needs to be enclosed in double quotes `""` or single quotes `''`.
 - The WHERE clause is followed by the filter condition. If a string is used, it needs to be enclosed in single quotes `'' `.
 - If there are multiple topics in the FROM clause, they need to be separated by commas `","`. For example,
     ```sql
     SELECT * FROM "t/1", "t/2".
     ```
 - You can use the `"." `Symbol to nest select payloads
-- If possible, don't create alias for payload, as this would cause performance degradations.
+- If possible, don't create an alias for payload, as this would cause performance degradations.
   i.e. Do not use `SELECT payload as p`
   :::
 

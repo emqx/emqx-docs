@@ -118,8 +118,8 @@ Connection
 | Maximum Inflight Window Size        | Maximum size of inflight window  |
 | Message Queue Size                 | Current message queue size, please refer to [InFlight Window and Message Queue](../advanced/inflight-window-and-message-queue.md#) |
 | Maximum Message Queue Size         | Maximum size of message queue |
-| Uncomfirmed PUBREC Packets         | Number of unconfirmed PUBREC messages |
-| Maximum Uncomfirmed PUBREC Packets | Maximum number of unconfirmed PUBREC messages allowed |
+| Unconfirmed PUBREC Packets         | Number of unconfirmed PUBREC messages |
+| Maximum Unconfirmed PUBREC Packets | Maximum number of unconfirmed PUBREC messages allowed |
 
 Metric
 

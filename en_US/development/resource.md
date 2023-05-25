@@ -13,7 +13,7 @@ category:
 ref:
 ---
 
-# Other resources
+# Other Resources
 
 
 

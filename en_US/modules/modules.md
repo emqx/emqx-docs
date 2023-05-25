@@ -3,7 +3,7 @@
 The EMQX provides abundant functional modules, including authentication and authorization, protocol access, message delivery, language extension, operation and maintenance monitoring, and internal modules.
 On the Dashboard's module management page, modules can be started and stopped, as well as their configuration and data can be managed.
 
-## Module list
+## Module List
 
 The modules currently provided by the EMQX include:
 
@@ -46,12 +46,12 @@ The modules currently provided by the EMQX include:
 
 ## Start and Stop Modules
 
-Currently there are two ways to start the module:
+Currently, there are two ways to start the module:
 
 1. Load modules with system 
-2. Use Dashboard to start and stop the module
+2. Use the Dashboard to start and stop the module
 
-**Enable loading modules with system**
+**Load Modules with the System**
 
 If you need to start a certain module when EMQX starts, you can directly add the module that needs to be started in `data/loaded_modules`.
 
@@ -87,6 +87,6 @@ For example, the modules automatically loaded by EMQX are:
 ]
 ```
 
-**Use Dashboard to start and stop the module**
+**Use Dashboard to Start/Stop Modules**
 
 If the Dashboard module is enabled, you can directly start and stop the module by accessing the module management page at `http://localhost:18083/modules`.

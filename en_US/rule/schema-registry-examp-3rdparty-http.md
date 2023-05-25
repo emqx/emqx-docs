@@ -103,7 +103,7 @@ $ python3 http_parser_server.py
  * Running on http://127.0.0.1:9003/ (Press CTRL+C to quit)
 ```
 
-## Check Rule Execution Results
+## Test the Rule
 
 Since this example is relatively simple, we'll use the MQTT Websocket client directly to simulate sending a message on the device side.
 

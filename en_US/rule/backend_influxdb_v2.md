@@ -1,5 +1,7 @@
 # Ingest Data into InfluxDB V2 & InfluxDB Cloud
 
+## Setup InfluxDB Database
+
 Start InfluxDB, or register an InfluxDB Cloud account to apply for the service.
 In this article, docker deployment is used as a demonstration, and the default port 8086 is used. If necessary, please replace it with other ports.
 
@@ -25,15 +27,15 @@ The following configurations are included in the resource:
 
 Example of obtaining organization name by InfluxDB Cloud (For local or docker deployment, you can enter the console by accessing port 8086 of the deployment address):
 
-![image](./assets/rule-engine/influxdbv2_get_orgname_demo.png)
+<img src="./assets/rule-engine/influxdbv2_get_orgname_demo.png" alt="image" style="zoom:50%;" />
 
 Example of obtaining API Token by InfluxDB Cloud (For local or docker deployment, you can enter the console by accessing port 8086 of the deployment address):
-![image](./assets/rule-engine/influxdbv2_get_api_token_demo.png)
+<img src="./assets/rule-engine/influxdbv2_get_api_token_demo.png" alt="image" style="zoom:50%;" />
 
 Create the resource:
 ![image](./assets/rule-engine/influxdbv2_create_resource.png)
 
-Create a rule:
+## Create a Rule
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rule" tab on the left.
 
@@ -49,7 +51,7 @@ FROM
 
 ![image](./assets/rule-engine/influxdbv2_create_rule.png)
 
-Related action:
+## Add an Action
 
 On the "Action" interface, select "Add action", and then select "Data to InfluxDB" in the “Action Type” drop-down box.
 
@@ -67,6 +69,8 @@ Required fields:
 Finally, click "Confirm".
 
 Return to the response action interface, select the InfluxDB resource just created, fill in other configurations and click "Confirm".
+
+## Test the Rule
 
 The rule has been created. Now, send a message:
 

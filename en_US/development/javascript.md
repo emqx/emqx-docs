@@ -14,7 +14,7 @@ ref:
 ---
 
 
-# MQTT JavaScript client library
+# MQTT JavaScript Client Library
 
 [MQTT.js](https://www.npmjs.com/package/mqtt) is a module written in JavaScript that implements the MQTT protocol client function and can be used in browsers and Node.js environments.
 
@@ -58,7 +58,13 @@ mqtt help
 > Launch 'mqtt help [command]' to know more about the commands.
 ```
 
-## MQTT.js usage example
+:::tip
+
+Currently, MQTT.js has fully supported MQTT 5.0.
+
+:::
+
+## Quick Start Tutorial
 
 This example contains the complete code of MQTT.js in JavaScrip language connecting EMQX Broker, sending and receiving messages:
 
@@ -98,8 +104,3 @@ client.on('message', (topic, message) => {
   console.log('receive message：', topic, message.toString())
 })
 ```
-
-
-## MQTT.js MQTT 5.0 support
-
-Currently, MQTT.js has fully supported MQTT 5.0.

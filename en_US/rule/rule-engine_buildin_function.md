@@ -1,7 +1,7 @@
 # Built-in SQL Functions
-## Mathematical functions
+## Mathematical Functions
 
-|function name|Purpose|parameter|Returned value|
+|Function Name|Purpose|Parameter|Returned Value|
 |--- |--- |--- |--- |
 |abs|Absolute value|Operand|absolute value|
 |cos|Cosine|Operand|Cosine value|
@@ -53,10 +53,10 @@ log10(1000) = 3
 log2(1024) = 10
 ```
 
-## Data type judgment function
+## Data Type Judgment Function
 
 
-|Function name|Purpose|parameter|Returned value|
+|Function Name|Purpose|Parameter|Returned Value|
 |--- |--- |--- |--- |
 |is_null|Judge if the variable is null|Data|Boolean data.if it is empty (undefined), return true, otherwise return false|
 |is_not_null|Judge if the variable is not null|Data|Boolean data.if it is empty (undefined), return false, otherwise return true|
@@ -82,9 +82,9 @@ is_num(2.3) = true
 is_num('val') = false
 ```
 
-## Data type conversion function
+## Data Type Conversion Function
 
-|function name|purpose|parameter|returned value|
+|function Name|Purpose|Parameter|Returned Value|
 |--- |--- |--- |--- |
 |str|Convert data to String type|Data|Data of type String. Failure to convert will cause SQL matching to fail|
 |str_utf8|Convert data to UTF-8 String type|Data|UTF-8 String type data. Failure to convert will cause SQL matching to fail|
@@ -106,9 +106,9 @@ float2str(20.2, 17) = '20.19999999999999928'
 ```
 
 
-## String functions
+## String Functions
 
-|Function name|Purpose|parameter|returned value|
+|Function Name|Purpose|Parameter|Returned Value|
 |--- |--- |--- |--- |
 |lower|convert to lowercase|input string|Lowercase string|
 |upper|convert to uppercase|input string|uppercase string|
@@ -149,9 +149,9 @@ split('a/b/ c', '/', 'trailing') = ['a/b', ' c']
 
 ```
 
-## Map function
+## Map Function
 
-|function name|purpose|parameter|returned value|
+|Function Name|Purpose|Parameter|Returned Value|
 |--- |--- |--- |--- |
 |map_get|Take the value of a Key in the Map, or return a null value if failed|1. Key <br />2. Map|The value of a Key in the Map. Support nested keys, such as "a.b.c"|
 |map_get|Take the value of a Key in the Map, if failed, return the specified default value|1. Key <br />2. Map <br />3. Default Value|The value of a Key in the Map. Support nested keys, such as "a.b.c"|
@@ -165,9 +165,9 @@ map_get('a', map_put('a', 2, json_decode( '{ "a" : 1 }' ))) = 2
 ```
 
 
-## Array function
+## Array Function
 
-|function name|purpose|parameter|returned value|
+|Function Name|Purpose|Parameter|Returned value|
 |--- |--- |--- |--- |
 |nth|Take the nth element, and subscripts start at 1|Original array|Nth element|
 |length|Get the length of an array|Original array|the length of an array|
@@ -188,9 +188,9 @@ last([1,2,3,4]) = 4
 contains(2, [1,2,3,4]) = true
 ```
 
-## Hash function
+## Hash Function
 
-|function name|purpose|parameter|returned value|
+|Function Name|Purpose|Parameter|Returned Value|
 |--- |--- |--- |--- |
 |md5|evaluate MD5|data|MD5 value|
 |sha|evaluate SHA|data|SHA value|
@@ -203,16 +203,16 @@ sha('some val') = 'f85ba28ff5ea84a0cbfa118319acb0c5e58ee2b9'
 sha256('some val') = '67f97635d8a0e064f60ba6e8846a0ac0be664f18f0c1dc6445cd3542d2b71993'
 ```
 
-## Compresses and Uncompresses functions
+## Compress and Decompress Function
 
 | Function | Purpose |        Parameters         | Returned value |
 | -------- | -------------- |--------------- | --------------------|
 | `gzip` | Compresses data with gz headers and checksum. | Raw binary data | Compressed binary data |
-| `gunzip` | Uncompresses data with gz headers and checksum. | Compressed binary data | Raw binary data |
+| `gunzip` | Decompresses data with gz headers and checksum. | Compressed binary data | Raw binary data |
 | `zip` | Compresses data without zlib headers and checksum. |  Raw binary data | Compressed binary data |
-| `unzip` | Uncompresses data without zlib headers and checksum. | Compressed binary data | Raw binary data |
+| `unzip` | Decompresses data without zlib headers and checksum. | Compressed binary data | Raw binary data |
 | `zip_compress` | Compresses data with zlib headers and checksum. |  Raw binary data | Compressed binary data |
-| `zip_uncompress` | Uncompresses data with zlib headers and checksum. | Compressed binary data | Raw binary data |
+| `zip_uncompress` | Decompresses data with zlib headers and checksum. | Compressed binary data | Raw binary data |
 
 ```erlang
 bin2hexstr(gzip('hello world')) = '1F8B0800000000000003CB48CDC9C95728CF2FCA49010085114A0D0B000000'
@@ -225,13 +225,13 @@ bin2hexstr(zip_compress('hello world')) = '789CCB48CDC9C95728CF2FCA4901001A0B045
 zip_uncompress(hexstr2bin('789CCB48CDC9C95728CF2FCA4901001A0B045D')) = 'hello world'
 ```
 
-## Bit functions
+## Bit Functions
 
-| Function  | Purpose| Parameters| Returned value | 
+| Function  | Purpose| Parameters| Returned Value |
 |-----------|-------------|--------|----------------------|
 | `subbits` | Get a given length of bits from the beginning of a binary, and then convert it to an unsigned integer (big-endian).  | 1. The binary <br />2. The length of bits to get | The unsigned integer |
-| `subbits` | Get a given length of bits start from the specified offset of a binary, and then convert it to an unsigned integer (big-endian). Offsets are start from 1. | 1. The binary <br />2. The offset <br />3. The length of bits to get| The unsigned integer |
-| `subbits` | Get a given length of bits start from the specified offset of a binary, and then convert it to a data type according to the arguments provided. Offsets are start from 1. | 1. The binary <br />2. The offset <br />3. The length of bits to get <br />4. Data Type, can be one of 'integer', 'float', 'bits' <br />5. Signedness, only works for integers, can be one of 'unsigned', 'signed', <br />6. Endianness, only works for integers, can be one of 'big', 'little' | The data got from the binary |
+| `subbits` | Get a given length of bits starting from the specified offset of a binary, and then convert it to an unsigned integer (big-endian). Offsets start from 1. | 1. The binary <br />2. The offset <br />3. The length of bits to get| The unsigned integer |
+| `subbits` | Get a given length of bits starting from the specified offset of a binary, and then convert it to a data type according to the arguments provided. Offsets start from 1. | 1. The binary <br />2. The offset <br />3. The length of bits to get <br />4. Data Type, can be one of 'integer', 'float', 'bits' <br />5. Signedness, only works for integers, can be one of 'unsigned', 'signed', <br />6. Endianness, only works for integers, can be one of 'big', 'little' | The data got from the binary |
 
 ```erlang
 subbits('abc', 8) = 97
@@ -242,16 +242,16 @@ subbits('abc', 9, 16, 'integer', 'signed', 'little') = 25442
 ```
 
 
-## Decoding and encoding functions
+## Decoding and Encoding Function
 
-| Function | Purpose                             |        Parameters         | Returned value    |
+| Function | Purpose                             |        Parameters         | Returned Value   |
 | -------- | ------------------------------------|-------------------------- | --------------------------- |
 | `base64_encode` | BASE64 encode   | The binary to be encoded | The encoded base64-formatted string |
 | `base64_decode` | BASE64 decode   | The base64-formatted string to be decoded | The decoded binary |
 | `json_encode` | JSON encode   | The data to be encoded | The JSON string |
 | `json_decode` | JSON decode   | The JSON string to be decoded | The decoded data |
 | `bin2hexstr` | Binary to Hex String | The binary | The hex string |
-| `hexstr2bin` | Binary to Hex String | The hex string | The binary |
+| `hexstr2bin` | Binary to Hex String | The Hex string | The binary |
 
 ```erlang
 base64_encode('some val') = 'c29tZSB2YWw='
@@ -261,17 +261,17 @@ bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 ```
 
 {% emqxee %}
-| Function | Purpose                             |        Parameters         | Returned value |
+| Function | Purpose                             |        Parameters         | Returned Value |
 | -------- | ------------------------------------|------------------------- | --------------------------- |
-| `schema_encode` | Encode according to schema. The schema should be created before using this function | 1. The Schema ID defined by schema registry 2. The data to be encoded 3..N. The remaining arguments according to the schema type | The encoded data |
-| `schema_decode` | Decode according to schema. The schema should be created before using this function | 1. The Schema ID defined by schema registry 2. The data to be decoded 3..N. The remaining arguments according to the schema type | The decoded data |
+| `schema_encode` | Encode according to a schema. The schema should be created before using this function | 1. The Schema ID is defined by schema registry <br>2. The data to be encoded <br>3..N. The remaining arguments are according to the schema type | The encoded data |
+| `schema_decode` | Decode according to a schema. The schema should be created before using this function | 1. The Schema ID is defined by schema registry <br>2. The data to be decoded <br>3..N. The remaining arguments are according to the schema type | The decoded data |
 
 For examples of schema_encode() and schema_decode(), see [schema registry](schema-registry.md)
 {% endemqxee %}
 
-## Time and date functions
+## Time and Date Function
 
-| Function | Purpose                             |        Parameters         | Returned value |
+| Function | Purpose                             |        Parameters         | Returned Value |
 | -------- | ------------------------------------|-------------------------- | --------------------------- |
 | `now_timestamp` | Return the unix epoch of now in second | - | The unix epoch |
 | `now_timestamp` | Return the unix epoch of now, in given time unit | 1. The time unit | The unix epoch |
@@ -280,11 +280,11 @@ For examples of schema_encode() and schema_decode(), see [schema registry](schem
 | `unix_ts_to_rfc3339` | Convert an unix epoch (in second) to RFC3339 time string | 1. The unix epoch in second | The time string of format RFC3339 |
 | `unix_ts_to_rfc3339` | Convert an unix epoch to RFC3339 time string, using the given time unit | 1. The unix epoch </br>2. The time unit | The time string of format RFC3339 |
 | `rfc3339_to_unix_ts` | Convert a RFC3339 time string (in second) to unix epoch | 1. The time string of format RFC3339 | The unix epoch |
-| `rfc3339_to_unix_ts` | Convert a RFC3339 time string to unix epoch, using the given time unit | 1. The time string of format RFC3339 </br>2. The time unit | The unix epoch |
-| `format_date` | Timestamp to formatted time | 1. The time unit (refer to The time unit)</br>2. The time offset (refer to time offset definition)</br>3. The date format (refer to time string codec format)</br>4. The timestamp (optional parameter, default is current time)| Formatted time |
-| `date_to_unix_ts` | Formatted time to timestamp | 1. The time unit (refer to the following table for definition) </br>2. The time offset (optional, when not filled, use the time offset in the formatted time string, refer to the time offset definition) </br>3. The date format (refer to time string codec format) </br>4. The formatted time string | The unix epoch |
+| `rfc3339_to_unix_ts` | Convert a RFC3339 time string to unix epoch, using the given time unit | 1. The time string of format RFC3339 <br>2. The time unit | The unix epoch |
+| `format_date` | Timestamp to formatted time | 1. The time unit (refer to The time unit)<br>2. The time offset (refer to time offset definition)<br>3. The date format (refer to time string codec format)<br>4. The timestamp (optional parameter, default is current time) | Formatted time |
+| `date_to_unix_ts` | Formatted time to timestamp | 1. The time unit (refer to the following table for definition) <br>2. The time offset (optional, when not filled, use the time offset in the formatted time string, refer to the time offset definition) <br>3. The date format (refer to time string codec format) <br>4. The formatted time string | The unix epoch |
 
-The time unit
+### The time unit
 
 | Name | Precision | Example |
 | -- | -- | -- |
@@ -293,7 +293,7 @@ The time unit
 | `microsecond` | microsecond | 1653557892926417 |
 | `nanosecond` | nanosecond | 1653557916474793000 |
 
-Time string format
+### Time string format
 
 | Placeholder | Definition | Range |
 | -- | -- | -- |
@@ -310,7 +310,7 @@ Time string format
 | `%:z` | time offset [+\|-]HH:MM | -11:59 to +11:59 |
 | `%::z` | time offset [+\|-]HH:MM:SS | -11:59:59 to +11:59:59 |
 
-The time offset
+### The time offset
 
 | Offset | Definition | Examples |
 | -- | -- | -- |
@@ -340,11 +340,11 @@ date_to_unix_ts('second', '%Y-%m-%d %H-%M-%S', '2022-05-26 10:40:12') = 16535616
 ```
 
 {% emqxee %}
-| Function | Purpose                             |        Parameters         | Returned value |
+| Function | Purpose                             |        Parameters         | Returned Value |
 | -------- | ------------------------------------|-------------------------- | --------------------------- |
-| `mongo_date` | Create a mongodb ISODate type of now | - | the ISODate |
-| `mongo_date` | Create a mongodb ISODate type from the given unix epoch in millisecond | 1. unix epoch in millisecond | the ISODate |
-| `mongo_date` | Create a mongodb ISODate type from the given unix epoch in given time unit | 1. unix epoch 2. time unit, can be one of 'second', 'millisecond', 'microsecond' or 'nanosecond' | the ISODate |
+| `mongo_date` | Create a MongoDB ISODate type of now | - | the ISODate |
+| `mongo_date` | Create a MongoDB ISODate type from the given unix epoch in millisecond | 1. unix epoch in millisecond | the ISODate |
+| `mongo_date` | Create a MongoDB ISODate type from the given unix epoch in given time unit | 1. unix epoch 2. time unit, can be one of 'second', 'millisecond', 'microsecond' or 'nanosecond' | the ISODate |
 
 The time unit can be one of 'second', 'millisecond', 'microsecond' or 'nanosecond'.
 

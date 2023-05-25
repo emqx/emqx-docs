@@ -1,8 +1,8 @@
-# Available fields in rule engine SQL statements
-The fields available in the SELECT and WHERE clauses are related to the type of event. Among them, `clientid`, `username` and ` event` are common fields that is contained by each type of event.
+# SQL Statement Fields
+The fields available in the SELECT and WHERE clauses are related to the type of event. Among them, `clientid`, `username` and ` event` are common fields that are contained by each type of event.
 
-## Use Rule Engine SQL to Handle Message Publishing
-The SQL statement of the rules engine can handle the message publishing. In a rule statement, the user can specify one or more topics with the FROM clause, and the rule will be triggered when any message is published to the specified topic.
+## Message Publishing with Rule Engine
+The SQL statement of the rules engine can handle the message publishing. In a rule statement, the user can specify one or more topics with the `FROM` clause, and the rule will be triggered when any message is published to the specified topic.
 
 | Field               | Explanation                                               |
 | :------------------ | :-------------------------------------------------------- |
@@ -45,16 +45,16 @@ output
 }
 ```
 
-## Use Rule Engine SQL to Handle Events
+## Events Handling with Rule Engine
 The SQL statements of the rule engine can handle both messages (message publishing) and events (client online and offline, client subscription, etc.). For messages, the FROM clause is directly followed by the topic name; for events, the FROM clause is followed by the event topic.
 
 The topic of the event message starts with `"$events/"`, such as `"$events/client_connected",` `"$events/session_subscribed"`.
 If you want emqx to publish the event message, you can configure it in the `emqx_rule_engine.conf` file.
 
-### Event topic available for FROM clause
+### Event Topics for `FROM` Clause
 
-| Event topic name              | Explanation                     |
-|-------------------------------|:--------------------------------|
+| Event Topic Name              | Explanation                     |
+| ----------------------------- | :------------------------------ |
 | $events/message\_delivered    | Message delivery                |
 | $events/message\_acked        | Message acknowledged            |
 | $events/message\_dropped      | Message dropped when routing    |
@@ -393,4 +393,4 @@ output
 }
 ```
 
-[Rule engine buildin functions](./rule-engine_buildin_function.md)
+[Rule engine build-in functions](./rule-engine_buildin_function.md)
