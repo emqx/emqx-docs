@@ -55,24 +55,15 @@ After setting up the RabbitMQ server using the Docker image, you can create a te
    * **Name**: test_exchange
    * **Type**: Choose direct from the drop-down list
    * **Durability**: Choose Durable to make the exchange persistent
-   * **Auto-delete**: Leave unchecked
-   * **Internal**: Leave unchecked
-   * **Alternate-exchange**: Leave empty
+   * **Auto-delete**: No
+   * **Internal**: No
 3. Click on the "Add exchange" button to create the test exchange.
 4. Create a Test Queue: Click on the "Queues" tab in the top menu. In the "Add a new queue" section at the bottom of the page, input the following information:
    * **Name**: test_queue
    * **Durability**: Choose Durable to make the queue persistent
-   * **Auto-delete**: Leave unchecked
-   * **Message TTL**: Leave empty
-   * **Expires**: Leave empty
-   * **Max length**: Leave empty
-   * **Max length** bytes: Leave empty
-   * **Max priority**: Leave empty
-   * **Dead letter exchange**: Leave empty
-   * **Dead letter routing key**: Leave empty
 5. Click on the "Add queue" button to create the test queue.
 6. **Bind the Test Queue to the Test Exchange**: After creating the test queue, click on its name in the "Queues" tab to open its details page. Click on the "Bindings" tab under the queue name. In the "Add binding from an exchange" section, input the following information:
-   * **From**: Choose test_exchange from the drop-down list
+   * **From exchange**: test_exchange
    * **Routing key**: test_routing_key
    * **Arguments**: Leave empty
 7. Click on the "Bind" button to bind the test queue to the test exchange with the specified routing key.
@@ -96,9 +87,9 @@ Next, you can start creating an EMQX data bridge to RabbitMQ.
    * In the **Delivery Mode** dropdown, choose between `non_persistent` and `persistent`:
        * `non_persistent` (default): Messages are not persisted to disk and may be lost if RabbitMQ restarts or crashes.
        * `persistent`: Messages are persisted to disk, providing durability in case RabbitMQ restarts or crashes. Notice that you may also need to set the queue and exchange as durable to prevent messages from being lost in case RabbitMQ is restarted. See the documentation of RabbitMQ for more information.
-   * **Enable Publish Confirmations**: To ensure that messages are successfully published to RabbitMQ, you can enable publish confirmations. This feature ensures that the RabbitMQ broker acknowledges the receipt of a published message before considering it successfully published. Enabling publish confirmations can help improve the reliability of your message delivery. To enable publish confirmations, set the wait_for_publish_confirmations configuration option to true. By default, this option is set to true, so publish confirmations are enabled by default.
+   * **Wait for Publish Confirmations**: To ensure that messages are successfully published to RabbitMQ, you can enable publish confirmations. This feature ensures that the RabbitMQ broker acknowledges the receipt of a published message before considering it successfully published. Enabling publish confirmations can help improve the reliability of your message delivery. To enable publish confirmations, set the "Wait for Publish Confirmations" configuration option to true. By default, this option is set to true, so publish confirmations are enabled by default.
    * **Set Publish Confirmation Timeout**: The publish confirmation timeout determines the duration the publisher will wait for the broker's acknowledgment before considering the publish operation a failure.
-   * **Payload Template**: The payload template field allows you to define a custom message payload format that will be sent to the RabbitMQ exchange. You can use placeholders within the template to dynamically include data from the incoming MQTT messages. These placeholders are enclosed in `${}` and will be replaced by the actual values from the message when it is forwarded to the RabbitMQ server. For example, if you want to include the MQTT message payload and its timestamp in the RabbitMQ message, you can use the template like this: {"payload": "${data}", "timestamp": ${timestamp}}. This template will produce a JSON-formatted message containing the payload and timestamp of the incoming MQTT message. The default value for the payload template field is an empty string, which means the message payload will be forwarded to RabbitMQ without any modification as JSON formatted text.
+   * **Payload Template**: The payload template field allows you to define a custom message payload format that will be sent to the RabbitMQ exchange. You can use placeholders within the template to dynamically include data from the incoming MQTT messages. These placeholders are enclosed in `${}` and will be replaced by the actual values from the message when it is forwarded to the RabbitMQ server. For example, if you want to include the MQTT message payload and its timestamp in the RabbitMQ message, you can use the template like this: {"payload": "${payload}", "timestamp": ${timestamp}}. This template will produce a JSON-formatted message containing the payload and timestamp of the incoming MQTT message. The default value for the payload template field is an empty string, which means the message payload will be forwarded to RabbitMQ without any modification.
 6. Then click **Create** to finish the creation of the data bridge.
 
 Now the RabbitMQ data bridge should appear in the data bridge list (**Data Integration -> Data Bridge**) with Resource Status as Connected. You can continue to create a rule to forward data to the new RabbitMQ bridge.
@@ -139,7 +130,7 @@ Click **Diagnose -> WebSocket** Client in the left navigation menu of the Dashbo
    * **QoS**: 2
 4. Click **Publish** to send the message.
 
-If everything has gone according to plan, a message should have been published to the specified exchange in the RabbitMQ server with the specified routing key. You can check this by visiting the RabbitMQ Management Console at http://localhost:15672 (use guest as both username and password if you haven't changed the default settings) and navigating to the Queues section to verify the message has been routed to the appropriate queue(s).
+If everything has gone according to plan, a message should have been published to the specified exchange in the RabbitMQ server with the specified routing key. You can check this by visiting the RabbitMQ Management Console at http://localhost:15672 (use guest as both username and password if you haven't changed the default settings) and navigating to the Queues section to verify the message has been routed to the appropriate queue(s). To see the message content, click on the the queue to see details and then on the "Get Message(s)" button.
 
 If everything is working correctly, you should see the message Hello World RabbitMQ from EMQX in the appropriate queue(s) in RabbitMQ.
 
