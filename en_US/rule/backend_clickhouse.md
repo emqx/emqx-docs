@@ -34,9 +34,9 @@ create table t_mqtt_msg (msgid Nullable(String), topic Nullable(String), clienti
 
 ![](./assets/rule-engine/clickhouse_0.png)
 
-## **Create the Rule**
+## Create the Rule
 
-Go to the [EMQX Dashboard](http://127.0.0.1:18083/#/rules), and type in the follwing SQL:
+Go to the [EMQX Dashboard](http://127.0.0.1:18083/#/rules), and type in the following SQL:
 
 ```sql
 SELECT * FROM "#"
@@ -84,4 +84,4 @@ Payload: "hello"
 
 And then we can verify if the message is inserted into the ClickHouse table:
 
-![image](./assets/rule-engine/clickhouse_8.png)
+<img src="./assets/rule-engine/clickhouse_8.png" alt="image" style="zoom:50%;" />
