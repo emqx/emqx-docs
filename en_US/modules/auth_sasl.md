@@ -4,9 +4,7 @@ EMQX also supports the MQTT 5.0 enhanced authentication. This authenticator impl
 
 SCRAM is a more complicated mechanism than password verification. It requires exchanging additional MQTT packages during connection. SCRAM authentication does not depend on external data sources, and it is simple and lightweight to use.
 
-TIP
-
-SCRAM authenticator only supports MQTT 5.0 connection.
+Note: SCRAM authenticator only supports MQTT 5.0 connection.
 
 
 

@@ -33,7 +33,7 @@ Note that when the QoS and Retain use placeholder variables and the parameters o
 
 ![image](./assets/rule-engine/republish/action.png)
 
-## Usage
+## Test the Action
 
 Using the desktop MQTT client MQTTX, set the clientid to `123456`, connect to the device and subscribe to `repub/to/#`.
 

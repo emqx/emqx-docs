@@ -1,14 +1,16 @@
 # Ingest Data into Oracle DB
 
+## Setup Oracle Database and Create Table
+
 Create t_mqtt_msg table:
 
 ```sql
 CREATE TABLE t_mqtt_msg (msgid VARCHAR2(64),topic VARCHAR2(255), qos NUMBER(1), payload NCLOB)
 ```
 
-![image](./assets/rule-engine/oracle_action_1.png)
+<img src="./assets/rule-engine/oracle_action_1.png" alt="image" style="zoom:50%;" />
 
-Create rules:
+## Create Rules
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
 
@@ -18,13 +20,13 @@ Fill in the rule SQL:
 SELECT * FROM "t/#"
 ```
 
-![image](./assets/rule-engine/rule_sql.png)
+<img src="/Users/lena/Documents/GitHub/rebalancing/emqx-docs/en_US/rule/assets/rule-engine/rule_sql.png" alt="image-20230522183143104" style="zoom:50%;" />
 
-Related actions:
+## Add an Action
 
 In the "Response Action" interface, select "Add", and then select "Save Data to Oracle Database" in the "Action" drop-down box.
 
-![image](./assets/rule-engine/oracle_action_2.png)
+<img src="./assets/rule-engine/oracle_action_2.png" alt="image-20230522182757372" style="zoom:50%;" />
 
 Fill in the action parameters:
 
@@ -42,21 +44,15 @@ Fill in the resource configuration:
 
 ![image](./assets/rule-engine/oracle_action_3.png)
 
-Note: for the connection to Oracle Real Applications Cluster (RAC) to work properly, the "Service Name" field must be filled correctly.  If left empty, it defaults to the Database SID.
+Note: for the connection to Oracle Real Applications Cluster (RAC) to work properly, the "Service Name" field must be filled in correctly.  If left empty, it defaults to the Database SID.
 
 Click the "New" button.
 
-Return to the response action interface and click "OK".
+Return to the response action interface and click "OK". Then return to the rule creation interface and click "Create".
 
-![image](./assets/rule-engine/oracle_action_4.png)
+In the rule list, you can click the "View" button or the rule ID connection to preview the rule just created. 
 
-Return to the rule creation interface and click "Create".
-
-![image](./assets/rule-engine/oracle_action_5.png)
-
-In the rule list, click the "View" button or the rule ID connection to preview the rule just created:
-
-![image](./assets/rule-engine/oracle_action_6.png)
+## Test the Rule
 
 The rule has been created. Now, send a piece of data:
 
@@ -66,6 +62,4 @@ QoS: 1
 Payload: "hello"
 ```
 
-View the number of rule hits
-
-![image](./assets/rule-engine/oracle_action_7.png)
+View the number of rule hits, it should now be 1. 

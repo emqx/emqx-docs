@@ -8,7 +8,7 @@ After the hot configuration in EMQX is activated, for the configuration items in
 For the other configuration items, you can still modify with the configuration file and these changes will take effect after EMQX restarts.
 :::
 
-## Create module
+## Create Module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules) and click on the "Modules" tab on the left:
 
@@ -23,6 +23,6 @@ After clicking the selection, the module is added:
 
 ![](./assets/hot_confs2.png)
 
-emqx provides more configuration modifications in dashboard, including basic configuration, zones, listeners, monitoring alarms, etc.
+EMQX provides more configuration modifications in dashboard, including basic configuration, zones, listeners, monitoring alarms, etc.
 
 ![](./assets/hot_confs3.png)

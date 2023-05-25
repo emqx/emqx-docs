@@ -1,6 +1,6 @@
 # Ingest Data into DolphinDB
 
-[DolphinDB](https://www.dolphindb.cn) is a high-performance distributed time series database developed by Zhejiang  DolphinDB Co., Ltd, which integrates powerful programming language and high-capacity and high-speed flow data analysis system, providing a one-stop solution for rapid storage, retrieval, analysis and calculation of massive structured data. It is suitable for the area of quantitative finance and industrial Internet of things.
+[DolphinDB](https://www.dolphindb.cn) is a high-performance distributed time series database developed by Zhejiang  DolphinDB Co., Ltd, which integrates a powerful programming language into the high-capacity and high-speed flow data analysis system, providing a one-stop solution for rapid storage, retrieval, analysis, and calculation of massive structured data. It is suitable for the area of quantitative finance and the Industrial Internet of things.
 
 EMQX uses Erlang to implement DolphinDB's client API, which transmits data to DolphinDB for storage through TCP.
 
@@ -81,9 +81,7 @@ For detailed DolphinDB usage documentation, please refer to:
 - Stream processing guidelines: https://github.com/dolphindb/Tutorials_CN/blob/master/streaming_tutorial.md
 - Programming manual: https://www.dolphindb.cn/cn/help/index.html
 
-## Configure the rules engine
-
-Create rules:
+## Create Rules
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
 
@@ -95,11 +93,11 @@ SELECT * FROM "t/#"
 
 ![image](./assets/rule-engine/rule_sql.png)
 
-Related actions:
+## Add an Action
 
 On the "Response Action" interface, select "Add", and then select "Save Data to DolphinDB" in the "Action" drop-down box.
 
-![image](./assets/rule-engine/dolphin_action_1.jpg)
+<img src="./assets/rule-engine/dolphin_action_1.jpg" alt="image" style="zoom:50%;" />
 
 Fill in the action parameters:
 
@@ -115,13 +113,13 @@ insert into st_msg values(${clientid}, ${topic}, ${qos}, ${payload})
 
 Fill in the server address corresponding to the DolphinDB server deployed above. The user name is `admin` and the password is `123456`
 
-![image](./assets/rule-engine/dolphin_res_1.jpg)
+<img src="./assets/rule-engine/dolphin_res_1.jpg" alt="image" style="zoom:50%;" />
 
 Click the "OK" button.
 
 Return to the response action interface and click "OK".
 
-![image](./assets/rule-engine/dolphin_action_2.jpg)
+<img src="./assets/rule-engine/dolphin_action_2.jpg" alt="image" style="zoom:50%;" />
 
 Return to the rule creation interface and click "Create".
 
@@ -130,6 +128,8 @@ Return to the rule creation interface and click "Create".
 In the rule list, click the "View" button or the rule ID connection to preview the rule just created:
 
 ![image](./assets/rule-engine/dolphin_overview.jpg)
+
+## Test the Rule
 
 The rule has been created. Now, send a piece of data:
 

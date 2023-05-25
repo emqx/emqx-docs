@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# Configuration from environment variable
+# Environment Variables
 
 By default, EMQX maps environment variables with prefix ``EMQX_``
 to key-value pairs in configuration files.
@@ -39,5 +39,5 @@ Start http:management listener on 9000 successfully.
 
 ::: tip Tip
 Configuration values from environment variables do not persist.
-After a restart from other shell, previous values do not have any effect.
+After a restart from other shells, previous values do not have any effect.
 :::

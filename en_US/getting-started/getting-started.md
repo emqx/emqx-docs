@@ -111,7 +111,7 @@ For Kubernetes, EMQ offers [EMQX Kubernetes Operator](https://www.emqx.com/en/em
 
 EMQX Kubernetes Operator is an application orchestration tool based on Kubernetes native API,
 which is used for the automatic deployment and lifecycle management of EMQX clusters.
-You can refer to the [documentation](https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html)
+You can refer to the [EMQX Operator Documentation](https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html)
 to learn how to deploy EMQX using the Operator.
 
 ### Deploy EMQX with Terraform
@@ -219,9 +219,9 @@ You can use the following client tools or client libraries to access EMQX
 
 EMQX dashboard comes with a built-in, WebSocket-based MQTT client.
 
-Open Dashboard and enter the page of **Tools -> Websocket**, where you can use the MQTT over WebSocket client to quickly access EMQX.
+Open Dashboard and enter the page of **Tools -> WebSocket**, where you can use the MQTT over WebSocket client to quickly access EMQX.
 
-The Websocket page provides you with a simple but effective WebSocket client tool, which can be used for publishing, subscribing, and inspecting messages.
+The WebSocket page provides you with a simple but effective WebSocket client tool, which can be used for publishing, subscribing, and inspecting messages.
 
 ![emqx-mqtt-websocket-tool-en](./assets/emqx-mqtt-websocket-tool-en.png)
 

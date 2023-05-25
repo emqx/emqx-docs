@@ -99,7 +99,7 @@ python3 -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./pro
 python3 emqx_schema_registry_server.py
 ```
 
-## Checking Rule Execution Results
+## Test the Rule
 
 Since this example is relatively simple, we'll use the MQTT Websocket client directly to simulate sending a message on the device side.
 

@@ -6,7 +6,7 @@ PostgreSQL Authentication/ACL uses an external PostgreSQL database as a data sou
 
 Open the PostgreSQL official website: https://www.postgresql.org/download/, select the version you need, here we choose the PostgreSQL version as macos-10.13
 
-![image-20200928140039111](./assets/auth_pg1.png)
+<img src="./assets/auth_pg1.png" alt="image-20200928140039111" style="zoom:50%;" />
 
 After the installation is complete, start PostgreSQL.
 
@@ -85,11 +85,11 @@ You can use AS syntax in SQL to specify a password for field renaming, or set th
 
 :::
 
-Note: In the default table structure, we set the username field as a unique index (UNIQUE), and use it with the default query statement (`select password from mqtt_user where username ='%u' limit 1`) to get very good query performance.
+Note: In the default table structure, we set the username field as a unique index (UNIQUE), and use it with the default query statement (`select password from mqtt_user where username ='%u' limit 1`) to get good query performance.
 
 If the default query conditions do not meet your needs, for example, you need to query the corresponding `Password Hash` and `Salt` based on the `Client ID`, please make sure to set the `Client ID` as an index; Or you want to perform multi-condition queries on `Username`, `Client ID`, or other fields. It is recommended to set the correct single-column index or multiple-column index. In short, set the correct table structure and query statement, and try not to let the index fail and affect the query performance.
 
-### Encryption rules
+### Encryption Rules
 
 ```shell
 ## No salt, plain text
@@ -111,7 +111,7 @@ pbkdf2,sha256,1000,20
 
 :::tip
 
-Refer to: [Salt rules and hash methods](https://docs.emqx.io/en/broker/latest/advanced/auth.html#password-salting-rules-and-hash-methods).
+Refer to: [Salt rules and hash methods](../advanced/auth.md#password-salting-rules-and-hash-methods).
 
 :::
 
@@ -195,7 +195,7 @@ You can adjust the super user SQL according to business needs, such as adding mu
 1. The query result must include the is_superuser field, and is_superuser should be explicitly true
 2. There can only be one query result, if there are multiple results, only the first one is taken as valid data
 
-::: tip
+:::tip
 
 If the super user function is not needed, commenting and disabling this option can effectively improve efficiency
 

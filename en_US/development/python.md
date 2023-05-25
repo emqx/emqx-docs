@@ -14,9 +14,9 @@ ref:
 ---
 
 
-# MQTT Python client library
+# MQTT Python Client Library
 
-[Eclipse Paho Python](https://github.com/eclipse/paho.mqtt.python) is a Python language client library under the Eclipse Paho project, which can connect to MQTT Broker to publish messages, subscribe to topics and receive Published message.
+[Eclipse Paho Python](https://github.com/eclipse/paho.mqtt.python) is a Python language client library under the Eclipse Paho project, which can connect to MQTT Broker to publish messages, subscribe to topics and receive published messages.
 
 Install using the PyPi package management tool:
 
@@ -24,7 +24,13 @@ Install using the PyPi package management tool:
 pip install paho-mqtt
 ```
 
-## Paho Python usage example
+:::tip
+
+Currently, Paho Python has fully supported MQTT 5.0.
+
+:::
+
+## Quick Start Tutorial
 
 This example contains the complete code of Paho Python in Python connecting to EMQX Broker, sending and receiving messages:
 
@@ -54,8 +60,3 @@ client.publish('emqtt',payload='Hello World',qos=0)
 
 client.loop_forever()
 ```
-
-
-## Paho Python MQTT 5.0 support
-
-Currently, Paho Python is still adapting to MQTT 5.0 and has not yet been fully supported it.

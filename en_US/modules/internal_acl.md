@@ -3,11 +3,11 @@
 The built-in ACL sets rules through files, which is simple and lightweight enough to use, and is suitable for projects with a predictable number of rules, no changes in demand, or small changes.
 
 
-## built-in ACL File
+## Built-in ACL File
 
-built-in ACL module is enabled by default, it could be updated or stopped by Dashboard but can not be deleted.
+Built-in ACL module is enabled by default, it could be updated or stopped by Dashboard but can not be deleted.
 
-![image-20200927213049265](./assets/acl_file4.png)
+<img src="./assets/acl_file4.png" alt="image-20200927213049265" style="zoom:50%;" />
 
 Editing ACL file content directly, or select a file to replace
 
@@ -51,50 +51,58 @@ It can be seen that the default ACL is mainly to restrict the client's authority
 
 The rules in the `acl.conf` file are matched from top to bottom in the order of writing.
 
-The grammar rules of ʻacl.conf` are contained in the comments at the top. Those familiar with Erlang grammar can directly read the comments at the top of the file. Or refer to the following interpretation:
+The grammar rules of `acl.conf` are contained in the comments at the top. Those familiar with Erlang grammar can directly read the comments at the top of the file. Or refer to the following interpretation:
 
--Use `%%` to indicate line comments.
+- Use `%%` to indicate line comments.
 
--Each rule consists of a four-tuple and ends with `.`.
+- Each rule consists of a four-tuple and ends with `.`
 
--The first place of the tuple: indicates that the permission control operation is performed after the rule is successfully hit. The possible values ​​are:
+- The first place of the tuple: indicates that the permission control operation is performed after the rule is successfully hit. The possible values ​​are:
 
- * `allow`: means `allow`
+  - `allow`: means `allow`
 
- * `deny`: means `deny`
+  - `deny`: means `deny`
 
--The second digit of the tuple: indicates the user whose rule takes effect, and the available formats are:
+- The second digit of the tuple: indicates the user whose rule takes effect, and the available formats are:
 
- * `{user, "dashboard"}`: indicates that the rule only takes effect for the user whose *Username (Username)* is "dashboard"
+   * `{user, "dashboard"}`: indicates that the rule only takes effect for the user whose *Username (Username)* is "dashboard"
 
- * `{client, "dashboard"}`: indicates that the rule only takes effect for users whose *client ID (ClientId)* is "dashboard"
 
- * `{ipaddr, "127.0.0.1"}`: indicates that the rule only takes effect for users whose source address is "127.0.0.1"
+   * `{client, "dashboard"}`: indicates that the rule only takes effect for users whose *client ID (ClientId)* is "dashboard"
 
- * `all`: indicates that the rule is effective for all users
 
--The third position of the tuple: indicates the operation controlled by the rule, and the possible values ​​are:
+   * `{ipaddr, "127.0.0.1"}`: indicates that the rule only takes effect for users whose source address is "127.0.0.1"
 
- * `publish`: indicates that the rule is applied to PUBLISH operations
 
- * `subscribe`: indicates that the rule is applied to the SUBSCRIBE operation
+   * `all`: indicates that the rule is effective for all users
 
- * `pubsub`: indicates that the rule is valid for both PUBLISH and SUBSCRIBE operations
 
--The fourth place of the tuple: indicates the list of topics restricted by the rule, the content is given in the format of an array, for example:
+- The third position of the tuple: indicates the operation controlled by the rule, and the possible values ​​are:
 
- * `$SYS/#`: It is a **topic filter (Topic Filter)**; it means that the rule can hit the topic that matches `$SYS/#`; for example, it can hit "$SYS/#" , You can also hit "$SYS/a/b/c"
+   * `publish`: indicates that the rule is applied to PUBLISH operations
 
- * `{eq, "#"}`: indicates the congruence of characters. The rule can only hit the string with subject `#`, not `/a/b/c` etc.
 
--In addition, there are two special rules:
+   * `subscribe`: indicates that the rule is applied to the SUBSCRIBE operation
 
--`{allow, all}`: Allow all operations
 
--`{deny, all}`: Deny all operations
+   * `pubsub`: indicates that the rule is valid for both PUBLISH and SUBSCRIBE operations
+
+
+- The fourth place of the tuple: indicates the list of topics restricted by the rule, the content is given in the format of an array, for example:
+
+   * `$SYS/#`: It is a **topic filter (Topic Filter)**; it means that the rule can hit the topic that matches `$SYS/#`; for example, it can hit "$SYS/#", you can also hit "$SYS/a/b/c"
+
+
+   * `{eq, "#"}`: indicates the congruence of characters. The rule can only hit the string with subject `#`, not `/a/b/c` etc.
+
+
+In addition, there are two special rules:
+
+- `{allow, all}`: Allow all operations
+- `{deny, all}`: Deny all operations
 
 ::: tip
 
-acl.conf should only contain some simple and general rules, making it the basic ACL principle of the system. If you need to support complex and massive ACL content, you can choose external resources to implement it.
+`acl.conf` should only contain some simple and general rules, making it the basic ACL principle of the system. If you need to support complex and massive ACL content, you can choose external resources to implement it.
 
 :::

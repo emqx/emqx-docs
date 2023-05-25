@@ -2,7 +2,7 @@
 
 HStreamDB is a streaming database designed for streaming data, with complete lifecycle management for accessing, storing, processing, and distributing large-scale real-time data streams. It uses standard SQL (and its stream extensions) as the primary interface language, with real-time as the main feature, and aims to simplify the operation and management of data streams and the development of real-time applications.
 
-![image](./assets/rule-engine/HStreamDB/HStream.png)
+<img src="./assets/rule-engine/HStreamDB/HStream.png" alt="image" style="zoom:50%;" />
 
 For more details, please refer to [HStream official website](https://hstream.io/)。
 
@@ -43,13 +43,13 @@ demo_stream
 >
 ```
 
-## Create HStreamDB resource
+## Create a Rule
 
 Access EMQX Dashboard, Click on Rules Engine, Resources, Create, select HStreamDB Resources, enter the resource address and link pool.
 
 ![image](./assets/rule-engine/HStreamDB/create_resource.png)
 
-## Create Rule
+
 
 Click on `Rules Engine` > `Resources` > `Create`, then select resources type HStreamDB.
 
@@ -67,6 +67,8 @@ FROM
 
 The SQL rules in the document are for demonstrations only, please write the SQL according to the business design.
 
+## Add an Action
+
 Click Add Action and select Data Persistence to save the data to HSTreamDB.
 Select the resource created in the previous step and enter the parameters, which are defined in the following table.
 
@@ -83,6 +85,8 @@ Click `Confirm` to create it.
 
 ![image](./assets/rule-engine/HStreamDB/create_rule.png)
 
+## Test the Rule
+
 Now use the state-of-the-art MQTT desktop client `MQTTX` to connect to EMQX and send a message.
 
 ![image](./assets/rule-engine/HStreamDB/send_msg.png)
@@ -91,7 +95,7 @@ See rule monitor.
 
 ![image](./assets/rule-engine/HStreamDB/rule_res.png)
 
-At this point the data is written to HStreamDB and the message is consumed using any consumption method. The documentation uses a simple consumption tool based on the HStream golang SDK, and the reader is free to write the consumption side according to a familiar programming language. The consumption log can be seen as follows.
+At this point, the data is written to HStreamDB and the message is consumed using any consumption method. The documentation uses a simple consumption tool based on the HStream golang SDK, and the reader is free to write the consumption side according to a familiar programming language. The consumption log can be seen as follows.
 Test tool see [fetcher](https://github.com/hstreamdb/fetcher).
 
 ```shell

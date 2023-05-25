@@ -1,4 +1,4 @@
-# Custom codec example - Protobuf
+# Custom Codec Example - Protobuf
 
 ## Rule Requirements
 
@@ -14,7 +14,7 @@ In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of 
 
 2. Codec Type: protobuf
 
-3. Schema: The following protobuf schema defines a Person message.
+3. Schema: The following protobuf schema defines a message about some person.
 
 ```protobuf
 message Person {
@@ -26,7 +26,7 @@ message Person {
 
 ## Creating Rules
 
-**Use the Schema you have just created to write the rule SQL statement:**
+Use the Schema you have just created to write the rule SQL statement:
 
 ```sql
 SELECT
@@ -69,7 +69,7 @@ def publish_msg(client):
     client.publish(topic, payload=message, qos=0, retain=False)
 ```
 
-## Checking Rule Execution Results
+## Test the Rule
 
 1)  In the Dashboard's [Websocket](http://127.0.0.1:18083/#/websocket) tools, log in to an MQTT Client and subscribe to "person/#".
 

@@ -29,7 +29,7 @@ If there is a firewall between cluster nodes, the firewall needs to open TCP por
 **ekka Mode (Default Mode Since Version 4.0：**
 
 In `ekka` mode, the port mapping is conventional, but not dynamic as in `epmd` mode.
-The configurations of `node.dist_listen_min` and `node.dist_listen_max` take no effect in this case.
+The configurations of `node.dist_listen_min` and `node.dist_listen_max` takes no effect in this case.
 
 If there is a firewall between the cluster nodes, the conventional listening port should be allowed
 for nodes to connect to each other. See below for the port mapping rule in `ekka` mode.
@@ -46,7 +46,7 @@ Each EMQX node also listens on a (conventional) port for the RPC channels, which
 
 ## EMQX Cluster Protocol Setting
 
-Each node in the Erlang cluster can be connected through TCPv4, TCPv6 or TLS, and the connection method can be configured in`etc/emqx.conf`:
+Each node in the Erlang cluster can be connected through TCPv4, TCPv6, or TLS, and the connection method can be configured in`etc/emqx.conf`:
 
 | Configuration name    | Type      | Default value       | Description                                                  |
 | --------------------- | --------- | ------------------- | ------------------------------------------------------------ |

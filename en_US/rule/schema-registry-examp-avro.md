@@ -1,4 +1,4 @@
-# Custom codec example - Avro
+# Custom Codec Example - Avro
 
 ## Rule Requirements
 
@@ -71,7 +71,7 @@ def publish_msg(client):
     client.publish(topic, payload=message, qos=0, retain=False)
 ```
 
-## Check Rule Execution Results
+## Test the Rule
 
 1)  In the Dashboard's [Websocket](http://127.0.0.1:18083/#/websocket) tools, log in to an MQTT Client and subscribe to "avro_user/#".
 

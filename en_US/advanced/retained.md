@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# Retained
+# Retained Message
 
 ## Introduction
 
@@ -34,8 +34,8 @@ The `emqx_retainer` plugin is enabled by default, and the configuration path of 
 | retainer.storage_type          | enum     | `ram`, `disc`, `disc_only` | ram |ram: only stored in memory; <br /> disc: stored in memory and hard disk; <br /> disc_only: only stored in hard disk|
 | retainer.max_retained_messages | integer  | \>= 0                    | 0      | The maximum number of retained messages, and 0 means no limit. After the number of retained messages exceeds the maximum limit, you can replace the existing retained messages, but cannot store retained messages for new topics. |
 | retainer.max_payload_size      | bytesize |                          | 1MB    | Retain the maximum Payload value of the message. After the Payload value exceeds the maximum value, the EMQX broker will treat the retained reserved message as a normal message. |
-| retainer.expiry_interval       | duration |                          | ０     | The expiration time of retaining message, and 0 means never expire. If the message expiration interval is set in the PUBLISH packet, the message expiration interval in the PUBLISH packet shall prevail. |
+| retainer.expiry_interval       | duration |                          | ０     | The expiration time of the retained message, and 0 means never expire. If the message expiration interval is set in the PUBLISH packet, the message expiration interval in the PUBLISH packet shall prevail. |
 
-::: tip
+:::tip
 EMQX Enterprise can store retained messages to various external databases
 :::

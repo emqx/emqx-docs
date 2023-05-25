@@ -31,7 +31,7 @@ Click the node drop-down list to switch to view the basic information of the nod
 
   - Memory: The current memory/maximum memory used by the Erlang VM, **where the maximum memory is automatically applied to the system by EMQX depending on the resource usage**.
   - Max Fds: Allow the current session/process to open the number of file handles. If this value is too small, it will limit the EMQX
-    concurrency performance. When it is far less than the maximum number of connections authorized by the license, please refer to the tuning or contact the EMQ technical staff to modify;
+    concurrency performance. When it is far less than the maximum number of connections authorized by the license, please refer to the tuning or contact the EMQ technical staff to modify it;
   - Erlang Process, Connections, Topics, Subscriptions, Retained, Share Subscription: It is divided into two groups by `/` which are the current value and the maximum value.
 
 ![image-20200304161123450](./assets/dashboard-ee/image-20200304161123450.png)
@@ -42,9 +42,9 @@ Click the button group on the right side of the node data area to switch to the 
 
 ![image-20200304161147766](./assets/dashboard-ee/image-20200304161147766.png)
 
-### Nde details
+### Nde Details
 
-Click the **View More** button below the node data to open the node details page, view the **basic information** of the current node, the *listener** and connection status, and **metrics**.
+Click the **View More** button below the node data to open the node details page, view the **basic information** of the current node, the **listener** and connection status, and **metrics**.
 
 #### Listener
 
@@ -58,10 +58,10 @@ The field information is as follows:
         is 512
       - <http:management>: HTTP protocol used by EMQX REST API, the
         default is 512
-      - mqtt:ws :MQTT over WebSocket, the default is 102400
+      - mqtt:ws: MQTT over WebSocket, the default is 102400
       - mqtt:wss: MQTT over WebSocket TLS, the default is 102400
   - Address: Listen to the bound network address and port. Listen to all IP addresses by default;
-  - Acceptors: listening the processor thread pool;
+  - Acceptors: Listen to the processor thread pool;
   - Connect: It contains a set of current/maximum values. The current value is the actual number of established connections. The maximum value is the maximum number of connections configured in the configuration file. **If any listener exceeds the maximum value, a new connection cannot be established.**
 
 #### About the maximum number of connections
@@ -90,7 +90,7 @@ You can view the license information of the cluster by monitoring the license ca
 
 EMQ will issue a mailbox through email notification before the certificate expires. Please pay attention to receiving information so as not to miss the renewal time, which will affect the business.
 
-![image-20200304161239961](./assets/dashboard-ee/image-20200304161239961.png)
+<img src="./assets/dashboard-ee/image-20200304161239961.png" alt="image-20200304161239961" style="zoom:50%;" />
 
 ## Connections
 
@@ -135,11 +135,11 @@ development process, improves user usability, and reduces the degree of coupling
 
 ![image-20200304161544424](./assets/dashboard-ee/image-20200304161544424.png)
 
-### Create Rule
+### Create Rules
 
 EMQX will trigger the Rule Engine when the message is published and the event is triggered, and the rules meeting the triggering conditions will execute their respective SQL statements to filter and process the context information of the message and event.
 
-With the Actions, the Rule Engine can store the message processing results of a specified topic to the database, send them to the HTTP Server, forward them to the Kafka or RabbitMQ, and republish them to a new topic or another broker cluster like Azure IoT Hub. Each rule can allocate multiple Actions.
+With the Actions, the Rule Engine can store the message processing results of a specified topic in the database, send them to the HTTP Server, forward them to the Kafka or RabbitMQ, and republish them to a new topic or another broker cluster like Azure IoT Hub. Each rule can allocate multiple Actions.
 
 1.  Select the messages published to t/\# and select all fields:
 
@@ -157,9 +157,9 @@ SELECT * FROM "message.publish" WHERE topic =~ 't/#'
 SELECT payload.x as x FROM "message.publish" WHERE topic =~ 't/a'
 ```
 
-The Rule Engine uses the **Events** to process the built-in events of EMQX. the built-in events provide more sophisticated message control and client action processing capabilities, which can be used in the message arrival records of QoS 1 and QoS 2, the device up and down line records and other businesses.
+The Rule Engine uses the **Events** to process the built-in events of EMQX. the built-in events provide more sophisticated message control and client action processing capabilities, which can be used in the message arrival records of QoS 1 and QoS 2, the device up and down line records, and other businesses.
 
-1.  Select the client connected event, filter the device with Username 'emqx' and select the connection information:
+1.  Select the client connected event, filter the device with Username 'emqx', and select the connection information:
 
 <!-- end list -->
 
@@ -171,9 +171,9 @@ SELECT clientid, connected_at FROM "client.connected" WHERE username = 'emqx'
 
 ## Resource
 
-The resource instances (such as database instance and Web Server ) required by the Rule Engine action. Before creating a rule, you need to create the resources required for the relevant action and ensure that the resources are available.
+The resource instances (such as database instances and Web Server) are required by the Rule Engine action. Before creating a rule, you need to create the resources required for the relevant action and ensure that the resources are available.
 
-### Resource list
+### Resource List
 
   - ID: Unique ID within the cluster, which can be used in CLI and REST API.
   - Status: After the resource is created, each node in the cluster will establish a connection with the resource, click to expand the resource status on the node.
@@ -194,7 +194,7 @@ Schema Registry supports Protobuf, Avro, and private message encoding parsing an
 
 ## Alarm
 
-The alarm shows the basic alarm information of EMQX, including current alarm and historical alarm. More advanced alarm, log and monitoring management is provided by EMQX Control Center, please contact EMQ technicians if necessary.
+The alarm shows the basic alarm information of EMQX, including the current alarm and historical alarm. More advanced alarm, log, and monitoring management is provided by EMQX Control Center, please contact EMQ technicians if necessary.
 
 ![image-20200304162147114](./assets/dashboard-ee/image-20200304162147114.png)
 
@@ -202,13 +202,13 @@ The alarm shows the basic alarm information of EMQX, including current alarm and
 
 View the list of EMQX built-in plugins.
 
-Unlike the command line plugin management, the plugin starts and stop operations on the Dashboard are synchronized to the cluster. If the plugin fails to start, check whether the configuration of each node in the cluster is correct. If any node fails to start, the plugin cannot be successfully started.
+Unlike the command line plugin management, the plugin starts and stops operations on the Dashboard and is synchronized to the cluster. If the plugin fails to start, check whether the configuration of each node in the cluster is correct. If any node fails to start, the plugin cannot be successfully started.
 
 ![image-20200304162200809](./assets/dashboard-ee/image-20200304162200809.png)
 
 ## Tool
 
-It provides MQTT over WebScoket client test tool, which can realize the publish and subscribe test of multiple mqtt connections at the same time.
+It provides MQTT over the WebSocket client test tool, which can realize the publish and subscribe test of multiple MQTT connections at the same time.
 
 ## Setting
 
@@ -216,7 +216,7 @@ Provides parameter configuration for the EMQX cluster and supports hot configura
 
 ### Basic
 
-Some basic configuration items that can be hot updated in`emqx.conf` are opened in the settings. You can complete most configuration items such as whether to enable anonymous authentication, ACL cache events, and ACL cache switches without restarting EMQX.
+Some basic configuration items that can be hot updated in `emqx.conf` are opened in the settings. You can complete most configuration items such as whether to enable anonymous authentication, ACL cache events, and ACL cache switches without restarting EMQX.
 
 The basic settings are organized in zones. By default, the external zone is associated with the listener on port 1883.
 
@@ -236,4 +236,4 @@ After the application is created successfully, click the Application ID in the *
 
 ### Users
 
-Dashboard user account management, you can create, edit, delete users, if you forget the user password, you can reset the password through CLI.
+Dashboard user account management, you can create, edit, and delete users, if you forget the user password, you can reset the password through CLI.

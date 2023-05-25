@@ -1,5 +1,7 @@
 # Ingest Data into MySQL
 
+## Setup MySQL Database and Create Table
+
 Setup a MySQL database, and changes the username/password to root/public, taking Mac OSX for instance:
 
 ```bash
@@ -39,10 +41,9 @@ CREATE TABLE `t_mqtt_msg` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 
-![image](./assets/rule-engine/mysql_init_1.png)
+<img src="./assets/rule-engine/mysql_init_1.png" alt="image" style="zoom:50%;" />
 
-
-Create a rule:
+## Create a Rule
 
 Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left.
 
@@ -52,9 +53,9 @@ Select "message.publish", then type in the following SQL:
 SELECT * FROM "message.publish"
 ```
 
-![image](./assets/rule-engine/mysql_sql_1.png)
+<img src="./assets/rule-engine/mysql_sql_1.png" alt="image" style="zoom:50%;" />
 
-Bind an action:
+## Add an Action
 
 Click on the "+ Add" button under "Action Handler", and then select
 "Data to MySQL" in the pop-up dialog window.
@@ -63,11 +64,11 @@ Click on the "+ Add" button under "Action Handler", and then select
 
 Fill in the parameters required by the action:
 
-Two parameters is required by action "Data to MySQL":
+Two parameters are required by action "Data to MySQL":
 
-1). SQL template. SQL template is the sql command you'd like to run
-when the action is triggered. In this example we'll insert a message
-into mysql, so type in the following sql
+1). SQL template. SQL template is the SQL command you'd like to run
+when the action is triggered. In this example, we'll insert a message
+into MySQL, so type in the following SQL
 template:
 
 ```sql
@@ -77,13 +78,13 @@ insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${top
 Before data is inserted into the table, placeholders like \${key} will
 be replaced by the corresponding values.
 
-![image](./assets/rule-engine/mysql_action_2.png)
+<img src="./assets/rule-engine/mysql_action_2.png" alt="image" style="zoom:50%;" />
 
 2). Bind a resource to the action. Since the dropdown list "Resource"
 is empty for now, we create a new resource by clicking on the "New
 Resource" to the top right, and then select "MySQL":
 
-![image](./assets/rule-engine/mysql_action_3.png)
+<img src="./assets/rule-engine/mysql_action_3.png" alt="image" style="zoom:50%;" />
 
 Configure the resource:
 
@@ -93,17 +94,19 @@ Password" to "public", and "Description" to "MySQL resource to
 to make sure the connection can be created successfully, and then
 click on the "Create" button.
 
-![image](./assets/rule-engine/mysql_resource_1.png)
+<img src="./assets/rule-engine/mysql_resource_1.png" alt="image" style="zoom:50%;" />
 
 Back to the "Actions" dialog, and then click on the "Confirm" button.
 
-![image](./assets/rule-engine/mysql_action_4.png)
+<img src="./assets/rule-engine/mysql_action_4.png" alt="image" style="zoom:50%;" />
 
 Back to the creating rule page, then click on "Create" button. The rule we created will be show in the rule list:
 
 ![image](./assets/rule-engine/mysql_rule_overview_1.png)
 
-We have finished, testing the rule by sending an MQTT message to emqx:
+## Test the Rule
+
+We have finished creating the rule, test the rule by sending an MQTT message to emqx:
 
 ```bash
 > Topic: "t/a"
@@ -115,4 +118,4 @@ We have finished, testing the rule by sending an MQTT message to emqx:
 
 Then inspect the MySQL table, verify a new record has been inserted:
 
-![image](./assets/rule-engine/mysql_result_1.png)
+<img src="./assets/rule-engine/mysql_result_1.png" alt="image" style="zoom:50%;" />

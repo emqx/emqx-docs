@@ -1,8 +1,8 @@
-# Update resource
+# Update Resource
 
-## On Dashboard
+## Update via Dashboard
 
-First your should click card at `Resource` menu to select the resource which you want to update, then click `Edit` button
+Click on `Resource` menu to select the resource which you want to update, then click `Edit` button
 
 ![image-20210301140017790](./assets/rule-engine/update_resource_1.png)
 

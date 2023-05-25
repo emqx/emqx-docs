@@ -2,7 +2,7 @@
 
 HTTP Authentication/ACL uses an external self-built HTTP application authentication data source, and judges the authentication result based on the data returned by the HTTP API, which can implement complex authentication logic and complex ACL verification logic.
 
-## Create module
+## Create Module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
@@ -20,7 +20,7 @@ After clicking add, the module is added
 
 ![image-20200927213049265](./assets/auth_http4.png)
 
-## Authentication principle
+## Authentication Principle
 
 EMQX uses the relevant information of the current client as parameters in the device connection event, initiates a request for query permissions to the user-defined authentication service, and processes the authentication request through the returned HTTP **response status code** (HTTP statusCode).
 
@@ -29,7 +29,7 @@ EMQX uses the relevant information of the current client as parameters in the de
 -  Ignore authentication: API returns 200 status code and response body is `ignore`
 
 
-## Authentication request
+## Authentication Request
 
 When performing identity authentication, EMQX will use the current client information to fill in and initiate the authentication query request configured by the user, and query the authentication data of the client on the HTTP server.
 
@@ -65,7 +65,7 @@ It is recommended to use the POST and PUT methods. When using the GET method, th
 :::
 
 
-## HTTP access control principle
+## HTTP Access Control Principle
 
 EMQX uses current client-related information as parameters in device publishing and subscription events to initiate a request for permissions to a user-defined authentication service, and process ACL authorization requests through the returned HTTP **response status code** (HTTP statusCode).
 
@@ -74,15 +74,15 @@ EMQX uses current client-related information as parameters in device publishing 
 -  Authorization is successful: API returns 200 status code
 -  Ignore authorization: API returns 200 status code and response body is `ignore`
 
-## HTTP request information
+## HTTP Request Information
 
 HTTP API basic request information, configuration certificate, request header and retry rules.
 
 When publishing and subscribing authentication, EMQX will use the current client information to fill in and initiate the ACL authorization query request configured by the user, and query the authorization data of the client on the HTTP server.
 
-## superuser request
+## Superuser Request
 
-First check whether the client is a super user. If the client is a super user, the ACL query will be skipped.
+First check whether the client is a super user. If the client is a superuser, the ACL query will be skipped.
 
 ```bash
 # etc/plugins/emqx_auth_http.conf
@@ -114,7 +114,7 @@ access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,mountpoint=%m
 
 ```
 
-## Request description
+## Request Description
 
 When the HTTP request method is GET, the request parameters will be passed in the form of a URL query string; POST and PUT requests will submit the request parameters in the form of ordinary forms (content-type is x-www-form-urlencoded).
 

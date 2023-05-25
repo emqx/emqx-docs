@@ -56,7 +56,7 @@ Network Partition Autoheal Process:
 
 ### Autoclean of Cluster Nodes 
 
-*EMQX* supports Autoclean fol cluster , which can be configured in `etc/emqx.conf` :
+*EMQX* supports Autoclean for cluster, which can be configured in `etc/emqx.conf` :
 
 ```bash
 cluster.autoclean = 5m

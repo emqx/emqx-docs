@@ -87,7 +87,7 @@ $ cat loaded_plugins
 
 Mnesia database is a distributed DBMS in Erlang, which can directly store various data structures of Erlang.
 
-EMQX Broker uses the Mnesia database to store its own running data, such as alarm records, resources and rules created by the rule engine, Dashbaord user information, etc. These data will be stored under the `mnesia` directory. Once the directory is deleted, EMQX Broker will lose all business data.
+EMQX Broker uses the Mnesia database to store its own running data, such as alarm records, resources and rules created by the rule engine, Dashboard user information, etc. These data will be stored under the `mnesia` directory. Once the directory is deleted, EMQX Broker will lose all business data.
 
 You can query the system information of the Mnesia database in EMQX Broker through the `emqx_ctl mnesia` command. For details, please see [Management Command CLI](../advanced/cli.md).
 

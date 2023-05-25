@@ -14,20 +14,26 @@ ref:
 ---
 
 
-# MQTT C Client library
+# MQTT C Client Library
 
 [Eclipse Paho C](https://www.eclipse.org/paho/clients/c/) and [Eclipse Paho Embedded C](https://www.eclipse.org/paho/clients/c/embedded/) are all client libraries in C language (MQTT C Client) under the Eclipse Paho project, and are full-featured MQTT clients written in ANSI C.
 
-Eclipse Paho Embedded C can be used on the desktop operating system, but mainly for embedded environments such as  [mbed](http://mbed.org/), [Arduino](http://www.arduino.cc/) and [FreeRTOS](http://freertos.org/) .
+Eclipse Paho Embedded C can be used on the desktop operating system, but mainly for embedded environments such as [mbed](http://mbed.org/), [Arduino](http://www.arduino.cc/) and [FreeRTOS](http://freertos.org/).
 
 The client has synchronous/asynchronous APIs, which start with MQTTClient and MQTTAsync:
 
 - The synchronous API is designed to be simpler and more useful and some calls will be blocked until the operation is completed, which is easier for programming;
 - There is only one calling block `API-waitForCompletion` in the asynchronous API, which is notified through the callback, and is more suitable for the non-main thread environment.
 
-## Paho C Usage example
+:::tip
 
-For detailed descriptions of the comparison, download, and usage of the two MQTT client libraries related to the C language, please move to the project homepage to view. This example contains the complete code of the Paho C  in C language connecting to the EMQX Broker, sending and receiving messages:
+Paho C has fully supported MQTT 5.0 Currently.
+
+:::
+
+## Quick Start Tutorial
+
+For detailed descriptions of the comparison, download, and usage of the two MQTT client libraries related to the C language, please move to the project homepage for details. This example contains the complete code of the Paho C  in C language connecting to the EMQX Broker, sending and receiving messages:
 
 ```c
 #include "stdio.h"
@@ -82,7 +88,3 @@ int main(int argc, char* argv[])
     return rc;
 }
 ```
-
-## Paho C MQTT 5.0 support
-
-Paho C has fully supported MQTT 5.0 Currently.

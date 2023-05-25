@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# Command line interface
+# Command Line Interface
 
 EMQX Broker provides the management command line of `./bin/emqx_ctl` for users to manage, configure and query EMQX Broker.
 

@@ -36,7 +36,7 @@ One of the crucial steps for EMQX clustering is node discovery, which enables in
 
 Before creating an EMQX cluster, the following prerequisites should first be met:
 
-1. All nodes are set with a unique node name in the format of `name@host`, where host must be an IP address or fully qualified domain name (FQDN). For more information on configuring node names, see [Configure Node Names](#configure-node-names).
+1. All nodes are set with a unique node name in the format of `name@host`, where the host must be an IP address or fully qualified domain name (FQDN). For more information on configuring node names, see [Configure Node Names](#configure-node-names).
 
 2. If there is a firewall or security group between nodes, ensure the cluster communication port has been opened. For details, see [Firewall Settings](./cluster-security.md#firewall-settings).
 
@@ -118,7 +118,7 @@ Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 
 Auto clustering in EMQX is another feature that allows multiple EMQX nodes to form a cluster automatically without manual configuration. Auto clustering simplifies the process of setting up an EMQX cluster and makes it easier to add or remove nodes from the cluster dynamically.
 
-EMQX supports auto clustering based on static node list, DNS Record, etcd, and Kubernetes. Continue to read to learn how to work with these features.
+EMQX supports auto clustering based on static node list, DNS records, etcd, and Kubernetes. Continue to read to learn how to work with these features.
 
 ### Autocluster by Static Node List
 

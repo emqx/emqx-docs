@@ -37,7 +37,7 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 
 - Ensure data security with MQTT over TLS/SSL.
 - Authenticate with LDAP, JWT, PSK, X.509 certificates, and more.
-- Rich data management APIs to help keeping your data protection policy in line with EU’s GDPR.
+- Rich data management APIs to help keep your data protection policy in line with EU’s GDPR.
 
 ### Cloud-Native
 
@@ -110,7 +110,7 @@ Advanced features for MQTT:
 
 ### Data Integration
 
-- SQL syntax data integrations to extract, filter, enrich, and transform MQTT message or internal events to desired format and export them to external data platforms
+- SQL syntax data integrations to extract, filter, enrich, and transform MQTT messages or internal events to desired format and export them to external data platforms
 - Supports data bridging with other brokers or IoT platforms using MQTT (such as EMQX Cloud, AWS IoT Core, Azure IoT Hub)
 - Supports integration with other apps using WebHook
 - 30+ enterprise system integrations including Kafka, RDS, various SQL / NoSQL / time-series databases, and enterprise systems such as Oracle and SAP (Enterprise edition)

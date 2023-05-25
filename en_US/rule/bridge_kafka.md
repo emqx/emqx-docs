@@ -53,7 +53,7 @@ Click on the "+ Add" button under "Action Handler", and then select "Data bridge
 
 Fill in the parameters required by the action:
 
-Two parameters is required by action "Data to Kafka":
+Two parameters are required by action "Data to Kafka":
 
 1). Kafka Topic
 

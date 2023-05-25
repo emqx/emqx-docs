@@ -1,5 +1,7 @@
 # Bridge Data into RocketMQ
 
+## Set up RocketMQ
+
 Set up RocketMQ, taking MacOS X for instance:
 
 ```bash
@@ -18,7 +20,7 @@ $ ./bin/mqnamesrv
 $ ./bin/mqbroker -n localhost:9876 -c conf/broker.conf
 ```
 
-Create a rule:
+## Create a Rule
 
 Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), and select **Rule Engine** -> **Rule** on the left navigation menu. Click **Create**.
 
@@ -30,7 +32,7 @@ SELECT * FROM "t/#"
 
 <img src="./assets/rule-engine/rocketmq_rule_sql.png" alt="image" style="zoom:50%;" />
 
-Add action:
+## Add an Action
 
 In the **Action** pane, click **Add action**. Select **Data bridge to RocketMQ** from the drop-down list.
 
@@ -49,7 +51,7 @@ You then need to specify the resource and topic that the rule applies :
 
    Fill in the resource configuration:
 
-   Fill in the actual RocketMQ server address. Use `,` to separate multiple addresses. Keep other values as default. Click **Test** to make sure the connection is successful.
+   Fill in the actual RocketMQ server address. Us e,` to separate multiple addresses. Keep other values as default. Click **Test** to make sure the connection is successful.
 
    Then, click **Confirm**.
 
@@ -70,6 +72,8 @@ QoS: 0
 
 Payload: "hello"
 ```
+
+## Test the Rule
 
 Use the RocketMQ command line to check if the message is sent successfully:
 

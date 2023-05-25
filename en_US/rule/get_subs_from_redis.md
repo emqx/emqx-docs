@@ -1,4 +1,6 @@
-# Redis
+# Auto Subscribe with Redis
+
+## Set up the Environment
 
 Set up the Redis environment, and take MacOS X as an example:
 
@@ -12,51 +14,51 @@ $ make && make install
 $ redis-server
 ```
 
-Create rules:
+## Create Rules
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
 
 Then fill in the rule SQL:
 
-```sql
+```bash
 SELECT * FROM "$events/client_connected"
 ```
 
-![](./assets/rule-engine/redis_sub_1.png)
+<img src="./assets/rule-engine/redis_sub_1.png" alt="image-20230523152321040" style="zoom:50%;" />
 
-Related actions:
+
+
+## Add an Action
 
 Select "Add Action" on the "Response Action" interface, and then select "Get Subscription List from Redis" in the "Add Action" drop-down box.
 
-![](./assets/rule-engine/redis_sub_2.png)
+<img src="./assets/rule-engine/redis_add_sub.png" alt="image-20230523152508102" style="zoom:50%;" />
 
 Fill in the action parameters:
 
 The action of "Get subscription list from Redis" requires one parameter:
 
-1). Associated resources. The resource drop-down box is empty now, and you can click "New" in the upper right corner to create a Redis resource:
-
-![](./assets/rule-engine/redis_sub_3.png)
+1). Associated resources. The resource drop-down box is empty now, and you can click "Create" in the upper right corner to create a Redis resource:
 
 Select "Redis single-node mode resources".
 
-![](./assets/rule-engine/offline_msg_4.png)
+<img src="./assets/rule-engine/redis_sub.png" alt="image-20230523152801350" style="zoom:50%;" />
 
 Fill in the resource configuration:
 
-Fill in the real Redis server address and keep other configurations at default values. Then, click the "Test Connection" button to ensure that the connection test is successful.
+Fill in the real Redis server address and keep other configurations at default values. Then, click the "Test" button to ensure that the connection test is successful.
 
-Finally click the "Create" button.
+Finally, click the "Confirm" button.
 
-![](./assets/rule-engine/redis_sub_5.png)
+Return to the response action interface and click "Confirm".
 
-Return to the response action interface and click "OK".
-
-![](./assets/rule-engine/redis_sub_6.png)
+<img src="./assets/rule-engine/redis_sub_5.png" alt="image-20230523152849709" style="zoom:50%;" />
 
 Return to the rule creation interface and click "Create".
 
-![](./assets/rule-engine/redis_sub_7.png)
+<img src="./assets/rule-engine/redis_sub_7.png" alt="image-20230523153039950" style="zoom:50%;" />
+
+## Test the Rule
 
 The rule has been created, and you can insert a subscription relationship into Redis through  Redis CLI:
 
@@ -64,13 +66,13 @@ The rule has been created, and you can insert a subscription relationship into R
 HSET mqtt:sub:test t1 1
 ```
 
-![](./assets/rule-engine/redis_sub_8.png)
+<img src="./assets/rule-engine/redis_sub_8.png" style="zoom: 50%;" />
 
-Log in to the device whose clientid is test via Dashboard:
+Log in to the device (with clientid test) via Dashboard and 
 
-![](./assets/rule-engine/redis_sub_9.png)
+![image-20230523153725483](./assets/rule-engine/redis_sub_9.png)
 
 Check the subscription list, and you can see that the **test** device has subscribed to the **t1** topic:
 
-![](./assets/rule-engine/redis_sub_10.png)
+![image-20230523153908018](./assets/rule-engine/redis_sub_10.png)
 

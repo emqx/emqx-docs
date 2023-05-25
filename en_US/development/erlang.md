@@ -16,15 +16,21 @@ ref:
 
 # MQTT Erlang client library
 
-[emqtt](https://github.com/emqx/emqtt) is the official client library provided by the open source MQTT Broker EMQX, which is suitable for Erlang language.
+[emqtt](https://github.com/emqx/emqtt) is the official client library provided by the open-source MQTT Broker EMQX, which is suitable for the Erlang language.
 
-The Erlang ecosystem has multiple MQTT Broker implementations, such as RabbitMQ, VerenMQ, EMQX that support MQTT through plugins. However, due to the language minority, there is almost no choice for available MQTT client library. Among the Erlang client libraries included in the MQTT community, [emqtt](https://github.com/emqx/emqtt) is the best choice .
+The Erlang ecosystem has multiple MQTT Broker implementations, such as RabbitMQ, VerenMQ, and EMQX that support MQTT through plugins. However, due to the language minority, there is almost no choice for the available MQTT client library. Among the Erlang client libraries included in the MQTT community, [emqtt](https://github.com/emqx/emqtt) is the best choice.
 
-emqtt is completely implemented by Erlang. It supports MQTT v3.1.1 and MQTT v5.0 protocol versions completely, and supports SSL one-way and two-way authentication and WebSocket connection. Another MQTT benchmark test tool [emqtt_bench](https://github.com/emqx/emqtt-bench) is built based on this client library.
+emqtt is completely implemented by Erlang. It supports MQTT v3.1.1 and MQTT v5.0 protocol versions completely and supports SSL one-way and two-way authentication and WebSocket connection. Another MQTT benchmark test tool [emqtt_bench](https://github.com/emqx/emqtt-bench) is built based on this client library.
 
-## emqtt usage example
+:::tip
 
-This example contains the complete code for Erlang's emqtt client library connecting to EMQX Broker, sending and receiving messages:
+Currently, emqtt has fully supported MQTT 5.0.
+
+:::
+
+## Quick Start Tutorial
+
+This example contains the complete code for Erlang's emqtt client library connecting to EMQX, sending and receiving messages:
 
 ```erlang
 ClientId = <<"test">>.
@@ -51,8 +57,3 @@ Receive().
 ok = emqtt:disconnect(ConnPid).
 ```
 
-
-
-## emqtt MQTT 5.0 support
-
-Currently, emqtt has fully supported MQTT 5.0.

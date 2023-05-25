@@ -14,7 +14,7 @@ $ make && make install
 $ redis-server
 ```
 
-## Create module
+## Create Module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
@@ -55,7 +55,7 @@ This is the data structure used by the default configuration. After you are fami
 
 :::
 
-### Salting rules and hashing methods
+### Salting Rules and Hashing Methods
 
 ```
 ## No salt, plain text
@@ -75,7 +75,7 @@ sha256,salt
 pbkdf2,sha256,1000,20
 ```
 
-### Authentication query command (auth query cmd)
+### Authentication Query Command
 
 When performing identity authentication, EMQX will use the current client information to fill in and execute the authentication query command configured by the user to query the authentication data of the client in Redis.
 

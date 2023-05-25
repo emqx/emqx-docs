@@ -1,4 +1,4 @@
-# Work with License
+# License
 
 EMQX Enterprise is the commercial version of EMQX, which requires a license certificate (License) when using it.
 
@@ -10,7 +10,7 @@ This chapter guides you through the process of obtaining a license and importing
 
 To apply for a license, contact your EMQ sales representative or fill out the contact information on our [Contact Us](https://www.emqx.com/en/contact?product=emqx&channel=apply-Licenses) page to apply for a license. Our sales representative will contact you as soon as possible.
 
-If you prefer to try EMQX Enterprise before purchasing, you can apply for a trial license on our [trial license application page](https://www.emqx.com/en/apply-licenses/emqx) and the license file will be sent to your emailbox immediately:
+If you prefer to try EMQX Enterprise before purchasing, you can apply for a trial license on our [trial license application page](https://www.emqx.com/en/apply-licenses/emqx) and the license file will be sent to your mailbox immediately:
 
 - The license is valid for 15 days;
 - The license supports 10,000 concurrent connection lines;

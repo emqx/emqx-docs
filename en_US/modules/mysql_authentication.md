@@ -6,7 +6,7 @@ MySQL Authentication/ACL uses an external MySQL database as a data source, which
 
 Open the official MySQL website: https://dev.MySQL.com/downloads/MySQL/5.7.html#downloads, select the version you need, here we choose the MySQL version as macos-5.7.31
 
-![image-20200928093151808](./assets/auth_mysql1.png)
+<img src="./assets/auth_mysql1.png" alt="image-20200928093151808" style="zoom:40%;" />
 
 After the installation is complete, start MySQL.
 
@@ -86,11 +86,11 @@ You can use AS syntax in SQL to specify a password for field renaming, or set th
 
 :::
 
-Note: In the default table structure, we set the username field as a unique index (UNIQUE), and use it with the default query statement (`select password from mqtt_user where username ='%u' limit 1`) to get very good query performance.
+Note: In the default table structure, we set the username field as a unique index (UNIQUE), and use it with the default query statement (`select password from mqtt_user where username ='%u' limit 1`) to get good query performance.
 
 If the default query conditions do not meet your needs, for example, you need to query the corresponding `Password Hash` and `Salt` based on the `Client ID`, please make sure to set the `Client ID` as an index; Or you want to perform multi-condition queries on `Username`, `Client ID`, or other fields. It is recommended to set the correct single-column index or multiple-column index. In short, set the correct table structure and query statement, and try not to let the index fail and affect the query performance.
 
-### Encryption rules
+### Encryption Rules
 
 ```shell
 ## No salt, plain text
