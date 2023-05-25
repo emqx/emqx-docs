@@ -1,6 +1,6 @@
 # Ingest Data into ClickHouse
 
-### Install ClickHouse Server and Create Tables
+## Install ClickHouse Server and Create Tables
 
 Steup the ClickHouse database, and set username/password to default/public. Take CentOS as an example:
 
