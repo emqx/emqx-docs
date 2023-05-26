@@ -167,10 +167,17 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
    - 如需实现设备上下线记录，输入以下 SQL 语法：
 
+     ```sql
+     SELECT
+       *
+     FROM 
+       "$events/client_connected", "$events/client_disconnected"
+     ```
+     
      ::: tip
-
+     
      为了演示方便，上下线消息也设置为复用 `TopicTest` 主题。
-
+     
      :::
 
 4. 点击**添加动作**，在动作下拉框中选择**使用数据桥接转发**选项，选择先前创建好的 RocketMQ 数据桥接。点击**添加**。
