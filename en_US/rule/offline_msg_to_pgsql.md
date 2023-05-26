@@ -1,6 +1,9 @@
-# Save offline messages to PostgreSQL
+# Save Offline Messages to PostgreSQL
+
+## Set up Environment
 
 Set up the PostgreSQL database, and take MacOS X as an example:
+
 ```bash
 $ brew install postgresql
 $ brew services start postgresql
@@ -39,13 +42,13 @@ CREATE TABLE mqtt_msg (
 );
 ```
 
-::: tip
+:::tip
 
 The message table structure cannot be modified. Please use the above SQL statement to create
 
 :::
 
-Create rules:
+## Create Rules
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
 
@@ -63,54 +66,50 @@ FROM description
 SELECT * FROM "t/#", "$events/session_subscribed", "$events/message_acked" WHERE topic =~ 't/#'
 ```
 
-![](./assets/rule-engine/pg_offline_msg_01.png)
+<img src="./assets/rule-engine/ofline-rules.png" alt="image-20230525151209609" style="zoom:50%;" />
 
-Related actions:
+## Add an Action
 
-Select "Add Action" on the "Response Action" interface, and then select "Save offline messages to PostgreSQL" in the "Add Action" drop-down box
+Select "Add Action" on the "Response Action" interface, and then select "Save offline messages to PostgreSQL" in the "Add Action" drop-down box.
 
-![](./assets/rule-engine/pg_offline_msg_02.png)
+<img src="./assets/rule-engine/offline-msg.png" alt="image-20230525135721993" style="zoom:50%;" />
 
-Now that the resource drop-down box is empty, and you can click "New" in the upper right corner to create a PostgreSQL resource:
-
-![](./assets/rule-engine/pg_offline_msg_03.png)
+Now that the resource drop-down box is empty, and you can click "Create" in the upper right corner to create a PostgreSQL resource:
 
 The "Create Resource" dialog box pops up
 
-![](./assets/rule-engine/pg_offline_msg_04.png)
+<img src="./assets/rule-engine/postgre-offline-resource.png" alt="image-20230525151714685" style="zoom:50%;" />
 
 Fill in the resource configuration:
 
-Fill in the real PostgreSQL server address and the values corresponding to other configurations, and then click the "Test Connection" button to ensure that the connection test is successful.
+Fill in the real PostgreSQL server address and the values corresponding to other configurations, and then click the "Test" button to ensure that the connection test is successful.
 
-Finally click the "OK" button.
+Finally, click the "Confirm" button.
 
-![](./assets/rule-engine/pg_offline_msg_05.png)
-
-Return to the response action interface and click "OK".
-
-![](./assets/rule-engine/pg_offline_msg_06.png)
+Return to the response action interface and click "Confirm".
 
 Return to the rule creation interface and click "Create".
 
-![](./assets/rule-engine/pg_offline_msg_07.png)
+<img src="./assets/rule-engine/postgre-offline-rule.png" alt="image-20230525151911291" style="zoom:50%;" />
+
+## Test the Rule
 
 The rule has been created, and you can send a piece of data through the WebSocket client of Dashboard **(The QoS of the published message must be greater than 0):**
 
-![](./assets/rule-engine/pg_offline_msg_08.png)
+<img src="./assets/rule-engine/offline-message-received.png" alt="image-20230525152023575" style="zoom:50%;" />
 
-After the message is sent, you can see the message is saved in PostgreSQL through psql:
+After the message is sent, you can see the message is saved in PostgreSQL through PostgreSQL:
 
-![](./assets/rule-engine/pg_offline_msg_09.png)
+<img src="./assets/rule-engine/pg_offline_msg_09.png" style="zoom:50%;" />
 
 Use another client to subscribe to the topic "t/1" (the QoS of the subscribed topic must be greater than 0, otherwise the message will be received repeatedly):
 
-![](./assets/rule-engine/pg_offline_msg_10.png)
+<img src="./assets/rule-engine/pg_offline_msg_10.png" style="zoom:50%;" />
 
 After subscribing, you will receive the offline message saved in PostgreSQL immediately:
 
-![](./assets/rule-engine/pg_offline_msg_11.png)
+<img src="./assets/rule-engine/pg_offline_msg_11.png" style="zoom:40%;" />
 
 Offline messages will be deleted in PostgreSQL after being received:
 
-![](./assets/rule-engine/pg_offline_msg_12.png)
+<img src="./assets/rule-engine/pg_offline_msg_12.png" style="zoom:50%;" />

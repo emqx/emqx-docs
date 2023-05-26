@@ -2,7 +2,7 @@
 
 The Stomp protocol gateway provides EMQX with the access capability of the Stomp protocol.
 
-## Create module
+## Create Module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
@@ -28,7 +28,7 @@ Click "OK" to complete the configuration of the listener, and then click "Add" t
 
 ![Complete Stomp Protocol Gateway](./assets/stomp_5.png)
 
-### Configuration parameters
+### Configuration Parameters
 
 | Configuration item                | Description                                         |
 | --------------------------------- | --------------------------------------------------- |

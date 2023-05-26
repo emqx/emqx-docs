@@ -30,7 +30,7 @@ Consistent with EMQX's native hook, it also supports chained calculation and ret
 
 ![chain_of_responsiblity](../advanced/assets/chain_of_responsiblity.png)
 
-## Interface design
+## Interface Design
 
 As the event processing end, that is, the gRPC server. It requires a user-defined implementation of the hook list that needs to be mounted, and the callback function for how to handle each hook event after it arrives. These interfaces are defined as a gRPC service named `HookProvider` in **Multilingual Extension Hook**. The list of interfaces that need to be implemented includes:
 
@@ -120,7 +120,7 @@ After the development is completed, the service needs to be deployed to a server
 The gRPC framework of each language can refer to: [grpc-ecosystem/awesome-grpc](https://github.com/grpc-ecosystem/awesome-grpc)
 
 
-## Create module
+## Create Module
 
 After successfully deploying the `HookProvider` service, you can open the multilingual hook extension module through the dashboard page and configure its service address to use it normally.
 

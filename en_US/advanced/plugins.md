@@ -1,16 +1,12 @@
 # Plugins
 
-The EMQX Broker distribution contains a large number of official plugins, which provide some basic or various extended functions.
+The EMQX distribution contains a large number of official plugins, which provide some basic or various extended functions.
 
-They rely on the code API of  [emqx](https://github.com/emqx/emqx) or [hooks](hooks.md) for their special functions.
+They rely on the code API of [emqx](https://github.com/emqx/emqx) or [hooks](hooks.md) for their special functions.
 
 You can compile it with the [emqx](https://github.com/emqx/emqx) core project and package it into a working package.
 
-::: tip
-EMQX Enteprise does not provide source code for commercial sales, and does not support customers to develop and compile plugins by themselves.
-:::
-
-## List of plugins
+## List of Plugins
 
  The official plug-ins provided by EMQX include:
 

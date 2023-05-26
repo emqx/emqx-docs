@@ -2,7 +2,7 @@
 
 The CoAP protocol gateway provides EMQX with the access capability of the CoAP protocol. It allows publishing, subscribing, and receiving messages to EMQX in accordance with a certain defined CoAP message format.
 
-## Create module
+## Create Module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
@@ -28,7 +28,7 @@ Click "OK" to complete the configuration of the listener, and then click "Add" t
 
 ![Complete CoAP Protocol Gateway](./assets/coap_conf4.jpg)
 
-## Usage example
+## Usage Example
 
 ### Client
 
@@ -42,7 +42,7 @@ cd libcoap
 make
 ```
 
-### PUBLISH example
+### PUBLISH Example
 
 Use `libcoap` to post a message:
 
@@ -56,7 +56,7 @@ libcoap/examples/coap-client -m put -e 1234 "coap://127.0.0.1/mqtt/topic1?c=clie
 -The password is: "secret"
 -Payload is: "1234"
 
-### SUBSCRIBE example
+### SUBSCRIBE Example
 
 Use `libcoap` to subscribe to a topic:
 
@@ -72,7 +72,7 @@ libcoap/examples/coap-client -m get -s 10 "coap://127.0.0.1/mqtt/topic1?c=client
 
 During this period, if a message is generated on the topic of `topic1`, `libcoap` will receive the message.
 
-### Communication interface description
+### Communication Interface
 
 #### CoAP Client Observe Operation
 
@@ -165,10 +165,10 @@ ClientId, Username, Password, Topic in CoAP URI are concepts in MQTT. In other w
 The authentication, access control, hook and other functions of EMQX are also applicable to the CoAP access gateway. such as:
 
 -If the username/password is not authorized, the CoAP client will get an ʻuauthorized` error
--If the username/client ID is not allowed to publish a specific topic, the CoAP message will actually be discarded, although the CoAP client will get an Acknoledgement from the access gateway
--If a CoAP message is published, the'message.publish' hook can also capture this message
+-If the username/client ID is not allowed to publish a specific topic, the CoAP message will actually be discarded, although the CoAP client will get an acknowledgment from the access gateway
+-If a CoAP message is published, the 'message.publish' hook can also capture this message
 
-### Well-known locations
+### Well-Known Locations
 --------------------
 
 The well-known of the CoAP access gateway found constant return "</mqtt>,</ps>"
