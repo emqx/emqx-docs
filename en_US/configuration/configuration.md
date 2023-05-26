@@ -4427,7 +4427,7 @@ Specify the target URL for the superuser authentication request.
 
 #### Description
 
-Specifies the request method of the super user authentication request.
+Specifies the request method of the superuser authentication request.
 
 
 
@@ -5452,7 +5452,7 @@ The encryption method used for the password stored in the database. The followin
 
 #### Description
 
-The SQL select statement used for super user authentication. All table names and field names in this statement can be modified as appropriate. If and only if the value of the selected field is `1`, the user is a super user. In the WHERE clause, the supported placeholders are the same as `auth.mysql.auth_query`.
+The SQL select statement used for superuser authentication. All table names and field names in this statement can be modified as appropriate. If and only if the value of the selected field is `1`, the user is a superuser. In the WHERE clause, the supported placeholders are the same as `auth.mysql.auth_query`.
 
 
 
@@ -5628,7 +5628,7 @@ The encryption method used for the password stored in the database, that is the 
 
 #### Description
 
-The SQL select statement used for super user authentication, that is the same as `auth.mysql.super_query`.
+The SQL select statement used for superuser authentication, that is the same as `auth.mysql.super_query`.
 
 
 

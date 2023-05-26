@@ -66,7 +66,7 @@ When performing publish/subscribe authentication, EMQX Broker will use the curre
 
 ## superuser Request
 
-Check whether the client is a super user at first. If the client is a super user, the ACL query will be skipped.
+Check whether the client is a superuser at first. If the client is a superuser, the ACL query will be skipped.
 
 ```bash
 # etc/plugins/emqx_auth_http.conf

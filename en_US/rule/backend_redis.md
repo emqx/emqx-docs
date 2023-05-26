@@ -1,6 +1,6 @@
 # Ingest Data into Redis
 
-## Setup Redis Database
+## Set up Redis Database
 
 Setup a Redis database, taking Mac OSX for instance:
 

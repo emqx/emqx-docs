@@ -1,6 +1,6 @@
 # Ingest Data into Oracle DB
 
-## Setup Oracle Database and Create Table
+## Set up Oracle Database and Create Table
 
 Create t_mqtt_msg table:
 

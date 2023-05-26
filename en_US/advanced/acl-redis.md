@@ -78,9 +78,9 @@ HSET mqtt_acl:emqx testtopic/2 2
 
 After enabling Redis ACL and successfully connecting with the username `emqx`. The client should have the subscription permission of all topics (excluding system topics) and the publish permission of `testtopic/2`.
 
-## Super user query command（super cmd）
+## Superuser query command（super cmd）
 
-When performing ACL authentication, EMQX Broker will use the current client information to execute the user-configured superuser query command to query whether the client is a superuser. ACL query command is skipped when the client is superuser.
+When performing ACL authentication, EMQX Broker will use the current client information to execute the user-configured superuser query command to query whether the client is a superuser. ACL query command is skipped when the client is a superuser.
 
 ```bash
 # etc/plugins/emqx_auth_redis.conf
@@ -90,17 +90,17 @@ auth.redis.super_cmd = HGET mqtt_user:%u is_superuser
 
 You can use the following placeholders in query command and EMQX Broker will automatically populate with client information when executed:
 
-- %u：Username
-- %c：Client ID
-- %C：TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
-- %d：TLS certificate subject, valid only for TLS connections
+- %u: Username
+- %c: Client ID
+- %C: TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
+- %d: TLS certificate subject, valid only for TLS connections
 
-You can adjust the super user query command according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the superuser query command needs to meet the following conditions:
+You can adjust the superuser query command according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the superuser query command needs to meet the following conditions:
 
 1. The first data in the query results must be the is_superuser data
 
 ::: tip
-If superuser functionality is not needed, it can be more efficient when commenting and disabling this option .
+If superuser functionality is not needed, it can be more efficient when commenting and disabling this option.
 :::
 
 
@@ -116,10 +116,10 @@ auth.redis.acl_cmd = HGETALL mqtt_acl:%u
 
 You can use the following placeholders in ACL SQL and EMQX Broker will automatically populate with client information when executed:
 
-- %u：Username
-- %c：Client ID
+- %u: Username
+- %c: Client ID
 
-You can adjust the ACL query command according to business requirement. However, in any case, the ACL query command  needs to meet the following conditions:
+You can adjust the ACL query command according to business requirements. However, in any case, the ACL query command  needs to meet the following conditions:
 
 1. Topic is used as key and access is used as value in hash
 

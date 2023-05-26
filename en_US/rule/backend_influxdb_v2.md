@@ -1,6 +1,6 @@
 # Ingest Data into InfluxDB V2 & InfluxDB Cloud
 
-## Setup InfluxDB Database
+## Set up InfluxDB Database
 
 Start InfluxDB, or register an InfluxDB Cloud account to apply for the service.
 In this article, docker deployment is used as a demonstration, and the default port 8086 is used. If necessary, please replace it with other ports.

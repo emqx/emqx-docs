@@ -82,19 +82,19 @@ When publishing and subscribing authentication, EMQX will use the current client
 
 ## Superuser Request
 
-First check whether the client is a super user. If the client is a superuser, the ACL query will be skipped.
+First, check whether the client is a superuser. If the client is a superuser, the ACL query will be skipped.
 
 ```bash
 # etc/plugins/emqx_auth_http.conf
 
-## Super user request address
+## Superuser request address
 http://127.0.0.1:8991/mqtt/superuser
 
 ## HTTP request method
 ## Value: POST | GET
 POST
 
-## Super User Request Parameters
+## Superuser Request Parameters
 clientid=%c,username=%u
 ```
 

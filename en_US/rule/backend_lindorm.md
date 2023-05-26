@@ -1,6 +1,6 @@
 # Ingest Data into Lindorm (since e4.4.1)
 
-## Setup Lindorm Database
+## Set up Lindorm Database
 
 First, make sure that the Lindorm database service is enabled.
 </br>

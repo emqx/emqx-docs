@@ -1,8 +1,8 @@
 # Ingest Data into MySQL
 
-## Setup MySQL Database and Create Table
+## Set up MySQL Database and Create Table
 
-Setup a MySQL database, and changes the username/password to root/public, taking Mac OSX for instance:
+Set up a MySQL database, and changes the username/password to root/public, taking Mac OSX for instance:
 
 ```bash
 $ brew install mysql

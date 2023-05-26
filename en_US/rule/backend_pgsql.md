@@ -1,8 +1,8 @@
 # Ingest Data into PostgreSQL
 
-## Setup PostgreSQL Database and Create Table
+## Set up PostgreSQL Database and Create Table
 
-Setup a PostgreSQL database, taking Mac OSX for instance:
+Set up a PostgreSQL database, taking Mac OSX for instance:
 
 ```bash
 $ brew install postgresql

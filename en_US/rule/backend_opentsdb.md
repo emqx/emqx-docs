@@ -1,8 +1,8 @@
 # Ingest Data into OpenTSDB
 
-## Setup OpenTSDB Database
+## Set up OpenTSDB Database
 
-Setup a OpenTSDB database, taking Mac OSX for instance:
+Set up an OpenTSDB database, taking Mac OSX for instance:
 
 ```bash
 $ docker pull petergrace/opentsdb-docker

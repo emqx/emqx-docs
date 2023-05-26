@@ -2,7 +2,7 @@
 
 ## Install Cassandra Server and Create Keyspace and Tables
 
-Setup a Cassandra database, and change the root/password to root/public, taking Mac OSX for instance:
+Set up a Cassandra database, and change the root/password to root/public, taking Mac OSX for instance:
 
 ```bash
 $ brew install cassandra

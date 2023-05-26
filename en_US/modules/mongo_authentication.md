@@ -120,7 +120,7 @@ Rule field description:
 
 ## Superuser
 
-When performing ACL authentication, EMQX will use the current client information to fill and execute the super user query configured by the user to check whether the client is a super user. When the client is a super user, ACL query will be skipped.
+When performing ACL authentication, EMQX will use the current client information to fill and execute the superuser query configured by the user to check whether the client is a superuser. When the client is a superuser, ACL query will be skipped.
 Multiple conditions of the same selector use MongoDB and query in the actual query:
 
 ```
@@ -141,9 +141,9 @@ MongoDB supports the configuration of collection names, authentication fields, a
 
 | Configuration              | Description                                                  |
 | -------------------------- | ------------------------------------------------------------ |
-| Superuser Query Collection | Super User Query MongoDB Collection                          |
+| Superuser Query Collection | Superuser Query MongoDB Collection                           |
 | Superuser query field name | Field to be queried from the collection                      |
-| Superuser condition field  | Super user query conditions, if you need to query more than one, use commas to separate them. For example username=%u,clientid=%c |
+| Superuser condition field  | Superuser query conditions, if you need to query more than one, use commas to separate them. For example username=%u,clientid=%c |
 
 :::tip
 

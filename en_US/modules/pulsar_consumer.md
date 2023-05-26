@@ -1,6 +1,6 @@
 # Pulsar Consumer Group
 
-## Setup Pulsar Consumer and Create Topics
+## Set up Pulsar Consumer and Create Topics
 
 The Pulsar consumer group uses an external Pulsar as a message queue, which can convert consumer messages from Pulsar into MQTT messages and publish them in EMQX.
 
