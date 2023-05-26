@@ -1,5 +1,7 @@
 # Save offline messages to MySQL
 
+## Set up Environment
+
 Set up the MySQL database and set the user name and password to root/public. Take MacOS X as an example:
 
 ```bash
@@ -42,7 +44,7 @@ The message table structure cannot be modified. Please use the above SQL stateme
 
 :::
 
-Create rules:
+## Create Rules
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
 
@@ -60,54 +62,52 @@ FROM description
 SELECT * FROM "t/#", "$events/session_subscribed", "$events/message_acked" WHERE topic =~ 't/#'
 ```
 
-![](./assets/rule-engine/mysql_offline_msg_01.png)
+<img src="./assets/rule-engine/ofline-rules.png" alt="image-20230525151209609" style="zoom:50%;" />
 
 Related actions:
 
-Select "Add Action" on the "Response Action" interface, and then select "Save offline messages to MySQL" in the "Add Action" drop-down box
+Select "Add Action" on the "Response Action" interface, and then select "Save offline messages to MySQL" in the "Add Action" drop-down box.
 
-![](./assets/rule-engine/mysql_offline_msg_02.png)
+<img src="./assets/rule-engine/offline-msg.png" alt="image-20230525135721993" style="zoom:50%;" />
 
-Now that the resource drop-down box is empty, and you can click "New" in the upper right corner to create a MySQL resource:
+Now that the resource drop-down box is empty, you can click "Create" in the upper right corner to create a MySQL resource:
 
-![](./assets/rule-engine/mysql_offline_msg_03.png)
+<img src="./assets/rule-engine/mysql-offline-resource.png" alt="image-20230526104806212" style="zoom:50%;" />
 
-The "Create Resource" dialog box pops up
+The "Create Resource" dialog box pops up, fill in the resource configuration.
 
-![](./assets/rule-engine/mysql_offline_msg_04.png)
+Fill in the real MySQL server address and the values corresponding to other configurations, and then click the "Test" button to ensure that the connection test is successful.
 
-Fill in the resource configuration:
+<img src="./assets/rule-engine/mysql-offline-create.png" alt="image-20230526104918376" style="zoom:50%;" />
 
-Fill in the real MySQL server address and the values corresponding to other configurations, and then click the "Test Connection" button to ensure that the connection test is successful.
 
-Finally click the "OK" button.
 
-![](./assets/rule-engine/mysql_offline_msg_05.png)
+Finally, click the "Confirm" button.
 
-Return to the response action interface and click "OK".
-
-![](./assets/rule-engine/mysql_offline_msg_06.png)
+Return to the response action interface and click "Confirm".
 
 Return to the rule creation interface and click "Create".
 
-![](./assets/rule-engine/mysql_offline_msg_07.png)
+![image-20230526105107000](./assets/rule-engine/mysql-offline-rule.png)
+
+## Test the Rule
 
 The rule has been created, and you can send a piece of data through the WebSocket client of Dashboard **(The QoS of the published message must be greater than 0):**
 
-![](./assets/rule-engine/mysql_offline_msg_08.png)
+<img src="./assets/rule-engine/offline-message-received.png" alt="image-20230525152023575" style="zoom:50%;" />
 
-After the message is sent, you can see the message is saved in MySQL through mysql:
+After the message is sent, you can see the message is saved in MySQL through MySQL:
 
-![](./assets/rule-engine/mysql_offline_msg_09.png)
+<img src="./assets/rule-engine/mysql_offline_msg_09.png" style="zoom:50%;" />
 
 Use another client to subscribe to the topic "t/1" (the QoS of the subscribed topic must be greater than 0, otherwise the message will be received repeatedly):
 
-![](./assets/rule-engine/mysql_offline_msg_10.png)
+<img src="./assets/rule-engine/mysql_offline_msg_10.png" style="zoom:50%;" />
 
 After subscribing, you will receive the offline message saved in MySQL immediately:
 
-![](./assets/rule-engine/mysql_offline_msg_11.png)
+<img src="./assets/rule-engine/mysql_offline_msg_11.png" style="zoom:50%;" />
 
 Offline messages will be deleted in MySQL after being received:
 
-![](./assets/rule-engine/mysql_offline_msg_12.png)
+<img src="./assets/rule-engine/mysql_offline_msg_12.png" style="zoom:50%;" />

@@ -35,7 +35,7 @@ Most of the data of the $SYS topic in EMQX Broker can be obtained through other 
 
 :::
 
-## Cluster status information
+## Cluster Status Information
 
 | Topic                      | Description       |
 | ----------------------------- | -------------------- |
@@ -45,7 +45,7 @@ Most of the data of the $SYS topic in EMQX Broker can be obtained through other 
 | $SYS/brokers/\${node}/datetime | EMQX Broker time |
 | $SYS/brokers/\${node}/sysdescr | EMQX Broker description |
 
-## Client Online and Offline Events
+## Client Online/Offline Events
 
 `$SYS` topic prefix: `$SYS/brokers/${node}/clients/`
 
@@ -93,54 +93,54 @@ Most of the data of the $SYS topic in EMQX Broker can be obtained through other 
 
 System topic prefix : `$SYS/brokers/${node}/stats/`
 
-### Client statistics
+### Client Statistics
 
 | Topic       | Description |
 | ----------------- | -------------- |
 | connections.count | Total number of current clients |
 | connections.max   | Maximum number of clients |
 
-### Subscription statistics
+### Subscription Statistics
 
 | Topic                | Description  |
 | -------------------------- | ---------------- |
-| suboptions.count           | number of current subscription options |
-| suboptions.max             | total number of maximum subscription options |
-| subscribers.count          | number of current subscribers |
-| subscribers.max            | maximum number of subscriptions |
-| subscriptions.count        | total number of current subscription |
-| subscriptions.max          | maximum number of subscriptions |
-| subscriptions.shared.count | total number of current shared subscriptions |
-| subscriptions.shared.max   | maximum number of shared subscriptions |
+| suboptions.count           | Number of current subscription options |
+| suboptions.max             | Total number of maximum subscription options |
+| subscribers.count          | Number of current subscribers |
+| subscribers.max            | Maximum number of subscriptions |
+| subscriptions.count        | Total number of current subscription |
+| subscriptions.max          | Maximum number of subscriptions |
+| subscriptions.shared.count | Total number of current shared subscriptions |
+| subscriptions.shared.max   | Maximum number of shared subscriptions |
 
-### Topic statistics
+### Topic Statistics
 
 | Topic  | Description |
 | ------------ | --------------- |
-| topics.count | total number of current topics |
-| topics.max   | maximum number of topics |
+| topics.count | Total number of current topics |
+| topics.max   | Maximum number of topics |
 
-### Routes statistics
+### Routes Statistics
 
 | Topic  | Description  |
 | ------------ | ---------------- |
-| routes.count | total number of current Routes |
-| routes.max   | maximum number of Routes |
+| routes.count | Total number of current Routes |
+| routes.max   | Maximum number of Routes |
 
  The topics.count and topics.max are numerically equal to routes.count and routes.max.
 
-### Throughput (bytes/packets/message) statistics
+### Throughput (bytes/packets/message) Statistics
 
  System Topic Prefix : `$SYS/brokers/${node}/metrics/`
 
-### sent and received bytes statistics
+### Sent/Received Bytes Statistics
 
 | Topic          | Description                |
 | -------------- | ------------ |
 | bytes/received | Accumulated received bytes |
 | bytes/sent     | Accumulated sent bytes |
 
-### sent and received MQTT packets statistics
+### Sent/Received MQTT Packets Statistics
 
 | Topic                        | Description                                      |
 | ---------------------------- | ------------------------------------------------ |
@@ -181,7 +181,7 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 | packets/auth/received        | Accumulative received packets of AUTH            |
 | packets/auth/sent            | Accumulative sent packets of AUTH                |
 
-### MQTT sent and received messages statistics
+### MQTT Sent/Received Messages Statistics
 
 | Topic                           | Description                                      |
 | ------------------------------- | ------------------------------------------------ |
@@ -203,16 +203,16 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 | messages/delivered              | Accumulative delivered messages                  |
 | messages/acked                  | Accumulative acked messages                      |
 
-## Alarms - system alarms
+## Alarms - System Alarms
 
 System Topic Prefix: `$SYS/brokers/${node}/alarms/`
 
 | Topic | Description        |
 | ----------- | ------------ |
-| activate    | newly generated alarm |
-| deactivate  | cleared alarm |
+| activate    | Newly generated alarm |
+| deactivate  | Cleared alarm |
 
-## Sysmon - system monitoring
+## Sysmon - System Monitoring
 
 System Topic Prefix: `$SYS/brokers/${node}/sysmon/`
 

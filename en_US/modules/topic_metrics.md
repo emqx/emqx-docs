@@ -2,7 +2,7 @@
 
 EMQX provides a topic indicator statistics function, which can count the number of messages sent and received, rate and other indicators under a specified topic.
 
-## Create module
+## Create Module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
@@ -12,7 +12,7 @@ Select the topic metrics module, no need to configure parameters, directly open
 
 ![image-20200927213049265](./assets/topic_metrics_1.png)
 
-## How to use topic metrics
+## How to Use Topic Metrics
 
 The topic metrics page is located under the statistical analysis tab of Dashboard. After the topic indicator statistics function is enabled, you can click the *Create* button in the upper right corner of the page to create a new topic indicator statistics. The following is the page after you have created the subject indicator statistics of ʻa/c` and ʻa/b`. You will be able to see the total number of messages flowing in and out, discarded, and the current rate under these two topics.
 

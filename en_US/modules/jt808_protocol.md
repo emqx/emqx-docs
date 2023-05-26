@@ -22,7 +22,7 @@
 2. Platform side: emqx-jt808 decodes the message and performs registration/authentication, or PUBLISH the data message to a specific topic; the agent subscribes to the downstream topic, and converts the downstream PUBLISH message into a JT/T 808 protocol message The text structure is delivered to the terminal.
 3. The other side can subscribe to the topic of the upstream PUBLISH message appearing in 2 to receive the upstream message. Or to publish a message to a specific downlink topic to send data to the terminal side.
 
-## Create module
+## Create Module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
@@ -56,7 +56,7 @@ After clicking Add, the module is added:
 -In the system, the mobile phone number is used as the unique identification of a connection, namely ClientId
 
 
-### Configuration parameters
+### Configuration Parameters
 
 The implementation of emqx-jt808 supports anonymous access authentication:
 
@@ -71,7 +71,7 @@ The implementation of emqx-jt808 supports anonymous access authentication:
 | Max Frame Length       | Maximum processing size of a single JT/T808 protocol message |
 
 
-### Registration and authentication
+### Registration and Authentication
 
 The detailed format of the registration request is as follows:
 
@@ -134,7 +134,7 @@ Other: Authentication failed
 The authentication request is only called when the system does not save the authentication code (that is, the terminal directly sends an authentication message to log in to the system)
 :::
 
-### Data uplink and downlink
+### Data Uplink and Downlink
 
 In emqx-jt808, you can send and receive terminal messages by configuring uplink and downlink topics:
 

@@ -1,6 +1,6 @@
 # ExProto Gateway
 
-In EMQX Enterprise 4.2.0, we provide multi-language extension support. Among them, the **Multilingual Extended Protocol Access** module allows other programming languages ​​(such as Python, Java, etc.) to directly process byte data messages to achieve custom protocol analysis, and provides Pub/Sub interfaces to achieve message exchange with the system .
+In EMQX Enterprise 4.2.0, we provide multi-language extension support. Among them, the **Multilingual Extended Protocol Access** module allows other programming languages ​​(such as Python, Java, etc.) to directly process byte data messages to achieve custom protocol analysis, and provides Pub/Sub interfaces to achieve message exchange with the system.
 
 The scalability brought by this function to EMQX is very powerful. It can process any proprietary protocol in a programming language familiar to users, and enjoy the advantages of extremely high concurrent connections brought by the EMQX system.
 

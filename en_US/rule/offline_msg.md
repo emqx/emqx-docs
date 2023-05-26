@@ -24,9 +24,9 @@ Offline message storage primarily logs operations like client connectivity statu
 1. PUB publishes a message;
 2. Backend records the message in DB;
 3. SUB1 and SUB2 subscribe to a topic;
-4. Backend retrieves the messages of this topic;
+4. The backend retrieves the messages of this topic;
 5. Messages are sent to SUB1 and SUB2;
-6. Backend records the read position of SUB1 and SUB2, the next
+6. The backend records the read position of SUB1 and SUB2, the next
    message’s retrieval starts from this position.
 
 <img src="./assets/backends_2.png" alt="image" style="zoom:67%;" />

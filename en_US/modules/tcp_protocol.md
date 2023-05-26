@@ -22,7 +22,7 @@ EMQX provides the **emqx-tcp** module as an access module close to the end side.
 2. On the platform side, the main body is the emqx-tcp module and the EMQX system. emqx-tcp is responsible for the encoding and decoding of messages, and the agent subscribes to downlink topics. Realize to convert the uplink message into the MQTT message PUBLISH in the EMQX system to the entire system; convert the downlink MQTT message into the message structure of the TCP private protocol, and send it to the terminal.
 3. The other side can subscribe to the topic of the upstream PUBLISH message appearing in 2 to receive the upstream message. Or to publish a message to a specific downlink topic to send data to the terminal side.
 
-## Create module
+## Create Module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
@@ -51,9 +51,7 @@ Click to confirm to the configuration parameter page:
 After clicking Add, the module is added:
 ![image-20200927213049265](./assets/proto_tcp6.png)
 
-### Configuration parameters
-
-
+### Configuration Parameters
 
 | Configuration         | Description                                                  |
 | --------------------- | ------------------------------------------------------------ |

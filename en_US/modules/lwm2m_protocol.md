@@ -2,25 +2,25 @@
 
 ## Protocol Introduction
 
-LwM2M (Lightweight Machine-To-Machine) is a protocol from the Open Mobile Alliance (OMA) for machine to machine (M2M) or Internet of things device (IoT), it provides device management and communication functions, especially suitable for terminal devices with limited resources.
+LwM2M (Lightweight Machine-To-Machine) is a protocol from the Open Mobile Alliance (OMA) for machine-to-machine (M2M) or Internet of Things device (IoT), it provides device management and communication functions, especially suitable for terminal devices with limited resources.
 
 For more information, see [OMA SpecWorks](http://openmobilealliance.org/iot/lightweight-m2m-lwm2m.)
 
 LwM2M is built on [Constrained Application Protocol](https://www.rfc-editor.org/rfc/rfc7252) (CoAP), carried over UDP or SMS, based on REST architecture,
-so the message structure is simple and compact to worker better in environments where network resources are limited and the device is not always online.
+so the message structure is simple and compact to work better in environments where network resources are limited and the device is not always online.
 
 There are two roles in the LwM2M protocol:
 
 - LwM2M Server
 
-  LwM2M has two kind services:
+  LwM2M has two kinds of services:
 
   1. LwM2M bootstrap server. The `emqx-lwm2m` plugin does not implement this server.
-  2. LwM2M server. The `emqx-lwm2m` plugin implement it over UDP/DTLS (but not over TCP/TLS, nor over SMS).
+  2. LwM2M server. The `emqx-lwm2m` plugin implements it over UDP/DTLS (but not over TCP/TLS, nor over SMS).
 
 - LwM2M Client
 
-    An LwM2M client is deployed on an LwM2M device which connects to the server for machine to machine communication.
+    An LwM2M client is deployed on an LwM2M device which connects to the server for machine-to-machine communication.
 
 Between LwM2M Server and LwM2M Client, the LwM2M protocol defines 4 interfaces.
 
@@ -84,25 +84,25 @@ Click `confirm` to enter the configuration parameter page:
 After clicking `Add`, the module is added:
 ![image-20200927213049265](./assets/proto_lwm2m6.png)
 
-EMQX-LwM2M is a gateway module of EMQX server, it implements most of the functionalities of LwM2M. MQTT client can access LwM2M-enabled devices through EMQX-LWM2M and devices can also report notification to EMQX-LwM2M for data collection and integration over MQTT protocol.
+EMQX-LwM2M is a gateway module of the EMQX broker, it implements most of the functionalities of LwM2M. MQTT client can access LwM2M-enabled devices through EMQX-LWM2M and devices can also report notification to EMQX-LwM2M for data collection and integration over MQTT protocol.
 
-### Configuration parameters
+### Configuration Parameters
 
 | Configuration     | Description                                                  |
 | ----------------- | ------------------------------------------------------------ |
 | Minimum Lifetime  | Minimum lifetime allowed to be set for registration/update, in seconds |
 | Maximum Lifetime  | Maximum lifetime allowed to be set for registration/update, in seconds |
-| QMode Time Window | QMode time window, indicating how long the downstream command sent to the client will be cached, in seconds |
+| QMode Time Window | QMode time window, indicates how long the downstream command sent to the client will be cached, in seconds |
 | Auto Observe      | After successful registration, whether to automatically observe the objectlist |
 | Mountpoint        | topic Prefix                                                 |
-| Command Topic     | Downlink command topic, %e means endpoint name              |
+| Command Topic     | Downlink command topic, %e means endpoint name               |
 | Response Topic    | Uplink response topic, %e means endpoint name                |
-| Register Topic    | Register message topic, %e means endpoint name                 |
-| Notify Topic      | Uplink notification topic, %e means endpoint name              |
-| Update Topic      | Update message topic, %e means endpoint name                   |
+| Register Topic    | Register message topic, %e means endpoint name               |
+| Notify Topic      | Uplink notification topic, %e means endpoint name            |
+| Update Topic      | Update message topic, %e means endpoint name                 |
 | XML Directory     | The directory of the LwM2M schema files which define LwM2M objects' schema |
 
-## MQTT and LwM2M conversion
+## MQTT and LwM2M Conversion
 
 With `emqx_lwm2m`, user is able to send LwM2M commands(READ/WRITE/EXECUTE/...) and get LwM2M response in MQTT way. `emqx_lwm2m` transforms data between MQTT and LwM2M protocol.
 
@@ -110,7 +110,7 @@ emqx_lwm2m needs object definitions to parse data from lwm2m devices. Object def
 
 ### Register/Update (LwM2M Client Registration Interface)
 
-- **LwM2M Register and Update message will be converted to following MQTT message:**
+- **LwM2M Register and Update message will be converted to the following MQTT message:**
 
   - **Method:** PUBLISH
   - **Topic:** `lwm2m/{?EndpointName}/up/resp` (configurable, `Mountpoint` + `Register/Update` Topic. The same rules apply to other conversion topics)
@@ -139,7 +139,8 @@ emqx_lwm2m needs object definitions to parse data from lwm2m devices. Object def
 
 ### Downlink Command and Uplink Response (LwM2M Device Management & Service Enablement Interface)
 
-- **To send a downlink command to device, publish following MQTT message:**
+- **To send a downlink command to device, publish the following MQTT message:**
+  
   - **Method:** PUBLISH
   - **Topic:** `lwm2m/{?EndpointName}/dn`
   - **Request Payload**:
@@ -207,7 +208,7 @@ emqx_lwm2m needs object definitions to parse data from lwm2m devices. Object def
         - {?GreaterThan}: Number, LwM2M Notification Class Attribute - Greater Than.
         - {?LessThan}: Number, LwM2M Notification Class Attribute - Less Than.
         - {?Step}: Number, LwM2M Notification Class Attribute - Step.
-
+  
       - **If {?MsgType} = "execute"**:
         ```json
         {
@@ -216,7 +217,7 @@ emqx_lwm2m needs object definitions to parse data from lwm2m devices. Object def
         }
         ```
         - {?Arguments}: String, LwM2M Execute Arguments.
-
+  
       - **If {?MsgType} = "create"**:
         ```json
         {
@@ -231,7 +232,7 @@ emqx_lwm2m needs object definitions to parse data from lwm2m devices. Object def
         }
         ```
         - {?ObjectID}: Integer, LwM2M Object ID
-
+  
       - **If {?MsgType} = "delete"**:
         ```json
         {
@@ -239,7 +240,7 @@ emqx_lwm2m needs object definitions to parse data from lwm2m devices. Object def
         }
         ```
         - {?ObjectInstanceID}: Integer, LwM2M Object Instance ID
-
+  
 - **The response of LwM2M will be converted to following MQTT message:**
   - **Method:** PUBLISH
   - **Topic:** `"lwm2m/{?EndpointName}/up/resp"`
@@ -384,11 +385,11 @@ emqx_lwm2m needs object definitions to parse data from lwm2m devices. Object def
     ```
     - {?MsgType}: String, must be "notify"
     - {?ObserveSeqNum}: Number, value of "Observe" option in CoAP message
-    - "content": same to the "content" field contains in the response of "read" command
+    - "content": same as the "content" field contained in the response of "read" command
 
-### MQTT and LwM2M conversion
+### MQTT and LwM2M Conversion
 
-From the MQTT client, you can send Command to the LwM2M device. The command from MQTT to LwM2M uses the following topic
+From the MQTT client, you can send commands to the LwM2M device. The command from MQTT to LwM2M uses the following topic
 
 ```bash
 "lwm2m/{?device_end_point_name}/command".

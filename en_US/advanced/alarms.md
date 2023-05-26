@@ -15,7 +15,7 @@ ref: undefined
 
 # Alarm
 
-EMQX Broker has built-in monitoring and alarm functions. Currently, it supports monitoring of CPU occupancy, (system, process) memory occupancy, number of processes, rule engine resource status, cluster partition and healing and it can alarm. Both activation and deactivation of alarms will generate a alarm log and the Broker will publish an MQTT message with the topic of `$SYS/brokers/<Node>/alarms/activate` or `$SYS/brokers/<Node>/alarms/deactivate`, Users can subscribe to the topics of `$SYS/brokers/+/alarms/avtivate` and `$SYS/brokers/+/alarms/deactivate` to get alarm notifications.
+EMQX has built-in monitoring and alarm functions. Currently, it supports monitoring of CPU occupancy, (system, process) memory occupancy, number of processes, rule engine resource status, cluster partition, and healing and it can alarm. Both activation and deactivation of alarms will generate an alarm log and the Broker will publish an MQTT message with the topic of `$SYS/brokers/<Node>/alarms/activate` or `$SYS/brokers/<Node>/alarms/deactivate`, Users can subscribe to the topics of `$SYS/brokers/+/alarms/avtivate` and `$SYS/brokers/+/alarms/deactivate` to get alarm notifications.
 
 The Payload of the alarm notification message is in Json format and contains the following fields:
 

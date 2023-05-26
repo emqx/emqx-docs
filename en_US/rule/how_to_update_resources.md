@@ -1,6 +1,6 @@
 # Update Resource
 
-## Update via Dashboard
+## Update Resources via Dashboard
 
 Click on `Resource` menu to select the resource which you want to update, then click `Edit` button
 
@@ -20,7 +20,7 @@ At this time, you will be prompted whether to confirm the modification, just cli
 At this time the "description" information has been updated.
 
 
-## By cli
+## Update Resources by Command Line Tool
 
 To update through the command line, you need to know the ID of the resource in advance: 
 

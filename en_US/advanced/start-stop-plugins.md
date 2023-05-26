@@ -13,16 +13,16 @@ category:
 ref:
 ---
 
-# Develop and Manage
+# Plugin Development and Management
 
-## Start and stop plugin
+## Start/Stop Plugin
 
  There are four ways to load plugins: 
 
 1.  Default loading
-2.  Start and stop plugin on command line
-3.  Start and stop plugin on Dashboard
-4.  Start and stop plugin by calling management API
+2.  Start and stop the plugin on command line
+3.  Start and stop the plugin on Dashboard
+4.  Start and stop the plugin by calling the management API
 
 
  **Default loading** 
@@ -41,11 +41,11 @@ ref:
 ```
 
 
- **Start and stop plugin on command line**
+ **Start/stop plugin on command line**
 
 When the EMQX is running, plugins can be checked, loaded/unloaded by [CLI - Load/Unload Plugin](cli.md#load_plugin):
 
- **Start and stop plugin on Dashboard**
+ **Start/stop plugin on Dashboard**
 
 If Dashboard plugin is started (by default), the plugins can be start or stopped by visiting the managing page that can be found under `http://localhost:18083/plugins`.
 
@@ -53,9 +53,9 @@ If Dashboard plugin is started (by default), the plugins can be start or stopped
 
 When EMQX Broker is running, you can view, start and stop a plugin through [Managing and Monitoring API - Load Plugin](http-api.md#load_plugin).
 
-## Plugin development
+## Plugin Development
 
-### Create plugin project
+### Create Plugin Project
 
 Refer to the [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) plugin template to create a new plugin project.
 
@@ -123,7 +123,7 @@ ok = emqx:hook('client.check_acl', fun emqx_acl_demo:check_acl/5, []).
 ```
 
 
-### Load hook
+### Load Hook
 
 During the plugin extension, you can load [hooks](hooks.md) to handle events such as client online and offline, topic subscription, and message sending and receiving.
 
@@ -153,7 +153,7 @@ load(Env) ->
 ```
 
 
-### Register CLI commands
+### Register CLI Commands
 
 Processing command line sample code - `emqx_cli_demo.erl`：
 
@@ -181,7 +181,7 @@ After the plugin is loaded, use `./bin/emqx_ctl`  to verify the new command line
 ./bin/emqx_ctl cmd arg1 arg2
 ```
 
-### Plugin configuration file
+### Plugin Configuration File
 
 Plug-in configuration files are placed in  `etc/${plugin_name}.conf|config`. EMQX Broker supports two plugin configuration formats:
 
@@ -206,9 +206,9 @@ plugin_name.key = value
 :::
 
 
-### Compile and publish the plugin
+### Compile and Publish the Plugin
 
-#### clone emqx project
+#### Clone emqx project
 
 ```bash
 git clone https://github.com/emqx/emqx.git
