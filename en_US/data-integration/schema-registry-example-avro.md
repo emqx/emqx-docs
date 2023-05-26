@@ -164,7 +164,7 @@ def on_message(client, userdata, msg):
 
 3. Click **Connect** to connect to the EMQX instance as an MQTT client.
 
-4. In the **Publish** area, type `avro_out` in the **Topic** field and type the following message in the **Payload** field: 
+4. In the **Publish** area, type `avro_in` in the **Topic** field and type the following message in the **Payload** field: 
 
    ```json
    {"favorite_color":"red","favorite_number":666,"name":"Shawn"}

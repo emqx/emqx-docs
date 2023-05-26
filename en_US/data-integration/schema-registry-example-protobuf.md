@@ -163,7 +163,7 @@ def on_message(client, userdata, msg):
 
 3. Click **Connect** to connect to the EMQX instance as an MQTT client.
 
-4. In the **Publish** area, type `protobuf_out` in the **Topic** field and type the following message in the **Payload** field:
+4. In the **Publish** area, type `protobuf_in` in the **Topic** field and type the following message in the **Payload** field:
 
    ```json
    {"name":"Shawn","id":1,"email":"shawn@example.com"}
