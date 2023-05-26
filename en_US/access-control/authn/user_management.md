@@ -24,7 +24,6 @@ User import is supported for the `password_based:built_in_database` authenticato
 The endpoints for importing users into the corresponding chains are:
 
 - `/api/v5/authentication/{id}/import_users`
-- `/api/v5/listeners/{listener_id}/authentication/{id}/import_users`
 - `/api/v5/gateway/{protocol}/authentication/import_users`
 - `/api/v5/gateway/{protocol}/listeners/{listener_id}/import_users`
 

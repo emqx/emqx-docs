@@ -49,7 +49,7 @@ Body:
 
 - **URL**：输入 HTTP 服务的 URL 地址。
 
-- **Headers**（可选）：HTTP 请求头配置。
+- **Headers**（可选）：HTTP 请求头配置。可以添加多个请求头。
 
 **连接配置**：在此部分进行并发连接、连接超时等待时间、最大 HTTP 请求数以及请求超时时间。
 
@@ -68,7 +68,7 @@ Body:
 
 ## 通过配置文件设置
 
-此外，您可以通过配置项完成相关配置，具体可参考：[authn-http:post](../../configuration/configuration-manual.md#authn-http:post) 与 [authn-http:get](../../configuration/configuration-manual.md#authn-http:get)。
+此外，您可以通过配置项完成相关配置，具体可参考：[authn-http:post](../../configuration/configuration-manual.html#authn-http:post) 与 [authn-http:get](../../configuration/configuration-manual.html#authn-http:get)。
 
 以下为使用 `POST` 和 `GET` 请求配置的 HTTP 请求示例：
 
@@ -100,6 +100,8 @@ Body:
 :::
 
 ::: tab GET 请求示例
+
+注意： body 将被转换为查询字符串。
 
 ```hcl
 {

@@ -4,7 +4,7 @@ To add or remove user accounts that can be used to log in to Dashboard, to obtai
 
 ## Users
 
-Clicking on Users under the System menu on the left will take you to the Users page. The user page displays a list of all current users who can log in to Dashboard, including users created using [CLI](../admin/cli.md). Click on the `Create` button in the top right corner of the page to open the Create User pop-up box, fill in the user information and click on the `Create` button to submit the data. Users that are successfully submitted will be added to the list of users. Users that are successfully added can have their passwords changed or their notes changed on the page; users that are no longer required can be deleted on the page.
+Click **System** -> **Users** to enter the **Users** page. The user page displays a list of all current users who can log in to Dashboard, including users created using [CLI](../admin/cli.md). Click on the `Create` button in the top right corner of the page to open the Create User pop-up box, fill in the user information and click on the `Create` button to submit the data. Users that are successfully submitted will be added to the list of users. Users that are successfully added can have their passwords changed or their notes changed on the page; users that are no longer required can be deleted on the page.
 
 ![image](./assets/users.png)
 
@@ -12,7 +12,7 @@ Clicking on Users under the System menu on the left will take you to the Users p
 
 ## API Keys
 
-Click on API Keys under the System menu on the left to go to the API Keys page. If you need an API key to create some scripts to call the [HTTP API](../admin/api.md), you can create and obtain one from this page. Click the `Create` button on the top right corner of the page to open the Create API key pop-up box, fill in the API key related data, if the `Expire At` is not filled in the API key will never expire, click `OK` to submit the data, the API Key and Secret Key of the API key created will be provided on the page after successful submission, **where the Secret Key will not be shown later**. The user needs to save the API Key and Secret Key to a safe place immediately; when finished saving the data, click the `Close` button to close the pop-up box.
+Click on **API Keys** under the **System** menu on the left to go to the API Keys page. If you need an API key to create some scripts to call the [HTTP API](../admin/api.md), you can create and obtain one from this page. Click the `Create` button on the top right corner of the page to open the Create API key pop-up box, fill in the API key related data, if the `Expire At` is not filled in the API key will never expire, click `OK` to submit the data, the API Key and Secret Key of the API key created will be provided on the page after successful submission, **where the Secret Key will not be shown later**. The user needs to save the API Key and Secret Key to a safe place immediately; when finished saving the data, click the `Close` button to close the pop-up box.
 
 ![image](./assets/api-key.png)
 

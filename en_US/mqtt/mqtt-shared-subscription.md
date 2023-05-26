@@ -43,8 +43,7 @@ EMQX supports a few different balancing strategies with the help from configurat
 
 Balancing strategies can be specified globally or per-group.
 
-- Global strategy can be set in `broker.shared_subscription_strategy` configuration.
-- Configure `broker.shared_subscription_group.$group_name.strategy` for per-group strategy
+Global strategy can be set in `broker.shared_subscription_strategy` configuration.
 
 ```txt
 # etc/emqx.conf

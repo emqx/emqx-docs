@@ -38,7 +38,11 @@ EMQX 会为每个需要创建数据桥的节点创建一个单独的连接池。
 
 ### 异步请求模式
 
-#### 异步模式配置
+异步请求模式可以防止消息的发布服务由于 I/O 压力而受影响。但在开启异步请求模式后，由于历史消息会在数据桥接处排队 ，客户端新发送消息的时间序列将受到影响。
+
+为了提高数据处理效率，EMQX 默认开启异步请求模式。如果您对消息的时间序列有严格要求，请禁用异步请求模式。
+
+**示例代码**
 
 ```bash
 bridges.mysql.foo {
@@ -47,11 +51,17 @@ bridges.mysql.foo {
   enable = true
   ...
   resource_opts {
-    query_mode = "async"
+    query_mode = "sync"
     ...
   }
 }
 ```
+
+::: tip
+
+为保证消息的时序性，请同时将 `max_inflight` 设置为 1。
+
+:::
 
 ### 批量模式
 
@@ -79,7 +89,6 @@ bridges.mysql.foo {
   enable = true
   ...
   resource_opts {
-    enable_batch = true
     batch_size = 100
     batch_time = "20ms"
     ...
@@ -90,11 +99,9 @@ bridges.mysql.foo {
 ### 缓存队列
 
 
-缓存队列为数据桥接提供了一定的容错性，建议启用该选项以提高数据安全性，可选配置如下：
+缓存队列为数据桥接提供了一定的容错性，建议启用该选项以提高数据安全性。
 
-- 是否启用缓存队列。
-- 部分数据桥接可配置缓存存储介质，可选内存/磁盘/内存-磁盘混合。
-- 每个资源连接（此处并非 MQTT 连接）缓存队列长度（按容量大小），超出长度按照 FIFO 的原则丢弃数据。
+每个资源连接（此处并非 MQTT 连接）缓存队列长度（按容量大小），超出长度按照 FIFO 的原则丢弃数据。
 
 #### 缓存文件位置
 
@@ -111,7 +118,6 @@ bridges.mysql.foo {
   enable = true
   ...
   resource_opts {
-    enable_queue = true
     max_queue_bytes = "100MB"
     query_mode = "async"
     ...

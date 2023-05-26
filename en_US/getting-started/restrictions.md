@@ -56,6 +56,6 @@ The operating limitations can be classified into:
 | Number of data bridges                | Unlimited                 |
 | **REST API**                          |                           |
 | Max page size                         | 10000                     |
-| Number of API Keys                    | 1024                      |
+| Number of API Keys                    | 100                       |
 | **Dashboard**                         |                           |
 | Dashboard users                       | Unlimited                 |

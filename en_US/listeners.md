@@ -41,7 +41,6 @@ Of course, we can also configure the listener in a more detailed way, for exampl
 ```
 listeners.tcp.demo {
     bind = "0.0.0.0:1883"
-    max_connections = 1024000
     proxy_protocol = true
 }
 ```

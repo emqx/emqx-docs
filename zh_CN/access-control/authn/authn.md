@@ -18,7 +18,7 @@ EMQX 默认未开启认证功能，即允许所有客户端链接，如在生产
 
 EMQX 支持通过密码进行身份验证。启用密码认证后，当客户端尝试连接时，需按要求提供身份凭证信息，EMQX 会在数据库中发起查询，并将返回得到的密码与客户端提供的信息进行匹配，匹配成功后，EMQX 将接受该客户端的连接请求。
 
-![EMQX 密码认证流程](./assets/emqx-authn-flow.png)
+<img src="./assets/emqx-authn-flow.png" alt="EMQX 密码认证流程" style="zoom:67%;" />
 
 除简单便捷的内置数据库外，EMQX 还支持通过与多类后端数据库的集成提供密码认证，包括 MySQL、PostgreSQL、MongoDB 和 Redis。
 
@@ -32,7 +32,7 @@ EMQX 支持通过密码进行身份验证。启用密码认证后，当客户端
 
 ### MQTT 5.0 增强认证
 
-[MQTT 5.0 增强认证](https://www.emqx.com/zh/blog/mqtt5-enhanced-authentication)是对密码认证的扩展，它更像是一种认证框架，允许使用各种更安全的认证机制，例如 SCRAM 认证、Kerberos 认证等。目前 EMQX 实现了 SCRAM 认证，并支持将认证数据存储在内置数据库中。
+[MQTT 5.0 增强认证](https://www.emqx.com/zh/blog/mqtt5-enhanced-authentication)是对密码认证的扩展，增强认证特性允许使用各种更安全的认证机制，例如 SCRAM 认证、Kerberos 认证等。目前 EMQX 具体实施了 SCRAM 认证，并支持将认证数据存储在内置数据库中。
 
 ## EMQX 认证器
 
@@ -71,6 +71,12 @@ EMQX 允许创建多个认证器构成一条认证链，认证器将按照在链
 2. 当前认证器执行时没有检索到匹配的认证信息，例如数据源中没有查找到数据：
    - 当前认证器之后还有认证器：忽略认证，交由下一认证器继续认证。
    - 当前认证器已经是链中最后一个认证器：客户端认证失败，拒绝连接。
+
+::: tip
+
+请注意，某个认证器查找出错（如数据库错误）或未启用时，将继续执行下一个认证器。
+
+:::
 
 ![EMQX 认证链](./assets/authn-chain.png)
 
@@ -218,14 +224,6 @@ gateway.stomp {
     ...
   }
 
-  listeners.tcp.default {
-    ...
-    enable_authn = true
-    # Specific authenticator for the specified STOMP listener
-    authentication = {
-      ...
-    }
-  }
 }
 ```
 
@@ -240,11 +238,7 @@ gateway.stomp {
 EMQX 提供的认证 API 允许对认证链和认证器进行管理，例如为全局认证创建一个认证器，以及更新指定认证器的配置。
 
 - `/api/v5/authentication`: 管理 MQTT 全局认证
-
-- `/api/v5/listeners/{listener_id}/authentication`: 管理 MQTT 监听器认证
-
 - `/api/v5/gateway/{protocol}/authentication`: 管理网关的全局认证
-
 - `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`: 管理网关监听器认证
 
 #### **认证器 ID**

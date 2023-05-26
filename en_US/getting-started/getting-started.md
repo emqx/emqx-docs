@@ -182,6 +182,10 @@ Note: Considering all the runtime dependencies, it is recommended to use zip/tar
 
 {% endemqxee %}
 
+:::
+
+::::
+
 3. To run EMQX, enter:
 
    ```bash
@@ -190,11 +194,7 @@ Note: Considering all the runtime dependencies, it is recommended to use zip/tar
 
 4. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../dashboard/introduction.md), from where you can connect to your clients or check the running status.
 
-   Default user name and password:
-
-   `admin`
-
-   `public`
+   The default user name and password are `admin` & `public`. You will be prompted to change the default password once logged in. 
 
 5. To stop EMQX, enter:
 
@@ -209,12 +209,12 @@ To uninstall EMQX after your testing, you only need to delete the EMQX folders.
 ::::
 
 
-## Use MQTT X to Verify Connection
+## Use MQTTX to Verify Connection
 
 Now that you have successfully started EMQX, you can continue to test the connection and message services with MQTT X
 
 
-[MQTT X](https://mqttx.app/en) is an elegant cross-platform MQTT 5.0 desktop client, running on macOS, Linux, and Windows. By utilizing a chat style of user interface, MQTT X allows users to quickly create connections and save multiple clients, which facilitates users to quickly test the MQTT/MQTTS connection, as well as the subscription and publication of MQTT messages.
+[MQTT X](https://mqttx.app) is an elegant cross-platform MQTT 5.0 desktop client, running on macOS, Linux, and Windows. By utilizing a chat style of user interface, MQTT X allows users to quickly create connections and save multiple clients, which facilitates users to quickly test the MQTT/MQTTS connection, as well as the subscription and publication of MQTT messages.
 
 This section will introduce how to verify the connection with [MQTT X Web](https://mqttx.app/web), the browser-based MQTT 5.0 WebSocket client tool, with zero need to download or install any application. 
 
@@ -222,7 +222,7 @@ This section will introduce how to verify the connection with [MQTT X Web](https
 The broker address and the port information should be prepared before testing the connection:
 
 - Broker address: The IP address of your server, in general.
-- Port: Click **Configuration** -> **Listeners** on the left navigation menu to get the port number.
+- Port: Click **Management** -> **Listeners** on the left navigation menu to get the port number.
 :::
 
 1. Click [MQTT X Web](http://www.emqx.io/online-mqtt-client#/recent_connections) to visit the browser-based MQTT X.

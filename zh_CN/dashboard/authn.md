@@ -20,7 +20,7 @@ EMQX Dashboard 提供了开箱即用的认证与权限管理功能，用户仅�
 2. JWT，客户端可以在用户名或密码字段中携带 JWT token 来进行认证；
 3. SCRAM，MQTT 5.0 中的增强认证，可以实现对客户端和服务器的双向认证。
 
-![image](./assets/create-authn.png)
+<img src="./assets/create-authn.png" alt="image" style="zoom:67%;" />
 
 ### 数据源
 
@@ -33,7 +33,7 @@ EMQX Dashboard 提供了开箱即用的认证与权限管理功能，用户仅�
 
 除数据库外，还可以直接使用能够提供认证数据的 HTTP 服务，即选择 `HTTP Server`。
 
-![image](./assets/authn-data-source.png)
+<img src="./assets/authn-data-source.png" alt="image" style="zoom:67%;" />
 
 #### JWT
 
@@ -55,7 +55,7 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 
 例如使用内置数据库的话需要选择使用用户名还是客户端 ID，选择密码的加密方式等；如果是选择了 MQTT 5.0 的增强认证，使用内置数据库的话，只需要配置加密方式即可。
 
-![image](./assets/authn-built-db-config.png)
+<img src="./assets/authn-built-db-config.png" alt="image" style="zoom:67%;" />
 
 更多关于内置数据库的配置详情，请访问 [使用内置数据库（Mnesia）的密码认证](../access-control/authn/mnesia.md)。
 
@@ -63,7 +63,7 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 
 选择外部数据库的话，需要配置能访问到的数据库地址，数据库名称，用户名密码，以及认证相关配置，填写如何从数据库中获取数据的 SQL 语句或其它查询语句等。以 MySQL 为例：
 
-![image](./assets/authn-mysql-config.png)
+<img src="./assets/authn-mysql-config.png" alt="image" style="zoom:67%;" />
 
 更多关于 MySQL 或其它外部数据库的配置详情，请访问 [使用 MySQL 的密码认证](../access-control/authn/mysql.md) 或查看使用其它数据库。
 
@@ -71,7 +71,7 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 
 选择使用 HTTP 服务的话，需要配置请求该 HTTP 服务的请求方式，POST 或 GET 方法。请求地址 URL，注意 URL 内需要填写协议是 http 或 https，如果有端口号的话需要在 URL 中携带端口号。然后是 HTTP 请求的 Headers 配置，携带认证信息的内容需要和请求 HTTP 服务的数据格式相同，然后配置到 `Body` 字段中，例如将 `username` 和 `password` 填写到 JSON 数据中。
 
-![image](./assets/authn-http-config.png)
+<img src="./assets/authn-http-config.png" alt="image" style="zoom:67%;" />
 
 更多关于 HTTP Server 的配置详情，请访问 [使用 HTTP 的密码认证](../access-control/authn/http.md)。
 
@@ -81,7 +81,7 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 
 选择 JWKS 可以从 `JWKS Endpoint` 上定期获取最新的 JWKS，JWKS 本质上就是一组公钥，它们将被用于验证授权服务器颁发并使用 RSA 或者 ECDSA 算法签名的任何 JWT，并配置 JWKS 的刷新间隔时间（单位为秒）。最后再配置 `Payload` 项即可完成 JWKS 的配置。
 
-![image](./assets/authn-jwt-config.png)
+<img src="./assets/authn-jwt-config.png" alt="image" style="zoom:67%;" />
 
 更多关于 JWT 的配置详情，请访问 [JWT 认证](../access-control/authn/jwt.md)。
 
@@ -95,17 +95,17 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 
 在操作栏中还可以点击设置或删除认证器等。
 
-![image](./assets/authn-list.png)
+<img src="./assets/authn-list.png" alt="image" style="zoom:67%;" />
 
 :::tip
-关闭认证器后，EMQ X Broker 将不再对客户端进行认证，所有客户端都可以连接到 EMQ X Broker。请谨慎操作。
+关闭认证器后，EMQX Broker 将不再对客户端进行认证，所有客户端都可以连接到 EMQX Broker。请谨慎操作。
 :::
 
 ## 用户管理
 
 对于使用内置数据库的用户来说，在认证列表页点击 `用户管理`，可以来到用户管理页面，在该页面，可以管理认证信息，例如添加或删除用户名和密码，也可以通过下载模版，在模版内填充好相关的认证信息，点击 `导入` 来批量创建认证相关的用户信息。
 
-![image](./assets/authn-users.png)
+<img src="./assets/authn-users.png" alt="image" style="zoom:67%;" />
 
 ## 认证概览
 
@@ -113,7 +113,7 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 
 页面最下方的节点状态，可以从列表中查看每个节点下的指标数据。
 
-![image](./assets/authn-overview.png)
+<img src="./assets/authn-overview.png" alt="image" style="zoom:67%;" />
 
 ## 认证设置
 
@@ -123,6 +123,6 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 当使用内置数据库时，更新密码「加密方式」或「加盐方式」将导致已添加的认证数据不可用，请谨慎操作。
 :::
 
-![image](./assets/authn-settings.png)
+<img src="./assets/authn-settings.png" alt="image" style="zoom:67%;" />
 
 更多关于认证的详细解释与使用，请访问[安全认证](../access-control/authn/authn.md)。

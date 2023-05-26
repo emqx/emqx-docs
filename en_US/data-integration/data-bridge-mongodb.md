@@ -17,9 +17,10 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 ## Feature List
 
-- [Connection pool](./data-bridges.md)
-- [Batch mode](./data-bridges.md)
-- [Buffer queue](./data-bridges.md)
+- [Connection pool](./data-bridges.md#connection-pool)
+- [Batch mode](./data-bridges.md#batch-mode)
+- [Async mode](./data-bridges.md#async-mode)
+- [Buffer queue](./data-bridges.md#buffer-queue)
 
 ## Quick Start Tutorial
 
@@ -52,7 +53,7 @@ use emqx_data
 db.createCollection('emqx_messages')
 ```
 
-### Create MongoDB Data Bridge
+### Create a MongoDB Data Bridge
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 

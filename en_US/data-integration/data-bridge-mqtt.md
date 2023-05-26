@@ -14,11 +14,11 @@ The following topic mapping configuration is used here to implement message brid
 
 Below is the message flow in **ingress** direction:
 
-![bridge_igress](./assets/bridge_igress.png)
+<img src="./assets/bridge_igress.png" alt="bridge_igress" style="zoom:50%;" />
 
 And this is the message flow in **egress** direction:
 
-![bridge_egerss](./assets/bridge_egerss.png)
+<img src="./assets/bridge_egerss.png" alt="bridge_egerss" style="zoom:50%;" />
 
 MQTT data bridge can be used either alone or in conjunction with rules for more powerful and flexible data processing capabilities.
 
@@ -26,11 +26,11 @@ The message flow for MQTT data bridge working with rules are as follows:
 
 In **ingress** direction, it can be used as the data source of the rule:
 
-![bridge_igress_rule_link](./assets/bridge_igress_rule_link.png)
+<img src="./assets/bridge_igress_rule_link.png" alt="bridge_igress_rule_link" style="zoom:50%;" />
 
 In **egress** direction, it can be used as the actions of the rule:
 
-![bridge_egress_rule](./assets/bridge_egress_rule.png)
+<img src="./assets/bridge_egress_rule.png" alt="bridge_egress_rule" style="zoom: 50%;" />
 
 :::tip Prerequisites
 
@@ -42,9 +42,8 @@ In **egress** direction, it can be used as the actions of the rule:
 
 ## Feature List
 
-- [Connection pool](./data-bridges.md) <!-- TODO 确认改版后知否支持-->
-- [Async mode](./data-bridges.md)
-- [Buffer queue](./data-bridges.md)
+- [Async mode](./data-bridges.md#async-mode)
+- [Buffer queue](./data-bridges.md#buffer-queue)
 
 <!--  Configuration parameters TODO 链接到配置手册对应配置章节。 -->
 

@@ -1,6 +1,6 @@
 # 配置文件简介
 
-EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX，本章节将介绍 EMQX 配置文件基本信息，配置项以及详细的介绍请参考 [配置手册](./configuration-manual.md)
+EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX，本章节将介绍 EMQX 配置文件基本信息，配置项以及详细的介绍请参考 [配置手册](./configuration-manual.html)
 
 ## 配置文件介绍
 
@@ -109,15 +109,14 @@ node {
 export EMQX_LISTENERS__SSL__DEFAULT__BIND='"127.0.0.1:8883"'
 
 ## 通过字符直接传递 HOCON 数组
-export EMQX_LISTENERS__SSL__DEFAULT__AUTHENTICATION__SSL__CIPHERS='["TLS_AES_256_GCM_SHA384"]'
+export EMQX_LISTENERS__SSL__DEFAULT__SSL_OPTIONS__CIPHERS='["TLS_AES_256_GCM_SHA384"]'
 
 
 # 配置文件
 listeners.ssl.default {
   ...
-  authentication {
     bind = "127.0.0.1:8883"
-    ssl {
+    ssl_options {
       ciphers = ["TLS_AES_256_GCM_SHA384"]
     }
   }

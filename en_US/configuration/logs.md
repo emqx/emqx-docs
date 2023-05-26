@@ -10,7 +10,7 @@ debug < info < notice < warning < error < critical < alert < emergency
 
 <!-- for a more detailed description of each log level, see [Log and observability - Log](https://docs.emqx.com/en/enterprise/v5.0/observability/log.html). -->
 
-You can configure EMQX logs with Dashboard or configuration files. To configure with EMQX Dashboard, you can click **Configuration** -> **Log** on the left navigation menu to configure. 
+You can configure EMQX logs with Dashboard or configuration files. To configure with EMQX Dashboard, you can click **Management** -> **Log** on the left navigation menu to configure. 
 
 :::tip
 
@@ -89,6 +89,6 @@ Where,
 
 To configure listeners via Dashboard,  click **Configuration** -> **Log** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
 
-EMQX has offered more configuration items to better serve customized needs, you can continue to read [Configuration Manual](./configuration-manual.md).
+EMQX has offered more configuration items to better serve customized needs, you can continue to read [Configuration Manual](./configuration-manual.html).
 
 :::

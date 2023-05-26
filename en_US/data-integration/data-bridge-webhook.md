@@ -14,8 +14,9 @@ or from the output of a rule.
 
 ## Feature List
 
-- [Connection pool](./data-bridges.md)
-- [Buffer queue](./data-bridges.md)
+- [Connection pool](./data-bridges.md#connection-pool)
+- [Buffer queue](./data-bridges.md#buffer-queue)
+- [Async mode](./data-bridges.md#async-mode)
 
 ## Quick Start Tutorial
 
@@ -54,13 +55,9 @@ python3 http_server.py
 
 2. Click **Create** on the top right corner of the page. Click to select the **Webhook** and click **Next**:
 
-<img src="./assets/rules/en-webhook-index-ee.png" alt="image" style="zoom:50%;" />
-
 3. Input a name for the data bridge. The name should be a combination of upper/lower case letters or numbers, for example, `my_webhook`. 
 
    Set **URL** to `http://localhost:5000`. For the rest, you can keep the default value.
-
-<img src="./assets/rules/en-webhook-conf-1-ee.png" alt="image" style="zoom:50%;" />
 
 4. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the HTTP server.
 

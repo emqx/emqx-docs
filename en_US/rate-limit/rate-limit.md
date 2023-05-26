@@ -27,7 +27,7 @@ The system currently supports rate control services for the following resources:
 
 The hierarchical relationship is shown in the figure:
 
- ![image](./assets/limiter_hierarchy.png)
+ <img src="./assets/limiter_hierarchy.png" alt="image" style="zoom:67%;" />
 
 ### Wooden Barrel Effect
   No matter how much the rate of the lower layer is configured, it is limited by the actual rate of the upper layer, and it is guaranteed that it will never exceed the actual rate limit of the upper layer

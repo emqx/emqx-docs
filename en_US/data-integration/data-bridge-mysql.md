@@ -1,6 +1,6 @@
 # Ingest Data into MySQL
 
-EMQX supports integration with MySQL. You can save client messages and events to MySQL, or record the online status or online/offline of clients by using events to trigger the data update or removal. 
+EMQX supports integration with MySQL. You can save client messages and events to MySQL, or record the online status or online/offline of clients by using events to trigger the data update or removal.
 
 {% emqxce %}
 :::tip
@@ -19,10 +19,11 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 ## Feature List
 
-- [Connection pool](./data-bridges.md)
-- [Batch mode](./data-bridges.md)
-- [Buffer mode](./data-bridges.md)
-- [SQL preprocessing](./data-bridges.md)
+- [Connection pool](./data-bridges.md#connection-pool)
+- [Batch mode](./data-bridges.md#batch-mode)
+- [Async mode](./data-bridges.md#async-mode)
+- [Buffer queue](./data-bridges.md#buffer-queue)
+- [SQL prepared statement](./data-bridges.md#prepared-statement)
 
 <!-- [Configuration parameters](#Configuration) TODO 链接到配置手册对应配置章节。 -->
 
@@ -34,7 +35,7 @@ This tutorial assumes that you run both EMQX and MySQL on the local machine. If 
 
 ### Install MySQL Server
 
-Install MySQL server via Docker, and then run the docker image. 
+Install MySQL server via Docker, and then run the docker image.
 
 ```bash
 # To start the MySQL docker image and set the password as public
@@ -65,7 +66,7 @@ use emqx_data;
    );
    ```
 
-2. Use the following SQL statements to create data table `emqx_client_events` in MySQL database for storing the client ID, event type, and creation time of every event. 
+2. Use the following SQL statements to create data table `emqx_client_events` in MySQL database for storing the client ID, event type, and creation time of every event.
 
    ```sql
    CREATE TABLE emqx_client_events (
@@ -78,7 +79,7 @@ use emqx_data;
 
 ### Create MySQL Data Bridges
 
-Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to MySQL for messages storage and event recording. 
+Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to MySQL for messages storage and event recording.
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 
@@ -95,12 +96,12 @@ Data bridges for message storage and event recording require different SQL templ
    - **Username**: Input `root`.
    - **Password**: Input `public`.
 
-6. Configure the **SQL Template** based on the feature to use: 
+6. Configure the **SQL Template** based on the feature to use:
 
    Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
-   
+
    - To create a data bridge for message storage, use the statement below:
-   
+
      ```sql
      INSERT INTO emqx_messages(clientid, topic, payload, created_at) VALUES(
        ${clientid},
@@ -109,9 +110,9 @@ Data bridges for message storage and event recording require different SQL templ
        FROM_UNIXTIME(${timestamp}/1000)
      )
      ```
-   
+
    - To create a data bridge for online/offline status recording, use the statement below:
-   
+
      ```sql
      INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
        ${clientid},
@@ -122,17 +123,17 @@ Data bridges for message storage and event recording require different SQL templ
 
 7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md).
 
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the TDengine.
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the MySQL.
 
 9. Click **Create** to finish the creation of the data bridge.
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into MySQL. You can also create rules by following the steps in [Create Rules for MySQL Data Bridge](#create-rules-for-mysql-data-bridge).
 
-Now the MySQL data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+Now the MySQL data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
 ### Create Rules for MySQL Data Bridge
 
-After you have successfully created the data bridge to MySQL, you can continue to create rules to specify the data to be saved into MySQL and rules for the online/offline status recording. 
+After you have successfully created the data bridge to MySQL, you can continue to create rules to specify the data to be saved into MySQL and rules for the online/offline status recording.
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
 
@@ -145,7 +146,7 @@ After you have successfully created the data bridge to MySQL, you can continue t
      Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
 
      ```sql
-     SELECT 
+     SELECT
        *
      FROM
        "t/#"
@@ -156,26 +157,26 @@ After you have successfully created the data bridge to MySQL, you can continue t
      ```sql
      SELECT
        *
-     FROM 
+     FROM
        "$events/client_connected", "$events/client_disconnected"
      ```
 
 4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data Bridge**. Click the **Add** button.
-5. Click the **Create** button to finish the setup. 
+5. Click the **Create** button to finish the setup.
 
-Now you have successfully created the rule for MySQL data bridge. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to MySQL after parsing by rule  `my_rule`. 
+Now you have successfully created the rule for MySQL data bridge. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to MySQL after parsing by rule  `my_rule`.
 
 ### Test the Data Bridge and Rule
 
-Use MQTT X  to send a message to topic  `t/1`  to trigger an online/offline event. 
+Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello MySQL" }'
 ```
 
-Check the running status of the two data bridges, there should be one new incoming and one new outgoing message. 
+Check the running status of the two data bridges, there should be one new incoming and one new outgoing message.
 
-Check whether the data is written into the ` emqx_messages` data table. 
+Check whether the data is written into the ` emqx_messages` data table.
 
 ```bash
 mysql> select * from emqx_messages;

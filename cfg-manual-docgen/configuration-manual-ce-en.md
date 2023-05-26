@@ -155,7 +155,7 @@ If setting it to 0, the runtime system does not even attempt to write a crash du
 
   *Default*: `[]`
 
-  List of Erlang applications that shall be rebooted when the EMQX joins the cluster.
+  List of Erlang applications that shall be rebooted when the EMQX broker joins the cluster.
 
 
 **node.etc_dir**
@@ -744,7 +744,7 @@ Service discovery via Kubernetes API server.
 
   *Default*: `emqx`
 
-  EMQX service name.
+  EMQX broker service name.
 
 
 **cluster.k8s.address_type**
@@ -2491,7 +2491,7 @@ subscriber was not found, send to a random subscriber cluster-wide
 ### System topics
 
 
-The EMQX periodically publishes its own status, message statistics,
+The EMQX Broker periodically publishes its own status, message statistics,
 client online and offline events to the system topic starting with `$SYS/`.
 
 The following options control the behavior of `$SYS` topics.
@@ -3292,7 +3292,7 @@ Settings for the limiter of the node level.
 
 ### Listener-level rate limiting
 
-在监听器中配置中配置速率限制器。
+Config rate limiter in listeners.
 
 **listeners.\$type.$name.limiter.bytes_in**
 
@@ -11092,7 +11092,7 @@ WebSocket listener options.
 
   *Default*: `/mqtt`
 
-  WebSocket's MQTT protocol path. So the address of EMQX's WebSocket is:
+  WebSocket's MQTT protocol path. So the address of EMQX Broker's WebSocket is:
 <code>ws://{ip}:{port}/mqtt</code>
 
 
@@ -11505,4 +11505,5 @@ Lower values decrease memory usage per connection.
   *Optional*: `8-15`
 
   Specifies the size of the compression context for the client.
+
 
