@@ -20,7 +20,7 @@ For example, you need to republish a message with the `name` field equal to `Sha
 
    - **Schema**:
 
-     ```protobuf
+     ```json
      {
        "type":"record",
        "fields":[
