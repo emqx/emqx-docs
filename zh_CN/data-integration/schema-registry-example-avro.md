@@ -173,7 +173,7 @@ def on_message(client, userdata, msg):
 
 3. 点击**连接**，作为 MQTT 客户端连接到 EMQX。
 
-4. 在**发布**区域，在**主题**中输入 `avro_out`，在 **Payload** 中输入以下消息：
+4. 在**发布**区域，在**主题**中输入 `avro_in`，在 **Payload** 中输入以下消息：
 
    ```json
    {"favorite_color":"red","favorite_number":666,"name":"Shawn"}
