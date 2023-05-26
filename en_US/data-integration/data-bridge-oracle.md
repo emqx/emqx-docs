@@ -100,7 +100,7 @@ Data bridges for message storage and event recording require different SQL templ
 
 6. Configure the **SQL Template** based on the feature to use.
 
-   Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+   Note: This is a [preprocessed SQL](./data-bridges.md#prepared-statement), so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
    
    - To create a data bridge for message storage, use the SQL statement below:
    

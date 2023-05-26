@@ -96,7 +96,7 @@ CREATE TABLE t_emqx_client_events (
 
 6. 根据业务实现配置 **SQL 模版**。
 
-   注意：此处为[预处理 SQL](/data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;` 。
+   注意：此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;` 。
 
    - 想要为消息存储创建数据桥接，使用下面的 SQL 语句：
 
