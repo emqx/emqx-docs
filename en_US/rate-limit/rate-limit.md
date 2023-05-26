@@ -1,46 +1,29 @@
 # Rate limit
 
-EMQX can specify the limit on access speed and message speed, this is a backpressure scheme that avoids system overload from the entrance and guarantees system stability and predictable throughput.
+EMQX allows for specifying limits on connection speed and messaging speed, using a backpressure scheme that avoids system overload at the entry point and guarantees system stability with predictable throughput.
 
 ## Limiter Types
 
-EMQX limiter currently supports the following types:
+EMQX uses the following types of limiters to specify the rate limits:
 
-| Type              | Description                                             | Post-Overload Behavior            |
-| :---------------- | :------------------------------------------------------ | :-------------------------------- |
-| bytes_rate        | Incoming message size in bytes per second               | Pause receiving client messages   |
-| messages_rate     | Incoming messages per second                            | Pause receiving client messages   |
-| max_conn_rate     | Connections per second                                  | Pause for new connections         |
+| Type          | Description                               | Post-Overload Behavior          |
+| :------------ | :---------------------------------------- | :------------------------------ |
+| bytes_rate    | Incoming message size in bytes per second | Pause receiving client messages |
+| messages_rate | Incoming messages per second              | Pause receiving client messages |
+| max_conn_rate | Connections per second                    | Pause receiving new connections |
 
-## Useage
-                                      
-### Setup Limiter for a Listener
+## Configure Limiter on Listener
 
-It's easy to set limiters for listeners by adding the type directly to the listener configuration.
- 
+Limiter can work on the listener level. For example, to set a Limiter for the default TCP listener, you can work with the code below:
+
 ```bash
 listeners.tcp.default {
   bind = "0.0.0.0:1883"
   ## Set the limit of connection rate for this listener to 1000 per second
   max_conn_rate = "1000/s"
-  ## Set the limit of inbound message numbers per second for each client connected to this listener to 1000
+  ## Set the limit of incoming message numbers per second for each client connected to this listener to 1000
   messages_rate = "1000/s"
-  ## Set the limit of inbound message size per second for each client connected to this listener to 1000M
-  bytes_rate = "1000MB/s"
-}
-```
-
-### Setup Limiter for the Node
-
-It's also possible and easy to set a limit for the whole node, which needs the below section into the `emqx.conf`.
-
-```bash
-limiter {
-  ## Set the limit of connection rate for the current node
-  max_conn_rate = "1000/s"
-  ## Set the limit of inbound message numbers per second for the current node
-  messages_rate = "1000/s"
-  ## Set the limit of inbound message size per second for the current node
+  ## Set the limit of incoming message size per second for each client connected to this listener to 1000M
   bytes_rate = "1000MB/s"
 }
 ```
