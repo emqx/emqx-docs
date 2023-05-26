@@ -137,7 +137,7 @@ This section demonstrates how to create an EMQX data bridge to RabbitMQ in Dashb
 
 8. Click **Create** to finish the creation of the data bridge.
 
-   A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into RabbitMQ. You can also create rules by following the steps in [Create a Rule for RabbitMQ Data Bridge](#create-a-rule-for-rabbitmq-data-bridge).
+   A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into RabbitMQ. For detailed steps, refer to [Create a Rule for RabbitMQ Data Bridge](#create-a-rule-for-rabbitmq-data-bridge).
 
 Now the RabbitMQ data bridge should appear in the data bridge list (**Data Integration -> Data Bridge**) with **Resource Status** as Connected. You can continue to create a rule to forward data to the new RabbitMQ bridge.
 
