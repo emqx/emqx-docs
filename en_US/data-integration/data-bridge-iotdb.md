@@ -5,12 +5,12 @@
 EMQX supports data integration with Apache IoTDB, allowing you to forward time series data to Apache IoTDB using their [REST API V2](https://iotdb.apache.org/UserGuide/Master/API/RestServiceV2.html).
 
 {% emqxce %}
-:::tip 
+:::tip
 
 The Apache IoTDB bridge is an EMQX Enterprise Edition feature. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 ::: {% endemqxce %}
 
-::: tip Prerequisites
+:::tip Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 
@@ -77,16 +77,7 @@ This section introduces how to create an EMQX data bridge to Apache IoTDB throug
    * **Base URL**: Input `http://localhost:18080`, or the actual hostname/IP if the IoTDB server is running remotely.
    * **Username**: Input the IoTDB username; The default value is `root`.
    * **Password**: Input the IoTDB password; The default value is `root`.
-   
-6. Configure the **Payload Template**: The default value is an empty string, meaning the message payload will be forwarded as JSON-formatted text to IoTDB without modification.
-
-   You can also define a custom message payload format using placeholders within the template to dynamically include data from the incoming MQTT messages. For example, if you want to include the MQTT message payload and its timestamp in the IoTDB message, you can use the following template:
-
-   ```sql
-   {"payload": "${data}", "timestamp": ${timestamp}}
-   ```
-
-   `${data}` and `${timestamp}` are placeholders and will be replaced by the actual values from the message when it is forwarded to the Apache IoTDB server. This template will produce a JSON-formatted message containing the payload and timestamp of the incoming MQTT message. 
+   * **Device ID** (optional): A fixed device id used as the name of the device this timeseries data is inserted for at the IoTDB instance. If omitted it needs to be part of the resulting message or else it will be taken from the topic these messages are being sent to by converting '/' into '.', ie posting a message to `root/sg27` will result in sending a device name of `root.sg27`.
 
 7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed.
 
@@ -96,7 +87,7 @@ This section introduces how to create an EMQX data bridge to Apache IoTDB throug
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Apache IoTDB. You can also create rules by following the steps in [Create Rules for Apache IoTDB Data Bridge](#create-a-rule-for-apache-iotdb-bridge).
 
-Now the Apache IoTDB data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with Resource Status as Connected. 
+Now the Apache IoTDB data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with Resource Status as Connected.
 
 ### Create a Rule for Apache IoTDB Data Bridge
 
@@ -109,16 +100,15 @@ You can continue to create a rule to forward data to the new Apache IoTDB bridge
 3. Input a rule ID, for example, `my_rule`.
 
 4. Input the following statement in the SQL editor, which will forward the MQTT messages matching the topic pattern `t/#`:
-
    ```
    SELECT
      *
    FROM
-     "t/#"
+     "root/#"
 
    ```
 
-5. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**.
+5. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**. You can skip this step and the next step if you chose **Create Rule** when creating the bridge itself, it will be pre-configured in that case.
 
 6. Click the **Add** button to finish the setup.
 
@@ -132,7 +122,7 @@ You can use the built-in WebSocket client in the EMQX dashboard to test your rul
 
 1. Click **Diagnose** -> **WebSocket Client** in the left navigation menu of the Dashboard.
 
-2. Fill in the connection information for the current EMQX instance. 
+2. Fill in the connection information for the current EMQX instance.
 
    - If you run EMQX locally, you can use the default value.
    - If you have changed EMQX's default configuration. For example, the configuration change on authentication can require you to type in a username and password.
@@ -140,8 +130,8 @@ You can use the built-in WebSocket client in the EMQX dashboard to test your rul
 3. Click **Connect** to connect the client to the EMQX instance.
 
 3. Scroll down to the publish area and type in the following:
-   * **Topic**:`t/test`
-   * **Payload**: Make sure to use `JSON` as the payload encoding and then enter:
+   * **Topic**: `root/test`
+   * **Payload**:
    ```json
    {
      "measurement": "temp",
@@ -151,10 +141,26 @@ You can use the built-in WebSocket client in the EMQX dashboard to test your rul
    }
    ```
    * **QoS**: `2`
-   
+
 4. Click **Publish** to send the message.
 
-If the data bridge and rule are successfully created, the message should have been published to the specified time series table in the Apache IoTDB server. You can check this using IoTDB's command line interface. If you're using it from docker as above you can connect the server by using this command from your terminal:
+5. Instead of sending `device_id` you can also use the topic as the identifier. In this case enter the following data:
+   * **Topic**: `root/sg27`
+   * **Payload**:
+   ```json
+   {
+     "measurement": "temp",
+     "data_type": "FLOAT",
+     "value": "36.6"
+   }
+   ```
+   * **QoS**: `2`
+
+   **NOTE**: If your topic does not start with `root` it will automatically be prefixed, ie. if you post to `test/sg27` the resulting device name will be `root.test.sg27`, make sure your rule above is configured correctly, so it forwards messages from that topic to the bridge.
+
+6. Click **Publish** to send the message.
+
+If the data bridge and rule are successfully created, the message(s) should have been published to the specified time series table in the Apache IoTDB server. You can check this by using IoTDB's command line interface. If you're using it from docker as shown above, you can connect to the server by using the following command from your terminal:
 
 ```shell
     $ docker exec -ti iotdb-service /iotdb/sbin/start-cli.sh -h iotdb-service
@@ -170,5 +176,7 @@ And you should see the data printed as follows:
 |                    Time|root.sg27.temp|
 +------------------------+--------------+
 |2023-05-05T14:26:44.743Z|          37.6|
+|2023-05-05T14:27:44.743Z|          36.6|
 +------------------------+--------------+
 ```
+**NOTE**: If you configured a fixed **Device ID** at the bridge's configuration, it always takes precedence over any of the above.
