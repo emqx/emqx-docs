@@ -190,10 +190,11 @@
     - data-integration/data-bridge-pgsql
     - data-integration/data-bridge-dynamo
     - data-integration/data-bridge-clickhouse
-    # - data-integration/data-bridge-cassa
+    - data-integration/data-bridge-cassa
     - data-integration/data-bridge-tdengine
     - data-integration/data-bridge-rocketmq
     - data-integration/data-bridge-oracle
+    - data-integration/data-bridge-sqlserver
 
 
     # TODO

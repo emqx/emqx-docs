@@ -18,14 +18,14 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 ## Feature List
 
-- [Connection pool](./data-bridges.md)
-- [Batch mode](./data-bridges.md)
-- [Buffer queue](./data-bridges.md)
-- [Prepared Statement](./data-bridges.md)
+- [Connection pool](./data-bridges.md#connection-pool)
+- [Batch mode](./data-bridges.md#batch-mode)
+- [Buffer queue](./data-bridges.md#buffer-queue)
+- [Prepared Statement](./data-bridges.md#prepared-statement)
 
 ## Quick Start Tutorial
 
-This section introduces how to configure the Oracle Database data bridge, covering topics like how to set up the Oracle Database server, create data bridges and rules for forwarding data to Oracle Database and test the data bridges and rules.
+This section introduces how to use the Oracle Database data bridge with a practical tutorial, covering topics like how to install the Oracle Database server and create data tables, create data bridges and rules for forwarding data to Oracle Database, and test the data bridges and rules.
 
 This tutorial assumes that you run both EMQX and Oracle Database on the local machine. If you have Oracle Database and EMQX running remotely, adjust the settings accordingly.
 
@@ -38,10 +38,10 @@ Install Oracle Database server via Docker, and then run the docker image.
 docker run --name oracledb -p 1521:1521 -d oracleinanutshell/oracle-xe-11g:1.0.0
 
 # To start the Oracle Database docker image remotely
-# docker run --name oracledb -p 1521:1521 -e ORACLE_ALLOW_REMOTE=true -d oracleinanutshell/oracle-xe-11g:1.0.0
+docker run --name oracledb -p 1521:1521 -e ORACLE_ALLOW_REMOTE=true -d oracleinanutshell/oracle-xe-11g:1.0.0
 
 # For performance concern, you may want to disable the disk asynch IO:
-# docker run --name oracledb -p 1521:1521 -e ORACLE_DISABLE_ASYNCH_IO=true -d oracleinanutshell/oracle-xe-11g:1.0.0
+docker run --name oracledb -p 1521:1521 -e ORACLE_DISABLE_ASYNCH_IO=true -d oracleinanutshell/oracle-xe-11g:1.0.0
 
 # Access the container
 docker exec -it oracledb bash
@@ -82,8 +82,6 @@ Use the following SQL statements to create data table `t_emqx_client_events` in 
 
 Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to Oracle Database for message storage and event recording.
 
-#### Message Storage Data Bridge
-
 1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
 
 2. Click **Create** on the top right corner of the page.
@@ -96,45 +94,45 @@ Data bridges for message storage and event recording require different SQL templ
 
    - **Server Host**: Input `http://127.0.0.1:1521`, or the actual URL if the Oracle Database server is running remotely.
    - **Database Name**: Input `XE`.
-   - **SID**: Input `XE`.
+   - **Oracle Database SID**: Input `XE`.
    - **Username**: Input `system`.
    - **Password**: Input `oracle`.
 
-6. Configure the **SQL Template**. Use the SQL statements below to insert data.
+6. Configure the **SQL Template** based on the feature to use.
 
    Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+   
+   - To create a data bridge for message storage, use the SQL statement below:
+   
+     ```sql
+     INSERT INTO t_mqtt_msgs(msgid, sender, topic, qos, retain, payload, arrived) VALUES(
+       ${id},
+       ${clientid},
+       ${topic},
+       ${qos},
+       ${flags.retain},
+       ${payload},
+       TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') + NUMTODSINTERVAL(${timestamp}/1000, 'SECOND')
+     )
+     ```
+   
+   - To create a data bridge for online/offline status recording, use the SQL statement below:
+   
+     ```sql
+     INSERT INTO t_emqx_client_events(clientid, event, created_at) VALUES (
+       ${clientid},
+       ${event},
+       TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') + NUMTODSINTERVAL(${timestamp}/1000, 'SECOND')
+     )
+     ```
 
-  ```sql
-  INSERT INTO t_mqtt_msgs(msgid, sender, topic, qos, retain, payload, arrived) VALUES(
-    ${id},
-    ${clientid},
-    ${topic},
-    ${qos},
-    ${flags.retain},
-    ${payload},
-    TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') + NUMTODSINTERVAL(${timestamp}/1000, 'SECOND')
-  )
-  ```
+7. Leave other options as default.
 
-7. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Oracle Database server.
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Oracle Database server.
 
-8. Then click **Create** to finish the creation of the data bridge.
+9. Click **Create** to finish the creation of the data bridge.
 
-#### Online/Offline Status Recording Data Bridge
-
-The operating steps are similar to those at the [Message Storage Data Bridge](#message-storage-data-bridge) session except for the Oracle Database template and SQL rules.
-
-The SQL template for online/offline status recording is as follows.
-
-Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
-
-```sql
-INSERT INTO t_emqx_client_events(clientid, event, created_at) VALUES (
-  ${clientid},
-  ${event},
-  TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') + NUMTODSINTERVAL(${timestamp}/1000, 'SECOND')
-)
-```
+   A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Oracle Database. For detailed steps, refer to [Create Rules for Oracle Database Data Bridge](#create-rules-for-oracle-database-data-bridge).
 
 Now the Oracle Database data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
@@ -142,39 +140,34 @@ Now the Oracle Database data bridge should appear in the data bridge list (**Dat
 
 After you have successfully created the data bridges to Oracle Database, you can continue to create rules to specify the data to be saved into Oracle Database and rules for the online/offline status recording.
 
-#### Message Storage Rule
-
 1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `t/#`  to Oracle Database, we can use the SQL syntax below.
+3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
 
-   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
+   - To create a rule for message storage, input the following SQL syntax, which means the MQTT messages under topic `t/#`  will be saved to Oracle Database.
 
-```sql
-SELECT
-  *
-FROM
-  "t/#"
-```
+     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
 
-4. Then click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data bridge**.
-5. Then, click the **Add** button.
-6. Then click the **Create** button to finish the setup.
+     ```sql
+     SELECT 
+       *
+     FROM
+       "t/#"
+     ```
 
-#### Online/Offline Status Recording Rule
+   - To create a rule for online/offline status recording, input the following SQL syntax:
 
-The creating steps are similar to those at the [Message Storage Rule](#message-storage-rule) session except for the SQL rules.
+     ```sql
+     SELECT
+       *
+     FROM
+       "$events/client_connected", "$events/client_disconnected"
+     ```
 
-The SQL rule is as follows:
-
-```sql
-SELECT
-  *
-FROM
-  "$events/client_connected", "$events/client_disconnected"
-```
+4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the Oracle Database data bridge just created. Click the **Add** button.
+6. Click the **Create** button to finish the setup.
 
 Now you have successfully created the data bridges to Oracle Database. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Oracle Database after parsing by rule  `my_rule`.
 
@@ -199,7 +192,7 @@ MSGID                            SENDER TOPIC QOS RETAIN PAYLOAD                
 
 ```
 
-Check whether the data is written into the`t_emqx_client_events` table.
+Check whether the data is written into the `t_emqx_client_events` table.
 
 ```sql
 SELECT * FROM t_emqx_client_events;
