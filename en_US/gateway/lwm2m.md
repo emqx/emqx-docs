@@ -99,7 +99,7 @@ gateway.lwm2m {
 Configuring the gateway via emqx.conf requires changes on a per-node basis, but configuring it via Dashboard or the HTTP API will take effect across the cluster.
 :::
 
-The LwM2M gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters refer to: [Gateway Configuration - Listeners](../configuration/configuration-manual.md)
+The LwM2M gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters refer to: [Gateway Configuration - Listeners](../configuration/configuration-manual.html)
 
 
 ## Authentication
@@ -821,7 +821,7 @@ Variables:
 
 ## User Interfaces
 
-- Detailed configuration options: [Configuration - LwM2M Gateway](../configuration/configuration-manual.md)
+- Detailed configuration options: [Configuration - LwM2M Gateway](../configuration/configuration-manual.html)
 - Detailed HTTP APIs Description: [HTTP API - Gateway](../admin/api.md)
 
 ## Client libraries

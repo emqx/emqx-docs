@@ -64,7 +64,7 @@ gateway.coap {
 通过配置文件来配置网关，需要在每个节点上手动同步配置文件；而通过 Dashboard 或者 HTTP API 管理则会自动同步至整个集群。
 :::
 
-CoAP 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表请参考：[网关配置 - 监听器](../configuration/configuration-manual.md)
+CoAP 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表请参考：[网关配置 - 监听器](../configuration/configuration-manual.html)
 
 ## 工作模式
 
@@ -174,7 +174,7 @@ CoAP 网关基于 [Publish-Subscribe Broker for the CoAP](https://datatracker.ie
 
 ## 用户层接口
 
-- 配置说明参考：[网关配置 - CoAP 网关](../configuration/configuration-manual.md)
+- 配置说明参考：[网关配置 - CoAP 网关](../configuration/configuration-manual.html)
 - 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
 
 

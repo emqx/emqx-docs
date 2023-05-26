@@ -1,6 +1,6 @@
 # Integrate with MongoDB
 
-This authorizer implements authorization checks through matching pubublish/subscription requests against lists of rules stored in the MongoDB database.
+This authorizer implements authorization checks by matching publish/subscribe requests against lists of rules stored in the MongoDB database.
 
 ::: tip Tip
 
@@ -53,15 +53,15 @@ You can use EMQX Dashboard to configure how to use MongoDB for user authorizatio
 
 1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
 
-2. Click **Create** at the top right corner, then click to select **MongoDB** as **Backend**. Click **Next**. The **Configuration** tab is shown as below.
+2. Click **Create** at the top right corner, then click to select **MongoDB** as **Backend**. Click **Next**. The **Configuration** tab is shown below.
 
-   ![authz-MongoDB_ee](./assets/authz-MongoDB_ee.png)
+   <img src="./assets/authz-MongoDB_ee.png" alt="authz-MongoDB_ee" style="zoom:67%;" />
 
 3. Follow the instructions below to do the configuration.
 
    **Connect**: Fill in the information needed to connect MongDB.
 
-   - **MongoDB Mode**: Select how MongoDB is deployed, including **Single**, **Replica Set** and **Sharding**.
+   - **MongoDB Mode**: Select how MongoDB is deployed, including **Single**, **Replica Set,** and **Sharding**.
    - **Server**: Specify the server address that EMQX is to connect (`host:port`).
    - **Database**: MongoDB database name.
    - **Collection**: Name of MongoDB collection where authorization rules are stored; Data type: strings.
@@ -85,7 +85,7 @@ You can use EMQX Dashboard to configure how to use MongoDB for user authorizatio
 
 You can configure the EMQX MongoDB authorizer with EMQX configuration items.
 
-The MongoDB authorizer is identified by type `mongodb`. The authorizer supports connecting to MongoDB running in 3 types of deployment modes. <!---For detailed configuration information, see:[authz:mongo_single](../../configuration/configuration-manual.md#authz:mongo_single),[authz:mongo_sharded](../../configuration/configuration-manual.md#authz:mongo_sharded) and [authz:mongo_rs](../../configuration/configuration-manual.md#authz:mongo_rs)-->
+The MongoDB authorizer is identified by type `mongodb`. The authorizer supports connecting to MongoDB running in 3 types of deployment modes. <!---For detailed configuration information, see:[authz:mongo_single](../../configuration/configuration-manual.html#authz:mongo_single),[authz:mongo_sharded](../../configuration/configuration-manual.html#authz:mongo_sharded) and [authz:mongo_rs](../../configuration/configuration-manual.html#authz:mongo_rs)-->
 
 Sample configuration:
 

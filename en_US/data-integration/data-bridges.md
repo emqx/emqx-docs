@@ -30,7 +30,7 @@ EMQX will provide the running statistics of data integration in the following ca
 
 ## Features Supported
 
-You can further improve the performance and reliability of data integration with the following easy-to-use data integration features. Note: Depending on the data system you are connecting to, the features supported may differ. You may refer to the document about different data systems for feature support.
+You can further improve the performance and reliability of data integration with the following easy-to-use data integration features. Note: The features supported may differ depending on the data system you are connecting to. You may refer to the document about different data systems for feature support.
 
 ### Connection Pool
 
@@ -42,7 +42,7 @@ EMQX will create a separate connection pool for each node with data integration 
 
 Async mode is the data processing mode of the data integration. By enabling the Async mode, we can prevent the message publishing services from being blocked by the I/O pressure. Note: The time series of the message publishing might be affected, as the data integration may be still processing the queued messages while the client has already sent several new messages.
 
-To improve the data processing efficiency, EMQX has enabled the Async mode by default. You can use the following commands to disable the Async mode if your application has strict requirements on the time series.
+To improve the data processing efficiency, EMQX has enabled the Async mode by default. Use the following command to disable it if your application has strict requirements on the time series.
 
 Example code
 
@@ -54,11 +54,17 @@ bridges.mysql.foo {
   ...
   resource_opts {
   # sync | async
-    query_mode = "async"
+    query_mode = "sync"
     ...
   }
 }
 ```
+
+::: tip
+
+To ensure the time series of messages, please also add `max_inflight = 1` to the configuration file `emqx.conf`.  
+
+:::
 
 ### Batch Mode
 
@@ -85,7 +91,6 @@ bridges.mysql.foo {
   enable = true
   ...
   resource_opts {
-    enable_batch = true
     batch_size = 100
     batch_time = "20ms"
     ...
@@ -97,11 +102,9 @@ bridges.mysql.foo {
 
 When external resources are unavailable, for example, due to network fluctuations or service downtime, the buffer queue feature can help to save the message generated during this period as memory or disk cache and then resume the messaging after the service is restored.
 
-It is recommended to enable this feature to improve the fault tolerance capability of the data integration. The configuration items include:
+It is recommended to enable this feature to improve the fault tolerance capability of the data integration. 
 
-- Whether to enable Buffer Queue;
-- For data integration connecting certain data systems, you can set the cache medium as memory, disk, or memory-disk.
-- For each resource connection (not MQTT connection), you can specify the cache queue size based on the storage size. If the cached size exceeds the limit, data will be discarded following the First In First Out (FIFO) rule.
+For each resource connection (not MQTT connection), you can specify the cache queue size based on the storage size. If the cached size exceeds the limit, data will be discarded following the First In First Out (FIFO) rule.
 
 #### Configuration
 
@@ -118,7 +121,6 @@ bridges.mysql.foo {
   enable = true
   ...
   resource_opts {
-    enable_queue = true
     max_queue_bytes = "100MB"
     query_mode = "async"
     ...

@@ -35,7 +35,7 @@ When only the `Built-in Database` authentication is enabled, according to the pr
 ```
 4. Return **Authentication succeeded**, and the client will successfully access the system as a superuser. 
 
-![hooks_and_internal_model](./assets/hooks_and_internal_model.png)
+<img src="./assets/hooks_and_internal_model.png" alt="hooks_and_internal_model" style="zoom:50%;" />
 
 Therefore, **Hooks** can greatly enhance the flexibility of EMQX. If we want to customize EMQX behaviors, we no longer need to modify the core code and only need to hook a function on **HookPoint** that EMQX provided on the specific location.
 
