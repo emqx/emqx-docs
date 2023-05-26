@@ -195,7 +195,7 @@ Clients can have a "Superuser" identity, which has the highest permissions witho
 
 1. After the superuser function is enabled in the authentication plugin, EMQX will check whether the client  has superuser identity first when publishing the subscription
 
-2. When the client is a super user, the authentication is passed and subsequent ACL checks are skipped
+2. When the client is a superuser, the authentication is passed and subsequent ACL checks are skipped
 
 
 ## ACL Cache

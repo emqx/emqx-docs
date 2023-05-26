@@ -4,7 +4,7 @@
 
 ## Install Kafka and Create Kafka Topics
 
-Setup a Kafka, taking Mac OSX for instance:
+Set up a Kafka, taking Mac OSX for instance:
 
 ```bash
 wget https://archive.apache.org/dist/kafka/2.8.0/kafka_2.13-2.8.0.tgz

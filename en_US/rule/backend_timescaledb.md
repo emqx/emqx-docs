@@ -1,8 +1,8 @@
 # Ingest Data into TimescaleDB
 
-## Setup TimescaleDB and Create Tables
+## Set up TimescaleDB and Create Tables
 
-Setup a TimescaleDB database, taking Mac OSX for instance:
+Set up a TimescaleDB database, taking Mac OSX for instance:
 
 ```bash
 $ docker pull timescale/timescaledb

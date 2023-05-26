@@ -1,6 +1,6 @@
 # Kafka Consumer Group
 
-## Setup Kafka Consumer and Create Topic
+## Set up Kafka Consumer and Create Topic
 
 The Kafka consumer group uses external Kafka as a message queue, which can convert consumer messages from Kafka into MQTT messages and publish them in EMQX.
 

@@ -1,8 +1,8 @@
 # Ingest Data into RabbitMQ
 
-## Setup RabbitMQ
+## Set up RabbitMQ
 
-Setup a RabbitMQ, taking Mac OSX for instance:
+Set up a RabbitMQ, taking Mac OSX for instance:
 
 ```bash
 $ brew install rabbitmq

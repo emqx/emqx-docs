@@ -174,9 +174,9 @@ INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (
 INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, NULL, '$all', NULL, 1,'/smarthome/%c/temperature');
 ```
 
-## Super User
+## Superuser
 
-Super users can subscribe and publish any topic. The default SQL is as follows:
+superusers can subscribe and publish any topic. The default SQL is as follows:
 
 ```sql
 select is_superuser from mqtt_user where username ='%u' limit 1
@@ -189,7 +189,7 @@ You can use the following placeholders in SQL, and EMQX will be automatically fi
 - %C: TLS certificate common name (domain name or subdomain name of the certificate), valid only when TLS connection
 - %d: TLS certificate subject, only valid when TLS connection
 
-You can adjust the super user SQL according to business needs, such as adding multiple query conditions and using database preprocessing functions to achieve more business-related functions. But in any case, super user SQL needs to meet the following conditions:
+You can adjust the superuser SQL according to business needs, such as adding multiple query conditions and using database preprocessing functions to achieve more business-related functions. But in any case, superuser SQL needs to meet the following conditions:
 
 1. The query result must include the is_superuser field, and is_superuser should be explicitly true
 2. There can only be one query result, if there are multiple results, only the first one is taken as valid data

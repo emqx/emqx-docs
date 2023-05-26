@@ -1,8 +1,8 @@
 # Ingest Data into Pulsar
 
-## Setup Pulsar and Create Topics
+## Set up Pulsar and Create Topics
 
-Setup a Pulsar, taking Mac OSX for instance:
+Set up a Pulsar, taking Mac OSX for instance:
 
 ```bash
 $ wget https://archive.apache.org/dist/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz

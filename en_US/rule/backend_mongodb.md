@@ -1,7 +1,7 @@
 # Ingest Data into MongoDB
-## Setup MongoDB Database and Create Table
+## Set up MongoDB Database and Create Table
 
-Setup a MongoDB database, and changes the username/password to root/public, taking Mac OSX for instance:
+Set up a MongoDB database, and changes the username/password to root/public, taking Mac OSX for instance:
 
 ```bash
 $ brew install mongodb

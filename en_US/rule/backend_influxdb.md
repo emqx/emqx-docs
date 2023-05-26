@@ -1,8 +1,8 @@
 # Ingest Data into InfluxDB
 
-## Setup InfluxDB Database
+## Set up InfluxDB Database
 
-Setup an InfluxDB database, taking Mac OSX for instance:
+Set up an InfluxDB database, taking Mac OSX for instance:
 
 ```bash
 $ docker pull influxdb

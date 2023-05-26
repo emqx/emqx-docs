@@ -2,7 +2,7 @@
 
 ## Start DynamoDB Database and Create Table
 
-Setup a DynamoDB database, taking Mac OSX for instance:
+Set up a DynamoDB database, taking Mac OSX for instance:
 
 ```bash
 $ brew install dynamodb-local

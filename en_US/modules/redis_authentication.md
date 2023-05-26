@@ -121,7 +121,7 @@ HSET mqtt_acl:testtopic/2 2
 
 ### ACL Query Command
 
-When performing ACL authentication, EMQX will use the current client information to fill in and execute the super user command configured by the user. If the super user command is not enabled or the client is not a super user, the ACL query command will be used to query the client’s database in the database. ACL rules.
+When performing ACL authentication, EMQX will use the current client information to fill in and execute the superuser command configured by the user. If the superuser command is not enabled or the client is not a superuser, the ACL query command will be used to query the client’s database in the database. ACL rules.
 
 ```bash
 HGETALL mqtt_acl:%u
@@ -134,9 +134,9 @@ You can use the following placeholders in ACL query commands, and EMQX will auto
 
 You can adjust the ACL query command according to your business needs, but in any case, the ACL query command needs to use topic as the key and access as the value in the hash
 
-## Super User
+## Superuser
 
-When performing ACL authentication, EMQX will use the current client information to fill and execute the super user query command configured by the user to query whether the client is a super user. When the client is a super user, the ACL query command will be skipped.
+When performing ACL authentication, EMQX will use the current client information to fill and execute the superuser query command configured by the user to query whether the client is a superuser. When the client is a superuser, the ACL query command will be skipped.
 
 ```bash
 HGET mqtt_user:%u is_superuser
@@ -152,12 +152,12 @@ You can use the following placeholders in the command, and EMQX will automatical
 
 - %d: TLS certificate subject, valid only when TLS connection
 
-You can adjust super user query commands according to business needs, such as adding multiple query conditions and using database preprocessing functions to implement more business-related functions. But in any case, the super user query command needs to meet the following conditions:
+You can adjust superuser query commands according to business needs, such as adding multiple query conditions and using database preprocessing functions to implement more business-related functions. But in any case, the superuser query command needs to meet the following conditions:
 
 1. The first data in the query result must be is_superuser data
 
 :::tip
 
-If the super user function is not needed, commenting and disabling this option can effectively improve efficiency
+If the superuser function is not needed, commenting and disabling this option can effectively improve efficiency
 
 :::

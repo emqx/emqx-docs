@@ -2,7 +2,7 @@
 
 TDengine can be widely applied to IoT, Industrial Internet, Connected Vehicles, DevOps, energy, finance, and many other scenarios. 
 
-## Setup TDengine and Create Tables
+## Set up TDengine and Create Tables
 
 Deploy TDengine by [Huawei Cloud](https://marketplace.huaweicloud.com/product/OFFI454488918838128640) or Docker:
 

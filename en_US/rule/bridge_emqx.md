@@ -1,8 +1,8 @@
 # Bridge Data into Multiple MQTT Brokers
 
-## Setup MQTT Brokers
+## Set up MQTT Brokers
 
-Setup another MQTT broker using EMQX, taking Mac OSX for instance:
+Set up another MQTT broker using EMQX, taking Mac OSX for instance:
 
 ```bash
 $ brew tap emqx/emqx/emqx
