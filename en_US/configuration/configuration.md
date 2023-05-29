@@ -2947,6 +2947,24 @@ Specifies whether to verify the client during the handshake.
 
 
 
+### listener.ssl.external.partial_chain
+
+| Type | Optional Value                                                           | Default |
+|------|--------------------------------------------------------------------------|---------|
+| enum | `false`, `true`, `cacert_from_cacertfile`, `two_cacerts_from_cacertfile` | `false` |
+
+#### Description
+
+When EMQX verifies a client certificate during the x509 path validation process, it constructs a certificate chain that starts with the client certificate and ends with a trust anchor.
+
+By default, if the setting is set to `false`, the trust anchor is the rootCA, and the certificate chain must be complete.
+
+However, if the setting is set to `true` or `cacert_from_cacertfile`, the last certificate in the cacertfile will be used as the trust anchor certificate (such as an intermediate CA). This creates a partial chain in the path validation.
+
+Alternatively, if the setting is set to `two_cacerts_from_cacertfile`, one of the last two certificates in the cacertfile will be used as the trust anchor certificate, forming a partial chain. This option is particularly useful for CA certificate rotation. However, please note that it incurs some additional overhead, so it should only be used for certificate rotation purposes.
+
+
+
 ### listener.ssl.external.fail_if_no_peer_cert
 
 | Type | Optional Value  | Default |
