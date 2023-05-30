@@ -29,10 +29,10 @@ You can use CLI command to start the node evacuation, get the evacuation status,
 
 #### Start Node Evacuation
 
-You can use the following CLI command to start the node evacuation:
+You can use the following CLI command to start the node evacuation, the `--evacuation` parameter means this is an evacuation operation:
 
-```
-emqx_ctl rebalance start --evacuation \
+```bash
+./bin/emqx_ctl rebalance start --evacuation \
     [--redirect-to "Host1:Port1 Host2:Port2 ..."] \
     [--conn-evict-rate CountPerSec] \
     [--migrate-to "node1@host1 node2@host2 ..."] \
@@ -67,40 +67,38 @@ This command will disconnect existing clients at a rate of `30` connections per 
 
 You can use the following CLI command to get the evacuation status:
 
-```
-emqx_ctl rebalance node-status
+```bash
+./bin/emqx_ctl rebalance node-status
 ```
 
 Below is an example of the returned results:
 
 ```bash
-./bin/emqx_ctl rebalance node-status
-Rebalance type: rebalance
+Rebalance type: evacuation
 Rebalance state: evicting_conns
-Coordinator node: 'emqx2@127.0.0.1'
-Connection eviction rate: 5 connections/second
-Session eviction rate: 5 sessions/second
-Connection goal: 504.0
-Recipient nodes: ['emqx2@127.0.0.1']
+Connection eviction rate: 30 connections/second
+Session eviction rate: 30 sessions/second
+Connection goal: 0
+Session goal: 0
+Session recipient nodes: []
 Channel statistics:
-  current_connected: 960
-  current_disconnected_sessions: 35
-  current_sessions: 995
-  initial_connected: 1000
-  initial_sessions: 1000
+  current_connected: 10
+  current_sessions: 0
+  initial_connected: 100
+  initial_sessions: 0
 ```
 
 #### Stop Node Evacuation
 
 You can use the following CLI command to stop evacuation:
 
-```
-emqx_ctl rebalance stop
+```bash
+./bin/emqx_ctl rebalance stop
 ```
 
 Below is an example of the returned results:
 
-```
+```bash
 ./bin/emqx_ctl rebalance stop
 Rebalance(evacuation) stopped
 ```
@@ -204,8 +202,8 @@ Rebalance started
 
 The CLI command for getting rebalance status is:
 
-```
-emqx_ctl rebalance node-status
+```bash
+./bin/emqx_ctl rebalance node-status
 ```
 
 **Example**
@@ -248,33 +246,33 @@ During evacuation/rebalance, it is up to the user to provide the necessary confi
 This configuration should help disconnected clients to be directed to the recipient nodes when they reconnect.
 Without such a configuration, there may be an excess number of disconnections.
 
-<!--To help create that configuration, EMQX provides health check endpoints:-->
+To assist in creating that configuration, EMQX provides a health check API for load balancers:
 
-<!--GET /api/v4/load_rebalance/availability_check-->
+`GET /api/v5/load_rebalance/availability_check`
 
-<!--They respond with 503 HTTP code for the donor or evacuated nodes and 200 HTTP code for nodes operating normally and receiving connections.-->
+They respond with 503 HTTP code for the donor or evacuated nodes and 200 HTTP code for nodes operating normally and receiving connections.
 
-<!--For example, the described configuration for Haproxy and a 3-node cluster could look like this:-->
+For example, for an EMQX cluster with 3 nodes and MQTT listeners on ports 3001, 3002, and 3003, and REST API ports 5001, 5002, and 5003, you can use the following configuration:
 
-<!--defaults-->
-  <!--timeout connect 5s-->
-  <!--timeout client 60m-->
-  <!--timeout server 60m-->
+```bash
+defaults
+  timeout connect 5s
+  timeout client 60m
+  timeout server 60m
 
-<!--listen mqtt-->
-  <!--bind *:1883-->
-  <!--mode tcp-->
-  <!--maxconn 50000-->
-  <!--timeout client 6000s-->
-  <!--default_backend emqx_cluster-->
+listen mqtt
+  bind *:1883
+  mode tcp
+  maxconn 50000
+  timeout client 6000s
+  default_backend emqx_cluster
 
-<!--backend emqx_cluster-->
-  <!--mode tcp-->
-  <!--balance leastconn-->
-  <!--option httpchk-->
-  <!--http-check send meth GET uri /api/v4/load_rebalance/availability_check hdr Authorization "Basic YWRtaW46cHVibGlj"-->
-  <!--server emqx1 127.0.0.1:3001 check port 5001 inter 1000 fall 2 rise 5 weight 1 maxconn 1000-->
-  <!--server emqx2 127.0.0.1:3002 check port 5002 inter 1000 fall 2 rise 5 weight 1 maxconn 1000-->
-  <!--server emqx3 127.0.0.1:3003 check port 5003 inter 1000 fall 2 rise 5 weight 1 maxconn 1000-->
-
-<!--Here we have 3 nodes with MQTT listeners on ports 3001, 3002, and 3003 and HTTP listeners on ports 5001, 5002, and 5003, respectively.-->
+backend emqx_cluster
+  mode tcp
+  balance leastconn
+  option httpchk
+  http-check send meth GET uri /api/v5/load_rebalance/availability_check hdr Authorization "Basic xxxxxx"
+  server emqx1 127.0.0.1:3001 check port 5001 inter 1000 fall 2 rise 5 weight 1 maxconn 1000
+  server emqx2 127.0.0.1:3002 check port 5002 inter 1000 fall 2 rise 5 weight 1 maxconn 1000
+  server emqx3 127.0.0.1:3003 check port 5003 inter 1000 fall 2 rise 5 weight 1 maxconn 1000
+```
