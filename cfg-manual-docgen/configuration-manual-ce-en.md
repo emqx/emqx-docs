@@ -3292,7 +3292,7 @@ Settings for the limiter of the node level.
 
 ### Listener-level rate limiting
 
-Config rate limiter in listeners.
+Config rate limiter in listener:
 
 **listeners.\$type.$name.limiter.bytes_in**
 
