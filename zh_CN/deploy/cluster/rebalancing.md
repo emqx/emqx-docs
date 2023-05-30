@@ -25,16 +25,16 @@ EMQX 节点疏散功能的工作原理如下：
 
 您可随时停止疏散流程。如果待疏散节点在疏散过程中关闭，重启后将继续以上疏散过程。
 
-### 通过CLI 命令启停节点疏散
+### 通过 CLI 命令启停节点疏散
 
 您可以使用 CLI 命令来开启节点疏散、获取节点疏散状态和停止节点疏散。
 
 #### 开启节点疏散
 
-您可以通过如下命令执行节点的疏散任务：
+您可以通过如下命令执行节点的疏散任务，其中 `--evacuation` 选项表示该命令为节点疏散操作：
 
 ``` bash
-emqx_ctl rebalance start --evacuation \
+./bin/emqx_ctl rebalance start --evacuation \
     [--redirect-to "Host1:Port1 Host2:Port2 ..."] \
     [--conn-evict-rate CountPerSec] \
     [--migrate-to "node1@host1 node2@host2 ..."] \
@@ -70,39 +70,38 @@ Rebalance(evacuation) started
 您可通过如下命令获取节点疏散状态：
 
 ```bash
-emqx_ctl rebalance node-status
+./bin/emqx_ctl rebalance node-status
 ```
 
 返回结果如下：
 
 ```bash
 ./bin/emqx_ctl rebalance node-status
-Rebalance type: rebalance
+Rebalance type: evacuation
 Rebalance state: evicting_conns
-Coordinator node: 'emqx2@127.0.0.1'
-Connection eviction rate: 5 connections/second
-Session eviction rate: 5 sessions/second
-Connection goal: 504.0
-Recipient nodes: ['emqx2@127.0.0.1']
+Connection eviction rate: 30 connections/second
+Session eviction rate: 30 sessions/second
+Connection goal: 0
+Session goal: 0
+Session recipient nodes: []
 Channel statistics:
-  current_connected: 960
-  current_disconnected_sessions: 35
-  current_sessions: 995
-  initial_connected: 1000
-  initial_sessions: 1000
+  current_connected: 10
+  current_sessions: 0
+  initial_connected: 100
+  initial_sessions: 0
 ```
 
 #### 停止节点疏散
 
 您可通过如下命令终止节点疏散任务：
 
-```
-emqx_ctl rebalance stop
+```bash
+./bin/emqx_ctl rebalance stop
 ```
 
 返回结果如下：
 
-```
+```bash
 ./bin/emqx_ctl rebalance stop
 Rebalance(evacuation) stopped
 ```
@@ -149,7 +148,7 @@ Rebalance(evacuation) stopped
 开启重平衡任务的命令可包含下列配置项：
 
 ```bash
-rebalance start \
+./bin/ rebalance start \
     [--nodes "node1@host1 node2@host2"] \
     [--wait-health-check Secs] \
     [--conn-evict-rate ConnPerSec] \
@@ -208,7 +207,7 @@ Rebalance started
 
 获取重平衡状态的命令如下：
 
-```
+```bash
 emqx_ctl rebalance node-status
 ```
 
@@ -232,7 +231,7 @@ Current average donor node connection count: 300.0
 停止重平衡任务的命令如下：
 
 ```bash
-emqx_ctl rebalance stop
+./bin/emqx_ctl rebalance stop
 ```
 
 **示例**：
@@ -249,3 +248,34 @@ Rebalance stopped
 ## 集成负载均衡器
 
 在执行疏散/重平衡时，如果是用了负载均衡器，需要用户自行配置健康检查参数。断开的客户端尝试重连时，负载均衡器会基于当前后端节点状态将其合理重定向。如果没有配置健康检查可能出现多次断开的问题。
+
+为了帮助创建该配置，EMQX 提供了用于负载均衡器的健康检查 API：
+
+`GET /api/v5/load_rebalance/availability_check`
+
+对于正在进行节点转移或者被疏散的节点，健康检查会响应 HTTP 503 状态码；对于正常运行并接收连接的节点，会响应 HTTP 200 状态码。
+
+例如，对于 HAProxy 和一个包含 3 个节点的 EMQX 集群，它们的 MQTT 监听器分别在端口 3001、3002 和 3003 上，REST API 端口分别为 5001、5002 和 5003，可以使用以下配置：
+
+```bash
+defaults
+  timeout connect 5s
+  timeout client 60m
+  timeout server 60m
+
+listen mqtt
+  bind *:1883
+  mode tcp
+  maxconn 50000
+  timeout client 6000s
+  default_backend emqx_cluster
+
+backend emqx_cluster
+  mode tcp
+  balance leastconn
+  option httpchk
+  http-check send meth GET uri /api/v5/load_rebalance/availability_check hdr Authorization "Basic xxxxxx"
+  server emqx1 127.0.0.1:3001 check port 5001 inter 1000 fall 2 rise 5 weight 1 maxconn 1000
+  server emqx2 127.0.0.1:3002 check port 5002 inter 1000 fall 2 rise 5 weight 1 maxconn 1000
+  server emqx3 127.0.0.1:3003 check port 5003 inter 1000 fall 2 rise 5 weight 1 maxconn 1000
+```
