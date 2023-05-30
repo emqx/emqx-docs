@@ -141,8 +141,6 @@ Among the enhancements, there are new exciting new features worth highlighting:
 
 - fix the `{badarg,[{ets,lookup,[gproc,{shared, ...` error logs during shutdown [#9919](https://github.com/emqx/emqx/pull/9919).
 
-- Fix crash when updating a client's keepalive via the HTTP API if it connects with keepalive disabled [#9933](https://github.com/emqx/emqx/pull/9933).
-
 - Delete the files directory when `resources` were deleted to avoid files leaking [#10039](https://github.com/emqx/emqx/pull/10039).
 
 ## v4.4.11
