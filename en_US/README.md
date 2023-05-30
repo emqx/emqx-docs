@@ -1,4 +1,4 @@
-# EMQ - Erlang MQTT Broker
+# Introduction
 
 _EMQ(Erlang MQTT Broker)_ is a distributed, massively scalable, highly extensible MQTT message broker written in Erlang/OTP.
 
