@@ -71,7 +71,7 @@ select password from mqtt_user where username = '%u' limit 1
 默认配置下示例数据如下：
 
 ```sql
-INSERT INTO `mqtt_user` ( `username`, `password`, `salt`)
+INSERT INTO mqtt_user (username, password, salt)
 VALUES
     ('emqx', 'efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7', NULL);
 ```

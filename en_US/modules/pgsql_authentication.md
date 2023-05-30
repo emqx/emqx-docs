@@ -43,10 +43,10 @@ CREATE TABLE mqtt_user (
 
 Field description:
 
--username: The username for connecting to the client. If the value here is set to `$all`, it means that the rule applies to all users
--password: password parameter for connecting to the client
--salt: password and salt string
--is_superuser: Is it a superuser
+- username: The username for connecting to the client. If the value here is set to `$all`, it means that the rule applies to all users
+- password: password parameter for connecting to the client
+- salt: password and salt string
+- is_superuser: Is it a superuser
 
 When performing identity authentication, EMQX will use the current client information to fill and execute the authentication SQL configured by the user, and query the authentication data of the client in the database.
 
@@ -56,11 +56,11 @@ select password from mqtt_user where username ='%u' limit 1
 
 Field description
 
--%u: username
--%c: clientid
--%P: Plain text password
--%C: TLS certificate common name (domain name or subdomain name of the certificate), valid only when TLS connection
--%d: TLS certificate subject, valid only when TLS connection
+- %u: username
+- %c: clientid
+- %P: Plain text password
+- %C: TLS certificate common name (domain name or subdomain name of the certificate), valid only when TLS connection
+- %d: TLS certificate subject, valid only when TLS connection
 
 The authentication SQL can be adjusted according to business needs, such as adding multiple query conditions and using database preprocessing functions to implement more business-related functions. But in any case, the authentication SQL needs to meet the following conditions:
 
@@ -71,7 +71,7 @@ The authentication SQL can be adjusted according to business needs, such as addi
 The sample data in the default configuration is as follows:
 
 ```sql
-INSERT INTO `mqtt_user` (ʻusername`, `password`, `salt`)
+INSERT INTO mqtt_user (username, password, salt)
 VALUES
     ('emqx','efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7', NULL);
 ```
