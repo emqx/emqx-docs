@@ -369,7 +369,8 @@ coap-client -m get -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clien
 
 ### 取消订阅
 
-该接口用于 CoAP 客户端取消订阅指定主题。在 `连接模式` 下需要额外携带身份信息。
+该接口用于 CoAP 客户端取消订阅指定主题。
+当前实现，取消订阅操作仅在 `连接模式` 下可用。
 
 **请求参数表：**
 
@@ -388,3 +389,9 @@ coap-client -m get -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clien
   - `4.00`：错误的请求格式，并在消息体中返回具体的错误信息。
   - `4.01`：请求格式正确，但鉴权失败。并在消息体中返回具体的错误信息。
 - 消息体（Payload）：当返回码为 `2.07` 时，消息体为空；否则为具体的错误消息
+
+例如，`连接模式` 下取消订阅主题 `coap/test` ：
+
+```bash
+coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test&clientid=123&token=3404490787"
+```
