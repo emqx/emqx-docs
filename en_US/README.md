@@ -1,4 +1,4 @@
-# EMQ X Broker - High Performance MQTT Message Broker 
+# Introduction
 
 *EMQ X Broker* R3.2 is a distributed, massively scalable, highly extensible MQTT message broker written in Erlang/OTP. 
 
