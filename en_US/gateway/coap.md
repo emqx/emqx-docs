@@ -387,7 +387,8 @@ coap-client -m get -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clien
 ### Topic Unsubscribe
 
 This interface is used by the CoAP client to unsubscribe from a topic.
-Additional identity information needs to be carried if the `Connection Mode` is enabled.
+
+In the current implementation, the Unsubscribe operation is only available in `Connection Mode`.
 
 **Request Parameters:**
 
@@ -407,3 +408,9 @@ Additional identity information needs to be carried if the `Connection Mode` is 
   - `4.00`: Bad request. Detailed error information will be returned in the message body.
   - `4.01`: Not authorized. The request format is validated, but authorization failed.
 - Payload: When the return code is `2.07`, the message body is empty, otherwise it is `ErrorMessage`.
+
+For example, unsubscribe to `coap/test` in `Connection Mode`:
+
+```bash
+coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test&clientid=123&token=3404490787"
+```
