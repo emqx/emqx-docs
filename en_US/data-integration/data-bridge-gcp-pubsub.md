@@ -52,7 +52,7 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
    ::: tip
 
-   The Service Account must have permissions to publish to that topic.
+   The Service Account must have permission to publish that topic.
 
    :::
 
@@ -110,35 +110,38 @@ You can continue to create rules to specify the data to be saved into GCP PubSub
 
 2. Click **Create** on the top right corner of the page.
 
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `t/#`  to GCP PubSub, we can use the SQL syntax below. 
+3. Input `my_rule` as the rule ID.
 
-   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
+3. Set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `/devices/+/events`  to GCP PubSub, we can use the SQL syntax below. 
+
+   Note: If you want to specify your own SQL syntax, make sure that the `SELECT` part includes all fields required by the payload template in the data bridge.
    
    ```sql
    SELECT
      *
    FROM
-     "t/#"
+     "/devices/+/events"
    ```
 
-4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge you just created under **Data Bridge**. Then click the **Add** button.
+5. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**. Then click the **Add** button.
+
 4. Click **Create** at the page bottom to finish the creation.
 
-Now a rule to forward data to GCP PubSub via a GCP PubSub bridge is created. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to GCP PubSub after parsing by rule  `my_rule`.
+Now a rule to forward data to GCP PubSub via a GCP PubSub bridge is created. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/devices/+/events`  are sent and saved to GCP PubSub after parsing by rule  `my_rule`.
 
 ### Test the Data Bridge and Rule
 
-You can use the WebSocket Client in EMQX Dashboard to test that all messages on the topic `t/#` will be forwarded to `my-iot-core` topic in GCP Pub/Sub. 
+1. Use MQTTX to send messages on the topic `/devices/+/events`.
 
-1. Go to the Dashboard, and click **Diagnose** -> **WebSocket Client**.
+   ```bash
+   mqttx pub -i emqx_c -t /devices/+/events -m '{ "msg": "hello GCP PubSub" }'
+   ```
 
-2. Create a new client connection. Send several messages on the topic `t/1`.
+2. Check the running status of the data bridge, there should be one new incoming and one new outgoing message. 
 
-3. Click **Data Integration** -> **Flows** from the left navigation menu. You can see 4 recordings about **data_to_gcp_pubsub**, indicating data have been written into GCP Pub/Sub. <!--Need to check-->
+3. Go to GCP **Pub/Sub** -> **Subscriptions**, click **MESSAGES** tab. You should see the message.
 
-4. Go to GCP **Pub/Sub** -> **Subscriptions**, click **MESSAGES** tab. You can see messages on topic `my-iot-core`.
-
-   <img src="./assets/gcp_pubsub/test-rule.png" alt="test-rule" style="zoom:50%;" />
+   
 
 
 
