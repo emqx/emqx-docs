@@ -19,11 +19,8 @@ Limiter can work on the listener level. For example, to set a Limiter for the de
 ```bash
 listeners.tcp.default {
   bind = "0.0.0.0:1883"
-  ## Set the limit of connection rate for this listener to 1000 per second
   max_conn_rate = "1000/s"
-  ## Set the limit of incoming message numbers per second for each client connected to this listener to 1000
   messages_rate = "1000/s"
-  ## Set the limit of incoming message size per second for each client connected to this listener to 1000M
   bytes_rate = "1000MB/s"
 }
 ```
