@@ -207,6 +207,7 @@
     - data-integration/data-bridge-tdengine
     - data-integration/data-bridge-rocketmq
     - data-integration/data-bridge-sqlserver
+    - data-integration/data-bridge-opents
 
     # TODO
     # - title_en: Examples and Tutorials
