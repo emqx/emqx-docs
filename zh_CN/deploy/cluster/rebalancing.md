@@ -46,7 +46,7 @@ EMQX 节点疏散功能的工作原理如下：
 |---------------------|------------------|-------------|
 | `--redirect-to` | 字符 | 重连时的重定向服务器地址，针对 MQTT 5.0 客户端；具体可参考 [MQTT 5.0 协议 - 服务器重定向(Server redirection) ](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255) |
 | `--conn-evict-rate` | 正整数 | 客户端每秒断开连接速度。默认为 500 连接/秒 |
-| `--migrate-to` | 字符 | 目标节点列表，多个节点以逗号或空格分隔。 |
+| `--migrate-to` | 字符 | 疏散会话被迁移到的节点列表，多个节点以逗号或空格分隔。 |
 | `--wait-takeover` | 正整数 | 所有连接断开后，等待客户端重连以接管会话的时间；单位： 秒，默认为 60 秒 |
 | `--sess-evict-rate` | 正整数 | `wait-takeover` 之后每秒会话疏散速度。 默认为 500 会话/秒 |
 
@@ -108,7 +108,7 @@ Rebalance(evacuation) stopped
 
 ### 通过 HTTP API 启停节点疏散
 
-您也可通过 API 开启/停止节点疏散任务，此时需要在参数中指定操作节点。具体命令及操作，见 [API 文档](https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html)
+您也可通过 API 开启/停止节点疏散任务，此时需要在参数中指定操作节点。具体命令及操作，见 [API 文档](https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html)。
 
 ## 集群负载重平衡
 
@@ -243,19 +243,17 @@ Rebalance stopped
 
 ### 通过 HTTP API 启停重平衡
 
-所有关于重平衡的操作也可以通过 API 进行。开启和停止重平衡需要在参数中指定操作节点。具体命令及操作，见 [API 文档](https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html)
+所有关于重平衡的操作也可以通过 API 进行。开启和停止重平衡需要在参数中指定操作节点。具体命令及操作，见 [API 文档](https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html)。
 
 ## 集成负载均衡器
 
-在执行疏散/重平衡时，如果是用了负载均衡器，需要用户自行配置健康检查参数。断开的客户端尝试重连时，负载均衡器会基于当前后端节点状态将其合理重定向。如果没有配置健康检查可能出现多次断开的问题。
-
-为了帮助创建该配置，EMQX 提供了用于负载均衡器的健康检查 API：
+用户可以集成负载均衡器执行疏散/重平衡。当断开的客户端尝试重连时，负载均衡器会基于当前后端节点状态将其合理重定向。用户需要为集成负载均衡器配置健康检查参数，否则可能出现多次断开的问题。为了帮助创建配置，EMQX 提供了健康检查 REST API：
 
 `GET /api/v5/load_rebalance/availability_check`
 
 对于正在进行节点转移或者被疏散的节点，健康检查会响应 HTTP 503 状态码；对于正常运行并接收连接的节点，会响应 HTTP 200 状态码。
 
-例如，对于 HAProxy 和一个包含 3 个节点的 EMQX 集群，它们的 MQTT 监听器分别在端口 3001、3002 和 3003 上，REST API 端口分别为 5001、5002 和 5003，可以使用以下配置：
+例如，对于 HAProxy 和一个包含 3 个节点的 EMQX 集群，它们的 MQTT 监听器分别在端口 3001、3002 和 3003 上，REST API 端口分别为 5001、5002 和 5003，健康检查参数配置如下：
 
 ```bash
 defaults
