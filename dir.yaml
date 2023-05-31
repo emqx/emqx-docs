@@ -215,7 +215,7 @@
     #     - data-integration/rule-configs
 
 - title_en: Schema Registry
-  title_cn: Schema 注册
+  title_cn: Schema Registry
   edition: ee
   children:
     - data-integration/schema-registry
