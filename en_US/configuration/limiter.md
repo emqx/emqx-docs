@@ -6,9 +6,9 @@ For the moment, you can restrict the message rates from the following perspectiv
 
 | **Type**        | Dashboard UI            | **Description**                           | **Recovery Behavior**           |
 | --------------- | ----------------------- | ----------------------------------------- | ------------------------------- |
-| `bytes_rate`    | Data Publish Rate       | Incoming message size in bytes per second | Pause receiving client messages |
-| `message_rate`  | Messages Publish Rate   | Incoming messages per second              | Pause receiving client messages |
-| `max_conn_rate` | Maximum Connection Rate | Connections per second                    | Pause receiving new connections |
+| `bytes_rate`    | Data Publish Rate per Client       | Incoming message size in bytes per second | Pause receiving client messages |
+| `messages_rate`  | Messages Publish Rate per Client   | Incoming messages per second              | Pause receiving client messages |
+| `max_conn_rate` | Maximum Connection Rate per Listener| Connections per second                    | Pause receiving new connections |
 
 Limiter can work on the listener level, for example, to set a Limiter for the default TCP listener, you can work with the code below:
 
