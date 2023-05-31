@@ -75,19 +75,19 @@ This section introduces how to create an EMQX data bridge to Apache IoTDB throug
 
 5. Input the connection information:
    * **Base URL**: Input `http://localhost:18080`, or the actual hostname/IP if the IoTDB server is running remotely.
-   
+
    * **Username**: Input the IoTDB username; The default value is `root`.
-   
+
    * **Password**: Input the IoTDB password; The default value is `root`.
-   
-   * **Device ID** (optional): A fixed device id used as the name of the device from which the timeseries data is forwarded and inserted into the IoTDB instance. 
-   
+
+   * **Device ID** (optional): A fixed device id used as the name of the device from which the timeseries data is forwarded and inserted into the IoTDB instance.
+
      :::tip
-   
+
      When left empty, the device id can also be specified in the publishing message, configured in the rule, or extracted from the topic to which these messages are being sent by converting '/' into '.'. For example, publishing a message to `root/sg27` will result in sending a device name of `root.sg27`. However, the fixed device id configured in this field takes precedence over any methods mentioned previously.
-   
+
      :::
-   
+
 7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed.
 
 8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Apache IoTDB server.
@@ -114,10 +114,33 @@ You can continue to create a rule to forward data to the new Apache IoTDB bridge
      *
    FROM
      "root/#"
-   
+
+   ```
+   This assumes, the message, the source system is sending, has a JSON payload like this:
+   ```json
+   {
+     "measurement": "temp",
+     "data_type": "FLOAT",
+     "value": "32.67",
+     "device_id": "root.sg27" // optional
+   }
+   ```
+   I.e. the fields `measurement`, `data_type` and `value` must be present. If payload is structured differently, you can use the rule to rewrite its structure. E.g.:
+   ```
+   SELECT
+     payload.measurement, payload.dtype as payload.data_type, payload.val as payload.value
+   FROM
+     "root/#"
+   ```
+   You can also use meta-data of the MQTT message in the rule , e.g.:
+   ```
+   SELECT
+     payload.measurement, payload.data_type, payload.value, clientid as payload.device_id
+   FROM
+     "root/#"
    ```
 
-5. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**. 
+5. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**.
 
    :::tip
 
@@ -145,11 +168,11 @@ You can use the built-in WebSocket client in the EMQX dashboard to test your rul
 3. Click **Connect** to connect the client to the EMQX instance.
 
 3. Scroll down to the publish area. Specify the device id in the message and type the following:
-   
+
    - **Topic**: `root/test`
-   
+
    - **Payload**:
-   
+
      ```json
      {
        "measurement": "temp",
@@ -158,9 +181,9 @@ You can use the built-in WebSocket client in the EMQX dashboard to test your rul
        "device_id": "root.sg27"
      }
      ```
-   
+
    - **QoS**: `2`
-   
+
 5. Click **Publish** to send the message.
 
 6. Publish another message with the device id specified in the topic:
@@ -187,7 +210,7 @@ You can use the built-in WebSocket client in the EMQX dashboard to test your rul
 
 7. Click **Publish** to send the message.
 
-   If the data bridge and rule are successfully created, the messages should have been published to the specified time series table in the Apache IoTDB server. 
+   If the data bridge and rule are successfully created, the messages should have been published to the specified time series table in the Apache IoTDB server.
 
 8. Check the messages by using IoTDB's command line interface. If you're using it from docker as shown above, you can connect to the server by using the following command from your terminal:
 
@@ -202,7 +225,7 @@ You can use the built-in WebSocket client in the EMQX dashboard to test your rul
    ```
 
    You should see the data printed as follows:
-   
+
    ```
    +------------------------+--------------+
    |                    Time|root.sg27.temp|
