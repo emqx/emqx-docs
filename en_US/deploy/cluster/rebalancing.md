@@ -18,8 +18,11 @@ The node evacuation works in the following sequence:
    - MQTT v5.0 clients: specified by the `redirect-to` parameter.
 3. Wait for the target node to complete reconnection with the clients and take over the sessions (specified by `wait-takeover`).
 4. After the reconnection waiting time has elapsed, the remaining unclaimed sessions on the nodes to be evacuated will be migrated to the target node:
-  - The node to which the session will be migrated is specified by `migrate-to`;
-  - The speed of session migration is specified by `sess-evict-rate`.
+
+     - The node to which the session will be migrated is specified by `migrate-to`;
+
+     - The speed of session migration is specified by `sess-evict-rate`.
+
 
 You can stop the evacuation at any time. If the node to be evacuated closes during the evacuation, the evacuation process will be resumed after the node is restarted.
 
@@ -29,7 +32,7 @@ You can use CLI command to start the node evacuation, get the evacuation status,
 
 #### Start Node Evacuation
 
-You can use the following CLI command to start the node evacuation, the `--evacuation` parameter means this is an evacuation operation:
+You can use the following CLI command to start the node evacuation. The `--evacuation` parameter means this is an evacuation operation:
 
 ```bash
 ./bin/emqx_ctl rebalance start --evacuation \
@@ -236,23 +239,19 @@ emqx_ctl rebalance stop
 Rebalance stopped
 ```
 
-## Start/Stop Rebalancing via HTTP API
+### Start/Stop Rebalancing via HTTP API
 
 All the operations available from the CLI are also available from the API. Start/stop commands require a node as a parameter. For details, see [API Docs](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html).
 
 ## Integrate Load Balancer
 
-During evacuation/rebalance, it is up to the user to provide the necessary configuration for the load balancer (if any).
-This configuration should help disconnected clients to be directed to the recipient nodes when they reconnect.
-Without such a configuration, there may be an excess number of disconnections.
-
-To assist in creating that configuration, EMQX provides a health check API for load balancers:
+Users can integrate a load balancer to perform evacuation/rebalancing. When a disconnected client attempts to reconnect, the load balancer will redirect it to the recipient nodes based on the current status of backend nodes. Users need to configure health check parameters for integrating the load balancer; otherwise, there can be an excess number of disconnections. To assist in creating this configuration, EMQX provides a health check REST API:
 
 `GET /api/v5/load_rebalance/availability_check`
 
-They respond with 503 HTTP code for the donor or evacuated nodes and 200 HTTP code for nodes operating normally and receiving connections.
+The health check responds with HTTP code 503 for the donor or evacuated nodes and HTTP code 200 for nodes operating normally and receiving connections.
 
-For example, for an EMQX cluster with 3 nodes and MQTT listeners on ports 3001, 3002, and 3003, and REST API ports 5001, 5002, and 5003, you can use the following configuration:
+For example, you can use the following configuration for HAProxy and an EMQX cluster with 3 nodes, with the MQTT listeners on ports 3001, 3002, and 3003, and REST API ports on 5001, 5002, and 5003:
 
 ```bash
 defaults
