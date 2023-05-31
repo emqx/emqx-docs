@@ -195,6 +195,7 @@
     - data-integration/data-bridge-webhook
     - data-integration/data-bridge-mqtt
     - data-integration/data-bridge-kafka
+    - data-integration/data-bridge-pulsar
     - data-integration/data-bridge-influxdb
     - data-integration/data-bridge-mysql
     - data-integration/data-bridge-redis
@@ -208,6 +209,7 @@
     - data-integration/data-bridge-rocketmq
     - data-integration/data-bridge-sqlserver
     - data-integration/data-bridge-iotdb
+    - data-integration/data-bridge-opents
 
     # TODO
     # - title_en: Examples and Tutorials
@@ -394,7 +396,7 @@
     - observability/tracer
     - observability/mqtt-system-topics
     - observability/prometheus
-    
+
 
 ## Device connectivity
 

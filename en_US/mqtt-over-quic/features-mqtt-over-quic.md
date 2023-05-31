@@ -4,7 +4,7 @@ EMQX 5.0 designs a unique message transmission mechanism and management method f
 
 The current implementation of EMQX replaces the transport layer with a QUIC stream, where the client initiates the connection and creates a bi-directional stream. EMQX and the client interact on this stream. Considering the complex network environment, if the client fails to perform QUIC handshake for some reason, it will automatically fall back to traditional TCP to avoid communication failure with the server. The interaction between EMQX and the client has two modes: [single-stream mode](#single-stream-mode) and [multi-streams mode](#multi-streams-mode). The features and benefits of each mode are introduced below with some use cases. 
 
-<img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/mqtt-over-quic/assets/mqtt-over-quic.png" alt="MQTT over QUIC" style="zoom:25%;" />
+<img src="./assets/mqtt-over-quic.png" alt="MQTT over QUIC" style="zoom:25%;" />
 
 ## Single-Stream Mode
 

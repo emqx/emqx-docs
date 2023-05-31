@@ -7,6 +7,8 @@ Supported versions:
 - Debian 11
 - Debian 10
 
+{% emqxce %}
+
 ## Install with Apt source
 
 EMQX supports installing with Apt source to provide our users with a convenient and reliable way to manage EMQX installation and updates. Here is how to install EMQX with Apt source:

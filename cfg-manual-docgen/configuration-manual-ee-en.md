@@ -3256,7 +3256,7 @@ Settings for the limiter of the node level.
 
 ### Listener-level rate limiting
 
-在监听器中配置中配置速率限制器。
+Config rate limiter in listener:
 
 **listeners.\$type.$name.limiter.bytes_in**
 
