@@ -40,8 +40,7 @@ CREATE TABLE t_mqtt_msg (
     msgid text,
     topic text,
     qos int,
-    payload blob,
-    retain int,
+    payload text,
     arrived timestamp,
     PRIMARY KEY (msgid, topic)
 );
@@ -58,17 +57,17 @@ Select "message.publish", then type in the following SQL:
 SELECT
     *
 FROM
-    "message.publish"
+    "t/#"
 ```
 
-![image](./assets/rule-engine/mysql_sql_1.png)
+![image](./assets/rule-engine/cassandra/cassandra-rule-1.png)
 
 Bind an action:
 
-Click on the "+ Add" button under "Action Handler", and then select
+Click on the "+ Add action" button under "Action", and then select "Action Type" to "Data persist" and
 "Data to Cassandra" in the pop-up dialog window.
 
-![image](./assets/rule-engine/cass_action_0.png)
+![image](./assets/rule-engine/cassandra/cassandra-rule-2.png)
 
 Fill in the parameters required by the action:
 
@@ -80,19 +79,18 @@ into Cassandra, so type in the following sql
 template:
 
 ```sql
-insert into t_mqtt_msg(msgid, topic, qos, payload, retain, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${retain}, ${timestamp})
+insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
 ```
 
 Before data is inserted into the table, placeholders like \${key} will
 be replaced by the corresponding values.
 
-![image](./assets/rule-engine/cass_action_1.png)
+![image](./assets/rule-engine/cassandra/cassandra-rule-3.png)
 
 2). Bind a resource to the action. Since the dropdown list "Resource"
-is empty for now, we create a new resource by clicking on the "New
-Resource" to the top right, and then select "Cassandra":
+is empty for now, we create a new resource by clicking on the "Create" to the top right:
 
-![image](./assets/rule-engine/cass_action_2.png)
+![image](./assets/rule-engine/cassandra/cassandra-rule-4.png)
 
 Configure the resource:
 
@@ -101,17 +99,17 @@ Set "Cassandra Keyspace" to "test", "Cassandra Username" to "root",
 default, and click on the "Testing Connection" button to make sure the
 connection can be created successfully.
 
-![image](./assets/rule-engine/cass_resoure_1.png)
+![image](./assets/rule-engine/cassandra/cassandra-rule-5.png)
 
-Then click on the "Create" button.
+Then click on the "Confirm" button.
 
 Back to the "Actions" dialog, and then click on the "Confirm" button.
 
-![image](./assets/rule-engine/cass_action_3.png)
+![image](./assets/rule-engine/cassandra/cassandra-rule-6.png)
 
 Back to the creating rule page, then click on "Create" button. The rule we created will be show in the rule list:
 
-![image](./assets/rule-engine/cass_rule_overview_0.png)
+![image](./assets/rule-engine/cassandra/cassandra-rule-7.png)
 
 We have finished, testing the rule by sending an MQTT message to emqx:
 
@@ -124,9 +122,9 @@ We have finished, testing the rule by sending an MQTT message to emqx:
 Then inspect the Cassandra table, verify a new record has been
 inserted:
 
-![image](./assets/rule-engine/cass_result.png)
+![image](./assets/rule-engine/cassandra/cassandra-rule-8.png)
 
 And from the rule list, verify that the "Matched" column has increased
 to 1:
 
-![image](./assets/rule-engine/cass_rule_overview_1.png)
+![image](./assets/rule-engine/cassandra/cassandra-rule-9.png)
