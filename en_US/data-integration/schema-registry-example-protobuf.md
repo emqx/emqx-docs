@@ -32,7 +32,7 @@ For example, you to republish a message with the `name` field equal to "Shawn" t
 
 ![](./assets/schema_registry/protobuf_create1.png)
 
-### Create the Rule
+### Create Rule
 1. In the Dashboard, select **Integration** -> **Rules** from the navigation menu.
 
 2. On the **Rules** page, click **Create** at the top right corner.
@@ -112,7 +112,7 @@ A device subscribes to a topic `protobuf_out` expecting a binary message encoded
 
 Use the same schema as described in the [decoding scenario](#decoding-scenario).
 
-### Create the rule
+### Create Rule
 
 1. In the Dashboard, select **Integration** -> **Rules** from the navigation menu.
 

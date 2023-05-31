@@ -35,7 +35,7 @@ For example, you need to republish a message with the `name` field equal to `Sha
 
 ![](./assets/schema_registry/avro_create1.png)
 
-### Create the rule
+### Create Rule
 1. In the Dashboard, select **Integration** -> **Rules** from the navigation menu.
 
 2. On the **Rules** page, click **Create** at the top right corner.
@@ -60,7 +60,7 @@ For example, you need to republish a message with the `name` field equal to `Sha
 5. In the **Topic** field, type `avro_user/${avro_user.name}` as the destination topic. 
 6. In the **Payload** field, type message content template: `${avro_user}`.
 
-This action sends the decoded umessage to the topic `avro_user/${avro_user.name}` in JSON format. `${avro_user.name}` is a variable placeholder that will be replaced at runtime with the value of the `name` field from the decoded message.
+This action sends the decoded message to the topic `avro_user/${avro_user.name}` in JSON format. `${avro_user.name}` is a variable placeholder that will be replaced at runtime with the value of the `name` field from the decoded message.
 ### Prepare Device-Side Code
 
 Once the rule is created, you can simulate the data for testing.
@@ -111,7 +111,7 @@ A device subscribes to a topic `avro_out` expecting a binary message encoded usi
 
 Use the same schema as described in the [Decoding Scenario](#decoding-scenario).
 
-### Create the Rule
+### Create Rule
 
 1. In the Dashboard, select **Integration** -> **Rules** from the navigation menu.
 
@@ -138,7 +138,7 @@ Use the same schema as described in the [Decoding Scenario](#decoding-scenario).
 
 6. In the **Payload** field, type message content template: `${avro_user}`.
 
-This action sends the Avro-encoded umessage to the topic `avro_out`. `${avro_user}` is a variable placeholder that will be replaced at runtime with the value of the result of `schema_encode` (a binary value).
+This action sends the Avro-encoded message to the topic `avro_out`. `${avro_user}` is a variable placeholder that will be replaced at runtime with the value of the result of `schema_encode` (a binary value).
 
 ### Prepare Device-Side Code
 
