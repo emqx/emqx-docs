@@ -83,7 +83,7 @@ docker exec -it cassa cqlsh "-e \
 
 5. 输入 Cassandra 连接信息，**Servers** 地址填写 `127.0.0.1:9042`，**Keyspace** 填写 `mqtt`，其他使用默认值即可。
 
-6. 配置 CQL 模版，将字段 `topic`, `id`, `clientid`, `qos`, `palyload`, `timestamp`, 和 `flags.retain` 存储到 Cassandra 数据库中。该模板将通过 Cassandra 查询语言执行，对应模板如下：
+6. 配置 CQL 模版，将字段 `topic`, `id`, `clientid`, `qos`, `palyload` 和 `timestamp` 存储到 Cassandra 数据库中。该模板将通过 Cassandra 查询语言执行，对应模板如下：
 
    ```sql
    insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})
