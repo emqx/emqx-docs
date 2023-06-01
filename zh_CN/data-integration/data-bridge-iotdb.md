@@ -122,6 +122,35 @@ docker run -d --name iotdb-service \
    
    ```
 
+   如果您想要创建自定义的规则，在规则的 `SELECT` 部分需要包括所需的 MQTT 消息上下文信息。例如，客户端发送一条 payload 格式为 JSON 的消息，如下所示：
+
+   ```json
+   {
+     "measurement": "temp",
+     "data_type": "FLOAT",
+     "value": "32.67",
+     "device_id": "root.sg27" // optional
+   }
+   ```
+
+   您可以设置以下规则来呈现 `measurement`, `data_type` 和 `value` 这些字段：
+
+   ```sql
+   SELECT
+     payload.measurement, payload.data_type, payload.value, clientid as payload.device_id
+   FROM
+     "root/#"
+   ```
+
+   对于不同结构的 payload，可以使用下面的规则对结构进行重写：
+
+   ```sql
+   SELECT
+     payload.measurement, payload.dtype as payload.data_type, payload.val as payload.value
+   FROM
+     "root/#"
+   ```
+
 5. 点击**添加动作**按钮，在下拉框中选择**使用数据桥接转发**，选择之前创建好的 Apache IoTDB 数据桥接。
 
    :::tip

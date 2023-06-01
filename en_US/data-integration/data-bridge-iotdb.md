@@ -132,7 +132,7 @@ You can continue to create a rule to forward data to the new Apache IoTDB bridge
    FROM
      "root/#"
    ```
-    If the payload is structured differently, you can use the rule to rewrite its structure like the following:
+   If the payload is structured differently, you can use the rule to rewrite its structure like the following:
    ```sql
    SELECT
      payload.measurement, payload.dtype as payload.data_type, payload.val as payload.value
