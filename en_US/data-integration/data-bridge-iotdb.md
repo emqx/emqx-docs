@@ -116,7 +116,7 @@ You can continue to create a rule to forward data to the new Apache IoTDB bridge
      "root/#"
    
    ```
-   If you need to specify your own rule, you need to include the required contextual information in the MQTT message in the `SELECT` part of the rule. For example, the source system is sending a message with the payload in JSON format as follows: 
+   If you need to specify your own rule, you need to include the required contextual information in the MQTT message in the `SELECT` part of the rule. For example, the client is sending a message with the payload in JSON format as follows: 
    ```json
    {
      "measurement": "temp",
