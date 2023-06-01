@@ -12,7 +12,7 @@ EMQX uses the following types of limiters to specify the rate limits:
 | messages_rate | Incoming messages per second per client             | Pause receiving client messages |
 | max_conn_rate | Connections per second per listener                     | Pause receiving new connections |
 
-Limiter can work on the listener level. For example, to set a Limiter for the default TCP listener, you can work with the code below:
+Limiter can work on the listener level. For example, to set a Limiter for the default TCP listener, You can configure it in emqx.conf as follows:
 
 ```bash
 listeners.tcp.default {
