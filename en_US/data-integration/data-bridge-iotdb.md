@@ -114,9 +114,9 @@ You can continue to create a rule to forward data to the new Apache IoTDB bridge
      *
    FROM
      "root/#"
-
+   
    ```
-   This assumes, the message, the source system is sending, has a JSON payload like this:
+   If you need to specify your own rule, you need to include the required contextual information in the MQTT message in the `SELECT` part of the rule. For example, the source system is sending a message with the payload in JSON format as follows: 
    ```json
    {
      "measurement": "temp",
@@ -125,17 +125,17 @@ You can continue to create a rule to forward data to the new Apache IoTDB bridge
      "device_id": "root.sg27" // optional
    }
    ```
-   I.e. the fields `measurement`, `data_type` and `value` must be present. If payload is structured differently, you can use the rule to rewrite its structure. E.g.:
-   ```
+   You can use the following rule to present the fields `measurement`, `data_type` and `value`.
+   ```sql
    SELECT
-     payload.measurement, payload.dtype as payload.data_type, payload.val as payload.value
+     payload.measurement, payload.data_type, payload.value, clientid as payload.device_id
    FROM
      "root/#"
    ```
-   You can also use meta-data of the MQTT message in the rule , e.g.:
-   ```
+    If the payload is structured differently, you can use the rule to rewrite its structure like the following:
+   ```sql
    SELECT
-     payload.measurement, payload.data_type, payload.value, clientid as payload.device_id
+     payload.measurement, payload.dtype as payload.data_type, payload.val as payload.value
    FROM
      "root/#"
    ```
