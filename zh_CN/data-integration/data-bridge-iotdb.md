@@ -122,7 +122,7 @@ docker run -d --name iotdb-service \
    
    ```
 
-   如果您想要创建自定义的规则，在规则的 `SELECT` 部分需要包括所需的 MQTT 消息上下文信息。例如，客户端发送一条 payload 格式为 JSON 的消息，如下所示：
+   如果您想要创建自定义的规则，您需要在 SQL 语句的 `SELECT` 部分需要包括桥接所需的所有字段。例如，客户端发送一条 payload 格式为 JSON 的消息，如下所示：
 
    ```json
    {
@@ -133,7 +133,7 @@ docker run -d --name iotdb-service \
    }
    ```
 
-   您可以设置以下规则来呈现 `measurement`, `data_type` 和 `value` 这些字段：
+   您可以使用以下 SQL 语句来选择 `measurement`, `data_type` 和 `value` 这些字段：
 
    ```sql
    SELECT
