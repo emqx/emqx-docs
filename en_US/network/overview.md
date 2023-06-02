@@ -18,7 +18,7 @@ This chapter mainly provides instructions on how to enable the SSL/TLS connectio
 
 ## TLS for Client Connection
 
-The [Enable SSL/TLS Connection](./emqx-mqtt-tls.md) section in this chapter introduces how to enable an SSL/TLS connection between the MQTT client and EMQX in detail. To further enhance the security with the SSL/TLS enabled, you can also enable the CRL check <!--Add link later--> for certificate verification and OCSP stapling <!--Add link later--> for revocation status checking of the SSL/TLS certificate. The [Client TLS](./mqtt-client-tls.md) section provides information on the sample MQTT client code and project. The TLS use guide is included in these samples.
+The [Enable SSL/TLS Connection](./emqx-mqtt-tls.md) section in this chapter introduces how to enable an SSL/TLS connection between the MQTT client and EMQX in detail. To further enhance the security with the SSL/TLS enabled, you can also enable the [CRL check](./crl.md) for certificate verification and [OCSP stapling](./ocsp.md) for revocation status checking of the SSL/TLS certificate. The [Client TLS](./mqtt-client-tls.md) section provides information on the sample MQTT client code and project. The TLS use guide is included in these samples.
 
 ## TLS for External Resource Access
 
