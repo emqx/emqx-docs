@@ -122,7 +122,7 @@ docker run -d --name iotdb-service \
    
    ```
 
-   如果您想要创建自定义的规则，您需要在 SQL 语句的 `SELECT` 部分需要包括桥接所需的所有字段。例如，客户端发送一条 payload 格式为 JSON 的消息，如下所示：
+   如果您想要创建自定义的规则，您需要在 SQL 语句的 `SELECT` 部分选择出桥接所需的所有字段。例如，客户端发送一条 payload 格式为 JSON 的消息，在 IoTDB 桥接中需要以下字段：
 
    ```json
    {
@@ -133,7 +133,7 @@ docker run -d --name iotdb-service \
    }
    ```
 
-   您可以使用以下 SQL 语句来选择 `measurement`, `data_type` 和 `value` 这些字段：
+   您可以使用以下 SQL 语句来选择出 `measurement`, `data_type` 和 `value` 这些字段：
 
    ```sql
    SELECT
