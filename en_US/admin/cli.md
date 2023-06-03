@@ -1,58 +1,86 @@
 # Command Line Interface
 
-## Main script
+This page introduces all kinds of startup and administrative commands supported by EMQX and gives detailed introductions to ctl administrative commands.
 
-The main boot script of EMQX is a bash script which can also be used to execute some of the administrative commands.
+## Startup Commands
 
-```bash
-$ emqx help
-Usage: emqx COMMAND [help]
+EMQX supports some basic startup and administrative commands, which can be executed using the `emqx <command>` command.
 
-Commonly used COMMANDs:
-  start:      Start EMQX in daemon mode
-  console:    Start EMQX in an interactive Erlang or Elixir shell
-  foreground: Start EMQX in foreground mode without an interactive shell
-  stop:       Stop the running EMQX node
-  ctl:        Administration commands, execute 'emqx ctl help' for more details
+Here are some commonly used startup and administrative commands:
 
-More:
-  Shell attach:  remote_console | attach
-  Up/Down-grade: upgrade | downgrade | install | uninstall
-  Install info:  ertspath | root_dir | versions | root_dir
-  Runtime info:  pid | ping | versions
-  Advanced:      console_clean | escript | rpc | rpcterms | eval | eval-erl
+| Command    | Description                                                  |
+| ---------- | ------------------------------------------------------------ |
+| start      | Starts EMQX in daemon mode, without requiring an interactive shell during runtime. |
+| console    | Starts EMQX in Erlang or Elixir interactive shell. Used for debugging EMQX in a development environment, requiring interaction with EMQX. |
+| foreground | Starts EMQX in foreground mode, without using an interactive shell. Used to start EMQX in a development environment without running it in the background. |
+| stop       | Stops the running EMQX node.                                 |
+| ctl        | Manages and monitors EMQX. Executing `emqx ctl help` can get more detailed information. |
 
-Execute 'emqx COMMAND help' for more information
-```
+The following are advanced commands for development and debugging, and ordinary users usually don't need to care about them:
+
+| Command        | Description                                                  |
+| -------------- | ------------------------------------------------------------ |
+| remote_console | Connects to the interactive shell of a remote EMQX node.     |
+| attach         | Attaches to a running EMQX node to perform interactive operations. |
+| ertspath       | Retrieves the path of the EMQX Erlang library.               |
+| root_dir       | Retrieves the path of the EMQX root directory.               |
+| pid            | Retrieves the process ID of the running EMQX node.           |
+| ping           | Checks if the EMQX node is running.                          |
+| check_config   | Validates if the EMQX configuration file is correct.         |
+| console_clean  | Clears the output of the interactive shell console.          |
+| escript        | Executes an Escript script on the EMQX node.                 |
 
 ## The ctl Commands
 
-The `emqx ctl COMMAND ARGS ...` (or equivalently `emqx_ctl COMMAND ARGS ...`) commands
-require EMQX node to be up and running.
+The EMQX `ctl` command provides multiple subcommands for managing and monitoring EMQX. The `ctl` command needs to be run after the EMQX service is started.
 
-It starts up a (hidden) Erlang node, connects to the local EMQX Erlang node
-and issues Erlang RPC calls to get the commands executed.
+> EMQX also provides `emqx_ctl` command, which is an alias of `emqx ctl`.
+> The `ctl` command remotely connects to the specified EMQX node by starting a hidden Erlang node, executes an Erlang remote call, and then prints the returned result. Therefore, it is advised to avoid excessive usage of the `ctl` command.
 
-Below is a list of all supported commands without copy-pasting a lot of the
-descriptive information from the usage outputs.
+Below is a list of all the subcommands of the `ctl` command along with their brief descriptions. This section aims to introduce the functionality of the commands, while detailed parameter information can be viewed using the `help` command.
 
 ## status
 
-`emqx ctl status`
-
 This command is a quick inspection to see if the broker is up and running.
+
+```bash
+$ emqx ctl status
+Node 'emqx@127.0.0.1' 5.0.3 is started
+```
 
 ## broker
 
-`emqx ctl broker`
-
 This command is to inspect the local broker running status, statistics and metrics.
+
+```bash
+$ emqx ctl broker
+sysdescr  : EMQX Enterprise
+version   : 5.0.3
+datetime  : 2023-05-12T10:21:50.095047713+08:00
+uptime    : 52 seconds
+```
 
 ## observer
 
-`emqx ctl observer`
+This command provides Erlang virtual machine insights including a realtime view like linux's 'top' command. Subcommands are as follows:
 
-This command provides Erlang virtual machine insights including a realtime view like linux's 'top' top command.
+| Command           | Description                                                  |
+| ----------------- | ------------------------------------------------------------ |
+| observer status   | Launches the observer in the current console, used to monitor and debug the status and activities of the EMQX node. |
+| observer bin_leak | Forces all processes to perform garbage collection and prints the top 100 processes that release the maximum amount of binary data, potentially revealing potential memory leak issues. |
+| observer load Mod | Ensures that the specified module is loaded on all nodes in the EMQX cluster. This command can be used to load modules when it is necessary to ensure that they are available throughout the entire cluster. |
+
+### observer status
+
+<!-- TODO -->
+
+### observer bin_leak
+
+<!-- TODO -->
+
+### observer load Mod
+
+<!-- TODO -->
 
 ## cluster_call
 
