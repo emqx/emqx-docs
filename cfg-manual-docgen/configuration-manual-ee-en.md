@@ -595,7 +595,7 @@ Service discovery via UDP multicast.
 
   *Type*: `array`
 
-  *Default*: `ᄑᄒ`
+  *Default*: `[4369, 4370]`
 
   List of UDP ports used for service discovery.<br/>
 Note: probe messages are broadcast to all the specified ports.
