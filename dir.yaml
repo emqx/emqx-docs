@@ -211,6 +211,7 @@
     - data-integration/data-bridge-sqlserver
     - data-integration/data-bridge-iotdb
     - data-integration/data-bridge-opents
+    - data-integration/data-bridge-rabbitmq
 
     # TODO
     # - title_en: Examples and Tutorials
@@ -220,9 +221,9 @@
 
 - title_en: Schema Registry
   title_cn: Schema Registry
+  path: data-integration/schema-registry
   edition: ee
   children:
-    - data-integration/schema-registry
     - data-integration/schema-registry-example-avro
     - data-integration/schema-registry-example-protobuf
 
