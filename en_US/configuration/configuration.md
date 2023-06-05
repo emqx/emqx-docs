@@ -2963,6 +2963,31 @@ However, if the setting is set to `true` or `cacert_from_cacertfile`, the last c
 
 Alternatively, if the setting is set to `two_cacerts_from_cacertfile`, one of the last two certificates in the cacertfile will be used as the trust anchor certificate, forming a partial chain. This option is particularly useful for CA certificate rotation. However, please note that it incurs some additional overhead, so it should only be used for certificate rotation purposes.
 
+### listener.ssl.external.verify_peer_ext_key_usage
+
+| Type   | Default   |
+|--------|-----------|
+| string | undefined |
+
+#### Description
+
+For additional client certificate validation, the value defined here must present in the 
+'Extended Key Usage' of client certificate defined in 
+[rfc5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.12).
+
+Allowed values are
+
+- "clientAuth"
+- "serverAuth"
+- "codeSigning"
+- "emailProtection"
+- "timeStamping"
+- "ocspSigning"
+- raw OID, example: "OID:1.3.6.1.5.5.7.3.2" 
+  
+Comma-separated string is also supported for validating the subset of key usages.
+
+example, "serverAuth,OID:1.3.6.1.5.5.7.3.2"
 
 
 ### listener.ssl.external.fail_if_no_peer_cert
