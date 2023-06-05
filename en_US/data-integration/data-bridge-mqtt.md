@@ -33,7 +33,7 @@ In **ingress** direction, it can be used as the data source of the rule:
 
 <img src="./assets/bridge_igress_rule_link.png" alt="bridge_igress_rule_link" style="zoom:50%;" />
 
-In **egress** direction, it can be used as the actions of the rule:
+In **egress** direction, it can be used as the action of the rule:
 
 <img src="./assets/bridge_egress_rule.png" alt="bridge_egress_rule" style="zoom: 50%;" />
 
@@ -43,7 +43,7 @@ In both modes EMQX employs pools of MQTT clients to connect to the bridged broke
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 
-- Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [data bridges](./data-bridges.md)
 
   :::
 
@@ -62,7 +62,7 @@ The following section will use EMQX [public MQTT broker](https://www.emqx.com/en
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
-2. Click **Create** on the top right corner of the page.
+2. Click **Create** in the top right corner of the page.
 
 3. In the **Create Data Bridge** page, click to select **MQTT**, and then click **Next**.
 
@@ -80,7 +80,7 @@ The following section will use EMQX [public MQTT broker](https://www.emqx.com/en
      - **Remote MQTT Broker**: Subscribe to the remote topics.
      
        - **Topic**: In cluster mode, we can use the [Shared Subscription](../mqtt/mqtt-shared-subscription.md) to avoid repeated messages, therefore we will fill in `$share/g/remote/topic/ingress`
-       - QoS: Select `0`.
+       - **QoS**: Select `0`.
      
      - **Local MQTT Broker**: Forward the received messages to specific local topics or leave them blank, then these messages will first be processed by the configured rules and then forwarded with the [republish action](./rules.md).
        - **Topic**: Input `local/topic/ingress`.
