@@ -10,13 +10,6 @@ The MQTT data bridge is a channel for EMQX to communicate with other MQTT servic
 
     Forwarding messages from the current cluster to the bridged brokers following the rule settings.
 
-The following topic mapping configuration is used here to implement message bridging between local and remote MQTT services:
-
-| Topic                      | Direction                       | Target topic              |
-| -------------------------- | ------------------------------- | ------------------------- |
-| **`remote/topic/ingress`** | **`ingress`** (remote -> local) | **`local/topic/ingress`** |
-| **`local/topic/egress`**   | **`egress`** (local -> remote)  | **`remote/topic/egress`** |
-
 Below is the message flow in **ingress** direction:
 
 <img src="./assets/bridge_igress.png" alt="bridge_igress" style="zoom:50%;" />
