@@ -16,7 +16,7 @@ When designing a cluster, there are several key aspects that need to be consider
 
 * **Centralized Management**: The cluster should be able to be managed centrally, as all nodes in the cluster can be monitored and controlled from a single management console.
 
-* **Data Consistency**: The cluster ensures that all nodes in the cluster have a consistent view of the r. This is achieved by replicating data across all nodes in the cluster.
+* **Data Consistency**: The cluster ensures that all nodes in the cluster have a consistent view of the routing information. This is achieved by replicating data across all nodes in the cluster.
 
 * **Easy To Scale**: To reduce the complexity of the cluster management, it should not be a complex task to add more nodes to the cluster. The cluster should be able to automatically detect the new nodes and add them to the cluster.
 
