@@ -221,7 +221,7 @@
     #     - data-integration/rule-configs
 
 - title_en: Schema Registry
-  title_cn: Schema Registry
+  title_cn: 编解码
   path: data-integration/schema-registry
   edition: ee
   children:
