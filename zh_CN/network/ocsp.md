@@ -26,7 +26,7 @@ EMQX 支持通过 Dashboard 和配置文件启用 SSL 监听器 OCSP Stapling。
 
 ## 通过 Dashboard 配置
 
-登陆 EMQX Dashboard，点击左侧导航目录的**管理**->**监听器**，访问**监听器**页面。在本章我们将为默认的 SSL 监听器启用 OCSP Stapling，点击监听器名称进入**编辑监听器**页面。拖动到页面底部，找到 **启用 OCSP Stapling**的设置开关。
+登陆 EMQX Dashboard，点击左侧导航目录的**管理**->**监听器**，访问**监听器**页面。在本章我们将为默认的 SSL 监听器启用 OCSP Stapling，点击监听器名称进入**编辑监听器**页面。拖动到页面底部，找到**启用 OCSP Stapling**的设置开关。
 
 <img src="./assets/OCSP.png" alt="OCSP" style="zoom:50%;" />
 

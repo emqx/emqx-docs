@@ -231,6 +231,9 @@
   children:
     - network/emqx-mqtt-tls
     - network/mqtt-client-tls
+    - network/psk-authentication
+    - network/tls-certificate
+    # - network/crl-and-ocsp-stapling
     - network/crl
     - network/ocsp
     - title_en: GMSSL

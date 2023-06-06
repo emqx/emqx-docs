@@ -59,7 +59,7 @@ Follow the instruction below on how to configure:
 - **Database**: Redis database name; Data type: strings.
 - **Password** (optional): Specify Redis user password. 
 
-**TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
+**TLS Configuration**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
 
 **Connection Configuration**: Set the concurrent connections.
 
