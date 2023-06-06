@@ -127,7 +127,7 @@ You can continue to create rules to specify the data to be saved into GCP PubSub
 
 4. Click **Create** at the page bottom to finish the creation.
 
-Now a rule to forward data to GCP PubSub via a GCP PubSub bridge is created. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/devices/+/events`  are sent and saved to GCP PubSub after parsing by rule  `my_rule`.
+Now a rule to forward data to GCP PubSub via a GCP PubSub bridge is created. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `/devices/+/events` are sent and saved to GCP PubSub after parsing by rule `my_rule`.
 
 ### Test the Data Bridge and Rule
 
