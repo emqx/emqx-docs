@@ -15,7 +15,7 @@ This page introduces how to directly establish an SSL/TLS connection between the
 
 ## Safety Benefits
 
-Enabling SSL/TLS connection provides the following safety benefits.
+Enabling SSL/TLS connection provides the following safety benefits:
 
 1. **Strong Authentication**: Both communicating parties will verify each other's identities by checking the X.509 digital certificate held by the other party. These types of digital certificates are usually issued by trusted Certificate Authorities (CAs) and cannot be forged.
 2. **Confidentiality**: Each session will be encrypted using the session key negotiated by both parties. No third party can know the communication content, so even if the session key is compromised, it does not affect the security of other sessions.
@@ -35,18 +35,20 @@ The SSL listener enabled on port `8883` is used to encrypt the transmission data
 
 3. On the **Listeners** page, click **default** from the **Name** column of the SSL listener. 
 
-   - **TLS Verify**: Disabled by default. If peer verification is required to verify the client's identity, click the toggle switch to enable the option. 
+   - **TLS Verify**: Disabled by default; If peer verification is required to verify the client's identity, click the toggle switch to enable the option. 
    - **TLS Cert**, **TLS Key** and **CA Cert**: Replace the current certificate files with your private certificate files by clicking the **Reset** button.
-   - **SSL Versions**: All TLS/DTLS versions are supported by default. If PSK cipher suits are used for PSK authentication, make sure to configure `tlsv1.2` , `tlsv1.1` and `tlsv1` here. For more information on PSK authentication, see [Enable PSK Authentication](./psk-authentication.md).
+   - **SSL Versions**: All TLS/DTLS versions are supported. The default values are `tlsv1.3` and `tlsv1.2`. If PSK cipher suits are used for PSK authentication, make sure to configure `tlsv1.2` , `tlsv1.1` and `tlsv1` here. For more information on PSK authentication, see [Enable PSK Authentication](./psk-authentication.md).
    - **Fail If No Peer Cert**: Used together with **TLS Verify** is enabled. Set to `false` by default.
      - If set to `true`, verification of the client's identity fails if the client sends an empty certificate. The SSL/TLS connection will be rejected.
      - If set to `false`, verification of the client's identity fails only if the client sends an invalid certificate (An empty certificate is considered to be valid). The SSL/TLS connection will be rejected.
    - **Intermediate Certificate Depth**: The allowed maximum depth of certification path; the default value is `10`.
    - **Key Password**: Type the password if the private key file is password-protected.
-   
-   <img src="./assets/edit-listener.png" alt="edit-listener" style="zoom:40%;" />
+   - **Enable OCSP Stapling**: Disabled by default; If you need to obtain the revocation status of SSL/TLS certificates, you can enable it by clicking the toogle switch. For more information, see [OCSP Stapling](./ocsp.md).
+   - **Enable CRL Check**: Disabled by default; If you need to verify whether connecting client certificates are not revoked, you can enable it by clicking the toogle switch. For more information, see [CRL Check](./crl.md).
 
 4. After you complete the editing, click the **Update** button.
+
+   <img src="./assets/edit-listener.png" alt="edit-listener" style="zoom:40%;" />
 
 ## Enable SSL/TLS Connection via Configuration File
 

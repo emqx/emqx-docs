@@ -10,7 +10,7 @@ EMQX provides comprehensive support for SSL/TLS capabilities, including support 
 
 ::: tip
 
-SSL and TSL protocols are often adopted in network communications to ensure that the data transmission remains confidential and cannot be intercepted or modified by an attacker. The SSL/TLS encryption function encrypts network connections at the transport layer and involves the use of digital certificates to authenticate the identity of the parties involved and to establish a secure communication channel.
+SSL and TLS protocols are often adopted in network communications to ensure that the data transmission remains confidential and cannot be intercepted or modified by an attacker. The SSL/TLS encryption function encrypts network connections at the transport layer and involves the use of digital certificates to authenticate the identity of the parties involved and to establish a secure communication channel.
 
 :::
 
@@ -24,15 +24,15 @@ The [Enable SSL/TLS Connection](./emqx-mqtt-tls.md) section in this chapter intr
 
 EMQX also offers you the option of enabling TLS when there is a need to access external resources. For example, when using password-based authentication with access to a web server via HTTPS or connecting to a database for data integration. You can switch on the **Enable TLS** when configuring these features on the EMQX Dashboard.
 
-- When **TLS Verify** is enabled, the **CA Cert** field must be filled in to verify the legitimacy of the server certificate.
 - **SNI** means Server Name Indication, indicating whether the server domain name and certificate are verified to be the same; A null value means no validation.
 - When the server needs to verify the client certificate, the **TLS Cert** and **TLS Key** must be filled in.
+- When **TLS Verify** is enabled, the **CA Cert** field must be filled in to verify the legitimacy of the server certificate.
 
 <img src="./assets/enable-TLS-dashboard.png" alt="enable-TLS-dashboard" style="zoom:50%;" />
 
 In addition, you can add `ssl` options when you configure the features in the configuration file. For example, you can configure the `authentication` group in the `emqx.conf` by adding the following statement:
 
-```
+```bash
 authentication {
   url = "https://127.0.0.1:8080"
   backend = "http"
