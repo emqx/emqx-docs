@@ -209,6 +209,7 @@
     - data-integration/data-bridge-rocketmq
     - data-integration/data-bridge-oracle
     - data-integration/data-bridge-sqlserver
+    - data-integration/data-bridge-iotdb
     - data-integration/data-bridge-opents
 
     # TODO
