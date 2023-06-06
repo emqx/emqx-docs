@@ -153,7 +153,7 @@ Both for **ingress** and **egress** mode EMQX employs a pool of MQTT clients. Ho
 | `${ClientIDPrefix}`  | As per configuration. If not set then whole first fragment is omitted. |
 | `${BridgeName}`      | User-provided name of the bridge. |
 | `${Mode}`            | Either `ingress` or `egress`. |
-| `${NodeName}`        | [Name of the node](../../configuration/cluster.html#node-names) on which the MQTT client is running. |
+| `${NodeName}`        | [Name of the node](../configuration/cluster.md#node-names) on which the MQTT client is running. |
 | `${N}`               | Number from `1` to the configured size of the MQTT client pool. |
 
 ### Using MQTT Client pool for ingress
