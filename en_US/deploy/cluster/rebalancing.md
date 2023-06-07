@@ -36,6 +36,7 @@ You can use the following CLI command to start the node evacuation. The `--evacu
 
 ```bash
 ./bin/emqx_ctl rebalance start --evacuation \
+    [--wait-health-check Secs] \
     [--redirect-to "Host1:Port1 Host2:Port2 ..."] \
     [--conn-evict-rate CountPerSec] \
     [--migrate-to "node1@host1 node2@host2 ..."] \
@@ -43,13 +44,15 @@ You can use the following CLI command to start the node evacuation. The `--evacu
     [--sess-evict-rate CountPerSec]
 ```
 
-| Parameter           | Type             | Description                                                  |
-| ------------------- | ---------------- | ------------------------------------------------------------ |
-| `--redirect-to`     | String           | The redirected server address during reconnection, for MQTT 5.0 clients; Refer to [MQTT 5.0 Specification - Server redirection](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255) for more details. |
-| `--conn-evict-rate` | Positive integer | Client disconnection rate, count/second; 500 connections per second by default |
-| `--migrate-to`      | String           | Space or comma-separated list of nodes to which sessions will be evacuated |
-| `--wait-takeover`   | Positive integer | Amount of time in seconds to wait before starting session evacuation; Unit: second, 60 seconds by default |
-| `--sess-evict-rate` | Positive integer | Client evacuation rate, count/second; 500 sessions per second by default |
+| Parameter              | Type             | Description                                                  |
+| -----------------------| ---------------- | ------------------------------------------------------------ |
+| `--wait-health-check`  | Positive integer | Specified waiting time (in seconds, default 60 seconds) for the LB to remove the source node from the active backend node list. Once the specified waiting time is exceeded, the evacuation will start and the node will start rejecting new connections. |
+| `--redirect-to`        | String           | The redirected server address during reconnection, for MQTT 5.0 clients; Refer to [MQTT 5.0 Specification - Server redirection](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255) for more details. |
+| `--conn-evict-rate`    | Positive integer | Client disconnection rate, count/second; 500 connections per second by default |
+| `--migrate-to`         | String           | Space or comma-separated list of nodes to which sessions will be evacuated |
+| `--wait-takeover`      | Positive integer | Amount of time in seconds to wait before starting session evacuation; Unit: second, 60 seconds by default |
+| `--sess-evict-rate`    | Positive integer | Client evacuation rate, count/second; 500 sessions per second by default |
+
 
 **Code Example**
 
@@ -57,6 +60,7 @@ If you want to migrate the clients on the node `emqx@127.0.0.1` to the nodes `em
 
 ```bash
 ./bin/emqx_ctl rebalance start --evacuation \
+	--wait-health-check 60 \
 	--wait-takeover 200 \
 	--conn-evict-rate 30 \
 	--sess-evict-rate 30 \
@@ -118,7 +122,7 @@ Due to the same reason as MQTT being a stateful long-lived connection protocol, 
 
 ### How It Works
 
-Rebalancing is a more complicated process since it involves several nodes. 
+Rebalancing is a more complicated process since it involves several nodes.
 
 You can initiate a cluster load rebalancing task on any node. EMQX will automatically calculate the necessary connection migration plan based on the current connection load of each node. It will then migrate the corresponding number of connections and sessions from high-load nodes to low-load nodes to achieve load balancing between nodes. The workflow is as follows:
 
@@ -178,8 +182,8 @@ rebalance start \
 Connections are considered to be balanced when the following condition holds:
 
 ```bash
-avg(DonorConns) < avg(RecipientConns) + abs_conn_threshold 
-OR 
+avg(DonorConns) < avg(RecipientConns) + abs_conn_threshold
+OR
 avg(DonorConns) < avg(RecipientConns) * rel_conn_threshold
 ```
 
