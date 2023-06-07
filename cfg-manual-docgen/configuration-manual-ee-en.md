@@ -3761,26 +3761,6 @@ Tuning options for the mria table.
   Maintain a copy of the data in RAM for faster access.
 
 
-
-{% emqxce %}
-
-## Telemetry
-
-
-Settings for the telemetry module.
-
-**telemetry.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Enable telemetry.
-
-
-
-{% endemqxce %}
-
 <!-- ## zone 配置 -->
 
 <!-- #zone:overload_protection# -->
