@@ -430,7 +430,3 @@ Changes:
 
 Clients of other protocols than MQTT (LwM2M, CoAP, STOMP, MQTT-SN) are no longer listed as MQTT clients on the dashboard **Connections** page and in the `GET /clients` API.
 They can be found in **Extentions** -> **Gateways** section or listed with `GET /gateway/{name}/clients` API.
-
-## Telemetry
-
-The telemetry plugin (emqx_telemetry) has been removed, please configure it through the `telemetry {}` configuration item or in the Dashboard **System Settings** -> **Settings** page.

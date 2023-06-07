@@ -3769,26 +3769,6 @@ Tuning options for the mria table.
   在内存中保持一份数据的副本，以便更快地访问。
 
 
-
-{% emqxce %}
-
-## 遥测
-
-
-Settings for the telemetry module.
-
-**telemetry.enable**
-
-  *类型*: `boolean`
-
-  *默认值*: `true`
-
-  Enable telemetry.
-
-
-
-{% endemqxce %}
-
 <!-- ## zone 配置 -->
 
 <!-- #zone:overload_protection# -->
