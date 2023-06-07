@@ -18,7 +18,7 @@ SSL 和 TLS 常被用于网络通信，以确保数据传输保持机密性，�
 
 ## 启用 TLS 进行客户端加密连接
 
-[开启 SSL/TLS 连接](./emqx-mqtt-tls.md)页面详细介绍了如何在 MQTT 客户端与 EMQX 的连接中启用 SSL/TLS。在 SSL/TLS 启用的情况下，您可以同时开启 [CRL 检查](./crl.md)和 [OCSP stapling](./ocsp.md) 来验证证书的状态。[客户端 TLS](./mqtt-client-tls.md) 页面列举了 MQTT 客户端库接入示例和工程项目代码，在这些示例中包括了 TLS 使用指南。
+[开启 SSL/TLS 连接](./emqx-mqtt-tls.md)页面详细介绍了如何在 MQTT 客户端与 EMQX 的连接中启用 SSL/TLS。在 SSL/TLS 启用的情况下，您可以同时开启 [CRL 检查](./crl.md)或 [OCSP stapling](./ocsp.md) 来验证证书的状态。[客户端 TLS](./mqtt-client-tls.md) 页面列举了 MQTT 客户端库接入示例和工程项目代码，在这些示例中包括了 TLS 使用指南。
 
 ### 国密 SSL
 
