@@ -117,8 +117,7 @@ EMQX 安装完成后会创建一些目录用来存放运行文件和配置文件
 EMQX 的配置项存储在 `etc` 和 `data/configs` 目录下，二者的主要区别是 `etc` 目录存储**只读**的配置文件，用户通过 Dashboard 和 REST API 提交的配置将被保存到 `data/configs` 目录下，并支持在运行时进行热更新。
 
 - `etc/emqx.conf`
-- `data/configs/cluster-override.conf`
-- `data/configs/local-override.conf` 
+- `data/configs/cluster.hocon`
 
 EMQX 读取这些配置并将其合并转化为 Erlang 原生配置文件格式，以便在运行时应用这些配置。
 
