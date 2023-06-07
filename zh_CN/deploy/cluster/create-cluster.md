@@ -34,7 +34,7 @@ EMQX 支持手动创建集群，也支持通过多种方式自动集群，本章
 
     ```bash
     cluster {
-        ## 可选 manual | static | mcast | dns | etcd | K8s
+        ## 可选 manual | static | dns | etcd | K8s
         discovery_strategy  =  manual
     }
     ```
@@ -119,7 +119,7 @@ EMQX 默认配置为手动创建集群，您可以通过 `emqx.conf` 配置文�
 
 ```bash
 cluster {
-    ## 可选 manual | static | mcast | dns | etcd | K8s
+    ## 可选 manual | static | dns | etcd | K8s
     discovery_strategy  =  manual
 }
 ```

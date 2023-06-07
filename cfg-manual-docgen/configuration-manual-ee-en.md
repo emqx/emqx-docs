@@ -458,7 +458,7 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
 
   *Default*: `manual`
 
-  *Optional*: `manual | static | mcast | dns | etcd | k8s`
+  *Optional*: `manual | static | dns | etcd | k8s`
 
   Service discovery method for the cluster nodes. Possible values are:
 - manual: Use <code>emqx ctl cluster</code> command to manage cluster.<br/>
@@ -518,11 +518,6 @@ there is no need to set this value.
   *Type*: `cluster_static`
 
 
-**cluster.mcast**
-
-  *Type*: `cluster_mcast`
-
-
 **cluster.dns**
 
   *Type*: `cluster_dns`
@@ -548,7 +543,6 @@ see [Create and manage clusters](../deploy/cluster/create-cluster.md)。
 | -------- | ------------------------------- |
 | manual   | Create cluster manually         |
 | static   | Autocluster by static node list |
-| mcast    | Autocluster by UDP Multicast    |
 | dns      | Autocluster by DNS A Record     |
 | etcd     | Autocluster using etcd          |
 | k8s      | Autocluster on Kubernetes       |
@@ -574,88 +568,6 @@ The new node joins the cluster by connecting to one of the bootstrap nodes.
   *Default*: `[]`
 
   List EMQX node names in the static cluster. See <code>node.name</code>.
-
-
-
-### Autocluster by IP Multicast
-
-
-Service discovery via UDP multicast.
-
-**cluster.mcast.addr**
-
-  *Type*: `string`
-
-  *Default*: `239.192.0.1`
-
-  Multicast IPv4 address.
-
-
-**cluster.mcast.ports**
-
-  *Type*: `array`
-
-  *Default*: `[4369, 4370]`
-
-  List of UDP ports used for service discovery.<br/>
-Note: probe messages are broadcast to all the specified ports.
-
-
-**cluster.mcast.iface**
-
-  *Type*: `string`
-
-  *Default*: `0.0.0.0`
-
-  Local IP address the node discovery service needs to bind to.
-
-
-**cluster.mcast.ttl**
-
-  *Type*: `integer`
-
-  *Default*: `255`
-
-  *Optional*: `0-255`
-
-  Time-to-live (TTL) for the outgoing UDP datagrams.
-
-
-**cluster.mcast.loop**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  If <code>true</code>, loop UDP datagrams back to the local socket.
-
-
-**cluster.mcast.sndbuf**
-
-  *Type*: `bytesize`
-
-  *Default*: `16KB`
-
-  Size of the kernel-level buffer for outgoing datagrams.
-
-
-**cluster.mcast.recbuf**
-
-  *Type*: `bytesize`
-
-  *Default*: `16KB`
-
-  Size of the kernel-level buffer for incoming datagrams.
-
-
-**cluster.mcast.buffer**
-
-  *Type*: `bytesize`
-
-  *Default*: `32KB`
-
-  Size of the user-level buffer.
-
 
 
 ### Autocluster by DNS Record
