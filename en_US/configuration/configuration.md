@@ -53,6 +53,10 @@ Some configuration items cannot be overridden, for example, `node.name`.
 
 :::
 
+Since version 5.1, when cluster config changes, EMQX makes a backup for `cluster.hocon` file before overwriting it.
+The backup files are suffixed with a timestamp of the node's local time.
+There are at most 10 backup files kept.
+
 ## HOCON Configuration Format
 
 Since EMQX 5.0, we have begun to use [Human-Optimized Config Object Notation (HOCON)](https://github.com/emqx/hocon) as the configuration file format.
