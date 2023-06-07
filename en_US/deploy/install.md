@@ -64,7 +64,7 @@ The table below lists the operating systems and versions that EMQX supports.
 
 Depending on the number of client connections, message rate, message size, and enabled features, the minimum hardware specification for EMQX varies.
 
-Here is the minimum hardware specification for running a simple EMQX function verification, supporting 100,000 client connections and 100,000 message throughput per second.
+Below are hardware specifications for running EMQX with simple workloads, supporting 100,000 client connections and 100,000 messages per second of throughput.
 
 | Item           | Minimum configuration | Recommended configuration |
 | -------------- | --------------------- | ------------------------- |
@@ -75,7 +75,7 @@ Here is the minimum hardware specification for running a simple EMQX function ve
 
 ::: tip
 
-In production environments, you can use the [Server Estimate](https://www.emqx.com/en/server-estimate) calculator to calculate the recommended hardware specification under various maximum connections and message throughputs.
+In production environments, you can use the [Server Estimate](https://www.emqx.com/en/server-estimate) calculator to calculate the recommended hardware specification under various maximum connections and message throughput.
 
 :::
 
