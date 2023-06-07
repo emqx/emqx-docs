@@ -48,12 +48,9 @@ EMQX supports several node discovery strategies:
 | -------- | --------------------------------------- |
 | `manual` | Manually create a cluster with commands |
 | `static` | Autocluster through static node list    |
-| `mcast`* | Create a cluster through UDP multicast  |
 | `DNS`    | Autocluster through DNS A and SRV records        |
 | `etcd`   | Autocluster through etcd                |
 | `k8s`    | Autocluster provided by Kubernetes      |
-
-[^*]: The multicast discovery strategy has been deprecated and will be removed in future releases.
 
 ### Network Partition Autoheal
 

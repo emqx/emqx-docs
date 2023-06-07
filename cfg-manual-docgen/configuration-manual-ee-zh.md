@@ -439,7 +439,7 @@ EMQX 节点可以组成一个集群，以提高总容量。<br/> 这里指定了
 
   *默认值*: `manual`
 
-  *可选值*: `manual | static | mcast | dns | etcd | k8s`
+  *可选值*: `manual | static | dns | etcd | k8s`
 
   集群节点发现方式。可选值为:
 - manual: 使用 <code>emqx ctl cluster</code> 命令管理集群。<br/>
@@ -498,11 +498,6 @@ EMQX 节点可以组成一个集群，以提高总容量。<br/> 这里指定了
   *类型*: `cluster_static`
 
 
-**cluster.mcast**
-
-  *类型*: `cluster_mcast`
-
-
 **cluster.dns**
 
   *类型*: `cluster_dns`
@@ -527,7 +522,6 @@ EMQX 支持多种策略的节点自动发现与集群，详见 [创建集群](..
 | ------ | ----------------------- |
 | manual | 手工命令创建集群        |
 | static | 静态节点列表自动集群    |
-| mcast  | UDP 组播方式自动集群    |
 | dns    | DNS A 记录自动集群      |
 | etcd   | 通过 etcd 自动集群      |
 | k8s    | Kubernetes 服务自动集群 |
@@ -555,95 +549,6 @@ cluster.discovery = manual
 指定固定的节点列表，多个节点间使用逗号 , 分隔。
 当 cluster.discovery_strategy 为 static 时，此配置项才有效。
 适合于节点数量较少且固定的集群。
-
-
-
-### 基于 mcast 组播自动集群
-
-
-UDP 组播服务发现。
-
-**cluster.mcast.addr**
-
-  *类型*: `string`
-
-  *默认值*: `239.192.0.1`
-
-  指定多播 IPv4 地址。
-当 cluster.discovery_strategy 为 mcast 时，此配置项才有效。
-
-
-**cluster.mcast.ports**
-
-  *类型*: `array`
-
-  *默认值*: `[4369, 4370]`
-
-  指定多播端口。如有多个端口使用逗号 , 分隔。
-当 cluster.discovery_strategy 为 mcast 时，此配置项才有效。
-
-
-**cluster.mcast.iface**
-
-  *类型*: `string`
-
-  *默认值*: `0.0.0.0`
-
-  指定节点发现服务需要绑定到本地 IP 地址。
-当 cluster.discovery_strategy 为 mcast 时，此配置项才有效。
-
-
-**cluster.mcast.ttl**
-
-  *类型*: `integer`
-
-  *默认值*: `255`
-
-  *可选值*: `0-255`
-
-  指定多播的 Time-To-Live 值。
-当 cluster.discovery_strategy 为 mcast 时，此配置项才有效。
-
-
-**cluster.mcast.loop**
-
-  *类型*: `boolean`
-
-  *默认值*: `true`
-
-  设置多播的报文是否投递到本地回环地址。
-当 cluster.discovery_strategy 为 mcast 时，此配置项才有效。
-
-
-**cluster.mcast.sndbuf**
-
-  *类型*: `bytesize`
-
-  *默认值*: `16KB`
-
-  外发数据报的内核级缓冲区的大小。
-当 cluster.discovery_strategy 为 mcast 时，此配置项才有效。
-
-
-**cluster.mcast.recbuf**
-
-  *类型*: `bytesize`
-
-  *默认值*: `16KB`
-
-  接收数据报的内核级缓冲区的大小。
-当 cluster.discovery_strategy 为 mcast 时，此配置项才有效。
-
-
-**cluster.mcast.buffer**
-
-  *类型*: `bytesize`
-
-  *默认值*: `32KB`
-
-  用户级缓冲区的大小。
-当 cluster.discovery_strategy 为 mcast 时，此配置项才有效。
-
 
 
 ### 基于 DNS 记录自动集群
