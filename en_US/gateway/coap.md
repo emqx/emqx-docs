@@ -14,7 +14,7 @@ Below is the feature list supported in connection mode and connectionless mode.
 | ----------------- | ------------------- | --------------- |
 | Message Publish   | √                   | √               |
 | Topic Subscribe   | √                   | √               |
-| Topic Unsubscribe | √                   | √               |
+| Topic Unsubscribe | ×                   | √               |
 | Create connection | ×                   | √               |
 | Close connection  | ×                   | √               |
 | Heartbeat         | ×                   | √               |

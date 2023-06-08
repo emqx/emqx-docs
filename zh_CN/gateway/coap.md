@@ -72,7 +72,6 @@ CoAP 网关支持 2 种工作模式：
 - `无连接模式`：该模式完全遵循 [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) 协议，在该模式下不需要连接认证、会话、心跳维持等操作，仅支持：
   * 消息发布
   * 订阅主题
-  * 取消订阅
 
 - `连接模式`：该模式下定义了连接认证、会话、和心跳维持等概念。客户端在发布订阅前需要先创建连接，成功连接后客户端将获得会话令牌(Token)，在后续的通信中都需要在 Query String 加入令牌信息。它实现了如下功能:
   * 创建连接
