@@ -1,0 +1,117 @@
+name: Deploy Docs Preview
+
+on:
+  workflow_run:
+    workflows: [Check Docs]
+    branches:
+      - release-[0-9].[0-9]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-20.04
+    steps:
+    - name: clone docs
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        path: docs-files
+
+    - name: set env
+      run: |
+        echo "DOCS_TYPE=enterprise" >> $GITHUB_ENV
+        echo "DOCS_BRANCH=${{ github.event.workflow_run.head_branch }}" >> $GITHUB_ENV
+        version=$(echo $DOCS_BRANCH | sed 's/release-//g')
+        echo "VERSION=v${version}" >> $GITHUB_ENV
+
+    - name: clone next frontend
+      uses: actions/checkout@v3
+      with:
+        repository: 'emqx/docs-emqx-com-frontend'
+        token: ${{ secrets.CI_GIT_TOKEN }}
+        path: frontend
+        ref: next
+
+    - name: use node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 16
+    
+    - name: use pnpm
+      uses: pnpm/action-setup@v2
+      with:
+          version: 8.5.1
+
+    - name: generate directory.json
+      run: |
+        cd docs-files
+        ./gen.py ce | tee directory.json
+        ./gen.py ee | tee directory_ee.json
+
+    - name: remove unused files
+      run: |
+        cd docs-files
+        python3 .github/scripts/remove_unused.py directory_ee.json $(pwd)
+
+    - name: set current emqx version
+      run: |
+        cd docs-files
+        source current-version.env
+        find ./en_US ./zh_CN -type f -name "*.md" -exec sed -i 's/@CE_VERSION@/'"$CE_VERSION"'/g' {} +
+        find ./en_US ./zh_CN -type f -name "*.md" -exec sed -i 's/@EE_VERSION@/'"$EE_VERSION"'/g' {} +
+
+    - name: move ee files
+      run: |
+        rm frontend/docs/en/index.md || true
+        rm frontend/docs/zh/index.md || true
+        rm frontend/docs/*.md || true
+        rm frontend/README.md || true
+        mkdir -p frontend/docs/en/${DOCS_TYPE}/${VERSION}/
+        mkdir -p frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
+        mkdir -p frontend/docs/.vitepress/public/api/
+        mkdir -p frontend/redoc/
+        cp -r docs-files/en_US/* frontend/docs/en/${DOCS_TYPE}/${VERSION}/
+        cp -r docs-files/zh_CN/* frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
+        cp -r docs-files/redocly/*.json frontend/redoc/
+        cp docs-files/directory_ee.json frontend/docs/.vitepress/config/directory.json
+
+    - name: generate version config
+      run: |
+        cd docs-files
+        version_list=$(git tag | egrep "^e.*$" | xargs echo -n)
+        python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/.vitepress/public/api/${DOCS_TYPE}_versions.json
+        cat ../frontend/docs/.vitepress/public/api/${DOCS_TYPE}_versions.json
+
+    - name: build docs
+      run: |
+        cd frontend
+        pnpm install
+        pnpm build
+
+    - name: build ee redoc
+      run: |
+        cd frontend
+        yarn global add redoc-cli
+        LANGS=(zh en)
+        for lang in "${LANGS[@]}"; do
+          redoc-cli bundle redoc/ee-${lang}.json -t redoc/template.hbs \
+            --output docs/.vitepress/dist/${lang}/enterprise/${VERSION}/admin/api-docs.html \
+            --options.theme.colors.primary.main=#5e4eff \
+            --options.theme.typography.headings.fontFamily='Roboto, sans-serif' \
+            --options.hide-hostname --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \
+            --templateOptions.description "EMQX Enterprise ${VERSION} API Documentation" \
+            --templateOptions.version "${VERSION}" \
+            $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
+        done
+
+    - name: upload ee file
+      run: |
+        pip3 install coscmd
+        coscmd config -a ${{ secrets.TENCENT_COS_ID }} -s ${{ secrets.TENCENT_COS_KEY }} -b docs-preview-1302406139 -r ap-hongkong
+        coscmd delete -r -f en/${DOCS_TYPE}/${VERSION} || true
+        coscmd delete -r -f zh/${DOCS_TYPE}/${VERSION} || true
+        coscmd config -a ${{ secrets.TENCENT_COS_ID }} -s ${{ secrets.TENCENT_COS_KEY }} -b docs-preview-1302406139 -e cos.accelerate.myqcloud.com
+        cd frontend/docs/.vitepress/dist/
+        coscmd upload -r ./ /
