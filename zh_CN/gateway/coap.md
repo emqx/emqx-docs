@@ -370,7 +370,7 @@ coap-client -m get -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clien
 ### 取消订阅
 
 该接口用于 CoAP 客户端取消订阅指定主题。
-当前实现，取消订阅操作仅在 `连接模式` 下可用。
+目前，取消订阅操作仅在 `连接模式` 下可用。
 
 **请求参数表：**
 
