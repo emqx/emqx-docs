@@ -50,7 +50,7 @@ The rule describes the three configurations of **where data comes from,  how to 
 
 The following figure is a simple rule, which is used to process the data at the time of **message publishing**, filter out the `msg` field,  messages `topic`, ` qos` of all topic messages, and send them to the Web Server and /uplink topics:
 
-![image-20190604103907875](../assets/image-20190604103907875.png)
+<img src="./assets/rule-engine/rule_engine_view.png" alt="rule_engine_view" style="zoom:67%;" />
 
 EMQX Broker's rule engine can be used to flexibly process messages and events. By using the rule engine, it can easily achieve such function as converting the message into a specified format, and then stored in a database table, or sent to the message queue.
 
@@ -181,7 +181,7 @@ For all supported events and available fields, please see [Event topics availabl
 - You can use the `"." `Symbol to nest select payloads
 - If possible, don't create alias for payload, as this would cause performance degradations.
   i.e. Do not use `SELECT payload as p`
-:::
+  :::
 
 #### Examples of FOREACH-DO-INCASE
 
@@ -306,15 +306,15 @@ The SQL statement test function is provided in the Dashboard interface, and the 
 
 1.  On the rule creating interface, enter **rule SQL** and enable the **SQL test** switch:
 
-    ![image](../assets/sql-test-1@2x.png)
+    ![rule_engine_create_SQL_test_1](./assets/rule-engine/rule_engine_create_SQL_test_1.png)
 
-2. Modify the field of the simulated event, or use the default configuration, and click the **Test** button:
+2. Use the default configuration, or you can also modify the field of the simulated event if needed, and click the **Test** button:
 
-   ![image](../assets/sql-test-2@2x.png)
+   ![rule_engine_create_SQL_test_2](./assets/rule-engine/rule_engine_create_SQL_test_2.png)
 
 3. The result of SQL processing will be displayed in the **Test Output** text box:
 
-   ![image](../assets/sql-test-3@2x.png)
+   ![rule_engine_create_SQL_test_3](./assets/rule-engine/rule_engine_create_SQL_test_3.png)
 
 ## Migration Guide
 

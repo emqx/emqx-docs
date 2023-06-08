@@ -128,5 +128,5 @@ You can use the following placeholders in the authentication request. EMQX will 
 -%t: Subject
 
 ::: tip
-It is recommended to use the POST and PUT methods. When using the GET method, the plaintext password may be recorded in the server log during the transmission along with the URL.
+It is recommended to use the POST method. When using the GET method, the plaintext password may be recorded in the server log during the transmission along with the URL.
 :::

@@ -175,11 +175,11 @@ auth.mysql.password_hash = sha256,salt
 
 ### EMQX authentication process
 
-1. The authentication data such as password (ciphertext) and salt are queried according to the configured authentication SQL combined with the information passed in by the client. If there is no query result, the authentication will terminate and the ignore result will be returned
+1. The authentication data such as password (ciphertext) and salt are queried according to the configured authentication SQL combined with the information passed in by the client. If there is no query result, the authentication will terminate and the ignore result will be returned.
 2. The cipher text is calculated according to the configured salting rule and hash method. If no hash method is enabled,  this step is skipped.
 3. Compare the cipher text stored in the database with the cipher text calculated by the current client. If the comparison is successful, the authentication succeeds. Otherwise, the authentication fails.
 
-MySQL authentication function logic diagram:
+PostgreSQL authentication function logic diagram:
 
 ![image-20200217154254202](./assets/image-20200217154254202.png)
 
