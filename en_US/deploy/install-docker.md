@@ -73,7 +73,7 @@ version: '3'
 
 services:
   emqx1:
-    image: emqx:@CE_VERSION@
+    image: emqx/emqx:@CE_VERSION@
     container_name: emqx1
     environment:
     - "EMQX_NODE_NAME=emqx@node1.emqx.io"
@@ -98,7 +98,7 @@ services:
     #   - $PWD/emqx1_data:/opt/emqx/data
 
   emqx2:
-    image: emqx:@CE_VERSION@
+    image: emqx/emqx:@CE_VERSION@
     container_name: emqx2
     environment:
     - "EMQX_NODE_NAME=emqx@node2.emqx.io"
