@@ -44,14 +44,14 @@ You can use the following CLI command to start the node evacuation. The `--evacu
     [--sess-evict-rate CountPerSec]
 ```
 
-| Parameter              | Type             | Description                                                  |
-| -----------------------| ---------------- | ------------------------------------------------------------ |
-| `--wait-health-check`  | Positive integer | Specified waiting time (in seconds, default 60 seconds) for the LB to remove the source node from the active backend node list. Once the specified waiting time is exceeded, the evacuation will start and the node will start rejecting new connections. |
-| `--redirect-to`        | String           | The redirected server address during reconnection, for MQTT 5.0 clients; Refer to [MQTT 5.0 Specification - Server redirection](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255) for more details. |
-| `--conn-evict-rate`    | Positive integer | Client disconnection rate, count/second; 500 connections per second by default |
-| `--migrate-to`         | String           | Space or comma-separated list of nodes to which sessions will be evacuated |
-| `--wait-takeover`      | Positive integer | Amount of time in seconds to wait before starting session evacuation; Unit: second, 60 seconds by default |
-| `--sess-evict-rate`    | Positive integer | Client evacuation rate, count/second; 500 sessions per second by default |
+| Parameter             | Type             | Description                                                  |
+| --------------------- | ---------------- | ------------------------------------------------------------ |
+| `--wait-health-check` | Positive integer | The duration (in seconds, 60 seconds by default) during which the node waits for the Load Balancer (LB) to remove it from the active backend node list. When this specified waiting time elapses, the evacuation process begins, and the source node starts rejecting any new incoming connections. |
+| `--redirect-to`       | String           | The redirected server address during reconnection, for MQTT 5.0 clients; Refer to [MQTT 5.0 Specification - Server redirection](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255) for more details. |
+| `--conn-evict-rate`   | Positive integer | Client disconnection rate, count/second; 500 connections per second by default |
+| `--migrate-to`        | String           | Space or comma-separated list of nodes to which sessions will be evacuated |
+| `--wait-takeover`     | Positive integer | Amount of time in seconds to wait before starting session evacuation; Unit: second, 60 seconds by default |
+| `--sess-evict-rate`   | Positive integer | Client evacuation rate, count/second; 500 sessions per second by default |
 
 
 **Code Example**
@@ -168,7 +168,7 @@ rebalance start \
 | Fields                 | Type             | Description                                                  |
 | ---------------------- | ---------------- | ------------------------------------------------------------ |
 | `--nodes`              | String           | Space or comma-separated list of nodes participating in the rebalance. It may or may not include the coordinator (node on which the command is run) |
-| `--wait-health-check`  | Positive integer | Specified waiting time (in seconds, default 60 seconds) for the LB to remove the source node from the active backend node list. Once the specified waiting time is exceeded, the load rebalancing task will start. |
+| `--wait-health-check`  | Positive integer | The duration (in seconds, 60 seconds by default) during which the node waits for the Load Balancer (LB) to remove it from the active backend node list. When this specified waiting time elapses, the load rebalancing process begins. |
 | `--conn-evict-rate`    | Positive integer | Client disconnection rate on source nodes; 500 connections per second by default |
 | `--abs-conn-threshold` | Positive integer | Absolute threshold for checking connection balance; 1000 by default |
 | `--rel-conn-threshold` | Number<br> > 1.0 | Relative threshold for checking connection balance; 1.1 by default |
