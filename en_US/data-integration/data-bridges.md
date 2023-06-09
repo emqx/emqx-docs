@@ -17,16 +17,60 @@ Only data bridges to MQTT and Webhook are supported in the EMQX open-source vers
 EMQX will provide the running statistics of data integration in the following categories:
 <!-- TODO 由于调整过 Data Bridge 结构，先前的指标设计过时了重新设计指标后补充文档 -->
 
-- Matched
+- Matched (counter)
+- Sent Successfully (counter)
+- Sent Failed (counter)
+- Dropped (counter)
+- Late Reply (counter)
+- Inflight (gauge)
+- Queuing (gauge)
 
-- Sent Successfully
-- Sent Failed
-- Sent Inflight
-- Dropped
-- Queuing
-- Retried
-- Rate
-- Late Reply
+![Bridge Metrics](./assets/metrics.svg)
+
+### Matched (`matched`)
+
+Counts the number of requests/messages that were routed to the bridge, regardless of its state.  Each message is ultimately accounted by other metrics, such that `matched = success + failed + inflight + queuing + late_reply + dropped`.
+
+### Sent Successfully (`success` and `retried.success`)
+
+Counts the number messages that were successfully received by the external data system.  `retried.success` is a sub-count of `success` which tracks the number of messages that had their delivery retried at least once.  Therefore, `retried.success <= success`.
+
+### Sent Failed (`failed` and `retried.failed`)
+
+Counts the number messages that failed to be received by the external data system.  `retried.failed` is a sub-count of `failed` which tracks the number of messages that had their delivery retried at least once.  Therefore, `retried.failed <= failed`.
+
+### Dropped (`dropped`, `dropped.expired`, `dropped.queue_full`, `dropped.resource_stopped`, `dropped.resource_not_found`)
+
+Counts the number of messages that had to be dropped without a delivery attempt.  There are some more specific buckets in which a more specific reason can be found.  We have `dropped = dropped.expired + dropped.queue_full + dropped.resource_stopped + dropped.resource_not_found`.
+
+- `expired` : the message time-to-live (TTL) was reached during queuing before it got a chance to be sent.
+- `queue_full` : the maximum queue size was reached and the message was dropped to prevent memory overflow.
+- `resource_stopped` : the message was attempted to be sent when the bridge was already stopped.
+- `resource_not_found` : the message was attempted to be sent when the bridge was no longer found.  This is very rare and should only happen due to race conditions while a bridge is being removed.
+
+### Late Reply (`late_reply`)
+
+Incremented when the message was attempted to be sent, but a response from the underlying driver was received after the message time-to-live (TTL) had expired.
+
+::: tip
+Note that `late_reply` does not indicate whether the message succeeded nor failed to be sent: it's an unknown status.  It could either have succeeded to be inserted in the external data system, failed to be inserted, or even the connection to the data system timed out while trying to be established.
+:::
+
+### Inflight (`inflight`)
+
+Gauges the number of messages in the buffering layer that are currently inflight and waiting for a response from the external data system.
+
+### Queuing (`queuing`)
+
+Gauges the number of messages have been received by the buffering layer but have not been sent yet to the external data system.
+
+## Data Bridge Statuses
+
+- `connecting`: the initial state before any health probes were made, and when the bridge is still attempting to connect to the external data system.
+- `connected`: the bridge is connecting and operating normally.  A failed health probe may transition the bridge to either `connecting` or `disconnected` states, depending on the severity of the failure.
+- `disconnected`: bridge failed the health probes and is in an unhealthy state.  It may try periodically to reconnect automatically depending on its configuration.
+- `stopped`: when the bridge has been manually disabled.
+- `inconsistent`: when there's disagreement on the bridge status among the cluster nodes.
 
 ## Features Supported
 
@@ -62,7 +106,7 @@ bridges.mysql.foo {
 
 ::: tip
 
-To ensure the time series of messages, please also add `max_inflight = 1` to the configuration file `emqx.conf`.  
+To ensure the time series of messages, please also add `max_inflight = 1` to the configuration file `emqx.conf`.
 
 :::
 
@@ -102,7 +146,7 @@ bridges.mysql.foo {
 
 When external resources are unavailable, for example, due to network fluctuations or service downtime, the buffer queue feature can help to save the message generated during this period as memory or disk cache and then resume the messaging after the service is restored.
 
-It is recommended to enable this feature to improve the fault tolerance capability of the data integration. 
+It is recommended to enable this feature to improve the fault tolerance capability of the data integration.
 
 For each resource connection (not MQTT connection), you can specify the cache queue size based on the storage size. If the cached size exceeds the limit, data will be discarded following the First In First Out (FIFO) rule.
 
