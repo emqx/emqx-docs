@@ -70,21 +70,11 @@ This command provides Erlang virtual machine insights including a realtime view 
 | observer bin_leak | Forces all processes to perform garbage collection and prints the top 100 processes that release the maximum amount of binary data, potentially revealing potential memory leak issues. |
 | observer load Mod | Ensures that the specified module is loaded on all nodes in the EMQX cluster. This command can be used to load modules when it is necessary to ensure that they are available throughout the entire cluster. |
 
-### observer status
+## conf cluster_sync
 
-<!-- TODO -->
+In version 5.0.x, this command was named `cluster_call`, this old command is still available in 5.1 but it is not displayed in usage info.
 
-### observer bin_leak
-
-<!-- TODO -->
-
-### observer load Mod
-
-<!-- TODO -->
-
-## cluster_call
-
-`emqx ctl cluster_call`
+`emqx ctl conf cluster_sync`
 
 This command is mostly for troubleshooting when there is something wrong with cluster-calls
 used to sync config changes between the nodes in the cluster.
@@ -98,7 +88,7 @@ to inspect and even fix the replication so it can move forward.
 For example, to inspect the 2nd config change (disabled SSL listener from dashboard).
 
 ```
-$ emqx ctl cluster_call tnxid 2
+$ emqx ctl conf cluster_sync tnxid 2
 {atomic,#{created_at => {{2022,6,21},{21,57,50}},
           initiator => 'emqx@127.0.0.1',
           mfa =>

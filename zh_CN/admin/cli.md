@@ -73,22 +73,16 @@ uptime    : 52 seconds
 | observer bin_leak | 强制所有进程执行垃圾回收，并打印释放最大数量二进制数据的前 100 个进程，可能会显示出潜在的内存泄漏问题。 |
 | observer load Mod | 确保指定的模块在 EMQX 集群中的所有节点上都已加载。当需要确保模块在整个集群中都可用时，可以使用此命令来加载模块。 |
 
-### observer status
-<!-- TODO -->
-### observer bin_leak
-<!-- TODO -->
+## conf cluster_sync
 
-### observer load Mod
-<!-- TODO -->
+在 5.0.x 版本中，这个命令的名称是 `cluster_call`。老的名字在 EMQX 5.1 中继续有效，但是不会显示在帮助信息中。
 
-## cluster_call
-
-`emqx ctl cluster_call`
+`emqx ctl conf cluster_sync`
 
 该命令用于查看、调查甚至修改集群配置修改的同步状态。
 
 EMQX 的 HTTP API 可以用于修改很多配置，当一个 API 被调用，例如从控制台界面的操作，来修改配置时，
-在收到这个请求的节点会先将修改的内容在本地写入 `data/configs/cluster-override.conf`，然后
+在收到这个请求的节点会先将修改的内容在本地写入 `data/configs/cluster.hocon`，然后
 同样的操作会被记录在数据库中，并异步地转发到集群中的其他节点。
 
 当由于某种原因，无法在另一个节点成功执行同样的修改，那么这个命令就可以很方便的查看这个异步复制的状态，
@@ -99,7 +93,7 @@ EMQX 会为每个集群范围的配置修改生成一个ID，（tnxid），这�
 下面这个例子，展示的是查看第二（tnxid=2）个修改的内容（这是一个启用 TLS 监听器的操作）。
 
 ```
-$ emqx ctl cluster_call tnxid 2
+$ emqx ctl conf cluster_sync tnxid 2
 {atomic,#{created_at => {{2022,6,21},{21,57,50}},
           initiator => 'emqx@127.0.0.1',
           mfa =>
