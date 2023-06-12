@@ -46,7 +46,7 @@ EMQX 允许多个客户端同时连接到桥接的 MQTT 代理。在创建桥接
 
 #### 在 ingress 模式下使用连接池
 
-尽管连接池适用于 ingress 和 egress 模式，但在 ingress 模式下使用连接池有更多要求。当在不同的 MQTT [集群](../deploy/cluster/introduction.md)之间创建 ingress 模式下的数据桥接时，如果连接池中的所有客户端都订阅相同的主题，它们将从远程代理接收到重复的消息，这将给服务器带来压力。在这种情况下，强烈建议使用[共享订阅](../messaging/mqtt-shared-subscription.md)作为一种安全措施。例如，您可以将远程MQTT代理的主题配置为 `$share/name1/topic1` 或者在使用主题过滤器时配置为 `$share/name2/topic2/#`。
+尽管连接池适用于 ingress 和 egress 模式，但在 ingress 模式下使用连接池有更多要求。当在不同的 MQTT [集群](../deploy/cluster/introduction.md)之间创建 ingress 模式下的数据桥接时，如果连接池中的所有客户端都订阅相同的主题，它们将从远程代理接收到重复的消息，这将给服务器带来压力。在这种情况下，强烈建议使用[共享订阅](../mqtt/mqtt-shared-subscription.md)作为一种安全措施。例如，您可以将远程MQTT代理的主题配置为 `$share/name1/topic1` 或者在使用主题过滤器时配置为 `$share/name2/topic2/#`。
 
 ## 快速开始
 

@@ -46,7 +46,7 @@ Because the MQTT protocol requires that a client connects to one broker must has
 
 #### Use Connection Pool in Ingress Mode
 
-Although the connection pool applies to both ingress and egress modes, using the connection pool in ingress mode has more requirements. When data bridges in ingress mode are created between MQTT brokers in different MQTT [clusters](../deploy/cluster/introduction.md), clients in the connection pool will receive duplicated messages from the remote broker if they all subscribe to the same topic. In that case, it will bring pressure to the brokers, so it is strongly advised to use [shared subscription](./messaging/mqtt-shared-subscription.md) as a kind of safety measure. For example, you can configure the topic of the remote MQTT Broker to  `$share/name1/topic1` or `$share/name2/topic2/#` if topic filter is used. 
+Although the connection pool applies to both ingress and egress modes, using the connection pool in ingress mode has more requirements. When data bridges in ingress mode are created between MQTT brokers in different MQTT [clusters](../deploy/cluster/introduction.md), clients in the connection pool will receive duplicated messages from the remote broker if they all subscribe to the same topic. In that case, it will bring pressure to the brokers, so it is strongly advised to use [shared subscription](../messaging/mqtt-shared-subscription.md) as a kind of safety measure. For example, you can configure the topic of the remote MQTT Broker to  `$share/name1/topic1` or `$share/name2/topic2/#` if topic filter is used. 
 
 ## Quick Start Tutorial
 
