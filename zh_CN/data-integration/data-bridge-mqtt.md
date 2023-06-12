@@ -1,42 +1,68 @@
 # MQTT
 
-MQTT 数据桥接是一种连接多个 EMQX 集群或其他 MQTT 服务的方式，其工作原理如下：
+MQTT 数据桥接是一种连接多个 EMQX 集群或其他 MQTT 服务的方式。本页介绍了 EMQX 中 MQTT 数据桥接的工作原理，并提供了在EMQX Dashboard 或使用配置文件创建 MQTT 数据桥接的快速入门教程。
 
-- 按照规则将当前集群的消息转发至桥接服务器；
-- 从桥接服务器订阅主题，收到消息后在当前集群中转发该消息。
+## 桥接模式
 
-:::tip 前置准备
+EMQX 支持在两种主要模式下工作的 MQTT 数据桥接：ingress 和 egress。本节将详细介绍每种模式的工作原理。同时，还介绍了在这两种模式中使用的连接池。
 
-- 了解 [规则](./rules.md)。
-- 了解 [数据桥接](./data-bridges.md)。
+### Ingress 模式
 
-:::
-
-## 功能清单
-
-- [异步请求模式](./data-bridges.md#异步请求模式)
-- [缓存队列](./data-bridges.md#缓存队列)
-
-## 快速开始
-
-下面将以 EMQX 的 [在线 MQTT 服务器](https://www.emqx.com/zh/mqtt/public-mqtt5-broker) 作为桥接服务器，指导您如何配置连接与桥接。
-
-### 桥接规则
-
-此处使用以下主题映射配置实现本地与远程 MQTT 服务之间的消息桥接：
-
-| 消息主题                   | 方向                       | 目标主题                  |
-| -------------------------- | -------------------------- | ------------------------- |
-| **`remote/topic/ingress`** | **ingress** (远程 -> 本地) | **`local/topic/ingress`** |
-| **`local/topic/egress`**   | **egress** (本地 -> 远程)  | **`remote/topic/egress`** |
-
-**ingress 模式下的消息服务流程**
+在 ingress 模式下，本地的 EMQX 从桥接的远程 MQTT 代理订阅主题，并在当前集群内分发接收到的消息。下面是 **ingress** 方向的消息服务流程：
 
 <img src="./assets/bridge_mqtt_igress.png" alt="MQTT 数据桥接 igress 示意图" style="zoom:67%;" />
 
-**egress 模式下的消息服务流程**
+MQTT 数据桥接可以单独使用，也可以与规则结合使用，以实现更强大、更灵活的数据处理能力。在 **ingress** 方向上，数据桥接可以作为规则的数据源。MQTT 数据桥接与规则配合工作的消息流程如下：
+
+<img src="./assets/bridge_igress_rule_link.png" alt="bridge_igress_rule_link" style="zoom:67%;" />
+
+### Egress 模式
+
+在 egress 模式下，本地的 EMQX 根据规则设置，将当前集群中的消息转发给桥接的远程 MQTT 代理。下面是**egress**方向上的消息服务流程：
 
 <img src="./assets/bridge_mqtt_egerss.png" alt="MQTT 数据桥接 egress 示意图" style="zoom:67%;" />
+
+在 **egress** 方向下，可以将规则处理结果作为消息，转发到远程 MQTT 代理的指定主题下：
+
+<img src="./assets/bridge_egress_rule.png" alt="bridge_egress_rule" style="zoom:67%;" />
+
+### 连接池
+
+EMQX 允许多个客户端同时连接到桥接的 MQTT 代理。在创建桥接时您可以设置一个 MQTT 客户端连接池，并配置连接池大小以表明连接池中的客户端连接数。在 MQTT 数据桥接中启用连接池，可以充分利用服务器资源，以实现更大的消息吞吐和更好的并发性能。这对于处理高负载、高并发的场景非常重要。
+
+由于 MQTT 协议要求连接到一个代理的客户端必须具有唯一的客户端 ID，因此连接池中的每个客户端都被分配了一个唯一的客户端 ID。为了使客户端 ID 可预测，EMQX 根据以下模式自动生成客户端 ID：
+
+```bash
+[${ClientIDPrefix}:]${BridgeName}:${Mode}:${NodeName}:${N}
+```
+
+| 片段                | 描述                                                         |
+| ------------------- | ------------------------------------------------------------ |
+| `${ClientIDPrefix}` | 配置的客户端 ID 前缀。如果未设置，则省略整个第一片段。       |
+| `${BridgeName}`     | 桥接的名称，由用户提供。                                     |
+| `${Mode}`           | `ingress` 或 `egress`。                                      |
+| `${NodeName}`       | 运行 MQTT 客户端的[节点名称](../configuration/cluster.md#node-names)。 |
+| `${N}`              | 从 `1` 到配置的 MQTT 客户端连接池的大小的数字。              |
+
+#### 在 ingress 模式下使用连接池
+
+尽管连接池适用于 ingress 和 egress 模式，但在 ingress 模式下使用连接池有更多要求。当在不同的 MQTT [集群](../deploy/cluster/introduction.md)之间创建 ingress 模式下的数据桥接时，如果连接池中的所有客户端都订阅相同的主题，它们将从远程代理接收到重复的消息，这将给服务器带来压力。在这种情况下，强烈建议使用[共享订阅](../messaging/mqtt-shared-subscription.md)作为一种安全措施。例如，您可以将远程MQTT代理的主题配置为 `$share/name1/topic1` 或者在使用主题过滤器时配置为 `$share/name2/topic2/#`。
+
+## 快速开始
+
+下面将以 EMQX 的[在线 MQTT 服务器](https://www.emqx.com/zh/mqtt/public-mqtt5-broker)作为桥接服务器，指导您如何配置连接与桥接。
+
+:::tip 前置准备
+
+- 了解[规则](./rules.md)。
+- 了解[数据桥接](./data-bridges.md)。
+
+:::
+
+### 功能清单
+
+- [异步请求模式](./data-bridges.md#异步请求模式)
+- [缓存队列](./data-bridges.md#缓存队列)
 
 ### 通过 Dashboard 配置
 
@@ -59,14 +85,15 @@ MQTT 数据桥接是一种连接多个 EMQX 集群或其他 MQTT 服务的方式
    - **入口配置**（可选）：配置桥接规则，将远程 MQTT 服务上的消息转发到本地；我们希望订阅 `remote/topic/ingress ` 下的消息，并将收到的信息转发至 `local/topic/ingress` 主题，因此将进行如下配置：
    
       - **远程 MQTT 服务**：订阅主题以获取消息
-         - **主题**：在集群工作模式下，我们可通过[共享订阅](../mqtt/mqtt-shared-subscription.md)来避免消息重复，因此填入 `$share/g/remote/topic/ingress`
+         - **主题**：在集群工作模式下，我们可通过共享订阅来避免消息重复，因此填入 `$share/g/remote/topic/ingress`
          - QoS：选择 `0`。
    
-      - **本地 MQTT 服务**：将订阅得到的消息发布到指定主题中，也可以留空，通过配置规则处理并使用 [消息重发布](./rules.md#消息重发布) 动作转发。
+      - **本地 MQTT 服务**：将订阅得到的消息发布到指定主题中，也可以留空，通过配置规则处理并使用[消息重发布](./rules.md#消息重发布)动作转发。
          - **主题**：填入 `local/topic/ingress`。
          - **QoS**：选择 `0`，或 `${qos}` （跟随消息 QoS）。
          - **Retain**：通过勾选确认是否以保留消息方式发布消息。
          - **消息模版**：转发的消息 Payload 模板，支持使用 `${field}` 语法提取数据。
+      - **连接池大小**：指定本地 MQTT 服务的客户端连接池的大小。在这个例子中，您可以设置为`8`。只要远程 MQTT 服务的主题使用共享订阅，这样的设置不会影响性能。
    
    - **出口配置**（可选）：将本地指定 MQTT 主题下的消息发布到远程 MQTT 服务，可以理解为入口配置的反向数据流。我们希望将 `local/topic/egress` 主题下的消息转发到远程 MQTT 服务 `remote/topic/egress` 主题中，因此将进行如下配置：
    
@@ -78,12 +105,15 @@ MQTT 数据桥接是一种连接多个 EMQX 集群或其他 MQTT 服务的方式
         - **QoS**：选择 `0`，或 `${qos}` （跟随消息 QoS）。
         - **Retain**：通过勾选确认是否以保留消息方式发布消息。
         - **消息模版**：转发的消息 Payload 模板，支持使用 `${field}` 语法提取数据。
+      - **连接池大小**：指定本地代理的 MQTT 客户端连接池的大小。在这个例子中，您可以设置为`8`。
    
 7. 其他配置（可选），根据情况配置同步/异步模式，队列与批量等参数。
 
 8. 点击**创建**按钮完成数据桥接创建。
 
-以上操作对应配置文件如下：
+### 通过配置文件配置
+
+EMQX 同时也支持使用配置文件创建 MQTT 数据桥接，对应的配置示例如下：
 
 ```bash
 bridges.mqtt.my_mqtt_bridge {
@@ -116,14 +146,3 @@ bridges.mqtt.my_mqtt_bridge {
 }
 ```
 
-## 配合规则使用
-
-此外，您也可配合规则使用 MQTT 数据桥接，实现更强大、更灵活的数据处理功能。
-
-在 **ingress** 方向下，可以将远程 MQTT 服务订阅得到的消息作为规则的数据源：
-
-<img src="./assets/bridge_igress_rule_link.png" alt="bridge_igress_rule_link" style="zoom:67%;" />
-
-在 **egress** 方向下，可以将规则处理结果作为消息，转发到远程 MQTT 服务的指定主题下：
-
-<img src="./assets/bridge_egress_rule.png" alt="bridge_egress_rule" style="zoom:67%;" />
