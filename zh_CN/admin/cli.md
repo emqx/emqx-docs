@@ -8,27 +8,27 @@ EMQX 支持一些基本的启动和管理命令，您可以通过 `emqx <command
 
 以下是常用的启动和管理命令：
 
-| 命令       | 介绍                                                                                          |
-| ---------- | --------------------------------------------------------------------------------------------- |
-| start      | 以守护进程模式启动 EMQX，运行期间不需要交互式 shell                                           |
-| console    | 在 Erlang 或 Elixir 交互式 shell 中启动 EMQX。用于在开发环境中调试 EMQX，需要与 EMQX 进行交互 |
-| foreground | 在前台模式下启动 EMQX，不使用交互式 shell。用于在开发环境中启动 EMQX，但不需要后台运行        |
-| stop       | 停止运行中的 EMQX 节点                                                                        |
-| ctl        | 管理和监控 EMQX，执行 'emqx ctl help' 可以获取更多详细信息                                    |
+| 命令       | 描述                                                         |
+| ---------- | ------------------------------------------------------------ |
+| start      | 以守护进程模式启动 EMQX，运行期间不需要交互式 shell。        |
+| console    | 在 Erlang 或 Elixir 交互式 shell 中启动 EMQX。用于在开发环境中调试 EMQX，需要与 EMQX 进行交互。 |
+| foreground | 在前台模式下启动 EMQX，不使用交互式 shell。用于在开发环境中启动 EMQX，但不需要后台运行。 |
+| stop       | 停止运行中的 EMQX 节点。                                     |
+| ctl        | 管理和监控 EMQX，执行 `emqx ctl help` 可以获取更多详细信息。 |
 
 以下是用于开发调试的高级命令，普通用户通常无需关心：
 
-| 命令           | 介绍                                       |
-| -------------- | ------------------------------------------ |
-| remote_console | 连接到远程 EMQX 节点的交互式 shell         |
-| attach         | 附加到正在运行的 EMQX 节点上执行交互式操作 |
-| ertspath       | 获取 EMQX Erlang 库的路径                  |
-| root_dir       | 获取 EMQX 根目录的路径                     |
-| pid            | 获取正在运行的 EMQX 节点的进程 ID          |
-| ping           | 检查 EMQX 节点是否正在运行                 |
-| check_config   | 验证 EMQX 配置文件是否正确                 |
-| console_clean  | 清空交互式 shell 控制台输出                |
-| escript        | 在 EMQX 节点上执行 Escript 脚本            |
+| 命令           | 描述                                         |
+| -------------- | -------------------------------------------- |
+| remote_console | 连接到远程 EMQX 节点的交互式 shell。         |
+| attach         | 附加到正在运行的 EMQX 节点上执行交互式操作。 |
+| ertspath       | 获取 EMQX Erlang 库的路径。                  |
+| root_dir       | 获取 EMQX 根目录的路径。                     |
+| pid            | 获取正在运行的 EMQX 节点的进程 ID。          |
+| ping           | 检查 EMQX 节点是否正在运行。                 |
+| check_config   | 验证 EMQX 配置文件是否正确。                 |
+| console_clean  | 清空交互式 shell 控制台输出。                |
+| escript        | 在 EMQX 节点上执行 Escript 脚本。            |
 
 ## ctl 命令介绍
 
@@ -101,23 +101,24 @@ $ emqx ctl observer load Mod
 Loaded 'Mod' module on []: ok
 ```
 
-## cluster_call
+## conf cluster_sync
 
 该命令用于查看、调查甚至修改集群配置修改的同步状态。
 
-EMQX 的 HTTP API 可以用于修改很多配置，当一个 API 被调用，例如从控制台界面的操作，来修改配置时，
-在收到这个请求的节点会先将修改的内容在本地写入 `data/configs/cluster.hocon`，然后
-同样的操作会被记录在数据库中，并异步地转发到集群中的其他节点。
+::: tip
 
-当由于某种原因，无法在另一个节点成功执行同样的修改，那么这个命令就可以很方便的查看这个异步复制的状态，
-甚至可以强制跳过一个失败的复制。
+在 5.0.x 版本中，这个命令的名称是 `cluster_call`。老的名字在 EMQX 5.1 中继续有效，但是不会显示在帮助信息中。
 
-EMQX 会为每个集群范围的配置修改生成一个 ID，（tnxid），这个 ID 会在集群范围内严格递增，
-每个修改，例如从控制台中修改一个配置之后，都会记录在数据库中。
-下面这个例子，展示的是查看第二（tnxid=2）个修改的内容（这是一个启用 TLS 监听器的操作）。
+:::
+
+EMQX 的 HTTP API 可以用于修改很多配置，当一个 API 被调用，例如通过 Dashboard 界面的操作来修改配置时，在收到这个请求的节点会先将修改的内容在本地写入 `data/configs/cluster.hocon`，然后同样的操作会被记录在数据库中，并异步地转发到集群中的其他节点。
+
+当由于某种原因，无法在另一个节点成功执行同样的修改，那么这个命令就可以很方便地查看这个异步复制的状态，甚至可以强制跳过一个失败的复制。
+
+EMQX 会为每个集群范围的配置修改生成一个 ID（tnxid），这个 ID 会在集群范围内严格递增，每个修改，例如从 Dashboard 修改一个配置之后，都会记录在数据库中。下面这个例子，展示的是查看第二（tnxid=2）个修改的内容（这是一个启用 TLS 监听器的操作）。
 
 ```bash
-$ emqx ctl cluster_call tnxid 2
+$ emqx ctl conf cluster_sync tnxid 2
 {atomic,#{created_at => {{2022,6,21},{21,57,50}},
           initiator => 'emqx@127.0.0.1',
           mfa =>
@@ -129,13 +130,12 @@ $ emqx ctl cluster_call tnxid 2
 ```
 
 ::: tip
-`skip` 指令和 `fast_forward` 指令会迫使本地节点跳过一些（失败）的操作
-这可能会导致集群内节点之间的配置不一致。
+`skip` 指令和 `fast_forward` 指令会迫使本地节点跳过一些（失败）的操作，这可能会导致集群内节点之间的配置不一致。
 :::
 
 ## admins
 
-admins 用于创建，修改，删除管理员账户，子命令如下：
+用于创建、修改、删除管理员账户，子命令如下：
 
 | 命令                                           | 描述                          |
 | ---------------------------------------------- | ----------------------------- |
@@ -168,13 +168,13 @@ ok
 
 用于查看和管理 retain 的消息。也可以用于为 retain 表创建索引。
 
-| 命令                           | 描述                                                                                              |
-| ------------------------------ | ------------------------------------------------------------------------------------------------- |
-| retainer info                  | 显示保留消息的数量                                                                                |
-| retainer topics                | 显示所有保留消息的主题                                                                            |
-| retainer clean                 | 清除所有保留消息                                                                                  |
-| retainer clean \<Topic>         | 按指定主题过滤器清除保留消息                                                                      |
-| retainer reindex status        | 显示重新索引状态                                                                                  |
+| 命令                           | 描述                                                         |
+| ------------------------------ | ------------------------------------------------------------ |
+| retainer info                  | 显示保留消息的数量。                                         |
+| retainer topics                | 显示所有保留消息的主题。                                     |
+| retainer clean                 | 清除所有保留消息。                                           |
+| retainer clean \<Topic>         | 按指定主题过滤器清除保留消息。                               |
+| retainer reindex status        | 显示重新索引状态。                                           |
 | retainer reindex start [force] | 根据配置设置生成新的保留消息主题索引。将 true 作为 \<Force> 参数传递以忽略先前启动的重新索引过程。 |
 
 ### retainer info
@@ -199,7 +199,7 @@ $SYS/brokers/emqx@127.0.0.1/version
 emqx ctl retainer clean
 ```
 
-### retainer clean \<Topic>
+### retainer clean \\<Topic>
 
 ```bash
 emqx ctl retainer clean t/1
@@ -227,13 +227,13 @@ Reindexing finished
 
 换句话说，`emqx ctl cluster join <OneOfTheClusteredNodes>` 命令用于向 `OneOfTheClusteredNodes` 所在的集群发送请求以加入，而不是让这个节点加入自身所在的集群。
 
-| 命令                         | 描述                 | 使用场景和注意事项                                                                                                   |
-| ---------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| emqx ctl cluster             | 控制 EMQX 集群的命令 |                                                                                                                      |
-| cluster join \<Node\>        | 加入集群             | - 使用该命令将节点加入到指定节点所在的 EMQX 集群<br />- 注意确保指定的节点是活动且可访问的                             |
-| cluster leave                | 离开集群             | - 使用该命令将节点从当前 EMQX 集群中移除                                                                             |
-| cluster force-leave \<Node\> | 强制节点离开集群     | - 使用该命令强制指定节点离开 EMQX 集群<br />- 注意该操作可能导致集群状态不一致，谨慎使用                               |
-| cluster status [--json]      | 查看集群状态         | - 使用该命令查看 EMQX 集群的状态信息<br />- 可选参数`--json`以 JSON 格式显示集群状态<br />- 用于监视和调试集群的健康状况 |
+| 命令                         | 描述                   | 使用场景和注意事项                                           |
+| ---------------------------- | ---------------------- | ------------------------------------------------------------ |
+| emqx ctl cluster             | 控制 EMQX 集群的命令。 |                                                              |
+| cluster join \<Node\>        | 加入集群。             | - 使用该命令将节点加入到指定节点所在的 EMQX 集群。<br>- 注意确保指定的节点是活动且可访问的。 |
+| cluster leave                | 离开集群。             | - 使用该命令将节点从当前 EMQX 集群中移除                     |
+| cluster force-leave \<Node\> | 强制节点离开集群。     | - 使用该命令强制指定节点离开 EMQX 集群。<br>- 注意该操作可能导致集群状态不一致，谨慎使用。 |
+| cluster status [--json]      | 查看集群状态。         | - 使用该命令查看 EMQX 集群的状态信息。<br>- 可选参数`--json`以 JSON 格式显示集群状态。<br>- 用于监视和调试集群的健康状况。 |
 
 ### cluster join \<Node\>
 
@@ -340,7 +340,7 @@ t/1 -> emqx@127.0.0.1
 
 ## subscriptions
 
-查看，增加或者删除某个客户端的订阅。
+查看、增加或者删除某个客户端的订阅。
 
 | 命令                                             | 描述                   |
 | ------------------------------------------------ | ---------------------- |
@@ -452,7 +452,7 @@ emqx ctl plugins disable emqx_auth_mnesia-3.0.1
 emqx ctl plugins enable emqx_auth_mnesia-3.0.1 front
 ```
 
-可以使用 'front', 'rear', 或 'before Other-Vsn' 来指定一个相对位置用来调整启动顺序。
+可以使用 `front`, `rear`, 或 `before Other-Vsn` 来指定一个相对位置用来调整启动顺序。
 如果没有给出 Position，已配置好的插件将停留在原来的位置，新的插件会被附加到最后面的位置上。
 
 ## vm
@@ -631,14 +631,14 @@ $ emqx ctl trace stop client emqx_c
 stop tracing clientid emqx_c successfully
 ```
 
-### trace start topic \<Topic> \<File> [\<Level>]
+### trace start topic \\<Topic> \<File> [\<Level>]
 
 ```bash
 $ emqx ctl trace start topic t/1 trace.log info
 trace t/1 CLI-t/1 successfully
 ```
 
-### trace stop topic \<Topic>
+### trace stop topic \\<Topic>
 
 ```bash
 $ emqx ctl trace stop topic t/1
@@ -665,7 +665,7 @@ stop tracing ip_address 127.0.0.1 successfully
 :::
 
 ::: tip
-也可以在控制台界面中管理追踪日志。参考[tracer 文档](../observability/tracer.md)
+也可以在控制台界面中管理追踪日志。参考[tracer 文档](../observability/tracer.md)。
 :::
 
 ## traces
@@ -676,12 +676,12 @@ stop tracing ip_address 127.0.0.1 successfully
 
 管理监听器。
 
-| 命令                             | 描述                                                                 |
-| -------------------------------- | -------------------------------------------------------------------- |
-| listeners                        | 列出所有监听器的信息。                                               |
-| listeners stop \<Identifier\>    | 停止一个监听器，Identifier 为 `{type}:{name}` 格式，如 `tcp:default` |
-| listeners start \<Identifier\>   | 启动一个监听器。                                                     |
-| listeners restart \<Identifier\> | 重启一个监听器。                                                     |
+| 命令                             | 描述                                                         |
+| -------------------------------- | ------------------------------------------------------------ |
+| listeners                        | 列出所有监听器的信息。                                       |
+| listeners stop \<Identifier\>    | 停止一个监听器，Identifier 为 `{type}:{name}` 格式，如 `tcp:default`。 |
+| listeners start \<Identifier\>   | 启动一个监听器。                                             |
+| listeners restart \<Identifier\> | 重启一个监听器。                                             |
 
 ### listeners
 
@@ -941,6 +941,6 @@ expiry          : false
 emqx ctl license update <YOUR_LICENSE_STRING>
 ```
 
-请将 "YOUR_LICENSE_STRING" 替换为实际的 License 字符串。
+请将 `YOUR_LICENSE_STRING` 替换为实际的 License 字符串。
 
 {%endemqxee%}
