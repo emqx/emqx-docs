@@ -40,7 +40,7 @@ This page provides a step-by-step guide to quickly get started with the File Tra
 
    ```
    >tree _build/emqx-enterprise/rel/emqx/data/file_transfer/exports
-   _build/emqx-enterprise/rel/emqx/data/file_transfer/exports
+   _./data/file_transfer/exports
    ├── 8E
    │   └── B5
    │       └── 7023DA998C12F0B2A6CA586027E48BEC6271
@@ -179,7 +179,7 @@ Before you start, you need to ensure that `s3cmd` is installed and configured co
 
    ::: tip:
 
-   In the S3 Exporter scenario, the download link provided does not lead to EMQX but directly to the S3 storage, as the file is not stored locally on EMQX.
+   In the S3 Exporter scenario, the download link provided does not lead to EMQX but directly to the S3 storage, so the file is not stored locally on EMQX.
 
    :::
 
