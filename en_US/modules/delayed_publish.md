@@ -1,4 +1,4 @@
-# Delayed publish
+# Delayed Publish
 
 ## Create module
 
