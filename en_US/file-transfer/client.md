@@ -1,27 +1,24 @@
-# Client Side of File Transfer
+# File Transfer Process and Commands
 
-Here we describe file transfer from the client's perspective, i.e. some device that wants to upload a file to the broker.
+This page provides an overview of the file transfer process from the client's perspective. It describes the steps involved in uploading a file to EMQX and provides details about the commands used.
 
 ## The Common Flow
 
-* A client device chooses a file to upload and generates a unique `file_id` for the upload. This `file_id` will be used to identify the file transfer session.
-* The client device publishes `init` command to the `$file/{file_id}/init` topic. The message's payload contains the file metadata, such as file name, size, and checksum.
-* The client sends consecutive `segment` commands to the `$file/{file_id}/{offset}[/{checksum}]` topic. The message's payload contains file data at the specified offset, and the `checksum` optionally contains the checksum of the data.
-* The client sends `finish` command to the `$file/{file_id}/fin/{file_size}[/{checksum}]` topic. `file_size` is the size of the whole file, and `checksum` is the checksum of the whole file. The payload of the message is not used.
+The typical flow for file transfer from the client side involves the following steps:
 
-All commands are published with QOS 1. The success status of each step is reported via RC (return code) of the corresponding MQTT PUBACK message. If an error is reported, this generally means that the client should restart the whole file transfer.
+1. A client device selects a file to upload and generates a unique `file_id` for the transfer session. This `file_id` will be used to identify the file transfer session.
+2. The client device publishes `init` command to the `$file/{file_id}/init` topic. The payload of the message contains the file metadata, including the file name, size, and checksum.
+3. The client sends consecutive `segment` commands to the `$file/{file_id}/{offset}[/{checksum}]` topic. Each `segment` command carries a chunk of the file data at the specified offset. The `checksum` field is optional and can contain the checksum of the data.
+4. The client sends `finish` command to the `$file/{file_id}/fin/{file_size}[/{checksum}]` topic. The payload of this message is not used. The `file_size` parameter represents the total size of the file, while the `checksum` parameter contains the checksum of the entire file.
 
-If a client loses connection to the broker, it can resume the file transfer by sending all the unconfirmed commands again.
+All commands are published with QoS 1, ensuring reliability. The success status of each step is reported through the return code (RC) of the corresponding MQTT PUBACK message. If an error occurs, the client is typically required to restart the entire file transfer process. In case of a disconnection, the client can resume the file transfer by re-sending the unconfirmed commands.
 
-The final `finish` command may take significant time to proceed because the broker needs to reassemble the file from the chunks and export it to the configured storage. So the client may take advantage of the asynchronous nature of MQTT and continue sending other commands while waiting for the `finish` command to complete.
-
-Also, if a disconnect happens during the `finish` command, the client can resume the file transfer by sending the `finish` command again. If the file transfer is already completed, the broker will immediately respond with success,
-otherwise, the response will be sent when the file transfer is completed.
+The `finish` command may take considerable time to process because the broker needs to assemble the file from the received segments and export it to the configured storage. During this time, the client can continue sending other commands while waiting for the `finish` command to complete. If a disconnect happens during the `finish` command, the client can simply resend the command to resume the file transfer. If the file transfer has already been completed, the broker will immediately respond with success.
 
 
 ## File Transfer Commands
 
-All file transfer commands are regular MQTT PUBLISH messages with QOS 1 sent to specific topics.
+The file transfer commands are regular MQTT PUBLISH messages with QoS 1 sent to specific topics.
 
 ### Init Command
 
@@ -41,13 +38,13 @@ Payload: a JSON object with the following fields:
 }
 ```
 
-* `file_id` is the unique identifier of the file transfer session. The client device generates it, which must be unique across all file transfer sessions.
-* `name` is the name of the file. It will be sanitized using percent-encoding if it coincides with reserved file names "." and ".."; if it contains "/", "\", "%", ":" or unprintable unicode characters. The binary length of the name must not exceed 240 bytes.
-* `size` is the size of the file in bytes. This is an informational field and is not used by the broker.
-* `checksum` is the SHA256 checksum of the file. It is optional, but if provided, the broker will verify the file's checksum after it is uploaded.
-* `expire_at` is the timestamp in seconds since the epoch when the file may be deleted from the storage.
-* `segments_ttl` is the time-to-live of the file segments in seconds. The value will be clamped to the range `minimum_segments_ttl` to `maximum_segments_ttl` configured in the broker.
-* `user_data` is an arbitrary JSON object that will be stored along with the file metadata. It can be used to store any additional information about the file.
+* `file_id`: Unique identifier for the file transfer session.
+* `name`: Name of the file. It will be sanitized using percent-encoding if it coincides with reserved file names (such as ".", "..") or if it contains characters like "/", "", "%", ":", or unprintable unicode characters. The binary length of the name should not exceed 240 bytes.
+* `size`: Size of the file in bytes (informational field).
+* `checksum`: SHA256 checksum of the file (optional). The broker will verify the file's checksum if provided.
+* `expire_at`: Timestamp (in seconds since the epoch) when the file may be deleted from storage.
+* `segments_ttl`: Time-to-live of the file segments in seconds. This value is clamped to the range specified by the `minimum_segments_ttl` and `maximum_segments_ttl` settings configured in the broker.
+* `user_data`: Arbitrary JSON object to store additional information about the file along with its metadata.
 
 In the payload, the only required field is `name`.
 
@@ -70,8 +67,8 @@ Topic: `$file/{file_id}/{offset}[/{checksum}]`
 
 Payload: the binary data of the file chunk.
 
-* `file_id` is the unique identifier of the file transfer session.
-* `offset` is the offset in bytes from the beginning of the file where the chunk should be written.
+* `file_id`: Unique identifier for the file transfer session.
+* `offset`: Offset in bytes from the beginning of the file where the chunk should be written.
 
 ### Finish Command
 
@@ -81,8 +78,8 @@ Topic: `$file/{file_id}/fin/{file_size}[/{checksum}]`
 
 Payload: not used.
 
-* `file_id` is the unique identifier of the file transfer session.
-* `file_size` is the size of the whole file in bytes.
-* `checksum` is the SHA256 checksum of the whole file. If specified, this value has a greater priority than the `checksum` field in the `init` command.
+* `file_id`: Unique identifier for the file transfer session.
+* `file_size`: Total size of the file in bytes.
+* `checksum`: SHA256 checksum of the entire file. If specified, this value takes priority over the `checksum` field provided in the `init` command.
 
-The broker will verify that it has all the segments to assemble the file and start exporting to the configured exporter. If the file is successfully exported and its checksum is valid, the broker will respond with success RC. Otherwise, the broker will respond with an error.
+Upon receiving the `finish` command, the broker verifies that it has received all the segments necessary to assemble the file. If the file is successfully exported and its checksum is valid, the broker responds with a success return code (RC). In case of any errors, an appropriate error response is sent.

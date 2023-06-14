@@ -1,14 +1,12 @@
-# Broker Side of File Transfer
+# Configure File Transfer Setting in EMQX
 
-Here we describe the main concepts of file transfer from the perspective of the EMQX broker, i.e., the party that receives file uploads from the clients.
+This page provides instructions on configuring the file transfer settings in EMQX. Topics will cover the MQTT settings for file transfer operations, as well as the storage options available for managing file metadata, segments, and exporting files. Specifically, instructions will focus on the local storage backend and the S3 exporter for file export.
 
 EMQX allows not to configure most of the file transfer settings and use the default values.
 
-## File Transfer MQTT Settings
+## Configure File Transfer MQTT Settings
 
-Since file transfer/export operations may take a significant amount of time, we may want to specify timeouts for particular operations so that the MQTT clients do not wait too long for the result.
-
-We can do this by setting the following options:
+To optimize file transfer operations and prevent clients from waiting excessively, we can set specific timeouts for different file transfer operations. The following MQTT settings can be configured:
 ```
 file_transfer {
     enable = true
@@ -18,11 +16,17 @@ file_transfer {
 }
 ```
 
-`init_timeout`, `store_segment_timeout` and `assemble_timeout` are the timeouts for the corresponding operations. The client will receive a PUBACK packet with `RC_UNSPECIFIED_ERROR` code if the operation is not completed within the specified timeout.
+- `init_timeout`: Timeout for initialization operation.
+- `store_segment_timeout`: Timeout for storing file segments.
+- `assemble_timeout`: Timeout for file assembly.
 
-## File Transfer Storage
+If any of these operations exceed the specified timeout, the MQTT client will receive a PUBACK packet with the `RC_UNSPECIFIED_ERROR` code.
 
-File transfer _storage_ manages how the broker stores and handles metadata and file segments and assembles the file from the segments. Currently, a single storage backend is supported, the local file storage.
+## Configure File Transfer Storage
+
+EMQX provides storage options for managing file metadata, segments, and exporting files. Currently, the EMQX broker supports a single storage backend: local file storage.
+
+To enable local file storage, use the following configuration:
 
 ```
 {
@@ -37,17 +41,16 @@ File transfer _storage_ manages how the broker stores and handles metadata and f
 }
 ```
 
-Local file storage stores the file metadata and segments in the local file system of the nodes which receive the corresponding file transfer commands.
-
-Also, local file storage exports the uploaded files using a configured _exporter_. Currently, two exporters are supported: _local_ and _s3_, exporting files correspondingly to the local file system and S3-compatible object storage.
+With the local file storage, the broker stores file metadata and segments in the local file system of the receiving nodes. Additionally, the local file storage exports uploaded files using a configured exporter. EMQX supports two exporters: the local exporter and the S3 exporter, exporting files correspondingly to the local file system and S3-compatible object storage.
 
 Several exporters may have settings simultaneously, but only one may be enabled.
 
-### Segement Settings
+### Segment Settings
 
-To configure how the segments are managed, one may specify the following:
-* the root directory where the segments are stored;
-* segment garbage collection settings
+Segment settings allow you to configure how the segments are managed. The following parameters can be specified:
+
+- `root`: The root directory where segments are stored.
+- Segment garbage collection settings.
 
 
 ```
@@ -71,11 +74,11 @@ To configure how the segments are managed, one may specify the following:
 }
 ```
 
-One should choose these configuration parameters carefully, depending on the expected file transfer load, expected file sizes, number of concurrent transfers, and available disk space.
+It is important to choose appropriate values for these parameters based on factors such as expected file transfer load, file sizes, concurrent transfers, and available disk space.
 
 ### Local Exporter Settings
 
-Local exporter has few settings: only the root folder for the exported files.
+The local exporter allows exporting files to a local file system. It only has the setting of the root folder for the exported files.
 
 ```
 {
@@ -96,28 +99,30 @@ Local exporter has few settings: only the root folder for the exported files.
 }
 ```
 
-Exported files may be collected for a long time, so thousands of files may be in the export folder. To avoid having overpopulated folders, EMQX uses a bucketing scheme to store the exported files:
-* it calculates the sha256 hash of the file id together client id (`ABCDEFG012345...`)
-* stores the file into a 6-level folder hierarchy, using as levels:
-    * the first 2 bytes of the hash as the first-level folder name;
-    * the next 2 bytes as the second-level folder name;
-    * the rest of the hash as the 3-rd level folder name;
-    * the client id;
-    * the file id;
-    * the escaped file name as the last level.
-  So the exported file will be stored in a folder like this: `AB/CD/EFGH.../clientid/file_id/escaped_file_name_form_the_metadata`.
+Exported files may accumulate over time, potentially resulting in a large number of files in the export folder. To address this, EMQX utilizes a bucketing scheme for storing exported files. The scheme involves the following 6-level folder hierarchy:
 
-EMQX provides an API to list and download the exported files.
+- It calculates the sha256 hash of the file id together client id (`ABCDEFG012345...`).
+- It stores the file into a 6-level folder hierarchy, using as levels:
+  * The first 2 bytes of the hash as the first-level folder name;
+  * The next 2 bytes as the second-level folder name;
+  * The rest of the hash as the 3-rd level folder name;
+  * The client id;
+  * The file id;
+  * The escaped file name as the last level.
+
+For example, an exported file might be stored in a folder structure like this: `AB/CD/EFGH.../clientid/file_id/escaped_file_name_from_the_metadata`.
+
+EMQX provides an API for listing and downloading the exported files.
 
 ### S3 Exporter Settings
 
-S3 exporter settings are straightforward (see the corresponding configuration section for details).
+The S3 exporter allows exporting files to an S3-compatible object storage system. It has the following configuration settings:
 
-The notable settings are:
-* `min_part_size` and `max_part_size`. S3 exporter uses multipart upload to upload the files to S3. It gathers the file segments into chunks larger than `min_part_size` before uploading them. Also, segments larger than `max_part_size` will cause an error.
-* `transport_settings` - settings for the underlying HTTP(S) connection to S3. Use this to make file upload secure or to manage the connection pool.
+- `min_part_size` and `max_part_size`: The S3 exporter utilizes multipart upload for file uploads to S3. Segments are gathered into chunks larger than `min_part_size` before uploading, while segments larger than `max_part_size` will result in an error.
+- `transport_settings`: Settings for the underlying HTTP(S) connection to S3, allowing secure file uploads and connection pool management.
 
-Also, S3 exporter does not use the bucketing scheme; they are stored using a 3-level hierarchy:
-* the client id
-* the file id
-* the escaped file name as the last level.
+Unlike the bucketing scheme used in the local exporter, files exported using the S3 exporter are stored using a simpler 3-level hierarchy:
+
+- The client ID.
+- The file ID.
+- The escaped file name.
