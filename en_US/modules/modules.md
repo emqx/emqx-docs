@@ -43,6 +43,7 @@ The modules currently provided by the EMQX include:
   - [MQTT Topic Rewrite](./topic_rewrite.md)
   - [MQTT Retainer Message](./retainer.md)
   - [MQTT Delayed Publish](./delayed_publish.md)
+  - [GCP IoT Core Device](./GCP_device.md)
 
 
 ## Start and Stop Modules

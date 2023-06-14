@@ -44,6 +44,7 @@ EMQX 发行包中提供了丰富了功能模块，包括 认证鉴权、协议�
   - [MQTT 主题重写](./topic_rewrite.md)
   - [MQTT 保留消息](./retainer.md)
   - [MQTT 延迟发布](./delayed_publish.md)
+  - [GCP IoT Core 设备](./GCP_device.md)
   
 
 
