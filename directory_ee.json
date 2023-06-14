@@ -255,6 +255,10 @@
         {
           "title": "MQTT 消息延迟发布",
           "path": "modules/delayed_publish"
+        },
+        {
+          "title": "GCP IoT Core 设备",
+          "path": "modules/GCP_device"
         }
       ]
     },
@@ -1004,7 +1008,11 @@
         {
           "title": "MQTT Delayed Publish",
           "path": "modules/delayed_publish"
-        }
+        },
+        {
+          "title": "GCP IoT Core Device",
+          "path": "modules/GCP_device"
+       }
       ]
     },
     {
