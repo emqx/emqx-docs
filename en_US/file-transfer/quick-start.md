@@ -18,7 +18,7 @@ This page provides a step-by-step guide to quickly get started with the File Tra
    ./bin/emqx start
    ```
 
-3. Set up the test client. Clone the `emqx-ft` repository from GitHub and prepare the test client environment. Run the following commands:
+3. Clone the `emqx-ft` repository from GitHub and set up the test client environment using the following command:
 
    ```bash
    git clone https://github.com/emqx/emqx-ft.git
@@ -28,13 +28,13 @@ This page provides a step-by-step guide to quickly get started with the File Tra
    pip install .
    ```
 
-4. Use the `emqx-ft` command-line tool to upload a file. Execute the following command, replacing the placeholders with appropriate values:
+4. Upload a file by using the `emqx-ft` command-line tool to run the following command:
 
-   ```css
+   ```
    emqx-ft --file test-file.txt --file-id file-id-1 --segment-size 10 --client-id client-1 --file-name uploaded-test-file.txt
    ```
 
-5. Manually list the uploaded files by navigating to the file storage directory. Execute the following command. 
+5. Manually list the uploaded files by using the following command to navigate to the file storage directory.
 
    The directory structure displayed will contain the uploaded file.
 
@@ -51,7 +51,7 @@ This page provides a step-by-step guide to quickly get started with the File Tra
    └── tmp
    ```
 
-6. Use the HTTP API to retrieve a list of uploaded files. Execute the following command, replacing the necessary placeholders.
+6. Retrieve a list of uploaded files through the HTTP API by running the following command.
 
    The response will contain details about the uploaded file, including its name, size, and timestamp.
 
@@ -76,7 +76,7 @@ This page provides a step-by-step guide to quickly get started with the File Tra
    }
    ```
 
-7. Use the provided API endpoint to download the file. Execute the following command, replacing the necessary placeholders.
+7. Download the file through the provided API endpoint by using the following command.
 
    The downloaded file will be retrieved from EMQX.
 
@@ -132,7 +132,7 @@ Before you start, you need to ensure that `s3cmd` is installed and configured co
    ./bin/emqx start
    ```
 
-3. Set up the test client. Clone the `emqx-ft` repository from GitHub and prepare the test client environment. Run the following commands:
+3. Clone the `emqx-ft` repository from GitHub and set up the test client environment using the following command:
 
    ```bash
    git clone https://github.com/emqx/emqx-ft.git
@@ -142,13 +142,13 @@ Before you start, you need to ensure that `s3cmd` is installed and configured co
    pip install .
    ```
 
-4. Use the `emqx-ft` command-line tool to upload a file. Execute the following command, replacing the placeholders with appropriate values:
+4. Upload a file by using the `emqx-ft` command-line tool to run the following command:
 
    ```
    emqx-ft --file test-file.txt --file-id file-id-1 --segment-size 10 --client-id client-1 --file-name uploaded-test-file.txt
    ```
 
-5. Manually list the uploaded files using the S3 command-line tool. Execute the following command:
+5. Manually list the uploaded files by using the S3 command-line tool to run the following command:
 
    ```
    s3cmd ls -r s3://YOURBUCKET/
@@ -157,7 +157,7 @@ Before you start, you need to ensure that `s3cmd` is installed and configured co
 
    The output will display the uploaded file in the specified S3 bucket.
 
-6. the HTTP API to retrieve a list of uploaded files. Execute the following command, replacing the necessary placeholders:
+6. Retrieve a list of uploaded files through the HTTP API by using the following command:
 
    ```
    >curl -u '...' -s 'http://127.0.0.1:18083/api/v5/file_transfer/files' | jq
@@ -175,7 +175,7 @@ Before you start, you need to ensure that `s3cmd` is installed and configured co
    }
    ```
 
-7. Use the provided URI to download the file directly from the S3 storage. Execute the following command, replacing the necessary placeholders:
+7. Download the file directly from the S3 storage through the provided URI by using the following command.
 
    ::: tip:
 
