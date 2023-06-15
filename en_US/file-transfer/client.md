@@ -1,6 +1,6 @@
-# File Transfer Process and Commands
+# Commands for File Transfer Client Development
 
-This page provides an overview of the file transfer process from the client's perspective. It describes the steps involved in uploading a file to EMQX and provides details about the commands used.
+This page provides an overview of the file transfer process from the client's perspective along with detailed information on the commands utilized for uploading a file to EMQX. This information helps you to implement the file transfer feature for client development.
 
 ## The Common Flow
 
@@ -13,7 +13,7 @@ The typical flow for file transfer from the client side involves the following s
 
 All commands are published with QoS 1, ensuring reliability. The success status of each step is reported through the return code (RC) of the corresponding MQTT PUBACK message. If an error occurs, the client is typically required to restart the entire file transfer process. In case of a disconnection, the client can resume the file transfer by re-sending the unconfirmed commands.
 
-The `finish` command may take considerable time to process because the broker needs to assemble the file from the received segments and export it to the configured storage. During this time, the client can continue sending other commands while waiting for the `finish` command to complete. If a disconnect happens during the `finish` command, the client can simply resend the command to resume the file transfer. If the file transfer has already been completed, the broker will immediately respond with success.
+The `finish` command may take considerable time to process because the EMQX needs to assemble the file from the received segments and export it to the configured storage. During this time, the client can continue sending other commands while waiting for the `finish` command to complete. If a disconnect happens during the `finish` command, the client can simply resend the command to resume the file transfer. If the file transfer has already been completed, EMQX will immediately respond with success.
 
 
 ## File Transfer Commands
@@ -41,9 +41,9 @@ Payload: a JSON object with the following fields:
 * `file_id`: Unique identifier for the file transfer session.
 * `name`: Name of the file. It will be sanitized using percent-encoding if it coincides with reserved file names (such as ".", "..") or if it contains characters like "/", "", "%", ":", or unprintable unicode characters. The binary length of the name should not exceed 240 bytes.
 * `size`: Size of the file in bytes (informational field).
-* `checksum`: SHA256 checksum of the file (optional). The broker will verify the file's checksum if provided.
+* `checksum`: SHA256 checksum of the file (optional). EMQX will verify the file's checksum if provided.
 * `expire_at`: Timestamp (in seconds since the epoch) when the file may be deleted from storage.
-* `segments_ttl`: Time-to-live of the file segments in seconds. This value is clamped to the range specified by the `minimum_segments_ttl` and `maximum_segments_ttl` settings configured in the broker.
+* `segments_ttl`: Time-to-live of the file segments in seconds. This value is clamped to the range specified by the `minimum_segments_ttl` and `maximum_segments_ttl` settings configured in EMQX. Refer to [Segment Settings](./broker.md#segment-settings) for details.
 * `user_data`: Arbitrary JSON object to store additional information about the file along with its metadata.
 
 In the payload, the only required field is `name`.
@@ -82,4 +82,4 @@ Payload: not used.
 * `file_size`: Total size of the file in bytes.
 * `checksum`: SHA256 checksum of the entire file. If specified, this value takes priority over the `checksum` field provided in the `init` command.
 
-Upon receiving the `finish` command, the broker verifies that it has received all the segments necessary to assemble the file. If the file is successfully exported and its checksum is valid, the broker responds with a success return code (RC). In case of any errors, an appropriate error response is sent.
+Upon receiving the `finish` command, EMQX verifies that it has received all the segments necessary to assemble the file. If the file is successfully exported and its checksum is valid, EMQX responds with a success return code (RC). In case of any errors, an appropriate error response is sent.

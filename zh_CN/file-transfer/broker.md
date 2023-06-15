@@ -1,14 +1,13 @@
-# Broker Side of File Transfer
+# 在 EMQX 中配置文件传输
 
-Here we describe the main concepts of file transfer from the perspective of the EMQX broker, i.e., the party that receives file uploads from the clients.
+本页面提供了在 EMQX 中配置文件传输功能设置的说明。主题将涵盖用于文件传输操作的 MQTT 设置，以及用于管理文件元数据、片段和导出文件的存储选项。本页还将具体说明本地存储后端和用于文件导出的 S3 导出器。
 
-EMQX allows not to configure most of the file transfer settings and use the default values.
+EMQX 允许不配置大多数文件传输设置并使用默认值。
 
-## File Transfer MQTT Settings
+## 配置文件传输的 MQTT 设置
 
-Since file transfer/export operations may take a significant amount of time, we may want to specify timeouts for particular operations so that the MQTT clients do not wait too long for the result.
+为了优化文件传输操作并防止客户端等待时间过长，我们可以为不同的文件传输操作设置特定的超时时间。可以配置以下 MQTT 传输设置：
 
-We can do this by setting the following options:
 ```
 file_transfer {
     enable = true
@@ -18,11 +17,17 @@ file_transfer {
 }
 ```
 
-`init_timeout`, `store_segment_timeout` and `assemble_timeout` are the timeouts for the corresponding operations. The client will receive a PUBACK packet with `RC_UNSPECIFIED_ERROR` code if the operation is not completed within the specified timeout.
+- `init_timeout`：初始化操作的超时时间。
+- `store_segment_timeout`：存储文件片段的超时时间。
+- `assemble_timeout`：文件组装的超时时间。
 
-## File Transfer Storage
+如果这些操作中的任何一个超过了指定的超时时间，MQTT 客户端将收到带有 `RC_UNSPECIFIED_ERROR` 代码的PUBACK数据包。
 
-File transfer _storage_ manages how the broker stores and handles metadata and file segments and assembles the file from the segments. Currently, a single storage backend is supported, the local file storage.
+## 配置文件传输存储设置
+
+EMQX 提供了用于管理文件元数据、片段和导出文件的存储选项。目前，EMQX 支持单个存储后端：本地文件存储。
+
+要启用本地文件存储，请使用以下配置：
 
 ```
 {
@@ -37,17 +42,16 @@ File transfer _storage_ manages how the broker stores and handles metadata and f
 }
 ```
 
-Local file storage stores the file metadata and segments in the local file system of the nodes which receive the corresponding file transfer commands.
+使用本地文件存储，EMQX 将文件元数据和片段存储在接收节点的本地文件系统中。此外，本地文件存储使用配置的导出器导出已上传的文件。EMQX 支持两种导出器：本地导出器和 S3 导出器，分别将文件导出到本地文件系统和兼容 S3 的对象存储系统。
 
-Also, local file storage exports the uploaded files using a configured _exporter_. Currently, two exporters are supported: _local_ and _s3_, exporting files correspondingly to the local file system and S3-compatible object storage.
+可以同时设置多个导出器的设置，但只能启用一个。
 
-Several exporters may have settings simultaneously, but only one may be enabled.
+### 文件片段设置
 
-### Segement Settings
+文件片段设置允许您配置如何管理文件片段。可以指定以下参数：
 
-To configure how the segments are managed, one may specify the following:
-* the root directory where the segments are stored;
-* segment garbage collection settings
+- `root`：存储片段的根目录。
+- 片段垃圾回收设置。
 
 
 ```
@@ -71,11 +75,11 @@ To configure how the segments are managed, one may specify the following:
 }
 ```
 
-One should choose these configuration parameters carefully, depending on the expected file transfer load, expected file sizes, number of concurrent transfers, and available disk space.
+您需要根据预期的文件传输负载、文件大小、并发传输和可用磁盘空间这些因素为这些参数选择适当的值。
 
-### Local Exporter Settings
+### 本地导出器设置
 
-Local exporter has few settings: only the root folder for the exported files.
+本地导出器允许将文件导出到本地文件系统。您只需设置导出文件的根文件夹。
 
 ```
 {
@@ -96,28 +100,30 @@ Local exporter has few settings: only the root folder for the exported files.
 }
 ```
 
-Exported files may be collected for a long time, so thousands of files may be in the export folder. To avoid having overpopulated folders, EMQX uses a bucketing scheme to store the exported files:
-* it calculates the sha256 hash of the file id together client id (`ABCDEFG012345...`)
-* stores the file into a 6-level folder hierarchy, using as levels:
-    * the first 2 bytes of the hash as the first-level folder name;
-    * the next 2 bytes as the second-level folder name;
-    * the rest of the hash as the 3-rd level folder name;
-    * the client id;
-    * the file id;
-    * the escaped file name as the last level.
-  So the exported file will be stored in a folder like this: `AB/CD/EFGH.../clientid/file_id/escaped_file_name_form_the_metadata`.
+随着时间的推移，导出的文件可能会累积，可能导致导出文件夹中存在大量文件。为了解决这个问题，EMQX 使用存储导出文件的分桶存储方案。该方案涉及以下 6 级文件夹层次结构：
 
-EMQX provides an API to list and download the exported files.
+- 它计算文件 ID 和客户端 ID 的 sha256 哈希值（`ABCDEFG012345...`）。
+- 它将文件存储在 6 级文件夹层次结构中，使用以下级别：
+  1. 哈希的前两个字节作为第一级文件夹名称；
+  2. 接下来的两个字节作为第二级文件夹名称；
+  3. 剩余的哈希作为第三级文件夹名称；
+  4. 客户端 ID；
+  5. 文件 ID；
+  6. 元数据中的转义文件名作为最后一级。
 
-### S3 Exporter Settings
+例如，导出的文件可能存储在如下的文件夹结构中：`AB/CD/EFGH.../clientid/file_id/escaped_file_name_from_the_metadata`。
 
-S3 exporter settings are straightforward (see the corresponding configuration section for details).
+EMQX 提供了用于列出和下载导出文件的 API。
 
-The notable settings are:
-* `min_part_size` and `max_part_size`. S3 exporter uses multipart upload to upload the files to S3. It gathers the file segments into chunks larger than `min_part_size` before uploading them. Also, segments larger than `max_part_size` will cause an error.
-* `transport_settings` - settings for the underlying HTTP(S) connection to S3. Use this to make file upload secure or to manage the connection pool.
+### S3 导出器设置
 
-Also, S3 exporter does not use the bucketing scheme; they are stored using a 3-level hierarchy:
-* the client id
-* the file id
-* the escaped file name as the last level.
+S3 导出器允许将文件导出到兼容 S3 的对象存储系统。它具有以下配置设置：
+
+- `min_part_size` 和 `max_part_size`：S3 导出器使用分块上传将文件上传到 S3。在上传之前，片段将被收集到大于 `min_part_size` 的块中，而大于 `max_part_size` 的片段将导致错误。
+- `transport_settings`：用于与S3的底层 HTTP(S) 连接的设置，允许安全文件上传和连接池管理。
+
+与本地导出器使用的分桶存储方案不同，使用 S3 导出器导出的文件使用更简单的 3 级层次结构存储：
+
+1. 客户端 ID。
+2. 文件 ID。
+3. 转义后的文件名。

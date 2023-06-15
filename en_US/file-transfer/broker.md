@@ -24,7 +24,7 @@ If any of these operations exceed the specified timeout, the MQTT client will re
 
 ## Configure File Transfer Storage
 
-EMQX provides storage options for managing file metadata, segments, and exporting files. Currently, the EMQX broker supports a single storage backend: local file storage.
+EMQX provides storage options for managing file metadata, segments, and exporting files. Currently, the EMQX supports a single storage backend: local file storage.
 
 To enable local file storage, use the following configuration:
 
@@ -41,7 +41,7 @@ To enable local file storage, use the following configuration:
 }
 ```
 
-With the local file storage, the broker stores file metadata and segments in the local file system of the receiving nodes. Additionally, the local file storage exports uploaded files using a configured exporter. EMQX supports two exporters: the local exporter and the S3 exporter, exporting files correspondingly to the local file system and S3-compatible object storage.
+With the local file storage, EMQX stores file metadata and segments in the local file system of the receiving nodes. Additionally, the local file storage exports uploaded files using a configured exporter. EMQX supports two exporters: the local exporter and the S3 exporter, exporting files correspondingly to the local file system and S3-compatible object storage.
 
 Several exporters may have settings simultaneously, but only one may be enabled.
 
