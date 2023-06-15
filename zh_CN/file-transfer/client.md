@@ -1,35 +1,32 @@
-# Client Side of File Transfer
+# 文件传输客户端开发命令
 
-Here we describe file transfer from the client's perspective, i.e. some device that wants to upload a file to the broker.
+本页提供了从客户端角度对文件传输过程的概述，并提供了用于上传文件到 EMQX 的命令的详细信息，帮助您为客户端开发实现文件传输功能。
 
-## The Common Flow
+## 通用流程
 
-* A client device chooses a file to upload and generates a unique `file_id` for the upload. This `file_id` will be used to identify the file transfer session.
-* The client device publishes `init` command to the `$file/{file_id}/init` topic. The message's payload contains the file metadata, such as file name, size, and checksum.
-* The client sends consecutive `segment` commands to the `$file/{file_id}/{offset}[/{checksum}]` topic. The message's payload contains file data at the specified offset, and the `checksum` optionally contains the checksum of the data.
-* The client sends `finish` command to the `$file/{file_id}/fin/{file_size}[/{checksum}]` topic. `file_size` is the size of the whole file, and `checksum` is the checksum of the whole file. The payload of the message is not used.
+从客户端侧进行文件传输的典型流程包括以下步骤：
 
-All commands are published with QOS 1. The success status of each step is reported via RC (return code) of the corresponding MQTT PUBACK message. If an error is reported, this generally means that the client should restart the whole file transfer.
+1. 客户端设备选择要上传的文件并生成用于传输会话的唯一 `file_id`。此 `file_id` 将用于标识文件传输会话。
+2. 客户端设备向 `$file/{file_id}/init` 主题发布 `init` 命令。消息的有效载荷包含文件的元数据，包括文件名、大小和校验和。
+3. 客户端发送连续的 `segment` 命令到 `$file/{file_id}/{offset}[/{checksum}]` 主题。每个 `segment` 命令携带指定偏移量的文件数据块。`checksum` 字段是可选的，包含数据的校验和。
+4. 客户端发送 `finish` 命令到 `$file/{file_id}/fin/{file_size}[/{checksum}]` 主题。此消息不使用有效载荷。`file_size` 参数表示文件的总大小，而 `checksum` 参数包含整个文件的校验和。
 
-If a client loses connection to the broker, it can resume the file transfer by sending all the unconfirmed commands again.
+所有命令均以 QoS 1 消息等级发布，以确保可靠性。每个步骤的成功状态通过相应 MQTT PUBACK 消息的返回代码（RC）报告。如果发生错误，通常要求客户端重新启动整个文件传输过程。如果发生断开连接，客户端可以通过重新发送未确认的命令来恢复文件传输。
 
-The final `finish` command may take significant time to proceed because the broker needs to reassemble the file from the chunks and export it to the configured storage. So the client may take advantage of the asynchronous nature of MQTT and continue sending other commands while waiting for the `finish` command to complete.
+由于 EMQX 需要从接收到的文件片段中组装文件并将其导出到配置的存储中，`finish` 命令可能需要较长时间进行处理。在此期间，客户端可以在等待 `finish` 命令完成时继续发送其他命令。如果在 `finish` 命令期间发生断开连接，客户端可以简单地重新发送命令以恢复文件传输。如果文件传输已经完成， EMQX 将立即回复传输成功。
 
-Also, if a disconnect happens during the `finish` command, the client can resume the file transfer by sending the `finish` command again. If the file transfer is already completed, the broker will immediately respond with success,
-otherwise, the response will be sent when the file transfer is completed.
+## 文件传输命令
 
+文件传输命令是使用 QoS 1 发送到特定主题的常规 MQTT PUBLISH 消息。
 
-## File Transfer Commands
+### Init 命令
 
-All file transfer commands are regular MQTT PUBLISH messages with QOS 1 sent to specific topics.
+`init` 命令用于初始化文件传输会话。
 
-### Init Command
+主题：`$file/{file_id}/init`
 
-The `init` command is used to initialize a file transfer session.
+有效载荷：一个带有以下字段的 JSON 对象：
 
-Topic: `$file/{file_id}/init`
-
-Payload: a JSON object with the following fields:
 ```
 {
   "name": "{name}",
@@ -41,17 +38,18 @@ Payload: a JSON object with the following fields:
 }
 ```
 
-* `file_id` is the unique identifier of the file transfer session. The client device generates it, which must be unique across all file transfer sessions.
-* `name` is the name of the file. It will be sanitized using percent-encoding if it coincides with reserved file names "." and ".."; if it contains "/", "\", "%", ":" or unprintable unicode characters. The binary length of the name must not exceed 240 bytes.
-* `size` is the size of the file in bytes. This is an informational field and is not used by the broker.
-* `checksum` is the SHA256 checksum of the file. It is optional, but if provided, the broker will verify the file's checksum after it is uploaded.
-* `expire_at` is the timestamp in seconds since the epoch when the file may be deleted from the storage.
-* `segments_ttl` is the time-to-live of the file segments in seconds. The value will be clamped to the range `minimum_segments_ttl` to `maximum_segments_ttl` configured in the broker.
-* `user_data` is an arbitrary JSON object that will be stored along with the file metadata. It can be used to store any additional information about the file.
+- `file_id`：文件传输会话的唯一标识符。
+- `name`：文件名。如果与保留的文件名（例如“.”、“..”）冲突或包含像“/”、“”、“%”、“:”或不可打印的 Unicode 字符等字符，则将对其进行百分比编码以进行清理。文件名的二进制长度不应超过 240 字节。
+- `size`：文件的大小（信息字段）。
+- `checksum`：文件的 SHA256 校验和（可选）。如果提供， EMQX 将验证文件的校验和。
+- `expire_at`：文件可能从存储中删除的时间戳（自纪元以来的秒数）。
+- `segments_ttl`：文件片段的存活时间（以秒为单位）。此值被固定在`minimum_segments_ttl` 和 `maximum_segments_ttl` 参数设置指定的范围内。这两个参数在 EMQX 中进行配置，详见[文件片段设置](./broker.md#文件片段设置)。
+- `user_data`：用于存储有关文件的其他信息及其元数据的任意 JSON 对象。
 
-In the payload, the only required field is `name`.
+在有效载荷中，唯一必需的字段是 `name`。
 
-Example:
+示例：
+
 ```json
 {
   "name": "ml-logs-data.log",
@@ -62,27 +60,32 @@ Example:
 }
 ```
 
-### Segment Command
+### Segment 命令
 
-The `segment` command is used to upload a chunk of the file.
+`segment` 命令用于上传文件的一个数据块。
 
-Topic: `$file/{file_id}/{offset}[/{checksum}]`
+主题：`$file/{file_id}/{offset}[/{checksum}]`
 
-Payload: the binary data of the file chunk.
+有效载荷：文件块的二进制数据。
 
-* `file_id` is the unique identifier of the file transfer session.
-* `offset` is the offset in bytes from the beginning of the file where the chunk should be written.
+- `file_id`：文件传输会话的唯一标识符。
+- `offset`：文件块应写入的起始偏移量（以字节为单位），从文件的开头计算。
 
-### Finish Command
+### Finish 命令
 
-The `finish` command is used to finish the file transfer session.
+`finish` 命令用于完成文件传输会话。
 
-Topic: `$file/{file_id}/fin/{file_size}[/{checksum}]`
+主题：`$file/{file_id}/fin/{file_size}[/{checksum}]`
 
-Payload: not used.
+有效载荷：未使用。
 
-* `file_id` is the unique identifier of the file transfer session.
-* `file_size` is the size of the whole file in bytes.
-* `checksum` is the SHA256 checksum of the whole file. If specified, this value has a greater priority than the `checksum` field in the `init` command.
+- `file_id`：文件传输会话的唯一标识符。
+- `file_size`：文件的总大小（以字节为单位）。
+- `checksum`：整个文件的 SHA256 校验和。如果指定此值，它将优先于 `init` 命令中提供的 `checksum` 字段。
 
-The broker will verify that it has all the segments to assemble the file and start exporting to the configured exporter. If the file is successfully exported and its checksum is valid, the broker will respond with success RC. Otherwise, the broker will respond with an error.
+在接收到 `finish` 命令后，EMQX 将验证是否已接收到组装文件所需的所有片段。如果文件成功导出并且其校验和有效，EMQX 将以成功的返回代码（RC）进行响应。如果有任何错误，则发送适当的错误响应。
+
+## 示例客户端 SDK
+
+请参阅 [Python](https://github.com/emqx/emqx-ft/blob/main/src/emqx_ft/main.py) 获取示例客户端 SDK。
+
