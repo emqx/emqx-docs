@@ -30,7 +30,7 @@ Similar to the ingress mode, the MQTT data bridge can also be used in conjunctio
 
 EMQX allows more than one client to connect to the bridged MQTT broker at the same time. When creating the data bridge, you can set a pool of MQTT client connections and configure the pool size indicating the number of the client connections in the pool. Enabling connection pool allows for efficient utilization of server resources, leading to greater message throughput.
 
-Because the MQTT protocol requires that a client connects to one broker must has it's own unique client ID, each client in the connection pool is assigned to a unique client ID. To make the client ID predictable, EMQX automatically generates the Client ID following the pattern below:
+Because the MQTT protocol requires that a client connecting to the broker must have its own unique Client ID, EMQX automatically generates the Client ID for each client in the connection pool following the pattern below:
 
 ```bash
 [${ClientIDPrefix}:]${BridgeName}:${Mode}:${NodeName}:${N}
