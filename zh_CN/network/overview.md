@@ -18,15 +18,13 @@ SSL 和 TLS 常被用于网络通信，以确保数据传输保持机密性，�
 
 ## 启用 TLS 进行客户端加密连接
 
-[开启 SSL/TLS 连接](./emqx-mqtt-tls.md)页面详细介绍了如何在 MQTT 客户端与 EMQX 的连接中启用 SSL/TLS。在 SSL/TLS 启用的情况下，您可以同时开启[CRL 检查](./crl.md)和[OCSP stapling](./ocsp.md)来验证证书的状态。[客户端 TLS](./mqtt-client-tls.md)页面列举了 MQTT 客户端库接入示例和工程项目代码，在这些示例中包括了 TLS 使用指南。
+[开启 SSL/TLS 连接](./emqx-mqtt-tls.md)页面详细介绍了如何在 MQTT 客户端与 EMQX 的连接中启用 SSL/TLS。在 SSL/TLS 启用的情况下，您可以同时开启 [CRL 检查](./crl.md)或 [OCSP stapling](./ocsp.md) 来验证证书的状态。[客户端 TLS](./mqtt-client-tls.md) 页面列举了 MQTT 客户端库接入示例和工程项目代码，在这些示例中包括了 TLS 使用指南。
 
 ### 国密 SSL
 
 [国密 SSL](./gmssl.md) 即国家密码局认定的国产密码算法。我国在金融银行、教育、交通、通信、国防工业等各类重要领域的信息系统均已开始进行国产密码算法的升级改造。本节将介绍 EMQX 国密算法整体解决方案。
 
 ## 启用 TLS 加密访问外部资源
-
-EMQX also offers you the option of enabling TLS when there is a need to access external resources. For example, when using password-based authentication with access to a web server via HTTPS or connecting to a database for data integration. You can switch on the **Enable TLS** when configuring these features on the EMQX Dashboard.
 
 除了允许接收启用了双向 SSL 认证的 MQTT 客户端外，EMQX 还提供了通过 SSL 加密访问外部资源的功能。比如，在使用 HTTP 服务进行密码认证时，通过 HTTPS 访问 web 服务器。下面的示例将介绍如何在 Dashboard 和配置文件中开启 TLS 加密。
 

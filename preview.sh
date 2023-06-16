@@ -28,10 +28,10 @@ if [ "$PRODUCT" = "ce" ]; then
 else
     python3 "$THIS_DIR/gen.py" ee > directory_ee.json
     docker run -p ${PORT}:8080 -it --name emqx-doc-preview \
-        -v "$THIS_DIR"/directory_ee.json:/app/docs/.vuepress/config/directory.json \
+        -v "$THIS_DIR"/directory_ee.json:/app/docs/.vitepress/config/directory.json \
         -v "$THIS_DIR"/en_US:/app/docs/en/enterprise/latest \
         -v "$THIS_DIR"/zh_CN:/app/docs/zh/enterprise/latest \
         -e DOCS_TYPE=enterprise \
         -e VERSION=latest \
-    ghcr.io/emqx/docs-emqx-com-frontend:latest
+    ghcr.io/emqx/docs-emqx-com-next:latest
 fi
