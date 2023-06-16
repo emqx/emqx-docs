@@ -6,7 +6,7 @@ EMQX is an [open-source](https://github.com/emqx/emqx), highly scalable, and fea
 
 EMQX supports various protocols, including MQTT (3.1, 3.1.1, and 5.0), HTTP, QUIC, and WebSocket. It also provides secure bi-directional communication with MQTT over TLS/SSL and various authentication mechanisms, ensuring reliable and efficient communication infrastructure for IoT devices and applications.
 
-<img src="./assets/architecture_image.png" alt="architecture_image" style="zoom:50%;" />
+<img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/assets/architecture_image.png" alt="architecture_image" style="zoom:50%;" />
 
 With a built-in powerful SQL-based [rules engine](https://www.emqx.com/en/solutions/iot-rule-engine), EMQX can extract, filter, enrich, and transform IoT data in real-time. EMQX also ensures high availability and horizontal scalability with a masterless distributed architecture and provides an operations-friendly user experience with excellent observability.
 
