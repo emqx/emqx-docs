@@ -7,11 +7,8 @@ EMQX 5.1.0 is not backward compatible with 4.x in management APIs and clustering
 
 ## Log
 
-Compared with 4.x, the most significant change in the log is the format.
-In 4.x, the log text is primarily plain, aiming for good human readability.
-However, starting from 5.1, we moved to structured logging without losing readability.
-For instance, most log fields use underscores as word separators,
-making them more search-friendly. This format also helps log indexing tools to index the logs more effectively.
+Compared with 4.x, the most significant change in the log is the format. In 4.x, the log text is primarily plain, aiming for good human readability. However, starting from 5.1, we moved to structured logging without losing readability.
+For instance, most log fields use underscores as word separators, making them more search-friendly. This format also helps log indexing tools to index the logs more effectively.
 
 ```bash
 2022-06-29T16:58:53.235042+02:00 [info] foo: bar, msg: msg_for_human_to_read_but_also_easy_to_index
@@ -63,7 +60,7 @@ The previous official plugins have been migrated to EMQX as built-in functions. 
 
 ## HTTP API
 
-Previously, "Applications" dashboard section was used to manage API access credentials. Now "API Key" section should be used to create credentials. The credentials consist of API Key and Secret Key that can be respectively used as username and password in HTTP basic auth. Secret Key is only displayed once when credentials are created, but cannot be obtained again later.
+Previously, **Applications** menu on Dashboard was used to manage API access credentials. Now **API Key** is used to create credentials. The credentials consist of API Key and Secret Key that can be respectively used as username and password in HTTP basic authentication. Secret Key is only displayed once when credentials are created, but cannot be obtained again later.
 
 1. Port 8081 has been merged into port 18083, and the HTTP API is accessed through port 18083.
 2. Can not use Dashboard username/password to access HTTP API. **Must** use API Key instead.
@@ -151,7 +148,7 @@ Auth is renamed to **Authentication**, and ACL is renamed **Authorization**. Now
 
 **Data Migration**
 
-We have keep the authentication methods and supported data sources from version 4.x, with only a few changes to the way they are used. For most Authenticator/Authorizer, it could continue to use the 4.x database when upgrading to version 5.1 without having to migrate existing data.
+We have kept the authentication methods and supported data sources from version 4.x, with only a few changes to the way they are used. For most Authenticator/Authorizer, you can continue to use the 4.x database when upgrading to version 5.1 without having to migrate existing data.
 
 ### Order of authentication/authorization chain
 
@@ -190,8 +187,7 @@ authentication = [
 
 #### Remove the Anonymous Mechanism
 
-Remove the `allow_anonymous` configuration item. All client connections are allowed by default.
-If **add and enable** any authenticator, EMQX will perform an authentication check for all new connections.
+Remove the `allow_anonymous` configuration item. All client connections are allowed by default. If **add and enable** any authenticator, EMQX will perform an authentication check for all new connections.
 
 When a client matches the authentication data in all authenticators, the connection is rejected.
 
@@ -261,7 +257,7 @@ authentication = [
 
 #### Redis
 
-1. Only supports [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) data structure and `HGET`, `HMGET` query commands. The commands must return `password_hash` as the password field name;
+1. Only supports [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) data structure and `HGET`, `HMGET` query commands. The commands must return `password_hash` or `password` (compatible with 4.x) as the password field name;
 2. Remove standalone super-user query command. If you need to give clients super-user permissions, please add the `is_superuser` field to the Redis query command.
 
 ```shell
@@ -310,14 +306,14 @@ No changes.
 
 #### Built-in Database (Mnesia)
 
-1. Mnesia renamed to the built-in database;
-2. The data format and REST API have changed. For more information, please refer to `POST /authorization/built_in_database/clientid`.
+1. Mnesia renamed to the Built-in Database;
+2. The data format and REST API have changed. For more information, please refer to `POST/authorization/built_in_database/clientid`.
 
 4.x ACL data can be exported with `./bin/emqx_ctl data export`  command. Users may convert the data into 5.1 format and import it through the corresponding REST API.
 
 #### MySQL/PostgreSQL
 
-1. The `ipaddr/username/clientid` field is no longer required in the query result, need to change the query SQL;
+1. The `ipaddr/username/clientid` field is no longer required in the query result, and you need to change the query SQL;
 2. The `access` field name is changed to `action`, and its data type is changed from integer to character or character enumeration.
 3. The `allow` field name is changed to `permission`, and its data type is changed from integer to character or character enumeration.
 
@@ -423,17 +419,17 @@ The MQTT bridge plugin (emqx_bridge_mqtt) has been removed. Use the MQTT Sink an
 
 The [offline messages](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html) provided in EMQX 4.x are based on an external database. EMQX plans to provide native offline messages (based on the built-in database) in future versions, so the offline messages for the external database have been removed from version 5.0.0.
 
-Look for future native offline messages that will provide higher performance and reduce usage and maintenance costs.
+The upcoming native offline messaging feature will provide improved performance and reduce usage and maintenance costs. Stay tuned for more updates.
 
-## Auto subscription(Server side subscriptions)
+## Auto subscription (Server side subscriptions)
 
-As of version 5.0.0, EMQX no longer provides [Auto subscription](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html)(server side subscriptions) based on an external database.
+As of version 5.0.0, EMQX no longer provides [Auto subscription](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html) (server side subscriptions) based on an external database.
 
-{% endemqxee %
+{% endemqxee %}
 
 ## Prometheus
 
-Prometheus scraping endpoint is enabled by default, and no authentication is required to scrap the metrics.
+Old Prometheus plug-in (emqx_prometheus) has been removed. In version 5.1, Prometheus scraping endpoint is enabled by default, and no authentication is required to scrap the metrics.
 
 You can use `curl` command to inspect the metrics:
 
@@ -487,6 +483,6 @@ They can be found in **Extentions** -> **Gateways** section or listed with `GET 
 
 ## Telemetry
 
-The telemetry plugin (emqx_telemetry) has been removed, please configure it through the `telemetry {}` configuration item or in the Dashboard **System Settings** -> **Settings** page.
+The telemetry plugin (emqx_telemetry) has been removed. Please configure it through the `telemetry {}` configuration item or in the Dashboard **System Settings** -> **Settings** page.
 
 {% endemqxce %}

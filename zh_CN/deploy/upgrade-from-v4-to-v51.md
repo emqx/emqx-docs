@@ -59,11 +59,11 @@
 
 ## HTTP API
 
-此前“应用”(Appication)用于管理 API 访问凭证，现已更名为“API 密钥”(API Key)，且 Secret Key 仅在创建成功时返回一次，后续无法再次获得。
+此前 Dashboard 中的**应用 (Appication)** 用于管理 API 访问凭证，现已更名为 **API 密钥 (API Key)**，且 Secret Key 仅在创建成功时返回一次，后续无法再次获得。
 
 1. 8081 端口已被合并至 18083 端口，所有 API 都通过 18083 端口提供。
 2. 不能使用 Dashboard 的用户名和密码进行 API 访问，**必须**使用 API 密钥创建的访问凭证。
-3. API 访问基础路径由 `/api/v4` 切换到 `/api/v5` 请通过此端口和路径调用 API。
+3. API 访问基础路径由 `/api/v4` 切换到 `/api/v5` 。请通过 18083 端口和 `/api/v5` 路径调用 API。
 4. 时间相关的字段将使用带时区的 [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) 格式。
 
 ### 响应数据格式调整
@@ -106,9 +106,10 @@ API 有较大变动，以下是常用的 API 变动对照表，现存的部分 A
 :::tip
 兼容性说明：
 
-- 兼容：沿用了旧版 API 路径跟参数，或者保留了旧版 API
-- 部分兼容：API 路径不变，但部分 API 字段发生改变
-- 不兼容：API 路径与字段都发生变化
+- 兼容：沿用了旧版 API 路径跟参数，或者保留了旧版 API。
+- 部分兼容：API 路径不变，但部分 API 字段发生改变。
+- 不兼容：API 路径与字段都发生变化。
+
 :::
 
 | 4.x                             | 5.1                                         | 兼容性   | 说明                 |
@@ -139,7 +140,7 @@ API 有较大变动，以下是常用的 API 变动对照表，现存的部分 A
 
 **功能入口**
 
-认证授权插件(emqx_auth_*)已被移除，相关功能以内置功能的形式迁移到 EMQX 中，支持用户以 Dashboard 或配置文件的方式配置。
+认证授权插件 (emqx_auth_*) 已被移除，相关功能以内置功能的形式迁移到 EMQX 中，支持用户以 Dashboard 或配置文件的方式配置。
 
 **概念调整**
 
@@ -155,8 +156,7 @@ API 有较大变动，以下是常用的 API 变动对照表，现存的部分 A
 
 ### 占位符变量提取语法
 
-此前认证插件中可以使用 `%u` 类似的语法构造占位符以提取变量，将客户端信息动态拼接到如 SQL 语句、Redis 查询命令和 HTTP 请求中，
-现在 EMQX **所有**认证跟授权检查功能中使用了新的语法 `${}`，如 `${username}`、`${clientid}`，该语法与规则 SQL 一致。
+此前，认证插件中可以使用 `%u` 类似的语法构造占位符以提取变量，将客户端信息动态拼接到如 SQL 语句、Redis 查询命令和 HTTP 请求中。现在 EMQX **所有**认证跟授权检查功能中使用了新的语法 `${}`，如 `${username}`、`${clientid}`，该语法与规则 SQL 一致。
 
 支持的占位符请参考：
 
@@ -188,13 +188,13 @@ authentication = [
 
 移除 `allow_anonymous` 配置项，默认允许所有客户端连接，**添加并启用**任意一个认证器后将对所有新连接进行认证检查。
 
-当某个客户端在所有认证器中均匹配到认证数据时时，将判定为拒绝连接。
+当某个客户端在所有认证器中均匹配到认证数据时，将判定为拒绝连接。
 
 移除 `bypass_auth_plugins` 配置项，某个监听器需要跳过认证时，可以通过 `listeners.{type}.{name}.enable_authn = true | false` 配置项进行设置。
 
 #### 内置数据库 (Mnesia) 变动
 
-1. 为方便理解，该数据源由 Mnesia 更名为内置数据库(Built-in Database)；
+1. 为方便理解，该数据源由 Mnesia 更名为内置数据库 (Built-in Database)；
 2. 只能选定一种认证查找方式：基于用户名或基于客户端 ID；
 3. 数据操作 REST API 有变动，新的 API 是 `/authentication/{id}/users`。
 
@@ -202,8 +202,8 @@ authentication = [
 
 #### HTTP 变动
 
-1. 使用响应 Body 里面的 JSON 字段而非响应状态码(HTTP response status codes)判断认证结果；
-2. 移除单独的超级用户(superuser)请求，客户端的超级用户身份通过认证响应中的 body 设置。
+1. 使用响应 Body 里面的 JSON 字段而非响应状态码 (HTTP response status codes) 判断认证结果；
+2. 移除单独的超级用户 (superuser) 请求，客户端的超级用户身份通过认证响应中的 body 设置。
 
 **成功响应状态码:**
 
@@ -230,7 +230,7 @@ authentication = [
 #### MySQL/PostgreSQL 变动
 
 1. 查询结果中要求的密码字段由 `password` 更改为 `password_hash`，在不更改数据库列名的情况下可以在查询时使用 `as` 语法完成迁移；
-2. 移除单独的超级用户(superuser)查询 SQL，如需超级用户功能请确保认证 SQL 结果包含 `is_superuser` 字段。
+2. 移除单独的超级用户 (superuser) 查询 SQL，如需超级用户功能请确保认证 SQL 结果包含 `is_superuser` 字段。
 
 ```sql
 SELECT
@@ -243,7 +243,7 @@ FROM mqtt_user
 
 #### MongoDB 变动
 
-1. 移除单独的超级用户(superuser)查询，如需超级用户功能请在 MongoDB 认证器配置指定 `is_superuser_field` 字段，并确保认证查询结果中包含超级用户信息。
+1. 移除单独的超级用户 (superuser) 查询，如需超级用户功能请在 MongoDB 认证器配置指定 `is_superuser_field` 字段，并确保认证查询结果中包含超级用户信息。
 
 ```shell
 authentication = [
@@ -258,8 +258,8 @@ authentication = [
 
 #### Redis 变动
 
-1. 仅支持 [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) 数据结构与 `HGET`、`HMGET` 查询命令，必须使用 `password_hash` 或 `password`(兼容 4.x)作为密码字段名；
-2. 移除单独的超级用户(superuser)查询命令，如需超级用户功能请在 Redis 查询命令中添加 `is_superuser` 字段。
+1. 仅支持 [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) 数据结构与 `HGET`、`HMGET` 查询命令，必须使用 `password_hash` 或 `password`(兼容 4.x) 作为密码字段名；
+2. 移除单独的超级用户 (superuser) 查询命令，如需超级用户功能请在 Redis 查询命令中添加 `is_superuser` 字段。
 
 ```shell
 # bad
@@ -307,7 +307,7 @@ HMGET emqx_user:${username} password_hash is_superuser
 
 #### 内置数据库 (Mnesia) 变动
 
-1. 为方便理解，该数据源由 Mnesia 更名为内置数据库(Built-in Database)；
+1. 为方便理解，该数据源由 Mnesia 更名为内置数据库 (Built-in Database)；
 2. 数据格式与数据操作 REST API 有变动，新的 API 是 `/authorization/sources/built_in_database/rules{/clients,/users}`。
 
 <!-- TODO add migrate script -->
@@ -378,7 +378,7 @@ HSET mqtt_acl:emqx_u a/1 publish
 
 #### HTTP 变动
 
-1. 使用响应 Body 里面的 JSON 字段而非响应状态码(HTTP response status codes)判断认证结果。
+1. 使用响应 Body 里面的 JSON 字段而非响应状态码 (HTTP response status codes) 判断认证结果。
 
 **成功响应状态码:**
 
@@ -404,7 +404,7 @@ HSET mqtt_acl:emqx_u a/1 publish
 
 规则引擎已更名为数据集成，包含规则与数据桥接功能。
 
-规则 SQL 完全兼容 4.x 的语法，但规则下的动作拆分为内置动作(republish、console)与数据桥接(HTTP Server、MQTT 桥接)。
+规则 SQL 完全兼容 4.x 的语法，但规则下的动作拆分为内置动作 (republish、console) 与数据桥接 (HTTP Server、MQTT 桥接)。
 
 {% emqxee %}
 
@@ -422,11 +422,11 @@ HSET mqtt_acl:emqx_u a/1 publish
 
 ## WebHook
 
-4.x 版本中的 WebHook 插件(emqx_web_hook) 已被移除，请使用数据集成中的 HTTP Server 数据桥接功能替代。
+4.x 版本中的 WebHook 插件 (emqx_web_hook) 已被移除，请使用数据集成中的 HTTP Server 数据桥接功能替代。
 
 ## MQTT 桥接
 
-MQTT 桥接插件(emqx_bridge_mqtt) 已被移除，请使用数据集成中的 MQTT 数据桥接功能替代。
+MQTT 桥接插件 (emqx_bridge_mqtt) 已被移除，请使用数据集成中的 MQTT 数据桥接功能替代。
 
 ## Prometheus
 
@@ -436,7 +436,7 @@ MQTT 桥接插件(emqx_bridge_mqtt) 已被移除，请使用数据集成中的 M
 curl -f "http://127.0.0.1:18083/api/v5/prometheus/stats"
 ```
 
-如果您想要使用 push-gateway，可参考 [集成 Prometheus](../observability/prometheus.md)。
+如果您想要使用 push-gateway，可参考[集成 Prometheus](../observability/prometheus.md)。
 
 除了配置方式外，Prometheus 的指标也发生了变化：
 
