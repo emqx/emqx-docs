@@ -222,7 +222,7 @@ FileUsage   = 1
 
 This section introduces how to create Microsoft SQL Server data bridge for message storage and events recording.
 
-1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -262,14 +262,14 @@ This section introduces how to create Microsoft SQL Server data bridge for messa
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Microsoft SQL Server. You can also create rules by following the steps in [Create Rules for Microsoft SQL Server Data Bridge](#create-rules-for-sqlserver-data-bridge).
 
-Now that you have created the data bridge, and the Microsoft SQL Server data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
+Now that you have created the data bridge, and the Microsoft SQL Server data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
 
 ### Create Rules for Microsoft SQL Server Data Bridge
 
 After you have successfully created the data bridge to Microsoft SQL Server, you can continue to create rules to specify the data to be saved into Microsoft SQL Server and rules for the online/offline status recording.
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
+1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -301,7 +301,7 @@ After you have successfully created the data bridge to Microsoft SQL Server, you
 
 5. Click the **Create** button to finish the setup.
 
-Now you have successfully created the rule for Microsoft SQL Server data bridge. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Microsoft SQL Server after parsing by rule  `my_rule`.
+Now you have successfully created the rule for Microsoft SQL Server data bridge. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Microsoft SQL Server after parsing by rule  `my_rule`.
 
 ### Test Data Bridge and Rule
 

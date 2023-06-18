@@ -112,7 +112,7 @@ Configure the following fields for the general settings of the console log handl
 
 - **Flush Threshold**: Set the number limit of buffered log events. The handler starts to discard the buffered log messages. It is set to `8000` by default.
 
-Configuration options for log file overload kill feature and log burst control feature are the same as for [**Console Log**](#Configure Console Log).
+Configuration options for log file overload kill feature and log burst control feature are the same as for [**Console Log**](#configure-console-log).
 
 When file logging is enabled (log.to = file or both), the following files will appear in the log directory:
 

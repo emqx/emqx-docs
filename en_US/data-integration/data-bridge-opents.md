@@ -54,7 +54,7 @@ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
 
 ### Create OpenTSDB Data Bridge
 
-1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -75,13 +75,13 @@ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into OpenTSDB. You can also create rules by following the steps in [Create Rules for OpenTSDB Data Bridge](#create-rules-for-opentsdb-data-bridge).
 
-Now the OpenTSDB data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+Now the OpenTSDB data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
 
 ### Create Rules for OpenTSDB Data Bridge
 
 Now that you have successfully created the data bridge to OpenTSDB, you can continue to create rules to specify the data to be saved into OpenTSDB.
 
-1. Go to EMQX Dashboard, and click **Data Integration** -> **Rules**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** at the upper right corner of the page.
 
@@ -99,7 +99,7 @@ Now that you have successfully created the data bridge to OpenTSDB, you can cont
 4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**.  Click the **Add** button. 
 5. Click the **Create** button to finish the setup. 
 
-Now you have successfully created the data bridge to OpenTSDB. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to OpenTSDB after parsing by rule `my_rule`. 
+Now you have successfully created the data bridge to OpenTSDB. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to OpenTSDB after parsing by rule `my_rule`. 
 
 ### Test the Data Bridges and Rules
 

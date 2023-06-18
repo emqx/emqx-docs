@@ -20,8 +20,22 @@
 
 ![image](./assets/api-key-detail.png)
 
+{% emqxce %}
+
 ## 设置
 
 点击左侧系统设置菜单或页面右上角用户名下拉菜单下的设置，可以来到设置页面。用户可以在设置页面修改 Dashboard 的语言及主题色，主题色可选择是否需要同步操作系统主题，如开启同步操作系统主题，Dashboard 主题将自动同步用户的操作系统主题，无法手动进行选择；页面最下方可切换是否启动遥测，如启动遥测，用户将与 EMQX 共享使用情况的信息来帮助 EMQX 研发团队了解用户如果使用 EMQX 以持续地改进产品。
 
 ![image](./assets/settings.png)
+
+{% endemqxce %}
+
+{% emqxee %}
+
+## 设置
+
+点击页面右上角的设置图标可以修改系统设置，包括修改 Dashboard 的语言及主题色，主题色可选择是否需要同步操作系统主题，如开启同步操作系统主题，Dashboard 主题将自动同步用户的操作系统主题，无法手动进行选择；
+
+![settings_ee](./assets/settings_ee.png)
+
+{% endemqxee %}

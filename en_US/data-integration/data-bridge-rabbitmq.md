@@ -78,7 +78,7 @@ After the RabbitMQ server is started, you can create a test exchange and a queue
 
 This section demonstrates how to create an EMQX data bridge to RabbitMQ in Dashboard.
 
-1. Go to the EMQX Dashboard, and click **Data Integration -> Data Bridge**.
+1. Go to the EMQX Dashboard, and click **Integration -> Data Bridge**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -139,7 +139,7 @@ This section demonstrates how to create an EMQX data bridge to RabbitMQ in Dashb
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into RabbitMQ. For detailed steps, refer to [Create a Rule for RabbitMQ Data Bridge](#create-a-rule-for-rabbitmq-data-bridge).
 
-Now the RabbitMQ data bridge should appear in the data bridge list (**Data Integration -> Data Bridge**) with **Resource Status** as Connected. You can continue to create a rule to forward data to the new RabbitMQ bridge.
+Now the RabbitMQ data bridge should appear in the data bridge list (**Integration -> Data Bridge**) with **Resource Status** as Connected. You can continue to create a rule to forward data to the new RabbitMQ bridge.
 
 ### Create a Rule for RabbitMQ Data Bridge
 
@@ -160,7 +160,7 @@ Now the RabbitMQ data bridge should appear in the data bridge list (**Data Integ
 6. Click the **Add** button to finish the setup.
 7. Click the **Create** button at the bottom of the page to finish the setup.
 
-Now a rule to forward data to RabbitMQ via a RabbitMQ bridge is created. You can click **Data Integration -> Flows** to view the topology. It can be seen that the messages under the topic `t/#` are sent and saved to RabbitMQ.
+Now a rule to forward data to RabbitMQ via a RabbitMQ bridge is created. You can click **Integration -> Flows** to view the topology. It can be seen that the messages under the topic `t/#` are sent and saved to RabbitMQ.
 
 ### Test the Data Bridge and Rule
 

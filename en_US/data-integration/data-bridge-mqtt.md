@@ -53,7 +53,7 @@ The following section will use EMQX [public MQTT broker](https://www.emqx.com/en
 
 ### Create MQTT Data Bridge via Dashboard
 
-1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
 2. Click **Create** on the top right corner of the page.
 
