@@ -86,7 +86,7 @@ You need to create 2 data bridges to PostgreSQL for messages storage and event r
 
 #### Message storage
 
-1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -136,7 +136,7 @@ INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
 )
 ```
 
-Now the PostgreSQL data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+Now the PostgreSQL data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
 
 ### Create Rules for PostgreSQL Data Bridge 
 
@@ -144,7 +144,7 @@ After you have successfully created the data bridge to PostgreSQL, you can conti
 
 #### Message Storage
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
+1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -176,7 +176,7 @@ FROM
   "$events/client_connected", "$events/client_disconnected"
 ```
 
-Now you have successfully created the data bridge to PostgreSQL. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to PostgreSQL after parsing by rule  `my_rule`. 
+Now you have successfully created the data bridge to PostgreSQL. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to PostgreSQL after parsing by rule  `my_rule`. 
 
 ### Test the Data Bridges and Rules
 

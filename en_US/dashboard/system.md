@@ -20,8 +20,22 @@ Click on the API key name to view the key details; click on the `Edit` button to
 
 ![image](./assets/api-key-detail.png)
 
+{% emqxce %}
+
 ## Settings
 
 The Settings page can be accessed by clicking on the System menu on the left or under the username drop-down menu in the top right corner of the page. You can change the language and theme color of the Dashboard on the settings page, the theme color can be selected if you want to synchronize the OS theme, if this is enabled, the Dashboard theme will be automatically synchronize with the user's OS theme and cannot be selected manually. If telemetry is enabled, users will share usage information with EMQX to help the EMQX development team understand how users are using EMQX and to continuously improve the product.
 
 ![image](./assets/settings.png)
+
+{% endemqxce %}
+
+{% emqxee %}
+
+## Settings
+
+The Settings can be accessed by clicking the setting icon on the top right corner of the page. You can change the language and theme color of the Dashboard, the theme color can be selected if you want to synchronize the OS theme, if this is enabled, the Dashboard theme will be automatically synchronize with the user's OS theme and cannot be selected manually. 
+
+![settings_ee](./assets/settings_ee.png)
+
+{% endemqxee}

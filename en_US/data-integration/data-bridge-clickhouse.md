@@ -71,7 +71,7 @@ You can find more information about running ClickHouse in docker [on dockerhub](
 
 Then you can start to create an EMQX data bridge to ClickHouse.
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, click **Integration** -> **Data Bridge**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -100,11 +100,11 @@ Then you can start to create an EMQX data bridge to ClickHouse.
 
 10. Then click **Create** to finish the creation of the data bridge.
 
-Now the ClickHouse data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. You can continue to create a rule to forward data to the new ClickHouse bridge. 
+Now the ClickHouse data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. You can continue to create a rule to forward data to the new ClickHouse bridge. 
 
 ### Create a Rule for the ClickHouse Bridge
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
+1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -125,7 +125,7 @@ Now the ClickHouse data bridge should appear in the data bridge list (**Data Int
 7. Click the **Add** button to finish the setup. 
 8. Click the **Create** button at the page bottom to finish the setup. 
 
-Now a rule to forward data to ClickHouse via a ClickHouse bridge is created. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to ClickHouse. 
+Now a rule to forward data to ClickHouse via a ClickHouse bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to ClickHouse. 
 
 ### Test the Rule and Bridge
 

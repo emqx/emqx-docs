@@ -65,7 +65,7 @@ You can find more information about running [IoTDB in Docker on Docker Hub](http
 
 This section introduces how to create an EMQX data bridge to Apache IoTDB through Dashboard.
 
-1. Go to the Dashboard, and click **Data Integration** -> **Data Bridge** from the left navigation menu.
+1. Go to the Dashboard, and click **Integration** -> **Data Bridge** from the left navigation menu.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -96,7 +96,7 @@ This section introduces how to create an EMQX data bridge to Apache IoTDB throug
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Apache IoTDB. For detailed steps, refer to [Create Rules for Apache IoTDB Data Bridge](#create-a-rule-for-apache-iotdb-bridge).
 
-Now the Apache IoTDB data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with Resource Status as Connected.
+Now the Apache IoTDB data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with Resource Status as Connected.
 
 ### Create a Rule for Apache IoTDB Data Bridge
 
@@ -152,7 +152,7 @@ You can continue to create a rule to forward data to the new Apache IoTDB bridge
 
 7. Click the **Create** button at the bottom of the page to finish the setup.
 
-Now a rule to forward data to Apache IoTDB via the data bridge is created. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under the topic `root/#` are sent and saved to Apache IoTDB.
+Now a rule to forward data to Apache IoTDB via the data bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under the topic `root/#` are sent and saved to Apache IoTDB.
 
 ### Test the Data Bridge and Rule
 

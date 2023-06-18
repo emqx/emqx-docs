@@ -49,7 +49,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
 ### Create a InfluxDB Data Bridge
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, click **Integration** -> **Data Bridge**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -86,13 +86,13 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
 11. Click the **Create** button to finish the setup.
 
-Now the InFluxDB data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
+Now the InFluxDB data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
 ### Create a Rule for InfluxDB Bridge
 
 You can continue to create rules to specify the data to be saved into InfluxDB.
 
-1. Go to EMQX Dashboard, and click **Data Integration** -> **Rules**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -110,7 +110,7 @@ You can continue to create rules to specify the data to be saved into InfluxDB.
 4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge we just created under **Data Bridge**. Then click the **Add** button.
 4. Click **Create** at the page bottom to finish the creation.
 
-Now a rule to forward data to InfluxDB via an InfluxDB bridge is created. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by rule  `my_rule`.
+Now a rule to forward data to InfluxDB via an InfluxDB bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by rule  `my_rule`.
 
 ### Test the Data Bridge and Rule
 

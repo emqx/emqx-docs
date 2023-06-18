@@ -67,7 +67,7 @@ Now you have successfully installed Redis and verified the installation with the
 
 You need to create 2 separate Redis data bridges for the messaging caching and statistics features. Follow the same connection configurations for both data bridges types, but you need to configure different **Redis Command Template** in the specific configuration step.
 
-1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 2. Click **Create** on the top right corner of the page. In the **Create Data Bridge** page, click to select **Redis**, and then click **Next**.
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 5. Set **Redis Mode** as the business needs, for example, **single**.
@@ -101,13 +101,13 @@ You need to create 2 separate Redis data bridges for the messaging caching and s
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Redis. You can also create rules by following the steps in [Create Rules for Redis Data Bridge](#create-rules-for-redis-data-bridge).
 
-Now the Redis data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
+Now the Redis data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
 ### Create Rules for Redis Data Bridge
 
 After you successfully created the data bridge to Redis, you can continue to create rules for message caching and message discard statistics.
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
+1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -144,7 +144,7 @@ After you successfully created the data bridge to Redis, you can continue to cre
 
 6. Click the **Create** button to finish the setup.
 
-Now you have successfully finished creating the rules for the Redis data bridge. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to Redis.
+Now you have successfully finished creating the rules for the Redis data bridge. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to Redis.
 
 ### Test the Data Bridge and Rule
 

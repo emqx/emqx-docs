@@ -1,11 +1,11 @@
-# Webhook
+# HTTP 服务
 
-EMQX 支持通过 Webhook 的方式将客户端消息和事件发送到外部 HTTP 服务。
+EMQX 支持通过 HTTP 服务的方式将客户端消息和事件发送到外部 HTTP 服务。
 
 :::tip 前置准备
 
-- 了解 [规则](./rules.md)。
-- 了解 [数据桥接](./data-bridges.md)。
+- 了解[规则](./rules.md)。
+- 了解[数据桥接](./data-bridges.md)。
 
 :::
 
@@ -17,7 +17,7 @@ EMQX 支持通过 Webhook 的方式将客户端消息和事件发送到外部 HT
 
 ## 快速开始
 
-我们将通过示例来展示如何使用 Dashboard 创建一个简单的 Webhook，并桥接到一个 HTTP 服务器。
+我们将通过示例来展示如何使用 Dashboard 创建一个简单的 HTTP 服务，并桥接到一个 HTTP 服务器。
 
 ### 搭建简易 HTTP 服务
 
@@ -48,12 +48,12 @@ pip install flask
 python3 http_server.py
 ```
 
-### 创建 Webhook 数据桥接
+### 创建 HTTP 服务数据桥接
 
 1. 转到 Dashboard **数据集成** -> **数据桥接**页面。
 2. 点击页面右上角的**创建**。
-3. 在数据桥接类型中选择 Webhook，点击**下一步**。
-4. 输入数据桥接名称，要求是大小写英文字母和数字的组合，这里我们输入 `my_webhook`。
+3. 在数据桥接类型中选择 **HTTP 服务**，点击**下一步**。
+4. 输入数据桥接名称，要求是大小写英文字母和数字的组合，这里我们输入 `my_httpserver`。
 5. 请求方法选择 POST，URL 为 `http://localhost:5000`，其他使用默认值即可。
 6. 点击最下方**创建**按钮完成规则创建。
 
@@ -63,7 +63,7 @@ python3 http_server.py
 
 1. 转到 Dashboard **数据集成** -> **规则**页面。
 2. 点击页面右上角的**创建**。
-3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息发送到 Webhook，此处规则 SQL 如下：
+3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息发送到 HTTP 服务，此处规则 SQL 如下：
 
   ```sql
   SELECT 
@@ -71,20 +71,20 @@ python3 http_server.py
   FROM
     "t/#"
   ```
-4. 添加动作，在动作下拉框中选择 **使用数据桥接转发** 选项，选择先前创建好的 Webhook。
+4. 添加动作，在动作下拉框中选择**使用数据桥接转发**选项，选择先前创建好的 HTTP 服务。
 5. 点击最下方**创建**按钮完成规则创建。
 
-至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果转发到 Webhook。
+至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果转发到 HTTP 服务。
 
 ### 测试数据桥接与规则
 
 使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
 
 ```bash
-mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello Webhook" }'
+mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello HTTP Server" }'
 ```
 
-查看 Webhook 运行统计，命中、发送成功次数均 +1。
+查看 HTTP 服务 运行统计，命中、发送成功次数均 +1。
 
 查看消息是否已经转发到 HTTP 服务：
 
@@ -97,5 +97,5 @@ python3 http_server.py
  * Debug mode: off
  * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)
 
-got post request:  b'hello Webhook'
+got post request:  b'hello HTTP Server'
 ```

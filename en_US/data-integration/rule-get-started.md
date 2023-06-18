@@ -1,6 +1,6 @@
 # Create Rules
 
-This guide introduces how to create a rule using the EMQX Dashboard. Log in to the EMQX Dashboard and click **Data Integration** -> **Rules** in the left navigation tree. Then click the **Create** button, which directs you to the **Rules** page. Here, you can define the data source for your rule and determine the subsequent actions for the filtered messages, such as republishing, printing the result to the Console, or forwarding with data bridges.
+This guide introduces how to create a rule using the EMQX Dashboard. Log in to the EMQX Dashboard and click **Integration** -> **Rules** in the left navigation tree. Then click the **Create** button, which directs you to the **Rules** page. Here, you can define the data source for your rule and determine the subsequent actions for the filtered messages, such as republishing, printing the result to the Console, or forwarding with data bridges.
 
 The following steps demonstrate how to create a rule that listens to messages with the topic `t/#` and forwards the received messages to the topic `a/1`.
 
@@ -89,7 +89,7 @@ For details on how to build the connection between the MQTTX client tool and EMQ
 
 ## View the Rules
 
-EMQX 5.0 introduced the Flows editor to provide a visualized view of the rules you created. Click **Data Integration** -> **Flows** to access it. The window shows that you have created two rules for all messages with topics following the "t/#" pattern: "rule_4xjx" publishes the messages and streams data into Kafka, and "rule_z97h" prints the messages to the console.
+EMQX 5.0 introduced the Flows editor to provide a visualized view of the rules you created. Click **Integration** -> **Flows** to access it. The window shows that you have created two rules for all messages with topics following the "t/#" pattern: "rule_4xjx" publishes the messages and streams data into Kafka, and "rule_z97h" prints the messages to the console.
 
 ![Flows Editor](./assets/rules/flow-eidtor.png)
 

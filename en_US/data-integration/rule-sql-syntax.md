@@ -4,7 +4,7 @@ EMQX uses SQL-based rules for data extraction, filtering, enriching, and transfo
 
 <img src="./assets/rules/data-integration-arch.png" alt="image" style="zoom:40%;" />
 
-EMQX has provided a rich set of built-in functions that you can access by clicking **Data Integration** -> **Rules** -> **SQL Example** on EMQX Dashboard. For more customized needs, EMQX also supports creating your own SQL-like statements. This section will introduce the SQL-like language. 
+EMQX has provided a rich set of built-in functions that you can access by clicking **Integration** -> **Rules** -> **SQL Example** on EMQX Dashboard. For more customized needs, EMQX also supports creating your own SQL-like statements. This section will introduce the SQL-like language. 
 
 This SQL-like syntax has two types of statements: `SELECT` and `FOREACH`. Each rule can have exactly one statement. 
 
