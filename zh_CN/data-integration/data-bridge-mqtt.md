@@ -4,25 +4,25 @@ MQTT 数据桥接是一种连接多个 EMQX 集群或其他 MQTT 服务的方式
 
 ## 桥接模式
 
-EMQX 支持在两种主要模式下工作的 MQTT 数据桥接：ingress 和 egress。本节将详细介绍每种模式的工作原理。同时，还介绍了在这两种模式中使用的连接池。
+EMQX 支持在两种主要模式下工作的 MQTT 数据桥接：入口和出口。本节将详细介绍每种模式的工作原理。同时，还介绍了在这两种模式中使用的连接池。
 
-### Ingress 模式
+### 入口模式
 
-在 ingress 模式下，本地的 EMQX 从桥接的远程 MQTT 代理订阅主题，并在当前集群内分发接收到的消息。下面是 **ingress** 方向的消息服务流程：
+在入口模式下，本地的 EMQX 从桥接的远程 MQTT 代理订阅主题，并在当前集群内分发接收到的消息。下面是**入口**方向的消息服务流程：
 
 <img src="./assets/bridge_mqtt_igress.png" alt="MQTT 数据桥接 igress 示意图" style="zoom:67%;" />
 
-MQTT 数据桥接可以单独使用，也可以与规则结合使用，以实现更强大、更灵活的数据处理能力。在 **ingress** 方向上，数据桥接可以作为规则的数据源。MQTT 数据桥接与规则配合工作的消息流程如下：
+MQTT 数据桥接可以单独使用，也可以与规则结合使用，以实现更强大、更灵活的数据处理能力。在 **入口**方向上，数据桥接可以作为规则的数据源。MQTT 数据桥接与规则配合工作的消息流程如下：
 
 <img src="./assets/bridge_igress_rule_link.png" alt="bridge_igress_rule_link" style="zoom:67%;" />
 
-### Egress 模式
+### 出口模式
 
-在 egress 模式下，本地的 EMQX 根据规则设置，将当前集群中的消息转发给桥接的远程 MQTT 代理。下面是**egress**方向上的消息服务流程：
+在出口模式下，本地的 EMQX 根据规则设置，将当前集群中的消息转发给桥接的远程 MQTT 代理。下面是**出口**方向上的消息服务流程：
 
 <img src="./assets/bridge_mqtt_egerss.png" alt="MQTT 数据桥接 egress 示意图" style="zoom:67%;" />
 
-在 **egress** 方向下，可以将规则处理结果作为消息，转发到远程 MQTT 代理的指定主题下：
+在**出口**方向下，可以将规则处理结果作为消息，转发到远程 MQTT 代理的指定主题下：
 
 <img src="./assets/bridge_egress_rule.png" alt="bridge_egress_rule" style="zoom:67%;" />
 
@@ -44,9 +44,9 @@ EMQX 允许多个客户端同时连接到桥接的 MQTT 代理。在创建桥接
 | `${NodeName}`       | 运行 MQTT 客户端的节点名称。                           |
 | `${N}`              | 从 `1` 到配置的 MQTT 客户端连接池的大小的数字。        |
 
-#### 在 ingress 模式下使用连接池
+#### 在入口模式下使用连接池
 
-尽管连接池适用于 ingress 和 egress 模式，但在 ingress 模式下使用连接池有更多要求。当在不同的 MQTT [集群](../deploy/cluster/introduction.md)之间创建 ingress 模式下的数据桥接时，如果连接池中的所有客户端都订阅相同的主题，它们将从远程代理接收到重复的消息，这将给服务器带来压力。在这种情况下，强烈建议使用[共享订阅](../mqtt/mqtt-shared-subscription.md)作为一种安全措施。例如，您可以将远程MQTT代理的主题配置为 `$share/name1/topic1` 或者在使用主题过滤器时配置为 `$share/name2/topic2/#`。
+尽管连接池适用于入口和出口模式，但在入口模式下使用连接池需要考虑一些注意事项。当您拥有多个节点的 EMQX [集群](../deploy/cluster/introduction.md)并配置了一个入口 MQTT 桥接以从远程代理订阅非共享主题时，如果连接池中的所有客户端都订阅相同的主题，它们将从远程代理接收到重复的消息，这将给服务器带来压力。在这种情况下，强烈建议使用[共享订阅](../mqtt/mqtt-shared-subscription.md)作为一种安全措施。例如，您可以将远程MQTT代理的主题配置为 `$share/name1/topic1` 或者在使用主题过滤器时配置为 `$share/name2/topic2/#`。在非共享订阅情况下，MQTT 客户端连接池将缩减为一个客户端，这意味着只有一个客户端会启动。
 
 ## 快速开始
 
@@ -84,8 +84,8 @@ EMQX 允许多个客户端同时连接到桥接的 MQTT 代理。在创建桥接
    
    - **入口配置**（可选）：配置桥接规则，将远程 MQTT 服务上的消息转发到本地；我们希望订阅 `remote/topic/ingress ` 下的消息，并将收到的信息转发至 `local/topic/ingress` 主题，因此将进行如下配置：
    
-      - **远程 MQTT 服务**：订阅主题以获取消息
-         - **主题**：在集群工作模式下，我们可通过共享订阅来避免消息重复，因此填入 `$share/g/remote/topic/ingress`
+      - **远程 MQTT 服务**：订阅主题以获取消息。
+         - **主题**：在集群工作模式下，须通过共享订阅来避免消息重复，因此填入 `$share/g/remote/topic/ingress`。
          - QoS：选择 `0`。
    
       - **本地 MQTT 服务**：将订阅得到的消息发布到指定主题中，也可以留空，通过配置规则处理并使用[消息重发布](./rules.md#消息重发布)动作转发。
