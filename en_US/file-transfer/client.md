@@ -84,6 +84,6 @@ Payload: not used.
 
 Upon receiving the `finish` command, EMQX verifies that it has received all the segments necessary to assemble the file. If the file is successfully exported and its checksum is valid, EMQX responds with a success return code (RC). In case of any errors, an appropriate error response is sent.
 
-## Client SDK Sample
+## Client Code Sample
 
-Refer to [Python](https://github.com/emqx/emqx-ft/blob/main/src/emqx_ft/main.py) to get the client SDK sample.
+Refer to [demonstrational Python client](https://github.com/emqx/emqx-ft/blob/main/src/emqx_ft/main.py) to get the client code sample.

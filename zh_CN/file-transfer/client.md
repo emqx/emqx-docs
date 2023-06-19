@@ -85,7 +85,7 @@
 
 在接收到 `finish` 命令后，EMQX 将验证是否已接收到组装文件所需的所有片段。如果文件成功导出并且其校验和有效，EMQX 将以成功的返回代码（RC）进行响应。如果有任何错误，则发送适当的错误响应。
 
-## 客户端 SDK 示例
+## 客户端代码示例
 
-请参阅 [Python](https://github.com/emqx/emqx-ft/blob/main/src/emqx_ft/main.py) 获取客户端 SDK 示例。
+请参阅 [演示 Python 客户端](https://github.com/emqx/emqx-ft/blob/main/src/emqx_ft/main.py) 获取客户端代码示例。
 
