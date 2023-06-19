@@ -1,4 +1,4 @@
-# Commands for File Transfer Client Development
+# File Transfer on Clients
 
 This page provides an overview of the file transfer process from the client's perspective along with detailed information on the commands utilized for uploading a file to EMQX. This information helps you to implement the file transfer feature for client development.
 
@@ -83,3 +83,7 @@ Payload: not used.
 * `checksum`: SHA256 checksum of the entire file. If specified, this value takes priority over the `checksum` field provided in the `init` command.
 
 Upon receiving the `finish` command, EMQX verifies that it has received all the segments necessary to assemble the file. If the file is successfully exported and its checksum is valid, EMQX responds with a success return code (RC). In case of any errors, an appropriate error response is sent.
+
+## Client SDK Sample
+
+Refer to [Python](https://github.com/emqx/emqx-ft/blob/main/src/emqx_ft/main.py) to get the client SDK sample.
