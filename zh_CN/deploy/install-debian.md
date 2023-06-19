@@ -31,7 +31,6 @@ EMQX 支持通过 Apt 源安装，免除了用户需要手动处理依赖关系�
    sudo systemctl start emqx
    ```
 
-   
 
 ## 通过下载包安装
 
@@ -107,8 +106,6 @@ EMQX 同时支持通过下载包进行安装。下文将以 Debian 11 系统为�
   ```shell
 sudo apt remove --purge emqx
   ```
-
-
 
 ## 通过 tar.gz 安装
 
@@ -198,7 +195,7 @@ sudo apt remove --purge emqx
 
 ### 启动 EMQX 
 
-您可通过如下3种方式启动 EMQX 
+您可通过如下3种方式启动 EMQX。
 - 直接启动：
 
   ```bash

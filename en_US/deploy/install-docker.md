@@ -10,7 +10,7 @@ This chapter introduces how to use the official Docker image to install and run 
 
    :::
 
-## Use Docker to run a single EMQX node
+## Use Docker to Run A Single EMQX Node
 
 This section will introduce how to use the Docker image to install the latest version of EMQX. If you want to work with other versions,  please visit the [EMQX Deployment page](https://www.emqx.com/en/try?product=enterprise).
 
@@ -54,7 +54,7 @@ For more information about EMQX official docker image, see [Docker Hub - emqx/em
 
 {% endemqxee %}
 
-## Use Docker Compose to build an EMQX cluster
+## Use Docker Compose to Build an EMQX Cluster
 
 Docker Compose is a tool for defining and running multi-container Docker applications. This section introduces how to use Docker Compose to create a static EMQX cluster. 
 
