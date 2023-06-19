@@ -39,7 +39,8 @@ This page provides a step-by-step guide to quickly get started with the File Tra
    The directory structure displayed will contain the uploaded file.
 
    ```
-   >tree _build/emqx-enterprise/rel/emqx/data/file_transfer/exports
+   $ tree /var/lib/emqx/file_transfer/exports
+   /var/lib/emqx/file_transfer/exports
    _./data/file_transfer/exports
    ├── 8E
    │   └── B5
