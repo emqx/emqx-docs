@@ -7,19 +7,9 @@ Supported versions:
 - CentOS 8
 - CentOS 7
 
-## Check your environment
-
-Erlang VM that powers EMQX relies on system locale settings to enable Unicode support for [filenames](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#unicode-filenames) and [terminal IO](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#the-interactive-shell) in interactive Erlang shells, among other things.
-
-Before starting EMQX, it is recommended to verify that UTF-8 locale is enabled in the system environment and enable it if it's not. Under systemd, this is usually handled by [`localectl`](https://www.freedesktop.org/software/systemd/man/localectl.html).
-
-```bash
-sudo localectl set-locale LANG=C.UTF-8
-```
-
 {% emqxce %}
 
-## Install with Yum source
+## Install with Yum Source
 
 EMQX supports installing with Yum source to provide our users with a convenient and reliable way to manage EMQX installation and updates. Here is how to install EMQX with Yum source:
 
@@ -41,7 +31,7 @@ EMQX supports installing with Yum source to provide our users with a convenient 
    sudo systemctl start emqx
    ```
 
-## Install with package
+## Install with Package
 
 The section below will take CentOS 8 as an example to illustrate how to download the latest version of EMQX. For other system versions, please visit the [EMQX Deployment page](https://www.emqx.io/downloads?os=CentOS). 
 

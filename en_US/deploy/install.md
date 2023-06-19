@@ -4,9 +4,50 @@ This chapter walks you through the basic installation steps for EMQX, the minimu
 
 {% emqxee %}
 
-This chapter will also cover how to configure a license for EMQX and how to migrate from EMQX 4.x to EMQX 5.x.
+This chapter will also cover how to configure a license for EMQX and how to migrate from EMQX 4.x to EMQX 5.1.0.
 
 {% endemqxee %}
+
+## Installation Environment
+
+The Erlang VM powering EMQX relies on system locale settings to enable Unicode support for various functionalities, including [filenames](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#unicode-filenames) and [terminal IO](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#the-interactive-shell) in interactive Erlang shells.
+
+If you use the Linux operating system, it is recommended to make sure that UTF-8 locale is enabled in the system environment before starting EMQX. 
+
+- For Amazon Linux 2, you can enable the UTF-8 locale with [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html#amazon-linux-cloud-init) configuration:
+
+  ```bash
+  cat <<EOF | sudo tee /etc/cloud/cloud.cfg.d/99_locale.cfg
+  #cloud-config
+  locale: C.utf8
+  EOF
+  ```
+
+- For CentOS, under systemd, it is usually enabled by `localectl`:
+
+  ```bash
+  sudo localectl set-locale LANG=C.UTF-8
+  ```
+
+- For Debian, the UTF-8 locale can be enabled in two ways:
+
+  - Under systemd, it is usually enabled by [`localectl`](https://www.freedesktop.org/software/systemd/man/localectl.html).
+
+    ```bash
+    sudo localectl set-locale LANG=C.UTF-8
+    ```
+
+  - Otherwise, it can be enabled with [`update-locale`](https://manpages.debian.org/buster/locales/update-locale.8.en.html).
+
+    ```bash
+    sudo update-locale LANG=C.UTF-8
+    ```
+
+- For Ubuntu, it can be enabled with [`update-locale`](https://manpages.ubuntu.com/manpages/jammy/man8/update-locale.8.html):
+
+  ```bash
+  sudo update-locale LANG=C.UTF-8
+  ```
 
 ## Download
 
@@ -32,7 +73,7 @@ EMQX website: <https://www.emqx.com/en/try?product=enterprise>
 Besides the above deployment methods, you are also welcome to try our [EMQX Cloud](https://www.emqx.com/en/cloud), a fully managed MQTT service for IoT. You only need to [register for an account](https://www.emqx.com/en/signup?continue=https://www.emqx.com/en/cloud) before starting your MQTT services and connecting your IoT devices to any cloud with zero need for infrastructure maintenance.
 :::
 
-## Supported operating systems
+## Supported Operating Systems
 
 The table below lists the operating systems and versions that EMQX supports.
 
@@ -60,7 +101,7 @@ The table below lists the operating systems and versions that EMQX supports.
 
 {% endemqxee %}
 
-## Hardware specification
+## Hardware Specification
 
 Depending on the number of client connections, message rate, message size, and enabled features, the minimum hardware specification for EMQX varies.
 
@@ -79,7 +120,7 @@ In production environments, you can use the [Server Estimate](https://www.emqx.c
 
 :::
 
-## Files and directories
+## Files and Directories
 
 After installation, EMQX creates some directories to store running and configuration files, data, and logs. The table below lists the directories created and their file path under different installation methods:
 

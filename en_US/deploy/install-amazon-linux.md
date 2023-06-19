@@ -2,19 +2,6 @@
 
 This section guides you on installing and starting EMQX on Amazon Linux 2.
 
-## Check your environment
-
-Erlang VM that powers EMQX relies on system locale settings to enable Unicode support for [filenames](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#unicode-filenames) and [terminal IO](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#the-interactive-shell) in interactive Erlang shells, among other things.
-
-Before starting EMQX, it is recommended to verify that UTF-8 locale is enabled in the system environment and enable it if it's not. This may be achieved with [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html#amazon-linux-cloud-init) configuration.
-
-```bash
-cat <<EOF | sudo tee /etc/cloud/cloud.cfg.d/99_locale.cfg
-#cloud-config
-locale: C.utf8
-EOF
-```
-
 {% emqxce %}
 
 ## Install with rpm
