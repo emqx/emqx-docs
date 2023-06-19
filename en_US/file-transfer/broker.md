@@ -99,7 +99,7 @@ The local exporter allows exporting files to a local file system. It only has th
 }
 ```
 
-Exported files may accumulate over time, potentially resulting in a large number of files in the export folder. To address this, EMQX utilizes a bucketing scheme for storing exported files. The scheme involves the following 6-level folder hierarchy:
+Exported files may accumulate over time, potentially resulting in a large number of files in the export folder. To address this, EMQX utilizes a bucketing scheme to store exported files. The scheme involves the following 6-level folder hierarchy:
 
 - It calculates the sha256 hash of the file id together client id (`ABCDEFG012345...`).
 - It stores the file into a 6-level folder hierarchy, using as levels:
