@@ -86,9 +86,9 @@ Exported files may accumulate over time, potentially resulting in a large number
   * The first 2 bytes of the hash as the first-level directory name;
   * The next 2 bytes as the second-level directory name;
   * The rest of the hash as the 3-rd level directory name;
-  * The client id;
-  * The file id;
-  * The escaped file name as the last directory.
+  * The escaped client ID;
+  * The escaped file ID;
+  * The file name as the last level.
 
 For example, an exported file might be stored in a directory structure like this: `AB/CD/EFGH.../clientid/file_id/escaped_file_name_from_the_metadata`.
 
@@ -103,9 +103,9 @@ The S3 exporter allows exporting files to an S3-compatible object storage system
 
 Unlike the bucketing scheme used in the local exporter, files exported using the S3 exporter are stored using a simpler 3-level hierarchy:
 
-- The client ID.
-- The file ID.
-- The escaped file name.
+- The escaped client ID.
+- The escaped file ID.
+- The file name.
 
 ## Configure File Transfer MQTT Settings
 
