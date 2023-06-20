@@ -266,11 +266,11 @@ numId: '2928540609735937'
 - 从 Google Cloud IoT Core 导出设备数据
 - 将设备数据导入到 EMQX
 
-### 从 GCP IoT Core 导出数据
+### 从 GCP IoT Core 导出设备数据
 
 您可以使用一个利用了 [Google Cloud IoT Core REST API](https://cloud.google.com/iot/docs/reference/cloudiot/rest) 的脚本导出数据。
 
-1. 在相同的 `emqx-gcp-iot-migrate` 文件夹下运行以下命令。该文件夹在[连接设备到 MQTT 端点](#连接设备到-mqtt-端点) 中用于安装环境。
+1. 在相同的 `emqx-gcp-iot-migrate` 文件夹下运行以下命令。该文件夹在[连接设备到 MQTT 端点](#连接设备到-mqtt-端点)中用于安装环境。
 
    ```bash
    python gcp-export.py --project iot-export --region europe-west1 --registry my-registry > gcp-data.json
@@ -298,7 +298,7 @@ numId: '2928540609735937'
 
    :::
 
-### 将数据导入 EMQX
+### 将设备数据导入 EMQX
 
 使用 REST API 将数据导入 EMQX。 `admin:public` 是 EMQX 默认的用户名和密码。
 
@@ -310,68 +310,9 @@ curl -s -v -u 'admin:public' -X POST 'http://127.0.0.1:18083/api/v4/gcp_devices'
 
 您可以看到有14 个设备被导入。
 
-## 使用 GCP IoT Core 设备模块通过 Dashboard 进行设备迁移
+## 通过 API 管理设备
 
-Dashboard 上的 GCP IoT Core 设备模块为设备迁移提供了一种可视化的方式。
-
-### 通过 Dashboard 添加模块
-
-1. 转到 EMQX Dashboard。从左侧导航目录点击 **模块**。
-
-2. 在 **模块** 页面，点击**添加模块**。在**选择模块**区域，点击**内部模块**。
-
-3. 找到 **GCP IoT Core 设备**并点击**选择**。
-
-   <img src="./assets/GCP_device_select.png" alt="GCP_device_select" style="zoom:67%;" />
-
-4. 点击页面上的**添加**以启用模块。 
-
-   <img src="./assets/GCP_device_add.png" alt="GCP_device_add" style="zoom:67%;" />
-
-现在您可以看到 **GCP IoT Core 设备**已被添加到**模块**页面。
-
-### 导入设备数据 
-
-1. 在**模块**页面上，点击 **GCP IoT Core 设备**的**管理**按钮。
-
-   <img src="./assets/GCP_device_manage.png" alt="GCP_device_manage" style="zoom:67%;" />
-
-2. 在**详情**页面的**设备管理**页签，点击**导入**以批量导入设备数据或者点击**添加**以手动添加设备数据。
-
-   - 如果点击**导入**，将弹出对话框让您导入从 GCP IoT Core 中导出的 json 文件。选中文件并点击**打开**。
-
-     <img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/modules/assets/GCP_device_import.png" alt="GCP_device_import" style="zoom:67%;" />
-
-   - 如果点击**添加**，将弹出对话框让您输入`设备 ID` 并添加公钥。点击**添加**，从下拉列表中选择公钥格式。上传公钥文件或输入文件内容，设置到期时间，最后点击**确定**。
-
-     <img src="./assets/GCP_device_add_public_key.png" alt="GCP_device_add_public_key" style="zoom:67%;" />
-
-您可以看到设备已被导入。 <!-- Better to show a screenshot-->
-
-## 对迁移结果进行测试
-
-要测试迁移，请使用之前的相同客户端代码，但将端点更改为 EMQX。您还需要将 CA 证书更改为 EMQX 使用的证书。
-
-```bash
-docker cp emqx:/opt/emqx/etc/certs/cacert.pem ./сacert.pem
-python client-demo.py --project "iot-export" --region "europe-west1" --registry "my-registry" --algorithm ES256 --device "c2-ec-x509" --hostname localhost --private-key-file ./sample-keys/c2_ec_private.pem --ca-certs cacert.pem
-```
-
-输出结果如下：
-
-```
-Device client_id is 'projects/iot-export/locations/europe-west1/registries/my-registry/devices/c2-ec-x509'
-Password is eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2ODIzNDE2NzgsImV4cCI6MTY4MjM0Mjg3OCwiYXVkIjoiaW90LWV4cG9ydCJ9.04_zR71fmi0YikSxZbb_wxpVTnikt2XIkxkuI6JM6VS0VJ1B8QrggHuUron8MAOSJDJu9SVa2fuuFFjJEKJ-Bw
-Subscribing to config topic /devices/c2-ec-x509/config
-on_connect Connection Accepted.
-Received message b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\x0c\r\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\x7f\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f\xa0\xa1\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xab\xac\xad\xae\xaf\xb0\xb1\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xbb\xbc\xbd\xbe\xbf\xc0\xc1\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd0\xd1\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xdb\xdc\xdd\xde\xdf\xe0\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff' on topic /devices/c2-ec-x509/config with qos 1
-```
-
-结果和之前相同，但是现在您使用的是 EMQX 而不是 Google Cloud IoT Core。
-
-## 附加的 API
-
-EMQX提供了一些额外的 API 调用，使用“设备”术语来管理 EMQX 数据。
+当设备从 GCP IoT Core 导入到了 EMQX 后，EMQX 提供了一些额外的 API 调用，使用“设备”术语来管理 EMQX 数据。
 
 ### 管理单个设备配置
 
@@ -469,6 +410,65 @@ EMQX提供了一些额外的 API 调用，使用“设备”术语来管理 EMQX
 ```bash
 >curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices?_page=2&_limit=2' | jq
 ```
+
+## 通过 Dashboard 迁移和管理设备
+
+Dashboard 上的 GCP IoT Core 设备模块为设备迁移和管理提供了一种可视化的方式。
+
+### 添加 GCP IoT Core 设备模块
+
+1. 转到 EMQX Dashboard。从左侧导航目录点击**模块**。
+
+2. 在**模块**页面，点击**添加模块**。在**选择模块**区域，点击**内部模块**。
+
+3. 找到 **GCP IoT Core 设备**并点击**选择**。
+
+   <img src="./assets/GCP_device_select.png" alt="GCP_device_select" style="zoom:67%;" />
+
+4. 点击页面上的**添加**以启用模块。 
+
+   <img src="./assets/GCP_device_add.png" alt="GCP_device_add" style="zoom:67%;" />
+
+现在您可以看到 **GCP IoT Core 设备**已被添加到**模块**页面。
+
+### 导入设备数据 
+
+1. 在**模块**页面上，点击 **GCP IoT Core 设备**的**管理**按钮。
+
+   <img src="./assets/GCP_device_manage.png" alt="GCP_device_manage" style="zoom:67%;" />
+
+2. 在**详情**页面的**设备管理**页签，点击**导入**以批量导入设备数据或者点击**添加**以手动添加设备数据。
+
+   - 如果点击**导入**，将弹出对话框让您导入从 GCP IoT Core 中导出的 json 文件。选中文件并点击**打开**。
+
+     <img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/modules/assets/GCP_device_import.png" alt="GCP_device_import" style="zoom:67%;" />
+
+   - 如果点击**添加**，将弹出对话框让您输入`设备 ID` 并添加公钥。点击**添加**，从下拉列表中选择公钥格式。上传公钥文件或输入文件内容，设置到期时间，最后点击**确定**。
+
+     <img src="./assets/GCP_device_add_public_key.png" alt="GCP_device_add_public_key" style="zoom:67%;" />
+
+您可以看到设备已被导入。 <!-- Better to show a screenshot-->
+
+## 对迁移结果进行测试
+
+要测试迁移，请使用之前的相同客户端代码，但将端点更改为 EMQX。您还需要将 CA 证书更改为 EMQX 使用的证书。
+
+```bash
+docker cp emqx:/opt/emqx/etc/certs/cacert.pem ./сacert.pem
+python client-demo.py --project "iot-export" --region "europe-west1" --registry "my-registry" --algorithm ES256 --device "c2-ec-x509" --hostname localhost --private-key-file ./sample-keys/c2_ec_private.pem --ca-certs cacert.pem
+```
+
+输出结果如下：
+
+```
+Device client_id is 'projects/iot-export/locations/europe-west1/registries/my-registry/devices/c2-ec-x509'
+Password is eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2ODIzNDE2NzgsImV4cCI6MTY4MjM0Mjg3OCwiYXVkIjoiaW90LWV4cG9ydCJ9.04_zR71fmi0YikSxZbb_wxpVTnikt2XIkxkuI6JM6VS0VJ1B8QrggHuUron8MAOSJDJu9SVa2fuuFFjJEKJ-Bw
+Subscribing to config topic /devices/c2-ec-x509/config
+on_connect Connection Accepted.
+Received message b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\x0c\r\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\x7f\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f\xa0\xa1\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xab\xac\xad\xae\xaf\xb0\xb1\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xbb\xbc\xbd\xbe\xbf\xc0\xc1\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd0\xd1\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xdb\xdc\xdd\xde\xdf\xe0\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff' on topic /devices/c2-ec-x509/config with qos 1
+```
+
+结果和之前相同，但是现在您使用的是 EMQX 而不是 Google Cloud IoT Core。
 
 ## 限制
 
