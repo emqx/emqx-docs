@@ -1,0 +1,33 @@
+// dot -Tsvg ./metrics.dot > ./metrics.svg
+digraph G {
+    node [shape=plaintext]
+    a [label=<
+       <TABLE BORDER="0" CELLSPACING="8">
+         <TR>
+           <TD BGCOLOR="blue" BORDER="1" COLSPAN="28" STYLE="ROUNDED"><FONT FACE="Roboto Mono" COLOR="whitesmoke">matched</FONT></TD>
+         </TR>
+         <TR>
+           <TD BGCOLOR="green" BORDER="1" COLSPAN="10" STYLE="ROUNDED"><FONT FACE="Roboto Mono" COLOR="black">success</FONT></TD>
+           <TD BGCOLOR="red" BORDER="1" COLSPAN="10" STYLE="ROUNDED"><FONT FACE="Roboto Mono" COLOR="black">failed</FONT></TD>
+           <TD BGCOLOR="yellow" BORDER="1" COLSPAN="4" STYLE="ROUNDED"><FONT FACE="Roboto Mono" COLOR="black">late_reply</FONT></TD>
+           <TD BGCOLOR="red" BORDER="1" COLSPAN="4" STYLE="ROUNDED"><FONT FACE="Roboto Mono" COLOR="black">dropped</FONT></TD>
+         </TR>
+         <TR>
+           <TD BGCOLOR="green" BORDER="1" COLSPAN="2" STYLE="ROUNDED"><FONT FACE="Roboto Mono" COLOR="black">retried.success</FONT></TD>
+           <TD BORDER="0" COLSPAN="8"></TD>
+           <TD BGCOLOR="red" BORDER="1" COLSPAN="2" STYLE="ROUNDED"><FONT FACE="Roboto Mono" COLOR="black">retried.failed</FONT></TD>
+           <TD BORDER="0" COLSPAN="8"></TD>
+           <TD BORDER="0" COLSPAN="4"></TD>
+           <TD BGCOLOR="red" BORDER="1" COLSPAN="1" STYLE="ROUNDED"><FONT FACE="Roboto Mono" COLOR="black">dropped.expired</FONT></TD>
+           <TD BGCOLOR="red" BORDER="1" COLSPAN="1" STYLE="ROUNDED"><FONT FACE="Roboto Mono" COLOR="black">dropped.queue_full</FONT></TD>
+           <TD BGCOLOR="red" BORDER="1" COLSPAN="1" STYLE="ROUNDED"><FONT FACE="Roboto Mono" COLOR="black">dropped.resource_not_found</FONT></TD>
+           <TD BGCOLOR="red" BORDER="1" COLSPAN="1" STYLE="ROUNDED"><FONT FACE="Roboto Mono" COLOR="black">dropped.resource_stopped</FONT></TD>
+         </TR>
+         <TR><TD> </TD></TR>
+         <TR>
+           <TD BGCOLOR="gray" BORDER="1" COLSPAN="4" STYLE="ROUNDED"><FONT FACE="Roboto Mono" COLOR="black">inflight</FONT></TD>
+           <TD BGCOLOR="gray" BORDER="1" COLSPAN="4" STYLE="ROUNDED"><FONT FACE="Roboto Mono" COLOR="black">queuing</FONT></TD>
+         </TR>
+       </TABLE>
+       >]
+}
