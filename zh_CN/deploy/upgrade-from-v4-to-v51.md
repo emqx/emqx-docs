@@ -196,7 +196,7 @@ authentication = [
 
 1. 为方便理解，该数据源由 Mnesia 更名为内置数据库 (Built-in Database)；
 2. 只能选定一种认证查找方式：基于用户名或基于客户端 ID；
-3. 数据操作 REST API 有变动，新的 API 是 `/authentication/{id}/users`。
+3. 数据操作 REST API 有变动，新的 API 是 `POST /authentication/{id}/users`。
 
 <!-- TODO: add migrate script -->
 
@@ -309,6 +309,8 @@ HMGET emqx_user:${username} password_hash is_superuser
 
 1. 为方便理解，该数据源由 Mnesia 更名为内置数据库 (Built-in Database)；
 2. 数据格式与数据操作 REST API 有变动，新的 API 是 `/authorization/sources/built_in_database/rules{/clients,/users}`。
+
+4.x 版本中的 ACL 数据可以通过 `./bin/emqx_ctl data export` 命令导出。用户可以将数据转换为符合 5.1 版本的格式，并通过相应的 REST API 导入。
 
 <!-- TODO add migrate script -->
 

@@ -307,9 +307,9 @@ No changes.
 #### Built-in Database (Mnesia)
 
 1. Mnesia renamed to the Built-in Database;
-2. The data format and REST API have changed. For more information, please refer to `POST/authorization/built_in_database/clientid`.
+2. The data format and REST API have changed. For more information, please refer to `/authorization/sources/built_in_database/rules{/clients,/users}`.
 
-4.x ACL data can be exported with `./bin/emqx_ctl data export`  command. Users may convert the data into 5.1 format and import it through the corresponding REST API.
+The ACL data in version 4.x can be exported with `./bin/emqx_ctl data export`  command. Users may convert the data into the format compatible with version 5.1 and import it through the corresponding REST API.
 
 #### MySQL/PostgreSQL
 
