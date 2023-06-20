@@ -27,7 +27,7 @@ By default, the following listeners are no longer provided:
 
 ## Plugins
 
-The previous official plugins have been migrated to EMQX as built-in functions. Custom plugins developed for version 4.x need to be adapted before they can be used in EMQX 5.1. The following is a comparison table between official plugins and existing functions:
+The previous official plugins have been migrated to EMQX as built-in functions. Custom plugins developed for version 4.x need to be adapted before they can be used in EMQX 5.1. The following is a comparison table between official plugins and built-in features.
 
 | 4.x              | 5.1                                                       |
 | ---------------- | --------------------------------------------------------- |
