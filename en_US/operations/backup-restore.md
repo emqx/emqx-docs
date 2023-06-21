@@ -38,61 +38,57 @@ Before EMQX 5.0, persistent sessions were stored in memory, and for the EMQX ent
 
 To restore the configuration file, you only need to place the backed-up configuration files and data in the corresponding directory before starting EMQX.
 
-# Data import and export
+## Data Import and Export
 
-EMQX 5.1 introduced user-friendly data import and export tool. It is similar to one available in EMQX 4.x but has several significant differences and is not compatible with it.
-Unlike EMQX 4.x that used a single JSON file to carry all the necessary data from both EMQX configuration and built-in database, EMQX 5.1 uses an opaque compressed tar archive, which allows to handle potentially large amount of user data in a more efficient and structured way.
-The data currently supported for import and export in EMQX 5.1 is analogous to EMQX 4.x. It includes:
+EMQX 5.1 introduces a user-friendly tool for data import and export. While similar to the one available in EMQX 4.x, it has several significant differences and is not compatible with it.
 
-* the content of EMQX [configuration rewrite file](../configuratation/configuration.md#configuration-rewrite-file), including:
-    * rules and bridges
-    * authentication and authorization configuration
-    * listeners, gateways configuration
-    * other EMQX settings
-* built-in database (Mnesia) data, including:
+In EMQX 4.x, a single JSON file was used to carry all the necessary data from both the EMQX configuration and the built-in database. However, in EMQX 5.1, an opaque compressed tar archive is used. This allows for more efficient and structured handling of potentially large amounts of user data.
+
+The data supported for import and export in EMQX 5.1 is analogous to that of EMQX 4.x. It includes:
+
+* Contents of EMQX [configuration rewrite file](../configuration/configuration.md#configuration-rewrite-file):
+    * Rules and bridges
+    * Authentication and authorization configuration
+    * Listeners, gateways configuration
+    * Other EMQX settings
+* Built-in database (Mnesia) data:
     * Dashboard users and API keys
     * Authentication user credentials (both simple and enhanced)
     * PSK authentication data
     * Authorization rules
-    * banned clients
+    * Banned clients
 * SSL/TLS certificates stored in EMQX data directory (`node.data_dir`)
 * Authorization acl.conf file stored in EMQX data directory
 
-::: warning
-Any SSL/TLS certificate or acl.conf files stored outside EMQX data directory are not included in the exported archive.
-It is possible to export and import data successfully in such case, but these files should be provisioned on all EMQX target nodes before
-importing the data.
+::: tip Warning
+
+Any SSL/TLS certificate or acl.conf files stored outside the EMQX data directory are not included in the exported archive. Therefore, when exporting and importing data, it's important to note that these files should be provisioned on all EMQX target nodes before importing the data. This ensures that the necessary SSL/TLS certificates and acl.conf files are available for proper functionality.
+
 :::
 
-## Export
+### Export
 
 Data can be exported from any running cluster node.
 
-## Import
+### Import
 
-Data can be imported only on a running EMQX node. Several conditions must be met for the import operation to succeed:
+To import data, the EMQX node must be running, and certain conditions must be met for a successful import operation:
 
-* if [Core + Replicant](../deploy/cluster/mria-introduction.md#enable-core-replicant-mode) mode is used, the data import
-  can only be initiated on core nodes. This doesn't affect actual data import behavior in any way: the data will be copied
-  to all cluster nodes (both core and replicant), it just needs to be triggered on a core node to properly coordinate the operation.
-* Data exported from EMQX Enterprise Edition cluster cannot be imported to EMQX Community Edition cluster.
-* A data file must not be renamed.
+* If [Core + Replicant](../deploy/cluster/mria-introduction.md#enable-core-replicant-mode) mode is enabled, the data import can only be initiated on core nodes. This does not affect the actual import behavior as the data will be copied to all cluster nodes, both core and replicant. Initiating the import on a core node ensures proper coordination of the operation.
+* Data exported from EMQX Enterprise Edition cluster cannot be imported to EMQX Open Source Edition cluster.
+* The data file must not be renamed.
 
-If any of the above conditions is not satisfied, the import will be aborted with an appropriate error message.
+If any of the above conditions are not satisfied, the import process will be aborted, and an appropriate error message will be displayed.
 
-Data import operation either inserts the data (if it was not present on the target EMQX cluster before) or updates existing data (when there is a conflict). No previous data is removed on EMQX cluster during the import.
+During the data import operation, the data will either be inserted (if it was not present in the target EMQX cluster) or updated (in case of a conflict). The import process does not remove any existing data from the EMQX cluster.
 
-::: warning
-In rare circumstances, the existing data may be not compatible with the imported data.
-For example, if EMQX cluster uses built-in database authentication mechanism with 'suffix' salt position, and the imported data defines the same
-authentication source with 'prefix' salt position, all the old user credentials created before the import will be not operational any more,
-since they are not compatible with the newly imported configuration.
-Therefore, importing data to a non-clean EMQX cluster may require extra caution.
+::: tip Warning
+In rare circumstances, the existing data may not be compatible with the imported data. For example, if the EMQX cluster uses the built-in database authentication mechanism with a 'suffix' salt position, and the imported data defines the same authentication source with a 'prefix' salt position, the old user credentials created before the import will no longer be operational. Therefore, importing data to a non-clean EMQX cluster may require extra caution.
 :::
 
-## Example
+### Example
 
-### Command line interface
+This section shows how to import and export data using the command Line Interface.
 
 1. Export data. The file name format of the exported file is `emqx-export-YYYY-MM-DD-HH-mm-ss.sss.tar.gz`, and export directory is `<EMQX data directory>/backup`:
 
