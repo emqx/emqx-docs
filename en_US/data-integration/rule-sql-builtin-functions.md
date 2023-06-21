@@ -148,19 +148,39 @@ EMQX provides several built-in functions for manipulating strings in the rule en
 
 See the table below for a complete list of string functions supported. 
 
-| Function Name              | Description                    | Parameter                                                    |
-| -------------------------- | ------------------------------ | ------------------------------------------------------------ |
-| lower                      | Convert to lowercase           | Input string                                                 |
-| upper                      | Convert to uppercase           | Input string                                                 |
-| trim                       | Remove left and right space    | Input string                                                 |
-| ltrim                      | Remove left space              | Input string                                                 |
-| rtrim                      | Remove right space             | Input string                                                 |
-| reverse                    | String inversion               | Input string                                                 |
-| strlen                     | String length                  | Input string                                                 |
-| substr                     | Take a substring of characters | 1. Input string <br />2. Start position (starting at position 1) |
-| substr<br>(with end)       | Take a substring of characters | 1. Input string <br />2. Start position (starting at position 1).<br />3. End position <br> |
-| split                      | String split                   | 1. Input string <br />2. Separator                           |
-| split <br>(with direction) | String split                   | 1. Input string <br />2. Separator <br />3. Direction, optional value: `leading` or `trailing` |
+| Function Name              | Description                                                  | Parameter                                                    |
+| -------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| lower                      | Convert to lowercase                                         | Input string                                                 |
+| upper                      | Convert to uppercase                                         | Input string                                                 |
+| trim                       | Remove left and right space                                  | Input string                                                 |
+| ltrim                      | Remove left space                                            | Input string                                                 |
+| rtrim                      | Remove right space                                           | Input string                                                 |
+| reverse                    | String inversion                                             | Input string                                                 |
+| strlen                     | String length                                                | Input string                                                 |
+| substr                     | Take a substring of characters                               | 1. Input string <br />2. Start position (starting at position 1) |
+| substr<br>(with end)       | Take a substring of characters                               | 1. Input string <br />2. Start position (starting at position 1).<br />3. End position <br> |
+| split                      | String split                                                 | 1. Input string <br />2. Separator                           |
+| split <br>(with direction) | String split                                                 | 1. Input string <br />2. Separator <br />3. Direction, optional value: `leading` or `trailing` |
+| concat                     | String concatenation                                         | 1. Left string <br />2. Right substring                      |
+| tokens                     | String splitting (based on a specified delimiter)            | 1. Input string <br />2. Delimiter or substring              |
+| tokens                     | String splitting (based on a specified delimiter and line break) | 1. Input string <br />2. Delimiter or substring <br />3. 'nocrlf' |
+| sprintf                    | String formatting, see the Format section in  https://erlang.org/doc/man/io.html#fwrite-1 for usage | 1. Format string <br />2,3,4... Parameter list. The number of parameters may vary |
+| pad                        | String padding with spaces from the end                      | 1. Original string <br />2. Total character length           |
+| pad                        | String padding with spaces from the end                      | 1. Original string <br />2. Total character length <br />3. 'trailing' |
+| pad                        | String padding with spaces from both sides                   | 1. Original string <br />2. Total character length <br />3. 'both' |
+| pad                        | String padding with spaces from the beginning                | 1. Original string <br />2. Total character length <br />3. 'leading' |
+| pad                        | String padding with a specified character from the end       | 1. Original string <br />2. Total character length <br />3. 'trailing' <br />4. Character used for padding |
+| pad                        | String padding with a specified character from both sides    | 1. Original string <br />2. Total character length <br />3. 'both' <br />4. Character used for padding |
+| pad                        | String padding with a specified character from the beginning | 1. Original string <br />2. Total character length <br />3. 'leading' <br />4. Character used for padding |
+| replace                    | Replace a substring in a string (replace all occurrences)    | 1. Original string <br />2. Substring to be replaced <br />3. String used for replacement |
+| replace                    | Replace a substring in a string (replace all occurrences)    | 1. Original string <br />2. Substring to be replaced <br />3. String used for replacement <br />4. 'all' |
+| replace                    | Replace a substring in a string (replace the first occurrence from the end) | 1. Original string <br />2. Substring to be replaced <br />3. String used for replacement <br />4. 'trailing' |
+| replace                    | Replace a substring in a string (replace the first occurrence from the beginning) | 1. Original string <br />2. Substring to be replaced <br />3. String used for replacement <br />4. 'leading' |
+| regex_match                | Check if a string matches a regular expression               | 1. Original string <br />2. Regular expression               |
+| regex_replace              | Replace substrings in a string that match a regular expression | 1. Original string <br />2. Regular expression <br />3. String used for replacement |
+| ascii                      | Return the ASCII code of a character                         | 1. Character                                                 |
+| find                       | Search and return a substring in a string (searching from the beginning) | 1. Original string <br />2. Substring to be found            |
+| find                       | Search and return a substring in a string (searching from the beginning) | 1. Original string <br />2. Substring to be found <br />3. 'leading' |
 
 **Examples:**
 
@@ -186,6 +206,45 @@ substr('abcdef', 2, 3) = 'cde'
 split('a/b/ c', '/') = ['a', 'b', ' c']
 split('a/b/ c', '/', 'leading') = ['a', 'b/ c']
 split('a/b/ c', '/', 'trailing') = ['a/b', ' c']
+
+concat('a', '/bc') = 'a/bc'
+'a' + '/bc' = 'a/bc'
+
+tokens(' a/b/ c', '/') = [' a', 'b', ' c']
+tokens(' a/b/ c', '/ ') = ['a', 'b', 'c']
+tokens(' a/b/ c\n', '/ ') = ['a', 'b', 'c\n']
+tokens(' a/b/ c\n', '/ ', 'nocrlf') = ['a', 'b', 'c']
+tokens(' a/b/ c\r\n', '/ ', 'nocrlf') = ['a', 'b', 'c']
+
+sprintf('hello, ~s!', 'steve') = 'hello, steve!'
+sprintf('count: ~p~n', 100) = 'count: 100\n'
+
+pad('abc', 5) = 'abc  '
+pad('abc', 5, 'trailing') = 'abc  '
+pad('abc', 5, 'both') = ' abc '
+pad('abc', 5, 'leading') = '  abc'
+pad('abc', 5, 'trailing', '*') = 'abc**'
+pad('abc', 5, 'trailing', '*#') = 'abc*#*#'
+pad('abc', 5, 'both', '*') = '*abc*'
+pad('abc', 5, 'both', '*#') = '*#abc*#'
+pad('abc', 5, 'leading', '*') = '**abc'
+pad('abc', 5, 'leading', '*#') = '*#*#abc'
+
+replace('ababef', 'ab', 'cd') = 'cdcdef'
+replace('ababef', 'ab', 'cd', 'all') = 'cdcdef'
+replace('ababef', 'ab', 'cd', 'trailing') = 'abcdef'
+replace('ababef', 'ab', 'cd', 'leading') = 'cdabef'
+
+regex_match('abc123', '[a-zA-Z1-9]*') = true
+
+regex_replace('ab1cd3ef', '[1-9]', '[&]') = 'ab[1]cd[3]ef'
+regex_replace('ccefacef', 'c+', ':') = ':efa:ef'
+
+ascii('a') = 97
+
+find('eeabcabcee', 'abc') = 'abcabcee'
+find('eeabcabcee', 'abc', 'leading') = 'abcabcee'
+find('eeabcabcee', 'abc', 'trailing') = 'abcee'
 ```
 
 ## Map Functions
