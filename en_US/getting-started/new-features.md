@@ -2,6 +2,80 @@
 
 This section lists the new features introduced in EMQX 5.0.
 
+{% emqxee %}
+
+## Hot Upgrades
+
+Starting from EMQX Enterprise Edition 5.1.0, EMQX introduces the hot upgrade feature, allowing you to upgrade to newer versions of EMQX without interrupting the service.
+
+This means you can smoothly update EMQX to a higher version while keeping your applications running continuously without any downtime. This feature provides greater flexibility and reliability to meet your system upgrade needs.
+
+{% endemqxee %}
+
+## File Transfer over MQTT 
+
+EMQX 5.1.0 introduces File Transfer over MQTT, which supports file transfer using the MQTT protocol.
+
+This feature is implemented based on the extended implementation of the standard MQTT protocol, allowing integration with existing clients and applications without modification. Clients can send file segments to specific topics using the MQTT protocol. After the transfer is complete, the server merges the file segments and saves them to local disk or exports them to object storage compatible with the S3 protocol.
+
+Compared to HTTP/FTP protocols, MQTT has the advantages of low bandwidth consumption and minimal resource utilization, enabling fast and efficient file transfer. The unified IoT data channel also simplifies system architecture, reducing application complexity and maintenance costs.
+
+Get started with [File Transfer over MQTT](../file-transfer/introduction.md) now.
+
+## Backup and Restore
+
+EMQX 5.1.0 introduces a set of command-line tools for backup and restore, allowing you to export data and configuration files from the built-in database as a compressed package and restore them to a new cluster.
+
+Create a backup:
+
+```bash
+$ ./bin/emqx ctl data export
+...
+Data has been successfully exported to data/backup/emqx-export-2023-06-21-14-07-31.592.tar.gz.
+```
+
+Restore a backup:
+
+```bash
+./bin/emqx ctl data import <File>
+```
+
+Try [Backup and Restore](../operations/backup-restore.md) now.
+
+## CRL/OCPP Stapling
+
+{% emqxce %}
+
+Starting from version 5.0.22, EMQX supports CRL/OCSP Stapling check for MQTT SSL listeners.
+
+{% endemqxce %}
+
+{% emqxee %}
+
+Starting from version 5.0.3, EMQX supports CRL/OCSP Stapling check for MQTT SSL listeners.
+
+{% endemqxee %}
+
+Previously, EMQX provided SSL/TLS support, allowing users to use X.509 certificates for client access authentication and secure communication.
+
+CRL and OCSP Stapling are crucial for revoking certificates in the event of private key leakage, certificate information errors, or the need to permanently destroy devices to prevent unauthorized use. With CRL and OCSP Stapling, you can control the validity of each certificate, revoke illegal client certificates in a timely manner, and provide flexible and high-level security for your IoT applications.
+
+Get started with [CRL Check](../network/crl.md) and [OCSP Stapling](../network/ocsp.md) now.
+
+{% emqxee %}
+
+## Node Evacuation and Cluster Load Rebalancing
+
+Starting from version 5.0.4, EMQX supports node evacuation and cluster load rebalancing.
+
+This feature allows you to redistribute connections on each node when the cluster load is imbalanced. It also allows you to forcefully migrate connections and sessions to other nodes before shutting down a node for maintenance, avoiding session data loss.
+
+Node evacuation and cluster load rebalancing provide flexible and controllable operational practices for EMQX, greatly reducing the impact of load imbalance and maintenance work on business.
+
+Get started with [Node Evacuation and Cluster Load Rebalancing](../deploy/cluster/rebalancing.md) now.
+
+{% endemqxee %}
+
 ## Mria Cluster Architecture
 
 EMQX 5.0 adopts a new [Mria cluster architecture](../deploy/cluster/mria-introduction.md). With this Mria architecture, one EMQX cluster can support up to [100 million concurrent MQTT connections](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0), making it the world’s most scalable open-source MQTT broker.
