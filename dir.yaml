@@ -77,6 +77,7 @@
     - deploy/cluster/create-cluster
     - deploy/cluster/security
     - deploy/cluster/lb
+    - deploy/cluster/rebalancing
     - title_en: Performance and Tuning
       title_cn: 性能与调优
       path: performance/overview
@@ -195,6 +196,7 @@
     - data-integration/data-bridge-webhook
     - data-integration/data-bridge-mqtt
     - data-integration/data-bridge-kafka
+    - data-integration/data-bridge-pulsar
     - data-integration/data-bridge-influxdb
     - data-integration/data-bridge-mysql
     - data-integration/data-bridge-redis
@@ -206,18 +208,25 @@
     - data-integration/data-bridge-cassa
     - data-integration/data-bridge-tdengine
     - data-integration/data-bridge-rocketmq
+    - data-integration/data-bridge-oracle
     - data-integration/data-bridge-sqlserver
+    - data-integration/data-bridge-iotdb
+    - data-integration/data-bridge-opents
+    - data-integration/data-bridge-rabbitmq
 
     # TODO
     # - title_en: Examples and Tutorials
     #   title_cn: 示例和教程
     #   children:
     #     - data-integration/rule-configs
-    # - title_en: Schema Registry
-    #   title_cn: Schema 注册
-    #   edition: ee
-    #   children:
-    #     - data-integration/schema-registry
+
+- title_en: Schema Registry
+  title_cn: 编解码
+  path: data-integration/schema-registry
+  edition: ee
+  children:
+    - data-integration/schema-registry-example-avro
+    - data-integration/schema-registry-example-protobuf
 
 - title_en: Network and TLS
   title_cn: 网络与 TLS
@@ -225,6 +234,9 @@
   children:
     - network/emqx-mqtt-tls
     - network/mqtt-client-tls
+    - network/psk-authentication
+    - network/tls-certificate
+    # - network/crl-and-ocsp-stapling
     - network/crl
     - network/ocsp
     - title_en: GMSSL
@@ -393,7 +405,7 @@
     - observability/tracer
     - observability/mqtt-system-topics
     - observability/prometheus
-    
+
 
 ## Device connectivity
 

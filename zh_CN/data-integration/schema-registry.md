@@ -1,37 +1,24 @@
-# 编解码（Schema Registry）介绍
+# 编解码
 
 物联网设备终端种类繁杂，各厂商使用的编码格式各异，所以在接入物联网平台的时候就产生了统一数据格式的需求，以便平台之上的应用进行设备管理。
 
 Schema Registry 管理编解码使用的 Schema、处理编码或解码请求并返回结果。Schema Registry 配合规则引擎，可适配各种场景的设备接入和规则设计。
 
-EMQX Schema Registry 目前可支持三种格式的编解码：[Avro](https://avro.apache.org)，[Protobuf](https://developers.google.com/protocol-buffers/)，以及自定义编码。其中 
-Avro 和 Protobuf 是依赖 Schema 的数据格式，编码后的数据为二进制，解码后为 Map 格式。解码后的数据可直接被规则引擎和其他插件使用。用户自定义的 (3rd-party)编解码服务通过 HTTP 或 GRPC 回调的方式，进行更加贴近业务需求的编解码。
-
-::: tip
-Schema Registry 为 Avro 和 Protobuf 等内置编码格式维护 Schema 文本，但对于自定义编解码
-(3rd-party) 格式，如需要，Schema 文本需由编解码服务自己维护
-:::
-
-## 数据格式
+EMQX Schema Registry 目前可支持两种格式的编解码：[Avro](https://avro.apache.org) 和 [Protobuf](https://developers.google.com/protocol-buffers/)。Avro 和 Protobuf 是依赖 Schema 的数据格式，编码后的数据为二进制，解码后为 [Map 格式](#规则引擎内部数据格式-map)。解码后的数据可直接被规则引擎和其他插件使用。Schema Registry 为 Avro 和 Protobuf 等内置编码格式维护 Schema 文本。
 
 下图展示了 Schema Registry 的一个应用案例。多个设备上报不同格式的数据，经过 Schema Registry 解码之后，变为统一的内部格式，然后转发给后台应用。
 
-![schema-registry](./assets/schema-registry.png)
-
-### 二进制格式支持
-
-Schema Registry 数据格式包括 [Avro](https://avro.apache.org) 和 [Protobuf](https://developers.google.com/protocol-buffers/)。Avro 和 Protobuf 是依赖 Schema 的数据格式，编码后的数据为二进制，使用 Schema Registry 解码后的内部数据格式(Map，稍后讲解) 可直接被规则引擎和其他插件使用。此外 Schema Registry 支持用户自定义的 (3rd-party) 编解码服务，通过 HTTP 或 GRPC 回调的方式，进行更加贴近业务需求的编解码。
+<img src="./assets/schema-registry.png" alt="schema-registry" style="zoom:67%;" />
 
 ## 架构设计
 
-Schema Registry 为 Avro 和 Protobuf 等内置编码格式维护 Schema 文本，但对于自定义编解码 (3rd-party) 格式，如需要 Schema，Schema 文本需由编解码服务自己维护。Schema API 提供了通过 Schema Name 的添加、查询和删除操作。
+Schema Registry 既可以解码，也可以编码。Schema Registry 为 Avro 和 Protobuf 内置编码格式维护 Schema 文本。Schema API 提供了通过 Schema Name 的添加、查询和删除操作，因此编码和解码时需要指定 Schema Name。
 
-Schema Registry 既可以解码，也可以编码。编码和解码时需要指定 Schema Name。
+![schema_registry1](./assets/schema_registry1.svg)
 
-![architecture](./assets/arch.png)
+常见的使用案例是，使用规则引擎来调用 Schema Registry 提供的编码和解码接口，然后将编码或解码后的数据作为后续动作的输入。
 
-
-编码调用示例：参数为 Schema
+编码调用示例：
 
 ```c
 schema_encode(SchemaName, Data) -> RawData
@@ -43,7 +30,11 @@ schema_encode(SchemaName, Data) -> RawData
 schema_decode(SchemaName, RawData) -> Data
 ```
 
-常见的使用案例是，使用规则引擎来调用 Schema Registry 提供的编码和解码接口，然后将编码或解码后的数据作为后续动作的输入。
+当对 JSON 格式的 MQTT 消息进行编码时，在用 schema 编码之前，您也需要用 `json_decode` 先对其进行解码，使它变为规则引擎内部数据格式 (Map)，示例如下：
+
+```erlang
+schema_encode(SchemaName, json_decode(Data))
+```
 
 ## 编解码 + 规则引擎
 
@@ -51,7 +42,7 @@ EMQX 的消息处理层面可分为消息路由(Messaging)、规则引擎(Rule E
 
 EMQX 的 PUB/SUB 系统将消息路由到指定的主题。规则引擎可以灵活地配置数据的业务规则，按规则匹配消息，然后指定相应动作。数据格式转换发生在规则匹配的过程之前，先将数据转换为可参与规则匹配的 Map 格式，然后进行匹配。
 
-![SchemaAndRuleEngine](./assets/SchemaAndRuleEngine.png)
+<img src="./assets/SchemaAndRuleEngine.png" alt="SchemaAndRuleEngine" style="zoom:67%;" />
 
 ### 规则引擎内部数据格式(Map)
 

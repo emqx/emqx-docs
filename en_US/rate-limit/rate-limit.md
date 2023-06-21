@@ -1,99 +1,46 @@
 # Rate limit
 
-EMQX can specify the limit on access speed and message speed, this is a backpressure scheme that avoids system overload from the entrance and guarantees system stability and predictable throughput.
+EMQX allows for specifying limits on connection speed and messaging speed, using a backpressure scheme that avoids system overload at the entry point and guarantees system stability with predictable throughput.
 
-In 5.0 we introduced a new rate limiter which based on the hierarchical token bucket algorithm, it can flexibly and accurately control the usage rate of the corresponding resources in the EMQX node.
+## Limiter Types
 
-## Terminologies
+EMQX uses the following types of limiters to specify the rate limits:
 
-### Resource
+| Type          | Description                               | Post-Overload Behavior          |
+| :------------ | :---------------------------------------- | :------------------------------ |
+| bytes_rate    | Incoming message size in bytes per second per client | Pause receiving client messages |
+| messages_rate | Incoming messages per second per client             | Pause receiving client messages |
+| max_conn_rate | Connections per second per listener                     | Pause receiving new connections |
 
-The system currently supports rate control services for the following resources:
-
-| Type            | Description                                           | Post-Overload Behavior          |
-|:----------------|:------------------------------------------------------|:--------------------------------|
-| bytes_in        | Incoming message size in bytes per second             | Pause receiving client messages |
-| message_in      | Incoming messages per second                          | Pause receiving client messages |
-| connection      | Connections per second                                | Pause for new connections       |
-| message_routing | The number of messages deliver by the session per second | Pause session delivery       |
-
-### Rate Control Hierarchy
-
-- **Node level:** resource rate control on the current EMQX node
-- **Listener level:** The aggregate rate limit of all connections (sessions) coming in through a same listener
-- **Connection level:** rate control of resources on a single connection (session)
-
-### Hierarchy
-
-The hierarchical relationship is shown in the figure:
-
- <img src="./assets/limiter_hierarchy.png" alt="image" style="zoom:67%;" />
-
-### Wooden Barrel Effect
-  No matter how much the rate of the lower layer is configured, it is limited by the actual rate of the upper layer, and it is guaranteed that it will never exceed the actual rate limit of the upper layer
-
-## Useage
-
-### Connection Level
-  The connection-level rate limit is for a single connection. Assuming that the inflow rate of each session accessed through port 1883 needs to be limited to 100 messages per second, you only need to modify the configuration of port 1883 in emqx.conf as follows:
+Limiter can work on the listener level. For example, to set a Limiter for the default TCP listener, You can configure it in emqx.conf as follows:
 
 ```bash
 listeners.tcp.default {
   bind = "0.0.0.0:1883"
-  max_connections = 1024000
-  limiter.client.message_in {
-  rate = "100/s"
-  capacity = 100
-  }
+  max_conn_rate = "1000/s"
+  messages_rate = "1000/s"
+  bytes_rate = "1000MB/s"
 }
 ```
 
-All options supported at this level are as follows:
+## Rate Unit
 
-| Options        | Type     | Default  | Description                                                                                                                                             |
-|:---------------|:---------|:---------|:--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| rate           | int      | infinity | token generation rate                                                                                                                                   |
-| initial        | int      | 0        | initial number of tokens                                                                                                                                |
-| capacity       | int      | infinity | maximum number of tokens                                                                                                                                |
-| low_watermark  | int      | 0        | The low water mark, when the number of tokens is lower than this number, even if the token request is successful, the rate also will be slightly limited |
-| divisible      | bool     | false    | Whether the token request can be split into multiple requests when the number of tokens is not enough                                                   |
-| max_retry_time | duration | 10s      | The maximum attempt time for token request, if no token is obtained after this time, the request fails                                                  |
+### Time Unit
 
-### Listener Level
-  The listener-level  limite  the total rate limit of all sessions connected through a same listener. For example, if you want the sum of  messages in  per second does not exceed 100 of all sessions that connected through port 1883,  you can modify the configuration as follows:
+The supported time unit in the rate value could be:
 
-```bash
-listeners.tcp.default {
-  bind = "0.0.0.0:1883"
-  max_connections = 1024000
-  limiter.message_in {
-  rate = "100/s"
-  capacity = 100
-  }
-}
-```
+- **s** :: Second
+- **m** :: Minute
+- **h** :: Hour
+- **d** :: Day
 
-All options supported at this level are as follows:
+The time unit also can be an interval value, like `1000/10s` means setting the limit to 1000 per every 10 seconds.
 
-| Options  | Type | Default  | Description              |
-|:---------|:-----|:---------|:-------------------------|
-| rate     | int  | infinity | token generation rate    |
-| initial  | int  | 0        | initial number of tokens |
-| capacity | int  | infinity | maximum number of tokens |
+### Size Unit
 
-### Node Level
+The supported size unit in the rate value could be:
 
-The node-level limit  the resource consumption speed of the current node. If you want to limit the number of messages flowing in the current node per second to no more than 100, you can add the following configuration to emqx.conf:
+- **KB** :: Kilobyte
+- **MB** :: Megabyte
+- **GB** :: Gigabyte
 
-```bash
-limiter.message_in.rate = "100/s"
-```
-
-**Note:** Only listeners with rate limiting configured will be affected by node-level settings
-
-All options supported at this level are as follows:
-
-| Options | Type | Default  | Description                                                                                                                                                    |
-|:--------|:-----|:---------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| rate    | int  | infinity | token generation rate                                                                                                                                          |
-| burst   | int  | 0        | When overloaded (the consumption rate of tokens is greater than the generation rate), burst will be used as an additional generation rate to supplement tokens |

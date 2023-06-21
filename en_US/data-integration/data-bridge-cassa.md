@@ -79,7 +79,7 @@ docker exec -it cassa cqlsh "-e \
 
 5. Input the connection information. Input `127.0.0.1:9042` for the **Servers**, `mqtt` as the **Keyspace**, and leave others as default.
 
-6. Configure the **CQL template** to save `topic`, `id`, `clientid`, `qos`, `palyload`, `timestamp`, and `flags.retain` to Cassandra. This template will be executed via Cassandra Query Language, and the sample code is as follows:
+6. Configure the **CQL template** to save `topic`, `id`, `clientid`, `qos`, `palyload` and `timestamp` to Cassandra. This template will be executed via Cassandra Query Language, and the sample code is as follows:
 
    ```sql
    insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})

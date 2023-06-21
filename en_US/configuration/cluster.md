@@ -54,7 +54,7 @@ Where,
 | Configuration Item       | Description                                                  | Default Value | Optional Values                                   |
 | ------------------------ | ------------------------------------------------------------ | ------------- | ------------------------------------------------- |
 | `name`                   | This sets the name of the cluster                            | `emqxcl`      |                                                   |
-| `discovery_strategy`     | This sets the node discovery strategy for the cluster.       | `manual`      | `manual`, `static`, `mcast`, `DNS`, `etcd`, `k8s` |
+| `discovery_strategy`     | This sets the node discovery strategy for the cluster.       | `manual`      | `manual`, `static`, `DNS`, `etcd`, `k8s`          |
 | `core_nodes`             | This sets the core nodes that this replicant code will connect to.<br>Multiple nodes can be added here, separated with a `,` | --            | --                                                |
 | `driver`                 | This sets the transport protocol for inter-EMQX node communication. | `tcp`         | `tcp`, `SSL`                                      |
 | `ssl_options`            | This sets the SSL/TLS configuration options for the listener, it has three properties | --            | --                                                |

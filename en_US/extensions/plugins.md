@@ -1,12 +1,13 @@
 # Plugins
 
-EMQX allows users to customize the business logic or implement other protocols using plugins. In this chapter, you will learn how to develop plugins.
+EMQX allows users to customize the business logic or implement other protocols using plugins written in Erlang. In this chapter, you will learn how to develop such a custom plugin.
 
 The basic process of plugin development and operation is as follows:
 
-- Generate the corresponding plugin tar.gz package through the plugin template provided by EMQX.
-- Install the plugin packages via Dashboard or CLI.
-- Start/stop/uninstall plugins via Dashboard or CLI.
+- Download and install our [rebar3 emqx-plugin template](https://github.com/emqx/emqx-plugin-template).
+- Generate the corresponding plugin tarball using the plugin template provided by EMQX.
+- Install the plugin package via Dashboard or CLI.
+- Start/stop/uninstall your plugin via Dashboard or CLI.
 
 :::tip
 Prerequisites
@@ -16,52 +17,70 @@ Prerequisites
 
 ## Develop EMQX Plugins
 
-EMQX offers an [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template), which allows you to further customize your plugins. In the section below, we will use the access control plugin as an example to give you a step-by-step guide to plugin development. 
+EMQX offers an [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template) to create a custom emqx-plugin project. In the section below, we will create a custom access control plugin as an example to give you a step-by-step guide to plugin development.
 
-**Download the plugin template**
+### Download, install and use the rebar3 plugin template
 
-To download the  [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template), run: 
+1. Download the  [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template), run:
 
-```
-git clone https://github.com/emqx/emqx-plugin-template
-```
-
-As we can see from the directory structure, this is a standard Erlang application. 
-
-```sh
+```shell
+$ mkdir -p ~/.config/rebar3/templates
+$ pushd ~/.config/rebar3/templates
 $ git clone https://github.com/emqx/emqx-plugin-template
-$ ls
-LICENSE                  _build                   get-rebar3
-Makefile                 check-vsn.sh             priv
-README.md                rebar.config             src
+$ popd
 ```
 
-**Test the compile environment**
+2. Now create your custom plugin from the template
 
-Run `make rel` to test whether the plugin can be successfully compiled and packed. No coding is needed. 
+```shell
+$ rebar3 new emqx-plugin my_emqx_plugin
+```
 
-The plugins under development need to use the functions of the main EMQX, so the program needs first to download the dependency and then compile the main project. Therefore, the first compilation usually takes a long time to complete.
+This will create a standard Erlang application with `emqx` as a dependency. Have a look at `rebar.config` and tune to your needs.
+
+```shell
+$ tree my_emqx_plugin
+my_emqx_plugin
+├── License
+├── Makefile
+├── README.md
+├── check-svn.sh
+├── erlang_ls.config
+├── get-rebar3
+├── priv
+│   └── config.hocon
+├── rebar.config
+└── src
+    ├── emqx_cli_demo.erl
+    ├── my_emqx_plugin.app.src
+    ├── my_emqx_plugin.erl
+    ├── my_emqx_plugin_app.erl
+    └── my_emqx_plugin_sup.erl
+
+3 directories, 13 files
+```
+
+It also ships an example module on how to add your own custom `emqx ctl` commands (`emqx_cli_demo`).
+
+**Note** Since the example depends on `emqx` this plugin needs a customized version of `rebar3`, which will be installed using the provided `get-rebar3` script.
+
+### Test your development environment
 
 {% emqxce %}
-For the compiling environment, see [Install from Source code](../deploy/install-source.md).
+:::tip
+For a working development environment, see [Install from Source code](../deploy/install-source.md).
+:::
 {% endemqxce %}
 
-**Mount the hook functions**
+Run `make rel` to test whether the plugin can be successfully compiled and packaged. No coding is needed at this point.
 
-Below is the directory structure:
+As the example plugin relies on the EMQX main application, it needs to be downloaded along with its dependencies and subsequently compiled as part of the main project. Please note that the compilation process may take a significant amount of time to finish.
 
-```sh
-> tree src/
-src/
-├── emqx_cli_demo.erl
-├── emqx_plugin_template.app.src
-├─ emqx_plugin_template.erl
-├── emqx_plugin_template_app.erl
-└── emqx_plugin_template_sup.erl
-```
+### Customize the example project
 
-`emqx_plugins_template_app.erl` is the initiation portal of the application, where you can create your own supervision tree or load EMQX's hook functions. This template contains all hook functions, please remove the unnecessary hooks before using it.
-In this example, we only need 2 hooks for authentication and access control, so we can modify `emqx_plugins_template:load/1` as follows:
+Now that things are working, you can start customizing the project to suit your needs. We've provided a core module that registers all currently [known hooks](https://www.emqx.io/docs/en/v5.0/extensions/hooks.html). This code can be found in `src/my_emqx_plugin.erl`. You will want to remove all unused hooks and then fill in the callbacks for the remaining ones with your own custom code.
+
+In the example below, we only need 2 hooks for authentication and access control, so we modify `my_emqx_plugin:load/1` as follows:
 
 ```erlang
 load(Env) ->
@@ -70,11 +89,11 @@ load(Env) ->
   ok.
 ```
 
-We will use `on_client_authenticate/3` for client authentication and `on_client_authorize/5`  for access control. 
+We will use `on_client_authenticate/3` for client authentication and `on_client_authorize/5`  for access control.
 
 As one hook function may be mounted both by EMQX and customized plugins, we also need to specify the execution order when mounting it to the plugin.  `HP_HIGHEST` specifies that the current hook function has the highest priority and is executed first.
 
-**Customize access control code** 
+#### Customize access control code
 
 ```erlang
 %% Only allow connections with clientID name matching any of the following characters: A-Z, a-z, 0-9, and underscore.
@@ -96,8 +115,8 @@ In the above code example, we only allow clients with clientID matching the spec
 
 :::tip
 
-1. Be sure to set `authorization.no_match` to `deny` in the configuration first, that is, EMQX will reject any unauthorized connection requests. 
-2. In this example, we illustrate how to customize an access control plugin, you can also [set similar authorization rules based on File](../access-control/authz/file.md). 
+1. Be sure to set `authorization.no_match` to `deny` in the configuration first, that is, EMQX will reject any unauthorized connection requests.
+2. In this example, we illustrate how to customize an access control plugin, you can also [set similar authorization rules based on File](../access-control/authz/file.md).
 
 :::
 
@@ -106,54 +125,59 @@ In the above code example, we only allow clients with clientID matching the spec
 Modify the version information of the plugin via `rebar.config`:
 
 ```erlang
-{relx, [ {release, {emqx_plugin_template, "5.0.0-rc.3"}, [emqx_plugin_template, map_sets]}
-         , {dev_mode, false}
-         , {include_erts, false}
-         ]}.
+{relx, [ {release, {my_emqx_plugin, "1.0.0"}, %% this is the release version, different from app vsn in .app file
+            [ my_emqx_plugin
+            , map_sets
+            ]}
+       , {dev_mode, false}
+       , {include_erts, false}
+       ]}.
+
   %% Additional info about the plugin
   {emqx_plugrel,
-      [ {authors, ["EMQX Team"]}
-      , {builder,
-          [ {name, "EMQX Team"}
-          , {contact, "emqx-support@emqx.io"}
-          , {website, "www.emqx.com"}
-          ]}
-      , {repo, "https://github.com/emqx/emqx-plugin-template"}
-      , {functionality, ["Demo"]}
-      , {compatibility,
-          [ {emqx, "~> 5.0"}
-          ]}
-      , {description, "This is a demo plugin"}
-      ]
-  }.
+    [ {authors, ["Your Name"]}
+    , {builder,
+        [ {name, "Your Name"}
+        , {contact, "your_email@example.cpm"}
+        , {website, "http://example.com"}
+        ]}
+    , {repo, "https://github.com/emqx/emqx-plugin-template"}
+    , {functionality, ["Demo"]}
+    , {compatibility,
+        [ {emqx, "~> 5.0"}
+        ]}
+    , {description, "Another amazing EMQX plugin"}
+    ]
+}..
 ```
-Rerun the packing command:
-```sh
+
+Now rerun the release command:
+
+```shell
 make rel
 ...
-===> Release successfully assembled: _build/default/rel/emqx_plugin_template
-===> [emqx_plugrel] creating _build/default/emqx_plugrel/emqx_plugin_template-5.0.0-rc.3.tar.gz  
+===> Release successfully assembled: _build/default/rel/my_emqx_plugin
+===> [emqx_plugrel] creating _build/default/emqx_plugrel/my_emqx_plugin-1.0.0.tar.gz
 ```
 
-The command will prompt to generate the plugin  `pluginname-version.tar.gz`.
+This created a new EMQX plugin tarball  `my_emqx_plugin-1.0.0.tar.gz` that you can now upload and install to your running EMQX cluster.
 
-**Install/launch the plugin**
+## Install/launch the plugin
 
-Use CLI to install the compiled package: 
+Use CLI to install the compiled package:
 
 ```bash
-./bin/emqx_ctl plugins install {pluginName}
+./bin/emqx ctl plugins install {pluginName}
 ```
 
-**Uninstall the plugin**
+## Uninstall the plugin
 
 When you don't need the plugin, you can easily uninstall it with CLI:
 
 ```bash
-./bin/emqx_ctl plugins uninstall {pluginName}
+./bin/emqx ctl plugins uninstall {pluginName}
 ```
 
 {% emqxee %}
-Note: The plugins need to be reinstalled after hot upgrades.
-
+**Note**: Plugins need to be reinstalled after hot upgrades.
 {% endemqxee %}
