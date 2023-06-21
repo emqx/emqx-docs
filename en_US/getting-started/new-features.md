@@ -8,7 +8,7 @@ This section lists the new features introduced in EMQX 5.0.
 
 Starting from EMQX Enterprise 5.1.0, EMQX introduces the hot upgrade feature, allowing you to upgrade to newer versions of EMQX without interrupting the service.
 
-This means you can smoothly update EMQX to a higher version while keeping your applications running continuously without any downtime. This feature provides greater flexibility and reliability to meet your system upgrade needs.
+This means you can smoothly update EMQX to a newer version while keeping your applications running continuously without any downtime. This feature provides greater flexibility and reliability to meet your system upgrade needs.
 
 {% endemqxee %}
 
