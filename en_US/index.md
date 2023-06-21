@@ -12,13 +12,13 @@ With a built-in powerful SQL-based [rules engine](https://www.emqx.com/en/soluti
 
 EMQX has been adopted by over 20,000 enterprise users, connecting more than 100 million IoT devices. Over 400 customers, including renowned brands like HPE, VMware, Verifone, SAIC Volkswagen, and Ericsson, trust EMQX for their mission-critical IoT scenarios. 
 
-{% endmeqxce %}
+{% endemqxce %}
 
 {% emqxee %}
 
 EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platform to connect, move and process your data in business-critical scenarios for the IoT era.
 
-<img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/assets/EMQX-enterprise.png" alt="EMQX-enterprise" style="zoom:50%;" />
+<img src="./assets/EMQX-enterprise.png" alt="EMQX-enterprise" style="zoom:50%;" />
 
 
 
@@ -74,15 +74,6 @@ EMQX can be easily deployed on-premises or in public clouds using **Kubernetes O
 
 EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud Serverless and EMQX Dedicated Cloud) and two self-hosted options (EMQX Open Source and EMQX Enterprise). To help you choose the best deployment option for your requirements, this page lists a comparison of feature support across different deployment types.
 
-<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
-.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
-</style>
 <table class="tg">
 <thead>
   <tr>
@@ -269,6 +260,7 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
   </tr>
 </tbody>
 </table>
+
 
 {% endemqxce %}
 

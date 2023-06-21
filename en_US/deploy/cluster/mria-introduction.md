@@ -29,10 +29,6 @@ cluster {
 }
 ```
 
-<!---cluster.core_nodes:
-<!--v5.0.23 之前仅支持 "emqx1,emqx2" ["emqx1@192.168.0.1", "emqx2@192.168.0.2", ...]-->
-<!--v5.0.23 之后 ["emqx1@192.168.0.1", "emqx2@192.168.0.2", ...]和"emqx1,emqx2" 都支持-->
-
 ## Monitor and Debug
 
 <!-- TODO 后续补充数值类型 Gauge or Counter -->
