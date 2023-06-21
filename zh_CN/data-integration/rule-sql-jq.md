@@ -23,21 +23,21 @@ JQ 同时也是一个图灵完备的编程语言，[JQ 官方文档](https://ste
 简单处理示例：
 
 ```SQL
-jq('.', '{"temprature": 10}') =
-[json_decode('{"temprature": 10}')]
+jq('.', '{"temperature": 10}') =
+[json_decode('{"temperature": 10}')]
 
-jq('.', json_decode('{"temprature": 10}')) =
-[json_decode('{"temprature": 10}')]
+jq('.', json_decode('{"temperature": 10}')) =
+[json_decode('{"temperature": 10}')]
 
-jq('.temprature', '{"temprature": 10}') =
+jq('.temperature', '{"temperature": 10}') =
 [10]
 
-jq('{temprature_C:.temprature,
-     temprature_F: (.temprature * 1.8 + 32)}',
-   '{"temprature": 10}') =
-[json_decode('{"temprature_C": 10, "temprature_F": 50}')]
+jq('{temperature_C:.temperature,
+     temperature_F: (.temperature * 1.8 + 32)}',
+   '{"temperature": 10}') =
+[json_decode('{"temperature_C": 10, "temperature_F": 50}')]
 
-jq('.temprature,(.temprature * 1.8 + 32)', '{"temprature": 10}') =
+jq('.temperature,(.temperature * 1.8 + 32)', '{"temperature": 10}') =
 [10, 50]
 ```
 
