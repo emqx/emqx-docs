@@ -22,6 +22,7 @@
 - title_en: Get Started
   title_cn: 快速开始
   path: getting-started/getting-started
+  collapsed: true
   children:
     - getting-started/new-features
     - getting-started/restrictions
@@ -31,6 +32,7 @@
 - title_en: Installation
   title_cn: 安装部署
   path: deploy/install
+  collapsed: true
   children:
     - deploy/install-docker
     - deploy/install-debian
@@ -72,6 +74,7 @@
 - title_en: Clustering
   title_cn: 构建集群
   path: deploy/cluster/introduction
+  collapsed: true
   children:
     - deploy/cluster/mria-introduction
     - deploy/cluster/create-cluster
@@ -88,6 +91,7 @@
 - title_en: Access Control
   title_cn: 访问控制
   path: access-control/overview
+  collapsed: true
   children:
     - title_en: Authentication
       title_cn: 认证
@@ -123,6 +127,7 @@
 - title_en: Publish/Subscribe
   title_cn: 发布订阅
   path: messaging/introduction
+  collapsed: true
   children:
     - messaging/mqtt-concepts
     - title_en: Test with MQTT Clients
@@ -151,6 +156,7 @@
 - title_en: Client SDK
   title_cn: 客户端 SDK
   path: connect-emqx/introduction
+  collapsed: true
   children:
     - connect-emqx/c
     - connect-emqx/java
@@ -167,6 +173,7 @@
 - title_en: MQTT over QUIC
   title_cn: MQTT over QUIC
   path: mqtt-over-quic/introduction
+  collapsed: true
   children:
     - mqtt-over-quic/features-mqtt-over-quic
     - mqtt-over-quic/getting-started
@@ -177,6 +184,7 @@
 - title_en: File Transfer over MQTT
   title_cn: 基于 MQTT 的文件传输
   path: file-transfer/introduction
+  collapsed: true
   children:
     - file-transfer/quick-start
     - file-transfer/client
@@ -188,6 +196,7 @@
 - title_en: Rules
   title_cn: 规则引擎
   path: data-integration/rules
+  collapsed: true
   children:
     - title_en: Create Rules
       title_cn: 创建规则
@@ -202,6 +211,7 @@
 - title_en: Data Integration
   title_cn: 数据集成
   path: data-integration/data-bridges
+  collapsed: true
   children:
     - data-integration/data-bridge-webhook
     - data-integration/data-bridge-mqtt
@@ -234,6 +244,7 @@
   title_cn: 编解码
   path: data-integration/schema-registry
   edition: ee
+  collapsed: true
   children:
     - data-integration/schema-registry-example-avro
     - data-integration/schema-registry-example-protobuf
@@ -241,6 +252,7 @@
 - title_en: Network and TLS
   title_cn: 网络与 TLS
   path: network/overview
+  collapsed: true
   children:
     - network/emqx-mqtt-tls
     - network/mqtt-client-tls
@@ -262,6 +274,7 @@
 - title_en: REST API
   title_cn: REST API
   path: admin/api
+  collapsed: true
   children:
     - title_en: API Docs
       title_cn: API 文档
@@ -289,6 +302,7 @@
 - title_en: Dashboard
   title_cn: Dashboard
   path: dashboard/introduction
+  collapsed: true
   children:
     - dashboard/dashboard
     - dashboard/connections/connections
@@ -323,6 +337,7 @@
 - title_en: Configuration
   title_cn: 配置文件参数
   path: configuration/configuration
+  collapsed: true
   children:
     - title_en: Cluster
       title_cn: Cluster
@@ -406,6 +421,7 @@
 - title_en: Logs and Observability
   title_cn: 日志及可观测性
   path: observability/overview
+  collapsed: true
   children:
     - observability/metrics-and-stats
     - observability/alarms
@@ -422,6 +438,7 @@
 - title_en: Multi-Protocol Gateway
   title_cn: 多协议网关
   path: gateway/gateway
+  collapsed: true
   children:
     - gateway/stomp
     - gateway/mqttsn
@@ -449,6 +466,7 @@
 - title_en: Plugin and Extension
   title_cn: 插件与扩展
   path: extensions/introduction
+  collapsed: true
   children:
     - extensions/hooks
     - extensions/plugins
@@ -459,6 +477,7 @@
 - title_en: MQTT Essentials
   title_cn: MQTT 协议
   path: mqtt/mqtt-specific
+  collapsed: true
   children:
     # - mqtt/mqtt-compliance
     - mqtt/mqtt-publish-and-subscribe
@@ -482,6 +501,7 @@
 - title_en: Design and Implementation
   title_cn: 设计与实现
   path: design/overview
+  collapsed: true
   children:
     - title_en: EMQX Clustering
       title_zh: EMQX 集群
