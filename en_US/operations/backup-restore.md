@@ -40,7 +40,7 @@ To restore the configuration file, you only need to place the backed-up configur
 
 ## Data Import and Export
 
-EMQX 5.1 introduces a user-friendly tool for data import and export. While similar to the one available in EMQX 4.x, it has several significant differences and is not compatible with it.
+EMQX 5.1 introduces a user-friendly command-line tool for data import and export. While similar to the one available in EMQX 4.x, it has several significant differences and is not compatible with it.
 
 In EMQX 4.x, a single JSON file was used to carry all the necessary data from both the EMQX configuration and the built-in database. However, in EMQX 5.1, an opaque compressed tar archive is used. This allows for more efficient and structured handling of potentially large amounts of user data.
 
