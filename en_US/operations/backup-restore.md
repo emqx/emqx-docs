@@ -4,45 +4,11 @@ EMQX adopts a distributed storage schema and also introduces a cluster transfer 
 
 This chapter will discuss how to backup your operating data and configuration files to prevent data losses in case of system malfunctions.
 
-## Configuration Files
-
-When EMQX is deployed with a deployment tool, the configuration center, or Git, these configurations will be automatically backed up, and no manual backup is needed.
-
-However, for the manually configured items, it is recommended to run a periodic backup. The configuration files may locate at:
-
-* `/etc/emqx`: when installed from RPM or DEB packages
-* `/opt/emqx/etc`: when running in docker container
-* `/path/to/install/dir/etc`: when directly extracted from zip package.
-
-Besides the `etc` directory, there are also some configuration-related files in the `data` directory. For details, see [Configuration file](../configuration/configuration.md).
-
-## Built-in Database
-
-By default, EMQX will use the built-in database for data storage, therefore you can back up the `mnesia` folder under `data`.
-
-<!-- TODO 功能完成后提供 -->
-
-Based on the installation mode, the file path could be:
-
-* `/var/lib/emqx/data`: when installed from RPM or DEB packages
-* `/opt/emqx/data`: when running in docker container
-* `./data`: when directly extracted from zip package.
-
-You can also specify the `data` directory location via `node.data_dir` or the `EMQX_NODE__DATA_DIR` environment variable.
-
-## Persisted Sessions
-
-Before EMQX 5.0, persistent sessions were stored in memory, and for the EMQX enterprise version, they are stored in an external database, so you cannot back up persistent sessions in EMQX.
-
-## Data Restore
-
-To restore the configuration file, you only need to place the backed-up configuration files and data in the corresponding directory before starting EMQX.
-
 ## Data Import and Export
 
 EMQX 5.1 introduces a user-friendly command-line tool for data import and export. While similar to the one available in EMQX 4.x, it has several significant differences and is not compatible with it.
 
-In EMQX 4.x, a single JSON file was used to carry all the necessary data from both the EMQX configuration and the built-in database. However, in EMQX 5.1, an opaque compressed tar archive is used. This allows for more efficient and structured handling of potentially large amounts of user data.
+In EMQX 4.x, a single JSON file was used to store all the necessary data from both the EMQX configuration and the built-in database. However, in EMQX 5.1, an opaque compressed tar archive is used. This allows for more efficient and structured handling of potentially large amounts of user data.
 
 The data supported for import and export in EMQX 5.1 is analogous to that of EMQX 4.x. It includes:
 
@@ -74,16 +40,20 @@ Data can be exported from any running cluster node.
 
 To import data, the EMQX node must be running, and certain conditions must be met for a successful import operation:
 
-* If [Core + Replicant](../deploy/cluster/mria-introduction.md#enable-core-replicant-mode) mode is enabled, the data import can only be initiated on core nodes. This does not affect the actual import behavior as the data will be copied to all cluster nodes, both core and replicant. Initiating the import on a core node ensures proper coordination of the operation.
+* If [Core + Replicant](../deploy/cluster/mria-introduction.md#enable-core-replicant-mode) mode is enabled, the data import can only be initiated on core nodes. This does not affect the actual import behavior as the data will be copied to all cluster nodes, both core and replicant. Initiating the import on a core node makes sure that data is imported correctly.
 * Data exported from EMQX Enterprise Edition cluster cannot be imported to EMQX Open Source Edition cluster.
 * The data file must not be renamed.
 
 If any of the above conditions are not satisfied, the import process will be aborted, and an appropriate error message will be displayed.
 
-During the data import operation, the data will either be inserted (if it was not present in the target EMQX cluster) or updated (in case of a conflict). The import process does not remove any existing data from the EMQX cluster.
+During the data import operation, the data will either be inserted (if it was not present in the target EMQX cluster) or updated (in case of a conflict) in EMQX. The import process does not remove any existing data from the EMQX cluster.
 
 ::: tip Warning
-In rare circumstances, the existing data may not be compatible with the imported data. For example, if the EMQX cluster uses the built-in database authentication mechanism with a 'suffix' salt position, and the imported data defines the same authentication source with a 'prefix' salt position, the old user credentials created before the import will no longer be operational. Therefore, importing data to a non-clean EMQX cluster may require extra caution.
+In rare circumstances, the existing data may not be compatible with the imported data. 
+
+For example, if the EMQX cluster uses the built-in database authentication mechanism with a 'suffix' salt position, and the imported data defines the same authentication source with a 'prefix' salt position, the old user credentials created before the import will no longer be operational. 
+
+Therefore, importing data to a non-clean EMQX cluster may require extra caution.
 :::
 
 ### Example
