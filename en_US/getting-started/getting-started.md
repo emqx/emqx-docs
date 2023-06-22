@@ -144,40 +144,40 @@ Container deployment is the quickest way to start exploring EMQX. In this sectio
 
 {% emqxce %}
 
-You can also install EMQX with zip/tar.gz files on a computer or VM, so you can easily adjust the configurations or run performance tuning. In this section, we will use [macOS](https://www.emqx.io/downloads?os=macOS) (macOS11 amd64) as an example to illustrate the operating steps.
+You can also install EMQX with zip/tar.gz files on a computer or VM, so you can easily adjust the configurations or run performance tuning. In this section, we will use [macOS](https://www.emqx.io/downloads?os=macOS) (macOS12 amd64) as an example to illustrate the operating steps.
 
 Note: Considering all the runtime dependencies, it is recommended to use zip/tar.gz files for testing and hot upgrades, and **NOT** recommended in a production environment. 
 
 1. To download the zip file, enter:
 
    ```bash
-   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-macos11-amd64.zip
+   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-macos12-amd64.zip
    ```
 
 2. To install EMQX, enter:
 
    ```bash
-   mkdir -p emqx && unzip emqx-@CE_VERSION@-macos11-amd64.zip -d emqx
+   mkdir -p emqx && unzip emqx-@CE_VERSION@-macos12-amd64.zip -d emqx
    ```
 
 {% endemqxce %}
 
 {% emqxee %}
 
-You can also install EMQX with zip/tar.gz files on a computer or VM, so you can easily adjust the configurations or run performance tuning. In this section, we will use [macOS](https://www.emqx.com/en/try?product=enterprise) (macOS11 amd64) as an example to illustrate the operating steps.
+You can also install EMQX with zip/tar.gz files on a computer or VM, so you can easily adjust the configurations or run performance tuning. In this section, we will use [macOS](https://www.emqx.com/en/try?product=enterprise) (macOS12 amd64) as an example to illustrate the operating steps.
 
 Note: Considering all the runtime dependencies, it is recommended to use zip/tar.gz files for testing and hot upgrades, and **NOT** recommended in a production environment.
 
 1. To download the zip file, enter:
 
    ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos11-amd64.zip
+   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-macos12-amd64.zip
    ```
 
 2. To install EMQX, enter:
 
    ```bash
-   mkdir -p emqx && unzip emqx-enterprise-5.0.0-macos11-amd64.zip -d emqx
+   mkdir -p emqx && unzip emqx-enterprise-@EE_VERSION@-macos12-amd64.zip -d emqx
    ```
 
 {% endemqxee %}
@@ -202,7 +202,7 @@ Note: Considering all the runtime dependencies, it is recommended to use zip/tar
    ./emqx/bin/emqx stop
    ```
 
-To uninstall EMQX after your testing, you only need to delete the EMQX folders. 
+To uninstall EMQX after your testing, simply delete the EMQX folder.
 
 :::
 
