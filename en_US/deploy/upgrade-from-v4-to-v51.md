@@ -1,7 +1,7 @@
 # Migrate from V4
 
 This section provides guidelines for migrating from EMQX 4.4 to 5.1 or newer.
-EMQX 5.1.0 is not backward compatible with 4.x in management APIs and clustering APIs. However, most of the functionality is not significantly changed.
+EMQX 5 is not backward compatible with 4.x in management APIs and clustering APIs. However, most of the functionality is not significantly changed.
 
 <!-- To learn about the new features we added to EMQX 5.1, check [New Features](../getting-started/new-features.md). -->
 
