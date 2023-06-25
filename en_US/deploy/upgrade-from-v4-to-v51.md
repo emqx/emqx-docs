@@ -141,7 +141,7 @@ Compatibility Notes:
 
 **Change of concept**
 
-Auth is renamed to **Authentication**, and ACL is renamed **Authorization**. Now they are independent of each other.
+Auth is referred to as **Authentication**, and ACL is also referred to as **Authorization**.
 
 **Data Migration**
 
