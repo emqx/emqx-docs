@@ -1,6 +1,6 @@
 # Ingest Data into Microsoft SQL Server
 
-EMQX supports integration with Microsoft SQL Server. You can save client messages and online/offline events to Microsoft SQL Server.
+EMQX supports integration with Microsoft SQL Server. You can save MQTT messages and client online/offline events to Microsoft SQL Server.
 
 {% emqxee %}
 

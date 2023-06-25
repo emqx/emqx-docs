@@ -1,6 +1,6 @@
 # Ingest Data into MySQL
 
-EMQX supports integration with MySQL. You can save client messages and events to MySQL, or record the online status or online/offline of clients by using events to trigger the data update or removal.
+EMQX supports integration with MySQL. You can save MQTT messages and client events to MySQL, or record the online status or online/offline of clients by using events to trigger the data update or removal.
 
 {% emqxce %}
 :::tip
