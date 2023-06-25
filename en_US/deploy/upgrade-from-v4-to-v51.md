@@ -402,7 +402,7 @@ Other status codes or request failure will be treated as `ignore`.
 
 Rule SQL is fully compatible with 4.x syntax, but the actions under the rule are split into built-in actions (republish, console) and data bridges (HTTP Server, MQTT Bridge).
 
-## WebHook
+## HTTP Server
 
 The WebHook plugin (emqx_web_hook) has been removed. Use the HTTP Server data bridge in Data Integration instead.
 
