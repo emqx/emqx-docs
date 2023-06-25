@@ -188,7 +188,7 @@ The `allow_anonymous` configuration is now deleted. All clients are allowed to c
 
 After traversing the configured authentication chain, if none of the authenticator in the chain can decide that this client is allowed to connect, then the connection is rejected.
 
-The `bypass_auth_plugins` configuration is also deleted. When one wants to allow all clients to connect without authentication, they may set `listeners.{type}.{name}.enable_authn = false`.
+The `bypass_auth_plugins` configuration is also deleted. When you wants to allow all clients to connect without authentication, you can set `listeners.{type}.{name}.enable_authn = false`.
 
 #### Built-in database (Mnesia)
 
@@ -199,7 +199,7 @@ The `bypass_auth_plugins` configuration is also deleted. When one wants to allow
 #### HTTP
 
 1. Use the JSON fields inside the response body instead of the HTTP response status codes to identify the authentication result;
-2. Removed standalone super-user request. The super-user identity of the client is established through authentication in the response body.
+2. Remove standalone super-user request. The super-user identity of the client is established through authentication in the response body.
 
 **Success response status code:**
 
@@ -285,7 +285,7 @@ No changes.
 1. Remove the `acl_file` configuration. The file-based ACL (acl.conf) will be used as one of the authorization sources and added to EMQX by default;
 2. In `acl.conf` a few keyword syntax has been changed:
 
-| 4.x    | 5.1.0    | Compatibility |
+| 4.x    | 5.1      | Compatibility |
 | ------ | -------- | ------------- |
 | user   | username | Yes           |
 | client | clientid | Yes           |
@@ -318,18 +318,18 @@ The correspondence between 4.x integer values and 5.1 character/enumeration valu
 
 **access/action field mapping**
 
-| 4.x (int) | 5.1.0 (varchar/enum) | action              |
-| --------- | -------------------- | ------------------- |
-| 1         | subscribe            | subscribe           |
-| 2         | publish              | publish             |
-| 3         | all                  | subscribe & publish |
+| 4.x (int) | 5.1 (varchar/enum) | action              |
+| --------- | ------------------ | ------------------- |
+| 1         | subscribe          | subscribe           |
+| 2         | publish            | publish             |
+| 3         | all                | subscribe & publish |
 
 **allow/permission field mapping**
 
-| 4.x (int) | 5.1.0 (varchar/enum) | permission |
-| --------- | -------------------- | ---------- |
-| 0         | deny                 | deny       |
-| 1         | allow                | allow      |
+| 4.x (int) | 5.1 (varchar/enum) | permission |
+| --------- | ------------------ | ---------- |
+| 0         | deny               | deny       |
+| 1         | allow              | allow      |
 
 #### MongoDB
 

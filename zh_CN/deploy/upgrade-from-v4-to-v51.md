@@ -1,13 +1,13 @@
-# 从 v4 迁移到 v5.1.0
+# 从 V4 迁移到 V5.1
 
-本章节提供了从 EMQX 4.x 版本迁移至 EMQX v5.1.0 版本的指南，尽管 EMQX 5.1.0 不保证向后兼容（Backward Compatibility），但绝大部分功能运行机制没有太大的变化，你仍然可以通过手动迁移的方式来实现升级。
+本章节提供了从 EMQX 4.4 版本迁移至 EMQX 5.1 及以上版本的指南，尽管 EMQX 5 不保证向后兼容（Backward Compatibility），但绝大部分功能运行机制没有太大的变化，你仍然可以通过手动迁移的方式来实现升级。
 
 <!-- 要了解我们在 EMQX 5.1 中增加的新功能，请查看 [全新功能](../getting-started/new-features.md)。 -->
 
 ## 日志
 
-与 4.x 相比，日志中最重要的变化是格式。在 4.x 中，日志是扁平化格式的以便人类阅读。从 5.1 开始，我们在不影响可读性的前提下，转向使用结构化日志。
-例如，多数日志字段使用下划线作为单词分隔符，使其更容易被检索，这种格式也有助于日志工具更有效地进行索引。
+与 4.x 相比，日志中最重要的变化是格式。在 4.x 中，日志是扁平化格式的以便人类阅读。从 EMQX 5 开始，我们在不影响可读性的前提下，转向使用结构化日志，因此更适合机器（日志索引器）使用。
+`msg` 字段的值是snake_case 格式的消息，使其更容易进行搜索。这种格式还有助于日志索引工具更有效地索引日志，例如：
 
 ```bash
 2022-06-29T16:58:53.235042+02:00 [info] foo: bar, msg: msg_for_human_to_read_but_also_easy_to_index
@@ -136,15 +136,11 @@ API 有较大变动，以下是常用的 API 变动对照表，现存的部分 A
 | `GET /alarms{/activated}`       | `GET /alarms?activated={true,false}`        | 不兼容   |                      |
 | `GET /alarms{/deactivated}`     | `GET /alarms?activated={true,false}`        | 不兼容   |                      |
 
-## 认证/发布订阅 ACL
-
-**功能入口**
-
-认证授权插件 (emqx_auth_*) 已被移除，相关功能以内置功能的形式迁移到 EMQX 中，支持用户以 Dashboard 或配置文件的方式配置。
+## MQTT 客户端认证和授权
 
 **概念调整**
 
-发布订阅 ACL 更名为 **授权**，认证与发布订阅 ACL 功能进行了拆分。
+Auth 被称为**认证**，ACL 也被称为**授权**。
 
 **数据迁移**
 
@@ -152,7 +148,7 @@ API 有较大变动，以下是常用的 API 变动对照表，现存的部分 A
 
 ### 认证/授权链顺序
 
-同时启用多个认证器或授权检查器时，不再按照启动顺序而是按照固定的配置顺序来执行检查，可在配置文件跟 Dashboard 中调整的执行顺序。
+同时启用多个认证器或授权检查器时，不再按照启动顺序而是根据配置按照固定的顺序来执行检查，执行顺序可在 Dashboard 中调整。
 
 ### 占位符变量提取语法
 
@@ -182,21 +178,21 @@ authentication = [
 ]
 ```
 
-### 认证
+### MQTT 客户端认证
 
 #### 移除匿名认证机制
 
-移除 `allow_anonymous` 配置项，默认允许所有客户端连接，**添加并启用**任意一个认证器后将对所有新连接进行认证检查。
+`allow_anonymous` 配置项已删除。默认情况下，允许所有客户端连接。如果**添加并启用**任意一个认证器， EMQX 将对所有新连接进行认证检查。
 
-当某个客户端在所有认证器中均匹配到认证数据时，将判定为拒绝连接。
+在遍历配置的认证链之后，如果链中的任何一个认证器都不能确定允许该客户端连接，那么连接将被拒绝。
 
-移除 `bypass_auth_plugins` 配置项，某个监听器需要跳过认证时，可以通过 `listeners.{type}.{name}.enable_authn = true | false` 配置项进行设置。
+`bypass_auth_plugins` 配置项也已被删除，当您想允许所有客户端跳过认证进行连接时，可以通过 `listeners.{type}.{name}.enable_authn = true | false` 配置项进行设置。
 
 #### 内置数据库 (Mnesia) 变动
 
-1. 为方便理解，该数据源由 Mnesia 更名为内置数据库 (Built-in Database)；
-2. 只能选定一种认证查找方式：基于用户名或基于客户端 ID；
-3. 数据操作 REST API 有变动，新的 API 是 `POST /authentication/{id}/users`。
+1. Mnesia 现被称为内置数据库 (Built-in Database)；
+2. 提供两种搜索方法：基于用户名或基于客户端 ID，但不再支持混合使用。
+3. 管理认证数据记录的 REST API 有变动，更多信息，请参考 `POST /authentication/{id}/users` 的 API 文档。
 
 <!-- TODO: add migrate script -->
 
@@ -289,7 +285,7 @@ HMGET emqx_user:${username} password_hash is_superuser
 1. 移除 `acl_file` 配置，基于文件的 ACL(acl.conf) 将作为授权检查器中的一种，默认添加到 EMQX 中；
 2. `acl.conf` 文件中，几个关键字语法有所调整，变更情况见下表：
 
-| 4.x    | 5.1.0    | 是否兼容 |
+| 4.x    | 5.1      | 是否兼容 |
 | ------ | -------- | -------- |
 | user   | username | 是       |
 | client | clientid | 是       |
@@ -322,18 +318,18 @@ HMGET emqx_user:${username} password_hash is_superuser
 
 **access-action 字段数据类型映射**
 
-| 4.x (int) | 5.1.0 (varchar/enum) | 对应动作 |
-| --------- | -------------------- | -------- |
-| 1         | subscribe            | 订阅     |
-| 2         | publish              | 发布     |
-| 3         | all                  | 发布订阅 |
+| 4.x (int) | 5.1 (varchar/enum) | 对应动作 |
+| --------- | ------------------ | -------- |
+| 1         | subscribe          | 订阅     |
+| 2         | publish            | 发布     |
+| 3         | all                | 发布订阅 |
 
 **allow-permission 字段数据类型映射**
 
-| 4.x (int) | 5.1.0 (varchar/enum) | 对应行为 |
-| --------- | -------------------- | -------- |
-| 0         | deny                 | 拒绝     |
-| 1         | allow                | 允许     |
+| 4.x (int) | 5.1 (varchar/enum) | 对应行为 |
+| --------- | ------------------ | -------- |
+| 0         | deny               | 拒绝     |
+| 1         | allow              | 允许     |
 
 #### MongoDB 变动
 
@@ -412,7 +408,7 @@ HSET mqtt_acl:emqx_u a/1 publish
 
 ## 离线消息
 
-目前 EMQX 4.x 版本中提供的[离线消息](https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_redis.html)是基于外置数据库实现的，EMQX 计划在后续版本提供原生的离线消息功能（基于内置数据库），因此从 5.0.0 版本中移除了外置数据库的离线消息功能。
+目前 EMQX 4.x 版本中提供的[离线消息](https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_redis.html)是基于外置数据库实现的，EMQX 计划在后续版本提供原生的离线消息功能（基于内置数据库），因此在 5 版本中不再支持外置数据库的离线消息功能。
 
 后续的原生离线消息能够提供更高的性能，并有效降低使用和维护成本，敬请期待。
 
@@ -422,17 +418,17 @@ HSET mqtt_acl:emqx_u a/1 publish
 
 {% endemqxee %}
 
-## WebHook
+## HTTP Server
 
-4.x 版本中的 WebHook 插件 (emqx_web_hook) 已被移除，请使用数据集成中的 HTTP Server 数据桥接功能替代。
+WebHook 插件（`emqx_web_hook`）已转换为原生功能，现在被称为“HTTP服务器”桥接。
 
 ## MQTT 桥接
 
-MQTT 桥接插件 (emqx_bridge_mqtt) 已被移除，请使用数据集成中的 MQTT 数据桥接功能替代。
+MQTT 桥接插件 (`emqx_bridge_mqtt`) 已被移除，请使用数据集成中的 MQTT 数据桥接功能替代。
 
 ## Prometheus
 
-旧的 Prometheus 插件 (emqx_prometheus) 已被移除。在 5.1 中，Prometheus 的数据拉取服务默认开启，且无需认证就可以拉取数据，可以使用 curl 命令来查看：
+旧的 Prometheus 插件 (`emqx_prometheus`) 已转换为原生功能。在 5 版本中，Prometheus 的数据拉取服务默认开启，且无需认证就可以拉取数据，可以使用 curl 命令来查看：
 
 ```bash
 curl -f "http://127.0.0.1:18083/api/v5/prometheus/stats"
@@ -480,10 +476,3 @@ curl -f "http://127.0.0.1:18083/api/v5/prometheus/stats"
 其他协议（LwM2M、CoAP、STOMP、MQTT-SN）的客户端将不再映射为 MQTT 客户端，无法通过 Dashboard 客户端页面和 `GET /clients` API 获取。
 用户可以前往网关页面详情页面或通过 `GET /gateway/{name}/clients` API 获取。
 
-{% emqxce %}
-
-## 遥测
-
-遥测插件 (emqx_telemetry) 已被移除，请通过 `telemetry {}` 配置项或 Dashboard **系统设置** -> **设置** 页面进行配置。
-
-{% endemqxce %}
