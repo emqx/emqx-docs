@@ -180,7 +180,7 @@ authentication = [
 ]
 ```
 
-### Auth
+### MQTT Client Authentication
 
 #### Remove the Anonymous Mechanism
 
