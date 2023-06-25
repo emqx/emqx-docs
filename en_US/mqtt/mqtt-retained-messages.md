@@ -68,11 +68,11 @@ Without a limit, all matched messages will be copied into the subscriber's proce
 this may cause the subscriber Erlang process (the actor) to allocate an excessive amount of RAM and bring the risk of
 forced shutdown following the `force_shutdown` policy.
 
-To make it less aggressive, `retainer.deliver_rate` settings can be used, e.g:
+To make it less aggressive, `retainer.delivery_rate` settings can be used, e.g:
 
 ```bash
 # Each session subscribed to retain messages will get 1000 messages per second at the most
-retainer.deliver_rate = "1000/s"
+retainer.delivery_rate = "1000/s"
 ```
 
 
