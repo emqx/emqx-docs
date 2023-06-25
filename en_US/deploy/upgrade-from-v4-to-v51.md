@@ -184,7 +184,7 @@ authentication = [
 
 #### Remove the Anonymous Mechanism
 
-Remove the `allow_anonymous` configuration item. All client connections are allowed by default. If **add and enable** any authenticator, EMQX will perform an authentication check for all new connections.
+The `allow_anonymous` configuration is now deleted. All clients are allowed to connect by default. If **add and enable** any authenticator, EMQX will try to authenticate the clients.
 
 When a client matches the authentication data in all authenticators, the connection is rejected.
 
