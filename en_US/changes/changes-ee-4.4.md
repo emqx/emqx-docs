@@ -1,5 +1,151 @@
 # Releases
 
+## e4.4.19
+
+*Release Date: 2023-06-26*
+
+### Enhancements
+
+- Added support for TCP keep-alive in MQTT/TCP and MQTT/SSL listeners [#10854](https://github.com/emqx/emqx/pull/10854).
+
+  A new configuration option has been added: `zone.<zone-name>.tcp_keepalive = Idle,Interval,Probes`. Users can enable the TCP layer's Keep Alive feature and specify time parameters using this configuration. This configuration is only effective on Linux and MacOS systems.
+
+- Improving error logs related to Proxy Protocol [emqx/esockd#177](https://github.com/emqx/esockd/pull/177).
+
+  The sample logs before this improvement:
+  ```
+  2023-04-20T14:56:51.671735+08:00 [error] supervisor: 'esockd_connection_sup - <0.2537.0>', errorContext: connection_shutdown, reason: {invalid_proxy_info,<<"f\n">>}, offender: [{pid,<0.3192.0>},{name,connection},{mfargs,{...}}]
+
+  2023-04-20T14:57:01.348275+08:00 [error] supervisor: 'esockd_connection_sup - <0.2537.0>', errorContext: connection_shutdown, reason: {proxy_proto_timeout,5000}, offender: [{pid,<0.3194.0>},{name,connection},{mfargs,{...}}]
+  ```
+  After the improvement:
+  ```
+  2023-04-20T18:07:06.180134+08:00 [error] [esockd_proxy_protocol] The listener 127.0.0.1:8883 is working in proxy protocol mode, but received invalid proxy_protocol header, raw_bytes=<<"f\n">>
+
+  2023-04-20T18:10:17.205436+08:00 [error] [esockd_proxy_protocol] The listener 127.0.0.1:8883 is working in proxy protocol mode, but timed out while waiting for proxy_protocol header
+  ```
+
+- Adds a new feature to enable partial certificate chain validation for TLS listeners [#10553](https://github.com/emqx/emqx/pull/10553).
+
+  For details please checkout the `listener.ssl.external.partial_chain` in the `zones.conf` config file.
+
+- Adds a new feature to enable client certificate extended key usage validation for TLS listeners [#10669](https://github.com/emqx/emqx/pull/10669).
+
+  For details please checkout the `listener.ssl.external.verify_peer_ext_key_usage` in the `zones.conf` config file.
+
+- Added the `live_connections` field in the HTTP API `/api/v4/nodes` response [#10859](https://github.com/emqx/emqx/pull/10859).
+
+  Previously, this interface had a `connections` field, which represented the number of active connections on the current node that had not expired. This means that even if the MQTT connection has been disconnected, as long as the client has a persistent session, it would still be counted in the `connections` field. The newly added `live_connections` field specifically counts the number of clients with MQTT connections that have not been disconnected.
+
+- Added 3 random SQL functions to the rule engine [#11113](https://github.com/emqx/emqx/pull/11113).
+
+  - random(): Generates a random number between 0 and 1 (0.0 =< X < 1.0).
+  - uuid_v4(): Generates a random UUID (version 4) string.
+  - uuid_v4_no_hyphen(): Generates a random UUID (version 4) string without hyphens.
+
+- Added numerical range validation (23-65535) for the `mqtt.max_clientid_len` configuration parameter [#11096](https://github.com/emqx/emqx/pull/11096).
+
+- Added a plugin `emqx_gcp_device` [#1784](https://github.com/emqx/emqx-enterprise/pull/1784).
+
+  It simplifies migration from Google IoT Core:
+  * It allows import of Google IoT Core device configuration and authentication data.
+  * Implements Google IoT Core compatible MQTT authentication.
+  * Provides API endpoints for managing device configuration and authentication data.
+
+- Added support for creating RabbitMQ actions with dynamic Routing Key [#1807](https://github.com/emqx/emqx-enterprise/pull/1807).
+
+  The "RabbitMQ Routing Key" parameter of RabbitMQ actions can now use dynamic variables in the `${key}` format.
+
+- Added default ports for DynamoDB resources [#1808](https://github.com/emqx/emqx-enterprise/pull/1808).
+
+  Previously, the "DynamoDB Server" parameter of DynamoDB resources required a URL with a specified port number, otherwise the resource creation would fail.
+  Now, if the URL does not include a port number, the default value will be 80 (HTTP) or 443 (HTTPS).
+
+### Bug fixes
+
+- Fixed an issue where the rule engine was unable to access variables exported by `FOREACH` in the `DO` clause [#10620](https://github.com/emqx/emqx/pull/10620).
+
+  Given a payload: `{"date": "2023-05-06", "array": ["a"]}`, as well as the following SQL statement:
+  ```
+  FOREACH payload.date as date, payload.array as elem
+  DO date, elem
+  FROM "t/#"
+  ```
+  Prior to the fix, the `date` variable exported by `FOREACH` could not be accessed in the `DO` clause of the above SQL, resulting in the following output for the SQL statement:
+  `[{"elem": "a","date": "undefined"}]`.
+  After the fix, the output of the SQL statement is: `[{"elem": "a","date": "2023-05-06"}]`
+
+- Fixed the issue where the cache of rules failed to update in certain cases [#11072](https://github.com/emqx/emqx/pull/11072).
+
+  Prior to the fix, after manually updating the rules, there could be instances where the cache update did not synchronize to certain nodes. This would result in inconsistent rule execution states across different nodes.
+
+- Fixed an issue where the WebHook plugin failed to execute the `on_client_connack` hook [#10710](https://github.com/emqx/emqx/pull/10710).
+
+  See https://github.com/emqx/emqx/issues/10628 for more details.
+
+- Fixed an issue related to reconnection of the authentication module [#1785](https://github.com/emqx/emqx-enterprise/pull/1785).
+
+  When starting EMQX, if the connection between the authentication module and the database is disconnected, the authentication module will periodically initiate reconnection.
+  Prior to the fix, even if the module was manually disabled, EMQX would still periodically reconnect to the database. After the fix, reconnection attempts are made only when the module is enabled.
+
+- Fixed an issue where the PgSQL authentication module lost Prepared Statements after reconnection [#1785](https://github.com/emqx/emqx-enterprise/pull/1785).
+
+  Prior to the fix, if the connection between the PgSQL authentication module and the database was disconnected and reconnected, authentication would fail due to the loss of Prepared Statements, and the following error log would be printed:
+  ```
+  2023-03-30T20:50:48.088416+08:00 [error] abc@124.79.220.151:58561 [Postgres] query '"auth_query"' failed: {error,error,<<"26000">>,invalid_sql_statement_name,<<"prepared statement \"auth_query\" does not exist">>,[...]}
+  ```
+
+- Fixed an issue where connection to Kafka failed after importing resources from version 4.4.9 [#1785](https://github.com/emqx/emqx-enterprise/pull/1785).
+
+  Prior to the fix, when importing data from version 4.4.9 to 4.4.18, if the Kafka resource was not configured with a username and password (i.e. authentication mode was NONE), EMQX might incorrectly use PLAIN authentication mode to connect to Kafka after importing, resulting in authentication failure.
+
+- Fixed the issue of EMQX docker container unable to integrate with Kafka using Kerberos authentication [#1795](https://github.com/emqx/emqx-enterprise/pull/1795).
+
+  Prior to the fix, the EMQX docker (alpine) image was missing two software packages, libsasl and cyrus-sasl-gssapiv2, which caused the Kerberos functionality to not work properly. The error log was as follows:
+  ```
+  2023-06-15T05:30:31.148811+00:00 [warning] ...,{connect_kafka_server_fail,[{<<"kafka-a:9092">>,{{not_loaded,[{module,sasl_auth},{line,212},{on_load_error_info,{error,{load_failed,"Failed to load NIF library: 'Error loading shared library libsasl2.so.3: No such file or directory (needed by /opt/emqx/lib/sasl_auth-2.0.1/priv/sasl_auth.so)'"}
+  ```
+
+- Fixed the data distribution logic of the RocketMQ action in the rule engine [#1802](https://github.com/emqx/emqx-enterprise/pull/1802).
+
+  Prior to the fix, in the scenario where EMQX sends data to a RocketMQ cluster in master-slave mode, if the RocketMQ cluster has multiple master nodes, regardless of whether the `roundrobin` or `key_dispatch` strategy is used, the messages will always be distributed to the first RocketMQ master node.
+
+- Fixed the issue of module order changing after restart or joining a cluster [#1806](https://github.com/emqx/emqx-enterprise/pull/1806).
+
+  Prior to the fix, after node restart or joining a cluster, the order of modules could change, which would cause the authentication chain order to change if multiple authentication modules were enabled.
+
+- Fixed the issue of failing to import listener configurations from 4.4.7 [#1810](https://github.com/emqx/emqx-enterprise/pull/1810).
+
+  Prior to the fix, if the JSON file contained configurations for "wss" or "wss" listeners, the import could fail due to an incompatible type of the `fail_if_no_subprotocol` configuration item, but without any error messages or logs.
+
+- Fixed the issue of hot configurations not taking effect after a new node joins the cluster [#1800](https://github.com/emqx/emqx-enterprise/pull/1800).
+
+  Prior to the fix, when a node joined a cluster with hot configurations enabled, it could successfully replicate the hot configurations from the cluster, but the configurations did not take effect at runtime.
+
+- Fix the issue that the WebSocket downlink message type of the OCPP gateway is incorrect [#1815](https://github.com/emqx/emqx-enterprise/pull/1815).
+
+  Prior to the fix, the WebSocket downlink message type of the OCPP gateway was `binary`, but it should be `text`.
+
+- Fix issue when MQTT clients could not connect over TLS if the listener was configured to use TLS v1.3 only. [#1818](https://github.com/emqx/emqx-enterprise/pull/1818).
+
+  The problem was that TLS connection was trying to use options incompatible with TLS v1.3.
+
+- Fixed the issue of retainer module throwing errors after hot upgrade [#1816](https://github.com/emqx/emqx-enterprise/pull/1816).
+
+  After upgrading from old versions (e4.4.0 ~ e4.4.16) to e4.4.17 or e4.4.18, the retainer module might throw errors, causing retain messages to be unable to be sent properly. The error log is as follows:
+  ```
+  2023-05-17T01:48:44.515012+00:00 [error] mqtt_conti@62.93.210.184:54851 [Hooks] Failed to execute {fun emqx_retainer:on_session_subscribed/3,[]}: {error,badarg,[...]}
+  ```
+
+- Fixed the issue of error log appearing when testing the connectivity of RabbitMQ [#1819](https://github.com/emqx/emqx-enterprise/pull/1819).
+
+  Prior to the fix, when clicking the test button for RabbitMQ resources, the following error log would be printed (only the error log appeared, and the functionality was not affected):
+  ```
+  2023-06-02T05:59:16.025229+00:00 [error] Destroy Resource bridge_rabbit failed, ResId: <<"_probe_:6edc3a76">>, not_found
+  ```
+
+- Fixed the issue of creating multiple duplicate hot configuration modules when continuously clicking the "Enable" button on the Dashboard settings page [#1826](https://github.com/emqx/emqx-enterprise/pull/1826)
+
 ## e4.4.18
 
 *Release Date: 2023-04-28*

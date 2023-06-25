@@ -1,5 +1,72 @@
 # Releases
 
+## v4.4.19
+
+*Release Date: 2023-06-26*
+
+### Enhancements
+
+- Added support for TCP keep-alive in MQTT/TCP and MQTT/SSL listeners [#10854](https://github.com/emqx/emqx/pull/10854).
+
+  A new configuration option has been added: `zone.<zone-name>.tcp_keepalive = Idle,Interval,Probes`. Users can enable the TCP layer's Keep Alive feature and specify time parameters using this configuration. This configuration is only effective on Linux and MacOS systems.
+
+- Improving error logs related to Proxy Protocol [emqx/esockd#177](https://github.com/emqx/esockd/pull/177).
+
+  The sample logs before this improvement:
+  ```
+  2023-04-20T14:56:51.671735+08:00 [error] supervisor: 'esockd_connection_sup - <0.2537.0>', errorContext: connection_shutdown, reason: {invalid_proxy_info,<<"f\n">>}, offender: [{pid,<0.3192.0>},{name,connection},{mfargs,{...}}]
+
+  2023-04-20T14:57:01.348275+08:00 [error] supervisor: 'esockd_connection_sup - <0.2537.0>', errorContext: connection_shutdown, reason: {proxy_proto_timeout,5000}, offender: [{pid,<0.3194.0>},{name,connection},{mfargs,{...}}]
+  ```
+  After the improvement:
+  ```
+  2023-04-20T18:07:06.180134+08:00 [error] [esockd_proxy_protocol] The listener 127.0.0.1:8883 is working in proxy protocol mode, but received invalid proxy_protocol header, raw_bytes=<<"f\n">>
+
+  2023-04-20T18:10:17.205436+08:00 [error] [esockd_proxy_protocol] The listener 127.0.0.1:8883 is working in proxy protocol mode, but timed out while waiting for proxy_protocol header
+  ```
+
+- Adds a new feature to enable partial certificate chain validation for TLS listeners [#10553](https://github.com/emqx/emqx/pull/10553).
+
+  For details please checkout the `listener.ssl.external.partial_chain` in the `zones.conf` config file.
+
+- Adds a new feature to enable client certificate extended key usage validation for TLS listeners [#10669](https://github.com/emqx/emqx/pull/10669).
+
+  For details please checkout the `listener.ssl.external.verify_peer_ext_key_usage` in the `zones.conf` config file.
+
+- Added the `live_connections` field in the HTTP API `/api/v4/nodes` response [#10859](https://github.com/emqx/emqx/pull/10859).
+
+  Previously, this interface had a `connections` field, which represented the number of active connections on the current node that had not expired. This means that even if the MQTT connection has been disconnected, as long as the client has a persistent session, it would still be counted in the `connections` field. The newly added `live_connections` field specifically counts the number of clients with MQTT connections that have not been disconnected.
+
+- Added 3 random SQL functions to the rule engine [#11113](https://github.com/emqx/emqx/pull/11113).
+
+  - random(): Generates a random number between 0 and 1 (0.0 =< X < 1.0).
+  - uuid_v4(): Generates a random UUID (version 4) string.
+  - uuid_v4_no_hyphen(): Generates a random UUID (version 4) string without hyphens.
+
+- Added numerical range validation (23-65535) for the `mqtt.max_clientid_len` configuration parameter [#11096](https://github.com/emqx/emqx/pull/11096).
+
+### Bug fixes
+
+- Fixed an issue where the rule engine was unable to access variables exported by `FOREACH` in the `DO` clause [#10620](https://github.com/emqx/emqx/pull/10620).
+
+  Given a payload: `{"date": "2023-05-06", "array": ["a"]}`, as well as the following SQL statement:
+  ```
+  FOREACH payload.date as date, payload.array as elem
+  DO date, elem
+  FROM "t/#"
+  ```
+  Prior to the fix, the `date` variable exported by `FOREACH` could not be accessed in the `DO` clause of the above SQL, resulting in the following output for the SQL statement:
+  `[{"elem": "a","date": "undefined"}]`.
+  After the fix, the output of the SQL statement is: `[{"elem": "a","date": "2023-05-06"}]`
+
+- Fixed the issue where the cache of rules failed to update in certain cases [#11072](https://github.com/emqx/emqx/pull/11072).
+
+  Prior to the fix, after manually updating the rules, there could be instances where the cache update did not synchronize to certain nodes. This would result in inconsistent rule execution states across different nodes.
+
+- Fixed an issue where the WebHook plugin failed to execute the `on_client_connack` hook [#10710](https://github.com/emqx/emqx/pull/10710).
+
+  See https://github.com/emqx/emqx/issues/10628 for more details.
+
 ## v4.4.18
 
 *Release Date: 2023-04-28*
