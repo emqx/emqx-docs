@@ -138,9 +138,6 @@ Compatibility Notes:
 
 ## Auth/ACL
 
-**Function Entry**
-
-The Auth and ACL plugins (emqx_auth_*) have been removed, and the corresponding functions are built into EMQX. Users can configure them through Dashboard or configuration files.
 
 **Change of concept**
 
