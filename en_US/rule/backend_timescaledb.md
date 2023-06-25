@@ -1,38 +1,85 @@
 # Ingest Data into TimescaleDB
 
+EMQX supports integration with TimescaleDB so you can save mqtt messages and client events to TimescaleDB or Timescale Service.
+
 ## Set up TimescaleDB and Create Tables
 
-Set up a TimescaleDB database, taking Mac OSX for instance:
+Using Timescale Service to set up a TimescaleDB instance, or use TimescaleDB Docker image.
+
+:::: tabs type:card
+::: tab Timescale Service
+
+1. [Create a Timescale account](https://docs.timescale.com/getting-started/latest/services/#create-your-timescale-account), if you don't have one.
+  
+2. Sign in to the Timescale portal and [create a Timescale service](https://docs.timescale.com/getting-started/latest/services/#create-your-first-service), save the **password** of the service.
+
+3. Get the connection info from service overview page, The fields required by EMQX including **Database name**, **Host**, **Port** and **Username**.
+
+4. [Connect to service](https://docs.timescale.com/getting-started/latest/services/#connect-to-your-service) with psql client.
 
 ```bash
-$ docker pull timescale/timescaledb
-
-$ docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg11
-
-$ docker exec -it timescaledb psql -U postgres
-
-## create tutorial database
-> CREATE database tutorial;
-
-> \c tutorial
-
-> CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
+# connect to service by service URL
+psql "postgres://tsdbadmin@xxxxx.xxxxx.tsdb.cloud.timescale.com:32541/tsdb?sslmode=require"
+# use password in step 2
+Password for user tsdbadmin:
 ```
 
-Initiate the TimescaleDB table:
+5. Create a table to save the client sensor data.
 
-```bash
-$ docker exec -it timescaledb psql -U postgres -d tutorial
-
-CREATE TABLE conditions (
+```sql
+CREATE TABLE sensor_data (
     time        TIMESTAMPTZ       NOT NULL,
     location    TEXT              NOT NULL,
     temperature DOUBLE PRECISION  NULL,
     humidity    DOUBLE PRECISION  NULL
 );
 
-SELECT create_hypertable('conditions', 'time');
+SELECT create_hypertable('sensor_data', 'time');
+```
 
+After successful creation, you can view the `sensor_data` table info in the **Explorer** Tab of the service.
+
+![Timescale Explorer table](./assets/rule-engine/timescale-explorer-table.png)
+
+:::
+
+::: tab TimescaleDB Docker
+:::
+::::
+
+1. [Install Docker](https://docs.docker.com/install/), if you don't have one.
+
+2. Create a TimescaleDB container with Docker, set the password of the database by `POSTGRES_PASSWORD` environment variable.
+
+```bash
+docker run -d --name timescaledb \
+    -p 5432:5432 \
+    -e POSTGRES_PASSWORD=<your-password> \
+    timescale/timescaledb:latest-pg13
+```
+
+1. Create a database to save the client sensor data.
+
+```bash
+docker exec -it timescaledb psql -U postgres
+
+## create tsdb database
+> CREATE database tsdb;
+
+> \c tsdb;
+```
+
+4. Initiate the table.
+
+```sql
+CREATE TABLE sensor_data (
+    time        TIMESTAMPTZ       NOT NULL,
+    location    TEXT              NOT NULL,
+    temperature DOUBLE PRECISION  NULL,
+    humidity    DOUBLE PRECISION  NULL
+);
+
+SELECT create_hypertable('sensor_data', 'time');
 ```
 
 ## Create a Rule
@@ -48,91 +95,60 @@ SELECT
     payload.humidity as humidity,
     payload.location as location
 FROM
-    "message.publish"
+    "t/#"
 ```
 
-<img src="./assets/rule-engine/timescaledb_sql_1.png" alt="image" style="zoom:50%;" />
+<img src="./assets/rule-engine/timescale-rule-sql.png" style="zoom:50%;" />
 
-## Add an Action
+### Add an Action
 
-Click on the "+ Add" button under "Action Handler", and then select
-"Data to TimescaleDB" in the pop-up dialog window.
+1. Click on the **+ Add** button under **Action Handler**, and then select **Data persist** -> **Data to TimescaleDB** in the dialog window. And click **Create** button to create a Timescale resource.
 
-![image](./assets/rule-engine/timescaledb_action_0.png)
+![Timescale action](./assets/rule-engine/timescale-action.png)
 
-Fill in the parameters required by the action:
+2. Fill in the connection info in new dialog, use `<host>:<port>` as **Server**, and click **Confirm** button to create a Timescale resource.
 
-Two parameters is required by action "Data to TimescaleDB":
+![Create EMQX Timescale Resource](./assets/rule-engine/timescale-resource.png)
 
-1). SQL template. SQL template is the sql command you'd like to run
+3. Input SQL template. SQL template is the sql command you'd like to run
 when the action is triggered. In this example, we'll insert a message
 into TimescaleDB, so type in the following SQL
 template:
 
 ```sql
-insert into conditions(time, location, temperature, humidity) values (NOW(), ${location}, ${temp}, ${humidity})
+INSERT INTO 
+    sensor_data (time, location, temperature, humidity)
+VALUES 
+    (NOW(), ${location}, ${temp}, ${humidity})
 ```
 
-Before data is inserted into the table, placeholders like \${key} will
-be replaced by the corresponding values.
+Before data is inserted into the table, placeholders like `${key}` will be replaced by the corresponding values.
 
-![image](./assets/rule-engine/timescaledb_action_1.png)
+Back to the creating rule page, then click on the "Create" button. The rule we created will be shown in the rule list.
 
-2). Bind a resource to the action. Since the dropdown list "Resource"
-is empty for now, we create a new resource by clicking on the "New
-Resource" to the top right, and then select "TimescaleDB":
+![EMQX Timescale Rule](./assets/rule-engine/timescale-rule-list.png)
 
-![image](./assets/rule-engine/timescaledb_action_1.png)
-
-### Configure the Resource
-
-Set "TimescaleDB Database" to "tutorial", "TimescaleDB User" to
-"postgres", "TimescaleDB Password" to "password", and keep all other
-configs as default, and click on the "Testing Connection" button to
-make sure the connection can be created successfully, and then click
-on the "Create" button.
-
-<img src="./assets/rule-engine/timescaledb_resource_0.png" alt="image" style="zoom:50%;" />
-
-Back to the "Actions" dialog, and then click on the "Confirm" button.
-
-<img src="./assets/rule-engine/timescaledb_action_3.png" alt="image" style="zoom:50%;" />
-
-Back to the creating rule page, then click on the "Create" button. The rule we created will be shown in the rule list:
-
-![image](./assets/rule-engine/timescaledb_rule_overview_0.png)
 
 ## Test the Rule
 
 We have finished creating the rule, test the rule by sending an MQTT message to EMQX:
 
 ```bash
-> Topic: "t/1"
->
-> QoS: 0
->
-> Retained: false
->
-> Payload: {"temp":24,"humidity":30,"location":"hangzhou"}
+mqttx pub -t t/1 -m '{"temp":24,"humidity":30,"location":"hangzhou"}'
 ```
 
 Then inspect the TimescaleDB table, verify a new record has been
 inserted:
 
- tutorial=\# SELECT \* FROM conditions LIMIT 100;
-
-The output data could look like
-
- this:
 ```bash
-    time              | location | temperature | humidity
-
- \------------------------------+----------+-------------+----------2019-06-27
- 01:41:08.752103+00 | hangzhou | 24 | 30
-
+tsdb=> select * from sensor_data;
+             time              | location | temperature | humidity
+-------------------------------+----------+-------------+----------
+ 2023-06-25 10:14:05.456206+00 | hangzhou |          24 |       30
+(1 row)
 ```
 
 And from the rule list, verify that the "Matched" column has increased
 to 1:
 
-![image](./assets/rule-engine/timescaledb_rule_overview_1.png)
+![EMQX Timescale Rule Metrics](./assets/rule-engine/timescale-rule-metrics.png)
