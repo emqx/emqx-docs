@@ -7,7 +7,7 @@ EMQX 5 is not backward compatible with 4.x in management APIs and clustering API
 
 ## Log
 
-Compared with 4.x, the most significant change in the log is the format. In 4.x, the log text is primarily plain, aiming for good human readability. However, starting from 5.1, we moved to structured logging without losing readability.
+Compared with 4.x, the most significant change in the log is the format. In 4.x, the log text is primarily plain, aiming for good human readability. Starting from 5, logging style is changed to be more structured, so it is more machine (log indexer).
 For instance, most log fields use underscores as word separators, making them more search-friendly. This format also helps log indexing tools to index the logs more effectively.
 
 ```bash
