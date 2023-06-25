@@ -12,42 +12,62 @@
 
 EMQX 所使用的 Erlang 虚拟机依赖于系统区域设置来启用各种功能的 Unicode 支持，包括交互式 Erlang Shell 中的[文件名](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#unicode-filenames)和[终端 IO](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#the-interactive-shell)。
 
-如果您使用的是 Linux 操作系统，在启动 EMQX 前建议确认系统环境中已启用了 UTF-8 区域设置。
+如果您使用的是 Linux 操作系统，在启动 EMQX 前建议确认系统环境中已启用了 UTF-8 区域设置。关于如何在不同平台上启用 UTF-8 区域设置，点击下列标签：
 
-- 对于 Amazon Linux 2，可以使用 [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html#amazon-linux-cloud-init) 配置启用 UTF-8 locale 区域设置：
+:::: tabs
 
-  ```bash
-  cat <<EOF | sudo tee /etc/cloud/cloud.cfg.d/99_locale.cfg
-  #cloud-config
-  locale: C.utf8
-  EOF
-  ```
+::: tab Amazon Linux 2
 
-- 对于 CentOS，通过 systemd，通常可以使用 `localectl` 命令启用 UTF-8 locale 区域设置：
+使用 [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html#amazon-linux-cloud-init) 配置启用 UTF-8 locale 区域设置：
+
+```bash
+cat <<EOF | sudo tee /etc/cloud/cloud.cfg.d/99_locale.cfg
+#cloud-config
+locale: C.utf8
+EOF
+```
+
+:::
+
+::: tab CentOS
+
+通过 systemd，通常可以使用 `localectl` 命令启用 UTF-8 locale 区域设置：
+
+```bash
+sudo localectl set-locale LANG=C.UTF-8
+```
+
+:::
+
+::: tab Debian
+
+UTF-8 区域设置可以通过两种方式启用。
+
+- 通过 systemd，通常使用 [`localectl`](https://www.freedesktop.org/software/systemd/man/localectl.html) 命令启用：
 
   ```bash
   sudo localectl set-locale LANG=C.UTF-8
   ```
 
-- 对于 Debian，UTF-8 区域设置可以通过两种方式启用。
-
-  - 通过 systemd，通常使用 [`localectl`](https://www.freedesktop.org/software/systemd/man/localectl.html) 命令启用：
-
-    ```bash
-    sudo localectl set-locale LANG=C.UTF-8
-    ```
-
-  - 否则，使用 [`update-locale`](https://manpages.debian.org/buster/locales/update-locale.8.en.html) 命令启用：
-
-    ```bash
-    sudo update-locale LANG=C.UTF-8
-    ```
-
-- 对于 Ubuntu，可以使用 [`update-locale`](https://manpages.ubuntu.com/manpages/jammy/man8/update-locale.8.html) 命令启用：
+- 否则，使用 [`update-locale`](https://manpages.debian.org/buster/locales/update-locale.8.en.html) 命令启用：
 
   ```bash
   sudo update-locale LANG=C.UTF-8
   ```
+
+:::
+
+::: tab Ubuntu
+
+可以使用 [`update-locale`](https://manpages.ubuntu.com/manpages/jammy/man8/update-locale.8.html) 命令启用：
+
+```bash
+sudo update-locale LANG=C.UTF-8
+```
+
+:::
+
+::::
 
 ## 下载
 
