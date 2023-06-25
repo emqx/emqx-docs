@@ -66,16 +66,16 @@ For more information, see: https://www.erlang.org/doc/man/erl.html
 
   *Type*: `string`
 
-  Path to the persistent data directory.<br/>
-Possible auto-created subdirectories are:<br/>
-- `mnesia/<node_name>`: EMQX's built-in database directory.<br/>
-For example, `mnesia/emqx@127.0.0.1`.<br/>
-There should be only one such subdirectory.<br/>
-Meaning, in case the node is to be renamed (to e.g. `emqx@10.0.1.1`),<br/>
-the old dir should be deleted first.<br/>
-- `configs`: Generated configs at boot time, and cluster/local override configs.<br/>
-- `patches`: Hot-patch beam files are to be placed here.<br/>
-- `trace`: Trace log files.<br/>
+  Path to the persistent data directory.<br />
+Possible auto-created subdirectories are:<br />
+- `mnesia/<node_name>`: EMQX's built-in database directory.<br />
+For example, `mnesia/emqx@127.0.0.1`.<br />
+There should be only one such subdirectory.<br />
+Meaning, in case the node is to be renamed (to e.g. `emqx@10.0.1.1`),<br />
+the old dir should be deleted first.<br />
+- `configs`: Generated configs at boot time, and cluster/local override configs.<br />
+- `patches`: Hot-patch beam files are to be placed here.<br />
+- `trace`: Trace log files.<br />
 
 **NOTE**: One data dir cannot be shared by two or more EMQX nodes.
 
@@ -97,12 +97,12 @@ the old dir should be deleted first.<br/>
 
   *Optional*: `core | replicant`
 
-  Select a node role.<br/>
+  Select a node role.<br />
 <code>core</code> nodes provide durability of the data, and take care of writes.
-It is recommended to place core nodes in different racks or different availability zones.<br/>
+It is recommended to place core nodes in different racks or different availability zones.<br />
 <code>replicant</code> nodes are ephemeral worker nodes. Removing them from the cluster
-doesn't affect database redundancy<br/>
-It is recommended to have more replicant nodes than core nodes.<br/>
+doesn't affect database redundancy<br />
+It is recommended to have more replicant nodes than core nodes.<br />
 Note: this parameter only takes effect when the <code>backend</code> is set
 to <code>rlog</code>.
 
@@ -111,7 +111,7 @@ to <code>rlog</code>.
 ## RPC
 
 
-EMQX uses a library called <code>gen_rpc</code> for inter-broker communication.<br/>
+EMQX uses a library called <code>gen_rpc</code> for inter-broker communication.<br />
 Most of the time the default config should work,
 but in case you need to do performance fine-tuning or experiment a bit,
 this is where to look.
@@ -156,7 +156,7 @@ this is where to look.
 
   *Optional*: `manual | stateless`
 
-  <code>manual</code>: discover ports by <code>tcp_server_port</code>.<br/>
+  <code>manual</code>: discover ports by <code>tcp_server_port</code>.<br />
 <code>stateless</code>: discover ports in a stateless manner, using the following algorithm.
 If node name is <code>emqxN@127.0.0.1</code>, where the N is an integer,
 then the listening port will be 5370 + N.
@@ -168,7 +168,7 @@ then the listening port will be 5370 + N.
 
   *Default*: `5369`
 
-  Listening port used by RPC local service.<br/>
+  Listening port used by RPC local service.<br />
 Note that this config only takes effect when rpc.port_discovery is set to manual.
 
 
@@ -178,7 +178,7 @@ Note that this config only takes effect when rpc.port_discovery is set to manual
 
   *Default*: `5369`
 
-  Listening port used by RPC local service.<br/>
+  Listening port used by RPC local service.<br />
 Note that this config only takes effect when rpc.port_discovery is set to manual
 and <code>driver</code> is set to <code>ssl</code>.
 
@@ -215,7 +215,7 @@ Note that this config only takes effect when <code>rpc.driver</code> is set to <
 
   *Type*: `file`
 
-  Path to the private key file for the <code>rpc.certfile</code>.<br/>
+  Path to the private key file for the <code>rpc.certfile</code>.<br />
 Note: contents of this file are secret, so it's necessary to set permissions to 600.
 
 
@@ -223,7 +223,7 @@ Note: contents of this file are secret, so it's necessary to set permissions to 
 
   *Type*: `file`
 
-  Path to certification authority TLS certificate file used to validate <code>rpc.certfile</code>.<br/>
+  Path to certification authority TLS certificate file used to validate <code>rpc.certfile</code>.<br />
 Note: certificates of all nodes in the cluster must be signed by the same CA.
 
 
@@ -322,7 +322,7 @@ until the RPC connection is considered lost.
 ## Cluster Setup
 
 
-EMQX nodes can form a cluster to scale up the total capacity.<br/>
+EMQX nodes can form a cluster to scale up the total capacity.<br />
       Here holds the configs to instruct how individual nodes can discover each other.
 
 **cluster.name**
@@ -343,10 +343,10 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
   *Optional*: `manual | static | dns | etcd | k8s | mcast`
 
   Service discovery method for the cluster nodes. Possible values are:
-- manual: Use <code>emqx ctl cluster</code> command to manage cluster.<br/>
-- static: Configure static nodes list by setting <code>seeds</code> in config file.<br/>
-- dns: Use DNS A record to discover peer nodes.<br/>
-- etcd: Use etcd to discover peer nodes.<br/>
+- manual: Use <code>emqx ctl cluster</code> command to manage cluster.<br />
+- static: Configure static nodes list by setting <code>seeds</code> in config file.<br />
+- dns: Use DNS A record to discover peer nodes.<br />
+- etcd: Use etcd to discover peer nodes.<br />
 - k8s: Use Kubernetes API to discover peer pods.
 - mcast: Deprecated since 5.1, will be removed in 5.2.
   This supports discovery via UDP multicast.
@@ -358,10 +358,10 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
 
   *Default*: `[]`
 
-  List of core nodes that the replicant will connect to.<br/>
+  List of core nodes that the replicant will connect to.<br />
 Note: this parameter only takes effect when the <code>backend</code> is set
-to <code>rlog</code> and the <code>role</code> is set to <code>replicant</code>.<br/>
-This value needs to be defined for manual or static cluster discovery mechanisms.<br/>
+to <code>rlog</code> and the <code>role</code> is set to <code>replicant</code>.<br />
+This value needs to be defined for manual or static cluster discovery mechanisms.<br />
 If an automatic cluster discovery mechanism is being used (such as <code>etcd</code>),
 there is no need to set this value.
 
@@ -392,8 +392,8 @@ there is no need to set this value.
 
   *Optional*: `inet_tcp | inet6_tcp | inet_tls`
 
-  The Erlang distribution protocol for the cluster.<br/>
-- inet_tcp: IPv4 TCP <br/>
+  The Erlang distribution protocol for the cluster.<br />
+- inet_tcp: IPv4 TCP <br />
 - inet_tls: IPv4 TLS, works together with <code>etc/ssl_dist.conf</code>
 
 
@@ -573,7 +573,7 @@ make EMQX to discover IP addresses of peer nodes from Kubernetes API.
 
   *Default*: `pod.local`
 
-  Node name suffix.<br/>
+  Node name suffix.<br />
 Note: this parameter is only relevant when <code>address_type</code> is <code>dns</code>
 or <code>hostname</code>.
 
@@ -781,8 +781,8 @@ set to `some_tenant`, then the client actually subscribes to the topic
 `some_tenant/t`. Similarly, if another client B (connected to the same listener
 as the client A) sends a message to topic `t`, the message is routed
 to all the clients subscribed `some_tenant/t`, so client A will receive the
-message, with topic name `t`.<br/>
-Set to `""` to disable the feature.<br/>
+message, with topic name `t`.<br />
+Set to `""` to disable the feature.<br />
 
 Variables in mountpoint string:
   - <code>${clientid}</code>: clientid
@@ -809,7 +809,7 @@ anonymous clients early.
 
   *Type*: `rate`
 
-  Maximum connection rate.<br/>
+  Maximum connection rate.<br />
 This is used to limit the connection rate for this listener,
 once the limit is reached, new connections will be deferred or refused
 
@@ -818,7 +818,7 @@ once the limit is reached, new connections will be deferred or refused
 
   *Type*: `rate`
 
-  Messages publish rate.<br/>
+  Messages publish rate.<br />
 This is used to limit the inbound message numbers for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -827,7 +827,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *Type*: `rate`
 
-  Data publish rate.<br/>
+  Data publish rate.<br />
 This is used to limit the inbound bytes rate for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -838,7 +838,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *Default*: `["allow all"]`
 
-  The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
+  The access control rules for this listener.<br />See: https://github.com/emqtt/esockd#allowdeny
 
 
 **listeners.tcp.$name.proxy_protocol**
@@ -847,7 +847,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *Default*: `false`
 
-  Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/>
+  Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br />
 See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
@@ -922,8 +922,8 @@ set to `some_tenant`, then the client actually subscribes to the topic
 `some_tenant/t`. Similarly, if another client B (connected to the same listener
 as the client A) sends a message to topic `t`, the message is routed
 to all the clients subscribed `some_tenant/t`, so client A will receive the
-message, with topic name `t`.<br/>
-Set to `""` to disable the feature.<br/>
+message, with topic name `t`.<br />
+Set to `""` to disable the feature.<br />
 
 Variables in mountpoint string:
   - <code>${clientid}</code>: clientid
@@ -950,7 +950,7 @@ anonymous clients early.
 
   *Type*: `rate`
 
-  Maximum connection rate.<br/>
+  Maximum connection rate.<br />
 This is used to limit the connection rate for this listener,
 once the limit is reached, new connections will be deferred or refused
 
@@ -959,7 +959,7 @@ once the limit is reached, new connections will be deferred or refused
 
   *Type*: `rate`
 
-  Messages publish rate.<br/>
+  Messages publish rate.<br />
 This is used to limit the inbound message numbers for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -968,7 +968,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *Type*: `rate`
 
-  Data publish rate.<br/>
+  Data publish rate.<br />
 This is used to limit the inbound bytes rate for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -979,7 +979,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *Default*: `["allow all"]`
 
-  The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
+  The access control rules for this listener.<br />See: https://github.com/emqtt/esockd#allowdeny
 
 
 **listeners.ssl.$name.proxy_protocol**
@@ -988,7 +988,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *Default*: `false`
 
-  Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/>
+  Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br />
 See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
@@ -1031,7 +1031,7 @@ Settings for the MQTT over QUIC listener.
 or as an array of strings. e.g.
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
-<br/>
+<br />
 Ciphers (and their ordering) define the way in which the
 client and server encrypts information over the network connection.
 Selecting a good cipher suite is critical for the
@@ -1039,21 +1039,21 @@ application's data security, confidentiality and performance.
 
 The names should be in OpenSSL string format (not RFC format).
 All default values and examples provided by EMQX config
-documentation are all in OpenSSL format.<br/>
+documentation are all in OpenSSL format.<br />
 
 NOTE: Certain cipher suites are only compatible with
 specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
 incompatible cipher suites will be silently dropped.
 For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
 configuring cipher suites for other versions will have no effect.
-<br/>
+<br />
 
-NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
-If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
+NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br />
+If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br />
 PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br />
 
 NOTE: QUIC listener supports only 'tlsv1.3' ciphers
 
@@ -1116,8 +1116,8 @@ set to `some_tenant`, then the client actually subscribes to the topic
 `some_tenant/t`. Similarly, if another client B (connected to the same listener
 as the client A) sends a message to topic `t`, the message is routed
 to all the clients subscribed `some_tenant/t`, so client A will receive the
-message, with topic name `t`.<br/>
-Set to `""` to disable the feature.<br/>
+message, with topic name `t`.<br />
+Set to `""` to disable the feature.<br />
 
 Variables in mountpoint string:
   - <code>${clientid}</code>: clientid
@@ -1144,7 +1144,7 @@ anonymous clients early.
 
   *Type*: `rate`
 
-  Maximum connection rate.<br/>
+  Maximum connection rate.<br />
 This is used to limit the connection rate for this listener,
 once the limit is reached, new connections will be deferred or refused
 
@@ -1153,7 +1153,7 @@ once the limit is reached, new connections will be deferred or refused
 
   *Type*: `rate`
 
-  Messages publish rate.<br/>
+  Messages publish rate.<br />
 This is used to limit the inbound message numbers for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -1162,7 +1162,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *Type*: `rate`
 
-  Data publish rate.<br/>
+  Data publish rate.<br />
 This is used to limit the inbound bytes rate for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -1224,8 +1224,8 @@ set to `some_tenant`, then the client actually subscribes to the topic
 `some_tenant/t`. Similarly, if another client B (connected to the same listener
 as the client A) sends a message to topic `t`, the message is routed
 to all the clients subscribed `some_tenant/t`, so client A will receive the
-message, with topic name `t`.<br/>
-Set to `""` to disable the feature.<br/>
+message, with topic name `t`.<br />
+Set to `""` to disable the feature.<br />
 
 Variables in mountpoint string:
   - <code>${clientid}</code>: clientid
@@ -1252,7 +1252,7 @@ anonymous clients early.
 
   *Type*: `rate`
 
-  Maximum connection rate.<br/>
+  Maximum connection rate.<br />
 This is used to limit the connection rate for this listener,
 once the limit is reached, new connections will be deferred or refused
 
@@ -1261,7 +1261,7 @@ once the limit is reached, new connections will be deferred or refused
 
   *Type*: `rate`
 
-  Messages publish rate.<br/>
+  Messages publish rate.<br />
 This is used to limit the inbound message numbers for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -1270,7 +1270,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *Type*: `rate`
 
-  Data publish rate.<br/>
+  Data publish rate.<br />
 This is used to limit the inbound bytes rate for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -1281,7 +1281,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *Default*: `["allow all"]`
 
-  The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
+  The access control rules for this listener.<br />See: https://github.com/emqtt/esockd#allowdeny
 
 
 **listeners.ws.$name.proxy_protocol**
@@ -1290,7 +1290,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *Default*: `false`
 
-  Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/>
+  Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br />
 See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
@@ -1370,8 +1370,8 @@ set to `some_tenant`, then the client actually subscribes to the topic
 `some_tenant/t`. Similarly, if another client B (connected to the same listener
 as the client A) sends a message to topic `t`, the message is routed
 to all the clients subscribed `some_tenant/t`, so client A will receive the
-message, with topic name `t`.<br/>
-Set to `""` to disable the feature.<br/>
+message, with topic name `t`.<br />
+Set to `""` to disable the feature.<br />
 
 Variables in mountpoint string:
   - <code>${clientid}</code>: clientid
@@ -1398,7 +1398,7 @@ anonymous clients early.
 
   *Type*: `rate`
 
-  Maximum connection rate.<br/>
+  Maximum connection rate.<br />
 This is used to limit the connection rate for this listener,
 once the limit is reached, new connections will be deferred or refused
 
@@ -1407,7 +1407,7 @@ once the limit is reached, new connections will be deferred or refused
 
   *Type*: `rate`
 
-  Messages publish rate.<br/>
+  Messages publish rate.<br />
 This is used to limit the inbound message numbers for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -1416,7 +1416,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *Type*: `rate`
 
-  Data publish rate.<br/>
+  Data publish rate.<br />
 This is used to limit the inbound bytes rate for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -1427,7 +1427,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *Default*: `["allow all"]`
 
-  The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
+  The access control rules for this listener.<br />See: https://github.com/emqtt/esockd#allowdeny
 
 
 **listeners.wss.$name.proxy_protocol**
@@ -1436,7 +1436,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *Default*: `false`
 
-  Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/>
+  Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br />
 See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
@@ -1470,7 +1470,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 Global MQTT configuration parameters.
 
 
-Global MQTT configuration.<br/>The configs here work as default values which can be overridden
+Global MQTT configuration.<br />The configs here work as default values which can be overridden
 in <code>zone</code> configs
 
 **mqtt.idle_timeout**
@@ -1907,7 +1907,7 @@ Configuration of the internal database storing retained messages.
 
   *Default*: `[[1,2,3],[1,3],[2,3],[3]]`
 
-  Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.<br/>For example, it is good to have <code>[2, 4]</code> index to optimize <code>+/X/+/Y/...</code> topic wildcard subscriptions.
+  Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.<br />For example, it is good to have <code>[2, 4]</code> index to optimize <code>+/X/+/Y/...</code> topic wildcard subscriptions.
 
 
 
@@ -2022,7 +2022,7 @@ Settings for reporting metrics to Prometheus
 
   *Default*: `[]`
 
-  An HTTP Headers when pushing to Push Gateway.<br/>
+  An HTTP Headers when pushing to Push Gateway.<br />
 For example, <code> { Authorization = "some-authz-tokens"}</code>
 
 
@@ -2032,10 +2032,10 @@ For example, <code> { Authorization = "some-authz-tokens"}</code>
 
   *Default*: `${name}/instance/${name}~${host}`
 
-  Job Name that is pushed to the Push Gateway. Available variables:<br/>
-- ${name}: Name of EMQX node.<br/>
-- ${host}: Host name of EMQX node.<br/>
-For example, when the EMQX node name is <code>emqx@127.0.0.1</code> then the <code>name</code> variable takes value <code>emqx</code> and the <code>host</code> variable takes value <code>127.0.0.1</code>.<br/>
+  Job Name that is pushed to the Push Gateway. Available variables:<br />
+- ${name}: Name of EMQX node.<br />
+- ${host}: Host name of EMQX node.<br />
+For example, when the EMQX node name is <code>emqx@127.0.0.1</code> then the <code>name</code> variable takes value <code>emqx</code> and the <code>host</code> variable takes value <code>127.0.0.1</code>.<br />
 Default value is: <code>${name}/instance/${name}~${host}</code>
 
 
@@ -2122,7 +2122,7 @@ Settings for the alarms.
 
   *Default*: `["log","publish"]`
 
-  The actions triggered when the alarm is activated.<br/>Currently, the following actions are supported: <code>log</code> and <code>publish</code>.
+  The actions triggered when the alarm is activated.<br />Currently, the following actions are supported: <code>log</code> and <code>publish</code>.
 <code>log</code> is to write the alarm to log (console or file).
 <code>publish</code> is to publish the alarm as an MQTT message to the system topics:
 <code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and
@@ -2137,7 +2137,7 @@ Settings for the alarms.
 
   *Optional*: `1-3000`
 
-  The maximum total number of deactivated alarms to keep as history.<br/>When this limit is exceeded, the oldest deactivated alarms are deleted to cap the total number.
+  The maximum total number of deactivated alarms to keep as history.<br />When this limit is exceeded, the oldest deactivated alarms are deleted to cap the total number.
 
 
 **alarm.validity_period**
@@ -2669,11 +2669,11 @@ The configuration is only valid when the inet6 is true.
 
   *Default*: `${EMQX_ETC_DIR}/certs/cacert.pem`
 
-  Trusted PEM format CA certificates bundle file.<br/>
+  Trusted PEM format CA certificates bundle file.<br />
 The certificates in this file are used to verify the TLS peer's certificates.
 Append new certificates to the file if new CAs are to be trusted.
 There is no need to restart EMQX to have the updated file loaded, because
-the system regularly checks if file has been updated (and reload).<br/>
+the system regularly checks if file has been updated (and reload).<br />
 NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
@@ -2684,7 +2684,7 @@ already established connections.
 
   *Default*: `${EMQX_ETC_DIR}/certs/cert.pem`
 
-  PEM format certificates chain file.<br/>
+  PEM format certificates chain file.<br />
 The certificates in this file should be in reversed order of the certificate
 issue chain. That is, the host's certificate should be placed in the beginning
 of the file, followed by the immediate issuer certificate and so on.
@@ -2729,8 +2729,8 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   *Default*: `10`
 
   Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
-So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/>
-if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
+So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br />
+if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br />
 if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
@@ -2747,8 +2747,8 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
   *Default*: `["tlsv1.3","tlsv1.2"]`
 
-  All TLS/DTLS versions to be supported.<br/>
-NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
+  All TLS/DTLS versions to be supported.<br />
+NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br />
 In case PSK cipher suites are intended, make sure to configure
 <code>['tlsv1.2', 'tlsv1.1']</code> here.
 
@@ -2763,7 +2763,7 @@ In case PSK cipher suites are intended, make sure to configure
 or as an array of strings. e.g.
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
-<br/>
+<br />
 Ciphers (and their ordering) define the way in which the
 client and server encrypts information over the network connection.
 Selecting a good cipher suite is critical for the
@@ -2771,17 +2771,17 @@ application's data security, confidentiality and performance.
 
 The names should be in OpenSSL string format (not RFC format).
 All default values and examples provided by EMQX config
-documentation are all in OpenSSL format.<br/>
+documentation are all in OpenSSL format.<br />
 
 NOTE: Certain cipher suites are only compatible with
 specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
 incompatible cipher suites will be silently dropped.
 For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
 configuring cipher suites for other versions will have no effect.
-<br/>
+<br />
 
-NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
-If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
+NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br />
+If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br />
 PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
@@ -2828,7 +2828,7 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   Path to a file containing PEM-encoded Diffie-Hellman parameters
 to be used by the server if a cipher suite using Diffie-Hellman
 key exchange is negotiated. If not specified, default parameters
-are used.<br/>
+are used.<br />
 NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
 
 
@@ -3069,11 +3069,11 @@ This means that loop detection will be more effective and that retained messages
 
   *Default*: `300s`
 
-  MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
+  MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br />- `ms` for milliseconds,
 - `s` for seconds,
 - `m` for minutes,
 - `h` for hours;
-<br/>or combination of whereof: `1h5m0s`
+<br />or combination of whereof: `1h5m0s`
 
 
 **bridges.mqtt.$name.retry_interval**
@@ -3082,11 +3082,11 @@ This means that loop detection will be more effective and that retained messages
 
   *Default*: `15s`
 
-  Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
+  Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br />- `ms` for milliseconds,
 - `s` for seconds,
 - `m` for minutes,
 - `h` for hours;
-<br/>or combination of whereof: `1h5m0s`
+<br />or combination of whereof: `1h5m0s`
 
 
 **bridges.mqtt.$name.max_inflight**
@@ -3112,8 +3112,8 @@ This means that loop detection will be more effective and that retained messages
   *Type*: `connector-mqtt:ingress`
 
   The ingress config defines how this bridge receive messages from the remote MQTT broker, and then
-        send them to the local broker.<br/>
-        Template with variables is allowed in 'remote.qos', 'local.topic', 'local.qos', 'local.retain', 'local.payload'.<br/>
+        send them to the local broker.<br />
+        Template with variables is allowed in 'remote.qos', 'local.topic', 'local.qos', 'local.retain', 'local.payload'.<br />
         NOTE: if this bridge is used as the input of a rule, and also 'local.topic' is
         configured, then messages got from the remote broker will be sent to both the 'local.topic' and
         the rule.
@@ -3123,8 +3123,8 @@ This means that loop detection will be more effective and that retained messages
 
   *Type*: `connector-mqtt:egress`
 
-  The egress config defines how this bridge forwards messages from the local broker to the remote broker.<br/>
-Template with variables is allowed in 'remote.topic', 'local.qos', 'local.retain', 'local.payload'.<br/>
+  The egress config defines how this bridge forwards messages from the local broker to the remote broker.<br />
+Template with variables is allowed in 'remote.topic', 'local.qos', 'local.retain', 'local.payload'.<br />
 NOTE: if this bridge is used as the action of a rule, and also 'local.topic'
 is configured, then both the data got from the rule and the MQTT messages that matches
 'local.topic' will be forwarded.
@@ -3310,9 +3310,9 @@ Configuration for an HTTP bridge.
 
   *Type*: `string`
 
-  The URL of the HTTP Bridge.<br/>
+  The URL of the HTTP Bridge.<br />
 Template with variables is allowed in the path, but variables cannot be used in the scheme, host,
-or port part.<br/>
+or port part.<br />
 For example, <code> http://localhost:9901/${topic} </code> is allowed, but
 <code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code>
 is not allowed.
@@ -3330,7 +3330,7 @@ is not allowed.
   *Type*: `string`
 
   The MQTT topic filter to be forwarded to the HTTP server. All MQTT 'PUBLISH' messages with the topic
-matching the local_topic will be forwarded.<br/>
+matching the local_topic will be forwarded.<br />
 NOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is
 configured, then both the data got from the rule and the MQTT messages that match local_topic
 will be forwarded.
@@ -3344,7 +3344,7 @@ will be forwarded.
 
   *Optional*: `post | put | get | delete`
 
-  The method of the HTTP request. All the available methods are: post, put, get, delete.<br/>
+  The method of the HTTP request. All the available methods are: post, put, get, delete.<br />
 Template with variables is allowed.
 
 
@@ -3354,7 +3354,7 @@ Template with variables is allowed.
 
   *Default*: `{"keep-alive":"timeout=5","content-type":"application/json","connection":"keep-alive","cache-control":"no-cache","accept":"application/json"}`
 
-  The headers of the HTTP request.<br/>
+  The headers of the HTTP request.<br />
 Template with variables is allowed.
 
 
@@ -3362,12 +3362,12 @@ Template with variables is allowed.
 
   *Type*: `string`
 
-  The body of the HTTP request.<br/>
-If not provided, the body will be a JSON object of all the available fields.<br/>
+  The body of the HTTP request.<br />
+If not provided, the body will be a JSON object of all the available fields.<br />
 There, 'all the available fields' means the context of a MQTT message when
 this webhook is triggered by receiving a MQTT message (the `local_topic` is set),
 or the context of the event when this webhook is triggered by a rule (i.e. this
-webhook is used as an action of a rule).<br/>
+webhook is used as an action of a rule).<br />
 Template with variables is allowed.
 
 
@@ -3530,8 +3530,8 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 
-The egress config defines how this bridge forwards messages from the local broker to the remote broker.<br/>
-Template with variables is allowed in 'remote.topic', 'local.qos', 'local.retain', 'local.payload'.<br/>
+The egress config defines how this bridge forwards messages from the local broker to the remote broker.<br />
+Template with variables is allowed in 'remote.topic', 'local.qos', 'local.retain', 'local.payload'.<br />
 NOTE: if this bridge is used as the action of a rule, and also 'local.topic'
 is configured, then both the data got from the rule and the MQTT messages that matches
 'local.topic' will be forwarded.
@@ -3542,7 +3542,7 @@ is configured, then both the data got from the rule and the MQTT messages that m
 
   *Default*: `8`
 
-  Size of the pool of MQTT clients that will publish messages to the remote broker.<br/>
+  Size of the pool of MQTT clients that will publish messages to the remote broker.<br />
 Each MQTT client will be assigned 'clientid' of the form '${clientid_prefix}:${bridge_name}:egress:${node}:${n}'
 where 'n' is the number of a client inside the pool.
 
@@ -3580,7 +3580,7 @@ The configs about sending message to the remote broker.
 
   *Type*: `string`
 
-  Forward to which topic of the remote broker.<br/>
+  Forward to which topic of the remote broker.<br />
 Template with variables is allowed.
 
 
@@ -3590,7 +3590,7 @@ Template with variables is allowed.
 
   *Default*: `1`
 
-  The QoS of the MQTT message to be sent.<br/>
+  The QoS of the MQTT message to be sent.<br />
 Template with variables is allowed.
 
 
@@ -3600,7 +3600,7 @@ Template with variables is allowed.
 
   *Default*: `false`
 
-  The 'retain' flag of the MQTT message to be sent.<br/>
+  The 'retain' flag of the MQTT message to be sent.<br />
 Template with variables is allowed.
 
 
@@ -3608,15 +3608,15 @@ Template with variables is allowed.
 
   *Type*: `string`
 
-  The payload of the MQTT message to be sent.<br/>
+  The payload of the MQTT message to be sent.<br />
 Template with variables is allowed.
 
 
 
 
 The ingress config defines how this bridge receive messages from the remote MQTT broker, and then
-        send them to the local broker.<br/>
-        Template with variables is allowed in 'remote.qos', 'local.topic', 'local.qos', 'local.retain', 'local.payload'.<br/>
+        send them to the local broker.<br />
+        Template with variables is allowed in 'remote.qos', 'local.topic', 'local.qos', 'local.retain', 'local.payload'.<br />
         NOTE: if this bridge is used as the input of a rule, and also 'local.topic' is
         configured, then messages got from the remote broker will be sent to both the 'local.topic' and
         the rule.
@@ -3627,7 +3627,7 @@ The ingress config defines how this bridge receive messages from the remote MQTT
 
   *Default*: `8`
 
-  Size of the pool of MQTT clients that will ingest messages from the remote broker.<br/>
+  Size of the pool of MQTT clients that will ingest messages from the remote broker.<br />
 This value will be respected only if 'remote.topic' is a shared subscription topic or topic-filter
 (for example `$share/name1/topic1` or `$share/name2/topic2/#`), otherwise only a single MQTT client will be used.
 Each MQTT client will be assigned 'clientid' of the form '${clientid_prefix}:${bridge_name}:ingress:${node}:${n}'
@@ -3657,7 +3657,7 @@ The configs about sending message to the local broker.
 
   *Type*: `string`
 
-  Send messages to which topic of the local broker.<br/>
+  Send messages to which topic of the local broker.<br />
 Template with variables is allowed.
 
 
@@ -3667,7 +3667,7 @@ Template with variables is allowed.
 
   *Default*: `${qos}`
 
-  The QoS of the MQTT message to be sent.<br/>
+  The QoS of the MQTT message to be sent.<br />
 Template with variables is allowed.
 
 
@@ -3677,7 +3677,7 @@ Template with variables is allowed.
 
   *Default*: `${retain}`
 
-  The 'retain' flag of the MQTT message to be sent.<br/>
+  The 'retain' flag of the MQTT message to be sent.<br />
 Template with variables is allowed.
 
 
@@ -3685,7 +3685,7 @@ Template with variables is allowed.
 
   *Type*: `string`
 
-  The payload of the MQTT message to be sent.<br/>
+  The payload of the MQTT message to be sent.<br />
 Template with variables is allowed.
 
 
@@ -3713,10 +3713,10 @@ The configs about subscribing to the remote broker.
 ## Plugin
 
 
-Manage EMQX plugins.<br/>
+Manage EMQX plugins.<br />
 Plugins can be pre-built as a part of EMQX package,
 or installed as a standalone package in a location specified by
-<code>install_dir</code> config key<br/>
+<code>install_dir</code> config key<br />
 The standalone-installed plugins are referred to as 'external' plugins.
 
 **plugins.states**
@@ -3725,7 +3725,7 @@ The standalone-installed plugins are referred to as 'external' plugins.
 
   *Default*: `[]`
 
-  An array of plugins in the desired states.<br/>
+  An array of plugins in the desired states.<br />
 The plugins are started in the defined order
 
 
@@ -3738,7 +3738,7 @@ The plugins are started in the defined order
   The installation directory for the external plugins.
 The plugin beam files and configuration files should reside in
 the subdirectory named as <code>emqx_foo_bar-0.1.0</code>.
-<br/>
+<br />
 NOTE: For security reasons, this directory should **NOT** be writable
 by anyone except <code>emqx</code> (or any user which runs EMQX).
 
@@ -3758,8 +3758,8 @@ A per-plugin config to describe the desired state of the plugin.
 
   *Type*: `string`
 
-  The {name}-{version} of the plugin.<br/>
-It should match the plugin application name-version as the for the plugin release package name<br/>
+  The {name}-{version} of the plugin.<br />
+It should match the plugin application name-version as the for the plugin release package name<br />
 For example: my_plugin-0.1.0.
 
 
@@ -3909,11 +3909,11 @@ SSL client configuration.
 
   *Type*: `string`
 
-  Trusted PEM format CA certificates bundle file.<br/>
+  Trusted PEM format CA certificates bundle file.<br />
 The certificates in this file are used to verify the TLS peer's certificates.
 Append new certificates to the file if new CAs are to be trusted.
 There is no need to restart EMQX to have the updated file loaded, because
-the system regularly checks if file has been updated (and reload).<br/>
+the system regularly checks if file has been updated (and reload).<br />
 NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
@@ -3922,7 +3922,7 @@ already established connections.
 
   *Type*: `string`
 
-  PEM format certificates chain file.<br/>
+  PEM format certificates chain file.<br />
 The certificates in this file should be in reversed order of the certificate
 issue chain. That is, the host's certificate should be placed in the beginning
 of the file, followed by the immediate issuer certificate and so on.
@@ -3965,8 +3965,8 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   *Default*: `10`
 
   Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
-So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/>
-if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
+So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br />
+if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br />
 if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
@@ -3983,8 +3983,8 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
   *Default*: `["tlsv1.3","tlsv1.2"]`
 
-  All TLS/DTLS versions to be supported.<br/>
-NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
+  All TLS/DTLS versions to be supported.<br />
+NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br />
 In case PSK cipher suites are intended, make sure to configure
 <code>['tlsv1.2', 'tlsv1.1']</code> here.
 
@@ -3999,7 +3999,7 @@ In case PSK cipher suites are intended, make sure to configure
 or as an array of strings. e.g.
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
-<br/>
+<br />
 Ciphers (and their ordering) define the way in which the
 client and server encrypts information over the network connection.
 Selecting a good cipher suite is critical for the
@@ -4007,17 +4007,17 @@ application's data security, confidentiality and performance.
 
 The names should be in OpenSSL string format (not RFC format).
 All default values and examples provided by EMQX config
-documentation are all in OpenSSL format.<br/>
+documentation are all in OpenSSL format.<br />
 
 NOTE: Certain cipher suites are only compatible with
 specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
 incompatible cipher suites will be silently dropped.
 For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
 configuring cipher suites for other versions will have no effect.
-<br/>
+<br />
 
-NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
-If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
+NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br />
+If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br />
 PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
@@ -4070,15 +4070,15 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
 
   *Type*: `disable | string`
 
-  Specify the host name to be used in TLS Server Name Indication extension.<br/>
+  Specify the host name to be used in TLS Server Name Indication extension.<br />
 For instance, when connecting to "server.example.net", the genuine server
 which accepts the connection and performs TLS handshake may differ from the
 host the TLS client initially connects to, e.g. when connecting to an IP address
-or when the host has multiple resolvable DNS records <br/>
+or when the host has multiple resolvable DNS records <br />
 If not specified, it will default to the host name string which is used
-to establish the connection, unless it is IP addressed used.<br/>
+to establish the connection, unless it is IP addressed used.<br />
 The host name is then also used in the host name verification of the peer
-certificate.<br/> The special value 'disable' prevents the Server Name
+certificate.<br /> The special value 'disable' prevents the Server Name
 Indication extension from being sent and disables the hostname
 verification check.
 
@@ -4095,11 +4095,11 @@ Socket options for SSL clients.
 
   *Type*: `string`
 
-  Trusted PEM format CA certificates bundle file.<br/>
+  Trusted PEM format CA certificates bundle file.<br />
 The certificates in this file are used to verify the TLS peer's certificates.
 Append new certificates to the file if new CAs are to be trusted.
 There is no need to restart EMQX to have the updated file loaded, because
-the system regularly checks if file has been updated (and reload).<br/>
+the system regularly checks if file has been updated (and reload).<br />
 NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
@@ -4108,7 +4108,7 @@ already established connections.
 
   *Type*: `string`
 
-  PEM format certificates chain file.<br/>
+  PEM format certificates chain file.<br />
 The certificates in this file should be in reversed order of the certificate
 issue chain. That is, the host's certificate should be placed in the beginning
 of the file, followed by the immediate issuer certificate and so on.
@@ -4151,8 +4151,8 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   *Default*: `10`
 
   Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
-So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/>
-if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
+So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br />
+if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br />
 if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
@@ -4169,8 +4169,8 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
   *Default*: `["tlsv1.3","tlsv1.2"]`
 
-  All TLS/DTLS versions to be supported.<br/>
-NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
+  All TLS/DTLS versions to be supported.<br />
+NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br />
 In case PSK cipher suites are intended, make sure to configure
 <code>['tlsv1.2', 'tlsv1.1']</code> here.
 
@@ -4185,7 +4185,7 @@ In case PSK cipher suites are intended, make sure to configure
 or as an array of strings. e.g.
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
-<br/>
+<br />
 Ciphers (and their ordering) define the way in which the
 client and server encrypts information over the network connection.
 Selecting a good cipher suite is critical for the
@@ -4193,17 +4193,17 @@ application's data security, confidentiality and performance.
 
 The names should be in OpenSSL string format (not RFC format).
 All default values and examples provided by EMQX config
-documentation are all in OpenSSL format.<br/>
+documentation are all in OpenSSL format.<br />
 
 NOTE: Certain cipher suites are only compatible with
 specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
 incompatible cipher suites will be silently dropped.
 For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
 configuring cipher suites for other versions will have no effect.
-<br/>
+<br />
 
-NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
-If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
+NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br />
+If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br />
 PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
@@ -4256,15 +4256,15 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
 
   *Type*: `disable | string`
 
-  Specify the host name to be used in TLS Server Name Indication extension.<br/>
+  Specify the host name to be used in TLS Server Name Indication extension.<br />
 For instance, when connecting to "server.example.net", the genuine server
 which accepts the connection and performs TLS handshake may differ from the
 host the TLS client initially connects to, e.g. when connecting to an IP address
-or when the host has multiple resolvable DNS records <br/>
+or when the host has multiple resolvable DNS records <br />
 If not specified, it will default to the host name string which is used
-to establish the connection, unless it is IP addressed used.<br/>
+to establish the connection, unless it is IP addressed used.<br />
 The host name is then also used in the host name verification of the peer
-certificate.<br/> The special value 'disable' prevents the Server Name
+certificate.<br /> The special value 'disable' prevents the Server Name
 Indication extension from being sent and disables the hostname
 verification check.
 
@@ -4281,11 +4281,11 @@ Socket options for SSL connections.
 
   *Default*: `${EMQX_ETC_DIR}/certs/cacert.pem`
 
-  Trusted PEM format CA certificates bundle file.<br/>
+  Trusted PEM format CA certificates bundle file.<br />
 The certificates in this file are used to verify the TLS peer's certificates.
 Append new certificates to the file if new CAs are to be trusted.
 There is no need to restart EMQX to have the updated file loaded, because
-the system regularly checks if file has been updated (and reload).<br/>
+the system regularly checks if file has been updated (and reload).<br />
 NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
@@ -4296,7 +4296,7 @@ already established connections.
 
   *Default*: `${EMQX_ETC_DIR}/certs/cert.pem`
 
-  PEM format certificates chain file.<br/>
+  PEM format certificates chain file.<br />
 The certificates in this file should be in reversed order of the certificate
 issue chain. That is, the host's certificate should be placed in the beginning
 of the file, followed by the immediate issuer certificate and so on.
@@ -4341,8 +4341,8 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   *Default*: `10`
 
   Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
-So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/>
-if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
+So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br />
+if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br />
 if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
@@ -4359,8 +4359,8 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
   *Default*: `["tlsv1.3","tlsv1.2"]`
 
-  All TLS/DTLS versions to be supported.<br/>
-NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
+  All TLS/DTLS versions to be supported.<br />
+NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br />
 In case PSK cipher suites are intended, make sure to configure
 <code>['tlsv1.2', 'tlsv1.1']</code> here.
 
@@ -4375,7 +4375,7 @@ In case PSK cipher suites are intended, make sure to configure
 or as an array of strings. e.g.
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
-<br/>
+<br />
 Ciphers (and their ordering) define the way in which the
 client and server encrypts information over the network connection.
 Selecting a good cipher suite is critical for the
@@ -4383,17 +4383,17 @@ application's data security, confidentiality and performance.
 
 The names should be in OpenSSL string format (not RFC format).
 All default values and examples provided by EMQX config
-documentation are all in OpenSSL format.<br/>
+documentation are all in OpenSSL format.<br />
 
 NOTE: Certain cipher suites are only compatible with
 specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
 incompatible cipher suites will be silently dropped.
 For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
 configuring cipher suites for other versions will have no effect.
-<br/>
+<br />
 
-NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
-If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
+NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br />
+If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br />
 PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
@@ -4440,7 +4440,7 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   Path to a file containing PEM-encoded Diffie-Hellman parameters
 to be used by the server if a cipher suite using Diffie-Hellman
 key exchange is negotiated. If not specified, default parameters
-are used.<br/>
+are used.<br />
 NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
 
 
@@ -4530,7 +4530,7 @@ TCP listener options.
 
   *Default*: `100`
 
-  Specify the {active, N} option for this Socket.<br/>
+  Specify the {active, N} option for this Socket.<br />
 See: https://erlang.org/doc/man/inet.html#setopts-2
 
 
@@ -4661,7 +4661,7 @@ WebSocket listener options.
 
   *Default*: `false`
 
-  If <code>true</code>, compress WebSocket messages using <code>zlib</code>.<br/>
+  If <code>true</code>, compress WebSocket messages using <code>zlib</code>.<br />
 The configuration items under <code>deflate_opts</code> belong to the compression-related parameter configuration.
 
 
@@ -4691,7 +4691,7 @@ The configuration items under <code>deflate_opts</code> belong to the compressio
 
   If <code>true</code>, the server will return an error when
  the client does not carry the <code>Sec-WebSocket-Protocol</code> field.
- <br/>Note: WeChat applet needs to disable this verification.
+ <br />Note: WeChat applet needs to disable this verification.
 
 
 **ws_opts.supported_subprotocols**
@@ -4731,7 +4731,7 @@ The configuration items under <code>deflate_opts</code> belong to the compressio
 
   *Default*: `http://localhost:18083, http://127.0.0.1:18083`
 
-  List of allowed origins.<br/>See <code>check_origin_enable</code>.
+  List of allowed origins.<br />See <code>check_origin_enable</code>.
 
 
 **ws_opts.proxy_address_header**
@@ -4770,11 +4770,11 @@ Socket options for WebSocket/SSL connections.
 
   *Default*: `${EMQX_ETC_DIR}/certs/cacert.pem`
 
-  Trusted PEM format CA certificates bundle file.<br/>
+  Trusted PEM format CA certificates bundle file.<br />
 The certificates in this file are used to verify the TLS peer's certificates.
 Append new certificates to the file if new CAs are to be trusted.
 There is no need to restart EMQX to have the updated file loaded, because
-the system regularly checks if file has been updated (and reload).<br/>
+the system regularly checks if file has been updated (and reload).<br />
 NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
@@ -4785,7 +4785,7 @@ already established connections.
 
   *Default*: `${EMQX_ETC_DIR}/certs/cert.pem`
 
-  PEM format certificates chain file.<br/>
+  PEM format certificates chain file.<br />
 The certificates in this file should be in reversed order of the certificate
 issue chain. That is, the host's certificate should be placed in the beginning
 of the file, followed by the immediate issuer certificate and so on.
@@ -4830,8 +4830,8 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   *Default*: `10`
 
   Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
-So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/>
-if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
+So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br />
+if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br />
 if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
@@ -4848,8 +4848,8 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
   *Default*: `["tlsv1.3","tlsv1.2"]`
 
-  All TLS/DTLS versions to be supported.<br/>
-NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
+  All TLS/DTLS versions to be supported.<br />
+NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br />
 In case PSK cipher suites are intended, make sure to configure
 <code>['tlsv1.2', 'tlsv1.1']</code> here.
 
@@ -4864,7 +4864,7 @@ In case PSK cipher suites are intended, make sure to configure
 or as an array of strings. e.g.
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
-<br/>
+<br />
 Ciphers (and their ordering) define the way in which the
 client and server encrypts information over the network connection.
 Selecting a good cipher suite is critical for the
@@ -4872,17 +4872,17 @@ application's data security, confidentiality and performance.
 
 The names should be in OpenSSL string format (not RFC format).
 All default values and examples provided by EMQX config
-documentation are all in OpenSSL format.<br/>
+documentation are all in OpenSSL format.<br />
 
 NOTE: Certain cipher suites are only compatible with
 specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
 incompatible cipher suites will be silently dropped.
 For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
 configuring cipher suites for other versions will have no effect.
-<br/>
+<br />
 
-NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
-If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
+NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br />
+If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br />
 PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
@@ -4929,7 +4929,7 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   Path to a file containing PEM-encoded Diffie-Hellman parameters
 to be used by the server if a cipher suite using Diffie-Hellman
 key exchange is negotiated. If not specified, default parameters
-are used.<br/>
+are used.<br />
 NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
 
 
@@ -5007,7 +5007,7 @@ Compression options.
 
   *Optional*: `1-9`
 
-  Specifies the size of the compression state.<br/>
+  Specifies the size of the compression state.<br />
 Lower values decrease memory usage per connection.
 
 
@@ -5064,5 +5064,4 @@ Lower values decrease memory usage per connection.
   *Optional*: `8-15`
 
   Specifies the size of the compression context for the client.
-
 
