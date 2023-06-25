@@ -136,7 +136,7 @@ Compatibility Notes:
 | `GET /alarms{/activated}`        | `GET /alarms?activated={true,false}`        | Incompatible         |                              |
 | `GET /alarms{/deactivated}`      | `GET /alarms?activated={true,false}`        | Incompatible         |                              |
 
-## Auth/ACL
+## MQTT Client Authentication and Authorization
 
 
 **Change of concept**
