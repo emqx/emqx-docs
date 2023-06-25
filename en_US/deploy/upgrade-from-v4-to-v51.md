@@ -188,7 +188,7 @@ The `allow_anonymous` configuration is now deleted. All clients are allowed to c
 
 When a client matches the authentication data in all authenticators, the connection is rejected.
 
-Remove the `bypass_auth_plugins` configuration item. When a listener needs to skip authentication, it can be set through the `listeners.{type}.{name}.enable_authn = true | false` configuration item.
+The `bypass_auth_plugins` configuration is also deleted. When one wants to allow all clients to connect without authentication, they may set `listeners.{type}.{name}.enable_authn = false`.
 
 #### Built-in database (Mnesia)
 
