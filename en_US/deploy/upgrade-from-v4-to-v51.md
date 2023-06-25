@@ -149,7 +149,7 @@ We have kept the authentication methods and supported data sources from version 
 
 ### Order of authentication/authorization chain
 
-When multiple authenticators or authorization checkers are enabled simultaneously, the checks are no longer performed according to the startup order but a fixed configuration order. The execution order can be adjusted in the configuration file and Dashboard.
+When multiple authenticators or authorization checkers are enabled simultaneously, the checks are no longer performed according to the startup order but a fixed order per configuration. The order can be adjusted from Dashboard.
 
 ### Variable Interpolation Syntax
 
