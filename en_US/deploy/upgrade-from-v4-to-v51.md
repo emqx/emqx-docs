@@ -186,7 +186,7 @@ authentication = [
 
 The `allow_anonymous` configuration is now deleted. All clients are allowed to connect by default. If **add and enable** any authenticator, EMQX will try to authenticate the clients.
 
-When a client matches the authentication data in all authenticators, the connection is rejected.
+After traversing the configured authentication chain, if none of the authenticator in the chain can decide that this client is allowed to connect, then the connection is rejected.
 
 The `bypass_auth_plugins` configuration is also deleted. When one wants to allow all clients to connect without authentication, they may set `listeners.{type}.{name}.enable_authn = false`.
 
