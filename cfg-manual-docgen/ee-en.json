@@ -15768,7 +15768,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "The MQTT topic filter to be forwarded to Cassandra. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.</br>\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
+        "desc" : "The MQTT topic filter to be forwarded to Cassandra. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.<br />\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
         "aliases" : [
           
         ]
@@ -15946,7 +15946,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "The MQTT topic filter to be forwarded to Clickhouse. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.</br>\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
+        "desc" : "The MQTT topic filter to be forwarded to Clickhouse. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.<br />\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
         "aliases" : [
           
         ]
@@ -16337,7 +16337,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "The MQTT topic filter to be forwarded to DynamoDB. All MQTT `PUBLISH` messages with the topic\nmatching the `local_topic` will be forwarded.</br>\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also `local_topic` is\nconfigured, then both the data got from the rule and the MQTT messages that match `local_topic`\nwill be forwarded.",
+        "desc" : "The MQTT topic filter to be forwarded to DynamoDB. All MQTT `PUBLISH` messages with the topic\nmatching the `local_topic` will be forwarded.<br />\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also `local_topic` is\nconfigured, then both the data got from the rule and the MQTT messages that match `local_topic`\nwill be forwarded.",
         "aliases" : [
           
         ]
@@ -16805,7 +16805,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "The MQTT topic filter to be forwarded to GCP PubSub. All MQTT 'PUBLISH' messages with the topic\nmatching `local_topic` will be forwarded.</br>\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
+        "desc" : "The MQTT topic filter to be forwarded to GCP PubSub. All MQTT 'PUBLISH' messages with the topic\nmatching `local_topic` will be forwarded.<br />\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
         "aliases" : [
           
         ]
@@ -16882,7 +16882,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "The MQTT topic filter to be forwarded to the HStreamDB. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.</br>\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
+        "desc" : "The MQTT topic filter to be forwarded to the HStreamDB. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.<br />\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
         "aliases" : [
           
         ]
@@ -16960,7 +16960,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "The MQTT topic filter to be forwarded to the InfluxDB. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.</br>\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
+        "desc" : "The MQTT topic filter to be forwarded to the InfluxDB. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.<br />\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
         "aliases" : [
           
         ]
@@ -16971,7 +16971,7 @@
           "kind" : "primitive"
         },
         "name" : "write_syntax",
-        "desc" : "Conf of InfluxDB line protocol to write data points. It is a text-based format that provides the measurement, tag set, field set, and timestamp of a data point, and placeholder supported.\nSee also [InfluxDB 2.3 Line Protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) and\n[InfluxDB 1.8 Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_tutorial/) </br>\nTLDR:</br>\n```\n<measurement>[,<tag_key>=<tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=<field_value>] [<timestamp>]\n```\nPlease note that a placeholder for an integer value must be annotated with a suffix `i`. For example `${payload.int_value}i`.",
+        "desc" : "Conf of InfluxDB line protocol to write data points. It is a text-based format that provides the measurement, tag set, field set, and timestamp of a data point, and placeholder supported.\nSee also [InfluxDB 2.3 Line Protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) and\n[InfluxDB 1.8 Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_tutorial/) <br />\nTLDR:<br />\n```\n<measurement>[,<tag_key>=<tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=<field_value>] [<timestamp>]\n```\nPlease note that a placeholder for an integer value must be annotated with a suffix `i`. For example `${payload.int_value}i`.",
         "aliases" : [
           
         ]
@@ -17001,7 +17001,7 @@
         },
         "raw_default" : "127.0.0.1:8086",
         "name" : "server",
-        "desc" : "The IPv4 or IPv6 address or the hostname to connect to.</br>\nA host entry has the following form: `Host[:Port]`.</br>\nThe InfluxDB default port 8086 is used if `[:Port]` is not specified.",
+        "desc" : "The IPv4 or IPv6 address or the hostname to connect to.<br />\nA host entry has the following form: `Host[:Port]`.<br />\nThe InfluxDB default port 8086 is used if `[:Port]` is not specified.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"127.0.0.1:8086\""
@@ -17116,7 +17116,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "The MQTT topic filter to be forwarded to the InfluxDB. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.</br>\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
+        "desc" : "The MQTT topic filter to be forwarded to the InfluxDB. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.<br />\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
         "aliases" : [
           
         ]
@@ -17127,7 +17127,7 @@
           "kind" : "primitive"
         },
         "name" : "write_syntax",
-        "desc" : "Conf of InfluxDB line protocol to write data points. It is a text-based format that provides the measurement, tag set, field set, and timestamp of a data point, and placeholder supported.\nSee also [InfluxDB 2.3 Line Protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) and\n[InfluxDB 1.8 Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_tutorial/) </br>\nTLDR:</br>\n```\n<measurement>[,<tag_key>=<tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=<field_value>] [<timestamp>]\n```\nPlease note that a placeholder for an integer value must be annotated with a suffix `i`. For example `${payload.int_value}i`.",
+        "desc" : "Conf of InfluxDB line protocol to write data points. It is a text-based format that provides the measurement, tag set, field set, and timestamp of a data point, and placeholder supported.\nSee also [InfluxDB 2.3 Line Protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) and\n[InfluxDB 1.8 Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_tutorial/) <br />\nTLDR:<br />\n```\n<measurement>[,<tag_key>=<tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=<field_value>] [<timestamp>]\n```\nPlease note that a placeholder for an integer value must be annotated with a suffix `i`. For example `${payload.int_value}i`.",
         "aliases" : [
           
         ]
@@ -17157,7 +17157,7 @@
         },
         "raw_default" : "127.0.0.1:8086",
         "name" : "server",
-        "desc" : "The IPv4 or IPv6 address or the hostname to connect to.</br>\nA host entry has the following form: `Host[:Port]`.</br>\nThe InfluxDB default port 8086 is used if `[:Port]` is not specified.",
+        "desc" : "The IPv4 or IPv6 address or the hostname to connect to.<br />\nA host entry has the following form: `Host[:Port]`.<br />\nThe InfluxDB default port 8086 is used if `[:Port]` is not specified.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"127.0.0.1:8086\""
@@ -19366,7 +19366,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "The MQTT topic filter to be forwarded to MySQL. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.</br>\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
+        "desc" : "The MQTT topic filter to be forwarded to MySQL. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.<br />\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
         "aliases" : [
           
         ]
@@ -19535,7 +19535,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "The MQTT topic filter to be forwarded to PostgreSQL. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.</br>\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
+        "desc" : "The MQTT topic filter to be forwarded to PostgreSQL. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.<br />\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
         "aliases" : [
           
         ]
@@ -19681,7 +19681,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "The MQTT topic filter to be forwarded to Redis. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.</br>\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
+        "desc" : "The MQTT topic filter to be forwarded to Redis. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.<br />\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
         "aliases" : [
           
         ]
@@ -19832,7 +19832,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "The MQTT topic filter to be forwarded to Redis. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.</br>\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
+        "desc" : "The MQTT topic filter to be forwarded to Redis. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.<br />\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
         "aliases" : [
           
         ]
@@ -20010,7 +20010,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "The MQTT topic filter to be forwarded to Redis. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.</br>\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
+        "desc" : "The MQTT topic filter to be forwarded to Redis. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.<br />\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
         "aliases" : [
           
         ]
@@ -20843,7 +20843,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "The MQTT topic filter to be forwarded to RocketMQ. All MQTT `PUBLISH` messages with the topic\nmatching the `local_topic` will be forwarded.</br>\nNOTE: if the bridge is used as a rule action, `local_topic` should be left empty otherwise the messages will be duplicated.",
+        "desc" : "The MQTT topic filter to be forwarded to RocketMQ. All MQTT `PUBLISH` messages with the topic\nmatching the `local_topic` will be forwarded.<br />\nNOTE: if the bridge is used as a rule action, `local_topic` should be left empty otherwise the messages will be duplicated.",
         "aliases" : [
           
         ]
@@ -21082,7 +21082,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "The MQTT topic filter to be forwarded to Microsoft SQL Server. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.</br>\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
+        "desc" : "The MQTT topic filter to be forwarded to Microsoft SQL Server. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.<br />\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
         "aliases" : [
           
         ]
@@ -21462,7 +21462,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "The MQTT topic filter to be forwarded to TDengine. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.</br>\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
+        "desc" : "The MQTT topic filter to be forwarded to TDengine. All MQTT 'PUBLISH' messages with the topic\nmatching the local_topic will be forwarded.<br />\nNOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is\nconfigured, then both the data got from the rule and the MQTT messages that match local_topic\nwill be forwarded.",
         "aliases" : [
           
         ]
