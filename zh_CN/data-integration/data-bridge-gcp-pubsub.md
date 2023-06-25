@@ -2,7 +2,7 @@
 
 [Google Cloud PubSub](https://cloud.google.com/pubsub?hl=en-us) 是一种异步消息传递服务，旨在实现极高的可靠性和可扩缩性。
 
-借助 EMQX GCP PubSub 集成，你可以将 MQTT 消息和事件发送到 GCP PubSub 中，这能够帮助您更快的基于 GCP 构建物联网应用，助力你从 GCP IoT Core 迁移到 EMQX 中。
+借助 EMQX GCP PubSub 集成，你可以将 MQTT 消息和客户端事件发送到 GCP PubSub 中，这能够帮助您更快的基于 GCP 构建物联网应用，助力你从 GCP IoT Core 迁移到 EMQX 中。
 
 {% emqxce %}
 :::tip

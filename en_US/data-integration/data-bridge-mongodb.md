@@ -1,6 +1,6 @@
 # Ingest Data into MongoDB
 
-EMQX supports integration with MongoDB so you can save client messages and events to MongoDB.
+EMQX supports integration with MongoDB so you can save MQTT messages and client events to MongoDB.
 
 {% emqxce %}
 :::tip
