@@ -1,5 +1,153 @@
 # 版本发布
 
+## e4.4.19
+
+*发布日期: 2023-06-16*
+
+### 增强
+
+- 为 MQTT/TCP 和 MQTT/SSL 监听器增加 TCP Keep Alive 的支持 [#10854](https://github.com/emqx/emqx/pull/10854)。
+
+  现在增加了一个配置项：`zone.<zone-name>.tcp_keepalive = Idle,Interval,Probes`，用户可以通过此配置来启用 TCP 层的 Keep Alive 功能并指定时间参数。此配置仅在 Linux 和 MacOS 系统上生效。
+
+- 改进 Proxy Protocol 相关的错误日志 [emqx/esockd#177](https://github.com/emqx/esockd/pull/177)。
+
+  改进之前的日志样例:
+  ```
+  2023-04-20T14:56:51.671735+08:00 [error] supervisor: 'esockd_connection_sup - <0.2537.0>', errorContext: connection_shutdown, reason: {invalid_proxy_info,<<"f\n">>}, offender: [{pid,<0.3192.0>},{name,connection},{mfargs,{...}}]
+
+  2023-04-20T14:57:01.348275+08:00 [error] supervisor: 'esockd_connection_sup - <0.2537.0>', errorContext: connection_shutdown, reason: {proxy_proto_timeout,5000}, offender: [{pid,<0.3194.0>},{name,connection},{mfargs,{...}}]
+  ```
+  改进之后:
+  ```
+  2023-04-20T18:07:06.180134+08:00 [error] [esockd_proxy_protocol] The listener 127.0.0.1:8883 is working in proxy protocol mode, but received invalid proxy_protocol header, raw_bytes=<<"f\n">>
+
+  2023-04-20T18:10:17.205436+08:00 [error] [esockd_proxy_protocol] The listener 127.0.0.1:8883 is working in proxy protocol mode, but timed out while waiting for proxy_protocol header
+  ```
+
+- 增加了一个新功能，用户可以在 TLS 监听器中启用“部分证书链验证”了 [#10553](https://github.com/emqx/emqx/pull/10553)。
+
+  详情请查看 `zones.conf` 配置文件中的 `listener.ssl.external.partial_chain` 配置项。
+
+- 增加了一个新功能，用户可以在 TLS 监听器中启用“客户端证书扩展密钥用途验证”了 [#10669](https://github.com/emqx/emqx/pull/10669)。
+
+  详情请查看 `zones.conf` 配置文件中的 `listener.ssl.external.verify_peer_ext_key_usage` 配置项。
+
+- 在 HTTP API `/api/v4/nodes` 的返回中增加 `live_connections` 字段 [#10859](https://github.com/emqx/emqx/pull/10859)。
+
+  此前该接口中有一个 `connections` 字段，它代表当前节点上会话未过期的连接数量。这意味着即使 MQTT 连接已经断开，只要客户端保持了会话，它仍然会被统计在 `connections` 中。新增的 `live_connections` 字段则仅仅统计 MQTT 连接未断开的客户端数量。
+
+- 规则引擎新增了三个随机函数 [#11113](https://github.com/emqx/emqx/pull/11113)。
+
+  - random()：生成 0 到 1 之间的随机数 (0.0 =< X < 1.0)。
+  - uuid_v4()：生成随机的 UUID (version4) 字符串。
+  - uuid_v4_no_hyphen()：生成随机的不带连词符的 UUID (version4) 字符串。
+
+- 为 `mqtt.max_clientid_len` 配置项增加数值范围校验 (23-65535) [#11096](https://github.com/emqx/emqx/pull/11096)。
+
+- 新增插件 `emqx_gcp_device` [#1784](https://github.com/emqx/emqx-enterprise/pull/1784)。
+
+  该插件简化了从 Google IoT Core 的迁移过程：
+  * 允许导入 Google IoT Core 设备配置和认证数据。
+  * 实现了与 Google IoT Core 兼容的 MQTT 认证。
+  * 提供了用于管理设备配置和认证数据的 API 接口。
+
+- 支持使用动态的 Routing Key 创建 RabbitMQ 动作 [#1807](https://github.com/emqx/emqx-enterprise/pull/1807)。
+
+  现在 RabbitMQ 动作的 "RabbitMQ Routing Key" 参数可以使用 `${key}` 格式的动态变量了。
+
+- DynamoDB 资源支持默认端口 [#1808](https://github.com/emqx/emqx-enterprise/pull/1808)。
+
+  此前 DynamoDB 资源的 “DynamoDB 服务器” 参数中必须填写带端口号的 URL，否则会资源会创建失败。
+  现在如果 URL 不带端口号，缺省值为 80 (HTTP) 或者 443 (HTTPS)。
+
+### 修复
+
+- 修复规则引擎无法在 `DO` 子句中访问 `FOREACH` 导出的变量的问题 [#10620](https://github.com/emqx/emqx/pull/10620)。
+
+  给定消息：`{"date": "2023-05-06", "array": ["a"]}`，以及如下 SQL 语句：
+  ```
+  FOREACH payload.date as date, payload.array as elem
+  DO date, elem
+  FROM "t/#"
+  ```
+  修复前，以上 SQL 语句中 `FOREACH` 导出的 `date` 变量无法在 `DO` 子句中访问，导致以上 SQL 的输出为：
+  `[{"elem": "a","date": "undefined"}]`。
+  修复后，SQL 的输出为：`[{"elem": "a","date": "2023-05-06"}]`
+
+- 修复在某些情况下，规则的缓存没能更新的问题 [#11072](https://github.com/emqx/emqx/pull/11072)。
+
+  修复前，手动更新规则之后，可能会出现缓存的更新没能同步到某些节点上的情况，这会导致规则在不同的节点上运行状态不一致。
+
+- 修复 WebHook 插件执行 `on_client_connack` 钩子失败的问题 [#10710](https://github.com/emqx/emqx/pull/10710)。
+
+  详见 https://github.com/emqx/emqx/issues/10628
+
+- 修复认证模块断线重连相关的问题 [#1785](https://github.com/emqx/emqx-enterprise/pull/1785)。
+
+  在启动 EMQX 的时候，如果认证模块与数据库之间的连接处于断开状态，认证模块会周期性发起重连。
+  修复前，即使手动禁用该模块，EMQX 仍然会周期性重连数据库。修复后仅仅当模块启用的时候尝试重连。
+
+- 修复 PgSQL 认证模块重连后 Prepared Statement 丢失的问题 [#1785](https://github.com/emqx/emqx-enterprise/pull/1785)。
+
+  修复前，如果 PgSQL 认证模块与数据库之间的连接发生过断开并重连，会因为 Prepared Statement 丢失而导致认证失败，并打印如下错误日志：
+  ```
+  2023-03-30T20:50:48.088416+08:00 [error] abc@124.79.220.151:58561 [Postgres] query '"auth_query"' failed: {error,error,<<"26000">>,invalid_sql_statement_name,<<"prepared statement \"auth_query\" does not exist">>,[...]}
+  ```
+
+- 修复从 4.4.9 版本导入 Kafka 资源后连接失败的问题 [#1785](https://github.com/emqx/emqx-enterprise/pull/1785)。
+
+  修复前，从 4.4.9 版本导入数据到 4.4.18，如果导入之前 Kafka 资源未配置用户名密码（即认证模式是 NONE），导入后 EMQX 可能会错误地使用 PLAIN 认证模式连接 Kafka，从而导认证失败。
+
+- 修复 EMQX docker 容器无法使用 Kerberos 认证方式集成 Kafka 的问题 [#1795](https://github.com/emqx/emqx-enterprise/pull/1795)。
+
+  修复前，EMQX 的 docker (alpine) 镜像缺失了 libsasl 和 cyrus-sasl-gssapiv2 两个软件包，导致 Kerberos 功能无法正常使用，错误日志：
+  ```
+  2023-06-15T05:30:31.148811+00:00 [warning] ...,{connect_kafka_server_fail,[{<<"kafka-a:9092">>,{{not_loaded,[{module,sasl_auth},{line,212},{on_load_error_info,{error,{load_failed,"Failed to load NIF library: 'Error loading shared library libsasl2.so.3: No such file or directory (needed by /opt/emqx/lib/sasl_auth-2.0.1/priv/sasl_auth.so)'"}
+  ```
+
+- 修复规则引擎 RocketMQ 动作的数据分发逻辑 [#1802](https://github.com/emqx/emqx-enterprise/pull/1802)。
+
+  修复前，在 EMQX 发送数据到主从模式的 RocketMQ 集群的场景中，如果 RocketMQ 集群有多个主节点，那么无论使用 `roundrobin` 还是 `key_dispatch` 策略，消息总是会被分发到第一个 RocketMQ 主节点上。
+
+- 修复重启或加入集群后模块顺序改变的问题 [#1806](https://github.com/emqx/emqx-enterprise/pull/1806)。
+
+  修复前，在节点重启或者加入集群之后，模块的顺序可能会发生改变，如果启用了多个认证模块，会导致认证链的顺序发生改变。
+
+- 修复从 4.4.7 导入监听器配置失败的问题 [#1810](https://github.com/emqx/emqx-enterprise/pull/1810)。
+
+  修复前，如果 JSON 文件中包含 "wss" 或 "wss" 监听器的配置，导入可能会由于 `fail_if_no_subprotocol` 配置项的类型不兼容而导入失败，但没有任何错误提示和日志。
+
+- 修复新节点加入集群后热配置不生效的问题 [#1800](https://github.com/emqx/emqx-enterprise/pull/1800)。
+
+  修复前，当节点加入一个已启用热配置的集群时，可以成功从集群复制热配置，但配置没有在运行时生效。
+
+- 修复 OCPP 网关的 WebSocket 下行消息类型错误的问题 [#1815](https://github.com/emqx/emqx-enterprise/pull/1815)。
+
+  OCPP 网管的 WebSocket 下行消息应该为 `text`，而不是修复前的 `binary`。
+
+- 修复当配置了监听器仅使用 TLS v1.3 协议的情况下，MQTT 客户端无法连接的问题 [#1818](https://github.com/emqx/emqx-enterprise/pull/1818)。
+
+  之前的问题是 EMQX 监听器在建立 TLS 连接时，使用了与 TLS v1.3 不兼容的参数项。
+
+- 修复热升级后 retainer 模块报错的问题 [#1816](https://github.com/emqx/emqx-enterprise/pull/1816)。
+
+  从旧版本版本 (e4.4.0 ~ e4.4.16) 升级到 e4.4.17 或 e4.4.18 之后，retainer 模块可能会报错，导致 retain 消息无法正常发送，错误日志如下：
+
+  ```
+  2023-05-17T01:48:44.515012+00:00 [error] mqtt_conti@62.93.210.184:54851 [Hooks] Failed to execute {fun emqx_retainer:on_session_subscribed/3,[]}: {error,badarg,[...]}
+  ```
+
+- 修复 RabbitMQ 测试连接可用性时出现错误日志的问题 [#1819](https://github.com/emqx/emqx-enterprise/pull/1819)。
+
+  修复前，在点击 RabbitMQ 资源的测试按钮时，会打印如下错误日志 (仅出现错误日志，功能未受影响)：
+
+  ```
+  2023-06-02T05:59:16.025229+00:00 [error] Destroy Resource bridge_rabbit failed, ResId: <<"_probe_:6edc3a76">>, not_found
+  ```
+
+- 修复连续点击 Dashboard 设置页面上的 “启用” 按钮时，会导致创建出多个重复的热配置模块的问题 [#1826](https://github.com/emqx/emqx-enterprise/pull/1826)
+
 ## e4.4.18
 
 *发布日期: 2023-04-28*

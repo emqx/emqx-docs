@@ -1,5 +1,72 @@
 # 版本发布
 
+## v4.4.19
+
+*发布日期: 2023-06-26*
+
+### 增强
+
+- 为 MQTT/TCP 和 MQTT/SSL 监听器增加 TCP Keep Alive 的支持 [#10854](https://github.com/emqx/emqx/pull/10854)。
+
+  现在增加了一个配置项：`zone.<zone-name>.tcp_keepalive = Idle,Interval,Probes`，用户可以通过此配置来启用 TCP 层的 Keep Alive 功能并指定时间参数。此配置仅在 Linux 和 MacOS 系统上生效。
+
+- 改进 Proxy Protocol 相关的错误日志 [emqx/esockd#177](https://github.com/emqx/esockd/pull/177)。
+
+  改进之前的日志样例:
+  ```
+  2023-04-20T14:56:51.671735+08:00 [error] supervisor: 'esockd_connection_sup - <0.2537.0>', errorContext: connection_shutdown, reason: {invalid_proxy_info,<<"f\n">>}, offender: [{pid,<0.3192.0>},{name,connection},{mfargs,{...}}]
+
+  2023-04-20T14:57:01.348275+08:00 [error] supervisor: 'esockd_connection_sup - <0.2537.0>', errorContext: connection_shutdown, reason: {proxy_proto_timeout,5000}, offender: [{pid,<0.3194.0>},{name,connection},{mfargs,{...}}]
+  ```
+  改进之后:
+  ```
+  2023-04-20T18:07:06.180134+08:00 [error] [esockd_proxy_protocol] The listener 127.0.0.1:8883 is working in proxy protocol mode, but received invalid proxy_protocol header, raw_bytes=<<"f\n">>
+
+  2023-04-20T18:10:17.205436+08:00 [error] [esockd_proxy_protocol] The listener 127.0.0.1:8883 is working in proxy protocol mode, but timed out while waiting for proxy_protocol header
+  ```
+
+- 增加了一个新功能，用户可以在 TLS 监听器中启用“部分证书链验证”了 [#10553](https://github.com/emqx/emqx/pull/10553)。
+
+  详情请查看 `zones.conf` 配置文件中的 `listener.ssl.external.partial_chain` 配置项。
+
+- 增加了一个新功能，用户可以在 TLS 监听器中启用“客户端证书扩展密钥用途验证”了 [#10669](https://github.com/emqx/emqx/pull/10669)。
+
+  详情请查看 `zones.conf` 配置文件中的 `listener.ssl.external.verify_peer_ext_key_usage` 配置项。
+
+- 在 HTTP API `/api/v4/nodes` 的返回中增加 `live_connections` 字段 [#10859](https://github.com/emqx/emqx/pull/10859)。
+
+  此前该接口中有一个 `connections` 字段，它代表当前节点上会话未过期的连接数量。这意味着即使 MQTT 连接已经断开，只要客户端保持了会话，它仍然会被统计在 `connections` 中。新增的 `live_connections` 字段则仅仅统计 MQTT 连接未断开的客户端数量。
+
+- 规则引擎新增了三个随机函数 [#11113](https://github.com/emqx/emqx/pull/11113)。
+
+  - random()：生成 0 到 1 之间的随机数 (0.0 =< X < 1.0)。
+  - uuid_v4()：生成随机的 UUID (version4) 字符串。
+  - uuid_v4_no_hyphen()：生成随机的不带连词符的 UUID (version4) 字符串。
+
+- 为 `mqtt.max_clientid_len` 配置项增加数值范围校验 (23-65535) [#11096](https://github.com/emqx/emqx/pull/11096)。
+
+### 修复
+
+- 修复规则引擎无法在 `DO` 子句中访问 `FOREACH` 导出的变量的问题 [#10620](https://github.com/emqx/emqx/pull/10620)。
+
+  给定消息：`{"date": "2023-05-06", "array": ["a"]}`，以及如下 SQL 语句：
+  ```
+  FOREACH payload.date as date, payload.array as elem
+  DO date, elem
+  FROM "t/#"
+  ```
+  修复前，以上 SQL 语句中 `FOREACH` 导出的 `date` 变量无法在 `DO` 子句中访问，导致以上 SQL 的输出为：
+  `[{"elem": "a","date": "undefined"}]`。
+  修复后，SQL 的输出为：`[{"elem": "a","date": "2023-05-06"}]`
+
+- 修复在某些情况下，规则的缓存没能更新的问题 [#11072](https://github.com/emqx/emqx/pull/11072)。
+
+  修复前，手动更新规则之后，可能会出现缓存的更新没能同步到某些节点上的情况，这会导致规则在不同的节点上运行状态不一致。
+
+- 修复 WebHook 插件执行 `on_client_connack` 钩子失败的问题 [#10710](https://github.com/emqx/emqx/pull/10710)。
+
+  详见 https://github.com/emqx/emqx/issues/10628
+
 ## v4.4.18
 
 *发布日期: 2023-04-28*
