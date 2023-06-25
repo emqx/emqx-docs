@@ -115,8 +115,8 @@ Besides the `FROM` and `WHERE` clause, this `FOREACH` statement has two more typ
 
 | Clause   | Optional/Required | Description                                                  |
 | -------- | ----------------- | ------------------------------------------------------------ |
-| `DO`     | Optional          | To transform each element in the array selected by `FOREACH`<br><br>Correspond to the `SELECT` clause in the `SELECT` statement and accepts the same expressions |
-| `INCASE` | Optional          | To filter out array elements that do not match the specified conditions.<br><br>Accepts the same expressions as the `WHERE` clause |
+| `DO`     | Optional          | To transform each element in the array selected by `FOREACH`<br /><br />Correspond to the `SELECT` clause in the `SELECT` statement and accepts the same expressions |
+| `INCASE` | Optional          | To filter out array elements that do not match the specified conditions.<br /><br />Accepts the same expressions as the `WHERE` clause |
 
 The basic format of a `FOREACH` statement in the rule engine SQL is as follows:
 
