@@ -12,7 +12,7 @@ EMQX 配置文件手册。
 
   *默认值*: `emqx@127.0.0.1`
 
-  节点名。格式为 \<name>@\<host>。其中 <host> 可以是 IP 地址，也可以是 FQDN。
+  节点名。格式为 \<name>@\<host>。其中 \<host> 可以是 IP 地址，也可以是 FQDN。
 详见 http://erlang.org/doc/reference_manual/distributed.html。
 
 
