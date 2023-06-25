@@ -414,7 +414,7 @@ The MQTT bridge plugin (emqx_bridge_mqtt) has been removed. Use the MQTT Sink an
 
 ## Offline messages
 
-The [offline messages](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html) provided in EMQX 4.x are based on an external database. EMQX plans to provide native offline messages (based on the built-in database) in future versions, so the offline messages for the external database have been removed from version 5.0.0.
+The [offline messages](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html) provided in EMQX 4.x are based on an external database. EMQX plans to provide native offline messages (based on the built-in database) in future versions, so the offline messages for the external database is no longer supported in version 5.
 
 The upcoming native offline messaging feature will provide improved performance and reduce usage and maintenance costs. Stay tuned for more updates.
 
