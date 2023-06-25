@@ -193,7 +193,7 @@ The `bypass_auth_plugins` configuration is also deleted. When one wants to allow
 #### Built-in database (Mnesia)
 
 1. Mnesia is now referred to as the "built-in" database;
-2. Only two search methods are available: username-based or clientid-based;
+2. Two search methods are available: username-based or clientid-based, but mixing is no longer supported.
 3. The data format and REST API have changed. For more information, refer to `POST /authentication/{id}/users`.
 
 #### HTTP
