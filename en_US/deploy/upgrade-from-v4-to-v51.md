@@ -404,7 +404,7 @@ Rule SQL is fully compatible with 4.x syntax, but the actions under the rule are
 
 ## HTTP Server
 
-The WebHook plugin (emqx_web_hook) has been removed. Use the HTTP Server data bridge in Data Integration instead.
+The WebHook plugin (`emqx_web_hook`) is converted to a native feature, and it is now referred to as "HTTP Server" bridge.
 
 ## MQTT Bridge
 
