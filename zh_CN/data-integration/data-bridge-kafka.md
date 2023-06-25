@@ -81,8 +81,6 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 3. 在**数据桥接类型**中选择 **Kafka**，点击**下一步**。
 
-   <img src="./assets/bridge-create-next.png" alt="bridge-create-next" style="zoom:67%;" />
-
 4. 在**桥接角色** 中选择**生产者**或**消费者**。
    
    :::: tabs type:card

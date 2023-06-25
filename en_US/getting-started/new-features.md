@@ -1,12 +1,12 @@
 # What's New
 
-This section lists the new features introduced in EMQX 5.0.
+This section lists the new features introduced in EMQX 5.1.
 
 {% emqxee %}
 
 ## Hot Upgrades
 
-Starting from EMQX Enterprise 5.1.0, EMQX introduces the hot upgrade feature, allowing you to upgrade to newer versions of EMQX without interrupting the service.
+Starting from EMQX Enterprise 5.1, EMQX introduces the hot upgrade feature, allowing you to upgrade to newer versions of EMQX without interrupting the service.
 
 This means you can smoothly update EMQX to a newer version while keeping your applications running continuously without any downtime. This feature provides greater flexibility and reliability to meet your system upgrade needs.
 
@@ -14,7 +14,7 @@ This means you can smoothly update EMQX to a newer version while keeping your ap
 
 ## File Transfer over MQTT 
 
-EMQX 5.1.0 introduces File Transfer over MQTT, which supports file transfer using the MQTT protocol.
+EMQX 5.1 introduces File Transfer over MQTT, which supports file transfer using the MQTT protocol.
 
 This feature is implemented based on the extended implementation of the standard MQTT protocol, allowing integration with existing clients and applications without modification. Clients can send file segments to specific topics using the MQTT protocol. After the transfer is complete, the server merges the file segments and saves them to local disk or exports them to object storage compatible with the S3 protocol.
 
@@ -24,7 +24,7 @@ Get started with [File Transfer over MQTT](../file-transfer/introduction.md) now
 
 ## Backup and Restore
 
-EMQX 5.1.0 introduces a set of command-line tools for backup and restore, allowing you to export data and configuration files from the built-in database as a compressed package and restore them to a new cluster.
+EMQX 5.1 introduces a set of command-line tools for backup and restore, allowing you to export data and configuration files from the built-in database as a compressed package and restore them to a new cluster.
 
 Create a backup:
 

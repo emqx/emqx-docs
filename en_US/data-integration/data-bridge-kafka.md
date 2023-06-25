@@ -80,8 +80,6 @@ This section demonstrates how to create Kafka producer or consumer data bridges 
 
 3. In the **Create Data Bridge** page, click to select **Kafka**, and then click **Next**.
 
-   <img src="./assets/kafka_consumer/setup2.png" alt="setup2" style="zoom:67%;" />
-
 4. In **Bridge Role** field, select **Producer** or **Consumer**. Click the corresponding tabs for the configuration of each role. 
    
    :::: tabs type:card

@@ -80,7 +80,7 @@
     - deploy/cluster/create-cluster
     - deploy/cluster/security
     - deploy/cluster/lb
-    - title_en: Cluster Rebalancing
+    - title_en: Node Evacuation and Cluster Load Rebalancing
       title_cn: 节点疏散与集群负载重平衡
       edition: ee
       path: deploy/cluster/rebalancing
@@ -302,8 +302,8 @@
 
 ## Dashboard
 
-- title_en: Dashboard
-  title_cn: Dashboard
+- title_en: EMQX Dashboard
+  title_cn: EMQX Dashboard
   path: dashboard/introduction
   collapsed: true
   children:

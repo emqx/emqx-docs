@@ -1,4 +1,4 @@
-# Dashboard
+# Dashboard Home Page
 
 Once you have successfully logged in, you will be able to access the EMQX Dashboard home page, which contains three tabs.
 
