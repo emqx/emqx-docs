@@ -426,7 +426,7 @@ As of version 5.0.0, EMQX no longer provides [Auto subscription](https://docs.em
 
 ## Prometheus
 
-Old Prometheus plug-in (emqx_prometheus) has been removed. In version 5.1, Prometheus scraping endpoint is enabled by default, and no authentication is required to scrap the metrics.
+The old plugin named `emqx_prometheus` has been converted to a native feature in version 5. Prometheus scraping endpoint is enabled by default, and no authentication is required to scrap the metrics.
 
 You can use `curl` command to inspect the metrics:
 
