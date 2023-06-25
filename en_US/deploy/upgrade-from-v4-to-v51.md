@@ -199,7 +199,7 @@ The `bypass_auth_plugins` configuration is also deleted. When one wants to allow
 #### HTTP
 
 1. Use the JSON fields inside the response body instead of the HTTP response status codes to identify the authentication result;
-2. Remove standalone super-user request. The super-user identity of the client is established through authentication in the response body.
+2. Removed standalone super-user request. The super-user identity of the client is established through authentication in the response body.
 
 **Success response status code:**
 
