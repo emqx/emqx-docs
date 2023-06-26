@@ -12,6 +12,8 @@ This means you can smoothly update EMQX to a newer version while keeping your ap
 
 {% endemqxee %}
 
+{% emqxee %}
+
 ## File Transfer over MQTT 
 
 EMQX 5.1 introduces File Transfer over MQTT, which supports file transfer using the MQTT protocol.
@@ -22,6 +24,7 @@ Compared to HTTP/FTP protocols, MQTT has the advantages of low bandwidth consump
 
 Get started with [File Transfer over MQTT](../file-transfer/introduction.md) now.
 
+{% endemqxee %}
 ## Backup and Restore
 
 EMQX 5.1 introduces a set of command-line tools for backup and restore, allowing you to export data and configuration files from the built-in database as a compressed package and restore them to a new cluster.
