@@ -27,11 +27,11 @@
 
 - 增加了一个新功能，用户可以在 TLS 监听器中启用“部分证书链验证” [#10553](https://github.com/emqx/emqx/pull/10553)。
 
-  详情请查看 `zones.conf` 配置文件中的 `listener.ssl.external.partial_chain` 配置项。
+  详情请查看 `listeners.conf` 配置文件中的 `listener.ssl.external.partial_chain` 配置项。
 
 - 增加了一个新功能，用户可以在 TLS 监听器中启用“客户端证书扩展密钥用途验证” [#10669](https://github.com/emqx/emqx/pull/10669)。
 
-  详情请查看 `zones.conf` 配置文件中的 `listener.ssl.external.verify_peer_ext_key_usage` 配置项。
+  详情请查看 `listeners.conf` 配置文件中的 `listener.ssl.external.verify_peer_ext_key_usage` 配置项。
 
 - 在 HTTP API `/api/v4/nodes` 的返回中增加 `live_connections` 字段 [#10859](https://github.com/emqx/emqx/pull/10859)。
 
@@ -50,7 +50,7 @@
   * 允许导入 Google IoT Core 设备配置和认证数据。
   * 实现了与 Google IoT Core 兼容的 MQTT 认证。
   * 提供了用于管理设备配置和认证数据的 API 接口。
-  
+
 - 支持使用动态的 Routing Key 创建 RabbitMQ 动作 [#1807](https://github.com/emqx/emqx-enterprise/pull/1807)。
 
   现在 RabbitMQ 动作的 "RabbitMQ Routing Key" 参数可以使用 `${key}` 格式的动态变量。
