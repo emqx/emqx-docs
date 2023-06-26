@@ -5,7 +5,7 @@ When in a cluster, EMQX nodes can be upgraded one at a time without any downtime
 The rolling upgrade process for each node in the cluster is as follows:
 
 1. Evacuate clients from the node using cluster rebalancing. (optional)
-1. Stop the old version node.
+2. Stop the old version node.
 1. Backup the config files and data directory of the nodes.
 1. Install a new version of EMQX.
 1. Start the new version node.
