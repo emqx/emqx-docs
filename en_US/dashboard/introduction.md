@@ -1,8 +1,6 @@
 # EMQX Dashboard
 
-EMQX provides a built-in Dashboard management console for users to monitor and manage EMQX clusters and configure the required features via web pages. The new Dashboard comes with a fresh new design for the dashboard, it provides the most easy-to-use MQTT broker management UI. it provides the most easy-to-use MQTT broker management UI.
-
-EMQX provides a built-in management console, EMQX Dashboard. Users can easily manage and monitor EMQX clusters, and configure and use the required features from a web page.
+EMQX provides a built-in Dashboard management console for users to monitor and manage EMQX clusters and configure the required features via web pages. The new Dashboard comes with a fresh new design and provides the most easy-to-use MQTT broker management UI. 
 
 The new UI / UX design of EMQX Dashboard optimizes the display and content of key data and metrics, enhancing the visual experience while providing more comprehensive, powerful and easy-to-use built-in features, such as authentication and permission management for connection, subscription and publishing, support for data integration transformation using data bridging and with the rules engine, etc. Quick and easy access using the browser provides users with the convenience of using EMQX for more IoT business development.
 
