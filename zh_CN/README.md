@@ -6,7 +6,7 @@ EMQX 是一款[开源](https://github.com/emqx/emqx)的大规模分布式 MQTT �
 
 EMQX 支持多种协议，包括 MQTT (3.1、3.1.1 和 5.0)、HTTP、QUIC 和 WebSocket 等，保证各种网络环境和硬件设备的可访问性。EMQX 还提供了全面的 SSL/TLS 功能支持，比如双向认证以及各种身份验证机制，为物联网设备和应用程序提供可靠和高效的通信基础设施。
 
-<img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/assets/architecture_image.png" alt="architecture_image" style="zoom:50%;" />
+<img src="./assets/architecture_image.png" alt="architecture_image" style="zoom:50%;" />
 
 内置基于 SQL 的[规则引擎](https://www.emqx.com/zh/solutions/iot-rule-engine)，EMQX 可以实时提取、过滤、丰富和转换物联网数据。此外，EMQX 采用了无主分布式架构，以确保高可用性和水平扩展性，并提供操作友好的用户体验和出色的可观测性。
 
