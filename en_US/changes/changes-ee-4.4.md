@@ -45,18 +45,18 @@
 
 - Added numerical range validation (23-65535) for the `mqtt.max_clientid_len` configuration parameter [#11096](https://github.com/emqx/emqx/pull/11096).
 
-- Added a plugin `emqx_gcp_device` [#1784](https://github.com/emqx/emqx-enterprise/pull/1784).
+- Added a plugin `emqx_gcp_device`.
 
   It simplifies migration from Google IoT Core:
   * It allows import of Google IoT Core device configuration and authentication data.
   * Implements Google IoT Core compatible MQTT authentication.
   * Provides API endpoints for managing device configuration and authentication data.
 
-- Added support for creating RabbitMQ actions with dynamic Routing Key [#1807](https://github.com/emqx/emqx-enterprise/pull/1807).
+- Added support for creating RabbitMQ actions with dynamic Routing Key.
 
   The "RabbitMQ Routing Key" parameter of RabbitMQ actions can now use dynamic variables in the `${key}` format.
 
-- Added default ports for DynamoDB resources [#1808](https://github.com/emqx/emqx-enterprise/pull/1808).
+- Added default ports for DynamoDB resources.
 
   Previously, the "DynamoDB Server" parameter of DynamoDB resources required a URL with a specified port number, otherwise the resource creation would fail.
   Now, if the URL does not include a port number, the default value will be 80 (HTTP) or 443 (HTTPS).
@@ -83,68 +83,68 @@
 
   See https://github.com/emqx/emqx/issues/10628 for more details.
 
-- Fixed an issue related to reconnection of the authentication module [#1785](https://github.com/emqx/emqx-enterprise/pull/1785).
+- Fixed an issue related to reconnection of the authentication module.
 
   When starting EMQX, if the connection between the authentication module and the database is disconnected, the authentication module will periodically initiate reconnection.
   Prior to the fix, even if the module was manually disabled, EMQX would still periodically reconnect to the database. After the fix, reconnection attempts are made only when the module is enabled.
 
-- Fixed an issue where the PgSQL authentication module lost Prepared Statements after reconnection [#1785](https://github.com/emqx/emqx-enterprise/pull/1785).
+- Fixed an issue where the PgSQL authentication module lost Prepared Statements after reconnection.
 
   Prior to the fix, if the connection between the PgSQL authentication module and the database was disconnected and reconnected, authentication would fail due to the loss of Prepared Statements, and the following error log would be printed:
   ```
   2023-03-30T20:50:48.088416+08:00 [error] abc@124.79.220.151:58561 [Postgres] query '"auth_query"' failed: {error,error,<<"26000">>,invalid_sql_statement_name,<<"prepared statement \"auth_query\" does not exist">>,[...]}
   ```
 
-- Fixed an issue where connection to Kafka failed after importing resources from version 4.4.9 [#1785](https://github.com/emqx/emqx-enterprise/pull/1785).
+- Fixed an issue where connection to Kafka failed after importing resources from version 4.4.9.
 
   Prior to the fix, when importing data from version 4.4.9 to 4.4.18, if the Kafka resource was not configured with a username and password (i.e. authentication mode was NONE), EMQX might incorrectly use PLAIN authentication mode to connect to Kafka after importing, resulting in authentication failure.
 
-- Fixed the issue of EMQX docker container unable to integrate with Kafka using Kerberos authentication [#1795](https://github.com/emqx/emqx-enterprise/pull/1795).
+- Fixed the issue of EMQX docker container unable to integrate with Kafka using Kerberos authentication.
 
   Prior to the fix, the EMQX docker (alpine) image was missing two software packages, libsasl and cyrus-sasl-gssapiv2, which caused the Kerberos functionality to not work properly. The error log was as follows:
   ```
   2023-06-15T05:30:31.148811+00:00 [warning] ...,{connect_kafka_server_fail,[{<<"kafka-a:9092">>,{{not_loaded,[{module,sasl_auth},{line,212},{on_load_error_info,{error,{load_failed,"Failed to load NIF library: 'Error loading shared library libsasl2.so.3: No such file or directory (needed by /opt/emqx/lib/sasl_auth-2.0.1/priv/sasl_auth.so)'"}
   ```
 
-- Fixed the data distribution logic of the RocketMQ action in the rule engine [#1802](https://github.com/emqx/emqx-enterprise/pull/1802).
+- Fixed the data distribution logic of the RocketMQ action in the rule engine.
 
   Prior to the fix, in the scenario where EMQX sends data to a RocketMQ cluster in master-slave mode, if the RocketMQ cluster has multiple master nodes, regardless of whether the `roundrobin` or `key_dispatch` strategy is used, the messages will always be distributed to the first RocketMQ master node.
 
-- Fixed the issue of module order changing after restarting or joining a cluster [#1806](https://github.com/emqx/emqx-enterprise/pull/1806).
+- Fixed the issue of module order changing after restarting or joining a cluster.
 
   Prior to the fix, after a node restarting or joining a cluster, the order of modules could change, which would cause the authentication chain order to change if multiple authentication modules were enabled.
 
-- Fixed the issue of failing to import listener configurations from 4.4.7 [#1810](https://github.com/emqx/emqx-enterprise/pull/1810).
+- Fixed the issue of failing to import listener configurations from 4.4.7.
 
   Prior to the fix, if the JSON file contained configurations for "wss" or "wss" listeners, the import could fail due to an incompatible type of the `fail_if_no_subprotocol` configuration item, but without any error messages or logs.
 
-- Fixed the issue of hot configurations not taking effect after a new node joins the cluster [#1800](https://github.com/emqx/emqx-enterprise/pull/1800).
+- Fixed the issue of hot configurations not taking effect after a new node joins the cluster.
 
   Prior to the fix, when a node joined a cluster with hot configurations enabled, it could successfully replicate the hot configurations from the cluster, but the configurations did not take effect at runtime.
 
-- Fix the issue that the WebSocket downlink message type of the OCPP gateway is incorrect [#1815](https://github.com/emqx/emqx-enterprise/pull/1815).
+- Fix the issue that the WebSocket downlink message type of the OCPP gateway is incorrect.
 
   Prior to the fix, the WebSocket downlink message type of the OCPP gateway was `binary`, but it should be `text`.
 
-- Fix issue when MQTT clients could not connect over TLS if the listener was configured to use TLS v1.3 only. [#1818](https://github.com/emqx/emqx-enterprise/pull/1818).
+- Fix issue when MQTT clients could not connect over TLS if the listener was configured to use TLS v1.3 only.
 
   The problem was that TLS connection was trying to use options incompatible with TLS v1.3.
 
-- Fixed the issue of retainer module throwing errors after hot upgrade [#1816](https://github.com/emqx/emqx-enterprise/pull/1816).
+- Fixed the issue of retainer module throwing errors after hot upgrade.
 
   After upgrading from old versions (e4.4.0 ~ e4.4.16) to e4.4.17 or e4.4.18, the retainer module might throw errors, causing retain messages to be unable to be sent properly. The error log is as follows:
   ```
   2023-05-17T01:48:44.515012+00:00 [error] mqtt_conti@62.93.210.184:54851 [Hooks] Failed to execute {fun emqx_retainer:on_session_subscribed/3,[]}: {error,badarg,[...]}
   ```
 
-- Fixed the issue of error log appearing when testing the connectivity of RabbitMQ [#1819](https://github.com/emqx/emqx-enterprise/pull/1819).
+- Fixed the issue of error log appearing when testing the connectivity of RabbitMQ.
 
   Prior to the fix, when clicking the test button for RabbitMQ resources, the following error log would be printed (only the error log appeared, and the functionality was not affected):
   ```
   2023-06-02T05:59:16.025229+00:00 [error] Destroy Resource bridge_rabbit failed, ResId: <<"_probe_:6edc3a76">>, not_found
   ```
 
-- Fixed the issue of creating multiple duplicate hot configuration modules when continuously clicking the **Enable** button on the Dashboard settings page [#1826](https://github.com/emqx/emqx-enterprise/pull/1826).
+- Fixed the issue of creating multiple duplicate hot configuration modules when continuously clicking the **Enable** button on the Dashboard settings page.
 
 ## e4.4.18
 
@@ -457,71 +457,71 @@ For more information about this feature, please refer to [Cluster Rebalancing](.
 
 ### Enhancements
 
-- Added topic validation for `emqx_mod_rewrite`. The dest topics contains wildcards are not allowed to publish [#1590](https://github.com/emqx/emqx-enterprise/pull/1590).
+- Added topic validation for `emqx_mod_rewrite`. The dest topics contains wildcards are not allowed to publish.
 
 - TDEngine resource support HTTP response formats of both TDEngine 2.x and 3.x [emqx/tdengine-client-erl#7](https://github.com/emqx/tdengine-client-erl/pull/7).
   The HTTP response of TDEngine 2.x uses the `status` field to represent the success or failure,
   while TDEngine 3.x uses the `code` field instead.
 
-- Support batch sending messages to [TDEngine SubTables](https://docs.tdengine.com/2.6/concept/#subtable) [#1583](https://github.com/emqx/emqx-enterprise/pull/1583).
+- Support batch sending messages to [TDEngine SubTables](https://docs.tdengine.com/2.6/concept/#subtable).
 
-- The offline message clickhouse action prints an info level log: `Destroyed .. Successfully` when enabling a rule [#1594](https://github.com/emqx/emqx-enterprise/pull/1594).
+- The offline message clickhouse action prints an info level log: `Destroyed .. Successfully` when enabling a rule.
 
-- Now the rules can be created even though the corresponding resources are not ready [#1620](https://github.com/emqx/emqx-enterprise/pull/1620).
+- Now the rules can be created even though the corresponding resources are not ready.
   Before this change, one cannot create rules without getting the resources connected. We made it
   possible in this change, but the newly created rule will be in `disabled` state.
 
-- Avoid delete offline message twice [#1522](https://github.com/emqx/emqx-enterprise/pull/1522).
+- Avoid delete offline message twice.
   EMQX while delete offline message in external database when subscriber send a PUBACK or PUBREC packet.
   But a message with `retain = true` will be stored twice (in retainer and external database) in case retain message and offline message are used in same time.
-  The reduplicated PUBACK and PUBREC will trigger deleted action twice. And the action-metrics will also increase caused by Rule-SQL execution suceeeed.
+  The reduplicated PUBACK and PUBREC will trigger deleted action twice. And the action-metrics will also increase caused by Rule-SQL execution succeed.
   In most cases this does not generate any exceptions or errors, and only a few databases will report that the message to be deleted does not exist on the second delete.
   This change will avoid redundant offline message deletion operations.
 
-- Users can define the `externalTrafficPolicy` of service in EMQX Enterprise Helm Chart [#1638](https://github.com/emqx/emqx-enterprise/pull/1638).
+- Users can define the `externalTrafficPolicy` of service in EMQX Enterprise Helm Chart.
 
-- When dashboard creates a new user, the password format is `^[A-Za-z0-9]+[A-Za-z0-9-_]*$` [#1643](https://github.com/emqx/emqx-enterprise/pull/1643).
+- When dashboard creates a new user, the password format is `^[A-Za-z0-9]+[A-Za-z0-9-_]*$`.
 
 ### Bug fixes
 
-- After a reconnect, the unacknowledged QoS1/QoS2 messages in non-clean session were not retransmitted periodically as before the reconnect [#1623](https://github.com/emqx/emqx-enterprise/pull/1623).
+- After a reconnect, the unacknowledged QoS1/QoS2 messages in non-clean session were not retransmitted periodically as before the reconnect.
   The configuration `zone.<zone-name>.retry_interval` specifies the retransmission interval of
   unacknowledged QoS1/QoS2 messages (defaults to 30s).
   Prior to this fix, unacknowledged messages buffered in the session are re-sent only once after session take-over, but not retried at configured interval.
 
-- The expired 'awaiting_rel' queue is not cleared after persistent session MQTT client disconnected [#1602](https://github.com/emqx/emqx-enterprise/pull/1602).
+- The expired 'awaiting_rel' queue is not cleared after persistent session MQTT client disconnected.
   Before this change, if the 'awaiting_rel' queue is full when the MQTT client reconnect
   to the broker and publish a QoS2 message, the client will get disconnected by the broker
   with reason code RC_RECEIVE_MAXIMUM_EXCEEDED(0x93), even if the packet IDs in the 'awaiting_rel'
   queue have already expired.
 
-- Authentication for RocketMQ resource not working [#1561](https://github.com/emqx/emqx-enterprise/pull/1561).
+- Authentication for RocketMQ resource not working.
   In this change we moved the configuration fields `access_key`, `secret_key`
   and `security_token` from the `data_to_rocket` action to the `bridge_rocket`
   resource. And we also added a new field `namespace` for RocketMQ services in
   Aliyun cloud.
 
-- Added validation for Kafka action parameters, Segment Bytes should not be greater than Max Bytes [#1607](https://github.com/emqx/emqx-enterprise/pull/1607).
+- Added validation for Kafka action parameters, Segment Bytes should not be greater than Max Bytes.
 
-- Added validation for Pulsar action parameters, Segment Bytes should not be greater than Max Bytes [#1625](https://github.com/emqx/emqx-enterprise/pull/1625).
+- Added validation for Pulsar action parameters, Segment Bytes should not be greater than Max Bytes.
 
-- Fix the "ORA-01000: maximum open cursors exceeded" problem when sending data via the emqx oracle resource [#1556](https://github.com/emqx/emqx-enterprise/pull/1556).
+- Fix the "ORA-01000: maximum open cursors exceeded" problem when sending data via the emqx oracle resource.
 
-- Fixed EMQX Enterprise Helm Chart deployment error [#1621](https://github.com/emqx/emqx-enterprise/pull/1621)
+- Fixed EMQX Enterprise Helm Chart deployment error.
   - Fixed the `Discovery error: no such service` error occurred during helm chart deployment, resulting in an abnormal discovery of cluster nodes.
   - Fixed EMQX Enterprise Helm Chart can not set JSON type value for EMQX Enterprise configuration items.
 
-- Fixed an issue where the configuration would not be reloaded on all nodes in a cluster after importing a backup configuration [#1612](https://github.com/emqx/emqx-enterprise/pull/1612).
+- Fixed an issue where the configuration would not be reloaded on all nodes in a cluster after importing a backup configuration.
 
-- Fixed an issue where the HTTP API would fail to download a backup configuration file when downloading it from a node where it does not reside in [#1612](https://github.com/emqx/emqx-enterprise/pull/1612).
+- Fixed an issue where the HTTP API would fail to download a backup configuration file when downloading it from a node where it does not reside in.
 
-- Add the `SNI` field for SSL connection configuration of Kafka resource [#1642](https://github.com/emqx/emqx-enterprise/pull/1642).
+- Add the `SNI` field for SSL connection configuration of Kafka resource.
 
-- Fixed the issue that the MongoDB resource connection process was slow when authentication was enabled [#1655](https://github.com/emqx/emqx-enterprise/pull/1655).
+- Fixed the issue that the MongoDB resource connection process was slow when authentication was enabled.
 
-- Fixed the issue that after the release hot upgrade, EMQX occasionally alarms resources down, and the alarms could not be automatically cleared [#1652](https://github.com/emqx/emqx-enterprise/pull/1652).
+- Fixed the issue that after the release hot upgrade, EMQX occasionally alarms resources down, and the alarms could not be automatically cleared.
 
-- Fix connection statistics in the dashboard: mark evacuated clients as disconnected before they can reconnect [#1680](https://github.com/emqx/emqx-enterprise/pull/1680).
+- Fix connection statistics in the dashboard: mark evacuated clients as disconnected before they can reconnect.
 ## e4.4.11
 
 *Release Date: 2022-11-26*
@@ -558,14 +558,13 @@ a node restart (and configuration change) is required.
   sync manner might be sent but regarded as a timeout error, which in
   turn causes such clients to be disconnected.
 
-- Added hot-configuration support for OCSP stapling and CRL checking/caching. [#1528](https://github.com/emqx/emqx-enterprise/pull/1528)
+- Added hot-configuration support for OCSP stapling and CRL checking/caching.
 
-- Added a new rule engine bridge and corresponding rule action for GCP
-  PubSub [#1523](https://github.com/emqx/emqx-enterprise/pull/1523).
+- Added a new rule engine bridge and corresponding rule action for GCP PubSub.
 
-- Support to use placeholders like `${var}` in the `Collection` field of Rule-Engine's MongoDB actions [#1503](https://github.com/emqx/emqx-enterprise/pull/1503).
+- Support to use placeholders like `${var}` in the `Collection` field of Rule-Engine's MongoDB actions
 
-- Add a format check to the `host` field of the InfluxDB resource in Rule-Engine [#1426](https://github.com/emqx/emqx-enterprise/pull/1426).
+- Add a format check to the `host` field of the InfluxDB resource in Rule-Engine.
   The host field should be an ip/domain without scheme and port.
 
 - OTP upgrade from 24.1.5-3 to 24.3.4.2-1 [#9265](https://github.com/emqx/emqx/pull/9265).
@@ -637,23 +636,23 @@ a node restart (and configuration change) is required.
 ### Bug fixes
 
 - Fix the default authentication mechanism of Kafka resource changed to `NONE` from `PLAIN`
-  when upgrading emqx from e4.4.5 and older versions [#1509](https://github.com/emqx/emqx-enterprise/pull/1509).
+  when upgrading emqx from e4.4.5 and older versions.
 
-- Fix an upgrade issue for JWT authentication plugin [#1558](https://github.com/emqx/emqx-enterprise/pull/1558).
+- Fix an upgrade issue for JWT authentication plugin.
   When upgrading from e4.4.3 or earlier, an EMQX internal resource which holds the keys will have to be restarted,
   during the restart, clients may fail to be authenticated.
 
 - Fixed the option to choose the `reset_by_subscriber` offset reset
-  policy in Kafka Consumer [#1463](https://github.com/emqx/emqx-enterprise/pull/1463).
+  policy in Kafka Consumer.
 
-- Added the missing `tlsv1.3` option to `tls_versions` in hot-config [#1532](https://github.com/emqx/emqx-enterprise/pull/1532).
+- Added the missing `tlsv1.3` option to `tls_versions` in hot-config.
 
-- Made Rule-Engine able to connect SQL server when its listening port is not the default (`1433`) [#1464](https://github.com/emqx/emqx-enterprise/pull/1464).
+- Made Rule-Engine able to connect SQL server when its listening port is not the default (`1433`).
 
-- Make sure Schema-Registry API supports Percent-encoding `name` in HTTP request URI [#1497](https://github.com/emqx/emqx-enterprise/issues/1497).
+- Make sure Schema-Registry API supports Percent-encoding `name` in HTTP request URI.
   Note that the `name` in `POST /api/v4/schemas` request body should not be percent-encoded as it's a JSON field value.
 
-- Fix an upgrade issue for JWT authentication plugin [#1554](https://github.com/emqx/emqx-enterprise/pull/1554).
+- Fix an upgrade issue for JWT authentication plugin.
   When upgrading from e4.3.9 or earlier, an EMQX internal resource which holds the keys will have to be restarted,
   during the restart, clients may fail to be authenticated.
 

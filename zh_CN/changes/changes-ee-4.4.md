@@ -45,17 +45,17 @@
 
 - 为 `mqtt.max_clientid_len` 配置项增加数值范围校验 (23-65535) [#11096](https://github.com/emqx/emqx/pull/11096)。
 
-- 新增插件 `emqx_gcp_device` [#1784](https://github.com/emqx/emqx-enterprise/pull/1784)。该插件简化了从 Google IoT Core 的迁移过程：
+- 新增插件 `emqx_gcp_device`。该插件简化了从 Google IoT Core 的迁移过程：
 
   * 允许导入 Google IoT Core 设备配置和认证数据。
   * 实现了与 Google IoT Core 兼容的 MQTT 认证。
   * 提供了用于管理设备配置和认证数据的 API 接口。
 
-- 支持使用动态的 Routing Key 创建 RabbitMQ 动作 [#1807](https://github.com/emqx/emqx-enterprise/pull/1807)。
+- 支持使用动态的 Routing Key 创建 RabbitMQ 动作。
 
   现在 RabbitMQ 动作的 "RabbitMQ Routing Key" 参数可以使用 `${key}` 格式的动态变量。
 
-- DynamoDB 资源支持默认端口 [#1808](https://github.com/emqx/emqx-enterprise/pull/1808)。
+- DynamoDB 资源支持默认端口。
 
   此前 DynamoDB 资源的 “DynamoDB 服务器” 参数中必须填写带端口号的 URL，否则会资源会创建失败。
   现在如果 URL 不带端口号，缺省值为 80 (HTTP) 或者 443 (HTTPS)。
@@ -82,54 +82,54 @@
 
   详见 https://github.com/emqx/emqx/issues/10628
 
-- 修复认证模块断线重连相关的问题 [#1785](https://github.com/emqx/emqx-enterprise/pull/1785)。
+- 修复认证模块断线重连相关的问题。
 
   在启动 EMQX 的时候，如果认证模块与数据库之间的连接处于断开状态，认证模块会周期性发起重连。
   修复前，即使手动禁用该模块，EMQX 仍然会周期性重连数据库。修复后仅仅当模块启用的时候尝试重连。
 
-- 修复 PgSQL 认证模块重连后 Prepared Statement 丢失的问题 [#1785](https://github.com/emqx/emqx-enterprise/pull/1785)。
+- 修复 PgSQL 认证模块重连后 Prepared Statement 丢失的问题。
 
   修复前，如果 PgSQL 认证模块与数据库之间的连接发生过断开并重连，会因为 Prepared Statement 丢失而导致认证失败，并打印如下错误日志：
   ```
   2023-03-30T20:50:48.088416+08:00 [error] abc@124.79.220.151:58561 [Postgres] query '"auth_query"' failed: {error,error,<<"26000">>,invalid_sql_statement_name,<<"prepared statement \"auth_query\" does not exist">>,[...]}
   ```
 
-- 修复从 4.4.9 版本导入 Kafka 资源后连接失败的问题 [#1785](https://github.com/emqx/emqx-enterprise/pull/1785)。
+- 修复从 4.4.9 版本导入 Kafka 资源后连接失败的问题。
 
   修复前，从 4.4.9 版本导入数据到 4.4.18，如果导入之前 Kafka 资源未配置用户名密码（即认证模式是 NONE），导入后 EMQX 可能会错误地使用 PLAIN 认证模式连接 Kafka，从而导认证失败。
 
-- 修复 EMQX docker 容器无法使用 Kerberos 认证方式集成 Kafka 的问题 [#1795](https://github.com/emqx/emqx-enterprise/pull/1795)。
+- 修复 EMQX docker 容器无法使用 Kerberos 认证方式集成 Kafka 的问题。
 
   修复前，EMQX 的 docker (alpine) 镜像缺失了 libsasl 和 cyrus-sasl-gssapiv2 两个软件包，导致 Kerberos 功能无法正常使用，错误日志：
   ```
   2023-06-15T05:30:31.148811+00:00 [warning] ...,{connect_kafka_server_fail,[{<<"kafka-a:9092">>,{{not_loaded,[{module,sasl_auth},{line,212},{on_load_error_info,{error,{load_failed,"Failed to load NIF library: 'Error loading shared library libsasl2.so.3: No such file or directory (needed by /opt/emqx/lib/sasl_auth-2.0.1/priv/sasl_auth.so)'"}
   ```
 
-- 修复规则引擎 RocketMQ 动作的数据分发逻辑 [#1802](https://github.com/emqx/emqx-enterprise/pull/1802)。
+- 修复规则引擎 RocketMQ 动作的数据分发逻辑。
 
   修复前，在 EMQX 发送数据到主从模式的 RocketMQ 集群的场景中，如果 RocketMQ 集群有多个主节点，那么无论使用 `roundrobin` 还是 `key_dispatch` 策略，消息总是会被分发到第一个 RocketMQ 主节点上。
 
-- 修复重启或加入集群后模块顺序改变的问题 [#1806](https://github.com/emqx/emqx-enterprise/pull/1806)。
+- 修复重启或加入集群后模块顺序改变的问题。
 
   修复前，在节点重启或者加入集群之后，模块的顺序可能会发生改变，如果启用了多个认证模块，会导致认证链的顺序发生改变。
 
-- 修复从 4.4.7 导入监听器配置失败的问题 [#1810](https://github.com/emqx/emqx-enterprise/pull/1810)。
+- 修复从 4.4.7 导入监听器配置失败的问题。
 
   修复前，如果 JSON 文件中包含 "wss" 或 "wss" 监听器的配置，导入可能会由于 `fail_if_no_subprotocol` 配置项的类型不兼容而导入失败，但没有任何错误提示和日志。
 
-- 修复新节点加入集群后热配置不生效的问题 [#1800](https://github.com/emqx/emqx-enterprise/pull/1800)。
+- 修复新节点加入集群后热配置不生效的问题。
 
   修复前，当节点加入一个已启用热配置的集群时，可以成功从集群复制热配置，但配置没有在运行时生效。
 
-- 修复 OCPP 网关的 WebSocket 下行消息类型错误的问题 [#1815](https://github.com/emqx/emqx-enterprise/pull/1815)。
+- 修复 OCPP 网关的 WebSocket 下行消息类型错误的问题。
 
   OCPP 网管的 WebSocket 下行消息应该为 `text`，而不是修复前的 `binary`。
 
-- 修复当配置了监听器仅使用 TLS v1.3 协议的情况下，MQTT 客户端无法连接的问题 [#1818](https://github.com/emqx/emqx-enterprise/pull/1818)。
+- 修复当配置了监听器仅使用 TLS v1.3 协议的情况下，MQTT 客户端无法连接的问题。
 
   之前的问题是 EMQX 监听器在建立 TLS 连接时，使用了与 TLS v1.3 不兼容的参数项。
 
-- 修复热升级后 retainer 模块报错的问题 [#1816](https://github.com/emqx/emqx-enterprise/pull/1816)。
+- 修复热升级后 retainer 模块报错的问题。
 
   从旧版本版本 (e4.4.0 ~ e4.4.16) 升级到 e4.4.17 或 e4.4.18 之后，retainer 模块可能会报错，导致 retain 消息无法正常发送，错误日志如下：
 
@@ -137,7 +137,7 @@
   2023-05-17T01:48:44.515012+00:00 [error] mqtt_conti@62.93.210.184:54851 [Hooks] Failed to execute {fun emqx_retainer:on_session_subscribed/3,[]}: {error,badarg,[...]}
   ```
 
-- 修复 RabbitMQ 测试连接可用性时出现错误日志的问题 [#1819](https://github.com/emqx/emqx-enterprise/pull/1819)。
+- 修复 RabbitMQ 测试连接可用性时出现错误日志的问题。
 
   修复前，在点击 RabbitMQ 资源的测试按钮时，会打印如下错误日志 (仅出现错误日志，功能未受影响)：
 
@@ -145,7 +145,7 @@
   2023-06-02T05:59:16.025229+00:00 [error] Destroy Resource bridge_rabbit failed, ResId: <<"_probe_:6edc3a76">>, not_found
   ```
 
-- 修复连续点击 Dashboard 设置页面上的**启用**按钮时，会导致创建出多个重复的热配置模块的问题 [#1826](https://github.com/emqx/emqx-enterprise/pull/1826)。
+- 修复连续点击 Dashboard 设置页面上的**启用**按钮时，会导致创建出多个重复的热配置模块的问题。
 
 ## e4.4.18
 
@@ -447,65 +447,65 @@
 
 ### 增强
 
-- 为主题重写模块增加主题合法性检查，带有通配符的目标主题不允许被发布 [#1590](https://github.com/emqx/emqx-enterprise/pull/1590)。
+- 为主题重写模块增加主题合法性检查，带有通配符的目标主题不允许被发布。
 
 - TDEngine 资源同时支持 TDEngine 2.x 和 3.x 两个版本的 API 返回格式 [emqx/tdengine-client-erl#7](https://github.com/emqx/tdengine-client-erl/pull/7)。
   在 HTTP 的返回中，TDEngine 2.x 使用 `status` 字段来代表请求成功或者失败，而 TDEngine 3.x 改为使用 `code` 字段。
 
-- TDEngine 资源支持批量发送数据到 [TDEngine 子表](https://docs.taosdata.com/concept/#子表subtable) [#1593](https://github.com/emqx/emqx-enterprise/pull/1593)。
+- TDEngine 资源支持批量发送数据到 [TDEngine 子表](https://docs.taosdata.com/concept/#子表subtable)。
 
-- 在启用规则的时候，Clickhouse 离线消息动作打印了一行 info 级别的日志：`Destroyed .. Successfully` [#1594](https://github.com/emqx/emqx-enterprise/pull/1594)。
+- 在启用规则的时候，Clickhouse 离线消息动作打印了一行 info 级别的日志：`Destroyed .. Successfully`。
 
-- 现在即使对应的资源没有就绪的情况下，我们也能创建规则 [#1620](https://github.com/emqx/emqx-enterprise/pull/1620)。
+- 现在即使对应的资源没有就绪的情况下，我们也能创建规则。
   在此改动之前，如果资源没有连接好，我们就没办法创建规则。在此改动之后可以创建了，但是新创建的规则将处于 `禁用` 状态。
 
-- 避免离线消息被重复删除 [#1522](https://github.com/emqx/emqx-enterprise/pull/1522)。
+- 避免离线消息被重复删除。
   当订阅者回复消息 PUBACK(Qos1) 或消息 PUBREC(Qos2) 时，EMQX 会将外部数据库中的这条离线消息删除。
   但当离线消息和保留消息功能同时启用时，一条 `retain = true` 的消息会被冗余存储两次 (Retainer 与外部数据库)。
   那么重复的 PUBACK 或 PUBREC 将触发两次删除外部数据库中离线消息的行为，并且会使 Rule-SQL 执行成功而使 action-metrics 增加。
   在多数情况下这不会产生任何异常或错误，仅有个别数据库在第二次删除时会报告要删除的消息不存在。
   此更改后，将避免冗余的离线消息删除操作。
 
-- 用户可以在 EMQX Enterprise Helm Chart 中自定义 service 资源的 `externalTrafficPolicy` [#1638](https://github.com/emqx/emqx-enterprise/pull/1638)。
+- 用户可以在 EMQX Enterprise Helm Chart 中自定义 service 资源的 `externalTrafficPolicy`。
 
-- 当控制台创建新用户时，密码格式为 `^[A-Za-z0-9]+[A-Za-z0-9-_]*$` [#1643](https://github.com/emqx/emqx-enterprise/pull/1643)。
+- 当控制台创建新用户时，密码格式为 `^[A-Za-z0-9]+[A-Za-z0-9-_]*$`。
 
 ### 修复
 
-- 持久会话的 MQTT 客户端重新连接 emqx 之后，未被确认过的 QoS1/QoS2 消息不再周期性重发 [#1623](https://github.com/emqx/emqx-enterprise/pull/1623)。
+- 持久会话的 MQTT 客户端重新连接 emqx 之后，未被确认过的 QoS1/QoS2 消息不再周期性重发。
   `zone.<zone-name>.retry_interval` 配置指定了没有被确认过的 QoS1/QoS2 消息的重发间隔，(默认为 30s)。在这个修复之前，
   当持久会话的 MQTT 客户端重新连接 emqx 之后，emqx 会将队列中缓存的未被确认过的消息重发一次，但是不会按配置的时间间隔重试。
 
-- 持久会话的 MQTT 客户端断连之后，已经过期的 'awaiting_rel' 队列没有清除 [#1602](https://github.com/emqx/emqx-enterprise/pull/1602)。
+- 持久会话的 MQTT 客户端断连之后，已经过期的 'awaiting_rel' 队列没有清除。
   在这个改动之前，在客户端重连并且发布 QoS2 消息的时候，如果 'awaiting_rel' 队列已满，此客户端会被服务器以
   RC_RECEIVE_MAXIMUM_EXCEEDED(0x93) 错误码断开连接，即使这时候 'awaiting_rel' 队列里面的报文 ID 已经过期了。
 
-- RocketMQ 资源的认证功能不能正常工作 [#1561](https://github.com/emqx/emqx-enterprise/pull/1561)。
+- RocketMQ 资源的认证功能不能正常工作。
   在这个改动里，我们把 `access_key`, `secret_key` 以及 `security_token` 三个配置项字段
   从 `data_to_rocket` 动作挪到了 `bridge_rocket` 资源的配置中。并且我们为阿里云的 RocketMQ
   服务新加了一个 `namespace` 字段。
 
-- 为 Kafka 动作参数增加检查，确保 Segment Bytes 不会超过 Max Bytes [#1607](https://github.com/emqx/emqx-enterprise/pull/1607)。
+- 为 Kafka 动作参数增加检查，确保 Segment Bytes 不会超过 Max Bytes。
 
-- 为 Pulsar 动作参数增加检查，确保 Segment Bytes 不会超过 Max Bytes [#1625](https://github.com/emqx/emqx-enterprise/pull/1625)。
+- 为 Pulsar 动作参数增加检查，确保 Segment Bytes 不会超过 Max Bytes。
 
-- 解决通过 emqx oracle 资源发送数据时，报 "ORA-01000: maximum open cursors exceeded" 错误的问题 [#1556](https://github.com/emqx/emqx-enterprise/pull/1556)。
+- 解决通过 emqx oracle 资源发送数据时，报 "ORA-01000: maximum open cursors exceeded" 错误的问题。
 
-- 修复了 EMQX Enterprise Helm Chart 部署的一些问题 [#1621](https://github.com/emqx/emqx-enterprise/pull/1621)
+- 修复了 EMQX Enterprise Helm Chart 部署的一些问题。
   - 修复了 EMQX Enterprise Helm Chart 部署时出现 `Discovery error: no such service` 错误，导致集群节点发现异常。
   - 修复了 EMQX Enterprise Helm Chart 无法配置 value 为 JSON 类型的 EMQX Enterprise 配置项。
 
-- 修正了一个问题，即导入备份配置后，配置不会在集群的所有节点上重新加载 [#1612](https://github.com/emqx/emqx-enterprise/pull/1612)。
+- 修正了一个问题，即导入备份配置后，配置不会在集群的所有节点上重新加载。
 
-- 修正了一个问题，即当从一个不在其中的节点下载备份配置文件时，HTTP API将无法下载该文件 [#1612](https://github.com/emqx/emqx-enterprise/pull/1612)。
+- 修正了一个问题，即当从一个不在其中的节点下载备份配置文件时，HTTP API将无法下载该文件。
 
-- 为 Kafka 资源的 SSL 连接配置增加 `SNI` 字段 [#1642](https://github.com/emqx/emqx-enterprise/pull/1642)。
+- 为 Kafka 资源的 SSL 连接配置增加 `SNI` 字段。
 
-- 修复了 MongoDB 资源在启用认证的情况下，连接过程很慢的问题 [#1655](https://github.com/emqx/emqx-enterprise/pull/1655)。
+- 修复了 MongoDB 资源在启用认证的情况下，连接过程很慢的问题。
 
-- 修复了在版本热升级之后，EMQX 偶尔会出现资源已断开的告警，并且告警无法自动清除的问题 [#1652](https://github.com/emqx/emqx-enterprise/pull/1652)。
+- 修复了在版本热升级之后，EMQX 偶尔会出现资源已断开的告警，并且告警无法自动清除的问题。
 
-- 修复仪表盘中的连接统计：将疏散后的客户端标记为断开连接 [#1680](https://github.com/emqx/emqx-enterprise/pull/1680)。
+- 修复仪表盘中的连接统计：将疏散后的客户端标记为断开连接。
 
 
 ## e4.4.11
@@ -538,14 +538,13 @@
   **注意**: 如果 EMQX 从原先的版本升级上来，然后再降级回去，可能会导致一些向 Pulsar
   发送消息的飞行窗口中的同步请求超时，导致影响这部分客户端异常下线。
 
-- 为 GCP PubSub 添加了新的规则引擎桥和相应的规则操作
-  [#1523](https://github.com/emqx/emqx-enterprise/pull/1523)。
+- 为 GCP PubSub 添加了新的规则引擎桥和相应的规则操作。
 
-- 增加了对 OCSP Stapling 和 CRL 检查/缓存的热配置支持 [#1528](https://github.com/emqx/emqx-enterprise/pull/1528)。
+- 增加了对 OCSP Stapling 和 CRL 检查/缓存的热配置支持。
 
-- 支持在规则引擎的 MongoDB 动作的 `Collection` 字段里使用 `${var}` 格式的占位符 [#1503](https://github.com/emqx/emqx-enterprise/pull/1503)。
+- 支持在规则引擎的 MongoDB 动作的 `Collection` 字段里使用 `${var}` 格式的占位符。
 
-- 添加针对规则引擎中的 InfluxDB 资源的 `host` 字段的格式检查；主机字段应该是不包括 scheme 和端口的 IP/域名 [#1426](https://github.com/emqx/emqx-enterprise/pull/1426)。
+- 添加针对规则引擎中的 InfluxDB 资源的 `host` 字段的格式检查；主机字段应该是不包括 scheme 和端口的 IP/域名。
   相关的文档更新请查看 [emqx/emqx-docs#1368](https://github.com/emqx/emqx-docs/pull/1368)。
 
 - OTP 升级: 从 24.1.5-3 至 24.3.4.2-1 [#9265](https://github.com/emqx/emqx/pull/9265)。
@@ -609,21 +608,21 @@
 
 ### 修复
 
-- 解决从 e4.4.5 以及更早的版本升级 emqx 的时候，Kafka 资源的认证类型从 `PLAIN` 变成了 `NONE` 的错误 [#1509](https://github.com/emqx/emqx-enterprise/pull/1509)。
+- 解决从 e4.4.5 以及更早的版本升级 emqx 的时候，Kafka 资源的认证类型从 `PLAIN` 变成了 `NONE` 的错误。
 
-- 修复 JWT 认证插件的一个热升级问题 [#1558](https://github.com/emqx/emqx-enterprise/pull/1558)。
+- 修复 JWT 认证插件的一个热升级问题。
   当从 e4.4.3 或更早的热升级上来时，EMQX 内部一个 Key 管理进程会需要重启，在重启过程中的 JWT 认证请求可能会失败。
 
-- 修正了在 Kafka Consumer 中选择 `reset_by_subscriber` 偏移重置策略的选项 [#1463](https://github.com/emqx/emqx-enterprise/pull/1463)。
+- 修正了在 Kafka Consumer 中选择 `reset_by_subscriber` 偏移重置策略的选项。
 
-- 修复了热配置中的 `tls_versions` 配置项遗漏了 `tlsv1.3` 选项的问题 [#1532](https://github.com/emqx/emqx-enterprise/pull/1532)。
+- 修复了热配置中的 `tls_versions` 配置项遗漏了 `tlsv1.3` 选项的问题。
 
-- 修复了 SQL Server 资源中，无法在 `server` 字段里使用除 `1433` 之外的端口的问题 [#1464](https://github.com/emqx/emqx-enterprise/pull/1464)。
+- 修复了 SQL Server 资源中，无法在 `server` 字段里使用除 `1433` 之外的端口的问题。
 
-- Schema-Registry 的 API 在 HTTP 请求 URI 中支持百分号编码的 `name` [#1497](https://github.com/emqx/emqx-enterprise/issues/1497)。
+- Schema-Registry 的 API 在 HTTP 请求 URI 中支持百分号编码的 `name`。
   注意在创建 Schema 时，`POST /api/v4/schemas` 请求中的 `name` 字段不应使用百分号编码，因为这是一个 JSON 字段。
 
-- 修复 JWT 认证插件的一个热升级问题 [#1554](https://github.com/emqx/emqx-enterprise/pull/1554)。
+- 修复 JWT 认证插件的一个热升级问题。
   当从 e4.3.9 或更早的热升级上来时，EMQX 内部一个 Key 管理进程会需要重启，在重启过程中的 JWT 认证请求可能会失败。
 
 - 修复日志追踪模块没开启时，GET Trace 列表接口报错的问题。[#9156](https://github.com/emqx/emqx/pull/9156)
