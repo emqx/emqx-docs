@@ -12,6 +12,8 @@
 
 {% endemqxee %}
 
+{% emqxee %}
+
 ## 基于 MQTT 的文件传输
 
 EMQX 5.1 引入了 MQTT 文件传输功能，支持通过 MQTT 协议传输文件。
@@ -21,6 +23,8 @@ EMQX 5.1 引入了 MQTT 文件传输功能，支持通过 MQTT 协议传输文�
 相比于 HTTP/FTP 协议，MQTT 具有低带宽消耗和资源占用少的特点，能够快速且高效的进行文件传输。统一的物联网数据通道也简化了系统架构，减少应用的复杂性和维护成本。
 
 立即开始使用[基于 MQTT 的文件传输](../file-transfer/introduction.md)。
+
+{% endemqxee %}
 
 ## 备份与恢复
 
