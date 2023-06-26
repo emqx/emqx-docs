@@ -20,7 +20,7 @@ Rules specify how to retrieve data from a **data source**, perform **data transf
 
 - **Data Transformation**: Data transformations describe the process of transforming an input message. The `SELECT` part of the SQL extracts and transforms data from the input message. Embedded SQL sample statements can be used to implement advanced transformations, such as adding a timestamp to the output message.
 
-  For a detailed explanation of the syntax and built-in SQL functions, see [Rule Syntax](./rule-sql-syntax.md) and [Built-in SQL Functions](./rule-sql-builtin-functions.md).
+  For a detailed explanation of the syntax and built-in SQL functions, see [Rule Engine SQL Reference](./rule-sql-syntax.md) and [Built-in SQL Functions](./rule-sql-builtin-functions.md).
 
 - **Actions**: After the input is processed according to the specified rules, one or more actions can be defined to process the SQL execution results. The Rule Engine will sequentially perform corresponding actions, such as storing the processing results in a database or republishing them to another MQTT topic.
 
