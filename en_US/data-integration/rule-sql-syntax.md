@@ -1,23 +1,21 @@
-# Rule Engine SQL Language
+# Rule Engine SQL Reference
 
-EMQX uses an SQL-based language in its rules for data extraction, filtering, enrichment, and transformation. The rule-engine language provides a rich set of built-in functions, enabling you to perform simple transformations and create timestamps, among other operations. The language also supports embedding [JQ programs](https://stedolan.github.io/jq/) within expressions, which allows you to do complex data transformations whenever required.
-
-<img src="./assets/rules/data-integration-arch.png" alt="image" style="zoom:40%;" />
-
-This SQL-like language has two types of statements: `SELECT` and `FOREACH`. Each rule can have exactly one statement. 
+EMQX uses an SQL-based syntax in its rules for data extraction, filtering, enrichment, and transformation. This SQL-like syntax has two types of statements: `SELECT` and `FOREACH`. 
 
 | Statement | Description                                                  |
 | --------- | ------------------------------------------------------------ |
 | `SELECT`  | For situations where the result of the SQL statement is a single message. |
 | `FOREACH` | For producing zero or more messages from a single input message. |
 
-The rule syntax also supports complex expressions that can be embedded within the `SELECT` and `FOREACH` statements. 
+Each rule can have exactly one statement. SQL statements provide a rich set of built-in functions, enabling you to perform simple transformations and create timestamps, among other operations. 
 
-For the fields that can be referenced in the `SELECT` and `FOREACH` statements, see [Data Sources and Fields](./rule-sql-events-and-fields.md).
+SQL statements also supports embedding [JQ programs](https://stedolan.github.io/jq/) within expressions, which allows you to do complex data transformations whenever required. Expressions can be embedded within the `SELECT` and `FOREACH` statements. For the fields that can be referenced in the `SELECT` and `FOREACH` statements, see [Data Sources and Fields](./rule-sql-events-and-fields.md).
+
+<img src="./assets/rules/data-integration-arch.png" alt="image" style="zoom:40%;" />
 
 ## The `SELECT` Statement 
 
-The rule engine SQL in EMQX uses a `SELECT` statement to select specific fields from an input message, rename fields, transform data, and filter messages based on conditions. 
+The `SELECT` statement selects specific fields from an input message, rename fields, transform data, and filter messages based on conditions. 
 
 The basic format of a `SELECT` statement in the rule engine SQL is as follows:
 
@@ -64,7 +62,7 @@ You can find all available events in the EMQX Dashboard (under the **Events** ta
 
 :::
 
-### The `WHERE` clause
+### The `WHERE` Clause
 
 The `WHERE` clause provides an optional way to refine message filtering by specifying additional conditions that the messages must meet, in addition to the topic/event filter specified in the `FROM` clause.
 
@@ -269,7 +267,7 @@ Then the output will be:
 
 ## More Examples
 
-### Examples of SELECT Statements 
+### Examples of `SELECT` Statements 
 
 -  Extract all fields from the messages with the topic "t/a":
     ```sql
@@ -327,7 +325,7 @@ Then the output will be:
 - You can use the period symbol (`.`) to access inner fields of the payload. For example, if the payload is a nested JSON structure, you can use `payload.outer_field.inner_field` to access the `inner_field` of the `outer_field`. 
 :::
 
-### Examples of FOREACH Statements
+### Examples of `FOREACH` Statements
 
 Suppose there are messages with client ID `c_steve` coming to the topic ` t/1`. The message body is in JSON format, and the sensors field is an array containing multiple objects as is shown in the following example:
 
