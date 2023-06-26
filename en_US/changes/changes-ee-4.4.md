@@ -10,7 +10,7 @@
 
   A new configuration option has been added: `zone.<zone-name>.tcp_keepalive = Idle,Interval,Probes`. Users can enable the TCP layer's Keep Alive feature and specify time parameters using this configuration. This configuration is only effective on Linux and MacOS systems.
 
-- Improving error logs related to Proxy Protocol [emqx/esockd#177](https://github.com/emqx/esockd/pull/177).
+- Improved error logs related to Proxy Protocol [emqx/esockd#177](https://github.com/emqx/esockd/pull/177).
 
   The sample logs before this improvement:
   ```
@@ -25,13 +25,13 @@
   2023-04-20T18:10:17.205436+08:00 [error] [esockd_proxy_protocol] The listener 127.0.0.1:8883 is working in proxy protocol mode, but timed out while waiting for proxy_protocol header
   ```
 
-- Adds a new feature to enable partial certificate chain validation for TLS listeners [#10553](https://github.com/emqx/emqx/pull/10553).
+- Added a new feature to enable partial certificate chain validation for TLS listeners [#10553](https://github.com/emqx/emqx/pull/10553).
 
-  For details please checkout the `listener.ssl.external.partial_chain` in the `zones.conf` config file.
+  For details, please check out the `listener.ssl.external.partial_chain` in the `zones.conf` config file.
 
-- Adds a new feature to enable client certificate extended key usage validation for TLS listeners [#10669](https://github.com/emqx/emqx/pull/10669).
+- Added a new feature to enable client certificate extended key usage validation for TLS listeners [#10669](https://github.com/emqx/emqx/pull/10669).
 
-  For details please checkout the `listener.ssl.external.verify_peer_ext_key_usage` in the `zones.conf` config file.
+  For details, please check out the `listener.ssl.external.verify_peer_ext_key_usage` in the `zones.conf` config file.
 
 - Added the `live_connections` field in the HTTP API `/api/v4/nodes` response [#10859](https://github.com/emqx/emqx/pull/10859).
 
@@ -110,9 +110,9 @@
 
   Prior to the fix, in the scenario where EMQX sends data to a RocketMQ cluster in master-slave mode, if the RocketMQ cluster has multiple master nodes, regardless of whether the `roundrobin` or `key_dispatch` strategy is used, the messages will always be distributed to the first RocketMQ master node.
 
-- Fixed the issue of module order changing after restart or joining a cluster [#1806](https://github.com/emqx/emqx-enterprise/pull/1806).
+- Fixed the issue of module order changing after restarting or joining a cluster [#1806](https://github.com/emqx/emqx-enterprise/pull/1806).
 
-  Prior to the fix, after node restart or joining a cluster, the order of modules could change, which would cause the authentication chain order to change if multiple authentication modules were enabled.
+  Prior to the fix, after a node restarting or joining a cluster, the order of modules could change, which would cause the authentication chain order to change if multiple authentication modules were enabled.
 
 - Fixed the issue of failing to import listener configurations from 4.4.7 [#1810](https://github.com/emqx/emqx-enterprise/pull/1810).
 
@@ -144,7 +144,7 @@
   2023-06-02T05:59:16.025229+00:00 [error] Destroy Resource bridge_rabbit failed, ResId: <<"_probe_:6edc3a76">>, not_found
   ```
 
-- Fixed the issue of creating multiple duplicate hot configuration modules when continuously clicking the "Enable" button on the Dashboard settings page [#1826](https://github.com/emqx/emqx-enterprise/pull/1826)
+- Fixed the issue of creating multiple duplicate hot configuration modules when continuously clicking the **Enable** button on the Dashboard settings page [#1826](https://github.com/emqx/emqx-enterprise/pull/1826).
 
 ## e4.4.18
 
