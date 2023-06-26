@@ -1,6 +1,6 @@
 # Rule Engine SQL Language
 
-An SQL-based based language is used in EMQX's rules for data extraction, filtering, enriching, and transformation. The rule-engine language has a rich set of built-in functions for doing simple transformations and creating timestamps etc. The language also supports embedding [JQ programs](https://stedolan.github.io/jq/) in expressions, which allows you to do complex data transformations when it is needed.
+EMQX uses an SQL-based language in its rules for data extraction, filtering, enrichment, and transformation. The rule-engine language provides a rich set of built-in functions, enabling you to perform simple transformations and create timestamps, among other operations. The language also supports embedding [JQ programs](https://stedolan.github.io/jq/) within expressions, which allows you to do complex data transformations whenever required.
 
 <img src="./assets/rules/data-integration-arch.png" alt="image" style="zoom:40%;" />
 
@@ -45,9 +45,9 @@ Where,
 
   - `clientid`: is the client ID in the metadata
 
-  - `payload.clientid`: is the client ID in the message payload. All fields in the message payload are stored under `payload`
+  - `payload.clientid`: is the client ID in the message payload. All fields in the message payload are stored under `payload`.
 
-    - the `as` syntax renames the `payload.clientid` field as `myclientid`. 
+    - The `as` syntax renames the `payload.clientid` field as `myclientid`. 
 
 
 #### Select by Events
@@ -60,7 +60,7 @@ SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
 
 ::: tip
 
-You can find all available events in the EMQX Dashboard (under the Events tab when editing a rule)
+You can find all available events in the EMQX Dashboard (under the **Events** tab when editing a rule).
 
 :::
 
@@ -100,13 +100,13 @@ You can also use dot notation to access fields in a payload with a complex struc
 SELECT payload.a.b.c.deep as my_field FROM "t/#"
 ```
 
-An example of how the equality operator (=) can be used to test that a field has a certain value in the WHERE-clause. Using * in the SELECT-clause will forward all metadata and the payload to the output message:
+The statement below shows an example of how the equality operator (=) can be used to test that a field has a certain value in the WHERE-clause. Using * in the SELECT-clause will forward all metadata and the payload to the output message:
 
 ```sql
 SELECT * FROM "t/#" WHERE payload.x.y = 1
 ```
 
-One can use the`and` and `or` operators to form complex boolean expressions in the WHERE-clause:
+You can use the `and` and `or` operators to form complex boolean expressions in the WHERE-clause:
 
 ```sql
 SELECT * FROM "t/#" WHERE payload.name = "sensor_1" and payload.temprature > 39
@@ -126,16 +126,16 @@ FROM <topic>
 [WHERE <condition>]
 ```
 
-A `FOREACH` Statement starts with a `FOREACH`-clause that is used to create an array from the input message. The `FROM` and `WHERE` clauses have the same purpose and works the same as the clauses with the corresponding names in the SELECT statement. Besides the `FOREACH`, `FROM` and `WHERE` clauses, the `FOREACH` statement has two more optional clauses:
+A `FOREACH` statement starts with a `FOREACH`-clause that is used to create an array from the input message. The `FROM` and `WHERE` clauses have the same purpose and work the same as the clauses with the corresponding names in the SELECT statement. Besides the `FOREACH`, `FROM` and `WHERE` clauses, the `FOREACH` statement has two more optional clauses:
 
 | Clause   | Optional/Required | Description                                                  |
 | -------- | ----------------- | ------------------------------------------------------------ |
-| `DO`     | Optional          | To transform each element in the array selected by `FOREACH`<br><br>Correspond to the `SELECT` clause in the `SELECT` statement and accepts the same expressions |
-| `INCASE` | Optional          | To filter out array elements that do not match the specified conditions.<br><br>Accepts the same expressions as the `WHERE` clause |
+| `DO`     | Optional          | Transform each element in the array selected by `FOREACH`.<br><br>Correspond to the `SELECT` clause in the `SELECT` statement and accepts the same expressions. |
+| `INCASE` | Optional          | Filter out array elements that do not match the specified conditions.<br><br>Accepts the same expressions as the `WHERE` clause. |
 
 ::: tip
 
-All but the `FOREACH` clause have corresponding clauses in the `SELECT` statement, the `FOREACH` statement can thus be seen as a generalization of the `SELECT` statement as mentioned earlier. The following two statements are equivalent (note that `jq('.', payload)` wraps the payload inside an array): 
+Except for the FOREACH clause, all other clauses in the `FOREACH` statement have corresponding clauses in the `SELECT` statement. This implies that the FOREACH statement can be seen as a generalization of the `SELECT` statement, as mentioned earlier. The following two statements are equivalent (note that `jq('.', payload)` wraps the payload inside an array): 
 
 ```sql
 FOREACH jq('.', payload) as it
@@ -182,11 +182,11 @@ Where,
 - The `FOREACH`-clause specifies the `sensors` field in the input message's payload as the array to iterate over. It also names the array itmes `sensor` with the "`as nane`"-syntax.
 - The `DO` clause specifies the fields to be included in the output:
   - `timestamp` is the timestamp from the input message's metadata.
-  - `clientid` is the client ID from the input message's metadata, 
+  - `clientid` is the client ID from the input message's metadata.
   - `sensor.name` will be capitalized with the build-in `upper` function and renamed as `name` with the "`as name`"-syntax. Please note that "sensor" specifically refers to the current item within the array that is selected by the FOREACH clause.
-  - `sensor.idx`  will be renamed as `idx` with the `as` clause
-- The `INCASE` clause adds another filter condition, so we only get sensors where the value of the idx-field is 1 and above.
-- The `FROM` clause specifies that we want messages from topics that match the pattern "t/#". 
+  - `sensor.idx`  will be renamed as `idx` with the `as` clause.
+- The `INCASE` clause adds another filter condition, so you only get sensors where the value of the idx-field is 1 and above.
+- The `FROM` clause specifies that you want messages from topics that match the pattern "t/#". 
 
 After creating your rules, it's always recommended to test your rules before putting them into production. The Dashboard UI contains a test feature that allows you to test your rules with sample messages. For details on how to test the SQL statements, see [Test the Rule](./rule-get-started.md#test-the-rule). The rule above can be tested by putting in the following JSON formatted text as payload:
 
@@ -207,7 +207,7 @@ DO item.field_1, item.field_2
 FROM "t/#"
 ```
 
-EMQX supports using the `jq` function for advanced transformations, you can refer to the [documentation page for the build-in `jq` function](./rule-sql-jq) for more code examples.
+EMQX supports using the `jq` function for advanced transformations. You can refer to the [ build-in `jq` function](./rule-sql-jq) for more code examples.
 
 ## Expressions and Operations 
 
