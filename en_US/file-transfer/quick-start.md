@@ -109,8 +109,8 @@ Before you start, you need to ensure that `s3cmd` is installed and configured co
                        host = "s3.eu-north-1.amazonaws.com" # or any other S3-compatible storage
                        port = "443"
 
-                       access_key_id = "AKIA123467890ABCDXYZ"
-                       secret_access_key = "******"
+                       access_key_id = "..."
+                       secret_access_key = "..."
 
                        bucket = "YOURBUCKET"
                        acl = private
