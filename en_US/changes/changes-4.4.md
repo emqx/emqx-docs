@@ -10,7 +10,7 @@
 
   A new configuration option has been added: `zone.<zone-name>.tcp_keepalive = Idle,Interval,Probes`. Users can enable the TCP layer's Keep Alive feature and specify time parameters using this configuration. This configuration is only effective on Linux and MacOS systems.
 
-- Improving error logs related to Proxy Protocol [emqx/esockd#177](https://github.com/emqx/esockd/pull/177).
+- Improved error logs related to Proxy Protocol [emqx/esockd#177](https://github.com/emqx/esockd/pull/177).
 
   The sample logs before this improvement:
   ```
@@ -25,11 +25,11 @@
   2023-04-20T18:10:17.205436+08:00 [error] [esockd_proxy_protocol] The listener 127.0.0.1:8883 is working in proxy protocol mode, but timed out while waiting for proxy_protocol header
   ```
 
-- Adds a new feature to enable partial certificate chain validation for TLS listeners [#10553](https://github.com/emqx/emqx/pull/10553).
+- Added a new feature to enable partial certificate chain validation for TLS listeners [#10553](https://github.com/emqx/emqx/pull/10553).
 
   For details please checkout the `listener.ssl.external.partial_chain` in the `zones.conf` config file.
 
-- Adds a new feature to enable client certificate extended key usage validation for TLS listeners [#10669](https://github.com/emqx/emqx/pull/10669).
+- Added a new feature to enable client certificate extended key usage validation for TLS listeners [#10669](https://github.com/emqx/emqx/pull/10669).
 
   For details please checkout the `listener.ssl.external.verify_peer_ext_key_usage` in the `zones.conf` config file.
 

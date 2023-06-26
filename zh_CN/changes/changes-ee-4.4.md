@@ -2,7 +2,7 @@
 
 ## e4.4.19
 
-*发布日期: 2023-06-16*
+*发布日期: 2023-06-26*
 
 ### 增强
 
@@ -25,11 +25,11 @@
   2023-04-20T18:10:17.205436+08:00 [error] [esockd_proxy_protocol] The listener 127.0.0.1:8883 is working in proxy protocol mode, but timed out while waiting for proxy_protocol header
   ```
 
-- 增加了一个新功能，用户可以在 TLS 监听器中启用“部分证书链验证”了 [#10553](https://github.com/emqx/emqx/pull/10553)。
+- 增加了一个新功能，用户可以在 TLS 监听器中启用“部分证书链验证” [#10553](https://github.com/emqx/emqx/pull/10553)。
 
   详情请查看 `zones.conf` 配置文件中的 `listener.ssl.external.partial_chain` 配置项。
 
-- 增加了一个新功能，用户可以在 TLS 监听器中启用“客户端证书扩展密钥用途验证”了 [#10669](https://github.com/emqx/emqx/pull/10669)。
+- 增加了一个新功能，用户可以在 TLS 监听器中启用“客户端证书扩展密钥用途验证” [#10669](https://github.com/emqx/emqx/pull/10669)。
 
   详情请查看 `zones.conf` 配置文件中的 `listener.ssl.external.verify_peer_ext_key_usage` 配置项。
 
@@ -45,16 +45,15 @@
 
 - 为 `mqtt.max_clientid_len` 配置项增加数值范围校验 (23-65535) [#11096](https://github.com/emqx/emqx/pull/11096)。
 
-- 新增插件 `emqx_gcp_device` [#1784](https://github.com/emqx/emqx-enterprise/pull/1784)。
+- 新增插件 `emqx_gcp_device` [#1784](https://github.com/emqx/emqx-enterprise/pull/1784)。该插件简化了从 Google IoT Core 的迁移过程：
 
-  该插件简化了从 Google IoT Core 的迁移过程：
   * 允许导入 Google IoT Core 设备配置和认证数据。
   * 实现了与 Google IoT Core 兼容的 MQTT 认证。
   * 提供了用于管理设备配置和认证数据的 API 接口。
-
+  
 - 支持使用动态的 Routing Key 创建 RabbitMQ 动作 [#1807](https://github.com/emqx/emqx-enterprise/pull/1807)。
 
-  现在 RabbitMQ 动作的 "RabbitMQ Routing Key" 参数可以使用 `${key}` 格式的动态变量了。
+  现在 RabbitMQ 动作的 "RabbitMQ Routing Key" 参数可以使用 `${key}` 格式的动态变量。
 
 - DynamoDB 资源支持默认端口 [#1808](https://github.com/emqx/emqx-enterprise/pull/1808)。
 
@@ -75,7 +74,7 @@
   `[{"elem": "a","date": "undefined"}]`。
   修复后，SQL 的输出为：`[{"elem": "a","date": "2023-05-06"}]`
 
-- 修复在某些情况下，规则的缓存没能更新的问题 [#11072](https://github.com/emqx/emqx/pull/11072)。
+- 修复在某些情况下规则的缓存没有更新到某些节点上的问题 [#11072](https://github.com/emqx/emqx/pull/11072)。
 
   修复前，手动更新规则之后，可能会出现缓存的更新没能同步到某些节点上的情况，这会导致规则在不同的节点上运行状态不一致。
 
@@ -146,7 +145,7 @@
   2023-06-02T05:59:16.025229+00:00 [error] Destroy Resource bridge_rabbit failed, ResId: <<"_probe_:6edc3a76">>, not_found
   ```
 
-- 修复连续点击 Dashboard 设置页面上的 “启用” 按钮时，会导致创建出多个重复的热配置模块的问题 [#1826](https://github.com/emqx/emqx-enterprise/pull/1826)
+- 修复连续点击 Dashboard 设置页面上的**启用**按钮时，会导致创建出多个重复的热配置模块的问题 [#1826](https://github.com/emqx/emqx-enterprise/pull/1826)。
 
 ## e4.4.18
 

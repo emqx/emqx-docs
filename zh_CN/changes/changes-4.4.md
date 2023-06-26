@@ -59,13 +59,13 @@
   `[{"elem": "a","date": "undefined"}]`。
   修复后，SQL 的输出为：`[{"elem": "a","date": "2023-05-06"}]`
 
-- 修复在某些情况下，规则的缓存没能更新的问题 [#11072](https://github.com/emqx/emqx/pull/11072)。
+- 修复在某些情况下规则的缓存没有更新到某些节点上的问题 [#11072](https://github.com/emqx/emqx/pull/11072)。
 
   修复前，手动更新规则之后，可能会出现缓存的更新没能同步到某些节点上的情况，这会导致规则在不同的节点上运行状态不一致。
 
 - 修复 WebHook 插件执行 `on_client_connack` 钩子失败的问题 [#10710](https://github.com/emqx/emqx/pull/10710)。
 
-  详见 https://github.com/emqx/emqx/issues/10628
+  详见 https://github.com/emqx/emqx/issues/10628。
 
 ## v4.4.18
 
