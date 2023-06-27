@@ -27,11 +27,11 @@
 
 - Added a new feature to enable partial certificate chain validation for TLS listeners [#10553](https://github.com/emqx/emqx/pull/10553).
 
-  For details please checkout the `listener.ssl.external.partial_chain` in the `listeners.conf` config file.
+  For details please checkout the `listener.ssl.external.partial_chain` in the `emqx.conf` config file.
 
 - Added a new feature to enable client certificate extended key usage validation for TLS listeners [#10669](https://github.com/emqx/emqx/pull/10669).
 
-  For details please checkout the `listener.ssl.external.verify_peer_ext_key_usage` in the `listeners.conf` config file.
+  For details please checkout the `listener.ssl.external.verify_peer_ext_key_usage` in the `emqx.conf` config file.
 
 - Added the `live_connections` field in the HTTP API `/api/v4/nodes` response [#10859](https://github.com/emqx/emqx/pull/10859).
 
