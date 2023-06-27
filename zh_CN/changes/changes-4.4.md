@@ -2,7 +2,7 @@
 
 ## v4.4.19
 
-*发布日期: 2023-06-26*
+*发布日期: 2023-06-27*
 
 ### 增强
 
@@ -27,11 +27,11 @@
 
 - 增加了一个新功能，用户可以在 TLS 监听器中启用“部分证书链验证”了 [#10553](https://github.com/emqx/emqx/pull/10553)。
 
-  详情请查看 `listeners.conf` 配置文件中的 `listener.ssl.external.partial_chain` 配置项。
+  详情请查看 `emqx.conf` 配置文件中的 `listener.ssl.external.partial_chain` 配置项。
 
 - 增加了一个新功能，用户可以在 TLS 监听器中启用“客户端证书扩展密钥用途验证”了 [#10669](https://github.com/emqx/emqx/pull/10669)。
 
-  详情请查看 `listeners.conf` 配置文件中的 `listener.ssl.external.verify_peer_ext_key_usage` 配置项。
+  详情请查看 `emqx.conf` 配置文件中的 `listener.ssl.external.verify_peer_ext_key_usage` 配置项。
 
 - 在 HTTP API `/api/v4/nodes` 的返回中增加 `live_connections` 字段 [#10859](https://github.com/emqx/emqx/pull/10859)。
 
