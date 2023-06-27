@@ -2,7 +2,7 @@
 
 ## v4.4.19
 
-*Release Date: 2023-06-26*
+*Release Date: 2023-06-27*
 
 ### Enhancements
 
