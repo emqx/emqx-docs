@@ -78,7 +78,7 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
   <tr>
     <th>Features</th>
     <th colspan="2">MQTT as a Service</th>
-    <th colspan="2">Self Hosted</th>
+    <th colspan="2">Self-Hosted</th>
   </tr>
 </thead>
 <tbody>
