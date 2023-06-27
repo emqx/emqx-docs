@@ -5,9 +5,9 @@ EMQX is one of the alternatives for the MQTT service of [Google Cloud IoT Core](
 - Importing device configuration and authentication data from GCP IoT Core.
 - Providing device configuration and MQTT authentication in GCP IoT Core compatible format.
 
-The EMQX compatibility layer is implemented through a GCP IoT Core Device module which requires minimal changes to your device code. You can add this module in EMQX Dashboard and import your device configuration and authentication data.
+The EMQX compatibility layer is implemented through a GCP IoT Core Device module which requires minimal changes to your device code. You can add this module to EMQX Dashboard and import your device configuration and authentication data.
 
-This page provides a comprehensive guide for migrating your devices in GCP IoT Core to EMQX, including how to export the device credentials from Google Cloud IoT Core and import them into EMQX and switch the endpoint in the actual devices to the EMQX. The migration progcess can be executed through the command line and REST API, or conveniently through the EMQX Dashboard. Both methods are demonstrated in detail on this page.
+This page provides a comprehensive guide for migrating your devices in GCP IoT Core to EMQX, including how to export the device credentials from Google Cloud IoT Core and import them into EMQX and switch the endpoint in the actual devices to the EMQX. The migration process can be executed through the command line and REST API, or conveniently through the EMQX Dashboard. Both methods are demonstrated in detail on this page.
 
 ## Simulate How Things Work with Google Cloud IoT Core
 
@@ -82,7 +82,7 @@ numId: '2928540609735937'
 
 ### Connect Devices to MQTT Endpoint
 
-1. Prepare a test script for connecting to the endpoint, authenticating with the private key and obtaining configurations. Name the script as `client-demo.py`.
+1. Prepare a test script for connecting to the endpoint, authenticating with the private key, and obtaining configurations. Name the script as `client-demo.py`.
 
    ::: tip
 
@@ -413,13 +413,13 @@ The query allows pagination: `_limit` and `_page` parameters:
 
 ## Migrate and Manage Device Data via Dashboard
 
-The GCP IoT Core Device module in EMQX Dashboard provides you a visualized way to do the device data migration and management. 
+The GCP IoT Core Device module in EMQX Dashboard provides you with a visualized way to do the device data migration and management. 
 
 ### Add GCP IoT Core Device Module
 
 1. Go to EMQX Dashboard. Click **Modules** from the left navigation menu.
 
-2. On the **Modules** page, click **Add Module**. In the **Moddule Select** area, click **Local Modules**.
+2. On the **Modules** page, click **Add Module**. In the **Module Select** area, click **Local Modules**.
 
 3. Locate the **GCP IoT Core Device** and click **Select**.
 
@@ -475,7 +475,7 @@ This is just the same as before, but now you are using EMQX instead of Google Cl
 It should also be noted that the EMQX broker is not a drop-in replacement for GCP IoT Core. The mentioned APIs are provided to help with migration. The most notable limitations are:
 
 * EMQX does not support the "gateway" concept. However, this results only in the inability of devices behind a gateway to have gateway-independent credentials.
-* Project, location and registry are not used in EMQX. They are only used to construct or verify GCP IoT Core-compatible client ids. That means that devices imported into EMQX should have globally unique ids to avoid collisions.
+* Project, location, and registry are not used in EMQX. They are only used to construct or verify GCP IoT Core-compatible client ids. That means that devices imported into EMQX should have globally unique ids to avoid collisions.
 
 
 
