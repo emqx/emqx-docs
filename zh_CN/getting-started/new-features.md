@@ -120,8 +120,6 @@ QUIC 非常适用于传统 TCP/IP 网络 UDP MTU 大小能够保证的弱网环�
 
 后续版本 EMQX 还将支持在 Dashboard 上以拖拽的方式编排规则和数据桥接（Flow Editor），通过可视化操作实现数据集成配置。
 
-![Flow Editor：通过可视化编排规则处理数据流](./assets/flow-editor.png)
-
 关于 EMQX 支持的桥接类型以及如何配置，可阅读[数据桥接章节](../data-integration/data-bridges.md)。
 
 ## 灵活多样认证授权
