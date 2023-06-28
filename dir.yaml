@@ -142,6 +142,10 @@
       title_cn: 共享订阅
       path: messaging/mqtt-shared-subscription
       lang: en
+    - title_en: Wildcard Subscription
+      title_cn: 通配符订阅
+      path: messaging/mqtt-wildcard-subscription
+      lang: en
     - title_en: Retained Message
       title_cn: 保留消息
       path: messaging/mqtt-retained-message
