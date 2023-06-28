@@ -20,8 +20,6 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 
 <img src="./assets/EMQX-enterprise.png" alt="EMQX-enterprise" style="zoom:50%;" />
 
-
-
 {% endemqxee %}
 
 ## Key Benefits
