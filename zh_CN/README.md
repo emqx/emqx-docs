@@ -91,7 +91,7 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
   <tr>
     <td width="12%" rowspan="2"></td>
     <td width="22%">EMQX Cloud Serverless</td>
-    <td width="22%">EMQX Cloud 转有版</td>
+    <td width="22%">EMQX Cloud 专有版</td>
     <td width="22%">EMQX 开源版</td>
     <td width="22%">EMQX 企业版</td>
   </tr>
@@ -250,7 +250,7 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
   </tr>
   <tr>
     <td><b>技术支持</b></td>
-    <td>8x5 全球支持</td>
+    <td>5x8 全球支持</td>
     <td>7x24 全球支持</td>
     <td>开源社区</td>
     <td>7x24 全球支持</td>
