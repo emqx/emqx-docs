@@ -15,7 +15,7 @@ You can use client tools to try this messaging service in EMQX. This section int
 
 The following procedure demonstrates how to form groups for multiple subscribers that can share the subscription to the same topic and how these subscribers will receive the messages from the shared subscription.
 
-In this demonstration, you can create one client connection `demo` as a publisher to publish messages on the topic `t/1`. Then, you can create three client connections as subscribers, such as `Subscriber1`, `Subscriber2` and `Subscriber3`.  The subscribers can be divided into groups `a` and `b`, and both groups subscribe to the topic `t/1`.
+In this demonstration, you can create one client connection `Demo` as a publisher to publish messages on the topic `t/1`. Then, you can create three client connections as subscribers, such as `Subscriber1`, `Subscriber2` and `Subscriber3`.  The subscribers can be divided into groups `a` and `b`, and both groups subscribe to the topic `t/1`.
 
 1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection named `Demo`.
 
@@ -29,7 +29,7 @@ In this demonstration, you can create one client connection `demo` as a publishe
 
    <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
 
-2. Click the **New Connection** to create 3 new connections as subscribers. Set **Name** set to `Subscriber1`, `Subscriber2,` and `Subscriber3` respectively.
+2. Click the **New Connection** to create 3 new connections as subscribers. Set **Name** to `Subscriber1`, `Subscriber2,` and `Subscriber3` respectively.
 
 3. Create shared subscriptions for subscribers. Select the specific connection in the **Connections** pane. Click the **New Subscription** button to create a subscription. Type the correct topic in the **Topic** text box by referring to the rules below.
 
