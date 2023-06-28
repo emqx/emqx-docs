@@ -12,14 +12,13 @@ With a built-in powerful SQL-based [rules engine](https://www.emqx.com/en/soluti
 
 EMQX has been adopted by over 20,000 enterprise users, connecting more than 100 million IoT devices. Over 400 customers, including renowned brands like HPE, VMware, Verifone, SAIC Volkswagen, and Ericsson, trust EMQX for their mission-critical IoT scenarios. 
 
-{% endmeqxce %}
+{% endemqxce %}
 
 {% emqxee %}
 
 EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platform to connect, move and process your data in business-critical scenarios for the IoT era.
 
 <img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/assets/EMQX-enterprise.png" alt="EMQX-enterprise" style="zoom:50%;" />
-
 
 
 {% endemqxee %}

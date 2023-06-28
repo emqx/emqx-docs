@@ -68,7 +68,7 @@ For more information, see: https://www.erlang.org/doc/man/erl.html
 
   Path to the persistent data directory.<br/>
 Possible auto-created subdirectories are:<br/>
-- `mnesia/<node_name>`: EMQX's built-in database directory.<br/>
+- `mnesia/{node_name}`: EMQX's built-in database directory.<br/>
 For example, `mnesia/emqx@127.0.0.1`.<br/>
 There should be only one such subdirectory.<br/>
 Meaning, in case the node is to be renamed (to e.g. `emqx@10.0.1.1`),<br/>
@@ -2919,9 +2919,9 @@ gateway clients. The types of the clients
 are distinguished by the topic prefix:
 
 - For the MQTT clients, the format is:
-`$SYS/broker/<node>/clients/<clientid>/<event>`
+`$SYS/broker/<node>/clients/{clientid}/{event}`
 - For the Gateway clients, it is
-`$SYS/broker/<node>/gateway/<gateway-name>/clients/<clientid>/<event>`
+`$SYS/broker/<node>/gateway/{gateway-name}/clients/{clientid}/{event}`
 
 
 **sys_topics.sys_event_messages.client_connected**
