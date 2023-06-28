@@ -139,7 +139,7 @@ jobs:
         rm frontend/README.md || true
         mkdir -p frontend/docs/en/${DOCS_TYPE}/${VERSION}/
         mkdir -p frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
-        mkdir -p frontend/docs/.vitepress/public/api/
+        mkdir -p frontend/docs/public/api/
         mkdir -p frontend/redoc/
         cp -r docs-files/en_US/* frontend/docs/en/${DOCS_TYPE}/${VERSION}/
         cp -r docs-files/zh_CN/* frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
@@ -155,7 +155,7 @@ jobs:
           python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
         else
           version_list=$(git tag | egrep "^e.*$" | xargs echo -n)
-          python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/.vitepress/public/api/${DOCS_TYPE}_versions.json
+          python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/public/api/${DOCS_TYPE}_versions.json
         fi
 
     - name: build ce docs
