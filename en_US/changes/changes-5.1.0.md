@@ -1,6 +1,8 @@
-# e5.1.0
+# Releases
 
-## Enhancements
+## e5.1.0
+
+### Enhancements
 
 -   [#11035](https://github.com/emqx/emqx/pull/11035) Upgraded Cassandra driver to avoid username and password leakage in data bridge logs.
 -   [#10584](https://github.com/emqx/emqx/pull/10584) Added log level configuration to SSL communication
@@ -48,7 +50,7 @@
 -   [#11045](https://github.com/emqx/emqx/pull/11045) The listener's authentication and zone related apis have been officially removed in version `5.1.0`.
 -   [#11062](https://github.com/emqx/emqx/pull/11062) Renamed config `log.file.to` to `log.file.path`.
 
-## Bug Fixes
+### Bug Fixes
 
 -   [#11018](https://github.com/emqx/emqx/pull/11018) Fixed multiple issues with the Stomp gateway, including:
     -   Fixed an issue where `is_superuser` was not working correctly.
