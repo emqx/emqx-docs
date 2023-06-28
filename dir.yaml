@@ -502,7 +502,7 @@
     #     - development/python
     #     - development/resource
 
- - title_en: Change log
+- title_en: Change log
    title_cn: 版本发布记录
    path: changes/changes-5.1.0
 
