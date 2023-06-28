@@ -419,7 +419,3 @@ MQTT 桥接插件(emqx_bridge_mqtt) 已被移除，请使用数据集成中的 M
 
 其他协议（LwM2M、CoAP、STOMP、MQTT-SN）的客户端将不再映射为 MQTT 客户端，无法通过 Dashboard 客户端页面和 `GET /clients` API 获取。
 用户可以前往网关页面详情页面或通过 `GET /gateway/{name}/clients` API 获取。
-
-## 遥测
-
-遥测插件 (emqx_telemetry) 已被移除，请通过 `telemetry {}` 配置项或 Dashboard **系统设置** -> **设置** 页面进行配置。

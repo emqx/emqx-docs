@@ -65,8 +65,8 @@
   #   title_cn: 升级
   #   children:
   #     - deploy/hot-upgrades
-  #     - deploy/rolling-upgrades
-    - deploy/upgrade-from-v4-to-v51
+    - deploy/rolling-upgrades
+    - deploy/upgrade-from-v4
   # - title_en: Migrate to Enterprise
   #   title_cn: 迁移到企业版
   #   path: deploy/migrate-to-enterprise
