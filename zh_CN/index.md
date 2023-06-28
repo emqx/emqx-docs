@@ -4,7 +4,7 @@
 
 EMQX 是一款[开源](https://github.com/emqx/emqx)的大规模分布式 MQTT 消息服务器，功能丰富，专为物联网和实时通信应用而设计。EMQX 5.0 单集群支持 MQTT 并发连接数高达 1 亿条，单服务器的传输与处理吞吐量可达每秒百万级 MQTT 消息，并保证延迟在亚毫秒级。
 
-EMQX 支持多种协议，包括 MQTT (3.1、3.1.1 和 5.0)、HTTP、QUIC 和 WebSocket 等，保证各种网络环境和硬件设备的可访问性。EMQX 还提供了全面的 SSL/TLS 功能支持，比如双向认证以及各种身份验证机制，为物联网设备和应用程序提供可靠和高效的通信基础设施。
+EMQX 支持多种协议，包括 MQTT (3.1、3.1.1 和 5.0)、HTTP、QUIC 和 WebSocket 等，保证各种网络环境和硬件设备的可访问性。EMQX 还提供了全面的 SSL/TLS 功能支持，比如双向认证以及多种身份验证机制，为物联网设备和应用程序提供可靠和高效的通信基础设施。
 
 <img src="./assets/architecture_image.png" alt="architecture_image" style="zoom:50%;" />
 
@@ -78,186 +78,186 @@ EMQX 5.0 单集群可支持 MQTT 并发连接数高达 **1 亿**条。
 
 EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless 和 EMQX Cloud 专有版）和两种自托管模式（EMQX 开源版 和 EMQX 企业版）。以下列出了这些部署模式的主要功能对比，以帮助您根据业务需求进行选择。
 
-<table class="tg">
+<div style="text-align: center;">
+<table>
 <thead>
   <tr>
-    <th class="tg-c3ow">主要特性</th>
-    <th class="tg-c3ow" colspan="2">云服务模式</th>
-    <th class="tg-c3ow" colspan="2">自托管模式</th>
+    <th>主要特性</th>
+    <th colspan="2">云服务模式</th>
+    <th colspan="2">自托管模式</th>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal"> </span></td>
-    <td class="tg-c3ow">EMQX Cloud Serverless</td>
-    <td class="tg-c3ow">EMQX Cloud 转有版</td>
-    <td class="tg-c3ow">EMQX 开源版</td>
-    <td class="tg-c3ow">EMQX 企业版</td>
+    <td width="12%" rowspan="2"></td>
+    <td width="22%">EMQX Cloud Serverless</td>
+    <td width="22%">EMQX Cloud 专有版</td>
+    <td width="22%">EMQX 开源版</td>
+    <td width="22%">EMQX 企业版</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal"> </span></td>
-    <td class="tg-c3ow"><a href="https://accounts-zh.emqx.com/signup?continue=https%3A%2F%2Fcloud.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew"></a><span style="text-decoration:none;color:var(--ds-link, #0052CC)">免费使用 Serverless</span></td>
-    <td class="tg-c3ow"><a href="https://accounts-zh.emqx.com/signup?continue=https%3A%2F%2Fcloud.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew"><span style="text-decoration:none;color:var(--ds-link, #0052CC)">14 天免费试用</span></td>
-    <td class="tg-c3ow"><a href="https://www.emqx.com/zh/try?product=broker"><span style="text-decoration:none;color:var(--ds-link, #0052CC)">立即下载</span></a></td>
-    <td class="tg-c3ow"><a href="https://www.emqx.com/zh/apply-licenses/emqx"><span style="text-decoration:none;color:var(--ds-link, #0052CC)">免费试用</span></a></td>
+    <td><a href="https://accounts-zh.emqx.com/signup?continue=https%3A%2F%2Fcloud.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">免费使用 Serverless</a></td>
+    <td><a href="https://accounts-zh.emqx.com/signup?continue=https%3A%2F%2Fcloud.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">14 天免费试用</a></td>
+    <td><a href="https://www.emqx.com/zh/try?product=broker">立即下载</a></td>
+    <td><a href="https://www.emqx.com/zh/apply-licenses/emqx">免费试用</a></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">可扩展性</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">自动扩展，最多 1,000 条连接</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">无限制</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">单集群支持 MQTT 并发连接数高达 1 亿条</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">单集群支持 MQTT 并发连接数高达 1 亿条
-</span><br><span style="font-weight:normal">小于 100 条连接，永久免费</span></td>
+    <td><b>可扩展性</b></td>
+    <td>自动扩展，最多 1,000 条连接</td>
+    <td>无限制</td>
+    <td style="text-align:left;">单集群支持 MQTT 并发连接数高达 1 亿条</td>
+    <td style="text-align:left;">单集群支持 MQTT 并发连接数高达 1 亿条；小于 100 条连接，永久免费。</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">吞吐量</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">1000 TPS</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">> 500 万 MQTT 消息每秒</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">> 500 万 MQTT 消息每秒</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">> 500 万 MQTT 消息每秒</span></td>
+    <td><b>吞吐量</b></td>
+    <td>1000 TPS</td>
+    <td>> 500 万 MQTT 消息每秒</td>
+    <td>> 500 万 MQTT 消息每秒</td>
+    <td>> 500 万 MQTT 消息每秒</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">延迟</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">1~5 毫秒</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">1~5 毫秒</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">1~5 毫秒</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">1~5 毫秒</span></td>
+    <td><b>延迟</b></td>
+    <td>1~5 毫秒</td>
+    <td>1~5 毫秒</td>
+    <td>1~5 毫秒</td>
+    <td>1~5 毫秒</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">数据集成（开箱即用）</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal">不支持</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">支持 40 多种数据集成，包括 Webhook、MQTT 数据桥接、MySQL、PostgreSQL、Kafka、MongoDB、Oracle 等。</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">支持 Webhook 和 MQTT 数据桥接</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">支持 40 多种数据集成，包括 Webhook、MQTT 数据桥接、MySQL、PostgreSQL、Kafka、MongoDB、Oracle 等。</span></td>
+    <td><b>数据集成（开箱即用）</b></td>
+    <td>不支持</td>
+    <td style="text-align:left;">支持 40 多种数据集成，包括 Webhook、MQTT 数据桥接、MySQL、PostgreSQL、Kafka、MongoDB、Oracle 等。</td>
+    <td style="text-align:left;">支持 Webhook 和 MQTT 数据桥接</td>
+    <td style="text-align:left;">支持 40 多种数据集成，包括 Webhook、MQTT 数据桥接、MySQL、PostgreSQL、Kafka、MongoDB、Oracle 等。</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">MQTT 5.0 Broker</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>MQTT 5.0 Broker</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">MQTT over QUIC</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>MQTT over QUIC</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">MQTT 扩展</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>MQTT 扩展</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">多协议网关</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>多协议网关</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">多租户</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>多租户</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">跨地域复制</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>跨地域复制</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">数据持久化</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>数据持久化</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Schema Registry</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>Schema Registry</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">消息编解码</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>消息编解码</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">规则引擎</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>规则引擎</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Flow Editor</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>Flow Editor</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">文件传输</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>文件传输</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">故障排查</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>故障排查</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Cloud-Native &amp; K8s</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>Cloud-Native &amp; K8s</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">边缘计算</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>边缘计算</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">SLA 等级</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">99.9%</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">99.99%</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">99.99%</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Up to 99.999%</span></td>
+    <td><b>SLA 等级</b></td>
+    <td>99.9%</td>
+    <td>99.99%</td>
+    <td>99.99%</td>
+    <td>Up to 99.999%</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">License</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">SaaS 模式，按需计费</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">SaaS 模式，按小时计费</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Apache Version 2.0</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">商业许可证（商业源代码许可证）</span></td>
+    <td><b>License</b></td>
+    <td>SaaS 模式，按需计费</td>
+    <td>SaaS 模式，按小时计费</td>
+    <td>Apache Version 2.0</td>
+    <td>商业许可证（商业源代码许可证）</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">技术支持</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">8x5 全球支持</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">7x24 全球支持</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">开源社区</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">7x24 全球支持</span></td>
+    <td><b>技术支持</b></td>
+    <td>5x8 全球支持</td>
+    <td>7x24 全球支持</td>
+    <td>开源社区</td>
+    <td>7x24 全球支持</td>
   </tr>
 </tbody>
 </table>
+</div>
 
 
 {% endemqxce %}

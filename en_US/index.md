@@ -72,192 +72,193 @@ EMQX can be easily deployed on-premises or in public clouds using **Kubernetes O
 
 EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud Serverless and EMQX Dedicated Cloud) and two self-hosted options (EMQX Open Source and EMQX Enterprise). To help you choose the best deployment option for your requirements, this page lists a comparison of feature support across different deployment types.
 
-<table class="tg">
+<div style="text-align: center;">
+<table>
 <thead>
   <tr>
-    <th class="tg-c3ow">Features</th>
-    <th class="tg-c3ow" colspan="2">MQTT as a Service</th>
-    <th class="tg-c3ow" colspan="2">Self Hosted</th>
+    <th>Features</th>
+    <th colspan="2">MQTT as a Service</th>
+    <th colspan="2">Self-Hosted</th>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal"> </span></td>
-    <td class="tg-c3ow">EMQX Cloud Serverless</td>
-    <td class="tg-c3ow">EMQX Dedicated Cloud</td>
-    <td class="tg-c3ow">EMQX Open Source</td>
-    <td class="tg-c3ow">EMQX Enterprise</td>
+    <td width="10%" rowspan="2"></td>
+    <td width="22%">EMQX Cloud Serverless</td>
+    <td width="23%">EMQX Dedicated Cloud</td>
+    <td width="22%">EMQX Open Source</td>
+    <td width="23%">EMQX Enterprise</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal"></span></td>
-    <td class="tg-c3ow"><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew"><span style="text-decoration:none;color:var(--ds-link, #0052CC)">Get Free Serverless</span></td>
-    <td class="tg-c3ow"><a href="https://www.emqx.com/en/try?product=broker"><span style="text-decoration:none;color:var(--ds-link, #0052CC)">14-day Free Trial</span></td>
-    <td class="tg-c3ow"><a href="https://www.emqx.com/en/try?product=broker"><span style="text-decoration:none;color:var(--ds-link, #0052CC)">Open Source Download</span></a></td>
-    <td class="tg-c3ow"><a href="https://www.emqx.com/en/apply-licenses/emqx"><span style="text-decoration:none;color:var(--ds-link, #0052CC)">Get a Free Trial License</span></a></td>
+    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">Get Free Serverless</a></td>
+    <td><a href="https://www.emqx.com/en/try?product=broker">14-day Free Trial</a></td>
+    <td><a href="https://www.emqx.com/en/try?product=broker">Open Source Download</a></td>
+    <td><a href="https://www.emqx.com/en/apply-licenses/emqx">Get a Free Trial License</a></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Scalability</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">1000 auto scale</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">1000 - unlimited</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Up to 100M MQTT connections per cluster</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Up to 100M MQTT connections per cluster</span><br><span style="font-weight:normal">Forever free for &lt;100 connections</span></td>
+    <td><b>Scalability</b></td>
+    <td>1000 auto scale</td>
+    <td>1000 - unlimited</td>
+    <td style="text-align:left;">Up to 100M MQTT connections per cluster</td>
+    <td style="text-align:left;">Up to 100M MQTT connections per cluster. Forever free for &lt;100 connections.</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Throughput</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">1000 TPS</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Same as enterprise</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">5M+ MQTT messages per second</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">5M+ MQTT messages per second</span></td>
+    <td><b>Throughput</b></td>
+    <td>1000 TPS</td>
+    <td>Same as enterprise</td>
+    <td>5M+ MQTT messages per second</td>
+    <td>5M+ MQTT messages per second</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Reliability</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Maintained by EMQX Cloud Team</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Maintained by EMQX Cloud Team</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Data storage in memory</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Data persistence in RocksDB(Coming soon)</span></td>
+    <td><b>Reliability</b></td>
+    <td>Maintained by EMQX Cloud Team</td>
+    <td>Maintained by EMQX Cloud Team</td>
+    <td>Data storage in memory</td>
+    <td>Data persistence in RocksDB (Coming soon)</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Latency</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">1~5 millisecond</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">1~5 millisecond</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">1~5 millisecond</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">1~5 millisecond</span></td>
+    <td><b>Latency</b></td>
+    <td>1~5 millisecond</td>
+    <td>1~5 millisecond</td>
+    <td>1~5 millisecond</td>
+    <td>1~5 millisecond</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Integrations (Out-of-the-box)</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal">No supported</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Supports over 40 data integrations, including Webhook, MQTT data bridge, MySQL, PostgreSQL, Kafka, MongoDB, Oracle, etc.</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Supports Webhook and MQTT data bridge.</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Supports over 40 data integrations, including Webhook, MQTT data bridge, MySQL, PostgreSQL, Kafka, MongoDB, Oracle, etc.</span></td>
+    <td><b>Integrations (Out-of-the-box)</b></td>
+    <td>No supported</td>
+    <td style="text-align:left;">Supports over 40 data integrations, including MQTT data bridge, Webhook, MySQL, PostgreSQL, Kafka, MongoDB, Oracle, etc.</td>
+    <td style="text-align:left;">Supports Webhook and MQTT data bridge.</td>
+    <td style="text-align:left;">Supports over 40 data integrations, including MQTT data bridge, Webhook, MySQL, PostgreSQL, Kafka, MongoDB, Oracle, etc.</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">MQTT 5.0 Broker</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>MQTT 5.0 Broker</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">MQTT over QUIC</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>MQTT over QUIC</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">MQTT Add-ons</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>MQTT Add-ons</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Multi-Protocol Gateways</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>Multi-Protocol Gateways</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Multi-Tenancy</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>Multi-Tenancy</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Geo-Replication</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>Geo-Replication</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Data Persistence</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>Data Persistence</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Schema Registry</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>Schema Registry</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Message Codec</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>Message Codec</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Rule Engine</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>Rule Engine</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Flow Editor</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>Flow Editor</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">File Transfer</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>File Transfer</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Troubleshooting</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>Troubleshooting</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Cloud-Native &amp; K8s</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>Cloud-Native &amp; K8s</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Edge Computing</span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></span></td>
-    <td class="tg-c3ow"><span style="font-weight:normal"><img src="./assets/check_mark_64.png" style="zoom:40%;" /></span></td>
+    <td><b>Edge Computing</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">SLA</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">99.9%</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">99.99%</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">99.99%</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Up to 99.999%</span></td>
+    <td><b>SLA</b></td>
+    <td>99.9%</td>
+    <td>99.99%</td>
+    <td>99.99%</td>
+    <td>Up to 99.999%</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">License Model</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">SaaS - pay as you go</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">SaaS - hourly billing</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Apache Version 2.0</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Commercial license (Business source license)</span></td>
+    <td><b>License Model</b></td>
+    <td>SaaS - pay as you go</td>
+    <td>SaaS - hourly billing</td>
+    <td>Apache Version 2.0</td>
+    <td>Commercial license (Business source license)</td>
   </tr>
   <tr>
-    <td class="tg-0pky"><span style="font-weight:normal">Technical Support</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">8/5 Global support</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">24/7 Global support</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">Open source community</span></td>
-    <td class="tg-0pky"><span style="font-weight:normal">24/7 Global support</span></td>
+    <td><b>Technical Support</b></td>
+    <td>8/5 Global support</td>
+    <td>24/7 Global support</td>
+    <td>Open source community</td>
+    <td>24/7 Global support</td>
   </tr>
 </tbody>
 </table>
+</div>
 
 
 {% endemqxce %}
