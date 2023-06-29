@@ -44,7 +44,7 @@
 
 {% endemqxee %}
 
-## Future versions
+## Future Versions
 
 * Cross-datacenter Cluster Linking support
 * Multi-cloud clusters

@@ -1,16 +1,24 @@
 # 全新功能
 
-本章节描述了 EMQX 5.1 及 EMQX 5.1 引入的全新功能。
+本章节描述了 EMQX 5.0 及 EMQX 5.1 引入的全新功能。
 
-{% emqxee %}
+## Mria 集群架构
 
-## 热升级
+支持全新的 Mria 集群架构，在此架构下 EMQX 水平扩展性得到指数级提升，单个集群可以轻松支持 [1 亿 MQTT 连接](https://www.emqx.com/zh/blog/reaching-100m-mqtt-connections-with-emqx-5-0)，这使得 EMQX 5.0 成为目前全球最具扩展性的 MQTT Broker。
 
-从 EMQX 企业版 5.1 开始，EMQX 支持了热升级功能，使您能够在不中断服务的情况下升级到较新的 EMQX 版本。
+<img src="./assets/100m-benckmark.png" alt="100M benchmark" style="zoom:33%;" />
 
-这意味着您可以平滑地将 EMQX 更新为更高版本，同时保持您的应用程序持续运行，无需停机时间。这一功能提供了更高的灵活性和可靠性，以满足您对系统升级的需求。
+在构建满足用户业务需求的更大规模集群的同时，Mria 架构还能够降低大规模部署下的脑裂风险以及脑裂后的影响，以提供更加稳定可靠的物联网数据接入服务。
 
-{% endemqxee %}
+立即开始[创建与管理集群](../deploy/cluster/create-cluster.md)。
+
+## MQTT over QUIC 支持
+
+以实验性功能将 QUIC 作为 MQTT 传输层，并设计了独特的消息传输机制和管理方式。
+
+QUIC 非常适用于传统 TCP/IP 网络 UDP MTU 大小能够保证的弱网环境或者网络经常切换的环境。对于设备时刻处在移动中的物联网场景（如车联网、移动采集等），或是需要频繁断连不适合做长连接的场景（如设备需要定期休眠）来说，QUIC 都拥有巨大的潜力，是更为适合的底层协议选择。
+
+立即开始[使用 MQTT over QUIC](../mqtt-over-quic/getting-started.md)。
 
 {% emqxee %}
 
@@ -46,60 +54,6 @@ Data has been successfully exported to data/backup/emqx-export-2023-06-21-14-07-
 
 尝试[备份与恢复](../operations/backup-restore.md)。
 
-## CRL/OCPP Stapling
-
-{% emqxce %}
-
-从 5.0.22 版本开始，EMQX 支持针对 MQTT SSL 监听器设置 CRL/COSP Stapling 检查功能。
-
-{% endemqxce %}
-
-{% emqxee %}
-
-从 5.0.3 版本开始，EMQX 支持针对 MQTT SSL 监听器设置 CRL/COSP Stapling 功能。
-
-{% endemqxee %}
-
-此前版本的 EMQX 提供了 SSL/TLS 支持，用户可以使用 X.509 证书实现客户端接入认证与通信安全加密。
-
-持有数字证书的物联网设备，如果出现私钥泄漏、证书信息有误的情况，或者设备需要永久销毁时，需要吊销对应证书以确保不被非法利用，CRL 与 OCSP Stapling 就是解决这一问题的关键。
-
-通过 CRL 与 OCSP Stapling 功能，您可以控制每一张证书的有效性，及时吊销非法客户端证书，为您的物联网应用提供灵活且高级别的安全保障。
-
-立即开始使用 [CRL](../network/crl.md) 与 [OCSP Stapling](../network/ocsp.md)。
-
-{% emqxee %}
-
-## 节点疏散与集群负载重平衡
-
-从 5.0.4 版本开始，EMQX 支持节点疏散与集群负载重平衡。
-
-该功能允许用户在集群负载不平衡时重新分配每个节点的连接，亦或是因维护关闭节点之前强制将连接和会话迁移到其他节点，以避免因此带来的会话数据丢失。
-
-节点疏散与集群负载重平衡为 EMQX 提供了灵活可控的运维实践，能够大大降低 EMQX 负载状态不均衡以及维护工作对业务的影响。
-
-立即开始使用[节点疏散与集群负载重平衡](../deploy/cluster/rebalancing.md)。
-
-{% endemqxee %}
-
-## Mria 集群架构
-
-支持全新的 Mria 集群架构，在此架构下 EMQX 水平扩展性得到指数级提升，单个集群可以轻松支持 [1 亿 MQTT 连接](https://www.emqx.com/zh/blog/reaching-100m-mqtt-connections-with-emqx-5-0)，这使得 EMQX 5.0 成为目前全球最具扩展性的 MQTT Broker。
-
-<img src="./assets/100m-benckmark.png" alt="100M benchmark" style="zoom:33%;" />
-
-在构建满足用户业务需求的更大规模集群的同时，Mria 架构还能够降低大规模部署下的脑裂风险以及脑裂后的影响，以提供更加稳定可靠的物联网数据接入服务。
-
-立即开始[创建与管理集群](../deploy/cluster/create-cluster.md)。
-
-## MQTT over QUIC 支持
-
-以实验性功能将 QUIC 作为 MQTT 传输层，并设计了独特的消息传输机制和管理方式。
-
-QUIC 非常适用于传统 TCP/IP 网络 UDP MTU 大小能够保证的弱网环境或者网络经常切换的环境。对于设备时刻处在移动中的物联网场景（如车联网、移动采集等），或是需要频繁断连不适合做长连接的场景（如设备需要定期休眠）来说，QUIC 都拥有巨大的潜力，是更为适合的底层协议选择。
-
-立即开始[使用 MQTT over QUIC](../mqtt-over-quic/getting-started.md)。
-
 ## 全新物联网数据集成
 
 规则引擎在原有 SQL 的基础上集成了 [jq](https://stedolan.github.io/jq/)，支持更多复杂格式 JSON 数据的处理。
@@ -118,15 +72,13 @@ QUIC 非常适用于传统 TCP/IP 网络 UDP MTU 大小能够保证的弱网环�
 
 同时，EMQX 5.0 还提供了数据集成可视化查看能力（Flows）。通过 Dashboard 页面，您可以清晰看到设备与云端之间的物联网数据处理和流转步骤。
 
-后续版本 EMQX 还将支持在 Dashboard 上以拖拽的方式编排规则和数据桥接（Flow Editor），通过可视化操作实现数据集成配置。
-
 关于 EMQX 支持的桥接类型以及如何配置，可阅读[数据桥接章节](../data-integration/data-bridges.md)。
 
 ## 灵活多样认证授权
 
 改进了认证授权流程，并提供了灵活的使用与配置方式。通过简单配置，无需编写代码即可对接各类数据源与认证服务，为您的物联网应用开启安全防护。
 
-EMQX 5.0 认证授权包括以下特性：
+EMQX 5.1 认证授权包括以下特性：
 
 - 支持在 Dashboard 完成整个集群的认证授权配置。
 - 支持通过 Dashboard 管理认证凭证与授权数据。
@@ -138,7 +90,7 @@ EMQX 5.0 认证授权包括以下特性：
 
 ## 全新 EMQX Dashboard
 
-EMQX 5.0 带来了全新 UI 设计风格的 EMQX Dashboard，在提升视觉体验的同时，也极大提升了 EMQX 的易用性。
+EMQX 5.1 重新设计了 EMQX Dashboard，在提升视觉体验的同时，也极大提升了 EMQX 的易用性。
 
 全新 Dashboard 包括以下更新：
 
@@ -146,7 +98,7 @@ EMQX 5.0 带来了全新 UI 设计风格的 EMQX Dashboard，在提升视觉体�
 - 优化菜单结构，快速直达访问内容。
 - 更丰富的可视化系统，数据和状态一目了然。
 - 开箱即用的认证授权配置与管理功能。
-- 强大数据集成能力，Flow 可视化编排与双向数据桥接。
+- 强大数据集成能力，[Flows](../dashboard/flows.md) 可视化编排让用户能够清晰地看到从设备或客户端流出的数据通过规则引擎处理后的流向。
 - 在线配置更新，在 Dashboard 上实现配置热更新。
 
 ## 云原生与 EMQX Operator
@@ -159,7 +111,7 @@ EMQX Kubernetes Operator 使部署和管理工作变成一种低成本、标准�
 
 ## 全新网关框架
 
-网关能够实现多协议的接入和设备管理，EMQX 5.0 重构了多协议接入的底层架构，使得各个网关功能定义更为清晰：
+网关能够实现多协议的接入和设备管理，EMQX 5.1 重构了多协议接入的底层架构，使得各个网关功能定义更为清晰：
 
 - 独立的统计指标，每个网关有自己的收发字节数、消息等指标。
 - 独立的连接和会话管理能力，能够查看和管理每种协议客户端自有的属性。

@@ -26,7 +26,7 @@
   children:
     - getting-started/new-features
     - getting-started/restrictions
-    - getting-started/roadmap
+  # - getting-started/roadmap
 
 ## Infrastructure
 

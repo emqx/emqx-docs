@@ -2,7 +2,7 @@
 
 This section lists the new features introduced in EMQX 5.0 and 5.1.
 
-## Core + Replica cluster architecture
+## Core + Replica Cluster Architecture
 
 EMQX 5.0 adopts a new [Mria cluster architecture](../deploy/cluster/mria-introduction.md). With this architecture, one EMQX cluster can support [100 million concurrent MQTT connections](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0), and more, making it the world’s most scalable open-source MQTT broker.
 
@@ -54,7 +54,7 @@ Restore a backup:
 
 Try [Backup and Restore](../operations/backup-restore.md) now.
 
-## Redesigned IoT data integration
+## Redesigned IoT Data Integration
 
 Besides SQL, EMQX 5.1 Rule Engine also supports [jq](https://stedolan.github.io/jq/), so it is capable of handling more complex JSON data formats.
 
@@ -88,7 +88,7 @@ EMQX 5.1 offers a built-in client authentication/authorization feature, users on
 
 On how to run authentication/authorization configuration with EMQX Dashboard or configuration files, you can continue to read [Access Control](../access-control/overview.md).
 
-## User-friendly EMQX Dashboard
+## User-Friendly EMQX Dashboard
 
 In EMQX 5.1, we have redesigned the EMQX Dashboard, enhancing the visual experience and supporting more powerful and user-friendly features.
 
@@ -118,7 +118,7 @@ EMQX 5.1 presents a new extended gateway framework with reconstructed underlying
 
 The new gateway framework further improves EMQX's usability by unifying access and managing multiple protocols. Now clients implementing third-party protocols can also leverage the advantages of EMQX, such as data integration, safe and reliable authentication/authorization, billion-level horizontal expansion capabilities, etc.
 
-## **More feature updates**
+## **More Feature Updates**
 
 **Simplified configuration**
 
