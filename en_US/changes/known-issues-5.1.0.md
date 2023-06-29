@@ -2,7 +2,7 @@
 
 -   **Duplicate "Connection Pool Size" Setting in MongoDB Bridge UI.**
 
-    The MongoDB Bridge UI shows two duplicate parameters for "Connection Pool Size", and the second one is used to setting MongoDB connect options, which causing confusion and potential configuration errors.
+    The MongoDB Bridge UI shows two duplicate parameters for "Connection Pool Size". The second one is used to set MongoDB connecting options, which causes confusion and potential configuration errors.
 
 -   **State of TimescaleDB Bridge remains Disconnected after Successful Creation**
 
