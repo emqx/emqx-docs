@@ -43,7 +43,7 @@
 
 -   **Unable to View and Download Files on Replica Nodes in Cluster with File Transfer Feature.**
 
-    When uploading files using the file transfer function in a cluster, files uploaded to replica nodes can only be accessed from the node to which they were uploaded. Accessing files from the node to which the file is uplaoded resolves the issue.
+    When uploading files using the file transfer function in a cluster, files uploaded to replica nodes can only be accessed from the node to which they were uploaded. Accessing files from the node to which the file is uploaded resolves the issue.
 
     > **Workaround:**
     > Only view and download files from the node to which the file is uploaded.
