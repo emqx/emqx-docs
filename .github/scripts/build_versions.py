@@ -50,13 +50,14 @@ if current_version == same_version[0]:
 
     ]
     if len(same_version) > 1:
-        build_list.append({
-            'version': same_version[1],
-            'tag': find_latest_tag(same_version[1]),
-            'docs_type': docs_type,
-            'canonical_version': same_version[1],
-            'latest_version': version_list[0]
-        })
+        if docs_type == 'broker' or (docs_type == 'enterprise' and same_version[1] > 'e5.0'):
+            build_list.append({
+                'version': same_version[1],
+                'tag': find_latest_tag(same_version[1]),
+                'docs_type': docs_type,
+                'canonical_version': same_version[1],
+                'latest_version': version_list[0]
+            })
 
 else:
     build_list = [{

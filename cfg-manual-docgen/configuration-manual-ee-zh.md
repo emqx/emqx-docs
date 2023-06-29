@@ -12,7 +12,7 @@ EMQX 配置文件手册。
 
   *默认值*: `emqx@127.0.0.1`
 
-  节点名。格式为 \<name>@\<host>。其中 <host> 可以是 IP 地址，也可以是 FQDN。
+  节点名。格式为 \<name>@\<host>。其中 \<host> 可以是 IP 地址，也可以是 FQDN。
 详见 http://erlang.org/doc/reference_manual/distributed.html。
 
 
@@ -64,12 +64,12 @@ EMQX 配置文件手册。
 
   *类型*: `string`
 
-  节点数据存放目录，可能会自动创建的子目录如下：<br/>
-- `mnesia/<node_name>`。EMQX的内置数据库目录。例如，`mnesia/emqx@127.0.0.1`。<br/>
-如果节点要被重新命名（例如，`emqx@10.0.1.1`）。旧目录应该首先被删除。<br/>
-- `configs`。在启动时生成的配置，以及集群/本地覆盖的配置。<br/>
-- `patches`: 热补丁文件将被放在这里。<br/>
-- `trace`: 日志跟踪文件。<br/>
+  节点数据存放目录，可能会自动创建的子目录如下：<br />
+- `mnesia/{node_name}`。EMQX的内置数据库目录。例如，`mnesia/emqx@127.0.0.1`。<br />
+如果节点要被重新命名（例如，`emqx@10.0.1.1`）。旧目录应该首先被删除。<br />
+- `configs`。在启动时生成的配置，以及集群/本地覆盖的配置。<br />
+- `patches`: 热补丁文件将被放在这里。<br />
+- `trace`: 日志跟踪文件。<br />
 
 **注意**: 一个数据dir不能被两个或更多的EMQX节点同时使用。
 
@@ -91,10 +91,10 @@ EMQX 配置文件手册。
 
   *可选值*: `core | replicant`
 
-  选择节点的角色。<br/>
-<code>core</code> 节点提供数据的持久性，并负责写入。建议将核心节点放置在不同的机架或不同的可用区。<br/>
-<code>repliant</code> 节点是临时工作节点。 从集群中删除它们，不影响数据库冗余<br/>
-建议复制节点多于核心节点。<br/>
+  选择节点的角色。<br />
+<code>core</code> 节点提供数据的持久性，并负责写入。建议将核心节点放置在不同的机架或不同的可用区。<br />
+<code>repliant</code> 节点是临时工作节点。 从集群中删除它们，不影响数据库冗余<br />
+建议复制节点多于核心节点。<br />
 注意：该参数仅在设置<code>backend</code>时生效到 <code>rlog</code>。
 
 
@@ -102,7 +102,7 @@ EMQX 配置文件手册。
 ## RPC 设置
 
 
-EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。<br/>
+EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。<br />
 大多数情况下，默认的配置应该可以工作，但如果你需要做一些性能优化或者实验，可以尝试调整这些参数。
 
 **rpc.mode**
@@ -145,7 +145,7 @@ EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。<br/>
   *可选值*: `manual | stateless`
 
   <code>manual</code>: 通过 <code>tcp_server_port</code> 来发现端口。
-<br/><code>stateless</code>: 使用无状态的方式来发现端口，使用如下算法。如果节点名称是 <code>
+<br /><code>stateless</code>: 使用无状态的方式来发现端口，使用如下算法。如果节点名称是 <code>
 emqxN@127.0.0.1</code>, N 是一个数字，那么监听端口就是 5370 + N。
 
 
@@ -155,7 +155,7 @@ emqxN@127.0.0.1</code>, N 是一个数字，那么监听端口就是 5370 + N。
 
   *默认值*: `5369`
 
-  RPC 本地服务使用的 TCP 端口。<br/>
+  RPC 本地服务使用的 TCP 端口。<br />
 只有当 rpc.port_discovery 设置为 manual 时，此配置才会生效。
 
 
@@ -165,7 +165,7 @@ emqxN@127.0.0.1</code>, N 是一个数字，那么监听端口就是 5370 + N。
 
   *默认值*: `5369`
 
-  RPC 本地服务使用的监听SSL端口。<br/>
+  RPC 本地服务使用的监听SSL端口。<br />
 只有当 rpc.port_discovery 设置为 manual 且 <code> dirver </code> 设置为 <code>ssl</code>，
 此配置才会生效。
 
@@ -202,7 +202,7 @@ emqxN@127.0.0.1</code>, N 是一个数字，那么监听端口就是 5370 + N。
 
   *类型*: `file`
 
-  <code>rpc.certfile</code> 的私钥文件的路径。<br/>
+  <code>rpc.certfile</code> 的私钥文件的路径。<br />
 注意：此文件内容是私钥，所以需要设置权限为 600。
 
 
@@ -210,7 +210,7 @@ emqxN@127.0.0.1</code>, N 是一个数字，那么监听端口就是 5370 + N。
 
   *类型*: `file`
 
-  验证 <code>rpc.certfile</code> 的 CA 证书文件的路径。<br/>
+  验证 <code>rpc.certfile</code> 的 CA 证书文件的路径。<br />
 注意：集群中所有节点的证书必须使用同一个 CA 签发。
 
 
@@ -308,7 +308,7 @@ emqxN@127.0.0.1</code>, N 是一个数字，那么监听端口就是 5370 + N。
 ## 集群设置
 
 
-EMQX 节点可以组成一个集群，以提高总容量。<br/> 这里指定了节点之间如何连接。
+EMQX 节点可以组成一个集群，以提高总容量。<br /> 这里指定了节点之间如何连接。
 
 **cluster.name**
 
@@ -328,10 +328,10 @@ EMQX 节点可以组成一个集群，以提高总容量。<br/> 这里指定了
   *可选值*: `manual | static | dns | etcd | k8s | mcast`
 
   集群节点发现方式。可选值为:
-- manual: 使用 <code>emqx ctl cluster</code> 命令管理集群。<br/>
-- static: 配置静态节点。配置几个固定的节点，新节点通过连接固定节点中的某一个来加入集群。<br/>
-- dns: 使用 DNS A 记录的方式发现节点。<br/>
-- etcd: 使用 etcd 发现节点。<br/>
+- manual: 使用 <code>emqx ctl cluster</code> 命令管理集群。<br />
+- static: 配置静态节点。配置几个固定的节点，新节点通过连接固定节点中的某一个来加入集群。<br />
+- dns: 使用 DNS A 记录的方式发现节点。<br />
+- etcd: 使用 etcd 发现节点。<br />
 - k8s: 使用 Kubernetes API 发现节点。
 
 
@@ -341,10 +341,10 @@ EMQX 节点可以组成一个集群，以提高总容量。<br/> 这里指定了
 
   *默认值*: `[]`
 
-  当前节点连接的核心节点列表。<br/>
+  当前节点连接的核心节点列表。<br />
 注意：该参数仅在设置<code>backend</code>时生效到 <code>rlog</code>
-并且设置<code>role</code>为<code>replicant</code>时生效。<br/>
-该值需要在手动或静态集群发现机制下设置。<br/>
+并且设置<code>role</code>为<code>replicant</code>时生效。<br />
+该值需要在手动或静态集群发现机制下设置。<br />
 如果使用了自动集群发现机制（如<code>etcd</code>），则不需要设置该值。
 
 
@@ -374,8 +374,8 @@ EMQX 节点可以组成一个集群，以提高总容量。<br/> 这里指定了
 
   *可选值*: `inet_tcp | inet6_tcp | inet_tls`
 
-  分布式 Erlang 集群协议类型。可选值为:<br/>
-- inet_tcp: 使用 IPv4 <br/>
+  分布式 Erlang 集群协议类型。可选值为:<br />
+- inet_tcp: 使用 IPv4 <br />
 - inet_tls: 使用 TLS，需要配合 <code>etc/ssl_dist.conf</code> 一起使用。
 
 
@@ -415,7 +415,7 @@ EMQX 支持多种策略的节点自动发现与集群，详见 [创建集群](..
 
 ### manual 手动创建集群
 
-默认配置为手动创建集群，节点通过 `./bin/emqx_ctl join <Node>` 命令加入:
+默认配置为手动创建集群，节点通过 `./bin/emqx_ctl join {Node}` 命令加入:
 
 ```bash
 cluster.discovery = manual
@@ -486,7 +486,7 @@ DNS SRV 记录服务发现。
   *默认值*: `emqxcl`
 
   指定 etcd 路径的前缀。每个节点在 etcd 中都会创建一个路径:
-v2/keys/<prefix>/<cluster.name>/<node.name> <br/>
+v2/keys/{prefix}/{cluster.name}/{node.name} <br />
 当 cluster.discovery_strategy 为 etcd 时，此配置项才有效。
 
 
@@ -765,10 +765,10 @@ EMQX 支持配置多个监听器，默认 MQTT/TCP 监听器端口为 `1883`。
 
 将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。
 
-例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
-类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>
+例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br />
+类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br />
 
-设置为<code>""</code> 以禁用该功能<br/>
+设置为<code>""</code> 以禁用该功能<br />
 
 mountpoint 字符串中的变量：
 - <code>${clientid}</code>: clientid
@@ -793,7 +793,7 @@ mountpoint 字符串中的变量：
 
   *类型*: `rate`
 
-  Maximum connection rate.<br/>
+  Maximum connection rate.<br />
 This is used to limit the connection rate for this listener,
 once the limit is reached, new connections will be deferred or refused
 
@@ -802,7 +802,7 @@ once the limit is reached, new connections will be deferred or refused
 
   *类型*: `rate`
 
-  Messages publish rate.<br/>
+  Messages publish rate.<br />
 This is used to limit the inbound message numbers for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -811,7 +811,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *类型*: `rate`
 
-  Data publish rate.<br/>
+  Data publish rate.<br />
 This is used to limit the inbound bytes rate for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -831,7 +831,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *默认值*: `false`
 
-  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/>
+  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br />
 详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
@@ -901,10 +901,10 @@ Settings for the MQTT over SSL listener.
 
 将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。
 
-例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
-类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>
+例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br />
+类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br />
 
-设置为<code>""</code> 以禁用该功能<br/>
+设置为<code>""</code> 以禁用该功能<br />
 
 mountpoint 字符串中的变量：
 - <code>${clientid}</code>: clientid
@@ -929,7 +929,7 @@ mountpoint 字符串中的变量：
 
   *类型*: `rate`
 
-  Maximum connection rate.<br/>
+  Maximum connection rate.<br />
 This is used to limit the connection rate for this listener,
 once the limit is reached, new connections will be deferred or refused
 
@@ -938,7 +938,7 @@ once the limit is reached, new connections will be deferred or refused
 
   *类型*: `rate`
 
-  Messages publish rate.<br/>
+  Messages publish rate.<br />
 This is used to limit the inbound message numbers for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -947,7 +947,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *类型*: `rate`
 
-  Data publish rate.<br/>
+  Data publish rate.<br />
 This is used to limit the inbound bytes rate for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -967,7 +967,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *默认值*: `false`
 
-  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/>
+  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br />
 详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
@@ -1007,27 +1007,27 @@ Settings for the MQTT over QUIC listener.
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
-<br/>
+<br />
 密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
 选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
 名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
-EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
+EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br />
 注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
 不兼容的密码套件将被自动删除。
 
 例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
-<br/>
-注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
+<br />
+注：PSK 的 Ciphers 不支持 tlsv1.3<br />
 如果打算使用PSK密码套件，<code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
 
-<br/>
+<br />
 PSK 密码套件：
 <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br />
 
 注：QUIC 监听器不支持 tlsv1.3 的 ciphers
 
@@ -1085,10 +1085,10 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
 将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。
 
-例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
-类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>
+例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br />
+类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br />
 
-设置为<code>""</code> 以禁用该功能<br/>
+设置为<code>""</code> 以禁用该功能<br />
 
 mountpoint 字符串中的变量：
 - <code>${clientid}</code>: clientid
@@ -1113,7 +1113,7 @@ mountpoint 字符串中的变量：
 
   *类型*: `rate`
 
-  Maximum connection rate.<br/>
+  Maximum connection rate.<br />
 This is used to limit the connection rate for this listener,
 once the limit is reached, new connections will be deferred or refused
 
@@ -1122,7 +1122,7 @@ once the limit is reached, new connections will be deferred or refused
 
   *类型*: `rate`
 
-  Messages publish rate.<br/>
+  Messages publish rate.<br />
 This is used to limit the inbound message numbers for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -1131,7 +1131,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *类型*: `rate`
 
-  Data publish rate.<br/>
+  Data publish rate.<br />
 This is used to limit the inbound bytes rate for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -1188,10 +1188,10 @@ Settings for the MQTT over WebSocket listener.
 
 将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。
 
-例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
-类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>
+例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br />
+类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br />
 
-设置为<code>""</code> 以禁用该功能<br/>
+设置为<code>""</code> 以禁用该功能<br />
 
 mountpoint 字符串中的变量：
 - <code>${clientid}</code>: clientid
@@ -1216,7 +1216,7 @@ mountpoint 字符串中的变量：
 
   *类型*: `rate`
 
-  Maximum connection rate.<br/>
+  Maximum connection rate.<br />
 This is used to limit the connection rate for this listener,
 once the limit is reached, new connections will be deferred or refused
 
@@ -1225,7 +1225,7 @@ once the limit is reached, new connections will be deferred or refused
 
   *类型*: `rate`
 
-  Messages publish rate.<br/>
+  Messages publish rate.<br />
 This is used to limit the inbound message numbers for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -1234,7 +1234,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *类型*: `rate`
 
-  Data publish rate.<br/>
+  Data publish rate.<br />
 This is used to limit the inbound bytes rate for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -1254,7 +1254,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *默认值*: `false`
 
-  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/>
+  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br />
 详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
@@ -1329,10 +1329,10 @@ Settings for the MQTT over WebSocket/SSL listener.
 
 将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。
 
-例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
-类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>
+例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br />
+类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br />
 
-设置为<code>""</code> 以禁用该功能<br/>
+设置为<code>""</code> 以禁用该功能<br />
 
 mountpoint 字符串中的变量：
 - <code>${clientid}</code>: clientid
@@ -1357,7 +1357,7 @@ mountpoint 字符串中的变量：
 
   *类型*: `rate`
 
-  Maximum connection rate.<br/>
+  Maximum connection rate.<br />
 This is used to limit the connection rate for this listener,
 once the limit is reached, new connections will be deferred or refused
 
@@ -1366,7 +1366,7 @@ once the limit is reached, new connections will be deferred or refused
 
   *类型*: `rate`
 
-  Messages publish rate.<br/>
+  Messages publish rate.<br />
 This is used to limit the inbound message numbers for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -1375,7 +1375,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *类型*: `rate`
 
-  Data publish rate.<br/>
+  Data publish rate.<br />
 This is used to limit the inbound bytes rate for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
@@ -1395,7 +1395,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
   *默认值*: `false`
 
-  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/>
+  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br />
 详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
@@ -1429,7 +1429,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 全局的 MQTT 配置参数。
 
 
-Global MQTT configuration.<br/>The configs here work as default values which can be overridden
+Global MQTT configuration.<br />The configs here work as default values which can be overridden
 in <code>zone</code> configs
 
 **mqtt.idle_timeout**
@@ -1863,7 +1863,7 @@ Configuration of the internal database storing retained messages.
 
   *默认值*: `[[1,2,3],[1,3],[2,3],[3]]`
 
-  Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.<br/>For example, it is good to have <code>[2, 4]</code> index to optimize <code>+/X/+/Y/...</code> topic wildcard subscriptions.
+  Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.<br />For example, it is good to have <code>[2, 4]</code> index to optimize <code>+/X/+/Y/...</code> topic wildcard subscriptions.
 
 
 
@@ -1978,7 +1978,7 @@ Prometheus 监控数据推送
 
   *默认值*: `[]`
 
-  推送到 Push Gateway 的 HTTP Headers 列表。<br/>
+  推送到 Push Gateway 的 HTTP Headers 列表。<br />
 例如，<code> { Authorization = "some-authz-tokens"}</code>
 
 
@@ -1988,10 +1988,10 @@ Prometheus 监控数据推送
 
   *默认值*: `${name}/instance/${name}~${host}`
 
-  推送到 Push Gateway 的 Job 名称。可用变量为：<br/>
+  推送到 Push Gateway 的 Job 名称。可用变量为：<br />
 - ${name}: EMQX 节点的名称。
 - ${host}: EMQX 节点主机名。
-例如，当 EMQX 节点名为 <code>emqx@127.0.0.1</code> 则 name 变量的值为 <code>emqx</code>，host 变量的值为 <code>127.0.0.1</code>。<br/>
+例如，当 EMQX 节点名为 <code>emqx@127.0.0.1</code> 则 name 变量的值为 <code>emqx</code>，host 变量的值为 <code>127.0.0.1</code>。<br />
 默认值为: <code>${name}/instance/${name}~${host}</code>
 
 
@@ -2078,7 +2078,7 @@ Settings for the alarms.
 
   *默认值*: `["log","publish"]`
 
-  警报激活时触发的动作。<br/>目前，支持以下操作：<code>log</code> 和 <code>publish</code>.
+  警报激活时触发的动作。<br />目前，支持以下操作：<code>log</code> 和 <code>publish</code>.
 <code>log</code> 将告警写入日志 (控制台或者文件).
 <code>publish</code> 将告警作为 MQTT 消息发布到系统主题:
 <code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and
@@ -2606,10 +2606,10 @@ Dashboard 监听器(HTTPS)配置。
 
   *默认值*: `${EMQX_ETC_DIR}/certs/cacert.pem`
 
-  受信任的PEM格式 CA  证书捆绑文件<br/>
+  受信任的PEM格式 CA  证书捆绑文件<br />
 此文件中的证书用于验证TLS对等方的证书。
 如果要信任新 CA，请将新证书附加到文件中。
-无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
+无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br />
 注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
@@ -2619,7 +2619,7 @@ Dashboard 监听器(HTTPS)配置。
 
   *默认值*: `${EMQX_ETC_DIR}/certs/cert.pem`
 
-  PEM格式证书链文件<br/>
+  PEM格式证书链文件<br />
 此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
 然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
 根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
@@ -2661,8 +2661,8 @@ Dashboard 监听器(HTTPS)配置。
   *默认值*: `10`
 
   在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
-因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
-如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br />
+如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br />
 如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
 
 
@@ -2679,7 +2679,7 @@ Dashboard 监听器(HTTPS)配置。
 
   *默认值*: `["tlsv1.3","tlsv1.2"]`
 
-  支持所有TLS/DTLS版本<br/>
+  支持所有TLS/DTLS版本<br />
 注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
 
@@ -2692,22 +2692,22 @@ Dashboard 监听器(HTTPS)配置。
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
-<br/>
+<br />
 密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
 选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
 名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
-EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
+EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br />
 注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
 不兼容的密码套件将被自动删除。
 
 例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
-<br/>
-注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
+<br />
+注：PSK 的 Ciphers 不支持 tlsv1.3<br />
 如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
 
-<br/>
+<br />
 PSK 密码套件：
 <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
@@ -2749,7 +2749,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
 
   *类型*: `string`
 
-  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
+  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br />
 注意：TLS 1.3不支持<code>dhfile</code>选项。
 
 
@@ -2831,9 +2831,9 @@ gateway clients. The types of the clients
 are distinguished by the topic prefix:
 
 - For the MQTT clients, the format is:
-`$SYS/broker/<node>/clients/<clientid>/<event>`
+`$SYS/broker/<node>/clients/{clientid}/{event}`
 - For the Gateway clients, it is
-`$SYS/broker/<node>/gateway/<gateway-name>/clients/<clientid>/<event>`
+`$SYS/broker/<node>/gateway/{gateway-name}/clients/{clientid}/{event}`
 
 
 **sys_topics.sys_event_messages.client_connected**
@@ -2981,11 +2981,11 @@ This means that loop detection will be more effective and that retained messages
 
   *默认值*: `300s`
 
-  MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
+  MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br />- `ms` for milliseconds,
 - `s` for seconds,
 - `m` for minutes,
 - `h` for hours;
-<br/>or combination of whereof: `1h5m0s`
+<br />or combination of whereof: `1h5m0s`
 
 
 **bridges.mqtt.$name.retry_interval**
@@ -2994,11 +2994,11 @@ This means that loop detection will be more effective and that retained messages
 
   *默认值*: `15s`
 
-  Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
+  Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br />- `ms` for milliseconds,
 - `s` for seconds,
 - `m` for minutes,
 - `h` for hours;
-<br/>or combination of whereof: `1h5m0s`
+<br />or combination of whereof: `1h5m0s`
 
 
 **bridges.mqtt.$name.max_inflight**
@@ -3024,8 +3024,8 @@ This means that loop detection will be more effective and that retained messages
   *类型*: `connector-mqtt:ingress`
 
   The ingress config defines how this bridge receive messages from the remote MQTT broker, and then
-        send them to the local broker.<br/>
-        Template with variables is allowed in 'remote.qos', 'local.topic', 'local.qos', 'local.retain', 'local.payload'.<br/>
+        send them to the local broker.<br />
+        Template with variables is allowed in 'remote.qos', 'local.topic', 'local.qos', 'local.retain', 'local.payload'.<br />
         NOTE: if this bridge is used as the input of a rule, and also 'local.topic' is
         configured, then messages got from the remote broker will be sent to both the 'local.topic' and
         the rule.
@@ -3035,8 +3035,8 @@ This means that loop detection will be more effective and that retained messages
 
   *类型*: `connector-mqtt:egress`
 
-  The egress config defines how this bridge forwards messages from the local broker to the remote broker.<br/>
-Template with variables is allowed in 'remote.topic', 'local.qos', 'local.retain', 'local.payload'.<br/>
+  The egress config defines how this bridge forwards messages from the local broker to the remote broker.<br />
+Template with variables is allowed in 'remote.topic', 'local.qos', 'local.retain', 'local.payload'.<br />
 NOTE: if this bridge is used as the action of a rule, and also 'local.topic'
 is configured, then both the data got from the rule and the MQTT messages that matches
 'local.topic' will be forwarded.
@@ -3221,8 +3221,8 @@ HTTP Bridge 配置
 
   *类型*: `string`
 
-  HTTP Bridge 的 URL。<br/>
-路径中允许使用带变量的模板，但是 host， port 不允许使用变量模板。<br/>
+  HTTP Bridge 的 URL。<br />
+路径中允许使用带变量的模板，但是 host， port 不允许使用变量模板。<br />
 例如，<code> http://localhost:9901/${topic} </code> 是允许的，
 但是<code> http://${host}:9901/message </code>
 或 <code> http://localhost:${port}/message </code>
@@ -3240,7 +3240,7 @@ HTTP Bridge 配置
 
   *类型*: `string`
 
-  发送到 'local_topic' 的消息都会转发到 HTTP 服务器。 <br/>
+  发送到 'local_topic' 的消息都会转发到 HTTP 服务器。 <br />
 注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 HTTP 服务器。
 
 
@@ -3252,7 +3252,7 @@ HTTP Bridge 配置
 
   *可选值*: `post | put | get | delete`
 
-  HTTP 请求的方法。 所有可用的方法包括：post、put、get、delete。<br/>
+  HTTP 请求的方法。 所有可用的方法包括：post、put、get、delete。<br />
 允许使用带有变量的模板。
 
 
@@ -3262,7 +3262,7 @@ HTTP Bridge 配置
 
   *默认值*: `{"keep-alive":"timeout=5","content-type":"application/json","connection":"keep-alive","cache-control":"no-cache","accept":"application/json"}`
 
-  HTTP 请求的标头。<br/>
+  HTTP 请求的标头。<br />
 允许使用带有变量的模板。
 
 
@@ -3270,10 +3270,10 @@ HTTP Bridge 配置
 
   *类型*: `string`
 
-  HTTP 请求的正文。<br/>
-如果没有设置该字段，请求正文将是包含所有可用字段的 JSON object。<br/>
+  HTTP 请求的正文。<br />
+如果没有设置该字段，请求正文将是包含所有可用字段的 JSON object。<br />
 如果该 webhook 是由于收到 MQTT 消息触发的，'所有可用字段' 将是 MQTT 消息的
-上下文信息；如果该 webhook 是由于规则触发的，'所有可用字段' 则为触发事件的上下文信息。<br/>
+上下文信息；如果该 webhook 是由于规则触发的，'所有可用字段' 则为触发事件的上下文信息。<br />
 允许使用带有变量的模板。
 
 
@@ -3435,8 +3435,8 @@ HTTP Bridge 配置
 
 
 
-The egress config defines how this bridge forwards messages from the local broker to the remote broker.<br/>
-Template with variables is allowed in 'remote.topic', 'local.qos', 'local.retain', 'local.payload'.<br/>
+The egress config defines how this bridge forwards messages from the local broker to the remote broker.<br />
+Template with variables is allowed in 'remote.topic', 'local.qos', 'local.retain', 'local.payload'.<br />
 NOTE: if this bridge is used as the action of a rule, and also 'local.topic'
 is configured, then both the data got from the rule and the MQTT messages that matches
 'local.topic' will be forwarded.
@@ -3447,7 +3447,7 @@ is configured, then both the data got from the rule and the MQTT messages that m
 
   *默认值*: `8`
 
-  Size of the pool of MQTT clients that will publish messages to the remote broker.<br/>
+  Size of the pool of MQTT clients that will publish messages to the remote broker.<br />
 Each MQTT client will be assigned 'clientid' of the form '${clientid_prefix}:${bridge_name}:egress:${node}:${n}'
 where 'n' is the number of a client inside the pool.
 
@@ -3485,7 +3485,7 @@ The configs about sending message to the remote broker.
 
   *类型*: `string`
 
-  Forward to which topic of the remote broker.<br/>
+  Forward to which topic of the remote broker.<br />
 Template with variables is allowed.
 
 
@@ -3495,7 +3495,7 @@ Template with variables is allowed.
 
   *默认值*: `1`
 
-  The QoS of the MQTT message to be sent.<br/>
+  The QoS of the MQTT message to be sent.<br />
 Template with variables is allowed.
 
 
@@ -3505,7 +3505,7 @@ Template with variables is allowed.
 
   *默认值*: `false`
 
-  The 'retain' flag of the MQTT message to be sent.<br/>
+  The 'retain' flag of the MQTT message to be sent.<br />
 Template with variables is allowed.
 
 
@@ -3513,15 +3513,15 @@ Template with variables is allowed.
 
   *类型*: `string`
 
-  The payload of the MQTT message to be sent.<br/>
+  The payload of the MQTT message to be sent.<br />
 Template with variables is allowed.
 
 
 
 
 The ingress config defines how this bridge receive messages from the remote MQTT broker, and then
-        send them to the local broker.<br/>
-        Template with variables is allowed in 'remote.qos', 'local.topic', 'local.qos', 'local.retain', 'local.payload'.<br/>
+        send them to the local broker.<br />
+        Template with variables is allowed in 'remote.qos', 'local.topic', 'local.qos', 'local.retain', 'local.payload'.<br />
         NOTE: if this bridge is used as the input of a rule, and also 'local.topic' is
         configured, then messages got from the remote broker will be sent to both the 'local.topic' and
         the rule.
@@ -3532,7 +3532,7 @@ The ingress config defines how this bridge receive messages from the remote MQTT
 
   *默认值*: `8`
 
-  Size of the pool of MQTT clients that will ingest messages from the remote broker.<br/>
+  Size of the pool of MQTT clients that will ingest messages from the remote broker.<br />
 This value will be respected only if 'remote.topic' is a shared subscription topic or topic-filter
 (for example `$share/name1/topic1` or `$share/name2/topic2/#`), otherwise only a single MQTT client will be used.
 Each MQTT client will be assigned 'clientid' of the form '${clientid_prefix}:${bridge_name}:ingress:${node}:${n}'
@@ -3562,7 +3562,7 @@ The configs about sending message to the local broker.
 
   *类型*: `string`
 
-  Send messages to which topic of the local broker.<br/>
+  Send messages to which topic of the local broker.<br />
 Template with variables is allowed.
 
 
@@ -3572,7 +3572,7 @@ Template with variables is allowed.
 
   *默认值*: `${qos}`
 
-  The QoS of the MQTT message to be sent.<br/>
+  The QoS of the MQTT message to be sent.<br />
 Template with variables is allowed.
 
 
@@ -3582,7 +3582,7 @@ Template with variables is allowed.
 
   *默认值*: `${retain}`
 
-  The 'retain' flag of the MQTT message to be sent.<br/>
+  The 'retain' flag of the MQTT message to be sent.<br />
 Template with variables is allowed.
 
 
@@ -3590,7 +3590,7 @@ Template with variables is allowed.
 
   *类型*: `string`
 
-  The payload of the MQTT message to be sent.<br/>
+  The payload of the MQTT message to be sent.<br />
 Template with variables is allowed.
 
 
@@ -3618,8 +3618,8 @@ The configs about subscribing to the remote broker.
 ## 插件
 
 
-管理EMQX插件。<br/>
-插件可以是EMQX安装包中的一部分，也可以是一个独立的安装包。<br/>
+管理EMQX插件。<br />
+插件可以是EMQX安装包中的一部分，也可以是一个独立的安装包。<br />
 独立安装的插件称为“外部插件”。
 
 **plugins.states**
@@ -3655,7 +3655,7 @@ The configs about subscribing to the remote broker.
 
   *类型*: `string`
 
-  插件的名称{name}-{version}。<br/>
+  插件的名称{name}-{version}。<br />
 它应该与插件的发布包名称一致，如my_plugin-0.1.0。
 
 
@@ -3803,10 +3803,10 @@ SSL client configuration.
 
   *类型*: `string`
 
-  受信任的PEM格式 CA  证书捆绑文件<br/>
+  受信任的PEM格式 CA  证书捆绑文件<br />
 此文件中的证书用于验证TLS对等方的证书。
 如果要信任新 CA，请将新证书附加到文件中。
-无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
+无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br />
 注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
@@ -3814,7 +3814,7 @@ SSL client configuration.
 
   *类型*: `string`
 
-  PEM格式证书链文件<br/>
+  PEM格式证书链文件<br />
 此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
 然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
 根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
@@ -3854,8 +3854,8 @@ SSL client configuration.
   *默认值*: `10`
 
   在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
-因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
-如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br />
+如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br />
 如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
 
 
@@ -3872,7 +3872,7 @@ SSL client configuration.
 
   *默认值*: `["tlsv1.3","tlsv1.2"]`
 
-  支持所有TLS/DTLS版本<br/>
+  支持所有TLS/DTLS版本<br />
 注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
 
@@ -3885,22 +3885,22 @@ SSL client configuration.
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
-<br/>
+<br />
 密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
 选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
 名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
-EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
+EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br />
 注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
 不兼容的密码套件将被自动删除。
 
 例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
-<br/>
-注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
+<br />
+注：PSK 的 Ciphers 不支持 tlsv1.3<br />
 如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
 
-<br/>
+<br />
 PSK 密码套件：
 <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
@@ -3951,12 +3951,12 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
 
   *类型*: `disable | string`
 
-  指定要在 TLS 服务器名称指示扩展中使用的主机名。<br/>
+  指定要在 TLS 服务器名称指示扩展中使用的主机名。<br />
 例如，当连接到 "server.example.net" 时，接受连接并执行 TLS 握手的真正服务器可能与 TLS 客户端最初连接到的主机不同，
-例如，当连接到 IP 地址时，或者当主机具有多个可解析的 DNS 记录时<br/>
+例如，当连接到 IP 地址时，或者当主机具有多个可解析的 DNS 记录时<br />
 如果未指定，它将默认为使用的主机名字符串
-建立连接，除非使用 IP 地址<br/>
-然后，主机名也用于对等机的主机名验证证书<br/>
+建立连接，除非使用 IP 地址<br />
+然后，主机名也用于对等机的主机名验证证书<br />
 特殊值 <code>disable</code> 阻止发送服务器名称指示扩展，并禁用主机名验证检查。
 
 
@@ -3972,10 +3972,10 @@ Socket options for SSL clients.
 
   *类型*: `string`
 
-  受信任的PEM格式 CA  证书捆绑文件<br/>
+  受信任的PEM格式 CA  证书捆绑文件<br />
 此文件中的证书用于验证TLS对等方的证书。
 如果要信任新 CA，请将新证书附加到文件中。
-无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
+无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br />
 注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
@@ -3983,7 +3983,7 @@ Socket options for SSL clients.
 
   *类型*: `string`
 
-  PEM格式证书链文件<br/>
+  PEM格式证书链文件<br />
 此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
 然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
 根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
@@ -4023,8 +4023,8 @@ Socket options for SSL clients.
   *默认值*: `10`
 
   在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
-因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
-如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br />
+如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br />
 如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
 
 
@@ -4041,7 +4041,7 @@ Socket options for SSL clients.
 
   *默认值*: `["tlsv1.3","tlsv1.2"]`
 
-  支持所有TLS/DTLS版本<br/>
+  支持所有TLS/DTLS版本<br />
 注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
 
@@ -4054,22 +4054,22 @@ Socket options for SSL clients.
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
-<br/>
+<br />
 密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
 选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
 名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
-EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
+EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br />
 注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
 不兼容的密码套件将被自动删除。
 
 例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
-<br/>
-注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
+<br />
+注：PSK 的 Ciphers 不支持 tlsv1.3<br />
 如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
 
-<br/>
+<br />
 PSK 密码套件：
 <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
@@ -4120,12 +4120,12 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
 
   *类型*: `disable | string`
 
-  指定要在 TLS 服务器名称指示扩展中使用的主机名。<br/>
+  指定要在 TLS 服务器名称指示扩展中使用的主机名。<br />
 例如，当连接到 "server.example.net" 时，接受连接并执行 TLS 握手的真正服务器可能与 TLS 客户端最初连接到的主机不同，
-例如，当连接到 IP 地址时，或者当主机具有多个可解析的 DNS 记录时<br/>
+例如，当连接到 IP 地址时，或者当主机具有多个可解析的 DNS 记录时<br />
 如果未指定，它将默认为使用的主机名字符串
-建立连接，除非使用 IP 地址<br/>
-然后，主机名也用于对等机的主机名验证证书<br/>
+建立连接，除非使用 IP 地址<br />
+然后，主机名也用于对等机的主机名验证证书<br />
 特殊值 <code>disable</code> 阻止发送服务器名称指示扩展，并禁用主机名验证检查。
 
 
@@ -4141,10 +4141,10 @@ Socket options for SSL connections.
 
   *默认值*: `${EMQX_ETC_DIR}/certs/cacert.pem`
 
-  受信任的PEM格式 CA  证书捆绑文件<br/>
+  受信任的PEM格式 CA  证书捆绑文件<br />
 此文件中的证书用于验证TLS对等方的证书。
 如果要信任新 CA，请将新证书附加到文件中。
-无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
+无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br />
 注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
@@ -4154,7 +4154,7 @@ Socket options for SSL connections.
 
   *默认值*: `${EMQX_ETC_DIR}/certs/cert.pem`
 
-  PEM格式证书链文件<br/>
+  PEM格式证书链文件<br />
 此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
 然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
 根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
@@ -4196,8 +4196,8 @@ Socket options for SSL connections.
   *默认值*: `10`
 
   在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
-因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
-如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br />
+如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br />
 如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
 
 
@@ -4214,7 +4214,7 @@ Socket options for SSL connections.
 
   *默认值*: `["tlsv1.3","tlsv1.2"]`
 
-  支持所有TLS/DTLS版本<br/>
+  支持所有TLS/DTLS版本<br />
 注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
 
@@ -4227,22 +4227,22 @@ Socket options for SSL connections.
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
-<br/>
+<br />
 密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
 选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
 名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
-EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
+EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br />
 注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
 不兼容的密码套件将被自动删除。
 
 例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
-<br/>
-注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
+<br />
+注：PSK 的 Ciphers 不支持 tlsv1.3<br />
 如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
 
-<br/>
+<br />
 PSK 密码套件：
 <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
@@ -4284,7 +4284,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
 
   *类型*: `string`
 
-  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
+  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br />
 注意：TLS 1.3不支持<code>dhfile</code>选项。
 
 
@@ -4364,7 +4364,7 @@ TCP listener options.
 
   *默认值*: `100`
 
-  为此套接字指定{active，N}选项<br/>
+  为此套接字指定{active，N}选项<br />
 See: https://erlang.org/doc/man/inet.html#setopts-2
 
 
@@ -4493,7 +4493,7 @@ WebSocket listener options.
 
   *默认值*: `false`
 
-  如果 <code>true</code>，则使用<code>zlib</code> 压缩 WebSocket 消息<br/>
+  如果 <code>true</code>，则使用<code>zlib</code> 压缩 WebSocket 消息<br />
 <code>deflate_opts</code> 下的配置项属于压缩相关参数配置。
 
 
@@ -4522,7 +4522,7 @@ WebSocket listener options.
   *默认值*: `true`
 
   如果<code>true</code>，当客户端未携带<code>Sec WebSocket Protocol</code>字段时，服务器将返回一个错误。
-<br/>注意：微信小程序需要禁用此验证。
+<br />注意：微信小程序需要禁用此验证。
 
 
 **ws_opts.supported_subprotocols**
@@ -4597,10 +4597,10 @@ Socket options for WebSocket/SSL connections.
 
   *默认值*: `${EMQX_ETC_DIR}/certs/cacert.pem`
 
-  受信任的PEM格式 CA  证书捆绑文件<br/>
+  受信任的PEM格式 CA  证书捆绑文件<br />
 此文件中的证书用于验证TLS对等方的证书。
 如果要信任新 CA，请将新证书附加到文件中。
-无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
+无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br />
 注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
@@ -4610,7 +4610,7 @@ Socket options for WebSocket/SSL connections.
 
   *默认值*: `${EMQX_ETC_DIR}/certs/cert.pem`
 
-  PEM格式证书链文件<br/>
+  PEM格式证书链文件<br />
 此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
 然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
 根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
@@ -4652,8 +4652,8 @@ Socket options for WebSocket/SSL connections.
   *默认值*: `10`
 
   在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
-因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
-如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br />
+如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br />
 如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
 
 
@@ -4670,7 +4670,7 @@ Socket options for WebSocket/SSL connections.
 
   *默认值*: `["tlsv1.3","tlsv1.2"]`
 
-  支持所有TLS/DTLS版本<br/>
+  支持所有TLS/DTLS版本<br />
 注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
 
@@ -4683,22 +4683,22 @@ Socket options for WebSocket/SSL connections.
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
 <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
 <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
-<br/>
+<br />
 密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
 选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
 名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
-EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
+EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br />
 注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
 不兼容的密码套件将被自动删除。
 
 例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
-<br/>
-注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
+<br />
+注：PSK 的 Ciphers 不支持 tlsv1.3<br />
 如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
 
-<br/>
+<br />
 PSK 密码套件：
 <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
@@ -4740,7 +4740,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
 
   *类型*: `string`
 
-  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
+  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br />
 注意：TLS 1.3不支持<code>dhfile</code>选项。
 
 
@@ -4808,7 +4808,7 @@ Compression options.
 
   *可选值*: `1-9`
 
-  指定压缩状态的大小<br/>
+  指定压缩状态的大小<br />
 较低的值会减少每个连接的内存使用。
 
 

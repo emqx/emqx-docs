@@ -1,8 +1,6 @@
 # Telemetry
 
-<!-- TODO 企业版本会直接不加载这个application，可以把这一章节直接从企业版本删除掉 -->
-
-EMQ collects information about the usage of EMQX through telemetry. This function is designed to provide us with comprehensive information about users and communities, as well as an understanding of how EMQX is used. Sharing these metrics with us can help us better understand how you use our products and can continuously help us improve our products.
+EMQ collects information about the usage of EMQX Opensource edition through telemetry. This function is designed to provide us with comprehensive information about users and communities, as well as an understanding of how EMQX opensource edition is used. Sharing these metrics with us can help us better understand how you use our products and can continuously help us improve our products.
 
 It is important to note that telemetry data cannot and will not be used to identify or associate you personally. These statistics do not contain individual data, such as server model, hardware number, IP address, and will never be shared with anyone else.
 

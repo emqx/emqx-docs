@@ -65,6 +65,9 @@ def parse(children, lang, edition):
             if 'path' in child:
                 _child['path'] = child['path']
 
+            if 'collapsed' in child:
+                _child['collapsed'] = child['collapsed']
+
             if 'children' in child:
                 godeep = parse(child['children'], lang, edition)
                 _child['children'] = godeep

@@ -1,6 +1,6 @@
 # OpenTSDB
 
-EMQX 支持与 OpenTSDB 集成，因此可以将客户端消息保存到 OpenTSDB 以便后续进行分析和检索。
+EMQX 支持与 OpenTSDB 集成，因此可以将 MQTT 消息保存到 OpenTSDB 以便后续进行分析和检索。
 
 {% emqxce %}
 :::tip

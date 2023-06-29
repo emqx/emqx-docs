@@ -1,6 +1,6 @@
 # Ingest Data into MongoDB
 
-EMQX supports integration with MongoDB so you can save client messages and events to MongoDB.
+EMQX supports integration with MongoDB so you can save MQTT messages and client events to MongoDB.
 
 {% emqxce %}
 :::tip
@@ -85,7 +85,7 @@ db.createCollection('emqx_messages')
    - Auto-derivation of the data type of "value" is not supported:
      - Characters need to be wrapped with `"`, otherwise, an error will be reported;
      - Values do not need to be wrapped, otherwise, they will be recognized as characters;
-     - For timestamp, date, and time types, if no special treatment is performed, they will be recognized as numeric or character types. To store them as date or time, use the `mongo_date` function in the rule SQL to process the fields. For details, see [Time and date functions](https://github.com/emqx/emqx-docs/blob/1991eaf3eb0596726e3b397f7758212742bf7a3e/en_US/data-integration/rule-sql-builtin-functions.md#Time and date functions). 
+     - For timestamp, date, and time types, if no special treatment is performed, they will be recognized as numeric or character types. To store them as date or time, use the `mongo_date` function in the rule SQL to process the fields. For details, see [Time and date functions](./rule-sql-builtin-functions.md#time-and-date-functions). 
 
    - Nested objects are allowed, when value is a JSON object:
      - It is not allowed to use `"` to nest the value in the template, otherwise, it will cause an execution error;

@@ -55,8 +55,6 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
 3. In the **Create Data Bridge** page, click to select **InfluxDB**, and then click **Next**.
 
-   <img src="./assets/rules/en-InfluxDB-index-ee.png" alt="en-InfluxDB-index-ee" style="zoom:50%;" />
-
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers. Select the InfluxDB version as needed, by default v2 is selected.
 
 5. Input the connection information.

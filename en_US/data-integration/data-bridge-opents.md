@@ -1,6 +1,6 @@
 # Ingest Data into OpenTSDB
 
-EMQX supports integration with OpenTSDB. You can save client messages to OpenTSDB for subsequent analysis and retrieval.
+EMQX supports integration with OpenTSDB. You can save MQTT messages to OpenTSDB for subsequent analysis and retrieval.
 
 {% emqxce %}
 :::tip

@@ -1,6 +1,6 @@
 # Ingest Data into DynamoDB
 
-EMQX supports integration with DynamoDB, so you can save client messages and events to DynamoDB, or use events to trigger the update or removal of data to record the online status or online/offline of clients.
+EMQX supports integration with DynamoDB, so you can save MQTT messages and client events to DynamoDB, or use events to trigger the update or removal of data to record the online status or online/offline of clients.
 
 {% emqxce %}
 :::tip
