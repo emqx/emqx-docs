@@ -39,7 +39,7 @@
 
 -   **Error in Dashboard when Using "crt" for "Use Peer Certificate field as ClientId" Option.**
 
-    Selecting "Use Peer Certificate as Client ID" type as "crt" in MQTT causes the client ID to display garbled code on the dashboard and leads to an error when viewing details.
+    Selecting "Use Peer Certificate as Client ID" type as "crt" in MQTT causes the client ID to display garbled code on the Dashboard and leads to an error when viewing details.
 
 -   **Unable to View and Download Files on Replica Nodes in Cluster with File Transfer Feature.**
 
