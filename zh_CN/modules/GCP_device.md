@@ -9,9 +9,199 @@ EMQX 兼容层通过 GCP IoT Core 设备模块实现，您只需对设备代码�
 
 本页面指导您如何将 GCP IoT Core 中的设备迁移到 EMQX，包括如何将设备认证信息从 GCP IoT Core 中导出并导入 EMQX，以及将设备连接的端点切换成 EMQX。设备迁移可以使用命令行和 REST API 来进行，也可以方便地通过 EMQX Dashboard 进行。两种方式在本页均有演示。
 
-## 模拟设备在 GCP IoT Core 中的管理
+## 从 GCP IoT Core 迁移到 EMQX
 
-以下演示旨在模拟实际设备（例如客户端）与 GCP IoT Core 的 MQTT 端点进行交互的真实情况。
+设备迁移包括以下两个任务：
+
+- 从 Google Cloud IoT Core 导出设备数据
+- 将设备数据导入到 EMQX
+
+### 从 GCP IoT Core 导出设备数据
+
+您可以使用一个利用了 [Google Cloud IoT Core REST API](https://cloud.google.com/iot/docs/reference/cloudiot/rest) 的脚本导出数据。
+
+1. 在相同的 `emqx-gcp-iot-migrate` 文件夹下运行以下命令。该文件夹在[连接设备到 MQTT 端点](#连接设备到-mqtt-端点)中用于安装环境。
+
+   ```bash
+   python gcp-export.py --project iot-export --region europe-west1 --registry my-registry > gcp-data.json
+   ```
+
+   现在，`gcp-data.json` 文件中包含了准备导入到 EMQX 中的数据。
+
+2. 使用 Docker 启动 EMQX。这是在本地启动 EMQX 的最简单方式。
+
+   8883 是 MQTT 端口（使用 TLS），18083 是 HTTP API 端口。
+
+   ```bash
+   docker run -d --name emqx -p 8883:8883 -p 18083:18083 emqx/emqx:4.4.18
+   ```
+
+3. 在 EMQX 中启用 GCP IoT Core Device 模块。
+
+   ```bash
+   curl -s -u 'admin:public' -X POST 'http://127.0.0.1:18083/api/v4/modules/' -H "Content-Type: application/json"  --data-raw '{"type": "gcp_device", "config": {}}'
+   ```
+
+   ::: tip
+
+   您也可以通过在 EMQX Dashboard 中添加 GCP IoT Core Device 模块来启用该模块。了解更多信息，请参阅[通过 Dashboard 添加模块](#通过-dashboard-添加模块)。
+
+   :::
+
+### 将设备数据导入 EMQX
+
+使用 REST API 将数据导入 EMQX。 `admin:public` 是 EMQX 默认的用户名和密码。
+
+```bash
+curl -s -v -u 'admin:public' -X POST 'http://127.0.0.1:18083/api/v4/gcp_devices' --data @gcp-data.json
+...
+{"data":{"imported":14,"errors":0},"code":0}
+```
+
+您可以看到有14 个设备被导入。
+
+## 通过 API 管理设备
+
+当设备从 GCP IoT Core 导入到了 EMQX 后，EMQX 提供了一些额外的 API 调用，使用“设备”术语来管理 EMQX 数据。
+
+### 管理单个设备配置
+
+获取设备 `c2-ec-x509` 的配置：
+
+```bash
+>curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509' | jq
+{
+  "data": {
+    "registry": "my-registry",
+    "project": "iot-export",
+    "location": "europe-west1",
+    "keys": [
+      {
+        "key_type": "ES256_X509_PEM",
+        "key": "...",
+        "expires_at": 0
+      }
+    ],
+    "deviceid": "c2-ec-x509",
+    "created_at": 1685477382,
+    "config": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/w=="
+  },
+  "code": 0
+}
+```
+
+更新设备 `c2-ec-x509` 的配置（将配置保存到一个名为 `c2-ec-x509.json` 的文件中方便修改，然后更改 `config` 字段）：
+
+```bash
+>cat c2-ec-x509.json
+{
+    "registry": "my-registry",
+    "project": "iot-export",
+    "location": "europe-west1",
+    "keys": [
+      {
+        "key_type": "ES256_X509_PEM",
+        "key": "...",
+        "expires_at": 0
+      }
+    ],
+    "config": "bmV3Y29uZmlnCg=="
+}
+
+>curl -s -u 'admin:public' -X PUT 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509' -H "Content-Type: application/json" -d @c2-ec-x509.json
+{"data":{},"code":0}
+```
+
+删除设备 `c2-ec-x509` 的配置：
+
+```bash
+>curl -s -u 'admin:public' -X DELETE 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509'
+{"data":{},"code":0}
+>curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509' | jq
+{
+  "message": "device not found"
+}
+```
+
+### 列出设备
+
+列出所有设备：
+
+```bash
+>curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices' | jq
+{
+  "meta": {
+    "page": 1,
+    "limit": 10000,
+    "hasnext": false,
+    "count": 13
+  },
+  "data": [
+    {
+      "registry": "my-registry",
+      "project": "iot-export",
+      "location": "europe-west1",
+      "keys": [
+        {
+          "key_type": "RSA_X509_PEM",
+          "key": "...",
+          "expires_at": 0
+        }
+      ],
+      "deviceid": "2820826361193805",
+      "created_at": 1685477382,
+      "config": ""
+    },
+...
+```
+
+查询支持分页功能。使用`_limit`和`_page`参数：
+
+```bash
+>curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices?_page=2&_limit=2' | jq
+```
+
+## 通过 Dashboard 迁移和管理设备
+
+Dashboard 上的 GCP IoT Core 设备模块为设备迁移和管理提供了一种可视化的方式。
+
+### 添加 GCP IoT Core 设备模块
+
+1. 转到 EMQX Dashboard。从左侧导航目录点击**模块**。
+
+2. 在**模块**页面，点击**添加模块**。在**选择模块**区域，点击**内部模块**。
+
+3. 找到 **GCP IoT Core 设备**并点击**选择**。
+
+   <img src="./assets/GCP_device_select.png" alt="GCP_device_select" style="zoom:67%;" />
+
+4. 点击页面上的**添加**以启用模块。 
+
+   <img src="./assets/GCP_device_add.png" alt="GCP_device_add" style="zoom:67%;" />
+
+现在您可以看到 **GCP IoT Core 设备**已被添加到**模块**页面。
+
+### 导入设备数据 
+
+1. 在**模块**页面上，点击 **GCP IoT Core 设备**的**管理**按钮。
+
+   <img src="./assets/GCP_device_manage.png" alt="GCP_device_manage" style="zoom:67%;" />
+
+2. 在**详情**页面的**设备管理**页签，点击**导入**以批量导入设备数据或者点击**添加**以手动添加设备数据。
+
+   - 如果点击**导入**，将弹出对话框让您导入从 GCP IoT Core 中导出的 json 文件。选中文件并点击**打开**。
+
+     <img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/modules/assets/GCP_device_import.png" alt="GCP_device_import" style="zoom:67%;" />
+
+   - 如果点击**添加**，将弹出对话框让您输入`设备 ID` 并添加公钥。点击**添加**，从下拉列表中选择公钥格式。上传公钥文件或输入文件内容，设置到期时间，最后点击**确定**。
+
+     <img src="./assets/GCP_device_add_public_key.png" alt="GCP_device_add_public_key" style="zoom:67%;" />
+
+您可以看到设备已被导入。 <!-- Better to show a screenshot-->
+
+## 模拟 GCP IoT Core 中设备
+
+以下演示旨在模拟实际设备（例如客户端）与 GCP IoT Core 的 MQTT 端点进行交互的真实情况，以便您可以在 EMQX 中测试 GCP IoT Core 设备模块。
 
 ### 初始设置
 
@@ -258,196 +448,6 @@ numId: '2928540609735937'
 - 客户端从配置主题接收配置。消息是一个二进制块，但可以是 JSON 字符串或其他格式。
 
 迁移完成后，您可以期望相同的操作在 EMQX 中也能正常工作，而无需修改客户端代码。
-
-## 从 GCP IoT Core 迁移到 EMQX
-
-设备迁移包括以下两个任务：
-
-- 从 Google Cloud IoT Core 导出设备数据
-- 将设备数据导入到 EMQX
-
-### 从 GCP IoT Core 导出设备数据
-
-您可以使用一个利用了 [Google Cloud IoT Core REST API](https://cloud.google.com/iot/docs/reference/cloudiot/rest) 的脚本导出数据。
-
-1. 在相同的 `emqx-gcp-iot-migrate` 文件夹下运行以下命令。该文件夹在[连接设备到 MQTT 端点](#连接设备到-mqtt-端点)中用于安装环境。
-
-   ```bash
-   python gcp-export.py --project iot-export --region europe-west1 --registry my-registry > gcp-data.json
-   ```
-
-   现在，`gcp-data.json` 文件中包含了准备导入到 EMQX 中的数据。
-
-2. 使用 Docker 启动 EMQX。这是在本地启动 EMQX 的最简单方式。
-
-   8883 是 MQTT 端口（使用 TLS），18083 是 HTTP API 端口。
-
-   ```bash
-   docker run -d --name emqx -p 8883:8883 -p 18083:18083 emqx/emqx:4.4.18
-   ```
-
-3. 在 EMQX 中启用 GCP IoT Core Device 模块。
-
-   ```bash
-   curl -s -u 'admin:public' -X POST 'http://127.0.0.1:18083/api/v4/modules/' -H "Content-Type: application/json"  --data-raw '{"type": "gcp_device", "config": {}}'
-   ```
-
-   ::: tip
-
-   您也可以通过在 EMQX Dashboard 中添加 GCP IoT Core Device 模块来启用该模块。了解更多信息，请参阅[通过 Dashboard 添加模块](#通过-dashboard-添加模块)。
-
-   :::
-
-### 将设备数据导入 EMQX
-
-使用 REST API 将数据导入 EMQX。 `admin:public` 是 EMQX 默认的用户名和密码。
-
-```bash
-curl -s -v -u 'admin:public' -X POST 'http://127.0.0.1:18083/api/v4/gcp_devices' --data @gcp-data.json
-...
-{"data":{"imported":14,"errors":0},"code":0}
-```
-
-您可以看到有14 个设备被导入。
-
-## 通过 API 管理设备
-
-当设备从 GCP IoT Core 导入到了 EMQX 后，EMQX 提供了一些额外的 API 调用，使用“设备”术语来管理 EMQX 数据。
-
-### 管理单个设备配置
-
-获取设备 `c2-ec-x509` 的配置：
-
-```bash
->curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509' | jq
-{
-  "data": {
-    "registry": "my-registry",
-    "project": "iot-export",
-    "location": "europe-west1",
-    "keys": [
-      {
-        "key_type": "ES256_X509_PEM",
-        "key": "...",
-        "expires_at": 0
-      }
-    ],
-    "deviceid": "c2-ec-x509",
-    "created_at": 1685477382,
-    "config": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/w=="
-  },
-  "code": 0
-}
-```
-
-更新设备 `c2-ec-x509` 的配置（将配置保存到一个名为 `c2-ec-x509.json` 的文件中方便修改，然后更改 `config` 字段）：
-
-```bash
->cat c2-ec-x509.json
-{
-    "registry": "my-registry",
-    "project": "iot-export",
-    "location": "europe-west1",
-    "keys": [
-      {
-        "key_type": "ES256_X509_PEM",
-        "key": "...",
-        "expires_at": 0
-      }
-    ],
-    "config": "bmV3Y29uZmlnCg=="
-}
-
->curl -s -u 'admin:public' -X PUT 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509' -H "Content-Type: application/json" -d @c2-ec-x509.json
-{"data":{},"code":0}
-```
-
-删除设备 `c2-ec-x509` 的配置：
-
-```bash
->curl -s -u 'admin:public' -X DELETE 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509'
-{"data":{},"code":0}
->curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509' | jq
-{
-  "message": "device not found"
-}
-```
-
-### 列出设备
-
-列出所有设备：
-
-```bash
->curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices' | jq
-{
-  "meta": {
-    "page": 1,
-    "limit": 10000,
-    "hasnext": false,
-    "count": 13
-  },
-  "data": [
-    {
-      "registry": "my-registry",
-      "project": "iot-export",
-      "location": "europe-west1",
-      "keys": [
-        {
-          "key_type": "RSA_X509_PEM",
-          "key": "...",
-          "expires_at": 0
-        }
-      ],
-      "deviceid": "2820826361193805",
-      "created_at": 1685477382,
-      "config": ""
-    },
-...
-```
-
-查询支持分页功能。使用`_limit`和`_page`参数：
-
-```bash
->curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices?_page=2&_limit=2' | jq
-```
-
-## 通过 Dashboard 迁移和管理设备
-
-Dashboard 上的 GCP IoT Core 设备模块为设备迁移和管理提供了一种可视化的方式。
-
-### 添加 GCP IoT Core 设备模块
-
-1. 转到 EMQX Dashboard。从左侧导航目录点击**模块**。
-
-2. 在**模块**页面，点击**添加模块**。在**选择模块**区域，点击**内部模块**。
-
-3. 找到 **GCP IoT Core 设备**并点击**选择**。
-
-   <img src="./assets/GCP_device_select.png" alt="GCP_device_select" style="zoom:67%;" />
-
-4. 点击页面上的**添加**以启用模块。 
-
-   <img src="./assets/GCP_device_add.png" alt="GCP_device_add" style="zoom:67%;" />
-
-现在您可以看到 **GCP IoT Core 设备**已被添加到**模块**页面。
-
-### 导入设备数据 
-
-1. 在**模块**页面上，点击 **GCP IoT Core 设备**的**管理**按钮。
-
-   <img src="./assets/GCP_device_manage.png" alt="GCP_device_manage" style="zoom:67%;" />
-
-2. 在**详情**页面的**设备管理**页签，点击**导入**以批量导入设备数据或者点击**添加**以手动添加设备数据。
-
-   - 如果点击**导入**，将弹出对话框让您导入从 GCP IoT Core 中导出的 json 文件。选中文件并点击**打开**。
-
-     <img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/modules/assets/GCP_device_import.png" alt="GCP_device_import" style="zoom:67%;" />
-
-   - 如果点击**添加**，将弹出对话框让您输入`设备 ID` 并添加公钥。点击**添加**，从下拉列表中选择公钥格式。上传公钥文件或输入文件内容，设置到期时间，最后点击**确定**。
-
-     <img src="./assets/GCP_device_add_public_key.png" alt="GCP_device_add_public_key" style="zoom:67%;" />
-
-您可以看到设备已被导入。 <!-- Better to show a screenshot-->
 
 ## 对迁移结果进行测试
 

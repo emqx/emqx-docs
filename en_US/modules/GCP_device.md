@@ -1,4 +1,4 @@
-# GCP IoT Core Device 
+# GCP IoT Core Device
 
 EMQX is one of the alternatives for the MQTT service of [Google Cloud IoT Core](https://cloud.google.com/iot-core) which will be retired soon. To facilitate the migration of your current MQTT devices from Google Cloud IoT Core (referred to as GCP IoT Core) to EMQX, a compatibility layer is offered in EMQX with the following functions:
 
@@ -9,9 +9,199 @@ The EMQX compatibility layer is implemented through a GCP IoT Core Device module
 
 This page provides a comprehensive guide for migrating your devices in GCP IoT Core to EMQX, including how to export the device credentials from Google Cloud IoT Core and import them into EMQX and switch the endpoint in the actual devices to the EMQX. The migration progcess can be executed through the command line and REST API, or conveniently through the EMQX Dashboard. Both methods are demonstrated in detail on this page.
 
+## Migrate from GCP IoT Core to EMQX
+
+The device migration consists of the following two tasks:
+
+* Export device data from GCP IoT Core
+* Import device data into EMQX
+
+### Export Device Data from GCP IoT Core
+
+For export, you can use a script utilizing the [Google Cloud IoT Core REST API](https://cloud.google.com/iot/docs/reference/cloudiot/rest).
+
+1. Run the following command in the same `emqx-gcp-iot-migrate` folder you cloned in [Connect Devices to MQTT Endpoint](#connect-devices-to-mqtt-endpoint):
+
+   ```bash
+   python gcp-export.py --project iot-export --region europe-west1 --registry my-registry > gcp-data.json
+   ```
+
+   The `gcp-data.json` file now contains the data ready for being imported into EMQX.
+
+2. Start EMQX using Docker. This is the easiest way to start EMQX locally.
+
+   8883 is the MQTT port (over TLS), 18083 is the HTTP API port.
+
+   ```bash
+   docker run -d --name emqx -p 8883:8883 -p 18083:18083 emqx/emqx:4.4.18
+   ```
+
+3. Enable the GCP compatibility module in EMQX.
+
+   ```bash
+   curl -s -u 'admin:public' -X POST 'http://127.0.0.1:18083/api/v4/modules/' -H "Content-Type: application/json"  --data-raw '{"type": "gcp_device", "config": {}}'
+   ```
+
+   ::: tip
+
+   You can also enable the GCP compatibility module by adding it via the EMQX Dashboard. For more information, see [Add Module via Dashboard](#add-module-via-dashboard).
+   
+   :::
+
+### Import Device Data into EMQX
+
+Use the REST API to import data into EMQX.  `admin:public` is the default username and password for EMQX.
+
+```bash
+curl -s -v -u 'admin:public' -X POST 'http://127.0.0.1:18083/api/v4/gcp_devices' --data @gcp-data.json
+...
+{"data":{"imported":14,"errors":0},"code":0}
+```
+
+You can see that 14 devices were imported.
+
+## Manage Device Data via API
+
+After the device data are exported to EMQX from GCP IoT Core, EMQX provides some additional API calls to manage EMQX data using "device" terminology.
+
+### Manage Individual Device Configuration
+
+To get the configuration for the device `c2-ec-x509`:
+
+```bash
+>curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509' | jq
+{
+  "data": {
+    "registry": "my-registry",
+    "project": "iot-export",
+    "location": "europe-west1",
+    "keys": [
+      {
+        "key_type": "ES256_X509_PEM",
+        "key": "...",
+        "expires_at": 0
+      }
+    ],
+    "deviceid": "c2-ec-x509",
+    "created_at": 1685477382,
+    "config": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/w=="
+  },
+  "code": 0
+}
+```
+
+To update the configuration for the device `c2-ec-x509` (save the configuration to a file `c2-ec-x509.json` for convenience and change the `config` field):
+
+```bash
+>cat c2-ec-x509.json
+{
+    "registry": "my-registry",
+    "project": "iot-export",
+    "location": "europe-west1",
+    "keys": [
+      {
+        "key_type": "ES256_X509_PEM",
+        "key": "...",
+        "expires_at": 0
+      }
+    ],
+    "config": "bmV3Y29uZmlnCg=="
+}
+
+>curl -s -u 'admin:public' -X PUT 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509' -H "Content-Type: application/json" -d @c2-ec-x509.json
+{"data":{},"code":0}
+```
+
+To delete the configuration for the device `c2-ec-x509`:
+
+```bash
+>curl -s -u 'admin:public' -X DELETE 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509'
+{"data":{},"code":0}
+>curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509' | jq
+{
+  "message": "device not found"
+}
+```
+
+### List Devices
+
+To list all devices:
+
+```bash
+>curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices' | jq
+{
+  "meta": {
+    "page": 1,
+    "limit": 10000,
+    "hasnext": false,
+    "count": 13
+  },
+  "data": [
+    {
+      "registry": "my-registry",
+      "project": "iot-export",
+      "location": "europe-west1",
+      "keys": [
+        {
+          "key_type": "RSA_X509_PEM",
+          "key": "...",
+          "expires_at": 0
+        }
+      ],
+      "deviceid": "2820826361193805",
+      "created_at": 1685477382,
+      "config": ""
+    },
+...
+```
+
+The query allows pagination: `_limit` and `_page` parameters:
+
+```bash
+>curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices?_page=2&_limit=2' | jq
+```
+
+## Migrate and Manage Device Data via Dashboard
+
+The GCP IoT Core Device module in EMQX Dashboard provides you a visualized way to do the device data migration and management. 
+
+### Add GCP IoT Core Device Module
+
+1. Go to EMQX Dashboard. Click **Modules** from the left navigation menu.
+
+2. On the **Modules** page, click **Add Module**. In the **Moddule Select** area, click **Local Modules**.
+
+3. Locate the **GCP IoT Core Device** and click **Select**.
+
+   <img src="./assets/GCP_device_select.png" alt="GCP_device_select" style="zoom:67%;" />
+
+4. Click **Add** on the page to enable the module. 
+
+   <img src="./assets/GCP_device_add.png" alt="GCP_device_add" style="zoom:67%;" />
+
+Now you can see the **GCP IoT Core Device** is listed on the **Modules** page.
+
+### Import Device Data 
+
+1. On the **Modules** page, click the **Manage** button for the **GCP IoT Core Device** module.
+
+   <img src="./assets/GCP_device_manage.png" alt="GCP_device_manage" style="zoom:67%;" />
+
+2. On the **Devices** tab of the details page, click **Import** to import a batch of device data or **Add** to manually add your device data.
+
+   - If you click **Import**, a dialogue pops up for you to import the json file you have exported from the GCP IoT Core. Select the file and click **Open**.
+
+     <img src="./assets/GCP_device_import.png" alt="GCP_device_import" style="zoom:67%;" />
+
+   - If you click **Add**, a dialogue pops up for you to input the `device ID` and add the public key. Click **Add** to select the public key format from the drop-down list. Select the key file or enter the content, set the expirateion date and click **Confirm**.
+
+     <img src="./assets/GCP_device_add_public_key.png" alt="GCP_device_add_public_key" style="zoom:67%;" />
+
+You can see the devices are imported. <!-- Better to show a screenshot-->
+
 ## Simulate How Things Work with Google Cloud IoT Core
 
-The following demonstrations are provided to simulate the real situation of how an actual device, for example, a client interacts with the MQTT endpoint of GCP IoT Core.
+The following demonstrations are provided to simulate the real situation of how an actual device, for example, a client interacts with the MQTT endpoint of GCP IoT Core. So that you can test GCP IoT Core device modules in EMQX.
 
 ### Initial Setup
 
@@ -258,196 +448,6 @@ The demonstration above shows the following:
 * It receives the config from the config topic. The message is a binary blob but can be a JSON string or something else.
 
 After the migration, you can expect the same things also work with EMQX, without modifications to the client code.
-
-## Migrate from GCP IoT Core to EMQX
-
-The device migration consists of the following two tasks:
-
-* Export device data from GCP IoT Core
-* Import device data into EMQX
-
-### Export Device Data from GCP IoT Core
-
-For export, you can use a script utilizing the [Google Cloud IoT Core REST API](https://cloud.google.com/iot/docs/reference/cloudiot/rest).
-
-1. Run the following command in the same `emqx-gcp-iot-migrate` folder you cloned in [Connect Devices to MQTT Endpoint](#connect-devices-to-mqtt-endpoint):
-
-   ```bash
-   python gcp-export.py --project iot-export --region europe-west1 --registry my-registry > gcp-data.json
-   ```
-
-   The `gcp-data.json` file now contains the data ready for being imported into EMQX.
-
-2. Start EMQX using Docker. This is the easiest way to start EMQX locally.
-
-   8883 is the MQTT port (over TLS), 18083 is the HTTP API port.
-
-   ```bash
-   docker run -d --name emqx -p 8883:8883 -p 18083:18083 emqx/emqx:4.4.18
-   ```
-
-3. Enable the GCP compatibility module in EMQX.
-
-   ```bash
-   curl -s -u 'admin:public' -X POST 'http://127.0.0.1:18083/api/v4/modules/' -H "Content-Type: application/json"  --data-raw '{"type": "gcp_device", "config": {}}'
-   ```
-
-   ::: tip
-
-   You can also enable the GCP compatibility module by adding it via the EMQX Dashboard. For more information, see [Add Module via Dashboard](#add-module-via-dashboard).
-   
-   :::
-
-### Import Device Data into EMQX
-
-Use the REST API to import data into EMQX.  `admin:public` is the default username and password for EMQX.
-
-```bash
-curl -s -v -u 'admin:public' -X POST 'http://127.0.0.1:18083/api/v4/gcp_devices' --data @gcp-data.json
-...
-{"data":{"imported":14,"errors":0},"code":0}
-```
-
-You can see that 14 devices were imported.
-
-## Manage Device Data via API
-
-After the device data are exported to EMQX from GCP IoT Core, EMQX provides some additional API calls to manage EMQX data using "device" terminology.
-
-### Manage Individual Device Configuration
-
-To get the configuration for the device `c2-ec-x509`:
-
-```bash
->curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509' | jq
-{
-  "data": {
-    "registry": "my-registry",
-    "project": "iot-export",
-    "location": "europe-west1",
-    "keys": [
-      {
-        "key_type": "ES256_X509_PEM",
-        "key": "...",
-        "expires_at": 0
-      }
-    ],
-    "deviceid": "c2-ec-x509",
-    "created_at": 1685477382,
-    "config": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/w=="
-  },
-  "code": 0
-}
-```
-
-To update the configuration for the device `c2-ec-x509` (save the configuration to a file `c2-ec-x509.json` for convenience and change the `config` field):
-
-```bash
->cat c2-ec-x509.json
-{
-    "registry": "my-registry",
-    "project": "iot-export",
-    "location": "europe-west1",
-    "keys": [
-      {
-        "key_type": "ES256_X509_PEM",
-        "key": "...",
-        "expires_at": 0
-      }
-    ],
-    "config": "bmV3Y29uZmlnCg=="
-}
-
->curl -s -u 'admin:public' -X PUT 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509' -H "Content-Type: application/json" -d @c2-ec-x509.json
-{"data":{},"code":0}
-```
-
-To delete the configuration for the device `c2-ec-x509`:
-
-```bash
->curl -s -u 'admin:public' -X DELETE 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509'
-{"data":{},"code":0}
->curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices/c2-ec-x509' | jq
-{
-  "message": "device not found"
-}
-```
-
-### List Devices
-
-To list all devices:
-
-```bash
->curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices' | jq
-{
-  "meta": {
-    "page": 1,
-    "limit": 10000,
-    "hasnext": false,
-    "count": 13
-  },
-  "data": [
-    {
-      "registry": "my-registry",
-      "project": "iot-export",
-      "location": "europe-west1",
-      "keys": [
-        {
-          "key_type": "RSA_X509_PEM",
-          "key": "...",
-          "expires_at": 0
-        }
-      ],
-      "deviceid": "2820826361193805",
-      "created_at": 1685477382,
-      "config": ""
-    },
-...
-```
-
-The query allows pagination: `_limit` and `_page` parameters:
-
-```bash
->curl -s -u 'admin:public' -X GET 'http://127.0.0.1:18083/api/v4/gcp_devices?_page=2&_limit=2' | jq
-```
-
-## Migrate and Manage Device Data via Dashboard
-
-The GCP IoT Core Device module in EMQX Dashboard provides you a visualized way to do the device data migration and management. 
-
-### Add GCP IoT Core Device Module
-
-1. Go to EMQX Dashboard. Click **Modules** from the left navigation menu.
-
-2. On the **Modules** page, click **Add Module**. In the **Moddule Select** area, click **Local Modules**.
-
-3. Locate the **GCP IoT Core Device** and click **Select**.
-
-   <img src="./assets/GCP_device_select.png" alt="GCP_device_select" style="zoom:67%;" />
-
-4. Click **Add** on the page to enable the module. 
-
-   <img src="./assets/GCP_device_add.png" alt="GCP_device_add" style="zoom:67%;" />
-
-Now you can see the **GCP IoT Core Device** is listed on the **Modules** page.
-
-### Import Device Data 
-
-1. On the **Modules** page, click the **Manage** button for the **GCP IoT Core Device** module.
-
-   <img src="./assets/GCP_device_manage.png" alt="GCP_device_manage" style="zoom:67%;" />
-
-2. On the **Devices** tab of the details page, click **Import** to import a batch of device data or **Add** to manually add your device data.
-
-   - If you click **Import**, a dialogue pops up for you to import the json file you have exported from the GCP IoT Core. Select the file and click **Open**.
-
-     <img src="./assets/GCP_device_import.png" alt="GCP_device_import" style="zoom:67%;" />
-
-   - If you click **Add**, a dialogue pops up for you to input the `device ID` and add the public key. Click **Add** to select the public key format from the drop-down list. Select the key file or enter the content, set the expirateion date and click **Confirm**.
-
-     <img src="./assets/GCP_device_add_public_key.png" alt="GCP_device_add_public_key" style="zoom:67%;" />
-
-You can see the devices are imported. <!-- Better to show a screenshot-->
 
 ## Test the Migration
 
