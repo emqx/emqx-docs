@@ -50,7 +50,7 @@
 
 -   **Listener Port Modification Not Reflected on Dashboard**
 
-    Modifying the listener port in the following`emqx.conf` configuration file does not update the displayed port on the dashboard, causing a discrepancy between the displayed and actual port.
+    Modifying the listener port in the following`emqx.conf` configuration file does not update the displayed port on the Dashboard, causing a discrepancy between the displayed and actual port.
     ```
     listeners.tcp.default {
         bind = "0.0.0.1884"
