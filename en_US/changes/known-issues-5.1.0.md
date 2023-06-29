@@ -21,7 +21,7 @@
 
 -   **Plugin Start/Stop Command Only Affects Executing Node, Not Cluster-Wide**
 
-    Starting or stopping a plugin through following command lines affects only the executing node, not other nodes in the cluster. Executing the command on all nodes or using the dashboard resolves the issue.
+    Starting or stopping a plugin through the following command lines affects only the executing node, not other nodes in the cluster. Executing the command on all nodes or using the Dashboard resolves the issue.
     ```
     ./bin/emqx ctl plugins stop emqx_plugin_template-5.0.0
     ./bin/emqx ctl plugins start emqx_plugin_template-5.0.0
