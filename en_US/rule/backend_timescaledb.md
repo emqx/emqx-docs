@@ -88,7 +88,7 @@ After the table is successfully created, you can view the information of the tab
 
 1. Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules). Click **Rule Engine** -> **Rule** from the left navigation menu.
 
-2. Select `message.publish` from the drop-down list of the **Trigger** field, then type the following SQL in the **SQL** field:
+2. Type the following SQL in the **SQL** field:
 
    ```sql
    SELECT
