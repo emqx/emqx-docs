@@ -59,7 +59,7 @@
 
 -   **"Max Connections" Parameter Ineffective for quic or ws Listeners**
 
-    Configuring "Max Connections" for quic or ws type listeners through the dashboard or configuration file does not have any effect.
+    Configuring "Max Connections" for "quic" or "ws" type listeners through the Dashboard or configuration file does not take effect.
 
 -   **Inaccurate `client.disconnected` Events Statistics in Rules**
 
