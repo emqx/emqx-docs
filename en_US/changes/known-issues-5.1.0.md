@@ -13,7 +13,7 @@
 
 -   **Listener Status Not Updated on Dashboard after Command Line Start/Stop**
 
-    Starting or stopping a listener through following commands does not update the listener's status on the dashboard, causing confusion about its actual state.
+    Starting or stopping a listener through following commands does not update the listener's status on the Dashboard, causing confusion about its actual state.
     ```
     ./bin/emqx ctl listeners stop tcp:we
     ./bin/emqx ctl listeners start tcp:we
@@ -57,7 +57,7 @@
     }
     ```
 
--   **"Max Connections" Parameter Ineffective for quic or ws Listeners**
+-   **"Max Connections" Parameter Ineffective for "quic" or "ws" Listeners**
 
     Configuring "Max Connections" for "quic" or "ws" type listeners through the Dashboard or configuration file does not take effect.
 
