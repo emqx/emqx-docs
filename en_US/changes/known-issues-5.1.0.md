@@ -28,7 +28,7 @@
     ```
 
     > **Workaround:**
-    > Execute the start/stop command on all nodes in the cluster or use the dashboard to manage the plugin.
+    > Execute the start/stop command on all nodes in the cluster or use the Dashboard to manage the plugin.
 
 -   **No Authentication Enabled in Connection Mode for Coap Gateway is Disallowed.**
 
