@@ -39,7 +39,7 @@ EMQX 支持与 TimescaleDB 集成以便您将 MQTT 消息和客户端事件保�
 
 数据表成功创建后，您可以在 Services 中的 **Explore** 页签下查看数据表 `sensor_data` 的信息。
 
-![Timescale Explorer table](/Users/emqx/Documents/GitHub/emqx-docs/en_US/rule/assets/rule-engine/timescale-explorer-table.png)
+![Timescale Explorer table](./assets/rule-engine/timescale-explorer-table.png)
 
 :::
 
