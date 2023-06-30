@@ -18,6 +18,7 @@ The modules currently provided by the EMQX include:
   - [PSK File AUTH](./psk_authentication.md)
   - [LDAP AUTH/ACL](./ldap_authentication.md)
   - [JWT AUTH](./jwt_authentication.md)
+  - [GCP IoT Core Device](./GCP_device.md)
 - Protocol Access
   - [LwM2M Gateway](./lwm2m_protocol.md)
   - [MQTT-SN Gateway](./mqtt_sn_protocol.md)
@@ -43,7 +44,6 @@ The modules currently provided by the EMQX include:
   - [MQTT Topic Rewrite](./topic_rewrite.md)
   - [MQTT Retainer Message](./retainer.md)
   - [MQTT Delayed Publish](./delayed_publish.md)
-  - [GCP IoT Core Device](./GCP_device.md)
 
 
 ## Start and Stop Modules

@@ -18,6 +18,7 @@ EMQX 发行包中提供了丰富了功能模块，包括 认证鉴权、协议�
   - [PSK File 认证](./psk_authentication.md)
   - [LDAP 认证/访问控制](./ldap_authentication.md)
   - [JWT 认证](./jwt_authentication.md)
+  - [GCP IoT Core 设备](./GCP_device.md)
 - 协议接入
   - [LwM2M 协议网关](./lwm2m_protocol.md)
   - [MQTT-SN 协议网关](./mqtt_sn_protocol.md)
@@ -44,7 +45,6 @@ EMQX 发行包中提供了丰富了功能模块，包括 认证鉴权、协议�
   - [MQTT 主题重写](./topic_rewrite.md)
   - [MQTT 保留消息](./retainer.md)
   - [MQTT 延迟发布](./delayed_publish.md)
-  - [GCP IoT Core 设备](./GCP_device.md)
   
 
 
