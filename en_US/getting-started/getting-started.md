@@ -96,7 +96,7 @@ In addition, you can also deploy EMQX with one-click through [EMQX Terraform](ht
 
 <!-- TODO @wivwiv Update Terraform link when EMQX Terraform 5.0 document ready -->
 
-### Install EMQX With Docker/Installation Package
+### Install EMQX with Docker/Installation Package
 
 In this quick start guide, we will show you the easiest ways to start or run EMQX, that is, with Docker or with the installation package. 
 
@@ -192,7 +192,7 @@ Note: Considering all the runtime dependencies, it is recommended to use zip/tar
    ./emqx/bin/emqx start
    ```
 
-4. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../dashboard/introduction.md), from where you can connect to your clients or check the running status.
+4. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the [EMQX Dashboard](../dashboard/introduction.md), from where you can connect to your clients or check the running status.
 
    The default user name and password are `admin` & `public`. You will be prompted to change the default password once logged in. 
 
@@ -213,10 +213,9 @@ To uninstall EMQX after your testing, simply delete the EMQX folder.
 
 Now that you have successfully started EMQX, you can continue to test the connection and message services with MQTT X
 
+[MQTTX](https://mqttx.app) is an elegant cross-platform MQTT 5.0 desktop client, running on macOS, Linux, and Windows. By utilizing a chat style of user interface, MQTT X allows users to quickly create connections and save multiple clients, which facilitates users to quickly test the MQTT/MQTTS connection, as well as the subscription and publication of MQTT messages.
 
-[MQTT X](https://mqttx.app) is an elegant cross-platform MQTT 5.0 desktop client, running on macOS, Linux, and Windows. By utilizing a chat style of user interface, MQTT X allows users to quickly create connections and save multiple clients, which facilitates users to quickly test the MQTT/MQTTS connection, as well as the subscription and publication of MQTT messages.
-
-This section will introduce how to verify the connection with [MQTT X Web](https://mqttx.app/web), the browser-based MQTT 5.0 WebSocket client tool, with zero need to download or install any application. 
+This section will introduce how to verify the connection with [MQTTX Web](https://mqttx.app/web), the browser-based MQTT 5.0 WebSocket client tool, with zero need to download or install any application. 
 
 ::: tip Prerequisites
 The broker address and the port information should be prepared before testing the connection:
@@ -225,7 +224,7 @@ The broker address and the port information should be prepared before testing th
 - Port: Click **Management** -> **Listeners** on the left navigation menu to get the port number.
 :::
 
-1. Click [MQTT X Web](http://www.emqx.io/online-mqtt-client#/recent_connections) to visit the browser-based MQTT X.
+1. Click [MQTTX Web](http://www.emqx.io/online-mqtt-client#/recent_connections) to visit the browser-based MQTT X.
 
 2. Configure and establish the MQTT connection. Click the **+ New Connection** button to enter the configure page: 
 
@@ -233,7 +232,7 @@ The broker address and the port information should be prepared before testing th
 
    - **Host**
 
-     - Select the protocol type via the drop-down list, for example, select **ws://** if the WebSockets protocol is adopted; MQTT X Web only supports Websockets protocol, to test the SSL/TLS connection, download [MQTT X desktop client](https://mqttx.app/);
+     - Select the protocol type via the drop-down list, for example, select **ws://** if the WebSockets protocol is adopted; MQTTX Web only supports Websockets protocol, to test the SSL/TLS connection, download [MQTTX desktop client](https://mqttx.app/);
      - Fill in the EMQX address, for example, **emqx@127.0.0.1**; 
 
    - **Port**: for example, **8083** for the WebSockets protocol; 
@@ -242,19 +241,27 @@ The broker address and the port information should be prepared before testing th
 
    Then click the **Connect** button at the top right corner of the page.
 
-3. Subscribe to topics. After the connection is successfully established, you can continue to subscribe to different topics. Click **+ New Subscription**. MQTT X Web has already filled in some fields, according to the setting, you will subscribe to topic `testtopic/#`  with QoS level of 0. You can repeat this step to subscribe to different topics, and MQTT X Web will differentiate topics with colors.
+3. Subscribe to topics. After the connection is successfully established, you can continue to subscribe to different topics. Click **+ New Subscription**. MQTTX Web has already filled in some fields, according to the setting, you will subscribe to topic `testtopic/#`  with QoS level of 0. You can repeat this step to subscribe to different topics, and MQTTX Web will differentiate topics with colors.
 
 4. Test the publish/receive of messages: Click the send icon in the bottom right corner of the chat area, then the messages successfully sent will appear in the chat window above. 
 
 <img src="./assets/MQTTXWeb-test.png" alt="MQTT X Web test" style="zoom: 25%;" />
 
-If you'd like to continue the testing, such as one-way/two-way SSL authentication and simulate test data with customized scripts, you can continue to explore with [MQTT X](https://mqttx.app). 
+If you'd like to continue the testing, such as one-way/two-way SSL authentication and simulate test data with customized scripts, you can continue to explore with [MQTTX](https://mqttx.app). 
 
-Then you can click **Dashboard** in the left navigation tree to return to the **Dashboard** page and check metrics such as **Connections**, **Topics**, **Subscriptions**, **Incoming Messages**, **Outgoing messages**, and **Dropped Messages**.
+Then, on the Cluster Overview page in **Dashboard**, you can check metrics such as **Connections**, **Topics**, **Subscriptions**, **Incoming Messages**, **Outgoing messages**, and **Dropped Messages**.
+
+{% emqxee}
+
+![emqx-dashboard_ee](./assets/emqx-dashboard_ee.png)
+
+{% endemqxee %}
+
+{% emqxce %}
 
 ![EMQX dashboard](./assets/emqx-dashboard.png)
 
-
+{% endemqxce %}
 
 ## Advanced Operation
 

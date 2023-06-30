@@ -26,9 +26,9 @@ Supported versions:
    brew install emqx
    ```
 
-## Install EMQX from zip package
+## Install EMQX from Zip Package
 
-1. Download [emqx package for your OS and architecture](https://www.emqx.io/downloads?os=macOS). Here is the direct link to zip package for a Mac computer with macOS 12 (Monterey) and Apple Silicon:
+1. Download [emqx package for your OS and architecture](https://www.emqx.io/downloads?os=macOS). Here is the direct link to the zip package for a Mac computer with macOS 12 (Monterey) and Apple Silicon:
 
    ```bash
    wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-macos12-arm64.zip
@@ -40,11 +40,11 @@ Supported versions:
    mkdir -p emqx && unzip emqx-@CE_VERSION@-macos12-arm64.zip -d emqx && cd emqx
    ```
 
-### Operating EMQX
+## Operate EMQX
 
-EMQX can be started in daemon mode, foreground mode or interactive mode. Note, that only one instance of EMQX can be running at any time with default configuration.
+EMQX can be started in daemon mode, foreground mode, or interactive mode. Note, that only one instance of EMQX can be running at any time with default configuration.
 
-If you installed EMQX with Homebrew, please use `emqx` command as specified below. If you installed EMQX from a zip package, please use `bin/emqx` instead (assuming you are in the directory where you extracted emqx files).
+If you install EMQX with Homebrew, use `emqx` command as specified below. If you install EMQX from a zip package, use `bin/emqx` instead (assuming you are in the directory where you extract emqx files).
 
    ```bash
    # start as daemon
@@ -57,13 +57,13 @@ If you installed EMQX with Homebrew, please use `emqx` command as specified belo
    emqx console
    ```
 
-After successful start EMQX will output this messsage (if it was started in foreground or interactive mode):
+After a successful start, EMQX will output this message (if it is started in the foreground or interactive mode):
 
 ```bash
 EMQX @CE_VERSION@ is running now!
 ```
 
-You may also see some warning messages which are intended for operators of production environment and can be ignored if EMQX is used in local environment for tests, experiments or client development:
+You may also see some warning messages which are intended for operators of the production environment and can be ignored if EMQX is used in the local environment for tests, experiments, or client development:
 
 ```bash
 ERROR: DB Backend is RLOG, but an incompatible OTP version has been detected. Falling back to using Mnesia DB backend.
@@ -73,7 +73,7 @@ WARNING: Configure node.cookie in /opt/homebrew/Cellar/emqx/@CE_VERSION@/etc/emq
 WARNING: NOTE: Use the same cookie for all nodes in the cluster.
 ```
 
-You can check status of EMQX with this command:
+You can check the status of EMQX with this command:
 
 ```bash
 emqx ctl status
@@ -83,11 +83,11 @@ Start your web browser and enter `http://localhost:18083/` (`localhost` can be s
 
 The default user name and password are `admin` & `public`. You will be prompted to change the default password once logged in.
 
-To stop emqx:
+To stop EMQX:
 
-* `emqx stop` or `bin/emqx stop` if it was started in daemon mode.
-* Ctrl+C if it was started in foreground mode.
-* Ctrl+C twice if it was started in interactive mode.
+* `emqx stop` or `bin/emqx stop` if it is started in daemon mode.
+* Ctrl+C if it is started in foreground mode.
+* Ctrl+C twice if it is started in interactive mode.
 
 {% endemqxce %}
 
@@ -109,9 +109,9 @@ The section below will take macOS 12 as an example to illustrate how to download
    mkdir -p emqx && unzip emqx-enterprise-@EE_VERSION@-macos12-arm64.zip -d emqx && cd emqx
    ```
 
-## Operating EMQX
+## Operate EMQX
 
-EMQX can be started in daemon mode, foreground mode or interactive mode. Note, that only one instance of EMQX can be running at any time with default configuration.
+EMQX can be started in daemon mode, foreground mode, or interactive mode. Note, that only one instance of EMQX can be running at any time with default configuration.
 
    ```bash
    # start as daemon
@@ -124,13 +124,13 @@ EMQX can be started in daemon mode, foreground mode or interactive mode. Note, t
    emqx console
    ```
 
-After successful start EMQX will output this messsage (if it was started in foreground or interactive mode):
+After a successful start, EMQX will output this message (if it was started in the foreground or interactive mode):
 
 ```bash
 EMQX Enterprise @EE_VERSION@ is running now!
 ```
 
-You may also see some warning messages which are intended for operators of production environment and can be ignored if EMQX is used in local environment for tests, experiments or client development:
+You may also see some warning messages which are intended for operators of the production environment and can be ignored if EMQX is used in the local environment for tests, experiments, or client development:
 
 ```bash
 ERROR: DB Backend is RLOG, but an incompatible OTP version has been detected. Falling back to using Mnesia DB backend.
@@ -140,7 +140,7 @@ WARNING: Configure node.cookie in /path/to/emqx/etc/emqx.conf or override from e
 WARNING: NOTE: Use the same cookie for all nodes in the cluster.
 ```
 
-You can check status of EMQX with this command:
+You can check the status of EMQX with this command:
 
 ```bash
 emqx ctl status
@@ -150,10 +150,10 @@ Start your web browser and enter `http://localhost:18083/` (`localhost` can be s
 
 The default user name and password are `admin` & `public`. You will be prompted to change the default password once logged in.
 
-To stop emqx:
+To stop EMQX:
 
-* `emqx stop` or `bin/emqx stop` if it was started in daemon mode.
-* Ctrl+C if it was started in foreground mode.
-* Ctrl+C twice if it was started in interactive mode.
+* `emqx stop` or `bin/emqx stop` if it is started in daemon mode.
+* Ctrl+C if it is started in foreground mode.
+* Ctrl+C twice if it is started in interactive mode.
 
 {% endemqxee %}
