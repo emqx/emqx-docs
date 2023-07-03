@@ -211,6 +211,14 @@
     - data-integration/rule-sql-builtin-functions
     - data-integration/rule-sql-jq
     # - data-integration/rule-sql-user-defined-function
+    - title_en: Schema Registry
+      title_cn: 编解码
+      path: data-integration/schema-registry
+      edition: ee
+      collapsed: true
+      children:
+        - data-integration/schema-registry-example-avro
+        - data-integration/schema-registry-example-protobuf
 
 - title_en: Data Integration
   title_cn: 数据集成
@@ -243,15 +251,6 @@
     #   title_cn: 示例和教程
     #   children:
     #     - data-integration/rule-configs
-
-- title_en: Schema Registry
-  title_cn: 编解码
-  path: data-integration/schema-registry
-  edition: ee
-  collapsed: true
-  children:
-    - data-integration/schema-registry-example-avro
-    - data-integration/schema-registry-example-protobuf
 
 - title_en: Network and TLS
   title_cn: 网络与 TLS
