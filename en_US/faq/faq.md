@@ -261,24 +261,24 @@ You need to two steps:
 After the extraction is complete, the license needs to be reloaded from the command line to complete the update:
 
 ```
-emqx_ctl license reload [license file path]
+emqx ctl license reload [license file path]
 ```
 
 The update commands for different installation modes:
 
 ```
 ## zip packages
-./bin/emqx_ctl license reload path/to/emqx.lic
+./bin/emqx ctl license reload path/to/emqx.lic
 
 ## DEB/RPM
-emqx_ctl license reload path/to/emqx.lic
+emqx ctl license reload path/to/emqx.lic
 
 ## Docker
-docker exec -it emqx-ee emqx_ctl license reload path/to/emqx.lic
+docker exec -it emqx-ee emqx ctl license reload path/to/emqx.lic
 ```
 
 ::: tip
-On a multi-node cluster, the `emqx_ctl license reload` command needs to be executed only on one of the nodes, as the license will be replicated and applied to all members. Each one will contain a copy of the new license under the configured data directory for EMQX, as well as a backup of the old license, if any.
+On a multi-node cluster, the `emqx ctl license reload` command needs to be executed only on one of the nodes, as the license will be replicated and applied to all members. Each one will contain a copy of the new license under the configured data directory for EMQX, as well as a backup of the old license, if any.
 
 Note that this command only takes effect _on the local node_ executing the command for EMQX versions prior to e4.3.10, so this command will require being executed on each node of the cluster for those older versions.
 :::
@@ -362,7 +362,7 @@ EMQX can receive messages from other broker, but it depends also on the implemen
 
 ## What should I do if I want trace the subscription and publish of some particular message?
 
-EMQX support the tracing of messages from particular client or under particular topic. You can use the command line tool `emqx_ctl` for tracing. The example below shows how to trace messages under 'topic' and save the result in 'trace_topic.log'. For more details, please refer to [Log Trace](../observability/tracer.md).
+EMQX support the tracing of messages from particular client or under particular topic. You can use the command line tool `emqx ctl` for tracing. The example below shows how to trace messages under 'topic' and save the result in 'trace_topic.log'. For more details, please refer to [Log Trace](../observability/tracer.md).
 
 ## When I was executing stress test, the connection number and throughput are lower than expected. How can I tune the system to make full use of it?
 
@@ -425,7 +425,7 @@ Modify the reuse_sessions = on in the emqx.conf configuration and take effect. I
 
 ## MQTT client disconnect statistics
 
-Execute `emqx_ctl listeners` to view the `shutdown_count` statistics under the corresponding port.
+Execute `emqx ctl listeners` to view the `shutdown_count` statistics under the corresponding port.
 
 Client disconnect link error code list:
 

@@ -35,7 +35,7 @@ You can upload your License file with EMQX Dashboard or configuration file.
 
 ### Import with the Configuration File
 
-You can also configure the license file with the configuration file. After the configuration, you can run `emqx_ctl license reload` in [EMQX command line tool](../admin/cli.md) to reload the license. 
+You can also configure the license file with the configuration file. After the configuration, you can run `emqx ctl license reload` in [EMQX command line tool](../admin/cli.md) to reload the license. 
 
 ```bash
 license {
@@ -43,6 +43,6 @@ license {
 }
 ```
 
-After execution, you can run `emqx_ctl license info` to confirm that the new license file has taken effect.
+After execution, you can run `emqx ctl license info` to confirm that the new license file has taken effect.
 
 <!-- 您也可以通过环境变量 `EMQX_LICENSE__KEY` 变量名设置您的 License。TODO 确认是否可以 reload -->
