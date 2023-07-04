@@ -42,7 +42,7 @@ sensor/bedroom/1/temperature
 
 ## Try Wildcard Subscription with MQTTX Client
 
-This section demonstrates how to use the MQTTX client to simulate subscriptions to wildcard topics. 
+This section demonstrates how to use the MQTTX client to create subscriptions to wildcard topics. 
 
 In this demonstration, you can create one client connection `demo` as a publisher to publish messages. Then, you can create another client connection as a subscriber. The subscriber subscribes to the following wildcard topics:
 
