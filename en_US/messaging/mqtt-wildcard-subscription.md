@@ -67,7 +67,7 @@ In this demonstration, you can create one client connection `demo` as a publishe
 
    <img src="./assets/wildcard-sub-1.png" alt="wildcard-sub-1" style="zoom: 38%;" />
 
-4. Select `Demo` in **Connections**. Type `testtopic/room1/temperature` in the topic field and type the message payload `28 degree` in the message field. Click the send button. Send another message with the topic `testtopic/room2/temperature`.
+4. Select `Demo` in **Connections**. Type `testtopic/room1/temperature` in the topic field and type the message payload `28 degree` in the message field. Click the send button. Send another message with the same payload to the topic `testtopic/room2/temperature`.
 
       <img src="./assets/wildcard-sub-2.png" alt="wildcard-sub-2" style="zoom:40%;" />
 
