@@ -238,7 +238,6 @@ The following is a list of feature comparison between EMQX Enterprise and Open S
 | **Performance**                   | 5M+ MQTT messages per second                                | 5M+ MQTT messages per second                                |
 | **Reliability**                   | Data persistence in RocksDB (Coming soon)                   | Data storage in memory                                      |
 | **Latency**                       | 1~5 millisecond                                             | 1~5 millisecond                                             |
-| **Service Level Agreement (SLA)** | Up to 99.999%                                               | 99.99%                                                      |
 | **Integrations (Out-of-the-box)** | 40+                                                         | 2                                                           |
 | **License Model**                 | Commercial license (Business source license)                | Apache Version 2.0                                          |
 | **Technical Support**             | 24/7 Global support                                         | Open source community                                       |
