@@ -2,6 +2,12 @@
 
 MQTT topic name is a UTF-8 encoded string used for message routing. To provide more flexibility, MQTT supports a hierarchical topic namespace. A topic is typically leveled and separated with a slash `/` between the levels such as `chat/room/1`. A [wildcard subscription](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Topic_Names_and) is a subscription with a topic filter containing one or more wildcard characters. This allows the subscription to match more than one topic name. This page introduces the usage of two types of wildcards supported in MQTT and how to make a wildcard subscription in EMQX. 
 
+::: tip
+
+Wildcard can only be used in subscription, but not in publishing.
+
+:::
+
 ## Single-Level Wildcard
 
 `+` (U+002B) is a wildcard character that matches only one topic level. The single-level wildcard can be used at any level in the topic filter, including the first and last levels. Where it is used, it must occupy an entire level of the filter. It can be used at more than one level in the topic filter and can be used in conjunction with the multi-level wildcard. Below are some examples of using the single-level wildcard:
@@ -13,7 +19,7 @@ MQTT topic name is a UTF-8 encoded string used for message routing. To provide m
 "sensor+" is invalid (does not occupy an entire level)
 ```
 
-If the client subscribes to the topic `sensor/+/temperature`, it will receive messages from the following topics:
+If a client subscribes to the topic `sensor/+/temperature`, it will receive messages from the following topics:
 
 ```awk
 sensor/1/temperature
@@ -40,14 +46,22 @@ sensor/bedroom/1/temperature
 "sensor/#/temperature" is invalid (# must be the last level)
 ```
 
+If a client subscribes to the topic  `sensor/#`，it will receive messages from the following topics:
+
+```pgsql
+sensor
+sensor/temperature
+sensor/1/temperature
+```
+
 ## Try Wildcard Subscription with MQTTX Client
 
-This section demonstrates how to use the MQTTX client to create subscriptions to wildcard topics. 
-
-In this demonstration, you can create one client connection `Demo` as a publisher to publish messages. Then, you can create another client connection as a subscriber. The subscriber subscribes to the following wildcard topics:
+This section demonstrates how to use the MQTTX client to create subscriptions to wildcard topics. In this demonstration, you can create one client connection `Demo` as a publisher to publish messages. Then, you can create another client connection as a subscriber. The subscriber subscribes to the following wildcard topics:
 
 - `testtopic/+/temperature`
 - `testtopic/#`
+
+Before you start, make sure EMQX is started.
 
 1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection named `Demo`.
 
@@ -59,7 +73,7 @@ In this demonstration, you can create one client connection `Demo` as a publishe
 
    :::
 
-   <img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/messaging/assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
+   <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
 
 2. Click **+** in the **Connections** pane to create another connection as a subscriber. Set **Name** to `Subscriber`.
 
@@ -71,14 +85,14 @@ In this demonstration, you can create one client connection `Demo` as a publishe
 
       <img src="./assets/wildcard-sub-2.png" alt="wildcard-sub-2" style="zoom:40%;" />
 
-5. Select `Subscriber` in **Connections**. You can see the subscriber receives the two messages sent by the publisher.
+5. Select `Subscriber` in **Connections**. You can see the subscriber receives the two messages with different topics sent by the publisher.
 
       <img src="./assets/wildcard-sub-3.png" alt="wildcard-sub-3" style="zoom:40%;" />
 
 6. Click **+ New Subscription**. In the pop-up dialogue, use the default topic `testtopic/#` in the **Topic** field. Leave other options as default.
 
-7. Select `Demo` in **Connections**. Type `testtopic/bedroom/moisture` in the topic field and type the message payload `50%` in the message field. Click the send button.
+7. Select `Demo` in **Connections**. Type `testtopic/bedroom/room1/temperature` in the topic field and type the message payload `28 degree` in the message field. Click the send button.
 
-8. Select `Subscriber` in **Connections**. You can see the subscriber receives the message from the publisher.
+8. Select `Subscriber` in **Connections**. You can see the message is sent to the subscription `testtopic/#` only.
 
       <img src="./assets/wildcard-sub-4.png" alt="wildcard-sub-4" style="zoom:40%;" />
