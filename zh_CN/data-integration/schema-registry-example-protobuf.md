@@ -30,7 +30,7 @@
 
 3. 点击**创建**。
 
-<img src="/Users/emqx/Documents/GitHub/emqx-docs/zh_CN/data-integration/assets/protobuf_create1.png" alt="protobuf_create1" style="zoom:67%;" />
+<img src="./assets/protobuf_create1.png" alt="protobuf_create1" style="zoom:50%;" />
 
 ### 创建规则
 

@@ -158,8 +158,8 @@ NanoMQ also provides the test tool `nanomq_cli`, which contains MQTT over QUIC c
 ```bash
 nanomq_cli quic --help
 Usage: quic conn <url>
-       quic sub  <url> <qos> <topic>
-       quic pub  <url> <qos> <topic> <data>
+       quic sub  <url> \<qos> \<topic>
+       quic pub  <url> \<qos> \<topic> \<data>
 
 ## subscribe example
 nanomq_cli quic sub mqtt-quic://54.75.171.11:14567 2 msg

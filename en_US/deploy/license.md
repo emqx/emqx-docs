@@ -1,4 +1,4 @@
-# Work with license
+# Work with License
 
 EMQX Enterprise is the commercial version of EMQX, which requires a license certificate (License) when using it.
 
@@ -33,7 +33,7 @@ You can upload your License file with EMQX Dashboard or configuration file.
 2. Click the **Update License** button. Paste your License Key in the popup dialog box, and click **Save**. The page data automatically refreshes following your submission.
 3. Confirm that the new license file has taken effect.
 
-### Import with the configuration file
+### Import with the Configuration File
 
 You can also configure the license file with the configuration file. After the configuration, you can run `emqx_ctl license reload` in [EMQX command line tool](../admin/cli.md) to reload the license. 
 

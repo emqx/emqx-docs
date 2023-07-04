@@ -27,7 +27,7 @@ mkdir -p emqx && unzip emqx-@CE_VERSION@-macos12-arm64.zip -d emqx
 
 ## 启动 EMQX
 
-您可通过如下三种方式启动 EMQX
+您可通过如下三种方式启动 EMQX。
 
 - 直接启动：
 
@@ -81,7 +81,7 @@ mkdir -p emqx && unzip emqx-enterprise-@EE_VERSION@-macos12-arm64.zip -d emqx
 
 ## 启动 EMQX
 
-您可通过如下三种方式启动 EMQX
+您可通过如下三种方式启动 EMQX。
 
 - 直接启动：
 

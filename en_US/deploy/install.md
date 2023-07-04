@@ -8,6 +8,67 @@ This chapter will also cover how to configure a license for EMQX and how to migr
 
 {% endemqxee %}
 
+## Installation Environment
+
+The Erlang VM powering EMQX relies on system locale settings to enable Unicode support for various functionalities, including [filenames](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#unicode-filenames) and [terminal IO](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#the-interactive-shell) in interactive Erlang shells.
+
+If you use the Linux operating system, it is recommended to make sure that UTF-8 locale is enabled in the system environment before starting EMQX. Click the tabs to see how to enable the UTF-8 locale on different platforms:
+
+:::: tabs
+
+::: tab Amazon Linux 2
+
+Enable the UTF-8 locale with [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html#amazon-linux-cloud-init) configuration:
+
+```bash
+cat <<EOF | sudo tee /etc/cloud/cloud.cfg.d/99_locale.cfg
+#cloud-config
+locale: C.utf8
+EOF
+```
+
+:::
+
+::: tab CentOS
+
+It is usually enabled by `localectl` under systemd:
+
+```bash
+sudo localectl set-locale LANG=C.UTF-8
+```
+
+:::
+
+::: tab Debian
+
+Enable the UTF-8 locale in two ways:
+
+- It is usually enabled by [`localectl`](https://www.freedesktop.org/software/systemd/man/localectl.html) under systemd:
+
+  ```bash
+  sudo localectl set-locale LANG=C.UTF-8
+  ```
+
+- Otherwise, it can be enabled with [`update-locale`](https://manpages.debian.org/buster/locales/update-locale.8.en.html).
+
+  ```bash
+  sudo update-locale LANG=C.UTF-8
+  ```
+
+:::
+
+::: tab Ubuntu
+
+Enable the UTF-8 locale with [`update-locale`](https://manpages.ubuntu.com/manpages/jammy/man8/update-locale.8.html):
+
+```bash
+sudo update-locale LANG=C.UTF-8
+```
+
+:::
+
+::::
+
 ## Download
 
 {% emqxce %}
@@ -32,7 +93,7 @@ EMQX website: <https://www.emqx.com/en/try?product=enterprise>
 Besides the above deployment methods, you are also welcome to try our [EMQX Cloud](https://www.emqx.com/en/cloud), a fully managed MQTT service for IoT. You only need to [register for an account](https://www.emqx.com/en/signup?continue=https://www.emqx.com/en/cloud) before starting your MQTT services and connecting your IoT devices to any cloud with zero need for infrastructure maintenance.
 :::
 
-## Supported operating systems
+## Supported Operating Systems
 
 The table below lists the operating systems and versions that EMQX supports.
 
@@ -60,11 +121,11 @@ The table below lists the operating systems and versions that EMQX supports.
 
 {% endemqxee %}
 
-## Hardware specification
+## Hardware Specification
 
 Depending on the number of client connections, message rate, message size, and enabled features, the minimum hardware specification for EMQX varies.
 
-Here is the minimum hardware specification for running a simple EMQX function verification, supporting 100,000 client connections and 100,000 message throughput per second.
+Below are hardware specifications for running EMQX with simple workloads, supporting 100,000 client connections and 100,000 messages per second of throughput.
 
 | Item           | Minimum configuration | Recommended configuration |
 | -------------- | --------------------- | ------------------------- |
@@ -75,11 +136,11 @@ Here is the minimum hardware specification for running a simple EMQX function ve
 
 ::: tip
 
-In production environments, you can use the [Server Estimate](https://www.emqx.com/en/server-estimate) calculator to calculate the recommended hardware specification under various maximum connections and message throughputs.
+In production environments, you can use the [Server Estimate](https://www.emqx.com/en/server-estimate) calculator to calculate the recommended hardware specification under various maximum connections and message throughput.
 
 :::
 
-## Files and directories
+## Files and Directories
 
 After installation, EMQX creates some directories to store running and configuration files, data, and logs. The table below lists the directories created and their file path under different installation methods:
 
@@ -115,7 +176,6 @@ The table below introduces the files and subfolders of some directories.
 EMQX stores the configuration information in the `data/configs` and the `etc` directory. The `etc` directory stores read-only configuration files, while configuration updates from the Dashboard or REST API are saved in the `data/configs` directory to support hot configuration reloads at runtime.
 
 - `etc/emqx.conf`
-- `data/configs/cluster-override.conf`
-- `data/configs/local-override.conf` 
+- `data/configs/cluster.hocon`
 
-EMQX reads the configuration items from these files and converts them to the Erlang native configuration file format, so as to apply the configurations at runtime.
+EMQX reads the configuration items from these files and converts them to the Erlang native configuration file format, to apply the configurations at runtime.

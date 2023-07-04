@@ -9,7 +9,7 @@ Supported versions:
 
 {% emqxce %}
 
-## Install with Yum source
+## Install with Yum Source
 
 EMQX supports installing with Yum source to provide our users with a convenient and reliable way to manage EMQX installation and updates. Here is how to install EMQX with Yum source:
 
@@ -31,7 +31,7 @@ EMQX supports installing with Yum source to provide our users with a convenient 
    sudo systemctl start emqx
    ```
 
-## Install with package
+## Install with Package
 
 The section below will take CentOS 8 as an example to illustrate how to download the latest version of EMQX. For other system versions, please visit the [EMQX Deployment page](https://www.emqx.io/downloads?os=CentOS). 
 
