@@ -96,7 +96,7 @@ In addition, you can also deploy EMQX with one-click through [EMQX Terraform](ht
 
 <!-- TODO @wivwiv Update Terraform link when EMQX Terraform 5.0 document ready -->
 
-### Install EMQX With Docker/Installation Package
+### Install EMQX with Docker/Installation Package
 
 In this quick start guide, we will show you the easiest ways to start or run EMQX, that is, with Docker or with the installation package. 
 

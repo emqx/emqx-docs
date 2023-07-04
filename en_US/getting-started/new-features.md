@@ -99,7 +99,7 @@ TO evaluate MQTT over QUIC and verify how it could improve network connectivity,
 
 
 
-## Redesigned IoT data integration
+## Redesigned IoT Data Integration
 
 Besides SQL, [jq](https://stedolan.github.io/jq/) is also supported with EMQX Rule Engine, so it is capable of handling more complex JSON data formats.
 
@@ -137,7 +137,7 @@ EMQX 5.0 has offered a built-in client authentication/authorization feature, use
 
 On how to run authentication/authorization configuration with EMQX Dashboard or configuration files, you can continue to read [Access Control](../access-control/overview.md).
 
-## User-friendly EMQX Dashboard
+## User-Friendly EMQX Dashboard
 
 In EMQX 5.0, we have redesigned the EMQX Dashboard with a new UI design style, enhancing the visual experience and supporting more powerful and user-friendly features. 
 
@@ -167,7 +167,7 @@ EMQX 5.0 presents a new extended gateway framework with reconstructed underlying
 
 The new gateway framework further improves EMQX's usability by unifying access and managing multiple protocols. Now clients implementing third-party protocols can also leverage the advantages of EMQX, such as data integration, safe and reliable authentication/authorization, billion-level horizontal expansion capabilities, etc.
 
-## **More feature updates**
+## **More Feature Updates**
 
 **Simplified configuration**
 
