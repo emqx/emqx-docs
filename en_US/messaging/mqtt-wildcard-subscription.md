@@ -71,7 +71,7 @@ In this demonstration, you can create one client connection `demo` as a publishe
 
       <img src="./assets/wildcard-sub-2.png" alt="wildcard-sub-2" style="zoom:40%;" />
 
-5. Select `Subscriber` in **Connections**. You can see the subscriber receives the two messages the publisher sends.
+5. Select `Subscriber` in **Connections**. You can see the subscriber receives the two messages sent by the publisher.
 
       <img src="./assets/wildcard-sub-3.png" alt="wildcard-sub-3" style="zoom:40%;" />
 
