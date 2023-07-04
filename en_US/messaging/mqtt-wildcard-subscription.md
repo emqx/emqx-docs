@@ -40,7 +40,7 @@ sensor/bedroom/1/temperature
 "sensor/#/temperature" is invalid (# must be the last level)
 ```
 
-## Try Wildcard  Subscription with MQTTX Client
+## Try Wildcard Subscription with MQTTX Client
 
 This section demonstrates how to use the MQTTX client to simulate subscriptions to wildcard topics. 
 
