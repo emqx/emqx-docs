@@ -8,6 +8,67 @@
 
 {% endemqxee %}
 
+## 安装环境
+
+EMQX 所使用的 Erlang 虚拟机依赖于系统区域设置来启用各种功能的 Unicode 支持，包括交互式 Erlang Shell 中的[文件名](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#unicode-filenames)和[终端 IO](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#the-interactive-shell)。
+
+如果您使用的是 Linux 操作系统，在启动 EMQX 前建议确认系统环境中已启用了 UTF-8 区域设置。关于如何在不同平台上启用 UTF-8 区域设置，点击下列标签：
+
+:::: tabs
+
+::: tab Amazon Linux 2
+
+使用 [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html#amazon-linux-cloud-init) 配置启用 UTF-8 locale 区域设置：
+
+```bash
+cat <<EOF | sudo tee /etc/cloud/cloud.cfg.d/99_locale.cfg
+#cloud-config
+locale: C.utf8
+EOF
+```
+
+:::
+
+::: tab CentOS
+
+通过 systemd，通常可以使用 `localectl` 命令启用 UTF-8 locale 区域设置：
+
+```bash
+sudo localectl set-locale LANG=C.UTF-8
+```
+
+:::
+
+::: tab Debian
+
+UTF-8 区域设置可以通过两种方式启用。
+
+- 通过 systemd，通常使用 [`localectl`](https://www.freedesktop.org/software/systemd/man/localectl.html) 命令启用：
+
+  ```bash
+  sudo localectl set-locale LANG=C.UTF-8
+  ```
+
+- 否则，使用 [`update-locale`](https://manpages.debian.org/buster/locales/update-locale.8.en.html) 命令启用：
+
+  ```bash
+  sudo update-locale LANG=C.UTF-8
+  ```
+
+:::
+
+::: tab Ubuntu
+
+可以使用 [`update-locale`](https://manpages.ubuntu.com/manpages/jammy/man8/update-locale.8.html) 命令启用：
+
+```bash
+sudo update-locale LANG=C.UTF-8
+```
+
+:::
+
+::::
+
 ## 下载
 
 {% emqxce %}
@@ -115,8 +176,7 @@ EMQX 安装完成后会创建一些目录用来存放运行文件和配置文件
 EMQX 的配置项存储在 `etc` 和 `data/configs` 目录下，二者的主要区别是 `etc` 目录存储**只读**的配置文件，用户通过 Dashboard 和 REST API 提交的配置将被保存到 `data/configs` 目录下，并支持在运行时进行热更新。
 
 - `etc/emqx.conf`
-- `data/configs/cluster-override.conf`
-- `data/configs/local-override.conf` 
+- `data/configs/cluster.hocon`
 
 EMQX 读取这些配置并将其合并转化为 Erlang 原生配置文件格式，以便在运行时应用这些配置。
 

@@ -31,7 +31,6 @@ EMQX 支持通过 Yum 源安装，您可通过以下 Yum 命令从中自动下�
    sudo systemctl start emqx
    ```
 
-   
 
 ## 通过下载包安装
 
@@ -77,7 +76,7 @@ EMQX 同时支持通过下载包进行安装。下文将以 CentOS 8 系统为�
 
 #### 启动 EMQX
 
-您可通过如下三种方式启动 EMQX
+您可通过如下三种方式启动 EMQX。
 
 - 直接启动：
 
