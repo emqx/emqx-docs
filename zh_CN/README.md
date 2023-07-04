@@ -106,7 +106,7 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
     <td>自动扩展，最多 1,000 条连接</td>
     <td>无限制</td>
     <td style="text-align:left;">单集群支持 MQTT 并发连接数高达 1 亿条</td>
-    <td style="text-align:left;">单集群支持 MQTT 并发连接数高达 1 亿条；小于 100 条连接，永久免费。</td>
+    <td style="text-align:left;">单集群支持 MQTT 并发连接数高达 1 亿条</td>
   </tr>
   <tr>
     <td><b>吞吐量</b></td>
@@ -158,27 +158,6 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>多租户</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>跨地域复制</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>数据持久化</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
     <td><b>Schema Registry</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -200,13 +179,6 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>Flow Editor</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
     <td><b>文件传输</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -222,24 +194,17 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
   </tr>
   <tr>
     <td><b>Cloud-Native &amp; K8s</b></td>
+    <td>N/A</td>
+    <td>N/A</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>边缘计算</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
     <td><b>SLA 等级</b></td>
     <td>99.9%</td>
     <td>99.99%</td>
-    <td>99.99%</td>
-    <td>Up to 99.999%</td>
+    <td>N/A</td>
+    <td>N/A</td>
   </tr>
   <tr>
     <td><b>License</b></td>
@@ -258,6 +223,7 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
 </tbody>
 </table>
 </div>
+
 
 {% endemqxce %}
 

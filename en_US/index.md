@@ -91,7 +91,7 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
   </tr>
   <tr>
     <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">Get Free Serverless</a></td>
-    <td><a href="https://www.emqx.com/en/try?product=broker">14-day Free Trial</a></td>
+    <td><a href="https://www.emqx.com/en/try?product=broker">14-Day Free Trial</a></td>
     <td><a href="https://www.emqx.com/en/try?product=broker">Open Source Download</a></td>
     <td><a href="https://www.emqx.com/en/apply-licenses/emqx">Get a Free Trial License</a></td>
   </tr>
@@ -100,12 +100,12 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
     <td>1000 auto scale</td>
     <td>1000 - unlimited</td>
     <td style="text-align:left;">Up to 100M MQTT connections per cluster</td>
-    <td style="text-align:left;">Up to 100M MQTT connections per cluster. Forever free for &lt;100 connections.</td>
+    <td style="text-align:left;">Up to 100M MQTT connections per cluster</td>
   </tr>
   <tr>
     <td><b>Throughput</b></td>
     <td>1000 TPS</td>
-    <td>Same as enterprise</td>
+    <td>Unlimited</td>
     <td>5M+ MQTT messages per second</td>
     <td>5M+ MQTT messages per second</td>
   </tr>
@@ -125,7 +125,7 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
   </tr>
   <tr>
     <td><b>Integrations (Out-of-the-box)</b></td>
-    <td>No supported</td>
+    <td>Not supported.</td>
     <td style="text-align:left;">Supports over 40 data integrations, including MQTT data bridge, Webhook, MySQL, PostgreSQL, Kafka, MongoDB, Oracle, etc.</td>
     <td style="text-align:left;">Supports Webhook and MQTT data bridge.</td>
     <td style="text-align:left;">Supports over 40 data integrations, including MQTT data bridge, Webhook, MySQL, PostgreSQL, Kafka, MongoDB, Oracle, etc.</td>
@@ -159,27 +159,6 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>Multi-Tenancy</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Geo-Replication</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Data Persistence</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
     <td><b>Schema Registry</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -201,13 +180,6 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>Flow Editor</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
     <td><b>File Transfer</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -216,31 +188,24 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
   </tr>
   <tr>
     <td><b>Troubleshooting</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
     <td><b>Cloud-Native &amp; K8s</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td>N/A</td>
+    <td>N/A</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>Edge Computing</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>SLA</b></td>
+    <td><b>Service Level Agreement (SLA)</b></td>
     <td>99.9%</td>
-    <td>99.99%</td>
-    <td>99.99%</td>
-    <td>Up to 99.999%</td>
+    <td>Up to 99.99%</td>
+    <td>N/A</td>
+    <td>N/A</td>
   </tr>
   <tr>
     <td><b>License Model</b></td>
@@ -259,7 +224,6 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
 </tbody>
 </table>
 </div>
-
 
 {% endemqxce %}
 
