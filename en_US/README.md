@@ -234,31 +234,24 @@ The following is a list of feature comparison between EMQX Enterprise and Open S
 
 | **Items**                         | **EMQX Enterprise**                                         | **EMQX Open Source**                                        |
 | :-------------------------------- | :---------------------------------------------------------- | :---------------------------------------------------------- |
-| **Positioning**                   | The reliable and scalable enterprise MQTT platform          | The world’s #1 open source MQTT broker                      |
 | **Scalability**                   | Up to 100M MQTT connections per cluster                     | Up to 100M MQTT connections per cluster                     |
 | **Performance**                   | 5M+ MQTT messages per second                                | 5M+ MQTT messages per second                                |
-| **Reliability**                   | Data persistence in RocksDB(Coming soon)                    | Data storage in memory                                      |
+| **Reliability**                   | Data persistence in RocksDB (Coming soon)                   | Data storage in memory                                      |
 | **Latency**                       | 1~5 millisecond                                             | 1~5 millisecond                                             |
-| **SLA**                           | Up to 99.999%                                               | 99.99%                                                      |
-| **Integrations (Out-of-the-box)** | 40+                                                         | 3                                                           |
+| **Service Level Agreement (SLA)** | Up to 99.999%                                               | 99.99%                                                      |
+| **Integrations (Out-of-the-box)** | 40+                                                         | 2                                                           |
 | **License Model**                 | Commercial license (Business source license)                | Apache Version 2.0                                          |
 | **Technical Support**             | 24/7 Global support                                         | Open source community                                       |
 | **MQTT 5.0 Broker**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 | **MQTT over QUIC**                | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 | **MQTT Add-ons**                  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 | **Multi-protocol Gateways**       | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **Multi-Tenancy**                 | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **Geo-Replication**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **Data Persistence**              | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
 | **Schema Registry**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
 | **Message Codec**                 | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
 | **Rule Engine**                   | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
-| **Flow Editor**                   | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
 | **File Transfer**                 | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **Kafka Integration**             | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
 | **Enterprise Integrations**       | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
 | **Troubleshooting**               | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
 | **Cloud-Native & K8s**            | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
-| **Edge Computing**                | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
 
 {% endemqxee %}
