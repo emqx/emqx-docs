@@ -348,7 +348,7 @@ This command is to view, add or delete clients' subscriptions.
 | subscriptions list                               | List all subscriptions.                   |
 | subscriptions show \<ClientId\>                  | Show subscriptions for a specific client. |
 | subscriptions add \<ClientId\> \<Topic\> \<QoS\> | Mannually add a subscription.             |
-| subscriptions del \<ClientId\> \\<Topic>          | Manually remove a subscription.           |
+| subscriptions del \<ClientId\> \<Topic>          | Manually remove a subscription.           |
 
 ### subscriptions list
 
@@ -589,7 +589,7 @@ $ emqx ctl log handlers stop console
 log handler console stopped
 ```
 
-### log handlers set-level \<HandlerId\> \\<Level>
+### log handlers set-level \<HandlerId\> \<Level>
 
 ```bash
 $ emqx ctl log handlers set-level console debug
