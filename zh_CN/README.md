@@ -237,7 +237,6 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
 | **性能**                 | > 500 万 MQTT 消息每秒                                      | > 500 万 MQTT 消息每秒                                      |
 | **可靠性**               | RocksDB 数据存储（即将支持）                                | 内存数据存储                                                |
 | **延迟**                 | 1~5 毫秒                                                    | 1~5 毫秒                                                    |
-| **SLA 等级**             | 至多 99.999%                                                | 99.99%                                                      |
 | **数据集成（开箱即用）** | 40+                                                         | 2                                                           |
 | **License**              | Commercial License (Business source license)                | Apache Version 2.0                                          |
 | **技术支持**             | 7x24 全球支持                                               | 开源社区                                                    |
