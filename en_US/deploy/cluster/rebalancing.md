@@ -171,11 +171,11 @@ rebalance start \
 | `--wait-health-check`  | Positive integer | The duration (in seconds, 60 seconds by default) during which the node waits for the Load Balancer (LB) to remove it from the active backend node list. When this specified waiting time elapses, the load rebalancing process begins. |
 | `--conn-evict-rate`    | Positive integer | Client disconnection rate on source nodes; 500 connections per second by default |
 | `--abs-conn-threshold` | Positive integer | Absolute threshold for checking connection balance; 1000 by default |
-| `--rel-conn-threshold` | Number<br> > 1.0 | Relative threshold for checking connection balance; 1.1 by default |
+| `--rel-conn-threshold` | Number<br /> > 1.0 | Relative threshold for checking connection balance; 1.1 by default |
 | `--wait-takeover`      | Positive integer | Specified waiting time (in seconds, default 60 seconds) for clients to reconnect and take over the sessions after all connections are disconnected. |
 | `--sess-evict-rate`    | Positive integer | Session evacuation rate on source nodes; 500 sessions per second by default |
 | `--abs-sess-threshold` | Positive integer | Absolute threshold for checking session balance; 1000 by default |
-| `--rel-sess-threshold` | Number<br> > 1.0 | Relative threshold for checking session balance; 1.1 by default |
+| `--rel-sess-threshold` | Number<br /> > 1.0 | Relative threshold for checking session balance; 1.1 by default |
 
 **Check Session Balance**
 

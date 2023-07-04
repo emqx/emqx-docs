@@ -139,25 +139,25 @@ admins 用于创建，修改，删除管理员账户，子命令如下：
 
 | 命令                                           | 描述                          |
 | ---------------------------------------------- | ----------------------------- |
-| admins add <Username> <Password> <Description> | 添加 Dashboard 用户           |
-| admins passwd <Username> <Password>            | 重置 Dashboard 指定用户的密码 |
-| admins del <Username>                          | 删除指定 Dashboard 用户       |
+| admins add \<Username> \<Password> \<Description> | 添加 Dashboard 用户           |
+| admins passwd \<Username> \<Password>            | 重置 Dashboard 指定用户的密码 |
+| admins del \<Username>                          | 删除指定 Dashboard 用户       |
 
-### admins add <Username> <Password> <Description>
+### admins add \<Username> \<Password> \<Description>
 
 ```bash
 $ emqx ctl admins add emqx_u EMQemq@1172
 ok
 ```
 
-### admins passwd <Username> <Password>
+### admins passwd \<Username> \<Password>
 
 ```bash
 $ emqx ctl admins passwd emqx_u EMQemq@11721
 ok
 ```
 
-### admins del <Username>
+### admins del \<Username>
 
 ```bash
 $ emqx ctl admins del emqx_u
@@ -173,9 +173,9 @@ ok
 | retainer info                  | 显示保留消息的数量                                                                                |
 | retainer topics                | 显示所有保留消息的主题                                                                            |
 | retainer clean                 | 清除所有保留消息                                                                                  |
-| retainer clean <Topic>         | 按指定主题过滤器清除保留消息                                                                      |
+| retainer clean \<Topic>         | 按指定主题过滤器清除保留消息                                                                      |
 | retainer reindex status        | 显示重新索引状态                                                                                  |
-| retainer reindex start [force] | 根据配置设置生成新的保留消息主题索引。将 true 作为 <Force> 参数传递以忽略先前启动的重新索引过程。 |
+| retainer reindex start [force] | 根据配置设置生成新的保留消息主题索引。将 true 作为 \<Force> 参数传递以忽略先前启动的重新索引过程。 |
 
 ### retainer info
 
@@ -199,7 +199,7 @@ $SYS/brokers/emqx@127.0.0.1/version
 emqx ctl retainer clean
 ```
 
-### retainer clean <Topic>
+### retainer clean \<Topic>
 
 ```bash
 emqx ctl retainer clean t/1
@@ -230,10 +230,10 @@ Reindexing finished
 | 命令                         | 描述                 | 使用场景和注意事项                                                                                                   |
 | ---------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | emqx ctl cluster             | 控制 EMQX 集群的命令 |                                                                                                                      |
-| cluster join \<Node\>        | 加入集群             | - 使用该命令将节点加入到指定节点所在的 EMQX 集群<br>- 注意确保指定的节点是活动且可访问的                             |
+| cluster join \<Node\>        | 加入集群             | - 使用该命令将节点加入到指定节点所在的 EMQX 集群<br />- 注意确保指定的节点是活动且可访问的                             |
 | cluster leave                | 离开集群             | - 使用该命令将节点从当前 EMQX 集群中移除                                                                             |
-| cluster force-leave \<Node\> | 强制节点离开集群     | - 使用该命令强制指定节点离开 EMQX 集群<br>- 注意该操作可能导致集群状态不一致，谨慎使用                               |
-| cluster status [--json]      | 查看集群状态         | - 使用该命令查看 EMQX 集群的状态信息<br>- 可选参数`--json`以 JSON 格式显示集群状态<br>- 用于监视和调试集群的健康状况 |
+| cluster force-leave \<Node\> | 强制节点离开集群     | - 使用该命令强制指定节点离开 EMQX 集群<br />- 注意该操作可能导致集群状态不一致，谨慎使用                               |
+| cluster status [--json]      | 查看集群状态         | - 使用该命令查看 EMQX 集群的状态信息<br />- 可选参数`--json`以 JSON 格式显示集群状态<br />- 用于监视和调试集群的健康状况 |
 
 ### cluster join \<Node\>
 
@@ -631,28 +631,28 @@ $ emqx ctl trace stop client emqx_c
 stop tracing clientid emqx_c successfully
 ```
 
-### trace start topic <Topic> <File> [<Level>]
+### trace start topic \<Topic> \<File> [\<Level>]
 
 ```bash
 $ emqx ctl trace start topic t/1 trace.log info
 trace t/1 CLI-t/1 successfully
 ```
 
-### trace stop topic <Topic>
+### trace stop topic \<Topic>
 
 ```bash
 $ emqx ctl trace stop topic t/1
 stop tracing topic t/1 successfully
 ```
 
-### trace start ip_address <IP> <File> [<Level>]
+### trace start ip_address \<IP> \<File> [\<Level>]
 
 ```bash
 $ emqx ctl trace start ip_address 127.0.0.1 trace.log debug
 trace 127.0.0.1 CLI-127.0.0.1 successfully
 ```
 
-### trace stop ip_address <IP>
+### trace stop ip_address \<IP>
 
 ```bash
 $ emqx ctl trace stop ip_address 127.0.0.1
@@ -870,7 +870,7 @@ ok
 | 命令                | 描述                                     |
 | ------------------- | ---------------------------------------- |
 | rules list          | 列出所有规则,包括规则的 ID、名称等信息。 |
-| rules show <RuleID> | 显示特定规则的详细信息。                 |
+| rules show \<RuleID> | 显示特定规则的详细信息。                 |
 
 请注意，下面是每个命令的执行示例：
 
@@ -881,7 +881,7 @@ $ emqx ctl rules list
 Rule{id=my-rule, name=, enabled=true, descr=this is my rule}
 ```
 
-### rules show <RuleID>
+### rules show \<RuleID>
 
 ```bash
 $ emqx ctl rules show my-rule
