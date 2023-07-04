@@ -17,7 +17,7 @@ The table below describes the meaning and output contents for each log level.
 
 | Log Level | Meaning                                                      | Output Examples                                              |
 | --------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| debug     | Detailed information about the internal workings of a program, helping to debug and diagnose issues in the code. <br>It is not recommended to output this level of logging directly to the production environment. Instead, enable [Log Trace](./tracer.md) for a specific client. | Variable values, function call stacks, and other detailed debugging data. |
+| debug     | Detailed information about the internal workings of a program, helping to debug and diagnose issues in the code. <br />It is not recommended to output this level of logging directly to the production environment. Instead, enable [Log Trace](./tracer.md) for a specific client. | Variable values, function call stacks, and other detailed debugging data. |
 | info      | Useful information that is more general than debug-level logs. | Client connections, subscriptions, publishes, QoS levels, and message delivery status. |
 | notice    | Important system information indicating that an event has occurred, but no action is required. | Number of clients connected to the proxy server, number of reconnections attempted, and number of crashed nodes. |
 | warning   | Potential issues or errors that require action; typically used for proactive monitoring and detecting potential problems before they become critical issues. | Disconnections, connection timeouts, authentication failures, and other similar events. |
