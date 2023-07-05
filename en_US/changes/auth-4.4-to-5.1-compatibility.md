@@ -85,7 +85,7 @@ authentication {
 }
 ```
 
-## Redis
+### Redis
 
 ```
   mechanism = password_based
@@ -611,7 +611,7 @@ In dsl, pubsub is renamed to all.
 {allow, all}.
 ```
 
-## Built-in Database
+### Built-in Database
 
 #### Example
 
