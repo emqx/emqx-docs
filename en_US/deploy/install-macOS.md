@@ -1,6 +1,6 @@
 # macOS
 
-This section guides you on installing and starting EMQX on macOS with a zip file.
+This page guides you on installing and starting EMQX on macOS with a zip file.
 
 Supported versions:
 
@@ -40,9 +40,9 @@ Supported versions:
    mkdir -p emqx && unzip emqx-@CE_VERSION@-macos12-arm64.zip -d emqx && cd emqx
    ```
 
-## Operate EMQX
+## Start and Stop EMQX
 
-EMQX can be started in daemon mode, foreground mode, or interactive mode. Note, that only one instance of EMQX can be running at any time with default configuration.
+EMQX can be started in daemon mode, foreground mode, or interactive mode. Note that only one instance of EMQX can be running at any time with default configuration.
 
 If you install EMQX with Homebrew, use `emqx` command as specified below. If you install EMQX from a zip package, use `bin/emqx` instead (assuming you are in the directory where you extract emqx files).
 
@@ -85,9 +85,9 @@ The default user name and password are `admin` & `public`. You will be prompted 
 
 To stop EMQX:
 
-* `emqx stop` or `bin/emqx stop` if it is started in daemon mode.
-* Ctrl+C if it is started in foreground mode.
-* Ctrl+C twice if it is started in interactive mode.
+* Use `emqx stop` or `bin/emqx stop` if it is started in daemon mode.
+* Press Ctrl+C if it is started in foreground mode.
+* Press Ctrl+C twice if it is started in interactive mode.
 
 {% endemqxce %}
 
@@ -109,9 +109,9 @@ The section below will take macOS 12 as an example to illustrate how to download
    mkdir -p emqx && unzip emqx-enterprise-@EE_VERSION@-macos12-arm64.zip -d emqx && cd emqx
    ```
 
-## Operate EMQX
+## Start and Stop EMQX
 
-EMQX can be started in daemon mode, foreground mode, or interactive mode. Note, that only one instance of EMQX can be running at any time with default configuration.
+EMQX can be started in daemon mode, foreground mode, or interactive mode. Note that only one instance of EMQX can be running at any time with default configuration.
 
    ```bash
    # start as daemon
@@ -152,8 +152,8 @@ The default user name and password are `admin` & `public`. You will be prompted 
 
 To stop EMQX:
 
-* `emqx stop` or `bin/emqx stop` if it is started in daemon mode.
-* Ctrl+C if it is started in foreground mode.
-* Ctrl+C twice if it is started in interactive mode.
+* Use `emqx stop` or `bin/emqx stop` if it is started in daemon mode.
+* Press Ctrl+C if it is started in foreground mode.
+* Press Ctrl+C twice if it is started in interactive mode.
 
 {% endemqxee %}
