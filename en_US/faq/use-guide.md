@@ -417,3 +417,141 @@ Client disconnect link error code list:
 - `proto_unexpected_c`：Repeatedly received an MQTT connection request when there is already an MQTT connection
 
 - `idle_timeout`： After the TCP connection is established for 15s, the connect packet has not been received yet.
+
+## Can EMQX guarantee the original order when forwarding the messages to subscribers?
+
+**Tags:** [*Pub/Sub*](tags.md#pub-sub)
+
+EMQX will ensure that messages with the same topic from the same client are forwarded in the order of their arrival, regardless of the QoS level of the messages. The QoS level does not affect the order of message forwarding. Whether messages are lost or duplicated, they will not cause message disorder. This is also the requirement from MQTT.
+
+However, EMQX does not guarantee the forwarding order of messages from different topics. We can consider them as entering different channels. For example, messages from topic A arrive at EMQX before messages from topic B, it is possible that messages from topic B will be forwarded earlier.
+
+## What should I do when I encounter problems related to client connection, publishing and subscribing?
+
+**Tags:** [*Debug*](tags.md#debug)
+
+EMQX's debug logs already record all the behaviors and phenomena. By reading the debug logs, we can know when the client initiated the connection, which parameters were specified during the connection, whether the connection was successful, and the reasons for connection rejection, etc. However, due to the excessive information recorded in debug logs, it may incur additional resource consumption and make it difficult to analyze individual clients or topics.
+
+So EMQX provides a [Log Trace](../getting-started/log.md) feature. We can specify the clients or topics we want to trace, and EMQX will output all the debug logs related to those clients or topics to the designated log file. This makes it convenient for both self-analysis and seeking help from the community.
+
+Just so you know, if the client cannot connect to EMQX for network reasons, the log tracing feature will not be helpful, because EMQX has not received any messages in such cases. This situation often occurs due to network configuration issues such as firewalls or security groups, which result in the server port not being open. This is particularly common when deploying EMQX on cloud instances. So, in addition to log tracing, we can troubleshoot network-related issues by checking port occupation, listening status, and network configurations.
+
+## Why are there client IDs like "CENSYS" or other unfamiliar clients?
+
+**Tags:** [*Security*](tags.md#security)
+
+CENSYS is an internet scanning and reconnaissance tool that periodically scans the IPv4 address space to discover default ports for protocols such as HTTP, SSH, MQTT, etc. So if you find MQTT clients with a client ID of "CENSYS" or other unknown clients accessing your MQTT broker, it indicates that you are currently at a relatively lower level of security protection. The following measures can effectively help you avoid this issue:
+
+1. Avoid using default configurations, such as the AppID and AppSecret used for verifying HTTP API access permissions in EMQX.
+2. Enable authentication, which can be password-based authentication or JWT authentication, to prevent situations where only knowledge of an IP address is required for login.
+3. Enable TLS mutual authentication, allowing only clients with valid certificates to access the system.
+4. Enable authorization to prevent unauthorized devices from accessing sensitive data after logging in.
+5. Configure your firewall to close unnecessary ports as much as possible.
+
+## Can I shared subscribe to the system topic?
+
+**Tags:** [*Shared Subscription*](tags.md#shared-subscription)
+
+Yes, some system messages, such as client online/offline events, may be published frequently, so using a shared subscription is essential for clients. Example subscription: `$share/group1/$SYS/brokers/+/clients/+/connected`.
+
+## Why can't I receive retained messages when using shared subscriptions?
+
+**Tags:** [*Shared Subscription*](tags.md#shared-subscription)
+
+The MQTT protocol stipulates that when the client uses a shared subscription, the server cannot send retained messages to it.
+
+## Why are messages occasionally lost when using shared subscriptions?
+
+**Tags:** [*Shared Subscription*](tags.md#shared-subscription)
+
+When the connection of the shared subscriber is disconnected but the session still exists, the server will continue delivering the messages to the shared subscriber, and these messages will be temporarily stored in the corresponding session. This will cause other online shared subscribers to appear to have not consumed all the messages. In addition, if the shared subscriber chooses to create a new session when reconnecting, the messages cached in the old session will be permanently lost.
+
+If we confirm that the above situation does not exist, but the problem of message loss still exists, then we can use the client tracking function of EMQX for further investigation.
+
+## What should I do if EMQX prompts that the port is occupied (eaddrinuse) when starting?
+
+**Tags:** [*Failed to Start*](tags.md#failed-to-start)
+
+By default, EMQX will occupy 7 ports when it starts. They are:
+
+1. 1883, used for MQTT over TCP listener, can be modified by configuration
+2. 8883, used for MQTT over SSL/TLS listener, can be modified by configuration
+3. 8083, used for MQTT over WebSocket listener, can be modified by configuration
+4. 8084, for MQTT over WSS (WebSocket over SSL) listener, can be modified by configuration
+5. 18083, the default listening port of the HTTP API service. And the dashboard also depends on this port, which can be modified by configuration
+6. 4370, used for remote function calls of EMQX distributed cluster, Mnesia data synchronization, etc. This port will be occupied by default even if no cluster is formed. The listening port should be `BasePort (4370) + Offset`, 4370 is fixed and cannot be modified, and Offset is determined by the numeric suffix of the Name part in the node name (`Name@Host`). If there is no numeric suffix, it defaults to 0. For example, the Offset of `emqx@127.0.0.1` is 0, and the Offset of `emqx1@127.0.0.1` is 1.
+7. 5370, the cluster RPC port used to share the pressure of the last port, mainly used for forwarding MQTT messages between nodes. Similar to port 4370, even if no cluster is formed, this port will be occupied by default, and it should actually be `BasePort (5370) + Offset`, 5370 is fixed and cannot be modified, and Offset is determined by the Name part of the node name (`Name@Host`). If there is no number suffix, it defaults to 0.
+
+## Why does EMQX output the log "WARNING: Default (insecure) Erlang cookie is in use." when it starts?
+
+**Tags:** [*Log*](tags.md#log)
+
+The complete WARNING log is as follows:
+
+```
+WARNING: Default (insecure) Erlang cookie is in use.
+WARNING: Configure node.cookie in /usr/lib/emqx/etc/emqx.conf or override from environment variable EMQX_NODE__COOKIE
+WARNING: NOTE: Use the same cookie for all nodes in the cluster.
+```
+
+Only EMQX nodes using the same cookie can form a cluster. While a cookie does not secure cluster communication, it prevents a node from connecting to a cluster it did not intend to communicate with. EMQX nodes uniformly use `emqxsecretcookie` as cookie by default, so we recommend users change the cookie value when building a cluster.
+
+The second warning log indicates two ways to modify the cookie: `node.cookie` in the `emqx.conf` configuration file and the environment variable `EMQX_NODE__COOKIE`.
+
+## When using Docker to deploy EMQX, why does the restart of the container cause data loss, such as configured rules and resources?
+
+**Tags:** [*Persistence*](tags.md#persistence)
+
+The runtime data of EMQX are all stored in the `/opt/emqx/data` directory, such as the configuration of rules and resources, retained messages, etc. We need to mount the `/opt/emqx/data` directory to a local host directory or a data volume to ensure that these data will not be lost due to container restarts.
+
+But we may find that even if the `/opt/emqx/data` directory has been mounted, the data may still be lost after the container restarts. This is because the runtime data of EMQX is stored in the `/opt/emqx/data/mnesia/${Node Name}` directory. So the data loss is actually that the node name of EMQX has changed after the container is restarted, which in turn caused EMQX to create a new storage directory.
+
+EMQX node name consists of Name and Host, where Host comes from the container's IP address by default. Under the default network configuration, the container's IP may change after restarting, so we have to keep the container's IP fixed.
+
+EMQX provides an environment variable `EMQX_HOST`, which allows us to set the Host part of the node name. Of course, the premise is that this Host must be connectable to other nodes, so we also need to use it with the network alias:
+
+```
+docker run -d --name emqx -p 18083:18083 -p 1883:1883 -e EMQX_HOST=alias-for-emqx --network example --network-alias alias-for-emqx --mount type=bind,source=/tmp/emqx,target=/opt/emqx/data emqx:5.0.24
+```
+
+## Reasons for common logs
+
+**Tags:** [*Log*](tags.md#log)
+
+### Keyword: “reason: {shutdown, takeovered}”
+
+In EMQX, each MQTT client connection is maintained by an independent process. Whenever an MQTT client connects, EMQX will create a new process. If the client wants to restore communication from the existing session state, EMQX needs to migrate the session state from the old process to the new one. We call this process: Take over, and the old process will be closed after the takeover is completed, and the reason for closing is `{shutdown, takeovered}`. If the original client is still connected, EMQX will send a DISCONNECT packet with Reason Code 0x8E (Session taken over), and then close the old connection.
+
+### Keyword: “reason: {shutdown, discarded}”
+
+Contrary to session takeover, if the client indicates that it wants to start a new session when connecting, then EMQX needs to discard the old session state, and EMQX will close the old process with the reason `{shutdown, discarded}`. If the original client is still connected, EMQX will send a DISCONNECT packet with Reason Code 0x8E (Session taken over), and then close the old connection.
+
+### Keyword: “reason: {shutdown, kicked}”
+
+Indicates that the client connection was manually kicked out (click the Kick Out button on the Dashboard or call the `DELETE clients/{clientid}` API). If the original client is still connected, EMQX will send a DISCONNECT packet with Reason Code 0x98 (Administrative action), and then close the old connection.
+
+### Keyword: “reason: {shutdown, tcp_closed}”
+
+This log indicates that the client directly closed the network connection without sending a DISCONNECT packet. The corresponding reason would be `{shutdown, normal}`, which means that the client first sent a DISCONNECT packet with a Reason Code of 0 and then closed the network connection.
+
+Therefore, when you encounter that `tcp_closed` appears in the EMQX logs, and this disconnection behavior is not what you expected, it is recommended to investigate the client's implementation for any potential issues.
+
+### Keyword: “maximum heap size reached”
+
+The appearance of this log indicates that the heap occupied by the current client process has exceeded the preset maximum value, and the client process will be forcibly killed to ensure the availability of EMQX, and avoid the unlimited growth of the memory usage of the client process and eventually lead to EMQX OOM. 
+
+Usually, message accumulation is the main reason for the increase in client process heap occupation, and message accumulation is generally because the client's consumption capacity does not match the peer's message production capacity. The recommended solution is to optimize the client processing code or use shared subscriptions to disperse the load.
+
+The related configuration item is `force_shutdown_policy`, and its format is `<Maximum Message Queue Length>|<Maximum Heap Size>`, for example, `10000|64MB`.  `<Maximum Heap Size>` refers to the maximum heap memory that each client process can occupy.
+
+### Keyword: “Parse failed for function_clause”
+
+This log indicates that the parsing of the packet failed. Maybe because it is not an MQTT packet, we have encountered many situations where HTTP requests are sent to the MQTT port, or because the packet contains non-UTF-8 characters. We can search the `Frame data` keyword in this "Parse failed..." log to view the complete message and help us analyze the possible reasons for the parsing failure.
+
+### Keyword: “Dropped msg due to mqueue is full”
+
+EMQX can send multiple unconfirmed QoS 1 and QoS 2 messages at the same time, but limited by the performance of the client, we usually limit the maximum number of messages allowed to be sent at the same time. After reaching this limit, subsequent arriving messages will be cached by EMQX in the message queue of each client process.
+
+To prevent excessive message buffering, EMQX also sets a maximum length limit for the message queue. If the message queue is full when a message arrives, the latest message will still be enqueued, but the oldest message in the queue will be dequeued and dropped, and EMQX will generate the log message: "Dropped msg due to mqueue is full."
+
+If this log only appears during traffic peaks, you can modify the configuration item `max_mqueue_len` only to increase the maximum length of the message queue. However, if it continues to appear, it indicates that the current client consumption capability is poor. In such cases, it is recommended to optimize the client's code or use shared subscriptions to distribute the load.

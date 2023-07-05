@@ -449,3 +449,139 @@ EMQX 支持加密连接。在生产环境部署时，推荐的方案是使用负
 + `etimedout`：TCP 发送超时（没有收到TCP ACK 回应）
 + `proto_unexpected_c`：在已经有一条MQTT连接的情况下重复收到了MQTT连接请求
 + `idle_timeout`： TCP 连接建立 15s 之后，还没收到 connect 报文
+
+## EMQX 向订阅者转发消息的时候能否保证原始顺序？
+
+**标签:** [*发布订阅*](tags.md#发布订阅)
+
+EMQX 会保证来自同一客户端的相同主题的消息按照到达顺序被转发，这与消息的 QoS 等级无关，QoS 等级不会影响转发顺序。不管消息丢失还是重复，也都不会导致消息失序。这也是 MQTT 协议所要求的。
+
+但对于不同主题的消息，EMQX 不会提供转发顺序保证，我们可以将他们视为进入了不同的通道，比如主题 A 的消息先于主题 B 的消息到达 EMQX，但最终可能主题 B 的消息会更早被转发。
+
+## 当我遇到客户端连接、发布、订阅相关的问题时应该怎么办？
+
+**标签:** [*调试*](tags.md#调试)
+
+EMQX 的 Debug 日志基本记录了所有的行为和现象，通过阅读 Debug 日志我们能够知道客户端何时发起了连接，连接时指定了哪些参数，连接是否通过，被拒绝连接的原因是什么等等。但是由于 Debug 日志记录的信息过多，会带来额外的资源消耗，并且不利于我们针对单个客户端或主题进行分析。
+
+所以 EMQX 提供了[日志追踪](../getting-started/log.md)功能，我们可以指定想要追踪的客户端或主题，EMQX 会将所有与该客户端或主题相关的 Debug 日志都输出到指定日志文件中。这样不管是自己分析调试，还是寻求社区帮助，都会方便许多。
+
+需要注意的是，如果客户端是因为网络原因而无法连接到 EMQX 的话，日志追踪功能也是无法提供帮助的，因为此时 EMQX 尚未收到任何报文。这种情况很多时候是因为防火墙、安全组等网络配置原因导致服务器端口没有开放，这在使用云主机部署 EMQX 时尤为常见。所以除了日志追踪，我们可以通过检查端口占用、监听情况，检查网络配置等手段来排除网络方面的原因。
+
+## 为什么会出现 Client ID 为 CENSYS 的或者是其他我不认识的客户端？
+
+**标签:** [*安全*](tags.md#安全)
+
+CENSYS 是一款互联网探测扫描工具，它会周期性扫描 IPv4 地址空间，探测 HTTP、SSH、MQTT 等协议的默认端口。所以如果你发现有 Client ID 为 CENSYS 的或者其他未知的客户端接入了你的 MQTT Broker，这意味你目前处于相对较低的安全性保障下。以下措施可以有效帮助你避免这个问题：
+
+1. 不要使用默认配置，例如 EMQX 用于验证 HTTP API 访问权限的 AppID 与 AppSecret 等。
+2. 启用认证，可以是用户名密码认证，也可以是 JWT 认证，避免只需要知道 IP 地址就可以登录的尴尬情况。
+3. 启用 TLS 双向认证，只有持有有效证书的客户端才能接入系统。
+4. 启用授权，避免非法设备登录后可以获取敏感数据。
+5. 配置你的防火墙，尽量关闭一些不需要的端口。
+
+## 能否以共享订阅的方式订阅系统主题？
+
+**标签:** [*共享订阅*](tags.md#共享订阅)
+
+可以，某些系统消息的发布频率可能较高，例如客户端上下线事件，所以采用共享订阅对于客户端来说是非常必要的。订阅示例： `$share/group1/$SYS/brokers/+/clients/+/connected`。
+
+## 为什么共享订阅时收不到保留消息？
+
+**标签:** [*共享订阅*](tags.md#共享订阅)
+
+MQTT 协议规定了服务端不能发送保留消息给共享订阅。
+
+## 为什么使用共享订阅时消息会偶尔丢失？
+
+**标签:** [*共享订阅*](tags.md#共享订阅)
+
+在共享订阅者的连接断开，但会话仍然存在的情况下，服务端会仍然向该共享订阅者投递消息，只是消息将被暂存至对应的会话中，这会导致其余在线的共享订阅者看起来没能完整地消费到所有消息。另外，如果该共享订阅者在重连时选择创建全新会话，那么缓存在旧会话中的消息就会永久丢失。
+
+如果我们确认了不存在以上情况，而消息丢失的问题仍然存在，那么可以借助 EMQX 的客户端追踪功能来进行进一步的排查。
+
+## EMQX 启动时提示端口被占用（eaddrinuse）应该怎么办？
+
+**标签:** [*启动失败*](tags.md#启动失败)
+
+默认情况下，EMQX 启动时会占用 7 个端口，它们分别是：
+
+1. 1883，用于 MQTT over TCP 监听器，可通过配置修改
+2. 8883，用于 MQTT over SSL/TLS 监听器，可通过配置修改
+3. 8083，用于 MQTT over WebSocket 监听器，可通过配置修改
+4. 8084，用于 MQTT over WSS (WebSocket over SSL) 监听器，可通过配置修改
+5. 18083，HTTP API 服务的默认监听端口，Dashboard 功能也依赖于这个端口，可通过配置修改
+6. 4370，用于 EMQX 分布式集群远程函数调用、Mnesia 数据同步等。即便没有组成集群，这个端口也会被默认占用。这个监听端口实际上应该是 `BasePort (4370) + Offset`，4370 固定无法修改，Offset 则由节点名称（`Name@Host`）中 Name 部分的数字后缀决定，没有数字后缀则默认为 0。例如 `emqx@127.0.0.1` 的 Offset 为 0，`emqx1@127.0.0.1` 的 Offset 为 1。
+7. 5370，用于分担上一端口压力的集群 RPC 端口，主要用于节点间转发 MQTT 消息。与 4370 端口类似，即便没有组成集群，这个端口也会被默认占用，并且它实际上应该是 `BasePort (5370) + Offset`，5370 固定无法修改，Offset 则由节点名称（`Name@Host`）中 Name 部分的数字后缀决定，没有数字后缀则默认为 0。
+
+## 为什么 EMQX 启动时会输出日志 “ WARNING: Default (insecure) Erlang cookie is in use.”
+
+**标签:** [*日志*](tags.md#日志)
+
+完整的 WARNING 日志如下：
+
+```
+WARNING: Default (insecure) Erlang cookie is in use.
+WARNING: Configure node.cookie in /usr/lib/emqx/etc/emqx.conf or override from environment variable EMQX_NODE__COOKIE
+WARNING: NOTE: Use the same cookie for all nodes in the cluster.
+```
+
+只有使用相同 Cookie 的 EMQX 节点才能组成一个集群。虽然 Cookie 并不能保证集群的通信安全，但它可以避免节点连接到它不打算与之通信的集群。EMQX 节点默认统一将 `emqxsecretcookie` 作为 Cookie，所以我们会推荐用户在搭建集群时更改 Cookie 的值。
+
+第二条 WARNING 日志则提示了修改 Cookie 的两种方式，分别为 `emqx.conf` 配置文件中的 `node.cookie`，和环境变量 `EMQX_NODE__COOKIE`。
+
+## 使用 Docker 部署 EMQX 时，为什么容器重启会导致配置的规则、资源等数据丢失？
+
+**标签:** [*持久化*](tags.md#持久化)
+
+EMQX 的运行时数据，譬如规则和资源的配置、保留消息等等，它们都存储在 `/opt/emqx/data` 目录下，所以为了保证这部分数据不会因容器重启而丢失，我们需要将 `/opt/emqx/data` 目录挂载到本地主机目录或者数据卷中去。
+
+但我们可能会发现，即便已经挂载了 `/opt/emqx/data` 目录，数据仍然可能会在容器重启后丢失。这是因为 EMQX 的运行时数据实际上存储在 `/opt/emqx/data/mnesia/${Node Name}` 目录。所以数据丢失，实际上是容器重启后 EMQX 的节点名发生了变化，进而导致 EMQX 创建了一个全新的存储目录。
+
+EMQX 节点名由 Name 和 Host 两部分组成，其中 Host 默认来自容器的 IP 地址。在默认的网络配置下容器一旦重启它的 IP 就可能发生变化，所以我们要做的就是让容器的 IP 保持固定。
+
+EMQX 提供了一个环境变量 `EMQX_HOST`，允许我们自行设置节点名的 Host 部分。当然前提是这个 Host 必须是其他节点可以连接的，所以我们还需要配合网络别名使用：
+
+```
+docker run -d --name emqx -p 18083:18083 -p 1883:1883 -e EMQX_HOST=alias-for-emqx --network example --network-alias alias-for-emqx --mount type=bind,source=/tmp/emqx,target=/opt/emqx/data emqx:5.0.24
+```
+
+## 常见日志原因
+
+**标签:** [*日志*](tags.md#日志)
+
+### 关键字：“reason: {shutdown, takeovered}”
+
+在 EMQX 中，每个 MQTT 客户端连接都由独立的一个进程来维护。每当有 MQTT 客户端连接，EMQX 就会创建一个新的进程。如果客户端希望从已存在的会话状态中恢复通信，那么 EMQX 就需要将旧进程中的会话状态数据迁移至新进程。这个过程，我们称之为 Take over，而旧进程将在接管工作完成后关闭，关闭的原因为 `{shutdown, takeovered}`。如果原先的客户端仍处于连接状态，那么 EMQX 还将发送一个 Reason Code 为 0x8E (Session taken over) 的 DISCONNECT 报文，然后关闭旧连接。
+
+### 关键字：“reason: {shutdown, discarded}”
+
+与会话接管相反，如果客户端在连接时表示希望开始一个全新的会话，那么 EMQX 就需要丢弃旧进程中的会话状态数据，EMQX 将以 `{shutdown, discarded}` 原因关闭旧进程。如果原先的客户端仍处于连接状态，那么 EMQX 同样将发送一个 Reason Code 为 0x8E (Session taken over) 的 DISCONNECT 报文，然后关闭旧连接。
+
+### 关键字：“reason: {shutdown, kicked}”
+
+表示客户端连接被手动踢除（在 Dashboard 上点击 Kick Out 按钮或者调用 `DELETE clients/{clientid}` API）。如果原先的客户端仍处于连接状态，那么 EMQX 同样将发送一个 Reason Code 为 0x98 (Administrative action) 的 DISCONNECT 报文，然后关闭旧连接。
+
+### 关键字：“reason: {shutdown, tcp_closed}”
+
+这一日志表示客户端在没有发送 DISCONNECT 报文的情况下直接关闭了网络连接，与之对应的是 `reason: {shutdown, normal}`，这表示客户端先发送了一个 Reason Code 为 0 的 DISCONNECT 报文，然后再关闭了网络连接。
+
+所以，当发现 EMQX 日志中出现 `tcp_closed`，并且这一断开连接的行为并不是你期望的时，建议排查客户端的实现是否存在问题。
+
+### 关键字：“maximum heap size reached“
+
+出现这一日志说明当前客户端进程占用的堆栈已经超过了预设的最大值，客户端进程将被强制杀死以保证 EMQX 的可用性，避免客户端进程的内存占用无限制增长最终导致 EMQX OOM。
+
+通常消息堆积是导致客户端进程堆栈占用上升的主要原因，而消息堆积通常是因为客户端消费能力与对端消息的生产能力不匹配，推荐的解决方案是优化客户端处理代码或者使用共享订阅分散负载。
+
+与此相关的配置项是 `force_shutdown_policy`，它的配置格式为 `<Maximum Message Queue Length>|<Maximum Heap Size>`，例如 `10000|64MB`。其中 `<Maximum Heap Size>` 就是限制每个客户端进程能够占用的最大堆栈内存。
+
+### 关键字：“Parse failed for function_clause“
+
+这一日志表示报文解析失败。可能因为这不是一个 MQTT 报文，我们遇到过很多向 MQTT 端口发送 HTTP 请求的情况，也可能因为报文中包含了非 UTF-8 字符等等。我们可以在这条 “Parse failed...” 日志中检索 `Frame data` 关键字以查看完整的报文，帮助我们分析解析失败的可能原因。
+
+### 关键字：“Dropped msg due to mqueue is full“
+
+EMQX 可以同时发送多个未确认的 QoS 1 和 QoS 2 消息，但受限于客户端的性能，通常我们会限制允许同时发送的消息的最大数量。在达到这一限制后，后续到达的消息都会被 EMQX 缓存在每个客户端进程的消息队列中。为了防止消息缓存过多，EMQX 同样为消息队列设置了最大长度限制。如果消息到达时消息队列已满，那么这个最新的消息仍然会入队，但队列中最老的消息将会出队并被丢弃，同时产生 “Dropped msg due to mqueue is full” 这一日志。
+
+如果此日志只是在流量高峰期出现，那么可以修改配置项 `max_mqueue_len` 仅增加消息队列的最大长度。但如果持续出现，那么说明当前客户端消费能力较差，尽量选择优化客户端代码或者使用共享订阅分散负载。
