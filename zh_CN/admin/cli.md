@@ -910,7 +910,7 @@ Actions:
 
 注意，命令行仅仅用于查看，规则的创建和更新等管理操作必需要在控制台的界面中操作。
 
-{%emqxee%}
+{% emqxee %}
 
 ## license
 
@@ -942,4 +942,4 @@ emqx ctl license update <YOUR_LICENSE_STRING>
 
 请将 `YOUR_LICENSE_STRING` 替换为实际的 License 字符串。
 
-{%endemqxee%}
+{% endemqxee %}
