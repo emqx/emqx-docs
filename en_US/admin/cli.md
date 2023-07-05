@@ -915,7 +915,7 @@ Actions:
 
 CLI is only for inspection, Rule and action managements are managed from dashboard.
 
-{%emqxee%}
+{% emqxee %}
 
 ## license
 
@@ -947,4 +947,4 @@ emqx ctl license update <YOUR_LICENSE_STRING>
 
 You need to replace `YOUR_LICENSE_STRING` with the actual License string.
 
-{%endemqxee%}
+{% endemqxee %}
