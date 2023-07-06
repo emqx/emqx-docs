@@ -40,11 +40,11 @@ Payload: a JSON object with the following fields:
 
 * `file_id`: Unique identifier for the file transfer session.
 * `name`: Name of the file. It will be sanitized using percent-encoding if it coincides with reserved file names (such as ".", "..") or if it contains characters like "/", "", "%", ":", or unprintable unicode characters. The binary length of the name should not exceed 240 bytes.
-* `size`: Size of the file in bytes (informational field).
+* `size`: Size of the file in bytes (optional, informational field).
 * `checksum`: SHA256 checksum of the file (optional). EMQX will verify the file's checksum if provided.
-* `expire_at`: Timestamp (in seconds since the epoch) when the file may be deleted from storage.
-* `segments_ttl`: Time-to-live of the file segments in seconds. This value is clamped to the range specified by the `minimum_segments_ttl` and `maximum_segments_ttl` settings configured in EMQX. Refer to [Segment Settings](./broker.md#segment-settings) for details.
-* `user_data`: Arbitrary JSON object to store additional information about the file along with its metadata.
+* `expire_at`: Timestamp (in seconds since the epoch) when the file may be deleted from storage (optional).
+* `segments_ttl`: Time-to-live of the file segments in seconds (optional). This value is clamped to the range specified by the `minimum_segments_ttl` and `maximum_segments_ttl` settings configured in EMQX. Refer to [Segment Settings](./broker.md#segment-settings) for details.
+* `user_data`: Arbitrary JSON object to store additional information about the file along with its metadata (optional).
 
 In the payload, the only required field is `name`.
 
