@@ -26,11 +26,11 @@
     - faq/faq
     - support/technical-support
     - getting-started/roadmap
-  # - title_en: Product roadmap
-      title_cn: Product roadmap
-      lang: en
-      edition: ce
-      path: https://github.com/emqx/emqx/discussions/11136
+  # - title_en: Product Roadmap
+  #   title_cn: Product Roadmap
+  #   lang: en
+  #   edition: ce
+  #   path: https://github.com/emqx/emqx/discussions/11136
 
 - title_en: Installation and Migration
   title_cn: 安装部署和迁移
