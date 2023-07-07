@@ -56,7 +56,7 @@ WebSocket 是一种在基于 HTTP 协议上支持全双工通讯的协议，通�
 
 共享订阅对于数据采集 / 集中处理类应用非常有用。在这样的场景下，数据的生产者远多余数据的消费者，且同一条数据只需要被任意消费者处理一次。
 
-更多使用方式请参考 [共享订阅](../mqtt/mqtt-shared-subscription.md)。
+更多使用方式请参考 [共享订阅](../messaging/mqtt-shared-subscription.md)。
 
 ## 什么是离线消息？
 
