@@ -1,14 +1,16 @@
-# Authentication / Authorization Compatibility between v4.4 and v5.1 
+# Authentication / Authorization Compatibility Between EMQX 4.4 and EMQX 5.1 
 
-## Common Changes 
+This page presents the compatibility information for authentication and authorization configurations between EMQX 4.4 and EMQX 5.1.
 
-### SSL options
+## Common Imcompatibility Changes 
 
-All providers using external connections (MySQL, PostgreSQL, MongoDB, Redis, HTTP) have the same options for establishing secure connection via TLS under ssl key: https://www.emqx.io/docs/en/v5.0/network/overview.html#tls-for-external-resource-access.
+### SSL Options
+
+EMQX 5.1 provides the option of enabling TLS when there is a need to access external resources, such as connecting to a database (MySQL, PostgreSQL, MongoDB, Redis) for authentication, or using password-based authentication with access to a web server via HTTPS.  For more information, refer to [TLS for External Resource Access](https://docs.emqx.com/en/enterprise/v5.1/network/overview.html#tls-for-external-resource-access).
 
 ### Placeholders
 
-Backends supporting some kind of data interpolation (MySQL, PostgreSQL, MongoDB, Redis, HTTP for external requests, JWT for data interpolation) support ${variable} placeholders instead of %X ones. 
+Backends that support some kind of data interpolation (MySQL, PostgreSQL, MongoDB, Redis, HTTP for external requests, JWT for data interpolation) now use '${variable}' placeholders instead of '%X' ones.
 
 ## Authentication
 
@@ -16,35 +18,35 @@ Backends supporting some kind of data interpolation (MySQL, PostgreSQL, MongoDB,
 
 #### Password Hashing
 
-All password-based providers (Built-in database, MySQL, PostgreSQL, MongoDB, Redis) have the same password hashing options, configured in the same way: https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#password-hashing 
+All password-based providers (Built-in database, MySQL, PostgreSQL, MongoDB, Redis) now have the same password hashing options, configured in the same way. For details, refer to [Password Hashing](https://docs.emqx.com/en/enterprise/v5.1/access-control/authn/authn.html#password-hashing).
 
 #### Per-Listener Authentication
 
-Unlike 4.4, each MQTT listener may have its own authentication. Also, enable_authn listener option is available:
+Unlike in version 4.4, each MQTT listener in EMQX 5.1 may have its own authentication configuration. Additionally, the `enable_authn` listener option is available:
 
-- enable_authn=true is the default, when authentication is delegated to the authentication chain;
-- enable_authn=false switches off authentication completely for the listener;
-- enable_authn=quick_deny_anonymous like true, but also immediately rejects connecting clients without credentials.
+- `enable_authn=true` is the default, delegating authentication to the authentication chain.
+- `enable_authn=false` completely disables authentication for the listener.
+- `enable_authn=quick_deny_anonymous` is similar to 'true', but also immediately rejects connecting clients without credentials.
 
 #### Defaults
 
-EMQX 5.1 does not have explicit allow_anonymous settings. One should remove or disable all authenticators in the global or listener-specific chain to allow anonymous access.
+EMQX 5.1 no longer has explicit `allow_anonymous` settings. To allow anonymous access, remove or disable all authenticators in the global or listener-specific chain.
 
 ### Built-in Database
 
-- No user records in the config
-- password_hash to password_hash_algorithm {name = Algo, salt_position = prefix} (see https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#password-hashing )
-- user_id_type is used to identify whether clientid or username should be used as MQTT user identifiers. Mixed types of records are not allowed.
+- No user records in the configuration.
+- Change `password_hash` to `password_hash_algorithm`: {name = Algo, salt_position = prefix}. For details, refer to [Password Hashing](https://docs.emqx.com/en/enterprise/v5.1/access-control/authn/authn.html#password-hashing).
+- `user_id_type` is used to identify whether the `clientid` or `username` should be used as MQTT user identifiers. Mixed types of records are not allowed.
 
 #### Example
 
-4.4
+EMQX 4.4
 
 ```
 auth.mnesia.password_hash = sha256
 ```
 
-5.1
+EMQX 5.1
 
 ```
 authentication {
@@ -61,18 +63,18 @@ authentication {
 
 ### Built-in Database (Enhanced Authentication)
 
-- No support for SHA1 hashing (used in 4.4). Use algorithm to choose between sha512 and sha256 algorithms.
-- `iteration_count` can be configured (4096 is implicitly used in 4.4). 
+- SHA1 hashing support used in EMQX 4.4 is no longer available. Use the `algorithm` parameter to choose between `sha512'`and `sha256` algorithms.
+- `iteration_count` can now be configured (4096 was implicitly used in EMQX 4.4).
 
 #### Example
 
-4.4
+EMQX 4.4
 
 ```
 # No configuration
 ```
 
-5.1
+EMQX 5.1
 
 ```
 {
@@ -92,27 +94,24 @@ authentication {
   backend = redis
 ```
 
-- type to redis_type 
-  - for type single:
-    - server to server;
-  - for type sentine
-    - server to servers;
-  - for type sentinel:
-    - server to servers;
-- database to database (except cluster type, there is no this option for cluster anymore);
-- pool to pool_size;
-- password to password;
-- query_timeout is not used anymore;
-- ssl.* to common SSL options https://www.emqx.io/docs/en/v5.0/network/overview.html#tls-for-external-resource-access ;
-- auth_cmd to cmd. Ony HGET and HMGET commands are supported. ${var}-style [placeholders](https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#authentication-placeholders) should be used.  Command should fetch at least password or password_hash field and additionally salt and is_superuser fields;
-- super_cmd is not used anymore, provide is_superuser field in cmd instead.
-- password_hash to common password_hash_algorithm parameters.
+- `type` is changed to `redis_type`.
+  - For type `single`,  `server` is changed to `servers`.
+  - For type `sentinel`,  `server` is changed to `servers`.
+  - For type `cluster`,  `database` option is no longer available.
+- `database` is changed to `database` (except for the `cluster` type; this option is not available for clusters anymore).
+- `pool` is changed to `pool_size`.
+- `password` is changed to `password`.
+- `query_timeout` is no longer used.
+- `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](https://docs.emqx.com/en/enterprise/v5.1/network/overview.html#tls-for-external-resource-access).
+- `auth_cmd` is changed to `cmd`. Only `HGET` and `HMGET` commands are supported. Use `${var}`-style [placeholders](https://docs.emqx.com/en/enterprise/v5.1/access-control/authn/authn.html#authentication-placeholders) in the command. The command should fetch at least the `password` or `password_hash` field and optionally the `salt` and `is_superuser` fields.
+- `super_cmd` is no longer used. Provide the `is_superuser` field in `cmd` instead.
+- `password_hash` now uses common `password_hash_algorithm` parameters.
 
-auto_reconnect may be used to reconnect to Redis automatically on failure.
+You can use `auto_reconnect` to automatically reconnect to Redis on failure.
 
 #### Example
 
-4.4
+EMQX 4.4
 
 ```
 auth.redis.type = single
@@ -133,7 +132,7 @@ auth.redis.ssl.verify = true
 auth.redis.ssl.server_name_indication = myredis
 ```
 
-5.1
+EMQX 5.1
 
 ```
 authentication {
@@ -173,18 +172,18 @@ authentication {
   mechanism = password_based
 ```
 
-- server, username, password, database, query_timeout to themselves
-- pool to pool_size;
-- ssl.* to common SSL options https://www.emqx.io/docs/en/v5.0/network/overview.html#tls-for-external-resource-access ;
-- password_hash to common password_hash_algorithm parameters.
-- auth_query to query.  ${var}-style [placeholders](https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#authentication-placeholders) should be used. Query should fetch at least password or password_hash column and additionally salt and is_superuser columns;
-- super_query is not used anymore, provide is_superuser column in query instead.
+-  `server`, `username`, `password`, `database`, `query_timeout` are retained.
+- `pool` is changed to `pool_size`.
+- `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](https://docs.emqx.com/en/enterprise/v5.1/network/overview.html#tls-for-external-resource-access).
+- `password_hash` is changed to`common password_hash_algorithm` parameters.
+- `auth_query` is changed to `query`.  `${var}`-style [placeholders](https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#authentication-placeholders) should be used. Query should fetch at least `password` or `password_hash` column and optionally `salt` and `is_superuser` columns.
+- `super_query` is not used anymore, `is_superuser` column is provided in query instead.
 
-auto_reconnect may be used to reconnect to MySQL automatically on failure.
+You can use `auto_reconnect`  to reconnect to MySQL automatically on failure.
 
 #### Example
 
-4.4
+EMQX 4.4
 
 ```
 auth.mysql.server = 127.0.0.1:3306
@@ -205,7 +204,7 @@ auth.mysql.ssl.verify = true
 auth.mysql.ssl.server_name_indication = mymysql
 ```
 
-5.1
+EMQX 5.1
 
 ```
 authentication {
@@ -249,18 +248,18 @@ authentication {
   backend = postgresql
 ```
 
-- server, username, password, database.
-- query_timeout is not used anymore.
-- encoding is not used anymore.
-- pool to pool_size;
-- ssl.* to common SSL options https://www.emqx.io/docs/en/v5.0/network/overview.html#tls-for-external-resource-access ;
-- password_hash to common password_hash_algorithm parameters.
-- auth_query to query.  ${var}-style [placeholders](https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#authentication-placeholders) should be used. Query should fetch at least password or password_hash column and additionally salt and is_superuser columns;
-- super_query is not used anymore, provide is_superuser column in query instead.
+- `server`, `username`, `password`, `database` are retained.
+- `query_timeout` is not used anymore.
+- `encoding` is not used anymore.
+- `pool` is changed to `pool_size`.
+- `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](https://docs.emqx.com/en/enterprise/v5.1/network/overview.html#tls-for-external-resource-access).
+- `password_hash` is changed to common `password_hash_algorithm` parameters.
+- `auth_query` is changed to `query`.  `${var}`-style [placeholders](https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#authentication-placeholders) should be used. Query should fetch at least `password` or `password_hash` column and optionally `salt` and `is_superuser` columns.
+- `super_query` is not used anymore, `is_superuser` column is proviced in query instead.
 
 #### Example
 
-4.4
+EMQX 4.4
 
 ```
 auth.pgsql.server = 127.0.0.1:5432
@@ -283,7 +282,7 @@ auth.pgsql.ssl.verify = true
 auth.pgsql.ssl.server_name_indication = mypgsql
 ```
 
-5.1
+EMQX 5.1
 
 ```
 authentication {
@@ -326,24 +325,24 @@ mechanism = password_based
 backend = mongodb
 ```
 
-- type to mongo_type field; possible values are single, rs, sharded . unknown value is not available anymore.
-- server
-  - for rs, sharded to servers
-  - for single to server
-- srv_record, username, password, auth_source, database, w_mode, topology, collection to themselves;
-- r_mode is availalable only for rs type.
-- pool to pool_size;
-- ssl.* to common SSL options https://www.emqx.io/docs/en/v5.0/network/overview.html#tls-for-external-resource-access ;
-- auth_query.selector to filter. The filter should be not a string, but the whole selector data structure,  ${var}-style [placeholders](https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#authentication-placeholders) may be used in selector values.
-- auth_query.salt_field to salt_field
-- auth_query.super_field to is_superuser_field
-- super_query is not used anymore. Provide is_superuser_field field in the documents fetched with filter together with is_superuser_field setting.
-- password_hash to common password_hash_algorithm parameters.
-- query_timeout is not used.
+- `type` is changed to `mongo_type` field. Possible values are `single`, `rs`, `sharded`. Unknown value is not available anymore.
+- `server`
+  - For `rs`, `sharded` to `servers`
+  - For `single` to `server`
+- `srv_record`, `username`, `password`, `auth_source`, `database`, `w_mode`, `topology`, `collection` are retained.
+- `r_mode` is availalable only for `rs` type.
+- `pool` is changed to `pool_size`.
+- `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](https://docs.emqx.com/en/enterprise/v5.1/network/overview.html#tls-for-external-resource-access).
+- `auth_query.selector` is changed to `filter`. The filter should not be a string, but the whole selector data structure.  `${var`}-style [placeholders](https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#authentication-placeholders) may be used in selector values.
+- `auth_query.salt_field` is changed to `salt_field`.
+- `auth_query.super_field` is changed to `is_superuser_field`.
+- `super_query` is not used anymore. Provide `is_superuser_field` field in the documents fetched with `filter` together with `is_superuser_field` setting.
+- `password_hash` is changed to `common password_hash_algorithm` parameters.
+- `query_timeout` is not used.
 
 #### Example
 
-4.4
+EMQX 4.4
 
 ```
 auth.mongo.type = single
@@ -380,7 +379,7 @@ auth.mongo.super_query.super_field = is_superuser
 auth.mongo.super_query.selector = username=%u, clientid=%c
 ```
 
-5.1
+EMQX 5.1
 
 ```
 authentication {
@@ -431,36 +430,36 @@ authentication {
 mechanism = jwt
 ```
 
-- secret, from, verify_claims, acl_claim_name, refresh_interval  to themselves
-- pubkey to public_key
-- jwks to endpoint
-- signature_format is no more available
+-  `secret`, `from`, `verify_claims`, `acl_claim_name`, `refresh_interval` are retained.
+- `pubkey ` is changed to `public_key`.
+- `jwks` is changed to `endpoint`.
+- `signature_format` is no more available.
 
-In verifiy_claims, ${var}-style placeholders (${username} and ${clientid}) should be used in selector values instead of %X ones.
+In `verifiy_claims`, `${var}`-style placeholders (``${username}`` and `${clientid}`) should be used in selector values instead of `%X` ones.
 
 Additional parameters:
 
-- use_jwks whether to fetch keys from JWKS
-- algorithm — public-key|hmac-based which type of signature to verify.
-- secret_base64_encoded — specifies secret format
-- pool_size — number of connections to JWKS server
-- ssl SSL options for connecting to JWKS server
+- `use_jwks`: whether to fetch keys from JWKS
+- `algorithm`:  `public-key|hmac-based` which type of signature to verify.
+- `secret_base64_encoded`: specifies secret format
+- `pool_size`: number of connections to JWKS server
+- `ssl` SSL options for connecting to JWKS server
 
 Not all sets of parameters are allowed. 
 
-Unlike 4.4, not all combinations of  (secret,secret_base64_encoded,public_key,endpoint, pool_size,refresh_interval,ssl ) parameters are allowed. use_jwks and algorithm identify the available sets:
+Unlike EMQX 4.4, not all combinations of  (``secret`,` secret_base64_encoded`,`public_key`,` endpoint`, `pool_size`, `refresh_interval` , `ssl` ) parameters are allowed. `use_jwks` and `algorithm` identify the available sets:
 
-With use_jwks=true and algorithm=public-key:  endpoint, pool_size,refresh_interval,ssl
+With `use_jwks=true` and `algorithm=public-key`:  `endpoint`, `pool_size`,``refresh_interval`, `ssl`
 
-With use_jwks=false and algorithm=public-key:  public_key
+With `use_jwks=false` and a`lgorithm=public-key`:  `public_key`
 
-With use_jwks=false and algorithm=hmac-based: secret,secret_base64_encoded
+With `use_jwks=false` and `algorithm=hmac-based`: `secret`, `secret_base64_encoded`
 
-Combination use_jwks=true and algorithm=hmac-based is invalid.
+Combination `use_jwks=true` and `algorithm=hmac-based` is invalid.
 
 #### Example
 
-4.4
+EMQX 4.4
 
 ```
 auth.jwt.jwks = https://127.0.0.1:8080/jwks
@@ -474,7 +473,7 @@ auth.jwt.verify_claims.username = %u
 auth.jwt.acl_claim_name = acl
 ```
 
-5.1
+EMQX 5.1
 
 ```
 {
@@ -502,23 +501,23 @@ mechanism = password_based
 backend = http
 ```
 
-- method, pool_size, connect_timeout, enable_pipelining to themselves
-- auth_req.url to url 
-- auth_req.headers to headers 
-- auth_req.params to body 
-- timeout to request_timeout
-- ssl.* to common SSL options https://www.emqx.io/docs/en/v5.0/network/overview.html#tls-for-external-resource-access;
-- super_req is not available. Provide is_superuser field in the service response instead.
+-  `method`, `pool_size`, `connect_timeout`, and `enable_pipelining` are retained.
+-  `auth_req.url` is changed to `url`.
+-  `auth_req.headers` is changed to `headers`.
+-  `auth_req.params` is changed with `body`.
+-  `timeout` is changed to `request_timeout`.
+- `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](https://docs.emqx.com/en/enterprise/v5.1/network/overview.html#tls-for-external-resource-access).
+- `super_req` is not available. Provide `is_superuser` field in the service response instead.
 
-Unlike 4.4 url, headers and body parameters allow placeholders.   
+Unlike version 4.4,  `url`, `headers`, and `body` parameters allow placeholders.   
 
-In 5.1, body is not a string, but a map. It is serialized using JSON or X-WWW-Form-Urlencoded format (for post requests) or as query params (for get requests).
+In version 5.1, `body` is not a string, but a map. It is serialized using JSON or X-WWW-Form-Urlencoded format (for post requests) or as query params (for get requests).
 
-Unlike 4.4, HTTP authentication only respects responses with successful HTTP code (2XX) and takes the resolution from the response body (from result) field.  
+Unlike version 4.4, HTTP authentication only respects responses with successful HTTP code (2XX) and takes the resolution from the response body (from `result`) field.  
 
 #### Example
 
-4.4
+EMQX 4.4
 
 ```
 auth.http.auth_req.url = http://127.0.0.1:80/mqtt/auth
@@ -542,7 +541,7 @@ auth.http.ssl.verify = true
 auth.http.ssl.server_name_indication = myhttp
 ```
 
-5.1
+EMQX 5.1
 
 ```
 {
@@ -581,13 +580,13 @@ auth.http.ssl.server_name_indication = myhttp
 
 ## Authorization
 
-### File-based
+### File-Based
 
-In dsl, pubsub is renamed to all.
+In dsl, `pubsub` is renamed to `all`.
 
 #### Example
 
-4.3
+EMQX 4.3
 
 ```
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
@@ -599,7 +598,7 @@ In dsl, pubsub is renamed to all.
 {allow, all}.
 ```
 
-5.1
+EMQX 5.1
 
 ```
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
@@ -615,13 +614,13 @@ In dsl, pubsub is renamed to all.
 
 #### Example
 
-4.4
+EMQX 4.4
 
 ```
 # No settings
 ```
 
-5.1
+EMQX 5.1
 
 ```
 {
@@ -632,7 +631,7 @@ In dsl, pubsub is renamed to all.
 
 ### JWT
 
-This is the implicit ACL based on claims fetched during JWT authentication. In ACL claims, ${variable} placeholders instead of %X ones should be used.
+This is the implicit ACL based on claims fetched during JWT authentication. In ACL claims, `${variable}` placeholders instead of `%X` ones should be used.
 
 ### HTTP
 
@@ -640,22 +639,22 @@ This is the implicit ACL based on claims fetched during JWT authentication. In A
 type = http
 ```
 
-- method, pool_size, connect_timeout, enable_pipelining to themselves
-- acl_req.url to url 
-- acl_req.headers to headers 
-- acl_req.params to body 
-- timeout to request_timeout
-- ssl.* to common SSL options https://www.emqx.io/docs/en/v5.0/network/overview.html#tls-for-external-resource-access;
+- `method`, `pool_size`, `connect_timeout`, `enable_pipelining` are retained.
+- `acl_req.url` is changed to `url`. 
+- `acl_req.headers` is changed to `headers`. 
+- `acl_req.params` is changed to `body`. 
+- `timeout` to `request_timeout`.
+- `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](https://docs.emqx.com/en/enterprise/v5.1/network/overview.html#tls-for-external-resource-access).
 
-Unlike 4.4 url, headers and body parameters allow placeholders.   
+Unlike 4.4,  `url`, `headers`, and `body` parameters allow placeholders.   
 
-In 5.1, body is not a string, but a map. It is serialized using JSON or X-WWW-Form-Urlencoded format (for post requests) or as query params (for get requests).
+In 5.1, `body` is not a string, but a map. It is serialized using JSON or X-WWW-Form-Urlencoded format (for post requests) or as query params (for get requests).
 
-Unlike 4.4, HTTP authorization only respects responses with successful HTTP code (2XX) and takes the resolution from the response body (from result) field.  
+Unlike 4.4, HTTP authorization only respects responses with successful HTTP code (2XX) and takes the resolution from the response body (from `result`) field.  
 
 #### Example
 
-4.4
+EMQX 4.4
 
 ```
 auth.http.acl_req.url = http://127.0.0.1:80/mqtt/acl
@@ -679,7 +678,7 @@ auth.http.ssl.verify = true
 auth.http.ssl.server_name_indication = myhttp
 ```
 
-5.1
+EMQX 5.1
 
 ```
 {
@@ -720,25 +719,22 @@ auth.http.ssl.server_name_indication = myhttp
   type = redis
 ```
 
-- type to redis_type 
-  - for type single:
-    - server to server;
-  - for type sentine
-    - server to servers;
-  - for type sentinel:
-    - server to servers;
-- database to database (except cluster type, there is no this option for cluster anymore);
-- pool to pool_size;
-- password to password;
-- query_timeout is not used anymore;
-- ssl.* to common SSL options https://www.emqx.io/docs/en/v5.0/network/overview.html#tls-for-external-resource-access ;
-- acl_cmd to cmd. ${var}-style [placeholders](https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#authentication-placeholders) should be used.
-
 auto_reconnect may be used to reconnect to Redis automatically on failure.
+
+- `type` is changed to `redis_type`.
+  - For type `single`,  `server` is changed to `servers`.
+  - For type `sentinel`,  `server` is changed to `servers`.
+  - For type `cluster`,  `database` option is no longer available.
+- `database` is changed to `database` (except for the `cluster` type; this option is not available for clusters anymore).
+- `pool` is changed to `pool_size`.
+- `password` is changed to `password`.
+- `query_timeout` is no longer used.
+- `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](https://docs.emqx.com/en/enterprise/v5.1/network/overview.html#tls-for-external-resource-access).
+- `auth_cmd` is changed to `cmd`.  `${var}`-style [placeholders](https://docs.emqx.com/en/enterprise/v5.1/access-control/authn/authn.html#authentication-placeholders) should be used in the command. 
 
 #### Example
 
-4.4
+EMQX 4.4
 
 ```
 auth.redis.type = single
@@ -759,7 +755,7 @@ auth.redis.ssl.verify = true
 auth.redis.ssl.server_name_indication = myredis
 ```
 
-5.1
+EMQX 5.1
 
 ```
 {
@@ -792,22 +788,22 @@ auth.redis.ssl.server_name_indication = myredis
   type = mysql
 ```
 
-- server, username, password, database, query_timeout to themselves
-- pool to pool_size;
-- ssl.* to common SSL options https://www.emqx.io/docs/en/v5.0/network/overview.html#tls-for-external-resource-access ;
-- acl_query to query.  ${var}-style [placeholders](https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#authentication-placeholders) should be used
+- `server`, `username`, `password`, `database`, `query_timeout` are retained.
+- `pool` is changed to `pool_size`.
+- `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](https://docs.emqx.com/en/enterprise/v5.1/network/overview.html#tls-for-external-resource-access).
+- `acl_query` is changed to query.  `${var}`-style [placeholders](https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#authentication-placeholders) should be used.
 
-auto_reconnect may be used to reconnect to MySQL automatically on failure.
+You can use `auto_reconnect` to reconnect to MySQL automatically on failure.
 
 Storage schema is changed.
 
-In 4.4, the query should fetch rows with columns [Allow, IpAddr, Username, ClientId, Access, Topic] under any name exactly in this order.
+In EMQX 4.4, the query should fetch rows with columns `[Allow, IpAddr, Username, ClientId, Access, Topic]` under any name exactly in this order.
 
-In 5.1, the query should fetch rows with columns permission, action, topic in any order but under exactly these names. The “who“ part (IpAddr, Username, ClientId) is now suggested to pe a part of the query.
+In EMQX 5.1, the query should fetch rows with columns `permission, action, topic` in any order but under exactly these names. The “who“ part (`IpAddr, Username, ClientId`) is now suggested to be a part of the query.
 
 #### Example
 
-4.4
+EMQX 4.4
 
 ```
 auth.mysql.server = 127.0.0.1:3306
@@ -827,7 +823,7 @@ auth.mysql.ssl.verify = true
 auth.mysql.ssl.server_name_indication = mymysql
 ```
 
-5.1
+EMQX 5.1
 
 ```
 {
@@ -864,22 +860,22 @@ auth.mysql.ssl.server_name_indication = mymysql
 type = postgresql
 ```
 
-- server, username, password, database to themselves.
-- query_timeout is not used anymore.
-- encoding is not used anymore.
-- pool to pool_size;
-- ssl.* to common SSL options https://www.emqx.io/docs/en/v5.0/network/overview.html#tls-for-external-resource-access ;
-- acl_query to query.  ${var}-style [placeholders](https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#authentication-placeholders) should be used. 
+- `server`, `username`, `password`, `database` are retained.
+- `query_timeout` is not used anymore.
+- `encoding` is not used anymore.
+- `poo`l is changed to `pool_size`.
+- `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](https://docs.emqx.com/en/enterprise/v5.1/network/overview.html#tls-for-external-resource-access).
+- `acl_query` is changed to `query`.  `${var}`-style [placeholders](https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#authentication-placeholders) should be used. 
 
 Storage schema is changed.
 
-In 4.4, the query should fetch rows with columns [Allow, IpAddr, Username, ClientId, Access, Topic] under any name exactly in this order.
+In EMQX 4.4, the query should fetch rows with columns `[Allow, IpAddr, Username, ClientId, Access, Topic]` under any name exactly in this order.
 
-In 5.1, the query should fetch rows with columns permission, action, topic in any order but under exactly these names. The “who“ part (IpAddr, Username, ClientId) is now suggested to pe a part of the query.
+In EMQX 5.1, the query should fetch rows with columns `permission, action, topic` in any order but under exactly these names. The “who“ part `(IpAddr, Username, ClientId)` is now suggested to be a part of the query.
 
 ### Example
 
-4.4
+EMQX 4.4
 
 ```
 auth.pgsql.server = 127.0.0.1:5432
@@ -900,7 +896,7 @@ auth.pgsql.ssl.verify = true
 auth.pgsql.ssl.server_name_indication = mypgsql
 ```
 
-5.1
+EMQX 5.1
 
 ```
 {
@@ -936,20 +932,20 @@ auth.pgsql.ssl.server_name_indication = mypgsql
 type = mongodb
 ```
 
-- type to mongo_type field; possible values are single, rs, sharded . unknown value is not available anymore.
-- server
-  - for rs, sharded to servers
-  - for single to server
-- srv_record, username, password, auth_source, database, w_mode, topology, collection to themselves;
-- r_mode is availalable only for rs type.
-- pool to pool_size;
-- ssl.* to common SSL options https://www.emqx.io/docs/en/v5.0/network/overview.html#tls-for-external-resource-access ;
-- acl_query.selector to filter. The filter should be not a string, but the whole selector data structure,  ${var}-style [placeholders](https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#authentication-placeholders) may be used in selector values.
-- query_timeout is not used.
+- `type` is changed to `mongo_type` field. Possible values are `single`, `rs`, `sharded`. Unknown value is not available anymore.
+- `server`
+  - For `rs`, `sharded` to `servers`
+  - For `single` to `server`
+- `srv_record`, `username`, `password`, `auth_source`, `database`, `w_mode`, `topology`, `collection` are retained.
+- `r_mode` is availalable only for `rs` type.
+- `pool` is changed to `pool_size`.
+- `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](https://docs.emqx.com/en/enterprise/v5.1/network/overview.html#tls-for-external-resource-access).
+- `auth_query.selector` is changed to `filter`. The filter should not be a string, but the whole selector data structure.  `${var`}-style [placeholders](https://www.emqx.io/docs/en/v5.0/access-control/authn/authn.html#authentication-placeholders) may be used in selector values.
+- `query_timeout` is not used.
 
 Storage schema is changed.
 
-In 4.4, the resulting documents should contain topics lists by action key, like in Redis or JWT:
+In EMQX 4.4, the resulting documents should contain topics lists by action key, like in Redis or JWT:
 
 ```
 {
@@ -959,11 +955,11 @@ In 4.4, the resulting documents should contain topics lists by action key, like 
 }
 ```
 
-In 5.5, the documents should contain individual rules with permission, action, topics fields. Note that topics should be an array of topics.
+In EMQX 5.5, the documents should contain individual rules with `permission`, `action`, `topics` fields. Note that `topics` should be an array of topics.
 
 #### Example
 
-4.4
+EMQX 4.4
 
 ```
 auth.mongo.type = single
@@ -993,7 +989,7 @@ auth.mongo.acl_query.collection = mqtt_user
 auth.mongo.acl_query.selector = username=%u, clientid=%c
 ```
 
-5.1
+EMQX 5.1
 
 ```
 {
@@ -1027,3 +1023,4 @@ auth.mongo.acl_query.selector = username=%u, clientid=%c
   }
 }
 ```
+
