@@ -1,226 +1,212 @@
-# Data Integration Compatibility between e5.1 and e4.4
+# Data Integration Compatibility Between EMQX 5.1 and EMQX 4.4
 
-e5.1 completely upgraded the concept of Data Integration
+The whole concept of Data Integration was upgraded in EMQX 5.1.
 
-1. The previous process of ***Rule -> Action -> Resources*** has been modified to **Rule -> Bridges.** 
+- The previous **Rule** -> **Action** -> **Resources** process is changed to **Data Bridge** -> **Rules**. 
 
-   1. In e5.1, When adding an Action for a certain rule in 5.1, you need to create a bridge first. and modify this SQL template of the bridge to adapt the output of the rules. But in e4.4, there is a configuration entity for Action here.
+   In EMQX 5.1, when adding an action for a certain rule, you need to create a data bridge first and modify the SQL template of the bridge to adapt the output of the rules. But in EMQX 4.4, there was a configuration entity for Action.
 
-      e5.1: Configure the Action(Bridge) for a Rule
+   Configure the Action(Bridge) for a Rule in EMQX 5.1:
 
-      <img src="./assets/config-action-for-rule.png" alt="config-action-for-rule" style="zoom:67%;" />
+   <img src="./assets/config-action-for-rule.png" alt="config-action-for-rule" style="zoom:67%;" />
 
-2. Move the Modules/Message Publish into the Bridges
+- The **Modules** -> **Message Publish** is moved into the **Data Bridge**.
 
-   e4.4: The Message Publish Modules
+   The Message Publish Module in EMQX 4.4:
 
    <img src="./assets/message-publish-modules.png" alt="message-publish-modules" style="zoom:67%;" />
 
-3. Removed the “Save offline Message“ features
+- [Save Offline Message](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html) features in EMQX 4.4 are removed.
 
-The Save Offline Message features in e4.4 docs
+- [Get Subscriptions](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html) features in EMQX 4.4 are removed.
 
-\4. Removed the “Get Subscriptions“ features
+- Tablestore, DolphinDB, Lindorm, and SAP Event Mesh data bridges are no longer supported.
 
-The Get Subscription features in e4.4 docs
+- `EMQX Bridge` as a resource type is no longer supported.
 
-\5. Tablestore, DolphinDB, Lindorm, SAP Event Mesh is not supported now
+  <img src="./assets/mqtt-bridge-resource.png" alt="mqtt-bridge-resource" style="zoom:50%;" />
 
-\6. Removed the “EMQX Bridge“ feature
+## Common Incompatibility Changes
 
+- All SSL-related configuration options (`ssl`, `cafile`, `keyfile`, `certfile`, `verify`) are changed to a unified structure and name. For example, `ssl.cacertfile`, `ssl.certfile`, `ssl.keyfile`, `ssl.verify`, and etc.
+- There is no equivalent functionality as the feature of saving offline messages to an external database and retrieving them when a client subscribes to topics (through the `$events/session_subscribed` event and bridge rule action).
 
+## Incompatibility in Functionality and Configuration Items
 
-## Common incompatibility issues
-
-- all SSL-related confs (ssl , cafile, keyfile, certfile, verify) → changed to a unified structure and name. i.e: ssl.cacertfile ssl.certfile ssl.keyfile ssl.verify and more ssl options
-- There’s no equivalent of the “save offline messages to” feature of fetching messages from external databases when a client subscribes to topics (i.e.: the $events/session_subscribed event + bridge rule action to read them).
-
-## Incompatibility in functionality, configuration items
+This section listed the changes in functionality and configuration items for each data bridge.
 
 ### Cassandra
 
-https://emqx.atlassian.net/browse/EMQX-9925 
-
-**Configuration Names:**
-
-- Changed nodes to servers
+The configuration name `nodes` is changed to `servers`.
 
 ### Kafka Producer
 
-- Changed 
-  - servers → bootstrap_hosts
-  - authentication_mechanism → authentication
-  - sync_timeout → sync_query_timeout
-  - send_buffer → socket_opts.sndbuf
-  - tcp_keepalive → socket.tcp_keepalive
-  - strategy → partition_strategy
-  - cache_mode → kafka.buffer.mode
-  - Buffer mode enum memory+disk → hybrid
-  - highmem_drop → kafka.buffer.memory_overload_protection
-- No equivalent in e5.1
-  - query_api_versions
-  - kafka_ext_headers
-- Nested replayq related options (e.g.: max_batch_bytes) under kafka key 
+- Changed configuration items: 
+  - `servers` to `bootstrap_hosts`
+  - `authentication_mechanism` to `authentication`
+  - `sync_timeout` to `sync_query_timeout`
+  - `send_buffer` to `socket_opts.sndbuf`
+  - `tcp_keepalive` to `socket.tcp_keepalive`
+  - `strategy` to `partition_strategy`
+  - `cache_mode` to `kafka.buffer.mode`
+  - Buffer mode enum `memory+disk` to `hybrid`
+  - `highmem_drop` to `kafka.buffer.memory_overload_protection`
+- No equivalent in EMQX 5.1
+  - `query_api_versions`
+  - `kafka_ext_headers`
+- Nested `replayq` related options (e.g.: `max_batch_bytes`) under `kafka` key 
 - Now, message key is templatable, whereas before it could be only a few option.
 
 ### Kafka Consumer
 
-- Changed:
-  - servers → bootstrap_hosts
-  - max_bytes → kafka.max_batch_bytes
-  - offset_reset_policy enum: {reset_to_latest, reset_by_subscriber} → {latest, earliest}
-- There’s no pool_size in e5.1: the number of workers is set automatically by the lib depending on the number of partitions in the topic(s).
-- In e4.4, only plain SASL was supported for authentication.  In e5.1, we support the same mechanisms as Kafka Producer.
+- Changed configuration items:
+  - `servers` to `bootstrap_hosts`
+  - `max_bytes` to `kafka.max_batch_bytes`
+  - `offset_reset_policy `enum: `{reset_to_latest, reset_by_subscriber}` to `{latest, earliest}`
+- There’s no `pool_size` in EMQX 5.1: the number of workers is set automatically by the lib depending on the number of partitions in the topic(s).
+- In EMQX 4.4, only plain SASL was supported for authentication.  In EMQX 5.1, the same mechanisms as Kafka Producer is supported.
 
 ### Pulsar Consumer
 
-There’s no Pulsar Consumer in e5.1.0.
+There is no Pulsar Consumer in EMQX 5.1.0.
 
 ### Pulsar Producer
 
-- In e5.1, the bridge only produces messages using the driver’s async API, without option for sync API.
-- Now, message key is templatable, whereas before it could be only a few option.
-- Changed:
-  - Buffer mode enum memory+disk → hybrid
-  - max_total_bytes → buffer.per_partition_limit
-  - segment_bytes → buffer.segment_bytes
+- In EMQX 5.1, the bridge only produces messages using the driver’s async API, without an option for sync API.
+- Now, there is a template for the message key. Before, there are only a few options.
+- Changed configuration items:
+  - Buffer mode enum `memory+disk` to `hybrid`
+  - `max_total_bytes` to `buffer.per_partition_limit`
+  - `segment_bytes` to `buffer.segment_bytes`
 
 ### Redis
 
-#### Common to all 3 types
+The configuration item `cmd` is changed to `command_template` (common to all 3 Redis Modes).
 
-- cmd → command_template
+Changes for "Cluster" mode:
 
-#### Cluster
-
-- There’s no database field in e5.1.
-- There’s no equivalent for ttl (offline messages from e4.4) in e5.1.
+- There is no `database` field in EMQX 5.1.
+- There is no equivalent for `ttl `(offline messages from EMQX 4.4) in EMQX 5.1.
 
 ### Postgres
 
-- No differences in connector
-- Action:
-  - Batching configuration has moved to resource_opts.*.
-    - enable_batch = true (e4.4) = resource_opts.batch_size > 1 (e5.1)
-    - batch_time is hidden and defaults to 0 in e5.1
-    - sql → prepare_statement
+- No differences in connector.
+- The batching configuration has moved to `resource_opts.*` in the Action configuration.
+  - `enable_batch = true` (EMQX 4.4) to `resource_opts.batch_size > 1` (EMQX 5.1)
+  - `batch_time` is hidden and defaults to `0` in EMQX 5.1.
+  - `sql ` to `prepare_statement`.
 
-## MySQL
+### MySQL
 
-- Changed
-  - user → username
-- Action:
-  - Batching configuration has moved to resource_opts.*.
-    - enable_batch = true (e4.4) = resource_opts.batch_size > 1 (e5.1)
-    - batch_time is hidden and defaults to 0 in e5.1
-    - sql → prepare_statement
+- `user` is changed to `username`.
+- The batching configuration has moved to `resource_opts.*` in the Action configuration.
+  - `enable_batch = true` (EMQX 4.4) to `resource_opts.batch_size > 1` (EMQX 5.1)
+  - `batch_time` is hidden and defaults to `0` in EMQX 5.1.
+  - `sql ` to `prepare_statement`.
 
 ### MQTT
 
-- Changed
-  - address → server
-  - pool_size → {egress,ingress}.pool_size
-  - reconnect_interval → resource_opts.health_check_interval
-- Without equivalent in e5.1:
-  - append 
-  - mountpoint
-- disk_cache = on (e4.4) would be somewhat equivalent to resource_opts.buffer_mode =  volatile_offload, but the latter is a hidden configuration (it defaults to memory_only).
-- There’s no RPC MQTT bridge equivalent in e5.1.
-- Actions
-  - forward_topic → egress.remote.topic
-  - payload_tmpl → payload
+- Changed configuration items:
+  - `address` to `server`
+  - `pool_size` to `{egress,ingress}.pool_size`
+  - `reconnect_interval` to `resource_opts.health_check_interval`
+- No equivalent in EMQX 5.1:
+  - `append`
+  - `mountpoint`
+- `disk_cache = on` (in EMQX 4.4) can be considered somewhat equivalent to setting `resource_opts.buffer_mode =  volatile_offload`, but the latter is a hidden configuration option that defaults to `memory_only`.
+- There is no RPC MQTT bridge equivalent in EMQX 5.1.
+- Changed configuration items in Actions:
+  - `forward_topic` to `egress.remote.topic`
+  - `payload_tmpl` to `payload`
 
 ### InfluxDB
 
-#### Common to both API v1 and API v2
+The following changes are common to both API v1 and API v2.
 
-- host + port -> server
-- https_enabled & ssl options like tls_version → ssl
-- Actions
-  - There’s no equivalent for int_suffix in e5.1; the type is directly specified in write_syntax.
-  - measurement + timestamp + fields + tags → write_syntax
+- Changed bridge configuration items:
+  - `host` and `port` are changed to `server`.
+  - `https_enabled` and ssl options like `tls_version` are changed to `ssl`.
+
+- Changed configurations in Actions:
+  - There is no equivalent for `int_suffix` in EMQX 5.1; the type is directly specified in `write_syntax`.
+  - `measurement`, `timestamp`, `fields`, `tags` are changed to `write_syntax`.
 
 ### Tablestore, DolphinDB, Lindorm, SAP Event Mesh
 
-There are no equivalent bridges in e5.1.
+There are no equivalent data bridges in EMQX 5.1.
 
 ### Clickhouse
 
-- Changed
-  - server → url
-  - user → username
-  - key → password
+Changed configuration items:
+- `server` to `url`
+- `user` to `username`
+- `key` to `password`
 
 ### Dynamo
 
-- No equivalent in 5.1
-  - region
-- Now we have payload_template.
+- No equivalent for `region` in EMQX 5.1.
+- Now there is `payload_template`.
 
 ### HStreamDB
 
-- Changed
-  - server → url
-- No equivalent in 5.1
-  - grpc_timeout
-  - partition_key
-  - grpc_flush_timeout
+- The configuration item `server` is changed to `url`.
+- The following items have no equivalents in EMQX 5.1:
+  - `grpc_timeout`
+  - `partition_key`
+  - `grpc_flush_timeout`
 
 ### IoTDB
 
-- Changed
-  - host + rest_port -> base_url
-  - request_timeout → resource_opts.request_ttl
+Changed configuration items:
+- `host`, `rest_port` to `base_url`
+- `request_timeout` to `resource_opts.request_ttl`
 
 ### MongoDB
 
-- Changed
-  - login → username
-  - connectTimeoutMS → connect_timeout_ms
-  - rs_set_name → replica_set_name
-  - payload_tmpl → payload_template
+Changed configuration items:
+- `login` to `username`
+- `connectTimeoutMS` to `connect_timeout_ms`
+- `rs_set_name` to `replica_set_name`
+- `payload_tmpl` to `payload_template`
 
 ### OpenTSDB
 
-- Changed
-  - sync → resource_opts.query_mode = sync
+`sync` is changed to `resource_opts.query_mode = sync`.
 
 ### Oracle
 
-- Changed
-  - user → username
+`user` is changed to `username`.
 
 ## SQLServer
 
-No incompatibilities found.
+No incompatibilities were found.
 
 ### TDengine
 
-- Changed
-  - host + port → server
-  - dbname → database
+Changed configuration items:
+- `host`, `port` to `server`
+- `dbname` to `database`
 
 ### GCP PubSub Producer
 
-- Deprecated
-  - flush_mode
-  - flush_period_ms
+Deprecated configuration items:
+- `flush_mode`
+- `flush_period_ms`
 
 ### RabbitMQ Producer
 
-- Changed
-  - server → host + port
-  - payload_tmpl → payload_template
-  - durable  → delivery_mode
-- No equivalent in 5.1
-  - exchange_type
+- Changed configuration items:
+  - `server` to `host` and `port`
+  - `payload_tmpl` to `payload_template`
+  - `durable`  to `delivery_mode`
+- `exchange_type` has no equivalent in EMQX 5.1.
 
 ### RocketMQ
 
-- No equivalent in 5.1
-  - namespace
-  - strategy
-  - key
-- Changed
-  - type → resource_opts.query_mode
-  - payload_tmpl → payload_template
+- The following configuration items have no equivalents in EMQX 5.1:
+  - `namespace`
+  - `strategy`
+  - `key`
+- Changed configuration items:
+  - `type` to `resource_opts.query_mode`
+  - `payload_tmpl` to `payload_template`

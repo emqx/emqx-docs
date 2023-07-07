@@ -2,17 +2,17 @@
 
 EMQX 5.1 introduces several changes that may affect compatibility with older versions of EMQX. These breaking changes are also documented in the EMQX 5.1 release notes.
 
-This document is intended for EMQX Enterprise customers and internal teams who are planning to upgrade from v4.x to v5.1 and want to understand potential issues they may encounter.
+This document is intended for EMQX Enterprise customers and internal teams who are planning to upgrade from EMQX 4.x to EMQX 5.1 and want to understand potential issues they may encounter.
 
 ::: tip
 
-It is recommended to upgrade to the latest version of 4.4 before proceeding with the upgrade to 5.1.
+It is recommended to upgrade to the latest version of 4.4 before proceeding with the upgrade to version 5.1.
 
 :::
 
 ## Summary
 
-Compared to v4.4, the upgrade to v5.1 introduces significant changes, particularly in terms of various concepts and mechanisms, surpassing the level of changes seen in previous upgrades from v2.x to v3.x and from v3.x to v4.x.
+Compared to EMQX 4.4, the upgrade to EMQX 5.1 introduces significant changes, particularly in terms of various concepts and mechanisms, surpassing the level of changes seen in previous upgrades from EMQX 2.x to EMQX 3.x and from EMQX 3.x to EMQX 4.x.
 
 In conclusion, there are several points that need to be noted:
 
@@ -31,19 +31,19 @@ In conclusion, there are several points that need to be noted:
 
 - Format:
 
-  - v4.x: Flat format with `path.to.key = value`.
-  - v5.1: Supports nested format with `path{to{ key = value }}`.
+  - EMQX 4.x: Flat format with `path.to.key = value`.
+  - EMQX 5.1: Supports nested format with `path{to{ key = value }}`.
 - Sources:
-  - v4.x:
+  - EMQX 4.x:
     - Multiple files, such as `emqx.conf`, `listeners.conf`, `zones.conf`, etc.
     - Dynamic updates are stored in Mnesia. Once enabled, files cannot be updated for config changes.
-  - v5.1:
+  - EMQX 5.1:
     - `emqx.conf` for static configs.
     - `cluster.hocon` for dynamic updates.
 
 ## Log File Format
 
-Log files follow the same format, but the log content style has slight differences. The log format in v5.1 is more indexer-friendly.
+Log files follow the same format, but the log content style has slight differences. The log format in EMQX 5.1 is more indexer-friendly.
 
 ## Distribution and Cluster
 
@@ -55,10 +55,10 @@ Log files follow the same format, but the log content style has slight differenc
 ## MQTT
 
 - The `$queue` prefix for shared subscriptions is not supported.
-- In v5.0, MQTT clients can no longer see EMQX cluster as a single black box due to eventual consistency. Subscribers may or may not receive published messages from other clients after the subscription is confirmed.
-- In v5.0, keepalive (receiving PING) requires a full MQTT control Packet instead of a few bytes.
-- In v5.0, the TLS listener does not support `partial_chain` and `verify_peer_ext_key_usage`.
-- The retry interval is 30s in v5.0 but disabled (0) in v4.4. The default config file in v4.4 has a retry interval of 30s.
+- In EMQX 5.0, MQTT clients can no longer see EMQX cluster as a single black box due to eventual consistency. Subscribers may or may not receive published messages from other clients after the subscription is confirmed.
+- In EMQX 5.0, keepalive (receiving PING) requires a full MQTT control Packet instead of a few bytes.
+- In EMQX 5.0, the TLS listener does not support `partial_chain` and `verify_peer_ext_key_usage`.
+- The retry interval is 30s in version 5.0 but disabled (0) in version 4.4. The default config file in version 4.4 has a retry interval of 30s.
 
 ## MQTT over QUIC
 
@@ -74,10 +74,10 @@ All authentication/authorization providers now use placeholders instead of the p
 
 - The superuser query has been removed. There should be a single query returning hashed credentials and the `is_superuser` flag.
 - HTTP authentication
-  - In v4.x, only the HTTP status code was used, and the body was discarded (e.g., `200` for `allow` and `403` for `deny`).
-  - In v5.0, HTTP authentication has been redesigned to make use of the HTTP body. Refer to [HTTP service authentication](https://docs.emqx.com/en/enterprise/v5.0/access-control/authn/http.html) for more detailed information.
+  - In EMQX 4.x, only the HTTP status code was used, and the body was discarded (e.g., `200` for `allow` and `403` for `deny`).
+  - In EMQX 5.0, HTTP authentication has been redesigned to make use of the HTTP body. Refer to [HTTP service authentication](https://docs.emqx.com/en/enterprise/v5.0/access-control/authn/http.html) for more detailed information.
 - SCRAM authentication
-  - The SHA1 hashing mode (the only one available in v4.4) is not available. SHA256/SHA512 hashes are used.
+  - The SHA1 hashing mode (the only one available in version 4.4) is not available. SHA256/SHA512 hashes are used.
 - Built-in database
   - Credentials cannot be provided directly in the config file.
   - The credential table now keeps either username or clientid types of credentials, not both.
@@ -92,24 +92,24 @@ All authentication/authorization providers now use placeholders instead of the p
 
 - File-based
 
-  - The ACL rule `{allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"\]}` is not working in EMQX 5. Refer to issue [#10735](https://github.com/emqx/emqx/issues/10735) for more information.
+  - The ACL rule `{allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"\]}` is not working in EMQX 5.1. Refer to issue [#10735](https://github.com/emqx/emqx/issues/10735) for more information.
 
 - HTTP 
 
-  - In v4.x, HTTP status code was used, but the body was discarded (except for the "ignore" case). For example, `200` for `allow` and `403` for `deny`.
-  - In v5.0, HTTP authorization has been redesigned to make use of the HTTP body. Refer to [Use HTTP Service](https://www.emqx.io/docs/en/v5.0/access-control/authz/http.html) for more information.
+  - In EMQX 4.x, HTTP status code was used, but the body was discarded (except for the "ignore" case). For example, `200` for `allow` and `403` for `deny`.
+  - In EMQX 5.0, HTTP authorization has been redesigned to make use of the HTTP body. Refer to [Use HTTP Service](https://www.emqx.io/docs/en/v5.0/access-control/authz/http.html) for more information.
 
 - MySQL, PostgreSQL
 
   - The storage schema has changed.
-  - In v4.4, the query should fetch rows with columns `[Allow, IpAddr, Username, ClientId, Access, Topic]` under any name but exactly in this order.
-  - In v5.1, the query should fetch rows with columns `permission, action, topic` in any order but under exactly these names. The "who" part (`IpAddr, Username, ClientId`) is now suggested to be a part of the query.
+  - In EMQX 4.4, the query should fetch rows with columns `[Allow, IpAddr, Username, ClientId, Access, Topic]` under any name but exactly in this order.
+  - In EMQX 5.1, the query should fetch rows with columns `permission, action, topic` in any order but under exactly these names. The "who" part (`IpAddr, Username, ClientId`) is now suggested to be a part of the query.
 
 - MongoDB
 
   - The storage schema has changed.
 
-  - In v4.4, resulting documents should contain topics lists by action key, like in Redis or JWT: 
+  - In EMQX 4.4, resulting documents should contain topics lists by action key, like in Redis or JWT: 
 
     ```
     {
@@ -119,34 +119,34 @@ All authentication/authorization providers now use placeholders instead of the p
     }
     ```
 
-  - In v5.1, the documents should contain individual rules with `permission, action, topics` fields. Note that `topics` should be an array of topics.
+  - In EMQX 5.1, the documents should contain individual rules with `permission, action, topics` fields. Note that `topics` should be an array of topics.
 
 ## Data Integration
 
-In 5.1, there have been conceptual improvements to data integration:
+In EMQX 5.1, there have been conceptual improvements to data integration:
 
 - Full compatibility for Rule and SQL templates is ensured.
 - Most of the configuration item names and formats for resources and bridging have changed.
-- The previous Rule -> Action -> Resources process has been modified to **Rule -> Bridges**.
+- The previous **Rule** -> **Action** -> **Resources** process has been modified to **Rule** -> **Bridges**.
 - The functionality of **Modules/Message Publish** has been moved into the Bridges.
 - The [**Save Offline Message**](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html)**,** [**Get Subscriptions**](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html), and EMQX Bridge features have been removed.
 - Tablestore, DolphinDB, Lindorm, and SAP Event Mesh are not supported.
 
-For a complete compatibility report, see [Data Integration Incompatibility between e5.1 with e4.4](./data-integration-4.4-to-5.1-incompatibility.md).
+For a complete compatibility report, see [Data Integration Incompatibility Between EMQX 5.1 with EMQX 4.4](./data-integration-4.4-to-5.1-incompatibility.md).
 
 ## Data Persistence
 
-- [MQTT Message Persistence](https://docs.emqx.com/en/enterprise/v4.4/backend/backend.html#mqtt-message-persistence) is not implemented in 5.0-5.1.
+- [MQTT Message Persistence](https://docs.emqx.com/en/enterprise/v4.4/backend/backend.html#mqtt-message-persistence) is not implemented in EMQX 5.0 a5.1.
 
 ## Gateway
 
-In 4.x, various protocols can be configured through corresponding Plugins and Modules (only for the enterprise edition). However, in version 5.0, we have introduced a new concept called Gateway.
+In EMQX 4.x, various protocols can be configured through corresponding Plugins and Modules (only for the enterprise edition). However, in E5.0, we have introduced a new concept called Gateway.
 
-- It is **completely incompatible** from the configuration and management approaches perspective. Version 5.0 has a brand new configuration format and management approach.
+- It is **completely incompatible** from the configuration and management approaches perspective. E 5.0 has a brand new configuration format and management approach.
   - New configuration format.
   - Added a new HTTP API for managing gateways and clients of the gateway.
   - Each gateway has its own independent authentication method.
-- JT/T 808, GB/T 32960, TCP and OCPP are **not supported on e5.1.0**.
+- JT/T 808, GB/T 32960, TCP and OCPP are **not supported on EMQX 5.1.**.
 - Stomp, MQTT-SN, and ExProto protocols are fully compatible with version 4.x and have even more improvements in functionality.
 - Although the gateway for CoAP and LwM2M has been implemented in version 5.1.0, it is not recommended for use in a production environment due to incomplete design and implementation.
 
