@@ -1,7 +1,5 @@
 # MQTT-SN 协议网关
 
-## 简介
-
 MQTT-SN 网关基于 [MQTT-SN v1.2](https://www.oasis-open.org/committees/download.php/66091/MQTT-SN_spec_v1.2.pdf) 版本实现。
 
 ## 快速开始

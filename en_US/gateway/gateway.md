@@ -6,12 +6,13 @@ Before EMQX 5.0, non-MQTT protocol access was implemented by separate protocol p
 
 Starting from 5.0, EMQX offers the Multi-Protocol Gateway defines a unified conceptual and operational model to make it easier to use. 
 
-The Multi-Protocol Gateway supports the MQTT-SN, STOMP, CoAP, and LwM2M protocols. It can be enabled and configured directly in the Dashboard, or managed using the HTTP API or `emqx.conf`. On how to enable these gateways and how to customize the settings to better suit your business needs, you can click the link below for details. 
+The Multi-Protocol Gateway supports the MQTT-SN, STOMP, CoAP, and LwM2M protocols. It can be enabled and configured directly in the Dashboard or managed using the HTTP API or `emqx.conf`. On how to enable these gateways and how to customize the settings to better suit your business needs, you can click the link below for details. 
 
 - [MQTT-SN](./mqttsn.md)
 - [STOMP](./stomp.md)
 - [CoAP](./coap.md)
 - [LwM2M](./lwm2m.md)
+- [ExProto](./exproto.md)
 
 ## How the Multi-Protocol Gateway Works
 
@@ -39,8 +40,9 @@ Each gateway can have multiple listeners enabled, and different protocol gateway
 | STOMP   | ✔︎    |      | ✔︎    |      |
 | CoAP    |      | ✔︎    |      | ✔︎    |
 | LwM2M   |      | ✔︎    |      | ✔︎    |
+| ExProto | ✔︎    | ✔︎    | ✔︎    | ✔︎    |
 
-### Message format
+### Message Format
 
 To ensure compatibility with the PUB/SUB messaging model, each gateway type must adapt to the presence or absence of a PUB/SUB concept in its underlying protocol.
 
@@ -49,7 +51,7 @@ For protocols with a PUB/SUB concept, like [MQTT-SN](./mqttsn.md) and [Stomp](./
 For protocols without a PUB/SUB concept, such as [CoAP](./coap.md) and [LwM2M](./lwm2m.md), there are no definitions for topics, publishing, or subscribing. Here, the gateway must design the message content format, with each type potentially using a distinct format.
 
 - **CoAP**: The CoAP gateway uses the URI path and methods defined in the [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) standard. For details, see [Message Publish](./coap.md#message-publish), [Topic Subscribe](./coap.md#topic-subscribe), [Topic Unsubscribe](./coap.md#topic-unsubscribe).
-- **LwM2M**: The Messaging model of LwM2M protocol is based on [Resources Model and Operations](https://technical.openmobilealliance.org/OMNA/LwM2M/LwM2MRegistry.html). This is completely different from the Publish/Subscribe model of the MQTT protocol. For details, see [LwM2M Gateway - Message Format](./lwm2m.md#message-format).
+- **LwM2M**: The messaging model of LwM2M protocol is based on [Resources Model and Operations](https://technical.openmobilealliance.org/OMNA/LwM2M/LwM2MRegistry.html). This is completely different from the Publish/Subscribe model of the MQTT protocol. For details, see [LwM2M Gateway - Message Format](./lwm2m.md#message-format).
 
 ### Authentications
 
@@ -63,6 +65,7 @@ Different gateways may support different types of authenticators, but all gatewa
 | STOMP   | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
 | CoAP    | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
 | LwM2M   | ✔︎           |                   |       |         |            |       |      |      |
+| Exproto | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
 
 Note: Any client can log in if no authenticator is configured. 
 

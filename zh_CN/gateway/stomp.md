@@ -1,7 +1,5 @@
 # Stomp 协议网关
 
-## 简介
-
 Stomp 网关基于 [Stomp v1.2](https://stomp.github.io/stomp-specification-1.2.html) 版本实现，并兼容 Stomp v1.0 和 v1.1 的标准。
 
 ## 快速开始

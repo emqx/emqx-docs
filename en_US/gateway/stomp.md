@@ -1,12 +1,8 @@
 # STOMP Gateway
 
-## Introduction
-
-<!--**Add an introductory section**: Begin the page briefly introducing the relevant protocol and the Gateway. This will provide context for users who are new to the concept.-->
-
 EMQX STOMP Gateway is a messaging protocol translator that bridges the gap between [STOMP](https://stomp.github.io/stomp-specification-1.2.html) and MQTT protocols, allowing clients using these protocols to communicate with each other.
 
-This STOMP Gateway provides a lightweight and simple messaging solution for clients and servers, enabling message exchange in a variety of messaging environments. With its support for TCP and SSL type listeners, the STOMP gateway is a flexible and versatile tool for building messaging systems.
+This STOMP Gateway provides a lightweight and simple messaging solution for clients and servers, enabling message exchange in a variety of messaging environments. With its support for TCP and SSL-type listeners, the STOMP gateway is a flexible and versatile tool for building messaging systems.
 
 ::: tip
 
@@ -14,7 +10,7 @@ The STOMP gateway is based on [Stomp v1.2](https://stomp.github.io/stomp-specifi
 
 :::
 
-## Enable the STOMP Gateway
+## Enable STOMP Gateway
 
 In EMQX 5.0, STOMP gateway can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
 
@@ -22,7 +18,7 @@ On EMQX Dashboard, click **Management** -> **Gateways** on the left navigation m
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, please configure with [`emqx.conf`](../configuration/configuration.md)
+If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure with [`emqx.conf`](../configuration/configuration.md).
 
 :::
 
@@ -75,9 +71,9 @@ After establishing the STOMP gateway, you can use the STOMP client tools to test
 
 The STOMP protocol is fully compatible with the PUB/SUB messaging model, and the STOMP gateway uses:
 
-- the `SEND` message of the STOMP protocol for message publishing. The `destination` field in the `SEND` message specifies the topic, while the message content is contained in the body of the `SEND` message. The quality of service (QoS) is fixed at 0.
-- the `SUBSCRIBE` message of the STOMP protocol for subscribing requests. The `destination` field in the `SUBSCRIBE` message specifies the topic. The QoS is fixed at 0 and the wildcards defined in the MQTT protocol are supported.
-- the `UNSUBSCRIBE` message of the STOMP protocol for unsubscribing requests.  The `destination` field in the `SUBSCRIBE` message specifies the topic. 
+- The `SEND` message of the STOMP protocol for message publishing. The `destination` field in the `SEND` message specifies the topic, while the message content is contained in the body of the `SEND` message. The quality of service (QoS) is fixed at 0.
+- The `SUBSCRIBE` message of the STOMP protocol for subscribing requests. The `destination` field in the `SUBSCRIBE` message specifies the topic. The QoS is fixed at 0 and the wildcards defined in the MQTT protocol are supported.
+- The `UNSUBSCRIBE` message of the STOMP protocol for unsubscribing requests.  The `destination` field in the `SUBSCRIBE` message specifies the topic. 
 
 ## Customize Your STOMP Gateway
 
@@ -89,15 +85,15 @@ In the **Basic Configuration** tab, you can set the maximum header allowed, the 
 
 <!--with a screenshot to be added later-->
 
-1. **Max Header**: Set the maximum allowed number of STOMP Header, default: **10**. 
+1. **Max Header**: Set the maximum allowed number of STOMP Header, default: `10`. 
 
-2. **Max Each Header Length**: Set the maximum allowed string length of the Header value, default: **1024**. 
+2. **Max Each Header Length**: Set the maximum allowed string length of the Header value, default: `1024`. 
 
-3. **Max Body Length**: Set the maximum allowed bytes of the STOMP packet, default: **65536**. 
+3. **Max Body Length**: Set the maximum allowed bytes of the STOMP packet, default: `65536`. 
 
 4. **Idle Timeout**: Set the maximum amount of time in seconds that the gateway will wait for a STOMP frame before closing the connection due to inactivity.
 
-5. **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: **true**, optional values: **true**, **false**.
+5. **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: `true`, optional values: `true`, `false`.
 
 6. **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, *stomp/*.
 
@@ -105,7 +101,7 @@ In the **Basic Configuration** tab, you can set the maximum header allowed, the 
 
 ### Add Listeners 
 
-One tcp listener with the name of **default** is already configured on port `61613`, which allows a maximum of 16  acceptors in the pool, and support up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings for **Delete** to delete the listener. Or click **Add Listener** to add a new listener.
+One tcp listener with the name of **default** is already configured on port `61613`, which allows a maximum of 16  acceptors in the pool, and support up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings, click **Delete** to delete the listener, or click **+ Add Listener** to add a new listener.
 
 ::: tip
 

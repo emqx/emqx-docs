@@ -1,7 +1,5 @@
 # LwM2M 协议网关
 
-## 简介
-
 [LwM2M (Lightweight Machine-to-Machine)](https://lwm2m.openmobilealliance.org/)
 是为物联网设备和机器对机器通信设计的协议。它是一种轻量级协议，对处理能力和内存
 受限的设备非常友好。

@@ -1,9 +1,5 @@
 # CoAP Gateway
 
-## Introduction
-
-<!--**Add an introductory section**: Begin the page briefly introducing the relevant protocol and the Gateway. This will provide context for users who are new to the concept.-->
-
 The CoAP gateway in EMQX enables you to implement publish, subscribe, and receive messages as standard with the [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) protocol.
 
 To ensure secure communication, the CoAP gateway includes the **Connection Mode** feature which provides client access authentication. This feature restricts unauthorized CoAP clients from accessing the system, thus enhancing security and preventing potential attacks. 
@@ -30,7 +26,7 @@ On EMQX Dashboard, click **Extensions** -> **Gateways** on the left navigation m
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, please configure with [`emqx.conf`](../configuration/configuration.md)
+If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure with [`emqx.conf`](../configuration/configuration.md).
 
 :::
 
@@ -73,15 +69,15 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/coap' \
   ]
 }'
 ```
-For a detailed HTTP API description, see [HTTP API - Gateway](../admin/api.md)
+For a detailed HTTP API description, see [HTTP API - Gateway](../admin/api.md).
 
 If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your CoAP Gateway section](#customize-your-coap-gateway).
 
-The CoAP gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters refer to: [Gateway Configuration - Listeners](../configuration/configuration-manual.html)
+The CoAP gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters, refer to: [Gateway Configuration - Listeners](../configuration/configuration-manual.html).
 
 ## Work with CoAP Clients
 
-### Client libraries
+### Client Libraries
 
 After establishing the CoAP gateway, you can use the CoAP client tools to test the connections and ensure everything works as expected. Below are some of the recommended CoAP client tools. 
 
@@ -100,9 +96,9 @@ In addition to the default settings, EMQX provides a variety of configuration op
 
 <img src="./assets/coap-basic-conf.png" alt="image-20230420152920254" style="zoom:50%;" />
 
-- **Connection Required**: Set whether to enable connectionless or connection mode, default: **false** (connectionless), optional values: **false** (connectionless), **true** (connection).
+- **Connection Required**: Set whether to enable connectionless or connection mode, default: `false` (connectionless), optional values: `false` (connectionless), `true` (connection).
 
-- **Notification Message Type**: Set the type of CoAP messages to be delivered, default: **qos**; optional values: 
+- **Notification Message Type**: Set the type of CoAP messages to be delivered, default: `qos`; optional values: 
 
   - **qos**: Whether the CoAP notification needs to be acknowledged depends on the QoS level of the received message, 
     - QoS 0, no acknowledgment is required from the client, 
@@ -110,18 +106,18 @@ In addition to the default settings, EMQX provides a variety of configuration op
   - **con**: The CoAP notification should be acknowledged by the client. 
   - **non**: The CoAP notification need not be acknowledged by the client. 
 
-- **Heatbeat**: Only needed if **Connection Required** is set to **true**, set the minimum heartbeat interval to keep the connection alive; default: 30s. 
+- **Heatbeat**: Only needed if **Connection Required** is set to `true`, set the minimum heartbeat interval to keep the connection alive; default: 30s. 
 
-- **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: **true**, optional values: **true**, **false**.
+- **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: `true`, optional values: `true`, `false`.
 
-- **Subscriber QoS**: Set the default QoS level for subscribe requests, default: **coap**, optional values:
+- **Subscriber QoS**: Set the default QoS level for subscribe requests, default: `coap`, optional values:
 
   - **coap**: Follow the setting in **Notification Message Type** to determine the QoS level
     - Use QoS 0 if no acknowledgment is required.
     - Use QoS 1 if acknowledgment is required.
   - **qos0**, **qos1**, **qos2**
 
-- **Publish QoS**: Set the default QoS level for publish requests, default: **coap**, optional values: **coap**, **qos0**, **qos1**, **qos2**; the values here 
+- **Publish QoS**: Set the default QoS level for publish requests, default: `coap`, optional values: `coap`, `qos0`, `qos1`, `qos2`.
 
 - **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, *CoAP*.
 
@@ -129,7 +125,7 @@ In addition to the default settings, EMQX provides a variety of configuration op
 
 ### Add Listeners 
 
-By default, one UDP listener with the name of **default** is already configured on port `5683`, which supports up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings for **Delete** to delete the listener. Or click **Add Listener** to add a new listener.
+By default, one UDP listener with the name of **default** is already configured on port `5683`, which supports up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings, click **Delete** to delete the listener, or click **Add Listener** to add a new listener.
 
 <img src="./assets/mqttsn-listerner.png" alt="MQTTSN listener" style="zoom:50%;" />
 
@@ -138,7 +134,7 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 **Basic settings**
 
 - **Name**: Set a unique identifier for the listener.
-- **Type**: Select the protocol type, for CoAP, this can be either **udp** or **dtls**.
+- **Type**: Select the protocol type, for CoAP, this can be either `udp` or `dtls`.
 - **Bind**: Set the port number on which the listener accepts incoming connections.
 - **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols.
 
