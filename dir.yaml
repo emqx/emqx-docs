@@ -149,7 +149,7 @@
       children:
         - design/clustering
         - design/inflight-window-and-message-queue
-        - design/message-retransmission
+        - design/retransmission
       # - design/design
       # - title_en: SDK & Tools
       #   title_cn: SDK 与工具
