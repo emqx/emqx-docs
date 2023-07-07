@@ -329,119 +329,119 @@
           path: configuration/license
           lang: en
           edition: ee
-        - configuration/configuration-manual
-      # - title_en: Configuration Manual
-      #   title_cn: 配置手册
-      #   lang: cn
-      #   edition: ce
-      #   path: https://www.emqx.io/docs/zh/v5.0/configuration/configuration-manual.html
-      # - title_en: Configuration Manual
-      #   title_cn: 配置手册
-      #   lang: en
-      #   edition: ce
-      #   path: https://www.emqx.io/docs/en/v5.0/configuration/configuration-manual.html
-      # - title_en: Configuration Manual
-      #   title_cn: 配置手册
-      #   lang: cn
-      #   edition: ee
-      #   path: https://docs.emqx.com/zh/enterprise/v5.0/configuration/configuration-manual.html
-      # - title_en: Configuration Manual
-      #   title_cn: 配置手册
-      #   lang: en
-      #   edition: ee
-      #   path: https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html 
-     - title_en: Command Line Interface
-       title_cn: 命令行接口
-       path: admin/cli
-     - title_en: REST API
-       title_cn: REST API
-       path: admin/api
-       collapsed: true
-       children:
-         - title_en: API Docs
-           title_cn: API 文档
-           lang: en
-           edition: ce
-           path: https://www.emqx.io/docs/en/v5.0/admin/api-docs.html
-         - title_en: API Docs
-           title_cn: API 文档
-           lang: cn
-           edition: ce
-           path: https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html
-         - title_en: API Docs
-           title_cn: API 文档
-           lang: en
-           edition: ee
-           path: https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html
-         - title_en: API Docs
-           title_cn: API 文档
-           lang: cn
-           edition: ee
-           path: https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html
-     - title_en: EMQX Dashboard
-       title_cn: EMQX Dashboard
-       path: dashboard/introduction
-       collapsed: true
-       children:
-         - dashboard/dashboard
-         - dashboard/connections/connections
-         - title_en: Topics and subscription
-           title_cn: 主题与订阅
-           path: dashboard/subscriptions/overview
-           children:
-             - dashboard/subscriptions/topics
-             - dashboard/subscriptions/subscriptions
-         - dashboard/retained
-         - title_en: Access Control
-           title_cn: 访问控制
-           path: dashboard/acloverview
-           children:
-             - dashboard/authn
-             - dashboard/authz
-             - dashboard/blacklist
-         - title_en: Data Integration
-           title_cn: 数据集成
-           path: dashboard/bridgeoverview
-           children:
-             - dashboard/bridge
-             - dashboard/rules
-             - dashboard/flows
-         - dashboard/configuration
-         - dashboard/extensions
-         - dashboard/diagnose
-         - dashboard/system
-     - title_en: Rate Limit
-       title_cn: 速率限制
-       path: rate-limit/rate-limit
-     - title_en: Logs and Observability
-       title_cn: 日志及可观测性
-       path: observability/overview
-       collapsed: true
-       children:
-         - observability/metrics-and-stats
-         - observability/alarms
-         - observability/log
-         - observability/topic-metrics
-         - observability/slow-subscribers-statistics
-         - observability/tracer
-         - observability/mqtt-system-topics
-         - observability/prometheus 
-     - title_en: Backup and Restore
-       title_cn: 备份与恢复
-       path: operations/backup-restore
-     - title_en: Plugin and Extension
-       title_cn: 插件与扩展
-       path: extensions/introduction
-       collapsed: true
-       children:
-         - extensions/hooks
-         - extensions/plugins
-       # - extensions/lang-lua
-         - extensions/exhook
-     - title_en: Telemetry
-       title_cn: 遥测
-       path: telemetry/telemetry
-       edition: ce 
+    - configuration/configuration-manual
+  # - title_en: Configuration Manual
+  #   title_cn: 配置手册
+  #   lang: cn
+  #   edition: ce
+  #   path: https://www.emqx.io/docs/zh/v5.0/configuration/configuration-manual.html
+  # - title_en: Configuration Manual
+  #   title_cn: 配置手册
+  #   lang: en
+  #   edition: ce
+  #   path: https://www.emqx.io/docs/en/v5.0/configuration/configuration-manual.html
+  # - title_en: Configuration Manual
+  #   title_cn: 配置手册
+  #   lang: cn
+  #   edition: ee
+  #   path: https://docs.emqx.com/zh/enterprise/v5.0/configuration/configuration-manual.html
+  # - title_en: Configuration Manual
+  #   title_cn: 配置手册
+  #   lang: en
+  #   edition: ee
+  #   path: https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html 
+    - title_en: Command Line Interface
+      title_cn: 命令行接口
+      path: admin/cli
+    - title_en: REST API
+      title_cn: REST API
+      path: admin/api
+      collapsed: true
+      children:
+        - title_en: API Docs
+          title_cn: API 文档
+          lang: en
+          edition: ce
+          path: https://www.emqx.io/docs/en/v5.0/admin/api-docs.html
+        - title_en: API Docs
+          title_cn: API 文档
+          lang: cn
+          edition: ce
+          path: https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html
+        - title_en: API Docs
+          title_cn: API 文档
+          lang: en
+          edition: ee
+          path: https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html
+        - title_en: API Docs
+          title_cn: API 文档
+          lang: cn
+          edition: ee
+          path: https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html
+    - title_en: EMQX Dashboard
+      title_cn: EMQX Dashboard
+      path: dashboard/introduction
+      collapsed: true
+      children:
+        - dashboard/dashboard
+        - dashboard/connections/connections
+        - title_en: Topics and subscription
+          title_cn: 主题与订阅
+          path: dashboard/subscriptions/overview
+          children:
+            - dashboard/subscriptions/topics
+            - dashboard/subscriptions/subscriptions
+        - dashboard/retained
+        - title_en: Access Control
+          title_cn: 访问控制
+          path: dashboard/acloverview
+          children:
+            - dashboard/authn
+            - dashboard/authz
+            - dashboard/blacklist
+        - title_en: Data Integration
+          title_cn: 数据集成
+          path: dashboard/bridgeoverview
+          children:
+            - dashboard/bridge
+            - dashboard/rules
+            - dashboard/flows
+        - dashboard/configuration
+        - dashboard/extensions
+        - dashboard/diagnose
+        - dashboard/system
+    - title_en: Rate Limit
+      title_cn: 速率限制
+      path: rate-limit/rate-limit
+    - title_en: Logs and Observability
+      title_cn: 日志及可观测性
+      path: observability/overview
+      collapsed: true
+      children:
+        - observability/metrics-and-stats
+        - observability/alarms
+        - observability/log
+        - observability/topic-metrics
+        - observability/slow-subscribers-statistics
+        - observability/tracer
+        - observability/mqtt-system-topics
+        - observability/prometheus 
+    - title_en: Backup and Restore
+      title_cn: 备份与恢复
+      path: operations/backup-restore
+    - title_en: Plugin and Extension
+      title_cn: 插件与扩展
+      path: extensions/introduction
+      collapsed: true
+      children:
+        - extensions/hooks
+        - extensions/plugins
+      # - extensions/lang-lua
+        - extensions/exhook
+    - title_en: Telemetry
+      title_cn: 遥测
+      path: telemetry/telemetry
+      edition: ce 
         
 - title_en: Security Guide
   title_cn: 安全指南
