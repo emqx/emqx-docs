@@ -71,9 +71,11 @@
         - deploy/upgrade-from-v4
         - title_en: Upgrade EMQX on Kubernetes
           title_cn: Upgrade EMQX on Kubernetes
+          lang: en
           path: https://www.emqx.com/en/blog/how-to-upgrade-emqx-in-kubernetes
         - title_en: 在 Kubernetes 中升级 EMQX
           title_cn: 在 Kubernetes 中升级 EMQX
+          lang: cn
           path: https://www.emqx.com/zh/blog/how-to-upgrade-emqx-in-kubernetes
       # - deploy/hot-upgrades
   # - title_en: Migrate to Enterprise
@@ -282,7 +284,7 @@
     #     - data-integration/rule-configs
 
 - title_en: Administration Guide
-  title_en: 管理员指南
+  title_cn: 管理员指南
   path: admin/admin-guide
   collapsed: true
   children: 
@@ -713,6 +715,7 @@
 - title_en: Reference
   title_cn: 参考指南
   path: introduction/reference
+  collapsed: true
   children:
     - title_en: MQTT 5.0 
       title_cn: MQTT 5.0
