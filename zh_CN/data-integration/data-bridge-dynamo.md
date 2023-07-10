@@ -8,10 +8,6 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 :::
 {% endemqxce %}
 
-:::tip
-本章节内容同样适用于 TimescaleDB 以及 MatrixDB。
-:::
-
 ## 前置条件
 
 - 了解 EMQX 数据桥接[规则](./rules.md)。
@@ -27,7 +23,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 ## 快速开始教程
 
-本节介绍如何配置 DynamoDB 数据桥接，包括如何设置 DynamoDB 服务器、创建数据桥接和规则以将数据转发到 RocketMQ、以及如何测试数据桥接和规则。
+本节介绍如何配置 DynamoDB 数据桥接，包括如何设置 DynamoDB 服务器、创建数据桥接和规则以将数据转发到 DynamoDB、以及如何测试数据桥接和规则。
 
 本教程假定您在本地机器上同时运行 EMQX 和 DynamoDB。如果您在远程运行 DynamoDB 和 EMQX，请相应地调整设置。
 
@@ -114,7 +110,7 @@ docker run --rm -e AWS_ACCESS_KEY_ID=root -e AWS_SECRET_ACCESS_KEY=public -e AWS
    - **连接访问 ID**： 填写 `root`，
    - **连接访问密钥**：填写 `public`。
 
-6. **模版**设置为默认值，即为空；模版为空时将会将整个消息转发给 RocketMQ，实际值为 JSON 模版数据。
+6. **模版**设置为默认值，即为空；模版为空时将会将整个消息转发给 DynamoDB，实际值为 JSON 模版数据。
 
 7. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[数据桥接简介](./data-bridges.md)。
 
@@ -134,7 +130,7 @@ docker run --rm -e AWS_ACCESS_KEY_ID=root -e AWS_SECRET_ACCESS_KEY=public -e AWS
 
 3. 输入规则 ID `my_rule`，在 **SQL 编辑器**中根据业务实现需要输入规则：
 
-   - 如需实现对指定主题消息的转发，例如将 `t/#` 主题的 MQTT 消息转发至 RocketMQ，输入以下 SQL 语法：
+   - 如需实现对指定主题消息的转发，例如将 `t/#` 主题的 MQTT 消息转发至 DynamoDB，输入以下 SQL 语法：
 
      注意：如果您希望制定自己的 SQL 语法，需要确保规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量。
 
