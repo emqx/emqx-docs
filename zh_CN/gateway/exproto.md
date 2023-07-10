@@ -88,7 +88,7 @@ message SocketCreatedRequest {
 
 Upon completing the gateway activation process, you can return to the **Gateways** page and observe that the ExProto Gateway now displays an **Enabled** status.
 
-<img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/gateway/assets/exproto-enabled.png" alt="Enabled ExProto gateway" style="zoom:50%;" />
+<img src="./assets/exproto-enabled.png" alt="Enabled ExProto gateway" style="zoom:50%;" />
 
 The above configuration can also be configured with HTTP API:
 
@@ -185,7 +185,7 @@ Before you start, make sure you have completed the following:
 
 4. Go to EMQX Dashboard and click **Management** -> **Gateways** from the left navigation menu. Click **Clients** of ExProto. On the ExProto page, you can see the client you connect to using telnet. 
 
-   <img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/gateway/assets/connected-exproto-client.png" alt="Connected ExProto Client" style="zoom:50%;" />
+   <img src="./assets/connected-exproto-client.png" alt="Connected ExProto Client" style="zoom:50%;" />
 
 
 
@@ -198,7 +198,7 @@ In addition to the default settings, EMQX provides a variety of configuration op
 
 In the **Basic Configuration** tab, you can customize your ConnectionUnaryHandler service address, ConnectionAdapter listening port, and set the MountPoint string for this gateway. 
 
-![Basic Configuration](/Users/emqx/Documents/GitHub/emqx-docs/en_US/gateway/assets/exproto-basic-config.png)
+![Basic Configuration](./assets/exproto-basic-config.png)
 
 - **Idle Timeout**: Set the duration (in seconds) of inactivity after which a connected client will be considered disconnected. Default: `30 s`.
 
@@ -221,7 +221,7 @@ In the **Basic Configuration** tab, you can customize your ConnectionUnaryHandle
 
 By default, one TCP listener with the name of **default** is already configured on port `7993`, which allows a maximum of 1,000 connections per second, and support up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings, click **Delete** to delete the listener, or click **Add Listener** to add a new listener.
 
-<img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/gateway/assets/exproto-listener.png" alt="exproto-listener" style="zoom:50%;" />
+<img src="./assets/exproto-listener.png" alt="exproto-listener" style="zoom:50%;" />
 
 Click **Add Listener** to open **Add Listener** page, where you can continue with the following configuration fields:
 
@@ -279,7 +279,7 @@ On the **Gateways** page, locate **ExProto** and click **Settings** in the **Act
 
 Click **+ Create Authentication**, choose **Password-Based** as the **Mechanism**, and select **HTTP Server** as the **Backend**. Then in the **Configuration** tab, you can set the authentication rules.
 
-![mqttsn authentication](/Users/emqx/Documents/GitHub/emqx-docs/en_US/gateway/assets/exproto-authn-config.png)
+![mqttsn authentication](./assets/exproto-authn-config.png)
 
 For a detailed explanation of each field on the page, you can refer to [HTTP Server Authentication](../access-control/authn/http.md).
 
