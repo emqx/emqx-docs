@@ -19,7 +19,7 @@ making them more search-friendly, for example:
 
 Find more details in [Logs](../observability/log.md).
 
-## Default listeners
+## Default Listeners
 
 Changes in default listeners:
 
@@ -119,9 +119,10 @@ The API has undergone significant changes, and some APIs have been made compatib
 - Compatible: Use the old API path and parameters, or keep the old API.
 - Partially compatible: The API path remains unchanged, but some API fields have changed.
 - Incompatible: API paths and fields have changed.
+
 :::
 
-::: details API Compatibility table
+::: details API compatibility table
 
 | 4.x                              | 5.x                                         | Compatibility        | Notes                        |
 | -------------------------------- | ------------------------------------------- | -------------------- | ---------------------------- |
@@ -151,11 +152,11 @@ The API has undergone significant changes, and some APIs have been made compatib
 
 ## MQTT Client Authentication and Authorization
 
-**Change of concept**
+### **Change of Concept**
 
 Auth is referred to as **Authentication**, and ACL is also referred to as **Authorization**.
 
-**Data Migration**
+### **Data Migration**
 
 We have kept the authentication methods and supported data sources from version 4.x, with only a few changes to the way they are used. For most Authenticator/Authorizer, you can continue to use the 4.x database when upgrading to version 5.x without having to migrate existing data.
 
@@ -194,7 +195,7 @@ authentication = [
 
 :::
 
-### MQTT Client Authentication
+### Authentication
 
 #### Remove the Anonymous Mechanism
 
@@ -204,7 +205,7 @@ After traversing the configured authentication chain, if none of the authenticat
 
 The `bypass_auth_plugins` configuration is also deleted. When you wants to allow all clients to connect without authentication, you can set `listeners.{type}.{name}.enable_authn = false`.
 
-#### Built-in database (Mnesia)
+#### Built-in Database (Mnesia)
 
 1. Mnesia is now referred to as the "built-in" database;
 2. Two search methods are available: username-based or clientid-based, but mixing is no longer supported.
@@ -273,7 +274,7 @@ authentication = [
 ]
 ```
 
-::: details
+::: 
 
 #### Redis
 
@@ -303,16 +304,16 @@ Not supported for now.
 
 #### JWT
 
-4.x supports `public key` and `hmac secret` algorithms, as well as `jwks` at the same time.
+EMQX 4.x supports `public key` and `hmac secret` algorithms, as well as `jwks` at the same time.
 
-5.1 uses one algorithm at a time only, which is set in the global config.
+EMQX 5.1 uses one algorithm at a time only, which is set in the global config.
 
 ### Authorization (ACL)
 
 #### ACL File
 
 1. Removed the `acl_file` configuration. The file-based ACL (acl.conf) will be used as one of the authorization sources and added to EMQX by default.
-2. `acl.conf` data file syntax has been changed
+2. `acl.conf` data file syntax has been changed.
 
 | 4.x    | 5.x      | Compatibility |
 | ------ | -------- | ------------- |
@@ -349,7 +350,7 @@ Not supported for now.
 
 ::: details The correspondence between 4.x integer values and 5.x character/enumeration values
 
-**access/action field mapping**
+**Access/action field mapping**
 
 | 4.x (int) | 5.x (varchar/enum)   | action              |
 | --------- | -------------------- | ------------------- |
@@ -357,7 +358,7 @@ Not supported for now.
 | 2         | publish              | publish             |
 | 3         | all                  | subscribe & publish |
 
-**allow/permission field mapping**
+**Allow/permission field mapping**
 
 | 4.x (int) | 5.x (varchar/enum)   | permission |
 | --------- | -------------------- | ---------- |
@@ -395,7 +396,10 @@ If you want to continue using the data from in 4.x, please make necessary migrat
 1. Redis data source still only supports white list mode, which requires setting `acl_nomatch = deny`;
 2. The `access` field name changes to `action`, and the data changes from numbers to action strings.
 
+If you want to continue using the data from in 4.x, please make necessary migrations manually.
+
 ::: details The correspondence between 4.x and 5.x data
+
 | 4.x | 5.x       | action              |
 | --- | --------- | ------------------- |
 | 1   | subscribe | subscribe           |
@@ -410,8 +414,6 @@ HSET mqtt_acl:emqx_u # all
 HSET mqtt_acl:emqx_u a/1 publish
 ```
 :::
-
-If you want to continue using the data from in 4.x, please make necessary migrations manually.
 
 #### HTTP
 
@@ -453,13 +455,15 @@ The WebHook plugin (`emqx_web_hook`) is converted to a native feature, and it is
 
 The MQTT bridge plugin (`emqx_bridge_mqtt`) has been removed. Use the built-in MQTT data bridge in Data Integration instead.
 
-## Offline messages
+{% emqxee %}
 
-The [offline messages](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html) provided in EMQX 4.x are based on an external database. EMQX plans to provide native offline messages (based on the built-in database) in future versions, so the offline messages for the external database is no longer supported in version 5.
+## Offline Messages
+
+The [offline messages](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html) provided in EMQX 4.x are based on an external database. EMQX plans to provide native offline messages (based on the built-in database) in future versions, so the offline messages for the external database is no longer supported in version 5.x.
 
 The upcoming native offline messaging feature will provide improved performance and reduce usage and maintenance costs. Stay tuned for more updates.
 
-## Auto subscription (Server side subscriptions)
+## Auto Subscription (Server Side Subscriptions)
 
 As of version 5.0.0, EMQX no longer provides [Auto subscription](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html) (server side subscriptions) based on an external database.
 
@@ -467,7 +471,7 @@ As of version 5.0.0, EMQX no longer provides [Auto subscription](https://docs.em
 
 ## Prometheus
 
-The old plugin named `emqx_prometheus` has been converted to a native feature in version 5. Prometheus scraping endpoint is enabled by default, and no authentication is required to scrape the metrics.
+The old plugin named `emqx_prometheus` has been converted to a native feature in version 5.x. Prometheus scraping endpoint is enabled by default, and no authentication is required to scrape the metrics.
 
 You can use `curl` command to inspect the metrics:
 

@@ -67,7 +67,7 @@ node.name = emqx@192.168.0.20
 两个节点启动后，在`s2.emqx.io`上执行如下命令：
 
 ```bash
-$ ./bin/emqx_ctl cluster join emqx@s1.emqx.io
+$ ./bin/emqx ctl cluster join emqx@s1.emqx.io
 
 Join the cluster successfully.
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
@@ -95,7 +95,7 @@ join 命令应该在 `s3` 上执行，但 **NOT** 在 `s1` 或 `s2` 上执行。
 查询任意节点上的集群状态：
 
 ```bash
-$ ./bin/emqx_ctl cluster status
+$ ./bin/emqx ctl cluster status
 
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
@@ -110,13 +110,13 @@ Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 让 `emqx@s2.emqx.io` 主动退出集群:
 
 ```bash
-$ ./bin/emqx_ctl cluster leave
+$ ./bin/emqx ctl cluster leave
 ```
 
 或在 `s1.emqx.io` 上，从集群移除 `emqx@s2.emqx.io` 节点:
 
 ```bash
-$ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
+$ ./bin/emqx ctl cluster force-leave emqx@s2.emqx.io
 ```
 
 ## 单机伪分布式

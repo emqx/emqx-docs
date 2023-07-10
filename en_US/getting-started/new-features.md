@@ -22,7 +22,7 @@ EMQX 5.0 introduced QUIC support (MQTT over QUIC) as an experimental feature and
 
 As the underlying transport protocol of the next-generation Internet protocol HTTP/3,  [QUIC](https://datatracker.ietf.org/doc/html/rfc9000) can provide connectivity for the modern mobile Internet with less connection overhead and message latency compared to TCP/TLS protocols. Therefore, EMQX attempted to replace the transport layer of MQTT with QUIC, which led to the MQTT over QUIC.
 
-TO evaluate MQTT over QUIC and verify how it could improve network connectivity, please read [Use MQTT over QUIC ](../mqtt-over-quic/getting-started.md).
+To evaluate MQTT over QUIC and verify how it could improve network connectivity, please read [Use MQTT over QUIC ](../mqtt-over-quic/getting-started.md).
 
 {% emqxee %}
 
@@ -132,22 +132,22 @@ The new gateway framework further improves EMQX's usability by unifying access a
 
 ## **More Feature Updates**
 
-**Simplified configuration**
+### Simplified Configuration
 
 The `emqx.conf` configuration file has been changed to a concise and readable [HOCON](https://github.com/emqx/hocon) format, and contains commonly used configuration items by default, to improve the readability and maintainability.
 
-**Improved REST API**
+### Improved REST API
 
 REST API is now compliant with the OpenAPI 3.0 specification, and comes with clear and rich API documentation.
 
-**Rapid troubleshooting**
+### Rapid Troubleshooting
 
 Added more diagnostic tools such as slow subscriptions and online tracing so users can quickly troubleshoot issues in production.
 
-**Structured logs**
+### Structured Logs
 
 Added support for machine (indexer) friendly structured logs in JSON format. Error logs are consistently tagged with 'msg' tokens to facilitate locating the cause of the problem.
 
-**Flexible expansion and customization**
+### Flexible Expansion and Customization
 
 Developed a new plugin architecture, with which users can compile, distribute, and install their extension plugins in the form of independent plugin packages to customize and extend the usage of EMQX.

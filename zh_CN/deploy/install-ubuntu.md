@@ -84,7 +84,7 @@ EMQX 支持通过 deb 包或 tar.gz 包进行安装。下文将以 Ubuntu 22.04 
   $ emqx start
   EMQX @CE_VERSION@ is started successfully!
   
-  $ emqx_ctl status
+  $ emqx ctl status
   Node 'emqx@127.0.0.1' @CE_VERSION@ is started
   ```
 
@@ -204,7 +204,7 @@ sudo apt remove --purge emqx
   $ emqx start
   EMQX @EE_VERSION@ is started successfully!
 
-  $ emqx_ctl status
+  $ emqx ctl status
   Node 'emqx@127.0.0.1' @EE_VERSION@ is started
   ```
 
