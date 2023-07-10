@@ -9,7 +9,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 {% endemqxce %}
 
 ::: tip
-This section is also applicable to TimescaleDB and MatrixDB.
+This section is also applicable to MatrixDB.
 :::
 
 ## Prerequisites
