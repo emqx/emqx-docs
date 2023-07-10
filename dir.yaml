@@ -421,7 +421,7 @@
    #- gateway/jt808
    #- gateway/gbt32960
    #- gateway/tcp
-   #- gateway/exproto
+    - gateway/exproto
 
 # - title_en: Advanced MQTT Features
 #   title_cn: MQTT 高级特性
