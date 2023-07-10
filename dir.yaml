@@ -231,6 +231,10 @@
     - data-integration/data-bridge-kafka
     - data-integration/data-bridge-pulsar
     - data-integration/data-bridge-influxdb
+    - title_en: TimescaleDB
+      title_zh: TimescaleDB
+      lang: zh
+      path: data-integration/data-bridge-timescale
     - data-integration/data-bridge-mysql
     - data-integration/data-bridge-redis
     - data-integration/data-bridge-gcp-pubsub
