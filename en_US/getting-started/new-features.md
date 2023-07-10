@@ -12,7 +12,7 @@ Besides this obvious scalability improvement, the Mria cluster architecture is a
 
 To get started, see [Create an EMQX Cluster](../deploy/cluster/create-cluster.md).
 
-## Rolling Upgrades without downtime
+## Rolling Upgrades without Downtime
 
 Starting with EMQX Enterprise 5.1.0, the system now supports seamless rolling upgrades for the cluster. This enhances the overall system availability and reliability by allowing transitions to newer versions without any service interruption.
 
@@ -107,11 +107,11 @@ In EMQX 5.x, we have redesigned the EMQX Dashboard, enhancing the visual experie
 - Visualized data flows: Using [Flows](../dashboard/flows.md) users can clearly see how data flows from devices or clients through the rule engine
 - Configuration updates during runtime: Hot update that takes effect immediately
 
-## Overload protection, Limiter and Buffer queue for Bridges
+## Overload Protection, Limiter and Buffer Queue for Bridges
 
-New **Limiter** feature delivers a more accurate and layered rate control and ensures that the system operates under the expected workload, because it supports limiting client behavior at the client, listener, or node levels. The combination of Overload protection and Limiter prevents the clients from becoming too busy or receiving excessive request traffic and ensures stable system operation.
+The new **Limiter** feature enhances connection and messaging rate control by providing more precise and layered rate control options. It ensures that the system operates under the expected workloads by limiting the client behavior at the client, listener, or node levels. The combination of the Overload protection and Limiter features prevents the clients from becoming overwhelmed or receiving excessive request traffic and ensures stable system operation.
 
-We also added a generic buffer queue for all bridges which allows to buffer messages generated under stressful conditions. It can be configured to store messages in memory or disk cache when external resources are unavailable, for example, due to network fluctuations or service downtime. Messages will be sent after the service is restored. However, requests may expire in the buffer – this is a big difference comparing with v4. If the buffered data exceeds the limit, it will be discarded following the First In First Out (FIFO) rule.
+A generic buffer queue is also added for all bridges, allowing buffer messages generated under stressful conditions. This buffer can be configured to store messages in either memory or disk cache when external resources are unavailable, such as during network fluctuations or service downtime. Buffered messages will be sent once the service is restored. However, requests in the buffer may expire, which is a big difference compared to version 4. If the amount of buffered data exceeds the limit, it will be discarded following the First In First Out (FIFO) rule.
 
 ## Cloud Native and EMQX Operator
 
@@ -142,12 +142,12 @@ REST API is now compliant with the OpenAPI 3.0 specification, and comes with cle
 
 ### Rapid Troubleshooting
 
-Added more diagnostic tools such as slow subscriptions and online tracing so users can quickly troubleshoot issues in production.
+More diagnostic tools such as slow subscriptions and online tracing are added so users can quickly troubleshoot issues in production.
 
 ### Structured Logs
 
-Added support for machine (indexer) friendly structured logs in JSON format. Error logs are consistently tagged with 'msg' tokens to facilitate locating the cause of the problem.
+Machine (indexer) friendly structured logs in JSON format are supported. Error logs are consistently tagged with 'msg' tokens to facilitate locating the cause of the problem.
 
 ### Flexible Expansion and Customization
 
-Developed a new plugin architecture, with which users can compile, distribute, and install their extension plugins in the form of independent plugin packages to customize and extend the usage of EMQX.
+A new plugin architecture is developed, with which users can compile, distribute, and install their extension plugins in the form of independent plugin packages to customize and extend the usage of EMQX.
