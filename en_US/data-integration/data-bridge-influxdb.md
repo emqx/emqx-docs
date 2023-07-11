@@ -47,7 +47,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 2. With InfluxDB running, visit [http://localhost:8086](http://localhost:8086). Set the **Username**, **Password**, **Organization Name**, and **Bucket Name**.
 3. In the InfluxDB UI, click **Load Data** -> **API Token** and then follow the instructions to [create all-access tokens](https://docs.influxdata.com/influxdb/v2.5/install/#create-all-access-tokens).
 
-### Create a InfluxDB Data Bridge
+### Create InfluxDB Data Bridge
 
 1. Go to EMQX Dashboard, click **Integration** -> **Data Bridge**.
 

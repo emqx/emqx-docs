@@ -135,7 +135,7 @@ FROM
 
 Now a rule to forward data to MongoDB via a MongoDB data bridge is created. You can go to **Integration** -> **Flows** to view the topology. Messages under topic `t/#` are first processed by rule  `my_rule`  and then saved in MongoDB. 
 
-### Test the Data Bridge and Rule
+### Test Data Bridge and Rule
 
 Use MQTTX  to send a message to topic  `t/1`:
 

@@ -12,10 +12,12 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 This section is also applicable to MatrixDB.
 :::
 
-## Prerequisites
+::: tip Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
+
+:::
 
 ## Features List
 
