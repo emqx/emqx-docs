@@ -132,8 +132,8 @@ Message 3:
 
 The example code processes an input message containing multiple sensor measurements and splits it into separate messages for each sensor type. This is how it works:
 
-- The `FOREACH` uses the JQ function to transform input message is transformed into an array of objects containing `sensor_type` and `value` fields. 
-- The `DO` clause selects relevant fields for the output messages
+- The `FOREACH` uses the JQ function to transform the input message into an array of objects containing `sensor_type` and `value` fields. 
+- The `DO` clause selects relevant fields for the output messages.
 - The `FROM` clause applies the rule to messages with a matching [topic filter](./rule-sql-events-and-fields.md), `car/measurements`.
 
 ```sql
