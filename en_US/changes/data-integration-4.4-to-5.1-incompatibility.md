@@ -4,7 +4,7 @@ The whole concept of Data Integration was upgraded in EMQX 5.1.
 
 - The previous **Rule** -> **Action** -> **Resources** process is changed to **Data Bridge** -> **Rules**. 
 
-   In EMQX 5.1, when adding an action for a certain rule, you need to create a data bridge first and modify the SQL template of the bridge to adapt the output of the rules. But in EMQX 4.4, there was a configuration entity for Action.
+   In EMQX 5.1, when adding an action for a certain rule, you must first create a data bridge and modify the bridge's SQL template to adapt the rule output. But in EMQX 4.4, there was a configuration entity for Action.
 
    Configure the Action(Bridge) for a Rule in EMQX 5.1:
 
@@ -20,7 +20,7 @@ The whole concept of Data Integration was upgraded in EMQX 5.1.
 
 - [Get Subscriptions](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html) features in EMQX 4.4 are removed.
 
-- Tablestore, DolphinDB, Lindorm, and SAP Event Mesh data bridges are no longer supported.
+- Tablestore, DolphinDB, Lindorm, and SAP Event Mesh data bridges are not supported, but SAP Event Mesh is in the product roadmap.
 
 - `EMQX Bridge` as a resource type is no longer supported.
 
@@ -33,7 +33,7 @@ The whole concept of Data Integration was upgraded in EMQX 5.1.
 
 ## Incompatibility in Functionality and Configuration Items
 
-This section listed the changes in functionality and configuration items for each data bridge.
+This section lists the functionality and configuration items changes for each data bridge.
 
 ### Cassandra
 

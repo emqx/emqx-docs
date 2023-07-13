@@ -20,7 +20,7 @@ In conclusion, there are several points that need to be noted:
 2. **Core MQTT protocol functionalities**, including Pub/Sub, Retainer, and Shared Subscription, remain fully compatible with client programs. However, there may be slight changes in the management interface.
 3. Other functionalities related to Authentication, Authorization, Data Integration, and Protocol Access will require migration based on their respective functions.
 4. Certain concepts have undergone changes. For example, new versions of **Plugins** have been introduced, which differ significantly from the old versions. The concept of **Modules** in the old version has been completely removed.
-5. Pay attention to the **removal of certain features**, such as `mcast` for Cluster discovery and `EMQX Bridges` for Data integration, among others.
+5. Pay attention to the **removal of certain features**, such as `mcast` for Cluster discovery and `EMQX Bridges` as a resource type for data integration, among others.
 
 ## HTTP APIs
 
@@ -43,7 +43,7 @@ In conclusion, there are several points that need to be noted:
 
 ## Log File Format
 
-Log files follow the same format, but the log content style has slight differences. The log format in EMQX 5.1 is more indexer-friendly.
+Log files in EMQX 5.1 is either the same flat log file format as in EMQX 4.4 or the structured JSON format, which is more indexer-friendly.
 
 ## Distribution and Cluster
 
@@ -130,23 +130,23 @@ In EMQX 5.1, there have been conceptual improvements to data integration:
 - The previous **Rule** -> **Action** -> **Resources** process has been modified to **Rule** -> **Bridges**.
 - The functionality of **Modules/Message Publish** has been moved into the Bridges.
 - The [**Save Offline Message**](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html)**,** [**Get Subscriptions**](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html), and EMQX Bridge features have been removed.
-- Tablestore, DolphinDB, Lindorm, and SAP Event Mesh are not supported.
+- Tablestore, DolphinDB, Lindorm, and SAP Event Mesh data bridges are not supported yet.
 
 For a complete compatibility report, see [Data Integration Incompatibility Between EMQX 5.1 with EMQX 4.4](./data-integration-4.4-to-5.1-incompatibility.md).
 
 ## Data Persistence
 
-- [MQTT Message Persistence](https://docs.emqx.com/en/enterprise/v4.4/backend/backend.html#mqtt-message-persistence) is not implemented in EMQX 5.0 a5.1.
+- [MQTT Message Persistence](https://docs.emqx.com/en/enterprise/v4.4/backend/backend.html#mqtt-message-persistence) is not implemented in EMQX 5.0 and 5.1. It is planned for later versions.
 
 ## Gateway
 
-In EMQX 4.x, various protocols can be configured through corresponding Plugins and Modules (only for the enterprise edition). However, in E5.0, we have introduced a new concept called Gateway.
+In EMQX 4.x, various protocols can be configured through corresponding Plugins and Modules (only for the enterprise edition). However, in EMQX 5.0, we have introduced a new concept called Gateway.
 
-- It is **completely incompatible** from the configuration and management approaches perspective. E 5.0 has a brand new configuration format and management approach.
+- It is **completely incompatible** from the configuration and management approaches perspective. EMQX 5.0 has a brand new configuration format and management approach.
   - New configuration format.
   - Added a new HTTP API for managing gateways and clients of the gateway.
   - Each gateway has its own independent authentication method.
-- JT/T 808, GB/T 32960, TCP and OCPP are **not supported on EMQX 5.1.**.
+- JT/T 808, GB/T 32960, TCP and OCPP are **not supported on EMQX 5.1**.
 - Stomp, MQTT-SN, and ExProto protocols are fully compatible with version 4.x and have even more improvements in functionality.
 - Although the gateway for CoAP and LwM2M has been implemented in version 5.1.0, it is not recommended for use in a production environment due to incomplete design and implementation.
 
