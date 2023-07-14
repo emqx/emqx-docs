@@ -47,7 +47,7 @@ Before you create data bridges for TDengine, you need to create two data tables 
 
 1. Use the following SQL statements to create data table `t_mqtt_msg` in TDengine database. The data table is used to store the client ID, topic, payload, and creation time of every message. 
 
-   ```sql
+```sql
    CREATE TABLE t_mqtt_msg (
        ts timestamp,
        msgid NCHAR(64),
@@ -56,17 +56,17 @@ Before you create data bridges for TDengine, you need to create two data tables 
        payload BINARY(1024),
        arrived timestamp
      );
-   ```
+```
 
 2. Use the following SQL statements to create data table `emqx_client_events` in TDengine database. This data table is used to store the client ID, event type, and creation time of every event. 
 
-   ```sql
+```sql
      CREATE TABLE emqx_client_events (
          ts timestamp,
          clientid VARCHAR(255),
          event VARCHAR(255)
        );
-   ```
+```
 
 ### Create TDengine Data Bridges
 
@@ -94,8 +94,8 @@ Data bridges for message storage and event recording require different SQL templ
    - To create a data bridge for message storage, use the statement below:
 
      ```sql
-     INSERT INTO mqtt.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
-         VALUES (${ts}, ${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
+     INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
+         VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
      ```
 
    - To create a data bridge for online/offline status recording, use the statement below:
@@ -103,10 +103,12 @@ Data bridges for message storage and event recording require different SQL templ
      ```sql
      INSERT INTO emqx_client_events(ts, clientid, event) VALUES (
            ${ts},
-           ${clientid},
-           ${event}
+           '${clientid}',
+           '${event}'
          )
      ```
+
+**NOTE:** *There is a breaking change at e5.1.1, before it, the string-type values are automatically quoted, but now, users should manually quote them*
 
 7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed.
 
@@ -152,7 +154,7 @@ Now that you have successfully created the data bridge to TDengine, you can cont
 
 5. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**. Click the **Add** button. 
 
-5. Click the **Create** button to finish the setup. 
+6. Click the **Create** button to finish the setup. 
 
 Now you have successfully created the data bridge to TDengine. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to TDengine after parsing by rule `my_rule`. 
 
