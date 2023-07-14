@@ -22,7 +22,7 @@
 - [REST API](./api) 指导您快速开始使用 EMQX REST API。
 - [EMQX Dashboard](../dashboard/introduction.md) 为您全面介绍 EMQX 内置的管理控制台，您将了解如何管理和监控 EMQX 集群并配置和使用所需的各项功能。
 - [速率限制](../rate-limit/rate-limit.md)介绍了如何通过配置消息接入速度限制器避免系统过载，从而保证系统稳定。
-- [日志及可观测性](../obervability/overview.md)介绍了 EMQX 中的指标观测和监控功能，便于您进行系统监控和调试。
+- [日志及可观测性](../observability/overview.md)介绍了 EMQX 中的指标观测和监控功能，便于您进行系统监控和调试。
 - [备份与恢复](../operations/backup-restore.md)指导您如何对 EMQX 数据进行备份和恢复。
 - [插件与扩展](../extensions/introduction.md)帮助您通过开发插件来扩展 EMQX 的功能。
 - [遥测](../telemetry/telemetry.md)介绍了通过启用遥测来共享您的使用情况以帮助产品改进。
