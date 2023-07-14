@@ -28,5 +28,5 @@ This Administration Guide is designed to assist administrators and operators in 
 - [Plugins and Extensions](../extensions/introduction.md) help you extend the functionality of EMQX by developing plugins.
 - [Telemetry](../telemetry/telemetry.md) explains how to share your usage information by enabling telemetry to help improve the product.
 
-{% endemqxve %}
+{% endemqxce %}
 

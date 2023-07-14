@@ -4,5 +4,5 @@
 
 - [MQTT 教程](https://www.emqx.com/zh/mqtt-guide)提供了一站式的 MQTT 学习资源，涵盖了从入门到高级的所有内容。
 - [设计与实现](../design/overview.md)介绍了 EMQX 设计实现原理。 
-- [认证与鉴权](./emqx-access-control.md) 和 [TLS](./emqx.tls.md) 为您提供了关于网络安全知识的相关资源。
+- [认证与鉴权](./emqx-access-control.md) 和 [TLS](./emqx-tls.md) 为您提供了关于网络安全知识的相关资源。
 

@@ -1,4 +1,4 @@
-#  Dashboard 首页
+# Dashboard 首页
 
 登录成功后就可以进入到 EMQX Dashboard 的首页，即仪表盘页面。该菜单页面下包含有三个标签页：
 
