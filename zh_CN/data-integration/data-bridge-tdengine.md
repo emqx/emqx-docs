@@ -85,10 +85,12 @@ CREATE TABLE emqx_client_events (
 
 6. 配置 SQL 模板，使用如下 SQL 完成数据插入，此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`
 
-   ```sql
-     INSERT INTO mqtt.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
-       VALUES (${ts}, ${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
-   ```
+     ```sql
+     INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
+         VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
+     ```
+
+**注意:** *在 e5.1.1 中引入了一个破坏性变动，在这之前，字符类型的占位符会被自动转义加上单引号，在这之后，用户需要手动加上。*
 
 7. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](#配置参数)。
 8. 点击**创建**按钮完成数据桥接创建。
@@ -101,13 +103,13 @@ CREATE TABLE emqx_client_events (
 2. 点击页面右上角的**创建**。
 3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息存储至 TDengine，请确认规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量，此处规则 SQL 如下：
 
-  ```sql
+```sql
     SELECT
       *,
       now_timestamp('millisecond')  as ts
     FROM
       "t/#"
-  ```
+```
 
 4. 添加动作，在动作下拉框中选择 **使用数据桥接转发** 选项，选择先前创建好的 TDengine 数据桥接。
 5. 点击最下方**创建**按钮完成规则创建。
@@ -123,11 +125,11 @@ CREATE TABLE emqx_client_events (
 数据桥接的 SQL 模板如下，请注意字段不应当包含引号，SQL 末尾不要带 `;`:
 
 ```sql
-    INSERT INTO emqx_client_events(ts, clientid, event) VALUES (
-      ${ts},
-      ${clientid},
-      ${event}
-    )
+     INSERT INTO emqx_client_events(ts, clientid, event) VALUES (
+           ${ts},
+           '${clientid}',
+           '${event}'
+         )
 ```
 
 规则 SQL 如下：
