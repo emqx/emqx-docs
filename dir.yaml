@@ -505,6 +505,7 @@
     - title_en: MQTT over QUIC
       title_cn: MQTT over QUIC
       path: mqtt-over-quic/introduction
+      collapsed: true
       children:
         - title_en: Features and Benefits
           title_cn: 优势与特性
@@ -546,23 +547,6 @@
       title_cn: MQTT 客户端编程
       collapsed: true
       path: tutorial/mqtt-programming
-      children:
-        - title_en: How to Use MQTT in Node.js
-          title_cn: How to Use MQTT in Node.js
-          lang: en
-          path: https://www.emqx.com/en/blog/how-to-use-mqtt-in-nodejs
-        - title_en: 如何在 Node.js 项目中使用 MQTT
-          title_cn: 如何在 Node.js 项目中使用 MQTT
-          lang: cn
-          path: https://www.emqx.com/zh/blog/how-to-use-mqtt-in-nodejs
-        - title_en: How to Use MQTT in Python 
-          title_cn: How to Use MQTT in Python 
-          lang: en
-          path: https://www.emqx.com/en/blog/how-to-use-mqtt-in-python
-        - title_en: 如何在 Python 中使用 MQTT
-          title_cn: 如何在 Python 中使用 MQTT
-          lang: cn
-          path: https://www.emqx.com/zh/blog/how-to-use-mqtt-in-python
     - title_en: How to Achieve Flexible Data Collection for IoV
       title_cn: How to Achieve Flexible Data Collection for IoV
       lang: en

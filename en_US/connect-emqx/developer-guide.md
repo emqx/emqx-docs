@@ -2,7 +2,7 @@
 
 The Developer Guide is designed to provide developers with the information to get started with EMQX and build applications on top of it.
 
-This section will explore the core concepts of MQTT, MQTT-specific features and some extended features in EMQX. We will also explain how to configure these features in EMQX Dashboard and test them using client tools. The following features are covered in the guide:
+This chapter explores the core concepts of MQTT, MQTT-specific features, and some extended features in EMQX. We will also explain how to configure these features in EMQX Dashboard and test them using client tools. The following features are covered in the guide:
 
 - [MQTT Core Concepts](../messaging/mqtt-concepts.md)
 - [Test with MQTT Clients](../messaging/publish-and-subscribe.md)

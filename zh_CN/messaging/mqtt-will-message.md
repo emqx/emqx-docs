@@ -24,7 +24,7 @@ EMQX 实现了 MQTT 的遗嘱消息功能。如果为客户端设置了遗嘱消
 
    :::
 
-   <img src="/Users/emqx/Documents/GitHub/emqx-docs/zh_CN/messaging/assets/retain-message-new-connection.png" alt="retain-message-new-connection-general" style="zoom:35%;" />
+   <img src="./assets/retain-message-new-connection.png" alt="retain-message-new-connection-general" style="zoom:35%;" />
 
    将页面下拉，在 **Last Will and Testament** 部分，填写遗嘱消息的配置。
 
