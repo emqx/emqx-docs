@@ -1,5 +1,7 @@
 # 安全指南
 
-<!--to be translated-->
+安全是所有开发者需要重点去关注的内容，本章节旨在帮助您在 EMQX 部署中实现安全、可靠的连接，重点介绍如何使用 TLS 实现访问控制和网络安全。以下是本章节涵盖的主要内容：
 
-Security is a critical aspect of any MQTT-based application, and this guide is designed to help you understand and implement robust security measures in your EMQX deployments. This section will explore various security-related topics, focusing on access control and network security using Transport Layer Security (TLS).
+- [访问控制](./overview.md) 介绍了关于认证和授权的相关功能设定和操作以及如何设置黑名单。
+- [网络与 TLS](../network/overview.md) 介绍了 EMQX 如何支持端对端加密通信，包括如何启用 SSL/TLS 连接和 PSK 验证、如何进行获取 SSL/TLS 证书。
+

@@ -26,7 +26,7 @@ EMQX 5.1 引入了一个用户友好的命令行工具用于数据导入和导�
 * 存储在 EMQX 数据目录（`node.data_dir`）中的 SSL/TLS 证书
 * 存储在 EMQX 数据目录中的授权 acl.conf 文件
 
-::: 特别提示
+::: tip 特别提示
 
 任何存储在 EMQX 数据目录之外的 SSL/TLS 证书或 acl.conf 文件不会包含在导出的存档中。因此，在导出和导入数据时，需要注意在导入数据之前在所有目标节点上预置这些文件。这样确保必要的 SSL/TLS 证书和 acl.conf 文件可以正常使用。
 
@@ -95,5 +95,4 @@ EMQX 5.1 引入了一个用户友好的命令行工具用于数据导入和导�
    Importing emqx_admin database table...
    Data has been imported successfully.
    ```
-
 

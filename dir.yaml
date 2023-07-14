@@ -26,11 +26,6 @@
     - faq/faq
     - support/technical-support
     - getting-started/roadmap
-  # - title_en: Product Roadmap
-  #   title_cn: Product Roadmap
-  #   lang: en
-  #   edition: ce
-  #   path: https://github.com/emqx/emqx/discussions/11136
 
 - title_en: Installation and Migration
   title_cn: 安装部署和迁移
@@ -60,7 +55,7 @@
       path: deploy/install-source
       edition: ce
     # - deploy/install-marketplace
-    - title_en: Working with License
+    - title_en: Work with License
       title_cn: 配置 License
       edition: ee
       path: deploy/license
@@ -84,7 +79,6 @@
 
 - title_en: Developer Guide
   title_cn: 开发者指南
-  lang: en
   path: connect-emqx/developer-guide
   collapsed: true
   children:
@@ -95,22 +89,18 @@
       children:
         - messaging/mqtt-concepts
         - title_en: Test with MQTT Clients
-          title_cn: 使用 MQTT Client 工具测试
+          title_cn: MQTT 客户端工具演示
           path: messaging/publish-and-subscribe
-          lang: en
       # - messaging/explore-mqtt
         - title_en: Shared Subscription
           title_cn: 共享订阅
           path: messaging/mqtt-shared-subscription
-          lang: en
         - title_en: Retained Message
           title_cn: 保留消息
           path: messaging/mqtt-retained-message
-          lang: en
         - title_en: Will Message
           title_cn: 遗嘱消息
           path: messaging/mqtt-will-message
-          lang: en
         - messaging/mqtt-delayed-publish
         - messaging/mqtt-auto-subscription
         - messaging/mqtt-exclusive-subscription
@@ -136,20 +126,23 @@
   path: mqtt/emqx-essentials
   collapsed: true 
   children:
-    - title_en: MQTT Essentials
-      title_cn: MQTT Essentials
+    - title_en: MQTT Guide
+      title_cn: MQTT Guide
       lang: en
       path: https://www.emqx.com/en/mqtt-guide
     - title_en: MQTT 教程
       title_cn: MQTT 教程
       lang: cn
       path: https://www.emqx.com/zh/mqtt-guide
-    - title_en: EMQX Essentials
-      title_cn: EMQX 基础知识
+    - title_en: Design and Implementation
+      title_cn: 设计与实现
       path: design/overview
       collapsed: true
       children:
-        - design/clustering
+        - title_en: Clustering
+          title_cn: Clustering
+          lang: en
+          path: design/clustering
         - design/inflight-window-and-message-queue
         - design/retransmission
       # - design/design
@@ -167,6 +160,7 @@
     - title_en: Authentication and Authorization
       title_cn: 认证与鉴权
       collapsed: true
+      path: mqtt/emqx-access-control
       children: 
         - title_en: Username and Password Authentication
           title_cn: Username and Password Authentication
@@ -180,6 +174,7 @@
     - title_en: TLS
       title_cn: TLS
       collapsed: true
+      path: mqtt/emqx-tls
       children:
         - title_en: What is Mutual Authentication?
           title_cn: What is Mutual Authentication?
@@ -542,14 +537,15 @@
        
 
 - title_en: Tutorials
-  title_cn: 使用教程
+  title_cn: 实用教程
   lang: en
   path: tutorial/tutorial
   collapsed: true
   children:  
     - title_en: MQTT Programming
-      title_cn: MQTT 编程
+      title_cn: MQTT 客户端编程
       collapsed: true
+      path: tutorial/mqtt-programming
       children:
         - title_en: How to Use MQTT in Node.js
           title_cn: How to Use MQTT in Node.js

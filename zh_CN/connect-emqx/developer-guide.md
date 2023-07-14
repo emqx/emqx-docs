@@ -1,24 +1,20 @@
 # 开发者指南
 
-<!-- to be translated-->
+开发者指南旨在帮助开发者们快速入门 EMQX，并构建应用程序。开发者指南将探讨 MQTT 的核心概念和功能以及 EMQX 的一些扩展功能，还会介绍如何在 EMQX 仪表板中配置这些功能并使用客户端工具进行测试。具体将涵盖以下内容：
 
-The Developer Guide is designed to provide developers with the information to get started with EMQX and build applications on top of it.
+- [MQTT 核心概念](../messaging/mqtt-concepts.md)
+- [MQTT 客户端工具演示](../messaging/publish-and-subscribe.md)
+- [共享订阅](../messaging/mqtt-shared-subscription.md)
+- [保留消息](../messaging/mqtt-retained-message.md)
+- [遗嘱消息](../messaging/mqtt-will-message.md)
+- [排他订阅](../messaging/mqtt-exclusive-subscription.md)
+- [延迟发布](../messaging/mqtt-delayed-publish.md)
+- [自动订阅](../messaging/mqtt-auto-subscription.md)
 
-This section will explore the core concepts of MQTT, MQTT-specific features and some extended features in EMQX. We will also explain how to configure these features in EMQX Dashboard and test them using client tools. The following features are covered in the guide:
-
-- [MQTT Core Concepts](../messaging/mqtt-concepts.md)
-- [Test with MQTT Clients](../messaging/publish-and-subscribe.md)
-- [Shared Subscription](../messaging/mqtt-shared-subscription.md)
-- [Retained Message](../messaging/mqtt-retained-message.md)
-- [Will Message](../messaging/mqtt-will-message.md)
-- [Exclusive Subscription](../messaging/mqtt-exclusive-subscription.md)
-- [Delayed Publish](../messaging/mqtt-delayed-publish.md)
-- [Auto Subscribe](../messaging/mqtt-auto-subscription.md)
-
-EMQX's support of the MQTT protocol makes it compatible with most MQTT client libraries and SDKs. This guide also provides [step-by-step instructions and code samples](./introduction.md) to help developers quickly start building their MQTT projects. For a complete list of MQTT client SDKs and their Comparison, see [MQTT client SDKs](https://www.emqx.com/en/mqtt-client-sdk).
+由于 EMQX 支持 MQTT 协议，所以能够兼容大多数 MQTT 客户端库和 SDK。本指南中还提供了[代码示例](./introduction.md)，帮助开发者快速开始构建其 MQTT 项目。有关 MQTT 客户端 SDK 及其比较的完整列表，参见 [MQTT 客户端 & SDKs](https://www.emqx.com/zh/mqtt-client-sdk)。
 
 ::: tip
 
-Not all SDKs are displayed on the document.
+文档中并不包括所有的 SDK。
 
 :::

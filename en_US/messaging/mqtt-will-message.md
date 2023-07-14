@@ -25,21 +25,21 @@ You can use client tools to try this messaging service in EMQX. This section int
 
    <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
 
-   In **Last Will and Testament** section, fill in the will message configuration.
+   Scroll down the page and in **Last Will and Testament** section, fill in the will message configuration.
 
-   - **Last-Will Topic**: Type `offline`.
+   - **Last-Will Topic**: Enter `offline`.
    - **Last-Will QoS**: Set as the default value `0`.
    - **Last-Will Retain**: Set disabled as default. If enabled, the will message will also be a retained message.
-   - **Last-Will Payload**: Type `I'm offline`.
+   - **Last-Will Payload**: Enter `I'm offline`.
    - **Will Delay Intervals (s)**: Set `5` seconds.
-
-   <img src="./assets/Configure-new-connection-will.png" alt="Configure-new-connection-will" style="zoom:35%;" />
 
    Leave the rest settings as default. Click the **Connect** button.
 
-2. Create a new connection for another client. Type the connection name as `Subscriber`.
+   <img src="./assets/Configure-new-connection-will.png" alt="Configure-new-connection-will" style="zoom:35%;" />
 
-3. Click **New Subscription** in the **Subscribe** pane. Type `offline` in the **Topic** textbox. Leave the other settings as default. Click the **Confirm** button.
+2. In the **Connections** pane, click **+** -> **New Connection** to create a new client connection. Set the connection **Name** as `Subscriber` and **Host** as `127.0.0.1`. Leave other settings as default and click **Connect**.
+
+3. Click **New Subscription** in the **Subscriber** pane. Enter `offline` in the **Topic** textbox. Leave the other settings as default. Click the **Confirm** button.
 
    <img src="./assets/Subscribe-will-message.png" alt="Subscribe-will-message" style="zoom:35%;" />
 
