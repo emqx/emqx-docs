@@ -129,10 +129,10 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 | ----------------- | ------ | ---------- | ------------------------------------------------------------ |
 | `nodes`           | 字符   | 是         | 节点名称                                                     |
 | `redirect_to`     | 正整数 | 是         | 重连时的重定向服务器地址，仅适用 MQTT 5.0 客户端<br>具体可参考 [MQTT 5.0 协议 - 服务器重定向(Server redirection) ](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255) |
-| `conn_evict_rate` | 正整数 | 是         | 客户端每秒断开连接速度。默认为 500 连接/秒。                                     |
-| `migrate_to`      | 正整数 | 是         | 目标节点列表，多个节点以逗号或空格分隔。                     |
-| `wait_takeover`   | 正整数 | 否         | 所有连接断开后，等待客户端重连以接管会话的时间；单位： 秒 ，默认为 60 秒。   |
-| `sess_evict_rate` | 正整数 | 否         | `wait-takeover` 之后每秒会话疏散速度。默认为 500 会话/秒。                       |
+| `conn_evict_rate` | 正整数 | 是         | 客户端每秒断开连接速度。默认为 500 连接/秒。                 |
+| `migrate_to`      | 字符   | 是         | 目标节点列表，多个节点以逗号或空格分隔。                     |
+| `wait_takeover`   | 正整数 | 否         | 所有连接断开后，等待客户端重连以接管会话的时间；单位： 秒 ，默认为 60 秒。 |
+| `sess_evict_rate` | 正整数 | 否         | `wait-takeover` 之后每秒会话疏散速度。默认为 500 会话/秒。   |
 
 #### 停止疏散
 
