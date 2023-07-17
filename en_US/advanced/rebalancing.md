@@ -1,12 +1,12 @@
 # Node Evacuation and Cluster Load Rebalancing
 
-MQTT is a stateful long-lived connection access protocol, which means connections will not be easily disconnected once they connection is established. Therefore, upgrading, maintaining, and scaling cluster nodes will become more challenging. To facilitate users' cluster operation and maintenance, EMQX provides node evacuation and cluster load rebalancing functions.
+MQTT is a stateful long-lived connection access protocol, which means connections will not be easily disconnected once the connection is established. Therefore, upgrading, maintaining, and scaling cluster nodes will become more challenging. EMQX provides node evacuation and cluster load rebalancing functions to facilitate users' cluster operation and maintenance.
 
 ## Node Evacuation
 
 When you need to maintain or upgrade a node in the cluster, directly shutting down the node can result in lost connections and sessions, causing data loss. In addition, this type of operation can cause a large number of devices to go offline and reconnect for a period of time, increasing server load and potentially affecting overall business.
 
-Therefore, EMQX provides node evacuation functionality to help migrate all connection and session data from the node to other nodes in the cluster before shutting down, reducing the impact on overall business.
+Therefore, EMQX provides node evacuation functionality to help migrate all connection and session data from the node to other nodes in the cluster before shutting down, reducing the impact on the overall business.
 
 ### How It Works
 
@@ -129,7 +129,7 @@ The above statement contains the following fields:
 | `nodes`           | String           | Yes             | Node name                                                    |
 | `redirect_to`     | Positive integer | Yes             | The redirected server address during reconnection, for MQTT 5.0 clients only; <br>Refer to [MQTT 5.0 Specification - Server redirection](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255) for more details. |
 | `conn_evict_rate` | Positive integer | Yes             | Client disconnection rate, count/second; 500 connections per second by default |
-| `migrate_to`      | Positive integer | Yes             | Space or comma-separated list of nodes to which sessions will be evacuated |
+| `migrate_to`      | String           | Yes             | Space or comma-separated list of nodes to which sessions will be evacuated |
 | `wait_takeover`   | Positive integer | No              | Amount of time in seconds to wait before starting session evacuation; Unit: second, 60 seconds by default |
 | `sess_evict_rate` | Positive integer | No              | Client evacuation rate, count/second; 500 sessions per second by default |
 
