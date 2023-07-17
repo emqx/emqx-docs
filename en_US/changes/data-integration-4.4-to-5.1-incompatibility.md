@@ -2,7 +2,7 @@
 
 The whole concept of Data Integration was upgraded in EMQX 5.1.
 
-- The previous **Rule** -> **Action** -> **Resources** process is changed to **Data Bridge** -> **Rules**. 
+- The previous **Rule** -> **Action** -> **Resources** process is changed to **Rules** -> **Data Bridge**. 
 
    In EMQX 5.1, when adding an action for a certain rule, you must first create a data bridge and modify the bridge's SQL template to adapt the rule output. But in EMQX 4.4, there was a configuration entity for Action.
 
@@ -24,7 +24,7 @@ The whole concept of Data Integration was upgraded in EMQX 5.1.
 
 - `EMQX Bridge` as a resource type is no longer supported.
 
-  <img src="./assets/mqtt-bridge-resource.png" alt="mqtt-bridge-resource" style="zoom:50%;" />
+  <img src="./assets/emqx-bridge-resource.png" alt="emqx-bridge-resource" style="zoom:50%;" />
 
 ## Common Incompatibility Changes
 

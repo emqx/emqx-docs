@@ -509,7 +509,7 @@
   collapsed: true
   children:
     - title_en: EMQX Clustering
-      title_zh: EMQX 集群
+      title_cn: EMQX 集群
       lang: en
       path: design/clustering
     - design/inflight-window-and-message-queue
@@ -527,9 +527,28 @@
     #     - development/python
     #     - development/resource
 
-- title_en: Change log
-  title_cn: 版本发布记录
-  path: changes/changes-5.1
+- title_en: Release Notes
+  title_cn: 版本发布说明
+  collapsed: true
+  children:
+    - changes/changes-5.1
+    - title_en: Incompatible Changes
+      title_cn: Incompatible Changes
+      lang: en
+      path: changes/breaking-changes-5.1
+      children:
+        - title_en: Authentication / Authorization Compatibility Between EMQX 4.4 and EMQX 5.1 
+          title_cn: Authentication / Authorization Compatibility Between EMQX 4.4 and EMQX 5.1 
+          lang: en
+          path: changes/auth-4.4-to-5.1-compatibility
+        - title_en: Data Integration Compatibility Between EMQX 5.1 and EMQX 4.4
+          title_cn: Data Integration Compatibility Between EMQX 5.1 and EMQX 4.4
+          lang: en
+          path: changes/data-integration-4.4-5.1-incompatibility
+        - title_en: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
+          title_cn: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
+          lang: en
+          path: changes/gateway-4.4-to-5.1-incompatibility
 
 - title_en: Technical Support
   title_cn: 技术支持
