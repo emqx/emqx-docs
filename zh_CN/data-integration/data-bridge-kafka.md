@@ -150,7 +150,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
    
    ::::
    
-5. 点击**创建**前，您可点击**测试连接**按钮确保能连接到 Kafuka 服务器。
+5. 点击**创建**前，您可点击**测试连接**按钮确保能连接到 Kafka 服务器。
 
 6. 点击**创建**，将提示是否使用该数据桥接创建规则。
 
