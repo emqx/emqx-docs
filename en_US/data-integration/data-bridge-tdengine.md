@@ -89,19 +89,23 @@ Data bridges for message storage and event recording require different SQL templ
    - **Username**: Input `root`.
    - **Password**: Input `taosdata`.
 
-6. Configure the **SQL Template** based on the feature to use: 
+6. Configure the **SQL Template** based on the feature to use.
 
-   Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements. 
+   ::: tip
 
+   There is a breaking change in EMQX 5.1.1. Prior to this version, string-type values were automatically quoted. However, starting from EMQX 5.1.1, users are required to manually quote these values.
+
+   :::
+   
    - To create a data bridge for message storage, use the statement below:
-
+   
      ```sql
      INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
          VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
      ```
-
+   
    - To create a data bridge for online/offline status recording, use the statement below:
-
+   
      ```sql
      INSERT INTO emqx_client_events(ts, clientid, event) VALUES (
            ${ts},
@@ -109,8 +113,6 @@ Data bridges for message storage and event recording require different SQL templ
            '${event}'
          )
      ```
-
-**NOTE:** *There is a breaking change at e5.1.1, before it, the string-type values are automatically quoted, but now, users should manually quote them*
 
 7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed.
 

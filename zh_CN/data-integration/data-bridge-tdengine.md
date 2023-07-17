@@ -83,8 +83,14 @@ CREATE TABLE emqx_client_events (
 
 5. 输入 TDengine 连接信息，主机列表填写 **127.0.0.1:6041**，数据库填写 `mqtt`，用户名为 `root`，密码为 `taosdata`。
 
-6. 配置 SQL 模板，使用如下 SQL 完成数据插入，此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`
+6. 配置 SQL 模板，可使用如下 SQL 完成数据插入。
 
+     ::: tip
+     
+     在 EMQX 5.1.1 中引入了一个重大变更。在 EMQX 5.1.1 之前，字符类型的占位符会被自动转义加上单引号，而现在需要手动加上单引号。
+     
+     :::
+     
      ```sql
      INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
          VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
