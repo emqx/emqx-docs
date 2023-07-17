@@ -535,7 +535,7 @@
     - title_en: Incompatible Changes
       title_cn: Incompatible Changes
       lang: en
-      path: changes/breaking-changes-5.1
+      path: changes/breaking-changes-5.1.0
       children:
         - title_en: Authentication / Authorization Compatibility Between EMQX 4.4 and EMQX 5.1 
           title_cn: Authentication / Authorization Compatibility Between EMQX 4.4 and EMQX 5.1 
@@ -544,7 +544,7 @@
         - title_en: Data Integration Compatibility Between EMQX 5.1 and EMQX 4.4
           title_cn: Data Integration Compatibility Between EMQX 5.1 and EMQX 4.4
           lang: en
-          path: changes/data-integration-4.4-5.1-incompatibility
+          path: changes/data-integration-4.4-to-5.1-incompatibility
         - title_en: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
           title_cn: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
           lang: en
