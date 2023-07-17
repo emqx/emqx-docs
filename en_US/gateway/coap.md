@@ -344,7 +344,7 @@ coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test"
 Or carry `clientid` and `token` in `Connection Mode`:
 
 ```bash
-coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test&clientid=123&token=3404490787"
+coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
 
