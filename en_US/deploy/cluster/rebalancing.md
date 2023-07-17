@@ -245,7 +245,7 @@ Rebalance stopped
 
 ### Start/Stop Rebalancing via HTTP API
 
-All the operations available from the CLI are also available from the API. Start/stop commands require a node as a parameter. For details, see [API Docs](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html).
+All the operations available from the CLI are also available from the API. Start/stop commands require a node as a parameter. For details, see [API Docs](https://docs.emqx.com/en/enterprise/v5.1/admin/api-docs.html).
 
 ## Integrate Load Balancer
 
