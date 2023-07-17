@@ -322,7 +322,7 @@ coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test"
 `连接模式` 下则需要携带 `clientid` 和 `token`
 
 ```bash
-coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test&clientid=123&token=3404490787"
+coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
 
