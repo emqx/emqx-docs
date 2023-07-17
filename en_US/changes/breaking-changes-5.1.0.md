@@ -150,7 +150,7 @@ In EMQX 4.x, various protocols can be configured through corresponding Plugins a
 - Stomp, MQTT-SN, and ExProto protocols are fully compatible with version 4.x and have even more improvements in functionality.
 - Although the gateway for CoAP and LwM2M has been implemented in version 5.1.0, it is not recommended for use in a production environment due to incomplete design and implementation.
 
-For the complete compatibility report, see [Gateway Incompatibility between e4.4  and e5.1](./gateway-4.4-to-5.1-imcompatibility.md).
+For the complete compatibility report, see [Gateway Incompatibility between e4.4  and e5.1](./gateway-4.4-to-5.1-incompatibility.md).
 
 ## Observability 
 
