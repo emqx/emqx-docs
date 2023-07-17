@@ -2,7 +2,7 @@
 
 Extension Protocol (ExProto) 协议是一个基于 gRPC 通信实现的自定义协议解析网关。它允许用户使用其熟悉的编程语言（如 Java、Python、Go 等）开发 gRPC 服务，用于解析设备的网络协议，并完成设备连接、身份验证和消息传输等功能。
 
-本也介绍了如何在 EMQX 中配置和使用 ExProto 网关。
+本页介绍了如何在 EMQX 中配置和使用 ExProto 网关。
 
 <!--a brief introduction of the architecture-->
 
@@ -82,17 +82,17 @@ message SocketCreatedRequest {
 
 为了简化配置过程，EMQX 为**网关**页面上所有必填的字段提供了默认值。如果不需要自定义配置，您只需以下 3 步就可启用 ExProto 网关:
 
-1. Click **Next** in the **Basic Configuration** tab to accept all the default settings.
-2. Then you will be directed to the **Listeners** tab, where EMQX has pre-configured a TCP listener on port 7993. Click **Next** again to confirm the setting.
-3. Click the **Enable** button to activate the ExProto Gateway.
+1. 接受**基础参数**步骤页面上所有的默认设置，点击**下一步**。
+2. 然后您将被导航到**监听器**步骤页面，在该页面中，EMQX 已经预配置了一个端口为 7993 的 TCP 监听器。再次点击**下一步**以确认设置。
+3. 点击**启用**按钮以激活 ExProto 网关。
 
-Upon completing the gateway activation process, you can return to the **Gateways** page and observe that the ExProto Gateway now displays an **Enabled** status.
+完成网关激活过程后，您可以返回**网关**页面并看到 ExProto 网关现在显示为**已启用**状态。
 
-<img src="./assets/exproto-enabled.png" alt="Enabled ExProto gateway" style="zoom:50%;" />
+<img src="./assets/exproto-enabled.png" alt="Enabled ExProto gateway" style="zoom:45%;" />
 
-The above configuration can also be configured with HTTP API:
+以上配置也可通过 REST API 完成。
 
-**Example Code:**
+**示例代码：**
 
 ```bash
 curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/exproto' \
@@ -121,171 +121,99 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/exproto' \
 }'
 ```
 
-For a detailed HTTP API description, see [HTTP API - Gateway](../admin/api.md).
+更多信息，参考 [REST API](../admin/api.md)。
 
-If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your ExProto Gateway](#customize-your-exproto-gateway).
+如果您有一些定制化的需求，比如想要添加更多监听器或增加认证规则，您可以继续阅读 [自定义您的 ExProto 网关](#自定义您的-exproto-网关)。
 
-## Start gRPC Service Example for Testing
+## 自定义您的 ExProto 网关
 
-In this section, you can start a gRPC service example to learn how ExProto Gateway and the gRPC service work together.
+除了默认设置外，EMQX 还提供了各种配置选项，以更好地适应您的特定业务需求。本节提供了关于**网关**页面上可用配置选项的深入概述。
 
-You can find example programs for various languages in [emqx-extension-examples](https://github.com/emqx/emqx-extension-examples). In this repository, `exproto-svr-python` is an Echo program that implements the ConnectionUnaryHandler of ExProto Gateway using Python. It simply sends back any data received from a TCP client. The following steps take `exproto-svr-python` as an example:
+### 基本设置
 
-::: tip Prerequisites:
+在**网关**页面，找到 **ExProto**，点击**操作**列中的**设置**。在**设置**页，您可以自定义 ConnectionUnaryHandler 服务地址、ConnectionAdapter 监听端口，并设置该网关的 MountPoint 字符串。
 
-Before you start, make sure you have completed the following:
+<img src="./assets/exproto-basic-config.png" alt="Basic Configuration" style="zoom:45%;" />
 
-- Run EMQX 5.1.0 or above and enable the ExProto Gateway with default configurations.
+- **启用统计**: 设置是否允许网关收集和报告统计信息；默认值：`true`，可选值：`true`，`false`。
+- **空闲超时时间**: 设置连接客户端在无活动状态下被视为断开连接的持续时间（以秒为单位）。默认值：`30秒`。
+- **挂载点**: 设置一个字符串，用于在发布或订阅时作为所有主题的前缀，提供在不同协议之间实现消息路由隔离的方法，例如 `mqttsn/`。此主题前缀由网关管理。客户端在发布和订阅时无需显式添加此前缀。
+- **gRPC 监听**: 配置 ExProto 网关需要启动的 `ConnectionAdapter` 服务。
+  - **绑定**: 服务监听地址和端口。监听地址。默认值：**0.0.0.0:9100**。
+  - **验证客户端证书**：启用或禁用对等验证。默认为禁用，如果启用，您可以配置相关的 **TLS 证书**，**TLS 密钥**和 **CA 证书**信息，可以通过输入文件内容或使用**选择文件**按钮上传。详细信息请参阅 [开启 SSL/TLS 连接](../network/emqx-mqtt-tls.md)。
+- **gRPC 连接**: 配置 ExProto 网关需要请求的 `ConnectionHandler` 服务地址。
+  - **服务器**: 对端 gRPC 服务器地址。
+  - **启用 TLS**：启用 TLS 连接。默认为禁用，如果启用，您可以继续进行以下设置：
+    - **验证服务器证书 **：启用或禁用对等验证。默认为禁用，如果启用，您可以配置相关的 **TLS 证书**，**TLS 密钥**和 **CA 证书**信息，可以通过输入文件内容或使用**选择文件**按钮上传。
+    - **SNI**：指定要在 TLS 服务器名称指示扩展中使用的主机名。
 
-- Install Python 3.7 or above, and install the following dependencies:
+### 添加监听器
 
-  ```
-  python -m pip install grpcio
-  python -m pip install grpcio-tools
-  ```
-
-:::
-
-1. On the same machine with EMQX running, clone the sample code and enter the directory `exproto-svr-python`:
-
-   ```bash
-   git clone https://github.com/emqx/emqx-extension-examples
-   cd exproto-svr-python
-   ```
-
-2. Start the gRPC Server using the following command:
-
-   ```
-   python exproto_server.py
-   ```
-
-   After a successful start, an output similar to the following will be printed:
-
-   ```
-   ConnectionUnaryHandler started successfully, listening on 9001
-   
-   Tips: If the Listener of EMQX ExProto gateway listen on 7993:
-         You can use the telnet to test the server, for example:
-   
-         telnet 127.0.0.1 7993
-   
-   Waiting for client connections...
-   ```
-
-3. Use `telenet` to access the 7993 port that Exproto Gateway is listening on, and enter `Hi, this is tcp client!` to test if the gRPC Server is working properly. For example:
-
-   ```
-   $ telnet 127.0.0.1 7993
-   Trying 127.0.0.1...
-   Connected to 127.0.0.1.
-   Escape character is '^]'.
-   Hi, this is tcp client!
-   Hi, this is tcp client!
-   ```
-
-4. Go to EMQX Dashboard and click **Management** -> **Gateways** from the left navigation menu. Click **Clients** of ExProto. On the ExProto page, you can see the client you connect to using telnet. 
-
-   <img src="./assets/connected-exproto-client.png" alt="Connected ExProto Client" style="zoom:50%;" />
-
-
-
-
-## Customize Your ExProto Gateway
-
-In addition to the default settings, EMQX provides a variety of configuration options to better accommodate your specific business requirements. This section offers an in-depth overview of the configuration options available on the **Gateways** page.
-
-### Basic Configuration
-
-In the **Basic Configuration** tab, you can customize your ConnectionUnaryHandler service address, ConnectionAdapter listening port, and set the MountPoint string for this gateway. 
-
-![Basic Configuration](./assets/exproto-basic-config.png)
-
-- **Idle Timeout**: Set the duration (in seconds) of inactivity after which a connected client will be considered disconnected. Default: `30 s`.
-
-- **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: `true`, optional values: `true`, `false`.
-
-- **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, `mqttsn/`.
-
-  **Note**: This topic prefix is managed by the gateway. Clients do not need to add this prefix explicitly when publishing and subscribing.
-
-- **gRPC ConnectionAdapter**: ExProto gateway provides the ConnectionAdapter service configuration.
-
-  - **Bind**: Listening address. Default: **0.0.0.0:9100**.
-
-- **gRPC ConnectionHandler**: The callback server configuration that implemented ConnectionUnaryHandler.
-
-  - **Server**: The callback server address.
-
-
-### Add Listeners
-
-By default, one TCP listener with the name of **default** is already configured on port `7993`, which allows a maximum of 1,000 connections per second, and support up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings, click **Delete** to delete the listener, or click **Add Listener** to add a new listener.
+默认情况下，已经在端口 `7993` 上配置了一个名为 **default** 的 TCP 监听器，允许每秒最多 1,000 个连接，并支持高达 1,024,000 个并发连接。您可以点击**监听器**页签进行更多自定义设置，包括编辑、 删除监听器，或添加新的监听器。
 
 <img src="./assets/exproto-listener.png" alt="exproto-listener" style="zoom:50%;" />
 
-Click **Add Listener** to open **Add Listener** page, where you can continue with the following configuration fields:
+点击 **+ 添加监听器**，您可以在弹出的**添加监听器**页面中进行以下配置：
 
-**Basic settings**
+**基本设置**
 
-- **Name**: Set a unique identifier for the listener.
-- **Type**: Select the protocol type, for MQTT-SN, this can be either `udp` or `dtls`.
-- **Bind**: Set the port number on which the listener accepts incoming connections.
-- **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols.
+- **名称**: 为监听器设置一个唯一标识符。
+- **类型**: 选择协议类型，对于 MQTT-SN，可以选择 `udp` 或 `dtls`。
+- **监听地址**: 设置监听器接受传入连接的端口号。
+- **挂载点**（可选）: 设置一个字符串，作为发布或订阅时所有主题的前缀，提供在不同协议之间实现消息路由隔离的方法。
 
-**Listener Settings**
+**监听器设置**
 
-- **Acceptor**: Set the size of the acceptor pool, default: `16`.
-- **Max Connections**: Set the maximum number of concurrent connections that the listener can handle, default: `1024000`.
-- **Max Connection Rate**: Set the maximum rate of new connections the listener can accept per second, default: `1000`.
+- **接收器**: 设置接收器池的大小，默认值：`16`。
+- **最大连接数**: 设置监听器可以处理的最大并发连接数，默认值：`1024000`。
+- **最大连接速率**: 设置监听器每秒钟可以接受的最大新连接数，默认值：`1000`。
+- **代理协议**：是否开启 Proxy Protocol V1/2。默认值`false`。
+- **代理协议超时**：接收 Proxy Protocol 报文头的超时时间。如果在超时内没有收到 Proxy Protocol 包，EMQX 将关闭 TCP 连接。默认值：`3` 秒。
 
-**TCP Settings**
+**TCP 设置**
 
-- **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://erlang.org/doc/man/inet.html#setopts-2).
-- **Buffer**: Set the size of the buffer used to store incoming and outgoing packets, unit: KB.
-- **Receive Buffer**: Set the size of the receive buffer, unit: KB.
-- **Send Buffer**: Set the size of the send buffer, unit: KB.
-- **SO_REUSEADDR**: Set whether to allow local reuse of port numbers. <!--not quite sure what this means-->
+- **ActiveN**: 设置套接字的 `{active, N}` 选项，即套接字可以主动处理的传入数据包数量。详细信息请参阅 [Erlang文档 - setopts/2](https://erlang.org/doc/man/inet.html#setopts-2)。
+- **Buffer**: 设置用于存储传入和传出数据包的缓冲区大小，单位：KB。
+- **TCP_NODELAY**: 设置连接的 TCP_NODELAY 标识。默认值：`false`。
+- **SO_REUSEADDR**: 设置是否允许本地重用端口号。默认值：`true`。<!--不太确定这是什么意思-->
+- **发送超时时间**：连接的 TCP 发送超时。默认值：`15` 秒。
+- **关闭发送超时连接**：如果发送超时，则关闭连接。默认值 `true`。
 
-**TLS Settings** (for ssl listeners only)
+**TLS 设置**（仅适用于 SSL 监听器）
 
-You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
+您可以通过设置切换开关来启用 TLS 验证。但在此之前，您需要配置相关的 **TLS 证书**，**TLS 密钥**和 **CA 证书**信息，可以通过输入文件内容或使用**选择文件**按钮上传。详细信息请参阅 [开启 SSL/TLS 连接](../network/emqx-mqtt-tls.md)。
 
-Then you can continue to set:
+然后您可以继续设置：
 
-- **SSL Versions**: Set the DTLS versions supported, default: `dtlsv1.2` and `dtlsv1`.
-- **SSL Fail If No Peer Cert**: Set whether EMQX will reject the connection if the client sends an empty certificate, default: `false`, optional values: `true`, `false`.
-- **CACert Depth**: Set the maximum number of non-self-issued intermediate certificates that can be included in a valid certification path following the peer certificate, default, `10`.
-- **Key File Passphrase**: Set the user's password, used only when the private key is password-protected.
-
-
-### Configure Authentication
-
-ExProto Gateway supports various types of authenticators, such as:
-
-- [Built-in Database Authentication](../access-control/authn/mnesia.md)
-- [MySQL Authentication](../access-control/authn/mysql.md)
-- [MongoDB Authentication](../access-control/authn/mongodb.md)
-- [PostgreSQL Authentication](../access-control/authn/postgresql.md)
-- [Redis Authentication](../access-control/authn/redis.md)
-- [HTTP Server Authentication](../access-control/authn/http.md)
-- [JWT Authentication](../access-control/authn/jwt.md)
-
-The Client ID, Username, and Password of the client information are all derived from the parameters passed in the Authenticate method of the ConnectionAdapter.
+- **SSL 版本**: 设置支持的 TLS 版本，默认值：`tlsv1`，`tlsv1.1`，`tlsv1.2` 和 `tlsv1.3`。
+- **没有证书则 SSL 失败**: 设置当客户端发送空证书时，EMQX 是否拒绝连接，默认值：`false`，可选值：`true`，`false`。
+- **CA 证书深度**: 设置可以包含在对等证书后的有效认证路径中的非自签发中间证书的最大数量，默认值：`10`。
+- **密钥文件密码**: 设置用户的密码，仅在私钥受密码保护时使用。
 
 
-This part takes the Dashboard as an example to illustrate how to do the authentication configuration.
+### 配置接入认证
 
-On the **Gateways** page, locate **ExProto** and click **Settings** in the **Actions** column. On the Exproto page, click the **Authentication** tab.
+ExProto 网关支持各种类型的认证器，例如：
 
-Click **+ Create Authentication**, choose **Password-Based** as the **Mechanism**, and select **HTTP Server** as the **Backend**. Then in the **Configuration** tab, you can set the authentication rules.
+- [内置数据库认证](../access-control/authn/mnesia.md)
+- [MySQL 认证](../access-control/authn/mysql.md)
+- [MongoDB 认证](../access-control/authn/mongodb.md)
+- [PostgreSQL 认证](../access-control/authn/postgresql.md)
+- [Redis 认证](../access-control/authn/redis.md)
+- [HTTP 服务器认证](../access-control/authn/http.md)
+- [JWT 认证](../access-control/authn/jwt.md)
+
+客户端信息的客户端 ID、用户名和密码都是从 ConnectionAdapter 的 Authenticate 方法中传递的参数中获取的。
+
+本节以 Dashboard 为例，说明如何进行接入认证配置。点击**接入认证**页签。
+
+点击 **+ 添加认证**，选择 **Password-Based** 作为**认证方式**，并选择 **HTTP 服务**作为**数据源**，点击**下一步**。然后在**配置参数**中，您可以设置身份验证规则。对于每一项配置的具体解释，您可以参考[使用 HTTP 服务进行密码认证](../access-control/authn/http.md)。
 
 ![mqttsn authentication](./assets/exproto-authn-config.png)
 
-For a detailed explanation of each field on the page, you can refer to [HTTP Server Authentication](../access-control/authn/http.md).
+以上配置也可以通过 REST API 设置。
 
-The above configuration can also be performed via HTTP API.
-
-**Example Code**
+**示例代码：**
 
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/exproto/authentication' \
@@ -314,4 +242,106 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/exproto/authentication' \
   "enable": true
 }'
 ```
+
+## 开启 gRPC 服务示例进行测试
+
+本节将带您启动一个 gRPC 服务示例，以了解 ExProto 网关和 gRPC 服务是如何协同工作的。
+
+您可以在 [emqx-extension-examples](https://github.com/emqx/emqx-extension-examples) 中找到各种语言的示例程序。在这个代码库中，`exproto-svr-python` 是一个使用 Python 实现的 Echo 程序，它通过 ExProto 网关的 ConnectionUnaryHandler 将从 TCP 客户端接收到的任何数据简单地返回回去。以下步骤以 `exproto-svr-python` 为例：
+
+::: tip 前置准备
+
+在开始之前，请确保已完成以下操作：
+
+- 运行 EMQX 5.1.0 或更高版本，并使用默认配置启用 ExProto 网关。
+
+- 安装 Python 3.7 或更高版本，并安装以下依赖项：
+
+  ```
+  python -m pip install grpcio
+  python -m pip install grpcio-tools
+  ```
+
+:::
+
+1. 在与运行 EMQX 的同一台机器上，克隆示例代码并进入 `exproto-svr-python` 目录：
+
+   ```
+   git clone https://github.com/emqx/emqx-extension-examples
+   cd exproto-svr-python
+   ```
+
+2. 使用以下命令启动 gRPC 服务器：
+
+   ```
+   python exproto_server.py
+   ```
+
+   成功启动后，将会打印类似以下的输出：
+
+   ```
+   ConnectionUnaryHandler started successfully, listening on 9001
+   
+   Tips: If the Listener of EMQX ExProto gateway listen on 7993:
+         You can use the telnet to test the server, for example:
+   
+         telnet 127.0.0.1 7993
+   
+   Waiting for client connections...
+   ```
+
+3. 使用 `telnet` 访问 ExProto 网关监听的 7993 端口，并输入 `Hi, this is tcp client!` 来测试 gRPC 服务器是否正常工作。例如：
+
+   ```
+   $ telnet 127.0.0.1 7993
+   Trying 127.0.0.1...
+   Connected to 127.0.0.1.
+   Escape character is '^]'.
+   Hi, this is tcp client!
+   Hi, this is tcp client!
+   ```
+
+4. 进入 EMQX Dashboard，从左侧导航菜单点击**管理** -> **网关**。点击 ExProto 的 **Clients**。在 ExProto 页面上，您可以看到使用 telnet 连接的客户端。
+
+   <img src="./assets/connected-exproto-client.png" alt="Connected ExProto Client" style="zoom:50%;" />
+
+### 示例时序图
+
+下面的图表显示了此示例中连接和消息传递的顺序。
+
+```mermaid
+sequenceDiagram
+    Telnet ->> ExProto Gateway: Establish a TCP connection
+rect rgb(191, 223, 255)
+    ExProto Gateway ->> exproto-svr-python: Call OnSocketCreated
+  exproto-svr-python ->> ExProto Gateway: Call `Authenticate` to register client
+  ExProto Gateway -->> exproto-svr-python: Succeed
+  exproto-svr-python ->> ExProto Gateway: Call 'Subscribe' to subscribe 'test/echo'
+    ExProto Gateway -->> exproto-svr-python: Succeed
+  exproto-svr-python ->> ExProto Gateway: Call 'StartTimer' to start keepalive timer
+    ExProto Gateway -->> exproto-svr-python: Succeed
+    exproto-svr-python -->> ExProto Gateway: `OnSocketCreated` return
+end
+  Telnet ->> ExProto Gateway: Send 'Hi, this is...'
+rect rgb(100,150, 240)
+  ExProto Gateway ->> exproto-svr-python: Call `OnReceivedBytes`
+  exproto-svr-python --> exproto-svr-python: Use 'Hi, this is...' to create a message
+  exproto-svr-python ->> ExProto Gateway: Call `Publish` to publish message to 'test/echo'
+  ExProto Gateway -->> ExProto Gateway: Route the message
+  ExProto Gateway -->> exproto-svr-python: Succeed
+  exproto-svr-python -->> ExProto Gateway: `OnReceivedBytes` return
+end
+rect rgb(100, 150, 200)
+  ExProto Gateway ->> exproto-svr-python: Call `OnReceivedMessages`
+  exproto-svr-python -->> exproto-svr-python: Use message payload
+  exproto-svr-python ->> ExProto Gateway: Call `Send` to deliver bytes 'Hi, this is ...'
+  ExProto Gateway -->> exproto-svr-python: Succeed
+  ExProto Gateway ->> Telnet: Deliver 'Hi, this is...'
+  exproto-svr-python -->> ExProto Gateway: `OnReceivedMessages` return
+end
+```
+
+
+
+
 
