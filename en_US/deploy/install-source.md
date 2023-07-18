@@ -1,4 +1,4 @@
-# Install from Source code
+# Install from Source Code
 
 ## Dependencies
 
@@ -26,7 +26,7 @@ docker run -d --name emqx-builder \
   bash -c "tail -f /dev/null"
 ```
 
-## Compile and start EMQX
+## Compile and Start EMQX
 
 The EMQX repository is located at <https://github.com/emqx/emqx>, where the `master` branch is the latest EMQX 5.0 version, and the `main-*` branch corresponds to different minor versions (such as 4.4.x, 5.1. x).
 

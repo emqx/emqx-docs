@@ -1,4 +1,4 @@
-# Operating limitations
+# Operating Limitations
 
 ## Background
 

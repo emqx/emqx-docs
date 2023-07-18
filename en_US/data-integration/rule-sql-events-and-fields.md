@@ -126,22 +126,22 @@ Output:
 ```
 Below are detailed explanations of each field. 
 
-| Code                  | Explanation                                           |
-| :-------------------- | :---------------------------------------------------- |
-| `id`                  | MQTT message ID                                       |
-| `from_clientid`       | Client ID of the publisher                            |
-| `from_username`       | Username of the publisher                             |
-| `clientid`            | Client ID of the subscriber                           |
-| `username`            | Username of the subscriber                            |
-| `payload`             | MQTT payload                                          |
-| `peerhost`            | Client IP address                                     |
-| `topic`               | MQTT topic                                            |
-| `qos`                 | QoS level                                             |
-| `flags`               | Flags                                                 |
-| `pub_props`           | PUBLISH Properties (MQTT 5.0 clients only)            |
-| `timestamp`           | Event trigger time (unit: ms)                         |
-| `publish_received_at` | Time when PUBLISH message reaches EMQX <br>(unit: ms) |
-| `node`                | EMQX node where the event triggered                   |
+| Code                  | Explanation                                             |
+| :-------------------- | :------------------------------------------------------ |
+| `id`                  | MQTT message ID                                         |
+| `from_clientid`       | Client ID of the publisher                              |
+| `from_username`       | Username of the publisher                               |
+| `clientid`            | Client ID of the subscriber                             |
+| `username`            | Username of the subscriber                              |
+| `payload`             | MQTT payload                                            |
+| `peerhost`            | Client IP address                                       |
+| `topic`               | MQTT topic                                              |
+| `qos`                 | QoS level                                               |
+| `flags`               | Flags                                                   |
+| `pub_props`           | PUBLISH Properties (MQTT 5.0 clients only)              |
+| `timestamp`           | Event trigger time (unit: ms)                           |
+| `publish_received_at` | Time when PUBLISH message reaches EMQX <br />(unit: ms) |
+| `node`                | EMQX node where the event triggered                     |
 
 ### Message Acknowledged Event ("$events/message_acked")
 

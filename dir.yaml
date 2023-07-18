@@ -26,6 +26,7 @@
   children:
     - getting-started/new-features
     - getting-started/restrictions
+  # - getting-started/roadmap
 
 ## Infrastructure
 
@@ -65,7 +66,7 @@
   #   title_cn: 升级
   #   children:
   #     - deploy/hot-upgrades
-  #     - deploy/rolling-upgrades
+    - deploy/rolling-upgrades
     - deploy/upgrade-from-v4
   # - title_en: Migrate to Enterprise
   #   title_cn: 迁移到企业版
@@ -80,7 +81,7 @@
     - deploy/cluster/create-cluster
     - deploy/cluster/security
     - deploy/cluster/lb
-    - title_en: Cluster Rebalancing
+    - title_en: Node Evacuation and Cluster Load Rebalancing
       title_cn: 节点疏散与集群负载重平衡
       edition: ee
       path: deploy/cluster/rebalancing
@@ -187,6 +188,7 @@
 - title_en: File Transfer over MQTT
   title_cn: 基于 MQTT 的文件传输
   path: file-transfer/introduction
+  edition: ee
   collapsed: true
   children:
     - file-transfer/quick-start
@@ -210,6 +212,14 @@
     - data-integration/rule-sql-builtin-functions
     - data-integration/rule-sql-jq
     # - data-integration/rule-sql-user-defined-function
+    - title_en: Schema Registry
+      title_cn: 编解码
+      path: data-integration/schema-registry
+      edition: ee
+      collapsed: true
+      children:
+        - data-integration/schema-registry-example-avro
+        - data-integration/schema-registry-example-protobuf
 
 - title_en: Data Integration
   title_cn: 数据集成
@@ -243,15 +253,6 @@
     #   children:
     #     - data-integration/rule-configs
 
-- title_en: Schema Registry
-  title_cn: 编解码
-  path: data-integration/schema-registry
-  edition: ee
-  collapsed: true
-  children:
-    - data-integration/schema-registry-example-avro
-    - data-integration/schema-registry-example-protobuf
-
 - title_en: Network and TLS
   title_cn: 网络与 TLS
   path: network/overview
@@ -283,27 +284,27 @@
       title_cn: API 文档
       lang: en
       edition: ce
-      path: https://www.emqx.io/docs/en/v5.0/admin/api-docs.html
+      path: https://www.emqx.io/docs/en/v5.1/admin/api-docs.html
     - title_en: API Docs
       title_cn: API 文档
       lang: cn
       edition: ce
-      path: https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html
+      path: https://www.emqx.io/docs/zh/v5.1/admin/api-docs.html
     - title_en: API Docs
       title_cn: API 文档
       lang: en
       edition: ee
-      path: https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html
+      path: https://docs.emqx.com/en/enterprise/v5.1/admin/api-docs.html
     - title_en: API Docs
       title_cn: API 文档
       lang: cn
       edition: ee
-      path: https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html
+      path: https://docs.emqx.com/zh/enterprise/v5.1/admin/api-docs.html
 
 ## Dashboard
 
-- title_en: Dashboard
-  title_cn: Dashboard
+- title_en: EMQX Dashboard
+  title_cn: EMQX Dashboard
   path: dashboard/introduction
   collapsed: true
   children:
@@ -525,9 +526,9 @@
     #     - development/python
     #     - development/resource
 
-# - title_en: Change log
-#   title_cn: 版本发布记录
-#   path: changes/changes-5.0
+- title_en: Change log
+  title_cn: 版本发布记录
+  path: changes/changes-5.1
 
 - title_en: Technical Support
   title_cn: 技术支持

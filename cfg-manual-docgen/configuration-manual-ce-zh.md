@@ -65,7 +65,7 @@ EMQX 配置文件手册。
   *类型*: `string`
 
   节点数据存放目录，可能会自动创建的子目录如下：<br/>
-- `mnesia/<node_name>`。EMQX的内置数据库目录。例如，`mnesia/emqx@127.0.0.1`。<br/>
+- `mnesia/{node_name}`。EMQX的内置数据库目录。例如，`mnesia/emqx@127.0.0.1`。<br/>
 如果节点要被重新命名（例如，`emqx@10.0.1.1`）。旧目录应该首先被删除。<br/>
 - `configs`。在启动时生成的配置，以及集群/本地覆盖的配置。<br/>
 - `patches`: 热补丁文件将被放在这里。<br/>
@@ -415,7 +415,7 @@ EMQX 支持多种策略的节点自动发现与集群，详见 [创建集群](..
 
 ### manual 手动创建集群
 
-默认配置为手动创建集群，节点通过 `./bin/emqx_ctl join <Node>` 命令加入:
+默认配置为手动创建集群，节点通过 `./bin/emqx_ctl join {Node}` 命令加入:
 
 ```bash
 cluster.discovery = manual
@@ -486,7 +486,7 @@ DNS SRV 记录服务发现。
   *默认值*: `emqxcl`
 
   指定 etcd 路径的前缀。每个节点在 etcd 中都会创建一个路径:
-v2/keys/<prefix>/<cluster.name>/<node.name> <br/>
+v2/keys/{prefix}/{cluster.name}/{node.name} <br/>
 当 cluster.discovery_strategy 为 etcd 时，此配置项才有效。
 
 
@@ -2831,9 +2831,9 @@ gateway clients. The types of the clients
 are distinguished by the topic prefix:
 
 - For the MQTT clients, the format is:
-`$SYS/broker/<node>/clients/<clientid>/<event>`
+`$SYS/broker/<node>/clients/{clientid}/{event}`
 - For the Gateway clients, it is
-`$SYS/broker/<node>/gateway/<gateway-name>/clients/<clientid>/<event>`
+`$SYS/broker/<node>/gateway/{gateway-name}/clients/{clientid}/{event}`
 
 
 **sys_topics.sys_event_messages.client_connected**

@@ -54,7 +54,7 @@ Below are detailed descriptions of each field
 | ------------------------------ | -------- | ------------------------ | ------ | ------------------------------------------------------------ |
 | Storage Type | - | Built-in Database | - | - |
 | Storage Method | enum     | `ram`, `disc` | `ram` |`ram`: only stored in memory; <br/><br/> `disc`: stored in memory and hard disk. |
-| Max Retained Messages | integer  | ≥ 0                   | 0 (Unlimited) | 0: Unlimit. <br>When you set a limit on the maximum number of retained messages, EMQX replaces existing messages once the limit is reached. However, you cannot store retained messages for new topics beyond the limit. |
+| Max Retained Messages | integer  | ≥ 0                   | 0 (Unlimited) | 0: Unlimit. <br />When you set a limit on the maximum number of retained messages, EMQX replaces existing messages once the limit is reached. However, you cannot store retained messages for new topics beyond the limit. |
 | Max Payload Size      | bytesize |                          | 1MB    | Retain the maximum Payload value of the message. After the Payload value exceeds the maximum value, the EMQX will treat the retained reserved message as a normal message. |
 | Expire       | duration |                          | 0    | The expiration time of the retained message, and 0 means never expire. If the message expiration interval is set in the PUBLISH packet, the message expiration interval in the PUBLISH packet shall prevail. |
 | Clean Interval  | duration |                          | 0    | Interval to clean up expired messages. |

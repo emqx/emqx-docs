@@ -1,6 +1,6 @@
 # MongoDB
 
-通过 MongoDB 数据桥接可以将客户端消息和事件存储到 MongoDB 中。
+通过 MongoDB 数据桥接可以将 MQTT 消息和客户端事件存储到 MongoDB 中。
 
 {% emqxce %}
 :::tip

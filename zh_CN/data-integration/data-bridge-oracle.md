@@ -1,6 +1,6 @@
 # Oracle Database
 
-EMQX 支持将数据桥接到 Oracle Database，您可以将客户端消息和事件存储到 Oracle Database 中，也可以通过事件触发对 Oracle Database 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
+EMQX 支持将数据桥接到 Oracle Database，您可以将 MQTT 消息和客户端事件存储到 Oracle Database 中，也可以通过事件触发对 Oracle Database 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
 
 {% emqxce %}
 ::: tip

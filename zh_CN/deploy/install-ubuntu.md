@@ -32,7 +32,6 @@ EMQX 支持通过 Apt 源安装，免除了用户需要手动处理依赖关系�
    sudo systemctl start emqx
    ```
 
-   
 
 ## 通过下载包安装
 
@@ -77,7 +76,7 @@ EMQX 支持通过 deb 包或 tar.gz 包进行安装。下文将以 Ubuntu 22.04 
 
 #### 启动 EMQX
 
-您可通过如下三种方式启动 EMQX
+您可通过如下三种方式启动 EMQX。
 
 - 直接启动：
 
@@ -197,7 +196,7 @@ sudo apt remove --purge emqx
 
 ### 启动 EMQX
 
-您可通过如下三种方式启动 EMQX
+您可通过如下三种方式启动 EMQX。
 
 - 直接启动：
 

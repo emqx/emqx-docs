@@ -59,7 +59,7 @@ emqx foreground
 emqx console
 ```
 
-成功启动后，如果以前台模式或交互模式启动，EMQX 将输出以下消息：
+如果以前台模式或交互模式启动，启动成功后，EMQX 将输出以下消息：
 
 ```bash
 EMQX @CE_VERSION@ is running now!
@@ -124,7 +124,7 @@ emqx foreground
 emqx console
 ```
 
-成功启动后，如果以前台或交互模式启动，EMQX 将输出以下消息：
+如果以前台或交互模式启动，启动成功后，EMQX 将输出以下消息：
 
 ```bash
 EMQX Enterprise @EE_VERSION@ is running now！

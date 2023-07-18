@@ -1,6 +1,6 @@
 # Ingest Data into DynamoDB
 
-EMQX supports integration with DynamoDB, so you can save client messages and events to DynamoDB, or use events to trigger the update or removal of data to record the online status or online/offline of clients.
+EMQX supports integration with DynamoDB, so you can save MQTT messages and client events to DynamoDB, or use events to trigger the update or removal of data to record the online status or online/offline of clients.
 
 {% emqxce %}
 :::tip
@@ -121,7 +121,7 @@ The following JSON will be printed if the table was created successfully.
 
 7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
 
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the MySQL server.
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the server.
 
 9. Then click **Create** to finish the creation of the data bridge.
 

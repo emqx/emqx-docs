@@ -46,7 +46,7 @@ You can integrate with Prometheus to monitor the cluster operations. On how to i
 | `emqx_mria_last_intercepted_trans` | Transactions received by the shard since the node started    |
 | `emqx_mria_weight`                 | Instantaneous load of the Core node                          |
 | `emqx_mria_replicants`             | Replicant nodes connected to the Core node Numbers are grouped per shard. |
-| `emqx_mria_server_mql`             | Pending transactions waiting to be sent to the replicant nodes. Less is optimal. <br>If this indicator shows a growing trend, more Core nodes are needed. |
+| `emqx_mria_server_mql`             | Pending transactions waiting to be sent to the replicant nodes. Less is optimal. <br />If this indicator shows a growing trend, more Core nodes are needed. |
 
 #### Replicant Nodes
 

@@ -9,7 +9,7 @@ Supported versions:
 
 {% emqxce %}
 
-## Install with Apt source
+## Install with Apt Source
 
 EMQX supports installing with Apt source to provide our users with a convenient and reliable way to manage EMQX installation and updates. Here is how to install EMQX with Apt source:
 
@@ -31,7 +31,7 @@ EMQX supports installing with Apt source to provide our users with a convenient 
    sudo systemctl start emqx
    ```
 
-## Install with package
+## Install with Package
 
 The section below will take Debian 11 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.io/downloads?os=Debian). 
 
@@ -89,7 +89,7 @@ EMQX offers 3 different options to start EMQX:
   Node 'emqx@127.0.0.1' @CE_VERSION@ is started
   ```
 
-- To start EMQX with systemctl, run:
+- To start EMQX as a systemd service, run:
 
   ```bash
   sudo systemctl start emqx
@@ -217,7 +217,7 @@ EMQX offers 3 different options to start EMQX:
   Node 'emqx@127.0.0.1' @EE_VERSION@ is started
   ```
 
-- To start EMQX with systemctl, run:
+- To start EMQX as a systemd service, run:
 
   ```bash
   sudo systemctl start emqx
@@ -228,8 +228,6 @@ EMQX offers 3 different options to start EMQX:
   ```bash
   sudo service emqx start
   ```
-
-
 
 ### Uninstall EMQX
 

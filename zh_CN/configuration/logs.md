@@ -59,10 +59,10 @@ log {
 | ----------------------- | -------------------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
 | `file_handlers.default` | File Handler         | This sets whether to enable using the file-based log handler for logging purposes, once enabled, it will write the log messages to a specified file on the disk (configured by `file`). | `enabled`     | `enable`, `disable`                                          |
 | `level`                 | Log Level            | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
-| `file`                  | Log File Name        | This sets the name of the log file, <br>By default, EMQX writes the log file to the `emqx.log` file in the `log` directory of the EMQX installation directory. | `emqx.log`    | --                                                           |
+| `file`                  | Log File Name        | This sets the name of the log file, <br />By default, EMQX writes the log file to the `emqx.log` file in the `log` directory of the EMQX installation directory. | `emqx.log`    | --                                                           |
 | `count`                 | Max Log Files Number | This sets the max number of log files that can be saved.     | `10`          | `1` ~ `2,048`                                                |
 | `max_size`              | Rotation Size        | This sets the maximum size of a single log file before it is rotated. The old log file will be renamed and moved to an archive directory once it reached the specified value unless it is set to `infinity`, indicating the log file will not be rotated. | `50MB`        | `1` ~ `infinity`                                             |
-| `formatted`             | Log Formatter        | This sets the log format.                                    | `text`        | `text` for free text<br> `json` for structured logging       |
+| `formatted`             | Log Formatter        | This sets the log format.                                    | `text`        | `text` for free text<br /> `json` for structured logging       |
 
 ## Output log with Console
 
@@ -83,7 +83,7 @@ Where,
 | ----------------------- | ------------------ | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
 | `file_handlers.default` | Enable Log Handler | This sets whether to enable outputting logs with the console. | `enabled`     | `enable`, `disable`                                          |
 | `level`                 | Log Level          | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
-| `formatted`             | Log Formatter      | This sets the log format                                     | `text`        | `text` for free text<br> `json` for structured logging       |
+| `formatted`             | Log Formatter      | This sets the log format                                     | `text`        | `text` for free text<br /> `json` for structured logging       |
 
 :::tip
 
