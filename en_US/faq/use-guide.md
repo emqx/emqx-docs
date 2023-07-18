@@ -550,8 +550,8 @@ This log indicates a failure in packet parsing. It may occur when a non-MQTT pac
 
 ### Keyword: “Dropped msg due to mqueue is full”
 
-EMQX can send multiple unconfirmed QoS 1 and QoS 2 messages simultaneously, but limited by the performance of the client, we usually limit the maximum number of messages in flight. After reaching this limit, subsequent arriving messages will be cached by EMQX in the message queue of each client process.
+EMQX can send multiple unconfirmed QoS 1 and QoS 2 messages simultaneously, but limited by the performance of the client, we usually limit the maximum number of messages in flight. After reaching this limit, subsequent incoming messages will be cached by EMQX in the message queue of each client process.
 
-However, the message queus still has a length limit. So If the message queue is full when a new message arrives, the latest message will be enqueued, but the oldest message in the queue will be dequeued and dropped. EMQX generates the log message: "Dropped msg due to mqueue is full."
+However, the message queus still have a length limit. If the message queue is full when a new message arrives, the most recent message will be enqueued, but the oldest message in the queue will be dequeued and dropped. EMQX generates the log message: "Dropped msg due to mqueue is full."
 
 If this log only appears during traffic peaks, you can increase the maximum length of the message queue by modifying the `max_mqueue_len` configuration item. However, if it continues to appear, it indicates poor client consumption capability. In such cases, it is recommended to optimize the client's code or use shared subscriptions to distribute the load.
