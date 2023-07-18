@@ -1,4 +1,4 @@
-# Data Integration Compatibility Between EMQX 5.1 and EMQX 4.4
+# Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4
 
 The whole concept of Data Integration was upgraded in EMQX 5.1.
 
