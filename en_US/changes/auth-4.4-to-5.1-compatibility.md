@@ -1,8 +1,8 @@
-# Authentication / Authorization Compatibility Between EMQX 4.4 and EMQX 5.1 
+# Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1 
 
 This page presents the compatibility information for authentication and authorization configurations between EMQX 4.4 and EMQX 5.1.
 
-## Common Imcompatibility Changes 
+## Commo Incompatibility Changes 
 
 ### SSL Options
 
