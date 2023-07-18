@@ -1,5 +1,7 @@
 # macOS
 
+{% emqxce %}
+
 This page guides you on installing and starting EMQX on macOS with a zip file.
 
 Supported versions:
@@ -7,8 +9,6 @@ Supported versions:
 - macOS 13 (Homebrew package only)
 - macOS 12
 - macOS 11
-
-{% emqxce %}
 
 ## Install EMQX with Homebrew
 
@@ -93,7 +93,14 @@ To stop EMQX:
 
 {% emqxee %}
 
-The section below will take macOS 12 as an example to illustrate how to download the latest version of EMQX. If you want to install a different version or in a different system, please visit the [EMQX Deployment page](https://www.emqx.com/en/try?product=enterprise). 
+This page guides you on installing and starting EMQX on macOS with a zip file.
+
+Supported versions:
+
+- macOS 12
+- macOS 11
+
+The instructions below will take macOS 12 as an example to illustrate how to download the latest version of EMQX. If you want to install a different version or in a different system, please visit the [EMQX Deployment page](https://www.emqx.com/en/try?product=enterprise). 
 
 ## Install EMQX
 
