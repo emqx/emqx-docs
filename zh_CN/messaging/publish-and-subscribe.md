@@ -21,7 +21,7 @@
 - MQTTX 命令行工具
 - MQTT Web
 
-### MQTTX 客户端
+### MQTTX Desktop
 
 MQTTX 客户端是一款跨平台的 MQTT 桌面客户端工具。它提供用户友好的图形界面，让用户可以快速创建、测试 MQTT 连接，并进行MQTT 消息的发布和订阅。
 

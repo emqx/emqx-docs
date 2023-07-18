@@ -2,7 +2,7 @@
 
 EMQX implements the will message feature of MQTT. If a will message is set for a client, EMQX sends the message to relevant subscribers when the client is accidentally disconnected, so that the subscribers can be informed and update the client status.
 
-You can use client tools to try this messaging service in EMQX. This section introduces how to use the [MQTTX Client](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and see how a will message is published and received.
+You can use client tools to try this messaging service in EMQX. This section introduces how to use the [MQTTX Desktop](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and see how a will message is published and received.
 
 :::tip Prerequisites
 
@@ -11,15 +11,17 @@ You can use client tools to try this messaging service in EMQX. This section int
 
 :::
 
-## Publish Will Message with MQTTX Client
+## Publish Will Message with MQTTX Desktop
 
-1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection named `Demo`.
+1. Start EMQX and MQTTX Desktop. Click the **New Connection** to create a client connection as a publisher.
 
-   - The localhost `127.0.0.1` is used as an example in this demonstration.
+   - Enter `Demo` in the **Name** field.
+   - Enter the localhost `127.0.0.1` in **Host** to use as an example in this demonstration.
+   - Leave other settings as default and click **Connect**.
 
    ::: tip
 
-   For detailed instructions on creating an MQTT connection, see [MQTTX Client](./publish-and-subscribe.md).
+   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
 
    :::
 

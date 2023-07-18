@@ -21,9 +21,9 @@ This section introduces the commonly used MQTT 5.0 client tools and provides a s
 - MQTTX CLI
 - MQTT Web
 
-### MQTTX Client
+### MQTTX Desktop
 
-[MQTTX Client](https://mqttx.app) is a cross-platform MQTT desktop client tool. It provides users with an easy-to-use graphic interface to allow users to quickly create, test MQTT connections, and publish/subscribe MQTT messages.
+[MQTTX Desktop](https://mqttx.app) is a cross-platform MQTT desktop client tool. It provides users with an easy-to-use graphic interface to allow users to quickly create, test MQTT connections, and publish/subscribe MQTT messages.
 
 Before you test, download and install the MQTTX Client:
 

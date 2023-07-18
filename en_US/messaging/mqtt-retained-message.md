@@ -2,7 +2,7 @@
 
 EMQX implements the retained message feature of MQTT. You can flag one message published under a certain topic as `Retained` and save it as a persistent message on the EMQX. When any new subscribers subscribe to a topic that matches the topic of the retained message, they immediately receive that message, even if it was published before they subscribed to the topic.
 
-You can use client tools to connect to EMQX and try this messaging service. This section introduces how to use the [MQTTX Client](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and see how a retained message is published and received.
+You can use client tools to connect to EMQX and try this messaging service. This section introduces how to use the [MQTTX Desktop](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and see how a retained message is published and received.
 
 :::tip Prerequisites
 
@@ -11,9 +11,9 @@ You can use client tools to connect to EMQX and try this messaging service. This
 
 :::
 
-## Publish Retained Message with MQTTX Client
+## Publish Retained Message with MQTTX Desktop
 
-1. Start EMQX and MQTTX Client. Click the **New Connection** to create a client connection as a publisher.
+1. Start EMQX and MQTTX Desktop. Click the **New Connection** to create a client connection as a publisher.
 
    - Enter `Demo` in the **Name** field.
    - Enter the localhost `127.0.0.1` in **Host** to use as an example in this demonstration.
@@ -21,7 +21,7 @@ You can use client tools to connect to EMQX and try this messaging service. This
 
    ::: tip
 
-   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Client](./publish-and-subscribe.md#mqttx-client).
+   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
 
    :::
 

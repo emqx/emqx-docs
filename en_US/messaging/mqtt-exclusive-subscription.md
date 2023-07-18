@@ -10,7 +10,7 @@ To make a subscription exclusive, you need to add a prefix to the topic heading.
 
 When client **A** subscribes to `$exclusive/t/1`, other clients will fail to subscribe to `$exclusive/t/1` until **A** cancels the subscription to `$exclusive/t/1`.
 
-::: tip Note
+::: tip
 
 Exclusive subscriptions must be prefixed with `$exclusive/`, in the above example, other clients can still successfully subscribe via `t/1`.
 
@@ -18,13 +18,13 @@ Exclusive subscriptions must be prefixed with `$exclusive/`, in the above exampl
 
 ## Configure Exclusive Subscription via Configuration File
 
-The exclusive subscription is disabled by default. You can enable this feature in `etc/emqx.conf`.
+::: tip 
 
-:::tip Note
-
-Configuration using the Dashboard is currently not supported.
+Exclusive subscription can be configurated via the configuration file only. Configuration using the Dashboard is currently not supported.
 
 :::
+
+The exclusive subscription is disabled by default. You can enable this feature in `etc/emqx.conf`.
 
 ```bash
 mqtt.exclusive_subscription {
@@ -32,22 +32,24 @@ mqtt.exclusive_subscription {
 }
 ```
 
-## Try Exclusive Subscription with MQTTX Client
+## Try Exclusive Subscription with MQTTX Desktop
 
 ::: tip Prerequisites
 
-- Basic publishing and subscribing operations using [MQTTX Client](./publish-and-subscribe.md)
+- Basic publishing and subscribing operations using [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop)
 - Exclusive subscription is enabled.
 
 :::
 
-1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection named `Demo`.
+1. Start EMQX and MQTTX Desktop. Click the **New Connection** to create a client connection as a publisher.
 
-   - The localhost `127.0.0.1` is used as an example in this demonstration.
+   - Enter `Demo` in the **Name** field.
+   - Enter the localhost `127.0.0.1` in **Host** to use as an example in this demonstration.
+   - Leave other settings as default and click **Connect**.
 
    ::: tip
 
-   For detailed instructions on creating an MQTT connection, see [MQTTX Client](./publish-and-subscribe.md).
+   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
 
    :::
 
@@ -69,12 +71,12 @@ mqtt.exclusive_subscription {
 
 ::: tip Prerequisites
 
-- Basic publishing and subscribing operations using [MQTTX CLI](./publish-and-subscribe.md)
+- Basic publishing and subscribing operations using [MQTTX CLI](./publish-and-subscribe.md#mqttx-cli)
 - Exclusive subscription is enabled.
 
 :::
 
-1. Use the following command to make an exclusive subscribscription.
+1. Use the following command to make an exclusive subscription.
 
    ```bash
    mqttx sub -t "$exclusive/t/1"
@@ -86,10 +88,10 @@ mqtt.exclusive_subscription {
    subscription negated to t/2 with code 135
    ```
 
-   Subscription Error Code：
+   Error codes of exclusive subscription:
 
-   | Code | Reason                                                   |
-   | ---- | -------------------------------------------------------- |
-   | 0x8F | Use `$exclusive/` without exclusive subscription enabled |
-   | 0x97 | A client has already subscribed to this topic            |
+   | Code | Reason                                                    |
+   | ---- | --------------------------------------------------------- |
+   | 0x8F | Use `$exclusive/` without exclusive subscription enabled. |
+   | 0x97 | A client has already subscribed to this topic.            |
 

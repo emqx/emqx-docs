@@ -2,7 +2,7 @@
 
 EMQX 实现了 MQTT 的遗嘱消息功能。如果为客户端设置了遗嘱消息，在客户端意外断开连接时，EMQX 将把遗嘱消息发送给相关的订阅者，以便订阅者可以得知并更新客户端状态。
 
-您可以使用客户端工具在 EMQX 中尝试此消息服务。本节介绍了如何使用 [MQTTX 客户端](https://mqttx.app/zh)和 [MQTTX CLI](https://mqttx.app/zh/cli) 来模拟客户端尝试遗嘱消息的发布和接收。
+您可以使用客户端工具在 EMQX 中尝试此消息服务。本节介绍了如何使用 [MQTTX Desktop](https://mqttx.app/zh)和 [MQTTX CLI](https://mqttx.app/zh/cli) 来模拟客户端尝试遗嘱消息的发布和接收。
 
 :::tip 前置准备
 
@@ -11,16 +11,16 @@ EMQX 实现了 MQTT 的遗嘱消息功能。如果为客户端设置了遗嘱消
 
 :::
 
-## 使用 MQTTX 客户端发布遗嘱消息
+## 使用 MQTTX Desktop 发布遗嘱消息
 
-1. 启动 EMQX 和 MQTTX 客户端。点击**新建连接**创建一个名为 `Demo` 的客户端连接作为发布者。
+1. 启动 EMQX 和 MQTTX Desktop。点击**新建连接**创建一个名为 `Demo` 的客户端连接作为发布者。
 
    - 在**名称**栏中输入`Demo`。
-   - 在本演示中，**服务器地址**使用本地主机 `127.0.0.1`作为示例。
+   - 在本演示中，**服务器地址**使用本地主机 `127.0.0.1` 作为示例。
 
    ::: tip
 
-   [MQTTX 客户端](./publish-and-subscribe.md/#mqttx-客户端)中介绍了更多详细的连接创建信息。
+   [MQTTX Desktop](./publish-and-subscribe.md/#mqttx-desktop) 中介绍了更多详细的连接创建信息。
 
    :::
 
@@ -38,9 +38,9 @@ EMQX 实现了 MQTT 的遗嘱消息功能。如果为客户端设置了遗嘱消
 
    <img src="./assets/will-message-config.png" alt="will-message-config" style="zoom:35%;" />
 
-2. 在**连接**窗格点击**+** -> **新建连接**，新建一个客户端连接。将**名称**设置为 `Subscriber`，**服务器地址**为 `127.0.0.1`，其他连接信息均保留默认值，点击**连接**。
+2. 在**连接**窗格点击**+** -> **新建连接**，新建一个客户端连接作为订阅者。将**名称**设置为 `Subscriber`，**服务器地址**为 `127.0.0.1`，其他连接信息均保留默认值，点击**连接**。
 
-3. 在 **Subscriber** 窗格中，点击 **添加订阅**。在 **Topic** 文本框中输入 `offline`。其他设置保持默认，点击**确定**。
+3. 在 **Subscriber** 窗格中，点击**添加订阅**。在 **Topic** 文本框中输入 `offline`。其他设置保持默认，点击**确定**。
 
    <img src="./assets/will-message-sub.png" alt="will-message-sub" style="zoom:35%;" />
 

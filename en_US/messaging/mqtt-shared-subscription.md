@@ -2,7 +2,7 @@
 
 EMQX implements the shared subscription feature of MQTT. A shared subscription is a subscription mode to implement load balancing among multiple subscribers. Clients can be divided into multiple subscription groups, and messages are still forwarded to all subscription groups, but only one client within each subscription group receives the message at a time. You can add a `$share` prefix to the original topic to enable shared subscriptions for a group of subscribers.
 
-You can use client tools to connect to EMQX and try this messaging service. This section introduces how to use the [MQTTX Client](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and try how messages are received through a shared subscription.
+You can use client tools to connect to EMQX and try this messaging service. This section introduces how to use the [MQTTX Desktop](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and try how messages are received through a shared subscription.
 
 :::tip Prerequisites
 
@@ -11,13 +11,13 @@ You can use client tools to connect to EMQX and try this messaging service. This
 
 :::
 
-## Try Shared Subscription with MQTTX Client
+## Try Shared Subscription with MQTTX Desktop
 
 The following procedure demonstrates how to form groups for multiple subscribers that can share the subscription to the same topic and how these subscribers will receive the messages from the shared subscription.
 
 In this demonstration, you can create one client connection `demo` as a publisher to publish messages to the topic `t/1`. Then, you can create 4 client connections as subscribers, such as `Subscriber1`, `Subscriber2`, `Subscriber3`, and `Subscriber4`.  The subscribers can be divided into groups `a` and `b`, and both groups subscribe to the topic `t/1`.
 
-1. Start EMQX and MQTTX Client. Click the **New Connection** to create a client connection as a publisher.
+1. Start EMQX and MQTTX Desktop. Click the **New Connection** to create a client connection as a publisher.
 
    - Enter `Demo` in the **Name** field.
    - Enter the localhost `127.0.0.1` in **Host** to use as an example in this demonstration.
@@ -25,7 +25,7 @@ In this demonstration, you can create one client connection `demo` as a publishe
 
    ::: tip
 
-   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Client](./publish-and-subscribe.md#mqttx-client).
+   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
 
    :::
 

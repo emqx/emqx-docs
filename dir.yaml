@@ -713,6 +713,6 @@
       title_cn: MQTT 原因码
       path: https://emqx.atlassian.net/wiki/spaces/Community/pages/576717003
 
-- title_en: Change log
+- title_en: Change Log
   title_cn: 版本发布记录
   path: changes/changes-5.1

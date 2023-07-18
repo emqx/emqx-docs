@@ -2,7 +2,7 @@
 
 EMQX adopts a distributed storage schema and also introduces a cluster transfer feature to ensure the system's high availability.
 
-This chapter will discuss how to backup your operating data and configuration files to prevent data losses in case of system malfunctions.
+This page discusses how to backup your operating data and configuration files to prevent data losses in case of system malfunctions.
 
 ## Data Import and Export
 
@@ -56,7 +56,7 @@ For example, if the EMQX cluster uses the built-in database authentication mecha
 Therefore, importing data to a non-clean EMQX cluster may require extra caution.
 :::
 
-### Example
+## Example
 
 This section shows how to import and export data using the command Line Interface.
 
@@ -94,7 +94,7 @@ This section shows how to import and export data using the command Line Interfac
     Importing emqx_authn_mnesia database table...
     Importing emqx_admin database table...
     Data has been imported successfully.
-
+   
     # import the file by the path relative to EMQX root directory:
     $ ./emqx_ctl data import ../../../tmp/emqx-export-2023-06-21-13-28-06.418.tar.gz
     Importing data from "../../../tmp/emqx-export-2023-06-21-13-28-06.418.tar.gz"...
@@ -108,7 +108,7 @@ This section shows how to import and export data using the command Line Interfac
     Importing emqx_psk database table...
     Importing emqx_app database table...
     Data has been imported successfully.
-
+   
     # import the file from `<EMQX data directory>/backup` directory:
     $ cp /tmp/emqx-export-2023-06-21-13-28-06.418.tar.gz /opt/emqx/data/backup/
     $ ./emqx_ctl data import emqx-export-2023-06-21-13-28-06.418.tar.gz
