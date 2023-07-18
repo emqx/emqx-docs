@@ -530,7 +530,7 @@
         - gateway/mqttsn
         - gateway/coap
         - gateway/lwm2m
-       #- gateway/exproto
+        - gateway/exproto
        #- gateway/ocpp
        #- gateway/jt808
        #- gateway/gbt32960
