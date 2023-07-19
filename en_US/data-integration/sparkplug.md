@@ -108,7 +108,7 @@ Suppose you get messages from a device on the topic `my/sparkplug/topic` and wan
 
 #### Create Rule in Dashboard
 
-1. Go to EMQX Dashboard. Click **Integration** -> **Rules** from the left navigation menu to enter the **Create Rule** page.
+1. Go to EMQX Dashboard. Click **Integration** -> **Rules** from the left navigation menu. Click **+ Create** to enter the **Create Rule** page.
 
 2. Enter the following SQL statement in **SQL Editor**:
 
@@ -138,7 +138,7 @@ Suppose you get messages from a device on the topic `my/sparkplug/topic` and wan
 
 You can simulate an MQTT client using the MQTTX client tool to publish the Sparkplug B message to the topic `my/sparkplug/topic`. Then, you can verify that the message is transformed and forwarded to the topic `intresting_counters/counter1_run_updates` as a JSON formatted message:
 
-1. Open MQTTX client desktop and connect to the EMQX broker. For detailed information on working with the MQTTX, refer to [MQTTX Client](../messaging/publish-and-subscribe.md/#mqttx-client).
+1. Open MQTTX client desktop and connect to the EMQX broker. For detailed information on working with the MQTTX, refer to [MQTTX Client](../messaging/publish-and-subscribe.md).
 
 2. Create a new subscription and subscribe to the topic `intresting_counters/counter1_run_updates`.
 
