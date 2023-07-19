@@ -1,6 +1,6 @@
 # Wildcard Subscription
 
-MQTT topic name is a UTF-8 encoded string used for message routing. To provide more flexibility, MQTT supports a hierarchical topic namespace. A topic is typically leveled and separated with a slash `/` between the levels such as `chat/room/1`. A [wildcard subscription](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Topic_Names_and) is a subscription with a topic filter containing one or more wildcard characters. This allows the subscription to match more than one topic name. This page introduces the usage of two types of wildcards supported in MQTT and how to make a wildcard subscription in EMQX. 
+MQTT topic name is a UTF-8 encoded string used for message routing. To provide more flexibility, MQTT supports a hierarchical topic namespace. A topic is typically leveled and separated with a slash `/` between the levels such as `chat/room/1`. A [wildcard subscription](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Topic_Names_and) is a subscription with a topic filter containing one or more wildcard characters. This allows the subscription to match more than one topic name. This page introduces the usage of two types of wildcards supported in MQTT and how to subscribe to topics containing wildcard characters in EMQX. 
 
 ::: tip
 
