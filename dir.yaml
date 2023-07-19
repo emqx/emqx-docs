@@ -92,18 +92,16 @@
           title_cn: MQTT 客户端工具演示
           path: messaging/publish-and-subscribe
       # - messaging/explore-mqtt
-        - title_en: Shared Subscription
-          title_cn: 共享订阅
-          path: messaging/mqtt-shared-subscription
-        - title_en: Retained Message
-          title_cn: 保留消息
-          path: messaging/mqtt-retained-message
-        - title_en: Will Message
-          title_cn: 遗嘱消息
-          path: messaging/mqtt-will-message
+        - messaging/mqtt-shared-subscription
+        - messaging/mqtt-retained-message
+        - messaging/mqtt-will-message
+        - messaging/mqtt-exclusive-subscription
         - messaging/mqtt-delayed-publish
         - messaging/mqtt-auto-subscription
-        - messaging/mqtt-exclusive-subscription
+        - title_en: Wildcard Subscription
+          title_cn: 通配符订阅
+          edition: ce
+          path: messaging/mqtt-wildcard-subscription
       # - messaging/nanomq
       # - messaging/neuron
     - title_en: Client SDK
@@ -256,6 +254,7 @@
     - data-integration/data-bridge-kafka
     - data-integration/data-bridge-pulsar
     - data-integration/data-bridge-influxdb
+    - data-integration/data-bridge-timescale
     - data-integration/data-bridge-mysql
     - data-integration/data-bridge-redis
     - data-integration/data-bridge-gcp-pubsub
@@ -708,11 +707,38 @@
       path: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901003
     - title_en: MQTT 5.0 Features
       title_cn: MQTT 5.0 特性
-      path: https://emqx.atlassian.net/wiki/spaces/Community/pages/582420638
-    - title_en: MQTT Reason Codes
+      path: https://www.emqx.com/en/mqtt/mqtt5
+    - title_en: MQTT Reason Code
       title_cn: MQTT 原因码
-      path: https://emqx.atlassian.net/wiki/spaces/Community/pages/576717003
+      path: https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack
 
-- title_en: Change Log
-  title_cn: 版本发布记录
-  path: changes/changes-5.1
+- title_en: Release Notes
+  title_cn: 版本发布说明
+  collapsed: true
+  children:
+    - title_en: Releases
+      title_cn: 版本发布
+      edition: ee
+      path: changes/changes-ee-5.1
+    - title_en: Releases
+      title_cn: 版本发布
+      edition: ce
+      path: changes/changes-ce-5.1
+    - title_en: Incompatible Changes
+      title_cn: Incompatible Changes
+      lang: en
+      path: changes/breaking-changes-5.1.0
+      children:
+        - title_en: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1 
+          title_cn: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1 
+          lang: en
+          path: changes/auth-4.4-to-5.1-compatibility
+        - title_en: Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4
+          title_cn: Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4
+          lang: en
+          path: changes/data-integration-4.4-to-5.1-incompatibility
+        - title_en: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
+          title_cn: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
+          lang: en
+          path: changes/gateway-4.4-to-5.1-incompatibility
+
