@@ -9,13 +9,15 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 {% endemqxce %}
 
 :::tip
-本章节内容同样适用于 TimescaleDB 以及 MatrixDB。
+本章节内容同样适用于 MatrixDB。
 :::
 
-## 先决条件
+::: tip 前置准备
 
 - 了解 [规则](./rules.md)。
 - 了解 [数据桥接](./data-bridges.md)。
+
+:::
 
 ## 特性
 

@@ -84,7 +84,7 @@ EMQX_NODE__NAME='emqx2@127.0.0.1' \
     EMQX_NODE__DATA_DIR="./data2" \
 ./bin/emqx start
 
-./bin/emqx_ctl cluster join emqx1@127.0.0.1
+./bin/emqx ctl cluster join emqx1@127.0.0.1
 ```
 
 The above code example is to create a cluster manually, you can also refer to the [auto clustering](#auto-clustering) section on how to create a cluster automatically. 

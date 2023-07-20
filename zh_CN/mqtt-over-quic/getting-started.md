@@ -2,10 +2,9 @@
 
 为了更多用户能体验到 MQTT over QUIC 为物联网消息传输带来的提升，本章节指导您如何从零开始上手使用 MQTT over QUIC。
 
-:::tip
-前置条件：
+::: tip 前置条件
 
-- 熟悉并了解 [MQTT over QUIC](./introduction.md)。
+熟悉并了解 [MQTT over QUIC](./introduction.md)。
 :::
 
 ## 环境要求
@@ -49,10 +48,10 @@ MQTT over QUIC 默认禁用，请通过以下配置手动开启。
 
    
 
-2. 通过 CLI 执行 `emqx_ctl listeners` 命令，可在结果中看到 MQTT over QUIC 监听器已启用：
+2. 通过 CLI 执行 `emqx ctl listeners` 命令，可在结果中看到 MQTT over QUIC 监听器已启用：
 
   ```bash
-   > emqx_ctl listeners
+   > emqx ctl listeners
    quic:default
      listen_on       : :14567
      acceptors       : 16
@@ -66,7 +65,7 @@ MQTT over QUIC 默认禁用，请通过以下配置手动开启。
      current_conn    : 0
      max_conns       : 512000
   ```
-  
+
 
 至此，您已经在 EMQX 上启用了 MQTT over QUIC 监听器，下面我们将接入客户端。
 

@@ -237,8 +237,7 @@
       children:
         - performance/tune
         - performance/benchmark
-
-        
+    
 - title_en: Rules
   title_cn: 规则引擎
   path: data-integration/rules
@@ -264,7 +263,6 @@
 
 ## Data integration
 # - data-integration/introduction
-
 
 - title_en: Data Integration
   title_cn: 数据集成
@@ -682,7 +680,6 @@
     # - advanced/quic
 
 ## Developers & Testers
-
 
 - title_en: Reference
   title_cn: 参考指南

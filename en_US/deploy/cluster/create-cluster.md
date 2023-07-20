@@ -94,7 +94,7 @@ After the nodes are started,  you can run the `cluster join` command on the node
 <!--should we add how to start the nodes or how to confirm the nodes are started?-->
 
 ```bash
-$ ./bin/emqx_ctl cluster join emqx@s1.emqx.io
+$ ./bin/emqx ctl cluster join emqx@s1.emqx.io
 
 Join the cluster successfully.
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
@@ -269,7 +269,7 @@ After the cluster is succefully created, you can refer to the section below on h
 Run the command below on any cluster node to query the cluster status:
 
 ```bash
-$ ./bin/emqx_ctl cluster status
+$ ./bin/emqx ctl cluster status
 
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
@@ -285,13 +285,13 @@ When an EMQX node issues the `cluster force-leave <node@host>` command, the targ
 For example, in the previously built cluster, if `emqx@s2.emqx.io` wants to leave the cluster, you can run the command below on `emqx@s2.emqx.io`:
 
 ```bash
-./bin/emqx_ctl cluster leave
+./bin/emqx ctl cluster leave
 ```
 
 Or run the command below on `emqx@s1.emqx.io` to remove `emqx@s2.emqx.io` from the cluster:
 
 ```bash
-./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
+./bin/emqx ctl cluster force-leave emqx@s2.emqx.io
 ```
 
 After the cluster is created, you can continue to set the network protocols for the nodes. EMQX supports connecting the nodes via TCP or TLS.

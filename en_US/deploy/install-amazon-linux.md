@@ -54,7 +54,7 @@ EMQX offers 3 different options to start EMQX:
   $ emqx start
   EMQX @CE_VERSION@ is started successfully!
   
-  $ emqx_ctl status
+  $ emqx ctl status
   Node 'emqx@127.0.0.1' @CE_VERSION@ is started
   ```
 
@@ -180,7 +180,7 @@ EMQX offers 3 different options to start EMQX:
   $ emqx start
   EMQX @EE_VERSION@ is started successfully!
   
-  $ emqx_ctl status
+  $ emqx ctl status
   Node 'emqx@127.0.0.1' @EE_VERSION@ is started
   ```
 

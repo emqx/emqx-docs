@@ -210,7 +210,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 在 `bench2`上也执行同样的操作。
 
-在所有连接建立完成后，执行 `./bin/emqx_ctl listeners`，并找到以下的内容， 查看 EMQX 中连接数的信息：
+在所有连接建立完成后，执行 `./bin/emqx ctl listeners`，并找到以下的内容， 查看 EMQX 中连接数的信息：
 
 ```bash
 listener on mqtt:tcp:0.0.0.0:1883
