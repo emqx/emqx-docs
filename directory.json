@@ -97,6 +97,14 @@
           "path": "advanced/cluster"
         },
         {
+          "title": "创建集群",
+          "path": "advanced/create-cluster"
+        },
+        {
+          "title": "集群安全",
+          "path": "advanced/cluster-security"
+        },
+        {
           "title": "钩子",
           "path": "advanced/hooks"
         },
@@ -271,7 +279,7 @@
       ]
     },
     {
-      "title": "数据存储",
+      "title": "数据集成",
       "path": "backend/backend"
     },
     {
@@ -485,17 +493,8 @@
       ]
     },
     {
-      "title": "相关资料",
-      "children": [
-        {
-          "title": "架构设计",
-          "path": "design/design"
-        },
-        {
-          "title": "资源",
-          "path": "awesome/awesome"
-        }
-      ]
+      "title": "架构设计",
+      "path": "design/design"
     }
   ],
   "en": [
@@ -765,7 +764,7 @@
       ]
     },
     {
-      "title": "Backend",
+      "title": "Data Integration",
       "path": "backend/backend"
     },
     {
@@ -950,17 +949,8 @@
       ]
     },
     {
-      "title": "Resource",
-      "children": [
-        {
-          "title": "Design",
-          "path": "design/design"
-        },
-        {
-          "title": "Awsome",
-          "path": "awesome/awesome"
-        }
-      ]
+      "title": "Design",
+      "path": "design/design"
     },
     {
       "title": "Protocol Introduction",

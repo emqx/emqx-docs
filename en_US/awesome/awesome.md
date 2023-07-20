@@ -39,19 +39,6 @@ You can contact the EMQ community and developers through the following channels:
 
 You are welcome to submit any bugs, issues and feature requests to [emqx/emqx](https://github.com/emqx/emqx/issues)。
 
-
-## Projects using EMQX Broker
-
-The following are submitted open source projects that use EMQX Broker. Unsubmitted projects/commercial projects are not listed here:
-
-- [ActorCloud](https://github.com/emqx/ActorCloud) -Open source one-stop IoT platform service
-
-## Chinese tutorial
-
-For EMQX Broker series of tutorials and Erlang/IoT related blogs and video sites, please leave a message or [Issues contribution](https://github.com/emqx/emqx-docs-cn).
-
-- None
-
 ## MQTT specification
 
 You can learn about and check the MQTT protocol through the following link:

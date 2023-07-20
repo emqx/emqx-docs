@@ -17,25 +17,13 @@ ref:
 
 本章节将指导您从下载安装开始，快速开始使用 EMQX。
 
-{% emqxce %}
+## 部署方式
 
-## 版本选择
+{% emqxce %}
 
 EMQX 提供开源版和企业版下载安装，也提供了全托管的 MQTT 云服务 EMQX Cloud，您可以选择合适您的部署方式，快速开始使用。
 
-{% endemqxce %}
-
-{% emqxee %}
-
-## 部署方式选择
-
-EMQX 提供私有部署的企业版，也提供了全托管的 MQTT 云服务 EMQX Cloud，您可以选择合适您的部署方式，快速开始使用。
-
-{% endemqxee %}
-
 :::: tabs type:card
-
-{% emqxce %}
 ::: tab EMQX 开源版
 大规模可弹性伸缩的云原生分布式物联网 MQTT 消息服务器，高效可靠连接海量物联网设备，高性能实时处理消息与事件流数据，助力构建关键业务的物联网平台与应用。
 
@@ -46,20 +34,6 @@ EMQX 提供私有部署的企业版，也提供了全托管的 MQTT 云服务 EM
 - 可扩展的网关和插件体系
 
 [下载安装](https://www.emqx.io/zh/downloads)
-:::
-
-{% endemqxce %}
-
-::: tab EMQX Cloud
-通过可靠、实时的物联网数据移动、处理和集成，连接您的海量物联网设备。加快您的物联网应用开发，免除基础设施管理维护负担。
-
-- 全托管的 MQTT 5.0 服务
-- 基于 SQL 的 IoT 规则引擎
-- 多种数据库与云服务集成
-- 关键业务的高可用高可靠
-- 在任何地方运行，随用随付
-
-[免费试用](https://www.emqx.com/zh/try?product=cloud)
 :::
 
 ::: tab EMQX 企业版
@@ -76,14 +50,23 @@ EMQX 提供私有部署的企业版，也提供了全托管的 MQTT 云服务 EM
 :::
 ::::
 
+{% endemqxce %}
+
+{% emqxee %}
+
+**「随处运行，无限连接，任意集成」** 云原生分布式物联网接入平台，一体化的分布式 MQTT 消息服务和强大的 IoT 规则引擎，为高可靠、高性能的物联网实时数据移动、处理和集成提供动力，助力企业快速构建关键业务的 IoT 平台与应用。
+
+- 标准或专有多协议支持
+- 基于 SQL 的 IoT 规则引擎
+- 数据持久化与数据桥接
+- 管理与监控中心
+- 7x24 小时技术支持服务
+
+[**免费试用**](
+
+{% endemqxee %}
+
 ## 安装 EMQX
-
-### 在 EMQX Cloud 中运行
-
-EMQX Cloud 是全球首个全托管的 MQTT 5.0 公有云服务。在 [EMQX Cloud](https://www.emqx.com/zh/cloud) 支持下，您可以在云上创建 EMQX 集群并使用 EMQX 企业版全部功能。这使您可以将更多的时间花费在业务对接上，而将较少的时间用于 EMQX 的运维和管理。
-
-- [创建并登录 EMQX Cloud 账户](https://docs.emqx.com/zh/cloud/latest/quick_start/introduction.html#创建和登录-emq-x-cloud-账户)
-- [创建免费试用部署](https://docs.emqx.com/zh/cloud/latest/quick_start/create_free_trial.html)
 
 ### 通过 Docker 容器运行
 
@@ -114,13 +97,13 @@ EMQX 提供了一个容器镜像，您可以在 [Docker Hub](https://hub.docker.
 1. 获取 Docker 镜像
 
 ```bash
-docker pull emqx/emqx-ee:latest
+docker pull emqx/emqx-ee:4.3.19
 ```
 
 1. 启动 Docker 容器
 
 ```bash
-docker run -d --name emqx-ee -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-ee:latest
+docker run -d --name emqx-ee -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-ee:4.3.19
 ```
 
 {% endemqxee %}
@@ -260,10 +243,7 @@ MQTT 客户端库接入示例工程项目代码，涵盖 [Android](https://githu
 
 ### 认证鉴权
 
-身份认证与是大多数应用的重要组成部分，启用身份认证能有效阻止非法客户端的连接。发布订阅 ACL 可以对客户端发布 /订阅操作进行权限控制。
-
-- [认证简介](../advanced/auth.md)：选择内置插件、外部数据库、JWT 或者 HTTP 服务作为认证数据源，验证客户端连接合法性。
-- [发布订阅 ACL](../advanced/acl.md)：选择内置插件、外部数据库、或者 HTTP 服务作为 ACL 数据源，验证客户端发布订阅权限。
+身份认证与是大多数应用的重要组成部分，启用身份认证能有效阻止非法客户端的连接。发布订阅 ACL 可以对客户端发布 /订阅操作进行权限控制，具体可阅读 [认证页面](../advanced/auth.md)，了解如何选择内置插件、外部数据库、JWT 或者 HTTP 服务作为认证/ACL 数据源，验证客户端连接合法性或发布订阅权限。
 
 ### 规则引擎
 
@@ -293,9 +273,8 @@ HTTP API 是物联网平台开发与 EMQX 运维中频繁使用的功能，HTTP 
 
 包含官方使用指南、最佳实践等信息。
 
-- [设备管理](../tutorial/device-management.md)
 - [系统调优](../tutorial/tune.md)
-- [生产部署](../tutorial/deploy.md)
+- [集群负载均衡](../tutorial/deploy.md)
 - [Prometheus 监控告警](../tutorial/prometheus.md)
 - [性能测试](../tutorial/benchmark.md)
 

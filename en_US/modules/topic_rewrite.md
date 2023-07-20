@@ -2,7 +2,7 @@
 
 The topic rewriting function of EMQX supports rewriting topic A to topic B when the client subscribes to topics, publishes messages, and cancels subscriptions according to user-configured rules.
 
-## Create module
+## Create Module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
@@ -20,7 +20,7 @@ After clicking add, the module is added
 
 ![image-20200927213049265](./assets/topic_rewrite_3.png)
 
-## topic rewriting rules
+## Topic Rewriting Rules
 
 The rewrite rules are divided into Pub rules and Sub rules. Pub rules match the topics carried in PUSHLISH packets, and Sub rules match the topics carried in SUBSCRIBE and UNSUBSCRIBE packets.
 
@@ -32,9 +32,9 @@ And the target expression alose support use `$c` to represent the `client ID` an
 
 It should be noted that EMQX uses reverse order to read the rewrite rules in the configuration file. When a topic can match the topic filter of multiple topic rewrite rules at the same time, EMQX will only use the first rule it matches. Rewrite. If the regular expression in this rule does not match the subject of the MQTT message, the rewriting will fail, and no other rules will be attempted for rewriting. Therefore, users need to carefully design MQTT message topics and topic rewriting rules when using them.
 
-## topic rewrite example
+## Topic Rewrite Example
 
-Add the topic rewriting rules in the above figure and subscribe to `y/a/z/b`, `y/def`, `x/1/2`, `x/y/2`, `x/y/z `Five topic:
+Add the topic rewriting rules in the above figure and subscribe to five topics: `y/a/z/b`, `y/def`, `x/1/2`, `x/y/2`, `x/y/z `
 
 + When the client subscribes to the topic of `y/def`, `y/def` does not match any topic filter, so no topic rewriting is performed, and the topic of `y/def` is directly subscribed.
 
@@ -44,4 +44,4 @@ Add the topic rewriting rules in the above figure and subscribe to `y/a/z/b`, `y
 
 + When the client sends a message to the subject of `x/y/2`, `x/y/2` matches both `x/#` and `x/y/+` two topic filters, EMQX reads in reverse order The configuration is taken, so `module.rewrite.pub.rule.2` is matched first, and the message is actually sent to the topic `z/y/2` through regular replacement.
 
-+ When the client sends a message to the topic `x/y/z`, `x/y/z` matches both `x/#` and `x/y/+` two topic filters, EMQX reads in reverse order The configuration is taken, so `module.rewrite.pub.rule.2' is first matched. If the element is not matched by the regular expression, the subject rewriting is not performed, and the message is sent directly to the `x/y/z` topic. It should be noted that even if the regular expression of `module.rewrite.pub.rule.2` fails to match, it will not match the rule of `module.rewrite.pub.rule.1` again.
++ When the client sends a message to the topic `x/y/z`, `x/y/z` matches both `x/#` and `x/y/+` two topic filters, EMQX reads in reverse order The configuration is taken, so `module.rewrite.pub.rule.2` is first matched. If the element is not matched by the regular expression, the subject rewriting is not performed, and the message is sent directly to the `x/y/z` topic. It should be noted that even if the regular expression of `module.rewrite.pub.rule.2` fails to match, it will not match the rule of `module.rewrite.pub.rule.1` again.

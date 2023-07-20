@@ -654,7 +654,7 @@ Mnesia ACL 使用 EMQX 内置的 Mnesia 数据库存储 ACL 规则，可以存�
   -X POST \
   -d '{"topic":"Topic/A", "action":"pub", "access": "allow"}' \
   http://localhost:8081/api/v4/acl
-
+  
   ## Return
   {
     "data":{
@@ -1236,7 +1236,7 @@ ok
 
 ### acl 命令
 
-user 命令查询管理内置数据库的访问控制。
+Acl 命令查询管理内置数据库的访问控制。
 
 | 命令                                   | 描述                   |
 | -------------------------------------- | ---------------------- |

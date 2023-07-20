@@ -1,4 +1,4 @@
-# RPC Bridge
+# Ingest Data into RPC
 
 ::: tip
 

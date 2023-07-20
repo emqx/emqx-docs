@@ -1,7 +1,7 @@
-# LDAP Authentication/ACL
+# LDAP
 LDAP authentication/access control uses an external OpenLDAP server as the authentication data source, which can store large amounts of data and facilitate integration with external device management systems.
 
-## Create module
+## Create Module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
@@ -116,16 +116,15 @@ userPassword:: e1NIQX1tbGIzZmF0NDBNS0JUWFVWWndDS21MNzNSLzA9
 
 After enabling LDAP authentication, you can connect via username: mqttuser0001 and password: public.
 
-## LDAP access control configuration method
+## Configure LDAP Access Control
 
-`mqttPublishTopic` allowed topics to be published (multiple can be configured)
+- `mqttPublishTopic` allowed topics to be published (multiple can be configured)
 
-`mqttSubscriptionTopic` allows to subscribe to the topic (multiple can be configured)
+- `mqttSubscriptionTopic` allows subscribing to the topic (multiple can be configured)
+- `mqttPubSubTopic` allows to subscribe/publish the topic (multiple can be configured)
 
-`mqttPubSubTopic` allows to subscribe/publish the topic (multiple can be configured)
+:::tip
 
-::: tip
-
-The current version only supports OpenLDAP, not Microsoft Active Directory.
+Only OpenLDAP is supported. 
 
 :::

@@ -1,6 +1,10 @@
-# Bridge data to Kafka
+# Stream Data into Kafka
 
-Setup a Kafka, taking Mac OSX for instance:
+[Apache Kafka](https://kafka.apache.org/) is a popular open-source distributed event streaming platform. EMQX's integration with Apache Kafka/Confluent offers users dependable bi-directional data transport and processing capabilities in high-throughput situations. This section introduces how to stream data into Kafka
+
+## Install Kafka and Create Kafka Topics
+
+Set up a Kafka, taking Mac OSX for instance:
 
 ```bash
 wget https://archive.apache.org/dist/kafka/2.8.0/kafka_2.13-2.8.0.tgz
@@ -16,8 +20,7 @@ cd kafka_2.13-2.8.0
 ```
 
 
-Create topics for
-    Kafka:
+Create topics for Kafka:
 
 ```bash
 $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testTopic --create
@@ -27,10 +30,9 @@ Created topic testTopic.
 .. note:: Kafka topics should be created before creating the kafka rule, or the rule creation would not success.
 ```
 
-Create a rule:
+## Create a Rule
 
-Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
-"rule" tab on the menu to the left.
+Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left.
 
 Select "message.publish", then type in the following SQL:
 
@@ -41,26 +43,23 @@ FROM
     "message.publish"
 ```
 
-![image](./assets/rule-engine/mysql_sql_1.png)
+<img src="./assets/rule-engine/mysql_sql_1.png" alt="image" style="zoom:50%;" />
 
-Bind an action:
+## Bind an Action
 
-Click on the "+ Add" button under "Action Handler", and then select
-    "Data bridge to Kafka" in the pop-up dialog window.
+Click on the "+ Add" button under "Action Handler", and then select "Data bridge to Kafka" in the pop-up dialog window.
 
-![image](./assets/rule-engine/kafka_action_0.png)
+<img src="./assets/rule-engine/kafka_action_0.png" alt="image" style="zoom:50%;" />
 
 Fill in the parameters required by the action:
 
-Two parameters is required by action "Data to Kafka":
+Two parameters are required by action "Data to Kafka":
 
 1). Kafka Topic
 
-2). Bind a resource to the action. Since the dropdown list "Resource"
-is empty for now, we create a new resource by clicking on the "New
-Resource" to the top right, and then select "Kafka":
+2). Bind a resource to the action. Since the dropdown list "Resource" is empty for now, we create a new resource by clicking on the "New Resource" to the top right, and then select "Kafka":
 
-![image](./assets/rule-engine/kafka_action_1.png)
+<img src="./assets/rule-engine/kafka_action_1.png" alt="image" style="zoom:50%;" />
 
 Configure the resource:
 ```
@@ -69,20 +68,19 @@ be separated by comma), and keep all other configs as default, and
 click on the "Testing Connection" button to make sure the connection
 can be created successfully, and then click on the "Create" button.
 ```
-![image](./assets/rule-engine/kafka_resource_0.png)
+<img src="./assets/rule-engine/kafka_resource_0.png" alt="image" style="zoom:50%;" />
 
-Back to the "Actions" dialog, and then click on the "Confirm"
-    button.
+Back to the "Actions" dialog, and then click on the "Confirm" button.
 
-![image](./assets/rule-engine/kafka_action_2.png)
+<img src="./assets/rule-engine/kafka_action_2.png" alt="image" style="zoom:50%;" />
 
-Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+Back to the creating rule page, then click on "Create" button. The rule we created will be shown in the rule list:
 
-![image](./assets/rule-engine/kafka_rule_overview_0.png)
+<img src="./assets/rule-engine/kafka_rule_overview_0.png" alt="image" style="zoom:50%;" />
 
-We have finished, testing the rule by sending an MQTT message to
-    emqx:
+## Test the Rule
+
+We have finished, testing the rule by sending an MQTT message to EMQX:
 
 ```bash
 Topic: "t/1"
@@ -94,14 +92,12 @@ Retained: false
 Payload: "hello"
 ```
 
-Then inspect Kafka by consume from the
-topic:
+Then inspect Kafka by consuming from the topic:
 
 ```bash
 $ ./bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092  --topic testTopic --from-beginning
 ```
 
-And from the rule list, verify that the "Matched" column has increased
-to 1:
+And from the rule list, verify that the "Matched" column has increased to 1:
 
-![image](./assets/rule-engine/kafka_rule_overview_0.png)
+<img src="./assets/rule-engine/kafka_rule_overview_0.png" alt="image" style="zoom:50%;" />

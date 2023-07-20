@@ -1,10 +1,8 @@
-# Tuning guide
+# Performance Tuning
 
-Since 4.2 EMQX had been stress-tested with 1.3 million on an 8-core, 32G memory CentOS server.
+This guide includes general tuning suggestions for Linux and EMQX.
 
-This guide includes in general tuning suggestions for one EMQX broker to serve about 1 million clients.
-
-## Turn off swap
+## Turn off Swap
 
 Linux swap partitions may cause nondeterministic memory latency to Erlang virtual machine,
 which in turn significantly affects the system stability.
@@ -24,7 +22,7 @@ sysctl -w fs.nr_open=2097152
 echo 2097152 > /proc/sys/fs/nr_open
 ```
 
-The limit on opened file handles for current session:
+The limit on opened file handles for the current session:
 
 ```
 ulimit -n 2097152
@@ -46,8 +44,8 @@ DefaultLimitNOFILE=2097152
 
 ### emqx.service
 
-Set the maximum number of file handles for emqx service in e.g. one of below paths depending
-on which linux distribution is in use.
+Set the maximum number of file handles for EMQX service in for example one of the below paths depends
+on which Linux distribution is in use.
 
 - `/usr/lib/systemd/system/emqx.service`
 - `/lib/systemd/system/emqx.service`
@@ -67,7 +65,7 @@ Persist the maximum number of opened file handles for users in `/etc/security/li
 
 ## TCP Network Tuning
 
-Increase number of incoming connections backlog:
+Increase the number of incoming connections backlog:
 
 ```
 sysctl -w net.core.somaxconn=32768
@@ -132,11 +130,11 @@ node.process_limit = 2097152
 node.max_ports = 2097152
 ```
 
-## When running in docker
+## When Running in Docker
 
-Usually you should tune the linux docker host by following the above guide.
+Usually, you should tune the Linux docker host by following the above guide.
 
-If you want to tune linux kernel by docker, you must ensure your docker is latest version (>=1.12).
+If you want to tune Linux kernel by docker, you must ensure your docker is the latest version (>=1.12).
 
 Here is an example to show how it looks.
 

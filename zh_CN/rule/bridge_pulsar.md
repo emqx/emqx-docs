@@ -1,4 +1,4 @@
-# 桥接数据到 Pulsar
+# 集成 Pulsar
 
 搭建 Pulsar 环境，以 MacOS X 为例:
 
@@ -52,7 +52,7 @@ SELECT * FROM "t/#"
 填写资源配置:
 
    填写真实的 Pulsar 服务器地址，多个地址用,分隔，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
-   
+
    服务器地址是逗号分隔的多个 Pulsar URL, URL 格式为 `pulsar://<hostname>:<port>`，如果 Pulsar 端开启了 TLS 的话，则格式为 `pulsar+ssl://<hostname>:<port>`。
 
 最后点击 “新建” 按钮。

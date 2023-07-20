@@ -1190,32 +1190,8 @@ $ ./bin/emqx_ctl resource-types show backend_mysql
 
 resource_type(name='backend_mysql', provider='emqx_backend_mysql', title ='MySQL', description='MySQL Database')
 ```
-## 与规则引擎相关的状态、统计指标和告警
 
-### 规则状态和统计指标
-
-![image](../assets/rule_metrics.png)
-
-- 已命中: 规则命中(规则 SQL 匹配成功)的次数，
-- 命中速度: 规则命中的速度(次/秒)
-- 最大命中速度: 规则命中速度的峰值(次/秒)
-- 5分钟平均速度: 5分钟内规则的平均命中速度(次/秒)
-
-### 动作状态和统计指标
-
-![image](../assets/action_metrics.png)
-
-- 成功: 动作执行成功次数
-- 失败: 动作执行失败次数
-
-### 资源状态和告警
-
-![image](../assets/resource_status.png)
-
-- 可用: 资源可用
-- 不可用: 资源不可用(比如数据库连接断开)
-
-## EMQX 内置数据库 Auth 与 ACL 规则
+## EMQX 内置数据库 Auth 与 ACL 命令
 
 此命令只有在开启 emqx_auth_mnesia 插件后生效
 

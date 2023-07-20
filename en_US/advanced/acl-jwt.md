@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# JWT ACL
+# JWT
 
 JWT ACL uses ACL rules from JWTs provided by a client during authentication. To keep JWTs reasonably small, clients using JWT ACL are not supposed to have many ACL rules.
 
@@ -94,7 +94,7 @@ a client with an expired JWT has to reconnect with a fresh JWT.
 
 To make ACL rules valid forever, a client may not provide `exp` claim at all.
 
-::: warning
+:::
 1. Using long-living JWTs is not considered secure.
 2. When ACL cache is enabled, the ACL rule's expiration is either when the cache or JWT expires, whichever is the later.
 :::

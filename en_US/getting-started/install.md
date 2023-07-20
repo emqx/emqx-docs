@@ -95,7 +95,7 @@ EMQX binary packages are released on below operating systems:
 
 ## ZIP (Linux、MacOS、Windows)
 
-::: warning
+:::
 ZIP packages are released for quick testing and hot-beam upgrade. Do NOT install zip packages for production unless you know how to manually resolve all the runtime dependencies.
 :::
 

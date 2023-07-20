@@ -2,7 +2,7 @@
 
 [JWT](https://JWT.io/) Authentication is an authentication mechanism based on Token. It does not rely on the server to retain the authentication information or session information of the client. The authentication information can be issued in batches with the key. The easiest way to authenticate.
 
-## Create module
+## Create Module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, select "Add Module":
 
@@ -15,7 +15,7 @@ Then select "JWT Authentication" under "Authentication":
 JWT authentication provides the following configuration items:
 
 1. From: The field that stores the JWT when the client connects. It currently supports the selection of username or password.
-2. Secret: The key used when issuing the JWT. It will be used to verify whether the JWT received by EMQX is legal and is applicable to the JWT issued by the HMAC algorithm.
+2. Secret: The key used when issuing the JWT. It will be used to verify whether the JWT received by EMQX is legal and applicable to the JWT issued by the HMAC algorithm.
 3. Pubkey: It will be used to verify whether the JWT received by EMQX is legal, and is applicable to the JWT issued by RSA or ECDSA algorithm.
 4. JWKs Addr: EMQX will periodically query the latest public key list from the JWKS server and use it to verify whether the received JWT is legitimate, and is applicable to JWTs issued by RSA or ECDSA algorithms.
 5. Verify Claims: Whether to verify that the claims in the JWT payload are consistent with the claims.
@@ -25,15 +25,15 @@ JWT authentication provides the following configuration items:
 
 > Note: When verifying JWT the values for `Secret`, `Pubkey`, and `JWKs Addr` are checked in that specific order. Keys with missing values will be ignored.
 
-![JWT Module Settings](./assets/auth_jwt3.png)
+<img src="./assets/auth_jwt3.png" alt="JWT Module Settings" style="zoom:40%;" />
 
 After the configuration is complete, click the "Add" button to successfully add the JWT authentication module.
 
 ![Modules JWT Added](./assets/auth_jwt4.png)
 
-## Authentication principle
+## Authentication Principle
 
-Client carries JWT with username or password field (depending on the module configuration). When initiating a connection, EMQX uses the key and certificate in the configuration for decryption. If the decryption is successful, the authentication is successful, otherwise the authentication fails.
+Client carries JWT with username or password field (depending on the module configuration). When initiating a connection, EMQX uses the key and certificate in the configuration for decryption. If the decryption is successful, the authentication is successful, otherwise, the authentication fails.
 
 After JWT authentication is enabled in the default configuration, you can connect with any username + the following password:
 
@@ -41,19 +41,19 @@ After JWT authentication is enabled in the default configuration, you can connec
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImF1dGhvciI6IndpdndpdiIsInNpdGUiOiJodHRwczovL3dpdndpdi5jb20ifSwiZXhwIjoxNTgyMjU1MzYwNjQyMDAwMCwiaWF0IjoxNTgyMjU1MzYwfQ.FdyAx2fYahm6h3g47m88ttyINzptzKy_speimyUcma4
 ```
 
-::: tip
+:::tip
 
 The above JWT Token is only for testing and can be generated with related tools according to your own business needs. An online generation tool is provided here: https://www.jsonwebtoken.io/.
 
 :::
 
-## ACL information stored in claims
+## ACL Information Stored in Claims
 
 The 'ACL Claim Name' field can be used to to specify which JWT token claim is to be used for ACL rules.
 If the provided claim is not found in the JWT, no ACL check will be applied for this client, unless there
 are other ACL plugins or modules enabled.
 
-## ACL data structure
+## ACL Data Structure
 
 The data structure of ACL rules is the following:
 
@@ -95,14 +95,16 @@ For example:
 }
 ```
 
-## ACL expiration
+## ACL Expiration
 
 JWT ACL engine will prohibit all operations after the deadline specified in `exp` JWT claim, so
 a client with an expired JWT has to reconnect with a fresh JWT.
 
 To make ACL rules valid forever, a client may omit the `exp` claim.
 
-::: warning
-1. Using long-living JWTs is not considered secure.
-2. When ACL cache is enabled, the ACL rule's expiration is either when the cache or JWT expires, whichever is the later.
+:::tip
+Using long-living JWTs is not considered secure.
+
+When ACL cache is enabled, the ACL rule's expiration is either when the cache or JWT expires, whichever comes later.
+
 :::

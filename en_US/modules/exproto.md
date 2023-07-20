@@ -1,6 +1,6 @@
-# Multi-language extension-protocol access
+# ExProto Gateway
 
-In EMQX Enterprise 4.2.0, we provide multi-language extension support. Among them, the **Multilingual Extended Protocol Access** module allows other programming languages ​​(such as Python, Java, etc.) to directly process byte data messages to achieve custom protocol analysis, and provides Pub/Sub interfaces to achieve message exchange with the system .
+In EMQX Enterprise 4.2.0, we provide multi-language extension support. Among them, the **Multilingual Extended Protocol Access** module allows other programming languages ​​(such as Python, Java, etc.) to directly process byte data messages to achieve custom protocol analysis, and provides Pub/Sub interfaces to achieve message exchange with the system.
 
 The scalability brought by this function to EMQX is very powerful. It can process any proprietary protocol in a programming language familiar to users, and enjoy the advantages of extremely high concurrent connections brought by the EMQX system.
 
@@ -13,34 +13,31 @@ The scalability brought by this function to EMQX is very powerful. It can proces
 
 ## Architecture
 
-![Extension-Protocol Arch](./assets/exproto-arch.jpg)
+<img src="./assets/exproto-arch.jpg" alt="Extension-Protocol Arch" style="zoom:50%;" />
 
 The main contents of this module include:
 
 1. **Connection layer:** This part mainly **maintains the life cycle of Socket, and the sending and receiving of data**. Its functional requirements include:
-
-    -Listen to a port. When a new TCP/UDP connection arrives, a connection process is started to maintain the connection status.
-    -Call the ʻOnSocketCreated` callback. Used to notify the external module that a new connection has been established**.
-    -Call the ʻOnScoektClosed` callback. Used to notify the external module that the connection is **closed**.
-    -Call the ʻOnReceivedBytes` callback. Used to notify the external module ** the newly received data packet for this connection**.
-    -Provide `Send` interface. Called by external modules, **used to send data packets**.
-    -Provide `Close` interface. Called by external modules, **used to actively close the connection**.
-
+    - Listen to a port. When a new TCP/UDP connection arrives, a connection process is started to maintain the connection status.
+    - Call the ʻOnSocketCreated` callback. Used to notify the external module that a new connection has been established**.
+    - Call the ʻOnScoektClosed` callback. Used to notify the external module that the connection is **closed**.
+    - Call the ʻOnReceivedBytes` callback. Used to notify the external module the newly received data packet for this connection.
+    - Provide `Send` interface. Called by external modules, **used to send data packets**.
+    - Provide `Close` interface. Called by external modules, **used to actively close the connection**.
 2. **Protocol/session layer:** This part mainly provides PUB/SUB interface** to realize message intercommunication with the EMQX Broker system. include:
+    - Provide ʻAuthenticate` interface. Used by external modules to register clients to the cluster.
+    - Provide `StartTimer` interface. Called by external modules to start timers such as heartbeat for the connection process.
+    - Provide `Publish` interface. Used by external modules to publish messages in EMQX Broker.
+    - Provide the `Subscribe` interface. It is used by external modules to subscribe to a topic in order to receive certain downlink messages from EMQX Broker.
+    - Provide the ʻUnsubscribe` interface. Called by external modules to unsubscribe a topic.
+    - Call the ʻOnTimerTimeout` callback. It is used to handle events that the timer expires.
+    - Call the ʻOnReceivedMessages` callback. Used to receive downlink messages (after subscribing to the topic successfully, if there is a message on the topic, this method will be called back)
 
-    -Provide ʻAuthenticate` interface. Used by external modules to register clients to the cluster.
-    -Provide `StartTimer` interface. Called by external modules to start timers such as heartbeat for the connection process.
-    -Provide `Publish` interface. Used by external modules to publish messages in EMQX Broker.
-    -Provide the `Subscribe` interface. It is used by external modules to subscribe to a topic in order to receive certain downlink messages from EMQX Broker.
-    -Provide the ʻUnsubscribe` interface. Called by external modules to unsubscribe a topic.
-    -Call the ʻOnTimerTimeout` callback. It is used to handle events that the timer expires.
-    -Call the ʻOnReceivedMessages` callback. Used to receive downlink messages (after subscribing to the topic successfully, if there is a message on the topic, this method will be called back)
-
-## Interface design
+## Interface Design
 
 From the gRPC perspective, ExProto will act as a client to send callback requests to the `ConnectionHandler` service. At the same time, it will also serve as a server to provide `ConnectionAdapter` services to external modules to provide various interface calls. As shown:
 
-![Extension Protocol gRPC Arch](./assets/exproto-grpc-arch.jpg)
+<img src="./assets/exproto-grpc-arch.jpg" alt="Extension Protocol gRPC Arch" style="zoom:50%;" />
 
 
 For details, see: [exproto.proto](https://github.com/emqx/emqx-exproto/blob/dev/e4.2.0/priv/protos/exproto.proto), for example, the definition of the interface is:
@@ -108,7 +105,7 @@ After the development is completed, the service needs to be deployed to a server
 The gRPC framework of each language can be referred to: [grpc-ecosystem/awesome-grpc](https://github.com/grpc-ecosystem/awesome-grpc)
 
 
-## Create module
+## Create Module
 
 After successfully deploying the gRPC service, you can open the multi-language extension protocol access module through the dashboard page, and configure the following three parts to use it successfully:
 

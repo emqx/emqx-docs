@@ -1,4 +1,4 @@
-# MQTT-SN protocol gateway
+# MQTT-SN Protocol Gateway
 
 ## Protocol Introduction
 
@@ -19,7 +19,7 @@ The message is buffered and sent until the device wakes up.
 EMQX-SN is a gateway access module of EMQX, which implements most of the functions of MQTT-SN. It is equivalent to an MQTT-SN gateway in the cloud, directly interacting with EMQ
 X Broker is connected.
 
-## Create module
+## Create Module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
@@ -48,14 +48,14 @@ Click to confirm to the configuration parameter page:
 After clicking Add, the module is added:
 ![image-20200927213049265](./assets/proto_mqtt_sn6.png)
 
-### Configuration parameters
+### Configuration Parameters
 
 | Configuration | Description                                                  |
 | ------------- | ------------------------------------------------------------ |
 | Username      | Optional parameter, which specifies the username of all MQTT-SN connections, used in the EMQX authentication module |
 | Password      | Optional parameter, used with username in EMQX authentication module |
 
-### MQTT-SN client library
+### MQTT-SN Client Library
 
 1. <https://github.com/eclipse/paho.mqtt-sn.embedded-c/>
 2. <https://github.com/ty4tw/MQTT-SN>

@@ -1,6 +1,8 @@
-# Save data to OpenTSDB
+# Ingest Data into OpenTSDB
 
-Setup a OpenTSDB database, taking Mac OSX for instance:
+## Set up OpenTSDB Database
+
+Set up an OpenTSDB database, taking Mac OSX for instance:
 
 ```bash
 $ docker pull petergrace/opentsdb-docker
@@ -8,7 +10,7 @@ $ docker pull petergrace/opentsdb-docker
 $ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
 ```
 
-Create a rule:
+## Create a Rule
 
 Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
 "rule" tab on the menu to the left.
@@ -22,14 +24,14 @@ FROM
     "message.publish"
 ```
 
-![image](./assets/rule-engine/opentsdb_sql_1.png)
+<img src="./assets/rule-engine/opentsdb_sql_1.png" alt="image" style="zoom:50%;" />
 
-Bind an action:
+## Add an Action
 
 Click on the "+ Add" button under "Action Handler", and then select
 "Data to OpenTSDB" in the pop-up dialog window.
 
-![image](./assets/rule-engine/opentsdb_action_0.png)
+<img src="./assets/rule-engine/opentsdb_action_0.png" alt="image" style="zoom:50%;" />
 
 Fill in the parameters required by the action:
 
@@ -48,34 +50,35 @@ allowed to be included in a single request. Default to 20.
 
 5). Sync Timeout. Defaults to 0.
 
-![image](./assets/rule-engine/opentsdb_action_1.png)
+<img src="./assets/rule-engine/opentsdb_action_1.png" alt="image" style="zoom:50%;" />
 
 6). Bind a resource to the action. Since the dropdown list "Resource"
 is empty for now, we create a new resource by clicking on the "New
 Resource" to the top right, and then select "OpenTSDB":
 
-![image](./assets/rule-engine/opentsdb_action_2.png)
+<img src="./assets/rule-engine/opentsdb_action_2.png" alt="image" style="zoom:50%;" />
 
-Configure the resource:
+## Configure the Resource
 
 Keep all the default configs as default, and click on the "Testing
 Connection" button to make sure the connection can be created
 successfully, and then click on the "Create" button.
 
-![image](./assets/rule-engine/opentsdb_resource_1.png)
+<img src="./assets/rule-engine/opentsdb_resource_1.png" alt="image" style="zoom:50%;" />
 
 Back to the "Actions" dialog, and then click on the "Confirm"
     button.
 
-![image](./assets/rule-engine/opentsdb_action_3.png)
+<img src="./assets/rule-engine/opentsdb_action_3.png" alt="image" style="zoom:50%;" />
 
 Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+    rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/opentsdb_rule_overview_0.png)
 
-We have finished, testing the rule by sending an MQTT message to
-    emqx:
+## Test the Rule
+
+We have finished creating the rule, test the rule by sending an MQTT message to EMQX:
 
 ```bash
 > Topic: "t/1"

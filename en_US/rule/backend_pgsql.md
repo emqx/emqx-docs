@@ -1,6 +1,8 @@
-# Save data to PostgreSQL
+# Ingest Data into PostgreSQL
 
-Setup a PostgreSQL database, taking Mac OSX for instance:
+## Set up PostgreSQL Database and Create Table
+
+Set up a PostgreSQL database, taking Mac OSX for instance:
 
 ```bash
 $ brew install postgresql
@@ -48,7 +50,7 @@ CREATE TABLE t_mqtt_msg (
 );
 ```
 
-Create a rule:
+## Create a Rule
 
 Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the "Rule" tab on the menu to the left.
 
@@ -61,14 +63,14 @@ FROM
  "message.publish"
 ```
 
-![image](./assets/rule-engine/mysql_sql_1.png)
+<img src="./assets/rule-engine/mysql_sql_1.png" alt="image" style="zoom:50%;" />
 
-Bind an action:
+## Add an Action
 
 Click on the "+ Add" button under "Action Handler", and then select
 "Data to PostgreSQL" in the pop-up dialog window.
 
-![image](./assets/rule-engine/pgsql_action_0.png)
+<img src="./assets/rule-engine/pgsql_action_0.png" alt="image" style="zoom:50%;" />
 
 Fill in the parameters required by the action:
 
@@ -86,13 +88,13 @@ insert into t_mqtt_msg(msgid, topic, qos, retain, payload, arrived) values (${id
 Before data is inserted into the table, placeholders like \${key} will
 be replaced by the corresponding values.
 
-![image](./assets/rule-engine/pgsql_action_1.png)
+<img src="./assets/rule-engine/pgsql_action_1.png" alt="image" style="zoom:50%;" />
 
 2). Bind a resource to the action. Since the dropdown list "Resource"
 is empty for now, we create a new resource by clicking on the "New
 Resource" to the top right, and then select "PostgreSQL":
 
-![image](./assets/rule-engine/pgsql_resource_0.png)
+<img src="./assets/rule-engine/pgsql_resource_0.png" alt="image" style="zoom:50%;" />
 
 Select "PostgreSQL Resource".
 
@@ -105,20 +107,21 @@ successfully.
 
 Finally click on the "Create" button.
 
-![image](./assets/rule-engine/pgsql_resource_1.png)
+<img src="./assets/rule-engine/pgsql_resource_1.png" alt="image" style="zoom:50%;" />
 
 Back to the "Actions" dialog, and then click on the "Confirm"
     button.
 
-![image](./assets/rule-engine/pgsql_action_2.png)
+<img src="./assets/rule-engine/pgsql_action_2.png" alt="image" style="zoom:50%;" />
 
 Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+    rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/pgsql_rule_overview_1.png)
 
-We have finished, testing the rule by sending an MQTT message to
-    emqx:
+## Test the Rule
+
+We have finished creating the rule, test the rule by sending an MQTT message to EMQX:
 
 ```bash
 > Topic: "t/1"

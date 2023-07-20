@@ -8,9 +8,9 @@ In simple terms, the purpose of this mechanism is to enhance the scalability of 
 
 ![Hooks-In-System](./assets/hooks_in_system.png)
 
-When the **Hooks** mechanism does not exist in the system, the entire event processing flow (from the input of the event, to the handler and the result) is invisible and cannot be modified for the external system .
+When the **Hooks** mechanism does not exist in the system, the entire event processing flow (from the input of the event to the handler and the result) is invisible and cannot be modified for the external system.
 
-In the process, if a HookPoint where a function can be mounted is added, it will allow external plugins to mount multiple callback functions to form a call chain. Then, the internal event processing  can be extended and modified .
+In the process, if a HookPoint where a function can be mounted is added, it will allow external plugins to mount multiple callback functions to form a call chain. Then, the internal event processing can be extended and modified.
 
 The authentication plugin commonly used in the system is implemented according to this logic. Take the simplest  plugin of [emqx_auth_mnesia](https://github.com/emqx/emqx/tree/main-v4.3/apps/emqx_auth_mnesia) as an example:
 
@@ -18,7 +18,7 @@ When only the `emqx_auth_mnesia` authentication plugin is enabled and anonymous 
 
 1. Receive user authentication request (Authenticate)
 2. Read the parameter of *Whether to allow anonymous login*  and get ***deny*** result
-3. Execute the hook of the authentication event , that is, call back to the `emqx_auth_mnesia` plugin, assume this authentication is valid, and get **allow** result
+3. Execute the hook of the authentication event, that is, call back to the `emqx_auth_mnesia` plugin, assume this authentication is valid, and get **allow** result
 4. Return **Authentication succeeded**, and successfully access the system
 
 It is shown in the following figure:
@@ -92,7 +92,6 @@ In the following two sections of [HookPoint](#hookpoint) and [callback function]
 
 {% emqxee %}
 
-- For hooks and HTTP server applications, Refer to: [WebHook](webhook.md)
 - For hooks and other language applications, Refer to: [Modules - Extensions](../modules/exhook.md)
 
 {% endemqxee %}
@@ -130,7 +129,7 @@ EMQX Broker is based on a client's key activities during its life cycle, and pre
 - **The Session is taken over:** When the client logs in with the method of `Reserved Session`, if the client's session already exists on the server, the old session will be taken over by the new connection
 :::
 
-### Hook and unhook
+### Hook and Unhook
 
 EMQX Broker provides an API for the operation of hooking and unhooking.
 
@@ -154,10 +153,10 @@ emqx:unhook(Name, {Module, Function}).
 ```
 
 
-## Callback function
+## Callback Function
 The input parameters and returned value of the callback function are shown in the following table:
 
-(For parameter data structure, see:[emqx_types.erl](https://github.com/emqx/emqx/blob/main-v4.3/src/emqx_types.erl))
+(For parameter data structure, see [emqx_types.erl](https://github.com/emqx/emqx/blob/main-v4.3/src/emqx_types.erl)
 
 
 | Name                 | input parameter                                                                                                                                                          | Returned value     |
@@ -183,4 +182,4 @@ The input parameters and returned value of the callback function are shown in th
 | message.dropped      | `Message`：Message object<br>`By`：Dropped by<br>`Reason`：Drop reason                                                                                                   | -                  |
 
 
-For the application of these hooks, see:[emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)
+For the application of these hooks, see [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)

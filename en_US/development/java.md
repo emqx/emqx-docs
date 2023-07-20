@@ -14,11 +14,17 @@ ref:
 ---
 
 
-# MQTT Java client library
+# MQTT Java Client Library
 
-[Eclipse Paho Java Client](https://www.eclipse.org/paho/clients/java/) is an MQTT client library written in Java(MQTT Java Client), which can be used in JVM or other Java compatible platforms (such as Android ).
+[Eclipse Paho Java Client](https://www.eclipse.org/paho/clients/java/) is an MQTT client library written in Java(MQTT Java Client), which can be used in JVM or other Java-compatible platforms (such as Android).
 
 Eclipse Paho Java Client provides asynchronous and synchronous API of MqttAsyncClient and MqttClient .
+
+:::tip
+
+Currently, the MQTT Java client library has fully supported MQTT 5.0.
+
+:::
 
 ## Install Paho Java via Maven
 
@@ -32,7 +38,7 @@ The Paho Java client library can be easily installed through the package managem
 </dependency>
 ```
 
-## Paho Java usage example
+## Quick Start Tutorial
 
 In the Java system, Paho Java is a relatively stable and widely used MQTT client library. This example contains the complete code of Paho Java in the Java language connecting to EMQX Broker, sending and receiving messages:
 
@@ -131,8 +137,3 @@ public class OnMessageCallback implements MqttCallback {
     }
 }
 ```
-
-
-## Paho Java MQTT 5.0 Support
-
-Currently, Paho Java is still adapting to MQTT 5.0 and has not yet fully supported it .

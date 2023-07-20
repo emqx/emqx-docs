@@ -1,57 +1,57 @@
 # Module Management
 
 The EMQX provides abundant functional modules, including authentication and authorization, protocol access, message delivery, language extension, operation and maintenance monitoring, and internal modules.
-On the module management page of dashboard, modules can be started and stopped, as well as their configuration and data can be managed.
+On the Dashboard's module management page, modules can be started and stopped, as well as their configuration and data can be managed.
 
-## Module list
+## Module List
 
 The modules currently provided by the EMQX include:
 
 - Authentication & Authorization
-  - Builtin ACL file
-  - MySQL Authentication/ACL
-  - PostgreSQL Authentication/ACL
-  - Redis Authentication/ACL
-  - HTTP Authentication/ACL
-  - Builtin database Authentication/ACL
-  - MongoDB Authentication/ACL
-  - LDAP Authentication/ACL
-  - JWT Authentication
+  - [Builtin ACL File](./internal_acl.md)
+  - [MySQL AUTH/ACL](./mysql_authentication.md)
+  - [PostgreSQL AUTH/ACL](./pgsql_authentication.md)
+  - [Redis AUTH/ACL](./redis_authentication.md)
+  - [HTTP AUTH/ACL](./http_authentication.md)
+  - [Builtin Database AUTH/ACL](./mnesia_authentication.md)
+  - [MongoDB AUTH/ACL](./mongo_authentication.md)
+  - [PSK File AUTH](./psk_authentication.md)
+  - [LDAP AUTH/ACL](./ldap_authentication.md)
+  - [JWT AUTH](./jwt_authentication.md)
 - Protocol Access
-  - LwM2M protocol gateway
-  - MQTT-SN protocol gateway
-  - TCP protocol gateway
-  - JT/T808 Protocol Gateway
-  - CoAP protocol gateway
-  - Stomp protocol gateway
+  - [LwM2M Gateway](./lwm2m_protocol.md)
+  - [MQTT-SN Gateway](./mqtt_sn_protocol.md)
+  - [TCP Gateway](./tcp_protocol.md)
+  - [JT/T808 Gateway](./jt808_protocol.md)
+  - [CoAP Gateway](./coap_protocol.md)
+  - [Stomp Gateway](./stomp_protocol.md)
 - Message Delivery
-  - Kafka consumer group
-  - Pulsar Consumer Group
-  - MQTT subscribers
+  - [Kafka Consumer Group](./kafka_consumer.md)
+  - [Pulsar Consumer Group](./pulsar_consumer.md)
+  - [MQTT Subscriber](./mqtt_subscriber.md)
 - Language Extension
-  - Protocol access
-  - Hook
+  - [Protocol Access](./exproto.md)
+  - [Hook](./exhook.md)
 - Develop and Maintenance 
-  - Recon
-  - Prometheus Agent
+  - [Prometheus Agent](../tutorial/prometheus.md)
 - Internal Modules
-  - Topic metrics
-  - MQTT enhanced certification
-  - MQTT online and offline notification
-  - MQTT broker subscription
-  - MQTT topic rewrite
-  - MQTT retainr messages
-  - MQTT delayed publish
+  - [Hot Configuration](./hot_confs.md)
+  - [Topic Metrics](./topic_metrics.md)
+  - [Online and Offline Notification](./presence.md)
+  - [MQTT Proxy Subscription](./subscription.md)
+  - [MQTT Topic Rewrite](./topic_rewrite.md)
+  - [MQTT Retainer Message](./retainer.md)
+  - [MQTT Delayed Publish](./delayed_publish.md)
 
 
 ## Start and Stop Modules
 
-Currently there are two ways to start the module:
+Currently, there are two ways to start the module:
 
 1. Load modules with system 
-2. Use Dashboard to start and stop the module
+2. Use the Dashboard to start and stop the module
 
-**Enable loading modules with system**
+**Load Modules with the System**
 
 If you need to start a certain module when EMQX starts, you can directly add the module that needs to be started in `data/loaded_modules`.
 
@@ -87,6 +87,6 @@ For example, the modules automatically loaded by EMQX are:
 ]
 ```
 
-**Use Dashboard to start and stop the module**
+**Use Dashboard to Start/Stop Modules**
 
 If the Dashboard module is enabled, you can directly start and stop the module by accessing the module management page at `http://localhost:18083/modules`.

@@ -1,7 +1,7 @@
-# Online and Offline notification
+# Online and Offline Notification
 EMQX online and offline system message notification function automatically sends a system topic message when the client connection is successful or the client is disconnected, and EMQX turns on the online and offline notification module by default.
 
-## Create module
+## Create Module
 
 The online and offline notification module is started by default and can be started and stopped through the dashboard page.
 
@@ -17,7 +17,7 @@ There is no need to configure any parameters for the online and offline notifica
 
 ![image-20200927213049265](./assets/mod_presence2.png)
 
-## Online and offline message notification format
+## Notification Message Format
 
 `$SYS` Subject prefix: `$SYS/brokers/${node}/clients/`
 

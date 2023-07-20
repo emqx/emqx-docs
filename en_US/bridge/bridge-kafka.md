@@ -1,4 +1,4 @@
-# Kafka Bridge
+# Steam Data into Kafka
 
 ::: tip
 

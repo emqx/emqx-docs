@@ -1,4 +1,4 @@
-# 保存数据到 ClickHouse
+# 集成 ClickHouse
 
 搭建 ClickHouse 数据库，并设置用户名密码为 default/public，以 CentOS 为例:
 

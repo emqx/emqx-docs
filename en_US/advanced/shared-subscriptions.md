@@ -1,4 +1,4 @@
-## Shared subscription
+## Shared Subscription
 
 Shared subscription is a subscription method that achieves load balancing among multiple subscribers:
 
@@ -12,17 +12,17 @@ Shared subscription is a subscription method that achieves load balancing among 
 
 In the above picture, three subscribers subscribe to the same topic `$share/g/topic` using a shared subscription method, where ` topic` is the real topic name they subscribed to, and `$share/g/`  is a shared subscription Prefix. EMQX Broker supports shared subscription prefixes in two formats:
 
-| Example         | Prefix      | Real topic name |
-| --------------- | ----------- | --------------- |
-| $queue/t/1      | $queue/     | t/1             |
-| $share/abc/t/1  | $share/abc  | t/1             |
+| Example        | Prefix     | Real Topic Name |
+| -------------- | ---------- | --------------- |
+| $queue/t/1     | $queue/    | t/1             |
+| $share/abc/t/1 | $share/abc | t/1             |
 
 
-### Shared subscription with groups
+### Shared Subscription with Groups
 
 Shared subscriptions prefixed with `$ share/<group-name>` are shared subscriptions with groups:
 
-group-name can be any string. Subscribers who belong to the same group will receive messages with load balancing, but EMQX Broker will broadcast messages to different groups.
+`group-name` can be any string. Subscribers who belong to the same group will receive messages with load balancing, but EMQX Broker will broadcast messages to different groups.
 
 For example, suppose that subscribers s1, s2, and s3 belong to group g1, and subscribers s4 and s5 belong to group g2. Then when EMQX Broker publishes a message msg1 to this topic:
 
@@ -42,7 +42,7 @@ For example, suppose that subscribers s1, s2, and s3 belong to group g1, and sub
                                       [s5] got msg1
 ```
 
-### Shared subscription without group
+### Shared Subscription without Group
 
 Shared subscriptions prefixed with `$queue/` are shared subscriptions without groups. It is a special case of `$share` subscription, which is quite similar to all subscribers in a subscription group:
 
@@ -54,7 +54,7 @@ Shared subscriptions prefixed with `$queue/` are shared subscriptions without gr
                                        [s3] got msg3
 ```
 
-### Balancing strategy and distribution of Ack configuration
+### Balancing Strategy and Distribution of Ack Configuration
 
 EMQX Broker's shared subscription supports balancing strategy and distribution of Ack configuration:
 
@@ -77,11 +77,11 @@ broker.shared_dispatch_ack_enabled = false
 | :------------ | :------------------------------------------------------------------- |
 | hash_clientid | According to the hash value of the publisher ClientID |
 | hash_topic    | According to the hash value of the message's topic name |
-| local         | Selects random subscriber connected to the node which received the message. If no such subscribers present, selects a random cluster-wise |
+| local         | Selects a random subscriber connected to the node which received the message. If there is no such subscribers, select a random cluster-wise |
 | random        | Select randomly among all subscribers |
 | round_robin   | According to the order of subscription |
 | sticky        | First dispatch is random, then stick to it for all subsequent messages until that subscriber goes disconnected or that publisher reconnects |
 
 ::: tip
-Whether it is a single client subscription or a shared subscription, pay attention to the client performance and message reception rate, otherwise it will cause errors such as message accumulation and client crash.
+Whether it is a single client subscription or a shared subscription, pay attention to the client performance and message reception rate, otherwise, it will cause errors such as message accumulation and client crash.
 :::

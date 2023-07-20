@@ -1,12 +1,12 @@
-# 3rd-Party Custom codec example - gRPC
+# Third-Party Custom Codec - gRPC
 
-## Rule requirements
+## Rule Requirements
 
 The device publishes an arbitrary message to verify that the self-deployed codec service is working normally.
 
-## Create a resource Parser gRPC
+## Create a Resource Parser gRPC
 
-In the EMQX Dashboard 的 [Resource 创建](http://127.0.0.1:18083/#/resources) interface of EMQX, create a Parser gRPC resource using the following parameters:
+In the EMQX Dashboard ->  [Resource](http://127.0.0.1:18083/#/resources),  create a Parser gRPC resource using the following parameters:
 
 - URL: http://127.0.0.1:50051
 - Resource ID: my_grpc_parser_resource
@@ -22,7 +22,7 @@ In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of 
 
 All other configurations remain default.
 
-## Creating rules
+## Creating Rules
 
 **Use the Schema you have just created to write the rule SQL statement:**
 
@@ -52,11 +52,11 @@ This check action prints the results filtered by the SQL statement to the emqx c
 
 If the service is started with emqx console, the print will be displayed directly in the console; if the service is started with emqx start, the print will be output to the erlang.log.N file in the log directory, where "N" is an integer, e.g. "erlang.log.1", " erlang.log.2".
 
-## Codec server-side code
+## Codec Server-Side Code
 
 Once the rules have been created, it is time to simulate the data for testing. Therefore, the first thing you need to do is write your own codec service.
 
-The following code implements an gRPC codec service using the Python language. For simplicity, this service just do base64_encode on received string when encoding, and do base64_decode
+The following code implements a gRPC codec service using the Python language. For simplicity, this service just do base64_encode on a received string when encoding, and do base64_decode
 when decoding.
 See [full code](https://github.com/terry-xiaoyu/emqx-schema-grpc-python-server) for details.
 
@@ -99,7 +99,7 @@ python3 -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./pro
 python3 emqx_schema_registry_server.py
 ```
 
-## Checking rule execution results
+## Test the Rule
 
 Since this example is relatively simple, we'll use the MQTT Websocket client directly to simulate sending a message on the device side.
 

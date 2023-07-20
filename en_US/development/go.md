@@ -14,17 +14,23 @@ ref:
 ---
 
 
-# MQTT Go Client library
+# MQTT Go Client Library
 
 [Eclipse Paho MQTT Go Client](https://github.com/eclipse/paho.mqtt.golang) is the Go language client library under the Eclipse Paho project, which can connect to the MQTT Broker to publish messages, subscribe to topics and receive the published message. It supports asynchronous operation mode completely.
 
-The client depends on Google's software Package of [proxy](https://godoc.org/golang.org/x/net/proxy) and [websockets](https://godoc.org/github.com/gorilla/websocket), which can be installed with the following command:
+The client depends on Google's software Package of [proxy](https://godoc.org/golang.org/x/net/proxy) and [WebSockets](https://godoc.org/github.com/gorilla/websocket), which can be installed with the following command:
 
 ```bash
 go get github.com/eclipse/paho.mqtt.golang
 ```
 
-## MQTT Go usage example
+:::tip
+
+Eclipse Paho MQTT Go Client has fully supported MQTT 5.0.
+
+:::
+
+## Quick Start Tutorial
 
 This example contains the complete code for Paho MQTT in Go language connecting to EMQX Broker, sending and receiving messages:
 
@@ -83,10 +89,3 @@ func main() {
 	time.Sleep(1 * time.Second)
 }
 ```
-
-
-
-
-## Paho Golang MQTT 5.0 support
-
-MQTT 5.0 support can refer to [eclipse/paho.golang](https://github.com/eclipse/paho.golang)

@@ -33,7 +33,7 @@ The configuration files of EMQX Broker usually have the suffix `.conf`. You can 
 
 It should be noted that for the EMQX Broker installed by different methods, the path of the `etc` directory may be different. For details, please refer to [directory structure](directory.md#).
 
-## Grammar rules
+## Grammar Rules
 
 - Use k = v common format like sysctl
 - All information for a single configuration item is on the same line, and a new line means creating a new configuration item
@@ -47,7 +47,7 @@ It should be noted that for the EMQX Broker installed by different methods, the 
 mqtt.max_packet_size = 1MB
 ```
 
-## Data type
+## Data Type
 
 **integer**
 
@@ -107,7 +107,7 @@ You can arbitrarily combine these time units, such as `1w13ms`, or you can use f
 
 `bytesize` supports configuration of message size and buffer size in a more readable way, and the unit can be `KB`, `MB` and `GB`. You can also use lower case, for example `kb`, but mixed case, such as `Kb`, is not supported. It will eventually be converted to bytes. If you do not specify any units, then it is used directly as the number of bytes.
 
-## Default configuration
+## Default Configuration
 
 In the configuration file of EMQX Broker, you will see a lot of configuration items that are commented out, which means that these configuration items will use their default values. Usually we will list the default values of these configurations.
 
@@ -123,8 +123,8 @@ Listener is mainly used to configure listening ports and related parameters of d
 | ------------------------- | ------------------------------------------------------- |
 | TCP Listener              | A listener for MQTT which uses TCP                      |
 | SSL Listener              | A secure listener for MQTT which uses TLS               |
-| Websocket Listener        | A listener for MQTT over WebSockets                     |
-| Secure Websocket Listener | A secure listener for MQTT over secure WebSockets (TLS) |
+| WebSocket Listener        | A listener for MQTT over WebSockets                     |
+| Secure WebSocket Listener | A secure listener for MQTT over secure WebSockets (TLS) |
 
 EMQX Broker provides 5 Listeners by default, and they will occupy the following ports:
 
@@ -151,3 +151,15 @@ Of course, in this case, we recommend that you copy the default Listener configu
 A Zone defines a set of configuration items (such as the maximum number of connections), and the Listener can specify the Zone through the configuration item `listener.<Protocol>.<Listener Name>.zone` to use all the configurations under the Zone. Multiple Listeners can share the same Zone. The naming rule of Zone is `zone.<Zone Name>.xxx`. `Zone Name` can be named at will, but it is also recommended to be all lowercase. `xxx` is a specific configuration item, you can find it in [configuration item](../configuration/configuration.md) to view all configuration items supported by Zone.
 
 At this time, there are three available values for each of our configuration items, which are the global value, the value set in Zone and the default value, and their priority order is: Zone> Global> Default.
+
+## Apply Configuration
+
+{% emqxce %}
+The EMQX open source edition does not support updating the configuration at runtime. If there is a need, you can consider migrating to EMQX Enterprise. To apply the latest settings, you can reload extension plugins as EMQX reads and loads configuration items during startup.
+
+{% endemqxce %}
+
+{% emqxee %}
+EMQX will read and load the configuration items during startup or when extension plugins are started. You can update the configuration at runtime through the Dashboard or REST API, or reload the plug-in after modifying the plug-in configuration to apply the latest configuration.
+
+{% endemqxee %}

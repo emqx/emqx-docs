@@ -1,17 +1,17 @@
-# Hot-Patch EMQX at Runtime
+# Hot Patch
 
-Starting from 4.3, EMQX supports an easier (comparing to 4.2) hot-patch mechanism.
-Hot-patch is an ad-hoc patch mechanism comparing to [Hot Upgrade](./relup.md#hot-upgrade-steps).
-For certain urgent issues, a hot-patch can be applied before the fix is included in a (future) official release.
+Starting from 4.3, EMQX supports an easier (compared to 4.2) hot-patch mechanism.
+Hot-patch is an ad-hoc patch mechanism compared to [Hot Upgrade](./relup.md#hot-upgrade-steps).
+For certain urgent issues, a hot patch can be applied before the fix is included in a (future) official release.
 
 ::: tip NOTE
-It's recommended to upgrade to the offical release which included the patched fixes.
+It's recommended to upgrade to the official release which included the patched fixes.
 The patched modules should be deleted before upgrading.
 :::
 
 ## Steps to Patch
 
-1. Get the list of modules to be updated from EMQX support team. For example:
+1. Get the list of modules to be updated from the EMQX support team. For example:
 
 ```
 emqx.beam
@@ -44,7 +44,7 @@ $ emqx eval 'c:lm().'
 
 ## Rollback the Patched Modules
 
-In case the patch does not work as expected, or if one wish to go back to the state before patching, below are the steps to rollback.
+In case the patch does not work as expected, or you want to go back to the state before patching, below are the steps to roll back.
 
 1. Delete the patched modules from the `data/patches` directory
 

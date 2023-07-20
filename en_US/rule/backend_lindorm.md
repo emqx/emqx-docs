@@ -1,4 +1,6 @@
-# Save data to Lindorm database (since e3.3.6, and e4.4.1)
+# Ingest Data into Lindorm (since e4.4.1)
+
+## Set up Lindorm Database
 
 First, make sure that the Lindorm database service is enabled.
 </br>
@@ -22,6 +24,8 @@ CREATE TABLE demo_sensor(
     msg VARCHAR)
 ```
 
+## Create Resource
+
 The resource requires the following startup parameters:
 
 - Lindorm server: Lindorm access address. Lindorm provides domain name access. For Alibaba Cloud host, please fill in the intra-net access address. The default port is `8242`. When filling according to the actual situation, you need to add the prefix `http://`;
@@ -36,7 +40,7 @@ Ensure that the resource status is available (for non-Alibaba Cloud deployments,
 
 ![image](./assets/rule-engine/lindorm_resource_status.png)
 
-Create rule
+## Create rule
 
 ```SQL
 SELECT
@@ -49,7 +53,7 @@ FROM
 
 ![image](./assets/rule-engine/lindorm_create_rule.png)
 
-Add action
+## Add action
 
 - Action type: data persistence; save data to Lindorm;
 - Using resource: select the created resource ID;
@@ -67,11 +71,13 @@ Click OK. Then, click Create and view the rules:
 
 ![image](./assets/rule-engine/lindorm_create_rule_over.png)
 
+## Test the Rule
+
 Use the MQTT client to publish messages and view the counts of successes and failures of rule hits;
 
 ![image](./assets/rule-engine/lindorm_create_rule_run.png)
 
-Use API to query database and write results:
+Use API to query the database and write results:
 
 ```shell
 # Replace

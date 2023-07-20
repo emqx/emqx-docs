@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# HTTP ACL
+# HTTP AUTH/ACL
 
 An external self-built HTTP application authentication data source is used for HTTP authentication, and the authentication result is judged based on the data returned by the HTTP API, which can implement complex ACL verification logic.
 
@@ -66,7 +66,7 @@ When performing publish/subscribe authentication, EMQX Broker will use the curre
 
 ## superuser Request
 
-Check whether the client is a super user at first. If the client is a super user, the ACL query will be skipped.
+Check whether the client is a superuser at first. If the client is a superuser, the ACL query will be skipped.
 
 ```bash
 # etc/plugins/emqx_auth_http.conf
@@ -115,7 +115,7 @@ You can use the following placeholders in the authentication request, and EMQX B
 - %C:TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
 - %d:TLS certificate subject, valid only for TLS connections
 
-::: warning 
+::: 
 The POST and PUT methods are recommended. When using the GET method, the clear text password may be recorded with the URL in the server log during transmission.
 
 :::

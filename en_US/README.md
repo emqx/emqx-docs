@@ -16,7 +16,7 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 
 {% emqxce %}
 
-- **Massive Scale**: Scale to 100 million concurrent MQTT connections with a single EMQX 5.0 cluster, In 4.x this number is 10 million.
+- **Massive Scale**: Each EMQX node supports up to 2 million concurrent MQTT connections, and each EMQX cluster can support up to 10 million concurrent MQTT connections. 
 - **High Performance**: Move and process millions of MQTT messages per second in a single broker.
 - **Low Latency**: Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
 - **Fully MQTT 5.0**: 100% compliant with MQTT 5.0 and 3.x standard for better scalability, security, and reliability.
@@ -35,9 +35,9 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 
 ### Data Security & Privacy
 
-- Ensure data security with MQTT over TLS/SSL or QUIC.
+- Ensure data security with MQTT over TLS/SSL.
 - Authenticate with LDAP, JWT, PSK, X.509 certificates, and more.
-- Rich data management APIs to help keeping your data protection policy in line with EU’s GDPR.
+- Rich data management APIs to help keep your data protection policy in line with EU’s GDPR.
 
 ### Cloud-Native
 
@@ -45,7 +45,6 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 
 ### Run Anywhere
 
-- Run Anywhere
 - Run anywhere in private, hybrid, and public clouds like AWS, GCP, and Azure without vendor lock-in.
 
 ### High ROI (Return on Investment) with Low TCO (Total Cost of Ownership)
@@ -79,7 +78,6 @@ Below is a brief/incomplete feature list, highlighting the features EMQX provide
   - TCP
   - TLS
   - WebSocket
-  - QUIC (Experimental)
 - HTTP message publishing interface support
 - Gateways
   - CoAP
@@ -88,7 +86,6 @@ Below is a brief/incomplete feature list, highlighting the features EMQX provide
   - Stomp
   - GB/T 32960 (Enterprise edition) <!--cannot use 'emqxee' macro inside list-->
   - JT/T 808 (Enterprise edition)
-  - OCPP (Enterprise edition)
 
 Advanced features for MQTT:
 
@@ -113,7 +110,7 @@ Advanced features for MQTT:
 
 ### Data Integration
 
-- SQL syntax data integrations to extract, filter, enrich, and transform MQTT message or internal events to desired format and export them to external data platforms
+- SQL syntax data integrations to extract, filter, enrich, and transform MQTT messages or internal events to desired format and export them to external data platforms
 - Supports data bridging with other brokers or IoT platforms using MQTT (such as EMQX Cloud, AWS IoT Core, Azure IoT Hub)
 - Supports integration with other apps using WebHook
 - 30+ enterprise system integrations including Kafka, RDS, various SQL / NoSQL / time-series databases, and enterprise systems such as Oracle and SAP (Enterprise edition)

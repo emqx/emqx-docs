@@ -99,6 +99,6 @@ EMQX Enterprise 需要 License 文件才能正常启动，请联系销售人员�
 
 ### 放置 License
 
-- 替换默认证书目录下的 License 文件（`etc/emqx.lic`），当然你也可以选择变更证书文件的读取路径，修改 `etc/emqx.conf` 文件中的 `license.file`，并确保 License 文件位于更新后的读取路径且 EMQX Enterprise 拥有读取权限，然后启动 EMQX Enterprise。EMQX Enterprise 的启动方式与 EMQX 相同，见下文。
+- 改变配置中的许可证文件的路径：修改 `etc/license.conf` 文件中的 `license.file`，并确保许可证文件确实在更新的路径中，而且 EMQX Enterprise 有对它的读取权限。然后，启动EMQX Enterprise。EMQX Enterprise 的启动方式与EMQX 开源版相同。
 
-- 如果正在运行的EMQX企业集群需要更新许可证文件，可以使用`emqx_ctl license reload [path of the license file]`命令直接更新许可证文件，而无需重启任何节点。 需要注意的是，`emqx_ctl license reload`命令加载的证书将应用于整个EMQX集群，它将被保存在每个节点的`licenses`子目录下的EMQX的数据目录中（即：`data/licenses/emqx.lic`）。 即使节点重新启动，这个新的许可证文件也会被加载和应用。
+- 另外，如果正在运行的EMQX企业集群需要更新许可证文件，可以使用 `emqx_ctl license reload [path of the license file]` 命令直接更新许可证文件，而不必重新启动任何节点。 需要注意的是，`emqx_ctl license reload` 命令加载的证书将应用于整个 EMQX 集群，它将被保存在每个节点的数据目录的 `licenses` 子目录下（即：`data/licenses/emqx.lic`）。 即使节点重新启动，这个新的许可证文件也会被加载和应用。

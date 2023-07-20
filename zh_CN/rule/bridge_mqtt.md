@@ -1,4 +1,4 @@
-# 桥接数据到 MQTT Broker
+# 集成 MQTT Broker
 
 搭建 MQTT Broker 环境，以 MacOS X 为例:
 ```bash

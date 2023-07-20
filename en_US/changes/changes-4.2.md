@@ -457,7 +457,7 @@ EMQX 4.2.0 is released now, it mainly includes the following changes:
 - Allow users to configure whether to allow WebSocket messages to contain multiple MQTT messages to be compatible with some clients
 - Adjust RPC port discovery strategy
 - ***Incompatible changes:*** The API path provided by the `emqx-auth-mnesia` plugin has been adjusted to `api/v4/mqtt_user` and `api/v4/mqtt_acl`
-- The `emqx-auth-http` plugin disables super user authentication requests by default
+- The `emqx-auth-http` plugin disables superuser authentication requests by default
 - `emqx-bridge-mqtt` disables bridge mode by default
 
 **Bug fixes:**
@@ -689,7 +689,7 @@ EMQX 4.2-beta.1 is released now, it mainly includes the following changes:
 
 **Bug fixes:**
 
-- Disable super user authentication request by default
+- Disable superuser authentication request by default
 
   Github PR: [emqx-auth-http#195](https://github.com/emqx/emqx-auth-http/pull/195)
 
@@ -5468,7 +5468,7 @@ Bugfix: Topic has been decoded by gen-coap, no conversion needed
 
 *Release Date: 2017-07-03*
 
-::: warning Warning
+::: Warning
 2.2-rc.2 requires Erlang/OTP R19.3+ to build.
 :::
 
@@ -5774,7 +5774,7 @@ auth.redis.password\_hash = plain by default (emq-auth-redis\#20)
 
 EMQ v2.1.0-beta.1 is now available.
 
-::: warning Warning
+::: Warning
 EMQ 2.1+ Requires Erlang/OTP R19+ to build.
 :::
 

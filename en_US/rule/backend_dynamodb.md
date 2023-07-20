@@ -1,6 +1,8 @@
-# Save data to DynamoDB
+# Ingest Data into DynamoDB
 
-Setup a DynamoDB database, taking Mac OSX for instance:
+## Start DynamoDB Database and Create Table
+
+Set up a DynamoDB database, taking Mac OSX for instance:
 
 ```bash
 $ brew install dynamodb-local
@@ -8,7 +10,7 @@ $ brew install dynamodb-local
 $ dynamodb-local -sharedDb
 ```
 
-For details about how to deply DynamoDB and AWS CLI locally, please see [Deploying DynamoDB Locally](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)
+For details about how to deploy DynamoDB and AWS CLI locally, please see [Deploying DynamoDB Locally](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)
 
 Initiate the DynamoDB table:
 
@@ -37,7 +39,7 @@ table:
 $aws dynamodb create-table --cli-input-json file://mqtt_msg.json --endpoint-url http://localhost:8000
 ```
 
-Create a rule:
+## Create a Rule
 
 Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
 "rule" tab on the menu to the left.
@@ -48,7 +50,7 @@ Select "message.publish", then type in the following SQL:
 SELECT id as msgid, topic, payload FROM "#"
 ```
 
-Bind an action:
+## Add an Action
 
 Click on the "+ Add" button under "Action Handler", and then select
 "Data to DynamoDB" in the pop-up dialog window.
@@ -74,9 +76,9 @@ Resource" to the top right, and then select "DynamoDB":
 
 ![image](./assets/rule-engine/dynamo_action_2.png)
 
-Configure the resource:
 
-Fill in the configs as following:
+
+Fill in the configs as follows:
 
 - DynamoDB Region: us-west-2
 - DynamoDB Server: <http://localhost:8000>
@@ -95,7 +97,9 @@ Back to the creating rule page, then click on "Create" button. The rule we creat
 
 ![image](./assets/rule-engine/dynamo_rule_overview_0.png)
 
-We have finished, testing the rule by sending an MQTT message to emqx:
+## Test the Rule
+
+We have finished creating the rule, test the rule by sending an MQTT message to EMQX:
 
 ```bash
 > Topic: "t/a"
@@ -105,7 +109,7 @@ We have finished, testing the rule by sending an MQTT message to emqx:
 > Payload: "hello"
 ```
 
-Then inspect the DynamoDB table, verify a new record has been
+Then inspect the DynamoDB table, and verify if a new record is
 inserted:
 
 ![image](./assets/rule-engine/dynamo_result.png)

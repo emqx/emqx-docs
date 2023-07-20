@@ -1,6 +1,8 @@
-# Bridge data to RabbitMQ
+# Ingest Data into RabbitMQ
 
-Setup a RabbitMQ, taking Mac OSX for instance:
+## Set up RabbitMQ
+
+Set up a RabbitMQ, taking Mac OSX for instance:
 
 ```bash
 $ brew install rabbitmq
@@ -8,10 +10,9 @@ $ brew install rabbitmq
 # start rabbitmq
 $ rabbitmq-server
 ```
-Create a rule:
+## Create a Rule
 
-Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
-"rule" tab on the menu to the left.
+Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left.
 
 Select "message.publish", then type in the following SQL:
 
@@ -22,18 +23,18 @@ FROM
     "message.publish"
 ```
 
-![image](./assets/rule-engine/mysql_sql_1.png)
+<img src="./assets/rule-engine/mysql_sql_1.png" alt="image" style="zoom:50%;" />
 
-Bind an action:
-```
+## Add an Action
+
 Click on the "+ Add" button under "Action Handler", and then select
 "Data bridge to RabbitMQ" in the pop-up dialog window.
-```
-![image](./assets/rule-engine/rabbit_action_0.png)
+
+<img src="./assets/rule-engine/rabbit_action_0.png" alt="image" style="zoom:50%;" />
 
 Fill in the parameters required by the action:
 
-Two parameters is required by action "Data bridge to RabbitMQ":
+Three parameters are required by action "Data bridge to RabbitMQ":
 
 1). RabbitMQ Exchange. Here set it to "messages"
 
@@ -41,35 +42,36 @@ Two parameters is required by action "Data bridge to RabbitMQ":
 
 3). RabbitMQ Routing Key. Here set it to "test"
 
-![image](./assets/rule-engine/rabbit_action_1.png)
+<img src="./assets/rule-engine/rabbit_action_1.png" alt="image" style="zoom:50%;" />
 
 4). Bind a resource to the action. Since the dropdown list "Resource"
 is empty for now, we create a new resource by clicking on the "New
 Resource" to the top right, and then select "RabbitMQ":
 
-![image](./assets/rule-engine/rabbit_action_2.png)
+<img src="./assets/rule-engine/rabbit_action_2.png" alt="image" style="zoom:50%;" />
 
-Configure the resource:
+### Configure the Resource
 
 Set "RabbitMQ Server" to "127.0.0.1:5672", and keep all other configs
 as default, and click on the "Testing Connection" button to make sure
 the connection can be created successfully, and then click on the
 "Create" button.
 
-![image](./assets/rule-engine/rabbit_resource_0.png)
+<img src="./assets/rule-engine/rabbit_resource_0.png" alt="image" style="zoom:50%;" />
 
 Back to the "Actions" dialog, and then click on the "Confirm"
     button.
 
-![image](./assets/rule-engine/rabbit_action_3.png)
+<img src="./assets/rule-engine/rabbit_action_3.png" alt="image" style="zoom:50%;" />
 
 Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+    rule we created will be shown in the rule list:
 
-![image](./assets/rule-engine/rabbit_rule_overview_0.png)
+<img src="./assets/rule-engine/rabbit_rule_overview_0.png" alt="image" style="zoom:50%;" />
 
-We have finished, testing the rule by sending an MQTT message to
-    emqx:
+## Test the Rule
+
+We have finished creating the rule, test the rule by sending an MQTT message to EMQX:
 
 ```bash
 Topic: "t/1"
@@ -82,7 +84,7 @@ Payload: "Hello, World\!"
 ```
 
 Write an AMQP Client to consume the messages, following is the one
-written in python:
+written in Python:
 
 ```python
 #!/usr/bin/env python
@@ -110,10 +112,10 @@ channel.basic_consume(
 channel.start_consuming()
 ```
 
-![image](./assets/rule-engine/rabbit_result.png)
+<img src="./assets/rule-engine/rabbit_result.png" alt="image" style="zoom:50%;" />
 
 And from the rule list, verify that the "Matched" column has increased
 to 1:
 
-![image](./assets/rule-engine/rabbit_rule_overview_1.png)
+<img src="./assets/rule-engine/rabbit_rule_overview_1.png" alt="image" style="zoom:50%;" />
 

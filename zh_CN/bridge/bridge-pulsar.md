@@ -1,4 +1,4 @@
-# Pulsar 桥接
+# 集成 Pulsar
 
 ::: tip
 

@@ -1,24 +1,24 @@
-# Rate limit
-EMQX Broker specifies the limit on access speed and message speed. When the client's connection request speed exceeds the specified limit, the establishment of a new connection is suspended; when the message reception speed exceeds the specified limit, the reception of messages is suspended.
+# Rate Limit
+EMQX specifies the limit on access speed and message speed. When the client's connection request speed exceeds the specified limit, the establishment of a new connection is suspended; when the message reception speed exceeds the specified limit, the reception of messages is suspended.
 
 Rate limit is a *backpressure* scheme that avoids system overload from the entrance and guarantees system stability and predictable throughput. The rate limit can be configured in `etc/emqx.conf` :
 
-| Configuration item                  | Type            | Default value | Description                                                  |
-| ----------------------------------- | --------------- | ------------- | ------------------------------------------------------------ |
-| listener.tcp.external.max_conn_rate | Number          | 1000          | The maximum allowable connection rate on this node (conn/s)  |
-| zone.external.rate_limit.conn_messages_in         | Number,Duration | No limit      | Maximum allowable publish rate on a single connection (msg/s) |
-| zone.external.rate_limit.conn_bytes_in    | Size,Duration   | No limit      | Maximum allowable packet rate on a single connection (bytes/s) |
+| Configuration item                        | Type             | Default value | Description                                                  |
+| ----------------------------------------- | ---------------- | ------------- | ------------------------------------------------------------ |
+| listener.tcp.external.max_conn_rate       | Number           | 1000          | The maximum allowable connection rate on this node (conn/s)  |
+| zone.external.rate_limit.conn_messages_in | Number, Duration | No limit      | Maximum allowable publish rate on a single connection (msg/s) |
+| zone.external.rate_limit.conn_bytes_in    | Size, Duration   | No limit      | Maximum allowable packet rate on a single connection (bytes/s) |
 
-- **max_conn_rate** is the rate limit for connection establishment on a single emqx node. `1000` means that 1000 clients can access at most.
+- **max_conn_rate** is the rate limit for connection establishment on a single EMQX node. `1000` means that 1000 clients can access at most.
 - **conn_messages_in** is the rate limit for receiving PUBLISH packets on a single connection. `100,10s` means that the maximum PUBLISH message rate allowed on each connection is 100 every 10 seconds.
 - **conn_bytes_in** is the rate limit for receiving TCP packets on a single connection. `100KB,10s` means that the maximum TCP packet rate allowed on each connection is 100KB every 10 seconds.
 
 `conn_messages_in` and `conn_bytes_in` both provide limits for a single connection. EMQX Broker currently does not provide a global message rate limit.
 
-## Rate limit explanation 
+## Rate Limit Explanation 
 EMQX Broker uses the [Token Bucket](https://en.wikipedia.org/wiki/Token_bucket) algorithm to control all Rate Limits. The logic of the token bucket algorithm is as follows:
 
-![image-20190604103907875](../assets/token-bucket.jpg)
+<img src="../assets/token-bucket.jpg" alt="image-20190604103907875" style="zoom:50%;" />
 
 - There is a bucket that can hold the maximum burst of the token. The maximum burst is abbreviated as b.
 - There is a rate for adding tokens to the bucket per second, abbreviated as r. When the bucket is full, no tokens are added to the bucket.
@@ -31,10 +31,10 @@ It can be seen from this algorithm:
 - When the actual request reaching speed is M, and M> r, then the maximum (peak) rate that can be achieved in actual operation is M = b + r.
 
 It is easy to think that the maximum rate M is the speed that can consume the full state token bucket in 1 unit of time. The consumption rate of token bucket is M-r, so we can see that: b / (M-r) = 1, and we get M = b + r
-  
+
   
 
-### Application of Token Bucket Algorithm in EMQX Broker
+### Application of Token Bucket Algorithm in EMQX
 When the following configuration is used for packet rate limiting:
 
 ```

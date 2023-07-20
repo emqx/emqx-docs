@@ -1,4 +1,4 @@
-# InfluxDB 消息存储
+# 集成 InfluxDB
 
 ::: tip
 

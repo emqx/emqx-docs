@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# PostgreSQL ACL
+# PostgreSQL
 
 An external PostgreSQL database is used to store ACL rules for PostgreSQL ACL, which can store a large amount of data and dynamically manage ACLs for easy integration with external device management systems.
 
@@ -153,7 +153,7 @@ You can use the following placeholders in SQL and EMQX Broker will automatically
 - %C：TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
 - %d：TLS certificate subject, valid only for TLS connections
 
-You can adjust the super user SQL according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the superuser SQL needs to meet the following conditions:
+You can adjust the superuser SQL according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the superuser SQL needs to meet the following conditions:
 
 1. The query result must include the is_superuser field, which should be explicitly true
 2. There can be only one query result. When there are multiple results, only the first one is taken as valid data.

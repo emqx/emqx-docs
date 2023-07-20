@@ -14,9 +14,9 @@ category:
 ref: undefined
 ---
 
-# Mnesia  Authentication
+# Built-In Database
 
-Mnesia authentication uses the built-in Mnesia database of EMQX to store client Client ID/Username and password, and supports management of authentication data through HTTP API.
+Mnesia authentication uses the built-in Mnesia database of EMQX to store client Client ID/Username and password, and supports the management of authentication data through HTTP API.
 
 Mnesia authentication does not depend on external data sources, and it is simple and lightweight to use.
 
@@ -98,7 +98,7 @@ The preset authentication data cannot be modified or deleted through the API, pl
       "username": "emqx_u",
       "password": "emqx_p"
   }
-
+  
   # Response
   {
       "code": 0
@@ -148,7 +148,7 @@ The preset authentication data cannot be modified or deleted through the API, pl
           "password": "emqx_p"
       }
   ]
-
+  
   # Response
   {
       "data": {
@@ -188,7 +188,7 @@ The preset authentication data cannot be modified or deleted through the API, pl
   ```bash
   # Request
   GET api/v4/auth_username?_like_username=emqx_u
-
+  
   # Response
   {
     "meta": {
@@ -230,7 +230,7 @@ The preset authentication data cannot be modified or deleted through the API, pl
   {
       "password": "emqx_new_p"
   }
-
+  
   # Response
   {
       "code": 0
@@ -262,7 +262,7 @@ Note that the password returned here is the password encrypted using the hash me
   ```bash
   # Request
   GET api/v4/auth_username/${username}
-
+  
   # Response
   {
       "code": 0,
@@ -292,7 +292,7 @@ Note that the password returned here is the password encrypted using the hash me
   ```bash
   # Request
   DELETE api/v4/auth_username/${username}
-
+  
   # Response
   {
       "code": 0

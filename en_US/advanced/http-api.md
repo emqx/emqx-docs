@@ -1,16 +1,16 @@
 # HTTP API
-EMQX Broker provides HTTP APIs for integration with external systems, such as querying client information, publishing messages, and creating rules.
+EMQX provides HTTP APIs for integration with external systems, such as querying client information, publishing messages, and creating rules.
 
-EMQX Broker's HTTP API service listens on port 8081 by default. You can modify the listening port through the configuration file of  `etc/plugins/emqx_management.conf`, or enable HTTPS listening. All API calls start with `api/v4` after [EMQX Broker 4.0.0](https://github.com/emqx/emqx/releases/tag/v4.0.0).
+EMQX's HTTP API service listens on port 8081 by default. You can modify the listening port through the configuration file of  `etc/plugins/emqx_management.conf`, or enable HTTPS listening. All API calls start with `api/v4` after [EMQX 4.0.0](https://github.com/emqx/emqx/releases/tag/v4.0.0).
 
 ## Interface security
-EMQX Broker's HTTP API uses the method of [Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). The `id` and ` password` must be filled with AppID and AppSecret respectively.
+EMQX's HTTP API uses the method of [Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). The `id` and ` password` must be filled with AppID and AppSecret respectively.
 The default AppID and AppSecret are: `admin/public`. You can modify and add AppID / AppSecret in the left menu bar of Dashboard by selecting "Manage"-> "Apps".
 
 ## Response code
 ### HTTP status codes
 
-The EMQX Broker interface always returns 200 OK when the call is successful, and the response content is returned in JSON format.
+The EMQX interface always returns 200 OK when the call is successful, and the response content is returned in JSON format.
 
 The possible status codes are as follows:
 
@@ -24,7 +24,7 @@ The possible status codes are as follows:
 
 ### result codes
 
-The response message body of the EMQX Broker interface is in JSON format, which always contains the returned `code`.
+The response message body of the EMQX interface is in JSON format, which always contains the returned `code`.
 
 The possible returned codes are as follows:
 
@@ -80,7 +80,7 @@ emqx is not_running
 
 ### /api/v4
 #### GET /api/v4
-Return all Endpoints supported by EMQX Broker.
+Return all Endpoints supported by EMQX.
 
 **Parameters:** None
 
@@ -122,10 +122,10 @@ Return basic information of all nodes in the cluster.
 | data.datetime    | String    | Current time, in the format of "YYYY-MM-DD HH: mm: ss" |
 | data.node        | String    | Node name                                             |
 | data.node_status | String    | Node status                                           |
-| data.otp_release | String    | Erlang/OTP version used by EMQX Broker |
+| data.otp_release | String    | Erlang/OTP version used by EMQX |
 | data.sysdescr    | String    | Software description                                 |
-| data.uptime      | String    | EMQX Broker runtime, in the format of "H hours, m minutes, s seconds" |
-| data.version     | String    | EMQX Broker version                                     |
+| data.uptime      | String    | EMQX runtime, in the format of "H hours, m minutes, s seconds" |
+| data.version     | String    | EMQX version                                     |
 
 **Examples:**
 
@@ -170,11 +170,11 @@ Return the status of the node.
 | data.memory_used       | String    | VM occupied system memory |
 | data.node              | String    | Node name                    |
 | data.node_status       | String    | Node status                  |
-| data.otp_release       | String    | Erlang/OTP version used by EMQX Broker |
+| data.otp_release       | String    | Erlang/OTP version used by EMQX |
 | data.process_available | Integer   | Number of available processes |
 | data.process_used      | Integer   | Number of used processes |
-| data.uptime            | String    | EMQX Broker runtime         |
-| data.version           | String    | EMQX Broker version             |
+| data.uptime            | String    | EMQX runtime         |
+| data.version           | String    | EMQX version             |
 
 **Examples:**
 
@@ -259,7 +259,7 @@ After version 4.1, multiple conditions and fuzzy queries are supported. The quer
 | data[0].mqueue_dropped    | Integer   | Number of messages dropped by the message queue due to exceeding the length |
 | data[0].awaiting_rel      | Integer   | Number of awaiting PUBREC packet |
 | data[0].max_awaiting_rel  | Integer   | Maximum allowed number of awaiting PUBREC packet |
-| data[0].recv_oct          | Integer   | Number of bytes received by EMQX Broker (the same below) |
+| data[0].recv_oct          | Integer   | Number of bytes received by EMQX (the same below) |
 | data[0].recv_cnt          | Integer   | Number of TCP packets received |
 | data[0].recv_pkt          | Integer   | Number of MQTT packets received |
 | data[0].recv_msg          | Integer   | Number of PUBLISH packets received |
@@ -1103,8 +1103,8 @@ Returns all statistical  metrics under the cluster
 
 | Name | Type | Description |
 | ----------------| --------- | -------------------- |
-| bytes.received                  | Integer   | Number of bytes received by EMQX Broker |
-| bytes.sent                      | Integer   | Number of bytes sent by EMQX Broker on this connection |
+| bytes.received                  | Integer   | Number of bytes received by EMQX |
+| bytes.sent                      | Integer   | Number of bytes sent by EMQX on this connection |
 | client.authenticate             | Integer   | Number of client authentications |
 | client.auth.anonymous           | Integer   | Number of clients who log in anonymously |
 | client.connect                  | Integer   | Number of client connections |
@@ -1120,9 +1120,9 @@ Returns all statistical  metrics under the cluster
 | delivery.dropped.expired        | Integer   | Number of messages dropped due to message expiration on sending |
 | delivery.dropped.no_local       | Integer   | Number of messages that were dropped due to the No Local subscription option when sending |
 | delivery.dropped                | Integer   | Total number of discarded messages when sending |
-| messages.delayed                | Integer   | Number of delay- published messages stored by EMQX Broker |
-| messages.delivered              | Integer   | Number of messages forwarded to the subscription process internally by EMQX Broker |
-| messages.dropped                | Integer   | Total number of messages dropped by EMQX Broker before forwarding to the subscription process |
+| messages.delayed                | Integer   | Number of delay- published messages stored by EMQX |
+| messages.delivered              | Integer   | Number of messages forwarded to the subscription process internally by EMQX |
+| messages.dropped                | Integer   | Total number of messages dropped by EMQX before forwarding to the subscription process |
 | messages.dropped.expired        | Integer   | Number of messages dropped due to message expiration when receiving |
 | messages.dropped.no_subscribers | Integer   | Number of messages dropped due to no subscribers |
 | messages.forward                | Integer   | Number of messages forwarded to other nodes |
@@ -1133,9 +1133,9 @@ Returns all statistical  metrics under the cluster
 | messages.qos0.sent              | Integer   | Number of QoS 0 messages sent to clients |
 | messages.qos1.sent              | Integer   | Number of QoS 1 messages sent to clients |
 | messages.qos2.sent              | Integer   | Number of QoS 2 messages sent to clients |
-| messages.received               | Integer   | Number of messages received from the client, equal to the sum of `messages.qos0.received`，`messages.qos1.received` and `messages.qos2.received` |
-| messages.sent                   | Integer   | Number of messages sent to the client, equal to the sum of `messages.qos0.sent`，`messages.qos1.sent` and `messages.qos2.sent` |
-| messages.retained               | Integer   | Number of retained messages stored by EMQX Broker |
+| messages.received               | Integer   | Number of messages received from the client, equal to the sum of `messages.qos0.received`, `messages.qos1.received` and `messages.qos2.received` |
+| messages.sent                   | Integer   | Number of messages sent to the client, equal to the sum of `messages.qos0.sent`, `messages.qos1.sent` and `messages.qos2.sent` |
+| messages.retained               | Integer   | Number of retained messages stored by EMQX |
 | messages.acked                  | Integer   | Number of received PUBACK and PUBREC packet |
 | packets.received                | Integer   | Number of received packet |
 | packets.sent                    | Integer   | Number of sent packet |

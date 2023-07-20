@@ -13,11 +13,11 @@ category:
 ref: undefined
 ---
 
-# Command line interface
+# Command Line Interface
 
 EMQX Broker provides the management command line of `./bin/emqx_ctl` for users to manage, configure and query EMQX Broker.
 
-## status command
+## status Command
 
 Query the running status of EMQX Broker:
 
@@ -27,7 +27,7 @@ Node 'emqx@127.0.0.1' is started
 emqx v4.0.0 is running
 ```
 
-## mgmt command
+## mgmt Command
 
 The mgmt command can query the application.
 
@@ -89,7 +89,7 @@ $ ./bin/emqx_ctl mgmt delete dbcb6e023370b
 ok
 ```
 
-## broker command
+## Broker Command
 
 The broker command queries basic server information, startup time, statistics data and performance data.
 
@@ -109,7 +109,7 @@ uptime    : 4 minutes, 52 seconds
 datetime  : 2020-02-21 09:39:58
 ```
 
-### broker stats
+### Broker stats
 
 Query statistics of connections, topics, subscriptions, routes between server and client :
 
@@ -139,7 +139,7 @@ topics.count                  : 0
 topics.max                    : 0
 ```
 
-### broker metrics
+### Broker metrics
 
 Query server traffic (Bytes), MQTT Packets, messages sending and receiving statistics:
 
@@ -225,7 +225,7 @@ session.takeovered            : 0
 session.terminated            : 0
 ```
 
-## cluster command
+## Cluster command
 
 The cluster command is used to manage a cluster of multiple EMQX Broker nodes (processes):
 
@@ -304,7 +304,7 @@ $ cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
 
 It is Noted that EMQX Broker does not support joining a node that is already in a cluster to another cluster. That is because this will cause the data of the two clusters to be inconsistent. However, it supports nodes that have joined the cluster to join another cluster after leaving the cluster.
 
-## acl command
+## acl Command
 
 Since v4.1 the command `modules` has been introduced and we reload the ACLs using the following command:
 
@@ -331,7 +331,7 @@ After v4.3, the command to clean up the ACL cache has been introduced:
 | `acl cache-clean <ClientId>  ` | Clears acl cache for given client |
 
 
-## clients command
+## Clients Command
 
 The clients command can query the connected MQTT clients.
 
@@ -390,7 +390,7 @@ $ ./bin/emqx_ctl clients kick "clientid"
 ok
 ```
 
-## routes command
+## Routes Command
 
 The routes command is used to query routing information.
 
@@ -420,7 +420,7 @@ $ ./bin/emqx_ctl routes show t/+/x
 t/+/x -> emqx2@127.0.0.1,emqx@127.0.0.1
 ```
 
-## subscriptions command
+## Subscriptions Command
 
 The subscriptions command queries the subscription table of the message server.
 
@@ -468,7 +468,7 @@ $ ./bin/emqx_ctl subscriptions del 'mosqsub/90475-airlee.lo' '/world'
 ok
 ```
 
-## plugins command
+## Plugins Command
 
 The plugins command is used to load, unload, and query plugin applications. EMQX Broker extends authentication and customization through plugins. The plugin configuration is located in the directory of `etc/plugins/` .
 
@@ -529,7 +529,7 @@ $ ./bin/emqx_ctl plugins reload emqx_lua_hook
 Plugin emqx_lua_hook reloaded successfully.
 ```
 
-## modules command
+## Modules Command
 
 Since v4.1 we have introduced the `modules` command to manage EMQX's built-in modules at runtime.
 
@@ -581,7 +581,7 @@ $ ./bin/emqx_ctl modules reload emqx_mod_acl_internal
 Module emqx_mod_acl_internal reloaded successfully.
 ```
 
-## vm command
+## VM Command
 
 The vm command is used to query information of Erlang virtual machine load, memory, process, and IO.
 
@@ -679,7 +679,7 @@ ports/count           : 18
 ports/limit           : 1048576
 ```
 
-## mnesia command
+## Mnesia Command
 
 Query the mnesia database system status.
 
@@ -744,7 +744,7 @@ $ ./bin/emqx_ctl log handlers set-level emqx_logger_handler error
 error
 ```
 
-## trace command
+## Trace Command
 
 The trace command is used to trace a client or topic, and print log information to a file. For details, see [Log and Trace](../getting-started/log.md).
 
@@ -814,7 +814,7 @@ Trace (clientid=clientid2, level=error, destination="log/clientid2_trace.log")
 Trace (topic=topic2, level=error, destination="log/topic2_trace.log")
 ```
 
-## listeners
+## Listeners
 
 The listeners command is used to query the active TCP service listeners.
 
@@ -905,7 +905,7 @@ Start http:dashboard listener on 0.0.0.0:18083 successfully.
 
 ```
 
-## recon command
+## Recon Command
 
 The recon command of EMQX Broker is based on the Erlang Recon library, which is used to help DevOps staff to diagnose problems in the production node, and ordinary users do not need to care. The recon command will consume some performance, so, please use it with caution.
 
@@ -920,7 +920,7 @@ The recon command of EMQX Broker is based on the Erlang Recon library, which is 
 
 Visit [Documentation for recon](http://ferd.github.io/recon/) for more information.
 
-## retainer command
+## Retainer Command
 
 | Command                  | Description                                              |
 | ------------------------ | -------------------------------------------------------- |
@@ -967,7 +967,7 @@ $ ./bin/emqx_ctl retainer clean topic
 Cleaned 1 retained messages
 ```
 
-## admins command
+## Admins Command
 
 It is used to create and delete administrator's accounts and reset the administrator's password.
 
@@ -1004,7 +1004,7 @@ $ ./bin/emqx_ctl admins del root
 ok
 ```
 
-## Rule engine command
+## Rule Engine Command
 
 ### rules command
 
@@ -1172,30 +1172,8 @@ $ ./bin/emqx_ctl resource-types show backend_mysql
  
 resource_type(name='backend_mysql', provider='emqx_backend_mysql', title ='MySQL', description='MySQL Database')
 ```
-## Status, statistical indicators and alerts related to the rules engine
 
-### Rule status and statistical indicators
-
-![image](../assets/rule_metrics.png)
-
-- Hits: number of rule hits (match succeed for rule SQL),
-- Hit Speed: Speed of rule hits (times/second)
-- Maximum hit speed: Peak value of hit speed (times/second)
-- 5 minute average speed: Average hit speed in 5 minutes (times/second)
-
-### Action status and statistical indicators
-![image](../assets/action_metrics.png)
-
-- Success: Number of successful actions
-- Failure: Number of failed actions
-
-### Resource status and alerts
-![image](../assets/resource_status.png)
-
-- Available: Resources available
-- Unavailable: resources unavailable (e.g. database connection shutdown)
-
-## EMQX Internal DB Auth/ACL
+## EMQX Internal DB Auth/ACL Command
 
 This command will only take effect when the emqx_auth_mnesia plug-in is turned on
 

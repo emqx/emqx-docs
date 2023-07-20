@@ -1,6 +1,8 @@
 # Kafka Consumer Group
 
-The Kafka consumer group uses external Kafka as a message queue, which can convert consumer messages from Kafka into MQTT messages and publish them in emqx.
+## Set up Kafka Consumer and Create Topic
+
+The Kafka consumer group uses external Kafka as a message queue, which can convert consumer messages from Kafka into MQTT messages and publish them in EMQX.
 
 Set up the Kafka environment, taking MacOS X as an example:
 
@@ -17,11 +19,11 @@ $ ./bin/zookeeper-server-start.sh config/zookeeper.properties
 $ ./bin/kafka-server-start.sh config/server.properties
 ```
 
-::: warning
+:::
 
 Kafka consumer groups do not support Kafka versions below 0.9
 
-Before creating resources, you need to create Kafka topics in advance, otherwise an error will be prompted
+Before creating resources, you need to create Kafka topics in advance, otherwise, an error will be prompted
 
 :::
 
@@ -30,7 +32,7 @@ Create Kafka topic:
 ```bash
 $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testTopic --create
 ```
-## Create module
+## Create Module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
@@ -66,7 +68,9 @@ After clicking Add, the module is added:
 
 ![](./assets/kafka_consumer4.png)
 
-The resource has been created, now use Dashboard's websocket tool to subscribe to the MQTT topic "TestTopic":
+## Test the Consumer
+
+The resource has been created, now use Dashboard's WebSocket tool to subscribe to the MQTT topic "TestTopic":
 
 ![](./assets/kafka_consumer5.png)
 
@@ -78,6 +82,6 @@ Use the kafka command line to produce a message:
 
 ![](./assets/kafka_consumer6.png)
 
-The websocket tool of Dashboard received the message "hello-kafka" produced by Kafka:
+The WebSocket tool of Dashboard received the message "hello-kafka" produced by Kafka:
 
-![](./assets/kafka_consumer7.png)
+<img src="./assets/kafka_consumer7.png" style="zoom:50%;" />

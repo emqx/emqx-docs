@@ -258,7 +258,7 @@ listener.ssl.external.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-G
 
 ```bash
 #listener.ssl.external.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,...
-listener.ssl.external.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA
+listener.ssl.external.psk_ciphers = PSK-AES256-GCM-SHA384,PSK-AES128-GCM-SHA256,PSK-AES256-CBC-SHA384,PSK-AES256-CBC-SHA,PSK-AES128-CBC-SHA256,PSK-AES128-CBC-SHA,RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,RSA-PSK-RC4-SHA
 
 ```
 
@@ -274,3 +274,7 @@ PSK 的配置文件为 `etc/psk.txt`，使用冒号`:` 分隔 PSK ID 和 PSK：
 client1:1234
 client2:abcd
 ```
+
+**注意**:
+
+如果使用 `RSA-PSK` 密码套件，则仍然需要 `RSA` 证书，详见 [RFC4279](https://www.rfc-editor.org/rfc/rfc4279#section-4)

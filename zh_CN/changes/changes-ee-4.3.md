@@ -1,5 +1,123 @@
 # 版本发布
 
+## e4.3.19
+
+*发布日期:  2023-03-03*
+
+### 增强
+
+- 为 Kafka 客户端增加 TCP 保活配置。
+
+- 将用户添加到内部身份验证数据库时改进仪表板中的错误消息。
+
+- 编解码插件将作为规则引擎的可选功能默认启用。
+
+### 修复
+
+- 修复版本热升级之后，新的 MQTT TLS 连接建立失败的问题。
+  详情见：[emqx/esockd#170](https://github.com/emqx/esockd/pull/170)
+
+- 修复通过规则引擎发送消息到 RocketMQ 集群失败的问题。
+
+- 修复资源、动作以及模块里的一些描述错误。
+
+- 修复请求 JWKS 服务失败的时候，没有日志打印的问题。
+
+- 修复使用 `消息重发布` 动作转发带 User-Property 的 MQTT 消息时出错的问题。
+
+- 修复使用 Redis 离线消息功能时，EMQX 以相反顺序向客户端发送离线消息的问题。
+
+- 修复以分页的方式获取 HTPT API 获取客户端列表时，同样的请求发送到不同的 EMQX 节点返回的结果不一致的问题。
+  在此修改之前，发送 'GET http://localhost:8081/api/v4/clients?_page=1&_limit=1000' 请求
+  到集群里的不同的 EMQX 节点，将返回不同的客户端列表。
+
+- 当上传许可证时，现在EMQX将总是重新加载许可证，以避免用户用新的内容替换当前的许可证文件的情况。
+
+- 在 emqx_modules 应用程序启动时，仅仅在本地创建 EMQX 模块。
+  在此之前，当 emqx_modules 应用程序启动时，我们向所有节点发送 RPC 以创建或重新创建模块，因此最终我们在所有节点上创建了 N^2 次模块（每个节点上创建N次）。
+
+- Dashboard 新用户密码格式不再限制为 ^[A-Za-z0-9]+[A-Za-z0-9-_]*$。
+
+- 在集群中使用 API 创建已存在的监听器时返回失败。
+
+- 在 `资源/模块/编解码` 删除时清理其文件目录以防止文件泄露。
+
+## e4.3.18
+
+*发布日期:  2022-12-29*
+
+### 增强
+
+- 解决通过 emqx oracle 资源发送数据时，报 "ORA-01000: maximum open cursors exceeded" 错误的问题 [#1560](https://github.com/emqx/emqx-enterprise/pull/1560)。
+
+- 支持更多的 PSK 密码套件[#1619](https://github.com/emqx/emqx-enterprise/pull/1619)。
+
+- Erlang/OTP 从 23.3.4.9-3 升级到 23.3.4.18-1 [#1660](https://github.com/emqx/emqx-enterprise/pull/1660)。
+
+### 修复
+
+- 修正了一个问题，即导入备份配置后，配置不会在集群的所有节点上重新加载。[#1486](https://github.com/emqx/emqx-enterprise/pull/1486)
+
+- 修正了一个问题，即当从一个不在其中的节点下载备份配置文件时，HTTP API将无法下载该文件。 [#1486](https://github.com/emqx/emqx-enterprise/pull/1486)
+
+- 增加对 Kafka 资源配置字段的合法性检查 [#1511](https://github.com/emqx/emqx-enterprise/pull/1511)。
+  在这个改动之前，创建 Kafka 资源的时候，我们没有对时长、字节大小等类型的字段做合法性检查，即使给这些
+  字段传入任意的字符串也能创建成功，但在运行时出现错误。
+
+- 避免离线消息被重复删除 [#1522](https://github.com/emqx/emqx-enterprise/pull/1522)。
+  当订阅者回复消息 PUBACK(Qos1) 或消息 PUBREC(Qos2) 时，EMQX 会将外部数据库中的这条离线消息删除。
+  但当离线消息和保留消息功能同时启用时，一条 `retain = true` 的消息会被冗余存储两次 (Retainer 与外部数据库)。
+  那么重复的 PUBACK 或 PUBREC 将触发两次删除外部数据库中离线消息的行为，并且会使 Rule-SQL 执行成功而使 action-metrics 增加。
+  在多数情况下这不会产生任何异常或错误，仅有个别数据库在第二次删除时会报告要删除的消息不存在。
+  此更改后，将避免冗余的离线消息删除操作。
+
+- HTTP 客户端库 `ehttpc` 从 0.2.1 升级到 `0.4.2` [#1587](https://github.com/emqx/emqx-enterprise/pull/1587)。
+
+- 为主题重写模块增加主题合法性检查，带有通配符的目标主题不允许被发布 [#1589](https://github.com/emqx/emqx-enterprise/pull/1589)。
+
+- 在启用规则的时候，Clickhouse 离线消息动作打印了一行 info 级别的日志：`Destroyed .. Successfully` [#1594](https://github.com/emqx/emqx-enterprise/pull/1594).
+
+- 现在即使对应的资源没有就绪的情况下，我们也能创建规则 [#1620](https://github.com/emqx/emqx-enterprise/pull/1620)。
+  在此改动之前，如果资源没有连接好，我们就没办法创建规则。在此改动之后可以创建了，但是新创建的规则将处于 `禁用` 状态。
+
+- 修复 `cluster/invite_node` API 缺少节点名时返回 500 的错误 [#1531](https://github.com/emqx/emqx-enterprise/pull/1531)。
+
+- 修正了`/load_rebalance/{node}/evacuation/start`中错误的rpc错误信息 [#1572](https://github.com/emqx/emqx-enterprise/pull/1572)。
+
+- 修复 mqtt_app 表内没有 boostrap user 里未导入用户的问题 [#1600](https://github.com/emqx/emqx-enterprise/pull/1600)。
+
+- 修正了 `/load_rebalance/{node}/evacuation/start` 中错误的rpc错误信息 [#1572](https://github.com/emqx/emqx-enterprise/pull/1572)。
+
+- 持久会话的 MQTT 客户端断连之后，已经过期的 'awaiting_rel' 队列没有清除 [#1574](https://github.com/emqx/emqx-enterprise/pull/1574)。
+  在这个改动之前，在客户端重连并且发布 QoS2 消息的时候，如果 'awaiting_rel' 队列已满，此客户端会被服务器以 RC_RECEIVE_MAXIMUM_EXCEEDED(0x93) 错误码断开连接，即使这时候 'awaiting_rel' 队列里面的报文 ID 已经过期了。
+
+- 当 QoS2 消息被重发(使用相同 Packet ID)，或当 'awaiting_rel' 队列已满时，触发消息丢弃钩子(`message.dropped`)及计数器 [#1605](https://github.com/emqx/emqx-enterprise/pull/1605)。
+
+- 修复热升级自 `e4.3.0..e4.3.10` 至 `e4.3.11..e4.3.17` 导致的规则引擎动作 `Data to InfluxDB` 无法执行的问题 [#1601](https://github.com/emqx/emqx-enterprise/pull/1601)。
+
+- 为 Kafka 动作参数增加检查，确保 Segment Bytes 不会超过 Max Bytes [#1608](https://github.com/emqx/emqx-enterprise/pull/1608)。
+
+- 为 Pulsar 动作的 duration 和 bytesize 类型的参数增加检查 [#1631](https://github.com/emqx/emqx-enterprise/pull/1631)。
+
+- 持久会话的 MQTT 客户端重新连接 emqx 之后，未被确认过的 QoS1/QoS2 消息不再周期性重发 [#1617](https://github.com/emqx/emqx-enterprise/pull/1617)。
+  `zone.<zone-name>.retry_interval` 配置指定了没有被确认过的 QoS1/QoS2 消息的重发间隔，(默认为 30s)。在这个修复之前，
+  当持久会话的 MQTT 客户端重新连接 emqx 之后，emqx 会将队列中缓存的未被确认过的消息重发一次，但是不会按配置的时间间隔重试。
+
+- RocketMQ 资源的认证功能不能正常工作 [#1561](https://github.com/emqx/emqx-enterprise/pull/1561)。
+  在这个改动里，我们把 `access_key`, `secret_key` 以及 `security_token` 三个配置项字段
+  从 `data_to_rocket` 动作挪到了 `bridge_rocket` 资源的配置中。并且我们为阿里云的 RocketMQ
+  服务新加了一个 `namespace` 字段。
+
+- 当控制台创建新用户时，密码长度必须在 3-32 之间，且格式为 `^[A-Za-z0-9]+[A-Za-z0-9-_]*$` [#1599](https://github.com/emqx/emqx-enterprise/pull/1599)。
+
+- 当创建资源过慢的情况下，有可能会残留一些用来探活的临时的连接 [#1641](https://github.com/emqx/emqx-enterprise/pull/1641)。
+
+- 为 Kafka 资源的 SSL 连接配置增加 `SNI` 字段 [#1647](https://github.com/emqx/emqx-enterprise/pull/1647)。
+
+- 修复了 MongoDB 资源在启用认证的情况下，连接过程很慢的问题 [#1669](https://github.com/emqx/emqx-enterprise/pull/1669)。
+
+- 修复了在版本热升级之后，EMQX 偶尔会出现资源已断开的告警，并且告警无法自动清除的问题 [#1668](https://github.com/emqx/emqx-enterprise/pull/1668)。
+
 ## e4.3.17
 
 *发布日期: 2022-11-26*
@@ -144,7 +262,7 @@
   QoS 0 的消息不会被保存到后端数据库中而是会被丢弃。
   在此次修复前，消息虽然被丢弃了，但是保存成功的计数器仍然计数，已修复为失败计数。
 
-- 规则引擎增加 SSL 连接 redis 时的 “是否校验服务器证书” 选项。
+- 规则引擎增加 SSL 连接 Redis 时的 “是否校验服务器证书” 选项。
 
 - 修复 Redis 资源探活逻辑。本次修复前，Redis 资源连接成功即被认为可用。
   本次修复方法是尝试做一个 PING 查询来检查资源是否可用。
@@ -157,7 +275,7 @@
 
 - 修复 HTTP 客户端库启用 SSL 后 Socket 可能会进入 passive 状态 [#9145](https://github.com/emqx/emqx/pull/9145)。
 
-- 隐藏 redis 客户端错误日志中的密码参数 [#9071](https://github.com/emqx/emqx/pull/9071)。
+- 隐藏 Redis 客户端错误日志中的密码参数 [#9071](https://github.com/emqx/emqx/pull/9071)。
   也包含了如下一些改进：
   - 修复一些其他可能导致密码泄漏的隐患 [eredis#19](https://github.com/emqx/eredis/pull/19)。
   - 修复了 eredis_cluster 中连接池命名冲突的问题 [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22)

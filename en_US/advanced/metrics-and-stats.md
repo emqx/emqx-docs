@@ -1,6 +1,6 @@
 # Metrics
 
-EMQX Broker provides users with metrics monitoring functions, allowing users and operation and maintenance personnel to know the current service status based on these metrics. The metrics monitoring function is forcibly enabled. This function has high performance, and users do not need to worry about affecting system performance in high-throughput scenarios.
+EMQX provides users with metrics monitoring functions, allowing users and operation and maintenance personnel to know the current service status based on these metrics. The metrics monitoring function is forcibly enabled. This function has high performance, and users do not need to worry about affecting system performance in high-throughput scenarios.
 
 EMQX Broker provides users with multiple ways to view metrics and status. Most directly, users can see this data on the Overview page of EMQX Dashboard.
 
@@ -12,7 +12,7 @@ EMQX Broker provides the [emqx_statsd](https://github.com/emqx/emqx-statsd) plug
 
 ## Metrics & Stats
 
-EMQX Broker divides metrics into Metrics and Stats. Metrics usually refer to data that will only increase monotonically, such as the number of sent bytes and the number of sent messages. Metrics currently provided by EMQX Broker covers the four dimensions of bytes, packets, messages, and events. Stats usually refers to data that appears in pairs, including current values and historical maximums, such as the current number of subscriptions and the historical maximum number of subscription.
+EMQX divides metrics into Metrics and Stats. Metrics usually refer to data that will only increase monotonically, such as the number of sent bytes and the number of sent messages. Metrics currently provided by EMQX cover the four dimensions of bytes, packets, messages, and events. Stats usually refers to data that appears in pairs, including current values and historical maximums, such as the current number of subscriptions and the historical maximum number of subscriptions.
 
 ### Metrics
 
@@ -145,5 +145,4 @@ EMQX Broker divides metrics into Metrics and Stats. Metrics usually refer to dat
 | routes.max                 | Integer   | Historical maximum number of routes                          |
 | retained.count             | Integer   | Number of currently retained messages                        |
 | retained.max               | Integer   | Historical maximum number of retained messages               |
-
 

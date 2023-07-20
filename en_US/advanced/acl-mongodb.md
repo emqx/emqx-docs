@@ -13,7 +13,7 @@ category:
 ref: undefined
 ---
 
-# MongoDB ACL
+# MongoDB AUTH/ACL
 
 For MongoDB ACL, an external MongoDB database is used to store ACL rules, which can store a large amount of data and dynamically manage ACLs for easy integration with external device management systems
 
@@ -184,7 +184,7 @@ auth.mongo.super_query = on
 ##collections for super queries
 auth.mongo.super_query.collection = mqtt_user
 
-##Field for super user
+##Field for superuser
 auth.mongo.super_query.super_field = is_superuser
 
 ## Superuser query selector, commas can be used to seperate multiple conditions
@@ -206,7 +206,7 @@ You can use the following placeholders in your query conditions, and EMQX Broker
 - %u：user name
 - %c：Client ID
 
-You can adjust the super user query according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the superuser query needs to meet the following conditions:
+You can adjust the superuser query according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the superuser query needs to meet the following conditions:
 
 1. The query result must include the is_superuser field, which should be explicitly true
 

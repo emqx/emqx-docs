@@ -1,6 +1,8 @@
 # Pulsar Consumer Group
 
-The Pulsar consumer group uses an external Pulsar as a message queue, which can convert consumer messages from Pulsar into MQTT messages and publish them in emqx.
+## Set up Pulsar Consumer and Create Topics
+
+The Pulsar consumer group uses an external Pulsar as a message queue, which can convert consumer messages from Pulsar into MQTT messages and publish them in EMQX.
 
 Set up the Pulsar environment, taking MacOS X as an example:
 
@@ -20,11 +22,11 @@ Create Pulsar topic:
 $ ./bin/pulsar-admin topics create-partitioned-topic -p 5 testTopic
 ```
 
-## Create module
+## Create Module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
-![](./assets/modules.png)
+<img src="./assets/modules.png" style="zoom:50%;" />
 
 Click "Select", and then select "Pulsar Consumer Group":
 
@@ -53,9 +55,11 @@ After clicking Add, the module is added:
 
 ![](./assets/pulsar_consumer4.png)
 
-The resource has been created, now use Dashboard's websocket tool to subscribe to the MQTT topic "TestTopic":
+## Test the Consumer
 
-![](./assets/pulsar_consumer5.png)
+The resource has been created, now use Dashboard's WebSocket tool to subscribe to the MQTT topic "TestTopic":
+
+<img src="./assets/pulsar_consumer5.png" style="zoom:50%;" />
 
 Use pulsar-cli to produce a message:
 
@@ -63,8 +67,8 @@ Use pulsar-cli to produce a message:
 ./bin/pulsar-client produce TestTopic --messages "hello-pulsar"
 ```
 
-![](./assets/pulsar_consumer6.png)
+<img src="./assets/pulsar_consumer6.png" style="zoom:50%;" />
 
-The websocket tool of Dashboard received the message "hello-pulsar" produced by pulsar:
+The WebSocket tool of Dashboard received the message "hello-pulsar" produced by pulsar:
 
-![](./assets/pulsar_consumer7.png)
+<img src="./assets/pulsar_consumer7.png" style="zoom:50%;" />

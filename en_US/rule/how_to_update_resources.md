@@ -1,8 +1,8 @@
-# Update resource
+# Update Resource
 
-## On Dashboard
+## Update Resources via Dashboard
 
-First your should click card at `Resource` menu to select the resource which you want to update, then click `Edit` button
+Click on `Resource` menu to select the resource which you want to update, then click `Edit` button
 
 ![image-20210301140017790](./assets/rule-engine/update_resource_1.png)
 
@@ -20,7 +20,7 @@ At this time, you will be prompted whether to confirm the modification, just cli
 At this time the "description" information has been updated.
 
 
-## By cli
+## Update Resources by Command Line Tool
 
 To update through the command line, you need to know the ID of the resource in advance: 
 

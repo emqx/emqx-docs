@@ -1,27 +1,23 @@
 
-## Release Upgrade
+## Hot Upgrade
 
 {% emqxce %}
 
-Since version 4.2.0, EMQX supports hot upgrade.
+Since version 4.2.0, EMQX supports hot upgrades.
 
 By using the hot upgrade feature, users can quickly and safely upgrade the EMQX in the production environment, and avoid the decrease in system availability caused by restarting the service.
 
-::: tip
-Currently EMQX for Windows and MacOSX does not support hot upgrade feature.
+:::tip
+
+- Currently, EMQX for Windows and MacOSX does not support hot upgrades.
+
+- EMQX only allows hot upgrades between patch versions (the third digit of the version number). i.e. upgrading from x.y.z to x.y.(z+N) is allowed, but upgrading from x.y to (x+N).(y+M) is not allowed. Please operate with caution.
+- Hot upgrade between EMQX (open source) and EMQX Enterprise is not allowed, please operate with caution.
+
 :::
 
-::: warning
-EMQX only allows hot upgrade between patch versions (the third digit of the version number).
-i.e. upgrading from x.y.z to x.y.(z+N) is allowed, but upgrading from x.y to (x+N).(y+M) is not allowed.
-Please operate with caution.
-:::
 
-::: warning
-Hot upgrade between EMQX (opensource) and EMQX Enterprise is not allowed, please operate with caution.
-:::
-
-## Hot upgrade steps
+## Hot Upgrade Steps
 
 1. View the currently installed version list of EMQX.
 
@@ -79,7 +75,7 @@ Installed versions:
 * 4.2.0	old
 ```
 
-## Manually permanent after upgrade
+## Manually Permanent after Upgrade
 
 The above `emqx upgrade 4.2.1` command actually performs three actions:
 
@@ -114,7 +110,7 @@ Installed versions:
 
 ```
 
-After the system has been running stably for a period of time, if you decide to make the new version permant, you can execute the `install` command again:
+After the system has been running stably for a period of time, if you decide to make the new version permanent, you can execute the `install` command again:
 
 ```bash
 
@@ -125,7 +121,7 @@ Made release permanent: "4.2.1"
 
 ```
 
-## Downgrade to pervious versions
+## Downgrade to Previous Versions
 
 If you find a problem and want to roll back after the upgrade, you can execute the version downgrade command.
 For example, the following example will roll back EMQX to version 4.2.0:
@@ -140,7 +136,7 @@ Made release permanent: "4.2.0"
 
 ```
 
-## Delete versions
+## Delete Versions
 
 After the system has been running stably for a period of time, if you decide to delete an old version, you can execute the version uninstall command.
 For example, the following example will uninstall the old version 4.2.0:
@@ -166,17 +162,17 @@ By using the hot upgrade feature, users can quickly and safely upgrade the EMQX 
 Currently EMQX for Windows and MacOSX does not support hot upgrade feature.
 :::
 
-::: warning
+:::
 EMQX only allows hot upgrade between patch versions (the third digit of the version number).
 i.e. upgrading from x.y.z to x.y.(z+N) is allowed, but upgrading from x.y to (x+N).(y+M) is not allowed.
 Please operate with caution.
 :::
 
-::: warning
+:::
 Hot upgrade between EMQX (opensource) and EMQX Enterprise is not allowed, please operate with caution.
 :::
 
-## Hot upgrade steps
+## Hot Upgrade Steps
 
 1. View the currently installed version list of EMQX Enterprise.
 
@@ -280,7 +276,7 @@ Made release permanent: "4.2.1"
 
 ```
 
-## Downgrade to pervious versions
+## Downgrade to Previous Versions
 
 If you find a problem and want to roll back after the upgrade, you can execute the version downgrade command.
 For example, the following example will roll back EMQX Enterprise to version 4.2.0:
@@ -295,7 +291,7 @@ Made release permanent: "4.2.0"
 
 ```
 
-## Delete versions
+## Delete Versions
 
 After the system has been running stably for a period of time, if you decide to delete an old version, you can execute the version uninstall command.
 For example, the following example will uninstall the old version 4.2.0:

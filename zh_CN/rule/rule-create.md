@@ -90,7 +90,7 @@ nc 命令在部分 Linux 操作系统上有问题，无法与 EMQX 发起的 HTT
 :::
 {% endemqxce %}
 
-::: warning
+:::
 Webhook 会规范化 HTTP 头里的 Key。Key 里面下划线 `_` 会被替换成连词符 `-`，并且大写字符会被转换成小写。
 举例来说，Key 如果是 `Content_Type`，将会被替换成 `content-type`。
 :::

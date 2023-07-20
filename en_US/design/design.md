@@ -21,12 +21,6 @@ In terms of the design of EMQX Broker, it firstly separates the FrontEnd and Bac
 
 ![image](../assets/design_1.png)
 
-### 1 million connections
-
-With Multi-core servers and modern operating system kernel, it can easily support 1 million TCP connections. The core issue is how to deal with business bottlenecks at the application level.
-
-EMQX Broker solves all kinds of bottleneck problems of single node carrying 1 million connections at the business and application level. For the operating system kernel, TCP protocol stack, and Erlang virtual machine parameters of connection testing, see: [System Tuning](../tutorial/tune.md)
-
 ### Fully asynchronous architecture
 
 EMQX Broker is a fully asynchronous architecture based on the Erlang/OTP platform: asynchronous TCP connection processing, asynchronous Topic subscription, and asynchronous message publishing. Only for the resource load limitation part, it adopts synchronous design, such as TCP connection creation and Mnesia database transaction execution.

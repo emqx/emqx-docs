@@ -1,4 +1,4 @@
-# Introduction to Schema Registry
+# Schema Registry
 
 
 Because of the variety of IoT device terminals and the different coding formats used by various manufacturers, the need for a unified data format arises when accessing the IoT platform for device management by the applications on the platform.
@@ -7,7 +7,7 @@ The Schema Registry manages the Schema used for coding and decoding, processes t
 
 EMQX Schema Registry currently supports codecs in three formats: [Avro](https://avro.apache.org), [Protobuf](https://developers.google.com/protocol-buffers/), and custom encoding. Avro and Protobuf are Schema-dependent data formats. The encoded data is binary and the decoded data is in Map format. The decoded data can be used directly by the rule engine and other plugins. User-defined (3rd-party) coding and decoding services can perform coding and decoding more closely to business needs via HTTP or TCP callbacks.
 
-::: tip
+:::tip
 Schema Registry maintains Schema text for built-in encoding formats such as Avro and Protobuf, but for custom codec (3rd-party) formats, Schema text needs to be maintained by the codec service itself, if required.
 :::
 
@@ -18,7 +18,7 @@ The diagram below shows an example of a Schema Registry application. Multiple de
 ![schema-registry](./assets/schema-registry.png)
 
 
-### Binary format support
+### Binary Format Support
 
 Schema Registry data formats include [Avro](https://avro.apache.org) and [Protobuf](https://developers.google.com/protocol-buffers/). Avro and Protobuf are Schema-dependent data formats and encoded as binary data. The internal data format (Map, explained later) decoded using the Schema Registry can be used directly by rule engines and other plugins. Besides, Schema Registry supports user-defined (3rd-party) coding and decoding services that can perform coding and decoding more closely to business needs via HTTP or TCP callbacks.
 
@@ -54,7 +54,7 @@ EMQX's PUB/SUB system routes messages to specified topics. The rule engine has t
 ![SchemaAndRuleEngine](./assets/SchemaAndRuleEngine.png)
 
 
-### Rule engine internal data format (Map)
+### Rule Engine Internal Data Format (Map)
 
 The data format used in the internal rule engine is Erlang Map, so if the original data is in binary or other formats, it must be converted to Map using codec functions (such as schema_decode and json_decode as mentioned above).
 

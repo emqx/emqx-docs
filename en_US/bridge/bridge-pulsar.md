@@ -1,4 +1,4 @@
-# Pulsar Bridge
+# Ingest Data into Pulsar
 
 ::: tip
 

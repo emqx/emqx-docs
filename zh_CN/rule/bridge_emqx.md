@@ -1,4 +1,4 @@
-# 桥接数据到 RPC 服务
+# 集成多个 MQTT Broker
 
 搭建 EMQX Broker 环境，以 MacOS X 为例:
 

@@ -1,6 +1,6 @@
-# Benchmark
+# Performance Test
 
-[emqtt_bench](https://github.com/emqx/emqtt_bench) is a concise and powerful MQTT protocol performance testing tool written with Erlang. If you need  testing services with large-scale scenarios and in-depth customization , the test service provided by EMQ partners [XMeter](https://www.xmeter.net/) is recommended.
+[emqtt_bench](https://github.com/emqx/emqtt_bench) is a concise and powerful MQTT protocol performance testing tool written with Erlang. If you need testing services with large-scale scenarios and in-depth customization, the test service provided by EMQ [XMeter](https://www.emqx.com/en/products/xmeter) is recommended.
 
 ## Compile and install
 
@@ -58,7 +58,7 @@ When executing `./emqtt_bench pub --help`, you will get the available parameter 
 | --ssl             | -S           | true<br />false | false          | Whether to enable SSL                                        |
 | --certfile        | -            | -               | None           | Client SSL certificate                                       |
 | --keyfile         | -            | -               | None           | Client SSL key file                                          |
-| --ws              | -            | true<br />false | false          | Whether to establish a connection via Websocket              |
+| --ws              | -            | true<br />false | false          | Whether to establish a connection via WebSocket              |
 | --ifaddr          | -            | -               | None           | Specifies the local network card used by the client connection |
 
 
@@ -97,7 +97,7 @@ For example, we start 1000 connections:
 
 
 
-### SSL connection
+### SSL Connection
 
 `emqtt_bench` supports establishing a secure SSL connection and performing tests.
 
@@ -117,16 +117,16 @@ Two-way certificate:
 ./emqtt_bench pub -c 100 -i 10 -t bench/%i -s 256 -p 8883 --certfile path/to/client-cert.pem --keyfile path/to/client-key.pem
 ```
 
-## Typical stress test scenario
+## Typical Stress Test Scenario
 
-### Scenario description
+### Scenario Description
 
 We verify the use of the tool in 2 most typical scenarios:
 
 1. Connections: Use `emqtt_bench` to create millions of connections to EMQX Broker.
 2. Throughput: Use `emqtt_bench` to create `10W / s Qos0` message throughput in EMQX Broker.
 
-### Device and deployment topology
+### Device and Deployment Topology
 
 A total of three 8C16G servers need to be prepared, one for EMQX Broker and two for client presses:
 
@@ -153,10 +153,10 @@ The topology structure is as follows:
 
 ### Tuning
 
-Both the client's press and the server's machine need to perform system parameter tuning, refer to [Tuning guide](../tutorial/tune.md).
+Both the client's press and the server's machine need to perform system parameter tuning, refer to the [Tuning guide](../tutorial/tune.md).
 
 
-### Connection test
+### Connection Gest
 
 After performing system tuning, start the server:
 
@@ -200,7 +200,7 @@ listener on mqtt:tcp:0.0.0.0:1883
 
 
 
-### Throughput test
+### Throughput Test
 
 Similarly, first start the server:
 

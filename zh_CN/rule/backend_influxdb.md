@@ -1,4 +1,4 @@
-# 保存数据到 InfluxDB
+# 集成 InfluxDB
 
 启动 InfluxDB，请确保启用了相应的 Listener（我们假设您已经成功安装了 InfluxDB 环境）
 

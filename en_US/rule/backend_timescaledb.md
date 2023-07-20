@@ -1,6 +1,8 @@
-# Save data to TimescaleDB
+# Ingest Data into TimescaleDB
 
-Setup a TimescaleDB database, taking Mac OSX for instance:
+## Set up TimescaleDB and Create Tables
+
+Set up a TimescaleDB database, taking Mac OSX for instance:
 
 ```bash
 $ docker pull timescale/timescaledb
@@ -33,7 +35,7 @@ SELECT create_hypertable('conditions', 'time');
 
 ```
 
-Create a rule:
+## Create a Rule
 
 Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
 "rule" tab on the menu to the left.
@@ -49,9 +51,9 @@ FROM
     "message.publish"
 ```
 
-![image](./assets/rule-engine/timescaledb_sql_1.png)
+<img src="./assets/rule-engine/timescaledb_sql_1.png" alt="image" style="zoom:50%;" />
 
-Bind an action:
+## Add an Action
 
 Click on the "+ Add" button under "Action Handler", and then select
 "Data to TimescaleDB" in the pop-up dialog window.
@@ -63,8 +65,8 @@ Fill in the parameters required by the action:
 Two parameters is required by action "Data to TimescaleDB":
 
 1). SQL template. SQL template is the sql command you'd like to run
-when the action is triggered. In this example we'll insert a message
-into timescaledb, so type in the following sql
+when the action is triggered. In this example, we'll insert a message
+into TimescaleDB, so type in the following SQL
 template:
 
 ```sql
@@ -82,7 +84,7 @@ Resource" to the top right, and then select "TimescaleDB":
 
 ![image](./assets/rule-engine/timescaledb_action_1.png)
 
-Configure the resource:
+### Configure the Resource
 
 Set "TimescaleDB Database" to "tutorial", "TimescaleDB User" to
 "postgres", "TimescaleDB Password" to "password", and keep all other
@@ -90,19 +92,19 @@ configs as default, and click on the "Testing Connection" button to
 make sure the connection can be created successfully, and then click
 on the "Create" button.
 
-![image](./assets/rule-engine/timescaledb_resource_0.png)
+<img src="./assets/rule-engine/timescaledb_resource_0.png" alt="image" style="zoom:50%;" />
 
 Back to the "Actions" dialog, and then click on the "Confirm" button.
 
-![image](./assets/rule-engine/timescaledb_action_3.png)
+<img src="./assets/rule-engine/timescaledb_action_3.png" alt="image" style="zoom:50%;" />
 
-Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+Back to the creating rule page, then click on the "Create" button. The rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/timescaledb_rule_overview_0.png)
 
-We have finished, testing the rule by sending an MQTT message to
-    emqx:
+## Test the Rule
+
+We have finished creating the rule, test the rule by sending an MQTT message to EMQX:
 
 ```bash
 > Topic: "t/1"

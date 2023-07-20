@@ -1,14 +1,16 @@
-# Save data to SQLServer
+# Ingest Data into Microsoft SQL Server
 
-Set up a SQLServer database and set the user name and password to sa/mqtt_public. Take MacOS X as an example:
+## Set up SQL Server and Create Tables
+
+Set up an SQL Server database and set the user name and password to sa/mqtt_public. Take MacOS X as an example:
 
 ```bash
 docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=mqtt_public' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
 ```
 
-Enter the SQLServer container and initialize the SQLServer table:
+Enter the SQL Server container and initialize the SQL Server table:
 
-Setting up SQLServer `sa` password
+Setting up SQL Server `sa` password
 ```bash
 $ /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P mqtt_public -d master
 ```
@@ -32,7 +34,7 @@ CREATE TABLE t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
 go;
 ```
 
-Configure odbc driver in Mac:
+Configure the ODBC driver in Mac:
 ```
 $ brew install unixodbc freetds
 $ vim /usr/local/etc/odbcinst.ini
@@ -43,7 +45,7 @@ Setup       = /usr/local/lib/libtdsodbc.so
 FileUsage   = 1
 ```
 
-Configure odbc driver in CentOS:
+Configure ODBC driver in CentOS:
 ```
 $ yum install unixODBC unixODBC-devel freetds freetds-devel perl-DBD-ODBC perl-local-lib
 $ vim /etc/odbcinst.ini
@@ -57,7 +59,7 @@ Setup64     = /usr/lib64/libtdsS.so.2
 FileUsage   = 1
 ```
 
-Configure odbc dirver in Ubuntu:
+Configure ODBC dirver in Ubuntu:
 ```
 $ apt-get install unixodbc unixodbc-dev unixodbc-bin tdsodbc freetds-bin freetds-common freetds-dev libdbd-odbc-perl liblocal-lib-perl
 $ vim /etc/odbcinst.ini
@@ -69,7 +71,7 @@ Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
 FileUsage   = 1
 ```
 
-Create rules:
+## Create Rules
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
 
@@ -79,41 +81,39 @@ Fill in the rule SQL:
 SELECT * FROM "t/#"
 ```
 
-![image](./assets/rule-engine/sqlserver1.png)
+<img src="./assets/rule-engine/sqlserver1.png" alt="image" style="zoom:50%;" />
 
-Related actions:
+
+## Add Actions
 
 On the "Response Action" interface, select "Add", and then select "Save Data to SQLServer" in the "Action" drop-down box.
 
-![image](./assets/rule-engine/sqlserver2.png)
+<img src="./assets/rule-engine/sqlserver2.png" alt="image" style="zoom:50%;" />
 
 Fill in the action parameters:
 
 The "Save data to SQLServer" action requires two parameters:
-1). SQL template. In this example, we insert a piece of data into SQLServer, and the SQL template is:
+1). SQL template. In this example, we insert a piece of data into SQL Server, and the SQL template is:
 
 ```sql
 insert into t_mqtt_msg(msgid, topic, qos, payload) values ('${id}', '${topic}', ${qos}, '${payload}')
 ```
 
-![image](./assets/rule-engine/sqlserver3.png)
+2). The ID of the associated resource. Now the resource drop-down box is empty, and you can click "New Resource" in the upper right corner to create a SQL Server resource. In the popup dialog box, configure as instructed below: input “mqtt” for database name, “sa” for user name, and “mqtt_public” for password. 
 
-2). The ID of the associated resource. Now the resource drop-down box is empty, and you can click "New Resource" in the upper right corner to create a SQLServer resource:
-
-Fill in the resource configuration:
-Fill in “mqtt” for database name, “sa” for user name, and “mqtt_public” for password
-
-![image](./assets/rule-engine/sqlserver4.png)
+<img src="./assets/rule-engine/sqlserver4.png" alt="image" style="zoom:50%;" />
 
 Click the "Confirm" button.
 
 Return to the response action interface and click "OK".
 
-![image](./assets/rule-engine/sqlserver5.png)
+<img src="./assets/rule-engine/sqlserver5.png" alt="image" style="zoom:50%;" />
 
 Return to the rule creation interface and click "Create".
 
-![image](./assets/rule-engine/sqlserver6.png)
+<img src="./assets/rule-engine/sqlserver6.png" alt="image" style="zoom:50%;" />
+
+## Test the Rule
 
 The rule has been created. Now, send a piece of data:
 
@@ -125,10 +125,10 @@ Payload: "hello"
 
 In the rule list, click the "View" button or the rule ID connection to preview the rule you just created:</br>
 
-Here we can see that metrics has been increased.
+Here we can see that metrics have been increased.
 
 ![image](./assets/rule-engine/sqlserver7.png)
 
-Then check the SQLServer table to see whether the new record is added successfully:
+Then check the SQL Server table to see whether the new record is added successfully:
 
 ![image](./assets/rule-engine/sqlserver8.png)

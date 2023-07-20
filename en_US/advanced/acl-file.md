@@ -13,9 +13,9 @@ category:
 ref: undefined
 ---
 
-# ACL file
+# Internal ACL File
 
-The built-in ACL sets rules through files, which is simple and lightweight to use. It is suitable for projects with predictable number of rules, no change or small change requirements.
+The built-in ACL sets rules through files, which is simple and lightweight to use. It is suitable for projects with a predictable number of rules, no change, or small change requirements.
 
 ACL rules file:
 
@@ -24,7 +24,7 @@ etc/acl.conf
 ```
 
 ::: tip
-The built-in ACL has the lowest priority and can be overridden by the ACL plugin. If you want to disable it, you can comment all the rules. After the rules file is changed, EMQX Broker needs to be restarted to make them taking effect.
+The built-in ACL has the lowest priority and can be overridden by the ACL plugin. If you want to disable it, you can comment on all the rules. After the rules file is changed, EMQX Broker needs to be restarted to make them take effect.
 
 :::
 
@@ -69,20 +69,20 @@ The syntax rules of `acl.conf` are included in the comments at the top. Those fa
     * `allow`
     * `deny`
 - The second position of the tuple indicates the user to which the rule takes effect. The format that can be used is:
-    * `{user, "dashboard"}`：The rule only takes effect for users whose Username  is dashboard
-    * `{client, "dashboard"}`：The rule only takes effect for users whose ClientId is dashboard
-    * `{ipaddr, "127.0.0.1"}`：The rule only takes effect for users whose Source Address is "127.0.0.1"
-    * `all`：The rule takes effect for all users
+    * `{user, "dashboard"}`: The rule only takes effect for users whose Username  is dashboard
+    * `{client, "dashboard"}`: The rule only takes effect for users whose ClientId is dashboard
+    * `{ipaddr, "127.0.0.1"}`: The rule only takes effect for users whose Source Address is "127.0.0.1"
+    * `all`: The rule takes effect for all users
 - The third position of the tuple indicates the operation controlled by the rule with the possible value:
-    * `publish`：The rule applies to PUBLISH operations
-    * `subscribe`：The rule applies to SUBSCRIBE operations
-    * `pubsub`：The rule applies to both PUBLISH and SUBSCRIBE operations
+    * `publish`: The rule applies to PUBLISH operations
+    * `subscribe`: The rule applies to SUBSCRIBE operations
+    * `pubsub`: The rule applies to both PUBLISH and SUBSCRIBE operations
 - The fourth position of the tuple means the list of topics restricted by the rule. The content is given in the form of an array. For example:
-    * `"$SYS/#"`：a **Topic Filter** which means that the rule is applied to topics that match `$SYS/#`; for example rules created for "$SYS/#" applies to publish/subscribe actions on topic "$SYS/a/b/c", and subscribe actions on topic "$SYS/#"
-    * `{eq, "#"}`：It indicates full equivalence of characters. The rule is only applied for topic `#` but not for `/a/b/c`, etc.
+    * `"$SYS/#"`:  **Topic Filter** which means that the rule is applied to topics that match `$SYS/#`; for example rules created for "$SYS/#" applies to publish/subscribe actions on topic "$SYS/a/b/c", and subscribe actions on topic "$SYS/#"
+    * `{eq, "#"}`: It indicates full equivalence of characters. The rule is only applied for topic `#` but not for `/a/b/c`, etc.
 - In addition, there are two special rules:
-    - `{allow, all}`：Allow all operations
-    - `{deny, all}`：Deny all operations
+    - `{allow, all}`: Allow all operations
+    - `{deny, all}`: Deny all operations
 
 After the `acl.conf` modification is completed, it will not be automatically loaded into the EMQX Broker system, but needs to be performed manually:
 
@@ -103,10 +103,9 @@ E.g:
 {allow, all, pubsub, ["sensor/%c/ctrl"]}.
 ```
 
-Means that a client with ID 'light' is **Allowed** to **Subscribe and Publish** to the `sensor/light/ctrl` topic.
-
+This means that a client with ID 'light' is **Allowed** to **Subscribe and Publish** to the `sensor/light/ctrl` topic.
 
 ::: tip
-Only a few simple and general rules is contained in acl.conf that make it a system-based ACL principle. If you need to support complex, large amounts of ACL content, you should implement it in an authentication plugin.
+Only a few simple and general rules are contained in `acl.conf` that make it a system-based ACL principle. If you need to support complex, large amounts of ACL content, you should implement it in an authentication plugin.
 
 :::

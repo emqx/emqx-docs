@@ -1,169 +1,101 @@
-# Production deployment
+# Configure Load Balancer
 
-During development, we usually use compressed packages to start services with the form of a single node. However, production operation requires a simpler and more stable way. This page mainly explains how to deploy your EMQX service from best practices of deployment architecture.
+Load Balancer (LB) balances the load among multiple network components and optimizes resource usage to avoid system malfunctions caused by overload. LB is not a mandatory component in EMQX, but it can bring some obvious system benefits, for example:
 
+- Balance the load of EMQX to avoid single node overload;
+- Simplify client configuration, the client only needs to connect to the LB and need not worry about the scaling within the cluster;
+- Reduce the load of EMQX clusters by TLS/SSL termination;
+- Improve cluster security, with LB configured at the front end of the cluster, unwanted traffic can be blocked to protect the EMQX cluster from malicious attacks. 
 
+This chapter introduces how to configure LB in EMQX. 
 
-## Deployment architecture
+## Architecture
+
+For an EMQX cluster configured with LB, the LB handles the incoming TCP traffic and then distributes the received MQTT connection requests and messages to different EMQX nodes. The typical deployment architecture is as follows:
+
+## Deployment Architecture
 
 EMQX cluster can be deployed as an IoT access service (IoT Hub). Currently, EMQ provides free software images out of the box on cloud service providers such as QingCloud, Aliyun, and AWS. For special hardware platforms and system versions such as Raspberry Pi and Linux ARM, source code compilation and installation can be used.
 
-Typical deployment architecture:
+<img src="./_assets/lb_2.png" alt="TLS termination" style="zoom:50%;" />
 
-![](./_assets/deploy_1.png)
+If SSL/TLS is enabled, it is recommended to terminate the SSL/TLS connection at LB, that is, to use SSL/TLS to secure the connection between clients and LB and then use TCP connection between LB and EMQX nodes, maximizing the performance of the EMQX cluster. The architecture is as follows:
+
+<img src="./_assets/lb_3.png" alt="image" style="zoom:50%;" />
 
 
 
-## Load Balancer (LB)
+:::tip
 
-The Load Balancer (LB) distributes MQTT connections and traffic from devices across the *EMQX* clusters. LB enhances the HA of the clusters, balances the loads among the cluster nodes and makes the dynamic expansion possible.
+You can also use DNS polling for load balancing for test or development purposes.
 
-It is recommended that SSL connections are terminated by a LB. The links between devices and the LB are secured by SSL, while the links between the LB and *EMQX* cluster nodes are plain TCP connections. By this setup, a single *EMQX* cluster can serve a million devices.
+:::
 
-LB products of public cloud providers:
+## Select an LB Product
 
-| Cloud provider                     | SSL Termination | LB Product DOC/URL                                         |
-| ---------------------------------- | --------------- | ---------------------------------------------------------- |
-| [QingCloud](https://qingcloud.com) | Yes             | <https://docs.qingcloud.com/product/network/loadbalancer/> |
-| [AWS](https://aws.amazon.com)      | Yes             | <https://aws.amazon.com/cn/elasticloadbalancing/>          |
-| [Aliyun](https://www.aliyun.com)   | No              | <https://www.aliyun.com/product/slb>                       |
-| [UCloud](https://ucloud.cn)        | Unknown         | <https://ucloud.cn/site/product/ulb.html>                  |
-| [QCloud](https://www.qcloud.com)   | Unknown         | <https://www.qcloud.com/product/clb>                       |
+Many load-balancing products are currently available, including open-source and commercial editions, and public cloud providers also have their load-balancing services.
 
- LBs for Private Cloud: 
+LB products for public cloud:
+
+| Cloud provider                            | SSL Termination | LB Product                                                  |
+| ----------------------------------------- | --------------- | ----------------------------------------------------------- |
+| [AWS](https://aws.amazon.com)             | Yes             | <https://aws.amazon.com/elasticloadbalancing/?nc1=h_ls>     |
+| [Azure](https://azure.microsoft.com)      | Unknown         | <https://azure.microsoft.com/en-us/products/load-balancer/> |
+| [Google Cloud](https://cloud.google.com/) | Yes             | <https://cloud.google.com/load-balancing>                   |
+
+ LB products for private cloud:
 
 | Open-Source LB                     | SSL Termination | DOC/URL                                                 |
 | ---------------------------------- | --------------- | ------------------------------------------------------- |
 | [HAProxy](https://www.haproxy.org) | Yes             | <https://www.haproxy.com/solutions/load-balancing.html> |
 | [NGINX](https://www.nginx.com)     | Yes             | <https://www.nginx.com/solutions/load-balancing/>       |
 
+The following section takes the HAProxy or NGINX as an example to illustrate how to configure an LB in EMQX cluster. 
 
+## Configure HAProxy/NGINX in EMQX
 
-::: tip
+Suppose you have a cluster with 2 EMQX nodes, with emqx1 on `192.168.0.2` and emqx2 on `192.168.0.3`, you can follow the steps below to add HAProxy or NGINX as the LB.
 
-Qingcloud(EMQX partner) is recommended for domestic public cloud deployments, AWS is recommended for foreign deployments, and HAProxy is recommended for LB for private deployments.
+### Enable Proxy Protocol
 
-:::
+To configure the HAProxy or Nginx on port 1883, you first need to enable the configuration item `proxy_protocol` in `etc/listeners.conf` by setting it to `on`
 
+**Code Example**:
 
+```
+listener.tcp.external.proxy_protocol = on
+```
 
-### EMQX Cluster
+:::tip
 
-*EMQX* cluster nodes are deployed behind LB. It is suggested that the nodes are deployed on VPCs or on a private network. Cloud provider, such as AWS, Azure or QingCloud, usually provides VPC network.
+For proxy protocols and that used in Nginx, see: 
 
-*EMQX* Provides the MQTT service on following TCP ports by default:
+- Proxy protocol: https://www.haproxy.com/blog/haproxy/proxy-protocol
 
-| Port  | Description        |
-| ----- | ------------------ |
-| 1883  | MQTT               |
-| 8883  | MQTT/SSL           |
-| 8083  | MQTT/WebSocket     |
-| 8084  | MQTT/WebSocket/SSL |
-| 8081  | Management API     |
-| 18083 | Dashboard          |
+- Nginx: [https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)
 
-Firewall should make the relevant ports accessible for public according to the MQTT access method.
+  :::
 
-TCP ports used by EMQX node cluster:
+### Configure HAProxy/NGINX
 
-| Port | Description                     |
-|------|---------------------------------|
-| 4369 | Node discovery port (EPMD Mode) |
-| 4370 | Node discovery port             |
-| 5370 | Cluster PRC                     |
+:::: tabs type:card
 
-If deployed between nodes, firewalls should be configured that the above ports are inter-accessible between the nodes.
+::: tab Configure HAProxy 
 
+**Prerequisite**: HAProxy installed. For detailed introduction and installation of HAProxy, see [HAProxy website](http://www.haproxy.org/).
 
+To configure HAProxy as the LB for EMQX and terminate the SSL connection, you can modify `/etc/haproxy/haproxy.cfg` following the code example below. 
 
-## Deploying on QingCloud
+In this example, you have a cluster that handles a maximum of 50,000 concurrent connections (`maxconn`). You want to configure the HAProxy to monitor all incoming traffic encrypted in SSL (with SSL certificate located at `/etc/ssl/emqx/emq.pem`) on port `8883` and also to terminate the SSL connectoin, using the `source` load balancing algorithm. <!--the explanation to be reviewed -->
 
-1. Create VPC network.
-2. Create a ‘private network’ for *EMQX* cluster inside the VPC network, e.g. 192.168.0.0/24
-3. Create 2 *EMQX* hosts inside the private network, like:
-
-| Node  | IP address  |
-| ----- | ----------- |
-| emqx1 | 192.168.0.2 |
-| emqx2 | 192.168.0.3 |
-
-
-4. Install and cluster *EMQX* on these two hosts. Please refer to the sections of cluster installation for details.
-5. Create LB and assign the public IP address.
-6. Create MQTT TCP listener:
-
-![image](./_assets/deploy_2.png)
-
- Or create SSL listener and terminate the SSL connections on LB: 
-
-![image](./_assets/deploy_3.png)
-
-7. Connect the MQTT clients to the LB using the public IP address and test the deployment.
-
-
-
-## Deploying on AWS
-
-1. Create VPC network.
-2. Create a ‘private network’ for *EMQX* cluster inside the VPC network, e.g. 192.168.0.0/24
-3. Create 2 hosts inside the private network, like:
-
-| Node  | IP address  |
-| ----- | ----------- |
-| emqx1 | 192.168.0.2 |
-| emqx2 | 192.168.0.3 |
-
-
-4. Open the TCP ports for MQTT services (e.g. 1883,8883) on the security group.
-5. Install and cluster *EMQX* on these two hosts. Please refer to the sections of cluster installation for details.
-6. Create ELB (Classic Load Balancer), assign the VPC network, and assign the public IP address.
-7. Create MQTT TCP listener on the ELB:
-
-![image](./_assets/deploy_4-20200225175403693.png)
-
- Or create SSL listener and terminate the SSL connections on the ELB: 
-
-![image](./_assets/deploy_5.png)
-
-8. Connect the MQTT clients to the ELB using the public IP address and test the deployment.
-
-
-
-## Deploying on private network
-
-### Direct connection of EMQX cluster
-
- *EMQX* cluster should be DNS-resolvable and the clients access the cluster via domain name or IP list: 
-
-1. Deploy *EMQX* cluster. Please refer to the sections of ‘Installation’ and ‘*EMQX* nodes clustering’ for details.
-2. Enable the access to the MQTT ports on the firewall (e.g. 1883, 8883).
-3. Client devices access the *EMQX* cluster via domain name or IP list.
-
-::: tip
- This kind of deployment is NOT recommended. 
-:::
-
-### HAProxy LB
-
- HAProxy serves as a LB for *EMQX* cluster and terminates the SSL connections: 
-
-1. Create *EMQX* Cluster nodes like following:
-
-| node  | IP          |
-| ----- | ----------- |
-| emqx1 | 192.168.0.2 |
-| emqx2 | 192.168.0.3 |
-
-2. Configure /etc/haproxy/haproxy.cfg: 
-
-```yaml
+```bash
 listen mqtt-ssl
   bind *:8883 ssl crt /etc/ssl/emqx/emq.pem no-sslv3
   mode tcp
   maxconn 50000
   timeout client 600s
   default_backend emqx_cluster
-        
+
 backend emqx_cluster
   mode tcp
   balance source
@@ -173,20 +105,17 @@ backend emqx_cluster
   server emqx2 192.168.0.3:1883 check inter 10000 fall 2 rise 5 weight 1
 ```
 
+Note: The file path may differ based on your installation mode. <!--should we also add the parameter explanation? -->
 
+:::
 
-### Nginx LB
+::: tab Configure NGINX
 
- NGINX Plus serves as a LB for *EMQX* cluster and terminates the SSL connections 
+**Prerequisite**: NGINX installed. For detailed introduction and installation of HAProxy, see [Nginx website](https://www.nginx.com/).
 
-1. Create *EMQX* cluster nodes like following:
+In this example, you want to configure the NGINX LB that listens for incoming connections on port `8883` encrypted in SSL and also terminates the SSL connection, and then it will forward those connections to one of two upstream servers using the `stream` module. <!--the explanation to be reviewed and whether it is sufficient-->
 
-| Node  | IP          |
-| ----- | ----------- |
-| emqx1 | 192.168.0.2 |
-| emqx2 | 192.168.0.3 |
-
-3. Configure /etc/nginx/nginx.conf:
+To configure NGINX as the LB for EMQX and terminate the SSL connection, you can modify `/etc/nginx/nginx.conf` following the code example below. 
 
 ```bash
 stream {
@@ -207,3 +136,9 @@ stream {
   }
 }
 ```
+
+Note: The file path may differ based on your installation mode. <!--should we also add the parameter explanation? -->
+
+:::
+
+::::

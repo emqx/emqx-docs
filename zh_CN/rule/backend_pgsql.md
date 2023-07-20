@@ -1,4 +1,4 @@
-# 保存数据到 PostgreSQL
+# 集成 PostgreSQL
 
 搭建 PostgreSQL 数据库，以 MacOS X 为例:
 
