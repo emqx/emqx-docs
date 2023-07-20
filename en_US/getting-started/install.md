@@ -131,6 +131,24 @@ ZIP packages are released for quick testing and hot-beam upgrade. Do NOT install
 
 ## Running EMQX in Docker (Contain a simple docker-compose cluster)
 
+
+::tip Note
+
+1. If you want to persist the EMQX Docker container, you need to keep the following directories, so that the data will persist even if the container no longer exists.
+
+```bash
+/opt/emqx/data
+/opt/emqx/etc
+/opt/emqx/log
+```
+
+2. In Docker, `localhost` or `127.0.0.1`  points to the internal address of the container. Use the host’s IP or [host networking](https://docs.docker.com/network/host/) to access the host address. If you are using Docker for Mac or Docker for Windows, you can use `host.docker.internal` as the host address.
+
+3. Because emqx stores data in the `data/mnesia/<node name>` directory, when using the container to start emqx,
+the hostname or FQDN must be used to form the node name of emqx. Otherwise, the data storage directory will be switched, resulting in data loss.
+
+:::
+
 ### Run a single container
 
 1.  Get docker image
@@ -148,6 +166,8 @@ ZIP packages are released for quick testing and hot-beam upgrade. Do NOT install
     ```
 
 ### Create a simple static cluster by docker-compose
+
+Please note that the Docker Compose example file in this section is only applicable to local testing. If you need to deploy a cluster in a production environment, please refer to [Create a cluster](./cluster.md).
 
 1. Create `docker-compose.yaml` file
 
