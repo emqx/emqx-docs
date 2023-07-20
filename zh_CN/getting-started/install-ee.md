@@ -292,8 +292,19 @@ ZIP包适用于测试和热更，如果不知道如何手动安装所有可能�
 
 ## Docker
 
-:::
-由于 emqx 将数据存储在 `data/mnesia/<节点名>` 目录，所以在使用容器启动 emqx 的时候，
+:::tip Docker 部署注意事项
+
+1. 如果需要持久 Docker 容器 ，请将以下目录挂载到容器外部，这样即使容器被删除数据也不会丢失：
+
+```bash
+/opt/emqx/data
+/opt/emqx/etc
+/opt/emqx/log
+```
+
+2. Docker 内的 `localhost` 或 `127.0.0.1` 指向的是容器内部地址，如需访问宿主机地址请使用宿主机的真实 IP 或使用 [host 网络模式](https://docs.docker.com/network/host/)。如果您使用的是 Docker for Mac 或 Docker for Windows，可以使用 `host.docker.internal` 作为宿主机地址。
+
+3. 由于 emqx 将数据存储在 `data/mnesia/<节点名>` 目录，所以在使用容器启动 emqx 的时候，
 必须使用 hostname 或者 FQDN 来组建 emqx 的节点名。否则数据存储目录将发生切换，导致数据丢失。
 :::
 
@@ -325,6 +336,8 @@ $ docker run -d \
 更多关于 EMQX Docker 的信息请查看 [Docker Hub](https://hub.docker.com/r/emqx/emqx-ee)
 
 ### 使用 docker-compose 创建一个简单的静态集群
+
+请注意，本章节中的 Docker Compose 示例文件仅适用于本地测试，如果您需要在生产环境中部署集群请参考 [分布式集群](./cluster.md)。
 
 1. 创建 `docker-compose.yaml` 文件
 
