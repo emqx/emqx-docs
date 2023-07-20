@@ -134,10 +134,7 @@
   collapsed: true
   children:
     - messaging/mqtt-concepts
-    - title_en: Test with MQTT Clients
-      title_cn: 使用 MQTT Client 工具测试
-      path: messaging/publish-and-subscribe
-      lang: en
+    - messaging/publish-and-subscribe
     # - messaging/explore-mqtt
     - title_en: Shared Subscription
       title_cn: 共享订阅
