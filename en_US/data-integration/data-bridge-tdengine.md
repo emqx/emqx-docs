@@ -15,7 +15,6 @@ EMQX supports integration with TDengine so you can save MQTT messages and client
 - [Async mode](./data-bridges.md#async-mode)
 - [Batch mode](./data-bridges.md#batch-mode)
 - [Buffer queue](./data-bridges.md#buffer-queue)
-- [SQL prepared statement](./data-bridges.md#prepared-statement)
 
 ## Quick Start Tutorial
 
