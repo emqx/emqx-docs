@@ -210,7 +210,7 @@ Then start 50 thousand connections on each network card on `bench1`, which is a 
 
 Perform the same operation on `bench2`.
 
-After all connections are established, execute `./bin/emqx_ctl listeners` and find the following content to view the information about the number of connections in EMQX:
+After all connections are established, execute `./bin/emqx ctl listeners` and find the following content to view the information about the number of connections in EMQX:
 
 ```bash
 listener on mqtt:tcp:0.0.0.0:1883

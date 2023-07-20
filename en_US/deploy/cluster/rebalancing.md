@@ -35,7 +35,7 @@ You can use CLI command to start the node evacuation, get the evacuation status,
 You can use the following CLI command to start the node evacuation. The `--evacuation` parameter means this is an evacuation operation:
 
 ```bash
-./bin/emqx_ctl rebalance start --evacuation \
+./bin/emqx ctl rebalance start --evacuation \
     [--wait-health-check Secs] \
     [--redirect-to "Host1:Port1 Host2:Port2 ..."] \
     [--conn-evict-rate CountPerSec] \
@@ -59,7 +59,7 @@ You can use the following CLI command to start the node evacuation. The `--evacu
 If you want to migrate the clients on the node `emqx@127.0.0.1` to the nodes `emqx2@127.0.0.1` and `emqx3@127.0.0.1`, you can execute the following command on the node `emqx@127.0.0.1`:
 
 ```bash
-./bin/emqx_ctl rebalance start --evacuation \
+./bin/emqx ctl rebalance start --evacuation \
 	--wait-health-check 60 \
 	--wait-takeover 200 \
 	--conn-evict-rate 30 \
@@ -75,7 +75,7 @@ This command will disconnect existing clients at a rate of `30` connections per 
 You can use the following CLI command to get the evacuation status:
 
 ```bash
-./bin/emqx_ctl rebalance node-status
+./bin/emqx ctl rebalance node-status
 ```
 
 Below is an example of the returned results:
@@ -100,13 +100,13 @@ Channel statistics:
 You can use the following CLI command to stop evacuation:
 
 ```bash
-./bin/emqx_ctl rebalance stop
+./bin/emqx ctl rebalance stop
 ```
 
 Below is an example of the returned results:
 
 ```bash
-./bin/emqx_ctl rebalance stop
+./bin/emqx ctl rebalance stop
 Rebalance(evacuation) stopped
 ```
 
@@ -194,7 +194,7 @@ A similar rule is applied to disconnected sessions.
 To achieve load rebalancing among the three nodes `emqx@127.0.0.1`, `emqx2@127.0.0.1`, and `emqx3@127.0.0.1`, you can use the following command:
 
 ```bash
-./bin/emqx_ctl rebalance start \
+./bin/emqx ctl rebalance start \
 	--wait-health-check 10 \
 	--wait-takeover 60  \
 	--conn-evict-rate 5 \
@@ -210,13 +210,13 @@ Rebalance started
 The CLI command for getting rebalance status is:
 
 ```bash
-./bin/emqx_ctl rebalance node-status
+./bin/emqx ctl rebalance node-status
 ```
 
 **Example**
 
 ```bash
-./bin/emqx_ctl rebalance node-status
+./bin/emqx ctl rebalance node-status
 Node 'emqx1@127.0.0.1': rebalance coordinator
 Rebalance state: evicting_conns
 Coordinator node: 'emqx1@127.0.0.1'
@@ -233,19 +233,19 @@ Current average donor node connection count: 300.0
 The CLI command to stop rebalancing is:
 
 ```bash
-emqx_ctl rebalance stop
+emqx ctl rebalance stop
 ```
 
 **Example**
 
 ```bash
-./bin/emqx_ctl rebalance stop
+./bin/emqx ctl rebalance stop
 Rebalance stopped
 ```
 
 ### Start/Stop Rebalancing via HTTP API
 
-All the operations available from the CLI are also available from the API. Start/stop commands require a node as a parameter. For details, see [API Docs](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html).
+All the operations available from the CLI are also available from the API. Start/stop commands require a node as a parameter. For details, see [API Docs](https://docs.emqx.com/en/enterprise/v5.1/admin/api-docs.html).
 
 ## Integrate Load Balancer
 

@@ -84,7 +84,7 @@ EMQX 同时支持通过下载包进行安装。下文将以 CentOS 8 系统为�
   $ emqx start
   EMQX @CE_VERSION@ is started successfully!
   
-  $ emqx_ctl status
+  $ emqx ctl status
   Node 'emqx@127.0.0.1' @CE_VERSION@ is started
 - systemctl 启动：
 
@@ -203,7 +203,7 @@ sudo apt remove --purge emqx
   $ emqx start
   EMQX @EE_VERSION@ is started successfully!
 
-  $ emqx_ctl status
+  $ emqx ctl status
   Node 'emqx@127.0.0.1' @EE_VERSION@ is started
   ```
 

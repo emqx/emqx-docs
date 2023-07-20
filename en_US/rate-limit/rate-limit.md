@@ -1,4 +1,4 @@
-# Rate limit
+# Rate Limit
 
 EMQX allows for specifying limits on connection speed and messaging speed, using a backpressure scheme that avoids system overload at the entry point and guarantees system stability with predictable throughput.
 

@@ -34,7 +34,7 @@ EMQX 节点疏散功能的工作原理如下：
 您可以通过如下命令执行节点的疏散任务，其中 `--evacuation` 选项表示该命令为节点疏散操作：
 
 ``` bash
-./bin/emqx_ctl rebalance start --evacuation \
+./bin/emqx ctl rebalance start --evacuation \
     [--redirect-to "Host1:Port1 Host2:Port2 ..."] \
     [--conn-evict-rate CountPerSec] \
     [--migrate-to "node1@host1 node2@host2 ..."] \
@@ -56,7 +56,7 @@ EMQX 节点疏散功能的工作原理如下：
 如希望将 `emqx@127.0.0.1` 节点的客户端迁移到 `emqx2@127.0.0.1` 与 `emqx3@127.0.0.1` 节点，可在 `emqx@127.0.0.1` 节点执行以下命令：
 
 ```bash
-./bin/emqx_ctl rebalance start --evacuation \
+./bin/emqx ctl rebalance start --evacuation \
 	--wait-takeover 200 \
 	--conn-evict-rate 30 \
 	--sess-evict-rate 30 \
@@ -71,13 +71,13 @@ Rebalance(evacuation) started
 您可通过如下命令获取节点疏散状态：
 
 ```bash
-./bin/emqx_ctl rebalance node-status
+./bin/emqx ctl rebalance node-status
 ```
 
 返回结果如下：
 
 ```bash
-./bin/emqx_ctl rebalance node-status
+./bin/emqx ctl rebalance node-status
 Rebalance type: evacuation
 Rebalance state: evicting_conns
 Connection eviction rate: 30 connections/second
@@ -97,19 +97,19 @@ Channel statistics:
 您可通过如下命令终止节点疏散任务：
 
 ```bash
-./bin/emqx_ctl rebalance stop
+./bin/emqx ctl rebalance stop
 ```
 
 返回结果如下：
 
 ```bash
-./bin/emqx_ctl rebalance stop
+./bin/emqx ctl rebalance stop
 Rebalance(evacuation) stopped
 ```
 
 ### 通过 HTTP API 启停节点疏散
 
-您也可通过 API 开启/停止节点疏散任务，此时需要在参数中指定操作节点。具体命令及操作，见 [API 文档](https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html)。
+您也可通过 API 开启/停止节点疏散任务，此时需要在参数中指定操作节点。具体命令及操作，见 [API 文档](https://docs.emqx.com/zh/enterprise/v5.1/admin/api-docs.html)。
 
 ## 集群负载重平衡
 
@@ -193,7 +193,7 @@ avg(源节点连接数) < avg(目标节点连接数) * rel_conn_threshold
 如希望在 `emqx@127.0.0.1`、`emqx2@127.0.0.1` 与 `emqx3@127.0.0.1` 三个节点之间实现负载重平衡，可使用如下命令操作：
 
 ```bash
-./bin/emqx_ctl rebalance start \
+./bin/emqx ctl rebalance start \
 	--wait-health-check 10 \
 	--wait-takeover 60  \
 	--conn-evict-rate 5 \
@@ -209,13 +209,13 @@ Rebalance started
 获取重平衡状态的命令如下：
 
 ```bash
-emqx_ctl rebalance node-status
+emqx ctl rebalance node-status
 ```
 
 **示例**：
 
 ```bash
-./bin/emqx_ctl rebalance node-status
+./bin/emqx ctl rebalance node-status
 Node 'emqx1@127.0.0.1': rebalance coordinator
 Rebalance state: evicting_conns
 Coordinator node: 'emqx1@127.0.0.1'
@@ -232,13 +232,13 @@ Current average donor node connection count: 300.0
 停止重平衡任务的命令如下：
 
 ```bash
-./bin/emqx_ctl rebalance stop
+./bin/emqx ctl rebalance stop
 ```
 
 **示例**：
 
 ```bash
-./bin/emqx_ctl rebalance stop
+./bin/emqx ctl rebalance stop
 Rebalance stopped
 ```
 

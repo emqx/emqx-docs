@@ -134,7 +134,5 @@
 -   [#11092](https://github.com/emqx/emqx/pull/11092) and [#11100](https://github.com/emqx/emqx/pull/11100) Fixed problem when replicat nodes were unable to connect to the core node due to timeout in `mria_lb:core_nodes()` call.
     Relevant mria pull request: [https://github.com/emqx/mria/pull/143](https://github.com/emqx/mria/pull/143)
 
-
-## [Breaking Changes](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/breaking-changes-5.1.0.md)
-
 ## [Known Issues](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/known-issues-5.1.0.md)
+
