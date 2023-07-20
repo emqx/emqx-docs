@@ -69,7 +69,7 @@ sensor/1/temperature
 
    ::: tip
 
-   有关创建 MQTT 连接的详细说明，请参阅 [MQTTX 客户端](./publish-and-subscribe.md)。
+   有关创建 MQTT 连接的详细说明，请参阅 [MQTTX](./publish-and-subscribe.md)。
 
    :::
 
