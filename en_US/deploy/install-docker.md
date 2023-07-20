@@ -4,7 +4,13 @@ This chapter introduces how to use the official Docker image to install and run 
 
 :::tip Note
 
-1. If you want to keep the data, mount the EMQX data directory (`/opt/emqx/data`) out of the container, so that the data will persist even if the container no longer exists.
+1. If you want to persist the EMQX Docker container, you need to keep the following directories, so that the data will persist even if the container no longer exists.
+
+```bash
+/opt/emqx/data
+/opt/emqx/etc
+/opt/emqx/log
+```
 
 2. In Docker, `localhost` or `127.0.0.1`  points to the internal address of the container. Use the host’s IP or [host networking](https://docs.docker.com/network/host/) to access the host address. If you are using Docker for Mac or Docker for Windows, you can use `host.docker.internal` as the host address.
 
@@ -56,7 +62,9 @@ For more information about EMQX official docker image, see [Docker Hub - emqx/em
 
 ## Use Docker Compose to Build an EMQX Cluster
 
-Docker Compose is a tool for defining and running multi-container Docker applications. This section introduces how to use Docker Compose to create a static EMQX cluster. 
+Docker Compose is a tool for defining and running multi-container Docker applications. This section introduces how to use Docker Compose to create a static EMQX cluster.
+
+Please note that the Docker Compose example file in this section is only applicable to local testing. If you need to deploy a cluster in a production environment, please refer to [Clustering](./cluster/introduction.md).
 
 :::tip
 

@@ -4,7 +4,13 @@
 
 :::tip Docker 部署注意事项
 
-1. 如需保留数据，请将 EMQX 数据目录 `/opt/emqx/data` 挂载在容器外部，这样即使容器被删除数据也不会丢失。
+1. 如果需要持久 Docker 容器 ，请将以下目录挂载到容器外部，这样即使容器被删除数据也不会丢失：
+
+```bash
+/opt/emqx/data
+/opt/emqx/etc
+/opt/emqx/log
+```
 
 2. Docker 内的 `localhost` 或 `127.0.0.1` 指向的是容器内部地址，如需访问宿主机地址请使用宿主机的真实 IP 或使用 [host 网络模式](https://docs.docker.com/network/host/)。如果您使用的是 Docker for Mac 或 Docker for Windows，可以使用 `host.docker.internal` 作为宿主机地址。
 :::
@@ -55,7 +61,9 @@ docker run -d --name emqx-enterprise -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8
 
 ## 通过 Docker Compose 构建 EMQX 集群
 
-Docker Compose 是一个用于编排和运行多容器的工具，下面将指导您通过 Docker Compose 创建简单的 EMQX 静态集群。
+Docker Compose 是一个用于编排和运行多容器的工具，下面将指导您通过 Docker Compose 创建简单的 EMQX 静态集群用于测试。
+
+请注意，本章节中的 Docker Compose 示例文件仅适用于本地测试，如果您需要在生产环境中部署集群请参考 [构建集群](./cluster/introduction.md)。
 
 :::tip
 
