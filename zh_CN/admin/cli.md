@@ -39,7 +39,6 @@ EMQX `ctl` 命令提供了多个用于管理和监控 EMQX 的子命令。`ctl` 
 
 下面列举了所有 `ctl` 命令的子命令和相应的简介，本文档旨在介绍命令的功能，命令的详细参数介绍可以用 `help` 指令查看。
 
-
 ## status
 
 快速查看当前运行的节点是否运行。
@@ -199,7 +198,7 @@ $SYS/brokers/emqx@127.0.0.1/version
 emqx ctl retainer clean
 ```
 
-### retainer clean \\<Topic>
+### retainer clean \<Topic>
 
 ```bash
 emqx ctl retainer clean t/1
@@ -631,14 +630,14 @@ $ emqx ctl trace stop client emqx_c
 stop tracing clientid emqx_c successfully
 ```
 
-### trace start topic \\<Topic> \<File> [\<Level>]
+### trace start topic \<Topic> \<File> [\<Level>]
 
 ```bash
 $ emqx ctl trace start topic t/1 trace.log info
 trace t/1 CLI-t/1 successfully
 ```
 
-### trace stop topic \\<Topic>
+### trace stop topic \<Topic>
 
 ```bash
 $ emqx ctl trace stop topic t/1
@@ -911,7 +910,7 @@ Actions:
 
 注意，命令行仅仅用于查看，规则的创建和更新等管理操作必需要在控制台的界面中操作。
 
-{%emqxee%}
+{% emqxee %}
 
 ## license
 
@@ -943,4 +942,4 @@ emqx ctl license update <YOUR_LICENSE_STRING>
 
 请将 `YOUR_LICENSE_STRING` 替换为实际的 License 字符串。
 
-{%endemqxee%}
+{% endemqxee %}

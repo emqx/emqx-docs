@@ -231,6 +231,7 @@
     - data-integration/data-bridge-kafka
     - data-integration/data-bridge-pulsar
     - data-integration/data-bridge-influxdb
+    - data-integration/data-bridge-timescale
     - data-integration/data-bridge-mysql
     - data-integration/data-bridge-redis
     - data-integration/data-bridge-gcp-pubsub
@@ -284,22 +285,22 @@
       title_cn: API 文档
       lang: en
       edition: ce
-      path: https://www.emqx.io/docs/en/v5.0/admin/api-docs.html
+      path: https://www.emqx.io/docs/en/v5.1/admin/api-docs.html
     - title_en: API Docs
       title_cn: API 文档
       lang: cn
       edition: ce
-      path: https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html
+      path: https://www.emqx.io/docs/zh/v5.1/admin/api-docs.html
     - title_en: API Docs
       title_cn: API 文档
       lang: en
       edition: ee
-      path: https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html
+      path: https://docs.emqx.com/en/enterprise/v5.1/admin/api-docs.html
     - title_en: API Docs
       title_cn: API 文档
       lang: cn
       edition: ee
-      path: https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html
+      path: https://docs.emqx.com/zh/enterprise/v5.1/admin/api-docs.html
 
 ## Dashboard
 
@@ -508,7 +509,7 @@
   collapsed: true
   children:
     - title_en: EMQX Clustering
-      title_zh: EMQX 集群
+      title_cn: EMQX 集群
       lang: en
       path: design/clustering
     - design/inflight-window-and-message-queue
@@ -526,9 +527,35 @@
     #     - development/python
     #     - development/resource
 
-- title_en: Change log
-  title_cn: 版本发布记录
-  path: changes/changes-5.1
+- title_en: Release Notes
+  title_cn: 版本发布说明
+  collapsed: true
+  children:
+    - title_en: Releases
+      title_cn: 版本发布
+      edition: ee
+      path: changes/changes-ee-5.1
+    - title_en: Releases
+      title_cn: 版本发布
+      edition: ce
+      path: changes/changes-ce-5.1
+    - title_en: Incompatible Changes
+      title_cn: Incompatible Changes
+      lang: en
+      path: changes/breaking-changes-5.1.0
+      children:
+        - title_en: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1 
+          title_cn: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1 
+          lang: en
+          path: changes/auth-4.4-to-5.1-compatibility
+        - title_en: Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4
+          title_cn: Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4
+          lang: en
+          path: changes/data-integration-4.4-to-5.1-incompatibility
+        - title_en: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
+          title_cn: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
+          lang: en
+          path: changes/gateway-4.4-to-5.1-incompatibility
 
 - title_en: Technical Support
   title_cn: 技术支持
