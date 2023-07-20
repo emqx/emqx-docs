@@ -98,10 +98,7 @@
         - messaging/mqtt-exclusive-subscription
         - messaging/mqtt-delayed-publish
         - messaging/mqtt-auto-subscription
-        - title_en: Wildcard Subscription
-          title_cn: 通配符订阅
-          edition: ce
-          path: messaging/mqtt-wildcard-subscription
+        - messaging/mqtt-wildcard-subscription
       # - messaging/nanomq
       # - messaging/neuron
     - title_en: Client SDK
