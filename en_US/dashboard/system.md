@@ -9,6 +9,7 @@ Click **System** -> **Users** to enter the **Users** page. The user page display
 ![image](./assets/users.png)
 
 > All users have admin rights to delete other users, but you cannot delete the currently logged in user on the Dashboard.
+> For security reasons, starting with EMQX v5.0.0, Dashboard user cannot be used for REST API authentication.
 
 ## API Keys
 

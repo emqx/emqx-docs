@@ -8,7 +8,8 @@
 
 ![image](./assets/users.png)
 
-> EMQX 现阶段不提供基于角色的权限管理能力，所有的用户都有管理员权限可删除其他用户，但无法在 Dashboard 上删除当前登录用户
+> EMQX 现阶段不提供基于角色的权限管理能力，所有的用户都有管理员权限可删除其他用户，但无法在 Dashboard 上删除当前登录用户。
+> 出于安全考虑，从 EMQX v5.0.0 开始 Dashboard 用户无法用于 REST API 认证。
 
 ## API 密钥
 
