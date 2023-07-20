@@ -145,8 +145,8 @@ ZIP包适用于测试和热更，如果不知道如何手动安装所有可能�
 
 2. Docker 内的 `localhost` 或 `127.0.0.1` 指向的是容器内部地址，如需访问宿主机地址请使用宿主机的真实 IP 或使用 [host 网络模式](https://docs.docker.com/network/host/)。如果您使用的是 Docker for Mac 或 Docker for Windows，可以使用 `host.docker.internal` 作为宿主机地址。
 
-3. 由于 emqx 将数据存储在 `data/mnesia/<节点名>` 目录，所以在使用容器启动 emqx 的时候，
-必须使用 hostname 或者 FQDN 来组建 emqx 的节点名。否则数据存储目录将发生切换，导致数据丢失。
+3. 由于 EMQX 将数据存储在 `data/mnesia/<节点名>` 目录，所以在使用容器启动 EMQX 的时候，
+必须使用 hostname 或者 FQDN 作为节点名。否则数据存储目录将发生切换，导致数据丢失。
 :::
 
 ### 运行单个容器
