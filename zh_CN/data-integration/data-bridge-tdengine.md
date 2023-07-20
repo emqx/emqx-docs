@@ -15,7 +15,6 @@
 - [异步请求模式](./data-bridges.md#异步请求模式)
 - [批量模式](./data-bridges.md#批量模式)
 - [缓存队列](./data-bridges.md#缓存队列)
-- [SQL 预处理](./data-bridges.md#SQL-预处理)
 
 ## 快速开始
 
@@ -95,8 +94,6 @@ CREATE TABLE emqx_client_events (
      INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
          VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
      ```
-
-**注意:** *在 e5.1.1 中引入了一个破坏性变动，在这之前，字符类型的占位符会被自动转义加上单引号，在这之后，用户需要手动加上。*
 
 7. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](#配置参数)。
 8. 点击**创建**按钮完成数据桥接创建。
