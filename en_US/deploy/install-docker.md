@@ -12,9 +12,9 @@ This chapter introduces how to use the official Docker image to install and run 
 /opt/emqx/log
 ```
 
-2. In Docker, `localhost` or `127.0.0.1`  points to the internal address of the container. Use the host’s IP or [host networking](https://docs.docker.com/network/host/) to access the host address. If you are using Docker for Mac or Docker for Windows, you can use `host.docker.internal` as the host address.
+2. Due to EMQX using `data/mnesia/<node_name>` as the data storage directory, please use fixed information such as hostname or FQDN as the node name to avoid data loss caused by node name changes.
 
-   :::
+:::
 
 ## Use Docker to Run A Single EMQX Node
 
