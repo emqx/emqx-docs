@@ -68,7 +68,7 @@ log.rotation.count = 5
 By default, the log data will be output to files. However, when starting with the `emqx console` command, the startup script will set `log.to = console` by environment variable. In that case, the log data will be output to the console.
 :::
 
-## Output log file for log level
+## Output Log File for Log level
 
 If you want to write logs greater than or equal to a certain level to a separate file, you can configure `log.<level>.file` in `emqx.conf`:
 
