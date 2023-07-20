@@ -27,7 +27,7 @@
 
 有效载荷：一个带有以下字段的 JSON 对象：
 
-```
+```json
 {
   "name": "{name}",
   "size": {size},
@@ -87,5 +87,10 @@
 
 ## 客户端代码示例
 
-请参阅 [演示 Python 客户端](https://github.com/emqx/emqx-ft/blob/main/src/emqx_ft/main.py) 获取客户端代码示例。
+以下是不同语言和客户端库的文件传输客户端代码示例：
 
+- [C - Paho](https://github.com/emqx/MQTT-Client-Examples/blob/master/mqtt-client-C-paho/emqx_file_transfer.c)
+- [Python3 - Paho](https://github.com/emqx/MQTT-Client-Examples/blob/master/mqtt-client-Python3/file_transfer.py)
+- [Java - Paho](https://github.com/emqx/MQTT-Client-Examples/blob/master/mqtt-client-Java/src/main/java/io/emqx/mqtt/MqttFileTransferSample.java)
+- [Golang - Paho](https://github.com/emqx/MQTT-Client-Examples/pull/110/files#diff-ea542153b4dd7109626626beff78b699ed649f9a7c05af362e5d67cce0866a94)
+- [Node.js - MQTT.js](https://github.com/emqx/MQTT-Client-Examples/blob/master/mqtt-client-Node.js/emqx-file-transfer.js)
