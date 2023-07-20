@@ -144,8 +144,8 @@ ZIP packages are released for quick testing and hot-beam upgrade. Do NOT install
 
 2. In Docker, `localhost` or `127.0.0.1`  points to the internal address of the container. Use the host’s IP or [host networking](https://docs.docker.com/network/host/) to access the host address. If you are using Docker for Mac or Docker for Windows, you can use `host.docker.internal` as the host address.
 
-3. Because emqx stores data in the `data/mnesia/<node name>` directory, when using the container to start emqx,
-the hostname or FQDN must be used to form the node name of emqx. Otherwise, the data storage directory will be switched, resulting in data loss.
+3. Because EMQX stores data in the `data/mnesia/<node name>` directory, when using the container to start EMQX,
+the hostname or FQDN must be used to form the node name of EMQX. Otherwise, the data storage directory will be switched, resulting in data loss.
 
 :::
 
