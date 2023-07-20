@@ -9,16 +9,17 @@ Use cases:
 
 ## How It Works
 
-We can add a `$share` prefix to the original topic to enable shared subscriptions for a group of subscribers.
+We can add a `$share` or `$queue` prefix to the original topic to enable shared subscriptions for a group of subscribers.
 
 ![shared_subscription](./assets/shared_subscription.png)
 
 In the above diagram, three subscribers subscribe to the same topic `$share/g/topic` using a shared subscription method,
 where ` topic` is the real topic name they subscribed to, and `$share/g/` is a shared subscription prefix.
 
-| Example         | Prefix      | Topic Name |
-| --------------- | ----------- | ---------- |
-| $share/abc/t/1  | $share/abc/ | t/1        |
+| Example        | Prefix      | Topic Name |
+| -------------- | ----------- | ---------- |
+| $share/abc/t/1 | $share/abc/ | t/1        |
+| $queue/t/1     | $queue/     | t/1        |
 
 ## Shared Subscriptions in Group
 
@@ -35,6 +36,12 @@ When EMQX publishes a message `msg1` to topic `t1`:
 - Only one of `s4` and `s5` will receive `msg1`
 
 ![shared_subscription_group](./assets/shared_subscription_group.png)
+
+## Shared subscription without group
+
+Shared subscriptions prefixed with `$queue/` are shared subscriptions without groups. It is a special case of `$share` subscription, which is quite similar to all subscribers in a subscription group like `$share/$queue`.
+
+![shared subscription queue](./assets/shared_subscription_queue.jpg)
 
 ## Load Balancing Policy and Dispatch ACK Configuration
 
@@ -55,15 +62,15 @@ broker.shared_subscription_strategy = random
 broker.shared_dispatch_ack_enabled = false
 ```
 
-| Load Balance  | Description                                        |
-| :------------ | :------------------------------------------------- |
-| `random`        | Random selection among all subscribers             |
-| `round_robin`   | Select the subscribers in a round-robin manner                     |
-| `round_robin_per_group`   | Select the subscribers in round-robin fashion within each shared subscriber group                         |
-| `local`   | Select a random local subscriber, if cannot be found, then select a random subscriber within the cluster                       |
-| `sticky`        | Always send to the last selected subscriber until the subscriber disconnects        |
-| `hash_clientid` | Select the subscribers by hashing the `clientIds`  |
-| `hash_topic`    | Select the subscribers by hashing the source topic |
+| Load Balance            | Description                                                                                              |
+| :---------------------- | :------------------------------------------------------------------------------------------------------- |
+| `random`                | Random selection among all subscribers                                                                   |
+| `round_robin`           | Select the subscribers in a round-robin manner                                                           |
+| `round_robin_per_group` | Select the subscribers in round-robin fashion within each shared subscriber group                        |
+| `local`                 | Select a random local subscriber, if cannot be found, then select a random subscriber within the cluster |
+| `sticky`                | Always send to the last selected subscriber until the subscriber disconnects                             |
+| `hash_clientid`         | Select the subscribers by hashing the `clientIds`                                                        |
+| `hash_topic`            | Select the subscribers by hashing the source topic                                                       |
 
 ### Discussion on Message Loss
 

@@ -54,7 +54,6 @@ Log files in EMQX 5.1 is either the same flat log file format as in EMQX 4.4 or 
 
 ## MQTT
 
-- The `$queue` prefix for shared subscriptions is not supported.
 - In EMQX 5.0, MQTT clients can no longer see EMQX cluster as a single black box due to eventual consistency. Subscribers may or may not receive published messages from other clients after the subscription is confirmed.
 - In EMQX 5.0, keepalive (receiving PING) requires a full MQTT control Packet instead of a few bytes.
 - In EMQX 5.0, the TLS listener does not support `partial_chain` and `verify_peer_ext_key_usage`.

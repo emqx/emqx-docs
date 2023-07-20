@@ -10,15 +10,16 @@
 
 ## 机制介绍
 
-在原有主题的基础上，添加 `$share` 前缀即可为一组订阅端启用共享订阅。
+在原有主题的基础上，添加 `$share` 或 `$queue` 前缀即可为一组订阅端启用共享订阅。
 
 ![shared_subscription](./assets/shared_subscription.png)
 
-上图中，共享 3 个 subscriber 用共享订阅的方式订阅了同一个主题 `$share/g/topic`，其中`topic` 是它们订阅的真实主题名，而  `$share/g/` 是共享订阅前缀。EMQX 支持两种格式的共享订阅前缀：
+上图中，3 个 subscriber 用共享订阅的方式订阅了同一个主题 `$share/g/topic`，其中`topic` 是它们订阅的真实主题名，而  `$share/g/` 是共享订阅前缀，EMQX 支持两种格式的共享订阅前缀：
 
-| 示例            | 前缀        | 真实主题名 |
-| --------------- | ----------- | ---------- |
-| $share/abc/t/1  | $share/abc/ | t/1        |
+| 示例           | 前缀        | 真实主题名 |
+| -------------- | ----------- | ---------- |
+| $share/abc/t/1 | $share/abc/ | t/1        |
+| $queue/t/1     | $queue/     | t/1        |
 
 ## 带群组的共享订阅
 
@@ -35,6 +36,12 @@ group-name 可以为任意字符串，属于同一个群组内部的订阅者将
 
 ![shared_subscription_group](./assets/shared_subscription_group.png)
 
+## 不带群组的共享订阅
+
+以 `$queue/` 为前缀的共享订阅是不带群组的共享订阅。它是 `$share` 订阅的一种特例，相当与所有订阅者都在一个订阅组里面例如 `$share/$queue/`。
+
+![shared subscription queue](./assets/shared_subscription_queue.jpg)
+
 ## 负载均衡策略与派发 ACK 配置
 
 MQTT 协议规范中，没有明确的规范平衡策略。EMQX 在配置的帮助下支持一些不同的平衡策略。
@@ -45,7 +52,7 @@ MQTT 协议规范中，没有明确的规范平衡策略。EMQX 在配置的帮�
 - 全局策略可以在 `broker.shared_subscription_strategy` 配置中设置。
 - 配置 `broker.shared_subscription_group.$group_name.strategy` 为每组策略。
 
-```txt
+```bash
 # etc/emqx.conf
 
 # 均衡策略
@@ -55,15 +62,15 @@ broker.shared_subscription_strategy = random
 broker.shared_dispatch_ack_enabled = false
 ```
 
-|  均衡策略    |             描述             |
-| :---------- | :--------------------------- |
-| `random`      | 在所有订阅者中随机选择       |
-| `round_robin` | 按照订阅顺序选择                 |
-| `round_robin_per_group` | 在每个共享订阅组中按照订阅顺序进行选择                 |
-| `local ` | 随机在本地订阅中进行选择，如无法找到，则在集群范围内随机选择                 |
-| `sticky`      | 选定订阅者后，始终向其进行发送，直到该订阅者断开连接   |
-| `hash_clientid` | 通过对发送者的客户端 ID 进行 Hash 处理来选择订阅者 |
-| `hash_topic` | 通过对源主题进行 Hash 处理来选择订阅者 |
+| 均衡策略                | 描述                                                         |
+| :---------------------- | :----------------------------------------------------------- |
+| `random`                | 在所有订阅者中随机选择                                       |
+| `round_robin`           | 按照订阅顺序选择                                             |
+| `round_robin_per_group` | 在每个共享订阅组中按照订阅顺序进行选择                       |
+| `local`                | 随机在本地订阅中进行选择，如无法找到，则在集群范围内随机选择 |
+| `sticky`                | 选定订阅者后，始终向其进行发送，直到该订阅者断开连接         |
+| `hash_clientid`         | 通过对发送者的客户端 ID 进行 Hash 处理来选择订阅者           |
+| `hash_topic`            | 通过对源主题进行 Hash 处理来选择订阅者                       |
 
 ::: tip
 无论是单客户端订阅还是共享订阅都要注意客户端性能与消息接收速率，否则会引发消息堆积、客户端崩溃等错误。
