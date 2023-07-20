@@ -6,7 +6,6 @@
 
 - 配置文件参数和配置手册为您提供了配置文件基本信息，配置项以及详细的配置参考信息。
 - [命令行接口](./cli.md)介绍了 EMQX 支持的各类启动与管理命令。
-- [REST API](./api) 指导您快速开始使用 EMQX REST API。
 - [EMQX Dashboard](../dashboard/introduction.md) 为您全面介绍 EMQX 内置的管理控制台，您将了解如何管理和监控 EMQX 集群并配置和使用所需的各项功能。
 - [速率限制](../rate-limit/rate-limit.md)介绍了如何通过配置消息接入速度限制器避免系统过载，从而保证系统稳定。
 - [日志及可观测性](../observability/overview.md)介绍了 EMQX 中的指标观测和监控功能，便于您进行系统监控和调试。
@@ -19,7 +18,6 @@
 
 - 配置文件参数和配置手册为您提供了配置文件基本信息，配置项以及详细的配置参考信息。
 - [命令行接口](./cli.md)介绍了 EMQX 支持的各类启动与管理命令。
-- [REST API](./api) 指导您快速开始使用 EMQX REST API。
 - [EMQX Dashboard](../dashboard/introduction.md) 为您全面介绍 EMQX 内置的管理控制台，您将了解如何管理和监控 EMQX 集群并配置和使用所需的各项功能。
 - [速率限制](../rate-limit/rate-limit.md)介绍了如何通过配置消息接入速度限制器避免系统过载，从而保证系统稳定。
 - [日志及可观测性](../observability/overview.md)介绍了 EMQX 中的指标观测和监控功能，便于您进行系统监控和调试。

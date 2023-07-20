@@ -165,7 +165,7 @@ axios
 
 ## HTTP 响应状态码
 
-EMQX 遵循[HTTP 响应状态码](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)标准，可能的状态码如下：
+EMQX 遵循 [HTTP 响应状态码](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)标准，可能的状态码如下：
 
 | 状态码 | 描述                                                                          |
 | ------ | ----------------------------------------------------------------------------- |

@@ -118,6 +118,31 @@
           title_cn: MQTT 微信小程序示例
           lang: cn
           path: connect-emqx/wechat-miniprogram
+    - title_en: REST API
+      title_cn: REST API
+      path: admin/api
+      collapsed: true
+      children:
+        - title_en: API Docs
+          title_cn: API 文档
+          lang: en
+          edition: ce
+          path: https://www.emqx.io/docs/en/v5.0/admin/api-docs.html
+        - title_en: API Docs
+          title_cn: API 文档
+          lang: cn
+          edition: ce
+          path: https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html
+        - title_en: API Docs
+          title_cn: API 文档
+          lang: en
+          edition: ee
+          path: https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html
+        - title_en: API Docs
+          title_cn: API 文档
+          lang: cn
+          edition: ee
+          path: https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html
 
 - title_en: EMQX Essentials 
   title_cn: EMQX 基础知识
@@ -349,31 +374,6 @@
     - title_en: Command Line Interface
       title_cn: 命令行接口
       path: admin/cli
-    - title_en: REST API
-      title_cn: REST API
-      path: admin/api
-      collapsed: true
-      children:
-        - title_en: API Docs
-          title_cn: API 文档
-          lang: en
-          edition: ce
-          path: https://www.emqx.io/docs/en/v5.0/admin/api-docs.html
-        - title_en: API Docs
-          title_cn: API 文档
-          lang: cn
-          edition: ce
-          path: https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html
-        - title_en: API Docs
-          title_cn: API 文档
-          lang: en
-          edition: ee
-          path: https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html
-        - title_en: API Docs
-          title_cn: API 文档
-          lang: cn
-          edition: ee
-          path: https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html
     - title_en: EMQX Dashboard
       title_cn: EMQX Dashboard
       path: dashboard/introduction
@@ -538,14 +538,10 @@
 
 - title_en: Tutorials
   title_cn: 实用教程
-  lang: en
   path: tutorial/tutorial
   collapsed: true
   children:  
-    - title_en: MQTT Programming
-      title_cn: MQTT 客户端编程
-      collapsed: true
-      path: tutorial/mqtt-programming
+    - tutorial/mqtt-programming
     - title_en: How to Achieve Flexible Data Collection for IoV
       title_cn: How to Achieve Flexible Data Collection for IoV
       lang: en

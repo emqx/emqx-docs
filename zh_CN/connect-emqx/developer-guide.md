@@ -7,6 +7,7 @@
 - [共享订阅](../messaging/mqtt-shared-subscription.md)
 - [保留消息](../messaging/mqtt-retained-message.md)
 - [遗嘱消息](../messaging/mqtt-will-message.md)
+- [通配符订阅](../messaging/mqtt-wildcard-subscription.md)
 - [排他订阅](../messaging/mqtt-exclusive-subscription.md)
 - [延迟发布](../messaging/mqtt-delayed-publish.md)
 - [自动订阅](../messaging/mqtt-auto-subscription.md)
@@ -18,3 +19,5 @@
 文档中并不包括所有的 SDK。
 
 :::
+
+EMQX 还为开发者提供了 API 文档来帮助开发。[REST API](../admin/api.md) 指导您快速上手使用管理监控 API。

@@ -10,22 +10,10 @@ The subscribe function in EMQX allows devices to receive messages from a particu
 
 In this chapter, you will learn the [MQTT Core Concepts](./mqtt-concepts.md). You will also learn how to try the publish/subscribe function in EMQX and also try the following MQTT-specific features using the MQTT client tools.
 
-{% emqxee %}
-
-- [Shared Subscription](./mqtt-shared-subscription.md)
-- [Retained Message](./mqtt-retained-message.md)
-- [Will Message](./mqtt-will-message.md)
-
-{% endemqxee %}
-
-{% emqxce %}
-
 - [Shared Subscription](./mqtt-shared-subscription.md)
 - [Retained Message](./mqtt-retained-message.md)
 - [Will Message](./mqtt-will-message.md)
 - [Topic Wildcards](./mqtt-wildcard-subscription.md)
-
-{% endemqxce %}
 
 Except for the MQTT-specific features, some extended features are also implemented in EMQX. This chapter also introduces the following extended features and how to configure them in EMQX Dashboard and test them using the client tools:
 
