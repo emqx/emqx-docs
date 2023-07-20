@@ -27,7 +27,8 @@ The `init` command is used to initialize a file transfer session.
 Topic: `$file/{file_id}/init`
 
 Payload: a JSON object with the following fields:
-```
+
+```json
 {
   "name": "{name}",
   "size": {size},
@@ -86,4 +87,10 @@ Upon receiving the `finish` command, EMQX verifies that it has received all the 
 
 ## Client Code Sample
 
-Refer to [demonstrational Python client](https://github.com/emqx/emqx-ft/blob/main/src/emqx_ft/main.py) to get the client code sample.
+The following are examples of file transfer client code in different languages and client libraries:
+
+- [C - Paho](https://github.com/emqx/MQTT-Client-Examples/blob/master/mqtt-client-C-paho/emqx_file_transfer.c)
+- [Python3 - Paho](https://github.com/emqx/MQTT-Client-Examples/blob/master/mqtt-client-Python3/file_transfer.py)
+- [Java - Paho](https://github.com/emqx/MQTT-Client-Examples/blob/master/mqtt-client-Java/src/main/java/io/emqx/mqtt/MqttFileTransferSample.java)
+- [Golang - Paho](https://github.com/emqx/MQTT-Client-Examples/pull/110/files#diff-ea542153b4dd7109626626beff78b699ed649f9a7c05af362e5d67cce0866a94)
+- [Node.js - MQTT.js](https://github.com/emqx/MQTT-Client-Examples/blob/master/mqtt-client-Node.js/emqx-file-transfer.js)
