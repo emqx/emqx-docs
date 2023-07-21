@@ -1,6 +1,6 @@
 # Amazon Linux 2
 
-This section guides you on installing and starting EMQX on Amazon Linux 2.
+This page guides you on installing and starting EMQX on Amazon Linux 2.
 
 {% emqxce %}
 

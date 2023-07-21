@@ -1,18 +1,18 @@
 # Deploy with Docker
 
-This chapter introduces how to use the official Docker image to install and run EMQX, and how to use Docker Compose to build an EMQX cluster.
+This page introduces how to use the official Docker image to install and run EMQX, and how to use Docker Compose to build an EMQX cluster.
 
-:::tip Note
+:::tip Tips for data persistent
 
 1. If you want to persist data generated in the EMQX Docker container, you need to keep the following directories, so that the data will persist even if the container no longer exists.
 
-```bash
-/opt/emqx/data
-/opt/emqx/etc
-/opt/emqx/log
-```
+   ```
+   /opt/emqx/data
+   /opt/emqx/etc
+   /opt/emqx/log
+   ```
 
-2. Due to EMQX using `data/mnesia/<node_name>` as the data storage directory, please use fixed information such as hostname or FQDN as the node name to avoid data loss caused by node name changes.
+2. As EMQX uses `data/mnesia/<node_name>` as the data storage directory, it is important to select a fixed identifier, such as the hostname or FQDN, as the node name. This practice avoids data loss caused by node name changes.
 
 :::
 

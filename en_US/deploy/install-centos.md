@@ -1,6 +1,6 @@
 # CentOS/RHEL
 
-This section guides you on installing and starting EMQX on CentOS/RHEL system.
+This page guides you on installing and starting EMQX on CentOS/RHEL system.
 
 Supported versions: 
 

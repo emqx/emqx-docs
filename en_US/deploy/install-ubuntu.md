@@ -1,6 +1,6 @@
 # Ubuntu
 
-This section guides you on installing and starting EMQX on the Ubuntu system.
+This page guides you on installing and starting EMQX on the Ubuntu system.
 
 Supported versions:
 

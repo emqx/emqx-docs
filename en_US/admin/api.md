@@ -18,7 +18,7 @@ EMQX's REST API uses [HTTP Basic Authentication](https://developer.mozilla.org/e
 To create an API key, you can click **System** -> **API Key** page on the left navigation menu of the Dashboard, Please refer to [Dashboard - API Keys](../dashboard/system.md#api-keys).
 
 :::tip
-For security reasons, starting with EMQX v5.0.0, Dashboard user cannot be used for REST API authentication.
+For security reasons, starting with EMQX 5.0.0, Dashboard user credentials cannot be used for REST API authentication.
 :::
 
 You can use the generated API Key and Secret Key as the username and password for Basic authentication:

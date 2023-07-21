@@ -1,20 +1,21 @@
 # Docker 部署指南
 
-本章节将指导您使用官方 Docker 镜像快速安装和运行 EMQX，并使用 Docker Compose 实现集群搭建。
+本页将指导您使用官方 Docker 镜像快速安装和运行 EMQX，并使用 Docker Compose 实现集群搭建。
 
 :::tip Docker 部署注意事项
 
 1. 如果需要持久 Docker 容器 ，请将以下目录挂载到容器外部，这样即使容器被删除数据也不会丢失：
 
-```bash
-/opt/emqx/data
-/opt/emqx/etc
-/opt/emqx/log
-```
+   ```
+   /opt/emqx/data
+   /opt/emqx/etc
+   /opt/emqx/log
+   ```
 
 2. Docker 内的 `localhost` 或 `127.0.0.1` 指向的是容器内部地址，如需访问宿主机地址请使用宿主机的真实 IP 或使用 [host 网络模式](https://docs.docker.com/network/host/)。如果您使用的是 Docker for Mac 或 Docker for Windows，可以使用 `host.docker.internal` 作为宿主机地址。
 
 3. 由于 EMQX 使用 `data/mnesia/<节点名>` 作为数据存储目录，请使用 hostname 或者 FQDN 等固定的信息作为节点名，避免因为节点名称变动导致数据丢失。
+
 :::
 
 ## 通过 Docker 运行单个 EMQX 节点
@@ -39,7 +40,7 @@ docker pull emqx/emqx-enterprise:@EE_VERSION@
 
 {% endemqxee %}
 
-2. 运行以下命令启动 Docker 容器
+2. 运行以下命令启动 Docker 容器。
 
 {% emqxce %}
 

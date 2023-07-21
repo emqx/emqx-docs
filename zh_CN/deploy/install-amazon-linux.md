@@ -1,6 +1,6 @@
 # Amazon Linux 2
 
-本章节将指导您如何在 Amazon Linux 2系统中下载安装并启动 EMQX。
+本页将指导您如何在 Amazon Linux 2系统中下载安装并启动 EMQX。
 
 {% emqxce %}
 
