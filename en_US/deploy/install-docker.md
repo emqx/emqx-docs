@@ -4,7 +4,7 @@ This chapter introduces how to use the official Docker image to install and run 
 
 :::tip Note
 
-1. If you want to persist the EMQX Docker container, you need to keep the following directories, so that the data will persist even if the container no longer exists.
+1. If you want to persist data generated in the EMQX Docker container, you need to keep the following directories, so that the data will persist even if the container no longer exists.
 
 ```bash
 /opt/emqx/data
