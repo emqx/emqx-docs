@@ -65,7 +65,7 @@ log.rotation.count = 5
 ```
 
 :::tip
-By default, the log data will be output to files. However, when starting with the `emqx console` command, the startup script will set `log.to = console` by environment variable. In that case, the log data will be output to the console.
+By default, the log data will be written to files. However, when starting node with the `emqx console` command, the startup script will apply the 'log.to = console' setting. As a result, the log data will be directed to the console instead.
 :::
 
 ## Output Log File for Log level
