@@ -87,7 +87,7 @@ Upon receiving the `finish` command, EMQX verifies that it has received all the 
 
 ## Client Code Sample
 
-The following are examples of file transfer client code in different languages and client libraries:
+Explore file transfer client code examples in various languages and client libraries:
 
 - [C - Paho](https://github.com/emqx/MQTT-Client-Examples/blob/master/mqtt-client-C-paho/emqx_file_transfer.c)
 - [Python3 - Paho](https://github.com/emqx/MQTT-Client-Examples/blob/master/mqtt-client-Python3/file_transfer.py)
