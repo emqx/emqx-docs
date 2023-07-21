@@ -42,13 +42,13 @@ EMQX Enterprise binary packages are released on below operating systems:
       ```
       # for ubuntu
       $ sudo apt install -i ./emqx-ee-ubuntu18.04-v4.0.0_amd64.deb
-
+  
       # for debian
       # first ensure libodbc is installed, then
       $ sudo dpkg -i emqx-ee-ubuntu18.04-v4.0.0_amd64.deb
       ```
 
-3. Start EMQX Broker
+3. Start EMQX Broker.
 
       - quick start
 
@@ -72,14 +72,14 @@ EMQX Enterprise binary packages are released on below operating systems:
         $ sudo service emqx start
         ```
 
-4.  Stop EMQX Broker
+4.  Stop EMQX Broker.
 
     ```
     $ emqx stop
     ok
     ```
 
-5.  Uninstall EMQX Broker
+5.  Uninstall EMQX Broker.
 
     + DEB:
 
@@ -114,7 +114,7 @@ ZIP packages are released for quick testing and hot-beam upgrade. Do NOT install
       $ unzip emqx-ee-ubuntu18.04-v4.0.0.zip
       ```
 
-3.  Start EMQX Broker
+3.  Start EMQX Broker.
 
     ```
     $ ./bin/emqx start
@@ -125,55 +125,54 @@ ZIP packages are released for quick testing and hot-beam upgrade. Do NOT install
     emqx v4.0.0 is running
     ```
 
-4.  Stop EMQX Broker
+4.  Stop EMQX Broker.
 
     ```
     $ ./bin/emqx stop
     ok
     ```
 
-5.  Remove EMQX Broker
+5.  Remove EMQX Broker.
 
-    Simply delete the EMQX Broker directory
+    Simply delete the EMQX Broker directory.
 
 ## Install EMQX in Docker (Contain a simple docker-compose cluster)
 
-:::tip Note
+::: tip Tips for data persistent and docker-compose
 
 1. If you want to persist data generated in the EMQX Docker container, you need to keep the following directories, so that the data will persist even if the container no longer exists.
 
-```bash
-/opt/emqx/data
-/opt/emqx/etc
-/opt/emqx/log
-```
+   ```bash
+   /opt/emqx/data
+   /opt/emqx/etc
+   /opt/emqx/log
+   ```
 
 2. In Docker, `localhost` or `127.0.0.1`  points to the internal address of the container. Use the host’s IP or [host networking](https://docs.docker.com/network/host/) to access the host address. If you are using Docker for Mac or Docker for Windows, you can use `host.docker.internal` as the host address.
 
-3. Due to EMQX using `data/mnesia/<node_name>` as the data storage directory, please use fixed information such as hostname or FQDN as the node name to avoid data loss caused by node name changes.
+3. As EMQX uses `data/mnesia/<node_name>` as the data storage directory, it is important to select a fixed identifier, such as the hostname or FQDN, as the node name. This practice avoids data loss caused by node name changes.
 
 :::
 
-### Run a single container
+### Run a Single Container
 
-1.  Get docker image
+1.  Get docker image from [Docker Hub](https://hub.docker.com/r/emqx/emqx-ee).
 
-      - From [Docker Hub](https://hub.docker.com/r/emqx/emqx-ee)
-
-        ```
-        $ docker pull emqx/emqx-ee:v4.0.0
-        ```
-2.  Start docker container
+    ```
+    $ docker pull emqx/emqx-ee:v4.0.0
+    ```
+    
+2.  Start docker container.
 
     ```
     $ docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx-ee:v4.0.0
     ```
 
-### create a simple static cluster by docker-compose
+### Create a Simple Static Cluster by Docker-Compose
 
 Please note that the Docker Compose example file in this section is only applicable to local testing. If you need to deploy a cluster in a production environment, please refer to [Create a cluster](./cluster.md).
 
-1. Create `docker-compose.yaml` file
+1. Create `docker-compose.yaml` file.
 
    ```
    version: '3'
@@ -223,13 +222,13 @@ Please note that the Docker Compose example file in this section is only applica
 
    ```
 
-2. Start docker-compose cluster
+2. Start docker-compose cluster.
 
    ```
    $ docker-compose -p my_emqx up -d
    ```
 
-3. View cluster
+3. View cluster.
 
    ```
    $ docker exec -it my_emqx_emqx1_1 sh -c "emqx_ctl cluster status"
@@ -237,4 +236,4 @@ Please note that the Docker Compose example file in this section is only applica
                      stopped_nodes => []}
    ```
 
-For more information about EMQX Broker Docker, please visit [Docker Hub](https://hub.docker.com/r/emqx/emqx-ee)
+For more information about EMQX Broker Docker, please visit [Docker Hub](https://hub.docker.com/r/emqx/emqx-ee).
