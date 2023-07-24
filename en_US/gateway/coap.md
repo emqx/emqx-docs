@@ -280,7 +280,7 @@ For example:
 coap-client -m delete -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&token=3404490787"
 ```
 
-### Hearbeat
+### Heartbeat
 
 Only available in `Connection Mode`.
 
@@ -308,7 +308,7 @@ coap-client -m put -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&token=34
 ```
 
 :::tip
-The heartbeat interval is determined by the `hearbeat` option of CoAP gateway, default: 30 seconds.
+The heartbeat interval is determined by the `heartbeat` option of CoAP gateway, default: 30 seconds.
 :::
 
 
