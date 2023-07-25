@@ -177,8 +177,6 @@
 
 - [#10645](https://github.com/emqx/emqx/pull/10645) Changes health check for Oracle Database, PostgreSql, MySql and Kafka Producer data bridges to ensure target table/topic exists.
 
-- [#11090](https://github.com/emqx/emqx/pull/11090) Fixed a configuration that prevented the pipelining option from being correctly set for GCP PubSub Producer bridge.
-
 - [#11107](https://github.com/emqx/emqx/pull/11107) Now we return the health check failure reason when probing a MongoDB bridge.
 
 - [#11139](https://github.com/emqx/emqx/pull/11139) The Redis bridge has been refactored to its own Erlang application to improve the code structure and to make it easier to maintain.
