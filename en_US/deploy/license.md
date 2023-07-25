@@ -29,18 +29,20 @@ You can update your license file and configure the settings for the license conn
 
 ### Dashboard
 
-1. On EMQX Dashboard, click **System** -> **License** from the left navigation menu. On the License page, you can check the basic information of your current License.
+1. On EMQX Dashboard, click **System** -> **License** from the left navigation menu. In the **Basic Info** section on the License page, you can check information such as License connection quota usage, EMQX version, and issue information. 
 
 2. Click the **Update License** button. Paste your License Key in the popup dialog box, and click **Save**. The license information on the page automatically refreshes following your submission.
 
-   Check the information to confirm that the new license file has taken effect.
+   Verify the information to confirm that the new license file has taken effect.
 
 3. In the **License Settings** section, you can configure the watermark limits for the license connection quota usage.
 
-   - **Usage High Watermark**: Specify the percentage value to set the limit above which alarms for license connection quota usage will be triggered.
-   - **Usage Low Watermark**: Specify the percentage value to set the limit below which alarms for license connection quota usage will be deactivated.
+   - **Usage High Watermark**: Specify the percentage value to set the threshold above which alarms for license connection quota usage will be triggered.
+   - **Usage Low Watermark**: Specify the percentage value to set the threshold below which alarms for license connection quota usage will be deactivated.
 
 4. Click **Save Changes** to save your License settings.
+
+   <img src="./assets/license.png" alt="license" style="zoom: 33%;" />
 
 ### Configuration File
 

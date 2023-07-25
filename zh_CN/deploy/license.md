@@ -22,19 +22,21 @@ EMQX 企业版 5.0 采用与之前版本不同格式的 License，申请时请�
 
 ## 更新和设置 License 
 
-您可以通过 Dashboard 或配置文件更新 License 并且设置 License 连接配额使用。
+您可以通过 Dashboard 或配置文件更新 License 并且设置 License 连接配额使用水位线。
 
 ### Dashboard 
 
-1. 打开 EMQX Dasboard，从左侧导航目录点击**系统设置 **-> **License** 进入 **License** 页面。您可以看到 EMQX 当前 License 信息，包括**License 使用情况**、**到期时间**等信息。
+1. 打开 EMQX Dasboard，从左侧导航目录点击**系统设置 **-> **License**, 在 **License** 页面的**基础信息**区域，您可以看到 EMQX 当前 License 的基础信息，包括 License 连接配额使用情况、EMQX 版本信息和 License 签发信息等。
+
 2. 点击**更新 License** 按钮，在弹出框中粘贴您的 License Key，点击提交即可。提交完成后页面数据将刷新，请确认新的 License 文件是否生效。
+
 3. 在 **License 设置**区域，您可以配置 License 连接配额使用的水位限制。
-   - **使用量高水位线**：指定超过该百分比值将触 License 连接配额使用告警的限制。
+   - **使用量高水位线**：指定超过该百分比值将触发 License 连接配额使用告警的限制。
    - **使用低水位线**：指定低于该百分比值将取消 License 连接配额使用告警的限制。
 
 4. 点击**保存修改**保存您的设置。
 
-<!-- TODO 发版后提供截图 -->
+   <img src="/Users/emqx/Documents/GitHub/emqx-docs/zh_CN/deploy/assets/license.png" alt="license" style="zoom:33%;" />
 
 ### 配置文件
 
