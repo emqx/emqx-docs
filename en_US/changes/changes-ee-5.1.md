@@ -1,5 +1,243 @@
 # Releases
 
+## e5.1.1
+
+## Enhancements
+
+- [#10667](https://github.com/emqx/emqx/pull/10667) The MongoDB connector and bridge have been refactored to a separate app to improve code structure.
+
+- [#11115](https://github.com/emqx/emqx/pull/11115) Added info logs to indicate when buffered messages are dropped due to time-to-live (TTL) expiration.
+
+- [#11133](https://github.com/emqx/emqx/pull/11133) Rename `deliver_rate` to `delivery_rate` in the configuration of `retainer`.
+
+- [#11137](https://github.com/emqx/emqx/pull/11137) Refactors the dashboard listener configuration to use a nested `ssl_options` field for ssl settings.
+
+- [#11138](https://github.com/emqx/emqx/pull/11138) - Change k8s `api_server` default value from `http://127.0.0.1:9091` to `https://kubernetes.default.svc:443`
+  - `emqx_ctl conf show cluster` no longer displays irrelevant configuration items, such as when `discovery_strategy=static`,
+  it will not display configuration information related to `etcd/k8s/dns`.
+  - Remove `zones`(deprecated config key) from `emqx_ctl conf show_keys`
+
+- [#11165](https://github.com/emqx/emqx/pull/11165) Remove `/configs/limiter` api from `swagger.json`, only the api documentation was removed,
+  and the `/configs/limiter` api functionalities have not been changed.
+
+- [#11166](https://github.com/emqx/emqx/pull/11166) Added 3 random SQL functions to the rule engine.
+  - random(): Generates a random number between 0 and 1 (0.0 =< X < 1.0).
+  - uuid_v4(): Generates a random UUID (version 4) string.
+  - uuid_v4_no_hyphen(): Generates a random UUID (version 4) string without hyphens.
+
+- [#11180](https://github.com/emqx/emqx/pull/11180) Adding a new configuration API `/configs`(GET/PUT) that supports to reload the hocon format configuration file.
+
+- [#11226](https://github.com/emqx/emqx/pull/11226) Unify the listener switch to `enable`, while being compatible with the previous `enabled`.
+
+- [#11249](https://github.com/emqx/emqx/pull/11249) Support HTTP API for setting alarm watermark of license.
+
+- [#11251](https://github.com/emqx/emqx/pull/11251) Add `/cluster/topology` HTTP API endpoint
+
+  `GET` request to the endpoint returns the cluster topology: connections between RLOG core and replicant nodes.
+
+- [#11253](https://github.com/emqx/emqx/pull/11253) The Webhook/HTTP bridge has been refactored to its own Erlang application. This allows for more flexibility in the future, and also allows for the bridge to be run as a standalone application.
+
+- [#11079](https://github.com/emqx/emqx/pull/11079) Add support for custom headers in messages for Kafka producer bridge.
+
+- [#11132](https://github.com/emqx/emqx/pull/11132) Add support for MQTT action authorization based on QoS level and Retain flag values.
+  Now, EMQX can check by ACL whether a client has permission to publish/subscribe using a specified QoS level and to use retained messages.
+
+- [#11207](https://github.com/emqx/emqx/pull/11207) Update the dependent versions of multiple data bridges to enhance security and ensure that sensitive data will not be leaked.
+  Including:
+  - TDEngine
+  - MongoDB
+  - MySQL
+  - Clickhouse
+
+- [#11241](https://github.com/emqx/emqx/pull/11241) Schema Registry has been refactored to its own Erlang application. This allows for more flexibility in the future.
+
+- [#11020](https://github.com/emqx/emqx/pull/11020) Upgraded emqtt dependency to avoid sensitive data leakage in the debug log.
+
+- [#11135](https://github.com/emqx/emqx/pull/11135) Improve time offset parser in rules engine and return uniform error codes.
+
+- [#11236](https://github.com/emqx/emqx/pull/11236) Improve the speed of clients querying in HTTP API `/clients` endpoint with default parameters
+
+- [#11282](https://github.com/emqx/emqx/pull/11282) Added indexing to the rule engine's topic matching to improve rule search performance.
+
+## Bug Fixes
+
+- [#11004](https://github.com/emqx/emqx/pull/11004) Do not allow wildcards for destination topic in rewrite rules.
+
+- [#11026](https://github.com/emqx/emqx/pull/11026) Addressed an inconsistency in the usage of 'div' and 'mod' operations within the rule engine. Previously, the 'div' operation was only usable as an infix operation and 'mod' could only be applied through a function call. With this change, both 'div' and 'mod' can be used via function call syntax and infix syntax.
+
+- [#11037](https://github.com/emqx/emqx/pull/11037) When starting an HTTP connector EMQX now returns a descriptive error in case the system is unable to connect to the remote target system.
+
+- [#11039](https://github.com/emqx/emqx/pull/11039) Fixed database number validation for Redis connector. Previously negative numbers were accepted as valid database numbers.
+
+- [#11074](https://github.com/emqx/emqx/pull/11074) Fix to adhere to Protocol spec MQTT-5.0 [MQTT-3.8.3-4].
+
+- [#11077](https://github.com/emqx/emqx/pull/11077) Fixes crash when updating binding with a non-integer port.
+
+- [#11094](https://github.com/emqx/emqx/pull/11094) Fixed an issue where connection errors in Kafka Producer would not be reported when reconnecting the bridge.
+
+- [#11103](https://github.com/emqx/emqx/pull/11103) Updated `erlcloud` dependency.
+
+- [#11106](https://github.com/emqx/emqx/pull/11106) Added a validation for the maximum number of pool workers of a bridge.
+
+  Now the maximum amount is 1024 to avoid large memory consumption from an unreasonable number of workers.
+
+- [#11118](https://github.com/emqx/emqx/pull/11118) Ensure that validation errors in REST API responses are slightly less confusing. Now, if there are out-of-range errors, they will be presented as `{"value": 42, "reason": {"expected": "1..10"}, ...}`, replacing the previous usage of `expected_type` with `expected`.
+
+- [#11126](https://github.com/emqx/emqx/pull/11126) Rule metrics for async mode bridges will set failure counters correctly now.
+
+- [#11134](https://github.com/emqx/emqx/pull/11134) Fix the value of the uppercase `authorization` header is not obfuscated.
+
+- [#11139](https://github.com/emqx/emqx/pull/11139) The Redis connector has been refactored to its own Erlang application to improve the code structure.
+
+- [#11145](https://github.com/emqx/emqx/pull/11145) Add several fixes and improvements in Ekka and Mria.
+
+  Ekka:
+  - improve cluster discovery log messages to consistently describe actual events
+  [Ekka PR](https://github.com/emqx/ekka/pull/204)
+  - remove deprecated cluster auto-clean configuration parameter (it has been moved to Mria)
+  [Ekka PR](https://github.com/emqx/ekka/pull/203)
+
+  Mria:
+  - ping only running replicant nodes. Previously, `mria_lb` was trying to ping both stopped and running
+  replicant nodes, which might result in timeout errors.
+  [Mria PR](https://github.com/emqx/mria/pull/146)
+  - use `null_copies` storage when copying `$mria_rlog_sync` table.
+  This fix has no effect on EMQX for now, as `$mria_rlog_sync` is only used in `mria:sync_transaction/2,3,4`,
+  which is not utilized by EMQX.
+  [Mria PR](https://github.com/emqx/mria/pull/144)
+
+- [#11148](https://github.com/emqx/emqx/pull/11148) Fix when a node has left the cluster, other nodes still try to synchronize configuration update operations to it.
+
+- [#11150](https://github.com/emqx/emqx/pull/11150) Wait for Mria table when emqx_psk app is being started to ensure that
+  PSK data is synced to replicant nodes even if they don't have init PSK file.
+
+- [#11151](https://github.com/emqx/emqx/pull/11151) The MySQL connector has been refactored to its own Erlang application to improve the code structure.
+
+- [#11158](https://github.com/emqx/emqx/pull/11158) Wait for Mria table when the mnesia backend of retainer starts to avoid a possible error of the retainer when joining a cluster.
+
+- [#11162](https://github.com/emqx/emqx/pull/11162) Fixed an issue in webhook bridge where, in async query mode, HTTP status codes like 4XX and 5XX would be treated as successes in the bridge metrics.
+
+- [#11164](https://github.com/emqx/emqx/pull/11164) Reintroduced support for nested (i.e.: `${payload.a.b.c}`) placeholders for extracting data from rule action messages without the need for calling `json_decode(payload)` first.
+
+- [#11172](https://github.com/emqx/emqx/pull/11172) Fix the `payload` will be duplicated in the below situations:
+  - Use a `foreach` sentence without  the `as` sub-expression and select all fields(use the `*` or omitted the `do` sub-expression)
+
+  For example:
+
+  `FOREACH payload.sensors FROM "t/#"`
+  - Select the `payload` field and all fields
+
+  For example:
+
+  `SELECT payload.sensors, * FROM "t/#"`
+
+- [#11174](https://github.com/emqx/emqx/pull/11174) Fixed the encoding of the `server` key coming from an ingress MQTT bridge.
+
+  Before the fix, it was being encoded as a list of integers corresponding to the ASCII characters of the server string.
+
+- [#11184](https://github.com/emqx/emqx/pull/11184) Config value for `max_packet_size` has a max value of 256MB defined by protocol. This is now enforced and any configuration with a value greater than that will break.
+
+- [#11192](https://github.com/emqx/emqx/pull/11192) Fix produces valid HOCON file when atom type is used.
+  Remove unnecessary `"` from HOCON file.
+
+- [#11195](https://github.com/emqx/emqx/pull/11195) Avoid to create duplicated subscription by HTTP API or client in Stomp gateway
+
+- [#11206](https://github.com/emqx/emqx/pull/11206) Make the username and password params of CoAP client to optional in connection mode.
+
+- [#11208](https://github.com/emqx/emqx/pull/11208) Fix the issue of abnormal data statistics for LwM2M client.
+
+- [#11211](https://github.com/emqx/emqx/pull/11211) Consistently return `404` for `DELETE` operations on non-existent resources.
+
+- [#11214](https://github.com/emqx/emqx/pull/11214) Fix a bug where node configuration may fail to synchronize correctly when joining the cluster.
+
+- [#11229](https://github.com/emqx/emqx/pull/11229) Fixed an issue preventing plugins from starting/stopping after changing configuration via `emqx ctl conf load`.
+
+- [#11237](https://github.com/emqx/emqx/pull/11237) The `headers` default value in /prometheus API should be a map instead of a list.
+
+- [#11250](https://github.com/emqx/emqx/pull/11250) Fix while a WebSocket packet contains more than one MQTT packet, the order of MQTT packets will be reversed.
+
+
+- [#11271](https://github.com/emqx/emqx/pull/11271) Ensure that the range of percentage type is from 0% to 100%.
+
+- [#11272](https://github.com/emqx/emqx/pull/11272) Fix a typo in the log, when EMQX received an abnormal `PUBREL` packet, the `pubrel` was mistakenly typo as `pubrec`.
+
+- [#11281](https://github.com/emqx/emqx/pull/11281) Restored support for the special `$queue/` shared subscription.
+
+- [#11294](https://github.com/emqx/emqx/pull/11294) Fix `emqx_ctl cluster join`, `leave`, and `status` commands.
+
+- [#11306](https://github.com/emqx/emqx/pull/11306) Fixed rule action metrics inconsistency where dropped requests were not accounted for.
+
+- [#11309](https://github.com/emqx/emqx/pull/11309) Improve startup order of EMQX applications.
+  Simplify build scripts and improve code reuse.
+
+- [#11322](https://github.com/emqx/emqx/pull/11322) Import additional configurations from EMQX backup file (`emqx ctl import` command):
+  - rule_engine (previously not imported due to the bug)
+  - topic_metrics (previously not implemented)
+  - slow_subs (previously not implemented).
+
+- [#10645](https://github.com/emqx/emqx/pull/10645) Changes health check for Oracle Database, PostgreSql, MySql and Kafka Producer data bridges to ensure target table/topic exists.
+
+- [#11090](https://github.com/emqx/emqx/pull/11090) Fixed a configuration that prevented the pipelining option from being correctly set for GCP PubSub Producer bridge.
+
+- [#11107](https://github.com/emqx/emqx/pull/11107) Now we return the health check failure reason when probing a MongoDB bridge.
+
+- [#11139](https://github.com/emqx/emqx/pull/11139) The Redis bridge has been refactored to its own Erlang application to improve the code structure and to make it easier to maintain.
+
+- [#11151](https://github.com/emqx/emqx/pull/11151) The MySQL bridge has been refactored to its own Erlang application to improve the code structure and to make it easier to maintain.
+
+- [#11163](https://github.com/emqx/emqx/pull/11163) Fixed `topology.pool_size = 1` and hid such option from users for MondoDB bridges to avoid confusion.
+
+- [#11175](https://github.com/emqx/emqx/pull/11175) Now when using a nonexistent hostname for connecting to MySQL will result in a 400 error rather than 503 in the HTTP API.
+
+- [#11198](https://github.com/emqx/emqx/pull/11198) Fix global rebalance status evaluation on replicant nodes.
+  Previously, `/api/v5/load_rebalance/global_status` API method could return incomplete results if handled by a replicant node.
+
+- [#11223](https://github.com/emqx/emqx/pull/11223) In InfluxDB bridging, if intend to write using the float data type but the placeholder represents the original value
+  as an integer without a decimal point during serialization, it will result in the failure of Influx Line Protocol serialization
+  and the inability to write to the InfluxDB bridge.
+
+  See also: [InfluxDB v2.7 Line-Protocol](https://docs.influxdata.com/influxdb/v2.7/reference/syntax/line-protocol/#float)
+
+- [#11225](https://github.com/emqx/emqx/pull/11225) Fix the `username` of PostgreSQL/Timescale/MatrixDB bridges could be empty
+
+- [#11242](https://github.com/emqx/emqx/pull/11242) Restart emqx_ee_schema_registry when a node joins a cluster.
+
+  As emqx_ee_schema_registry uses Mria tables, a node joining a cluster needs to restart this application in order to
+  start relevant Mria shard processes.
+  This is needed to ensure a correct behaviour in Core/Replicant mode.
+
+- [#11266](https://github.com/emqx/emqx/pull/11266) Fix and improve support for TDEngine `insert` syntax.
+
+  1. Support inserting into multi-table in the template
+
+  For example:
+
+  `insert into table_1 values (${ts}, '${id}', '${topic}')
+  table_2 values (${ts}, '${id}', '${topic}')`
+
+  2. Support mixing prefixes/suffixes and placeholders in the template
+
+  For example:
+
+  `insert into table_${topic} values (${ts}, '${id}', '${topic}')`
+
+  Note: This is a breaking change. Previously the values of string type were quoted automatically, but now they must be quoted explicitly.
+
+  For example:
+
+  `insert into table values (${ts}, '${a_string}')`
+
+- [#11307](https://github.com/emqx/emqx/pull/11307) Fixed check for table existence to return a more friendly message in the Oracle bridge.
+
+- [#11316](https://github.com/emqx/emqx/pull/11316) Fixed Pool Size value not being considered in Oracle Bridge.
+
+- [#11326](https://github.com/emqx/emqx/pull/11326) Fixed return error checking on table validation in the Oracle bridge.
+
+### [Breaking Changes](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/breaking-changes-5.1.1.md)
+
+### [Known Issues](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/known-issues-5.1.1.md)
+
+
 ## e5.1.0
 
 ### Enhancements
@@ -134,6 +372,6 @@
 -   [#11092](https://github.com/emqx/emqx/pull/11092) and [#11100](https://github.com/emqx/emqx/pull/11100) Fixed problem when replicat nodes were unable to connect to the core node due to timeout in `mria_lb:core_nodes()` call.
     Relevant mria pull request: [https://github.com/emqx/mria/pull/143](https://github.com/emqx/mria/pull/143)
 
-## [Breaking Changes](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/breaking-changes-5.1.0.md)
+### [Breaking Changes](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/breaking-changes-5.1.0.md)
 
-## [Known Issues](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/known-issues-5.1.0.md)
+### [Known Issues](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/known-issues-5.1.0.md)
