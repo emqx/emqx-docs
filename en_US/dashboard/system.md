@@ -22,7 +22,9 @@ Click on the API key name to view the key details; click on the `Edit` button to
 
 ## License
 
-Click on **License** under the **System** menu on the left to access the License page. On this page, you can view the basic information of your current License, including the **Issued To**, **License Usage**, **EMQX Version Information**, **Issued Email**, **Issuance Time**, and **Expiration Time**. Click **Update License** to upload your License Key. In the **License Settings** section, you can set the high and low watermark limits for the license connection quota usage.
+Click on **License** under the **System** menu on the left to access the License page. On this page, you can view the basic information of your current License, including the License connection quota usage, EMQX version, customer, and issue information. Click **Update License** to upload your License Key. In the **License Settings** section, you can set the high and low watermark limits for the license connection quota usage.
+
+<img src="./assets/license.png" alt="license" style="zoom:35%;" />
 
 ## Settings
 
