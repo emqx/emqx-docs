@@ -14,6 +14,10 @@ EMQX 在 REST API 上做了版本控制，EMQX 5.0.0 以后的所有 API 调用�
 
 EMQX 的 REST API 使用 [HTTP Basic 认证](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication#%E9%80%9A%E7%94%A8%E7%9A%84_http_%E8%AE%A4%E8%AF%81%E6%A1%86%E6%9E%B6) 携带认证凭据，您可以在 Dashboard **系统设置** -> **API 密钥** 界面中创建用于认证的 API 密钥，详细操作请参考 [Dashboard - API 密钥](../dashboard/system.md#api-密钥)。
 
+:::tip
+出于安全考虑，从 EMQX 5.0.0 开始 Dashboard 用户无法用于 REST API 认证。
+:::
+
 使用生成的 API Key 以及 Secret Key 分别作为 Basic 认证的用户名与密码，请求示例如下：
 
 :::: tabs type:card

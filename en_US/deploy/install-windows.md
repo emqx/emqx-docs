@@ -1,6 +1,6 @@
 # Windows
 
-This section will guide you on installing and starting EMQX on Windows with a zip file.
+This page guides you on installing and starting EMQX on Windows with a zip file.
 
 :::tip
 It is recommended only to use EMQX for development and testing on Windows. And it is recommended to [run EMQX with Docker](./install-docker.md).

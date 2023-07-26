@@ -14,14 +14,14 @@ MQTT specification does not define any standard way to transfer files. Instead, 
 
 The following features are the highlights of the File Transfer over MQTT capability:
 
-* The entire file transfer process takes place over MQTT, using the same connection for other MQTT operations. No additional connections are required.
+* Supports sharing the same MQTT connection with other services, fully leveraging the existing client management system.
 
-* The file transfer is chunked so that the process does not consume excessive memory, allowing file transfers to be performed even on lightweight clients. The client device can send the file in small chunks, and EMQX will reassemble the chunks into the original file.
+* Enables chunked transmission, allowing lightweight clients to handle large files and facilitating the transfer of files exceeding the MQTT protocol size limit (256MB).
 
-* The file transfer is resumable so that the client device can resume the transfer from where it was interrupted.
+* Supports resumable file transfer, allowing client devices to pause file transmission at any time for higher-priority data transfers or to resume transmission after a network interruption.
 
-* The file transfer commands and finalization process are designed to be idempotent. This means that the client device can safely retry chunk transfers or the finalization command without worrying about creating duplicate files on EMQX. 
+* Ensures reliability by using QoS 1 level messages for transmission, providing verification and retransmission mechanisms to ensure file transfer integrity.
 
-* The file transfer allows exporting uploaded files to a dedicated local directory on the EMQX or S3-compatible object storage.
+* Offers flexible storage configuration, allowing uploaded files to be saved to a designated local directory or an S3-compatible object storage for convenient future use.
 
   <!-- "The Dashboard allows listing and downloading files uploaded to the broker." This is not implemented in Dashboard yet.-->
