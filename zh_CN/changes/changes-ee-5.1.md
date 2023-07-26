@@ -1,5 +1,222 @@
 # 版本发布
 
+## 增强
+
+- [#10667](https://github.com/emqx/emqx/pull/10667) 将 MongoDB 连接器和桥接重构为单独的应用程序，以改进代码结构。
+
+- [#11115](https://github.com/emqx/emqx/pull/11115) 添加了信息日志，标示由于存活时间（TTL）过期而丢弃的缓冲消息。
+
+- [#11133](https://github.com/emqx/emqx/pull/11133) 在 `retainer` 的配置中将 `deliver_rate` 重命名为 `delivery_rate`。
+
+- [#11137](https://github.com/emqx/emqx/pull/11137) 重构了 Dashboard 监听器配置，使用嵌套的 `ssl_options` 字段来进行 SSL 设置。
+
+- [#11138](https://github.com/emqx/emqx/pull/11138)  将k8s `api_server `的默认值从 `http://127.0.0.1:9091 ` 更改为 `https://kubernetes.default.svc:443`。
+
+  - 当 `discovery_strategy=static` 时，`emqx_ctl conf show cluster` 不再显示不相关的配置项。 与`etcd/k8s/dns` 相关的配置信息将不再显示。
+  - 从 `emqx_ctl conf show_keys` 中删除了 `zones`（已弃用的配置键）。
+
+- [#11165](https://github.com/emqx/emqx/pull/11165) 从 `swagger.json` 中删除了 `/configs/limiter` API。仅删除了 API 文档，`/configs/limiter` API的功能保持不变。
+
+- [#11166](https://github.com/emqx/emqx/pull/11166) 在规则引擎中添加了3个随机SQL函数：
+
+  - `random()`: 生成0到1之间的随机数（0.0 =< X < 1.0）。
+  - `uuid_v4()`: 生成随机 UUID（版本4）字符串。
+  - `uuid_v4_no_hyphen()`: 生成无连字符的随机 UUID（版本4）字符串。
+
+- [#11180](https://github.com/emqx/emqx/pull/11180) 添加了一个新的配置 API `/configs`（GET/PUT），支持重新加载 Hocon 格式的配置文件。
+
+- [#11226](https://github.com/emqx/emqx/pull/11226) 统一监听器开关为`enable`，同时兼容之前的`enabled`。
+
+- [#11249](https://github.com/emqx/emqx/pull/11249) 添加了支持通过HTTP API设置 License 连接使用配额的警戒水位。
+
+- [#11251](https://github.com/emqx/emqx/pull/11251) 添加了 `/cluster/topology` HTTP API端点：
+
+  对该端点的 `GET` 请求返回集群拓扑，显示 RLOG核心节点和复制节点之间的连接。
+
+- [#11253](https://github.com/emqx/emqx/pull/11253) 将 Webhook/HTTP 桥接重构为单独的 Erlang 应用程序，为将来的使用提供了灵活性，并允许将桥接作为独立应用程序运行。
+
+- [#11079](https://github.com/emqx/emqx/pull/11079) 生产者桥接中的消息添加了自定义 headers 支持。
+
+- [#11132](https://github.com/emqx/emqx/pull/11132) 添加了基于 QoS 级别和保留消息标志值的 MQTT 动作授权支持。现在 EMQX 可以检查ACL，以验证客户端是否有权限使用指定的 QoS 级别发布/订阅以及使用保留消息。
+
+- [#11207](https://github.com/emqx/emqx/pull/11207) 更新了多个数据桥接的依赖版本，以增强安全性并确保敏感数据不会泄露。包括：
+
+  - TDEngine
+  - MongoDB
+  - MySQL
+  - Clickhouse
+
+- [#11241](https://github.com/emqx/emqx/pull/11241) 将Schema Registry 重构为单独的 Erlang 应用程序以提供灵活性。
+
+- [#11020](https://github.com/emqx/emqx/pull/11020) 升级了emqtt 依赖项，以防止调试日志中的敏感数据泄漏。
+
+- [#11135](https://github.com/emqx/emqx/pull/11135) 改进了规则引擎中的时间偏移解析器，并返回统一的错误代码。
+
+- [#11236](https://github.com/emqx/emqx/pull/11236) 在默认参数下，改进了HTTP API `/clients` 端点中客户端查询的速度。
+
+- [#11282](https://github.com/emqx/emqx/pull/11282) 对规则引擎的主题匹配添加了索引，以提高规则搜索性能。
+
+## 修复
+
+- [#11004](https://github.com/emqx/emqx/pull/11004) 不再允许在重写规则的目标主题中使用通配符。
+
+- [#11026](https://github.com/emqx/emqx/pull/11026) 解决了规则引擎中 `div` 和 `mod` 操作使用的一致性问题。之前，`div` 操作只能作为中缀操作使用，`mod `只能通过函数调用应用。现在，`div `和 `mod` 都可以通过函数调用语法和中缀语法使用。
+
+- [#11037](https://github.com/emqx/emqx/pull/11037) 启动 HTTP 连接器时，如果系统无法连接到远程目标系统，EMQX 现在会返回一个描述性错误。
+
+- [#11039](https://github.com/emqx/emqx/pull/11039) 修复了 Redis 连接器的数据库编号验证问题。之前，负数被接受为有效的数据库编号。
+
+- [#11074](https://github.com/emqx/emqx/pull/11074) 修复了有关 MQTT-5.0 [MQTT-3.8.3-4] 协议内容的问题。
+
+- [#11077](https://github.com/emqx/emqx/pull/11077) 修复了在更新带有非整数端口的绑定时可能发生崩溃的问题。
+
+- [#11094](https://github.com/emqx/emqx/pull/11094) 修复了 Kafka 生产者桥接在重新连接时无法报告连接错误的问题。
+
+- [#11103](https://github.com/emqx/emqx/pull/11103) 更新了 `erlcloud` 依赖项。
+
+- [#11106](https://github.com/emqx/emqx/pull/11106) 添加了对桥接资源 `worker_pool_size` 的最大数量的验证。现在最大数量为1024，以避免因不合理数量的工作进程导致大内存消耗。
+
+- [#11118](https://github.com/emqx/emqx/pull/11118) 确保 REST API 响应中的验证错误信息更加明确。现在，如果有超出范围的错误，将呈现为`{"value": 42, "reason": {"expected": "1..10"}, ...}`，替换了先前使用的 `expected_type`，改为使用 `expected`。
+
+- [#11126](https://github.com/emqx/emqx/pull/11126) 异步模式桥接的规则指标现在将正确设置失败计数。
+
+- [#11134](https://github.com/emqx/emqx/pull/11134) 修复了大写 `authorization` header的值不被混淆的问题。
+
+- [#11139](https://github.com/emqx/emqx/pull/11139) 将 Redis 桥接器重构为单独的Erlang应用程序，以改进代码结构。
+
+- [#11145](https://github.com/emqx/emqx/pull/11145) 在 Ekka 和 Mria 中进行了几处修复和改进。
+
+  Ekka:
+
+  - 改进了集群发现日志消息，以一致地描述实际事件 [Ekka PR](https://github.com/emqx/ekka/pull/204)。
+  - 删除了弃用的集群自动清理配置参数（已移动到 Mria） [Ekka PR](https://github.com/emqx/ekka/pull/203)。
+
+  Mria:
+
+  - 现在 Ping 只在复制节点上运行。之前，`mria_lb `尝试同时 ping 停止和运行中的复制节点，可能导致超时错误。 [Mria PR](https://github.com/emqx/mria/pull/146)
+  - 在复制 `$mria_rlog_sync` 表时使用 `null_copies` 存储。 此修复对 EMQX 目前没有影响，因为 `$mria_rlog_sync`仅在 `mria:sync_transaction/2,3,4` 中使用，而这在 EMQX 中未被使用。 [Mria PR](https://github.com/emqx/mria/pull/144)
+
+- [#11148](https://github.com/emqx/emqx/pull/11148) 修复了一个问题：当一个节点离开集群时，其他节点仍然尝试将配置更新操作同步到它。
+
+- [#11150](https://github.com/emqx/emqx/pull/11150) 在启动 emqx_psk 应用程序时等待 Mria 表，确保 PSK 数据在复制节点上同步，即使它们没有初始化PSK 文件。
+
+- [#11151](https://github.com/emqx/emqx/pull/11151) 将 MySQL 桥接重构为单独的Erlang应用程序，以改进代码结构。
+
+- [#11158](https://github.com/emqx/emqx/pull/11158) 在 Mnesia 后端的 retainer 启动时等待 Mria 表，避免加入集群时保留器可能出现错误。
+
+- [#11162](https://github.com/emqx/emqx/pull/11162) 修复了 Webhook 桥接中异步查询模式下，HTTP 状态码如 4XX 和 5XX 在桥接统计指标中被视为成功的问题。
+
+- [#11164](https://github.com/emqx/emqx/pull/11164) 重新引入对嵌套（例如：`${payload.a.b.c}`）占位符的支持，以从规则动作消息中提取数据，无需先调用 `json_decode(payload)`。
+
+- [#11172](https://github.com/emqx/emqx/pull/11172) 修复了以下情况下 `payload` 重复的问题：
+
+  - 在使用 `foreach` 语句而不带 `as` 子表达式并选择所有字段（使用 `*` 或省略 `do` 子表达式）的情况下。
+
+  例如：
+
+  ```
+  FOREACH payload.sensors FROM "t/#"
+  ```
+
+  - 在选择 `payload` 字段和所有字段的情况下。
+
+  例如：
+
+  ```
+  SELECT payload.sensors, * FROM "t/#"
+  ```
+
+- [#11174](https://github.com/emqx/emqx/pull/11174) 修复了来自 Ingress MQTT 桥接的 `server` 键的编码问题。在修复之前，它被编码为 ASCII 字符对应的整数列表。
+
+- [#11184](https://github.com/emqx/emqx/pull/11184) `max_packet_size `的配置值现在具有协议定义的最大值为 256MB。现在强制执行此限制，任何超过该值的配置将导致破坏性变更。
+
+- [#11192](https://github.com/emqx/emqx/pull/11192) 修复了在使用 atom 类型生成有效 HOCON 文件时，从 HOCON 文件中删除不必要的 `"`。
+
+- [#11195](https://github.com/emqx/emqx/pull/11195) 避免了通过HTTP API或客户端在 Stomp 网关创建重复订阅。
+
+- [#11206](https://github.com/emqx/emqx/pull/11206) 在连接模式中，使CoAP客户端的 `username` 和 `password` 参数可选。
+
+- [#11208](https://github.com/emqx/emqx/pull/11208) 修复了 LwM2M 客户端异常数据统计的问题。
+
+- [#11211](https://github.com/emqx/emqx/pull/11211) 对于 `DELETE` 操作，一致性地返回 `404` 状态码，以表示不存在的资源。
+
+- [#11214](https://github.com/emqx/emqx/pull/11214) 修复了节点配置可能在加入集群时无法正确同步的问题。
+
+- [#11229](https://github.com/emqx/emqx/pull/11229) 修复了在通过 `emqx ctl conf load` 更改配置后，插件无法启动/停止的问题。
+
+- [#11237](https://github.com/emqx/emqx/pull/11237)  `/prometheus` API中 `headers` 的默认值应为映射而不是列表。
+
+- [#11250](https://github.com/emqx/emqx/pull/11250) 修复了 WebSocket 数据包中包含多个 MQTT 数据包时其顺序被颠倒的问题。
+
+
+- [#11271](https://github.com/emqx/emqx/pull/11271) 确保百分比类型的范围为 0% 到 100%。
+
+- [#11272](https://github.com/emqx/emqx/pull/11272) 修复了日志中的拼写错误，错误地将异常 `PUBREL` 数据包称为 `pubrec`。
+
+- [#11281](https://github.com/emqx/emqx/pull/11281) 恢复对特殊的 `$queue/` 共享订阅的支持。
+
+- [#11294](https://github.com/emqx/emqx/pull/11294) 修复了`emqx_ctl cluster join`，`leave`和`status`命令。
+
+- [#11306](https://github.com/emqx/emqx/pull/11306) 修复了规则动作指标不一致的问题，未计算丢弃的请求。
+
+- [#11309](https://github.com/emqx/emqx/pull/11309) 改进了 EMQX 应用程序的启动顺序。简化了构建脚本，并改进了代码重用。
+
+- [#11322](https://github.com/emqx/emqx/pull/11322) 从 EMQX 备份文件（`emqx ctl import `命令）中导入了其他配置：
+
+  - rule_engine（以前由于错误未导入）
+  - topic_metrics（以前未实现）
+  - slow_subs（以前未实现）。
+
+- [#10645](https://github.com/emqx/emqx/pull/10645) 更改了对 Oracle Database、PostgreSql、MySql 和 Kafka 生产者数据桥接的健康检查，以确保目标表/主题存在。
+
+- [#11107](https://github.com/emqx/emqx/pull/11107) 现在在探测 MongoDB 桥接时返回健康检查失败原因。
+
+- [#11139](https://github.com/emqx/emqx/pull/11139) 将 Redis 桥接重构为单独的 Erlang 应用程序，以改进代码结构和易维护性。
+
+- [#11151](https://github.com/emqx/emqx/pull/11151) 将 MySQL 桥接重构为单独的 Erlang 应用程序，以改进代码结构和易维护性。
+
+- [#11163](https://github.com/emqx/emqx/pull/11163) 修复了MondoDB 桥接中的 `topology.pool_size = 1`，并将该选项对用户隐藏，以避免混淆。
+
+- [#11175](https://github.com/emqx/emqx/pull/11175) 现在，在连接 MySQL 时使用不存在的主机名时，在HTTP API 中将返回 400 错误而不是 503 错误。
+
+- [#11198](https://github.com/emqx/emqx/pull/11198) 修复了复制节点上全局再平衡状态评估。之前，`/api/v5/load_rebalance/global_status` API method 可能在由复制节点处理时返回不完整的结果。
+
+- [#11223](https://github.com/emqx/emqx/pull/11223) 在 InfluxDB 桥接时，如果要使用浮点数据类型但在序列化期间占位符表示原始值为没有小数点的整数，可能导致 Influx Line Protocol 序列化失败，并且无法写入 InfluxDB 桥接。
+
+  另请参阅：[InfluxDB v2.7 Line-Protocol](https://docs.influxdata.com/influxdb/v2.7/reference/syntax/line-protocol/#float)。
+
+- [#11225](https://github.com/emqx/emqx/pull/11225) 修复了PostgreSQL/Timescale/MatrixDB 桥接的 `username` 可能为空的问题。
+
+- [#11242](https://github.com/emqx/emqx/pull/11242) 当节点加入集群时重新启动 emqx_ee_schema_registry。因为 emqx_ee_schema_registry 使用 Mria 表，所以节点加入集群需要重新启动此应用程序，以启动相关的 Mria 分片进程，确保在核心/复制节点模式下正确工作。
+
+- [#11266](https://github.com/emqx/emqx/pull/11266) 修复和改进对 TDEngine  `insert `语法的支持：
+
+  1. 支持在模板中插入多表。
+
+     例如：
+
+     `insert into table_1 values (${ts}, ${val}) into table_2 values (${ts}, ${val})`
+
+  2. 支持在模版中混合前缀/后缀和占位符。
+
+     例如：
+
+     `insert into table_${topic} values (${ts}, '${id}', '${topic}')`
+
+     注意：这是一个破坏性变更。此前，字符类型的占位符会被自动转义加上单引号，而现在需要手动加上单引号。
+
+     例如：
+
+     `insert into table values (${ts}, '${a_string}')`
+
+- [#11307](https://github.com/emqx/emqx/pull/11307) 修复了在 Oracle 桥接中检查表是否存在时返回更友好的错误信息。
+
+- [#11316](https://github.com/emqx/emqx/pull/11316) 修复了在 Oracle 桥接中未考虑 Pool Size 值的问题。
+
+- [#11326](https://github.com/emqx/emqx/pull/11326) 修复了在 Oracle 桥接中返回错误检查的问题。
+
+### [已知问题](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/known-issues-5.1.1.md)
+
 ## e5.1.0
 
 ### 增强
