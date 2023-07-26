@@ -27,17 +27,15 @@
 
 - [#11226](https://github.com/emqx/emqx/pull/11226) 统一监听器开关为`enable`，同时兼容之前的`enabled`。
 
-- [#11249](https://github.com/emqx/emqx/pull/11249) 添加了支持通过HTTP API设置 License 连接使用配额的警戒水位。
+- [#11249](https://github.com/emqx/emqx/pull/11249) 添加了 `/license/setting` HTTP API 端点用来读取和更新 License 连接使用配额的警戒水位。
 
-- [#11251](https://github.com/emqx/emqx/pull/11251) 添加了 `/cluster/topology` HTTP API端点：
-
-  对该端点的 `GET` 请求返回集群拓扑，显示 RLOG核心节点和复制节点之间的连接。
+- [#11251](https://github.com/emqx/emqx/pull/11251) 添加了 `/cluster/topology` HTTP API端点。对该端点的 `GET` 请求返回集群拓扑，显示 RLOG核心节点和复制节点之间的连接。
 
 - [#11253](https://github.com/emqx/emqx/pull/11253) 将 Webhook/HTTP 桥接重构为单独的 Erlang 应用程序，为将来的使用提供了灵活性，并允许将桥接作为独立应用程序运行。
 
 - [#11079](https://github.com/emqx/emqx/pull/11079) 生产者桥接中的消息添加了自定义 headers 支持。
 
-- [#11132](https://github.com/emqx/emqx/pull/11132) 添加了基于 QoS 级别和保留消息标志值的 MQTT 动作授权支持。现在 EMQX 可以检查ACL，以验证客户端是否有权限使用指定的 QoS 级别发布/订阅以及使用保留消息。
+- [#11132](https://github.com/emqx/emqx/pull/11132) 添加了基于 QoS 级别和保留消息标志值的 MQTT 动作授权支持。现在 EMQX 可以使用 ACL 来验证客户端是否有权限发布/订阅指定某个 QoS 级别的消息以及是否有权限写保留消息。
 
 - [#11207](https://github.com/emqx/emqx/pull/11207) 更新了多个数据桥接的依赖版本，以增强安全性并确保敏感数据不会泄露。包括：
 
@@ -60,7 +58,7 @@
 
 - [#11004](https://github.com/emqx/emqx/pull/11004) 不再允许在重写规则的目标主题中使用通配符。
 
-- [#11026](https://github.com/emqx/emqx/pull/11026) 解决了规则引擎中 `div` 和 `mod` 操作使用的一致性问题。之前，`div` 操作只能作为中缀操作使用，`mod `只能通过函数调用应用。现在，`div `和 `mod` 都可以通过函数调用语法和中缀语法使用。
+- [#11026](https://github.com/emqx/emqx/pull/11026) 解决了规则引擎中 `div` 和 `mod` 操作使用的一致性问题。之前，`div` 操作只能作为中缀操作使用，`mod ` 只能通过函数调用应用。现在，`div ` 和 `mod` 都可以通过函数调用语法和中缀语法使用。
 
 - [#11037](https://github.com/emqx/emqx/pull/11037) 启动 HTTP 连接器时，如果系统无法连接到远程目标系统，EMQX 现在会返回一个描述性错误。
 
@@ -96,7 +94,7 @@
   - 现在 Ping 只在复制节点上运行。之前，`mria_lb `尝试同时 ping 停止和运行中的复制节点，可能导致超时错误。 [Mria PR](https://github.com/emqx/mria/pull/146)
   - 在复制 `$mria_rlog_sync` 表时使用 `null_copies` 存储。 此修复对 EMQX 目前没有影响，因为 `$mria_rlog_sync`仅在 `mria:sync_transaction/2,3,4` 中使用，而这在 EMQX 中未被使用。 [Mria PR](https://github.com/emqx/mria/pull/144)
 
-- [#11148](https://github.com/emqx/emqx/pull/11148) 修复了一个问题：当一个节点离开集群时，其他节点仍然尝试将配置更新操作同步到它。
+- [#11148](https://github.com/emqx/emqx/pull/11148) 修复了节点在尝试将配置更新操作同步到已经离开集群的节点时出现的问题。
 
 - [#11150](https://github.com/emqx/emqx/pull/11150) 在启动 emqx_psk 应用程序时等待 Mria 表，确保 PSK 数据在复制节点上同步，即使它们没有初始化PSK 文件。
 
@@ -108,22 +106,18 @@
 
 - [#11164](https://github.com/emqx/emqx/pull/11164) 重新引入对嵌套（例如：`${payload.a.b.c}`）占位符的支持，以从规则动作消息中提取数据，无需先调用 `json_decode(payload)`。
 
-- [#11172](https://github.com/emqx/emqx/pull/11172) 修复了以下情况下 `payload` 重复的问题：
+- [#11172](https://github.com/emqx/emqx/pull/11172) 修复了规则引擎 SQL 中的 `payload` 字段在以下情况下出现重复的问题：
 
-  - 在使用 `foreach` 语句而不带 `as` 子表达式并选择所有字段（使用 `*` 或省略 `do` 子表达式）的情况下。
-
-  例如：
+  - 在使用 `foreach` 语句而不带 `as` 子表达式并选择所有字段（使用 `*` 或省略 `do` 子表达式）的情况下，例如：
 
   ```
-  FOREACH payload.sensors FROM "t/#"
+FOREACH payload.sensors FROM "t/#"
   ```
-
-  - 在选择 `payload` 字段和所有字段的情况下。
-
-  例如：
+  
+  - 在选择 `payload` 字段和所有字段的情况下，例如：
 
   ```
-  SELECT payload.sensors, * FROM "t/#"
+SELECT payload.sensors, * FROM "t/#"
   ```
 
 - [#11174](https://github.com/emqx/emqx/pull/11174) 修复了来自 Ingress MQTT 桥接的 `server` 键的编码问题。在修复之前，它被编码为 ASCII 字符对应的整数列表。
@@ -149,13 +143,13 @@
 - [#11250](https://github.com/emqx/emqx/pull/11250) 修复了 WebSocket 数据包中包含多个 MQTT 数据包时其顺序被颠倒的问题。
 
 
-- [#11271](https://github.com/emqx/emqx/pull/11271) 确保百分比类型的范围为 0% 到 100%。
+- [#11271](https://github.com/emqx/emqx/pull/11271) 确保所有百分比类型的配置范围为 0% 到 100%。比如 `sysom.os.sysmem_high_watermark=101%` 现在是无效的设置。
 
 - [#11272](https://github.com/emqx/emqx/pull/11272) 修复了日志中的拼写错误，错误地将异常 `PUBREL` 数据包称为 `pubrec`。
 
 - [#11281](https://github.com/emqx/emqx/pull/11281) 恢复对特殊的 `$queue/` 共享订阅的支持。
 
-- [#11294](https://github.com/emqx/emqx/pull/11294) 修复了`emqx_ctl cluster join`，`leave`和`status`命令。
+- [#11294](https://github.com/emqx/emqx/pull/11294) 修复了`emqx_ctl cluster join`，`leave `和 `status `命令。
 
 - [#11306](https://github.com/emqx/emqx/pull/11306) 修复了规则动作指标不一致的问题，未计算丢弃的请求。
 

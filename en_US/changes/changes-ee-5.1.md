@@ -158,7 +158,7 @@
 - [#11250](https://github.com/emqx/emqx/pull/11250) Fixed a bug when the order of MQTT packets withing a WebSocket packet will be reversed.
 
 
-- [#11271](https://github.com/emqx/emqx/pull/11271) Ensured that the range of percentage type is from 0% to 100%.
+- [#11271](https://github.com/emqx/emqx/pull/11271) Ensured that the range of all percentage type configurations is from 0% to 100%. For example, `sysom.os.sysmem_high_watermark=101%` is invalid now.
 
 - [#11272](https://github.com/emqx/emqx/pull/11272) Fixed a typo in the log, where an abnormal `PUBREL` packet was mistakenly referred to as `pubrec`.
 
@@ -226,8 +226,6 @@
 - [#11316](https://github.com/emqx/emqx/pull/11316) Fixed Pool Size value not being considered in Oracle Bridge.
 
 - [#11326](https://github.com/emqx/emqx/pull/11326) Fixed return error checking on table validation in the Oracle bridge.
-
-### [Breaking Changes](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/breaking-changes-5.1.1.md)
 
 ### [Known Issues](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/known-issues-5.1.1.md)
 
@@ -365,7 +363,5 @@
 -   [#11070](https://github.com/emqx/emqx/pull/11070) Fixed the problem that the `cluster.autoclean` configuration item does not take effect.
 -   [#11092](https://github.com/emqx/emqx/pull/11092) and [#11100](https://github.com/emqx/emqx/pull/11100) Fixed problem when replicat nodes were unable to connect to the core node due to timeout in `mria_lb:core_nodes()` call.
     Relevant mria pull request: [https://github.com/emqx/mria/pull/143](https://github.com/emqx/mria/pull/143)
-
-### [Breaking Changes](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/breaking-changes-5.1.0.md)
 
 ### [Known Issues](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/known-issues-5.1.0.md)
