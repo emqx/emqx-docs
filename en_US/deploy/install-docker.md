@@ -12,7 +12,9 @@ This page introduces how to use the official Docker image to install and run EMQ
    /opt/emqx/log
    ```
 
-2. As EMQX uses `data/mnesia/<node_name>` as the data storage directory, it is important to select a fixed identifier, such as the hostname or FQDN, as the node name. This practice avoids data loss caused by node name changes.
+2. In Docker, localhost or 127.0.0.1 points to the internal address of the container. Use the host’s IP or host networking to access the host address. If you are using Docker for Mac or Docker for Windows, you can use host.docker.internal as the host address.
+
+3. As EMQX uses `data/mnesia/<node_name>` as the data storage directory, it is important to select a fixed identifier, such as the hostname or FQDN, as the node name. This practice avoids data loss caused by node name changes.
 
 :::
 
