@@ -121,7 +121,6 @@ EMQX 5.1
 
   ::: details
   
-  ~~~shell
   ```shell
   # bad
   GET emqx_user:${username}
@@ -134,10 +133,9 @@ EMQX 5.1
   # good
   HMGET emqx_user:${username} password_hash is_superuser
   ```
-  ~~~
   
-  ::: 
-
+  :::
+  
 - `password_hash` now uses common `password_hash_algorithm` parameters.
 
 You can use `auto_reconnect` to automatically reconnect to Redis on failure.
