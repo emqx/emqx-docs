@@ -8,7 +8,7 @@
 
 - [#11115](https://github.com/emqx/emqx/pull/11115) Added info logs to indicate when buffered messages are dropped due to time-to-live (TTL) expiration.
 
-- [#11133](https://github.com/emqx/emqx/pull/11133) Renamed `deliver_rate` to `delivery_rate` in the configuration of `retainer`.
+- [#11133](https://github.com/emqx/emqx/pull/11133) Renamed `deliver_rate` to `delivery_rate` in the configuration of `retainer`, while being compatible with the previous `deliver_rate`.
 
 - [#11137](https://github.com/emqx/emqx/pull/11137) Refactored the Dashboard listener configuration to use a nested `ssl_options` field for SSL settings.
 
@@ -27,26 +27,26 @@
   - `uuid_v4()`: Generates a random UUID (version 4) string.
   - `uuid_v4_no_hyphen()`: Generates a random UUID (version 4) string without hyphens.
   
-- [#11180](https://github.com/emqx/emqx/pull/11180) Added a new configuration API `/configs` (GET/PUT) that supports reloading the Hocon format configuration file.
+- [#11180](https://github.com/emqx/emqx/pull/11180) Added a new configuration API `/configs` (GET/PUT) that supports reloading the HOCON format configuration file.
 
 - [#11226](https://github.com/emqx/emqx/pull/11226) Unified the listener switch to `enable`, while being compatible with the previous `enabled`.
 
-- [#11249](https://github.com/emqx/emqx/pull/11249) Added `/license/setting` HTTP API endpoint to read and update licensed connections usage alarm watermark.
+- [#11249](https://github.com/emqx/emqx/pull/11249) Added `/license/setting` REST API endpoint to read and update licensed connections usage alarm watermark.
 
-- [#11251](https://github.com/emqx/emqx/pull/11251) Added the `/cluster/topology` HTTP API endpoint:
+- [#11251](https://github.com/emqx/emqx/pull/11251) Added the `/cluster/topology` REST API endpoint:
 
   A `GET` request to this endpoint returns the cluster topology, showing connections between RLOG core and replicant nodes.
 
 - [#11253](https://github.com/emqx/emqx/pull/11253) The Webhook/HTTP bridge has been refactored into its own Erlang application. This allows for more flexibility in the future and allows the bridge to be run as a standalone application.
 
-- [#11079](https://github.com/emqx/emqx/pull/11079) Added support for custom headers in messages for Kafka producer bridge.
+- [#11079](https://github.com/emqx/emqx/pull/11079) Added support for custom headers in messages for Kafka bridge producer mode.
 
 - [#11132](https://github.com/emqx/emqx/pull/11132) Added support for MQTT action authorization based on QoS level and Retain flag values.
-  EMQX can now use ACL to verify whether a client has permission to publish/subscribe with a specified QoS level and whether it can write retained messages.
+  Now, EMQX can verify whether clients have the permission to publish/subscribe using specific QoS levels and also have the permission to publish retained messages.
 
-- [#11207](https://github.com/emqx/emqx/pull/11207) Updated the dependent versions of multiple data bridges to enhance security and ensure that sensitive data will not be leaked. This includes:
+- [#11207](https://github.com/emqx/emqx/pull/11207) Updated the driver versions of multiple data bridges to enhance security and ensure that sensitive data will not be leaked. This includes:
   
-  - TDEngine
+  - TDengine
   - MongoDB
   - MySQL
   - Clickhouse
@@ -57,13 +57,13 @@
 
 - [#11135](https://github.com/emqx/emqx/pull/11135) Improved time offset parser in rule engine and return uniform error codes.
 
-- [#11236](https://github.com/emqx/emqx/pull/11236) Improved the speed of clients querying in HTTP API `/clients` endpoint with default parameters.
+- [#11236](https://github.com/emqx/emqx/pull/11236) Improved the speed of clients querying in REST API `/clients` endpoint with default parameters.
 
 - [#11282](https://github.com/emqx/emqx/pull/11282) Added indexing to the rule engine's topic matching to improve rule search performance.
 
 ## Bug Fixes
 
-- [#11004](https://github.com/emqx/emqx/pull/11004) Wildcards are no longer allowed for the destination topic in rewrite rules.
+- [#11004](https://github.com/emqx/emqx/pull/11004) Wildcards are no longer allowed for the destination topic in topic rewrite.
 
 - [#11026](https://github.com/emqx/emqx/pull/11026) Addressed an inconsistency in the usage of `div` and `mod` operations within the rule engine. Previously, the `div'` operation could only be used as an infix operation, and `mod` could only be applied through a function call. Now, both `div` and `mod` can be used via function call syntax and infix syntax.
 
@@ -73,7 +73,7 @@
 
 - [#11074](https://github.com/emqx/emqx/pull/11074) Fixed a bug to adhere to Protocol spec MQTT-5.0 [MQTT-3.8.3-4].
 
-- [#11077](https://github.com/emqx/emqx/pull/11077) Fixed a crash when updating binding with a non-integer port.
+- [#11077](https://github.com/emqx/emqx/pull/11077) Fixed a crash when updating listener binding with a non-integer port.
 
 - [#11094](https://github.com/emqx/emqx/pull/11094) Fixed an issue where connection errors in Kafka Producer would not be reported when reconnecting the bridge.
 
@@ -87,7 +87,7 @@
 
 - [#11126](https://github.com/emqx/emqx/pull/11126) Rule metrics for async mode bridges will set failure counters correctly now.
 
-- [#11134](https://github.com/emqx/emqx/pull/11134) Fixed the value of the uppercase `authorization` header not being obfuscated.
+- [#11134](https://github.com/emqx/emqx/pull/11134) Fixed the value of the uppercase `authorization` header not being obfuscated in the log.
 
 - [#11139](https://github.com/emqx/emqx/pull/11139) The Redis connector has been refactored into its own Erlang application to improve the code structure.
 
@@ -137,11 +137,11 @@
 
   Before the fix, it was encoded as a list of integers corresponding to the ASCII characters of the server string.
 
-- [#11184](https://github.com/emqx/emqx/pull/11184) Config value for `max_packet_size` now has a max value of 256MB as defined by the protocol. This is now enforced, and any configuration with a value greater than that will not be accepted.
+- [#11184](https://github.com/emqx/emqx/pull/11184) Config value for `mqtt.max_packet_size` now has a max value of 256MB as defined by the protocol.
 
 - [#11192](https://github.com/emqx/emqx/pull/11192) Fixed an issue with producing invalid HOCON file when an atom type was used. Also removed unnecessary `"` around keys and latin1 strings from HOCON file.
   
-- [#11195](https://github.com/emqx/emqx/pull/11195) Avoided creating duplicated subscriptions by HTTP API or client in Stomp gateway.
+- [#11195](https://github.com/emqx/emqx/pull/11195) Fixed an issue where the REST API could create duplicate subscriptions for specified clients of the Stomp gateway.
 
 - [#11206](https://github.com/emqx/emqx/pull/11206) Made the `username` and `password` params of CoAP client optional in connection mode.
 
@@ -158,11 +158,11 @@
 - [#11250](https://github.com/emqx/emqx/pull/11250) Fixed a bug when the order of MQTT packets withing a WebSocket packet will be reversed.
 
 
-- [#11271](https://github.com/emqx/emqx/pull/11271) Ensured that the range of all percentage type configurations is from 0% to 100%. For example, `sysom.os.sysmem_high_watermark=101%` is invalid now.
+- [#11271](https://github.com/emqx/emqx/pull/11271) Ensured that the range of all percentage type configurations is from 0% to 100% in the REST API and configuration. For example, `sysom.os.sysmem_high_watermark=101%` is invalid now.
 
 - [#11272](https://github.com/emqx/emqx/pull/11272) Fixed a typo in the log, where an abnormal `PUBREL` packet was mistakenly referred to as `pubrec`.
 
-- [#11281](https://github.com/emqx/emqx/pull/11281) Restored support for the special `$queue/` shared subscription.
+- [#11281](https://github.com/emqx/emqx/pull/11281) Restored support for the special `$queue/` shared subscription topic prefix.
 
 - [#11294](https://github.com/emqx/emqx/pull/11294) Fixed `emqx ctl cluster join`, `leave`, and `status` commands.
 
@@ -176,7 +176,7 @@
   - topic_metrics (previously not implemented)
   - slow_subs (previously not implemented).
   
-- [#10645](https://github.com/emqx/emqx/pull/10645) Changed health check for Oracle Database, PostgreSql, MySql and Kafka Producer data bridges to ensure target table/topic exists.
+- [#10645](https://github.com/emqx/emqx/pull/10645) Changed health check for Oracle Database, PostgreSQL, MySQL and Kafka Producer data bridges to ensure target table/topic exists.
 
 - [#11107](https://github.com/emqx/emqx/pull/11107) MongoDB bridge health check now returns the failure reason.
 
@@ -184,15 +184,13 @@
 
 - [#11151](https://github.com/emqx/emqx/pull/11151) The MySQL bridge has been refactored to its own Erlang application to improve the code structure and to make it easier to maintain.
 
-- [#11163](https://github.com/emqx/emqx/pull/11163) Fixed `topology.pool_size = 1` and hid such option from users for MondoDB bridges to avoid confusion.
+- [#11163](https://github.com/emqx/emqx/pull/11163) Hid `topology.pool_size` in MondoDB bridges and fixed it to 1 to avoid confusion.
 
-- [#11175](https://github.com/emqx/emqx/pull/11175) Now when using a nonexistent hostname for connecting to MySQL, a 400 error is returned rather than 503 in the HTTP API.
+- [#11175](https://github.com/emqx/emqx/pull/11175) Now when using a nonexistent hostname for connecting to MySQL, a 400 error is returned rather than 503 in the REST API.
 
 - [#11198](https://github.com/emqx/emqx/pull/11198) Fixed global rebalance status evaluation on replicant nodes. Previously, `/api/v5/load_rebalance/global_status` API method could return incomplete results if handled by a replicant node.
   
-- [#11223](https://github.com/emqx/emqx/pull/11223) In InfluxDB bridging, if intend to write using the float data type but the placeholder represents the original value
-  as an integer without a decimal point during serialization, it could result in the failure of Influx Line Protocol serialization
-  and the inability to write to the InfluxDB bridge.
+- [#11223](https://github.com/emqx/emqx/pull/11223) In InfluxDB bridging, mixing decimals and integers in a field may lead to serialization failure in the Influx Line Protocol, resulting in the inability to write to the InfluxDB bridge (when the decimal point is 0, InfluxDB mistakenly interprets it as an integer)..
 
   See also: [InfluxDB v2.7 Line-Protocol](https://docs.influxdata.com/influxdb/v2.7/reference/syntax/line-protocol/#float).
 
@@ -200,7 +198,7 @@
 
 - [#11242](https://github.com/emqx/emqx/pull/11242) Restarted emqx_ee_schema_registry when a node joins a cluster. As emqx_ee_schema_registry uses Mria tables, a node joining a cluster needs to restart this application in order to start relevant Mria shard processes, ensuring a correct behaviour in Core/Replicant mode.
 
-- [#11266](https://github.com/emqx/emqx/pull/11266) Fixed and improved support for TDEngine `insert` syntax:
+- [#11266](https://github.com/emqx/emqx/pull/11266) Fixed and improved support for TDengine `insert` syntax:
 
   1. Added support for inserting into multi-table in the template.
 
