@@ -235,11 +235,11 @@
       children:
         - data-integration/schema-registry-example-avro
         - data-integration/schema-registry-example-protobuf
-    - title_en: Sparkplug
-      title_cn: Sparkplug
-      path: data-integration/sparkplug
-      edition: ee
-      collapsed: true
+   # - title_en: Sparkplug
+   #   title_cn: Sparkplug
+   #   path: data-integration/sparkplug
+   #   edition: ee
+   #   collapsed: true
 
 ## Data integration
 # - data-integration/introduction
