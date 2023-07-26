@@ -10,7 +10,7 @@ For the moment, you can restrict the message rates from the following perspectiv
 | `messages_rate`  | Messages Publish Rate per Client   | Incoming messages per second  per client | Pause receiving client messages |
 | `max_conn_rate` | Maximum Connection Rate per Listener | Connections per second per listener | Pause receiving new connections |
 
-For example, to set a Limiter for the default TCP listener, you can work with the code below:
+For example, to set a limiter for the default TCP listener, you can work with the code below:
 
 ```bash
 listeners.tcp.default {
