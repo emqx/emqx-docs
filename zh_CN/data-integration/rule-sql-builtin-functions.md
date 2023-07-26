@@ -414,6 +414,6 @@ mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
 
 {% endemqxee %}
 
-## 用来转换 JSON 数据的 JQ 函数
+## 用来转换 JSON 数据的 jq 函数
 
-除了以上内置函数外，EMQX 还集成了用于处理 JSON 数据的 JQ 函数，请参考 [JQ 函数](./rule-sql-jq.md)。
+除了以上内置函数外，EMQX 还集成了用于处理 JSON 数据的 jq 函数，请参考 [jq 函数](./rule-sql-jq.md)。

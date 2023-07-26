@@ -60,7 +60,7 @@ Data has been successfully exported to data/backup/emqx-export-2023-06-21-14-07-
 
 ## 全新物联网数据集成
 
-EMQX 5.x 的规则引擎在原有 SQL 的基础上集成了 [jq](https://stedolan.github.io/jq/)，支持更多复杂格式 JSON 数据的处理。更多信息详见：[JQ 函数](../data-integration/rule-sql-jq.md)。
+EMQX 5.x 的规则引擎在原有 SQL 的基础上集成了 [jq](https://stedolan.github.io/jq/)，支持更多复杂格式 JSON 数据的处理。更多信息详见：[jq 函数](../data-integration/rule-sql-jq.md)。
 
 {% emqxce %}
 

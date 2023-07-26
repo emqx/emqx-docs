@@ -4,7 +4,7 @@ EMQX rules use a SQL-like syntax and support a variety of built-in functions for
 
 :::tip
 
-Since EMQX 5.0 version, EMQX also supports using  [JQ language](https://stedolan.github.io/jq/manual/) for complex data transformation, you may read the [JQ Fucntion](./rule-sql-jq.md) section for more information.
+Since EMQX 5.0 version, EMQX also supports using  [jq language](https://stedolan.github.io/jq/manual/) for complex data transformation, you may read the [jq Fucntion](./rule-sql-jq.md) section for more information.
 
 :::
 

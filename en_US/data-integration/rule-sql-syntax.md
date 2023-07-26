@@ -9,7 +9,7 @@ EMQX uses an SQL-based syntax in its rules for data extraction, filtering, enric
 
 Each rule can have exactly one statement. SQL statements provide a rich set of built-in functions, enabling you to perform simple transformations and create timestamps, among other operations. 
 
-SQL statements also supports embedding [JQ programs](https://stedolan.github.io/jq/) within expressions, which allows you to do complex data transformations whenever required. Expressions can be embedded within the `SELECT` and `FOREACH` statements. For the fields that can be referenced in the `SELECT` and `FOREACH` statements, see [Data Sources and Fields](./rule-sql-events-and-fields.md).
+SQL statements also supports embedding [jq programs](https://stedolan.github.io/jq/) within expressions, which allows you to do complex data transformations whenever required. Expressions can be embedded within the `SELECT` and `FOREACH` statements. For the fields that can be referenced in the `SELECT` and `FOREACH` statements, see [Data Sources and Fields](./rule-sql-events-and-fields.md).
 
 <img src="./assets/rules/data-integration-arch.png" alt="image" style="zoom:40%;" />
 
