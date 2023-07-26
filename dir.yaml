@@ -303,7 +303,7 @@
   collapsed: true
   children: 
     - title_en: Configuration
-      title_cn: 配置文件参数
+      title_cn: 配置文件
       path: configuration/configuration
       collapsed: true
       children:
