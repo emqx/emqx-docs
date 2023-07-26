@@ -392,7 +392,7 @@ coap-client -m get -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clien
 
 This interface is used by the CoAP client to unsubscribe from a topic.
 
-In the current implementation, the Unsubscribe operation is only available in `Connection Mode`.
+In the current implementation, the unsubscribing operation is only available in `Connection Mode`.
 
 **Request Parameters:**
 
