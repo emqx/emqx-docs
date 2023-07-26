@@ -178,16 +178,16 @@ Click **+ Add Listener** to open **Add Listener** page, where you can continue w
 - **Buffer**: Set the size of the buffer used to store incoming and outgoing packets, unit: KB.
 - **TCP_NODELAY**: Set the TCP_NODELAY flag for the connections; default: `false`.
 - **SO_REUSEADDR**: Set whether to allow local reuse of port numbers; default: `true`.<!--not quite sure what this means-->
-- **Send Timeout**: The TCP send timeout for the connections, default: `15` seconds.
+- **Send Timeout**: The TCP sends timeout for the connections, default: `15` seconds.
 - **Send Timeout Close**: Close the connection if send timeout, default `true`.
 
-**TLS Settings** (for ssl listeners only)
+**TLS Settings** (for SSL listeners only)
 
 You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
 
 Then you can continue to set:
 
-- **SSL Versions**: Set the TLS versions supported, default:`tlsv1`，`tlsv1.1`，`tlsv1.2` and `tlsv1.3`。
+- **SSL Versions**: Set the TLS versions supported, default:`tlsv1`，`tlsv1.1`，`tlsv1.2`, and `tlsv1.3`。
 - **SSL Fail If No Peer Cert**: Set whether EMQX will reject the connection if the client sends an empty certificate, default: `false`, optional values: `true`, `false`.
 - **CACert Depth**: Set the maximum number of non-self-issued intermediate certificates that can be included in a valid certification path following the peer certificate, default, `10`.
 - **Key File Passphrase**: Set the user's password, used only when the private key is password-protected.
@@ -252,9 +252,9 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/exproto/authentication' \
 
 This section demonstrates how ExProto gateway and the gRPC service work together by starting an example gRPC service.
 
-In this demonstration, the `telnet` command is used to simulate a client that uses TCP protocol to send or receive messages. In actual environment, it can be a device that implements custom private protocols and connects to the TCP listener on port 7993. The ExpProto gateway listens on port 7993 to receive client connections and it also listens on port 9100 and provides a `ConnectionAdapter` service defined in the `exproto.proto` file.
+In this demonstration, the `telnet` command is used to simulate a client that uses TCP protocol to send or receive messages. In the actual environment, it can be a device that implements custom private protocols and connects to the TCP listener on port 7993. The ExpProto gateway listens on port 7993 to receive client connections and it also listens on port 9100 and provides a `ConnectionAdapter` service defined in the `exproto.proto` file.
 
-You can find programs in various languages in [emqx-extension-examples](https://github.com/emqx/emqx-extension-examples) as example gRPC services. In this demonstration, an echo program `exproto-svr-python` is used as an example gRPC service to implement the `ConnectionUnaryHandler` service using Python. It simply sends back any data received from a TCP client. In actual environment, it publishes these upstream messages to EMQX, or subscribes to topics to receive messages from EMQX and delivers them to client connections.
+You can find programs in various languages in [emqx-extension-examples](https://github.com/emqx/emqx-extension-examples) as example gRPC services. In this demonstration, an echo program `exproto-svr-python` is used as an example gRPC service to implement the `ConnectionUnaryHandler` service using Python. It simply sends back any data received from a TCP client. In the actual environment, it publishes these upstream messages to EMQX, or subscribes to topics to receive messages from EMQX and delivers them to client connections.
 
 The following steps take `exproto-svr-python` as an example:
 
