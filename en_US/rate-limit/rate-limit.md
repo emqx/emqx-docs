@@ -19,7 +19,7 @@ listeners.tcp.default {
   bind = "0.0.0.0:1883"
   max_conn_rate = "1000/s"
   messages_rate = "1000/s"
-  bytes_rate = "1000MB/s"
+  bytes_rate = "1MB/s"
 }
 ```
 
