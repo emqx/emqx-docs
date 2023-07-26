@@ -119,9 +119,9 @@ EMQX 5.1
 
 - `super_cmd` is no longer used. Provide the `is_superuser` field in `cmd` instead. If you need to give clients super-user permissions, please add the `is_superuser` field to the Redis query command.
 
-  ~~~shell
   ::: details
   
+  ~~~shell
   ```shell
   # bad
   GET emqx_user:${username}
@@ -134,9 +134,9 @@ EMQX 5.1
   # good
   HMGET emqx_user:${username} password_hash is_superuser
   ```
-  
-  ::: details
   ~~~
+  
+  ::: 
 
 - `password_hash` now uses common `password_hash_algorithm` parameters.
 

@@ -333,8 +333,6 @@ If you want to enable push-gateway, please refer to [Integrate with Prometheus](
 
 :::
 
-## 
-
 ## Gateway
 
 In EMQX 4.x, various protocols can be configured through corresponding Plugins and Modules (only for the enterprise edition). However, in EMQX 5.0, we have introduced a new concept called Gateway.

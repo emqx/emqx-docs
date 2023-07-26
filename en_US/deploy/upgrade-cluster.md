@@ -2,7 +2,7 @@
 
 This page provides instructions on how to upgrade your EMQX cluster to the latest version. 
 
-Since EMQX 5.1 is not backward compatible with version 4.x in terms of configurations, management APIs, and clustering APIs, a [rolling upgrade](./rolling-upgrades.md) from an early version is not supported. To ensure a successful upgrade, read the [Considerations Before You Start](#) carefully before you start the upgrading procedure.
+Since EMQX 5.1 is not backward compatible with version 4.x in terms of configurations, management APIs, and clustering APIs, a [rolling upgrade](./rolling-upgrades.md) from an early version is not supported. To ensure a successful upgrade, read the [Considerations Before You Start](#considerations-before-you-start) carefully before you start the upgrading procedure.
 
 If you encounter any problems during the upgrade, contact [EMQX Support](https://www.emqx.com/en/support).
 

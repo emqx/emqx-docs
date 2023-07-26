@@ -34,7 +34,7 @@
 
 #### 客户端应用程序和数据桥接兼容性
 
-使用不兼容的客户端和数据桥接版本运行升级部署可能会导致意外或未定义的行为。因此，务必确保您的客户端应用程序和数据桥接后端服务与 5.1 版本兼容。您可以参考 [EMQX 5.1 与 EMQX 4.4 之间的数据集成不兼容性](https://chat.openai.com/changes/data-integration-4.4-to-5.1-incompatibility.md)和[客户端 SDK](../connect-emqx/introduction.md) 来验证与 EMQX 5.1 的兼容性。
+使用不兼容的客户端和数据桥接版本运行升级部署可能会导致意外或未定义的行为。因此，务必确保您的客户端应用程序和数据桥接后端服务与 5.1 版本兼容。您可以参考[客户端 SDK](../connect-emqx/introduction.md) 来验证与 EMQX 5.1 的兼容性。
 
 ### 潜在问题
 

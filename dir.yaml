@@ -717,7 +717,7 @@
     - title_en: 从 V4 迁移到 V5
       title_cn: 从 V4 迁移到 V5
       lang: cn
-      path: deploy/upgrad-from-v4
+      path: deploy/upgrade-from-v4
     - title_en: Incompatible Changes
       title_cn: Incompatible Changes
       lang: en
