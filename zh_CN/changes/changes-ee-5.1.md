@@ -33,7 +33,7 @@
 
 - [#11253](https://github.com/emqx/emqx/pull/11253) 将 Webhook/HTTP 桥接重构为单独的 Erlang 应用程序，为将来的使用提供了灵活性，并允许将桥接作为独立应用程序运行。
 
-- [#11079](https://github.com/emqx/emqx/pull/11079) 生产者桥接中的消息添加了自定义 headers 支持。
+- [#11079](https://github.com/emqx/emqx/pull/11079) Kafka 生产者桥接中的消息添加了自定义 headers 支持。
 
 - [#11132](https://github.com/emqx/emqx/pull/11132) 添加了基于 QoS 级别和保留消息标志值的 MQTT 动作授权支持。现在 EMQX 可以使用 ACL 来验证客户端是否有权限发布/订阅指定某个 QoS 级别的消息以及是否有权限写保留消息。
 
@@ -96,7 +96,7 @@
 
 - [#11148](https://github.com/emqx/emqx/pull/11148) 修复了节点在尝试将配置更新操作同步到已经离开集群的节点时出现的问题。
 
-- [#11150](https://github.com/emqx/emqx/pull/11150) 在启动 emqx_psk 应用程序时等待 Mria 表，确保 PSK 数据在复制节点上同步，即使它们没有初始化PSK 文件。
+- [#11150](https://github.com/emqx/emqx/pull/11150) 在启动 emqx_psk 应用程序时等待 Mria 表，确保 PSK 数据在复制节点上同步，即使它们没有初始化的 PSK 文件。
 
 - [#11151](https://github.com/emqx/emqx/pull/11151) 将 MySQL 桥接重构为单独的Erlang应用程序，以改进代码结构。
 
