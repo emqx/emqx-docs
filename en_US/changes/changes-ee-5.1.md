@@ -31,7 +31,7 @@
 
 - [#11226](https://github.com/emqx/emqx/pull/11226) Unified the listener switch to `enable`, while being compatible with the previous `enabled`.
 
-- [#11249](https://github.com/emqx/emqx/pull/11249) Added support for an HTTP API to set alarm watermark of license.
+- [#11249](https://github.com/emqx/emqx/pull/11249) Added `/license/setting` HTTP API endpoint to read and update licensed connections usage alarm watermark.
 
 - [#11251](https://github.com/emqx/emqx/pull/11251) Added the `/cluster/topology` HTTP API endpoint:
 
@@ -42,7 +42,7 @@
 - [#11079](https://github.com/emqx/emqx/pull/11079) Added support for custom headers in messages for Kafka producer bridge.
 
 - [#11132](https://github.com/emqx/emqx/pull/11132) Added support for MQTT action authorization based on QoS level and Retain flag values.
-  EMQX can now check ACL to verify whether a client has permission to publish/subscribe using a specified QoS level and to use retained messages.
+  EMQX can now use ACL to verify whether a client has permission to publish/subscribe with a specified QoS level and whether it can write retained messages.
 
 - [#11207](https://github.com/emqx/emqx/pull/11207) Updated the dependent versions of multiple data bridges to enhance security and ensure that sensitive data will not be leaked. This includes:
   
@@ -65,7 +65,7 @@
 
 - [#11004](https://github.com/emqx/emqx/pull/11004) Wildcards are no longer allowed for the destination topic in rewrite rules.
 
-- [#11026](https://github.com/emqx/emqx/pull/11026) Addressed an inconsistency in the usage of `div` and `mod` operations within the rule engine. Previously, the `div'` operation could only be used as an infix operation and `mod` could only be applied through a function call. Now both `div` and `mod` can be used via function call syntax and infix syntax.
+- [#11026](https://github.com/emqx/emqx/pull/11026) Addressed an inconsistency in the usage of `div` and `mod` operations within the rule engine. Previously, the `div'` operation could only be used as an infix operation, and `mod` could only be applied through a function call. Now, both `div` and `mod` can be used via function call syntax and infix syntax.
 
 - [#11037](https://github.com/emqx/emqx/pull/11037) When starting an HTTP connector, EMQX now returns a descriptive error in case the system is unable to connect to the remote target system.
 
@@ -108,7 +108,7 @@
   which is not utilized by EMQX.
   [Mria PR](https://github.com/emqx/mria/pull/144)
 
-- [#11148](https://github.com/emqx/emqx/pull/11148) Fixed an issue when a node left the cluster, other nodes still tried to synchronize configuration update operations to it.
+- [#11148](https://github.com/emqx/emqx/pull/11148) Fixed an issue when nodes tried to synchronize configuration update operations to a node which has already left the cluster.
 
 - [#11150](https://github.com/emqx/emqx/pull/11150) Wait for Mria table when emqx_psk app is being started to ensure that PSK data is synced to replicant nodes even if they don't have init PSK file.
   
@@ -120,7 +120,7 @@
 
 - [#11164](https://github.com/emqx/emqx/pull/11164) Reintroduced support for nested (i.e.: `${payload.a.b.c}`) placeholders for extracting data from rule action messages without the need for calling `json_decode(payload)` first.
 
-- [#11172](https://github.com/emqx/emqx/pull/11172) Fixed the `payload` being duplicated in the below situations:
+- [#11172](https://github.com/emqx/emqx/pull/11172) Fixed the `payload` field in rule engine SQL being duplicated in the below situations:
   
   - When using a `foreach` sentence without the `as` sub-expression and selecting all fields (using the `*` or omitting the `do` sub-expression).
   
@@ -137,9 +137,9 @@
 
   Before the fix, it was encoded as a list of integers corresponding to the ASCII characters of the server string.
 
-- [#11184](https://github.com/emqx/emqx/pull/11184) Config value for `max_packet_size` now has a max value of 256MB defined by the protocol. This is now enforced and any configuration with a value greater than that will result in a breaking change.
+- [#11184](https://github.com/emqx/emqx/pull/11184) Config value for `max_packet_size` now has a max value of 256MB as defined by the protocol. This is now enforced, and any configuration with a value greater than that will not be accepted.
 
-- [#11192](https://github.com/emqx/emqx/pull/11192) Fixed an issue with producing a valid HOCON file when an atom type is used, removing unnecessary `"` from HOCON file.
+- [#11192](https://github.com/emqx/emqx/pull/11192) Fixed an issue with producing invalid HOCON file when an atom type was used. Also removed unnecessary `"` around keys and latin1 strings from HOCON file.
   
 - [#11195](https://github.com/emqx/emqx/pull/11195) Avoided creating duplicated subscriptions by HTTP API or client in Stomp gateway.
 
@@ -147,15 +147,15 @@
 
 - [#11208](https://github.com/emqx/emqx/pull/11208) Fixed the issue of abnormal data statistics for LwM2M clients.
 
-- [#11211](https://github.com/emqx/emqx/pull/11211) Consistently returned `404` for `DELETE` operations on non-existent resources.
+- [#11211](https://github.com/emqx/emqx/pull/11211) HTTP API `DELETE` operations on non-existent resources now consistently returns `404`.
 
-- [#11214](https://github.com/emqx/emqx/pull/11214) Fixed a bug where node configuration may fail to synchronize correctly when joining the cluster.
+- [#11214](https://github.com/emqx/emqx/pull/11214) Fixed a bug where node configuration may fail to synchronize correctly when the node joins the cluster.
 
-- [#11229](https://github.com/emqx/emqx/pull/11229) Fixed an issue taht prevented plugins from starting/stopping after changing configuration via `emqx ctl conf load`.
+- [#11229](https://github.com/emqx/emqx/pull/11229) Fixed an issue that prevented plugins from starting/stopping after changing configuration via `emqx ctl conf load`.
 
 - [#11237](https://github.com/emqx/emqx/pull/11237) The `headers` default value in /prometheus API should be a map instead of a list.
 
-- [#11250](https://github.com/emqx/emqx/pull/11250) Fixed a bug where a WebSocket packet containing more than one MQTT packet would have their order reversed.
+- [#11250](https://github.com/emqx/emqx/pull/11250) Fixed a bug when the order of MQTT packets withing a WebSocket packet will be reversed.
 
 
 - [#11271](https://github.com/emqx/emqx/pull/11271) Ensured that the range of percentage type is from 0% to 100%.
@@ -164,13 +164,13 @@
 
 - [#11281](https://github.com/emqx/emqx/pull/11281) Restored support for the special `$queue/` shared subscription.
 
-- [#11294](https://github.com/emqx/emqx/pull/11294) Fixed `emqx_ctl cluster join`, `leave`, and `status` commands.
+- [#11294](https://github.com/emqx/emqx/pull/11294) Fixed `emqx ctl cluster join`, `leave`, and `status` commands.
 
 - [#11306](https://github.com/emqx/emqx/pull/11306) Fixed rule action metrics inconsistency where dropped requests were not accounted for.
 
-- [#11309](https://github.com/emqx/emqx/pull/11309) Improved startup order of EMQX applications. Simplify build scripts and improved code reuse.
+- [#11309](https://github.com/emqx/emqx/pull/11309) Improved startup order of EMQX applications. Simplified build scripts and improved code reuse.
   
-- [#11322](https://github.com/emqx/emqx/pull/11322) Imported additional configurations from EMQX backup file (`emqx ctl import` command):
+- [#11322](https://github.com/emqx/emqx/pull/11322) Added support for importing additional configurations from EMQX backup file (`emqx ctl import` command):
   
   - rule_engine (previously not imported due to the bug)
   - topic_metrics (previously not implemented)
@@ -178,7 +178,7 @@
   
 - [#10645](https://github.com/emqx/emqx/pull/10645) Changed health check for Oracle Database, PostgreSql, MySql and Kafka Producer data bridges to ensure target table/topic exists.
 
-- [#11107](https://github.com/emqx/emqx/pull/11107) Now returns the health check failure reason when probing a MongoDB bridge.
+- [#11107](https://github.com/emqx/emqx/pull/11107) MongoDB bridge health check now returns the failure reason.
 
 - [#11139](https://github.com/emqx/emqx/pull/11139) The Redis bridge has been refactored into its own Erlang application to improve the code structure and to make it easier to maintain.
 
@@ -196,7 +196,7 @@
 
   See also: [InfluxDB v2.7 Line-Protocol](https://docs.influxdata.com/influxdb/v2.7/reference/syntax/line-protocol/#float).
 
-- [#11225](https://github.com/emqx/emqx/pull/11225) Fixed the `username` of PostgreSQL/Timescale/MatrixDB bridges, which could be empty.
+- [#11225](https://github.com/emqx/emqx/pull/11225) The `username` field in PostgreSQL/Timescale/MatrixDB bridges configuration is now a required one.
 
 - [#11242](https://github.com/emqx/emqx/pull/11242) Restarted emqx_ee_schema_registry when a node joins a cluster. As emqx_ee_schema_registry uses Mria tables, a node joining a cluster needs to restart this application in order to start relevant Mria shard processes, ensuring a correct behaviour in Core/Replicant mode.
 
