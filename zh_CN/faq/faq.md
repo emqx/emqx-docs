@@ -333,7 +333,7 @@ Mosquitto 可以配置转发消息到 EMQX，请参考[数据桥接 - MQTT](../d
 
 ## 我想跟踪特定消息的发布和订阅过程，应该如何做？
 
-EMQX 支持追踪来自某个客户端的报文或者发布到某个主题的报文。追踪消息的发布和订阅需要使用命令行工具（emqx_ctl）的 trace 命令，下面给出一个追踪‘topic’主题的消息并保存在 `trace_topic.log` 中的例子。更详细的说明请参阅 [日志追踪](../observability/tracer.md)。
+EMQX 支持追踪来自某个客户端的报文或者发布到某个主题的报文。追踪消息的发布和订阅需要使用命令行工具（emqx ctl）的 trace 命令，下面给出一个追踪‘topic’主题的消息并保存在 `trace_topic.log` 中的例子。更详细的说明请参阅 [日志追踪](../observability/tracer.md)。
 
 ## 为什么我做压力测试的时候，连接数目和吞吐量老是上不去，有系统调优指南吗？
 
@@ -397,7 +397,7 @@ Root: /usr/lib/emqx
 
 ## 如何进行 MQTT 客户端断开连接统计
 
-执行 `emqx_ctl listeners`，查看对应端口下的 `shutdown_count` 统计。
+执行 `emqx ctl listeners`，查看对应端口下的 `shutdown_count` 统计。
 
 客户端断开链接错误码列表：
 

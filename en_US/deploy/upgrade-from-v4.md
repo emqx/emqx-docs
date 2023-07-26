@@ -1,36 +1,40 @@
 # Migrate from V4
 
-This page provides guidelines for migrating from EMQX 4.x to 5.0.
-EMQX 5.0 is not backward compatible with 4.x in management APIs and clustering APIs. However, most of the functionality is not significantly changed.
+This section provides a list of imprtant changes and guidelines for migrating from EMQX 4.4 to 5.0 or newer.
+EMQX 5.x is not backward compatible with 4.x in management APIs and clustering APIs. However, most of the functionality did not change significantly.
 
-<!-- To learn about the new features we added to EMQX 5.0, check [New Features](../getting-started/new-features.md). -->
+To learn about the new features we added to EMQX 5.0 and 5.1, check [New Features](../getting-started/new-features.md).
 
 ## Log
 
 Compared with 4.x, the most significant change in the log is the format.
 In 4.x, the log text is primarily plain, aiming for good human readability.
-However, starting from 5.0, we moved to structured logging without losing readability.
-For instance, most log fields use underscores as word separators,
-making them more search-friendly. This format also helps log indexing tools to index the logs more effectively.
+However, starting from 5.0, we added an option to use structured logging
+in JSON format making log files more machine (log indexer) friendly.
+
+Also, most log fields now use underscores as word separators,
+making them more search-friendly, for example:
 
 `2022-06-29T16:58:53.235042+02:00 [info] foo: bar, msg: msg_for_human_to_read_but_also_easy_to_index`
 
-Find more details in [Log & Trace](../observability/log.md).
+Find more details in [Logs](../observability/log.md).
 
-## Default listeners
+## Default Listeners
 
-By default, the following listeners are no longer provided:
+Changes in default listeners:
 
-| Listeners            | Description                        |
-| -------------------- | ---------------------------------- |
-| MQTT-TCP 11883       | Listeners for backend applications |
-| Management-HTTP 8081 | For REST API, merged to port 18083 |
+| Name            | Description                         | v4.4 port | Corresponding v5.x port            |
+| ----------------| ----------------------------------- | --------- | ---------------------------------- |
+| MQTT-TCP        | Internal (backplane) MQTT listener  | 11883     | - (removed)                        |
+| Management-HTTP | REST API                            | 8081      | 18083 (Merged with Dashboard port) |
 
 ## Plugins
 
-The previous official plugins have been migrated to EMQX as built-in functions. Custom plugins developed for version 4.x need to be adapted before they can be used in EMQX 5.0. The following is a comparison table between official plugins and existing functions:
+The previous official plugins have been migrated to EMQX as built-in functions. Custom plugins developed for version 4.x need to be adapted before they can be used in EMQX 5.x.
 
-| 4.x              | 5.0                                                       |
+::: details Comparison table between official plugins and built-in features.
+
+| 4.x              | 5.x                                                       |
 | ---------------- | --------------------------------------------------------- |
 | emqx_auth_http   | AuthN/AuthZ - HTTP data source                            |
 | emqx_auth_jwt    | AuthN/AuthZ - JWT                                         |
@@ -42,8 +46,8 @@ The previous official plugins have been migrated to EMQX as built-in functions. 
 | emqx_sasl        | AuthN/AuthZ - MQTT 5 Enhanced Authentication              |
 | emqx_auth_ldap   | -                                                         |
 | emqx_rule_engine | Data Integration                                          |
-| emqx_bridge_mqtt | Data Bridge - MQTT Sink/MQTT Source                       |
-| emqx_web_hook    | Data Bridge - WebHook                                     |
+| emqx_bridge_mqtt | Data Bridge - MQTT Bridge                                 |
+| emqx_web_hook    | Data Bridge - HTTP Server                                 |
 | emqx_coap        | CoAP Gateway                                              |
 | emqx_dashboard   | Dasboard                                                  |
 | emqx_exhook      | ExHook                                                    |
@@ -52,61 +56,75 @@ The previous official plugins have been migrated to EMQX as built-in functions. 
 | emqx_sn          | MQTT-SN Gateway                                           |
 | emqx_stomp       | STOMP Gateway                                             |
 | emqx_lua_hook    | -                                                         |
-| emqx_management  | -                                                         |
+| emqx_management  | Dashboard                                                 |
 | emqx_prometheus  | Prometheus                                                |
 | emqx_psk_file    | AuthN - PSK (`psk_authentication.enable = true`)          |
-| emqx_recon       | Old features still available from CLI `emqx_ctl observer` |
+| emqx_recon       | Old features still available from CLI `emqx ctl observer` |
 | emqx_retainer    | Retain                                                    |
-| emqx_telemetry   | Telemetry                                                 |
+<!--| emqx_telemetry   | Telemetry                                                 | -->
+
+:::
 
 ## HTTP API
 
-Previously, "Applications" dashboard section was used to manage API access credentials. Now "API Key" section should be used to create credentials. The credentials consist of API Key and Secret Key that can be respectively used as username and password in HTTP basic auth. Secret Key is only displayed once when credentials are created, but cannot be obtained again later.
+Previously, **Applications** dashboard section was used to manage API access credentials. Now, **API Key** section should be used to create credentials. The credentials consist of API Key and Secret Key that can be respectively used as username and password in HTTP basic authentication. Secret Key is only displayed once when credentials are created, but cannot be obtained again later.
 
-Port 8081 has been merged into port 18083, and the basic path of API access has been switched from `/api/v4` to `/api/v5`. Call the API through port 18083 and path `/api/v5`.
-
-String timestamps are now in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) format.
+1. Port 8081 has been merged into port 18083, and the HTTP API is accessed through port 18083.
+2. Username/password can not be used to access HTTP API, API Key **must** be used instead.
+3. The basic path of API access has been switched from `/api/v4` to `/api/v5`. Call the API through port 18083 and path `/api/v5`.
+4. The time-related fields will use the [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) format with time zones.
 
 ### Data Format Changes
 
 When the response is successful, the business status code `code` will no longer be returned with the data, and the corresponding 4xx/5xx HTTP status code and error prompt will be returned when an error occurs.
-Users can access `GET /error_codes` to get all possible error codes. The following is a comparative example of the response format:
+Users can access `GET /error_codes` to get all possible error codes.
+
+::: details Comparative example of the response format:
+
+**Successful response**
 
 ```shell
-# 4.x successful response
+# 4.x
 ## HTTP StatusCode = 200
 GET /api/v4/rules/my_rule
 { "code": 0, "data": { ... } }
 
-# 4.x error response
+# 5.1
+## HTTP StatusCode = 200
+GET /api/v5/rules/my_rule
+{ ... }
+```
+
+**Error response**
+
+```bash
+# 4.x
 ## HTTP StatusCode = 200
 GET /api/v4/rules/my_rule
 { "code": 404, "message": "Not Found" }
 
-# 5.0 successful response
-## HTTP StatusCode = 200
-GET /api/v5/rules/my_rule
-{ ... }
-
-# 5.0 error response
+# 5.1
 ## HTTP StatusCode = 404
 GET /api/v5/rules/my_rule
 { "code": "NOT_FOUND", "message": "Rule Id Not Found" }
 ```
 
+:::
+
 ### Major API Changes
 
 The API has undergone significant changes, and some APIs have been made compatible. The following is a comparison table of commonly used API changes.
 
-:::tip
-Compatibility Notes:
-
+::: tip Compatibility Notes
 - Compatible: Use the old API path and parameters, or keep the old API.
 - Partially compatible: The API path remains unchanged, but some API fields have changed.
 - Incompatible: API paths and fields have changed.
+
 :::
 
-| 4.x                              | 5.0                                         | Compatibility        | Notes                        |
+::: details API compatibility table
+
+| 4.x                              | 5.x                                         | Compatibility        | Notes                        |
 | -------------------------------- | ------------------------------------------- | -------------------- | ---------------------------- |
 | **Publish/Subscribe**            |                                             |                      |                              |
 | `POST /mqtt/publish`             | `POST /publish`                             | Compatible           |                              |
@@ -130,13 +148,17 @@ Compatibility Notes:
 | `GET /alarms{/activated}`        | `GET /alarms?activated={true,false}`        | Incompatible         |                              |
 | `GET /alarms{/deactivated}`      | `GET /alarms?activated={true,false}`        | Incompatible         |                              |
 
-## Auth/ACL
+:::
 
-The Auth and ACL plugins (emqx_auth_*) have been removed, and the corresponding functions are built into EMQX. Users can configure them through Dashboard or configuration files.
+## MQTT Client Authentication and Authorization
 
-Auth is renamed to **Authentication**, and ACL is renamed **Authorization**. Now they are independent of each other.
+### **Change of Concept**
 
-Version 5.0 supports the authentication methods and most data sources in 4.x, but there are certain adjustments in the usage.
+Auth is referred to as **Authentication**, and ACL is also referred to as **Authorization**.
+
+### **Data Migration**
+
+We have kept the authentication methods and supported data sources from version 4.x, with only a few changes to the way they are used. For most Authenticator/Authorizer, you can continue to use the 4.x database when upgrading to version 5.x without having to migrate existing data.
 
 ### Fixed Order of Execution
 
@@ -147,14 +169,19 @@ When multiple authenticators or authorization checkers are enabled simultaneousl
 Previously, the Auth plugins could use `%u` syntax to construct variable placeholders, dynamically interpolating client information into SQL statements, Redis query commands, and HTTP requests.
 Now EMQX uses the new syntax `${}`, such as `${username}`, `${clientid}`, which is consistent with the rule SQL.
 
-Usage example:
+For supported placeholders, please refer to:
+
+- [Authentication Placeholders](../access-control/authn/authn.md#authentication-placeholders)
+- [Authorization Placeholders](../access-control/authz/authz.md#placeholders-in-data-queries)
+
+::: details Usage example
 
 ```shell
 # 4.x
 # etc/emqx_auth_mysql.conf
 auth.mysql.auth_query = select password from mqtt_user where username = '%u' limit 1
 
-# 5.0
+# 5.x
 # emqx.conf
 authentication = [
   {
@@ -166,27 +193,31 @@ authentication = [
 ]
 ```
 
-### Auth
+:::
+
+### Authentication
 
 #### Remove the Anonymous Mechanism
 
-Remove the `allow_anonymous` configuration item. All client connections are allowed by default.
-If **add and enable** any authenticator, EMQX will perform an authentication check for all new connections.
+The `allow_anonymous` configuration is now deleted. All clients are allowed to connect by default. If you **add and enable** any authenticator, EMQX will try to authenticate the clients.
 
-Remove the `bypass_auth_plugins` configuration item. When a listener needs to disable authentication, it can be set through the `listeners.{type}.{name}.enable_authn = true | false` configuration item.
+After traversing the configured authentication chain, if none of the authenticator in the chain can decide that this client is allowed to connect, then the connection is rejected.
 
-#### Built-in database (Mnesia)
+The `bypass_auth_plugins` configuration is also deleted. When you wants to allow all clients to connect without authentication, you can set `listeners.{type}.{name}.enable_authn = false`.
 
-1. Mnesia is renamed to the built-in database;
-2. Only two search methods are available: username-based or clientid-based;
-3. The data format and REST API have changed. For more information, refer to `POST /authentication/{id}/users`.
+#### Built-in Database (Mnesia)
 
-Users can use the data import API to import data from older versions into EMQX 5.0, see `POST /authentication/{id}/import_users` for details.
+1. Mnesia is now referred to as the "built-in" database;
+2. Two search methods are available: username-based or clientid-based, but mixing is no longer supported.
+3. The REST APIs to manage the authentication data records are changed. For more information, refer to the API doc for `POST /authentication/{id}/users`.
+4. Users can use the data import API to import data from older versions into EMQX 5.x, see `POST /authentication/{id}/import_users` for details.
 
 #### HTTP
 
-1. Use the JSON fields inside the response body instead of the HTTP response status codes to identify the authentication result;
-2. Remove the super user query configuration. If you need the super-user function, set it through JSON in the response body of successful authentication.
+1. The authentication result is now determined through JSON fields within the response body, rather than utilizing HTTP response status codes.
+2. Removed the standalone super-user request. The super-user identity of the client is established through authentication in the response body.
+
+::: details
 
 **Success response status code:**
 
@@ -198,10 +229,10 @@ The authenticator will be ignored if the request fails or returns another status
 
 **Success Response Body (JSON):**
 
-| Name          | Type    | Required | Description                 |
-| ------------- | ------- | -------- | --------------------------- |
+| Name          | Type    | Required | Description             |
+| ------------- | ------- | -------- | ----------------------- |
 | result        | Enum    | true     | `allow | deny | ignore` |
-| is_supseruser | Boolean | false    |                             |
+| is_supseruser | Boolean | false    |                         |
 
 ```json
 {
@@ -210,18 +241,27 @@ The authenticator will be ignored if the request fails or returns another status
 }
 ```
 
+:::
+
 #### MySQL/PostgreSQL
 
-1. The password field required in the query result is changed from `password` to `password_hash`. If you do not want to change the database column name, you can use `as` to complete the migration;
-2. Remove the super-user query SQL. If you need to give clients super-user permissions, please ensure that the authentication SQL result contains the `is_superuser` field.
+1. The password field required in the query result is changed from `password` to `password_hash`. If you do not want to change the database column name, you can use `as` to complete the migration.
+2. Removed the standalone super-user query SQL. If you need to give clients super-user permissions, please ensure that the authentication SQL result contains the `is_superuser` field.
 
 ```sql
-SELECT password as password_hash, salt, is_superuser FROM mqtt_user where username = ${username} LIMIT 1
+SELECT
+  password as password_hash,
+  salt,
+  is_superuser
+FROM mqtt_user
+  where username = ${username} LIMIT 1
 ```
 
 #### MongoDB
 
-Remove the super-user query. If you need to give clients super-user permissions, specify the `is_superuser_field` field.
+Removed the standalone super-user query. If you need to give clients super-user permissions, specify the `is_superuser_field` field.
+
+::: details
 
 ```shell
 authentication = [
@@ -234,10 +274,14 @@ authentication = [
 ]
 ```
 
+::: 
+
 #### Redis
 
-1. Only supports [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) data structure and `HGET`, `HMGET` query commands. The commands must return `password_hash` as the password field name;
-2. Remove the super-user query. If you need to give clients super-user permissions, please add the `is_superuser` field to the Redis query command.
+1. Only supports [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) data structure and `HGET`, `HMGET` query commands. The commands must return `password_hash` or `password` (compatible with 4.x) as the password field name.
+2. Remove standalone super-user query command. If you need to give clients super-user permissions, please add the `is_superuser` field to the Redis query command.
+
+::: details
 
 ```shell
 # bad
@@ -252,57 +296,76 @@ HMGET emqx_user:${username} password_hash
 HMGET emqx_user:${username} password_hash is_superuser
 ```
 
+::: details
+
 #### LDAP
 
 Not supported for now.
 
 #### JWT
 
-No changes.
+EMQX 4.x supports `public key` and `hmac secret` algorithms, as well as `jwks` at the same time.
+
+EMQX 5.1 uses one algorithm at a time only, which is set in the global config.
 
 ### Authorization (ACL)
 
 #### ACL File
 
-1. Remove the `acl_file` configuration. The file-based ACL (acl.conf) will be used as one of the authorization sources and added to EMQX by default;
-2. The `acl.conf` file is moved from the `etc` directory to the `data/authz` directory. Please ensure that EMQX has read and write permissions for this file;
-3. `acl.conf` data file syntax has changed
+1. Removed the `acl_file` configuration. The file-based ACL (acl.conf) will be used as one of the authorization sources and added to EMQX by default.
+2. `acl.conf` data file syntax has been changed.
 
-| 4.x    | 5.0.0    | Compatibility |
+| 4.x    | 5.x      | Compatibility |
 | ------ | -------- | ------------- |
 | user   | username | Yes           |
 | client | clientid | Yes           |
 | pubsub | all      | No            |
 
+::: details Example
+
+```bash
+# 4.x
+{allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
+{allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
+
+# 5.x
+{allow, {username, {re, "^dashboard$"}}, subscribe, ["$SYS/#"]}.
+{allow, {ipaddr, "127.0.0.1"}, all, ["$SYS/#", "#"]}.
+```
+
+:::
+
 #### Built-in Database (Mnesia)
 
-1. Mnesia renamed to the built-in database;
-2. The data format and REST API have changed. For more information, please refer to `POST /authorization/built_in_database/clientid`.
+1. Mnesia renamed to the Built-in Database.
+2. The data format and REST API have changed. For more information, please refer to `/authorization/sources/built_in_database/rules/{clients,users}`.
 
-4.x ACL data can be exported with `./bin/emqx_ctl data export`  command. Users may convert the data into 5.0 format and import it through the corresponding REST API.
+4.x ACL data can be exported with `./bin/emqx_ctl data export` command. Users may convert the data into 5.x format and import it through the corresponding REST API.
 
 #### MySQL/PostgreSQL
 
-1. The `ipaddr/username/clientid` field is no longer required in the query result;
+1. The `ipaddr/username/clientid` field is no longer required in the query result.
 2. The `access` field name is changed to `action`, and its data type is changed from integer to character or character enumeration.
 3. The `allow` field name is changed to `permission`, and its data type is changed from integer to character or character enumeration.
 
-The correspondence between 4.x integer values and 5.0 character/enumeration values is shown in the following tables.
+::: details The correspondence between 4.x integer values and 5.x character/enumeration values
 
-**access/action field mapping**
+**Access/action field mapping**
 
-| 4.x (int) | 5.0.0 (varchar/enum) | action              |
+| 4.x (int) | 5.x (varchar/enum)   | action              |
 | --------- | -------------------- | ------------------- |
 | 1         | subscribe            | subscribe           |
 | 2         | publish              | publish             |
 | 3         | all                  | subscribe & publish |
 
-**allow/permission field mapping**
+**Allow/permission field mapping**
 
-| 4.x (int) | 5.0.0 (varchar/enum) | permission |
+| 4.x (int) | 5.x (varchar/enum)   | permission |
 | --------- | -------------------- | ---------- |
 | 0         | deny                 | deny       |
 | 1         | allow                | allow      |
+
+:::
 
 #### MongoDB
 
@@ -311,7 +374,7 @@ The correspondence between 4.x integer values and 5.0 character/enumeration valu
 
 If you want to continue using the data from in 4.x, please make necessary migrations manually.
 
-**Data example in 5.0**
+::: details Data example in 5.x
 
 ```json
 [
@@ -326,30 +389,37 @@ If you want to continue using the data from in 4.x, please make necessary migrat
 ]
 ```
 
+:::
+
 #### Redis
 
 1. Redis data source still only supports white list mode, which requires setting `acl_nomatch = deny`;
-2. The `access` field name changes to `action`, and the data changes from numbers to action strings. The correspondence is shown in the table below.
+2. The `access` field name changes to `action`, and the data changes from numbers to action strings.
 
-| 4.x | 5.0.0     | action              |
+If you want to continue using the data from in 4.x, please make necessary migrations manually.
+
+::: details The correspondence between 4.x and 5.x data
+
+| 4.x | 5.x       | action              |
 | --- | --------- | ------------------- |
 | 1   | subscribe | subscribe           |
 | 2   | publish   | publish             |
 | 3   | all       | subscribe & publish |
 
-If you want to continue using the data from in 4.x, please make necessary migrations manually.
-
-**Data example in 5.0**
+**Data example in 5.x**
 
 ```
 HSET mqtt_acl:emqx_u t/# subscribe
 HSET mqtt_acl:emqx_u # all
 HSET mqtt_acl:emqx_u a/1 publish
 ```
+:::
 
 #### HTTP
 
-1. Use the JSON fields in the response body instead of the HTTP response status codes to identify the authentication result.
+The authentication result is now determined through JSON fields within the response body, rather than utilizing HTTP response status codes.
+
+::: details
 
 **Success response status code:**
 
@@ -361,9 +431,9 @@ Other status codes or request failure will be treated as `ignore`.
 
 **Success Response Body (JSON):**
 
-| Name          | Type    | Required | Description                 |
-| ------------- | ------- | -------- | --------------------------- |
-| result        | Enum    | true     | `allow | deny | ignore` |
+| Name   | Type | Required | Description             |
+| ------ | ---- | -------- | ----------------------- |
+| result | Enum | true     | `allow | deny | ignore` |
 
 ```json
 {
@@ -371,29 +441,49 @@ Other status codes or request failure will be treated as `ignore`.
 }
 ```
 
+:::
+
 ## Rule Engine
 
-Rule SQL is fully compatible with 4.x syntax, but the actions under the rule are split into built-in actions (republish, console) and data bridges (WebHook, MQTT Sink, MQTT Source) to provide reuse of actions.
+Rule SQL is fully compatible with 4.x syntax, but the actions under the rule are split into built-in actions (republish, console) and data bridges (HTTP Server, MQTT Bridge).
 
-## WebHook
+## HTTP Server
 
-The WebHook plugin (emqx_web_hook) has been removed. Use the WebHook data bridge in Data Integration instead.
+The WebHook plugin (`emqx_web_hook`) is converted to a native feature, and it is now referred to as "HTTP Server" bridge.
 
 ## MQTT Bridge
 
-The MQTT bridge plugin (emqx_bridge_mqtt) has been removed. Use the MQTT Sink and MQTT Source data bridge in Data Integration instead.
+The MQTT bridge plugin (`emqx_bridge_mqtt`) has been removed. Use the built-in MQTT data bridge in Data Integration instead.
+
+{% emqxee %}
+
+## Offline Messages
+
+The [offline messages](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html) provided in EMQX 4.x are based on an external database. EMQX plans to provide native offline messages (based on the built-in database) in future versions, so the offline messages for the external database is no longer supported in version 5.x.
+
+The upcoming native offline messaging feature will provide improved performance and reduce usage and maintenance costs. Stay tuned for more updates.
+
+## Auto Subscription (Server Side Subscriptions)
+
+As of version 5.0.0, EMQX no longer provides [Auto subscription](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html) (server side subscriptions) based on an external database.
+
+{% endemqxee %}
 
 ## Prometheus
 
-Prometheus scraping endpoint is enabled by default, and no authentication is required to scrap the metrics.
+The old plugin named `emqx_prometheus` has been converted to a native feature in version 5.x. Prometheus scraping endpoint is enabled by default, and no authentication is required to scrape the metrics.
 
-You can use `curl` command to inspect the metrics: `curl -f "127.0.0.1:18083/api/v5/prometheus/stats"`
+You can use `curl` command to inspect the metrics:
 
-If you want to enable push-gateway, configure it in the dashboard or through `prometheus {...}` config block.
+```bash
+curl -f "http://127.0.0.1:18083/api/v5/prometheus/stats"
+```
 
-Changes:
+If you want to enable push-gateway, please refer to [Integrate with Prometheus](../observability/prometheus.md).
 
-| 4.4.4                              | 5.0                                             | Description |
+::: details Changes in Prometheus metrics
+
+| 4.4.x                              | 5.x                                             | Description |
 | ---------------------------------- | ----------------------------------------------- | ----------- |
 | emqx_client_auth_success_anonymous | emqx_client_auth_anonymous                      | Renamed     |
 | emqx_client_check_acl              | emqx_client_authorize counter                   | Renamed     |
@@ -425,6 +515,8 @@ Changes:
 | -                                  | erlang_vm_statistics_dirty_cpu_run_queue_length | New         |
 | -                                  | erlang_vm_statistics_dirty_io_run_queue_length  | New         |
 | -                                  | erlang_vm_wordsize_bytes                        | New         |
+
+:::
 
 ## Gateway/Multi-Protocol Support
 

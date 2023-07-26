@@ -6,7 +6,7 @@ EMQX allows not to configure most of the file transfer settings and use the defa
 
 ## Configure File Transfer Storage
 
-EMQX provides storage options for managing file metadata, segments, and exporting files. Currently, the EMQX supports a single storage backend: local file storage.
+EMQX provides storage options for managing file metadata, segments, and exporting files.
 
 To enable local file storage, use the following configuration:
 

@@ -42,13 +42,13 @@ end
 首先确保 `emqx_lua_hook` 插件已经启动：
 
 ```bash
-./bin/emqx_ctl plugins load emqx_lua_hook
+./bin/emqx ctl plugins load emqx_lua_hook
 ```
 
 加载 `test.lua` 到 `emqx_lua_hook` 中：
 
 ```bash
-./bin/emqx_ctl luahook load test.lua
+./bin/emqx ctl luahook load test.lua
 ```
 
 执行成功，则表示脚本已成功加载。否则，请检查源文件的语法格式是否正确。

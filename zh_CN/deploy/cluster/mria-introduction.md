@@ -101,4 +101,4 @@ Mria 是 Mnesia 的一个开源扩展，它为集群增加了最终的一致性�
 
 ### 控制台命令
 
-执行 `emqx_ctl eval 'mria_rlog:status().'` 命令，获得更多关于嵌入式数据库状态的信息。
+执行 `emqx ctl eval 'mria_rlog:status().'` 命令，获得更多关于嵌入式数据库状态的信息。

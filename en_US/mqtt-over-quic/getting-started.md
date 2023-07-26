@@ -52,10 +52,10 @@ MQTT over QUIC is disabled by default, you need to enable this listener with the
 
 ​	This configuration indicates that the QUIC listener is enabled on port `14567`. Save the changes and restart EMQX to apply the configuration.
 
-2. Execute `emqx_ctl listeners` in CLI, and we can see that the MQTT over QUIC listener is enabled:
+2. Execute `emqx ctl listeners` in CLI, and we can see that the MQTT over QUIC listener is enabled:
 
 ```bash
- > emqx_ctl listeners
+ > emqx ctl listeners
  quic:default
    listen_on       : :14567
    acceptors       : 16

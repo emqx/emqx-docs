@@ -90,7 +90,7 @@ services:
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
     - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
     healthcheck:
-      test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
+      test: ["CMD", "/opt/emqx/bin/emqx ctl", "status"]
       interval: 5s
       timeout: 25s
       retries: 5
@@ -115,7 +115,7 @@ services:
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
     - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
     healthcheck:
-      test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
+      test: ["CMD", "/opt/emqx/bin/emqx ctl", "status"]
       interval: 5s
       timeout: 25s
       retries: 5
@@ -147,7 +147,7 @@ services:
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
     - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
     healthcheck:
-      test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
+      test: ["CMD", "/opt/emqx/bin/emqx ctl", "status"]
       interval: 5s
       timeout: 25s
       retries: 5
@@ -172,7 +172,7 @@ services:
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
     - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
     healthcheck:
-      test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
+      test: ["CMD", "/opt/emqx/bin/emqx ctl", "status"]
       interval: 5s
       timeout: 25s
       retries: 5
@@ -199,7 +199,7 @@ docker-compose up -d
 3. 查看集群状态
 
 ```bash
-$ docker exec -it emqx1 sh -c "emqx_ctl cluster status"
+$ docker exec -it emqx1 sh -c "emqx ctl cluster status"
 Cluster status: #{running_nodes => ['emqx@node1.emqx.com','emqx@node2.emqx.com'],
                   stopped_nodes => []}
 ```

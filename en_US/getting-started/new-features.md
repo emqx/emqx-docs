@@ -12,13 +12,17 @@ Besides this obvious scalability improvement, the Mria cluster architecture is a
 
 To get started, see [Create an EMQX Cluster](../deploy/cluster/create-cluster.md).
 
+## Rolling Upgrades without Downtime
+
+Starting with EMQX Enterprise 5.1.0, the system now supports seamless rolling upgrades for the cluster. This enhances the overall system availability and reliability by allowing transitions to newer versions without any service interruption.
+
 ## MQTT over QUIC
 
 EMQX 5.0 introduced QUIC support (MQTT over QUIC) as an experimental feature and designs a unique messaging mechanism and management approach. In EMQX 5.1 we added [QUIC multistream](https://www.emqx.com/en/blog/emqx-newsletter-202302) support and from now on consider this feature as "generally available".
 
 As the underlying transport protocol of the next-generation Internet protocol HTTP/3,  [QUIC](https://datatracker.ietf.org/doc/html/rfc9000) can provide connectivity for the modern mobile Internet with less connection overhead and message latency compared to TCP/TLS protocols. Therefore, EMQX attempted to replace the transport layer of MQTT with QUIC, which led to the MQTT over QUIC.
 
-TO evaluate MQTT over QUIC and verify how it could improve network connectivity, please read [Use MQTT over QUIC ](../mqtt-over-quic/getting-started.md).
+To evaluate MQTT over QUIC and verify how it could improve network connectivity, please read [Use MQTT over QUIC ](../mqtt-over-quic/getting-started.md).
 
 {% emqxee %}
 
@@ -38,6 +42,7 @@ Get started with [File Transfer over MQTT](../file-transfer/introduction.md) now
 
 EMQX 5.1 introduces a set of command-line tools for backup and restore, allowing you to export data and configuration files from the built-in database as a compressed package and restore them to a new cluster.
 
+::: details Usage example
 Create a backup:
 
 ```bash
@@ -51,12 +56,13 @@ Restore a backup:
 ```bash
 ./bin/emqx ctl data import <File>
 ```
+:::
 
-Try [Backup and Restore](../operations/backup-restore.md) now.
+Find more details on [Backup and Restore](../operations/backup-restore.md) page.
 
 ## Redesigned IoT Data Integration
 
-Besides SQL, EMQX 5.1 Rule Engine also supports [jq](https://stedolan.github.io/jq/), so it is capable of handling more complex JSON data formats.
+Besides SQL, EMQX 5.x Rule Engine also supports [jq](https://stedolan.github.io/jq/), so it is capable of handling more complex JSON data formats. See more at the [JQ Functions documentation](../data-integration/rule-sql-jq.md).
 
 {% emqxce %}
 
@@ -76,7 +82,7 @@ On different data bridging that EMQX supports and how to configure, see [Data Br
 
 ## Flexible Authentication/Authorization
 
-EMQX 5.1 offers a built-in client authentication/authorization feature, users only need to do some simple configuration work before integrating with various data sources for user authentication and ensuring data security under various scenarios. 
+EMQX 5.x offers a built-in client authentication/authorization feature, users only need to do some simple configuration work before integrating with various data sources for user authentication and ensuring data security under various scenarios.
 
 **New features**
 
@@ -90,7 +96,7 @@ On how to run authentication/authorization configuration with EMQX Dashboard or 
 
 ## User-Friendly EMQX Dashboard
 
-In EMQX 5.1, we have redesigned the EMQX Dashboard, enhancing the visual experience and supporting more powerful and user-friendly features.
+In EMQX 5.x, we have redesigned the EMQX Dashboard, enhancing the visual experience and supporting more powerful and user-friendly features.
 
 **New features**
 
@@ -101,11 +107,17 @@ In EMQX 5.1, we have redesigned the EMQX Dashboard, enhancing the visual experie
 - Visualized data flows: Using [Flows](../dashboard/flows.md) users can clearly see how data flows from devices or clients through the rule engine
 - Configuration updates during runtime: Hot update that takes effect immediately
 
+## Overload Protection, Limiter and Buffer Queue for Bridges
+
+The new **Limiter** feature enhances connection and messaging rate control by providing more precise and layered rate control options. It ensures that the system operates under the expected workloads by limiting the client behavior at the client, listener, or node levels. The combination of the Overload protection and Limiter features prevents the clients from becoming overwhelmed or receiving excessive request traffic and ensures stable system operation.
+
+A generic buffer queue is also added for all bridges, allowing buffer messages generated under stressful conditions. This buffer can be configured to store messages in either memory or disk cache when external resources are unavailable, such as during network fluctuations or service downtime. Buffered messages will be sent once the service is restored. However, requests in the buffer may expire, which is a big difference compared to version 4. If the amount of buffered data exceeds the limit, it will be discarded following the First In First Out (FIFO) rule.
+
 ## Cloud Native and EMQX Operator
 
 Horizontal expansion and elastic clusters are features that a cloud-native application must support.
 
-[EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator) lets you take full advantage of the Replicant node of EMQX 5.0. You can deploy a stateless EMQX node with Kubernetes Deployment and then build the EMQX cluster that supports large-scale MQTT connections and message throughput.
+[EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator) lets you take full advantage of the Replicant node of EMQX 5.x. You can deploy a stateless EMQX node with Kubernetes Deployment and then build the EMQX cluster that supports large-scale MQTT connections and message throughput.
 
 ## New Gateway Framework
 
@@ -120,22 +132,22 @@ The new gateway framework further improves EMQX's usability by unifying access a
 
 ## **More Feature Updates**
 
-**Simplified configuration**
+### Simplified Configuration
 
-The `emqx.conf` configuration file has been changed to a concise and readable HOCON format, and contains commonly used configuration items by default, to improve the readability and maintainability.
+The `emqx.conf` configuration file has been changed to a concise and readable [HOCON](https://github.com/emqx/hocon) format, and contains commonly used configuration items by default, to improve the readability and maintainability.
 
-**Improved REST API**
+### Improved REST API
 
-Provide REST API compliant with the OpenAPI 3.0 specification, as well as clear and rich API documentation.
+REST API is now compliant with the OpenAPI 3.0 specification, and comes with clear and rich API documentation.
 
-**Rapid troubleshooting**
+### Rapid Troubleshooting
 
-Provide more diagnostic tools such as slow subscriptions and online tracing so users can quickly troubleshoot issues in production.
+More diagnostic tools such as slow subscriptions and online tracing are added so users can quickly troubleshoot issues in production.
 
-**Structured logs**
+### Structured Logs
 
-More user-friendly structured logs and JSON format is also supported. Error logs is flagged with 'msg' to facilitate locating the cause of the problem.
+Machine (indexer) friendly structured logs in JSON format are supported. Error logs are consistently tagged with 'msg' tokens to facilitate locating the cause of the problem.
 
-**Flexible expansion and customization**
+### Flexible Expansion and Customization
 
-Provide a new plugin architecture, with which users can compile, distribute, and install their extension plugins in the form of independent plugin packages to customize and extend the usage of EMQX.
+A new plugin architecture is developed, with which users can compile, distribute, and install their extension plugins in the form of independent plugin packages to customize and extend the usage of EMQX.

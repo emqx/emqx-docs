@@ -62,7 +62,7 @@ node.name = emqx@192.168.0.20
 After the two nodes are started, execute the following command on `s2.emqx.io`:
 
 ```bash
-$ ./bin/emqx_ctl cluster join emqx@s1.emqx.io
+$ ./bin/emqx ctl cluster join emqx@s1.emqx.io
 Join the cluster successfully.
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
@@ -86,7 +86,7 @@ Joining another cluster will cause the node to leave any current cluster it may 
 Query the cluster status on any node:
 
 ```bash
-$ ./bin/emqx_ctl cluster status
+$ ./bin/emqx ctl cluster status
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
 
@@ -100,13 +100,13 @@ There are two ways for a node to leave a cluster:
 Make `emqx@s2.emqx.io` leave a cluster by executing the below command on `s2.emqx.io`:
 
 ```bash
-$ ./bin/emqx_ctl cluster leave
+$ ./bin/emqx ctl cluster leave
 ```
 
 Or force `emqx@s2.emqx.io` to leave cluster by executing the command on `s1.emqx.io`:
 
 ```bash
-$ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
+$ ./bin/emqx ctl cluster force-leave emqx@s2.emqx.io
 ```
 
 ### Start a Cluster on a Single Machine

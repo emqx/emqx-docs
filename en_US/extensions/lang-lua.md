@@ -38,13 +38,13 @@ After the script is written, you need to manually load it into the `emqx_lua_hoo
 The `emqx_lua_hook` plugin is enabled at first:
 
 ```bash
-./bin/emqx_ctl plugins load emqx_lua_hook
+./bin/emqx ctl plugins load emqx_lua_hook
 ```
 
 Load `test.lua` into ` emqx_lua_hook`:
 
 ```bash
-./bin/emqx_ctl luahook load test.lua
+./bin/emqx ctl luahook load test.lua
 ```
 
 When the execution succeeds, it means that the script has been successfully loaded. Otherwise, check whether the syntax of the source file is correct.
