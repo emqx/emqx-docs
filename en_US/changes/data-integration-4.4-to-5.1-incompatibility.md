@@ -177,10 +177,6 @@ Changed configuration items:
 
 `user` is changed to `username`.
 
-## SQLServer
-
-No incompatibilities were found.
-
 ### TDengine
 
 Changed configuration items:

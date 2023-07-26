@@ -28,15 +28,21 @@ Unlike in version 4.4, each MQTT listener in EMQX 5.1 may have its own authentic
 - `enable_authn=false` completely disables authentication for the listener.
 - `enable_authn=quick_deny_anonymous` is similar to 'true', but also immediately rejects connecting clients without credentials.
 
-#### Defaults
+#### Remove the Anonymous Mechanism
 
-EMQX 5.1 no longer has explicit `allow_anonymous` settings. To allow anonymous access, remove or disable all authenticators in the global or listener-specific chain.
+EMQX 5.1 no longer has explicit `allow_anonymous` settings. All clients are allowed to connect by default. If you **add and enable** any authenticator, EMQX will try to authenticate the clients. To allow anonymous access, remove or disable all authenticators in the global or listener-specific chain.
 
-### Built-in Database
+After traversing the configured authentication chain, if none of the authenticator in the chain can decide that this client is allowed to connect, then the connection is rejected.
 
-- No user records in the configuration.
+The `bypass_auth_plugins` configuration is also deleted. When you wants to allow all clients to connect without authentication, you can set `listeners.{type}.{name}.enable_authn = false`.
+
+### Built-in Database (Mnesia)
+
+- Mnesia is now referred to as the "built-in" database; No user records in the configuration.
 - Change `password_hash` to `password_hash_algorithm`: {name = Algo, salt_position = prefix}. For details, refer to [Password Hashing](../access-control/authn/authn.md#password-hashing).
 - `user_id_type` is used to identify whether the `clientid` or `username` should be used as MQTT user identifiers. Mixed types of records are not allowed.
+- The REST APIs to manage the authentication data records are changed. For more information, refer to the API doc for `POST /authentication/{id}/users`.
+- Users can use the data import API to import data from older versions into EMQX 5.x, see `POST /authentication/{id}/import_users` for details.
 
 #### Example
 
@@ -98,13 +104,40 @@ EMQX 5.1
   - For type `single`,  `server` is changed to `servers`.
   - For type `sentinel`,  `server` is changed to `servers`.
   - For type `cluster`,  `database` option is no longer available.
+  
 - `database` is changed to `database` (except for the `cluster` type; this option is not available for clusters anymore).
+
 - `pool` is changed to `pool_size`.
+
 - `password` is changed to `password`.
+
 - `query_timeout` is no longer used.
+
 - `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-- `auth_cmd` is changed to `cmd`. Only `HGET` and `HMGET` commands are supported. Use `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) in the command. The command should fetch at least the `password` or `password_hash` field and optionally the `salt` and `is_superuser` fields.
-- `super_cmd` is no longer used. Provide the `is_superuser` field in `cmd` instead.
+
+- `auth_cmd` is changed to `cmd`. Only supports [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) data structure and `HGET` and `HMGET` query commands. Use `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) in the command. The command should fetch at least the `password` (compatible with 4.x) or `password_hash` field and optionally the `salt` and `is_superuser` fields.
+
+- `super_cmd` is no longer used. Provide the `is_superuser` field in `cmd` instead. If you need to give clients super-user permissions, please add the `is_superuser` field to the Redis query command.
+
+  ~~~shell
+  ::: details
+  
+  ```shell
+  # bad
+  GET emqx_user:${username}
+  # bad
+  HMGET emqx_user:${username} passwd
+  
+  # good
+  HMGET emqx_user:${username} password_hash
+  
+  # good
+  HMGET emqx_user:${username} password_hash is_superuser
+  ```
+  
+  ::: details
+  ~~~
+
 - `password_hash` now uses common `password_hash_algorithm` parameters.
 
 You can use `auto_reconnect` to automatically reconnect to Redis on failure.
@@ -172,12 +205,26 @@ authentication {
   mechanism = password_based
 ```
 
--  `server`, `username`, `password`, `database`, `query_timeout` are retained.
+- `server`, `username`, `password`, `database`, `query_timeout` are retained.
+
 - `pool` is changed to `pool_size`.
+
 - `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+
 - `password_hash` is changed to`common password_hash_algorithm` parameters.
+
 - `auth_query` is changed to `query`.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used. Query should fetch at least `password` or `password_hash` column and optionally `salt` and `is_superuser` columns.
-- `super_query` is not used anymore, `is_superuser` column is provided in query instead.
+
+- `super_query` is not used anymore, `is_superuser` column is provided in query instead. If you need to give clients super-user permissions, please ensure that the authentication SQL result contains the `is_superuser` field.
+
+  ```sql
+  SELECT
+    password as password_hash,
+    salt,
+    is_superuser
+  FROM mqtt_user
+    where username = ${username} LIMIT 1
+  ```
 
 You can use `auto_reconnect`  to reconnect to MySQL automatically on failure.
 
@@ -249,13 +296,29 @@ authentication {
 ```
 
 - `server`, `username`, `password`, `database` are retained.
+
 - `query_timeout` is not used anymore.
+
 - `encoding` is not used anymore.
+
 - `pool` is changed to `pool_size`.
+
 - `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+
 - `password_hash` is changed to common `password_hash_algorithm` parameters.
+
 - `auth_query` is changed to `query`.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used. Query should fetch at least `password` or `password_hash` column and optionally `salt` and `is_superuser` columns.
-- `super_query` is not used anymore, `is_superuser` column is proviced in query instead.
+
+- `super_query` is not used anymore, `is_superuser` column is proviced in query instead. If you need to give clients super-user permissions, please ensure that the authentication SQL result contains the `is_superuser` field.
+
+  ```sql
+  SELECT
+    password as password_hash,
+    salt,
+    is_superuser
+  FROM mqtt_user
+    where username = ${username} LIMIT 1
+  ```
 
 #### Example
 
@@ -326,18 +389,44 @@ backend = mongodb
 ```
 
 - `type` is changed to `mongo_type` field. Possible values are `single`, `rs`, `sharded`. Unknown value is not available anymore.
+
 - `server`
   - For `rs`, `sharded` to `servers`
   - For `single` to `server`
+  
 - `srv_record`, `username`, `password`, `auth_source`, `database`, `w_mode`, `topology`, `collection` are retained.
+
 - `r_mode` is availalable only for `rs` type.
+
 - `pool` is changed to `pool_size`.
+
 - `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+
 - `auth_query.selector` is changed to `filter`. The filter should not be a string, but the whole selector data structure.  `${var`}-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) may be used in selector values.
+
 - `auth_query.salt_field` is changed to `salt_field`.
+
 - `auth_query.super_field` is changed to `is_superuser_field`.
+
 - `super_query` is not used anymore. Provide `is_superuser_field` field in the documents fetched with `filter` together with `is_superuser_field` setting.
+
+  ::: details
+
+  ```shell
+  authentication = [
+    {
+      ...
+      mechanism = "password_based"
+      backend = "mongodb"
+      # is_superuser_field = "is_superuser"
+    }
+  ]
+  ```
+
+  ::: 
+
 - `password_hash` is changed to `common password_hash_algorithm` parameters.
+
 - `query_timeout` is not used.
 
 #### Example
@@ -447,7 +536,7 @@ Additional parameters:
 
 Not all sets of parameters are allowed. 
 
-Unlike EMQX 4.4, not all combinations of  (``secret`,` secret_base64_encoded`,`public_key`,` endpoint`, `pool_size`, `refresh_interval` , `ssl` ) parameters are allowed. `use_jwks` and `algorithm` identify the available sets:
+EMQX 4.x supports `public key` and `hmac secret` algorithms, as well as `jwks` at the same time. Unlike EMQX 4.4, not all combinations of  (`secret`,` secret_base64_encoded`,`public_key`,` endpoint`, `pool_size`, `refresh_interval` , `ssl` ) parameters are allowed. EMQX 5.1 uses one algorithm at a time only, which is set in the global config. `use_jwks` and `algorithm` identify the available sets:
 
 With `use_jwks=true` and `algorithm=public-key`:  `endpoint`, `pool_size`,``refresh_interval`, `ssl`
 
@@ -509,11 +598,35 @@ backend = http
 - `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
 - `super_req` is not available. Provide `is_superuser` field in the service response instead.
 
-Unlike version 4.4,  `url`, `headers`, and `body` parameters allow placeholders.   
+Unlike version 4.4,  `url`, `headers`, and `body` parameters allow placeholders. In version 5.1, `body` is not a string, but a map. It is serialized using JSON or X-WWW-Form-Urlencoded format (for post requests) or as query params (for get requests).
 
-In version 5.1, `body` is not a string, but a map. It is serialized using JSON or X-WWW-Form-Urlencoded format (for post requests) or as query params (for get requests).
+Unlike version 4.4, HTTP authentication only respects responses with successful HTTP code (2XX) and takes the resolution from the response body (from `result`) field. In version 5.1, the authentication result is now determined through JSON fields within the response body, rather than utilizing HTTP response status codes.
 
-Unlike version 4.4, HTTP authentication only respects responses with successful HTTP code (2XX) and takes the resolution from the response body (from `result`) field.  
+::: details
+
+**Success response status code:**
+
+```shell
+200 or 204
+```
+
+The authenticator will be ignored if the request fails or returns another status code.
+
+**Success Response Body (JSON):**
+
+| Name          | Type    | Required | Description             |
+| ------------- | ------- | -------- | ----------------------- |
+| result        | Enum    | true     | `allow | deny | ignore` |
+| is_supseruser | Boolean | false    |                         |
+
+```json
+{
+  "result": "allow",
+  "is_supseruser": true
+}
+```
+
+:::
 
 #### Example
 
@@ -580,6 +693,31 @@ EMQX 5.1
 
 ## Authorization
 
+### ACL File
+
+1. Removed the `acl_file` configuration. The file-based ACL (acl.conf) will be used as one of the authorization sources and added to EMQX by default.
+2. `acl.conf` data file syntax has been changed.
+
+| 4.x    | 5.x      | Compatibility |
+| ------ | -------- | ------------- |
+| user   | username | Yes           |
+| client | clientid | Yes           |
+| pubsub | all      | No            |
+
+::: details Example
+
+```bash
+# 4.x
+{allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
+{allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
+
+# 5.x
+{allow, {username, {re, "^dashboard$"}}, subscribe, ["$SYS/#"]}.
+{allow, {ipaddr, "127.0.0.1"}, all, ["$SYS/#", "#"]}.
+```
+
+:::
+
 ### File-Based
 
 In dsl, `pubsub` is renamed to `all`.
@@ -611,6 +749,11 @@ EMQX 5.1
 ```
 
 ### Built-in Database
+
+- Mnesia renamed to the Built-in Database.
+- The data format and REST API have changed. For more information, please refer to `/authorization/sources/built_in_database/rules/{clients,users}`.
+
+4.x ACL data can be exported with `./bin/emqx_ctl data export` command. Users may convert the data into 5.x format and import it through the corresponding REST API.
 
 #### Example
 
@@ -650,7 +793,31 @@ Unlike 4.4,  `url`, `headers`, and `body` parameters allow placeholders.
 
 In 5.1, `body` is not a string, but a map. It is serialized using JSON or X-WWW-Form-Urlencoded format (for post requests) or as query params (for get requests).
 
-Unlike 4.4, HTTP authorization only respects responses with successful HTTP code (2XX) and takes the resolution from the response body (from `result`) field.  
+Unlike 4.4, HTTP authorization only respects responses with successful HTTP code (2XX) and takes the resolution from the response body (from `result`) field. The authorization result is now determined through JSON fields within the response body, rather than utilizing HTTP response status codes.
+
+::: details
+
+**Success response status code:**
+
+```shell
+200 or 204
+```
+
+Other status codes or request failure will be treated as `ignore`.
+
+**Success Response Body (JSON):**
+
+| Name   | Type | Required | Description             |
+| ------ | ---- | -------- | ----------------------- |
+| result | Enum | true     | `allow | deny | ignore` |
+
+```json
+{
+  "result": "deny"
+}
+```
+
+:::
 
 #### Example
 
@@ -731,6 +898,28 @@ auto_reconnect may be used to reconnect to Redis automatically on failure.
 - `query_timeout` is no longer used.
 - `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
 - `auth_cmd` is changed to `cmd`.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used in the command. 
+- Redis data source still only supports white list mode, which requires setting `acl_nomatch = deny`;
+- The `access` field name changes to `action`, and the data changes from numbers to action strings.
+
+If you want to continue using the data from in 4.x, please make necessary migrations manually.
+
+::: details The correspondence between 4.x and 5.x data
+
+| 4.x  | 5.x       | action              |
+| ---- | --------- | ------------------- |
+| 1    | subscribe | subscribe           |
+| 2    | publish   | publish             |
+| 3    | all       | subscribe & publish |
+
+**Data example in 5.x**
+
+```
+HSET mqtt_acl:emqx_u t/# subscribe
+HSET mqtt_acl:emqx_u # all
+HSET mqtt_acl:emqx_u a/1 publish
+```
+
+:::
 
 #### Example
 
@@ -788,9 +977,37 @@ EMQX 5.1
   type = mysql
 ```
 
+- The `ipaddr/username/clientid` field is no longer required in the query result.
+
+- The `access` field name is changed to `action`, and its data type is changed from integer to character or character enumeration.
+
+- The `allow` field name is changed to `permission`, and its data type is changed from integer to character or character enumeration.
+
+  ::: details The correspondence between 4.x integer values and 5.x character/enumeration values
+
+  **Access/action field mapping**
+
+  | 4.x (int) | 5.x (varchar/enum) | action              |
+  | --------- | ------------------ | ------------------- |
+  | 1         | subscribe          | subscribe           |
+  | 2         | publish            | publish             |
+  | 3         | all                | subscribe & publish |
+
+  **Allow/permission field mapping**
+
+  | 4.x (int) | 5.x (varchar/enum) | permission |
+  | --------- | ------------------ | ---------- |
+  | 0         | deny               | deny       |
+  | 1         | allow              | allow      |
+
+  :::
+
 - `server`, `username`, `password`, `database`, `query_timeout` are retained.
+
 - `pool` is changed to `pool_size`.
+
 - `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+
 - `acl_query` is changed to query.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used.
 
 You can use `auto_reconnect` to reconnect to MySQL automatically on failure.
@@ -859,6 +1076,29 @@ EMQX 5.1
 ```
 type = postgresql
 ```
+
+- The `ipaddr/username/clientid` field is no longer required in the query result.
+- The `access` field name is changed to `action`, and its data type is changed from integer to character or character enumeration.
+- The `allow` field name is changed to `permission`, and its data type is changed from integer to character or character enumeration.
+
+::: details The correspondence between 4.x integer values and 5.x character/enumeration values
+
+**Access/action field mapping**
+
+| 4.x (int) | 5.x (varchar/enum) | action              |
+| --------- | ------------------ | ------------------- |
+| 1         | subscribe          | subscribe           |
+| 2         | publish            | publish             |
+| 3         | all                | subscribe & publish |
+
+**Allow/permission field mapping**
+
+| 4.x (int) | 5.x (varchar/enum) | permission |
+| --------- | ------------------ | ---------- |
+| 0         | deny               | deny       |
+| 1         | allow              | allow      |
+
+:::
 
 - `server`, `username`, `password`, `database` are retained.
 - `query_timeout` is not used anymore.
@@ -955,7 +1195,26 @@ In EMQX 4.4, the resulting documents should contain topics lists by action key, 
 }
 ```
 
-In EMQX 5.5, the documents should contain individual rules with `permission`, `action`, `topics` fields. Note that `topics` should be an array of topics.
+In EMQX 5.5, MongoDB data source can be used for both allow and deny rules. Previously, only white list mode was supported, and it was required to set `acl_nomatch = deny`. The documents should contain individual rules with `permission`, `action`, `topics` fields. Note that `topics` should be an array of topics. For details, see [AuthZ-MongoDB](../access-control/authz/mongodb.md).
+
+If you want to continue using the data from in 4.x, please make the necessary migrations manually.
+
+::: details Data example in 5.x
+
+```json
+[
+  {
+      "username": "emqx_u",
+      "clientid": "emqx_c",
+      "ipaddress": "127.0.0.1",
+      "permission": "allow",
+      "action": "all",
+      "topics": ["#"]
+  }
+]
+```
+
+:::
 
 #### Example
 

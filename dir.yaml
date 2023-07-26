@@ -38,12 +38,12 @@
     - deploy/install-centos
     - deploy/install-amazon-linux
     - deploy/install-macOS
-    - title_en: EMQX on Kubernetes
-      title_cn: EMQX on Kubernetes
+    - title_en: Kubernetes
+      title_cn: Kubernetes
       lang: en
       path: "https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html"
-    - title_en: EMQX on Kubernetes
-      title_cn: EMQX on Kubernetes
+    - title_en: Kubernetes
+      title_cn: Kubernetes
       lang: cn
       path: "https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html"
     - title_en: Windows
@@ -59,11 +59,11 @@
       title_cn: 配置 License
       edition: ee
       path: deploy/license
-    - title_en: Upgrade
-      title_cn: 升级
+    - title_en: Upgrade Guide
+      title_cn: 升级指南
       children:
         - deploy/rolling-upgrades
-        - deploy/upgrade-from-v4
+        - deploy/upgrade-cluster
         - title_en: Upgrade EMQX on Kubernetes
           title_cn: Upgrade EMQX on Kubernetes
           lang: en
@@ -115,31 +115,6 @@
           title_cn: MQTT 微信小程序示例
           lang: cn
           path: connect-emqx/wechat-miniprogram
-    - title_en: REST API
-      title_cn: REST API
-      path: admin/api
-      collapsed: true
-      children:
-        - title_en: API Docs
-          title_cn: API 文档
-          lang: en
-          edition: ce
-          path: https://www.emqx.io/docs/en/v5.0/admin/api-docs.html
-        - title_en: API Docs
-          title_cn: API 文档
-          lang: cn
-          edition: ce
-          path: https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html
-        - title_en: API Docs
-          title_cn: API 文档
-          lang: en
-          edition: ee
-          path: https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html
-        - title_en: API Docs
-          title_cn: API 文档
-          lang: cn
-          edition: ee
-          path: https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html
 
 - title_en: EMQX Essentials 
   title_cn: EMQX 基础知识
@@ -154,29 +129,6 @@
       title_cn: MQTT 教程
       lang: cn
       path: https://www.emqx.com/zh/mqtt-guide
-    - title_en: Design and Implementation
-      title_cn: 设计与实现
-      path: design/overview
-      collapsed: true
-      children:
-        - title_en: Clustering
-          title_cn: Clustering
-          lang: en
-          path: design/clustering
-        - design/inflight-window-and-message-queue
-        - design/retransmission
-      # - design/design
-      # - title_en: SDK & Tools
-      #   title_cn: SDK 与工具
-      #   children:
-      #     - development/client
-      #     - development/c
-      #     - development/java
-      #     - development/go
-      #     - development/erlang
-      #     - development/javascript
-      #     - development/python
-      #     - development/resource
     - title_en: Authentication and Authorization
       title_cn: 认证与鉴权
       collapsed: true
@@ -217,6 +169,29 @@
         - title_en: What is PSK?
           title_cn: What is PSK?
           path: https://en.wikipedia.org/wiki/TLS-PSK
+    - title_en: Design and Implementation
+      title_cn: 设计与实现
+      path: design/overview
+      collapsed: true
+      children:
+        - title_en: Clustering
+          title_cn: Clustering
+          lang: en
+          path: design/clustering
+        - design/inflight-window-and-message-queue
+        - design/retransmission
+      # - design/design
+      # - title_en: SDK & Tools
+      #   title_cn: SDK 与工具
+      #   children:
+      #     - development/client
+      #     - development/c
+      #     - development/java
+      #     - development/go
+      #     - development/erlang
+      #     - development/javascript
+      #     - development/python
+      #     - development/resource
 
 - title_en: EMQX Clustering
   title_cn: 构建集群
@@ -369,6 +344,31 @@
     - title_en: Command Line Interface
       title_cn: 命令行接口
       path: admin/cli
+    - title_en: REST API
+      title_cn: REST API
+      path: admin/api
+      collapsed: true
+      children:
+        - title_en: API Docs
+          title_cn: API 文档
+          lang: en
+          edition: ce
+          path: https://www.emqx.io/docs/en/v5.0/admin/api-docs.html
+        - title_en: API Docs
+          title_cn: API 文档
+          lang: cn
+          edition: ce
+          path: https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html
+        - title_en: API Docs
+          title_cn: API 文档
+          lang: en
+          edition: ee
+          path: https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html
+        - title_en: API Docs
+          title_cn: API 文档
+          lang: cn
+          edition: ee
+          path: https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html
     - title_en: EMQX Dashboard
       title_cn: EMQX Dashboard
       path: dashboard/introduction
@@ -686,11 +686,11 @@
   path: introduction/reference
   collapsed: true
   children:
-    - title_en: MQTT 5.0 
-      title_cn: MQTT 5.0
+    - title_en: MQTT 5.0 Specification
+      title_cn: MQTT 5.0 协议
       path: https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html
-    - title_en: MQTT 3.1.1
-      title_cn: MQTT 3.1.1
+    - title_en: MQTT 3.1.1 Specification
+      title_cn: MQTT 3.1.1 协议
       path: http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
     - title_en: MQTT Glossary
       title_cn: MQTT 术语
@@ -714,6 +714,10 @@
       title_cn: 版本发布
       edition: ce
       path: changes/changes-ce-5.1
+    - title_en: 从 V4 迁移到 V5
+      title_cn: 从 V4 迁移到 V5
+      lang: cn
+      path: deploy/upgrad-from-v4
     - title_en: Incompatible Changes
       title_cn: Incompatible Changes
       lang: en
