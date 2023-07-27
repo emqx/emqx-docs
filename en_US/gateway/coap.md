@@ -416,5 +416,5 @@ In the current implementation, the unsubscribing operation is only available in 
 For example, unsubscribe to `coap/test` in `Connection Mode`:
 
 ```bash
-coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test&clientid=123&token=3404490787"
+coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```

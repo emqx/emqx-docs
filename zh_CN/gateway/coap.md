@@ -392,5 +392,5 @@ coap-client -m get -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clien
 例如，`连接模式` 下取消订阅主题 `coap/test` ：
 
 ```bash
-coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test&clientid=123&token=3404490787"
+coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
