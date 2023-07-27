@@ -27,38 +27,9 @@ The section takes macOS 12 as an example to illustrate how to download the lates
 
 ## Start EMQX
 
-EMQX offers 3 different options to start EMQX:
-
-- To start EMQX directly, run:
-
-  ```bash
-  $ emqx start
-  EMQX @CE_VERSION@ is started successfully!
-  
-  $ emqx_ctl status
-  Node 'emqx@127.0.0.1' @CE_VERSION@ is started
-  ```
-
-- To start EMQX with systemctl, run:
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- To start EMQX as a service, run:
-
-  ```bash
-  sudo service emqx start
-  ```
-
-## Uninstall EMQX
-
-To uninstall EMQX, run:
-
+```bash
+./emqx/bin/emqx start
 ```
-sudo apt remove --purge emqx
-```
-
 
 {% endemqxce %}
 
@@ -68,50 +39,14 @@ The section below will take macOS 12 as an example to illustrate how to download
 
 ## Install EMQX
 
-1.  Download [emqx-enterprise-@EE_VERSION@-macos12-arm64.zip](https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-macos12-arm64.zip). 
+1. Go to [EMQ Offical Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=macOS=currentOS=macOS12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise), select `@EE_VERSION@` for **Version** and `macOS` for **OS**, and click the **Download** button.
 
-   ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-macos12-arm64.zip
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   mkdir -p emqx && unzip emqx-enterprise-@EE_VERSION@-macos12-arm64.zip -d emqx
-   ```
+2. On the Downloads and Install page, select `zip` as **Install Method** and select the proper **CPU Architecture**. Download and install the package according to the instruction.
 
 ## Start EMQX
 
-EMQX offers 3 different options to start EMQX:
-
-- To start EMQX directly, run:
-
-  ```bash
-  $ emqx start
-  EMQX @EE_VERSION@ is started successfully!
-  
-  $ emqx_ctl status
-  Node 'emqx@127.0.0.1' @EE_VERSION@ is started
-  ```
-
-- To start EMQX with systemctl, run:
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- To start EMQX as a service, run:
-
-  ```bash
-  sudo service emqx start
-  ```
-
-## Uninstall EMQX
-
-To uninstall EMQX, run:
-
-  ```shell
-sudo apt remove --purge emqx
-  ```
+```bash
+./emqx/bin/emqx start
+```
 
 {% endemqxee %}
