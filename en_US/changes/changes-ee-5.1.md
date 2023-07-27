@@ -59,8 +59,6 @@
 
 - [#11236](https://github.com/emqx/emqx/pull/11236) Improved the speed of clients querying in REST API `/clients` endpoint with default parameters.
 
-- [#11282](https://github.com/emqx/emqx/pull/11282) Added indexing to the rule engine's topic matching to improve rule search performance.
-
 ## Bug Fixes
 
 - [#11004](https://github.com/emqx/emqx/pull/11004) Wildcards are no longer allowed for the destination topic in topic rewrite.

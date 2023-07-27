@@ -52,8 +52,6 @@
 
 - [#11236](https://github.com/emqx/emqx/pull/11236) 改进了默认参数下 `GET /clients` REST API 客户端查询的速度。
 
-- [#11282](https://github.com/emqx/emqx/pull/11282) 对规则引擎的主题匹配添加了索引，以提高规则执行时的检索性能。
-
 ## 修复
 
 - [#11004](https://github.com/emqx/emqx/pull/11004) 主题重写不再允许在目标主题中使用通配符。
