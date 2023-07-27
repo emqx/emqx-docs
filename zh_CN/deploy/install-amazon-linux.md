@@ -124,40 +124,9 @@ sudo systemctl start emqx
 
 ## 通过 rpm 安装
 
-请根据 CPU 架构选择对应安装方式。
+1. 前往 [EMQ 官网](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=AmazonLinux2=currentOS=AmazonLinux2&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)，**版本**选择 `@EE_VERSION@`，**系统**选择 `Amazon Linux 2`，点击**免费下载**按钮进入下载页面。
 
-:::: tabs type:card
-
-::: tab amd64
-
-1. 下载 [emqx-enterprise-@EE_VERSION@-amzn2-amd64.rpm](https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-amd64.rpm)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-amd64.rpm
-   ```
-
-2. 安装 EMQX。
-   ```bash
-   sudo yum install emqx-enterprise-@EE_VERSION@-amzn2-amd64.rpm -y
-   ```
-
-:::
-
-::: tab arm64
-1. 下载 [emqx-enterprise-@EE_VERSION@-amzn2-arm64.rpm](https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-arm64.rpm)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-arm64.rpm
-   ```
-
-2. 安装 EMQX。
-   ```bash
-   sudo yum install emqx-enterprise-@EE_VERSION@-amzn2-arm64.rpm -y
-   ```
-
-:::
-
-::::
+2. 在安装与下载页面中，**安装方式**选择 `rpm`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
 
 ### 启动 EMQX 
 
@@ -187,43 +156,10 @@ sudo systemctl start emqx
 
 ## 通过 tar.gz 安装
 
-请根据 CPU 架构选择对应安装方式。
+1. 前往 [EMQ 官网](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=AmazonLinux2=currentOS=AmazonLinux2&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)，**版本**选择 `@EE_VERSION@`，**系统**选择 `Amazon Linux 2`，点击**免费下载**按钮进入下载页面。
 
-:::: tabs type:card
+2. 在安装与下载页面中，**安装方式**选择 `tar.gz`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
 
-::: tab amd64
-
-1. 下载 [emqx-enterprise-@EE_VERSION@-amzn2-amd64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-amd64.tar.gz)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-amd64.tar.gz
-   ```
-
-2. 安装 EMQX。
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-enterprise-@EE_VERSION@-amzn2-amd64.tar.gz -C emqx
-   ```
-
-:::
-
-::: tab arm64
-
-1. 下载 [emqx-enterprise-@EE_VERSION@-amzn2-arm64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-arm64.tar.gz)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-arm64.tar.gz
-   ```
-
-2. 安装 EMQX。
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-enterprise-@EE_VERSION@-amzn2-arm64.tar.gz -C emqx
-   ```
-
-:::
-
-::::
 
 ### 启动 EMQX
 
