@@ -174,13 +174,13 @@
 
 # File transfer
 
-- title_en: File Transfer over MQTT
-  title_cn: 基于 MQTT 的文件传输
-  path: file-transfer/introduction
-  children:
-    - file-transfer/quick-start
-    - file-transfer/client
-    - file-transfer/broker
+# - title_en: File Transfer over MQTT
+#   title_cn: 基于 MQTT 的文件传输
+#   path: file-transfer/introduction
+#   children:
+#     - file-transfer/quick-start
+#     - file-transfer/client
+#     - file-transfer/broker
 
 ## Data integration
 # - data-integration/introduction
