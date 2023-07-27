@@ -27,37 +27,11 @@ mkdir -p emqx && unzip emqx-@CE_VERSION@-macos12-arm64.zip -d emqx
 
 ## 启动 EMQX
 
-您可通过如下三种方式启动 EMQX。
+安装完成后，可通过如下命令启动 EMQX。
 
-- 直接启动：
-
-  ```bash
-  $ emqx start
-  EMQX @CE_VERSION@ is started successfully!
-  
-  $ emqx_ctl status
-  Node 'emqx@127.0.0.1' @CE_VERSION@ is started
-  ```
-
-- systemctl 启动：
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- service 启动：
-
-  ```bash
-  sudo service emqx start
-  ```
-
-## 卸载 EMQX
-
-服务完成后，可通过如下命令卸载 EMQX：
-
-  ```shell
-sudo apt remove --purge emqx
-  ```
+```bash
+./emqx/bin/emqx start
+```
 
 {% endemqxce %}
 
@@ -67,50 +41,16 @@ sudo apt remove --purge emqx
 
 下文将以 macOS 12 系统为例演示如何下载最新版 EMQX。如希望在其他系统中进行安装，可前往 [EMQX 下载页面](https://www.emqx.com/zh/try?product=enterprise) 获取详细的安装信息。
 
-1. 下载 [emqx-enterprise-@EE_VERSION@-macos12-arm64.zip](https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-macos12-arm64.zip)。
+1. 前往 [EMQ 官网](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=macOS=currentOS=macOS12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)，**版本**选择 `@EE_VERSION@`，**系统**选择 `macOS`，点击**免费下载**按钮进入下载页面。
 
-```bash
-wget https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-macos12-arm64.zip
-```
-
-2. 安装 EMQX。
-
-```bash
-mkdir -p emqx && unzip emqx-enterprise-@EE_VERSION@-macos12-arm64.zip -d emqx
-```
+2. 在安装与下载页面中，**安装方式**选择 `zip`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
 
 ## 启动 EMQX
 
-您可通过如下三种方式启动 EMQX。
+安装完成后，可通过如下命令启动 EMQX。
 
-- 直接启动：
-
-  ```bash
-  $ emqx start
-  EMQX @EE_VERSION@ is started successfully!
-  
-  $ emqx_ctl status
-  Node 'emqx@127.0.0.1' @EE_VERSION@ is started
-  ```
-
-- systemctl 启动：
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- service 启动：
-
-  ```bash
-  sudo service emqx start
-  ```
-
-## 卸载 EMQX
-
-服务完成后，可通过如下命令卸载 EMQX：
-
-  ```shell
-sudo apt remove --purge emqx
-  ```
+```bash
+./emqx/bin/emqx start
+```
 
 {% endemqxee %}
