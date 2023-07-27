@@ -20,9 +20,10 @@ EMQX 提供了两个规则引擎 SQL 函数用于编码和解码 Sparkplug B 数
 
 由于规则引擎及其 `jq` 函数的灵活性，Sparkplug B 编码和解码函数可以执行各种任务。要了解更多有关规则引擎及其 `jq` 函数的信息，请参阅以下页面：
 
+- [创建规则](./rule-get-started.md)
 - [SQL 语法与示例](./rule-sql-syntax.md)
 - [JQ 函数](./rule-sql-jq.md)
-- [JQ编程语言完整说明](https://stedolan.github.io/jq/manual/)
+- [JQ 编程语言完整说明](https://stedolan.github.io/jq/manual/)
 
 ### sparkplug_decode
 

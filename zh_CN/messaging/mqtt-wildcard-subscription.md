@@ -61,15 +61,22 @@ sensor/1/temperature
 - `testtopic/+/temperature`
 - `testtopic/#`
 
-在您开始之前，请确保 EMQX 已启动。
+:::tip 前置准备
 
-1. 启动 MQTTX 客户端。点击**新建连接**创建一个名为 `Demo` 的 MQTT 连接。
+- 了解 MQTT 的[通配符](./mqtt-concepts.md#通配符)。
+- 能使用 [MQTTX](./publish-and-subscribe.md) 进行基本的发布和订阅操作。
 
-   - 本演示中以本地主机 `127.0.0.1` 为例。
+:::
+
+1. 启动 EMQX 和 MQTTX Desktop。点击**新建连接**创建一个名为 `Demo` 的客户端连接作为发布者。
+
+   - 在**名称**栏中输入`Demo`。
+   - 在本演示中，**服务器地址**使用本地主机 `127.0.0.1` 作为示例。
+   - 其它设置保持默认，点击**连接**。
 
    ::: tip
 
-   有关创建 MQTT 连接的详细说明，请参阅 [MQTTX](./publish-and-subscribe.md)。
+   [MQTTX Desktop](./publish-and-subscribe.md/#mqttx-) 中介绍了更多详细的连接创建信息。
 
    :::
 

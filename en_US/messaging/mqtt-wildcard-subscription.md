@@ -61,15 +61,22 @@ This section demonstrates how to use the MQTTX client to create subscriptions to
 - `testtopic/+/temperature`
 - `testtopic/#`
 
-Before you start, make sure EMQX is started.
+:::tip Prerequisites
 
-1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection named `Demo`.
+- Knowledge about MQTT [Wildcards](./mqtt-concepts.md#topic-and-wildcards)
+- Basic publishing and subscribing operations using [MQTTX](./publish-and-subscribe.md)
 
-   - The localhost `127.0.0.1` is used as an example in this demonstration.
+:::
+
+1. Start EMQX and MQTTX Desktop. Click the **New Connection** to create a client connection as a publisher.
+
+   - Enter `Demo` in the **Name** field.
+   - Enter the localhost `127.0.0.1` in **Host** to use as an example in this demonstration.
+   - Leave other settings as default and click **Connect**.
 
    ::: tip
 
-   For detailed instructions on creating an MQTT connection, see [MQTTX Client](./publish-and-subscribe.md).
+   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
 
    :::
 

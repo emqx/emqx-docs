@@ -21,9 +21,9 @@ EMQX provides two rule engine SQL functions for encoding and decoding Sparkplug 
 
 The Sparkplug B encoding and decoding functions can be used to perform a wide variety of tasks due to the flexibility of the rule engine and its `jq` function. To learn more about the rule engine and its `jq` function, refer to the following pages:
 
-* [Rule Engine Rules](./rule-get-started)
-* [Rule Engine SQL Language](./rule-sql-syntax)
-* [The Rule Engine JQ Fuction](./rule-sql-jq)
+* [Create Rules](./rule-get-started.md)
+* [Rule Engine SQL Language](./rule-sql-syntax.md)
+* [The Rule Engine JQ Fuction](./rule-sql-jq.md)
 * [Full Description of the JQ Programming Language](https://stedolan.github.io/jq/manual/)
 
 ### sparkplug_decode

@@ -417,3 +417,11 @@ mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
 ## 用来转换 JSON 数据的 jq 函数
 
 除了以上内置函数外，EMQX 还集成了用于处理 JSON 数据的 jq 函数，请参考 [jq 函数](./rule-sql-jq.md)。
+
+{% emqxee %}
+
+## Schema Registry and Sparkplug B 
+
+在企业版 EMQX 中， [schema registry](./schema-registry.md) 提供了`schema_decode` 和 `schema_encode` 功能，可以为 [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) 和 [Avro](https://avro.apache.org/) 格式的数据进行编解码。 关于功能详情，请见[编解码](./schema-registry.md). <!--There are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about [the sparkplug function on their documentation page](./sparkplug.md).-->
+
+{% endemqxee %}

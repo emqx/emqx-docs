@@ -88,9 +88,7 @@
       collapsed: true
       children:
         - messaging/mqtt-concepts
-        - title_en: Test with MQTT Clients
-          title_cn: MQTT 客户端工具演示
-          path: messaging/publish-and-subscribe
+        - messaging/publish-and-subscribe
       # - messaging/explore-mqtt
         - messaging/mqtt-shared-subscription
         - messaging/mqtt-retained-message
@@ -218,10 +216,7 @@
   path: data-integration/rules
   collapsed: true
   children:
-    - title_en: Create Rules
-      title_cn: 创建规则
-      lang: en
-      path: data-integration/rule-get-started
+    - data-integration/rule-get-started
     - data-integration/rule-sql-syntax
     - data-integration/rule-sql-events-and-fields
     - data-integration/rule-sql-builtin-functions

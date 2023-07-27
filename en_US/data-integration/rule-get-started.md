@@ -1,6 +1,6 @@
 # Create Rules
 
-This guide introduces how to create a rule using the EMQX Dashboard. Log in to the EMQX Dashboard and click **Integration** -> **Rules** in the left navigation tree. Then click the **Create** button, which directs you to the **Rules** page. Here, you can define the data source for your rule and determine the subsequent actions for the filtered messages, such as republishing, printing the result to the Console, or forwarding with data bridges.
+This guide introduces how to create a rule using the EMQX Dashboard. Log in to the EMQX Dashboard and click **Integration** -> **Rules** in the left navigation menu. Then click the **Create** button, which directs you to the **Rules** page. Here, you can define the data source for your rule and determine the subsequent actions for the filtered messages, such as republishing, printing the result to the Console, or forwarding with data bridges.
 
 The following steps demonstrate how to create a rule that listens to messages with the topic `t/#` and forwards the received messages to the topic `a/1`.
 
@@ -25,9 +25,9 @@ EMQX has embedded rich SQL statement samples to help you get started, you can cl
 
 This is an optional step, but it is recommended if you are new to EMQX rules. Turn on the **Enable Test** toggle switch to enable the SQL statement testing.
 
-<img src="./assets/rules/test-sql.png" alt="Test the SQL" style="zoom:50%;" />
+EMQX has provided default values for all fields, such as **Data Source**, **Client ID**, **Username**, **Topic**, **QoS**, and **Payload**, you can just click the **Run Test** button to start the start.  A**Test Passed** prompt will appear if everything is working as expected.
 
-As shown in the screenshot above, EMQX has provided default values for all fields, such as **Data Source**, **Client ID**, **Username**, **Topic**, **QoS**, and **Payload**, you can just click the **Run Test** button to start the start.  A**Test Passed** prompt will appear if everything is working as expected.
+<img src="./assets/rules/test-sql.png" alt="Test the SQL" style="zoom:50%;" />
 
 The processing result of SQL will be presented in the **Output Result** section in the form of JSON. All the fields in SQL processing results can be referenced in the form of `${key}` by the subsequent actions (built-in actions or data bridges). For detailed explanation of the fields, see [SQL Data Sources and Fields](./rule-sql-events-and-fields.md).
 
