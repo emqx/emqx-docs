@@ -11,7 +11,7 @@
 
 ## 通过 Docker 运行单个 EMQX 节点
 
-本节主要介绍如何通过 Docker 镜像安装最新版本的 EMQX，如希望体验其他版本，可以前往 [EMQX 下载页面](https://www.emqx.com/zh/try?product=enterprise)。
+本节主要介绍如何通过 Docker 镜像安装最新版本的 EMQX，如希望体验其他版本，可以前往 [EMQX 下载页面](https://www.emqx.com/zh/try?product=enterprise&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)。
 
 1. 运行以下命令获取 Docker 镜像：
 

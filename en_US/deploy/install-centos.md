@@ -167,45 +167,9 @@ The section below will take CentOS 8 as an example to illustrate how to download
 
 ## Install with rpm
 
-EMQX offers different installation packages for different CPU architectures. 
+1. Go to [EMQ Offical Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise), select `@EE_VERSION@` for **Version** and `CentOS` for **OS**, and click the **Download** button.
 
-:::: tabs type:card
-
-::: tab amd64
-
-1. Download [emqx-enterprise-@EE_VERSION@-el8-amd64.rpm](https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-amd64.rpm). 
-
-   
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-amd64.rpm
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   sudo yum install emqx-enterprise-@EE_VERSION@-el8-amd64.rpm -y
-   ```
-
-:::
-
-::: tab arm64
-
-1. Download [emqx-enterprise-@EE_VERSION@-el8-arm64.rpm](https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-arm64.rpm)
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-arm64.rpm
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   sudo yum install emqx-enterprise-@EE_VERSION@-el8-arm64.rpm -y
-   ```
-
-:::
-
-::::
+2. On the Downloads and Install page, select `rpm` as **Install Method** and select the proper **CPU Architecture**. Download and install the package according to the instruction.
 
 ### Start EMQX
 
@@ -243,43 +207,9 @@ sudo apt remove --purge emqx
 
 ## Install with tar.gz
 
-EMQX offers different installation packages for different CPU architectures. 
+1. Go to [EMQ Offical Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise), select `@EE_VERSION@` for **Version** and `CentOS` for **OS**, and click the **Download** button.
 
-:::: tabs type:card
-
-::: tab amd64
-
-1. Download [emqx-enterprise-@EE_VERSION@-el8-amd64.tar.gz](https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-amd64.tar.gz).  
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-amd64.tar.gz
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-enterprise-@EE_VERSION@-el8-amd64.tar.gz -C emqx
-   ```
-
-:::
-
-::: tab arm64
-
-1. Download [emqx-enterprise-@EE_VERSION@-el8-arm64.tar.gz](https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-arm64.tar.gz). 
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-arm64.tar.gz
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-enterprise-@EE_VERSION@-el8-arm64.tar.gz -C emqx
-   ```
-
-:::
-
-::::
+2. On the Downloads and Install page, select `tar.gz` as **Install Method** and select the proper **CPU Architecture**. Download and install the package according to the instruction.
 
 ### Start EMQX
 
