@@ -36,7 +36,7 @@ EMQX 企业版 5.0 采用与之前版本不同格式的 License，申请时请�
 
 4. 点击**保存修改**保存您的设置。
 
-   <img src="/Users/emqx/Documents/GitHub/emqx-docs/zh_CN/deploy/assets/license.png" alt="license" style="zoom:33%;" />
+   <img src="./assets/license.png" alt="license" style="zoom:33%;" />
 
 ### 配置文件
 
