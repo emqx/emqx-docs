@@ -38,17 +38,17 @@ On the **Log** page, select the **Console Log** tab.
 
 <img src="./assets/config-console-log-1-ee.png" alt="config-console-log-1-ee" style="zoom: 40%;" /> 
 
-Configure the following fields for general settings of the console log handler:
+Configure the following fields for the general settings of the console log handler:
 
 - **Enable Log Handler**: Click the toggle switch to enable the console log handler. 
 
-- **Log Level**: Select the log level to use from the drop-down list. Default value is: `warning`.
+- **Log Level**: Select the log level to use from the drop-down list. The default value is: `warning`.
 
 - **Time Offset**: Define the format of the timestamp in the log. `system` is typed by default.
 
 - **Single Log Max Length**: Disabled by default, which means the maximum length of a single log message is unlimited. If you enable the toggle switch, you can specify the maximum length. When the length exceeds the limit, the log message will be truncated.
 
-- **Log Formatter**: Select the log format from the drop-down list. Optional values are: `text` and `json`. Default value is `text`. 
+- **Log Formatter**: Select the log format from the drop-down list. Optional values are `text` and `json`. The default value is `text`. 
 
   Note: If you select `json`, it is recommended to disable the toggle switch for **Single Log Max Length**, otherwise you will get incomplete json data.
 
@@ -90,17 +90,17 @@ Configure the following fields for the general settings of the console log handl
 
 - **Rotation Enable**: The rotation feature is by default enabled. The generated log files will have corresponding index numbers added to their file suffixes.
 
-- **Max Log Files Number**: Specify the maximum number of rotated log files. Default value is `10`.
+- **Max Log Files Number**: Specify the maximum number of rotated log files. The default value is `10`.
 
-- **Rotation Size**: Log file will be rotated once it reaches the specified size. It is by default enabled. You can type the specific value in the text box below. If you disable it, the value will be `infinity`, which means the log file will grow indefinitely.
+- **Rotation Size**: The log file will be rotated once it reaches the specified size. It is by default enabled. You can type the specific value in the text box below. If you disable it, the value will be `infinity`, which means the log file will grow indefinitely.
 
-- **Log Level**: Select the log level to use from the drop-down list. Optional values are: `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency`. Default value is: `warning`.
+- **Log Level**: Select the log level to use from the drop-down list. Optional values are: `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency`. The default value is: `warning`.
 
 - **Time Offset**: Define the format of the timestamp in the log. `system` is typed by default.
 
 - **Single Log Max Length**: Disabled by default, which means the maximum length of a single log message is unlimited. If you enable the toggle switch, you can specify the maximum length. When the length exceeds the limit, the log message will be truncated.
 
-- **Log Formatter**: Select the log format from the drop-down list. Optional values are: `text` and `json`. Default value is `text`. 
+- **Log Formatter**: Select the log format from the drop-down list. Optional values are `text` and `json`. The default value is `text`. 
 
   Note: If you select `json`, it is recommended to disable the toggle switch for **Single Log Max Length**, otherwise you will get incomplete json data.
 
@@ -108,7 +108,7 @@ Configure the following fields for the general settings of the console log handl
 
 - **Queue Length before Entering Sync Mode**: Set the number limit of buffered log events. If the message queue grows larger than the set value, the handler starts handling log events synchronously, which means that the client process sending the event must wait for a response. It is set to `100` by default. 
 
-- **Queue Length before Entering Drop Mode**: Set the number limit of buffered log events. If message queue grous larger than the set value, the handler starts to drop new log events. It is set to `3000` by default.
+- **Queue Length before Entering Drop Mode**: Set the number limit of buffered log events. If the message queue grows larger than the set value, the handler starts to drop new log events. It is set to `3000` by default.
 
 - **Flush Threshold**: Set the number limit of buffered log events. The handler starts to discard the buffered log messages. It is set to `8000` by default.
 
