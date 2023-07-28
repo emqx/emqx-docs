@@ -145,7 +145,7 @@
 
 - [#11272](https://github.com/emqx/emqx/pull/11272) 修复了日志中的拼写错误，错误地将异常 `PUBREL` 数据包称为 `pubrec`。
 
-- [#11281](https://github.com/emqx/emqx/pull/11281) 恢复对特殊的 `$queue/` 共享订阅主题前缀的支持。
+- [#11281](https://github.com/emqx/emqx/pull/11281) 恢复对特殊的共享订阅主题前缀 `$queue/` 的支持。
 
 - [#11294](https://github.com/emqx/emqx/pull/11294) 修复了`emqx_ctl cluster join`，`leave `和 `status `命令。
 
