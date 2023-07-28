@@ -167,9 +167,9 @@ The section below will take CentOS 8 as an example to illustrate how to download
 
 ## Install with rpm
 
-1. Go to [EMQ Offical Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise), select `@EE_VERSION@` for **Version** and `CentOS` for **OS**, and click the **Download** button.
-
-2. On the Downloads and Install page, select `rpm` as **Install Method** and select the proper **CPU Architecture**. Download and install the package according to the instruction.
+1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise). 
+2. Select `@EE_VERSION@` for **Version** and `CentOS` for **OS**, and click the **Download** button.
+2. On the Downloads and Install page, select `rpm` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
 
 ### Start EMQX
 
@@ -207,9 +207,9 @@ sudo apt remove --purge emqx
 
 ## Install with tar.gz
 
-1. Go to [EMQ Offical Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise), select `@EE_VERSION@` for **Version** and `CentOS` for **OS**, and click the **Download** button.
-
-2. On the Downloads and Install page, select `tar.gz` as **Install Method** and select the proper **CPU Architecture**. Download and install the package according to the instruction.
+1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
+2. Select `@EE_VERSION@` for **Version** and `CentOS` for **OS**, and click the **Download** button.
+2. On the Downloads and Install page, select `tar.gz` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
 
 ### Start EMQX
 
