@@ -94,7 +94,7 @@
 
 - [#11148](https://github.com/emqx/emqx/pull/11148) 修复当一个节点离开集群时，其他节点仍然尝试将配置更新操作同步到其中的问题。
 
-- [#11150](https://github.com/emqx/emqx/pull/11150) 在启动 emqx_psk 应用程序时等待 Mria 表，确保 PSK 数据在复制节点上同步，即使它们没有初始化的 PSK 文件。
+- [#11150](https://github.com/emqx/emqx/pull/11150) 在启动 `emqx_psk` 应用程序时等待 Mria 表，确保即使没有初始化 PSK 文件，PSK 数据也能同步到 replicant 节点。
 
 - [#11151](https://github.com/emqx/emqx/pull/11151) 将 MySQL 桥接重构为单独的 Erlang 应用，以改进代码结构。
 
