@@ -5,7 +5,7 @@
 ### 修复
 
 - [#11306](https://github.com/emqx/emqx/pull/11306) 修复了规则动作指标的不一致性，未计算被丢弃的请求。
-- [#11327](https://github.com/emqx/emqx/pull/11327) 更新了 ekka 到版本 0.15.8，更新了 mria 到版本 0.15.8，并更新了 optvar 到版本 1.0.5。 这修复了偶发的断言失败： `{{badmatch,noproc},[{optvar,read,2,[{file,"optvar.erl"},{line,140}]},{optvar,read,1,[{file,"optvar.erl"},{line,124}]},...`
+- [#11327](https://github.com/emqx/emqx/pull/11327) 更新了 ekka 到版本 0.15.8，更新了 mria 到版本 0.5.10，并更新了 optvar 到版本 1.0.5。 这修复了偶发的断言失败： `{{badmatch,noproc},[{optvar,read,2,[{file,"optvar.erl"},{line,140}]},{optvar,read,1,[{file,"optvar.erl"},{line,124}]},...`
 - [#11337](https://github.com/emqx/emqx/pull/11337) 修复了当发布主题重写规则针对带通配符的主题时出现的 HTTP API 错误。现在返回错误码 400（Bad Match），而不是错误码 500（Internal Error）。
 - [#11346](https://github.com/emqx/emqx/pull/11346) 更新了 ekka 到版本 0.15.9。 这修复了如果获取锁超时，会出现悬挂的 etcd 锁。
 - [#11352](https://github.com/emqx/emqx/pull/11352) 修复了在 Windows 或其他不支持 RocksDB 的平台上启动时出现的崩溃问题 [#11345](https://github.com/emqx/emqx/issues/11345)。
