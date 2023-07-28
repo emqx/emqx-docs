@@ -132,9 +132,9 @@ After the installation, run the command below to start EMQX.
 
 ## Install with rpm
 
-1. Go to [EMQ Offical Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=AmazonLinux2=currentOS=AmazonLinux2&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise), select `@EE_VERSION@` for **Version** and `Amazon Linux 2` for **OS**, and click the **Download** button.
-
-2. On the Downloads and Install page, select `rpm` as **Install Method** and select the proper **CPU Architecture**. Download and install the package according to the instruction.
+1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=AmazonLinux2=currentOS=AmazonLinux2&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
+2. Select `@EE_VERSION@` for **Version** and `Amazon Linux 2` for **OS**, and click the **Download** button.
+2. On the Downloads and Install page, select `rpm` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
 
 ### Start EMQX
 
@@ -173,9 +173,9 @@ sudo apt remove --purge emqx
 ## Install with tar.gz
 
 
-1. Go to [EMQ Offical Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=AmazonLinux2=currentOS=AmazonLinux2&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise), select `@EE_VERSION@` for **Version** and `Amazon Linux 2` for **OS**, and click the **Download** button.
-
-2. On the Downloads and Install page, select `tar.gz` as **Install Method** and select the proper **CPU Architecture**. Download and install the package according to the instruction.
+1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=AmazonLinux2=currentOS=AmazonLinux2&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
+2. Select `@EE_VERSION@` for **Version** and `Amazon Linux 2` for **OS**, and click the **Download** button.
+2. On the Downloads and Install page, select `tar.gz` as **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
 
 ### Start EMQX
 
