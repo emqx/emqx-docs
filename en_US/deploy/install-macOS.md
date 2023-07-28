@@ -106,7 +106,7 @@ The instructions below will take macOS 12 as an example to illustrate how to dow
 
 1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=macOS=currentOS=macOS12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
 2. Select `@EE_VERSION@` for **Version** and `macOS` for **OS**, and click the **Download** button.
-2. On the Downloads and Install page, select `zip` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
+3. On the Downloads and Install page, select `zip` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
 
 ## Start and Stop EMQX
 

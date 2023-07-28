@@ -167,7 +167,7 @@ The section below will take Debian 11 as an example to illustrate how to downloa
 
 1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=Debian=currentOS=Debian12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
 2. Select `@EE_VERSION@` for **Version** and `Debian` for **OS**, and click the **Download** button.
-2. On the Downloads and Install page, select `deb` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
+3. On the Downloads and Install page, select `deb` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
 
 ### Start EMQX
 
@@ -207,7 +207,7 @@ sudo apt remove --purge emqx
 
 1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=Debian=currentOS=Debian12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
 2. Select `@EE_VERSION@` for **Version** and `Debian` for **OS**, and click the **Download** button.
-2. On the Downloads and Install page, select `tar.gz` as **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
+3. On the Downloads and Install page, select `tar.gz` as **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
 
 ### Start EMQX
 
