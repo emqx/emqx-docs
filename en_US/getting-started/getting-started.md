@@ -96,9 +96,9 @@ In addition, you can also deploy EMQX with one-click through [EMQX Terraform](ht
 
 <!-- TODO @wivwiv Update Terraform link when EMQX Terraform 5.0 document ready -->
 
-### Install EMQX with Docker/Installation Package
+### Install EMQX using Docker/Installation Package
 
-In this quick start guide, we will show you the easiest ways to start or run EMQX, that is, with Docker or with the installation package. 
+This quick start guide shows you the easiest ways to install and run EMQX, either through Docker or using the installation package.
 
 :::: tabs type:card
 
@@ -182,10 +182,6 @@ Note: Considering all the runtime dependencies, it is recommended to use zip/tar
 
 {% endemqxee %}
 
-:::
-
-::::
-
 3. To run EMQX, enter:
 
    ```bash
@@ -211,11 +207,11 @@ To uninstall EMQX after your testing, simply delete the EMQX folder.
 
 ## Use MQTTX to Verify Connection
 
-Now that you have successfully started EMQX, you can continue to test the connection and message services with MQTT X
+Now that you have successfully started EMQX, you can continue to test the connection and message services with MQTTX.
 
 [MQTTX](https://mqttx.app) is an elegant cross-platform MQTT 5.0 desktop client, running on macOS, Linux, and Windows. By utilizing a chat style of user interface, MQTT X allows users to quickly create connections and save multiple clients, which facilitates users to quickly test the MQTT/MQTTS connection, as well as the subscription and publication of MQTT messages.
 
-This section will introduce how to verify the connection with [MQTTX Web](https://mqttx.app/web), the browser-based MQTT 5.0 WebSocket client tool, with zero need to download or install any application. 
+This section introduces how to verify the connection with [MQTTX Web](https://mqttx.app/web), the browser-based MQTT 5.0 WebSocket client tool, with zero need to download or install any application. 
 
 ::: tip Prerequisites
 The broker address and the port information should be prepared before testing the connection:
@@ -224,7 +220,7 @@ The broker address and the port information should be prepared before testing th
 - Port: Click **Management** -> **Listeners** on the left navigation menu to get the port number.
 :::
 
-1. Click [MQTTX Web](http://www.emqx.io/online-mqtt-client#/recent_connections) to visit the browser-based MQTT X.
+1. Click [MQTTX Web](http://www.emqx.io/online-mqtt-client#/recent_connections) to visit the browser-based MQTTX.
 
 2. Configure and establish the MQTT connection. Click the **+ New Connection** button to enter the configure page: 
 
@@ -232,12 +228,12 @@ The broker address and the port information should be prepared before testing th
 
    - **Host**
 
-     - Select the protocol type via the drop-down list, for example, select **ws://** if the WebSockets protocol is adopted; MQTTX Web only supports Websockets protocol, to test the SSL/TLS connection, download [MQTTX desktop client](https://mqttx.app/);
+     - Select the protocol type via the drop-down list, for example, select `ws://` if the WebSockets protocol is adopted; MQTTX Web only supports Websockets protocol, to test the SSL/TLS connection, download [MQTTX desktop client](https://mqttx.app/);
      - Fill in the EMQX address, for example, **emqx@127.0.0.1**; 
 
-   - **Port**: for example, **8083** for the WebSockets protocol; 
+   - **Port**: for example, `8083` is for the WebSockets protocol; 
 
-     Keep the default setting for the other fields or set it as your business needs. For a detailed explanation of different fields, see [*MQTT User Manual - Connect*](https://mqttx.app/docs/get-started).
+     Keep the default setting for the other fields or set it as your business needs. For a detailed explanation of different fields, see [MQTT User Manual - Connect](https://mqttx.app/docs/get-started).
 
    Then click the **Connect** button at the top right corner of the page.
 
@@ -247,9 +243,9 @@ The broker address and the port information should be prepared before testing th
 
 <img src="./assets/MQTTXWeb-test.png" alt="MQTT X Web test" style="zoom: 25%;" />
 
-If you'd like to continue the testing, such as one-way/two-way SSL authentication and simulate test data with customized scripts, you can continue to explore with [MQTTX](https://mqttx.app). 
+If you want to continue the testing, such as one-way/two-way SSL authentication, and simulate test data with customized scripts, you can continue to explore with [MQTTX](https://mqttx.app). 
 
-Then, on the Cluster Overview page in **Dashboard**, you can check metrics such as **Connections**, **Topics**, **Subscriptions**, **Incoming Messages**, **Outgoing messages**, and **Dropped Messages**.
+Then, on the Cluster Overview page in EMQX Dashboard, you can check metrics such as **Connections**, **Topics**, **Subscriptions**, **Incoming Messages**, **Outgoing messages**, and **Dropped Messages**.
 
 {% emqxee}
 
