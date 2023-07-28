@@ -24,7 +24,7 @@ EMQX provides the running statistics of data integration in the following catego
 - Inflight (gauge)
 - Queuing (gauge)
 
-![Bridge Metrics](./assets/metrics.svg)
+<img src="./assets/data-bridge-metrics.png" alt="data-bridge-metrics"  />
 
 ### Matched
 
