@@ -38,7 +38,7 @@ To better understand how clustering in EMQX works, you can continue to read the 
 
 ## Key Features
 
-EMQX adds an abstraction layer with the [Ekka](https://github.com/emqx/ekka) library on top of distributed Erlang, enabling features like auto discovery of EMQX nodes, auto cluster, network partition, autoheal, and autoclean.
+EMQX adds an abstraction layer with the [Ekka](https://github.com/emqx/ekka) library on top of distributed Erlang, enabling features like auto discovery of EMQX nodes, auto cluster, network partition autoheal, and autoclean.
 
 ### Node Discovery and Auto Clustering
 

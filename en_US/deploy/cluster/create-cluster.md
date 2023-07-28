@@ -45,8 +45,6 @@ Before creating an EMQX cluster, the following prerequisites should first be met
    }
    ```
 
-:::
-
 Now you can begin your journey to create an EMQX cluster.
 
 ## Configure Node Names
@@ -71,13 +69,11 @@ Now you have named 2 nodes to join the cluster, `emqx@s1.emqx.io` and `emqx@s2.e
 
 ## Manual Clustering
 
+EMQX supports creating clusters manually and automatically. This section introduces the manual clustering feature in EMQX.
+
 ### Set Node Discovery Strategy
 
-EMQX supports creating clusters manually and automatically. This section will introduce the manual clustering feature in EMQX.
-
-Set node discovery strategy
-
-Manual clustering is the method to configure an EMQX cluster by manually specifying which nodes should be part of the cluster. By default, EMQX adopts a manual clustering strategy, which can also be set in `emqx.conf`. Besides, you also need to configure the default
+Manual clustering is the method to configure an EMQX cluster by manually specifying which nodes should be part of the cluster. By default, EMQX adopts a manual clustering strategy, which can also be set in `emqx.conf`. 
 
 ```bash
 cluster {
@@ -85,8 +81,6 @@ cluster {
     discovery_strategy  =  manual
 }
 ```
-
-
 
 ### Configure Nodes to Join a Cluster
 
