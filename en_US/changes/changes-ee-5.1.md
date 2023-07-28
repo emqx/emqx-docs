@@ -93,7 +93,7 @@
 
   Ekka:
   - Improved cluster discovery log messages to consistently describe actual events.
-  [Ekka PR](https://github.com/emqx/ekka/pull/204).
+  [Ekka PR](https://github.com/emqx/ekka/pull/204)
   - Removed deprecated cluster auto-clean configuration parameter (it has been moved to Mria).
   [Ekka PR](https://github.com/emqx/ekka/pull/203)
 
