@@ -68,7 +68,7 @@ For more information, see: https://www.erlang.org/doc/man/erl.html
 
   Path to the persistent data directory.<br/>
 Possible auto-created subdirectories are:<br/>
-- `mnesia/{node_name}`: EMQX's built-in database directory.<br/>
+- `mnesia/<node_name>`: EMQX's built-in database directory.<br/>
 For example, `mnesia/emqx@127.0.0.1`.<br/>
 There should be only one such subdirectory.<br/>
 Meaning, in case the node is to be renamed (to e.g. `emqx@10.0.1.1`),<br/>
@@ -370,7 +370,7 @@ there is no need to set this value.
 
   *Type*: `duration`
 
-  *Default*: `24h`
+  *Default*: `5m`
 
   Remove disconnected nodes from the cluster after this interval.
 
@@ -434,7 +434,7 @@ see [Create and manage clusters](../deploy/cluster/create-cluster.md)。
 
 ### Create cluster manually
 
-This is the default configuration of clustering, nodes join a cluster by executing ./bin/emqx_ctl join \<Node\> CLI command:
+This is the default configuration of clustering, nodes join a cluster by executing ./bin/emqx_ctl join \<Node> CLI command:
 
 ```bash
 cluster.discovery = manual
@@ -2022,7 +2022,7 @@ Settings for reporting metrics to Prometheus
 
   *Default*: `[]`
 
-  An HTTP Headers when pushing to Push Gateway.<br/>
+  A list of HTTP Headers when pushing to Push Gateway.<br/>
 For example, <code> { Authorization = "some-authz-tokens"}</code>
 
 
@@ -2718,7 +2718,7 @@ the file if it is to be added.
 
   *Default*: `true`
 
-  Enable TLS session reuse.<br />
+  Enable TLS session reuse.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
@@ -2797,7 +2797,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
   SSL parameter renegotiation is a feature that allows a client and a server
 to renegotiate the parameters of the SSL connection on the fly.
 RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
-you drop support for the insecure renegotiation, prone to MitM attacks.<br />
+you drop support for the insecure renegotiation, prone to MitM attacks.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
@@ -2857,7 +2857,7 @@ The SSL application already takes measures to counter-act such attempts,
 but client-initiated renegotiation can be strictly disabled by setting this option to false.
 The default value is true. Note that disabling renegotiation can result in
 long-lived connections becoming unusable due to limits on
-the number of messages the underlying cipher suite can encipher.<br />
+the number of messages the underlying cipher suite can encipher.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
@@ -2919,9 +2919,9 @@ gateway clients. The types of the clients
 are distinguished by the topic prefix:
 
 - For the MQTT clients, the format is:
-`$SYS/broker/<node>/clients/{clientid}/{event}`
+`$SYS/broker/<node>/clients/<clientid>/<event>`
 - For the Gateway clients, it is
-`$SYS/broker/<node>/gateway/{gateway-name}/clients/{clientid}/{event}`
+`$SYS/broker/<node>/gateway/<gateway-name>/clients/<clientid>/<event>`
 
 
 **sys_topics.sys_event_messages.client_connected**
@@ -3954,7 +3954,7 @@ the file if it is to be added.
 
   *Default*: `true`
 
-  Enable TLS session reuse.<br />
+  Enable TLS session reuse.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
@@ -4033,7 +4033,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
   SSL parameter renegotiation is a feature that allows a client and a server
 to renegotiate the parameters of the SSL connection on the fly.
 RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
-you drop support for the insecure renegotiation, prone to MitM attacks.<br />
+you drop support for the insecure renegotiation, prone to MitM attacks.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
@@ -4140,7 +4140,7 @@ the file if it is to be added.
 
   *Default*: `true`
 
-  Enable TLS session reuse.<br />
+  Enable TLS session reuse.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
@@ -4219,7 +4219,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
   SSL parameter renegotiation is a feature that allows a client and a server
 to renegotiate the parameters of the SSL connection on the fly.
 RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
-you drop support for the insecure renegotiation, prone to MitM attacks.<br />
+you drop support for the insecure renegotiation, prone to MitM attacks.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
@@ -4330,7 +4330,7 @@ the file if it is to be added.
 
   *Default*: `true`
 
-  Enable TLS session reuse.<br />
+  Enable TLS session reuse.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
@@ -4409,7 +4409,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
   SSL parameter renegotiation is a feature that allows a client and a server
 to renegotiate the parameters of the SSL connection on the fly.
 RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
-you drop support for the insecure renegotiation, prone to MitM attacks.<br />
+you drop support for the insecure renegotiation, prone to MitM attacks.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
@@ -4482,7 +4482,7 @@ The SSL application already takes measures to counter-act such attempts,
 but client-initiated renegotiation can be strictly disabled by setting this option to false.
 The default value is true. Note that disabling renegotiation can result in
 long-lived connections becoming unusable due to limits on
-the number of messages the underlying cipher suite can encipher.<br />
+the number of messages the underlying cipher suite can encipher.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
@@ -4819,7 +4819,7 @@ the file if it is to be added.
 
   *Default*: `true`
 
-  Enable TLS session reuse.<br />
+  Enable TLS session reuse.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
@@ -4898,7 +4898,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
   SSL parameter renegotiation is a feature that allows a client and a server
 to renegotiate the parameters of the SSL connection on the fly.
 RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
-you drop support for the insecure renegotiation, prone to MitM attacks.<br />
+you drop support for the insecure renegotiation, prone to MitM attacks.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
@@ -4971,7 +4971,7 @@ The SSL application already takes measures to counter-act such attempts,
 but client-initiated renegotiation can be strictly disabled by setting this option to false.
 The default value is true. Note that disabling renegotiation can result in
 long-lived connections becoming unusable due to limits on
-the number of messages the underlying cipher suite can encipher.<br />
+the number of messages the underlying cipher suite can encipher.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
