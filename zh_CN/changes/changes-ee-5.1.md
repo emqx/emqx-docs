@@ -85,7 +85,7 @@
   Ekka:
 
   - 改进了集群发现日志消息，以一致地描述实际事件。 [Ekka PR](https://github.com/emqx/ekka/pull/204)
-  - 删除了弃用的集群自动清理配置参数（已移动到 Mria） [Ekka PR](https://github.com/emqx/ekka/pull/203)。
+  - 删除了弃用的集群自动清理配置参数（已移动到 Mria）。[Ekka PR](https://github.com/emqx/ekka/pull/203)
 
   Mria:
 
