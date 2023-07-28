@@ -1,5 +1,31 @@
 # Releases
 
+## e4.4.20
+
+*Release Date: 2023-07-28*
+
+### Enhancements
+
+- Improved the performance of sending data to Kafka and HStreamDB [#1834](https://github.com/emqx/emqx-enterprise/pull/1834).
+
+  This enhancement added an Erlang message buffer ahead of the driver process, reducing the frequency of internal message passing within EMQX. This optimization comes at the expense of increased message latency, but it significantly enhances the throughput capacity when sending data to Kafka and HStreamDB.
+
+  Now, messages sent from EMQX to Kafka or HStreamDB drivers will first enter the buffer. When the number of cached messages reaches `message_accumulation_size` or the time interval reaches `message_accumulation_interval`, the buffered messages will be batched and sent to the Kafka or HStreamDB driver. The driver will then handle the forwarding to Kafka or HStreamDB services. Setting `message_accumulation_size = 0` (default value) will disable this message buffering feature.
+
+- Added the `auto_reconnect` option for SQL Server resources [#1832](https://github.com/emqx/emqx-enterprise/pull/1832).
+
+  Before this improvement, when the connection between EMQX and the SQL Server database was disrupted, EMQX was unable to reconnect automatically. With this new enhancement, EMQX can reconnect automatically. You can still opt to set `auto_reconnect = false` to turn off the automatic reconnection feature.
+
+- Added TLS connection support to RabbitMQ resource [#1836](https://github.com/emqx/emqx-enterprise/pull/1836).
+
+- Added support for defining attributes and ordering key for GCP PubSub actions [#1843](https://github.com/emqx/emqx-enterprise/pull/1843).
+
+### Bug Fixes
+
+- Fixed the issue that the `mongo_date()` function of the rule engine cannot be tested on the Dashboard [#1834](https://github.com/emqx/emqx-enterprise/pull/1835).
+
+  Before the fix, `mongo_date()` can be used normally, but an error will occur when testing on the SQL test page of the Dashboard.
+
 ## e4.4.19
 
 *Release Date: 2023-06-27*
@@ -61,7 +87,7 @@
   Previously, the "DynamoDB Server" parameter of DynamoDB resources required a URL with a specified port number, otherwise the resource creation would fail.
   Now, if the URL does not include a port number, the default value will be 80 (HTTP) or 443 (HTTPS).
 
-### Bug fixes
+### Bug Fixes
 
 - Fixed an issue where the rule engine was unable to access variables exported by `FOREACH` in the `DO` clause [#10620](https://github.com/emqx/emqx/pull/10620).
 
@@ -176,7 +202,7 @@
     letters, numbers, and underscores. Now the `key` supports any UTF8
     characters.
 
-### Bug fixes
+### Bug Fixes
 
 -   Fixed the issue where required plugins were missing in
     `data/load_plugins`.
@@ -229,7 +255,7 @@
   $ emqx_ctl data import <filename> --env '{"auth.mnesia.as":"username"}'
   ```
 
-### Bug fixes
+### Bug Fixes
 
 - Fixed the issue where `Erlang distribution` could not use TLS [#9981](https://github.com/emqx/emqx/pull/9981).
 
@@ -294,7 +320,7 @@ This version update includes 4 enhancements and 7 fixes.
 
 - Change "EMQ X" to "EMQX" from the outputs of CLIs and names of plugins.
 
-### Bug fixes
+### Bug Fixes
 
 - Start the `emqx_schema_registry` plugin automatically when release hot upgrade.
   The `emqx_schema_registry` is a necessary plugin when using rules to decode serialized binary data
@@ -373,7 +399,7 @@ Among the enhancements, there are new exciting new features worth highlighting:
 
 - Expose the stats `live_connections.count` and `live_connections.max` to Prometheus [#9929](https://github.com/emqx/emqx/pull/9929).
 
-### Bug fixes
+### Bug Fixes
 
 - Fixed `tlsv1.3` is missing from Module(Stomp Gateway, GB/T 32960 Gateway, JT/T808 Gateway, Extension Protocol, TCP Gateway, MQTT Subscriber) `tls_versions` tab.
 
@@ -482,7 +508,7 @@ For more information about this feature, please refer to [Cluster Rebalancing](.
 
 - When dashboard creates a new user, the password format is `^[A-Za-z0-9]+[A-Za-z0-9-_]*$`.
 
-### Bug fixes
+### Bug Fixes
 
 - After a reconnect, the unacknowledged QoS1/QoS2 messages in non-clean session were not retransmitted periodically as before the reconnect.
   The configuration `zone.<zone-name>.retry_interval` specifies the retransmission interval of
@@ -633,7 +659,7 @@ a node restart (and configuration change) is required.
 - For Rule-Engine resource creation failure, delay before the first retry [#9313](https://github.com/emqx/emqx/pull/9313).
   Prior to this change, the retry delay was added *after* the retry failure.
 
-### Bug fixes
+### Bug Fixes
 
 - Fix the default authentication mechanism of Kafka resource changed to `NONE` from `PLAIN`
   when upgrading emqx from e4.4.5 and older versions.
@@ -726,7 +752,7 @@ a node restart (and configuration change) is required.
 
 - Fix delayed publish timing inaccuracy caused by OS time change [#8908](https://github.com/emqx/emqx/pull/8908).
 
-### Bug fixes
+### Bug Fixes
 
 - Fix `load_modules` reset after new node joins the cluster.
   Prior to this fix, if `load_modules` for a cluster has been changed, adding a new node to the cluster with default modules
@@ -797,7 +823,7 @@ a node restart (and configuration change) is required.
 
 - The `exp`, `nbf` and `iat` claims in JWT authentication support non-integer timestamps
 
-### Bug fixes
+### Bug Fixes
 
 - Fix rule engine update behaviour which may initialize actions for disabled rules
 - Fix inaccurate delayed publish due to OS time changes
@@ -818,7 +844,7 @@ a node restart (and configuration change) is required.
 - Add a guide for changing the default password on Dashboard
 - Improved import performance for Protobuf Schema files
 
-### Bug fixes
+### Bug Fixes
 
 - Fix `client.disconnected` event not trigger in some cases
 - Fix the issue that the JWK authentication module could not be started later when the JWKS service was not ready in time
@@ -849,7 +875,7 @@ a node restart (and configuration change) is required.
 - Allows the connection process to be configured to be garbage collected after the TLS handshake is complete to reduce memory footprint, which can reduce memory consumption by about 35% per SSL connection, but increases CPU consumption accordingly
 - Allows configuring the log level of the TLS handshake log to view the detailed handshake process
 
-### Bug fixes
+### Bug Fixes
 
 - Fix the issue that EMQX could not be started when deployed through Helm Chart after unmounting the `loaded_modules` file in ConfigMap
 
@@ -868,7 +894,7 @@ a node restart (and configuration change) is required.
 - Optimizing Shared Subscription Performance
 - Add `db_name` field to the action of rule engine writing data to TDEngine to improve support for super table
 
-### Bug fixes
+### Bug Fixes
 
 - Fix the issue that the action count is wrong when the rule engine writes to TDEngine
 - Fix the issue that the process pool size setting does not take effect when the rule engine writes to HStreamDB
@@ -898,7 +924,7 @@ a node restart (and configuration change) is required.
 - Optimize the UI when creating rule engine resources, such as folding some uncommon options, etc.
 - Opened 4 TCP-related configuration items: KeepAlive, TCP_NODELAY, SO_RCVBUF and SO_SNDBUF for the underlying gRPC connection of ExHook
 
-### Bug fixes
+### Bug Fixes
 
 - Fix the issue of inaccurate memory calculation in Linux OS, and calculate the memory usage of the current OS instead of the memory usage of EMQX
 - Fix the issue that the old disconnect event of ExHook would be triggered later than the new connect event when the client reconnects
@@ -945,7 +971,7 @@ a node restart (and configuration change) is required.
 - Allow white spaces in EMQX's installation path
 - Boot script fail fast on invalid node name (improve error message readability)
 
-### Bug fixes
+### Bug Fixes
 
 - Fix the issue that the client could not get the message after going online when using the PostgreSQL offline message plugin
 - Fix the issue that the rules engine could not successfully establish a TLS connection with Pulsar in some cases
@@ -989,7 +1015,7 @@ a node restart (and configuration change) is required.
 - Subscribing to an empty topic is prohibited in strict mode
 - Generate default files when `loaded_modules` and `loaded_plugins` files do not exist
 
-### Bug fixes
+### Bug Fixes
 
 - Fix the issue that the TLS configuration item `server_name_indication` is set to disable and does not take effect
 - Fix potential process leak issue in MongoDB driver
@@ -1027,7 +1053,7 @@ a node restart (and configuration change) is required.
 - Improve the writing precision of rule engine floating point data from 10 decimal places to 17 decimal places.
 - EMQX will prompt how to modify the initial password of Dashboard at startup.
 
-### Bug fixes
+### Bug Fixes
 
 - Fix `MQTT Subscriber` module not being able to use two-way SSL connection.
 - Fix the issue that `PSKFile` module failed to start.
@@ -1085,7 +1111,7 @@ The compare base of this change set is 4.4.0.
 - Added `connected_at` field to webhook event notifications
 - Log client state before terminating client due to holding the lock too long
 
-### Bug fixes
+### Bug Fixes
 
 - Fix the issue that data import and export were not available in some cases
 - The module update mechanism is improved to solve the issue that the module is unavailable after the update fails
@@ -1156,7 +1182,7 @@ EMQX Enterprise 4.4.0 mainly includes the following changes:
 
 - Add openssl-1.1 to RPM dependency
 
-### Bug fixes
+### Bug Fixes
 
 - Fix the issue that the client process becomes unresponsive due to the blockage of RPC calls between nodes
 

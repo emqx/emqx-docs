@@ -1,5 +1,31 @@
 # 版本发布
 
+## e4.4.20
+
+*发布日期: 2023-07-28*
+
+### 增强
+
+- 提升发送数据到 Kafka 和 HStreamDB 的性能 [#1834](https://github.com/emqx/emqx-enterprise/pull/1834)。
+
+  此改进在驱动进程的前面增加了一个 Erlang 消息缓冲区，虽然以增加消息时延为代价，但减少了 EMQX 内部的消息传递频率、提升了发送数据到 Kafka 和 HStreamDB 的吞吐能力。
+
+  现在，EMQX 发送到 Kafka 或 HStreamDB 驱动的消息会先进入到缓冲区，当缓存的消息数量达到 `message_accumulation_size` 或时间间隔达到 `message_accumulation_interval` 时，才会批量地将缓冲区中的消息发送到 Kafka 或 HStreamDB 驱动，然后再由驱动发送到 Kafka 或 HStreamDB 服务。设置 `message_accumulation_size = 0 `(默认值) 将关闭这个消息缓冲功能。
+
+- 为 SQL Server 资源增加 `auto_reconnect` 选项 [#1832](https://github.com/emqx/emqx-enterprise/pull/1832)。
+
+  改进前，当 EMQX 与 SQL Server 数据库之间的连接断开时，EMQX 无法自动重连。改进后 EMQX 将会自动重连，用户可以通过设置 `auto_reconnect = false` 来关闭自动重连功能。
+
+- 为 RabbitMQ 资源添加了 TLS 连接支持 [#1836](https://github.com/emqx/emqx-enterprise/pull/1836)
+
+- 为 GCP PubSub 动作添加属性和排序键的支持。 [#1843](https://github.com/emqx/emqx-enterprise/pull/1843)
+
+### 修复
+
+- 修复了无法在 Dashboard 上测试规则引擎的 `mongo_date()` 函数的问题 [#1834](https://github.com/emqx/emqx-enterprise/pull/1835)。
+
+  改进之前，`mongo_date()` 可以正常使用，但在 Dashboard 的 SQL 测试页面进行测试时会出现错误。
+
 ## e4.4.19
 
 *发布日期: 2023-06-27*
