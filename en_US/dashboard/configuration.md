@@ -52,7 +52,7 @@ Session menu is the session related configuration items of the MQTT protocol, in
 
 ### Retainer
 
-The retainer menu is the Retained Message related configuration items of the MQTT protocol, including whether to enable the Retained Message function, the storage type and method of the message, the maximum number of Retained Messages, the payload size of the Retained Message, the expiration interval of the Retained Message, etc. When you need to modify the configuration of the Retained Message, you can configure it here.
+The retainer menu is the Retained Message related configuration items of the MQTT protocol, including whether to enable the Retained Message function, the storage type and method of the message, the maximum number of Retained Messages, the payload size of the Retained Message, the expiration interval of the Retained Message, etc. For detailed information about the configuration items, see [Retainer Settings](./retained.md#retainer-settings).
 
 > When the Retained Message is disabled, the existing Retained Messages will not be deleted.
 
@@ -63,8 +63,6 @@ The system Topic menu is the system topic related configuration items of EMQX; E
 ### Advanced MQTT
 
 Besides, the EMQX Dashboard also offers advanced MQTT features like Topic Rewrite, Auto Subscribe, and Delayed Publish. You can click Management and browse to Advanced MQTT section for configurations we supported. 
-
-
 
 ## Limiter
 

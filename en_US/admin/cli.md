@@ -230,10 +230,10 @@ Note that the `join` command in EMQX for joining a cluster is a "request" sent t
 | Command                      | Description                                | Use cases and Considerations                                 |
 | ---------------------------- | ------------------------------------------ | ------------------------------------------------------------ |
 | emqx ctl cluster             | Command for cluster control of EMQX.       |                                                              |
-| cluster join \<Node\>        | Join a cluster.                            | - Use this command to join a node to the EMQX cluster where the specified node is located.<br/>- Ensure that the specified node is active and accessible. |
+| cluster join \<Node\>        | Join a cluster.                            | - Use this command to join a node to the EMQX cluster where the specified node is located.<br />- Ensure that the specified node is active and accessible. |
 | cluster leave                | Leave the cluster.                         | - Use this command to remove the node from the current EMQX cluster. |
-| cluster force-leave \<Node\> | Forcefully remove a node from the cluster. | - Use this command to forcefully remove the specified node from the EMQX cluster.<br/>- Note that this operation may cause cluster state inconsistency, so use it with caution. |
-| cluster status [--json]      | View the cluster status.                   | - Use this command to view the status of the EMQX cluster.<br/>- The optional `--json` parameter displays the cluster status in JSON format.<br/>- Useful for monitoring and debugging the health of the cluster. |
+| cluster force-leave \<Node\> | Forcefully remove a node from the cluster. | - Use this command to forcefully remove the specified node from the EMQX cluster.<br />- Note that this operation may cause cluster state inconsistency, so use it with caution. |
+| cluster status [--json]      | View the cluster status.                   | - Use this command to view the status of the EMQX cluster.<br />- The optional `--json` parameter displays the cluster status in JSON format.<br />- Useful for monitoring and debugging the health of the cluster. |
 
 ### cluster join \<Node\>
 

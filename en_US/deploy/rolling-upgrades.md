@@ -1,4 +1,4 @@
-# Rolling Upgrades
+# Rolling Upgrade
 
 {% emqxee %}
 

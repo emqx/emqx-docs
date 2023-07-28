@@ -6,9 +6,9 @@ Before EMQX 5.0, this feature is called **Proxy Subscription**.
 
 ## Configure Auto Subscribe via Dashboard
 
-1. Open EMQX Dashboard. In the left navigation menu, click **Management** -> **Delayed Publish**. 
+1. Open EMQX Dashboard. In the left navigation menu, click **Management** -> **Auto Subscribe**. 
 
-2. On the **Delayed Publish** page, click the **Add** button at the upper right corner. 
+2. On the **Auto Subscribe** page, click the **+ Add** button at the upper right corner. 
 
 3. In the pop-up dialog box, type the test topic `a/1` in the **Topic** text box. Leave other settings as default.
 
@@ -30,51 +30,53 @@ Before EMQX 5.0, this feature is called **Proxy Subscription**.
 
 Now the auto subscription function is enabled. New subscribers will subscribe to the topic `a/1` automatically once they are connected to the broker.
 
-## Try Auto Subscription Using MQTTX Client
+## Try Auto Subscription Using MQTTX Desktop
 
-The topic `a/1` is configured as the auto subscribe topic in [Configure Auto Subscribe via Dashboard](#configure-auto-subscribe-via-dashboard). The following procedure demonstrates how a client subscribes to the topic `a/1` automatically once it is connected to the broker.
+The topic `a/1` is configured as the auto-subscribe topic in [Configure Auto Subscribe via Dashboard](#configure-auto-subscribe-via-dashboard). The following procedure demonstrates how a client subscribes to the topic `a/1` automatically once it is connected to the broker.
 
 :::tip Prerequisite
 
-- Basic publishing and subscribing operations using [MQTTX Client](./publish-and-subscribe.md)
+Basic publishing and subscribing operations using [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop)
 
 :::
 
-1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection named `Subscriber`.
+1. Start EMQX and MQTTX Desktop. Click the **New Connection** to create a client connection as a publisher.
 
-   - The localhost `127.0.0.1` is used as an example in this demonstration.
+   - Enter `Demo` in the **Name** field.
+   - Enter the localhost `127.0.0.1` in **Host** to use as an example in this demonstration.
+   - Leave other settings as default and click **Connect**.
 
    ::: tip
 
-   For detailed instructions on creating an MQTT connection, see [MQTTX Client](./publish-and-subscribe.md).
+   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
 
    :::
 
-   <img src="./assets/new-connection-sub.png" alt="new-connection-sub" style="zoom:35%;" />
+   <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
 
-2. Create another MQTT connection named `Publisher`.
+3. Create another MQTT client connection named `Subscriber`.
 
-3. Type `a/1` as the topic. Send a message on this topic.
+3. Select client `Demo` in the **Connections** pane. Enter `a/1` as the topic. Send a message to this topic.
 
    - The client `Subscriber` receives the message automatically without creating a new subscription.
 
-   - The client `Publisher` also receives the message as it is also a new connection.
+   - The client `Demo` also receives the message as it is also a new connection.
 
-     :::tip
+     ::: tip
 
      In the publish/subscribe pattern, a client can be both sender and subscriber.
 
      :::
 
-4. Go to EMQX Dashboard. Click **Monitoring** -> **Subscriptions** in the left navigation menu. It shows two subscriptions automatically subscribe to the topic "a/1".
+4. Go to EMQX Dashboard. Click **Monitoring** -> **Subscriptions** from the left navigation menu. It shows two subscriptions automatically subscribe to the topic `a/1`.
 
-   <img src="./assets/view-auto-sub-dashboard.png" alt="view-auto-sub-dashboard" style="zoom:65%;" />
+   <img src="./assets/view-auto-sub-dashboard.png" alt="view-auto-sub-dashboard" style="zoom:50%;" />
 
 ## Try Auto Subscription using MQTTX CLI
 
 :::tip Prerequisite
 
-- Basic publishing and subscribing operations using [MQTTX CLI](./publish-and-subscribe.md)
+Basic publishing and subscribing operations using [MQTTX CLI](./publish-and-subscribe.md#mqttx-cli)
 
 :::
 

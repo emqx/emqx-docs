@@ -1,8 +1,9 @@
 # 从 V4 迁移到 V5
 
+
 本章节提供了从 EMQX 4.x 版本迁移至 5.0. 及以上版本的指南，尽管 EMQX 5.x 在管理 API 和集群 API 功能上与 EMQX 4.x 不兼容，但绝大部分功能运行机制没有太大的变化。
 
-要了解我们在 EMQX 5.0 和 5.1中增加的新功能，请查看 [全新功能](../getting-started/new-features.md)
+要了解我们在 EMQX 5.0 和 5.1中增加的新功能，请查看 [全新功能](../getting-started/new-features.md)。
 
 ## 日志
 

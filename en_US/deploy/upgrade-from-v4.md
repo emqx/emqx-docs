@@ -1,9 +1,9 @@
 # Migrate from V4
 
-This section provides a list of imprtant changes and guidelines for migrating from EMQX 4.4 to 5.0 or newer.
+This section provides a list of important changes and guidelines for migrating from EMQX 4.4 to 5.0 or newer.
 EMQX 5.x is not backward compatible with 4.x in management APIs and clustering APIs. However, most of the functionality did not change significantly.
 
-To learn about the new features we added to EMQX 5.0 and 5.1, check [New Features](../getting-started/new-features.md).
+To learn about the new features for EMQX 5.0 and 5.1, check [New Features](../getting-started/new-features.md).
 
 ## Log
 

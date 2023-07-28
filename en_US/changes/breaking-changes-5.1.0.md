@@ -24,8 +24,89 @@ In conclusion, there are several points that need to be noted:
 
 ## HTTP APIs
 
+Previously, **Applications** in Dashboard was used to manage API access credentials. Now, **[API Key](../dashboard/system.md#api-key)** should be used to create credentials. The credentials consist of API Key and Secret Key that can be respectively used as username and password in HTTP basic authentication. Secret Key is only displayed once when credentials are created, but cannot be obtained again later.
+
 - Port 8081 has been closed, and all API requests now use port 18083.
-- It is no longer supported to use the username of the Dashboard, such as admin:public, to request the HTTP API. Instead, an API Key must be used.
+- Username/password can not be used to access HTTP API, API Key **must** be used instead.
+- The basic path of API access has been switched from `/api/v4` to `/api/v5`. Call the API through port 18083 and path `/api/v5`.
+- The time-related fields will use the [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) format with time zones.
+
+### Data Format Changes
+
+When the response is successful, the business status code `code` will no longer be returned with the data, and the corresponding 4xx/5xx HTTP status code and error prompt will be returned when an error occurs.
+Users can access `GET /error_codes` to get all possible error codes.
+
+::: details Comparative example of the response format:
+
+**Successful response**
+
+```shell
+# 4.x
+## HTTP StatusCode = 200
+GET /api/v4/rules/my_rule
+{ "code": 0, "data": { ... } }
+
+# 5.1
+## HTTP StatusCode = 200
+GET /api/v5/rules/my_rule
+{ ... }
+```
+
+**Error response**
+
+```bash
+# 4.x
+## HTTP StatusCode = 200
+GET /api/v4/rules/my_rule
+{ "code": 404, "message": "Not Found" }
+
+# 5.1
+## HTTP StatusCode = 404
+GET /api/v5/rules/my_rule
+{ "code": "NOT_FOUND", "message": "Rule Id Not Found" }
+```
+
+:::
+
+### Major API Changes
+
+The API has undergone significant changes, and some APIs have been made compatible. The following is a comparison table of commonly used API changes.
+
+::: tip Compatibility Notes
+
+- Compatible: Use the old API path and parameters, or keep the old API.
+- Partially compatible: The API path remains unchanged, but some API fields have changed.
+- Incompatible: API paths and fields have changed.
+
+:::
+
+::: details API compatibility table
+
+| 4.x                              | 5.x                                         | Compatibility        | Notes                        |
+| -------------------------------- | ------------------------------------------- | -------------------- | ---------------------------- |
+| **Publish/Subscribe**            |                                             |                      |                              |
+| `POST /mqtt/publish`             | `POST /publish`                             | Compatible           |                              |
+| `POST /mqtt/publish_batch`       | `POST /publish/bulk`                        | Compatible           |                              |
+| `POST /mqtt/subscribe`           | `POST /clients/{clientid}/subscribe`        | Compatible           |                              |
+| `POST /mqtt/subscribe_batch`     | `POST /clients/{clientid}/subscribe/bulk`   | Compatible           |                              |
+| `POST /mqtt/unsubscribe`         | `POST /clients/{clientid}/unsubscribe`      | Compatible           |                              |
+| `POST /mqtt/unsubscribe_batch`   | `POST /clients/{clientid}/unsubscribe/bulk` | Compatible           |                              |
+| **Clients/Topics/Subscriptions** |                                             |                      |                              |
+| `GET /clients`                   | `GET /clients`                              | Partially compatible |                              |
+| `GET /routes{/topic}`            | `GET /topics{/topic}`                       | Incompatible         | `routes` renamed to `topics` |
+| `GET /subscriptions`             | `GET /subscriptions`                        | Partially compatible |                              |
+| `GET /subscriptions/{clientid}`  | `GET /clients/{clientid}/subscriptions`     | Incompatible         |                              |
+| **Node/Stats/Metrics**           |                                             |                      |                              |
+| `GET /nodes`                     | `GET /nodes`                                | Partially compatible |                              |
+| `GET /brokers`                   | -                                           | Incompatible         | merged to `GET /nodes`       |
+| `GET /stats`                     | `GET /stats`                                | Partially compatible |                              |
+| `GET /metrics`                   | `GET /metrics`                              | Partially compatible |                              |
+| **Users/Alarms**                 |                                             |                      |                              |
+| `GET /users`                     | `GET /users`                                | Partially compatible |                              |
+| `GET /alarms{/activated}`        | `GET /alarms?activated={true,false}`        | Incompatible         |                              |
+| `GET /alarms{/deactivated}`      | `GET /alarms?activated={true,false}`        | Incompatible         |                              |
+
+:::
 
 ## Configuration Files
 
@@ -54,7 +135,6 @@ Log files in EMQX 5.1 is either the same flat log file format as in EMQX 4.4 or 
 
 ## MQTT
 
-- The `$queue` prefix for shared subscriptions is not supported.
 - In EMQX 5.0, MQTT clients can no longer see EMQX cluster as a single black box due to eventual consistency. Subscribers may or may not receive published messages from other clients after the subscription is confirmed.
 - In EMQX 5.0, keepalive (receiving PING) requires a full MQTT control Packet instead of a few bytes.
 - In EMQX 5.0, the TLS listener does not support `partial_chain` and `verify_peer_ext_key_usage`.
@@ -69,6 +149,49 @@ MQTT over QUIC is a new feature in 5.0 but is disabled by default. Depending on 
 For a complete compatibility report, see [Authentication / Authorization v4.4 to v5.1 Compatibility](./auth-4.4-to-5.1-compatibility.md). 
 
 All authentication/authorization providers now use placeholders instead of the previous formatting. In EMQX 5.x, placeholders are used, such as `${clientid}`, while in EMQX 4.x, `%c` was used. The available set of placeholders has also changed.
+
+### **Change of Concept**
+
+Auth is referred to as **Authentication**, and ACL is also referred to as **Authorization**.
+
+### **Data Migration**
+
+We have kept the authentication methods and supported data sources from version 4.x, with only a few changes to the way they are used. For most Authenticator/Authorizer, you can continue to use the 4.x database when upgrading to version 5.x without having to migrate existing data.
+
+### Fixed Order of Execution
+
+When multiple authenticators or authorization checkers are enabled simultaneously, the checks are no longer performed according to the startup order but a fixed configuration order. The execution order can be adjusted in the configuration file and Dashboard.
+
+### Variable Interpolation Syntax
+
+Previously, the Auth plugins could use `%u` syntax to construct variable placeholders, dynamically interpolating client information into SQL statements, Redis query commands, and HTTP requests.
+Now EMQX uses the new syntax `${}`, such as `${username}`, `${clientid}`, which is consistent with the rule SQL.
+
+For supported placeholders, please refer to:
+
+- [Authentication Placeholders](../access-control/authn/authn.md#authentication-placeholders)
+- [Authorization Placeholders](../access-control/authz/authz.md#placeholders-in-data-queries)
+
+::: details Usage example
+
+```shell
+# 4.x
+# etc/emqx_auth_mysql.conf
+auth.mysql.auth_query = select password from mqtt_user where username = '%u' limit 1
+
+# 5.x
+# emqx.conf
+authentication = [
+  {
+    ...
+    mechanism = "password_based"
+    backend = "mysql"
+    query = "SELECT password_hash, salt FROM mqtt_user where username = ${username} LIMIT 1"
+  }
+]
+```
+
+:::
 
 ### Authentication Incompatibilities
 
@@ -121,6 +244,10 @@ All authentication/authorization providers now use placeholders instead of the p
 
   - In EMQX 5.1, the documents should contain individual rules with `permission, action, topics` fields. Note that `topics` should be an array of topics.
 
+## Rule Engine
+
+Rule SQL is fully compatible with 4.x syntax, but the actions under the rule are split into built-in actions (republish, console) and data bridges (HTTP Server, MQTT Bridge).
+
 ## Data Integration
 
 In EMQX 5.1, there have been conceptual improvements to data integration:
@@ -131,16 +258,86 @@ In EMQX 5.1, there have been conceptual improvements to data integration:
 - The functionality of **Modules/Message Publish** has been moved into the Bridges.
 - The [**Save Offline Message**](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html)**,** [**Get Subscriptions**](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html), and EMQX Bridge features have been removed.
 - Tablestore, DolphinDB, Lindorm, and SAP Event Mesh data bridges are not supported yet.
+- The MQTT bridge plugin (`emqx_bridge_mqtt`) has been removed. Use the built-in MQTT data bridge in Data Integration instead.
 
 For a complete compatibility report, see [Data Integration Incompatibility Between EMQX 5.1 with EMQX 4.4](./data-integration-4.4-to-5.1-incompatibility.md).
+
+## HTTP Server
+
+The WebHook plugin (`emqx_web_hook`) is converted to a native feature, and it is now referred to as "HTTP Server" bridge.
+
+{% emqxee %}
+
+## Offline Messages
+
+The [offline messages](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html) provided in EMQX 4.x are based on an external database. EMQX plans to provide native offline messages (based on the built-in database) in future versions, so the offline messages for the external database is no longer supported in version 5.x.
+
+The upcoming native offline messaging feature will provide improved performance and reduce usage and maintenance costs. Stay tuned for more updates.
+
+## Auto Subscription (Server Side Subscriptions)
+
+As of version 5.0.0, EMQX no longer provides [Auto subscription](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html) (server side subscriptions) based on an external database.
+
+{% endemqxee %}
 
 ## Data Persistence
 
 - [MQTT Message Persistence](https://docs.emqx.com/en/enterprise/v4.4/backend/backend.html#mqtt-message-persistence) is not implemented in EMQX 5.0 and 5.1. It is planned for later versions.
 
+## Prometheus
+
+The old plugin named `emqx_prometheus` has been converted to a native feature in version 5.x. Prometheus scraping endpoint is enabled by default, and no authentication is required to scrape the metrics.
+
+You can use `curl` command to inspect the metrics:
+
+```bash
+curl -f "http://127.0.0.1:18083/api/v5/prometheus/stats"
+```
+
+If you want to enable push-gateway, please refer to [Integrate with Prometheus](../observability/prometheus.md).
+
+::: details Changes in Prometheus metrics
+
+| 4.4.x                              | 5.x                                             | Description |
+| ---------------------------------- | ----------------------------------------------- | ----------- |
+| emqx_client_auth_success_anonymous | emqx_client_auth_anonymous                      | Renamed     |
+| emqx_client_check_acl              | emqx_client_authorize counter                   | Renamed     |
+| -                                  | emqx_mria_last_intercepted_trans                | New         |
+| -                                  | emqx_mria_replicants                            | New         |
+| -                                  | emqx_mria_server_mql                            | New         |
+| -                                  | emqx_mria_weight                                | New         |
+| emqx_routes_count                  | emqx_topics_count                               | Renamed     |
+| emqx_routes_max                    | emqx_topics_max                                 | Renamed     |
+| emqx_session_takeovered            | emqx_session_takenover                          | Renamed     |
+| erlang_vm_ets_tables               | -                                               | Removed     |
+| -                                  | erlang_vm_memory_dets_tables                    | New         |
+| -                                  | erlang_vm_memory_ets_tables                     | New         |
+| -                                  | erlang_vm_msacc_alloc_seconds_total             | New         |
+| -                                  | erlang_vm_msacc_aux_seconds_total               | New         |
+| -                                  | erlang_vm_msacc_bif_seconds_total               | New         |
+| -                                  | erlang_vm_msacc_busy_wait_seconds_total         | New         |
+| -                                  | erlang_vm_msacc_check_io_seconds_total          | New         |
+| -                                  | erlang_vm_msacc_emulator_seconds_total          | New         |
+| -                                  | erlang_vm_msacc_ets_seconds_total               | New         |
+| -                                  | erlang_vm_msacc_gc_full_seconds_total           | New         |
+| -                                  | erlang_vm_msacc_gc_seconds_total                | New         |
+| -                                  | erlang_vm_msacc_nif_seconds_total               | New         |
+| -                                  | erlang_vm_msacc_other_seconds_total             | New         |
+| -                                  | erlang_vm_msacc_port_seconds_total              | New         |
+| -                                  | erlang_vm_msacc_send_seconds_total              | New         |
+| -                                  | erlang_vm_msacc_sleep_seconds_total             | New         |
+| -                                  | erlang_vm_msacc_timers_seconds_total            | New         |
+| -                                  | erlang_vm_statistics_dirty_cpu_run_queue_length | New         |
+| -                                  | erlang_vm_statistics_dirty_io_run_queue_length  | New         |
+| -                                  | erlang_vm_wordsize_bytes                        | New         |
+
+:::
+
 ## Gateway
 
 In EMQX 4.x, various protocols can be configured through corresponding Plugins and Modules (only for the enterprise edition). However, in EMQX 5.0, we have introduced a new concept called Gateway.
+
+Clients of other protocols than MQTT (LwM2M, CoAP, STOMP, MQTT-SN) are no longer listed as MQTT clients on the dashboard **Connections** page and in the `GET /clients` API. They can be found in **Management** -> **Gateways** or listed with `GET /gateway/{name}/clients` API.
 
 - It is **completely incompatible** from the configuration and management approaches perspective. EMQX 5.0 has a brand new configuration format and management approach.
   - New configuration format.

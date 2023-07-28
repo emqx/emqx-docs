@@ -13,14 +13,13 @@ In this chapter, you will learn the [MQTT Core Concepts](./mqtt-concepts.md). Yo
 - [Shared Subscription](./mqtt-shared-subscription.md)
 - [Retained Message](./mqtt-retained-message.md)
 - [Will Message](./mqtt-will-message.md)
+- [Topic Wildcards](./mqtt-wildcard-subscription.md)
 
 Except for the MQTT-specific features, some extended features are also implemented in EMQX. This chapter also introduces the following extended features and how to configure them in EMQX Dashboard and test them using the client tools:
 
 - [Exclusive Subscription](./mqtt-exclusive-subscription.md)
 - [Delayed Publish](./mqtt-delayed-publish.md)
 - [Auto Subscribe](./mqtt-auto-subscription.md)
-
-
 
 
 

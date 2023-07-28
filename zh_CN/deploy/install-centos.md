@@ -1,6 +1,6 @@
 # CentOS/RHEL
 
-本章节将指导您如何在 CentOS/RHEL 系统中下载安装并启动 EMQX。
+本页将指导您如何在 CentOS/RHEL 系统中下载安装并启动 EMQX。
 
 支持的 CentOS/RHEL 版本：
 

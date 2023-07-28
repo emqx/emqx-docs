@@ -62,7 +62,7 @@ Find more details on [Backup and Restore](../operations/backup-restore.md) page.
 
 ## Redesigned IoT Data Integration
 
-Besides SQL, EMQX 5.x Rule Engine also supports [jq](https://stedolan.github.io/jq/), so it is capable of handling more complex JSON data formats. See more at the [JQ Functions documentation](../data-integration/rule-sql-jq.md).
+Besides SQL, EMQX 5.x Rule Engine also supports [jq](https://stedolan.github.io/jq/), so it is capable of handling more complex JSON data formats. See more at the [jq Functions documentation](../data-integration/rule-sql-jq.md).
 
 {% emqxce %}
 

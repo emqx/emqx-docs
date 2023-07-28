@@ -1,6 +1,6 @@
 # Design and Implementation
 
-This chapter will introduce the design principles of some key EMQX features, including:
+This section introduces the design principles of some key EMQX features, including:
 
 - [Clustering](./clustering)
 

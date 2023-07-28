@@ -31,21 +31,23 @@ Example:
 
    <img src="./assets/configure-delayed-publish-dashboard.png" alt="configure-delayed-publish-dashboard" style="zoom:45%;" />
 
-## Try Delayed Publish with MQTTX Client
+## Try Delayed Publish with MQTTX Desktop
 
 :::tip Prerequisite
 
-- Basic publishing and subscribing operations using [MQTTX Client](./publish-and-subscribe.md)
+Basic publishing and subscribing operations using [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop)
 
 :::
 
-1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection named `Demo`.
+1. Start EMQX and MQTTX Desktop. Click the **New Connection** to create a client connection as a publisher.
 
-   - The localhost `127.0.0.1` is used as an example in this demonstration.
+   - Enter `Demo` in the **Name** field.
+   - Enter the localhost `127.0.0.1` in **Host** to use as an example in this demonstration.
+   - Leave other settings as default and click **Connect**.
 
    ::: tip
 
-   For detailed instructions on creating an MQTT connection, see [MQTTX Client](./publish-and-subscribe.md).
+   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
 
    :::
 
@@ -59,7 +61,7 @@ Example:
    - `10`: Indicates the delayed interval is 10 seconds.
    - `x/y`: Indicates the topic name of the message.
 
-4. Select the connection named `Subscriber`. Click the **New Subscription** button to create a subscription.  Type `x/y` in the **Topic** textbox to subscribe to this topic.
+4. Select the connection named `Subscriber`. Click the **New Subscription** button to create a subscription.  Type `x/y` in the **Topic** textbox to subscribe to this topic. Click **Confirm**.
 
    <img src="./assets/subscribe-delayed-message.png" alt="subscribe-delayed-message" style="zoom:35%;" />
 
@@ -73,7 +75,7 @@ Example:
 
 ::: tip Prerequisite
 
-- Basic publishing and subscribing operations using [MQTTX CLI](./publish-and-subscribe.md)
+Basic publishing and subscribing operations using [MQTTX CLI](./publish-and-subscribe.md#mqttx-cli)
 
 :::
 

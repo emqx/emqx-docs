@@ -1,4 +1,4 @@
-# Create an Cluster
+# Create a Cluster
 
 With EMQX cluster, you can enjoy the benefits of fault tolerance and high availability by allowing the cluster to continue operating even if one or more nodes fail. You can create an EMQX cluster either manually or automatically. Before the actual clustering step, let's first get familiar with 2 key concepts, node names and node discovery.
 

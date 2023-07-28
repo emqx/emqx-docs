@@ -4,7 +4,7 @@ EMQX rules use a SQL-like syntax and support a variety of built-in functions for
 
 :::tip
 
-Since EMQX 5.0 version, EMQX also supports using  [JQ language](https://stedolan.github.io/jq/manual/) for complex data transformation, you may read the [JQ Fucntion](./rule-sql-jq.md) section for more information.
+Since EMQX 5.0 version, EMQX also supports using  [jq language](https://stedolan.github.io/jq/manual/) for complex data transformation, you may read the [jq Fucntion](./rule-sql-jq.md) section for more information.
 
 :::
 
@@ -485,5 +485,10 @@ mongo_date() = 'ISODate("2012-12-19T06:01:17.171Z")'
 mongo_date(timestamp) = 'ISODate("2012-12-19T06:01:17.171Z")'
 mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
 ```
+
+**Schema Registry and Sparkplug B Functions**
+
+In the enterprise version of EMQX, the [schema registry](./schema-registry) provide the `schema_decode` and `schema_encode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data. You can read more about these functions in the [schema registry documentation](./schema-registry). <!--There are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about [the sparkplug function on their documentation page](./sparkplug.md).-->
+
 
 {% endemqxee %}

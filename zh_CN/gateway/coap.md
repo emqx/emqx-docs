@@ -284,7 +284,7 @@ coap-client -m put -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&token=34
 ```
 
 :::tip
-心跳间隔时间由 CoAP 网关的 `hearbeat` 配置决定，默认为 30 秒
+心跳间隔时间由 CoAP 网关的 `heartbeat` 配置决定，默认为 30 秒
 :::
 
 
