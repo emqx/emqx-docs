@@ -2,7 +2,7 @@
 
 EMQX 实现了 MQTT 的保留消息功能。您可以将某个特定主题下发布的消息标记为“保留消息”，并将其保存为 EMQX 上的持久消息。当任何新的订阅者订阅与保留消息的主题匹配的主题时，他们会立即接收到该消息，即使该消息是在他们订阅该主题之前发布的。
 
-您可以使用客户端工具连接 EMQX 并尝试这个消息服务。本节介绍如何使用 [MQTTX Desktop](https://mqttx.app/zh)和 [MQTTX CLI](https://mqttx.app/zh/cli) 模拟客户端，并查看如何发布和接收保留消息。
+您可以使用客户端工具连接 EMQX 并尝试这个消息服务。本节介绍如何使用 [MQTTX Desktop](https://mqttx.app/zh) 和 [MQTTX CLI](https://mqttx.app/zh/cli) 模拟客户端，并查看如何发布和接收保留消息。
 
 :::tip 前置准备
 

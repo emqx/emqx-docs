@@ -719,8 +719,8 @@
       title_cn: 版本发布
       edition: ce
       path: changes/changes-ce-5.1
-    - title_en: 从 V4 迁移到 V5
-      title_cn: 从 V4 迁移到 V5
+    - title_en: 从 V4 升级到 V5 的不兼容更改
+      title_cn: 从 V4 升级到 V5 的不兼容更改
       lang: cn
       path: deploy/upgrade-from-v4
     - title_en: Incompatible Changes

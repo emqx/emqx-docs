@@ -22,7 +22,7 @@ EMQX 提供以下数据集成的运行统计指标：
 - 进行中（gauge）
 - 排队中（gauge）
 
-![metrics](./assets/metrics.svg)
+![data-bridge-metrics](./assets/data-bridge-metrics.png)
 
 ### 命中
 

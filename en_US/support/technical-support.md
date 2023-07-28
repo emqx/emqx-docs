@@ -16,8 +16,6 @@ If you have any questions about EMQX products or our IoT solutions, you are welc
 
 **Sales:** [sales@emqx.io](mailto:sales@emqx.io)
 
-**Careers:** [hr-eu@emqx.io](mailto:hr-eu@emqx.io)
-
 **Security:** [security@emqx.io](mailto:security@emqx.io)
 
 **Marketing:** [marketing@emqx.io](mailto:marketing@emqx.io)
@@ -29,14 +27,12 @@ If you have any questions about EMQX products or our IoT solutions, you are welc
 - Europe office: Frankfurt Eschborner Landstraße 42-50 Haus B, 60489 Frankfurt(M), Germany
 - US office: Silicon Valley 305 Vineyard Town Center #140 Morgan Hill CA 95037
 
-
-
 ## EMQX Enterprise Edition 
 
 For EMQX Enterprise edition users:
 
-- You can contact the [EMQX service team](https://www.emqx.com/en/contact?product=emqx) for professional support on designing, deploying or customizing your IoT solutions. 
-- Browse the [EMQX Support Portal](https://www.emqx.com/en/support) to find out the commercial support we cover
+- You can contact the [EMQX service team](https://www.emqx.com/en/contact?product=emqx) for professional support on designing, deploying, or customizing your IoT solutions. 
+- Browse the [EMQX Support Portal](https://www.emqx.com/en/support) to find out about the commercial support we cover.
 
 **Commercial Service Level**
 
@@ -49,10 +45,6 @@ For EMQX Enterprise edition users:
 | Response time             | 8 hours                                                      | 2 hours                                                      |
 | Hot bug fixes             | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
 | 3rd-party plug-in support | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
-
-
-
-
 
 ## EMQX Open Source Edition
 

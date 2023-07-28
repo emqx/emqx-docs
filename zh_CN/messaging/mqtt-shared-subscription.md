@@ -2,7 +2,7 @@
 
 EMQX 实现了 MQTT 的共享订阅功能。共享订阅是一种订阅模式，用于在多个订阅者之间实现负载均衡。客户端可以分为多个订阅组，消息仍然会被转发到所有订阅组，但每个订阅组内只有一个客户端接收消息。您可以为一组订阅者的原始主题添加 `$share` 或 `$queue` 前缀以启用共享订阅。
 
-您可以使用客户端工具连接 EMQX 并尝试这个消息服务。 本节介绍了共享订阅的机制并演示了如何使用 [MQTTX Desktop](https://mqttx.app/zh)和 [MQTTX CLI](https://mqttx.app/zh/cli) 来模拟客户端尝试通过共享订阅来接收消息。
+您可以使用客户端工具连接 EMQX 并尝试这个消息服务。 本节介绍了共享订阅的机制并演示了如何使用 [MQTTX Desktop](https://mqttx.app/zh) 和 [MQTTX CLI](https://mqttx.app/zh/cli) 来模拟客户端尝试通过共享订阅来接收消息。
 
 ## 带群组的共享订阅
 
@@ -26,7 +26,7 @@ EMQX 实现了 MQTT 的共享订阅功能。共享订阅是一种订阅模式，
 
 :::tip 前置准备
 
-- 了解 MQTT 的[保留消息](./mqtt-concepts.md#保留消息)。
+- 了解 MQTT 的[共享订阅](./mqtt-concepts.md#共享订阅)。
 - 能使用 [MQTTX](./publish-and-subscribe.md) 进行基本的发布和订阅操作。
 
 :::
