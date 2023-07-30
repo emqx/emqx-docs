@@ -2,7 +2,7 @@
 
 [Prometheus](https://prometheus.io/) is the monitoring solution open-sourced by SoundCloud, featuring its support for a multidimensional data model, flexible query language, and powerful alarm management.
 
-You can use Dashboard to confiture monitoring data integration to the Prometheus platform, for detailed operation steps, see [Integrate with Prometheus](../observability/prometheus).
+You can use Dashboard to configure monitoring data integration to the Prometheus platform, for detailed operation steps, see [Integrate with Prometheus](../observability/prometheus).
 
 Or work with the `emqx.conf` configuration file: 
 
