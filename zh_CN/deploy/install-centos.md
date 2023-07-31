@@ -1,6 +1,6 @@
 # CentOS/RHEL
 
-本章节将指导您如何在 CentOS/RHEL 系统中下载安装并启动 EMQX。
+本页将指导您如何在 CentOS/RHEL 系统中下载安装并启动 EMQX。
 
 支持的 CentOS/RHEL 版本：
 
@@ -31,7 +31,6 @@ EMQX 支持通过 Yum 源安装，您可通过以下 Yum 命令从中自动下�
    sudo systemctl start emqx
    ```
 
-   
 
 ## 通过下载包安装
 
@@ -77,7 +76,7 @@ EMQX 同时支持通过下载包进行安装。下文将以 CentOS 8 系统为�
 
 #### 启动 EMQX
 
-您可通过如下三种方式启动 EMQX
+您可通过如下三种方式启动 EMQX。
 
 - 直接启动：
 
@@ -85,7 +84,7 @@ EMQX 同时支持通过下载包进行安装。下文将以 CentOS 8 系统为�
   $ emqx start
   EMQX @CE_VERSION@ is started successfully!
   
-  $ emqx_ctl status
+  $ emqx ctl status
   Node 'emqx@127.0.0.1' @CE_VERSION@ is started
 - systemctl 启动：
 
@@ -160,40 +159,9 @@ sudo apt remove --purge emqx
 
 ## 通过 rpm 安装
 
-请根据 CPU 架构选择对应安装方式。
+1. 前往 [EMQ 官网](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)，**版本**选择 `@EE_VERSION@`，**系统**选择 `CentOS`，点击**免费下载**按钮进入下载页面。
 
-:::: tabs type:card
-
-::: tab amd64
-
-1. 下载 [emqx-enterprise-@EE_VERSION@-el8-amd64.rpm](https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-amd64.rpm)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-amd64.rpm
-   ```
-
-2. 安装 EMQX。
-   ```bash
-   sudo yum install emqx-enterprise-@EE_VERSION@-el8-amd64.rpm -y
-   ```
-
-:::
-
-::: tab arm64
-1. 下载 [emqx-enterprise-@EE_VERSION@-el8-arm64.rpm](https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-arm64.rpm)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-arm64.rpm
-   ```
-
-2. 安装 EMQX。
-   ```bash
-   sudo yum install emqx-enterprise-@EE_VERSION@-el8-arm64.rpm -y
-   ```
-
-:::
-
-::::
+2. 在安装与下载页面中，**安装方式**选择 `rpm`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
 
 ### 启动 EMQX 
 
@@ -204,7 +172,7 @@ sudo apt remove --purge emqx
   $ emqx start
   EMQX @EE_VERSION@ is started successfully!
 
-  $ emqx_ctl status
+  $ emqx ctl status
   Node 'emqx@127.0.0.1' @EE_VERSION@ is started
   ```
 
@@ -230,40 +198,10 @@ sudo apt remove --purge emqx
 
 ## 通过 tar.gz 安装
 
-请根据 CPU 架构选择对应安装方式。
 
-:::: tabs type:card
+1. 前往 [EMQ 官网](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)，**版本**选择 `@EE_VERSION@`，**系统**选择 `CentOS`，点击**免费下载**按钮进入下载页面。
 
-::: tab amd64
-
-1. 下载 [emqx-enterprise-@EE_VERSION@-el8-amd64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-amd64.tar.gz)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-amd64.tar.gz
-   ```
-
-2. 安装 EMQX。
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-enterprise-@EE_VERSION@-el8-amd64.tar.gz -C emqx
-   ```
-
-:::
-
-::: tab arm64
-1. 下载 [emqx-enterprise-@EE_VERSION@-el8-arm64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-arm64.tar.gz)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-el8-arm64.tar.gz
-   ```
-
-2. 安装 EMQX。
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-enterprise-@EE_VERSION@-el8-arm64.tar.gz -C emqx
-   ```
-
-:::
-
-::::
+2. 在安装与下载页面中，**安装方式**选择 `tar.gz`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
 
 ### 启动 EMQX
 

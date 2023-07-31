@@ -6,7 +6,7 @@ Even before a local deployment of EMQX, you can also leverage the free online pu
 
 <img src="./assets/public-borker.png" alt="public-borker" style="zoom:45%;" />
 
-This chapter introduces the commonly used MQTT 5.0 client tools and provides a simple demonstration on how to use these tools to test the following messaging services:
+This section introduces the commonly used MQTT 5.0 client tools and provides a simple demonstration on how to use these tools to test the following messaging services:
 
 - Establish client connections
 - Subscribe to topics
@@ -21,11 +21,11 @@ This chapter introduces the commonly used MQTT 5.0 client tools and provides a s
 - MQTTX CLI
 - MQTT Web
 
-### MQTTX Client
+### MQTTX Desktop
 
-[MQTTX Client](https://mqttx.app) is a cross-platform MQTT desktop client tool. It provides users with an easy-to-use graphic interface to allow users to quickly create, test MQTT connections, and publish/subscribe MQTT messages.
+[MQTTX Desktop](https://mqttx.app) is a cross-platform MQTT desktop client tool. It provides users with an easy-to-use graphic interface to allow users to quickly create, test MQTT connections, and publish/subscribe MQTT messages.
 
-Before you test, download, and install the MQTTX Client:
+Before you test, download and install the MQTTX Client:
 
 1. Download the installation package from the application store or [MQTTX website](https://mqttx.app/) based on your operating system.
 2. Install the MQTTX Client. For detailed instructions, see [MQTTX - Installation](https://mqttx.app/docs/downloading-and-installation).
@@ -34,7 +34,7 @@ Follow the instructions below to use the MQTTX desktop client for a simple test:
 
 1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection.
 
-2. Configure the new connection.
+2. Configure the new connection as a client that publishes messages.
 
    In the **General** section, fill in the general information of the client.
 
@@ -45,7 +45,7 @@ Follow the instructions below to use the MQTTX desktop client for a simple test:
    - **Username** and **Password**: Fill in the username and password if your broker enables user authentication or just leave them blank.
    - **SSL/TLS**: Enable the SSL/TLS by clicking the toggle button if an `SSL/TLS` authentication connection is used.
 
-   Leave the rest settings as default. Click the **Connect** button.
+   Leave the rest settings as default. Click the **Connect** button at the upper right corner.
 
    <img src="./assets/New-connection-fill-parameters.png" alt="New-connection-fill-parameters" style="zoom:35%;" />
 
@@ -53,23 +53,21 @@ Follow the instructions below to use the MQTTX desktop client for a simple test:
 
    <img src="./assets/Publish-test-message.png" alt="Publish-test-message" style="zoom:35%;" />
 
-4. Create another new connection following the configuration instruction in step 2 and set the name to `Subscriber`.
+4. Click **+** -> **New Connection** from the **Connections** pane to create another new connection as a client that receives messages. Set the name to `Subscriber` and leave other general connection configurations the same as that of the client `Demo`.
 
-5. Select the connection named "Subscriber" in the **Connections** pane. Click the **New Subscription**.
+5. Select the client `Subscriber` in the **Connections** pane. Click the **+ New Subscription**.
 
    **Topic**: Type `test` in the text box.
 
    **QoS**: Set as the default value.
 
-   **Color**: You can select the color to mark the description.
+   **Color**: You can select the color to mark the subscription.
 
-   Leave other options empty for the general test. <!--Add details later if needed-->
-
-   Click the **Confirm** button.
+   Leave other options empty for a general test. Click the **Confirm** button.
 
    <img src="./assets/Subscribe-test-topic.png" alt="Subscribe-test-topic" style="zoom:35%;" />
 
-6. Select the client `Demo` at the **Connections** pane. Publish a new message on the topic `test`. You can see the client named `Subscriber` receives a new message.
+6. Select the client `Demo` at the **Connections** pane. Publish a new message to the topic `test`. You can see the client `Subscriber` receives a new message.
 
    <img src="./assets/Receive-test-again-message.png" alt="Receive-test-again-message" style="zoom:35%;" />
 
@@ -77,7 +75,7 @@ Now you have tried the basic publishing and subscribing operations using the MQT
 
 ### MQTTX CLI
 
-[MQTTX CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command line tool provided by EMQ. It is an [MQTTX](https://mqttx.app) tool running on the command line tool so users can test and debug MQTT services and applications with no need for a graphic interface.
+[MQTTX CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command line tool provided by EMQ. It is an MQTTX tool running on the command line tool so users can test and debug MQTT services and applications with no need for a graphic interface.
 
 Follow the instructions below to connect, publish/subscribe, and view messages using MQTTX CLI:
 

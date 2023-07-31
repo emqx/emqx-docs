@@ -14,7 +14,7 @@ SSL 和 TLS 常被用于网络通信，以确保数据传输保持机密性，�
 
 :::
 
-本章主要介绍了 MQTT 客户端在建立与 EMQX 的连接时以及在连接到外部资源时启用 SSL/TLS，在[启用 PSK 验证](./psk-authentication.md)中还介绍了如何在 EMQX 中开启 TLS PSK 支持。此外，在[获取 SSL/TLS 证书](./tls-certificate.md)中介绍了创建自签名证书的方法。
+本节主要介绍了 MQTT 客户端在建立与 EMQX 的连接时以及在连接到外部资源时启用 SSL/TLS，在[启用 PSK 验证](./psk-authentication.md)中还介绍了如何在 EMQX 中开启 TLS PSK 支持。此外，在[获取 SSL/TLS 证书](./tls-certificate.md)中介绍了创建自签名证书的方法。
 
 ## 启用 TLS 进行客户端加密连接
 

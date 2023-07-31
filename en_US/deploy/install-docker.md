@@ -1,16 +1,24 @@
 # Deploy with Docker
 
-This chapter introduces how to use the official Docker image to install and run EMQX, and how to use Docker Compose to build an EMQX cluster.
+This page introduces how to use the official Docker image to install and run EMQX, and how to use Docker Compose to build an EMQX cluster.
 
-:::tip Note
+:::tip Tips for data persistent
 
-1. If you want to keep the data, mount the EMQX data directory (`/opt/emqx/data`) out of the container, so that the data will persist even if the container no longer exists.
+1. If you want to persist data generated in the EMQX Docker container, you need to keep the following directories, so that the data will persist even if the container no longer exists.
 
-2. In Docker, `localhost` or `127.0.0.1`  points to the internal address of the container. Use the host’s IP or [host networking](https://docs.docker.com/network/host/) to access the host address. If you are using Docker for Mac or Docker for Windows, you can use `host.docker.internal` as the host address.
+   ```
+   /opt/emqx/data
+   /opt/emqx/etc
+   /opt/emqx/log
+   ```
 
-   :::
+2. In Docker, localhost or 127.0.0.1 points to the internal address of the container. Use the host’s IP or host networking to access the host address. If you are using Docker for Mac or Docker for Windows, you can use host.docker.internal as the host address.
 
-## Use Docker to run a single EMQX node
+3. As EMQX uses `data/mnesia/<node_name>` as the data storage directory, it is important to select a fixed identifier, such as the hostname or FQDN, as the node name. This practice avoids data loss caused by node name changes.
+
+:::
+
+## Use Docker to Run A Single EMQX Node
 
 This section will introduce how to use the Docker image to install the latest version of EMQX. If you want to work with other versions,  please visit the [EMQX Deployment page](https://www.emqx.com/en/try?product=enterprise).
 
@@ -54,9 +62,11 @@ For more information about EMQX official docker image, see [Docker Hub - emqx/em
 
 {% endemqxee %}
 
-## Use Docker Compose to build an EMQX cluster
+## Use Docker Compose to Build an EMQX Cluster
 
-Docker Compose is a tool for defining and running multi-container Docker applications. This section introduces how to use Docker Compose to create a static EMQX cluster. 
+Docker Compose is a tool for defining and running multi-container Docker applications. This section introduces how to use Docker Compose to create a static EMQX cluster.
+
+Please note that the Docker Compose example file in this section is only applicable to local testing. If you need to deploy a cluster in a production environment, please refer to [Clustering](./cluster/introduction.md).
 
 :::tip
 
@@ -80,7 +90,7 @@ services:
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
     - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
     healthcheck:
-      test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
+      test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
       interval: 5s
       timeout: 25s
       retries: 5
@@ -105,7 +115,7 @@ services:
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
     - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
     healthcheck:
-      test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
+      test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
       interval: 5s
       timeout: 25s
       retries: 5
@@ -137,7 +147,7 @@ services:
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
     - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
     healthcheck:
-      test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
+      test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
       interval: 5s
       timeout: 25s
       retries: 5
@@ -162,7 +172,7 @@ services:
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
     - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
     healthcheck:
-      test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
+      test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
       interval: 5s
       timeout: 25s
       retries: 5
@@ -189,7 +199,7 @@ docker-compose up -d
 3. To check the cluster status, run:
 
 ```bash
-$ docker exec -it emqx1 sh -c "emqx_ctl cluster status"
+$ docker exec -it emqx1 sh -c "emqx ctl cluster status"
 Cluster status: #{running_nodes => ['emqx@node1.emqx.com','emqx@node2.emqx.com'],
                   stopped_nodes => []}
 ```

@@ -1,4 +1,4 @@
-# Cluster security
+# Cluster Security
 
 EMQX provides several security mechanisms to ensure the confidentiality, integrity, and availability of data, including [authentication](../../access-control/authn/authn.md) and [authorization](../../access-control/authz/authz.md) mechanisms on the node level, [a secret cookie](#set-node-cookie) to ensure secure communication between nodes in a cluster, and [TLS/SSL encryption](#configure-tls-ssl-to-secure-cluster-connections) to provide end-to-end encryption for inter-node traffic.
 
@@ -41,9 +41,9 @@ rpc {
 }
 ```
 
-### Use TLS/SSL for Erlang distribution
+### Use TLS/SSL for Erlang Distribution
 
-EMQX core nodes use Erlang distribution to synchronize database updates and manage nodes in the cluster, such as starting/stopping a component or collecting runtime metrics etc.
+EMQX core nodes use Erlang distribution to synchronize database updates and manage nodes in the cluster, such as starting/stopping a component or collecting runtime metrics, etc.
 
 * Make sure to verify `etc/ssl_dist.conf` file has the right paths to keys and certificates.
 * Ensure config `cluster.proto_dist` is set to `inet_tls`.
@@ -57,7 +57,7 @@ EMQX uses a port mapping rule for clustering to ensure that the communication be
 | Channel                       | Description                                                  | Default Port                                       |
 | ----------------------------- | ------------------------------------------------------------ | -------------------------------------------------- |
 | **Erlang Distribution Ports** | For node communications                                      | `4370`                                             |
-| **Cluster RPC Ports**         | For node administrative tasks, such as node joining or leaving | `5370` or<br>`5369` if EMQX is deployed via Docker |
+| **Cluster RPC Ports**         | For node administrative tasks, such as node joining or leaving | `5370` or<br />`5369` if EMQX is deployed via Docker |
 
 EMQX applies the same port mapping rule for Erlang Distribution Ports and Cluster RPC Ports, which is: 
 

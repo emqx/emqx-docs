@@ -6,7 +6,7 @@ Through data integration, users can send messages from EMQX to the external data
 
 {% emqxce %}
 ::: tip
-Only data bridges to MQTT and Webhook are supported in the EMQX open-source version. For the data systems supported in the EMQX enterprise version, you may refer to the [Data integration page on EMQX website](https://www.emqx.com/en/integrations).
+Only data bridges to MQTT and HTTP Server are supported in the EMQX open-source version. For the data systems supported in the EMQX enterprise version, you may refer to the [Data integration page on EMQX website](https://www.emqx.com/en/integrations).
 :::
 {% endemqxce %}
 
@@ -14,23 +14,74 @@ Only data bridges to MQTT and Webhook are supported in the EMQX open-source vers
 
 ## Data Integration Execution Statistics
 
-EMQX will provide the running statistics of data integration in the following categories:
-<!-- TODO 由于调整过 Data Bridge 结构，先前的指标设计过时了重新设计指标后补充文档 -->
+EMQX provides the running statistics of data integration in the following categories:
 
-- Matched
+- Matched (counter)
+- Sent Successfully (counter)
+- Sent Failed (counter)
+- Dropped (counter)
+- Late Reply (counter)
+- Inflight (gauge)
+- Queuing (gauge)
 
-- Sent Successfully
-- Sent Failed
-- Sent Inflight
-- Dropped
-- Queuing
-- Retried
-- Rate
-- Late Reply
+<img src="./assets/data-bridge-metrics.png" alt="data-bridge-metrics"  />
+
+### Matched
+
+The `matched` statistic counts the number of requests/messages that were routed to the bridge, regardless of its state.  Each message is ultimately accounted by other metrics, so the caluculation of `matched` is: `matched = success + failed + inflight + queuing + late_reply + dropped`.
+
+### Sent Successfully
+
+The `success` statistic counts the number of messages that were successfully received by the external data system.  `retried.success` is a sub-count of `success` which tracks the number of messages with delivery retried at least once. Therefore, `retried.success <= success`.
+
+### Sent Failed
+
+The `failed` statistic counts the number of messages that failed to be received by the external data system.  `retried.failed` is a sub-count of `failed` which tracks the number of messages with delivery retried at least once.  Therefore, `retried.failed <= failed`.
+
+### Dropped 
+
+The `dropped` statistic counts the number of messages that were dropped without any delivery attempt. It contains several more specific categories, each indicating a distinct reason for the drop. The calculation for `dropped` is:`dropped = dropped.expired + dropped.queue_full + dropped.resource_stopped + dropped.resource_not_found`.
+
+- `expired` : The message time-to-live (TTL) was reached during queuing before it got a chance to be sent.
+- `queue_full` : The maximum queue size was reached and the message was dropped to prevent memory overflow.
+- `resource_stopped` : The message being attempted for delivery when the bridge was already stopped.
+- `resource_not_found` : The message was attempted to be sent when the bridge was no longer found. It occurs rarely and usually due to race conditions during the removal of a bridge.
+
+### Late Reply
+
+The `late_reply` statistic incremented when the message was attempted to be sent, but a response from the underlying driver was received after the message time-to-live (TTL) had expired.
+
+::: tip
+Note that `late_reply` does not indicate whether the message succeeded nor failed to be sent: it's an unknown status.  It could either have succeeded to be inserted in the external data system, failed to be inserted, or even the connection to the data system timed out while trying to be established.
+:::
+
+### Inflight
+
+The `inflight` statistic gauges the number of messages in the buffering layer that are currently inflight and waiting for a response from the external data system.
+
+### Queuing
+
+The `queuing` gauges the number of messages have been received by the buffering layer but have not been sent yet to the external data system.
+
+## Data Bridge Status
+
+A data bridge can has the following status:
+
+- `connecting`: The initial state before any health probes are made, and the bridge is still attempting to connect to the external data system.
+- `connected`: The bridge is successfully connected and operating normally. If a health probe fails, the bridge may transition to either the `connecting` or `disconnected` state, depending on the severity of the failure.
+- `disconnected`: The bridge has failed the health probes and is in an unhealthy state.  It may try periodically to reconnect automatically depending on its configuration.
+- `stopped`: The bridge has been manually disabled.
+- `inconsistent`: There is a disagreement on the bridge status among the cluster nodes.
 
 ## Features Supported
 
-You can further improve the performance and reliability of data integration with the following easy-to-use data integration features. Note: The features supported may differ depending on the data system you are connecting to. You may refer to the document about different data systems for feature support.
+You can further improve the performance and reliability of data integration with the following easy-to-use data integration features. 
+
+::: tip
+
+The features supported may differ depending on the data system you are connecting to. You may refer to the document about different data systems for feature support.
+
+:::
 
 ### Connection Pool
 
@@ -62,7 +113,7 @@ bridges.mysql.foo {
 
 ::: tip
 
-To ensure the time series of messages, please also add `max_inflight = 1` to the configuration file `emqx.conf`.  
+To ensure the time series of messages, please also add `max_inflight = 1` to the configuration file `emqx.conf`.
 
 :::
 
@@ -102,7 +153,7 @@ bridges.mysql.foo {
 
 When external resources are unavailable, for example, due to network fluctuations or service downtime, the buffer queue feature can help to save the message generated during this period as memory or disk cache and then resume the messaging after the service is restored.
 
-It is recommended to enable this feature to improve the fault tolerance capability of the data integration. 
+It is recommended to enable this feature to improve the fault tolerance capability of the data integration.
 
 For each resource connection (not MQTT connection), you can specify the cache queue size based on the storage size. If the cached size exceeds the limit, data will be discarded following the First In First Out (FIFO) rule.
 

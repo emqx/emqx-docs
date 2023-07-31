@@ -35,7 +35,7 @@ In case you do not have one, you may follow the instructions in [GitHub registra
 
 ### Request a change
 
-Click on `Edit this page` or `Request docs changes` on the top right corner of each page of the documentation site
+Click on `Edit this page` or `Request docs changes` in the top right corner of each page of the documentation site
 [https://docs.emqx.io/](https://docs.emqx.io/) will take you directly to the Edit or Issue pages on the GitHub site,
 which means you don't need to know much about Git or Markdown.
 
@@ -57,7 +57,7 @@ you will be taken to the following page on GitHub, follow the instructions, and 
 
 #### Commit
 
-Click `Fork this repository` to jump to the document editing page and then you can start editing your document.
+Click `Fork this repository` to jump to the document editing page and start editing your document.
 After completing editing, you need to enter the title and description of this submission at the bottom of the page to complete your submission.
 
 > You need to ensure that the title and description clearly describe what you are modifying.

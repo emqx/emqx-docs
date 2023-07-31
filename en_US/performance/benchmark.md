@@ -91,7 +91,7 @@ When executing `./emqtt_bench pub --help`, you get the available parameter outpu
 | ----------------- | ------------ | --------------- | -------------- | ------------------------------------------------------------ |
 | --host            | -h           | -               | localhost      | Address of the MQTT server to connect                        |
 | --port            | -p           | -               | 1883           | MQTT service port                                            |
-| --version         | -V           | 3<br>4<br>5     | 5              | MQTT protocol version used                                   |
+| --version         | -V           | 3<br />4<br />5     | 5              | MQTT protocol version used                                   |
 | --count           | -c           | -               | 200            | Total number of clients                                      |
 | --startnumber     | -n           | -               | 0              | Start number of clients                                      |
 | --interval        | -i           | -               | 10             | Interval to create a client; unit: ms                        |
@@ -210,7 +210,7 @@ Then start 50 thousand connections on each network card on `bench1`, which is a 
 
 Perform the same operation on `bench2`.
 
-After all connections are established, execute `./bin/emqx_ctl listeners` and find the following content to view the information about the number of connections in EMQX:
+After all connections are established, execute `./bin/emqx ctl listeners` and find the following content to view the information about the number of connections in EMQX:
 
 ```bash
 listener on mqtt:tcp:0.0.0.0:1883

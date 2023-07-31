@@ -1,6 +1,6 @@
 # PostgreSQL
 
-通过 PostgreSQL 数据桥接可以将客户端消息和事件存储到 PostgreSQL 中，也可以通过事件触发对 PostgreSQL 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
+通过 PostgreSQL 数据桥接可以将 MQTT 消息和客户端事件存储到 PostgreSQL 中，也可以通过事件触发对 PostgreSQL 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
 
 {% emqxce %}
 :::tip
@@ -9,13 +9,15 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 {% endemqxce %}
 
 :::tip
-本章节内容同样适用于 TimescaleDB 以及 MatrixDB。
+本章节内容同样适用于 MatrixDB。
 :::
 
-## 先决条件
+::: tip 前置准备
 
 - 了解 [规则](./rules.md)。
 - 了解 [数据桥接](./data-bridges.md)。
+
+:::
 
 ## 特性
 

@@ -16,7 +16,7 @@ jobs:
     outputs:
       versions: ${{ steps.set_versions.outputs.versions}}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: set_versions
@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: clone docs
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ matrix.tag }}
         fetch-depth: 0
@@ -57,7 +57,7 @@ jobs:
         echo "LATEST_VERSION=${{ matrix.latest_version }}" >> $GITHUB_ENV
 
     - name: clone ce frontend
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       if: env.DOCS_TYPE == 'broker'
       with:
         repository: "emqx/emqx-io-docs-frontend"
@@ -65,17 +65,31 @@ jobs:
         path: frontend
 
     - name: clone ee frontend
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       if: env.DOCS_TYPE == 'enterprise'
       with:
         repository: 'emqx/docs-emqx-com-frontend'
+        ref: next
         token: ${{ secrets.CI_GIT_TOKEN }}
         path: frontend
 
     - name: use node.js
       uses: actions/setup-node@v1
+      if: env.DOCS_TYPE == 'broker'
       with:
         node-version: 14.15
+
+    - name: use node.js
+      uses: actions/setup-node@v1
+      if: env.DOCS_TYPE == 'enterprise'
+      with:
+        node-version: 16
+
+    - name: use pnpm
+      uses: pnpm/action-setup@v2
+      if: env.DOCS_TYPE == 'enterprise'
+      with:
+          version: 8.5.1
 
     - name: generate directory.json
       run: |
@@ -119,18 +133,18 @@ jobs:
     - name: move ee files
       if: env.DOCS_TYPE == 'enterprise'
       run: |
-        rm frontend/docs/en/README.md || true
-        rm frontend/docs/zh/README.md || true
+        rm frontend/docs/en/index.md || true
+        rm frontend/docs/zh/index.md || true
         rm frontend/docs/*.md || true
-        rm frontend/README.md
+        rm frontend/README.md || true
         mkdir -p frontend/docs/en/${DOCS_TYPE}/${VERSION}/
         mkdir -p frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
-        mkdir -p frontend/docs/.vuepress/public/api/
+        mkdir -p frontend/docs/public/api/
         mkdir -p frontend/redoc/
         cp -r docs-files/en_US/* frontend/docs/en/${DOCS_TYPE}/${VERSION}/
         cp -r docs-files/zh_CN/* frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
         cp -r docs-files/redocly/*.json frontend/redoc/
-        cp docs-files/directory_ee.json frontend/docs/.vuepress/config/directory.json
+        cp docs-files/directory_ee.json frontend/docs/.vitepress/config/directory.json
 
     - name: generate version config
       run: |
@@ -138,16 +152,24 @@ jobs:
         if [[ $DOCS_TYPE == "broker" ]];
         then
           version_list=$(git tag | egrep "^v.*$" | xargs echo -n)
+          python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
         else
           version_list=$(git tag | egrep "^e.*$" | xargs echo -n)
+          python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/public/api/${DOCS_TYPE}_versions.json
         fi
-        python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
-        cat ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
 
-    - name: build docs
+    - name: build ce docs
+      if: env.DOCS_TYPE == 'broker'
       run: |
         cd frontend
         yarn && yarn build
+
+    - name: build ee docs
+      if: env.DOCS_TYPE == 'enterprise'
+      run: |
+        cd frontend
+        pnpm install
+        pnpm build
 
     - name: build ce redoc
       if: env.DOCS_TYPE == 'broker'
@@ -174,7 +196,7 @@ jobs:
         LANGS=(zh en)
         for lang in "${LANGS[@]}"; do
           redoc-cli bundle redoc/ee-${lang}.json -t redoc/template.hbs \
-            --output docs/.vuepress/dist/${lang}/enterprise/${VERSION}/admin/api-docs.html \
+            --output docs/.vitepress/dist/${lang}/enterprise/${VERSION}/admin/api-docs.html \
             --options.theme.colors.primary.main=#5e4eff \
             --options.theme.typography.headings.fontFamily='Roboto, sans-serif' \
             --options.hide-hostname --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \
@@ -197,8 +219,8 @@ jobs:
     #   run: |
     #     LANGS=(zh en)
     #     for lang in "${LANGS[@]}"; do
-    #       cp -r docs-files/cfg-manual-docgen/configuration-manual.html frontend/docs/.vuepress/dist/${lang}/enterprise/${VERSION}/configuration/configuration-manual.html
-    #       cp -r docs-files/cfg-manual-docgen/ee-${lang}.json frontend/docs/.vuepress/dist/${lang}/enterprise/${VERSION}/configuration/configuration.json
+    #       cp -r docs-files/cfg-manual-docgen/configuration-manual.html frontend/docs/.vitepress/dist/${lang}/enterprise/${VERSION}/configuration/configuration-manual.html
+    #       cp -r docs-files/cfg-manual-docgen/ee-${lang}.json frontend/docs/.vitepress/dist/${lang}/enterprise/${VERSION}/configuration/configuration.json
     #     done
 
     - name: upload ce files
@@ -218,10 +240,7 @@ jobs:
         coscmd delete -r -f en/${DOCS_TYPE}/${VERSION} || true
         coscmd delete -r -f zh/${DOCS_TYPE}/${VERSION} || true
         coscmd config -a ${{ secrets.TENCENT_COS_ID }} -s ${{ secrets.TENCENT_COS_KEY }} -b docs-1302406139 -e cos.accelerate.myqcloud.com
-        cd frontend/docs/.vuepress/dist/
-        zip -rq docs-dist-${DOCS_TYPE}-${VERSION}.zip ./
-        coscmd upload docs-dist-${DOCS_TYPE}-${VERSION}.zip docs-zip/
-        sleep 90
+        coscmd upload -r frontend/docs/.vitepress/dist/ /
 
     - name: set tccli
       run: |
@@ -242,11 +261,11 @@ jobs:
             --UrlRedirect.Switch on \
             --UrlRedirect.PathRules.0.RedirectStatusCode 302 \
             --UrlRedirect.PathRules.0.Pattern "/zh/enterprise/latest/*" \
-            --UrlRedirect.PathRules.0.RedirectUrl "/zh/enterprise/v4.4/\$1" \
+            --UrlRedirect.PathRules.0.RedirectUrl "/zh/enterprise/${LATEST_VERSION}/\$1" \
             --UrlRedirect.PathRules.0.RedirectHost https://docs.emqx.com \
             --UrlRedirect.PathRules.1.RedirectStatusCode 302 \
             --UrlRedirect.PathRules.1.Pattern "/en/enterprise/latest/*" \
-            --UrlRedirect.PathRules.1.RedirectUrl "/en/enterprise/v4.4/\$1" \
+            --UrlRedirect.PathRules.1.RedirectUrl "/en/enterprise/${LATEST_VERSION}/\$1" \
             --UrlRedirect.PathRules.1.RedirectHost https://docs.emqx.com \
             --UrlRedirect.PathRules.2.RedirectStatusCode 302 \
             --UrlRedirect.PathRules.2.Pattern "/en/enterprise/v5.0/getting-started.html" \
@@ -261,10 +280,10 @@ jobs:
 
     - name: update ee search index
       if: env.DOCS_TYPE == 'enterprise'
-      uses: Swilder-M/docsearch-scraper-simple@v4
+      uses: Swilder-M/docsearch-scraper-simple@next
       env:
-        APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
-        API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
+        APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID_NEXT }}
+        API_KEY: ${{ secrets.ALGOLIA_API_KEY_NEXT }}
       with:
         docs_type: ${{ env.DOCS_TYPE }}
         docs_version: ${{ env.VERSION }}

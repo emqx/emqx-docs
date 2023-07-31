@@ -1,6 +1,6 @@
 # Ubuntu
 
-本章节将指导您如何在 Ubuntu 系统中下载安装并启动 EMQX。
+本页将指导您如何在 Ubuntu 系统中下载安装并启动 EMQX。
 
 支持的 Ubuntu 版本：
 
@@ -32,7 +32,6 @@ EMQX 支持通过 Apt 源安装，免除了用户需要手动处理依赖关系�
    sudo systemctl start emqx
    ```
 
-   
 
 ## 通过下载包安装
 
@@ -77,7 +76,7 @@ EMQX 支持通过 deb 包或 tar.gz 包进行安装。下文将以 Ubuntu 22.04 
 
 #### 启动 EMQX
 
-您可通过如下三种方式启动 EMQX
+您可通过如下三种方式启动 EMQX。
 
 - 直接启动：
 
@@ -85,7 +84,7 @@ EMQX 支持通过 deb 包或 tar.gz 包进行安装。下文将以 Ubuntu 22.04 
   $ emqx start
   EMQX @CE_VERSION@ is started successfully!
   
-  $ emqx_ctl status
+  $ emqx ctl status
   Node 'emqx@127.0.0.1' @CE_VERSION@ is started
   ```
 
@@ -160,44 +159,13 @@ sudo apt remove --purge emqx
 
 ## 通过 deb 安装
 
-请根据 CPU 架构选择对应安装方式。
+1. 前往 [EMQ 官网](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=Ubuntu=currentOS=Ubuntu22&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)，**版本**选择 `@EE_VERSION@`，**系统**选择 `Ubuntu`，点击**免费下载**按钮进入下载页面。
 
-:::: tabs type:card
-
-::: tab amd64
-
-1. 下载 [emqx-enterprise-@EE_VERSION@-ubuntu22.04-amd64.deb](https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-ubuntu22.04-amd64.deb)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-ubuntu22.04-amd64.deb
-   ```
-
-2. 安装 EMQX。
-   ```bash
-   sudo apt install ./emqx-enterprise-@EE_VERSION@-ubuntu22.04-amd64.deb
-   ```
-
-:::
-
-::: tab arm64
-1. 下载 [emqx-enterprise-@EE_VERSION@-ubuntu22.04-arm64.deb](https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-ubuntu22.04-arm64.deb)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-ubuntu22.04-arm64.deb
-   ```
-
-2. 安装 EMQX。
-   ```bash
-   sudo apt install ./emqx-enterprise-@EE_VERSION@-ubuntu22.04-arm64.deb
-   ```
-
-:::
-
-::::
+2. 在安装与下载页面中，**安装方式**选择 `deb`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
 
 ### 启动 EMQX
 
-您可通过如下三种方式启动 EMQX
+您可通过如下三种方式启动 EMQX。
 
 - 直接启动：
 
@@ -205,7 +173,7 @@ sudo apt remove --purge emqx
   $ emqx start
   EMQX @EE_VERSION@ is started successfully!
 
-  $ emqx_ctl status
+  $ emqx ctl status
   Node 'emqx@127.0.0.1' @EE_VERSION@ is started
   ```
 
@@ -231,46 +199,13 @@ sudo apt remove --purge emqx
 
 ## 通过 tar.gz 安装
 
-请根据 CPU 架构选择对应安装方式。
+1. 前往 [EMQ 官网](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=Ubuntu=currentOS=Ubuntu22&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)，**版本**选择 `@EE_VERSION@`，**系统**选择 `Ubuntu`，点击**免费下载**按钮进入下载页面。
 
-:::: tabs type:card
-
-::: tab amd64
-
-1. 下载 [emqx-enterprise-@EE_VERSION@-ubuntu22.04-amd64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-ubuntu22.04-amd64.tar.gz)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-ubuntu22.04-amd64.tar.gz
-   ```
-
-   
-
-2. 安装 EMQX。
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-enterprise-@EE_VERSION@-ubuntu22.04-amd64.tar.gz -C emqx
-   ```
-
-:::
-
-::: tab arm64
-1. 下载 [emqx-enterprise-@EE_VERSION@-ubuntu22.04-arm64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-ubuntu22.04-arm64.tar.gz)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-ubuntu22.04-arm64.tar.gz
-   ```
-
-2. 安装 EMQX。
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-enterprise-@EE_VERSION@-ubuntu22.04-arm64.tar.gz -C emqx
-   ```
-
-:::
-
-::::
+2. 在安装与下载页面中，**安装方式**选择 `tar.gz`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
 
 安装完成后，可通过如下命令启动 EMQX。
 
-```
+```bash
 ./emqx/bin/emqx start
 ```
 

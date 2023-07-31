@@ -35,7 +35,8 @@ You can use CLI command to start the node evacuation, get the evacuation status,
 You can use the following CLI command to start the node evacuation. The `--evacuation` parameter means this is an evacuation operation:
 
 ```bash
-./bin/emqx_ctl rebalance start --evacuation \
+./bin/emqx ctl rebalance start --evacuation \
+    [--wait-health-check Secs] \
     [--redirect-to "Host1:Port1 Host2:Port2 ..."] \
     [--conn-evict-rate CountPerSec] \
     [--migrate-to "node1@host1 node2@host2 ..."] \
@@ -43,20 +44,23 @@ You can use the following CLI command to start the node evacuation. The `--evacu
     [--sess-evict-rate CountPerSec]
 ```
 
-| Parameter           | Type             | Description                                                  |
-| ------------------- | ---------------- | ------------------------------------------------------------ |
-| `--redirect-to`     | String           | The redirected server address during reconnection, for MQTT 5.0 clients; Refer to [MQTT 5.0 Specification - Server redirection](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255) for more details. |
-| `--conn-evict-rate` | Positive integer | Client disconnection rate, count/second; 500 connections per second by default |
-| `--migrate-to`      | String           | Space or comma-separated list of nodes to which sessions will be evacuated |
-| `--wait-takeover`   | Positive integer | Amount of time in seconds to wait before starting session evacuation; Unit: second, 60 seconds by default |
-| `--sess-evict-rate` | Positive integer | Client evacuation rate, count/second; 500 sessions per second by default |
+| Parameter             | Type             | Description                                                  |
+| --------------------- | ---------------- | ------------------------------------------------------------ |
+| `--wait-health-check` | Positive integer | The duration (in seconds, 60 seconds by default) during which the node waits for the Load Balancer (LB) to remove it from the active backend node list. When this specified waiting time elapses, the evacuation process begins, and the source node starts rejecting any new incoming connections. |
+| `--redirect-to`       | String           | The redirected server address during reconnection, for MQTT 5.0 clients; Refer to [MQTT 5.0 Specification - Server redirection](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255) for more details. |
+| `--conn-evict-rate`   | Positive integer | Client disconnection rate, count/second; 500 connections per second by default |
+| `--migrate-to`        | String           | Space or comma-separated list of nodes to which sessions will be evacuated |
+| `--wait-takeover`     | Positive integer | Amount of time in seconds to wait before starting session evacuation; Unit: second, 60 seconds by default |
+| `--sess-evict-rate`   | Positive integer | Client evacuation rate, count/second; 500 sessions per second by default |
+
 
 **Code Example**
 
 If you want to migrate the clients on the node `emqx@127.0.0.1` to the nodes `emqx2@127.0.0.1` and `emqx3@127.0.0.1`, you can execute the following command on the node `emqx@127.0.0.1`:
 
 ```bash
-./bin/emqx_ctl rebalance start --evacuation \
+./bin/emqx ctl rebalance start --evacuation \
+	--wait-health-check 60 \
 	--wait-takeover 200 \
 	--conn-evict-rate 30 \
 	--sess-evict-rate 30 \
@@ -71,7 +75,7 @@ This command will disconnect existing clients at a rate of `30` connections per 
 You can use the following CLI command to get the evacuation status:
 
 ```bash
-./bin/emqx_ctl rebalance node-status
+./bin/emqx ctl rebalance node-status
 ```
 
 Below is an example of the returned results:
@@ -96,13 +100,13 @@ Channel statistics:
 You can use the following CLI command to stop evacuation:
 
 ```bash
-./bin/emqx_ctl rebalance stop
+./bin/emqx ctl rebalance stop
 ```
 
 Below is an example of the returned results:
 
 ```bash
-./bin/emqx_ctl rebalance stop
+./bin/emqx ctl rebalance stop
 Rebalance(evacuation) stopped
 ```
 
@@ -118,7 +122,7 @@ Due to the same reason as MQTT being a stateful long-lived connection protocol, 
 
 ### How It Works
 
-Rebalancing is a more complicated process since it involves several nodes. 
+Rebalancing is a more complicated process since it involves several nodes.
 
 You can initiate a cluster load rebalancing task on any node. EMQX will automatically calculate the necessary connection migration plan based on the current connection load of each node. It will then migrate the corresponding number of connections and sessions from high-load nodes to low-load nodes to achieve load balancing between nodes. The workflow is as follows:
 
@@ -164,22 +168,22 @@ rebalance start \
 | Fields                 | Type             | Description                                                  |
 | ---------------------- | ---------------- | ------------------------------------------------------------ |
 | `--nodes`              | String           | Space or comma-separated list of nodes participating in the rebalance. It may or may not include the coordinator (node on which the command is run) |
-| `--wait-health-check`  | Positive integer | Specified waiting time (in seconds, default 60 seconds) for the LB to remove the source node from the active backend node list. Once the specified waiting time is exceeded, the load rebalancing task will start. |
+| `--wait-health-check`  | Positive integer | The duration (in seconds, 60 seconds by default) during which the node waits for the Load Balancer (LB) to remove it from the active backend node list. When this specified waiting time elapses, the load rebalancing process begins. |
 | `--conn-evict-rate`    | Positive integer | Client disconnection rate on source nodes; 500 connections per second by default |
 | `--abs-conn-threshold` | Positive integer | Absolute threshold for checking connection balance; 1000 by default |
-| `--rel-conn-threshold` | Number<br> > 1.0 | Relative threshold for checking connection balance; 1.1 by default |
+| `--rel-conn-threshold` | Number<br /> > 1.0 | Relative threshold for checking connection balance; 1.1 by default |
 | `--wait-takeover`      | Positive integer | Specified waiting time (in seconds, default 60 seconds) for clients to reconnect and take over the sessions after all connections are disconnected. |
 | `--sess-evict-rate`    | Positive integer | Session evacuation rate on source nodes; 500 sessions per second by default |
 | `--abs-sess-threshold` | Positive integer | Absolute threshold for checking session balance; 1000 by default |
-| `--rel-sess-threshold` | Number<br> > 1.0 | Relative threshold for checking session balance; 1.1 by default |
+| `--rel-sess-threshold` | Number<br /> > 1.0 | Relative threshold for checking session balance; 1.1 by default |
 
 **Check Session Balance**
 
 Connections are considered to be balanced when the following condition holds:
 
 ```bash
-avg(DonorConns) < avg(RecipientConns) + abs_conn_threshold 
-OR 
+avg(DonorConns) < avg(RecipientConns) + abs_conn_threshold
+OR
 avg(DonorConns) < avg(RecipientConns) * rel_conn_threshold
 ```
 
@@ -190,7 +194,7 @@ A similar rule is applied to disconnected sessions.
 To achieve load rebalancing among the three nodes `emqx@127.0.0.1`, `emqx2@127.0.0.1`, and `emqx3@127.0.0.1`, you can use the following command:
 
 ```bash
-./bin/emqx_ctl rebalance start \
+./bin/emqx ctl rebalance start \
 	--wait-health-check 10 \
 	--wait-takeover 60  \
 	--conn-evict-rate 5 \
@@ -206,13 +210,13 @@ Rebalance started
 The CLI command for getting rebalance status is:
 
 ```bash
-./bin/emqx_ctl rebalance node-status
+./bin/emqx ctl rebalance node-status
 ```
 
 **Example**
 
 ```bash
-./bin/emqx_ctl rebalance node-status
+./bin/emqx ctl rebalance node-status
 Node 'emqx1@127.0.0.1': rebalance coordinator
 Rebalance state: evicting_conns
 Coordinator node: 'emqx1@127.0.0.1'
@@ -229,19 +233,19 @@ Current average donor node connection count: 300.0
 The CLI command to stop rebalancing is:
 
 ```bash
-emqx_ctl rebalance stop
+emqx ctl rebalance stop
 ```
 
 **Example**
 
 ```bash
-./bin/emqx_ctl rebalance stop
+./bin/emqx ctl rebalance stop
 Rebalance stopped
 ```
 
 ### Start/Stop Rebalancing via HTTP API
 
-All the operations available from the CLI are also available from the API. Start/stop commands require a node as a parameter. For details, see [API Docs](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html).
+All the operations available from the CLI are also available from the API. Start/stop commands require a node as a parameter. For details, see [API Docs](https://docs.emqx.com/en/enterprise/v5.1/admin/api-docs.html).
 
 ## Integrate Load Balancer
 

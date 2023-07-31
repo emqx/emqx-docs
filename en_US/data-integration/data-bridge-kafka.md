@@ -74,13 +74,11 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 This section demonstrates how to create Kafka producer or consumer data bridges via Dashboard.
 
-1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
 2. Click **Create** on the top right corner of the page.
 
 3. In the **Create Data Bridge** page, click to select **Kafka**, and then click **Next**.
-
-   <img src="./assets/kafka_consumer/setup2.png" alt="setup2" style="zoom:67%;" />
 
 4. In **Bridge Role** field, select **Producer** or **Consumer**. Click the corresponding tabs for the configuration of each role. 
    
@@ -161,11 +159,11 @@ Creating a rule allows Kafka messages matching the rule to be further transforme
 
 :::
 
-Now the Kafka data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
+Now the Kafka data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
 ### Create Rule for Kafka Producer Data Bridge
 
-1. Go to EMQX Dashboard, and click **Data Integration** -> **Rules**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -186,7 +184,7 @@ FROM
 
 6. Click **Create** at the page bottom to finish the creation.
 
-Now you have successfully created the data bridge to Kafka producer data bridge. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Kafka after parsing by rule  `my_rule`.
+Now you have successfully created the data bridge to Kafka producer data bridge. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Kafka after parsing by rule  `my_rule`.
 
 ### Test the Data Bridge and Rule
 

@@ -2,7 +2,7 @@
 
 EMQX implements the will message feature of MQTT. If a will message is set for a client, EMQX sends the message to relevant subscribers when the client is accidentally disconnected, so that the subscribers can be informed and update the client status.
 
-You can use client tools to try this messaging service in EMQX. This section introduces how to use the [MQTTX Client](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and see how a will message is published and received.
+You can use client tools to try this messaging service in EMQX. This section introduces how to use the [MQTTX Desktop](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and see how a will message is published and received.
 
 :::tip Prerequisites
 
@@ -11,35 +11,37 @@ You can use client tools to try this messaging service in EMQX. This section int
 
 :::
 
-## Publish Will Message with MQTTX Client
+## Publish Will Message with MQTTX Desktop
 
-1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection named `Demo`.
+1. Start EMQX and MQTTX Desktop. Click the **New Connection** to create a client connection as a publisher.
 
-   - The localhost `127.0.0.1` is used as an example in this demonstration.
+   - Enter `Demo` in the **Name** field.
+   - Enter the localhost `127.0.0.1` in **Host** to use as an example in this demonstration.
+   - Leave other settings as default and click **Connect**.
 
    ::: tip
 
-   For detailed instructions on creating an MQTT connection, see [MQTTX Client](./publish-and-subscribe.md).
+   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
 
    :::
 
    <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
 
-   In **Last Will and Testament** section, fill in the will message configuration.
+   Scroll down the page and in **Last Will and Testament** section, fill in the will message configuration.
 
-   - **Last-Will Topic**: Type `offline`.
+   - **Last-Will Topic**: Enter `offline`.
    - **Last-Will QoS**: Set as the default value `0`.
    - **Last-Will Retain**: Set disabled as default. If enabled, the will message will also be a retained message.
-   - **Last-Will Payload**: Type `I'm offline`.
+   - **Last-Will Payload**: Enter `I'm offline`.
    - **Will Delay Intervals (s)**: Set `5` seconds.
-
-   <img src="./assets/Configure-new-connection-will.png" alt="Configure-new-connection-will" style="zoom:35%;" />
 
    Leave the rest settings as default. Click the **Connect** button.
 
-2. Create a new connection for another client. Type the connection name as `Subscriber`.
+   <img src="./assets/Configure-new-connection-will.png" alt="Configure-new-connection-will" style="zoom:35%;" />
 
-3. Click **New Subscription** in the **Subscribe** pane. Type `offline` in the **Topic** textbox. Leave the other settings as default. Click the **Confirm** button.
+2. In the **Connections** pane, click **+** -> **New Connection** to create a new client connection. Set the connection **Name** as `Subscriber` and **Host** as `127.0.0.1`. Leave other settings as default and click **Connect**.
+
+3. Click **New Subscription** in the **Subscriber** pane. Enter `offline` in the **Topic** textbox. Leave the other settings as default. Click the **Confirm** button.
 
    <img src="./assets/Subscribe-will-message.png" alt="Subscribe-will-message" style="zoom:35%;" />
 

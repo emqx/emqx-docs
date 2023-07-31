@@ -14,8 +14,8 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 :::tip 前置准备
 
 <!-- 根据情况编写，包含必须的前置知识点、软件版本要求、需要预先创建/初始化的操作。 -->
-- 了解 [规则](./rules.md)。
-- 了解 [数据桥接](./data-bridges.md)。
+- 了解[规则](./rules.md)。
+- 了解[数据桥接](./data-bridges.md)。
 
 <!-- 列举功能或性能方面的亮点，如支持批处理、支持异步模式、双向数据桥接，链接到对应的功能介绍章节。 -->
 
@@ -80,8 +80,6 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 2. 点击页面右上角的**创建**。
 
 3. 在**数据桥接类型**中选择 **Kafka**，点击**下一步**。
-
-   <img src="./assets/bridge-create-next.png" alt="bridge-create-next" style="zoom:67%;" />
 
 4. 在**桥接角色** 中选择**生产者**或**消费者**。
    
@@ -152,7 +150,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
    
    ::::
    
-5. 点击**创建**前，您可点击**测试连接**按钮确保能连接到 Kafuka 服务器。
+5. 点击**创建**前，您可点击**测试连接**按钮确保能连接到 Kafka 服务器。
 
 6. 点击**创建**，将提示是否使用该数据桥接创建规则。
 

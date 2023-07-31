@@ -276,7 +276,7 @@ For example:
 coap-client -m delete -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&token=3404490787"
 ```
 
-### Hearbeat
+### Heartbeat
 
 Only available in `Connection Mode`.
 
@@ -304,7 +304,7 @@ coap-client -m put -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&token=34
 ```
 
 :::tip
-The heartbeat interval is determined by the `hearbeat` option of CoAP gateway, default: 30 seconds.
+The heartbeat interval is determined by the `heartbeat` option of CoAP gateway, default: 30 seconds.
 :::
 
 
@@ -340,7 +340,7 @@ coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test"
 Or carry `clientid` and `token` in `Connection Mode`:
 
 ```bash
-coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test&clientid=123&token=3404490787"
+coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
 
@@ -350,7 +350,7 @@ This interface is used by the CoAP client to subscribe a topic.
 Additional identity information needs to be carried if the `Connection Mode` enabled.
 
 **Request Parameters:**
-- Method: `POST`
+- Method: `GET`
 - Options: Set `observer` to `0`
 - URI: `mqtt/{+topic}{?QueryString*}`
   -  `{+topic}` is the topic to subscribe, i.e. the URI is `ps/coap/test` if to subscribe `coap/test`.
@@ -380,7 +380,7 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 Or, carry `clientid` and `token` to subscribe in `Connection Mode`:
 
 ```bash
-coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test&clientid=123&token=3404490787"
+coap-client -m get -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
 

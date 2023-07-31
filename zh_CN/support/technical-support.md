@@ -16,8 +16,6 @@ EMQ 公司成立于 2017 年，总部位于杭州，海外研发中心设在斯�
 
 **销售:** [sales-cn@emqx.io](mailto:sales-cn@emqx.io)
 
-**招聘:** [hr@emqx.io](mailto:hr@emqx.io)
-
 **安全:** [security@emqx.io](mailto:security@emqx.io)
 
 **市场:** [marketing@emqx.io](mailto:marketing@emqx.io)
@@ -30,8 +28,6 @@ EMQ 公司成立于 2017 年，总部位于杭州，海外研发中心设在斯�
 - 成都办公室：成都高新区交子大道177号B座4层13号
 - 昆明办公室：昆明五华区学府路745号海伦先生1栋1814室
 - 深圳办公室：深圳南山区高新南九道深圳湾科技生态园10栋A座5层
-
-
 
 ## EMQX 企业版
 
@@ -52,8 +48,6 @@ EMQ 公司成立于 2017 年，总部位于杭州，海外研发中心设在斯�
 | 响应时间           | 8 小时（工作时间内）                                         | 2 小时                                                       |
 | 补丁热修复         | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
 | 第三方插件技术支持 | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
-
-
 
 ## EMQX 开源版
 

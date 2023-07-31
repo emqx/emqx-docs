@@ -42,7 +42,7 @@ EMQX 支持手动创建集群，也支持通过多种方式自动集群，本章
 2. 启动两台节点后，在其中一台节点执行集群加入命令：
 
     ```bash
-    $ ./bin/emqx_ctl cluster join emqx@s1.emqx.io
+    $ ./bin/emqx ctl cluster join emqx@s1.emqx.io
 
     Join the cluster successfully.
     Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
@@ -57,7 +57,7 @@ EMQX 支持手动创建集群，也支持通过多种方式自动集群，本章
 3. 在任意节点上查询集群的状态：
 
     ```bash
-    $ ./bin/emqx_ctl cluster status
+    $ ./bin/emqx ctl cluster status
 
     Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
     ```
@@ -69,13 +69,13 @@ EMQX 支持手动创建集群，也支持通过多种方式自动集群，本章
    在 `emqx@s2.emqx.io` 上执行以下命令，让其退出集群：
 
     ```bash
-    ./bin/emqx_ctl cluster leave
+    ./bin/emqx ctl cluster leave
     ```
 
     或在 `emqx@s1.emqx.io` 上从集群移除 `emqx@s2.emqx.io` 节点：
 
     ```bash
-    ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
+    ./bin/emqx ctl cluster force-leave emqx@s2.emqx.io
     ```
 
 ### 单机伪分布式
@@ -95,7 +95,7 @@ EMQX_NODE__NAME='emqx2@127.0.0.1' \
     EMQX_NODE__DATA_DIR="./data2" \
 ./bin/emqx start
 
-./bin/emqx_ctl cluster join emqx1@127.0.0.1
+./bin/emqx ctl cluster join emqx1@127.0.0.1
 ```
 
 ## 节点发现与自动集群
@@ -110,7 +110,7 @@ EMQX 支持多种节点发现策略：
 | ------ | ----------------- |
 | manual | 手动命令创建集群        |
 | static | 静态节点列表自动集群        |
-| multicast | 采用 UDP 组播模式的自动群集<br>注意：5.0 之前版本中的组播模式发现策略已被废弃，在未来的版本中会被删除。 |
+| multicast | 采用 UDP 组播模式的自动群集<br />注意：5.0 之前版本中的组播模式发现策略已被废弃，在未来的版本中会被删除。 |
 | DNS | DNS A 记录自动集群      |
 | etcd   | 通过 etcd 自动集群      |
 | K8s    | Kubernetes 服务自动集群 |

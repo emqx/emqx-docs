@@ -52,10 +52,10 @@ MQTT over QUIC is disabled by default, you need to enable this listener with the
 
 ​	This configuration indicates that the QUIC listener is enabled on port `14567`. Save the changes and restart EMQX to apply the configuration.
 
-2. Execute `emqx_ctl listeners` in CLI, and we can see that the MQTT over QUIC listener is enabled:
+2. Execute `emqx ctl listeners` in CLI, and we can see that the MQTT over QUIC listener is enabled:
 
 ```bash
- > emqx_ctl listeners
+ > emqx ctl listeners
  quic:default
    listen_on       : :14567
    acceptors       : 16
@@ -158,8 +158,8 @@ NanoMQ also provides the test tool `nanomq_cli`, which contains MQTT over QUIC c
 ```bash
 nanomq_cli quic --help
 Usage: quic conn <url>
-       quic sub  <url> <qos> <topic>
-       quic pub  <url> <qos> <topic> <data>
+       quic sub  <url> \<qos> \<topic>
+       quic pub  <url> \<qos> \<topic> \<data>
 
 ## subscribe example
 nanomq_cli quic sub mqtt-quic://54.75.171.11:14567 2 msg

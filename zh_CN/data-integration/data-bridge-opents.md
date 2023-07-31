@@ -1,6 +1,6 @@
 # OpenTSDB
 
-EMQX 支持与 OpenTSDB 集成，因此可以将客户端消息保存到 OpenTSDB 以便后续进行分析和检索。
+EMQX 支持与 OpenTSDB 集成，因此可以将 MQTT 消息保存到 OpenTSDB 以便后续进行分析和检索。
 
 {% emqxce %}
 :::tip
@@ -8,11 +8,12 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 :::
 {% endemqxce %}
 
-
-## 前置条件
+::: tip 前置准备
 
 - 了解 [规则](./rules.md)。
 - 了解 [数据桥接](./data-bridges.md)。
+
+:::
 
 ## 特性
 

@@ -23,7 +23,7 @@ This page introduces how to enable PSK authentication in EMQX.
    ```bash
    psk_authentication {
      enable = true
-     init_file = data/psk_file.txt
+     init_file = "data/psk_file.txt"
    }
    ```
 
@@ -44,7 +44,7 @@ This page introduces how to enable PSK authentication in EMQX.
      bind = 1883
      ssl_options {
        ciphers = ["RSA-PSK-AES256-GCM-SHA384","RSA-PSK-AES256-CBC-SHA384","RSA-PSK-AES128-GCM-SHA256","RSA-PSK-AES128-CBC-SHA256","RSA-PSK-AES256-CBC-SHA","RSA-PSK-AES128-CBC-SHA"]
-       versions = [tlsv1.2, tlsv1.1, tlsv1]
+       versions = ["tlsv1.2", "tlsv1.1", "tlsv1"]
      }
    }
    ```

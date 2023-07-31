@@ -1,6 +1,6 @@
 # RocketMQ
 
-通过 RocketMQ 数据桥接可以将客户端消息和事件转发到 RocketMQ 中，例如，可以通过事件触发转发消息到 RocketMQ 中，从而实现对诸如设备在线状态、上下线历史等的记录。
+通过 RocketMQ 数据桥接可以将 MQTT 消息和客户端事件转发到 RocketMQ 中。例如，可以通过事件触发转发消息到 RocketMQ 中，从而实现对诸如设备在线状态、上下线历史等的记录。
 
 {% emqxce %}
 :::tip
@@ -8,10 +8,12 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 :::
 {% endemqxce %}
 
-## 前置条件
+::: tip 前置准备
 
 - 了解 EMQX 数据桥接[规则](./rules.md)。
 - 了解[数据桥接](./data-bridges.md)。
+
+:::
 
 ## 特性
 

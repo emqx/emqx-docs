@@ -282,7 +282,7 @@ coap-client -m put -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&token=34
 ```
 
 :::tip
-心跳间隔时间由 CoAP 网关的 `hearbeat` 配置决定，默认为 30 秒
+心跳间隔时间由 CoAP 网关的 `heartbeat` 配置决定，默认为 30 秒
 :::
 
 
@@ -320,7 +320,7 @@ coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test"
 `连接模式` 下则需要携带 `clientid` 和 `token`
 
 ```bash
-coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test&clientid=123&token=3404490787"
+coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
 
@@ -331,7 +331,7 @@ coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test&clie
 
 **请求参数表：**
 
-- 方法（Method）：`POST`
+- 方法（Method）：`GET`
 - 选项值（Options）：需设置 `observer` 为 0
 - 请求路径（URI）：`ps/{+topic}{?QueryString*}`，其中：
   -  `{+topic}` 为需要订阅主题，例如订阅 `coap/test` 主题，则请求路径为 `ps/coap/test`
@@ -361,7 +361,7 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 `连接模式` 下则需要携带 `clientid` 和 `token`：
 
 ```bash
-coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test&clientid=123&token=3404490787"
+coap-client -m get -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
 

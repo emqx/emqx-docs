@@ -261,24 +261,24 @@ You need to two steps:
 After the extraction is complete, the license needs to be reloaded from the command line to complete the update:
 
 ```
-emqx_ctl license reload [license file path]
+emqx ctl license reload [license file path]
 ```
 
 The update commands for different installation modes:
 
 ```
 ## zip packages
-./bin/emqx_ctl license reload path/to/emqx.lic
+./bin/emqx ctl license reload path/to/emqx.lic
 
 ## DEB/RPM
-emqx_ctl license reload path/to/emqx.lic
+emqx ctl license reload path/to/emqx.lic
 
 ## Docker
-docker exec -it emqx-ee emqx_ctl license reload path/to/emqx.lic
+docker exec -it emqx-ee emqx ctl license reload path/to/emqx.lic
 ```
 
 ::: tip
-On a multi-node cluster, the `emqx_ctl license reload` command needs to be executed only on one of the nodes, as the license will be replicated and applied to all members. Each one will contain a copy of the new license under the configured data directory for EMQX, as well as a backup of the old license, if any.
+On a multi-node cluster, the `emqx ctl license reload` command needs to be executed only on one of the nodes, as the license will be replicated and applied to all members. Each one will contain a copy of the new license under the configured data directory for EMQX, as well as a backup of the old license, if any.
 
 Note that this command only takes effect _on the local node_ executing the command for EMQX versions prior to e4.3.10, so this command will require being executed on each node of the cluster for those older versions.
 :::
@@ -362,7 +362,7 @@ EMQX can receive messages from other broker, but it depends also on the implemen
 
 ## What should I do if I want trace the subscription and publish of some particular message?
 
-EMQX support the tracing of messages from particular client or under particular topic. You can use the command line tool `emqx_ctl` for tracing. The example below shows how to trace messages under 'topic' and save the result in 'trace_topic.log'. For more details, please refer to [Log Trace](../observability/tracer.md).
+EMQX support the tracing of messages from particular client or under particular topic. You can use the command line tool `emqx ctl` for tracing. The example below shows how to trace messages under 'topic' and save the result in 'trace_topic.log'. For more details, please refer to [Log Trace](../observability/tracer.md).
 
 ## When I was executing stress test, the connection number and throughput are lower than expected. How can I tune the system to make full use of it?
 
@@ -425,7 +425,7 @@ Modify the reuse_sessions = on in the emqx.conf configuration and take effect. I
 
 ## MQTT client disconnect statistics
 
-Execute `emqx_ctl listeners` to view the `shutdown_count` statistics under the corresponding port.
+Execute `emqx ctl listeners` to view the `shutdown_count` statistics under the corresponding port.
 
 Client disconnect link error code list:
 
@@ -472,3 +472,81 @@ You can use our online calculation tool [https://www.emqx.com/en/server-estimate
 ## My connections number is small, do I still need to deploy multiple nodes in production?
 
 Even when the connection number is low, or message rate is low, it still makes sense to deploy a cluster with multiple nodes in production. Clustering improves the availability of system: when a single node goes down, the rest of the nodes in the cluster ensure that the service is not interrupted.
+
+## Can EMQX guarantee the original order when forwarding messages to subscribers?
+
+EMQX ensures that messages with the same topic from the same client are forwarded in the order they were received, regardless of the QoS level. The message forwarding order remains consistent regardless of message loss or duplication, as per MQTT requirements.
+
+However, EMQX does not guarantee the forwarding order of messages from different topics. These messages can be considered as entering separate channels. For example, if messages from topic A arrive at EMQX before messages from topic B, it is possible that messages from topic B will be forwarded earlier.
+
+## What should I do when I encounter problems related to client connection, publishing and subscribing?
+
+EMQX's debug logs already capture all the behaviors and phenomena. By viewing the debug logs, we can determine when the client initiated the connection, the parameters specified during the connection, the success of rejection of the connection, and the reasons for rejection, among other details. However, the extensive information logged in debug mode can consume additional resources and make it challenging to analyze individual clients or topics.
+
+To address this, EMQX provides a [Log Trace](../observability/tracer.md) feature. We can specify the clients or topics we want to trace, and EMQX will output all the debug logs related to those clients or topics to the designated log file. This facilitates self-analysis and seeking assistance from the community.
+
+It's important to note that if the client cannot establish a connection with EMQX due to network issues, the log tracing feature will not be useful since EMQX does not receive any messages in such cases. This situation often arises from network configuration problems like firewalls or security groups, resulting in closed server ports. This is particularly common when deploying EMQX on cloud instances. Therefore, in addition to log tracing, troubleshooting network-related issues involves checking port occupation, listening status, and network configurations.
+
+## Why are there client IDs like "CENSYS" or other unfamiliar clients?
+
+CENSYS is an internet scanning and reconnaissance tool that performs regular scans of the IPv4 address space to identify default ports for various protocols such as HTTP, SSH, MQTT, and etc. Therefore, if you notice MQTT clients with a client ID of "CENSYS" or other unfamiliar clients accessing your MQTT broker, it indicates a relatively lower level of security protection. To address this issue effectively, consider implementing the following measures:
+
+1. Avoid using default configurations, such as the AppID and AppSecret used for verifying HTTP API access permissions in EMQX.
+2. Enable authentication mechanisms like password-based authentication or JWT authentication to prevent unauthorized access where only knowledge of an IP address is sufficient for login.
+3. Enable TLS mutual authentication to allow access only to clients with valid certificates.
+4. Enable proper authorization mechanisms to restrict access to sensitive data for unauthorized devices.
+5. Configure your firewall to close unnecessary ports as much as possible.
+
+## Can I subscribe to system topics using shared subscriptions?
+
+Yes, it is possible to use shared subscriptions to subscribe to certain system messages, such as client online/offline events, which are published frequently. Shared subscriptions are particularly useful for clients in such cases. For instance, you can subscribe to the following topic using a shared subscription: $share/group1/$SYS/brokers/+/clients/+/connected.
+
+## Why can't I receive retained messages when using shared subscriptions?
+
+According to the MQTT protocol, when a client uses a shared subscription, the server is not allowed to send retained messages to that client.
+
+## Why do messages sometimes get lost when using shared subscriptions?
+
+When a shared subscriber's connection is disconnected but the session remains active, the server continues to deliver messages to the subscriber, which are temporarily stored in the session. As a result, other active shared subscribers may appear as if they have not consumed all the messages. In addition, if the shared subscriber chooses to create a new session when reconnecting, the messages cached in the old session will be permanently lost.
+
+If you have verified that the aforementioned situation does not occur, yet the issue of message loss persists, you can use the client tracking feature of EMQX to conduct further investigation.
+
+## What should I do if EMQX prompts that the port is occupied (eaddrinuse) when starting?
+
+By default, EMQX will occupy 7 ports when it starts. They are:
+
+1. Port 1883, used for MQTT over TCP listener. It can be modified through configuration.
+2. Port 8883, used for MQTT over SSL/TLS listener. It can be modified through configuration.
+3. Port 8083, used for MQTT over WebSocket listener. It can be modified through configuration.
+4. Port 8084, used for MQTT over WSS (WebSocket over SSL) listener. It can be modified through configuration.
+5. Port 18083, the default listening port for the HTTP API service. The dashboard also relies on this port, which can be modified through configuration.
+6. Port 4370, used for remote function calls in the EMQX distributed cluster and Mnesia data synchronization. This port is occupied by default, even if no cluster is formed. The listening port is determined by `BasePort (4370) + Offset`, where 4370 is fixed and cannot be modified, and Offset is determined by the numeric suffix in the node name (`Name@Host`). If there is no numeric suffix, it defaults to 0. For example, the Offset for `emqx@127.0.0.1` is 0, and the Offset for `emqx1@127.0.0.1` is 1.
+7. Port 5370, the cluster RPC port used for load sharing. It is mainly used for forwarding MQTT messages between nodes. Similar to port 4370, this port is occupied by default, even if no cluster is formed. The actual listening port is `BasePort (5370) + Offset`, where 5370 is fixed and cannot be modified, and Offset is determined by the Name part of the node name (`Name@Host`). If there is no numeric suffix, it defaults to 0.
+
+## Why does EMQX output the log "WARNING: Default (insecure) Erlang cookie is in use." during startup?
+
+The complete WARNING log is as follows:
+
+```
+WARNING: Default (insecure) Erlang cookie is in use.
+WARNING: Configure node.cookie in /usr/lib/emqx/etc/emqx.conf or override from environment variable EMQX_NODE__COOKIE
+WARNING: NOTE: Use the same cookie for all nodes in the cluster.
+```
+
+Only EMQX nodes using the same cookie can form a cluster. While a cookie does not secure cluster communication, it prevents a node from connecting to a cluster it did not intend to communicate with. By default, EMQX nodes uniformly use the cookie value `emqxsecretcookie`. However, we recommend that users change the cookie value when building a cluster to enhance security.
+
+The second warning log indicates two ways to modify the cookie: by editting `node.cookie` in the `emqx.conf` configuration file or by setting the environment variable `EMQX_NODE__COOKIE`.
+
+## Why does restarting the EMQX Docker container cause data loss, such as configured rules and resources?
+
+The runtime data of EMQX is stored in the `/opt/emqx/data` directory, including configuration rules, resources, retained messages, etc. To ensure data persistence during container restarts, it's important to mount the `/opt/emqx/data` directory to a local host directory or a data volume.
+
+However, even if the `/opt/emqx/data` directory is properly mounted, data loss may still occur after container restarts. This is because the runtime data of EMQX is stored in the `/opt/emqx/data/mnesia/${Node Name}` directory, and when the container is restarted, the node name of EMQX changes, leading to the creation of a new storage directory.
+
+EMQX node name consists of Name and Host, with the Host derived from the container's IP address by default. Under the default network configurations, the container's IP may change upon restarting, so you need to maintain a fixed IP for the container.
+
+To address this issue, EMQX provides an environment variable, `EMQX_HOST`, which allows you to set the Host part of the node name. However, it is crucial that this Host value is reachable by other nodes, so it should be used in conjunction with a network alias. Here is an example command for running the EMQX Docker container with the EMQX_HOST environment variable and a network alias:
+
+```
+docker run -d --name emqx -p 18083:18083 -p 1883:1883 -e EMQX_HOST=alias-for-emqx --network example --network-alias alias-for-emqx --mount type=bind,source=/tmp/emqx,target=/opt/emqx/data emqx:5.0.24
+```

@@ -1,6 +1,6 @@
 # Amazon Linux 2
 
-This section guides you on installing and starting EMQX on Amazon Linux 2.
+This page guides you on installing and starting EMQX on Amazon Linux 2.
 
 {% emqxce %}
 
@@ -54,7 +54,7 @@ EMQX offers 3 different options to start EMQX:
   $ emqx start
   EMQX @CE_VERSION@ is started successfully!
   
-  $ emqx_ctl status
+  $ emqx ctl status
   Node 'emqx@127.0.0.1' @CE_VERSION@ is started
   ```
 
@@ -132,43 +132,9 @@ After the installation, run the command below to start EMQX.
 
 ## Install with rpm
 
-EMQX offers different installation packages for different CPU architectures. 
-
-:::: tabs type:card
-
-::: tab amd64
-
-1. Download [emqx-enterprise-@EE_VERSION@-amzn2-amd64.rpm](https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-amd64.rpm). 
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-amd64.rpm
-   ```
-
-2. Install EMQX. 
-
-   ```bash
-   sudo yum install emqx-enterprise-@EE_VERSION@-amzn2-amd64.rpm -y
-   ```
-
-:::
-
-::: tab arm64
-
-1. Download [emqx-enterprise-@EE_VERSION@-amzn2-arm64.rpm](https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-arm64.rpm). 
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-arm64.rpm
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   sudo yum install emqx-enterprise-@EE_VERSION@-amzn2-arm64.rpm -y
-   ```
-
-:::
-
-::::
+1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=AmazonLinux2=currentOS=AmazonLinux2&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
+2. Select `@EE_VERSION@` for **Version** and `Amazon Linux 2` for **OS**, and click the **Download** button.
+3. On the Downloads and Install page, select `rpm` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
 
 ### Start EMQX
 
@@ -180,7 +146,7 @@ EMQX offers 3 different options to start EMQX:
   $ emqx start
   EMQX @EE_VERSION@ is started successfully!
   
-  $ emqx_ctl status
+  $ emqx ctl status
   Node 'emqx@127.0.0.1' @EE_VERSION@ is started
   ```
 
@@ -206,49 +172,16 @@ sudo apt remove --purge emqx
 
 ## Install with tar.gz
 
-EMQX has offered different installation packages for different CPU architectures. 
 
-:::: tabs type:card
-
-::: tab amd64
-
-1. Download [emqx-enterprise-@EE_VERSION@-amzn2-amd64.tar.gz](https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-amd64.tar.gz). 
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-amd64.tar.gz
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-enterprise-@EE_VERSION@-amzn2-amd64.tar.gz -C emqx
-   ```
-
-:::
-
-::: tab arm64
-
-1. Download [emqx-enterprise-@EE_VERSION@-amzn2-arm64.tar.gz](https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-arm64.tar.gz). 
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-amzn2-arm64.tar.gz
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-enterprise-@EE_VERSION@-amzn2-arm64.tar.gz -C emqx
-   ```
-
-:::
-
-::::
+1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=AmazonLinux2=currentOS=AmazonLinux2&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
+2. Select `@EE_VERSION@` for **Version** and `Amazon Linux 2` for **OS**, and click the **Download** button.
+3. On the Downloads and Install page, select `tar.gz` as **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
 
 ### Start EMQX
 
 After the installation, run the command below to start EMQX.
 
-```
+```bash
 ./emqx/bin/emqx start
 ```
 

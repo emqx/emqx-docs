@@ -34,7 +34,7 @@ EMQX 节点疏散功能的工作原理如下：
 您可以通过如下命令执行节点的疏散任务，其中 `--evacuation` 选项表示该命令为节点疏散操作：
 
 ``` bash
-./bin/emqx_ctl rebalance start --evacuation \
+./bin/emqx ctl rebalance start --evacuation \
     [--redirect-to "Host1:Port1 Host2:Port2 ..."] \
     [--conn-evict-rate CountPerSec] \
     [--migrate-to "node1@host1 node2@host2 ..."] \
@@ -44,18 +44,19 @@ EMQX 节点疏散功能的工作原理如下：
 
 | 配置项       | 类型           | 描述 |
 |---------------------|------------------|-------------|
+| `--wait-health-check` | 正整数 | 等待负载均衡器（LB）将源节点从活跃的后端节点列表中移除的时间（以秒为单位，默认为60秒）。当指定的等待时间结束后，将开始执行疏散过程，并且源节点将开始拒绝任何新的传入连接。 |
 | `--redirect-to` | 字符 | 重连时的重定向服务器地址，针对 MQTT 5.0 客户端；具体可参考 [MQTT 5.0 协议 - 服务器重定向(Server redirection) ](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255) |
-| `--conn-evict-rate` | 正整数 | 客户端每秒断开连接速度。默认为 500 连接/秒 |
+| `--conn-evict-rate` | 正整数 | 客户端每秒断开连接速度；默认为 500 连接/秒。 |
 | `--migrate-to` | 字符 | 疏散会话被迁移到的节点列表，多个节点以逗号或空格分隔。 |
-| `--wait-takeover` | 正整数 | 所有连接断开后，等待客户端重连以接管会话的时间；单位： 秒，默认为 60 秒 |
-| `--sess-evict-rate` | 正整数 | `wait-takeover` 之后每秒会话疏散速度。 默认为 500 会话/秒 |
+| `--wait-takeover` | 正整数 | 所有连接断开后，等待客户端重连以接管会话的时间；单位： 秒，默认为 60 秒。 |
+| `--sess-evict-rate` | 正整数 | `wait-takeover` 之后每秒会话疏散速度； 默认为 500 会话/秒。 |
 
 **代码示例**
 
 如希望将 `emqx@127.0.0.1` 节点的客户端迁移到 `emqx2@127.0.0.1` 与 `emqx3@127.0.0.1` 节点，可在 `emqx@127.0.0.1` 节点执行以下命令：
 
 ```bash
-./bin/emqx_ctl rebalance start --evacuation \
+./bin/emqx ctl rebalance start --evacuation \
 	--wait-takeover 200 \
 	--conn-evict-rate 30 \
 	--sess-evict-rate 30 \
@@ -70,13 +71,13 @@ Rebalance(evacuation) started
 您可通过如下命令获取节点疏散状态：
 
 ```bash
-./bin/emqx_ctl rebalance node-status
+./bin/emqx ctl rebalance node-status
 ```
 
 返回结果如下：
 
 ```bash
-./bin/emqx_ctl rebalance node-status
+./bin/emqx ctl rebalance node-status
 Rebalance type: evacuation
 Rebalance state: evicting_conns
 Connection eviction rate: 30 connections/second
@@ -96,19 +97,19 @@ Channel statistics:
 您可通过如下命令终止节点疏散任务：
 
 ```bash
-./bin/emqx_ctl rebalance stop
+./bin/emqx ctl rebalance stop
 ```
 
 返回结果如下：
 
 ```bash
-./bin/emqx_ctl rebalance stop
+./bin/emqx ctl rebalance stop
 Rebalance(evacuation) stopped
 ```
 
 ### 通过 HTTP API 启停节点疏散
 
-您也可通过 API 开启/停止节点疏散任务，此时需要在参数中指定操作节点。具体命令及操作，见 [API 文档](https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html)。
+您也可通过 API 开启/停止节点疏散任务，此时需要在参数中指定操作节点。具体命令及操作，见 [API 文档](https://docs.emqx.com/zh/enterprise/v5.1/admin/api-docs.html)。
 
 ## 集群负载重平衡
 
@@ -164,7 +165,7 @@ Rebalance(evacuation) stopped
 | 配置项                 | 类型             | 描述                                                         |
 | ---------------------- | ---------------- | ------------------------------------------------------------ |
 | `--nodes` | 字符 | 参与负载重平衡的节点列表，以空格或逗号分隔，调度节点（即运行命令的节点）可以不在列表中。 |
-| `--wait-health-check` | 正整数 | 等待 LB 将源节点从活跃的后端节点列表中移除的时间（单位为 秒，默认 60 秒），超过指定等待时间后，重平衡任务将启动。 |
+| `--wait-health-check` | 正整数 | 等待负载均衡器将源节点从活跃的后端节点列表中移除的时间（单位为秒，默认 60 秒），超过指定等待时间后，重平衡任务将启动。 |
 | `--conn-evict-rate` | 正整数 | 源节点客户端每秒断开连接速度。 默认 500 连接/秒。|
 | `--abs-conn-threshold` | 正整数 | 用于检查连接平衡的绝对阈值。默认为 1000。                                 |
 | `--rel-conn-threshold` | 数字<br/>> 1.0 | 用于检查连接平衡的相对阈值。默认为 1.1                                 |
@@ -192,7 +193,7 @@ avg(源节点连接数) < avg(目标节点连接数) * rel_conn_threshold
 如希望在 `emqx@127.0.0.1`、`emqx2@127.0.0.1` 与 `emqx3@127.0.0.1` 三个节点之间实现负载重平衡，可使用如下命令操作：
 
 ```bash
-./bin/emqx_ctl rebalance start \
+./bin/emqx ctl rebalance start \
 	--wait-health-check 10 \
 	--wait-takeover 60  \
 	--conn-evict-rate 5 \
@@ -208,13 +209,13 @@ Rebalance started
 获取重平衡状态的命令如下：
 
 ```bash
-emqx_ctl rebalance node-status
+emqx ctl rebalance node-status
 ```
 
 **示例**：
 
 ```bash
-./bin/emqx_ctl rebalance node-status
+./bin/emqx ctl rebalance node-status
 Node 'emqx1@127.0.0.1': rebalance coordinator
 Rebalance state: evicting_conns
 Coordinator node: 'emqx1@127.0.0.1'
@@ -231,13 +232,13 @@ Current average donor node connection count: 300.0
 停止重平衡任务的命令如下：
 
 ```bash
-./bin/emqx_ctl rebalance stop
+./bin/emqx ctl rebalance stop
 ```
 
 **示例**：
 
 ```bash
-./bin/emqx_ctl rebalance stop
+./bin/emqx ctl rebalance stop
 Rebalance stopped
 ```
 

@@ -1,6 +1,6 @@
 # Ingest Data into MySQL
 
-EMQX supports integration with MySQL. You can save client messages and events to MySQL, or record the online status or online/offline of clients by using events to trigger the data update or removal.
+EMQX supports integration with MySQL. You can save MQTT messages and client events to MySQL, or record the online status or online/offline of clients by using events to trigger the data update or removal.
 
 {% emqxce %}
 :::tip
@@ -81,7 +81,7 @@ use emqx_data;
 
 Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to MySQL for messages storage and event recording.
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, click **Integration** -> **Data Bridge**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -129,13 +129,13 @@ Data bridges for message storage and event recording require different SQL templ
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into MySQL. You can also create rules by following the steps in [Create Rules for MySQL Data Bridge](#create-rules-for-mysql-data-bridge).
 
-Now the MySQL data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
+Now the MySQL data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
 ### Create Rules for MySQL Data Bridge
 
 After you have successfully created the data bridge to MySQL, you can continue to create rules to specify the data to be saved into MySQL and rules for the online/offline status recording.
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
+1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -164,7 +164,7 @@ After you have successfully created the data bridge to MySQL, you can continue t
 4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data Bridge**. Click the **Add** button.
 5. Click the **Create** button to finish the setup.
 
-Now you have successfully created the rule for MySQL data bridge. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to MySQL after parsing by rule  `my_rule`.
+Now you have successfully created the rule for MySQL data bridge. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to MySQL after parsing by rule  `my_rule`.
 
 ### Test the Data Bridge and Rule
 

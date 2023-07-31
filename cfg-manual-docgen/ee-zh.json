@@ -15768,7 +15768,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "发送到 'local_topic' 的消息都会转发到 Cassandra。 </br>\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
+        "desc" : "发送到 'local_topic' 的消息都会转发到 Cassandra。 <br />\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
         "aliases" : [
           
         ]
@@ -15946,7 +15946,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "发送到 'local_topic' 的消息都会转发到 Clickhouse。 </br>\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
+        "desc" : "发送到 'local_topic' 的消息都会转发到 Clickhouse。 <br />\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
         "aliases" : [
           
         ]
@@ -16337,7 +16337,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "发送到 'local_topic' 的消息都会转发到 DynamoDB。 </br>\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
+        "desc" : "发送到 'local_topic' 的消息都会转发到 DynamoDB。 <br />\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
         "aliases" : [
           
         ]
@@ -16805,7 +16805,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "发送到 'local_topic' 的消息都会转发到 GCP PubSub。 </br>\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 GCP PubSub。",
+        "desc" : "发送到 'local_topic' 的消息都会转发到 GCP PubSub。 <br />\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 GCP PubSub。",
         "aliases" : [
           
         ]
@@ -16882,7 +16882,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "发送到 'local_topic' 的消息都会转发到 HStreamDB。 </br>\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 HStreamDB。",
+        "desc" : "发送到 'local_topic' 的消息都会转发到 HStreamDB。 <br />\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 HStreamDB。",
         "aliases" : [
           
         ]
@@ -16960,7 +16960,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "发送到 'local_topic' 的消息都会转发到 InfluxDB。 </br>\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 InfluxDB。",
+        "desc" : "发送到 'local_topic' 的消息都会转发到 InfluxDB。 <br />\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 InfluxDB。",
         "aliases" : [
           
         ]
@@ -16971,7 +16971,7 @@
           "kind" : "primitive"
         },
         "name" : "write_syntax",
-        "desc" : "使用 InfluxDB API Line Protocol 写入 InfluxDB 的数据，支持占位符</br>\n参考 [InfluxDB 2.3 Line Protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) 及\n[InfluxDB 1.8 Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_tutorial/) </br>\nTLDR: </br>\n```\n<measurement>[,<tag_key>=<tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=<field_value>] [<timestamp>]\n```\n注意，整形数值占位符后需要添加一个字符 `i` 类型标识。例如 `${payload.int_value}i`",
+        "desc" : "使用 InfluxDB API Line Protocol 写入 InfluxDB 的数据，支持占位符<br />\n参考 [InfluxDB 2.3 Line Protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) 及\n[InfluxDB 1.8 Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_tutorial/) <br />\nTLDR: <br />\n```\n<measurement>[,<tag_key>=<tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=<field_value>] [<timestamp>]\n```\n注意，整形数值占位符后需要添加一个字符 `i` 类型标识。例如 `${payload.int_value}i`",
         "aliases" : [
           
         ]
@@ -17001,7 +17001,7 @@
         },
         "raw_default" : "127.0.0.1:8086",
         "name" : "server",
-        "desc" : "将要连接的 IPv4 或 IPv6 地址，或者主机名。</br>\n主机名具有以下形式：`Host[:Port]`。</br>\n如果未指定 `[:Port]`，则使用 InfluxDB 默认端口 8086。",
+        "desc" : "将要连接的 IPv4 或 IPv6 地址，或者主机名。<br />\n主机名具有以下形式：`Host[:Port]`。<br />\n如果未指定 `[:Port]`，则使用 InfluxDB 默认端口 8086。",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"127.0.0.1:8086\""
@@ -17116,7 +17116,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "发送到 'local_topic' 的消息都会转发到 InfluxDB。 </br>\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 InfluxDB。",
+        "desc" : "发送到 'local_topic' 的消息都会转发到 InfluxDB。 <br />\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 InfluxDB。",
         "aliases" : [
           
         ]
@@ -17127,7 +17127,7 @@
           "kind" : "primitive"
         },
         "name" : "write_syntax",
-        "desc" : "使用 InfluxDB API Line Protocol 写入 InfluxDB 的数据，支持占位符</br>\n参考 [InfluxDB 2.3 Line Protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) 及\n[InfluxDB 1.8 Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_tutorial/) </br>\nTLDR: </br>\n```\n<measurement>[,<tag_key>=<tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=<field_value>] [<timestamp>]\n```\n注意，整形数值占位符后需要添加一个字符 `i` 类型标识。例如 `${payload.int_value}i`",
+        "desc" : "使用 InfluxDB API Line Protocol 写入 InfluxDB 的数据，支持占位符<br />\n参考 [InfluxDB 2.3 Line Protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) 及\n[InfluxDB 1.8 Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_tutorial/) <br />\nTLDR: <br />\n```\n<measurement>[,<tag_key>=<tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=<field_value>] [<timestamp>]\n```\n注意，整形数值占位符后需要添加一个字符 `i` 类型标识。例如 `${payload.int_value}i`",
         "aliases" : [
           
         ]
@@ -17157,7 +17157,7 @@
         },
         "raw_default" : "127.0.0.1:8086",
         "name" : "server",
-        "desc" : "将要连接的 IPv4 或 IPv6 地址，或者主机名。</br>\n主机名具有以下形式：`Host[:Port]`。</br>\n如果未指定 `[:Port]`，则使用 InfluxDB 默认端口 8086。",
+        "desc" : "将要连接的 IPv4 或 IPv6 地址，或者主机名。<br />\n主机名具有以下形式：`Host[:Port]`。<br />\n如果未指定 `[:Port]`，则使用 InfluxDB 默认端口 8086。",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"127.0.0.1:8086\""
@@ -19366,7 +19366,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "发送到 'local_topic' 的消息都会转发到 MySQL。 </br>\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
+        "desc" : "发送到 'local_topic' 的消息都会转发到 MySQL。 <br />\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
         "aliases" : [
           
         ]
@@ -19535,7 +19535,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "发送到 'local_topic' 的消息都会转发到 PostgreSQL。 </br>\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
+        "desc" : "发送到 'local_topic' 的消息都会转发到 PostgreSQL。 <br />\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
         "aliases" : [
           
         ]
@@ -19681,7 +19681,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "发送到 'local_topic' 的消息都会转发到 Redis。 </br>\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 Redis。",
+        "desc" : "发送到 'local_topic' 的消息都会转发到 Redis。 <br />\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 Redis。",
         "aliases" : [
           
         ]
@@ -19832,7 +19832,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "发送到 'local_topic' 的消息都会转发到 Redis。 </br>\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 Redis。",
+        "desc" : "发送到 'local_topic' 的消息都会转发到 Redis。 <br />\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 Redis。",
         "aliases" : [
           
         ]
@@ -20010,7 +20010,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "发送到 'local_topic' 的消息都会转发到 Redis。 </br>\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 Redis。",
+        "desc" : "发送到 'local_topic' 的消息都会转发到 Redis。 <br />\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 Redis。",
         "aliases" : [
           
         ]
@@ -20843,7 +20843,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "发送到 'local_topic' 的消息都会转发到 RocketMQ。 </br>\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
+        "desc" : "发送到 'local_topic' 的消息都会转发到 RocketMQ。 <br />\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
         "aliases" : [
           
         ]
@@ -21082,7 +21082,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "发送到 'local_topic' 的消息都会转发到 Microsoft SQL Server。 </br>\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
+        "desc" : "发送到 'local_topic' 的消息都会转发到 Microsoft SQL Server。 <br />\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
         "aliases" : [
           
         ]
@@ -21462,7 +21462,7 @@
           "kind" : "primitive"
         },
         "name" : "local_topic",
-        "desc" : "发送到 'local_topic' 的消息都会转发到 TDengine。 </br>\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
+        "desc" : "发送到 'local_topic' 的消息都会转发到 TDengine。 <br />\n注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。",
         "aliases" : [
           
         ]

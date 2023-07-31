@@ -1,6 +1,6 @@
 # Bridge Data into RocketMQ
 
-EMQX supports bridging data into RocketMQ, so you can forward client messages and events to RocketMQ, for example, use events to trigger the update of data to record the online status or online/offline of clients.
+EMQX supports bridging data into RocketMQ, so you can forward MQTT messages and client events to RocketMQ, for example, use events to trigger the update of data to record the online status or online/offline of clients.
 
 {% emqxce %}
 ::: tip
@@ -8,11 +8,12 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 :::
 {% endemqxce %}
 
-
-## Prerequisites
+::: tip Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
+
+:::
 
 ## Features List
 
@@ -121,7 +122,7 @@ In Linux, you should change the `host.docker.internal` to your real IP address.
 
 ### Create RocketMQ Data Bridge
 
-1. Go to EMQX Dashboard, and click **Data Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -139,7 +140,7 @@ In Linux, you should change the `host.docker.internal` to your real IP address.
 
    :::
 
-7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
+7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Integration](./data-bridges.md).
 
 8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the RocketMQ server.
 
@@ -147,13 +148,13 @@ In Linux, you should change the `host.docker.internal` to your real IP address.
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into RocketMQ. You can also create rules by following the steps in [Create Rules for RocketMQ Data Bridge](#create-rules-for-rocketmq-data-bridge).
 
-Now the RocketMQ data bridge should appear in the data bridge list (**Data Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+Now the RocketMQ data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
 
 ### Create Rules for RocketMQ Data Bridge
 
 Now that you have successfully created the data bridge to RocketMQ, you can continue to create rules to specify the data to be saved into RocketMQ. You need to create two different rules for messages forward and event records. 
 
-1. Go to EMQX Dashboard, and click **Data Integration** -> **Rules**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -188,7 +189,7 @@ Now that you have successfully created the data bridge to RocketMQ, you can cont
 4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**. Click the **Add** button. 
 6. Click the **Create** button to finish the setup. 
 
-Now you have successfully created the data bridge to RocketMQ. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to RocketMQ after parsing by rule `my_rule`. 
+Now you have successfully created the data bridge to RocketMQ. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to RocketMQ after parsing by rule `my_rule`. 
 
 ### Test Data Bridge and Rule
 
