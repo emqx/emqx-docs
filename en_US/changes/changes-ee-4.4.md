@@ -22,7 +22,7 @@
 
 ### Bug Fixes
 
-- Fixed the issue that the `mongo_date()` function of the rule engine cannot be tested on the Dashboard [#1834](https://github.com/emqx/emqx-enterprise/pull/1835).
+- Fixed the issue that the `mongo_date()` function of the rule engine cannot be tested on the Dashboard.
 
   Before the fix, `mongo_date()` can be used normally, but an error will occur when testing on the SQL test page of the Dashboard.
 
