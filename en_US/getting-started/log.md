@@ -64,7 +64,11 @@ log.rotation.size = 10MB
 log.rotation.count = 5
 ```
 
-## Output Logs for Log Level
+:::tip
+By default, the log data will be written to files. However, when starting node with the `emqx console` command, the startup script will apply the 'log.to = console' setting. As a result, the log data will be directed to the console instead.
+:::
+
+## Output Log File for Log level
 
 If you want to write logs greater than or equal to a certain level to a separate file, you can configure `log.<level>.file` in `emqx.conf`:
 
