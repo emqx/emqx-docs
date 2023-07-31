@@ -6,7 +6,7 @@
 
 ### Enhancements
 
-- Improved the performance of sending data to Kafka and HStreamDB [#1834](https://github.com/emqx/emqx-enterprise/pull/1834).
+- Improved the performance of sending data to Kafka and HStreamDB.
 
   This enhancement added an Erlang message buffer ahead of the driver process, reducing the frequency of internal message passing within EMQX. This optimization comes at the expense of increased message latency, but it significantly enhances the throughput capacity when sending data to Kafka and HStreamDB.
 
