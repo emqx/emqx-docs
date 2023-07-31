@@ -16,7 +16,7 @@
 
   Before this improvement, when the connection between EMQX and the SQL Server database was disrupted, EMQX was unable to reconnect automatically. With this new enhancement, EMQX can reconnect automatically. You can still opt to set `auto_reconnect = false` to turn off the automatic reconnection feature.
 
-- Added TLS connection support to RabbitMQ resource [#1836](https://github.com/emqx/emqx-enterprise/pull/1836).
+- Added TLS connection support to RabbitMQ resource.
 
 - Added support for defining attributes and ordering key for GCP PubSub actions [#1843](https://github.com/emqx/emqx-enterprise/pull/1843).
 
