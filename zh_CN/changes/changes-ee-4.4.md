@@ -18,7 +18,7 @@
 
 - 为 RabbitMQ 资源添加了 TLS 连接支持。
 
-- 为 GCP PubSub 动作添加属性和排序键的支持。 [#1843](https://github.com/emqx/emqx-enterprise/pull/1843)
+- 为 GCP PubSub 动作添加属性和排序键的支持。
 
 ### 修复
 
