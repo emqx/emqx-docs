@@ -6,7 +6,7 @@
 
 ### 增强
 
-- 提升发送数据到 Kafka 和 HStreamDB 的性能 [#1834](https://github.com/emqx/emqx-enterprise/pull/1834)。
+- 提升发送数据到 Kafka 和 HStreamDB 的性能。
 
   此改进在驱动进程的前面增加了一个 Erlang 消息缓冲区，虽然以增加消息时延为代价，但减少了 EMQX 内部的消息传递频率、提升了发送数据到 Kafka 和 HStreamDB 的吞吐能力。
 
