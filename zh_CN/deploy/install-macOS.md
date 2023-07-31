@@ -97,17 +97,9 @@ emqx ctl status
 
 ## 安装 EMQX
 
-1. 下载 [emqx-enterprise-@EE_VERSION@-macos12-arm64.zip](https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-macos12-arm64.zip)。
+1. 前往 [EMQ 官网](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=macOS=currentOS=macOS12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)，**版本**选择 `@EE_VERSION@`，**系统**选择 `macOS`，点击**免费下载**按钮进入下载页面。
 
-```bash
-wget https://www.emqx.com/zh/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-macos12-arm64.zip
-```
-
-2. 安装 EMQX。
-
-```bash
-mkdir -p emqx && unzip emqx-enterprise-@EE_VERSION@-macos12-arm64.zip -d emqx
-```
+2. 在安装与下载页面中，**安装方式**选择 `zip`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
 
 ## 启动和停止 EMQX
 
@@ -115,13 +107,13 @@ EMQX 可以以守护进程模式、前台模式或交互模式启动。请注意
 
 ```bash
 # 以守护进程模式启动
-emqx start
+./bin/emqx start
 
 # 以前台模式启动
-emqx foreground
+./bin/emqx foreground
 
 # 以交互模式启动，带有 Erlang shell
-emqx console
+./bin/emqx console
 ```
 
 如果以前台或交互模式启动，启动成功后，EMQX 将输出以下消息：
@@ -143,7 +135,7 @@ WARNING: NOTE: Use the same cookie for all nodes in the cluster.
 您可以使用以下命令检查 EMQX 的状态：
 
 ```bash
-emqx ctl status
+./bin/emqx ctl status
 ```
 
 打开您的网页浏览器，在地址栏中输入 `http://localhost:18083/`（`localhost` 可替换为您的 IP 地址）访问 [EMQX Dashboard](../dashboard/introduction.md)，您可以在控制台中连接客户端或检查运行状态。

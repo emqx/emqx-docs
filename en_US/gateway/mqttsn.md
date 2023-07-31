@@ -1,12 +1,8 @@
 # MQTT-SN Gateway
 
-## Introduction
-
-<!--**Add an introductory section**: Begin the page briefly introducing the relevant protocol and the Gateway. This will provide context for users who are new to the concept.-->
-
 MQTT-SN (MQTT for Sensor Networks) is a lightweight pub/sub protocol for wireless sensor networks, the EMQX MQTT-SN Gateway allows these devices to connect and communicate with EMQX, bridging the gap between MQTT-SN and the standard MQTT protocol.
 
-This guide will teach you how to configure and use the MQTT-SN Gateway in EMQX.
+This page introduces how to configure and use the MQTT-SN Gateway in EMQX.
 
 ::: tip
 
@@ -24,7 +20,7 @@ On EMQX Dashboard, click **Management** -> **Gateways** on the left navigation m
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, please configure with [`emqx.conf`](../configuration/configuration.md)
+If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure with [`emqx.conf`](../configuration/configuration.md).
 
 :::
 
@@ -96,13 +92,13 @@ In the **Basic Configuration** tab, you can customize your gateway ID, predefine
 
 - **Gateway ID**: Set the unique identifier of the gateway, for example, 1. 
 
-- **Enable Broadcast**: Set whether to allow the gateway to broadcast gateway advertisements to clients, it will broadcast the message the Gateway ID you just specified, default: **true**, optional values: **true**, **false**.
+- **Enable Broadcast**: Set whether to allow the gateway to broadcast gateway advertisements to clients, it will broadcast the message the Gateway ID you just specified, default: `true`, optional values: `true`, `false`.
 
-- **Enable QoS3**: Set whether to allow the gateway to support QoS 3 (Exactly-once) message delivery,  this setting is intended for basic clients that only need to send `PUBLISH` messages to the gateway; default: **true**, optional values: **true**, **false**.
+- **Enable QoS3**: Set whether to allow the gateway to support QoS 3 (Exactly-once) message delivery,  this setting is intended for basic clients that only need to send `PUBLISH` messages to the gateway; default: `true`, optional values: `true`, `false`.
 
-- **Idle Timeout**: Set the duration (in seconds) of inactivity after which a connected MQTT-SN client will be considered disconnected. Default: **30 s**.
+- **Idle Timeout**: Set the duration (in seconds) of inactivity after which a connected MQTT-SN client will be considered disconnected. Default: `30s`.
 
-- **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: **true**, optional values: **true**, **false**.
+- **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: `true`, optional values: `true`, `false`.
 
 - **Predefined Topic List**: Set the predefined topic IDs and corresponding topic names. Click **Add** to add a new entry. 
 
@@ -115,7 +111,7 @@ In the **Basic Configuration** tab, you can customize your gateway ID, predefine
 
 ### Add Listeners 
 
-By default, one UDP listener with the name of **default** is already configured on port `1884`, which allows a maximum of 1,000 connections per second, and support up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings for **Delete** to delete the listener. Or click **Add Listener** to add a new listener.
+By default, one UDP listener with the name of **default** is already configured on port `1884`, which allows a maximum of 1,000 connections per second, and support up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings, click **Delete** to delete the listener, or click **+ Add Listener** to add a new listener.
 
 <img src="./assets/mqttsn-listerner.png" alt="MQTTSN listener" style="zoom:50%;" />
 

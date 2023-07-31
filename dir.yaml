@@ -668,6 +668,20 @@
 
 ## Device connectivity
 
+- title_en: Multi-Protocol Gateway
+  title_cn: 多协议网关
+  path: gateway/gateway
+  children:
+    - gateway/stomp
+    - gateway/mqttsn
+    - gateway/coap
+    - gateway/lwm2m
+   #- gateway/ocpp
+   #- gateway/jt808
+   #- gateway/gbt32960
+   #- gateway/tcp
+    - gateway/exproto
+
 # - title_en: Advanced MQTT Features
 #   title_cn: MQTT 高级特性
 #   children:
@@ -714,8 +728,8 @@
       title_cn: 版本发布
       edition: ce
       path: changes/changes-ce-5.1
-    - title_en: 从 V4 迁移到 V5
-      title_cn: 从 V4 迁移到 V5
+    - title_en: 从 V4 升级到 V5 的不兼容更改
+      title_cn: 从 V4 升级到 V5 的不兼容更改
       lang: cn
       path: deploy/upgrade-from-v4
     - title_en: Incompatible Changes

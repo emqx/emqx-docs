@@ -104,31 +104,23 @@ The instructions below will take macOS 12 as an example to illustrate how to dow
 
 ## Install EMQX
 
-1.  Download [emqx-enterprise-@EE_VERSION@-macos12-arm64.zip](https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-macos12-arm64.zip):
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/@EE_VERSION@/emqx-enterprise-@EE_VERSION@-macos12-arm64.zip
-   ```
-
-2. Extract files from the package:
-
-   ```bash
-   mkdir -p emqx && unzip emqx-enterprise-@EE_VERSION@-macos12-arm64.zip -d emqx && cd emqx
-   ```
+1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=macOS=currentOS=macOS12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
+2. Select `@EE_VERSION@` for **Version** and `macOS` for **OS**, and click the **Download** button.
+3. On the Downloads and Install page, select `zip` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
 
 ## Start and Stop EMQX
 
-EMQX can be started in daemon mode, foreground mode, or interactive mode. Note that only one instance of EMQX can be running at any time with default configuration.
+EMQX can be started in daemon mode, foreground mode, or interactive mode. Note that only one instance of EMQX can be running at any time with the default configuration.
 
    ```bash
    # start as daemon
-   emqx start
+   ./bin/emqx start
 
    # start in foreground
-   emqx foreground
+   ./bin/emqx foreground
 
    # start in interactive mode, with Erlang shell
-   emqx console
+   ./bin/emqx console
    ```
 
 After a successful start, EMQX will output this message (if it was started in the foreground or interactive mode):
@@ -150,7 +142,7 @@ WARNING: NOTE: Use the same cookie for all nodes in the cluster.
 You can check the status of EMQX with this command:
 
 ```bash
-emqx ctl status
+./bin/emqx ctl status
 ```
 
 Start your web browser and enter `http://localhost:18083/` (`localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../dashboard/introduction.md), from where you can connect to your clients or check the running status.

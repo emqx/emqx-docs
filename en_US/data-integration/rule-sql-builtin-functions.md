@@ -157,8 +157,8 @@ See the table below for a complete list of string functions supported.
 | rtrim                        | Remove right space                                           | Input string                                                 |
 | reverse                      | String inversion                                             | Input string                                                 |
 | strlen                       | String length                                                | Input string                                                 |
-| substr                       | Take a substring of characters                               | 1. Input string <br />2. Start position (starting at position 1) |
-| substr<br />(with end)       | Take a substring of characters                               | 1. Input string <br />2. Start position (starting at position 1).<br />3. End position <br /> |
+| substr                       | Take a substring of characters                               | 1. Input string <br />2. Start position (starting at position 0) |
+| substr<br />(with end)       | Take a substring of characters                               | 1. Input string <br />2. Start position (starting at position 0)<br />3. Substring length  <br /> |
 | split                        | String split                                                 | 1. Input string <br />2. Separator                           |
 | split <br />(with direction) | String split                                                 | 1. Input string <br />2. Separator <br />3. Direction, optional value: `leading` or `trailing` |
 | concat                       | String concatenation                                         | 1. Left string <br />2. Right substring                      |
@@ -275,10 +275,10 @@ See the table below for a complete list of array functions supported.
 
 | Function Name | Purpose                                                      | Parameters                                           |
 | ------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
-| `nth`         | Returns the nth element of an array. <br />Subscripts start at 1. | 1. Array <br />2. n (integer)                        |
+| `nth`         | Returns the nth element of an array. <br />Subscripts start at 1. | 1. n (integer) <br />2. Array                        |
 | `length`      | Returns the length of an array.                              | Array                                                |
-| `sublist`     | Returns a sub-array of length len starting from the first element. <br />Subscripts start at 1. <br /><!--what does Subscripts start at 1 mean?--> | 1. Array <br />2. len (integer)                      |
-| `sublist`     | Returns a sub-array of length len starting from the nth element. <br />Subscripts start at 1. | 1. Array <br />2. n (integer) <br />3. len (integer) |
+| `sublist`     | Returns a sub-array of length len starting from the first element. <br />Subscripts start at 1. <br /><!--what does Subscripts start at 1 mean?--> | 1. len (integer) <br />2. Array                      |
+| `sublist`     | Returns a sub-array of length len starting from the nth element. <br />Subscripts start at 1. | 1. n (integer) <br />2. len (integer) <br />3. Array |
 | `first`       | Returns the first element of an array. <br />Subscripts start at 1. | Array                                                |
 | `last`        | Returns the last element of an array.                        | Array                                                |
 | `contains`    | Returns a boolean indicating if the data is in the array.    | 1. Data <br />2. Array                               |

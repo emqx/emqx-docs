@@ -1,13 +1,9 @@
 # LwM2M Gateway
 
-## Introduction
-
-[LwM2M (Lightweight Machine-to-Machine)](https://lwm2m.openmobilealliance.org/)
-is a protocol designed for IoT devices and machine-to-machine communication.
+[LwM2M (Lightweight Machine-to-Machine)](https://lwm2m.openmobilealliance.org/) is a protocol designed for IoT devices and machine-to-machine communication.
 It is a lightweight protocol that supports devices with limited processing power and memory.
 
-The **LwM2M Gateway** in EMQX can accept LwM2M clients and translate theirevents
-and messages into MQTT Publish messages.
+The **LwM2M Gateway** in EMQX can accept LwM2M clients and translate theirevents and messages into MQTT Publish messages.
 
 In the current implementation, it has the following limitations:
 - Based UDP/DTLS transport.

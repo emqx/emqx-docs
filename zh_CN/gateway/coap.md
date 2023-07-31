@@ -1,7 +1,5 @@
 # CoAP 协议网关
 
-## 简介
-
 CoAP 网关以 [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) 为标准，实现了发布、订阅、和消息接收功能。
 
 出于安全性的考虑，CoAP 网关实现了 **连接模式** 以提供客户端接入认证功能来限制未授权的 CoAP 客户端接入系统。

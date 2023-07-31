@@ -54,7 +54,7 @@ sensor/temperature
 sensor/1/temperature
 ```
 
-## 使用 MQTTX 客户端进行通配符订阅
+## 使用 MQTTX Desktop 尝试通配符订阅
 
 本节演示如何使用 MQTTX 客户端创建通配符主题的订阅。在此演示中，您可以创建一个客户端连接 `Demo` 作为发布者来发布消息。然后，您可以创建另一个客户端连接作为订阅者。订阅者订阅以下通配符主题：
 
@@ -76,7 +76,7 @@ sensor/1/temperature
 
    ::: tip
 
-   [MQTTX Desktop](./publish-and-subscribe.md/#mqttx-) 中介绍了更多详细的连接创建信息。
+   [MQTTX Desktop](./publish-and-subscribe.md/#mqttx-desktop) 中介绍了更多详细的连接创建信息。
 
    :::
 
