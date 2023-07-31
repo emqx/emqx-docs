@@ -16,7 +16,7 @@
 
   改进前，当 EMQX 与 SQL Server 数据库之间的连接断开时，EMQX 无法自动重连。改进后 EMQX 将会自动重连，用户可以通过设置 `auto_reconnect = false` 来关闭自动重连功能。
 
-- 为 RabbitMQ 资源添加了 TLS 连接支持 [#1836](https://github.com/emqx/emqx-enterprise/pull/1836)
+- 为 RabbitMQ 资源添加了 TLS 连接支持。
 
 - 为 GCP PubSub 动作添加属性和排序键的支持。 [#1843](https://github.com/emqx/emqx-enterprise/pull/1843)
 
