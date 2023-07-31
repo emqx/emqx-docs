@@ -129,6 +129,7 @@ stream {
       listen 8883 ssl;
       proxy_pass stream_backend;
       proxy_buffer_size 4k;
+      proxy_protocol on;
       ssl_handshake_timeout 15s;
       ssl_certificate     /etc/emqx/certs/cert.pem;
       ssl_certificate_key /etc/emqx/certs/key.pem;
