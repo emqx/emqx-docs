@@ -18,7 +18,7 @@
 
 - Added TLS connection support to RabbitMQ resource.
 
-- Added support for defining attributes and ordering key for GCP PubSub actions [#1843](https://github.com/emqx/emqx-enterprise/pull/1843).
+- Added support for defining attributes and ordering key for GCP PubSub actions.
 
 ### Bug Fixes
 
