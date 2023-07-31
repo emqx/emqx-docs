@@ -12,7 +12,7 @@
 
   Now, messages sent from EMQX to Kafka or HStreamDB drivers will first enter the buffer. When the number of cached messages reaches `message_accumulation_size` or the time interval reaches `message_accumulation_interval`, the buffered messages will be batched and sent to the Kafka or HStreamDB driver. The driver will then handle the forwarding to Kafka or HStreamDB services. Setting `message_accumulation_size = 0` (default value) will disable this message buffering feature.
 
-- Added the `auto_reconnect` option for SQL Server resources [#1832](https://github.com/emqx/emqx-enterprise/pull/1832).
+- Added the `auto_reconnect` option for SQL Server resources.
 
   Before this improvement, when the connection between EMQX and the SQL Server database was disrupted, EMQX was unable to reconnect automatically. With this new enhancement, EMQX can reconnect automatically. You can still opt to set `auto_reconnect = false` to turn off the automatic reconnection feature.
 
