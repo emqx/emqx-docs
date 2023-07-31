@@ -22,7 +22,7 @@
 
 ### 修复
 
-- 修复了无法在 Dashboard 上测试规则引擎的 `mongo_date()` 函数的问题 [#1834](https://github.com/emqx/emqx-enterprise/pull/1835)。
+- 修复了无法在 Dashboard 上测试规则引擎的 `mongo_date()` 函数的问题。
 
   改进之前，`mongo_date()` 可以正常使用，但在 Dashboard 的 SQL 测试页面进行测试时会出现错误。
 
