@@ -12,7 +12,7 @@
 
   现在，EMQX 发送到 Kafka 或 HStreamDB 驱动的消息会先进入到缓冲区，当缓存的消息数量达到 `message_accumulation_size` 或时间间隔达到 `message_accumulation_interval` 时，才会批量地将缓冲区中的消息发送到 Kafka 或 HStreamDB 驱动，然后再由驱动发送到 Kafka 或 HStreamDB 服务。设置 `message_accumulation_size = 0 `(默认值) 将关闭这个消息缓冲功能。
 
-- 为 SQL Server 资源增加 `auto_reconnect` 选项 [#1832](https://github.com/emqx/emqx-enterprise/pull/1832)。
+- 为 SQL Server 资源增加 `auto_reconnect` 选项。
 
   改进前，当 EMQX 与 SQL Server 数据库之间的连接断开时，EMQX 无法自动重连。改进后 EMQX 将会自动重连，用户可以通过设置 `auto_reconnect = false` 来关闭自动重连功能。
 
