@@ -26,6 +26,8 @@
 
   Before the fix, `mongo_date()` can be used normally, but an error will occur when testing on the SQL test page of the Dashboard.
 
+- Fixed the issue that the rule engine failed to send messages via RabbitMQ actions after hot-upgrading to 4.4.19.
+
 ## e4.4.19
 
 *Release Date: 2023-06-27*
