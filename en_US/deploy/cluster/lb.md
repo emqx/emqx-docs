@@ -108,8 +108,8 @@ backend emqx_cluster
   balance source
   timeout server 50s
   timeout check 5000
-  server emqx1 192.168.0.2:1883 check inter 10000 fall 2 rise 5 weight 1
-  server emqx2 192.168.0.3:1883 check inter 10000 fall 2 rise 5 weight 1
+  server emqx1 192.168.0.2:1883 check-send-proxy send-proxy-v2 inter 10000 fall 2 rise 5 weight 1
+  server emqx2 192.168.0.3:1883 check-send-proxy send-proxy-v2 inter 10000 fall 2 rise 5 weight 1
 ```
 
 Note: The file path may differ based on your installation mode. <!--should we also add the parameter explanation? -->
