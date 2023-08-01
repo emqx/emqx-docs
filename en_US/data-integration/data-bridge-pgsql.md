@@ -98,9 +98,9 @@ You need to create 2 data bridges to PostgreSQL for messages storage and event r
 
 5. Input the connection information:
 
-   - **Server Host**: Input `http://127.0.0.1:5432`, or the actual URL if the PostgreSQL server is running remotely.
+   - **Server Host**: Input `127.0.0.1:5432`, or the actual URL if the PostgreSQL server is running remotely.
    - **Database Name**: Input `emqx_data`.
-   - **Username**: Input `root`.
+   - **Username**: Input `postgres`.
    - **Password**: Input `public`.
 
 6. Configure the **SQL Template**. Use the SQL statements below to insert data. 
