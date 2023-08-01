@@ -82,7 +82,7 @@ To facilitate the development and test, you can emulate the Amazon Kinesis Data 
       - If using the defined template, placeholders of the form `${variable_name}` will be filled with the corresponding value from the MQTT context. For example, `${topic}` will be replaced with `my/topic` if such is the MQTT message topic.
 
 
-11. Advanced settings (optional): Choose whether to use buffer queue and batch mode as needed. For details, see [Data Integration](./data-integration/data-bridges.md).
+11. Advanced settings (optional): Choose whether to use buffer queue and batch mode as needed. For details, see [Data Integration](./data-bridges.md).
 
 11. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Amazon Kinesis server.
 
