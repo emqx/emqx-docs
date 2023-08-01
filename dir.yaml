@@ -96,6 +96,7 @@
         - messaging/mqtt-exclusive-subscription
         - messaging/mqtt-delayed-publish
         - messaging/mqtt-auto-subscription
+        - messaging/mqtt-topic-rewrite
         - messaging/mqtt-wildcard-subscription
       # - messaging/nanomq
       # - messaging/neuron
