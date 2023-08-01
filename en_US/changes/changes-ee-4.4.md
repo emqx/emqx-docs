@@ -2,7 +2,7 @@
 
 ## e4.4.20
 
-*Release Date: 2023-07-28*
+*Release Date: 2023-08-01*
 
 ### Enhancements
 
