@@ -669,20 +669,6 @@
 
 ## Device connectivity
 
-- title_en: Multi-Protocol Gateway
-  title_cn: 多协议网关
-  path: gateway/gateway
-  children:
-    - gateway/stomp
-    - gateway/mqttsn
-    - gateway/coap
-    - gateway/lwm2m
-   #- gateway/ocpp
-   #- gateway/jt808
-   #- gateway/gbt32960
-   #- gateway/tcp
-    - gateway/exproto
-
 # - title_en: Advanced MQTT Features
 #   title_cn: MQTT 高级特性
 #   children:
@@ -729,25 +715,11 @@
       title_cn: 版本发布
       edition: ce
       path: changes/changes-ce-5.1
-    - title_en: 从 V4 升级到 V5 的不兼容更改
-      title_cn: 从 V4 升级到 V5 的不兼容更改
-      lang: cn
-      path: deploy/upgrade-from-v4
     - title_en: Incompatible Changes
       title_cn: Incompatible Changes
-      lang: en
       path: changes/breaking-changes-5.1.0
       children:
-        - title_en: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1 
-          title_cn: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1 
-          lang: en
-          path: changes/auth-4.4-to-5.1-compatibility
-        - title_en: Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4
-          title_cn: Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4
-          lang: en
-          path: changes/data-integration-4.4-to-5.1-incompatibility
-        - title_en: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
-          title_cn: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
-          lang: en
-          path: changes/gateway-4.4-to-5.1-incompatibility
+        - changes/auth-4.4-to-5.1-compatibility
+        - changes/data-integration-4.4-to-5.1-incompatibility
+        - changes/gateway-4.4-to-5.1-incompatibility
 
