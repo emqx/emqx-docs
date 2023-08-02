@@ -2,7 +2,7 @@
 
 ## e5.1.1
 
-## Enhancements
+### Enhancements
 
 - [#10667](https://github.com/emqx/emqx/pull/10667) The MongoDB connector and bridge have been refactored into a separate app to improve the code structure.
 
@@ -59,7 +59,7 @@
 
 - [#11236](https://github.com/emqx/emqx/pull/11236) Improved the speed of clients querying in REST API `/clients` endpoint with default parameters.
 
-## Bug Fixes
+### Bug Fixes
 
 - [#11004](https://github.com/emqx/emqx/pull/11004) Wildcards are no longer allowed for the destination topic in topic rewrite.
 
