@@ -320,3 +320,32 @@ The diagram below shows the sequence of connections and message delivery in this
 
 <img src="./assets/exproto-sequence-diagram.png" alt="exproto-sequence-diagram" style="zoom:80%;" />
 
+<!--```mermaid sequenceDiagram
+    Telnet ->> ExProto Gateway: Establish a TCP connection
+rect rgb(191, 223, 255)
+    ExProto Gateway ->> exproto-svr-python: Call OnSocketCreated
+  exproto-svr-python ->> ExProto Gateway: Call `Authenticate` to register client
+  ExProto Gateway -->> exproto-svr-python: Succeed
+  exproto-svr-python ->> ExProto Gateway: Call 'Subscribe' to subscribe 'test/echo'
+    ExProto Gateway -->> exproto-svr-python: Succeed
+  exproto-svr-python ->> ExProto Gateway: Call 'StartTimer' to start keepalive timer
+    ExProto Gateway -->> exproto-svr-python: Succeed
+    exproto-svr-python -->> ExProto Gateway: `OnSocketCreated` return
+end
+  Telnet ->> ExProto Gateway: Send 'Hi, this is...'
+rect rgb(100,150, 240)
+  ExProto Gateway ->> exproto-svr-python: Call `OnReceivedBytes`
+  exproto-svr-python --> exproto-svr-python: Use 'Hi, this is...' to create a message
+  exproto-svr-python ->> ExProto Gateway: Call `Publish` to publish message to 'test/echo'
+  ExProto Gateway -->> ExProto Gateway: Route the message
+  ExProto Gateway -->> exproto-svr-python: Succeed
+  exproto-svr-python -->> ExProto Gateway: `OnReceivedBytes` return
+end
+rect rgb(100, 150, 200)
+  ExProto Gateway ->> exproto-svr-python: Call `OnReceivedMessages`
+  exproto-svr-python -->> exproto-svr-python: Use message payload
+  exproto-svr-python ->> ExProto Gateway: Call `Send` to deliver bytes 'Hi, this is ...'
+  ExProto Gateway -->> exproto-svr-python: Succeed
+  ExProto Gateway ->> Telnet: Deliver 'Hi, this is...'
+  exproto-svr-python -->> ExProto Gateway: `OnReceivedMessages` return
+end ```-->
