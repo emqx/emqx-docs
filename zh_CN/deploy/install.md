@@ -97,14 +97,14 @@ EMQX 每个版本会发布各个操作系统与平台程序包以及 Docker 镜�
 EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是支持情况：
 
 {% emqxce %}
-| 操作系统                                  | 支持版本                 | x86_64/amd64 | arm64 |
-| :---------------------------------------- | :----------------------- | :----------- | :---- |
-| [Ubuntu](./install-ubuntu.md)             | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04 | 是           | 是    |
-| [Debian](./install-debian.md)             | Debian 10<br />Debian 11 | 是           | 是    |
-| [CentOS/RHEL](./install-centos.md)        | CentOS 7<br />CentOS 8 | 是           | 是    |
-| [Amazon Linux](./install-amazon-linux.md) | -                        | 是           | 是    |
-| [macOS](./install-macOS.md)               | macOS 11<br />macOS 12 | 是           | 是    |
-| [Windows](./install-windows.md)           | -                        | 是           | 是    |
+| 操作系统                          | 支持版本                 | x86_64/amd64 | arm64 |
+| :-------------------------------- | :----------------------- | :----------- | :---- |
+| [Ubuntu](./install-ubuntu.md)     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04 | 是   | 是  |
+| [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | 是   | 是  |
+| [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是   | 是  |
+| [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | 是   | 是  |
+| [macOS](./install-macOS.md)       | macOS 11<br />macOS 12<br />macOS 13 (Homebrew)  | 是   | 是  |
+| [Windows](./install-windows.md)   | Windows Server 2019                              | 是   | 是  |
 
 {% endemqxce %}
 
@@ -112,11 +112,11 @@ EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是
 
 | 操作系统                                  | 支持版本                 | x86_64/amd64 | arm64 |
 | :---------------------------------------- | :----------------------- | :----------- | :---- |
-| [Ubuntu](./install-ubuntu.md)             | Ubuntu 18.04<br />Ubuntu 20.04 | 是           | 是    |
-| [Debian](./install-debian.md)             | Debian 10<br />Debian 11 | 是           | 是    |
-| [CentOS/RHEL](./install-centos.md)        | CentOS 7<br />CentOS 8 | 是           | 是    |
-| [Amazon Linux](./install-amazon-linux.md) | -                        | 是           | 是    |
-| [macOS](./install-macOS.md)               | macOS 11<br />macOS 12 | 是           | 是    |
+| [Ubuntu](./install-ubuntu.md)     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04 | 是   | 是  |
+| [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | 是   | 是  |
+| [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是   | 是  |
+| [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | 是   | 是  |
+| [macOS](./install-macOS.md)       | macOS 11<br />macOS 12<br />                     | 是   | 是  |
 
 {% endemqxee %}
 

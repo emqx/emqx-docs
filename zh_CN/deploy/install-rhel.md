@@ -4,8 +4,11 @@
 
 支持的 CentOS/RHEL 版本：
 
-- CentOS 8
-- CentOS 7
+- Amazon Linux 2023
+- Amazon Linux 2
+- Rocky Linux 9 (RHEL 9)
+- Rocky Linux 8 (RHEL 8)
+- CentOS 7 (RHEL 7)
 
 {% emqxce %}
 
@@ -103,7 +106,7 @@ EMQX 同时支持通过下载包进行安装。下文将以 CentOS 8 系统为�
 服务完成后，可通过如下命令卸载 EMQX：
 
   ```shell
-sudo apt remove --purge emqx
+sudo yum remove emqx
   ```
 
 ### 通过 tar.gz 安装
@@ -193,7 +196,7 @@ sudo apt remove --purge emqx
 服务完成后，可通过如下命令卸载 EMQX：
 
   ```shell
-  sudo apt remove --purge emqx
+  sudo yum remove emqx
   ```
 
 ## 通过 tar.gz 安装

@@ -35,8 +35,7 @@
     - deploy/install-docker
     - deploy/install-debian
     - deploy/install-ubuntu
-    - deploy/install-centos
-    - deploy/install-amazon-linux
+    - deploy/install-rhel
     - deploy/install-macOS
     - title_en: Kubernetes
       title_cn: Kubernetes
