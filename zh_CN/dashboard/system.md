@@ -21,13 +21,17 @@
 
 <img src="./assets/api-key-detail.png" alt="image" style="zoom:50%;" />
 
-{% emqxce %}
+{% emqxee %}
 
 ## License
 
 点击左侧**系统设置**菜单下的 **License** 可以来到 License 页面。在该页面上可以查看当前 License 的基础信息，包括**签发对象**、 **License 使用情况**、**EMQX 版本信息**、**签发邮箱**、**签发时间**和**到期时间**。点击**更新 License** 可以上传 License Key。在 **License 设置**区域可以设置 License 连接配额使用量的高低水位线。
 
 <img src="./assets/license.png" alt="license" style="zoom:35%;" />
+
+{% endemqxee %}
+
+{% emqxce %}
 
 ## 设置
 
