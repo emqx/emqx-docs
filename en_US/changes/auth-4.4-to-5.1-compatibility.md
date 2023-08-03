@@ -2,7 +2,7 @@
 
 This page presents the compatibility information for authentication and authorization configurations between EMQX 4.4 and EMQX 5.1.
 
-## Commo Incompatibility Changes 
+## Common Incompatibility Changes 
 
 ### SSL Options
 
@@ -10,7 +10,7 @@ EMQX 5.1 provides the option of enabling TLS when there is a need to access exte
 
 ### Placeholders
 
-Backends that support some kind of data interpolation (MySQL, PostgreSQL, MongoDB, Redis, HTTP for external requests, JWT for data interpolation) now use '${variable}' placeholders instead of '%X' ones.
+Backends that support some kind of data interpolation (MySQL, PostgreSQL, MongoDB, Redis, HTTP for external requests, JWT for data interpolation) now use `${variable}` placeholders instead of `%X` ones.
 
 ## Authentication
 
@@ -18,7 +18,7 @@ Backends that support some kind of data interpolation (MySQL, PostgreSQL, MongoD
 
 #### Password Hashing
 
-All password-based providers (Built-in database, MySQL, PostgreSQL, MongoDB, Redis) now have the same password hashing options, configured in the same way. For details, refer to [Password Hashing](../access-control/authn/authn.md#password-hashing).
+All password-based providers (Built-in database, MySQL, PostgreSQL, MongoDB, Redis) now have the same `password_hash` options, configured in the same way. For details, refer to [Password Hashing](../access-control/authn/authn.md#password-hashing).
 
 #### Per-Listener Authentication
 
@@ -26,7 +26,7 @@ Unlike in version 4.4, each MQTT listener in EMQX 5.1 may have its own authentic
 
 - `enable_authn=true` is the default, delegating authentication to the authentication chain.
 - `enable_authn=false` completely disables authentication for the listener.
-- `enable_authn=quick_deny_anonymous` is similar to 'true', but also immediately rejects connecting clients without credentials.
+- `enable_authn=quick_deny_anonymous` is similar to `true`, but also immediately rejects connecting clients without credentials.
 
 #### Remove the Anonymous Mechanism
 
@@ -70,7 +70,7 @@ authentication {
 ### Built-in Database (Enhanced Authentication)
 
 - SHA1 hashing support used in EMQX 4.4 is no longer available. Use the `algorithm` parameter to choose between `sha512'`and `sha256` algorithms.
-- `iteration_count` can now be configured (4096 was implicitly used in EMQX 4.4).
+- `iteration_count` can now be configured to specify the calculation times of Hush function (4096 was implicitly used in EMQX 4.4).
 
 #### Example
 
@@ -105,11 +105,11 @@ EMQX 5.1
   - For type `sentinel`,  `server` is changed to `servers`.
   - For type `cluster`,  `database` option is no longer available.
   
-- `database` is changed to `database` (except for the `cluster` type; this option is not available for clusters anymore).
+- `database` is still `database` (except for the `cluster` type); this option is no more applicable for `cluster` type.
 
 - `pool` is changed to `pool_size`.
 
-- `password` is changed to `password`.
+- `password` is still `password`.
 
 - `query_timeout` is no longer used.
 
@@ -307,7 +307,7 @@ authentication {
 
 - `auth_query` is changed to `query`.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used. Query should fetch at least `password` or `password_hash` column and optionally `salt` and `is_superuser` columns.
 
-- `super_query` is not used anymore, `is_superuser` column is proviced in query instead. If you need to give clients super-user permissions, please ensure that the authentication SQL result contains the `is_superuser` field.
+- `super_query` is not used anymore, `is_superuser` column is provided in the query instead. If you need to give clients super-user permissions, please ensure that the authentication SQL result contains the `is_superuser` field.
 
   ```sql
   SELECT
@@ -400,7 +400,7 @@ backend = mongodb
 
 - `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
 
-- `auth_query.selector` is changed to `filter`. The filter should not be a string, but the whole selector data structure.  `${var`}-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) may be used in selector values.
+- `auth_query.selector` is changed to `filter`. The filter should not be a string, but the whole selector data structure.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) may be used in selector values.
 
 - `auth_query.salt_field` is changed to `salt_field`.
 
@@ -610,7 +610,7 @@ Unlike version 4.4, HTTP authentication only respects responses with successful 
 
 The authenticator will be ignored if the request fails or returns another status code.
 
-**Success Response Body (JSON):**
+**Success response body (JSON):**
 
 | Name          | Type    | Required | Description             |
 | ------------- | ------- | -------- | ----------------------- |
@@ -695,36 +695,19 @@ EMQX 5.1
 
 1. Removed the `acl_file` configuration. The file-based ACL (acl.conf) will be used as one of the authorization sources and added to EMQX by default.
 2. `acl.conf` data file syntax has been changed.
+2. In dsl, `pubsub` is renamed to `all`.
 
-| 4.x    | 5.x      | Compatibility |
+| 4.x    | 5.1      | Compatibility |
 | ------ | -------- | ------------- |
 | user   | username | Yes           |
 | client | clientid | Yes           |
 | pubsub | all      | No            |
 
-::: details Example
-
-```bash
-# 4.x
-{allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
-{allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
-
-# 5.x
-{allow, {username, {re, "^dashboard$"}}, subscribe, ["$SYS/#"]}.
-{allow, {ipaddr, "127.0.0.1"}, all, ["$SYS/#", "#"]}.
-```
-
-:::
-
-### File-Based
-
-In dsl, `pubsub` is renamed to `all`.
-
 #### Example
 
 EMQX 4.3
 
-```
+```bash
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
 
 {allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
@@ -736,7 +719,7 @@ EMQX 4.3
 
 EMQX 5.1
 
-```
+```bash
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
 
 {allow, {ipaddr, "127.0.0.1"}, all, ["$SYS/#", "#"]}.
@@ -749,9 +732,7 @@ EMQX 5.1
 ### Built-in Database
 
 - Mnesia renamed to the Built-in Database.
-- The data format and REST API have changed. For more information, please refer to `/authorization/sources/built_in_database/rules/{clients,users}`.
-
-4.x ACL data can be exported with `./bin/emqx_ctl data export` command. Users may convert the data into 5.x format and import it through the corresponding REST API.
+- The data format and REST API have changed. 4.x ACL data can be exported with `./bin/emqx_ctl data export` command. Users may convert the data into 5.x format and import it through the corresponding REST API `/authorization/sources/built_in_database/rules/{clients,users}`.
 
 #### Example
 
@@ -791,7 +772,7 @@ Unlike 4.4,  `url`, `headers`, and `body` parameters allow placeholders.
 
 In 5.1, `body` is not a string, but a map. It is serialized using JSON or X-WWW-Form-Urlencoded format (for post requests) or as query params (for get requests).
 
-Unlike 4.4, HTTP authorization only respects responses with successful HTTP code (2XX) and takes the resolution from the response body (from `result`) field. The authorization result is now determined through JSON fields within the response body, rather than utilizing HTTP response status codes.
+Unlike 4.4, the authorization result is now determined through JSON fields within the response body, rather than utilizing HTTP response status codes. HTTP authorization only respects responses with successful HTTP code (2XX) and takes the resolution from the response body (from `result`) field. 
 
 ::: details
 
@@ -803,7 +784,7 @@ Unlike 4.4, HTTP authorization only respects responses with successful HTTP code
 
 Other status codes or request failure will be treated as `ignore`.
 
-**Success Response Body (JSON):**
+**Success response body (JSON):**
 
 | Name   | Type | Required | Description             |
 | ------ | ---- | -------- | ----------------------- |
@@ -1101,7 +1082,7 @@ type = postgresql
 - `server`, `username`, `password`, `database` are retained.
 - `query_timeout` is not used anymore.
 - `encoding` is not used anymore.
-- `poo`l is changed to `pool_size`.
+- `pool` is changed to `pool_size`.
 - `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
 - `acl_query` is changed to `query`.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used. 
 
@@ -1193,7 +1174,7 @@ In EMQX 4.4, the resulting documents should contain topics lists by action key, 
 }
 ```
 
-In EMQX 5.5, MongoDB data source can be used for both allow and deny rules. Previously, only white list mode was supported, and it was required to set `acl_nomatch = deny`. The documents should contain individual rules with `permission`, `action`, `topics` fields. Note that `topics` should be an array of topics. For details, see [AuthZ-MongoDB](../access-control/authz/mongodb.md).
+In EMQX 5.1, MongoDB data source can be used for both allow and deny rules. Previously, only white list mode was supported, and it was required to set `acl_nomatch = deny`. The documents should contain individual rules with `permission`, `action`, `topics` fields. Note that `topics` should be an array of topics. For details, see [AuthZ-MongoDB](../access-control/authz/mongodb.md).
 
 If you want to continue using the data from in 4.x, please make the necessary migrations manually.
 

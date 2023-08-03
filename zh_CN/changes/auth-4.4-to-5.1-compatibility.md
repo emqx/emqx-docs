@@ -1,50 +1,50 @@
-# Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1 
+# 从 EMQX 4.4 到 EMQX 5.1 认证 / 授权的不兼容变更
 
-This page presents the compatibility information for authentication and authorization configurations between EMQX 4.4 and EMQX 5.1.
+本页介绍了认证和授权功能的配置在 EMQX 4.4 升级到 EMQX 5.1 之后的兼容性。
 
-## Commo Incompatibility Changes 
+## 通用不兼容变更 
 
-### SSL Options
+### SSL选项
 
-EMQX 5.1 provides the option of enabling TLS when there is a need to access external resources, such as connecting to a database (MySQL, PostgreSQL, MongoDB, Redis) for authentication, or using password-based authentication with access to a web server via HTTPS.  For more information, refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+EMQX 5.1 提供了当需要访问外部资源时可以启用 TLS 的选项，例如连接到数据库（MySQL、PostgreSQL、MongoDB、Redis）进行身份验证，或者通过 HTTPS 访问 Web 服务器进行基于密码的身份验证。更多信息，请参阅[启用 TLS 加密访问外部资源](../network/overview.md#tls-for-external-resource-access)。
 
-### Placeholders
+### 占位符
 
-Backends that support some kind of data interpolation (MySQL, PostgreSQL, MongoDB, Redis, HTTP for external requests, JWT for data interpolation) now use '${variable}' placeholders instead of '%X' ones.
+现在支持某种数据插值的后端（例如：MySQL、PostgreSQL、MongoDB、Redis、用于外部请求的 HTTP、用于数据插值的 JWT）使用 `${variable}` 占位符代替 `%X`。
 
-## Authentication
+## 认证配置的不兼容变更
 
-### Common Changes (All Authentication Sources)
+### 通用变更 (针对所有认证数据源)
 
-#### Password Hashing
+#### 密码散列
 
-All password-based providers (Built-in database, MySQL, PostgreSQL, MongoDB, Redis) now have the same password hashing options, configured in the same way. For details, refer to [Password Hashing](../access-control/authn/authn.md#password-hashing).
+所有使用密码认证的数据源（内置数据库、MySQL、PostgreSQL、MongoDB、Redis）现在都具有相同的 `password_hash` 选项，并以相同的方式配置。详情请参阅[密码散列](../access-control/authn/authn.html#密码散列)。
 
-#### Per-Listener Authentication
+#### 监听器认证
 
-Unlike in version 4.4, each MQTT listener in EMQX 5.1 may have its own authentication configuration. Additionally, the `enable_authn` listener option is available:
+与 4.4 版本不同，EMQX 5.1 中的每个 MQTT 监听器可以有自己的身份认证配置。此外，提供了 `enable_authn` 监听器选项：
 
-- `enable_authn=true` is the default, delegating authentication to the authentication chain.
-- `enable_authn=false` completely disables authentication for the listener.
-- `enable_authn=quick_deny_anonymous` is similar to 'true', but also immediately rejects connecting clients without credentials.
+- `enable_authn=true` 是默认值，将身份认证委托给身份认证链。
+- `enable_authn=false ` 完全禁用监听器的身份认证。
+- `enable_authn=quick_deny_anonymous  `类似于 `true`，但还会立即拒绝没有凭证的连接客户端。
 
-#### Remove the Anonymous Mechanism
+#### 移除匿名认证机制
 
-EMQX 5.1 no longer has explicit `allow_anonymous` settings. All clients are allowed to connect by default. If you **add and enable** any authenticator, EMQX will try to authenticate the clients. To allow anonymous access, remove or disable all authenticators in the global or listener-specific chain.
+EMQX 5.1 不再有显式的 `allow_anonymous` 设置。所有客户端默认允许连接。如果**添加并启用**任何身份验证器，EMQX 将尝试对客户端进行身份验证。要允许匿名访问，请移除或禁用全局或特定监听器链中的所有身份认证器。
 
-After traversing the configured authentication chain, if none of the authenticator in the chain can decide that this client is allowed to connect, then the connection is rejected.
+在遍历配置的身份认证链后，如果链中没有身份认证器决定允许此客户端连接，则拒绝连接。
 
-The `bypass_auth_plugins` configuration is also deleted. When you wants to allow all clients to connect without authentication, you can set `listeners.{type}.{name}.enable_authn = false`.
+同时也删除了`bypass_auth_plugins  ` 配置。当希望允许所有客户端在没有身份认证的情况下连接时，可以设置 `listeners.{type}.{name}.enable_authn = false`。
 
-### Built-in Database (Mnesia)
+### 内置数据库（Mnesia）
 
-- Mnesia is now referred to as the "built-in" database; No user records in the configuration.
-- Change `password_hash` to `password_hash_algorithm`: {name = Algo, salt_position = prefix}. For details, refer to [Password Hashing](../access-control/authn/authn.md#password-hashing).
-- `user_id_type` is used to identify whether the `clientid` or `username` should be used as MQTT user identifiers. Mixed types of records are not allowed.
-- The REST APIs to manage the authentication data records are changed. For more information, refer to the API doc for `POST /authentication/{id}/users`.
-- Users can use the data import API to import data from older versions into EMQX 5.x, see `POST /authentication/{id}/import_users` for details.
+- Mnesia 现在称为"内置"数据库；不在配置中保留用户记录。
+- 将 `password_hash` 更改为 `password_hash_algorithm`：{name = Algo, salt_position = prefix}。有关详情，请参阅[密码散列](../access-control/authn/authn.html#密码散列)。
+- `user_id_type` 用于标识是使用 `clientid` 还是 `username` 作为 MQTT 用户标识符。不允许混合类型的记录。
+- 用于管理身份认证数据记录的 REST API 已更改。有关更多信息，请参阅 `POST /authentication/{id}/users` 的API文档。
+- 用户可以使用数据导入 API 将数据从旧版本导入到 EMQX 5.x，请参阅 `POST /authentication/{id}/import_users` 了解详情。
 
-#### Example
+#### 示例
 
 EMQX 4.4
 
@@ -67,12 +67,12 @@ authentication {
 }
 ```
 
-### Built-in Database (Enhanced Authentication)
+### 内置数据库 (增强认证)
 
-- SHA1 hashing support used in EMQX 4.4 is no longer available. Use the `algorithm` parameter to choose between `sha512'`and `sha256` algorithms.
-- `iteration_count` can now be configured (4096 was implicitly used in EMQX 4.4).
+- EMQX 4.4 中使用的 SHA1哈希支持已不再可用。现在可以使用 `algorithm` 参数来选择 `sha512` 和 `sha256` 算法。
+- 现在可以通过配置迭代次数选项 `iteration_count` 指定散列次数（在 EMQX 4.4 中隐式使用了4096）。
 
-#### Example
+#### 示例
 
 EMQX 4.4
 
@@ -100,27 +100,28 @@ EMQX 5.1
   backend = redis
 ```
 
-- `type` is changed to `redis_type`.
-  - For type `single`,  `server` is changed to `servers`.
-  - For type `sentinel`,  `server` is changed to `servers`.
-  - For type `cluster`,  `database` option is no longer available.
+- `type` 已更改为 `redis_type`。
   
-- `database` is changed to `database` (except for the `cluster` type; this option is not available for clusters anymore).
+  - 对于类型为 `single`，`server `已更改为 `servers`。
+  - 对于类型为 `sentinel`，`server `已更改为 `servers`。
+  - 对于类型为 `cluster`，`database` 选项不再可用。
+  
+- `database` 仍为 `database`（对于 `cluster` 类型除外）；此选项不再适用于集群。
 
-- `pool` is changed to `pool_size`.
+- `pool` 已更改为 `pool_size`。
 
-- `password` is changed to `password`.
+- `password  ` 仍为 `password`。
 
-- `query_timeout` is no longer used.
+- `query_timeout   `不再使用。
 
-- `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+- `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../network/overview.md#tls-for-external-resource-access)。
 
-- `auth_cmd` is changed to `cmd`. Only supports [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) data structure and `HGET` and `HMGET` query commands. Use `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) in the command. The command should fetch at least the `password` (compatible with 4.x) or `password_hash` field and optionally the `salt` and `is_superuser` fields.
+- `auth_cmd` 已更改为 `cmd`。仅支持 [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) 数据结构和 `HGET` 和 `HMGET` 查询命令。在命令中使用 `${var}` 样式的[占位符](https://chat.openai.com/access-control/authn/authn.md#authentication-placeholders)。命令应至少获取 `password`（与 4.x 兼容）或 `password_hash` 字段，以及可选的 `salt` 和 `is_superuser` 字段。
 
-- `super_cmd` is no longer used. Provide the `is_superuser` field in `cmd` instead. If you need to give clients super-user permissions, please add the `is_superuser` field to the Redis query command.
+- 不再使用 `super_cmd`。请在 `cmd` 中提供 `is_superuser` 字段。如果需要给客户端提供超级用户权限，请将 `is_superuser` 字段添加到 Redis 查询命令中。
 
   ::: details
-  
+
   ```shell
   # bad
   GET emqx_user:${username}
@@ -133,14 +134,14 @@ EMQX 5.1
   # good
   HMGET emqx_user:${username} password_hash is_superuser
   ```
-  
+
   :::
-  
-- `password_hash` now uses common `password_hash_algorithm` parameters.
 
-You can use `auto_reconnect` to automatically reconnect to Redis on failure.
+- `password_hash` 现在使用通用的 `password_hash_algorithm` 参数。
 
-#### Example
+- 当与数据库连接失败时，您可以使用 `auto_reconnect` 配置来自动重连。
+
+#### 示例
 
 EMQX 4.4
 
@@ -203,17 +204,17 @@ authentication {
   mechanism = password_based
 ```
 
-- `server`, `username`, `password`, `database`, `query_timeout` are retained.
+- `server`、`username`、`password`、`database`、`query_timeout ` 保持不变。
 
-- `pool` is changed to `pool_size`.
+- `pool   `已更改为 `pool_size`。
 
-- `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+- `ssl.*    `选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../network/overview.md#tls-for-external-resource-access)。
 
-- `password_hash` is changed to`common password_hash_algorithm` parameters.
+- `password_hash` 已更改为 `common password_hash_algorithm` 参数。
 
-- `auth_query` is changed to `query`.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used. Query should fetch at least `password` or `password_hash` column and optionally `salt` and `is_superuser` columns.
+- `auth_query ` 已更改为 `query`。应使用 `${var}` 样式的[占位符](../access-control/authn/authn.md#认证占位符)。查询应至少获取 `password` 或 `password_hash` 列，并可选地获取`salt `和 `is_superuser` 列。
 
-- `super_query` is not used anymore, `is_superuser` column is provided in query instead. If you need to give clients super-user permissions, please ensure that the authentication SQL result contains the `is_superuser` field.
+- 不再使用` `，请在查询中提供 `is_superuser` 列。如果需要给客户端提供超级用户权限，请确保认证 SQL 结果包含 `is_superuser` 字段。
 
   ```sql
   SELECT
@@ -224,9 +225,10 @@ authentication {
     where username = ${username} LIMIT 1
   ```
 
-You can use `auto_reconnect`  to reconnect to MySQL automatically on failure.
+- 当与数据库连接失败时，您可以使用 `auto_reconnect` 配置来自动重连。
 
-#### Example
+
+#### 示例
 
 EMQX 4.4
 
@@ -293,21 +295,21 @@ authentication {
   backend = postgresql
 ```
 
-- `server`, `username`, `password`, `database` are retained.
+- `server`、`username`、`password`、`database` 保持不变。
 
-- `query_timeout` is not used anymore.
+- 不再使用 `query_timeout`。
 
-- `encoding` is not used anymore.
+- 不再使用 `encoding`。
 
-- `pool` is changed to `pool_size`.
+- `pool ` 已更改为 `pool_size`。
 
-- `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+- `ssl.* ` 已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../network/overview.md#tls-for-external-resource-access)。
 
-- `password_hash` is changed to common `password_hash_algorithm` parameters.
+- `password_hash ` 已更改为通用的 `password_hash_algorithm` 参数。
 
-- `auth_query` is changed to `query`.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used. Query should fetch at least `password` or `password_hash` column and optionally `salt` and `is_superuser` columns.
+- `auth_query ` 已更改为 `query`。应使用 `${var}` 样式的[占位符](../access-control/authn/authn.md#认证占位符)。查询应至少获取 `password` 或 `password_hash` 列，并可选地获取`salt` 和 `is_superuser` 列。
 
-- `super_query` is not used anymore, `is_superuser` column is proviced in query instead. If you need to give clients super-user permissions, please ensure that the authentication SQL result contains the `is_superuser` field.
+- 不再使用 `super_query`，请在查询中提供 `is_superuser` 列。如果需要给客户端提供超级用户权限，请确保认证 SQL 结果包含 `is_superuser` 字段。
 
   ```sql
   SELECT
@@ -318,7 +320,7 @@ authentication {
     where username = ${username} LIMIT 1
   ```
 
-#### Example
+#### 示例
 
 EMQX 4.4
 
@@ -386,27 +388,28 @@ mechanism = password_based
 backend = mongodb
 ```
 
-- `type` is changed to `mongo_type` field. Possible values are `single`, `rs`, `sharded`. Unknown value is not available anymore.
+- `type   `已更改为 `mongo_type` 字段。可能的值为 `single`、`rs`、`sharded`。不再支持未知值。
 
 - `server`
-  - For `rs`, `sharded` to `servers`
-  - For `single` to `server`
-  
-- `srv_record`, `username`, `password`, `auth_source`, `database`, `w_mode`, `topology`, `collection` are retained.
 
-- `r_mode` is availalable only for `rs` type.
+  - 对于 `rs`、`sharded  `类型，更改为 `servers`
+  - 对于 `single` 类型，更改为 `server`
 
-- `pool` is changed to `pool_size`.
+- `srv_record`, `username`, `password`, `auth_source`, `database`, `w_mode`, `topology`, `collection` 保持不变。
 
-- `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+- `r_mode` 仅适用于 `rs` 类型。
 
-- `auth_query.selector` is changed to `filter`. The filter should not be a string, but the whole selector data structure.  `${var`}-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) may be used in selector values.
+- `pool` 更改为 `pool_size`.
 
-- `auth_query.salt_field` is changed to `salt_field`.
+- `ssl.* ` 已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../network/overview.md#tls-for-external-resource-access)。
 
-- `auth_query.super_field` is changed to `is_superuser_field`.
+- `auth_query.selector` 更改为 `filter`。查询 Filter 应该不再是一个字符串，而是整个 selector 数据结构。在 selector 值中可使用  `${var}` 格式的[占位符](../access-control/authn/authn.md#认证占位符)。
 
-- `super_query` is not used anymore. Provide `is_superuser_field` field in the documents fetched with `filter` together with `is_superuser_field` setting.
+- `auth_query.salt_field` 更改为 `salt_field`。
+
+- `auth_query.super_field` 更改为 `is_superuser_field`。
+
+- `super_query` 不再使用。 在使用 `filter` 获取的文档中提供 `is_superuser_field` 字段，同时设置 `is_superuser_field`。
 
   ::: details
 
@@ -423,11 +426,11 @@ backend = mongodb
 
   ::: 
 
-- `password_hash` is changed to `common password_hash_algorithm` parameters.
+- `password_hash` 更改为 `common password_hash_algorithm` 参数。
 
-- `query_timeout` is not used.
+- `query_timeout` 不再使用。
 
-#### Example
+#### 示例
 
 EMQX 4.4
 
@@ -517,34 +520,34 @@ authentication {
 mechanism = jwt
 ```
 
--  `secret`, `from`, `verify_claims`, `acl_claim_name`, `refresh_interval` are retained.
-- `pubkey ` is changed to `public_key`.
-- `jwks` is changed to `endpoint`.
-- `signature_format` is no more available.
+-  `secret`、`from`、`verify_claims`、`acl_claim_name` 和 `refresh_interval` 保持不变。
+- `pubkey ` 更改为 `public_key`。
+- `jwks` 更改为 `endpoint`。
+- `signature_format` 已删除。
 
-In `verifiy_claims`, `${var}`-style placeholders (``${username}`` and `${clientid}`) should be used in selector values instead of `%X` ones.
+在 `verifiy_claims` 配置中，在 selector 值中应使用 `${var}` 格式的占位符 (``${username}`` 和 `${clientid}`) 而不是 `%X` 。
 
-Additional parameters:
+更多参数：
 
-- `use_jwks`: whether to fetch keys from JWKS
-- `algorithm`:  `public-key|hmac-based` which type of signature to verify.
-- `secret_base64_encoded`: specifies secret format
-- `pool_size`: number of connections to JWKS server
-- `ssl` SSL options for connecting to JWKS server
+- `use_jwks`：是否从 JWKS 获取 key
+- `algorithm`：使用哪种签名来验证 `public-key|hmac-based` 
+- `secret_base64_encoded`： 指定密钥格式
+- `pool_size`： 连接到 JWKS 服务器的客户端连接个数
+- `ssl`：用于连接 JWKS 服务器的 SSL 选项
 
-Not all sets of parameters are allowed. 
+注意：不是所有参数集都被允许。
 
-EMQX 4.x supports `public key` and `hmac secret` algorithms, as well as `jwks` at the same time. Unlike EMQX 4.4, not all combinations of  (`secret`,` secret_base64_encoded`,`public_key`,` endpoint`, `pool_size`, `refresh_interval` , `ssl` ) parameters are allowed. EMQX 5.1 uses one algorithm at a time only, which is set in the global config. `use_jwks` and `algorithm` identify the available sets:
+EMQX 4.x 同时支持 `public key`、`hmac secret` 算法以及 `jwks`。与 EMQX 4.4 不同，(`secret`, `secret_base64_encoded`, `public_key`, `endpoint`, `pool_size`, `refresh_interval`, `ssl`) 参数的所有组合并非都被允许。EMQX 5.1 只能一次使用一种算法，并且在全局配置中设置。`use_jwks` 和 `algorithm` 标识了可用的参数集：
 
-With `use_jwks=true` and `algorithm=public-key`:  `endpoint`, `pool_size`,``refresh_interval`, `ssl`
+使用 `use_jwks=true` 和 `algorithm=public-key`：`endpoint`、`pool_size`、`refresh_interval`、`ssl`
 
-With `use_jwks=false` and a`lgorithm=public-key`:  `public_key`
+使用 `use_jwks=false` 和 `algorithm=public-key`：`public_key`
 
-With `use_jwks=false` and `algorithm=hmac-based`: `secret`, `secret_base64_encoded`
+使用 `use_jwks=false` 和 `algorithm=hmac-based`：`secret`、`secret_base64_encoded`
 
-Combination `use_jwks=true` and `algorithm=hmac-based` is invalid.
+`use_jwks=true` 和 `algorithm=hmac-based` 的组合是无效的。
 
-#### Example
+#### 示例
 
 EMQX 4.4
 
@@ -588,34 +591,34 @@ mechanism = password_based
 backend = http
 ```
 
--  `method`, `pool_size`, `connect_timeout`, and `enable_pipelining` are retained.
--  `auth_req.url` is changed to `url`.
--  `auth_req.headers` is changed to `headers`.
--  `auth_req.params` is changed with `body`.
--  `timeout` is changed to `request_timeout`.
-- `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-- `super_req` is not available. Provide `is_superuser` field in the service response instead.
+- `method`、`pool_size`、`connect_timeout` 和 `enable_pipelining` 保持不变。
+- `auth_req.url` 已更改为 `url`。
+- `auth_req.headers` 已更改为 `headers`。
+- `auth_req.params` 已更改为 `body`。
+- `timeout` 已更改为 `request_timeout`。
+- `ssl.*` 已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../network/overview.md#tls-for-external-resource-access)。
+- `super_req` 不再可用。客户端的超级用户身份通过认证响应中的 body 设置，需要在服务响应中提供 `is_superuser` 字段。
 
-Unlike version 4.4,  `url`, `headers`, and `body` parameters allow placeholders. In version 5.1, `body` is not a string, but a map. It is serialized using JSON or X-WWW-Form-Urlencoded format (for post requests) or as query params (for get requests).
+与 4.4 版本不同，`url`、`headers` 和 `body` 参数允许使用占位符。在 5.1 版本中，`body` 不再是一个字符串，而是一个映射。它将使用 JSON 或 X-WWW-Form-Urlencoded 格式进行序列化（用于 POST 请求），或作为查询参数（用于 GET 请求）。
 
-Unlike version 4.4, HTTP authentication only respects responses with successful HTTP code (2XX) and takes the resolution from the response body (from `result`) field. In version 5.1, the authentication result is now determined through JSON fields within the response body, rather than utilizing HTTP response status codes.
+与 4.4 版本不同，在 5.1 版本中，认证结果现在通过响应 body 内的 JSON 字段来确定，而不再使用 HTTP 响应状态码。HTTP 认证仅会关注返回成功的 HTTP 状态码（2XX），并从响应 body 中提取 `result` 字段作为解析依据。
 
 ::: details
 
-**Success response status code:**
+**成功响应状态码：**
 
 ```shell
 200 or 204
 ```
 
-The authenticator will be ignored if the request fails or returns another status code.
+如果请求失败或返回其他状态码，认证器将被忽略。
 
-**Success Response Body (JSON):**
+**成功响应 body  (JSON)：**
 
-| Name          | Type    | Required | Description             |
+| 名称          | 类型    | 是否必须 | 描述                    |
 | ------------- | ------- | -------- | ----------------------- |
-| result        | Enum    | true     | `allow | deny | ignore` |
-| is_supseruser | Boolean | false    |                         |
+| result        | Enum    | 是       | `allow | deny | ignore` |
+| is_supseruser | Boolean | 否       | 默认为 `false`          |
 
 ```json
 {
@@ -626,7 +629,7 @@ The authenticator will be ignored if the request fails or returns another status
 
 :::
 
-#### Example
+#### 示例
 
 EMQX 4.4
 
@@ -689,42 +692,25 @@ EMQX 5.1
 }
 ```
 
-## Authorization
+## 授权配置的不兼容变更
 
-### ACL File
+### ACL 文件
 
-1. Removed the `acl_file` configuration. The file-based ACL (acl.conf) will be used as one of the authorization sources and added to EMQX by default.
-2. `acl.conf` data file syntax has been changed.
+- 移除了 `acl_file` 配置。基于文件的 ACL（acl.conf）将作为授权检查数据源之一，并默认添加到 EMQX 中。
+- `acl.conf` 数据文件的语法已经发生了变化。
+- 在 dsl 中，`pubsub` 被重命名为 `all`。
 
-| 4.x    | 5.x      | Compatibility |
-| ------ | -------- | ------------- |
-| user   | username | Yes           |
-| client | clientid | Yes           |
-| pubsub | all      | No            |
+| 4.x    | 5.1      | 兼容性 |
+| ------ | -------- | ------ |
+| user   | username | 是     |
+| client | clientid | 是     |
+| pubsub | all      | 否     |
 
-::: details Example
-
-```bash
-# 4.x
-{allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
-{allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
-
-# 5.x
-{allow, {username, {re, "^dashboard$"}}, subscribe, ["$SYS/#"]}.
-{allow, {ipaddr, "127.0.0.1"}, all, ["$SYS/#", "#"]}.
-```
-
-:::
-
-### File-Based
-
-In dsl, `pubsub` is renamed to `all`.
-
-#### Example
+#### 示例
 
 EMQX 4.3
 
-```
+```bash
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
 
 {allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
@@ -736,7 +722,7 @@ EMQX 4.3
 
 EMQX 5.1
 
-```
+```bash
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
 
 {allow, {ipaddr, "127.0.0.1"}, all, ["$SYS/#", "#"]}.
@@ -746,14 +732,12 @@ EMQX 5.1
 {allow, all}.
 ```
 
-### Built-in Database
+### 内置数据库（Mnesia）
 
-- Mnesia renamed to the Built-in Database.
-- The data format and REST API have changed. For more information, please refer to `/authorization/sources/built_in_database/rules/{clients,users}`.
+- 为方便理解，该数据源由 Mnesia 更名为内置数据库 (Built-in Database)。
+- 数据格式与数据操作 REST API 有变动，4.x 版本中的 ACL 数据可以通过 `./bin/emqx_ctl data export` 命令导出。用户可以将数据转换为符合 5.1 版本的格式，并通过相应的 REST API 导入。新的 API 是 `/authorization/sources/built_in_database/rules{/clients,/users}`。
 
-4.x ACL data can be exported with `./bin/emqx_ctl data export` command. Users may convert the data into 5.x format and import it through the corresponding REST API.
-
-#### Example
+#### 示例
 
 EMQX 4.4
 
@@ -763,7 +747,7 @@ EMQX 4.4
 
 EMQX 5.1
 
-```
+```json
 {
   type = built_in_database
   enable = true
@@ -772,7 +756,7 @@ EMQX 5.1
 
 ### JWT
 
-This is the implicit ACL based on claims fetched during JWT authentication. In ACL claims, `${variable}` placeholders instead of `%X` ones should be used.
+这是隐式的 ACL，基于 JWT 认证期间提取的声明 。在 ACL 声明中，应使用 `${variable}` 占位符，而不是 `%X` 占位符。
 
 ### HTTP
 
@@ -780,34 +764,34 @@ This is the implicit ACL based on claims fetched during JWT authentication. In A
 type = http
 ```
 
-- `method`, `pool_size`, `connect_timeout`, `enable_pipelining` are retained.
-- `acl_req.url` is changed to `url`. 
-- `acl_req.headers` is changed to `headers`. 
-- `acl_req.params` is changed to `body`. 
-- `timeout` to `request_timeout`.
-- `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+- `method`、`pool_size`、`connect_timeout` 和 `enable_pipelining` 参数保留不变。
+- `acl_req.url` 已更改为 `url`。
+- `acl_req.headers` 已更改为 `headers`。
+- `acl_req.params` 已更改为 `body`。
+- `timeout` 已更改为 `request_timeout`。
+- `ssl.*` 已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../network/overview.md#tls-for-external-resource-access)。
 
-Unlike 4.4,  `url`, `headers`, and `body` parameters allow placeholders.   
+与 4.4 版本不同，`url`、`headers` 和 `body` 参数允许使用占位符。
 
-In 5.1, `body` is not a string, but a map. It is serialized using JSON or X-WWW-Form-Urlencoded format (for post requests) or as query params (for get requests).
+在 5.1 版本中，`body` 不再是一个字符串，而是一个映射。它将使用 JSON 或 X-WWW-Form-Urlencoded 格式进行序列化（用于 POST 请求），或作为查询参数（用于 GET 请求）。
 
-Unlike 4.4, HTTP authorization only respects responses with successful HTTP code (2XX) and takes the resolution from the response body (from `result`) field. The authorization result is now determined through JSON fields within the response body, rather than utilizing HTTP response status codes.
+与 4.4 版本不同，授权结果现在通过响应 body 内的 JSON 字段来确定，而不再使用 HTTP 响应状态码。HTTP 授权仅关注返回成功的 HTTP 状态码（2XX），并从响应 body 中提取 `result` 字段作为解析依据。
 
 ::: details
 
-**Success response status code:**
+**成功响应状态码**
 
 ```shell
 200 or 204
 ```
 
-Other status codes or request failure will be treated as `ignore`.
+如果请求失败或返回其他状态码，授权检查器将被忽略。
 
-**Success Response Body (JSON):**
+**成功响应 body (JSON):**
 
-| Name   | Type | Required | Description             |
+| Name   | 类型 | 是否必须 | 描述                    |
 | ------ | ---- | -------- | ----------------------- |
-| result | Enum | true     | `allow | deny | ignore` |
+| result | Enum | 是       | `allow | deny | ignore` |
 
 ```json
 {
@@ -817,7 +801,7 @@ Other status codes or request failure will be treated as `ignore`.
 
 :::
 
-#### Example
+#### 示例
 
 EMQX 4.4
 
@@ -884,32 +868,31 @@ EMQX 5.1
   type = redis
 ```
 
-auto_reconnect may be used to reconnect to Redis automatically on failure.
+- 当与数据库连接失败时，可以使用 `auto_reconnect` 配置进行自动重连。
+- `type ` 已更改为 `redis_type`。
+  - 对于类型 `single`，`server` 已更改为 `servers`。
+  - 对于类型 `sentinel`，`server` 已更改为 `servers`。
+  - 对于类型 `cluster`，`database` 选项不再可用。
+- `database` 仍为 `database`，但不包括 `cluster` 类型；该选项不再适用于集群）。
+- `pool` 已更改为 `pool_size`。
+- `password` 仍为 `password`。
+- 不再使用 `query_timeout` 选项。
+- `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../network/overview.md#tls-for-external-resource-access)。
+- `auth_cmd` 已更改为 `cmd`。应在命令中使用 `${var}` 样式的[占位符](../access-control/authn/authn.md#认证占位符)。
+- Redis 数据源仍然仅支持白名单模式，需要设置 `acl_nomatch = deny`；
+- `access` 字段名称更改为 `action`，数据由数字变为动作全称字符串，对应关系见下表。
 
-- `type` is changed to `redis_type`.
-  - For type `single`,  `server` is changed to `servers`.
-  - For type `sentinel`,  `server` is changed to `servers`.
-  - For type `cluster`,  `database` option is no longer available.
-- `database` is changed to `database` (except for the `cluster` type; this option is not available for clusters anymore).
-- `pool` is changed to `pool_size`.
-- `password` is changed to `password`.
-- `query_timeout` is no longer used.
-- `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-- `auth_cmd` is changed to `cmd`.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used in the command. 
-- Redis data source still only supports white list mode, which requires setting `acl_nomatch = deny`;
-- The `access` field name changes to `action`, and the data changes from numbers to action strings.
+如果您想继续使用 4.x 中的数据，请手动进行必要的迁移。
 
-If you want to continue using the data from in 4.x, please make necessary migrations manually.
+::: details  4.x 与 5.x 版本的数据对应关系
 
-::: details The correspondence between 4.x and 5.x data
+| 4.x  | 5.x       | 对应动作 |
+| ---- | --------- | -------- |
+| 1    | subscribe | 订阅     |
+| 2    | publish   | 发布     |
+| 3    | all       | 发布订阅 |
 
-| 4.x  | 5.x       | action              |
-| ---- | --------- | ------------------- |
-| 1    | subscribe | subscribe           |
-| 2    | publish   | publish             |
-| 3    | all       | subscribe & publish |
-
-**Data example in 5.x**
+**5.1 版本中数据示例**
 
 ```
 HSET mqtt_acl:emqx_u t/# subscribe
@@ -919,7 +902,7 @@ HSET mqtt_acl:emqx_u a/1 publish
 
 :::
 
-#### Example
+#### 示例
 
 EMQX 4.4
 
@@ -975,48 +958,44 @@ EMQX 5.1
   type = mysql
 ```
 
-- The `ipaddr/username/clientid` field is no longer required in the query result.
+- 查询结果中不再需要 `ipaddr/username/clientid` 字段，需要调整查询 SQL。
 
-- The `access` field name is changed to `action`, and its data type is changed from integer to character or character enumeration.
+- `access` 字段名变为 `action`，数据类型由整型变为字符或字符枚举，数值对应关系见下表。
 
-- The `allow` field name is changed to `permission`, and its data type is changed from integer to character or character enumeration.
+- `allow` 字段名变为 `permission`，数据类型由整型变为字符或字符枚举，数值对应关系见下表。
 
-  ::: details The correspondence between 4.x integer values and 5.x character/enumeration values
+  ::: details 4.x 的整数值与 5.x 的字符/字符枚举值之间的对应关系
 
-  **Access/action field mapping**
+  **Access/action 字段数据类型映射**
 
-  | 4.x (int) | 5.x (varchar/enum) | action              |
-  | --------- | ------------------ | ------------------- |
-  | 1         | subscribe          | subscribe           |
-  | 2         | publish            | publish             |
-  | 3         | all                | subscribe & publish |
+  | 4.x (int) | 5.x (varchar/enum) | 对应动作 |
+  | --------- | ------------------ | -------- |
+  | 1         | subscribe          | 订阅     |
+  | 2         | publish            | 发布     |
+  | 3         | all                | 发布订阅 |
 
-  **Allow/permission field mapping**
+  **Allow/permission 字段数据类型映射**
 
-  | 4.x (int) | 5.x (varchar/enum) | permission |
-  | --------- | ------------------ | ---------- |
-  | 0         | deny               | deny       |
-  | 1         | allow              | allow      |
+  | 4.x (int) | 5.x (varchar/enum) | 对应行为 |
+  | --------- | ------------------ | -------- |
+  | 0         | deny               | 拒绝     |
+  | 1         | allow              | 允许     |
 
   :::
 
-- `server`, `username`, `password`, `database`, `query_timeout` are retained.
+- `server`、`username`、`password`、`database`、`query_timeout` 参数保留不变。
+- `pool` 已更改为 `pool_size`。
+- `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../network/overview.md#tls-for-external-resource-access)。
+- `acl_query` 已更改为 `query`。应使用 `${var}` 样式的[占位符](../access-control/authn/authn.md#认证占位符)。
+- 您可以使用 `auto_reconnect` 在 MySQL 连接失败时自动重新连接。
 
-- `pool` is changed to `pool_size`.
+存储模式已更改。
 
-- `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+在 EMQX 4.4 中，查询应准确按照 `[Allow, IpAddr, Username, ClientId, Access, Topic]` 列的顺序提取行，列名可以是任意名称。
 
-- `acl_query` is changed to query.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used.
+在 EMQX 5.1 中，查询应该按照任意顺序提取具有 `permission, action, topic` 列的行，但列名必须是这些名称。 "who" 部分（`IpAddr, Username, ClientId`）现在建议作为查询的一部分。
 
-You can use `auto_reconnect` to reconnect to MySQL automatically on failure.
-
-Storage schema is changed.
-
-In EMQX 4.4, the query should fetch rows with columns `[Allow, IpAddr, Username, ClientId, Access, Topic]` under any name exactly in this order.
-
-In EMQX 5.1, the query should fetch rows with columns `permission, action, topic` in any order but under exactly these names. The “who“ part (`IpAddr, Username, ClientId`) is now suggested to be a part of the query.
-
-#### Example
+#### 示例
 
 EMQX 4.4
 
@@ -1075,43 +1054,43 @@ EMQX 5.1
 type = postgresql
 ```
 
-- The `ipaddr/username/clientid` field is no longer required in the query result.
-- The `access` field name is changed to `action`, and its data type is changed from integer to character or character enumeration.
-- The `allow` field name is changed to `permission`, and its data type is changed from integer to character or character enumeration.
+- 查询结果中不再需要 `ipaddr/username/clientid` 字段，需要调整查询 SQL。
+- `access` 字段名变为 `action`，数据类型由整型变为字符或字符枚举，数值对应关系见下表。
+- `allow` 字段名变为 `permission`，数据类型由整型变为字符或字符枚举，数值对应关系见下表。
 
-::: details The correspondence between 4.x integer values and 5.x character/enumeration values
+::: details 4.x 的整数值与 5.x 的字符/字符枚举值之间的对应关系
 
-**Access/action field mapping**
+**Access/action 字段数据类型映射**
 
-| 4.x (int) | 5.x (varchar/enum) | action              |
-| --------- | ------------------ | ------------------- |
-| 1         | subscribe          | subscribe           |
-| 2         | publish            | publish             |
-| 3         | all                | subscribe & publish |
+| 4.x (int) | 5.x (varchar/enum) | 对应动作 |
+| --------- | ------------------ | -------- |
+| 1         | subscribe          | 订阅     |
+| 2         | publish            | 发布     |
+| 3         | all                | 发布订阅 |
 
-**Allow/permission field mapping**
+**Allow/permission 字段数据类型映射**
 
-| 4.x (int) | 5.x (varchar/enum) | permission |
-| --------- | ------------------ | ---------- |
-| 0         | deny               | deny       |
-| 1         | allow              | allow      |
+| 4.x (int) | 5.x (varchar/enum) | 对应行为 |
+| --------- | ------------------ | -------- |
+| 0         | deny               | 拒绝     |
+| 1         | allow              | 允许     |
 
 :::
 
-- `server`, `username`, `password`, `database` are retained.
-- `query_timeout` is not used anymore.
-- `encoding` is not used anymore.
-- `poo`l is changed to `pool_size`.
-- `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-- `acl_query` is changed to `query`.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used. 
+- `server`、`username`、`password`、`database`、`query_timeout` 参数保留不变。
+- `query_timeout` 不再使用。
+- `encoding` 不再使用。
+- `pool` 已更改为 `pool_size`。
+- `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../network/overview.md#tls-for-external-resource-access)。
+- `acl_query` 已更改为 `query`。应使用 `${var}` 样式的[占位符](../access-control/authn/authn.md#认证占位符)。
 
-Storage schema is changed.
+存储模式已更改。
 
-In EMQX 4.4, the query should fetch rows with columns `[Allow, IpAddr, Username, ClientId, Access, Topic]` under any name exactly in this order.
+在 EMQX 4.4 中，查询应准确按照 `[Allow, IpAddr, Username, ClientId, Access, Topic]` 列的顺序提取行，列名可以是任意名称。
 
-In EMQX 5.1, the query should fetch rows with columns `permission, action, topic` in any order but under exactly these names. The “who“ part `(IpAddr, Username, ClientId)` is now suggested to be a part of the query.
+在 EMQX 5.1 中，查询应该按照任意顺序提取具有 `permission, action, topic` 列的行，但列名必须是这些名称。 "who" 部分（`IpAddr, Username, ClientId`）现在建议作为查询的一部分。
 
-### Example
+### 示例
 
 EMQX 4.4
 
@@ -1170,20 +1149,18 @@ EMQX 5.1
 type = mongodb
 ```
 
-- `type` is changed to `mongo_type` field. Possible values are `single`, `rs`, `sharded`. Unknown value is not available anymore.
+- `type` 已更改为 `mongo_type` 字段。可能的取值为 `single`、`rs` 和 `sharded`。不再允许未知的值。
 - `server`
-  - For `rs`, `sharded` to `servers`
-  - For `single` to `server`
-- `srv_record`, `username`, `password`, `auth_source`, `database`, `w_mode`, `topology`, `collection` are retained.
-- `r_mode` is availalable only for `rs` type.
-- `pool` is changed to `pool_size`.
-- `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-- `auth_query.selector` is changed to `filter`. The filter should not be a string, but the whole selector data structure.  `${var`}-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) may be used in selector values.
-- `query_timeout` is not used.
+  - 对于 `rs` 和 `sharded` 类型，`server` 已更改为 `servers`。
+  - 对于 `single` 类型，`server` 已更改为 `server`。
+- `srv_record`、`username`、`password`、`auth_source`、`database`、`w_mode`、`topology`、`collection` 参数保留不变。
+- `r_mode` 仅适用于 `rs` 类型。
+- `pool` 已更改为 `pool_size`。
+- `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../network/overview.md#tls-for-external-resource-access)。
+- `auth_query.selector` 已更改为 `filter`。过滤器不应该是一个字符串，而是整个选择器数据结构。应在选择器值中使用 `${var}` 样式的[占位符](../access-control/authn/authn.md#认证占位符)。
+- 不再使用 `query_timeout`。
 
-Storage schema is changed.
-
-In EMQX 4.4, the resulting documents should contain topics lists by action key, like in Redis or JWT:
+存储模式已更改。在 EMQX 4.4 中，生成的数据存储文档应该按照 action 键包含主题列表，类似于 Redis 或 JWT：
 
 ```
 {
@@ -1193,11 +1170,9 @@ In EMQX 4.4, the resulting documents should contain topics lists by action key, 
 }
 ```
 
-In EMQX 5.5, MongoDB data source can be used for both allow and deny rules. Previously, only white list mode was supported, and it was required to set `acl_nomatch = deny`. The documents should contain individual rules with `permission`, `action`, `topics` fields. Note that `topics` should be an array of topics. For details, see [AuthZ-MongoDB](../access-control/authz/mongodb.md).
+在 EMQX 5.1 中, MongoDB 数据源可用于黑/白名单模式下，此前仅支持白名单模式，并要求设置 `acl_nomatch = deny`。 MongoDB 数据存储文档中应包含 `action` `permission` `topics` 字段的单独规则，`topic` 字段应该是一个主题数组。具体使用方式详见 [基于 MongoDB 进行授权](../access-control/authz/mongodb.md)。如需继续使用 4.x 中的数据，请手动迁移适配。
 
-If you want to continue using the data from in 4.x, please make the necessary migrations manually.
-
-::: details Data example in 5.x
+::: details 5.1 版本中数据示例
 
 ```json
 [
@@ -1214,7 +1189,7 @@ If you want to continue using the data from in 4.x, please make the necessary mi
 
 :::
 
-#### Example
+#### 示例
 
 EMQX 4.4
 
