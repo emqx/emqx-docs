@@ -460,6 +460,7 @@
                 - access-control/authn/mongodb
                 - access-control/authn/http
             - access-control/authn/jwt
+            - access-control/authn/gcp-device
             - access-control/authn/scram
             - access-control/authn/user_management
         - title_en: Authorization
