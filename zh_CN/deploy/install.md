@@ -16,7 +16,7 @@ EMQX 所使用的 Erlang 虚拟机依赖于系统区域设置来启用各种功�
 
 :::: tabs
 
-::: tab Amazon Linux 2
+::: tab Amazon Linux 
 
 使用 [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html#amazon-linux-cloud-init) 配置启用 UTF-8 locale 区域设置：
 
