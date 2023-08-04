@@ -36,11 +36,11 @@ EMQX supports installing with Yum source to provide our users with a convenient 
 
 ## Install with Package
 
+EMQX offers different installation packages for different CPU architectures.
+
 The section below will take CentOS 8 as an example to illustrate how to download the latest version of EMQX. For other system versions, please visit the [EMQX Deployment page](https://www.emqx.io/downloads?os=CentOS). 
 
 ### Install with rpm
-
-EMQX offers different installation packages for different CPU architectures. 
 
 :::: tabs type:card
 
@@ -114,7 +114,7 @@ sudo yum remove emqx
 
 ## Install with tar.gz
 
-EMQX offers different installation packages for different CPU architectures. 
+EMQX offers different installation packages for different CPU architectures.
 
 The section below will take CentOS 8 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.io/downloads?os=CentOS). 
 
