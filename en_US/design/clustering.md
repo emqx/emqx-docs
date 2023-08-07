@@ -6,7 +6,7 @@ One of the biggest challenges of MQTT broker clustering is ensuring that the clu
 EMQX is a highly scalable and fault-tolerant MQTT broker that can be distributed and run in a cluster mode with multiple nodes.
 In this chapter, we will discuss the reasons why we need the cluster MQTT brokers and how it is done EMQX which enables millions of unique wildcard subscribers in one single cluster.
 
-For instructions to create and run a EMQX version 5 cluster, you can find more inforamtion here: [EMQX Cluster](../deploy/cluster/introduction).
+For instructions to create and run a EMQX version 5 cluster, you can find more inforamtion here: [EMQX Cluster](../deploy/cluster/introduction.md).
 
 Clustering EMQX can help improve the scalability, availability, reliability and management of IoT messaging systems, which is why clustering is recommended for larger or mission-critical applications.
 
