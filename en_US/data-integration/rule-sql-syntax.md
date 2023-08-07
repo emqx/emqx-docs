@@ -205,11 +205,11 @@ DO item.field_1, item.field_2
 FROM "t/#"
 ```
 
-EMQX supports using the `jq` function for advanced transformations. You can refer to the [ build-in `jq` function](./rule-sql-jq) for more code examples.
+EMQX supports using the `jq` function for advanced transformations. You can refer to the [ build-in `jq` function](./rule-sql-jq.md) for more code examples.
 
 ## Expressions and Operations 
 
-EMQX rule syntax allows using expressions to transform data and filter messages, which can be used in various clauses, including `SELECT`, `FOREACH`, `DO`, `INCASE`, and `WHERE`. This section offers more information on using these expressions. The following are the operations that can be used to form expressions, and remember that there is a wide range of [built-in functions](./rule-sql-builtin-functions) that can also be used in expressions.
+EMQX rule syntax allows using expressions to transform data and filter messages, which can be used in various clauses, including `SELECT`, `FOREACH`, `DO`, `INCASE`, and `WHERE`. This section offers more information on using these expressions. The following are the operations that can be used to form expressions, and remember that there is a wide range of [built-in functions](./rule-sql-builtin-functions.md) that can also be used in expressions.
 
 
 ### Arithmetic Operations

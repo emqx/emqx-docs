@@ -24,7 +24,7 @@ Rules specify how to retrieve data from a **data source**, perform **data transf
 
 - **Actions**: After the input is processed according to the specified rules, one or more actions can be defined to process the SQL execution results. The Rule Engine will sequentially perform corresponding actions, such as storing the processing results in a database or republishing them to another MQTT topic.
 
-  For a step-by-step guide on creating a rule with the EMQX dashboard, see [Create Rules](./rule-get-started).
+  For a step-by-step guide on creating a rule with the EMQX dashboard, see [Create Rules](./rule-get-started.md).
 
 ## Key Benefits
 
