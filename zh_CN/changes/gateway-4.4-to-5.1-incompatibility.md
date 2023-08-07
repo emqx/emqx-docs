@@ -1,16 +1,16 @@
-# Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
+# 网关从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
 
-This page presents the compatibility information for gateway configurations between EMQX 4.4 and EMQX 5.1.
+本页介绍了 EMQX 4.4 和 EMQX 5.1 之间网关功能配置的兼容性信息。
 
-## Common Incompatibility Changes
+## 通用的不兼容变更
 
-### Configuration
+### 配置
 
-In EMQX 4.x, the gateway can be configured through configuration files such as `etc/plugins/emqx_stomp.conf` or via modules on the Dashboard (i.e., using the `POST http://127.0.0.1:18084/api/v4/modules` interface).
+在 EMQX 4.x 版本中，网关可以通过配置文件进行配置，例如 `etc/plugins/emqx_stomp.conf`，或通过 Dashboard 上的模块（即使用 `POST http://127.0.0.1:18084/api/v4/modules` 接口）进行配置。
 
-In EMQX 5.1, all gateway can be configured in `etc/emqx.conf` or `PUT http://127.0.0.1:18083/api/v5/gateways/coap`.
+在 EMQX 5.1 版本中，所有的网关配置都可以在 `etc/emqx.conf` 中进行，或者通过 `PUT http://127.0.0.1:18083/api/v5/gateways/coap` 进行配置。
 
-For example, in EMQX 4.x:
+EMQX 4.x 中的配置示例：
 
 ```
 stomp.listener = 61613
@@ -26,7 +26,7 @@ stomp.frame.max_header_length = 1024
 stomp.frame.max_body_length = 8192
 ```
 
-In EMQX 5.x:
+EMQX 5.x 中的配置示例：
 
 ```
 gateway.stomp {
@@ -42,23 +42,23 @@ gateway.stomp {
 }
 ```
 
-### Management via HTTP API or Dashboard
+### 通过 HTTP API 或 Dashboard 进行管理
 
-In EMQX 4.x, there is no separate HTTP API and webpage for management. For example, if you want to query the device list for MQTT-SN, you need to use `GET http://127.0.0.1:8081/api/v4/clients?protocol=mqtt-sn`. It is combined with the query interface for MQTT devices (even other protocols, i.e. CoAP, LwM2M, etc.).
+在 EMQX 4.x 版本中，没有单独的 HTTP API 和网页用于管理。例如，如果您想查询 MQTT-SN 的设备列表，需要使用 `GET http://127.0.0.1:8081/api/v4/clients?protocol=mqtt-sn`。这与查询 MQTT 设备（甚至其他协议，如 CoAP、LwM2M 等）的接口是合并在一起的。
 
-In EMQX 5.x, we provided more proprietary interfaces to accomplish these functions. For example, `GET /api/v5/gateways/mqttsn/clients`, and more newly added HTTP APIs:
+而在 EMQX 5.x 版本中，我们提供了更多专有的接口来完成这些功能。例如，`GET /api/v5/gateways/mqttsn/clients`，以及更多新增的 HTTP API：
 
-- [Gateways](https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html#tag/Gateways) 
+- [Gateways](https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html#tag/Gateways)
 - [Gateway-Authentication](https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html#tag/Gateway-Authentication)
-- [Gateway-Clients](https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html#tag/Gateway-Clients) 
+- [Gateway-Clients](https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html#tag/Gateway-Clients)
 
-It also provides dedicated Dashboard pages for managing clients, gateway configurations, listeners, and more.
+此外，还提供了专用的 Dashboard 页面，用于管理客户端、网关配置、监听器等功能。
 
-### Listeners
+### 监听器
 
-In EMQX 4.x, each gateway has its own format for listener configuration. However, in EMQX 5.1, the configuration format for all listeners has been standardized. 
+在 EMQX 4.x 版本中，每个网关都有自己的监听器配置格式。然而，在 EMQX 5.1 版本中，所有监听器的配置格式已经标准化。
 
-For example, in EMQX 4.x
+EMQX 4.x 中的配置示例：
 
 ```
 ## etc/plugins/emqx_stomp.conf
@@ -75,7 +75,7 @@ lwm2m.bind.udp.1 = 0.0.0.0:5683
 lwm2m.bind.dtls.1 = 0.0.0.0:5684
 ```
 
-In EMQX 5.x, all protocol gateways have the same format for the listener configuration. Take the Exproto gateway as an example:
+在 EMQX 5.x 版本中，所有协议网关的监听器配置都采用相同的格式。以 Exproto 网关为例：
 
 ```
 ## etc/emqx.conf
@@ -94,11 +94,11 @@ gateway.exproto {
 }
 ```
 
-### Authentication
+### 认证
 
-In version EMQX 4.x, each gateway is configured with a hybrid authentication for MQTT.
+在 EMQX 4.x 版本中，每个网关都使用混合认证来配置 MQTT。
 
-But in EMQX 5.0, you need to configure a separate authenticator for each gateway. For example:
+但在 EMQX 5.0 版本中，您需要为每个网关配置单独的认证器。例如：
 
 ```
 gateway.coap {
@@ -114,21 +114,21 @@ gateway.coap {
 }
 ```
 
-## Incompatibility in Protocol Functionality and Configuration Items
+## 网关协议功能和配置项的不兼容变更
 
 ### Stomp
 
-`stomp.default_user.login`, `stomp.default_user.passcode` and `stomp.allow_anonymous` are removed in EMQX 5.x.
+`stomp.default_user.login`, `stomp.default_user.passcode` 和 `stomp.allow_anonymous` 在 EMQX 5.x 中被移除。
 
 ### MQTT-SN
 
-- Listeners of DTLS type are supported in EMQX 5.1, but not in EMQX 4.x.
-- `mqtt.sn.username`, `mqtt.sn.password` and `mqtt.sn.subs_resume` are not removed.
-- `mqtt.sn.advertise_duration` is renamed to `gateway.mqttsn.broadcast`.
+- DTLS 类型的监听器在 EMQX 5.1中支持，但在 EMQX 4.x 中不支持。
+- `mqtt.sn.username`， `mqtt.sn.password` 和 `mqtt.sn.subs_resume` 没有被移除。
+- `mqtt.sn.advertise_duration` 重命名为 `gateway.mqttsn.broadcast`。
 
 ### ExProto
 
-Previously, the ConnectionAdapter service configuration format was:
+之前，ConnectionAdapter 服务的配置格式为：
 
 ```
 exproto.server.http.port = 9100
@@ -138,7 +138,7 @@ exproto.server.https.certfile = etc/certs/cert.pem
 exproto.server.https.keyfile = etc/certs/key.pem
 ```
 
-Now, it is:
+现在为：
 
 ```
 gateway.exproto {
@@ -149,7 +149,7 @@ gateway.exproto {
 }
 ```
 
-Previously, the ConnectionHandler configuration was on listeners:
+之前，ConnectionHandler 在监听器上配置：
 
 ```
 exproto.listener.protoname.connection_handler_url = http://127.0.0.1:9001
@@ -158,7 +158,7 @@ exproto.listener.protoname.connection_handler_url = http://127.0.0.1:9001
 #exproto.listener.protoname.connection_handler_keyfile =
 ```
 
-Now, the configuration is:
+现在，配置为：
 
 ```
 gateway.exproto {
@@ -169,17 +169,17 @@ gateway.exproto {
 }
 ```
 
-This means that in version 5.0, it is not possible to specify different ConnectionHandler service addresses for each listening port.
+这意味着在 5.0 版本中，无法为每个监听端口指定不同的 ConnectionHandler 服务地址。
 
 ### CoAP
 
-The implementation specification for the CoAP protocol is completely redesigned.
+对CoAP 协议的实现规范进行了完全重新设计。
 
-Refers to the [Introduction](https://docs.emqx.com/en/enterprise/v5.1/gateway/coap.html#introduction) for the new design.
+请参考 [CoAP](../gateway/coap.md) 以了解新设计的内容。
 
 ### LwM2M
 
-Previously, the option structure was:
+之前，配置项格式为：
 
 ```
 lwm2m.topics.command = dn/#
@@ -189,7 +189,7 @@ lwm2m.topics.register = up/resp
 lwm2m.topics.update = up/resp
 ```
 
-Now, the structure is:
+现在，格式为：
 
 ```
 gateway.lwm2m {

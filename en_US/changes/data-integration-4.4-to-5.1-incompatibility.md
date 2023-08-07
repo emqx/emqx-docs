@@ -4,9 +4,7 @@ The whole concept of Data Integration was upgraded in EMQX 5.1.
 
 - The previous **Rule** -> **Action** -> **Resources** process is changed to **Rules** -> **Data Bridge**. 
 
-   In EMQX 5.1, when adding an action for a certain rule, you must first create a data bridge and modify the bridge's SQL template to adapt the rule output. But in EMQX 4.4, there was a configuration entity for Action.
-
-   Configure the Action(Bridge) for a Rule in EMQX 5.1:
+   In EMQX 4.4, there was a configuration entity for Action. But in EMQX 5.1, when adding an action for a certain rule, you must first create a data bridge and modify the bridge's SQL template to adapt the rule output.
 
    <img src="./assets/config-action-for-rule.png" alt="config-action-for-rule" style="zoom:67%;" />
 
@@ -20,7 +18,7 @@ The whole concept of Data Integration was upgraded in EMQX 5.1.
 
 - [Get Subscriptions](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html) features in EMQX 4.4 are removed.
 
-- Tablestore, DolphinDB, Lindorm, and SAP Event Mesh data bridges are not supported, but SAP Event Mesh is in the product roadmap.
+- Tablestore, DolphinDB, Lindorm, and SAP Event Mesh data bridges are not supported, but SAP Event Mesh is in the [product roadmap](../getting-started/roadmap.md).
 
 - `EMQX Bridge` as a resource type is no longer supported.
 
@@ -51,7 +49,7 @@ The configuration name `nodes` is changed to `servers`.
   - `cache_mode` to `kafka.buffer.mode`
   - Buffer mode enum `memory+disk` to `hybrid`
   - `highmem_drop` to `kafka.buffer.memory_overload_protection`
-- No equivalent in EMQX 5.1
+- No equivalent in EMQX 5.1:
   - `query_api_versions`
   - `kafka_ext_headers`
 - Nested `replayq` related options (e.g.: `max_batch_bytes`) under `kafka` key 
