@@ -20,6 +20,7 @@ Except for the MQTT-specific features, some extended features are also implement
 - [Exclusive Subscription](./mqtt-exclusive-subscription.md)
 - [Delayed Publish](./mqtt-delayed-publish.md)
 - [Auto Subscribe](./mqtt-auto-subscription.md)
+- [Topic Rewrite](./mqtt-topic-rewrite.md)
 
 
 
