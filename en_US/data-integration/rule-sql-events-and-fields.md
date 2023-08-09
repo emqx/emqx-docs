@@ -57,24 +57,11 @@ Refer to the table below for fields that can be selected from the received MQTT 
 
 ## MQTT Events
 
-You can use EMQX rules to handle event notifications, for example, client online and offline, client subscriptions, etc. In this case, you can use the `FROM` clause to specify the event topics. The event topic starts with `"$events/"`, such as `"$events/client_connected"`. 
+You can use EMQX rules to extract data from event topics to get event notifications, for example, client online and offline, client subscriptions, etc. The event topic starts with `"$events/"`, such as `"$events/client_connected"`, which can be specified in the `FROM` clause of the rule.
 
 ::: tip
 
-By default, clients are unable to subscribe directly to MQTT event messages. This tutorial will guide you through the process of using rules to subscribe to these messages. To enable direct subscriptions for MQTT event messages with your clients, you must first add the following configuration items to the `emqx.conf` file. After saving the modifications, restart EMQX to apply the new settings.
-
-```bash
-sys_topics {
-	sys_event_messages {
-		client_connected = true,
-		client_disconnected = true,
-		client_subscribed = true,
-		client_unsubscribed = true
-	}
-}
-```
-
- <!--tech review @WIVWIV-->
+By default, clients are unable to subscribe directly to MQTT event messages. This section describes using rules to subscribe to these messages. You can also obtain the data from MQTT event messages by subscribing to [system topics](../observability/mqtt-system-topics.md).
 
 :::
 
@@ -82,18 +69,18 @@ See the table below for the supported event topic list.
 
 ### Event Topic List
 
-| Event topic name                      | Explanation                     |
-| ------------------------------------- | :------------------------------ |
-| `$events/message_delivered`           | Message delivery                |
-| `$events/message_acked`               | Message acknowledged            |
-| `$events/message_dropped`             | Message dropped when routing    |
-| `$events/delivery_dropped`            | Message dropped when delivering |
-| `$events/client_connected`            | Connection complete             |
-| `$events/client_disconnected`         | Disconnect                      |
-| `$events/client_connack`              | Connection acknowledged         |
-| `$events/client_check_authz_complete` | Authorization check complete    |
-| `$events/session_subscribed`          | Subscribe                       |
-| `$events/session_unsubscribed`        | Unsubscribe                     |
+| Event topic name                                             | Explanation                     |
+| ------------------------------------------------------------ | :------------------------------ |
+| [$events/message_delivered](#message-delivery-event-events-message-delivered) | Message delivery                |
+| [$events/message_acked](#message-acknowledged-event-events-message-acked) | Message acknowledged            |
+| [$events/message_dropped](#message-dropped-when-routing-event-events-message-dropped) | Message dropped when routing    |
+| [$events/delivery_dropped](#message-dropped-when-delivering-event-events-delivery-dropped) | Message dropped when delivering |
+| [$events/client_connected](#connection-complete-event-events-client-connected) | Connection complete             |
+| [$events/client_disconnected](#disconnect-event-events-client-disconnected) | Disconnect                      |
+| [$events/client_connack](#connection-acknowlege-event-events-client-connack) | Connection acknowledged         |
+| [$events/client_check_authz_complete](#authorization-check-complete-event-events-client-check-authz-complete) | Authorization check complete    |
+| [$events/session_subscribed](#subscriber-event-events-session-subscribed) | Subscribe                       |
+| [$events/session_unsubscribed](#unsubcribe-event-events-session-unsubscribed) | Unsubscribe                     |
 
 ### Message Delivery Event ("$events/message_delivered")
 
@@ -246,7 +233,7 @@ Output:
 
 ### Message Dropped When Delivering Event ("$events/delivery_dropped")
 
-This event topic can be used to trigger a rule when a message is dropped during delivering. 
+This event topic can trigger a rule when a message is dropped during delivery. 
 
 For example, to extract data from the `"$events/delivery_dropped"` event topic that includes the following data fields: publisher ID and username, drop reason, message topic and QoS, you can use the statement below: 
 
