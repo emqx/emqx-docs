@@ -490,8 +490,8 @@ mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
 
 {% emqxee %}
 
-## <!--Schema Registry and Sparkplug B Functions-->
+## Schema Registry and Sparkplug B Functions
 
-<!--In the enterprise version of EMQX, the [schema registry](./schema-registry.md) provide the `schema_decode` and `schema_encode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data. You can read more about these functions in [Schema registry](./schema-registry.md). There are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about [the sparkplug function on their documentation page](./sparkplug.md).-->
+In EMQX Enterprise, the [schema registry](./schema-registry.md) provide the `schema_decode` and `schema_encode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data. You can read more about these functions in [Schema registry](./schema-registry.md). There are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about the sparkplug functions in [Sparkplug B](./sparkplug.md).
 
 {% endemqxee %}

@@ -4,7 +4,7 @@ EMQX supports the simplest and most popular password authentication, which requi
 
 Besides the built-in database, EMQX also supports integration with various backend databases for password authentication, including MySQL, PostgreSQL, MongoDB, and Redis. Click the link below for more information:
 
-- [Build-in database](./mnesia.md)
+- [Built-in database](./mnesia.md)
 - [Integrate with MySQL](./mysql.md)
 - [Integrate with PostgreSQL](./postgresql.md)
 - [Integrate with Redis](./redis.md)
