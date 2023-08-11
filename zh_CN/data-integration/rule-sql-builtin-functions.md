@@ -395,19 +395,6 @@ date_to_unix_ts('second', 'local', '%Y-%m-%d %H-%M-%S', '2022-05-26 18:40:12') =
 date_to_unix_ts('second', '%Y-%m-%d %H-%M-%S', '2022-05-26 10:40:12') = 1653561612
 ```
 
-## UUID 函数
-
-| 函数名 | 函数作用       | 参数                              | 返回值       |
-| ------ | -------------- | --------------------------------- | ------------ |
-| uuid_v4  | 产生 Version 4 标准的 UUID  | 无                   | UUID       |
-| uuid_v4_no_hyphen  | 产生不带连字符的 Version 4 标准的 UUID  | 无               | UUID       |
-
-
-```erlang
-uuid_v4() = '4b90d7b7-a185-4bf0-9b97-3f6b8f83b61d'
-uuid_v4_no_hyphen() = 'fb00db84f64a4731b49f42b9ea2e3e34'
-```
-
 {% emqxee %}
 
 **专用于 MongoDB 的时间函数**
@@ -427,6 +414,19 @@ mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
 ```
 
 {% endemqxee %}
+
+## UUID 函数
+
+| 函数名            | 函数作用                               | 参数 | 返回值 |
+| ----------------- | -------------------------------------- | ---- | ------ |
+| uuid_v4           | 产生 Version 4 标准的 UUID             | 无   | UUID   |
+| uuid_v4_no_hyphen | 产生不带连字符的 Version 4 标准的 UUID | 无   | UUID   |
+
+
+```erlang
+uuid_v4() = '4b90d7b7-a185-4bf0-9b97-3f6b8f83b61d'
+uuid_v4_no_hyphen() = 'fb00db84f64a4731b49f42b9ea2e3e34'
+```
 
 ## 用来转换 JSON 数据的 jq 函数
 

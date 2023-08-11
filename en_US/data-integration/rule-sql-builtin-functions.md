@@ -43,6 +43,7 @@ See the table below for a complete list of mathematical functions supported.
 | log           | Logarithm to e                          | Operand                                    |
 | log10         | Logarithm to 10                         | Operand                                    |
 | log2          | Logarithm to 2                          | Operand                                    |
+| random        | Pseudo-random numbers                   | 0 < Operand <= 1                           |
 
 **Examples:**
 
@@ -487,6 +488,19 @@ mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
 ```
 
 {% endemqxee %}
+
+## UUID Function
+
+| Function          | Purpose                                           | Parameters | Return Value |
+| ----------------- | ------------------------------------------------- | ---------- | ------------ |
+| uuid_v4           | Generates Version 4 standard UUID                 | -          | UUID         |
+| uuid_v4_no_hyphen | Generates Version 4 standard UUID without hyphens | -          | UUID         |
+
+
+```erlang
+uuid_v4() = '4b90d7b7-a185-4bf0-9b97-3f6b8f83b61d'
+uuid_v4_no_hyphen() = 'fb00db84f64a4731b49f42b9ea2e3e34'
+```
 
 {% emqxee %}
 
