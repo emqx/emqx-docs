@@ -392,14 +392,21 @@ bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 
 {% emqxee %}
 
-EMQX Enterprise also supports using schema encoding and decoding functions to encode and decode data according to a specified schema. See the table below for a detailed explanation of the functions. 
+### Schema Registry Functions
+
+EMQX Enterprise also supports using `schema_encode` and `schema_decode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data according to a specified schema. You can read more about these functions in [Schema Registry](./schema-registry.md). 
+
+See the table below for a detailed explanation of the functions. 
 
 | Function | Description | Parameters |
 | -------- | ------------------------------------|------------------------- |
 | `schema_encode` | Encode data according to a pre-defined schema. | 1. Schema ID defined by schema registry <br />2. Data to be encoded <br />3 ... N. Remaining arguments according to the schema type |
 | `schema_decode` | Decode data according to a pre-defined schema. | 1. Schema ID defined by schema registry<br /> 2. Data to be decoded <br />3..N. Remaining arguments according to the schema type |
 
-<!-- For examples of schema_encode() and schema_decode(), see [schema registry](schema-registry.md) -->
+### **Sparkplug B Functions**
+
+In EMQX Enterprise, there are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about the sparkplug functions in [Sparkplug B](./sparkplug.md).
+
 {% endemqxee %}
 
 ## Time and Date Functions
@@ -470,7 +477,7 @@ date_to_unix_ts('second', '%Y-%m-%d %H-%M-%S', '2022-05-26 10:40:12') = 16535616
 
 {% emqxee %}
 
-**MongoDB Time Functions**
+### MongoDB Time Functions
 
 | Function | Purpose | Parameters |
 | -------- | ------------------------------------|-------------------------- |
@@ -488,10 +495,3 @@ mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
 
 {% endemqxee %}
 
-{% emqxee %}
-
-## Schema Registry and Sparkplug B Functions
-
-In EMQX Enterprise, the [schema registry](./schema-registry.md) provide the `schema_decode` and `schema_encode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data. You can read more about these functions in [Schema registry](./schema-registry.md). There are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about the sparkplug functions in [Sparkplug B](./sparkplug.md).
-
-{% endemqxee %}
