@@ -1,8 +1,16 @@
+# e5.1.1
+
+-   **After completing a rolling upgrade, the `emqx.log` may display an error message. However, the upgrade is successful and the error message is harmless.**
+
+    When performing a rolling upgrade on a core+replicant cluster, error message `** ERROR ** Mnesia post_commit hook failed: error:badarg` may appear in the logs. However, it is important to note that these errors do not affect the successful upgrade process, and the cluster can be upgraded without any issues.
+
 # e5.1.0
 
 -   **Duplicate "Connection Pool Size" Setting in MongoDB Bridge UI.**
 
     The MongoDB Bridge UI shows two duplicate parameters for "Connection Pool Size". The second one is used to set MongoDB connecting options, which causes confusion and potential configuration errors.
+
+    > **Fixed Version:** 5.1.0
 
 -   **State of TimescaleDB Bridge remains Disconnected after Successful Creation**
 
@@ -11,9 +19,12 @@
     > **Workaround:**
     > Set up users and passwords for the TimescaleDB, and create a data bridge using the correct username and password.
 
+    > **Fixed Version:** 5.1.0
+
 -   **Listener Status Not Updated on Dashboard after Command Line Start/Stop**
 
-    Starting or stopping a listener through following commands does not update the listener's status on the Dashboard, causing confusion about its actual state.
+    Starting or stopping a listener through the following commands does not update the listener's status on the Dashboard, causing confusion about its actual state.
+
     ```
     ./bin/emqx ctl listeners stop tcp:we
     ./bin/emqx ctl listeners start tcp:we
@@ -22,6 +33,7 @@
 -   **Plugin Start/Stop Command Only Affects Executing Node, Not Cluster-Wide**
 
     Starting or stopping a plugin through the following command lines affects only the executing node, not other nodes in the cluster. Executing the command on all nodes or using the Dashboard resolves the issue.
+
     ```
     ./bin/emqx ctl plugins stop emqx_plugin_template-5.0.0
     ./bin/emqx ctl plugins start emqx_plugin_template-5.0.0
@@ -37,6 +49,8 @@
     > **Workaround:**
     > Enable any authentication method and create a connection with the correct authentication information.
 
+    > **Fixed Version:** 5.1.0
+
 -   **Error in Dashboard when Using "crt" for "Use Peer Certificate field as ClientId" Option.**
 
     Selecting "Use Peer Certificate as Client ID" type as "crt" in MQTT causes the client ID to display garbled code on the Dashboard and leads to an error when viewing details.
@@ -48,14 +62,19 @@
     > **Workaround:**
     > Only view and download files from the node to which the file is uploaded.
 
+    > **Fixed Version:** 5.1.0
+
 -   **Listener Port Modification Not Reflected on Dashboard**
 
     Modifying the listener port in the following`emqx.conf` configuration file does not update the displayed port on the Dashboard, causing a discrepancy between the displayed and actual port.
+
     ```
     listeners.tcp.default {
         bind = "0.0.0.1884"
     }
     ```
+
+    > **Fixed Version:** 5.1.0
 
 -   **"Max Connections" Parameter Ineffective for "quic" or "ws" Listeners**
 
@@ -64,3 +83,17 @@
 -   **Inaccurate `client.disconnected` Events Statistics in Rules**
 
     Channels with `clean_session = false` emit two `client.disconnected` events, leading to inaccurate event statistics.
+
+-   **UTF-8 characters like `${payload.'msg'}` can't be parsed in the payload of rule action republish.**
+
+    When creating a rule with republish as the action and using `${payload.'msg'}` in the payload, clients subscribed to the republish topic will receive `${payload.'msg'}` instead of the actual value of `${payload.msg}`.
+
+-   **The default value of "Connection Pool Size" for Oracle Database is 8 and cannot be changed.**
+
+    Regardless of the value set for this parameter, it remains fixed at the default value of 8.
+
+    > **Fixed Version:** 5.1.0
+
+-   **Changing the QoS of a subscribed topic does not update the dashboard and the new QoS does not take effect.**
+
+    When a CoAP client subscribes to a topic with QoS 0 and changes the QoS to 1, the dashboard still displays the original QoS value and the actual QoS remains at 0.
