@@ -1,10 +1,10 @@
-# e5.1.1
+## e5.1.1
 
 -   **After completing a rolling upgrade, the `emqx.log` may display an error message. However, the upgrade is successful and the error message is harmless.**
 
     When performing a rolling upgrade on a core+replicant cluster, error message `** ERROR ** Mnesia post_commit hook failed: error:badarg` may appear in the logs. However, it is important to note that these errors do not affect the successful upgrade process, and the cluster can be upgraded without any issues.
 
-# e5.1.0
+## e5.1.0
 
 -   **Duplicate "Connection Pool Size" Setting in MongoDB Bridge UI.**
 
