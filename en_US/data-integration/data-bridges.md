@@ -4,7 +4,7 @@ Data integration is a channel used to connect EMQX and external data systems, fo
 
 Through data integration, users can send messages from EMQX to the external data system in real time. If bi-directional data integration is used, users can also pull data from the external data system and send it to a topic in EMQX.
 
-::: tip
+::: tip Note
 
 Currently, EMQX only supports bi-directional data integration with Kafka and Pulsar.
 
