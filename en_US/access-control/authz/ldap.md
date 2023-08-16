@@ -8,7 +8,7 @@ This authorizer implements authorization checks by matching publish/subscription
 
 :::
 
-## Data Schema and Query Statement
+## Data Schema and Query
 
 LDAP authorizer supports almost any storage schema. You can determine how to store credentials and access them as your business needs.
 
@@ -40,6 +40,51 @@ objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
 
 ```
 Here defines a multivalued attribute for each action, and each attribute can occur zero or more times which just related to how many topics are allowed for this action.
+
+Here is an LDIF example base on the above schema for OpenLDAP:
+
+```sql
+
+## create organization: emqx.io
+dn:dc=emqx,dc=io
+objectclass: top
+objectclass: dcobject
+objectclass: organization
+dc:emqx
+o:emqx,Inc.
+
+## create organization unit: testdevice.emqx.io
+dn:ou=testdevice,dc=emqx,dc=io
+objectClass: top
+objectclass:organizationalUnit
+ou:testdevice
+
+dn:uid=mqttuser0001,ou=testdevice,dc=emqx,dc=io
+objectClass: top
+objectClass: mqttUser
+uid: mqttuser0001
+## allows publishing to these 3 topics
+mqttPublishTopic: mqttuser0001/pub/1
+mqttPublishTopic: mqttuser0001/pub/+
+mqttPublishTopic: mqttuser0001/pub/#
+## allows subscribe to these 3 topics
+mqttSubscriptionTopic: mqttuser0001/sub/1
+mqttSubscriptionTopic: mqttuser0001/sub/+
+mqttSubscriptionTopic: mqttuser0001/sub/#
+## the underneath topics allow both publish or subscribe
+mqttPubSubTopic: mqttuser0001/pubsub/1
+mqttPubSubTopic: mqttuser0001/pubsub/+
+mqttPubSubTopic: mqttuser0001/pubsub/#
+
+dn:uid=mqttuser0002,ou=testdevice,dc=emqx,dc=io
+objectClass: top
+objectClass: mqttUser
+uid: mqttuser0002
+mqttPublishTopic: mqttuser0002/pub/#
+mqttSubscriptionTopic: mqttuser0002/sub/1
+mqttPubSubTopic: mqttuser0002/pubsub/#
+
+```
 
 ## Configure with Dashboard
 

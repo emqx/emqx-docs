@@ -8,7 +8,7 @@ EMQX supports integrating with LDAP for password authentication.
 
 :::
 
-## Data Schema and Query Statement
+## Data Schema and Query
 
 LDAP authenticator supports almost all LDAP schema. You can determine how to store credentials and access them as your business needs.
 
@@ -28,6 +28,58 @@ objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
 	AUXILIARY
 	MAY ( isSuperuser )
     MUST ( userPassword ) )
+
+```
+Here is an LDIF example base on the above schema for OpenLDAP:
+
+```sql
+
+## create organization: emqx.io
+dn:dc=emqx,dc=io
+objectclass: top
+objectclass: dcobject
+objectclass: organization
+dc:emqx
+o:emqx,Inc.
+
+## create organization unit: testdevice.emqx.io
+dn:ou=testdevice,dc=emqx,dc=io
+objectClass: top
+objectclass:organizationalUnit
+ou:testdevice
+
+## create user=mqttuser0001,
+#         password=mqttuser0001,
+#         passhash={SHA}mlb3fat40MKBTXUVZwCKmL73R/0=
+#         base64passhash=e1NIQX1tbGIzZmF0NDBNS0JUWFVWWndDS21MNzNSLzA9
+dn:uid=mqttuser0001,ou=testdevice,dc=emqx,dc=io
+objectClass: top
+objectClass: mqttUser
+uid: mqttuser0001
+mqttAccountName: user1
+userPassword:: e1NIQX1tbGIzZmF0NDBNS0JUWFVWWndDS21MNzNSLzA9
+
+## create user=mqttuser0002
+#         password=mqttuser0002,
+#         passhash={SSHA}n9XdtoG4Q/TQ3TQF4Y+khJbMBH4qXj4M
+#         base64passhash=e1NTSEF9bjlYZHRvRzRRL1RRM1RRRjRZK2toSmJNQkg0cVhqNE0=
+dn:uid=mqttuser0002,ou=testdevice,dc=emqx,dc=io
+objectClass: top
+objectClass: mqttUser
+uid: mqttuser0002
+mqttAccountName: user2
+userPassword:: e1NTSEF9bjlYZHRvRzRRL1RRM1RRRjRZK2toSmJNQkg0cVhqNE0=
+
+## create a superuser mqttuser0003
+#         password=mqttuser0003,
+#         passhash={MD5}ybsPGoaK3nDyiQvveiCOIw==
+#         base64passhash=e01ENX15YnNQR29hSzNuRHlpUXZ2ZWlDT0l3PT0=
+dn:uid=mqttuser0003,ou=testdevice,dc=emqx,dc=io
+objectClass: top
+objectClass: mqttUser
+uid: mqttuser0003
+isSuperuser: TRUE
+userPassword:: e01ENX15YnNQR29hSzNuRHlpUXZ2ZWlDT0l3PT0=
 
 ```
 
