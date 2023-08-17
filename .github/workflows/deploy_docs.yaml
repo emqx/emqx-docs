@@ -173,11 +173,11 @@ jobs:
             --UrlRedirect.Switch on \
             --UrlRedirect.PathRules.0.RedirectStatusCode 302 \
             --UrlRedirect.PathRules.0.Pattern "/zh/enterprise/latest/*" \
-            --UrlRedirect.PathRules.0.RedirectUrl "/zh/enterprise/v4.4/\$1" \
+            --UrlRedirect.PathRules.0.RedirectUrl "/zh/enterprise/${LATEST_VERSION}/\$1" \
             --UrlRedirect.PathRules.0.RedirectHost https://docs.emqx.com \
             --UrlRedirect.PathRules.1.RedirectStatusCode 302 \
             --UrlRedirect.PathRules.1.Pattern "/en/enterprise/latest/*" \
-            --UrlRedirect.PathRules.1.RedirectUrl "/en/enterprise/v4.4/\$1" \
+            --UrlRedirect.PathRules.1.RedirectUrl "/en/enterprise/${LATEST_VERSION}/\$1" \
             --UrlRedirect.PathRules.1.RedirectHost https://docs.emqx.com \
             --UrlRedirect.PathRules.2.RedirectStatusCode 302 \
             --UrlRedirect.PathRules.2.Pattern "/en/enterprise/v5.0/getting-started.html" \
