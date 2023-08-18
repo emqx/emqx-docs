@@ -1,8 +1,8 @@
 # Integrate with LDAP
 
-This authorizer implements authorization checks by matching publish/subscription requests against lists of attributes stored in the LDAP.
+[Lightweight Directory Access Protocol (LDAP)](https://ldap.com/) is a protocol used to access and manage directory information. EMQX supports integrating with an LDAP server for authorization checks. The LDAP authorizer implements authorization checks by matching publish/subscription requests against lists of attributes stored in the LDAP server.
 
-::: tip Tip
+::: tip Prerequisite
 
 - Knowledge about [basic EMQX authorization concepts](./authz.md)
 
@@ -10,11 +10,7 @@ This authorizer implements authorization checks by matching publish/subscription
 
 ## Data Schema and Query
 
-LDAP authorizer supports almost any storage schema. You can determine how to store credentials and access them as your business needs.
-
-The LDAP authorizer uses an allowed-list strategy, users should provide a list of topics(can include wildcard) for each action. An action is only allowed if its topic can match, otherwise, the LDAP authorizer will ignore it.
-
-Here is a schema example for OpenLDAP:
+The LDAP authorizer checks the client authorization against the authorization data stored within the LDAP directory. An LDAP schema defines the structure and rules for organizing and storing the authorization data. The LDAP authorizer supports almost any storage schema. Here is a schema example for OpenLDAP:
 
 ```sql
 
@@ -39,9 +35,9 @@ objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
 	MAY ( mqttPublishTopic $ mqttSubscriptionTopic $ mqttPubSubTopic  ) )
 
 ```
-Here defines a multivalued attribute for each action, and each attribute can occur zero or more times which just related to how many topics are allowed for this action.
+The LDAP authorizer uses an allowed-list strategy. Users need to define a list of topics (wildcard supported) for each action. An action is only allowed if its topic can match, otherwise, the LDAP authorizer will ignore it.
 
-Here is an LDIF example base on the above schema for OpenLDAP:
+Below is an example of LDAP authorization data specified in [LDAP Data Interchange Format (LDIF)](https://ldap.com/ldif-the-ldap-data-interchange-format/) based on the given schema for OpenLDAP:
 
 ```sql
 
@@ -86,13 +82,42 @@ mqttPubSubTopic: mqttuser0002/pubsub/#
 
 ```
 
+The given example defines a multi-valued attribute for each action. Each attribute can repeat zero or more times depending on how many topics are allowed for this action.
+
+Edit the LDAP configuration file `sladp.conf` to include the schema and LDIF file so that they will be loaded when the LDAP server is started. Below is an example `sladp.conf` file:
+
+::: tip
+
+You can determine how to store LDAP authorization data and access them based on your business needs. 
+
+:::
+
+```sh
+include         /usr/local/etc/openldap/schema/core.schema
+include         /usr/local/etc/openldap/schema/cosine.schema
+include         /usr/local/etc/openldap/schema/inetorgperson.schema
+include         /usr/local/etc/openldap/schema/ppolicy.schema
+include         /usr/local/etc/openldap/schema/emqx.schema
+
+TLSCACertificateFile  /usr/local/etc/openldap/cacert.pem
+TLSCertificateFile    /usr/local/etc/openldap/cert.pem
+TLSCertificateKeyFile /usr/local/etc/openldap/key.pem
+
+database bdb
+suffix "dc=emqx,dc=io"
+rootdn "cn=root,dc=emqx,dc=io"
+rootpw {SSHA}eoF7NhNrejVYYyGHqnt+MdKNBh4r1w3W
+
+directory       /usr/local/etc/openldap/data
+```
+
 ## Configure with Dashboard
 
 You can use EMQX Dashboard to configure how to use LDAP for user authorization.
 
-1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page.
+1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation menu to enter the **Authorization** page.
 
-2. Click **Create** at the top right corner, then click to select **LDAP**** as **Backend**. Click **Next**. The **Configuration** tab is shown below.
+2. Click **Create** at the top right corner, then click to select **LDAP** as **Backend**. Click **Next**. The **Configuration** tab is shown below.
 
 3. Follow the instructions below to do the configuration.
 
@@ -106,17 +131,27 @@ You can use EMQX Dashboard to configure how to use LDAP for user authorization.
 
    **Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
 
-   - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to LDAP. Default: **8**.
+   - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to LDAP. Default: `8`.
    - **Query Timeout** (optional): Specify the waiting period before EMQX assumes the query is timed out. Units supported include milliseconds, second, minute, and hour.
 
    **Authorization configuration**: Fill in the authorization-related settings:
 
-   - **base_dn**: The name of the base object entry (or possibly the root) relative to which the `Search` is to be performed. For more information, see [RFC 4511 Search Request](#https://datatracker.ietf.org/doc/html/rfc4511#section-4.5.1), the placeholders is supported.
-   - **filter**: The `filter` that defines the conditions that must be fulfilled in order for the `Search` to match a given entry.
-The syntax of the filter follows [RFC 4515](#https://www.rfc-editor.org/rfc/rfc4515) and also supports placeholders.
-   - ** publish_attribute **: Indicates which attribute is used to represent the allowed topics list of the `publish`.
-   - ** subscribe_attribute **: Indicates which attribute is used to represent the allowed topics list of the `subscribe`.
-   - ** all_attribute **: Indicates which attribute is used to represent the both allowed topics list of  `publish` and `subscribe`.
+   - **Base DN**: The name of the base object entry (or possibly the root) relative to which the search is to be performed. For more information, see [RFC 4511 Search Request](https://datatracker.ietf.org/doc/html/rfc4511#section-4.5.1), the placeholders are supported.
+
+     ::: tip
+
+     DN refers to Distinguished Name. This is a unique identifier of each object entry and it also describes the location of the entry within the information tree.
+
+     :::
+
+   - **Filter**: The `filter` that defines the conditions that must be fulfilled in order for the `Search` to match a given entry.
+     The syntax of the filter follows [RFC 4515](#https://www.rfc-editor.org/rfc/rfc4515) and also supports placeholders.
+
+   - **Publish_attribute**: Indicates which attribute is used to represent the allowed topics list of the `publish`.
+
+   - **Subscribe_attribute**: Indicates which attribute is used to represent the allowed topics list of the `subscribe`.
+
+   - **All_attribute**: Indicates which attribute is used to represent the both allowed topics list of `publish` and `subscribe`.
 
 4. Click **Create** to finish the settings.
 
