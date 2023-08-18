@@ -19,7 +19,7 @@
   title_cn: 快速开始
   path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
   collapsed: true
-  children: 
+  children:
     - getting-started/new-features
     - getting-started/getting-started
     - getting-started/restrictions
@@ -115,10 +115,10 @@
           lang: cn
           path: connect-emqx/wechat-miniprogram
 
-- title_en: EMQX Essentials 
+- title_en: EMQX Essentials
   title_cn: EMQX 基础知识
   path: mqtt/emqx-essentials
-  collapsed: true 
+  collapsed: true
   children:
     - title_en: MQTT Guide
       title_cn: MQTT Guide
@@ -132,7 +132,7 @@
       title_cn: 认证与鉴权
       collapsed: true
       path: mqtt/emqx-access-control
-      children: 
+      children:
         - title_en: Username and Password Authentication
           title_cn: Username and Password Authentication
           path: https://auth0.com/blog/username-password-authentication/
@@ -211,7 +211,7 @@
       children:
         - performance/tune
         - performance/benchmark
-    
+
 - title_en: Rule Engine
   title_cn: 规则引擎
   path: data-integration/rules
@@ -266,6 +266,7 @@
     - data-integration/data-bridge-iotdb
     - data-integration/data-bridge-opents
     - data-integration/data-bridge-rabbitmq
+    - data-integration/data-bridge-azure-event-hub
 
     # TODO
     # - title_en: Examples and Tutorials
@@ -277,7 +278,7 @@
   title_cn: 管理员指南
   path: admin/admin-guide
   collapsed: true
-  children: 
+  children:
     - title_en: Configuration
       title_cn: 配置文件
       path: configuration/configuration
@@ -341,7 +342,7 @@
   #   title_cn: 配置手册
   #   lang: en
   #   edition: ee
-  #   path: https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html 
+  #   path: https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html
     - title_en: Command Line Interface
       title_cn: 命令行接口
       path: admin/cli
@@ -417,7 +418,7 @@
         - observability/slow-subscribers-statistics
         - observability/tracer
         - observability/mqtt-system-topics
-        - observability/prometheus 
+        - observability/prometheus
     - title_en: Backup and Restore
       title_cn: 备份与恢复
       path: operations/backup-restore
@@ -433,8 +434,8 @@
     - title_en: Telemetry
       title_cn: 遥测
       path: telemetry/telemetry
-      edition: ce 
-        
+      edition: ce
+
 - title_en: Security Guide
   title_cn: 安全指南
   path: access-control/security-guide
@@ -491,7 +492,7 @@
           lang: cn
           path: network/gmssl
       # - network/ipv6
-  
+
 - title_en: Advanced Features
   title_cn: 高级功能
   collapsed: true
@@ -530,13 +531,13 @@
        #- gateway/jt808
        #- gateway/gbt32960
        #- gateway/tcp
-       
+
 
 - title_en: Tutorials
   title_cn: 实用教程
   path: tutorial/tutorial
   collapsed: true
-  children:  
+  children:
     - tutorial/mqtt-programming
     - title_en: How to Achieve Flexible Data Collection for IoV
       title_cn: How to Achieve Flexible Data Collection for IoV
@@ -564,7 +565,7 @@
       lang: cn
       edition: ce
       path: https://www.emqx.com/zh/blog/connecting-coap-devices-to-emqx-cloud
-    - title_en: Million-Level IoV Message Throughput Architecture 
+    - title_en: Million-Level IoV Message Throughput Architecture
       title_cn: Million-Level IoV Message Throughput Architecture
       lang: en
       path: https://www.emqx.com/en/blog/million-level-message-throughput-architecture-design-for-internet-of-vehicles
@@ -605,7 +606,7 @@
       title_cn: Use Terraform to Deploy EMQX
       lang: en
       path: https://www.emqx.com/en/blog/using-terraform-to-deploy-emqx-mqtt-broke
-    - title_en: IoT Data Monitoring Visualzation 
+    - title_en: IoT Data Monitoring Visualzation
       title_cn: IoT 数据可视化监控
       collapsed: true
       children:
@@ -724,8 +725,8 @@
       lang: en
       path: changes/breaking-changes-5.1.0
       children:
-        - title_en: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1 
-          title_cn: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1 
+        - title_en: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1
+          title_cn: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1
           lang: en
           path: changes/auth-4.4-to-5.1-compatibility
         - title_en: Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4
@@ -736,4 +737,3 @@
           title_cn: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
           lang: en
           path: changes/gateway-4.4-to-5.1-incompatibility
-
