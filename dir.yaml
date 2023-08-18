@@ -473,7 +473,7 @@
             - access-control/authz/postgresql
             - access-control/authz/redis
             - access-control/authz/mongodb
-            - access-conetol/authz/ldap
+            - access-control/authz/ldap
         - access-control/blacklist
     - title_en: Network and TLS
       title_cn: 网络与 TLS
