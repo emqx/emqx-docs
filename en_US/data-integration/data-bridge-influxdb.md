@@ -1,4 +1,4 @@
-# Ingest Data into InfluxDB
+# Ingest MQTT Data into InfluxDB
 
 InfluxDB is a database for storing and analyzing time series data. Its powerful data throughput capability and stable performance make it very suitable to be applied in the field of Internet of Things (IoT).
 

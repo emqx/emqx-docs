@@ -1,4 +1,4 @@
-# Ingest Data into Cassandra
+# Ingest MQTT Data into Cassandra
 
 <!-- 提供一段简介，描述支数据桥接的基本工作方式、关键特性和价值，如果有局限性也应当在此处说明（如必须说明的版本限制、当前未解决的问题）。 -->
 

@@ -1,4 +1,4 @@
-# Ingest Data into Redis
+# Ingest MQTT Data into Redis
 
 EMQX supports integration with Redis so you can save MQTT messages and client events to Redis. With Redis data bridge, you can use Redis for message caching and statistics of published/subscribed/discarded messages.
 

@@ -1,4 +1,4 @@
-# Ingest Data into GCP Pub/Sub
+# Ingest MQTT Data into GCP Pub/Sub
 
 EMQX supports seamless integration with [Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=en-us) for real-time extraction, processing and analysis of MQTT data, and can also push and subscribe to various Google Cloud services such as Cloud Functions, App Engine, Cloud Run or Kubernetes Engine or Compute Engine. 
 
