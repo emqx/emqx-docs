@@ -31,7 +31,8 @@ attributetype ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4.3 NAME ( 'mqttPubSubTopic' 'mp
 	USAGE userApplications )
 
 objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
-	AUXILIARY
+    SUP top
+	STRUCTURAL
 	MAY ( mqttPublishTopic $ mqttSubscriptionTopic $ mqttPubSubTopic  ) )
 
 ```
@@ -88,7 +89,7 @@ Edit the LDAP configuration file `sladp.conf` to include the schema and LDIF fil
 
 ::: tip
 
-You can determine how to store LDAP authorization data and access them based on your business needs. 
+You can determine how to store LDAP authorization data and access them based on your business needs.
 
 :::
 

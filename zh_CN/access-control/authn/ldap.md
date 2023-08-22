@@ -21,7 +21,8 @@ attributetype ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.1.4 NAME 'isSuperuser'
 	USAGE userApplications )
 
 objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
-	AUXILIARY
+    SUP top
+	STRUCTURAL
 	MAY ( isSuperuser )
     MUST ( userPassword ) )
 

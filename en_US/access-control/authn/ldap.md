@@ -21,14 +21,15 @@ attributetype ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.1.4 NAME 'isSuperuser'
 	USAGE userApplications )
 
 objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
-	AUXILIARY
+	SUP top
+	STRUCTURAL
 	MAY ( isSuperuser )
     MUST ( userPassword ) )
 
 ```
 The given schema example defines an attribute named `isSuperuser` to indicate whether a user is a superuser, then defines an auxiliary object class named `mqttUser` which is used to represent the user and must include the `userPassword` attribute.
 
-To create LDAP credentials, users need to define some necessary attribute names, the distinguished name (dn) of the base object, and a filter for the LDAP query. 
+To create LDAP credentials, users need to define some necessary attribute names, the distinguished name (dn) of the base object, and a filter for the LDAP query.
 
 Below are some sample LDAP credentials specified in [LDAP Data Interchange Format (LDIF)](https://ldap.com/ldif-the-ldap-data-interchange-format/) based on the given schema for OpenLDAP:
 
@@ -87,7 +88,7 @@ Edit the LDAP configuration file `sladp.conf` to include the schema and LDIF fil
 
 ::: tip
 
-You can determine how to store LDAP credentials and access them based on your business needs. 
+You can determine how to store LDAP credentials and access them based on your business needs.
 
 :::
 

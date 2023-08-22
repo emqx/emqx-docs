@@ -31,7 +31,8 @@ attributetype ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4.3 NAME ( 'mqttPubSubTopic' 'mp
 	USAGE userApplications )
 
 objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
-	AUXILIARY
+    SUP top
+	STRUCTURAL
 	MAY ( mqttPublishTopic $ mqttSubscriptionTopic $ mqttPubSubTopic  ) )
 
 ```
@@ -125,13 +126,13 @@ directory       /usr/local/etc/openldap/data
      - **服务器**：指定 EMQX 要连接的服务器地址（`主机：端口`）。
      - **用户名**：指定 LDAP 根用户名称。
      - **密码**：指定 LDAP 根用户密码。
-   
+
    **TLS 配置**：如果要启用TLS，请打开切换按钮。有关启用TLS的更多信息，请参见[网络和TLS](../../network/overview.md)。
-   
+
    - **连接配置**：设置并发连接数和连接超时前的等待时间。
      - **连接池大小**（可选）：输入一个整数值来定义EMQX节点到 LDAP 的并发连接数。默认值：`8`。
      - **查询超时**（可选）：指定 EMQX 在查询超时之前的等待时间。支持的单位包括毫秒、秒、分钟和小时。
-   
+
    **授权配置**：填写与授权相关的设置：
 
    - **基本 DN**：相对于要执行搜索的基本对象条目（或可能是根）的名称。有关更多信息，请参见 [RFC 4511搜索请求](https://datatracker.ietf.org/doc/html/rfc4511#section-4.5.1)，支持使用占位符。
@@ -143,13 +144,13 @@ directory       /usr/local/etc/openldap/data
      :::
 
    - **查询 Filter**：LDAP 查询筛选器，定义搜索匹配给定条目必须满足的条件。 过滤器的语法遵循 [RFC 4515](https://www.rfc-editor.org/rfc/rfc4515)，也支持占位符。
-     
+
    - **发布属性**: 填写列出允许发布主题的属性。
-   
+
    - **订阅属性**: 填写列出允许订阅主题的属性。
-   
+
    - **发布订阅属性**: 填写列出允许发布和订阅主题的属性。
-   
+
 4. 点击**创建**完成设置。
 
 ## 通过配置文件配置
