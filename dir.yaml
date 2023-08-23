@@ -308,6 +308,9 @@
     - title_en: RabbitMQ
       title_cn: RabbitMQ
       path: data-integration/data-bridge-rabbitmq
+    - title_en: GreptimeDB
+      title_cn: GreptimeDB
+      path: data-integration/data-bridge-greptimedb
 
     # TODO
     # - title_en: Examples and Tutorials
