@@ -1,4 +1,4 @@
-# Ingest Data into GreptimeDB
+# Ingest MQTT Data into GreptimeDB
 
 [GreptimeDB](https://github.com/GreptimeTeam/greptimedb) is an open-source time-series database with a special focus on scalability, analytical capabilities and efficiency. It's designed to work on infrastructure of the cloud era, and users benefit from its elasticity and commodity storage.
 
@@ -48,8 +48,8 @@ greptime/greptimedb standalone start \
 
 ```
 
-2. The `user-provider` argument configures the GreptimeDB authentication, you can configure it by file refer to [doc](https://docs.greptime.com/user-guide/clients/authentication#authentication).
-3. With GreptimeDB running, visit [http://localhost:4000/dashboard](http://localhost:4000/dashboard) to use the GreptimeDB dashbaord.For the username and password is `greptime_user` and `greptime_pwd`.
+2. The `user-provider` parameter configures the GreptimeDB authentication. You can configure it by file. For more information, refer to the [documentation](https://docs.greptime.com/user-guide/clients/authentication#authentication).
+3. With GreptimeDB running, visit [http://localhost:4000/dashboard](http://localhost:4000/dashboard) to use the GreptimeDB dashbaord. The username and password are `greptime_user` and `greptime_pwd`.
 
 ### Create GreptimeDB Data Bridge
 
@@ -59,25 +59,26 @@ greptime/greptimedb standalone start \
 
 3. In the **Create Data Bridge** page, click to select **GreptimeDB**, and then click **Next**.
 
-4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers. 
+4. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers. 
 
-5. Input the connection information.
-   - For **Server Host**, input `127.0.0.1:4001`. If you are creating a connection to GreptimeCloud, use 443 as the port No., that is, input `{url}:443`.
-   - For the **dbname**, input `public`. If you are connecting to GreptimeCloud, input the service name instead.
-   - For the `username` and `password`, input `greptime_user` and `greptime_pwd`, which are set in  the [Install GreptimeDB](#install-greptimedb-server) step. If you are connecting to GreptimeCloud, intput the service username and password.
-
-6. Set the **Time Precision**, it is set to millisecond by default. 
-
-7. Select **Data Format** as **JSON** or **LINE PROTOCOL**, GreptimeDB supports compatible data format with InfluxDB.
+5. Configure the connection information.
+   - **Server Host**: Enter `127.0.0.1:4001`. If you are creating a connection to GreptimeCloud, use 443 as the port by entering `{url}:443`.
+   - **Database**: Enter `public`. If you are connecting to GreptimeCloud, enter the service name instead.
+   - **Username** and **Password**: Enter `greptime_user` and `greptime_pwd`, which are set in the [Install GreptimeDB Server](#install-greptimedb-server). If you are connecting to GreptimeCloud, enter the service username and password.
+   - **Time Precision**: Select `millisecond` by default. 
+   - **Enable TLS**: Click the toggle switch to enable the TLS connection if you want to establish a secured connection. For more information on TLS connection, refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+   
+6. Configure **Write Syntax**. Select the data format as **JSON** or **Line Protocol**, GreptimeDB supports compatible data format with InfluxDB.
 
    - For **JSON** format, define data parsing method, including **Measurement**, **Timestamp**, **Fields,** and **Tags**. Note: All key values can be variables and you can also follow the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/) to set them.
 
-   - For **LINE PROTOCOL** format, specify a text-based format that provides the measurement, tag set, field set, timestamp of a data point, and placeholder supported according to the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) syntax.
-   
+   - For **Line Protocol** format, specify a text-based format that provides the measurement, tags, fields, and timestamp of a data point, and placeholder supported according to the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) syntax.
+
      ::: tip
 
      - To write a signed integer type value to GreptimeDB, add `i` as the type identifier after the placeholder, for example, `${payload.int}i`.
      - To write an unsigned integer type value to GreptimeDB, add `u` as the type identifier after the placeholder, for example, `${payload.int}u`. 
+
      :::
 
 8. Advanced settings (optional): Choose whether to use **sync** or **async** query mode, and whether to enable queue or batch. For details, see [Configuration](./data-bridges.md).
@@ -86,7 +87,7 @@ greptime/greptimedb standalone start \
 
 10. Click the **Create** button to finish the setup.
 
-Now the GreptimeDB data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
+Now the GreptimeDB data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as `Connected`.
 
 ### Create a Rule for GreptimeDB Bridge
 
@@ -110,7 +111,7 @@ You can continue to create rules to specify the data to be saved into GreptimeDB
 4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge we just created under **Data Bridge**. Then click the **Add** button.
 5. Click **Create** at the page bottom to finish the creation.
 
-Now a rule to forward data to GreptimeDB via an GreptimeDB bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to GreptimeDB after parsing by rule  `my_rule`.
+Now a rule to forward data to GreptimeDB via a GreptimeDB bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to GreptimeDB after parsing by rule  `my_rule`.
 
 ### Test the Data Bridge and Rule
 
