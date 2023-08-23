@@ -28,7 +28,7 @@ objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
 
 ```
 
-此数据结构定义了一个名为 `isSuperuser` 的属性，用于指示用户是否为超级用户，然后定义了一个附加对象类 `mqttUser`，用于表示用户，并且必须包括 `userPassword` 属性。
+此数据结构定义了一个名为 `isSuperuser` 的属性，用于指示用户是否为超级用户，还定义了一个对象类 `mqttUser`，用于表示用户，并且对像类必须包括 `userPassword` 属性。
 
 要创建 LDAP 认证数据，用户需要定义一些必要的属性名称，基本对象 (object) 的专有名称 (Distinguished Name, DN) 以及 LDAP 查询筛选器 (filter)。以下是根据提供的 OpenLDAP 数据结构使用 LDAP 数据交换格式 (LDIF) 创建的一些示例 LDAP 认证数据：
 
@@ -107,8 +107,6 @@ rootpw {SSHA}eoF7NhNrejVYYyGHqnt+MdKNBh4r1w3W
 
 directory       /usr/local/etc/openldap/data
 ```
-
-启用 LDAP 认证后，你可以通过用户名：，密码：连接 EMQX。
 
 ## 通过 Dashboard 配置
 

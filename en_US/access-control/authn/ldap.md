@@ -27,7 +27,7 @@ objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
     MUST ( userPassword ) )
 
 ```
-The given schema example defines an attribute named `isSuperuser` to indicate whether a user is a superuser, then defines an auxiliary object class named `mqttUser` which is used to represent the user and must include the `userPassword` attribute.
+The given schema example defines an attribute named `isSuperuser` to indicate whether a user is a superuser. It also defines an object class named `mqttUser` which is used to represent the user and the object class must include the `userPassword` attribute.
 
 To create LDAP credentials, users need to define some necessary attribute names, the distinguished name (dn) of the base object, and a filter for the LDAP query.
 
@@ -110,8 +110,6 @@ rootpw {SSHA}eoF7NhNrejVYYyGHqnt+MdKNBh4r1w3W
 
 directory       /usr/local/etc/openldap/data
 ```
-
-When the LDAP authentication is enabled, you can connect to EMQX using the username `?` and `?`.
 
 ## Configure with Dashboard
 
