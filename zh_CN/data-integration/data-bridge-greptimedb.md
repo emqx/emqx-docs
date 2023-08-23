@@ -25,9 +25,13 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 ## 快速开始
 
+本节介绍如何使用 GreptimeDB 数据桥接，包括如何设置 GreptimeDB 服务器、创建用于将数据转发到 GreptimeDB 的数据桥接和规则，以及测试数据桥接和规则等主题。
+
+本教程假设您在同一台本地机器上运行 EMQX 和 GreptimeDB。如果您在远程运行 GreptimeDB 和 EMQX，请相应调整设置。
+
 ### 安装 GreptimeDB
 
-1. 通过 Docker 安装并启动 GreptimeDB，详细步骤请参考 [下载安装GreptimeDB](https://greptime.cn/download)。
+1. 通过 Docker 安装并启动 GreptimeDB，详细步骤请参考[下载安装GreptimeDB](https://greptime.cn/download)。
 
 ```bash
 # 启动一个 GreptimeDB 容器
@@ -56,34 +60,37 @@ greptime/greptimedb standalone start \
 
 4. 输入数据桥接名称，要求是大小写英文字母和数字的组合。
 
-5. 输入 GreptimeDB 连接信息
-   - 服务器地址填写 **127.0.0.1:4001**。如果是 GreptimeCloud 需要指定端口为 443，即填入 **{url}:443**。
-   - **数据库名称**填入 `public`，如果 GreptiemCloud，请输入 service 名称。
-   - **用户名**和**密码**设置成 `greptime_user` 和 `greptime_pwd`。
-
-6. 设定**时间精度**，默认为毫秒。
-
+5. 输入 GreptimeDB 连接信息：
+   - **服务器地址**：输入 `127.0.0.1:4001`。如果是 GreptimeCloud 需要指定端口为 443，即输入 `{url}:443` 。
+   - **数据库**：输入数据库名称 `public`，如果 GreptiemCloud，请输入 service 名称。
+   - **用户名**和**密码**：设置成 `greptime_user` 和 `greptime_pwd`。
+   - **时间精度**：默认为毫秒。
+   
 7. 定义数据格式为 JSON 或 Line Protocol， GreptimeDB 使用和 InfluxDB 兼容的数据格式：
 
-   - 对于 JSON 格式，需设置数据的 **Measurement**，**Fields**，**Timestamp** 与 **Tags**，键值均支持变量，可以使用[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。
+   - 对于 **JSON** 格式，需设置数据的 **Measurement**，**Fields**，**Timestamp** 与 **Tags**，键值均支持变量，可以使用[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。
 
-   - 对于 Line Protocol 格式，请通过一段语句指定数据点的 Measurement、Fields、Timestamp 与 Tags，键值均支持变量，可按照[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。
+   - 对于 **Line Protocol** 格式，请通过一段语句指定数据点的 Measurement、Fields、Timestamp 与 Tags，键值均支持变量，可按照[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。
    
-  :::tip
-   - 如希望输入带符号的整型值，请在占位符后添加 `i` 作为类型标识，例如 `${payload.int}i`。
+     ::: tip
    
-   - 对于无符号整型值，请在占位符后添加 `u` 作为类型标识，例如 `${payload.uint}u`。
-   :::
+     - 如希望输入带符号的整型值，请在占位符后添加 `i` 作为类型标识，例如 `${payload.int}i`。
+     - 对于无符号整型值，请在占位符后添加 `u` 作为类型标识，例如 `${payload.uint}u`。
+   
+     :::
+   
 
-8. 高级配置（可选），根据情况配置同步/异步模式，队列等参数，详细请参考[配置参数](#配置参数)。
+8. 高级配置（可选），根据情况配置同步/异步模式，队列等参数，详细请参考[配置参数](./data-bridges.md)。
 
 9. 设置完成后，您可点击**测试连接**按钮进行验证。
 
 10. 点击**创建**按钮完成数据桥接创建。
 
-至此您已经完成数据桥接创建流程，接下来将继续创建一条规则来指定需要写入的数据：
+至此您已经完成数据桥接创建流程。在数据桥接列表（集成 -> 数据桥接）中应出现 GreptimeDB 数据桥接，**资源状态**为`已连接`。
 
 ### 创建规则
+
+您可以继续创建一条规则来指定需要写入的数据。
 
 1. 转到 Dashboard **数据集成** -> **规则页面**。
 2. 点击页面右上角的**创建**。
@@ -112,4 +119,4 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello GreptimeDB" }'
 
 分别查看两个数据桥接运行统计，命中、发送成功次数均 +1。
 
-前往 GreptimeDB Dashboard 查看数据是否已经写入 GreptimeDB 中。
+前往 GreptimeDB dashboard 查看数据是否已经写入 GreptimeDB 中。
