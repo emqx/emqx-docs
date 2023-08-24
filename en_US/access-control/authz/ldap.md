@@ -120,6 +120,8 @@ You can use EMQX Dashboard to configure how to use LDAP for user authorization.
 
 2. Click **Create** at the top right corner, then click to select **LDAP** as **Backend**. Click **Next**. The **Configuration** tab is shown below.
 
+   <img src="./assets/authz-ldap.png" alt="authz-ldap"  />
+
 3. Follow the instructions below to do the configuration.
 
    **Connect**: Fill in the information needed to connect to LDAP.

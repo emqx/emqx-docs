@@ -120,6 +120,8 @@ directory       /usr/local/etc/openldap/data
 
 2. 单击**+ 创建**，选择 **LDAP** 作为 **数据源**。点击**下一步**进入**配置参数**页签：
 
+   <img src="./assets/authz-ldap.png" alt="authz-ldap" style="zoom:90%;" />
+
 3. 按照以下说明进行配置：
 
    - **连接设置**：填写连接到 LDAP 服务器所需的信息。
