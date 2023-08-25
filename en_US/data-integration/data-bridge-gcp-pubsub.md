@@ -1,6 +1,6 @@
-# Ingest Data into GCP Pub/Sub
+# Ingest MQTT Data into GCP Pub/Sub
 
-EMQX supports seamless integration with [Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=en-us) for real-time extraction, processing and analysis of MQTT data, and can also push and subscribe to various Google Cloud services such as Cloud Functions, App Engine, Cloud Run or Kubernetes Engine or Compute Engine.
+EMQX supports seamless integration with [Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=en-us) for real-time extraction, processing, and analysis of MQTT data. Additionally, it enables data push and subscription to various Google Cloud services such as Cloud Functions, App Engine, Cloud Run, Kubernetes Engine, and Compute Engine.
 
 EMQX GCP Pub/Sub integration allows you to send MQTT messages and events to GCP Pub/Sub, which can help you flexibly choose services on Google Cloud and build IoT applications more easily.
 
@@ -32,9 +32,9 @@ This section introduces how to configure the GCP Pub/Sub data bridge, including 
 
 You need to create a service account and a service account key to use the GCP PubSub service.
 
-1. Create a [Service Account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) in your GCP account.  Ensure that the Service Account has permissions to at least publish messages to the topic of interest.
+1. Create a [Service Account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) in your GCP account.  Ensure that the Service Account has permission to at least publish messages to the topic of interest.
 
-2. Click the email address for the service account you created. Click the **Key** tab. In the **Add key** drop-down list, select **Create new key** to create a Sercice Account key for that account and download it in JSON format.
+2. Click the email address for the service account you created. Click the **Key** tab. In the **Add key** drop-down list, select **Create new key** to create a Service Account key for that account and download it in JSON format.
 
    ::: tip
 
@@ -83,26 +83,27 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
 3. In the **Create Data Bridge** page, click to select **Google PubSub**, and then click **Next**.
 
-4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
+4. In the **Name** field, enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
+
+5. In the **Bridge Role** field, select `Producer` or `Consumer` from the drop-down list according to your business needs and complete the corresponding configurations. 
 
    :::: tabs type:card
 
    ::: tab Configure as Producer Role
 
-   - In **GCP PubSub Topic** field, input the topic id you created in [Create and Manage Topic in GCP](#create-and-manage-topic-in-gcp).
-
-   - In the **Payload Template** field, leave it blank or define a template.
-
+   - **GCP PubSub Topic**: Enter the topic ID `my-iot-core` you created in [Create and Manage Topic in GCP](#create-and-manage-topic-in-gcp).
+   - **GCP Service Account Credentials**: Upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
+   - **Payload Template**: leave it blank or define a template.
       - If left blank, it will encode all visible inputs from the MQTT message using JSON format, such as clientid, topic, payload, etc.
-      - If use the defined template, placeholders of the form `${variable_name}` will be filled with the corresponding value from the MQTT context.  For example, `${topic}` will be replaced with `my/topic` if such is the MQTT message topic.
-
+      - If using the defined template, placeholders of the form `${variable_name}` will be filled with the corresponding value from the MQTT context.  For example, `${topic}` will be replaced with `my/topic` if such is the MQTT message topic.
+   - **Attributes Template**: You can click **Add** to enter the key and value for formatting the outgoing message attributes.
    - Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed.
 
    :::
 
    ::: tab Configure as Consumer Role
 
-   :::
+   - In the **GCP Service Account Credentials** field, upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
 
    - The **Topic Mapping** field must contain at least one GCP PubSub-to-MQTT topic mapping. The **MQTT Payload Template** subfield specifies the MQTT payload that should be used, and has the following GCP PubSub message fields available for templating:
 
@@ -132,9 +133,11 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
      **Note**: Each GCP PubSub-to-MQTT topic mapping must contain a unique GCP PubSub topic name.  That is, the GCP PubSub topic must not be present in more than one mapping.
 
-   ::::
+   - Leave other options as default.
 
-5. In the **GCP Service Account Credentials** field, upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
+   :::
+
+   ::::
 
 6. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Redis server.
 
