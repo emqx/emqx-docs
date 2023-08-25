@@ -25,7 +25,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 This section introduces how to stream data into or from Azure Event Hubs through the data bridge, covering topics like how to set up Azure Event Hub, how to create a bridge and a rule for forwarding data to the bridge, and how to test the data bridge and rule.
 
-### Setup Azure Event Hub
+### Set Up Azure Event Hub
 
 In order to use Azure Event Hub data integration, a Namespace and Event Hub must be set up in the Azure account.  The following links to the official documentation provide details on how to do the setup.
 
@@ -52,12 +52,12 @@ This section demonstrates how to create Azure Event Hubs producer data bridge vi
 
 6. Configure the data bridge information.
    - **Event Hub Name**: Enter the name of the Event Hub to be used. Note: Variables are not supported here.
-   - **Azure Event Hub Headers**:
-   - **Azure Event Hub Header value encode mode**:
-   - **Extra Azure Event Hub headers**:
+   - **Azure Event Hub Headers**: Enter a placeholder to be used as headers that will be added to the messages when being published to Azure Event Hub.
+   - **Azure Event Hub Header value encode mode**: Select the value encode mode for the header; optional values are `none` or `json`.
+   - **Extra Azure Event Hub headers**: You can click **Add** to provide more key-value pairs for Azure Event Hub headers.
    - **Message Key**: Event hub message key. Insert a string here, either a plain string or a string containing placeholders (${var}).
    - **Message Value**: Event hub message value. Insert a string here, either a plain string or a string containing placeholders (${var}).
-   - **Message Timestamp**: Specify the type of timestamp to be used。
+   - **Message Timestamp**: Specify the type of timestamp to be used.
 
 7. Advanced settings (optional): Set the **Max Batch Bytes**, **Required Acks**, and **Partition Strategy** as your business needs.
 
