@@ -60,19 +60,19 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 2. 点击页面右上角的**创建**。
 
-3. 在**创建数据桥接**页面，点击选择**Amazon Kinesis**，然后点击**下一步**。
+3. 在**创建数据桥接**页面，点击选择 **Amazon Kinesis**，然后点击**下一步**。
 
 4. 为数据桥接输入一个名称。名称应为大写/小写字母和数字的组合。
 
 5. 输入 Amazon Kinesis Data Streams 服务的连接信息：
 
-   - **Amazon Kinesis 终端点**：输入 Kinesis 服务的[终端节点](https://docs.aws.amazon.com/zh_cn/general/latest/gr/ak.html)。如果使用 [LocalStack](#在本地模拟-amazon-kinesis-data-streams)，输入`http://localhost:4566`。
    - **AWS 访问密钥 ID**：输入[访问密钥 ID](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html)。如果使用 LocalStack，可输入任何值。
-   - **AWS 密钥**：输入[密钥](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html)。如果使用 LocalStack，可输入任何值。
+   - **AWS 秘密访问密钥**：输入[密钥](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html)。如果使用 LocalStack，可输入任何值。
+   - **Amazon Kinesis 端点**：输入 Kinesis 服务的[终端节点](https://docs.aws.amazon.com/zh_cn/general/latest/gr/ak.html)。如果使用 [LocalStack](#在本地模拟-amazon-kinesis-data-streams)，输入`http://localhost:4566`。
    - **AWS Kinesis 流**：输入您[在 Amazon Kinesis Data Streams 中创建数据流](#在-amazon-kinesis-data-streams-中创建数据流)中创建的数据流名称。
    - **分区键**：输入将与发送到此数据流的记录关联的分区键。允许使用 `${variable_name}` 形式的占位符（查看下一步以了解占位符示例）。
 
-6. 在**Payload Template**字段中，将其留空或定义模板。
+6. 在 **Payload Template** 字段中，将其留空或定义模板。
 
    - 如果留空，它将使用 JSON 格式编码 MQTT 消息中的所有可见输入，例如 clientid、topic、payload 等。
    - 如果使用定义的模板，`${variable_name}` 形式的占位符将使用 MQTT 上下文中的相应值进行填充。例如，如果 MQTT 消息主题是 `my/topic`，`${topic}` 将被替换为 `my/topic`。
