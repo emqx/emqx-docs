@@ -244,7 +244,7 @@ Rebalance stopped
 
 ### 通过 HTTP API 启停重平衡
 
-所有关于重平衡的操作也可以通过 API 进行。开启和停止重平衡需要在参数中指定操作节点。具体命令及操作，见 [API 文档](https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html)。
+所有关于重平衡的操作也可以通过 API 进行。开启和停止重平衡需要在参数中指定操作节点。具体命令及操作，见 [API 文档](https://docs.emqx.com/zh/enterprise/v5.1/admin/api-docs.html)。
 
 ## 集成负载均衡器
 
