@@ -199,7 +199,12 @@
     - deploy/cluster/mria-introduction
     - deploy/cluster/create-cluster
     - deploy/cluster/security
-    - deploy/cluster/lb
+    - title_en: Configure Load Balancer
+      title_cn: 集群负载均衡
+      path: deploy/cluster/lb
+      children:
+        - deploy/cluster/lb-nginx
+        # - deploy/cluster/lb-haproxy
     - title_en: Node Evacuation and Cluster Load Rebalancing
       title_cn: 节点疏散与集群负载重平衡
       edition: ee
