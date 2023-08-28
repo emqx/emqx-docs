@@ -43,11 +43,11 @@ This section demonstrates how to create Azure Event Hubs producer data bridge vi
 2. Click **Create** on the top right corner of the page.
 3. In the **Create Data Bridge** page, click to select **Azure Event Hubs**, and then click **Next**.
 4. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
-3. Configure the connection information. 
+3. Configure the connection information.
 
    - **Bootstrap Hosts**: Enter the Host Name for your Namespace.  The default port is `9093`.  For the other fields set as the actual condition.
    - **Connection String**: Enter the Connection String for the Namespace.  It can be found in the "connection string-primary key" of a Namespace shared access policy. For more information, see [Get an Event Hubs connection string](https://learn.microsoft.com/en-us/azure/event-hubs/event-hubs-get-connection-string).
-   - **Enable TLS**: TLS is enabled by default for connecting to Azure Event Hub. For more information on TLS connection options, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access). 
+   - **Enable TLS**: TLS is enabled by default for connecting to Azure Event Hub. For more information on TLS connection options, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
    - Leave other fields by default or specify the value as your business needs.
 
 6. Configure the data bridge information.
@@ -110,4 +110,4 @@ Now you have successfully created the data bridge to Azure Event Hub producer da
 
 Check the running status of the data bridge and there should be one new outgoing message.
 
-Check whether messages are written into the configured Event Hub in the Azure Portal dashboard.
+Check whether messages are written into the configured Event Hub using any Kafka-compatible consumer.
