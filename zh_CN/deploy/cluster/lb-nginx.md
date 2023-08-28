@@ -23,19 +23,19 @@ git clone https://github.com/emqx/emqx-usage-example
 cd emqx-usage-example/mqtt-lb-nginx
 ```
 
-1. 接着，通过 Docker Compose 启动示例：
+2. 接着，通过 Docker Compose 启动示例：
 
 ```bash
 docker compose up -d
 ```
 
-1. 使用 MQTTX CLI 建立 10 个 TCP 连接，模拟 MQTT 客户端连接：
+3. 使用 MQTTX CLI 建立 10 个 TCP 连接，模拟 MQTT 客户端连接：
 
 ```bash
 mqttx bench conn -c 10
 ```
 
-1. 在此之后，您可以查看 Nginx 连接监控情况以及 EMQX 客户端连接的分布情况：
+4. 在此之后，您可以查看 Nginx 连接监控情况以及 EMQX 客户端连接的分布情况：
     - 通过以下命令查看 Nginx 连接监控：
 
     ```bash
