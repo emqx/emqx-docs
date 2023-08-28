@@ -93,10 +93,12 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
    - **GCP PubSub Topic**: Enter the topic ID `my-iot-core` you created in [Create and Manage Topic in GCP](#create-and-manage-topic-in-gcp).
    - **GCP Service Account Credentials**: Upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
-   - **Payload Template**: leave it blank or define a template.
+   - **Payload Template**: Leave it blank or define a template.
       - If left blank, it will encode all visible inputs from the MQTT message using JSON format, such as clientid, topic, payload, etc.
       - If using the defined template, placeholders of the form `${variable_name}` will be filled with the corresponding value from the MQTT context.  For example, `${topic}` will be replaced with `my/topic` if such is the MQTT message topic.
-   - **Attributes Template**: You can click **Add** to enter the key and value for formatting the outgoing message attributes.
+   - **Attributes Template** and **Ordering Key Template** (optional): Similarly, you can define templates for formatting the attributes and/or ordering key of the outgoing message. 
+      - For **Attributes**, both keys and values may use placeholders of the form `${variable_name}`.  Such values will be extracted from the MQTT context.  If a key template resolves to an empty string, that key is omitted from the outgoing message to GCP PubSub.
+      - For **Ordering Key**, placeholders of the form `${variable_name}` may be used.  If the resolved value is an empty string, the `orderingKey` field will not be set for the GCP PubSub outgoing message.
    - Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed.
 
    :::
