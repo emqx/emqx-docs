@@ -104,7 +104,7 @@ def publish_msg(client):
    t/1 b'\n\x05Shawn\x10\x01\x1a\rliuxy@emqx.io'
    ```
 
-6. 检查 Websocket 端收到主题为 `avro_user/Shawn` 的消息:
+6. 检查 Websocket 端收到主题为 `person/Shawn` 的消息:
 
    ```json
    {"email":"liuxy@emqx.io","id":1,"name":"Shawn"}
