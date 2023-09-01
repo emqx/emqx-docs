@@ -179,27 +179,27 @@ Nginx 反向代理 MQTT 连接，将客户端请求转发至后端 MQTT 服务�
 ```bash
 stream {
   upstream mqtt_servers {
-  # down：表示当前的 server 暂时不参与负载
+    # down：表示当前的 server 暂时不参与负载
     # max_fails：允许请求失败的次数；默认为 1
     # fail_timeout：失败超时时间，默认 10s, max_fails 达到次数后暂停的请求时间
     # backup：其它所有的非backup机器down或者忙的时候，请求backup机器
 
     server emqx1-cluster.emqx.io:1883 max_fails=2 fail_timeout=10s;
     server emqx2-cluster.emqx.io:1883 down;
-  server emqx3-cluster.emqx.io:1883 backup;
+    server emqx3-cluster.emqx.io:1883 backup;
   }
 
   server {
     listen 1883;
     proxy_pass mqtt_servers;
 
-  # 启用此项时，对应后端监听器也需要启用 proxy_protocol
-  proxy_protocol on;
-  proxy_connect_timeout 10s;   
-  # 默认心跳时间为 10 分钟
-   proxy_timeout 1800s;
-   proxy_buffer_size 3M;
-   tcp_nodelay on;       
+    # 启用此项时，对应后端监听器也需要启用 proxy_protocol
+    proxy_protocol on;
+    proxy_connect_timeout 10s;   
+    # 默认心跳时间为 10 分钟
+    proxy_timeout 1800s;
+    proxy_buffer_size 3M;
+    tcp_nodelay on;       
   }
 }
 ```
@@ -222,27 +222,27 @@ stream {
     listen 8883 ssl;
 
     ssl_session_cache shared:SSL:10m;
-  ssl_session_timeout 10m;
-  ssl_certificate /usr/local/nginx/certs/emqx.pem;
-  ssl_certificate_key /usr/local/nginx/certs/emqx.key;
-  ssl_verify_depth 2;
-  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-  ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_session_timeout 10m;
+    ssl_certificate /usr/local/nginx/certs/emqx.pem;
+    ssl_certificate_key /usr/local/nginx/certs/emqx.key;
+    ssl_verify_depth 2;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers HIGH:!aNULL:!MD5;
 
-  # 添加 CA 证书及开启验证客户端证书参数即可启用双向认证
-  # ssl_client_certificate /usr/local/nginx/certs/ca.pem;
-  # ssl_verify_client on;
-  # ssl_verify_depth 1;
+    # 添加 CA 证书及开启验证客户端证书参数即可启用双向认证
+    # ssl_client_certificate /usr/local/nginx/certs/ca.pem;
+    # ssl_verify_client on;
+    # ssl_verify_depth 1;
 
     proxy_pass mqtt_servers;
 
-  # 启用此项时，对应后端监听器也需要启用 proxy_protocol
-  proxy_protocol on;
-  proxy_connect_timeout 10s;   
-  # 默认心跳时间为 10 分钟
-   proxy_timeout 1800s;
-   proxy_buffer_size 3M;
-   tcp_nodelay on;
+    # 启用此项时，对应后端监听器也需要启用 proxy_protocol
+    proxy_protocol on;
+    proxy_connect_timeout 10s;   
+    # 默认心跳时间为 10 分钟
+    proxy_timeout 1800s;
+    proxy_buffer_size 3M;
+    tcp_nodelay on;
   }
 }
 
@@ -264,26 +264,26 @@ http {
     server_name mqtt.example.com;
 
     location /mqtt {
-        proxy_pass http://mqtt_websocket_servers;
+      proxy_pass http://mqtt_websocket_servers;
 
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
 
-    # 禁用缓存             
-        proxy_buffering off;
+      # 禁用缓存             
+      proxy_buffering off;
 
-    proxy_connect_timeout 10s;        
-        # WebSocket 连接有效时间
-    # 在该时间内没有数据交互的话 WebSocket 连接会自动断开，默认为 60s 
-        proxy_send_timeout 3600s;            
-        proxy_read_timeout 3600s;            
+      proxy_connect_timeout 10s;        
+      # WebSocket 连接有效时间
+      # 在该时间内没有数据交互的话 WebSocket 连接会自动断开，默认为 60s 
+      proxy_send_timeout 3600s;            
+      proxy_read_timeout 3600s;            
 
-    # 反向代理真实 IP            
-        proxy_set_header Host $host;            
-        proxy_set_header X-Real-IP $remote_addr;            
-        proxy_set_header REMOTE-HOST $remote_addr;            
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      # 反向代理真实 IP            
+      proxy_set_header Host $host;            
+      proxy_set_header X-Real-IP $remote_addr;            
+      proxy_set_header REMOTE-HOST $remote_addr;            
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
   }
 }
@@ -307,15 +307,15 @@ http {
     server_name mqtt.example.com;
 
     ssl_session_cache shared:SSL:10m;
-  ssl_session_timeout 10m;
-  ssl_certificate /usr/local/nginx/certs/emqx.pem;
-  ssl_certificate_key /usr/local/nginx/certs/emqx.key;
-  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-  ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_session_timeout 10m;
+    ssl_certificate /usr/local/nginx/certs/emqx.pem;
+    ssl_certificate_key /usr/local/nginx/certs/emqx.key;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers HIGH:!aNULL:!MD5;
 
-  # 添加 CA 证书及开启验证客户端证书参数即可启用双向认证
-  # ssl_client_certificate /usr/local/nginx/certs/ca.pem;
-  # ssl_verify_client on;
+    # 添加 CA 证书及开启验证客户端证书参数即可启用双向认证
+    # ssl_client_certificate /usr/local/nginx/certs/ca.pem;
+    # ssl_verify_client on;
 
     location /mqtt {
         proxy_pass http://mqtt_websocket_servers;
@@ -323,7 +323,7 @@ http {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
 
-    # 反向代理真实 IP            
+        # 反向代理真实 IP            
         proxy_set_header Host $host;            
         proxy_set_header X-Real-IP $remote_addr;            
         proxy_set_header REMOTE-HOST $remote_addr;            
@@ -348,9 +348,9 @@ Nginx 提供了多种负载均衡策略，用于控制连接的分发方式。�
 
 ```bash
 upstream backend_servers {
-    server emqx1-cluster.emqx.io:1883;
-    server emqx2-cluster.emqx.io:1883;
-    server emqx3-cluster.emqx.io:1883;
+  server emqx1-cluster.emqx.io:1883;
+  server emqx2-cluster.emqx.io:1883;
+  server emqx3-cluster.emqx.io:1883;
 }
 ```
 
@@ -360,9 +360,9 @@ upstream backend_servers {
 
 ```bash
 upstream backend_servers {
-    server emqx1-cluster.emqx.io:1883 weight=3;
-    server emqx2-cluster.emqx.io:1883 weight=2;
-    server emqx3-cluster.emqx.io:1883 weight=1;
+  server emqx1-cluster.emqx.io:1883 weight=3;
+  server emqx2-cluster.emqx.io:1883 weight=2;
+  server emqx3-cluster.emqx.io:1883 weight=1;
 }
 ```
 
@@ -372,10 +372,10 @@ upstream backend_servers {
 
 ```bash
 upstream backend_servers {
-    ip_hash;
-    server emqx1-cluster.emqx.io:1883;
-    server emqx2-cluster.emqx.io:1883;
-    server emqx3-cluster.emqx.io:1883;
+  ip_hash;
+  server emqx1-cluster.emqx.io:1883;
+  server emqx2-cluster.emqx.io:1883;
+  server emqx3-cluster.emqx.io:1883;
 }
 ```
 
@@ -385,10 +385,10 @@ upstream backend_servers {
 
 ```bash
 upstream backend_servers {
-    least_conn;
-    server emqx1-cluster.emqx.io:1883;
-    server emqx2-cluster.emqx.io:1883;
-    server emqx3-cluster.emqx.io:1883;
+  least_conn;
+  server emqx1-cluster.emqx.io:1883;
+  server emqx2-cluster.emqx.io:1883;
+  server emqx3-cluster.emqx.io:1883;
 }
 ```
 
@@ -426,7 +426,7 @@ stream {
     * 10.211.55.23;    
   }
 
- upstream mqtt_servers {
+  upstream mqtt_servers {
     server emqx1-cluster.emqx.io:1883;
     server emqx2-cluster.emqx.io:1883;
   }
@@ -435,7 +435,7 @@ stream {
     listen 1883;
 
     proxy_pass mqtt_servers;
-  proxy_bind $multi_ip;
+    proxy_bind $multi_ip;
   }
 }
 
