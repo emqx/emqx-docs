@@ -102,12 +102,14 @@ Now you have successfully created the data bridge to Azure Event Hub producer da
 
 ### Test the Data Bridge and Rule
 
- Use MQTTX to send messages to topic  `t/1`:
+To test if the Kafka producer data bridge and rule work as you expected, you can use the [MQTTX](https://mqttx.app/) to simulate a client to publish MQTT messages to EMQX.
+
+1. Use MQTTX to send messages to topic  `t/1`:
 
 ```bash
    mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Azure Event Hub" }'
 ```
 
-Check the running status of the data bridge and there should be one new outgoing message.
+2. Click the name of the data bridge on the **Data Bridge** page to view the statistics. Check the running status of the data bridge and there should be one new outgoing message.
 
-Check whether messages are written into the configured Event Hub using any Kafka-compatible consumer.
+3. Check whether messages are written into the configured Event Hub using any Kafka-compatible consumer. For more information about using the Kafka CLI, see [Use the Kafka CLI to Send and Receive Messages to/from Azure Event Hubs for Apache Kafka Ecosystem](https://github.com/Azure/azure-event-hubs-for-kafka/tree/master/quickstart/kafka-cli).

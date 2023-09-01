@@ -29,7 +29,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 ### 设置 Azure Event Hubs
 
-为了使用 Azure Event Hub 数据集成，必须在 Azure 账户中设置命名空间和事件中心。以下链接指向官方文档，详细介绍了如何进行设置。
+为了使用 Azure Event Hub 数据集成，必须在 Azure 账户中设置命名空间和事件中心。以下 Azure 官方文档详细介绍了如何进行设置。
 
 - [什么是适用于 Apache Kafka 的 Azure 事件中心](https://learn.microsoft.com/zh-cn/azure/event-hubs/azure-event-hubs-kafka-overview)
 - [快速入门：使用 Azure 门户创建事件中心](https://learn.microsoft.com/zh-cn/azure/event-hubs/event-hubs-create)
@@ -113,12 +113,14 @@ FROM
 
 ### 测试数据桥接和规则
 
-使用 MQTTX 向 `t/1` 主题发布消息：
+您可以使用 [MQTTX](https://mqttx.app/zh) 来模拟客户端向 EMQX 发送 MQTT 消息来测试数据桥接和规则的运行。
+
+1. 使用 MQTTX 向 `t/1` 主题发布消息：
 
 ```bash
    mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Azure Event Hub" }'
 ```
 
-查看数据桥接运行统计，命中、发送成功次数应当 +1。
+2. 在**数据桥接**页面点击桥接名称查看数据桥接运行统计，命中、发送成功次数应当 +1。
 
-在 Azure 门户仪表板中检查是否将消息写入配置的事件中心。
+3. 在 Azure 门户仪表板中检查是否将消息写入配置的事件中心。使用任何兼容 Kafka 的消费者，检查消息是否被写入配置的事件中心。有关使用 Kafka CLI 的更多信息，请参阅 [Use the Kafka CLI to Send and Receive Messages to/from Azure Event Hubs for Apache Kafka Ecosystem](https://github.com/Azure/azure-event-hubs-for-kafka/tree/master/quickstart/kafka-cli)。
