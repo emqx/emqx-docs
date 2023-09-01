@@ -155,7 +155,7 @@ EMQX 使用 `odbcinst.ini` 配置中的 DSN Name 来确定驱动动态库的路�
    RUN apt-get update \
        && apt-get install -y gnupg2 curl apt-utils \
        && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-       && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-mkc crelease.list \
+       && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
        && apt-get update \
        && ACCEPT_EULA=Y apt-get install -y msodbcsql17 unixodbc-dev \
        && sed -i 's/ODBC Driver 17 for SQL Server/ms-sql/g' /etc/odbcinst.ini \
