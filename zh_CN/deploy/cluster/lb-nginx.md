@@ -10,11 +10,22 @@ Nginx 是一种高性能的 Web 服务器和反向代理服务器，适用于物
 - Nginx 可用于终结 MQTT 的 SSL 连接，从而提供多种优势，如提高性能、简化证书管理和增强安全性。
 - Nginx 具有灵活的负载均衡策略，如粘性负载平衡，可将请求路由到同一后端服务器，从而提高性能和会话持久性。
 
+
+## 架构
+
+在开始使用之前，你需要了解如何[构建 EMQX 集群](./introduction.md)。
+
+本章节将使用单个 Nginx 服务器配置为负载均衡器，将请求转发到由 3 个 EMQX 节点组成的集群。
+
+| 节点地址              | MQTT TCP 端口 | MQTT WebSocket 端口 |
+| --------------------- | ------------- | ------------------- |
+| emqx1-cluster.emqx.io | 1883          | 8083                |
+| emqx2-cluster.emqx.io | 1883          | 8083                |
+| emqx3-cluster.emqx.io | 1883          | 8083                |
+
 ## 快速入门
 
-此处提供了一个具有实际示例的 Docker Compose 配置，让您能够轻松地进行验证和测试。
-
-这个示例的目标是将单个 Nginx 服务器配置为反向代理，将请求转发到由 3 个 EMQX 节点组成的集群。您可以按照以下步骤来进行操作：
+此处提供了一个具有实际示例的 Docker Compose 配置，让您能够轻松地进行验证和测试，您可以按照以下步骤来进行操作：
 
 1. 首先，克隆示例仓库并进入 `mqtt-lb-nginx` 目录：
 
@@ -67,7 +78,7 @@ mqttx bench conn -c 10
     live_connections.count        : 3
     ```
 
-通过以上步骤，您可以验证示例中的 Nginx 反向代理功能，以及 EMQX 集群中客户端连接的分布情况。您也可以更改 `emqx-usage-example/mqtt-lb-nginx/nginx.conf` 文件进行自定义的配置验证。
+通过以上步骤，您可以验证示例中的 Nginx 负载均衡功能，以及 EMQX 集群中客户端连接的分布情况。您也可以更改 `emqx-usage-example/mqtt-lb-nginx/nginx.conf` 文件进行自定义的配置验证。
 
 接下来，我们将从头介绍如何安装并配置 Nginx 实现各类场景下的负载均衡需求。
 

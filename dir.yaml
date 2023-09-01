@@ -204,7 +204,7 @@
       path: deploy/cluster/lb
       children:
         - deploy/cluster/lb-nginx
-        # - deploy/cluster/lb-haproxy
+        - deploy/cluster/lb-haproxy
     - title_en: Node Evacuation and Cluster Load Rebalancing
       title_cn: 节点疏散与集群负载重平衡
       edition: ee
