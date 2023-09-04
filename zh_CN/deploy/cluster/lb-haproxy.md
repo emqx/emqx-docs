@@ -1,23 +1,21 @@
-# HAProxy 负载均衡 MQTT 部署 EMQX 集群
+# 用 HAProxy 负载均衡 EMQX 集群
 
-本章节介绍了如何使用 HAProxy 部署负载均衡以及 EMQX 集群来搭建 MQTT 服务器。
+HAProxy 是一款免费、快速并且可靠的负载均衡软件，可以将来自客户端的网络连接请求分发到多个后端服务器。EMQX 原生支持由多个 MQTT 服务器组成的分布式集群架构。通过 HAProxy 部署 EMQX 集群，可以对来自物联网设备的 MQTT 连接进行负载均衡，将大量的设备连接分发到集群中不同的 EMQX 节点。
 
-HAProxy 是一款免费、快速并且可靠的负载均衡软件。它可用来对 MQTT 连接进行负载均衡，将大量的设备连接分发到不同的 EMQX 节点。
+本页主要介绍了如何安装和配置 HAProxy 来搭建 MQTT 服务器从而为 EMQX 集群实现负载均衡。
 
-## 优势
+## 功能与优势
 
-HAProxy 用于 EMQX MQTT 负载均衡时有以下优势：
+HAProxy 用于 EMQX MQTT 负载均衡时有以下功能和优势：
 
 - 使用 HAProxy 部署 EMQX 集群，通过反向代理隐藏后端节点信息，对外提供统一的接入地址，提升了系统的可维护性和扩展性。
 - 支持终结 MQTT over TLS 连接，减轻了 EMQX 的 SSL 加密计算负载，同时简化了证书部署和管理。
 - 内置对 MQTT 协议的支持，可以解析 MQTT 报文实现会话黏性等智能负载均衡机制，以及识别非法连接进行丢弃，增强了安全防护。
 - 提供主备高可用机制，配合后端健康检查，可以实现毫秒级故障切换，确保服务的连续可用性。
 
-## 架构
+## 前置准备
 
-在开始使用之前，你需要了解如何[构建 EMQX 集群](./introduction.md)。
-
-本章节将使用单个 HAProxy 服务器配置为负载均衡器，将请求转发到由 3 个 EMQX 节点组成的集群。
+在开始使用之前，确保您已经创建了由以下 3 个 EMQX 节点组成的集群。需要了解如何创建 EMQX 集群，详见[创建与管理集群](./create-cluster.md)。
 
 | 节点地址              | MQTT TCP 端口 | MQTT WebSocket 端口 |
 | --------------------- | ------------- | ------------------- |
@@ -25,7 +23,9 @@ HAProxy 用于 EMQX MQTT 负载均衡时有以下优势：
 | emqx2-cluster.emqx.io | 1883          | 8083                |
 | emqx3-cluster.emqx.io | 1883          | 8083                |
 
-## 快速入门
+本页中的示例将使用单个 Nginx 服务器配置为负载均衡器，将请求转发到由这 3 个 EMQX 节点组成的集群。
+
+## 快速体验
 
 此处提供了一个具有实际示例的 Docker Compose 配置，让您能够轻松地进行验证和测试，您可以按照以下步骤来进行操作：
 
@@ -36,20 +36,20 @@ git clone https://github.com/emqx/emqx-usage-example
 cd emqx-usage-example/mqtt-lb-haproxy
 ```
 
-1. 接着，通过 Docker Compose 启动示例：
+2. 接着，通过 Docker Compose 启动示例：
 
 ```bash
 docker compose up -d
 ```
 
-1. 使用 MQTTX CLI 建立 10 个 TCP 连接，模拟 MQTT 客户端连接：
+3. 使用 MQTTX CLI 建立 10 个 TCP 连接，模拟 MQTT 客户端连接：
 
 ```bash
 mqttx bench conn -c 10
 ```
 
-1. 在此之后，您可以查看 HAProxy 连接监控情况以及 EMQX 客户端连接的分布情况：
-    - 通过 HAProxy 状态监控页面 [http://localhost:8888/stats](http://localhost:8888/stats) 查看客户端连接情况
+4. 在此之后，您可以查看 HAProxy 连接监控情况以及 EMQX 客户端连接的分布情况。
+    - 通过 HAProxy 状态监控页面 [http://localhost:8888/stats](http://localhost:8888/stats) 查看客户端连接情况：
 
     ![HAProxy stats MQTT](./assets/haproxy-stats-mqtt.png)
 
@@ -129,6 +129,8 @@ sudo systemctl status haproxy
 
 ## 基础配置
 
+以下是启动 HAProxy 服务器需要的参考配置。需要确保 `haproxy.cfg` 配置文件中包含这两项配置。
+
 ```bash
 global  
   log 127.0.0.1 local3 info 
@@ -147,9 +149,9 @@ defaults
   maxconn 20000
 ```
 
-## **反向代理 MQTT**
+## 反向代理 MQTT 
 
-HAProxy 反向代理 MQTT 连接，将客户端请求转发至后端 MQTT 服务器。
+您可以在 HAProxy 的配置文件中添加以下配置来反向代理 MQTT 连接，将客户端请求转发至后端 MQTT 服务器。
 
 ```bash
 backend mqtt_backend
@@ -159,7 +161,7 @@ backend mqtt_backend
 
  # 增加 send-proxy 会把真实带给 EMQX，对应后端监听器需要启用 proxy_protocol
   # server emqx1 emqx1-cluster.emqx.io:1883 check send-proxy
- server emqx1 emqx1-cluster.emqx.io:1883
+  server emqx1 emqx1-cluster.emqx.io:1883
   server emqx2 emqx2-cluster.emqx.io:1883
   server emqx3 emqx3-cluster.emqx.io:1883
 
@@ -171,9 +173,9 @@ frontend mqtt_servers
   default_backend mqtt_backend
 ```
 
-## 反向代理 **MQTT TLS**
+## 反向代理 MQTT SSL
 
-HAProxy 反向代理 MQTT 并解密 TLS 连接，将客户端加密的 MQTT 请求解密后转发至后端 MQTT 服务器，以确保通信安全性。
+您可以通过以下配置使 HAProxy 反向代理 MQTT 并解密 TLS 连接，将客户端加密的 MQTT 请求解密后转发至后端 MQTT 服务器，以确保通信安全性。
 
 只需在 TCP 基础配置上添加 SSL 与证书相关参数即可：
 
@@ -183,7 +185,7 @@ backend mqtt_backend
   balance roundrobin
  
  # 增加 send-proxy 会把真实 IP 带给 EMQX，对应后端监听器需要启用 proxy_protocol
- server emqx1 emqx1-cluster.emqx.io:1883 check-send-proxy send-proxy-v2
+  server emqx1 emqx1-cluster.emqx.io:1883 check-send-proxy send-proxy-v2
   server emqx2 emqx2-cluster.emqx.io:1883 check-send-proxy send-proxy-v2
   server emqx3 emqx3-cluster.emqx.io:1883 check-send-proxy send-proxy-v2
 
@@ -195,9 +197,9 @@ frontend mqtt_tls_frontend
   default_backend mqtt_backend
 ```
 
-## 反向代理 **MQTT WebSocket**
+## 反向代理 MQTT WebSocket
 
-HAProxy 在反向代理 MQTT WebSocket 连接，将客户端请求转发至后端 MQTT 服务器。需要使用  `server_name` 指定 HTTP 域名或 IP 地址。
+您可以通过以下配置使 HAProxy反向代理 MQTT WebSocket 连接，将客户端请求转发至后端 MQTT 服务器。需要使用  `server_name` 指定 HTTP 域名或 IP 地址。
 
 ```bash
 backend mqtt_ws_backend
@@ -215,7 +217,7 @@ frontend mqtt_ws_frontend
 
 ## 反向代理 **MQTT WebSocket SSL**
 
-HAProxy 反向代理 MQTT WebSocket 并解密 TLS 连接，将客户端加密的 MQTT 请求解密后转发至后端 MQTT 服务器，以确保通信安全性。需要使用  `server_name` 指定 HTTP 域名或 IP 地址。
+您可以通过以下配置使 HAProxy 反向代理 MQTT WebSocket 并解密 TLS 连接，将客户端加密的 MQTT 请求解密后转发至后端 MQTT 服务器，以确保通信安全性。需要使用  `server_name` 指定 HTTP 域名或 IP 地址。
 
 只需在 WebSocket 基础配置上添加 SSL 与证书相关参数即可：
 
@@ -235,11 +237,11 @@ frontend mqtt_ws_tls_frontend
 
 ## 负载均衡策略
 
-HAProxy 提供了多种负载均衡策略，用于控制连接的分发方式。在实际使用中，请根据您的服务器性能和流量需求等，选择适当的负载均衡策略非常重要。
+HAProxy 提供了多种负载均衡策略，用于控制连接的分发方式。在实际使用中，根据您的服务器性能、流量需求等选择适当的负载均衡策略非常重要。
 
 以下是 HAProxy 支持的负载均衡策略与配置方式。
 
-### **轮询（Round Robin）**
+### 轮询（Round Robin）
 
 这是默认的负载均衡策略，它将请求依次分配给每个后端服务器，循环往复。这样可以平均分担负载，适用于后端服务器性能差不多的情况。
 
@@ -247,12 +249,12 @@ HAProxy 提供了多种负载均衡策略，用于控制连接的分发方式。
 backend mqtt_backend
   mode tcp
   balance roundrob
- server emqx1 emqx1-cluster.emqx.io:1883 check
+  server emqx1 emqx1-cluster.emqx.io:1883 check
   server emqx2 emqx2-cluster.emqx.io:1883 check
   server emqx3 emqx3-cluster.emqx.io:1883 check
 ```
 
-### **权重轮询（Weighted Round Robin）**
+### 权重轮询（Weighted Round Robin）
 
 在轮询基础上，为每个 EMQX 节点分配不同的权重，从而影响请求分配的比例。权重越高的服务器会获得更多的请求。
 
@@ -260,12 +262,12 @@ backend mqtt_backend
 backend mqtt_backend
   mode tcp
   balance roundrobin
- server emqx1 emqx1-cluster.emqx.io:1883 check weight 5
+  server emqx1 emqx1-cluster.emqx.io:1883 check weight 5
   server emqx2 emqx2-cluster.emqx.io:1883 check weight 2
   server emqx3 emqx3-cluster.emqx.io:1883 check weight 3
 ```
 
-### **IP 哈希（IP Hash）**
+### IP 哈希（IP Hash）
 
 根据客户端的 IP 地址进行哈希计算，然后将请求分配给一个固定的后端服务器。这确保同一个客户端的请求总是分发到同一个服务器上。
 
@@ -273,12 +275,12 @@ backend mqtt_backend
 backend mqtt_backend
   mode tcp
   balance source
- server emqx1 emqx1-cluster.emqx.io:1883
+  server emqx1 emqx1-cluster.emqx.io:1883
   server emqx2 emqx2-cluster.emqx.io:1883
   server emqx3 emqx3-cluster.emqx.io:1883
 ```
 
-### **最少连接数（Least Connections）**
+### 最少连接数（Least Connections）
 
 请求分发到当前连接数最少的服务器，以确保每个服务器的负载尽可能平衡。适用于后端服务器性能差异较大的情况。
 
@@ -286,7 +288,7 @@ backend mqtt_backend
 backend mqtt_backend
   mode tcp
   balance leastconn
- server emqx1 emqx1-cluster.emqx.io:1883
+  server emqx1 emqx1-cluster.emqx.io:1883
   server emqx2 emqx2-cluster.emqx.io:1883
   server emqx3 emqx3-cluster.emqx.io:1883
 ```
@@ -308,7 +310,7 @@ backend mqtt_backend
   # 使用客户端 ID 作为键
   stick on req.payload(0，0)，mqtt_field_value(connect，client_identifier)
  
- server emqx1 emqx1-cluster.emqx.io:1883
+  server emqx1 emqx1-cluster.emqx.io:1883
   server emqx2 emqx2-cluster.emqx.io:1883
   server emqx3 emqx3-cluster.emqx.io:1883
 ```
@@ -334,6 +336,6 @@ frontend stats
 
 ### HAProxy 高可用方案介绍
 
-HAProxy 和 Keepalived 是一种常见的高可用性和负载均衡解决方案的组合。Keepalived 是Linux下⼀个轻量级别的⾼可⽤解决⽅案，它可以管理多个服务器上的虚拟 IP 地址（VIP），并确保在某个服务器不可用时将 VIP 迁移到另一个服务器，从而实现高可用性。Keepalived 还可以监控 HAProxy 进程，并在需要时重新启动它，以确保负载均衡服务的可用性。
+HAProxy 和 Keepalived 是一种常见的高可用性和负载均衡解决方案的组合。Keepalived 是 Linux下⼀个轻量级别的⾼可⽤解决⽅案，它可以管理多个服务器上的虚拟 IP 地址（VIP），并确保在某个服务器不可用时将 VIP 迁移到另一个服务器，从而实现高可用性。Keepalived 还可以监控 HAProxy 进程，并在需要时重新启动它，以确保负载均衡服务的可用性。
 
 通过使用 Keepalived，可以确保 HAProxy 的高可用性。如果主要的 HAProxy 服务器出现故障，Keepalived 将自动将 VIP 迁移到备用服务器上，从而确保服务的连续性。

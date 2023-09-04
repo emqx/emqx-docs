@@ -157,7 +157,7 @@ sudo make install
 sudo ln -s /usr/local/nginx/sbin/nginx /usr/local/bin/nginx
 ```
 
-## 使用基本命令
+## 开始使用
 
 Nginx 的配置文件默认位于 `/usr/local/nginx/conf/nginx.conf`，将本页的配置示例添加到文件末尾即可。Nginx 基本操作命令如下：
 
@@ -185,7 +185,7 @@ sudo nginx -s reload
 sudo nginx stop
 ```
 
-## 配置反向代理 MQTT 连接
+## 反向代理 MQTT 
 
 您可以在 Nginx 的配置文件中添加以下配置来反向代理来自客户端的 MQTT 连接请求，将请求转发至后端 MQTT 服务器。
 
@@ -217,9 +217,9 @@ stream {
 }
 ```
 
-## 配置反向代理 TLS 加密的 MQTT 连接
+## 反向代理 MQTT SSL
 
-Nginx 反向代理 MQTT 并解密 TLS 连接，将客户端加密的 MQTT 请求解密后转发至后端 MQTT 服务器，以确保通信安全性。
+您可以通过以下配置使 Nginx 反向代理 MQTT 并解密 TLS 连接，将客户端加密的 MQTT 请求解密后转发至后端 MQTT 服务器，以确保通信安全性。
 
 只需在 TCP 基础配置上添加 SSL 与证书相关参数即可：
 
@@ -261,9 +261,9 @@ stream {
 
 ```
 
-## 配置反向代理 MQTT WebSocket 连接
+## 反向代理 MQTT WebSocket 
 
-Nginx 在反向代理 MQTT WebSocket 连接，将客户端请求转发至后端 MQTT 服务器。需要使用  `server_name` 指定 HTTP 域名或 IP 地址。
+您可以使用以下配置使 Nginx 反向代理 MQTT WebSocket 连接，将客户端请求转发至后端 MQTT 服务器。需要使用  `server_name` 指定 HTTP 域名或 IP 地址。
 
 ```bash
 http {
@@ -302,9 +302,9 @@ http {
 }
 ```
 
-## 配置反向代理 TLS 加密的 MQTT WebSocket 连接
+## 反向代理 MQTT WebSocket SSL
 
-Nginx 反向代理 MQTT WebSocket 并解密 TLS 连接，将客户端加密的 MQTT 请求解密后转发至后端 MQTT 服务器，以确保通信安全性。需要使用  `server_name` 指定 HTTP 域名或 IP 地址。
+您可以使用以下配置使 Nginx 反向代理 MQTT WebSocket 并解密 TLS 连接，将客户端加密的 MQTT 请求解密后转发至后端 MQTT 服务器，以确保通信安全性。需要使用  `server_name` 指定 HTTP 域名或 IP 地址。
 
 只需在 WebSocket 基础配置上添加 SSL 与证书相关参数即可：
 
@@ -349,7 +349,7 @@ http {
 }
 ```
 
-## 配置负载均衡策略
+## 负载均衡策略
 
 Nginx 提供了多种负载均衡策略，用于控制连接的分发方式。在实际使用中，根据您的服务器性能、流量需求等选择适当的负载均衡策略非常重要。
 
@@ -405,9 +405,28 @@ upstream backend_servers {
 }
 ```
 
+### MQTT 粘性（Sticky）会话
+
+MQTT 粘性会话负载均衡仅在 Nginx Plus 版本中可用，本章节中编译安装的 Nginx 无法引用该配置。有关使用 Nginx Plus 优化 MQTT 连接的操作可参阅此[文档](https://www.nginx.com/blog/optimizing-mqtt-deployments-in-enterprise-environments-nginx-plus/)。
+
+「粘性」是负载均衡器在重新连接时将客户端路由到之前服务器的能力，在 MQTT 中可以避免会话接管。这对于多客户端频繁重新连接或有问题的客户端断开连接再次连接的情况特别有用，能够提高有效性。
+
+为了实现粘性，服务器需要识别连接请求中的客户端标识符（通常是客户端 ID），这需要负载均衡器检查 MQTT 数据包。一旦获取客户端标识符，对于静态集群，服务器可以将其散列到服务器 ID，或者负载均衡器可以维护客户端标识符到目标节点 ID 的映射表以提供更灵活的路由。
+
+```bash
+mqtt_preread on; 
+
+upstream backend_servers {
+    hash $mqtt_preread_clientid consistent;
+    server emqx1-cluster.emqx.io:1883;
+    server emqx2-cluster.emqx.io:1883;
+    server emqx3-cluster.emqx.io:1883;
+}
+```
+
 请注意，上述示例配置可能需要根据您的实际情况进行调整。配置中使用的模块（如 **`ip_hash`**、**`least_conn`**）都是 Nginx 内置的模块，无需额外的模块依赖。
 
-## 配置性能优化与监控功能
+## 性能优化与监控
 
 ### Nginx 基础配置调整
 
@@ -471,7 +490,7 @@ http {
 }
 ```
 
-打开 `[http://localhost:8888/status](http://localhost:8888/status)` 即可查看状态数据：
+打开 [http://localhost:8888/status](http://localhost:8888/status) 即可查看状态数据：
 
 ```bash
 $ curl http://localhost:8888/status
