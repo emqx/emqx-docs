@@ -338,4 +338,4 @@ frontend stats
 
 HAProxy 和 Keepalived 是一种常见的高可用性和负载均衡解决方案的组合。Keepalived 是 Linux下⼀个轻量级别的⾼可⽤解决⽅案，它可以管理多个服务器上的虚拟 IP 地址（VIP），并确保在某个服务器不可用时将 VIP 迁移到另一个服务器，从而实现高可用性。Keepalived 还可以监控 HAProxy 进程，并在需要时重新启动它，以确保负载均衡服务的可用性。
 
-通过使用 Keepalived，可以确保 HAProxy 的高可用性。如果主要的 HAProxy 服务器出现故障，Keepalived 将自动将 VIP 迁移到备用服务器上，从而确保服务的连续性。
+通过使用 Keepalived，可以确保 HAProxy 的高可用性。如果主要的 HAProxy 服务器出现故障，Keepalived 将自动将 VIP 迁移到备用服务器上，从而确保服务的连续性。想要了解如何使用该方案，请参考 [HAProxy 文档](https://www.haproxy.com/documentation/hapee/latest/high-availability/active-standby/)。
