@@ -71,9 +71,9 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
         - zookeeper
         - hstore
       ports:
-        - "127.0.0.1:6670:6570"
+        - "127.0.0.1:6570:6570"
       expose:
-        - 6670
+        - 6570
       networks:
         - quickstart-tcp
       volumes:
@@ -196,7 +196,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 - 此 docker compose 文件使用了 `172.100.0.0/24` 网段作为 docker network bridge，如有其他网络配置需求，请自行更改 Docker Compose 文件。
 - 请注意不要为容器设置默认的 `http_proxy`, `https_proxy`, `all_proxy` 等环境变量，目前版本中这些环境变量会影响 HStream 各个容器间的通讯。参考 [_Docker Network Proxy_](https://docs.docker.com/network/proxy/)
-- 根证书及自签名证书使用了 [_smallstep/step-ca_](https://hub.docker.com/r/smallstep/step-ca) 容器进行自动化生成，并配置了 `172.100.0.10` 及 `172.100.0.11` 两个主题备用名。
+- 根证书及自签名证书使用了 [_smallstep/step-ca_](https://hub.docker.com/r/smallstep/step-ca) 容器进行自动化生成，并配置了 `172.100.0.10` 及 `172.100.0.11` 两个主题备用名称。
 - 如有其他证书需求，请自行挂载证书文件至 HStreamDB 容器或参考 [_Configuring step-ca_](https://smallstep.com/docs/step-ca/configuration/index.html)。
   - step-ca 默认配置下生成的证书仅有一天有效期，若要更改证书有效期配置，请删除 `ca` 目录下的证书，并根据 [_step-ca-configuration-options_](https://smallstep.com/docs/step-ca/configuration/#configuration-options) 更改证书有效期
 
@@ -499,7 +499,8 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 5. 输入 HStreamDB 连接信息。
    - **服务器地址**： `hstream://127.0.0.1:6570`，或使用实际的 HStreamDB 地址和端口
-     - 对与 TLS 连接，scheme 需要使用 `hstreams`，如 `hstreams://127.0.0.1:6570`。
+     - schema 支持 `http`、`https`、`hstream`、`hstreams`
+     - 对与 TLS 连接，scheme 需要使用 `hstreams` 或 `https`，如 `hstreams://127.0.0.1:6570`。
    - **HStreamDB 流名称**： 需要写入的 Stream 名，如 `mqtt_connect` 或 `mqtt_message`。
    - **启用 TLS**： 启用 TLS 连接时，关闭 `验证服务器证书`
      - `tls-deploy/ca` 目录下生成的证书及私钥文件： `ca/certs/root_ca.crt`，`ca/hstream.crt`，`ca/hstream.key` 分别填入 `CA Cert`，`TLS Cert`，`TLS Key`。
