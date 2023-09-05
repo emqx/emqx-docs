@@ -6,17 +6,32 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 :::
 {% endemqxce %}
 
-EMQX supports integration with MongoDB so you can save MQTT messages and client events to MongoDB.
-
-<!--As the beginning paragraph, you should provide a brief introduction to the external database or data processing services, and also describe what the data integration can do, such as streaming data, real-time analysis, series data storage, etc. Optionally, you can add a high-level picture, indicating if the data integration is single-directional or bi-directional, producing data or writing data into the database.-->
+MongoDB, a leading NoSQL database, is renowned for its flexibility in schema design, scalability, and capacity to store large volumes of structured and semi-structured data. By integrating EMQX with MongoDB, users can efficiently ingest MQTT messages and client events directly into MongoDB. This facilitates long-term series data storage and advanced querying capabilities within MongoDB. The integration ensures a single-directional flow, where MQTT messages from EMQX are written into the MongoDB database. This powerful combination serves as a solid foundation for businesses looking to manage their IoT data effectively.
 
 ## How It Works
 
-<!-- In this section, you explain how the data integration works together with the rule engine by introducing the architecture, emphasizing the simplicity and no coding required….You can also combine the working principle with a real-life use case. Some of the typical scenarios include connected vehicles, IIoT, power and engergy, and etc. You can describe where the data will be used evantually and what value they can bring to the business under the specific scenario. Use sequential steps to describe how data flows from devices to the data integration, and then to the data storage…-->
+The integration of EMQX with MongoDB is rooted in the EMQX rule engine. This rule engine acts as an intermediary, directing the flow of MQTT messages from connected devices to the MongoDB bridge, and it achieves this with without the need for any advanced coding.
+
+1. **Data Collection**: Devices, whether they are part of connected vehicles, IIoT systems, or energy management platforms, send MQTT messages based on their operational states, readings, or triggered events.
+2. **EMQX Rule Engine**: These messages are then processed by the EMQX rule engine rules. The rules, based on predefined criteria, determines which messages need to be routed to MongoDB. The beauty of this step is its simplicity; users can define their criteria without delving into any complex coding.
+3. **Data Ingestion into MongoDB**: Once the rule engine identifies a message for MongoDB storage, it channels that message seamlessly into the MongoDB bridge that forwards it to the database.
+4. **Data Storage and Utilization**: With the data now stored in MongoDB, businesses can harness its querying power for various use-cases. For instance, in the realm of connected vehicles, this stored data can inform fleet management systems about vehicle health, optimize route planning based on real-time metrics, or track assets. Similarly, in IIoT settings, the data might be used to monitor machinery health, forecast maintenance, or optimize production schedules.
+
+By using this integrated system, businesses in sectors like power and energy can continuously monitor grid health, forecast demand, or identify potential outages before they happen. The value derived from the real-time and historical data not only ensures operational efficiency but can also lead to significant cost savings and enhanced customer experiences.
 
 ## Features and Benefits
 
+The data integration with MongoDB offers a range of features and benefits tailored to ensure effective data handling and storage:
 
+1. **Dedicated Egress Traffic Support**: The MongoDB bridge is designed for egress traffic, which ensures seamless and uninterrupted data flow from MQTT messages in EMQX directly to a MongoDB instance.
+2. **Flexible MongoDB Connection Options**: Whether you operate with a single MongoDB instance or leverage the robustness of a replica set, the bridge offers native support to connect with both configurations, providing businesses with the flexibility to adapt as per their infrastructure needs.
+3. **NoSQL**: MongoDB's schema-less architecture ensures that diverse MQTT message structures can be easily stored without the need for rigid schemas, accommodating the dynamic nature of IoT data.
+4. **Scalability and Performance**: Given MongoDB's inherent scalability, integrating it with EMQX ensures that as your IoT deployments grow, your data storage capabilities can scale with ease, handling vast amounts of data generated from myriad devices.
+5. **Reliable Data Storage**: Once the EMQX rule engine processes and routes the message, it is stored in MongoDB with the platform's proven reliability, ensuring data integrity and consistent availability.
+6. **Operational Metrics**: Glean insights from metrics such as the total message count, egress traffic rate, and more. These metrics, combined with MongoDB's powerful querying, can be utilized to monitor, analyze, and optimize the data flow.
+7. **Latest MongoDB Version Support**: The bridge is compatible with and supports the latest versions of MongoDB, ensuring users benefit from the newest features, optimizations, and security updates offered by the database platform.
+
+This MongoDB integration fortifies your IoT infrastructure, ensuring that vast amounts of data generated by your devices are not just stored but are also ready for future querying and analysis. The ease of setup and operational excellence it brings can greatly enhance the efficiency and reliability of your IoT systems.
 
 ## Befor You Start
 
@@ -26,6 +41,7 @@ This section describe the preparations you need to complete before you start to 
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [MongoDB](https://www.mongodb.com/)
 
 ### Install MongoDB Server
 
@@ -173,42 +189,28 @@ Under the second rule SQL, the returned information should be:
 
 ## Advanced Configurations
 
-<!--Provide users with some advanced operations so that they can optimize the configurations to be more suitable to their business needs, including parameters under speical scenarios, such as high throughput, lower lentancy, large payload size, also some advanced optional parameters that affect operation, such as buffered queue, sync or async query mode, and batch mode.-->
+This section delves deeper into the advanced configuration options available for the EMQX MongoDB Bridge. When configuring the data bridge, navigate to **Advanced Settings** to tailor the following parameters to meet your specific needs.
 
-<!--In the descriptions, we need to provide detailed information about what this option is used for, how to use this option for optimization, what’s the default value and optional values, and etc.-->
+| **Fields**                   | **Descriptions**                                                                                                                                                                                                                                                                                                                                                            | **Recommended Value** |
+|------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
+| **Connect Timeout**          | The time duration EMQX will wait while attempting to establish a connection to MongoDB before timing out.                                                                                                                                                                                                                                                                   | 30s                   |
+| **Socket Timeout**           | This determines how long EMQX will wait while trying to send or receive data on a socket connection with MongoDB before it times out.                                                                                                                                                                                                                                       | 30s                   |
+| **Max Overflow Workers**     | Specifies the additional number of workers that can be created when all existing workers are occupied. This setting is crucial in times of workload surges to permit more concurrent connections to MongoDB.                                                                                                                                                                | 0                     |
+| **Wait Queue Timeout**       | The maximum duration a worker can remain idle while waiting for a connection to MongoDB to become available.                                                                                                                                                                                                                                                                | 10s                   |
+| **Heartbeat Period**         | Defines the interval at which the driver checks the state of the MongoDB deployment. This specifies the time between consecutive checks, effectively controlling the frequency of these heartbeat signals to ensure MongoDB's operational status.                                                                                                                           | 200s                  |
+| **Minimum Heartbeat Period** | Sets the shortest time interval allowed between heartbeats, ensuring that the driver doesn't check the MongoDB state too frequently. This is vital for avoiding unnecessary loads and ensuring efficient communication between EMQX and MongoDB.                                                                                                                            | 200s                  |
+| **Use Legacy Protocol**      | Determines if MongoDB's legacy communication protocol should be used. MongoDB introduced a new wire protocol in version 3.6, with the legacy protocol retained for backward compatibility. This setting can be set to true, false, or auto. In "auto" mode (default option), EMQX will automatically determine which protocol to use based on the detected MongoDB version. | auto                  |
 
-This section describes some advanced configurations options that can optimize the performance of your data bridge and customize the operation based on your specific using scenarios. When creating the data bridge, unfold **Advanced Settings** and you can configure the following settings according to your business needs.
 
-| **Fields**               | **Descriptions** | Recommend Value? |
-| ------------------------ | ---------------- | ---------------- |
-| Write Mode               |                  |                  |
-| Max Overflow Workers     |                  |                  |
-| Overflow TTL             |                  |                  |
-| Overflow Check Period    |                  |                  |
-| Local Threshold          |                  |                  |
-| Connect Timeout          |                  |                  |
-| Socket Timeout           |                  |                  |
-| Server Selection Timeout |                  |                  |
-| Wait Queue Timeout       |                  |                  |
-| Heartbeat Period         |                  |                  |
-| Minimum Heartbeat Period |                  |                  |
-| Connection Pool Size     |                  |                  |
-| Start Timeout            |                  |                  |
-| Buffer Pool Size         |                  |                  |
-| Request TTL              |                  |                  |
-| Health Check Interval    |                  |                  |
-| Max Buffer Queue Size    |                  |                  |
-| Query Mode               |                  |                  |
-| Inflight Window          |                  |                  |
+
 
 ## More Information
 
-EMQX provides bunches of learning resources on the data integration with MongoDB. Check out the following links to learn more:
+Check out the following links to learn more:
 
 **Blogs:**
-
-- 
+https://www.emqx.com/en/blog/emqx-rule-engine-series-store-messages-to-the-mongodb-database
 
 **Videos:**
 
-- 
+https://www.youtube.com/watch?v=c2M-rlkkT5o
