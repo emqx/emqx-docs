@@ -735,4 +735,8 @@
           title_cn: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
           lang: en
           path: changes/gateway-4.4-to-5.1-incompatibility
+    - title_en: Known Issues
+      title_cn: 已知问题
+      edition: ee
+      path: changes/known-issues-5.1
 
