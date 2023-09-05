@@ -1,14 +1,14 @@
 # Stream MQTT Data into Apache Kafka
 
+{% emqxce %}
+:::tip
+The Kafka data integration is an EMQX Enterprise Edition feature. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+:::
+{% endemqxce %}
+
 [Apache Kafka](https://kafka.apache.org/) is a widely used open-source distributed event streaming platform that can handle the real-time transfer of data streams between applications and systems. In the IoT realm, data generated from devices and applications are transmitted using the lightweight MQTT protocol. EMQX’s integration with Kafka/[Confluent](https://www.confluent.io/) enables users to stream MQTT data seamlessly into or from Kafka. MQTT data streams are ingested into Kafka topics, ensuring real-time processing, storage, and analytics. Conversely, Kafka topics data can be consumed by MQTT devices, enabling timely actions. 
 
 <img src="./assets/kafka_bridge.jpg" alt="kafka_bridge" style="zoom:67%;" />
-
-{% emqxce %}
-:::tip
-The Kafka data integration is a EMQX Enterprise Edition feature. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
-:::
-{% endemqxce %}
 
 This page provides a comprehensive introduction to the data integration between EMQX and Kafka with practical using instructions. Here is a list of topics covered on this page:
 
@@ -58,11 +58,11 @@ The data integration with Apache Kafka brings the following features and benefit
 - **Processing capabilities in high-throughput situations:** EMQX Kafka producer supports synchronous/asynchronous writing modes, enabling flexible balancing between latency and throughput according to different scenarios.
 - **Real-time metrics:** Metrics such as total message count, successful/failed delivery count, message rate, etc., can be combined with SQL rules to perform operations like data extraction, filtering, enrichment, and transformation before pushing messages to Kafka or devices.
 
-This data integration helps you to stablish an effective and robust IoT platform architecture so that your increasing volums of IoT data can be transmitted under stable network connections and can be futher stored and managed effectively. 
+This data integration helps you to establish an effective and robust IoT platform architecture so that your increasing volumes of IoT data can be transmitted under stable network connections and can be further stored and managed effectively. 
 
 ## Before You Start
 
-This section describe the preparations you need to complete before you start to create the Kafka data bridges in EMQX Dashboard.
+This section describes the preparations you need to complete before you start to create the Kafka data bridges in EMQX Dashboard.
 
 ### Prerequisites
 
@@ -128,28 +128,35 @@ This section demonstrates how to create a rule in EMQX to process messages from 
    Note: If you are a beginner user, you can click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
 5. Click the + **Add Action** button to define an action that will be triggered by the rule. Select **Forwarding with Data Bridge** from the dropdown list. With this action, EMQX sends the data processed by the rule to Kafa.
+
 6. Click the **+** icon next to the **Data bridge** drop-down box to create a data bridge.
+
 7. Select **Kafka** from the **Type of Data Bridge** drop-down list. Fill in the required fields (marked with an asterisk).
-8. In **Bridge Role** field, select **Producer**. 
+
+8. In the **Bridge Role** field, select **Producer**. 
+
 9. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
+
 10. Enter the connection information for the data bridge. 
     - Enter `127.0.0.1:9092` for the **Bootstrap Hosts**. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
-    - Leave other options as default or configure according to your business needs.
-    - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see **TLS for External Reesource Access**.
+    - Leave other options as default or configure them according to your business needs.
+    - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
 
-11. Configure the data bridge fields.
+11. Configure the data bridge options.
     - **Source MQTT Topic:** You can leave this field blank, implying that Kafka only processes data from the rules. In this example, indicating all MQTT messages matching the topic `t/#` will be sent to Kafka. If you wish to establish a Kafka Data Bridge without utilizing rules, you can directly input an MQTT topic as the data source. This field supports wildcards.
     - **Kafka Topic Name**: Enter `testtopic-in`. Note: Variables are not supported here.
-    - **Kafka Headers**: Enter the metadata or contextual information related to a Kafka message (optional). The value of the placeholder must be an object. You can select the value encode mode for the header from the **Kafka Header Value Encode Mode** drop-down list. You can also add more than one header by click **Add** to add more key-value pairs.
+    - **Kafka Headers**: Enter the metadata or contextual information related to a Kafka message (optional). The value of the placeholder must be an object. You can select the value encode mode for the header from the **Kafka Header Value Encode Mode** drop-down list. You can also add more than one header by clicking **Add** to add more key-value pairs.
     - **Message Key**: Kafka message key. Ensert a string here, either a plain string or a string containing placeholders (${var}).
     - **Message Value**: Kafka message value. Enter a string here, either a plain string or a string containing placeholders (${var}).
-    - Advanced settings (optional): See **Advanced Configurations**.
+    - **Message Timestamp**: Specify the string format for this data field in a Kafka message.
+    - **Compression**: <!-- Need inputs for this field?-->
+    - **Partition Strategy**: Select the way for the producer to dispatch messages to Kafka partitions.
 
-12. Click the **Add** button to complete the data bridge configuration. You will be redirected back to the **Add Action** page. Select the Kafka Data Bridge you just created from the **Data bridge** drop-down list. Click the **Add** button at the bottom to include this action in the rule.
+12. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
+13. Click the **Add** button to complete the data bridge configuration. You will be redirected back to the **Add Action** page. Select the Kafka Data Bridge you just created from the **Data bridge** drop-down list. Click the **Add** button at the bottom to include this action in the rule.
+14. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
-
-    ![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
+![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
 
 Now you have successfully created the rule and data bridge. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to Kafka after parsing by rule `my_rule`.
 
@@ -179,10 +186,15 @@ This section provides instructions on how to create a data bridge to receive dat
 This section demonstrates how to create a data bridge to receive data from Kafka. Through the data bridge, messages of the Kafka topic `testtopic-out` will be forwarded to a MQTT topic `t/1` in EMQX.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
+
 2. Click **Create** on the top right corner of the page.
+
 3. In the **Create Data Bridge** page, click to select **Kafka**, and then click **Next**.
+
 4. In **Bridge Role** field, select **Consumer**.
+
 5. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
+
 6. Enter the connection information for the data bridge. 
    - Enter `127.0.0.1:9092` for the **Bootstrap Hosts**. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
    - Leave other options as default or configure according to your business needs.
@@ -216,6 +228,8 @@ This section demonstrates how to create a data bridge to receive data from Kafka
    }
    ```
 
+   Subfields from the Kafka message may be accessed with dot notation. For example, `${.value}` will resolve to the Kafka message value, and `${.headers.h1}` will resolve to the value of the `h1` Kafka header if such a subfield exists. Absent values will be replaced by empty strings.
+
    **Note**: Each Kafka-to-MQTT topic mapping must contain a unique Kafka topic name. That is, the Kafka topic must not be present in more than one mapping.
 
 9. **Offset Reset Pollicy**: Select the policy for resetting the offset where Kafaka consumers start to read from a Kafka topic partition when there is no consumer’s offset or the offset becomes invalid.
@@ -223,7 +237,9 @@ This section demonstrates how to create a data bridge to receive data from Kafka
    - Select **earlist** if you want the consumer to start reading messages from the beginning of the partition, including messages that were produced before the consumer started, that is, to read all the historical data in a topic.
 
 10. Advanced settings (optional): See **Advanced Configurations.**
+
 11. Before clicking **Create**, you can click **Test Connection** to test that the bridge can connect to the Kafka server.
+
 12. Click **Create**. You will be offered the option of creating an associated rule. For the Kafka consumer data bridge, it is not strictly necessary to create a rule for further data processing. If you need to create a rule for the data bridge, see [Create Rule and Data Bridge for Kafka Consumer (Optional)](#create-rule-for-consumer-data-bridge-optional).
 
 <img src="./assets/Kafka_consumer_bridge.png" alt="Kafka_consumer_bridge" style="zoom:67%;" />
@@ -296,24 +312,28 @@ To test if the Kafka consumer data bridge and rule work as expected, you can use
 
 ## Advanced Configurations
 
-This section describes some advanced configurations options that can optimize the performance of your data bridge and customize the operation based on your specific using scenarios. When creating the data bridge, you can configure the following advanced settings according to your business needs.
+This section describes some advanced configuration options that can optimize the performance of your data bridge and customize the operation based on your specific scenarios. When creating the data bridge, you can unfold the **Advanced Settings** and configure the following settings according to your business needs.
 
-- **Message Timestamp**: 
-- **Max Batch Bytes**: 
-- **Compression**: 
-- **Partition Strategy**: 
-- **Required Acks**: 
-- **Partition Count Refresh Interval**: 
-- **Max Inflight:** Controls the number of unacknowledged messages in transit, effectively balancing the load to prevent overburdening the system.
-- **Query Mode:** Allows you to choose asynchronous or synchronous query modes to optimize message transmission based on different requirements. In asynchronous mode, writing to Kafka does not block the MQTT message publish process. However, this might result in clients receiving messages ahead of their arrival in Kafka.
-- **Synchronous Query Timeout:** In synchronous query mode, establishes a maximum wait time for confirmation. This ensures timely message transmission completion to avoid prolonged waits.
-- **Buffer Mode:** Defines whether messages are stored in a buffer before being sent. Memory buffering can increase transmission speeds.
-- **Per-partition Buffer Limit:** Imposes a size restriction on the buffer for each partition, balancing memory usage and performance.
-- **Segment File Bytes:** Controls the size of segmented files used to store messages, influencing the optimization level of disk storage.
-- **Memory Overload Protection:** Helps prevent system instability due to excessive memory usage, ensuring system reliability.
-- **Socket Send Buffer Size** and **Socket Receive Buffer Size**: Manages the size of socket buffers to optimize network transmission performance.
-- **TCP Keepalive**: Enables the TCP Keepalive mechanism to maintain ongoing connection validity, preventing connection disruptions caused by extended periods of inactivity.
-- **Health Check Interval**:
+| Fields                                      | Descriptions                                                 | Recommended Values |
+| ------------------------------------------- | ------------------------------------------------------------ | ------------------ |
+| Min Metadata Refresh Interval               |                                                              | `3`                |
+| Metadata Request Timeout                    |                                                              | `5`                |
+| Connect Timeout                             |                                                              | `5`                |
+| Fetch Bytes (Consumer)                      |                                                              | `896`              |
+| Max Batch Bytes (Producer)                  |                                                              | `896`              |
+| Offset Commit Interval (Consumer)           |                                                              | `5`                |
+| Required Acks (Producer)                    |                                                              | `all_isr`          |
+| Partition Count Refresh Interval (Producer) |                                                              | `60`               |
+| Max Inflight (Producer)                     | Controls the number of unacknowledged messages in transit, effectively balancing the load to prevent overburdening the system. | `10`               |
+| Query Mode (Producer)                       | Allows you to choose asynchronous or synchronous query modes to optimize message transmission based on different requirements. In asynchronous mode, writing to Kafka does not block the MQTT message publish process. However, this might result in clients receiving messages ahead of their arrival in Kafka. | `Async`            |
+| Synchronous Query Timeout (Producer)        | In synchronous query mode, establishes a maximum wait time for confirmation. This ensures timely message transmission completion to avoid prolonged waits. | `5`                |
+| Buffer Mode (Producer)                      | Defines whether messages are stored in a buffer before being sent. Memory buffering can increase transmission speeds. | `memory`           |
+| Per-partition Buffer Limit (Producer)       | Imposes a size restriction on the buffer for each partition, balancing memory usage and performance. | `2`                |
+| Segment File Bytes (Producer)               | Controls the size of segmented files used to store messages, influencing the optimization level of disk storage. | `100`              |
+| Memory Overload Protection (Producer)       | Helps prevent system instability due to excessive memory usage, ensuring system reliability. | Disabled           |
+| Socket Send / Receive Buffer Size           | Manages the size of socket buffers to optimize network transmission performance. | `1024`             |
+| TCP Keepalive                               | Enables the TCP Keepalive mechanism to maintain ongoing connection validity, preventing connection disruptions caused by extended periods of inactivity. | `none`             |
+| Health Check Interval                       |                                                              | `15`               |
 
 ## More Information
 
