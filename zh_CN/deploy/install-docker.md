@@ -60,10 +60,6 @@ docker run -d --name emqx-enterprise -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8
 
   {% emqxce %}
 
-  ```bash
-
-  {% emqxce %}
-
   将 `/opt/emqx/etc` 目录下的文件复制到宿主机下：
 
   ```bash
@@ -71,17 +67,6 @@ docker run -d --name emqx-enterprise -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8
   ```
 
   启动容器并挂载目录：
-
-  ```bash
-  docker run -d --name emqx \
-    -p 1883:1883 -p 8083:8083 \
-    -p 8084:8084 -p 8883:8883 \
-    -p 18083:18083 \
-    -v $PWD/etc:/opt/emqx/etc \
-    -v $PWD/data:/opt/emqx/data \
-    -v $PWD/log:/opt/emqx/log \
-    emqx/emqx:@CE_VERSION@
-  ```
 
   ```bash
   docker run -d --name emqx \
