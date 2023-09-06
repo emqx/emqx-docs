@@ -40,13 +40,13 @@ Streaming data into or from Apache Kafka involves creating data bridges to Kafka
 
 1. **Message publication from IoT devices:** The connected vehicles periodically publish messages containing status data using the MQTT protocol. These messages include information such as speed and direction.
 2. **Message reception by EMQX:** As an MQTT borker, EMQX receives these MQTT messages from the connected vehicles. It serves as the centralized hub for handling MQTT-based communication.
-3. **Data processing and transformation:** With an embedded rule engine working together with the broker as a single component, these MQTT messages undergo filtering, format transformation, and other processing based on topic matching rules.
-4. **Bridging to Kafka:** The rule defined in rule engine triggers an action of forwarding the messages to Kafka. Using the Kafka bridging functionality, MQTT topics are mapped to pre-defined Kafka topics and all messages and data are written into Kafka topics. 
+3. **Message data processing:** With an embedded rule engine working together with the broker as a single component, these MQTT messages can be processed based on topic matching rules. When a message arrives, it passes through the rule engine, which evaluates the defined rules for that message. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
+4. **Bridging to Kafka:** The rule defined in the rule engine triggers an action of forwarding the messages to Kafka. Using the Kafka bridging functionality, MQTT topics are mapped to pre-defined Kafka topics, and all processed messages and data are written into Kafka topics. 
 
 After the vehicle data are ingested into Kafka, you can flexibly access and utilize the data:
 
 - Your services can directly integrate with Kafka clients to consume real-time data streams from specific topics, enabling customized business processing.
-- Utilize Kafka Streams for stream processing, perform real-time monitoring by aggregating and correlating vehicle statuses in-memory.
+- Utilize Kafka Streams for stream processing, and perform real-time monitoring by aggregating and correlating vehicle statuses in-memory.
 - By using Kafka Connect components, you can select various connectors to output data to external systems such as MySQL, ElasticSearch, for storage.
 
 ## Features and Benefits
@@ -54,11 +54,12 @@ After the vehicle data are ingested into Kafka, you can flexibly access and util
 The data integration with Apache Kafka brings the following features and benefits to your business:
 
 - **Dependable and bi-directional IoT data messaging:**  The data communication between Kafka and resource-limited IoT devices running on unpredictable mobile networks can be processed under the MQTT protocol that excels in messaging in uncertain networks. EMQX not only batch forwards MQTT messages to Kafka but also subscribes to Kafka messages from backend systems and delivers them to connected IoT clients.
-- **Effective topic handling for scalability:** Numerous IoT business topics can be mapped into Kakfa topics for further processing. EMQX supports various flexible topic mapping methods, including one-to-one, one-to-many, many-to-many, and also includes support for MQTT topic filters (wildcards).
+- **Payload transformation**: Message payload can be processed by the defined SQL rules during the transmission. For example, payloads containing some real-time metrics such as total message count, successful/failed delivery count, and message rate can go through data extraction, filtering, enrichment, and transformation before the messages are ingested into Kafka.
+- **Effective topic mapping:** Numerous IoT business topics can be mapped into Kakfa topics by the configured kafka data bridge. EMQX supports the MQTT user property mapping to Kafka headers and adopts various flexible topic mapping methods, including one-to-one, one-to-many, many-to-many, and also includes support for MQTT topic filters (wildcards).
+- **Flexible partition selection strategy**: Supports forwarding messages to the same Kafka partition based on MQTT topics or clients.
 - **Processing capabilities in high-throughput situations:** EMQX Kafka producer supports synchronous/asynchronous writing modes, enabling flexible balancing between latency and throughput according to different scenarios.
-- **Real-time metrics:** Metrics such as total message count, successful/failed delivery count, message rate, etc., can be combined with SQL rules to perform operations like data extraction, filtering, enrichment, and transformation before pushing messages to Kafka or devices.
 
-This data integration helps you to establish an effective and robust IoT platform architecture so that your increasing volumes of IoT data can be transmitted under stable network connections and can be further stored and managed effectively. 
+These features enhance the integration capabilities and flexibility that help you establish an effective and robust IoT platform architecture. Your increasing volumes of IoT data can be transmitted under stable network connections and can be further stored and managed effectively. 
 
 ## Before You Start
 
@@ -232,10 +233,11 @@ This section demonstrates how to create a data bridge to receive data from Kafka
 
    **Note**: Each Kafka-to-MQTT topic mapping must contain a unique Kafka topic name. That is, the Kafka topic must not be present in more than one mapping.
 
-9. **Offset Reset Pollicy**: Select the policy for resetting the offset where Kafaka consumers start to read from a Kafka topic partition when there is no consumer’s offset or the offset becomes invalid.
-   - Select **lastest** if you want the consumer start reading messages from the latest offset, skipping messages that were produced before the consumer started.
-   - Select **earlist** if you want the consumer to start reading messages from the beginning of the partition, including messages that were produced before the consumer started, that is, to read all the historical data in a topic.
-
+9. **Offset Reset Policy**: Select the policy for resetting the offset where Kafaka consumers start to read from a Kafka topic partition when there is no consumer’s offset or the offset becomes invalid.
+   
+   - Select **lastest** if you want the consumer to start reading messages from the latest offset, skipping messages that were produced before the consumer started.
+   - Select **earliest** if you want the consumer to start reading messages from the beginning of the partition, including messages that were produced before the consumer started, that is, to read all the historical data in a topic.
+   
 10. Advanced settings (optional): See **Advanced Configurations.**
 
 11. Before clicking **Create**, you can click **Test Connection** to test that the bridge can connect to the Kafka server.
@@ -294,7 +296,7 @@ To test if the Kafka consumer data bridge and rule work as expected, you can use
 
 3. Enter `{"msg": "Hello EMQX"}` to produce a message to the `testtopic-out` topic using the producer and press enter. 
 
-4. Check the subcription in MQTTX. The following message from Kafka should be received under the topic `t/1`: 
+4. Check the subscription in MQTTX. The following message from Kafka should be received under the topic `t/1`: 
 
    ```json
    {
