@@ -59,17 +59,17 @@
 
 - [#11396](https://github.com/emqx/emqx/pull/11396) Introduced topic index for the rule engine runtime to speed up matching messages' topics to topic filters configured in rule definitions by avoiding full scan of the rule set, significantly improving EMQX's performance when handling a substantial number of rules.
 
-- [#11399](https://github.com/emqx/emqx/pull/11399) Improved the placeholder syntax in rule engine. The republising actions support using placeholder syntax to
+- [#11399](https://github.com/emqx/emqx/pull/11399) Improved the placeholder syntax in rule engine. The republishing actions support placeholder syntax to
   dynamically fill in the content of strings in payload variable. The format of the placeholder syntax is `${key}`.
   Before this improvement, the `key` in `${key}` could only contain letters, numbers, and underscores. Now the `key` supports any UTF8 characters.
   
-- [#11405](https://github.com/emqx/emqx/pull/11405) Improved the error reason of the `date_to_unix_ts` for better understanding.
+- [#11405](https://github.com/emqx/emqx/pull/11405) Made the error message for `date_to_unix_ts` function more clear.
 
 - [#11490](https://github.com/emqx/emqx/pull/11490) Added fast error handling for undefined password in various authentication backends. This improves the consistency and user-friendliness of the authentication process.
 
 ### Bug Fixes
 
-- [#11065](https://github.com/emqx/emqx/pull/11065) This fix prevents the logging of irrelevant error messages during EMQX shutdown.
+- [#11065](https://github.com/emqx/emqx/pull/11065) Silenced irrelevant error messages during EMQX shutdown.
 
 - [#11279](https://github.com/emqx/emqx/pull/11279) Fixed an issue where clients could not send messages with large payloads when debug/trace logging was enabled in EMQX.
 
