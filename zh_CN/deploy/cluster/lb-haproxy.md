@@ -248,7 +248,7 @@ HAProxy 提供了多种负载均衡策略，用于控制连接的分发方式。
 ```bash
 backend mqtt_backend
   mode tcp
-  balance roundrob
+  balance roundrobin
   server emqx1 emqx1-cluster.emqx.io:1883 check
   server emqx2 emqx2-cluster.emqx.io:1883 check
   server emqx3 emqx3-cluster.emqx.io:1883 check
@@ -304,7 +304,7 @@ MQTT 粘性会话负载均衡在 HAProxy 2.4 版本中加入。
 ```bash
 backend mqtt_backend
   mode tcp
- # 创建粘性会话表
+  # 创建粘性会话表
   stick-table type string len 32 size 100k expire 30m
 
   # 使用客户端 ID 作为键
