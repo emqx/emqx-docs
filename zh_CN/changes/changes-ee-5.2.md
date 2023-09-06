@@ -22,7 +22,6 @@
 
 - [#11438](https://github.com/emqx/emqx/pull/11438) 将 `mqtt.max_packet_size` 的类型从字符串更改为 byteSize，以更好地表示有效的数字范围。仍然支持字符串以确保向后兼容性。
 
-- [#11446](https://github.com/emqx/emqx/pull/11446) 重构了与日期时间相关的模块和函数，以简化代码。
 
 - [#11469](https://github.com/emqx/emqx/pull/11469) 支持在 Redis 认证中指定用户名。
 
@@ -76,9 +75,7 @@
 - [#11346](https://github.com/emqx/emqx/pull/11346) 更新了 ekka 到版本 0.15.9。 这修复了在获取锁定超时时出现的悬挂的 etcd 锁定问题。
 - [#11347](https://github.com/emqx/emqx/pull/11347) 确保 OCSP 请求路径正确进行了 URL 编码。
 - [#11352](https://github.com/emqx/emqx/pull/11352) 修复了在 Windows 或其他不支持 RocksDB 的平台上启动时出现的崩溃问题。
-- [#11372](https://github.com/emqx/emqx/pull/11372) 由于与某些集群发现机制不兼容，删除了最近引入的 TLS 客户端模式中的 `cacerts` 选项。
 - [#11388](https://github.com/emqx/emqx/pull/11388) 增加了 `emqx_router_sup` 重启强度，以提高对在正常情况下发生偶发崩溃的容忍度，而无需关闭整个 EMQX 应用程序。 例如， 如果核心节点正在停止、重新启动或处于不可用状态，从复制节点委派给 `emqx_router_helper` 的 mria 写入/删除调用可能会失败。修改后的重启强度确保系统保持稳定运行。
-- [#11410](https://github.com/emqx/emqx/pull/11410) 重新引入了 `cacerts` TLS 客户端选项作为已弃用选项。修复了尝试从 5.1.3 升级时在配置文件中设置了该选项或在 EMQX Operator 设置中持久化了该选项的问题。
 - [#11424](https://github.com/emqx/emqx/pull/11424) 添加了对 API 中时间戳的最大值的检查，以确保它是有效的 Unix 时间戳。
 - [#11445](https://github.com/emqx/emqx/pull/11445) 删除了 Windows 平台上的 os_mon 应用程序监控支持，以防止虚拟机崩溃。 该功能仍然适用于非 Windows 平台。
 - [#11454](https://github.com/emqx/emqx/pull/11454) 修复了在调试/跟踪大型 payload 时出现的崩溃问题（在 [#11279](https://github.com/emqx/emqx/pull/11279) 中引入）。
@@ -91,12 +88,9 @@
 - [#11540](https://github.com/emqx/emqx/pull/11540) 在尝试创建具有无效名称的桥接时，改进了 HTTP 响应。
 - [#11548](https://github.com/emqx/emqx/pull/11548) 修复了在整个集群中更新插件顺序的问题。
 - [#11366](https://github.com/emqx/emqx/pull/11366) 修复了在使用 EMQX Operator 在 `bootstrapConfig` 中指定一些桥接配置时可能会阻止 pod 启动的问题。
-- [#11444](https://github.com/emqx/emqx/pull/11444) 修复了 Kinesis 桥接无法连接到端点时的错误信息。
-- [#11452](https://github.com/emqx/emqx/pull/11452) 在没有提供模板时，更新了 Kinesis 数据桥接的默认 payload 模板以存储整个消息。
 - [#11453](https://github.com/emqx/emqx/pull/11453) 修复了测试 InfluxDB 桥接的连接时可能产生虚假负面结果的问题。
 - [#11461](https://github.com/emqx/emqx/pull/11461) 将测试桥接连接的超时更加紧密地与配置的健康检查超时保持一致。
 - [#11492](https://github.com/emqx/emqx/pull/11492) 修复了测试 GreptimeDB 桥接的连接时可能产生虚假负面结果的问题。
-- [#11494](https://github.com/emqx/emqx/pull/11494) 添加了模式验证器，以反映静态约束，增强了 Kinesis 桥接配置和测试。现在批量请求支持最多 500 条记录（最大批量大小）。
 - [#11508](https://github.com/emqx/emqx/pull/11508) 修复了 Kafka 桥接中将 header 翻译为无效值时的错误处理。
 - [#11513](https://github.com/emqx/emqx/pull/11513) 修复了一个错误，该错误导致 Kafka 生产者桥接无法使用正确的模板的来处理 `timestamp` 字段。
 - [#11527](https://github.com/emqx/emqx/pull/11527) 修复了与 Kafka header 模板处理相关的问题。该问题发生在占位符解析为键值对数组时（例如：`[{"key": "foo", "value": "bar"}]`）。

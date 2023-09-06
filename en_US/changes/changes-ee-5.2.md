@@ -22,7 +22,6 @@
 
 - [#11438](https://github.com/emqx/emqx/pull/11438) Changed the type of the `mqtt.max_packet_size` from string to byteSize for better representation the valid numeric range. Strings will still be accepted for backwards compatibility.
   
-- [#11446](https://github.com/emqx/emqx/pull/11446) Refactored datetime-related modules and functions to simplify the code.
 
 - [#11469](https://github.com/emqx/emqx/pull/11469) Added support for specifying username in Redis authentication.
 
@@ -90,13 +89,11 @@
 
 - [#11352](https://github.com/emqx/emqx/pull/11352) Fixed a [crash issue](https://github.com/emqx/emqx/issues/11345) that occured when starting on Windows or any other platform without RocksDB support.
 
-- [#11372](https://github.com/emqx/emqx/pull/11372) Removed the recently introduced `cacerts` option from TLS client schema due to incompatibilities with some cluster discovery mechanisms. 
 
 - [#11388](https://github.com/emqx/emqx/pull/11388) Increased `emqx_router_sup` restart intensity to improve tolerance for occasional crashes that can occur under normal conditions, without necessitating the shutdown of the entire EMQX application.
   For example, mria write/delete call delegated from a replicant to a core node by `emqx_router_helper` may fail,
   if the core node undergoes stopping, restarting, or is in an unready state. The modified restart intensity ensures that the system remains stable and operational.
   
-- [#11410](https://github.com/emqx/emqx/pull/11410) Reintroduced `cacerts` TLS client option as a deprecated option.
 
   This fixes issues found when trying to upgrade from 5.1.3 where that option was set in the configuration files or persisted in EMQX Operator settings.
 
@@ -114,7 +111,7 @@
 
 - [#11520](https://github.com/emqx/emqx/pull/11520) Fixed issue where `packets_connack_sent` metric was not incremented on CONNACK packets sent with non-zero `ack_flag`.
 
-- [#11523](https://github.com/emqx/emqx/pull/11523) Corrected a misunderstood prompt when specifying invalid certificates/keys for the `/configs` API.
+- [#11523](https://github.com/emqx/emqx/pull/11523) Corrected a misleading prompt when specifying invalid certificates/keys for the `/configs` API.
 
 - [#11534](https://github.com/emqx/emqx/pull/11534) Fixed the increment on data bridge statistics when bridge is unhealthy. Now, messages sent to unhealthy bridges are counted as dropped messages.
 
@@ -124,9 +121,7 @@
 
 - [#11366](https://github.com/emqx/emqx/pull/11366) Fixed an issue that could prevent a pod from starting if some bridge configuration were specified in `bootstrapConfig` using EMQX Operator.
 
-- [#11444](https://github.com/emqx/emqx/pull/11444) Fixed error information when Kinesis bridge fails to connect to endpoint.
 
-- [#11452](https://github.com/emqx/emqx/pull/11452) Updated the default payload template for Kinesis data bridge to store the entire message when no template is provided.
 
 - [#11453](https://github.com/emqx/emqx/pull/11453) Fixed an issue that would yield false negatives when testing the connectivity of InfluxDB bridges.
 
@@ -134,7 +129,6 @@
 
 - [#11492](https://github.com/emqx/emqx/pull/11492) Fixed an issue that would yield false negatives when testing the connectivity of GreptimeDB bridges.
 
-- [#11494](https://github.com/emqx/emqx/pull/11494) Added schema validator to reflect static constraint, enhancing the Kinesis bridge configuration and testing. The batch request can now support up to 500 records (max batch size).
 
 - [#11508](https://github.com/emqx/emqx/pull/11508) Fixed error handling in Kafka bridge when headers are translated to an invalid value.
 
