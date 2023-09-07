@@ -42,7 +42,7 @@
 
 - [#11392](https://github.com/emqx/emqx/pull/11392) 集成了 LDAP 作为授权源。
 
-- [#11402](https://github.com/emqx/emqx/pull/11402) 添加了支持使用占位符定义 Kafka 消费者桥接的 MQTT 主题映射中的主题。
+- [#11402](https://github.com/emqx/emqx/pull/11402)  Kafka 消费者桥接支持使用占位符动态设置 MQTT 主题。
 
 - [#11403](https://github.com/emqx/emqx/pull/11403) 添加了支持定义 GCP PubSub 生产者桥接的消息属性和排序键模板。还更新了我们的 HOCON 库，以修复一个问题，即数组中的对象即使位于不同的行上也会被串联在一起。
 
