@@ -22,7 +22,6 @@
 
 - [#11438](https://github.com/emqx/emqx/pull/11438) 将 `mqtt.max_packet_size` 的类型从字符串更改为 byteSize，以更好地表示有效的数字范围。仍然支持字符串以确保向后兼容性。
 
-
 - [#11469](https://github.com/emqx/emqx/pull/11469) 支持在 Redis 认证中指定用户名。
 
 - [#11496](https://github.com/emqx/emqx/pull/11496) 默认情况下禁用 Erlang VM Prometheus 导出器，以提高性能和安全性。
