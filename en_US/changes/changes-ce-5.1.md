@@ -28,7 +28,7 @@
 
 - [#10697](https://github.com/emqx/emqx/pull/10697) This enhancement enables the configuration of the `minReadySeconds` for the StatefulSet. This feature allows for the introduction of a time gap between the restarts of individual pods triggered by upgrade or restart commands.
 - [#11390](https://github.com/emqx/emqx/pull/11390) Added `node.broker_pool_size`, `node.generic_pool_size`, `node.channel_cleanup_batch_size` options to EMQX configuration. Tuning these options can significantly improve the performance if cluster interconnect network latency is high.
-- [#11389](https://github.com/emqx/emqx/pull/11389) Improved retained message publishing latency by consolidating multiple index update operations into a single mnesia activity, leveraging the new APIs introduced in mria 0.6.0.
+- [#11389](https://github.com/emqx/emqx/pull/11389) Improved retained message publishing latency by consolidating multiple index update operations into a single Mnesia activity, leveraging the new APIs introduced in Mria 0.6.0.
 - [#11399](https://github.com/emqx/emqx/pull/11399) Improved the placeholder syntax of the rule engine. The republishing actions support placeholder syntax to dynamically fill in the content of strings in the payload variable. The format of the placeholder syntax is `${key}`. Before this improvement, the `key` in `${key}` could only contain letters, numbers, and underscores. Now the `key` supports any UTF8 characters.
 
 - [#11405](https://github.com/emqx/emqx/pull/11405) Made the error message for `date_to_unix_ts` function clearer.
