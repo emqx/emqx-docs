@@ -28,7 +28,7 @@
 
 - [#11497](https://github.com/emqx/emqx/pull/11497) 通过添加新的消息、过载保护、授权、身份验证指标，改进 OpenTelemetry 的命名一致性，增强了指标可观测性。
 
-- [#10647](https://github.com/emqx/emqx/pull/10647) 实现了 [GreptimeDB](https://github.com/GreptimeTeam/greptimedb) 的数据集成。
+- [#10647](https://github.com/emqx/emqx/pull/10647) 新增了 [GreptimeDB](https://github.com/GreptimeTeam/greptimedb) 数据集成。
 
 - [#11261](https://github.com/emqx/emqx/pull/11261) 实现了 Amazon Kinesis Data Streams 生产者数据集成。
 
