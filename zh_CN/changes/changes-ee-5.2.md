@@ -52,7 +52,7 @@
 
   在 [PR#11530](https://github.com/emqx/emqx/pull/11530) 中更新了驱动程序至 `0.4.5+v0.16.1`。
 
-- [#11389](https://github.com/emqx/emqx/pull/11389) 通过利用 mria 0.6.0 中引入的新 API 将多个索引更新操作合并为单个 mnesia 事物来提高保留消息发布的速度。
+- [#11389](https://github.com/emqx/emqx/pull/11389) 通过利用 Mria 0.6.0 中引入的新 API 将多个索引更新操作合并为单个 Mnesia 事务来提高保留消息发布的速度。
 
 - [#11396](https://github.com/emqx/emqx/pull/11396) 为规则引擎运行时引入了主题索引，提高了将消息主题与规则定义中配置的主题过滤器进行匹配的速度，避免了对规则集的全面扫描，大幅提升了 EMQX 在处理大量规则时的性能。
 
