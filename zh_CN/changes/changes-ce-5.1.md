@@ -8,7 +8,7 @@
 - [#11436](https://github.com/emqx/emqx/pull/11436) 添加了新的 API 端点 `DELETE/banned`，用于清除所有 `banned` 数据。
 - [#11438](https://github.com/emqx/emqx/pull/11438) 将 `mqtt.max_packet_size` 的类型从字符串更改为 byteSize，以更好地表示有效的数字范围。仍然支持字符串以确保向后兼容性。
 - [#11446](https://github.com/emqx/emqx/pull/11446) 重构了与日期时间相关的模块和函数，以简化代码。
-- [#11396](https://github.com/emqx/emqx/pull/11396) 为规则引擎运行时引入了主题索引，提高了将消息主题与规则定义中配置的主题过滤器进行匹配的速度，避免了对规则集的全面扫描，大幅提升了 EMQX 在处理大量规则时的性能。
+- [#11396](https://github.com/emqx/emqx/pull/11396) 为规则引擎运行时引入了主题索引，提高了消息主题与规则 SQL 中的主题过滤器匹配的速度，避免了对规则集的全面扫描，大幅提升了 EMQX 在处理大量规则时的性能。
 
 ### 修复
 
@@ -28,7 +28,7 @@
 
 - [#10697](https://github.com/emqx/emqx/pull/10697) 此增强功能允许配置 StatefulSet 的 `minReadySeconds`，从而允许在升级或重新启动命令触发的每个 pod 重新启动之间引入时间间隔。
 - [#11390](https://github.com/emqx/emqx/pull/11390) 在 EMQX 配置中添加了 `node.broker_pool_size`、`node.generic_pool_size` 和 `node.channel_cleanup_batch_size` 选项。如果集群互连网络延迟较高，调整这些选项可以显著提高性能。
-- [#11389](https://github.com/emqx/emqx/pull/11389) 通过利用 mria 0.6.0 中引入的新 API 将多个索引更新操作合并为单个 mnesia 事物来提高保留消息发布的速度。
+- [#11389](https://github.com/emqx/emqx/pull/11389) 通过利用 Mria 0.6.0 中引入的新 API 将多个索引更新操作合并为单个 Mnesia 事物来提高保留消息发布的速度。
 - [#11399](https://github.com/emqx/emqx/pull/11399) 改进了规则引擎中的占位符语法。发布操作支持使用占位符语法动态填充 payload 变量中的内容。 占位符语法的格式为 `${key}`。 在此改进之前，`${key}` 中只能包含字母、数字和下划线。现在，`${key}` 支持任何 UTF8 字符。
 
 - [#11405](https://github.com/emqx/emqx/pull/11405) 改进了 `date_to_unix_ts` 的错误原因以便理解。
