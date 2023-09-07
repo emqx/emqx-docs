@@ -10,7 +10,7 @@
 
 - [#11289](https://github.com/emqx/emqx/pull/11289) 发布了适用于 Debian 12 的软件包。
 
-- [#11290](https://github.com/emqx/emqx/pull/11290) 更新了 `jq` 依赖项至版本 0.3.10，其中包括 `oniguruma` 库更新至版本 6.9.8，修复了一些小的安全问题。
+- [#11290](https://github.com/emqx/emqx/pull/11290) 更新了 `jq` 依赖项至版本 0.3.10，其引用的 `oniguruma` 库更新至版本 6.9.8，修复了一些小的安全问题。
 
 - [#11291](https://github.com/emqx/emqx/pull/11291) 通过 ekka 更新至版本 0.15.6，将 RocksDB 版本更新至 1.8.0-emqx-1。
 
