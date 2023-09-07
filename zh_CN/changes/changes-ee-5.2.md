@@ -26,7 +26,7 @@
 
 - [#11496](https://github.com/emqx/emqx/pull/11496) 默认情况下禁用 Erlang VM Prometheus 导出器，以提高性能和安全性。
 
-- [#11497](https://github.com/emqx/emqx/pull/11497) 通过添加新的指标来增强 broker 的 metrics 收集和导出，包括消息、过载保护、授权、认证，并提高 OpenTelemetry 的命名一致性。
+- [#11497](https://github.com/emqx/emqx/pull/11497) 通过添加新的消息、过载保护、授权、身份验证指标，改进 OpenTelemetry 的命名一致性，增强了指标可观测性。
 
 - [#10647](https://github.com/emqx/emqx/pull/10647) 实现了 [GreptimeDB](https://github.com/GreptimeTeam/greptimedb) 的数据集成。
 
