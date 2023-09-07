@@ -62,7 +62,7 @@
   dynamically fill in the content of strings in the payload variable. The format of the placeholder syntax is `${key}`.
   Before this improvement, the `key` in `${key}` could only contain letters, numbers, and underscores. Now the `key` supports any UTF8 characters.
   
-- [#11405](https://github.com/emqx/emqx/pull/11405) Made the error message for `date_to_unix_ts` function clearer.
+- [#11405](https://github.com/emqx/emqx/pull/11405) Made the error message for `date_to_unix_ts` function more understandable.
 
 - [#11490](https://github.com/emqx/emqx/pull/11490) Added fast error handling for undefined passwords in various authentication backends. This improves the consistency and user-friendliness of the authentication process.
 
