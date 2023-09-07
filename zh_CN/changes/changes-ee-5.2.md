@@ -18,7 +18,7 @@
 
 - [#11429](https://github.com/emqx/emqx/pull/11429) 在 MondoDB 连接和桥接中添加了配置检测遗留协议的选项。
 
-- [#11436](https://github.com/emqx/emqx/pull/11436) 添加了新的 API 端点 `DELETE/banned`，用于清除所有 `banned` 数据。
+- [#11436](https://github.com/emqx/emqx/pull/11436) 添加了新的 REST API `DELETE /banned`，用于清除所有黑名单数据。
 
 - [#11438](https://github.com/emqx/emqx/pull/11438) 将 `mqtt.max_packet_size` 的类型从字符串更改为 byteSize，以更好地表示有效的数字范围。仍然支持字符串以确保向后兼容性。
 
@@ -32,15 +32,15 @@
 
 - [#11261](https://github.com/emqx/emqx/pull/11261) 新增了 Amazon Kinesis Data Streams 生产者数据集成。
 
-- [#11329](https://github.com/emqx/emqx/pull/11329) 实现了 Azure Event Hub 生产者数据集成。
+- [#11329](https://github.com/emqx/emqx/pull/11329) 新增了 Azure Event Hub 生产者数据集成。
 
 - [#11363](https://github.com/emqx/emqx/pull/11363) 为 RabbitMQ 桥接添加了 TLS 连接支持。
 
 - [#11367](https://github.com/emqx/emqx/pull/11367) 从 EMQX 4.4 迁移了 GCP IoT Hub 认证支持。
 
-- [#11386](https://github.com/emqx/emqx/pull/11386) 集成了 LDAP 作为新的认证器。
+- [#11386](https://github.com/emqx/emqx/pull/11386) 认证器新增了 LDAP 数据源。
 
-- [#11392](https://github.com/emqx/emqx/pull/11392) 集成了 LDAP 作为授权源。
+- [#11392](https://github.com/emqx/emqx/pull/11392) 授权管理器新增了 LDAP 数据源。
 
 - [#11402](https://github.com/emqx/emqx/pull/11402)  Kafka 消费者桥接支持使用占位符动态设置 MQTT 主题。
 
