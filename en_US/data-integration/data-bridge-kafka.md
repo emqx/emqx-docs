@@ -150,7 +150,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
     - **Message Key**: Kafka message key. Ensert a string here, either a plain string or a string containing placeholders (${var}).
     - **Message Value**: Kafka message value. Enter a string here, either a plain string or a string containing placeholders (${var}).
     - **Message Timestamp**: Specify the string format for this data field in a Kafka message.
-    - **Compression**: <!-- Need inputs for this field?-->
+    - **Compression**: Specify whether or not to use compression algorithms to compress/decompress the records in a Kafka message. 
     - **Partition Strategy**: Select the way for the producer to dispatch messages to Kafka partitions.
 
 12. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
