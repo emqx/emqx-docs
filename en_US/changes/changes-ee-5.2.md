@@ -42,7 +42,7 @@
 
 - [#11392](https://github.com/emqx/emqx/pull/11392) Integrated LDAP as an authorization source.
 
-- [#11402](https://github.com/emqx/emqx/pull/11402) Added support for using placeholders to define MQTT Topic in Kafka Consumer bridge topic mappings.
+- [#11402](https://github.com/emqx/emqx/pull/11402) Added support for using placeholders to define MQTT Topic in Kafka Consumer bridge topic mappings. This allows dynamically setting the MQTT Topic.
 
 - [#11403](https://github.com/emqx/emqx/pull/11403) Added support for defining message attributes and ordering key templates for GCP PubSub Producer bridge.
 
