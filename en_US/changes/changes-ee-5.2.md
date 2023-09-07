@@ -10,19 +10,18 @@
 
 - [#11289](https://github.com/emqx/emqx/pull/11289) Released packages for Debian 12.
 
-- [#11290](https://github.com/emqx/emqx/pull/11290) Updated the `jq` dependency to version 0.3.10, which includes an update to the `oniguruma` library to version 6.9.8 with few minor security fixes.
+- [#11290](https://github.com/emqx/emqx/pull/11290) Updated the `jq` dependency to version 0.3.10, which includes an update to the `oniguruma` library to version 6.9.8 with a few minor security fixes.
 
 - [#11291](https://github.com/emqx/emqx/pull/11291) Updated RocksDB version to 1.8.0-emqx-1 via ekka update to 0.15.6.
 
 - [#11390](https://github.com/emqx/emqx/pull/11390) Added `node.broker_pool_size`, `node.generic_pool_size`, `node.channel_cleanup_batch_size` options to EMQX configuration. Tuning these options can significantly improve the performance if cluster interconnect network latency is high.
 
-- [#11429](https://github.com/emqx/emqx/pull/11429) Added an option to configure detection of legacy protocol in MondoDB connectors and bridges.
+- [#11429](https://github.com/emqx/emqx/pull/11429) Added an option to configure detection of the legacy protocol in MondoDB connectors and bridges.
 
 - [#11436](https://github.com/emqx/emqx/pull/11436) Added a new API endpoint `DELETE/banned` for clearing all `banned` data.
 
-- [#11438](https://github.com/emqx/emqx/pull/11438) Changed the type of the `mqtt.max_packet_size` from string to byteSize for better representation the valid numeric range. Strings will still be accepted for backwards compatibility.
+- [#11438](https://github.com/emqx/emqx/pull/11438) Changed the type of the `mqtt.max_packet_size` from string to byteSize for a better representation of the valid numeric range. Strings will still be accepted for backward compatibility.
   
-
 - [#11469](https://github.com/emqx/emqx/pull/11469) Added support for specifying username in Redis authentication.
 
 - [#11496](https://github.com/emqx/emqx/pull/11496) Disabled the Erlang VM Prometheus exporter by default to improve performance and security.
@@ -47,7 +46,7 @@
 
 - [#11403](https://github.com/emqx/emqx/pull/11403) Added support for defining message attributes and ordering key templates for GCP PubSub Producer bridge.
 
-  Also updated our HOCON library to fix an issue where objects in an array were concatenated even if they laid on different lines.
+  Also updated our HOCON library to fix an issue where objects in an array were concatenated even if they were laid on different lines.
 
 - [#11459](https://github.com/emqx/emqx/pull/11459) Added the option to configure health check interval for Kafka bridges.
 
@@ -59,13 +58,13 @@
 
 - [#11396](https://github.com/emqx/emqx/pull/11396) Introduced topic index for the rule engine runtime to speed up matching messages' topics to topic filters configured in rule definitions by avoiding full scan of the rule set, significantly improving EMQX's performance when handling a substantial number of rules.
 
-- [#11399](https://github.com/emqx/emqx/pull/11399) Improved the placeholder syntax in rule engine. The republishing actions support placeholder syntax to
-  dynamically fill in the content of strings in payload variable. The format of the placeholder syntax is `${key}`.
+- [#11399](https://github.com/emqx/emqx/pull/11399) Improved the placeholder syntax in the rule engine. The republishing actions support placeholder syntax to
+  dynamically fill in the content of strings in the payload variable. The format of the placeholder syntax is `${key}`.
   Before this improvement, the `key` in `${key}` could only contain letters, numbers, and underscores. Now the `key` supports any UTF8 characters.
   
-- [#11405](https://github.com/emqx/emqx/pull/11405) Made the error message for `date_to_unix_ts` function more clear.
+- [#11405](https://github.com/emqx/emqx/pull/11405) Made the error message for `date_to_unix_ts` function clearer.
 
-- [#11490](https://github.com/emqx/emqx/pull/11490) Added fast error handling for undefined password in various authentication backends. This improves the consistency and user-friendliness of the authentication process.
+- [#11490](https://github.com/emqx/emqx/pull/11490) Added fast error handling for undefined passwords in various authentication backends. This improves the consistency and user-friendliness of the authentication process.
 
 ### Bug Fixes
 
@@ -87,7 +86,7 @@
   
 - [#11347](https://github.com/emqx/emqx/pull/11347) Ensured that OCSP request path is properly URL encoded.
 
-- [#11352](https://github.com/emqx/emqx/pull/11352) Fixed a [crash issue](https://github.com/emqx/emqx/issues/11345) that occured when starting on Windows or any other platform without RocksDB support.
+- [#11352](https://github.com/emqx/emqx/pull/11352) Fixed a [crash issue](https://github.com/emqx/emqx/issues/11345) that occurred when starting on Windows or any other platform without RocksDB support.
 
 
 - [#11388](https://github.com/emqx/emqx/pull/11388) Increased `emqx_router_sup` restart intensity to improve tolerance for occasional crashes that can occur under normal conditions, without necessitating the shutdown of the entire EMQX application.
@@ -113,15 +112,13 @@
 
 - [#11523](https://github.com/emqx/emqx/pull/11523) Corrected a misleading prompt when specifying invalid certificates/keys for the `/configs` API.
 
-- [#11534](https://github.com/emqx/emqx/pull/11534) Fixed the increment on data bridge statistics when bridge is unhealthy. Now, messages sent to unhealthy bridges are counted as dropped messages.
+- [#11534](https://github.com/emqx/emqx/pull/11534) Fixed the increment on data bridge statistics when the bridge is unhealthy. Now, messages sent to unhealthy bridges are counted as dropped messages.
 
 - [#11540](https://github.com/emqx/emqx/pull/11540) Improved HTTP response when attempting to create a bridge with an invalid name.
 
 - [#11548](https://github.com/emqx/emqx/pull/11548) Fixed an issue that prevented the plugin order from being updated across the entire cluster.
 
-- [#11366](https://github.com/emqx/emqx/pull/11366) Fixed an issue that could prevent a pod from starting if some bridge configuration were specified in `bootstrapConfig` using EMQX Operator.
-
-
+- [#11366](https://github.com/emqx/emqx/pull/11366) Fixed an issue that could prevent a pod from starting if some bridge configurations were specified in `bootstrapConfig` using EMQX Operator.
 
 - [#11453](https://github.com/emqx/emqx/pull/11453) Fixed an issue that would yield false negatives when testing the connectivity of InfluxDB bridges.
 
