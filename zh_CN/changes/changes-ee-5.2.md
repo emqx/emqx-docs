@@ -30,7 +30,7 @@
 
 - [#10647](https://github.com/emqx/emqx/pull/10647) 新增了 [GreptimeDB](https://github.com/GreptimeTeam/greptimedb) 数据集成。
 
-- [#11261](https://github.com/emqx/emqx/pull/11261) 实现了 Amazon Kinesis Data Streams 生产者数据集成。
+- [#11261](https://github.com/emqx/emqx/pull/11261) 新增了 Amazon Kinesis Data Streams 生产者数据集成。
 
 - [#11329](https://github.com/emqx/emqx/pull/11329) 实现了 Azure Event Hub 生产者数据集成。
 
