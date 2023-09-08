@@ -1,6 +1,6 @@
 # HStreamDB
 
-通过 HStreamDB 数据桥接可以将 MQTT 消息和客户端事件存储到 HStreamDB 中，也可以通过事件触发对 HStreamDB 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
+[HStreamDB](https://hstream.io/zh) 是一个开源流数据平台，让您能够在一个平台上高效完成对所有实时消息、事件以及其它数据流的一站式摄取、存储、处理和分发。通过 HStreamDB 数据桥接可以将 MQTT 消息和客户端事件存储到 HStreamDB 中，也可以通过事件触发对 HStreamDB 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
 
 {% emqxee %}
 
@@ -41,28 +41,32 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 ### 安装并连接到 HStreamDB
 
-本节描述如何使用 Docker 镜像在 Linux/MacOS 安装启动 HStreamDB 以及如何使用 `hstream` 命令行程序连接到 HStreamDB。关于其他 HStreamDB 的安装方式及 HStreamDB Platform，请参阅 [使用 Docker-Compose 快速开始](https://docs.hstream.io/zh/start/quickstart-with-docker.html) 及 [开始使用 HStream Platform](https://docs.hstream.io/zh/start/try-out-hstream-platform.html)。
+本节描述如何使用 Docker 镜像在 Linux/MacOS 安装启动 HStreamDB 以及如何使用 `hstream` 命令行程序连接到 HStreamDB 并创建 Stream。关于其他 HStreamDB 的安装方式及 HStreamDB Platform，请参阅[使用 Docker-Compose 快速开始](https://docs.hstream.io/zh/start/quickstart-with-docker.html) 及 [开始使用 HStream Platform](https://docs.hstream.io/zh/start/try-out-hstream-platform.html)。
 
-:::tip Docker Compose 版本
+::: tip 注意
 
-请尽可能使用 docker compose v2
+HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，例如删除并重新创建 Stream 后，需要重新连接 HStreamDB，即重启 HStreamDB 资源。
 
 :::
 
----
+#### 启动 HStreamDB TCP 服务并创建 Stream
 
-**启动 HStreamDB TCP 服务并创建 Stream**
+:::tip 前置准备
+
+请确保 Docker 已安装并尽可能使用 Docker Compose v2。
+
+:::
 
 按照以下步骤在本地的 Docker 环境中启动一个单节点的 HStreamDB TCP 服务。
 
-- 将以下 yaml 文件保存至 `docker-compose-tcp.yaml`
+1. 将以下 yaml 文件保存至 `docker-compose-tcp.yaml`。
 
   <details>
   <summary><code>docker-compose-tcp.yaml</code></summary>
 
   ```yaml
   version: "3.9"
-
+  
   services:
     hserver:
       image: hstreamdb/hstream:v0.17.0
@@ -98,7 +102,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
           --store-log-level warning \
           --io-tasks-path /tmp/io/tasks \
           --io-tasks-network quickstart-tcp
-
+  
     hstore:
       image: hstreamdb/hstream:v0.17.0
       container_name: quickstart-tcp-hstore
@@ -118,7 +122,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
           --user-admin-port 6440 \
           --param enable-dscp-reflection=false \
           --no-interactive
-
+  
     zookeeper:
       image: zookeeper:3.8.1
       container_name: quickstart-tcp-zk
@@ -129,11 +133,11 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
       volumes:
         - data_zk_data:/data
         - data_zk_datalog:/datalog
-
+  
   networks:
     quickstart-tcp:
       name: quickstart-tcp
-
+  
   volumes:
     data_store:
       name: quickstart_tcp_data_store
@@ -145,16 +149,23 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
   </details>
 
-- 执行以下 shell 命令以启动 HStreamDB TCP 服务
+2. 执行以下 shell 命令以启动 HStreamDB TCP 服务。
 
   ```bash
   docker compose -f docker-compose-tcp.yaml up --build
   ```
 
-- 进入 HStreamDB 容器并创建名为 `mqtt_connect` 和 `mqtt_message` 的两个 Stream
-  :::tip `hstream` 命令与交互式 sql
-  有关 hstream 命令的其它用法，请参考 help 信息：`hstream --help`
+3. 启动 HStreamDB 交互式 SQL CLI。
+
+  ::: tip 
+  使用 `hstream --help` 命令获取更多有关 `hstream` 命令的其他用法。
   :::
+
+  ```bash
+  docker run -it --rm --name some-hstream-cli --network host hstreamdb/hstream:latest hstream --port 6570 sql
+  ```
+
+4. 进入 HStreamDB 容器并创建名为 `mqtt_connect` 和 `mqtt_message` 的两个 Stream。
 
   <details>
   <summary><b>创建 Stream 命令</b></summary>
@@ -188,36 +199,34 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
   </details>
 
----
-
-**启动 HStreamDB TLS 服务并创建 Stream**
+#### 启动 HStreamDB TLS 服务并创建 Stream
 
 :::tip 关于 Docker 网络环境与证书文件
 
 - 此 docker compose 文件使用了 `172.100.0.0/24` 网段作为 docker network bridge，如有其他网络配置需求，请自行更改 Docker Compose 文件。
-- 请注意不要为容器设置默认的 `http_proxy`, `https_proxy`, `all_proxy` 等环境变量，目前版本中这些环境变量会影响 HStream 各个容器间的通讯。参考 [_Docker Network Proxy_](https://docs.docker.com/network/proxy/)
-- 根证书及自签名证书使用了 [_smallstep/step-ca_](https://hub.docker.com/r/smallstep/step-ca) 容器进行自动化生成，并配置了 `172.100.0.10` 及 `172.100.0.11` 两个主题备用名称。
-- 如有其他证书需求，请自行挂载证书文件至 HStreamDB 容器或参考 [_Configuring step-ca_](https://smallstep.com/docs/step-ca/configuration/index.html)。
-  - step-ca 默认配置下生成的证书仅有一天有效期，若要更改证书有效期配置，请删除 `ca` 目录下的证书，并根据 [_step-ca-configuration-options_](https://smallstep.com/docs/step-ca/configuration/#configuration-options) 更改证书有效期
+- 请注意不要为容器设置默认的 `http_proxy`, `https_proxy`, `all_proxy` 等环境变量，目前版本中这些环境变量会影响 HStream 各个容器间的通讯。参考 [Docker Network Proxy](https://docs.docker.com/network/proxy/)。
+- 根证书及自签名证书使用了 [smallstep/step-ca](https://hub.docker.com/r/smallstep/step-ca) 容器进行自动化生成，并配置了 `172.100.0.10` 及 `172.100.0.11` 两个主题备用名称。
+- 如有其他证书需求，请自行挂载证书文件至 HStreamDB 容器或参考 [Configuring step-ca_](https://smallstep.com/docs/step-ca/configuration/index.html)。
+  - step-ca 默认配置下生成的证书仅有一天有效期，若要更改证书有效期配置，请删除 `ca` 目录下的证书，并根据 [step-ca-configuration-options](https://smallstep.com/docs/step-ca/configuration/#configuration-options) 更改证书有效期。
 
 :::
 
 按照以下步骤在本地的 Docker 环境中启动一个双节点的 HStreamDB TLS 服务。
 
-- 新建目录 tls-deploy/ca 作为证书存储目录
+1. 新建目录 tls-deploy/ca 作为证书存储目录。
 
     ```bash
     mkdir tls-deploy/ca
     ```
 
-- 将以下 yaml 文件保存至 `tls-deploy/docker-compose-tls.yaml`
+2. 将以下 yaml 文件保存至 `tls-deploy/docker-compose-tls.yaml`。
 
   <details>
   <summary><code>docker-compose-tls.yaml</code></summary>
 
   ```yaml
   version: "3.9"
-
+  
   services:
     step-ca:
       image: smallstep/step-ca:0.23.0
@@ -229,7 +238,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
       environment:
         - DOCKER_STEPCA_INIT_NAME=HStream
         - DOCKER_STEPCA_INIT_DNS_NAMES=step-ca
-
+  
     generate-hstream-cert:
       image: smallstep/step-ca:0.23.0
       container_name: quickstart-tls-generate-hstream-cert
@@ -255,7 +264,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
           --san 172.100.0.11 \
           --san quickstart-tls-hserver-0 \
           --san quickstart-tls-hserver-1
-
+  
     hserver0:
       image: hstreamdb/hstream:v0.17.0
       container_name: quickstart-tls-hserver-0
@@ -303,10 +312,10 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
           --tls-key-path /data/server/hstream.key \
           --advertised-listeners l1:hstream://172.100.0.10:6570 \
           --listeners-security-protocol-map l1:tls
-
+  
           # NOTE:
           # advertised-listeners ip addr should same as container addr for tls listener
-
+  
     hserver1:
       image: hstreamdb/hstream:v0.17.0
       container_name: quickstart-tls-hserver-1
@@ -356,10 +365,10 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
           --tls-key-path /data/server/hstream.key \
           --advertised-listeners l1:hstream://172.100.0.11:6572 \
           --listeners-security-protocol-map l1:tls
-
+  
           # NOTE:
           # advertised-listeners ip addr should same as container addr for tls listener
-
+  
     hserver-init:
       image: hstreamdb/hstream:v0.17.0
       container_name: quickstart-tls-hserver-init
@@ -383,7 +392,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
               [ $$timeout -le 0 ] && echo 'Timeout!' && exit 1;
           done; \
           /usr/local/bin/hadmin server --host hserver0 --port 26570 init
-
+  
     hstore:
       image: hstreamdb/hstream:v0.17.0
       container_name: quickstart-tls-hstore
@@ -400,7 +409,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
           --use-tcp --tcp-host $$(hostname -I | awk '{print $$1}') \
           --user-admin-port 6440 \
           --no-interactive
-
+  
     zookeeper:
       image: zookeeper:3.8.1
       container_name: quickstart-tls-zk
@@ -411,7 +420,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
       volumes:
         - data_zk_data:/data
         - data_zk_datalog:/datalog
-
+  
   networks:
     quickstart-tls:
       ipam:
@@ -419,7 +428,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
         config:
           - subnet: "172.100.0.0/24"
       name: quickstart-tls
-
+  
   volumes:
     data_store:
       name: quickstart_tls_data_store
@@ -437,19 +446,19 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
   tls-deploy
   ├── ca
   └── docker-compose-tls.yaml
-
+  
   2 directories, 1 file
   ```
 
-- 进入 `tls-deploy` 目录执行以下 shell 命令以启动 HStreamDB TLS 服务
+3. 进入 `tls-deploy` 目录执行以下 shell 命令以启动 HStreamDB TLS 服务。
 
   ```bash
   env step_ca=$PWD/ca docker compose -f docker-compose-tls.yaml up --build
   ```
 
-- 进入 HStreamDB 容器并创建名为 `mqtt_connect` 和 `mqtt_message` 的两个 Stream
+4. 进入 HStreamDB 容器并创建名为 `mqtt_connect` 和 `mqtt_message` 的两个 Stream。
   :::tip TLS 连接命令行选项
-  类似与 HStreamDB TCP 服务，此处仅需为命令行增加 `--tls-ca [CA_PATH]` 选项
+  类似于 HStreamDB TCP 服务，此处仅需为命令行增加 `--tls-ca [CA_PATH]` 选项。
   需要注意的是，如需在节点 `quickstart-tls-hserver-1` 中执行命令，需要额外指定选项 `--port 6572` 以保证与 docker-compose 文件中指定的端口一致。
   :::
 
@@ -498,16 +507,16 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 4. 输入数据桥接名称，要求是大小写英文字母和数字的组合。
 
 5. 输入 HStreamDB 连接信息。
-   - **服务器地址**： `hstream://127.0.0.1:6570`，或使用实际的 HStreamDB 地址和端口
-     - schema 支持 `http`、`https`、`hstream`、`hstreams`
+   - **服务器地址**： `hstream://127.0.0.1:6570`，或使用实际的 HStreamDB 地址和端口。
+     - schema 支持 `http`、`https`、`hstream`、`hstreams`。
      - 对与 TLS 连接，scheme 需要使用 `hstreams` 或 `https`，如 `hstreams://127.0.0.1:6570`。
    - **HStreamDB 流名称**： 需要写入的 Stream 名，如 `mqtt_connect` 或 `mqtt_message`。
-   - **启用 TLS**： 启用 TLS 连接时，关闭 `验证服务器证书`
+   - **启用 TLS**： 启用 TLS 连接时，关闭**验证服务器证书**。
      - `tls-deploy/ca` 目录下生成的证书及私钥文件： `ca/certs/root_ca.crt`，`ca/hstream.crt`，`ca/hstream.key` 分别填入 `CA Cert`，`TLS Cert`，`TLS Key`。
 
 6. 根据业务实现需要配置 HRecord 模板：
 
-   - 如需实现对指定主题消息的转发，使用如下 HRecord 模板完成数据插入。
+   - 如需实现对指定主题消息的转发，使用如下 HRecord 模板完成数据插入：
 
      ```json
      {"id": ${id}, "topic": "${topic}", "qos": ${qos}, "payload": "${payload}"}
@@ -521,7 +530,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 7. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](./data-bridges.md)。
 
-8. 在点击 **创建** 按钮完成数据桥接创建之前，您可以使用 **测试连接** 来测试当前 EMQX 到 HStreamDB 的连接是否成功。
+8. 在点击**创建**按钮完成数据桥接创建之前，您可以使用**测试连接**来测试当前 EMQX 到 HStreamDB 的连接是否成功。
 
 9. 点击**创建**按钮完成数据桥接创建。
 
@@ -593,6 +602,3 @@ timestamp: "1693903488294", id: 1947758827604597-8589934594-0, key: "", record: 
 ^CRead Done.
 ```
 
-### 已知问题
-
-HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，例如删除并重新创建 Stream 后，需要重新连接 HStreamDB，即重启 HStreamDB 资源。
