@@ -231,11 +231,11 @@
       children:
         - data-integration/schema-registry-example-avro
         - data-integration/schema-registry-example-protobuf
-   # - title_en: Sparkplug
-   #   title_cn: Sparkplug
-   #   path: data-integration/sparkplug
-   #   edition: ee
-   #   collapsed: true
+    - title_en: Sparkplug
+      title_cn: Sparkplug
+      path: data-integration/sparkplug
+      edition: ee
+      collapsed: true
 
 ## Data integration
 # - data-integration/introduction
@@ -267,6 +267,7 @@
     - data-integration/data-bridge-opents
     - data-integration/data-bridge-rabbitmq
     - data-integration/data-bridge-hstreamdb
+    - data-integration/data-bridge-kinesis
 
     # TODO
     # - title_en: Examples and Tutorials
