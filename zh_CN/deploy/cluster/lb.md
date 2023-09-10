@@ -50,7 +50,7 @@
 
 下面我们将以私有部署 LB 服务器为例向大家介绍如何配置并负载均衡 EMQX 集群。
 
-## 配置 HAProxy/NGINX 负载均衡
+## 配置 HAProxy 负载均衡
 
 假设 EMQX 集群中有以下 2 个节点：
 
@@ -59,11 +59,16 @@
 | emqx1 | 192.168.0.2 |
 | emqx2 | 192.168.0.3 |
 
-对应的配置方式如下。
+您可以按照以下指导为集群配置 HAProxy 负载均衡。
 
-### 启用 Proxy Protocol
+### 前置准备
 
-如果 EMQX 集群部署在 HAProxy 或 NGINX 后，且需要拿到客户端真实的源 IP 地址与端口，则需要在 EMQX 对应监听器打开 Proxy Protocol 配置，以 1883 监听器为例，在 `etc/emqx.conf` 中找到监听器配置并添加 `proxy_protocol` 配置项：
+- HAProxy 已安装，有关 HAProxy 介绍及安装请参考 [HAProxy 官方网站](http://www.haproxy.org/)。
+- Proxy protocol 已启用。
+
+#### 启用 Proxy Protocol
+
+如果 EMQX 集群部署在 HAProxy 后，且需要拿到客户端真实的源 IP 地址与端口，则需要在 EMQX 对应监听器打开 Proxy Protocol 配置，以 1883 监听器为例，在 `etc/emqx.conf` 中找到监听器配置并添加 `proxy_protocol` 配置项：
 
 ```bash
 listeners.tcp.default {
@@ -74,20 +79,11 @@ listeners.tcp.default {
 }
 ```
 
-有关 Proxy Protocol 的介绍和 NGINX 中使用的 Proxy Protocol，可以参考：
+有关 Proxy Protocol 的介绍，可以参考：[Proxy Protocol 介绍](https://www.haproxy.com/blog/haproxy/proxy-protocol)。
 
-- [Proxy Protocol 介绍](https://www.haproxy.com/blog/haproxy/proxy-protocol)
-- [NGINX 中使用 Proxy Protocol](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)
+### 配置示例
 
-:::: tabs type:card
-
-::: tab 配置 HAProxy
-
-**前置准备**：HAProxy 已安装，有关 HAProxy 介绍及安装请参考 [HAProxy 官方网站](http://www.haproxy.org/)。
-
-如使用 HAProxy 作为 EMQX 集群的 LB，并终结 SSL 连接，可参照如下示例修改 `/etc/haproxy/haproxy.cfg`。
-
-注意：根据您所选的 HAProxy 安装方式，文件路径会有差异。
+如使用 HAProxy 作为 EMQX 集群的 LB，并终结 SSL 连接，可参照如下示例修改 `/etc/haproxy/haproxy.cfg`。注意：根据您所选的 HAProxy 安装方式，文件路径会有差异。
 
 ```bash
 listen mqtt-ssl
@@ -106,11 +102,40 @@ backend emqx_cluster
   server emqx2 192.168.0.3:1883 check inter 10000 fall 2 rise 5 weight 1
 ```
 
-:::
+在这个示例中，您有一个能够处理最多 50,000 个并发连接（`maxconn`）的集群。您希望配置 HAProxy 以在端口 `8883` 上监视所有经过 SSL 加密的传入流量（SSL 证书位于 `/etc/ssl/emqx/emq.pem`），并使用 `source` 负载均衡算法终止 SSL 连接。
 
-::: tab 配置 NGINX
+## 配置 NGINX 负载均衡
 
-**前置准备**：NGINX 已安装，有关 NGINX 介绍及安装请参考 [Nginx 官方网站](https://www.nginx.com/)。
+假设 EMQX 集群中有以下 2 个节点：
+
+| 节点  | IP 地址     |
+| ----- | ----------- |
+| emqx1 | 192.168.0.2 |
+| emqx2 | 192.168.0.3 |
+
+您可以按照以下指导为集群配置 NGINX 负载均衡。
+
+### 前置准备
+
+- NGINX 已安装，有关 NGINX 介绍及安装请参考 [Nginx 官方网站](https://www.nginx.com/)。
+- Proxy protocol 已启用。
+
+#### 启用 Proxy Protocol
+
+如果 EMQX 集群部署在 NGINX 后，且需要拿到客户端真实的源 IP 地址与端口，则需要在 EMQX 对应监听器打开 Proxy Protocol 配置，以 1883 监听器为例，在 `etc/emqx.conf` 中找到监听器配置并添加 `proxy_protocol` 配置项：
+
+```bash
+listeners.tcp.default {
+  bind = "0.0.0.0:1883"
+  max_connections = 1024000
+
+  proxy_protocol = true
+}
+```
+
+有关 NGINX 中使用的 Proxy Protocol，可以参考：[NGINX 中使用 Proxy Protocol](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)。
+
+### 配置示例
 
 如使用 NGINX 作为 EMQX 集群的 LB，并终结 SSL 连接，修改 `/etc/nginx/nginx.conf` 配置。
 
@@ -137,6 +162,4 @@ stream {
 }
 ```
 
-:::
-
-::::
+在这个示例中，您想要配置 NGINX 负载均衡器，在端口 `8883` 上监听经过 SSL 加密的传入连接，终止 SSL 连接，然后使用 `stream` 模块将这些连接转发到两个上游服务器中的一个。

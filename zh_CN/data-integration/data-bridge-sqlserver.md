@@ -59,7 +59,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
    $ docker exec -it sqlserver bash
    ```
 
-3. 在容器中连接到 Microsoft SQL Server 服务器，需要输入预设的密码。因为安全原因，输入密码时字符不会回显。请输入密码后直接键入 `Enter`。
+3. 在容器中连接到 Microsoft SQL Server 服务器，需要输入预设的密码。输入密码时字符不会回显。请输入密码后直接键入 `Enter`。
 
    ```bash
    $ /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa

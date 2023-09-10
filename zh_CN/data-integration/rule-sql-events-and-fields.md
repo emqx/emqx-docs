@@ -138,19 +138,25 @@ FROM
 事件消息的主题以 `"$events/"` 开头，比如 `"$events/client_connected",` `"$events/session_subscribed"。`
 如果想让 emqx 将事件消息发布出来，可以在 `emqx_rule_engine.conf` 文件中配置。
 
+::: tip
+
+默仍情况下，客户端无法直接订阅 MQTT 事件消息。 本节介绍了如何使用规则来订阅这些消息，您也可以通过订阅[系统主题](../observability/mqtt-system-topics.md)直接获取 MQTT 事件消息。
+
+:::
+
 ### FROM 子句可用的事件主题
-| 事件主题名                             | 释义                     |
-|----------------------------------------|:-------------------------|
-| $events/message\_delivered             | 消息投递                 |
-| $events/message\_acked                 | 消息确认                 |
-| $events/message\_dropped               | 消息在转发的过程中被丢弃 |
-| $events/delivery\_dropped              | 消息在投递的过程中被丢弃 |
-| $events/client\_connected              | 连接完成                 |
-| $events/client\_disconnected           | 连接断开                 |
-| $events/client\_connack                | 连接确认                 |
-| $events/client\_check\_authz\_complete | 鉴权完成                 |
-| $events/session\_subscribed            | 订阅                     |
-| $events/session\_unsubscribed          | 取消订阅                 |
+| 事件主题名                                                   | 释义                     |
+| ------------------------------------------------------------ | :----------------------- |
+| [$events/message\_delivered](#消息投递事件-events-message-delivered) | 消息投递                 |
+| [$events/message\_acked](#消息确认事件-events-message-acked) | 消息确认                 |
+| [$events/message\_dropped](#消息在转发的过程中被丢弃事件-events-message-dropped) | 消息在转发的过程中被丢弃 |
+| [$events/delivery\_dropped](#消息在投递的过程中被丢弃事件-events-delivery-dropped) | 消息在投递的过程中被丢弃 |
+| [$events/client\_connected](#终端连接成功事件-events-client-connected) | 连接完成                 |
+| [$events/client\_disconnected](#终端连接断开事件-events-client-disconnected) | 连接断开                 |
+| [$events/client\_connack](#连接确认事件-events-client-connack) | 连接确认                 |
+| [$events/client\_check\_authz\_complete](#鉴权完成事件-events-client-check-authz-complete) | 鉴权完成                 |
+| [$events/session\_subscribed](#终端订阅成功事件-events-session-subscribed) | 订阅                     |
+| [$events/session\_unsubscribed](#取消终端订阅成功事件-events-session-unsubscribed) | 取消订阅                 |
 
 ### 消息投递事件 ("$events/message_delivered")
 
@@ -262,6 +268,7 @@ FROM
 | publish\_received\_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒)                                                                                                                       |
 | node                  | 事件触发所在节点                                                                                                                                                  |
 示例
+
 ```sql
 SELECT
   reason,
@@ -272,7 +279,9 @@ SELECT
 FROM
   "$events/message_dropped"
 ```
+
 输出
+
 ```json
 {
   "topic": "t/a",
