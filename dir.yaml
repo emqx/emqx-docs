@@ -245,28 +245,72 @@
   path: data-integration/data-bridges
   collapsed: true
   children:
-    - data-integration/data-bridge-webhook
-    - data-integration/data-bridge-mqtt
-    - data-integration/data-bridge-kafka
-    - data-integration/data-bridge-pulsar
-    - data-integration/data-bridge-influxdb
-    - data-integration/data-bridge-timescale
-    - data-integration/data-bridge-mysql
-    - data-integration/data-bridge-redis
-    - data-integration/data-bridge-gcp-pubsub
-    - data-integration/data-bridge-mongodb
-    - data-integration/data-bridge-pgsql
-    - data-integration/data-bridge-dynamo
-    - data-integration/data-bridge-clickhouse
-    - data-integration/data-bridge-cassa
-    - data-integration/data-bridge-tdengine
-    - data-integration/data-bridge-rocketmq
-    - data-integration/data-bridge-oracle
-    - data-integration/data-bridge-sqlserver
-    - data-integration/data-bridge-iotdb
-    - data-integration/data-bridge-opents
-    - data-integration/data-bridge-rabbitmq
-    - data-integration/data-bridge-kinesis
+    - title_en: HTTP Server
+      title_cn: HTTP Server
+      path: data-integration/data-bridge-webhook
+    - title_en: MQTT
+      title_cn: MQTT
+      path: data-integration/data-bridge-mqtt
+    - title_en: Apache Kafka
+      title_cn: Apache Kafka
+      path: data-integration/data-bridge-kafka
+    - title_en: Apache Pulsar
+      title_cn: Apache Pulsar
+      path: data-integration/data-bridge-pulsar
+    - title_en: InfluxDB
+      title_cn: InfluxDB
+      path: data-integration/data-bridge-influxdb
+    - title_en: TimescaleDB
+      title_cn: TimescaleDB
+      path: data-integration/data-bridge-timescale
+    - title_en: MySQL
+      title_cn: MySQL
+      path: data-integration/data-bridge-mysql
+    - title_en: Redis
+      title_cn: Redis
+      path: data-integration/data-bridge-redis
+    - title_en: GCP PubSub
+      title_cn: GCP PubSub
+      path: data-integration/data-bridge-gcp-pubsub
+    - title_en: MongoDB
+      title_cn: MongoDB
+      path: data-integration/data-bridge-mongodb
+    - title_en: PostgreSQL
+      title_cn: PostgreSQL
+      path: data-integration/data-bridge-pgsql
+    - title_en: DynamoDB
+      title_cn: DynamoDB
+      path: data-integration/data-bridge-dynamo
+    - title_en: ClickHouse
+      title_cn: ClickHouse
+      path: data-integration/data-bridge-clickhouse
+    - title_en: Cassandra
+      title_cn: Cassandra
+      path: data-integration/data-bridge-cassa
+    - title_en: TDengine
+      title_cn: TDengine
+      path: data-integration/data-bridge-tdengine
+    - title_en: RocketMQ
+      title_cn: RocketMQ
+      path: data-integration/data-bridge-rocketmq
+    - title_en: Oracle Database
+      title_cn: Oracle Database
+      path: data-integration/data-bridge-oracle
+    - title_en: Microsoft SQL Server
+      title_cn: Microsoft SQL Server
+      path: data-integration/data-bridge-sqlserver
+    - title_en: Apache IoTDB
+      title_cn: Apache IoTDB
+      path: data-integration/data-bridge-iotdb
+    - title_en: OpenTSDB
+      title_cn: OpenTSDB
+      path: data-integration/data-bridge-opents
+    - title_en: RabbitMQ
+      title_cn: RabbitMQ
+      path: data-integration/data-bridge-rabbitmq
+    - title_en: GreptimeDB
+      title_cn: GreptimeDB
+      path: data-integration/data-bridge-greptimedb
 
     # TODO
     # - title_en: Examples and Tutorials

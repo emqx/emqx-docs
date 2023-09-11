@@ -1,4 +1,4 @@
-# Ingest Data into Oracle Database
+# Ingest MQTT Data into Oracle Database
 
 EMQX supports integration with Oracle Database so you can save MQTT messages and client events to Oracle Database, or use events to trigger the update or removal of data to record the online status or online/offline of clients.
 

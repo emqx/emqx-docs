@@ -1,4 +1,4 @@
-# Bridge Data into MQTT Broker
+# Bridge MQTT Data into MQTT Broker
 
 The MQTT data bridge is a channel for EMQX to communicate with other MQTT services, including EMQX clusters that use the MQTT protocol. This page introduces how the MQTT data bridge works in EMQX and provides a quick start tutorial on how to create an MQTT data bridge in EMQX Dashboard or using the configuration file.
 

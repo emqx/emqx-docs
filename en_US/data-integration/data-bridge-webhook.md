@@ -1,4 +1,4 @@
-# Ingest Data into HTTP Server
+# Ingest MQTT Data into HTTP Server
 
 HTTP Server is the channel through which EMQX sends messages to HTTP services. Through HTTP servers, users can send messages to the remote HTTP service from a local topic, or from the output of a rule.
 

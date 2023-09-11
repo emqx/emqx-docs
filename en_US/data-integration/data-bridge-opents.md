@@ -1,4 +1,4 @@
-# Ingest Data into OpenTSDB
+# Ingest MQTT Data into OpenTSDB
 
 EMQX supports integration with OpenTSDB. You can save MQTT messages to OpenTSDB for subsequent analysis and retrieval.
 

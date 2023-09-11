@@ -1,4 +1,4 @@
-# Ingest Data into PostgreSQL
+# Ingest MQTT Data into PostgreSQL
 
 EMQX supports integration with PostgreSQL so you can save MQTT messages and client events to PostgreSQL, or use events to trigger the update or removal of data to record the online status or online/offline of clients.
 
