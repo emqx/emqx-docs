@@ -1,6 +1,6 @@
 # Ingest MQTT Data into GCP Pub/Sub
 
-EMQX supports seamless integration with [Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=en-us) for real-time extraction, processing and analysis of MQTT data, and can also push and subscribe to various Google Cloud services such as Cloud Functions, App Engine, Cloud Run or Kubernetes Engine or Compute Engine. 
+EMQX supports seamless integration with [Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=en-us) for real-time extraction, processing and analysis of MQTT data, and can also push and subscribe to various Google Cloud services such as Cloud Functions, App Engine, Cloud Run or Kubernetes Engine or Compute Engine.
 
 EMQX GCP Pub/Sub integration allows you to send MQTT messages and events to GCP Pub/Sub, which can help you flexibly choose services on Google Cloud and build IoT applications more easily.
 
@@ -30,7 +30,7 @@ This section introduces how to configure the GCP Pub/Sub data bridge, including 
 
 ### Create Service Account Key in GCP
 
-You need to create a service account and a service account key to use the GCP PubSub service. 
+You need to create a service account and a service account key to use the GCP PubSub service.
 
 1. Create a [Service Account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) in your GCP account.  Ensure that the Service Account has permissions to at least publish messages to the topic of interest.
 
@@ -60,7 +60,7 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
    <img src="./assets/gcp_pubsub/create-topic-GCP-console.png" alt="create-topic-GCP-console" style="zoom:50%;" />
 
-3. Go to the **Subscriptions** page. Click the **Topic ID** in the list. Create a subscription to the topic. 
+3. Go to the **Subscriptions** page. Click the **Topic ID** in the list. Create a subscription to the topic.
 
    - Select **Pull** in **Delivery type**.
    - Select `7` Days for **Message retention duration**.
@@ -85,20 +85,25 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
-5. In **GCP PubSub Topic** field, input the topic id you created in [Create and Manage Topic in GCP](#create-and-manage-topic-in-gcp). 
+5. In **GCP PubSub Topic** field, input the topic id you created in [Create and Manage Topic in GCP](#create-and-manage-topic-in-gcp).
 
 6. In the **Payload Template** field, leave it blank or define a template.
 
-   -  If left blank, it will encode all visible inputs from the MQTT message using JSON format, such as clientid, topic, payload, etc.  
+   -  If left blank, it will encode all visible inputs from the MQTT message using JSON format, such as clientid, topic, payload, etc.
    - If use the defined template, placeholders of the form `${variable_name}` will be filled with the corresponding value from the MQTT context.  For example, `${topic}` will be replaced with `my/topic` if such is the MQTT message topic.
 
-7. In the **GCP Service Account Credentials** field, upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
+7. (optional) Similarly, define templates for **Attributes** and/or **Ordering Key**.
 
-8. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed.
+   - For **Attributes**, both keys and values may use placeholders of the form `${variable_name}`.  Such values will be extracted from the MQTT context.  If a key template resolves to an empty string, that key is omitted from the outgoing message to GCP PubSub.
+   - For **Ordering Key**, placeholders of the form `${variable_name}` may be used.  If the resolved value is an empty string, the `orderingKey` field will not be set for the GCP PubSub outgoing message.
 
-9. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Redis server.
+8. In the **GCP Service Account Credentials** field, upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
 
-10. Click **Create** to finish the creation of the data bridge. 
+9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed.
+
+10. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Redis server.
+
+11. Click **Create** to finish the creation of the data bridge.
 
     A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into GCP PubSub. You can also create rules by following the steps in [Create Rules for GCP PubSub Data Bridge](#create-rules-for-GCP-PubSub-data-bridge).
 
@@ -112,10 +117,10 @@ You can continue to create rules to specify the data to be saved into GCP PubSub
 
 3. Input `my_rule` as the rule ID.
 
-3. Set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `/devices/+/events`  to GCP PubSub, we can use the SQL syntax below. 
+3. Set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `/devices/+/events`  to GCP PubSub, we can use the SQL syntax below.
 
    Note: If you want to specify your own SQL syntax, make sure that the `SELECT` part includes all fields required by the payload template in the data bridge.
-   
+
    ```sql
    SELECT
      *
@@ -137,13 +142,6 @@ Now a rule to forward data to GCP PubSub via a GCP PubSub bridge is created. You
    mqttx pub -i emqx_c -t /devices/+/events -m '{ "msg": "hello GCP PubSub" }'
    ```
 
-2. Check the running status of the data bridge, there should be one new incoming and one new outgoing message. 
+2. Check the running status of the data bridge, there should be one new incoming and one new outgoing message.
 
 3. Go to GCP **Pub/Sub** -> **Subscriptions**, click **MESSAGES** tab. You should see the message.
-
-   
-
-
-
-
-
