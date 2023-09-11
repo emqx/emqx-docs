@@ -31,7 +31,7 @@ prometheus {
 }
 ```
 
-## 通过 Dashboard 配置
+## 通过 Dashboard 配置集成
 
 {% emqxce %}
 

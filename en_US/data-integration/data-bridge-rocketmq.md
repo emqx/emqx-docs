@@ -1,4 +1,4 @@
-# Bridge Data into RocketMQ
+# Bridge MQTT Data into RocketMQ
 
 EMQX supports bridging data into RocketMQ, so you can forward MQTT messages and client events to RocketMQ, for example, use events to trigger the update of data to record the online status or online/offline of clients.
 

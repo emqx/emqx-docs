@@ -1,4 +1,4 @@
-# Ingest Data into RabbitMQ
+# Ingest MQTT Data into RabbitMQ
 
 [RabbitMQ](https://www.rabbitmq.com/) is a widely used open-source message broker that implements the Advanced Message Queuing Protocol (AMQP). It provides a robust and scalable platform for messaging between distributed systems.
 
