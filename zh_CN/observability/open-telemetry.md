@@ -1,5 +1,10 @@
-# 集成Opentelemetry
-[OpenTelemetry](https://opentelemetry.io/docs/what-is-opentelemetry/) 是一个用于管理 Traces、Metrics 和 Logs 等遥测数据的可观测性框架。它可对接 Jaeger 和 Prometheus 类的可观测性后台。EMQX 5.2 已支持将 Metrics 通过 OTEL 协议上传至 OpenTelemetry Collector。
+# 集成 OpenTelemetry
+[OpenTelemetry](https://opentelemetry.io/docs/what-is-opentelemetry/) 是一个用于管理 traces、metrics 和 logs 等遥测数据的可观测性框架。它可对接 Jaeger 和 Prometheus 类的可观测性后台。EMQX 5.2 已支持通过 gRPC OTEL 协议直接把 metrics 推送到 OpenTelemetry Collector，再经 Collector 中转/过滤/转换到任意你想要集成的后台中作存储和可视化。
+
+本页介绍了如何在 EMQX Dashboard 中配置 EMQX 与 OpenTelemetry 的集成，然后通过 [Prometheus](./open-telemetry.md) 查看 EMQX 指标。
+
+未来我们也将集成 trace 和 log 遥测数据到 Collector，全面支持 OpenTelemetry 生态。
+
 ```
                                        -> StatsD
                                        -> ElasticSearch        
@@ -10,6 +15,9 @@ EMQX    -->   Opentelemetry Collector  -> Prometheus
                                        -> Any open source or vendor backend of your choice
 ```
 ## 前期准备工作
+
+在集成 Opentelemetry 之前，您需要先部署和配置 OpenTelemetry 以及 Prometheus。
+
 - 部署 [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started)。
 - 配置 Collector GRPC 接收端口（端口默认为 4317 ），及导出为 Prometheus Metrics 的端口（8889）。
 ```
@@ -44,7 +52,9 @@ scrape_configs:
       - targets: ['otel-collector:8889'] # emqx metrics
       - targets: ['otel-collector:8888'] # collector metrics
 ```
-## 通过 Dashboard 配置 EMQX
+## 通过 Dashboard 配置集成
+
+您可在 EMQX Dashboard 设置集成 OpenTelemetry。点击左侧导航目录中的**管理** -> **监控**，在**监控集成**页签，设置启用 OpenTelemetry。
 
 ![OpenTelemetry-Dashboard](./assets/opentelemetry-dashboard-zh.png)
 - 服务地址： OpenTelemetry Collector 的 GRPC 端口地址，默认为`http://localhost:4317`
@@ -55,6 +65,3 @@ scrape_configs:
 
 ![OpenTelemetry-Prometheus](./assets/opentelemetry-prometheus.png)
 
-- ## 总结
-- EMQX 支持通过 GRPC OTEL 协议直接把 Metrics 推送到 OpenTelemetry Collector，再经 Collector 中转/过滤/转换到任意你想要集成的后台中作存储和可视化。
-- 未来我们也将集成 Trace 和 Log 到 Collector，全面支持 OpenTelemetry 生态。
