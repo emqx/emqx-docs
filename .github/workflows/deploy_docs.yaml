@@ -208,6 +208,8 @@ jobs:
         wget http://gosspublic.alicdn.com/ossutil/1.7.8/ossutil64
         chmod 755 ./ossutil64
         ./ossutil64 config -e https://oss-accelerate.aliyuncs.com -i ${{ secrets.ALI_OSS_ACCESSKEY_ID }} -k ${{ secrets.ALI_OSS_ACCESSKEY_SECRET }} -L CH
+        ./ossutil64 rm -r oss://emqx-io-docs/docs/zh/${VERSION} || true
+        ./ossutil64 rm -r oss://emqx-io-docs/docs/en/${VERSION} || true
         ./ossutil64 cp -r dist/ oss://emqx-io-docs/docs/ -u
 
     - name: upload ee file
