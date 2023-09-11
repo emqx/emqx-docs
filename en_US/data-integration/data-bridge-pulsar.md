@@ -1,4 +1,4 @@
-# Stream Data into Apache Pulsar
+# Stream MQTT Data into Apache Pulsar
 
 [Apache Pulsar](https://pulsar.apache.org/) is a popular open-source distributed event streaming platform. EMQX's integration with Apache Pulsar offers users dependable data transport and processing capabilities in high-throughput situations.
 
