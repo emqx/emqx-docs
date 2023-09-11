@@ -46,7 +46,7 @@ For more information about EMQX official docker image, see [Docker Hub - emqx/em
 
 {% endemqxee %}
 
-## Notes on Docker Deployment
+## Docker Deployment Precautions
 
 1. If you want to persist data generated in the EMQX Docker container, you need to keep the following directories, so that the data will persist even if the container no longer exists.
 
@@ -55,72 +55,56 @@ For more information about EMQX official docker image, see [Docker Hub - emqx/em
    /opt/emqx/etc
    /opt/emqx/log
    ```
-  
-  Note: Copy files under `/opt/etc` to the host before mounting `/opt/etc`. For more details on EMQX directory structure, refer to [EMQX - Files and Directories](./install.md#files-and-directories).
+   
+   Copy files under `/opt/etc` to the host before mounting `/opt/etc`. For more details on EMQX directory structure, refer to [EMQX - Files and Directories](./install.md#files-and-directories).
+   
+    {% emqxce %}
+   
+   ```
+   docker run --rm emqx/emqx:@CE_VERSION@ sh -c 'cd /opt/emqx && tar -c etc' | tar -C $PWD -x
+   ```
+   
+    Start container and mount directory:
+   
+   ```bash
+   docker run -d --name emqx \
+     -p 1883:1883 -p 8083:8083 \
+     -p 8084:8084 -p 8883:8883 \
+     -p 18083:18083 \
+     -v $PWD/etc:/opt/emqx/etc \
+     -v $PWD/data:/opt/emqx/data \
+     -v $PWD/log:/opt/emqx/log \
+     emqx/emqx:@CE_VERSION@
+   ```
+   
+    {% endemqxce %}
+   
+    {% emqxee %}
+   
+    Copy files under `/opt/emqx/etc` to the host:
+   
+   ```bash
+   docker run --rm emqx/emqx-enterprise:@EE_VERSION@ sh -c 'cd /opt/emqx && tar -c etc' | tar -C $PWD -x
+   ```
+   
+    Start container and mount directory:
+   
+   ```bash
+   docker run -d --name emqx-enterprise \
+     -p 1883:1883 -p 8083:8083 \
+     -p 8084:8084 -p 8883:8883 \
+     -p 18083:18083 \
+     -v $PWD/etc:/opt/emqx/etc \
+     -v $PWD/data:/opt/emqx/data \
+     -v $PWD/log:/opt/emqx/log \
+     emqx/emqx-enterprise:@EE_VERSION@
+   ```
+   
+    {% endemqxee %}
 
-  {% emqxce %}
+2. In Docker environments, `localhost` or `127.0.0.1` refers to the container's own internal network interface, not that of the host machine. To access services running on the host machine, use the host's IP address or use [host networking settings](https://docs.docker.com/network/host/). If you are using Docker for Mac or Docker for Windows, you can use `host.docker.internal` as the host address.
 
-  ```bash
-  {% emqxce %}
-
-  Copy files under `/opt/emqx/etc` to the host:
-
-  ```bash
-  docker run --rm emqx/emqx:@CE_VERSION@ sh -c 'cd /opt/emqx && tar -c etc' | tar -C $PWD -x
-  ```
-
-  Start container and mount directory:
-
-  ```bash
-  docker run -d --name emqx \
-    -p 1883:1883 -p 8083:8083 \
-    -p 8084:8084 -p 8883:8883 \
-    -p 18083:18083 \
-    -v $PWD/etc:/opt/emqx/etc \
-    -v $PWD/data:/opt/emqx/data \
-    -v $PWD/log:/opt/emqx/log \
-    emqx/emqx:@CE_VERSION@
-  ```
-
-  ```bash
-  docker run -d --name emqx \
-    -p 1883:1883 -p 8083:8083 \
-    -p 8084:8084 -p 8883:8883 \
-    -p 18083:18083 \
-    -v $PWD/etc:/opt/emqx/etc \
-    -v $PWD/data:/opt/emqx/data \
-    -v $PWD/log:/opt/emqx/log \
-    emqx/emqx:@CE_VERSION@ 
-  ```
-
-  {% endemqxce %}
-
-  {% emqxee %}
-
-  Copy files under `/opt/emqx/etc` to the host:
-
-  ```bash
-  docker run --rm emqx/emqx-enterprise:@EE_VERSION@ sh -c 'cd /opt/emqx && tar -c etc' | tar -C $PWD -x
-  ```
-
-  Start container and mount directory:
-
-  ```bash
-  docker run -d --name emqx-enterprise \
-    -p 1883:1883 -p 8083:8083 \
-    -p 8084:8084 -p 8883:8883 \
-    -p 18083:18083 \
-    -v $PWD/etc:/opt/emqx/etc \
-    -v $PWD/data:/opt/emqx/data \
-    -v $PWD/log:/opt/emqx/log \
-    emqx/emqx-enterprise:@EE_VERSION@
-  ```
-
-  {% endemqxee %}
-
-2. In Docker, localhost or 127.0.0.1 points to the internal address of the container. Use the host’s IP or host networking to access the host address. If you are using Docker for Mac or Docker for Windows, you can use host.docker.internal as the host address.
-
-3. As EMQX uses `data/mnesia/<node_name>` as the data storage directory, it is important to select a fixed identifier, such as the hostname or FQDN, as the node name. This practice avoids data loss caused by node name changes.
+3. EMQX employs the `data/mnesia/<node_name>` directory for data storage. It's crucial to choose a stable identifier, such as a hostname or Fully Qualified Domain Name (FQDN), to serve as the node name. This practice avoids data loss caused by node name changes.
 
 ## Use Docker Compose to Build an EMQX Cluster
 
