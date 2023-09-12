@@ -41,7 +41,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 ### 前置准备
 
-以下小节描述如何使用 Docker 镜像在 Linux/MacOS 安装启动 HStreamDB，因此请确保 Docker 已安装并尽可能使用 Docker Compose v2。关于其他 HStreamDB 的安装方式及 HStreamDB Platform，请参阅[使用 Docker-Compose 快速开始](https://docs.hstream.io/zh/start/quickstart-with-docker.html) 及 [开始使用 HStream Platform](https://docs.hstream.io/zh/start/try-out-hstream-platform.html)。
+以下小节描述如何使用 Docker 镜像在 Linux/MacOS 安装启动 HStreamDB，因此请确保 Docker 已安装并尽可能使用 Docker Compose v2。关于其他 HStreamDB 的安装方式及 HStreamDB Platform，请参阅[使用 Docker-Compose 快速开始](https://docs.hstream.io/zh/start/quickstart-with-docker.html)以及[开始使用 HStream Platform](https://docs.hstream.io/zh/start/try-out-hstream-platform.html)。
 
 ### 启动 HStreamDB TCP 服务并创建 Stream
 
@@ -197,10 +197,10 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 ::: tip 关于 Docker 网络环境与证书文件
 
 - 此 docker compose 文件使用了 `172.100.0.0/24` 网段作为 docker network bridge，如有其他网络配置需求，请自行更改 Docker Compose 文件。
-- 请注意不要为容器设置默认的 `http_proxy`, `https_proxy`, `all_proxy` 等环境变量，目前版本中这些环境变量会影响 HStream 各个容器间的通讯。参考 [Docker Network Proxy](https://docs.docker.com/network/proxy/)。
-- 根证书及自签名证书使用了 [smallstep/step-ca](https://hub.docker.com/r/smallstep/step-ca) 容器进行自动化生成，并配置了 `172.100.0.10` 及 `172.100.0.11` 两个主题备用名称。
-- 如有其他证书需求，请自行挂载证书文件至 HStreamDB 容器或参考 [Configuring step-ca_](https://smallstep.com/docs/step-ca/configuration/index.html)。
-  - step-ca 默认配置下生成的证书仅有一天有效期，若要更改证书有效期配置，请删除 `ca` 目录下的证书，并根据 [step-ca-configuration-options](https://smallstep.com/docs/step-ca/configuration/#configuration-options) 更改证书有效期。
+- 请注意不要为容器设置默认的 `http_proxy`, `https_proxy`, `all_proxy` 等环境变量，目前版本中这些环境变量会影响 HStream 各个容器间的通讯。参考 [__Docker Network Proxy_](https://docs.docker.com/network/proxy/)。
+- 根证书及自签名证书使用了 [__smallstep/step-ca_](https://hub.docker.com/r/smallstep/step-ca) 容器进行自动化生成，并配置了 `172.100.0.10` 及 `172.100.0.11` 两个主题备用名称。
+- 如有其他证书需求，请自行挂载证书文件至 HStreamDB 容器或参考 [__Configuring step-ca_](https://smallstep.com/docs/step-ca/configuration/index.html)。
+  - step-ca 默认配置下生成的证书仅有一天有效期，若要更改证书有效期配置，请删除 `ca` 目录下的证书，并根据 [__step-ca-configuration-options_](https://smallstep.com/docs/step-ca/configuration/#configuration-options) 更改证书有效期。
 
 :::
 
