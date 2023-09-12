@@ -71,12 +71,12 @@ listeners.tcp.default {
 }
 ```
 
-Where:  <!--the explanations need a review-->
+Where:
 
 - `listeners.tcp.default` is the name or identifier of the TCP listener configuration.
 - `bind` is the network interface and port the LB is bound, default: `1883`.
 - `max_connections` is the maximum number of concurrent connections allowed by the listener, default: `infinity`.
-- `proxy_protocol` is to enable/disable the proxy protocol, it is a boolean, default: `false`. 
+- `proxy_protocol` is to enable/disable the proxy protocol, it is a boolean, default: `false`.
 
 ::: tip
 
@@ -86,11 +86,11 @@ For proxy protocols and that used in Haproxy, see https://www.haproxy.com/blog/h
 
 ### Configuration Example
 
-To configure HAProxy as the LB for EMQX and terminate the SSL connection, you can modify `/etc/haproxy/haproxy.cfg` following the code example below. 
+To configure HAProxy as the LB for EMQX and terminate the SSL connection, you can modify `/etc/haproxy/haproxy.cfg` following the code example below.
 
 Note: The file path may differ based on your installation mode. <!--should we also add the parameter explanation? -->
 
-```bash
+```
 listen mqtt-ssl
   bind *:8883 ssl crt /etc/ssl/emqx/emq.pem no-sslv3
   mode tcp
@@ -150,7 +150,35 @@ To configure NGINX as the LB for EMQX and terminate the SSL connection, you can 
 
 Note: The file path may differ based on your installation mode.
 
-```bash
+**Code Example**:
+
+```
+listeners.tcp.default {
+  bind = "0.0.0.0:1883"
+  proxy_protocol = true
+}
+```
+
+Where:
+
+- `listeners.tcp.default` is the name or identifier of the TCP listener configuration.
+- `bind` is the network interface and port the LB is bound, default: `1883`
+- `max_connections` is the maximum number of concurrent connections allowed by the listener, default: `infinity`
+- `proxy_protocol` is to enable/disable the proxy protocol, it is a boolean, default: `false`.
+
+::: tip
+
+For proxy protocols that are used in NGINX, see https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/.
+
+:::
+
+### Configuration Example
+
+To configure NGINX as the LB for EMQX and terminate the SSL connection, you can modify `/etc/nginx/nginx.conf` following the code example below.
+
+Note: The file path may differ based on your installation mode.
+
+```
 stream {
   upstream stream_backend {
       zone tcp_servers 64k;
