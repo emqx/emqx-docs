@@ -60,7 +60,7 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 
   ```yaml
   version: "3.9"
-  
+
   services:
     hserver:
       image: hstreamdb/hstream:v0.17.0
@@ -96,7 +96,7 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
           --store-log-level warning \
           --io-tasks-path /tmp/io/tasks \
           --io-tasks-network quickstart-tcp
-  
+
     hstore:
       image: hstreamdb/hstream:v0.17.0
       container_name: quickstart-tcp-hstore
@@ -116,7 +116,7 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
           --user-admin-port 6440 \
           --param enable-dscp-reflection=false \
           --no-interactive
-  
+
     zookeeper:
       image: zookeeper:3.8.1
       container_name: quickstart-tcp-zk
@@ -127,11 +127,11 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
       volumes:
         - data_zk_data:/data
         - data_zk_datalog:/datalog
-  
+
   networks:
     quickstart-tcp:
       name: quickstart-tcp
-  
+
   volumes:
     data_store:
       name: quickstart_tcp_data_store
@@ -159,7 +159,6 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 
   <details>
   <summary><b>进入 HStreamDB 容器创建 Stream 的命令</b></summary>
-
 
   ```bash
   $ docker container exec -it quickstart-tcp-hserver bash
@@ -197,10 +196,10 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 ::: tip 关于 Docker 网络环境与证书文件
 
 - 此 docker compose 文件使用了 `172.100.0.0/24` 网段作为 docker network bridge，如有其他网络配置需求，请自行更改 Docker Compose 文件。
-- 请注意不要为容器设置默认的 `http_proxy`, `https_proxy`, `all_proxy` 等环境变量，目前版本中这些环境变量会影响 HStream 各个容器间的通讯。参考 [__Docker Network Proxy_](https://docs.docker.com/network/proxy/)。
-- 根证书及自签名证书使用了 [__smallstep/step-ca_](https://hub.docker.com/r/smallstep/step-ca) 容器进行自动化生成，并配置了 `172.100.0.10` 及 `172.100.0.11` 两个主题备用名称。
-- 如有其他证书需求，请自行挂载证书文件至 HStreamDB 容器或参考 [__Configuring step-ca_](https://smallstep.com/docs/step-ca/configuration/index.html)。
-  - step-ca 默认配置下生成的证书仅有一天有效期，若要更改证书有效期配置，请删除 `ca` 目录下的证书，并根据 [__step-ca-configuration-options_](https://smallstep.com/docs/step-ca/configuration/#configuration-options) 更改证书有效期。
+- 请注意不要为容器设置默认的 `http_proxy`, `https_proxy`, `all_proxy` 等环境变量，目前版本中这些环境变量会影响 HStream 各个容器间的通讯。参考 [_Docker Network Proxy_](https://docs.docker.com/network/proxy/)。
+- 根证书及自签名证书使用了 [_smallstep/step-ca_](https://hub.docker.com/r/smallstep/step-ca) 容器进行自动化生成，并配置了 `172.100.0.10` 及 `172.100.0.11` 两个主题备用名称。
+- 如有其他证书需求，请自行挂载证书文件至 HStreamDB 容器或参考 [_Configuring step-ca_](https://smallstep.com/docs/step-ca/configuration/index.html)。
+  - step-ca 默认配置下生成的证书仅有一天有效期，若要更改证书有效期配置，请删除 `ca` 目录下的证书，并根据 [_step-ca-configuration-options_](https://smallstep.com/docs/step-ca/configuration/#configuration-options) 更改证书有效期。
 
 :::
 
@@ -217,7 +216,7 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 
   ```yaml
   version: "3.9"
-  
+
   services:
     step-ca:
       image: smallstep/step-ca:0.23.0
@@ -229,7 +228,7 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
       environment:
         - DOCKER_STEPCA_INIT_NAME=HStream
         - DOCKER_STEPCA_INIT_DNS_NAMES=step-ca
-  
+
     generate-hstream-cert:
       image: smallstep/step-ca:0.23.0
       container_name: quickstart-tls-generate-hstream-cert
@@ -255,7 +254,7 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
           --san 172.100.0.11 \
           --san quickstart-tls-hserver-0 \
           --san quickstart-tls-hserver-1
-  
+
     hserver0:
       image: hstreamdb/hstream:v0.17.0
       container_name: quickstart-tls-hserver-0
@@ -303,10 +302,10 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
           --tls-key-path /data/server/hstream.key \
           --advertised-listeners l1:hstream://172.100.0.10:6570 \
           --listeners-security-protocol-map l1:tls
-  
+
           # NOTE:
           # advertised-listeners ip addr should same as container addr for tls listener
-  
+
     hserver1:
       image: hstreamdb/hstream:v0.17.0
       container_name: quickstart-tls-hserver-1
@@ -356,10 +355,10 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
           --tls-key-path /data/server/hstream.key \
           --advertised-listeners l1:hstream://172.100.0.11:6572 \
           --listeners-security-protocol-map l1:tls
-  
+
           # NOTE:
           # advertised-listeners ip addr should same as container addr for tls listener
-  
+
     hserver-init:
       image: hstreamdb/hstream:v0.17.0
       container_name: quickstart-tls-hserver-init
@@ -383,7 +382,7 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
               [ $$timeout -le 0 ] && echo 'Timeout!' && exit 1;
           done; \
           /usr/local/bin/hadmin server --host hserver0 --port 26570 init
-  
+
     hstore:
       image: hstreamdb/hstream:v0.17.0
       container_name: quickstart-tls-hstore
@@ -400,7 +399,7 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
           --use-tcp --tcp-host $$(hostname -I | awk '{print $$1}') \
           --user-admin-port 6440 \
           --no-interactive
-  
+
     zookeeper:
       image: zookeeper:3.8.1
       container_name: quickstart-tls-zk
@@ -411,7 +410,7 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
       volumes:
         - data_zk_data:/data
         - data_zk_datalog:/datalog
-  
+
   networks:
     quickstart-tls:
       ipam:
@@ -419,7 +418,7 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
         config:
           - subnet: "172.100.0.0/24"
       name: quickstart-tls
-  
+
   volumes:
     data_store:
       name: quickstart_tls_data_store
@@ -437,7 +436,7 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
   tls-deploy
   ├── ca
   └── docker-compose-tls.yaml
-  
+
   2 directories, 1 file
   ```
 
@@ -507,7 +506,7 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
    - **HStreamDB gRPC 超时**：指定当发出 gRPC 请求到 HStreamDB 服务器时，系统将等待响应的最长时间。默认值是 `30` 秒。
    - **启用 TLS**： 启用 TLS 连接时，关闭**验证服务器证书**。
      - `tls-deploy/ca` 目录下生成的证书及私钥文件： `ca/certs/root_ca.crt`，`ca/hstream.crt`，`ca/hstream.key` 分别填入 `CA Cert`，`TLS Cert`，`TLS Key`。
-   
+
 6. 根据业务实现需要配置 **HStream Record 模板**：
 
    - 如需实现对指定主题消息的转发，使用如下 HRecord 模板完成数据插入：
