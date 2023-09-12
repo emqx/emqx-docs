@@ -759,6 +759,10 @@
       path: changes/changes-ee-5.1
     - title_en: Releases
       title_cn: 版本发布
+      edition: ee
+      path: changes/changes-ee-5.2
+    - title_en: Releases
+      title_cn: 版本发布
       edition: ce
       path: changes/changes-ce-5.1
     - title_en: 从 V4 升级到 V5 的不兼容更改
