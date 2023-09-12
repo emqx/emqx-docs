@@ -501,9 +501,10 @@
               children:
                 - access-control/authn/mnesia
                 - access-control/authn/mysql
+                - access-control/authn/mongodb
                 - access-control/authn/postgresql
                 - access-control/authn/redis
-                - access-control/authn/mongodb
+                - access-control/authn/ldap
                 - access-control/authn/http
             - access-control/authn/jwt
             - access-control/authn/scram
@@ -514,11 +515,12 @@
           children:
             - access-control/authz/file
             - access-control/authz/mnesia
-            - access-control/authz/http
             - access-control/authz/mysql
+            - access-control/authz/mongodb
             - access-control/authz/postgresql
             - access-control/authz/redis
-            - access-control/authz/mongodb
+            - access-control/authz/ldap
+            - access-control/authz/http
         - access-control/blacklist
     - title_en: Network and TLS
       title_cn: 网络与 TLS
