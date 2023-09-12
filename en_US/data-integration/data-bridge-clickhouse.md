@@ -1,4 +1,4 @@
-# Ingest Data into ClickHouse 
+# Ingest MQTT Data into ClickHouse 
 
 ClickHouse is a high-performance distributed database management system designed for processing large-scale data. It features excellent query performance, a flexible data model, and scalable distributed architecture, making it suitable for various data analytics scenarios.
 

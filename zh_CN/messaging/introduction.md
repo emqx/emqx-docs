@@ -21,4 +21,5 @@ EMQX 中的订阅功能允许设备从特定主题接收消息。设备可以订
 - [排他订阅](./mqtt-exclusive-subscription.md)
 - [延迟发布](./mqtt-delayed-publish.md)
 - [自动订阅](./mqtt-auto-subscription.md)
+- [主题重写](./mqtt-topic-rewrite.md)
 

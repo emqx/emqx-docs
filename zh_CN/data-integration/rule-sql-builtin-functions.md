@@ -314,12 +314,18 @@ bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 
 {% emqxee %}
 
+### Schema Registry
+
+在 EMQX 企业版中， schema registry 提供了`schema_decode` 和 `schema_encode` 功能，可以为 [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) 和 [Avro](https://avro.apache.org/) 格式的数据进行编解码。 关于功能详情，请见[编解码](./schema-registry.md)。
+
 | 函数名          | 函数功能                                    | 参数                                                         | 返回值       |
 | --------------- | ------------------------------------------- | ------------------------------------------------------------ | ------------ |
 | `schema_encode` | 通过 Schema 做编码. 使用前需要先创建 Schema | 1. Schema registry 里定义的 Schema ID 2. 要编码的数据 3..N. 其他的参数，有哪些参数取决于 Schema 的类型 | 编码后的数据 |
 | `schema_decode` | 通过 Schema 做解码. 使用前需要先创建 Schema | 1. Schema registry 里定义的 Schema ID 2. 要解码的数据 3..N. 其他的参数，有哪些参数取决于 Schema 的类型 | 解码后的数据 |
 
-<!-- 函数 schema_encode() 和 schema_decode() 的示例请参见 [schema registry](schema-registry.md) -->
+### Sparkplug B
+
+EMQX 企业版还有专门用于解码和编码 Sparkplug B 消息的特殊用途函数（`sparkplug_decode` 和`sparkplug_encode`）。您可以在 [Sparkplug B](https://chat.openai.com/sparkplug.md) 中了解有关 Sparkplug 函数的更多信息。
 
 {% endemqxee %}
 
@@ -396,7 +402,7 @@ date_to_unix_ts('second', '%Y-%m-%d %H-%M-%S', '2022-05-26 10:40:12') = 16535616
 
 {% emqxee %}
 
-**专用于 MongoDB 的时间函数**
+### 专用于 MongoDB 的时间函数
 
 | Function | Purpose | Parameters | Returned value |
 | -------- | ------------------------------------|-------------------------- | --------------------------- |
@@ -418,10 +424,3 @@ mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
 
 除了以上内置函数外，EMQX 还集成了用于处理 JSON 数据的 jq 函数，请参考 [jq 函数](./rule-sql-jq.md)。
 
-{% emqxee %}
-
-## <!--Schema Registry and Sparkplug B-->
-
-<!--在企业版 EMQX 中， [schema registry](./schema-registry.md) 提供了`schema_decode` 和 `schema_encode` 功能，可以为 [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) 和 [Avro](https://avro.apache.org/) 格式的数据进行编解码。 关于功能详情，请见[编解码](./schema-registry.md). There are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about [the sparkplug function on their documentation page](./sparkplug.md).-->
-
-{% endemqxee %}
