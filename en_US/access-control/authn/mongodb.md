@@ -97,7 +97,7 @@ Follow the instruction below on how to configure:
 - **is_superuser Field**: Specify if the user is a super user. 
 - **Filter**: A map interpreted as MongoDB selector for credential lookup. [Placeholders](./authn.md#authentication-placeholders) are supported. 
 
-Now we can click **Create** to finish the settings. 
+After you finish the settings, click **Create**.
 
 ## Configure with Configuration Items
 
