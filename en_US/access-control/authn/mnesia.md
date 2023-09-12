@@ -31,7 +31,7 @@ On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Con
    - **Iteration Count**: Specify the calculation times of Hush function. Default: **4096**.
    - **Derived Key Length** (optional): Specify the generated key length. You can leave this field blank, then the key length will be determined by the pseudorandom function you selected.
 
-Now we can click **Create** to finish the setting.
+After you finish the settings, click **Create**.
 
 ## Configure with Configuration Items
 
