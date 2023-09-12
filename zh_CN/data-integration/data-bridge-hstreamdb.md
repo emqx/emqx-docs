@@ -39,25 +39,19 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 本教程假设您在本地机器上同时运行 EMQX 和容器内的 HStreamDB。 如果您有远程运行的 EMQX 和 HStreamDB，请相应地调整设置。
 
-### 安装并连接到 HStreamDB
+### 前置准备
 
-本节描述如何使用 Docker 镜像在 Linux/MacOS 安装启动 HStreamDB 以及如何使用 `hstream` 命令行程序连接到 HStreamDB 并创建 Stream。关于其他 HStreamDB 的安装方式及 HStreamDB Platform，请参阅[使用 Docker-Compose 快速开始](https://docs.hstream.io/zh/start/quickstart-with-docker.html) 及 [开始使用 HStream Platform](https://docs.hstream.io/zh/start/try-out-hstream-platform.html)。
+以下小节描述如何使用 Docker 镜像在 Linux/MacOS 安装启动 HStreamDB，因此请确保 Docker 已安装并尽可能使用 Docker Compose v2。关于其他 HStreamDB 的安装方式及 HStreamDB Platform，请参阅[使用 Docker-Compose 快速开始](https://docs.hstream.io/zh/start/quickstart-with-docker.html) 及 [开始使用 HStream Platform](https://docs.hstream.io/zh/start/try-out-hstream-platform.html)。
+
+### 启动 HStreamDB TCP 服务并创建 Stream
+
+本节介绍了如何在本地的 Docker 环境中启动一个单节点的 HStreamDB TCP 服务并创建 Stream。
 
 ::: tip 注意
 
 HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，例如删除并重新创建 Stream 后，需要重新连接 HStreamDB，即重启 HStreamDB 资源。
 
 :::
-
-#### 启动 HStreamDB TCP 服务并创建 Stream
-
-:::tip 前置准备
-
-请确保 Docker 已安装并尽可能使用 Docker Compose v2。
-
-:::
-
-按照以下步骤在本地的 Docker 环境中启动一个单节点的 HStreamDB TCP 服务。
 
 1. 将以下 yaml 文件保存至 `docker-compose-tcp.yaml`。
 
@@ -155,20 +149,17 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
   docker compose -f docker-compose-tcp.yaml up --build
   ```
 
-3. 启动 HStreamDB 交互式 SQL CLI。
+3. 进入 HStreamDB 容器并创建名为 `mqtt_connect` 和 `mqtt_message` 的两个 Stream。
 
-  ::: tip 
-  使用 `hstream --help` 命令获取更多有关 `hstream` 命令的其他用法。
-  :::
+   ::: tip
 
-  ```bash
-  docker run -it --rm --name some-hstream-cli --network host hstreamdb/hstream:latest hstream --port 6570 sql
-  ```
+   您也可以使用 HStreamDB 交互式 SQL CLI 来创建 Stream。使用 `hstream --help` 命令获取更多有关 `hstream` 命令的其他用法。
 
-4. 进入 HStreamDB 容器并创建名为 `mqtt_connect` 和 `mqtt_message` 的两个 Stream。
+   :::
 
   <details>
-  <summary><b>创建 Stream 命令</b></summary>
+  <summary><b>进入 HStreamDB 容器创建 Stream 的命令</b></summary>
+
 
   ```bash
   $ docker container exec -it quickstart-tcp-hserver bash
@@ -201,7 +192,9 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 
 #### 启动 HStreamDB TLS 服务并创建 Stream
 
-:::tip 关于 Docker 网络环境与证书文件
+本节介绍了如何在本地的 Docker 环境中启动一个双节点的 HStreamDB TLS 服务并创建 Stream。
+
+::: tip 关于 Docker 网络环境与证书文件
 
 - 此 docker compose 文件使用了 `172.100.0.0/24` 网段作为 docker network bridge，如有其他网络配置需求，请自行更改 Docker Compose 文件。
 - 请注意不要为容器设置默认的 `http_proxy`, `https_proxy`, `all_proxy` 等环境变量，目前版本中这些环境变量会影响 HStream 各个容器间的通讯。参考 [Docker Network Proxy](https://docs.docker.com/network/proxy/)。
@@ -210,8 +203,6 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
   - step-ca 默认配置下生成的证书仅有一天有效期，若要更改证书有效期配置，请删除 `ca` 目录下的证书，并根据 [step-ca-configuration-options](https://smallstep.com/docs/step-ca/configuration/#configuration-options) 更改证书有效期。
 
 :::
-
-按照以下步骤在本地的 Docker 环境中启动一个双节点的 HStreamDB TLS 服务。
 
 1. 新建目录 tls-deploy/ca 作为证书存储目录。
 
@@ -457,13 +448,14 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
   ```
 
 4. 进入 HStreamDB 容器并创建名为 `mqtt_connect` 和 `mqtt_message` 的两个 Stream。
-  :::tip TLS 连接命令行选项
-  类似于 HStreamDB TCP 服务，此处仅需为命令行增加 `--tls-ca [CA_PATH]` 选项。
-  需要注意的是，如需在节点 `quickstart-tls-hserver-1` 中执行命令，需要额外指定选项 `--port 6572` 以保证与 docker-compose 文件中指定的端口一致。
-  :::
+    :::tip TLS 连接命令行选项
+    类似于 HStreamDB TCP 服务，此处仅需为命令行增加 `--tls-ca [CA_PATH]` 选项。
+    需要注意的是，如需在节点 `quickstart-tls-hserver-1` 中执行命令，需要额外指定选项 `--port 6572` 以保证与 docker-compose 文件中指定的端口一致。
+    :::
 
   <details>
-  <summary><b>创建 Stream 命令</b></summary>
+  <summary><b>进入 HStreamDB 创建 Stream 的命令</b></summary>
+
 
   ```bash
   $ docker container exec -it quickstart-tls-hserver-0 bash
@@ -506,15 +498,17 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 
 4. 输入数据桥接名称，要求是大小写英文字母和数字的组合。
 
-5. 输入 HStreamDB 连接信息。
+5. 输入 HStreamDB 连接信息。（带星号字段为必填字段。）
    - **服务器地址**： `hstream://127.0.0.1:6570`，或使用实际的 HStreamDB 地址和端口。
      - schema 支持 `http`、`https`、`hstream`、`hstreams`。
      - 对与 TLS 连接，scheme 需要使用 `hstreams` 或 `https`，如 `hstreams://127.0.0.1:6570`。
    - **HStreamDB 流名称**： 需要写入的 Stream 名，如 `mqtt_connect` 或 `mqtt_message`。
+   - **HStreamDB 分区键**：指定用于确定数据将存储在 HStreamDB 的哪个分区或节点内的分区键。例如，您可以输入 `${topic}` 以确保相同主题的消息被有序写入 HStreamDB。如果未指定，将使用默认键，数据将被映射到某个默认的分片。
+   - **HStreamDB gRPC 超时**：指定当发出 gRPC 请求到 HStreamDB 服务器时，系统将等待响应的最长时间。默认值是 `30` 秒。
    - **启用 TLS**： 启用 TLS 连接时，关闭**验证服务器证书**。
      - `tls-deploy/ca` 目录下生成的证书及私钥文件： `ca/certs/root_ca.crt`，`ca/hstream.crt`，`ca/hstream.key` 分别填入 `CA Cert`，`TLS Cert`，`TLS Key`。
-
-6. 根据业务实现需要配置 HRecord 模板：
+   
+6. 根据业务实现需要配置 **HStream Record 模板**：
 
    - 如需实现对指定主题消息的转发，使用如下 HRecord 模板完成数据插入：
 
