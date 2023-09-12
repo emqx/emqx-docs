@@ -457,7 +457,6 @@
                 - access-control/authn/postgresql
                 - access-control/authn/redis
                 - access-control/authn/mongodb
-                - access-control/authn/ldap
                 - access-control/authn/http
             - access-control/authn/jwt
             - access-control/authn/scram
@@ -473,7 +472,6 @@
             - access-control/authz/postgresql
             - access-control/authz/redis
             - access-control/authz/mongodb
-            - access-control/authz/ldap
         - access-control/blacklist
     - title_en: Network and TLS
       title_cn: 网络与 TLS
