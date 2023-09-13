@@ -22,7 +22,7 @@ EMQX 5.0引入了QUIC 支持（MQTT over QUIC）作为一项实验性功能，�
 
 作为下一代互联网协议 HTTP/3的底层传输协议，[QUIC](https://datatracker.ietf.org/doc/html/rfc9000) 相对于 TCP/TLS 协议，可以为现代移动互联网提供更低的连接开销和消息延迟。因此，EMQX 尝试使用 QUIC 替代 MQTT 的传输层，从而产生了MQTT over QUIC。
 
-为了评估 MQTT over QUIC 并验证它如何改善网络连接，请阅读[使用MQTT over QUIC](https://chat.openai.com/mqtt-over-quic/getting-started.md)。
+为了评估 MQTT over QUIC 并验证它如何改善网络连接，请阅读[使用 MQTT over QUIC](../mqtt-over-quic/getting-started.md)。
 
 {% emqxee %}
 
