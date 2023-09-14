@@ -59,8 +59,8 @@
 - [#11396](https://github.com/emqx/emqx/pull/11396) Introduced topic index for the rule engine runtime to speed up matching messages' topics to topic filters configured in rule definitions by avoiding full scan of the rule set, significantly improving EMQX's performance when handling a substantial number of rules.
 
 - [#11399](https://github.com/emqx/emqx/pull/11399) Improved the placeholder syntax in the rule engine. The republishing actions support placeholder syntax to
-  dynamically fill in the content of strings in the payload variable. The format of the placeholder syntax is `${key}`.
-  Before this improvement, the `key` in `${key}` could only contain letters, numbers, and underscores. Now the `key` supports any UTF8 characters.
+  dynamically fill in the content of strings in the payload variable. The format of the placeholder syntax is `\${key}`.
+  Before this improvement, the `key` in `\${key}` could only contain letters, numbers, and underscores. Now the `key` supports any UTF8 characters.
   
 - [#11405](https://github.com/emqx/emqx/pull/11405) Made the error message for `date_to_unix_ts` function more understandable.
 
