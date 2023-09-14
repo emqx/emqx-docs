@@ -80,7 +80,7 @@
   
 - [#11327](https://github.com/emqx/emqx/pull/11327) Updated ekka to version 0.15.8, mria to version 0.15.8, and optvar to 1.0.5.
   This fixes occasional assertion failures:
-  `{{badmatch,noproc},[{optvar,read,2,[{file,"optvar.erl"},{line,140}]},{optvar,read,1,[{file,"optvar.erl"},{line,124}]},...`
+  `{{badmatch,noproc},[{optvar,read,2,[{file,"optvar.erl"},{line,140}]},{optvar,read,1,[{file,"optvar.erl"},{line,124}]},...}}`
 
 - [#11346](https://github.com/emqx/emqx/pull/11346) Updated ekka to version 0.15.9. This fixes dangling etcd locks that occurred when acquiring the lock failed with a timeout.
   
