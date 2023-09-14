@@ -12,21 +12,22 @@ The Kafka data integration is an EMQX Enterprise Edition feature. EMQX Enterpris
 
 This page provides a comprehensive introduction to the data integration between EMQX and Kafka with practical using instructions. Here is a list of topics covered on this page:
 
-- [How It Works](#how-it-works)
-- [Features and Benefits](#features-and-benefits)
-- [Before You Start](#before-you-start)
-  - [Prerequisites](#prerequisites)
-  - [Set Up a Kafka Server](#set-up-a-kafka-server)
-  - [Create Kafka Topics](#create-kafka-topics)
-- [Kafka Producer Data Bridge](#kafka-producer-data-bridge)
-  - [Create Rule and Data Bridge for Kafka Producer](#create-rule-and-data-bridge-for-kafka-producer)
-  - [Test Kafka Producer Data Bridge and Rule](#test-kafka-producer-data-bridge-and-rule)
-- [Kafka Consumer Data Bridge](#kafka-consumer-data-bridge)
-  - [Create Data Bridge for Kafka Consumer](#create-data-bridge-for-kafka-consumer)
-  - [Create Rule for Consumer Data Bridge (Optional)](#create-rule-for-consumer-data-bridge-optional)
-  - [Test Kafka Consumer Data Bridge and Rule](#test-kafka-consumer-data-bridge-and-rule)
-- [Advanced Configurations](#advanced-configurations)
-- [More Information](#more-information)
+- [Stream MQTT Data into Apache Kafka](#stream-mqtt-data-into-apache-kafka)
+  - [How It Works](#how-it-works)
+  - [Features and Benefits](#features-and-benefits)
+  - [Before You Start](#before-you-start)
+    - [Prerequisites](#prerequisites)
+    - [Set Up a Kafka Server](#set-up-a-kafka-server)
+    - [Create Kafka Topics](#create-kafka-topics)
+  - [Kafka Producer Data Bridge](#kafka-producer-data-bridge)
+    - [Create Rule and Data Bridge for Kafka Producer](#create-rule-and-data-bridge-for-kafka-producer)
+    - [Test Kafka Producer Data Bridge and Rule](#test-kafka-producer-data-bridge-and-rule)
+  - [Kafka Consumer Data Bridge](#kafka-consumer-data-bridge)
+    - [Create Data Bridge for Kafka Consumer](#create-data-bridge-for-kafka-consumer)
+    - [Create Rule for Consumer Data Bridge (Optional)](#create-rule-for-consumer-data-bridge-optional)
+    - [Test Kafka Consumer Data Bridge and Rule](#test-kafka-consumer-data-bridge-and-rule)
+  - [Advanced Configurations](#advanced-configurations)
+  - [More Information](#more-information)
 
 ## How It Works
 

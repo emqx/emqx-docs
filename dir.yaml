@@ -318,12 +318,18 @@
     - title_en: RabbitMQ
       title_cn: RabbitMQ
       path: data-integration/data-bridge-rabbitmq
-    - title_en: GreptimeDB
-      title_cn: GreptimeDB
-      path: data-integration/data-bridge-greptimedb
+    - title_en: Azure Event Hubs
+      title_cn: Azure Event Hubs
+      path: data-integration/data-bridge-azure-event-hub
+    - title_en: AWS Kinesis
+      title_cn: AWS Kinesis
+      path: data-integration/data-bridge-kinesis
     - title_en: HStreamDB
       title_cn: HStreamDB
       path: data-integration/data-bridge-hstreamdb
+    - title_en: GreptimeDB
+      title_cn: GreptimeDB
+      path: data-integration/data-bridge-greptimedb
 
     # TODO
     # - title_en: Examples and Tutorials
@@ -801,8 +807,3 @@
           title_cn: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
           lang: en
           path: changes/gateway-4.4-to-5.1-incompatibility
-    - title_en: Known Issues
-      title_cn: 已知问题
-      edition: ee
-      path: changes/known-issues-5.1
-
