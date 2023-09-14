@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Stream MQTT Data into Apache Kafka
 
 {% emqxce %}
@@ -7,6 +8,9 @@ The Kafka data integration is an EMQX Enterprise Edition feature. EMQX Enterpris
 {% endemqxce %}
 
 [Apache Kafka](https://kafka.apache.org/) is a widely used open-source distributed event streaming platform that can handle the real-time transfer of data streams between applications and systems. In the IoT realm, data generated from devices and applications are transmitted using the lightweight MQTT protocol. EMQX’s integration with Kafka/[Confluent](https://www.confluent.io/) enables users to stream MQTT data seamlessly into or from Kafka. MQTT data streams are ingested into Kafka topics, ensuring real-time processing, storage, and analytics. Conversely, Kafka topics data can be consumed by MQTT devices, enabling timely actions. 
+=======
+# Stream Data into Apache Kafka
+>>>>>>> aeh-r52-20230818
 
 <img src="./assets/kafka_bridge.jpg" alt="kafka_bridge" style="zoom:67%;" />
 
