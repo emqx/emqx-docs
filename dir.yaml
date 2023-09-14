@@ -255,6 +255,14 @@
   path: data-integration/data-bridges
   collapsed: true
   children:
+    - title_en: Webhook
+      title_cn: Webhook
+      path: data-integration/webhook
+      lang: cn
+    - title_en: Flow Designer
+      title_cn: Flow 设计器
+      path: data-integration/flow-designer
+      lang: cn
     - title_en: HTTP Server
       title_cn: HTTP Server
       path: data-integration/data-bridge-webhook
