@@ -30,7 +30,7 @@ This page provides a comprehensive introduction to the data integration between 
 
 ## How It Works
 
-Apache Kafka data integration is an out of the box feature in EMQX designed to bridge the gap between MQTT-based IoT data and Kafka's powerful data processing capabilities. With a built-in [rule engine](https://docs.emqx.com/en/enterprise/v5.1/data-integration/rules.html) component, the integration simplies the process of streaming and processing data between the two platforms, eliminating the need for complex coding. 
+Apache Kafka data integration is an out-of-the-box feature in EMQX designed to bridge the gap between MQTT-based IoT data and Kafka's powerful data processing capabilities. With a built-in [rule engine](https://docs.emqx.com/en/enterprise/v5.1/data-integration/rules.html) component, the integration simplifies the process of streaming and processing data between the two platforms, eliminating the need for complex coding. 
 
 The diagram below illustrates a typical architecture of data integration between EMQX and Kafka used in automotive IoT.
 
@@ -128,7 +128,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    Note: If you are a beginner user, you can click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-5. Click the + **Add Action** button to define an action that will be triggered by the rule. Select **Forwarding with Data Bridge** from the dropdown list. With this action, EMQX sends the data processed by the rule to Kafa.
+5. Click the + **Add Action** button to define an action that will be triggered by the rule. Select **Forwarding with Data Bridge** from the dropdown list. With this action, EMQX sends the data processed by the rule to the data bridge.
 
 6. Click the **+** icon next to the **Data bridge** drop-down box to create a data bridge.
 
@@ -159,7 +159,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 ![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
 
-Now you have successfully created the rule and data bridge. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to Kafka after parsing by rule `my_rule`.
+Now you have successfully created the rule and data bridge. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to Kafka after parsing by rule `my_rule`.
 
 ### Test Kafka Producer Data Bridge and Rule
 
