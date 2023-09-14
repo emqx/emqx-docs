@@ -247,8 +247,10 @@
       edition: ee
       collapsed: true
 
-## Data integration
-# - data-integration/introduction
+- title_en: Flow Designer
+  title_cn: Flow 设计器
+  path: flow-designer/introduction
+  lang: cn
 
 - title_en: Data Integration
   title_cn: 数据集成
@@ -258,10 +260,6 @@
     - title_en: Webhook
       title_cn: Webhook
       path: data-integration/webhook
-      lang: cn
-    - title_en: Flow Designer
-      title_cn: Flow 设计器
-      path: data-integration/flow-designer
       lang: cn
     - title_en: HTTP Server
       title_cn: HTTP Server
