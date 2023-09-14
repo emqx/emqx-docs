@@ -260,7 +260,6 @@
     - title_en: Webhook
       title_cn: Webhook
       path: data-integration/webhook
-      lang: cn
     - title_en: HTTP Server
       title_cn: HTTP Server
       path: data-integration/data-bridge-webhook
