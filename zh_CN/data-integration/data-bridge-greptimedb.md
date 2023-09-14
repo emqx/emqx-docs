@@ -61,30 +61,29 @@ greptime/greptimedb standalone start \
 4. 输入数据桥接名称，要求是大小写英文字母和数字的组合。
 
 5. 输入 GreptimeDB 连接信息：
-
    - **服务器地址**：输入 `127.0.0.1:4001`。如果是 GreptimeCloud 需要指定端口为 443，即输入 `{url}:443` 。
    - **数据库**：输入数据库名称 `public`，如果 GreptiemCloud，请输入 service 名称。
    - **用户名**和**密码**：设置成 `greptime_user` 和 `greptime_pwd`。
    - **时间精度**：默认为毫秒。
-
-6. 配置数据格式，通过一段语句指定数据点的测量、标签集、字段集和时间戳，键值均支持变量，可按照[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。<!--定义数据格式为 JSON 或 Line Protocol， -->GreptimeDB 使用和 InfluxDB 兼容的数据格式。
+   
+7. 配置数据格式，通过一段语句指定数据点的测量、标签集、字段集和时间戳，键值均支持变量，可按照[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。<!--定义数据格式为 JSON 或 Line Protocol， -->GreptimeDB 使用和 InfluxDB 兼容的数据格式。
 
    <!--对于 **JSON** 格式，需设置数据的 **Measurement**，**Fields**，**Timestamp** 与 **Tags**，键值均支持变量，可以使用[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。-->
 
    <!--对于 **Line Protocol** 格式，请通过一段语句指定数据点的 Measurement、Fields、Timestamp 与 Tags，键值均支持变量，可按照[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。-->
-
+   
    ::: tip
-
+   
    - 如希望输入带符号的整型值，请在占位符后添加 `i` 作为类型标识，例如 `${payload.int}i`。
    - 对于无符号整型值，请在占位符后添加 `u` 作为类型标识，例如 `${payload.uint}u`。
-
+   
    :::
+   
+8. 高级配置（可选），根据情况配置同步/异步模式，队列等参数，详细请参考[配置参数](./data-bridges.md)。
 
-7. 高级配置（可选），根据情况配置同步/异步模式，队列等参数，详细请参考[配置参数](./data-bridges.md)。
+9. 设置完成后，您可点击**测试连接**按钮进行验证。
 
-8. 设置完成后，您可点击**测试连接**按钮进行验证。
-
-9. 点击**创建**按钮完成数据桥接创建。
+10. 点击**创建**按钮完成数据桥接创建。
 
 至此您已经完成数据桥接创建流程。在数据桥接列表（集成 -> 数据桥接）中应出现 GreptimeDB 数据桥接，**资源状态**为`已连接`。
 
@@ -98,10 +97,10 @@ greptime/greptimedb standalone start \
 
 
   ```sql
-SELECT
-  *
-FROM
-  "t/#"
+  SELECT
+    *
+  FROM
+    "t/#"
   ```
 
 4. 添加动作，在动作下拉框中选择 使用数据桥接转发 选项，选择先前创建好的 GreptimeDB 数据桥接。

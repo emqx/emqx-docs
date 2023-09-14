@@ -62,13 +62,12 @@ greptime/greptimedb standalone start \
 4. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers. 
 
 5. Configure the connection information.
-
    - **Server Host**: Enter `127.0.0.1:4001`. If you are creating a connection to GreptimeCloud, use 443 as the port by entering `{url}:443`.
    - **Database**: Enter `public`. If you are connecting to GreptimeCloud, enter the service name instead.
    - **Username** and **Password**: Enter `greptime_user` and `greptime_pwd`, which are set in the [Install GreptimeDB Server](#install-greptimedb-server). If you are connecting to GreptimeCloud, enter the service username and password.
    - **Time Precision**: Select `millisecond` by default. 
    - **Enable TLS**: Click the toggle switch to enable the TLS connection if you want to establish a secured connection. For more information on TLS connection, refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-
+   
 6. Configure **Write Syntax**. Specify a text-based format that provides the measurement, tags, fields, and timestamp of a data point, and placeholder supported according to the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) syntax. GreptimeDB supports data formats compatible with InfluxDB. <!--Select the data format as **JSON** or **Line Protocol**,-->
 
    <!--For **JSON** format, define data parsing method, including **Measurement**, **Timestamp**, **Fields,** and **Tags**. Note: All key values can be variables and you can also follow the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/) to set them.-->
@@ -82,11 +81,11 @@ greptime/greptimedb standalone start \
 
    :::
 
-7. Advanced settings (optional): Choose whether to use **sync** or **async** query mode, and whether to enable queue or batch. For details, see [Configuration](./data-bridges.md).
+8. Advanced settings (optional): Choose whether to use **sync** or **async** query mode, and whether to enable queue or batch. For details, see [Configuration](./data-bridges.md).
 
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the GreptimeDB server.
+9. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the GreptimeDB server.
 
-9. Click the **Create** button to finish the setup.
+10. Click the **Create** button to finish the setup.
 
 Now the GreptimeDB data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as `Connected`.
 
@@ -103,10 +102,10 @@ You can continue to create rules to specify the data to be saved into GreptimeDB
    Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
 
   ```sql
-SELECT
-  *
-FROM
-  "t/#"
+  SELECT
+    *
+  FROM
+    "t/#"
   ```
 
 4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge we just created under **Data Bridge**. Then click the **Add** button.

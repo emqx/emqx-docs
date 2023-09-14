@@ -35,8 +35,7 @@
     - deploy/install-docker
     - deploy/install-debian
     - deploy/install-ubuntu
-    - deploy/install-centos
-    - deploy/install-amazon-linux
+    - deploy/install-rhel
     - deploy/install-macOS
     - title_en: Kubernetes
       title_cn: Kubernetes
@@ -200,7 +199,18 @@
     - deploy/cluster/mria-introduction
     - deploy/cluster/create-cluster
     - deploy/cluster/security
-    - deploy/cluster/lb
+    - title_en: Configure Load Balancer
+      title_cn: 集群负载均衡
+      path: deploy/cluster/lb
+      children:
+        - title_en: 用 Nginx 负载均衡 EMQX 集群
+          title_cn: 用 Nginx 负载均衡 EMQX 集群
+          path: deploy/cluster/lb-nginx
+          lang: cn
+        - title_en: 用 HAProxy 负载均衡 EMQX 集群
+          title_cn: 用 HAProxy 负载均衡 EMQX 集群
+          path: deploy/cluster/lb-haproxy
+          lang: cn
     - title_en: Node Evacuation and Cluster Load Rebalancing
       title_cn: 节点疏散与集群负载重平衡
       edition: ee
@@ -408,22 +418,22 @@
           title_cn: API 文档
           lang: en
           edition: ce
-          path: https://www.emqx.io/docs/en/v5.0/admin/api-docs.html
+          path: https://www.emqx.io/docs/en/v5.1/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: cn
           edition: ce
-          path: https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html
+          path: https://www.emqx.io/docs/zh/v5.1/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: en
           edition: ee
-          path: https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html
+          path: https://docs.emqx.com/en/enterprise/v5.1/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: cn
           edition: ee
-          path: https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html
+          path: https://docs.emqx.com/zh/enterprise/v5.1/admin/api-docs.html
     - title_en: EMQX Dashboard
       title_cn: EMQX Dashboard
       path: dashboard/introduction
@@ -510,9 +520,10 @@
               children:
                 - access-control/authn/mnesia
                 - access-control/authn/mysql
+                - access-control/authn/mongodb
                 - access-control/authn/postgresql
                 - access-control/authn/redis
-                - access-control/authn/mongodb
+                - access-control/authn/ldap
                 - access-control/authn/http
             - access-control/authn/jwt
             - access-control/authn/scram
@@ -523,11 +534,12 @@
           children:
             - access-control/authz/file
             - access-control/authz/mnesia
-            - access-control/authz/http
             - access-control/authz/mysql
+            - access-control/authz/mongodb
             - access-control/authz/postgresql
             - access-control/authz/redis
-            - access-control/authz/mongodb
+            - access-control/authz/ldap
+            - access-control/authz/http
         - access-control/blacklist
     - title_en: Network and TLS
       title_cn: 网络与 TLS
@@ -768,6 +780,10 @@
       path: changes/changes-ee-5.1
     - title_en: Releases
       title_cn: 版本发布
+      edition: ee
+      path: changes/changes-ee-5.2
+    - title_en: Releases
+      title_cn: 版本发布
       edition: ce
       path: changes/changes-ce-5.1
     - title_en: 从 V4 升级到 V5 的不兼容更改
@@ -791,3 +807,8 @@
           title_cn: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
           lang: en
           path: changes/gateway-4.4-to-5.1-incompatibility
+    - title_en: Known Issues
+      title_cn: 已知问题
+      edition: ee
+      path: changes/known-issues-5.1
+

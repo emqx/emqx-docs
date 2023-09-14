@@ -12,7 +12,7 @@
 
 ### 运行 Docker 镜像
 
-你可以通过运行`emqtt_bench`镜像来安装测试工具。`emqtt_bench` docker 镜像已推送到 [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags), 且每个新版本都会更新`:latest`标签：
+你可以通过运行`emqtt-bench`镜像来安装测试工具。`emqtt-bench` docker 镜像已推送到 [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags), 且每个新版本都会更新`:latest`标签：
 
 ```bash
 docker run -it emqx/emqtt-bench:latest
@@ -23,31 +23,34 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### 用二进制包安装
 
-你可以下载`emqtt_bench`的二进制包并在以下平台上安装测试工具：
+你可以下载`emqtt-bench`的二进制包并在以下平台上安装测试工具：
 
 - Amazon Linux 2
+- Amazon Linux 2023
 - CentOS 7
 - Rocky Linux 8
 - Rocky Linux 9
 - Debian 9
-- Debain 10
-- Debain 11
+- Debian 10
+- Debian 11
+- Debian 12
 - Ubuntu 16.04
 - Ubuntu 18.04
 - Ubuntu 20.04
 - Ubuntu 22.04
-- MacOS 11
-- MacOS 12
+- MacOS 11 (Intel)
+- MacOS 12 (Intel)
+- MacOS 12 (Apple Silicon)
 
-前往 [Releases](https://github.com/emqx/emqtt-bench/releases) 页面查看具体的`emqtt_bench`发布版本信息。
+前往 [Releases](https://github.com/emqx/emqtt-bench/releases) 页面查看具体的`emqtt-bench`发布版本信息。
 
-例如，以下是如何在 Ubuntu 20.04 上安装 `emqtt_bench`:
+例如，以下是如何在 Ubuntu 20.04 上安装 `emqtt-bench`:
 
 ```bash
-mkdir emqtt_bench && cd emqtt_bench
-wget https://github.com/emqx/emqtt-bench/releases/download/0.4.11/emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
-tar xfz emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
-rm emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
+mkdir emqtt-bench && cd emqtt-bench
+wget https://github.com/emqx/emqtt-bench/releases/download/0.4.12/emqtt-bench-0.4.12-ubuntu20.04-amd64.tar.gz
+tar xfz emqtt-bench-0.4.12-ubuntu20.04-amd64.tar.gz
+rm emqtt-bench-0.4.12-ubuntu20.04-amd64.tar.gz
 
 ./emqtt_bench
 Usage: emqtt_bench pub | sub | conn [--help]
@@ -55,7 +58,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### 源代码构建
 
-`emqtt_bench` 的运行依赖于 Erlang/OTP 21.2 以上版本运行环境，安装过程略过，详情请参考网上各个安装教程。
+`emqtt-bench` 的运行依赖于 Erlang/OTP 21.2 以上版本运行环境，安装过程略过，详情请参考网上各个安装教程。
 
 Erlang 环境安装完成后，下载 `emqtt-bench` 最新代码，并编译：
 
@@ -73,7 +76,7 @@ make
 Usage: emqtt_bench pub | sub | conn [--help]
 ```
 
-输出以上内容，则证明 `emqtt_bench` 已正确安装到主机。
+输出以上内容，则证明 `emqtt-bench` 已正确安装到主机。
 
 ## 用 eMQTT-Bench 进行性能测试
 
@@ -138,7 +141,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### SSL 连接
 
-`emqtt_bench` 支持建立 SSL 的安全连接，并执行测试。
+`emqtt-bench` 支持建立 SSL 的安全连接，并执行测试。
 
 单向证书，例如：
 
@@ -160,8 +163,8 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 此处以 2 类最典型的场景来验证工具的使用：
 
-1. 连接量：使用 `emqtt_bench` 创建百万连接到 EMQX Broker。
-2. 吞吐量：使用 `emqtt_bench` 在 EMQX 中创建出 `10W/s 的 Qos0` 消息吞吐量。
+1. 连接量：使用 `emqtt-bench` 创建百万连接到 EMQX Broker。
+2. 吞吐量：使用 `emqtt-bench` 在 EMQX 中创建出 `10W/s 的 Qos0` 消息吞吐量。
 
 ### 机器及部署拓扑图
 

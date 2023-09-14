@@ -34,7 +34,6 @@
   * Control permissions on QoS and Retain flags
   * Support OAuth 2.0 authorization
 * New Data Integrations
-  * Snowflake
   * AWS Kinesis
   * GCP PubSub
   * Azure EventHub

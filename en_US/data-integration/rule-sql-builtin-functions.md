@@ -43,6 +43,7 @@ See the table below for a complete list of mathematical functions supported.
 | log           | Logarithm to e                          | Operand                                    |
 | log10         | Logarithm to 10                         | Operand                                    |
 | log2          | Logarithm to 2                          | Operand                                    |
+| random        | Pseudo-random numbers                   | 0 < Operand <= 1                           |
 
 **Examples:**
 
@@ -495,3 +496,23 @@ mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
 
 {% endemqxee %}
 
+## UUID Function
+
+| Function          | Purpose                                           | Parameters | Return Value |
+| ----------------- | ------------------------------------------------- | ---------- | ------------ |
+| uuid_v4           | Generates Version 4 standard UUID                 | -          | UUID         |
+| uuid_v4_no_hyphen | Generates Version 4 standard UUID without hyphens | -          | UUID         |
+
+
+```erlang
+uuid_v4() = '4b90d7b7-a185-4bf0-9b97-3f6b8f83b61d'
+uuid_v4_no_hyphen() = 'fb00db84f64a4731b49f42b9ea2e3e34'
+```
+
+{% emqxee %}
+
+## <!--Schema Registry and Sparkplug B Functions-->
+
+<!--In the enterprise version of EMQX, the [schema registry](./schema-registry.md) provide the `schema_decode` and `schema_encode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data. You can read more about these functions in [Schema registry](./schema-registry.md). There are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about [the sparkplug function on their documentation page](./sparkplug.md).-->
+
+{% endemqxee %}
