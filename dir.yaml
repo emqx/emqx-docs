@@ -252,6 +252,9 @@
   path: flow-designer/introduction
   lang: cn
 
+- title_en: Flow Designer
+  title_cn: Flow 设计器
+  path: flow-designer/introduction
 - title_en: Data Integration
   title_cn: 数据集成
   path: data-integration/data-bridges
