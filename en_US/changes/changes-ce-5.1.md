@@ -1,5 +1,57 @@
 # Releases
 
+## v5.1.6
+
+### Enhancements
+
+- [#11429](https://github.com/emqx/emqx/pull/11429) Added an option to configure detection of the legacy protocol in MondoDB connectors and bridges.
+- [#11436](https://github.com/emqx/emqx/pull/11436) Added a new API endpoint `DELETE/banned` to clear all `banned` data.
+- [#11438](https://github.com/emqx/emqx/pull/11438) Changed the type of the `mqtt.max_packet_size` from string to byteSize for a better representation of the valid numeric range. Strings will still be accepted for backward compatibility.
+- [#11446](https://github.com/emqx/emqx/pull/11446) Refactored datetime-related modules and functions to simplify the code.
+- [#11396](https://github.com/emqx/emqx/pull/11396) Introduced topic index for the rule engine runtime to speed up matching messages' topics to topic filters configured in rule definitions by avoiding a full scan of the rule set, significantly improving EMQX's performance when handling a substantial number of rules.
+
+### Bug Fixes
+
+- [#11424](https://github.com/emqx/emqx/pull/11424) Added a check for the maximum value of the timestamp in the API to ensure it is a valid Unix timestamp.
+
+- [#11445](https://github.com/emqx/emqx/pull/11445) Removed os_mon application monitor support on Windows platforms to prevent VM crashes. Functionality remains on non-Windows platforms.
+
+- [#11454](https://github.com/emqx/emqx/pull/11454) Fixed crashing when debugging/tracing with large payloads (introduced in [#11279](https://github.com/emqx/emqx/pull/11279)).
+
+- [#11456](https://github.com/emqx/emqx/pull/11456) Removed validation that enforced non-empty PEM for the CA cert file, allowing the CA certificate file PEM to be empty.
+
+- [#11499](https://github.com/emqx/emqx/pull/11499) Upgraded Erlang/OTP to 25.3.2-2. Erlang/OTP 25.3.2-2 excludes sensitive data from mnesia_hook log message.
+
+## v5.1.5-build.3
+
+### Enhancements
+
+- [#10697](https://github.com/emqx/emqx/pull/10697) This enhancement enables the configuration of the `minReadySeconds` for the StatefulSet. This feature allows for the introduction of a time gap between the restarts of individual pods triggered by upgrade or restart commands.
+- [#11390](https://github.com/emqx/emqx/pull/11390) Added `node.broker_pool_size`, `node.generic_pool_size`, `node.channel_cleanup_batch_size` options to EMQX configuration. Tuning these options can significantly improve the performance if cluster interconnect network latency is high.
+- [#11389](https://github.com/emqx/emqx/pull/11389) Improved retained message publishing latency by consolidating multiple index update operations into a single Mnesia activity, leveraging the new APIs introduced in Mria 0.6.0.
+- [#11399](https://github.com/emqx/emqx/pull/11399) Improved the placeholder syntax of the rule engine. The republishing actions support placeholder syntax to dynamically fill in the content of strings in the payload variable. The format of the placeholder syntax is `${key}`. Before this improvement, the `key` in `${key}` could only contain letters, numbers, and underscores. Now the `key` supports any UTF8 characters.
+
+- [#11405](https://github.com/emqx/emqx/pull/11405) Made the error message for `date_to_unix_ts` function clearer.
+
+### Bug Fixes
+
+- [#11279](https://github.com/emqx/emqx/pull/11279) Fixed an issue where clients could not send messages with large payloads when debug/trace logging was enabled in EMQX.
+
+- [#11388](https://github.com/emqx/emqx/pull/11388) Increased `emqx_router_sup` restart intensity to improve tolerance for occasional crashes that can occur under normal conditions, without necessitating the shutdown of the entire EMQX application. For example, mria write/delete call delegated from a replicant to a core node by `emqx_router_helper` may fail, if the core node undergoes stopping, restarting, or is in an unready state. The modified restart intensity ensures that the system remains stable and operational.
+
+- [#11410](https://github.com/emqx/emqx/pull/11410) Reintroduced `cacerts` TLS client option as a deprecated option. This fixes issues found when trying to upgrade from 5.1.3 where that option is set in the configuration files or persisted in EMQX Operator settings.
+
+## v5.1.4
+
+### Enhancements
+
+- [#11185](https://github.com/emqx/emqx/pull/11185) Added support for [topologySpreadConstraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) in the Helm chart.
+
+### Bug Fixes
+
+- [#11347](https://github.com/emqx/emqx/pull/11347) Ensure that OCSP request path is properly URL encoded.
+- [#11372](https://github.com/emqx/emqx/pull/11372) Removed the recently introduced `cacerts` option from TLS client schema due to incompatibilities with some cluster discovery mechanisms.
+
 ## v5.1.3
 
 ### Bug Fixes

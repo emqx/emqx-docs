@@ -179,6 +179,7 @@ EMQX 授权支持与多种数据源集成，包括内置数据库、文件、MyS
 | PostgreSQL  | [使用 PostgreSQL 存放授权数据](./postgresql.md)   |
 | MongoDB     | [使用 MongoDB 存放授权数据](./mongodb.md)         |
 | Redis       | [使用 Redis 存放授权数据](./redis.md)             |
+| LDAP        | [使用 LDAP 目录存放授权数据](./ldap.md)           |
 | HTTP 服务器 | [通过访问外部 HTTP 服务来获取授权信息](./http.md) |
 
 例如，MySQL 授权检查器的配置文件为：

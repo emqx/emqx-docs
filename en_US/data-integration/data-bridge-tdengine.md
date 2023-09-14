@@ -1,4 +1,4 @@
-# Ingest Data into TDengine
+# Ingest MQTT Data into TDengine
 
 EMQX supports integration with TDengine so you can save MQTT messages and client events to TDengine, or use events to trigger the update or removal of data from TDengine to record the online status or online/offline of clients.
 

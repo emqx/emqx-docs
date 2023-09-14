@@ -1,4 +1,4 @@
-# Ingest Data into TimescaleDB
+# Ingest MQTT Data into TimescaleDB
 
 [TimescaleDB](https://www.timescale.com/) (Timescale) is a database specifically designed for storing and analyzing time-series data. Its exceptional data throughput and reliable performance make it an ideal choice for the Internet of Things (IoT) domain, providing efficient and scalable data storage and analysis solutions for IoT applications.
 

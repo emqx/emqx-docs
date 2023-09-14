@@ -1,4 +1,4 @@
-# Ingest Data into InfluxDB
+# Ingest MQTT Data into InfluxDB
 
 InfluxDB is a database for storing and analyzing time series data. Its powerful data throughput capability and stable performance make it very suitable to be applied in the field of Internet of Things (IoT).
 
@@ -59,17 +59,17 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
 5. Input the connection information.
    - For **Server Host**, input `127.0.0.1:8086`. If you are creating a connection to InfluxDB Cloud, use 443 as the port No., that is, input `{url}:443` and enable TLS  connection.
-   - Input the **Organization**, **Bucket**, and **Token** you set in the [Install InfluxDB](#install-influxdb-server) step. Note: If you chose v1 as **Version of InfluxDB**, please set the **Database**, **Username** and **Password** as required. 
+   - Input the **Organization**, **Bucket**, and **Token** you set in the [Install InfluxDB Server](#install-influxdb-server). Note: If you chose v1 as **Version of InfluxDB**, please set the **Database**, **Username** and **Password** as required. 
 
 6. Set the **Time Precision**, it is set to millisecond by default. 
 
 7. Choose whether to enable TLS by clicking the **Enable TLS** toggle switch.
 
-8. Select **Data Format** as **JSON** or **LINE PROTOCOL**. 
+8. Select **Data Format** as **JSON** or **Line Protocol**. 
 
    - For **JSON** format, define data parsing method, including **Measurement**, **Timestamp**, **Fields,** and **Tags**. Note: All key values can be variables and you can also follow the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/) to set them.
 
-   - For **LINE PROTOCOL** format, specify a text-based format that provides the measurement, tag set, field set, timestamp of a data point, and placeholder supported according to the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) syntax.
+   - For **Line Protocol** format, specify a text-based format that provides the measurement, tag set, field set, timestamp of a data point, and placeholder supported according to the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) syntax.
    
      ::: tip
 

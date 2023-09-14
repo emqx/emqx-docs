@@ -16,7 +16,7 @@ If you use the Linux operating system, it is recommended to make sure that UTF-8
 
 :::: tabs
 
-::: tab Amazon Linux 2
+::: tab Amazon Linux
 
 Enable the UTF-8 locale with [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html#amazon-linux-cloud-init) configuration:
 
@@ -98,26 +98,26 @@ Besides the above deployment methods, you are also welcome to try our [EMQX Clou
 The table below lists the operating systems and versions that EMQX supports.
 
 {% emqxce %}
-| Operating system                          | Versions supported       | x86_64/amd64 | arm64 |
-| :---------------------------------------- | :----------------------- | :----------- | :---- |
-| [Ubuntu](./install-ubuntu.md)             | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04 | Yes          | Yes   |
-| [Debian](./install-debian.md)             | Debian 10<br />Debian 11 | Yes          | Yes   |
-| [CentOS/RHEL](./install-centos.md)        | CentOS 7<br />CentOS 8 | Yes          | Yes   |
-| [Amazon Linux](./install-amazon-linux.md) | -                        | Yes          | Yes   |
-| [macOS](./install-macOS.md)               | macOS 11<br />macOS 12 | Yes          | Yes   |
-| [Windows](./install-windows.md)           | -                        | Yes          | Yes   |
+| Operating system                  | Versions supported                      | x86_64/amd64 | arm64 |
+| :---------------------------------| :----------------------------------------------- | :-- | :-- |
+| [Ubuntu](./install-ubuntu.md)     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04 | Yes | Yes |
+| [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | Yes | Yes |
+| [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | Yes | Yes |
+| [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | Yes | Yes |
+| [macOS](./install-macOS.md)       | macOS 11<br />macOS 12<br />macOS 13 (Homebrew)  | Yes | Yes |
+| [Windows](./install-windows.md)   | Windows Server 2019                              | Yes | Yes |
 
 {% endemqxce %}
 
 {% emqxee %}
 
-| Operating system                          | Versions supported       | x86_64/amd64 | arm64 |
-| :---------------------------------------- | :----------------------- | :----------- | :---- |
-| [Ubuntu](./install-ubuntu.md)             | Ubuntu 18.04<br />Ubuntu 20.04 | Yes          | Yes   |
-| [Debian](./install-debian.md)             | Debian 10<br />Debian 11 | Yes          | Yes   |
-| [CentOS/RHEL](./install-centos.md)        | CentOS 7<br />CentOS 8 | Yes          | Yes   |
-| [Amazon Linux](./install-amazon-linux.md) | -                        | Yes          | Yes   |
-| [macOS](./install-macOS.md)               | macOS 11<br />macOS 12 | Yes          | Yes   |
+| Operating system                  | Versions supported                      | x86_64/amd64 | arm64 |
+| :---------------------------------| :----------------------------------------------- | :-- | :-- |
+| [Ubuntu](./install-ubuntu.md)     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04 | Yes | Yes |
+| [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | Yes | Yes |
+| [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | Yes | Yes |
+| [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | Yes | Yes |
+| [macOS](./install-macOS.md)       | macOS 11<br />macOS 12<br />                     | Yes | Yes |
 
 {% endemqxee %}
 

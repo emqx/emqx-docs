@@ -32,11 +32,11 @@ EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规�
 
 EMQX 5.0 单集群可支持 MQTT 并发连接数高达 **1 亿**条。
 
-**高性能**
+[**高性能**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput)
 
 单服务器的传输与处理吞吐量可达**每秒百万级** MQTT 消息。
 
-**低延时**
+[**低延时**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time)
 
 近乎实时的信息传递，保证延迟在亚毫秒级。
 
@@ -59,15 +59,11 @@ EMQX 5.0 单集群可支持 MQTT 并发连接数高达 **1 亿**条。
 {% emqxee %}
 
 - **[海量连接](https://www.emqx.com/zh/blog/reaching-100m-mqtt-connections-with-emqx-5-0)**：单节点支持 500 万 MQTT 设备连接，集群可水平扩展至支持 1 亿并发的 MQTT 连接。
-
 - **高可靠**：弹性伸缩，无单点故障。内置 RocksDB 可靠地持久化 MQTT 消息，确保无数据损失。
-
 - **数据安全**：端到端数据加密（支持国密），细粒度访问控制，保障数据安全，满足企业合规需求。
-
 - **[多协议](https://www.emqx.com/zh/blog/iot-protocols-mqtt-coap-lwm2m)**：支持 MQTT、HTTP、QUIC、WebSocket、LwM2M/CoAP 或专有协议连接任何设备。
-
-- **高性能**：单节点支持每秒实时接收、处理与分发数百万条的 MQTT 消息。毫秒级消息交付时延。
-
+- [**高性能**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput)：单节点支持每秒实时接收、处理与分发数百万条的 MQTT 消息。毫秒级消息交付时延。
+- [**低延时**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time)：通过软实时运行时，在消息传递中保证亚毫秒级的延迟。
 - **易运维**：图形化配置、操作与管理，实时监测运行状态。支持 MQTT 跟踪进行端到端问题分析。
 
 {% endemqxee %}

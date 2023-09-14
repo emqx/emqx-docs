@@ -27,6 +27,7 @@
 | log    | 以 e 为底对数  | 1. 被操作数                       | 值           |
 | log10  | 以 10 为底对数 | 1. 被操作数                       | 值           |
 | log2   | 以 2 为底对数  | 1. 被操作数                       | 值           |
+| random | 产生伪随机数   | 无                               | 0 < 值 <= 1  |
 
 ```erlang
 abs(-12) = 12
@@ -280,8 +281,8 @@ zip_uncompress(hexstr2bin('789CCB48CDC9C95728CF2FCA4901001A0B045D')) = 'hello wo
 
 ## 比特操作函数
 
-| 函数名  | 函数功能                                                                                                   | 参数                                                                                                                                                                                                                                                        | 返回值       |
-| ------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ---------------- |
+| 函数名          | 函数功能                  | 参数                   | 返回值              |
+| --------------- | ------------------------- | ---------------------- | ------------------- |
 | subbits | 从二进制数据的起始位置获取指定长度的比特位，然后转换为无符号整型 (大端).                                   | 1. 二进制数据 <br />2. 要获取的长度(bits)                                                                                                                                                                                                                   | 无           | subbits 符号整数 |
 | subbits | 从二进制数据的指定下标位置获取指定长度的比特位，然后转换为无符号整型 (大端). 下标是从 1 开始的             | 1. 二进制数据 <br />2. 起始位置的下标 <br />3. 要获取的长度(bits)                                                                                                                                                                                           | 无符号整数   |
 | subbits | 从二进制数据的指定下标位置获取指定长度的比特位，然后按照给定的参数转换为想要的数据类型. 下标是从 1 开始的. | 1. 二进制数据 <br />2. 起始位置的下标 <br />3. 要获取的长度(bits) <br />4. 数据类型，可选值：'integer'、'float'、'bits' <br />5. 符号类型，只对整型数据有效，可选值：'unsigned'、'signed'，<br />6. 大端还是小端，只对整型数据有效，可选值：'big'、'little' | 获取到的数据 |
@@ -314,12 +315,18 @@ bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 
 {% emqxee %}
 
+### Schema Registry
+
+在 EMQX 企业版中， schema registry 提供了`schema_decode` 和 `schema_encode` 功能，可以为 [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) 和 [Avro](https://avro.apache.org/) 格式的数据进行编解码。 关于功能详情，请见[编解码](./schema-registry.md)。
+
 | 函数名          | 函数功能                                    | 参数                                                         | 返回值       |
 | --------------- | ------------------------------------------- | ------------------------------------------------------------ | ------------ |
 | `schema_encode` | 通过 Schema 做编码. 使用前需要先创建 Schema | 1. Schema registry 里定义的 Schema ID 2. 要编码的数据 3..N. 其他的参数，有哪些参数取决于 Schema 的类型 | 编码后的数据 |
 | `schema_decode` | 通过 Schema 做解码. 使用前需要先创建 Schema | 1. Schema registry 里定义的 Schema ID 2. 要解码的数据 3..N. 其他的参数，有哪些参数取决于 Schema 的类型 | 解码后的数据 |
 
-<!-- 函数 schema_encode() 和 schema_decode() 的示例请参见 [schema registry](schema-registry.md) -->
+### Sparkplug B
+
+EMQX 企业版还有专门用于解码和编码 Sparkplug B 消息的特殊用途函数（`sparkplug_decode` 和`sparkplug_encode`）。您可以在 [Sparkplug B](https://chat.openai.com/sparkplug.md) 中了解有关 Sparkplug 函数的更多信息。
 
 {% endemqxee %}
 
@@ -396,7 +403,7 @@ date_to_unix_ts('second', '%Y-%m-%d %H-%M-%S', '2022-05-26 10:40:12') = 16535616
 
 {% emqxee %}
 
-**专用于 MongoDB 的时间函数**
+### 专用于 MongoDB 的时间函数
 
 | Function | Purpose | Parameters | Returned value |
 | -------- | ------------------------------------|-------------------------- | --------------------------- |
@@ -414,14 +421,20 @@ mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
 
 {% endemqxee %}
 
+## UUID 函数
+
+| 函数名            | 函数作用                               | 参数 | 返回值 |
+| ----------------- | -------------------------------------- | ---- | ------ |
+| uuid_v4           | 产生 Version 4 标准的 UUID             | 无   | UUID   |
+| uuid_v4_no_hyphen | 产生不带连字符的 Version 4 标准的 UUID | 无   | UUID   |
+
+
+```erlang
+uuid_v4() = '4b90d7b7-a185-4bf0-9b97-3f6b8f83b61d'
+uuid_v4_no_hyphen() = 'fb00db84f64a4731b49f42b9ea2e3e34'
+```
+
 ## 用来转换 JSON 数据的 jq 函数
 
 除了以上内置函数外，EMQX 还集成了用于处理 JSON 数据的 jq 函数，请参考 [jq 函数](./rule-sql-jq.md)。
 
-{% emqxee %}
-
-## <!--Schema Registry and Sparkplug B-->
-
-<!--在企业版 EMQX 中， [schema registry](./schema-registry.md) 提供了`schema_decode` 和 `schema_encode` 功能，可以为 [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) 和 [Avro](https://avro.apache.org/) 格式的数据进行编解码。 关于功能详情，请见[编解码](./schema-registry.md). There are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about [the sparkplug function on their documentation page](./sparkplug.md).-->
-
-{% endemqxee %}

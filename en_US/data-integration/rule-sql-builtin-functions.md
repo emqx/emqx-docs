@@ -43,6 +43,7 @@ See the table below for a complete list of mathematical functions supported.
 | log           | Logarithm to e                          | Operand                                    |
 | log10         | Logarithm to 10                         | Operand                                    |
 | log2          | Logarithm to 2                          | Operand                                    |
+| random        | Pseudo-random numbers                   | 0 < Operand <= 1                           |
 
 **Examples:**
 
@@ -392,14 +393,21 @@ bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 
 {% emqxee %}
 
-EMQX Enterprise also supports using schema encoding and decoding functions to encode and decode data according to a specified schema. See the table below for a detailed explanation of the functions. 
+### Schema Registry Functions
+
+EMQX Enterprise also supports using `schema_encode` and `schema_decode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data according to a specified schema. You can read more about these functions in [Schema Registry](./schema-registry.md). 
+
+See the table below for a detailed explanation of the functions. 
 
 | Function | Description | Parameters |
 | -------- | ------------------------------------|------------------------- |
 | `schema_encode` | Encode data according to a pre-defined schema. | 1. Schema ID defined by schema registry <br />2. Data to be encoded <br />3 ... N. Remaining arguments according to the schema type |
 | `schema_decode` | Decode data according to a pre-defined schema. | 1. Schema ID defined by schema registry<br /> 2. Data to be decoded <br />3..N. Remaining arguments according to the schema type |
 
-<!-- For examples of schema_encode() and schema_decode(), see [schema registry](schema-registry.md) -->
+### **Sparkplug B Functions**
+
+In EMQX Enterprise, there are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about the sparkplug functions in [Sparkplug B](./sparkplug.md).
+
 {% endemqxee %}
 
 ## Time and Date Functions
@@ -470,7 +478,7 @@ date_to_unix_ts('second', '%Y-%m-%d %H-%M-%S', '2022-05-26 10:40:12') = 16535616
 
 {% emqxee %}
 
-**MongoDB Time Functions**
+### MongoDB Time Functions
 
 | Function | Purpose | Parameters |
 | -------- | ------------------------------------|-------------------------- |
@@ -487,6 +495,19 @@ mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
 ```
 
 {% endemqxee %}
+
+## UUID Function
+
+| Function          | Purpose                                           | Parameters | Return Value |
+| ----------------- | ------------------------------------------------- | ---------- | ------------ |
+| uuid_v4           | Generates Version 4 standard UUID                 | -          | UUID         |
+| uuid_v4_no_hyphen | Generates Version 4 standard UUID without hyphens | -          | UUID         |
+
+
+```erlang
+uuid_v4() = '4b90d7b7-a185-4bf0-9b97-3f6b8f83b61d'
+uuid_v4_no_hyphen() = 'fb00db84f64a4731b49f42b9ea2e3e34'
+```
 
 {% emqxee %}
 

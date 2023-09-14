@@ -112,7 +112,7 @@ Rebalance(evacuation) stopped
 
 ### Start/Stop Node Evacuation via HTTP API
 
-You can also use HTTP API to start/stop the node evacuation and you need to specify the node to be evacuated in the parameters. For details, see [API Docs](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html).
+You can also use HTTP API to start/stop the node evacuation and you need to specify the node to be evacuated in the parameters. For details, see [API Docs](https://docs.emqx.com/en/enterprise/v5.1/admin/api-docs.html).
 
 ## Rebalancing
 

@@ -4,83 +4,105 @@ EMQX 支持通过插件扩展自定义业务逻辑，或通过插件的协议扩
 
 插件开发和运行基本流程如下：
 
-- 通过 EMQX 提供的插件模板生成对应的插件 tar.gz 包。
-- 通过 Dashboard 或 CLI 安装插件包，
-- 通过 Dashboard 或 CLI 启动/停止/卸载插件。
+- 下载并安装我们的 [rebar3 emqx-plugin 模板](https://github.com/emqx/emqx-plugin-template)。
+- 使用 EMQX 提供的插件模板生成相应的插件 tarball。  
+- 通过 Dashboard 或 CLI 安装插件包。
+- 通过 Dashboard 或 CLI 启动/停止/卸载您的插件。
 
 :::tip 前置准备：
 
 - 了解 EMQX [钩子](./hooks.md)。
   :::
 
-## 插件开发
+## 开发 EMQX 插件
 
-EMQX 提供了一个基础的插件模板 [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template)，你可以基于它开始开发您的插件。此处以访问控制插件为例，指导您一步步开发自己的插件：
+EMQX 提供了 [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template) 来创建自定义的 emqx-plugin 项目。在下面的部分中，我们将创建一个自定义的访问控制插件作为示例，为您逐步介绍插件开发。
 
-### 1. 下载插件模板 emqx-plugin-template
+### 下载、安装和使用 rebar3 插件模板
 
-```sh
+1. 下载 [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template)，运行:
+
+```shell
+mkdir -p ~/.config/rebar3/templates  
+pushd ~/.config/rebar3/templates
 git clone https://github.com/emqx/emqx-plugin-template
+popd
 ```
 
-查看目录结构，这是一个标准的 Erlang Application 应用。
+2. 现在从模板创建您的自定义插件
 
-```sh
-$ ls
-LICENSE                  _build                   get-rebar3
-Makefile                 check-vsn.sh             priv
-README.md                rebar.config             src
+```shell  
+rebar3 new emqx-plugin my_emqx_plugin
 ```
 
-### 2. 测试编译环境
+这将创建一个标准的 Erlang 应用，依赖 `emqx`。查看 `rebar.config` 并根据需要进行调整。
 
-不改任何代码，直接运行 `make rel` 测试是否可以正常编译打包插件。
+```shell
+$ tree my_emqx_plugin
+my_emqx_plugin
+├── License
+├── Makefile
+├── README.md
+├── check-svn.sh
+├── erlang_ls.config
+├── get-rebar3
+├── priv
+│   └── config.hocon
+├── rebar.config
+└── src
+    ├── emqx_cli_demo.erl
+    ├── my_emqx_plugin.app.src
+    ├── my_emqx_plugin.erl
+    ├── my_emqx_plugin_app.erl
+    └── my_emqx_plugin_sup.erl
 
-第一次编译过程较长，因为它依赖于 EMQX 主项目（方便插件直接使用主项目的各种函数），需要下载依赖，并编译主项目。
+3 directories， 13 files
+```
 
-{% emqxce %}
-编译环境请参照 [源码编译安装 EMQX](../deploy/install-source.md) 配置。
+它还包含一个示例模块，演示如何添加自定义 `emqx ctl` 命令 `emqx_cli_demo`。
+
+**注意**: 由于示例依赖 `emqx`，所以这个插件需要一个定制版本的 `rebar3`，它将通过提供的 `get-rebar3` 脚本安装。
+
+### 测试您的开发环境
+
+{% emqxce %}  
+:::提示
+要使用可工作的开发环境，请参阅[从源代码安装](../deploy/install-source.md)。
+:::
 {% endemqxce %}
 
-### 3. 挂载钩子函数
+运行 `make rel` 以测试插件是否可以成功编译和打包，此时无需编写代码。 
 
-查看目录结构：
+由于示例插件依赖 EMQX 主应用程序，它需要与依赖项一起下载然后作为主项目的一部分进行编译。请注意，编译过程可能需要较长时间才能完成。
 
-```sh
-> tree src/
-src/
-├── emqx_cli_demo.erl
-├── emqx_plugin_template.app.src
-├── emqx_plugin_template.erl
-├── emqx_plugin_template_app.erl
-└── emqx_plugin_template_sup.erl
-```
+### 定制示例项目
 
-`emqx_plugins_template_app.erl` 是应用启动入口。你可以在这里定义需要启动的监控树，并挂载 EMQX 的钩子函数。此模板插件中注册了所有的钩子函数，**使用前请删除不需要的钩子**。
+现在一切都工作正常了，您可以开始定制项目以满足您的需要。我们提供了一个核心模块，它注册了当前所有已知的[钩子](./hooks.md)。此代码位于 `src/my_emqx_plugin.erl` 中。您需要删除所有不需要的钩子，然后用自己的自定义代码实现剩余钩子的回调。
 
-此示例中只需要使用到认证和授权 2 个钩子，可以修改`emqx_plugins_template:load/1`为：
+在下面的示例中，我们只需要两个钩子用于认证和访问控制，因此我们修改 `my_emqx_plugin:load/1` 如下:
 
 ```erlang
 load(Env) ->
   emqx_hooks:add('client.authenticate', {?MODULE, on_client_authenticate, [Env]}, ?HP_HIGHEST),
-  emqx_hooks:add('client.authorize',    {?MODULE, on_client_authorize, [Env]}, ?HP_HIGHEST),
+  emqx_hooks:add('client.authorize', {?MODULE, on_client_authorize, [Env]}, ?HP_HIGHEST),
   ok.
 ```
 
-即：当客户端认证时执行我们自定义的 `on_client_authenticate/3` 函数，当客户端做授权控制检查时执行`on_client_authorize/5`函数。
+我们使用 `on_client_authenticate/3` 进行客户端认证，使用 `on_client_authorize/5` 进行访问控制。
 
-由于 EMQX 内部功能也会挂载钩子函数，并且其他插件也会挂载相同的钩子函数，所以我们必须在挂载钩子时指定它的执行的顺序。`?HP_HIGHEST` 即指定当前的钩子函数最高优先级，优先级越高越先被执行。
+由于一个钩子函数可能同时被 EMQX 和定制插件挂载，因此在挂载到插件时，我们还需要指定执行顺序。`HP_HIGHEST` 指定当前钩子函数具有最高优先级，并首先执行。
 
-### 4. 编写自定义访问控制代码
+
+#### 定制访问控制代码
 
 ```erlang
-%%  只允许 clientid 为 [A-Za-z0-9_] 的客户端连接。
+%% 只允许客户端ID名称匹配以下任一字符的连接: A-Z、a-z、0-9 和下划线。  
 on_client_authenticate(_ClientInfo = #{clientid := ClientId}, Result, _Env) ->
   case re:run(ClientId, "^[A-Za-z0-9_]+$", [{capture, none}]) of
     match -> {ok, Result};
     nomatch -> {stop, {error, banned}}
   end.
-%% 只允许订阅 /room/{clientid} 的主题，但是可以发送消息给任意主题。
+%% 只能订阅主题 /room/{clientid}，但可以向任何主题发送消息。
 on_client_authorize(_ClientInfo = #{clientid := ClientId}, subscribe, Topic, Result, _Env) ->
   case emqx_topic:match(Topic, <<"/room/", ClientId/binary>>) of
     true -> {ok, Result};
@@ -89,68 +111,75 @@ on_client_authorize(_ClientInfo = #{clientid := ClientId}, subscribe, Topic, Res
 on_client_authorize(_ClientInfo, _Pub, _Topic, Result, _Env) -> {ok, Result}.
 ```
 
-通过以上 2 个钩子函数，我们只让 clientid 格式符合规范的客户端登录。并且只能订阅 `/room/{clientid}` 主题，这样就实现了一个简单的聊天室功能：客户端可以发消息给任意客户端，但每个客户端只能订阅与自己相关的主题。
+在上面的代码示例中，我们只允许匹配规范的客户端登录。这些客户端只能订阅主题 `/room/{clientid}`，从而建立一个简单的聊天室，即客户端可以向任何其他客户端发送消息，但每个客户端只能订阅与自己相关的主题。
 
 :::tip
 
-1. 需要先把配置中的 `authorization.no_match` 设置为 `deny`，默认拒绝未经授权的操作。
-2. 要设置同样的订阅规则，无需开发插件，可以通过 EMQX 内置的 [基于文件进行授权](../access-control/authz/file.md) 来实现。
+1. 确保先在配置中将 `authorization.no_match` 设置为 `deny`，即 EMQX 将拒绝任何未经授权的连接请求。
+2. 在此示例中，我们演示了如何自定义一个访问控制插件，您也可以[基于文件设置类似的授权规则](../access-control/authz/file.md)。 
+
 :::
 
-### 5. 打包插件
+**打包定制的插件**
 
-通过 rebar.config 中修改插件的版本信息：
+通过 `rebar.config` 修改插件的版本信息:
 
 ```erlang
-{relx, [ {release, {emqx_plugin_template, "5.0.0-rc.3"}, [emqx_plugin_template, map_sets]}
+{relx, [ {release, {my_emqx_plugin, "1.0.0"}, %% this is the release version, different from app vsn in .app file
+            [ my_emqx_plugin
+            , map_sets
+            ]}
        , {dev_mode, false}
        , {include_erts, false}
        ]}.
-%% Additional info of the plugin
-{emqx_plugrel,
-    [ {authors, ["EMQX Team"]}
+
+  %% Additional info about the plugin
+  {emqx_plugrel,
+    [ {authors, ["Your Name"]}
     , {builder,
-        [ {name, "EMQX Team"}
-        , {contact, "emqx-support@emqx.io"}
-        , {website, "www.emqx.com"}
+        [ {name, "Your Name"}
+        , {contact, "your_email@example.cpm"}
+        , {website, "http://example.com"}
         ]}
     , {repo, "https://github.com/emqx/emqx-plugin-template"}
     , {functionality, ["Demo"]}
     , {compatibility,
         [ {emqx, "~> 5.0"}
         ]}
-    , {description, "This is a demo plugin"}
+    , {description, "Another amazing EMQX plugin"}
     ]
 }.
 ```
 
-再次运行打包命令：
+现在重新运行 release 命令:
 
-```sh
+```shell 
 make rel
 ...
-===> Release successfully assembled: _build/default/rel/emqx_plugin_template
-===> [emqx_plugrel] creating _build/default/emqx_plugrel/emqx_plugin_template-5.0.0-rc.3.tar.gz
+===> Release successfully assembled: _build/default/rel/my_emqx_plugin
+===> [emqx_plugrel] creating _build/default/emqx_plugrel/my_emqx_plugin-1.0.0.tar.gz
 ```
 
-命令会提示生成名称为 `插件名-版本.tar.gz` 的插件包。
+这将创建一个新的 EMQX 插件 tarball `my_emqx_plugin-1.0.0.tar.gz`，您现在可以上传并安装到运行中的 EMQX 集群中。
 
-### 6. 安装并启动插件
+## 安装/启动插件  
 
-编译完成的包可以通过 CLI 进行安装：
+使用 CLI 安装编译后的包:
 
 ```bash
-./bin/emqx_ctl plugins install {pluginName}
+./bin/emqx ctl plugins install {pluginName}
 ```
 
-### 7. 卸载插件
+## 卸载插件
 
-当你不需要插件，可以通过 CLI 卸载插件：
+当不再需要该插件时，可以使用 CLI 轻松卸载它:
 
-```bash
-./bin/emqx_ctl plugins uninstall {pluginName}
+```bash  
+./bin/emqx ctl plugins uninstall {pluginName}
 ```
 
 {% emqxee %}
-热升级后需要重新安装插件。
+**注意**:插件需要在热升级后重新安装。
+
 {% endemqxee %}
+

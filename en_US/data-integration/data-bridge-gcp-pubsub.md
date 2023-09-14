@@ -88,7 +88,7 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 5. In the **Bridge Role** field, select `Producer` or `Consumer` from the drop-down list according to your business needs and complete the corresponding configurations. 
 
    :::: tabs type:card
-
+   
    ::: tab Configure as Producer Role
 
    - **GCP PubSub Topic**: Enter the topic ID `my-iot-core` you created in [Create and Manage Topic in GCP](#create-and-manage-topic-in-gcp).

@@ -92,7 +92,7 @@ Follow the instruction below on how to configure:
     - **Derived Key Length**: Specify the length of the generated password. You can leave this field blank, then the key length will be determined by the pseudorandom function you selected.
 - **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
 
-Now we can click **Create** to finish the settings. 
+After you finish the settings, click **Create**.
 
 ## Configure with Configuration Items
 

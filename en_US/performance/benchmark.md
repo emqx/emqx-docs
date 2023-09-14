@@ -12,7 +12,7 @@ There are three options for installing the eMQTT-Bench:
 
 ### Docker Image
 
-You can install the benchmark tool by running the `emqtt_bench` docker image pushed to [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags). The `:latest` tag is updated with each new version:
+You can install the benchmark tool by running the `emqtt-bench` docker image pushed to [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags). The `:latest` tag is updated with each new version:
 
 ```bash
 docker run -it emqx/emqtt-bench:latest
@@ -23,31 +23,34 @@ Note that docker image name is using hyphen '-', while binary script name is wit
 
 ### Binary Package
 
-You can download the released binary packages and install the `emqtt_bench` on the following platforms:
+You can download the released binary packages and install the `emqtt-bench` on the following platforms:
 
 - Amazon Linux 2
+- Amazon Linux 2023
 - CentOS 7
 - Rocky Linux 8
 - Rocky Linux 9
 - Debian 9
-- Debain 10
-- Debain 11
+- Debian 10
+- Debian 11
+- Debian 12
 - Ubuntu 16.04
 - Ubuntu 18.04
 - Ubuntu 20.04
 - Ubuntu 22.04
-- MacOS 11
-- MacOS 12
+- MacOS 11 (Intel)
+- MacOS 12 (Intel)
+- MacOS 12 (Apple Silicon)
 
 For detailed information on each release, see [Releases](https://github.com/emqx/emqtt-bench/releases).
 
-For example, here is how to install `emqtt_bench` on Ubuntu 20.04:
+For example, here is how to install `emqtt-bench` on Ubuntu 20.04:
 
 ```bash
-mkdir emqtt_bench && cd emqtt_bench
-wget https://github.com/emqx/emqtt-bench/releases/download/0.4.11/emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
-tar xfz emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
-rm emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
+mkdir emqtt-bench && cd emqtt-bench
+wget https://github.com/emqx/emqtt-bench/releases/download/0.4.12/emqtt-bench-0.4.12-ubuntu20.04-amd64.tar.gz
+tar xfz emqtt-bench-0.4.12-ubuntu20.04-amd64.tar.gz
+rm emqtt-bench-0.4.12-ubuntu20.04-amd64.tar.gz
 
 ./emqtt_bench
 Usage: emqtt_bench pub | sub | conn [--help]
@@ -55,7 +58,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### Build from Source
 
-`emqtt_bench` is written in Erlang and requires [Erlang/OTP](https://www.erlang.org/) 21.2 and above version to build it. The installation process of Erlang/OTP is skipped. For details, please refer to the online installation tutorials.
+`emqtt-bench` is written in Erlang and requires [Erlang/OTP](https://www.erlang.org/) 22.3 and above version to build it. The installation process of Erlang/OTP is skipped. For details, please refer to the online installation tutorials.
 
 After the Erlang environment is installed, download the latest code of `emqtt-bench` and compile it:
 
@@ -73,7 +76,7 @@ After the compilation, an executable script named `emqtt_bench` will be generate
 Usage: emqtt_bench pub | sub | conn [--help]
 ```
 
-The output of the above content proves that `emqtt_bench` has been correctly installed on the host.
+The output of the above content proves that `emqtt-bench` has been correctly installed on the host.
 
 ## Test Performance Using eMQTT-Bench
 
@@ -138,7 +141,7 @@ For example, we start 1000 connections:
 
 ### SSL Connection
 
-`emqtt_bench` supports establishing a secure SSL connection and performing tests.
+`emqtt-bench` supports establishing a secure SSL connection and performing tests.
 
 One-way certificate:
 
@@ -160,8 +163,8 @@ Two-way certificate:
 
 Verify the use of the tool in 2 most typical scenarios:
 
-1. Connections: Use `emqtt_bench` to create millions of connections to EMQX.
-2. Throughput: Use `emqtt_bench` to create `10W / s Qos0` message throughput in EMQX.
+1. Connections: Use `emqtt-bench` to create millions of connections to EMQX.
+2. Throughput: Use `emqtt-bench` to create `100k/s Qos 0` message throughput in EMQX.
 
 ### Device and Deployment Topology
 

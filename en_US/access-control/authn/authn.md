@@ -2,17 +2,17 @@
 
 Authentication is the process of verifying the identity of a client. It is an essential part of most applications and can help to protect our services from illegal client connections. 
 
-EMQX supports several authentication mechanisms to better protect our clients, including:
-
-- Username/password authentication
-- JWT authentication
-- Enhanced authentication of MQTT 5.0
-
-EMQX also supports [TLS X.509 certificates](https://www.mongodb.com/docs/manual/core/security-x.509/) and [TLS-PSK](https://www.rfc-editor.org/rfc/rfc4279) protocols, which offers an option for the authentication request between the client and the server side. 
+EMQX supports several authentication mechanisms to better protect our clients and it also supports [TLS X.509 certificates](https://www.mongodb.com/docs/manual/core/security-x.509/) and [TLS-PSK](https://www.rfc-editor.org/rfc/rfc4279) protocols, which offers an option for the authentication request between the client and the server side. 
 
 This section covers the basic concepts of identity authentication and the settings. 
 
 ## Authentication Mechanism
+
+The authentication mechanisms supported in EMQX include:
+
+- Username/password authentication
+- JWT authentication
+- Enhanced authentication of MQTT 5.0
 
 ### Password Authentication
 
@@ -39,16 +39,17 @@ The client carries the JWT in the connection request, and EMQX uses the pre-conf
 
 EMQX supports 8 authentication methods (referred to as authenticator hereafter) based on the authentication mechanism and backend database used: 
 
-| Mechanism       | Database          | Description                                                  |
-| --------------- | ----------------- | ------------------------------------------------------------ |
-| Passsword-Based | Built-in Database | [Authentication with Mnesia database as credential storage](./mnesia.md) |
-| Passsword-Based | MySQL             | [Authentication with MySQL database as credential storage](mysql.md) |
-| Passsword-Based | PostgreSQL        | [Authentication with PostgreSQL database as credential storage](postgresql.md) |
-| Passsword-Based | MongoDB           | [Authentication with MongoDB database as credential storage](./mongodb.md) |
-| Passsword-Based | Redis             | [Authentication with Redis database as credential storage](./redis.md) |
-| Passsword-Based | HTTP Server       | [Authentication using external HTTP API for credential verification](./http.md) |
-| JWT             |                   | [Authentication using JWT](./jwt.md)                         |
-| SCRAM           | Built-in Database | [Authentication using SCRAM](./scram.md)                     |
+| Mechanism      | Database          | Description                                                  |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| Password-Based | Built-in Database | [Authentication with Mnesia database as credential storage](./mnesia.md) |
+| Password-Based | MySQL             | [Authentication with MySQL database as credential storage](mysql.md) |
+| Password-Based | PostgreSQL        | [Authentication with PostgreSQL database as credential storage](postgresql.md) |
+| Password-Based | MongoDB           | [Authentication with MongoDB database as credential storage](./mongodb.md) |
+| Password-Based | Redis             | [Authentication with Redis database as credential storage](./redis.md) |
+| Password-Based | LDAP              | [Authentication with LDAP server as credential storage](./ldap.md) |
+| Password-Based | HTTP Server       | [Authentication using external HTTP API for credential verification](./http.md) |
+| JWT            |                   | [Authentication using JWT](./jwt.md)                         |
+| SCRAM          | Built-in Database | [Authentication using SCRAM](./scram.md)                     |
 
 ## Basic Concepts
 
@@ -76,7 +77,7 @@ Taking the password-based authentication as an example, EMQX tries to retrieve t
    - the authentication information matches(e.g. password is correct, JWT is valid), the client will be allowed to connect.
    - the authentication information does not match, and the client will be denied to connect.
 2. When multiple authenticators are configured, EMQX will look for credentials in order. Once the match is successful it will allow the client to connect.
-If no credentials are found in the current authenticator, it will:
+   If no credentials are found in the current authenticator, it will:
    - continue to retrieve the information from other authenticators.
    - refuse the connection if this is already the last authenticator.
 
@@ -98,7 +99,7 @@ Users have a large number of clients and a high connection rate, thus users can 
 
 By default, EMQX adopts a global authentication method for all configured listeners. But for an EMQX cluster with multiple services connected, EMQX also supports customizing authentication methods for each access mode to meet various authentication requirements, for example:
 
-- For clients connected through MQTT over WebSocket, the time-sensitive JWT authenticator rather than the permanent username/password authentication method is recommended to better protect the business security.
+- For clients connected through MQTT over WebSocket, the time-sensitive JWT authenticator rather than the permanent username/password authentication method is recommended to better protect the business's security.
 - For hardware devices connected via MQTT TCP, their user name and password or client certificates are burned during initialization. The authentication will not be changed throughout the life cycle, so the password authentication method can be used.
 - The listeners used for backend service connections do not require authentication checks, as they usually listen to an intranet address with sufficient security assurance.
 
@@ -280,7 +281,7 @@ Note that both authenticator IDs and listener IDs need to follow URL encoding co
 PUT /api/v5/authentication/password_based%3Abuilt_in_database
 ```
 
-#### Data operation API
+#### Data Operation API
 
 For authentication using [built-in database](./mnesia.md) and [MQTT 5.0 enhanced authentication](./scram.md), EMQX provides HTTP API to manage authentication data, including the operations such as creating, updating, deleting, and listing data. For more information, see [Manage authentication data with HTTP API](./user_management.md).
 
