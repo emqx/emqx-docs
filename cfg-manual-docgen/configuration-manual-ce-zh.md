@@ -23,19 +23,6 @@ EMQX 配置文件手册。
   分布式 Erlang 集群使用的 cookie 值。集群间保持一致
 
 
-**node.process_limit**
-
-  *类型*: `integer`
-
-  *默认值*: `2097152`
-
-  *可选值*: `1024-134217727`
-
-  Erlang系统同时存在的最大进程数。
-实际选择的最大值可能比设置的数字大得多。
-参考: https://www.erlang.org/doc/man/erl.html
-
-
 **node.max_ports**
 
   *类型*: `integer`
@@ -335,24 +322,11 @@ EMQX 节点可以组成一个集群，以提高总容量。<br/> 这里指定了
 - k8s: 使用 Kubernetes API 发现节点。
 
 
-**cluster.core_nodes**
-
-  *类型*: `comma_separated_atoms | array`
-
-  *默认值*: `[]`
-
-  当前节点连接的核心节点列表。<br/>
-注意：该参数仅在设置<code>backend</code>时生效到 <code>rlog</code>
-并且设置<code>role</code>为<code>replicant</code>时生效。<br/>
-该值需要在手动或静态集群发现机制下设置。<br/>
-如果使用了自动集群发现机制（如<code>etcd</code>），则不需要设置该值。
-
-
 **cluster.autoclean**
 
   *类型*: `duration`
 
-  *默认值*: `5m`
+  *默认值*: `24h`
 
   指定多久之后从集群中删除离线节点。
 
@@ -518,7 +492,7 @@ Kubernetes 服务发现。
 
   *类型*: `string`
 
-  *默认值*: `http://10.110.111.204:8080`
+  *默认值*: `https://kubernetes.default.svc:443`
 
   指定 Kubernetes API Server。如有多个 Server 使用逗号 , 分隔。
 当 cluster.discovery_strategy 为 k8s 时，此配置项才有效。
@@ -719,7 +693,7 @@ log_overload_kill -->
 
 EMQX 支持配置多个监听器，默认 MQTT/TCP 监听器端口为 `1883`。
 
-**listeners.tcp.$name.enabled**
+**listeners.tcp.$name.enable**
 
   *类型*: `boolean`
 
@@ -730,7 +704,7 @@ EMQX 支持配置多个监听器，默认 MQTT/TCP 监听器端口为 `1883`。
 
 **listeners.tcp.$name.bind**
 
-  *类型*: `ip_port | integer`
+  *类型*: `ip_port`
 
   *默认值*: `1883`
 
@@ -844,6 +818,28 @@ once the limit is reached, the restricted client will slow down and even be hung
   代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。
 
 
+**listeners.tcp.$name.authentication**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  Default authentication configs for all MQTT listeners.
+
+For per-listener overrides see <code>authentication</code> in listener configs
+
+This option can be configured with:
+<ul>
+  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
+  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
+  <li>chain: An array of structs.</li>
+</ul>
+
+When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
+
+If there is no decision after a full chain exhaustion, the login is rejected.
+
+
 **listeners.tcp.$name.tcp_options**
 
   *类型*: [broker:tcp_opts](#tcp_opts)
@@ -855,7 +851,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
 Settings for the MQTT over SSL listener.
 
-**listeners.ssl.$name.enabled**
+**listeners.ssl.$name.enable**
 
   *类型*: `boolean`
 
@@ -866,7 +862,7 @@ Settings for the MQTT over SSL listener.
 
 **listeners.ssl.$name.bind**
 
-  *类型*: `ip_port | integer`
+  *类型*: `ip_port`
 
   *默认值*: `8883`
 
@@ -980,6 +976,28 @@ once the limit is reached, the restricted client will slow down and even be hung
   代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。
 
 
+**listeners.ssl.$name.authentication**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  Default authentication configs for all MQTT listeners.
+
+For per-listener overrides see <code>authentication</code> in listener configs
+
+This option can be configured with:
+<ul>
+  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
+  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
+  <li>chain: An array of structs.</li>
+</ul>
+
+When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
+
+If there is no decision after a full chain exhaustion, the login is rejected.
+
+
 **listeners.ssl.$name.tcp_options**
 
   *类型*: [broker:tcp_opts](#tcp_opts)
@@ -1039,7 +1057,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
   QUIC 传输层的 TLS 选项
 
 
-**listeners.quic.$name.enabled**
+**listeners.quic.$name.enable**
 
   *类型*: `boolean`
 
@@ -1050,7 +1068,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
 **listeners.quic.$name.bind**
 
-  *类型*: `ip_port | integer`
+  *类型*: `ip_port`
 
   *默认值*: `14567`
 
@@ -1142,7 +1160,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
 Settings for the MQTT over WebSocket listener.
 
-**listeners.ws.$name.enabled**
+**listeners.ws.$name.enable**
 
   *类型*: `boolean`
 
@@ -1153,7 +1171,7 @@ Settings for the MQTT over WebSocket listener.
 
 **listeners.ws.$name.bind**
 
-  *类型*: `ip_port | integer`
+  *类型*: `ip_port`
 
   *默认值*: `8083`
 
@@ -1267,6 +1285,28 @@ once the limit is reached, the restricted client will slow down and even be hung
   代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。
 
 
+**listeners.ws.$name.authentication**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  Default authentication configs for all MQTT listeners.
+
+For per-listener overrides see <code>authentication</code> in listener configs
+
+This option can be configured with:
+<ul>
+  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
+  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
+  <li>chain: An array of structs.</li>
+</ul>
+
+When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
+
+If there is no decision after a full chain exhaustion, the login is rejected.
+
+
 **listeners.ws.$name.tcp_options**
 
   *类型*: [broker:tcp_opts](#tcp_opts)
@@ -1283,7 +1323,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
 Settings for the MQTT over WebSocket/SSL listener.
 
-**listeners.wss.$name.enabled**
+**listeners.wss.$name.enable**
 
   *类型*: `boolean`
 
@@ -1294,7 +1334,7 @@ Settings for the MQTT over WebSocket/SSL listener.
 
 **listeners.wss.$name.bind**
 
-  *类型*: `ip_port | integer`
+  *类型*: `ip_port`
 
   *默认值*: `8084`
 
@@ -1408,6 +1448,28 @@ once the limit is reached, the restricted client will slow down and even be hung
   代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。
 
 
+**listeners.wss.$name.authentication**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  Default authentication configs for all MQTT listeners.
+
+For per-listener overrides see <code>authentication</code> in listener configs
+
+This option can be configured with:
+<ul>
+  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
+  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
+  <li>chain: An array of structs.</li>
+</ul>
+
+When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
+
+If there is no decision after a full chain exhaustion, the login is rejected.
+
+
 **listeners.wss.$name.tcp_options**
 
   *类型*: [broker:tcp_opts](#tcp_opts)
@@ -1429,8 +1491,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 全局的 MQTT 配置参数。
 
 
-Global MQTT configuration.<br/>The configs here work as default values which can be overridden
-in <code>zone</code> configs
+Global MQTT configuration.
 
 **mqtt.idle_timeout**
 
@@ -1808,11 +1869,11 @@ Configuration related to handling `PUBLISH` packets with a `retain` flag set to 
 的对应的保留消息，通过这个值控制是否停止发送清理消息
 
 
-**retainer.deliver_rate**
+**retainer.delivery_rate**
 
   *类型*: `rate`
 
-  The maximum rate of delivering retain messages
+  The maximum rate of delivering retained messages
 
 
 **retainer.backend**
@@ -1976,7 +2037,7 @@ Prometheus 监控数据推送
 
   *类型*: `[{string, string()}]`
 
-  *默认值*: `[]`
+  *默认值*: `{}`
 
   推送到 Push Gateway 的 HTTP Headers 列表。<br/>
 例如，<code> { Authorization = "some-authz-tokens"}</code>
@@ -2002,6 +2063,72 @@ Prometheus 监控数据推送
   *默认值*: `false`
 
   开启或关闭 Prometheus 数据推送
+
+
+**prometheus.vm_dist_collector**
+
+  *类型*: `enum`
+
+  *默认值*: `disabled`
+
+  *可选值*: `disabled | enabled`
+
+  开启或关闭 VM 分布采集器，收集 Erlang 分布机制中涉及的套接字和进程的信息。
+
+
+**prometheus.mnesia_collector**
+
+  *类型*: `enum`
+
+  *默认值*: `disabled`
+
+  *可选值*: `enabled | disabled`
+
+  开启或关闭 Mnesia 采集器, 使用 mnesia:system_info/1 收集 Mnesia 相关指标
+
+
+**prometheus.vm_statistics_collector**
+
+  *类型*: `enum`
+
+  *默认值*: `disabled`
+
+  *可选值*: `enabled | disabled`
+
+  开启或关闭 VM 统计采集器, 使用 erlang:statistics/1 收集 Erlang VM 相关指标
+
+
+**prometheus.vm_system_info_collector**
+
+  *类型*: `enum`
+
+  *默认值*: `disabled`
+
+  *可选值*: `enabled | disabled`
+
+  开启或关闭 VM 系统信息采集器, 使用 erlang:system_info/1 收集 Erlang VM 相关指标
+
+
+**prometheus.vm_memory_collector**
+
+  *类型*: `enum`
+
+  *默认值*: `disabled`
+
+  *可选值*: `enabled | disabled`
+
+  开启或关闭 VM 内存采集器, 使用 erlang:memory/0 收集 Erlang 虚拟机动态分配的内存信息，同时提供基本的 (D)ETS 统计信息
+
+
+**prometheus.vm_msacc_collector**
+
+  *类型*: `enum`
+
+  *默认值*: `disabled`
+
+  *可选值*: `enabled | disabled`
+
+  开启或关闭 VM msacc 采集器, 使用 erlang:statistics(microstate_accounting) 收集微状态计数指标
 
 
 
@@ -2145,7 +2272,7 @@ This part of the configuration is responsible for monitoring
 
   *类型*: `disabled | duration`
 
-  *默认值*: `60s`
+  *默认值*: `disabled`
 
   定期内存检查的时间间隔。
 
@@ -2441,20 +2568,13 @@ EMQX Dashboard 配置。
 允许服务器指示任何来源(域名、协议或端口)，除了本服务器之外的任何浏览器应允许加载资源。
 
 
-**dashboard.bootstrap_users_file**
-
-  *类型*: `string`
-
-  Deprecated since 5.1.0.
-
-
 
 
 Dashboard 监听器(HTTP)配置。
 
 **dashboard.listeners.http.bind**
 
-  *类型*: `non_neg_integer | ip_port`
+  *类型*: `ip_port`
 
   *默认值*: `0`
 
@@ -2530,11 +2650,18 @@ Dashboard 监听器(HTTPS)配置。
 
 **dashboard.listeners.https.bind**
 
-  *类型*: `non_neg_integer | ip_port`
+  *类型*: `ip_port`
 
   *默认值*: `0`
 
   监听地址和端口，热更新此配置时，会重启 Dashboard 服务。
+
+
+**dashboard.listeners.https.ssl_options**
+
+  *类型*: `dashboard:ssl_options`
+
+  SSL/TLS options for the dashboard listener.
 
 
 **dashboard.listeners.https.num_acceptors**
@@ -2598,189 +2725,6 @@ Dashboard 监听器(HTTPS)配置。
   *默认值*: `false`
 
   开启对  `HAProxy` 的支持，注意：一旦开启了这个功能，就无法再处理普通的 HTTP 请求了。
-
-
-**dashboard.listeners.https.cacertfile**
-
-  *类型*: `string`
-
-  *默认值*: `${EMQX_ETC_DIR}/certs/cacert.pem`
-
-  受信任的PEM格式 CA  证书捆绑文件<br/>
-此文件中的证书用于验证TLS对等方的证书。
-如果要信任新 CA，请将新证书附加到文件中。
-无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
-注意：从文件中失效（删除）证书不会影响已建立的连接。
-
-
-**dashboard.listeners.https.certfile**
-
-  *类型*: `string`
-
-  *默认值*: `${EMQX_ETC_DIR}/certs/cert.pem`
-
-  PEM格式证书链文件<br/>
-此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
-然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
-根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
-
-
-**dashboard.listeners.https.keyfile**
-
-  *类型*: `string`
-
-  *默认值*: `${EMQX_ETC_DIR}/certs/key.pem`
-
-  PEM格式的私钥文件。
-
-
-**dashboard.listeners.https.verify**
-
-  *类型*: `enum`
-
-  *默认值*: `verify_none`
-
-  *可选值*: `verify_peer | verify_none`
-
-  启用或禁用对等验证。
-
-
-**dashboard.listeners.https.reuse_sessions**
-
-  *类型*: `boolean`
-
-  *默认值*: `true`
-
-  启用 TLS 会话重用。
-
-
-**dashboard.listeners.https.depth**
-
-  *类型*: `non_neg_integer`
-
-  *默认值*: `10`
-
-  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
-因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
-如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
-如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
-
-
-**dashboard.listeners.https.password**
-
-  *类型*: `string`
-
-  包含用户密码的字符串。仅在私钥文件受密码保护时使用。
-
-
-**dashboard.listeners.https.versions**
-
-  *类型*: `array`
-
-  *默认值*: `["tlsv1.3","tlsv1.2"]`
-
-  支持所有TLS/DTLS版本<br/>
-注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
-
-
-**dashboard.listeners.https.ciphers**
-
-  *类型*: `array`
-
-  *默认值*: `[]`
-
-  此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
-<br/>
-密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
-选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
-
-名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
-EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
-注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
-不兼容的密码套件将被自动删除。
-
-例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
-
-<br/>
-注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
-如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
-
-<br/>
-PSK 密码套件：
-<code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
-RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
-RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
-
-
-**dashboard.listeners.https.secure_renegotiate**
-
-  *类型*: `boolean`
-
-  *默认值*: `true`
-
-  SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。
-RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。
-
-
-**dashboard.listeners.https.log_level**
-
-  *类型*: `enum`
-
-  *默认值*: `notice`
-
-  *可选值*: `emergency | alert | critical | error | warning | notice | info | debug | none | all`
-
-  SSL 握手的日志级别。默认值是 'notice'，可以设置为 'debug' 用来调查 SSL 握手的问题。
-
-
-**dashboard.listeners.https.hibernate_after**
-
-  *类型*: `duration`
-
-  *默认值*: `5s`
-
-  在闲置一定时间后休眠 SSL 进程，减少其内存占用。
-
-
-**dashboard.listeners.https.dhfile**
-
-  *类型*: `string`
-
-  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
-注意：TLS 1.3不支持<code>dhfile</code>选项。
-
-
-**dashboard.listeners.https.honor_cipher_order**
-
-  *类型*: `boolean`
-
-  *默认值*: `true`
-
-  一个重要的安全设置，它强制根据服务器指定的顺序而不是客户机指定的顺序设置密码，从而强制服务器管理员执行（通常配置得更正确）安全顺序。
-
-
-**dashboard.listeners.https.client_renegotiation**
-
-  *类型*: `boolean`
-
-  *默认值*: `true`
-
-  在支持客户机发起的重新协商的协议中，这种操作的资源成本对于服务器来说高于客户机。
-这可能会成为拒绝服务攻击的载体。
-SSL 应用程序已经采取措施来反击此类尝试，但通过将此选项设置为 false，可以严格禁用客户端发起的重新协商。
-默认值为 true。请注意，由于基础密码套件可以加密的消息数量有限，禁用重新协商可能会导致长期连接变得不可用。
-
-
-**dashboard.listeners.https.handshake_timeout**
-
-  *类型*: `duration`
-
-  *默认值*: `15s`
-
-  握手完成所允许的最长时间
 
 
 
@@ -3048,9 +2992,11 @@ is configured, then both the data got from the rule and the MQTT messages that m
 
 **bridges.mqtt.$name.resource_opts.worker_pool_size**
 
-  *类型*: `non_neg_integer`
+  *类型*: `integer`
 
   *默认值*: `16`
+
+  *可选值*: `1-1024`
 
   缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
 
@@ -3138,7 +3084,7 @@ is configured, then both the data got from the rule and the MQTT messages that m
 ### WebHook
 
 
-HTTP Bridge 配置
+Configuration for an HTTP bridge.
 
 **bridges.webhook.$name.enable**
 
@@ -3146,7 +3092,7 @@ HTTP Bridge 配置
 
   *默认值*: `true`
 
-  启用/禁用 Bridge
+  Enable or disable this bridge
 
 
 **bridges.webhook.$name.resource_opts**
@@ -3164,7 +3110,7 @@ HTTP Bridge 配置
 
   *默认值*: `15s`
 
-  连接HTTP服务器的超时时间。
+  The timeout when connecting to the HTTP server.
 
 
 **bridges.webhook.$name.retry_interval**
@@ -3176,11 +3122,11 @@ HTTP Bridge 配置
 
 **bridges.webhook.$name.pool_type**
 
-  *类型*: `emqx_connector_http:pool_type`
+  *类型*: `emqx_bridge_http_connector:pool_type`
 
   *默认值*: `random`
 
-  连接池的类型，可用类型有`random`, `hash`。
+  The type of the pool. Can be one of `random`, `hash`.
 
 
 **bridges.webhook.$name.pool_size**
@@ -3189,7 +3135,7 @@ HTTP Bridge 配置
 
   *默认值*: `8`
 
-  连接池大小。
+  The pool size.
 
 
 **bridges.webhook.$name.enable_pipelining**
@@ -3198,14 +3144,14 @@ HTTP Bridge 配置
 
   *默认值*: `100`
 
-  正整数，设置最大可发送的异步 HTTP 请求数量。当设置为 1 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
+  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
 
 
 **bridges.webhook.$name.request**
 
   *类型*: `connector-http:request`
 
-  设置 HTTP 请求的参数。
+  Configure HTTP request parameters.
 
 
 **bridges.webhook.$name.ssl**
@@ -3221,12 +3167,12 @@ HTTP Bridge 配置
 
   *类型*: `string`
 
-  HTTP Bridge 的 URL。<br/>
-路径中允许使用带变量的模板，但是 host， port 不允许使用变量模板。<br/>
-例如，<code> http://localhost:9901/${topic} </code> 是允许的，
-但是<code> http://${host}:9901/message </code>
-或 <code> http://localhost:${port}/message </code>
-不允许。
+  The URL of the HTTP Bridge.<br/>
+Template with variables is allowed in the path, but variables cannot be used in the scheme, host,
+or port part.<br/>
+For example, <code> http://localhost:9901/${topic} </code> is allowed, but
+<code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code>
+is not allowed.
 
 
 **bridges.webhook.$name.direction**
@@ -3240,8 +3186,11 @@ HTTP Bridge 配置
 
   *类型*: `string`
 
-  发送到 'local_topic' 的消息都会转发到 HTTP 服务器。 <br/>
-注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 HTTP 服务器。
+  The MQTT topic filter to be forwarded to the HTTP server. All MQTT 'PUBLISH' messages with the topic
+matching the local_topic will be forwarded.<br/>
+NOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is
+configured, then both the data got from the rule and the MQTT messages that match local_topic
+will be forwarded.
 
 
 **bridges.webhook.$name.method**
@@ -3252,8 +3201,8 @@ HTTP Bridge 配置
 
   *可选值*: `post | put | get | delete`
 
-  HTTP 请求的方法。 所有可用的方法包括：post、put、get、delete。<br/>
-允许使用带有变量的模板。
+  The method of the HTTP request. All the available methods are: post, put, get, delete.<br/>
+Template with variables is allowed.
 
 
 **bridges.webhook.$name.headers**
@@ -3262,19 +3211,21 @@ HTTP Bridge 配置
 
   *默认值*: `{"keep-alive":"timeout=5","content-type":"application/json","connection":"keep-alive","cache-control":"no-cache","accept":"application/json"}`
 
-  HTTP 请求的标头。<br/>
-允许使用带有变量的模板。
+  The headers of the HTTP request.<br/>
+Template with variables is allowed.
 
 
 **bridges.webhook.$name.body**
 
   *类型*: `string`
 
-  HTTP 请求的正文。<br/>
-如果没有设置该字段，请求正文将是包含所有可用字段的 JSON object。<br/>
-如果该 webhook 是由于收到 MQTT 消息触发的，'所有可用字段' 将是 MQTT 消息的
-上下文信息；如果该 webhook 是由于规则触发的，'所有可用字段' 则为触发事件的上下文信息。<br/>
-允许使用带有变量的模板。
+  The body of the HTTP request.<br/>
+If not provided, the body will be a JSON object of all the available fields.<br/>
+There, 'all the available fields' means the context of a MQTT message when
+this webhook is triggered by receiving a MQTT message (the `local_topic` is set),
+or the context of the event when this webhook is triggered by a rule (i.e. this
+webhook is used as an action of a rule).<br/>
+Template with variables is allowed.
 
 
 **bridges.webhook.$name.max_retries**
@@ -3283,7 +3234,7 @@ HTTP Bridge 配置
 
   *默认值*: `2`
 
-  HTTP 请求失败最大重试次数
+  HTTP request max retry times if failed.
 
 
 **bridges.webhook.$name.request_timeout**
@@ -3299,9 +3250,11 @@ HTTP Bridge 配置
 
 **bridges.webhook.$name.resource_opts.worker_pool_size**
 
-  *类型*: `non_neg_integer`
+  *类型*: `integer`
 
   *默认值*: `16`
+
+  *可选值*: `1-1024`
 
   缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
 
@@ -3395,42 +3348,42 @@ HTTP Bridge 配置
 
   *类型*: `string`
 
-  HTTP 请求方法。
+  HTTP method.
 
 
 **connector-http:request.path**
 
   *类型*: `string`
 
-  HTTP请求路径。
+  URL path.
 
 
 **connector-http:request.body**
 
   *类型*: `string`
 
-  HTTP请求报文主体。
+  HTTP request body.
 
 
 **connector-http:request.headers**
 
   *类型*: `map`
 
-  HTTP 头字段列表。
+  List of HTTP headers.
 
 
 **connector-http:request.max_retries**
 
   *类型*: `non_neg_integer`
 
-  请求出错时的最大重试次数。
+  Max retry times if error on sending request.
 
 
 **connector-http:request.request_timeout**
 
   *类型*: `timeout_duration_ms`
 
-  HTTP 请求超时。
+  HTTP request timeout.
 
 
 
@@ -3810,6 +3763,13 @@ SSL client configuration.
 注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
+**exhook.servers.$INDEX.ssl.cacerts**
+
+  *类型*: `boolean`
+
+  Deprecated since 5.1.4.
+
+
 **exhook.servers.$INDEX.ssl.certfile**
 
   *类型*: `string`
@@ -3979,6 +3939,13 @@ Socket options for SSL clients.
 注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
+**ssl_client_opts.cacerts**
+
+  *类型*: `boolean`
+
+  Deprecated since 5.1.4.
+
+
 **ssl_client_opts.certfile**
 
   *类型*: `string`
@@ -4146,6 +4113,13 @@ Socket options for SSL connections.
 如果要信任新 CA，请将新证书附加到文件中。
 无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
 注意：从文件中失效（删除）证书不会影响已建立的连接。
+
+
+**listener_ssl_opts.cacerts**
+
+  *类型*: `boolean`
+
+  Deprecated since 5.1.4.
 
 
 **listener_ssl_opts.certfile**
@@ -4602,6 +4576,13 @@ Socket options for WebSocket/SSL connections.
 如果要信任新 CA，请将新证书附加到文件中。
 无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
 注意：从文件中失效（删除）证书不会影响已建立的连接。
+
+
+**listeners.wss.$name.ssl_options.cacerts**
+
+  *类型*: `boolean`
+
+  Deprecated since 5.1.4.
 
 
 **listeners.wss.$name.ssl_options.certfile**

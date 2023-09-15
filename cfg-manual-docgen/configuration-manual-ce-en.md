@@ -25,19 +25,6 @@ the given EMQX cluster, but unique per EMQX cluster. It is used to prevent EMQX 
 belong to different clusters from accidentally connecting to each other.
 
 
-**node.process_limit**
-
-  *Type*: `integer`
-
-  *Default*: `2097152`
-
-  *Optional*: `1024-134217727`
-
-  Maximum number of simultaneously existing processes for this Erlang system.
-The actual maximum chosen may be much larger than the Number passed.
-For more information, see: https://www.erlang.org/doc/man/erl.html
-
-
 **node.max_ports**
 
   *Type*: `integer`
@@ -46,8 +33,7 @@ For more information, see: https://www.erlang.org/doc/man/erl.html
 
   *Optional*: `1024-134217727`
 
-  Maximum number of simultaneously existing ports for this Erlang system.
-The actual maximum chosen may be much larger than the Number passed.
+  Maximum number of simultaneously open files and sockets for this Erlang system.
 For more information, see: https://www.erlang.org/doc/man/erl.html
 
 
@@ -352,25 +338,11 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
   This supports discovery via UDP multicast.
 
 
-**cluster.core_nodes**
-
-  *Type*: `comma_separated_atoms | array`
-
-  *Default*: `[]`
-
-  List of core nodes that the replicant will connect to.<br/>
-Note: this parameter only takes effect when the <code>backend</code> is set
-to <code>rlog</code> and the <code>role</code> is set to <code>replicant</code>.<br/>
-This value needs to be defined for manual or static cluster discovery mechanisms.<br/>
-If an automatic cluster discovery mechanism is being used (such as <code>etcd</code>),
-there is no need to set this value.
-
-
 **cluster.autoclean**
 
   *Type*: `duration`
 
-  *Default*: `5m`
+  *Default*: `24h`
 
   Remove disconnected nodes from the cluster after this interval.
 
@@ -531,7 +503,7 @@ Service discovery via Kubernetes API server.
 
   *Type*: `string`
 
-  *Default*: `http://10.110.111.204:8080`
+  *Default*: `https://kubernetes.default.svc:443`
 
   Kubernetes API endpoint URL.
 
@@ -614,7 +586,7 @@ Log handler that prints log events to files.
 
   *Default*: `50MB`
 
-  This parameter controls log file rotation. The value `infinity` means the log file will grow indefinitely, otherwise the log file will be rotated once it reaches `max_size` in bytes.
+  This parameter controls log file rotation. The value `infinity` means the log file will grow indefinitely, otherwise the log file will be rotated once it reaches `rotation_size` in bytes.
 
 
 **log_file_handler.level**
@@ -730,7 +702,7 @@ log_overload_kill -->
 
 EMQX supports the creation of multiple listeners, and the default MQTT/TCP listener port is `1883`.
 
-**listeners.tcp.$name.enabled**
+**listeners.tcp.$name.enable**
 
   *Type*: `boolean`
 
@@ -741,7 +713,7 @@ EMQX supports the creation of multiple listeners, and the default MQTT/TCP liste
 
 **listeners.tcp.$name.bind**
 
-  *Type*: `ip_port | integer`
+  *Type*: `ip_port`
 
   *Default*: `1883`
 
@@ -860,6 +832,28 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
+**listeners.tcp.$name.authentication**
+
+  *Type*: `array`
+
+  *Default*: `[]`
+
+  Default authentication configs for all MQTT listeners.
+
+For per-listener overrides see <code>authentication</code> in listener configs
+
+This option can be configured with:
+<ul>
+  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
+  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
+  <li>chain: An array of structs.</li>
+</ul>
+
+When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
+
+If there is no decision after a full chain exhaustion, the login is rejected.
+
+
 **listeners.tcp.$name.tcp_options**
 
   *Type*: [broker:tcp_opts](#tcp_opts)
@@ -871,7 +865,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 Settings for the MQTT over SSL listener.
 
-**listeners.ssl.$name.enabled**
+**listeners.ssl.$name.enable**
 
   *Type*: `boolean`
 
@@ -882,7 +876,7 @@ Settings for the MQTT over SSL listener.
 
 **listeners.ssl.$name.bind**
 
-  *Type*: `ip_port | integer`
+  *Type*: `ip_port`
 
   *Default*: `8883`
 
@@ -1001,6 +995,28 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
+**listeners.ssl.$name.authentication**
+
+  *Type*: `array`
+
+  *Default*: `[]`
+
+  Default authentication configs for all MQTT listeners.
+
+For per-listener overrides see <code>authentication</code> in listener configs
+
+This option can be configured with:
+<ul>
+  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
+  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
+  <li>chain: An array of structs.</li>
+</ul>
+
+When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
+
+If there is no decision after a full chain exhaustion, the login is rejected.
+
+
 **listeners.ssl.$name.tcp_options**
 
   *Type*: [broker:tcp_opts](#tcp_opts)
@@ -1065,7 +1081,7 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers
   TLS options for QUIC transport
 
 
-**listeners.quic.$name.enabled**
+**listeners.quic.$name.enable**
 
   *Type*: `boolean`
 
@@ -1076,7 +1092,7 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers
 
 **listeners.quic.$name.bind**
 
-  *Type*: `ip_port | integer`
+  *Type*: `ip_port`
 
   *Default*: `14567`
 
@@ -1173,7 +1189,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
 Settings for the MQTT over WebSocket listener.
 
-**listeners.ws.$name.enabled**
+**listeners.ws.$name.enable**
 
   *Type*: `boolean`
 
@@ -1184,7 +1200,7 @@ Settings for the MQTT over WebSocket listener.
 
 **listeners.ws.$name.bind**
 
-  *Type*: `ip_port | integer`
+  *Type*: `ip_port`
 
   *Default*: `8083`
 
@@ -1303,6 +1319,28 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
+**listeners.ws.$name.authentication**
+
+  *Type*: `array`
+
+  *Default*: `[]`
+
+  Default authentication configs for all MQTT listeners.
+
+For per-listener overrides see <code>authentication</code> in listener configs
+
+This option can be configured with:
+<ul>
+  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
+  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
+  <li>chain: An array of structs.</li>
+</ul>
+
+When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
+
+If there is no decision after a full chain exhaustion, the login is rejected.
+
+
 **listeners.ws.$name.tcp_options**
 
   *Type*: [broker:tcp_opts](#tcp_opts)
@@ -1319,7 +1357,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 Settings for the MQTT over WebSocket/SSL listener.
 
-**listeners.wss.$name.enabled**
+**listeners.wss.$name.enable**
 
   *Type*: `boolean`
 
@@ -1330,7 +1368,7 @@ Settings for the MQTT over WebSocket/SSL listener.
 
 **listeners.wss.$name.bind**
 
-  *Type*: `ip_port | integer`
+  *Type*: `ip_port`
 
   *Default*: `8084`
 
@@ -1449,6 +1487,28 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
+**listeners.wss.$name.authentication**
+
+  *Type*: `array`
+
+  *Default*: `[]`
+
+  Default authentication configs for all MQTT listeners.
+
+For per-listener overrides see <code>authentication</code> in listener configs
+
+This option can be configured with:
+<ul>
+  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
+  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
+  <li>chain: An array of structs.</li>
+</ul>
+
+When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
+
+If there is no decision after a full chain exhaustion, the login is rejected.
+
+
 **listeners.wss.$name.tcp_options**
 
   *Type*: [broker:tcp_opts](#tcp_opts)
@@ -1470,8 +1530,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 Global MQTT configuration parameters.
 
 
-Global MQTT configuration.<br/>The configs here work as default values which can be overridden
-in <code>zone</code> configs
+Global MQTT configuration.
 
 **mqtt.idle_timeout**
 
@@ -1491,7 +1550,7 @@ Note: Please set the parameter with caution as long idle time will lead to resou
 
   *Default*: `1MB`
 
-  Maximum MQTT packet size allowed.
+  Maximum MQTT packet size allowed. Default: 1 MB, Maximum: 256 MB
 
 
 **mqtt.max_clientid_len**
@@ -1818,7 +1877,8 @@ Configuration related to handling `PUBLISH` packets with a `retain` flag set to 
 
   *Default*: `0s`
 
-  Message retention time. 0 means message will never be expired.
+  Message retention time. This config is only applicable for messages without the Message Expiry Interval message property.
+0 means message will never expire.
 
 
 **retainer.msg_clear_interval**
@@ -1827,8 +1887,7 @@ Configuration related to handling `PUBLISH` packets with a `retain` flag set to 
 
   *Default*: `0s`
 
-  Periodic interval for cleaning up expired messages.
-Never clear if the value is 0.
+  Interval for EMQX to scan expired messages and delete them. Never scan if the value is 0.
 
 
 **retainer.max_payload_size**
@@ -1852,11 +1911,11 @@ See:
 http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718038
 
 
-**retainer.deliver_rate**
+**retainer.delivery_rate**
 
   *Type*: `rate`
 
-  The maximum rate of delivering retain messages
+  The maximum rate of delivering retained messages
 
 
 **retainer.backend**
@@ -1931,7 +1990,12 @@ The following options control the behavior of `$SYS` topics.
 
   *Default*: `1m`
 
-  Time interval of publishing `$SYS` messages.
+  Time interval for publishing following system messages:
+  - `$SYS/brokers`
+  - `$SYS/brokers/<node>/version`
+  - `$SYS/brokers/<node>/sysdescr`
+  - `$SYS/brokers/<node>/stats/<name>`
+  - `$SYS/brokers/<node>/metrics/<name>`
 
 
 **sys_topics.sys_heartbeat_interval**
@@ -1996,7 +2060,9 @@ broker:trace@ -->
 ## Integration With Prometheus
 
 
-Settings for reporting metrics to Prometheus
+EMQX's Prometheus scraping endpoint is enabled by default without authentication.
+You can inspect it with a `curl` command like this: `curl -f "127.0.0.1:18083/api/v5/prometheus/stats"`<br/>
+The 'enable' flag is used to turn on and off for the push-gateway integration.
 
 **prometheus.push_gateway_server**
 
@@ -2004,7 +2070,7 @@ Settings for reporting metrics to Prometheus
 
   *Default*: `http://127.0.0.1:9091`
 
-  URL of Prometheus server
+  URL of Prometheus server. Pushgateway is optional, should not be configured if prometheus is to scrape EMQX.
 
 
 **prometheus.interval**
@@ -2020,9 +2086,9 @@ Settings for reporting metrics to Prometheus
 
   *Type*: `[{string, string()}]`
 
-  *Default*: `[]`
+  *Default*: `{}`
 
-  A list of HTTP Headers when pushing to Push Gateway.<br/>
+  An HTTP Headers when pushing to Push Gateway.<br/>
 For example, <code> { Authorization = "some-authz-tokens"}</code>
 
 
@@ -2046,6 +2112,72 @@ Default value is: <code>${name}/instance/${name}~${host}</code>
   *Default*: `false`
 
   Turn Prometheus data pushing on or off
+
+
+**prometheus.vm_dist_collector**
+
+  *Type*: `enum`
+
+  *Default*: `disabled`
+
+  *Optional*: `disabled | enabled`
+
+  Enable or disable VM distribution collector, collects information about the sockets and processes involved in the Erlang distribution mechanism.
+
+
+**prometheus.mnesia_collector**
+
+  *Type*: `enum`
+
+  *Default*: `disabled`
+
+  *Optional*: `enabled | disabled`
+
+  Enable or disable Mnesia metrics collector
+
+
+**prometheus.vm_statistics_collector**
+
+  *Type*: `enum`
+
+  *Default*: `disabled`
+
+  *Optional*: `enabled | disabled`
+
+  Enable or disable VM statistics collector.
+
+
+**prometheus.vm_system_info_collector**
+
+  *Type*: `enum`
+
+  *Default*: `disabled`
+
+  *Optional*: `enabled | disabled`
+
+  Enable or disable VM system info collector.
+
+
+**prometheus.vm_memory_collector**
+
+  *Type*: `enum`
+
+  *Default*: `disabled`
+
+  *Optional*: `enabled | disabled`
+
+  Enable or disable VM memory metrics collector.
+
+
+**prometheus.vm_msacc_collector**
+
+  *Type*: `enum`
+
+  *Default*: `disabled`
+
+  *Optional*: `enabled | disabled`
+
+  Enable or disable VM microstate accounting metrics collector.
 
 
 
@@ -2165,7 +2297,7 @@ This part of the configuration is responsible for monitoring
 
   *Default*: `60s`
 
-  The time interval for the periodic CPU check.
+  The time interval for the periodic CPU check. Disabled on Windows platform.
 
 
 **sysmon.os.cpu_high_watermark**
@@ -2175,7 +2307,7 @@ This part of the configuration is responsible for monitoring
   *Default*: `80%`
 
   The threshold, as percentage of system CPU load,
- for how much system cpu can be used before the corresponding alarm is raised.
+ for how much system cpu can be used before the corresponding alarm is raised. Disabled on Windows platform
 
 
 **sysmon.os.cpu_low_watermark**
@@ -2185,16 +2317,16 @@ This part of the configuration is responsible for monitoring
   *Default*: `60%`
 
   The threshold, as percentage of system CPU load,
- for how much system cpu can be used before the corresponding alarm is cleared.
+ for how much system cpu can be used before the corresponding alarm is cleared. Disabled on Windows platform
 
 
 **sysmon.os.mem_check_interval**
 
   *Type*: `disabled | duration`
 
-  *Default*: `60s`
+  *Default*: `disabled`
 
-  The time interval for the periodic memory check.
+  The time interval for the periodic memory check. Disabled on Windows platform.
 
 
 **sysmon.os.sysmem_high_watermark**
@@ -2204,7 +2336,7 @@ This part of the configuration is responsible for monitoring
   *Default*: `70%`
 
   The threshold, as percentage of system memory,
- for how much system memory can be allocated before the corresponding alarm is raised.
+ for how much system memory can be allocated before the corresponding alarm is raised. Disabled on Windows platform
 
 
 **sysmon.os.procmem_high_watermark**
@@ -2215,7 +2347,7 @@ This part of the configuration is responsible for monitoring
 
   The threshold, as percentage of system memory,
  for how much system memory can be allocated by one Erlang process before
- the corresponding alarm is raised.
+ the corresponding alarm is raised. Disabled on Windows platform.
 
 
 
@@ -2502,24 +2634,18 @@ Allows a server to indicate any origins (domain, scheme, or port) other than
 its own from which a browser should permit loading resources.
 
 
-**dashboard.bootstrap_users_file**
-
-  *Type*: `string`
-
-  Deprecated since 5.1.0.
-
-
 
 
 Configuration for the dashboard listener (plaintext).
 
 **dashboard.listeners.http.bind**
 
-  *Type*: `non_neg_integer | ip_port`
+  *Type*: `ip_port`
 
   *Default*: `0`
 
   Port without IP(18083) or port with specified IP(127.0.0.1:18083).
+Disabled when setting bind to `0`.
 
 
 **dashboard.listeners.http.num_acceptors**
@@ -2592,11 +2718,19 @@ Configuration for the dashboard listener (TLS).
 
 **dashboard.listeners.https.bind**
 
-  *Type*: `non_neg_integer | ip_port`
+  *Type*: `ip_port`
 
   *Default*: `0`
 
   Port without IP(18083) or port with specified IP(127.0.0.1:18083).
+Disabled when setting bind to `0`.
+
+
+**dashboard.listeners.https.ssl_options**
+
+  *Type*: `dashboard:ssl_options`
+
+  SSL/TLS options for the dashboard listener.
 
 
 **dashboard.listeners.https.num_acceptors**
@@ -2663,213 +2797,6 @@ The configuration is only valid when the inet6 is true.
   Enable support for `HAProxy` header. Be aware once enabled regular HTTP requests can't be handled anymore.
 
 
-**dashboard.listeners.https.cacertfile**
-
-  *Type*: `string`
-
-  *Default*: `${EMQX_ETC_DIR}/certs/cacert.pem`
-
-  Trusted PEM format CA certificates bundle file.<br/>
-The certificates in this file are used to verify the TLS peer's certificates.
-Append new certificates to the file if new CAs are to be trusted.
-There is no need to restart EMQX to have the updated file loaded, because
-the system regularly checks if file has been updated (and reload).<br/>
-NOTE: invalidating (deleting) a certificate from the file will not affect
-already established connections.
-
-
-**dashboard.listeners.https.certfile**
-
-  *Type*: `string`
-
-  *Default*: `${EMQX_ETC_DIR}/certs/cert.pem`
-
-  PEM format certificates chain file.<br/>
-The certificates in this file should be in reversed order of the certificate
-issue chain. That is, the host's certificate should be placed in the beginning
-of the file, followed by the immediate issuer certificate and so on.
-Although the root CA certificate is optional, it should be placed at the end of
-the file if it is to be added.
-
-
-**dashboard.listeners.https.keyfile**
-
-  *Type*: `string`
-
-  *Default*: `${EMQX_ETC_DIR}/certs/key.pem`
-
-  PEM format private key file.
-
-
-**dashboard.listeners.https.verify**
-
-  *Type*: `enum`
-
-  *Default*: `verify_none`
-
-  *Optional*: `verify_peer | verify_none`
-
-  Enable or disable peer verification.
-
-
-**dashboard.listeners.https.reuse_sessions**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Enable TLS session reuse.<br/>
-Has no effect when TLS version is configured (or negotiated) to 1.3
-
-
-**dashboard.listeners.https.depth**
-
-  *Type*: `non_neg_integer`
-
-  *Default*: `10`
-
-  Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
-So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/>
-if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
-if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
-
-
-**dashboard.listeners.https.password**
-
-  *Type*: `string`
-
-  String containing the user's password. Only used if the private key file is password-protected.
-
-
-**dashboard.listeners.https.versions**
-
-  *Type*: `array`
-
-  *Default*: `["tlsv1.3","tlsv1.2"]`
-
-  All TLS/DTLS versions to be supported.<br/>
-NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
-In case PSK cipher suites are intended, make sure to configure
-<code>['tlsv1.2', 'tlsv1.1']</code> here.
-
-
-**dashboard.listeners.https.ciphers**
-
-  *Type*: `array`
-
-  *Default*: `[]`
-
-  This config holds TLS cipher suite names separated by comma,
-or as an array of strings. e.g.
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
-<br/>
-Ciphers (and their ordering) define the way in which the
-client and server encrypts information over the network connection.
-Selecting a good cipher suite is critical for the
-application's data security, confidentiality and performance.
-
-The names should be in OpenSSL string format (not RFC format).
-All default values and examples provided by EMQX config
-documentation are all in OpenSSL format.<br/>
-
-NOTE: Certain cipher suites are only compatible with
-specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
-incompatible cipher suites will be silently dropped.
-For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
-configuring cipher suites for other versions will have no effect.
-<br/>
-
-NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
-If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
-PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
-RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
-RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
-
-
-**dashboard.listeners.https.secure_renegotiate**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  SSL parameter renegotiation is a feature that allows a client and a server
-to renegotiate the parameters of the SSL connection on the fly.
-RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
-you drop support for the insecure renegotiation, prone to MitM attacks.<br/>
-Has no effect when TLS version is configured (or negotiated) to 1.3
-
-
-**dashboard.listeners.https.log_level**
-
-  *Type*: `enum`
-
-  *Default*: `notice`
-
-  *Optional*: `emergency | alert | critical | error | warning | notice | info | debug | none | all`
-
-  Log level for SSL communication. Default is 'notice'. Set to 'debug' to inspect TLS handshake messages.
-
-
-**dashboard.listeners.https.hibernate_after**
-
-  *Type*: `duration`
-
-  *Default*: `5s`
-
-  Hibernate the SSL process after idling for amount of time reducing its memory footprint.
-
-
-**dashboard.listeners.https.dhfile**
-
-  *Type*: `string`
-
-  Path to a file containing PEM-encoded Diffie-Hellman parameters
-to be used by the server if a cipher suite using Diffie-Hellman
-key exchange is negotiated. If not specified, default parameters
-are used.<br/>
-NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
-
-
-**dashboard.listeners.https.honor_cipher_order**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  An important security setting, it forces the cipher to be set based
- on the server-specified order instead of the client-specified order,
- hence enforcing the (usually more properly configured) security
- ordering of the server administrator.
-
-
-**dashboard.listeners.https.client_renegotiation**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  In protocols that support client-initiated renegotiation,
-the cost of resources of such an operation is higher for the server than the client.
-This can act as a vector for denial of service attacks.
-The SSL application already takes measures to counter-act such attempts,
-but client-initiated renegotiation can be strictly disabled by setting this option to false.
-The default value is true. Note that disabling renegotiation can result in
-long-lived connections becoming unusable due to limits on
-the number of messages the underlying cipher suite can encipher.<br/>
-Has no effect when TLS version is configured (or negotiated) to 1.3
-
-
-**dashboard.listeners.https.handshake_timeout**
-
-  *Type*: `duration`
-
-  *Default*: `15s`
-
-  Maximum time duration allowed for the handshake to complete
-
-
 
 
 Configuration for the dashboard listener.
@@ -2900,12 +2827,10 @@ API Key, can be used to request API other than the management API key and the Da
 
   *Default*: `""`
 
-  Bootstrap file is used to add an api_key when emqx is launched,
-      the format is:
-       ```
-       7e729ae70d23144b:2QILI9AcQ9BYlVqLDHQNWN2saIjBV4egr1CZneTNKr9CpK
-       ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL
-       ```
+  The bootstrap file provides API keys for EMQX.
+EMQX will load these keys on startup to authorize API requests.
+It contains key-value pairs in the format:`api_key:api_secret`.
+Each line specifies an API key and its associated secret.
 
 
 
@@ -3136,9 +3061,11 @@ Creation options.
 
 **bridges.mqtt.$name.resource_opts.worker_pool_size**
 
-  *Type*: `non_neg_integer`
+  *Type*: `integer`
 
   *Default*: `16`
+
+  *Optional*: `1-1024`
 
   The number of buffer workers. Only applicable for egress type bridges.
 For bridges only have ingress direction data flow, it can be set to 0 otherwise must be greater than 0.
@@ -3265,7 +3192,7 @@ Configuration for an HTTP bridge.
 
 **bridges.webhook.$name.pool_type**
 
-  *Type*: `emqx_connector_http:pool_type`
+  *Type*: `emqx_bridge_http_connector:pool_type`
 
   *Default*: `random`
 
@@ -3393,9 +3320,11 @@ Creation options.
 
 **bridges.webhook.$name.resource_opts.worker_pool_size**
 
-  *Type*: `non_neg_integer`
+  *Type*: `integer`
 
   *Default*: `16`
+
+  *Optional*: `1-1024`
 
   The number of buffer workers. Only applicable for egress type bridges.
 For bridges only have ingress direction data flow, it can be set to 0 otherwise must be greater than 0.
@@ -3918,6 +3847,13 @@ NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
 
+**exhook.servers.$INDEX.ssl.cacerts**
+
+  *Type*: `boolean`
+
+  Deprecated since 5.1.4.
+
+
 **exhook.servers.$INDEX.ssl.certfile**
 
   *Type*: `string`
@@ -4104,6 +4040,13 @@ NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
 
+**ssl_client_opts.cacerts**
+
+  *Type*: `boolean`
+
+  Deprecated since 5.1.4.
+
+
 **ssl_client_opts.certfile**
 
   *Type*: `string`
@@ -4288,6 +4231,13 @@ There is no need to restart EMQX to have the updated file loaded, because
 the system regularly checks if file has been updated (and reload).<br/>
 NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
+
+
+**listener_ssl_opts.cacerts**
+
+  *Type*: `boolean`
+
+  Deprecated since 5.1.4.
 
 
 **listener_ssl_opts.certfile**
@@ -4777,6 +4727,13 @@ There is no need to restart EMQX to have the updated file loaded, because
 the system regularly checks if file has been updated (and reload).<br/>
 NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
+
+
+**listeners.wss.$name.ssl_options.cacerts**
+
+  *Type*: `boolean`
+
+  Deprecated since 5.1.4.
 
 
 **listeners.wss.$name.ssl_options.certfile**
