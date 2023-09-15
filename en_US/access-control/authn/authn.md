@@ -51,11 +51,7 @@ EMQX supports 8 authentication methods (referred to as authenticator hereafter) 
 | JWT            |                   | [Authentication using JWT](./jwt.md)                         |
 | SCRAM          | Built-in Database | [Authentication using SCRAM](./scram.md)                     |
 
-## Basic Concepts
-
-The following part introduces the basic authentication concepts we commonly referred to.
-
-### Authentication Chain
+## Authentication Chain
 
 EMQX allows the creation of authentication chain using multiple authenticators and follows the authenticator's position in the chain to perform the authentication. 
 
@@ -67,7 +63,7 @@ Besides, the authenticators for creating the authentication chain should be of d
 
 :::
 
-#### Authenticate Flow
+### Workflow
 
 With authentication chain configured, EMQX first tries to retrieve the matching authentication information from the first authenticator, if fails, it switches to the next authenticator to continue the process. 
 
@@ -91,31 +87,11 @@ The current authenticator will also be skipped when the authenticator is in a di
 
 ![](./assets/authn-chain.png)
 
-#### Use Case
-
-Users have a large number of clients and a high connection rate, thus users can create an authentication chain with the Redis authenticator and the MySQL or PostgreSQL authenticator. With Redis as a caching layer, the query performance can be greatly improved. 
-
-## Authentication of Listeners
-
-By default, EMQX adopts a global authentication method for all configured listeners. But for an EMQX cluster with multiple services connected, EMQX also supports customizing authentication methods for each access mode to meet various authentication requirements, for example:
-
-- For clients connected through MQTT over WebSocket, the time-sensitive JWT authenticator rather than the permanent username/password authentication method is recommended to better protect the business's security.
-- For hardware devices connected via MQTT TCP, their user name and password or client certificates are burned during initialization. The authentication will not be changed throughout the life cycle, so the password authentication method can be used.
-- The listeners used for backend service connections do not require authentication checks, as they usually listen to an intranet address with sufficient security assurance.
-
-::: tip
-
-Currently, EMQX only supports creating different listener authenticators for MQTT clients. For gateway listeners, EMQX only supports the use of the default global authenticator.
-
-:::
-
-The authentication configuration of the listener takes precedence over the global authentication configuration. Only when the listener removes its own authenticator configuration and enables authentication, the listener switches to using the global authentication configuration.
-
 ### Use Case
 
-For example, for listeners with TLS mutual authentication enabled, you may not want to apply the global password authentication method; or if your clients are from multiple different vendors, you need different authentication methods to solve the name duplication issue.
+Users have a large number of clients and a high connection rate, thus users can create an authentication chain with the Redis authenticator and the MySQL or PostgreSQL authenticator. With Redis as a caching layer, the query performance can be greatly improved.
 
-### Super User
+## Super User
 
 Usually, authentication only verifies the client's identity credentials, and whether the client has the right to publish and subscribe to certain topics is determined by the authorization system. But EMQX also provides a super user role and a permission preset feature to facilitate the follow-up publish/subscribe authorization steps. 
 
@@ -127,13 +103,13 @@ Permission preset is currently only supported in JWT authentication. The list of
 
 You can check if a user is a superuser with the  `is_superuser` field in a database query, HTTP response, or JWT claims.
 
-### Password Hashing
+## Password Hashing
 
 Storing a password in plain text would mean that anyone who looked through the database would be able to just read the user’s passwords. Therefore it is recommended to use password hashing algorithms to store the password as the generated hash. EMQX supports a variety of password hashing algorithms to meet various security requirements.
 
 Besides, EMQX also supports adding salt to hashing, the unique hash produced by adding the salt (password_hash) can protect us against different attacks. 
 
-#### Workflow
+### Workflow
 
 The workflow of password hashing is as follows:
 
