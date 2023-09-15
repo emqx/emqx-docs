@@ -92,23 +92,7 @@ The current authenticator will also be skipped when the authenticator is in a di
 
 #### Use Case
 
-Users have a large number of clients and a high connection rate, thus users can create an authentication chain with the Redis authenticator and the MySQL or PostgreSQL authenticator. With Redis as a caching layer, the query performance can be greatly improved. 
-
-## Authentication of Listeners
-
-By default, EMQX adopts a global authentication method for all configured listeners. But for an EMQX cluster with multiple services connected, EMQX also supports customizing authentication methods for each access mode to meet various authentication requirements, for example:
-
-- For clients connected through MQTT over WebSocket, the time-sensitive JWT authenticator rather than the permanent username/password authentication method is recommended to better protect the business security.
-- For hardware devices connected via MQTT TCP, their user name and password or client certificates are burned during initialization. The authentication will not be changed throughout the life cycle, so the password authentication method can be used.
-- The listeners used for backend service connections do not require authentication checks, as they usually listen to an intranet address with sufficient security assurance.
-
-::: tip
-
-Currently, EMQX only supports creating different listener authenticators for MQTT clients. For gateway listeners, EMQX only supports the use of the default global authenticator.
-
-:::
-
-The authentication configuration of the listener takes precedence over the global authentication configuration. Only when the listener removes its own authenticator configuration and enables authentication, the listener switches to using the global authentication configuration.
+Users have a large number of clients and a high connection rate, thus users can create an authentication chain with the Redis authenticator and the MySQL or PostgreSQL authenticator. With Redis as a caching layer, the query performance can be greatly improved.
 
 ### Use Case
 
