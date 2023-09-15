@@ -1,6 +1,8 @@
 # 版本发布
 
-## 增强
+## e5.1.1
+
+### 增强
 
 - [#10667](https://github.com/emqx/emqx/pull/10667) 将 MongoDB 连接器和桥接重构为单独的应用程序，以改进代码结构。
 
@@ -52,7 +54,7 @@
 
 - [#11236](https://github.com/emqx/emqx/pull/11236) 改进了默认参数下 `GET /clients` REST API 客户端查询的速度。
 
-## 修复
+### 修复
 
 - [#11004](https://github.com/emqx/emqx/pull/11004) 主题重写不再允许在目标主题中使用通配符。
 

@@ -4,8 +4,11 @@ This page guides you on installing and starting EMQX on CentOS/RHEL system.
 
 Supported versions: 
 
-- CentOS 8
-- CentOS 7
+- Amazon Linux 2023
+- Amazon Linux 2
+- Rocky Linux 9 (RHEL 9)
+- Rocky Linux 8 (RHEL 8)
+- CentOS 7 (RHEL 7)
 
 {% emqxce %}
 
@@ -31,13 +34,11 @@ EMQX supports installing with Yum source to provide our users with a convenient 
    sudo systemctl start emqx
    ```
 
-## Install with Package
+## Install with rpm
 
-The section below will take CentOS 8 as an example to illustrate how to download the latest version of EMQX. For other system versions, please visit the [EMQX Deployment page](https://www.emqx.io/downloads?os=CentOS). 
+EMQX offers rpm installation packages for different CPU architectures.
 
-### Install with rpm
-
-EMQX offers different installation packages for different CPU architectures. 
+This section takes CentOS 8 as an example to illustrate how to download the latest version of EMQX. For other system versions, please visit the [EMQX Deployment page](https://www.emqx.io/downloads?os=CentOS). 
 
 :::: tabs type:card
 
@@ -75,7 +76,7 @@ EMQX offers different installation packages for different CPU architectures.
 
 ::::
 
-#### Start EMQX
+### Start EMQX
 
 EMQX offers 3 different options to start EMQX:
 
@@ -101,17 +102,19 @@ EMQX offers 3 different options to start EMQX:
   sudo service emqx start
   ```
 
-#### Uninstall EMQX
+### Uninstall EMQX
 
 To uninstall EMQX, run:
 
 ```
-sudo apt remove --purge emqx
+sudo yum remove emqx
 ```
 
 ## Install with tar.gz
 
-EMQX offers different installation packages for different CPU architectures. 
+EMQX offers tar.gz installation packages for different CPU architectures.
+
+This section takes CentOS 8 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.io/downloads?os=CentOS). 
 
 :::: tabs type:card
 
@@ -134,8 +137,6 @@ EMQX offers different installation packages for different CPU architectures.
 ::: tab arm64
 
 1. Download [emqx-@CE_VERSION@-el8-arm64.tar.gz](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-arm64.tar.gz). 
-
-   
 
    ```bash
    wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-arm64.tar.gz
@@ -162,8 +163,6 @@ After the installation, run the command below to start EMQX.
 {% endemqxce %}
 
 {% emqxee %}
-
-The section below will take CentOS 8 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.com/en/try?product=enterprise). 
 
 ## Install with rpm
 
@@ -202,7 +201,7 @@ EMQX offers 3 different options to start EMQX:
 To uninstall EMQX, run:
 
 ```
-sudo apt remove --purge emqx
+sudo yum remove emqx
 ```
 
 ## Install with tar.gz

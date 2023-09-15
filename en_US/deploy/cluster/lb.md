@@ -49,13 +49,19 @@ LB products for public cloud:
 
 The following section takes the HAProxy or NGINX as an example to illustrate how to configure an LB in EMQX cluster. 
 
-## Configure HAProxy/NGINX in EMQX
+## Configure HAProxy in EMQX
 
-Suppose you have a cluster with 2 EMQX nodes, with emqx1 on `192.168.0.2` and emqx2 on `192.168.0.3`, you can follow the steps below to add HAProxy or NGINX as the LB.
+Suppose you have a cluster with 2 EMQX nodes, with emqx1 on `192.168.0.2` and emqx2 on `192.168.0.3`, you can follow the instructions below to add HAProxy as the LB.
 
-### Enable Proxy Protocol
+### Prerequisites
 
-To configure the HAProxy or Nginx on port 1883, you first need to enable the configuration item `proxy_protocol` in `emqx.conf` by setting it to `true`, also specify the true source IP and the port number of the client:
+#### Install HAProxy
+
+For detailed intrstructions on the installation of HAProxy, see [HAProxy website](http://www.haproxy.org/).
+
+#### Enable Proxy Protocol
+
+To configure the HAProxy on port 1883, you first need to enable the configuration item `proxy_protocol` in `emqx.conf` by setting it to `true`, also specify the true source IP and the port number of the client:
 
 **Code Example**:
 
@@ -66,36 +72,26 @@ listeners.tcp.default {
 }
 ```
 
-Where:  <!--the explanations need a review-->
+Where:
 
 - `listeners.tcp.default` is the name or identifier of the TCP listener configuration.
-- `bind` is the network interface and port the LB is bound, default: `1883`
-- `max_connections` is the maximum number of concurrent connections allowed by the listener, default: `infinity`
-- `proxy_protocol` is to enable/disable the proxy protocol, it is a boolean, default: `false`. 
+- `bind` is the network interface and port the LB is bound, default: `1883`.
+- `max_connections` is the maximum number of concurrent connections allowed by the listener, default: `infinity`.
+- `proxy_protocol` is to enable/disable the proxy protocol, it is a boolean, default: `false`.
 
-:::tip
+::: tip
 
-For proxy protocols and that used in Nginx, see: 
+For proxy protocols and that used in Haproxy, see https://www.haproxy.com/blog/haproxy/proxy-protocol
 
-- Proxy protocol: https://www.haproxy.com/blog/haproxy/proxy-protocol
+:::
 
-- Nginx: [https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)
+### Configuration Example
 
-  :::
+To configure HAProxy as the LB for EMQX and terminate the SSL connection, you can modify `/etc/haproxy/haproxy.cfg` following the code example below.
 
-### Configure HAProxy/NGINX
+Note: The file path may differ based on your installation mode.
 
-:::: tabs type:card
-
-::: tab Configure HAProxy 
-
-**Prerequisite**: HAProxy installed. For detailed introduction and installation of HAProxy, see [HAProxy website](http://www.haproxy.org/).
-
-To configure HAProxy as the LB for EMQX and terminate the SSL connection, you can modify `/etc/haproxy/haproxy.cfg` following the code example below. 
-
-In this example, you have a cluster that handles a maximum of 50,000 concurrent connections (`maxconn`). You want to configure the HAProxy to monitor all incoming traffic encrypted in SSL (with SSL certificate located at `/etc/ssl/emqx/emq.pem`) on port `8883` and also to terminate the SSL connectoin, using the `source` load balancing algorithm. <!--the explanation to be reviewed -->
-
-```bash
+```
 listen mqtt-ssl
   bind *:8883 ssl crt /etc/ssl/emqx/emq.pem no-sslv3
   mode tcp
@@ -108,23 +104,55 @@ backend emqx_cluster
   balance source
   timeout server 50s
   timeout check 5000
-  server emqx1 192.168.0.2:1883 check inter 10000 fall 2 rise 5 weight 1
-  server emqx2 192.168.0.3:1883 check inter 10000 fall 2 rise 5 weight 1
+  server emqx1 192.168.0.2:1883 check-send-proxy send-proxy-v2 inter 10000 fall 2 rise 5 weight 1
+  server emqx2 192.168.0.3:1883 check-send-proxy send-proxy-v2 inter 10000 fall 2 rise 5 weight 1
 ```
 
-Note: The file path may differ based on your installation mode. <!--should we also add the parameter explanation? -->
+In this example, you have a cluster that handles a maximum of 50,000 concurrent connections (`maxconn`). You want to configure the HAProxy to monitor all incoming traffic encrypted in SSL (with SSL certificate located at `/etc/ssl/emqx/emq.pem`) on port `8883` and also to terminate the SSL connectoin, using the `source` load balancing algorithm.
+
+## Configure NGINX in EMQX
+
+Suppose you have a cluster with 2 EMQX nodes, with emqx1 on `192.168.0.2` and emqx2 on `192.168.0.3`, you can follow the instructions below to add NGINX as the LB.
+
+### Prerequisites
+
+#### Install NGINX
+
+For a detailed intructions on the installation of NGINX, see [NGINX website](https://www.nginx.com/).
+
+#### Enable Proxy Protocol
+
+To configure the NGINX on port 1883, you first need to enable the configuration item `proxy_protocol` in `emqx.conf` by setting it to `true`, also specify the true source IP and the port number of the client:
+
+**Code Example**:
+
+```
+listeners.tcp.default {
+  bind = "0.0.0.0:1883"
+  proxy_protocol = true
+}
+```
+
+Where:
+
+- `listeners.tcp.default` is the name or identifier of the TCP listener configuration.
+- `bind` is the network interface and port the LB is bound, default: `1883`
+- `max_connections` is the maximum number of concurrent connections allowed by the listener, default: `infinity`
+- `proxy_protocol` is to enable/disable the proxy protocol, it is a boolean, default: `false`.
+
+::: tip
+
+For proxy protocols that are used in NGINX, see https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/.
 
 :::
 
-::: tab Configure NGINX
+### Configuration Example
 
-**Prerequisite**: NGINX installed. For detailed introduction and installation of HAProxy, see [Nginx website](https://www.nginx.com/).
+To configure NGINX as the LB for EMQX and terminate the SSL connection, you can modify `/etc/nginx/nginx.conf` following the code example below.
 
-In this example, you want to configure the NGINX LB that listens for incoming connections on port `8883` encrypted in SSL and also to terminate the SSL connection, and then it will forward those connections to one of two upstream servers using the `stream` module. <!--the explanation to be reviewed and whether it is sufficient-->
+Note: The file path may differ based on your installation mode.
 
-To configure NGINX as the LB for EMQX and terminate the SSL connection, you can modify `/etc/nginx/nginx.conf` following the code example below. 
-
-```bash
+```
 stream {
   upstream stream_backend {
       zone tcp_servers 64k;
@@ -146,8 +174,4 @@ stream {
 }
 ```
 
-Note: The file path may differ based on your installation mode. <!--should we also add the parameter explanation? -->
-
-:::
-
-::::
+In this example, you want to configure the NGINX LB that listens for incoming connections on port `8883` encrypted in SSL, terminates the SSL connection, and then forwards those connections to one of two upstream servers using the `stream` module.

@@ -4,8 +4,11 @@
 
 支持的 CentOS/RHEL 版本：
 
-- CentOS 8
-- CentOS 7
+- Amazon Linux 2023
+- Amazon Linux 2
+- Rocky Linux 9 (RHEL 9)
+- Rocky Linux 8 (RHEL 8)
+- CentOS 7 (RHEL 7)
 
 {% emqxce %}
 
@@ -31,12 +34,9 @@ EMQX 支持通过 Yum 源安装，您可通过以下 Yum 命令从中自动下�
    sudo systemctl start emqx
    ```
 
+## 通过 rpm 安装
 
-## 通过下载包安装
-
-EMQX 同时支持通过下载包进行安装。下文将以 CentOS 8 系统为例演示如何下载最新版 EMQX。如希望在其他支持系统中进行安装，或体验其他版本，可前往 [EMQX 下载页面](https://www.emqx.io/zh/downloads?os=CentOS) 获取详细安装信息。
-
-### 通过 rpm 安装
+EMQX 同时支持通过下载 rpm 安装包进行安装。本节以 CentOS 8 系统为例演示如何下载最新版 EMQX。如希望在其他支持系统中进行安装，或体验其他版本，可前往 [EMQX 下载页面](https://www.emqx.io/zh/downloads?os=CentOS)获取详细安装信息。
 
 请根据 CPU 架构选择对应安装方式。
 
@@ -74,9 +74,9 @@ EMQX 同时支持通过下载包进行安装。下文将以 CentOS 8 系统为�
 
 ::::
 
-#### 启动 EMQX
+### 启动 EMQX
 
-您可通过如下三种方式启动 EMQX。
+您可通过如下 3 种方式启动 EMQX。
 
 - 直接启动：
 
@@ -98,15 +98,17 @@ EMQX 同时支持通过下载包进行安装。下文将以 CentOS 8 系统为�
   sudo service emqx start
   ```
 
-#### 卸载 EMQX
+### 卸载 EMQX
 
 服务完成后，可通过如下命令卸载 EMQX：
 
   ```shell
-sudo apt remove --purge emqx
+sudo yum remove emqx
   ```
 
-### 通过 tar.gz 安装
+## 通过 tar.gz 安装
+
+EMQX 同时支持通过下载 tar.gz 安装包进行安装。本节以 CentOS 8 系统为例演示如何下载最新版 EMQX。如希望在其他支持系统中进行安装，或体验其他版本，可前往 [EMQX 下载页面](https://www.emqx.io/zh/downloads?os=CentOS)获取详细安装信息。
 
 请根据 CPU 架构选择对应安装方式。
 
@@ -165,7 +167,7 @@ sudo apt remove --purge emqx
 
 ### 启动 EMQX 
 
-您可通过如下三种方式启动 EMQX。 
+您可通过如下 3 种方式启动 EMQX。 
 - 直接启动：
 
   ```bash
@@ -193,7 +195,7 @@ sudo apt remove --purge emqx
 服务完成后，可通过如下命令卸载 EMQX：
 
   ```shell
-  sudo apt remove --purge emqx
+  sudo yum remove emqx
   ```
 
 ## 通过 tar.gz 安装

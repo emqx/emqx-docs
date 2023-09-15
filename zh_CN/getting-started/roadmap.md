@@ -34,7 +34,6 @@
   * QoS 和 Retain 标志的控制权限
   * 支持 OAuth 2.0 授权
 * 新增的数据集成
-  * Snowflake
   * AWS Kinesis
   * GCP PubSub
   * Azure EventHub

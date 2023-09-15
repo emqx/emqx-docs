@@ -96,7 +96,7 @@ When EMQX acts as the receiver of PUBLISH messages, it does not require the retr
 
 ### Inflight Window and Maximum Receiving Value
 
-For the definition and explanation of this concept, please refer to [Inflight Window and Message Queue](inflight-window-and-message-queue.md#)
+For the definition and explanation of this concept, please refer to [Inflight Window and Message Queue](./inflight-window-and-message-queue.md)
 
 The purpose of introducing these two concepts is to understand:
 

@@ -107,7 +107,7 @@ listeners.wss.default {
 where:
 
 - `listeners.wss.default` is to enable the listener. 
-  - `bind` is the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `8083`. 
+  - `bind` is the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `8084`. 
   - `max_connection` is the maximum number of concurrent connections allowed by the listener, default value: `infinity`.
   - `websocket.mqtt_path` is to set the path to the WebSocket’s MQTT protocol, which is `/mqtt` by default. 
     - `ssl_options` is the SSL/TLS configuration option for the listener, it has three properties:

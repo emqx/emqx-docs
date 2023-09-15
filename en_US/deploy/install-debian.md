@@ -4,6 +4,7 @@ This page guides you on installing and starting EMQX on the Debian system.
 
 Supported versions: 
 
+- Debian 12
 - Debian 11
 - Debian 10
 

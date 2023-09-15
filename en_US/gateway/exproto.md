@@ -123,7 +123,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/exproto' \
 
 For a detailed REST API description, see [REST API](../admin/api.md).
 
-If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your ExProto Gateway section](#customize-your-exproto-gateway).
+If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your ExProto Gateway](#customize-your-exproto-gateway).
 
 
 ## Customize Your ExProto Gateway
@@ -318,8 +318,9 @@ Before you start, make sure you have completed the following:
 
 The diagram below shows the sequence of connections and message delivery in this example.
 
-```mermaid
-sequenceDiagram
+<img src="./assets/exproto-sequence-diagram.png" alt="exproto-sequence-diagram" style="zoom:80%;" />
+
+<!--```mermaid sequenceDiagram
     Telnet ->> ExProto Gateway: Establish a TCP connection
 rect rgb(191, 223, 255)
     ExProto Gateway ->> exproto-svr-python: Call OnSocketCreated
@@ -347,6 +348,4 @@ rect rgb(100, 150, 200)
   ExProto Gateway -->> exproto-svr-python: Succeed
   ExProto Gateway ->> Telnet: Deliver 'Hi, this is...'
   exproto-svr-python -->> ExProto Gateway: `OnReceivedMessages` return
-end
-```
-
+end ```-->

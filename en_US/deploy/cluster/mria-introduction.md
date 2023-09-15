@@ -87,7 +87,7 @@ EMQX_NODE__NAME='emqx2@127.0.0.1' \
 ./bin/emqx ctl cluster join emqx1@127.0.0.1
 ```
 
-The above code example is to create a cluster manually, you can also refer to the [auto clustering](#auto-clustering) section on how to create a cluster automatically. 
+The above code example is to create a cluster manually, you can also refer to the [auto clustering](./create-cluster.md#auto-clustering) section on how to create a cluster automatically. 
 
 The dashboard is designed under the assumption that all cluster nodes use the same port number. Using distinct ports on a single computer may cause Dashboard UI issues, therefore, it is not recommended in production.
 
