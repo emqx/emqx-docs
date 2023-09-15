@@ -307,7 +307,7 @@
           },
           "cacerts": {
             "default": false,
-            "description": "When enabled, uses the system trusted CA certificates for establishing to TLS connections.",
+            "deprecated": true,
             "type": "boolean"
           },
           "certfile": {
@@ -425,25 +425,25 @@
         "properties": {
           "cpu_check_interval": {
             "default": "60s",
-            "description": "The time interval for the periodic CPU check.",
+            "description": "The time interval for the periodic CPU check. Disabled on Windows platform.",
             "example": "12m",
             "type": "string"
           },
           "cpu_high_watermark": {
             "default": "80%",
-            "description": "The threshold, as percentage of system CPU load,<br/> for how much system cpu can be used before the corresponding alarm is raised.",
+            "description": "The threshold, as percentage of system CPU load,<br/> for how much system cpu can be used before the corresponding alarm is raised. Disabled on Windows platform",
             "example": "12%",
             "type": "number"
           },
           "cpu_low_watermark": {
             "default": "60%",
-            "description": "The threshold, as percentage of system CPU load,<br/> for how much system cpu can be used before the corresponding alarm is cleared.",
+            "description": "The threshold, as percentage of system CPU load,<br/> for how much system cpu can be used before the corresponding alarm is cleared. Disabled on Windows platform",
             "example": "12%",
             "type": "number"
           },
           "mem_check_interval": {
-            "default": "60s",
-            "description": "The time interval for the periodic memory check.",
+            "default": "disabled",
+            "description": "The time interval for the periodic memory check. Disabled on Windows platform.",
             "oneOf": [
               {
                 "example": "12m",
@@ -459,13 +459,13 @@
           },
           "sysmem_high_watermark": {
             "default": "70%",
-            "description": "The threshold, as percentage of system memory,<br/> for how much system memory can be allocated before the corresponding alarm is raised.",
+            "description": "The threshold, as percentage of system memory,<br/> for how much system memory can be allocated before the corresponding alarm is raised. Disabled on Windows platform",
             "example": "12%",
             "type": "number"
           },
           "procmem_high_watermark": {
             "default": "5%",
-            "description": "The threshold, as percentage of system memory,<br/> for how much system memory can be allocated by one Erlang process before<br/> the corresponding alarm is raised.",
+            "description": "The threshold, as percentage of system memory,<br/> for how much system memory can be allocated by one Erlang process before<br/> the corresponding alarm is raised. Disabled on Windows platform.",
             "example": "12%",
             "type": "number"
           }
@@ -536,7 +536,7 @@
         "properties": {
           "bind": {
             "default": 0,
-            "description": "Port without IP(18083) or port with specified IP(127.0.0.1:18083).<br/>Disabled when setting bind to `0`.<br/>",
+            "description": "Port without IP(18083) or port with specified IP(127.0.0.1:18083).<br/>Disabled when setting bind to `0`.",
             "example": "0.0.0.0:18083",
             "type": "string"
           },
@@ -797,6 +797,26 @@
           "username": {
             "description": "Username",
             "example": "user1",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "opentelemetry.exporter": {
+        "required": [
+          "interval"
+        ],
+        "properties": {
+          "endpoint": {
+            "default": "http://localhost:4317",
+            "description": "Open Telemetry Exporter Endpoint",
+            "example": "http://127.0.0.1",
+            "type": "string"
+          },
+          "interval": {
+            "default": "10s",
+            "description": "The interval of sending metrics to Open Telemetry Endpoint",
+            "example": "32s",
             "type": "string"
           }
         },
@@ -1102,6 +1122,16 @@
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
             "format": "password",
+            "type": "string"
+          },
+          "use_legacy_protocol": {
+            "default": "auto",
+            "description": "Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.",
+            "enum": [
+              "auto",
+              true,
+              false
+            ],
             "type": "string"
           },
           "auth_source": {
@@ -3012,6 +3042,16 @@
             "format": "password",
             "type": "string"
           },
+          "use_legacy_protocol": {
+            "default": "auto",
+            "description": "Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.",
+            "enum": [
+              "auto",
+              true,
+              false
+            ],
+            "type": "string"
+          },
           "auth_source": {
             "description": "Database name associated with the user's credentials.",
             "type": "string"
@@ -3353,7 +3393,7 @@
           },
           "cacerts": {
             "default": false,
-            "description": "When enabled, uses the system trusted CA certificates for establishing to TLS connections.",
+            "deprecated": true,
             "type": "boolean"
           },
           "certfile": {
@@ -3665,7 +3705,7 @@
           },
           "max_packet_size": {
             "default": "1MB",
-            "description": "Maximum MQTT packet size allowed.",
+            "description": "Maximum MQTT packet size allowed. Default: 1 MB, Maximum: 256 MB",
             "example": "32MB",
             "type": "string"
           },
@@ -5607,6 +5647,16 @@
             "format": "password",
             "type": "string"
           },
+          "use_legacy_protocol": {
+            "default": "auto",
+            "description": "Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.",
+            "enum": [
+              "auto",
+              true,
+              false
+            ],
+            "type": "string"
+          },
           "auth_source": {
             "description": "Database name associated with the user's credentials.",
             "type": "string"
@@ -6260,7 +6310,7 @@
           },
           "cacerts": {
             "default": false,
-            "description": "When enabled, uses the system trusted CA certificates for establishing to TLS connections.",
+            "deprecated": true,
             "type": "boolean"
           },
           "certfile": {
@@ -8826,7 +8876,7 @@
           },
           "cacerts": {
             "default": false,
-            "description": "When enabled, uses the system trusted CA certificates for establishing to TLS connections.",
+            "deprecated": true,
             "type": "boolean"
           },
           "certfile": {
@@ -9100,6 +9150,16 @@
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
             "format": "password",
+            "type": "string"
+          },
+          "use_legacy_protocol": {
+            "default": "auto",
+            "description": "Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.",
+            "enum": [
+              "auto",
+              true,
+              false
+            ],
             "type": "string"
           },
           "auth_source": {
@@ -9983,6 +10043,16 @@
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
             "format": "password",
+            "type": "string"
+          },
+          "use_legacy_protocol": {
+            "default": "auto",
+            "description": "Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.",
+            "enum": [
+              "auto",
+              true,
+              false
+            ],
             "type": "string"
           },
           "auth_source": {
@@ -11296,7 +11366,7 @@
           },
           "cacerts": {
             "default": false,
-            "description": "When enabled, uses the system trusted CA certificates for establishing to TLS connections.",
+            "deprecated": true,
             "type": "boolean"
           },
           "certfile": {
@@ -11875,7 +11945,7 @@
           },
           "cacerts": {
             "default": false,
-            "description": "When enabled, uses the system trusted CA certificates for establishing to TLS connections.",
+            "deprecated": true,
             "type": "boolean"
           },
           "certfile": {
@@ -13822,7 +13892,7 @@
         "properties": {
           "bind": {
             "default": 0,
-            "description": "Port without IP(18083) or port with specified IP(127.0.0.1:18083).<br/>Disabled when setting bind to `0`.<br/>",
+            "description": "Port without IP(18083) or port with specified IP(127.0.0.1:18083).<br/>Disabled when setting bind to `0`.",
             "example": "0.0.0.0:18084",
             "type": "string"
           },
@@ -13957,6 +14027,16 @@
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
             "format": "password",
+            "type": "string"
+          },
+          "use_legacy_protocol": {
+            "default": "auto",
+            "description": "Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.",
+            "enum": [
+              "auto",
+              true,
+              false
+            ],
             "type": "string"
           },
           "auth_source": {
@@ -14710,7 +14790,7 @@
           },
           "cacerts": {
             "default": false,
-            "description": "When enabled, uses the system trusted CA certificates for establishing to TLS connections.",
+            "deprecated": true,
             "type": "boolean"
           },
           "certfile": {
@@ -14832,6 +14912,23 @@
           "enable_crl_check": {
             "default": false,
             "description": "Whether to enable CRL verification for this listener.",
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "opentelemetry.opentelemetry": {
+        "required": [
+          "enable"
+        ],
+        "properties": {
+          "exporter": {
+            "description": "Open Telemetry Exporter",
+            "$ref": "#/components/schemas/opentelemetry.exporter"
+          },
+          "enable": {
+            "default": false,
+            "description": "Enable or disable open telemetry metrics",
             "type": "boolean"
           }
         },
@@ -15641,7 +15738,7 @@
   },
   "info": {
     "title": "EMQX API",
-    "version": "5.1.3"
+    "version": "5.1.6"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -20284,83 +20381,83 @@
                   "general_client": {
                     "summary": "General client info",
                     "value": {
-                      "mailbox_len": 0,
-                      "expiry_interval": 0,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "recv_cnt": 1,
-                      "proto_ver": "1.0",
-                      "inflight_max": "infinity",
-                      "inflight_cnt": 0,
-                      "is_bridge": false,
-                      "subscriptions_max": "infinity",
-                      "disconnected_at": null,
-                      "mqueue_max": "infinity",
-                      "connected": true,
-                      "mqueue_len": 0,
-                      "clean_start": true,
-                      "proto_name": "STOMP",
-                      "recv_pkt": 1,
-                      "send_msg": 0,
                       "reductions": 72022,
+                      "mqueue_max": "infinity",
                       "subscriptions_cnt": 0,
-                      "send_pkt": 1,
-                      "recv_oct": 56,
-                      "send_oct": 61,
-                      "keepalive": 0,
-                      "mqueue_dropped": 0,
+                      "recv_pkt": 1,
+                      "heap_size": 4185,
+                      "proto_ver": "1.0",
+                      "awaiting_rel_max": "infinity",
+                      "inflight_max": "infinity",
                       "awaiting_rel_cnt": 0,
                       "ip_address": "127.0.0.1",
-                      "node": "emqx@127.0.0.1",
+                      "disconnected_at": null,
+                      "clean_start": true,
+                      "mqueue_dropped": 0,
+                      "expiry_interval": 0,
                       "recv_msg": 0,
-                      "heap_size": 4185,
-                      "awaiting_rel_max": "infinity",
+                      "inflight_cnt": 0,
+                      "recv_oct": 56,
+                      "subscriptions_max": "infinity",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "node": "emqx@127.0.0.1",
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "recv_cnt": 1,
+                      "connected": true,
                       "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "port": 50675,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "is_bridge": false,
+                      "send_msg": 0,
                       "username": "guest",
-                      "send_cnt": 1
+                      "proto_name": "STOMP",
+                      "send_oct": 61,
+                      "mqueue_len": 0,
+                      "send_pkt": 1,
+                      "mailbox_len": 0,
+                      "send_cnt": 1,
+                      "keepalive": 0
                     }
                   },
                   "lwm2m_client": {
                     "summary": "LwM2M client info",
                     "value": {
-                      "mailbox_len": 0,
-                      "expiry_interval": 0,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "recv_cnt": 1,
-                      "proto_ver": "1.0",
-                      "endpoint_name": "urn:imei:154928475237123",
-                      "inflight_max": "infinity",
-                      "inflight_cnt": 0,
-                      "is_bridge": false,
-                      "subscriptions_max": "infinity",
-                      "lifetime": 86400,
-                      "disconnected_at": null,
-                      "mqueue_max": "infinity",
-                      "connected": true,
-                      "mqueue_len": 0,
-                      "clean_start": true,
-                      "proto_name": "LwM2M",
-                      "recv_pkt": 1,
-                      "send_msg": 0,
                       "reductions": 72022,
+                      "mqueue_max": "infinity",
                       "subscriptions_cnt": 0,
-                      "send_pkt": 1,
-                      "recv_oct": 56,
-                      "send_oct": 61,
-                      "keepalive": 0,
-                      "mqueue_dropped": 0,
+                      "recv_pkt": 1,
+                      "heap_size": 4185,
+                      "proto_ver": "1.0",
+                      "lifetime": 86400,
+                      "awaiting_rel_max": "infinity",
+                      "inflight_max": "infinity",
                       "awaiting_rel_cnt": 0,
                       "ip_address": "127.0.0.1",
-                      "node": "emqx@127.0.0.1",
+                      "disconnected_at": null,
+                      "clean_start": true,
+                      "mqueue_dropped": 0,
+                      "expiry_interval": 0,
                       "recv_msg": 0,
-                      "heap_size": 4185,
-                      "awaiting_rel_max": "infinity",
+                      "inflight_cnt": 0,
+                      "recv_oct": 56,
+                      "subscriptions_max": "infinity",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "node": "emqx@127.0.0.1",
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "recv_cnt": 1,
+                      "connected": true,
                       "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "port": 50675,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "is_bridge": false,
+                      "send_msg": 0,
                       "username": "guest",
-                      "send_cnt": 1
+                      "proto_name": "LwM2M",
+                      "endpoint_name": "urn:imei:154928475237123",
+                      "send_oct": 61,
+                      "mqueue_len": 0,
+                      "send_pkt": 1,
+                      "mailbox_len": 0,
+                      "send_cnt": 1,
+                      "keepalive": 0
                     }
                   }
                 },
@@ -31910,6 +32007,26 @@
       }
     },
     "/banned": {
+      "delete": {
+        "description": "Clear all banned data.",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Banned"
+        ]
+      },
       "get": {
         "description": "List all currently banned client IDs, usernames and IP addresses.",
         "parameters": [
@@ -32255,6 +32372,114 @@
         ],
         "tags": [
           "Trace"
+        ]
+      }
+    },
+    "/opentelemetry": {
+      "get": {
+        "description": "Get opentelmetry configuration",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "example": {
+                  "enable": true,
+                  "exporter": {
+                    "endpoint": "http://localhost:4317",
+                    "interval": "10s"
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/opentelemetry.opentelemetry"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Monitor"
+        ]
+      },
+      "put": {
+        "description": "Update opentelmetry configuration",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "enable": true,
+                "exporter": {
+                  "endpoint": "http://localhost:4317",
+                  "interval": "10s"
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/opentelemetry.opentelemetry"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "example": {
+                  "enable": true,
+                  "exporter": {
+                    "endpoint": "http://localhost:4317",
+                    "interval": "10s"
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/opentelemetry.opentelemetry"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Update Config Failed",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Monitor"
         ]
       }
     },
@@ -33437,6 +33662,7 @@
                 "log",
                 "mqtt",
                 "node",
+                "opentelemetry",
                 "overload_protection",
                 "prometheus",
                 "psk_authentication",
