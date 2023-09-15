@@ -62,7 +62,7 @@ Besides, the authenticators for creating the authentication chain should be of d
 
 :::
 
-#### Workflow
+### Workflow
 
 With authentication chain configured, EMQX first tries to retrieve the matching authentication information from the first authenticator, if fails, it switches to the next authenticator to continue the process. 
 
@@ -86,7 +86,7 @@ The current authenticator will also be skipped when the authenticator is in a di
 
 ![](./assets/authn-chain.png)
 
-#### Use Case
+### Use Case
 
 Users have a large number of clients and a high connection rate, thus users can create an authentication chain with the Redis authenticator and the MySQL or PostgreSQL authenticator. With Redis as a caching layer, the query performance can be greatly improved.
 
