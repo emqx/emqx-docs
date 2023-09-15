@@ -108,7 +108,7 @@ Storing a password in plain text would mean that anyone who looked through the d
 
 Besides, EMQX also supports adding salt to hashing, the unique hash produced by adding the salt (password_hash) can protect us against different attacks. 
 
-#### Workflow
+### Workflow
 
 The workflow of password hashing is as follows:
 
