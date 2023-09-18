@@ -2153,10 +2153,6 @@ Default value is: <code>${name}/instance/${name}~${host}</code>
 
   *Default*: `disabled`
 
-  *Optional*: `enabled | disabled`
-
-  Enable or disable VM system info collector.
-
 
 **prometheus.vm_memory_collector**
 
