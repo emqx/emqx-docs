@@ -29,50 +29,51 @@ HAProxy 用于 EMQX MQTT 负载均衡时有以下功能和优势：
 
 此处提供了一个具有实际示例的 Docker Compose 配置，让您能够轻松地进行验证和测试，您可以按照以下步骤来进行操作：
 
-1. 首先，克隆示例仓库并进入 `mqtt-lb-nginx` 目录：
+1. 克隆示例仓库并进入 `mqtt-lb-nginx` 目录：
 
 ```bash
 git clone https://github.com/emqx/emqx-usage-example
 cd emqx-usage-example/mqtt-lb-haproxy
 ```
 
-2. 接着，通过 Docker Compose 启动示例：
+2. 通过 Docker Compose 启动示例：
 
 ```bash
 docker compose up -d
 ```
 
-3. 使用 MQTTX CLI 建立 10 个 TCP 连接，模拟 MQTT 客户端连接：
+3. 使用 [MQTTX](https://mqttx.app/zh) CLI 建立 10 个 TCP 连接，模拟 MQTT 客户端连接：
 
 ```bash
 mqttx bench conn -c 10
 ```
 
-4. 在此之后，您可以查看 HAProxy 连接监控情况以及 EMQX 客户端连接的分布情况。
-    - 通过 HAProxy 状态监控页面 [http://localhost:8888/stats](http://localhost:8888/stats) 查看客户端连接情况：
+4. 您可以查看 HAProxy 连接监控情况以及 EMQX 客户端连接的分布情况。
 
-    ![HAProxy stats MQTT](./assets/haproxy-stats-mqtt.png)
+   - 通过 HAProxy 状态监控页面 [http://localhost:8888/stats](http://localhost:8888/stats) 查看客户端连接情况：
 
-    这将显示当前活动连接数以及服务器的请求处理统计情况。
+   ![HAProxy stats MQTT](./assets/haproxy-stats-mqtt.png)
 
-    - 使用以下命令分别查看每个 EMQX 节点的客户端连接情况：
+   这将显示当前活动连接数以及服务器的请求处理统计情况。
 
-    ```bash
-    docker exec -it emqx1 emqx ctl broker stats | grep connections.count
-    docker exec -it emqx2 emqx ctl broker stats | grep connections.count
-    docker exec -it emqx3 emqx ctl broker stats | grep connections.count
-    ```
+   - 使用以下命令分别查看每个 EMQX 节点的客户端连接情况：
 
-    这将显示每个节点的连接数以及活动连接数，10 个连接均匀分布在集群节点：
+   ```bash
+   docker exec -it emqx1 emqx ctl broker stats | grep connections.count
+   docker exec -it emqx2 emqx ctl broker stats | grep connections.count
+   docker exec -it emqx3 emqx ctl broker stats | grep connections.count
+   ```
 
-    ```bash
-    connections.count             : 4
-    live_connections.count        : 4
-    connections.count             : 3
-    live_connections.count        : 3
-    connections.count             : 3
-    live_connections.count        : 3
-    ```
+   这将显示每个节点的连接数以及活动连接数，10 个连接均匀分布在集群节点：
+
+   ```bash
+   connections.count             : 4
+   live_connections.count        : 4
+   connections.count             : 3
+   live_connections.count        : 3
+   connections.count             : 3
+   live_connections.count        : 3
+   ```
 
 通过以上步骤，您可以验证示例中的 HAProxy 负载均衡功能，以及 EMQX 集群中客户端连接的分布情况。您也可以更改 `emqx-usage-example/mqtt-lb-haproxy/haproxy.conf` 文件进行自定义的配置验证。
 
@@ -93,7 +94,7 @@ haproxy -v
 
 ## 开始使用
 
-HAProxy 的配置文件默认位于 `/etc/haproxy/haproxy.cfg`，可以参考本文例子往文件末尾添加配置。HAProxy 运行时会持续记录日志到 `/var/log/haproxy.log`，可以通过查看日志来调试配置。
+HAProxy 的配置文件默认位于 `/etc/haproxy/haproxy.cfg`，可以参考本页的示例往文件末尾添加配置。HAProxy 运行时会持续记录日志到 `/var/log/haproxy.log`，可以通过查看日志来调试配置。
 
 以下是开始使用 HAProxy 需要了解的一些基本命令：
 
@@ -315,9 +316,7 @@ backend mqtt_backend
   server emqx3 emqx3-cluster.emqx.io:1883
 ```
 
-## 性能优化与监控
-
-### HAProxy 状态监控
+## HAProxy 状态监控
 
 HAProxy 配置配置一个特殊的 frontend 即可实现状态监控，能够查看每个 backend 与 frontend 连接情况，以及全局的连接统计信息。参考 [Exploring the HAProxy Stats Page](https://www.haproxy.com/blog/exploring-the-haproxy-stats-page)：
 
