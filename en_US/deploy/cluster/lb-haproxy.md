@@ -331,7 +331,7 @@ frontend stats
 
 Open http://localhost:8888/stats to view the status data:
 
-![HAProxy stats Page](/Users/emqx/Desktop/assets/haproxy-stats-all.png)
+![HAProxy stats Page](./assets/haproxy-stats-all.png)
 
 ### HAProxy High Availability Solution Introduction
 
