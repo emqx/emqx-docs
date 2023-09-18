@@ -245,12 +245,6 @@
       title_cn: Sparkplug
       path: data-integration/sparkplug
       edition: ee
-      collapsed: true
-
-- title_en: Flow Designer
-  title_cn: Flow 设计器
-  path: flow-designer/introduction
-  lang: cn
 
 - title_en: Flow Designer
   title_cn: Flow 设计器
@@ -426,22 +420,22 @@
           title_cn: API 文档
           lang: en
           edition: ce
-          path: https://www.emqx.io/docs/en/v5.1/admin/api-docs.html
+          path: https://www.emqx.io/docs/en/v5.2/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: cn
           edition: ce
-          path: https://www.emqx.io/docs/zh/v5.1/admin/api-docs.html
+          path: https://www.emqx.io/docs/zh/v5.2/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: en
           edition: ee
-          path: https://docs.emqx.com/en/enterprise/v5.1/admin/api-docs.html
+          path: https://docs.emqx.com/en/enterprise/v5.2/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: cn
           edition: ee
-          path: https://docs.emqx.com/zh/enterprise/v5.1/admin/api-docs.html
+          path: https://docs.emqx.com/zh/enterprise/v5.2/admin/api-docs.html
     - title_en: EMQX Dashboard
       title_cn: EMQX Dashboard
       path: dashboard/introduction
@@ -785,15 +779,7 @@
     - title_en: Releases
       title_cn: 版本发布
       edition: ee
-      path: changes/changes-ee-5.1
-    - title_en: Releases
-      title_cn: 版本发布
-      edition: ee
       path: changes/changes-ee-5.2
-    - title_en: Releases
-      title_cn: 版本发布
-      edition: ce
-      path: changes/changes-ce-5.1
     - title_en: 从 V4 升级到 V5 的不兼容更改
       title_cn: 从 V4 升级到 V5 的不兼容更改
       lang: cn

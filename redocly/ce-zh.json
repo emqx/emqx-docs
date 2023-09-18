@@ -1322,6 +1322,60 @@
             "example": "12m",
             "type": "string"
           },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
           },
@@ -2073,6 +2127,60 @@
             "example": "12m",
             "type": "string"
           },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
           },
@@ -2607,6 +2715,10 @@
             "description": "桥接远端服务时使用的连接池大小。",
             "minimum": 1,
             "type": "integer"
+          },
+          "username": {
+            "description": "内部数据库的用户名。",
+            "type": "string"
           },
           "password": {
             "description": "内部数据库密码。",
@@ -5268,6 +5380,60 @@
             "example": "12m",
             "type": "string"
           },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
           },
@@ -6178,6 +6344,60 @@
             "example": "12m",
             "type": "string"
           },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
           }
@@ -6250,8 +6470,10 @@
           },
           "salt_rounds": {
             "default": 10,
-            "description": "Salt rounds for BCRYPT password generation.",
+            "description": "Work factor for BCRYPT password generation.",
             "example": 10,
+            "maximum": 10,
+            "minimum": 5,
             "type": "integer"
           }
         },
@@ -6727,6 +6949,10 @@
             "description": "桥接远端服务时使用的连接池大小。",
             "minimum": 1,
             "type": "integer"
+          },
+          "username": {
+            "description": "内部数据库的用户名。",
+            "type": "string"
           },
           "password": {
             "description": "内部数据库密码。",
@@ -7360,6 +7586,60 @@
             "description": "代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。",
             "example": "12m",
             "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
@@ -8149,6 +8429,60 @@
             "example": "12m",
             "type": "string"
           },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
           },
@@ -8224,6 +8558,10 @@
             "description": "桥接远端服务时使用的连接池大小。",
             "minimum": 1,
             "type": "integer"
+          },
+          "username": {
+            "description": "内部数据库的用户名。",
+            "type": "string"
           },
           "password": {
             "description": "内部数据库密码。",
@@ -8340,6 +8678,10 @@
             "description": "桥接远端服务时使用的连接池大小。",
             "minimum": 1,
             "type": "integer"
+          },
+          "username": {
+            "description": "内部数据库的用户名。",
+            "type": "string"
           },
           "password": {
             "description": "内部数据库密码。",
@@ -8685,6 +9027,60 @@
             "description": "代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。",
             "example": "12m",
             "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
@@ -9891,6 +10287,60 @@
             "example": "12m",
             "type": "string"
           },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
           }
@@ -10080,10 +10530,12 @@
         "properties": {
           "code": {
             "description": "BAD_REQUEST",
+            "example": 144,
             "type": "string"
           },
           "message": {
             "description": "失败的详细原因。",
+            "example": "topic_name_invalid",
             "type": "string"
           }
         },
@@ -10753,6 +11205,10 @@
             "minimum": 1,
             "type": "integer"
           },
+          "username": {
+            "description": "内部数据库的用户名。",
+            "type": "string"
+          },
           "password": {
             "description": "内部数据库密码。",
             "format": "password",
@@ -10891,6 +11347,60 @@
             "example": "12m",
             "type": "string"
           },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
           }
@@ -10951,7 +11461,7 @@
             "type": "string"
           },
           "mnesia_collector": {
-            "default": "enabled",
+            "default": "disabled",
             "description": "开启或关闭 Mnesia 采集器, 使用 mnesia:system_info/1 收集 Mnesia 相关指标",
             "enum": [
               "enabled",
@@ -10960,7 +11470,7 @@
             "type": "string"
           },
           "vm_statistics_collector": {
-            "default": "enabled",
+            "default": "disabled",
             "description": "开启或关闭 VM 统计采集器, 使用 erlang:statistics/1 收集 Erlang VM 相关指标",
             "enum": [
               "enabled",
@@ -10969,7 +11479,7 @@
             "type": "string"
           },
           "vm_system_info_collector": {
-            "default": "enabled",
+            "default": "disabled",
             "description": "开启或关闭 VM 系统信息采集器, 使用 erlang:system_info/1 收集 Erlang VM 相关指标",
             "enum": [
               "enabled",
@@ -10978,7 +11488,7 @@
             "type": "string"
           },
           "vm_memory_collector": {
-            "default": "enabled",
+            "default": "disabled",
             "description": "开启或关闭 VM 内存采集器, 使用 erlang:memory/0 收集 Erlang 虚拟机动态分配的内存信息，同时提供基本的 (D)ETS 统计信息",
             "enum": [
               "enabled",
@@ -10987,7 +11497,7 @@
             "type": "string"
           },
           "vm_msacc_collector": {
-            "default": "enabled",
+            "default": "disabled",
             "description": "开启或关闭 VM msacc 采集器, 使用 erlang:statistics(microstate_accounting) 收集微状态计数指标",
             "enum": [
               "enabled",
@@ -11141,6 +11651,60 @@
             "description": "代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。",
             "example": "12m",
             "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
@@ -11617,6 +12181,60 @@
             "description": "代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。",
             "example": "12m",
             "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
@@ -14760,6 +15378,10 @@
             "minimum": 1,
             "type": "integer"
           },
+          "username": {
+            "description": "内部数据库的用户名。",
+            "type": "string"
+          },
           "password": {
             "description": "内部数据库密码。",
             "format": "password",
@@ -15220,6 +15842,60 @@
             "description": "代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。",
             "example": "12m",
             "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
@@ -15738,7 +16414,7 @@
   },
   "info": {
     "title": "EMQX API",
-    "version": "5.1.6"
+    "version": "5.2.0"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -20381,83 +21057,83 @@
                   "general_client": {
                     "summary": "General client info",
                     "value": {
-                      "inflight_cnt": 0,
                       "reductions": 72022,
-                      "send_pkt": 1,
-                      "proto_ver": "1.0",
+                      "inflight_max": "infinity",
+                      "inflight_cnt": 0,
+                      "recv_pkt": 1,
                       "heap_size": 4185,
-                      "clean_start": true,
-                      "mqueue_len": 0,
-                      "recv_oct": 56,
+                      "send_msg": 0,
+                      "subscriptions_cnt": 0,
                       "recv_msg": 0,
-                      "disconnected_at": null,
-                      "subscriptions_max": "infinity",
+                      "send_pkt": 1,
+                      "recv_oct": 56,
+                      "username": "guest",
                       "node": "emqx@127.0.0.1",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "awaiting_rel_cnt": 0,
                       "created_at": "2021-12-07T10:44:02.721+08:00",
                       "recv_cnt": 1,
                       "connected": true,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "username": "guest",
-                      "awaiting_rel_max": "infinity",
-                      "recv_pkt": 1,
-                      "is_bridge": false,
-                      "port": 50675,
-                      "mqueue_dropped": 0,
-                      "mqueue_max": "infinity",
-                      "mailbox_len": 0,
-                      "expiry_interval": 0,
                       "ip_address": "127.0.0.1",
                       "proto_name": "STOMP",
-                      "send_oct": 61,
-                      "inflight_max": "infinity",
-                      "subscriptions_cnt": 0,
-                      "send_msg": 0,
-                      "awaiting_rel_cnt": 0,
+                      "port": 50675,
+                      "awaiting_rel_max": "infinity",
                       "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "disconnected_at": null,
+                      "mailbox_len": 0,
+                      "expiry_interval": 0,
+                      "proto_ver": "1.0",
+                      "clean_start": true,
+                      "mqueue_len": 0,
+                      "send_oct": 61,
+                      "mqueue_max": "infinity",
+                      "is_bridge": false,
                       "send_cnt": 1,
-                      "keepalive": 0
+                      "keepalive": 0,
+                      "subscriptions_max": "infinity",
+                      "mqueue_dropped": 0
                     }
                   },
                   "lwm2m_client": {
                     "summary": "LwM2M client info",
                     "value": {
-                      "inflight_cnt": 0,
                       "reductions": 72022,
-                      "send_pkt": 1,
-                      "proto_ver": "1.0",
+                      "inflight_max": "infinity",
+                      "inflight_cnt": 0,
+                      "recv_pkt": 1,
                       "heap_size": 4185,
-                      "clean_start": true,
-                      "endpoint_name": "urn:imei:154928475237123",
-                      "mqueue_len": 0,
-                      "recv_oct": 56,
+                      "send_msg": 0,
+                      "subscriptions_cnt": 0,
                       "recv_msg": 0,
-                      "disconnected_at": null,
-                      "subscriptions_max": "infinity",
+                      "send_pkt": 1,
+                      "recv_oct": 56,
+                      "username": "guest",
                       "node": "emqx@127.0.0.1",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "lifetime": 86400,
+                      "awaiting_rel_cnt": 0,
                       "created_at": "2021-12-07T10:44:02.721+08:00",
                       "recv_cnt": 1,
                       "connected": true,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "username": "guest",
-                      "awaiting_rel_max": "infinity",
-                      "recv_pkt": 1,
-                      "is_bridge": false,
-                      "port": 50675,
-                      "mqueue_dropped": 0,
-                      "mqueue_max": "infinity",
-                      "mailbox_len": 0,
-                      "expiry_interval": 0,
                       "ip_address": "127.0.0.1",
                       "proto_name": "LwM2M",
-                      "send_oct": 61,
-                      "inflight_max": "infinity",
-                      "subscriptions_cnt": 0,
-                      "send_msg": 0,
-                      "lifetime": 86400,
-                      "awaiting_rel_cnt": 0,
+                      "port": 50675,
+                      "awaiting_rel_max": "infinity",
+                      "endpoint_name": "urn:imei:154928475237123",
                       "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "disconnected_at": null,
+                      "mailbox_len": 0,
+                      "expiry_interval": 0,
+                      "proto_ver": "1.0",
+                      "clean_start": true,
+                      "mqueue_len": 0,
+                      "send_oct": 61,
+                      "mqueue_max": "infinity",
+                      "is_bridge": false,
                       "send_cnt": 1,
-                      "keepalive": 0
+                      "keepalive": 0,
+                      "subscriptions_max": "infinity",
+                      "mqueue_dropped": 0
                     }
                   }
                 },
@@ -23771,17 +24447,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "items": {
-                        "$ref": "#/components/schemas/emqx_mgmt_api_publish.publish_error"
-                      },
-                      "type": "array"
-                    },
-                    {
-                      "$ref": "#/components/schemas/emqx_mgmt_api_publish.bad_request"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/emqx_mgmt_api_publish.bad_request"
                 }
               }
             }
@@ -27797,6 +28463,28 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "MOVE_FAILED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Move failed",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "security": [

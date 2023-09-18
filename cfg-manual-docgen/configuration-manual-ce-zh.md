@@ -818,6 +818,28 @@ once the limit is reached, the restricted client will slow down and even be hung
   代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。
 
 
+**listeners.tcp.$name.authentication**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  Default authentication configs for all MQTT listeners.
+
+For per-listener overrides see <code>authentication</code> in listener configs
+
+This option can be configured with:
+<ul>
+  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
+  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
+  <li>chain: An array of structs.</li>
+</ul>
+
+When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
+
+If there is no decision after a full chain exhaustion, the login is rejected.
+
+
 **listeners.tcp.$name.tcp_options**
 
   *类型*: [broker:tcp_opts](#tcp_opts)
@@ -952,6 +974,28 @@ once the limit is reached, the restricted client will slow down and even be hung
   *默认值*: `3s`
 
   代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。
+
+
+**listeners.ssl.$name.authentication**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  Default authentication configs for all MQTT listeners.
+
+For per-listener overrides see <code>authentication</code> in listener configs
+
+This option can be configured with:
+<ul>
+  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
+  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
+  <li>chain: An array of structs.</li>
+</ul>
+
+When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
+
+If there is no decision after a full chain exhaustion, the login is rejected.
 
 
 **listeners.ssl.$name.tcp_options**
@@ -1241,6 +1285,28 @@ once the limit is reached, the restricted client will slow down and even be hung
   代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。
 
 
+**listeners.ws.$name.authentication**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  Default authentication configs for all MQTT listeners.
+
+For per-listener overrides see <code>authentication</code> in listener configs
+
+This option can be configured with:
+<ul>
+  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
+  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
+  <li>chain: An array of structs.</li>
+</ul>
+
+When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
+
+If there is no decision after a full chain exhaustion, the login is rejected.
+
+
 **listeners.ws.$name.tcp_options**
 
   *类型*: [broker:tcp_opts](#tcp_opts)
@@ -1380,6 +1446,28 @@ once the limit is reached, the restricted client will slow down and even be hung
   *默认值*: `3s`
 
   代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。
+
+
+**listeners.wss.$name.authentication**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  Default authentication configs for all MQTT listeners.
+
+For per-listener overrides see <code>authentication</code> in listener configs
+
+This option can be configured with:
+<ul>
+  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
+  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
+  <li>chain: An array of structs.</li>
+</ul>
+
+When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
+
+If there is no decision after a full chain exhaustion, the login is rejected.
 
 
 **listeners.wss.$name.tcp_options**
@@ -1975,72 +2063,6 @@ Prometheus 监控数据推送
   *默认值*: `false`
 
   开启或关闭 Prometheus 数据推送
-
-
-**prometheus.vm_dist_collector**
-
-  *类型*: `enum`
-
-  *默认值*: `disabled`
-
-  *可选值*: `disabled | enabled`
-
-  开启或关闭 VM 分布采集器，收集 Erlang 分布机制中涉及的套接字和进程的信息。
-
-
-**prometheus.mnesia_collector**
-
-  *类型*: `enum`
-
-  *默认值*: `enabled`
-
-  *可选值*: `enabled | disabled`
-
-  开启或关闭 Mnesia 采集器, 使用 mnesia:system_info/1 收集 Mnesia 相关指标
-
-
-**prometheus.vm_statistics_collector**
-
-  *类型*: `enum`
-
-  *默认值*: `enabled`
-
-  *可选值*: `enabled | disabled`
-
-  开启或关闭 VM 统计采集器, 使用 erlang:statistics/1 收集 Erlang VM 相关指标
-
-
-**prometheus.vm_system_info_collector**
-
-  *类型*: `enum`
-
-  *默认值*: `enabled`
-
-  *可选值*: `enabled | disabled`
-
-  开启或关闭 VM 系统信息采集器, 使用 erlang:system_info/1 收集 Erlang VM 相关指标
-
-
-**prometheus.vm_memory_collector**
-
-  *类型*: `enum`
-
-  *默认值*: `enabled`
-
-  *可选值*: `enabled | disabled`
-
-  开启或关闭 VM 内存采集器, 使用 erlang:memory/0 收集 Erlang 虚拟机动态分配的内存信息，同时提供基本的 (D)ETS 统计信息
-
-
-**prometheus.vm_msacc_collector**
-
-  *类型*: `enum`
-
-  *默认值*: `enabled`
-
-  *可选值*: `enabled | disabled`
-
-  开启或关闭 VM msacc 采集器, 使用 erlang:statistics(microstate_accounting) 收集微状态计数指标
 
 
 
