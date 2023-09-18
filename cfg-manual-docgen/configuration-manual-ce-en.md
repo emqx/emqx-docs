@@ -2151,9 +2151,6 @@ Default value is: <code>${name}/instance/${name}~${host}</code>
 
   *Type*: `enum`
 
-<<<<<<< HEAD
-  *Default*: `enabled`
-=======
   *Default*: `disabled`
 
 
