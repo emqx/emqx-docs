@@ -5,7 +5,7 @@
 
 ### Enhancements
 
-- [#11568](https://github.com/emqx/emqx/pull/11568) Added support for defining templates for MQTT publish properties in Republish rule action.
+- [#11568](https://github.com/emqx/emqx/pull/11568) Added support for defining templates for MQTT 5.0 publish properties and user properties in Republish rule action.
 
 - [#11612](https://github.com/emqx/emqx/pull/11612) During node evacuation, evacuate all disconnected sessions, not only those started with `clean_start` set to `false`.
 
