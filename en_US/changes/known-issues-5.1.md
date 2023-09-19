@@ -84,7 +84,7 @@
 
     Configuring "Max Connections" for "quic" or "ws" type listeners through the Dashboard or configuration file does not take effect.
 
--   **Inaccurate** `client.disconnected` Events Statistics in Rules**
+-   **Inaccurate `client.disconnected` Events Statistics in Rules**
 
     Channels with `clean_session = false` generate two `client.disconnected` events, leading to inaccurate event statistics.
 
