@@ -4,7 +4,7 @@
 
 ### 增强
 
-- [#11568](https://github.com/emqx/emqx/pull/11568) 在消息重发布规则动作中，支持为 MQTT 发布属性设定模板。
+- [#11568](https://github.com/emqx/emqx/pull/11568) 在消息重发布规则动作中，支持设置 MQTT 5.0 发布属性与用户属性。
 - [#11612](https://github.com/emqx/emqx/pull/11612) 在节点疏散期间，疏散所有断开连接的会话，而不仅仅是那些以 `clean_start` 设置为 `false` 开始的会话。
 
 ### 修复
