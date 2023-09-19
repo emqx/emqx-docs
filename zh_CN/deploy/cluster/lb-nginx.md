@@ -29,26 +29,26 @@ Nginx 是一种高性能多功能的服务器软件，可以作为 Web 服务器
 
 此处提供了一个具有实际示例的 Docker Compose 配置，让您能够轻松地进行验证和测试，您可以按照以下步骤来进行操作：
 
-1. 首先，克隆示例仓库并进入 `mqtt-lb-nginx` 目录：
+1. 克隆示例仓库并进入 `mqtt-lb-nginx` 目录：
 
 ```bash
 git clone https://github.com/emqx/emqx-usage-example
 cd emqx-usage-example/mqtt-lb-nginx
 ```
 
-2. 接着，通过 Docker Compose 启动示例：
+2. 通过 Docker Compose 启动示例：
 
 ```bash
 docker compose up -d
 ```
 
-3. 使用 MQTTX CLI 建立 10 个 TCP 连接，模拟 MQTT 客户端连接：
+3. 使用 [MQTTX](https://mqttx.app/zh) CLI 建立 10 个 TCP 连接，模拟 MQTT 客户端连接：
 
 ```bash
 mqttx bench conn -c 10
 ```
 
-4. 在此之后，您可以查看 Nginx 连接监控情况以及 EMQX 客户端连接的分布情况：
+4. 您可以查看 Nginx 连接监控情况以及 EMQX 客户端连接的分布情况：
     - 通过以下命令查看 Nginx 连接监控：
 
     ```bash
@@ -428,6 +428,8 @@ upstream backend_servers {
 
 ## 性能优化与监控
 
+本节介绍了如何通过配置对 Nginx 进行性能优化以及启用状态监控功能。
+
 ### Nginx 基础配置调整
 
 `worker_processes`：工作进程数，设置与服务器 CPU 核心数相近的值，但要避免设置过多的进程，以防资源竞争。
@@ -518,6 +520,6 @@ Reading: 0 Writing: 1 Waiting: 1
 | ssl_certificate_key    | 指定与 SSL 证书对应的私钥文件的路径。                        |
 | ssl_protocols          | 指定允许的 SSL/TLS 协议版本。                                |
 | ssl_ciphers            | 配置允许的加密算法（密码套件）。HIGH:!aNULL:!MD5 这个设置指定了使用强加密套件，同时排除了一些不安全的选项，如不包括空密码套件和 MD5 散列算法。 |
-| ssl_client_certificate | 指定用于验证客户端证书的 CA（证书颁发机构）证书文件的路径。这个 CA 证书用于验证客户端证书的真实性。 |
-| ssl_verify_client      | 启用客户端证书验证。当设置为 "on" 时，Nginx 将会要求客户端提供有效的 SSL 证书。 |
-| ssl_verify_depth       | 设置验证客户端证书的最大深度。在这里，设置为 1 表示仅验证客户端证书和 CA 证书之间的一层，不再深入验证。 |
+| ssl_client_certificate | 指定用于验证客户端证书的证书颁发机构 （CA）证书文件的路径。这个 CA 证书用于验证客户端证书的真实性。 |
+| ssl_verify_client      | 启用客户端证书验证。当设置为 `on` 时，Nginx 将会要求客户端提供有效的 SSL 证书。 |
+| ssl_verify_depth       | 设置验证客户端证书的最大深度。在这里，设置为 `1` 表示仅验证客户端证书和 CA 证书之间的一层，不再深入验证。 |
