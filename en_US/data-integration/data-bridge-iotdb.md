@@ -136,8 +136,15 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
      :::tip
 
-     When left empty, the device id can also be specified in the publishing message or configured in the rule. For example, when publishing a JSON-encoded message with a `device_id` field in it, the value of that field will define the output device id. To define it using the rule engine, you must use SQL like `select json_decode(payload) as payload, 'my_device' as payload.device_id`. However, the fixed device id configured in this field takes precedence over any methods mentioned previously.
+     When left empty, the device id can also be specified in the publishing message or configured in the rule. For example, when publishing a JSON-encoded message with a `device_id` field in it, the value of that field will define the output device id. To extract this information using the rule engine, you must use SQL like the following:
 
+     ```sql
+     SELECT
+       json_decode(payload) as payload, `my_device` as payload.device_id
+     ```
+     
+     However, the fixed device id configured in this field takes precedence over any methods mentioned previously.
+     
      :::
 
    - **Align Timeseries**: Disabled by default.
