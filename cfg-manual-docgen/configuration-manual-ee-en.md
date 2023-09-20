@@ -2057,6 +2057,301 @@ auto_subscribe:topic@ -->
 
 broker:trace@ -->
 
+{% emqxee %}
+
+## MQTT File Transfer
+
+### File transfer settings
+
+
+File transfer settings
+
+**file_transfer.enable**
+
+  *Type*: `boolean`
+
+  *Default*: `false`
+
+  Enable the File Transfer feature.<br/>
+Enabling File Transfer implies reserving special MQTT topics in order to serve the protocol.<br/>
+This toggle also affects the availability of the File Transfer REST API and
+storage-dependent background activities (e.g. garbage collection).
+
+
+**file_transfer.init_timeout**
+
+  *Type*: `timeout_duration_ms`
+
+  *Default*: `10s`
+
+  Timeout for EMQX to initialize the file transfer.<br/>
+After reaching the timeout (e.g. due to system is overloaded), the PUBACK message for `init` will contain error code (0x80).
+
+
+**file_transfer.store_segment_timeout**
+
+  *Type*: `timeout_duration_ms`
+
+  *Default*: `5m`
+
+  Timeout for storing a file segment.<br/>
+After reaching the timeout (e.g. due to system overloaded), the PUBACK message will contain error code (0x80).
+
+
+**file_transfer.assemble_timeout**
+
+  *Type*: `timeout_duration_ms`
+
+  *Default*: `5m`
+
+  Timeout for assembling and exporting file segments into a final file.<br/>
+After reaching the timeout (e.g. due to system is overloaded), the PUBACK message for `fin` will contain error code (0x80)
+
+
+**file_transfer.storage**
+
+  *Type*: `file_transfer:storage_backend`
+
+  *Default*: `{"local":{}}`
+
+  Storage settings for file transfer.
+
+
+
+
+File transfer local storage settings
+
+**file_transfer.storage.local.segments**
+
+  *Type*: `file_transfer:local_storage_segments`
+
+  *Default*: `{"gc":{}}`
+
+  Settings for local segments storage, which include uploaded transfer fragments and temporary data.
+
+
+**file_transfer.storage.local.exporter**
+
+  *Type*: `file_transfer:local_storage_exporter_backend`
+
+  *Default*: `{"local":{}}`
+
+  Exporter for the local file system storage backend.<br/>
+Exporter defines where and how fully transferred and assembled files are stored.
+
+
+**file_transfer.storage.local.enable**
+
+  *Type*: `boolean`
+
+  *Default*: `true`
+
+  Whether to enable this backend.
+
+
+
+
+File transfer local segments storage settings
+
+**file_transfer.storage.local.segments.root**
+
+  *Type*: `string`
+
+  File system path to keep uploaded fragments and temporary data.
+
+
+**file_transfer.storage.local.segments.gc**
+
+  *Type*: `file_transfer:local_storage_segments_gc`
+
+  Garbage collection settings for the intermediate and temporary files in the local file system.
+
+
+
+
+Garbage collection settings for the File transfer local segments storage
+
+**file_transfer.storage.local.segments.gc.interval**
+
+  *Type*: `timeout_duration_ms`
+
+  *Default*: `1h`
+
+  Interval of periodic garbage collection.
+
+
+**file_transfer.storage.local.segments.gc.maximum_segments_ttl**
+
+  *Type*: `duration_s`
+
+  *Default*: `24h`
+
+  Maximum TTL of a segment kept in the local file system.<br/>
+This is a hard limit: no segment will outlive this TTL, even if some file transfer specifies a
+TTL more than that.
+
+
+**file_transfer.storage.local.segments.gc.minimum_segments_ttl**
+
+  *Type*: `duration_s`
+
+  *Default*: `5m`
+
+  Minimum TTL of a segment kept in the local file system.<br/>
+This is a hard limit: no segment will be garbage collected before reaching this TTL,
+even if some file transfer specifies a TTL less than that.
+
+
+
+### Export files to local storage
+
+
+Local Exporter settings for the File transfer local storage backend
+
+**file_transfer.storage.local.exporter.local.root**
+
+  *Type*: `string`
+
+  Directory where the uploaded files are kept.
+
+
+**file_transfer.storage.local.exporter.local.enable**
+
+  *Type*: `boolean`
+
+  *Default*: `true`
+
+  Whether to enable this backend.
+
+
+
+
+Exporter for the local file system storage backend
+
+**file_transfer.storage.local.exporter.local**
+
+  *Type*: `file_transfer:local_storage_exporter`
+
+  Exporter to the local file system.
+
+
+**file_transfer.storage.local.exporter.s3**
+
+  *Type*: `file_transfer:s3_exporter`
+
+  Exporter to the S3 API compatible object storage.
+
+
+
+### Export files to S3 storage
+
+
+S3 Exporter settings for the File transfer local storage backend
+
+**file_transfer.storage.local.exporter.s3.access_key_id**
+
+  *Type*: `string`
+
+  The access key ID of the S3 bucket.
+
+
+**file_transfer.storage.local.exporter.s3.secret_access_key**
+
+  *Type*: `emqx_s3_schema:secret_access_key`
+
+  The secret access key of the S3 bucket.
+
+
+**file_transfer.storage.local.exporter.s3.bucket**
+
+  *Type*: `string`
+
+  The name of the S3 bucket.
+
+
+**file_transfer.storage.local.exporter.s3.host**
+
+  *Type*: `string`
+
+  The host of the S3 endpoint.
+
+
+**file_transfer.storage.local.exporter.s3.port**
+
+  *Type*: `pos_integer`
+
+  The port of the S3 endpoint.
+
+
+**file_transfer.storage.local.exporter.s3.url_expire_time**
+
+  *Type*: `duration_s`
+
+  *Default*: `1h`
+
+  The time in seconds for which the signed URLs to the S3 objects are valid.
+
+
+**file_transfer.storage.local.exporter.s3.min_part_size**
+
+  *Type*: `bytesize`
+
+  *Default*: `5mb`
+
+  The minimum part size for multipart uploads.<br/>
+Uploaded data will be accumulated in memory until this size is reached.
+
+
+**file_transfer.storage.local.exporter.s3.max_part_size**
+
+  *Type*: `bytesize`
+
+  *Default*: `5gb`
+
+  The maximum part size for multipart uploads.<br/>
+S3 uploader won't try to upload parts larger than this size.
+
+
+**file_transfer.storage.local.exporter.s3.acl**
+
+  *Type*: `enum`
+
+  *Optional*: `private | public_read | public_read_write | authenticated_read | bucket_owner_read | bucket_owner_full_control`
+
+  The ACL to use for the uploaded objects.
+
+
+**file_transfer.storage.local.exporter.s3.transport_options**
+
+  *Type*: `s3:transport_options`
+
+  Options for the HTTP transport layer used by the S3 client.
+
+
+**file_transfer.storage.local.exporter.s3.enable**
+
+  *Type*: `boolean`
+
+  *Default*: `true`
+
+  Whether to enable this backend.
+
+
+
+
+Storage backend settings for file transfer
+
+**file_transfer.storage.local**
+
+  *Type*: `file_transfer:local_storage`
+
+  Local file system backend to store uploaded fragments and temporary data.
+
+
+
+{% endemqxee %}
+
+
 ## Integration With Prometheus
 
 
