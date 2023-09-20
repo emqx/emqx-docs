@@ -130,7 +130,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    * **Username**: Enter the IoTDB username; The default value is `root`.
 
-   * **Password**: Enter the IoTDB password; The default value is `root`.
+   * **Password**: Enter the IoTDB password.
 
    * **Device ID** (optional): Enter a fixed device id used as the name of the device from which the timeseries data is forwarded and inserted into the IoTDB instance.
 
