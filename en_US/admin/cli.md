@@ -596,7 +596,7 @@ $ emqx ctl log handlers set-level console debug
 debug
 ```
 
-## trace and traces
+## trace
 
 This command is used to trace (and log) events of a given client or topic etc.
 
@@ -674,7 +674,58 @@ This command is like the `trace` command, but applies on all nodes in the cluste
 
 ## traces
 
-This command is similar to the `trace` command, but it starts or stops a tracer across all nodes in the cluster. Refer to the previous `trace` command for details.
+This command is similar to the `trace` command, but it starts or stops a tracer across all nodes in the cluster. 
+
+| Command                                                 | Description                       |
+| ------------------------------------------------------- | --------------------------------- |
+| traces list                                             | List all cluster traces started   |
+| traces start \<Name> client \<ClientId> [\<Duration>]   | Traces for a client in cluster    |
+| traces start \<Name> topic \<Topic> [\<Duration>]       | Traces for a topic in cluster     |
+| traces start \<Name> ip_address \<IPAddr> [\<Duration>] | Traces for a client IP in cluster |
+| traces stop \<Name>                                     | Stop trace in cluster             |
+| traces delete \<Name>                                   | Delete trace in cluster           |
+
+### traces list
+
+```bash
+$ emqx ctl traces list
+Trace(mytraces_ip: ip_address=127.0.0.1, waiting, LogSize:#{'emqx@127.0.0.1' => 0})
+```
+
+### traces start \<Name> client \<ClientId> [\<Duration>]
+
+```bash
+$ emqx ctl traces start mytraces client emqx_c 1200
+cluster_trace clientid emqx_c mytraces successfully
+```
+
+### traces start \<Name> topic \<Topic> [\<Duration>]
+
+```bash
+$ emqx ctl traces start mytraces_ip topic t/1 1200
+cluster_trace topic t/1 mytraces_ip successfully
+```
+
+### traces start \<Name> ip_address \<IPAddr> [\<Duration>]
+
+```bash
+$ emqx ctl traces start mytraces_ip ip_address 127.0.0.1 1200
+cluster_trace ip_address 127.0.0.1 mytraces_ip successfully
+```
+
+### traces stop \<Name>
+
+```bash
+$ emqx ctl traces stop mytraces_ip
+Stop cluster_trace mytraces_ip successfully
+```
+
+### traces delete \<Name>
+
+```bash
+$ emqx ctl traces delete mytraces_ip
+Del cluster_trace mytraces_ip successfully
+```
 
 ## listeners
 
