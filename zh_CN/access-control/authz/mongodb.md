@@ -14,18 +14,25 @@ MongoDB 认证器支持将权限数据存储为 MongoDB 文档。用户需要提
 - `permission`: 用于指定操作权限，可选值有 `allow` 和 `deny`
 - `action`: 用于指定当前规则适用于哪些操作，可选值有 `publish`、`subscribe` 和 `all`
 - `topics`: 用于指定当前规则适用的主题列表，可以使用主题过滤器和[主题占位符](./authz.md#主题占位符)
+- `qos`: （可选）用于指定当前规则适用的消息 QoS，可选值有 `0`、`1`、`2`，也可以使用 Number 数组同时指定多个 QoS。默认为所有 QoS
+- `retain`: （可选）用于指定当前规则是否支持发布保留消息，可选值有 `0`、`1`，默认允许保留消息
 
-添加允许用户名为 `user123`的客户端发布主题为 `data/user123/#` 的消息的规则示例：
+:::
+`qos` 和 `retain` 字段是从 EMQX v5.1.1 版本开始引入的。
+:::
+
+禁止用户名为 `emqx_u` 的客户端发布主题为 `t/1` 且 QoS 值为 `1` 的消息:
 
 ```js
 > db.mqtt_acl.insertOne(
   {
-      "username": "user123",
-      "clientid": "client123",
+      "username": "emqx_u",
+      "clientid": "emqx_c",
       "ipaddress": "127.0.0.1",
-      "permission": "allow",
+      "permission": "deny",
       "action": "publish",
-      "topics": ["data/user123/#"]
+      "qos": 1,
+      "topics": ["t/1"]
   }
 );
 {
@@ -38,7 +45,7 @@ MongoDB 认证器支持将权限数据存储为 MongoDB 文档。用户需要提
 
 ```bash
 collection = "mqtt_acl"
-filter { username = "${username}", ipaddress = "${peerhost}"}
+filter { username = "${username}" }
 
 ```
 

@@ -13,21 +13,27 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 - `topic`: 用于指定当前规则适用的主题，可以使用主题过滤器和[主题占位符](./authz.md#主题占位符)
 - `action`: 用于指定当前规则适用于哪些操作，可选值有 `publish`、`subscribe` 和 `all`
+- `qos`: (可选)用于指定规则适用的消息 QoS，可选值为 `0`、`1`、`2`，也可以用 `,` 分隔的字符串指定多个 QoS，例如 `0,1`。默认为全部 QoS
+- `retain`: （可选）用于指定当前规则是否支持发布保留消息，可选值有 `true`、`false`，默认允许保留消息
 
-添加用户名为 `emqx_u`、允许订阅 `t/#` 主题，向 `bar/baz` 主题发布消息的权限数据示例：
+:::
+`qos` 和 `retain` 字段是从 EMQX v5.1.1 版本开始引入的。
+:::
+
+添加用户名为 `emqx_u`，允许以 QoS 1 订阅 `t/#` 主题，并向 `t/1` 主题发布保留消息的权限数据示例：
 
 ```bash
 >redis-cli
-127.0.0.1:6379> HSET users:emqx_u t/# subscribe
+127.0.0.1:6379> HSET mqtt_acl:emqx_u t/# subscribe qos 1
 (integer) 1
-127.0.0.1:6379> HSET users:emqx_u bar/baz publish
+127.0.0.1:6379> HSET mqtt_acl:emqx_u t/1 publish retain true
 (integer) 1
 ```
 
 对应的配置项为：
 
 ```bash
-cmd = "HGET users:${username}"
+cmd = "HGET mqtt_acl:${username}"
 ```
 
 ::: tip

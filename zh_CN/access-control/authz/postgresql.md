@@ -9,11 +9,17 @@ PostgreSQL Authorizer 支持客户端的权限列表存储在 PostgreSQL 数据�
 
 ## 表结构与查询语句
 
-PostgreSQL Authorizer 可以支持任何表结构，甚至是多个表联合查询、或从视图中查询。用户需要提供一个查询 SQL 模板，且确保查询结果包含以下字段：
+PostgreSQL Authorizer 可以支持任何表结构，甚至是多个表联合查询、或从视图中查询。用户需要提供一个查询 SQL 模板，且确保查询结果包含以下字段：
 
 - `permission`: 用于指定操作权限，可选值有 `allow` 和 `deny`
 - `action`: 用于指定当前规则适用于哪些操作，可选值有 `publish`、`subscribe` 和 `all`
 - `topic`: 用于指定当前规则适用的主题，可以使用主题过滤器和[主题占位符](./authz.md#主题占位符)
+- `qos`: （可选）用于指定当前规则适用的消息 QoS，可选值有 `0`、`1`、`2`，默认为所有 QoS
+- `retain`: （可选）用于指定当前规则是否支持发布保留消息，可选值有 `0`、`1`，默认允许保留消息
+
+:::
+`qos` 和 `retain` 字段是从 EMQX v5.1.1 版本开始引入的。
+:::
 
 示例表结构：
 
@@ -23,7 +29,9 @@ CREATE TABLE mqtt_acl(
   username text NOT NULL,
   permission text NOT NULL,
   action text NOT NULL,
-  topic text NOT NULL
+  topic text NOT NULL,
+  qos tinyint,
+  retain tinyint
 );
 CREATE INDEX mqtt_acl_username_idx ON mqtt_acl(username);
 ```
@@ -42,7 +50,7 @@ INSERT 0 1
 对应的配置参数为：
 
 ```bash
-query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
+query = "SELECT permission, action, topic, qos, retain FROM mqtt_acl WHERE username = ${username}"
 ```
 
 ## 配置项

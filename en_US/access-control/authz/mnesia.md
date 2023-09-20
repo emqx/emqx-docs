@@ -107,5 +107,10 @@ curl -X 'POST' \
 Each rule contains:
 * `permission`: Whether to allow or deny a certain type of operation request from current client/user; optional values: `allow` or `deny`;
 * `action`: Configure the operation corresponding to this rule; optional values: `publish`, `subscribe`, or `all`;
-* `topic filter`: Configure the corresponding to this rule, supporting [topic placeholders](./authz.md#topic-placeholders).
+* `topic`: Configure the corresponding to this rule, supporting [topic placeholders](./authz.md#topic-placeholders).
+* `qos`: (Optional) Use Number array to specify the QoS levels that the rule applies to, e.g. `[0, 1]`, `[1, 2]`. Default is all QoS levels.
+* `retain`: (Optional) Used to specify whether the current rule supports retained messages. Value options are `true`, `false`. Default is to allow retained messages.
 
+:::
+The `qos` and `retain` fields were introduced in EMQX v5.1.1.
+:::
