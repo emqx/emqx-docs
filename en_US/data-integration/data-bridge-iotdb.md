@@ -255,7 +255,7 @@ This section describes some advanced configuration options that can optimize the
 
 ## More Information
 
-EMQX provides bunches of learning resources on the data integration with Apache Kafka. Check out the following links to learn more:
+EMQX provides bunches of learning resources on the data integration with Apache IoTDB. Check out the following links to learn more:
 
 **Blogs:**
 
