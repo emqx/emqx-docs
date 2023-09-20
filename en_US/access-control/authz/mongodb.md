@@ -15,18 +15,25 @@ MongoDB authorizer supports storing authorization rules as MongoDB documents. Us
 * `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
 * `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
 * `topic` value specifies the topic filter for topics relevant to the rule. Should be a string that supports wildcards and [topic placeholders](./authz.md#topic-placeholders).
+* `qos` (Optional) Used to specify the QoS levels that the current rule applies to. Value options are `0`, `1`, `2`. It can also be a Number array to specify multiple QoS levels. Default is all QoS levels.
+* `retain` (Optional) Used to specify whether the current rule supports retained messages. Value options are `0`, `1` or `true`, `false`. Default is to allow retained messages.
 
-Example of adding an authorization rule for a user `user123` who is allowed to publish topics `data/user123/#`:
+:::
+The `qos` and `retain` fields were introduced in EMQX v5.1.1.
+:::
+
+Deny client with username `emqx_u` to publish to topic `t/1` with QoS 1:
 
 ```js
 > db.mqtt_acl.insertOne(
   {
-      "username": "user123",
-      "clientid": "client123",
+      "username": "emqx_u",
+      "clientid": "emqx_c",
       "ipaddress": "127.0.0.1",
-      "permission": "allow",
+      "permission": "deny",
       "action": "publish",
-      "topics": ["data/user123/#"]
+      "qos": 1,
+      "topics": ["t/1"]
   }
 );
 {
@@ -38,7 +45,7 @@ Example of adding an authorization rule for a user `user123` who is allowed to p
 The corresponding configuration parameters are:
 ```bash
 collection = "mqtt_acl"
-filter { username = "${username}", ipaddress = "${peerhost}" }
+filter { username = "${username}" }
 ```
 
 ::: tip

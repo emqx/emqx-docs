@@ -10,21 +10,31 @@ This authorizer implements authorization checks by matching publish/subscription
 
 ## Data Schema and Query Statement
 
-Users need to provide a templated Redis command that returns a key-value list with topic filters as keys and actions (`publish`, `subscribe`, or `all`) as values.
+Users need to provide a query template that returns the following data:
 
-For example, rules can be stored as [Redis hashes](https://redis.io/docs/manual/data-types/#hashes):
+- `topic`: Specifies the topic that the rule applies to, which can use topic filters and [topic placeholders](https://claude.ai/chat/authz.md#topic-placeholders).
+- `action`: Specifies the actions that the rule applies to, available options are `publish`, `subscribe`, and `all`.
+- `qos`: (Optional) Specifies the QoS levels that the rule applies to. Value options are `0`, `1`, `2`. It can also be a string separated by `,` to specify multiple QoS levels, e.g. `0,1`. Default is all QoS levels.
+- `retain`: (Optional) Specifies whether the rule supports retained messages. Value options are `true`, `false`. Default is to allow retained messages.
+
+:::
+The `qos` and `retain` fields were introduced in EMQX v5.1.1.
+:::
+
+For example, rules can be stored as [Redis hashes](https://redis.io/docs/manual/data-types/#hashes). Add permission rules to allow user `emqx_u` to subscribe to `t/#` topic:
 
 ```bash
 >redis-cli
-127.0.0.1:6379> HSET users:someuser foo/# subscribe
+127.0.0.1:6379> HSET mqtt_acl:emqx_u t/# subscribe qos 1
 (integer) 1
-127.0.0.1:6379> HSET users:someuser bar/baz publish
+127.0.0.1:6379> HSET mqtt_acl:emqx_u t/1 publish retain true
 (integer) 1
 ```
 
 The corresponding config parameters are:
+
 ```bash
-cmd = "HGET users:${username}"
+cmd = "HGET mqtt_acl:${username}"
 ```
 
 Fetched rules are used as permissive ones, i.e., a request is accepted if the topic filter and action match.

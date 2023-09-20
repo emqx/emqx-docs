@@ -10,7 +10,29 @@ EMQX supports the authorization based on the HTTP service. The user needs to bui
 
 ## HTTP Request and Response
 
-When the client initiates a subscription or publishing operation, the HTTP Authorizer constructs and sends a request based on the configured request template. Users need to implement authorization logic in the authorization service and return the results according to the following requirements:
+When the client initiates a subscription or publishing operation, the HTTP Authorizer constructs and sends a request based on the configured request template. Users need to implement authorization logic in the authorization service and return the results according to the following requirements.
+
+### Request
+
+The request can use JSON format, with the following placeholders in URL and request body:
+
+- `${clientid}`: The client ID
+- `${username}`: The username used by client on login
+- `${peerhost}`: The source IP address of the client 
+- `${proto_name}`: The protocol name used by client, e.g. `MQTT`, `CoAP`
+- `${mountpoint}`: The mountpoint of the gateway listener (topic prefix)
+- `${action}`: The action being requested, e.g. `publish`, `subscribe`  
+- `${topic}`: The topic (or topic filter) to be published or subscribed in current request
+- `${qos}`: The QoS of the message to be published or subscribed in current request
+- `${retain}`: Whether the message to be published in current request is a retained message
+
+:::
+The `qos` and `retain` fields were introduced in EMQX v5.1.1.
+:::
+
+### Response
+
+After checking, the authorization service needs to return a response in the following format:
 
 - Response `content-type` must be `application/json`.
 - If the HTTP Status Code is `200`, the authorization result is granted by HTTP Body. It depends on the value of the `result` field:
