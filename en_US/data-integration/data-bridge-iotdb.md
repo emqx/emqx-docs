@@ -128,7 +128,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    * **IoTDB Version**: Select the version of the IoTDB server you have installed.
 
-   * **Username**: Enter the IoTDB username; The default value is `root`.
+   * **Username**: Enter the IoTDB username.
 
    * **Password**: Enter the IoTDB password.
 
