@@ -14,7 +14,7 @@ This page provides a comprehensive introduction to the data integration between 
 
 <!-- In this section, you explain how the data integration works together with the rule engine by introducing the architecture, emphasizing the simplicity and no coding required….You can also combine the working principle with a real-life use case. Some typical scenarios include connected vehicles, IIoT, power and energy, etc. You can describe where the data will be used eventually and what value they can bring to the business under the specific scenario. Use sequential steps to describe how data flows from devices to the data integration, and then to the data storage…-->
 
-The Apache IoTDB data integration is an out-of-the-box feature in EMQX designed to bridge the gap between raw MQTT-based time series data and IoTDB's powerful data storage capabilities. With a built-in [rule engine](https://docs.emqx.com/en/enterprise/v5.1/data-integration/rules.html) component, the integration simplifies the process of ingesting data from EMQX to IoTDB for storage and query, eliminating the need for complex coding.
+The Apache IoTDB data integration is an out-of-the-box feature in EMQX designed to bridge the gap between raw MQTT-based time series data and IoTDB's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to IoTDB for storage and query, eliminating the need for complex coding.
 
 The diagram below illustrates a typical architecture of data integration between EMQX and IoTDB. <!-- This image needs to be modified to be IoTDB specific-->
 
