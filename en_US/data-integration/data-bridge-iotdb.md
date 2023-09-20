@@ -136,7 +136,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
      :::tip
 
-     When left empty, the device id can also be specified in the publishing message, configured in the rule, or extracted from the topic to which these messages are being sent by converting '/' into '.'. For example, publishing a message to `root/sg27` will result in sending a device name of `root.sg27`. However, the fixed device id configured in this field takes precedence over any methods mentioned previously.
+     When left empty, the device id can also be specified in the publishing message or configured in the rule. For example, when publishing a JSON-encoded message with a `device_id` field in it, the value of that field will define the output device id. To define it using the rule engine, you must use SQL like `select json_decode(payload) as payload, 'my_device' as payload.device_id`. However, the fixed device id configured in this field takes precedence over any methods mentioned previously.
 
      :::
 
