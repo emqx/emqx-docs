@@ -16,6 +16,12 @@ Users need to provide a query statement template and ensure the following fields
 * `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
 * `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
 * `topic` value specifies the topic filter for topics relevant to the rule. Should be a string that supports wildcards and [topic placeholders](./authz.md#topic-placeholders).
+* `qos` (Optional) Used to specify the QoS levels that the rule applies to. Value options are `0`, `1`, `2`. It can also be a string separated by `,` to specify multiple QoS levels, e.g. `0,1`. Default is all QoS levels.
+* `retain` (Optional) Used to specify whether the current rule supports retained messages. Value options are `0` and `1`. Default is to allow retained messages.
+
+:::
+The `qos` and `retain` fields were introduced in EMQX v5.1.1.
+:::
 
 Example table structure for storing credentials:
 
@@ -30,7 +36,9 @@ CREATE TABLE mqtt_acl (
   clientid CHARACTER VARYING(255) NOT NULL DEFAULT '',
   action ACTION,
   permission PERMISSION,
-  topic CHARACTER VARYING(255) NOT NULL
+  topic CHARACTER VARYING(255) NOT NULL,
+  qos tinyint,
+  retain tinyint
 );
 
 CREATE INDEX mqtt_acl_username_idx ON mqtt_acl(username);
@@ -47,7 +55,7 @@ INSERT 0 1
 
 The corresponding config parameters are:
 ```bash
-query = "SELECT permission, action, topic, ipaddress FROM mqtt_acl WHERE username = ${username} and ipaddress = ${peerhost}"
+query = "SELECT permission, action, topic, ipaddress, qos, retain FROM mqtt_acl WHERE username = ${username} and ipaddress = ${peerhost}"
 ```
 
 ## Configure with Dashboard
