@@ -2,6 +2,16 @@
 
 In EMQX, authorization refers to the permission control over the publish/subscribe operation of the MQTT clients. When a client performs publish/subscribe operation, EMQX follows a specific procedure or use the user-specified query statement to query the client's permission list from the configured data source. Based on the query result, EMQX allows or rejects the current operation.
 
+A single permission data of the following components:
+
+| **Permission** | **Client**            | **Operation**                       | **Message**          |
+| -------------- | --------------------- | ----------------------------------- | -------------------------- |
+| Allow/Deny     | Client ID/Username/IP | Publish/Subscribe/Publish-Subscribe | Topic/QoS/Retained Message |
+
+:::
+The support for checking QoS and retained messages in message is introduced starting from EMQX v5.1.1.
+:::
+
 The permission list of the client needs to be stored in a specific data source (database, file) in advance. You can update the list during runtime by updating the corresponding data record. 
 
 An file-based authorizer is configured in EMQX by default and you can use the authorizer directly. The authorization is processed based on the predefined rules configured in the ACL file. 
@@ -114,11 +124,11 @@ As mentioned in [Authorization chain](#authorization-chain), authorizers are exe
 
 You can check the connection status in the **Status** column:
 
-| Status       | Meaning                                                      | Troubleshooting                                              |
-| ------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Connected    | All nodes are connected to the data source successfully.     | -                                                            |
+| Status       | Meaning                                                                      | Troubleshooting                                                                                                                        |
+| ------------ | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Connected    | All nodes are connected to the data source successfully.                     | -                                                                                                                                      |
 | Disconnected | Parts of or all nodes are not connected to the data source (database, file). | Check if the data source is available; <br />Restart the authorizer manually (**Disable** and **Enable** again) after troubleshooting. |
-| Connecting   | Parts of or all nodes are reconnecting to the data source (database, file). | Check if the data source is available; <br/>Restart the authorizer manually (**Disable** and **Enable** again) after troubleshooting. |
+| Connecting   | Parts of or all nodes are reconnecting to the data source (database, file).  | Check if the data source is available; <br/>Restart the authorizer manually (**Disable** and **Enable** again) after troubleshooting.  |
 
 ### Running Metrics
 
@@ -144,15 +154,15 @@ In addition, EMQX can also connect to HTTP services developed by our users to me
 
 According to the backend data storage used, there are currently 7 different types of EMQX authorizers. Each authorizer has its own configuration options. You can click the corresponding links in the following table for more details.
 
-| Database          | Description                                                  |
-| ----------------- | ------------------------------------------------------------ |
-| ACL File          | [Authorization with static rules configured in a file](./file.md) |
+| Database          | Description                                                          |
+| ----------------- | -------------------------------------------------------------------- |
+| ACL File          | [Authorization with static rules configured in a file](./file.md)    |
 | Built-in database | [Authorization with built-in database as rules storage](./mnesia.md) |
-| MySQL             | [Authorization with MySQL as rules storage](./mysql.md)      |
-| PostgreSQL        | [Authorization with PostgreSQL as rules storage](./postgresql.md) |
-| MongoDB           | [Authorization with MongoDB as rules storage](./mongodb.md)  |
-| Redis             | [Authorization with Redis as rules storage](./redis.md)      |
-| HTTP              | [Authorization with external HTTP service](./http.md)        |
+| MySQL             | [Authorization with MySQL as rules storage](./mysql.md)              |
+| PostgreSQL        | [Authorization with PostgreSQL as rules storage](./postgresql.md)    |
+| MongoDB           | [Authorization with MongoDB as rules storage](./mongodb.md)          |
+| Redis             | [Authorization with Redis as rules storage](./redis.md)              |
+| HTTP              | [Authorization with external HTTP service](./http.md)                |
 
 {% endemqxce %}
 
