@@ -4,12 +4,12 @@ In EMQX, authorization refers to the permission control over the publish/subscri
 
 A single permission data of the following components:
 
-| **Permission** | **Client**            | **Operation**                       | **Message**          |
+| **Permission** | **Client**            | **Operation**                       | **Operation Details**          |
 | -------------- | --------------------- | ----------------------------------- | -------------------------- |
 | Allow/Deny     | Client ID/Username/IP | Publish/Subscribe/Publish-Subscribe | Topic/QoS/Retained Message |
 
 :::
-The support for checking QoS and retained messages in message is introduced starting from EMQX v5.1.1.
+The support for checking QoS and retained messages in operation details is introduced starting from EMQX v5.1.1.
 :::
 
 The permission list of the client needs to be stored in a specific data source (database, file) in advance. You can update the list during runtime by updating the corresponding data record. 
