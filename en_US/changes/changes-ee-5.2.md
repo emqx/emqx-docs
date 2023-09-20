@@ -12,6 +12,7 @@
 ### Bug Fixes
 
 - [#11568](https://github.com/emqx/emqx/pull/11568) Fixed an issue where an ill-defined built-in rule action config could be interpreted as a custom user function.
+- [#11630](https://github.com/emqx/emqx/pull/11630) Fixed an issue when core node could be stuck at `mria_schema:bootstrap/0`.
 
 
 ## e5.2.0
