@@ -11,43 +11,35 @@
 
 - [#11612](https://github.com/emqx/emqx/pull/11612) During node evacuation, evacuate all disconnected sessions, not only those started with `clean_start` set to `false`.
 
-- [#11532](https://github.com/emqx/emqx/pull/11532) Improve some error reasons when parsing invalid packets.
+- [#11532](https://github.com/emqx/emqx/pull/11532) Improved error messaging for better clarity when parsing invalid packets.
 
 ### Bug Fixes
 
-- [#11493](https://github.com/emqx/emqx/pull/11493) Examples and documentation for /api/v5/publish bad request response have been fixed. Previously the documentation example said that the bad request response could return a list in the body which was not actually the case.
+- [#11493](https://github.com/emqx/emqx/pull/11493) Fixed examples and documentation for /api/v5/publish bad request response. Previously the documentation example said that the bad request response could return a list in the body which was not actually the case.
 
-- [#11499](https://github.com/emqx/emqx/pull/11499) Upgrade Erlang/OTP to 25.3.2-2
+- [#11499](https://github.com/emqx/emqx/pull/11499) Upgraded Erlang/OTP to version 25.3.2-2, which now excludes sensitive data from mnesia_hook log messages.
 
-  Erlang/OTP 25.3.2-2 excludes sensitive data from mnesia_hook log message.
+- [#11506](https://github.com/emqx/emqx/pull/11506) Empty trace log files will no longer be downloaded. After implementing this fix, when attempting to download an empty trace log file using the GET request `/api/v5/trace/clientempty/download`, the server will now respond with a 404 status code and the following JSON message: `{"code":"NOT_FOUND","message":"Trace is empty"}`. This response will be triggered if no events matching the trace condition are found in the log file.
 
-- [#11506](https://github.com/emqx/emqx/pull/11506) Don't download a trace log file if it is empty.
+- [#11522](https://github.com/emqx/emqx/pull/11522) Improved error message for rule engine schema registry when schema name exceeds the permissible length.
 
-  After this fix, GET `/api/v5/trace/clientempty/download` returns 404 `{"code":"NOT_FOUND","message":"Trace is empty"}`
-  If no events matching the trace condition occurred.
+- [#11531](https://github.com/emqx/emqx/pull/11531) Fixed an issue where authorization cache cleaning cli was not working properly for specific client ID.
 
-- [#11522](https://github.com/emqx/emqx/pull/11522) Improved error message for rule engine schema registry when schema name exceeds permissible length.
-
-- [#11531](https://github.com/emqx/emqx/pull/11531) Fixed issue where authorization cache cleaning cli was not working properly for specific client ID.
-
-- [#11564](https://github.com/emqx/emqx/pull/11564) Fix cluster partition autoheal functionality.
-  Implement autohealing for the clusters that split into multiple partitions.
-
+- [#11564](https://github.com/emqx/emqx/pull/11564) Fixed cluster partition autoheal functionality. Implemented autohealing for the clusters that split into multiple partitions.
+  
 - [#11568](https://github.com/emqx/emqx/pull/11568) Fixed an issue where an ill-defined built-in rule action config could be interpreted as a custom user function.
 
-- [#11394](https://github.com/emqx/emqx/pull/11394) Upgrade Kafka producer client `wolff` from 1.7.6 to 1.7.7.
-  This fixes a potential race condition which may cause all Kafka producers to crash if some failed to initialize.
+- [#11394](https://github.com/emqx/emqx/pull/11394) Upgraded Kafka producer client `wolff` from 1.7.6 to 1.7.7. This fixed a potential race condition that might cause all Kafka producers to crash if some failed to initialize.
+  
+- [#11401](https://github.com/emqx/emqx/pull/11401) Fixed the behavior of the rule SQL `mongo_date` function in SQL statement testing in the EMQX Dashboard. The rule SQL `mongo_date` function now returns a string with the format `ISODate(*)`, where * is an ISO date string when running rules in test mode. This format aligns with how MongoDB stores dates.
 
-- [#11401](https://github.com/emqx/emqx/pull/11401) When running one of the rule engine SQL `mongo_date` functions in the EMQX dashboard test interface, the resulting date is formatted as `ISODate(*)`, where * is the date in ISO date format instead of only the ISO date string. This is the format used by MongoDB to store dates.
-
-- [#11547](https://github.com/emqx/emqx/pull/11547) Fix several emqx_bridge issues:
-
-  - fix Cassandra bridge connect error occurring when the bridge is configured without username/password
-  (Cassandra doesn't require user credentials when it is configured with `authenticator: AllowAllAuthenticator`)
-  - fix SQL Server bridge connect error caused by an empty password
-  - make `username` a required field in Oracle bridge
-  - fix IoTDB bridge error caused by setting base URL without scheme (e.g. `<host>:<port>`)
-
+- [#11547](https://github.com/emqx/emqx/pull/11547) Fixed several emqx_bridge issues:
+  - Fixed Cassandra bridge connect error occurring when the bridge is configured without username/password
+  (Cassandra doesn't require user credentials when it is configured with `authenticator: AllowAllAuthenticator`.)
+  - Fixed SQL Server bridge connect error caused by an empty password.
+  - Made `username` a required field in Oracle bridge.
+  - Fixed IoTDB bridge error caused by setting base URL without a scheme (e.g. `<host>:<port>`).
+  
 - [#11630](https://github.com/emqx/emqx/pull/11630) Fixed an issue where the core node could get stuck in the `mria_schema:bootstrap/0` state, preventing new nodes from joining the cluster.
 
 ## e5.2.0
