@@ -832,28 +832,6 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
-**listeners.tcp.$name.authentication**
-
-  *Type*: `array`
-
-  *Default*: `[]`
-
-  Default authentication configs for all MQTT listeners.
-
-For per-listener overrides see <code>authentication</code> in listener configs
-
-This option can be configured with:
-<ul>
-  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
-  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
-  <li>chain: An array of structs.</li>
-</ul>
-
-When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
-
-If there is no decision after a full chain exhaustion, the login is rejected.
-
-
 **listeners.tcp.$name.tcp_options**
 
   *Type*: [broker:tcp_opts](#tcp_opts)
@@ -993,28 +971,6 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   *Default*: `3s`
 
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
-
-
-**listeners.ssl.$name.authentication**
-
-  *Type*: `array`
-
-  *Default*: `[]`
-
-  Default authentication configs for all MQTT listeners.
-
-For per-listener overrides see <code>authentication</code> in listener configs
-
-This option can be configured with:
-<ul>
-  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
-  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
-  <li>chain: An array of structs.</li>
-</ul>
-
-When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
-
-If there is no decision after a full chain exhaustion, the login is rejected.
 
 
 **listeners.ssl.$name.tcp_options**
@@ -1319,28 +1275,6 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
-**listeners.ws.$name.authentication**
-
-  *Type*: `array`
-
-  *Default*: `[]`
-
-  Default authentication configs for all MQTT listeners.
-
-For per-listener overrides see <code>authentication</code> in listener configs
-
-This option can be configured with:
-<ul>
-  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
-  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
-  <li>chain: An array of structs.</li>
-</ul>
-
-When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
-
-If there is no decision after a full chain exhaustion, the login is rejected.
-
-
 **listeners.ws.$name.tcp_options**
 
   *Type*: [broker:tcp_opts](#tcp_opts)
@@ -1485,28 +1419,6 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   *Default*: `3s`
 
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
-
-
-**listeners.wss.$name.authentication**
-
-  *Type*: `array`
-
-  *Default*: `[]`
-
-  Default authentication configs for all MQTT listeners.
-
-For per-listener overrides see <code>authentication</code> in listener configs
-
-This option can be configured with:
-<ul>
-  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
-  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
-  <li>chain: An array of structs.</li>
-</ul>
-
-When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
-
-If there is no decision after a full chain exhaustion, the login is rejected.
 
 
 **listeners.wss.$name.tcp_options**
@@ -2057,6 +1969,35 @@ auto_subscribe:topic@ -->
 
 broker:trace@ -->
 
+{% emqxee %}
+
+## MQTT File Transfer
+
+### File transfer settings
+
+
+
+
+
+
+
+
+
+### Export files to local storage
+
+
+
+
+
+### Export files to S3 storage
+
+
+
+
+
+{% endemqxee %}
+
+
 ## Integration With Prometheus
 
 
@@ -2129,7 +2070,7 @@ Default value is: <code>${name}/instance/${name}~${host}</code>
 
   *Type*: `enum`
 
-  *Default*: `disabled`
+  *Default*: `enabled`
 
   *Optional*: `enabled | disabled`
 
@@ -2140,7 +2081,7 @@ Default value is: <code>${name}/instance/${name}~${host}</code>
 
   *Type*: `enum`
 
-  *Default*: `disabled`
+  *Default*: `enabled`
 
   *Optional*: `enabled | disabled`
 
@@ -2151,14 +2092,18 @@ Default value is: <code>${name}/instance/${name}~${host}</code>
 
   *Type*: `enum`
 
-  *Default*: `disabled`
+  *Default*: `enabled`
+
+  *Optional*: `enabled | disabled`
+
+  Enable or disable VM system info collector.
 
 
 **prometheus.vm_memory_collector**
 
   *Type*: `enum`
 
-  *Default*: `disabled`
+  *Default*: `enabled`
 
   *Optional*: `enabled | disabled`
 
@@ -2169,7 +2114,7 @@ Default value is: <code>${name}/instance/${name}~${host}</code>
 
   *Type*: `enum`
 
-  *Default*: `disabled`
+  *Default*: `enabled`
 
   *Optional*: `enabled | disabled`
 
