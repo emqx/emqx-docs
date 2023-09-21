@@ -60,12 +60,11 @@ EMQX 支持基于 ACL 文件中存储的规则进行授权检查。您可在文�
 - `publish`：发布消息
 - `subscribe`：订阅主题
 - `all`：发布消息和订阅主题
+- 从 v5.1.1 版本开始，EMQX 支持检查发布与订阅操作中的 QoS 与保留消息标志位，您可以在第三个元素中加上 `qos` 或 `retain` 来指定检查的 QoS 或保留消息标志位，例如：
+  - `{publish, [{qos, 1}, {retain, false}]}`：拒绝发布 QoS 为 1 的保留消息
+  - `{publish, {retain, true}}`：拒绝发布保留消息
+  - `{subscribe, {qos, 2}}`：拒绝以 QoS2 订阅主题
 
-从 v5.1.1 版本开始，EMQX 支持检查发布与订阅操作中的 QoS 与保留消息标志位，您可以在第三个元素中加上 `qos` 或 `retain` 来指定检查的 QoS 或保留消息标志位，例如：
-
-- `{publish, [{qos, 1}, {retain, false}]}`：拒绝发布 QoS 为 1 的保留消息
-- `{publish, {retain, true}}`：拒绝发布保留消息
-- `{subscribe, {qos, 2}}`：拒绝以 QoS2 订阅主题
 
 第四个元素用于指定当前规则适用的 MQTT 主题，支持通配符（主题过滤器），可以使用[主题占位符](./authz.md#主题占位符)：
 

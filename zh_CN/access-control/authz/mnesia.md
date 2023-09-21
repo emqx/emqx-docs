@@ -1,10 +1,10 @@
 # 内置数据库
 
 EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的授权规则存储方式。您可以通过 Dashboard 或配置文件设置使用内置数据库作为数据源，通过 Dashboard 或 HTTP API 添加相关授权检查规则。
-::: tip 前置准备：
+::: tip 前置准备
 
-- 熟悉 [EMQX 授权基本概念](./authz.md)
-  :::
+熟悉 [EMQX 授权基本概念](./authz.md)
+:::
 
 ## 通过 Dashboard 配置
 
@@ -97,12 +97,12 @@ curl -X 'POST' \
 
 每条规则应包括如下信息：
 
-- permission：是否允许当前客户端/用户的某类操作请求；可选值：`Allow`、`Deny`
-- action：配置该条规则对应的操作；可选值: `publish`、`subscribe`、 `all`
-- topic：配置该条规则对应的主题，支持[主题占位符](authz.md#主题占位符)
-- qos: (可选) 使用 Number 数组指定指定规则适用的消息 QoS，如 `[0, 1]`、`[1, 2]`。默认为全部 QoS
-- retain: （可选）用于指定当前规则是否支持发布保留消息，可选值有 `true`、`false`，默认允许保留消息
+- `permission`：是否允许当前客户端/用户的某类操作请求；可选值：`Allow`、`Deny`。
+- `action`：配置该条规则对应的操作；可选值: `publish`、`subscribe`、 `all`。
+- `topic`：配置该条规则对应的主题，支持[主题占位符](authz.md#主题占位符)。
+- `qos`: (可选) 使用数字数组指定规则适用的消息 QoS，如 `[0, 1]`、`[1, 2]`。默认为全部 QoS。
+- `retain`: （可选）用于指定当前规则是否支持发布保留消息，可选值有 `true`、`false`，默认允许保留消息。
 
-:::
-`qos` 和 `retain` 字段是从 EMQX v5.1.1 版本开始引入的。
+::: tip
+从 EMQX v5.1.1 版本开始引入了 `qos` 和 `retain` 字段。
 :::
