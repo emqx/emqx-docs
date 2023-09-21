@@ -11,7 +11,7 @@
 
 ### 修复
 
-- [#11493](https://github.com/emqx/emqx/pull/11493) 修复了关于 `/api/v5/publish` 的示例和文档中有关错误请求响应的问题。之前的文档示例指出错误请求的响应可以在响应体中返回一个列表，但实际情况并非如此。
+- [#11493](https://github.com/emqx/emqx/pull/11493) 修复了关于 `/api/v5/publish` 的 REST API 示例文档中错误请求响应的问题。之前的文档示例指出错误请求的响应可以在响应体中返回一个列表，但实际情况并非如此。
 - [#11499](https://github.com/emqx/emqx/pull/11499) 升级 Erlang/OTP 至 25.3.2-2，此版本从 mnesia_hook 日志消息中排除了敏感数据。
 - [#11506](https://github.com/emqx/emqx/pull/11506) 空的跟踪日志文件将不再被下载。在实施此修复后，尝试使用 GET 请求 `/api/v5/trace/clientempty/download` 下载空的跟踪日志文件时，服务器现在将返回 404 状态码以及以下 JSON 消息：`{"code":"NOT_FOUND","message":"Trace is empty"}`。如果在日志文件中未找到与跟踪条件匹配的事件，将触发此响应。
 - [#11522](https://github.com/emqx/emqx/pull/11522) 在规则引擎的编解码功能中，改进了当 schema 名称超出允许的长度时出现的错误消息。
