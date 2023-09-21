@@ -525,7 +525,10 @@
                 - access-control/authn/mongodb
                 - access-control/authn/postgresql
                 - access-control/authn/redis
-                - access-control/authn/ldap
+                - title_en: LDAP
+                  title_zh: LDAP
+                  path: access-control/authn/ldap
+                  edition: ee
                 - access-control/authn/http
             - access-control/authn/jwt
             - access-control/authn/scram
@@ -540,7 +543,10 @@
             - access-control/authz/mongodb
             - access-control/authz/postgresql
             - access-control/authz/redis
-            - access-control/authz/ldap
+            - title_en: LDAP
+              title_zh: LDAP
+              path: access-control/authz/ldap
+              edition: ee
             - access-control/authz/http
         - access-control/blacklist
         - access-control/flapping-detect
