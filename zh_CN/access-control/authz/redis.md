@@ -2,22 +2,22 @@
 
 Redis Authorizer 支持客户端的权限列表存储在 Redis 数据库中。
 
-::: tip 前置准备：
+::: tip 前置准备
 
-- 熟悉 [EMQX 授权基本概念](./authz.md)
-  :::
+熟悉 [EMQX 授权基本概念](./authz.md)
+:::
 
 ## 数据结构与查询指令
 
 Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-types/#hashes) 存储权限数据，用户需要提供一个查询指令模板，且确保查询结果包含以下数据：
 
-- `topic`: 用于指定当前规则适用的主题，可以使用主题过滤器和[主题占位符](./authz.md#主题占位符)
-- `action`: 用于指定当前规则适用于哪些操作，可选值有 `publish`、`subscribe` 和 `all`
-- `qos`:（可选）用于指定当前规则适用的消息 QoS，可选值有 `0`、`1`、`2`，也可以使用 Number 数组同时指定多个 QoS。默认为所有 QoS
-- `retain`: （可选）用于指定当前规则是否支持发布保留消息，可选值有 `true`、`false`，默认允许保留消息
+- `topic`: 用于指定当前规则适用的主题，可以使用主题过滤器和[主题占位符](./authz.md#主题占位符)。
+- `action`: 用于指定当前规则适用于哪些操作，可选值有 `publish`、`subscribe` 和 `all`。
+- `qos`:（可选）用于指定当前规则适用的消息 QoS，可选值有 `0`、`1`、`2`，也可以使用 Number 数组同时指定多个 QoS。默认为所有 QoS。
+- `retain`: （可选）用于指定当前规则是否支持发布保留消息，可选值有 `true`、`false`，默认允许保留消息。
 
 :::
-`qos` 和 `retain` 字段是从 EMQX v5.1.1 版本开始引入的。
+从 EMQX v5.1.1 版本开始引入了 `qos` 和 `retain` 字段。
 :::
 
 添加用户名为 `emqx_u`，允许订阅 `t/1` 主题的权限数据：
