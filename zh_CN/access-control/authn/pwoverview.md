@@ -4,9 +4,25 @@ EMQX 支持通过密码进行身份验证，这种最简单，也是使用最多
 
 除简单便捷的内置数据库外，EMQX 还支持通过与多类后端数据库的集成提供密码认证，包括 MySQL、PostgreSQL、MongoDB 和 Redis。
 
+{% emqxce %}
+
 - [内置数据库](./mnesia.md)
 - [集成 MySQL](./mysql.md)
 - [集成 PostgreSQL](./postgresql.md)
 - [集成 Redis](./redis.md)
 - [集成 MongoDB](./mongodb.md)
 - [使用 HTTP 服务](./http.md)
+
+{% endemqxce %}
+
+{% emqxee %}
+
+- [内置数据库](./mnesia.md)
+- [集成 MySQL](./mysql.md)
+- [集成 PostgreSQL](./postgresql.md)
+- [集成 Redis](./redis.md)
+- [集成 MongoDB](./mongodb.md)
+- [集成 LDAP](./ldap.md)
+- [使用 HTTP 服务](./http.md)
+
+{% endemqxee %}
