@@ -14,27 +14,39 @@ Users need to provide a query template that returns the following data:
 
 - `topic`: Specifies the topic that the rule applies to, which can use topic filters and [topic placeholders](https://claude.ai/chat/authz.md#topic-placeholders).
 - `action`: Specifies the actions that the rule applies to, available options are `publish`, `subscribe`, and `all`.
-- `qos`: (Optional) Specifies the QoS levels that the rule applies to. Value options are `0`, `1`, `2`. It can also be a string separated by `,` to specify multiple QoS levels, e.g. `0,1`. Default is all QoS levels.
+- `qos` (Optional) Used to specify the QoS levels that the current rule applies to. Value options are `0`, `1`, `2`. It can also be a Number array to specify multiple QoS levels. Default is all QoS levels.
 - `retain`: (Optional) Specifies whether the rule supports retained messages. Value options are `true`, `false`. Default is to allow retained messages.
 
 :::
 The `qos` and `retain` fields were introduced in EMQX v5.1.1.
 :::
 
-For example, rules can be stored as [Redis hashes](https://redis.io/docs/manual/data-types/#hashes). Add permission rules to allow user `emqx_u` to subscribe to `t/#` topic:
+For example, rules can be stored as [Redis hashes](https://redis.io/docs/manual/data-types/#hashes).
+
+Adding permission data for user `emqx_u` to subscribe to topic `t/1`:
 
 ```bash
->redis-cli
-127.0.0.1:6379> HSET mqtt_acl:emqx_u t/# subscribe qos 1
-(integer) 1
-127.0.0.1:6379> HSET mqtt_acl:emqx_u t/1 publish retain true
-(integer) 1
+HSET mqtt_acl:emqx_u t/1 subscribe
+```
+
+Due to Redis structure limitations, when using the `qos` and `retain` fields, the field other than topic needs to be placed in a JSON string, for example:
+
+- Adding permission data for user `emqx_u` to subscribe to topic `t/2` with QoS 1 and QoS 2:
+
+```bash
+HSET mqtt_acl:emqx_u t/2 '{ "action": "subscribe", "qos": [1, 2] }'
+```
+
+- Adding permission data to deny user `emqx_u` from publishing retained messages to `t/3`:
+
+```bash
+HSET mqtt_acl:emqx_u t/3 '{ "action": "publish", "retain": false }'
 ```
 
 The corresponding config parameters are:
 
 ```bash
-cmd = "HGET mqtt_acl:${username}"
+cmd = "HGETALL mqtt_acl:${username}"
 ```
 
 Fetched rules are used as permissive ones, i.e., a request is accepted if the topic filter and action match.
