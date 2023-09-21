@@ -5,7 +5,7 @@
 -   **Inaccurate Error Message Displayed After Successful Rolling Upgrade**
 
     Following a rolling upgrade, the `emqx.log` might present an error message. Nonetheless, this error message is harmless, and the upgrade has indeed succeeded.
-    
+
     When performing a rolling upgrade on a core+replicant cluster, you may observe the error message `** ERROR ** Mnesia post_commit hook failed: error:badarg` in the logs. However, it is important to recognize that these errors do not affect the success of the upgrade process, and the cluster can be upgraded without any issues.
 
 ## e5.1.0
@@ -14,7 +14,7 @@
 
     The MongoDB Bridge UI displays duplicated entries for the "Connection Pool Size" parameter. The second instance is utilized for configuring MongoDB connection options, leading to confusion and potential configuration errors.
 
-    > **Fixed Version:** 5.1.0
+    > **Fixed Version:** 5.1.1
 
 -   **TimescaleDB Bridge Status Remains Disconnected after Successful Creation**
 
@@ -23,7 +23,7 @@
     > **Workaround:**
     > Configure usernames and passwords for TimescaleDB, then create a data bridge using the correct credentials.
 
-    > **Fixed Version:** 5.1.0
+    > **Fixed Version:** 5.1.1
 
 -   **Listener Status Not Updated on Dashboard After Command Line Start/Stop**
 
@@ -36,7 +36,7 @@
 
 -   **Plugin Start/Stop Command Only Affects Executing Node, Not Cluster-Wide**
 
-    Executing the start/stop commands for a plugin as shown below affects only the executing node, not other nodes within the cluster. 
+    Executing the start/stop commands for a plugin as shown below affects only the executing node, not other nodes within the cluster.
 
     ```
     ./bin/emqx ctl plugins stop emqx_plugin_template-5.0.0
@@ -53,7 +53,7 @@
     > **Workaround:**
     > Enable any authentication method and create a connection with the correct authentication information.
 
-    > **Fixed Version:** 5.1.0
+    > **Fixed Version:** 5.1.1
 
 -   **Dashboard Error When Using "crt" for "Use Peer Certificate field as ClientId" Option**
 
@@ -61,12 +61,12 @@
 
 -   **Unable to View and Download Files on Replica Nodes in Cluster with File Transfer Feature**
 
-    When using the file transfer function to upload files within a cluster, files uploaded to one of the replica nodes can only be accessed with files list API from the node to which they are uploaded. 
+    When using the file transfer function to upload files within a cluster, files uploaded to one of the replica nodes can only be accessed with files list API from the node to which they are uploaded.
 
     > **Workaround:**
     > Only view and download files from the node to which the file is uploaded.
 
-    > **Fixed Version:** 5.1.0
+    > **Fixed Version:** 5.1.1
 
 -   **Dashboard Fails to Reflect Modified Listener Port**
 
@@ -78,7 +78,7 @@
     }
     ```
 
-    > **Fixed Version:** 5.1.0
+    > **Fixed Version:** 5.1.1
 
 -   **"Max Connections" Parameter Ineffective for "quic" or "ws" Listeners**
 
@@ -92,12 +92,22 @@
 
     When creating a rule with the "republish" action and using `${payload.'msg'}` in the payload, clients subscribed to the republish topic receive `${payload.'msg'}` instead of the actual `${payload.msg}` value.
 
+    > **Fixed Version:** 5.2.0
+
 -   **Default Value of "Connection Pool Size" for Oracle Database is Unchangeable**
 
     Irrespective of the specified value, the "Connection Pool Size" parameter remains fixed at the default value of 8.
 
-    > **Fixed Version:** 5.1.0
+    > **Fixed Version:** 5.1.1
 
 -   **Fail to Update for Subscribed Topic's QoS on Dashboard**
 
     When a CoAP client subscribes to a topic with QoS 0 and changes the QoS to 1, the Dashboard still displays the original QoS value and the actual QoS remains at 0.
+
+-   **Log Files Deleted on EMQX Restart with Rotation Number > 10**
+
+    When the log rotation_number is set to a value greater than 10, the log files with numbers higher than 10 (e.g., emqx.log.11, emqx.log.12, etc.) are still getting deleted upon restarting EMQX.
+
+-   **EMQX Cluster Split-Brain Issue when Node Disconnected for >2 Minutes**
+
+    EMQX 5.x upgrade to OTP25 has encountered a challenge due to the implementation of a more aggressive network fragmentation approach in Erlang OTP 25. Unlike the previous OTP 24 version, even minor network disturbances can now inaccurately trigger split-brain detection in the global component of EMQX.
