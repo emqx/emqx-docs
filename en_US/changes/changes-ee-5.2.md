@@ -15,11 +15,11 @@
 
 ### Bug Fixes
 
-- [#11493](https://github.com/emqx/emqx/pull/11493) Fixed examples and documentation for /api/v5/publish bad request response. Previously the documentation example said that the bad request response could return a list in the body which was not actually the case.
+- [#11493](https://github.com/emqx/emqx/pull/11493) Fixed response examples for `/api/v5/publish` bad request in RESP API documentation. Previously the documentation example said that the bad request response could return a list in the body which was not actually the case.
 
 - [#11499](https://github.com/emqx/emqx/pull/11499) Upgraded Erlang/OTP to version 25.3.2-2, which now excludes sensitive data from mnesia_hook log messages.
 
-- [#11506](https://github.com/emqx/emqx/pull/11506) Empty trace log files will no longer be downloaded. After implementing this fix, when attempting to download an empty trace log file using the GET request `/api/v5/trace/clientempty/download`, the server will now respond with a 404 status code and the following JSON message: `{"code":"NOT_FOUND","message":"Trace is empty"}`. This response will be triggered if no events matching the trace condition are found in the log file.
+- [#11506](https://github.com/emqx/emqx/pull/11506) Previously, attempting to download a non-existent trace log file would result in downloading an empty file. After implementing this fix, when attempting to download an empty trace log file using the GET request `/api/v5/trace/clientempty/download`, the server will now respond with a 404 status code and the following JSON message: `{"code":"NOT_FOUND","message":"Trace is empty"}`. This response will be triggered if no events matching the trace condition are found in the log file. 
 
 - [#11522](https://github.com/emqx/emqx/pull/11522) Improved error message for rule engine schema registry when schema name exceeds the permissible length.
 
