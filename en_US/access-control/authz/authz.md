@@ -1,20 +1,20 @@
 # Authorization
 
-In EMQX, authorization refers to the permission control over the publish/subscribe operation of the MQTT clients. When a client performs publish/subscribe operation, EMQX follows a specific procedure or use the user-specified query statement to query the client's permission list from the configured data source. Based on the query result, EMQX allows or rejects the current operation.
+In EMQX, authorization refers to the permission control over the publish/subscribe operation of the MQTT clients. When a client performs a publish/subscribe operation, EMQX follows a specific procedure or uses the user-specified query statement to query the client's permission list from the configured data source. Based on the query result, EMQX allows or rejects the current operation.
 
-A single permission data of the following components:
+A single permission data of a client has the following components:
 
 | **Permission** | **Client**            | **Operation**                       | **Operation Details**          |
 | -------------- | --------------------- | ----------------------------------- | -------------------------- |
 | Allow/Deny     | Client ID/Username/IP | Publish/Subscribe/Publish-Subscribe | Topic/QoS/Retained Message |
 
-:::
-The support for checking QoS and retained messages in operation details is introduced starting from EMQX v5.1.1.
+::: tip
+Starting from EMQX 5.1.1, the support for checking QoS and retained messages in operation details is introduced.
 :::
 
 The permission list of the client needs to be stored in a specific data source (database, file) in advance. You can update the list during runtime by updating the corresponding data record. 
 
-An file-based authorizer is configured in EMQX by default and you can use the authorizer directly. The authorization is processed based on the predefined rules configured in the ACL file. 
+A file-based authorizer is configured in EMQX by default and you can use the authorizer directly. The authorization is processed based on the predefined rules configured in the ACL file. 
 
 ## How Authorization Works
 
