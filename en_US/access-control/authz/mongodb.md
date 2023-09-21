@@ -2,9 +2,9 @@
 
 This authorizer implements authorization checks by matching publish/subscribe requests against lists of rules stored in the MongoDB database.
 
-::: tip Tip
+::: tip Prerequisite
 
-- Knowledge about [basic EMQX authorization concepts](./authz.md)
+Knowledge about [basic EMQX authorization concepts](./authz.md)
 
 :::
 
@@ -15,8 +15,8 @@ MongoDB authorizer supports storing authorization rules as MongoDB documents. Us
 * `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
 * `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
 * `topic` value specifies the topic filter for topics relevant to the rule. Should be a string that supports wildcards and [topic placeholders](./authz.md#topic-placeholders).
-* `qos` (Optional) Used to specify the QoS levels that the current rule applies to. Value options are `0`, `1`, `2`. It can also be a Number array to specify multiple QoS levels. Default is all QoS levels.
-* `retain` (Optional) Used to specify whether the current rule supports retained messages. Value options are `0`, `1` or `true`, `false`. Default is to allow retained messages.
+* `qos` (Optional) value specifies the QoS levels that the current rule applies to. Value options are `0`, `1`, `2`. It can also be a number array to specify multiple QoS levels. The default is all QoS levels.
+* `retain` (Optional) value specifies whether the current rule supports retained messages. Value options are `0`, `1,` or `true`, `false`. The default is to allow retained messages.
 
 :::
 The `qos` and `retain` fields were introduced in EMQX v5.1.1.

@@ -2,9 +2,9 @@
 
 This authorizer implements authorization checks by matching publish/subscription requests against lists of rules stored in the Redis database.
 
-::: tip Tip
+::: tip Prerequisite
 
-- Knowledge about [basic EMQX authorization concepts](./authz.md)
+Knowledge about [basic EMQX authorization concepts](./authz.md)
 
 :::
 
@@ -14,8 +14,8 @@ Users need to provide a query template that returns the following data:
 
 - `topic`: Specifies the topic that the rule applies to, which can use topic filters and [topic placeholders](https://claude.ai/chat/authz.md#topic-placeholders).
 - `action`: Specifies the actions that the rule applies to, available options are `publish`, `subscribe`, and `all`.
-- `qos` (Optional) Used to specify the QoS levels that the current rule applies to. Value options are `0`, `1`, `2`. It can also be a Number array to specify multiple QoS levels. Default is all QoS levels.
-- `retain`: (Optional) Specifies whether the rule supports retained messages. Value options are `true`, `false`. Default is to allow retained messages.
+- `qos` (Optional) Specifies the QoS levels that the current rule applies to. Value options are `0`, `1`, `2`. It can also be a number array to specify multiple QoS levels. The default is all QoS levels.
+- `retain`: (Optional) Specifies whether the rule supports retained messages. Value options are `true`, `false`. The default is to allow retained messages.
 
 :::
 The `qos` and `retain` fields were introduced in EMQX v5.1.1.
