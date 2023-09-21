@@ -152,7 +152,6 @@ According to the backend data storage used, there are currently 7 different type
 | PostgreSQL        | [Authorization with PostgreSQL as rules storage](./postgresql.md) |
 | MongoDB           | [Authorization with MongoDB as rules storage](./mongodb.md)  |
 | Redis             | [Authorization with Redis as rules storage](./redis.md)      |
-| LDAP              | [Authorization with LDAP directory as rules storage](./ldap.md) |
 | HTTP              | [Authorization with external HTTP service](./http.md)        |
 
 {% endemqxce %}

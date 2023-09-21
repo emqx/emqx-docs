@@ -48,7 +48,6 @@ EMQX supports 8 authentication methods (referred to as authenticator hereafter) 
 | Password-Based | PostgreSQL        | [Authentication with PostgreSQL database as credential storage](postgresql.md) |
 | Password-Based | MongoDB           | [Authentication with MongoDB database as credential storage](./mongodb.md) |
 | Password-Based | Redis             | [Authentication with Redis database as credential storage](./redis.md) |
-| Password-Based | LDAP              | [Authentication with LDAP server as credential storage](./ldap.md) |
 | Password-Based | HTTP Server       | [Authentication using external HTTP API for credential verification](./http.md) |
 | JWT            |                   | [Authentication using JWT](./jwt.md)                         |
 | SCRAM          | Built-in Database | [Authentication using SCRAM](./scram.md)                     |
