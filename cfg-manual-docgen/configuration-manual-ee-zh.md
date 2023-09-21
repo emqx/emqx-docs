@@ -689,6 +689,43 @@ log_burst_limit -->
 
 log_overload_kill -->
 
+{% emqxee %}
+
+## License 设置
+
+
+License provisioned as a string.
+
+**license.key**
+
+  *类型*: `string`
+
+  *默认值*: `MjIwMTExCjAKMTAKRXZhbHVhdGlvbgpjb250YWN0QGVtcXguaW8KZGVmYXVsdAoyMDIzMDEwOQoxODI1CjEwMAo=.MEUCIG62t8W15g05f1cKx3tA3YgJoR0dmyHOPCdbUxBGxgKKAiEAhHKh8dUwhU+OxNEaOn8mgRDtiT3R8RZooqy6dEsOmDI=`
+
+  许可证字符串
+
+
+**license.connection_low_watermark**
+
+  *类型*: `percent`
+
+  *默认值*: `75%`
+
+  低水位限制，低于此水位线时系统会清除连接配额使用告警
+
+
+**license.connection_high_watermark**
+
+  *类型*: `percent`
+
+  *默认值*: `80%`
+
+  高水位线，连接数超过这个水位线时，系统会触发许可证连接配额使用告警
+
+
+
+{% endemqxee %}
+
 ## MQTT/TCP 监听器 - 1883
 
 EMQX 支持配置多个监听器，默认 MQTT/TCP 监听器端口为 `1883`。
@@ -1152,6 +1189,62 @@ once the limit is reached, the restricted client will slow down and even be hung
   Data publish rate.<br/>
 This is used to limit the inbound bytes rate for each client connected to this listener,
 once the limit is reached, the restricted client will slow down and even be hung for a while.
+
+
+
+
+TLS options for QUIC transport.
+
+**listeners.quic.$name.ssl_options.cacertfile**
+
+  *类型*: `string`
+
+  *默认值*: `${EMQX_ETC_DIR}/certs/cacert.pem`
+
+  受信任的PEM格式 CA  证书捆绑文件<br/>
+此文件中的证书用于验证TLS对等方的证书。
+如果要信任新 CA，请将新证书附加到文件中。
+无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
+注意：从文件中失效（删除）证书不会影响已建立的连接。
+
+
+**listeners.quic.$name.ssl_options.certfile**
+
+  *类型*: `string`
+
+  *默认值*: `${EMQX_ETC_DIR}/certs/cert.pem`
+
+  PEM格式证书链文件<br/>
+此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
+然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
+根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
+
+
+**listeners.quic.$name.ssl_options.keyfile**
+
+  *类型*: `string`
+
+  *默认值*: `${EMQX_ETC_DIR}/certs/key.pem`
+
+  PEM格式的私钥文件。
+
+
+**listeners.quic.$name.ssl_options.verify**
+
+  *类型*: `enum`
+
+  *默认值*: `verify_none`
+
+  *可选值*: `verify_peer | verify_none`
+
+  启用或禁用对等验证。
+
+
+**listeners.quic.$name.ssl_options.password**
+
+  *类型*: `string`
+
+  包含用户密码的字符串。仅在私钥文件受密码保护时使用。
 
 
 
@@ -2303,6 +2396,85 @@ Storage backend settings for file transfer
 
 
 
+
+Options for the HTTP transport layer used by the S3 client
+
+**file_transfer.storage.local.exporter.s3.transport_options.ipv6_probe**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  Whether to probe for IPv6 support.
+
+
+**file_transfer.storage.local.exporter.s3.transport_options.connect_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  The timeout when connecting to the HTTP server.
+
+
+**file_transfer.storage.local.exporter.s3.transport_options.pool_type**
+
+  *类型*: `emqx_bridge_http_connector:pool_type`
+
+  *默认值*: `random`
+
+  The type of the pool. Can be one of `random`, `hash`.
+
+
+**file_transfer.storage.local.exporter.s3.transport_options.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  The pool size.
+
+
+**file_transfer.storage.local.exporter.s3.transport_options.enable_pipelining**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
+
+
+**file_transfer.storage.local.exporter.s3.transport_options.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+**file_transfer.storage.local.exporter.s3.transport_options.headers**
+
+  *类型*: `map`
+
+  List of HTTP headers.
+
+
+**file_transfer.storage.local.exporter.s3.transport_options.max_retries**
+
+  *类型*: `non_neg_integer`
+
+  Max retry times if error on sending request.
+
+
+**file_transfer.storage.local.exporter.s3.transport_options.request_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  HTTP request timeout.
+
+
+
 ## 集成 Prometheus
 
 
@@ -2422,6 +2594,51 @@ Prometheus 监控数据推送
   *可选值*: `enabled | disabled`
 
   开启或关闭 VM msacc 采集器, 使用 erlang:statistics(microstate_accounting) 收集微状态计数指标
+
+
+
+<!-- TODO 5.2 -->
+## 集成 OpenTelemetry
+
+
+Open Telemetry Toolkit configuration
+
+**opentelemetry.exporter**
+
+  *类型*: `opentelemetry:exporter`
+
+  Open Telemetry Exporter
+
+
+**opentelemetry.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  Enable or disable open telemetry metrics
+
+
+
+
+Open Telemetry Exporter
+
+**opentelemetry.exporter.endpoint**
+
+  *类型*: `url`
+
+  *默认值*: `http://localhost:4317`
+
+  Open Telemetry Exporter Endpoint
+
+
+**opentelemetry.exporter.interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `10s`
+
+  The interval of sending metrics to Open Telemetry Endpoint
 
 
 
@@ -3039,6 +3256,200 @@ Dashboard 监听器配置。
 
 
 
+
+SSL/TLS options for the dashboard listener.
+
+**dashboard.listeners.https.ssl_options.cacertfile**
+
+  *类型*: `string`
+
+  *默认值*: `${EMQX_ETC_DIR}/certs/cacert.pem`
+
+  受信任的PEM格式 CA  证书捆绑文件<br/>
+此文件中的证书用于验证TLS对等方的证书。
+如果要信任新 CA，请将新证书附加到文件中。
+无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
+注意：从文件中失效（删除）证书不会影响已建立的连接。
+
+
+**dashboard.listeners.https.ssl_options.cacerts**
+
+  *类型*: `boolean`
+
+  Deprecated since 5.1.4.
+
+
+**dashboard.listeners.https.ssl_options.certfile**
+
+  *类型*: `string`
+
+  *默认值*: `${EMQX_ETC_DIR}/certs/cert.pem`
+
+  PEM格式证书链文件<br/>
+此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
+然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
+根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
+
+
+**dashboard.listeners.https.ssl_options.keyfile**
+
+  *类型*: `string`
+
+  *默认值*: `${EMQX_ETC_DIR}/certs/key.pem`
+
+  PEM格式的私钥文件。
+
+
+**dashboard.listeners.https.ssl_options.verify**
+
+  *类型*: `enum`
+
+  *默认值*: `verify_none`
+
+  *可选值*: `verify_peer | verify_none`
+
+  启用或禁用对等验证。
+
+
+**dashboard.listeners.https.ssl_options.reuse_sessions**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用 TLS 会话重用。
+
+
+**dashboard.listeners.https.ssl_options.depth**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `10`
+
+  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
+因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
+如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
+
+
+**dashboard.listeners.https.ssl_options.password**
+
+  *类型*: `string`
+
+  包含用户密码的字符串。仅在私钥文件受密码保护时使用。
+
+
+**dashboard.listeners.https.ssl_options.versions**
+
+  *类型*: `array`
+
+  *默认值*: `["tlsv1.3","tlsv1.2"]`
+
+  支持所有TLS/DTLS版本<br/>
+注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
+
+
+**dashboard.listeners.https.ssl_options.ciphers**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
+<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
+<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
+<br/>
+密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
+选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
+
+名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
+EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
+注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+不兼容的密码套件将被自动删除。
+
+例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
+
+<br/>
+注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
+如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+
+<br/>
+PSK 密码套件：
+<code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
+RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+
+
+**dashboard.listeners.https.ssl_options.secure_renegotiate**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。
+RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。
+
+
+**dashboard.listeners.https.ssl_options.log_level**
+
+  *类型*: `enum`
+
+  *默认值*: `notice`
+
+  *可选值*: `emergency | alert | critical | error | warning | notice | info | debug | none | all`
+
+  SSL 握手的日志级别。默认值是 'notice'，可以设置为 'debug' 用来调查 SSL 握手的问题。
+
+
+**dashboard.listeners.https.ssl_options.hibernate_after**
+
+  *类型*: `duration`
+
+  *默认值*: `5s`
+
+  在闲置一定时间后休眠 SSL 进程，减少其内存占用。
+
+
+**dashboard.listeners.https.ssl_options.dhfile**
+
+  *类型*: `string`
+
+  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
+注意：TLS 1.3不支持<code>dhfile</code>选项。
+
+
+**dashboard.listeners.https.ssl_options.honor_cipher_order**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  一个重要的安全设置，它强制根据服务器指定的顺序而不是客户机指定的顺序设置密码，从而强制服务器管理员执行（通常配置得更正确）安全顺序。
+
+
+**dashboard.listeners.https.ssl_options.client_renegotiation**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  在支持客户机发起的重新协商的协议中，这种操作的资源成本对于服务器来说高于客户机。
+这可能会成为拒绝服务攻击的载体。
+SSL 应用程序已经采取措施来反击此类尝试，但通过将此选项设置为 false，可以严格禁用客户端发起的重新协商。
+默认值为 true。请注意，由于基础密码套件可以加密的消息数量有限，禁用重新协商可能会导致长期连接变得不可用。
+
+
+**dashboard.listeners.https.ssl_options.handshake_timeout**
+
+  *类型*: `duration`
+
+  *默认值*: `15s`
+
+  握手完成所允许的最长时间
+
+
+
 ## API 密钥
 
 
@@ -3107,6 +3518,3514 @@ are distinguished by the topic prefix:
   *默认值*: `false`
 
   是否开启客户端已成功取消订阅主题事件消息。
+
+
+
+## 客户端认证 - 密码认证
+
+### 使用内置数据库进行密码认证
+
+
+使用内置数据库作为认证数据源的认证器的配置项。
+
+**authn:builtin_db.mechanism**
+
+  *类型*: `password_based`
+
+  认证机制。
+
+
+**authn:builtin_db.backend**
+
+  *类型*: `built_in_database`
+
+  后端类型。
+
+
+**authn:builtin_db.user_id_type**
+
+  *类型*: `enum`
+
+  *默认值*: `username`
+
+  *可选值*: `clientid | username`
+
+  指定使用客户端ID `clientid` 还是用户名 `username` 进行认证。
+
+
+**authn:builtin_db.password_hash_algorithm**
+
+  *类型*: [authn-hash:bcrypt_rw](#authn-hash:bcrypt_rw) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
+
+  *默认值*: `{"salt_position":"prefix","name":"sha256"}`
+
+  Options for password hash creation and verification.
+
+
+**authn:builtin_db.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+
+### 使用 MySQL 进行密码认证
+
+
+使用 MySQL 作为认证数据源的认证器的配置项。
+
+**authn:mysql.mechanism**
+
+  *类型*: `password_based`
+
+  认证机制。
+
+
+**authn:mysql.backend**
+
+  *类型*: `mysql`
+
+  后端类型。
+
+
+**authn:mysql.password_hash_algorithm**
+
+  *类型*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
+
+  *默认值*: `{"salt_position":"prefix","name":"sha256"}`
+
+  Options for password hash verification.
+
+
+**authn:mysql.query**
+
+  *类型*: `string`
+
+  用于查询密码散列等用于认证的数据的 SQL 语句。
+
+
+**authn:mysql.query_timeout**
+
+  *类型*: `duration_ms`
+
+  *默认值*: `5s`
+
+  SQL 查询的超时时间。
+
+
+**authn:mysql.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+**authn:mysql.server**
+
+  *类型*: `string`
+
+  The IPv4 or IPv6 address or the hostname to connect to.<br/>
+A host entry has the following form: `Host[:Port]`.<br/>
+The MySQL default port 3306 is used if `[:Port]` is not specified.
+
+
+**authn:mysql.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**authn:mysql.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authn:mysql.username**
+
+  *类型*: `string`
+
+  *默认值*: `root`
+
+  内部数据库的用户名。
+
+
+**authn:mysql.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authn:mysql.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**authn:mysql.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+### 使用 MongoDB 进行密码认证
+
+#### MongoDB 单节点
+
+
+使用 MongoDB (Standalone) 作为认证数据源的认证器的配置项。
+
+**authn:mongo_single.mechanism**
+
+  *类型*: `password_based`
+
+  认证机制。
+
+
+**authn:mongo_single.backend**
+
+  *类型*: `mongodb`
+
+  后端类型。
+
+
+**authn:mongo_single.collection**
+
+  *类型*: `string`
+
+  存储认证数据的集合。
+
+
+**authn:mongo_single.filter**
+
+  *类型*: `map`
+
+  *默认值*: `{}`
+
+  在查询中定义过滤条件的条件表达式。
+过滤器支持如下占位符：
+- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名
+- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符
+
+
+**authn:mongo_single.password_hash_field**
+
+  *类型*: `string`
+
+  *默认值*: `password_hash`
+
+  文档中用于存放密码散列的字段。
+
+
+**authn:mongo_single.salt_field**
+
+  *类型*: `string`
+
+  *默认值*: `salt`
+
+  文档中用于存放盐值的字段。
+
+
+**authn:mongo_single.is_superuser_field**
+
+  *类型*: `string`
+
+  *默认值*: `is_superuser`
+
+  文档中用于定义用户是否具有超级用户权限的字段。
+
+
+**authn:mongo_single.password_hash_algorithm**
+
+  *类型*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
+
+  *默认值*: `{"salt_position":"prefix","name":"sha256"}`
+
+  Options for password hash verification.
+
+
+**authn:mongo_single.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+**authn:mongo_single.mongo_type**
+
+  *类型*: `single`
+
+  *默认值*: `single`
+
+  Standalone 模式。当 MongoDB 服务运行在 standalone 模式下，该配置必须设置为 'single'。
+
+
+**authn:mongo_single.server**
+
+  *类型*: `string`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+主机名具有以下形式：`Host[:Port]`。<br/>
+如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
+
+
+**authn:mongo_single.w_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `unsafe`
+
+  *可选值*: `unsafe | safe`
+
+  写模式。
+
+
+**authn:mongo_single.srv_record**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  使用 DNS SRV 记录。
+
+
+**authn:mongo_single.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authn:mongo_single.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authn:mongo_single.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authn:mongo_single.use_legacy_protocol**
+
+  *类型*: `enum`
+
+  *默认值*: `auto`
+
+  *可选值*: `auto | true | false`
+
+  Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.
+
+
+**authn:mongo_single.auth_source**
+
+  *类型*: `string`
+
+  与用户证书关联的数据库名称。
+
+
+**authn:mongo_single.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**authn:mongo_single.topology**
+
+  *类型*: `topology`
+
+
+**authn:mongo_single.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+#### MongoDB Replica Set 集群
+
+
+使用 MongoDB (Replica Set) 作为认证数据源的认证器的配置项。
+
+**authn:mongo_rs.mechanism**
+
+  *类型*: `password_based`
+
+  认证机制。
+
+
+**authn:mongo_rs.backend**
+
+  *类型*: `mongodb`
+
+  后端类型。
+
+
+**authn:mongo_rs.collection**
+
+  *类型*: `string`
+
+  存储认证数据的集合。
+
+
+**authn:mongo_rs.filter**
+
+  *类型*: `map`
+
+  *默认值*: `{}`
+
+  在查询中定义过滤条件的条件表达式。
+过滤器支持如下占位符：
+- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名
+- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符
+
+
+**authn:mongo_rs.password_hash_field**
+
+  *类型*: `string`
+
+  *默认值*: `password_hash`
+
+  文档中用于存放密码散列的字段。
+
+
+**authn:mongo_rs.salt_field**
+
+  *类型*: `string`
+
+  *默认值*: `salt`
+
+  文档中用于存放盐值的字段。
+
+
+**authn:mongo_rs.is_superuser_field**
+
+  *类型*: `string`
+
+  *默认值*: `is_superuser`
+
+  文档中用于定义用户是否具有超级用户权限的字段。
+
+
+**authn:mongo_rs.password_hash_algorithm**
+
+  *类型*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
+
+  *默认值*: `{"salt_position":"prefix","name":"sha256"}`
+
+  Options for password hash verification.
+
+
+**authn:mongo_rs.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+**authn:mongo_rs.mongo_type**
+
+  *类型*: `rs`
+
+  *默认值*: `rs`
+
+  Replica set模式。当 MongoDB 服务运行在 replica-set 模式下，该配置必须设置为 'rs'。
+
+
+**authn:mongo_rs.servers**
+
+  *类型*: `string`
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+主机名具有以下形式：`Host[:Port]`。
+如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
+
+
+**authn:mongo_rs.w_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `unsafe`
+
+  *可选值*: `unsafe | safe`
+
+  写模式。
+
+
+**authn:mongo_rs.r_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `master`
+
+  *可选值*: `master | slave_ok`
+
+  读模式。
+
+
+**authn:mongo_rs.replica_set_name**
+
+  *类型*: `string`
+
+  副本集的名称。
+
+
+**authn:mongo_rs.srv_record**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  使用 DNS SRV 记录。
+
+
+**authn:mongo_rs.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authn:mongo_rs.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authn:mongo_rs.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authn:mongo_rs.use_legacy_protocol**
+
+  *类型*: `enum`
+
+  *默认值*: `auto`
+
+  *可选值*: `auto | true | false`
+
+  Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.
+
+
+**authn:mongo_rs.auth_source**
+
+  *类型*: `string`
+
+  与用户证书关联的数据库名称。
+
+
+**authn:mongo_rs.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**authn:mongo_rs.topology**
+
+  *类型*: `topology`
+
+
+**authn:mongo_rs.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+#### MongoDB Sharded 集群
+
+
+使用 MongoDB (Sharded Cluster) 作为认证数据源的认证器的配置项。
+
+**authn:mongo_sharded.mechanism**
+
+  *类型*: `password_based`
+
+  认证机制。
+
+
+**authn:mongo_sharded.backend**
+
+  *类型*: `mongodb`
+
+  后端类型。
+
+
+**authn:mongo_sharded.collection**
+
+  *类型*: `string`
+
+  存储认证数据的集合。
+
+
+**authn:mongo_sharded.filter**
+
+  *类型*: `map`
+
+  *默认值*: `{}`
+
+  在查询中定义过滤条件的条件表达式。
+过滤器支持如下占位符：
+- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名
+- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符
+
+
+**authn:mongo_sharded.password_hash_field**
+
+  *类型*: `string`
+
+  *默认值*: `password_hash`
+
+  文档中用于存放密码散列的字段。
+
+
+**authn:mongo_sharded.salt_field**
+
+  *类型*: `string`
+
+  *默认值*: `salt`
+
+  文档中用于存放盐值的字段。
+
+
+**authn:mongo_sharded.is_superuser_field**
+
+  *类型*: `string`
+
+  *默认值*: `is_superuser`
+
+  文档中用于定义用户是否具有超级用户权限的字段。
+
+
+**authn:mongo_sharded.password_hash_algorithm**
+
+  *类型*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
+
+  *默认值*: `{"salt_position":"prefix","name":"sha256"}`
+
+  Options for password hash verification.
+
+
+**authn:mongo_sharded.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+**authn:mongo_sharded.mongo_type**
+
+  *类型*: `sharded`
+
+  *默认值*: `sharded`
+
+  Sharded cluster模式。当 MongoDB 服务运行在 sharded 模式下，该配置必须设置为 'sharded'。
+
+
+**authn:mongo_sharded.servers**
+
+  *类型*: `string`
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+主机名具有以下形式：`Host[:Port]`。
+如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
+
+
+**authn:mongo_sharded.w_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `unsafe`
+
+  *可选值*: `unsafe | safe`
+
+  写模式。
+
+
+**authn:mongo_sharded.srv_record**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  使用 DNS SRV 记录。
+
+
+**authn:mongo_sharded.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authn:mongo_sharded.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authn:mongo_sharded.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authn:mongo_sharded.use_legacy_protocol**
+
+  *类型*: `enum`
+
+  *默认值*: `auto`
+
+  *可选值*: `auto | true | false`
+
+  Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.
+
+
+**authn:mongo_sharded.auth_source**
+
+  *类型*: `string`
+
+  与用户证书关联的数据库名称。
+
+
+**authn:mongo_sharded.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**authn:mongo_sharded.topology**
+
+  *类型*: `topology`
+
+
+**authn:mongo_sharded.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+### 使用 PostgreSQL 进行密码认证
+
+
+使用 PostgreSQL 作为认证数据源的认证器的配置项。
+
+**authn:postgresql.mechanism**
+
+  *类型*: `password_based`
+
+  认证机制。
+
+
+**authn:postgresql.backend**
+
+  *类型*: `postgresql`
+
+  后端类型。
+
+
+**authn:postgresql.password_hash_algorithm**
+
+  *类型*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
+
+  *默认值*: `{"salt_position":"prefix","name":"sha256"}`
+
+  Options for password hash verification.
+
+
+**authn:postgresql.query**
+
+  *类型*: `string`
+
+  用于查询密码散列等用于认证的数据的 SQL 语句。
+
+
+**authn:postgresql.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+**authn:postgresql.server**
+
+  *类型*: `string`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+主机名具有以下形式：`Host[:Port]`。<br/>
+如果未指定 `[:Port]`，则使用 PostgreSQL 默认端口 5432。
+
+
+**authn:postgresql.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**authn:postgresql.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authn:postgresql.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authn:postgresql.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authn:postgresql.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**authn:postgresql.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+### 使用 Redis 进行密码认证
+
+#### Redis 单节点
+
+
+使用 Redis (Standalone) 作为认证数据源的认证器的配置项。
+
+**authn:redis_single.mechanism**
+
+  *类型*: `password_based`
+
+  认证机制。
+
+
+**authn:redis_single.backend**
+
+  *类型*: `redis`
+
+  后端类型。
+
+
+**authn:redis_single.cmd**
+
+  *类型*: `string`
+
+  用于查询密码散列等用于认证的数据的 Redis Command，目前仅支持 <code>HGET</code> 与 <code>HMGET</code>。
+
+
+**authn:redis_single.password_hash_algorithm**
+
+  *类型*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
+
+  *默认值*: `{"salt_position":"prefix","name":"sha256"}`
+
+  Options for password hash verification.
+
+
+**authn:redis_single.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+**authn:redis_single.server**
+
+  *类型*: `string`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+主机名具有以下形式：`Host[:Port]`。<br/>
+如果未指定 `[:Port]`，则使用 Redis 默认端口 6379。
+
+
+**authn:redis_single.redis_type**
+
+  *类型*: `single`
+
+  *默认值*: `single`
+
+  单机模式。当 Redis 服务运行在单机模式下，该配置必须设置为 'single'。
+
+
+**authn:redis_single.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authn:redis_single.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authn:redis_single.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authn:redis_single.database**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `0`
+
+  Redis 数据库 ID。
+
+
+**authn:redis_single.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**authn:redis_single.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+#### Redis 集群
+
+
+使用 Redis (Cluster) 作为认证数据源的认证器的配置项。
+
+**authn:redis_cluster.mechanism**
+
+  *类型*: `password_based`
+
+  认证机制。
+
+
+**authn:redis_cluster.backend**
+
+  *类型*: `redis`
+
+  后端类型。
+
+
+**authn:redis_cluster.cmd**
+
+  *类型*: `string`
+
+  用于查询密码散列等用于认证的数据的 Redis Command，目前仅支持 <code>HGET</code> 与 <code>HMGET</code>。
+
+
+**authn:redis_cluster.password_hash_algorithm**
+
+  *类型*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
+
+  *默认值*: `{"salt_position":"prefix","name":"sha256"}`
+
+  Options for password hash verification.
+
+
+**authn:redis_cluster.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+**authn:redis_cluster.servers**
+
+  *类型*: `string`
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+主机名具有以下形式：`Host[:Port]`。
+如果未指定 `[:Port]`，则使用 Redis 默认端口 6379。
+
+
+**authn:redis_cluster.redis_type**
+
+  *类型*: `cluster`
+
+  *默认值*: `cluster`
+
+  集群模式。当 Redis 服务运行在集群模式下，该配置必须设置为 'cluster'。
+
+
+**authn:redis_cluster.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authn:redis_cluster.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authn:redis_cluster.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authn:redis_cluster.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**authn:redis_cluster.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+#### Redis Sentinel 集群
+
+
+使用 Redis (Sentinel) 作为认证数据源的认证器的配置项。
+
+**authn:redis_sentinel.mechanism**
+
+  *类型*: `password_based`
+
+  认证机制。
+
+
+**authn:redis_sentinel.backend**
+
+  *类型*: `redis`
+
+  后端类型。
+
+
+**authn:redis_sentinel.cmd**
+
+  *类型*: `string`
+
+  用于查询密码散列等用于认证的数据的 Redis Command，目前仅支持 <code>HGET</code> 与 <code>HMGET</code>。
+
+
+**authn:redis_sentinel.password_hash_algorithm**
+
+  *类型*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
+
+  *默认值*: `{"salt_position":"prefix","name":"sha256"}`
+
+  Options for password hash verification.
+
+
+**authn:redis_sentinel.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+**authn:redis_sentinel.servers**
+
+  *类型*: `string`
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+主机名具有以下形式：`Host[:Port]`。
+如果未指定 `[:Port]`，则使用 Redis 默认端口 6379。
+
+
+**authn:redis_sentinel.redis_type**
+
+  *类型*: `sentinel`
+
+  *默认值*: `sentinel`
+
+  哨兵模式。当 Redis 服务运行在哨兵模式下，该配置必须设置为 'sentinel'。
+
+
+**authn:redis_sentinel.sentinel**
+
+  *类型*: `string`
+
+  Redis 哨兵模式下的集群名称。
+
+
+**authn:redis_sentinel.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authn:redis_sentinel.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authn:redis_sentinel.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authn:redis_sentinel.database**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `0`
+
+  Redis 数据库 ID。
+
+
+**authn:redis_sentinel.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**authn:redis_sentinel.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+#### 使用 HTTP 服务进行密码认证
+
+#### HTTP GET 方式
+
+
+使用 HTTP Server 作为认证服务的认证器的配置项 (使用 GET 请求)。
+
+**authn:http_get.method**
+
+  *类型*: `get`
+
+  HTTP 请求方法。
+
+
+**authn:http_get.headers**
+
+  *类型*: `map`
+
+  *默认值*: `{"keep-alive":"timeout=30, max=1000","connection":"keep-alive","cache-control":"no-cache","accept":"application/json"}`
+
+  HTTP Headers 列表 (无 <code>content-type</code>) 。
+
+
+**authn:http_get.mechanism**
+
+  *类型*: `password_based`
+
+  认证机制。
+
+
+**authn:http_get.backend**
+
+  *类型*: `http`
+
+  后端类型。
+
+
+**authn:http_get.url**
+
+  *类型*: `string`
+
+  认证 HTTP 服务器地址。
+
+
+**authn:http_get.body**
+
+  *类型*: `#{term => binary()}`
+
+  HTTP request body，JSON 字符模板，支持使用占位符。
+使用 GET 请求时，将被转换为 URL Query。
+使用 POST 请求时，转换格式将取决于 content-type 头被设置为 application/json 还是 application/x-www-form-urlencoded。
+
+
+
+**authn:http_get.request_timeout**
+
+  *类型*: `duration_ms`
+
+  *默认值*: `5s`
+
+  HTTP 请求超时时长。
+
+
+**authn:http_get.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+**authn:http_get.connect_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  The timeout when connecting to the HTTP server.
+
+
+**authn:http_get.enable_pipelining**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
+
+
+**authn:http_get.max_retries**
+
+  *类型*: `non_neg_integer`
+
+  Deprecated since 5.0.4.
+
+
+**authn:http_get.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  The pool size.
+
+
+**authn:http_get.request**
+
+  *类型*: `connector-http:request`
+
+  Configure HTTP request parameters.
+
+
+**authn:http_get.retry_interval**
+
+  *类型*: `timeout_duration`
+
+  Deprecated since 5.0.4.
+
+
+**authn:http_get.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+#### HTTP POST 方式
+
+
+使用 HTTP Server 作为认证服务的认证器的配置项 (使用 POST 请求)。
+
+**authn:http_post.method**
+
+  *类型*: `post`
+
+  HTTP 请求方法。
+
+
+**authn:http_post.headers**
+
+  *类型*: `map`
+
+  *默认值*: `{"keep-alive":"timeout=30, max=1000","content-type":"application/json","connection":"keep-alive","cache-control":"no-cache","accept":"application/json"}`
+
+  HTTP Headers 列表
+
+
+**authn:http_post.mechanism**
+
+  *类型*: `password_based`
+
+  认证机制。
+
+
+**authn:http_post.backend**
+
+  *类型*: `http`
+
+  后端类型。
+
+
+**authn:http_post.url**
+
+  *类型*: `string`
+
+  认证 HTTP 服务器地址。
+
+
+**authn:http_post.body**
+
+  *类型*: `#{term => binary()}`
+
+  HTTP request body，JSON 字符模板，支持使用占位符。
+使用 GET 请求时，将被转换为 URL Query。
+使用 POST 请求时，转换格式将取决于 content-type 头被设置为 application/json 还是 application/x-www-form-urlencoded。
+
+
+
+**authn:http_post.request_timeout**
+
+  *类型*: `duration_ms`
+
+  *默认值*: `5s`
+
+  HTTP 请求超时时长。
+
+
+**authn:http_post.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+**authn:http_post.connect_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  The timeout when connecting to the HTTP server.
+
+
+**authn:http_post.enable_pipelining**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
+
+
+**authn:http_post.max_retries**
+
+  *类型*: `non_neg_integer`
+
+  Deprecated since 5.0.4.
+
+
+**authn:http_post.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  The pool size.
+
+
+**authn:http_post.request**
+
+  *类型*: `connector-http:request`
+
+  Configure HTTP request parameters.
+
+
+**authn:http_post.retry_interval**
+
+  *类型*: `timeout_duration`
+
+  Deprecated since 5.0.4.
+
+
+**authn:http_post.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+{% emqxee %}
+
+### 使用 LDAP 进行密码认证
+
+
+Configuration of authenticator using LDAP as authentication data source.
+
+**authn:ldap.mechanism**
+
+  *类型*: `password_based`
+
+  认证机制。
+
+
+**authn:ldap.backend**
+
+  *类型*: `ldap`
+
+  后端类型。
+
+
+**authn:ldap.password_attribute**
+
+  *类型*: `string`
+
+  *默认值*: `userPassword`
+
+  Indicates which attribute is used to represent the user's password.
+
+
+**authn:ldap.is_superuser_attribute**
+
+  *类型*: `string`
+
+  *默认值*: `isSuperuser`
+
+  Indicates which attribute is used to represent whether the user is a superuser.
+
+
+**authn:ldap.query_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  Timeout for the LDAP query.
+
+
+**authn:ldap.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+**authn:ldap.server**
+
+  *类型*: `string`
+
+  The IPv4 or IPv6 address or the hostname to connect to.<br/>
+A host entry has the following form: `Host[:Port]`.<br/>
+The LDAP default port 389 is used if `[:Port]` is not specified.
+
+
+**authn:ldap.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authn:ldap.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authn:ldap.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authn:ldap.base_dn**
+
+  *类型*: `string`
+
+  The name of the base object entry (or possibly the root) relative to
+which the Search is to be performed.
+
+
+**authn:ldap.filter**
+
+  *类型*: `string`
+
+  *默认值*: `(objectClass=mqttUser)`
+
+  The filter that defines the conditions that must be fulfilled in order
+for the Search to match a given entry.<br>
+The syntax of the filter follows RFC 4515 and also supports placeholders.
+
+
+**authn:ldap.request_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  Sets the maximum time in milliseconds that is used for each individual request.
+
+
+**authn:ldap.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+{% endemqxee %}
+
+### 附录：认证 Hash 配置
+
+
+Settings for simple algorithms.
+
+**authn-hash:simple.name**
+
+  *类型*: `enum`
+
+  *可选值*: `plain | md5 | sha | sha256 | sha512`
+
+  Simple password hashing algorithm.
+
+
+**authn-hash:simple.salt_position**
+
+  *类型*: `enum`
+
+  *默认值*: `prefix`
+
+  *可选值*: `disable | prefix | suffix`
+
+  Salt position for PLAIN, MD5, SHA, SHA256 and SHA512 algorithms.
+
+
+
+
+Settings for bcrypt password hashing algorithm.
+
+**authn-hash:bcrypt.name**
+
+  *类型*: `bcrypt`
+
+  BCRYPT password hashing.
+
+
+
+
+Settings for bcrypt password hashing algorithm (for DB backends with write capability).
+
+**authn-hash:bcrypt_rw.name**
+
+  *类型*: `bcrypt`
+
+  BCRYPT password hashing.
+
+
+**authn-hash:bcrypt_rw.salt_rounds**
+
+  *类型*: `integer`
+
+  *默认值*: `10`
+
+  *可选值*: `5-10`
+
+  Work factor for BCRYPT password generation.
+
+
+
+
+Settings for PBKDF2 password hashing algorithm.
+
+**authn-hash:pbkdf2.name**
+
+  *类型*: `pbkdf2`
+
+  PBKDF2 password hashing.
+
+
+**authn-hash:pbkdf2.mac_fun**
+
+  *类型*: `enum`
+
+  *可选值*: `md4 | md5 | ripemd160 | sha | sha224 | sha256 | sha384 | sha512`
+
+  Specifies mac_fun for PBKDF2 hashing algorithm.
+
+
+**authn-hash:pbkdf2.iterations**
+
+  *类型*: `integer`
+
+  Iteration count for PBKDF2 hashing algorithm.
+
+
+**authn-hash:pbkdf2.dk_length**
+
+  *类型*: `integer`
+
+  Derived length for PBKDF2 hashing algorithm. If not specified, calculated automatically based on `mac_fun`.
+
+
+
+## 客户端认证 - JWT
+
+
+用于认证的 JWT 使用 HMAC 算法签发时的配置。
+
+**authn:jwt_hmac.algorithm**
+
+  *类型*: `enum`
+
+  *可选值*: `hmac-based`
+
+  JWT 签名算法，支持 HMAC (配置为 <code>hmac-based</code>）和 RSA、ECDSA (配置为 <code>public-key</code>)。
+
+
+**authn:jwt_hmac.secret**
+
+  *类型*: `string`
+
+  使用 HMAC 算法时用于验证 JWT 的密钥
+
+
+**authn:jwt_hmac.secret_base64_encoded**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  密钥是否为 Base64 编码。
+
+
+**authn:jwt_hmac.mechanism**
+
+  *类型*: `jwt`
+
+  认证机制。
+
+
+**authn:jwt_hmac.acl_claim_name**
+
+  *类型*: `string`
+
+  *默认值*: `acl`
+
+  JWT claim name to use for getting ACL rules.
+
+
+**authn:jwt_hmac.verify_claims**
+
+  *类型*: `[term]`
+
+  *默认值*: `[]`
+
+  需要验证的自定义声明列表，它是一个名称/值对列表。
+值可以使用以下占位符：
+- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名
+- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符
+认证时将验证 JWT（取自 Password 字段）中 claims 的值是否与 <code>verify_claims</code> 中要求的相匹配。
+
+
+**authn:jwt_hmac.from**
+
+  *类型*: `enum`
+
+  *默认值*: `password`
+
+  *可选值*: `username | password`
+
+  指定客户端连接请求中 JWT 的位置；可选值： password、 username（分别对应于 MQTT 客户端 CONNECT 报文中的 Password 和 Username 字段）
+
+
+**authn:jwt_hmac.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+
+
+用于认证的 JWTs 需要从 JWKS 端点获取时的配置。
+
+**authn:jwt_jwks.use_jwks**
+
+  *类型*: `enum`
+
+  *可选值*: `true`
+
+  是否使用 JWKS。
+
+
+**authn:jwt_jwks.endpoint**
+
+  *类型*: `string`
+
+  JWKS 端点， 它是一个以 JWKS 格式返回服务端的公钥集的只读端点。
+
+
+**authn:jwt_jwks.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authn:jwt_jwks.refresh_interval**
+
+  *类型*: `integer`
+
+  *默认值*: `300`
+
+  JWKS 刷新间隔。
+
+
+**authn:jwt_jwks.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  SSL 选项。
+
+
+**authn:jwt_jwks.mechanism**
+
+  *类型*: `jwt`
+
+  认证机制。
+
+
+**authn:jwt_jwks.acl_claim_name**
+
+  *类型*: `string`
+
+  *默认值*: `acl`
+
+  JWT claim name to use for getting ACL rules.
+
+
+**authn:jwt_jwks.verify_claims**
+
+  *类型*: `[term]`
+
+  *默认值*: `[]`
+
+  需要验证的自定义声明列表，它是一个名称/值对列表。
+值可以使用以下占位符：
+- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名
+- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符
+认证时将验证 JWT（取自 Password 字段）中 claims 的值是否与 <code>verify_claims</code> 中要求的相匹配。
+
+
+**authn:jwt_jwks.from**
+
+  *类型*: `enum`
+
+  *默认值*: `password`
+
+  *可选值*: `username | password`
+
+  指定客户端连接请求中 JWT 的位置；可选值： password、 username（分别对应于 MQTT 客户端 CONNECT 报文中的 Password 和 Username 字段）
+
+
+**authn:jwt_jwks.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+
+
+用于认证的 JWT 使用 RSA 或 ECDSA 算法签发时的配置。
+
+**authn:jwt_public_key.algorithm**
+
+  *类型*: `enum`
+
+  *可选值*: `public-key`
+
+  JWT 签名算法，支持 HMAC (配置为 <code>hmac-based</code>）和 RSA、ECDSA (配置为 <code>public-key</code>)。
+
+
+**authn:jwt_public_key.public_key**
+
+  *类型*: `string`
+
+  用于验证 JWT 的公钥。
+
+
+**authn:jwt_public_key.mechanism**
+
+  *类型*: `jwt`
+
+  认证机制。
+
+
+**authn:jwt_public_key.acl_claim_name**
+
+  *类型*: `string`
+
+  *默认值*: `acl`
+
+  JWT claim name to use for getting ACL rules.
+
+
+**authn:jwt_public_key.verify_claims**
+
+  *类型*: `[term]`
+
+  *默认值*: `[]`
+
+  需要验证的自定义声明列表，它是一个名称/值对列表。
+值可以使用以下占位符：
+- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名
+- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符
+认证时将验证 JWT（取自 Password 字段）中 claims 的值是否与 <code>verify_claims</code> 中要求的相匹配。
+
+
+**authn:jwt_public_key.from**
+
+  *类型*: `enum`
+
+  *默认值*: `password`
+
+  *可选值*: `username | password`
+
+  指定客户端连接请求中 JWT 的位置；可选值： password、 username（分别对应于 MQTT 客户端 CONNECT 报文中的 Password 和 Username 字段）
+
+
+**authn:jwt_public_key.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+
+## 客户端认证 - MQTT 增强认证
+
+
+Settings for Salted Challenge Response Authentication Mechanism
+(SCRAM) authentication.
+
+**authn:scram.mechanism**
+
+  *类型*: `scram`
+
+  认证机制。
+
+
+**authn:scram.backend**
+
+  *类型*: `built_in_database`
+
+  后端类型。
+
+
+**authn:scram.algorithm**
+
+  *类型*: `enum`
+
+  *默认值*: `sha256`
+
+  *可选值*: `sha256 | sha512`
+
+  Hashing algorithm.
+
+
+**authn:scram.iteration_count**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `4096`
+
+  Iteration count.
+
+
+**authn:scram.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+
+
+
+<!-- ### GCP IoT Core 认证 -->
+<!-- "@authn:gcp_device@", -->
+
+## 客户端认证 - PSK 认证
+
+
+此配置用于启用 TLS-PSK 身份验证。
+
+PSK 是 “Pre-Shared-Keys” 的缩写。
+
+注意: 确保 SSL 监听器仅启用了 'tlsv1.2'，并且配置了PSK 密码套件，例如 'RSA-PSK-AES256-GCM-SHA384'。
+
+可以通过查看监听器中的 SSL 选项，了解更多详细信息。
+
+可以通过配置 'init_file' 来设置初始化的 ID 和 密钥
+
+**psk_authentication.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  是否开启 TLS PSK 支持
+
+
+**psk_authentication.init_file**
+
+  *类型*: `string`
+
+  如果设置了初始化文件，EMQX 将在启动时从初始化文件中导入 PSK 信息到内建数据库中。
+这个文件需要按行进行组织，每一行必须遵守如下格式: <code>PSKIdentity:SharedSecret</code>
+例如: <code>mydevice1:c2VjcmV0</code>
+
+
+**psk_authentication.separator**
+
+  *类型*: `string`
+
+  *默认值*: `:`
+
+  PSK 文件中 <code>PSKIdentity</code> 和 <code>SharedSecret</code> 之间的分隔符
+
+
+**psk_authentication.chunk_size**
+
+  *类型*: `integer`
+
+  *默认值*: `50`
+
+  将 PSK 文件导入到内建数据时每个块的大小
+
+
+
+
+## 客户端授权
+
+### 授权设置
+
+
+授权相关
+
+**authorization.no_match**
+
+  *类型*: `enum`
+
+  *默认值*: `allow`
+
+  *可选值*: `allow | deny`
+
+  如果用户或客户端不匹配ACL规则，或者从可配置授权源(比如内置数据库、HTTP API 或 PostgreSQL 等。)内未找
+到此类用户或客户端时，模式的认访问控制操作。
+在“授权”中查找更多详细信息。
+
+
+**authorization.deny_action**
+
+  *类型*: `enum`
+
+  *默认值*: `ignore`
+
+  *可选值*: `ignore | disconnect`
+
+  授权检查拒绝操作时的操作。
+
+
+**authorization.cache**
+
+  *类型*: `broker:authz_cache`
+
+
+**authorization.sources**
+
+  *类型*: `array`
+
+  *默认值*: `[{"type":"file","path":"${EMQX_ETC_DIR}/acl.conf","enable":true}]`
+
+  授权数据源。<br/>
+授权（ACL）数据源的列表。
+它被设计为一个数组，而不是一个散列映射，
+所以可以作为链式访问控制。<br/>
+
+当授权一个 'publish' 或 'subscribe' 行为时，
+该配置列表中的所有数据源将按顺序进行检查。
+如果在某个客户端未找到时(使用 ClientID 或 Username)。
+将会移动到下一个数据源。直至得到 'allow' 或 'deny' 的结果。<br/>
+
+如果在任何数据源中都未找到对应的客户端信息。
+配置的默认行为 ('authorization.no_match') 将生效。<br/>
+
+注意：
+数据源使用 'type' 进行标识。
+使用同一类型的数据源多于一次不被允许。
+
+
+
+
+Settings for the authorization cache.
+
+**authorization.cache.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用或禁用授权缓存。
+
+
+**authorization.cache.max_size**
+
+  *类型*: `integer`
+
+  *默认值*: `32`
+
+  *可选值*: `1-1048576`
+
+  缓存项的最大数量。
+
+
+**authorization.cache.ttl**
+
+  *类型*: `duration`
+
+  *默认值*: `1m`
+
+  缓存数据的生存时间。
+
+
+
+### 基于 ACL 文件进行授权
+
+
+使用静态文件授权
+
+**authorization.sources.$INDEX.type**
+
+  *类型*: `file`
+
+  数据后端类型
+
+
+**authorization.sources.$INDEX.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+
+
+**authorization.sources.$INDEX.path**
+
+  *类型*: `string`
+
+  包含 ACL 规则的文件路径。
+如果在启动 EMQX 节点前预先配置该路径，
+那么可以将该文件置于任何 EMQX 可以访问到的位置。
+
+如果从 EMQX Dashboard 或 HTTP API 创建或修改了规则集，
+那么EMQX将会生成一个新的文件并将它存放在 `data_dir` 下的 `authz` 子目录中，
+并从此弃用旧的文件。
+
+
+
+### 基于内置数据库进行授权
+
+
+使用内部数据库授权（mnesia）。
+
+**authorization.sources.$INDEX.type**
+
+  *类型*: `built_in_database`
+
+  数据后端类型
+
+
+**authorization.sources.$INDEX.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+
+
+
+### 基于 MySQL 进行授权
+
+
+使用 MySOL 数据库授权
+
+**authorization.sources.$INDEX.type**
+
+  *类型*: `mysql`
+
+  数据后端类型
+
+
+**authorization.sources.$INDEX.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+
+
+**authorization.sources.$INDEX.server**
+
+  *类型*: `string`
+
+  The IPv4 or IPv6 address or the hostname to connect to.<br/>
+A host entry has the following form: `Host[:Port]`.<br/>
+The MySQL default port 3306 is used if `[:Port]` is not specified.
+
+
+**authorization.sources.$INDEX.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**authorization.sources.$INDEX.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authorization.sources.$INDEX.username**
+
+  *类型*: `string`
+
+  *默认值*: `root`
+
+  内部数据库的用户名。
+
+
+**authorization.sources.$INDEX.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authorization.sources.$INDEX.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**authorization.sources.$INDEX.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+**authorization.sources.$INDEX.prepare_statement**
+
+  *类型*: `map`
+
+  SQL 预处理语句列表。
+
+
+**authorization.sources.$INDEX.query**
+
+  *类型*: `string`
+
+  访问控制数据查询语句/查询命令。
+
+
+### 基于 PostgreSQL 进行授权
+
+
+使用 PostgreSQL 数据库授权
+
+**authorization.sources.$INDEX.type**
+
+  *类型*: `postgresql`
+
+  数据后端类型
+
+
+**authorization.sources.$INDEX.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+
+
+**authorization.sources.$INDEX.server**
+
+  *类型*: `string`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+主机名具有以下形式：`Host[:Port]`。<br/>
+如果未指定 `[:Port]`，则使用 PostgreSQL 默认端口 5432。
+
+
+**authorization.sources.$INDEX.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**authorization.sources.$INDEX.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authorization.sources.$INDEX.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authorization.sources.$INDEX.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authorization.sources.$INDEX.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**authorization.sources.$INDEX.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+**authorization.sources.$INDEX.prepare_statement**
+
+  *类型*: `map`
+
+  SQL 预处理语句列表。
+
+
+**authorization.sources.$INDEX.query**
+
+  *类型*: `string`
+
+  访问控制数据查询语句/查询命令。
+
+
+
+### 基于 MongoDB 进行授权
+
+### MongoDB 单节点
+
+
+使用 MongoDB 授权（单实例）。
+
+**authorization.sources.$INDEX.type**
+
+  *类型*: `mongodb`
+
+  数据后端类型
+
+
+**authorization.sources.$INDEX.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+
+
+**authorization.sources.$INDEX.collection**
+
+  *类型*: `string`
+
+  `MongoDB` 授权数据集。
+
+
+**authorization.sources.$INDEX.filter**
+
+  *类型*: `map`
+
+  *默认值*: `{}`
+
+  在查询中定义过滤条件的条件表达式。
+过滤器支持如下占位符：<br/>
+- <code>${username}</code>：将在运行时被替换为客户端连接时使用的用户名<br/>
+- <code>${clientid}</code>：将在运行时被替换为客户端连接时使用的客户端标识符
+
+
+**authorization.sources.$INDEX.mongo_type**
+
+  *类型*: `single`
+
+  *默认值*: `single`
+
+  Standalone 模式。当 MongoDB 服务运行在 standalone 模式下，该配置必须设置为 'single'。
+
+
+**authorization.sources.$INDEX.server**
+
+  *类型*: `string`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+主机名具有以下形式：`Host[:Port]`。<br/>
+如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
+
+
+**authorization.sources.$INDEX.w_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `unsafe`
+
+  *可选值*: `unsafe | safe`
+
+  写模式。
+
+
+**authorization.sources.$INDEX.srv_record**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  使用 DNS SRV 记录。
+
+
+**authorization.sources.$INDEX.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authorization.sources.$INDEX.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authorization.sources.$INDEX.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authorization.sources.$INDEX.use_legacy_protocol**
+
+  *类型*: `enum`
+
+  *默认值*: `auto`
+
+  *可选值*: `auto | true | false`
+
+  Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.
+
+
+**authorization.sources.$INDEX.auth_source**
+
+  *类型*: `string`
+
+  与用户证书关联的数据库名称。
+
+
+**authorization.sources.$INDEX.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**authorization.sources.$INDEX.topology**
+
+  *类型*: `topology`
+
+
+**authorization.sources.$INDEX.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+### MongoDB Replica Set 集群
+
+
+使用 MongoDB 授权（副本集模式）
+
+**authorization.sources.$INDEX.type**
+
+  *类型*: `mongodb`
+
+  数据后端类型
+
+
+**authorization.sources.$INDEX.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+
+
+**authorization.sources.$INDEX.collection**
+
+  *类型*: `string`
+
+  `MongoDB` 授权数据集。
+
+
+**authorization.sources.$INDEX.filter**
+
+  *类型*: `map`
+
+  *默认值*: `{}`
+
+  在查询中定义过滤条件的条件表达式。
+过滤器支持如下占位符：<br/>
+- <code>${username}</code>：将在运行时被替换为客户端连接时使用的用户名<br/>
+- <code>${clientid}</code>：将在运行时被替换为客户端连接时使用的客户端标识符
+
+
+**authorization.sources.$INDEX.mongo_type**
+
+  *类型*: `rs`
+
+  *默认值*: `rs`
+
+  Replica set模式。当 MongoDB 服务运行在 replica-set 模式下，该配置必须设置为 'rs'。
+
+
+**authorization.sources.$INDEX.servers**
+
+  *类型*: `string`
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+主机名具有以下形式：`Host[:Port]`。
+如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
+
+
+**authorization.sources.$INDEX.w_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `unsafe`
+
+  *可选值*: `unsafe | safe`
+
+  写模式。
+
+
+**authorization.sources.$INDEX.r_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `master`
+
+  *可选值*: `master | slave_ok`
+
+  读模式。
+
+
+**authorization.sources.$INDEX.replica_set_name**
+
+  *类型*: `string`
+
+  副本集的名称。
+
+
+**authorization.sources.$INDEX.srv_record**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  使用 DNS SRV 记录。
+
+
+**authorization.sources.$INDEX.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authorization.sources.$INDEX.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authorization.sources.$INDEX.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authorization.sources.$INDEX.use_legacy_protocol**
+
+  *类型*: `enum`
+
+  *默认值*: `auto`
+
+  *可选值*: `auto | true | false`
+
+  Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.
+
+
+**authorization.sources.$INDEX.auth_source**
+
+  *类型*: `string`
+
+  与用户证书关联的数据库名称。
+
+
+**authorization.sources.$INDEX.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**authorization.sources.$INDEX.topology**
+
+  *类型*: `topology`
+
+
+**authorization.sources.$INDEX.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+#### MongoDB Sharded 集群
+
+
+使用 MongoDB 授权（分片集群模式）。
+
+**authorization.sources.$INDEX.type**
+
+  *类型*: `mongodb`
+
+  数据后端类型
+
+
+**authorization.sources.$INDEX.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+
+
+**authorization.sources.$INDEX.collection**
+
+  *类型*: `string`
+
+  `MongoDB` 授权数据集。
+
+
+**authorization.sources.$INDEX.filter**
+
+  *类型*: `map`
+
+  *默认值*: `{}`
+
+  在查询中定义过滤条件的条件表达式。
+过滤器支持如下占位符：<br/>
+- <code>${username}</code>：将在运行时被替换为客户端连接时使用的用户名<br/>
+- <code>${clientid}</code>：将在运行时被替换为客户端连接时使用的客户端标识符
+
+
+**authorization.sources.$INDEX.mongo_type**
+
+  *类型*: `sharded`
+
+  *默认值*: `sharded`
+
+  Sharded cluster模式。当 MongoDB 服务运行在 sharded 模式下，该配置必须设置为 'sharded'。
+
+
+**authorization.sources.$INDEX.servers**
+
+  *类型*: `string`
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+主机名具有以下形式：`Host[:Port]`。
+如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
+
+
+**authorization.sources.$INDEX.w_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `unsafe`
+
+  *可选值*: `unsafe | safe`
+
+  写模式。
+
+
+**authorization.sources.$INDEX.srv_record**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  使用 DNS SRV 记录。
+
+
+**authorization.sources.$INDEX.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authorization.sources.$INDEX.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authorization.sources.$INDEX.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authorization.sources.$INDEX.use_legacy_protocol**
+
+  *类型*: `enum`
+
+  *默认值*: `auto`
+
+  *可选值*: `auto | true | false`
+
+  Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.
+
+
+**authorization.sources.$INDEX.auth_source**
+
+  *类型*: `string`
+
+  与用户证书关联的数据库名称。
+
+
+**authorization.sources.$INDEX.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**authorization.sources.$INDEX.topology**
+
+  *类型*: `topology`
+
+
+**authorization.sources.$INDEX.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+### 基于 Redis 进行授权
+
+### Redis 单节点
+
+
+使用 Redis 授权（集群模式）。
+
+**authorization.sources.$INDEX.type**
+
+  *类型*: `redis`
+
+  数据后端类型
+
+
+**authorization.sources.$INDEX.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+
+
+**authorization.sources.$INDEX.servers**
+
+  *类型*: `string`
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+主机名具有以下形式：`Host[:Port]`。
+如果未指定 `[:Port]`，则使用 Redis 默认端口 6379。
+
+
+**authorization.sources.$INDEX.redis_type**
+
+  *类型*: `cluster`
+
+  *默认值*: `cluster`
+
+  集群模式。当 Redis 服务运行在集群模式下，该配置必须设置为 'cluster'。
+
+
+**authorization.sources.$INDEX.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authorization.sources.$INDEX.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authorization.sources.$INDEX.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authorization.sources.$INDEX.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**authorization.sources.$INDEX.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+**authorization.sources.$INDEX.cmd**
+
+  *类型*: `string`
+
+  访问控制数据查查询命令
+
+
+
+### Redis 集群
+
+
+使用 Redis 授权（单实例）。
+
+**authorization.sources.$INDEX.type**
+
+  *类型*: `redis`
+
+  数据后端类型
+
+
+**authorization.sources.$INDEX.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+
+
+**authorization.sources.$INDEX.server**
+
+  *类型*: `string`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+主机名具有以下形式：`Host[:Port]`。<br/>
+如果未指定 `[:Port]`，则使用 Redis 默认端口 6379。
+
+
+**authorization.sources.$INDEX.redis_type**
+
+  *类型*: `single`
+
+  *默认值*: `single`
+
+  单机模式。当 Redis 服务运行在单机模式下，该配置必须设置为 'single'。
+
+
+**authorization.sources.$INDEX.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authorization.sources.$INDEX.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authorization.sources.$INDEX.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authorization.sources.$INDEX.database**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `0`
+
+  Redis 数据库 ID。
+
+
+**authorization.sources.$INDEX.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**authorization.sources.$INDEX.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+**authorization.sources.$INDEX.cmd**
+
+  *类型*: `string`
+
+  访问控制数据查查询命令
+
+
+
+### Redis Sentinel 集群
+
+
+使用 Redis 授权（哨兵模式）。
+
+**authorization.sources.$INDEX.type**
+
+  *类型*: `redis`
+
+  数据后端类型
+
+
+**authorization.sources.$INDEX.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+
+
+**authorization.sources.$INDEX.servers**
+
+  *类型*: `string`
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+主机名具有以下形式：`Host[:Port]`。
+如果未指定 `[:Port]`，则使用 Redis 默认端口 6379。
+
+
+**authorization.sources.$INDEX.redis_type**
+
+  *类型*: `sentinel`
+
+  *默认值*: `sentinel`
+
+  哨兵模式。当 Redis 服务运行在哨兵模式下，该配置必须设置为 'sentinel'。
+
+
+**authorization.sources.$INDEX.sentinel**
+
+  *类型*: `string`
+
+  Redis 哨兵模式下的集群名称。
+
+
+**authorization.sources.$INDEX.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authorization.sources.$INDEX.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authorization.sources.$INDEX.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authorization.sources.$INDEX.database**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `0`
+
+  Redis 数据库 ID。
+
+
+**authorization.sources.$INDEX.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**authorization.sources.$INDEX.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+**authorization.sources.$INDEX.cmd**
+
+  *类型*: `string`
+
+  访问控制数据查查询命令
+
+
+
+{% emqxee %}
+
+### 基于 LDAP 进行授权
+
+
+AuthZ with LDAP
+
+**authorization.sources.$INDEX.type**
+
+  *类型*: `ldap`
+
+  数据后端类型
+
+
+**authorization.sources.$INDEX.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+
+
+**authorization.sources.$INDEX.publish_attribute**
+
+  *类型*: `string`
+
+  *默认值*: `mqttPublishTopic`
+
+  Indicates which attribute is used to represent the allowed topics list of the `publish`.
+
+
+**authorization.sources.$INDEX.subscribe_attribute**
+
+  *类型*: `string`
+
+  *默认值*: `mqttSubscriptionTopic`
+
+  Indicates which attribute is used to represent the allowed topics list of the `subscribe`.
+
+
+**authorization.sources.$INDEX.all_attribute**
+
+  *类型*: `string`
+
+  *默认值*: `mqttPubSubTopic`
+
+  Indicates which attribute is used to represent the both allowed topics list of  `publish` and `subscribe`.
+
+
+**authorization.sources.$INDEX.query_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  Timeout for the LDAP query.
+
+
+**authorization.sources.$INDEX.server**
+
+  *类型*: `string`
+
+  The IPv4 or IPv6 address or the hostname to connect to.<br/>
+A host entry has the following form: `Host[:Port]`.<br/>
+The LDAP default port 389 is used if `[:Port]` is not specified.
+
+
+**authorization.sources.$INDEX.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**authorization.sources.$INDEX.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**authorization.sources.$INDEX.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**authorization.sources.$INDEX.base_dn**
+
+  *类型*: `string`
+
+  The name of the base object entry (or possibly the root) relative to
+which the Search is to be performed.
+
+
+**authorization.sources.$INDEX.filter**
+
+  *类型*: `string`
+
+  *默认值*: `(objectClass=mqttUser)`
+
+  The filter that defines the conditions that must be fulfilled in order
+for the Search to match a given entry.<br>
+The syntax of the filter follows RFC 4515 and also supports placeholders.
+
+
+**authorization.sources.$INDEX.request_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  Sets the maximum time in milliseconds that is used for each individual request.
+
+
+**authorization.sources.$INDEX.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+{% endemqxee %}
+
+### 基于 HTTP 应用进行授权
+
+#### HTTP GET 方式
+
+
+使用外部 HTTP 服务器授权(GET 请求)。
+
+**authorization.sources.$INDEX.type**
+
+  *类型*: `http`
+
+  数据后端类型
+
+
+**authorization.sources.$INDEX.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+
+
+**authorization.sources.$INDEX.url**
+
+  *类型*: `string`
+
+  授权 HTTP 服务器地址。
+
+
+**authorization.sources.$INDEX.request_timeout**
+
+  *类型*: `string`
+
+  *默认值*: `30s`
+
+  HTTP 请求超时时长。
+
+
+**authorization.sources.$INDEX.body**
+
+  *类型*: `map`
+
+  HTTP request body。
+
+
+**authorization.sources.$INDEX.connect_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  The timeout when connecting to the HTTP server.
+
+
+**authorization.sources.$INDEX.enable_pipelining**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
+
+
+**authorization.sources.$INDEX.max_retries**
+
+  *类型*: `non_neg_integer`
+
+  Deprecated since 5.0.4.
+
+
+**authorization.sources.$INDEX.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  The pool size.
+
+
+**authorization.sources.$INDEX.request**
+
+  *类型*: `connector-http:request`
+
+  Configure HTTP request parameters.
+
+
+**authorization.sources.$INDEX.retry_interval**
+
+  *类型*: `timeout_duration`
+
+  Deprecated since 5.0.4.
+
+
+**authorization.sources.$INDEX.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+**authorization.sources.$INDEX.method**
+
+  *类型*: `get`
+
+  HTTP 请求方法
+
+
+**authorization.sources.$INDEX.headers**
+
+  *类型*: `[{binary, binary()}]`
+
+  *默认值*: `{"keep-alive":"timeout=30, max=1000","connection":"keep-alive","cache-control":"no-cache","accept":"application/json"}`
+
+  HTTP Headers 列表 (无 <code>content-type</code>) 。
+
+
+
+#### HTTP POST 方式
+
+
+使用外部 HTTP 服务器授权(POST 请求)。
+
+**authorization.sources.$INDEX.type**
+
+  *类型*: `http`
+
+  数据后端类型
+
+
+**authorization.sources.$INDEX.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+
+
+**authorization.sources.$INDEX.url**
+
+  *类型*: `string`
+
+  授权 HTTP 服务器地址。
+
+
+**authorization.sources.$INDEX.request_timeout**
+
+  *类型*: `string`
+
+  *默认值*: `30s`
+
+  HTTP 请求超时时长。
+
+
+**authorization.sources.$INDEX.body**
+
+  *类型*: `map`
+
+  HTTP request body。
+
+
+**authorization.sources.$INDEX.connect_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  The timeout when connecting to the HTTP server.
+
+
+**authorization.sources.$INDEX.enable_pipelining**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
+
+
+**authorization.sources.$INDEX.max_retries**
+
+  *类型*: `non_neg_integer`
+
+  Deprecated since 5.0.4.
+
+
+**authorization.sources.$INDEX.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  The pool size.
+
+
+**authorization.sources.$INDEX.request**
+
+  *类型*: `connector-http:request`
+
+  Configure HTTP request parameters.
+
+
+**authorization.sources.$INDEX.retry_interval**
+
+  *类型*: `timeout_duration`
+
+  Deprecated since 5.0.4.
+
+
+**authorization.sources.$INDEX.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+**authorization.sources.$INDEX.method**
+
+  *类型*: `post`
+
+  HTTP 请求方法
+
+
+**authorization.sources.$INDEX.headers**
+
+  *类型*: `[{binary, binary()}]`
+
+  *默认值*: `{"keep-alive":"timeout=30, max=1000","content-type":"application/json","connection":"keep-alive","cache-control":"no-cache","accept":"application/json"}`
+
+  HTTP Headers 列表
+
+
+
+## 编解码
+
+
+Schema registry configurations.
+
+**schema_registry.schemas**
+
+  *类型*: `name`
+
+  *默认值*: `{}`
+
+  Registered schemas.
+
+
+
+### Protobuf
+
+
+[Protocol Buffers](https://protobuf.dev/) serialization format.
+
+**schema_registry.schemas.$name.type**
+
+  *类型*: `protobuf`
+
+  Schema type.
+
+
+**schema_registry.schemas.$name.source**
+
+  *类型*: `string`
+
+  Source text for the schema.
+
+
+**schema_registry.schemas.$name.description**
+
+  *类型*: `string`
+
+  *默认值*: `""`
+
+  A description for this schema.
+
+
+
+### Avro
+
+
+[Apache Avro](https://avro.apache.org/) serialization format.
+
+**schema_registry.schemas.$name.type**
+
+  *类型*: `avro`
+
+  Schema type.
+
+
+**schema_registry.schemas.$name.source**
+
+  *类型*: `json_binary`
+
+  Source text for the schema.
+
+
+**schema_registry.schemas.$name.description**
+
+  *类型*: `string`
+
+  *默认值*: `""`
+
+  A description for this schema.
 
 
 
@@ -3632,232 +7551,5374 @@ Template with variables is allowed.
 
 
 
-### 连接配置
+<!-- ### 连接配置
+
+  @connector-http:request@
+
+  @connector-mqtt:egress@
+
+  @connector-mqtt:egress_local@
+
+  @connector-mqtt:egress_remote@
+
+  @connector-mqtt:ingress@
+
+  @connector-mqtt:ingress_local@
+
+  @connector-mqtt:ingress_remote@ -->
+
+{% emqxee %}
+
+### Kafka
 
 
+使用 GSSAPI/Kerberos 认证。
 
-
-**connector-http:request.method**
-
-  *类型*: `string`
-
-  HTTP method.
-
-
-**connector-http:request.path**
-
-  *类型*: `string`
-
-  URL path.
-
-
-**connector-http:request.body**
-
-  *类型*: `string`
-
-  HTTP request body.
-
-
-**connector-http:request.headers**
-
-  *类型*: `map`
-
-  List of HTTP headers.
-
-
-**connector-http:request.max_retries**
-
-  *类型*: `non_neg_integer`
-
-  Max retry times if error on sending request.
-
-
-**connector-http:request.request_timeout**
-
-  *类型*: `timeout_duration_ms`
-
-  HTTP request timeout.
-
-
-
-
-The egress config defines how this bridge forwards messages from the local broker to the remote broker.<br/>
-Template with variables is allowed in 'remote.topic', 'local.qos', 'local.retain', 'local.payload'.<br/>
-NOTE: if this bridge is used as the action of a rule, and also 'local.topic'
-is configured, then both the data got from the rule and the MQTT messages that matches
-'local.topic' will be forwarded.
-
-**bridges.mqtt.$name.egress.pool_size**
-
-  *类型*: `pos_integer`
-
-  *默认值*: `8`
-
-  Size of the pool of MQTT clients that will publish messages to the remote broker.<br/>
-Each MQTT client will be assigned 'clientid' of the form '${clientid_prefix}:${bridge_name}:egress:${node}:${n}'
-where 'n' is the number of a client inside the pool.
-
-
-**bridges.mqtt.$name.egress.local**
-
-  *类型*: `connector-mqtt:egress_local`
-
-  The configs about receiving messages from local broker.
-
-
-**bridges.mqtt.$name.egress.remote**
-
-  *类型*: `connector-mqtt:egress_remote`
-
-  The configs about sending message to the remote broker.
-
-
-
-
-The configs about receiving messages from local broker.
-
-**bridges.mqtt.$name.egress.local.topic**
+**bridge_kafka:auth_gssapi_kerberos.kerberos_principal**
 
   *类型*: `string`
 
-  The local topic to be forwarded to the remote broker
+  SASL GSSAPI 认证方法的 Kerberos principal，例如 <code>client_name@MY.KERBEROS.REALM.MYDOMAIN.COM</code>注意：这里使用的 realm 需要配置在 EMQX 服务器的 /etc/krb5.conf 中
 
 
-
-
-The configs about sending message to the remote broker.
-
-**bridges.mqtt.$name.egress.remote.topic**
+**bridge_kafka:auth_gssapi_kerberos.kerberos_keytab_file**
 
   *类型*: `string`
 
-  Forward to which topic of the remote broker.<br/>
-Template with variables is allowed.
+  SASL GSSAPI 认证方法的 Kerberos keytab 文件。注意：该文件需要上传到 EMQX 服务器中，且运行 EMQX 服务的系统账户需要有读取权限。
 
 
-**bridges.mqtt.$name.egress.remote.qos**
-
-  *类型*: `qos | string`
-
-  *默认值*: `1`
-
-  The QoS of the MQTT message to be sent.<br/>
-Template with variables is allowed.
 
 
-**bridges.mqtt.$name.egress.remote.retain**
+基于用户名密码的认证。
 
-  *类型*: `boolean | string`
+**bridge_kafka:auth_username_password.mechanism**
 
-  *默认值*: `false`
+  *类型*: `enum`
 
-  The 'retain' flag of the MQTT message to be sent.<br/>
-Template with variables is allowed.
+  *可选值*: `plain | scram_sha_256 | scram_sha_512`
+
+  SASL 认证方法名称。
 
 
-**bridges.mqtt.$name.egress.remote.payload**
+**bridge_kafka:auth_username_password.username**
 
   *类型*: `string`
 
-  The payload of the MQTT message to be sent.<br/>
-Template with variables is allowed.
+  SASL 认证的用户名。
 
 
-
-
-The ingress config defines how this bridge receive messages from the remote MQTT broker, and then
-        send them to the local broker.<br/>
-        Template with variables is allowed in 'remote.qos', 'local.topic', 'local.qos', 'local.retain', 'local.payload'.<br/>
-        NOTE: if this bridge is used as the input of a rule, and also 'local.topic' is
-        configured, then messages got from the remote broker will be sent to both the 'local.topic' and
-        the rule.
-
-**bridges.mqtt.$name.ingress.pool_size**
-
-  *类型*: `pos_integer`
-
-  *默认值*: `8`
-
-  Size of the pool of MQTT clients that will ingest messages from the remote broker.<br/>
-This value will be respected only if 'remote.topic' is a shared subscription topic or topic-filter
-(for example `$share/name1/topic1` or `$share/name2/topic2/#`), otherwise only a single MQTT client will be used.
-Each MQTT client will be assigned 'clientid' of the form '${clientid_prefix}:${bridge_name}:ingress:${node}:${n}'
-where 'n' is the number of a client inside the pool.
-NOTE: Non-shared subscription will not work well when EMQX is clustered.
-
-
-**bridges.mqtt.$name.ingress.remote**
-
-  *类型*: `connector-mqtt:ingress_remote`
-
-  The configs about subscribing to the remote broker.
-
-
-**bridges.mqtt.$name.ingress.local**
-
-  *类型*: `connector-mqtt:ingress_local`
-
-  The configs about sending message to the local broker.
-
-
-
-
-The configs about sending message to the local broker.
-
-**bridges.mqtt.$name.ingress.local.topic**
+**bridge_kafka:auth_username_password.password**
 
   *类型*: `string`
 
-  Send messages to which topic of the local broker.<br/>
-Template with variables is allowed.
+  SASL 认证的密码。
 
 
-**bridges.mqtt.$name.ingress.local.qos**
-
-  *类型*: `qos | string`
-
-  *默认值*: `${qos}`
-
-  The QoS of the MQTT message to be sent.<br/>
-Template with variables is allowed.
 
 
-**bridges.mqtt.$name.ingress.local.retain**
+Kafka消费者配置。
 
-  *类型*: `boolean | string`
+**bridges.kafka_consumer.$name.kafka.max_batch_bytes**
 
-  *默认值*: `${retain}`
+  *类型*: `bytesize`
 
-  The 'retain' flag of the MQTT message to be sent.<br/>
-Template with variables is allowed.
+  *默认值*: `896KB`
+
+  设置每次从 Kafka 拉取数据的字节数。如该配置小于 Kafka 消息的大小，可能会影响消费性能。
 
 
-**bridges.mqtt.$name.ingress.local.payload**
+**bridges.kafka_consumer.$name.kafka.offset_reset_policy**
+
+  *类型*: `enum`
+
+  *默认值*: `latest`
+
+  *可选值*: `latest | earliest`
+
+  如不存在偏移量历史记录或历史记录失效，消费者应使用哪个偏移量开始消费。
+
+
+**bridges.kafka_consumer.$name.kafka.offset_commit_interval_seconds**
+
+  *类型*: `timeout_duration_s`
+
+  *默认值*: `5s`
+
+  指定 Kafka 消费组偏移量提交的时间间隔。
+
+
+
+
+指定 Kafka 主题和 MQTT 主题之间的映射关系。 应至少包含一项。
+
+**bridges.kafka_consumer.$name.topic_mapping.$INDEX.kafka_topic**
 
   *类型*: `string`
 
-  The payload of the MQTT message to be sent.<br/>
-Template with variables is allowed.
+  指定从哪个 Kafka 主题消费消息。
 
 
-
-
-The configs about subscribing to the remote broker.
-
-**bridges.mqtt.$name.ingress.remote.topic**
+**bridges.kafka_consumer.$name.topic_mapping.$INDEX.mqtt_topic**
 
   *类型*: `string`
 
-  Receive messages from which topic of the remote broker
+  设置 Kafka 消息向哪个本地 MQTT 主题转发消息。
 
 
-**bridges.mqtt.$name.ingress.remote.qos**
+**bridges.kafka_consumer.$name.topic_mapping.$INDEX.qos**
 
   *类型*: `qos`
 
+  *默认值*: `0`
+
+  转发 MQTT 消息时使用的 QoS。
+
+
+**bridges.kafka_consumer.$name.topic_mapping.$INDEX.payload_template**
+
+  *类型*: `string`
+
+  *默认值*: `${.}`
+
+  用于转换收到的 Kafka 消息的模板。 默认情况下，它将使用 JSON 格式来序列化来自 Kafka 的所有字段。 这些字段包括：<code>headers</code>：一个包含字符串键值对的 JSON 对象。
+<code>key</code>：Kafka 消息的键（使用选择的编码方式编码）。
+<code>offset</code>：消息的偏移量。
+<code>topic</code>：Kafka 主题。
+<code>ts</code>: 消息的时间戳。
+<code>ts_type</code>：消息的时间戳类型，值可能是： <code>create</code>， <code>append</code> 或 <code>undefined</code>。
+<code>value</code>: Kafka 消息值（使用选择的编码方式编码）。
+
+
+
+
+Kafka 消费者配置。
+
+**bridges.kafka_consumer.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用（true）或停用该（false）Kafka 数据桥接。
+
+
+**bridges.kafka_consumer.$name.bootstrap_hosts**
+
+  *类型*: `string`
+
+  用逗号分隔的 <code>host[:port]</code> 主机列表。默认端口号为 9092。
+
+
+**bridges.kafka_consumer.$name.connect_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  建立 TCP 连接时的最大等待时长（若启用认证，这个等待时长也包含完成认证所需时间）。
+
+
+**bridges.kafka_consumer.$name.min_metadata_refresh_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `3s`
+
+  刷新 Kafka broker 和 Kafka 主题元数据段最短时间间隔。设置太小可能会增加 Kafka 压力。
+
+
+**bridges.kafka_consumer.$name.metadata_request_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  刷新元数据时最大等待时长。
+
+
+**bridges.kafka_consumer.$name.authentication**
+
+  *类型*: none | [bridge_kafka:auth_username_password](#bridge_kafka:auth_username_password) | [bridge_kafka:auth_gssapi_kerberos](#bridge_kafka:auth_gssapi_kerberos)
+
+  *默认值*: `none`
+
+  认证参数。
+
+
+**bridges.kafka_consumer.$name.socket_opts**
+
+  *类型*: `bridge_kafka:socket_opts`
+
+  更多 Socket 参数设置。
+
+
+**bridges.kafka_consumer.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+**bridges.kafka_consumer.$name.kafka**
+
+  *类型*: `bridge_kafka:consumer_kafka_opts`
+
+  Kafka消费者配置。
+
+
+**bridges.kafka_consumer.$name.topic_mapping**
+
+  *类型*: `array`
+
+  指定 Kafka 主题和 MQTT 主题之间的映射关系。 应至少包含一项。
+
+
+**bridges.kafka_consumer.$name.key_encoding_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `none`
+
+  *可选值*: `none | base64`
+
+  通过 MQTT 转发之前，如何处理 Kafka 消息的 Key。<code>none</code> 使用 Kafka 消息中的 Key 原始值，不进行编码。  注意：在这种情况下，Key 必须是一个有效的 UTF-8 字符串。
+<code>base64</code> 对收到的密钥或值使用 base-64 编码。
+
+
+**bridges.kafka_consumer.$name.value_encoding_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `none`
+
+  *可选值*: `none | base64`
+
+  通过 MQTT 转发之前，如何处理 Kafka 消息的 Value。<code>none</code> 使用 Kafka 消息中的 Value 原始值，不进行编码。  注意：在这种情况下，Value 必须是一个有效的 UTF-8 字符串。
+<code>base64</code> 对收到的 Value 使用 base-64 编码。
+
+
+**bridges.kafka_consumer.$name.resource_opts**
+
+  *类型*: `bridge_kafka:resource_opts`
+
+  *默认值*: `{}`
+
+
+
+
+用于生成 Kafka 消息的模版。
+
+**bridges.kafka.$name.kafka.message.key**
+
+  *类型*: `string`
+
+  *默认值*: `${.clientid}`
+
+  生成 Kafka 消息 Key 的模版。如果模版生成后为空值，则会使用 Kafka 的 <code>NULL</code> ，而非空字符串。
+
+
+**bridges.kafka.$name.kafka.message.value**
+
+  *类型*: `string`
+
+  *默认值*: `${.}`
+
+  生成 Kafka 消息 Value 的模版。如果模版生成后为空值，则会使用 Kafka 的 <code>NULL</code>，而非空字符串。
+
+
+**bridges.kafka.$name.kafka.message.timestamp**
+
+  *类型*: `string`
+
+  *默认值*: `${.timestamp}`
+
+  生成 Kafka 消息时间戳的模版。该时间必需是一个整型数值（可以是字符串格式）例如 <code>1661326462115</code> 或 <code>'1661326462115'</code>。当所需的输入字段不存在，或不是一个整型时，则会使用当前系统时间。
+
+
+
+
+Kafka Producer 配置。
+
+**bridges.kafka.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用（true）或停用该（false）Kafka 数据桥接。
+
+
+**bridges.kafka.$name.bootstrap_hosts**
+
+  *类型*: `string`
+
+  用逗号分隔的 <code>host[:port]</code> 主机列表。默认端口号为 9092。
+
+
+**bridges.kafka.$name.connect_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  建立 TCP 连接时的最大等待时长（若启用认证，这个等待时长也包含完成认证所需时间）。
+
+
+**bridges.kafka.$name.min_metadata_refresh_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `3s`
+
+  刷新 Kafka broker 和 Kafka 主题元数据段最短时间间隔。设置太小可能会增加 Kafka 压力。
+
+
+**bridges.kafka.$name.metadata_request_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  刷新元数据时最大等待时长。
+
+
+**bridges.kafka.$name.authentication**
+
+  *类型*: none | [bridge_kafka:auth_username_password](#bridge_kafka:auth_username_password) | [bridge_kafka:auth_gssapi_kerberos](#bridge_kafka:auth_gssapi_kerberos)
+
+  *默认值*: `none`
+
+  认证参数。
+
+
+**bridges.kafka.$name.socket_opts**
+
+  *类型*: `bridge_kafka:socket_opts`
+
+  更多 Socket 参数设置。
+
+
+**bridges.kafka.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+**bridges.kafka.$name.local_topic**
+
+  *类型*: `string`
+
+  MQTT 主题数据源由桥接指定，或留空由规则动作指定。
+
+
+**bridges.kafka.$name.kafka**
+
+  *类型*: `bridge_kafka:producer_kafka_opts`
+
+  Kafka 生产者参数。
+
+
+**bridges.kafka.$name.resource_opts**
+
+  *类型*: `bridge_kafka:resource_opts`
+
+  *默认值*: `{}`
+
+
+
+
+配置消息缓存的相关参数。
+
+当 EMQX 需要发送的消息超过 Kafka 处理能力，或者当 Kafka 临时下线时，EMQX 内部会将消息缓存起来。
+
+**bridge_kafka:producer_buffer.mode**
+
+  *类型*: `enum`
+
+  *默认值*: `memory`
+
+  *可选值*: `memory | disk | hybrid`
+
+  消息缓存模式。
+<code>memory</code>: 所有的消息都缓存在内存里。如果 EMQX 服务重启，缓存的消息会丢失。
+<code>disk</code>: 缓存到磁盘上。EMQX 重启后会继续发送重启前未发送完成的消息。
+<code>hybrid</code>: 先将消息缓存在内存中，当内存中的消息堆积超过一定限制（配置项 <code>segment_bytes</code> 描述了该限制）后，后续的消息会缓存到磁盘上。与 <code>memory</code> 模式一样，如果 EMQX 服务重启，缓存的消息会丢失。
+
+
+**bridge_kafka:producer_buffer.per_partition_limit**
+
+  *类型*: `bytesize`
+
+  *默认值*: `2GB`
+
+  为每个 Kafka 分区设置的最大缓存字节数。当超过这个上限之后，老的消息会被丢弃，为新的消息腾出空间。
+
+
+**bridge_kafka:producer_buffer.segment_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `100MB`
+
+  当缓存模式是 <code>disk</code> 或 <code>hybrid</code> 时适用。该配置用于指定缓存到磁盘上的文件的大小。
+
+
+**bridge_kafka:producer_buffer.memory_overload_protection**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  缓存模式是 <code>memory</code> 或 <code>hybrid</code> 时适用。当系统处于高内存压力时，从队列中丢弃旧的消息以减缓内存增长。内存压力值由配置项 <code>sysmon.os.sysmem_high_watermark</code> 决定。注意，该配置仅在 Linux 系统中有效。
+
+
+
+
+Please provide more key-value pairs for Kafka headers<br/>
+The key-value pairs here will be combined with the
+value of <code>kafka_headers</code> field before sending to Kafka.
+
+**bridge_kafka:producer_kafka_ext_headers.kafka_ext_header_key**
+
+  *类型*: `string`
+
+  Key of the Kafka header. Placeholders in format of ${var} are supported.
+
+
+**bridge_kafka:producer_kafka_ext_headers.kafka_ext_header_value**
+
+  *类型*: `string`
+
+  Value of the Kafka header. Placeholders in format of ${var} are supported.
+
+
+
+
+Kafka 生产者参数。
+
+**bridges.kafka.$name.kafka.topic**
+
+  *类型*: `string`
+
+  Kafka 主题名称
+
+
+**bridges.kafka.$name.kafka.message**
+
+  *类型*: `bridge_kafka:kafka_message`
+
+  用于生成 Kafka 消息的模版。
+
+
+**bridges.kafka.$name.kafka.max_batch_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `896KB`
+
+  最大消息批量字节数。大多数 Kafka 环境的默认最低值是 1 MB，EMQX 的默认值比 1 MB 更小是因为需要补偿 Kafka 消息编码所需要的额外字节（尤其是当每条消息都很小的情况下）。当单个消息的大小超过该限制时，它仍然会被发送，（相当于该批量中只有单个消息）。
+
+
+**bridges.kafka.$name.kafka.compression**
+
+  *类型*: `enum`
+
+  *默认值*: `no_compression`
+
+  *可选值*: `no_compression | snappy | gzip`
+
+  压缩方法。
+
+
+**bridges.kafka.$name.kafka.partition_strategy**
+
+  *类型*: `enum`
+
+  *默认值*: `random`
+
+  *可选值*: `random | key_dispatch`
+
+  设置消息发布时应该如何选择 Kafka 分区。
+
+<code>random</code>: 为每个消息随机选择一个分区。
+<code>key_dispatch</code>: Hash Kafka message key to a partition number
+
+
+**bridges.kafka.$name.kafka.required_acks**
+
+  *类型*: `enum`
+
+  *默认值*: `all_isr`
+
+  *可选值*: `all_isr | leader_only | none`
+
+  设置 Kafka leader 在返回给 EMQX 确认之前需要等待多少个 follower 的确认。
+
+<code>all_isr</code>: 需要所有的在线复制者都确认。
+<code>leader_only</code>: 仅需要分区 leader 确认。
+<code>none</code>: 无需 Kafka 回复任何确认。
+
+
+**bridges.kafka.$name.kafka.kafka_headers**
+
+  *类型*: `string`
+
+  Please provide a placeholder to be used as Kafka Headers<br/>
+e.g. <code>${pub_props}</code><br/>
+Notice that the value of the placeholder must either be an object:
+<code>{"foo": "bar"}</code>
+or an array of key-value pairs:
+<code>[{"key": "foo", "value": "bar"}]</code>
+
+
+**bridges.kafka.$name.kafka.kafka_ext_headers**
+
+  *类型*: `array`
+
+  Please provide more key-value pairs for Kafka headers<br/>
+The key-value pairs here will be combined with the
+value of <code>kafka_headers</code> field before sending to Kafka.
+
+
+**bridges.kafka.$name.kafka.kafka_header_value_encode_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `none`
+
+  *可选值*: `none | json`
+
+  Kafka headers value encode mode<br/>
+ - NONE: only add binary values to Kafka headers;<br/>
+ - JSON: only add JSON values to Kafka headers,
+and encode it to JSON strings before sending.
+
+
+**bridges.kafka.$name.kafka.partition_count_refresh_interval**
+
+  *类型*: `timeout_duration_s`
+
+  *默认值*: `60s`
+
+  配置 Kafka 刷新分区数量的时间间隔。
+EMQX 发现 Kafka 分区数量增加后，会开始按 <code>partition_strategy<code> 配置，把消息发送到新的分区中。
+
+
+**bridges.kafka.$name.kafka.max_inflight**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `10`
+
+  设置 Kafka 生产者（每个分区一个）在收到 Kafka 的确认前最多发送多少个请求（批量）。调大这个值通常可以增加吞吐量，但是，当该值设置大于 1 时存在消息乱序的风险。
+
+
+**bridges.kafka.$name.kafka.buffer**
+
+  *类型*: `bridge_kafka:producer_buffer`
+
+  配置消息缓存的相关参数。
+
+当 EMQX 需要发送的消息超过 Kafka 处理能力，或者当 Kafka 临时下线时，EMQX 内部会将消息缓存起来。
+
+
+**bridges.kafka.$name.kafka.query_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `async`
+
+  *可选值*: `async | sync`
+
+  Query mode. Optional 'sync/async', default 'async'.
+
+
+**bridges.kafka.$name.kafka.sync_query_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  This parameter defines the timeout limit for synchronous queries. It applies only when the bridge query mode is configured to 'sync'.
+
+
+
+
+资源相关的选项。
+
+**bridge_kafka:resource_opts.health_check_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  健康检查间隔。
+
+
+
+
+更多 Socket 参数设置。
+
+**bridge_kafka:socket_opts.sndbuf**
+
+  *类型*: `bytesize`
+
+  *默认值*: `1MB`
+
+  TCP socket 的发送缓存调优。默认值是针对高吞吐量的一个推荐值。
+
+
+**bridge_kafka:socket_opts.recbuf**
+
+  *类型*: `bytesize`
+
+  *默认值*: `1MB`
+
+  TCP socket 的收包缓存调优。默认值是针对高吞吐量的一个推荐值。
+
+
+**bridge_kafka:socket_opts.tcp_keepalive**
+
+  *类型*: `string`
+
+  *默认值*: `none`
+
+  Enable TCP keepalive for Kafka bridge connections.
+The value is three comma separated numbers in the format of 'Idle,Interval,Probes'
+ - Idle: The number of seconds a connection needs to be idle before the server begins to send out keep-alive probes (Linux default 7200).
+ - Interval: The number of seconds between TCP keep-alive probes (Linux default 75).
+ - Probes: The maximum number of TCP keep-alive probes to send before giving up and killing the connection if no response is obtained from the other end (Linux default 9).
+For example "240,30,5" means: TCP keepalive probes are sent after the connection is idle for 240 seconds, and the probes are sent every 30 seconds until a response is received, if it misses 5 consecutive responses, the connection should be closed.
+Default: 'none'
+
+
+
+### Pulsar
+
+
+基本认证的参数。
+
+**bridges.pulsar_producer.$name.authentication.username**
+
+  *类型*: `string`
+
+  基本认证用户名。
+
+
+**bridges.pulsar_producer.$name.authentication.password**
+
+  *类型*: `string`
+
+  基本认证密码。
+
+
+
+
+令牌认证的参数。
+
+**bridges.pulsar_producer.$name.authentication.jwt**
+
+  *类型*: `string`
+
+  JWT认证令牌。
+
+
+
+
+配置消息缓存的相关参数。
+
+当 EMQX 需要发送的消息超过 Pulsar 处理能力，或者当 Pulsar 临时下线时，EMQX 内部会将消息缓存起来。
+
+**bridges.pulsar_producer.$name.buffer.mode**
+
+  *类型*: `enum`
+
+  *默认值*: `memory`
+
+  *可选值*: `memory | disk | hybrid`
+
+  消息缓存模式。
+<code>memory</code>: 所有的消息都缓存在内存里。如果 EMQX 服务重启，缓存的消息会丢失。
+<code>disk</code>: 缓存到磁盘上。EMQX 重启后会继续发送重启前未发送完成的消息。
+<code>hybrid</code>: 先将消息缓存在内存中，当内存中的消息堆积超过一定限制（配置项 <code>segment_bytes</code> 描述了该限制）后，后续的消息会缓存到磁盘上。与 <code>memory</code> 模式一样，如果 EMQX 服务重启，缓存的消息会丢失。
+
+
+**bridges.pulsar_producer.$name.buffer.per_partition_limit**
+
+  *类型*: `bytesize`
+
+  *默认值*: `2GB`
+
+  为每个 Pulsar 分区设置的最大缓存字节数。当超过这个上限之后，老的消息会被丢弃，为新的消息腾出空间。
+
+
+**bridges.pulsar_producer.$name.buffer.segment_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `100MB`
+
+  当缓存模式是 <code>disk</code> 或 <code>hybrid</code> 时适用。该配置用于指定缓存到磁盘上的文件的大小。
+
+
+**bridges.pulsar_producer.$name.buffer.memory_overload_protection**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  缓存模式是 <code>memory</code> 或 <code>hybrid</code> 时适用。当系统处于高内存压力时，从队列中丢弃旧的消息以减缓内存增长。内存压力值由配置项 <code>sysmon.os.sysmem_high_watermark</code> 决定。注意，该配置仅在 Linux 系统中有效。
+
+
+
+
+用于生成 Pulsar 消息的模版。
+
+**bridges.pulsar_producer.$name.message.key**
+
+  *类型*: `string`
+
+  *默认值*: `${.clientid}`
+
+  生成 Pulsar 消息 Key 的模版。
+
+
+**bridges.pulsar_producer.$name.message.value**
+
+  *类型*: `string`
+
+  *默认值*: `${.}`
+
+  生成 Pulsar 消息 Value 的模版。
+
+
+
+
+资源启动相关的选项。
+
+**bridges.pulsar_producer.$name.resource_opts.health_check_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `1s`
+
+  健康检查间隔。
+
+
+**bridges.pulsar_producer.$name.resource_opts.start_after_created**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否在创建资源后立即启动资源。
+
+
+**bridges.pulsar_producer.$name.resource_opts.start_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+
+
+
+Pulsar 桥接配置
+
+**bridges.pulsar_producer.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用（true）或停用（false）该 Pulsar 数据桥接。
+
+
+**bridges.pulsar_producer.$name.servers**
+
+  *类型*: `string`
+
+  以逗号分隔的 <code>scheme://host[:port]</code> 格式的 Pulsar URL 列表，支持的 scheme 有 <code>pulsar://</code> （默认）和<code>pulsar+ssl://</code>。默认的端口是6650。
+
+
+**bridges.pulsar_producer.$name.authentication**
+
+  *类型*: none | [bridge_pulsar:auth_basic](#bridge_pulsar:auth_basic) | [bridge_pulsar:auth_token](#bridge_pulsar:auth_token)
+
+  *默认值*: `none`
+
+  认证参数。
+
+
+**bridges.pulsar_producer.$name.connect_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  建立 TCP 连接时的最大等待时长（若启用认证，这个等待时长也包含完成认证所需时间）。
+
+
+**bridges.pulsar_producer.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+**bridges.pulsar_producer.$name.batch_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  在一个Pulsar消息中批处理的单个请求的最大数量。
+
+
+**bridges.pulsar_producer.$name.compression**
+
+  *类型*: `enum`
+
+  *默认值*: `no_compression`
+
+  *可选值*: `no_compression | snappy | zlib`
+
+  压缩方法。
+
+
+**bridges.pulsar_producer.$name.send_buffer**
+
+  *类型*: `bytesize`
+
+  *默认值*: `1MB`
+
+  TCP socket 的发送缓存调优。默认值是针对高吞吐量的一个推荐值。
+
+
+**bridges.pulsar_producer.$name.sync_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `3s`
+
+  同步发布时，从Pulsar接收发送回执的最长等待时间。
+
+
+**bridges.pulsar_producer.$name.retention_period**
+
+  *类型*: `infinity | duration_ms`
+
+  *默认值*: `infinity`
+
+  当没有连接到Pulsar代理时，信息将被缓冲的时间。 较长的时间意味着将使用更多的内存/磁盘
+
+
+**bridges.pulsar_producer.$name.max_batch_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `900KB`
+
+  最大消息批量字节数。大多数 Pulsar 环境的默认最低值是 5 MB，EMQX 的默认值比 5 MB 更小是因为需要补偿 Pulsar 消息编码所需要的额外字节（尤其是当每条消息都很小的情况下）。当单个消息的大小超过该限制时，它仍然会被发送，（相当于该批量中只有单个消息）。
+
+
+**bridges.pulsar_producer.$name.local_topic**
+
+  *类型*: `string`
+
+  MQTT 主题数据源由桥接指定，或留空由规则动作指定。
+
+
+**bridges.pulsar_producer.$name.pulsar_topic**
+
+  *类型*: `string`
+
+  Pulsar 主题名称
+
+
+**bridges.pulsar_producer.$name.strategy**
+
+  *类型*: `enum`
+
+  *默认值*: `random`
+
+  *可选值*: `random | roundrobin | key_dispatch`
+
+  设置消息发布时应该如何选择 Pulsar 分区。
+
+<code>random</code>: 为每个消息随机选择一个分区。
+<code>roundrobin</code>: 依次为每条信息挑选可用的生产商。
+<code>key_dispatch</code>: 将一批信息中的第一条信息的Pulsar信息密钥哈希到一个分区编号。
+
+
+**bridges.pulsar_producer.$name.buffer**
+
+  *类型*: `bridge_pulsar:producer_buffer`
+
+  配置消息缓存的相关参数。
+
+当 EMQX 需要发送的消息超过 Pulsar 处理能力，或者当 Pulsar 临时下线时，EMQX 内部会将消息缓存起来。
+
+
+**bridges.pulsar_producer.$name.message**
+
+  *类型*: `bridge_pulsar:producer_pulsar_message`
+
+  用于生成 Pulsar 消息的模版。
+
+
+**bridges.pulsar_producer.$name.resource_opts**
+
+  *类型*: `bridge_pulsar:producer_resource_opts`
+
+  资源启动相关的选项。
+
+
+
+### RocketMQ
+
+
+RocketMQ 桥接配置
+
+**bridges.rocketmq.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用桥接
+
+
+**bridges.rocketmq.$name.template**
+
+  *类型*: `string`
+
+  *默认值*: `""`
+
+  模板, 默认为空，为空时将会将整个消息转发给 RocketMQ。 <br>
+            模板可以是任意带有占位符的合法字符串, 例如:<br>
+            - ${id}, ${username}, ${clientid}, ${timestamp}<br>
+            - {"id" : ${id}, "username" : ${username}}
+
+
+**bridges.rocketmq.$name.local_topic**
+
+  *类型*: `string`
+
+  发送到 'local_topic' 的消息都会转发到 RocketMQ。 <br/>
+注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。
+
+
+**bridges.rocketmq.$name.resource_opts**
+
+  *类型*: `resource_schema:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.rocketmq.$name.servers**
+
+  *类型*: `string`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+主机名具有以下形式：`Host[:Port]`。<br/>
+如果未指定 `[:Port]`，则使用 RocketMQ 默认端口 9876。
+
+
+**bridges.rocketmq.$name.topic**
+
+  *类型*: `string`
+
+  *默认值*: `TopicTest`
+
+  RocketMQ 主题
+
+
+**bridges.rocketmq.$name.access_key**
+
+  *类型*: `string`
+
+  *默认值*: `""`
+
+  RocketMQ 服务器的 `accessKey`。
+
+
+**bridges.rocketmq.$name.secret_key**
+
+  *类型*: `string`
+
+  *默认值*: `""`
+
+  RocketMQ 服务器的 `secretKey`。
+
+
+**bridges.rocketmq.$name.security_token**
+
+  *类型*: `string`
+
+  *默认值*: `""`
+
+  RocketMQ 服务器安全令牌
+
+
+**bridges.rocketmq.$name.sync_timeout**
+
+  *类型*: `timeout_duration`
+
+  *默认值*: `3s`
+
+  RocketMQ 驱动同步调用的超时时间。
+
+
+**bridges.rocketmq.$name.refresh_interval**
+
+  *类型*: `timeout_duration`
+
+  *默认值*: `3s`
+
+  RocketMQ 主题路由更新间隔。
+
+
+**bridges.rocketmq.$name.send_buffer**
+
+  *类型*: `bytesize`
+
+  *默认值*: `1024KB`
+
+  RocketMQ 驱动的套字节发送消息的缓冲区大小
+
+
+**bridges.rocketmq.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.rocketmq.$name.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+
+### RabbitMQ
+
+
+RabbitMQ 桥接配置
+
+**bridges.rabbitmq.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用或禁用桥接
+
+
+**bridges.rabbitmq.$name.local_topic**
+
+  *类型*: `string`
+
+  转发到 RabbitMQ 的消息 MQTT 主题或主题过滤器。对所有的 'PUBLISH' 消息，如果匹配到该配置的主题或主题过滤器时，
+注意：如果此桥接被用作规则的动作，同时又配置了 'local_topic'，那么这两份消息都会被转发到 RabbitMQ，这可能会导致消息重复。
+
+
+**bridges.rabbitmq.$name.resource_opts**
+
+  *类型*: `bridge_rabbitmq:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.rabbitmq.$name.server**
+
+  *类型*: `string`
+
+  *默认值*: `localhost`
+
+  RabbitMQ 服务器的主机名或 IP 地址（例如 localhost）。
+
+
+**bridges.rabbitmq.$name.port**
+
+  *类型*: `port_number`
+
+  *默认值*: `5672`
+
+  RabbitMQ 服务器的主机名或 IP 地址（例如 localhost）。
+
+
+**bridges.rabbitmq.$name.username**
+
+  *类型*: `string`
+
+  用于认证的 RabbitMQ 用户名。
+
+
+**bridges.rabbitmq.$name.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**bridges.rabbitmq.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  连接池的大小。
+
+
+**bridges.rabbitmq.$name.timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  连接超时时间。
+
+
+**bridges.rabbitmq.$name.wait_for_publish_confirmations**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否等待 RabbitMQ 确认消息发布。
+
+
+**bridges.rabbitmq.$name.publish_confirmation_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `30s`
+
+  连接超时时间。
+
+
+**bridges.rabbitmq.$name.virtual_host**
+
+  *类型*: `string`
+
+  *默认值*: `/`
+
+  RabbitMQ 虚拟主机的名称。
+
+
+**bridges.rabbitmq.$name.heartbeat**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `30s`
+
+  发送心跳的间隔时间。
+
+
+**bridges.rabbitmq.$name.exchange**
+
+  *类型*: `string`
+
+   RabbitMQ Exchange 名称。
+
+
+**bridges.rabbitmq.$name.routing_key**
+
+  *类型*: `string`
+
+  用于路由消息的 Routing Key。
+
+
+**bridges.rabbitmq.$name.delivery_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `non_persistent`
+
+  *可选值*: `non_persistent | persistent`
+
+  消息的投递模式。non_persistent(1) 表示非持久化消息，persistent(2) 表示持久化消息。
+
+
+**bridges.rabbitmq.$name.payload_template**
+
+  *类型*: `string`
+
+  *默认值*: `${.}`
+
+  用于生成 RabbitMQ 消息的模版。模板中的占位符（例如 '${fields.sub_field}'）会被替换成消息的字段值。如果该留空，则表示所有的输入字段都会被转发到 RabbitMQ，与使用 '${.}' 作为占位符的效果等价。
+
+
+**bridges.rabbitmq.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+
+资源启动相关的选项。
+
+**bridges.rabbitmq.$name.resource_opts.worker_pool_size**
+
+  *类型*: `integer`
+
+  *默认值*: `16`
+
+  *可选值*: `1-1024`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+
+**bridges.rabbitmq.$name.resource_opts.health_check_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  健康检查间隔。
+
+
+**bridges.rabbitmq.$name.resource_opts.start_after_created**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否在创建资源后立即启动资源。
+
+
+**bridges.rabbitmq.$name.resource_opts.start_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+
+**bridges.rabbitmq.$name.resource_opts.auto_restart_interval**
+
+  *类型*: `infinity | duration_ms`
+
+  Deprecated since 5.1.0.
+
+
+**bridges.rabbitmq.$name.resource_opts.query_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `async`
+
+  *可选值*: `sync | async`
+
+  请求模式。可选 '同步/异步'，默认为'异步'模式。
+
+
+**bridges.rabbitmq.$name.resource_opts.request_ttl**
+
+  *类型*: `timeout_duration_ms | infinity`
+
+  *默认值*: `45s`
+
+  Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
+
+
+**bridges.rabbitmq.$name.resource_opts.inflight_window**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  请求飞行队列窗口大小。当请求模式为异步时，如果需要严格保证来自同一 MQTT 客户端的消息有序，则必须将此值设为 1。
+
+
+**bridges.rabbitmq.$name.resource_opts.batch_size**
+
+  *类型*: `pos_integer`
+
   *默认值*: `1`
 
-  The QoS level to be used when subscribing to the remote broker
+  最大批量请求大小。如果设为1，则无批处理。
+
+
+**bridges.rabbitmq.$name.resource_opts.batch_time**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `0ms`
+
+  在较低消息率情况下尝试累积批量输出时的最大等待间隔，以提高资源的利用率。
+
+
+**bridges.rabbitmq.$name.resource_opts.enable_queue**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.14.
+
+
+**bridges.rabbitmq.$name.resource_opts.max_buffer_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `256MB`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+
+### Azure Event Hubs
+
+
+Username/password based authentication.
+
+**bridges.azure_event_hub_producer.$name.authentication.password**
+
+  *类型*: `string`
+
+  The Connection String for connecting to Azure Event Hub.  Should be the "connection string-primary key" of a Namespace shared access policy.
+
+
+
+
+Template to render an Azure Event Hub message.
+
+**bridges.azure_event_hub_producer.$name.kafka.message.key**
+
+  *类型*: `string`
+
+  *默认值*: `${.clientid}`
+
+  Template to render Azure Event Hub message key. If the template is rendered into a NULL value (i.e. there is no such data field in Rule Engine context) then Azure Event Hub's <code>NULL</code> (but not empty string) is used.
+
+
+**bridges.azure_event_hub_producer.$name.kafka.message.value**
+
+  *类型*: `string`
+
+  *默认值*: `${.}`
+
+  Template to render Azure Event Hub message value. If the template is rendered into a NULL value (i.e. there is no such data field in Rule Engine context) then Azure Event Hub's <code>NULL</code> (but not empty string) is used.
+
+
+
+
+Azure Event Hub producer configs.
+
+**bridges.azure_event_hub_producer.$name.kafka.topic**
+
+  *类型*: `string`
+
+  Event Hub name
+
+
+**bridges.azure_event_hub_producer.$name.kafka.message**
+
+  *类型*: `bridge_azure_event_hub:kafka_message`
+
+  Template to render an Azure Event Hub message.
+
+
+**bridges.azure_event_hub_producer.$name.kafka.max_batch_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `896KB`
+
+  Maximum bytes to collect in an Azure Event Hub message batch. Most of the Kafka brokers default to a limit of 1 MB batch size. EMQX's default value is less than 1 MB in order to compensate Kafka message encoding overheads (especially when each individual message is very small). When a single message is over the limit, it is still sent (as a single element batch).
+
+
+**bridges.azure_event_hub_producer.$name.kafka.partition_strategy**
+
+  *类型*: `enum`
+
+  *默认值*: `random`
+
+  *可选值*: `random | key_dispatch`
+
+  Partition strategy is to tell the producer how to dispatch messages to Azure Event Hub partitions.
+
+<code>random</code>: Randomly pick a partition for each message
+<code>key_dispatch</code>: Hash Azure Event Hub message key to a partition number
+
+
+**bridges.azure_event_hub_producer.$name.kafka.required_acks**
+
+  *类型*: `enum`
+
+  *默认值*: `all_isr`
+
+  *可选值*: `all_isr | leader_only`
+
+  Required acknowledgements for Azure Event Hub partition leader to wait for its followers before it sends back the acknowledgement to EMQX Azure Event Hub producer
+
+<code>all_isr</code>: Require all in-sync replicas to acknowledge.
+<code>leader_only</code>: Require only the partition-leader's acknowledgement.
+
+
+**bridges.azure_event_hub_producer.$name.kafka.kafka_headers**
+
+  *类型*: `string`
+
+  Please provide a placeholder to be used as Azure Event Hub Headers<br/>
+e.g. <code>${pub_props}</code><br/>
+Notice that the value of the placeholder must either be an object:
+<code>{"foo": "bar"}</code>
+or an array of key-value pairs:
+<code>[{"key": "foo", "value": "bar"}]</code>
+
+
+**bridges.azure_event_hub_producer.$name.kafka.kafka_ext_headers**
+
+  *类型*: `array`
+
+  Please provide more key-value pairs for Azure Event Hub headers<br/>
+The key-value pairs here will be combined with the
+value of <code>kafka_headers</code> field before sending to Azure Event Hub.
+
+
+**bridges.azure_event_hub_producer.$name.kafka.kafka_header_value_encode_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `none`
+
+  *可选值*: `none | json`
+
+  Azure Event Hub headers value encode mode<br/>
+ - NONE: only add binary values to Azure Event Hub headers;<br/>
+ - JSON: only add JSON values to Azure Event Hub headers,
+and encode it to JSON strings before sending.
+
+
+**bridges.azure_event_hub_producer.$name.kafka.partition_count_refresh_interval**
+
+  *类型*: `timeout_duration_s`
+
+  *默认值*: `60s`
+
+  The time interval for Azure Event Hub producer to discover increased number of partitions.
+After the number of partitions is increased in Azure Event Hub, EMQX will start taking the
+discovered partitions into account when dispatching messages per <code>partition_strategy</code>.
+
+
+**bridges.azure_event_hub_producer.$name.kafka.max_inflight**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `10`
+
+  Maximum number of batches allowed for Azure Event Hub producer (per-partition) to send before receiving acknowledgement from Azure Event Hub. Greater value typically means better throughput. However, there can be a risk of message reordering when this value is greater than 1.
+
+
+**bridges.azure_event_hub_producer.$name.kafka.buffer**
+
+  *类型*: `bridge_kafka:producer_buffer`
+
+  Configure producer message buffer.
+
+Tell Azure Event Hub producer how to buffer messages when EMQX has more messages to send than Azure Event Hub can keep up, or when Azure Event Hub is down.
+
+
+**bridges.azure_event_hub_producer.$name.kafka.query_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `async`
+
+  *可选值*: `async | sync`
+
+  Query mode. Optional 'sync/async', default 'async'.
+
+
+**bridges.azure_event_hub_producer.$name.kafka.sync_query_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  This parameter defines the timeout limit for synchronous queries. It applies only when the bridge query mode is configured to 'sync'.
+
+
+
+
+Configuration for an Azure Event Hub bridge.
+
+**bridges.azure_event_hub_producer.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  Enable (true) or disable (false) this bridge.
+
+
+**bridges.azure_event_hub_producer.$name.bootstrap_hosts**
+
+  *类型*: `string`
+
+  A comma separated list of Azure Event Hub Kafka <code>host[:port]</code> namespace endpoints to bootstrap the client.  Default port number is 9093.
+
+
+**bridges.azure_event_hub_producer.$name.connect_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  Maximum wait time for TCP connection establishment (including authentication time if enabled).
+
+
+**bridges.azure_event_hub_producer.$name.min_metadata_refresh_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `3s`
+
+  Minimum time interval the client has to wait before refreshing Azure Event Hub Kafka broker and topic metadata. Setting too small value may add extra load on Azure Event Hub.
+
+
+**bridges.azure_event_hub_producer.$name.metadata_request_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  Maximum wait time when fetching metadata from Azure Event Hub.
+
+
+**bridges.azure_event_hub_producer.$name.authentication**
+
+  *类型*: `bridge_azure_event_hub:auth_username_password`
+
+  *默认值*: `{}`
+
+  Authentication configs.
+
+
+**bridges.azure_event_hub_producer.$name.socket_opts**
+
+  *类型*: `bridge_kafka:socket_opts`
+
+  Extra socket options.
+
+
+**bridges.azure_event_hub_producer.$name.ssl**
+
+  *类型*: `bridge_azure_event_hub:ssl_client_opts`
+
+  *默认值*: `{"enable":true}`
+
+  启用 SSL 连接。
+
+
+**bridges.azure_event_hub_producer.$name.local_topic**
+
+  *类型*: `string`
+
+  MQTT topic or topic filter as data source (bridge input).  If rule action is used as data source, this config should be left empty, otherwise messages will be duplicated in Azure Event Hub.
+
+
+**bridges.azure_event_hub_producer.$name.kafka**
+
+  *类型*: `bridge_azure_event_hub:producer_kafka_opts`
+
+  Azure Event Hub producer configs.
+
+
+**bridges.azure_event_hub_producer.$name.resource_opts**
+
+  *类型*: `bridge_kafka:resource_opts`
+
+  *默认值*: `{}`
+
+
+
+
+Socket options for SSL clients.
+
+**bridges.azure_event_hub_producer.$name.ssl.cacertfile**
+
+  *类型*: `string`
+
+  受信任的PEM格式 CA  证书捆绑文件<br/>
+此文件中的证书用于验证TLS对等方的证书。
+如果要信任新 CA，请将新证书附加到文件中。
+无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
+注意：从文件中失效（删除）证书不会影响已建立的连接。
+
+
+**bridges.azure_event_hub_producer.$name.ssl.cacerts**
+
+  *类型*: `boolean`
+
+  Deprecated since 5.1.4.
+
+
+**bridges.azure_event_hub_producer.$name.ssl.certfile**
+
+  *类型*: `string`
+
+  PEM格式证书链文件<br/>
+此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
+然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
+根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
+
+
+**bridges.azure_event_hub_producer.$name.ssl.keyfile**
+
+  *类型*: `string`
+
+  PEM格式的私钥文件。
+
+
+**bridges.azure_event_hub_producer.$name.ssl.verify**
+
+  *类型*: `enum`
+
+  *默认值*: `verify_none`
+
+  *可选值*: `verify_peer | verify_none`
+
+  启用或禁用对等验证。
+
+
+**bridges.azure_event_hub_producer.$name.ssl.reuse_sessions**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用 TLS 会话重用。
+
+
+**bridges.azure_event_hub_producer.$name.ssl.depth**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `10`
+
+  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
+因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
+如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
+
+
+**bridges.azure_event_hub_producer.$name.ssl.password**
+
+  *类型*: `string`
+
+  包含用户密码的字符串。仅在私钥文件受密码保护时使用。
+
+
+**bridges.azure_event_hub_producer.$name.ssl.versions**
+
+  *类型*: `array`
+
+  *默认值*: `["tlsv1.3","tlsv1.2"]`
+
+  支持所有TLS/DTLS版本<br/>
+注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
+
+
+**bridges.azure_event_hub_producer.$name.ssl.ciphers**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
+<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
+<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
+<br/>
+密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
+选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
+
+名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
+EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
+注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+不兼容的密码套件将被自动删除。
+
+例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
+
+<br/>
+注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
+如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+
+<br/>
+PSK 密码套件：
+<code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
+RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+
+
+**bridges.azure_event_hub_producer.$name.ssl.secure_renegotiate**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。
+RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。
+
+
+**bridges.azure_event_hub_producer.$name.ssl.log_level**
+
+  *类型*: `enum`
+
+  *默认值*: `notice`
+
+  *可选值*: `emergency | alert | critical | error | warning | notice | info | debug | none | all`
+
+  SSL 握手的日志级别。默认值是 'notice'，可以设置为 'debug' 用来调查 SSL 握手的问题。
+
+
+**bridges.azure_event_hub_producer.$name.ssl.hibernate_after**
+
+  *类型*: `duration`
+
+  *默认值*: `5s`
+
+  在闲置一定时间后休眠 SSL 进程，减少其内存占用。
+
+
+**bridges.azure_event_hub_producer.$name.ssl.enable**
+
+  *类型*: `true`
+
+  *默认值*: `true`
+
+  启用 TLS。
+
+
+**bridges.azure_event_hub_producer.$name.ssl.server_name_indication**
+
+  *类型*: `disable | auto | string`
+
+  *默认值*: `auto`
+
+  指定要在 TLS 服务器名称指示扩展中使用的主机名。<br/>
+例如，当连接到 "server.example.net" 时，接受连接并执行 TLS 握手的真正服务器可能与 TLS 客户端最初连接到的主机不同，
+例如，当连接到 IP 地址时，或者当主机具有多个可解析的 DNS 记录时<br/>
+如果未指定，它将默认为使用的主机名字符串
+建立连接，除非使用 IP 地址<br/>
+然后，主机名也用于对等机的主机名验证证书<br/>
+特殊值 <code>disable</code> 阻止发送服务器名称指示扩展，并禁用主机名验证检查。
+
+
+
+### Amazon Kinesis
+
+
+Configuration for an Amazon Kinesis bridge.
+
+**bridges.kinesis_producer.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用 Bridge
+
+
+**bridges.kinesis_producer.$name.resource_opts**
+
+  *类型*: `bridge_kinesis:creation_opts`
+
+  *默认值*: `{}`
+
+  资源启动相关的选项。
+
+
+**bridges.kinesis_producer.$name.aws_access_key_id**
+
+  *类型*: `string`
+
+  Access Key ID for connecting to Amazon Kinesis.
+
+
+**bridges.kinesis_producer.$name.aws_secret_access_key**
+
+  *类型*: `string`
+
+  AWS Secret Access Key for connecting to Amazon Kinesis.
+
+
+**bridges.kinesis_producer.$name.endpoint**
+
+  *类型*: `string`
+
+  The url of Amazon Kinesis endpoint.
+
+
+**bridges.kinesis_producer.$name.max_retries**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `2`
+
+  Max retry times if an error occurs when sending a request.
+
+
+**bridges.kinesis_producer.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  The pool size.
+
+
+**bridges.kinesis_producer.$name.payload_template**
+
+  *类型*: `string`
+
+  *默认值*: `${.}`
+
+  The template for formatting the outgoing messages.  If undefined, will send all the available context in JSON format.
+
+
+**bridges.kinesis_producer.$name.local_topic**
+
+  *类型*: `string`
+
+  The MQTT topic filter to be forwarded to Amazon Kinesis. All MQTT `PUBLISH` messages with the topic
+matching the `local_topic` will be forwarded.<br/>
+NOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also `local_topic` is
+configured, then both the data got from the rule and the MQTT messages that match `local_topic`
+will be forwarded.
+
+
+**bridges.kinesis_producer.$name.stream_name**
+
+  *类型*: `string`
+
+  The Amazon Kinesis Stream to publish messages to.
+
+
+**bridges.kinesis_producer.$name.partition_key**
+
+  *类型*: `string`
+
+  The Amazon Kinesis Partition Key associated to published message. Placeholders in format of ${var} are supported.
+
+
+
+
+资源启动相关的选项。
+
+**bridges.kinesis_producer.$name.resource_opts.worker_pool_size**
+
+  *类型*: `integer`
+
+  *默认值*: `16`
+
+  *可选值*: `1-1024`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+
+**bridges.kinesis_producer.$name.resource_opts.health_check_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  健康检查间隔。
+
+
+**bridges.kinesis_producer.$name.resource_opts.start_after_created**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否在创建资源后立即启动资源。
+
+
+**bridges.kinesis_producer.$name.resource_opts.start_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+
+**bridges.kinesis_producer.$name.resource_opts.auto_restart_interval**
+
+  *类型*: `infinity | duration_ms`
+
+  Deprecated since 5.1.0.
+
+
+**bridges.kinesis_producer.$name.resource_opts.query_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `async`
+
+  *可选值*: `sync | async`
+
+  请求模式。可选 '同步/异步'，默认为'异步'模式。
+
+
+**bridges.kinesis_producer.$name.resource_opts.request_ttl**
+
+  *类型*: `timeout_duration_ms | infinity`
+
+  *默认值*: `45s`
+
+  Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
+
+
+**bridges.kinesis_producer.$name.resource_opts.inflight_window**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  请求飞行队列窗口大小。当请求模式为异步时，如果需要严格保证来自同一 MQTT 客户端的消息有序，则必须将此值设为 1。
+
+
+**bridges.kinesis_producer.$name.resource_opts.batch_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `1`
+
+  最大批量请求大小。如果设为1，则无批处理。
+
+
+**bridges.kinesis_producer.$name.resource_opts.batch_time**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `0ms`
+
+  在较低消息率情况下尝试累积批量输出时的最大等待间隔，以提高资源的利用率。
+
+
+**bridges.kinesis_producer.$name.resource_opts.enable_queue**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.14.
+
+
+**bridges.kinesis_producer.$name.resource_opts.max_buffer_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `256MB`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+
+### Google PubSub
+
+
+GCP PubSub Consumer configuration.
+
+**bridges.gcp_pubsub_consumer.$name.consumer.pull_max_messages**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  The maximum number of messages to retrieve from GCP PubSub in a single pull request. The actual number may be less than the specified value.
+
+
+**bridges.gcp_pubsub_consumer.$name.consumer.topic_mapping**
+
+  *类型*: `array`
+
+  Defines the mapping between GCP PubSub topics and MQTT topics. Must contain at least one item.
+
+
+
+
+Defines the mapping between GCP PubSub topics and MQTT topics. Must contain at least one item.
+
+**bridges.gcp_pubsub_consumer.$name.consumer.topic_mapping.$INDEX.pubsub_topic**
+
+  *类型*: `string`
+
+  GCP PubSub topic to consume from.
+
+
+**bridges.gcp_pubsub_consumer.$name.consumer.topic_mapping.$INDEX.mqtt_topic**
+
+  *类型*: `string`
+
+  Local topic to which consumed GCP PubSub messages should be published to.
+
+
+**bridges.gcp_pubsub_consumer.$name.consumer.topic_mapping.$INDEX.qos**
+
+  *类型*: `qos`
+
+  *默认值*: `0`
+
+  MQTT QoS used to publish messages consumed from GCP PubSub.
+
+
+**bridges.gcp_pubsub_consumer.$name.consumer.topic_mapping.$INDEX.payload_template**
+
+  *类型*: `string`
+
+  *默认值*: `${.}`
+
+  The template for transforming the incoming GCP PubSub message.  By default, it will use JSON format to serialize inputs from the GCP PubSub message.  Available fields are:
+<code>message_id</code>: the message ID assigned by GCP PubSub.
+<code>publish_time</code>: message timestamp assigned by GCP PubSub.
+<code>topic</code>: GCP PubSub topic.
+<code>value</code>: the payload of the GCP PubSub message.  Omitted if there's no payload.
+<code>attributes</code>: an object containing string key-value pairs.  Omitted if there are no attributes.
+<code>ordering_key</code>: GCP PubSub message ordering key.  Omitted if there's none.
+
+
+
+
+Key-value pair.
+
+**bridges.gcp_pubsub.$name.attributes_template.$INDEX.key**
+
+  *类型*: `string`
+
+  Key
+
+
+**bridges.gcp_pubsub.$name.attributes_template.$INDEX.value**
+
+  *类型*: `string`
+
+  Value
+
+
+
+
+GCP PubSub 桥接配置
+
+**bridges.gcp_pubsub_consumer.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用 Bridge
+
+
+**bridges.gcp_pubsub_consumer.$name.resource_opts**
+
+  *类型*: `bridge_gcp_pubsub:consumer_resource_opts`
+
+  资源启动相关的选项。
+
+
+**bridges.gcp_pubsub_consumer.$name.connect_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  连接 HTTP 服务器的超时时间。
+
+
+**bridges.gcp_pubsub_consumer.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  连接池大小。
+
+
+**bridges.gcp_pubsub_consumer.$name.pipelining**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  正整数，设置最大可发送的异步 HTTP 请求数量。当设置为 1 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
+
+
+**bridges.gcp_pubsub_consumer.$name.max_retries**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `2`
+
+  请求出错时的最大重试次数。
+
+
+**bridges.gcp_pubsub_consumer.$name.request_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  Deprecated since e5.0.1.
+
+
+**bridges.gcp_pubsub_consumer.$name.service_account_json**
+
+  *类型*: `emqx_bridge_gcp_pubsub:service_account_json`
+
+  包含将与 PubSub 一起使用的 GCP 服务账户凭证的 JSON。
+当创建GCP服务账户时（如https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount），可以选择下载 JSON 形式的凭证，然后在该配置项中使用。
+
+
+**bridges.gcp_pubsub_consumer.$name.consumer**
+
+  *类型*: `bridge_gcp_pubsub:consumer`
+
+  Local MQTT publish and GCP PubSub consumer configs.
+
+
+
+
+GCP PubSub 桥接配置
+
+**bridges.gcp_pubsub.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用 Bridge
+
+
+**bridges.gcp_pubsub.$name.resource_opts**
+
+  *类型*: `resource_schema:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.gcp_pubsub.$name.connect_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  连接 HTTP 服务器的超时时间。
+
+
+**bridges.gcp_pubsub.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  连接池大小。
+
+
+**bridges.gcp_pubsub.$name.pipelining**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  正整数，设置最大可发送的异步 HTTP 请求数量。当设置为 1 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
+
+
+**bridges.gcp_pubsub.$name.max_retries**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `2`
+
+  请求出错时的最大重试次数。
+
+
+**bridges.gcp_pubsub.$name.request_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  Deprecated since e5.0.1.
+
+
+**bridges.gcp_pubsub.$name.service_account_json**
+
+  *类型*: `emqx_bridge_gcp_pubsub:service_account_json`
+
+  包含将与 PubSub 一起使用的 GCP 服务账户凭证的 JSON。
+当创建GCP服务账户时（如https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount），可以选择下载 JSON 形式的凭证，然后在该配置项中使用。
+
+
+**bridges.gcp_pubsub.$name.attributes_template**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  The template for formatting the outgoing message attributes.  Undefined values will be rendered as empty string values.  Empty keys are removed from the attribute map.
+
+
+**bridges.gcp_pubsub.$name.ordering_key_template**
+
+  *类型*: `string`
+
+  *默认值*: `""`
+
+  The template for formatting the outgoing message ordering key.  Undefined values will be rendered as empty string values.  This value will not be added to the message if it's empty.
+
+
+**bridges.gcp_pubsub.$name.payload_template**
+
+  *类型*: `string`
+
+  *默认值*: `""`
+
+  用于格式化外发信息的模板。 如果未定义，将以JSON格式发送所有可用的上下文。
+
+
+**bridges.gcp_pubsub.$name.local_topic**
+
+  *类型*: `string`
+
+  发送到 'local_topic' 的消息都会转发到 GCP PubSub。 <br/>
+注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 GCP PubSub。
+
+
+**bridges.gcp_pubsub.$name.pubsub_topic**
+
+  *类型*: `string`
+
+  要发布消息的GCP PubSub主题。
+
+
+
+
+资源启动相关的选项。
+
+**bridges.gcp_pubsub_consumer.$name.resource_opts.health_check_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `30s`
+
+  健康检查间隔。
+
+
+**bridges.gcp_pubsub_consumer.$name.resource_opts.request_ttl**
+
+  *类型*: `timeout_duration_ms | infinity`
+
+  *默认值*: `45s`
+
+  Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
+
+
+
+### MySQL
+
+
+Configuration for an HStreamDB bridge.
+
+**bridges.mysql.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  Enable or disable this bridge
+
+
+**bridges.mysql.$name.sql**
+
+  *类型*: `string`
+
+  *默认值*: `insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, FROM_UNIXTIME(${timestamp}/1000))`
+
+  SQL Template
+
+
+**bridges.mysql.$name.local_topic**
+
+  *类型*: `string`
+
+  The MQTT topic filter to be forwarded to MySQL. All MQTT 'PUBLISH' messages with the topic
+matching the local_topic will be forwarded.<br/>
+NOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is
+configured, then both the data got from the rule and the MQTT messages that match local_topic
+will be forwarded.
+
+
+**bridges.mysql.$name.resource_opts**
+
+  *类型*: `resource_schema:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.mysql.$name.server**
+
+  *类型*: `string`
+
+  The IPv4 or IPv6 address or the hostname to connect to.<br/>
+A host entry has the following form: `Host[:Port]`.<br/>
+The MySQL default port 3306 is used if `[:Port]` is not specified.
+
+
+**bridges.mysql.$name.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**bridges.mysql.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.mysql.$name.username**
+
+  *类型*: `string`
+
+  *默认值*: `root`
+
+  内部数据库的用户名。
+
+
+**bridges.mysql.$name.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**bridges.mysql.$name.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**bridges.mysql.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+### Redis
+
+
+集群模式。当 Redis 服务运行在集群模式下，该配置必须设置为 'cluster'。
+
+**bridges.redis_cluster.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用 Bridge
+
+
+**bridges.redis_cluster.$name.local_topic**
+
+  *类型*: `string`
+
+  发送到 'local_topic' 的消息都会转发到 Redis。 <br/>
+注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 Redis。
+
+
+**bridges.redis_cluster.$name.command_template**
+
+  *类型*: `[binary]`
+
+  用于推送数据的 Redis 命令模板。 每个列表元素代表一个命令名称或其参数。
+例如，要通过键值 `msgs` 将消息体推送到 Redis 列表中，数组元素应该是： `rpush`, `msgs`, `${payload}`。
+
+
+**bridges.redis_cluster.$name.resource_opts**
+
+  *类型*: `bridge_redis:creation_opts_redis_cluster`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.redis_cluster.$name.servers**
+
+  *类型*: `string`
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+主机名具有以下形式：`Host[:Port]`。
+如果未指定 `[:Port]`，则使用 Redis 默认端口 6379。
+
+
+**bridges.redis_cluster.$name.redis_type**
+
+  *类型*: `cluster`
+
+  *默认值*: `cluster`
+
+  集群模式。当 Redis 服务运行在集群模式下，该配置必须设置为 'cluster'。
+
+
+**bridges.redis_cluster.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.redis_cluster.$name.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**bridges.redis_cluster.$name.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**bridges.redis_cluster.$name.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**bridges.redis_cluster.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+
+哨兵模式。当 Redis 服务运行在哨兵模式下，该配置必须设置为 'sentinel'。
+
+**bridges.redis_sentinel.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用 Bridge
+
+
+**bridges.redis_sentinel.$name.local_topic**
+
+  *类型*: `string`
+
+  发送到 'local_topic' 的消息都会转发到 Redis。 <br/>
+注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 Redis。
+
+
+**bridges.redis_sentinel.$name.command_template**
+
+  *类型*: `[binary]`
+
+  用于推送数据的 Redis 命令模板。 每个列表元素代表一个命令名称或其参数。
+例如，要通过键值 `msgs` 将消息体推送到 Redis 列表中，数组元素应该是： `rpush`, `msgs`, `${payload}`。
+
+
+**bridges.redis_sentinel.$name.resource_opts**
+
+  *类型*: `bridge_redis:creation_opts_redis_sentinel`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.redis_sentinel.$name.servers**
+
+  *类型*: `string`
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+主机名具有以下形式：`Host[:Port]`。
+如果未指定 `[:Port]`，则使用 Redis 默认端口 6379。
+
+
+**bridges.redis_sentinel.$name.redis_type**
+
+  *类型*: `sentinel`
+
+  *默认值*: `sentinel`
+
+  哨兵模式。当 Redis 服务运行在哨兵模式下，该配置必须设置为 'sentinel'。
+
+
+**bridges.redis_sentinel.$name.sentinel**
+
+  *类型*: `string`
+
+  Redis 哨兵模式下的集群名称。
+
+
+**bridges.redis_sentinel.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.redis_sentinel.$name.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**bridges.redis_sentinel.$name.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**bridges.redis_sentinel.$name.database**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `0`
+
+  Redis 数据库 ID。
+
+
+**bridges.redis_sentinel.$name.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**bridges.redis_sentinel.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+
+单机模式。当 Redis 服务运行在单机模式下，该配置必须设置为 'single'。
+
+**bridges.redis_single.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用 Bridge
+
+
+**bridges.redis_single.$name.local_topic**
+
+  *类型*: `string`
+
+  发送到 'local_topic' 的消息都会转发到 Redis。 <br/>
+注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 Redis。
+
+
+**bridges.redis_single.$name.command_template**
+
+  *类型*: `[binary]`
+
+  用于推送数据的 Redis 命令模板。 每个列表元素代表一个命令名称或其参数。
+例如，要通过键值 `msgs` 将消息体推送到 Redis 列表中，数组元素应该是： `rpush`, `msgs`, `${payload}`。
+
+
+**bridges.redis_single.$name.resource_opts**
+
+  *类型*: `bridge_redis:creation_opts_redis_single`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.redis_single.$name.server**
+
+  *类型*: `string`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+主机名具有以下形式：`Host[:Port]`。<br/>
+如果未指定 `[:Port]`，则使用 Redis 默认端口 6379。
+
+
+**bridges.redis_single.$name.redis_type**
+
+  *类型*: `single`
+
+  *默认值*: `single`
+
+  单机模式。当 Redis 服务运行在单机模式下，该配置必须设置为 'single'。
+
+
+**bridges.redis_single.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.redis_single.$name.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**bridges.redis_single.$name.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**bridges.redis_single.$name.database**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `0`
+
+  Redis 数据库 ID。
+
+
+**bridges.redis_single.$name.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**bridges.redis_single.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+
+资源启动相关的选项。
+
+**bridges.redis_cluster.$name.resource_opts.worker_pool_size**
+
+  *类型*: `integer`
+
+  *默认值*: `16`
+
+  *可选值*: `1-1024`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+
+**bridges.redis_cluster.$name.resource_opts.health_check_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  健康检查间隔。
+
+
+**bridges.redis_cluster.$name.resource_opts.start_after_created**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否在创建资源后立即启动资源。
+
+
+**bridges.redis_cluster.$name.resource_opts.start_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+
+**bridges.redis_cluster.$name.resource_opts.auto_restart_interval**
+
+  *类型*: `infinity | duration_ms`
+
+  Deprecated since 5.1.0.
+
+
+**bridges.redis_cluster.$name.resource_opts.query_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `async`
+
+  *可选值*: `sync | async`
+
+  请求模式。可选 '同步/异步'，默认为'异步'模式。
+
+
+**bridges.redis_cluster.$name.resource_opts.request_ttl**
+
+  *类型*: `timeout_duration_ms | infinity`
+
+  *默认值*: `45s`
+
+  Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
+
+
+**bridges.redis_cluster.$name.resource_opts.inflight_window**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  请求飞行队列窗口大小。当请求模式为异步时，如果需要严格保证来自同一 MQTT 客户端的消息有序，则必须将此值设为 1。
+
+
+**bridges.redis_cluster.$name.resource_opts.enable_queue**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.14.
+
+
+**bridges.redis_cluster.$name.resource_opts.max_buffer_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `256MB`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+
+
+资源启动相关的选项。
+
+**bridges.redis_sentinel.$name.resource_opts.worker_pool_size**
+
+  *类型*: `integer`
+
+  *默认值*: `16`
+
+  *可选值*: `1-1024`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+
+**bridges.redis_sentinel.$name.resource_opts.health_check_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  健康检查间隔。
+
+
+**bridges.redis_sentinel.$name.resource_opts.start_after_created**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否在创建资源后立即启动资源。
+
+
+**bridges.redis_sentinel.$name.resource_opts.start_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+
+**bridges.redis_sentinel.$name.resource_opts.auto_restart_interval**
+
+  *类型*: `infinity | duration_ms`
+
+  Deprecated since 5.1.0.
+
+
+**bridges.redis_sentinel.$name.resource_opts.query_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `async`
+
+  *可选值*: `sync | async`
+
+  请求模式。可选 '同步/异步'，默认为'异步'模式。
+
+
+**bridges.redis_sentinel.$name.resource_opts.request_ttl**
+
+  *类型*: `timeout_duration_ms | infinity`
+
+  *默认值*: `45s`
+
+  Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
+
+
+**bridges.redis_sentinel.$name.resource_opts.inflight_window**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  请求飞行队列窗口大小。当请求模式为异步时，如果需要严格保证来自同一 MQTT 客户端的消息有序，则必须将此值设为 1。
+
+
+**bridges.redis_sentinel.$name.resource_opts.batch_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `1`
+
+  最大批量请求大小。如果设为1，则无批处理。
+
+
+**bridges.redis_sentinel.$name.resource_opts.batch_time**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `0ms`
+
+  在较低消息率情况下尝试累积批量输出时的最大等待间隔，以提高资源的利用率。
+
+
+**bridges.redis_sentinel.$name.resource_opts.enable_queue**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.14.
+
+
+**bridges.redis_sentinel.$name.resource_opts.max_buffer_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `256MB`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+
+
+资源启动相关的选项。
+
+**bridges.redis_single.$name.resource_opts.worker_pool_size**
+
+  *类型*: `integer`
+
+  *默认值*: `16`
+
+  *可选值*: `1-1024`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+
+**bridges.redis_single.$name.resource_opts.health_check_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  健康检查间隔。
+
+
+**bridges.redis_single.$name.resource_opts.start_after_created**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否在创建资源后立即启动资源。
+
+
+**bridges.redis_single.$name.resource_opts.start_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+
+**bridges.redis_single.$name.resource_opts.auto_restart_interval**
+
+  *类型*: `infinity | duration_ms`
+
+  Deprecated since 5.1.0.
+
+
+**bridges.redis_single.$name.resource_opts.query_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `async`
+
+  *可选值*: `sync | async`
+
+  请求模式。可选 '同步/异步'，默认为'异步'模式。
+
+
+**bridges.redis_single.$name.resource_opts.request_ttl**
+
+  *类型*: `timeout_duration_ms | infinity`
+
+  *默认值*: `45s`
+
+  Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
+
+
+**bridges.redis_single.$name.resource_opts.inflight_window**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  请求飞行队列窗口大小。当请求模式为异步时，如果需要严格保证来自同一 MQTT 客户端的消息有序，则必须将此值设为 1。
+
+
+**bridges.redis_single.$name.resource_opts.batch_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `1`
+
+  最大批量请求大小。如果设为1，则无批处理。
+
+
+**bridges.redis_single.$name.resource_opts.batch_time**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `0ms`
+
+  在较低消息率情况下尝试累积批量输出时的最大等待间隔，以提高资源的利用率。
+
+
+**bridges.redis_single.$name.resource_opts.enable_queue**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.14.
+
+
+**bridges.redis_single.$name.resource_opts.max_buffer_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `256MB`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+
+### MongoDB
+
+
+MongoDB（独立）配置
+
+**bridges.mongodb_single.$name.mongo_type**
+
+  *类型*: `single`
+
+  *默认值*: `single`
+
+  Standalone 模式。当 MongoDB 服务运行在 standalone 模式下，该配置必须设置为 'single'。
+
+
+**bridges.mongodb_single.$name.server**
+
+  *类型*: `string`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+主机名具有以下形式：`Host[:Port]`。<br/>
+如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
+
+
+**bridges.mongodb_single.$name.w_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `unsafe`
+
+  *可选值*: `unsafe | safe`
+
+  写模式。
+
+
+**bridges.mongodb_single.$name.srv_record**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  使用 DNS SRV 记录。
+
+
+**bridges.mongodb_single.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.mongodb_single.$name.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**bridges.mongodb_single.$name.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**bridges.mongodb_single.$name.use_legacy_protocol**
+
+  *类型*: `enum`
+
+  *默认值*: `auto`
+
+  *可选值*: `auto | true | false`
+
+  Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.
+
+
+**bridges.mongodb_single.$name.auth_source**
+
+  *类型*: `string`
+
+  与用户证书关联的数据库名称。
+
+
+**bridges.mongodb_single.$name.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**bridges.mongodb_single.$name.topology**
+
+  *类型*: `topology`
+
+
+**bridges.mongodb_single.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+**bridges.mongodb_single.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用或停用该MongoDB桥
+
+
+**bridges.mongodb_single.$name.collection**
+
+  *类型*: `string`
+
+  *默认值*: `mqtt`
+
+  数据将被存储到的集合
+
+
+**bridges.mongodb_single.$name.payload_template**
+
+  *类型*: `string`
+
+  用于格式化写入 MongoDB 的消息模板。 如果未定义，规则引擎会使用 JSON 格式序列化所有的可见输入，例如 clientid, topic, payload 等。
+
+
+**bridges.mongodb_single.$name.resource_opts**
+
+  *类型*: `bridge_mongodb:creation_opts`
+
+  资源启动相关的选项。
+
+
+
+
+MongoDB（Replica Set）配置
+
+**bridges.mongodb_rs.$name.mongo_type**
+
+  *类型*: `rs`
+
+  *默认值*: `rs`
+
+  Replica set模式。当 MongoDB 服务运行在 replica-set 模式下，该配置必须设置为 'rs'。
+
+
+**bridges.mongodb_rs.$name.servers**
+
+  *类型*: `string`
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+主机名具有以下形式：`Host[:Port]`。
+如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
+
+
+**bridges.mongodb_rs.$name.w_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `unsafe`
+
+  *可选值*: `unsafe | safe`
+
+  写模式。
+
+
+**bridges.mongodb_rs.$name.r_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `master`
+
+  *可选值*: `master | slave_ok`
+
+  读模式。
+
+
+**bridges.mongodb_rs.$name.replica_set_name**
+
+  *类型*: `string`
+
+  副本集的名称。
+
+
+**bridges.mongodb_rs.$name.srv_record**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  使用 DNS SRV 记录。
+
+
+**bridges.mongodb_rs.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.mongodb_rs.$name.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**bridges.mongodb_rs.$name.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**bridges.mongodb_rs.$name.use_legacy_protocol**
+
+  *类型*: `enum`
+
+  *默认值*: `auto`
+
+  *可选值*: `auto | true | false`
+
+  Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.
+
+
+**bridges.mongodb_rs.$name.auth_source**
+
+  *类型*: `string`
+
+  与用户证书关联的数据库名称。
+
+
+**bridges.mongodb_rs.$name.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**bridges.mongodb_rs.$name.topology**
+
+  *类型*: `topology`
+
+
+**bridges.mongodb_rs.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+**bridges.mongodb_rs.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用或停用该MongoDB桥
+
+
+**bridges.mongodb_rs.$name.collection**
+
+  *类型*: `string`
+
+  *默认值*: `mqtt`
+
+  数据将被存储到的集合
+
+
+**bridges.mongodb_rs.$name.payload_template**
+
+  *类型*: `string`
+
+  用于格式化写入 MongoDB 的消息模板。 如果未定义，规则引擎会使用 JSON 格式序列化所有的可见输入，例如 clientid, topic, payload 等。
+
+
+**bridges.mongodb_rs.$name.resource_opts**
+
+  *类型*: `bridge_mongodb:creation_opts`
+
+  资源启动相关的选项。
+
+
+
+
+MongoDB (Sharded)配置
+
+**bridges.mongodb_sharded.$name.mongo_type**
+
+  *类型*: `sharded`
+
+  *默认值*: `sharded`
+
+  Sharded cluster模式。当 MongoDB 服务运行在 sharded 模式下，该配置必须设置为 'sharded'。
+
+
+**bridges.mongodb_sharded.$name.servers**
+
+  *类型*: `string`
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+主机名具有以下形式：`Host[:Port]`。
+如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
+
+
+**bridges.mongodb_sharded.$name.w_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `unsafe`
+
+  *可选值*: `unsafe | safe`
+
+  写模式。
+
+
+**bridges.mongodb_sharded.$name.srv_record**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  使用 DNS SRV 记录。
+
+
+**bridges.mongodb_sharded.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.mongodb_sharded.$name.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**bridges.mongodb_sharded.$name.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**bridges.mongodb_sharded.$name.use_legacy_protocol**
+
+  *类型*: `enum`
+
+  *默认值*: `auto`
+
+  *可选值*: `auto | true | false`
+
+  Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.
+
+
+**bridges.mongodb_sharded.$name.auth_source**
+
+  *类型*: `string`
+
+  与用户证书关联的数据库名称。
+
+
+**bridges.mongodb_sharded.$name.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**bridges.mongodb_sharded.$name.topology**
+
+  *类型*: `topology`
+
+
+**bridges.mongodb_sharded.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+**bridges.mongodb_sharded.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用或停用该MongoDB桥
+
+
+**bridges.mongodb_sharded.$name.collection**
+
+  *类型*: `string`
+
+  *默认值*: `mqtt`
+
+  数据将被存储到的集合
+
+
+**bridges.mongodb_sharded.$name.payload_template**
+
+  *类型*: `string`
+
+  用于格式化写入 MongoDB 的消息模板。 如果未定义，规则引擎会使用 JSON 格式序列化所有的可见输入，例如 clientid, topic, payload 等。
+
+
+**bridges.mongodb_sharded.$name.resource_opts**
+
+  *类型*: `bridge_mongodb:creation_opts`
+
+  资源启动相关的选项。
+
+
+
+
+资源启动相关的选项。
+
+**bridge_mongodb:creation_opts.worker_pool_size**
+
+  *类型*: `integer`
+
+  *默认值*: `16`
+
+  *可选值*: `1-1024`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+
+**bridge_mongodb:creation_opts.health_check_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  健康检查间隔。
+
+
+**bridge_mongodb:creation_opts.start_after_created**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否在创建资源后立即启动资源。
+
+
+**bridge_mongodb:creation_opts.start_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+
+**bridge_mongodb:creation_opts.auto_restart_interval**
+
+  *类型*: `infinity | duration_ms`
+
+  Deprecated since 5.1.0.
+
+
+**bridge_mongodb:creation_opts.query_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `async`
+
+  *可选值*: `sync | async`
+
+  请求模式。可选 '同步/异步'，默认为'异步'模式。
+
+
+**bridge_mongodb:creation_opts.request_ttl**
+
+  *类型*: `timeout_duration_ms | infinity`
+
+  *默认值*: `45s`
+
+  Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
+
+
+**bridge_mongodb:creation_opts.inflight_window**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  请求飞行队列窗口大小。当请求模式为异步时，如果需要严格保证来自同一 MQTT 客户端的消息有序，则必须将此值设为 1。
+
+
+**bridge_mongodb:creation_opts.batch_time**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `0ms`
+
+  在较低消息率情况下尝试累积批量输出时的最大等待间隔，以提高资源的利用率。
+
+
+**bridge_mongodb:creation_opts.enable_queue**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.14.
+
+
+**bridge_mongodb:creation_opts.max_buffer_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `256MB`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+
+### InfluxDB
+
+
+InfluxDB HTTP API 协议。支持 Influxdb v1.8 以及之前的版本。
+
+**bridges.influxdb_api_v1.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用 Bridge
+
+
+**bridges.influxdb_api_v1.$name.local_topic**
+
+  *类型*: `string`
+
+  发送到 'local_topic' 的消息都会转发到 InfluxDB。 <br/>
+注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 InfluxDB。
+
+
+**bridges.influxdb_api_v1.$name.write_syntax**
+
+  *类型*: `emqx_bridge_influxdb:write_syntax`
+
+  使用 InfluxDB API Line Protocol 写入 InfluxDB 的数据，支持占位符<br/>
+参考 [InfluxDB 2.3 Line Protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) 及
+[InfluxDB 1.8 Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_tutorial/) <br/>
+TLDR: <br/>
+```
+\<measurement>[,\<tag_key>=\<tag_value>[,\<tag_key>=\<tag_value>]] \<field_key>=\<field_value>[,\<field_key>=\<field_value>] [\<timestamp>]
+```
+注意，整形数值占位符后需要添加一个字符 `i` 类型标识。例如 `${payload.int_value}i`
+
+
+**bridges.influxdb_api_v1.$name.resource_opts**
+
+  *类型*: `resource_schema:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.influxdb_api_v1.$name.server**
+
+  *类型*: `string`
+
+  *默认值*: `127.0.0.1:8086`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+主机名具有以下形式：`Host[:Port]`。<br/>
+如果未指定 `[:Port]`，则使用 InfluxDB 默认端口 8086。
+
+
+**bridges.influxdb_api_v1.$name.precision**
+
+  *类型*: `enum`
+
+  *默认值*: `ms`
+
+  *可选值*: `ns | us | ms | s`
+
+  InfluxDB 时间精度。
+
+
+**bridges.influxdb_api_v1.$name.database**
+
+  *类型*: `string`
+
+  InfluxDB 数据库。
+
+
+**bridges.influxdb_api_v1.$name.username**
+
+  *类型*: `string`
+
+  InfluxDB 用户名。
+
+
+**bridges.influxdb_api_v1.$name.password**
+
+  *类型*: `string`
+
+  InfluxDB 密码。
+
+
+**bridges.influxdb_api_v1.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+
+InfluxDB HTTP API V2 协议。支持 Influxdb v2.0 以及之后的版本。
+
+**bridges.influxdb_api_v2.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用 Bridge
+
+
+**bridges.influxdb_api_v2.$name.local_topic**
+
+  *类型*: `string`
+
+  发送到 'local_topic' 的消息都会转发到 InfluxDB。 <br/>
+注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 InfluxDB。
+
+
+**bridges.influxdb_api_v2.$name.write_syntax**
+
+  *类型*: `emqx_bridge_influxdb:write_syntax`
+
+  使用 InfluxDB API Line Protocol 写入 InfluxDB 的数据，支持占位符<br/>
+参考 [InfluxDB 2.3 Line Protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) 及
+[InfluxDB 1.8 Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_tutorial/) <br/>
+TLDR: <br/>
+```
+\<measurement>[,\<tag_key>=\<tag_value>[,\<tag_key>=\<tag_value>]] \<field_key>=\<field_value>[,\<field_key>=\<field_value>] [\<timestamp>]
+```
+注意，整形数值占位符后需要添加一个字符 `i` 类型标识。例如 `${payload.int_value}i`
+
+
+**bridges.influxdb_api_v2.$name.resource_opts**
+
+  *类型*: `resource_schema:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.influxdb_api_v2.$name.server**
+
+  *类型*: `string`
+
+  *默认值*: `127.0.0.1:8086`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+主机名具有以下形式：`Host[:Port]`。<br/>
+如果未指定 `[:Port]`，则使用 InfluxDB 默认端口 8086。
+
+
+**bridges.influxdb_api_v2.$name.precision**
+
+  *类型*: `enum`
+
+  *默认值*: `ms`
+
+  *可选值*: `ns | us | ms | s`
+
+  InfluxDB 时间精度。
+
+
+**bridges.influxdb_api_v2.$name.bucket**
+
+  *类型*: `string`
+
+  InfluxDB bucket 名称。
+
+
+**bridges.influxdb_api_v2.$name.org**
+
+  *类型*: `string`
+
+  InfluxDB 组织名称。
+
+
+**bridges.influxdb_api_v2.$name.token**
+
+  *类型*: `string`
+
+  InfluxDB token。
+
+
+**bridges.influxdb_api_v2.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+### PostgreSQL
+
+
+PostgreSQL 桥接配置
+
+**bridge_pgsql:config.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用桥接
+
+
+**bridge_pgsql:config.sql**
+
+  *类型*: `string`
+
+  *默认值*: `insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, TO_TIMESTAMP((${timestamp} :: bigint)/1000))`
+
+  SQL 模板
+
+
+**bridge_pgsql:config.local_topic**
+
+  *类型*: `string`
+
+  发送到 'local_topic' 的消息都会转发到 PostgreSQL。 <br/>
+注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。
+
+
+**bridge_pgsql:config.resource_opts**
+
+  *类型*: `resource_schema:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridge_pgsql:config.server**
+
+  *类型*: `string`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+主机名具有以下形式：`Host[:Port]`。<br/>
+如果未指定 `[:Port]`，则使用 PostgreSQL 默认端口 5432。
+
+
+**bridge_pgsql:config.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**bridge_pgsql:config.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridge_pgsql:config.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**bridge_pgsql:config.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**bridge_pgsql:config.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**bridge_pgsql:config.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+### TDengine
+
+
+TDengine 桥接配置
+
+**bridges.tdengine.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用桥接
+
+
+**bridges.tdengine.$name.sql**
+
+  *类型*: `string`
+
+  *默认值*: `insert into t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})`
+
+  SQL 模板
+
+
+**bridges.tdengine.$name.local_topic**
+
+  *类型*: `string`
+
+  发送到 'local_topic' 的消息都会转发到 TDengine。 <br/>
+注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。
+
+
+**bridges.tdengine.$name.resource_opts**
+
+  *类型*: `resource_schema:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.tdengine.$name.server**
+
+  *类型*: `string`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+主机名具有以下形式：`Host[:Port]`。<br/>
+如果未指定 `[:Port]`，则使用 TDengine 默认端口 6041。
+
+
+**bridges.tdengine.$name.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**bridges.tdengine.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.tdengine.$name.username**
+
+  *类型*: `string`
+
+  *默认值*: `root`
+
+  内部数据库的用户名。
+
+
+**bridges.tdengine.$name.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**bridges.tdengine.$name.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+
+### TimescaleDB
+
+### Apache IoTDB
+
+
+基本认证（basic auth）的参数。
+
+**bridges.iotdb.$name.authentication.username**
+
+  *类型*: `string`
+
+  Basic auth 用户名。类似 IoTDB REST 接口中的用户名。
+
+
+**bridges.iotdb.$name.authentication.password**
+
+  *类型*: `string`
+
+  Basic auth 密码。类似 IoTDB REST 接口中的密码。
+
+
+
+
+IoTDB Bridge 配置
+
+**bridges.iotdb.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用或禁用该桥接
+
+
+**bridges.iotdb.$name.authentication**
+
+  *类型*: [bridge_iotdb:auth_basic](#bridge_iotdb:auth_basic)
+
+  *默认值*: `auth_basic`
+
+  认证信息
+
+
+**bridges.iotdb.$name.is_aligned**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  是否对齐时间序列。
+
+
+**bridges.iotdb.$name.device_id**
+
+  *类型*: `string`
+
+  IoTDB 的设备ID（DeviceID）。可以使用一个占位符。如果留空则 MQTT 消息体中必须有一个 `device_id` 字段，
+或者 EMQX 规则引擎的 SQL 必须输出一个 `device_id` 字段。
+
+
+**bridges.iotdb.$name.iotdb_version**
+
+  *类型*: `enum`
+
+  *默认值*: `v1.1.x`
+
+  *可选值*: `v1.1.x | v1.0.x | v0.13.x`
+
+  IoTDB 版本。
+
+
+**bridges.iotdb.$name.resource_opts**
+
+  *类型*: `bridge_iotdb:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.iotdb.$name.connect_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  The timeout when connecting to the HTTP server.
+
+
+**bridges.iotdb.$name.retry_interval**
+
+  *类型*: `timeout_duration`
+
+  Deprecated since 5.0.4.
+
+
+**bridges.iotdb.$name.pool_type**
+
+  *类型*: `emqx_bridge_http_connector:pool_type`
+
+  *默认值*: `random`
+
+  The type of the pool. Can be one of `random`, `hash`.
+
+
+**bridges.iotdb.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  The pool size.
+
+
+**bridges.iotdb.$name.enable_pipelining**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
+
+
+**bridges.iotdb.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+**bridges.iotdb.$name.base_url**
+
+  *类型*: `url`
+
+  IoTDB REST 服务的 URL。
+
+
+**bridges.iotdb.$name.max_retries**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `2`
+
+  HTTP 请求的最大重试次数。
+
+
+
+
+资源启动相关的选项。
+
+**bridges.iotdb.$name.resource_opts.worker_pool_size**
+
+  *类型*: `integer`
+
+  *默认值*: `16`
+
+  *可选值*: `1-1024`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+
+**bridges.iotdb.$name.resource_opts.health_check_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  健康检查间隔。
+
+
+**bridges.iotdb.$name.resource_opts.start_after_created**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否在创建资源后立即启动资源。
+
+
+**bridges.iotdb.$name.resource_opts.start_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+
+**bridges.iotdb.$name.resource_opts.auto_restart_interval**
+
+  *类型*: `infinity | duration_ms`
+
+  Deprecated since 5.1.0.
+
+
+**bridges.iotdb.$name.resource_opts.query_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `async`
+
+  *可选值*: `sync | async`
+
+  请求模式。可选 '同步/异步'，默认为'异步'模式。
+
+
+**bridges.iotdb.$name.resource_opts.request_ttl**
+
+  *类型*: `timeout_duration_ms | infinity`
+
+  *默认值*: `45s`
+
+  Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
+
+
+**bridges.iotdb.$name.resource_opts.inflight_window**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  请求飞行队列窗口大小。当请求模式为异步时，如果需要严格保证来自同一 MQTT 客户端的消息有序，则必须将此值设为 1。
+
+
+**bridges.iotdb.$name.resource_opts.enable_queue**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.14.
+
+
+**bridges.iotdb.$name.resource_opts.max_buffer_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `256MB`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+
+### MatrixDB
+
+### OpenTSDB
+
+
+OpenTSDB 桥接配置
+
+**bridges.opents.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用桥接
+
+
+**bridges.opents.$name.resource_opts**
+
+  *类型*: `resource_schema:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.opents.$name.server**
+
+  *类型*: `string`
+
+  服务器的地址。
+
+
+**bridges.opents.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.opents.$name.summary**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否返回摘要信息。
+
+
+**bridges.opents.$name.details**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  是否返回详细信息。
+
+
+**bridges.opents.$name.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+
+### GreptimeDB
+
+
+GreptimeDB's protocol. Support GreptimeDB v1.8 and before.
+
+**bridges.greptimedb.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用 Bridge
+
+
+**bridges.greptimedb.$name.local_topic**
+
+  *类型*: `string`
+
+  The MQTT topic filter to be forwarded to the GreptimeDB. All MQTT 'PUBLISH' messages with the topic
+matching the local_topic will be forwarded.<br/>
+NOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is
+configured, then both the data got from the rule and the MQTT messages that match local_topic
+will be forwarded.
+
+
+**bridges.greptimedb.$name.write_syntax**
+
+  *类型*: `emqx_bridge_influxdb:write_syntax`
+
+  Conf of GreptimeDB gRPC protocol to write data points. Write syntax is a text-based format that provides the measurement, tag set, field set, and timestamp of a data point, and placeholder supported, which is the same as InfluxDB line protocol.
+See also [InfluxDB 2.3 Line Protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) and
+[GreptimeDB 1.8 Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_tutorial/) <br/>
+TLDR:<br/>
+```
+\<measurement>[,\<tag_key>=\<tag_value>[,\<tag_key>=\<tag_value>]] \<field_key>=\<field_value>[,\<field_key>=\<field_value>] [\<timestamp>]
+```
+Please note that a placeholder for an integer value must be annotated with a suffix `i`. For example `${payload.int_value}i`.
+
+
+**bridges.greptimedb.$name.resource_opts**
+
+  *类型*: `resource_schema:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.greptimedb.$name.server**
+
+  *类型*: `string`
+
+  *默认值*: `127.0.0.1:4001`
+
+  The IPv4 or IPv6 address or the hostname to connect to.<br/>
+A host entry has the following form: `Host[:Port]`.<br/>
+The GreptimeDB default port 8086 is used if `[:Port]` is not specified.
+
+
+**bridges.greptimedb.$name.precision**
+
+  *类型*: `enum`
+
+  *默认值*: `ms`
+
+  *可选值*: `ns | us | ms | s`
+
+  GreptimeDB time precision.
+
+
+**bridges.greptimedb.$name.dbname**
+
+  *类型*: `string`
+
+  GreptimeDB database.
+
+
+**bridges.greptimedb.$name.username**
+
+  *类型*: `string`
+
+  GreptimeDB username.
+
+
+**bridges.greptimedb.$name.password**
+
+  *类型*: `string`
+
+  GreptimeDB password.
+
+
+**bridges.greptimedb.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+### ClickHouse
+
+
+Clickhouse 桥接配置
+
+**bridges.clickhouse.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用桥接
+
+
+**bridges.clickhouse.$name.sql**
+
+  *类型*: `string`
+
+  *默认值*: `INSERT INTO mqtt_test(payload, arrived) VALUES ('${payload}', ${timestamp})`
+
+  可以使用 ${field} 占位符来引用消息与客户端上下文中的变量，请确保对应字段存在且数据格式符合预期。此处不支持 [SQL 预处理](https://docs.emqx.com/zh/enterprise/v5.0/data-integration/data-bridges.html#sql-预处理)。
+
+
+**bridges.clickhouse.$name.batch_value_separator**
+
+  *类型*: `string`
+
+  *默认值*: `, `
+
+  默认为逗号 ','，适用于 VALUE 格式。您也可以使用其他分隔符， 请参考 [INSERT INTO 语句](https://clickhouse.com/docs/en/sql-reference/statements/insert-into)。
+
+
+**bridges.clickhouse.$name.local_topic**
+
+  *类型*: `string`
+
+  发送到 'local_topic' 的消息都会转发到 Clickhouse。 <br/>
+注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。
+
+
+**bridges.clickhouse.$name.resource_opts**
+
+  *类型*: `bridge_clickhouse:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.clickhouse.$name.url**
+
+  *类型*: `emqx_bridge_clickhouse_connector:url`
+
+  你想连接到的Clickhouse服务器的HTTP URL（例如http://myhostname:8123）。
+
+
+**bridges.clickhouse.$name.connect_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  连接HTTP服务器的超时时间。
+
+
+**bridges.clickhouse.$name.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**bridges.clickhouse.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.clickhouse.$name.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**bridges.clickhouse.$name.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**bridges.clickhouse.$name.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+
+
+资源启动相关的选项。
+
+**bridges.clickhouse.$name.resource_opts.worker_pool_size**
+
+  *类型*: `integer`
+
+  *默认值*: `16`
+
+  *可选值*: `1-1024`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+
+**bridges.clickhouse.$name.resource_opts.health_check_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  健康检查间隔。
+
+
+**bridges.clickhouse.$name.resource_opts.start_after_created**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否在创建资源后立即启动资源。
+
+
+**bridges.clickhouse.$name.resource_opts.start_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+
+**bridges.clickhouse.$name.resource_opts.auto_restart_interval**
+
+  *类型*: `infinity | duration_ms`
+
+  Deprecated since 5.1.0.
+
+
+**bridges.clickhouse.$name.resource_opts.query_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `async`
+
+  *可选值*: `sync | async`
+
+  请求模式。可选 '同步/异步'，默认为'异步'模式。
+
+
+**bridges.clickhouse.$name.resource_opts.request_ttl**
+
+  *类型*: `timeout_duration_ms | infinity`
+
+  *默认值*: `45s`
+
+  Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
+
+
+**bridges.clickhouse.$name.resource_opts.inflight_window**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  请求飞行队列窗口大小。当请求模式为异步时，如果需要严格保证来自同一 MQTT 客户端的消息有序，则必须将此值设为 1。
+
+
+**bridges.clickhouse.$name.resource_opts.batch_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `1`
+
+  最大批量请求大小。如果设为1，则无批处理。
+
+
+**bridges.clickhouse.$name.resource_opts.batch_time**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `0ms`
+
+  在较低消息率情况下尝试累积批量输出时的最大等待间隔，以提高资源的利用率。
+
+
+**bridges.clickhouse.$name.resource_opts.enable_queue**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.14.
+
+
+**bridges.clickhouse.$name.resource_opts.max_buffer_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `256MB`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+
+### DynamoDB
+
+
+DynamoDB 桥接配置
+
+**bridges.dynamo.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用桥接
+
+
+**bridges.dynamo.$name.template**
+
+  *类型*: `string`
+
+  *默认值*: `""`
+
+  模板, 默认为空，为空时将会将整个消息存入数据库
+
+
+**bridges.dynamo.$name.local_topic**
+
+  *类型*: `string`
+
+  发送到 'local_topic' 的消息都会转发到 DynamoDB。 <br/>
+注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。
+
+
+**bridges.dynamo.$name.resource_opts**
+
+  *类型*: `bridge_dynamo:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.dynamo.$name.url**
+
+  *类型*: `string`
+
+  DynamoDB 的地址。
+
+
+**bridges.dynamo.$name.table**
+
+  *类型*: `string`
+
+  DynamoDB 的表。
+
+
+**bridges.dynamo.$name.aws_access_key_id**
+
+  *类型*: `string`
+
+  DynamoDB 的访问 ID。
+
+
+**bridges.dynamo.$name.aws_secret_access_key**
+
+  *类型*: `string`
+
+  DynamoDB 的访问密钥。
+
+
+**bridges.dynamo.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.dynamo.$name.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+
+
+资源启动相关的选项。
+
+**bridges.dynamo.$name.resource_opts.worker_pool_size**
+
+  *类型*: `integer`
+
+  *默认值*: `16`
+
+  *可选值*: `1-1024`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+
+**bridges.dynamo.$name.resource_opts.health_check_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  健康检查间隔。
+
+
+**bridges.dynamo.$name.resource_opts.start_after_created**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否在创建资源后立即启动资源。
+
+
+**bridges.dynamo.$name.resource_opts.start_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+
+**bridges.dynamo.$name.resource_opts.auto_restart_interval**
+
+  *类型*: `infinity | duration_ms`
+
+  Deprecated since 5.1.0.
+
+
+**bridges.dynamo.$name.resource_opts.query_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `async`
+
+  *可选值*: `sync | async`
+
+  请求模式。可选 '同步/异步'，默认为'异步'模式。
+
+
+**bridges.dynamo.$name.resource_opts.request_ttl**
+
+  *类型*: `timeout_duration_ms | infinity`
+
+  *默认值*: `45s`
+
+  Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
+
+
+**bridges.dynamo.$name.resource_opts.inflight_window**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  请求飞行队列窗口大小。当请求模式为异步时，如果需要严格保证来自同一 MQTT 客户端的消息有序，则必须将此值设为 1。
+
+
+**bridges.dynamo.$name.resource_opts.batch_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `1`
+
+  最大批量请求大小。如果设为1，则无批处理。
+
+
+**bridges.dynamo.$name.resource_opts.batch_time**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `0ms`
+
+  在较低消息率情况下尝试累积批量输出时的最大等待间隔，以提高资源的利用率。
+
+
+**bridges.dynamo.$name.resource_opts.enable_queue**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.14.
+
+
+**bridges.dynamo.$name.resource_opts.max_buffer_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `256MB`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+
+### Cassandra
+
+
+Cassandra 桥接配置
+
+**bridges.cassandra.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用桥接
+
+
+**bridges.cassandra.$name.cql**
+
+  *类型*: `string`
+
+  *默认值*: `insert into mqtt_msg(topic, msgid, sender, qos, payload, arrived, retain) values (${topic}, ${id}, ${clientid}, ${qos}, ${payload}, ${timestamp}, ${flags.retain})`
+
+  CQL 模板
+
+
+**bridges.cassandra.$name.local_topic**
+
+  *类型*: `string`
+
+  发送到 'local_topic' 的消息都会转发到 Cassandra。 <br/>
+注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。
+
+
+**bridges.cassandra.$name.resource_opts**
+
+  *类型*: `resource_schema:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.cassandra.$name.servers**
+
+  *类型*: `string`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+主机名具有以下形式：`Host[:Port][,Host2:Port]`。<br/>
+如果未指定 `[:Port]`，则使用 Cassandra 默认端口 9042。
+
+
+**bridges.cassandra.$name.keyspace**
+
+  *类型*: `string`
+
+  要连接到的 Keyspace 名称。
+
+
+**bridges.cassandra.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.cassandra.$name.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**bridges.cassandra.$name.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**bridges.cassandra.$name.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+**bridges.cassandra.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+### Microsoft SQL Server
+
+
+Microsoft SQL Server 桥接配置
+
+**bridges.sqlserver.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用桥接
+
+
+**bridges.sqlserver.$name.sql**
+
+  *类型*: `string`
+
+  *默认值*: `insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )`
+
+  SQL 模板
+
+
+**bridges.sqlserver.$name.driver**
+
+  *类型*: `string`
+
+  *默认值*: `ms-sql`
+
+  SQL Server Driver 名称
+
+
+**bridges.sqlserver.$name.local_topic**
+
+  *类型*: `string`
+
+  发送到 'local_topic' 的消息都会转发到 Microsoft SQL Server。 <br/>
+注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。
+
+
+**bridges.sqlserver.$name.resource_opts**
+
+  *类型*: `bridge_sqlserver:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.sqlserver.$name.server**
+
+  *类型*: `string`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+主机名具有以下形式：`Host[:Port]`。<br/>
+如果未指定 `[:Port]`，则使用 SQL Server 默认端口 1433。
+
+
+**bridges.sqlserver.$name.database**
+
+  *类型*: `string`
+
+  数据库名字。
+
+
+**bridges.sqlserver.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.sqlserver.$name.username**
+
+  *类型*: `string`
+
+  *默认值*: `sa`
+
+  内部数据库的用户名。
+
+
+**bridges.sqlserver.$name.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**bridges.sqlserver.$name.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+
+
+资源启动相关的选项。
+
+**bridges.sqlserver.$name.resource_opts.worker_pool_size**
+
+  *类型*: `integer`
+
+  *默认值*: `16`
+
+  *可选值*: `1-1024`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+
+**bridges.sqlserver.$name.resource_opts.health_check_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  健康检查间隔。
+
+
+**bridges.sqlserver.$name.resource_opts.start_after_created**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否在创建资源后立即启动资源。
+
+
+**bridges.sqlserver.$name.resource_opts.start_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+
+**bridges.sqlserver.$name.resource_opts.auto_restart_interval**
+
+  *类型*: `infinity | duration_ms`
+
+  Deprecated since 5.1.0.
+
+
+**bridges.sqlserver.$name.resource_opts.query_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `async`
+
+  *可选值*: `sync | async`
+
+  请求模式。可选 '同步/异步'，默认为'异步'模式。
+
+
+**bridges.sqlserver.$name.resource_opts.request_ttl**
+
+  *类型*: `timeout_duration_ms | infinity`
+
+  *默认值*: `45s`
+
+  Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
+
+
+**bridges.sqlserver.$name.resource_opts.inflight_window**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  请求飞行队列窗口大小。当请求模式为异步时，如果需要严格保证来自同一 MQTT 客户端的消息有序，则必须将此值设为 1。
+
+
+**bridges.sqlserver.$name.resource_opts.batch_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `1`
+
+  最大批量请求大小。如果设为1，则无批处理。
+
+
+**bridges.sqlserver.$name.resource_opts.batch_time**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `0ms`
+
+  在较低消息率情况下尝试累积批量输出时的最大等待间隔，以提高资源的利用率。
+
+
+**bridges.sqlserver.$name.resource_opts.enable_queue**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.14.
+
+
+**bridges.sqlserver.$name.resource_opts.max_buffer_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `256MB`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+
+### Oracle Database
+
+
+Oracle Database 桥接配置
+
+**bridges.oracle.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用桥接
+
+
+**bridges.oracle.$name.sql**
+
+  *类型*: `string`
+
+  *默认值*: `insert into t_mqtt_msgs(msgid, topic, qos, payload) values (${id}, ${topic}, ${qos}, ${payload})`
+
+  SQL模板。模板字符串可以包含消息元数据和有效载荷字段的占位符。占位符的插入不需要任何检查和特殊格式化，因此必须确保插入的数值格式化和转义正确。模板字符串可以包含占位符模板字符串可以包含消息元数据和有效载荷字段的占位符。这些占位符被插入所以必须确保插入的值的格式正确。因此，确保插入的值格式化和转义正确是非常重要的。模板字符串可以包含占位符模板字符串可以包含消息元数据和有效载荷字段的占位符。这些占位符被插入所以必须确保插入的值的格式正确。确保插入的值被正确地格式化和转义。
+
+
+**bridges.oracle.$name.local_topic**
+
+  *类型*: `string`
+
+  发送到 'local_topic' 的消息都会转发到 Oracle Database。 <br/>注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。
+
+
+**bridges.oracle.$name.resource_opts**
+
+  *类型*: `resource_schema:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.oracle.$name.server**
+
+  *类型*: `string`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>主机名具有以下形式：`Host[:Port]`。<br/>如果未指定 `[:Port]`，则使用 Oracle Database 默认端口 1521。
+
+
+**bridges.oracle.$name.sid**
+
+  *类型*: `string`
+
+  Oracle Database Sid 名称
+
+
+**bridges.oracle.$name.service_name**
+
+  *类型*: `string`
+
+  Oracle Database 服务名称。
+
+
+**bridges.oracle.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.oracle.$name.username**
+
+  *类型*: `string`
+
+  内部数据库的用户名。
+
+
+**bridges.oracle.$name.password**
+
+  *类型*: `string`
+
+  内部数据库密码。
+
+
+**bridges.oracle.$name.auto_reconnect**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.15.
+
+
+
+### HStreamDB
+
+
+Configuration for an HStreamDB bridge.
+
+**bridges.hstreamdb.$name.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用/禁用 Bridge
+
+
+**bridges.hstreamdb.$name.direction**
+
+  *类型*: `egress`
+
+  *默认值*: `egress`
+
+  The direction of this bridge, MUST be 'egress'
+
+
+**bridges.hstreamdb.$name.local_topic**
+
+  *类型*: `string`
+
+  The MQTT topic filter to be forwarded to the HStreamDB. All MQTT 'PUBLISH' messages with the topic
+matching the local_topic will be forwarded.<br/>
+NOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is
+configured, then both the data got from the rule and the MQTT messages that match local_topic
+will be forwarded.
+
+
+**bridges.hstreamdb.$name.record_template**
+
+  *类型*: `string`
+
+  *默认值*: `${payload}`
+
+  The HStream Record template to be forwarded to the HStreamDB. Placeholders supported.<br>
+NOTE: When you use `raw record` template (which means the data is not a valid JSON), you should use `read` or `subscription` in HStream to get the data.
+
+
+**bridges.hstreamdb.$name.resource_opts**
+
+  *类型*: `resource_schema:creation_opts`
+
+  *默认值*: `{}`
+
+  资源相关的选项。
+
+
+**bridges.hstreamdb.$name.url**
+
+  *类型*: `string`
+
+  *默认值*: `http://127.0.0.1:6570`
+
+  HStreamDB Server URL. Using gRPC http server address.
+
+
+**bridges.hstreamdb.$name.stream**
+
+  *类型*: `string`
+
+  HStreamDB Stream Name.
+
+
+**bridges.hstreamdb.$name.partition_key**
+
+  *类型*: `string`
+
+  HStreamDB Partition Key. Placeholders supported.
+
+
+**bridges.hstreamdb.$name.pool_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `8`
+
+  桥接远端服务时使用的连接池大小。
+
+
+**bridges.hstreamdb.$name.grpc_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `30s`
+
+  HStreamDB gRPC Timeout.
+
+
+**bridges.hstreamdb.$name.ssl**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  *默认值*: `{"enable":false}`
+
+  启用 SSL 连接。
+
+
+
+{% endemqxee %}
+
+### 附录：公共参数
+
+
+资源启动相关的选项。
+
+**resource_schema:creation_opts.worker_pool_size**
+
+  *类型*: `integer`
+
+  *默认值*: `16`
+
+  *可选值*: `1-1024`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+
+**resource_schema:creation_opts.health_check_interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `15s`
+
+  健康检查间隔。
+
+
+**resource_schema:creation_opts.start_after_created**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否在创建资源后立即启动资源。
+
+
+**resource_schema:creation_opts.start_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5s`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+
+**resource_schema:creation_opts.auto_restart_interval**
+
+  *类型*: `infinity | duration_ms`
+
+  Deprecated since 5.1.0.
+
+
+**resource_schema:creation_opts.query_mode**
+
+  *类型*: `enum`
+
+  *默认值*: `async`
+
+  *可选值*: `sync | async`
+
+  请求模式。可选 '同步/异步'，默认为'异步'模式。
+
+
+**resource_schema:creation_opts.request_ttl**
+
+  *类型*: `timeout_duration_ms | infinity`
+
+  *默认值*: `45s`
+
+  Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
+
+
+**resource_schema:creation_opts.inflight_window**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `100`
+
+  请求飞行队列窗口大小。当请求模式为异步时，如果需要严格保证来自同一 MQTT 客户端的消息有序，则必须将此值设为 1。
+
+
+**resource_schema:creation_opts.batch_size**
+
+  *类型*: `pos_integer`
+
+  *默认值*: `1`
+
+  最大批量请求大小。如果设为1，则无批处理。
+
+
+**resource_schema:creation_opts.batch_time**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `0ms`
+
+  在较低消息率情况下尝试累积批量输出时的最大等待间隔，以提高资源的利用率。
+
+
+**resource_schema:creation_opts.enable_queue**
+
+  *类型*: `boolean`
+
+  Deprecated since v5.0.14.
+
+
+**resource_schema:creation_opts.max_buffer_bytes**
+
+  *类型*: `bytesize`
+
+  *默认值*: `256MB`
+
+  每个缓存 worker 允许使用的最大字节数。
 
 
 
@@ -4211,6 +13272,1747 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
 建立连接，除非使用 IP 地址<br/>
 然后，主机名也用于对等机的主机名验证证书<br/>
 特殊值 <code>disable</code> 阻止发送服务器名称指示扩展，并禁用主机名验证检查。
+
+
+
+## 网关
+
+### CoAP
+
+
+The CoAP protocol gateway provides EMQX with the access capability of the CoAP protocol.
+It allows publishing, subscribing, and receiving messages to EMQX in accordance
+with a certain defined CoAP message format.
+
+**gateway.coap.heartbeat**
+
+  *类型*: `emqx_coap_schema:duration`
+
+  *默认值*: `30s`
+
+  CoAP 网关要求客户端的最小心跳间隔时间。
+当 <code>connection_required</code> 开启后，该参数用于检查客户端连接是否存活
+
+
+**gateway.coap.connection_required**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  是否开启连接模式。
+连接模式是非标准协议的功能。它维护 CoAP 客户端上线、认证、和连接状态的保持
+
+
+**gateway.coap.notify_type**
+
+  *类型*: `enum`
+
+  *默认值*: `qos`
+
+  *可选值*: `non | con | qos`
+
+  投递给 CoAP 客户端的通知消息类型。当客户端 Observe 一个资源（或订阅某个主题）时，网关会向客户端推送新产生的消息。其消息类型可设置为：<br/>
+  - non: 不需要客户端返回确认消息;<br/>
+  - con: 需要客户端返回一个确认消息;<br/>
+  - qos: 取决于消息的 QoS 等级; QoS 0 会以 `non` 类型下发，QoS 1/2 会以 `con` 类型下发
+
+
+**gateway.coap.subscribe_qos**
+
+  *类型*: `enum`
+
+  *默认值*: `coap`
+
+  *可选值*: `qos0 | qos1 | qos2 | coap`
+
+  客户端订阅请求的默认 QoS 等级。
+当 CoAP 客户端发起订阅请求时，如果未携带 `qos` 参数则会使用该默认值。默认值可设置为：<br/>
+  - qos0、 qos1、qos2: 设置为固定的 QoS 等级<br/>
+  - coap: 依据订阅操作的 CoAP 报文类型来动态决定<br/>
+    * 当订阅请求为 `non-confirmable` 类型时，取值为 qos0<br/>
+    * 当订阅请求为 `confirmable` 类型时，取值为 qos1
+
+
+**gateway.coap.publish_qos**
+
+  *类型*: `enum`
+
+  *默认值*: `coap`
+
+  *可选值*: `qos0 | qos1 | qos2 | coap`
+
+  客户端发布请求的默认 QoS 等级。
+当 CoAP 客户端发起发布请求时，如果未携带 `qos` 参数则会使用该默认值。默认值可设置为：<br>
+  - qos0、qos1、qos2: 设置为固定的 QoS 等级<br/>
+  - coap: 依据发布操作的 CoAP 报文类型来动态决定<br/>
+    * 当发布请求为 `non-confirmable` 类型时，取值为 qos0<br/>
+    * 当发布请求为 `confirmable` 类型时，取值为 qos1
+
+
+**gateway.coap.mountpoint**
+
+  *类型*: `string`
+
+  *默认值*: `""`
+
+  发布或订阅时，在所有主题前增加前缀字符串。
+当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。
+例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，
+则客户端实际上订阅了 `some_tenant/t` 主题。
+类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
+则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
+挂载点字符串中可用的变量：<br/>
+   - <code>${clientid}</code>：clientid<br/>
+   - <code>${username}</code>：用户名
+
+
+**gateway.coap.listeners**
+
+  *类型*: `gateway:udp_listeners`
+
+
+**gateway.coap.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否启用该网关
+
+
+**gateway.coap.enable_stats**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否开启客户端统计
+
+
+**gateway.coap.idle_timeout**
+
+  *类型*: `emqx_gateway_schema:duration`
+
+  *默认值*: `30s`
+
+  客户端连接过程的空闲时间。该配置用于：
+  1. 一个新创建的客户端进程如果在该时间间隔内没有收到任何客户端请求，将被直接关闭。
+  2. 一个正在运行的客户进程如果在这段时间后没有收到任何客户请求，将进入休眠状态以节省资源。
+
+
+**gateway.coap.clientinfo_override**
+
+  *类型*: `gateway:clientinfo_override`
+
+  ClientInfo 重写。
+
+
+
+### LwM2M
+
+
+The LwM2M protocol gateway.
+
+**gateway.lwm2m.xml_dir**
+
+  *类型*: `string`
+
+  LwM2M Resource 定义的 XML 文件目录路径。
+
+
+**gateway.lwm2m.lifetime_min**
+
+  *类型*: `emqx_lwm2m_schema:duration`
+
+  *默认值*: `15s`
+
+  允许 LwM2M 客户端允许设置的心跳最小值。
+
+
+**gateway.lwm2m.lifetime_max**
+
+  *类型*: `emqx_lwm2m_schema:duration`
+
+  *默认值*: `86400s`
+
+  允许 LwM2M 客户端允许设置的心跳最大值。
+
+
+**gateway.lwm2m.qmode_time_window**
+
+  *类型*: `emqx_lwm2m_schema:duration_s`
+
+  *默认值*: `22s`
+
+  在QMode模式下，LwM2M网关认为网络链接有效的时间窗口的值。
+例如，在收到客户端的更新信息后，在这个时间窗口内的任何信息都会直接发送到LwM2M客户端，而超过这个时间窗口的所有信息都会暂时储存在内存中。
+
+
+**gateway.lwm2m.auto_observe**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  自动 Observe REGISTER 数据包的 Object 列表。
+
+
+**gateway.lwm2m.update_msg_publish_condition**
+
+  *类型*: `enum`
+
+  *默认值*: `contains_object_list`
+
+  *可选值*: `always | contains_object_list`
+
+  发布UPDATE事件消息的策略。<br/>
+  - always: 只要收到 UPDATE 请求，就发送更新事件。<br/>
+  - contains_object_list: 仅当 UPDATE 请求携带 Object 列表时才发送更新事件。
+
+
+**gateway.lwm2m.translators**
+
+  *类型*: `lwm2m_translators`
+
+  LwM2M 网关订阅/发布消息的主题映射配置。
+
+
+**gateway.lwm2m.mountpoint**
+
+  *类型*: `string`
+
+  *默认值*: `lwm2m/${endpoint_name}/`
+
+  发布或订阅时，在所有主题前增加前缀字符串。
+当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。
+例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，
+则客户端实际上订阅了 `some_tenant/t` 主题。
+类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
+则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
+挂载点字符串中可用的变量：<br/>
+   - <code>${clientid}</code>：clientid<br/>
+   - <code>${username}</code>：用户名
+
+
+**gateway.lwm2m.listeners**
+
+  *类型*: `gateway:udp_listeners`
+
+
+**gateway.lwm2m.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否启用该网关
+
+
+**gateway.lwm2m.enable_stats**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否开启客户端统计
+
+
+**gateway.lwm2m.idle_timeout**
+
+  *类型*: `emqx_gateway_schema:duration`
+
+  *默认值*: `30s`
+
+  客户端连接过程的空闲时间。该配置用于：
+  1. 一个新创建的客户端进程如果在该时间间隔内没有收到任何客户端请求，将被直接关闭。
+  2. 一个正在运行的客户进程如果在这段时间后没有收到任何客户请求，将进入休眠状态以节省资源。
+
+
+**gateway.lwm2m.clientinfo_override**
+
+  *类型*: `gateway:clientinfo_override`
+
+  ClientInfo 重写。
+
+
+
+
+MQTT topics that correspond to LwM2M events.
+
+**gateway.lwm2m.translators.command**
+
+  *类型*: `translator`
+
+  下行命令主题。
+对于每个成功上线的新 LwM2M 客户端，网关会创建一个订阅关系来接收下行消息并将其发送给客户端。
+
+
+**gateway.lwm2m.translators.response**
+
+  *类型*: `translator`
+
+  用于网关发布来自 LwM2M 客户端的确认事件的主题。
+
+
+**gateway.lwm2m.translators.notify**
+
+  *类型*: `translator`
+
+  用于发布来自 LwM2M 客户端的通知事件的主题。
+在成功 Observe 到 LwM2M 客户端的资源后，如果客户端报告任何资源状态的变化，网关将通过该主题发送通知事件。
+
+
+**gateway.lwm2m.translators.register**
+
+  *类型*: `translator`
+
+  用于发布来自 LwM2M 客户端的注册事件的主题。
+
+
+**gateway.lwm2m.translators.update**
+
+  *类型*: `translator`
+
+  用于发布来自LwM2M客户端的更新事件的主题。
+
+
+
+
+MQTT topic that corresponds to a particular type of event.
+
+**translator.topic**
+
+  *类型*: `string`
+
+  主题名称
+
+
+**translator.qos**
+
+  *类型*: `qos`
+
+  *默认值*: `0`
+
+  QoS 等级
+
+
+
+
+配置 Topology
+
+**topology.max_overflow**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `0`
+
+  最大溢出。
+
+
+**topology.overflow_ttl**
+
+  *类型*: `timeout_duration_ms`
+
+  当池内工人太多时，等待多久清除多余工人。
+
+
+**topology.overflow_check_period**
+
+  *类型*: `timeout_duration_ms`
+
+  检查是否有超过配置的工人的周期（"溢出"）。
+
+
+**topology.local_threshold_ms**
+
+  *类型*: `timeout_duration_ms`
+
+  在多个合适的MongoDB实例中进行选择的延迟窗口的大小。
+
+
+**topology.connect_timeout_ms**
+
+  *类型*: `timeout_duration_ms`
+
+  超时重连的等待时间。
+
+
+**topology.socket_timeout_ms**
+
+  *类型*: `timeout_duration_ms`
+
+  在尝试超时之前，在套接字上尝试发送或接收的持续时间。
+
+
+**topology.server_selection_timeout_ms**
+
+  *类型*: `timeout_duration_ms`
+
+  指定在抛出异常之前为服务器选择阻断多长时间。
+
+
+**topology.wait_queue_timeout_ms**
+
+  *类型*: `timeout_duration_ms`
+
+  工作者等待连接可用的最长时间。
+
+
+**topology.heartbeat_frequency_ms**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `200s`
+
+  控制驱动程序何时检查MongoDB部署的状态。指定检查的间隔时间，从上一次检查结束到下一次检查开始计算。如果连接数增加（例如，如果你增加池子的大小，就会发生这种情况），你可能也需要增加这个周期，以避免在MongoDB日志文件中创建太多的日志条目。
+
+
+**topology.min_heartbeat_frequency_ms**
+
+  *类型*: `timeout_duration_ms`
+
+  心跳间的最小间隙
+
+
+
+### MQTT-SN
+
+
+The MQTT-SN (MQTT for Sensor Networks) protocol gateway.
+
+**gateway.mqttsn.gateway_id**
+
+  *类型*: `integer`
+
+  *默认值*: `1`
+
+  MQTT-SN 网关 ID。
+当 <code>broadcast</code> 打开时，MQTT-SN 网关会使用该 ID 来广播 ADVERTISE 消息
+
+
+**gateway.mqttsn.broadcast**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  是否周期性广播 ADVERTISE 消息
+
+
+**gateway.mqttsn.enable_qos3**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否允许无连接的客户端发送 QoS 等于 -1 的消息。
+该功能主要用于支持轻量的 MQTT-SN 客户端实现，它不会向网关建立连接，注册主题，也不会发起订阅；它只使用 QoS 为 -1 来发布消息
+
+
+**gateway.mqttsn.subs_resume**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  在会话被重用后，网关是否主动向客户端注册对已订阅主题名称
+
+
+**gateway.mqttsn.predefined**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  预定义主题列表。
+预定义的主题列表，是一组 主题 ID 和 主题名称 的映射关系。使用预先定义的主题列表，可以减少 MQTT-SN 客户端和网关对于固定主题的注册请求
+
+
+**gateway.mqttsn.mountpoint**
+
+  *类型*: `string`
+
+  *默认值*: `""`
+
+  发布或订阅时，在所有主题前增加前缀字符串。
+当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。
+例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，
+则客户端实际上订阅了 `some_tenant/t` 主题。
+类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
+则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
+挂载点字符串中可用的变量：<br/>
+   - <code>${clientid}</code>：clientid<br/>
+   - <code>${username}</code>：用户名
+
+
+**gateway.mqttsn.listeners**
+
+  *类型*: `gateway:udp_listeners`
+
+
+**gateway.mqttsn.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否启用该网关
+
+
+**gateway.mqttsn.enable_stats**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否开启客户端统计
+
+
+**gateway.mqttsn.idle_timeout**
+
+  *类型*: `emqx_gateway_schema:duration`
+
+  *默认值*: `30s`
+
+  客户端连接过程的空闲时间。该配置用于：
+  1. 一个新创建的客户端进程如果在该时间间隔内没有收到任何客户端请求，将被直接关闭。
+  2. 一个正在运行的客户进程如果在这段时间后没有收到任何客户请求，将进入休眠状态以节省资源。
+
+
+**gateway.mqttsn.clientinfo_override**
+
+  *类型*: `gateway:clientinfo_override`
+
+  ClientInfo 重写。
+
+
+
+
+The pre-defined topic name corresponding to the pre-defined topic
+ID of N.
+
+Note: the pre-defined topic ID of 0 is reserved.
+
+**gateway.mqttsn.predefined.$INDEX.id**
+
+  *类型*: `integer`
+
+  *可选值*: `1-1024`
+
+  主题 ID。范围：1-65535
+
+
+**gateway.mqttsn.predefined.$INDEX.topic**
+
+  *类型*: `string`
+
+  主题名称。注：不支持通配符
+
+
+
+### STOP
+
+
+The STOMP protocol gateway provides EMQX with the ability to access STOMP
+(Simple (or Streaming) Text Orientated Messaging Protocol) protocol.
+
+**gateway.stomp.frame**
+
+  *类型*: `stomp_frame`
+
+
+**gateway.stomp.mountpoint**
+
+  *类型*: `string`
+
+  *默认值*: `""`
+
+  发布或订阅时，在所有主题前增加前缀字符串。
+当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。
+例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，
+则客户端实际上订阅了 `some_tenant/t` 主题。
+类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
+则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
+挂载点字符串中可用的变量：<br/>
+   - <code>${clientid}</code>：clientid<br/>
+   - <code>${username}</code>：用户名
+
+
+**gateway.stomp.listeners**
+
+  *类型*: `gateway:tcp_listeners`
+
+
+**gateway.stomp.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否启用该网关
+
+
+**gateway.stomp.enable_stats**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否开启客户端统计
+
+
+**gateway.stomp.idle_timeout**
+
+  *类型*: `emqx_gateway_schema:duration`
+
+  *默认值*: `30s`
+
+  客户端连接过程的空闲时间。该配置用于：
+  1. 一个新创建的客户端进程如果在该时间间隔内没有收到任何客户端请求，将被直接关闭。
+  2. 一个正在运行的客户进程如果在这段时间后没有收到任何客户请求，将进入休眠状态以节省资源。
+
+
+**gateway.stomp.clientinfo_override**
+
+  *类型*: `gateway:clientinfo_override`
+
+  ClientInfo 重写。
+
+
+
+
+Size limits for the STOMP frames.
+
+**gateway.stomp.frame.max_headers**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `10`
+
+  允许的 Header 最大数量
+
+
+**gateway.stomp.frame.max_headers_length**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `1024`
+
+  允许的 Header 字符串的最大长度
+
+
+**gateway.stomp.frame.max_body_length**
+
+  *类型*: `integer`
+
+  *默认值*: `65536`
+
+  允许的 Stomp 报文 Body 的最大字节数
+
+
+
+### ExProto
+
+
+Settings for EMQX extension protocol (exproto).
+
+**gateway.exproto.server**
+
+  *类型*: `exproto_grpc_server`
+
+  配置 ExProto 网关需要启动的 <code>ConnectionAdapter</code> 服务。
+该服务用于提供客户端的认证、发布、订阅和数据下行等功能。
+
+
+**gateway.exproto.handler**
+
+  *类型*: `exproto_grpc_handler`
+
+  配置 ExProto 网关需要请求的 <code>ConnectionHandler</code> 服务地址。
+该服务用于给 ExProto 提供客户端的 Socket 事件处理、字节解码、订阅消息接收等功能。
+
+
+**gateway.exproto.mountpoint**
+
+  *类型*: `string`
+
+  *默认值*: `""`
+
+  发布或订阅时，在所有主题前增加前缀字符串。
+当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。
+例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，
+则客户端实际上订阅了 `some_tenant/t` 主题。
+类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
+则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
+挂载点字符串中可用的变量：<br/>
+   - <code>${clientid}</code>：clientid<br/>
+   - <code>${username}</code>：用户名
+
+
+**gateway.exproto.listeners**
+
+  *类型*: `gateway:tcp_udp_listeners`
+
+
+**gateway.exproto.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否启用该网关
+
+
+**gateway.exproto.enable_stats**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否开启客户端统计
+
+
+**gateway.exproto.idle_timeout**
+
+  *类型*: `emqx_gateway_schema:duration`
+
+  *默认值*: `30s`
+
+  客户端连接过程的空闲时间。该配置用于：
+  1. 一个新创建的客户端进程如果在该时间间隔内没有收到任何客户端请求，将被直接关闭。
+  2. 一个正在运行的客户进程如果在这段时间后没有收到任何客户请求，将进入休眠状态以节省资源。
+
+
+**gateway.exproto.clientinfo_override**
+
+  *类型*: `gateway:clientinfo_override`
+
+  ClientInfo 重写。
+
+
+
+
+Settings for the exproto gRPC connection handler.
+
+**gateway.exproto.handler.address**
+
+  *类型*: `string`
+
+  对端 gRPC 服务器地址。
+
+
+**gateway.exproto.handler.service_name**
+
+  *类型*: `ConnectionHandler | ConnectionUnaryHandler`
+
+  *默认值*: `ConnectionUnaryHandler`
+
+  The service name to handle the connection events.
+In the initial version, we expected to use streams to improve the efficiency
+of requests in `ConnectionHandler`. But unfortunately, events between different
+streams are out of order. It causes the `OnSocketCreated` event to may arrive
+later than `OnReceivedBytes`.
+So we added the `ConnectionUnaryHandler` service since v5.0.25 and forced
+the use of Unary in it to avoid ordering problems.
+
+
+**gateway.exproto.handler.ssl_options**
+
+  *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
+
+  gRPC 客户端的 SSL 配置。
+
+
+
+
+Settings for the exproto gRPC server.
+
+**gateway.exproto.server.bind**
+
+  *类型*: `emqx_exproto_schema:ip_port`
+
+  服务监听地址和端口。
+
+
+**gateway.exproto.server.ssl_options**
+
+  *类型*: `ssl_server_opts`
+
+  服务 SSL 配置。
+
+
+
+
+SSL configuration for the server.
+
+**gateway.exproto.server.ssl_options.cacertfile**
+
+  *类型*: `string`
+
+  *默认值*: `${EMQX_ETC_DIR}/certs/cacert.pem`
+
+  受信任的PEM格式 CA  证书捆绑文件<br/>
+此文件中的证书用于验证TLS对等方的证书。
+如果要信任新 CA，请将新证书附加到文件中。
+无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
+注意：从文件中失效（删除）证书不会影响已建立的连接。
+
+
+**gateway.exproto.server.ssl_options.cacerts**
+
+  *类型*: `boolean`
+
+  Deprecated since 5.1.4.
+
+
+**gateway.exproto.server.ssl_options.certfile**
+
+  *类型*: `string`
+
+  *默认值*: `${EMQX_ETC_DIR}/certs/cert.pem`
+
+  PEM格式证书链文件<br/>
+此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
+然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
+根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
+
+
+**gateway.exproto.server.ssl_options.keyfile**
+
+  *类型*: `string`
+
+  *默认值*: `${EMQX_ETC_DIR}/certs/key.pem`
+
+  PEM格式的私钥文件。
+
+
+**gateway.exproto.server.ssl_options.verify**
+
+  *类型*: `enum`
+
+  *默认值*: `verify_none`
+
+  *可选值*: `verify_peer | verify_none`
+
+  启用或禁用对等验证。
+
+
+**gateway.exproto.server.ssl_options.reuse_sessions**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用 TLS 会话重用。
+
+
+**gateway.exproto.server.ssl_options.depth**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `10`
+
+  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
+因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
+如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
+
+
+**gateway.exproto.server.ssl_options.password**
+
+  *类型*: `string`
+
+  包含用户密码的字符串。仅在私钥文件受密码保护时使用。
+
+
+**gateway.exproto.server.ssl_options.versions**
+
+  *类型*: `array`
+
+  *默认值*: `["tlsv1.3","tlsv1.2"]`
+
+  支持所有TLS/DTLS版本<br/>
+注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
+
+
+**gateway.exproto.server.ssl_options.ciphers**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
+<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
+<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
+<br/>
+密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
+选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
+
+名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
+EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
+注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+不兼容的密码套件将被自动删除。
+
+例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
+
+<br/>
+注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
+如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+
+<br/>
+PSK 密码套件：
+<code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
+RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+
+
+**gateway.exproto.server.ssl_options.secure_renegotiate**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。
+RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。
+
+
+**gateway.exproto.server.ssl_options.log_level**
+
+  *类型*: `enum`
+
+  *默认值*: `notice`
+
+  *可选值*: `emergency | alert | critical | error | warning | notice | info | debug | none | all`
+
+  SSL 握手的日志级别。默认值是 'notice'，可以设置为 'debug' 用来调查 SSL 握手的问题。
+
+
+**gateway.exproto.server.ssl_options.hibernate_after**
+
+  *类型*: `duration`
+
+  *默认值*: `5s`
+
+  在闲置一定时间后休眠 SSL 进程，减少其内存占用。
+
+
+**gateway.exproto.server.ssl_options.dhfile**
+
+  *类型*: `string`
+
+  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
+注意：TLS 1.3不支持<code>dhfile</code>选项。
+
+
+**gateway.exproto.server.ssl_options.fail_if_no_peer_cert**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  TLS/DTLS 服务器与 {verify，verify_peer} 一起使用。
+如果设置为true，则如果客户端没有要发送的证书，即发送空证书，服务器将失败。
+如果设置为false，则仅当客户端发送无效证书（空证书被视为有效证书）时才会失败。
+
+
+**gateway.exproto.server.ssl_options.honor_cipher_order**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  一个重要的安全设置，它强制根据服务器指定的顺序而不是客户机指定的顺序设置密码，从而强制服务器管理员执行（通常配置得更正确）安全顺序。
+
+
+**gateway.exproto.server.ssl_options.client_renegotiation**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  在支持客户机发起的重新协商的协议中，这种操作的资源成本对于服务器来说高于客户机。
+这可能会成为拒绝服务攻击的载体。
+SSL 应用程序已经采取措施来反击此类尝试，但通过将此选项设置为 false，可以严格禁用客户端发起的重新协商。
+默认值为 true。请注意，由于基础密码套件可以加密的消息数量有限，禁用重新协商可能会导致长期连接变得不可用。
+
+
+**gateway.exproto.server.ssl_options.handshake_timeout**
+
+  *类型*: `duration`
+
+  *默认值*: `15s`
+
+  握手完成所允许的最长时间
+
+
+
+### 网关客户端映射
+
+
+ClientInfo override.
+
+**gateway:clientinfo_override.username**
+
+  *类型*: `string`
+
+  username 重写模板
+
+
+**gateway:clientinfo_override.password**
+
+  *类型*: `string`
+
+  password 重写模板
+
+
+**gateway:clientinfo_override.clientid**
+
+  *类型*: `string`
+
+  clientid 重写模板
+
+
+
+### 网关监听器 - TCP
+
+
+Settings for TCP listener.
+
+**gateway:tcp_listener.acceptors**
+
+  *类型*: `integer`
+
+  *默认值*: `16`
+
+  Acceptor 进程池大小。
+
+
+**gateway:tcp_listener.tcp_options**
+
+  *类型*: [broker:tcp_opts](#tcp_opts)
+
+  TCP Socket 配置。
+
+
+**gateway:tcp_listener.proxy_protocol**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  是否开启 Proxy Protocol V1/2。当 EMQX 集群部署在 HAProxy 或 Nginx 后需要获取客户端真实 IP 时常用到该选项。参考：https://www.haproxy.com/blog/haproxy/proxy-protocol/
+
+
+**gateway:tcp_listener.proxy_protocol_timeout**
+
+  *类型*: `emqx_gateway_schema:duration`
+
+  *默认值*: `15s`
+
+  接收 Proxy Protocol 报文头的超时时间。如果在超时内没有收到 Proxy Protocol 包，EMQX 将关闭 TCP 连接。
+
+
+**gateway:tcp_listener.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否启用该监听器。
+
+
+**gateway:tcp_listener.bind**
+
+  *类型*: `emqx_gateway_schema:ip_port`
+
+  监听器绑定的 IP 地址或端口。
+
+
+**gateway:tcp_listener.max_connections**
+
+  *类型*: `pos_integer | infinity`
+
+  *默认值*: `1024`
+
+  监听器支持的最大连接数。
+
+
+**gateway:tcp_listener.max_conn_rate**
+
+  *类型*: `integer`
+
+  *默认值*: `1000`
+
+  监听器支持的最大连接速率。
+
+
+**gateway:tcp_listener.enable_authn**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  配置 <code>true</code> （默认值）启用客户端进行身份认证。
+配置 <code>false</code> 时，将不对客户端做任何认证。
+
+
+**gateway:tcp_listener.mountpoint**
+
+  *类型*: `string`
+
+  发布或订阅时，在所有主题前增加前缀字符串。
+当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。
+例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，
+则客户端实际上订阅了 `some_tenant/t` 主题。
+类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
+则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
+挂载点字符串中可用的变量：<br/>
+   - <code>${clientid}</code>：clientid<br/>
+   - <code>${username}</code>：用户名
+
+
+**gateway:tcp_listener.access_rules**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  配置监听器的访问控制规则。
+见：https://github.com/emqtt/esockd#allowdeny
+
+
+
+
+Settings for the TCP listeners.
+
+**gateway.stomp.listeners.tcp**
+
+  *类型*: `name`
+
+  从监听器名称到配置参数的映射。
+
+
+**gateway.stomp.listeners.ssl**
+
+  *类型*: `name`
+
+  从监听器名称到配置参数的映射。
+
+
+
+
+Settings for TCP and UDP listeners.
+
+**gateway.exproto.listeners.tcp**
+
+  *类型*: `name`
+
+  从监听器名称到配置参数的映射。
+
+
+**gateway.exproto.listeners.ssl**
+
+  *类型*: `name`
+
+  从监听器名称到配置参数的映射。
+
+
+**gateway.exproto.listeners.udp**
+
+  *类型*: `name`
+
+  从监听器名称到配置参数的映射。
+
+
+**gateway.exproto.listeners.dtls**
+
+  *类型*: `name`
+
+  从监听器名称到配置参数的映射。
+
+
+
+### 网关监听器 - SSL
+
+
+Settings for SSL listener.
+
+**gateway:ssl_listener.acceptors**
+
+  *类型*: `integer`
+
+  *默认值*: `16`
+
+  Acceptor 进程池大小。
+
+
+**gateway:ssl_listener.tcp_options**
+
+  *类型*: [broker:tcp_opts](#tcp_opts)
+
+  TCP Socket 配置。
+
+
+**gateway:ssl_listener.proxy_protocol**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  是否开启 Proxy Protocol V1/2。当 EMQX 集群部署在 HAProxy 或 Nginx 后需要获取客户端真实 IP 时常用到该选项。参考：https://www.haproxy.com/blog/haproxy/proxy-protocol/
+
+
+**gateway:ssl_listener.proxy_protocol_timeout**
+
+  *类型*: `emqx_gateway_schema:duration`
+
+  *默认值*: `15s`
+
+  接收 Proxy Protocol 报文头的超时时间。如果在超时内没有收到 Proxy Protocol 包，EMQX 将关闭 TCP 连接。
+
+
+**gateway:ssl_listener.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否启用该监听器。
+
+
+**gateway:ssl_listener.bind**
+
+  *类型*: `emqx_gateway_schema:ip_port`
+
+  监听器绑定的 IP 地址或端口。
+
+
+**gateway:ssl_listener.max_connections**
+
+  *类型*: `pos_integer | infinity`
+
+  *默认值*: `1024`
+
+  监听器支持的最大连接数。
+
+
+**gateway:ssl_listener.max_conn_rate**
+
+  *类型*: `integer`
+
+  *默认值*: `1000`
+
+  监听器支持的最大连接速率。
+
+
+**gateway:ssl_listener.enable_authn**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  配置 <code>true</code> （默认值）启用客户端进行身份认证。
+配置 <code>false</code> 时，将不对客户端做任何认证。
+
+
+**gateway:ssl_listener.mountpoint**
+
+  *类型*: `string`
+
+  发布或订阅时，在所有主题前增加前缀字符串。
+当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。
+例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，
+则客户端实际上订阅了 `some_tenant/t` 主题。
+类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
+则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
+挂载点字符串中可用的变量：<br/>
+   - <code>${clientid}</code>：clientid<br/>
+   - <code>${username}</code>：用户名
+
+
+**gateway:ssl_listener.access_rules**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  配置监听器的访问控制规则。
+见：https://github.com/emqtt/esockd#allowdeny
+
+
+**gateway:ssl_listener.ssl_options**
+
+  *类型*: [listener_ssl_opts](#监听器-ssl-tls-配置)
+
+  SSL Socket 配置。
+
+
+
+### 网关监听器 - UDP
+
+
+Settings for UDP listener.
+
+**gateway:udp_listener.udp_options**
+
+  *类型*: `gateway:udp_opts`
+
+
+**gateway:udp_listener.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否启用该监听器。
+
+
+**gateway:udp_listener.bind**
+
+  *类型*: `emqx_gateway_schema:ip_port`
+
+  监听器绑定的 IP 地址或端口。
+
+
+**gateway:udp_listener.max_connections**
+
+  *类型*: `pos_integer | infinity`
+
+  *默认值*: `1024`
+
+  监听器支持的最大连接数。
+
+
+**gateway:udp_listener.max_conn_rate**
+
+  *类型*: `integer`
+
+  *默认值*: `1000`
+
+  监听器支持的最大连接速率。
+
+
+**gateway:udp_listener.enable_authn**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  配置 <code>true</code> （默认值）启用客户端进行身份认证。
+配置 <code>false</code> 时，将不对客户端做任何认证。
+
+
+**gateway:udp_listener.mountpoint**
+
+  *类型*: `string`
+
+  发布或订阅时，在所有主题前增加前缀字符串。
+当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。
+例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，
+则客户端实际上订阅了 `some_tenant/t` 主题。
+类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
+则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
+挂载点字符串中可用的变量：<br/>
+   - <code>${clientid}</code>：clientid<br/>
+   - <code>${username}</code>：用户名
+
+
+**gateway:udp_listener.access_rules**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  配置监听器的访问控制规则。
+见：https://github.com/emqtt/esockd#allowdeny
+
+
+
+
+Settings for the UDP listeners.
+
+**gateway:udp_listeners.udp**
+
+  *类型*: `name`
+
+  从监听器名称到配置参数的映射。
+
+
+**gateway:udp_listeners.dtls**
+
+  *类型*: `name`
+
+  从监听器名称到配置参数的映射。
+
+
+
+
+Settings for UDP sockets.
+
+**gateway:udp_opts.active_n**
+
+  *类型*: `integer`
+
+  *默认值*: `100`
+
+  为 Socket 指定 {active, N} 选项。
+参见：https://erlang.org/doc/man/inet.html#setopts-2
+
+
+**gateway:udp_opts.recbuf**
+
+  *类型*: `emqx_gateway_schema:bytesize`
+
+  Socket 在内核空间接收缓冲区的大小。
+
+
+**gateway:udp_opts.sndbuf**
+
+  *类型*: `emqx_gateway_schema:bytesize`
+
+  Socket 在内核空间发送缓冲区的大小。
+
+
+**gateway:udp_opts.buffer**
+
+  *类型*: `emqx_gateway_schema:bytesize`
+
+  Socket 在用户空间的缓冲区大小。
+
+
+**gateway:udp_opts.reuseaddr**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  允许重用本地处于 TIME_WAIT 的端口号。
+
+
+
+### 网关监听器 - DTLS
+
+
+Settings for DTLS listener.
+
+**gateway:dtls_listener.acceptors**
+
+  *类型*: `integer`
+
+  *默认值*: `16`
+
+  Acceptor 进程池大小。
+
+
+**gateway:dtls_listener.udp_options**
+
+  *类型*: `gateway:udp_opts`
+
+
+**gateway:dtls_listener.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  是否启用该监听器。
+
+
+**gateway:dtls_listener.bind**
+
+  *类型*: `emqx_gateway_schema:ip_port`
+
+  监听器绑定的 IP 地址或端口。
+
+
+**gateway:dtls_listener.max_connections**
+
+  *类型*: `pos_integer | infinity`
+
+  *默认值*: `1024`
+
+  监听器支持的最大连接数。
+
+
+**gateway:dtls_listener.max_conn_rate**
+
+  *类型*: `integer`
+
+  *默认值*: `1000`
+
+  监听器支持的最大连接速率。
+
+
+**gateway:dtls_listener.enable_authn**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  配置 <code>true</code> （默认值）启用客户端进行身份认证。
+配置 <code>false</code> 时，将不对客户端做任何认证。
+
+
+**gateway:dtls_listener.mountpoint**
+
+  *类型*: `string`
+
+  发布或订阅时，在所有主题前增加前缀字符串。
+当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。
+例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，
+则客户端实际上订阅了 `some_tenant/t` 主题。
+类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
+则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
+挂载点字符串中可用的变量：<br/>
+   - <code>${clientid}</code>：clientid<br/>
+   - <code>${username}</code>：用户名
+
+
+**gateway:dtls_listener.access_rules**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  配置监听器的访问控制规则。
+见：https://github.com/emqtt/esockd#allowdeny
+
+
+**gateway:dtls_listener.dtls_options**
+
+  *类型*: `gateway:dtls_opts`
+
+  DTLS Socket 配置
+
+
+
+
+Settings for DTLS protocol.
+
+**gateway:dtls_opts.cacertfile**
+
+  *类型*: `string`
+
+  *默认值*: `${EMQX_ETC_DIR}/certs/cacert.pem`
+
+  受信任的PEM格式 CA  证书捆绑文件<br/>
+此文件中的证书用于验证TLS对等方的证书。
+如果要信任新 CA，请将新证书附加到文件中。
+无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
+注意：从文件中失效（删除）证书不会影响已建立的连接。
+
+
+**gateway:dtls_opts.cacerts**
+
+  *类型*: `boolean`
+
+  Deprecated since 5.1.4.
+
+
+**gateway:dtls_opts.certfile**
+
+  *类型*: `string`
+
+  *默认值*: `${EMQX_ETC_DIR}/certs/cert.pem`
+
+  PEM格式证书链文件<br/>
+此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
+然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
+根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
+
+
+**gateway:dtls_opts.keyfile**
+
+  *类型*: `string`
+
+  *默认值*: `${EMQX_ETC_DIR}/certs/key.pem`
+
+  PEM格式的私钥文件。
+
+
+**gateway:dtls_opts.verify**
+
+  *类型*: `enum`
+
+  *默认值*: `verify_none`
+
+  *可选值*: `verify_peer | verify_none`
+
+  启用或禁用对等验证。
+
+
+**gateway:dtls_opts.reuse_sessions**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  启用 TLS 会话重用。
+
+
+**gateway:dtls_opts.depth**
+
+  *类型*: `non_neg_integer`
+
+  *默认值*: `10`
+
+  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
+因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
+如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
+
+
+**gateway:dtls_opts.password**
+
+  *类型*: `string`
+
+  包含用户密码的字符串。仅在私钥文件受密码保护时使用。
+
+
+**gateway:dtls_opts.versions**
+
+  *类型*: `array`
+
+  *默认值*: `["dtlsv1.2"]`
+
+  支持所有TLS/DTLS版本<br/>
+注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
+
+
+**gateway:dtls_opts.ciphers**
+
+  *类型*: `array`
+
+  *默认值*: `[]`
+
+  此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
+<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
+<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
+<br/>
+密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
+选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
+
+名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
+EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
+注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+不兼容的密码套件将被自动删除。
+
+例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
+
+<br/>
+注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
+如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+
+<br/>
+PSK 密码套件：
+<code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
+RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+
+
+**gateway:dtls_opts.secure_renegotiate**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。
+RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。
+
+
+**gateway:dtls_opts.log_level**
+
+  *类型*: `enum`
+
+  *默认值*: `notice`
+
+  *可选值*: `emergency | alert | critical | error | warning | notice | info | debug | none | all`
+
+  SSL 握手的日志级别。默认值是 'notice'，可以设置为 'debug' 用来调查 SSL 握手的问题。
+
+
+**gateway:dtls_opts.hibernate_after**
+
+  *类型*: `duration`
+
+  *默认值*: `5s`
+
+  在闲置一定时间后休眠 SSL 进程，减少其内存占用。
+
+
+**gateway:dtls_opts.dhfile**
+
+  *类型*: `string`
+
+  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
+注意：TLS 1.3不支持<code>dhfile</code>选项。
+
+
+**gateway:dtls_opts.fail_if_no_peer_cert**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  TLS/DTLS 服务器与 {verify，verify_peer} 一起使用。
+如果设置为true，则如果客户端没有要发送的证书，即发送空证书，服务器将失败。
+如果设置为false，则仅当客户端发送无效证书（空证书被视为有效证书）时才会失败。
+
+
+**gateway:dtls_opts.honor_cipher_order**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  一个重要的安全设置，它强制根据服务器指定的顺序而不是客户机指定的顺序设置密码，从而强制服务器管理员执行（通常配置得更正确）安全顺序。
+
+
+**gateway:dtls_opts.client_renegotiation**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  在支持客户机发起的重新协商的协议中，这种操作的资源成本对于服务器来说高于客户机。
+这可能会成为拒绝服务攻击的载体。
+SSL 应用程序已经采取措施来反击此类尝试，但通过将此选项设置为 false，可以严格禁用客户端发起的重新协商。
+默认值为 true。请注意，由于基础密码套件可以加密的消息数量有限，禁用重新协商可能会导致长期连接变得不可用。
+
+
+**gateway:dtls_opts.handshake_timeout**
+
+  *类型*: `duration`
+
+  *默认值*: `15s`
+
+  握手完成所允许的最长时间
+
+
+**gateway:dtls_opts.gc_after_handshake**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  内存使用调优。如果启用，将在TLS/SSL握手完成后立即执行垃圾回收。TLS/SSL握手建立后立即进行GC。
+
+
+**gateway:dtls_opts.ocsp**
+
+  *类型*: `broker:ocsp`
+
+
+**gateway:dtls_opts.enable_crl_check**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  是否为该监听器启用 CRL 检查。
 
 
 
@@ -5139,4 +15941,5 @@ Compression options.
   *可选值*: `8-15`
 
   指定客户端压缩上下文的大小。
+
 
