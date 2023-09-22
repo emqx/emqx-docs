@@ -111,6 +111,4 @@ Each rule contains:
 * `qos`: (Optional) A number array used to specify the QoS levels that the rule applies to, e.g. `[0, 1]`, `[1, 2]`. The default is all QoS levels.
 * `retain`: (Optional) Used to specify whether the current rule supports retained messages. Value options are `true`, `false`. Default is to allow retained messages.
 
-::: tip
-The `qos` and `retain` fields were introduced in EMQX v5.1.1.
-:::
+

@@ -17,10 +17,6 @@ Users need to provide a query template that returns the following data:
 - `qos` (Optional) Specifies the QoS levels that the current rule applies to. Value options are `0`, `1`, `2`. It can also be a number array to specify multiple QoS levels. The default is all QoS levels.
 - `retain`: (Optional) Specifies whether the rule supports retained messages. Value options are `true`, `false`. The default is to allow retained messages.
 
-:::
-The `qos` and `retain` fields were introduced in EMQX v5.1.1.
-:::
-
 For example, rules can be stored as [Redis hashes](https://redis.io/docs/manual/data-types/#hashes).
 
 Adding permission data for user `emqx_u` to subscribe to topic `t/1`:

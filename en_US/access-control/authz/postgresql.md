@@ -19,10 +19,6 @@ Users need to provide a query statement template and ensure the following fields
 * `qos` (Optional) value specifies the QoS levels that the rule applies to. Value options are `0`, `1`, `2`. It can also be a string separated by `,` to specify multiple QoS levels, e.g. `0,1`. The default is all QoS levels.
 * `retain` (Optional) value specifies whether the current rule supports retained messages. Value options are `0` and `1`. The default is to allow retained messages.
 
-:::
-The `qos` and `retain` fields were introduced in EMQX v5.1.1.
-:::
-
 Example table structure for storing credentials:
 
 ```sql
