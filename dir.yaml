@@ -19,7 +19,7 @@
   title_cn: 快速开始
   path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
   collapsed: true
-  children: 
+  children:
     - getting-started/new-features
     - getting-started/getting-started
     - getting-started/restrictions
@@ -114,10 +114,10 @@
           lang: cn
           path: connect-emqx/wechat-miniprogram
 
-- title_en: EMQX Essentials 
+- title_en: EMQX Essentials
   title_cn: EMQX 基础知识
   path: mqtt/emqx-essentials
-  collapsed: true 
+  collapsed: true
   children:
     - title_en: MQTT Guide
       title_cn: MQTT Guide
@@ -131,7 +131,7 @@
       title_cn: 认证与鉴权
       collapsed: true
       path: mqtt/emqx-access-control
-      children: 
+      children:
         - title_en: Username and Password Authentication
           title_cn: Username and Password Authentication
           path: https://auth0.com/blog/username-password-authentication/
@@ -203,8 +203,14 @@
       title_cn: 集群负载均衡
       path: deploy/cluster/lb
       children:
-        - deploy/cluster/lb-nginx
-        - deploy/cluster/lb-haproxy
+        - title_en: 用 Nginx 负载均衡 EMQX 集群
+          title_cn: 用 Nginx 负载均衡 EMQX 集群
+          path: deploy/cluster/lb-nginx
+          lang: cn
+        - title_en: 用 HAProxy 负载均衡 EMQX 集群
+          title_cn: 用 HAProxy 负载均衡 EMQX 集群
+          path: deploy/cluster/lb-haproxy
+          lang: cn
     - title_en: Node Evacuation and Cluster Load Rebalancing
       title_cn: 节点疏散与集群负载重平衡
       edition: ee
@@ -215,7 +221,7 @@
       children:
         - performance/tune
         - performance/benchmark
-    
+
 - title_en: Rule Engine
   title_cn: 规则引擎
   path: data-integration/rules
@@ -235,41 +241,97 @@
       children:
         - data-integration/schema-registry-example-avro
         - data-integration/schema-registry-example-protobuf
-   # - title_en: Sparkplug
-   #   title_cn: Sparkplug
-   #   path: data-integration/sparkplug
-   #   edition: ee
-   #   collapsed: true
+    - title_en: Sparkplug
+      title_cn: Sparkplug
+      path: data-integration/sparkplug
+      edition: ee
 
-## Data integration
-# - data-integration/introduction
-
+- title_en: Flow Designer
+  title_cn: Flow 设计器
+  path: flow-designer/introduction
 - title_en: Data Integration
   title_cn: 数据集成
   path: data-integration/data-bridges
   collapsed: true
   children:
-    - data-integration/data-bridge-webhook
-    - data-integration/data-bridge-mqtt
-    - data-integration/data-bridge-kafka
-    - data-integration/data-bridge-pulsar
-    - data-integration/data-bridge-influxdb
-    - data-integration/data-bridge-timescale
-    - data-integration/data-bridge-mysql
-    - data-integration/data-bridge-redis
-    - data-integration/data-bridge-gcp-pubsub
-    - data-integration/data-bridge-mongodb
-    - data-integration/data-bridge-pgsql
-    - data-integration/data-bridge-dynamo
-    - data-integration/data-bridge-clickhouse
-    - data-integration/data-bridge-cassa
-    - data-integration/data-bridge-tdengine
-    - data-integration/data-bridge-rocketmq
-    - data-integration/data-bridge-oracle
-    - data-integration/data-bridge-sqlserver
-    - data-integration/data-bridge-iotdb
-    - data-integration/data-bridge-opents
-    - data-integration/data-bridge-rabbitmq
+    - title_en: Webhook
+      title_cn: Webhook
+      path: data-integration/webhook
+    - title_en: HTTP Server
+      title_cn: HTTP Server
+      path: data-integration/data-bridge-webhook
+    - title_en: MQTT
+      title_cn: MQTT
+      path: data-integration/data-bridge-mqtt
+    - title_en: Apache Kafka
+      title_cn: Apache Kafka
+      path: data-integration/data-bridge-kafka
+    - title_en: Apache Pulsar
+      title_cn: Apache Pulsar
+      path: data-integration/data-bridge-pulsar
+    - title_en: InfluxDB
+      title_cn: InfluxDB
+      path: data-integration/data-bridge-influxdb
+    - title_en: TimescaleDB
+      title_cn: TimescaleDB
+      path: data-integration/data-bridge-timescale
+    - title_en: MySQL
+      title_cn: MySQL
+      path: data-integration/data-bridge-mysql
+    - title_en: Redis
+      title_cn: Redis
+      path: data-integration/data-bridge-redis
+    - title_en: GCP PubSub
+      title_cn: GCP PubSub
+      path: data-integration/data-bridge-gcp-pubsub
+    - title_en: MongoDB
+      title_cn: MongoDB
+      path: data-integration/data-bridge-mongodb
+    - title_en: PostgreSQL
+      title_cn: PostgreSQL
+      path: data-integration/data-bridge-pgsql
+    - title_en: DynamoDB
+      title_cn: DynamoDB
+      path: data-integration/data-bridge-dynamo
+    - title_en: ClickHouse
+      title_cn: ClickHouse
+      path: data-integration/data-bridge-clickhouse
+    - title_en: Cassandra
+      title_cn: Cassandra
+      path: data-integration/data-bridge-cassa
+    - title_en: TDengine
+      title_cn: TDengine
+      path: data-integration/data-bridge-tdengine
+    - title_en: RocketMQ
+      title_cn: RocketMQ
+      path: data-integration/data-bridge-rocketmq
+    - title_en: Oracle Database
+      title_cn: Oracle Database
+      path: data-integration/data-bridge-oracle
+    - title_en: Microsoft SQL Server
+      title_cn: Microsoft SQL Server
+      path: data-integration/data-bridge-sqlserver
+    - title_en: Apache IoTDB
+      title_cn: Apache IoTDB
+      path: data-integration/data-bridge-iotdb
+    - title_en: OpenTSDB
+      title_cn: OpenTSDB
+      path: data-integration/data-bridge-opents
+    - title_en: RabbitMQ
+      title_cn: RabbitMQ
+      path: data-integration/data-bridge-rabbitmq
+    - title_en: Azure Event Hubs
+      title_cn: Azure Event Hubs
+      path: data-integration/data-bridge-azure-event-hub
+    - title_en: AWS Kinesis
+      title_cn: AWS Kinesis
+      path: data-integration/data-bridge-kinesis
+    - title_en: HStreamDB
+      title_cn: HStreamDB
+      path: data-integration/data-bridge-hstreamdb
+    - title_en: GreptimeDB
+      title_cn: GreptimeDB
+      path: data-integration/data-bridge-greptimedb
 
     # TODO
     # - title_en: Examples and Tutorials
@@ -281,7 +343,7 @@
   title_cn: 管理员指南
   path: admin/admin-guide
   collapsed: true
-  children: 
+  children:
     - title_en: Configuration
       title_cn: 配置文件
       path: configuration/configuration
@@ -345,7 +407,7 @@
   #   title_cn: 配置手册
   #   lang: en
   #   edition: ee
-  #   path: https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html 
+  #   path: https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html
     - title_en: Command Line Interface
       title_cn: 命令行接口
       path: admin/cli
@@ -358,22 +420,22 @@
           title_cn: API 文档
           lang: en
           edition: ce
-          path: https://www.emqx.io/docs/en/v5.1/admin/api-docs.html
+          path: https://www.emqx.io/docs/en/v5.2/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: cn
           edition: ce
-          path: https://www.emqx.io/docs/zh/v5.1/admin/api-docs.html
+          path: https://www.emqx.io/docs/zh/v5.2/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: en
           edition: ee
-          path: https://docs.emqx.com/en/enterprise/v5.1/admin/api-docs.html
+          path: https://docs.emqx.com/en/enterprise/v5.2/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: cn
           edition: ee
-          path: https://docs.emqx.com/zh/enterprise/v5.1/admin/api-docs.html
+          path: https://docs.emqx.com/zh/enterprise/v5.2/admin/api-docs.html
     - title_en: EMQX Dashboard
       title_cn: EMQX Dashboard
       path: dashboard/introduction
@@ -421,7 +483,8 @@
         - observability/slow-subscribers-statistics
         - observability/tracer
         - observability/mqtt-system-topics
-        - observability/prometheus 
+        - observability/prometheus
+        - observability/open-telemetry 
     - title_en: Backup and Restore
       title_cn: 备份与恢复
       path: operations/backup-restore
@@ -437,8 +500,8 @@
     - title_en: Telemetry
       title_cn: 遥测
       path: telemetry/telemetry
-      edition: ce 
-        
+      edition: ce
+
 - title_en: Security Guide
   title_cn: 安全指南
   path: access-control/security-guide
@@ -459,6 +522,7 @@
               children:
                 - access-control/authn/mnesia
                 - access-control/authn/mysql
+                - access-control/authn/mongodb
                 - access-control/authn/postgresql
                 - access-control/authn/redis
                 - title_en: LDAP
@@ -475,8 +539,8 @@
           children:
             - access-control/authz/file
             - access-control/authz/mnesia
-            - access-control/authz/http
             - access-control/authz/mysql
+            - access-control/authz/mongodb
             - access-control/authz/postgresql
             - access-control/authz/redis
             - title_en: LDAP
@@ -503,7 +567,7 @@
           lang: cn
           path: network/gmssl
       # - network/ipv6
-  
+
 - title_en: Advanced Features
   title_cn: 高级功能
   collapsed: true
@@ -542,13 +606,13 @@
        #- gateway/jt808
        #- gateway/gbt32960
        #- gateway/tcp
-       
+
 
 - title_en: Tutorials
   title_cn: 实用教程
   path: tutorial/tutorial
   collapsed: true
-  children:  
+  children:
     - tutorial/mqtt-programming
     - title_en: How to Achieve Flexible Data Collection for IoV
       title_cn: How to Achieve Flexible Data Collection for IoV
@@ -576,7 +640,7 @@
       lang: cn
       edition: ce
       path: https://www.emqx.com/zh/blog/connecting-coap-devices-to-emqx-cloud
-    - title_en: Million-Level IoV Message Throughput Architecture 
+    - title_en: Million-Level IoV Message Throughput Architecture
       title_cn: Million-Level IoV Message Throughput Architecture
       lang: en
       path: https://www.emqx.com/en/blog/million-level-message-throughput-architecture-design-for-internet-of-vehicles
@@ -617,7 +681,7 @@
       title_cn: Use Terraform to Deploy EMQX
       lang: en
       path: https://www.emqx.com/en/blog/using-terraform-to-deploy-emqx-mqtt-broke
-    - title_en: IoT Data Monitoring Visualzation 
+    - title_en: IoT Data Monitoring Visualzation
       title_cn: IoT 数据可视化监控
       collapsed: true
       children:
@@ -736,8 +800,8 @@
       lang: en
       path: changes/breaking-changes-5.1.0
       children:
-        - title_en: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1 
-          title_cn: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1 
+        - title_en: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1
+          title_cn: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1
           lang: en
           path: changes/auth-4.4-to-5.1-compatibility
         - title_en: Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4
@@ -748,8 +812,3 @@
           title_cn: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
           lang: en
           path: changes/gateway-4.4-to-5.1-incompatibility
-    - title_en: Known Issues
-      title_cn: 已知问题
-      edition: ee
-      path: changes/known-issues-5.1
-
