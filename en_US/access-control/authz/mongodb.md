@@ -2,9 +2,9 @@
 
 This authorizer implements authorization checks by matching publish/subscribe requests against lists of rules stored in the MongoDB database.
 
-::: tip Tip
+::: tip Prerequisite
 
-- Knowledge about [basic EMQX authorization concepts](./authz.md)
+Knowledge about [basic EMQX authorization concepts](./authz.md)
 
 :::
 
@@ -15,18 +15,21 @@ MongoDB authorizer supports storing authorization rules as MongoDB documents. Us
 * `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
 * `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
 * `topic` value specifies the topic filter for topics relevant to the rule. Should be a string that supports wildcards and [topic placeholders](./authz.md#topic-placeholders).
+* `qos` (Optional) value specifies the QoS levels that the current rule applies to. Value options are `0`, `1`, `2`. It can also be a number array to specify multiple QoS levels. The default is all QoS levels.
+* `retain` (Optional) value specifies whether the current rule supports retained messages. Value options are `0`, `1,` or `true`, `false`. The default is to allow retained messages.
 
-Example of adding an authorization rule for a user `user123` who is allowed to publish topics `data/user123/#`:
+Deny client with username `emqx_u` to publish to topic `t/1` with QoS 1:
 
 ```js
 > db.mqtt_acl.insertOne(
   {
-      "username": "user123",
-      "clientid": "client123",
+      "username": "emqx_u",
+      "clientid": "emqx_c",
       "ipaddress": "127.0.0.1",
-      "permission": "allow",
+      "permission": "deny",
       "action": "publish",
-      "topics": ["data/user123/#"]
+      "qos": 1,
+      "topics": ["t/1"]
   }
 );
 {
@@ -38,7 +41,7 @@ Example of adding an authorization rule for a user `user123` who is allowed to p
 The corresponding configuration parameters are:
 ```bash
 collection = "mqtt_acl"
-filter { username = "${username}", ipaddress = "${peerhost}" }
+filter { username = "${username}" }
 ```
 
 ::: tip
