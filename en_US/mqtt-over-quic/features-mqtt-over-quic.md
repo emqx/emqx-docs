@@ -1,6 +1,6 @@
 # Features and Benefits
 
-EMQX 5.0 designs a unique message transmission mechanism and management method for MQTT over QUIC, providing a more efficient and secure way to transmit MQTT messages over modern complex networks, thus improving the performance of MQTT in certain scenarios. 
+EMQX designs a unique message transmission mechanism and management method for MQTT over QUIC, providing a more efficient and secure way to transmit MQTT messages over modern complex networks, thus improving the performance of MQTT in certain scenarios. 
 
 The current implementation of EMQX replaces the transport layer with a QUIC stream, where the client initiates the connection and creates a bi-directional stream. EMQX and the client interact on this stream. Considering the complex network environment, if the client fails to perform QUIC handshake for some reason, it will automatically fall back to traditional TCP to avoid communication failure with the server. The interaction between EMQX and the client has two modes: [single-stream mode](#single-stream-mode) and [multi-streams mode](#multi-streams-mode). The features and benefits of each mode are introduced below with some use cases. 
 
@@ -10,7 +10,7 @@ The current implementation of EMQX replaces the transport layer with a QUIC stre
 
 This is a basic mode that encapsulates the MQTT packets in a single bi-directional QUIC stream. The client is required to initiate a bi-directional stream from the client to EMQX within the QUIC connection. All the MQTT packet exchanges are done over this stream.
 
-### Features and Benefits
+### Single-Stream Mode Features and Benefits
 
 - Fast handshake
 
@@ -56,7 +56,7 @@ The client is free to choose how to map the stream, for example:
 The order of data is maintained per stream, hence, if there are two topics whose data is correlated and ordering is crucial, they should be mapped to the same stream.
 :::
 
-### Features and Benefits
+###  Multi-Streams Mode Features and Benefits
 
    - Decouple connection control and MQTT data exchange
 

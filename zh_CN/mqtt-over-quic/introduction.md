@@ -4,11 +4,10 @@ MQTT 协议广泛用于物联网和车联网的消息服务应用开发。MQTT �
 
 为了克服 MQTT 基于 TCP 传输的局限性，EMQX 5.0 开创性地引入了一种新协议 MQTT over QUIC，使 MQTT 客户端和 EMQX 可以通过 Quick UDP Internet Connections (QUIC) 进行通信。该协议提供了与现有 MQTT 协议相同的功能，但具有 QUIC 的额外优势。
 
-本章介绍了采用 MQTT over QUIC 协议的原因以及如何在 EMQX 中实现 MQTT over QUIC。在[MQTT over QUIC 的特性和优势](./features-mqtt-over-quic.md)中，介绍了客户端与 EMQX 在 QUIC 流上的两种交互模式以及每种模式的特性和优势。在[快速开始](./getting-started.md)中，演示了如何使用客户端 SDK 和工具在 EMQX 中启用 MQTT over QUIC。
+本章介绍了采用 MQTT over QUIC 协议的原因以及如何在 EMQX 中实现 MQTT over QUIC。在 [MQTT over QUIC 的特性和优势](./features-mqtt-over-quic.md)中，介绍了客户端与 EMQX 在 QUIC 流上的两种交互模式以及每种模式的特性和优势。在[快速开始](./getting-started.md)中，演示了如何使用客户端 SDK 和工具在 EMQX 中启用 MQTT over QUIC。
 
 :::tip
-
-目前 MQTT over QUIC 仍然是实验性功能，EMQX 正在以 OASIS 成员身份推动其标准化落地。
+目前 MQTT over QUIC 还不是 MQTT 的标准协议，但它已经具备投入生产能力，并且 EMQ 正在 OASIS 中积极推动其标准化进程。
 :::
 
 ## 了解 QUIC
@@ -21,10 +20,10 @@ QUIC 也是 HTTP/3 的唯一传输协议，HTTP/3 是最新版本的 HTTP 协议
 
 MQTT over QUIC 特别适用于对实时性和稳定性要求较高的业务。例如，在山区、矿场和隧道中行驶的网联车辆，当进入信号死角或被动切换基站时，连接会中断。MQTT over QUIC 借助 QUIC 的优势，能够克服传统 MQTT over TCP 在以下场景中的缺点：
 
-- TCP/TLS 的连接建立缓慢。客户端和服务器之间的初始握手需要多次往返以建立连接。往返时间（RTT）对于连接建立速度至关重要。较长的 RTT 可导致延迟增加和连接建立缓慢。
+- TCP/TLS 的连接建立缓慢：客户端和服务器之间的初始握手需要多次往返以建立连接。往返时间（RTT）对于连接建立速度至关重要。较长的 RTT 可导致延迟增加和连接建立缓慢。
 - 由于拥塞窗口使用慢启动，导致流量缓慢增加。
-- 队头阻塞。当一个数据包丢失时，整个传输会被阻塞，直到它被恢复，这会显著增加延迟。
-- 无法感知上层协议。TCP 对所有数据传输都做同样的处理，无法区分使用同一网络连接的不同类型数据或业务。
+- 队头阻塞：当一个数据包丢失时，整个传输会被阻塞，直到它被恢复，这会显著增加延迟。
+- 无法感知上层协议：TCP 对所有数据传输都做同样的处理，无法区分使用同一网络连接的不同类型数据或业务。
 
 ## QUIC vs TCP/TLS 测试对比
 
@@ -47,6 +46,6 @@ MQTT over QUIC 特别适用于对实时性和稳定性要求较高的业务。�
 
 目前 MQTT over QUIC 已经具备投入生产能力，已有用户开始进行深度测试集成并获得了良好反馈，如需体验，请参考[快速开始](./getting-started.md)。
 
-然而，EMQX 还没有利用 QUIC 提供的所有功能，如多流复用、流优先级、流量控制和不可靠的数据报文，这些功能将在以后的版本中得到解决，并希望能成为 OASIS 标准。
+然而，EMQX 还没有利用 QUIC 提供的所有功能，如流优先级、流量控制和不可靠的数据报文，这些功能将在以后的版本中得到解决，并希望能成为 OASIS 标准。
 
 此外，需要进一步解决如何保留消息状态和在不重新连接的情况下恢复订阅这两种在[应用限制](#应用限制)中提到的局限。
