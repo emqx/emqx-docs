@@ -16,10 +16,6 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 - `qos`:（可选）用于指定当前规则适用的消息 QoS，可选值有 `0`、`1`、`2`，也可以使用 Number 数组同时指定多个 QoS。默认为所有 QoS。
 - `retain`: （可选）用于指定当前规则是否支持发布保留消息，可选值有 `true`、`false`，默认允许保留消息。
 
-:::
-从 EMQX v5.1.1 版本开始引入了 `qos` 和 `retain` 字段。
-:::
-
 添加用户名为 `emqx_u`，允许订阅 `t/1` 主题的权限数据：
 
 ```bash

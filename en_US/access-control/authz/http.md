@@ -26,9 +26,7 @@ The request can use JSON format, with the following placeholders in URL and requ
 - `${qos}`: The QoS of the message to be published or subscribed in current request
 - `${retain}`: Whether the message to be published in current request is a retained message
 
-::: tip
-The `qos` and `retain` fields were introduced in EMQX v5.1.1.
-:::
+
 
 ### Response
 

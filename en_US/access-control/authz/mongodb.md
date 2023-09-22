@@ -18,10 +18,6 @@ MongoDB authorizer supports storing authorization rules as MongoDB documents. Us
 * `qos` (Optional) value specifies the QoS levels that the current rule applies to. Value options are `0`, `1`, `2`. It can also be a number array to specify multiple QoS levels. The default is all QoS levels.
 * `retain` (Optional) value specifies whether the current rule supports retained messages. Value options are `0`, `1,` or `true`, `false`. The default is to allow retained messages.
 
-:::
-The `qos` and `retain` fields were introduced in EMQX v5.1.1.
-:::
-
 Deny client with username `emqx_u` to publish to topic `t/1` with QoS 1:
 
 ```js
