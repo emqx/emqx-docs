@@ -203,12 +203,8 @@
       title_cn: 集群负载均衡
       path: deploy/cluster/lb
       children:
-        - title_en: 用 Nginx 负载均衡 EMQX 集群
-          title_cn: 用 Nginx 负载均衡 EMQX 集群
-          path: deploy/cluster/lb-nginx
-        - title_en: 用 HAProxy 负载均衡 EMQX 集群
-          title_cn: 用 HAProxy 负载均衡 EMQX 集群
-          path: deploy/cluster/lb-haproxy
+        - deploy/cluster/lb-nginx
+        - deploy/cluster/lb-haproxy
     - title_en: Node Evacuation and Cluster Load Rebalancing
       title_cn: 节点疏散与集群负载重平衡
       edition: ee
