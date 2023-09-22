@@ -131,7 +131,7 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
      }
      ```
 
-     Subfields from the GCP PubSUb message may be accessed with dot notation. For example, `${.value}` will resolve to the GCP PubSub message value, and `${.attributes.h1}` will resolve to the value of the `h1` message attribute key if such a subfield exists.  Absent values will be replaced by empty strings.
+     Subfields from the GCP PubSub message may be accessed with dot notation. For example, `${.value}` will resolve to the GCP PubSub message value, and `${.attributes.h1}` will resolve to the value of the `h1` message attribute key if such a subfield exists.  Absent values will be replaced by empty strings.
 
      **Note**: Each GCP PubSub-to-MQTT topic mapping must contain a unique GCP PubSub topic name.  That is, the GCP PubSub topic must not be present in more than one mapping.
 
@@ -141,7 +141,7 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
    ::::
 
-6. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Redis server.
+6. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the GCP PubSub server.
 
 7. Click **Create** to finish the creation of the data bridge.
 
