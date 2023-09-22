@@ -6,10 +6,32 @@
 
 点击左侧**系统设置**菜单下的**用户**，可以来到用户页面。用户页面展示了当前所有可以登录 Dashboard 用户列表，包括使用[命令行](../admin/cli.md)创建的用户。点击页面右上角 **+ 创建**按钮，打开创建用户弹框，填入用户信息，点击**+ 创建**按钮提交数据。提交成功的用户将添加到用户列表中，添加成功的用户可在页面上对其进行修改密码或备注操作；已不再需要的用户可在页面上进行删除。
 
+
+{% emqxce %}
+
 <img src="./assets/users.png" alt="image" style="zoom:67%;" />
 
-> EMQX 现阶段不提供基于角色的权限管理能力，所有的用户都有管理员权限可删除其他用户，但无法在 Dashboard 上删除当前登录用户。
+> EMQX 开源版本不提供基于角色的权限管理能力，所有的用户都有管理员权限可删除其他用户，但无法在 Dashboard 上删除当前登录用户。
 > 出于安全考虑，从 EMQX 5.0.0 开始 Dashboard 用户无法用于 REST API 认证。
+
+{% endemqxce %}
+
+{% emqxee %}
+
+<img src="./assets/ee-users.png" alt="image" style="zoom:67%;" />
+
+从 EMQX 5.3 开始，我们为 Dashboard 用户引入了 RBAC（基于角色的访问控制）功能。
+
+目前，有两个预定义角色：
++ administrator
+
+    这个角色可以访问所有资源.
+
++ viewer
+
+    该角色只能查看资源和数据，对应 REST API 中的所有 `GET` 请求。
+
+{% endemqxee %}
 
 ## API 密钥
 

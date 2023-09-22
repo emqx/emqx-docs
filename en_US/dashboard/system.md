@@ -6,10 +6,28 @@ To add or remove user accounts that can be used to log in to Dashboard, to obtai
 
 Click **System** -> **Users** to enter the **Users** page. The user page displays a list of all current users who can log in to Dashboard, including users created using [CLI](../admin/cli.md). Click on the **+ Create** button in the top right corner of the page to open the Create User pop-up box, fill in the user information and click on the **Create** button to submit the data. Users that are successfully submitted will be added to the list of users. Users that are successfully added can have their passwords changed or their notes changed on the page; users that are no longer required can be deleted on the page.
 
+{% emqxce %}
 <img src="./assets/users.png" alt="image" style="zoom:67%;" />
 
 > All users have admin rights to delete other users, but you cannot delete the currently logged in user on the Dashboard.
 > For security reasons, starting with EMQX 5.0.0, Dashboard user cannot be used for REST API authentication.
+{% endemqxce %}
+
+{% emqxee %}
+<img src="./assets/ee-users.png" alt="image" style="zoom:67%;" />
+
+Since EMQX 5.3 we introduced the RBAC (Role-based access control) feature for the Dashboard users.
+
+Currently, there are two predefined roles:
++ administrator
+
+    This role could access all resources.
+
++ viewer
+
+    This role can only view resources and data, corresponding to all `GET` requests in the REST API.
+
+{% endemqxee %}
 
 ## API Key
 
