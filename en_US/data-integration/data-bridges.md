@@ -45,7 +45,7 @@ EMQX supports data integration with the following types of data systems.
 ::: tab Custom
 
 - [MQTT](./data-bridge-mqtt.md)
-- [Webhook](./data-integration-webhook.md)
+- [Webhook](./data-bridge-webhook.md)
 
 ::: tab Message Queue
 
