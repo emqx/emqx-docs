@@ -12,7 +12,7 @@ MongoDB, a leading NoSQL database, is renowned for its flexibility in schema des
 
 MongoDB data integration is an out-of-the-box feature in EMQX designed to bridge the gap between MQTT-based IoT data and MongoDB's powerful data storage capabilities. With a built-in [rule engine](https://docs.emqx.com/en/enterprise/v5.1/data-integration/rules.html) component, the integration simplifies the process of ingesting data from EMQX to MongoDB for storage and management, eliminating the need for complex coding.
 
-The diagram below illustrates a typical architecture of data integration between EMQX and MongDB. <!-- This image needs to be modified to represent MongoDB -->
+The diagram below illustrates a typical architecture of data integration between EMQX and MongoDB. 
 
 <img src="./assets/mongdb_bridge_architecture.png" alt="mongdb_bridge_architecture" style="zoom:67%;" />
 
@@ -29,6 +29,8 @@ By using this integrated system, businesses in sectors like power and energy can
 ## Features and Benefits
 
 The data integration with MongoDB offers a range of features and benefits tailored to ensure effective data handling and storage:
+
+{% emqxee %}
 
 - **Streamlined IoT Data Management**
 
@@ -66,7 +68,45 @@ The data integration with MongoDB offers a range of features and benefits tailor
 
   The bridge is compatible with and supports the latest versions of MongoDB, ensuring users benefit from the newest features, optimizations, and security updates offered by the database platform.
 
+{% endemqxee %}
+
 {% emqxce %}
+
+- **Streamlined IoT Data Management**
+
+  You can ingest, store, process, and analyze your IoT data all in one place, eliminating the need for complicated integrations and tedious data migrations. Say goodbye to data silos and hello to a unified view of your IoT data.
+  
+- **Real-time Data Processing**
+
+  EMQX is built for handling real-time data streams, ensuring efficient and reliable data transmission from source systems to MongoDB. It enables organizations to capture and analyze data in real-time, making it ideal for use cases requiring immediate insights and actions.
+
+- **Flexible MongoDB Connection Options**
+
+  Whether you operate with a single MongoDB instance or leverage the robustness of a replica set, the bridge offers native support to connect with both configurations, providing businesses with the flexibility to adapt as per their infrastructure needs.
+
+- **High Performance and Scalability**
+
+  EMQX's distributed architecture and MongoDB's columnar storage format enable seamless scalability as data volumes increase. This ensures consistent performance and responsiveness, even with large datasets. As your IoT deployments grow, your data storage capabilities can scale with ease.
+
+- **Flexible Data Transformation**
+
+  EMQX provides a powerful SQL-based Rule Engine, allowing organizations to pre-process data before storing it in MongoDB. It supports various data transformation mechanisms, such as filtering, routing, aggregation, and enrichment, enabling organizations to shape the data according to their needs.
+
+- **NoSQL**
+
+  MongoDB's schema-less architecture ensures that diverse MQTT message structures can be easily stored without the need for rigid schemas, accommodating the dynamic nature of IoT data.
+
+- **Reliable Data Storage**
+
+  Once the EMQX rule engine processes and routes the message, it is stored in MongoDB with the platform's proven reliability, ensuring data integrity and consistent availability.
+
+- **Operational Metrics and Advanced Analytics**
+
+  Glean insights from metrics such as the total message count, egress traffic rate, and more. These metrics, combined with MongoDB's powerful querying, can be utilized to monitor, analyze, and optimize the data flow, empowering users to gain valuable insights from IoT data, enabling predictive analytics, anomaly detection, and more.
+
+- **Latest MongoDB Version Support**
+
+  The bridge is compatible with and supports the latest versions of MongoDB, ensuring users benefit from the newest features, optimizations, and security updates offered by the database platform.
 
 - **Cost-Effective**
 
