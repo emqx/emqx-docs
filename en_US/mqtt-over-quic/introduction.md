@@ -8,8 +8,7 @@ This chapter explains why and how MQTT over QUIC is implemented in EMQX. In [Fea
 
 ::: tip
 
-For now, MQTT over QUIC is still an experimental feature. EMQX is preparing a draft proposal about MQTT over QUIC for submission to the OASIS MQTT Technical Committee. 
-
+For now, MQTT over QUIC is not yet the standard protocol for MQTT, but it has the capability to be deployed in production, and EMQ is actively driving its standardization process within OASIS.
 :::
 
 ## Introduction of QUIC
@@ -46,7 +45,7 @@ In comparison with TCP/TLS testing, the performance of MQTT over QUIC is summari
 
 Currently, MQTT over QUIC has the following limitations:
 
-  - Preserving session state is currently not supported. This means that if a client needs to reconnect, it must resubscribe to the topics it previously subscribed to over a data stream.
+- Preserving session state is currently not supported. This means that if a client needs to reconnect, it must resubscribe to the topics it previously subscribed to over a data stream.
 
 
 - If the data stream is closed unexpectedly by either peer, the QoS 1 and QoS 2 message states are not preserved. 

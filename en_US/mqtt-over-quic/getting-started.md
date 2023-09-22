@@ -2,17 +2,17 @@
 
 In EMQX 5.0, we introduce the MQTT over QUIC listener to help IoT users benefit from MQTT over QUIC. This section gives you a step-by-step guide on how to use MQTT over QUIC. 
 
-:::tip
-Prerequisites:
+::: tip Prerequisites
 
 - Knowledge of [MQTT over QUIC](./introduction.md).
-  :::
+:::
 
 ## Environment
 
 MQTT over QUIC is an experimental function currently not supported in CentOS 6, macOS, and Windows systems.
 
 {% emqxce %}
+
 To test this listener in these systems, you can [install EMQX from the source code](../deploy/install-source.md) and specify the environment variable `BUILD_WITH_QUIC=1` before compiling.
 {% endemqxce %}
 
@@ -38,7 +38,7 @@ For more information on running EMQX via Docker container, see [Deploy with Dock
 
 MQTT over QUIC is disabled by default, you need to enable this listener with the following steps manually:
 
-1. Open the configuration file `etc/emqx.conf`, uncomment the `listeners.quic.default` configuration group (if there is no such configuration group, please add it manually):
+1. Open the configuration file `etc/emqx.conf`, add the following configuration:
 
    ```bash
    # etc/emqx.conf
@@ -50,7 +50,7 @@ MQTT over QUIC is disabled by default, you need to enable this listener with the
    }
    ```
 
-​	This configuration indicates that the QUIC listener is enabled on port `14567`. Save the changes and restart EMQX to apply the configuration.
+​This configuration indicates that the QUIC listener is enabled on port `14567`. Save the changes and restart EMQX to apply the configuration.
 
 2. Execute `emqx ctl listeners` in CLI, and we can see that the MQTT over QUIC listener is enabled:
 
@@ -74,12 +74,6 @@ So far, we have enabled the MQTT over QUIC listener on EMQX, and then we will co
 
 ## Client SDK and Tools
 
-Compared with EMQX's support to MQTT, MQTT over QUIC still needs complete client library and toolchain support.
-
-EMQX plans to provide client libraries in multiple languages such as C, Java, Python, and Golang for MQTT over QUIC by priority, to help our users take the lead in using QUIC, for example, embedded hardware and other businesses that fit the scenario.
-
-### Client SDKs
-
 - [NanoSDK](https://github.com/nanomq/NanoSDK/): MQTT SDK in C language released by EMQ NanoMQ team, also supports protocols such as WebSocket and nanomsg/SP.
 - [NanoSDK-Python](https://github.com/wanghaEMQ/pynng-mqtt): Python binding of NanoSDK.
 - [NanoSDK-Java](https://github.com/nanomq/nanosdk-java): Java JNA binding of NanoSDK.
@@ -87,15 +81,13 @@ EMQX plans to provide client libraries in multiple languages such as C, Java, Py
 
 Besides the client library, EMQ provides MQTT over QUIC bridging with the edge computing product NanoMQ. You can use NanoMQ to bridge edge data to the cloud through QUIC, so you can use the MQTT over QUIC listener without needing too much development and integration effort. 
 
-### Support to Fallback
+## Network Failover
 
 As QUIC is based on the UDP protocol, many operators still have special routing strategies for UDP packets, often leading to QUIC connection failures or packet losses.
 
 Therefore, MQTT over QUIC clients are designed with the fallback feature: the API layer can use unified operations to write services, and the transport layer can switch in real time according to network conditions. When QUIC is unavailable, it automatically switches to TCP/TLS 1.2 to ensure services under various network environments.
 
-## MQTT over QUIC Through NanoSDK
-
-[NanoSDK](https://github.com/nanomq/NanoSDK/) is based on the   MsQuic
+## Example 1: MQTT over QUIC Through NanoSDK
 
 [NanoSDK](https://github.com/nanomq/NanoSDK/) is based on MsQuic, and it is the first Software Development Kit (SDK) to implement MQTT over QUIC in C language, which is seamlessly compatible with EMQX 5.0. It adopts a fully asynchronous IO design, binds the QUIC Stream and MQTT connection mapping, realizes the built-in function of 0 RTT fast handshake reconnection, and supports multi-core task parallelism.
 
@@ -106,7 +98,7 @@ NanoSDK API works similarly to MQTT over TCP, you can create the MQTT client bas
 nng_mqtt_quic_client_open(&socket, url);
 ```
 
-For message sample code, see  https://github.com/nanomq/NanoSDK/tree/main/demo/quic.
+For message sample code, see https://github.com/nanomq/NanoSDK/tree/main/demo
 
 After compiling, you can use the following command to connect to EMQX 5.0 on port 14567 for testing.
 
@@ -117,11 +109,10 @@ quic_client sub/pub mqtt-quic://127.0.0.1:14567 topic msg
 NanoSDK also provides bindings for Java) and Python:
 
 - [Java MQTT over QUIC Client](https://github.com/nanomq/nanosdk-java/blob/main/demo/src/main/java/io/sisu/nng/demo/quicmqtt/MqttQuicClient.java)
-- [Python MQTT over QUIC Client](https://github.com/wanghaEMQ/pynng-mqtt/blob/master/examples/mqttsub.py)
+- [Python MQTT over QUIC Client](https://github.com/wanghaEMQ/pynng-mqtt/blob/master/examples/mqtt_quic_sub.py)
 
 
-
-## MQTT over QUIC Bridging via NanoMQ 
+## Example 2: MQTT over QUIC Bridging via NanoMQ 
 
 [NanoMQ](https://nanomq.io/) is an ultra-lightweight and blazing-fast service for IoT edge, featuring cross-platform support, multi-threading, and support to MQTT over QUIC bridging. 
 
@@ -129,9 +120,7 @@ It can convert the data from traditional MQTT clients into QUIC packets and send
 
 ![NanoMQ MQTT over QUIC bridge](./assets/nanomq-mqtt-bridge.png)
 
-### NanoMQ Bridging Example
-
-Download and install NanoMQ:
+1. Download and install NanoMQ:
 
 ```bash
 git clone https://github.com/emqx/nanomq.git
@@ -142,7 +131,7 @@ cmake -G Ninja -DNNG_ENABLE_QUIC=ON ..
 sudo ninja install
 ```
 
-After the installation, we can configure the MQTT over QUIC bridging function and the related topics in the configuration file `/etc/nanomq.conf`. The URL prefix `mqtt-quic` indicates that it is using QUIC as the MQTT transmission layer:
+2. After the installation, we can configure the MQTT over QUIC bridging function and the related topics in the configuration file `/etc/nanomq.conf`. The URL prefix `mqtt-quic` indicates that it is using QUIC as the MQTT transmission layer:
 
 ```bash
 ## Bridge address: host:port .
@@ -151,7 +140,9 @@ After the installation, we can configure the MQTT over QUIC bridging function an
 bridge.mqtt.emqx.address=mqtt-quic://127.0.0.1:14567
 ```
 
-### MQTT over QUIC CLI Tool
+For more information, please refer to [NanoMQ - MQTT over QUIC Bridge](https://nanomq.io/docs/en/latest/config-description/bridges.html#mqtt-over-quic-bridge)
+
+## MQTT over QUIC CLI Tool
 
 NanoMQ also provides the test tool `nanomq_cli`, which contains MQTT over QUIC client tools so users can test the MQTT over QUIC function in EMQX 5.0:
 
