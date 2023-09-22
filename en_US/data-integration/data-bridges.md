@@ -58,30 +58,35 @@ EMQX supports data integration with the following types of data systems.
 
 :::
 
-::: tab Database
+::: tab SQL 
 
-- [MongoDB](./data-bridge-mongodb.md)
-- [ClickHouse](./data-bridge-clickhouse.md)
-- [PostgreSQL](./data-bridge-pgsql.md)
-- [MySQL](./data-bridge-mysql.md)
-- [Redis](./data-bridge-redis.md)
 - [Cassandra](./data-bridge-cassa.md)
-- [DynamoDB](./data-bridge-dynamo.md)
 - [Microsoft SQL Server](./data-bridge-sqlserver.md)
+- [MySQL](./data-bridge-mysql.md)
 - [Oracle](./data-bridge-oracle.md)
+- [PostgreSQL](./data-bridge-pgsql.md)
+
+:::
+
+::: tab NoSQL
+
+- [ClickHouse](./data-bridge-clickhouse.md)
+- [DynamoDB](./data-bridge-dynamo.md)
 - [Greptime](./data-bridge-greptimedb.md)
+- [MongoDB](./data-bridge-mongodb.md)
+- [Redis](./data-bridge-redis.md)
 - [TDengine](./data-bridge-tdengine.md)
 
 :::
 
-::: tab Time Series Database
+::: tab TS DB
 
 - [Apache IoTDB](./data-bridge-iotdb.md)
 - [InfluxDB](./data-bridge-influxdb.md)
 - [OpenTSDB](./data-bridge-opents.md)
 - [TimescalesDB](./data-bridge-timescale.md)
 
-::: tab Cloud Services 
+::: tab Enterprise System 
 
 - [Azure EventHub](./data-bridge-azure-event-hub.md)
 - [Google Cloud](./data-bridge-gcp-pubsub.md)
