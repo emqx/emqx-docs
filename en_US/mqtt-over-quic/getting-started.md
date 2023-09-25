@@ -4,7 +4,7 @@ In EMQX 5.0, we introduce the MQTT over QUIC listener to help IoT users benefit 
 
 ::: tip Prerequisites
 
-- Knowledge of [MQTT over QUIC](./introduction.md).
+Knowledge of [MQTT over QUIC](./introduction.md).
 :::
 
 ## Environment
@@ -40,17 +40,17 @@ MQTT over QUIC is disabled by default, you need to enable this listener with the
 
 1. Open the configuration file `etc/emqx.conf`, add the following configuration:
 
-   ```bash
-   # etc/emqx.conf
-   listeners.quic.default {
-     enabled = true
-     bind = "0.0.0.0:14567"
-     keyfile = "etc/certs/key.pem"
-     certfile = "etc/certs/cert.pem"
-   }
-   ```
+```bash
+# etc/emqx.conf
+listeners.quic.default {
+  enabled = true
+  bind = "0.0.0.0:14567"
+  keyfile = "etc/certs/key.pem"
+  certfile = "etc/certs/cert.pem"
+}
+```
 
-​This configuration indicates that the QUIC listener is enabled on port `14567`. Save the changes and restart EMQX to apply the configuration.
+This configuration indicates that the QUIC listener is enabled on port `14567`. Save the changes and restart EMQX to apply the configuration.
 
 2. Execute `emqx ctl listeners` in CLI, and we can see that the MQTT over QUIC listener is enabled:
 
@@ -98,7 +98,7 @@ NanoSDK API works similarly to MQTT over TCP, you can create the MQTT client bas
 nng_mqtt_quic_client_open(&socket, url);
 ```
 
-For message sample code, see https://github.com/nanomq/NanoSDK/tree/main/demo
+For message sample code, see https://github.com/nanomq/NanoSDK/tree/main/demo.
 
 After compiling, you can use the following command to connect to EMQX 5.0 on port 14567 for testing.
 
@@ -140,7 +140,7 @@ sudo ninja install
 bridge.mqtt.emqx.address=mqtt-quic://127.0.0.1:14567
 ```
 
-For more information, please refer to [NanoMQ - MQTT over QUIC Bridge](https://nanomq.io/docs/en/latest/config-description/bridges.html#mqtt-over-quic-bridge)
+For more information, please refer to [NanoMQ - MQTT over QUIC Bridge](https://nanomq.io/docs/en/latest/config-description/bridges.html#mqtt-over-quic-bridge).
 
 ## MQTT over QUIC CLI Tool
 
