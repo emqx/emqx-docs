@@ -8,9 +8,9 @@ The current implementation of EMQX replaces the transport layer with a QUIC stre
 
 ## Single-Stream Mode
 
-This is a basic mode that encapsulates the MQTT packets in a single bi-directional QUIC stream. The client is required to initiate a bi-directional stream from the client to EMQX within the QUIC connection. All the MQTT packet exchanges are done over this stream.
+The single-stream mode is a basic mode that encapsulates the MQTT packets in a single bi-directional QUIC stream. The client is required to initiate a bi-directional stream from the client to EMQX within the QUIC connection. All the MQTT packet exchanges are done over this stream.
 
-### Single-Stream Mode Features and Benefits
+The single-Stream mode has the following features and benefits
 
 - Fast handshake
 
@@ -18,7 +18,7 @@ This is a basic mode that encapsulates the MQTT packets in a single bi-direction
 
 - Ordered data delivery
 
-  Like TCP, the delivery of MQTT packets also follows the order of the messages being sent in the stream, even if the underlying UDP datagram packets are received in the wrong order.
+  Like TCP, the delivery of MQTT packets also follows the order of the messages sent in the stream, even if the underlying UDP datagram packets are received in the wrong order.
 
 - Connection resumption, 0-RTT
 
@@ -45,7 +45,7 @@ The client is free to choose how to map the stream, for example:
    - Use one stream for QoS 1 and another for QoS 0.
    - Use one stream for publishing and another for subscriptions. (Publish/Subscribe over the control stream is also allowed.)
 
- As the broker, EMQX does stream packets bindings:
+ As the broker, EMQX does stream packet bindings:
 
    - It sends PUBACK packets over the stream where it receives the PUBLISH for QoS 1, so to the QoS 2 packets.
    - It sends PUBLISH packets over the stream where it gets the topic subscription and also expects PUBACK for QoS1 from the same stream.
@@ -56,7 +56,7 @@ The client is free to choose how to map the stream, for example:
 The order of data is maintained per stream, hence, if there are two topics whose data is correlated and ordering is crucial, they should be mapped to the same stream.
 :::
 
-###  Multi-Streams Mode Features and Benefits
+The multi-streams mode has the following features and benefits
 
    - Decouple connection control and MQTT data exchange
 
