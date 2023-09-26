@@ -12,7 +12,7 @@ EMQX Dashboard 允许您集成 LDAP 实现单点登录。LDAP（轻量目录访�
 
 ## 支持的 LDAP 服务器
 
-您可以将 EMQX 与支持 LDAPv3 协议的目录服务集成，实现基于 LDAP 的单点登录解决方案，例如:
+您可以将 EMQX Dashboard 与支持 LDAPv3 协议的目录服务集成，实现基于 LDAP 的单点登录，例如:
 
 - [OpenLDAP](https://www.openldap.org/)
 - [Microsoft Active Directory](https://azure.microsoft.com/en-in/products/active-directory)
