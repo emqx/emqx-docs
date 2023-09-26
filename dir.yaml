@@ -131,42 +131,10 @@
       title_cn: 认证与鉴权
       collapsed: true
       path: mqtt/emqx-access-control
-      children:
-        - title_en: Username and Password Authentication
-          title_cn: Username and Password Authentication
-          path: https://auth0.com/blog/username-password-authentication/
-        - title_en: Why Need to Add Salt to Hashing?
-          title_cn: Why Need to Add Salt to Hashing?
-          path: https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/
-        - title_en: What is JWT?
-          title_cn: What is JWT?
-          path: https://jwt.io/introduction
     - title_en: TLS
       title_cn: TLS
       collapsed: true
       path: mqtt/emqx-tls
-      children:
-        - title_en: What is Mutual Authentication?
-          title_cn: What is Mutual Authentication?
-          path: https://en.wikipedia.org/wiki/Mutual_authentication
-        - title_en: What is SNI?
-          title_cn: What is SNI?
-          path: https://aboutssl.org/what-is-sni-how-does-it-works/
-        - title_en: TLS 1.2 vs TLS 1.3
-          title_cn: TLS 1.2 vs TLS 1.3
-          path: https://venafi.com/blog/why-tls-13-radically-different-tls-12/
-        - title_en: What is Perfect Forward Secrecy?
-          title_cn: What is Perfect Forward Secrecy?
-          path: https://www.sectigo.com/resource-library/perfect-forward-secrecy
-        - title_en: What is Cipher Suites?
-          title_cn: What is Cipher Suites?
-          path: https://www.keyfactor.com/blog/cipher-suites-explained/
-        - title_en: How to Choose Your Cipher Suite?
-          title_cn: How to Choose Your Cipher Suite?
-          path: https://technology.amis.nl/security-2/ssltls-choose-cipher-suite/
-        - title_en: What is PSK?
-          title_cn: What is PSK?
-          path: https://en.wikipedia.org/wiki/TLS-PSK
     - title_en: Design and Implementation
       title_cn: 设计与实现
       path: design/overview
