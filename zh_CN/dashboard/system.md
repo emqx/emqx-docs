@@ -21,15 +21,16 @@
 <img src="./assets/ee-users.png" alt="image" style="zoom:67%;" />
 
 从 EMQX 5.3 开始，我们为 Dashboard 用户引入了 RBAC（基于角色的访问控制）功能。
+RBAC 允许根据用户在组织中的角色为其分配权限，能够简化授权管理，通过限制访问权限提高安全性，并改善组织合规性，因此是 Dashboard 必不可少的访问控制机制。
 
 目前，有两个预定义角色：
-+ administrator
++ 管理员(Administrator)
 
-    这个角色可以访问所有资源.
+    拥有对 EMQX 所有功能和资源的完全管理访问权限，包括客户端管理、系统配置、API 密钥以及用户管理。
 
-+ viewer
++ 查看者(Viewer)
 
-    该角色只能查看资源和数据，对应 REST API 中的所有 `GET` 请求。
+    可以访问 EMQX 的所有数据和配置信息，对应 REST API 中的所有 `GET` 请求，但无权进行创建、修改和删除操作。
 
 {% endemqxee %}
 

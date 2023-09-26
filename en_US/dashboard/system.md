@@ -17,15 +17,16 @@ Click **System** -> **Users** to enter the **Users** page. The user page display
 <img src="./assets/ee-users.png" alt="image" style="zoom:67%;" />
 
 Since EMQX 5.3 we introduced the RBAC (Role-based access control) feature for the Dashboard users.
+RBAC allows us to assign permissions to users based on their roles in the organization.RBAC enables simplified authorization management, enhances security through restricted access, and improves organizational compliance, making it an essential access control mechanism for the Dashboard.
 
 Currently, there are two predefined roles:
-+ administrator
++ Administrator
 
-    This role could access all resources.
+    Has full access to manage all features and resources of EMQX, including client management, system configuration, API key and user management.
 
-+ viewer
++ Viewer
 
-    This role can only view resources and data, corresponding to all `GET` requests in the REST API.
+    Can access all data and configuration of EMQX, corresponding to all `GET` requests in the REST API. But has no rights to create, modify or delete.
 
 {% endemqxee %}
 
