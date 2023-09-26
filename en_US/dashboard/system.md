@@ -1,42 +1,70 @@
 # System
 
-To add or remove user accounts that can be used to log in to Dashboard, to obtain API keys that can be used to authenticate to create script calls to the HTTP API, and to modify the theme and language of Dashboard, you can use the System module to do so.
+{% emqxce %}
+
+The EMQX Dashboard's **System** menu includes submenus for **Users**, **API Keys**, and **Settings**. Each of these submenus allows you to efficiently manage and configure user accounts, API keys, and Dashboard setting preferences on their respective pages.
+
+{% endemqxce %}
+
+{% emqxee %}
+
+The EMQX Dashboard's **System** menu includes submenus for **Users**, **API Keys**, **License**, and **SSO**. Each of these submenus allows you to efficiently manage and configure user accounts, API keys, license settings, and single sign-on (SSO) preferences on their respective pages.
+
+{% endemqxee %}
 
 ## Users
 
-Click **System** -> **Users** to enter the **Users** page. The user page displays a list of all current users who can log in to Dashboard, including users created using [CLI](../admin/cli.md). Click on the **+ Create** button in the top right corner of the page to open the Create User pop-up box, fill in the user information and click on the **Create** button to submit the data. Users that are successfully submitted will be added to the list of users. Users that are successfully added can have their passwords changed or their notes changed on the page; users that are no longer required can be deleted on the page.
+The **Users** page provides an overview of all active Dashboard users, including those generated via the [CLI](../admin/cli.md).
+
+To add new users, simply click the **+ Create** button located in the top-right corner of the page. A pop-up dialog will appear, prompting you to input the necessary user details. Once entered, click the **Create** button to generate the user account. For further user management, such as editing user information, updating passwords, or deleting users, you can easily access these options through the **Actions** column.
 
 {% emqxce %}
 <img src="./assets/users.png" alt="image" style="zoom:67%;" />
 
 > All users have admin rights to delete other users, but you cannot delete the currently logged in user on the Dashboard.
 > For security reasons, starting with EMQX 5.0.0, Dashboard user cannot be used for REST API authentication.
+
 {% endemqxce %}
 
 {% emqxee %}
 <img src="./assets/ee-users.png" alt="image" style="zoom:67%;" />
 
-Since EMQX 5.3 we introduced the RBAC (Role-based access control) feature for the Dashboard users.
-RBAC allows us to assign permissions to users based on their roles in the organization.RBAC enables simplified authorization management, enhances security through restricted access, and improves organizational compliance, making it an essential access control mechanism for the Dashboard.
+Starting from EMQX 5.3, the Dashboard introduces the Role-Based Access Control (RBAC) feature for its users. RBAC allows you to assign permissions to users based on their roles within the organization. This feature simplifies authorization management, enhances security by restricting access, and improves organizational compliance, making it an essential access control mechanism for the Dashboard.
 
-Currently, there are two predefined roles:
+Currently, either of the following two predefined roles can be set for a user. You can select the role from the **Role** dropdown when you create users.
 + Administrator
 
-    Has full access to manage all features and resources of EMQX, including client management, system configuration, API key and user management.
+    Administrators have full access to manage all EMQX features and resources, including client management, system configuration, API key, and user management.
 
 + Viewer
 
-    Can access all data and configuration of EMQX, corresponding to all `GET` requests in the REST API. But has no rights to create, modify or delete.
+    Viewers can access all EMQX data and configurations, corresponding to all `GET` requests in the REST API. However, they do not have the rights to create, modify, or delete any data.
 
 {% endemqxee %}
 
 ## API Key
 
-Click on **API Keys** under the **System** menu on the left to go to the API Keys page. If you need an API key to create some scripts to call the [HTTP API](../admin/api.md), you can create and obtain one from this page. Click the **+ Create** button on the top right corner of the page to open the Create API key pop-up box, fill in the API key related data, if the **Expire At** is not filled in the API key will never expire, click **Confirm** to submit the data, the API Key and Secret Key of the API key created will be provided on the page after successful submission, **where the Secret Key will not be shown later**. The user needs to save the API Key and Secret Key to a safe place immediately; when finished saving the data, click the **Close** button to close the pop-up box.
+On the API Keys page, you can generate an API key and secret key for accessing the [HTTP API](../admin/api.md) by following the steps below.
+
+1. Click the **+ Create** button on the top right corner of the page to bring up the Create API Key pop-up dialog. 
+
+2. On the Create API Key dialog, configure in the detailed information for the API key. 
+
+   If the **Expire At** textbox is left empty, the API key will never expire.
+
+3. Click the **Confirm** button, and the API key and secret Key are created and displayed in the **Created Successfully** dialog. 
+
+   ::: warning
+
+   You need to save the API Key and Secret Key in a safe place because the secret key will not be shown again.
+
+   :::
+
+    Click the **Close** button to close the dialog.
 
 <img src="./assets/api-key.png" alt="image" style="zoom:67%;" />
 
-Click on the API key name to view the key details; click on the `Edit` button to reset the expiration time, enable status and notes of the API key, and extend the availability of the API key here if it has expired. If an API key is no longer needed, you can delete it by clicking the `Remove` button on the right side of the API key.
+You can view the details of the API key by clicking the name in the **Name** column. You click the **Edit** button in the **Actions** column to reset the expiration time, change the status, and edit the note of the API key. If an API key is no longer needed, you can delete it by clicking the **Delete** button.
 
 <img src="./assets/api-key-detail.png" alt="image" style="zoom:50%;" />
 
