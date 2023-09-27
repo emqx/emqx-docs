@@ -42,11 +42,9 @@ EMQX Dashboard 允许您集成 LDAP 实现单点登录。LDAP（轻量目录访�
 
 成功进行 LDAP 身份验证后，EMQX 会自动添加一个 Dashboard 用户，您可以在[用户](./system.md#用户)中进行管理，例如为其分配角色与权限。
 
-<!-- TODO 重命名文件名 -->
+![Dashboard SSO 登录页](./assets/dashboard-sso-login-page.png)
 
-![image-20230926182522354](./assets/image-20230926182522354.png)
-
-![image-20230926182543521](./assets/image-20230926182543521.png)
+![Dashboard SSO LDAP 登录页](./assets/dashboard-sso-ldap-login.png)
 
 ## 退出登录
 
