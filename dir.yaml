@@ -543,6 +543,7 @@
             - access-control/authz/ldap
             - access-control/authz/http
         - access-control/blacklist
+        - access-control/flapping-detect
     - title_en: Network and TLS
       title_cn: 网络与 TLS
       path: network/overview
