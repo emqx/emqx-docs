@@ -31,7 +31,9 @@
   This role can only view resources and data, corresponding to all GET requests in the REST API.
 
 - [#11612](https://github.com/emqx/emqx/pull/11612) During node evacuation, evacuate all disconnected sessions, not only those started with `clean_start` set to `false`.
+- [#11631](https://github.com/emqx/emqx/pull/11631) Add SSO feature and integrate with LDAP.
 
+- [#11656](https://github.com/emqx/emqx/pull/11656) Integrated the SAML 2.0 Support for SSO.
 
 
 ### Bug Fixes
