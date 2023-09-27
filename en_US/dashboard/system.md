@@ -8,7 +8,7 @@ The EMQX Dashboard's **System** menu includes submenus for **Users**, **API Keys
 
 {% emqxee %}
 
-The EMQX Dashboard's **System** menu includes submenus for **Users**, **API Keys**, **License**, and **SSO**. Each of these submenus allows you to efficiently manage and configure user accounts, API keys, license settings, and single sign-on (SSO) preferences on their respective pages.
+The EMQX Dashboard's **System** menu includes submenus for **Users**, **API Keys**, **License**, and **SSO**. Each of these submenus allows you to efficiently manage and configure user accounts, API keys, license settings, and single sign-on (SSO) configurations on their respective pages.
 
 {% endemqxee %}
 
@@ -95,3 +95,11 @@ The Settings can be accessed by clicking the setting icon on the top right corne
 <img src="./assets/settings_ee.png" alt="settings_ee" style="zoom:67%;" />
 
 {% endemqxee %}
+
+{% emqxee %}
+
+## SSO
+
+The Single Sign-On (SSO) page provides settings for the administrators to configure the SSO feature for user login management. For more information about the SSO feature, see [Single Sign-On (SSO)](./sso.md).
+
+{% endemqxee %} 
