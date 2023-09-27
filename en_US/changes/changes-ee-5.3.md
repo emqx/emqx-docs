@@ -15,7 +15,6 @@
 - [#11620](https://github.com/emqx/emqx/pull/11620) Added a new rule-engine SQL function `bytesize` to get the size of a byte-string. e.g. ``SELECT * FROM "t/#" WHERE bytesize(payload) > 10`.
 - [#11642](https://github.com/emqx/emqx/pull/11642) Updated to quicer version 0.0.200 in preparation for enabling openssl3 support for QUIC transport.
 
-- [#11608](https://github.com/emqx/emqx/pull/11608) Integrated the LDAP bind operation as a new authenticator.
 
 - [#11610](https://github.com/emqx/emqx/pull/11610) Implemented a preliminary Role-Based Access Control for the Dashboard.
 

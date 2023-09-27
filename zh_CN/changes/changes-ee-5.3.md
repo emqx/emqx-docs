@@ -16,7 +16,6 @@
 
 - [#11642](https://github.com/emqx/emqx/pull/11642) 将 quicer 升级到版本 0.0.200，为启用 OpenSSL3 对 QUIC 传输的支持做准备。
 
-- [#11608](https://github.com/emqx/emqx/pull/11608) 将 LDAP 绑定操作集成为新的身份验证器。
 
 - [#11610](https://github.com/emqx/emqx/pull/11610) 在 Dashboard 中实施了初步基于角色的访问控制。
 
