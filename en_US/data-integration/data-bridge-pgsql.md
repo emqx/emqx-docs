@@ -56,7 +56,7 @@ CREATE DATABASE emqx_data;
 
 ### Create Data Tables
 
-Use the following SQL statements to create data table `emqx_messages` in PostgreSQL database for storing the client ID, topic, payload, and creating time of every message. 
+Use the following SQL statements to create data table `t_mqtt_msg` in PostgreSQL database for storing the client ID, topic, payload, and creating time of every message. 
 
   ```sql
   CREATE TABLE t_mqtt_msg (
@@ -190,7 +190,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello PostgreSQL" }'
 
 Check the running status of the two data bridges, there should be one new incoming and one new outgoing message. 
 
-Check whether the data is written into the `t_mqtt_messages` data table.
+Check whether the data is written into the `t_mqtt_msg` data table.
 
 ```bash
 emqx_data=# select * from t_mqtt_msg;
