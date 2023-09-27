@@ -1,7 +1,8 @@
 # Releases
 
 ## e5.3.0
-## Enhancements
+
+### Enhancements
 
 - [#11568](https://github.com/emqx/emqx/pull/11568) Added support for defining templates for MQTT publish properties in Republish rule action.
 
@@ -33,7 +34,7 @@
 
 
 
-## Bug Fixes
+### Bug Fixes
 
 - [#11682](https://github.com/emqx/emqx/pull/11682) Fixed an issue where logging would stop if "Rotation Size" would be set to `infinity` on file log handlers.
 
