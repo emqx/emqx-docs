@@ -1,8 +1,9 @@
 # Releases
 
 ## e5.3.0
+## Enhancements
 
-### Enhancements
+- [#11568](https://github.com/emqx/emqx/pull/11568) Added support for defining templates for MQTT publish properties in Republish rule action.
 
 - [#11597](https://github.com/emqx/emqx/pull/11597) - Upgrade ekka to 0.15.13, which includes the following changes:
   - upgrade Mria to 0.6.2:
@@ -21,23 +22,27 @@
 - [#11610](https://github.com/emqx/emqx/pull/11610) Implemented a preliminary Role-Based Access Control for the Dashboard.
 
   In this version, there are two predefined roles:
-  - administrator
+  - superuser
 
   This role could access all resources.
   - viewer
 
   This role can only view resources and data, corresponding to all GET requests in the REST API.
 
+- [#11612](https://github.com/emqx/emqx/pull/11612) During node evacuation, evacuate all disconnected sessions, not only those started with `clean_start` set to `false`.
 
 
-### Bug Fixes
 
-- [#1111682](https://github.com/emqx/emqx/pull/1111682) Fixed an issue where logging would stop if "Rotation Size" would be set to `infinity` on file log handlers.
+## Bug Fixes
+
+- [#11682](https://github.com/emqx/emqx/pull/11682) Fixed an issue where logging would stop if "Rotation Size" would be set to `infinity` on file log handlers.
 
 - [#11567](https://github.com/emqx/emqx/pull/11567) Improve EMQX graceful shutdown (`emqx stop` command):
   - increase timeout from 1 to 2 minutes
   - print an error message if EMQX can't stop gracefully within the configured timeout
   - print periodic status messages while EMQX is shutting down
+
+- [#11568](https://github.com/emqx/emqx/pull/11568) Fixed an issue where an ill-defined builtin rule action config could be interpreted as a custom user function.
 
 - [#11584](https://github.com/emqx/emqx/pull/11584) Fixed telemetry reporting error on Windows when os_mon module is unavailable.
 
@@ -60,4 +65,4 @@
 
 - [#11627](https://github.com/emqx/emqx/pull/11627) Fix resources cleanup in HStreamdB bridge.
 
-  Prior to this fix, HStreamDB bridge might report errors during bridge configuration updates, since hstreamdb client/producer were not stopped properly.
+  Prior to this fix, HStreamDB bridge might report errors during bridge configuration updates, since hstreamdb client/producer were not stopped properly.ha
