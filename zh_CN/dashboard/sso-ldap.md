@@ -1,12 +1,10 @@
 # 配置 LDAP 单点登录
 
-EMQX Dashboard 允许您集成 LDAP 实现单点登录。LDAP（轻量目录访问协议）是一种应用层协议，用于访问和维护分布式目录信息服务。它是一种常见的身份验证和授权协议，被广泛应用于企业环境中的单点登录（SSO）解决方案。
-
-使用 LDAP 单点登录时，EMQX 会将用户 LDAP 凭证发送到目录服务器验证，成功后即可创建用户会话信息并登录进入 Dashboard。
+本页介绍了如何配置和使用基于轻量级目录访问协议（LDAP）协议实施的单点登录功能。
 
 ::: 先决条件
 
-- 了解[单点登录（SSO）](./sso.md)的基本概念。
+了解[单点登录（SSO）](./sso.md)的基本概念。
 
 :::
 
@@ -17,7 +15,7 @@ EMQX Dashboard 允许您集成 LDAP 实现单点登录。LDAP（轻量目录访�
 - [OpenLDAP](https://www.openldap.org/)
 - [Microsoft Active Directory](https://azure.microsoft.com/en-in/products/active-directory)
 
-## 启用 LDAP
+## 启用 LDAP 单点登录
 
 本节将指导您如何在 Dashboard 启用 LDAP 单点登录。
 
@@ -40,11 +38,11 @@ EMQX Dashboard 允许您集成 LDAP 实现单点登录。LDAP（轻量目录访�
 
 启用 LDAP 单点登录后，EMQX Dashboard 会在登录页面展示单点登录选项。点击 **LDAP** 按钮，进入 LDAP 单点登录页面，输入为用户分配的 LDAP 凭证（例如用户名与密码）并点击**登录**按钮。
 
+<img src="./assets/sso_ldap.png" alt="image-20230926182522354" style="zoom:67%;" />
+
+<img src="./assets/ldap_login.png" alt="image-20230926182543521" style="zoom:67%;" />
+
 成功进行 LDAP 身份验证后，EMQX 会自动添加一个 Dashboard 用户，您可以在[用户](./system.md#用户)中进行管理，例如为其分配角色与权限。
-
-![Dashboard SSO 登录页](./assets/dashboard-sso-login-page.png)
-
-![Dashboard SSO LDAP 登录页](./assets/dashboard-sso-ldap-login.png)
 
 ## 退出登录
 
