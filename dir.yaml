@@ -475,7 +475,7 @@
       children:
         - dashboard/sso-ldap
         - dashboard/sso-saml
-    - observability/audit-log
+    - dashboard/audit-log
     - title_en: Rate Limit
       title_cn: 速率限制
       path: rate-limit/rate-limit
