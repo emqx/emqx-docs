@@ -25,7 +25,7 @@
 
 - [#11656](https://github.com/emqx/emqx/pull/11656) Integrated the SAML 2.0 Support for SSO.
 
-- [#11599](https://github.com/emqx/emqx/pull/11599) Support audit logs, operations from CLI, REST API, and Dashboard will be recorded in separate log files.
+- [#11599](https://github.com/emqx/emqx/pull/11599) Supported audit logs to record operations from CLI, REST API, and Dashboard in separate log files.
 
 ### Bug Fixes
 
