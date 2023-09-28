@@ -2,7 +2,7 @@
 
 Single Sign-On (SSO) is an authentication mechanism that allows users to log in to multiple applications or systems using a single set of credentials, such as a username and password, without the need for separate authentication in each application. When EMQX Dashboard enables the SSO feature, users can conveniently log in to the EMQX Dashboard using their enterprise account credentials. Organizations can centrally manage user identities and permissions and simplify their user management processes. This feature enhances the security of enterprise data and systems while ensuring user convenience.
 
-EMQX implements SSO functionality based on Lightweight Directory Access Protocol (LDAP) and the Security Assertion Markup Language (SAML) 2.0 standard, supporting integration with mainstream identity services such as [OpenLDAP](https://www.openldap.org/), [Microsoft Active Directory](https://azure.microsoft.com/en-in/products/active-directory), [Okta](https://www.okta.com/), [Entra ID](https://www.microsoft.com/en-in/security/business/identity-access/microsoft-entra-verified-id), and more. 
+EMQX implements SSO functionality based on Lightweight Directory Access Protocol (LDAP) and the Security Assertion Markup Language (SAML) 2.0 standard, supporting integration with mainstream identity services such as [OpenLDAP](https://www.openldap.org/), [Microsoft Active Directory](https://azure.microsoft.com/en-in/products/active-directory), [Okta](https://www.okta.com/), [OneLogin](https://www.onelogin.com/), and more. 
 
 {% emqxce %} 
 
