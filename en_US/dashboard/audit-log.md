@@ -1,20 +1,26 @@
 # Audit Log
 
-The Audit Log feature allows you to track important operation changes in your EMQX cluster in real-time. It is a critical tool for enterprise users to comply with regulatory requirements and ensure data security. EMQX Audit Log supports recording change-related operations from the [Dashboard](../dashboard/introduction.md) and [CLI](../admin/cli.md), such as Dashboard user logins and modifications to clients, access controls, and data integrations. However, read-only operations such as metrics retrieval and client list queries are not recorded. Through the Audit Log, enterprise users can easily see who performed which critical operations, how they did it, and when they did it, ensuring compliance and security auditing during their operations.
+The Audit Log feature allows you to track important operation changes in your EMQX cluster in real-time. It is a critical tool for enterprise users to comply with regulatory requirements and ensure data security. EMQX Audit Log supports recording change-related operations from the [Dashboard](../dashboard/introduction.md), [REST API](../admin/api.md) and [CLI](../admin/cli.md), such as Dashboard user logins and modifications to clients, access controls, and data integrations. However, read-only operations such as metrics retrieval and client list queries are not recorded. Through the Audit Log, enterprise users can easily see who performed which critical operations, how they did it, and when they did it, ensuring compliance and security auditing during their operations.
+
+::: warning
+
+Audit logs for command-line operations may contain sensitive information, so take caution when sending them to a log collector. It is advisable to filter log content or use encrypted transmission methods to prevent unauthorized information leakage.
+
+:::
 
 ## View Log File
 
-EMQX enables Audit Log by default and saves it in log format in the `./log/audit.log.1` file. This facilitates in-depth analysis of audit records by enterprise users and integration into existing log management systems, meeting compliance and data security requirements. 
+When the Audit Log is enabled in EMQX, change-related operations are saved in log format in the `./log/audit.log.1` file. It is easy for enterprise users to perform an in-depth analysis of audit records and integrate the results into existing log management systems, meeting compliance and data security requirements. 
 
 In future versions, EMQX will also support direct viewing in the Dashboard or querying and obtaining Audit Logs via the REST API, making it convenient to check operation records. Through these methods, EMQX provides flexible and comprehensive support for Audit Logs, allowing enterprise users to choose the most suitable way to manage and view audit logs according to their needs.
 
 ## Configure Audit Log
 
-You can adjust the configuration parameters of the audit log or disable it through both the configuration file and the Dashboard.
+You can enable the Audit Log feature and adjust the configuration parameters through both the configuration file and the Dashboard.
 
 ### Configure Settings via Configuration File
 
-You can modify the parameters of the audit log or disable it by changing the settings under `log.audit` in the `emqx.conf` file, as shown in the example below.
+You can enable the audit log and modify the configuration options under `log.audit` in the `emqx.conf` file, as shown in the example below.
 
 ```bash
 log.audit {
@@ -29,7 +35,7 @@ log.audit {
 
 ### Configure Settings via the Dashboard
 
-You can also adjust the configuration parameters of the audit log or disable it through the Dashboard by navigating to **Management** -> **Logging** -> **Audit Log**.
+You can also enable the audit log and modify the configuration parameters through the Dashboard by navigating to **Management** -> **Logging** -> **Audit Log**.
 
 <img src="./assets/audit_log_config.png" alt="Audit Log Configuration" style="zoom:50%;" />
 
@@ -46,9 +52,9 @@ Audit log configuration options:
 
 The fields included in the Audit Log vary depending on the source of the operation records.
 
-### Operation Records from Dashboard
+### Operation Records from Dashboard or REST API
 
-Records of Dashboard operations include information about the operating user, the operated object, and the operation result. The log message format example is as follows:
+Audit logs that record Dashboard or REST API operations include information about the operating user, the operated object, and the operation result. The log message format example is as follows:
 
 ```bash
 {"time":1695865935099311,"level":"info","msg":"from_api","username":"admin","query_string":{},"operate_id":"/mqtt/retainer/message/:topic","node":"emqx@127.0.0.1","method":"delete","headers":{"user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36","sec-fetch-site":"same-origin","sec-fetch-mode":"cors","sec-fetch-dest":"empty","sec-ch-ua-platform":"\"macOS\"","sec-ch-ua-mobile":"?0","sec-ch-ua":"\"Chromium\";v=\"116\", \"Not)A;Brand\";v=\"24\", \"Google Chrome\";v=\"116\"","referer":"http://localhost:18083/","origin":"http://localhost:18083","host":"localhost:18083","connection":"keep-alive","authorization":"******","accept-language":"zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7","accept-encoding":"gzip, deflate, br","accept":"*/*"},"from":"dashboard","duration_ms":1,"code":204,"body":{},"bindings":{"topic":"t/1"},"auth_type":"jwt_token"
@@ -61,7 +67,7 @@ The following table shows the fields contained in the above log message samples.
 | time         | Integer | Timestamp indicating the time of the log record in microseconds. |
 | level        | String  | Log level.                                                   |
 | msg          | String  | Operation description.                                       |
-| from         | String  | Request source, where `dashboard` and `cli` indicate operations from the Dashboard and CLI, respectively. |
+| from         | String  | Request source, where `dashboard`, `rest`, `cli` and `erlang_shell` indicate operations from the Dashboard, REST API, CLI, and Erlang Shell respectively. |
 | node         | String  | Node name indicating the node or server where the operation was executed. |
 | username     | String  | User performing the operation, available when `from_api` is the source. |
 | method       | String  | HTTP request method, with `post`, `put`, and `delete` corresponding to create, update, and delete operations. |
@@ -76,7 +82,7 @@ The following table shows the fields contained in the above log message samples.
 
 ### Operation Records from CLI
 
-Operation records from CLI include the executed command, called parameters, and other information. The log message format examples are as follows:
+Audit logs that record operations from CLI operatios include the executed command, called parameters, and other information. The log message format examples are as follows:
 
 ```bash
 {"time":1695866030977555,"level":"info","msg":"from_cli","from": "cli","node":"emqx@127.0.0.1","duration_ms":0,"cmd":"retainer","args":["clean", "t/1"]}
