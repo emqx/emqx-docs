@@ -18,10 +18,6 @@ EMQX provides a series of observability-related features to help with system mon
 
   Logs provide a reliable source of information for troubleshooting and system performance optimization. You can find the record about the access, operating or network issues from EMQX logs.
 
-- [Audit Log](./audit-log.md)
-
-  Audit Log records the important operation changes in your EMQX cluster in real-time. It is a critical tool for enterprise users to comply with regulatory requirements and ensure data security.
-
 - [Integrate with Prometheus](./prometheus.md)
 
   [Prometheus](https://prometheus.io/) is the monitoring solution open-sourced by SoundCloud, featuring its support to multidimensional data model, flexible query language, and powerful alarm management. EMQX supports integrating with Prometheus to collect system metrics and as well as pushing metrics to `pushgateway`.
