@@ -1,5 +1,47 @@
 # Releases
 
+## e5.2.1
+
+### Enhancements
+
+- [#11487](https://github.com/emqx/emqx/pull/11487) The bcrypt work factor is limited to the range 5-10, because higher values consume too much CPU resources.
+  Bcrypt library is updated to allow parallel hash evaluation.
+
+- [#11568](https://github.com/emqx/emqx/pull/11568) Added support for defining templates for MQTT 5.0 publish properties and user properties in Republish rule action.
+
+- [#11612](https://github.com/emqx/emqx/pull/11612) During node evacuation, evacuate all disconnected sessions, not only those started with `clean_start` set to `false`.
+
+- [#11532](https://github.com/emqx/emqx/pull/11532) Improved error messaging for better clarity when parsing invalid packets.
+
+### Bug Fixes
+
+- [#11493](https://github.com/emqx/emqx/pull/11493) Fixed response examples for `/api/v5/publish` bad request in RESP API documentation. Previously the documentation example said that the bad request response could return a list in the body which was not actually the case.
+
+- [#11499](https://github.com/emqx/emqx/pull/11499) Upgraded Erlang/OTP to version 25.3.2-2, which now excludes sensitive data from mnesia_hook log messages.
+
+- [#11506](https://github.com/emqx/emqx/pull/11506) Previously, attempting to download a non-existent trace log file would result in downloading an empty file. After implementing this fix, when attempting to download an empty trace log file using the GET request `/api/v5/trace/clientempty/download`, the server will now respond with a 404 status code and the following JSON message: `{"code":"NOT_FOUND","message":"Trace is empty"}`. This response will be triggered if no events matching the trace condition are found in the log file. 
+
+- [#11522](https://github.com/emqx/emqx/pull/11522) Improved error message for rule engine schema registry when schema name exceeds the permissible length.
+
+- [#11531](https://github.com/emqx/emqx/pull/11531) Fixed an issue where authorization cache cleaning cli was not working properly for specific client ID.
+
+- [#11564](https://github.com/emqx/emqx/pull/11564) Fixed cluster partition autoheal functionality. Implemented autohealing for the clusters that split into multiple partitions.
+  
+- [#11568](https://github.com/emqx/emqx/pull/11568) Fixed an issue where an ill-defined built-in rule action config could be interpreted as a custom user function.
+
+- [#11394](https://github.com/emqx/emqx/pull/11394) Upgraded Kafka producer client `wolff` from 1.7.6 to 1.7.7. This fixed a potential race condition that might cause all Kafka producers to crash if some failed to initialize.
+  
+- [#11401](https://github.com/emqx/emqx/pull/11401) Fixed the behavior of the rule SQL `mongo_date` function in SQL statement testing in the EMQX Dashboard. The rule SQL `mongo_date` function now returns a string with the format `ISODate(*)`, where * is an ISO date string when running rules in test mode. This format aligns with how MongoDB stores dates.
+
+- [#11547](https://github.com/emqx/emqx/pull/11547) Fixed several emqx_bridge issues:
+  - Fixed Cassandra bridge connect error occurring when the bridge is configured without username/password
+  (Cassandra doesn't require user credentials when it is configured with `authenticator: AllowAllAuthenticator`.)
+  - Fixed SQL Server bridge connect error caused by an empty password.
+  - Made `username` a required field in Oracle bridge.
+  - Fixed IoTDB bridge error caused by setting base URL without a scheme (e.g. `<host>:<port>`).
+  
+- [#11630](https://github.com/emqx/emqx/pull/11630) Fixed an issue where the core node could get stuck in the `mria_schema:bootstrap/0` state, preventing new nodes from joining the cluster.
+
 ## e5.2.0
 
 ### Enhancements
