@@ -6,7 +6,7 @@
 
 - [#11597](https://github.com/emqx/emqx/pull/11597) Upgraded ekka to 0.15.13, which incorporates the following changes:
   - Upgraded Mria to 0.6.2.
-  - Introduced the ability to configure the bootstrap batch size, as detailed in [Mria PR](https://github.com/emqx/mria/pull/159).
+  - Introduced the ability to configure the bootstrap data sync batch size, as detailed in [Mria PR](https://github.com/emqx/mria/pull/159).
   - Enhanced the reliability of mria_membership processes, as described in [Mria PR](https://github.com/emqx/mria/pull/156).
   - Fix log message formatting error.
   - Added `node.default_bootstrap_batch_size` option to EMQX configuration.
@@ -21,7 +21,6 @@
   
   - Viewer: This role can only view resources and data, corresponding to all GET requests in the REST API.
   
-
 - [#11631](https://github.com/emqx/emqx/pull/11631) Added Single Sign-On (SSO) feature and integrated with LDAP.
 
 - [#11656](https://github.com/emqx/emqx/pull/11656) Integrated the SAML 2.0 Support for SSO.
