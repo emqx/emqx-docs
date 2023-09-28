@@ -2,30 +2,33 @@
 
 EMQX 支持通过集成 MongoDB 进行授权验证，即可以将客户端的权限列表存储在 MongoDB 数据库中。
 
-::: tip 前置准备：
+::: tip 前置准备
 
-- 熟悉 [EMQX 授权基本概念](./authz.md)
-  :::
+熟悉 [EMQX 授权基本概念](./authz.md)
+:::
 
 ## 数据结构与查询语句
 
 MongoDB 认证器支持将权限数据存储为 MongoDB 文档。用户需要提供一个查询语句模板，且确保查询结果包含以下字段：
 
-- `permission`: 用于指定操作权限，可选值有 `allow` 和 `deny`
-- `action`: 用于指定当前规则适用于哪些操作，可选值有 `publish`、`subscribe` 和 `all`
-- `topics`: 用于指定当前规则适用的主题列表，可以使用主题过滤器和[主题占位符](./authz.md#主题占位符)
+- `permission`: 用于指定操作权限，可选值有 `allow` 和 `deny`。
+- `action`: 用于指定当前规则适用于哪些操作，可选值有 `publish`、`subscribe` 和 `all`。
+- `topics`: 用于指定当前规则适用的主题列表，可以使用主题过滤器和[主题占位符](./authz.md#主题占位符)。
+- `qos`:（可选）用于指定当前规则适用的消息 QoS，可选值有 `0`、`1`、`2`，也可以使用数字数组同时指定多个 QoS。默认为所有 QoS。
+- `retain`: （可选）用于指定当前规则是否支持发布保留消息，可选值有 `0`、`1`，或 `true`、`false`。默认允许保留消息。
 
-添加允许用户名为 `user123`的客户端发布主题为 `data/user123/#` 的消息的规则示例：
+禁止用户名为 `emqx_u` 的客户端发布主题为 `t/1` 且 QoS 值为 `1` 的消息:
 
 ```js
 > db.mqtt_acl.insertOne(
   {
-      "username": "user123",
-      "clientid": "client123",
+      "username": "emqx_u",
+      "clientid": "emqx_c",
       "ipaddress": "127.0.0.1",
-      "permission": "allow",
+      "permission": "deny",
       "action": "publish",
-      "topics": ["data/user123/#"]
+      "qos": 1,
+      "topics": ["t/1"]
   }
 );
 {
@@ -38,7 +41,7 @@ MongoDB 认证器支持将权限数据存储为 MongoDB 文档。用户需要提
 
 ```bash
 collection = "mqtt_acl"
-filter { username = "${username}", ipaddress = "${peerhost}"}
+filter { username = "${username}" }
 
 ```
 

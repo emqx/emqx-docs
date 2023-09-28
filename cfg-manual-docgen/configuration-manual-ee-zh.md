@@ -2010,6 +2010,299 @@ auto_subscribe:topic@ -->
 
 broker:trace@ -->
 
+{% emqxee %}
+
+## MQTT 文件传输
+
+### 文件传输设置
+
+
+File transfer settings
+
+**file_transfer.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `false`
+
+  启用文件传输（File Transfer）服务。<br/>
+文件传输服务允许客户端使用 `$file` 主题将分片上传到 EMQX。
+启用文件传输服务表示 `$file` 主题前缀已被预留，用于提供文件传输服务。<br/>
+这个开关也会影响文件传输 REST API 的可用性，以及依赖存储的后台任务（例如垃圾回收）。
+
+
+**file_transfer.init_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `10s`
+
+  指定文件传输初始化的时间限制。在<br/>
+EMQX 服务器过载时可能发生初始化超时。超时后给 `init` 的 PUBACK 中包含一个错误码 （0x80）。
+
+
+**file_transfer.store_segment_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5m`
+
+  文件片段保存超时。<br/>
+EMQX 收到文件分片后，会对它进行保存，如果发生超时（例如系统过载），则会给这个发布消息的 PUBACK 中包含一个错误码（0x80）。
+
+
+**file_transfer.assemble_timeout**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `5m`
+
+  文件拼接超时。<br/>
+在收到 'fin' 消息后 EMQX 会对文件进行拼接，如果发生超时（例如系统过载），则会给 'fin' 的 PUBACK 中包含一个错误码（0x80）。
+
+
+**file_transfer.storage**
+
+  *类型*: `file_transfer:storage_backend`
+
+  *默认值*: `{"local":{}}`
+
+  文件后端存储配置
+
+
+
+
+File transfer local storage settings
+
+**file_transfer.storage.local.segments**
+
+  *类型*: `file_transfer:local_storage_segments`
+
+  *默认值*: `{"gc":{}}`
+
+  本地文件系统存储配置，包括已上传的文件分片和临时数据。
+
+
+**file_transfer.storage.local.exporter**
+
+  *类型*: `file_transfer:local_storage_exporter_backend`
+
+  *默认值*: `{"local":{}}`
+
+  将文件导出到本地存储<br/>
+该配置项指定所有分片都传输完成了的文件进行导出到本地存储的相关行为。
+
+
+**file_transfer.storage.local.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  Whether to enable this backend.
+
+
+
+
+File transfer local segments storage settings
+
+**file_transfer.storage.local.segments.root**
+
+  *类型*: `string`
+
+  文件分片存储的根目录。
+
+
+**file_transfer.storage.local.segments.gc**
+
+  *类型*: `file_transfer:local_storage_segments_gc`
+
+  文件系统中临时文件的垃圾回收配置。
+
+
+
+
+Garbage collection settings for the File transfer local segments storage
+
+**file_transfer.storage.local.segments.gc.interval**
+
+  *类型*: `timeout_duration_ms`
+
+  *默认值*: `1h`
+
+  运行垃圾回收的时间间隔。
+
+
+**file_transfer.storage.local.segments.gc.maximum_segments_ttl**
+
+  *类型*: `duration_s`
+
+  *默认值*: `24h`
+
+  分片的临时存储的最大 TTL。<br/>
+该配置为系统全局上限，所有的分片都不会超过这个 TTL，即使某些文件传输指定了一个更大的 TTL。
+
+
+**file_transfer.storage.local.segments.gc.minimum_segments_ttl**
+
+  *类型*: `duration_s`
+
+  *默认值*: `5m`
+
+  分片的临时存储的最小 TTL。<br/>
+分片在超过这个 TTL 之前不被垃圾回收。
+该配置为系统全局下限，所有的分片都不会低于这个 TTL，即使某些文件传输指定了一个更小的 TTL。
+
+
+
+{% endemqxee %}
+
+### 导出文件到本地磁盘
+
+
+Local Exporter settings for the File transfer local storage backend
+
+**file_transfer.storage.local.exporter.local.root**
+
+  *类型*: `string`
+
+  导出到本地文件时使用的根目录。
+
+
+**file_transfer.storage.local.exporter.local.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  Whether to enable this backend.
+
+
+
+
+Exporter for the local file system storage backend
+
+**file_transfer.storage.local.exporter.local**
+
+  *类型*: `file_transfer:local_storage_exporter`
+
+  将文件导出到本地存储。
+
+
+**file_transfer.storage.local.exporter.s3**
+
+  *类型*: `file_transfer:s3_exporter`
+
+  将文件导出到 AWS s3 API 兼容的对象存储服务。
+
+
+
+### 导出文件到 S3 存储
+
+
+S3 Exporter settings for the File transfer local storage backend
+
+**file_transfer.storage.local.exporter.s3.access_key_id**
+
+  *类型*: `string`
+
+  The access key ID of the S3 bucket.
+
+
+**file_transfer.storage.local.exporter.s3.secret_access_key**
+
+  *类型*: `emqx_s3_schema:secret_access_key`
+
+  The secret access key of the S3 bucket.
+
+
+**file_transfer.storage.local.exporter.s3.bucket**
+
+  *类型*: `string`
+
+  The name of the S3 bucket.
+
+
+**file_transfer.storage.local.exporter.s3.host**
+
+  *类型*: `string`
+
+  The host of the S3 endpoint.
+
+
+**file_transfer.storage.local.exporter.s3.port**
+
+  *类型*: `pos_integer`
+
+  The port of the S3 endpoint.
+
+
+**file_transfer.storage.local.exporter.s3.url_expire_time**
+
+  *类型*: `duration_s`
+
+  *默认值*: `1h`
+
+  The time in seconds for which the signed URLs to the S3 objects are valid.
+
+
+**file_transfer.storage.local.exporter.s3.min_part_size**
+
+  *类型*: `bytesize`
+
+  *默认值*: `5mb`
+
+  The minimum part size for multipart uploads.<br/>
+Uploaded data will be accumulated in memory until this size is reached.
+
+
+**file_transfer.storage.local.exporter.s3.max_part_size**
+
+  *类型*: `bytesize`
+
+  *默认值*: `5gb`
+
+  The maximum part size for multipart uploads.<br/>
+S3 uploader won't try to upload parts larger than this size.
+
+
+**file_transfer.storage.local.exporter.s3.acl**
+
+  *类型*: `enum`
+
+  *可选值*: `private | public_read | public_read_write | authenticated_read | bucket_owner_read | bucket_owner_full_control`
+
+  The ACL to use for the uploaded objects.
+
+
+**file_transfer.storage.local.exporter.s3.transport_options**
+
+  *类型*: `s3:transport_options`
+
+  Options for the HTTP transport layer used by the S3 client.
+
+
+**file_transfer.storage.local.exporter.s3.enable**
+
+  *类型*: `boolean`
+
+  *默认值*: `true`
+
+  Whether to enable this backend.
+
+
+
+
+Storage backend settings for file transfer
+
+**file_transfer.storage.local**
+
+  *类型*: `file_transfer:local_storage`
+
+  EMQX 节点本地用文件系统于存储文件分片的相关配置。
+
+
+
 ## 集成 Prometheus
 
 

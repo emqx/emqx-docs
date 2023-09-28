@@ -1270,7 +1270,8 @@
         "required": [
           "name",
           "server",
-          "type"
+          "type",
+          "username"
         ],
         "properties": {
           "status": {
@@ -3259,6 +3260,11 @@
             "description": "要重新发布的消息的有效负载。允许使用带有变量的模板，请参阅“republish_args”的描述。<br/>默认为 ${payload}。 如果从所选结果中未找到变量 ${payload}，则使用字符串 \"undefined\"。",
             "example": "${payload}",
             "type": "string"
+          },
+          "mqtt_properties": {
+            "default": {},
+            "description": "From which variable should the MQTT Publish Properties of the message be taken.<br/>Placeholders like <code>${.payload.content_type}</code> may be used.",
+            "$ref": "#/components/schemas/rule_engine.republish_mqtt_properties"
           },
           "user_properties": {
             "default": "${user_properties}",
@@ -9449,7 +9455,8 @@
         "required": [
           "name",
           "server",
-          "type"
+          "type",
+          "username"
         ],
         "properties": {
           "type": {
@@ -11749,8 +11756,10 @@
           },
           "salt_rounds": {
             "default": 10,
-            "description": "Salt rounds for BCRYPT password generation.",
+            "description": "Work factor for BCRYPT password generation.",
             "example": 10,
+            "maximum": 10,
+            "minimum": 5,
             "type": "integer"
           }
         },
@@ -18400,10 +18409,12 @@
         "properties": {
           "code": {
             "description": "BAD_REQUEST",
+            "example": 144,
             "type": "string"
           },
           "message": {
             "description": "失败的详细原因。",
+            "example": "topic_name_invalid",
             "type": "string"
           }
         },
@@ -21171,6 +21182,26 @@
         },
         "type": "object"
       },
+      "rule_engine.republish_mqtt_properties": {
+        "properties": {
+          "Payload-Format-Indicator": {
+            "type": "string"
+          },
+          "Message-Expiry-Interval": {
+            "type": "string"
+          },
+          "Content-Type": {
+            "type": "string"
+          },
+          "Response-Topic": {
+            "type": "string"
+          },
+          "Correlation-Data": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "bridge_iotdb.creation_opts": {
         "properties": {
           "worker_pool_size": {
@@ -23255,7 +23286,8 @@
       },
       "bridge_oracle.put": {
         "required": [
-          "server"
+          "server",
+          "username"
         ],
         "properties": {
           "enable": {
@@ -28056,7 +28088,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.2.0"
+    "version": "5.2.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -33077,83 +33109,83 @@
                   "general_client": {
                     "summary": "General client info",
                     "value": {
-                      "mqueue_dropped": 0,
-                      "reductions": 72022,
-                      "is_bridge": false,
-                      "disconnected_at": null,
-                      "ip_address": "127.0.0.1",
-                      "proto_ver": "1.0",
-                      "mailbox_len": 0,
-                      "send_pkt": 1,
-                      "proto_name": "STOMP",
-                      "heap_size": 4185,
-                      "awaiting_rel_cnt": 0,
-                      "recv_pkt": 1,
-                      "mqueue_max": "infinity",
-                      "expiry_interval": 0,
-                      "recv_oct": 56,
+                      "mqueue_len": 0,
+                      "clean_start": true,
+                      "subscriptions_cnt": 0,
+                      "recv_cnt": 1,
+                      "inflight_max": "infinity",
+                      "awaiting_rel_max": "infinity",
                       "created_at": "2021-12-07T10:44:02.721+08:00",
                       "send_msg": 0,
-                      "username": "guest",
-                      "node": "emqx@127.0.0.1",
-                      "subscriptions_max": "infinity",
-                      "recv_cnt": 1,
+                      "is_bridge": false,
                       "connected": true,
-                      "inflight_max": "infinity",
+                      "mqueue_dropped": 0,
+                      "reductions": 72022,
+                      "ip_address": "127.0.0.1",
                       "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "port": 50675,
-                      "subscriptions_cnt": 0,
-                      "awaiting_rel_max": "infinity",
+                      "username": "guest",
+                      "disconnected_at": null,
+                      "awaiting_rel_cnt": 0,
+                      "send_pkt": 1,
+                      "recv_oct": 56,
+                      "recv_pkt": 1,
                       "send_oct": 61,
+                      "keepalive": 0,
                       "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "clean_start": true,
-                      "mqueue_len": 0,
-                      "send_cnt": 1,
+                      "node": "emqx@127.0.0.1",
+                      "proto_ver": "1.0",
                       "recv_msg": 0,
+                      "proto_name": "STOMP",
+                      "heap_size": 4185,
+                      "mailbox_len": 0,
+                      "port": 50675,
                       "inflight_cnt": 0,
-                      "keepalive": 0
+                      "mqueue_max": "infinity",
+                      "send_cnt": 1,
+                      "subscriptions_max": "infinity",
+                      "expiry_interval": 0
                     }
                   },
                   "lwm2m_client": {
                     "summary": "LwM2M client info",
                     "value": {
-                      "mqueue_dropped": 0,
-                      "reductions": 72022,
-                      "is_bridge": false,
-                      "disconnected_at": null,
-                      "ip_address": "127.0.0.1",
-                      "proto_ver": "1.0",
-                      "mailbox_len": 0,
-                      "send_pkt": 1,
-                      "proto_name": "LwM2M",
-                      "heap_size": 4185,
-                      "awaiting_rel_cnt": 0,
-                      "recv_pkt": 1,
-                      "mqueue_max": "infinity",
-                      "expiry_interval": 0,
-                      "recv_oct": 56,
+                      "mqueue_len": 0,
+                      "clean_start": true,
+                      "subscriptions_cnt": 0,
+                      "recv_cnt": 1,
+                      "inflight_max": "infinity",
+                      "awaiting_rel_max": "infinity",
                       "created_at": "2021-12-07T10:44:02.721+08:00",
                       "send_msg": 0,
-                      "username": "guest",
-                      "lifetime": 86400,
-                      "node": "emqx@127.0.0.1",
-                      "subscriptions_max": "infinity",
-                      "endpoint_name": "urn:imei:154928475237123",
-                      "recv_cnt": 1,
+                      "is_bridge": false,
                       "connected": true,
-                      "inflight_max": "infinity",
+                      "mqueue_dropped": 0,
+                      "lifetime": 86400,
+                      "reductions": 72022,
+                      "ip_address": "127.0.0.1",
                       "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "port": 50675,
-                      "subscriptions_cnt": 0,
-                      "awaiting_rel_max": "infinity",
+                      "username": "guest",
+                      "disconnected_at": null,
+                      "awaiting_rel_cnt": 0,
+                      "send_pkt": 1,
+                      "recv_oct": 56,
+                      "recv_pkt": 1,
                       "send_oct": 61,
+                      "endpoint_name": "urn:imei:154928475237123",
+                      "keepalive": 0,
                       "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "clean_start": true,
-                      "mqueue_len": 0,
-                      "send_cnt": 1,
+                      "node": "emqx@127.0.0.1",
+                      "proto_ver": "1.0",
                       "recv_msg": 0,
+                      "proto_name": "LwM2M",
+                      "heap_size": 4185,
+                      "mailbox_len": 0,
+                      "port": 50675,
                       "inflight_cnt": 0,
-                      "keepalive": 0
+                      "mqueue_max": "infinity",
+                      "send_cnt": 1,
+                      "subscriptions_max": "infinity",
+                      "expiry_interval": 0
                     }
                   }
                 },
@@ -37588,17 +37620,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "items": {
-                        "$ref": "#/components/schemas/emqx_mgmt_api_publish.publish_error"
-                      },
-                      "type": "array"
-                    },
-                    {
-                      "$ref": "#/components/schemas/emqx_mgmt_api_publish.bad_request"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/emqx_mgmt_api_publish.bad_request"
                 }
               }
             }

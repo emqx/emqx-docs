@@ -37,7 +37,26 @@ The client carries the JWT in the connection request, and EMQX uses the pre-conf
 
 ## EMQX Authenticator
 
+{% emqxce %}
+
 EMQX supports 8 authentication methods (referred to as authenticator hereafter) based on the authentication mechanism and backend database used: 
+
+| Mechanism      | Database          | Description                                                  |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| Password-Based | Built-in Database | [Authentication with Mnesia database as credential storage](./mnesia.md) |
+| Password-Based | MySQL             | [Authentication with MySQL database as credential storage](mysql.md) |
+| Password-Based | PostgreSQL        | [Authentication with PostgreSQL database as credential storage](postgresql.md) |
+| Password-Based | MongoDB           | [Authentication with MongoDB database as credential storage](./mongodb.md) |
+| Password-Based | Redis             | [Authentication with Redis database as credential storage](./redis.md) |
+| Password-Based | HTTP Server       | [Authentication using external HTTP API for credential verification](./http.md) |
+| JWT            |                   | [Authentication using JWT](./jwt.md)                         |
+| SCRAM          | Built-in Database | [Authentication using SCRAM](./scram.md)                     |
+
+{% endemqxce %}
+
+{% emqxee %}
+
+EMQX supports 9 authentication methods (referred to as authenticator hereafter) based on the authentication mechanism and backend database used: 
 
 | Mechanism      | Database          | Description                                                  |
 | -------------- | ----------------- | ------------------------------------------------------------ |
@@ -50,6 +69,8 @@ EMQX supports 8 authentication methods (referred to as authenticator hereafter) 
 | Password-Based | HTTP Server       | [Authentication using external HTTP API for credential verification](./http.md) |
 | JWT            |                   | [Authentication using JWT](./jwt.md)                         |
 | SCRAM          | Built-in Database | [Authentication using SCRAM](./scram.md)                     |
+
+{% endemqxee %}
 
 ## Authentication Chain
 

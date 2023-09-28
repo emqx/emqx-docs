@@ -2,29 +2,47 @@
 
 This authorizer implements authorization checks by matching publish/subscription requests against lists of rules stored in the Redis database.
 
-::: tip Tip
+::: tip Prerequisite
 
-- Knowledge about [basic EMQX authorization concepts](./authz.md)
+Knowledge about [basic EMQX authorization concepts](./authz.md)
 
 :::
 
 ## Data Schema and Query Statement
 
-Users need to provide a templated Redis command that returns a key-value list with topic filters as keys and actions (`publish`, `subscribe`, or `all`) as values.
+Users need to provide a query template that returns the following data:
 
-For example, rules can be stored as [Redis hashes](https://redis.io/docs/manual/data-types/#hashes):
+- `topic`: Specifies the topic that the rule applies to, which can use topic filters and [topic placeholders](https://claude.ai/chat/authz.md#topic-placeholders).
+- `action`: Specifies the actions that the rule applies to, available options are `publish`, `subscribe`, and `all`.
+- `qos` (Optional) Specifies the QoS levels that the current rule applies to. Value options are `0`, `1`, `2`. It can also be a number array to specify multiple QoS levels. The default is all QoS levels.
+- `retain`: (Optional) Specifies whether the rule supports retained messages. Value options are `true`, `false`. The default is to allow retained messages.
+
+For example, rules can be stored as [Redis hashes](https://redis.io/docs/manual/data-types/#hashes).
+
+Adding permission data for user `emqx_u` to subscribe to topic `t/1`:
 
 ```bash
->redis-cli
-127.0.0.1:6379> HSET users:someuser foo/# subscribe
-(integer) 1
-127.0.0.1:6379> HSET users:someuser bar/baz publish
-(integer) 1
+HSET mqtt_acl:emqx_u t/1 subscribe
+```
+
+Due to Redis structure limitations, when using the `qos` and `retain` fields, the field other than topic needs to be placed in a JSON string, for example:
+
+- Adding permission data for user `emqx_u` to subscribe to topic `t/2` with QoS 1 and QoS 2:
+
+```bash
+HSET mqtt_acl:emqx_u t/2 '{ "action": "subscribe", "qos": [1, 2] }'
+```
+
+- Adding permission data to deny user `emqx_u` from publishing retained messages to `t/3`:
+
+```bash
+HSET mqtt_acl:emqx_u t/3 '{ "action": "publish", "retain": false }'
 ```
 
 The corresponding config parameters are:
+
 ```bash
-cmd = "HGET users:${username}"
+cmd = "HGETALL mqtt_acl:${username}"
 ```
 
 Fetched rules are used as permissive ones, i.e., a request is accepted if the topic filter and action match.

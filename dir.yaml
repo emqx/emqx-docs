@@ -203,14 +203,8 @@
       title_cn: 集群负载均衡
       path: deploy/cluster/lb
       children:
-        - title_en: 用 Nginx 负载均衡 EMQX 集群
-          title_cn: 用 Nginx 负载均衡 EMQX 集群
-          path: deploy/cluster/lb-nginx
-          lang: cn
-        - title_en: 用 HAProxy 负载均衡 EMQX 集群
-          title_cn: 用 HAProxy 负载均衡 EMQX 集群
-          path: deploy/cluster/lb-haproxy
-          lang: cn
+        - deploy/cluster/lb-nginx
+        - deploy/cluster/lb-haproxy
     - title_en: Node Evacuation and Cluster Load Rebalancing
       title_cn: 节点疏散与集群负载重平衡
       edition: ee
@@ -533,7 +527,10 @@
                 - access-control/authn/mongodb
                 - access-control/authn/postgresql
                 - access-control/authn/redis
-                - access-control/authn/ldap
+                - title_en: LDAP
+                  title_zh: LDAP
+                  path: access-control/authn/ldap
+                  edition: ee
                 - access-control/authn/http
             - access-control/authn/jwt
             - access-control/authn/scram
@@ -548,7 +545,10 @@
             - access-control/authz/mongodb
             - access-control/authz/postgresql
             - access-control/authz/redis
-            - access-control/authz/ldap
+            - title_en: LDAP
+              title_zh: LDAP
+              path: access-control/authz/ldap
+              edition: ee
             - access-control/authz/http
         - access-control/blacklist
         - access-control/flapping-detect
@@ -789,6 +789,10 @@
       title_cn: 版本发布
       edition: ee
       path: changes/changes-ee-5.2
+    - title_en: Releases
+      title_cn: 版本发布
+      edition: ce
+      patch: changes/changes-ce-5.2
     - title_en: 从 V4 升级到 V5 的不兼容更改
       title_cn: 从 V4 升级到 V5 的不兼容更改
       lang: cn
