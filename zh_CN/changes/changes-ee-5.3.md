@@ -16,7 +16,6 @@
 
 - [#11642](https://github.com/emqx/emqx/pull/11642) 将 quicer 升级到版本 0.0.200，为启用 OpenSSL3 对 QUIC 传输的支持做准备。
 
-
 - [#11610](https://github.com/emqx/emqx/pull/11610) 在 Dashboard 中实施了初步基于角色的访问控制。
 
   在此版本中，有两个预定义的角色：
@@ -24,13 +23,12 @@
   - 管理员：此角色可以访问所有资源。
   - 查看者：此角色只能查看资源和数据，对应于 REST API 中的所有 GET 请求。
 
-- [#11612](https://github.com/emqx/emqx/pull/11612)  在节点疏散期间疏散所有断开的会话，不仅仅是那些使用 `clean_start` 设置为 `false` 开始的会话。
 - [#11631](https://github.com/emqx/emqx/pull/11631) 添加了单点登录（SSO）功能并与 LDAP 集成。
 - [#11656](https://github.com/emqx/emqx/pull/11656) 集成了 SAML 2.0 支持以实现单点登录（SSO）。
 
 ### 修复
 
-- [#1111682](https://github.com/emqx/emqx/pull/1111682) 修复了在文件日志处理程序上将“旋转大小”设置为`infinity`时日志记录停止的问题。
+- [#11682](https://github.com/emqx/emqx/pull/11682) 修复了在文件日志处理程序上将“旋转大小”设置为`infinity`时日志记录停止的问题。
 
 - [#11567](https://github.com/emqx/emqx/pull/11567) 改进了 EMQX 的优雅关闭（`emqx stop` 命令）：
   

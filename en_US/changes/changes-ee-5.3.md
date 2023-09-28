@@ -4,7 +4,6 @@
 
 ### Enhancements
 
-- [#11568](https://github.com/emqx/emqx/pull/11568) Added support for defining templates for MQTT publish properties in the Republish rule action.
 - [#11597](https://github.com/emqx/emqx/pull/11597) Upgraded ekka to 0.15.13, which incorporates the following changes:
   - Upgraded Mria to 0.6.2.
   - Introduced the ability to configure the bootstrap batch size, as detailed in [Mria PR](https://github.com/emqx/mria/pull/159).
@@ -15,7 +14,6 @@
 - [#11620](https://github.com/emqx/emqx/pull/11620) Added a new rule-engine SQL function `bytesize` to get the size of a byte-string. e.g. ``SELECT * FROM "t/#" WHERE bytesize(payload) > 10`.
 - [#11642](https://github.com/emqx/emqx/pull/11642) Updated to quicer version 0.0.200 in preparation for enabling openssl3 support for QUIC transport.
 
-
 - [#11610](https://github.com/emqx/emqx/pull/11610) Implemented a preliminary Role-Based Access Control for the Dashboard.
 
   In this version, there are two predefined roles:
@@ -23,7 +21,6 @@
   
   - Viewer: This role can only view resources and data, corresponding to all GET requests in the REST API.
   
-- [#11612](https://github.com/emqx/emqx/pull/11612) During node evacuation, evacuate all disconnected sessions during node evacuation, not only those starting with `clean_start` set to `false`. 
 
 - [#11631](https://github.com/emqx/emqx/pull/11631) Added Single Sign-On (SSO) feature and integrated with LDAP.
 
