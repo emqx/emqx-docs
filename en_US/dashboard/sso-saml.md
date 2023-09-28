@@ -13,7 +13,9 @@ Be familiar with the basic concepts of [Single Sign-On (SSO)](./sso.md).
 The EMQX Dashboard can integrate with identity services that support the SAML 2.0 protocol to enable SAML-based single sign-on, such as:
 
 - [Okta](https://www.openldap.org/)
-- [Entra ID](https://www.microsoft.com/en-in/security/business/identity-access/microsoft-entra-verified-id)
+- [OneLogin](https://www.onelogin.com/)
+
+Other identity providers are in the process of integration and will be supported in future versions.
 
 ## Configure SSO by Integrating with Okta 
 
@@ -26,8 +28,6 @@ This section guides you on how to use Okta as an Identity Provider (IdP) and con
 3. On the configuration page, enter the following information:
    - **Dashboard Address**: Ensure users can access the actual access address of the Dashboard, without specifying a specific path. For example, `http://localhost:18083`. This address will be automatically concatenated to generate the **SSO Address** and **Metadata Address** for IdP-side configuration.
    - **SAML Metadata URL**: Leave it temporarily blank and wait for Step 2 configuration.
-   - **SP Request Signing**: Whether to sign request messages between Dashboard and the IdP to enhance security. If enabled, a certificate needs to be configured. <!-- TODO How to issue a certificate -->
-
 ### Step 2: Add a SAML 2.0 Application in Okta's Application Catalog
 
 1. Log in to Okta as an administrator and go to the **Okta Admin Console**.

@@ -13,7 +13,9 @@
 EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实现基于 SAML 的单点登录：
 
 - [Okta](https://www.openldap.org/)
-- [Entra ID](https://www.microsoft.com/en-in/security/business/identity-access/microsoft-entra-verified-id)
+- [OneLogin](https://www.onelogin.com/)
+
+其他身份提供商正在适配中，将在后续版本提供。
 
 ## 集成 Okta 身份服务配置 SSO
 
@@ -25,8 +27,7 @@ EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实�
 3. 在配置页面中，输入以下信息：
    - **Dashboard 地址**：确保用户能够访问 Dashboard 的实际访问地址，不需要带具体路径。例如 `http://localhost:18083`。该地址将自动拼接生成**单点登录地址**与**元数据地址**供 IdP 侧配置使用。
    - **SAML 元数据 URL**：暂时留空，等待第 2 步配置生成。
-   - **SP 请求签名**：是否对 Dashboard 和身份提供商 （IdP）之间的请求消息进行签名以提高安全性。如果启用需要配置证书。
-     <!-- TODO 如何签发证书 -->
+
 ### 第 2 步：在 Okta 的应用程序目录添加 SAML 2.0 应用程序
 
 1. 以管理员身份登录 Okta，然后转至 **Okta 管理控制台**。
@@ -52,7 +53,7 @@ EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实�
 
 1. 在 Okta 中，转到 **Sign On** 选项卡，复制 **Metadata URL**。
 2. 在 Dashboard 中，粘贴复制来的  **Metadata URL** 到第 1 步中的 **SAML 元数据 URL** 中，点击**更新**按钮。
-3. 在 **Okta > Assignments ** 选项卡中，您现在可以将用户和组分配给 EMQX Dashboard 应用，只有分配进来的用户才能登录此应用。
+3. 在 **Okta > Assignments** 选项卡中，您现在可以将用户和组分配给 EMQX Dashboard 应用，只有分配进来的用户才能登录此应用。
 ## 登录与用户管理
 
 启用 SAML 单点登录后，EMQX Dashboard 会在登录页面展示单点登录选项。点击 **SAML** 按钮，会进入到 IdP 预设值的登录页面，在新页面中输入为用户分配的凭证进行登录。
