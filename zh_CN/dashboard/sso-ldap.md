@@ -26,7 +26,7 @@
 | 选项         | 说明                                                         |
 | ------------ | ------------------------------------------------------------ |
 | 服务         | LDAP服务器的地址，例如`localhost:389`。                      |
-| 用户名       | 访问 LDAP 服务器的用户名。                                   |
+| 用户名       | 访问 LDAP 服务器的 绑定 DN（Bind DN）。                                   |
 | 密码         | 访问 LDAP 服务器的用户密码。                                 |
 | 基本 DN      | LDAP 目录的基本 DN，搜索用户的起点。                         |
 | 用户查询条件 | LDAP 中匹配用户的过滤器。在 LDAP 用户查询条件中,系统会自动替换 `${username}` 为实际输入的用户名，进行用户匹配。<br />- 对于标准 LDAP，默认过滤器是 `(&(objectClass=person)(uid=${username}))`。<br />- 对于 Active Directory，默认过滤器是 `(&(objectClass=user)(sAMAccountName=${username}))`。<br />该变量替换机制可以根据不同的用户属性灵活构造查询过滤器，进行用户名查询和匹配。有关条件格式详见 [LDAP过滤器](https://ldap.com/ldap-filters/)。 |

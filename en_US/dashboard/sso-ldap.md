@@ -26,7 +26,7 @@ This section guides you on how to enable LDAP-based SSO in the Dashboard.
 | Option             | Description                                                  |
 | ------------------ | ------------------------------------------------------------ |
 | Server             | The address of the LDAP server, for example, `localhost:389`. |
-| Username           | The username to access the LDAP server.                      |
+| Username           | The Bind DN to access the LDAP server.                      |
 | Password           | The password for the LDAP server user.                       |
 | Base DN            | The base DN of the LDAP directory, the starting point for user searches. |
 | User Lookup Filter | The filter in LDAP that matches users. In the LDAP user query condition, the system will automatically replace `${username}` with the actual input username for user matching.<br />- For standard LDAP, the default filter is `(&(objectClass=person)(uid=${username}))`.<br />- For Active Directory, the default filter is `(&(objectClass=user)(sAMAccountName=${username}))`.<br />This variable replacement mechanism allows you to construct query filters flexibly based on different user attributes for username queries and matching. For more information on the condition format, see [LDAP Filters](https://ldap.com/ldap-filters/). |
