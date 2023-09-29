@@ -631,6 +631,7 @@ Can be one of:
   - <code>utc</code>: the UTC time offset
   - <code>+-[hh]:[mm]</code>: user specified time offset, such as "-02:00" or "+00:00"
 Defaults to: <code>system</code>.
+This config has no effect for when formatter is <code>json</code> as the timestamp in JSON is milliseconds since epoch.
 
 
 
@@ -681,6 +682,66 @@ Can be one of:
   - <code>utc</code>: the UTC time offset
   - <code>+-[hh]:[mm]</code>: user specified time offset, such as "-02:00" or "+00:00"
 Defaults to: <code>system</code>.
+This config has no effect for when formatter is <code>json</code> as the timestamp in JSON is milliseconds since epoch.
+
+
+
+### Audit Log
+
+
+Audit log handler that prints log events to files.
+
+**log.audit.path**
+
+  *Type*: `file`
+
+  *Default*: `${EMQX_LOG_DIR}/audit.log`
+
+  Name the audit log file.
+
+
+**log.audit.rotation_count**
+
+  *Type*: `integer`
+
+  *Default*: `10`
+
+  *Optional*: `1-128`
+
+  Maximum number of log files.
+
+
+**log.audit.rotation_size**
+
+  *Type*: `infinity | bytesize`
+
+  *Default*: `50MB`
+
+  This parameter controls log file rotation. The value `infinity` means the log file will grow indefinitely, otherwise the log file will be rotated once it reaches `rotation_size` in bytes.
+
+
+**log.audit.enable**
+
+  *Type*: `boolean`
+
+  *Default*: `true`
+
+  Enable this log handler.
+
+
+**log.audit.time_offset**
+
+  *Type*: `string`
+
+  *Default*: `system`
+
+  The time offset to be used when formatting the timestamp.
+Can be one of:
+  - <code>system</code>: the time offset used by the local system
+  - <code>utc</code>: the UTC time offset
+  - <code>+-[hh]:[mm]</code>: user specified time offset, such as "-02:00" or "+00:00"
+Defaults to: <code>system</code>.
+This config has no effect for when formatter is <code>json</code> as the timestamp in JSON is milliseconds since epoch.
 
 
 
@@ -3150,6 +3211,11 @@ Allows a server to indicate any origins (domain, scheme, or port) other than
 its own from which a browser should permit loading resources.
 
 
+**dashboard.sso**
+
+  *Type*: `sso`
+
+
 
 
 Configuration for the dashboard listener (plaintext).
@@ -5162,7 +5228,7 @@ The syntax of the filter follows RFC 4515 and also supports placeholders.
 
 **authn:ldap.ssl**
 
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
+  *Type*: `ssl`
 
   *Default*: `{"enable":false}`
 
@@ -6798,7 +6864,7 @@ The syntax of the filter follows RFC 4515 and also supports placeholders.
 
 **authorization.sources.$INDEX.ssl**
 
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
+  *Type*: `ssl`
 
   *Default*: `{"enable":false}`
 
