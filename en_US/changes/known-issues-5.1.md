@@ -88,7 +88,6 @@
 
   Channels with `clean_session = false` generate two `client.disconnected` events, leading to inaccurate event statistics.
 
-  > **Fixed Version:** 5.1.0
 
 - **Parsing Issue with UTF-8 Characters in Rule Action "republish" Payload**
 
