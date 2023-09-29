@@ -88,7 +88,6 @@
 
   Channels with `clean_session = false` generate two `client.disconnected` events, leading to inaccurate event statistics.
 
-
 - **Parsing Issue with UTF-8 Characters in Rule Action "republish" Payload**
 
   When creating a rule with the "republish" action and using `${payload.'msg'}` in the payload, clients subscribed to the republish topic receive `${payload.'msg'}` instead of the actual `${payload.msg}` value.
