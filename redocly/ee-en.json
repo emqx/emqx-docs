@@ -1237,6 +1237,41 @@
         },
         "type": "object"
       },
+      "emqx_enterprise_schema.log": {
+        "properties": {
+          "console": {
+            "$ref": "#/components/schemas/emqx_conf_schema.console_handler"
+          },
+          "file": {
+            "default": {
+              "level": "warning"
+            },
+            "description": "File-based log handlers.",
+            "oneOf": [
+              {
+                "properties": {
+                  "$handler_name": {
+                    "$ref": "#/components/schemas/emqx_conf_schema.log_file_handler"
+                  }
+                },
+                "type": "object"
+              },
+              {
+                "$ref": "#/components/schemas/emqx_conf_schema.log_file_handler"
+              }
+            ]
+          },
+          "audit": {
+            "default": {
+              "enable": true,
+              "level": "info"
+            },
+            "description": "Audit file-based log handler.",
+            "$ref": "#/components/schemas/emqx_enterprise_schema.log_audit_handler"
+          }
+        },
+        "type": "object"
+      },
       "authn-hash.simple": {
         "required": [
           "name"
@@ -1485,6 +1520,31 @@
             "default": "10s",
             "description": "The interval of sending metrics to Open Telemetry Endpoint",
             "example": "32s",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_dashboard_sso_ldap.login": {
+        "required": [
+          "backend"
+        ],
+        "properties": {
+          "backend": {
+            "description": "Backend type.",
+            "enum": [
+              "ldap"
+            ],
+            "type": "string"
+          },
+          "username": {
+            "example": "admin",
+            "maxLength": 100,
+            "type": "string"
+          },
+          "password": {
+            "example": "public",
+            "maxLength": 100,
             "type": "string"
           }
         },
@@ -2619,6 +2679,9 @@
                   "$ref": "#/components/schemas/authn.gcp_device"
                 },
                 {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
                   "$ref": "#/components/schemas/authn.ldap"
                 },
                 {
@@ -3722,6 +3785,9 @@
                   "$ref": "#/components/schemas/authn.gcp_device"
                 },
                 {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
                   "$ref": "#/components/schemas/authn.ldap"
                 },
                 {
@@ -4415,7 +4481,7 @@
               "enable": false
             },
             "description": "SSL connection settings.",
-            "$ref": "#/components/schemas/broker.ssl_client_opts"
+            "$ref": "#/components/schemas/emqx_ldap.ssl"
           }
         },
         "type": "object"
@@ -6451,6 +6517,121 @@
         },
         "type": "object"
       },
+      "emqx_ldap.ssl": {
+        "properties": {
+          "cacertfile": {
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "type": "string"
+          },
+          "cacerts": {
+            "default": false,
+            "deprecated": true,
+            "type": "boolean"
+          },
+          "certfile": {
+            "description": "PEM format certificates chain file.<br/><br/>The certificates in this file should be in reversed order of the certificate<br/>issue chain. That is, the host's certificate should be placed in the beginning<br/>of the file, followed by the immediate issuer certificate and so on.<br/>Although the root CA certificate is optional, it should be placed at the end of<br/>the file if it is to be added.",
+            "type": "string"
+          },
+          "keyfile": {
+            "description": "PEM format private key file.",
+            "type": "string"
+          },
+          "verify": {
+            "default": "verify_none",
+            "description": "Enable or disable peer verification.",
+            "enum": [
+              "verify_peer",
+              "verify_none"
+            ],
+            "type": "string"
+          },
+          "reuse_sessions": {
+            "default": true,
+            "description": "Enable TLS session reuse.</br><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "type": "boolean"
+          },
+          "depth": {
+            "default": 10,
+            "description": "Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.<br/>So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/><br/>if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/><br/>if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "password": {
+            "description": "String containing the user's password. Only used if the private key file is password-protected.",
+            "example": "",
+            "format": "password",
+            "type": "string"
+          },
+          "versions": {
+            "default": [
+              "tlsv1.3",
+              "tlsv1.2"
+            ],
+            "description": "All TLS/DTLS versions to be supported.<br/><br/>NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/><br/>In case PSK cipher suites are intended, make sure to configure<br/><code>['tlsv1.2', 'tlsv1.1']</code> here.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "ciphers": {
+            "default": [],
+            "description": "This config holds TLS cipher suite names separated by comma,<br/>or as an array of strings. e.g.<br/><code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code> or<br/><code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>.<br/><br/><br/>Ciphers (and their ordering) define the way in which the<br/>client and server encrypts information over the network connection.<br/>Selecting a good cipher suite is critical for the<br/>application's data security, confidentiality and performance.<br/><br/>The names should be in OpenSSL string format (not RFC format).<br/>All default values and examples provided by EMQX config<br/>documentation are all in OpenSSL format.<br/><br/><br/>NOTE: Certain cipher suites are only compatible with<br/>specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')<br/>incompatible cipher suites will be silently dropped.<br/>For instance, if only 'tlsv1.3' is given in the <code>versions</code>,<br/>configuring cipher suites for other versions will have no effect.<br/><br/><br/><br/>NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/><br/>If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/><br/>PSK cipher suites: <code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,<br/>RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,<br/>RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,<br/>RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "secure_renegotiate": {
+            "default": true,
+            "description": "SSL parameter renegotiation is a feature that allows a client and a server<br/>to renegotiate the parameters of the SSL connection on the fly.<br/>RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,<br/>you drop support for the insecure renegotiation, prone to MitM attacks.</br><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "type": "boolean"
+          },
+          "log_level": {
+            "default": "notice",
+            "description": "Log level for SSL communication. Default is 'notice'. Set to 'debug' to inspect TLS handshake messages.",
+            "enum": [
+              "emergency",
+              "alert",
+              "critical",
+              "error",
+              "warning",
+              "notice",
+              "info",
+              "debug",
+              "none",
+              "all"
+            ],
+            "type": "string"
+          },
+          "hibernate_after": {
+            "default": "5s",
+            "description": "Hibernate the SSL process after idling for amount of time reducing its memory footprint.",
+            "example": "12m",
+            "type": "string"
+          },
+          "enable": {
+            "default": false,
+            "description": "Enable TLS.",
+            "type": "boolean"
+          },
+          "server_name_indication": {
+            "description": "Specify the host name to be used in TLS Server Name Indication extension.<br/><br/>For instance, when connecting to \"server.example.net\", the genuine server<br/>which accepts the connection and performs TLS handshake may differ from the<br/>host the TLS client initially connects to, e.g. when connecting to an IP address<br/>or when the host has multiple resolvable DNS records <br/><br/>If not specified, it will default to the host name string which is used<br/>to establish the connection, unless it is IP addressed used.<br/><br/>The host name is then also used in the host name verification of the peer<br/>certificate.<br/> The special value 'disable' prevents the Server Name<br/>Indication extension from being sent and disables the hostname<br/>verification check.",
+            "example": "disable",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disable"
+                ],
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "type": "object"
+      },
       "bridge_kafka.auth_username_password": {
         "required": [
           "mechanism",
@@ -7227,33 +7408,6 @@
             },
             "description": "SSL connection settings.",
             "$ref": "#/components/schemas/broker.ssl_client_opts"
-          }
-        },
-        "type": "object"
-      },
-      "emqx_conf_schema.log": {
-        "properties": {
-          "console": {
-            "$ref": "#/components/schemas/emqx_conf_schema.console_handler"
-          },
-          "file": {
-            "default": {
-              "level": "warning"
-            },
-            "description": "File-based log handlers.",
-            "oneOf": [
-              {
-                "properties": {
-                  "$handler_name": {
-                    "$ref": "#/components/schemas/emqx_conf_schema.log_file_handler"
-                  }
-                },
-                "type": "object"
-              },
-              {
-                "$ref": "#/components/schemas/emqx_conf_schema.log_file_handler"
-              }
-            ]
           }
         },
         "type": "object"
@@ -8306,6 +8460,189 @@
         },
         "type": "object"
       },
+      "listeners.with_name_ws_required_bind": {
+        "required": [
+          "bind",
+          "name",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "description": "Listener type",
+            "enum": [
+              "ws"
+            ],
+            "type": "string"
+          },
+          "running": {
+            "description": "Listener status",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Listener name",
+            "type": "string"
+          },
+          "current_connections": {
+            "description": "Current connections",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "enable": {
+            "default": true,
+            "description": "Enable listener.",
+            "type": "boolean"
+          },
+          "bind": {
+            "default": 8083,
+            "description": "IP address and port for the listening socket.",
+            "example": "127.0.0.1:80",
+            "type": "string"
+          },
+          "acceptors": {
+            "default": 16,
+            "description": "The size of the listener's receiving pool.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_connections": {
+            "default": "infinity",
+            "description": "The maximum number of concurrent connections allowed by the listener.",
+            "oneOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "mountpoint": {
+            "default": "",
+            "description": "When publishing or subscribing, prefix all topics with a mountpoint string.<br/>The prefixed string will be removed from the topic name when the message<br/>is delivered to the subscriber. The mountpoint is a way that users can use<br/>to implement isolation of message routing between different listeners.<br/>For example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`<br/>set to `some_tenant`, then the client actually subscribes to the topic<br/>`some_tenant/t`. Similarly, if another client B (connected to the same listener<br/>as the client A) sends a message to topic `t`, the message is routed<br/>to all the clients subscribed `some_tenant/t`, so client A will receive the<br/>message, with topic name `t`.<br/><br/>Set to `\"\"` to disable the feature.<br/><br/><br/>Variables in mountpoint string:<br/>  - <code>${clientid}</code>: clientid<br/>  - <code>${username}</code>: username",
+            "type": "string"
+          },
+          "enable_authn": {
+            "default": true,
+            "description": "Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
+          },
+          "max_conn_rate": {
+            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "messages_rate": {
+            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "bytes_rate": {
+            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "100MB/s",
+            "type": "string"
+          },
+          "access_rules": {
+            "default": [
+              "allow all"
+            ],
+            "description": "The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "proxy_protocol": {
+            "default": false,
+            "description": "Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/><br/>See: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
+            "type": "boolean"
+          },
+          "proxy_protocol_timeout": {
+            "default": "3s",
+            "description": "Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.",
+            "example": "12m",
+            "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "tcp_options": {
+            "$ref": "#/components/schemas/broker.tcp_opts"
+          },
+          "websocket": {
+            "$ref": "#/components/schemas/broker.ws_opts"
+          }
+        },
+        "type": "object"
+      },
       "bridge_gcp_pubsub.key_value_pair": {
         "required": [
           "key",
@@ -8800,6 +9137,189 @@
         },
         "type": "object"
       },
+      "listeners.with_name_ssl_required_bind": {
+        "required": [
+          "bind",
+          "name",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "description": "Listener type",
+            "enum": [
+              "ssl"
+            ],
+            "type": "string"
+          },
+          "running": {
+            "description": "Listener status",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Listener name",
+            "type": "string"
+          },
+          "current_connections": {
+            "description": "Current connections",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "enable": {
+            "default": true,
+            "description": "Enable listener.",
+            "type": "boolean"
+          },
+          "bind": {
+            "default": 8883,
+            "description": "IP address and port for the listening socket.",
+            "example": "127.0.0.1:80",
+            "type": "string"
+          },
+          "acceptors": {
+            "default": 16,
+            "description": "The size of the listener's receiving pool.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_connections": {
+            "default": "infinity",
+            "description": "The maximum number of concurrent connections allowed by the listener.",
+            "oneOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "mountpoint": {
+            "default": "",
+            "description": "When publishing or subscribing, prefix all topics with a mountpoint string.<br/>The prefixed string will be removed from the topic name when the message<br/>is delivered to the subscriber. The mountpoint is a way that users can use<br/>to implement isolation of message routing between different listeners.<br/>For example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`<br/>set to `some_tenant`, then the client actually subscribes to the topic<br/>`some_tenant/t`. Similarly, if another client B (connected to the same listener<br/>as the client A) sends a message to topic `t`, the message is routed<br/>to all the clients subscribed `some_tenant/t`, so client A will receive the<br/>message, with topic name `t`.<br/><br/>Set to `\"\"` to disable the feature.<br/><br/><br/>Variables in mountpoint string:<br/>  - <code>${clientid}</code>: clientid<br/>  - <code>${username}</code>: username",
+            "type": "string"
+          },
+          "enable_authn": {
+            "default": true,
+            "description": "Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
+          },
+          "max_conn_rate": {
+            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "messages_rate": {
+            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "bytes_rate": {
+            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "100MB/s",
+            "type": "string"
+          },
+          "access_rules": {
+            "default": [
+              "allow all"
+            ],
+            "description": "The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "proxy_protocol": {
+            "default": false,
+            "description": "Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/><br/>See: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
+            "type": "boolean"
+          },
+          "proxy_protocol_timeout": {
+            "default": "3s",
+            "description": "Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.",
+            "example": "12m",
+            "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "tcp_options": {
+            "$ref": "#/components/schemas/broker.tcp_opts"
+          },
+          "ssl_options": {
+            "$ref": "#/components/schemas/broker.listener_ssl_opts"
+          }
+        },
+        "type": "object"
+      },
       "bridge_kinesis.post_producer": {
         "required": [
           "aws_access_key_id",
@@ -8872,6 +9392,92 @@
           },
           "partition_key": {
             "description": "The Amazon Kinesis Partition Key associated to published message. Placeholders in format of ${var} are supported.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "authn.ldap_bind": {
+        "required": [
+          "backend",
+          "base_dn",
+          "mechanism",
+          "server",
+          "username"
+        ],
+        "properties": {
+          "mechanism": {
+            "description": "Authentication mechanism.",
+            "enum": [
+              "password_based"
+            ],
+            "type": "string"
+          },
+          "backend": {
+            "description": "Backend type.",
+            "enum": [
+              "ldap_bind"
+            ],
+            "type": "string"
+          },
+          "query_timeout": {
+            "default": "5s",
+            "description": "Timeout for the LDAP query.",
+            "example": "32s",
+            "type": "string"
+          },
+          "enable": {
+            "default": true,
+            "description": "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+            "type": "boolean"
+          },
+          "server": {
+            "description": "The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The LDAP default port 389 is used if `[:Port]` is not specified.",
+            "type": "string"
+          },
+          "pool_size": {
+            "default": 8,
+            "description": "Size of the connection pool towards the bridge target service.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "username": {
+            "description": "The username associated with the bridge in the external database used for authentication or identification purposes.",
+            "type": "string"
+          },
+          "password": {
+            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "format": "password",
+            "type": "string"
+          },
+          "base_dn": {
+            "description": "The name of the base object entry (or possibly the root) relative to<br/>which the Search is to be performed.",
+            "example": "uid=${username},ou=testdevice,dc=emqx,dc=io",
+            "type": "string"
+          },
+          "filter": {
+            "default": "(objectClass=mqttUser)",
+            "description": "The filter that defines the conditions that must be fulfilled in order<br/>for the Search to match a given entry.<br><br/>The syntax of the filter follows RFC 4515 and also supports placeholders.",
+            "example": "(& (objectClass=mqttUser) (uid=${username}))",
+            "type": "string"
+          },
+          "request_timeout": {
+            "default": "5s",
+            "description": "Sets the maximum time in milliseconds that is used for each individual request.",
+            "example": "32s",
+            "type": "string"
+          },
+          "ssl": {
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings.",
+            "$ref": "#/components/schemas/emqx_ldap.ssl"
+          },
+          "bind_password": {
+            "default": "${password}",
+            "description": "The template for password to bind.",
+            "example": "${password}",
             "type": "string"
           }
         },
@@ -9367,6 +9973,9 @@
               "oneOf": [
                 {
                   "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
                 },
                 {
                   "$ref": "#/components/schemas/authn.ldap"
@@ -10509,6 +11118,186 @@
         },
         "type": "object"
       },
+      "listeners.with_name_tcp_required_bind": {
+        "required": [
+          "bind",
+          "name",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "description": "Listener type",
+            "enum": [
+              "tcp"
+            ],
+            "type": "string"
+          },
+          "running": {
+            "description": "Listener status",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Listener name",
+            "type": "string"
+          },
+          "current_connections": {
+            "description": "Current connections",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "enable": {
+            "default": true,
+            "description": "Enable listener.",
+            "type": "boolean"
+          },
+          "bind": {
+            "default": 1883,
+            "description": "IP address and port for the listening socket.",
+            "example": "127.0.0.1:80",
+            "type": "string"
+          },
+          "acceptors": {
+            "default": 16,
+            "description": "The size of the listener's receiving pool.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_connections": {
+            "default": "infinity",
+            "description": "The maximum number of concurrent connections allowed by the listener.",
+            "oneOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "mountpoint": {
+            "default": "",
+            "description": "When publishing or subscribing, prefix all topics with a mountpoint string.<br/>The prefixed string will be removed from the topic name when the message<br/>is delivered to the subscriber. The mountpoint is a way that users can use<br/>to implement isolation of message routing between different listeners.<br/>For example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`<br/>set to `some_tenant`, then the client actually subscribes to the topic<br/>`some_tenant/t`. Similarly, if another client B (connected to the same listener<br/>as the client A) sends a message to topic `t`, the message is routed<br/>to all the clients subscribed `some_tenant/t`, so client A will receive the<br/>message, with topic name `t`.<br/><br/>Set to `\"\"` to disable the feature.<br/><br/><br/>Variables in mountpoint string:<br/>  - <code>${clientid}</code>: clientid<br/>  - <code>${username}</code>: username",
+            "type": "string"
+          },
+          "enable_authn": {
+            "default": true,
+            "description": "Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
+          },
+          "max_conn_rate": {
+            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "messages_rate": {
+            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "bytes_rate": {
+            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "100MB/s",
+            "type": "string"
+          },
+          "access_rules": {
+            "default": [
+              "allow all"
+            ],
+            "description": "The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "proxy_protocol": {
+            "default": false,
+            "description": "Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/><br/>See: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
+            "type": "boolean"
+          },
+          "proxy_protocol_timeout": {
+            "default": "3s",
+            "description": "Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.",
+            "example": "12m",
+            "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "tcp_options": {
+            "$ref": "#/components/schemas/broker.tcp_opts"
+          }
+        },
+        "type": "object"
+      },
       "emqx_conf_schema.console_handler": {
         "properties": {
           "level": {
@@ -10543,7 +11332,7 @@
           },
           "time_offset": {
             "default": "system",
-            "description": "The time offset to be used when formatting the timestamp.<br/>Can be one of:<br/>  - <code>system</code>: the time offset used by the local system<br/>  - <code>utc</code>: the UTC time offset<br/>  - <code>+-[hh]:[mm]</code>: user specified time offset, such as \"-02:00\" or \"+00:00\"<br/>Defaults to: <code>system</code>.",
+            "description": "The time offset to be used when formatting the timestamp.<br/>Can be one of:<br/>  - <code>system</code>: the time offset used by the local system<br/>  - <code>utc</code>: the UTC time offset<br/>  - <code>+-[hh]:[mm]</code>: user specified time offset, such as \"-02:00\" or \"+00:00\"<br/>Defaults to: <code>system</code>.<br/>This config has no effect for when formatter is <code>json</code> as the timestamp in JSON is milliseconds since epoch.",
             "type": "string"
           }
         },
@@ -11198,6 +11987,9 @@
               "oneOf": [
                 {
                   "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
                 },
                 {
                   "$ref": "#/components/schemas/authn.ldap"
@@ -13355,6 +14147,9 @@
                   "$ref": "#/components/schemas/authn.gcp_device"
                 },
                 {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
                   "$ref": "#/components/schemas/authn.ldap"
                 },
                 {
@@ -14279,7 +15074,7 @@
           },
           "time_offset": {
             "default": "system",
-            "description": "The time offset to be used when formatting the timestamp.<br/>Can be one of:<br/>  - <code>system</code>: the time offset used by the local system<br/>  - <code>utc</code>: the UTC time offset<br/>  - <code>+-[hh]:[mm]</code>: user specified time offset, such as \"-02:00\" or \"+00:00\"<br/>Defaults to: <code>system</code>.",
+            "description": "The time offset to be used when formatting the timestamp.<br/>Can be one of:<br/>  - <code>system</code>: the time offset used by the local system<br/>  - <code>utc</code>: the UTC time offset<br/>  - <code>+-[hh]:[mm]</code>: user specified time offset, such as \"-02:00\" or \"+00:00\"<br/>Defaults to: <code>system</code>.<br/>This config has no effect for when formatter is <code>json</code> as the timestamp in JSON is milliseconds since epoch.",
             "type": "string"
           }
         },
@@ -14461,6 +15256,77 @@
           "position": {
             "description": "Where to place the source.",
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_dashboard_sso_ldap.ldap": {
+        "required": [
+          "backend",
+          "base_dn",
+          "server",
+          "username"
+        ],
+        "properties": {
+          "enable": {
+            "default": false,
+            "description": "Whether to enable this backend.",
+            "type": "boolean"
+          },
+          "backend": {
+            "description": "Backend type.",
+            "enum": [
+              "ldap"
+            ],
+            "type": "string"
+          },
+          "query_timeout": {
+            "default": "5s",
+            "description": "Timeout for the LDAP query.",
+            "example": "32s",
+            "type": "string"
+          },
+          "server": {
+            "description": "The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The LDAP default port 389 is used if `[:Port]` is not specified.",
+            "type": "string"
+          },
+          "pool_size": {
+            "default": 8,
+            "description": "Size of the connection pool towards the bridge target service.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "username": {
+            "description": "The username associated with the bridge in the external database used for authentication or identification purposes.",
+            "type": "string"
+          },
+          "password": {
+            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "format": "password",
+            "type": "string"
+          },
+          "base_dn": {
+            "description": "The name of the base object entry (or possibly the root) relative to<br/>which the Search is to be performed.",
+            "type": "string"
+          },
+          "filter": {
+            "default": "(& (objectClass=person) (uid=${username}))",
+            "description": "The filter for matching users in LDAP is by default `(&(objectClass=person)(uid=${username}))`. For Active Directory, it should be set to `(&(objectClass=user)(sAMAccountName=${username}))` by default. Please refer to [LDAP Filters](https://ldap.com/ldap-filters/) for more details.",
+            "example": "(& (objectClass=person) (uid=${username}))",
+            "type": "string"
+          },
+          "request_timeout": {
+            "default": "5s",
+            "description": "Sets the maximum time in milliseconds that is used for each individual request.",
+            "example": "32s",
+            "type": "string"
+          },
+          "ssl": {
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings.",
+            "$ref": "#/components/schemas/emqx_ldap.ssl"
           }
         },
         "type": "object"
@@ -14993,6 +15859,9 @@
                   "$ref": "#/components/schemas/authn.gcp_device"
                 },
                 {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
                   "$ref": "#/components/schemas/authn.ldap"
                 },
                 {
@@ -15367,6 +16236,17 @@
             },
             "description": "SSL connection settings.",
             "$ref": "#/components/schemas/broker.ssl_client_opts"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_dashboard_sso_schema.sso": {
+        "properties": {
+          "ldap": {
+            "$ref": "#/components/schemas/emqx_dashboard_sso_ldap.ldap"
+          },
+          "saml": {
+            "$ref": "#/components/schemas/emqx_dashboard_sso_saml.saml"
           }
         },
         "type": "object"
@@ -15813,186 +16693,6 @@
             "description": "Maximum number of bytes to buffer for each buffer worker.",
             "example": "32MB",
             "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "listeners.ws_required_bind-with_name": {
-        "required": [
-          "bind",
-          "name",
-          "type"
-        ],
-        "properties": {
-          "type": {
-            "description": "Listener type",
-            "enum": [
-              "ws"
-            ],
-            "type": "string"
-          },
-          "running": {
-            "description": "Listener status",
-            "type": "boolean"
-          },
-          "name": {
-            "description": "Listener name",
-            "type": "string"
-          },
-          "current_connections": {
-            "description": "Current connections",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "enable": {
-            "default": true,
-            "description": "Enable listener.",
-            "type": "boolean"
-          },
-          "bind": {
-            "default": 8083,
-            "description": "IP address and port for the listening socket.",
-            "example": "127.0.0.1:80",
-            "type": "string"
-          },
-          "acceptors": {
-            "default": 16,
-            "description": "The size of the listener's receiving pool.",
-            "minimum": 1,
-            "type": "integer"
-          },
-          "max_connections": {
-            "default": "infinity",
-            "description": "The maximum number of concurrent connections allowed by the listener.",
-            "oneOf": [
-              {
-                "minimum": 1,
-                "type": "integer"
-              },
-              {
-                "enum": [
-                  "infinity"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "mountpoint": {
-            "default": "",
-            "description": "When publishing or subscribing, prefix all topics with a mountpoint string.<br/>The prefixed string will be removed from the topic name when the message<br/>is delivered to the subscriber. The mountpoint is a way that users can use<br/>to implement isolation of message routing between different listeners.<br/>For example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`<br/>set to `some_tenant`, then the client actually subscribes to the topic<br/>`some_tenant/t`. Similarly, if another client B (connected to the same listener<br/>as the client A) sends a message to topic `t`, the message is routed<br/>to all the clients subscribed `some_tenant/t`, so client A will receive the<br/>message, with topic name `t`.<br/><br/>Set to `\"\"` to disable the feature.<br/><br/><br/>Variables in mountpoint string:<br/>  - <code>${clientid}</code>: clientid<br/>  - <code>${username}</code>: username",
-            "type": "string"
-          },
-          "enable_authn": {
-            "default": true,
-            "description": "Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.",
-            "enum": [
-              true,
-              false,
-              "quick_deny_anonymous"
-            ],
-            "type": "string"
-          },
-          "max_conn_rate": {
-            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "messages_rate": {
-            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "bytes_rate": {
-            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "100MB/s",
-            "type": "string"
-          },
-          "access_rules": {
-            "default": [
-              "allow all"
-            ],
-            "description": "The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "proxy_protocol": {
-            "default": false,
-            "description": "Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/><br/>See: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
-            "type": "boolean"
-          },
-          "proxy_protocol_timeout": {
-            "default": "3s",
-            "description": "Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.",
-            "example": "12m",
-            "type": "string"
-          },
-          "authentication": {
-            "default": [],
-            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
-            "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/authn.gcp_device"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.ldap"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.scram"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_jwks"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_public_key"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_hmac"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_post"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_get"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_sentinel"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_cluster"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_sharded"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_rs"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.postgresql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mysql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.builtin_db"
-                }
-              ]
-            },
-            "type": "array"
-          },
-          "tcp_options": {
-            "$ref": "#/components/schemas/broker.tcp_opts"
-          },
-          "websocket": {
-            "$ref": "#/components/schemas/broker.ws_opts"
           }
         },
         "type": "object"
@@ -16491,6 +17191,51 @@
         },
         "type": "object"
       },
+      "emqx_dashboard_sso_saml.saml": {
+        "required": [
+          "backend"
+        ],
+        "properties": {
+          "enable": {
+            "default": false,
+            "description": "Whether to enable this backend.",
+            "type": "boolean"
+          },
+          "backend": {
+            "description": "Backend type.",
+            "enum": [
+              "saml"
+            ],
+            "type": "string"
+          },
+          "dashboard_addr": {
+            "default": "https://127.0.0.1:18083",
+            "description": "The address of the EMQX Dashboard.",
+            "type": "string"
+          },
+          "idp_metadata_url": {
+            "default": "https://idp.example.com",
+            "description": "The URL of the IdP metadata.",
+            "type": "string"
+          },
+          "sp_sign_request": {
+            "default": false,
+            "description": "Whether to sign the SAML request.",
+            "type": "boolean"
+          },
+          "sp_public_key": {
+            "default": "Pub Key",
+            "description": "The public key of the SP.",
+            "type": "string"
+          },
+          "sp_private_key": {
+            "description": "The private key of the SP.",
+            "format": "password",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "emqx_schema_registry_schema.get_protobuf": {
         "required": [
           "name",
@@ -16685,6 +17430,50 @@
           "ssl_options": {
             "description": "SSL configuration for the gRPC client.",
             "$ref": "#/components/schemas/broker.ssl_client_opts"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_enterprise_schema.log_audit_handler": {
+        "properties": {
+          "path": {
+            "default": "${EMQX_LOG_DIR}/audit.log",
+            "description": "Name the audit log file.",
+            "example": "/path/to/file",
+            "type": "string"
+          },
+          "rotation_count": {
+            "default": 10,
+            "description": "Maximum number of log files.",
+            "maximum": 128,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "rotation_size": {
+            "default": "50MB",
+            "description": "This parameter controls log file rotation. The value `infinity` means the log file will grow indefinitely, otherwise the log file will be rotated once it reaches `rotation_size` in bytes.",
+            "oneOf": [
+              {
+                "example": "32MB",
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "enable": {
+            "default": false,
+            "description": "Enable this log handler.",
+            "type": "boolean"
+          },
+          "time_offset": {
+            "default": "system",
+            "description": "The time offset to be used when formatting the timestamp.<br/>Can be one of:<br/>  - <code>system</code>: the time offset used by the local system<br/>  - <code>utc</code>: the UTC time offset<br/>  - <code>+-[hh]:[mm]</code>: user specified time offset, such as \"-02:00\" or \"+00:00\"<br/>Defaults to: <code>system</code>.<br/>This config has no effect for when formatter is <code>json</code> as the timestamp in JSON is milliseconds since epoch.",
+            "type": "string"
           }
         },
         "type": "object"
@@ -17786,7 +18575,7 @@
               "enable": false
             },
             "description": "SSL connection settings.",
-            "$ref": "#/components/schemas/broker.ssl_client_opts"
+            "$ref": "#/components/schemas/emqx_ldap.ssl"
           }
         },
         "type": "object"
@@ -17961,6 +18750,9 @@
               "oneOf": [
                 {
                   "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
                 },
                 {
                   "$ref": "#/components/schemas/authn.ldap"
@@ -18440,6 +19232,115 @@
           "rate_last5m": {
             "description": "The average rate of matched in the last 5 minutes, times/second.",
             "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "listeners.with_name_quic_required_bind": {
+        "required": [
+          "bind",
+          "name",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "description": "Listener type",
+            "enum": [
+              "quic"
+            ],
+            "type": "string"
+          },
+          "running": {
+            "description": "Listener status",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Listener name",
+            "type": "string"
+          },
+          "current_connections": {
+            "description": "Current connections",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "ciphers": {
+            "default": [
+              "TLS_AES_256_GCM_SHA384",
+              "TLS_AES_128_GCM_SHA256",
+              "TLS_CHACHA20_POLY1305_SHA256"
+            ],
+            "description": "This config holds TLS cipher suite names separated by comma,<br/>or as an array of strings. e.g.<br/><code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code> or<br/><code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>.<br/><br/><br/>Ciphers (and their ordering) define the way in which the<br/>client and server encrypts information over the network connection.<br/>Selecting a good cipher suite is critical for the<br/>application's data security, confidentiality and performance.<br/><br/>The names should be in OpenSSL string format (not RFC format).<br/>All default values and examples provided by EMQX config<br/>documentation are all in OpenSSL format.<br/><br/><br/>NOTE: Certain cipher suites are only compatible with<br/>specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')<br/>incompatible cipher suites will be silently dropped.<br/>For instance, if only 'tlsv1.3' is given in the <code>versions</code>,<br/>configuring cipher suites for other versions will have no effect.<br/><br/><br/><br/>NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/><br/>If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/><br/>PSK cipher suites: <code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,<br/>RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,<br/>RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,<br/>RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code><br/><br/><br/>NOTE: QUIC listener supports only 'tlsv1.3' ciphers",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "ssl_options": {
+            "description": "TLS options for QUIC transport",
+            "$ref": "#/components/schemas/broker.listener_quic_ssl_opts"
+          },
+          "enable": {
+            "default": true,
+            "description": "Enable listener.",
+            "type": "boolean"
+          },
+          "bind": {
+            "default": 14567,
+            "description": "IP address and port for the listening socket.",
+            "example": "127.0.0.1:80",
+            "type": "string"
+          },
+          "acceptors": {
+            "default": 16,
+            "description": "The size of the listener's receiving pool.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_connections": {
+            "default": "infinity",
+            "description": "The maximum number of concurrent connections allowed by the listener.",
+            "oneOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "mountpoint": {
+            "default": "",
+            "description": "When publishing or subscribing, prefix all topics with a mountpoint string.<br/>The prefixed string will be removed from the topic name when the message<br/>is delivered to the subscriber. The mountpoint is a way that users can use<br/>to implement isolation of message routing between different listeners.<br/>For example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`<br/>set to `some_tenant`, then the client actually subscribes to the topic<br/>`some_tenant/t`. Similarly, if another client B (connected to the same listener<br/>as the client A) sends a message to topic `t`, the message is routed<br/>to all the clients subscribed `some_tenant/t`, so client A will receive the<br/>message, with topic name `t`.<br/><br/>Set to `\"\"` to disable the feature.<br/><br/><br/>Variables in mountpoint string:<br/>  - <code>${clientid}</code>: clientid<br/>  - <code>${username}</code>: username",
+            "type": "string"
+          },
+          "enable_authn": {
+            "default": true,
+            "description": "Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
+          },
+          "max_conn_rate": {
+            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "messages_rate": {
+            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "bytes_rate": {
+            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "100MB/s",
+            "type": "string"
           }
         },
         "type": "object"
@@ -19352,183 +20253,6 @@
         },
         "type": "object"
       },
-      "listeners.tcp_required_bind-with_name": {
-        "required": [
-          "bind",
-          "name",
-          "type"
-        ],
-        "properties": {
-          "type": {
-            "description": "Listener type",
-            "enum": [
-              "tcp"
-            ],
-            "type": "string"
-          },
-          "running": {
-            "description": "Listener status",
-            "type": "boolean"
-          },
-          "name": {
-            "description": "Listener name",
-            "type": "string"
-          },
-          "current_connections": {
-            "description": "Current connections",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "enable": {
-            "default": true,
-            "description": "Enable listener.",
-            "type": "boolean"
-          },
-          "bind": {
-            "default": 1883,
-            "description": "IP address and port for the listening socket.",
-            "example": "127.0.0.1:80",
-            "type": "string"
-          },
-          "acceptors": {
-            "default": 16,
-            "description": "The size of the listener's receiving pool.",
-            "minimum": 1,
-            "type": "integer"
-          },
-          "max_connections": {
-            "default": "infinity",
-            "description": "The maximum number of concurrent connections allowed by the listener.",
-            "oneOf": [
-              {
-                "minimum": 1,
-                "type": "integer"
-              },
-              {
-                "enum": [
-                  "infinity"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "mountpoint": {
-            "default": "",
-            "description": "When publishing or subscribing, prefix all topics with a mountpoint string.<br/>The prefixed string will be removed from the topic name when the message<br/>is delivered to the subscriber. The mountpoint is a way that users can use<br/>to implement isolation of message routing between different listeners.<br/>For example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`<br/>set to `some_tenant`, then the client actually subscribes to the topic<br/>`some_tenant/t`. Similarly, if another client B (connected to the same listener<br/>as the client A) sends a message to topic `t`, the message is routed<br/>to all the clients subscribed `some_tenant/t`, so client A will receive the<br/>message, with topic name `t`.<br/><br/>Set to `\"\"` to disable the feature.<br/><br/><br/>Variables in mountpoint string:<br/>  - <code>${clientid}</code>: clientid<br/>  - <code>${username}</code>: username",
-            "type": "string"
-          },
-          "enable_authn": {
-            "default": true,
-            "description": "Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.",
-            "enum": [
-              true,
-              false,
-              "quick_deny_anonymous"
-            ],
-            "type": "string"
-          },
-          "max_conn_rate": {
-            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "messages_rate": {
-            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "bytes_rate": {
-            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "100MB/s",
-            "type": "string"
-          },
-          "access_rules": {
-            "default": [
-              "allow all"
-            ],
-            "description": "The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "proxy_protocol": {
-            "default": false,
-            "description": "Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/><br/>See: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
-            "type": "boolean"
-          },
-          "proxy_protocol_timeout": {
-            "default": "3s",
-            "description": "Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.",
-            "example": "12m",
-            "type": "string"
-          },
-          "authentication": {
-            "default": [],
-            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
-            "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/authn.gcp_device"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.ldap"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.scram"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_jwks"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_public_key"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_hmac"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_post"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_get"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_sentinel"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_cluster"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_sharded"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_rs"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.postgresql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mysql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.builtin_db"
-                }
-              ]
-            },
-            "type": "array"
-          },
-          "tcp_options": {
-            "$ref": "#/components/schemas/broker.tcp_opts"
-          }
-        },
-        "type": "object"
-      },
       "prometheus.prometheus": {
         "required": [
           "enable",
@@ -19659,186 +20383,6 @@
           "rate_last5m": {
             "description": "The average rate of matched in the last 5 minutes, times/second.",
             "type": "number"
-          }
-        },
-        "type": "object"
-      },
-      "listeners.ssl_required_bind-with_name": {
-        "required": [
-          "bind",
-          "name",
-          "type"
-        ],
-        "properties": {
-          "type": {
-            "description": "Listener type",
-            "enum": [
-              "ssl"
-            ],
-            "type": "string"
-          },
-          "running": {
-            "description": "Listener status",
-            "type": "boolean"
-          },
-          "name": {
-            "description": "Listener name",
-            "type": "string"
-          },
-          "current_connections": {
-            "description": "Current connections",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "enable": {
-            "default": true,
-            "description": "Enable listener.",
-            "type": "boolean"
-          },
-          "bind": {
-            "default": 8883,
-            "description": "IP address and port for the listening socket.",
-            "example": "127.0.0.1:80",
-            "type": "string"
-          },
-          "acceptors": {
-            "default": 16,
-            "description": "The size of the listener's receiving pool.",
-            "minimum": 1,
-            "type": "integer"
-          },
-          "max_connections": {
-            "default": "infinity",
-            "description": "The maximum number of concurrent connections allowed by the listener.",
-            "oneOf": [
-              {
-                "minimum": 1,
-                "type": "integer"
-              },
-              {
-                "enum": [
-                  "infinity"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "mountpoint": {
-            "default": "",
-            "description": "When publishing or subscribing, prefix all topics with a mountpoint string.<br/>The prefixed string will be removed from the topic name when the message<br/>is delivered to the subscriber. The mountpoint is a way that users can use<br/>to implement isolation of message routing between different listeners.<br/>For example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`<br/>set to `some_tenant`, then the client actually subscribes to the topic<br/>`some_tenant/t`. Similarly, if another client B (connected to the same listener<br/>as the client A) sends a message to topic `t`, the message is routed<br/>to all the clients subscribed `some_tenant/t`, so client A will receive the<br/>message, with topic name `t`.<br/><br/>Set to `\"\"` to disable the feature.<br/><br/><br/>Variables in mountpoint string:<br/>  - <code>${clientid}</code>: clientid<br/>  - <code>${username}</code>: username",
-            "type": "string"
-          },
-          "enable_authn": {
-            "default": true,
-            "description": "Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.",
-            "enum": [
-              true,
-              false,
-              "quick_deny_anonymous"
-            ],
-            "type": "string"
-          },
-          "max_conn_rate": {
-            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "messages_rate": {
-            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "bytes_rate": {
-            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "100MB/s",
-            "type": "string"
-          },
-          "access_rules": {
-            "default": [
-              "allow all"
-            ],
-            "description": "The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "proxy_protocol": {
-            "default": false,
-            "description": "Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/><br/>See: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
-            "type": "boolean"
-          },
-          "proxy_protocol_timeout": {
-            "default": "3s",
-            "description": "Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.",
-            "example": "12m",
-            "type": "string"
-          },
-          "authentication": {
-            "default": [],
-            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
-            "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/authn.gcp_device"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.ldap"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.scram"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_jwks"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_public_key"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_hmac"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_post"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_get"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_sentinel"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_cluster"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_sharded"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_rs"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.postgresql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mysql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.builtin_db"
-                }
-              ]
-            },
-            "type": "array"
-          },
-          "tcp_options": {
-            "$ref": "#/components/schemas/broker.tcp_opts"
-          },
-          "ssl_options": {
-            "$ref": "#/components/schemas/broker.listener_ssl_opts"
           }
         },
         "type": "object"
@@ -20420,6 +20964,9 @@
               "oneOf": [
                 {
                   "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
                 },
                 {
                   "$ref": "#/components/schemas/authn.ldap"
@@ -21773,6 +22320,27 @@
         },
         "type": "object"
       },
+      "dashboard_sso.backend_status": {
+        "required": [
+          "backend"
+        ],
+        "properties": {
+          "enable": {
+            "default": false,
+            "description": "Whether to enable this backend.",
+            "type": "boolean"
+          },
+          "backend": {
+            "description": "Backend type.",
+            "enum": [
+              "ldap",
+              "saml"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "listeners.node_status": {
         "properties": {
           "node": {
@@ -22562,115 +23130,6 @@
           "min_heartbeat_frequency_ms": {
             "description": "Controls the minimum amount of time to wait between heartbeats.",
             "example": "32s",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "listeners.quic_required_bind-with_name": {
-        "required": [
-          "bind",
-          "name",
-          "type"
-        ],
-        "properties": {
-          "type": {
-            "description": "Listener type",
-            "enum": [
-              "quic"
-            ],
-            "type": "string"
-          },
-          "running": {
-            "description": "Listener status",
-            "type": "boolean"
-          },
-          "name": {
-            "description": "Listener name",
-            "type": "string"
-          },
-          "current_connections": {
-            "description": "Current connections",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "ciphers": {
-            "default": [
-              "TLS_AES_256_GCM_SHA384",
-              "TLS_AES_128_GCM_SHA256",
-              "TLS_CHACHA20_POLY1305_SHA256"
-            ],
-            "description": "This config holds TLS cipher suite names separated by comma,<br/>or as an array of strings. e.g.<br/><code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code> or<br/><code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>.<br/><br/><br/>Ciphers (and their ordering) define the way in which the<br/>client and server encrypts information over the network connection.<br/>Selecting a good cipher suite is critical for the<br/>application's data security, confidentiality and performance.<br/><br/>The names should be in OpenSSL string format (not RFC format).<br/>All default values and examples provided by EMQX config<br/>documentation are all in OpenSSL format.<br/><br/><br/>NOTE: Certain cipher suites are only compatible with<br/>specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')<br/>incompatible cipher suites will be silently dropped.<br/>For instance, if only 'tlsv1.3' is given in the <code>versions</code>,<br/>configuring cipher suites for other versions will have no effect.<br/><br/><br/><br/>NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/><br/>If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/><br/>PSK cipher suites: <code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,<br/>RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,<br/>RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,<br/>RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code><br/><br/><br/>NOTE: QUIC listener supports only 'tlsv1.3' ciphers",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "ssl_options": {
-            "description": "TLS options for QUIC transport",
-            "$ref": "#/components/schemas/broker.listener_quic_ssl_opts"
-          },
-          "enable": {
-            "default": true,
-            "description": "Enable listener.",
-            "type": "boolean"
-          },
-          "bind": {
-            "default": 14567,
-            "description": "IP address and port for the listening socket.",
-            "example": "127.0.0.1:80",
-            "type": "string"
-          },
-          "acceptors": {
-            "default": 16,
-            "description": "The size of the listener's receiving pool.",
-            "minimum": 1,
-            "type": "integer"
-          },
-          "max_connections": {
-            "default": "infinity",
-            "description": "The maximum number of concurrent connections allowed by the listener.",
-            "oneOf": [
-              {
-                "minimum": 1,
-                "type": "integer"
-              },
-              {
-                "enum": [
-                  "infinity"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "mountpoint": {
-            "default": "",
-            "description": "When publishing or subscribing, prefix all topics with a mountpoint string.<br/>The prefixed string will be removed from the topic name when the message<br/>is delivered to the subscriber. The mountpoint is a way that users can use<br/>to implement isolation of message routing between different listeners.<br/>For example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`<br/>set to `some_tenant`, then the client actually subscribes to the topic<br/>`some_tenant/t`. Similarly, if another client B (connected to the same listener<br/>as the client A) sends a message to topic `t`, the message is routed<br/>to all the clients subscribed `some_tenant/t`, so client A will receive the<br/>message, with topic name `t`.<br/><br/>Set to `\"\"` to disable the feature.<br/><br/><br/>Variables in mountpoint string:<br/>  - <code>${clientid}</code>: clientid<br/>  - <code>${username}</code>: username",
-            "type": "string"
-          },
-          "enable_authn": {
-            "default": true,
-            "description": "Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.",
-            "enum": [
-              true,
-              false,
-              "quick_deny_anonymous"
-            ],
-            "type": "string"
-          },
-          "max_conn_rate": {
-            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "messages_rate": {
-            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "bytes_rate": {
-            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "100MB/s",
             "type": "string"
           }
         },
@@ -25390,9 +25849,20 @@
             "maxLength": 100,
             "type": "string"
           },
+          "role": {
+            "default": "administrator",
+            "description": "User role",
+            "example": "administrator",
+            "type": "string"
+          },
           "description": {
             "description": "Dashboard User Description",
             "example": "administrator",
+            "type": "string"
+          },
+          "backend": {
+            "description": "User account source",
+            "example": "local",
             "type": "string"
           }
         },
@@ -26708,189 +27178,6 @@
         },
         "type": "object"
       },
-      "listeners.wss_required_bind-with_name": {
-        "required": [
-          "bind",
-          "name",
-          "type"
-        ],
-        "properties": {
-          "type": {
-            "description": "Listener type",
-            "enum": [
-              "wss"
-            ],
-            "type": "string"
-          },
-          "running": {
-            "description": "Listener status",
-            "type": "boolean"
-          },
-          "name": {
-            "description": "Listener name",
-            "type": "string"
-          },
-          "current_connections": {
-            "description": "Current connections",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "enable": {
-            "default": true,
-            "description": "Enable listener.",
-            "type": "boolean"
-          },
-          "bind": {
-            "default": 8084,
-            "description": "IP address and port for the listening socket.",
-            "example": "127.0.0.1:80",
-            "type": "string"
-          },
-          "acceptors": {
-            "default": 16,
-            "description": "The size of the listener's receiving pool.",
-            "minimum": 1,
-            "type": "integer"
-          },
-          "max_connections": {
-            "default": "infinity",
-            "description": "The maximum number of concurrent connections allowed by the listener.",
-            "oneOf": [
-              {
-                "minimum": 1,
-                "type": "integer"
-              },
-              {
-                "enum": [
-                  "infinity"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "mountpoint": {
-            "default": "",
-            "description": "When publishing or subscribing, prefix all topics with a mountpoint string.<br/>The prefixed string will be removed from the topic name when the message<br/>is delivered to the subscriber. The mountpoint is a way that users can use<br/>to implement isolation of message routing between different listeners.<br/>For example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`<br/>set to `some_tenant`, then the client actually subscribes to the topic<br/>`some_tenant/t`. Similarly, if another client B (connected to the same listener<br/>as the client A) sends a message to topic `t`, the message is routed<br/>to all the clients subscribed `some_tenant/t`, so client A will receive the<br/>message, with topic name `t`.<br/><br/>Set to `\"\"` to disable the feature.<br/><br/><br/>Variables in mountpoint string:<br/>  - <code>${clientid}</code>: clientid<br/>  - <code>${username}</code>: username",
-            "type": "string"
-          },
-          "enable_authn": {
-            "default": true,
-            "description": "Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.",
-            "enum": [
-              true,
-              false,
-              "quick_deny_anonymous"
-            ],
-            "type": "string"
-          },
-          "max_conn_rate": {
-            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "messages_rate": {
-            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "bytes_rate": {
-            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "100MB/s",
-            "type": "string"
-          },
-          "access_rules": {
-            "default": [
-              "allow all"
-            ],
-            "description": "The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "proxy_protocol": {
-            "default": false,
-            "description": "Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/><br/>See: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
-            "type": "boolean"
-          },
-          "proxy_protocol_timeout": {
-            "default": "3s",
-            "description": "Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.",
-            "example": "12m",
-            "type": "string"
-          },
-          "authentication": {
-            "default": [],
-            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
-            "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/authn.gcp_device"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.ldap"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.scram"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_jwks"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_public_key"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_hmac"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_post"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_get"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_sentinel"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_cluster"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_sharded"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_rs"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.postgresql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mysql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.builtin_db"
-                }
-              ]
-            },
-            "type": "array"
-          },
-          "tcp_options": {
-            "$ref": "#/components/schemas/broker.tcp_opts"
-          },
-          "ssl_options": {
-            "$ref": "#/components/schemas/broker.listener_wss_opts"
-          },
-          "websocket": {
-            "$ref": "#/components/schemas/broker.ws_opts"
-          }
-        },
-        "type": "object"
-      },
       "emqx_gateway_api_listeners.tcp_listener": {
         "properties": {
           "id": {
@@ -27622,6 +27909,21 @@
         },
         "type": "object"
       },
+      "emqx_dashboard_sso_saml.login": {
+        "required": [
+          "backend"
+        ],
+        "properties": {
+          "backend": {
+            "description": "Backend type.",
+            "enum": [
+              "saml"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "dashboard.dashboard": {
         "properties": {
           "listeners": {
@@ -27638,6 +27940,9 @@
             "default": false,
             "description": "Support Cross-Origin Resource Sharing (CORS).<br/>Allows a server to indicate any origins (domain, scheme, or port) other than<br/>its own from which a browser should permit loading resources.",
             "type": "boolean"
+          },
+          "sso": {
+            "$ref": "#/components/schemas/emqx_dashboard_sso_schema.sso"
           }
         },
         "type": "object"
@@ -27693,6 +27998,192 @@
           "metrics": {
             "description": "The metrics of the resource.",
             "$ref": "#/components/schemas/authz.resource_metrics"
+          }
+        },
+        "type": "object"
+      },
+      "listeners.with_name_wss_required_bind": {
+        "required": [
+          "bind",
+          "name",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "description": "Listener type",
+            "enum": [
+              "wss"
+            ],
+            "type": "string"
+          },
+          "running": {
+            "description": "Listener status",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Listener name",
+            "type": "string"
+          },
+          "current_connections": {
+            "description": "Current connections",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "enable": {
+            "default": true,
+            "description": "Enable listener.",
+            "type": "boolean"
+          },
+          "bind": {
+            "default": 8084,
+            "description": "IP address and port for the listening socket.",
+            "example": "127.0.0.1:80",
+            "type": "string"
+          },
+          "acceptors": {
+            "default": 16,
+            "description": "The size of the listener's receiving pool.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_connections": {
+            "default": "infinity",
+            "description": "The maximum number of concurrent connections allowed by the listener.",
+            "oneOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "mountpoint": {
+            "default": "",
+            "description": "When publishing or subscribing, prefix all topics with a mountpoint string.<br/>The prefixed string will be removed from the topic name when the message<br/>is delivered to the subscriber. The mountpoint is a way that users can use<br/>to implement isolation of message routing between different listeners.<br/>For example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`<br/>set to `some_tenant`, then the client actually subscribes to the topic<br/>`some_tenant/t`. Similarly, if another client B (connected to the same listener<br/>as the client A) sends a message to topic `t`, the message is routed<br/>to all the clients subscribed `some_tenant/t`, so client A will receive the<br/>message, with topic name `t`.<br/><br/>Set to `\"\"` to disable the feature.<br/><br/><br/>Variables in mountpoint string:<br/>  - <code>${clientid}</code>: clientid<br/>  - <code>${username}</code>: username",
+            "type": "string"
+          },
+          "enable_authn": {
+            "default": true,
+            "description": "Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
+          },
+          "max_conn_rate": {
+            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "messages_rate": {
+            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "bytes_rate": {
+            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "100MB/s",
+            "type": "string"
+          },
+          "access_rules": {
+            "default": [
+              "allow all"
+            ],
+            "description": "The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "proxy_protocol": {
+            "default": false,
+            "description": "Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx.<br/><br/>See: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
+            "type": "boolean"
+          },
+          "proxy_protocol_timeout": {
+            "default": "3s",
+            "description": "Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.",
+            "example": "12m",
+            "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "tcp_options": {
+            "$ref": "#/components/schemas/broker.tcp_opts"
+          },
+          "ssl_options": {
+            "$ref": "#/components/schemas/broker.listener_wss_opts"
+          },
+          "websocket": {
+            "$ref": "#/components/schemas/broker.ws_opts"
           }
         },
         "type": "object"
@@ -28082,7 +28573,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.2.1"
+    "version": "5.3.0-alpha.2-g5614fd50"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -30211,6 +30702,9 @@
                       "$ref": "#/components/schemas/authn.gcp_device"
                     },
                     {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
+                    },
+                    {
                       "$ref": "#/components/schemas/authn.ldap"
                     },
                     {
@@ -30440,6 +30934,9 @@
                     "$ref": "#/components/schemas/authn.gcp_device"
                   },
                   {
+                    "$ref": "#/components/schemas/authn.ldap_bind"
+                  },
+                  {
                     "$ref": "#/components/schemas/authn.ldap"
                   },
                   {
@@ -30583,6 +31080,9 @@
                   "oneOf": [
                     {
                       "$ref": "#/components/schemas/authn.gcp_device"
+                    },
+                    {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
                     },
                     {
                       "$ref": "#/components/schemas/authn.ldap"
@@ -30811,6 +31311,9 @@
                     "$ref": "#/components/schemas/authn.gcp_device"
                   },
                   {
+                    "$ref": "#/components/schemas/authn.ldap_bind"
+                  },
+                  {
                     "$ref": "#/components/schemas/authn.ldap"
                   },
                   {
@@ -30954,6 +31457,9 @@
                   "oneOf": [
                     {
                       "$ref": "#/components/schemas/authn.gcp_device"
+                    },
+                    {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
                     },
                     {
                       "$ref": "#/components/schemas/authn.ldap"
@@ -32308,6 +32814,37 @@
         ]
       }
     },
+    "/sso": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/dashboard_sso.backend_status"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/mqtt/delayed/messages/{node}/{msgid}": {
       "delete": {
         "description": "Delete delayed message",
@@ -33103,83 +33640,83 @@
                   "general_client": {
                     "summary": "General client info",
                     "value": {
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "recv_cnt": 1,
-                      "recv_pkt": 1,
                       "username": "guest",
-                      "subscriptions_max": "infinity",
-                      "disconnected_at": null,
-                      "mqueue_len": 0,
-                      "connected": true,
-                      "proto_name": "STOMP",
-                      "send_msg": 0,
-                      "awaiting_rel_cnt": 0,
-                      "awaiting_rel_max": "infinity",
-                      "reductions": 72022,
-                      "send_pkt": 1,
-                      "recv_msg": 0,
-                      "mqueue_max": "infinity",
-                      "mailbox_len": 0,
-                      "proto_ver": "1.0",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "inflight_cnt": 0,
-                      "is_bridge": false,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "recv_oct": 56,
-                      "ip_address": "127.0.0.1",
-                      "send_oct": 61,
-                      "subscriptions_cnt": 0,
-                      "keepalive": 0,
-                      "node": "emqx@127.0.0.1",
-                      "clean_start": true,
-                      "heap_size": 4185,
                       "expiry_interval": 0,
+                      "recv_cnt": 1,
+                      "mailbox_len": 0,
+                      "proto_name": "STOMP",
+                      "send_pkt": 1,
+                      "connected": true,
+                      "proto_ver": "1.0",
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "awaiting_rel_cnt": 0,
+                      "reductions": 72022,
+                      "is_bridge": false,
+                      "mqueue_max": "infinity",
+                      "mqueue_dropped": 0,
                       "inflight_max": "infinity",
+                      "awaiting_rel_max": "infinity",
+                      "recv_pkt": 1,
+                      "ip_address": "127.0.0.1",
+                      "subscriptions_cnt": 0,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "clean_start": true,
+                      "inflight_cnt": 0,
+                      "recv_oct": 56,
+                      "send_oct": 61,
+                      "keepalive": 0,
+                      "recv_msg": 0,
+                      "disconnected_at": null,
+                      "subscriptions_max": "infinity",
+                      "mqueue_len": 0,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "node": "emqx@127.0.0.1",
+                      "heap_size": 4185,
                       "port": 50675,
                       "send_cnt": 1,
-                      "mqueue_dropped": 0
+                      "send_msg": 0
                     }
                   },
                   "lwm2m_client": {
                     "summary": "LwM2M client info",
                     "value": {
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "recv_cnt": 1,
-                      "recv_pkt": 1,
                       "username": "guest",
-                      "subscriptions_max": "infinity",
-                      "disconnected_at": null,
-                      "mqueue_len": 0,
-                      "connected": true,
-                      "proto_name": "LwM2M",
-                      "lifetime": 86400,
-                      "send_msg": 0,
-                      "awaiting_rel_cnt": 0,
-                      "awaiting_rel_max": "infinity",
-                      "reductions": 72022,
-                      "send_pkt": 1,
-                      "recv_msg": 0,
-                      "mqueue_max": "infinity",
-                      "mailbox_len": 0,
-                      "proto_ver": "1.0",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "inflight_cnt": 0,
-                      "is_bridge": false,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "recv_oct": 56,
-                      "ip_address": "127.0.0.1",
-                      "send_oct": 61,
-                      "subscriptions_cnt": 0,
-                      "keepalive": 0,
-                      "node": "emqx@127.0.0.1",
-                      "clean_start": true,
-                      "heap_size": 4185,
                       "expiry_interval": 0,
-                      "inflight_max": "infinity",
-                      "port": 50675,
+                      "recv_cnt": 1,
+                      "mailbox_len": 0,
+                      "proto_name": "LwM2M",
+                      "send_pkt": 1,
+                      "connected": true,
+                      "proto_ver": "1.0",
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
                       "endpoint_name": "urn:imei:154928475237123",
+                      "awaiting_rel_cnt": 0,
+                      "reductions": 72022,
+                      "is_bridge": false,
+                      "mqueue_max": "infinity",
+                      "mqueue_dropped": 0,
+                      "inflight_max": "infinity",
+                      "awaiting_rel_max": "infinity",
+                      "recv_pkt": 1,
+                      "ip_address": "127.0.0.1",
+                      "subscriptions_cnt": 0,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "clean_start": true,
+                      "inflight_cnt": 0,
+                      "recv_oct": 56,
+                      "send_oct": 61,
+                      "keepalive": 0,
+                      "lifetime": 86400,
+                      "recv_msg": 0,
+                      "disconnected_at": null,
+                      "subscriptions_max": "infinity",
+                      "mqueue_len": 0,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "node": "emqx@127.0.0.1",
+                      "heap_size": 4185,
+                      "port": 50675,
                       "send_cnt": 1,
-                      "mqueue_dropped": 0
+                      "send_msg": 0
                     }
                   }
                 },
@@ -36681,6 +37218,80 @@
         ]
       }
     },
+    "/sso/saml/acs": {
+      "post": {
+        "parameters": [],
+        "responses": {
+          "302": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "REDIRECT"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_USERNAME_OR_PWD"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BACKEND_NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/monitor/nodes/{node}": {
       "get": {
         "description": "List the monitor (statistics) data on the specified node.",
@@ -37004,6 +37615,9 @@
                       "$ref": "#/components/schemas/authn.gcp_device"
                     },
                     {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
+                    },
+                    {
                       "$ref": "#/components/schemas/authn.ldap"
                     },
                     {
@@ -37196,6 +37810,9 @@
                 "oneOf": [
                   {
                     "$ref": "#/components/schemas/authn.gcp_device"
+                  },
+                  {
+                    "$ref": "#/components/schemas/authn.ldap_bind"
                   },
                   {
                     "$ref": "#/components/schemas/authn.ldap"
@@ -38102,6 +38719,12 @@
                     "maxLength": 100,
                     "type": "string"
                   },
+                  "role": {
+                    "default": "administrator",
+                    "description": "User role",
+                    "example": "administrator",
+                    "type": "string"
+                  },
                   "description": {
                     "description": "Dashboard User Description",
                     "example": "administrator",
@@ -38126,9 +38749,20 @@
                       "maxLength": 100,
                       "type": "string"
                     },
+                    "role": {
+                      "default": "administrator",
+                      "description": "User role",
+                      "example": "administrator",
+                      "type": "string"
+                    },
                     "description": {
                       "description": "Dashboard User Description",
                       "example": "administrator",
+                      "type": "string"
+                    },
+                    "backend": {
+                      "description": "User account source",
+                      "example": "local",
                       "type": "string"
                     }
                   },
@@ -38613,19 +39247,19 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/listeners.quic_required_bind-with_name"
+                    "$ref": "#/components/schemas/listeners.with_name_quic_required_bind"
                   },
                   {
-                    "$ref": "#/components/schemas/listeners.wss_required_bind-with_name"
+                    "$ref": "#/components/schemas/listeners.with_name_wss_required_bind"
                   },
                   {
-                    "$ref": "#/components/schemas/listeners.ws_required_bind-with_name"
+                    "$ref": "#/components/schemas/listeners.with_name_ws_required_bind"
                   },
                   {
-                    "$ref": "#/components/schemas/listeners.ssl_required_bind-with_name"
+                    "$ref": "#/components/schemas/listeners.with_name_ssl_required_bind"
                   },
                   {
-                    "$ref": "#/components/schemas/listeners.tcp_required_bind-with_name"
+                    "$ref": "#/components/schemas/listeners.with_name_tcp_required_bind"
                   }
                 ]
               }
@@ -39080,6 +39714,9 @@
                       "$ref": "#/components/schemas/authn.gcp_device"
                     },
                     {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
+                    },
+                    {
                       "$ref": "#/components/schemas/authn.ldap"
                     },
                     {
@@ -39299,6 +39936,9 @@
                     "$ref": "#/components/schemas/authn.gcp_device"
                   },
                   {
+                    "$ref": "#/components/schemas/authn.ldap_bind"
+                  },
+                  {
                     "$ref": "#/components/schemas/authn.ldap"
                   },
                   {
@@ -39442,6 +40082,9 @@
                   "oneOf": [
                     {
                       "$ref": "#/components/schemas/authn.gcp_device"
+                    },
+                    {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
                     },
                     {
                       "$ref": "#/components/schemas/authn.ldap"
@@ -39660,6 +40303,9 @@
                     "$ref": "#/components/schemas/authn.gcp_device"
                   },
                   {
+                    "$ref": "#/components/schemas/authn.ldap_bind"
+                  },
+                  {
                     "$ref": "#/components/schemas/authn.ldap"
                   },
                   {
@@ -39803,6 +40449,9 @@
                   "oneOf": [
                     {
                       "$ref": "#/components/schemas/authn.gcp_device"
+                    },
+                    {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
                     },
                     {
                       "$ref": "#/components/schemas/authn.ldap"
@@ -40883,6 +41532,12 @@
               "application/json": {
                 "schema": {
                   "properties": {
+                    "role": {
+                      "default": "administrator",
+                      "description": "User role",
+                      "example": "administrator",
+                      "type": "string"
+                    },
                     "token": {
                       "description": "Dashboard Auth Token",
                       "type": "string"
@@ -45122,6 +45777,235 @@
         ]
       }
     },
+    "/sso/saml/metadata": {
+      "get": {
+        "parameters": [],
+        "requestbody": {
+          "content": {
+            "application/xml": {
+              "schema": {
+                "format": "binary",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "token": {
+                      "description": "Dashboard Auth Token",
+                      "type": "string"
+                    },
+                    "version": {
+                      "description": "EMQX Version",
+                      "example": "5.0.0",
+                      "type": "string"
+                    },
+                    "license": {
+                      "properties": {
+                        "edition": {
+                          "description": "EMQX License. opensource or enterprise",
+                          "enum": [
+                            "opensource",
+                            "enterprise"
+                          ],
+                          "example": "opensource",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BACKEND_NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
+    "/sso/login/{backend}": {
+      "post": {
+        "parameters": [
+          {
+            "example": "ldap",
+            "in": "path",
+            "name": "backend",
+            "required": true,
+            "schema": {
+              "enum": [
+                "ldap",
+                "saml"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/emqx_dashboard_sso_saml.login"
+                  },
+                  {
+                    "$ref": "#/components/schemas/emqx_dashboard_sso_ldap.login"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "role": {
+                      "default": "administrator",
+                      "description": "User role",
+                      "example": "administrator",
+                      "type": "string"
+                    },
+                    "token": {
+                      "description": "Dashboard Auth Token",
+                      "type": "string"
+                    },
+                    "version": {
+                      "description": "EMQX Version",
+                      "example": "5.0.0",
+                      "type": "string"
+                    },
+                    "license": {
+                      "properties": {
+                        "edition": {
+                          "description": "EMQX License. opensource or enterprise",
+                          "enum": [
+                            "opensource",
+                            "enterprise"
+                          ],
+                          "example": "opensource",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "302": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "REDIRECT"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_USERNAME_OR_PWD"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BACKEND_NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/subscriptions": {
       "get": {
         "description": "List subscriptions",
@@ -45900,6 +46784,9 @@
                         "$ref": "#/components/schemas/authn.gcp_device"
                       },
                       {
+                        "$ref": "#/components/schemas/authn.ldap_bind"
+                      },
+                      {
                         "$ref": "#/components/schemas/authn.ldap"
                       },
                       {
@@ -46064,6 +46951,9 @@
                     "$ref": "#/components/schemas/authn.gcp_device"
                   },
                   {
+                    "$ref": "#/components/schemas/authn.ldap_bind"
+                  },
+                  {
                     "$ref": "#/components/schemas/authn.ldap"
                   },
                   {
@@ -46210,6 +47100,9 @@
                   "oneOf": [
                     {
                       "$ref": "#/components/schemas/authn.gcp_device"
+                    },
+                    {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
                     },
                     {
                       "$ref": "#/components/schemas/authn.ldap"
@@ -47164,6 +48057,34 @@
         ]
       }
     },
+    "/sso/running": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "enum": [
+                      "ldap",
+                      "saml"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/gateways/{name}/clients/{clientid}/subscriptions/{topic}": {
       "delete": {
         "description": "Delete a subscriptions membership",
@@ -47329,6 +48250,20 @@
         "description": "Delete dashboard user",
         "parameters": [
           {
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "saml"
+              ],
+              "type": "string"
+            }
+          },
+          {
             "description": "Dashboard Username",
             "example": "admin",
             "in": "path",
@@ -47405,6 +48340,20 @@
         "description": "Update dashboard user description",
         "parameters": [
           {
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "saml"
+              ],
+              "type": "string"
+            }
+          },
+          {
             "description": "Dashboard Username",
             "example": "admin",
             "in": "path",
@@ -47420,6 +48369,12 @@
             "application/json": {
               "schema": {
                 "properties": {
+                  "role": {
+                    "default": "administrator",
+                    "description": "User role",
+                    "example": "administrator",
+                    "type": "string"
+                  },
                   "description": {
                     "description": "Dashboard User Description",
                     "example": "administrator",
@@ -47444,9 +48399,20 @@
                       "maxLength": 100,
                       "type": "string"
                     },
+                    "role": {
+                      "default": "administrator",
+                      "description": "User role",
+                      "example": "administrator",
+                      "type": "string"
+                    },
                     "description": {
                       "description": "Dashboard User Description",
                       "example": "administrator",
+                      "type": "string"
+                    },
+                    "backend": {
+                      "description": "User account source",
+                      "example": "local",
                       "type": "string"
                     }
                   },
@@ -49716,6 +50682,214 @@
         ],
         "tags": [
           "Monitor"
+        ]
+      }
+    },
+    "/sso/{backend}": {
+      "delete": {
+        "parameters": [
+          {
+            "example": "ldap",
+            "in": "path",
+            "name": "backend",
+            "required": true,
+            "schema": {
+              "enum": [
+                "ldap",
+                "saml"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Delete successfully"
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BACKEND_NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      },
+      "get": {
+        "parameters": [
+          {
+            "example": "ldap",
+            "in": "path",
+            "name": "backend",
+            "required": true,
+            "schema": {
+              "enum": [
+                "ldap",
+                "saml"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/emqx_dashboard_sso_saml.saml"
+                    },
+                    {
+                      "$ref": "#/components/schemas/emqx_dashboard_sso_ldap.ldap"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BACKEND_NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      },
+      "put": {
+        "parameters": [
+          {
+            "example": "ldap",
+            "in": "path",
+            "name": "backend",
+            "required": true,
+            "schema": {
+              "enum": [
+                "ldap",
+                "saml"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/emqx_dashboard_sso_saml.saml"
+                  },
+                  {
+                    "$ref": "#/components/schemas/emqx_dashboard_sso_ldap.ldap"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/emqx_dashboard_sso_saml.saml"
+                    },
+                    {
+                      "$ref": "#/components/schemas/emqx_dashboard_sso_ldap.ldap"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BACKEND_NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Dashboard Single Sign-On"
         ]
       }
     },
@@ -53624,7 +54798,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/emqx_conf_schema.log"
+                  "$ref": "#/components/schemas/emqx_enterprise_schema.log"
                 }
               }
             }
@@ -53672,7 +54846,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/emqx_conf_schema.log"
+                "$ref": "#/components/schemas/emqx_enterprise_schema.log"
               }
             }
           }
@@ -53683,7 +54857,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/emqx_conf_schema.log"
+                  "$ref": "#/components/schemas/emqx_enterprise_schema.log"
                 }
               }
             }
@@ -57044,8 +58218,23 @@
     },
     "/logout": {
       "post": {
-        "description": "Dashboard user logout",
-        "parameters": [],
+        "description": "Dashboard user logout.<br/>This endpoint is only for the Dashboard, not the `API Key`.<br/>The token from the `/login` endpoint must be a bearer authorization in the headers.",
+        "parameters": [
+          {
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "saml"
+              ],
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
