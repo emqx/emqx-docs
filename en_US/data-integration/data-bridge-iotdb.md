@@ -147,7 +147,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
      
      :::
 
-   - **Align Timeseries**: Disabled by default.
+   - **Align Timeseries**: Disabled by default. Once enabled, the timestamp columns of a group of aligned timeseries are stored only once in IoTDB, rather than duplicating them for each individual timeseries within the group. For more information, see [Aligned timeseries](https://iotdb.apache.org/UserGuide/V1.1.x/Data-Concept/Data-Model-and-Terminology.html#aligned-timeseries).
    - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
 
 10. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
