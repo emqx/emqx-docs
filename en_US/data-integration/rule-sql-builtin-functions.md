@@ -345,14 +345,38 @@ bin2hexstr(zip_compress('hello world')) = '789CCB48CDC9C95728CF2FCA4901001A0B045
 zip_uncompress(hexstr2bin('789CCB48CDC9C95728CF2FCA4901001A0B045D')) = 'hello world'
 ```
 
-## Bit Functions
+## Bit Operation Functions
 
-EMQX uses the `subbits` function to extract a sequence of bits from a binary or bitstring and convert it to a specified data type. 
+A number of bitwise functions are provided to operate on integers.
 
-See the table below for the syntax supported. 
+| Function   | Description | Parameters  |
+| ---------- | ------------| ------------|
+| `bitnot`   | Bitwise NOT | 1. Integer
+| `bitand`   | Bitwise AND of two integers | 1. Integer <br /> 2. Integer |
+| `bitor`    | Bitwise OR of two integers | 1. Integer <br /> 2. Integer |
+| `bitxor`   | Bitwise XOR  of two integers | 1. Integer <br /> 2. Integer |
+| `bitsl`    | Left-shift an integer| 1. Integer to operate on <br /> 2. Number of bits to shift |
+| `bitsr`    | Right-shift an integer| 1. Integer to operate on <br /> 2. Number of bits to shift |
+
+
+## Bit Sequence Functions
+
+A number of functions are provided to operate on bit sequence (binary or bitstring) inputs, e.g. `subbits` to extract a sequence of bits and convert it to a specified data type.
+
+:::tip
+The `binary` type represents a sequence of bytes, each consisting of 8 bits. On the other hand,
+a `bitstring` denotes a sequence of bits that may not necessarily be a multiple of 8 in length.
+
+Put simply, while every `binary` is a `bitstring`, the reverse is not always true.
+
+It's important to note that `bitstring`, when its length is not divisible by 8, is not directly serializable to external formats like JSON.
+Typically, it serves as an intermediate value before being converted to an integer or other suitable types.
+:::
 
 | Function                                              | Description                                                  | Parameters                                                   |
 | ----------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `bytesize`                                            | Returns the number of bytes of a byte sequence | 1. Binary |
+| `bitsize`                                             | Returns the number of bits of a bit sequence | 1. Binary or bitstring |
 | `subbits`                                             | Returns an unsigned integer (big-endian) obtained by extracting a specified number of bits from the beginning of a binary input. | 1. Binary input <br />2. Number of bits to extract           |
 | `subbits`<br />(with offset)                          | Returns an unsigned integer (big-endian) obtained by extracting a specified number of bits starting from a given offset in a binary input. <br />Offsets are indexed starting from 1. | 1. Binary input  <br />2. Starting offset <br />3. Number of bits to extract |
 | `subbits`<br />(with offset and data type conversion) | Returns a data value obtained by extracting a specified number of bits starting from a given offset in a binary input and after data type conversion. <br />Offsets are indexed starting from 1. | 1. Binary input <br />2. Starting offset<br />3. Number of bits to extract <br />4. Data Type, can be `integer`, `float`, `bits`<br /><br />If set to `integer`, you can continue to set:<br />- Signedness: `unsigned`, `signed`, <br />- Endianness: `big`, `little` |
