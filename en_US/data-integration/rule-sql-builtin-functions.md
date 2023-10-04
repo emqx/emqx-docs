@@ -345,7 +345,7 @@ bin2hexstr(zip_compress('hello world')) = '789CCB48CDC9C95728CF2FCA4901001A0B045
 zip_uncompress(hexstr2bin('789CCB48CDC9C95728CF2FCA4901001A0B045D')) = 'hello world'
 ```
 
-## Bit Operation Functions
+## Bitwise Operation Functions
 
 A number of bitwise functions are provided to operate on integers.
 
