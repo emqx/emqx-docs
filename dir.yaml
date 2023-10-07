@@ -463,7 +463,7 @@
         - dashboard/diagnose
         - dashboard/system
     - title_en: Single Sign-On (SSO)
-      title_cn: 单点登录
+      title_cn: 单点登录 (SSO)
       path: dashboard/sso
       collapsed: true
       children:
