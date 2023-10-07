@@ -784,7 +784,7 @@
     - title_en: Releases
       title_cn: 版本发布
       edition: ce
-      patch: changes/changes-ce-5.2
+      path: changes/changes-ce-5.2
     - title_en: 从 V4 升级到 V5 的不兼容更改
       title_cn: 从 V4 升级到 V5 的不兼容更改
       lang: cn
