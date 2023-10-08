@@ -1,4 +1,11 @@
-# Installation
+{% emqxee %}
+# Installation EMQX Enterprise
+{% endemqxee %}
+
+{% emqxce %}
+# Installation EMQX
+{% endemqxce %}
+
 
 This chapter walks you through the basic installation steps for EMQX, the minimum hardware specification, and the file and directory locations to facilitate future configuration and maintenance jobs.
 

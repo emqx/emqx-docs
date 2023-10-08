@@ -1,6 +1,6 @@
 ---
 {
-  'title': 'Client SDKs',
+  'title': 'MQTT Client SDKs',
   'categoryList':
     [
       {

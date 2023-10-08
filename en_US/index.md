@@ -1,4 +1,16 @@
-# Introduction
+---
+titleTemplate: false
+---
+
+{% emqxee %}
+# EMQX Enterprise Docs
+{% endemqxee %}
+
+{% emqxce %}
+# EMQX Documentation
+{% endemqxce %}
+
+
 
 {% emqxce %}
 
