@@ -55,7 +55,7 @@ CREATE DATABASE emqx_data;
 
 在 PostgreSQL 中创建两张表：
 
-数据表 `t_mqtt_msg `存储每条消息的发布者客户端 ID、主题、Payload 以及发布时间：
+数据表 `t_mqtt_msg` 存储每条消息的发布者客户端 ID、主题、Payload 以及发布时间：
 
 ```sql
   CREATE TABLE t_mqtt_msg (
@@ -128,7 +128,7 @@ CREATE TABLE emqx_client_events (
 3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息存储至 PostgreSQL，请确规则选择出来的字段（SELECT 部分）包含所有 SQL 模板中用到的变量，此处规则 SQL 如下：
 
    ```sql
-   SELECT 
+   SELECT
      *
    FROM
      "t/#"
@@ -160,7 +160,7 @@ INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
 ```sql
 SELECT
   *
-FROM 
+FROM
   "$events/client_connected", "$events/client_disconnected"
 ```
 
@@ -174,7 +174,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello PostgreSQL" }'
 
 分别查看两个数据桥接运行统计，命中、发送成功次数均 +1。
 
-查看数据是否已经写入表中，`emqx_messages` 表：
+查看数据是否已经写入表中，`t_mqtt_msg` 表：
 
 ```bash
 emqx_data=# select * from t_mqtt_msg;
