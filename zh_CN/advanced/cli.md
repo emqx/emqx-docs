@@ -115,28 +115,30 @@ datetime  : 2020-02-21 09:39:58
 
 ```bash
 $ ./bin/emqx_ctl broker stats
-channels.count                : 0
-channels.max                  : 0
-connections.count             : 0
-connections.max               : 0
-resources.count               : 0
-resources.max                 : 0
-retained.count                : 3
-retained.max                  : 3
-routes.count                  : 0
-routes.max                    : 0
-sessions.count                : 0
-sessions.max                  : 0
-suboptions.count              : 0
-suboptions.max                : 0
-subscribers.count             : 0
-subscribers.max               : 0
-subscriptions.count           : 0
-subscriptions.max             : 0
+channels.count                : 1
+channels.max                  : 1
+connections.count             : 1
+connections.max               : 1
+live_connections.count        : 1
+live_connections.max          : 1
+modules.count                 : 6
+modules.max                   : 6
+retained.count                : 0
+retained.max                  : 5
+routes.count                  : 1
+routes.max                    : 1
+sessions.count                : 1
+sessions.max                  : 1
+suboptions.count              : 1
+suboptions.max                : 1
+subscribers.count             : 1
+subscribers.max               : 1
+subscriptions.count           : 1
+subscriptions.max             : 1
 subscriptions.shared.count    : 0
 subscriptions.shared.max      : 0
-topics.count                  : 0
-topics.max                    : 0
+topics.count                  : 1
+topics.max                    : 1
 ```
 
 ### broker metrics
@@ -532,12 +534,11 @@ Plugin emqx_lua_hook reloaded successfully.
 
 自 v4.1 之后，引入了 `modules` 命令用于在运行时管理 EMQX 内置的模块。
 
-| 命令                       | 描述                      |
-| -------------------------- | ------------------------- |
-| `modules list            ` | 列出全部内置模块 (Module) |
-| `modules load   <Module> ` | 加载内置模块 (Module)     |
-| `modules unload <Module> ` | 卸载内置模块 (Module)     |
-| `modules reload <Module> ` | 重载内置模块 (Module)     |
+| 命令                        | 描述                      |
+| --------------------------- | ------------------------- |
+| `modules list            `  | 列出全部内置模块 (Module) |
+| `modules start   <Module> ` | 启动内置模块 (Module)     |
+| `modules stop <Module> `    | 停止内置模块 (Module)     |
 
 ### modules list
 
@@ -553,31 +554,22 @@ Module(emqx_mod_rewrite, description=EMQX Topic Rewrite Module, active=false)
 Module(emqx_mod_presence, description=EMQX Presence Module, active=true)
 ```
 
-### modules load
+### modules start
 
-加载内置模块:
+启动内置模块:
 
 ```bash
-$ ./bin/emqx_ctl modules load emqx_mod_delayed
-Module emqx_mod_delayed loaded successfully.
+$ ./bin/emqx_ctl modules start emqx_mod_delayed
+Module emqx_mod_delayed started successfully.
 ```
 
-### modules unload
+### modules stop
 
-卸载内置模块:
-
-```bash
-$ ./bin/emqx_ctl modules unload emqx_mod_delayed
-Module emqx_mod_delayed unloaded successfully.
-```
-
-### modules reload
-
-重载内置模块:
+停止内置模块:
 
 ```bash
-$ ./bin/emqx_ctl modules reload emqx_mod_acl_internal
-Module emqx_mod_acl_internal reloaded successfully.
+$ ./bin/emqx_ctl modules stop emqx_mod_delayed
+Module emqx_mod_delayed stopped successfully.
 ```
 
 ## vm 命令
