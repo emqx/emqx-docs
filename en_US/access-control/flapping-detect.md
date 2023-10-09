@@ -1,8 +1,8 @@
-## Flapping Detect
+# Flapping Detect
 
 Based on the banned client function, EMQX automatically bans frequently logging clients to prevent them from consuming server resources that may affect other clients. Those clients will be banned for a period of time.
 
-It should be noted that the automatic ban only bans the client by the client ID, not by the user name and IP address. That is to say, a malicious client may still be able to attack if they change the client ID for each attempt.
+It should be noted that the automatic ban only bans the client by the client ID, not by the user name and IP address. A malicious client may still be able to attack if they change the client ID for each attempt.
 
 This feature is disabled by default, and you can enable it via EMQX Dashboard or configuration file.
 

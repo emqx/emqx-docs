@@ -59,7 +59,7 @@ EMQX Dashboard 的**系统**菜单包括**用户**、**API 密钥**、**License*
 
 3. 单击**确认**按钮，API 密钥和密钥将被创建并显示在**创建成功**对话框中。
 
-   ::: 警告
+   ::: tip
 
    您需要将 API Key 和 Secret Key 保存在安全的地方，因为 Secret Key 将不再显示。
 

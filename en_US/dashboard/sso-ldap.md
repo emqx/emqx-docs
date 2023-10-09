@@ -38,9 +38,9 @@ This section guides you on how to enable LDAP-based SSO in the Dashboard.
 
 After enabling LDAP SSO, the EMQX Dashboard will display the LDAP SSO option on the login page. Click the **LDAP** button, enter the LDAP credentials assigned to the user (e.g., username and password), and click the **Login** button.
 
-<img src="./assets/sso_ldap.png" alt="image-20230926182522354" style="zoom:67%;" />
+<img src="./assets/sso_ldap.png" alt="sso_ldap" style="zoom:67%;" />
 
-<img src="./assets/ldap_login.png" alt="image-20230926182543521" style="zoom:67%;" />
+<img src="./assets/ldap_login.png" alt="ldap_login" style="zoom:67%;" />
 
 After successfully authenticating with LDAP, EMQX will automatically add a Dashboard user, which you can manage in [Users](./system.md#users), such as assigning roles and permissions.
 

@@ -5,20 +5,16 @@ Single Sign-On (SSO) is an authentication mechanism that allows users to log in 
 EMQX implements SSO functionality based on Lightweight Directory Access Protocol (LDAP) and the Security Assertion Markup Language (SAML) 2.0 standard, supporting integration with mainstream identity services such as [OpenLDAP](https://www.openldap.org/), [Microsoft Active Directory](https://azure.microsoft.com/en-in/products/active-directory), [Okta](https://www.okta.com/), [OneLogin](https://www.onelogin.com/), and more. 
 
 {% emqxce %} 
-
 ::: tip 
-
 EMQX Enterprise Edition feature. EMQX Enterprise Edition offers comprehensive coverage of critical business scenarios, richer data integration support, higher production-grade reliability, and 24/7 global technical support. Feel free to [try it for free](https://www.emqx.com/zh/try?product=enterprise). 
-
 ::: 
-
 {% endemqxce %}
 
 ## LDAP-Based SSO
 
 EMQX Dashboard allows you to integrate LDAP for SSO. LDAP is an application-layer protocol used to access and maintain distributed directory information services. It is a common authentication and authorization protocol widely used in enterprise environments for SSO solutions.
 
-When using LDAP SSO, EMQX sends user LDAP credentials to the directory server for validation. Upon successful validation, it creates user session information and logs the user into the Dashboard.
+EMQX sends user LDAP credentials to the directory server for validation when using LDAP SSO. Upon successful validation, it creates user session information and logs the user into the Dashboard.
 
 ## SAML-Based SSO
 

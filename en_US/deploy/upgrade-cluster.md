@@ -78,7 +78,7 @@ To mitigate these pitfalls, read the EMQX 5.1 documentation carefully and perfor
 
 5. Verify the new EMQX Cluster thoroughly to ensure that it functions as expected. Test its connectivity, messaging capabilities, and any other relevant functionalities to confirm that the upgrade was successful.
 
-   ::: warning
+   ::: tip Warning
 
    Downgrading to the previous version is not supported, so make sure that you have fully verified the new cluster before destroying the old cluster.
 

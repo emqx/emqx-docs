@@ -47,7 +47,7 @@ This section guides you on how to use Okta as an Identity Provider (IdP) and con
 
 6. On the **Feedback** tab, select **I'm an Okta customer adding an internal app**, fill in other information as needed, and click **Finish** to complete the application creation.
 
-<img src="./assets/okta_config.png" alt="image-20230926224425922" style="zoom:67%;" />
+<img src="./assets/okta_config.png" alt="okta_config" style="zoom:67%;" />
 
 ### Step 3: Complete Configuration and Assign Users and Groups in Okta
 

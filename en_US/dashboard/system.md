@@ -54,7 +54,7 @@ On the API Keys page, you can generate an API key and secret key for accessing t
 
 3. Click the **Confirm** button, and the API key and secret Key are created and displayed in the **Created Successfully** dialog. 
 
-   ::: warning
+   ::: tip
 
    You need to save the API Key and Secret Key in a safe place because the secret key will not be shown again.
 
@@ -103,3 +103,4 @@ The Settings can be accessed by clicking the setting icon on the top right corne
 The Single Sign-On (SSO) page provides settings for the administrators to configure the SSO feature for user login management. For more information about the SSO feature, see [Single Sign-On (SSO)](./sso.md).
 
 {% endemqxee %} 
+
