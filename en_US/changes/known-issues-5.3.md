@@ -2,6 +2,7 @@
 
 ## e5.3.0
 
-- **Lack of SAML Encryption and Incompatibility with Azure Entra ID**
+- **Limitation in SAML-Based SSO**
 
-  EMQX Dashboard SSO SAML Login supports Okta and OneLogin as identity providers but lacks SAML encryption. It is not currently compatible with Azure Entra ID due to complexity.
+  EMQX Dashboard supports Single Sign-On based on the Security Assertion Markup Language (SAML) 2.0 standard and integrates with Okta and OneLogin as identity providers. However, the SAML-based SSO currently does not support a certificate signature verification mechanism and is incompatible with Azure Entra ID due to its complexity.
+
