@@ -2,7 +2,17 @@
 
 Kafka 消费组使用外部 Kafka 作为消息队列，可以从 Kafka 中消费消息转换成为 MQTT 消息发布在 emqx 中。
 
-搭建 Kafka 环境，以 MacOS X 为例:
+## 启动 Kafka 并创建主题
+
+::: tip
+
+Kafka 消费组不支持 Kafka0.9 以下版本。
+
+创建资源之前，需要提前创建 Kafka 主题，不然会提示错误。
+
+:::
+
+1. 搭建 Kafka 环境，以 MacOS X 为例:
 
 ```bash
 wget https://archive.apache.org/dist/kafka/2.8.0/kafka_2.13-2.8.0.tgz
@@ -17,15 +27,7 @@ cd kafka_2.13-2.8.0
 ./bin/kafka-server-start.sh config/server.properties
 ```
 
-::: tip
-
-Kafka 消费组不支持 Kafka0.9 以下版本
-
-创建资源之前，需要提前创建 Kafka 主题，不然会提示错误
-
-:::
-
-创建 Kafka 的主题:
+2. 创建 Kafka 的主题:
 
 ```bash
 $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testTopic --create
@@ -33,40 +35,43 @@ $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --part
 
 ## 创建模块
 
-打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
+1. 打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧菜单中的**模块**，选择**添加模块**：
 
-![image-20200927213049265](./assets/modules.png)
+<img src="./assets/modules.png" alt="modules" style="zoom:67%;" />
 
-选择 Kafka 消费组模块:
+2. 在**消息下发**选项卡下选择 **Kafka 消费组**模块:
 
-![img](./assets/kafka_consumer1.png)
+<img src="./assets/kafka_consumer1.png" alt="kafka_consumer1" style="zoom:67%;" />
 
-填写相关参数:
+3. 填写相关参数:
 
-![img](./assets/kafka_consumer3.png)
+<img src="./assets/kafka_consumer3.png" alt="kafka_consumer3" style="zoom:67%;" />
 
-- Kafka 服务器地址
-- Kafka consumer 连接池大小
-- Kafka 的订阅主题
-- MQTT 的消息主题
-- MQTT 的主题服务质量
-- MQTT PayLoad，可选使用 Kafka message.value 或者 message 全部信息
-- 二进制 key 编码模式，UTF-8 或 base64，消息中 key 的编码方式，如果 key 值为非字符串或可能产生字符集编码异常的值，推荐使用 base64 模式
-- 二进制 value 编码模式，UTF-8 或 base64，消息中 value 的编码方式，如果 value 值为非字符串或可能产生字符集编码异常的值，推荐使用 base64 模式
-- Kafka Max Bytes (每次从 Kafka 里消费消息的最大字节数)
-- Kafka Offset Reset Policy (重置Offset策略,reset_to_latest | reset_by_subdcriber)
-- Kafka consumer 是否重连
-- SSL 连接参数
+- **Kafka 服务器**：填写 Kafka 服务器地址；默认为 `127.0.0.1:9092`。
+- **Pool Size**：Kafka consumer 连接池大小。
+- **Kafka 用户名和密码**：连接 Kafka 服务器的用户名和密码。
+- **Kafka 主题转 MQTT 主题映射关系**：
+  - **Kafka 主题**：从 Kafka 下发消息的主题；本示例中使用之前创建的 Kafka 主题 `TestTopic`。
+  - **MQTT 主题**：接收到的 MQTT 消息的主题；此处支持使用 `${message.key}` 对主题进行动态设置，使 MQTT 主题与 Kafka 主题始终保持一致。
+  - **MQTT QoS**：MQTT 消息质量等级。
+  - **MQTT PayLoad**：可选使用 Kafka message.value 或者 message 全部信息。
+
+- **Key 编码模式**：二进制 key 编码模式，UTF-8 或 base64，消息中 key 的编码方式，如果 key 值为非字符串或可能产生字符集编码异常的值，推荐使用 base64 模式。
+- **Value 编码模式**：二进制 value 编码模式，UTF-8 或 base64，消息中 value 的编码方式，如果 value 值为非字符串或可能产生字符集编码异常的值，推荐使用 base64 模式。
+- **提取消息最大字节数**：Kafka Max Bytes (每次从 Kafka 里消费消息的最大字节数)。
+- **Offset 重置策略**：Kafka Offset Reset Policy (重置Offset策略,reset_to_latest | reset_by_subdcriber)
+- **是否重连**：Kafka consumer 是否重连。
+- **开启 SSL**：SSL 连接参数。
 
 点击添加后，模块添加完成:
 
-![img](./assets/kafka_consumer4.png)
+## 测试消息下发
 
-资源已经创建完成，现在用Dashboard的websocket工具订阅MQTT的主题 "TestTopic":
+资源已经创建完成，现在用 Dashboard 的 Websocket 工具订阅 MQTT 主题 "TestTopic":
 
 ![img](./assets/kafka_consumer5.png)
 
-使用kafka 命令行 生产一条消息:
+使用kafka 命令行生产一条消息:
 
 ```bash
 ./bin/kafka-console-producer.sh --broker-list localhost:9092 --topic TestTopic

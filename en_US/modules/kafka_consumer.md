@@ -1,8 +1,18 @@
 # Kafka Consumer Group
 
-The Kafka consumer group uses external Kafka as a message queue, which can convert consumer messages from Kafka into MQTT messages and publish them in emqx.
+The Kafka consumer group uses external Kafka as a message queue, which can convert consumer messages from Kafka into MQTT messages and publish them in EMQX.
 
-Set up the Kafka environment, taking MacOS X as an example:
+## Set Up Kafka
+
+::: tip
+
+Kafka consumer groups do not support Kafka versions below 0.9.
+
+Before creating resources, you must create Kafka topics in advance, otherwise an error will be prompted.
+
+:::
+
+1. Set up the Kafka environment, taking MacOS X as an example:
 
 ```bash
 wget https://archive.apache.org/dist/kafka/2.8.0/kafka_2.13-2.8.0.tgz
@@ -17,67 +27,46 @@ $ ./bin/zookeeper-server-start.sh config/zookeeper.properties
 $ ./bin/kafka-server-start.sh config/server.properties
 ```
 
-:::
-
-Kafka consumer groups do not support Kafka versions below 0.9
-
-Before creating resources, you need to create Kafka topics in advance, otherwise an error will be prompted
-
-:::
-
-Create Kafka topic:
+2. Create a Kafka topic:
 
 ```bash
 ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testTopic --create
 ```
 
-## Create module
+## Create Module
 
-Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+1. Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click **Modules** in the left-navigation menu, and select **Add Module**.
 
-Select Kafka consumer group module:
+<img src="./assets/modules.png" alt="img" style="zoom:67%;" />
 
-![img](./assets/modules.png)
+2. Under the **Message Publish** tab, select the **Kafka Consumer Group** module:
 
-Click "Select", and then select "Kafka Consumer Group":
+<img src="./assets/kafka_consumer2.png" alt="img" style="zoom:67%;" />
 
-![img](./assets/kafka_consumer2.png)
+3. Fill in the relevant parameters:
 
-Fill in the relevant parameters:
+<img src="./assets/kafka_consumer3.png" style="zoom:67%;" />
 
-![](./assets/kafka_consumer3.png)
+- **Kafka Server**: Enter the Kafka server address; the default is `127.0.0.1:9092`.
+- **Pool Size**: Kafka consumer connection pool size.
+- **Kafka Username and Password**: Username and password to connect to the Kafka server.
+- Topic Mapping:
+  - **Kafka Topic**: The topic from which Kafka messages will be forwarded; in this example, you can use the Kafka topic created earlier, `TestTopic`.
+  - **MQTT Topic**: The topic of the received MQTT message; you can use `${message.key}` here to dynamically set the topic, ensuring that the MQTT topic is always the same as the Kafka topic.
+  - **MQTT QoS**: MQTT message quality of service.
+  - **MQTT Payload**: Optionally, you can use either Kafka `message.value` or the entire message information.
+- **Key encode mode**: Binary key encoding mode, UTF-8, or base64; encoding method for the key in the message. If the key value is non-string or may cause character encoding exceptions, it is recommended to use base64 mode.
+- **Value encode mode**: Binary value encoding mode, UTF-8, or base64; encoding method for the value in the message. If the value is non-string or may cause character encoding exceptions, it is recommended to use base64 mode.
+- **Max Bytes**: Kafka Max Bytes (maximum number of bytes to consume from Kafka at a time).
+- **Offset Reset Policy**: Kafka Offset Reset Policy (Offset reset strategy, reset_to_latest | reset_by_subscriber)
+- **Enable Reconnect**: Whether the Kafka consumer should automatically reconnect.
+- **Enable SSL**: SSL connection parameters.
 
-1). Kafka server address
+After clicking **Add**, the module will be added successfully.
 
-2). Kafka consumer connection pool size
+## Test Message Publish
 
-3). Kafka subscription topic
-
-4). MQTT message subject
-
-5). MQTT topic service quality
-
-6). Kafka Max Bytes (the maximum number of bytes of messages consumed each time from Kafka)
-
-7). Kafka Offset Reset Policy (reset Offset policy, reset_to_latest | reset_by_subdcriber)
-
-- Kafka server address
-- Kafka consumer connection pool size
-- Kafka subscription topic
-- MQTT message subject
-- MQTT theme service quality
-- MQTT Payload. Use Kafka message.value or entire message
-- Binary Key encode mode, force UTF-8 or base64 encode. The encoding method of the key in the message, if the key value is a non-string or a value that may generate a character set encoding exception, base64 mode is recommended
-- Binary Value encode mode, force UTF-8 or base64 encode. The encoding method of the value in the message, if the value is a non-string or a value that may generate a character set encoding exception, base64 mode is recommended
-- Kafka Max Bytes (the maximum number of bytes of messages consumed each time from Kafka)
-- Kafka Offset Reset Policy (reset Offset policy, reset_to_latest | reset_by_subdcriber)
-- Is Kafka consumer reconnected?
-
-After clicking Add, the module is added:
-
-![img](./assets/kafka_consumer4.png)
-
-The resource has been created, now use Dashboard's websocket tool to subscribe to the MQTT topic "TestTopic":
+After the resource is created, you can use Dashboard's Websocket tool to subscribe to the MQTT topic "TestTopic":
 
 ![img](./assets/kafka_consumer5.png)
 
@@ -89,6 +78,6 @@ Use the kafka command line to produce a message:
 
 ![img](./assets/kafka_consumer6.png)
 
-The websocket tool of Dashboard received the message "hello-kafka" produced by Kafka:
+The Websocket tool of Dashboard will receive the message "hello-kafka" produced by Kafka:
 
 ![img](./assets/kafka_consumer7.png)
