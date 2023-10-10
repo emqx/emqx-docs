@@ -50,17 +50,17 @@ $ ./bin/kafka-server-start.sh config/server.properties
 - **Kafka Server**: Enter the Kafka server address; the default is `127.0.0.1:9092`.
 - **Pool Size**: Kafka consumer connection pool size.
 - **Kafka Username and Password**: Username and password to connect to the Kafka server.
-- Topic Mapping:
+- **Topic Mapping**:
   - **Kafka Topic**: The topic from which Kafka messages will be forwarded; in this example, you can use the Kafka topic created earlier, `TestTopic`.
   - **MQTT Topic**: The topic of the received MQTT message; you can specify a fixed topic, or dynamically construct the topic from Kafka messages using `${field}` template syntax. Currently, the following fields can be used:
-
-  - value: The message content. If the message is in JSON format, 	`${value.field}` can be used to extract the value of the specified field.
-  - ts_type: The message operation type. 
-  - ts: The message timestamp in milliseconds, indicating when the message was created.
-  - topic: The Kafka Topic where the message is from.
-  - offset: The message offset in the Partition, used to uniquely identify a message.
-  - key: The message Key.
-  - headers: The message headers, which may contain additional metadata.
+    - `value`: The message content. If the message is in JSON format, `${value.field}` can be used to extract the value of the specified field.
+    - `ts_type`: The message operation type. 
+    - `ts`: The message timestamp in milliseconds, indicating when the message was created.
+    - `topic`: The Kafka Topic where the message is from.
+    - `offset`: The message offset in the Partition, used to uniquely identify a message.
+    - `key`: The message Key.
+    - `headers`: The message headers, which may contain additional metadata.
+  
   - **MQTT QoS**: MQTT message quality of service.
   - **MQTT Payload**: Optionally, you can use either Kafka `message.value` or the entire message information.
 - **Key encode mode**: Binary key encoding mode, UTF-8, or base64; encoding method for the key in the message. If the key value is non-string or may cause character encoding exceptions, it is recommended to use base64 mode.

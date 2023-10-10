@@ -53,13 +53,13 @@ $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --part
 - **Kafka 主题转 MQTT 主题映射关系**：
   - **Kafka 主题**：从 Kafka 下发消息的主题；本示例中使用之前创建的 Kafka 主题 `TestTopic`。
   - **MQTT 主题**：接收到的 MQTT 消息的主题。此处支持指定一个固定的主题，或者通过 `${field}` 的模板语法，动态地从 Kafka 消息中提取字段构造主题，目前支持使用以下字段：
-    - value: 消息内容，如果消息 Kafka 消息是 JSON 格式，支持使用 `${value.field}` 提取 JSON  中指定字段；
-    - ts_type: 消息的操作类型
-    - ts: 消息的时间戳，精度为毫秒，表示消息创建的时间
-    - topic: 消息所在的 Kafka 主题名称
-    - offset: 消息在 Partition 中的偏移量，用于唯一标识一条消息
-    - key: 消息的 Key
-    - headers: 消息头，可以包含一些额外的元数据信息
+    - `value`: 消息内容，如果消息 Kafka 消息是 JSON 格式，支持使用 `${value.field}` 提取 JSON 中指定的字段。
+    - `ts_type`: 消息的操作类型。
+    - `ts`: 消息的时间戳，精度为毫秒，表示消息创建的时间。
+    - `topic`: 消息所在的 Kafka 主题名称。
+    - `offset`: 消息在 Partition 中的偏移量，用于唯一标识一条消息。
+    - `key`: 消息的 Key。
+    - `headers`: 消息头，可以包含一些额外的元数据信息。
   - **MQTT QoS**：MQTT 消息质量等级。
   - **MQTT PayLoad**：可选使用 Kafka message.value 或者 message 全部信息。
 
