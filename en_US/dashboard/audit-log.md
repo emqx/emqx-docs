@@ -65,9 +65,9 @@ The following table shows the fields contained in the above log message samples.
 | time         | Integer | Timestamp indicating the time of the log record in microseconds. |
 | level        | String  | Log level.                                                   |
 | msg          | String  | Operation description.                                       |
-| from         | String  | Request source, where `dashboard`, `rest`, `cli` and `erlang_console` indicate operations from the Dashboard, REST API, CLI, and Erlang Shell respectively. |
+| from         | String  | Request source, where `dashboard`, `rest_api`, `cli` and `erlang_console` indicate operations from the Dashboard, REST API, CLI, and Erlang Shell respectively. |
 | node         | String  | Node name indicating the node or server where the operation was executed. |
-| username     | String  | User performing the operation, available when `from_api` is the source. |
+| username     | String  | User performing the operation, available when from is `rest_api`. |
 | method       | String  | HTTP request method, with `post`, `put`, and `delete` corresponding to create, update, and delete operations. |
 | operate_id   | String  | REST API path of the request, please refer to [REST API](../admin/api.md). |
 | bindings     | Object  | Specific request object information corresponding to placeholders in `operate_id`. |
