@@ -1,4 +1,9 @@
-# Operating Limitations
+---
+title: EMQX Operating Limitations
+description: Without limits on connections or data transmission, MQTT broker performance can reduce. Therefore, EMQX has set usage limits on major features.
+---
+
+# EMQX Operating Limitations
 
 ## Background
 

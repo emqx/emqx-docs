@@ -54,7 +54,7 @@ On the API Keys page, you can generate an API key and secret key for accessing t
 
 3. Click the **Confirm** button, and the API key and secret Key are created and displayed in the **Created Successfully** dialog. 
 
-   ::: tip
+   ::: warning Notice
 
    You need to save the API Key and Secret Key in a safe place because the secret key will not be shown again.
 

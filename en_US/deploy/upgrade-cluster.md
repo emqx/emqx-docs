@@ -1,6 +1,13 @@
-# Upgrade EMQX Cluster from EMQX 4.4 to EMQX 5.1
+{% emqxee %}
+# Upgrade EMQX Enterprise Cluster from 4.4 to 5.1
+{% endemqxee %}
 
-This page provides instructions on how to upgrade your EMQX cluster to the latest version. 
+{% emqxce %}
+# Upgrade EMQX Cluster from 4.4 to 5.1
+{% endemqxce %}
+
+
+This page provides instructions on how to upgrade your EMQX cluster to the latest version.
 
 Since EMQX 5.1 is not backward compatible with version 4.x in terms of configurations, management APIs, and clustering APIs, a [rolling upgrade](./rolling-upgrades.md) from an early version is not supported. To ensure a successful upgrade, read the [Considerations Before You Start](#considerations-before-you-start) carefully before you start the upgrading procedure.
 
@@ -78,7 +85,7 @@ To mitigate these pitfalls, read the EMQX 5.1 documentation carefully and perfor
 
 5. Verify the new EMQX Cluster thoroughly to ensure that it functions as expected. Test its connectivity, messaging capabilities, and any other relevant functionalities to confirm that the upgrade was successful.
 
-   ::: tip Warning
+   ::: warning Notice
 
    Downgrading to the previous version is not supported, so make sure that you have fully verified the new cluster before destroying the old cluster.
 

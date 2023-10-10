@@ -1,4 +1,11 @@
-# Ubuntu
+{% emqxee %}
+# Install EMQX Enterprise on Ubuntu
+{% endemqxee %}
+
+{% emqxce %}
+# Install EMQX on Ubuntu
+{% endemqxce %}
+
 
 This page guides you on installing and starting EMQX on the Ubuntu system.
 
