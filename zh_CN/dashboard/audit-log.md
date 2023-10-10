@@ -42,7 +42,7 @@ log.audit {
 - **审计日志文件**：填写审计日志文件路径和名称。默认值为 `${EMQX_LOG_DIR}/audit.log`，其中 `${EMQX_LOG_DIR}` 是一个变量，默认为`./log`，意味着最终默认保存在 `./log/audit.log.1`  文件中。
 - **最大日志文件数**：轮换的最大日志文件数。默认值为`10`。
 - **日志文件轮换大小**：设置日志文件大小，达到设定的值时日志文件将进行轮换。如果禁用，则日志文件将无限增长。可在文本框输入设定的值，在下拉列表中选择单位，可选值为：`MB`, `GB`, `KB`。默认值为 `50MB`。
-- **时间偏移量**：定义日志中时间戳的格式。比如："-02:00" 或者 "+00:00"，默认情况下为 `system`。
+- **时间偏移量**：定义日志中时间戳的格式。比如："-02:00" 或者 "+00:00"，默认为 `system`。
 
 ## 审计日志格式
 
@@ -63,9 +63,9 @@ log.audit {
 | time         | 整数 | 时间戳，表示日志记录的时间，以微秒为单位。                   |
 | level        | 字符 | 日志级别。                                                   |
 | msg          | 字符 | 操作描述。                                                   |
-| from         | 字符 | 请求来源，`dashboard`、`rest`、`cli`、`erlang_shell` 分别表示来自 Dashboard、REST API、 CLI 以及 Erlang Shell 的操作。 |
+| from         | 字符 | 请求来源，`dashboard`、`rest_api`、`cli`、`erlang_console` 分别表示来自 Dashboard、REST API、 CLI 以及 Erlang Shell 的操作。 |
 | node         | 字符 | 节点名称，表示执行操作的节点或服务器。                       |
-| username     | 字符 | 执行操作的用户，当来源为 `from_api` 时存在该字段。           |
+| username     | 字符 | 执行操作的用户，当来源为 `rest_api` 时存在该字段。           |
 | method       | 字符 | HTTP 请求方法，`post`, `put`, `delete` 对应创建、更新、删除操作。 |
 | operate_id   | 字符 | 请求的 REST API 路径，请参考 [REST API](../admin/api.md)。   |
 | bindings     | 对象 | 具体的请求对象信息，对应 `operate_id` 中的占位符。           |
