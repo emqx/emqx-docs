@@ -1,6 +1,6 @@
 # Rule SQL Reference
 
-EMQX uses an SQL-based syntax in its rules for data extraction, filtering, enrichment, and transformation. This SQL-like syntax has two types of statements: `SELECT` and `FOREACH`. 
+EMQX uses a SQL-based syntax in its rules for data extraction, filtering, enrichment, and transformation. This SQL-like syntax has two types of statements: `SELECT` and `FOREACH`. 
 
 | Statement | Description                                                  |
 | --------- | ------------------------------------------------------------ |
