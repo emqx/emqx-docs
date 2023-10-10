@@ -1,6 +1,8 @@
+{% emqxee %}
+
 # EMQX Enterprise Rolling Upgrade
 
-When in a cluster, EMQX nodes can be upgraded one at a time without any downtime. This process is referred to as a rolling upgrade. To achieve smooth client session migration, you can make use of the cluster rebalancing feature to evacuate clients from a node before upgrading it. Find more information about cluster rebalancing [here](./cluster/rebalancing.md).
+When in a cluster, EMQX nodes can be upgraded one at a time without any downtime. This process is referred to as a rolling upgrade. To achieve smooth client session migration, you can make use of the cluster rebalancing feature to evacuate clients from a node before upgrading it. Find more information about cluster rebalancing [here](../deploy/cluster/rebalancing.md).
 
 {% endemqxee %}
 
