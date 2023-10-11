@@ -21,22 +21,22 @@
   collapsed: true
   children:
     - title_en: What's New
-      title_zh: 全新功能
+      title_cn: 全新功能
       path: getting-started/new-features
     - title_en: Get Started
-      title_zh: 快速开始
+      title_cn: 快速开始
       path: getting-started/getting-started
     - title_en: Operating Limitations
-      title_zh: 使用限制
+      title_cn: 使用限制
       path: getting-started/restrictions
     - title_en: FAQ
-      title_zh: 常见问题解答
+      title_cn: 常见问题解答
       path: faq/faq
     - title_en: Technical Support
-      title_zh: 技术支持
+      title_cn: 技术支持
       path: support/technical-support
     - title_en: Product Roadmap
-      title_zh: 产品路线图
+      title_cn: 产品路线图
       path: getting-started/roadmap
 
 - title_en: Installation and Migration
@@ -550,7 +550,7 @@
                 - access-control/authn/postgresql
                 - access-control/authn/redis
                 - title_en: LDAP
-                  title_zh: LDAP
+                  title_cn: LDAP
                   path: access-control/authn/ldap
                   edition: ee
                 - access-control/authn/http
@@ -568,7 +568,7 @@
             - access-control/authz/postgresql
             - access-control/authz/redis
             - title_en: LDAP
-              title_zh: LDAP
+              title_cn: LDAP
               path: access-control/authz/ldap
               edition: ee
             - access-control/authz/http
