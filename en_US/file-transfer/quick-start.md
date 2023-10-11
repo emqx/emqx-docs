@@ -180,7 +180,7 @@ Before you start, you need to ensure that `s3cmd` is installed and configured co
 
 7. Download the file directly from the S3 storage through the provided URI by using the following command.
 
-   ::: tip:
+   ::: tip
 
    In the S3 Exporter scenario, the download link provided does not lead to EMQX but directly to the S3 storage, so the file is not stored locally on EMQX.
 
