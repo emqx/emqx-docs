@@ -3,7 +3,7 @@ titleTemplate: false
 ---
 
 {% emqxee %}
-# EMQX Enterprise Docs
+# EMQX Enterprise Documentation
 {% endemqxee %}
 
 {% emqxce %}
