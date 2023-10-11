@@ -83,7 +83,9 @@
     - title_en: Upgrade Guide
       title_cn: 升级指南
       children:
-        - deploy/rolling-upgrades
+        - title_en: Rolling Upgrade
+          title_cn: 滚动升级
+          path: deploy/rolling-upgrades
         - deploy/upgrade-cluster
         - title_en: Upgrade EMQX on Kubernetes
           title_cn: Upgrade EMQX on Kubernetes

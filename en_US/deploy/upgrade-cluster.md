@@ -1,10 +1,4 @@
-{% emqxee %}
-# Upgrade EMQX Enterprise Cluster from 4.4 to 5.1
-{% endemqxee %}
-
-{% emqxce %}
 # Upgrade EMQX Cluster from 4.4 to 5.1
-{% endemqxce %}
 
 
 This page provides instructions on how to upgrade your EMQX cluster to the latest version.
