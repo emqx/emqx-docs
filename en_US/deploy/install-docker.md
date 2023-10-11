@@ -10,7 +10,6 @@ description: This page introduces how to use the official Docker image to instal
 # Install EMQX Using Docker
 {% endemqxce %}
 
-
 This page introduces how to use the official Docker image to install and run EMQX, and how to use Docker Compose to build an EMQX cluster.
 
 ## Use Docker to Run A Single EMQX Node
