@@ -12,9 +12,9 @@
 
   For example, if the key of the message consumed by Kafka is "a", and the configured MQTT topic is "topic/${key}", then when the message is forwarded, the MQTT topic will be replaced with "topic/a".
 
-- Now the "Message Republish" action supports adding MQTT properties and user properties.
+- Now the "Message Republish" action supports adding "MQTT Properties" and "User Properties".
 
-  The "Message Republish" action supports two new fields: "MQTT Properties" and "User Property Value", both of which are in the format of key-value pairs, and both the key and value support placeholders.
+  The "Message Republish" action supports two new fields: "MQTT Properties" and "User Properties", both of which are in the format of key-value pairs, and both the key and value support placeholders.
 
 ### Bug fixes
 
