@@ -20,10 +20,10 @@ This page provides a comprehensive introduction to the data integration between 
     - [Set Up a Kafka Server](#set-up-a-kafka-server)
     - [Create Kafka Topics](#create-kafka-topics)
   - [Kafka Producer Data Bridge](#kafka-producer-data-bridge)
-    - [Create Rule and Data Bridge for Kafka Producer](#create-rule-and-data-bridge-for-kafka-producer)
+    - [Create Rule and Data Bridge to Kafka Producer](#create-rule-and-data-bridge-to-kafka-producer)
     - [Test Kafka Producer Data Bridge and Rule](#test-kafka-producer-data-bridge-and-rule)
   - [Kafka Consumer Data Bridge](#kafka-consumer-data-bridge)
-    - [Create Data Bridge for Kafka Consumer](#create-data-bridge-for-kafka-consumer)
+    - [Create Data Bridge to Kafka Consumer](#create-data-bridge-to-kafka-consumer)
     - [Create Rule for Consumer Data Bridge (Optional)](#create-rule-for-consumer-data-bridge-optional)
     - [Test Kafka Consumer Data Bridge and Rule](#test-kafka-consumer-data-bridge-and-rule)
   - [Advanced Configurations](#advanced-configurations)
@@ -31,7 +31,7 @@ This page provides a comprehensive introduction to the data integration between 
 
 ## How It Works
 
-Apache Kafka data integration is an out-of-the-box feature in EMQX designed to bridge the gap between MQTT-based IoT data and Kafka's powerful data processing capabilities. With a built-in [rule engine](https://docs.emqx.com/en/enterprise/v5.1/data-integration/rules.html) component, the integration simplifies the process of streaming and processing data between the two platforms, eliminating the need for complex coding. 
+Apache Kafka data integration is an out-of-the box feature in EMQX designed to bridge the gap between MQTT-based IoT data and Kafka's powerful data processing capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of streaming and processing data between the two platforms, eliminating the need for complex coding. 
 
 The diagram below illustrates a typical architecture of data integration between EMQX and Kafka used in automotive IoT.
 
