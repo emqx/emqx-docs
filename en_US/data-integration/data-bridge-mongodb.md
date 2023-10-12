@@ -10,7 +10,7 @@ MongoDB, a leading NoSQL database, is renowned for its flexibility in schema des
 
 ## How It Works
 
-MongoDB data integration is an out-of-the-box feature in EMQX designed to bridge the gap between MQTT-based IoT data and MongoDB's powerful data storage capabilities. With a built-in [rule engine](https://docs.emqx.com/en/enterprise/v5.1/data-integration/rules.html) component, the integration simplifies the process of ingesting data from EMQX to MongoDB for storage and management, eliminating the need for complex coding.
+MongoDB data integration is an out-of-the-box feature in EMQX designed to bridge the gap between MQTT-based IoT data and MongoDB's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to MongoDB for storage and management, eliminating the need for complex coding.
 
 The diagram below illustrates a typical architecture of data integration between EMQX and MongoDB. 
 
@@ -284,7 +284,7 @@ To test if the MongoDB data bridge and rule work as you expected, you can use th
 
 ## Advanced Configurations
 
-This section delves deeper into the advanced configuration options available for the EMQX MongoDB Bridge. When configuring the data bridge, navigate to **Advanced Settings** to tailor the following parameters to meet your specific needs.
+This section delves deeper into the advanced configuration options available for the EMQX MongoDB data bridge. When configuring the data bridge, navigate to **Advanced Settings** to tailor the following parameters to meet your specific needs.
 
 | **Fields**                   | **Descriptions**                                                                                                                                                                                                                                                                                                                                                            | **Recommended Value** |
 |------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|

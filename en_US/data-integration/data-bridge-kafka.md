@@ -31,7 +31,7 @@ This page provides a comprehensive introduction to the data integration between 
 
 ## How It Works
 
-Apache Kafka data integration is an out-of-the box feature in EMQX designed to bridge the gap between MQTT-based IoT data and Kafka's powerful data processing capabilities. With a built-in [rule engine](https://docs.emqx.com/en/enterprise/v5.1/data-integration/rules.html) component, the integration simplifies the process of streaming and processing data between the two platforms, eliminating the need for complex coding. 
+Apache Kafka data integration is an out-of-the box feature in EMQX designed to bridge the gap between MQTT-based IoT data and Kafka's powerful data processing capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of streaming and processing data between the two platforms, eliminating the need for complex coding. 
 
 The diagram below illustrates a typical architecture of data integration between EMQX and Kafka used in automotive IoT.
 
@@ -108,7 +108,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 This section provides instructions on how to create a rule and data bridge to forward MQTT data from EMQX to Kafka and how to test the rule and producer data bridge.
 
-### Create Rule and Data Bridge for Kafka Producer
+### Create Rule and Data Bridge to Kafka Producer
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through the configured Kafka data bridge to produce data into the Kafka `testtopic-in` topic. 
 
@@ -183,11 +183,11 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Kafka" }'
 
 ## Kafka Consumer Data Bridge
 
-This section provides instructions on how to create a data bridge to receive data from Kafka and optionally create a rule to further process the data and re how to test the rule and producer data bridge.
+This section provides instructions on how to create a data bridge to receive data from Kafka and optionally create a rule to further process the data and how to test the rule and consumer data bridge.
 
-### Create Data Bridge for Kafka Consumer
+### Create Data Bridge to Kafka Consumer
 
-This section demonstrates how to create a data bridge to receive data from Kafka. Through the data bridge, messages of the Kafka topic `testtopic-out` will be forwarded to a MQTT topic `t/1` in EMQX.
+This section demonstrates how to create a data bridge to receive data from Kafka. Through the data bridge, messages of the Kafka topic `testtopic-out` will be forwarded to an MQTT topic `t/1` in EMQX.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
@@ -350,6 +350,10 @@ EMQX provides bunches of learning resources on the data integration with Apache 
 - [Bridging MQTT Data to Kafka | EMQX Rule Engine Series](https://www.emqx.com/en/blog/emqx-rule-engine-series-bridge-data-to-message-queue-kafka) 
 - [MQTT Performance Benchmark Testing: EMQX-Kafka Integration](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-kafka-integration) 
 - [EMQX Enterprise + Apache Kafka Build a high-performance IoT message processing backend](https://www.emqx.com/en/blog/emqx-enterprise-mqtt-broker-apache-kafka-build-high-performance-iot-message-processing-backend) 
+
+**Benchmark Report**:
+
+- [EMQX Enterprise Performance Benchmark Testing: Kafka Integration](https://www.emqx.com/en/resources/emqx-enterprise-performance-benchmark-testing-kafka-integration)
 
 **Videos:**
 
