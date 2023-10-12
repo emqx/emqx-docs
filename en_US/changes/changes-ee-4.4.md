@@ -10,17 +10,16 @@
 
 - Now the MQTT topic field in the Kafka consumer group supports templates with placeholders.
 
-  For example, if the key of the message consumed by Kafka is "a", and the configured MQTT topic is "topic/${key}", then when the message is forwarded, the MQTT topic will be replaced with "topic/a".
+  For example, if the key of the message consumed by Kafka is "a", and the configured MQTT topic is "topic/${key}", then the MQTT topic will be replaced with "topic/a" when the message is forwarded.
 
-- Now the "Message Republish" action supports adding "MQTT Properties" and "User Properties".
+- Now the "Message Republish" action supports two new fields: "MQTT Properties" and "User Properties". Both of the fields are in the format of key-value pairs, and both the key and value support placeholders.
 
-  The "Message Republish" action supports two new fields: "MQTT Properties" and "User Properties", both of which are in the format of key-value pairs, and both the key and value support placeholders.
 
 ### Bug fixes
 
 - Fixed the issue that the Kafka action cannot send numeric values as Kafka Headers.
 
-  Prior to this fix, when the "Kafka Headers value encode mode" is set to "NONE", if the "Kafka Headers" field contains a JSON object with numeric types (such as `{"a": 1, "b": "str"}`), the numeric values (`"a":1`) will be ignored and not sent to Kafka. After the fix, the numeric types in JSON will be converted to strings before being sent to Kafka.
+  Prior to this fix, when the "Kafka Headers value encode mode" was set to "NONE", if the "Kafka Headers" field contains a JSON object with numeric types (such as `{"a": 1, "b": "str"}`), the numeric values (`"a":1`) would be ignored and not sent to Kafka. After the fix, the numeric types in JSON will be converted to strings before being sent to Kafka.
 
 ## e4.4.20
 
