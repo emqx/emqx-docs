@@ -1,4 +1,4 @@
-# Docker 部署指南
+# Docker
 
 本页将指导您使用官方 Docker 镜像快速安装和运行 EMQX，并使用 Docker Compose 实现集群搭建。
 

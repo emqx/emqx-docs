@@ -1,4 +1,4 @@
-name: Deploy Docs
+name: Deploy EMQX Docs
 
 concurrency: 
   group: ${{ github.ref }}
@@ -8,7 +8,6 @@ on:
   push:
     tags:
       - v*
-      - e*
 
 jobs:
   prepare:

@@ -1,4 +1,9 @@
-# Product Roadmap
+---
+title: EMQX Product Roadmap
+description: Dive into the roadmap of EMQX and stay updated with its latest features and improvements for a seamless IoT platform experience.
+---
+
+# EMQX Product Roadmap
 
 ## 2023 Roadmap
 

@@ -20,23 +20,45 @@
   path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
   collapsed: true
   children:
-    - getting-started/new-features
-    - getting-started/getting-started
-    - getting-started/restrictions
-    - faq/faq
-    - support/technical-support
-    - getting-started/roadmap
+    - title_en: What's New
+      title_cn: 全新功能
+      path: getting-started/new-features
+    - title_en: Get Started
+      title_cn: 快速开始
+      path: getting-started/getting-started
+    - title_en: Operating Limitations
+      title_cn: 使用限制
+      path: getting-started/restrictions
+    - title_en: FAQ
+      title_cn: 常见问题解答
+      path: faq/faq
+    - title_en: Technical Support
+      title_cn: 技术支持
+      path: support/technical-support
+    - title_en: Product Roadmap
+      title_cn: 产品路线图
+      path: getting-started/roadmap
 
 - title_en: Installation and Migration
   title_cn: 安装部署和迁移
   path: deploy/install
   collapsed: true
   children:
-    - deploy/install-docker
-    - deploy/install-debian
-    - deploy/install-ubuntu
-    - deploy/install-rhel
-    - deploy/install-macOS
+    - title_en: Deploy
+      title_cn: Docker
+      path: deploy/install-docker
+    - title_en: Debian
+      title_cn: Debian
+      path: deploy/install-debian
+    - title_en: Ubuntu
+      title_cn: Ubuntu
+      path: deploy/install-ubuntu
+    - title_en: CentOS/RHEL
+      title_cn: CentOS/RHEL
+      path: deploy/install-rhel
+    - title_en: macOS
+      title_cn: macOS
+      path: deploy/install-macOS
     - title_en: Kubernetes
       title_cn: Kubernetes
       lang: en
@@ -61,7 +83,9 @@
     - title_en: Upgrade Guide
       title_cn: 升级指南
       children:
-        - deploy/rolling-upgrades
+        - title_en: Rolling Upgrade
+          title_cn: 滚动升级
+          path: deploy/rolling-upgrades
         - deploy/upgrade-cluster
         - title_en: Upgrade EMQX on Kubernetes
           title_cn: Upgrade EMQX on Kubernetes
@@ -131,42 +155,10 @@
       title_cn: 认证与鉴权
       collapsed: true
       path: mqtt/emqx-access-control
-      children:
-        - title_en: Username and Password Authentication
-          title_cn: Username and Password Authentication
-          path: https://auth0.com/blog/username-password-authentication/
-        - title_en: Why Need to Add Salt to Hashing?
-          title_cn: Why Need to Add Salt to Hashing?
-          path: https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/
-        - title_en: What is JWT?
-          title_cn: What is JWT?
-          path: https://jwt.io/introduction
     - title_en: TLS
       title_cn: TLS
       collapsed: true
       path: mqtt/emqx-tls
-      children:
-        - title_en: What is Mutual Authentication?
-          title_cn: What is Mutual Authentication?
-          path: https://en.wikipedia.org/wiki/Mutual_authentication
-        - title_en: What is SNI?
-          title_cn: What is SNI?
-          path: https://aboutssl.org/what-is-sni-how-does-it-works/
-        - title_en: TLS 1.2 vs TLS 1.3
-          title_cn: TLS 1.2 vs TLS 1.3
-          path: https://venafi.com/blog/why-tls-13-radically-different-tls-12/
-        - title_en: What is Perfect Forward Secrecy?
-          title_cn: What is Perfect Forward Secrecy?
-          path: https://www.sectigo.com/resource-library/perfect-forward-secrecy
-        - title_en: What is Cipher Suites?
-          title_cn: What is Cipher Suites?
-          path: https://www.keyfactor.com/blog/cipher-suites-explained/
-        - title_en: How to Choose Your Cipher Suite?
-          title_cn: How to Choose Your Cipher Suite?
-          path: https://technology.amis.nl/security-2/ssltls-choose-cipher-suite/
-        - title_en: What is PSK?
-          title_cn: What is PSK?
-          path: https://en.wikipedia.org/wiki/TLS-PSK
     - title_en: Design and Implementation
       title_cn: 设计与实现
       path: design/overview
@@ -203,14 +195,8 @@
       title_cn: 集群负载均衡
       path: deploy/cluster/lb
       children:
-        - title_en: 用 Nginx 负载均衡 EMQX 集群
-          title_cn: 用 Nginx 负载均衡 EMQX 集群
-          path: deploy/cluster/lb-nginx
-          lang: cn
-        - title_en: 用 HAProxy 负载均衡 EMQX 集群
-          title_cn: 用 HAProxy 负载均衡 EMQX 集群
-          path: deploy/cluster/lb-haproxy
-          lang: cn
+        - deploy/cluster/lb-nginx
+        - deploy/cluster/lb-haproxy
     - title_en: Node Evacuation and Cluster Load Rebalancing
       title_cn: 节点疏散与集群负载重平衡
       edition: ee
@@ -257,81 +243,81 @@
     - title_en: Webhook
       title_cn: Webhook
       path: data-integration/webhook
-    - title_en: HTTP Server
-      title_cn: HTTP Server
-      path: data-integration/data-bridge-webhook
-    - title_en: MQTT
-      title_cn: MQTT
-      path: data-integration/data-bridge-mqtt
     - title_en: Apache Kafka
       title_cn: Apache Kafka
       path: data-integration/data-bridge-kafka
-    - title_en: Apache Pulsar
-      title_cn: Apache Pulsar
-      path: data-integration/data-bridge-pulsar
-    - title_en: InfluxDB
-      title_cn: InfluxDB
-      path: data-integration/data-bridge-influxdb
-    - title_en: TimescaleDB
-      title_cn: TimescaleDB
-      path: data-integration/data-bridge-timescale
-    - title_en: MySQL
-      title_cn: MySQL
-      path: data-integration/data-bridge-mysql
-    - title_en: Redis
-      title_cn: Redis
-      path: data-integration/data-bridge-redis
-    - title_en: GCP PubSub
-      title_cn: GCP PubSub
-      path: data-integration/data-bridge-gcp-pubsub
-    - title_en: MongoDB
-      title_cn: MongoDB
-      path: data-integration/data-bridge-mongodb
-    - title_en: PostgreSQL
-      title_cn: PostgreSQL
-      path: data-integration/data-bridge-pgsql
-    - title_en: DynamoDB
-      title_cn: DynamoDB
-      path: data-integration/data-bridge-dynamo
-    - title_en: ClickHouse
-      title_cn: ClickHouse
-      path: data-integration/data-bridge-clickhouse
-    - title_en: Cassandra
-      title_cn: Cassandra
-      path: data-integration/data-bridge-cassa
-    - title_en: TDengine
-      title_cn: TDengine
-      path: data-integration/data-bridge-tdengine
-    - title_en: RocketMQ
-      title_cn: RocketMQ
-      path: data-integration/data-bridge-rocketmq
-    - title_en: Oracle Database
-      title_cn: Oracle Database
-      path: data-integration/data-bridge-oracle
-    - title_en: Microsoft SQL Server
-      title_cn: Microsoft SQL Server
-      path: data-integration/data-bridge-sqlserver
     - title_en: Apache IoTDB
       title_cn: Apache IoTDB
       path: data-integration/data-bridge-iotdb
-    - title_en: OpenTSDB
-      title_cn: OpenTSDB
-      path: data-integration/data-bridge-opents
-    - title_en: RabbitMQ
-      title_cn: RabbitMQ
-      path: data-integration/data-bridge-rabbitmq
-    - title_en: Azure Event Hubs
-      title_cn: Azure Event Hubs
-      path: data-integration/data-bridge-azure-event-hub
+    - title_en: Apache Pulsar
+      title_cn: Apache Pulsar
+      path: data-integration/data-bridge-pulsar
     - title_en: AWS Kinesis
       title_cn: AWS Kinesis
       path: data-integration/data-bridge-kinesis
-    - title_en: HStreamDB
-      title_cn: HStreamDB
-      path: data-integration/data-bridge-hstreamdb
+    - title_en: Azure Event Hubs
+      title_cn: Azure Event Hubs
+      path: data-integration/data-bridge-azure-event-hub   
+    - title_en: Cassandra
+      title_cn: Cassandra
+      path: data-integration/data-bridge-cassa 
+    - title_en: ClickHouse
+      title_cn: ClickHouse
+      path: data-integration/data-bridge-clickhouse
+    - title_en: DynamoDB
+      title_cn: DynamoDB
+      path: data-integration/data-bridge-dynamo
+    - title_en: GCP PubSub
+      title_cn: GCP PubSub
+      path: data-integration/data-bridge-gcp-pubsub
     - title_en: GreptimeDB
       title_cn: GreptimeDB
       path: data-integration/data-bridge-greptimedb
+    - title_en: HStreamDB
+      title_cn: HStreamDB
+      path: data-integration/data-bridge-hstreamdb   
+    - title_en: HTTP Server
+      title_cn: HTTP Server
+      path: data-integration/data-bridge-webhook
+    - title_en: InfluxDB
+      title_cn: InfluxDB
+      path: data-integration/data-bridge-influxdb
+    - title_en: Microsoft SQL Server
+      title_cn: Microsoft SQL Server
+      path: data-integration/data-bridge-sqlserver
+    - title_en: MongoDB
+      title_cn: MongoDB
+      path: data-integration/data-bridge-mongodb
+    - title_en: MQTT
+      title_cn: MQTT
+      path: data-integration/data-bridge-mqtt
+    - title_en: MySQL
+      title_cn: MySQL
+      path: data-integration/data-bridge-mysql
+    - title_en: OpenTSDB
+      title_cn: OpenTSDB
+      path: data-integration/data-bridge-opents
+    - title_en: Oracle Database
+      title_cn: Oracle Database
+      path: data-integration/data-bridge-oracle
+    - title_en: PostgreSQL
+      title_cn: PostgreSQL
+      path: data-integration/data-bridge-pgsql
+    - title_en: RabbitMQ
+      title_cn: RabbitMQ
+      path: data-integration/data-bridge-rabbitmq
+    - title_en: Redis
+      title_cn: Redis
+      path: data-integration/data-bridge-redis
+    - title_en: RocketMQ
+      title_cn: RocketMQ
+      path: data-integration/data-bridge-rocketmq
+    - title_en: TDengine
+      title_cn: TDengine
+      path: data-integration/data-bridge-tdengine
+    - title_en: TimescaleDB
+      title_cn: TimescaleDB
+      path: data-integration/data-bridge-timescale
 
     # TODO
     # - title_en: Examples and Tutorials
@@ -420,22 +406,22 @@
           title_cn: API 文档
           lang: en
           edition: ce
-          path: https://www.emqx.io/docs/en/v5.2/admin/api-docs.html
+          path: https://www.emqx.io/docs/en/v5.3/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: cn
           edition: ce
-          path: https://www.emqx.io/docs/zh/v5.2/admin/api-docs.html
+          path: https://www.emqx.io/docs/zh/v5.3/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: en
           edition: ee
-          path: https://docs.emqx.com/en/enterprise/v5.2/admin/api-docs.html
+          path: https://docs.emqx.com/en/enterprise/v5.3/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: cn
           edition: ee
-          path: https://docs.emqx.com/zh/enterprise/v5.2/admin/api-docs.html
+          path: https://docs.emqx.com/zh/enterprise/v5.3/admin/api-docs.html
     - title_en: EMQX Dashboard
       title_cn: EMQX Dashboard
       path: dashboard/introduction
@@ -468,6 +454,14 @@
         - dashboard/extensions
         - dashboard/diagnose
         - dashboard/system
+    - title_en: Single Sign-On (SSO)
+      title_cn: 单点登录 (SSO)
+      path: dashboard/sso
+      collapsed: true
+      children:
+        - dashboard/sso-ldap
+        - dashboard/sso-saml
+    - dashboard/audit-log
     - title_en: Rate Limit
       title_cn: 速率限制
       path: rate-limit/rate-limit
@@ -526,7 +520,7 @@
                 - access-control/authn/postgresql
                 - access-control/authn/redis
                 - title_en: LDAP
-                  title_zh: LDAP
+                  title_cn: LDAP
                   path: access-control/authn/ldap
                   edition: ee
                 - access-control/authn/http
@@ -544,7 +538,7 @@
             - access-control/authz/postgresql
             - access-control/authz/redis
             - title_en: LDAP
-              title_zh: LDAP
+              title_cn: LDAP
               path: access-control/authz/ldap
               edition: ee
             - access-control/authz/http
@@ -786,11 +780,7 @@
     - title_en: Releases
       title_cn: 版本发布
       edition: ee
-      path: changes/changes-ee-5.2
-    - title_en: Releases
-      title_cn: 版本发布
-      edition: ce
-      patch: changes/changes-ce-5.2
+      path: changes/changes-ee-5.3
     - title_en: 从 V4 升级到 V5 的不兼容更改
       title_cn: 从 V4 升级到 V5 的不兼容更改
       lang: cn
@@ -812,3 +802,7 @@
           title_cn: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
           lang: en
           path: changes/gateway-4.4-to-5.1-incompatibility
+    - title_en: Known Issues
+      title_cn: 已知问题
+      edition: ee
+      patch: changes/known-issues-5.3

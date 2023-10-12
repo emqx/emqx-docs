@@ -1,4 +1,9 @@
-# Technical Support
+---
+title: EMQX Technical Support
+description: Find expert technical support for EMQX Enterprise, offering robust solutions and professional assistance to optimize your IoT middleware platform.
+---
+
+# EMQX Technical Support
 
 EMQ is the world's leading software provider of open-source IoT data infrastructure. We are dedicated to empowering future-proof IoT applications through one-stop, cloud-native products that connect, move, process, and analyze real-time IoT data—from edge to cloud to multi-cloud.
 

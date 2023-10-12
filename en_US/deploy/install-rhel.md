@@ -1,8 +1,15 @@
-# CentOS/RHEL
+{% emqxee %}
+# Install EMQX Enterprise on CentOS/RHEL
+{% endemqxee %}
+
+{% emqxce %}
+# Install EMQX on CentOS/RHEL
+{% endemqxce %}
+
 
 This page guides you on installing and starting EMQX on CentOS/RHEL system.
 
-Supported versions: 
+Supported versions:
 
 - Amazon Linux 2023
 - Amazon Linux 2

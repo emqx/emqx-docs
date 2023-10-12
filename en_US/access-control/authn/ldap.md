@@ -24,7 +24,7 @@ objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
 	SUP top
 	STRUCTURAL
 	MAY ( isSuperuser )
-    MUST ( userPassword ) )
+    MUST ( uid $ userPassword ) )
 
 ```
 The given schema example defines an attribute named `isSuperuser` to indicate whether a user is a superuser. It also defines an object class named `mqttUser` which is used to represent the user and the object class must include the `userPassword` attribute.
@@ -57,7 +57,6 @@ dn:uid=mqttuser0001,ou=testdevice,dc=emqx,dc=io
 objectClass: top
 objectClass: mqttUser
 uid: mqttuser0001
-mqttAccountName: user1
 userPassword:: e1NIQX1tbGIzZmF0NDBNS0JUWFVWWndDS21MNzNSLzA9
 
 ## create user=mqttuser0002
@@ -68,7 +67,6 @@ dn:uid=mqttuser0002,ou=testdevice,dc=emqx,dc=io
 objectClass: top
 objectClass: mqttUser
 uid: mqttuser0002
-mqttAccountName: user2
 userPassword:: e1NTSEF9bjlYZHRvRzRRL1RRM1RRRjRZK2toSmJNQkg0cVhqNE0=
 
 ## create a superuser mqttuser0003
@@ -96,14 +94,13 @@ You can determine how to store LDAP credentials and access them based on your bu
 include         /usr/local/etc/openldap/schema/core.schema
 include         /usr/local/etc/openldap/schema/cosine.schema
 include         /usr/local/etc/openldap/schema/inetorgperson.schema
-include         /usr/local/etc/openldap/schema/ppolicy.schema
 include         /usr/local/etc/openldap/schema/emqx.schema
 
 TLSCACertificateFile  /usr/local/etc/openldap/cacert.pem
 TLSCertificateFile    /usr/local/etc/openldap/cert.pem
 TLSCertificateKeyFile /usr/local/etc/openldap/key.pem
 
-database bdb
+database mdb
 suffix "dc=emqx,dc=io"
 rootdn "cn=root,dc=emqx,dc=io"
 rootpw {SSHA}eoF7NhNrejVYYyGHqnt+MdKNBh4r1w3W

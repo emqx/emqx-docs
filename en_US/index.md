@@ -1,4 +1,16 @@
-# Introduction
+---
+titleTemplate: false
+---
+
+{% emqxee %}
+# EMQX Enterprise Documentation
+{% endemqxee %}
+
+{% emqxce %}
+# EMQX Documentation
+{% endemqxce %}
+
+
 
 {% emqxce %}
 
@@ -30,11 +42,11 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 
 EMQX enables scaling up to **100 million** concurrent MQTT connections in a single cluster, making it one of the most scalable MQTT brokers available.
 
-**High Performance**
+[**High Performance**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput)
 
 EMQX is capable of processing and handling **millions** of MQTT messages per second within a single broker.
 
-**Low Latency**
+[**Low Latency**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time)
 
 EMQX offers almost real-time message delivery, with a sub-millisecond latency guarantee, ensuring that messages are received almost instantly.
 
@@ -42,7 +54,7 @@ EMQX offers almost real-time message delivery, with a sub-millisecond latency gu
 
 EMQX is **fully** compliant with both **MQTT 5.0 and 3.x** standards, providing better scalability, security, and reliability.
 
-[**High Availability**](https://www.emqx.io/docs/en/v5.0/deploy/cluster/mria-introduction.html)
+[**High Availability**](./deploy/cluster/mria-introduction.md)
 
 EMQX enables high availability and horizontal scalability through a masterless distributed architecture, ensuring reliable and scalable performance.
 
@@ -56,13 +68,13 @@ EMQX can be easily deployed on-premises or in public clouds using **Kubernetes O
 
 {% emqxee %}
 
-- **[Massive Scale](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections)**: Scale horizontally to 20+ nodes in a single cluster for 100M MQTT connections.
-- **Business-Critical Reliability**: Up to 99.99% SLA. Ensure no data loss with built-in RocksDB data persistence.
-- **Data Security**: End-to-end data encryption and fine-grained access control to protect your data.
-- **[Multiple protocols support](https://www.emqx.com/en/blog/iot-protocols-mqtt-coap-lwm2m)**: MQTT, QUIC, CoAP, Stomp, LwM2M, and more
-- **High Performance**: Ingest and process millions of MQTT messages efficiently per second per node.
-- **Low Latency**: Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
-- **Complete Observability**: Monitoring, alerting, and advanced end-to-end analysis with real-time MQTT tracing.
+- [**Massive Scale**](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections): Scale horizontally to 20+ nodes in a single cluster for 100M MQTT connections.
+- **Business-Critical Reliability**: Ensure no data loss with built-in RocksDB data persistence.
+- [**Data Security**](https://www.emqx.com/en/use-cases/mqtt-security): End-to-end data encryption and fine-grained access control to protect your data.
+- [**Multiple protocols support**](https://www.emqx.com/en/blog/iot-protocols-mqtt-coap-lwm2m): MQTT, QUIC, CoAP, Stomp, LwM2M, and more
+- [**High Performance**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput): Ingest and process millions of MQTT messages efficiently per second per node.
+- [**Low Latency**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time): Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
+- [**Complete Observability**](./dashboard/introduction.md): Monitoring, alerting, and advanced end-to-end analysis with real-time MQTT tracing.
 
 {% endemqxee %}
 

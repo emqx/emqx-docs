@@ -1,4 +1,4 @@
-# Will Message
+# MQTT Will Message
 
 EMQX implements the will message feature of MQTT. If a will message is set for a client, EMQX sends the message to relevant subscribers when the client is accidentally disconnected, so that the subscribers can be informed and update the client status.
 

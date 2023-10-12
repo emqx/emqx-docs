@@ -1237,6 +1237,41 @@
         },
         "type": "object"
       },
+      "emqx_enterprise_schema.log": {
+        "properties": {
+          "console": {
+            "$ref": "#/components/schemas/emqx_conf_schema.console_handler"
+          },
+          "file": {
+            "default": {
+              "level": "warning"
+            },
+            "description": "输出到文件的日志处理进程列表",
+            "oneOf": [
+              {
+                "properties": {
+                  "$handler_name": {
+                    "$ref": "#/components/schemas/emqx_conf_schema.log_file_handler"
+                  }
+                },
+                "type": "object"
+              },
+              {
+                "$ref": "#/components/schemas/emqx_conf_schema.log_file_handler"
+              }
+            ]
+          },
+          "audit": {
+            "default": {
+              "enable": true,
+              "level": "info"
+            },
+            "description": "Audit file-based log handler.",
+            "$ref": "#/components/schemas/emqx_enterprise_schema.log_audit_handler"
+          }
+        },
+        "type": "object"
+      },
       "authn-hash.simple": {
         "required": [
           "name"
@@ -1485,6 +1520,31 @@
             "default": "10s",
             "description": "The interval of sending metrics to Open Telemetry Endpoint",
             "example": "32s",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_dashboard_sso_ldap.login": {
+        "required": [
+          "backend"
+        ],
+        "properties": {
+          "backend": {
+            "description": "Backend type.",
+            "enum": [
+              "ldap"
+            ],
+            "type": "string"
+          },
+          "username": {
+            "example": "admin",
+            "maxLength": 100,
+            "type": "string"
+          },
+          "password": {
+            "example": "public",
+            "maxLength": 100,
             "type": "string"
           }
         },
@@ -2619,6 +2679,9 @@
                   "$ref": "#/components/schemas/authn.gcp_device"
                 },
                 {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
                   "$ref": "#/components/schemas/authn.ldap"
                 },
                 {
@@ -3722,6 +3785,9 @@
                   "$ref": "#/components/schemas/authn.gcp_device"
                 },
                 {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
                   "$ref": "#/components/schemas/authn.ldap"
                 },
                 {
@@ -4415,7 +4481,7 @@
               "enable": false
             },
             "description": "启用 SSL 连接。",
-            "$ref": "#/components/schemas/broker.ssl_client_opts"
+            "$ref": "#/components/schemas/emqx_ldap.ssl"
           }
         },
         "type": "object"
@@ -6451,6 +6517,121 @@
         },
         "type": "object"
       },
+      "emqx_ldap.ssl": {
+        "properties": {
+          "cacertfile": {
+            "description": "受信任的PEM格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证TLS对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "type": "string"
+          },
+          "cacerts": {
+            "default": false,
+            "deprecated": true,
+            "type": "boolean"
+          },
+          "certfile": {
+            "description": "PEM格式证书链文件<br/><br/>此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，<br/>然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。<br/>根 CA 证书是可选的，如果想要添加，应加到文件到最末端。",
+            "type": "string"
+          },
+          "keyfile": {
+            "description": "PEM格式的私钥文件。",
+            "type": "string"
+          },
+          "verify": {
+            "default": "verify_none",
+            "description": "启用或禁用对等验证。",
+            "enum": [
+              "verify_peer",
+              "verify_none"
+            ],
+            "type": "string"
+          },
+          "reuse_sessions": {
+            "default": true,
+            "description": "启用 TLS 会话重用。",
+            "type": "boolean"
+          },
+          "depth": {
+            "default": 10,
+            "description": "在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。<br/>因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/><br/>如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/><br/>如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "password": {
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+            "example": "",
+            "format": "password",
+            "type": "string"
+          },
+          "versions": {
+            "default": [
+              "tlsv1.3",
+              "tlsv1.2"
+            ],
+            "description": "支持所有TLS/DTLS版本<br/><br/>注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>[\"tlsv1.2\",\"tlsv1.1\"]</code>。",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "ciphers": {
+            "default": [],
+            "description": "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如<br/><code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code>或<br/><code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>。<br/><br/><br/>密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。<br/>选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。<br/><br/>名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。<br/>EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/><br/>注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。<br/>不兼容的密码套件将被自动删除。<br/><br/>例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。<br/><br/><br/><br/>注：PSK 的 Ciphers 不支持 tlsv1.3<br/><br/>如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。<br/><br/><br/><br/>PSK 密码套件：<br/><code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,<br/>RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,<br/>RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,<br/>RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "secure_renegotiate": {
+            "default": true,
+            "description": "SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。<br/>RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。",
+            "type": "boolean"
+          },
+          "log_level": {
+            "default": "notice",
+            "description": "SSL 握手的日志级别。默认值是 'notice'，可以设置为 'debug' 用来调查 SSL 握手的问题。",
+            "enum": [
+              "emergency",
+              "alert",
+              "critical",
+              "error",
+              "warning",
+              "notice",
+              "info",
+              "debug",
+              "none",
+              "all"
+            ],
+            "type": "string"
+          },
+          "hibernate_after": {
+            "default": "5s",
+            "description": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+            "example": "12m",
+            "type": "string"
+          },
+          "enable": {
+            "default": false,
+            "description": "启用 TLS。",
+            "type": "boolean"
+          },
+          "server_name_indication": {
+            "description": "指定要在 TLS 服务器名称指示扩展中使用的主机名。<br/><br/>例如，当连接到 \"server.example.net\" 时，接受连接并执行 TLS 握手的真正服务器可能与 TLS 客户端最初连接到的主机不同，<br/>例如，当连接到 IP 地址时，或者当主机具有多个可解析的 DNS 记录时<br/><br/>如果未指定，它将默认为使用的主机名字符串<br/>建立连接，除非使用 IP 地址<br/><br/>然后，主机名也用于对等机的主机名验证证书<br/><br/>特殊值 <code>disable</code> 阻止发送服务器名称指示扩展，并禁用主机名验证检查。",
+            "example": "disable",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disable"
+                ],
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "type": "object"
+      },
       "bridge_kafka.auth_username_password": {
         "required": [
           "mechanism",
@@ -7227,33 +7408,6 @@
             },
             "description": "启用 SSL 连接。",
             "$ref": "#/components/schemas/broker.ssl_client_opts"
-          }
-        },
-        "type": "object"
-      },
-      "emqx_conf_schema.log": {
-        "properties": {
-          "console": {
-            "$ref": "#/components/schemas/emqx_conf_schema.console_handler"
-          },
-          "file": {
-            "default": {
-              "level": "warning"
-            },
-            "description": "输出到文件的日志处理进程列表",
-            "oneOf": [
-              {
-                "properties": {
-                  "$handler_name": {
-                    "$ref": "#/components/schemas/emqx_conf_schema.log_file_handler"
-                  }
-                },
-                "type": "object"
-              },
-              {
-                "$ref": "#/components/schemas/emqx_conf_schema.log_file_handler"
-              }
-            ]
           }
         },
         "type": "object"
@@ -8306,6 +8460,189 @@
         },
         "type": "object"
       },
+      "listeners.with_name_ws_required_bind": {
+        "required": [
+          "bind",
+          "name",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "description": "Listener type",
+            "enum": [
+              "ws"
+            ],
+            "type": "string"
+          },
+          "running": {
+            "description": "Listener status",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Listener name",
+            "type": "string"
+          },
+          "current_connections": {
+            "description": "Current connections",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "enable": {
+            "default": true,
+            "description": "启停监听器。",
+            "type": "boolean"
+          },
+          "bind": {
+            "default": 8083,
+            "description": "监听套接字的 IP 地址和端口。",
+            "example": "127.0.0.1:80",
+            "type": "string"
+          },
+          "acceptors": {
+            "default": 16,
+            "description": "监听器接收池的大小。",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_connections": {
+            "default": "infinity",
+            "description": "监听器允许的最大并发连接数。",
+            "oneOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "mountpoint": {
+            "default": "",
+            "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username",
+            "type": "string"
+          },
+          "enable_authn": {
+            "default": true,
+            "description": "配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。<br/>配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。<br/>配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名<br/>客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
+          },
+          "max_conn_rate": {
+            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "messages_rate": {
+            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "bytes_rate": {
+            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "100MB/s",
+            "type": "string"
+          },
+          "access_rules": {
+            "default": [
+              "allow all"
+            ],
+            "description": "此监听器的访问控制规则。",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "proxy_protocol": {
+            "default": false,
+            "description": "如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/><br/>详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
+            "type": "boolean"
+          },
+          "proxy_protocol_timeout": {
+            "default": "3s",
+            "description": "代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。",
+            "example": "12m",
+            "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "tcp_options": {
+            "$ref": "#/components/schemas/broker.tcp_opts"
+          },
+          "websocket": {
+            "$ref": "#/components/schemas/broker.ws_opts"
+          }
+        },
+        "type": "object"
+      },
       "bridge_gcp_pubsub.key_value_pair": {
         "required": [
           "key",
@@ -8800,6 +9137,189 @@
         },
         "type": "object"
       },
+      "listeners.with_name_ssl_required_bind": {
+        "required": [
+          "bind",
+          "name",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "description": "Listener type",
+            "enum": [
+              "ssl"
+            ],
+            "type": "string"
+          },
+          "running": {
+            "description": "Listener status",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Listener name",
+            "type": "string"
+          },
+          "current_connections": {
+            "description": "Current connections",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "enable": {
+            "default": true,
+            "description": "启停监听器。",
+            "type": "boolean"
+          },
+          "bind": {
+            "default": 8883,
+            "description": "监听套接字的 IP 地址和端口。",
+            "example": "127.0.0.1:80",
+            "type": "string"
+          },
+          "acceptors": {
+            "default": 16,
+            "description": "监听器接收池的大小。",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_connections": {
+            "default": "infinity",
+            "description": "监听器允许的最大并发连接数。",
+            "oneOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "mountpoint": {
+            "default": "",
+            "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username",
+            "type": "string"
+          },
+          "enable_authn": {
+            "default": true,
+            "description": "配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。<br/>配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。<br/>配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名<br/>客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
+          },
+          "max_conn_rate": {
+            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "messages_rate": {
+            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "bytes_rate": {
+            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "100MB/s",
+            "type": "string"
+          },
+          "access_rules": {
+            "default": [
+              "allow all"
+            ],
+            "description": "此监听器的访问控制规则。",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "proxy_protocol": {
+            "default": false,
+            "description": "如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/><br/>详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
+            "type": "boolean"
+          },
+          "proxy_protocol_timeout": {
+            "default": "3s",
+            "description": "代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。",
+            "example": "12m",
+            "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "tcp_options": {
+            "$ref": "#/components/schemas/broker.tcp_opts"
+          },
+          "ssl_options": {
+            "$ref": "#/components/schemas/broker.listener_ssl_opts"
+          }
+        },
+        "type": "object"
+      },
       "bridge_kinesis.post_producer": {
         "required": [
           "aws_access_key_id",
@@ -8872,6 +9392,92 @@
           },
           "partition_key": {
             "description": "The Amazon Kinesis Partition Key associated to published message. Placeholders in format of ${var} are supported.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "authn.ldap_bind": {
+        "required": [
+          "backend",
+          "base_dn",
+          "mechanism",
+          "server",
+          "username"
+        ],
+        "properties": {
+          "mechanism": {
+            "description": "认证机制。",
+            "enum": [
+              "password_based"
+            ],
+            "type": "string"
+          },
+          "backend": {
+            "description": "后端类型。",
+            "enum": [
+              "ldap_bind"
+            ],
+            "type": "string"
+          },
+          "query_timeout": {
+            "default": "5s",
+            "description": "Timeout for the LDAP query.",
+            "example": "32s",
+            "type": "string"
+          },
+          "enable": {
+            "default": true,
+            "description": "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+            "type": "boolean"
+          },
+          "server": {
+            "description": "The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The LDAP default port 389 is used if `[:Port]` is not specified.",
+            "type": "string"
+          },
+          "pool_size": {
+            "default": 8,
+            "description": "桥接远端服务时使用的连接池大小。",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "username": {
+            "description": "内部数据库的用户名。",
+            "type": "string"
+          },
+          "password": {
+            "description": "内部数据库密码。",
+            "format": "password",
+            "type": "string"
+          },
+          "base_dn": {
+            "description": "The name of the base object entry (or possibly the root) relative to<br/>which the Search is to be performed.",
+            "example": "uid=${username},ou=testdevice,dc=emqx,dc=io",
+            "type": "string"
+          },
+          "filter": {
+            "default": "(objectClass=mqttUser)",
+            "description": "The filter that defines the conditions that must be fulfilled in order<br/>for the Search to match a given entry.<br><br/>The syntax of the filter follows RFC 4515 and also supports placeholders.",
+            "example": "(& (objectClass=mqttUser) (uid=${username}))",
+            "type": "string"
+          },
+          "request_timeout": {
+            "default": "5s",
+            "description": "Sets the maximum time in milliseconds that is used for each individual request.",
+            "example": "32s",
+            "type": "string"
+          },
+          "ssl": {
+            "default": {
+              "enable": false
+            },
+            "description": "启用 SSL 连接。",
+            "$ref": "#/components/schemas/emqx_ldap.ssl"
+          },
+          "bind_password": {
+            "default": "${password}",
+            "description": "The template for password to bind.",
+            "example": "${password}",
             "type": "string"
           }
         },
@@ -9367,6 +9973,9 @@
               "oneOf": [
                 {
                   "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
                 },
                 {
                   "$ref": "#/components/schemas/authn.ldap"
@@ -10509,6 +11118,186 @@
         },
         "type": "object"
       },
+      "listeners.with_name_tcp_required_bind": {
+        "required": [
+          "bind",
+          "name",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "description": "Listener type",
+            "enum": [
+              "tcp"
+            ],
+            "type": "string"
+          },
+          "running": {
+            "description": "Listener status",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Listener name",
+            "type": "string"
+          },
+          "current_connections": {
+            "description": "Current connections",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "enable": {
+            "default": true,
+            "description": "启停监听器。",
+            "type": "boolean"
+          },
+          "bind": {
+            "default": 1883,
+            "description": "监听套接字的 IP 地址和端口。",
+            "example": "127.0.0.1:80",
+            "type": "string"
+          },
+          "acceptors": {
+            "default": 16,
+            "description": "监听器接收池的大小。",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_connections": {
+            "default": "infinity",
+            "description": "监听器允许的最大并发连接数。",
+            "oneOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "mountpoint": {
+            "default": "",
+            "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username",
+            "type": "string"
+          },
+          "enable_authn": {
+            "default": true,
+            "description": "配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。<br/>配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。<br/>配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名<br/>客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
+          },
+          "max_conn_rate": {
+            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "messages_rate": {
+            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "bytes_rate": {
+            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "100MB/s",
+            "type": "string"
+          },
+          "access_rules": {
+            "default": [
+              "allow all"
+            ],
+            "description": "此监听器的访问控制规则。",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "proxy_protocol": {
+            "default": false,
+            "description": "如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/><br/>详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
+            "type": "boolean"
+          },
+          "proxy_protocol_timeout": {
+            "default": "3s",
+            "description": "代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。",
+            "example": "12m",
+            "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "tcp_options": {
+            "$ref": "#/components/schemas/broker.tcp_opts"
+          }
+        },
+        "type": "object"
+      },
       "emqx_conf_schema.console_handler": {
         "properties": {
           "level": {
@@ -11198,6 +11987,9 @@
               "oneOf": [
                 {
                   "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
                 },
                 {
                   "$ref": "#/components/schemas/authn.ldap"
@@ -13356,6 +14148,9 @@
                   "$ref": "#/components/schemas/authn.gcp_device"
                 },
                 {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
                   "$ref": "#/components/schemas/authn.ldap"
                 },
                 {
@@ -14467,6 +15262,77 @@
         },
         "type": "object"
       },
+      "emqx_dashboard_sso_ldap.ldap": {
+        "required": [
+          "backend",
+          "base_dn",
+          "server",
+          "username"
+        ],
+        "properties": {
+          "enable": {
+            "default": false,
+            "description": "Whether to enable this backend.",
+            "type": "boolean"
+          },
+          "backend": {
+            "description": "Backend type.",
+            "enum": [
+              "ldap"
+            ],
+            "type": "string"
+          },
+          "query_timeout": {
+            "default": "5s",
+            "description": "Timeout for the LDAP query.",
+            "example": "32s",
+            "type": "string"
+          },
+          "server": {
+            "description": "The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The LDAP default port 389 is used if `[:Port]` is not specified.",
+            "type": "string"
+          },
+          "pool_size": {
+            "default": 8,
+            "description": "桥接远端服务时使用的连接池大小。",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "username": {
+            "description": "内部数据库的用户名。",
+            "type": "string"
+          },
+          "password": {
+            "description": "内部数据库密码。",
+            "format": "password",
+            "type": "string"
+          },
+          "base_dn": {
+            "description": "The name of the base object entry (or possibly the root) relative to<br/>which the Search is to be performed.",
+            "type": "string"
+          },
+          "filter": {
+            "default": "(& (objectClass=person) (uid=${username}))",
+            "description": "The filter for matching users in LDAP is by default `(&(objectClass=person)(uid=${username}))`. For Active Directory, it should be set to `(&(objectClass=user)(sAMAccountName=${username}))` by default. Please refer to [LDAP Filters](https://ldap.com/ldap-filters/) for more details.",
+            "example": "(& (objectClass=person) (uid=${username}))",
+            "type": "string"
+          },
+          "request_timeout": {
+            "default": "5s",
+            "description": "Sets the maximum time in milliseconds that is used for each individual request.",
+            "example": "32s",
+            "type": "string"
+          },
+          "ssl": {
+            "default": {
+              "enable": false
+            },
+            "description": "启用 SSL 连接。",
+            "$ref": "#/components/schemas/emqx_ldap.ssl"
+          }
+        },
+        "type": "object"
+      },
       "emqx_rule_api_schema.node_metrics": {
         "properties": {
           "node": {
@@ -14996,6 +15862,9 @@
                   "$ref": "#/components/schemas/authn.gcp_device"
                 },
                 {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
                   "$ref": "#/components/schemas/authn.ldap"
                 },
                 {
@@ -15370,6 +16239,17 @@
             },
             "description": "启用 SSL 连接。",
             "$ref": "#/components/schemas/broker.ssl_client_opts"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_dashboard_sso_schema.sso": {
+        "properties": {
+          "ldap": {
+            "$ref": "#/components/schemas/emqx_dashboard_sso_ldap.ldap"
+          },
+          "saml": {
+            "$ref": "#/components/schemas/emqx_dashboard_sso_saml.saml"
           }
         },
         "type": "object"
@@ -15816,186 +16696,6 @@
             "description": "每个缓存 worker 允许使用的最大字节数。",
             "example": "32MB",
             "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "listeners.ws_required_bind-with_name": {
-        "required": [
-          "bind",
-          "name",
-          "type"
-        ],
-        "properties": {
-          "type": {
-            "description": "Listener type",
-            "enum": [
-              "ws"
-            ],
-            "type": "string"
-          },
-          "running": {
-            "description": "Listener status",
-            "type": "boolean"
-          },
-          "name": {
-            "description": "Listener name",
-            "type": "string"
-          },
-          "current_connections": {
-            "description": "Current connections",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "enable": {
-            "default": true,
-            "description": "启停监听器。",
-            "type": "boolean"
-          },
-          "bind": {
-            "default": 8083,
-            "description": "监听套接字的 IP 地址和端口。",
-            "example": "127.0.0.1:80",
-            "type": "string"
-          },
-          "acceptors": {
-            "default": 16,
-            "description": "监听器接收池的大小。",
-            "minimum": 1,
-            "type": "integer"
-          },
-          "max_connections": {
-            "default": "infinity",
-            "description": "监听器允许的最大并发连接数。",
-            "oneOf": [
-              {
-                "minimum": 1,
-                "type": "integer"
-              },
-              {
-                "enum": [
-                  "infinity"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "mountpoint": {
-            "default": "",
-            "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username",
-            "type": "string"
-          },
-          "enable_authn": {
-            "default": true,
-            "description": "配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。<br/>配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。<br/>配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名<br/>客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
-            "enum": [
-              true,
-              false,
-              "quick_deny_anonymous"
-            ],
-            "type": "string"
-          },
-          "max_conn_rate": {
-            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "messages_rate": {
-            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "bytes_rate": {
-            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "100MB/s",
-            "type": "string"
-          },
-          "access_rules": {
-            "default": [
-              "allow all"
-            ],
-            "description": "此监听器的访问控制规则。",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "proxy_protocol": {
-            "default": false,
-            "description": "如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/><br/>详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
-            "type": "boolean"
-          },
-          "proxy_protocol_timeout": {
-            "default": "3s",
-            "description": "代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。",
-            "example": "12m",
-            "type": "string"
-          },
-          "authentication": {
-            "default": [],
-            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
-            "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/authn.gcp_device"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.ldap"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.scram"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_jwks"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_public_key"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_hmac"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_post"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_get"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_sentinel"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_cluster"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_sharded"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_rs"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.postgresql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mysql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.builtin_db"
-                }
-              ]
-            },
-            "type": "array"
-          },
-          "tcp_options": {
-            "$ref": "#/components/schemas/broker.tcp_opts"
-          },
-          "websocket": {
-            "$ref": "#/components/schemas/broker.ws_opts"
           }
         },
         "type": "object"
@@ -16495,6 +17195,51 @@
         },
         "type": "object"
       },
+      "emqx_dashboard_sso_saml.saml": {
+        "required": [
+          "backend"
+        ],
+        "properties": {
+          "enable": {
+            "default": false,
+            "description": "Whether to enable this backend.",
+            "type": "boolean"
+          },
+          "backend": {
+            "description": "Backend type.",
+            "enum": [
+              "saml"
+            ],
+            "type": "string"
+          },
+          "dashboard_addr": {
+            "default": "https://127.0.0.1:18083",
+            "description": "The address of the EMQX Dashboard.",
+            "type": "string"
+          },
+          "idp_metadata_url": {
+            "default": "https://idp.example.com",
+            "description": "The URL of the IdP metadata.",
+            "type": "string"
+          },
+          "sp_sign_request": {
+            "default": false,
+            "description": "Whether to sign the SAML request.",
+            "type": "boolean"
+          },
+          "sp_public_key": {
+            "default": "Pub Key",
+            "description": "The public key of the SP.",
+            "type": "string"
+          },
+          "sp_private_key": {
+            "description": "The private key of the SP.",
+            "format": "password",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "emqx_schema_registry_schema.get_protobuf": {
         "required": [
           "name",
@@ -16689,6 +17434,50 @@
           "ssl_options": {
             "description": "gRPC 客户端的 SSL 配置。",
             "$ref": "#/components/schemas/broker.ssl_client_opts"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_enterprise_schema.log_audit_handler": {
+        "properties": {
+          "path": {
+            "default": "${EMQX_LOG_DIR}/audit.log",
+            "description": "Name the audit log file.",
+            "example": "/path/to/file",
+            "type": "string"
+          },
+          "rotation_count": {
+            "default": 10,
+            "description": "轮换的最大日志文件数。",
+            "maximum": 128,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "rotation_size": {
+            "default": "50MB",
+            "description": "此参数控制日志文件轮换。 `infinity` 意味着日志文件将无限增长，否则日志文件将在达到 `max_size`（以字节为单位）时进行轮换。<br/>与 rotation count配合使用。如果 counter 为 10，则是10个文件轮换。",
+            "oneOf": [
+              {
+                "example": "32MB",
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "enable": {
+            "default": false,
+            "description": "启用此日志处理进程。",
+            "type": "boolean"
+          },
+          "time_offset": {
+            "default": "system",
+            "description": "日志中的时间戳使用的时间偏移量。<br/>可选值为：<br/>  - <code>system</code>: 本地系统使用的时区偏移量<br/>  - <code>utc</code>: 0 时区的偏移量<br/>  - <code>+-[hh]:[mm]</code>: 自定义偏移量，比如 \"-02:00\" 或者 \"+00:00\"<br/>默认值为本地系统的时区偏移量：<code>system</code>。",
+            "type": "string"
           }
         },
         "type": "object"
@@ -17791,7 +18580,7 @@
               "enable": false
             },
             "description": "启用 SSL 连接。",
-            "$ref": "#/components/schemas/broker.ssl_client_opts"
+            "$ref": "#/components/schemas/emqx_ldap.ssl"
           }
         },
         "type": "object"
@@ -17966,6 +18755,9 @@
               "oneOf": [
                 {
                   "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
                 },
                 {
                   "$ref": "#/components/schemas/authn.ldap"
@@ -18445,6 +19237,115 @@
           "rate_last5m": {
             "description": "5分钟内平均命中速率，单位：次/秒。",
             "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "listeners.with_name_quic_required_bind": {
+        "required": [
+          "bind",
+          "name",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "description": "Listener type",
+            "enum": [
+              "quic"
+            ],
+            "type": "string"
+          },
+          "running": {
+            "description": "Listener status",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Listener name",
+            "type": "string"
+          },
+          "current_connections": {
+            "description": "Current connections",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "ciphers": {
+            "default": [
+              "TLS_AES_256_GCM_SHA384",
+              "TLS_AES_128_GCM_SHA256",
+              "TLS_CHACHA20_POLY1305_SHA256"
+            ],
+            "description": "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如<br/><code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code>或<br/><code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>。<br/><br/><br/>密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。<br/>选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。<br/><br/>名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。<br/>EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/><br/>注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。<br/>不兼容的密码套件将被自动删除。<br/><br/>例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。<br/><br/><br/><br/>注：PSK 的 Ciphers 不支持 tlsv1.3<br/><br/>如果打算使用PSK密码套件，<code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。<br/><br/><br/><br/>PSK 密码套件：<br/><code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,<br/>RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,<br/>RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,<br/>RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code><br/><br/><br/>注：QUIC 监听器不支持 tlsv1.3 的 ciphers",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "ssl_options": {
+            "description": "QUIC 传输层的 TLS 选项",
+            "$ref": "#/components/schemas/broker.listener_quic_ssl_opts"
+          },
+          "enable": {
+            "default": true,
+            "description": "启停监听器。",
+            "type": "boolean"
+          },
+          "bind": {
+            "default": 14567,
+            "description": "监听套接字的 IP 地址和端口。",
+            "example": "127.0.0.1:80",
+            "type": "string"
+          },
+          "acceptors": {
+            "default": 16,
+            "description": "监听器接收池的大小。",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_connections": {
+            "default": "infinity",
+            "description": "监听器允许的最大并发连接数。",
+            "oneOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "mountpoint": {
+            "default": "",
+            "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username",
+            "type": "string"
+          },
+          "enable_authn": {
+            "default": true,
+            "description": "配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。<br/>配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。<br/>配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名<br/>客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
+          },
+          "max_conn_rate": {
+            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "messages_rate": {
+            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "bytes_rate": {
+            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "100MB/s",
+            "type": "string"
           }
         },
         "type": "object"
@@ -19357,183 +20258,6 @@
         },
         "type": "object"
       },
-      "listeners.tcp_required_bind-with_name": {
-        "required": [
-          "bind",
-          "name",
-          "type"
-        ],
-        "properties": {
-          "type": {
-            "description": "Listener type",
-            "enum": [
-              "tcp"
-            ],
-            "type": "string"
-          },
-          "running": {
-            "description": "Listener status",
-            "type": "boolean"
-          },
-          "name": {
-            "description": "Listener name",
-            "type": "string"
-          },
-          "current_connections": {
-            "description": "Current connections",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "enable": {
-            "default": true,
-            "description": "启停监听器。",
-            "type": "boolean"
-          },
-          "bind": {
-            "default": 1883,
-            "description": "监听套接字的 IP 地址和端口。",
-            "example": "127.0.0.1:80",
-            "type": "string"
-          },
-          "acceptors": {
-            "default": 16,
-            "description": "监听器接收池的大小。",
-            "minimum": 1,
-            "type": "integer"
-          },
-          "max_connections": {
-            "default": "infinity",
-            "description": "监听器允许的最大并发连接数。",
-            "oneOf": [
-              {
-                "minimum": 1,
-                "type": "integer"
-              },
-              {
-                "enum": [
-                  "infinity"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "mountpoint": {
-            "default": "",
-            "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username",
-            "type": "string"
-          },
-          "enable_authn": {
-            "default": true,
-            "description": "配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。<br/>配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。<br/>配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名<br/>客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
-            "enum": [
-              true,
-              false,
-              "quick_deny_anonymous"
-            ],
-            "type": "string"
-          },
-          "max_conn_rate": {
-            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "messages_rate": {
-            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "bytes_rate": {
-            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "100MB/s",
-            "type": "string"
-          },
-          "access_rules": {
-            "default": [
-              "allow all"
-            ],
-            "description": "此监听器的访问控制规则。",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "proxy_protocol": {
-            "default": false,
-            "description": "如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/><br/>详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
-            "type": "boolean"
-          },
-          "proxy_protocol_timeout": {
-            "default": "3s",
-            "description": "代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。",
-            "example": "12m",
-            "type": "string"
-          },
-          "authentication": {
-            "default": [],
-            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
-            "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/authn.gcp_device"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.ldap"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.scram"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_jwks"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_public_key"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_hmac"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_post"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_get"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_sentinel"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_cluster"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_sharded"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_rs"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.postgresql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mysql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.builtin_db"
-                }
-              ]
-            },
-            "type": "array"
-          },
-          "tcp_options": {
-            "$ref": "#/components/schemas/broker.tcp_opts"
-          }
-        },
-        "type": "object"
-      },
       "prometheus.prometheus": {
         "required": [
           "enable",
@@ -19664,186 +20388,6 @@
           "rate_last5m": {
             "description": "5分钟内平均命中速率，单位：次/秒。",
             "type": "number"
-          }
-        },
-        "type": "object"
-      },
-      "listeners.ssl_required_bind-with_name": {
-        "required": [
-          "bind",
-          "name",
-          "type"
-        ],
-        "properties": {
-          "type": {
-            "description": "Listener type",
-            "enum": [
-              "ssl"
-            ],
-            "type": "string"
-          },
-          "running": {
-            "description": "Listener status",
-            "type": "boolean"
-          },
-          "name": {
-            "description": "Listener name",
-            "type": "string"
-          },
-          "current_connections": {
-            "description": "Current connections",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "enable": {
-            "default": true,
-            "description": "启停监听器。",
-            "type": "boolean"
-          },
-          "bind": {
-            "default": 8883,
-            "description": "监听套接字的 IP 地址和端口。",
-            "example": "127.0.0.1:80",
-            "type": "string"
-          },
-          "acceptors": {
-            "default": 16,
-            "description": "监听器接收池的大小。",
-            "minimum": 1,
-            "type": "integer"
-          },
-          "max_connections": {
-            "default": "infinity",
-            "description": "监听器允许的最大并发连接数。",
-            "oneOf": [
-              {
-                "minimum": 1,
-                "type": "integer"
-              },
-              {
-                "enum": [
-                  "infinity"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "mountpoint": {
-            "default": "",
-            "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username",
-            "type": "string"
-          },
-          "enable_authn": {
-            "default": true,
-            "description": "配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。<br/>配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。<br/>配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名<br/>客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
-            "enum": [
-              true,
-              false,
-              "quick_deny_anonymous"
-            ],
-            "type": "string"
-          },
-          "max_conn_rate": {
-            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "messages_rate": {
-            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "bytes_rate": {
-            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "100MB/s",
-            "type": "string"
-          },
-          "access_rules": {
-            "default": [
-              "allow all"
-            ],
-            "description": "此监听器的访问控制规则。",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "proxy_protocol": {
-            "default": false,
-            "description": "如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/><br/>详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
-            "type": "boolean"
-          },
-          "proxy_protocol_timeout": {
-            "default": "3s",
-            "description": "代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。",
-            "example": "12m",
-            "type": "string"
-          },
-          "authentication": {
-            "default": [],
-            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
-            "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/authn.gcp_device"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.ldap"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.scram"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_jwks"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_public_key"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_hmac"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_post"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_get"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_sentinel"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_cluster"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_sharded"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_rs"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.postgresql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mysql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.builtin_db"
-                }
-              ]
-            },
-            "type": "array"
-          },
-          "tcp_options": {
-            "$ref": "#/components/schemas/broker.tcp_opts"
-          },
-          "ssl_options": {
-            "$ref": "#/components/schemas/broker.listener_ssl_opts"
           }
         },
         "type": "object"
@@ -20425,6 +20969,9 @@
               "oneOf": [
                 {
                   "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
                 },
                 {
                   "$ref": "#/components/schemas/authn.ldap"
@@ -21778,6 +22325,27 @@
         },
         "type": "object"
       },
+      "dashboard_sso.backend_status": {
+        "required": [
+          "backend"
+        ],
+        "properties": {
+          "enable": {
+            "default": false,
+            "description": "Whether to enable this backend.",
+            "type": "boolean"
+          },
+          "backend": {
+            "description": "Backend type.",
+            "enum": [
+              "ldap",
+              "saml"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "listeners.node_status": {
         "properties": {
           "node": {
@@ -22567,115 +23135,6 @@
           "min_heartbeat_frequency_ms": {
             "description": "心跳间的最小间隙",
             "example": "32s",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "listeners.quic_required_bind-with_name": {
-        "required": [
-          "bind",
-          "name",
-          "type"
-        ],
-        "properties": {
-          "type": {
-            "description": "Listener type",
-            "enum": [
-              "quic"
-            ],
-            "type": "string"
-          },
-          "running": {
-            "description": "Listener status",
-            "type": "boolean"
-          },
-          "name": {
-            "description": "Listener name",
-            "type": "string"
-          },
-          "current_connections": {
-            "description": "Current connections",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "ciphers": {
-            "default": [
-              "TLS_AES_256_GCM_SHA384",
-              "TLS_AES_128_GCM_SHA256",
-              "TLS_CHACHA20_POLY1305_SHA256"
-            ],
-            "description": "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如<br/><code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code>或<br/><code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>。<br/><br/><br/>密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。<br/>选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。<br/><br/>名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。<br/>EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/><br/>注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。<br/>不兼容的密码套件将被自动删除。<br/><br/>例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。<br/><br/><br/><br/>注：PSK 的 Ciphers 不支持 tlsv1.3<br/><br/>如果打算使用PSK密码套件，<code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。<br/><br/><br/><br/>PSK 密码套件：<br/><code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,<br/>RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,<br/>RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,<br/>RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code><br/><br/><br/>注：QUIC 监听器不支持 tlsv1.3 的 ciphers",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "ssl_options": {
-            "description": "QUIC 传输层的 TLS 选项",
-            "$ref": "#/components/schemas/broker.listener_quic_ssl_opts"
-          },
-          "enable": {
-            "default": true,
-            "description": "启停监听器。",
-            "type": "boolean"
-          },
-          "bind": {
-            "default": 14567,
-            "description": "监听套接字的 IP 地址和端口。",
-            "example": "127.0.0.1:80",
-            "type": "string"
-          },
-          "acceptors": {
-            "default": 16,
-            "description": "监听器接收池的大小。",
-            "minimum": 1,
-            "type": "integer"
-          },
-          "max_connections": {
-            "default": "infinity",
-            "description": "监听器允许的最大并发连接数。",
-            "oneOf": [
-              {
-                "minimum": 1,
-                "type": "integer"
-              },
-              {
-                "enum": [
-                  "infinity"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "mountpoint": {
-            "default": "",
-            "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username",
-            "type": "string"
-          },
-          "enable_authn": {
-            "default": true,
-            "description": "配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。<br/>配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。<br/>配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名<br/>客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
-            "enum": [
-              true,
-              false,
-              "quick_deny_anonymous"
-            ],
-            "type": "string"
-          },
-          "max_conn_rate": {
-            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "messages_rate": {
-            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "bytes_rate": {
-            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "100MB/s",
             "type": "string"
           }
         },
@@ -25395,9 +25854,20 @@
             "maxLength": 100,
             "type": "string"
           },
+          "role": {
+            "default": "administrator",
+            "description": "User role",
+            "example": "administrator",
+            "type": "string"
+          },
           "description": {
             "description": "Dashboard 用户描述",
             "example": "administrator",
+            "type": "string"
+          },
+          "backend": {
+            "description": "User account source",
+            "example": "local",
             "type": "string"
           }
         },
@@ -26713,189 +27183,6 @@
         },
         "type": "object"
       },
-      "listeners.wss_required_bind-with_name": {
-        "required": [
-          "bind",
-          "name",
-          "type"
-        ],
-        "properties": {
-          "type": {
-            "description": "Listener type",
-            "enum": [
-              "wss"
-            ],
-            "type": "string"
-          },
-          "running": {
-            "description": "Listener status",
-            "type": "boolean"
-          },
-          "name": {
-            "description": "Listener name",
-            "type": "string"
-          },
-          "current_connections": {
-            "description": "Current connections",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "enable": {
-            "default": true,
-            "description": "启停监听器。",
-            "type": "boolean"
-          },
-          "bind": {
-            "default": 8084,
-            "description": "监听套接字的 IP 地址和端口。",
-            "example": "127.0.0.1:80",
-            "type": "string"
-          },
-          "acceptors": {
-            "default": 16,
-            "description": "监听器接收池的大小。",
-            "minimum": 1,
-            "type": "integer"
-          },
-          "max_connections": {
-            "default": "infinity",
-            "description": "监听器允许的最大并发连接数。",
-            "oneOf": [
-              {
-                "minimum": 1,
-                "type": "integer"
-              },
-              {
-                "enum": [
-                  "infinity"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "mountpoint": {
-            "default": "",
-            "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username",
-            "type": "string"
-          },
-          "enable_authn": {
-            "default": true,
-            "description": "配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。<br/>配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。<br/>配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名<br/>客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
-            "enum": [
-              true,
-              false,
-              "quick_deny_anonymous"
-            ],
-            "type": "string"
-          },
-          "max_conn_rate": {
-            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "messages_rate": {
-            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "1000/s",
-            "type": "string"
-          },
-          "bytes_rate": {
-            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
-            "example": "100MB/s",
-            "type": "string"
-          },
-          "access_rules": {
-            "default": [
-              "allow all"
-            ],
-            "description": "此监听器的访问控制规则。",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "proxy_protocol": {
-            "default": false,
-            "description": "如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/><br/>详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
-            "type": "boolean"
-          },
-          "proxy_protocol_timeout": {
-            "default": "3s",
-            "description": "代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。",
-            "example": "12m",
-            "type": "string"
-          },
-          "authentication": {
-            "default": [],
-            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
-            "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/authn.gcp_device"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.ldap"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.scram"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_jwks"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_public_key"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.jwt_hmac"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_post"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.http_get"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_sentinel"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_cluster"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.redis_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_sharded"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_rs"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mongo_single"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.postgresql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.mysql"
-                },
-                {
-                  "$ref": "#/components/schemas/authn.builtin_db"
-                }
-              ]
-            },
-            "type": "array"
-          },
-          "tcp_options": {
-            "$ref": "#/components/schemas/broker.tcp_opts"
-          },
-          "ssl_options": {
-            "$ref": "#/components/schemas/broker.listener_wss_opts"
-          },
-          "websocket": {
-            "$ref": "#/components/schemas/broker.ws_opts"
-          }
-        },
-        "type": "object"
-      },
       "emqx_gateway_api_listeners.tcp_listener": {
         "properties": {
           "id": {
@@ -27628,6 +27915,21 @@
         },
         "type": "object"
       },
+      "emqx_dashboard_sso_saml.login": {
+        "required": [
+          "backend"
+        ],
+        "properties": {
+          "backend": {
+            "description": "Backend type.",
+            "enum": [
+              "saml"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "dashboard.dashboard": {
         "properties": {
           "listeners": {
@@ -27644,6 +27946,9 @@
             "default": false,
             "description": "支持跨域资源共享(CORS)，<br/>允许服务器指示任何来源(域名、协议或端口)，除了本服务器之外的任何浏览器应允许加载资源。",
             "type": "boolean"
+          },
+          "sso": {
+            "$ref": "#/components/schemas/emqx_dashboard_sso_schema.sso"
           }
         },
         "type": "object"
@@ -27699,6 +28004,192 @@
           "metrics": {
             "description": "资源统计指标。",
             "$ref": "#/components/schemas/authz.resource_metrics"
+          }
+        },
+        "type": "object"
+      },
+      "listeners.with_name_wss_required_bind": {
+        "required": [
+          "bind",
+          "name",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "description": "Listener type",
+            "enum": [
+              "wss"
+            ],
+            "type": "string"
+          },
+          "running": {
+            "description": "Listener status",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Listener name",
+            "type": "string"
+          },
+          "current_connections": {
+            "description": "Current connections",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "enable": {
+            "default": true,
+            "description": "启停监听器。",
+            "type": "boolean"
+          },
+          "bind": {
+            "default": 8084,
+            "description": "监听套接字的 IP 地址和端口。",
+            "example": "127.0.0.1:80",
+            "type": "string"
+          },
+          "acceptors": {
+            "default": 16,
+            "description": "监听器接收池的大小。",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_connections": {
+            "default": "infinity",
+            "description": "监听器允许的最大并发连接数。",
+            "oneOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "mountpoint": {
+            "default": "",
+            "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username",
+            "type": "string"
+          },
+          "enable_authn": {
+            "default": true,
+            "description": "配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。<br/>配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。<br/>配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名<br/>客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
+          },
+          "max_conn_rate": {
+            "description": "Maximum connection rate.<br/><br/>This is used to limit the connection rate for this listener,<br/>once the limit is reached, new connections will be deferred or refused",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "messages_rate": {
+            "description": "Messages publish rate.<br/><br/>This is used to limit the inbound message numbers for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "1000/s",
+            "type": "string"
+          },
+          "bytes_rate": {
+            "description": "Data publish rate.<br/><br/>This is used to limit the inbound bytes rate for each client connected to this listener,<br/>once the limit is reached, the restricted client will slow down and even be hung for a while.",
+            "example": "100MB/s",
+            "type": "string"
+          },
+          "access_rules": {
+            "default": [
+              "allow all"
+            ],
+            "description": "此监听器的访问控制规则。",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "proxy_protocol": {
+            "default": false,
+            "description": "如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/><br/>详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/",
+            "type": "boolean"
+          },
+          "proxy_protocol_timeout": {
+            "default": "3s",
+            "description": "代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。",
+            "example": "12m",
+            "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.gcp_device"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap_bind"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.ldap"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "tcp_options": {
+            "$ref": "#/components/schemas/broker.tcp_opts"
+          },
+          "ssl_options": {
+            "$ref": "#/components/schemas/broker.listener_wss_opts"
+          },
+          "websocket": {
+            "$ref": "#/components/schemas/broker.ws_opts"
           }
         },
         "type": "object"
@@ -28088,7 +28579,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.2.1"
+    "version": "5.3.0-alpha.2-g5614fd50"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -30217,6 +30708,9 @@
                       "$ref": "#/components/schemas/authn.gcp_device"
                     },
                     {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
+                    },
+                    {
                       "$ref": "#/components/schemas/authn.ldap"
                     },
                     {
@@ -30446,6 +30940,9 @@
                     "$ref": "#/components/schemas/authn.gcp_device"
                   },
                   {
+                    "$ref": "#/components/schemas/authn.ldap_bind"
+                  },
+                  {
                     "$ref": "#/components/schemas/authn.ldap"
                   },
                   {
@@ -30589,6 +31086,9 @@
                   "oneOf": [
                     {
                       "$ref": "#/components/schemas/authn.gcp_device"
+                    },
+                    {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
                     },
                     {
                       "$ref": "#/components/schemas/authn.ldap"
@@ -30817,6 +31317,9 @@
                     "$ref": "#/components/schemas/authn.gcp_device"
                   },
                   {
+                    "$ref": "#/components/schemas/authn.ldap_bind"
+                  },
+                  {
                     "$ref": "#/components/schemas/authn.ldap"
                   },
                   {
@@ -30960,6 +31463,9 @@
                   "oneOf": [
                     {
                       "$ref": "#/components/schemas/authn.gcp_device"
+                    },
+                    {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
                     },
                     {
                       "$ref": "#/components/schemas/authn.ldap"
@@ -32314,6 +32820,37 @@
         ]
       }
     },
+    "/sso": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/dashboard_sso.backend_status"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/mqtt/delayed/messages/{node}/{msgid}": {
       "delete": {
         "description": "删除延迟消息",
@@ -33109,83 +33646,83 @@
                   "general_client": {
                     "summary": "General client info",
                     "value": {
-                      "mqueue_len": 0,
-                      "clean_start": true,
-                      "subscriptions_cnt": 0,
-                      "recv_cnt": 1,
-                      "inflight_max": "infinity",
-                      "awaiting_rel_max": "infinity",
+                      "send_pkt": 1,
                       "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "send_msg": 0,
+                      "recv_cnt": 1,
+                      "mailbox_len": 0,
                       "is_bridge": false,
+                      "mqueue_len": 0,
+                      "expiry_interval": 0,
                       "connected": true,
                       "mqueue_dropped": 0,
-                      "reductions": 72022,
+                      "mqueue_max": "infinity",
                       "ip_address": "127.0.0.1",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
                       "username": "guest",
                       "disconnected_at": null,
-                      "awaiting_rel_cnt": 0,
-                      "send_pkt": 1,
+                      "reductions": 72022,
+                      "clean_start": true,
+                      "recv_msg": 0,
+                      "inflight_max": "infinity",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "awaiting_rel_max": "infinity",
+                      "send_msg": 0,
+                      "proto_name": "STOMP",
+                      "subscriptions_cnt": 0,
                       "recv_oct": 56,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "recv_pkt": 1,
+                      "subscriptions_max": "infinity",
                       "send_oct": 61,
                       "keepalive": 0,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "node": "emqx@127.0.0.1",
                       "proto_ver": "1.0",
-                      "recv_msg": 0,
-                      "proto_name": "STOMP",
+                      "node": "emqx@127.0.0.1",
+                      "awaiting_rel_cnt": 0,
                       "heap_size": 4185,
-                      "mailbox_len": 0,
                       "port": 50675,
-                      "inflight_cnt": 0,
-                      "mqueue_max": "infinity",
                       "send_cnt": 1,
-                      "subscriptions_max": "infinity",
-                      "expiry_interval": 0
+                      "inflight_cnt": 0
                     }
                   },
                   "lwm2m_client": {
                     "summary": "LwM2M client info",
                     "value": {
-                      "mqueue_len": 0,
-                      "clean_start": true,
-                      "subscriptions_cnt": 0,
-                      "recv_cnt": 1,
-                      "inflight_max": "infinity",
-                      "awaiting_rel_max": "infinity",
+                      "send_pkt": 1,
                       "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "send_msg": 0,
+                      "recv_cnt": 1,
+                      "mailbox_len": 0,
+                      "lifetime": 86400,
                       "is_bridge": false,
+                      "mqueue_len": 0,
+                      "expiry_interval": 0,
                       "connected": true,
                       "mqueue_dropped": 0,
-                      "lifetime": 86400,
-                      "reductions": 72022,
+                      "mqueue_max": "infinity",
                       "ip_address": "127.0.0.1",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
                       "username": "guest",
                       "disconnected_at": null,
-                      "awaiting_rel_cnt": 0,
-                      "send_pkt": 1,
+                      "reductions": 72022,
+                      "clean_start": true,
+                      "recv_msg": 0,
+                      "inflight_max": "infinity",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "awaiting_rel_max": "infinity",
+                      "send_msg": 0,
+                      "proto_name": "LwM2M",
+                      "subscriptions_cnt": 0,
                       "recv_oct": 56,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "recv_pkt": 1,
+                      "subscriptions_max": "infinity",
                       "send_oct": 61,
                       "endpoint_name": "urn:imei:154928475237123",
                       "keepalive": 0,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "node": "emqx@127.0.0.1",
                       "proto_ver": "1.0",
-                      "recv_msg": 0,
-                      "proto_name": "LwM2M",
+                      "node": "emqx@127.0.0.1",
+                      "awaiting_rel_cnt": 0,
                       "heap_size": 4185,
-                      "mailbox_len": 0,
                       "port": 50675,
-                      "inflight_cnt": 0,
-                      "mqueue_max": "infinity",
                       "send_cnt": 1,
-                      "subscriptions_max": "infinity",
-                      "expiry_interval": 0
+                      "inflight_cnt": 0
                     }
                   }
                 },
@@ -36687,6 +37224,80 @@
         ]
       }
     },
+    "/sso/saml/acs": {
+      "post": {
+        "parameters": [],
+        "responses": {
+          "302": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "REDIRECT"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_USERNAME_OR_PWD"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BACKEND_NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/monitor/nodes/{node}": {
       "get": {
         "description": "列出指定节点的监控数据",
@@ -37010,6 +37621,9 @@
                       "$ref": "#/components/schemas/authn.gcp_device"
                     },
                     {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
+                    },
+                    {
                       "$ref": "#/components/schemas/authn.ldap"
                     },
                     {
@@ -37202,6 +37816,9 @@
                 "oneOf": [
                   {
                     "$ref": "#/components/schemas/authn.gcp_device"
+                  },
+                  {
+                    "$ref": "#/components/schemas/authn.ldap_bind"
                   },
                   {
                     "$ref": "#/components/schemas/authn.ldap"
@@ -38108,6 +38725,12 @@
                     "maxLength": 100,
                     "type": "string"
                   },
+                  "role": {
+                    "default": "administrator",
+                    "description": "User role",
+                    "example": "administrator",
+                    "type": "string"
+                  },
                   "description": {
                     "description": "Dashboard 用户描述",
                     "example": "administrator",
@@ -38132,9 +38755,20 @@
                       "maxLength": 100,
                       "type": "string"
                     },
+                    "role": {
+                      "default": "administrator",
+                      "description": "User role",
+                      "example": "administrator",
+                      "type": "string"
+                    },
                     "description": {
                       "description": "Dashboard 用户描述",
                       "example": "administrator",
+                      "type": "string"
+                    },
+                    "backend": {
+                      "description": "User account source",
+                      "example": "local",
                       "type": "string"
                     }
                   },
@@ -38619,19 +39253,19 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/listeners.quic_required_bind-with_name"
+                    "$ref": "#/components/schemas/listeners.with_name_quic_required_bind"
                   },
                   {
-                    "$ref": "#/components/schemas/listeners.wss_required_bind-with_name"
+                    "$ref": "#/components/schemas/listeners.with_name_wss_required_bind"
                   },
                   {
-                    "$ref": "#/components/schemas/listeners.ws_required_bind-with_name"
+                    "$ref": "#/components/schemas/listeners.with_name_ws_required_bind"
                   },
                   {
-                    "$ref": "#/components/schemas/listeners.ssl_required_bind-with_name"
+                    "$ref": "#/components/schemas/listeners.with_name_ssl_required_bind"
                   },
                   {
-                    "$ref": "#/components/schemas/listeners.tcp_required_bind-with_name"
+                    "$ref": "#/components/schemas/listeners.with_name_tcp_required_bind"
                   }
                 ]
               }
@@ -39086,6 +39720,9 @@
                       "$ref": "#/components/schemas/authn.gcp_device"
                     },
                     {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
+                    },
+                    {
                       "$ref": "#/components/schemas/authn.ldap"
                     },
                     {
@@ -39305,6 +39942,9 @@
                     "$ref": "#/components/schemas/authn.gcp_device"
                   },
                   {
+                    "$ref": "#/components/schemas/authn.ldap_bind"
+                  },
+                  {
                     "$ref": "#/components/schemas/authn.ldap"
                   },
                   {
@@ -39448,6 +40088,9 @@
                   "oneOf": [
                     {
                       "$ref": "#/components/schemas/authn.gcp_device"
+                    },
+                    {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
                     },
                     {
                       "$ref": "#/components/schemas/authn.ldap"
@@ -39666,6 +40309,9 @@
                     "$ref": "#/components/schemas/authn.gcp_device"
                   },
                   {
+                    "$ref": "#/components/schemas/authn.ldap_bind"
+                  },
+                  {
                     "$ref": "#/components/schemas/authn.ldap"
                   },
                   {
@@ -39809,6 +40455,9 @@
                   "oneOf": [
                     {
                       "$ref": "#/components/schemas/authn.gcp_device"
+                    },
+                    {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
                     },
                     {
                       "$ref": "#/components/schemas/authn.ldap"
@@ -40889,6 +41538,12 @@
               "application/json": {
                 "schema": {
                   "properties": {
+                    "role": {
+                      "default": "administrator",
+                      "description": "User role",
+                      "example": "administrator",
+                      "type": "string"
+                    },
                     "token": {
                       "description": "Dashboard 认证 Token",
                       "type": "string"
@@ -45128,6 +45783,235 @@
         ]
       }
     },
+    "/sso/saml/metadata": {
+      "get": {
+        "parameters": [],
+        "requestbody": {
+          "content": {
+            "application/xml": {
+              "schema": {
+                "format": "binary",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "token": {
+                      "description": "Dashboard 认证 Token",
+                      "type": "string"
+                    },
+                    "version": {
+                      "description": "EMQX 版本",
+                      "example": "5.0.0",
+                      "type": "string"
+                    },
+                    "license": {
+                      "properties": {
+                        "edition": {
+                          "description": "EMQX 许可类型。可为 opensource 或 enterprise",
+                          "enum": [
+                            "opensource",
+                            "enterprise"
+                          ],
+                          "example": "opensource",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BACKEND_NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
+    "/sso/login/{backend}": {
+      "post": {
+        "parameters": [
+          {
+            "example": "ldap",
+            "in": "path",
+            "name": "backend",
+            "required": true,
+            "schema": {
+              "enum": [
+                "ldap",
+                "saml"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/emqx_dashboard_sso_saml.login"
+                  },
+                  {
+                    "$ref": "#/components/schemas/emqx_dashboard_sso_ldap.login"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "role": {
+                      "default": "administrator",
+                      "description": "User role",
+                      "example": "administrator",
+                      "type": "string"
+                    },
+                    "token": {
+                      "description": "Dashboard 认证 Token",
+                      "type": "string"
+                    },
+                    "version": {
+                      "description": "EMQX 版本",
+                      "example": "5.0.0",
+                      "type": "string"
+                    },
+                    "license": {
+                      "properties": {
+                        "edition": {
+                          "description": "EMQX 许可类型。可为 opensource 或 enterprise",
+                          "enum": [
+                            "opensource",
+                            "enterprise"
+                          ],
+                          "example": "opensource",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "302": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "REDIRECT"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_USERNAME_OR_PWD"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BACKEND_NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/subscriptions": {
       "get": {
         "description": "列出订阅",
@@ -45906,6 +46790,9 @@
                         "$ref": "#/components/schemas/authn.gcp_device"
                       },
                       {
+                        "$ref": "#/components/schemas/authn.ldap_bind"
+                      },
+                      {
                         "$ref": "#/components/schemas/authn.ldap"
                       },
                       {
@@ -46070,6 +46957,9 @@
                     "$ref": "#/components/schemas/authn.gcp_device"
                   },
                   {
+                    "$ref": "#/components/schemas/authn.ldap_bind"
+                  },
+                  {
                     "$ref": "#/components/schemas/authn.ldap"
                   },
                   {
@@ -46216,6 +47106,9 @@
                   "oneOf": [
                     {
                       "$ref": "#/components/schemas/authn.gcp_device"
+                    },
+                    {
+                      "$ref": "#/components/schemas/authn.ldap_bind"
                     },
                     {
                       "$ref": "#/components/schemas/authn.ldap"
@@ -47170,6 +48063,34 @@
         ]
       }
     },
+    "/sso/running": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "enum": [
+                      "ldap",
+                      "saml"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/gateways/{name}/clients/{clientid}/subscriptions/{topic}": {
       "delete": {
         "description": "为某客户端删除某订阅关系",
@@ -47335,6 +48256,20 @@
         "description": "删除 Dashboard 用户",
         "parameters": [
           {
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "saml"
+              ],
+              "type": "string"
+            }
+          },
+          {
             "description": "Dashboard 用户名",
             "example": "admin",
             "in": "path",
@@ -47411,6 +48346,20 @@
         "description": "更新 Dashboard 用户描述",
         "parameters": [
           {
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "saml"
+              ],
+              "type": "string"
+            }
+          },
+          {
             "description": "Dashboard 用户名",
             "example": "admin",
             "in": "path",
@@ -47426,6 +48375,12 @@
             "application/json": {
               "schema": {
                 "properties": {
+                  "role": {
+                    "default": "administrator",
+                    "description": "User role",
+                    "example": "administrator",
+                    "type": "string"
+                  },
                   "description": {
                     "description": "Dashboard 用户描述",
                     "example": "administrator",
@@ -47450,9 +48405,20 @@
                       "maxLength": 100,
                       "type": "string"
                     },
+                    "role": {
+                      "default": "administrator",
+                      "description": "User role",
+                      "example": "administrator",
+                      "type": "string"
+                    },
                     "description": {
                       "description": "Dashboard 用户描述",
                       "example": "administrator",
+                      "type": "string"
+                    },
+                    "backend": {
+                      "description": "User account source",
+                      "example": "local",
                       "type": "string"
                     }
                   },
@@ -49722,6 +50688,214 @@
         ],
         "tags": [
           "Monitor"
+        ]
+      }
+    },
+    "/sso/{backend}": {
+      "delete": {
+        "parameters": [
+          {
+            "example": "ldap",
+            "in": "path",
+            "name": "backend",
+            "required": true,
+            "schema": {
+              "enum": [
+                "ldap",
+                "saml"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Delete successfully"
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BACKEND_NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      },
+      "get": {
+        "parameters": [
+          {
+            "example": "ldap",
+            "in": "path",
+            "name": "backend",
+            "required": true,
+            "schema": {
+              "enum": [
+                "ldap",
+                "saml"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/emqx_dashboard_sso_saml.saml"
+                    },
+                    {
+                      "$ref": "#/components/schemas/emqx_dashboard_sso_ldap.ldap"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BACKEND_NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      },
+      "put": {
+        "parameters": [
+          {
+            "example": "ldap",
+            "in": "path",
+            "name": "backend",
+            "required": true,
+            "schema": {
+              "enum": [
+                "ldap",
+                "saml"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/emqx_dashboard_sso_saml.saml"
+                  },
+                  {
+                    "$ref": "#/components/schemas/emqx_dashboard_sso_ldap.ldap"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/emqx_dashboard_sso_saml.saml"
+                    },
+                    {
+                      "$ref": "#/components/schemas/emqx_dashboard_sso_ldap.ldap"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BACKEND_NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Dashboard Single Sign-On"
         ]
       }
     },
@@ -53630,7 +54804,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/emqx_conf_schema.log"
+                  "$ref": "#/components/schemas/emqx_enterprise_schema.log"
                 }
               }
             }
@@ -53678,7 +54852,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/emqx_conf_schema.log"
+                "$ref": "#/components/schemas/emqx_enterprise_schema.log"
               }
             }
           }
@@ -53689,7 +54863,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/emqx_conf_schema.log"
+                  "$ref": "#/components/schemas/emqx_enterprise_schema.log"
                 }
               }
             }
@@ -57051,7 +58225,22 @@
     "/logout": {
       "post": {
         "description": "Dashboard 用户登出",
-        "parameters": [],
+        "parameters": [
+          {
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "saml"
+              ],
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
