@@ -33,21 +33,10 @@ Data sources from various IoT devices and systems have all kinds of data types a
 ## Supported Integrations
 
 {% emqxce %}
-::: tip
-Only data bridges to MQTT and HTTP Server are supported in the EMQX open-source version. For the data systems supported in the EMQX enterprise version, you may refer to the [Data integration page on EMQX website](https://www.emqx.com/en/integrations).
-:::
-{% endemqxce %}
 
-EMQX supports data integration with the following types of data systems. 
+Only data bridges to [MQTT](./data-bridge-mqtt.md) and [HTTP Server](./data-bridge-webhook.md) are supported in the EMQX open-source version. However, you can refer to the following pages for the data systems supported in the EMQX enterprise version.
 
-:::: tabs
-
-::: tab Custom
-
-- [MQTT](./data-bridge-mqtt.md)
-- [Webhook](./data-bridge-webhook.md)
-
-::: tab Message Queue
+**Message Queue**
 
 - [Amazon Kinesis](./data-bridge-kinesis.md)
 - [Apache Kafka/Confluence](./data-bridge-kafka.md)
@@ -56,9 +45,7 @@ EMQX supports data integration with the following types of data systems.
 - [RabbitMQ](./data-bridge-rabbitmq.md)
 - [RocketMQ](./data-bridge-rocketmq.md)
 
-:::
-
-::: tab SQL 
+**SQL**
 
 - [Cassandra](./data-bridge-cassa.md)
 - [Microsoft SQL Server](./data-bridge-sqlserver.md)
@@ -66,9 +53,7 @@ EMQX supports data integration with the following types of data systems.
 - [Oracle](./data-bridge-oracle.md)
 - [PostgreSQL](./data-bridge-pgsql.md)
 
-:::
-
-::: tab NoSQL
+**NoSQL**
 
 - [ClickHouse](./data-bridge-clickhouse.md)
 - [DynamoDB](./data-bridge-dynamo.md)
@@ -77,23 +62,68 @@ EMQX supports data integration with the following types of data systems.
 - [Redis](./data-bridge-redis.md)
 - [TDengine](./data-bridge-tdengine.md)
 
-:::
-
-::: tab TS DB
+**TS DB**
 
 - [Apache IoTDB](./data-bridge-iotdb.md)
 - [InfluxDB](./data-bridge-influxdb.md)
 - [OpenTSDB](./data-bridge-opents.md)
 - [TimescalesDB](./data-bridge-timescale.md)
 
-::: tab Enterprise System 
+**Enterprise System**
 
 - [Azure EventHub](./data-bridge-azure-event-hub.md)
 - [Google Cloud](./data-bridge-gcp-pubsub.md)
 
-:::
+{% endemqxce %}
 
-::::
+{% emqxee %}
+
+EMQX supports data integration with the following types of data systems.
+
+**Custom**
+
+- [MQTT](./data-bridge-mqtt.md)
+- [HTTP Server](./data-bridge-webhook.md)
+
+**Message Queue**
+
+- [Amazon Kinesis](./data-bridge-kinesis.md)
+- [Apache Kafka/Confluence](./data-bridge-kafka.md)
+- [HStreamDB](./data-bridge-hstreamdb.md)
+- [Pulsar](./data-bridge-pulsar.md)
+- [RabbitMQ](./data-bridge-rabbitmq.md)
+- [RocketMQ](./data-bridge-rocketmq.md)
+
+**SQL**
+
+- [Cassandra](./data-bridge-cassa.md)
+- [Microsoft SQL Server](./data-bridge-sqlserver.md)
+- [MySQL](./data-bridge-mysql.md)
+- [Oracle](./data-bridge-oracle.md)
+- [PostgreSQL](./data-bridge-pgsql.md)
+
+**NoSQL**
+
+- [ClickHouse](./data-bridge-clickhouse.md)
+- [DynamoDB](./data-bridge-dynamo.md)
+- [Greptime](./data-bridge-greptimedb.md)
+- [MongoDB](./data-bridge-mongodb.md)
+- [Redis](./data-bridge-redis.md)
+- [TDengine](./data-bridge-tdengine.md)
+
+**TS DB**
+
+- [Apache IoTDB](./data-bridge-iotdb.md)
+- [InfluxDB](./data-bridge-influxdb.md)
+- [OpenTSDB](./data-bridge-opents.md)
+- [TimescalesDB](./data-bridge-timescale.md)
+
+**Enterprise System**
+
+- [Azure EventHub](./data-bridge-azure-event-hub.md)
+- [Google Cloud](./data-bridge-gcp-pubsub.md)
+
+{% endemqxee %}
 
 ## Main Features 
 

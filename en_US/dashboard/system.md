@@ -102,5 +102,5 @@ The Settings can be accessed by clicking the setting icon on the top right corne
 
 The Single Sign-On (SSO) page provides settings for the administrators to configure the SSO feature for user login management. For more information about the SSO feature, see [Single Sign-On (SSO)](./sso.md).
 
-{% endemqxee %} 
+{% endemqxee %}
 
