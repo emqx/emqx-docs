@@ -391,7 +391,7 @@
         {
           "title": "集成 Confluent",
           "path": "rule/bridge_confluent"
-        }
+        },
         {
           "title": "集成 InfluxDB",
           "path": "rule/backend_influxdb"
