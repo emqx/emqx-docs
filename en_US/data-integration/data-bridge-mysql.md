@@ -91,7 +91,7 @@ Data bridges for message storage and event recording require different SQL templ
 
 5. Input the connection information:
 
-   - **Server Host**: Input `http://127.0.0.1:3036`, or the actual URL if the MySQL server is running remotely.
+   - **Server Host**: Input `127.0.0.1:3306`, or the actual hostname if the MySQL server is running remotely.
    - **Database Name**: Input `emqx_data`.
    - **Username**: Input `root`.
    - **Password**: Input `public`.
