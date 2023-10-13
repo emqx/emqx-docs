@@ -91,8 +91,8 @@ Data bridges for message storage and event recording require different SQL templ
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
 5. Input the connection information:
-
-   - **Server Host**: Input `http://127.0.0.1:1521`, or the actual URL if the Oracle Database server is running remotely.
+n
+   - **Server Host**: Input `127.0.0.1:1521`, or the actual hostname if the Oracle Database server is running remotely.
    - **Database Name**: Input `XE`.
    - **Oracle Database SID**: Input `XE`.
    - **Username**: Input `system`.
