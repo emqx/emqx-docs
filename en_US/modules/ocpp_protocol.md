@@ -115,7 +115,7 @@ You can define a downstream topic for receiving the control messages. The OCPP g
 ## plugins/emqx_ocpp.conf
 ## Topic to receive downstream control commands.
 
-ocpp.dnstream.topic = ocpp/${cid}/+/+
+ocpp.dnstream.topic = ocpp/cs/${cid}/+/+
 ```
 
 Note: The use of the wildcard `+` in this example provides flexibility in the topic structure. However, it's not necessary and can be adjusted according to your requirements.
@@ -123,7 +123,7 @@ Note: The use of the wildcard `+` in this example provides flexibility in the to
 The payload of a downstream message is a JSON string with a fixed pattern, similar to upstream messaging, for example, below is a downstream send to Charge Point CP001.
 
 ```
-Topic: ocpp/cp/CP001/Reply/BootNotification
+Topic: ocpp/cs/CP001/Reply/BootNotification
 Payload:
   {"MessageTypeId": 3,
    "UniqueId": "1",
