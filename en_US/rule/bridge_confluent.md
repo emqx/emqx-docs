@@ -8,27 +8,25 @@ Before creating a Confluent data bridge, you must create a Confluent cluster in 
 
 ### Create cluster
 
-1. Login to the Confluent Cloud console and create a cluster. Select the Dedicated cluster as an example, and click **Begin configuration**.
+1. Login to the Confluent Cloud console and create a cluster. Select the Standard Cluster as an example, and click **Begin configuration**.
 
-   <img src="./assets/rule-engine/confluent_cluster.png" alt="cluster" style="zoom:67%;" />
+   <img src="./assets/rule-engine/confluent_create_cluster_1.png" alt="EMQX Confluent Create Cluster" style="zoom:67%;" />
 
 2. Select Region/zones. Make sure the deployment region matches the region of the Confluent Cloud. Click **Continue**.
 
-   <img src="./assets/rule-engine/confluent_region.png" alt="region" style="zoom:67%;" />
+   <img src="./assets/rule-engine/confluent_create_cluster_2.png" alt="EMQX Confluent Select Cluster Region" style="zoom:67%;" />
 
-3. Select Internet for the Networking and click **Continue**. <!--Need to update the screenshot-->
+3. Input your cluster name and click **Launch cluster**.
 
-   <img src="./assets/rule-engine/confluent_nat.png" alt="nat" style="zoom:67%;" />
+   <img src="./assets/rule-engine/confluent_create_cluster_3.png" alt="image-20231013105736218" style="zoom:67%;" />
 
-4. Select the way to manage the encryption key based on your requirement. Click **Continue**.
+### Create Topic and API Key Using Confluent Cloud CLI
 
-   <img src="./assets/rule-engine/confluent_security.png" alt="security" style="zoom:67%;" />
+Now that you have a cluster up and running in Confluent Cloud, and you can get the **Bootstrap server** URL in  **Cluster Overview** -> **Cluster Settings** page.
 
-5. Bind with a credit card, and you are ready to launch the cluster. 
+<img src="./assets/rule-engine/confluent_cluster_info.png" alt="image-20231013111959327" style="zoom:67%;" />
 
-### Manage Cluster Using Confluent Cloud CLI
-
-Now that you have a cluster up and running in Confluent Cloud, you can manage it using the Confluent Cloud CLI. Here are some basic commands that you could use with Confluent Cloud CLI.
+You can manage it using the Confluent Cloud CLI. Here are some basic commands that you could use with Confluent Cloud CLI.
 
 #### Install the Confluent Cloud CLI
 
@@ -51,13 +49,19 @@ confluent login --save
 #### Select the Environment
 
 ```bash
-confluent environment use env-xxxxx
+# list env
+confluent environment list
+# use env
+confluent environment use <environment_id>
 ```
 
 #### Select the Cluster
 
 ```bash
-confluent kafka cluster use lkc-xxxxx
+# list kafka cluster
+confluent kafka cluster list
+# use kafka
+confluent kafka cluster use <kafka_cluster_id>
 ```
 
 #### Use an API Key and Secret
@@ -65,7 +69,7 @@ confluent kafka cluster use lkc-xxxxx
 If you have an existing API key to use, add it to the CLI using the command:
 
 ```bash
-confluent api-key store --resource lkc-xxxxx
+confluent api-key store --resource <kafka_cluster_id>
 Key: <API_KEY>
 Secret: <API_SECRET>
 ```
@@ -73,13 +77,21 @@ Secret: <API_SECRET>
 If you do not have the API key and secret, you can create one using the command:
 
 ```bash
-confluent api-key create --resource lkc-xxxxx
+$ confluent api-key create --resource <kafka_cluster_id>
+
+It may take a couple of minutes for the API key to be ready.
+Save the API key and secret. The secret is not retrievable later.
++------------+------------------------------------------------------------------+
+| API Key    | YZ6R7YO6Q2WK35X7                                                 |
+| API Secret | ****************************************                         |
++------------+------------------------------------------------------------------+
 ```
 
 After add them to the CLI, you can use the API key and secret using the command:
 
 ```bash
-confluent api-key use "API_Key" --resource lkc-xxxxx
+confluent api-key use <API_Key> --resource <kafka_cluster_id>
+
 ```
 
 #### Create a Topic
@@ -87,7 +99,7 @@ confluent api-key use "API_Key" --resource lkc-xxxxx
 You can use the command below to create a topic:
 
 ```bash
-confluent kafka topic create <topic-name>
+confluent kafka topic create <topic_name>
 ```
 
 You can use the command below to check the topic list:
@@ -98,19 +110,23 @@ confluent kafka topic list
 
 #### Produce Messages to the Topic
 
+You can use the command below to create a producer. After the producer starts, enter a message and press the Enter key. The message will be produced to the corresponding topic.
+
 ```bash
-confluent kafka topic produce <topic-name>
+confluent kafka topic produce <topic_name>
 ```
 
 #### Consume Messages from the Topic
 
+You can use the command below to create a consumer.  It will output all messages in the corresponding topic.
+
 ```bash
-confluent kafka topic consume -b <topic-name>
+confluent kafka topic consume -b <topic_name>
 ```
 
 ## Create a Confluent Data Bridge
 
-This section provides instructions on how to create a Confluent data bridge in the EMQX Dashboard by creating a rule and adding an action to the rule to forward data to Confluent. 
+This section provides instructions on how to create a Confluent data bridge in the EMQX Dashboard by creating a rule and adding an action to the rule to forward data to Confluent.
 
 1. Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), and click **Rule Engine** -> **Rule** from the left navigation menu.
 
@@ -120,14 +136,14 @@ This section provides instructions on how to create a Confluent data bridge in t
    SELECT
        *
    FROM
-       "message.publish"
+       "t/#"
    ```
 
 3. Click on the **+ Add Action** button in the **Action** pane. In the **Add Action** pop-up window, select `Data forward` from the **Action Type** drop-down list and select `Data Bridge to Confluent`.
 
    ![confluent_action_type](./assets/rule-engine/confluent_action_type.png)
 
-4. Click **Create** next to the **Use of resources** drop-down box to bind a resource to the action. 
+4. Click **Create** next to the **Use of resources** drop-down box to bind a resource to the action.
 
 5. On the **Create** dialog, enter the Confluent cluster endpoint to the **Bootstrap Servers** and enter the **Key** and **Secret**. Keep all the other configuration items as default.
 
@@ -143,7 +159,7 @@ This section provides instructions on how to create a Confluent data bridge in t
 
    - **More Kafka Headers**: (Optional) This field provides a method to add one or more Kafka headers in the form of key-value pairs. The key and value can use placeholders in the format of `${var}`. For example, you can add a key-value pair with key `clientid` and value `${clientid}`. When a MQTT client with the client ID `foo` triggers the action, it will send out a Kafka header `clientid: foo`.
 
-   - **Kafka Headers value encode mode**: This field allows you to select the encode mode for the key specified in the **Kafka Headers** and **More Kafka Headers** fields. When the specified key is not in string format, or the specified value is not in binary or string format, the value will be encoded before being sent out by the action. 
+   - **Kafka Headers value encode mode**: This field allows you to select the encode mode for the key specified in the **Kafka Headers** and **More Kafka Headers** fields. When the specified key is not in string format, or the specified value is not in binary or string format, the value will be encoded before being sent out by the action.
 
      ::: tip
 
@@ -183,9 +199,7 @@ Payload: "hello"
 Inspect the Confluent by consuming the message from the topic using the command:
 
 ```bash
-confluent kafka topic consume -b <t/1>
+confluent kafka topic consume -b t.1
 ```
 
 Click the icon in the **Monitor** column of the rule. Verify that the "Matched" column has increased to 1.
-
-
