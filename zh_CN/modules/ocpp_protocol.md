@@ -125,7 +125,7 @@ ocpp.upstream.error_topic = ocpp/cp/Error/${cid}
 ```
 ## plugins/emqx_ocpp.conf
 ## Topic to receive downstream control commands.
-ocpp.dnstream.topic = ocpp/${cid}/+/+
+ocpp.dnstream.topic = ocpp/cs/${cid}/+/+
 ```
 注：在此示例中使用通配符 `+` 可提供主题结构的灵活性。但是，这不是必需的，可以根据您的要求进行调整。
 
@@ -133,7 +133,7 @@ ocpp.dnstream.topic = ocpp/${cid}/+/+
 
 例如，一条从三方系统发到网关的 BootNotifaction 的应答消息格式为：
 ```
-Topic: ocpp/cp/CP001/Reply/BootNotification
+Topic: ocpp/cs/CP001/Reply/BootNotification
 Payload:
   {"MessageTypeId": 3,
    "UniqueId": "1",
