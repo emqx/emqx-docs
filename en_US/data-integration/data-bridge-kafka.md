@@ -6,27 +6,28 @@ The Kafka data integration is an EMQX Enterprise Edition feature. EMQX Enterpris
 :::
 {% endemqxce %}
 
-[Apache Kafka](https://kafka.apache.org/) is a widely used open-source distributed event streaming platform that can handle the real-time transfer of data streams between applications and systems. In the IoT realm, data generated from devices and applications are transmitted using the lightweight MQTT protocol. EMQX’s integration with Kafka/[Confluent](https://www.confluent.io/) enables users to stream MQTT data seamlessly into or from Kafka. MQTT data streams are ingested into Kafka topics, ensuring real-time processing, storage, and analytics. Conversely, Kafka topics data can be consumed by MQTT devices, enabling timely actions. 
+[Apache Kafka](https://kafka.apache.org/) is a widely used open-source distributed event streaming platform that can handle the real-time transfer of data streams between applications and systems. However, Kafka is not built for edge IoT communication and Kafka clients require a stable network connection and more hardware resources. In the IoT realm, data generated from devices and applications are transmitted using the lightweight MQTT protocol. EMQX’s integration with Kafka/[Confluent](https://www.confluent.io/) enables users to stream MQTT data seamlessly into or from Kafka. MQTT data streams are ingested into Kafka topics, ensuring real-time processing, storage, and analytics. Conversely, Kafka topics data can be consumed by MQTT devices, enabling timely actions.
 
 <img src="./assets/kafka_bridge.jpg" alt="kafka_bridge" style="zoom:67%;" />
 
 This page provides a comprehensive introduction to the data integration between EMQX and Kafka with practical instructions on how to create and validate the data integration. Here is a list of topics covered on this page:
 
-- [How It Works](#how-it-works)
-- [Features and Benefits](#features-and-benefits)
-- [Before You Start](#before-you-start)
-  - [Prerequisites](#prerequisites)
-  - [Set Up a Kafka Server](#set-up-a-kafka-server)
-  - [Create Kafka Topics](#create-kafka-topics)
-- [Kafka Producer Data Bridge](#kafka-producer-data-bridge)
-  - [Create Rule and Data Bridge for Kafka Producer](#create-rule-and-data-bridge-for-kafka-producer)
-  - [Test Kafka Producer Data Bridge and Rule](#test-kafka-producer-data-bridge-and-rule)
-- [Kafka Consumer Data Bridge](#kafka-consumer-data-bridge)
-  - [Create Data Bridge for Kafka Consumer](#create-data-bridge-for-kafka-consumer)
-  - [Create Rule for Consumer Data Bridge (Optional)](#create-rule-for-consumer-data-bridge-optional)
-  - [Test Kafka Consumer Data Bridge and Rule](#test-kafka-consumer-data-bridge-and-rule)
-- [Advanced Configurations](#advanced-configurations)
-- [More Information](#more-information)
+- [Stream MQTT Data into Apache Kafka](#stream-mqtt-data-into-apache-kafka)
+  - [How It Works](#how-it-works)
+  - [Features and Benefits](#features-and-benefits)
+  - [Before You Start](#before-you-start)
+    - [Prerequisites](#prerequisites)
+    - [Set Up a Kafka Server](#set-up-a-kafka-server)
+    - [Create Kafka Topics](#create-kafka-topics)
+  - [Kafka Producer Data Bridge](#kafka-producer-data-bridge)
+    - [Create Rule and Data Bridge for Kafka Producer](#create-rule-and-data-bridge-for-kafka-producer)
+    - [Test Kafka Producer Data Bridge and Rule](#test-kafka-producer-data-bridge-and-rule)
+  - [Kafka Consumer Data Bridge](#kafka-consumer-data-bridge)
+    - [Create Data Bridge for Kafka Consumer](#create-data-bridge-for-kafka-consumer)
+    - [Create Rule for Consumer Data Bridge (Optional)](#create-rule-for-consumer-data-bridge-optional)
+    - [Test Kafka Consumer Data Bridge and Rule](#test-kafka-consumer-data-bridge-and-rule)
+  - [Advanced Configurations](#advanced-configurations)
+  - [More Information](#more-information)
 
 ## How It Works
 
@@ -39,14 +40,14 @@ The diagram below illustrates a typical architecture of data integration between
 Streaming data into or from Apache Kafka involves creating data bridges to Kafka in two roles: producer (sends messages to Kafka) and consumer (receives messages from Kafka). EMQX enables you to create data bridges in either of the roles. If you configure the data bridge in a producer role, it works as follows:
 
 1. **Message publication from IoT devices:** The connected vehicles periodically publish messages containing status data using the MQTT protocol. These messages include information such as speed and direction.
-2. **Message reception by EMQX:** As an MQTT borker, EMQX receives these MQTT messages from the connected vehicles. It serves as the centralized hub for handling MQTT-based communication.
+2. **Message reception by EMQX:** As an MQTT Broker, EMQX receives these MQTT messages from the connected vehicles. It serves as the centralized hub for handling MQTT-based communication.
 3. **Message data processing:** With an embedded rule engine working together with the broker as a single component, these MQTT messages can be processed based on topic matching rules. When a message arrives, it passes through the rule engine, which evaluates the defined rules for that message. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
-4. **Bridging to Kafka:** The rule defined in the rule engine triggers an action of forwarding the messages to Kafka. Using the Kafka bridging functionality, MQTT topics are mapped to pre-defined Kafka topics, and all processed messages and data are written into Kafka topics. 
+4. **Bridging to Kafka:** The rule defined in the rule engine triggers an action of forwarding the messages to Kafka. Using the Kafka bridging functionality, MQTT topics are mapped to pre-defined Kafka topics, and all processed messages and data are written into Kafka topics.
 
 After the vehicle data are ingested into Kafka, you can flexibly access and utilize the data:
 
 - Your services can directly integrate with Kafka clients to consume real-time data streams from specific topics, enabling customized business processing.
-- Utilize Kafka Streams for stream processing, and perform real-time monitoring by aggregating and correlating vehicle statuses in-memory.
+- Utilize Kafka Streams for stream processing, and perform real-time monitoring by aggregating and correlating vehicle statuses in memory.
 - By using Kafka Connect components, you can select various connectors to output data to external systems such as MySQL, ElasticSearch, for storage.
 
 ## Features and Benefits
@@ -57,9 +58,11 @@ The data integration with Apache Kafka brings the following features and benefit
 - **Payload transformation**: Message payload can be processed by the defined SQL rules during the transmission. For example, payloads containing some real-time metrics such as total message count, successful/failed delivery count, and message rate can go through data extraction, filtering, enrichment, and transformation before the messages are ingested into Kafka.
 - **Effective topic mapping:** Numerous IoT business topics can be mapped into Kakfa topics by the configured kafka data bridge. EMQX supports the MQTT user property mapping to Kafka headers and adopts various flexible topic mapping methods, including one-to-one, one-to-many, many-to-many, and also includes support for MQTT topic filters (wildcards).
 - **Flexible partition selection strategy**: Supports forwarding messages to the same Kafka partition based on MQTT topics or clients.
-- **Processing capabilities in high-throughput situations:** EMQX Kafka producer supports synchronous/asynchronous writing modes, enabling flexible balancing between latency and throughput according to different scenarios.
+- **Processing capabilities in high-throughput situations**: EMQX Kafka producer supports both synchronous and asynchronous writing modes, allowing you to differentiate between real-time priority and performance priority for data writing strategies and enabling flexible balancing between latency and throughput according to different scenarios.
+- **Runtime metrics**: Supports viewing runtime metrics for each data bridge, such as total messages, success/failure counts, current rate, etc.
+- **Dynamic configuration**: You can dynamically configure data bridges in the Dashboard or configuration file.
 
-These features enhance the integration capabilities and flexibility that help you establish an effective and robust IoT platform architecture. Your increasing volumes of IoT data can be transmitted under stable network connections and can be further stored and managed effectively. 
+These features enhance the integration capabilities and flexibility that help you establish an effective and robust IoT platform architecture. Your increasing volumes of IoT data can be transmitted under stable network connections and can be further stored and managed effectively.
 
 ## Before You Start
 
@@ -93,7 +96,7 @@ For detailed operation steps, you may refer to the [Quick Start section in Kafka
 
 ### Create Kafka Topics
 
-Relevant Kafka topics should be created before creating the data bridge in EMQX. Use the commands below to create two topics in Kafka:  `testtopic-in` (for the producer role) and `testtopic-out` (for the consumer role). 
+Relevant Kafka topics should be created before creating the data bridge in EMQX. Use the commands below to create two topics in Kafka:  `testtopic-in` (for the producer role) and `testtopic-out` (for the consumer role).
 
 ```bash
 bin/kafka-topics.sh --create --topic testtopic-in --bootstrap-server localhost:9092
@@ -107,7 +110,7 @@ This section provides instructions on how to create a rule and data bridge to fo
 
 ### Create Rule and Data Bridge for Kafka Producer
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through the configured Kafka data bridge to produce data into the Kafka `testtopic-in` topic. 
+This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through the configured Kafka data bridge to produce data into the Kafka `testtopic-in` topic.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -126,7 +129,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
      "t/#"
    ```
 
-   Note: If you are a beginner user, you can click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   Note: If you are a beginner user, you can click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
 5. Click the + **Add Action** button to define an action that will be triggered by the rule. Select **Forwarding with Data Bridge** from the dropdown list. With this action, EMQX sends the data processed by the rule to the data bridge.
 
@@ -134,11 +137,11 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 7. Select **Kafka** from the **Type of Data Bridge** drop-down list. Fill in the required fields (marked with an asterisk).
 
-8. In the **Bridge Role** field, select **Producer**. 
+8. In the **Bridge Role** field, select **Producer**.
 
 9. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
-10. Enter the connection information for the data bridge. 
+10. Enter the connection information for the data bridge.
     - Enter `127.0.0.1:9092` for the **Bootstrap Hosts**. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
     - Leave other options as default or configure them according to your business needs.
     - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
@@ -150,7 +153,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
     - **Message Key**: Kafka message key. Ensert a string here, either a plain string or a string containing placeholders (${var}).
     - **Message Value**: Kafka message value. Enter a string here, either a plain string or a string containing placeholders (${var}).
     - **Message Timestamp**: Specify the string format for this data field in a Kafka message.
-    - **Compression**: Specify whether or not to use compression algorithms to compress/decompress the records in a Kafka message. 
+    - **Compression**: Specify whether or not to use compression algorithms to compress/decompress the records in a Kafka message.
     - **Partition Strategy**: Select the way for the producer to dispatch messages to Kafka partitions.
 
 12. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
@@ -196,7 +199,7 @@ This section demonstrates how to create a data bridge to receive data from Kafka
 
 5. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
-6. Enter the connection information for the data bridge. 
+6. Enter the connection information for the data bridge.
    - Enter `127.0.0.1:9092` for the **Bootstrap Hosts**. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
    - Leave other options as default or configure according to your business needs.
    - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see **TLS for External Reesource Access**.
@@ -234,10 +237,10 @@ This section demonstrates how to create a data bridge to receive data from Kafka
    **Note**: Each Kafka-to-MQTT topic mapping must contain a unique Kafka topic name. That is, the Kafka topic must not be present in more than one mapping.
 
 9. **Offset Reset Policy**: Select the policy for resetting the offset where Kafaka consumers start to read from a Kafka topic partition when there is no consumer’s offset or the offset becomes invalid.
-   
+
    - Select **lastest** if you want the consumer to start reading messages from the latest offset, skipping messages that were produced before the consumer started.
    - Select **earliest** if you want the consumer to start reading messages from the beginning of the partition, including messages that were produced before the consumer started, that is, to read all the historical data in a topic.
-   
+
 10. Advanced settings (optional): See **Advanced Configurations.**
 
 11. Before clicking **Create**, you can click **Test Connection** to test that the bridge can connect to the Kafka server.
@@ -267,7 +270,7 @@ This section demonstrates how to create a rule in EMQX to further process the me
      "$bridges/kafka_consumer:<bridgeName>"
    ```
 
-   Note: If you are a beginner user, you can click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   Note: If you are a beginner user, you can click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
 5. Click the + **Add Action** button to define an action that will be triggered by the rule. Select **Republish** from the drop-down list.
 6. In **Topic** and **Payload** fields, you can enter the topic and payload for the messages you want to republish. For example, enter `t/1` and `${.}` for this demonstration.
@@ -280,13 +283,13 @@ This section demonstrates how to create a rule in EMQX to further process the me
 
 To test if the Kafka consumer data bridge and rule work as expected, you can use [MQTTX](https://mqttx.app/) to simulate a client that subscribes to a topic in EMQX and use the Kafaka producer to produce data to a Kafka topic. Then, check if the data from Kafka is republished by EMQX to the topic subscribed by the client.
 
-1. Use MQTTX to subscribe to topic `t/1`: 
+1. Use MQTTX to subscribe to topic `t/1`:
 
    ```bash
    mqttx sub -t t/1 -v
    ```
 
-2. Open a new command line window and start the Kafka producer using the command below: 
+2. Open a new command line window and start the Kafka producer using the command below:
 
    ```bash
    bin/kafka-console-producer --bootstrap-server 127.0.0.1:9092 --topic testtopic-out
@@ -294,9 +297,9 @@ To test if the Kafka consumer data bridge and rule work as expected, you can use
 
    You will be prompted to input a message.
 
-3. Enter `{"msg": "Hello EMQX"}` to produce a message to the `testtopic-out` topic using the producer and press enter. 
+3. Enter `{"msg": "Hello EMQX"}` to produce a message to the `testtopic-out` topic using the producer and press enter.
 
-4. Check the subscription in MQTTX. The following message from Kafka should be received under the topic `t/1`: 
+4. Check the subscription in MQTTX. The following message from Kafka should be received under the topic `t/1`:
 
    ```json
    {
@@ -343,10 +346,10 @@ EMQX provides bunches of learning resources on the data integration with Apache 
 
 **Blogs:**
 
-- [MQTT with Kafka: Supercharging IoT Data Integration](https://www.emqx.com/en/blog/mqtt-and-kafka) 
-- [Bridging MQTT Data to Kafka | EMQX Rule Engine Series](https://www.emqx.com/en/blog/emqx-rule-engine-series-bridge-data-to-message-queue-kafka) 
-- [MQTT Performance Benchmark Testing: EMQX-Kafka Integration](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-kafka-integration) 
-- [EMQX Enterprise + Apache Kafka Build a high-performance IoT message processing backend](https://www.emqx.com/en/blog/emqx-enterprise-mqtt-broker-apache-kafka-build-high-performance-iot-message-processing-backend) 
+- [MQTT with Kafka: Supercharging IoT Data Integration](https://www.emqx.com/en/blog/mqtt-and-kafka)
+- [Bridging MQTT Data to Kafka | EMQX Rule Engine Series](https://www.emqx.com/en/blog/emqx-rule-engine-series-bridge-data-to-message-queue-kafka)
+- [MQTT Performance Benchmark Testing: EMQX-Kafka Integration](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-kafka-integration)
+- [EMQX Enterprise + Apache Kafka Build a high-performance IoT message processing backend](https://www.emqx.com/en/blog/emqx-enterprise-mqtt-broker-apache-kafka-build-high-performance-iot-message-processing-backend)
 
 **Videos:**
 

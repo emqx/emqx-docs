@@ -671,6 +671,57 @@ stop tracing ip_address 127.0.0.1 successfully
 
 这个命令跟 `trace` 命令一样，但是会在整个集群所有节点中都开始或停止一个 tracer，参照上文的 trace 命令即可。
 
+| 命令                                                    | 描述                         |
+| ------------------------------------------------------- | ---------------------------- |
+| traces list                                             | 列出所有已启动的集群跟踪     |
+| traces start \<Name> client \<ClientId> [\<Duration>]   | 对集群中的一个客户端进行跟踪 |
+| traces start \<Name> topic \<Topic> [\<Duration>]       | 对集群中的一个主题进行跟踪   |
+| traces start \<Name> ip_address \<IPAddr> [\<Duration>] | 对集群中一个客户端IP进行跟踪 |
+| traces stop \<Name>                                     | 停止集群中的跟踪             |
+| traces delete \<Name>                                   | 删除集群中的跟踪             |
+
+### traces list
+
+```bash
+$ emqx ctl traces list
+Trace(mytraces_ip: ip_address=127.0.0.1, waiting, LogSize:#{'emqx@127.0.0.1' => 0})
+```
+
+### traces start \<Name> client \<ClientId> [\<Duration>]
+
+```bash
+$ emqx ctl traces start mytraces client emqx_c 1200
+cluster_trace clientid emqx_c mytraces successfully
+```
+
+### traces start \<Name> topic \<Topic> [\<Duration>]
+
+```bash
+$ emqx ctl traces start mytraces_ip topic t/1 1200
+cluster_trace topic t/1 mytraces_ip successfully
+```
+
+### traces start \<Name> ip_address \<IPAddr> [\<Duration>]
+
+```bash
+$ emqx ctl traces start mytraces_ip ip_address 127.0.0.1 1200
+cluster_trace ip_address 127.0.0.1 mytraces_ip successfully
+```
+
+### traces stop \<Name>
+
+```bash
+$ emqx ctl traces stop mytraces_ip
+Stop cluster_trace mytraces_ip successfully
+```
+
+### traces delete \<Name>
+
+```bash
+$ emqx ctl traces delete mytraces_ip
+Del cluster_trace mytraces_ip successfully
+```
+
 ## listeners
 
 管理监听器。

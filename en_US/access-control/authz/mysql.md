@@ -2,9 +2,9 @@
 
 This authorizer implements authorization checks by matching publish/subscription requests against lists of rules stored in the MySQL database.
 
-::: tip Tip
+::: tip Prerequisite
 
-- Knowledge about [basic EMQX authorization concepts](./authz.md)
+Knowledge about [basic EMQX authorization concepts](./authz.md)
 
 
 :::
@@ -17,6 +17,8 @@ Users need to provide a query statement template and ensure the following fields
 * `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
 * `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
 * `topic` value specifies the topic filter for topics relevant to the rule. Should be a string that supports wildcards and [topic placeholders](./authz.md#topic-placeholders).
+* `qos` (Optional) value specifies the QoS levels that the rule applies to. Value options are `0`, `1`, `2`. It can also be a string separated by `,` to specify multiple QoS levels, e.g. `0,1`. The default is all QoS levels.
+* `retain` (Optional) value specifies whether the current rule supports retained messages. Value options are `0` and `1`. The default is to allow retained messages.
 
 Example table structure for storing credentials:
 
@@ -29,6 +31,8 @@ CREATE TABLE `mqtt_acl` (
   `action` ENUM('publish', 'subscribe', 'all') NOT NULL,
   `permission` ENUM('allow', 'deny') NOT NULL,
   `topic` VARCHAR(255) NOT NULL DEFAULT '',
+  `qos` tinyint(1),
+  `retain` tinyint(1),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
@@ -48,7 +52,7 @@ Query OK, 1 row affected (0,01 sec)
 
 The corresponding configuration parameters are:
 ```bash
-query = "SELECT action, permission, topic, ipaddress FROM mqtt_acl where username = ${username} and ipaddress = ${peerhost}"
+query = "SELECT action, permission, topic, ipaddress, qos, retain FROM mqtt_acl where username = ${username} and ipaddress = ${peerhost}"
 ```
 
 ## Configure with Dashboard

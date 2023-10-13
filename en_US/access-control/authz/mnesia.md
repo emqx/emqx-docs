@@ -2,9 +2,9 @@
 
 EMQX provides users with a low-cost, out-of-the-box authorization rule storage method through the built-in database. You can use the built-in database (Mnesia) as a data source by setting it up through the Dashboard or configuration files, and add relevant authorization check rules through the Dashboard or HTTP API.
 
-::: tip Tip
+::: tip Prerequisite
 
-- Knowledge about [basic EMQX authorization concepts](./authz.md)
+Knowledge about [basic EMQX authorization concepts](./authz.md)
 
 :::
 
@@ -73,7 +73,7 @@ Each rule is applied to:
   *  `/api/v5/authorization/sources/built_in_database/all` 
 
 
-Below is a quick example for how to create rules for a client (`client1`):
+Below is a quick example of how to create rules for a client (`client1`):
 
 ```bash
 curl -X 'POST' \
@@ -107,5 +107,8 @@ curl -X 'POST' \
 Each rule contains:
 * `permission`: Whether to allow or deny a certain type of operation request from current client/user; optional values: `allow` or `deny`;
 * `action`: Configure the operation corresponding to this rule; optional values: `publish`, `subscribe`, or `all`;
-* `topic filter`: Configure the corresponding to this rule, supporting [topic placeholders](./authz.md#topic-placeholders).
+* `topic`: Configure the corresponding to this rule, supporting [topic placeholders](./authz.md#topic-placeholders).
+* `qos`: (Optional) A number array used to specify the QoS levels that the rule applies to, e.g. `[0, 1]`, `[1, 2]`. The default is all QoS levels.
+* `retain`: (Optional) Used to specify whether the current rule supports retained messages. Value options are `true`, `false`. Default is to allow retained messages.
+
 

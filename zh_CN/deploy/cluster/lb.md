@@ -45,7 +45,7 @@
 
 | 开源 LB                            | 是否支持 TLS 终结 | 方案介绍                                                        |
 | ---------------------------------- | ----------------- | --------------------------------------------------------------- |
-| [HAProxy](https://www.haproxy.org) | 是                | <https://www.haproxy.com/solutions/load-balancing.html>（推荐） |
+| [HAProxy](https://www.haproxy.org) | 是                | <https://www.haproxy.com/solutions/load-balancing.html> |
 | [Nginx](https://www.nginx.com)     | 是                | <https://www.nginx.com/solutions/load-balancing/>               |
 
 下面两个页面将以私有部署 LB 服务器为例向您介绍如何配置并负载均衡 EMQX 集群：

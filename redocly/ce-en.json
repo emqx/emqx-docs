@@ -307,7 +307,7 @@
           },
           "cacerts": {
             "default": false,
-            "description": "When enabled, uses the system trusted CA certificates for establishing to TLS connections.",
+            "deprecated": true,
             "type": "boolean"
           },
           "certfile": {
@@ -425,25 +425,25 @@
         "properties": {
           "cpu_check_interval": {
             "default": "60s",
-            "description": "The time interval for the periodic CPU check.",
+            "description": "The time interval for the periodic CPU check. Disabled on Windows platform.",
             "example": "12m",
             "type": "string"
           },
           "cpu_high_watermark": {
             "default": "80%",
-            "description": "The threshold, as percentage of system CPU load,<br/> for how much system cpu can be used before the corresponding alarm is raised.",
+            "description": "The threshold, as percentage of system CPU load,<br/> for how much system cpu can be used before the corresponding alarm is raised. Disabled on Windows platform",
             "example": "12%",
             "type": "number"
           },
           "cpu_low_watermark": {
             "default": "60%",
-            "description": "The threshold, as percentage of system CPU load,<br/> for how much system cpu can be used before the corresponding alarm is cleared.",
+            "description": "The threshold, as percentage of system CPU load,<br/> for how much system cpu can be used before the corresponding alarm is cleared. Disabled on Windows platform",
             "example": "12%",
             "type": "number"
           },
           "mem_check_interval": {
-            "default": "60s",
-            "description": "The time interval for the periodic memory check.",
+            "default": "disabled",
+            "description": "The time interval for the periodic memory check. Disabled on Windows platform.",
             "oneOf": [
               {
                 "example": "12m",
@@ -459,13 +459,13 @@
           },
           "sysmem_high_watermark": {
             "default": "70%",
-            "description": "The threshold, as percentage of system memory,<br/> for how much system memory can be allocated before the corresponding alarm is raised.",
+            "description": "The threshold, as percentage of system memory,<br/> for how much system memory can be allocated before the corresponding alarm is raised. Disabled on Windows platform",
             "example": "12%",
             "type": "number"
           },
           "procmem_high_watermark": {
             "default": "5%",
-            "description": "The threshold, as percentage of system memory,<br/> for how much system memory can be allocated by one Erlang process before<br/> the corresponding alarm is raised.",
+            "description": "The threshold, as percentage of system memory,<br/> for how much system memory can be allocated by one Erlang process before<br/> the corresponding alarm is raised. Disabled on Windows platform.",
             "example": "12%",
             "type": "number"
           }
@@ -536,7 +536,7 @@
         "properties": {
           "bind": {
             "default": 0,
-            "description": "Port without IP(18083) or port with specified IP(127.0.0.1:18083).<br/>Disabled when setting bind to `0`.<br/>",
+            "description": "Port without IP(18083) or port with specified IP(127.0.0.1:18083).<br/>Disabled when setting bind to `0`.",
             "example": "0.0.0.0:18083",
             "type": "string"
           },
@@ -797,6 +797,26 @@
           "username": {
             "description": "Username",
             "example": "user1",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "opentelemetry.exporter": {
+        "required": [
+          "interval"
+        ],
+        "properties": {
+          "endpoint": {
+            "default": "http://localhost:4317",
+            "description": "Open Telemetry Exporter Endpoint",
+            "example": "http://127.0.0.1",
+            "type": "string"
+          },
+          "interval": {
+            "default": "10s",
+            "description": "The interval of sending metrics to Open Telemetry Endpoint",
+            "example": "32s",
             "type": "string"
           }
         },
@@ -1104,6 +1124,16 @@
             "format": "password",
             "type": "string"
           },
+          "use_legacy_protocol": {
+            "default": "auto",
+            "description": "Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.",
+            "enum": [
+              "auto",
+              true,
+              false
+            ],
+            "type": "string"
+          },
           "auth_source": {
             "description": "Database name associated with the user's credentials.",
             "type": "string"
@@ -1291,6 +1321,60 @@
             "description": "Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.",
             "example": "12m",
             "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
@@ -1610,6 +1694,11 @@
             "description": "The payload of the message to be re-published.<br/>Template with variables is allowed, see description of the 'republish_args'.<br/>Defaults to ${payload}. If variable ${payload} is not found from the selected result<br/>of the rule, then the string \"undefined\" is used.",
             "example": "${payload}",
             "type": "string"
+          },
+          "mqtt_properties": {
+            "default": {},
+            "description": "From which variable should the MQTT Publish Properties of the message be taken.<br/>Placeholders like <code>${.payload.content_type}</code> may be used.",
+            "$ref": "#/components/schemas/rule_engine.republish_mqtt_properties"
           },
           "user_properties": {
             "default": "${user_properties}",
@@ -2042,6 +2131,60 @@
             "description": "Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.",
             "example": "12m",
             "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
@@ -2578,6 +2721,10 @@
             "minimum": 1,
             "type": "integer"
           },
+          "username": {
+            "description": "The username associated with the bridge in the external database used for authentication or identification purposes.",
+            "type": "string"
+          },
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
             "format": "password",
@@ -3012,6 +3159,16 @@
             "format": "password",
             "type": "string"
           },
+          "use_legacy_protocol": {
+            "default": "auto",
+            "description": "Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.",
+            "enum": [
+              "auto",
+              true,
+              false
+            ],
+            "type": "string"
+          },
           "auth_source": {
             "description": "Database name associated with the user's credentials.",
             "type": "string"
@@ -3353,7 +3510,7 @@
           },
           "cacerts": {
             "default": false,
-            "description": "When enabled, uses the system trusted CA certificates for establishing to TLS connections.",
+            "deprecated": true,
             "type": "boolean"
           },
           "certfile": {
@@ -3665,7 +3822,7 @@
           },
           "max_packet_size": {
             "default": "1MB",
-            "description": "Maximum MQTT packet size allowed.",
+            "description": "Maximum MQTT packet size allowed. Default: 1 MB, Maximum: 256 MB",
             "example": "32MB",
             "type": "string"
           },
@@ -5228,6 +5385,60 @@
             "example": "12m",
             "type": "string"
           },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
           },
@@ -5605,6 +5816,16 @@
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
             "format": "password",
+            "type": "string"
+          },
+          "use_legacy_protocol": {
+            "default": "auto",
+            "description": "Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.",
+            "enum": [
+              "auto",
+              true,
+              false
+            ],
             "type": "string"
           },
           "auth_source": {
@@ -6128,6 +6349,60 @@
             "example": "12m",
             "type": "string"
           },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
           }
@@ -6200,8 +6475,10 @@
           },
           "salt_rounds": {
             "default": 10,
-            "description": "Salt rounds for BCRYPT password generation.",
+            "description": "Work factor for BCRYPT password generation.",
             "example": 10,
+            "maximum": 10,
+            "minimum": 5,
             "type": "integer"
           }
         },
@@ -6260,7 +6537,7 @@
           },
           "cacerts": {
             "default": false,
-            "description": "When enabled, uses the system trusted CA certificates for establishing to TLS connections.",
+            "deprecated": true,
             "type": "boolean"
           },
           "certfile": {
@@ -6677,6 +6954,10 @@
             "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
+          },
+          "username": {
+            "description": "The username associated with the bridge in the external database used for authentication or identification purposes.",
+            "type": "string"
           },
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
@@ -7310,6 +7591,60 @@
             "description": "Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.",
             "example": "12m",
             "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
@@ -8099,6 +8434,60 @@
             "example": "12m",
             "type": "string"
           },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
           },
@@ -8174,6 +8563,10 @@
             "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
+          },
+          "username": {
+            "description": "The username associated with the bridge in the external database used for authentication or identification purposes.",
+            "type": "string"
           },
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
@@ -8290,6 +8683,10 @@
             "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
+          },
+          "username": {
+            "description": "The username associated with the bridge in the external database used for authentication or identification purposes.",
+            "type": "string"
           },
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
@@ -8636,6 +9033,60 @@
             "example": "12m",
             "type": "string"
           },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
           },
@@ -8826,7 +9277,7 @@
           },
           "cacerts": {
             "default": false,
-            "description": "When enabled, uses the system trusted CA certificates for establishing to TLS connections.",
+            "deprecated": true,
             "type": "boolean"
           },
           "certfile": {
@@ -9100,6 +9551,16 @@
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
             "format": "password",
+            "type": "string"
+          },
+          "use_legacy_protocol": {
+            "default": "auto",
+            "description": "Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.",
+            "enum": [
+              "auto",
+              true,
+              false
+            ],
             "type": "string"
           },
           "auth_source": {
@@ -9831,6 +10292,60 @@
             "example": "12m",
             "type": "string"
           },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
           }
@@ -9985,6 +10500,16 @@
             "format": "password",
             "type": "string"
           },
+          "use_legacy_protocol": {
+            "default": "auto",
+            "description": "Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.",
+            "enum": [
+              "auto",
+              true,
+              false
+            ],
+            "type": "string"
+          },
           "auth_source": {
             "description": "Database name associated with the user's credentials.",
             "type": "string"
@@ -10010,10 +10535,12 @@
         "properties": {
           "code": {
             "description": "BAD_REQUEST",
+            "example": 144,
             "type": "string"
           },
           "message": {
             "description": "Describes the failure reason in detail.",
+            "example": "topic_name_invalid",
             "type": "string"
           }
         },
@@ -10683,6 +11210,10 @@
             "minimum": 1,
             "type": "integer"
           },
+          "username": {
+            "description": "The username associated with the bridge in the external database used for authentication or identification purposes.",
+            "type": "string"
+          },
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
             "format": "password",
@@ -10821,6 +11352,60 @@
             "example": "12m",
             "type": "string"
           },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
           }
@@ -10881,7 +11466,7 @@
             "type": "string"
           },
           "mnesia_collector": {
-            "default": "enabled",
+            "default": "disabled",
             "description": "Enable or disable Mnesia metrics collector",
             "enum": [
               "enabled",
@@ -10890,7 +11475,7 @@
             "type": "string"
           },
           "vm_statistics_collector": {
-            "default": "enabled",
+            "default": "disabled",
             "description": "Enable or disable VM statistics collector.",
             "enum": [
               "enabled",
@@ -10899,7 +11484,7 @@
             "type": "string"
           },
           "vm_system_info_collector": {
-            "default": "enabled",
+            "default": "disabled",
             "description": "Enable or disable VM system info collector.",
             "enum": [
               "enabled",
@@ -10908,7 +11493,7 @@
             "type": "string"
           },
           "vm_memory_collector": {
-            "default": "enabled",
+            "default": "disabled",
             "description": "Enable or disable VM memory metrics collector.",
             "enum": [
               "enabled",
@@ -10917,7 +11502,7 @@
             "type": "string"
           },
           "vm_msacc_collector": {
-            "default": "enabled",
+            "default": "disabled",
             "description": "Enable or disable VM microstate accounting metrics collector.",
             "enum": [
               "enabled",
@@ -11071,6 +11656,60 @@
             "description": "Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.",
             "example": "12m",
             "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
@@ -11296,7 +11935,7 @@
           },
           "cacerts": {
             "default": false,
-            "description": "When enabled, uses the system trusted CA certificates for establishing to TLS connections.",
+            "deprecated": true,
             "type": "boolean"
           },
           "certfile": {
@@ -11548,6 +12187,60 @@
             "example": "12m",
             "type": "string"
           },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
           },
@@ -11764,6 +12457,26 @@
         },
         "type": "object"
       },
+      "rule_engine.republish_mqtt_properties": {
+        "properties": {
+          "Payload-Format-Indicator": {
+            "type": "string"
+          },
+          "Message-Expiry-Interval": {
+            "type": "string"
+          },
+          "Content-Type": {
+            "type": "string"
+          },
+          "Response-Topic": {
+            "type": "string"
+          },
+          "Correlation-Data": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "authn.http_get": {
         "required": [
           "backend",
@@ -11875,7 +12588,7 @@
           },
           "cacerts": {
             "default": false,
-            "description": "When enabled, uses the system trusted CA certificates for establishing to TLS connections.",
+            "deprecated": true,
             "type": "boolean"
           },
           "certfile": {
@@ -13822,7 +14535,7 @@
         "properties": {
           "bind": {
             "default": 0,
-            "description": "Port without IP(18083) or port with specified IP(127.0.0.1:18083).<br/>Disabled when setting bind to `0`.<br/>",
+            "description": "Port without IP(18083) or port with specified IP(127.0.0.1:18083).<br/>Disabled when setting bind to `0`.",
             "example": "0.0.0.0:18084",
             "type": "string"
           },
@@ -13957,6 +14670,16 @@
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
             "format": "password",
+            "type": "string"
+          },
+          "use_legacy_protocol": {
+            "default": "auto",
+            "description": "Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.",
+            "enum": [
+              "auto",
+              true,
+              false
+            ],
             "type": "string"
           },
           "auth_source": {
@@ -14680,6 +15403,10 @@
             "minimum": 1,
             "type": "integer"
           },
+          "username": {
+            "description": "The username associated with the bridge in the external database used for authentication or identification purposes.",
+            "type": "string"
+          },
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
             "format": "password",
@@ -14710,7 +15437,7 @@
           },
           "cacerts": {
             "default": false,
-            "description": "When enabled, uses the system trusted CA certificates for establishing to TLS connections.",
+            "deprecated": true,
             "type": "boolean"
           },
           "certfile": {
@@ -14832,6 +15559,23 @@
           "enable_crl_check": {
             "default": false,
             "description": "Whether to enable CRL verification for this listener.",
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "opentelemetry.opentelemetry": {
+        "required": [
+          "enable"
+        ],
+        "properties": {
+          "exporter": {
+            "description": "Open Telemetry Exporter",
+            "$ref": "#/components/schemas/opentelemetry.exporter"
+          },
+          "enable": {
+            "default": false,
+            "description": "Enable or disable open telemetry metrics",
             "type": "boolean"
           }
         },
@@ -15123,6 +15867,60 @@
             "description": "Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.",
             "example": "12m",
             "type": "string"
+          },
+          "authentication": {
+            "default": [],
+            "description": "Default authentication configs for all MQTT listeners.<br/><br/>For per-listener overrides see <code>authentication</code> in listener configs<br/><br/>This option can be configured with:<br/><ul><br/>  <li><code>[]</code>: The default value, it allows *ALL* logins</li><br/>  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li><br/>  <li>chain: An array of structs.</li><br/></ul><br/><br/>When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.<br/><br/>If there is no decision after a full chain exhaustion, the login is rejected.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/authn.scram"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_jwks"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_public_key"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.jwt_hmac"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_post"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.http_get"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_sentinel"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_cluster"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.redis_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_sharded"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_rs"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mongo_single"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.postgresql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.mysql"
+                },
+                {
+                  "$ref": "#/components/schemas/authn.builtin_db"
+                }
+              ]
+            },
+            "type": "array"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/broker.tcp_opts"
@@ -15641,7 +16439,7 @@
   },
   "info": {
     "title": "EMQX API",
-    "version": "5.1.3"
+    "version": "5.2.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -20284,83 +21082,83 @@
                   "general_client": {
                     "summary": "General client info",
                     "value": {
-                      "mailbox_len": 0,
-                      "expiry_interval": 0,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "recv_cnt": 1,
-                      "proto_ver": "1.0",
-                      "inflight_max": "infinity",
-                      "inflight_cnt": 0,
-                      "is_bridge": false,
                       "subscriptions_max": "infinity",
-                      "disconnected_at": null,
-                      "mqueue_max": "infinity",
-                      "connected": true,
-                      "mqueue_len": 0,
-                      "clean_start": true,
-                      "proto_name": "STOMP",
-                      "recv_pkt": 1,
-                      "send_msg": 0,
-                      "reductions": 72022,
-                      "subscriptions_cnt": 0,
+                      "inflight_max": "infinity",
+                      "recv_cnt": 1,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "mailbox_len": 0,
+                      "username": "guest",
                       "send_pkt": 1,
+                      "proto_ver": "1.0",
+                      "mqueue_max": "infinity",
+                      "awaiting_rel_max": "infinity",
+                      "connected": true,
+                      "expiry_interval": 0,
+                      "inflight_cnt": 0,
+                      "mqueue_len": 0,
+                      "reductions": 72022,
+                      "ip_address": "127.0.0.1",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "is_bridge": false,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "proto_name": "STOMP",
                       "recv_oct": 56,
                       "send_oct": 61,
-                      "keepalive": 0,
+                      "recv_pkt": 1,
                       "mqueue_dropped": 0,
+                      "send_msg": 0,
+                      "subscriptions_cnt": 0,
                       "awaiting_rel_cnt": 0,
-                      "ip_address": "127.0.0.1",
+                      "keepalive": 0,
                       "node": "emqx@127.0.0.1",
-                      "recv_msg": 0,
                       "heap_size": 4185,
-                      "awaiting_rel_max": "infinity",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "port": 50675,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "username": "guest",
-                      "send_cnt": 1
+                      "clean_start": true,
+                      "disconnected_at": null,
+                      "send_cnt": 1,
+                      "recv_msg": 0
                     }
                   },
                   "lwm2m_client": {
                     "summary": "LwM2M client info",
                     "value": {
-                      "mailbox_len": 0,
-                      "expiry_interval": 0,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "recv_cnt": 1,
-                      "proto_ver": "1.0",
-                      "endpoint_name": "urn:imei:154928475237123",
-                      "inflight_max": "infinity",
-                      "inflight_cnt": 0,
-                      "is_bridge": false,
                       "subscriptions_max": "infinity",
                       "lifetime": 86400,
-                      "disconnected_at": null,
-                      "mqueue_max": "infinity",
-                      "connected": true,
-                      "mqueue_len": 0,
-                      "clean_start": true,
-                      "proto_name": "LwM2M",
-                      "recv_pkt": 1,
-                      "send_msg": 0,
-                      "reductions": 72022,
-                      "subscriptions_cnt": 0,
+                      "inflight_max": "infinity",
+                      "recv_cnt": 1,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "mailbox_len": 0,
+                      "username": "guest",
                       "send_pkt": 1,
+                      "proto_ver": "1.0",
+                      "mqueue_max": "infinity",
+                      "awaiting_rel_max": "infinity",
+                      "connected": true,
+                      "expiry_interval": 0,
+                      "inflight_cnt": 0,
+                      "mqueue_len": 0,
+                      "reductions": 72022,
+                      "ip_address": "127.0.0.1",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "is_bridge": false,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "proto_name": "LwM2M",
                       "recv_oct": 56,
                       "send_oct": 61,
-                      "keepalive": 0,
+                      "recv_pkt": 1,
                       "mqueue_dropped": 0,
+                      "send_msg": 0,
+                      "subscriptions_cnt": 0,
                       "awaiting_rel_cnt": 0,
-                      "ip_address": "127.0.0.1",
+                      "keepalive": 0,
+                      "endpoint_name": "urn:imei:154928475237123",
                       "node": "emqx@127.0.0.1",
-                      "recv_msg": 0,
                       "heap_size": 4185,
-                      "awaiting_rel_max": "infinity",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "port": 50675,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "username": "guest",
-                      "send_cnt": 1
+                      "clean_start": true,
+                      "disconnected_at": null,
+                      "send_cnt": 1,
+                      "recv_msg": 0
                     }
                   }
                 },
@@ -23674,17 +24472,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "items": {
-                        "$ref": "#/components/schemas/emqx_mgmt_api_publish.publish_error"
-                      },
-                      "type": "array"
-                    },
-                    {
-                      "$ref": "#/components/schemas/emqx_mgmt_api_publish.bad_request"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/emqx_mgmt_api_publish.bad_request"
                 }
               }
             }
@@ -27700,6 +28488,28 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "MOVE_FAILED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Move failed",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -31910,6 +32720,26 @@
       }
     },
     "/banned": {
+      "delete": {
+        "description": "Clear all banned data.",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Banned"
+        ]
+      },
       "get": {
         "description": "List all currently banned client IDs, usernames and IP addresses.",
         "parameters": [
@@ -32255,6 +33085,114 @@
         ],
         "tags": [
           "Trace"
+        ]
+      }
+    },
+    "/opentelemetry": {
+      "get": {
+        "description": "Get opentelmetry configuration",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "example": {
+                  "enable": true,
+                  "exporter": {
+                    "endpoint": "http://localhost:4317",
+                    "interval": "10s"
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/opentelemetry.opentelemetry"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Monitor"
+        ]
+      },
+      "put": {
+        "description": "Update opentelmetry configuration",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "enable": true,
+                "exporter": {
+                  "endpoint": "http://localhost:4317",
+                  "interval": "10s"
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/opentelemetry.opentelemetry"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "example": {
+                  "enable": true,
+                  "exporter": {
+                    "endpoint": "http://localhost:4317",
+                    "interval": "10s"
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/opentelemetry.opentelemetry"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Update Config Failed",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Monitor"
         ]
       }
     },
@@ -33437,6 +34375,7 @@
                 "log",
                 "mqtt",
                 "node",
+                "opentelemetry",
                 "overload_protection",
                 "prometheus",
                 "psk_authentication",
