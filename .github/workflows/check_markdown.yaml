@@ -14,7 +14,7 @@ jobs:
         sudo npm install -g markdownlint-cli
         markdownlint -c .github/workflows/markdown_config.json ./
 
-  broker_directory_check:
+  ce_directory_check:
     runs-on: ubuntu-latest
     steps:
     - name: check out code
@@ -25,7 +25,7 @@ jobs:
         python3 ./gen.py ce | tee directory.json
         python3 .github/scripts/directory_check.py directory.json $(pwd)
 
-  enterprise_directory_check:
+  ee_directory_check:
     runs-on: ubuntu-latest
     steps:
     - name: check out code
