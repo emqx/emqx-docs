@@ -28,6 +28,8 @@ FROM
 | 目的 QoS | 转发消息的 QoS 等级，使用 0、1 或 2，也可以使用占位符变量。文档中使用的`${qos}`，在规则 SQL 配合使用的情况下，表示使用原消息的 QoS 等级。自定义业务规则 SQL，可以使用其他的 Integer 类型的变量来代替 | Integer 或 占位符变量 |
 | 目标保留消息标识 | 转发消息的保留消息标识，可以使用占位符变量。文档中使用的`${flags.retain}`，在规则 SQL 配合使用的情况下，表示使用原消息的 Retain 标识。自定义业务规则 SQL，可以使用其他的 Boolean 类型的变量来代替 | Boolean 或 占位符变量 |
 | 消息内容模板 | 转发消息的报文内容，可以使用占位符变量。文档中使用的`${payload}`，在规则 SQL 配合使用的情况下，表示使用原消息的 Payload 内容。自定义业务规则 SQL，可以使用其他的变量来代替 | String |
+| MQTT Properties | **Property** <br /> <br />  **Value** <br /> | 占位符变量 |
+| User Properties | **Property** <br /> <br />  **Value** <br /> | 占位符变量 |
 
 注意，当 QoS 与 Retain 使用占位符变量之后，从消息信息中获取到的参数不合法（即 QoS 不是 0、1 或 2，Retain 不是 true 、 false）时，消息会被丢弃，并标记此 action 失败。
 
