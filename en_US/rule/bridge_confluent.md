@@ -4,7 +4,7 @@ Confluent Cloud is a resilient, scalable, streaming data service based on Apache
 
 ## Configure Confluent Cloud
 
-Before creating a Confluent data bridge, you must create a Confluent cluster in the Confluent Cloud console.
+Before creating a Confluent data bridge, you must create a Confluent cluster in the Confluent Cloud console and create topic and API key using Confluent Cloud CLI.
 
 ### Create cluster
 
@@ -16,7 +16,7 @@ Before creating a Confluent data bridge, you must create a Confluent cluster in 
 
    <img src="./assets/rule-engine/confluent_create_cluster_2.png" alt="EMQX Confluent Select Cluster Region" style="zoom:67%;" />
 
-3. Input your cluster name and click **Launch cluster**.
+3. Enter your cluster name and click **Launch cluster**.
 
    <img src="./assets/rule-engine/confluent_create_cluster_3.png" alt="image-20231013105736218" style="zoom:67%;" />
 
@@ -128,7 +128,7 @@ confluent kafka topic consume -b <topic_name>
 
 This section provides instructions on how to create a Confluent data bridge in the EMQX Dashboard by creating a rule and adding an action to the rule to forward data to Confluent.
 
-1. Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), and click **Rule Engine** -> **Rule** from the left navigation menu.
+1. On EMQX Dashboard, click **Rule Engine** -> **Rule** from the left navigation menu.
 
 2. Click **+ Create** on the Rule Engine page. Type the following SQL in **SQL** text box:
 
@@ -139,21 +139,21 @@ This section provides instructions on how to create a Confluent data bridge in t
        "t/#"
    ```
 
-3. Click on the **+ Add Action** button in the **Action** pane. In the **Add Action** pop-up window, select `Data forward` from the **Action Type** drop-down list and select `Data Bridge to Confluent`.
+3. Click the **+ Add Action** button in the **Action** area. In the **Add Action** pop-up window, select `Data forward` from the **Action Type** drop-down list and select `Data Bridge to Confluent`.
 
    ![confluent_action_type](./assets/rule-engine/confluent_action_type.png)
 
 4. Click **Create** next to the **Use of resources** drop-down box to bind a resource to the action.
 
-5. On the **Create** dialog, enter the Confluent cluster endpoint to the **Bootstrap Servers** and enter the **Key** and **Secret**. Keep all the other configuration items as default.
+5. On the **Create** dialog, enter the information in **Endpoints** on Confluent cluster settings page to the **Bootstrap Servers** text box. Enter the API key and secret you created using the Confluent Cloud CLI to the **Key** and **Secret** text boxes. Keep all the other configuration items as default.
 
 6. Click the **Test** button to make sure the connection can be created successfully, and then click the **Confirm** button.
 
    ![confluent_create_resource](./assets/rule-engine/confluent_create_resource.png)
 
-6. Back to the **Add Action** dialog, configure the options for the rule action. click the "Confirm" button.
+6. Back to the **Add Action** dialog, configure the options for the rule action:
 
-   - **Kafka Topic**: Enter the topic you created when you configured the Confluent.
+   - **Kafka Topic**: Enter the topic you created when you configured the Confluent, for example `t.1`.
 
    - **Kafka Headers**: (Optional) This field is used to directly send a variable output by the rule as Kafka Headers. For example, if you enter `${pub_props}`, the action will send all PUBLISH properties of the MQTT message processed by the rule as Kafka Headers.
 
@@ -184,7 +184,7 @@ This section provides instructions on how to create a Confluent data bridge in t
 
 ## Test the Data Bridge
 
-You can test if the Confluent data bridge works properly by sending an MQTT message to EMQX:
+1. You can test if the Confluent data bridge works properly by sending an MQTT message to EMQX:
 
 ```bash
 Topic: "t/1"
@@ -196,10 +196,10 @@ Retained: false
 Payload: "hello"
 ```
 
-Inspect the Confluent by consuming the message from the topic using the command:
+2. Inspect the Confluent by consuming the message from the topic using the command:
 
 ```bash
 confluent kafka topic consume -b t.1
 ```
 
-Click the icon in the **Monitor** column of the rule. Verify that the "Matched" column has increased to 1.
+3. Click the icon in the **Monitor** column of the rule. Verify that the "Matched" column has increased to 1.
