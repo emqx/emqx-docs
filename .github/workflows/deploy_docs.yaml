@@ -82,6 +82,11 @@ jobs:
         token: ${{ secrets.CI_GIT_TOKEN }}
         path: frontend
 
+    - name: use python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
+
     - name: use node.js
       uses: actions/setup-node@v3
       with:
@@ -234,7 +239,7 @@ jobs:
         tccli cdn PurgePathCache --cli-unfold-argument --Paths https://emqxio-docs.emqx.net/ --FlushType delete
 
     - name: flush ee cdn
-      if: ${{ matrix.docs_type }} == 'enterprise'
+      if: matrix.docs_type == 'enterprise'
       run: |
         tccli cdn PurgePathCache --cli-unfold-argument --Paths https://docs.emqx.com/zh/${DOCS_TYPE}/${VERSION}/ https://docs.emqx.com/en/${DOCS_TYPE}/${VERSION}/ --FlushType delete
         tccli cdn PurgeUrlsCache --cli-unfold-argument --Urls https://docs.emqx.com/api/${DOCS_TYPE}_versions.json https://docs.emqx.com/sitemap_${DOCS_TYPE}_${VERSION}.xml
