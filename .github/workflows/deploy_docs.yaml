@@ -100,6 +100,7 @@ jobs:
     - name: generate directory.json
       run: |
         cd docs-files
+        pip3 install pyyaml
         if [[ $DOCS_TYPE == "broker" ]];
         then
           ./gen.py ce | tee directory.json
