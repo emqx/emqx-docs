@@ -6,7 +6,7 @@ Kafka 消费组使用外部 Kafka 作为消息队列，可以从 Kafka 中消费
 
 ::: tip
 
-Kafka 消费组不支持 Kafka0.9 以下版本。
+Kafka 消费组不支持 Kafka 0.9 以下版本。
 
 创建资源之前，需要提前创建 Kafka 主题，不然会提示错误。
 
