@@ -144,7 +144,7 @@ confluent kafka topic consume -b <topic_name>
 
 1. 在 Dashboard 左侧导航菜单中点击**规则引擎** -> **规则**。
 
-2. 在规则创建页面上，点击**+** **创建**。在 **SQL** 文本框中输入以下 SQL：
+2. 在规则创建页面上，点击**创建**。在 **SQL** 文本框中输入以下 SQL：
 
    ```sql
    SELECT
@@ -153,7 +153,7 @@ confluent kafka topic consume -b <topic_name>
        "t/#"
    ```
 
-3. 点击**响应动作**区域的**+** **添加动作** 按钮。在**新增动作**对话框中，从**动作类型**下拉框中选择`数据转发` -> `数据桥接到 Confluent`。
+3. 点击**响应动作**区域的**添加动作**按钮。在**新增动作**对话框中，从**动作类型**下拉框中选择`数据转发` -> `数据桥接到 Confluent`。
 
    ![confluent_action_type](./assets/rule-engine/confluent_action_type.png)
 
