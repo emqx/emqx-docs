@@ -34,7 +34,14 @@ Data sources from various IoT devices and systems have all kinds of data types a
 
 {% emqxce %}
 
-Only data bridges to [MQTT](./data-bridge-mqtt.md) and [HTTP Server](./data-bridge-webhook.md) are supported in the EMQX open-source version. However, you can refer to the following pages for the data systems supported in the EMQX enterprise version.
+EMQX open-source version currently supports data bridges to [MQTT](./data-bridge-mqtt.md) and [HTTP Server](./data-bridge-webhook.md). 
+
+**Custom**
+
+- [MQTT](./data-bridge-mqtt.md)
+- [Webhook](./webhook.md)/[HTTPServer](./data-bridge-webhook.md)
+
+The following data systems are only supported in the EMQX enterprise version:
 
 **Message Queue**
 
