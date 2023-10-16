@@ -22,15 +22,15 @@ EMQX 与 Confluent 的集成具备以下特性与优势：
 
 ### 创建集群
 
-1. 登录到 Confluent Cloud 控制台并创建一个集群。选择 Standard 集群作为示例，然后点击**Begin configuration**。
+1. 登录到 Confluent Cloud 控制台并创建一个集群。选择 Standard 集群作为示例，然后点击 **Begin configuration**。
 
    <img src="./assets/rule-engine/confluent_create_cluster_1.png" alt="EMQX Confluent Create Cluster" style="zoom:67%;" />
 
-2. 选择 Region/zones。确保部署区域与 Confluent Cloud 的区域匹配。然后点击**Continue**。
+2. 选择 Region/zones。确保部署区域与 Confluent Cloud 的区域匹配。然后点击 **Continue**。
 
    <img src="./assets/rule-engine/confluent_create_cluster_2.png" alt="EMQX Confluent Select Cluster Region" style="zoom:67%;" />
 
-3. 输入您的集群名称，然后单击**Launch cluster**。
+3. 输入您的集群名称，然后点击 **Launch cluster**。
 
    <img src="./assets/rule-engine/confluent_create_cluster_3.png" alt="image-20231013105736218" style="zoom:67%;" />
 
@@ -144,7 +144,7 @@ confluent kafka topic consume -b <topic_name>
 
 1. 在 Dashboard 左侧导航菜单中点击**规则引擎** -> **规则**。
 
-2. 在规则创建页面上，点击**+ 创建**。在 **SQL** 文本框中输入以下 SQL：
+2. 在规则创建页面上，点击**+** **创建**。在 **SQL** 文本框中输入以下 SQL：
 
    ```sql
    SELECT
@@ -153,15 +153,15 @@ confluent kafka topic consume -b <topic_name>
        "t/#"
    ```
 
-3. 点击**响应动作**区域的**+ 添加动作** 按钮。在**新增动作**对话框中，从**动作类型**下拉框中选择`数据转发` -> `数据桥接到 Confluent`。
+3. 点击**响应动作**区域的**+** **添加动作** 按钮。在**新增动作**对话框中，从**动作类型**下拉框中选择`数据转发` -> `数据桥接到 Confluent`。
 
    ![confluent_action_type](./assets/rule-engine/confluent_action_type.png)
 
 4. 点击**使用资源**下拉框边上的**新建**，为动作绑定一个资源。
 
-5. 在**创建资源**对话中，将 Confluent 集群设置页面的 Endpoints 中的信息填入**Bootstrap 服务器** 文本框。将您之前用 Confluent Cloud CLI 创建的 API 密钥和 Secret 填入**Key** 和 **Secret** 文本框。其余选项均使用默认值。
+5. 在**创建资源**对话中，将 Confluent 集群设置页面的 Endpoints 中的信息填入**Bootstrap 服务器** 文本框。将您之前用 Confluent Cloud CLI 创建的 API 密钥和 Secret 填入 **Key** 和 **Secret** 文本框。其余选项均使用默认值。
 
-6. 点击**测试**按钮以确保可以成功创建连接，然后点击**确认**按钮。
+6. 点击**测试**按钮以确保可以成功创建连接，然后点击**确定**按钮。
 
    ![confluent_create_resource](./assets/rule-engine/confluent_create_resource.png)
 
@@ -169,7 +169,7 @@ confluent kafka topic consume -b <topic_name>
 
    - **Kafka 主题**：输入您在配置 Confluent 时创建的主题，例如 `t.1`。
 
-   - **Kafka Headers**：（可选）此字段用于直接将规则输出的变量作为 Kafka Headers 发送。例如，如果您输入`${pub_props}`，则动作将经规则处理的 MQTT 消息的所有 PUBLISH 属性作为 Kafka Header发送。
+   - **Kafka Headers**：（可选）此字段用于直接将规则输出的变量作为 Kafka Headers 发送。例如，如果您输入`${pub_props}`，则动作将经规则处理的 MQTT 消息的所有 PUBLISH 属性作为 Kafka Header 发送。
 
    - **更多 Kafka Header**：（可选）此字段允许您以键值对形式添加一个或多个 Kafka Header。键和值可以使用`${var}`的格式作为占位符。例如，您可以添加一个键为`clientid`，值为`${clientid}`的键值对。当具有客户端 ID `foo` 的 MQTT 客户端触发动作时，它将发送一个 Kafka Header `clientid: foo`。
 
@@ -188,7 +188,7 @@ confluent kafka topic consume -b <topic_name>
 
    - 将其他选项保留为默认设置。
 
-8. 点击**确认**按钮。
+8. 点击**确定**按钮。
 
    ![confluent_add_action](./assets/rule-engine/confluent_add_action.png)
 

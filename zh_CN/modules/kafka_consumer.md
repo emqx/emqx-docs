@@ -1,6 +1,6 @@
 # Kafka 消费组
 
-Kafka 消费组使用外部 Kafka 作为消息队列，可以从 Kafka 中消费消息转换成为 MQTT 消息发布在 emqx 中。
+Kafka 消费组使用外部 Kafka 作为消息队列，可以从 Kafka 中消费消息转换成为 MQTT 消息发布在 EMQX 中。
 
 ## 启动 Kafka 并创建主题
 
@@ -66,11 +66,11 @@ $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --part
 - **Key 编码模式**：二进制 key 编码模式，UTF-8 或 base64，消息中 key 的编码方式，如果 key 值为非字符串或可能产生字符集编码异常的值，推荐使用 base64 模式。
 - **Value 编码模式**：二进制 value 编码模式，UTF-8 或 base64，消息中 value 的编码方式，如果 value 值为非字符串或可能产生字符集编码异常的值，推荐使用 base64 模式。
 - **提取消息最大字节数**：Kafka Max Bytes (每次从 Kafka 里消费消息的最大字节数)。
-- **Offset 重置策略**：Kafka Offset Reset Policy (重置Offset策略,reset_to_latest | reset_by_subdcriber)
+- **Offset 重置策略**：Kafka 消费者开始从 Kafka 主题分区读取的偏移量重置策略。可选值为：`reset_to_latest` 和 `reset_by_subdcriber`。
 - **是否重连**：Kafka consumer 是否重连。
 - **开启 SSL**：SSL 连接参数。
 
-点击添加后，模块添加完成:
+点击**添加**后，模块添加完成。
 
 ## 测试消息下发
 
@@ -86,6 +86,6 @@ $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --part
 
 ![img](./assets/kafka_consumer6.png)
 
-Dashboard的websocket工具接收到了Kafka 生产的消息"hello-kafka":
+Dashboard 的 Websocket工具接收到了Kafka 生产的消息"hello-kafka":
 
 ![img](./assets/kafka_consumer7.png)
