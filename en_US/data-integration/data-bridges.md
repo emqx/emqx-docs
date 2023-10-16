@@ -46,7 +46,7 @@ The following data systems are only supported in the EMQX enterprise version:
 **Message Queue**
 
 - [Amazon Kinesis](./data-bridge-kinesis.md)
-- [Apache Kafka/Confluence](./data-bridge-kafka.md)
+- [Apache Kafka/Confluent](./data-bridge-kafka.md)
 - [HStreamDB](./data-bridge-hstreamdb.md)
 - [Pulsar](./data-bridge-pulsar.md)
 - [RabbitMQ](./data-bridge-rabbitmq.md)
@@ -90,12 +90,12 @@ EMQX supports data integration with the following types of data systems.
 **Custom**
 
 - [MQTT](./data-bridge-mqtt.md)
-- [HTTP Server](./data-bridge-webhook.md)
+- [Webhook](./webhook.md)/[HTTPServer](./data-bridge-webhook.md)
 
 **Message Queue**
 
 - [Amazon Kinesis](./data-bridge-kinesis.md)
-- [Apache Kafka/Confluence](./data-bridge-kafka.md)
+- [Apache Kafka/Confluent](./data-bridge-kafka.md)
 - [HStreamDB](./data-bridge-hstreamdb.md)
 - [Pulsar](./data-bridge-pulsar.md)
 - [RabbitMQ](./data-bridge-rabbitmq.md)
