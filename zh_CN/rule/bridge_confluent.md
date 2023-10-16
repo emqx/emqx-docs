@@ -143,7 +143,6 @@ confluent kafka topic consume -b <topic_name>
 本节介绍了在 EMQX Dashboard 中如何通过创建规则并添加规则动作以将数据转发到 Confluent 来创建一个 Confluent 数据桥接。
 
 1. 在 Dashboard 左侧导航菜单中点击**规则引擎** -> **规则**。
-
 2. 在规则创建页面上，点击**创建**。在 **SQL** 文本框中输入以下 SQL：
 
    ```sql
