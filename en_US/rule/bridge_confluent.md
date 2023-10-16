@@ -1,6 +1,16 @@
 # Stream Data into Confluent
 
-Confluent Cloud is a resilient, scalable, streaming data service based on Apache Kafka, delivered as a fully managed service. EMQX supports data integration with Confluent through a data bridge to enable you to stream MQTT data into Confluent seamlessly. This page provides instructions on configuring the Confluent Cloud and creating a Confluent data bridge in EMQX.
+Confluent Cloud is a resilient, scalable, streaming data service based on Apache Kafka, delivered as a fully managed service. EMQX supports data integration with Confluent through a data bridge to enable you to stream MQTT data into Confluent seamlessly. This page mainly introduces you to the features and benefits of Confluent integration and guides you on how to configure Confluent Cloud and create a Confluent data bridge in EMQX.
+
+## Features and Benefits
+
+The integration of EMQX with Confluent offers the following features and advantages:
+
+- **Reliable large-scale message transmission**: Both EMQX and Confluent Cloud adopt highly reliable cluster mechanisms, ensuring a stable and dependable message transmission channel with zero message loss for large-scale IoT device messages. They both support horizontal scaling by adding nodes and dynamically adjusting resources to handle sudden increases in large-scale messages, guaranteeing message transmission availability.
+- **Powerful Data Processing Capability**: EMQX's native rule engine and Confluent Cloud both provide reliable stream data processing capabilities. They operate at different stages of IoT data, from devices to applications, allowing selective real-time data filtering, format conversion, aggregation, and analysis based on specific scenarios. This enables more complex IoT message processing workflows to meet the needs of data analytics applications.
+- **Robust Integration Capability**: Leveraging various connectors provided by Confluent Cloud, EMQX can easily integrate with other databases, data warehouses, data stream processing systems, and more. This allows for the creation of complete IoT data pipelines and agile data analysis applications.
+- **Processing capabilities in high-throughput situations**: The data integration supports both synchronous and asynchronous writing modes, allowing you to differentiate between real-time priority and performance priority for data writing strategies and enabling flexible balancing between latency and throughput according to different scenarios.
+- **Effective topic mapping:** Numerous IoT business topics can be mapped into Kakfa topics by the configured Confluent data bridge. EMQX supports the MQTT user property mapping to Kafka headers and adopts various flexible topic mapping methods, including one-to-one, one-to-many, many-to-many, and also includes support for MQTT topic filters (wildcards).
 
 ## Configure Confluent Cloud
 
