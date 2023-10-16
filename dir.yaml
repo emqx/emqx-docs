@@ -138,51 +138,6 @@
           lang: cn
           path: connect-emqx/wechat-miniprogram
 
-- title_en: EMQX Essentials
-  title_cn: EMQX 基础知识
-  path: mqtt/emqx-essentials
-  collapsed: true
-  children:
-    - title_en: MQTT Guide
-      title_cn: MQTT Guide
-      lang: en
-      path: https://www.emqx.com/en/mqtt-guide
-    - title_en: MQTT 教程
-      title_cn: MQTT 教程
-      lang: cn
-      path: https://www.emqx.com/zh/mqtt-guide
-    - title_en: Authentication and Authorization
-      title_cn: 认证与鉴权
-      collapsed: true
-      path: mqtt/emqx-access-control
-    - title_en: TLS
-      title_cn: TLS
-      collapsed: true
-      path: mqtt/emqx-tls
-    - title_en: Design and Implementation
-      title_cn: 设计与实现
-      path: design/overview
-      collapsed: true
-      children:
-        - title_en: Clustering
-          title_cn: Clustering
-          lang: en
-          path: design/clustering
-        - design/inflight-window-and-message-queue
-        - design/retransmission
-      # - design/design
-      # - title_en: SDK & Tools
-      #   title_cn: SDK 与工具
-      #   children:
-      #     - development/client
-      #     - development/c
-      #     - development/java
-      #     - development/go
-      #     - development/erlang
-      #     - development/javascript
-      #     - development/python
-      #     - development/resource
-
 - title_en: EMQX Clustering
   title_cn: 构建集群
   path: deploy/cluster/introduction
@@ -751,6 +706,43 @@
     # - advanced/quic
 
 ## Developers & Testers
+
+- title_en: EMQX Essentials
+  title_cn: EMQX 基础知识
+  path: mqtt/emqx-essentials
+  collapsed: true
+  children:
+    - title_en: MQTT Guide
+      title_cn: MQTT Guide
+      lang: en
+      path: https://www.emqx.com/en/mqtt-guide
+    - title_en: MQTT 教程
+      title_cn: MQTT 教程
+      lang: cn
+      path: https://www.emqx.com/zh/mqtt-guide
+    - title_en: Design and Implementation
+      title_cn: 设计与实现
+      path: design/overview
+      collapsed: true
+      children:
+        - title_en: Clustering
+          title_cn: Clustering
+          lang: en
+          path: design/clustering
+        - design/inflight-window-and-message-queue
+        - design/retransmission
+      # - design/design
+      # - title_en: SDK & Tools
+      #   title_cn: SDK 与工具
+      #   children:
+      #     - development/client
+      #     - development/c
+      #     - development/java
+      #     - development/go
+      #     - development/erlang
+      #     - development/javascript
+      #     - development/python
+      #     - development/resource
 
 - title_en: Reference
   title_cn: 参考指南
