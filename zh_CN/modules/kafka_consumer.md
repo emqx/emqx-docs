@@ -61,7 +61,7 @@ $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --part
     - `key`: 消息的 Key。
     - `headers`: 消息头，可以包含一些额外的元数据信息。
   - **MQTT QoS**：MQTT 消息质量等级。
-  - **MQTT PayLoad**：可选使用 Kafka message.value 或者 message 全部信息。
+  - **MQTT Payload**：可选使用 Kafka message.value 或者 message 全部信息。
 
 - **Key 编码模式**：二进制 key 编码模式，UTF-8 或 base64，消息中 key 的编码方式，如果 key 值为非字符串或可能产生字符集编码异常的值，推荐使用 base64 模式。
 - **Value 编码模式**：二进制 value 编码模式，UTF-8 或 base64，消息中 value 的编码方式，如果 value 值为非字符串或可能产生字符集编码异常的值，推荐使用 base64 模式。
