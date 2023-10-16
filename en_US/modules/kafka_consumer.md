@@ -43,7 +43,7 @@ $ ./bin/kafka-server-start.sh config/server.properties
 
 <img src="./assets/kafka_consumer2.png" alt="img" style="zoom:67%;" />
 
-3. Fill in the relevant parameters:
+3. Configure the parameters:
 
 <img src="./assets/kafka_consumer3.png" style="zoom:67%;" />
 
@@ -66,7 +66,7 @@ $ ./bin/kafka-server-start.sh config/server.properties
 - **Key encode mode**: Binary key encoding mode, UTF-8, or base64; encoding method for the key in the message. If the key value is non-string or may cause character encoding exceptions, it is recommended to use base64 mode.
 - **Value encode mode**: Binary value encoding mode, UTF-8, or base64; encoding method for the value in the message. If the value is non-string or may cause character encoding exceptions, it is recommended to use base64 mode.
 - **Max Bytes**: Kafka Max Bytes (maximum number of bytes to consume from Kafka at a time).
-- **Offset Reset Policy**: Kafka Offset Reset Policy (Offset reset strategy, reset_to_latest | reset_by_subscriber)
+- **Offset Reset Policy**: The policy for resetting the offset where Kafaka consumers start to read from a Kafka topic partition. Optional values: `reset_to_latest` and `reset_by_subscriber`.
 - **Enable Reconnect**: Whether the Kafka consumer should automatically reconnect.
 - **Enable SSL**: SSL connection parameters.
 

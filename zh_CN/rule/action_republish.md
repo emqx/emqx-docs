@@ -7,7 +7,7 @@
 ## 创建规则和动作
 
 1. 点击 Dashboard 左侧导航菜单中的**规则引擎** -> **规则**。
-2. 点击页面上的**+ 创建** 按钮，在**SQL 输入**中输入以下 SQL示例：
+2. 点击页面上的**+** **创建** 按钮，在 **SQL 输入**中输入以下 SQL示例：
 
 ```SQL
 SELECT
@@ -19,7 +19,7 @@ FROM
   "t/1"
 ```
 
-3. 在**响应动作**区域点击**+ 添加动作**，在**动作类型**下拉框中选择`数据转发` -> `消息重新发布`。配置以下参数：
+3. 在**响应动作**区域点击**+** **添加动作**，在**动作类型**下拉框中选择`数据转发` -> `消息重新发布`。配置以下参数：
 
    - **目的主题**：转发消息的主题名，默认值为 `repub/to/${clientid}`，类型为 String。可以使用占位符变量，例如 `${repub/to/${clientid}}`， 在规则 SQL 配合使用的情况下，表示使用发布者的 clientid 作为后缀。如选择自定义业务规则 SQL，可以使用其他的变量来代替。
 
@@ -35,7 +35,7 @@ FROM
 
    - **消息内容模板**：转发消息的报文内容，类型为 String，可以使用占位符变量，例如 `${payload}`，在规则 SQL 配合使用的情况下，表示使用原消息的 Payload 内容。自定义业务规则 SQL，可以使用其他的变量来代替。
 
-   - **MQTT Properties**：通过添加预定义的键值配置转发的消息的 MQTT 属性，可选的键包括 `Payload-Format-Indicator`、``Message-Expiry-Interval`、`Content-Type`、`Response-Topic`、`Correlation-Data`、`Subscription-Identifier`、`Topic-Alias` 等，用于表示 Payload 格式、消息过期时间、内容 MIME 类型、请求响应主题、消息关联等信息。详见 [MQTT 5.0](https://www.emqx.com/zh/blog/mqtt5-new-features-properties-and-loads) 规范中的定义。
+   - **MQTT Properties**：通过添加预定义的键值配置转发的消息的 MQTT 属性，可选的键包括 `Payload-Format-Indicator`、`Message-Expiry-Interval`、`Content-Type`、`Response-Topic`、`Correlation-Data`、`Subscription-Identifier`、`Topic-Alias` 等，用于表示 Payload 格式、消息过期时间、内容 MIME 类型、请求响应主题、消息关联等信息。详见 [MQTT 5.0](https://www.emqx.com/zh/blog/mqtt5-new-features-properties-and-loads) 规范中的定义。
 
    - **User Properties**：通过添加自定义的键值配置转发消息的[用户属性](https://www.emqx.com/zh/blog/mqtt5-user-properties)，用于表示自定义的消息元数据。
 
