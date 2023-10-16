@@ -8,6 +8,7 @@
 
 - [桥接数据到 MQTT Broker](./bridge_mqtt.md)
 - [集成 Kafka](./bridge_kafka.md)
+- [集成 Confluent](./bridge_confluent.md)
 - [集成 InfluxDB](./backend_influxdb.md)
 - [集成 InfluxDB V2](./backend_influxdb_v2.md)
 - [集成 MySQL](./backend_mysql.md)

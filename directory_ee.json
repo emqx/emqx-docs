@@ -1137,6 +1137,10 @@
           "path": "rule/bridge_kafka"
         },
         {
+          "title": "Stream Data into Confluent",
+          "path": "rule/bridge_confluent"
+        },
+        {
           "title": "Ingest Data into InfluxDB",
           "path": "rule/backend_influxdb"
         },

@@ -7,7 +7,8 @@ This chapter introduces the supported external data systems, how to set up the d
 Currently, the following are supported:
 
 - [Bridge Data into MQTT Broker](../rule/bridge_mqtt.md)
-- [Steam Data into Kafka](../rule/bridge_kafka.md)
+- [Stream Data into Kafka](../rule/bridge_kafka.md)
+- [Stream Data into Confluent](./bridge_confluent.md)
 - [Ingest Data into InfluxDB](../rule/backend_influxdb.md)
 - [Ingest Data into InfluxDB V2](../rule/backend_influxdb_v2.md)
 - [Ingest Data into MySQL](../rule/backend_mysql.md)
