@@ -1355,8 +1355,6 @@ Whether to support shared subscriptions.
 
 Whether to ignore the message sent by itself. If it is ignored, it means that EMQX Broker will not deliver this message to the sender of the message.
 
-
-
 ### mqtt.strict_mode
 
 | Type | Optional Value  | Default |
@@ -1367,7 +1365,30 @@ Whether to ignore the message sent by itself. If it is ignored, it means that EM
 
 Whether to enable the strict check mode. The strict check mode will check the correctness of the MQTT message in more detail.
 
+### mqtt.response_information
 
+| Type   | Default |
+| ----   | ------- |
+| string |  -  |
+
+#### Description
+
+Configures the Response-Information property returned in the server's CONNACK packet (MQTT 5.0). For more details, see: [CONNACK: Response Information](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901095)
+
+### mqtt.message_expiry_interval
+
+| Type     | Default   |
+| -------- | --------- |
+| duration | infinity  |
+
+#### Description
+
+Sets the message expiration interval.
+
+- For MQTT 5.0 clients, this configuration only takes effect when the `Message-Expiry-Interval` property is not set in the message; otherwise, the value of the `Message-Expiry-Interval` property is used.
+- For MQTT versions below 5.0, this configuration always takes effect.
+
+Note: Setting `message_expiry_interval` to a value greater than `session_expiry_interval` is meaningless, as all messages will be cleared when the session expires.
 
 ### zone.external.idle_timeout
 
