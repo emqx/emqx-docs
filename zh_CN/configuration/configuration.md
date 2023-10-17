@@ -1325,6 +1325,31 @@ Topic层级过多可能导致订阅时的性能问题。
 
 是否开启严格检查模式。严格检查模式会更细致的检查 MQTT 报文的正确性。
 
+### mqtt.response_information
+
+| Type   | Default |
+| ----   | ------- |
+| string |  -  |
+
+#### 说明
+
+配置服务端 CONNACK 报文中返回的 Response-Information 属性（MQTT 5.0)，详见：[CONNACK: Response Information](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901095)
+
+### mqtt.message_expiry_interval
+
+| Type     | Default |
+| -------- | ------- |
+| duration | infinity |
+
+#### 说明
+
+设置消息的过期时间。
+
+- 对于 MQTT 5.0 客户端，此配置仅当消息中未设置 `Message-Expiry-Interval` 属性时生效；否则，将使用 `Message-Expiry-Interval` 属性的值。
+- 对于低于 5.0 版本的 MQTT，此配置将始终生效。
+
+注意：将 `message_expiry_interval` 设置为大于 `session_expiry_interval` 的值是没有意义的，因为当会话过期时，所有消息都将被清除。
+
 <br />
 
 ## zoneexternal
