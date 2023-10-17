@@ -58,8 +58,10 @@ log2(1024) = 10
 
 |Function name|Purpose|parameter|Returned value|
 |--- |--- |--- |--- |
-|is_null|Judge if the variable is null|Data|Boolean data.if it is empty (undefined), return true, otherwise return false|
-|is_not_null|Judge if the variable is not null|Data|Boolean data.if it is empty (undefined), return false, otherwise return true|
+| is_null   | Checks if a variable is null. Note: This function cannot determine the JSON `null` type; use `is_null_var` instead. | Data  | Returns true if the variable is null (undefined); otherwise, returns false. |
+| is_not_null | Checks if a variable is not null. Note: This function cannot determine the JSON `null` type; use `is_null_var` instead. | Data  | Returns false if the variable is null (undefined); otherwise, returns true. |
+| is_null_var | Checks if a variable is null. | Data  | Returns true if the variable is null (undefined); otherwise, returns false. |
+| is_not_null_var | Checks if a variable is not null. | Data  | Returns false if the variable is null (undefined); otherwise, returns true. |
 |is_str|Judge whether the variable is String type|Data|Boolean data.|
 |is_bool|Judge if the variable is Boolean type|Data|Boolean data.|
 |is_int|Judge whether the variable is Integer type|Data|Boolean data.|
@@ -70,8 +72,16 @@ log2(1024) = 10
 
 
 ```erlang
-is_null(undefined) = true
+is_null(undefined_var) = true
+is_null(mget('a', json_decode('{"a": null}'))) = false
 is_not_null(1) = true
+is_not_null(mget('a', json_decode('{"a": null}'))) = true
+
+is_null_var(undefined_var) = true
+is_null_var(mget('a', json_decode('{"a": null}'))) = true
+is_not_null_var(1) = true
+is_not_null_var(mget('a', json_decode('{"a": null}'))) = false
+
 is_str(1) = false
 is_str('val') = true
 is_bool(true) = true
@@ -106,23 +116,46 @@ float2str(20.2, 17) = '20.19999999999999928'
 ```
 
 
-## String functions
+## String Functions
 
-|Function name|Purpose|parameter|returned value|
-|--- |--- |--- |--- |
-|lower|convert to lowercase|input string|Lowercase string|
-|upper|convert to uppercase|input string|uppercase string|
-|trim|Remove left and right space|input string|output string|
-|ltrim|Remove the left space|input string|output string|
-|rtrim|Remove the right space|input string|output string|
-|reverse|String inversion|input string|output string|
-|strlen|string length|input string|Integer value|
-|substr|Take a substring of characters|1. input string <br />2. Start position. Note: Subscripts start at 1|substring|
-|substring|Take a substring of characters|1. input string <br />2. Start position <br />3. End position. Note: Subscripts start at 1|substring|
-|split|String splitting|1. input string <br />2. split string|Split string array|
-|split|String splitting|1. input string <br />2. split string <br />3. Find the first separator on the left or right, optional value is 'leading' or 'trailing'|Split string array|
-|split|split string|1. input string <br />2. split string <br />3. Find the first separator on the left or right, optional value is 'leading' or 'trailing'|Split string array|
-
+| Function Name        | Description                                           | Parameters                                      | Return Value              |
+| --------------------- | ------------------------------------------------------- | ----------------------------------------------- | -------------------------- |
+| lower                 | Convert to lowercase                                     | 1. Original string                             | Lowercase string           |
+| upper                 | Convert to uppercase                                     | 1. Original string                             | Uppercase string           |
+| trim                  | Remove leading and trailing spaces                      | 1. Original string                             | String with spaces removed |
+| ltrim                 | Remove leading spaces                                    | 1. Original string                             | String with leading spaces removed |
+| rtrim                 | Remove trailing spaces                                   | 1. Original string                             | String with trailing spaces removed |
+| reverse               | Reverse the string                                       | 1. Original string                             | Reversed string            |
+| strlen                | Get the length of the string                            | 1. Original string                             | Integer value, character length |
+| substr                | Get a substring of the string                           | 1. Original string <br> 2. Starting position (Note: 0-based index) | Substring |
+| substr                | Get a substring of the string                           | 1. Original string <br> 2. Starting position <br> 3. Length of the substring to extract (Note: 0-based index) | Substring |
+| split                 | Split the string                                        | 1. Original string <br> 2. Substring for splitting | Array of split strings     |
+| split                 | Split the string, only find the first leading delimiter | 1. Original string <br> 2. Substring for splitting <br> 3. 'leading' | Array of split strings     |
+| split                 | Split the string, only find the first trailing delimiter | 1. Original string <br> 2. Substring for splitting <br> 3. 'trailing' | Array of split strings     |
+| concat                | Concatenate strings                                     | 1. Left string <br> 2. Right string | Concatenated string         |
+| tokens                | Tokenize the string (split by a specified substring)   | 1. Input string <br> 2. Delimiter string | Array of tokenized strings |
+| tokens                | Tokenize the string (split by a specified string and ignore line breaks) | 1. Input string <br> 2. Delimiter string <br> 3. 'nocrlf' | Array of tokenized strings |
+| sprintf               | Format a string (see Format section in [Erlang's Format documentation](https://erlang.org/doc/man/io.html#fwrite-1) for format string usage) | 1. Format string <br> 2, 3, 4... Parameter list. Variable number of parameters | Formatted string |
+| pad                   | Pad a string with spaces, add from the end             | 1. Original string <br> 2. Total character length | Padded string |
+| pad                   | Pad a string with spaces, add from the end             | 1. Original string <br> 2. Total character length <br> 3. 'trailing' | Padded string |
+| pad                   | Pad a string with spaces, add from both sides          | 1. Original string <br> 2. Total character length <br> 3. 'both' | Padded string |
+| pad                   | Pad a string with spaces, add from the beginning       | 1. Original string <br> 2. Total character length <br> 3. 'leading' | Padded string |
+| pad                   | Pad a string with a specified character, add from the end | 1. Original string <br> 2. Total character length <br> 3. 'trailing' <br> 4. Character for padding | Padded string |
+| pad                   | Pad a string with a specified character, add from both sides | 1. Original string <br> 2. Total character length <br> 3. 'both' <br> 4. Character for padding | Padded string |
+| pad                   | Pad a string with a specified character, add from the beginning | 1. Original string <br> 2. Total character length <br> 3. 'leading' <br> 4. Character for padding | Padded string |
+| replace               | Replace a substring in the string, find and replace all matches | 1. Original string <br> 2. Substring to be replaced <br> 3. String for replacement | Replaced string |
+| replace               | Replace a substring in the string, find and replace all matches | 1. Original string <br> 2. Substring to be replaced <br> 3. String for replacement <br> 4. 'all' | Replaced string |
+| replace               | Replace a substring in the string, find and replace the first trailing match | 1. Original string <br> 2. Substring to be replaced <br> 3. String for replacement <br> 4. 'trailing' | Replaced string |
+| replace               | Replace a substring in the string, find and replace the first leading match | 1. Original string <br> 2. Substring to be replaced <br> 3. String for replacement <br> 4. 'leading' | Replaced string |
+| regex_match           | Check if a string matches a regular expression pattern | 1. Original string <br> 2. Regular expression | true or false |
+| regex_replace         | Replace substrings in the string that match a regular expression pattern | 1. Original string <br> 2. Regular expression <br> 3. String for replacement | Replaced string |
+| ascii                 | Get the ASCII code of a character                      | 1. Character                                    | Integer value, ASCII code |
+| find                  | Find and return a substring in the string, search from the beginning | 1. Original string <br> 2. Substring to find | Found substring, empty string if not found |
+| find                  | Find and return a substring in the string, search from the beginning | 1. Original string <br> 2. Substring to find <br> 3. 'leading' | Found substring, empty string if not found |
+| find                  | Find and return a substring in the string, search from the end | 1. Original string <br> 2. Substring to find <br> 3. 'trailing' | Found substring, empty string if not found |
+| join_to_string        | Concatenate array elements into a string                | 1. Array                                        | Concatenated string, comma and space (`, `) used as separator |
+| join_to_string        | Concatenate array elements into a string                | 1. Separator string <br> 2. Array | Concatenated string |
+| join_to_sql_values_string | Concatenate array elements into a string, wrapping string elements with single quotes. Useful for building SQL VALUES clauses | 1. Array | Concatenated string, comma and space (`, `) used as separator |
 
 ```erlang
 lower('AbC') = 'abc'
@@ -147,21 +180,81 @@ split('a/b/ c', '/') = ['a', 'b', ' c']
 split('a/b/ c', '/', 'leading') = ['a', 'b/ c']
 split('a/b/ c', '/', 'trailing') = ['a/b', ' c']
 
+concat('a', '/bc') = 'a/bc'
+'a' + '/bc' = 'a/bc'
+
+tokens(' a/b/ c', '/') = [' a', 'b', ' c']
+tokens(' a/b/ c', '/ ') = ['a', 'b', 'c']
+tokens(' a/b/ c\n', '/ ') = ['a', 'b', 'c\n']
+tokens(' a/b/ c\n', '/ ', 'nocrlf') = ['a', 'b', 'c']
+tokens(' a/b/ c\r\n', '/ ', 'nocrlf') = ['a', 'b', 'c']
+
+sprintf('hello, ~s!', 'steve') = 'hello, steve!'
+sprintf('count: ~p~n', 100) = 'count: 100\n'
+
+pad('abc', 5) = 'abc  '
+pad('abc', 5, 'trailing') = 'abc  '
+pad('abc', 5, 'both') = ' abc '
+pad('abc', 5, 'leading') = '  abc'
+pad('abc', 5, 'trailing', '*') = 'abc**'
+pad('abc', 5, 'trailing', '*#') = 'abc*#*#'
+pad('abc', 5, 'both', '*') = '*abc*'
+pad('abc', 5, 'both', '*#') = '*#abc*#'
+pad('abc', 5, 'leading', '*') = '**abc'
+pad('abc', 5, 'leading', '*#') = '*#*#abc'
+
+replace('ababef', 'ab', 'cd') = 'cdcdef'
+replace('ababef', 'ab', 'cd', 'all') = 'cdcdef'
+replace('ababef', 'ab', 'cd', 'trailing') = 'abcdef'
+replace('ababef', 'ab', 'cd', 'leading') = 'cdabef'
+
+regex_match('abc123', '[a-zA-Z1-9]*') = true
+
+regex_replace('ab1cd3ef', '[1-9]', '[&]') = 'ab[1]cd[3]ef'
+regex_replace('ccefacef', 'c+', ':') = ':efa:ef'
+
+ascii('a') = 97
+
+find('eeabcabcee', 'abc') = 'abcabcee'
+find('eeabcabcee', 'abc', 'leading') = 'abcabcee'
+find('eeabcabcee', 'abc', 'trailing') = 'abcee'
+
+join_to_string(['a', 'b', 'c']) = 'a, b, c'
+join_to_string('-', ['a', 'b', 'c']) = 'a-b-c'
+join_to_sql_values_string(['a', 'b', 1]) = '\'a\', \'b\', 1'
 ```
 
-## Map function
+## Map Function
 
-|function name|purpose|parameter|returned value|
-|--- |--- |--- |--- |
-|map_get|Take the value of a Key in the Map, or return a null value if failed|1. Key <br />2. Map|The value of a Key in the Map. Support nested keys, such as "a.b.c"|
-|map_get|Take the value of a Key in the Map, if failed, return the specified default value|1. Key <br />2. Map <br />3. Default Value|The value of a Key in the Map. Support nested keys, such as "a.b.c"|
-|map_put|Insert value into Map|1. Key <br />2. Value <br />3. Map|The inserted Map. Support nested keys, such as "a.b.c"|
-
+| Function Name | Function Purpose | Parameters | Return Value |
+| --- | --- | --- | --- |
+| map_new | Creates an empty Map data type | None | An empty Map (Erlang Map type: `#{}`, equivalent to JSON objects `{}`) |
+| map_get | Retrieves the value of a specific Key in the Map; returns empty if the Key doesn't exist | 1. Key <br /> 2. Map | The value of a specific Key in the Map. Supports nested Keys, e.g., "a.b.c" |
+| map_get | Retrieves the value of a specific Key in the Map; returns a specified default value if the Key doesn't exist | 1. Key <br /> 2. Map <br /> 3. Default Value | The value of a specific Key in the Map. Supports nested Keys, e.g., "a.b.c" |
+| map_put | Inserts a value into the Map | 1. Key <br /> 2. Value <br /> 3. Map | The Map after the insertion. Supports nested Keys, e.g., "a.b.c" |
+| mget | Retrieves the value of a specific Key in the Map; returns empty if the Key doesn't exist. Similar to map_get but does not support nested Keys | 1. Key <br /> 2. Map | The value of a specific Key in the Map |
+| mget | Retrieves the value of a specific Key in the Map; returns a specified default value if the Key doesn't exist. Similar to map_get but does not support nested Keys | 1. Key <br /> 2. Map <br /> 3. Default Value | The value of a specific Key in the Map |
+| mput | Inserts a value into the Map. Similar to map_put but does not support nested Keys | 1. Key <br /> 2. Value <br /> 3. Map | The Map after the insertion |
+| map_keys | Retrieves all keys of a Map data type | Map | An array containing all the keys |
+| map_values | Retrieves all values of a Map data type | Map | An array containing all the values |
+| map_to_entries | Converts a Map into an array of Key-Value pairs | Map | An array in the format `[#{key => Key}, #{value => Value}]`, equivalent to JSON `[{"key": Key}, {"value": Value}]` |
 
 ```erlang
+map_new() = #{}
+json_encode(map_new()) = '{}'
 map_get('a', json_decode( '{ "a" : 1 }' )) = 1
 map_get('b', json_decode( '{ "a" : 1 }' ), 2) = 2
-map_get('a', map_put('a', 2, json_decode( '{ "a" : 1 }' ))) = 2
+map_get('a.b', json_decode( '{ "a" : {"b": 2} }' )) = 2
+map_put('c', 1, map_new()) = #{c => 1}
+map_put('c.d', 1, map_new()) = #{c => #{d => 1}}
+json_encode(map_put('c.d', 1, map_new())) = '{"c":{"d":1}}'
+mget('a.b', json_decode( '{ "a.b" : 1 }' )) = 1
+mget('a.b', json_decode( '{ "a" : {"b": 2} }' )) = undefined
+mput('c.d', 1, map_new()) = #{<<"c.d">> => 1}
+json_encode(mput('c.d', 1, map_new())) = '{"c.d":1}'
+json_encode(map_to_entries('{"a": 1, "b": 2}')) = '[{"value":1,"key":"a"}, {"value":2,"key":"b"}]'
+map_keys(json_decode('{ "a" : 1, "b" : 2 }')) = ['a', 'b']
+map_values(json_decode('{ "a" : 1, "b" : 2 }')) = [1, 2]
 ```
 
 
