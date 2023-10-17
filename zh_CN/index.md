@@ -83,7 +83,7 @@ EMQX 5.0 单集群可支持 MQTT 并发连接数高达 **1 亿**条。
 
 {% endemqxee %}
 
-## 产品对比
+<!-- ## 产品对比
 
 {% emqxce %}
 
@@ -262,4 +262,4 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
 | **故障排查**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 | **云原生 & K8s**         | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 
-{% endemqxee %}
+{% endemqxee %} -->
