@@ -77,7 +77,7 @@ EMQX can be easily deployed on-premises or in public clouds using **Kubernetes O
 - [**Complete Observability**](./dashboard/introduction.md): Monitoring, alerting, and advanced end-to-end analysis with real-time MQTT tracing.
 
 {% endemqxee %}
-
+<!-- 
 ## Product Comparison
 
 {% emqxce %}
@@ -264,4 +264,4 @@ The following is a list of feature comparison between EMQX Enterprise and Open S
 | **Troubleshooting**               | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
 | **Cloud-Native & K8s**            | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
 
-{% endemqxee %}
+{% endemqxee %} -->
