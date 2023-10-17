@@ -301,7 +301,8 @@ This section delves deeper into the advanced configuration options available for
 
 Check out the following links to learn more:
 
-**Blogs:**
+**Blogs**:
+
 [Storing Messages to MongoDB Database | EMQX Rule Engine Series](https://www.emqx.com/en/blog/emqx-rule-engine-series-store-messages-to-the-mongodb-database)
 
 **Reports**:
