@@ -36,9 +36,9 @@ The data integration with ClickHouse offers a range of features and benefits tai
 
 ## Before You Start
 
-This section introduces how to use the ClickHouse bridge with a practical tutorial, covering topics like how to create a ClickHouse server, how to set up a bridge, and how to set up a rule for forwarding data to the bridge and testing that it all works. 
+This section describes the preparations you need to complete before you start to create the ClickHouse data bridges in EMQX Dashboard.
 
-This tutorial assumes that you run both EMQX and ClickHouse on the local machine. If you have ClickHouse and EMQX running remotely, please adjust the settings accordingly.
+This tutorial assumes that you run both EMQX and ClickHouse on the local machine. If you have ClickHouse and EMQX running remotely, adjust the settings accordingly.
 
 ### Prerequisites
 
@@ -86,13 +86,13 @@ You can find more information about running ClickHouse in docker [on dockerhub](
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured data bridge to ClickHouse. 
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Rules** from the left navigation menu.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Input, for example, `my_rule` as the rule ID.
+3. Enter the rule ID, for example, `my_rule`.
 
-4. Input the following statement in the SQL editor, which will forward the MQTT messages matching the topic pattern `t/#`. 
+4. Enter the following statement in the SQL editor, which will forward the MQTT messages matching the topic pattern `t/#`. 
 
    ```sql
    SELECT 
@@ -139,7 +139,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
     <img src="./assets/clickhouse_bridge.png" alt="clickhouse_bridge" style="zoom:67%;" />
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. The rule you created should be shown in the rule list and the **status** should be connected.
 
 Now a rule to forward data to ClickHouse via a ClickHouse data bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to ClickHouse. 
 
