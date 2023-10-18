@@ -22,9 +22,9 @@
 
 [EMQX+Prometheus+Grafana：MQTT 数据可视化监控实践](https://www.emqx.com/zh/blog/emqx-prometheus-grafana)
 
-[EMQX+InfluxDB+Grafana 构建物联网可视化平台](EMQX+InfluxDB+Grafana 构建物联网可视化平台)
+[EMQX+InfluxDB+Grafana 构建物联网可视化平台](https://www.emqx.com/zh/blog/build-emqx-influxdb-grafana-iot-data-visualization-solution-in-one-hour)
 
-[使用 Node-RED 处理 MQTT 数据](使用 Node-RED 处理 MQTT 数据)
+[使用 Node-RED 处理 MQTT 数据](https://www.emqx.com/zh/blog/using-node-red-to-process-mqtt-data)
 
 [如何使用 ThingsBoard 接入 MQTT 数据](https://www.emqx.com/zh/blog/how-to-use-thingsboard-to-access-mqtt-data)
 
@@ -50,9 +50,9 @@
 
 [EMQX+Prometheus+Grafana：MQTT 数据可视化监控实践](https://www.emqx.com/zh/blog/emqx-prometheus-grafana)
 
-[EMQX+InfluxDB+Grafana 构建物联网可视化平台](EMQX+InfluxDB+Grafana 构建物联网可视化平台)
+[EMQX+InfluxDB+Grafana 构建物联网可视化平台](https://www.emqx.com/zh/blog/build-emqx-influxdb-grafana-iot-data-visualization-solution-in-one-hour)
 
-[使用 Node-RED 处理 MQTT 数据](使用 Node-RED 处理 MQTT 数据)
+[使用 Node-RED 处理 MQTT 数据](https://www.emqx.com/zh/blog/using-node-red-to-process-mqtt-data)
 
 [如何使用 ThingsBoard 接入 MQTT 数据](https://www.emqx.com/zh/blog/how-to-use-thingsboard-to-access-mqtt-data)
 
