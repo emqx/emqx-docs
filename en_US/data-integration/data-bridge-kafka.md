@@ -10,7 +10,7 @@ The Kafka data integration is an EMQX Enterprise Edition feature. EMQX Enterpris
 
 <img src="./assets/kafka_bridge.jpg" alt="kafka_bridge" style="zoom:67%;" />
 
-This page provides a comprehensive introduction to the data integration between EMQX and Kafka with practical using instructions. Here is a list of topics covered on this page:
+This page provides a comprehensive introduction to the data integration between EMQX and Kafka with practical instructions on creating rules and data bridges. Here is a list of topics covered on this page:
 
 - [Stream MQTT Data into Apache Kafka](#stream-mqtt-data-into-apache-kafka)
   - [How It Works](#how-it-works)

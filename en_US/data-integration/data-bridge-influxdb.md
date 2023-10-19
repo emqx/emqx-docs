@@ -6,9 +6,9 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 :::
 {% endemqxce %}
 
-InfluxDB is a database for storing and analyzing time series data. Its powerful data throughput capability and stable performance make it very suitable to be applied in the field of Internet of Things (IoT).
+InfluxDB is a database for storing and analyzing time series data. Its powerful data throughput capability and stable performance make it very suitable to be applied in the field of Internet of Things (IoT). EMQX now supports connection to mainstream versions of InfluxDB Cloud, InfluxDB OSS, or InfluxDB Enterprise. 
 
-EMQX now supports connection to mainstream versions of InfluxDB Cloud, InfluxDB OSS, or InfluxDB Enterprise.
+This page provides a comprehensive introduction to the data integration between EMQX and Kafka with practical instructions on creating a rule and data bridge.
 
 ## How It Works
 
@@ -22,10 +22,10 @@ EMQX and InfluxDB provide an extensible IoT platform for efficiently collecting 
 
 EMQX forwards device data to InfluxDB through the rule engine and data bridge. InfluxDB analyzes the data using SQL statements, generates reports, charts, and other data analysis results, and presents them to users through InfluxDB's visualization tools. The workflow is as follows:
 
-1. **IoT Devices Publish Messages**: Energy storage devices regularly publish energy consumption data using the MQTT protocol, including information such as power consumption, input/output power, etc.
-2. **Message Data Reception**: EMQX, as an MQTT server, receives these MQTT messages from the energy storage devices.
-3. **Rule Engine Processing**: Using the built-in rule engine, messages from specific sources can be processed based on topic matching. When a message arrives, it passes through the rule engine, which matches it with the corresponding rule and processes the message data, such as transforming data formats, filtering specific information, or enriching messages with contextual information.
-4. **Writing to InfluxDB**: Rules defined in the rule engine trigger the operation of writing messages to InfluxDB. The InfluxDB data bridge provides SQL templates that allow flexible definitions of the data format to be written, mapping specific fields from the message to the corresponding tables and columns in InfluxDB.
+1. **Message publication from IoT devices**: Energy storage devices regularly publish energy consumption data using the MQTT protocol, including information such as power consumption, input/output power, etc.
+2. **Message reception by EMQX**: As an MQTT broker, EMQX receives data over MQTT from devices by subscribing to the topics to which MQTT messages are published. It serves as the centralized hub for handling MQTT-based communication.
+3. **Message data processing**: Using the built-in rule engine, messages from specific sources can be processed based on topic matching. When a message arrives, it passes through the rule engine, which matches it with the corresponding rule and processes the message data, such as transforming data formats, filtering specific information, or enriching messages with contextual information.
+4. **Data ingestion into InfluxDB**: Rules defined in the rule engine trigger the operation of writing messages to InfluxDB. The InfluxDB data bridge provides SQL templates that allow flexible definitions of the data format to be written, mapping specific fields from the message to the corresponding tables and columns in InfluxDB.
 
 After energy consumption data is written to InfluxDB, you can use SQL statements flexibly to analyze the data, for example:
 
@@ -44,7 +44,7 @@ InfluxDB data integration offers the following features and advantages:
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create the InfluxDB data bridges in EMQX Dashboard.
+This section describes the preparations you need to complete before you start to create the InfluxDB data bridges, including installing and setting up InfluxDB.
 
 ### Prerequisites
 
@@ -55,7 +55,7 @@ This section describes the preparations you need to complete before you start to
 - Knowledge about [data bridge](./data-bridges.md)
 
 
-### Install InfluxDB Server
+### Install and Set Up InfluxD
 
 1. [Install InfluxDB](https://docs.influxdata.com/influxdb/v2.5/install/) via Docker, and then run the docker image.
 
@@ -77,7 +77,7 @@ This tutorial assumes that you run both EMQX and InfluxDB on the local machine. 
 
 2. Click **Create** on the top right corner of the page.
 
-3. Enter `my_rule` as the rule ID, 
+3. On the Create Rule page, enter `my_rule` as the rule ID.
 
 4. Set the rules in the **SQL Editor**, for example, if you want to save the MQTT messages of the topic `t/#`  to InfluxDB, you can use the SQL syntax below. 
 
@@ -149,14 +149,14 @@ This section delves deeper into the advanced configuration options available for
 
 | **Fields**                | **Descriptions**                                             | **Recommended Value** |
 | ------------------------- | ------------------------------------------------------------ | --------------------- |
-| **Start Timeout**         | Determines the maximum time interval, in seconds, that the EMQX data bridge will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the data bridge does not proceed with operations until it verifies that the connected resource—such as a database instance in ClickHouse—is fully operational and ready to handle data transactions. | `5`                   |
-| **Buffer Pool Size**      | Specifies the number of buffer worker processes that will be allocated for managing data flow in egress-type bridges between EMQX and ClichHouse. These worker processes are responsible for temporarily storing and handling data before it is sent to the target service. This setting is particularly relevant for optimizing performance and ensuring smooth data transmission in egress (outbound) scenarios. For bridges that only deal with ingress (inbound) data flow, this option can be set to "0" as it is not applicable. | `16`                  |
-| **Request TTL**           | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from ClickHouse, the request is deemed to have expired. | `45`                  |
-| **Health Check Interval** | Specifies the time interval, in seconds, at which the data bridge will perform automated health checks on the connection to ClickHouse. | `15`                  |
-| **Max Buffer Queue Size** | Specifies the maximum number of bytes that can be buffered by each buffer worker in the ClickHouse data bridge. Buffer workers temporarily store data before it is sent to ClickHouse, serving as an intermediary to handle data flow more efficiently. Adjust the value according to your system's performance and data transfer requirements. | `256`                 |
-| **Max Batch Size**        | Specifies the maximum size of data batches that can be transmitted from EMQX to ClickHouse in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and ClickHouse.<br />If the "Max Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | `1`                   |
-| **Query Mode**            | Allows you to choose `asynchronous` or `synchronous` query modes to optimize message transmission based on different requirements. In asynchronous mode, writing to ClickHouse does not block the MQTT message publish process. However, this might result in clients receiving messages ahead of their arrival in ClickHouse. | `Async`               |
-| **Inflight Window**       | An "in-flight query" refers to a query that has been initiated but has not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queries that can exist simultaneously when the data bridge is communicating with ClickHouse.<br/>When the **Query Mode** is set to `async` (asynchronous), the "Inflight Window" parameter gains special importance. If it is crucial for messages from the same MQTT client to be processed in strict order, you should set this value to 1. | `100`                 |
+| **Start Timeout**         | Determines the maximum time interval, in seconds, that the EMQX data bridge will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the data bridge does not proceed with operations until it verifies that the connected resource—such as a database instance in InfluxDB—is fully operational and ready to handle data transactions. | `5`                   |
+| **Buffer Pool Size**      | Specifies the number of buffer worker processes that will be allocated for managing data flow in egress-type bridges between EMQX and InfluxDB. These worker processes are responsible for temporarily storing and handling data before it is sent to the target service. This setting is particularly relevant for optimizing performance and ensuring smooth data transmission in egress (outbound) scenarios. For bridges that only deal with ingress (inbound) data flow, this option can be set to "0" as it is not applicable. | `16`                  |
+| **Request TTL**           | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from InfluxDB, the request is deemed to have expired. | `45`                  |
+| **Health Check Interval** | Specifies the time interval, in seconds, at which the data bridge will perform automated health checks on the connection to InfluxDB. | `15`                  |
+| **Max Buffer Queue Size** | Specifies the maximum number of bytes that can be buffered by each buffer worker in the InfluxDB data bridge. Buffer workers temporarily store data before it is sent to InfluxDB, serving as an intermediary to handle data flow more efficiently. Adjust the value according to your system's performance and data transfer requirements. | `256`                 |
+| **Max Batch Size**        | Specifies the maximum size of data batches that can be transmitted from EMQX to InfluxDB in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and InfluxDB.<br />If the "Max Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | `1`                   |
+| **Query Mode**            | Allows you to choose `asynchronous` or `synchronous` query modes to optimize message transmission based on different requirements. In asynchronous mode, writing to InfluxDB does not block the MQTT message publish process. However, this might result in clients receiving messages ahead of their arrival in InfluxDB. | `Async`               |
+| **Inflight Window**       | An "in-flight query" refers to a query that has been initiated but has not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queries that can exist simultaneously when the data bridge is communicating with InfluxDB.<br/>When the **Query Mode** is set to `async` (asynchronous), the "Inflight Window" parameter gains special importance. If it is crucial for messages from the same MQTT client to be processed in strict order, you should set this value to 1. | `100`                 |
 
 ## More Information
 
