@@ -314,7 +314,7 @@ This interface is used by the CoAP client to send messages to the specified topi
 
 **Request Parameters:**
 - Method: `POST`
-- URI: `mqtt/{+topic}{?QueryString*}`
+- URI: `ps/{+topic}{?QueryString*}`
   -  `{+topic}` is the topic of publish messages, i.e. the URI is `ps/coap/test` if publish message to `coap/test`.
   - `{?QueryString}` is request parameters:
     - `clientid`: required in `Connection Mode` and optional in `Connectionless Mode`.
@@ -352,7 +352,7 @@ Additional identity information needs to be carried if the `Connection Mode` ena
 **Request Parameters:**
 - Method: `GET`
 - Options: Set `observer` to `0`
-- URI: `mqtt/{+topic}{?QueryString*}`
+- URI: `ps/{+topic}{?QueryString*}`
   -  `{+topic}` is the topic to subscribe, i.e. the URI is `ps/coap/test` if to subscribe `coap/test`.
   - `{?QueryString}` is request parameters:
     - `clientid`: required in `Connection Mode` and optional in `Connectionless Mode`.
@@ -392,7 +392,7 @@ Additional identity information needs to be carried if the `Connection Mode` is 
 **Request Parameters:**
 
 - Method: `GET`
-- URI: `mqtt/{+topic}{?QueryString*}`
+- URI: `ps/{+topic}{?QueryString*}`
   -  `{+topic}` is the topic to unsubscribe, i.e. the URI is `ps/coap/test` if subscribe to `coap/test`.
   - `{?QueryString}` is request parameters:
     - `clientid`: required in `Connection Mode` and optional in `Connectionless Mode`.
