@@ -31,8 +31,6 @@ The workflow of the data integration is as follows:
 
 ## Features and Benefits
 
-<!-- List the features/strength of the data integration and what benefits and value can it bring to the business.--> @Guowei
-
 The data integration with IoTDB offers a range of features and benefits tailored to ensure effective data handling and storage:
 
 - **Efficient Data Collection**
@@ -49,9 +47,7 @@ The data integration with IoTDB offers a range of features and benefits tailored
 
 - **Optimized Time-Series Storage**: IoTDB provides optimized storage for time-stamped data. It leverages time-partitioning, compression, and data retention policies to efficiently store and manage large volumes of time-series data. This ensures a minimal storage footprint while maintaining high performance, which is essential for IoT workloads that generate massive amounts of time-series data.
 
-- **Fast and Complex Querying**
-
-  By leveraging this powerful database technology, businesses can perform complex analytics and queries on their time series data. EMQX seamlessly integrates with IoTDB, providing a unified solution for storing and analyzing MQTT data.
+- **Fast and Complex Querying**: IoTDB has rich query semantics, supporting time alignment for timeseries data accross devices and sensors, computation in timeseries field (frequency domain transformation) and rich aggregation function support in time dimension. It also deeply integrates with Apache Hadoop, Spark and Flink, providing more powerful analytics capabilities. EMQX seamlessly integrates with IoTDB, providing a unified solution for storing and analyzing MQTT data.
 
 ## Before You Start
 
@@ -61,8 +57,6 @@ This section describes the preparations you must complete before creating the Ap
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridges](./data-bridges.md)
-- Knowledge about time series database
-- Basic knowledge of UNIX terminal and commands
 
 ### Start an Apache IoTDB Server
 
@@ -280,6 +274,7 @@ This section describes some advanced configuration options that can optimize the
 | Query Mode               | Allows you to choose `asynchronous` or `synchronous` query modes to optimize message transmission based on different requirements. In asynchronous mode, writing to IoTDB does not block the MQTT message publish process. However, this might result in clients receiving messages ahead of their arrival in IoTDB. | `Async`            |
 | Inflight Window          | An "in-flight query" refers to a query that has been initiated but has not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queries that can exist simultaneously when the data bridge is communicating with Apache IoTDB. <br />When the `query_mode` is set to `async` (asynchronous), the "Inflight Window" parameter gains special importance. If it is crucial for messages from the same MQTT client to be processed in strict order, you should set this value to 1. | `100`              |
 
+<!-- TODO
 ## More Information
 
 EMQX provides bunches of learning resources on the data integration with Apache IoTDB. Check out the following links to learn more:
@@ -287,3 +282,5 @@ EMQX provides bunches of learning resources on the data integration with Apache 
 **Blogs:**
 
 [Time-Series Database (TSDB) for IoT: The Missing Piece](https://www.emqx.com/en/blog/time-series-database-for-iot-the-missing-piece)
+
+-->
