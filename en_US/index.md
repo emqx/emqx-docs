@@ -76,7 +76,6 @@ EMQX can be easily deployed on-premises or in public clouds using **Kubernetes O
 - [**Low Latency**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time): Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
 - [**Complete Observability**](./dashboard/introduction.md): Monitoring, alerting, and advanced end-to-end analysis with real-time MQTT tracing.
 
-
 {% endemqxee %}
 
 ## Product Comparison

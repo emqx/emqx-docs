@@ -48,6 +48,14 @@ This tutorial assumes that you run both EMQX and ClickHouse on the local machine
 
 - Basic knowledge of UNIX terminal and commands 
 
+### Prerequisites
+
+- Knowledge about EMQX data integration [rules](./rules.md)
+
+- Knowledge about [data bridges](./data-bridges.md)
+
+- Basic knowledge of UNIX terminal and commands 
+
 ### Start a ClickHouse Server
 
 This section introduces how to start a ClickHouse server using [Docker](https://www.docker.com/). 
