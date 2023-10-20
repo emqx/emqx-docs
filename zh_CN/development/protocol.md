@@ -31,23 +31,23 @@ MQTT v5.0 协议规范:
 
 ### 特点
 
-1.  开放消息协议，简单易实现
-2.  发布订阅模式，一对多消息发布
-3.  基于TCP/IP网络连接
-4.  1字节固定报头，2字节心跳报文，报文结构紧凑
-5.  消息QoS支持，可靠传输保证
+1. 开放消息协议，简单易实现
+2. 发布订阅模式，一对多消息发布
+3. 基于TCP/IP网络连接
+4. 1字节固定报头，2字节心跳报文，报文结构紧凑
+5. 消息QoS支持，可靠传输保证
 
 ### 应用
 
 MQTT协议广泛应用于物联网、移动互联网、智能硬件、车联网、电力能源等领域。
 
-1.  物联网M2M通信，物联网大数据采集
-2.  Android消息推送，WEB消息推送
-3.  移动即时消息，例如Facebook Messenger
-4.  智能硬件、智能家具、智能电器
-5.  车联网通信，电动车站桩采集
-6.  智慧城市、远程医疗、远程教育
-7.  电力、石油与能源等行业市场
+1. 物联网M2M通信，物联网大数据采集
+2. Android消息推送，WEB消息推送
+3. 移动即时消息，例如Facebook Messenger
+4. 智能硬件、智能家具、智能电器
+5. 车联网通信，电动车站桩采集
+6. 智慧城市、远程医疗、远程教育
+7. 电力、石油与能源等行业市场
 
 ### MQTT基于主题(Topic)消息路由
 
@@ -66,11 +66,13 @@ $SYS/broker/metrics/#
 ```
 
 主题(Topic)通过'/'分割层级，支持'+', '\#'通配符:
+
 ```
 '+': 表示通配一个层级，例如a/+，匹配a/x, a/y
     
 '#': 表示通配多个层级，例如a/#，匹配a/x, a/b/c/d
 ```
+
 订阅者与发布者之间通过主题路由消息进行通信，例如采用mosquitto命令行发布订阅消息:
 
 ```bash
@@ -79,9 +81,7 @@ mosquitto_sub -t a/b/+ -q 1
 mosquitto_pub -t a/b/c -m hello -q 1
 ```
 
-
 订阅者可以订阅含通配符主题，但发布者不允许向含通配符主题发布消息。
-
 
 ### MQTT V3.1.1协议报文
 
@@ -148,7 +148,6 @@ MQTT发布消息QoS保证不是端到端的，是客户端与服务器之间的�
 | 2              | 1              | 1              |
 | 2              | 2              | 2              |
 
-
 #### Qos0消息发布订阅
 
 ![image](./_assets/qos0_seq.png)
@@ -180,7 +179,6 @@ MQTT客户端向服务器发起CONNECT请求时，通过KeepAlive参数设置保
 
 emqx 消息服务器默认按最长 2.5 心跳周期超时设计。
 
-
 ### MQTT遗愿消息(Last Will)
 
 MQTT客户端向服务器端CONNECT请求时，可以设置是否发送遗愿消息(Will
@@ -209,29 +207,34 @@ hello
 保留消息(Retained
 Message)有两种清除方式:
 
-1.  客户端向有保留消息的主题发布一个空消息:
+1. 客户端向有保留消息的主题发布一个空消息:
 
 ```bash
 mosquitto_pub -r -q 1 -t a/b/c -m ''
 ```
-2.  消息服务器设置保留消息的超期时间。
+
+2. 消息服务器设置保留消息的超期时间。
 
 ### MQTT WebSocket连接
 
 MQTT协议除支持TCP传输层外，还支持WebSocket作为传输层。通过WebSocket浏览器可以直连MQTT消息服务器，发布订阅模式与其他MQTT客户端通信。
 
 MQTT协议的WebSocket连接，必须采用binary模式，并携带子协议Header:
+
 ```
 Sec-WebSocket-Protocol: mqttv3.1 或 mqttv3.1.1
 ```
+
 ### MQTT 与 XMPP 协议对比
 
 MQTT协议设计简单轻量、路由灵活，将在移动互联网物联网消息领域，全面取代PC时代的XMPP协议:
 
-1.  MQTT协议一个字节固定报头，两个字节心跳报文，报文体积小编解码容易。XMPP协议基于繁重的XML，报文体积大且交互繁琐。
-2.  MQTT协议基于主题(Topic)发布订阅模式消息路由，相比XMPP基于JID的点对点消息路由更为灵活。
-3.  MQTT协议未定义报文内容格式，可以承载JSON、二进制等不同类型报文。XMPP协议采用XML承载报文，二进制必须Base64编码等处理。
-4.  MQTT协议支持消息收发确认和QoS保证，XMPP主协议并未定义类似机制。MQTT协议有更好的消息可靠性保证。
+1. MQTT协议一个字节固定报头，两个字节心跳报文，报文体积小编解码容易。XMPP协议基于繁重的XML，报文体积大且交互繁琐。
+2. MQTT协议基于主题(Topic)发布订阅模式消息路由，相比XMPP基于JID的点对点消息路由更为灵活。
+3. MQTT协议未定义报文内容格式，可以承载JSON、二进制等不同类型报文。XMPP协议采用XML承载报文，二进制必须Base64编码等处理。
+4. MQTT协议支持消息收发确认和QoS保证，XMPP主协议并未定义类似机制。MQTT协议有更好的消息可靠性保证。
+
+{% emqxce %}
 
 ## MQTT-SN 协议
 
@@ -296,11 +299,10 @@ mqtt.sn.password = abc
 
 ### MQTT-SN 客户端库
 
-1.  <https://github.com/eclipse/paho.mqtt-sn.embedded-c/>
-2.  <https://github.com/ty4tw/MQTT-SN>
-3.  <https://github.com/njh/mqtt-sn-tools>
-4.  <https://github.com/arobenko/mqtt-sn>
-
+1. <https://github.com/eclipse/paho.mqtt-sn.embedded-c/>
+2. <https://github.com/ty4tw/MQTT-SN>
+3. <https://github.com/njh/mqtt-sn-tools>
+4. <https://github.com/arobenko/mqtt-sn>
 
 ## LWM2M 协议
 
@@ -317,21 +319,21 @@ LwM2M 最主要的实体包括 LwM2M Server 和 LwM2M Client。
 
 LwM2M Server 作为服务器，部署在 M2M 服务供应商处或网络服务供应商处。LwM2M 定义了两种服务器
 
-  - 一种是 LwM2M BOOTSTRAP SERVER，emqx-lwm2m 插件并未实现该服务器的功能。
-  - 一种是 LwM2M SERVER，emqx-lwm2m 实现该服务器在 UDP 上的功能，SMS 并没有实现。
+- 一种是 LwM2M BOOTSTRAP SERVER，emqx-lwm2m 插件并未实现该服务器的功能。
+- 一种是 LwM2M SERVER，emqx-lwm2m 实现该服务器在 UDP 上的功能，SMS 并没有实现。
 
 LwM2M Client 作为客户端，部署在各个 LwM2M 设备上。
 
 在 LwM2M Server 和 LwM2M Client 之间，LwM2M 协议定义了4个接口。
 
-1.  引导接口 Bootstrap：向 LwM2M 客户端提供注册到 LwM2M
+1. 引导接口 Bootstrap：向 LwM2M 客户端提供注册到 LwM2M
     服务器的必要信息，例如服务器访问信息、客户端支持的资源信息等。
-2.  客户端注册接口 Client Registration：使 LwM2M 客户端与 LwM2M 服务器互联，将 LwM2M
+2. 客户端注册接口 Client Registration：使 LwM2M 客户端与 LwM2M 服务器互联，将 LwM2M
     客户端的相关信息存储在 LwM2M 服务器上。只有完成注册后，LwM2M
     客户端与服务器端之间的通信与管理才成为可能。
-3.  设备管理与服务实现接口 Device Management and Service Enablement：该接口的主控方为 LwM2M
+3. 设备管理与服务实现接口 Device Management and Service Enablement：该接口的主控方为 LwM2M
     服务器，服务器向客户端发送指令，客户端对指令做出回应并将回应消息发送给服务器。
-4.  信息上报接口 Information Reporting：允许 LwM2M
+4. 信息上报接口 Information Reporting：允许 LwM2M
     服务器端向客户端订阅资源信息，客户端接收订阅后按照约定的模式向服务器端报告自己的资源变化情况。
 
 <!-- ![image](./_assets/lwm2m_arch.png) -->
@@ -342,14 +344,14 @@ LwM2M 把设备上的服务抽象为 Object 和 Resource, 在 XML 文件中定�
 
 LwM2M 协议预定义了8种 Object 来满足基本的需求，分别是：
 
-  - Security 安全对象
-  - Server 服务器对象
-  - Access Control 访问控制对象
-  - Device 设备对象
-  - Connectivity Monitoring 连通性监控对象
-  - Firmware 固件对象
-  - Location 位置对象
-  - Connectivity Statistics 连通性统计对象
+- Security 安全对象
+- Server 服务器对象
+- Access Control 访问控制对象
+- Device 设备对象
+- Connectivity Monitoring 连通性监控对象
+- Firmware 固件对象
+- Location 位置对象
+- Connectivity Statistics 连通性统计对象
 
 ### EMQX-LWM2M 插件
 
@@ -403,87 +405,25 @@ lwm2m.xml_dir =  etc/lwm2m_xml
 
 ### LwM2M 的客户端库
 
-  - <https://github.com/eclipse/wakaama>
-  - <https://github.com/OpenMobileAlliance/OMA-LWM2M-DevKit>
-  - <https://github.com/AVSystem/Anjay>
-  - <http://www.eclipse.org/leshan/>
+- <https://github.com/eclipse/wakaama>
+- <https://github.com/OpenMobileAlliance/OMA-LWM2M-DevKit>
+- <https://github.com/AVSystem/Anjay>
+- <http://www.eclipse.org/leshan/>
 
-## 私有 TCP 协议
+## CoAP 协议
 
-EMQX 提供 **emqx-tcp** 插件，插件作为一个靠近端侧的一个接入模块，按照其功能逻辑和整个系统的关系，将整个消息交换的过程可以分成三个部分：终端侧，平台侧和其它侧：
+CoAP(Constrained Application Protocol)是一种专为物联网环境设计的轻量级网络传输协议。它基于 UDP 通信，支持客户端/服务器模式，通过确认/非确认消息及资源观察实现可靠传输。CoAP 消息开销小,对无线性能和电池寿命要求较低。
 
-```bash
-|<-- Terminal -->|<--------- Broker Side --------->|<---  Others  --->|
-|<-    Sid e   ->|                                 |<--    Side    -->|
+CoAP 通过其轻量、高效的特性非常适合物联网环境，可以单独使用，也可以与其他协议相结合来实现不同的应用场景。
 
-+---+                                                PUB  +-----------+
-| D |  INCOMING  +----------+    PUB     +---------+   -->| subscriber|
-| E |----------->|          |----------->|         |--/   +-----------+
-| V |            | emqx-tcp |            |  EMQX  |
-| I |<-----------|          |<-----------|         |<--   +-----------+
-| C |  OUTGOING  +----------+    PUB     +---------+   \--| publisher |
-| E |                                                PUB  +-----------+
-+---+
-```
+EMQX 通过插件提供 CoAP 接入支持，使用方式请参考 [EMQX CoAP](https://github.com/emqx/emqx/blob/main-v4.4/apps/emqx_coap/README.md)。
 
+## STOMP 协议
 
-1. 终端侧，通过本插件定义的 TCP 私有协议进行接入，然后实现数据的上报，或者接收下行的消息。
-2. 平台侧，主体是 emqx-tcp 插件和  EMQX 系统。emqx-tcp 负责报文的编解码，代理订阅下行主题。实现将上行消息转为 EMQX 系统中的 MQTT 消息 PUBLISH 到整个系统中；将下行的 MQTT 消息转化为 TCP 私有协议的报文结构，下发到终端。
-3. 其它侧，可以对 2 中出现的上行的 PUBLISH 消息的主题进行订阅，以接收上行消息。或对发布消息到具体的下行的主题，以发送数据到终端侧。
+STOMP(Simple Text Oriented Messaging Protocol)是一种面向文本的消息中间件传输协议。它使用简单直观的文本格式进行通信<支持发布订阅和点对点两种消息模式。STOMP 易于实现和扩展，可以跨多种语言使用,常用于客户端和消息代理之间的异步消息传递。
 
+STOMP 通过其简单、轻量级的文本通信方式，对消息中间件和异步通信提供了一种简单高效的支持，它易学易用的特点使其可以跨平台跨语言地应用到分布式系统中的消息传输,成为一种流行的文本机器间通信协议。
 
-### 配置说明
+EMQX 通过插件提供 STOMP 接入支持，使用方式请参考 [EMQX STOMP](https://github.com/emqx/emqx/blob/main-v4.4/apps/emqx_stomp/README.md)。
 
-#### 协议层
-
-```bash
-## 闲置时间。超过该时间未收到 CONNECT 帧, 将
-## 直接关闭该 TCP 连接
-tcp.proto.idle_timeout = 1s
-
-## 上行主题。上行消息到 EMQ 系统中的消息主题
-##
-## 占位符：
-#### - %c: 接入客户端的 ClientId
-#### - %u: 接入客户端的 Username
-tcp.proto.up_topic = tcp/%c/up
-
-## 下行主题。客户端接入成功后, emqx-tcp 会订阅
-## 该主题，以接收 EMQ 系统向该类型的客户端下
-## 发的消息。
-##
-## 占位符：(同上)
-tcp.proto.dn_topic = tcp/%c/dn
-
-## 最大处理的单个 TCP 私有协议报文大小
-tcp.proto.max_packet_size = 65535
-
-## 开启状态统计。开启后，emqx-tcp 会定期更新
-## 连接信息, 并检测连接的健康状态
-tcp.proto.enable_stats = on
-
-## 强制 GC, 当进程已处理 1000 消息或发送数据超过 1M
-tcp.proto.force_gc_policy = 1000|1MB
-
-## 强制关闭连接, 当进程堆积 8000 消息或堆栈内存超过 800M
-tcp.proto.force_shutdown_policy = 8000|800MB
-```
-
-#### 监听器
-
-监听器配置比较广泛，在此仅列举部分常用部分：
-
-```bash
-
-## 配置监听的端口
-tcp.listener.external = 0.0.0.0:8090
-
-## 配置监听池大小。影响 TCP 建链的并发速率。
-tcp.listener.external.acceptors = 8
-
-## 最大连接数
-tcp.listener.external.max_connections = 1024000
-
-## 每秒支持的最大并发连接数
-tcp.listener.external.max_conn_rate = 1000
-```
+{% endemqxce %}
