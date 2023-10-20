@@ -231,6 +231,11 @@ tsdb=# select * from sensor_data;
 
 ## 更多内容
 
-您可以通过以下链接查看更多关于 InfluxDB 集成的内容：
+您可以通过以下链接查看更多关于 Timescale 集成的内容：
 
 **博客**：
+
+[MQTT Performance Benchmark Testing: EMQX-TimescaleDB Integration](https://www.emqx.com/en/blog/mqtt-performance-benchmark-series-emqx-timescaledb-integration)
+
+[使用 MQTT 和 Timescale 为工业能耗监控构建物联网时序数据应用](https://www.emqx.com/zh/blog/build-an-iot-time-series-data-application-for-energy-storage-with-mqtt-and-timescale)
+
