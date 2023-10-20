@@ -346,10 +346,9 @@ EMQX provides bunches of learning resources on the data integration with Apache 
 
 **Blogs:**
 
+- [Building Connected Vehicle Streaming Data Pipelines with MQTT and Kafka: A 3-Minute Guide](https://www.emqx.com/en/blog/building-connected-vehicle-streaming-data-pipelines-with-mqtt-and-kafka)
 - [MQTT with Kafka: Supercharging IoT Data Integration](https://www.emqx.com/en/blog/mqtt-and-kafka)
-- [Bridging MQTT Data to Kafka | EMQX Rule Engine Series](https://www.emqx.com/en/blog/emqx-rule-engine-series-bridge-data-to-message-queue-kafka)
 - [MQTT Performance Benchmark Testing: EMQX-Kafka Integration](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-kafka-integration)
-- [EMQX Enterprise + Apache Kafka Build a high-performance IoT message processing backend](https://www.emqx.com/en/blog/emqx-enterprise-mqtt-broker-apache-kafka-build-high-performance-iot-message-processing-backend)
 
 **Videos:**
 
