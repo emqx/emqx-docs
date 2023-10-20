@@ -281,7 +281,7 @@ http {
 
       proxy_http_version 1.1;
       proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection "upgrade";
+      proxy_set_header Connection "Upgrade";
 
       # 禁用缓存             
       proxy_buffering off;
@@ -334,7 +334,7 @@ http {
         proxy_pass http://mqtt_websocket_servers;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
+        proxy_set_header Connection "Upgrade";
 
         # 反向代理真实 IP            
         proxy_set_header Host $host;            
