@@ -275,7 +275,7 @@ http {
 
       proxy_http_version 1.1;
       proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection "upgrade";
+      proxy_set_header Connection "Upgrade";
 
       # Disable caching
       proxy_buffering off;
@@ -326,7 +326,7 @@ http {
         proxy_pass http://mqtt_websocket_servers;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
+        proxy_set_header Connection "Upgrade";
 
         # Reverse proxy real IP
         proxy_set_header Host $host;
