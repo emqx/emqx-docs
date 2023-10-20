@@ -88,7 +88,7 @@ CREATE TABLE t_emqx_client_events (
 4. 输入数据桥接名称，名称应为大/小写字母和数字的组合。
 5. 输入以下连接信息：
 
-   - **服务器地址**：输入 `http://127.0.0.1:1521`，如果 Oracle Database 服务器在远程运行，则需输入实际地址。
+   - **服务器地址**：输入 `127.0.0.1:1521`，如果 Oracle Database 服务器在远程运行，则需输入实际地址。
    - **数据库名字**: 输入 `XE`。
    - **Oracle Database SID**: Input `XE`。
    - **用户名**: 输入 `system`。
