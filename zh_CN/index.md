@@ -83,9 +83,9 @@ EMQX 5.0 单集群可支持 MQTT 并发连接数高达 **1 亿**条。
 
 {% endemqxee %}
 
-## 产品对比
-
 {% emqxce %}
+
+## 产品对比
 
 EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless 和 EMQX Cloud 专有版）和两种自托管模式（EMQX 开源版 和 EMQX 企业版）。以下列出了这些部署模式的主要功能对比，以帮助您根据业务需求进行选择。
 
