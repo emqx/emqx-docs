@@ -66,9 +66,9 @@ EMQX can be easily deployed on-premises or in public clouds using **Kubernetes O
 
 {% endemqxee %}
 
-## Product Comparison
-
 {% emqxce %}
+
+## Product Comparison
 
 EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud Serverless and EMQX Dedicated Cloud) and two self-hosted options (EMQX Open Source and EMQX Enterprise). To help you choose the best deployment option for your requirements, this page lists a comparison of feature support across different deployment types.
 
@@ -226,30 +226,3 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
 </div>
 
 {% endemqxce %}
-
-{% emqxee %}
-
-The following is a list of feature comparison between EMQX Enterprise and Open Source edition.
-
-| **Items**                         | **EMQX Enterprise**                                         | **EMQX Open Source**                                        |
-| :-------------------------------- | :---------------------------------------------------------- | :---------------------------------------------------------- |
-| **Scalability**                   | Up to 100M MQTT connections per cluster                     | Up to 100M MQTT connections per cluster                     |
-| **Performance**                   | 5M+ MQTT messages per second                                | 5M+ MQTT messages per second                                |
-| **Reliability**                   | Data persistence in RocksDB (Coming soon)                   | Data storage in memory                                      |
-| **Latency**                       | 1~5 millisecond                                             | 1~5 millisecond                                             |
-| **Integrations (Out-of-the-box)** | 40+                                                         | 2                                                           |
-| **License Model**                 | Commercial license (Business source license)                | Apache Version 2.0                                          |
-| **Technical Support**             | 24/7 Global support                                         | Open source community                                       |
-| **MQTT 5.0 Broker**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **MQTT over QUIC**                | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **MQTT Add-ons**                  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **Multi-Protocol Gateways**       | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **Schema Registry**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **Message Codec**                 | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **Rule Engine**                   | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
-| **File Transfer**                 | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **Enterprise Integrations**       | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **Troubleshooting**               | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
-| **Cloud-Native & K8s**            | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
-
-{% endemqxee %}
