@@ -72,9 +72,9 @@ EMQX 5.0 单集群可支持 MQTT 并发连接数高达 **1 亿**条。
 
 {% endemqxee %}
 
-## 产品对比
-
 {% emqxce %}
+
+## 产品对比
 
 EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless 和 EMQX Cloud 专有版）和两种自托管模式（EMQX 开源版 和 EMQX 企业版）。以下列出了这些部署模式的主要功能对比，以帮助您根据业务需求进行选择。
 
@@ -225,30 +225,3 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
 </div>
 
 {% endemqxce %}
-
-{% emqxee %}
-
-以下列出了 EMQX 企业版和开源版的主要功能对比。
-
-| **项目**                 | **EMQX 企业版**                                             | **EMQX 开源版**                                             |
-| ------------------------ | ----------------------------------------------------------- | ----------------------------------------------------------- |
-| **伸缩性**               | 单集群至多 1 亿 MQTT 连接                                   | 单集群至多 1 亿 MQTT 连接                                   |
-| **性能**                 | > 500 万 MQTT 消息每秒                                      | > 500 万 MQTT 消息每秒                                      |
-| **可靠性**               | RocksDB 数据存储（即将支持）                                | 内存数据存储                                                |
-| **延迟**                 | 1~5 毫秒                                                    | 1~5 毫秒                                                    |
-| **数据集成（开箱即用）** | 40+                                                         | 2                                                           |
-| **License**              | Commercial License (Business source license)                | Apache Version 2.0                                          |
-| **技术支持**             | 7x24 全球支持                                               | 开源社区                                                    |
-| **MQTT 5.0**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **MQTT over QUIC**       | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **MQTT 扩展**            | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **多协议网关**           | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **Schema Registry**      | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **消息编解码**           | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **规则引擎**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **文件传输**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **企业系统集成**         | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **故障排查**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **云原生 & K8s**         | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-
-{% endemqxee %}
