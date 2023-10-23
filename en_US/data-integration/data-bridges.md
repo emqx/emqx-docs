@@ -1,8 +1,6 @@
 # Data Integration
 
-Data integration is a channel used to connect EMQX and external data systems, for example, databases like MySQL, MongoDB, message brokers like Apache Kafka and RabbitMQ, or even an HTTP server.
-
-Through data integration, users can send messages from EMQX to the external data system in real-time. If bi-directional data integration is used, users can also pull data from the external data system and send it to a topic in EMQX.
+With the power of a rule engine and data bridge, data integration allows you to transmit IoT data seamlessly to different data systems. A data bridge is a channel used to connect EMQX and external data systems, for example, databases like MySQL, MongoDB, message brokers like Apache Kafka and RabbitMQ, or even an HTTP server. Through data integration, users can send messages from EMQX to the external data system in real time. If bi-directional data integration is used, users can also pull data from the external data system and send it to a topic in EMQX.
 
 ::: tip Note
 
@@ -16,13 +14,11 @@ This page provides an overall introduction to data integration, including the wo
 
 ## How It Works
 
-EMQX data integration is an out-of-the-box feature that is designed to transmit IoT data seamlessly to different data systems. As an MQTT messaging platform, EMQX receives data from IoT devices via MQTT protocol. With the help of a built-in rule engine, the received data is processed by the rules configured in the rule engine. The rule will trigger an action of forwarding the processed data to the external data system through a configured data bridge.
-
-You can easily create the rule, attach the action to the rule, and create the data bridge on EMQX Dashboard without any coding efforts.
+EMQX data integration is an out-of-the-box feature. As an MQTT messaging platform, EMQX receives data from IoT devices via MQTT protocol. With the help of a built-in rule engine, the received data is processed by the rules configured in the rule engine. The rule will trigger an action of forwarding the processed data to the external data system through a configured data bridge. You can easily create a rule, attach an action to the rule, and create a data bridge on EMQX Dashboard without any coding efforts.
 
 ### Built-in Rule Engine
 
-A powerful rule engine is the core component of data processing and distribution based on MQTT. Before the IoT data is ingested into the external data system, the data will go through the rule engine and be processed by the rules for real-time data extraction, filtering, enrichment, and format transformation. When an action is added to the rule that defines how data is processed, EMQX will output the processing result to a configured data bridge.
+A powerful rule engine is the core component of data processing and distribution based on MQTT. Before the IoT data is ingested into the external data system, the data will go through the rule engine and be processed by the rules for real-time data extraction, filtering, enrichment, and format transformation. When an action is added to the rule defining how data is processed, EMQX will output the result to a configured data bridge.
 
 You can find detailed information on how the rule engine works in the [Rule Engine](./rules.md) chapter.
 
@@ -272,7 +268,7 @@ INSERT INTO msg(topic, qos, payload) VALUES(${topic}, ${qos}, ${payload});
 
 ## Data Integration Operation
 
-You can view the running status and statistics of the data integration on Dashboard to know if the data integration is operating properly.
+You can view the running status and statistics of the data integration on the Dashboard to know if the data integration is operating properly.
 
 ### Running Status
 
