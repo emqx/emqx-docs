@@ -4,8 +4,8 @@ Depending on the type of installation, the location of the directories needed by
 
 | Description         | tar.gz       | RPM/DEB                  |
 | --------------------| ------------ | ------------------------ |
-| Config files        | `./etc`      | `/etc/emqx/etc`          |
-| Database and files  | `./data`     | `/var/lib/emqx/data`     |
+| Static config files | `./etc`      | `/etc/emqx    `          |
+| Database and config | `./data`     | `/var/lib/emqx/data`     |
 | Log files           | `./log`      | `/var/log/emqx`          |
 | Boot instructions   | `./releases` | `/usr/lib/emqx/releases` |
 | Executables         | `./bin`      | `/usr/lib/emqx/bin`      |
@@ -15,28 +15,28 @@ Depending on the type of installation, the location of the directories needed by
 
 The directories are all created at installation time.
 
-Except for `etc`, `data`, `log`, `plugins`, all other directories are static and rarely have to
+Except for `data`, `log`, `plugins`, all other directories are static and rarely have to
 be changed before an upgrade.
 
 :::: tip Tip
 The `data` directory is recommended to be mounted on a high-performance hard drive.
 ::::
 
-## etc: config files
+## etc: static config files
 
-EMQX only reads the files in this directory.
+Files in this directory are read-only.
 
 * `emqx.conf`: the bootstrapping config file for EMQX
 * `vm.args`: The boot arguments for Erlang virtual machine
 * `certs/`: X.509 keys are certificate files for EMQX SSL listeners or SSL clients when
   integrating with external systems. e.g., HTTPS client for webhooks
 
-## data: database and files
+## data: database and config
 
 This directory is for EMQX to persist its state. Please make sure EMQX has read/write permissions for all files in this directory.
 
 :::: tip Tip
-In EMQX documents, this directory is often referred to as `data_dir`.
+In EMQX documentation, this directory is often referred to as `data_dir`.
 ::::
 
 A list of the subdirectories

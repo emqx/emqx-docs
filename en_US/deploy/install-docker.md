@@ -62,26 +62,20 @@ For more information about EMQX official docker image, see [Docker Hub - emqx/em
 
    ```bash
    /opt/emqx/data
-   /opt/emqx/etc
    /opt/emqx/log
    ```
    
-   Copy files under `/opt/etc` to the host before mounting `/opt/etc`. For more details on EMQX directory structure, refer to [EMQX - Files and Directories](./install.md#files-and-directories).
+   For more details on EMQX directory structure, refer to [EMQX - Files and Directories](./install.md#files-and-directories).
    
     {% emqxce %}
    
-   ```
-   docker run --rm emqx/emqx:@CE_VERSION@ sh -c 'cd /opt/emqx && tar -c etc' | tar -C $PWD -x
-   ```
-   
-    Start container and mount directory:
+    Start container and mount directories:
    
    ```bash
    docker run -d --name emqx \
      -p 1883:1883 -p 8083:8083 \
      -p 8084:8084 -p 8883:8883 \
      -p 18083:18083 \
-     -v $PWD/etc:/opt/emqx/etc \
      -v $PWD/data:/opt/emqx/data \
      -v $PWD/log:/opt/emqx/log \
      emqx/emqx:@CE_VERSION@
@@ -91,20 +85,13 @@ For more information about EMQX official docker image, see [Docker Hub - emqx/em
    
     {% emqxee %}
    
-    Copy files under `/opt/emqx/etc` to the host:
-   
-   ```bash
-   docker run --rm emqx/emqx-enterprise:@EE_VERSION@ sh -c 'cd /opt/emqx && tar -c etc' | tar -C $PWD -x
-   ```
-   
-    Start container and mount directory:
+    Start container and mount directories:
    
    ```bash
    docker run -d --name emqx-enterprise \
      -p 1883:1883 -p 8083:8083 \
      -p 8084:8084 -p 8883:8883 \
      -p 18083:18083 \
-     -v $PWD/etc:/opt/emqx/etc \
      -v $PWD/data:/opt/emqx/data \
      -v $PWD/log:/opt/emqx/log \
      emqx/emqx-enterprise:@EE_VERSION@
