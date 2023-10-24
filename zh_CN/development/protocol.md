@@ -129,7 +129,7 @@ EMQX-LWM2M 是 EMQX 服务器的一个网关插件，实现了 LwM2M 的大部�
 "lwm2m/{?device_end_point_name}/command".
 ```
 
-其中 MQTT Payload 是一个 json 格式的字符串，指定要发送的命令，更多的细节请参见 emqx-lwm2m 的文档。
+其中 MQTT Payload 是一个 json 格式的字符串，指定要发送的命令，更多的细节请参见 [emqx-lwm2m 的文档](https://github.com/emqx/emqx/blob/main-v4.4/apps/emqx_lwm2m/README.md)。
 
 LwM2M 设备的回复用如下 topic 传送：
 
@@ -137,7 +137,7 @@ LwM2M 设备的回复用如下 topic 传送：
 "lwm2m/{?device_end_point_name}/response".
 ```
 
-MQTT Payload 也是一个 json 格式的字符串，更多的细节请参见 emqx-lwm2m 的文档。
+MQTT Payload 也是一个 json 格式的字符串，更多的细节请参见 [emqx-lwm2m 的文档](https://github.com/emqx/emqx/blob/main-v4.4/apps/emqx_lwm2m/README.md)。
 
 #### 配置参数
 

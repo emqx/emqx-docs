@@ -121,7 +121,7 @@ Commands from MQTT clients can be sent to LwM2M devices. MQTT to LwM2M commands 
 "lwm2m/{?device_end_point_name}/command"
 ```
 
-The MQTT payload is a JSON-formatted string that specifies the command to be sent. For more details, refer to the emqx-lwm2m documentation.
+The MQTT payload is a JSON-formatted string that specifies the command to be sent. For more details, refer to the [emqx-lwm2m documentation](https://github.com/emqx/emqx/blob/main-v4.4/apps/emqx_lwm2m/README.md).
 
 Replies from LwM2M devices are sent using the following topic format:
 
@@ -129,7 +129,7 @@ Replies from LwM2M devices are sent using the following topic format:
 "lwm2m/{?device_end_point_name}/response"
 ```
 
-The MQTT payload is also a JSON-formatted string. Refer to emqx-lwm2m documentation for further details.
+The MQTT payload is also a JSON-formatted string. Refer to the [emqx-lwm2m documentation](https://github.com/emqx/emqx/blob/main-v4.4/apps/emqx_lwm2m/README.md) for further details.
 
 #### Configuration Parameters
 
