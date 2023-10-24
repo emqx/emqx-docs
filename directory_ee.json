@@ -699,13 +699,13 @@
       ]
     },
     {
+      "title": "MQTT 协议简介",
+      "path": "mqtt/mqtt-protocol"
+    },
+    {
       "title": "多协议网关",
       "path": "modules/gateway",
       "children": [
-        {
-          "title": "MQTT 协议",
-          "path": "development/protocol"
-        },
         {
           "title": "Stomp 网关",
           "path": "modules/stomp_protocol"
@@ -1449,6 +1449,10 @@
     {
       "title": "Design",
       "path": "design/design"
+    },
+    {
+      "title": "MQTT Protocol Overview",
+      "path": "mqtt/mqtt-protocol"
     },
     {
       "title": "Multi-Protocol Gateway",

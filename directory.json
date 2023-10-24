@@ -463,7 +463,11 @@
       ]
     },
     {
-      "title": "协议介绍",
+      "title": "MQTT 协议介绍",
+      "path": "mqtt/mqtt-protocol"
+    },
+    {
+      "title": "多协议网关插件",
       "path": "development/protocol"
     },
     {
@@ -956,6 +960,14 @@
     {
       "title": "Design",
       "path": "design/design"
+    },
+    {
+      "title": "MQTT Protocol",
+      "path": "mqtt/mqtt-protocol"
+    },
+    {
+      "title": "Multi-Protocol Gateway Plugin",
+      "path": "development/protocol"
     }
   ]
 }
