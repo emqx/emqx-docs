@@ -240,7 +240,7 @@ INSERT INTO msg(topic, qos, payload) VALUES(${topic}, ${qos}, ${payload});
 
 除了自动推导字段类型外，SQL 预处理技术还能避免 SQL 注入以提高安全性。
 
-## 数据集成运行
+## 数据集成状态与指标
 
 您可以在 Dashboard 上查看数据桥接的运行状态和数据集成统计信息，以了解桥接和集成是否正常运行。
 
