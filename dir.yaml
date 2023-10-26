@@ -759,7 +759,6 @@
       path: deploy/upgrade-from-v4
     - title_en: Incompatible Changes
       title_cn: Incompatible Changes
-      lang: en
       path: changes/breaking-changes-5.1.0
       children:
         - title_en: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1

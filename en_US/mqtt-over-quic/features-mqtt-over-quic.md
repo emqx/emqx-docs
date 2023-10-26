@@ -1,16 +1,35 @@
 # Features and Benefits
 
-EMQX 5.0 designs a unique message transmission mechanism and management method for MQTT over QUIC, providing a more efficient and secure way to transmit MQTT messages over modern complex networks, thus improving the performance of MQTT in certain scenarios. 
+EMQX designs a unique message transmission mechanism and management method for MQTT over QUIC, providing a more efficient and secure way to transmit MQTT messages over modern complex networks, thus improving the performance of MQTT in certain scenarios. 
 
-The current implementation of EMQX replaces the transport layer with a QUIC stream, where the client initiates the connection and creates a bi-directional stream. EMQX and the client interact on this stream. Considering the complex network environment, if the client fails to perform QUIC handshake for some reason, it will automatically fall back to traditional TCP to avoid communication failure with the server. The interaction between EMQX and the client has two modes: [single-stream mode](#single-stream-mode) and [multi-streams mode](#multi-streams-mode). The features and benefits of each mode are introduced below with some use cases. 
+This page introduces the advantages of MQTT over QUIC, and the benefits of each QUIC operation mode along with use cases. 
+
+## Advantages of MQTT over QUIC
+
+QUIC combines the functionalities of both TCP and UDP while introducing additional improvements to address latency issues in modern networks. The advantages of QUIC include:
+
+- **Reduced Latency**: QUIC is explicitly designed to minimize connection establishment time. Traditional MQTT over TCP requires a separate TLS handshake after the TCP handshake, leading to delays, especially in mobile networks or unstable connections. QUIC combines transport and TLS handshakes, potentially allowing MQTT connections to be established more quickly.
+- **Multiplexing without Head-of-Line Blocking**: QUIC supports multiplexing multiple streams over a single connection. In TCP, the loss of a packet in one stream can block other streams due to head-of-line blocking. In contrast, QUIC ensures that individual streams are independent. This can be advantageous for MQTT applications handling multiple topics or message streams simultaneously.
+- **Better Performance in Unstable Networks**: QUIC's design is more adept at handling packet loss and network fluctuations compared to TCP (e.g., switching between Wi-Fi and cellular networks). For MQTT applications running in environments with frequent network interruptions or on mobile devices, QUIC can provide more resilient connections.
+- **Built-in Security**: QUIC inherently includes security features equivalent to TLS. This means MQTT over QUIC will always be encrypted and authenticated without requiring additional configuration.
+- **Connection Migration**: QUIC can seamlessly handle changes in client IP addresses or ports without the need for connection restarts. This is particularly beneficial for MQTT devices in motion, ensuring persistent connections even when the underlying network changes.
+- **Improved Congestion Control**: While TCP's congestion control algorithms have stood the test of time, QUIC introduces new and more flexible methods, allowing for experimentation with novel algorithms. This may improve MQTT message throughput and responsiveness, especially in congested networks.
+
+## Operation Modes of QUIC
+
+The current implementation of EMQX replaces the transport layer with a QUIC stream, where the client initiates the connection and creates a bi-directional stream. EMQX and the client interact on this stream. Considering the complex network environment, if the client fails to perform QUIC handshake for some reason, it will automatically fall back to traditional TCP to avoid communication failure with the server. The interaction between EMQX and the client has two modes: [single-stream mode](#single-stream-mode) and [multi-streams mode](#multi-streams-mode). The following sections introduce the features and benefits of each mode.
 
 <img src="./assets/mqtt-over-quic.png" alt="MQTT over QUIC" style="zoom:25%;" />
 
-## Single-Stream Mode
+### Single-Stream Mode
 
-This is a basic mode that encapsulates the MQTT packets in a single bi-directional QUIC stream. The client is required to initiate a bi-directional stream from the client to EMQX within the QUIC connection. All the MQTT packet exchanges are done over this stream.
+The single-stream mode is a basic mode that encapsulates the MQTT packets in a single bi-directional QUIC stream. It offers fast handshakes, ordered data delivery, connection resumption, 0-RTT, client address migration, and enhanced loss detection and recovery. This mode can make communication between clients and EMQX faster and more efficient while maintaining order, quickly recovering connections, and allowing clients to migrate their local addresses without significant disruption.
 
-### Features and Benefits
+<img src="./assets/quic-single-stream-mode.png" alt="image-20231020154933157" style="zoom:67%;" />
+
+#### Features and Benefits
+
+The single-Stream mode has the following features and benefits
 
 - Fast handshake
 
@@ -18,7 +37,7 @@ This is a basic mode that encapsulates the MQTT packets in a single bi-direction
 
 - Ordered data delivery
 
-  Like TCP, the delivery of MQTT packets also follows the order of the messages being sent in the stream, even if the underlying UDP datagram packets are received in the wrong order.
+  Like TCP, the delivery of MQTT packets also follows the order of the messages sent in the stream, even if the underlying UDP datagram packets are received in the wrong order.
 
 - Connection resumption, 0-RTT
 
@@ -33,9 +52,11 @@ This is a basic mode that encapsulates the MQTT packets in a single bi-direction
 
   QUIC is more responsive compared to other protocols in detecting packet loss and recovery. The behaviors can be tuned specifically for each use case.
 
-## Multi-Streams Mode
+### Multi-Streams Mode
 
-It is common for a single MQTT connection to carry multiple topic data for different businesses. The topics can either be correlated or unrelated. The multi-streams mode expands on the single-stream mode by leveraging the stream multiplexing feature of QUIC to allow MQTT packets to be transported over multiple streams. The QUIC connection handshake between the MQTT client and EMQX is the same as the single-stream mode.
+Multi-stream mode utilizes QUIC's stream multiplexing capability, allowing MQTT packets to be transmitted through multiple streams. This enables a single MQTT connection to carry data from multiple topics and provides several improvements, such as decoupling connection control and MQTT data exchange, avoiding head-of-line blocking, splitting uplink and downlink data, distinguishing the priority of different data, improving parallelism, enhancing robustness, allowing traffic control of data streams, and reducing subscription latency.
+
+<img src="./assets/quic-multi-stream-mode.png" alt="image-20231020155006197" style="zoom:67%;" />
 
 The initial stream that is established from the client to EMQX is referred to as the control stream. Its purpose is to handle the maintenance or update of the MQTT connection. Following this, the client can initiate one or multiple data streams to publish topics or subscribe to topics, per stream.
 
@@ -45,7 +66,7 @@ The client is free to choose how to map the stream, for example:
    - Use one stream for QoS 1 and another for QoS 0.
    - Use one stream for publishing and another for subscriptions. (Publish/Subscribe over the control stream is also allowed.)
 
- As the broker, EMQX does stream packets bindings:
+ As the broker, EMQX does stream packet bindings:
 
    - It sends PUBACK packets over the stream where it receives the PUBLISH for QoS 1, so to the QoS 2 packets.
    - It sends PUBLISH packets over the stream where it gets the topic subscription and also expects PUBACK for QoS1 from the same stream.
@@ -56,7 +77,9 @@ The client is free to choose how to map the stream, for example:
 The order of data is maintained per stream, hence, if there are two topics whose data is correlated and ordering is crucial, they should be mapped to the same stream.
 :::
 
-### Features and Benefits
+#### Features and Benefits
+
+The multi-streams mode has the following features and benefits
 
    - Decouple connection control and MQTT data exchange
 

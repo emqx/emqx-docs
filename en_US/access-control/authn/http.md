@@ -30,9 +30,7 @@ Body:
 }
 ```
 
-::: tip
-
-EMQX 4.x Compatibility Notes
+::: tip EMQX 4.x Compatibility Notes
 
 In EMQX 4.x, only HTTP status code is used, but body is discarded, for example, `200` for `allow` and `403` for `deny`.
 Due to the lack of expressiveness, it has been redesigned to make use of HTTP body, and thus is not compatible with EMQX 5.0.
