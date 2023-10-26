@@ -4,7 +4,7 @@ With the power of a rule engine and data bridge, data integration allows you to 
 
 ::: tip Note
 
-Currently, EMQX only supports bi-directional data integration with Kafka and Pulsar.
+Currently, EMQX only supports bi-directional data integration with MQTT Broker, Kafka and GCP PubSub.
 
 :::
 
@@ -40,16 +40,10 @@ The [Supported Integrations](#supported-integrations) section provides links to 
 
 EMQX open-source version currently supports data bridges to [MQTT](./data-bridge-mqtt.md) and [HTTP Server](./data-bridge-webhook.md). 
 
-**Custom**
-
-- [MQTT](./data-bridge-mqtt.md)
-- [Webhook](./webhook.md)/[HTTPServer](./data-bridge-webhook.md)
-
 The following data systems are only supported in the EMQX enterprise version:
 
 **Message Queue**
 
-- [Amazon Kinesis](./data-bridge-kinesis.md)
 - [Apache Kafka/Confluent](./data-bridge-kafka.md)
 - [HStreamDB](./data-bridge-hstreamdb.md)
 - [Pulsar](./data-bridge-pulsar.md)
@@ -80,10 +74,11 @@ The following data systems are only supported in the EMQX enterprise version:
 - [OpenTSDB](./data-bridge-opents.md)
 - [TimescalesDB](./data-bridge-timescale.md)
 
-**Enterprise System**
+**Cloud**
 
+- [Amazon Kinesis](./data-bridge-kinesis.md)
 - [Azure EventHub](./data-bridge-azure-event-hub.md)
-- [Google Cloud](./data-bridge-gcp-pubsub.md)
+- [GCP PubSub](./data-bridge-gcp-pubsub.md)
 
 {% endemqxce %}
 
@@ -98,7 +93,6 @@ EMQX supports data integration with the following types of data systems.
 
 **Message Queue**
 
-- [Amazon Kinesis](./data-bridge-kinesis.md)
 - [Apache Kafka/Confluent](./data-bridge-kafka.md)
 - [HStreamDB](./data-bridge-hstreamdb.md)
 - [Pulsar](./data-bridge-pulsar.md)
@@ -129,10 +123,11 @@ EMQX supports data integration with the following types of data systems.
 - [OpenTSDB](./data-bridge-opents.md)
 - [TimescalesDB](./data-bridge-timescale.md)
 
-**Enterprise System**
+**Cloud**
 
+- [Amazon Kinesis](./data-bridge-kinesis.md)
 - [Azure EventHub](./data-bridge-azure-event-hub.md)
-- [Google Cloud](./data-bridge-gcp-pubsub.md)
+- [GCP PubSub](./data-bridge-gcp-pubsub.md)
 
 {% endemqxee %}
 
