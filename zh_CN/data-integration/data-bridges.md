@@ -2,9 +2,9 @@
 
 数据集成通过规则引擎和数据桥接，将物联网数据无缝传输到不同的数据系统。数据桥接是用来对接 EMQX 和外部数据系统的通道，比如 MySQL、MongoDB 等数据库，Kafka，RabbitMQ 等消息中间件或 HTTP 服务等。通过数据集成，用户可以实时地将消息从 EMQX 发送到外部数据系统。如果使用双向数据桥接，用户还可以从外部数据系统拉取数据并发送到 EMQX 的某个主题。
 
-::: tip
+::: tip 提示
 
-目前，EMQX 仅支持与 Kafka 和 Pulsar 进行双向数据桥接。
+目前，EMQX 仅支持与 MQTT、Kafka 和 GCP PubSub 进行双向数据桥接。
 
 :::
 
@@ -36,13 +36,12 @@ EMQX 数据集成是一个开箱即用的功能，在可视化界面上简单配
 EMQX 开源版中支持以下两种数据集成：
 
 - [MQTT](./data-bridge-mqtt.md)
-- [Webhook](./webhook.md)/[HTTPServer](./data-bridge-webhook.md)
+- [Webhook](./webhook.md)/[HTTP Server](./data-bridge-webhook.md)
 
 下列数据系统仅在 EMQX 企业版中支持：
 
 **消息队列**
 
-- [Amazon Kinesis](./data-bridge-kinesis.md)
 - [Apache Kafka/Confluent](./data-bridge-kafka.md)
 - [HStreamDB](./data-bridge-hstreamdb.md)
 - [Pulsar](./data-bridge-pulsar.md)
@@ -73,10 +72,11 @@ EMQX 开源版中支持以下两种数据集成：
 - [OpenTSDB](./data-bridge-opents.md)
 - [TimescalesDB](./data-bridge-timescale.md)
 
-**企业系统**
+**云服务**
 
+- [Amazon Kinesis](./data-bridge-kinesis.md)
 - [Azure EventHub](./data-bridge-azure-event-hub.md)
-- [Google Cloud](./data-bridge-gcp-pubsub.md)
+- [GCP PubSub](./data-bridge-gcp-pubsub.md)
 
 {% endemqxce %}
 
@@ -91,7 +91,6 @@ EMQX 支持与以下数据系统的集成：
 
 **消息队列**
 
-- [Amazon Kinesis](./data-bridge-kinesis.md)
 - [Apache Kafka/Confluent](./data-bridge-kafka.md)
 - [HStreamDB](./data-bridge-hstreamdb.md)
 - [Pulsar](./data-bridge-pulsar.md)
@@ -122,10 +121,11 @@ EMQX 支持与以下数据系统的集成：
 - [OpenTSDB](./data-bridge-opents.md)
 - [TimescalesDB](./data-bridge-timescale.md)
 
-**企业系统**
+**云服务**
 
+- [Amazon Kinesis](./data-bridge-kinesis.md)
 - [Azure EventHub](./data-bridge-azure-event-hub.md)
-- [Google Cloud](./data-bridge-gcp-pubsub.md)
+- [GCP PubSub](./data-bridge-gcp-pubsub.md)
 
 {% endemqxee %}
 
