@@ -18,7 +18,7 @@ EMQX data integration is an out-of-the-box feature. As an MQTT messaging platfor
 
 ### Built-in Rule Engine
 
-A powerful built-in rule engine forms the core component for SQL-based data processing and distribution. Incoming IoT data from clients is routed through this rule engine, where it undergoes real-time processing encompassing data extraction, filtering, enrichment, and format transformation based on predefined rules. Subsequently, the processed data is channeled to specified data bridges.
+A powerful built-in rule engine forms the core component for SQL-based data processing and distribution. It has the capability to process events and IoT data from clients in real time, performing tasks such as data extraction, filtering, enrichment, and format transformation based on predefined rules. The processed data is then sent to designated data bridges.
 
 You can find detailed information on how the rule engine works in the [Rule Engine](./rules.md) chapter.
 
