@@ -18,13 +18,21 @@ EMQX data integration is an out-of-the-box feature. As an MQTT messaging platfor
 
 ### Built-in Rule Engine
 
-A powerful rule engine is the core component of data processing and distribution based on MQTT. Before the IoT data is ingested into the external data system, the data will go through the rule engine and be processed by the rules for real-time data extraction, filtering, enrichment, and format transformation. When an action is added to the rule defining how data is processed, EMQX will output the result to a configured data bridge.
+A powerful built-in rule engine forms the core component for SQL-based data processing and distribution. Incoming IoT data from clients is routed through this rule engine, where it undergoes real-time processing encompassing data extraction, filtering, enrichment, and format transformation based on predefined rules. Subsequently, the processed data is channeled to specified data bridges.
 
 You can find detailed information on how the rule engine works in the [Rule Engine](./rules.md) chapter.
 
 ### SQL-Based Data Processing
 
-Data sources from various IoT devices and systems have all kinds of data types and formats. To obtain the required data, a SQL-based syntax is used in rules for data extraction, filtering, enrichment, and transformation. For more information on SQL-based rules, see [Rule SQL Reference](./rule-sql-syntax.md).
+Data sources from various IoT devices and systems have all kinds of data types and formats. The built-in SQL rules include a wide range of functions, such as character manipulation, data type conversion functions, and compression/decompression functions, allowing for flexible and complex data processing.
+
+For more information on SQL-based rules, see [Rule SQL Reference](./rule-sql-syntax.md).
+
+### Data Bridge
+
+The data bridge is a crucial component for connecting EMQX with external data systems. It enables the seamless flow of data from EMQX to external databases, cloud platforms, or other systems. You can configure data bridges through the EMQX Dashboard, specifying the data forwarding destination and data format for efficient data exchange with external systems.
+
+The [Supported Integrations](#supported-integrations) section provides links to the specific instructions for setting up different data bridges.
 
 ## Supported Integrations
 
