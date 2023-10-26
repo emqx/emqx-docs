@@ -176,7 +176,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello MySQL" }'
 
 Check the running status of the two data bridges, there should be one new incoming and one new outgoing message.
 
-Check whether the data is written into the ` emqx_messages` data table.
+Check whether the data is written into the `emqx_messages` data table.
 
 ```bash
 mysql> select * from emqx_messages;
