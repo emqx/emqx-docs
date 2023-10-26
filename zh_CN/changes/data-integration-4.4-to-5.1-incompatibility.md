@@ -102,7 +102,7 @@
 - 批处理配置已移至动作配置中的`resource_opts.*`。
   - `enable_batch = true` (EMQX 4.4) 改为 `resource_opts.batch_size > 1` (EMQX 5.1)。
   - EMQX 5.1中 `batch_time`被隐藏并默认为 `0`。
-  - `sql ` 改为 `prepare_statement`。
+  - `sql` 改为 `prepare_statement`。
 
 ### MQTT
 

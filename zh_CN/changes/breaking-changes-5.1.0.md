@@ -1,18 +1,19 @@
 # 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
 
-EMQX 5.1引入了一些重大变更，可能会影响与旧版本 EMQX 的兼容性。这些变更在 EMQX 5.1发布说明中也有所记录。
+EMQX 5.0 系列引入了一些重大变更，可能会影响与旧版本 EMQX 的兼容性。
 
-本页旨在为计划从 EMQX 4.x 升级到 EMQX 5.1的 EMQX 企业客户和内部团队提供帮助，让他们了解可能遇到的潜在问题。
+本章节旨在为计划从 EMQX 4.x 升级到 EMQX 5.1 版本的用户提供帮助，以明确并了解可能遇到的潜在问题，方便进行版本升级。
 
 ::: 提示
 
-建议在进行升级到版本 5.1之前先升级到最新的 4.4 版本。
+1. 建议升级到版本 5.1 之前，先升级到最新的 4.4 版本。
+2. 如需升级到 5.0 系列更高版本，请先按照此文档完成 5.1 版本升级，之后您可以继续升级到更高版本。
 
 :::
 
 ## 概述
 
-与 EMQX 4.4 相比，升级到 EMQX 5.1 引入了重大变更，特别是在各种概念和机制方面，其程度超过了先前从 EMQX 2.x 到 EMQX 3.x 和从 EMQX 3.x 到 EMQX 4.x 的升级引起的变更。
+与 EMQX 4.4 相比，升级到 EMQX 5.0 系列引入了重大变更，特别是在各种概念和机制方面，其程度超过了先前从 EMQX 2.x 到 EMQX 3.x 和从 EMQX 3.x 到 EMQX 4.x 的升级引起的变更。
 
 总体来说有以下几点需要注意：
 
@@ -26,9 +27,9 @@ EMQX 5.1引入了一些重大变更，可能会影响与旧版本 EMQX 的兼容
 
 之前，API 认证凭证通过 **Dashboard** 中的**应用**来管理。现在，必须使用 **[API Key](../dashboard/system.md#api-key)** 来创建凭证。这些凭证由 API Key 和 Secret Key 组成，分别可以作为 HTTP 基本认证的用户名和密码来使用。创建凭证时，Secret Key 只显示一次，之后将无法再次获取。
 
-- 端口 8081已被关闭，所有 API 请求现在都使用端口 18083。
+- 端口 8081 已被关闭，所有 API 请求现在都使用端口 18083。
 - 不能再使用用户名/密码来访问 HTTP API，必须使用 API Key。
-- API 访问的基本路径从 `/api/v4` 切换到 `/api/v5`。通过端口 18083 和路径 `/api/v5` 调用API。
+- API 访问的基本路径从 `/api/v4` 切换到 `/api/v5`。通过端口 18083 和路径 `/api/v5` 调用 API。
 - 与时间相关的字段将使用 [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) 格式与时区。
 
 ### 数据格式变化
@@ -149,18 +150,18 @@ API 经历了重大变化，其中一些 API 已经兼容。以下是常用 API 
 | emqx_rule_engine | 数据集成                                          |
 | emqx_bridge_mqtt | 数据桥接 - MQTT 桥接                              |
 | emqx_web_hook    | 数据桥接 - HTTP 服务                              |
-| emqx_coap        | CoAP网关                                          |
+| emqx_coap        | CoAP 网关                                         |
 | emqx_dashboard   | 仪表板                                            |
 | emqx_exhook      | ExHook                                            |
-| emqx_exproto     | ExProto  网关                                     |
+| emqx_exproto     | ExProto 网关                                      |
 | emqx_lwm2m       | LwM2M 网关                                        |
 | emqx_sn          | MQTT-SN 网关                                      |
 | emqx_stomp       | STOMP 网关                                        |
 | emqx_lua_hook    | -                                                 |
 | emqx_management  | Dashboard                                         |
-| emqx_prometheus  | Prometheus  监控                                  |
+| emqx_prometheus  | Prometheus 监控                                   |
 | emqx_psk_file    | AuthN - PSK（`psk_authentication.enable = true`） |
-| emqx_recon       | 旧特性在 CLI  `emqx ctl observer` 中仍然可用      |
+| emqx_recon       | 旧特性在 CLI `emqx ctl observer` 中仍然可用       |
 | emqx_retainer    | Retain                                            |
 | <!--             | emqx_telemetry                                    |
 
@@ -196,7 +197,7 @@ Auth 被称为 **Authentication** and ACL 也被称为 **Authorization**.
 
 ### 数据迁移
 
-我们保留了来自版本 4.x 的认证方法和支持的数据源，只对使用方式进行了一些更改。对于大多数认证器/授权检查器，可以在升级到版本5.x 时继续使用 4.x 数据库，无需迁移现有数据。
+我们保留了来自版本 4.x 的认证方法和支持的数据源，只对使用方式进行了一些更改。对于大多数认证器/授权检查器，可以在升级到版本 5.x 时继续使用 4.x 数据库，无需迁移现有数据。
 
 ### 固定执行顺序
 
@@ -204,7 +205,7 @@ Auth 被称为 **Authentication** and ACL 也被称为 **Authorization**.
 
 ### 变量插值语法
 
-以前，Auth 插件可以使用 `%u` 语法来构造变量占位符，将客户端信息动态地插入到 SQL 语句、Redis 查询命令和 HTTP 请求中。现在EMQX 使用新的 `${}` 语法，例如 `${username}`，`${clientid}`，与 SQL 的规则一致。
+以前，Auth 插件可以使用 `%u` 语法来构造变量占位符，将客户端信息动态地插入到 SQL 语句、Redis 查询命令和 HTTP 请求中。现在 EMQX 使用新的 `${}` 语法，例如 `${username}`，`${clientid}`，与 SQL 的规则一致。
 
 有关支持的占位符，请参考：
 
@@ -236,10 +237,10 @@ authentication = [
 
 - 移除了超级用户查询。应该返回具有散列凭据和 `is_superuser` 标志的单个查询。
 - HTTP 认证
-  - 在 EMQX 4.x 中，只使用 HTTP 状态码，而且 body 被丢弃（例如 `200` 表示 `allow`，`403 `表示 `deny`）。
+  - 在 EMQX 4.x 中，只使用 HTTP 状态码，而且 body 被丢弃（例如 `200` 表示 `allow`，`403`表示 `deny`）。
   - 在 EMQX 5.x 中，HTTP 认证经过重新设计，使用 HTTP body。更多详细信息请参阅 [HTTP 服务认证](../access-control/authn/http.md#http-request-and-response)。
 - SCRAM 认证
-  - 不再支持 SHA1哈希模式（版本 4.4 中唯一支持的模式）。现在使用 SHA256/SHA512 哈希。
+  - 不再支持 SHA1 哈希模式（版本 4.4 中唯一支持的模式）。现在使用 SHA256/SHA512 哈希。
 - 内置数据库
   - 不再可以在配置文件中直接提供凭证。
   - 凭证表现在只保持用户名或客户端 ID 类型的凭证，而不是同时保持两者。
@@ -256,9 +257,9 @@ authentication = [
 
   - ACL 规则 `{allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"\]}` 在 EMQX 5.1 中不起作用。有关更多信息，请参阅问题[#10735](https://github.com/emqx/emqx/issues/10735)。
 
-- HTTP 
+- HTTP
 
-  - 在 EMQX 4.x 中，使用 HTTP 状态码，但 body 被丢弃（除了 “ignore” 案例）。例如，`200 `表示 `allow`，`403 `表示 `deny`。
+  - 在 EMQX 4.x 中，使用 HTTP 状态码，但 body 被丢弃（除了 “ignore” 案例）。例如，`200`表示 `allow`，`403`表示 `deny`。
   - 在 EMQX 5.0 中，HTTP 授权经过重新设计，使用 HTTP body。有关更多信息，请参阅 [HTTP 请求格式与返回结果](../access-control/authz/http.md#http-request-and-response)。
 
 - MySQL, PostgreSQL
@@ -309,7 +310,7 @@ WebHook 插件（`emqx_web_hook`）已转换为内置功能，现在称为 "HTTP
 
 ## 离线消息
 
-在 EMQX 4.x 中提供的[离线消息](https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_redis.html)基于外部数据库。EMQX 计划在以后的版本中提供基于内置数据库的本地离线消息支持，因此在版本 5.x中不再支持外部数据库的离线消息。
+在 EMQX 4.x 中提供的[离线消息](https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_redis.html)基于外部数据库。EMQX 计划在以后的版本中提供基于内置数据库的本地离线消息支持，因此在版本 5.x 中不再支持外部数据库的离线消息。
 
 即将推出的本地离线消息功能将提供更高的性能，并降低使用和维护成本。敬请关注更多更新。
 
@@ -321,7 +322,7 @@ WebHook 插件（`emqx_web_hook`）已转换为内置功能，现在称为 "HTTP
 
 ## 数据持久化
 
-[MQTT 消息持久化](https://docs.emqx.com/zh/enterprise/v4.4/backend/backend.html#mqtt-message-persistence)在 EMQX 5.0 和 5.1中未实现。计划在以后的版本中提供。
+[MQTT 消息持久化](https://docs.emqx.com/zh/enterprise/v4.4/backend/backend.html#mqtt-message-persistence)在 EMQX 5.0 和 5.1 中未实现。计划在以后的版本中提供。
 
 ## 网关
 
@@ -398,4 +399,3 @@ curl -f "http://127.0.0.1:18083/api/v5/prometheus/stats"
 | -                                            | erlang_vm_wordsize_bytes                        | 新增        |
 
 :::
-

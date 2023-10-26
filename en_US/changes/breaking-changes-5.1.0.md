@@ -1,12 +1,13 @@
 # Incompatible Changes between EMQX 4.4 and EMQX 5.1
 
-EMQX 5.1 introduces several changes that may affect compatibility with older versions of EMQX. These breaking changes are also documented in the EMQX 5.1 release notes.
+EMQX 5.0 series versions introduces several changes that may affect compatibility with older versions of EMQX. These breaking changes are also documented in the EMQX 5.1 release notes.
 
-This document is intended for EMQX Enterprise customers and internal teams who are planning to upgrade from EMQX 4.x to EMQX 5.1 and want to understand potential issues they may encounter.
+This document is intended for EMQX users who are planning to upgrade from EMQX 4.x to EMQX 5.1 and want to understand potential issues they may encounter.
 
 ::: tip
 
-It is recommended to upgrade to the latest version of 4.4 before proceeding with the upgrade to version 5.1.
+1. It is recommended to upgrade to the latest version of 4.4 before proceeding with the upgrade to version 5.1.
+2. To upgrade to a higher version of the 5.0 series, please follow this document to complete the upgrade to version 5.1, after that, you can continue to upgrade to a higher version.
 
 :::
 
