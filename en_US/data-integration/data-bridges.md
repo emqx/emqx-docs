@@ -274,7 +274,7 @@ But for data integration supporting prepared statements, the fields in the SQL t
 INSERT INTO msg(topic, qos, payload) VALUES(${topic}, ${qos}, ${payload});
 ```
 
-## Data Integration Operation
+## Data Integration Status and Statistics
 
 You can view the running status and statistics of the data integration on the Dashboard to know if the data integration is operating properly.
 
