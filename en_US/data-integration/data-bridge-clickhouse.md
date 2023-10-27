@@ -48,14 +48,6 @@ This tutorial assumes that you run both EMQX and ClickHouse on the local machine
 
 - Basic knowledge of UNIX terminal and commands 
 
-### Prerequisites
-
-- Knowledge about EMQX data integration [rules](./rules.md)
-
-- Knowledge about [data bridges](./data-bridges.md)
-
-- Basic knowledge of UNIX terminal and commands 
-
 ### Start a ClickHouse Server
 
 This section introduces how to start a ClickHouse server using [Docker](https://www.docker.com/). 
@@ -116,7 +108,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 6. Click the **+** icon next to the **Data bridge** drop-down box to create a data bridge.
 
-7. Select **ClickHouse** from the **Type of Data Bridge** drop-down list. 
+7. Select `ClickHouse` from the **Type of Data Bridge** drop-down list. 
 
 8. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
