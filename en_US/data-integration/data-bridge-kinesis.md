@@ -1,4 +1,4 @@
-# Stream Data into Amazon Kinesis
+# Stream MQTT Data into Amazon Kinesis
 
 EMQX supports seamless integration with [Amazon Kinesis Data Streams](https://aws.amazon.com/kinesis/data-streams/) which can be integrated to several other AWS Services for real-time extraction, processing and analysis of MQTT data.
 
