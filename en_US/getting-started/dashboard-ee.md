@@ -28,7 +28,7 @@ control bar (red frame area) has three functions:
     log out and change passwords;
   - I18n: Dashboard displays Chinese / English by default according to
     the user's browser language. Click to switch
-languages.
+    languages.
 
 ![image-20200304160950998](./assets/dashboard-ee/image-20200304160950998.png)
 
@@ -61,7 +61,7 @@ connection, and subscription data. Some data is defined as follows:
   - Erlang Process、Connections、Topics、Subscriptions、Retained、Share
     Subscription: It is divided into two groups by `/` which are the
     current value and the maximum
-value.
+    value.
 
 ![image-20200304161123450](./assets/dashboard-ee/image-20200304161123450.png)
 
@@ -156,7 +156,7 @@ clients.Several important information in the list is as follows:
     be disconnected and the session will be cleared. If the client is
     not online, clicking Clear Session will clear the session such as
     the client's subscription
-relationship.
+    relationship.
 
 ![image-20200304161435785](./assets/dashboard-ee/image-20200304161435785.png)
 
@@ -202,7 +202,7 @@ coupling between business systems and EMQX. Excellent infrastructure.
   - Monitor: Click to display the execution statistics of the selected
     Rule, including the number of rule hits and executions, and the
     number of success/failed actions
-triggered.
+    triggered.
 
 ![image-20200304161544424](./assets/dashboard-ee/image-20200304161544424.png)
 
@@ -244,7 +244,7 @@ records and other businesses.
 
 1.  Select the client connected event, filter the device with Username
     'emqx' and select the connection
-information:
+    information:
 
 <!-- end list -->
 
@@ -271,7 +271,7 @@ the resources are available.
   - Delete: The resources being used by the Rule Engine cannot be
     deleted. Please delete the rules that depend on the selected
     resource before
-deleting.
+    deleting.
 
 ![image-20200304162110301](./assets/dashboard-ee/image-20200304162110301.png)
 
@@ -360,5 +360,36 @@ create or delete an application.
 
 ### Users
 
-Dashboard user account management, you can create, edit, delete users,
-if you forget the user password, you can reset the password through CLI.
+Dashboard user account management, you can create, edit, delete users, if you forget the user password, you can reset the password through CLI.
+
+To add new users, click the **+ Create** button on the page. A pop-up dialog will appear to prompt you to enter the necessary user details. 
+
+![users](./assets/users.png)
+
+Starting from EMQX 4.4.22, the Dashboard introduces the Role-Based Access Control (RBAC) feature for its users. RBAC allows you to assign permissions to users based on their roles within the organization. This feature simplifies authorization management, enhances security by restricting access, and improves organizational compliance, making it an essential access control mechanism for the Dashboard.
+
+You can select the role from the **Role** dropdown when you create users. Currently, you can set either of the following predefined roles for a user:
+
+- Administrator
+
+  Administrators have full access to manage all EMQX features and resources, including client management, system configuration, API key, and user management.
+
+- Viewer
+
+  Viewers can access all EMQX data and configurations, corresponding to all `GET` requests in the REST API. However, they do not have the rights to create, modify, or delete any data.
+
+![users_role](./assets/users_role.png)
+
+Click the **Confirm** button to generate the user account. For further user management, such as editing user information, updating passwords, or deleting users, you can easily access these options by clicking **Edit** button at the end of the user row.
+
+### Blacklist
+
+The blacklist is used to prevent clients from establishing connections. This feature is suitable for managing a small number of clients, and the blacklist will expire after a specified period.
+
+The blacklist supports the following 3 ways to block client connections:
+
+- clientid: Blocking based on the client ID (Client ID);
+- username: Blocking based on the username (Username);
+- peerhost: Blocking based on the peerhost (e.g., IP address).
+
+![blacklist](./assets/blacklist.png)
