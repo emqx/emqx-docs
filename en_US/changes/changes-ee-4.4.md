@@ -6,7 +6,7 @@
 
 ### Enhancements
 
-- Enhanced logging capabilities through enabling the audit log module within the Dashboard.
+- Added the Audit Log feature to track important operation changes.
 
   - To enable the audit log feature, please click on "General" -> "Audit Log" -> "Enable", modify the parameters and then click "Add".
   - Once enabled, all HTTP requests except `GET` requests, as well as the CLIs, will be recorded.
