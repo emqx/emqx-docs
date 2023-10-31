@@ -89,10 +89,6 @@
           "path": "advanced/blacklist"
         },
         {
-          "title": "WebHook",
-          "path": "advanced/webhook"
-        },
-        {
           "title": "分布集群",
           "path": "advanced/cluster"
         },
@@ -115,6 +111,10 @@
         {
           "title": "速率限制",
           "path": "advanced/rate-limit"
+        },
+        {
+          "title": "CRL 与 OCSP Stapling",
+          "path": "security/crl-ocsp-stapling"
         },
         {
           "title": "飞行窗口与消息队列",
@@ -342,15 +342,6 @@
       ]
     },
     {
-      "title": "安全",
-      "children": [
-        {
-          "title": "CRL/OCSP Stapling",
-          "path": "security/crl-ocsp-stapling"
-        }
-      ]
-    },
-    {
       "title": "命令行接口",
       "children": [
         {
@@ -364,8 +355,8 @@
       "path": "advanced/relup"
     },
     {
-       "title": "安装补丁包",
-       "path": "advanced/patches"
+      "title": "安装补丁包",
+      "path": "advanced/patches"
     },
     {
       "title": "FAQ 常见问题解答",
@@ -596,10 +587,6 @@
           "path": "advanced/blacklist"
         },
         {
-          "title": "WebHook",
-          "path": "advanced/webhook"
-        },
-        {
           "title": "Distributed Cluster",
           "path": "advanced/cluster"
         },
@@ -618,6 +605,10 @@
         {
           "title": "Rate limit",
           "path": "advanced/rate-limit"
+        },
+        {
+          "title": "CRL/OCSP Stapling",
+          "path": "security/crl-ocsp-stapling"
         },
         {
           "title": "Inflight and Queue",
@@ -844,15 +835,6 @@
       ]
     },
     {
-      "title": "Security",
-      "children": [
-        {
-          "title": "CRL/OCSP Stapling",
-          "path": "security/crl-ocsp-stapling"
-        }
-      ]
-    },
-    {
       "title": "Command",
       "children": [
         {
@@ -866,8 +848,8 @@
       "path": "advanced/relup"
     },
     {
-       "title": "Apply Patches",
-       "path": "advanced/patches"
+      "title": "Apply Patches",
+      "path": "advanced/patches"
     },
     {
       "title": "Multi-language Extension",
