@@ -6,22 +6,22 @@
 
 ### Enhancements
 
-- Enhanced logging capabilities to support audit logs for dashboard.
+- Enhanced logging capabilities by enabling the audit log module in the Dashboard.
 
-- Added support for RBAC roles in the dashboard. Implemented functionality for role-based access control (RBAC).
+- Added support for Role-Based Access Control (RBAC) roles in the dashboard. With this new functionality, users can be assigned one of two roles: "Administrator" or "Viewer" when logging into the Dashboard, each with distinct permissions.
 
-  When accessing the administrative dashboard, this feature enables the differentiation between administrator and viewer roles, thereby enforcing the appropriate permissions.
-  Administrators enjoy unrestricted access, allowing them to view and modify all aspects of the dashboard's functionality. In contrast, viewers are limited to accessing the dashboard solely for viewing purposes and are unable to make any modifications.
+  - Administrator Role: Administrators enjoy unrestricted access, granting them full control over all aspects of the dashboard's functionality. 
+  - Viewer Role: Viewers are limited to read-only access. They can view dashboard information but are unable to make any modifications.
 
-- LwM2M gateway supports sending downlink data using Block Wise Transfer.
+  RBAC ensures that the right users have the appropriate level of access, simplifying user management and access control and enhancing security and data integrity.
 
-- Added new SQL functions.
+- LwM2M gateway supported sending downlink data using Block Wise Transfer.
 
-  The new functions are: map_keys(), map_values(), map_to_entries(), join_to_string(), join_to_string(), join_to_sql_values_string(), is_null_var(), is_not_null_var().
+- Added the new SQL functions: map_keys(), map_values(), map_to_entries(), join_to_string(), join_to_string(), join_to_sql_values_string(), is_null_var(), is_not_null_var().
 
   For more information on the functions and their usage, refer to the documentation.
 
-- Added `QoS` configuration option for MQTT bridge action to specify the QoS level of bridged messages.
+- Added `Forward QoS` configuration option for the action of "Data bridge to MQTT Broker" to specify the QoS level of messages to be forwarded through the MQTT bridge.
 
 - Added support for specifying the expiration time of MQTT messages via configuration file.
 
@@ -29,64 +29,63 @@
 
 - Updated Erlang/OTP version to OTP-24.3.4.2-4.
 
-- Added schema validations for better configuration OCSP Stapling and CRL Check consistency.
+- Added schema validations for better configuring OCSP Stapling and CRL Check consistency.
 
-### Bug fixes
+### Bug Fixes
 
-- Resolved an issue causing a crash in the Kafka client (wolff) producer.
+- Resolved the issue causing the Kafka client (wolff) producer to crash.
 
-  This issue arose when a Kafka resource was inadvertently deleted during
-  the initialization of certain rules, leading to a failure in the dependent rules.
-  This error then propagated, invoking an error escalation mechanism which led to the crash of all rules.
-  The resolution prevents this propagation, ensuring system stability.
+  This problem occurred when a Kafka resource was inadvertently deleted during the initialization of certain rules, leading to a failure in the dependent rules. This error then propagated, triggering an error escalation mechanism, leading to the crash of all rules. The resolution prevents this propagation, ensuring the system stability.
+  
+- Fixed the issue that GBT32960 gateway module could not parse the `retry_interval` parameter.
 
-- Fixed GBT32960 gateway module not parsing the `retry_interval` parameter.
+- Fixed the issue that GBT32960 client was unable to fetch through the HTTP API.
 
-- Fixed GBT32960 client not being able to fetch via HTTP API.
+- Fixed the issue that exception logs appeared when the OCPP client failed in authentication.
 
-- Fixed anomaly logs when OCPP client fails to authenticate.
-
-- Fixed OCPP gateway not validating for an empty ClientID.
+- Fixed the issue that OCPP gateway did not validate an empty ClientID.
 
 - Upgraded RabbitMQ driver and fixed some security vulnerabilities.
 
-- Fixed GCP PubSub action in rule engine not incrementing statistics counter in asynchronous send mode.
+- Fixed the issue with the GCP PubSub action in the rule engine, where the statistics counter did not increase in asynchronous sending mode.
 
-- Fixed manual reconnection of resources only reconnecting resources on the current node.
+- Fixed the issue that only the resources of the current node would reconnect when manually reconnecting resources.
 
-- Fixed counters of actions not being reset after deleting and re-importing rules.
+- Fixed the issue that the statistics counter of actions was not reset after deleting and reimporting rules.
 
-- Fixed resource leakage of actions when restarting rules in cluster mode.
+- Fixed the issue in cluster mode where restarting rules would result in an action resource leak.
 
-  Prior to the fix, when stopping and starting rules, if the creation of actions on some nodes failed, the resources (some processes associated with the actions) would be leaked.
+  Before the fix, when stopping and starting rules, the action resource (some processes associated with the actions) leaked if the action creation failed on certain nodes.
 
-- Fixed the performance degradation of some data integration actions with batch mode in multi-CPU scenarios compared to versions before 4.4.5.
+- Fixed the issue of reduced performance in some data integration actions with batch mode in multi-CPU scenarios compared to versions before 4.4.5.
 
-  In version 4.4.5, the number of workers in the batch process pool was modified to `number of CPU cores * 4`. When running on a machine with a large number of CPU cores, the number of workers would be too large, so each process would accumulate fewer messages within the specified batch time, resulting in a performance degradation of batch data sending. After the fix, the number of workers in the batch process pool is no longer hard-coded, but a new configuration item `batch_pool_size` is provided, with a default value of 8.
+  In version 4.4.5, the number of workers in the batch process pool was modified to `number of CPU cores * 4`. When running on machines with a higher number of CPU cores, this resulted in an excessive number of worker processes, causing each process to accumulate relatively few messages within the specified batch time. This, in turn, led to a decrease in the performance of batch data sending.
 
-  This fix affects the following data integration actions: data_to_cassa, data_to_clickhouse, data_to_influxdb, data_to_iotdb, data_to_lindorm, data_to_mysql, data_to_oracle, data_to_pgsql, data_to_sqlserver, data_to_tablestore, data_to_tdengine, data_to_gcp_pubsub.
+  The fix no longer hardcodes the number of workers in the batch process pool. Instead, it introduces a new configuration option called `batch_pool_size`, with a default value of 8.
 
-- Fixed an issue in MQTT bridge that failing to send QoS2 messages using the MQTT 5.0 protocol.
+  The data integration actions affected are: data_to_cassa, data_to_clickhouse, data_to_influxdb, data_to_iotdb, data_to_lindorm, data_to_mysql, data_to_oracle, data_to_pgsql, data_to_sqlserver, data_to_tablestore, data_to_tdengine, data_to_gcp_pubsub.
 
-- Fixed the problem of hot configuration updates failing when the configuration for a listener in the configuration file is missing.
+- Fixed an issue in the MQTT bridge that sending QoS2 messages failed when using the MQTT 5.0 protocol.
 
-- Fixed the LwM2M gateway plugin startup failure issue.
+- Fixed the issue that hot configuration updates failed when the configuration for a listener in the configuration file was missing.
 
-  Prior to the fix, stopping the LwM2M module and then starting the LwM2M plugin would result in plugin startup failure, with the following log message:
+- Fixed the issue of LwM2M gateway plugin startup failure.
+
+  Before the fix, if the LwM2M module was first shut down and then the LwM2M plugin was started, it would result in a plugin startup failure. The log message was as follows:
 
   ```
   {emqx_lwm2m,{bad_return,{{emqx_lwm2m_app,start,[normal,[]]},{'EXIT',{{already_started,<0.3895.177>},[...]}}}}}
   ```
 
-- Fixed the issue where the shared subscription topic prefix on the Dashboard wasn't displayed correctly.
+- Fixed the issue that the shared subscription topic prefix on the Dashboard was not displayed correctly.
 
-  Before the fix, a topic like `$share/g//t` would be displayed as `/t` on the client details page of the Dashboard, causing the shared subscription prefix to be lost. After the fix, it will be displayed correctly as `$share/g//t`.
+  Before the fix, topics like `$share/g//t` would be displayed as `/t` on the client details page of the Dashboard, causing the shared subscription prefix to be lost. After the fix, it will be displayed correctly as `$share/g//t`.
 
-- Added a `none` option for `peer_cert_as_username` and `peer_cert_as_clientid`.
+- Added a `none` option for `peer_cert_as_username` and `peer_cert_as_clientid` in the configuration file. These two options are used to use (client) certificate content as the username/ClientID.
 
 - Fixed the issue of occasional listener restarts when enabling hot configuration feature.
 
-- Fixed the errors when stopping actively running rules.
+- Fixed the issue that errors occurred when stopping actively running rules.
 
   Before the fix, manually stopping actively running rules occasionally resulted in error logs like the following, indicating that the action was not properly initialized or had been cleared:
   ```
@@ -96,17 +95,17 @@
 
 - Fixed the issue of DTLS PSK handshake failure in the LwM2M gateway.
 
-- Add checks for illegal fields in the retainer module's configuration.
+- Added checks for illegal fields in the retainer module's configuration.
 
-  Added checks for the 'Max Retained Messages' and 'Max Retained Payload Size' fields to ensure they are non-negative values.
+  Added checks for the `Max Retained Messages` and `Max Retained Payload Size` fields to ensure they are non-negative values.
 
 - Fixed the issue of failing to send messages to TDEngine after hot update.
 
 - Fixed the issue of RabbitMQ resources becoming unavailable after hot update.
 
-- Cancel OCSP refresh timer when disabling OCSP stapling or the TLS listener.
+- Canceled the HTTP refresh timer of the OCSP when disabling OCSP stapling or the TLS listener.
 
-- Cancel CRL refresh timer when disabling CRL check or the TLS listener.
+- Canceled the CRL refresh timer when disabling CRL check or the TLS listener.
 
 ## e4.4.21
 
@@ -123,7 +122,7 @@
 - Now the "Message Republish" action supports two new fields: "MQTT Properties" and "User Properties". Both of the fields are in the format of key-value pairs, and both the key and value support placeholders.
 
 
-### Bug fixes
+### Bug Fixes
 
 - Fixed the issue that the Kafka action cannot send numeric values as Kafka Headers.
 
