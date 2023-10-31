@@ -9,7 +9,7 @@
 - Added the Audit Log feature to track important operation changes.
 
   - To enable the Audit Log, click **General** -> **Audit Log** -> **Enable** on Dashboard, modify the parameters, and click **Add**.
-  - Once enabled, all HTTP requests except `GET` requests, as well as the CLIs, will be recorded.
+  - Once enabled, all HTTP requests except `GET` and CLI executions will be recorded.
   - By default, the most recent 5,000 audit log entries can be accessed through the dashboard, and the complete log file is stored in `data/audit` directory.
 
 - Added support for Role-Based Access Control (RBAC) roles in the dashboard. With this new functionality, users can be assigned one of two roles: "Administrator" or "Viewer" when logging into the Dashboard, each with distinct permissions.
