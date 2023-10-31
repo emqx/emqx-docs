@@ -8,7 +8,7 @@
 
 - Added the Audit Log feature to track important operation changes.
 
-  - To enable the audit log feature, please click on "General" -> "Audit Log" -> "Enable", modify the parameters and then click "Add".
+  - To enable the Audit Log, click **General** -> **Audit Log** -> **Enable** on Dashboard, modify the parameters, and click **Add**.
   - Once enabled, all HTTP requests except `GET` requests, as well as the CLIs, will be recorded.
   - By default, the most recent 5,000 audit log entries can be accessed through the dashboard, and the complete log file is stored in `data/audit` directory.
 
