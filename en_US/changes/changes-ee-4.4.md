@@ -6,7 +6,13 @@
 
 ### Enhancements
 
-- Enhanced logging capabilities by enabling the audit log module in the Dashboard.
+- Enhanced logging capabilities through enabling the audit log module within the Dashboard.
+
+    - Enable/Disable the audit feature via Dashboard/Module or Dashboard/General/Audit Log.
+
+    - Once enabled, all HTTP requests except GET requests, as well as command line execution, will be recorded.
+
+    - By default, the most recent 5,000 audit log entries can be accessed through the dashboard. The complete log file is stored in data/audit directory.
 
 - Added support for Role-Based Access Control (RBAC) roles in the dashboard. With this new functionality, users can be assigned one of two roles: "Administrator" or "Viewer" when logging into the Dashboard, each with distinct permissions.
 
