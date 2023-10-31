@@ -1,5 +1,112 @@
 # 版本发布
 
+## e4.4.22
+
+*发布日期: 2023-11-01*
+
+### 增强
+
+- 支持 Dashboard 的审核日志记录和查询。
+
+- 在 Dashboard 中增加了对 RBAC 角色的支持。实现了基于角色的访问控制(RBAC)的功能，用于访问管理 Dashboard。
+
+  这使得能够在管理员和查看者角色类型之间进行区分，以实施适当的权限。
+  管理员能通过 Dashboard 查看和修改所有功能，而查看者只能查询，无法对功能进行修改。
+
+- LwM2M 网关支持使用块传输协议（Block Wise Transfer）发送下行数据。
+
+- 新增一些 SQL 函数。
+
+  新增的函数有：map_keys(), map_values(), map_to_entries(), join_to_string(), join_to_string(), join_to_sql_values_string(), is_null_var(), is_not_null_var().
+
+  函数的作用和使用方法详见文档。
+
+- 为 MQTT 桥接动作增加 `QoS` 配置项，用于指定桥接消息的 QoS 等级。
+
+- 支持通过配置文件指定 MQTT 消息的过期时间。
+
+  详见 `emqx.conf` 文件中对 `mqtt.message_expiry_interval` 配置的描述。
+
+- 更新 Erlang/OTP 的版本到 OTP-24.3.4.2-4。
+
+- 新增 Schema 验证，以便更好地配置 OCSP Stapling 和 CRL 检查一致性。
+
+### 修复
+
+- 解决了导致 Kafka 客户端（wolff）生产者崩溃的问题。
+
+  这个问题是在初始化某些规则时删除了 Kafka 资源，从而导致依赖规则失败。
+  这个错误随后传播，触发了错误升级机制，导致所有规则崩溃。
+
+- 修复了 GBT32960 网关模块无法解析 `retry_interval` 参数的问题。
+
+- 修复了 GBT32960 客户端无法在通过 HTTP API 获取的问题。
+
+- 修复了 OCPP 客户端在认证失败时的异常日志。
+
+- 修复了 OCPP 网关未对 ClientID 为空的校验问题。
+
+- 升级了 RabbitMQ 驱动程序，并修复了一些安全漏洞。
+
+- 修复规则引擎的 GCP PubSub 动作在异步发送模式下，统计计数不增长的问题。
+
+- 修复手动重连资源时，只有当前节点的资源会执行重连的问题。
+
+- 修复删除规则重新导入后，动作的统计计数没有清零的问题。
+
+- 修复集群模式下重启规则失败导致的动作资源泄露的问题。
+
+  修复前，停止并启动规则时，如果某些节点上的动作创建失败，会导致动作资源（该动作关联的一些进程）泄露。
+
+- 修复了多 CPU 场景下，某些带批量模式的数据集成动作，批量发送数据的性能比 4.4.5 之前的版本有所下降的问题。
+
+  4.4.5 版本将批量进程池的工作进程数目修改为 `CPU 核心数 * 4`，在 CPU 核心数比较多的机器上运行时，会导致工作进程数过多，所以每个进程在指定批量时间内累积的消息比较少，从而使得批量发送数据的性能下降。修复后不再硬编码批量进程池的工作进程数目，而是提供了一个新的配置项 `batch_pool_size`，默认值为 8。
+
+  该修复会影响到以下数据集成动作: data_to_cassa, data_to_clickhouse, data_to_influxdb, data_to_iotdb, data_to_lindorm, data_to_mysql, data_to_oracle, data_to_pgsql, data_to_sqlserver, data_to_tablestore, data_to_tdengine, data_to_gcp_pubsub.
+
+- 修复 MQTT 桥接使用 MQTT 5.0 协议发送 QoS2 消息失败的问题。
+
+- 修复当配置文件中某个监听器的配置缺失时，热配置更新失败的问题。
+
+- 修复 LwM2M 网关插件启动失败的问题。
+
+  修复前，若先关闭 LwM2M 模块然后启动 LwM2M 插件，会导致插件启动失败，日志如下：
+
+  ```
+  {emqx_lwm2m,{bad_return,{{emqx_lwm2m_app,start,[normal,[]]},{'EXIT',{{already_started,<0.3895.177>},[...]}}}}}
+  ```
+
+- 修复 Dashboard 上共享订阅主题的前缀无法正常展示的问题。
+
+  修复前，`$share/g//t` 这样的主题会在 Dashboard 的客户端详情页面上展示为 `/t`，共享订阅前缀丢失。
+  修复后，将正常展示为 `$share/g//t`。
+
+- 为 `peer_cert_as_username` 和 `peer_cert_as_clientid` 增加一个 `none` 选项。
+
+- 修复启用热配置功能，会偶现监听器被重启的问题。
+
+- 修复停止正在运行中的规则时出错的问题。
+
+  修复前，若手动停止正在运行中的规则，会偶尔出现如下错误日志，提示动作没有正常初始化或者已经被清除：
+  ```
+  foo@x.x.x.x:54663 Rule: <<"rule:ba48182b">>; Action: data_to_kafka; Resource: <<"resource:7bacacdc">>. Continue next action, reason: {error,{badmatch,not_found}, ...
+  ```
+  修复后这种情况下不再打印错误日志，并且优化了其他情况下出现动作未初始化时的错误日志。
+
+- 修复 LwM2M 网关 DTLS PSK 握手失败的问题。
+
+- 检查 Retainer 模块配置的非法字段。
+
+  添加了对 “最大保留消息数” 和 “最大保留消息大小“ 两个字段的检查，确保为非负值。
+
+- 修复热更新之后发送消息到 TDEngine 失败的问题。
+
+- 修复热更新之后 RabbitMQ 资源不可用的问题。
+
+- 当禁用 OCSP Stapling 或停止 TLS 监听器时，一并取消 OCSP 的 HTTP 定时刷新。
+
+- 当禁用 CRL 检查或停止 TLS 监听器时，一并取消 CRL 的定时刷新。
+
 ## e4.4.21
 
 *发布日期: 2023-10-16*
