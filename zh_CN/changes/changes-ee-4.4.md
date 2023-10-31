@@ -62,7 +62,7 @@
 
   4.4.5 版本将批量进程池的工作进程数目修改为 `CPU 核心数 * 4`，在 CPU 核心数比较多的机器上运行时，会导致工作进程数过多，所以每个进程在指定批量时间内累积的消息比较少，从而使得批量发送数据的性能下降。修复后不再硬编码批量进程池的工作进程数目，而是提供了一个新的配置项 `batch_pool_size`，默认值为 8。
 
-  该修复会影响到以下数据集成动作: data_to_cassa, data_to_clickhouse, data_to_influxdb, data_to_iotdb, data_to_lindorm, data_to_mysql, data_to_oracle, data_to_pgsql, data_to_sqlserver, data_to_tablestore, data_to_tdengine, data_to_gcp_pubsub.
+  受影响的数据集成动作: data_to_cassa, data_to_clickhouse, data_to_influxdb, data_to_iotdb, data_to_lindorm, data_to_mysql, data_to_oracle, data_to_pgsql, data_to_sqlserver, data_to_tablestore, data_to_tdengine, data_to_gcp_pubsub。
 
 - 修复 MQTT 桥接使用 MQTT 5.0 协议发送 QoS2 消息失败的问题。
 
@@ -81,7 +81,7 @@
   修复前，`$share/g//t` 这样的主题会在 Dashboard 的客户端详情页面上展示为 `/t`，共享订阅前缀丢失。
   修复后，将正常展示为 `$share/g//t`。
 
-- 为 `peer_cert_as_username` 和 `peer_cert_as_clientid` 增加一个 `none` 选项。
+- 在配置文件中，为 `peer_cert_as_username` 和 `peer_cert_as_clientid` 增加一个 `none` 选项。这两个配置项用于将（客户端）证书内容作为用户名/ ClientID。
 
 - 修复启用热配置功能，会偶现监听器被重启的问题。
 
