@@ -40,6 +40,5 @@
 
 **高级特性和扩展**：介绍 EMQX 支持的高级特性和扩展功能。
 
-- [WebHook](./webhook.md)
 - [钩子](./hooks.md)
 - [飞行窗口与消息队列](./inflight-window-and-message-queue.md)

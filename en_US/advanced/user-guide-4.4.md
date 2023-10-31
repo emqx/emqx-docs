@@ -46,6 +46,5 @@ This chapter is designed to help users get started with EMQX, and it covers a wi
 
 **Advanced Features and Extensions**: This section describes the advanced features and extensions that are supported by EMQX.
 
-- [WebHook](./webhook.md)
 - [Hook](./hooks.md)
 - [Inflight Window and Message Queue](./inflight-window-and-message-queue.md)
