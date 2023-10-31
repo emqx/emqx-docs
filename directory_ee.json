@@ -103,8 +103,8 @@
           "path": "advanced/rate-limit"
         },
         {
-          "title": "WebHook",
-          "path": "advanced/webhook"
+          "title": "CRL 与 OCSP Stapling",
+          "path": "security/crl-ocsp-stapling"
         },
         {
           "title": "钩子",
@@ -619,10 +619,6 @@
       ]
     },
     {
-      "title": "安全",
-      "path": "security/crl-ocsp-stapling"
-    },
-    {
       "title": "命令行接口",
       "path": "advanced/cli"
     },
@@ -863,8 +859,8 @@
           "path": "advanced/rate-limit"
         },
         {
-          "title": "WebHook",
-          "path": "advanced/webhook"
+          "title": "Security",
+          "path": "security/crl-ocsp-stapling"
         },
         {
           "title": "Hook",
@@ -1347,10 +1343,6 @@
     {
       "title": "HTTP API",
       "path": "advanced/http-api"
-    },
-    {
-      "title": "Security",
-      "path": "security/crl-ocsp-stapling"
     },
     {
       "title": "Configuration",
