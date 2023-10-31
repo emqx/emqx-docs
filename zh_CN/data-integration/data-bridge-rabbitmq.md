@@ -1,4 +1,4 @@
-# RabbitMQ
+# 将 MQTT 数据传输到 RabbitMQ
 
 作为一款广泛使用的开源消息代理，[RabbitMQ](https://www.rabbitmq.com/) 应用了高级消息队列协议（AMQP），为分布式系统之间的消息传递提供了一个强大而可扩展的平台。
 

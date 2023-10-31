@@ -1,4 +1,4 @@
-# Apache Pulsar
+# 将 MQTT 数据传输到 Apache Pulsar
 
 [Apache Pulsar](https://pulsar.apache.org/) 是一款流行的开源分布式事件流平台。EMQX 与 Apache Pulsar 的集成为用户在高吞吐量环境中提供可靠的数据传输和处理能力。
 

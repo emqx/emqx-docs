@@ -1,4 +1,4 @@
-# ClickHouse 
+# 将 MQTT 数据写入到 ClickHouse 
 
 ClickHouse 是一个高性能、列式存储的分布式数据库管理系统，专门用于处理大规模数据。它具有出色的查询性能、灵活的数据模型和可扩展的分布式架构，适用于多种数据分析场景。
 EMQX 将 MQTT 消息和客户端事件存储到 [ClickHouse](https://clickhouse.com/)。

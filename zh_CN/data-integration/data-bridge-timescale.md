@@ -1,4 +1,4 @@
-# TimescaleDB
+# 将 MQTT 数据写入到 TimescaleDB
 
 {% emqxce %}
 :::tip

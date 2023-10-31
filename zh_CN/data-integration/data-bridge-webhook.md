@@ -1,4 +1,4 @@
-# HTTP 服务
+# 将 MQTT 数据发送到 HTTP 服务
 
 EMQX 支持通过 HTTP 服务的方式将 MQTT 消息和客户端事件发送到外部 HTTP 服务。
 

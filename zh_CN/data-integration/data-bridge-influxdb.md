@@ -1,4 +1,4 @@
-# InfluxDB
+# 将 MQTT 数据写入到 InfluxDB
 
 {% emqxce %}
 :::tip
