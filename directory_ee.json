@@ -111,6 +111,10 @@
           "path": "advanced/hooks"
         },
         {
+          "title": "审计日志",
+          "path": "advanced/audit-log"
+        },
+        {
           "title": "数据导入导出",
           "path": "advanced/data-import-and-export"
         },
@@ -255,6 +259,10 @@
         {
           "title": "慢订阅者统计",
           "path": "modules/slow_subscribers_statistics"
+        },
+        {
+          "title": "审计日志",
+          "path": "modules/audit-log"
         },
         {
           "title": "MQTT 消息延迟发布",
@@ -867,6 +875,10 @@
           "path": "advanced/hooks"
         },
         {
+          "title": "Audit Log",
+          "path": "advanced/audit-log"
+        },
+        {
           "title": "Import/Export Data",
           "path": "advanced/data-import-and-export"
         },
@@ -1007,6 +1019,10 @@
         {
           "title": "Slow Subscriber Statistics",
           "path": "modules/slow_subscribers_statistics"
+        },
+        {
+          "title": "Audit Log",
+          "path": "modules/audit-log"
         },
         {
           "title": "MQTT Delayed Publish",
