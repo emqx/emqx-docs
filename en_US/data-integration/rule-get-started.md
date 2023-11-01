@@ -49,31 +49,21 @@ Select **Republish** from the drop-down menu under **Action**, and configure the
 
 - **Payload**: Input "${payload}", indicating the republished message will have the same payload as the original message, without any modifications.
 
-- **Publish Properties**: Click the toggle switch to configure the user properties and MQTT properties as necessary. The properties options allow you to add rich message metadata descriptions for the republished message.
+- **MQTT 5.0 Message Properties**: Click the toggle switch to configure the user properties and MQTT properties as necessary. The properties options allow you to add rich message metadata descriptions for the republished message.
 
-  - **User Properties**: You can add custom key-value pairs to configure the [user properties](https://www.emqx.com/en/blog/mqtt5-user-properties) of the republished message, which represent custom message metadata.
+  <!-- - **User Properties**: You can add custom key-value pairs to configure the [user properties](https://www.emqx.com/en/blog/mqtt5-user-properties) of the republished message, which represent custom message metadata. -->
 
-  - **Payload Format Indicator**: Enter a value to indicate whether the payload of the message is in a specific format (e.g., UTF-8 text) or not. Optional values are:
-
-    - 0 (0x00): The payload is not specified to have a specific format.
-    - 1 (0x01): The payload is UTF-8 encoded character data.
+  - **Payload Format Indicator**: Enter a value to indicate whether the payload of the message is in a specific format. When the value is set to `false`, the message is considered as undetermined bytes. When set to `true`, it indicates that the payload within the message body is UTF-8 encoded character data. This will help MQTT clients or MQTT servers parse message content more efficiently without the need for explicit formatting or type identification for the message body.
 
   - **Message Expiry Interval**: Enter a value (in seconds) to specify a time interval after which the message should expire and be considered invalid if it hasn't been delivered to the intended recipient.
+  
+- **Content Type**: Enter a value to specify the type or format of the payload content within the republished message (MIME type), for example, `text/plain` represents a text file, `audio/aac` represents an audio file, and `application/json` signifies an application message in JSON format.
+  
+- **Response Topic**: Enter the specific MQTT topic to which you want the response message to be published. For example, if you want responses to be sent to a topic named "response/my_device," you would enter: `response/my_device`.
+  
+- **Correlation Data**: Enter a unique identifier or data to correlate a response message with the original request message. For example, you could enter a unique request identifier, a transaction ID, or any other information that is meaningful in your application context.
 
-  - **Content Type**: Enter a value to specify the type or format of the payload content within the republished message, for example, "..." <!-- what should be entered?-->
-
-  - **Response Topic**: Enter the specific MQTT topic to which you want the response message to be published. For example, if you want responses to be sent to a topic named "response/my_device," you would enter: `response/my_device`.
-
-  - **Correlation Data**: Enter a unique identifier or data to correlate a response message with the original request message.
-
-    ::: tip
-
-    You can enter any relevant data or identifier that helps you associate the republished message with the original request. For example, you could enter a unique request identifier, a transaction ID, or any other information that is meaningful in your application context.
-
-    :::
-
-
-<img src="./assets/rules/action-republish.png" alt="action-republish" style="zoom:50%;" />
+![action-republish](./assets/action-republish.png)
 
 On the **Create Rules** page, click the **Create** button at the bottom to complete the rule creation. This rule will be added to as a new entry in the **Rules** page. You can view the rule ID, data source, enable or disable the rule, and creation time. You can also click **Settings** to modify the data source or add more action, or click the **More** button to duplicate or delete the rule.
 
