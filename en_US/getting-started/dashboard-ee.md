@@ -380,7 +380,7 @@ You can select the role from the **Role** dropdown when you create users. Curren
 
 ![users_role](./assets/users_role.png)
 
-Click the **Confirm** button to generate the user account. For further user management, such as editing user information, updating passwords, or deleting users, you can easily access these options by clicking **Edit** button at the end of the user row.
+Click the **Confirm** button to create the user account. For further user management, such as editing user information, updating passwords, or deleting users, you can easily access these options by clicking **Edit** button at the end of the user row.
 
 ### Blacklist
 
