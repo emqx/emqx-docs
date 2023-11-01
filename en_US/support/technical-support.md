@@ -27,14 +27,14 @@ If you have any questions about EMQX products or our IoT solutions, you are welc
 - Europe office: Frankfurt Eschborner Landstraße 42-50 Haus B, 60489 Frankfurt(M), Germany
 - US office: Silicon Valley 305 Vineyard Town Center #140 Morgan Hill CA 95037
 
-## EMQX Enterprise Edition 
+{% emqxee %}
 
-For EMQX Enterprise edition users:
+The EMQX service team provides you with professional support:
 
-- You can contact the [EMQX service team](https://www.emqx.com/en/contact?product=emqx) for professional support on designing, deploying, or customizing your IoT solutions. 
+- You can contact the [EMQX service team](https://www.emqx.com/en/contact?product=emqx) for professional support on designing, deploying, or customizing your IoT solutions.
 - Browse the [EMQX Support Portal](https://www.emqx.com/en/support) to find out about the commercial support we cover.
 
-**Commercial Service Level**
+**Commercial Support Level**
 
 | Features                  | Standard                                                     | Professional                                                 |
 | ------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -46,7 +46,9 @@ For EMQX Enterprise edition users:
 | Hot bug fixes             | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
 | 3rd-party plug-in support | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
 
-## EMQX Open Source Edition
+{% endemqxee %}
+
+{% emqxce %}
 
 For EMQX developers and users, you are welcome to join EMQX forum, slack channel or visit Github pages to ask questions, find answers, and share ideas and best practices:
 
@@ -61,3 +63,4 @@ You may also reach us at:
 - [LinkedIn](https://www.linkedin.com/company/emqtech)
 - [Discord](https://discord.com/invite/xYGf3fQnES)
 
+{% endemqxce %}
