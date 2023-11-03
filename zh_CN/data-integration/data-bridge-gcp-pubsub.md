@@ -1,8 +1,6 @@
 # GCP PubSub
 
-[Google Cloud PubSub](https://cloud.google.com/pubsub?hl=en-us) 是一种异步消息传递服务，旨在实现极高的可靠性和可扩缩性。EMQX 支持与 Google Cloud Pub/Sub 的无缝集成，用于实时提取、处理和分析 MQTT 数据。此外，它还支持将数据推送并订阅各种Google Cloud 服务，如 Cloud Functions、App Engine、Cloud Run、Kubernetes Engine 和 Compute Engine。
-
-借助 EMQX GCP PubSub 集成，您可以将 MQTT 消息和客户端事件发送到 GCP PubSub 中，这能够帮助您更快的基于 GCP 构建物联网应用，助力你从 GCP IoT Core 迁移到 EMQX 中。
+[Google Cloud PubSub](https://cloud.google.com/pubsub?hl=en-us) 是一种异步消息传递服务，旨在实现极高的可靠性和可扩缩性。EMQX 支持与 Google Cloud PubSub 的无缝集成，能够实时提取、处理和分析 MQTT 数据，并将数据推送到各类 Google Cloud 服务，如 Cloud Functions、App Engine、Cloud Run、Kubernetes Engine 和 Compute Engine 中，或将 Google Cloud 中的数据通过 MQTT 下发，帮助用户更快的基于 GCP 构建物联网应用。
 
 {% emqxce %}
 :::tip
@@ -10,18 +8,32 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 :::
 {% endemqxce %}
 
-## 功能清单
+## 工作原理
 
-- [连接池](./data-bridges.md#连接池)
-- [异步请求模式](./data-bridges.md#异步请求模式)
-- [批量模式](./data-bridges.md#批量模式)
-- [缓存队列](./data-bridges.md#缓存队列)
+GCP PubSub 数据桥接是 EMQX 的开箱即用功能，旨在帮助用户轻松地将 MQTT 数据流与 Google Cloud 集成，并利用其丰富的服务和功能实现物联网应用开发。
 
-## 快速开始
+EMQX 通过规则引擎与数据桥接将 MQTT 数据转发至 GCP PubSub，以 GCP PubSub 生产者角色为例，其完整流程如下：
 
-本节介绍如何配置 GCP PubSub 数据桥接，包括如何设置 GCP 的服务、创建数据桥接和转发数据到 GCP PubSub 的规则以及测试数据桥接和规则等主题。
+1. **物联网设备发布消息**：设备通过特定的主题发布遥测和状态数据，消息将触发规则引擎。
+2. **规则引擎处理消息**：通过内置的规则引擎，可以根据主题匹配处理特定来源的 MQTT 消息。规则引擎会匹配对应的规则，并对消息进行处理，例如转换数据格式、过滤掉特定信息或使用上下文信息丰富消息。
+3. **桥接到 GCP PubSub**：规则触发将消息转发到 GCP PubSub 的操作，允许轻松配置数据到 GCP PubSub 属性，排序键，以及 MQTT 主题到 GCP PubSub 主题的映射关系，可以为数据集成提供更丰富的上下文信息和顺序保证，实现灵活的物联网数据处理。
 
-在配置 GCP PubSub 之前，必须先在 GCP 上创建好对应的服务账户凭证以及 PubSub 主题。
+MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发，例如：
+
+1. 实时数据处理和分析：利用 Google Cloud 的强大数据处理和分析工具，如 Dataflow、BigQuery 和 PubSub 自身的流处理功能，对消息数据进行实时处理和分析，从而获得有价值的洞察和决策支持。
+
+2. 事件驱动的功能：触发 Google Cloud 的事件处理如 Cloud Functions 和 Cloud Run，以实现动态、灵活的功能触发和处理。
+
+3. 数据存储和共享：将消息数据传输到 Google Cloud 的存储服务中，如 Cloud Storage 和 Firestore，以便安全地存储和管理大量的数据，并与其他 Google Cloud 服务共享和分析这些数据，以满足不同的业务需求。
+
+## 桥接准备
+
+本节介绍如何配置 GCP PubSub，并创建主题与获取连接凭证。
+
+### 先决条件
+
+- 了解[规则](./rules.md)。
+- 了解[数据桥接](./data-bridges.md)。
 
 ### 创建服务账户凭证
 
@@ -44,7 +56,9 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 3. 点击 **Subscription ID** → **MESSAGES** → **PULL** 可以在线查看发送到主题中的消息。
 
-### 创建 GCP PubSub 数据桥接
+## 创建 GCP PubSub 数据桥接
+
+本节介绍如何配置 GCP PubSub 数据桥接，在配置 GCP PubSub 之前，必须先在 GCP 上创建好对应的服务账户凭证以及 PubSub 主题。
 
 1. 转到 Dashboard **数据集成** -> **数据桥接**页面。
 
@@ -112,7 +126,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 6. 设置完成后，您可点击**测试连接**按钮进行验证。
 
-10. 点击**创建**按钮完成数据桥接创建。
+7.  点击**创建**按钮完成数据桥接创建。
 
 至此您已经完成数据桥接创建流程，接下来将继续创建一条规则来指定需要写入的数据。
 
