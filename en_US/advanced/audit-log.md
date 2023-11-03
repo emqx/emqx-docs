@@ -10,7 +10,7 @@ Audit logs for command-line operations may contain sensitive information, so tak
 
 ## Enable and Configure Audit Log
 
-The Audit Log is disabled by default. You can enable it on the Dashboard by clicking **General** -> **Audit Log** from the left navigation menu. You can also enable and manage it through [Modules](../modules/audit-log.md). 
+The Audit Log is disabled by default. You can enable it on the Dashboard by clicking **General** -> **Audit Log** from the left navigation menu. You can also enable and manage it through [Modules](../modules/audit.md). 
 
 When enabling the audit log, you need to configure the following parameters:
 

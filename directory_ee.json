@@ -262,7 +262,7 @@
         },
         {
           "title": "审计日志",
-          "path": "modules/audit-log"
+          "path": "modules/audit"
         },
         {
           "title": "MQTT 消息延迟发布",
@@ -1022,7 +1022,7 @@
         },
         {
           "title": "Audit Log",
-          "path": "modules/audit-log"
+          "path": "modules/audit"
         },
         {
           "title": "MQTT Delayed Publish",
