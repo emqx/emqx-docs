@@ -44,7 +44,7 @@ The modules currently provided by the EMQX include:
   - [MQTT Topic Rewrite](./topic_rewrite.md)
   - [MQTT Retainer Message](./retainer.md)
   - [MQTT Delayed Publish](./delayed_publish.md)
-  - [Audit Log](./audit-log.md)
+  - [Audit Log](./audit.md)
 
 
 ## Start and Stop Modules
