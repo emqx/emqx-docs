@@ -29,9 +29,9 @@ EMQ 公司成立于 2017 年，总部位于杭州，海外研发中心设在斯�
 - 昆明办公室：昆明五华区学府路745号海伦先生1栋1814室
 - 深圳办公室：深圳南山区高新南九道深圳湾科技生态园10栋A座5层
 
-## EMQX 企业版
+{% emqxee %}
 
-对于 EMQX 企业版用户，EMQX 服务团队为您提供专业的支持：
+EMQX 服务团队为您提供专业的支持：
 
 - 您可以借助 [专家支持和服务](https://www.emqx.com/zh/contact?product=emqx) 来帮助您设计、部署和拓展，量身定制最佳实践的物联网解决方案；
 - 或浏览 [EMQX 技术支持 ](https://www.emqx.com/zh/support)页面，了解详细的商业支持列表。
@@ -49,9 +49,11 @@ EMQ 公司成立于 2017 年，总部位于杭州，海外研发中心设在斯�
 | 补丁热修复         | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
 | 第三方插件技术支持 | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
 
-## EMQX 开源版
+{% endemqxee %}
 
-对于 EMQX 企业版用户，EMQX 通过以下方式与世界各地的 EMQX 开发者及用户共同交流学习，获取帮助，分享见解。
+{% emqxce %}
+
+EMQX 通过以下方式与世界各地的 EMQX 开发者及用户共同交流学习，获取帮助，分享见解。
 
 - [访问问答社区获取答案及寻求帮助](https://askemq.com/c/emqx/5)
 
@@ -66,3 +68,4 @@ EMQ 公司成立于 2017 年，总部位于杭州，海外研发中心设在斯�
 - [LinkedIn](https://www.linkedin.com/company/emqtech)
 - [Discord](https://discord.com/invite/xYGf3fQnES)
 
+{% endemqxce %}
