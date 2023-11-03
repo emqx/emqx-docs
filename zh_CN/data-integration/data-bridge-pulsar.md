@@ -8,15 +8,6 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 [Apache Pulsar](https://pulsar.apache.org/) 是一款流行的开源分布式事件流平台。EMQX 与 Apache Pulsar 的集成为用户在高吞吐量环境中提供可靠的数据传输和处理能力。将数据流式传输至 Apache Pulsar 需要以生产者角色创建数据桥接（将消息发送至 Pulsar）。
 
-## 
-
-::: tip 前置准备
-
-- 了解[规则](./rules.md)。
-- 了解[数据桥接](./data-bridges.md)。
-
-:::
-
 ## 工作原理
 
 
