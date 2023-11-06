@@ -290,10 +290,10 @@ Note that this command only takes effect _on the local node_ executing the comma
 
 ## What happens when my license expires?
 
-When your license reaches its expiration date, a warning reminding you of that starts to be printed once each time the node is started.  Additional restrictions might come into play depending on your license type:
+When your license reaches its expiration date, a warning starts to appear each time the node is started to remind you of the expiration.  Depending on your license type, additional restrictions may apply:
 
-- **If the license is issued for "small" customers, or if the license is a trial license:** no new MQTT connections are allowed, even if the total number of connections is less than the limit specified in the license.  Existing connections won't be disconnected, but they won't be able to reconnect if they drop.
-- **If the license is not for "small" customers nor a trial license**: new MQTT connections are still permitted, as long as the total count remains below the maximum limit.
+- **For licenses issued for "small" customers or trial licenses:** No new MQTT connections are allowed, even if the total number of connections is less than the limit specified in the license.  Existing connections won't be disconnected, but they won't be able to reconnect if they drop.
+- **For licenses not issued for "small" customers or trial licenses**: New MQTT connections are still permitted, as long as the total count remains below the maximum limit.
 
 If you are unsure which type of license you have, please confirm with your account manager.
 
