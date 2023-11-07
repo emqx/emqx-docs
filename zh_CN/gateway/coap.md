@@ -70,7 +70,6 @@ CoAP 网关支持 2 种工作模式：
 - `无连接模式`：该模式完全遵循 [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) 协议，在该模式下不需要连接认证、会话、心跳维持等操作，仅支持：
   * 消息发布
   * 订阅主题
-  * 取消订阅
 
 - `连接模式`：该模式下定义了连接认证、会话、和心跳维持等概念。客户端在发布订阅前需要先创建连接，成功连接后客户端将获得会话令牌(Token)，在后续的通信中都需要在 Query String 加入令牌信息。它实现了如下功能:
   * 创建连接
@@ -367,7 +366,8 @@ coap-client -m get -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clien
 
 ### 取消订阅
 
-该接口用于 CoAP 客户端取消订阅指定主题。在 `连接模式` 下需要额外携带身份信息。
+该接口用于 CoAP 客户端取消订阅指定主题。
+目前，取消订阅操作仅在 `连接模式` 下可用。
 
 **请求参数表：**
 
@@ -386,3 +386,9 @@ coap-client -m get -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clien
   - `4.00`：错误的请求格式，并在消息体中返回具体的错误信息。
   - `4.01`：请求格式正确，但鉴权失败。并在消息体中返回具体的错误信息。
 - 消息体（Payload）：当返回码为 `2.07` 时，消息体为空；否则为具体的错误消息
+
+例如，`连接模式` 下取消订阅主题 `coap/test` ：
+
+```bash
+coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
+```

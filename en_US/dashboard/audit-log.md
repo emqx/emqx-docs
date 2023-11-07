@@ -2,7 +2,7 @@
 
 The Audit Log feature allows you to track important operation changes in your EMQX cluster in real-time. It is a critical tool for enterprise users to comply with regulatory requirements and ensure data security. EMQX Audit Log supports recording change-related operations from the [Dashboard](../dashboard/introduction.md), [REST API](../admin/api.md) and [CLI](../admin/cli.md), such as Dashboard user logins and modifications to clients, access controls, and data integrations. However, read-only operations such as metrics retrieval and client list queries are not recorded. Through the Audit Log, enterprise users can easily see who performed which critical operations, how they did it, and when they did it, ensuring compliance and security auditing during their operations.
 
-::: warning
+::: warning Notice
 
 Audit logs for command-line operations may contain sensitive information, so take caution when sending them to a log collector. It is advisable to filter log content or use encrypted transmission methods to prevent unauthorized information leakage.
 
@@ -10,7 +10,7 @@ Audit logs for command-line operations may contain sensitive information, so tak
 
 ## View Log File
 
-When the Audit Log is enabled in EMQX, change-related operations are saved in log format in the `./log/audit.log.1` file. It is easy for enterprise users to perform an in-depth analysis of audit records and integrate the results into existing log management systems, meeting compliance and data security requirements. 
+When the Audit Log is enabled in EMQX, change-related operations are saved in log format in the `./log/audit.log.1` file. It is easy for enterprise users to perform an in-depth analysis of audit records and integrate the results into existing log management systems, meeting compliance and data security requirements.
 
 In future versions, EMQX will also support direct viewing in the Dashboard or querying and obtaining Audit Logs via the REST API, making it convenient to check operation records. Through these methods, EMQX provides flexible and comprehensive support for Audit Logs, allowing enterprise users to choose the most suitable way to manage and view audit logs according to their needs.
 
@@ -25,7 +25,6 @@ You can enable the audit log and modify the configuration options under `log.aud
 ```bash
 log.audit {
   enable = true
-  level = info
   path = "./log/audit.log"
   rotation_count = 10
   rotation_size = 50MB
@@ -45,8 +44,7 @@ Audit log configuration options:
 - **Audit Log File Name**: Specify the path and name of the audit log file. The default value is `${EMQX_LOG_DIR}/audit.log`, where `${EMQX_LOG_DIR}` is a variable and defaults to `./log`, meaning it is ultimately be saved in `./log/audit.log.1`.
 - **Maximum Log Files Number**: The maximum number of rotated log files. The default value is `10`.
 - **Rotation Size**: Set the size of log files, and when the specified size is reached, log files will be rotated. If disabled, log files will grow indefinitely. You can enter the desired value in the text box and select the unit from the dropdown list, with options such as `MB`, `GB`, and `KB`. The default value is `50MB`.
-- **Log Level**: Choose the log level to use from the dropdown list. Options include `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, and `emergency`. The default value is `info`.
-- **Time Offset**: Define the format of timestamps in the log. By default, it is set to `system`.
+- **Time Offset**: Define the format of timestamps in the log. such as "-02:00" or "+00:00". By default, it is set to `system`.
 
 ## Log Formats
 
@@ -67,9 +65,9 @@ The following table shows the fields contained in the above log message samples.
 | time         | Integer | Timestamp indicating the time of the log record in microseconds. |
 | level        | String  | Log level.                                                   |
 | msg          | String  | Operation description.                                       |
-| from         | String  | Request source, where `dashboard`, `rest`, `cli` and `erlang_shell` indicate operations from the Dashboard, REST API, CLI, and Erlang Shell respectively. |
+| from         | String  | Request source, where `dashboard`, `rest_api`, `cli` and `erlang_console` indicate operations from the Dashboard, REST API, CLI, and Erlang Shell respectively. |
 | node         | String  | Node name indicating the node or server where the operation was executed. |
-| username     | String  | User performing the operation, available when `from_api` is the source. |
+| username     | String  | User performing the operation, available when from is `rest_api`. |
 | method       | String  | HTTP request method, with `post`, `put`, and `delete` corresponding to create, update, and delete operations. |
 | operate_id   | String  | REST API path of the request, please refer to [REST API](../admin/api.md). |
 | bindings     | Object  | Specific request object information corresponding to placeholders in `operate_id`. |
@@ -100,4 +98,3 @@ The following table shows the fields contained in the above log message samples.
 | duration_ms | Integer | Execution time of the operation in milliseconds.             |
 | cmd         | String  | Specific command operation executed, for supported commands, please refer to [CLI](../admin/cli.md). |
 | args        | Array   | Additional parameters attached to the command, multiple parameters are separated by arrays. |
-

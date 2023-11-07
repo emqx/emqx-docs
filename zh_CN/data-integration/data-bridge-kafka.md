@@ -81,7 +81,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 3. 在**数据桥接类型**中选择 **Kafka**，点击**下一步**。
 
-4. 在**桥接角色** 中选择**生产者**或**消费者**。
+4. 在**桥接角色**中选择**生产者**或**消费者**。
    
    :::: tabs type:card
    
@@ -93,7 +93,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
    
    - 输入 Kafka 连接信息，**主机列表**填写 `127.0.0.1:9092`，其他参数根据实际情况填写。
    
-   - **源 MQTT 主题**：选择要为其建立桥接的 MQTT 主题，此处填写 `t/#` 表示将匹配此主题的 MQTT 消息转发至 Kafka。您也可以选择将此项留空，通过[新建规则]指定发往 Kafka 的数据。
+   - **源 MQTT 主题**：选择要为其建立桥接的 MQTT 主题，此处填写 `t/#` 表示将匹配此主题的 MQTT 消息转发至 Kafka。您也可以选择将此项留空，通过[新建规则](#创建-kafka-生产者数据转发规则)指定发往 Kafka 的数据。
    
    - **Kafka 主题名称**：填写 Kafka 中预先创建好的主题 `testtopic-in`，此处暂不支持使用变量。
    

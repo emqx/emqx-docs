@@ -91,7 +91,7 @@ Data bridges for message storage and event recording require different SQL templ
 
 5. Input the connection information:
 
-   - **Server Host**: Input `http://127.0.0.1:3036`, or the actual URL if the MySQL server is running remotely.
+   - **Server Host**: Input `127.0.0.1:3306`, or the actual hostname if the MySQL server is running remotely.
    - **Database Name**: Input `emqx_data`.
    - **Username**: Input `root`.
    - **Password**: Input `public`.
@@ -176,7 +176,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello MySQL" }'
 
 Check the running status of the two data bridges, there should be one new incoming and one new outgoing message.
 
-Check whether the data is written into the ` emqx_messages` data table.
+Check whether the data is written into the `emqx_messages` data table.
 
 ```bash
 mysql> select * from emqx_messages;

@@ -1,8 +1,15 @@
-# Debian
+{% emqxee %}
+# Install EMQX Enterprise on Debian
+{% endemqxee %}
+
+{% emqxce %}
+# Install EMQX on Debian
+{% endemqxce %}
+
 
 This page guides you on installing and starting EMQX on the Debian system.
 
-Supported versions: 
+Supported versions:
 
 - Debian 12
 - Debian 11

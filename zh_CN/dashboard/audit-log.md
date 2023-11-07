@@ -2,7 +2,7 @@
 
 审计日志（Audit Log）功能让您实时跟踪 EMQX 集群的重要操作变更，是企业用户遵守合规要求、确保数据安全的关键工具。EMQX 审计日志支持记录来自 [Dashboard](../dashboard/introduction.md) 、[REST API](../admin/api.md) 以及 [命令行](../admin/cli.md) 的变更性操作，例如 Dashboard 用户登录，对客户端、访问控制以及数据集成等资源的修改。而指标获取、客户端列表查询等只读操作则不会被记录。通过审计日志，企业用户可以方便地查看谁通过何种方式，在何时执行了哪些关键操作，以实现运营过程中的合规性和安全性审计。
 
-::: warning
+::: warning 注意
 
 命令行操作的审计日志可能包含敏感信息，在发送到日志收集器时需要谨慎操作。建议过滤日志内容或使用加密传输方式，避免未经授权的信息泄露。
 
@@ -14,7 +14,7 @@
 
 ## 配置审计日志
 
-您可以通过配置文件和 Dashboard 启用审计日志并设置审计日志的配置参数。 
+您可以通过配置文件和 Dashboard 启用审计日志并设置审计日志的配置参数。
 
 ### 通过配置文件配置
 
@@ -23,7 +23,6 @@
 ```bash
 log.audit {
   enable = true
-  level = info
   path = "./log/audit.log"
   rotation_count = 10
   rotation_size = 50MB
@@ -35,7 +34,7 @@ log.audit {
 
 您还可以在 Dashboard **管理** -> **日志** -> **审计日志**页面中启用并设置审计日志的配置参数。
 
-<img src="./assets/audit_log_config.png" alt="audit_log_config" style="zoom: 50%;" /> 
+<img src="./assets/audit_log_config.png" alt="audit_log_config" style="zoom: 50%;" />
 
 审计日志配置选项：
 
@@ -43,8 +42,7 @@ log.audit {
 - **审计日志文件**：填写审计日志文件路径和名称。默认值为 `${EMQX_LOG_DIR}/audit.log`，其中 `${EMQX_LOG_DIR}` 是一个变量，默认为`./log`，意味着最终默认保存在 `./log/audit.log.1`  文件中。
 - **最大日志文件数**：轮换的最大日志文件数。默认值为`10`。
 - **日志文件轮换大小**：设置日志文件大小，达到设定的值时日志文件将进行轮换。如果禁用，则日志文件将无限增长。可在文本框输入设定的值，在下拉列表中选择单位，可选值为：`MB`, `GB`, `KB`。默认值为 `50MB`。
-- **日志级别**：从下拉列表中选择要使用的日志级别。可选值为：`debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` 。默认值为：`info`。
-- **时间偏移量**：定义日志中时间戳的格式。默认情况下为 `system`。
+- **时间偏移量**：定义日志中时间戳的格式。比如："-02:00" 或者 "+00:00"，默认为 `system`。
 
 ## 审计日志格式
 
@@ -65,9 +63,9 @@ log.audit {
 | time         | 整数 | 时间戳，表示日志记录的时间，以微秒为单位。                   |
 | level        | 字符 | 日志级别。                                                   |
 | msg          | 字符 | 操作描述。                                                   |
-| from         | 字符 | 请求来源，`dashboard`、`rest`、`cli`、`erlang_shell` 分别表示来自 Dashboard、REST API、 CLI 以及 Erlang Shell 的操作。 |
+| from         | 字符 | 请求来源，`dashboard`、`rest_api`、`cli`、`erlang_console` 分别表示来自 Dashboard、REST API、 CLI 以及 Erlang Shell 的操作。 |
 | node         | 字符 | 节点名称，表示执行操作的节点或服务器。                       |
-| username     | 字符 | 执行操作的用户，当来源为 `from_api` 时存在该字段。           |
+| username     | 字符 | 执行操作的用户，当来源为 `rest_api` 时存在该字段。           |
 | method       | 字符 | HTTP 请求方法，`post`, `put`, `delete` 对应创建、更新、删除操作。 |
 | operate_id   | 字符 | 请求的 REST API 路径，请参考 [REST API](../admin/api.md)。   |
 | bindings     | 对象 | 具体的请求对象信息，对应 `operate_id` 中的占位符。           |
@@ -80,7 +78,7 @@ log.audit {
 
 ### REST API 操作记录
 
-请求来源，`dashboard`、`rest`、`cli`、`erlang_shell` 分别表示来自 Dashboard、REST API、 CLI 以及 Erlang Shell 的操作。
+请求来源，`dashboard`、`rest`、`cli`、`erlang_conosle` 分别表示来自 Dashboard、REST API、 CLI 以及 Erlang Shell 的操作。
 
 
 
@@ -97,7 +95,6 @@ log.audit {
 | 字段名称    | 类型 | 描述                                                         |
 | ----------- | ---- | ------------------------------------------------------------ |
 | time        | 整数 | 时间戳，表示日志记录的时间，以微秒为单位。                   |
-| level       | 字符 | 日志级别。                                                   |
 | msg         | 字符 | 操作描述。                                                   |
 | from        | 字符 | 请求来源，`dashboard`、`cli` 分别表示来自 Dashboard 与 CLI 的操作。 |
 | node        | 字符 | 节点名称，表示执行操作的节点或服务器。                       |

@@ -1,4 +1,11 @@
-# macOS
+{% emqxee %}
+# Install EMQX Enterprise on macOS
+{% endemqxee %}
+
+{% emqxce %}
+# Install EMQX on macOS
+{% endemqxce %}
+
 
 {% emqxce %}
 

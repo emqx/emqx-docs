@@ -4,12 +4,12 @@
 
 ::: tip 前置条件
 
-熟悉并了解 [MQTT over QUIC](./introduction.md)。
+了解 [MQTT over QUIC](./introduction.md)。
 :::
 
 ## 环境要求
 
-由于是实验性功能，在 CentOS 6、macOS 以及 Windows 系统下并未包含 QUIC 编译，请自行从源码编译并在编译前指定环境变量 `BUILD_WITH_QUIC=1`，其他操作系统和平台则可以正常使用。
+在 CentOS 6、macOS 以及 Windows 系统下并未包含 QUIC 编译，请自行从源码编译并在编译前指定环境变量 `BUILD_WITH_QUIC=1`，其他操作系统和平台则可以正常使用。
 
 测试环境推荐使用 Docker 镜像，以下命令通过环境变量启用 QUIC 监听器并映射 UDP 14567 作为接入端口：
 
@@ -31,7 +31,7 @@ emqx/emqx:@CE_VERSION@
 
 MQTT over QUIC 默认禁用，请通过以下配置手动开启。
 
-1. 打开配置文件 `etc/emqx.conf`，取消 `listeners.quic.default` 配置组的注释（如果没有此配置组请手动添加）：
+1. 打开配置文件 `etc/emqx.conf`，添加：
 
    ```bash
    # etc/emqx.conf
@@ -71,32 +71,20 @@ MQTT over QUIC 默认禁用，请通过以下配置手动开启。
 
 ## 客户端 SDK 与工具
 
-相比于 MQTT 而言，目前 MQTT over QUIC 仍然缺少完整的客户端库和工具链支持。
-
-EMQ 针对 MQTT over QUIC 的适用场景，计划提供 C、Java、Python、Golang 等多个语言的客户端库并按照优先级逐个支持，确保嵌入式硬件等这类契合场景的业务能够率先将 QUIC 利用起来。
-
-
-
-### 已有的客户端 SDK
-
 - [NanoSDK](https://github.com/nanomq/NanoSDK/)：由 EMQ 旗下 NanoMQ 团队发布的 C 语言的 MQTT SDK，除 MQTT over QUIC 外还支持 WebSocket、nanomsg/SP 等多协议。
 - [NanoSDK-Python](https://github.com/wanghaEMQ/pynng-mqtt)：NanoSDK 的 Python 语言 binding。
 - [NanoSDK-Java](https://github.com/nanomq/nanosdk-java)：NanoSDK 的 Java JNA binding。
 - [emqtt](https://github.com/emqx/emqtt)：Erlang 语言的 MQTT 客户端库，支持 QUIC。
 
-
-
 除了客户端库之外，EMQ 还在边缘计算产品 NanoMQ 中提供了 MQTT over QUIC 桥接支持，在特定的应用中您可以借助 NanoMQ 实现边缘数据通过 QUIC 桥接上云，无需过多开发集成即可应用 MQTT over QUIC 的特性。
 
-### fallback 支持
+## 网络回退支持
 
 考虑到 QUIC 基于 UDP 协议，目前许多运营商仍然对 UDP 包有特殊的路由策略，这往往导致 QUIC 连接无法成功建立或一直被丢包。
 
 因此 MQTT over QUIC 客户端设计支持了 fallback 能力：API 层能够使用统一的操作编写业务，传输层则根据网络情况实时切换，当 QUIC 不可用时自动切换为 TCP/TLS 1.2，确保各类网络环境下业务都能正常运行。
 
-
-
-## 通过 NanoSDK 完成 MQTT over QUIC 连接
+## 示例 1：使用 NanoSDK 实现 MQTT over QUIC 连接
 
 [NanoSDK](https://github.com/nanomq/NanoSDK/) 基于 MsQuic 项目率先实现了第一个 C 语言的 MQTT over QUIC SDK，能无缝兼容 EMQX 5.0。内部采用全异步 IO 设计，将 QUIC Stream 和 MQTT 连接映射绑定，并内置实现了 0RTT 快速握手重连功能，支持多核任务并行。
 
@@ -107,7 +95,7 @@ NanoSDK API 方面保持了 MQTT over TCP 的使用习惯，一行代码即可�
 nng_mqtt_quic_client_open(&socket, url);
 ```
 
-消息示例代码请参考：https://github.com/nanomq/NanoSDK/tree/main/demo/quic 。
+消息示例代码请参考：https://github.com/nanomq/NanoSDK/tree/main/demo 。
 
 编译后可以通过以下命令连接 EMQX 5.0 的 14567 端口进行测试。
 
@@ -118,11 +106,9 @@ quic_client sub/pub mqtt-quic://127.0.0.1:14567 topic msg
 NanoSDK 也提供 Java) 和 Python 的 binding：
 
 - [Java MQTT over QUIC Client](https://github.com/nanomq/nanosdk-java/blob/main/demo/src/main/java/io/sisu/nng/demo/quicmqtt/MqttQuicClient.java)
-- [Python MQTT over QUIC Client](https://github.com/wanghaEMQ/pynng-mqtt/blob/master/examples/mqttsub.py)
+- [Python MQTT over QUIC Client](https://github.com/wanghaEMQ/pynng-mqtt/blob/master/examples/mqtt_quic_sub.py)
 
-
-
-## 通过 NanoMQ 桥接 MQTT over QUIC
+## 示例 2：使用 NanoMQ 进行 MQTT over QUIC 桥接
 
 [NanoMQ](https://nanomq.io/) 是一款超轻量、高性能且跨平台的边缘 MQTT 消息引擎，兼具多协议消息总线功能，支持 MQTT over QUIC 桥接功能。
 
@@ -130,9 +116,9 @@ NanoSDK 也提供 Java) 和 Python 的 binding：
 
 ![NanoMQ MQTT over QUIC bridge](./assets/nanomq-mqtt-bridge.png)
 
-### NanoMQ 桥接示例
+1. 下载安装 NanoMQ：
 
-下载安装 NanoMQ：
+使用源码编译的方式
 
 ```bash
 git clone https://github.com/emqx/nanomq.git
@@ -143,7 +129,9 @@ cmake -G Ninja -DNNG_ENABLE_QUIC=ON ..
 sudo ninja install
 ```
 
-开启 QUIC 桥接功能的 NanoMQ 编译安装完成后，可以在配置文件`/etc/nanomq.conf`中配置 MQTT over QUIC 桥接功能和对应的主题，使用 `mqtt-quic` 作为 URL 前缀即是采用 QUIC 作为 MQTT 的传输层：
+2. 配置 MQTT over QUIC 桥接
+
+开启 QUIC 桥接功能的 NanoMQ 编译安装完成后，可以在配置文件`/etc/nanomq.conf`中配置 MQTT over QUIC 桥接功能，使用 `mqtt-quic` 作为 URL 前缀即是采用 QUIC 作为 MQTT 的传输层：
 
 ```bash
 ## Bridge address: host:port .
@@ -152,7 +140,9 @@ sudo ninja install
 bridge.mqtt.emqx.address=mqtt-quic://127.0.0.1:14567
 ```
 
-### MQTT over QUIC CLI 工具
+更多内容请参考 [NanoMQ - MQTT over QUIC 桥接](https://nanomq.io/docs/zh/latest/config-description/bridges.html#mqtt-over-quic-%E6%A1%A5%E6%8E%A5)。
+
+## MQTT over QUIC CLI 工具
 
 NanoMQ 还提供了 nanomq_cli ，其中包含有 MQTT over QUIC 的客户端工具供用户测试 EMQX 5.0 的MQTT over QUIC 功能：
 
@@ -167,6 +157,3 @@ nanomq_cli quic sub mqtt-quic://54.75.171.11:14567 2 msg
 ```
 
 综上所述，您可以直接将 NanoSDK 集成到项目中，亦可以搭配 NanoMQ 使用，实现设备侧到云端的 QUIC 接入。
-
-
-

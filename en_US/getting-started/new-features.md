@@ -1,6 +1,16 @@
-# What's New
+---
+description: This section lists the new features introduced in EMQX 5.0 and 5.1.
+---
 
-This section lists the new features introduced in EMQX 5.0 and 5.1.
+{% emqxee %}
+# What's New in EMQX Enterprise 5.0 and 5.1
+{% endemqxee %}
+
+{% emqxce %}
+# What's New in EMQX 5.0 and 5.1
+{% endemqxce %}
+
+This section lists the new features introduced in EMQX after version 5.0.
 
 ## Core + Replica Cluster Architecture
 

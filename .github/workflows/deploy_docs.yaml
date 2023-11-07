@@ -12,90 +12,101 @@ on:
 
 jobs:
   prepare:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     outputs:
-      versions: ${{ steps.set_versions.outputs.versions}}
+      versions: ${{ steps.set_environment.outputs.versions }}
+      docs_types: ${{ steps.set_environment.outputs.docs_types }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@main
         with:
           fetch-depth: 0
-      - name: set_versions
-        id: set_versions
+      - name: set_environment
+        id: set_environment
         run: |
-          current_branch=$(echo ${{ github.ref }} | sed -r  "s ^refs/heads/|^refs/tags/(.*) \1 g")
+          current_branch=$(echo ${{ github.ref_name }})
+          current_version=$(echo ${{ github.ref_name }} | sed -r "s/^(.*)-.*$/\1/")
+          current_version=${current_version/e/v}
           if [[ $current_branch == v* ]];
           then
             tag_list=$(git tag | egrep "^v.*$" | xargs echo -n)
+            docs_types='["broker"]'
           else
             tag_list=$(git tag | egrep "^e.*$" | xargs echo -n)
+            docs_types='["enterprise"]'
           fi
-          version_list=$(python3 .github/scripts/build_versions.py $current_branch $tag_list)
-          echo "::set-output name=versions::$version_list"
+          latest_version=$(python3 .github/scripts/generate_version.py $tag_list | jq -r '.[0]')
+          if [[ $current_version == $latest_version ]];
+          then
+            build_version_list='["'latest'","'$current_version'"]'
+          else
+            build_version_list='["'$current_version'"]'
+          fi
+          echo "versions=$build_version_list" >> $GITHUB_OUTPUT
+          echo "docs_types=$docs_types" >> $GITHUB_OUTPUT
 
   deploy:
     needs: prepare
     strategy:
-      matrix: ${{fromJSON(needs.prepare.outputs.versions)}}
-    runs-on: ubuntu-20.04
+      matrix:
+        version: ${{ fromJSON(needs.prepare.outputs.versions) }}
+        docs_type: ${{ fromJSON(needs.prepare.outputs.docs_types) }}
+    runs-on: ubuntu-latest
     steps:
     - name: clone docs
-      uses: actions/checkout@v3
+      uses: actions/checkout@main
       with:
-        ref: ${{ matrix.tag }}
         fetch-depth: 0
         path: docs-files
 
     - name: set env
       run: |
-        real_version=$(echo ${{ matrix.tag }} | sed -r "s/^(.*)-.*$/\1/")
-        real_version=${real_version/e/v}
         echo "DOCS_TYPE=${{ matrix.docs_type }}" >> $GITHUB_ENV
-        echo "DOCS_BRANCH=${{ matrix.tag }}" >> $GITHUB_ENV
+        echo "DOCS_BRANCH=${{ github.ref_name }}" >> $GITHUB_ENV
         echo "VERSION=${{ matrix.version }}" >> $GITHUB_ENV
-        echo "REAL_VERSION=$real_version" >> $GITHUB_ENV
-        echo "CANONICAL_VERSION=${{ matrix.canonical_version }}" >> $GITHUB_ENV
-        echo "LATEST_VERSION=${{ matrix.latest_version }}" >> $GITHUB_ENV
 
     - name: clone ce frontend
-      uses: actions/checkout@v3
-      if: env.DOCS_TYPE == 'broker'
+      if: matrix.docs_type == 'broker'
+      uses: actions/checkout@main
       with:
-        repository: "emqx/emqx-io-docs-frontend"
+        repository: 'emqx/emqx-io-docs-frontend'
+        ref: next
         token: ${{ secrets.CI_GIT_TOKEN }}
         path: frontend
 
     - name: clone ee frontend
-      uses: actions/checkout@v3
-      if: env.DOCS_TYPE == 'enterprise'
+      if: matrix.docs_type == 'enterprise'
+      uses: actions/checkout@main
       with:
         repository: 'emqx/docs-emqx-com-frontend'
         ref: next
         token: ${{ secrets.CI_GIT_TOKEN }}
         path: frontend
 
-    - name: use node.js
-      uses: actions/setup-node@v1
-      if: env.DOCS_TYPE == 'broker'
+    - name: use python
+      uses: actions/setup-python@v4
       with:
-        node-version: 14.15
+        python-version: 3.8
 
     - name: use node.js
-      uses: actions/setup-node@v1
-      if: env.DOCS_TYPE == 'enterprise'
+      uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version-file: 'frontend/.nvmrc'
 
     - name: use pnpm
       uses: pnpm/action-setup@v2
-      if: env.DOCS_TYPE == 'enterprise'
       with:
-          version: 8.5.1
+          version: 8
 
     - name: generate directory.json
       run: |
         cd docs-files
-        ./gen.py ce | tee directory.json
-        ./gen.py ee | tee directory_ee.json
+        pip3 install pyyaml
+        if [[ $DOCS_TYPE == "broker" ]];
+        then
+          ./gen.py ce | tee directory.json
+        else
+          ./gen.py ee | tee directory_ee.json
+        fi
 
     - name: remove unused files
       run: |
@@ -106,7 +117,7 @@ jobs:
         else
           python3 .github/scripts/remove_unused.py directory_ee.json $(pwd)
         fi
-    
+
     - name: set current emqx version
       run: |
         cd docs-files
@@ -115,23 +126,21 @@ jobs:
         find ./en_US ./zh_CN -type f -name "*.md" -exec sed -i 's/@EE_VERSION@/'"$EE_VERSION"'/g' {} +
 
     - name: move ce files
-      if: env.DOCS_TYPE == 'broker'
+      if: matrix.docs_type == 'broker'
       run: |
-        rm frontend/docs/en/README.md || true
-        rm frontend/docs/zh/README.md || true
         rm frontend/docs/*.md || true
-        rm frontend/README.md
+        rm frontend/README.md || true
         mkdir -p frontend/docs/en/${VERSION}/
         mkdir -p frontend/docs/zh/${VERSION}/
-        mkdir -p frontend/docs/.vuepress/public/api/
+        mkdir -p frontend/docs/public/api/
         mkdir -p frontend/redoc/
         cp -r docs-files/en_US/* frontend/docs/en/${VERSION}/
         cp -r docs-files/zh_CN/* frontend/docs/zh/${VERSION}/
         cp -r docs-files/redocly/*.json frontend/redoc/
-        cp docs-files/directory.json frontend/docs/.vuepress/config/directory.json
+        cp docs-files/directory.json frontend/docs/.vitepress/config/directory.json
 
     - name: move ee files
-      if: env.DOCS_TYPE == 'enterprise'
+      if: matrix.docs_type == 'enterprise'
       run: |
         rm frontend/docs/en/index.md || true
         rm frontend/docs/zh/index.md || true
@@ -152,34 +161,26 @@ jobs:
         if [[ $DOCS_TYPE == "broker" ]];
         then
           version_list=$(git tag | egrep "^v.*$" | xargs echo -n)
-          python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
         else
           version_list=$(git tag | egrep "^e.*$" | xargs echo -n)
-          python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/public/api/${DOCS_TYPE}_versions.json
         fi
+        python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/public/api/${DOCS_TYPE}_versions.json
 
-    - name: build ce docs
-      if: env.DOCS_TYPE == 'broker'
-      run: |
-        cd frontend
-        yarn && yarn build
-
-    - name: build ee docs
-      if: env.DOCS_TYPE == 'enterprise'
+    - name: build docs
       run: |
         cd frontend
         pnpm install
         pnpm build
 
     - name: build ce redoc
-      if: env.DOCS_TYPE == 'broker'
+      if: matrix.docs_type == 'broker'
       run: |
         cd frontend
         yarn global add redoc-cli
         LANGS=(zh en)
         for lang in "${LANGS[@]}"; do
           redoc-cli bundle redoc/ce-${lang}.json -t redoc/template.hbs \
-            --output docs/.vuepress/dist/${lang}/${VERSION}/admin/api-docs.html \
+            --output docs/.vitepress/dist/${lang}/${VERSION}/admin/api-docs.html \
             --options.theme.colors.primary.main=#00b173 \
             --options.theme.typography.headings.fontFamily='Roboto, sans-serif' \
             --options.hide-hostname --templateOptions.title "EMQX ${VERSION} API Documentation" \
@@ -189,7 +190,7 @@ jobs:
         done
 
     - name: build ee redoc
-      if: env.DOCS_TYPE == 'enterprise'
+      if: matrix.docs_type == 'enterprise'
       run: |
         cd frontend
         yarn global add redoc-cli
@@ -204,38 +205,20 @@ jobs:
             --templateOptions.version "${VERSION}" \
             $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
         done
-    
-    # - name: generate ce configuration manual
-    #   if: env.DOCS_TYPE == 'broker'
-    #   run: |
-    #     LANGS=(zh en)
-    #     for lang in "${LANGS[@]}"; do
-    #       cp -r docs-files/cfg-manual-docgen/configuration-manual.html frontend/docs/.vuepress/dist/${lang}/${VERSION}/configuration/configuration-manual.html
-    #       cp -r docs-files/cfg-manual-docgen/ce-${lang}.json frontend/docs/.vuepress/dist/${lang}/${VERSION}/configuration/configuration.json
-    #     done
-
-    # - name: generate ee configuration manual
-    #   if: env.DOCS_TYPE == 'enterprise'
-    #   run: |
-    #     LANGS=(zh en)
-    #     for lang in "${LANGS[@]}"; do
-    #       cp -r docs-files/cfg-manual-docgen/configuration-manual.html frontend/docs/.vitepress/dist/${lang}/enterprise/${VERSION}/configuration/configuration-manual.html
-    #       cp -r docs-files/cfg-manual-docgen/ee-${lang}.json frontend/docs/.vitepress/dist/${lang}/enterprise/${VERSION}/configuration/configuration.json
-    #     done
 
     - name: upload ce files
-      if: env.DOCS_TYPE == 'broker'
+      if: matrix.docs_type == 'broker'
       run: |
-        cd frontend/docs/.vuepress/
-        wget http://gosspublic.alicdn.com/ossutil/1.7.8/ossutil64
+        cd frontend/docs/.vitepress/
+        wget https://gosspublic.alicdn.com/ossutil/1.7.8/ossutil64
         chmod 755 ./ossutil64
         ./ossutil64 config -e https://oss-accelerate.aliyuncs.com -i ${{ secrets.ALI_OSS_ACCESSKEY_ID }} -k ${{ secrets.ALI_OSS_ACCESSKEY_SECRET }} -L CH
         ./ossutil64 rm -r -f oss://emqx-io-docs/docs/zh/${VERSION}/ || true
         ./ossutil64 rm -r -f oss://emqx-io-docs/docs/en/${VERSION}/ || true
-        ./ossutil64 cp -r dist/ oss://emqx-io-docs/docs/ -u
+        ./ossutil64 cp -r -f dist/ oss://emqx-io-docs/docs/
 
     - name: upload ee file
-      if: env.DOCS_TYPE == 'enterprise'
+      if: matrix.docs_type == 'enterprise'
       run: |
         pip3 install coscmd
         coscmd config -a ${{ secrets.TENCENT_COS_ID }} -s ${{ secrets.TENCENT_COS_KEY }} -b docs-1302406139 -r ap-shanghai
@@ -252,50 +235,32 @@ jobs:
         tccli configure set region ap-shanghai
 
     - name: flush ce cdn
-      if: env.DOCS_TYPE == 'broker'
+      if: matrix.docs_type == 'broker'
       run: |
         tccli cdn PurgePathCache --cli-unfold-argument --Paths https://emqxio-docs.emqx.net/ --FlushType delete
 
     - name: flush ee cdn
-      if: env.DOCS_TYPE == 'enterprise'
+      if: matrix.docs_type == 'enterprise'
       run: |
-        tccli cdn UpdateDomainConfig --cli-unfold-argument --Domain docs.emqx.com \
-            --UrlRedirect.Switch on \
-            --UrlRedirect.PathRules.0.RedirectStatusCode 302 \
-            --UrlRedirect.PathRules.0.Pattern "/zh/enterprise/latest/*" \
-            --UrlRedirect.PathRules.0.RedirectUrl "/zh/enterprise/${LATEST_VERSION}/\$1" \
-            --UrlRedirect.PathRules.0.RedirectHost https://docs.emqx.com \
-            --UrlRedirect.PathRules.1.RedirectStatusCode 302 \
-            --UrlRedirect.PathRules.1.Pattern "/en/enterprise/latest/*" \
-            --UrlRedirect.PathRules.1.RedirectUrl "/en/enterprise/${LATEST_VERSION}/\$1" \
-            --UrlRedirect.PathRules.1.RedirectHost https://docs.emqx.com \
-            --UrlRedirect.PathRules.2.RedirectStatusCode 302 \
-            --UrlRedirect.PathRules.2.Pattern "/en/enterprise/v5.0/getting-started.html" \
-            --UrlRedirect.PathRules.2.RedirectUrl "/en/enterprise/v5.0/getting-started/getting-started.html" \
-            --UrlRedirect.PathRules.2.RedirectHost https://docs.emqx.com \
-            --UrlRedirect.PathRules.3.RedirectStatusCode 302 \
-            --UrlRedirect.PathRules.3.Pattern "/zh/enterprise/v5.0/getting-started.html" \
-            --UrlRedirect.PathRules.3.RedirectUrl "/zh/enterprise/v5.0/getting-started/getting-started.html" \
-            --UrlRedirect.PathRules.3.RedirectHost https://docs.emqx.com
         tccli cdn PurgePathCache --cli-unfold-argument --Paths https://docs.emqx.com/zh/${DOCS_TYPE}/${VERSION}/ https://docs.emqx.com/en/${DOCS_TYPE}/${VERSION}/ --FlushType delete
         tccli cdn PurgeUrlsCache --cli-unfold-argument --Urls https://docs.emqx.com/api/${DOCS_TYPE}_versions.json https://docs.emqx.com/sitemap_${DOCS_TYPE}_${VERSION}.xml
 
-    - name: update ee search index
-      if: env.DOCS_TYPE == 'enterprise'
+    - name: update ce search index
+      if: matrix.docs_type == 'broker'
       uses: Swilder-M/docsearch-scraper-simple@next
       env:
-        APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID_NEXT }}
-        API_KEY: ${{ secrets.ALGOLIA_API_KEY_NEXT }}
+        APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID_CE }}
+        API_KEY: ${{ secrets.ALGOLIA_API_KEY_CE }}
       with:
         docs_type: ${{ env.DOCS_TYPE }}
         docs_version: ${{ env.VERSION }}
 
-    - name: update ce search index
-      if: env.DOCS_TYPE == 'broker'
-      uses: Swilder-M/docsearch-scraper-simple@v4
+    - name: update ee search index
+      if: matrix.docs_type == 'enterprise'
+      uses: Swilder-M/docsearch-scraper-simple@next
       env:
-        APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID_CE }}
-        API_KEY: ${{ secrets.ALGOLIA_API_KEY_CE }}
+        APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID_NEXT }}
+        API_KEY: ${{ secrets.ALGOLIA_API_KEY_NEXT }}
       with:
         docs_type: ${{ env.DOCS_TYPE }}
         docs_version: ${{ env.VERSION }}

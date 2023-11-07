@@ -20,23 +20,45 @@
   path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
   collapsed: true
   children:
-    - getting-started/new-features
-    - getting-started/getting-started
-    - getting-started/restrictions
-    - faq/faq
-    - support/technical-support
-    - getting-started/roadmap
+    - title_en: What's New
+      title_cn: 全新功能
+      path: getting-started/new-features
+    - title_en: Get Started
+      title_cn: 快速开始
+      path: getting-started/getting-started
+    - title_en: Operating Limitations
+      title_cn: 使用限制
+      path: getting-started/restrictions
+    - title_en: FAQ
+      title_cn: 常见问题解答
+      path: faq/faq
+    - title_en: Technical Support
+      title_cn: 技术支持
+      path: support/technical-support
+    - title_en: Product Roadmap
+      title_cn: 产品路线图
+      path: getting-started/roadmap
 
 - title_en: Installation and Migration
   title_cn: 安装部署和迁移
   path: deploy/install
   collapsed: true
   children:
-    - deploy/install-docker
-    - deploy/install-debian
-    - deploy/install-ubuntu
-    - deploy/install-rhel
-    - deploy/install-macOS
+    - title_en: Deploy
+      title_cn: Docker
+      path: deploy/install-docker
+    - title_en: Debian
+      title_cn: Debian
+      path: deploy/install-debian
+    - title_en: Ubuntu
+      title_cn: Ubuntu
+      path: deploy/install-ubuntu
+    - title_en: CentOS/RHEL
+      title_cn: CentOS/RHEL
+      path: deploy/install-rhel
+    - title_en: macOS
+      title_cn: macOS
+      path: deploy/install-macOS
     - title_en: Kubernetes
       title_cn: Kubernetes
       lang: en
@@ -61,7 +83,9 @@
     - title_en: Upgrade Guide
       title_cn: 升级指南
       children:
-        - deploy/rolling-upgrades
+        - title_en: Rolling Upgrade
+          title_cn: 滚动升级
+          path: deploy/rolling-upgrades
         - deploy/upgrade-cluster
         - title_en: Upgrade EMQX on Kubernetes
           title_cn: Upgrade EMQX on Kubernetes
@@ -113,83 +137,31 @@
           title_cn: MQTT 微信小程序示例
           lang: cn
           path: connect-emqx/wechat-miniprogram
-
-- title_en: EMQX Essentials
-  title_cn: EMQX 基础知识
-  path: mqtt/emqx-essentials
-  collapsed: true
-  children:
-    - title_en: MQTT Guide
-      title_cn: MQTT Guide
-      lang: en
-      path: https://www.emqx.com/en/mqtt-guide
-    - title_en: MQTT 教程
-      title_cn: MQTT 教程
-      lang: cn
-      path: https://www.emqx.com/zh/mqtt-guide
-    - title_en: Authentication and Authorization
-      title_cn: 认证与鉴权
-      collapsed: true
-      path: mqtt/emqx-access-control
-      children:
-        - title_en: Username and Password Authentication
-          title_cn: Username and Password Authentication
-          path: https://auth0.com/blog/username-password-authentication/
-        - title_en: Why Need to Add Salt to Hashing?
-          title_cn: Why Need to Add Salt to Hashing?
-          path: https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/
-        - title_en: What is JWT?
-          title_cn: What is JWT?
-          path: https://jwt.io/introduction
-    - title_en: TLS
-      title_cn: TLS
-      collapsed: true
-      path: mqtt/emqx-tls
-      children:
-        - title_en: What is Mutual Authentication?
-          title_cn: What is Mutual Authentication?
-          path: https://en.wikipedia.org/wiki/Mutual_authentication
-        - title_en: What is SNI?
-          title_cn: What is SNI?
-          path: https://aboutssl.org/what-is-sni-how-does-it-works/
-        - title_en: TLS 1.2 vs TLS 1.3
-          title_cn: TLS 1.2 vs TLS 1.3
-          path: https://venafi.com/blog/why-tls-13-radically-different-tls-12/
-        - title_en: What is Perfect Forward Secrecy?
-          title_cn: What is Perfect Forward Secrecy?
-          path: https://www.sectigo.com/resource-library/perfect-forward-secrecy
-        - title_en: What is Cipher Suites?
-          title_cn: What is Cipher Suites?
-          path: https://www.keyfactor.com/blog/cipher-suites-explained/
-        - title_en: How to Choose Your Cipher Suite?
-          title_cn: How to Choose Your Cipher Suite?
-          path: https://technology.amis.nl/security-2/ssltls-choose-cipher-suite/
-        - title_en: What is PSK?
-          title_cn: What is PSK?
-          path: https://en.wikipedia.org/wiki/TLS-PSK
-    - title_en: Design and Implementation
-      title_cn: 设计与实现
-      path: design/overview
+    - title_en: REST API
+      title_cn: REST API
+      path: admin/api
       collapsed: true
       children:
-        - title_en: Clustering
-          title_cn: Clustering
+        - title_en: API Docs
+          title_cn: API 文档
           lang: en
-          path: design/clustering
-        - design/inflight-window-and-message-queue
-        - design/retransmission
-      # - design/design
-      # - title_en: SDK & Tools
-      #   title_cn: SDK 与工具
-      #   children:
-      #     - development/client
-      #     - development/c
-      #     - development/java
-      #     - development/go
-      #     - development/erlang
-      #     - development/javascript
-      #     - development/python
-      #     - development/resource
+          edition: ce
+          path: https://www.emqx.io/docs/en/v5.3/admin/api-docs.html
+        - title_en: API Docs
+          title_cn: API 文档
+          lang: cn
+          edition: ce
+          path: https://www.emqx.io/docs/zh/v5.3/admin/api-docs.html
+        - title_en: API Docs
+          title_cn: API 文档
+          lang: en
+          edition: ee
+          path: https://docs.emqx.com/en/enterprise/v5.3/admin/api-docs.html
+        - title_en: API Docs
+          title_cn: API 文档
+          lang: cn
+          edition: ee
+          path: https://docs.emqx.com/zh/enterprise/v5.3/admin/api-docs.html
 
 - title_en: EMQX Clustering
   title_cn: 构建集群
@@ -251,81 +223,81 @@
     - title_en: Webhook
       title_cn: Webhook
       path: data-integration/webhook
-    - title_en: HTTP Server
-      title_cn: HTTP Server
-      path: data-integration/data-bridge-webhook
-    - title_en: MQTT
-      title_cn: MQTT
-      path: data-integration/data-bridge-mqtt
     - title_en: Apache Kafka
       title_cn: Apache Kafka
       path: data-integration/data-bridge-kafka
-    - title_en: Apache Pulsar
-      title_cn: Apache Pulsar
-      path: data-integration/data-bridge-pulsar
-    - title_en: InfluxDB
-      title_cn: InfluxDB
-      path: data-integration/data-bridge-influxdb
-    - title_en: TimescaleDB
-      title_cn: TimescaleDB
-      path: data-integration/data-bridge-timescale
-    - title_en: MySQL
-      title_cn: MySQL
-      path: data-integration/data-bridge-mysql
-    - title_en: Redis
-      title_cn: Redis
-      path: data-integration/data-bridge-redis
-    - title_en: GCP PubSub
-      title_cn: GCP PubSub
-      path: data-integration/data-bridge-gcp-pubsub
-    - title_en: MongoDB
-      title_cn: MongoDB
-      path: data-integration/data-bridge-mongodb
-    - title_en: PostgreSQL
-      title_cn: PostgreSQL
-      path: data-integration/data-bridge-pgsql
-    - title_en: DynamoDB
-      title_cn: DynamoDB
-      path: data-integration/data-bridge-dynamo
-    - title_en: ClickHouse
-      title_cn: ClickHouse
-      path: data-integration/data-bridge-clickhouse
-    - title_en: Cassandra
-      title_cn: Cassandra
-      path: data-integration/data-bridge-cassa
-    - title_en: TDengine
-      title_cn: TDengine
-      path: data-integration/data-bridge-tdengine
-    - title_en: RocketMQ
-      title_cn: RocketMQ
-      path: data-integration/data-bridge-rocketmq
-    - title_en: Oracle Database
-      title_cn: Oracle Database
-      path: data-integration/data-bridge-oracle
-    - title_en: Microsoft SQL Server
-      title_cn: Microsoft SQL Server
-      path: data-integration/data-bridge-sqlserver
     - title_en: Apache IoTDB
       title_cn: Apache IoTDB
       path: data-integration/data-bridge-iotdb
-    - title_en: OpenTSDB
-      title_cn: OpenTSDB
-      path: data-integration/data-bridge-opents
-    - title_en: RabbitMQ
-      title_cn: RabbitMQ
-      path: data-integration/data-bridge-rabbitmq
-    - title_en: Azure Event Hubs
-      title_cn: Azure Event Hubs
-      path: data-integration/data-bridge-azure-event-hub
+    - title_en: Apache Pulsar
+      title_cn: Apache Pulsar
+      path: data-integration/data-bridge-pulsar
     - title_en: AWS Kinesis
       title_cn: AWS Kinesis
       path: data-integration/data-bridge-kinesis
-    - title_en: HStreamDB
-      title_cn: HStreamDB
-      path: data-integration/data-bridge-hstreamdb
+    - title_en: Azure Event Hubs
+      title_cn: Azure Event Hubs
+      path: data-integration/data-bridge-azure-event-hub   
+    - title_en: Cassandra
+      title_cn: Cassandra
+      path: data-integration/data-bridge-cassa 
+    - title_en: ClickHouse
+      title_cn: ClickHouse
+      path: data-integration/data-bridge-clickhouse
+    - title_en: DynamoDB
+      title_cn: DynamoDB
+      path: data-integration/data-bridge-dynamo
+    - title_en: GCP PubSub
+      title_cn: GCP PubSub
+      path: data-integration/data-bridge-gcp-pubsub
     - title_en: GreptimeDB
       title_cn: GreptimeDB
       path: data-integration/data-bridge-greptimedb
+    - title_en: HStreamDB
+      title_cn: HStreamDB
+      path: data-integration/data-bridge-hstreamdb   
+    - title_en: HTTP Server
+      title_cn: HTTP Server
+      path: data-integration/data-bridge-webhook
+    - title_en: InfluxDB
+      title_cn: InfluxDB
+      path: data-integration/data-bridge-influxdb
+    - title_en: Microsoft SQL Server
+      title_cn: Microsoft SQL Server
+      path: data-integration/data-bridge-sqlserver
+    - title_en: MongoDB
+      title_cn: MongoDB
+      path: data-integration/data-bridge-mongodb
+    - title_en: MQTT
+      title_cn: MQTT
+      path: data-integration/data-bridge-mqtt
+    - title_en: MySQL
+      title_cn: MySQL
+      path: data-integration/data-bridge-mysql
+    - title_en: OpenTSDB
+      title_cn: OpenTSDB
+      path: data-integration/data-bridge-opents
+    - title_en: Oracle Database
+      title_cn: Oracle Database
+      path: data-integration/data-bridge-oracle
+    - title_en: PostgreSQL
+      title_cn: PostgreSQL
+      path: data-integration/data-bridge-pgsql
+    - title_en: RabbitMQ
+      title_cn: RabbitMQ
+      path: data-integration/data-bridge-rabbitmq
+    - title_en: Redis
+      title_cn: Redis
+      path: data-integration/data-bridge-redis
+    - title_en: RocketMQ
+      title_cn: RocketMQ
+      path: data-integration/data-bridge-rocketmq
+    - title_en: TDengine
+      title_cn: TDengine
+      path: data-integration/data-bridge-tdengine
+    - title_en: TimescaleDB
+      title_cn: TimescaleDB
+      path: data-integration/data-bridge-timescale
 
     # TODO
     # - title_en: Examples and Tutorials
@@ -405,31 +377,6 @@
     - title_en: Command Line Interface
       title_cn: 命令行接口
       path: admin/cli
-    - title_en: REST API
-      title_cn: REST API
-      path: admin/api
-      collapsed: true
-      children:
-        - title_en: API Docs
-          title_cn: API 文档
-          lang: en
-          edition: ce
-          path: https://www.emqx.io/docs/en/v5.2/admin/api-docs.html
-        - title_en: API Docs
-          title_cn: API 文档
-          lang: cn
-          edition: ce
-          path: https://www.emqx.io/docs/zh/v5.2/admin/api-docs.html
-        - title_en: API Docs
-          title_cn: API 文档
-          lang: en
-          edition: ee
-          path: https://docs.emqx.com/en/enterprise/v5.2/admin/api-docs.html
-        - title_en: API Docs
-          title_cn: API 文档
-          lang: cn
-          edition: ee
-          path: https://docs.emqx.com/zh/enterprise/v5.2/admin/api-docs.html
     - title_en: EMQX Dashboard
       title_cn: EMQX Dashboard
       path: dashboard/introduction
@@ -463,7 +410,7 @@
         - dashboard/diagnose
         - dashboard/system
     - title_en: Single Sign-On (SSO)
-      title_cn: 单点登录
+      title_cn: 单点登录 (SSO)
       path: dashboard/sso
       collapsed: true
       children:
@@ -528,7 +475,7 @@
                 - access-control/authn/postgresql
                 - access-control/authn/redis
                 - title_en: LDAP
-                  title_zh: LDAP
+                  title_cn: LDAP
                   path: access-control/authn/ldap
                   edition: ee
                 - access-control/authn/http
@@ -546,7 +493,7 @@
             - access-control/authz/postgresql
             - access-control/authz/redis
             - title_en: LDAP
-              title_zh: LDAP
+              title_cn: LDAP
               path: access-control/authz/ldap
               edition: ee
             - access-control/authz/http
@@ -616,109 +563,6 @@
   collapsed: true
   children:
     - tutorial/mqtt-programming
-    - title_en: How to Achieve Flexible Data Collection for IoV
-      title_cn: How to Achieve Flexible Data Collection for IoV
-      lang: en
-      path: https://www.emqx.com/en/blog/how-to-achieve-flexible-data-collection-for-internet-of-vehicles
-    - title_en: 如何实现车联网的灵活数据采集
-      title_cn: 如何实现车联网的灵活数据采集
-      lang: cn
-      path: https://www.emqx.com/zh/blog/how-to-achieve-flexible-data-collection-for-internet-of-vehicles
-    - title_en: MQTT Communication Optimization Practices for IoV
-      title_cn: MQTT Communication Optimization Practices for IoV
-      lang: en
-      path: https://www.emqx.com/en/blog/mqtt-communication-optimization-practices-for-iov
-    - title_en: 车联网 MQTT 通信优化实践
-      title_cn: 车联网 MQTT 通信优化实践
-      lang: cn
-      path: https://www.emqx.com/zh/blog/mqtt-communication-optimization-practices-for-iov
-    - title_en: Connect CoAP Devices to EMQX Cloud
-      title_cn: Connect CoAP Devices to EMQX Cloud
-      lang: en
-      edition: ce
-      path: https://www.emqx.com/en/blog/connecting-coap-devices-to-emqx-cloud
-    - title_en: CoAP 协议设备接入 EMQX Cloud
-      title_cn: CoAP 协议设备接入 EMQX Cloud
-      lang: cn
-      edition: ce
-      path: https://www.emqx.com/zh/blog/connecting-coap-devices-to-emqx-cloud
-    - title_en: Million-Level IoV Message Throughput Architecture
-      title_cn: Million-Level IoV Message Throughput Architecture
-      lang: en
-      path: https://www.emqx.com/en/blog/million-level-message-throughput-architecture-design-for-internet-of-vehicles
-    - title_en: 车联网百万级消息吞吐架构设计
-      title_cn: 车联网百万级消息吞吐架构设计
-      lang: cn
-      path: https://www.emqx.com/zh/blog/million-level-message-throughput-architecture-design-for-internet-of-vehicles
-    - title_en: 10-Million-Level IoV Message Platform Architecture
-      title_cn: 10-Million-Level IoV Message Platform Architecture
-      lang: en
-      path: https://www.emqx.com/en/blog/mqtt-messaging-platform-for-internet-of-vehicles
-    - title_en: 车联网千万级消息平台架构设计
-      title_cn: 车联网千万级消息平台架构设计
-      lang: cn
-      path: https://www.emqx.com/zh/blog/mqtt-messaging-platform-for-internet-of-vehicles
-    - title_en: Bridge Mosquitto MQTT Messages to EMQX
-      title_cn: Bridge Mosquitto MQTT Messages to EMQX
-      lang: en
-      path: https://www.emqx.com/en/blog/bridging-mosquitto-to-emqx-cluster
-    - title_en: Mosquitto MQTT 消息桥接
-      title_cn: Mosquitto MQTT 消息桥接
-      lang: cn
-      path: https://www.emqx.com/zh/blog/bridging-mosquitto-to-emqx-cluster
-    - title_en: Two-Way TLS/SSL with EMQX Cloud
-      title_cn: Two-Way TLS/SSL with EMQX Cloud
-      lang: en
-      edition: ce
-      path: https://www.emqx.com/en/blog/two-way-tls-ssl-with-emqx-cloud
-    - title_en: EMQX Cluster Based on HAProxy
-      title_cn: EMQX Cluster Based on HAProxy
-      lang: en
-      path: https://www.emqx.com/en/blog/emqx-haproxy
-    - title_en: 基于 HAProxy 搭建 EMQX 集群
-      title_cn: 基于 HAProxy 搭建 EMQX 集群
-      lang: cn
-      path: https://www.emqx.com/zh/blog/emqx-haproxy
-    - title_en: Use Terraform to Deploy EMQX
-      title_cn: Use Terraform to Deploy EMQX
-      lang: en
-      path: https://www.emqx.com/en/blog/using-terraform-to-deploy-emqx-mqtt-broke
-    - title_en: IoT Data Monitoring Visualzation
-      title_cn: IoT 数据可视化监控
-      collapsed: true
-      children:
-        - title_en: Prometheus 和 Grafana 可视化监控
-          title_cn: Prometheus 和 Grafana 可视化监控
-          lang: cn
-          path: https://www.emqx.com/zh/blog/emqx-prometheus-grafana
-        - title_en: Monitor with Prometheus and Grafana
-          title_cn: Monitor with Prometheus and Grafana
-          lang: en
-          path: https://www.emqx.com/en/blog/emqx-prometheus-grafana
-        - title_en: Build EMQX+InfluxDB+Grafana Visualation Platform
-          title_cn: Build EMQX+InfluxDB+Grafana Visualation Platform
-          lang: en
-          path: https://www.emqx.com/en/blog/build-emqx-influxdb-grafana-iot-data-visualization-solution-in-one-hour
-        - title_en: 构建 EMQX+InfluxDB+Grafana 可视化平台
-          title_cn: 构建 EMQX+InfluxDB+Grafana 可视化平台
-          lang: cn
-          path: https://www.emqx.com/zh/blog/build-emqx-influxdb-grafana-iot-data-visualization-solution-in-one-hour
-    - title_en: Process MQTT Data with Node-RED
-      title_cn: Process MQTT Data with Node-RED
-      lang: en
-      path: https://www.emqx.com/en/blog/using-node-red-to-process-mqtt-data
-    - title_en: 使用 Node-RED 处理 MQTT 数据
-      title_cn: 使用 Node-RED 处理 MQTT 数据
-      lang: cn
-      path: https://www.emqx.com/zh/blog/using-node-red-to-process-mqtt-data
-    - title_en: Access MQTT Data with ThingsBoard
-      title_cn: Access MQTT Data with ThingsBoard
-      lang: en
-      path: https://www.emqx.com/en/blog/how-to-use-thingsboard-to-access-mqtt-data
-    - title_en: 使用 ThingsBoard 接入 MQTT 数据
-      title_cn: 使用 ThingsBoard 接入 MQTT 数据
-      lang: cn
-      path: https://www.emqx.com/zh/blog/how-to-use-thingsboard-to-access-mqtt-data
 
 ## Infrastructure
 
@@ -760,6 +604,43 @@
 
 ## Developers & Testers
 
+- title_en: EMQX Essentials
+  title_cn: EMQX 基础知识
+  path: mqtt/emqx-essentials
+  collapsed: true
+  children:
+    - title_en: MQTT Guide
+      title_cn: MQTT Guide
+      lang: en
+      path: https://www.emqx.com/en/mqtt-guide
+    - title_en: MQTT 教程
+      title_cn: MQTT 教程
+      lang: cn
+      path: https://www.emqx.com/zh/mqtt-guide
+    - title_en: Design and Implementation
+      title_cn: 设计与实现
+      path: design/overview
+      collapsed: true
+      children:
+        - title_en: Clustering
+          title_cn: Clustering
+          lang: en
+          path: design/clustering
+        - design/inflight-window-and-message-queue
+        - design/retransmission
+      # - design/design
+      # - title_en: SDK & Tools
+      #   title_cn: SDK 与工具
+      #   children:
+      #     - development/client
+      #     - development/c
+      #     - development/java
+      #     - development/go
+      #     - development/erlang
+      #     - development/javascript
+      #     - development/python
+      #     - development/resource
+
 - title_en: Reference
   title_cn: 参考指南
   path: introduction/reference
@@ -794,23 +675,9 @@
       lang: cn
       path: deploy/upgrade-from-v4
     - title_en: Incompatible Changes
-      title_cn: Incompatible Changes
-      lang: en
+      title_cn: 不兼容变更
       path: changes/breaking-changes-5.1.0
       children:
-        - title_en: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1
-          title_cn: Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1
-          lang: en
-          path: changes/auth-4.4-to-5.1-compatibility
-        - title_en: Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4
-          title_cn: Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4
-          lang: en
-          path: changes/data-integration-4.4-to-5.1-incompatibility
-        - title_en: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
-          title_cn: Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
-          lang: en
-          path: changes/gateway-4.4-to-5.1-incompatibility
-    - title_en: Known Issues
-      title_cn: 已知问题
-      edition: ee
-      patch: changes/known-issues-5.3
+        - changes/auth-4.4-to-5.1-compatibility
+        - changes/data-integration-4.4-to-5.1-incompatibility
+        - changes/gateway-4.4-to-5.1-incompatibility

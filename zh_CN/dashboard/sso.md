@@ -2,7 +2,7 @@
 
 单点登录（SSO）是一种身份验证机制，它允许用户使用一组凭据（例如用户名和密码）登录到多个应用程序或系统中，而无需在每个应用程序中单独进行身份验证。EMQX Dashboard 开启单点登录后，用户可以方便地使用企业账号管理系统登录到 EMQX Dashboard。 企业能够集中管理用户身份和权限，简化用户管理流程，在提高企业数据和系统的安全性的同时，兼顾了用户使用的便捷性。
 
-EMQX 基于轻量级目录访问协议（LDAP）和安全断言标记语言（SAML ）2.0 标准实施 SSO 功能，支持集成例如 [OpenLDAP](https://www.openldap.org/)、[Microsoft Active Directory](https://azure.microsoft.com/en-in/products/active-directory) 以及 [Okta](https://www.okta.com/)、[OneLogin](https://www.onelogin.com/) 等主流身份服务提供商。
+EMQX 基于轻量级目录访问协议（LDAP）和安全断言标记语言（SAML ）2.0 标准实施 SSO 功能，支持集成例如 [OpenLDAP](https://www.openldap.org/)、[Azure AD（Microsoft Entra ID）](https://azure.microsoft.com/en-in/products/active-directory) 以及 [Okta](https://www.okta.com/)、[OneLogin](https://www.onelogin.com/) 等主流身份服务提供商。
 
 {% emqxce %}
 :::tip

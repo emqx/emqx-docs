@@ -1,12 +1,13 @@
-# Incompatible Changes between EMQX 5.1 and EMQX 4.4
+# Incompatible Changes between EMQX 4.4 and EMQX 5.1
 
-EMQX 5.1 introduces several changes that may affect compatibility with older versions of EMQX. These breaking changes are also documented in the EMQX 5.1 release notes.
+EMQX 5.0 series versions introduces several changes that may affect compatibility with older versions of EMQX. These breaking changes are also documented in the EMQX 5.1 release notes.
 
-This document is intended for EMQX Enterprise customers and internal teams who are planning to upgrade from EMQX 4.x to EMQX 5.1 and want to understand potential issues they may encounter.
+This document is intended for EMQX users who are planning to upgrade from EMQX 4.x to EMQX 5.1 and want to understand potential issues they may encounter.
 
 ::: tip
 
-It is recommended to upgrade to the latest version of 4.4 before proceeding with the upgrade to version 5.1.
+1. It is recommended to upgrade to the latest version of 4.4 before proceeding with the upgrade to version 5.1.
+2. To upgrade to a higher version of the 5.0 series, please follow this document to complete the upgrade to version 5.1, after that, you can continue to upgrade to a higher version.
 
 :::
 
@@ -122,16 +123,58 @@ The API has undergone significant changes, and some APIs have been made compatib
     - `emqx.conf` for static configs.
     - `cluster.hocon` for dynamic updates.
 
-## Log File Format
+## Default Listeners
 
-Log files in EMQX 5.1 is either the same flat log file format as in EMQX 4.4 or the structured JSON format, which is more indexer-friendly.
+Changes in default listeners:
+
+| Name            | Description                        | v4.4 port | Corresponding v5.x port            |
+| --------------- | ---------------------------------- | --------- | ---------------------------------- |
+| MQTT-TCP        | Internal (backplane) MQTT listener | 11883     | - (removed)                        |
+| Management-HTTP | REST API                           | 8081      | 18083 (Merged with Dashboard port) |
+
+## Plugins
+
+The previous official plugins have been migrated to EMQX as built-in functions. Custom plugins developed for version 4.x need to be adapted before they can be used in EMQX 5.x.
+
+::: details Comparison table between official plugins and built-in features
+
+| 4.x              | 5.x                                                       |
+| ---------------- | --------------------------------------------------------- |
+| emqx_auth_http   | AuthN/AuthZ - HTTP data source                            |
+| emqx_auth_jwt    | AuthN/AuthZ - JWT                                         |
+| emqx_auth_mnesia | AuthN/AuthZ - Built-in database                           |
+| emqx_auth_mongo  | AuthN/AuthZ - MongoDB data source                         |
+| emqx_auth_mysql  | AuthN/AuthZ - MySQL data source                           |
+| emqx_auth_pgsql  | AuthN/AuthZ - PostgreSQL data source                      |
+| emqx_auth_redis  | AuthN/AuthZ - Redis data source                           |
+| emqx_sasl        | AuthN/AuthZ - MQTT 5 Enhanced Authentication              |
+| emqx_auth_ldap   | -                                                         |
+| emqx_rule_engine | Data Integration                                          |
+| emqx_bridge_mqtt | Data Bridge - MQTT Bridge                                 |
+| emqx_web_hook    | Data Bridge - HTTP Server                                 |
+| emqx_coap        | CoAP Gateway                                              |
+| emqx_dashboard   | Dasboard                                                  |
+| emqx_exhook      | ExHook                                                    |
+| emqx_exproto     | ExProto Gateway                                           |
+| emqx_lwm2m       | LwM2M Gateway                                             |
+| emqx_sn          | MQTT-SN Gateway                                           |
+| emqx_stomp       | STOMP Gateway                                             |
+| emqx_lua_hook    | -                                                         |
+| emqx_management  | Dashboard                                                 |
+| emqx_prometheus  | Prometheus                                                |
+| emqx_psk_file    | AuthN - PSK (`psk_authentication.enable = true`)          |
+| emqx_recon       | Old features still available from CLI `emqx ctl observer` |
+| emqx_retainer    | Retain                                                    |
+| <!--             | emqx_telemetry                                            |
+
+:::
 
 ## Distribution and Cluster
 
 - The `mcast` discovery strategy for cluster creation has been deprecated and is pending removal.
 - Configuration for service discovery has been changed: cluster.discovery is changed to **cluster.discovery_strategy**.
-- New feature: [cluster call](https://www.emqx.io/docs/en/v5.0/configuration/configuration-manual.html#cluster-call).
-- Optional [eventual consistency](https://www.emqx.io/docs/en/v5.0/design/clustering.html#data-consistency) has been added to the internal DB. 
+- New feature: [cluster call](https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html#cluster-autodiscovery).
+- Optional [eventual consistency](../design/clustering.md#data-consistency) has been added to the internal DB. 
 
 ## MQTT
 
@@ -198,7 +241,7 @@ authentication = [
 - The superuser query has been removed. There should be a single query returning hashed credentials and the `is_superuser` flag.
 - HTTP authentication
   - In EMQX 4.x, only the HTTP status code was used, and the body was discarded (e.g., `200` for `allow` and `403` for `deny`).
-  - In EMQX 5.0, HTTP authentication has been redesigned to make use of the HTTP body. Refer to [HTTP service authentication](https://docs.emqx.com/en/enterprise/v5.0/access-control/authn/http.html) for more detailed information.
+  - In EMQX 5.x, HTTP authentication has been redesigned to make use of the HTTP body. Refer to [HTTP service authentication](../access-control/authn/http.md#http-request-and-response) for more detailed information.
 - SCRAM authentication
   - The SHA1 hashing mode (the only one available in version 4.4) is not available. SHA256/SHA512 hashes are used.
 - Built-in database
@@ -220,7 +263,7 @@ authentication = [
 - HTTP 
 
   - In EMQX 4.x, HTTP status code was used, but the body was discarded (except for the "ignore" case). For example, `200` for `allow` and `403` for `deny`.
-  - In EMQX 5.0, HTTP authorization has been redesigned to make use of the HTTP body. Refer to [Use HTTP Service](https://www.emqx.io/docs/en/v5.0/access-control/authz/http.html) for more information.
+  - In EMQX 5.0, HTTP authorization has been redesigned to make use of the HTTP body. Refer to [HTTP Request and Response](../access-control/authz/http.md#http-request-and-response) for more information.
 
 - MySQL, PostgreSQL
 
@@ -246,7 +289,7 @@ authentication = [
 
 ## Rule Engine
 
-Rule SQL is fully compatible with 4.x syntax, but the actions under the rule are split into built-in actions (republish, console) and data bridges (HTTP Server, MQTT Bridge).
+Rule SQL is fully compatible with EMQX 4.x syntax, but the actions under the rule are split into built-in actions (republish, console) and data bridges (HTTP Server, MQTT Bridge).
 
 ## Data Integration
 
@@ -282,62 +325,13 @@ As of version 5.0.0, EMQX no longer provides [Auto subscription](https://docs.em
 
 ## Data Persistence
 
-- [MQTT Message Persistence](https://docs.emqx.com/en/enterprise/v4.4/backend/backend.html#mqtt-message-persistence) is not implemented in EMQX 5.0 and 5.1. It is planned for later versions.
-
-## Prometheus
-
-The old plugin named `emqx_prometheus` has been converted to a native feature in version 5.x. Prometheus scraping endpoint is enabled by default, and no authentication is required to scrape the metrics.
-
-You can use `curl` command to inspect the metrics:
-
-```bash
-curl -f "http://127.0.0.1:18083/api/v5/prometheus/stats"
-```
-
-If you want to enable push-gateway, please refer to [Integrate with Prometheus](../observability/prometheus.md).
-
-::: details Changes in Prometheus metrics
-
-| 4.4.x                              | 5.x                                             | Description |
-| ---------------------------------- | ----------------------------------------------- | ----------- |
-| emqx_client_auth_success_anonymous | emqx_client_auth_anonymous                      | Renamed     |
-| emqx_client_check_acl              | emqx_client_authorize counter                   | Renamed     |
-| -                                  | emqx_mria_last_intercepted_trans                | New         |
-| -                                  | emqx_mria_replicants                            | New         |
-| -                                  | emqx_mria_server_mql                            | New         |
-| -                                  | emqx_mria_weight                                | New         |
-| emqx_routes_count                  | emqx_topics_count                               | Renamed     |
-| emqx_routes_max                    | emqx_topics_max                                 | Renamed     |
-| emqx_session_takeovered            | emqx_session_takenover                          | Renamed     |
-| erlang_vm_ets_tables               | -                                               | Removed     |
-| -                                  | erlang_vm_memory_dets_tables                    | New         |
-| -                                  | erlang_vm_memory_ets_tables                     | New         |
-| -                                  | erlang_vm_msacc_alloc_seconds_total             | New         |
-| -                                  | erlang_vm_msacc_aux_seconds_total               | New         |
-| -                                  | erlang_vm_msacc_bif_seconds_total               | New         |
-| -                                  | erlang_vm_msacc_busy_wait_seconds_total         | New         |
-| -                                  | erlang_vm_msacc_check_io_seconds_total          | New         |
-| -                                  | erlang_vm_msacc_emulator_seconds_total          | New         |
-| -                                  | erlang_vm_msacc_ets_seconds_total               | New         |
-| -                                  | erlang_vm_msacc_gc_full_seconds_total           | New         |
-| -                                  | erlang_vm_msacc_gc_seconds_total                | New         |
-| -                                  | erlang_vm_msacc_nif_seconds_total               | New         |
-| -                                  | erlang_vm_msacc_other_seconds_total             | New         |
-| -                                  | erlang_vm_msacc_port_seconds_total              | New         |
-| -                                  | erlang_vm_msacc_send_seconds_total              | New         |
-| -                                  | erlang_vm_msacc_sleep_seconds_total             | New         |
-| -                                  | erlang_vm_msacc_timers_seconds_total            | New         |
-| -                                  | erlang_vm_statistics_dirty_cpu_run_queue_length | New         |
-| -                                  | erlang_vm_statistics_dirty_io_run_queue_length  | New         |
-| -                                  | erlang_vm_wordsize_bytes                        | New         |
-
-:::
+[MQTT Message Persistence](https://docs.emqx.com/en/enterprise/v4.4/backend/backend.html#mqtt-message-persistence) is not implemented in EMQX 5.0 and 5.1. It is planned for later versions.
 
 ## Gateway
 
 In EMQX 4.x, various protocols can be configured through corresponding Plugins and Modules (only for the enterprise edition). However, in EMQX 5.0, we have introduced a new concept called Gateway.
 
-Clients of other protocols than MQTT (LwM2M, CoAP, STOMP, MQTT-SN) are no longer listed as MQTT clients on the dashboard **Connections** page and in the `GET /clients` API. They can be found in **Management** -> **Gateways** or listed with `GET /gateway/{name}/clients` API.
+Clients of other protocols than MQTT (LwM2M, CoAP, STOMP, MQTT-SN) are no longer listed as MQTT clients on the Dashboard **Connections** page and in the `GET /clients` API. They can be found in **Management** -> **Gateways** or listed with `GET /gateway/{name}/clients` API.
 
 - It is **completely incompatible** from the configuration and management approaches perspective. EMQX 5.0 has a brand new configuration format and management approach.
   - New configuration format.
@@ -349,7 +343,63 @@ Clients of other protocols than MQTT (LwM2M, CoAP, STOMP, MQTT-SN) are no longer
 
 For the complete compatibility report, see [Gateway Incompatibility between e4.4  and e5.1](./gateway-4.4-to-5.1-incompatibility.md).
 
-## Observability 
+## Log File Format
 
-- Prometheus: The metric `erlang_vm_statistics_run_queues_length_total` has been renamed to `erlang_vm_statistics_run_queues_length`.
-- StatsD: Removed.
+Log files in EMQX 5.1 is either the same flat log file format as in EMQX 4.4 or the structured JSON format, which is more indexer-friendly.
+
+Also, most log fields now use underscores as word separators, making them more search-friendly, for example:
+
+`2022-06-29T16:58:53.235042+02:00 [info] foo: bar, msg: msg_for_human_to_read_but_also_easy_to_index`
+
+Find more details in [Logs](../observability/log.md).
+
+## Prometheus
+
+The plugin `emqx_statsd` is removed. The old plugin named `emqx_prometheus` has been converted to a native feature in version 5.x. Prometheus scraping endpoint is enabled by default, and no authentication is required to scrape the metrics.
+
+You can use `curl` command to inspect the metrics:
+
+```bash
+curl -f "http://127.0.0.1:18083/api/v5/prometheus/stats"
+```
+
+If you want to enable push-gateway, refer to [Integrate with Prometheus](../observability/prometheus.md).
+
+::: details Changes in Prometheus metrics
+
+| 4.4.x                                        | 5.x                                             | Description |
+| -------------------------------------------- | ----------------------------------------------- | ----------- |
+| emqx_client_auth_success_anonymous           | emqx_client_auth_anonymous                      | Renamed     |
+| emqx_client_check_acl                        | emqx_client_authorize counter                   | Renamed     |
+| -                                            | emqx_mria_last_intercepted_trans                | New         |
+| -                                            | emqx_mria_replicants                            | New         |
+| -                                            | emqx_mria_server_mql                            | New         |
+| -                                            | emqx_mria_weight                                | New         |
+| emqx_routes_count                            | emqx_topics_count                               | Renamed     |
+| emqx_routes_max                              | emqx_topics_max                                 | Renamed     |
+| emqx_session_takeovered                      | emqx_session_takenover                          | Renamed     |
+| erlang_vm_ets_tables                         | -                                               | Removed     |
+| -                                            | erlang_vm_memory_dets_tables                    | New         |
+| -                                            | erlang_vm_memory_ets_tables                     | New         |
+| -                                            | erlang_vm_msacc_alloc_seconds_total             | New         |
+| -                                            | erlang_vm_msacc_aux_seconds_total               | New         |
+| -                                            | erlang_vm_msacc_bif_seconds_total               | New         |
+| -                                            | erlang_vm_msacc_busy_wait_seconds_total         | New         |
+| -                                            | erlang_vm_msacc_check_io_seconds_total          | New         |
+| -                                            | erlang_vm_msacc_emulator_seconds_total          | New         |
+| -                                            | erlang_vm_msacc_ets_seconds_total               | New         |
+| -                                            | erlang_vm_msacc_gc_full_seconds_total           | New         |
+| -                                            | erlang_vm_msacc_gc_seconds_total                | New         |
+| -                                            | erlang_vm_msacc_nif_seconds_total               | New         |
+| -                                            | erlang_vm_msacc_other_seconds_total             | New         |
+| -                                            | erlang_vm_msacc_port_seconds_total              | New         |
+| -                                            | erlang_vm_msacc_send_seconds_total              | New         |
+| -                                            | erlang_vm_msacc_sleep_seconds_total             | New         |
+| -                                            | erlang_vm_msacc_timers_seconds_total            | New         |
+| -                                            | erlang_vm_statistics_dirty_cpu_run_queue_length | New         |
+| -                                            | erlang_vm_statistics_dirty_io_run_queue_length  | New         |
+| erlang_vm_statistics_run_queues_length_total | erlang_vm_statistics_run_queues_length          | Renamed     |
+| -                                            | erlang_vm_wordsize_bytes                        | New         |
+
+:::
+

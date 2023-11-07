@@ -1,4 +1,9 @@
-# FAQ
+---
+title: EMQX FAQ
+description: Explore comprehensive FAQs to solve queries about EMQX and understand connection limits, protocols, cluster set-up, security, and more.
+---
+
+# EMQX FAQ
 
 ## Which products do we offer?
 
