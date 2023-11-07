@@ -1,96 +1,57 @@
 # Releases
 
-## e5.3.0
+## e5.3.1
 
 ### Enhancements
 
-- [#11637](https://github.com/emqx/emqx/pull/11637) Added an extra diagnostic to help debug issues when mnesia is waiting for tables.
-
-  Updated libraries: `ekka` -> 0.15.15, `mria` -> 0.6.4.
-
-- [#11581](https://github.com/emqx/emqx/pull/11581) Preview Feature: Support for Version 2 Bridge Design
-
-  - Introduction of Bridge v2 with a new 'connector' concept
-
-  - In the original Bridge v1 design, each connector was exclusively tied to a single bridge.
-  This design prioritized error isolation and performance but posed challenges for users setting up multiple bridges to the same service.
-  For instance, setting up 10 bridges to a single Kafka cluster required the same configuration to be repeated for each bridge.
-
-  - The revamped Bridge v2 design provides more flexibility and better scalability:
-  - Users have the option to either share a connector across multiple bridges or retain it exclusively for one bridge, as in v1.
-  - For the majority of data bridges, sharing a connector among too many bridges might lead to performance degradation but avoids
-  overloading the external system with too many connections if the number of bridges is very high.
-  - In some cases, specific data bridges always utilize dedicated connections, even when the connector is shared.
-  Right now these are:
-  - Kafka Producer
-  - Azure Event Hub Producer
-
-  - Management of Connectors
-  - Connectors can now be managed separately, bringing in more flexibility.
-  - New API endpoints have been introduced under the `/connectors` path for connector management.
-  - Version 2 bridges can be managed via the `/bridges_v2` endpoint.
-
-  - Limitations in e5.3.1
-
-  - Currently, only the Kafka and Azure Event Hub producer bridges have been upgraded to the v2 design.
-  - The v2 bridge feature is accessible through config files and HTTP APIs. However, it's not yet available on the dashboard UI.
-
-
+- [#11637](https://github.com/emqx/emqx/pull/11637) Added extra diagnostic checks to help debug issues when mnesia is stuck waiting for tables. Library Updates: `ekka` has been upgraded to version 0.15.15, and `mria` to version 0.6.4.
+- [#11581](https://github.com/emqx/emqx/pull/11581) Preview Feature: Support for Version 2 Bridge Design with introducing a new "connector" concept.
+  - In the original Bridge v1 design, each connector was exclusively associated with a single bridge. While this design prioritized error isolation and performance, it posed challenges for users who needed to set up multiple bridges to the same service.  For example, setting up 10 bridges to a single Kafka cluster required the same configuration to be repeated for each bridge.
+  - The revamped Bridge v2 design provides more flexibility and better scalability. Users have the option to either share a connector among multiple bridges or assign it exclusively to one bridge, as in the v1 design. For most of the data bridges, while sharing a connector among too many bridges may lead to performance degradation, it helps avoid overloading external systems with numerous connections when managing a high number of bridges. For certain data bridges, dedicated connections are always used, even when the connector is shared. The Bridge v2 design has been introduced for the following data bridges:
+    - Kafka Producer
+    - Azure Event Hub Producer
+  - The introduction of connectors brings more flexibility to your setup. To manage connectors separately, new API endpoints have been introduced under the `/connectors` path for connector management. Version 2 bridges can be managed via the `/bridges_v2` endpoint.
+  - Limitations in e5.3.1: In this release, only the Kafka and Azure Event Hub producer bridges have been upgraded to the v2 design. The v2 bridge feature is accessible through configuration files and HTTP APIs but is not yet available in the Dashboard UI.
 
 ### Bug Fixes
 
-- [#11565](https://github.com/emqx/emqx/pull/11565) Upgraded jq library from v0.3.10 to v0.3.11. In this version, jq_port programs are initiated on-demand and will not appear in users' processes unless the jq function in EMQX is used. Additionally, idle jq_port programs will auto-terminate after a set period. Note: Most EMQX users, running jq in NIF mode, will be unaffected by this update.
+- [#11565](https://github.com/emqx/emqx/pull/11565) Upgraded jq library from v0.3.10 to v0.3.11. In this version, jq_port programs are initiated on-demand and will not appear in users' processes unless the jq function in EMQX is used. Additionally, idle jq_port programs will auto-terminate after a set period. Note: Most EMQX users, running jq in NIF mode will not be affected by this update.
 
-- [#11676](https://github.com/emqx/emqx/pull/11676) Hide few pieces of sensitive information from debug-level logs.
+- [#11676](https://github.com/emqx/emqx/pull/11676) Hid a few pieces of sensitive information from debug-level logs.
 
-- [#11697](https://github.com/emqx/emqx/pull/11697) Disable outdated TLS versions and ciphersuites in the EMQX backplane network (`gen_rpc`).
-  Allow using tlsv1.3 on the backplane.
-
-  Add new configuration parameters: `EMQX_RPC__TLS_VERSIONS` and `EMQX_RPC__CIPHERS`.
-
+- [#11697](https://github.com/emqx/emqx/pull/11697) Disabled outdated TLS versions and cipher suites in the EMQX backplane network (`gen_rpc`). Added support for tlsv1.3 on the backplane and introduced new configuration parameters: `EMQX_RPC__TLS_VERSIONS` and `EMQX_RPC__CIPHERS`.
+  
   The corresponding `gen_rpc` PR: https://github.com/emqx/gen_rpc/pull/36
+  
+- [#11734](https://github.com/emqx/emqx/pull/11734) Fixed clustering in IPv6 network. Added new configurations `rpc.listen_address` and `rpc.ipv6_only` to allow EMQX cluster RPC server and client to use IPv6.
 
-- [#11734](https://github.com/emqx/emqx/pull/11734) Fix clustering in IPv6 network.
-
-  Added new configurations `rpc.listen_address` and `rpc.ipv6_only` to allow EMQX cluster RPC server and client to use IPv6.
-
-- [#11747](https://github.com/emqx/emqx/pull/11747) Update QUIC stack to msquic 2.2.3.
+- [#11747](https://github.com/emqx/emqx/pull/11747) Updated QUIC stack to msquic 2.2.3.
 
 
-- [#11796](https://github.com/emqx/emqx/pull/11796) Fix rpc schema, ensure client/server use same transport driver.
+- [#11796](https://github.com/emqx/emqx/pull/11796) Fixed rpc schema to ensure that client/server uses same transport driver.
 
 
 - [#11798](https://github.com/emqx/emqx/pull/11798) Fixed the issue where the node could not start after executing `./bin/emqx data import [FILE]`.
 
-  And strongly bind apikey's `apikey_key` to `apikey_name`.
-  - `apikey_key` will generate a unique value from the given human-readable `apikey_name` when generating an apikey using dashboard.
-  - `apikey_name` will be a unique value generated by `apikey_key` when using bootstrap file to generate apikey, .
+  The connection between `apikey_key` and `apikey_name` is also enhanced for better consistency and unique identification.
+  - `apikey_key`: When generating an API key via the dashboard, `apikey_key` will now create a unique value derived from the provided human-readable `apikey_name`. 
+  - `apikey_name` Conversely, when using a bootstrap file to generate an API key, `apikey_name` will be generated as a unique value based on the associated `apikey_key`. 
 
-- [#11813](https://github.com/emqx/emqx/pull/11813) Fix schema: RPC client ssl port alighn with configured server port.
-  And ensure RPC ports are opened in helm chart.
+- [#11813](https://github.com/emqx/emqx/pull/11813) Fixed the schema to ensure that RPC client SSL port aligns with the configured server port. This fix also guarantees that the RPC ports are correctly opened in the Helm chart. 
 
+- [#11819](https://github.com/emqx/emqx/pull/11819) Upgraded opentelemetry library to v1.3.1-emqx. This opentelemetry release fixes invalid metrics timestamps in the exported metrics.
 
-
-- [#11819](https://github.com/emqx/emqx/pull/11819) Upgrade opentelemetry library to v1.3.1-emqx
-
-  This opentelemetry release fixes invalid metrics timestamps in the exported metrics.
-
-- [#11861](https://github.com/emqx/emqx/pull/11861) Fix excessive warning message print in remote console shell.
+- [#11861](https://github.com/emqx/emqx/pull/11861) Fixed excessive warning message printed in remote console shell.
 
 
 - [#11722](https://github.com/emqx/emqx/pull/11722) Fixed an issue where a Kafka Producer bridge with `sync` query mode would not buffer messages when in the `connecting` state.
-
-- [#11724](https://github.com/emqx/emqx/pull/11724) Fixed a metrics issue where messages sent to Kafka would count as failed even when they were successfully sent late due to its internal buffering.
-
-- [#11728](https://github.com/emqx/emqx/pull/11728) Improved the LDAP filter string parser:
-  1. Automatically escape special characters in filter strings.
-  2. Fixed a bug that the filter value can't be `dn`.
-
-- [#11733](https://github.com/emqx/emqx/pull/11733) Resolved an incompatibility issue that led to crashes during session takeover / channel eviction when the session was residing on a remote node running EMQX v5.2.x or earlier.
-
+- [#11724](https://github.com/emqx/emqx/pull/11724) Fixed a metrics-related issue where messages sent to Kafka would be counted as failed even when they were successfully transmitted afterward due to internal buffering.
+- [#11728](https://github.com/emqx/emqx/pull/11728) Enhanced the LDAP filter string parser with the following improvements:
+  - Automatic escaping of special characters within filter strings.
+  - Fixed a bug that previously prevented the use of `dn` as a filter value.
+- [#11733](https://github.com/emqx/emqx/pull/11733) Resolved an incompatibility issue that caused crashes during session takeover or channel eviction when the session was located on a remote node running EMQX v5.2.x or an earlier version.
 - [#11750](https://github.com/emqx/emqx/pull/11750) Eliminated logging and tracing of HTTP request bodies in HTTP authentification and HTTP bridges.
-
-- [#11760](https://github.com/emqx/emqx/pull/11760) Simplified the CQL query employed for Cassandra bridge health check that was apparently the source of warnings in Cassandra server logs.
+- [#11760](https://github.com/emqx/emqx/pull/11760) Simplified the CQL query used for the Cassandra bridge health check, which was previously generating warnings in the Cassandra server logs.
 
 
 ## e5.3.0
