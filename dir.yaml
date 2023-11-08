@@ -186,7 +186,9 @@
       path: performance/overview
       children:
         - performance/tune
-        - performance/benchmark
+        - performance/benchmark-emqtt-bench
+        - performance/benchmark-xmeter
+        - performance/performance-reference
 
 - title_en: Rule Engine
   title_cn: 规则引擎
