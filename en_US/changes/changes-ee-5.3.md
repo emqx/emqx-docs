@@ -9,8 +9,6 @@
   - The previous bridge architecture (Version 1) encapsulated both the connector and the action within a single, indivisible bridge. This structure was designed for error isolation and performance but lacked the flexibility required for configurations that needed multiple bridges to interface with the same external service. As an example, creating 10 distinct bridges to interact with a single Kafka cluster demanded redundant configuration for each bridge.
   - The new design introduces a significant improvement in flexibility and scalability. Now, users can configure a single "connector" to be used by multiple "actions", or continue with a one-to-one relationship as per the old design. This approach is particularly beneficial when dealing with a large number of actions to avoid overwhelming external systems with too many connections. A single connector can now serve multiple actions, or be dedicated to just one, as was the case in the Version 1 design. This can prevent the overloading of external services with connections, especially when managing numerous bridges. Certain data bridges will maintain dedicated connections for specific actions, even when utilizing shared connectors. The Version 2 Bridge Design has been introduced for the following data bridges:
 
-    Kafka Producer
-    Azure Event Hub Producer
     - Kafka Producer
     - Azure Event Hub Producer
   - The introduction of connectors brings more flexibility to your setup. Separate API endpoints for "connector" management have been introduced at `/connectors`. Actions based on the new design can be managed via the `/actions` endpoint.
