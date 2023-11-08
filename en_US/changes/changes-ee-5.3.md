@@ -5,17 +5,20 @@
 ### Enhancements
 
 - [#11637](https://github.com/emqx/emqx/pull/11637) Added extra diagnostic checks to help debug issues when mnesia is stuck waiting for tables. Library Updates: `ekka` has been upgraded to version 0.15.15, and `mria` to version 0.6.4.
-- [#11581](https://github.com/emqx/emqx/pull/11581) Preview Feature: Support for Version 2 Bridge Design with introducing a new "connector" concept.
-  - In the original Bridge v1 design, each connector was exclusively associated with a single bridge. While this design prioritized error isolation and performance, it posed challenges for users who needed to set up multiple bridges to the same service.  For example, setting up 10 bridges to a single Kafka cluster required the same configuration to be repeated for each bridge.
-  - The revamped Bridge v2 design provides more flexibility and better scalability. Users have the option to either share a connector among multiple bridges or assign it exclusively to one bridge, as in the v1 design. For most of the data bridges, while sharing a connector among too many bridges may lead to performance degradation, it helps avoid overloading external systems with numerous connections when managing a high number of bridges. For certain data bridges, dedicated connections are always used, even when the connector is shared. The Bridge v2 design has been introduced for the following data bridges:
+- [#11581](https://github.com/emqx/emqx/pull/11581) Preview Feature: Introducing Version 2 Bridge Design with separate "connector" and "action" concepts.
+  - The previous bridge architecture (Version 1) encapsulated both the connector and the action within a single, indivisible bridge. This structure was designed for error isolation and performance but lacked the flexibility required for configurations that needed multiple bridges to interface with the same external service. As an example, creating 10 distinct bridges to interact with a single Kafka cluster demanded redundant configuration for each bridge.
+  - The new design introduces a significant improvement in flexibility and scalability. Now, users can configure a single "connector" to be used by multiple "actions", or continue with a one-to-one relationship as per the old design. This approach is particularly beneficial when dealing with a large number of actions to avoid overwhelming external systems with too many connections. A single connector can now serve multiple actions, or be dedicated to just one, as was the case in the Version 1 design. This can prevent the overloading of external services with connections, especially when managing numerous bridges. Certain data bridges will maintain dedicated connections for specific actions, even when utilizing shared connectors. The Version 2 Bridge Design has been introduced for the following data bridges:
+
+    Kafka Producer
+    Azure Event Hub Producer
     - Kafka Producer
     - Azure Event Hub Producer
-  - The introduction of connectors brings more flexibility to your setup. To manage connectors separately, new API endpoints have been introduced under the `/connectors` path for connector management. Version 2 bridges can be managed via the `/bridges_v2` endpoint.
+  - The introduction of connectors brings more flexibility to your setup. Separate API endpoints for "connector" management have been introduced at `/connectors`. Actions based on the new design can be managed via the `/actions` endpoint.
   - Limitations in e5.3.1: In this release, only the Kafka and Azure Event Hub producer bridges have been upgraded to the v2 design. The v2 bridge feature is accessible through configuration files and HTTP APIs but is not yet available in the Dashboard UI.
 
 ### Bug Fixes
 
-- [#11565](https://github.com/emqx/emqx/pull/11565) Upgraded jq library from v0.3.10 to v0.3.11. In this version, jq_port programs are initiated on-demand and will not appear in users' processes unless the jq function in EMQX is used. Additionally, idle jq_port programs will auto-terminate after a set period. Note: Most EMQX users, running jq in NIF mode will not be affected by this update.
+- [#11565](https://github.com/emqx/emqx/pull/11565) Upgraded jq library from v0.3.10 to v0.3.11. In this version, jq_port programs are initiated on-demand and will not appear in users' processes unless the jq function in EMQX is used. Additionally, idle jq_port programs will auto-terminate after a set period. Note: Most EMQX users are running jq in NIF mode and will not be affected by this update.
 
 - [#11676](https://github.com/emqx/emqx/pull/11676) Hid a few pieces of sensitive information from debug-level logs.
 
