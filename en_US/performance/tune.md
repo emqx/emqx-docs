@@ -117,12 +117,9 @@ sysctl -w net.ipv4.tcp_fin_timeout=15
 
 ## Erlang VM Tuning
 
-Tune and optimize the Erlang VM in etc/emq.conf file: :
+Tune and optimize the Erlang VM in etc/emqx.conf file: :
 
 ```bash
-## Erlang Process Limit
-node.process_limit = 2097152
-
 ## Sets the maximum number of simultaneously existing ports for this system
 node.max_ports = 2097152
 ```
