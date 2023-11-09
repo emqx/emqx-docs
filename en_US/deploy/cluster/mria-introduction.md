@@ -65,30 +65,3 @@ You can also monitor the operating status of the cluster with command `emqx eval
 If EMQX cluster is operating normally, you can get a list of status information, for example, the current log level, the number of messages processed, and the number of messages dropped.
 
 <!--Here we need a query statement and the returned message, and can we link this Erlang console to https://www.erlang.org/doc/man/shell.html -->
-
-## Pseudo-Distributed Cluster 
-
-EMQX also provides a pseudo-distributed cluster feature for testing and development purposes. It refers to a cluster setup where multiple instances of EMQX are running on a single machine, with each instance configured as a node in the cluster. 
-
-After starting the first node, use the following command to start the second node and join the cluster manually. To avoid port conflicts, we need to adjust some listening ports:
-
-```bash
-EMQX_NODE__NAME='emqx2@127.0.0.1' \
-    EMQX_LOG__FILE_HANDLERS__DEFAULT__FILE='log2/emqx.log' \
-    EMQX_STATSD__SERVER='127.0.0.1:8124' \
-    EMQX_LISTENERS__TCP__DEFAULT__BIND='0.0.0.0:1882' \
-    EMQX_LISTENERS__SSL__DEFAULT__BIND='0.0.0.0:8882' \
-    EMQX_LISTENERS__WS__DEFAULT__BIND='0.0.0.0:8082' \
-    EMQX_LISTENERS__WSS__DEFAULT__BIND='0.0.0.0:8085' \
-    EMQX_DASHBOARD__LISTENERS__HTTP__BIND='0.0.0.0:18082' \
-    EMQX_NODE__DATA_DIR="./data2" \
-./bin/emqx start
-
-./bin/emqx ctl cluster join emqx1@127.0.0.1
-```
-
-The above code example is to create a cluster manually, you can also refer to the [auto clustering](./create-cluster.md#auto-clustering) section on how to create a cluster automatically. 
-
-The dashboard is designed under the assumption that all cluster nodes use the same port number. Using distinct ports on a single computer may cause Dashboard UI issues, therefore, it is not recommended in production.
-
-<!--to add a quickstart with the pseudo-distributed cluster @WIVWIV -->
