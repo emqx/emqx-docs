@@ -10,7 +10,14 @@
 
 - **稳定性**：减少高负载下的延迟、提高系统响应速度，并且降低系统崩溃或故障的风险。
 
-本章节提供生产部署与测试所需的 Linux 内核参数，网络协议栈参数，Erlang 虚拟机参数以及 EMQX 参数调优设置。
+本页提供生产部署与测试所需的 Linux 内核参数，网络协议栈参数，Erlang 虚拟机参数以及 EMQX 参数调优设置。
+
+## 关闭交换分区
+
+Linux 交换分区可能会导致 Erlang 虚拟机出现不确定的内存延迟，严重影响系统的稳定性。 建议永久关闭交换分区。
+
+- 要立即关闭交换分区，执行命令 `sudo swapoff -a`。 
+- 要永久关闭交换分区，在 `/etc/fstab` 文件中注释掉 `swap` 行，然后重新启动主机。
 
 ## Linux 操作系统参数
 
@@ -31,7 +38,7 @@ ulimit -n 1048576
 
 ### /etc/sysctl.conf
 
-持久化 'fs.file-max' 设置到 /etc/sysctl.conf 文件:
+持久化 `fs.file-max` 设置到 /etc/sysctl.conf 文件:
 
 ```bash
 fs.file-max = 1048576
