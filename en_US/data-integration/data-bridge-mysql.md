@@ -16,8 +16,8 @@ MySQL data bridge is an out-of-the-box feature in EMQX, which enables complex bu
 
 EMQX forwards device events and data to MySQL through the rule engine and data bridge. Applications can read the data in MySQL to sense the device status, obtain device online and offline records, and analyze device data. The specific workflow is as follows:
 
-- **IoT devices connect to EMQX**: After the device is successfully connected through the MQTT protocol, an online event will be triggered. The event includes information such as device ID, source IP address, and other attributes.
-- **IoT device message publishing and receiving**: The device publishes telemetry and status data through a specific topic. After EMQX receives the message, it will be matched in the rules engine.
+- **IoT devices connect to EMQX**: After IoT devices are successfully connected through the MQTT protocol, online events will be triggered. The events include information such as device ID, source IP address, and other attributes.
+- **Message publication and reception**: The devices publish telemetry and status data to specific topics. When EMQX receives these messages, it initiates the matching process within its rules engine.
 - **Rule Engine Processing Messages**: With the built-in rules engine, messages and events from specific sources can be processed based on topic matching. The rules engine matches the corresponding rules and processes messages and events, such as converting data formats, filtering out specific information, or enriching messages with contextual information.
 - **Write to MySQL**: The rule triggers the writing of messages to MySQL. With the help of SQL templates, users can extract data from the rule processing results to construct SQL and send it to MySQL for execution, so that specific fields of the message can be written or updated into the corresponding tables and columns of the database.
 
