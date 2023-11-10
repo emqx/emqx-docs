@@ -89,8 +89,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
      **HTTP 请求消息体模版**的默认值为 `${.}`，它将所有可用数据编码为 JSON 对象。例如，选择 `${.}` 作为模板将会为包含所有可选字段的 GCP PubSub 消息生成以下内容：
 
-     ```
-     jsonCopy code
+     ```json
      {
        "attributes": {"attribute_key": "attribute_value"},
        "message_id": "1679665968238",

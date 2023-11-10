@@ -92,7 +92,50 @@ EMQX 允许多个客户端同时连接到桥接的 MQTT 服务器。在创建桥
          - **主题**：填入 `local/topic/ingress`。
          - **QoS**：选择 `0`，或 `${qos}` （跟随消息 QoS）。
          - **Retain**：通过勾选确认是否以保留消息方式发布消息。
-         - **消息模版**：转发的消息 Payload 模板，支持使用 `${field}` 语法提取数据。
+         - **消息模版**：转发的消息 Payload 模板，支持使用 `${field}` 语法提取数据，支持的字段如下：
+
+        | 字段名称                      | 描述                                                                |
+        | ----------------------------- | ------------------------------------------------------------------- |
+        | topic                         | 来源消息主题                                                        |
+        | server                        | 桥接连接的服务器地址                                                |
+        | retain                        | 是否保留消息，值为 false                                            |
+        | qos                           | 消息服务质量                                                        |
+        | pub_props                     | MQTT 5.0 消息属性对象，包含用户属性对、用户属性和其他属性           |
+        | pub_props.User-Property-Pairs | 用户属性对数组，每个包含键值对，例如 `{"key":"foo", "value":"bar"}` |
+        | pub_props.User-Property       | 用户属性对象，包含键值对，例如 `{"foo":"bar"}`                      |
+        | pub_props.*                   | 其他包含的消息属性键值对，例如 `Content-Type: JSON`                 |
+        | payload                       | 消息内容                                                            |
+        | message_received_at           | 消息接收时间戳，单位为毫秒                                          |
+        | id                            | 消息 ID                                                             |
+        | dup                           | 是否为重复消息                                                      |
+
+        例如，当消息模板留空时将发布以下内容消息：
+        ```json
+        {
+          "topic": "f/1",
+          "server": "broker.emqx.io:1883",
+          "retain": false,
+          "qos": 0,
+          "pub_props": {
+              "User-Property-Pairs": [
+                  {
+                      "value": "bar",
+                      "key": "foo"
+                  }
+              ],
+              "User-Property": {
+                  "foo": "bar"
+              },
+              "Message-Expiry-Interval": 3600,
+              "Content-Type": "JSON"
+          },
+          "payload": "Hello MQTTX CLI",
+          "message_received_at": 1699603701552,
+          "id": "000609C7D2E3D556F445000010E4000C",
+          "dup": false
+        }
+        ```
+
       - **连接池大小**：指定本地 MQTT 服务的客户端连接池的大小。在这个例子中，您可以设置为`8`。只要远程 MQTT 服务的主题使用共享订阅，这样的设置不会影响性能。
    
    - **出口配置**（可选）：将本地指定 MQTT 主题下的消息发布到远程 MQTT 服务，可以理解为入口配置的反向数据流。我们希望将 `local/topic/egress` 主题下的消息转发到远程 MQTT 服务 `remote/topic/egress` 主题中，因此将进行如下配置：
@@ -107,9 +150,9 @@ EMQX 允许多个客户端同时连接到桥接的 MQTT 服务器。在创建桥
         - **消息模版**：转发的消息 Payload 模板，支持使用 `${field}` 语法提取数据。
       - **连接池大小**：指定本地 MQTT 服务器的客户端连接池的大小。在这个例子中，您可以设置为`8`。
    
-7. 其他配置（可选），根据情况配置同步/异步模式，队列与批量等参数。
+8. 其他配置（可选），根据情况配置同步/异步模式，队列与批量等参数。
 
-8. 点击**创建**按钮完成数据桥接创建。
+9. 点击**创建**按钮完成数据桥接创建。
 
 ### 通过配置文件配置
 

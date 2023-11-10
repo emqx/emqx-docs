@@ -131,14 +131,14 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
      
      ```json
      {
-           "value": "value",
-           "ts_type": "create",
-           "ts": 1679665968238,
-           "topic": "my-kafka-topic",
-           "offset": 2,
-           "key": "key",
-           "headers": {"header_key": "header_value"}
-          }
+        "value": "value",
+        "ts_type": "create",
+        "ts": 1679665968238,
+        "topic": "my-kafka-topic",
+        "offset": 2,
+        "key": "key",
+        "headers": {"header_key": "header_value"}
+     }
      ```
      
      可以使用点符号选择 Kafka 消息的子字段。例如：`${.value}` 将解析为 Kafka 消息的值，`${.headers.h1}` 将解析为 Kafka `h1` 标题的值（如果存在该子字段）。缺失的值将被替换为空字符串。
