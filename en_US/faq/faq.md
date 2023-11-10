@@ -297,9 +297,9 @@ When your license reaches its expiration date, a warning starts to appear each t
 
 If you are unsure which type of license you have, please confirm with your account manager.
 
-## Can EMQX support customized protocols? How to implement?
+## <!-- Can EMQX support customized protocols? How to implement?-->
 
-TODO...
+<!-- TODO...-->
 
 ## Can I capture device online and offline events? How to use it?
 
