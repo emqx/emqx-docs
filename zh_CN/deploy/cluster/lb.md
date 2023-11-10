@@ -57,23 +57,23 @@ listeners.tcp.default {
 **公有云厂商 LB 产品：**
 
 | 云计算厂商                                | 是否支持 TLS 终结 | 是否支持 Proxy Protocol | LB 产品介绍                                                 |
-| ----------------------------------------- | ----- | ------------ | ----------------------------------------------------------- |
-| [华为云](https://www.huaweicloud.com)     | 否    | 否 | <https://www.huaweicloud.com/product/elb.html>              |
-| [阿里云](https://www.aliyun.com)          | 是    | 是 | <https://www.aliyun.com/product/slb>                        |
-| [腾讯云](https://cloud.tencent.com)       | 是   | 否 | <https://cloud.tencent.com/product/clb>                     |
-| [青云](https://qingcloud.com)             | 否  | 否 | <https://docs.qingcloud.com/product/network/loadbalancer/>  |
-| [天翼云](https://www.ctyun.cn)            | 否   | 否 | <https://www.ctyun.cn/products/elb>                         |
-| [UCloud](https://ucloud.cn)               | 否   | 否 | <https://ucloud.cn/site/product/ulb.html>                   |
-| [AWS](https://aws.amazon.com)             | 是    | 是 | <https://aws.amazon.com/cn/elasticloadbalancing/>           |
-| [Azure](https://azure.microsoft.com)      | 未知   | 未知 | <https://azure.microsoft.com/zh-cn/products/load-balancer/> |
-| [Google Cloud](https://cloud.google.com/) | 是    | 是 | <https://cloud.google.com/load-balancing?hl=zh-cn>          |
+| ----------------------------------------- | ----------------- | ----------------------- | ----------------------------------------------------------- |
+| [华为云](https://www.huaweicloud.com)     | 否                | 否                      | <https://www.huaweicloud.com/product/elb.html>              |
+| [阿里云](https://www.aliyun.com)          | 是                | 是                      | <https://www.aliyun.com/product/slb>                        |
+| [腾讯云](https://cloud.tencent.com)       | 是                | 否                      | <https://cloud.tencent.com/product/clb>                     |
+| [青云](https://qingcloud.com)             | 否                | 否                      | <https://docs.qingcloud.com/product/network/loadbalancer/>  |
+| [天翼云](https://www.ctyun.cn)            | 否                | 否                      | <https://www.ctyun.cn/products/elb>                         |
+| [UCloud](https://ucloud.cn)               | 否                | 否                      | <https://ucloud.cn/site/product/ulb.html>                   |
+| [AWS](https://aws.amazon.com)             | 是                | 是                      | <https://aws.amazon.com/cn/elasticloadbalancing/>           |
+| [Azure](https://azure.microsoft.com)      | 未知              | 未知                    | <https://azure.microsoft.com/zh-cn/products/load-balancer/> |
+| [Google Cloud](https://cloud.google.com/) | 是                | 是                      | <https://cloud.google.com/load-balancing?hl=zh-cn>          |
 
 **私有部署 LB 服务器**
 
-| 开源 LB                            | 是否支持 TLS 终结 | 方案介绍                                                |
-| ---------------------------------- | ----------------- | ------------------------------------------------------- |
-| [HAProxy](https://www.haproxy.org) | 是                | <https://www.haproxy.com/solutions/load-balancing.html> |
-| [Nginx](https://www.nginx.com)     | 是                | <https://www.nginx.com/solutions/load-balancing/>       |
+| 开源 LB                            | 是否支持 TLS 终结 | 是否支持 Proxy Protocol | 方案介绍                                                |
+| ---------------------------------- | ----------------- | ----------------------- | ------------------------------------------------------- |
+| [HAProxy](https://www.haproxy.org) | 是                | 是                      | <https://www.haproxy.com/solutions/load-balancing.html> |
+| [Nginx](https://www.nginx.com)     | 是                | 是                      | <https://www.nginx.com/solutions/load-balancing/>       |
 
 下面两个页面将以私有部署 LB 服务器为例向您介绍如何配置并负载均衡 EMQX 集群：
 
