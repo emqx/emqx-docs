@@ -16,8 +16,7 @@ Apache Pulsar data bridge is an out-of-the-box feature of EMQX that combines EMQ
 
 EMQX forwards MQTT data to Apache Pulsar through the rule engine and configured data bridge, and the complete process is as follows:
 
-1. **Message publication from IoT devices**: Devices publish telemetry and status data through specific topics.
-2. **Message reception by EMQX**: As an MQTT broker, EMQX receives data over MQTT from devices by subscribing to the topics to which MQTT messages are published. It serves as the centralized hub for handling MQTT-based communication.
+1. **Message publication and reception**: IoT devices establish successful connections through the MQTT protocol and subsequently publish telemetry and status data to specific topics. When EMQX receives these messages, it initiates the matching process within its rules engine.
 3. **Rule engine processes messages**: Using the built-in rule engine, MQTT messages from specific sources can be processed based on topic matching. The rule engine matches corresponding rules and processes messages, such as data format conversion, filtering specific information, or enriching messages with context information.
 4. **Data streaming into Apache Pulsar**: Rule triggers the action of forwarding messages to Pulsar where data can be easily configured to Pulsar message key and value. MQTT topics can also be mapped to Pulsar topics for better data organization and identification, facilitating subsequent data processing and analysis.
 
