@@ -4,32 +4,24 @@
 
 ### 增强
 
-- [#11637](https://github.com/emqx/emqx/pull/11637) 增加了额外的诊断检查，以帮助调试当 Mnesia 因等待表而停滞时出现的问题。Library 更新：`ekka` 已升级至版本0.15.15，`mria` 已升级至版本0.6.4。
-- [#11581](https://github.com/emqx/emqx/pull/11581) 功能预告：引入了一个新的 "连接器" 概念，支持桥接设计版本2。
-  - 在之前的桥接设计版本1中，每个连接器专属于单个桥接。虽然这种设计优先考虑了错误隔离和性能，但不便于需要将多个桥接设置到同一个服务的用户。例如，将10个桥接设置到单个 Kafka 集群需要为每个桥接重复相同的配置。
-  - 改进后的桥接版本2设计提供了更大的灵活性和更好的可扩展性。用户可以选择将连接器共享给多个桥接，或者与版本1设计类似，将其专用于一个桥接。对于大多数数据桥接而言，将连接器共享给过多的桥接可能会导致性能下降，但在管理大量桥接时，可以避免过多连接给外部系统带来负担。对于某些数据桥接，即使连接器被共享，也始终使用专用连接。桥接设计版本2已应用于以下数据桥接：
-    - Kafka生产者
-    - Azure事件中心生产者
-  - 引入连接器增加了设置的灵活性。为了单独管理连接器，引入了新的 API 端点，在`/connectors ` 路径下提供连接器管理功能。版本2的桥接可以通过`/bridges_v2`端点进行管理。
-  - 在版本 e5.3.1中的限制：在此版本中，只有 Kafka 和 Azure Event Hub 生产者桥接已升级到 v2设计。v2 桥接功能可以通过配置文件和 HTTP API 访问，但尚不在 Dashboard UI 中提供。
+- [#11637](https://github.com/emqx/emqx/pull/11637) 增加了额外的诊断检查，以帮助调试当 Mnesia 因等待表而停滞时出现的问题。更新依赖库：`ekka` 已升级至 0.15.15 版本，`mria` 已升级至 0.6.4 版本。
+- [#11747](https://github.com/emqx/emqx/pull/11747) 更新 QUIC 到 msquic 2.2.3 版本。
+- [#11581](https://github.com/emqx/emqx/pull/11581) 功能预告：计划在 EMQX v5.4.0 版本中，在数据桥接的基础上新增*连接*与*动作*概念，并逐步迁移现有数据桥接到连接与动作。连接用于管理数据集成与外部系统的连接，动作仅用于配置数据操作方式，连接可以在多个动作之间重复使用，以提供更大的灵活性和更好的可扩展性。目前 Kafka 生产者与 Azure Event Hub 生产者已经完成迁移。
+- Dashboard 为规则引擎消息重发布动作提供了 MQTT 5.0 发布属性设置，允许用户更灵活的发布消息。
 
 ### 修复
 
-- [#11565](https://github.com/emqx/emqx/pull/11565) 将 jq 库从 v0.3.10升级至v0.3.11。在此版本中，jq_port 程序将按需启动，除非 EMQX 中使用 jq 功能，否则不会出现在用户的进程中。此外，空闲的 jq_port 程序将在设定的一段时间后自动终止。注意：大多数运行 NIF 模式下的 EMQX 用户不会受到此更新的影响。
+- [#11565](https://github.com/emqx/emqx/pull/11565) 将 jq 库从 v0.3.10 升级至 v0.3.11。在此版本中，jq_port 程序将按需启动，除非 EMQX 中使用 jq 功能，否则不会出现在用户的进程中。此外，空闲的 jq_port 程序将在设定的一段时间后自动终止。注意：大多数运行 NIF 模式下的 EMQX 用户不会受到此更新的影响。
 
-- [#11676](https://github.com/emqx/emqx/pull/11676) 从调试级别的日志中隐藏了一些敏感信息。
+- [#11676](https://github.com/emqx/emqx/pull/11676) 隐藏 DEBUG 级别的日志中的部分敏感信息。
 
 - [#11697](https://github.com/emqx/emqx/pull/11697) 在 EMQX 后端网络 (`gen_rpc`) 中禁用了过时的 TLS 版本和密码套件。增加了对后端网络的 tlsv1.3 支持，并引入了新的配置参数：`EMQX_RPC__TLS_VERSIONS` 和 `EMQX_RPC__CIPHERS`。
 
   对应的 `gen_rpc` PR: https://github.com/emqx/gen_rpc/pull/36
 
-- [#11734](https://github.com/emqx/emqx/pull/11734) 修复了 IPv6 网络中集群配置的问题。新增了新的配置项 `rpc.listen_address` 和 `rpc.ipv6_only`，以允许 EMQX 集群的 RPC 服务器和客户端使用 IPv6。
-
-- [#11747](https://github.com/emqx/emqx/pull/11747) 更新了 QUIC 栈到 msquic 2.2.3 版本。
-
+- [#11734](https://github.com/emqx/emqx/pull/11734) 修复了 IPv6 网络中集群配置的问题。新增了新的配置项 `rpc.listen_address` 和 `rpc.ipv6_only`，以允许 EMQX 集群的 RPC 服务和客户端使用 IPv6。
 
 - [#11796](https://github.com/emqx/emqx/pull/11796) 修复了 RPC schema，以确保客户端和服务器使用相同的传输驱动程序。
-
 
 - [#11798](https://github.com/emqx/emqx/pull/11798) 修复了在执行 `./bin/emqx data import [FILE]` 后节点无法启动的问题。
 
@@ -40,10 +32,9 @@
 
 - [#11813](https://github.com/emqx/emqx/pull/11813) 修复了 schema，确保 RPC 客户端 SSL 端口与配置的服务器端口一致。此修复还确保了RPC 端口在 Helm 图表中的被正确打开。
 
-- [#11819](https://github.com/emqx/emqx/pull/11819) 升级了 opentelemetry 库至 v1.3.1-emqx。这个 opentelemetry 版本修复了在导出的指标中，指标时间戳无效的问题。
+- [#11819](https://github.com/emqx/emqx/pull/11819) 升级了 OpenTelemetry 库至 v1.3.1-emqx。该版本修复了在导出的指标中指标时间戳无效的问题。
 
-- [#11861](https://github.com/emqx/emqx/pull/11861) 修复了在远程控制台 shell 中打印过多警告信息的问题。
-
+- [#11861](https://github.com/emqx/emqx/pull/11861) 修复了 remote shell 中打印过多警告信息的问题。
 
 - [#11722](https://github.com/emqx/emqx/pull/11722) 修复了同步请求模式下的 Kafka 生产者桥接在`正在连接`状态下无法缓存消息的问题。
 - [#11724](https://github.com/emqx/emqx/pull/11724) 修复了一个与统计指标相关的问题，即消息发送到 Kafka 时，由于内部缓存、即使后来被成功传输，仍然被计为发送失败。
@@ -51,8 +42,8 @@
   - 自动转义过滤字符串中的特殊字符。
   - 修复了先前阻止使用 `dn` 作为过滤值的错误。
 - [#11733](https://github.com/emqx/emqx/pull/11733) 解决了一个不兼容性问题，该问题导致在会话接管或通道驱逐时，如果会话位于运行 EMQX v5.2.x 或更早版本的远程节点上，可能会导致崩溃。
-- [#11750](https://github.com/emqx/emqx/pull/11750) 在使用 HTTP 服务进行认证和 HTTP 服务数据桥接中取消了对 HTTP 请求体的日志记录和追踪。
-- [#11760](https://github.com/emqx/emqx/pull/11760) 简化了用于 Cassandra 数据桥接健康检查的 CQL 查询，之前该查询在 Cassandra 服务器日志中生成了警告。 
+- [#11750](https://github.com/emqx/emqx/pull/11750) 日志不再输出使用 HTTP 服务进行认证和 HTTP 服务数据桥接的请求 Body。
+- [#11760](https://github.com/emqx/emqx/pull/11760) 简化了用于 Cassandra 数据桥接健康检查的 CQL 查询，之前该查询在 Cassandra 服务器日志中生成了警告。
 
 ## e5.3.0
 
