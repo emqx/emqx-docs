@@ -1,21 +1,45 @@
 # 创建与管理集群
 
-EMQX 支持手动创建集群，也支持通过多种方式自动集群，本章节将指导您使用不同的方式创建并管理 EMQX 集群。
+EMQX 支持手动创建集群，也支持通过多种方式自动集群。本页将为您介绍手动和自动集群方式并指导您使用这两种不同的方式创建并管理 EMQX 集群。
 
-## 前置条件
+## 手动与自动集群简介
 
-在开始创建集群之前，您需要了解以下基本概念：
+节点发现是创建集群的必要过程，它允许单个 EMQX 节点发现对方并互相通信，无论其位置或 IP 地址如何。根据节点发现的方式，我们可以将创建集群的方式分为手动与自动集群。
+
+EMQX 支持基于 [Ekka](https://github.com/emqx/ekka) 库自动创建集群。Ekka 是为 Erlang/OTP 应用开发的集群管理库，实现了 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、 网络分区自动愈合 (Network Partition Autoheal)、自动删除宕机节点 (Autoclean) 等功能。
+
+| 方式      | 说明                                                         |
+| --------- | ------------------------------------------------------------ |
+| manual    | 手动命令创建集群                                             |
+| static    | 静态节点列表自动集群                                         |
+| multicast | 采用 UDP 组播模式的自动群集<br />注意：5.0 之前版本中的组播模式发现策略已被废弃，在未来的版本中会被删除。 |
+| DNS       | DNS A 记录自动集群                                           |
+| etcd      | 通过 etcd 自动集群                                           |
+| K8s       | Kubernetes 服务自动集群                                      |
+
+EMQX 默认配置为手动创建集群，您可以通过 `emqx.conf` 配置文件配置节点发现策略：
+
+```bash
+cluster {
+    ## 可选 manual | static | dns | etcd | K8s
+    discovery_strategy  =  manual
+}
+```
+
+## 前置准备
+
+在开始创建集群之前，首先需要了解以下基本概念：
 
 - [分布式集群](./introduction.md)
 - [部署架构与集群要求](./mria-introduction.md)
 
-需要检查网络环境与节点配置：
+您还需要检查网络环境与节点配置：
 
 - **网络环境配置**：确保节点之间的网络连接正常。如果节点之间存在防火墙或安全组，需要开放[集群内通信端口](./security.md)。
 - **节点名设置**：为每个节点设置唯一的节点名，节点名的格式应为 `name@host`，其中 host 必须是其他节点可以访问的 IP 地址或 FQDN（主机名或域名）。
 - **节点 Cookie 设置**：所有节点必须使用相同的 Cookie 值，请修改默认的 Cookie 值以确保安全。
 
-:::tip
+::: tip
 集群一经创建，节点名是不可变的，因为数据数据库和数据文件都与之相关。即使网络环境提供静态 IP 的情况下，也强烈建议使用静态 FQDN 作为 EMQX 节点名。
 :::
 
@@ -211,31 +235,7 @@ Cluster status: #{running_nodes =>
 
 如需退出集群请参考[退出集群](#退出集群)。
 
-至此，您已经完成了一个简单的集群创建过程，接下来可以按照本章节的内容选择您需要的集群创建方式进行修改部署。
-
-## 手动与自动集群介绍
-
-节点发现是创建集群的必要过程，它允许单个 EMQX 节点发现对方并互相通信，无论其位置或 IP 地址如何。根据节点发现的方式，我们可以将创建集群的方式分为手动与自动集群。
-
-EMQX 支持基于 [Ekka](https://github.com/emqx/ekka) 库自动创建集群。Ekka 是为 Erlang/OTP 应用开发的集群管理库，实现了 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、 网络分区自动愈合 (Network Partition Autoheal)、自动删除宕机节点 (Autoclean) 等功能。
-
-| 方式      | 说明                                                                                                      |
-| --------- | --------------------------------------------------------------------------------------------------------- |
-| manual    | 手动命令创建集群                                                                                          |
-| static    | 静态节点列表自动集群                                                                                      |
-| multicast | 采用 UDP 组播模式的自动群集<br />注意：5.0 之前版本中的组播模式发现策略已被废弃，在未来的版本中会被删除。 |
-| DNS       | DNS A 记录自动集群                                                                                        |
-| etcd      | 通过 etcd 自动集群                                                                                        |
-| K8s       | Kubernetes 服务自动集群                                                                                   |
-
-EMQX 默认配置为手动创建集群，您可以通过 `emqx.conf` 配置文件配置节点发现策略：
-
-```bash
-cluster {
-    ## 可选 manual | static | dns | etcd | K8s
-    discovery_strategy  =  manual
-}
-```
+至此，您已经完成了一个简单的集群创建过程，接下来可以按照以下章节的内容选择您需要的集群创建方式进行修改部署。
 
 ## 手动创建集群
 
@@ -279,7 +279,7 @@ cluster {
 
    ```bash
    $ ./bin/emqx ctl cluster status
-
+   
    Cluster status: [{running_nodes,['emqx@node1.emqx.com','emqx@node2.emqx.com']}]
    ```
 
