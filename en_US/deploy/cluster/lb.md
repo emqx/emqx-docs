@@ -11,10 +11,16 @@ This chapter introduces how to configure LB in EMQX.
 
 ## Architecture
 
+This section introduces three different load balancer deployment architectures.
+
+### TCP Load Balancer
+
 For an EMQX cluster configured with LB, the LB handles the incoming TCP traffic and then distributes the received MQTT connection requests and messages to different EMQX nodes. The typical deployment architecture is as follows:
 
 
 <img src="./assets/lb_2.png" alt="TLS termination" style="zoom:45%;" />
+
+### TLS Termination and Load Balancer
 
 If SSL/TLS is enabled, it is recommended to terminate the SSL/TLS connection at LB, that is, to use SSL/TLS to secure the connection between clients and LB and then use TCP connection between LB and EMQX nodes, maximizing the performance of the EMQX cluster. The architecture is as follows:
 
@@ -22,30 +28,51 @@ If SSL/TLS is enabled, it is recommended to terminate the SSL/TLS connection at 
 
 <img src="./assets/lb_3.png" alt="image" style="zoom:50%;" />
 
-:::tip
+### Hybrid Deployment
 
-You can also use DNS polling for load balancing for test or development purposes. 
+If you want to use a cloud service provider's LB as the connection and load balancing layer but it does not support TLS termination or lacks certain TLS features (such as proxy protocol), you can select a hybrid deployment architecture: deploy HAProxy or Nginx in front of EMQX to terminate SSL/TLS connections.
 
-:::
+Compared to directly using EMQX to handle TLS connections, this approach can get greater performance benefits. The deployment architecture is as follows:
+
+<img src="./assets/lb_6.png" alt="EMQX Load Balancing Hybrid Deployment" style="zoom:33%;" />
+
+In addition to load balancing deployment clusters, you can also use DNS round-robin to connect directly to the EMQX cluster, which involves adding all nodes to the DNS round-robin list. Devices access the cluster via domain names or IP address lists. However, it is generally not recommended to use DNS round-robin for production environments.
+
+## Real IP and Proxy Protocol
+
+After deploying LB, EMQX typically needs to obtain the actual source IP of the client or TLS certificate information. You will need to enable [Proxy Protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol) configuration on the LB or enable relevant configurations to retrieve the real IP.
+
+If Proxy Protocol is enabled on the LB, the `proxy_protocol` configuration option must also be enabled on the corresponding listener in EMQX. For example, for a TCP 1883 listener, you can add the following configuration in `etc/emqx.conf`:
+
+```bash
+listeners.tcp.default {
+  bind = "0.0.0.0:1883"
+  max_connections = 1024000
+
+  proxy_protocol = true
+}
+```
+
+For information on enabling Proxy Protocol on your LB, refer to the respective documentation for your LB. Some LB products do not support Proxy Protocol but still allow the backend service to obtain the actual client IP. Configure accordingly based on the specific requirements of your LB and cloud service provider.
 
 ## Select an LB Product
 
-Many load-balancing products are currently available, including open-source and commercial editions, and public cloud providers also have their load-balancing services.
+Many LB products are currently available, including open-source and commercial editions, and public cloud providers also have their load-balancing services.
 
-LB products for public cloud:
+LB products for the public cloud:
 
-| Cloud provider                            | SSL Termination | LB Product                                                  |
-| ----------------------------------------- | --------------- | ----------------------------------------------------------- |
-| [AWS](https://aws.amazon.com)             | Yes             | <https://aws.amazon.com/elasticloadbalancing/?nc1=h_ls>     |
-| [Azure](https://azure.microsoft.com)      | Unknown         | <https://azure.microsoft.com/en-us/products/load-balancer/> |
-| [Google Cloud](https://cloud.google.com/) | Yes             | <https://cloud.google.com/load-balancing>                   |
+| Cloud provider                            | SSL Termination | Support Proxy Protocol | LB Product                                                  |
+| ----------------------------------------- | --------------- | ---------------------- | ----------------------------------------------------------- |
+| [AWS](https://aws.amazon.com)             | Yes             | Yes                    | <https://aws.amazon.com/elasticloadbalancing/?nc1=h_ls>     |
+| [Azure](https://azure.microsoft.com)      | Unknown         | Unknown                | <https://azure.microsoft.com/en-us/products/load-balancer/> |
+| [Google Cloud](https://cloud.google.com/) | Yes             | Yes                    | <https://cloud.google.com/load-balancing>                   |
 
  LB products for private cloud:
 
-| Open-Source LB                     | SSL Termination | DOC/URL                                                 |
-| ---------------------------------- | --------------- | ------------------------------------------------------- |
-| [HAProxy](https://www.haproxy.org) | Yes             | <https://www.haproxy.com/solutions/load-balancing.html> |
-| [NGINX](https://www.nginx.com)     | Yes             | <https://www.nginx.com/solutions/load-balancing/>       |
+| Open-Source LB                     | SSL Termination | Support Proxy Protocol | DOC/URL                                                 |
+| ---------------------------------- | --------------- | ---------------------- | ------------------------------------------------------- |
+| [HAProxy](https://www.haproxy.org) | Yes             | Yes                    | <https://www.haproxy.com/solutions/load-balancing.html> |
+| [NGINX](https://www.nginx.com)     | Yes             | Yes                    | <https://www.nginx.com/solutions/load-balancing/>       |
 
 The following two pages will use a privately deployed LB server as an example to introduce how to configure and load balance an EMQX cluster:
 

@@ -180,6 +180,15 @@ You can use the following configuration to have HAProxy reverse proxy MQTT and d
 
 Simply add SSL and certificate-related parameters to the basic TCP configuration:
 
+:::tip Tip
+HAProxy's certificate file needs to include both the certificate and the key, and you can use the `cat` command to merge them into one file.
+
+```bash
+cat server.crt server.key > server.pem
+```
+
+:::
+
 ```bash
 backend mqtt_backend
   mode tcp
@@ -221,6 +230,15 @@ frontend mqtt_ws_frontend
 You can use the following configuration to have HAProxy reverse proxy MQTT WebSocket connections and decrypt TLS connections, forwarding encrypted MQTT requests from clients to backend MQTT servers to ensure communication security. Specify the HTTP domain name or IP address using `server_name`.
 
 Simply add SSL and certificate-related parameters to the basic WebSocket configuration:
+
+:::tip Tip
+HAProxy's certificate file needs to include both the certificate and the key, and you can use the `cat` command to merge them into one file.
+
+```bash
+cat server.crt server.key > server.pem
+```
+
+:::
 
 ```bash
 backend mqtt_ws_backend
