@@ -91,13 +91,60 @@ The following section will use EMQX [public MQTT broker](https://www.emqx.com/en
        
      - **Local MQTT Broker**: Forward the received messages to specific local topics or leave them blank, then these messages will first be processed by the configured rules and then forwarded with the [republish action](./rules.md).
        - **Topic**: Input `local/topic/ingress`.
+       
        - **QoS**: Select `0` or `${qos}` (to use the QoS of the received messages).
+       
        - **Retain**: Confirm whether the message will be published as a retained message.
-       - **Payload**: Payload template for the messages to be forwarded, and supports reading data using `${field}` syntax.
-     
+       
+       - **Payload**: Payload template for the messages to be forwarded, and supports reading data using `${field}` syntax. The supported fields are as follows:
+       
+         | Field Name                    | Description                                                  |
+         | ----------------------------- | ------------------------------------------------------------ |
+         | topic                         | The topic of the source message                              |
+         | server                        | The server address to which the data bridge is connected     |
+         | retain                        | Whether to be published as a retain the message, with a value of false |
+         | qos                           | Message Service Quality                                      |
+         | pub_props                     | MQTT 5.0 message properties object, including user property pairs, user properties, and other properties |
+         | pub_props.User-Property-Pairs | Array of user property pairs, each containing key-value pairs, for example, `{"key":"foo", "value":"bar"}` |
+         | pub_props.User-Property       | User property object, containing key-value pairs, for example, `{"foo":"bar"}` |
+         | pub_props.*                   | Other message property key-value pairs, for example, `Content-Type: JSON` |
+         | payload                       | Message content                                              |
+         | message_received_at           | Message received timestamp in milliseconds                   |
+         | id                            | Message ID                                                   |
+         | dup                           | Whether it is a duplicate message                            |
+       
+         For example, when the message template is left blank, the following message will be published:
+       
+         ```json
+         {
+           "topic": "f/1",
+           "server": "broker.emqx.io:1883",
+           "retain": false,
+           "qos": 0,
+           "pub_props": {
+               "User-Property-Pairs": [
+                   {
+                       "value": "bar",
+                       "key": "foo"
+                   }
+               ],
+               "User-Property": {
+                   "foo": "bar"
+               },
+               "Message-Expiry-Interval": 3600,
+               "Content-Type": "JSON"
+           },
+           "payload": "Hello MQTTX CLI",
+           "message_received_at": 1699603701552,
+           "id": "000609C7D2E3D556F445000010E4000C",
+           "dup": false
+         }
+         ```
+       
      - **Connection Pool Size**: Specifies the size of the pool of MQTT client connections to the local broker. In this example, you can set `8`. This is safe as long as shared subscription is used for the remote topic.
      
    - **Egress** (optional): Set the rules to publish messages from specific local MQTT topics to remote MQTT brokers. In this example, you publish the messages from `local/topic/egress` to `remote/topic/egress`:
+   
    - **Local MQTT Broker**: Specify the local message topics.
        - **Topic**: Input `local/topic/egress`.
      
