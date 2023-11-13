@@ -72,7 +72,7 @@ node {
   name = "emqx@127.0.0.1"
   cookie = "mysecret"
   cluster_call {
-    retry_interval  =  1m
+    retry_interval = "1m"
   }
 }
 ```
@@ -189,10 +189,10 @@ The packet size limit was first set to 1MB, then overridden to 10MB:
 ```bash
 zone {
   zone1 {
-    mqtt.max_packet_size = 1M
+    mqtt.max_packet_size = "1M"
   }
 }
-zone.zone1.mqtt.max_packet_size = 10M
+zone.zone1.mqtt.max_packet_size = "10M"
 ```
 
 ### List Element Override
@@ -256,7 +256,7 @@ The configuration document you are reading now is generated from schema metadata
 
 ### Primitive Data Types
 
-Complex types define data 'boxes' which may contain other complex data or primitive values. There are quite some different primitive types, to name a few:
+There are quite some different primitive types, to name a few:
 
 - `atom()`.
 - `boolean()`.
@@ -265,7 +265,6 @@ Complex types define data 'boxes' which may contain other complex data or primit
 - `float()`.
 - `number()`.
 - `binary()`, another format of string().
-- `emqx_schema:duration()`, time duration, another format of integer()
 - ...
 
 ::: tip Tip 
@@ -274,9 +273,25 @@ The primitive types are mostly self-describing, so there is usually not a lot to
 
 :::
 
+### Specialized Data Types
+
+Specialized types are essentially primitive types with additional meaning that is reflected in their names, validation rules, and descriptions.
+
+* `duration` (`duration_s` / `duration_ms`)
+
+    A string that represents a time duration, for example: `10s`, `2.5m`, `1h30m`, `2345ms`, `1W2D`. When precision is specified, finer portions of the duration may be ignored: writing `1200ms` for `duration_s` is equivalent to writing `1s`. It doesn't matter if units are in upper or lower case.
+
+* `bytesize`
+
+    A string that represents a number of bytes, for example: `10B`, `640kb`, `4MB`, `1GB`. Units are interpreted as powers of 1024, and the unit part is case-insensitive.
+
+* `secret`
+
+    A string holding some sensitive information, such as a password. When secret starts with `file://`, the rest of the string is interpreted as a path to a file containing the secret itself: whole content of the file except any trailing whitespace characters is considered a secret value.
+
 ### Complex Data Types
 
-There are 4 complex data types in EMQX's HOCON config:
+Complex types define data 'boxes' which may contain other complex data, primitive or specialized values. There are 4 complex data types in EMQX's HOCON config:
 
 1. Struct: Named using an unquoted string, followed by a predefined list of fields. Only lowercase letters and digits are allowed in struct and field names. Also, only underscore can be used as a word separator.
 2. Map: Map is like Struct, however, the fields are not predefined.
