@@ -72,7 +72,7 @@
 
 ### 修复
 
-- [#11682](https://github.com/emqx/emqx/pull/11682) 修复了在文件日志处理程序上将“旋转大小”设置为`infinity`时日志记录停止的问题。
+- [#11682](https://github.com/emqx/emqx/pull/11682) 修复了在文件日志处理程序上将“轮换大小”设置为`infinity`时日志记录停止的问题。
 
 - [#11567](https://github.com/emqx/emqx/pull/11567) 改进了 EMQX 的优雅关闭（`emqx stop` 命令）：
 
