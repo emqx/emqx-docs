@@ -38,7 +38,6 @@
 
 - [#11861](https://github.com/emqx/emqx/pull/11861) Fixed excessive warning message printed in remote console shell.
 
-
 - [#11722](https://github.com/emqx/emqx/pull/11722) Fixed an issue where a Kafka Producer bridge with `sync` query mode would not buffer messages when in the `connecting` state.
 - [#11724](https://github.com/emqx/emqx/pull/11724) Fixed a metrics-related issue where messages sent to Kafka would be counted as failed even when they were successfully transmitted afterward due to internal buffering.
 - [#11728](https://github.com/emqx/emqx/pull/11728) Enhanced the LDAP filter string parser with the following improvements:
@@ -48,6 +47,11 @@
 - [#11750](https://github.com/emqx/emqx/pull/11750) Eliminated logging and tracing of HTTP request bodies in HTTP authentification and HTTP bridges.
 - [#11760](https://github.com/emqx/emqx/pull/11760) Simplified the CQL query used for the Cassandra bridge health check, which was previously generating warnings in the Cassandra server logs.
 
+- [#11886](https://github.com/emqx/emqx/pull/11886) Fixed backward plugin compatibility.
+
+  Currently, EMQX validates hookpoint names, so invalid hookspoints cannot be used for registering hooks. However, older versions of plugin templates used some misspelled hookpoints, and so could the real plugins. We allow the old hookpoints to be used for registering hooks, but issue a warning that they are deprecated. As before, these hooks are never called.
+
+- [#11897](https://github.com/emqx/emqx/pull/11897) Fix config sync wait-loop race condition when cluster nodes boot around the same time.
 
 ## e5.3.0
 
