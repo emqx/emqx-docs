@@ -51,7 +51,7 @@
 
   Currently, EMQX validates hook point names, and invalid hook points cannot be used for hook registration. However, some older versions of plugin templates used misspelled hook points, and actual plugins in use may also have this issue. To maintain compatibility with these older plugins, we allow the use of the old hook points for hook registration, but we issue deprecated warnings for them. As before, these hooks will not be called.
 
-- [#11897](https://github.com/emqx/emqx/pull/11897) Fix config sync wait-loop race condition when cluster nodes boot around the same time.
+- [#11897](https://github.com/emqx/emqx/pull/11897) Fixed the issue of waiting for a loop race condition during node configuration synchronization when cluster nodes are started approximately at the same time.
 
 ## e5.3.0
 
