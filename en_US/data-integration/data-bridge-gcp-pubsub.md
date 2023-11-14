@@ -1,32 +1,48 @@
 # Ingest MQTT Data into GCP Pub/Sub
 
-EMQX supports seamless integration with [Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=en-us) for real-time extraction, processing, and analysis of MQTT data. Additionally, it enables data push and subscription to various Google Cloud services such as Cloud Functions, App Engine, Cloud Run, Kubernetes Engine, and Compute Engine.
-
-EMQX GCP Pub/Sub integration allows you to send MQTT messages and events to GCP Pub/Sub, which can help you flexibly choose services on Google Cloud and build IoT applications more easily.
-
 {% emqxce %}
 :::tip
 EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 :::
 {% endemqxce %}
 
-:::tip Prerequisites
+[Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=en-us) is an asynchronous messaging service designed to achieve extremely high reliability and scalability. EMQX supports seamless integration with Google Cloud Pub/Sub for real-time extraction, processing, and analysis of MQTT data. It can push data to various Google Cloud services such as Cloud Functions, App Engine, Cloud Run, Kubernetes Engine, and Compute Engine. Alternatively, it can also distribute data from Google Cloud to MQTT, helping users rapidly build IoT applications on GCP.
+
+This page provides a comprehensive introduction to the data integration between EMQX and GCP Pub/Sub with practical instructions on creating and validating the data integration.
+
+## How It Works
+
+GCP Pub/Sub data bridge is an out-of-the-box feature of EMQX designed to help users seamlessly integrate MQTT data streams with Google Cloud and leverage its rich services and capabilities for IoT application development.
+
+![GCP_bridge_architect](./assets/gcp_pubsub/GCP_bridge_architect.png)
+
+EMQX forwards MQTT data to GCP Pub/Sub through the rule engine and data bridging. Taking the example of a GCP Pub/Sub producer role, the complete process is as follows:
+
+1. **IoT Devices Publish Messages**: Devices publish telemetry and status data through specific topics, triggering the rule engine.
+2. **Rule Engine Processes Messages**: Using the built-in rule engine, MQTT messages from specific sources are processed based on topic matching. The rule engine matches corresponding rules and processes messages, such as converting data formats, filtering specific information, or enriching messages with contextual information.
+3. **Bridging to GCP Pub/Sub**: The rule triggers the action of forwarding messages to GCP Pub/Sub, allowing easy configuration of data properties, ordering keys, and mapping of MQTT topics to GCP Pub/Sub topics. This provides richer context information and order assurance for data integration, enabling flexible IoT data processing.
+
+After MQTT message data is written to GCP Pub/Sub, you can perform flexible application development, such as:
+
+- Real-time Data Processing and Analysis: Utilize powerful Google Cloud data processing and analysis tools like Dataflow, BigQuery, and Pub/Sub's own streaming capabilities to perform real-time processing and analysis of message data, obtaining valuable insights and decision support.
+- Event-Driven Functionality: Trigger Google Cloud event handling, such as Cloud Functions and Cloud Run, to achieve dynamic and flexible function triggering and processing.
+- Data Storage and Sharing: Transmit message data to Google Cloud storage services like Cloud Storage and Firestore for secure storage and management of large volumes of data. This allows you to share and analyze this data with other Google Cloud services to meet various business needs.
+
+## Features and Benefits
+
+The data integration with IoTDB offers a range of features and benefits:
+
+- 
+- 
+
+## Before You Start
+
+This section describes the preparations you need to complete before you start to create the GCP Pub/Sub data bridges.
+
+### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
-
-:::
-
-## Feature List
-
-- [Connection pool](./data-bridges.md#connection-pool)
-- [Async mode](./data-bridges.md#async-mode)
-- [Batch mode](./data-bridges.md#batch-mode)
-- [Buffer queue](./data-bridges.md#buffer-queue)
-
-## Quick Start Tutorial
-
-This section introduces how to configure the GCP Pub/Sub data bridge, including how to set up the GCP service, create data bridges and rules for forwarding data to GCP and test the data bridges and rules.
 
 ### Create Service Account Key in GCP
 
@@ -75,7 +91,7 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
    <img src="./assets/gcp_pubsub/subscriptions-id-pull.png" alt="subscriptions-id-pull" style="zoom:50%;" />
 
-### Create a GCP Pub/Sub Bridge
+## Create a GCP Pub/Sub Bridge
 
 1. Go to EMQX Dashboard, click **Integration** -> **Data Bridge**.
 
@@ -147,7 +163,7 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
     A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into GCP PubSub. You can also create rules by following the steps in [Create Rules for GCP PubSub Data Bridge](#create-rules-for-GCP-PubSub-data-bridge).
 
-### Create a Rule for GCP PubSub Producer Data Bridge
+## Create a Rule for GCP PubSub Producer Data Bridge
 
 You can continue to create rules to specify the data to be saved into GCP PubSub.
 
@@ -174,7 +190,7 @@ You can continue to create rules to specify the data to be saved into GCP PubSub
 
 Now a rule to forward data to GCP PubSub via a GCP PubSub bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `/devices/+/events` are sent and saved to GCP PubSub after parsing by rule `my_rule`.
 
-### Test the Data Bridge and Rule
+## Test Data Bridge and Rule
 
 1. Use MQTTX to send messages on the topic `/devices/+/events`.
 
