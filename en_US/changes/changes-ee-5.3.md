@@ -49,7 +49,7 @@
 
 - [#11886](https://github.com/emqx/emqx/pull/11886) Fixed backward plugin compatibility.
 
-  Currently, EMQX validates hookpoint names, so invalid hookspoints cannot be used for registering hooks. However, older versions of plugin templates used some misspelled hookpoints, and so could the real plugins. We allow the old hookpoints to be used for registering hooks, but issue a warning that they are deprecated. As before, these hooks are never called.
+  Currently, EMQX validates hook point names, and invalid hook points cannot be used for hook registration. However, some older versions of plugin templates used misspelled hook points, and actual plugins in use may also have this issue. To maintain compatibility with these older plugins, we allow the use of the old hook points for hook registration, but we issue deprecated warnings for them. As before, these hooks will not be called.
 
 - [#11897](https://github.com/emqx/emqx/pull/11897) Fix config sync wait-loop race condition when cluster nodes boot around the same time.
 
