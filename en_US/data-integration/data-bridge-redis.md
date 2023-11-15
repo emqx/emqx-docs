@@ -1,42 +1,46 @@
 # Ingest MQTT Data into Redis
 
-EMQX supports integration with Redis so you can save MQTT messages and client events to Redis. With Redis data bridge, you can use Redis for message caching and statistics of published/subscribed/discarded messages.
-
 {% emqxce %}
 :::tip
 EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 :::
 {% endemqxce %}
 
-<!-- TODO 确认是否支持数据发布订阅操作、消息队列等场景。 -->
+[Redis](https://redis.io/) is an open-source, in-memory data store used by millions of developers as a database, cache, streaming engine, and message broker. EMQX supports integration with Redis so you can save MQTT messages and client events to Redis. With Redis data bridge, you can use Redis for message caching and statistics of published/subscribed/discarded messages.
 
-:::tip Prerequisites
+This page provides a comprehensive introduction to the data integration between EMQX and Redis with practical instructions on creating a rule and data bridge.
+
+## How It Works
+
+Redis data integration is an out-of-the-box feature in EMQX designed to bridge the gap between MQTT-based IoT data and Redis's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to Redis for storage and management, eliminating the need for complex coding.
+
+<!-- The diagram below illustrates a typical architecture of data integration between EMQX and Redis. -->
+
+Ingesting MQTT data into Redis works as follows:
+
+1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to Redis. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
+3. **Data ingestion into Redis**: Once the rule engine identifies a message for Redis storage, it triggers an action of forwarding the messages to Redis. Processed data will be seamlessly written into the collection of the Redis database.
+4. **Data Storage and Utilization**: With the data now stored in Redis, businesses can harness its querying power for various use cases. For instance, in logistics and supply chain management fields, data from IoT devices such as GPS trackers, temperature sensors, and inventory management systems can be monitored and analyzed for real-time tracking, route optimization, demand forecasting, and efficient inventory management.
+
+## Features and Benefits
+
+The data integration with Redis offers a range of features and benefits tailored to ensure efficient data transmission, storage, and utilization:
+
+- **Real-time Data Streaming**: EMQX is built for handling real-time data streams, ensuring efficient and reliable data transmission from source systems to Redis. It enables organizations to capture and analyze data in real-time, making it ideal for use cases requiring immediate insights and actions.
+- **High Performance and Scalability**: EMQX's distributed architecture and Redis's columnar storage format enable seamless scalability as data volumes increase. This ensures consistent performance and responsiveness, even with large datasets.
+- **Flexibility in Data Transformation:** EMQX provides a powerful SQL-based Rule Engine, allowing organizations to pre-process data before storing it in Redis. It supports various data transformation mechanisms, such as filtering, routing, aggregation, and enrichment, enabling organizations to shape the data according to their needs.
+- **Easy Deployment and Management:** EMQX provides a user-friendly interface for configuring data sources, pre-processing data rules, and Redis storage settings. This simplifies the setup and ongoing management of the data integration process.
+- **Advanced Analytics:** Redis's powerful SQL-based query language and support for complex analytical functions empower users to gain valuable insights from IoT data, enabling predictive analytics, anomaly detection, and more.
+
+## Before You Start
+
+This section describes the preparations you need to complete before you start to create the Redis data bridges, including how to set up the Redis server.
+
+### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
-
-:::
-
-
-## Feature List
-
-- [Connection pool](./data-bridges.md#connection-pool)
-- [Batch mode](./data-bridges.md#batch-mode)
-- [Async mode](./data-bridges.md#async-mode)
-- [Buffer queue](./data-bridges.md#buffer-queue)
-
-<!-- TODO 配置参数 需要补充链接到配置手册对应配置章节。 -->
-
-## Quick Start Tutorial
-
-This section introduces how to configure the Redis data bridges to:
-
-- Cache the last message of every client.
-- Collect the message discard statistics.
-
-The covering topics include how to set up the Redis server, create data bridges and rules for forwarding data to TDengine and test the data bridges and rules.
-
-This tutorial assumes that you run both EMQX and Redis on the local machine. If you have Redis and EMQX running remotely, adjust the settings accordingly.
 
 ### Install Redis Server
 
@@ -64,6 +68,13 @@ OK
 Now you have successfully installed Redis and verified the installation with the `SET` and `GET` commands. For more Redis commands, see [Redis Commands](https://redis.io/commands/).
 
 ### Create Redis Data Bridge
+
+This section introduces how to configure the Redis data bridges to:
+
+- Cache the last message of every client.
+- Collect the message discard statistics.
+
+It assumes that you run both EMQX and Redis on the local machine. If you have Redis and EMQX running remotely, adjust the settings accordingly.
 
 You need to create 2 separate Redis data bridges for the messaging caching and statistics features. Follow the same connection configurations for both data bridges types, but you need to configure different **Redis Command Template** in the specific configuration step.
 

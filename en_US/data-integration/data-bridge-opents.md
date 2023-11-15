@@ -1,46 +1,48 @@
 # Ingest MQTT Data into OpenTSDB
 
-EMQX supports integration with OpenTSDB. You can save MQTT messages to OpenTSDB for subsequent analysis and retrieval.
-
 {% emqxce %}
 :::tip
 EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 :::
 {% endemqxce %}
 
-::: tip Prerequisites
+[OpenTSDB](http://opentsdb.net/) is a scalable, distributed time series database. EMQX supports integration with OpenTSDB. You can save MQTT messages to OpenTSDB for subsequent analysis and retrieval.
+
+This page provides a comprehensive introduction to the data integration between EMQX and OpenTSDB with practical instructions on creating a rule and data bridge.
+
+## How It Works
+
+OpenTSDB data integration is an out-of-the-box feature in EMQX that combines EMQX's real-time data capturing and transmission capabilities with OpenTSDB's data storage and analysis functionality. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to OpenTSDB for storage and analysis, eliminating the need for complex coding.
+
+EMQX forwards device data to OpenTSDB through the rule engine and data bridge. OpenTSDB analyzes the data using SQL statements, generates reports, charts, and other data analysis results, and presents them to users through OpenTSDB's visualization tools. The workflow is as follows:
+
+1. **Message publication and reception**: IoT devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol, including information such as power consumption, input/output power, etc. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+2. **Message data processing**: Using the built-in rule engine, messages from specific sources can be processed based on topic matching. When a message arrives, it passes through the rule engine, which matches it with the corresponding rule and processes the message data, such as transforming data formats, filtering specific information, or enriching messages with contextual information.
+3. **Data ingestion into OpenTSDB**: Rules defined in the rule engine trigger the operation of writing messages to OpenTSDB. The OpenTSDB data bridge provides SQL templates that allow flexible definitions of the data format to be written, mapping specific fields from the message to the corresponding tables and columns in OpenTSDB.
+
+After data is written to OpenTSDB, you can use SQL statements flexibly to analyze the data, for example:
+
+- Connect to visualization tools like Grafana to generate charts based on the data, displaying energy storage data.
+- Connect to business systems for monitoring and alerting on the status of energy storage devices.
+
+## Features and Benefits
+
+The OpenTSDB data integration offers the following features and advantages:
+
+- **Efficient Data Processing**: EMQX can handle a massive number of IoT device connections and message throughput, while OpenTSDB excels in data writing, storage, and querying, providing outstanding performance to meet the data processing needs of IoT scenarios without overburdening the system.
+- **Message Transformation**: Messages can undergo extensive processing and transformation through EMQX rules before being written into OpenTSDB.
+- **Scalability**: Both EMQX and OpenTSDB are capable of cluster scaling, allowing flexible horizontal expansion of clusters as business needs grow.
+- **Rich Query Capabilities**: OpenTSDB offers optimized functions, operators, and indexing techniques, enabling efficient querying and analysis of timestamped data, and accurately extracting valuable insights from IoT time-series data.
+- **Efficient Storage**: OpenTSDB uses encoding methods with high compression ratios, significantly reducing storage costs. It also allows customization of storage durations for different data types to avoid unnecessary data occupying storage space.
+
+## Before You Start
+
+This section describes the preparations you need to complete before you start to create the OpenTSDB data bridges, including how to set up the OpenTSDB server.
+
+### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
-
-:::
-
-## Features List
-
-- [Connection pool](./data-bridges.md#connection-pool)
-- [Async mode](./data-bridges.md#async-mode)
-- [Batch mode](./data-bridges.md#batch-mode)
-- [Buffer queue](./data-bridges.md#buffer-queue)
-- [SQL preprocessing](./data-bridges.md#prepared-statement)
-
-## Quick Start Tutorial
-
-This section introduces how to configure the OpenTSDB data bridge, covering topics like how to set up the OpenTSDB server, create data bridges and rules for forwarding data to OpenTSDB and test the data bridges and rules.
-
-This tutorial assumes that you run both EMQX and OpenTSDB on the local machine. If you have OpenTSDB and EMQX running remotely, adjust the settings accordingly.
-
-The data reported by the client in this tutorial is as follows:
-- Topic: `t/opents`
-- Payload:
-```json
-{
-  "metric": "cpu",
-  "tags": {
-    "host": "serverA"
-  },
-  "value":12
-}
-```
 
 ### Install OpenTSDB
 
@@ -53,7 +55,24 @@ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
 
 ```
 
-### Create OpenTSDB Data Bridge
+The data reported by the client in this tutorial is as follows:
+
+- Topic: `t/opents`
+- Payload:
+
+```json
+{
+  "metric": "cpu",
+  "tags": {
+    "host": "serverA"
+  },
+  "value":12
+}
+```
+
+## Create OpenTSDB Data Bridge
+
+This section demonstrates how to create an OpenTSDB data bridge in EMQX Dashboard. It assumes that you run both EMQX and OpenTSDB on the local machine. If you have OpenTSDB and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
@@ -78,7 +97,7 @@ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
 
 Now the OpenTSDB data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
 
-### Create Rules for OpenTSDB Data Bridge
+## Create Rules for OpenTSDB Data Bridge
 
 Now that you have successfully created the data bridge to OpenTSDB, you can continue to create rules to specify the data to be saved into OpenTSDB.
 
@@ -102,7 +121,7 @@ Now that you have successfully created the data bridge to OpenTSDB, you can cont
 
 Now you have successfully created the data bridge to OpenTSDB. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to OpenTSDB after parsing by rule `my_rule`. 
 
-### Test the Data Bridges and Rules
+## Test Data Bridges and Rules
 
 Use MQTTX to publish a message on topic `t/opents`. 
 
