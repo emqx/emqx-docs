@@ -101,7 +101,7 @@ This section demonstrates how to create PostgreSQL data bridges in EMQX Dashboar
 
 You need to create 2 data bridges to PostgreSQL for messages storage and event records respectively. 
 
-#### Message storage
+### Message storage
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
@@ -137,7 +137,7 @@ You need to create 2 data bridges to PostgreSQL for messages storage and event r
 8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the MySQL server.
 9. Then click **Create** to finish the creation of the data bridge.
 
-#### Online/Offline Status Recording
+### Online/Offline Status Recording
 
 The operating steps are similar to those at the [Message Storage](#message-storage) part expect for the SQL template and SQL rules. 
 
@@ -159,7 +159,7 @@ Now the PostgreSQL data bridge should appear in the data bridge list (**Integrat
 
 After you have successfully created the data bridge to PostgreSQL, you can continue to create rules to specify the data to be saved into PostgreSQL and rules for the online/offline status recording. 
 
-#### Message Storage
+### Message Storage
 
 1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
 
@@ -180,7 +180,7 @@ FROM
 5. Then, click the **Add** button. 
 6. Then click the **Create** button to finish the setup. 
 
-#### Online/Offline Status Recording
+### Online/Offline Status Recording
 
 The creating steps are similar to those at the [Message Storage](#message-storage) part except for the SQL rules.
 
