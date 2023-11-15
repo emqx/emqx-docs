@@ -29,7 +29,7 @@ After MQTT message data is written to Apache Pulsar, you can engage in flexible 
 
 ## Features and Benefits
 
-Using Pulsar data bridging in EMQX brings the following features and advantages to your business:
+The data integration with Pulsar brings the following features and advantages to your business:
 
 - **Reliable IoT Data Message Delivery**: EMQX can reliably batch and send MQTT messages to Pulsar, enabling the integration of IoT devices with Pulsar and application systems.
 - **MQTT Message Transformation**: Using the rule engine, EMQX can filter and transform MQTT messages. Messages can undergo data extraction, filtering, enrichment, and transformation before being sent to Pulsar.
