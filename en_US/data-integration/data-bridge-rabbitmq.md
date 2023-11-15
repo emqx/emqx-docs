@@ -1,37 +1,49 @@
 # Ingest MQTT Data into RabbitMQ
 
-[RabbitMQ](https://www.rabbitmq.com/) is a widely used open-source message broker that implements the Advanced Message Queuing Protocol (AMQP). It provides a robust and scalable platform for messaging between distributed systems.
-
-EMQX supports integration with RabbitMQ, allowing you to forward MQTT messages and events to RabbitMQ.
-
 {% emqxce %}
 :::tip
 The RabbitMQ bridge is an EMQX Enterprise Edition feature. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 :::
 {% endemqxce %}
 
-::: tip Prerequisites
+[RabbitMQ](https://www.rabbitmq.com/) is a widely used open-source message broker that implements the Advanced Message Queuing Protocol (AMQP). It provides a robust and scalable platform for messaging between distributed systems. EMQX supports integration with RabbitMQ, allowing you to forward MQTT messages and events to RabbitMQ.
+
+This page provides a comprehensive introduction to the data integration between EMQX and RabbitMQ with practical instructions on creating a rule and data bridge.
+
+## How It Works
+
+The RabbitMQ data integration is an out-of-the-box feature in EMQX designed to bridge the gap between MQTT-based IoT data and RabbitMQ's powerful message queue processing capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to RabbitMQ for storage and management, eliminating the need for complex coding.
+
+<!-- The diagram below illustrates a typical architecture of data integration between EMQX and RabbitMQ. -->
+
+Ingesting MQTT data into RabbitMQ works as follows:
+
+1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to RabbitMQ. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
+3. **Data ingestion into RabbitMQ**: Once the rule engine identifies a message for RabbitMQ storage, it triggers an action of forwarding the messages to RabbitMQ. Processed data will be seamlessly written into RabbitMQ.
+4. **Data Storage and Utilization**: With the data now stored in RabbitMQ, businesses can harness its querying power for various use cases. For instance, in logistics and supply chain management fields, data from IoT devices such as GPS trackers, temperature sensors, and inventory management systems can be monitored and analyzed for real-time tracking, route optimization, demand forecasting, and efficient inventory management.
+
+## Features and Benefits
+
+The data integration with RabbitMQ brings the following features and advantages to your business:
+
+- **Reliable IoT Data Message Delivery**: EMQX can reliably batch and send MQTT messages to RabbitMQ, enabling the integration of IoT devices with RabbitMQ and application systems.
+- **MQTT Message Transformation**: Using the rule engine, EMQX can filter and transform MQTT messages. Messages can undergo data extraction, filtering, enrichment, and transformation before being sent to RabbitMQ.
+- **Flexible Topic Mapping**: RabbitMQ Data Bridge supports flexible mapping of MQTT topics to RabbitMQ topics, allowing easy configuration of keys (Key) and values (Value) for data in RabbitMQ messages.
+- **Flexible Partition Selection**: RabbitMQ Data Bridge can select RabbitMQ partitions based on MQTT topics or clients using different strategies, providing flexibility in organizing and identifying data.
+- **Processing Capabilities in High-Throughput Scenarios**: RabbitMQ Data Bridge supports both synchronous and asynchronous write modes, allowing for a flexible balance between latency and throughput according to different scenarios.
+
+## Before You Start
+
+This section describes the preparations you need to complete before you start to create the RabbitMQ data bridges, including how to create a RabbitMQ server and create RabbitMQ test exchange and queue.
+
+### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 
 - Knowledge about [data bridges](./data-bridges.md)
 
 - Basic knowledge of UNIX terminal and commands
-
-:::
-
-## Feature List
-
-- [Connection pool](./data-bridges.md#connection-pool)
-- [Async mode](./data-bridges.md#async-mode)
-- [Batch mode](./data-bridges.md#batch-mode)
-- [Buffer queue](./data-bridges.md#buffer-queue)
-
-## Quick Start Tutorial
-
-This section introduces how to use the RabbitMQ bridge with a practical tutorial, covering topics like how to create a RabbitMQ server, create RabbitMQ test exchange and queue, create a data bridge and rule for forwarding data to the bridge, and test that it all works.
-
-This tutorial assumes that you run both EMQX and RabbitMQ on the local machine. If you have RabbitMQ and EMQX running remotely, please adjust the settings accordingly.
 
 ### Start a RabbitMQ Server
 
@@ -74,9 +86,9 @@ After the RabbitMQ server is started, you can create a test exchange and a queue
    * **Arguments**: Leave empty
 7. Click the **Bind** button to bind the test queue to the test exchange with the specified routing key.
 
-### Create a RabbitMQ Data Bridge
+## Create a RabbitMQ Data Bridge
 
-This section demonstrates how to create an EMQX data bridge to RabbitMQ in Dashboard.
+This section demonstrates how to create a RabbitMQ data bridge in EMQX Dashboard. It assumes that you run both EMQX and RabbitMQ on the local machine. If you have RabbitMQ and EMQX running remotely, please adjust the settings accordingly.
 
 1. Go to the EMQX Dashboard, and click **Integration -> Data Bridge**.
 
@@ -141,7 +153,7 @@ This section demonstrates how to create an EMQX data bridge to RabbitMQ in Dashb
 
 Now the RabbitMQ data bridge should appear in the data bridge list (**Integration -> Data Bridge**) with **Resource Status** as Connected. You can continue to create a rule to forward data to the new RabbitMQ bridge.
 
-### Create a Rule for RabbitMQ Data Bridge
+## Create a Rule for RabbitMQ Data Bridge
 
 1. Go to the EMQX Dashboard, and click Data **Integration -> Rules**.
 2. Click **Create** on the top right corner of the page.
@@ -162,7 +174,7 @@ Now the RabbitMQ data bridge should appear in the data bridge list (**Integratio
 
 Now a rule to forward data to RabbitMQ via a RabbitMQ bridge is created. You can click **Integration -> Flows** to view the topology. It can be seen that the messages under the topic `t/#` are sent and saved to RabbitMQ.
 
-### Test the Data Bridge and Rule
+## Test Data Bridge and Rule
 
 You can use the built-in WebSocket client in the EMQX dashboard to test our rule and bridge.
 

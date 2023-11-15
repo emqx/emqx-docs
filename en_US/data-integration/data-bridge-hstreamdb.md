@@ -1,6 +1,14 @@
 # Stream MQTT Data into HStreamDB
 
+{% emqxce %}
+:::tip
+EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+:::
+{% endemqxce %}
+
 [HStreamDB](https://hstream.io/) is an open-source streaming data platform that enables you to efficiently ingest, store, process, and distribute all real-time messages, events, and other data streams in one unified platform. Through EMQX's integration with HStreamDB, you can save MQTT messages and client events to HStreamDB, or record the online status or clients' online/offline history by triggering the update or removal of data in HSreamDB through events.
+
+This page provides a comprehensive introduction to the data integration between EMQX and HStreamDB with practical instructions on creating and validating the data integration.
 
 {% emqxee %}
 
@@ -12,34 +20,43 @@ HSreamDB data integration is only supported in EMQX 5.2.0 and above.
 
 {% emqxee %}
 
-{% emqxce %}
-:::tip
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
-:::
-{% endemqxce %}
+## How It Works
 
-::: tip Prerequisites
+Apache HStreamDB data bridge is an out-of-the-box feature of EMQX that combines EMQX's device connectivity and message transmission capabilities with HStreamDB's robust data processing capabilities. With the built-in rule engine component, the data streaming and processing process is simplified between the two platforms. This means that you can easily transmit MQTT data to HStreamDB and leverage HStreamDB's powerful features for data processing without the need for complex coding, making the management and utilization of IoT data more efficient and convenient.
+
+EMQX forwards MQTT data to Apache HStreamDB through the rule engine and configured data bridge, and the complete process is as follows:
+
+1. **Message publication and reception**: IoT devices establish successful connections through the MQTT protocol and subsequently publish telemetry and status data to specific topics. When EMQX receives these messages, it initiates the matching process within its rules engine.
+2. **Rule engine processes messages**: Using the built-in rule engine, MQTT messages from specific sources can be processed based on topic matching. The rule engine matches corresponding rules and processes messages, such as data format conversion, filtering specific information, or enriching messages with context information.
+3. **Data streaming into Apache HStreamDB**: Rule triggers the action of forwarding messages to HStreamDB where data can be easily configured to HStreamDB message key and value. MQTT topics can also be mapped to HStreamDB topics for better data organization and identification, facilitating subsequent data processing and analysis.
+
+After MQTT message data is written to Apache HStreamDB, you can engage in flexible application development, such as:
+
+- Write HStreamDB consumer applications to subscribe and process these messages. Depending on business needs, you can associate, aggregate, or transform MQTT data with other data sources, achieving real-time data synchronization and integration.
+- Upon receiving specific MQTT messages, you can use HStreamDB's rule engine component to trigger corresponding actions or events, enabling cross-system and application event-driven functionality.
+- Analyze MQTT data streams in real-time within HStreamDB, detect anomalies or specific event patterns, and trigger alert notifications or perform corresponding actions based on these conditions.
+- Centralize data from multiple MQTT topics into a unified data stream and utilize HStreamDB's computational capabilities for real-time aggregation, calculation, and analysis to gain more comprehensive data insights.
+
+## Features and Benefits
+
+The data integration with HStreamDB brings the following features and advantages to your business:
+
+- **Reliable IoT Data Message Delivery**: EMQX can reliably batch and send MQTT messages to HStreamDB, enabling the integration of IoT devices with HStreamDB and application systems.
+- **MQTT Message Transformation**: Using the rule engine, EMQX can filter and transform MQTT messages. Messages can undergo data extraction, filtering, enrichment, and transformation before being sent to HStreamDB.
+- **Flexible Topic Mapping**: HStreamDB Data Bridge supports flexible mapping of MQTT topics to HStreamDB topics, allowing easy configuration of keys (Key) and values (Value) for data in HStreamDB messages.
+- **Flexible Partition Selection**: HStreamDB Data Bridge can select HStreamDB partitions based on MQTT topics or clients using different strategies, providing flexibility in organizing and identifying data.
+- **Processing Capabilities in High-Throughput Scenarios**: HStreamDB Data Bridge supports both synchronous and asynchronous write modes, allowing for a flexible balance between latency and throughput according to different scenarios.
+
+## Before You Start
+
+This section describes the preparations you need to complete before you start to create a HStreamDB data bridge, including how to start HStreamDB services and create streams.
+
+The sub-sections below describe how to install and connect to HStreamDB on Linux/MacOS using Docker images. Make sure you have installed Docker and use Docker Compose v2 if possible. For other installation methods of HStreamDB and HStreamDB Platform, please refer to [Quickstart with Docker-Compose](https://docs.hstream.io/start/quickstart-with-docker.html) and [Getting Started with HStream Platform](https://docs.hstream.io/start/try-out-hstream-platform.html).
+
+### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
-
-:::
-
-## Feature List
-
-- [Async mode](./data-bridges.md#async-mode)
-- [Batch mode](./data-bridges.md#batch-mode)
-- [Buffer queue](./data-bridges.md#buffer-queue)
-
-## Quick Start Tutorial
-
-This section introduces how to stream data into HStreamDB, covering topics like how to start HStreamDB services and create streams, create a bridge and a rule for forwarding data to the bridge, and test the data bridge and rule.
-
-This tutorial assumes you run EMQX and HStreaDB in docker on the local machine. If you have HStreamDB and EMQX running remotely, please adjust the settings accordingly.
-
-### Before You Start
-
-The sections below describes how to install and connect to HStreamDB on Linux/MacOS using Docker images. Make sure you have installed Docker and use Docker Compose v2 if possible. For other installation methods of HStreamDB and HStreamDB Platform, please refer to [Quickstart with Docker-Compose](https://docs.hstream.io/start/quickstart-with-docker.html) and [Getting Started with HStream Platform](https://docs.hstream.io/start/try-out-hstream-platform.html).
 
 ### Start HStreamDB TCP Service and Create Streams
 
@@ -221,7 +238,7 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
 
    ```yaml
    version: "3.9"
-
+   
    services:
      step-ca:
        image: smallstep/step-ca:0.23.0
@@ -233,7 +250,7 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
        environment:
          - DOCKER_STEPCA_INIT_NAME=HStream
          - DOCKER_STEPCA_INIT_DNS_NAMES=step-ca
-
+   
      generate-hstream-cert:
        image: smallstep/step-ca:0.23.0
        container_name: quickstart-tls-generate-hstream-cert
@@ -259,7 +276,7 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
            --san 172.100.0.11 \
            --san quickstart-tls-hserver-0 \
            --san quickstart-tls-hserver-1
-
+   
      hserver0:
        image: hstreamdb/hstream:v0.17.0
        container_name: quickstart-tls-hserver-0
@@ -307,10 +324,10 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
            --tls-key-path /data/server/hstream.key \
            --advertised-listeners l1:hstream://172.100.0.10:6570 \
            --listeners-security-protocol-map l1:tls
-
+   
            # NOTE:
            # advertised-listeners ip addr should same as container addr for tls listener
-
+   
      hserver1:
        image: hstreamdb/hstream:v0.17.0
        container_name: quickstart-tls-hserver-1
@@ -360,10 +377,10 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
            --tls-key-path /data/server/hstream.key \
            --advertised-listeners l1:hstream://172.100.0.11:6572 \
            --listeners-security-protocol-map l1:tls
-
+   
            # NOTE:
            # advertised-listeners ip addr should same as container addr for tls listener
-
+   
      hserver-init:
        image: hstreamdb/hstream:v0.17.0
        container_name: quickstart-tls-hserver-init
@@ -387,7 +404,7 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
                [ $$timeout -le 0 ] && echo 'Timeout!' && exit 1;
            done; \
            /usr/local/bin/hadmin server --host hserver0 --port 26570 init
-
+   
      hstore:
        image: hstreamdb/hstream:v0.17.0
        container_name: quickstart-tls-hstore
@@ -404,7 +421,7 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
            --use-tcp --tcp-host $$(hostname -I | awk '{print $$1}') \
            --user-admin-port 6440 \
            --no-interactive
-
+   
      zookeeper:
        image: zookeeper:3.8.1
        container_name: quickstart-tls-zk
@@ -415,7 +432,7 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
        volumes:
          - data_zk_data:/data
          - data_zk_datalog:/datalog
-
+   
    networks:
      quickstart-tls:
        ipam:
@@ -423,7 +440,7 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
          config:
            - subnet: "172.100.0.0/24"
        name: quickstart-tls
-
+   
    volumes:
      data_store:
        name: quickstart_tls_data_store
@@ -492,9 +509,11 @@ Now the directory structure should be:
 
    </details>
 
-### Create HStreamDB Data Bridge
+## Create HStreamDB Data Bridge
 
 This section introduces how to create HStreamDB data bridges in EMQX Dashboard. Data bridges for client message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges for message storage and event recording.
+
+The demonstration in this section assumes you run EMQX and HStreaDB in docker on the local machine. If you have HStreamDB and EMQX running remotely, please adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, click **Integration** -> **Data Bridge**.
 
@@ -543,7 +562,7 @@ This section introduces how to create HStreamDB data bridges in EMQX Dashboard. 
 
 Now the HStream data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
-### Create Rules for HStreamDB Data Bridge
+## Create Rules for HStreamDB Data Bridge
 
 After you have successfully created the data bridge to HStreamDB, you can continue to create rules to specify the data to be saved into HStreamDB and rules for the online/offline status recording.
 
@@ -578,7 +597,7 @@ After you have successfully created the data bridge to HStreamDB, you can contin
 
 Now you have successfully created the rule for HStreamDB data bridge. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to HStreamDB after parsing by rule  `my_rule`.
 
-### Test Data Bridge and Rule
+## Test Data Bridge and Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 

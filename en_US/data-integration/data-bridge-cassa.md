@@ -2,43 +2,46 @@
 
 <!-- 提供一段简介，描述支数据桥接的基本工作方式、关键特性和价值，如果有局限性也应当在此处说明（如必须说明的版本限制、当前未解决的问题）。 -->
 
-Cassandra is a popular open-source, distributed NoSQL database management system.
-EMQX's integration with Apache Cassandra provides the ability to store messages and events in Cassandra database.
-
-The current implementation only supports Cassandra v3.x, not yet compatible with v4.x.
-
 {% emqxce %}
 :::tip
 EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 :::
 {% endemqxce %}
 
-::: tip
+Cassandra is a popular open-source, distributed NoSQL database management system. EMQX's integration with Apache Cassandra provides the ability to store messages and events in Cassandra database. The current implementation only supports Cassandra v3.x, not yet compatible with v4.x.
 
-Prerequisites
+This page provides a comprehensive introduction to the data integration between EMQX and Cassandra with practical instructions on creating and validating the data integration.
 
-<!-- 根据情况编写，包含必须的前置知识点、软件版本要求、需要预先创建/初始化的操作。 -->
+## How It Works
+
+Cassandra data integration is an out-of-the-box feature in EMQX designed to bridge the gap between MQTT-based IoT data and Cassendra's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to Cassandra for storage and management, eliminating the need for complex coding.
+
+<!-- The diagram below illustrates a typical architecture of data integration between EMQX and Cassandra. -->
+
+Ingesting MQTT data into Cassandra works as follows:
+
+1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to Cassandra. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
+3. **Data ingestion into Cassandra**: Once the rule engine identifies a message for Cassandra storage, it triggers an action of forwarding the messages to Cassandra. Processed data will be seamlessly written into the collection of the Cassandra database.
+4. **Data Storage and Utilization**: With the data now stored in Cassandra, businesses can harness its querying power for various use cases. For instance, in logistics and supply chain management fields, data from IoT devices such as GPS trackers, temperature sensors, and inventory management systems can be monitored and analyzed for real-time tracking, route optimization, demand forecasting, and efficient inventory management.
+
+## Features and Benefits
+
+The data integration with Cassandra offers a range of features and benefits tailored to ensure efficient data transmission, storage, and utilization:
+
+- **Real-time Data Streaming**: EMQX is built for handling real-time data streams, ensuring efficient and reliable data transmission from source systems to Cassandra. It enables organizations to capture and analyze data in real-time, making it ideal for use cases requiring immediate insights and actions.
+- **High Performance and Scalability**: EMQX's distributed architecture and Cassandra's columnar storage format enable seamless scalability as data volumes increase. This ensures consistent performance and responsiveness, even with large datasets.
+- **Flexibility in Data Transformation:** EMQX provides a powerful SQL-based Rule Engine, allowing organizations to pre-process data before storing it in Cassandra. It supports various data transformation mechanisms, such as filtering, routing, aggregation, and enrichment, enabling organizations to shape the data according to their needs.
+- **Easy Deployment and Management:** EMQX provides a user-friendly interface for configuring data sources, pre-processing data rules, and Cassandra storage settings. This simplifies the setup and ongoing management of the data integration process.
+- **Advanced Analytics:** Cassandra's powerful SQL-based query language and support for complex analytical functions empower users to gain valuable insights from IoT data, enabling predictive analytics, anomaly detection, and more.
+
+## Before You Start
+This section describes the preparations you need to complete before you start to create a TimescaleDB data bridge, including how to install a Cassandra server and create keyspace and table.
+
+### Prerequisites
+
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
-
-:::
-
-<!-- 列举功能或性能方面的亮点，如支持批处理、支持异步模式、双向数据桥接，链接到对应的功能介绍章节。 -->
-
-## Feature List
-
-- [Connection pool](./data-bridges.md#connection-pool)
-- [Async mode](./data-bridges.md#async-mode)
-- [SQL prepared statement](./data-bridges.md#prepared-statement)
-
-<!--  Configuration parameters TODO 链接到配置手册对应配置章节。 -->
-
-## Quick Start Tutorial
-<!-- 从安装测试所需步骤，如果有不同的用法增加章节介绍。 -->
-
-This section introduces how to configure a Cassandra data bridge, including how to set up a Cassandra server, configure a Cassandra data bridge to connect to the Cassandra server, and test the data bridge and rule.
-
-This tutorial assumes that you run both EMQX and Cassandra on the local machine. If you have Cassandra and EMQX running remotely, adjust the settings accordingly.
 
 ### Install Cassandra Server
 
@@ -71,7 +74,9 @@ docker exec -it cassa cqlsh "-e \
         PRIMARY KEY(msgid, topic));"
 ```
 
-### Create Cassandra Data Bridge
+## Create Cassandra Data Bridge
+
+This section demonstrates how to create a Cassandra data bridge in EMQX Dashboard. It assumes that you run both EMQX and Cassandra on the local machine. If you have Cassandra and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
@@ -99,7 +104,7 @@ docker exec -it cassa cqlsh "-e \
 
 Now the Cassandra data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
 
-### Create a Rule for Cassandra Data Bridge
+## Create a Rule for Cassandra Data Bridge
 
 Now that you have successfully created the data bridge, you can continue to create rules to specify the data to be stored in Cassandra. 
 
@@ -123,7 +128,7 @@ Now that you have successfully created the data bridge, you can continue to crea
 
 After creating the data bridge to Cassandra. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Cassandra after parsing by rule `my_rule`.
 
-### Test Data Bridge and Rule
+## Test Data Bridge and Rule
 
 Use MQTTX to send messages to topic  `t/1`:
 
