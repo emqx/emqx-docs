@@ -8,6 +8,8 @@ Webhook 提供了一种将 EMQX 客户端消息和事件集成到外部 HTTP 服
 
 Webhook 是 EMQX 中开箱即用的功能。当客户端向特定主题发布消息，或执行特定操作时就会触发 Webhook，将事件数据和消息数据转发到预设的 HTTP 服务器中。
 
+![EMQX Webhook 集成](./assets/emqx-integration-http.jpg)
+
 Webhook 支持规则引擎所有的消息与事件，各事件的数据请参考 [SQL 数据源和字段](./rule-sql-events-and-fields.md)。
 
 ### 消息
