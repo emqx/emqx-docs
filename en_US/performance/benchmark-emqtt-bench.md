@@ -1,4 +1,4 @@
-# Performance Testing with eMQTT-Bench
+# Performance Test with eMQTT-Bench
 
 After you deploy the EMQX either in a single mode or in an EMQX cluster, you can test the performance of your deployment to know the system capability. This section introduces how to install and use the [eMQTT-Bench](https://www.emqx.com/en/try?product=emqtt-bench) to do the performance test. The eMQTT-Bench is a concise and powerful MQTT protocol benchmark tool written with Erlang. If you need testing services with large-scale scenarios and in-depth customization, the test service [XMeter](https://www.xmeter.net/) is recommended.
 
@@ -19,7 +19,7 @@ docker run -it emqx/emqtt-bench:latest
 Usage: emqtt_bench pub | sub | conn [--help]
 ```
 
-Note that docker image name is using hyphen '-', while binary script name is with underscore '_'.
+Note that the docker image name uses hyphen '-', while the binary script name uses with underscore '_'.
 
 ### Binary Package
 
@@ -58,7 +58,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### Build from Source
 
-`emqtt-bench` is written in Erlang and requires [Erlang/OTP](https://www.erlang.org/) 22.3 and above version to build it. The installation process of Erlang/OTP is skipped. For details, please refer to the online installation tutorials.
+The eMQTT-Bench is written in Erlang and requires [Erlang/OTP](https://www.erlang.org/) 22.3 and above version to build it. The installation process of Erlang/OTP is skipped. For details, please refer to the online installation tutorials.
 
 After the Erlang environment is installed, download the latest code of `emqtt-bench` and compile it:
 
@@ -78,7 +78,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 The output of the above content proves that `emqtt-bench` has been correctly installed on the host.
 
-## Test Performance Using eMQTT-Bench
+## Use eMQTT-Bench
 
 There are three subcommands of `emqtt_bench`:
 
@@ -113,7 +113,7 @@ When executing `./emqtt_bench pub --help`, you get the available parameter outpu
 | --ws              | -            | true<br />false | false          | Whether to establish a connection via WebSocket              |
 | --ifaddr          | -            | -               | None           | Specifies the local network card used by the client connection |
 
-For example, we start 10 connections and send 100 Qos0 messages to the topic `t` every second, where the size of each message payload is ` 16` bytes:
+For example, you can start 10 connections and send 100 Qos0 messages to the topic `t` every second, where the size of each message payload is ` 16` bytes:
 
 ```bash
 ./emqtt_bench pub -t t -h emqx-server -s 16 -q 0 -c 10 -I 10
@@ -123,7 +123,7 @@ For example, we start 10 connections and send 100 Qos0 messages to the topic `t`
 
 Execute `./emqtt_bench sub --help` to get all available parameters of this subcommand. Their explanations have been included in the table above and are omitted here.
 
-For example, we start 500 connections, and each subscribes to the `t` topic with Qos0:
+For example, you can start 500 connections, and each subscribes to the `t` topic with Qos0:
 
 ```bash
 ./emqtt_bench sub -t t -h emqx-server -c 500
@@ -133,7 +133,7 @@ For example, we start 500 connections, and each subscribes to the `t` topic with
 
 Execute `./emqtt_bench conn --help` to get all available parameters of this subcommand. Their explanations have been included in the table above and are omitted here.
 
-For example, we start 1000 connections:
+For example, you can start 1000 connections:
 
 ```bash
 ./emqtt_bench conn -h emqx-server -c 1000
@@ -157,9 +157,11 @@ Two-way certificate:
 ./emqtt_bench pub -c 100 -i 10 -t bench/%i -s 256 -p 8883 --certfile path/to/client-cert.pem --keyfile path/to/client-key.pem
 ```
 
-## Typical Stress Test Scenario
+## Perform Stress Test
 
-### Scenario Description
+This section describes how to perform stress tests on in 2 typical scenarios: connection and throughput.
+
+### Typical Stress Test Scenarios
 
 Verify the use of the tool in 2 most typical scenarios:
 
@@ -176,8 +178,7 @@ A total of three 8C16G servers need to be prepared, one for EMQX and two for cli
 
 - **Server**: `emqx-centos7-v4.0.2.zip`
 
-- **Press**: `emqtt-bench v0.3.1`
-  - Each press is configured with 10 network cards, which are used to establish a large number of MQTT client connections in the connection test
+- **Press**: `emqtt-bench v0.3.1`, each press is configured with 10 network cards, which are used to establish a large number of MQTT client connections in the connection test
 
 The topology structure is as follows:
 
@@ -213,7 +214,7 @@ Then start 50 thousand connections on each network card on `bench1`, which is a 
 
 Perform the same operation on `bench2`.
 
-After all connections are established, execute `./bin/emqx ctl listeners` and find the following content to view the information about the number of connections in EMQX:
+After all the connections are established, execute `./bin/emqx ctl listeners` and you will find the following information about the number of connections in EMQX:
 
 ```bash
 listener on mqtt:tcp:0.0.0.0:1883
@@ -243,7 +244,7 @@ Then start 20 publishers on `bench2` and publish 10 messages per second:
 ./emqtt_bench pub -t t -h 192.168.0.99 -c 20 -I 100
 ```
 
-Then, go back to the subscribing client on `bench1`, you can see the current rate of receiving messages:
+Go back to the subscribing client on `bench1`, you can see the current rate of receiving messages:
 
 ```bash
 recv(28006): total=2102563, rate=99725(msg/sec)
