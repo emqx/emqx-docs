@@ -103,7 +103,7 @@ The following section will use EMQX [public MQTT broker](https://www.emqx.com/en
          | topic                         | The topic of the source message                              |
          | server                        | The server address to which the data bridge is connected     |
          | retain                        | Whether to be published as a retain the message, with a value of false |
-         | qos                           | Message Service Quality                                      |
+         | qos                           | Message Quality of Service                                      |
          | pub_props                     | MQTT 5.0 message properties object, including user property pairs, user properties, and other properties |
          | pub_props.User-Property-Pairs | Array of user property pairs, each containing key-value pairs, for example, `{"key":"foo", "value":"bar"}` |
          | pub_props.User-Property       | User property object, containing key-value pairs, for example, `{"foo":"bar"}` |
