@@ -14,6 +14,8 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 Apache Pulsar 数据桥接是 EMQX 的开箱即用功能，结合了 EMQX 的设备接入、消息传输能力与 Pulsar 的强大数据处理能力。借助内置的规则引擎组件，数据流传输和处理过程在两个平台之间更加简化。这意味着您可以轻松地将 MQTT 数据传输到 Pulsar，并利用 Pulsar 的强大功能进行数据处理，而无需额外的开发工作，使得物联网数据的管理和利用变得更加高效和方便。
 
+![EMQX 数据集成 - Apache Pulsar](./assets/emqx-integration-pulsar.jpg)
+
 EMQX 通过规则引擎与数据桥接将 MQTT 数据转发至 Apache Pulsar，其完整流程如下：
 
 1. **设备消息发布与接收**：物联网设备通过 MQTT 协议连接成功后向特定的主题发布遥测和状态数据，EMQX 接收到消息后将在规则引擎中进行比对。
