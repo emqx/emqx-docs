@@ -1,4 +1,4 @@
-# GreptimeDB
+# 将 MQTT 数据写入到 GreptimeDB
 
 [GreptimeDB](https://github.com/GreptimeTeam/greptimedb) 是一个开源、分布式、云原生时序数据库，融合时序数据处理和分析能力。GreptimeDB 专为云而生，充分利用云的优势，如弹性、可扩展性和高可用性。
 

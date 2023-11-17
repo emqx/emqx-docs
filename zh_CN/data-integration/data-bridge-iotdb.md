@@ -1,4 +1,4 @@
-# Apache IoTDB
+# 将 MQTT 数据写入到 Apache IoTDB
 
 [Apache IoTDB (物联网数据库)](https://iotdb.apache.org/zh/) 是一款高性能可扩展的物联网时序数据库，用于处理由各种物联网设备和系统产生的海量时序数据。通过数据桥接将数据导入 Apache IoTDB，您可以将来自其他系统的数据转发到 Apache IoTDB 进行存储和分析。
 

@@ -1,4 +1,4 @@
-# HStreamDB
+# 将 MQTT 数据写入到 HStreamDB
 
 [HStreamDB](https://hstream.io/zh) 是一个开源流数据平台，让您能够在一个平台上高效完成对所有实时消息、事件以及其它数据流的一站式摄取、存储、处理和分发。通过 HStreamDB 数据桥接可以将 MQTT 消息和客户端事件存储到 HStreamDB 中，也可以通过事件触发对 HStreamDB 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
 

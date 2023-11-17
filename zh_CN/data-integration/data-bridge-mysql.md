@@ -1,4 +1,4 @@
-# MySQL
+# 将 MQTT 数据写入到 MySQL
 
 {% emqxce %}
 :::tip

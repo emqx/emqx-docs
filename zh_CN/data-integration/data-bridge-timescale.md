@@ -1,4 +1,4 @@
-# TimescaleDB
+# 将 MQTT 数据写入到 TimescaleDB
 
 {% emqxce %}
 :::tip
@@ -6,7 +6,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 :::
 {% endemqxce %}
 
-[Timescale](https://www.timescale.com/) (TimescaleDB) 是一个专门用于存储和分析时间序列数据的数据库，它的出色数据吞吐能力和可靠的性能表现使其成为物联网领域的理想选择，EMQX 与 TimescaleDB 集成，能够将 MQTT 数据无缝的集成到 TimescaleDB 进行存储，并借助其丰富的数据分析能力，为物联网应用提供了高效、可扩展的数据存储和分析解决方案。
+[Timescale](https://www.timescale.com/) (TimescaleDB) 是一个专门用于存储和分析时间序列数据的数据库，它的出色数据吞吐能力和可靠的性能表现使其成为物联网领域的理想选择，EMQX 通过与 TimescaleDB 集成，能够将 MQTT 数据无缝的集成到 TimescaleDB 进行存储，并借助其丰富的数据分析能力，为物联网应用提供了高效、可扩展的数据存储和分析解决方案。
 
 本页详细介绍了 EMQX 与 TimescaleDB 的数据集成并提供了实用的规则和数据桥接创建指导。
 
@@ -188,10 +188,10 @@ EMQX 支持与私有部署的 TimescaleDB 或与云上的 Timescale Service 集�
 
 11. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中，**状态**为**已连接**。
 
-至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 TimescaleDB 进行存储。
+现在您已创建了通过 TimescaleDB 数据桥接将数据转发到 TimescaleDB 的规则。您可以单击 **集成** -> **拓扑** 来查看拓扑结构。可以看到，在规则 `my_rule` 解析后，主题 `t/#` 下的消息被发送并保存到 TimescaleDB。
 
 
-### 测试数据桥接规则
+## 测试数据桥接规则
 
 使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
 

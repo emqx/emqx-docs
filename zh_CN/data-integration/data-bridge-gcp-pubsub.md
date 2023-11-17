@@ -1,4 +1,8 @@
-# GCP Pub/Sub
+# 将 MQTT 数据传输到 GCP PubSub
+
+[Google Cloud PubSub](https://cloud.google.com/pubsub?hl=en-us) 是一种异步消息传递服务，旨在实现极高的可靠性和可扩缩性。EMQX 支持与 Google Cloud Pub/Sub 的无缝集成，用于实时提取、处理和分析 MQTT 数据。此外，它还支持将数据推送并订阅各种Google Cloud 服务，如 Cloud Functions、App Engine、Cloud Run、Kubernetes Engine 和 Compute Engine。
+
+借助 EMQX GCP PubSub 集成，您可以将 MQTT 消息和客户端事件发送到 GCP PubSub 中，这能够帮助您更快的基于 GCP 构建物联网应用，助力你从 GCP IoT Core 迁移到 EMQX 中。
 
 {% emqxce %}
 :::tip

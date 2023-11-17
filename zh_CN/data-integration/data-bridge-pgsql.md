@@ -1,4 +1,4 @@
-# PostgreSQL
+# 将 MQTT 数据写入到 PostgreSQL
 
 通过 PostgreSQL 数据桥接可以将 MQTT 消息和客户端事件存储到 PostgreSQL 中，也可以通过事件触发对 PostgreSQL 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
 

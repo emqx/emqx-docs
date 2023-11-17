@@ -1,4 +1,4 @@
-# MQTT
+# 将 MQTT 数据桥接到其他 MQTT 服务
 
 MQTT 数据桥接是一种连接多个 EMQX 集群或其他 MQTT 服务的方式。本页介绍了 EMQX 中 MQTT 数据桥接的工作原理，并提供了在EMQX Dashboard 或使用配置文件创建 MQTT 数据桥接的快速入门教程。
 

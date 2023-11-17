@@ -1,4 +1,4 @@
-# MongoDB
+# 将 MQTT 数据写入到 MongoDB
 
 通过 MongoDB 数据桥接可以将 MQTT 消息和客户端事件存储到 MongoDB 中。
 
