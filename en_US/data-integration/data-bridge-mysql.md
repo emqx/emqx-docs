@@ -163,7 +163,9 @@ This demonstration assumes that you run both EMQX and MySQL on the local machine
      )
      ```
 
-   <img src="./assets/MySQL_ bridge.png" alt="MySQL_ bridge" style="zoom:67%;" />
+   <!-- 
+   <img src="./assets/MySQL_bridge.png" alt="MySQL_ bridge" style="zoom:67%;" />
+   -->
 
 10. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
 
