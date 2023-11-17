@@ -14,6 +14,8 @@ For users who need to integrate with HTTP services but do not require data proce
 
 HTTP server data integration is an out-of-the-box feature in EMQX, allowing integration with external HTTP services through simple configuration. With the HTTP service, users can write code in their preferred programming language and framework to implement custom, flexible, and complex data processing logic.
 
+<img src="./assets/emqx-integration-http.jpg" alt="emqx-integration-http" style="zoom:67%;" />
+
 EMQX forwards device events and data to the HTTP server through the rule engine and data bridge. The workflow is as follows:
 
 1. **Devices Connect to EMQX**: When IoT devices successfully connect, an online event is triggered, containing device ID, source IP address, and other attributes.
@@ -40,7 +42,7 @@ In summary, the HTTP service offers real-time, flexible, and customizable data i
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create the HTTP server data bridge, including how to set up a simple HTTP server.
+This section describes the preparations you need to complete before you start to create the HTTP server data bridge, including setting up a simple HTTP server.
 
 ### Prerequisites
 
