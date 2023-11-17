@@ -14,6 +14,8 @@ This page introduces the data integration between EMQX and MySQL and provides pr
 
 MySQL data bridge is an out-of-the-box feature in EMQX, which enables complex business development through simple configuration. In a typical IoT application, EMQX, as the IoT platform, is responsible for device connection and transmitting messages. MySQL, as the data storage platform, is responsible for storing device status and metadata, as well as message data storage and data analysis.
 
+<img src="./assets/emqx-integraion-mysql.jpg" alt="EMQX MySQL 数据集成" style="zoom:67%;" />
+
 EMQX forwards device events and data to MySQL through the rule engine and data bridge. Applications can read the data in MySQL to sense the device status, obtain device online and offline records, and analyze device data. The specific workflow is as follows:
 
 - **IoT devices connect to EMQX**: After IoT devices are successfully connected through the MQTT protocol, online events will be triggered. The events include information such as device ID, source IP address, and other attributes.
@@ -28,9 +30,19 @@ After the event and message data are written to MySQL, you can connect to MySQL 
 
 ## Features and Benefits
 
+The data integration with MySQL can bring the following features and advantages to your business:
 
+- **Flexible Event Handling**: Through the EMQX rules engine, MySQL can handle device lifecycle events, greatly facilitating the development of various management and monitoring tasks required for implementing IoT applications. By analyzing event data, you can promptly detect device failures, abnormal behavior, or trend changes to take appropriate measures.
+- **Message Transformation**: Messages can undergo extensive processing and transformation through EMQX rules before being written to MySQL, making storage and usage more convenient.
+- **Flexible Data Operations**: With SQL templates provided by MySQL data bridging, it's easy to write or update data from specific fields to the corresponding tables and columns in the MySQL database, enabling flexible data storage and management.
+- **Integration of Business Processes**: MySQL data bridging allows you to integrate device data with MySQL's rich ecosystem applications, facilitating integration with systems like ERP, CRM, or other custom business systems to achieve advanced business processes and automation.
+- **Runtime Metrics**: Support for viewing runtime metrics of each data bridge, such as total message count, success/failure counts, current rates, and more.
+
+Through flexible event handling, extensive message transformation, flexible data operations, and real-time monitoring and analysis capabilities, you can build efficient, reliable, and scalable IoT applications, benefiting your business decisions and optimizations.
 
 ## Before You Start
+
+This section describes the preparations you need to complete before you start to create the MySQL data bridges in EMQX Dashboard, including installing the MySQL server and creating data tables.
 
 ### Prerequisites
 
