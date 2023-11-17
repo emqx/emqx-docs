@@ -37,46 +37,6 @@ The final test results are shown below:
 
 These results reveal that higher QoS levels correspond to increased average CPU usage under equivalent workloads. Consequently, higher QoS levels generally result in relatively lower throughput with the same system resources.
 
-
-ChatGPT
-
-## Test Result Reference
-
-As we follow the test procedures outlined in [Performance Testing with XMeter Cloud](https://chat.openai.com/c/benchmark-xmeter), we delve into the performance evolution of EMQX across various typical scenarios. These assessments provide a comprehensive view of EMQX's benchmark performance, revealing how factors such as QoS level and Payload size influence MQTT performance.
-
-### Test Environment
-
-The evaluations within this section are based on the open-source edition of **EMQX v5.1.6**, deployed on a single node. To eliminate external network latency interference, EMQX and XMeter Cloud have established a peering connection. The server specifications running EMQX are as follows:
-
-- **CPU**: 4vCPUs (Intel Xeon Platinum 8378A CPU @ 3.00GHz)
-- **Memory**: 8 GiB
-- **System Disk**: General Purpose SSD | 40 GiB
-- **Maximum Bandwidth**: 8 Gbit/s
-- **Maximum Packets Per Second**: 800,000 PPS
-- **OS**: CentOS 7.9
-
-With the exception of the fan-in scenario, where XMeter Cloud utilized 20 test clients for message exchange, all other scenarios featured 10 test clients.
-
-### Test Scenarios and Results
-
-#### Scenario 1: EMQX Performance with Different QoS
-
-The complexity of MQTT packet interactions increases with higher QoS levels, leading to greater system resource consumption during message delivery. Therefore, understanding the performance impact of various QoS levels is crucial.
-
-In this scenario, we conducted one-to-one communication with 1,000 publishers and 1,000 subscribers, employing 128-byte Payload messages. That is, there were a total of 1,000 topics, and each topic had one publisher and one subscriber.
-
-![img](./assets/symmetric.png)
-
-We progressively elevated the workload by increasing the message publishing rate and running EMQX for 5 minutes under each workload to ensure stability. Performance and resource consumption metrics were recorded for EMQX under different QoS levels and workloads, including average message latency, P99 message latency, and average CPU usage.
-
-The final test results are outlined below:
-
-![img](./assets/symmetric-test-result-01.png) ![img](./assets/symmetric-test-result-02.png)
-
-> **Latency** denotes the time taken for a message to be received from the moment it is published. **Throughput** comprises inbound and outbound message throughput.
-
-These results reveal that higher QoS levels correspond to increased average CPU usage under equivalent workloads. Consequently, higher QoS levels generally result in relatively lower throughput with the same system resources.
-
 Assuming an average CPU usage of approximately 75% as the recommended daily load, we can conclude: under the provided hardware and testing scenarios, the recommended load for QoS 0 is approximately 57K TPS, for QoS 1 is approximately 40K TPS, and for QoS 2 is approximately 24K TPS. Here are the performance data for the test points that are closest to 75% CPU usage:
 
 | **QoS Level** | **Recommended Workload, TPS (In + Out)** | **Average CPU Usage, % (1 - Idle)** | **Average Memory Usage, %** | **Average Letancy, ms** | **P99 Letancy, ms** |
