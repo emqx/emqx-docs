@@ -1,4 +1,4 @@
-# 性能测试
+# 使用 eMQTT-Bench 进行性能测试
 
 当你部署了单个 EMQX 服务器或者建立了 EMQX 集群，你可以进行对你的部署进行性能测试以了解系统的能力。这个章节介绍了如何安装和使用 [eMQTT-Bench](https://www.emqx.com/zh/try?product=emqtt-bench) 来进行性能测试。eMQTT-Bench是基于 Erlang 编写的，一个简洁强大的 MQTT 协议基准测试工具。如需大规模场景、深度定制化的测试服务推荐使用 [XMeter](https://www.emqx.com/zh/products/xmeter) 进行测试。
 

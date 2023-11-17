@@ -38,8 +38,6 @@ The data integration with ClickHouse offers a range of features and benefits tai
 
 This section describes the preparations you need to complete before you start to create the ClickHouse data bridges in EMQX Dashboard.
 
-This tutorial assumes that you run both EMQX and ClickHouse on the local machine. If you have ClickHouse and EMQX running remotely, adjust the settings accordingly.
-
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
@@ -85,6 +83,8 @@ You can find more information about running ClickHouse in docker [on dockerhub](
 ## Create Rule and ClickHouse Databridge
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured data bridge to ClickHouse. 
+
+This demonstration assumes that you run both EMQX and ClickHouse on the local machine. If you have ClickHouse and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules** from the left navigation menu.
 

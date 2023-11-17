@@ -146,11 +146,11 @@ EMQX 安装完成后会创建一些目录用来存放运行文件和配置文件
 
 | 目录       | 描述              | 压缩包解压安装 | 二进制包安装             |
 | ---------- | ----------------- | -------------- | ------------------------ |
-| `etc`      | 配置文件目录      | `./etc`        | `/etc/emqx`      |
-| `data`     | 数据文件          | `./data`       | `/var/lib/emqx`     |
+| `etc`      | 静态配置文件    | `./etc`        | `/etc/emqx`      |
+| `data`     | 数据和配置文件       | `./data`       | `/var/lib/emqx`     |
 | `log`      | 日志文件          | `./log`        | `/var/log/emqx`          |
 | `releases` | 启动相关的脚本    | `./releases`   | `/usr/lib/emqx/releases` |
-| `bin`      | 可执行文件目录    | `./bin`        | `/usr/lib/emqx/bin`      |
+| `bin`      | 可执行文件    | `./bin`        | `/usr/lib/emqx/bin`      |
 | `lib`      | Erlang 代码       | `./lib`        | `/usr/lib/emqx/lib`      |
 | `erts-*`   | Erlang 虚拟机文件 | `./erts-*`     | `/usr/lib/emqx/erts-*`   |
 | `plugins`  | 插件              | `./plugins`    | `/usr/lib/emqx/plugins`  |

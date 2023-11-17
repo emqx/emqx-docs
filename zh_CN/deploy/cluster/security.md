@@ -45,7 +45,7 @@ Erlang 分布端口。`ListeningPort = BasePort + Offset`。
 Docker 容器中的 EMQX 使用静态端口 `5369` 进行集群 RPC。
 :::
 
-### 使用 TLS 为集群 RPC 传输层
+## 使用 TLS 为集群 RPC 传输层
 
 ::: tip
 TLS 是以增加 CPU 负载和 RAM 使用为代价的。

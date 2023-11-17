@@ -1,6 +1,11 @@
-# 配置 LDAP 单点登录
+# 配置 LDAP/Azure AD 单点登录
 
 本页介绍了如何配置和使用基于轻量级目录访问协议（LDAP）协议实施的单点登录功能。
+
+您可以将 EMQX Dashboard 与支持 LDAPv3 协议的目录服务集成，实现基于 LDAP 的单点登录，目前支持的产品有:
+
+- [OpenLDAP](https://www.openldap.org/)
+- [Microsoft Entra ID（原名为 Azure AD）](https://www.microsoft.com/zh-cn/security/business/identity-access/microsoft-entra-id)
 
 ::: tip 先决条件
 
@@ -8,35 +13,77 @@
 
 :::
 
-## 支持的 LDAP 服务器
+## 配置 OpenLDAP 单点登录
 
-您可以将 EMQX Dashboard 与支持 LDAPv3 协议的目录服务集成，实现基于 LDAP 的单点登录，例如:
+本节将指导您如何在 Dashboard 启用 OpenLDAP 单点登录。
 
-- [OpenLDAP](https://www.openldap.org/)
-- [Microsoft Active Directory](https://azure.microsoft.com/en-in/products/active-directory)
+1. 转到 Dashboard **系统设置** -> **单点登录** 页面。
 
-## 启用 LDAP 单点登录
+2. 选择 **LDAP** 选项，点击 **启用** 按钮。
 
-本节将指导您如何在 Dashboard 启用 LDAP 单点登录。
+3. 在配置页面中，输入 LDAP 服务器的基本信息。
+
+   | 选项         | 说明                                                         |
+   | ------------ | ------------------------------------------------------------ |
+   | 服务         | LDAP服务器的地址，例如`localhost:389`。                      |
+   | 用户名       | 访问 LDAP 服务器的绑定 DN（Bind DN）。                       |
+   | 密码         | 访问 LDAP 服务器的用户密码。                                 |
+   | 基本 DN      | LDAP 目录的基本 DN，搜索用户的起点。                         |
+   | 用户查询条件 | LDAP 中匹配用户的过滤器。在 LDAP 用户查询条件中,系统会自动替换 `${username}` 为实际输入的用户名，进行用户匹配。<br />- 对于标准 LDAP，默认过滤器是 `(&(objectClass=person)(uid=${username}))`。<br />- 对于 Active Directory，默认过滤器是 `(&(objectClass=user)(sAMAccountName=${username}))`。<br />该变量替换机制可以根据不同的用户属性灵活构造查询过滤器，进行用户名查询和匹配。有关条件格式详见 [LDAP过滤器](https://ldap.com/ldap-filters/)。 |
+   | 启用 TLS     | 是否启用 LDAP 访问的 TLS 安全传输。如果启用需要配置证书。    |
+
+
+4. 点击**更新**按钮，保存配置。后续使用请参照[登录与用户管理](#登录与用户管理)。
+
+## 配置 Microsoft Entra ID 单点登录
+
+本节将指导您如何在 Dashboard 启用 Azure AD 单点登录。
+
+### 配置 Microsoft Entra ID 实例
+
+在配置 Dashboard 中的 Microsoft Extra ID SSO 之前，您需要按照本节的说明配置 Microsoft Entry ID 实例以获取基本的 LDAP 服务器信息。
+
+1. 登录 [Azure 门户网站](https://portal.azure.com)，按照[此教程](https://learn.microsoft.com/zh-cn/entra/identity/domain-services/tutorial-create-instance)创建 Microsoft Entra 域服务。
+
+![SSO AD Domain List](./assets/sso-ad-domain-list.png)
+
+2. 启用加密 LDAP 连接：在 Microsoft Entra 域服务中，进入**安全 LDAP** 页面，启用**安全 LDAP** 与**允许安全 LDAP 通过 Internet 进行访问**开关。按照页面指引更改证书并配置网络安全组，确保 EMQX 可以访问到 Microsoft Entra 域服务实例。
+
+![SSO AD Enable TLS](./assets/sso-ad-enable-tls.png)
+
+3. 获取连接配置：在 Microsoft Entra 域服务中，进入**属性** 页面，其中 **安全 LDAP 外部 IP 地址**即为实际 EMQX 的连接地址。
+
+![SSO AD Get IP Address](./assets/sso-ad-get-ip.png)
+
+4. 配置 Entra ID：按照[快速入门文档](https://learn.microsoft.com/zh-cn/entra/fundamentals/create-new-tenant)中的步骤创建 Entra ID 实例。
+5. 禁用多重身份验证：EMQX 使用 Microsoft Entra ID 配置 SSO 需要关闭多重身份验证，在 Entra ID 实例中，进入**安全组** -> **身份验证方法** -> **设置**页面，禁用多重身份验证。
+
+![SSO AD Disable 2FA](./assets/sso-ad-disable-2fa.png)
+
+6. 添加用户：在 Entra ID 实例中，进入**概述**页面，点击**添加** -> **用户** -> **新建用户**进行用户的添加。需要添加至少 2 个用户：用于连接 Entra ID 的登录用户，以及实际访问 EMQX Dashboard 的用户。用户添加完成后需要在 Microsoft Entra ID 中至少登录一次并更改默认密码，之后才可以在 Dashboard 中进行 SSO 登录。
+
+![SSO AD Add User](./assets/sso-ad-add-user.png)
+
+![SSO AD Add User Detail](./assets/sso-ad-add-user-detail.png)
+
+### 在 Dashboard 中配置 Microsoft Entra ID 单点登录
 
 1. 转到 Dashboard **系统设置** -> **单点登录** 页面。
 2. 选择 **LDAP** 选项，点击 **启用** 按钮。
 3. 在配置页面中，输入 LDAP 服务器的基本信息：
+   - **服务**：填写 `ip:port`，其中 IP 为 Microsoft Entra ID 的安全 LDAP 外部 IP 地址，端口为加密 LDAP `636`.
+   - **用户名**、**密码**：填写 Entra ID 中创建的用于连接 Entra ID 的用户以及其密码。
+   - **基本 DN**：根据 Azure AD 的域名填写，例如 `emqxqa.onmicrosoft.com` 填写为 `DC=emqxqa,DC=onmicrosoft,DC=com`。可以添加其他属性，将用户限制在某个部门或者分组内。
+   - **用户查询条件**：对于 Azure AD，默认过滤器是 `(&(objectClass=user)(sAMAccountName=${username}))`，表示通过账户名（邮箱名）登录。可以将 `sAMAccountName` 更换为 `mail` 使用邮箱地址登录。
+   - 此处使用的是 IP 地址 + 安全 LDAP直接访问，因此需要勾选**启用 TLS**，并取消勾选**验证服务器证书**。
 
-| 选项         | 说明                                                         |
-| ------------ | ------------------------------------------------------------ |
-| 服务         | LDAP服务器的地址，例如`localhost:389`。                      |
-| 用户名       | 访问 LDAP 服务器的 绑定 DN（Bind DN）。                      |
-| 密码         | 访问 LDAP 服务器的用户密码。                                 |
-| 基本 DN      | LDAP 目录的基本 DN，搜索用户的起点。                         |
-| 用户查询条件 | LDAP 中匹配用户的过滤器。在 LDAP 用户查询条件中,系统会自动替换 `${username}` 为实际输入的用户名，进行用户匹配。<br />- 对于标准 LDAP，默认过滤器是 `(&(objectClass=person)(uid=${username}))`。<br />- 对于 Active Directory，默认过滤器是 `(&(objectClass=user)(sAMAccountName=${username}))`。<br />该变量替换机制可以根据不同的用户属性灵活构造查询过滤器，进行用户名查询和匹配。有关条件格式详见 [LDAP过滤器](https://ldap.com/ldap-filters/)。 |
-| 启用 TLS     | 是否启用 LDAP 访问的 TLS 安全传输。如果启用需要配置证书。    |
+4. 点击**更新**按钮，保存配置并启用 Microsoft Entra ID SSO。后续使用请参照[登录与用户管理](#登录与用户管理)。
 
-4. 点击 **更新** 按钮，保存配置。
+![SSO AD Dashboard](./assets/sso-ad-dashboard.png)
 
 ## 登录与用户管理
 
-启用 LDAP 单点登录后，EMQX Dashboard 会在登录页面展示单点登录选项。点击 **LDAP** 按钮，进入 LDAP 单点登录页面，输入为用户分配的 LDAP 凭证（例如用户名与密码）并点击**登录**按钮。
+启用基于 LDAP 的单点登录后，EMQX Dashboard 会在登录页面展示单点登录选项。点击 **LDAP** 按钮，进入 LDAP 单点登录页面，输入为用户分配的 LDAP 凭证（例如用户名与密码）并点击**登录**按钮。
 
 <img src="./assets/sso_ldap.png" alt="image-20230926182522354" style="zoom:67%;" />
 
