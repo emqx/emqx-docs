@@ -454,29 +454,12 @@
       ]
     },
     {
-      "title": "协议介绍",
-      "children": [
-        {
-          "title": "MQTT 协议",
-          "path": "development/protocol"
-        },
-        {
-          "title": "LwM2M 接入网关",
-          "path": "modules/lwm2m_protocol"
-        },
-        {
-          "title": "MQTT-SN 接入网关",
-          "path": "modules/mqtt_sn_protocol"
-        },
-        {
-          "title": "CoAP 接入网关",
-          "path": "modules/coap_protocol"
-        },
-        {
-          "title": "Stomp 接入网关",
-          "path": "modules/stomp_protocol"
-        }
-      ]
+      "title": "MQTT 协议介绍",
+      "path": "mqtt/mqtt-protocol"
+    },
+    {
+      "title": "多协议网关插件",
+      "path": "development/protocol"
     },
     {
       "title": "版本发布",
@@ -961,33 +944,12 @@
       "path": "design/design"
     },
     {
-      "title": "Protocols",
-      "children": [
-        {
-          "title": "LwM2M gateway",
-          "path": "modules/lwm2m_protocol"
-        },
-        {
-          "title": "MQTT-SN gateway",
-          "path": "modules/mqtt_sn_protocol"
-        },
-        {
-          "title": "TCP gateway",
-          "path": "modules/tcp_protocol"
-        },
-        {
-          "title": "JT/T808 gateway",
-          "path": "modules/jt808_protocol"
-        },
-        {
-          "title": "CoAP gateway",
-          "path": "modules/coap_protocol"
-        },
-        {
-          "title": "Stomp gateway",
-          "path": "modules/stomp_protocol"
-        }
-      ]
+      "title": "MQTT Protocol",
+      "path": "mqtt/mqtt-protocol"
+    },
+    {
+      "title": "Multi-Protocol Gateway Plugin",
+      "path": "development/protocol"
     }
   ]
 }

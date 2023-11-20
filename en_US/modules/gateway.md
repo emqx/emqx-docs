@@ -1,6 +1,8 @@
 # Multi-Protocol Gateway
 
-This chapter provides an in-depth examination of various gateway protocols supported by EMQX, offering a comprehensive understanding of their operation, use cases, and potential benefits.
+The multi-protocol gateways are crucial modules of EMQX, enabling EMQX to support a multitude of IoT communication protocols. Through the protocol conversion, message routing, and processing functionalities of the gateways, devices and applications using various communication protocols can establish connections with EMQX, thereby achieving cross-protocol interoperability. 
+
+This chapter provides an in-depth examination of various protocol gateways supported by EMQX, offering a comprehensive understanding of their operation, use cases, and potential benefits.
 
 - The **LwM2M Gateway** section focuses on the LwM2M protocol, an emerging standard for device management and telemetry in the Internet of Things (IoT) space. It provides insights into how the LwM2M gateway operates and its application in various scenarios.
 - The **MQTT-SN Gateway** section delves into the MQTT-SN protocol, specifically designed for wireless sensor networks. This part aims to shed light on how MQTT-SN can provide efficient and reliable data transfer in environments with limited bandwidth.
