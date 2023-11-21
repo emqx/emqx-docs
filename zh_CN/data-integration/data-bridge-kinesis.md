@@ -147,7 +147,7 @@ EMQX 与 AWS Kinesis Data Streams 的数据集成可以为您的业务带来以�
 
 3. 转到 [Amazon Kinesis 数据查看器](https://docs.aws.amazon.com/zh_cn/streams/latest/dev/data-viewer.html)。您应该可以看到数据流指定分片内的数据记录。
 
-#### 使用 LocalStack 查看数据
+### 使用 LocalStack 查看数据
 
 如果您使用 LocalStack，通过以下步骤查看接收到的数据。
 
