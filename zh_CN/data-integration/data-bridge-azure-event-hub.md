@@ -1,6 +1,4 @@
-# Azure Event Hubs
-
-[Azure Event Hub](https://azure.microsoft.com/en-us/products/event-hubs) 是一个用于数据摄取的实时托管事件流平台。EMQX 与 Azure Event Hub 的集成为用户在高吞吐量情况下提供了可靠的数据传输和处理能力。目前，EMQX 支持使用 SASL/PLAIN 身份验证、通过与 Kafka 协议兼容的 Apache Kafka 终端点进行 Azure Event Hub 集成。
+# 将 MQTT 数据传输到 Azure Event Hubs
 
 {% emqxce %}
 ::: tip
@@ -10,22 +8,47 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 :::
 {% endemqxce %}
 
-::: tip 前置准备
+[Azure Event Hub](https://azure.microsoft.com/en-us/products/event-hubs) 是一个用于数据摄取的实时托管事件流平台。EMQX 与 Azure Event Hub 的集成为用户在高吞吐量情况下提供了可靠的数据传输和处理能力。Azure Event Hubs 可作为 EMQX 与 Azure 丰富的云服务应用之间的数据通道，将物联网数据集成到 Azure Blob Storage、Azure Stream Analytics 以及部署在 Azure 虚拟机上的各类应用和服务当中。目前，EMQX 支持使用 SASL/PLAIN 身份验证、通过与 Kafka 协议兼容的 Apache Kafka 终端点进行 Azure Event Hub 集成。
 
-- 了解 [规则](./rules.md)。
-- 了解 [数据桥接](./data-bridges.md)。
+本页详细介绍了 EMQX 与 Azure Event Hubs 的数据集成并提供了实用的规则和数据桥接创建指导。
 
-:::
+## 工作原理
 
-## 功能清单
+Azure Event Hubs 数据桥是 EMQX 的一个开箱即用功能，旨在帮助用户无缝集成 MQTT 数据流与 Azure Event Hubs，利用其丰富的服务和能力进行物联网应用开发。
 
-- [异步请求模式](./data-bridges.md)
-- [批量模式](./data-bridges.md)
-- [缓存队列](./data-bridges.md)
+![event_hubs_architecture](./assets/event_hubs_architecture.svg)
 
-## 快速开始
+EMQX 通过规则引擎和数据桥接将 MQTT 数据转发到 Azure Event Hubs。完整的过程如下：
 
-本节介绍了如何将数据通过数据桥接流入或流出 Azure Event Hubs，涵盖了诸如如何设置 Azure Event Hub、如何创建桥接器和转发数据到桥接器的规则，以及如何测试数据桥接器和规则等主题。
+1. **物联网设备发布消息**：设备通过特定主题发布遥测和状态数据，触发规则引擎。
+2. **规则引擎处理消息**：使用内置规则引擎，基于主题匹配处理来自特定来源的 MQTT 消息。规则引擎匹配相应的规则并处理消息，例如转换数据格式、过滤特定信息或用上下文信息丰富消息。
+3. **桥接到 Azure Event Hubs**：规则触发将消息转发到 Azure Event Hubs 的动作，允许轻松配置数据属性、排序键，并将 MQTT 主题映射到 Azure Event Hubs 消息头。这为数据集成提供了更丰富的上下文信息和顺序保证，使得物联网数据处理更加灵活。
+
+在 MQTT 消息数据写入 Azure Event Hubs 之后，您可以进行灵活的应用开发，例如：
+
+- 实时数据处理和分析：利用 Azure Event Hubs 强大的数据处理和分析工具及其自身的流处理能力，对消息数据进行实时处理和分析，获取有价值的洞察和决策支持。
+- 事件驱动功能：触发 Azure 事件处理，实现动态灵活的功能触发和处理。
+- 数据存储和共享：将消息数据传输到 Azure Event Hubs 存储服务，安全存储和管理大量数据。这使您能够与其他 Azure 服务共享和分析这些数据，以满足各种业务需求。
+
+## 特性与优势
+
+EMQX 与 Azure Event Hubs 的数据集成可以为您的业务带来以下功能和优势：
+
+- **高性能海量消息吞吐**：EMQX 支持海量 MQTT 客户端连接，每秒数百万条消息能够持续引入 Azure Event Hubs，可以获得极低的消息传输与存储延迟时间，并在 Azure Event Hubs 上配置保留时间实现消息量的控制。
+- **灵活的数据映射**：通过配置的 Azure Event Hubs，可以实现 MQTT 主题与 Azure Event Hubs 事件中心的灵活映射，并且支持 MQTT 用户属性与 Azure Event Hubs 消息头的映射，这为数据集成提供了更丰富的上下文信息和顺序保证。
+- **弹性伸缩支持**：EMQX 与 Azure Event Hubs 均可以支持弹性伸缩，能够随着应用规格进行扩展，轻松将物联网数据规模从数 MB 轻松扩展到数 TB。
+- **丰富的生态系统**：得益于采用标准 MQTT 协议以及各类主流物联网传输协议的支持，EMQX 能够实现各类物联网设备的接入。结合 Azure Event Hubs 在 Azure Functions、各类编程语言 SDK 以及 Kafka 生态系统中的支持，能够轻松打通设备到云端的数据通道，实现无缝物联网数据接入与处理。
+
+这些功能增强了集成能力和灵活性，可以帮助用户快速实现海量物联网设备数据与 Azure 的连接。让用户更便捷的获得云计算带来的数据分析和智能化能力，构建功能强大的数据驱动型应用。
+
+## 桥接准备
+
+本节介绍了在 EMQX 中创建 Azure Event Nubs 数据桥接之前需要做的准备工作，包括如何设置 Azure Event Hubs。
+
+### 前置准备
+
+- 了解[规则](./rules.md)。
+- 了解[数据桥接](./data-bridges.md)。
 
 ### 设置 Azure Event Hubs
 
@@ -37,9 +60,9 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
   - 遵循“连接字符串”说明，这是 EMQX 用于连接的方式。
 - [获取事件中心连接字符串](https://learn.microsoft.com/zh-cn/azure/event-hubs/event-hubs-get-connection-string)
 
-### 创建 Azure Event Hubs 数据桥接
+## 创建 Azure Event Hubs 数据桥接
 
-本节演示如何通过 Dashboard 创建 Azure Event Hubs 生产者数据桥接。
+本节演示如何通过 Dashboard 创建 Azure Event Hubs 生产者数据桥接、将数据通过数据桥接流入或流出 Azure Event Hubs。
 
 1. 进入 EMQX Dashboard，点击**集成** -> **数据桥接**。
 
@@ -81,7 +104,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 现在，Azure Event Hubs 数据桥接应该在数据桥接列表（**集成** -> **数据桥接**）中显示，**资源状态**为 **已连接**。
 
-### 创建 Azure Event Hubs 生产者数据转发规则
+## 创建 Azure Event Hubs 生产者数据转发规则
 
 至此您已经完成数据桥接创建流程，接下来将继续创建一条规则来指定需要写入的数据：
 
@@ -111,7 +134,7 @@ FROM
 
 至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 Azure Event Hub 进行存储。
 
-### 测试数据桥接和规则
+## 测试数据桥接和规则
 
 您可以使用 [MQTTX](https://mqttx.app/zh) 来模拟客户端向 EMQX 发送 MQTT 消息来测试数据桥接和规则的运行。
 

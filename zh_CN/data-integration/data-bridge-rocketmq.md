@@ -1,33 +1,46 @@
 # 将 MQTT 数据传输到 RocketMQ
 
-通过 RocketMQ 数据桥接可以将 MQTT 消息和客户端事件转发到 RocketMQ 中。例如，可以通过事件触发转发消息到 RocketMQ 中，从而实现对诸如设备在线状态、上下线历史等的记录。
-
 {% emqxce %}
 :::tip
 EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
 :::
 {% endemqxce %}
 
-::: tip 前置准备
+通过 RocketMQ 数据桥接可以将 MQTT 消息和客户端事件转发到 RocketMQ 中。例如，可以通过事件触发转发消息到 RocketMQ 中，从而实现对诸如设备在线状态、上下线历史等的记录。
+
+本页详细介绍了 EMQX 与 RocketMQ 的数据集成并提供了实用的规则和数据桥接创建指导。
+
+## 工作原理
+
+RocketMQ 数据集成是 EMQX 中的一个开箱即用功能，它结合了 EMQX 的设备接入以及实时数据捕获和传输能力与 RocketMQ 强大的消息队列处理能力。通过内置的[规则引擎](./rules.md)组件，该集成简化了将数据从 EMQX 引入到 RocketMQ 进行存储和管理的过程，无需复杂编码。
+
+<!-- 下图展示了 EMQX 与 RocketMQ 之间数据集成的典型架构。 -->
+
+将 MQTT 数据引入 RocketMQ 的过程如下：
+
+1. **消息发布和接收**：工业物联网设备通过 MQTT 协议成功连接到 EMQX，并向 EMQX 发布实时 MQTT 数据。EMQX 收到这些消息后，将启动其规则引擎中的匹配过程。
+2. **消息数据处理**：当消息到达时，它会经过规则引擎，然后由 EMQX 中定义的规则处理。这些规则基于预定义的标准，确定哪些消息需要路由到 RocketMQ。如果任何规则指定了有效载荷转换，那么将应用这些转换，例如转换数据格式、过滤特定信息或用额外的上下文丰富有效载荷。
+3. **数据引入到 RocketMQ**：一旦规则处理了消息，它就会触发一个动作，将消息转发到 RocketMQ。处理后的数据将无缝写入 RocketMQ。
+4. **数据存储和利用**：现在数据存储在 RocketMQ 中，企业可以利用其查询能力应用于各种用例。例如，在金融行业，RocketMQ 可以用作可靠的高性能消息队列来存储和管理来自支付终端、交易系统的数据，并将消息连接到数据分析和监管平台，实现风险管理、欺诈检测和预防、监管合规等要求。
+
+## 特性与优势
+
+RocketMQ 数据集成为您的业务带来了以下功能和优势：
+
+- **可靠的物联网数据消息传递**：EMQX 能够可靠地批处理并发送 MQTT 消息到 RocketMQ，实现物联网设备与 RocketMQ 及应用系统的集成。
+- **MQTT 消息转换**：使用规则引擎，EMQX 可以过滤和转换 MQTT 消息。消息在发送到 RocketMQ 之前，可以进行数据提取、过滤、丰富和转换。
+- **云原生弹性扩展**：EMQX 与 RocketMQ 都是基于云原生构建的应用，提供了友好的 K8s 支持以及云原生生态集成，能够无限弹性扩缩以适应业务的快速发展。
+- **灵活的主题映射**：RocketMQ 数据桥支持将 MQTT 主题灵活映射到 RocketMQ 主题，允许轻松配置 RocketMQ 消息中的键（Key）和值（Value）。
+- **高吞吐量场景下的处理能力**：RocketMQ 数据桥支持同步和异步写入模式，允许根据不同场景灵活平衡延迟和吞吐量。
+
+## 桥接准备
+
+本节介绍了在 EMQX 中创建 RocketMQ 数据桥接之前需要做的准备工作，包括如何设置 RocketMQ 服务器。
+
+### 前置准备
 
 - 了解 EMQX 数据桥接[规则](./rules.md)。
 - 了解[数据桥接](./data-bridges.md)。
-
-:::
-
-## 特性
-
-- [连接池](./data-bridges.md#连接池)
-- [异步请求模式](./data-bridges.md#异步请求模式)
-- [批量模式](./data-bridges.md#批量模式)
-- [缓存队列](./data-bridges.md#缓存队列)
-- [SQL 预处理](./data-bridges.md#sql-预处理)
-
-## 快速开始教程
-
-本节介绍如何配置 RocketMQ 数据桥接，包括如何设置 RocketMQ 服务器、创建数据桥接和规则以将数据转发到 RocketMQ、以及如何测试数据桥接和规则。
-
-本教程假定您在本地机器上同时运行 EMQX 和 RocketMQ。如果您在远程运行 RocketMQ 和 EMQX，请相应地调整设置。
 
 ### 安装 RocketMQ
 
@@ -121,9 +134,9 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
 :::
 
-### 创建 RocketMQ 数据桥接
+## 创建 RocketMQ 数据桥接
 
-本节我们将创建一个 RocketMQ 数据桥接来实现对客户端发布消息的转发。
+本节我们将创建一个 RocketMQ 数据桥接来实现对客户端发布消息的转发。以下步骤假定您在本地机器上同时运行 EMQX 和 RocketMQ。如果您在远程运行 RocketMQ 和 EMQX，请相应地调整设置。
 
 1. 转到 Dashboard **数据集成** -> **数据桥接**页面。
 
@@ -145,7 +158,7 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
    在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 RocketMQ 的数据。您也可以按照[创建 RocketMQ 数据桥接规则](#创建-rocketmq-数据桥接规则)章节的步骤来创建规则。
 
-### 创建 RocketMQ 数据桥接规则
+## 创建 RocketMQ 数据桥接规则
 
 至此您已经完成数据桥接创建，接下来将继续创建一条规则来指定需要写入的数据。您需要为消息转发和设备上下线记录创建两条不同的规则。
 
@@ -188,7 +201,7 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
 至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果转发至 RocketMQ。
 
-### 测试桥接和规则
+## 测试桥接和规则
 
 
 使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
