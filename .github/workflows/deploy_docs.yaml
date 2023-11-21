@@ -141,7 +141,23 @@ jobs:
         ./ossutil64 config -e https://oss-accelerate.aliyuncs.com -i ${{ secrets.ALI_OSS_ACCESSKEY_ID }} -k ${{ secrets.ALI_OSS_ACCESSKEY_SECRET }} -L CH
         ./ossutil64 cp -r dist/ oss://emqx-io-docs/docs/ -u
 
-    - name: upload ee file
+    - name: set aws credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      if: env.DOCS_TYPE == 'enterprise'
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+    - name: upload ee file to aws s3
+      if: env.DOCS_TYPE == 'enterprise'
+      run: |
+        aws s3 rm --recursive s3://docs-emqx-com/zh/${DOCS_TYPE}/${VERSION} || true
+        aws s3 rm --recursive s3://docs-emqx-com/en/${DOCS_TYPE}/${VERSION} || true
+        aws s3 cp --recursive frontend/docs/.vitepress/dist/ s3://docs-emqx-com/
+        aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DOCS_CLOUDFRONT_ID }} --paths "/zh/${DOCS_TYPE}/${VERSION}/*" "/en/${DOCS_TYPE}/${VERSION}/*" "/api/${DOCS_TYPE}_versions.json" "/sitemap_${DOCS_TYPE}_${VERSION}.xml"
+
+    - name: upload ee file to tencent cos
       if: env.DOCS_TYPE == 'enterprise'
       run: |
         pip3 install coscmd
