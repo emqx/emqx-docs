@@ -20,17 +20,17 @@ Ingesting MQTT data into RabbitMQ works as follows:
 
 1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
 2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to RabbitMQ. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
-3. **Data ingestion into RabbitMQ**: Once the rule engine identifies a message for RabbitMQ storage, it triggers an action of forwarding the messages to RabbitMQ. Processed data will be seamlessly written into RabbitMQ.
-4. **Data Storage and Utilization**: With the data now stored in RabbitMQ, businesses can harness its querying power for various use cases. For instance, in logistics and supply chain management fields, data from IoT devices such as GPS trackers, temperature sensors, and inventory management systems can be monitored and analyzed for real-time tracking, route optimization, demand forecasting, and efficient inventory management.
+3. **Message ingestion into RabbitMQ**: When the rule has finished processing the message, it triggers an action of forwarding the messages to RabbitMQ. Processed message will be seamlessly written into RabbitMQ.
+4. **Data persistence and Utilization**: RabbitMQ stores the messages in queues and delivers them to the appropriate consumers. The messages can be consumed by other applications or services for further processing, such as data analysis, visualization, and storage.
 
 ## Features and Benefits
 
 The data integration with RabbitMQ brings the following features and advantages to your business:
 
-- **Reliable IoT Data Message Delivery**: EMQX can reliably batch and send MQTT messages to RabbitMQ, enabling the integration of IoT devices with RabbitMQ and application systems.
+- **Reliable IoT Data Message Delivery**: EMQX 实现了设备到云端的可靠连接与消息传递，RabbitMQ 实现了消息的消息持久化，以及在不同业务之间的可靠传递，在不同流程中保证了应用数据的可靠性。
 - **MQTT Message Transformation**: Using the rule engine, EMQX can filter and transform MQTT messages. Messages can undergo data extraction, filtering, enrichment, and transformation before being sent to RabbitMQ.
-- **Flexible Topic Mapping**: RabbitMQ Data Bridge supports flexible mapping of MQTT topics to RabbitMQ topics, allowing easy configuration of keys (Key) and values (Value) for data in RabbitMQ messages.
-- **Flexible Partition Selection**: RabbitMQ Data Bridge can select RabbitMQ partitions based on MQTT topics or clients using different strategies, providing flexibility in organizing and identifying data.
+- **Flexible Message Mapping**: RabbitMQ Data Bridge supports flexible mapping of MQTT topics to RabbitMQ Routing Key and Exchange, allowing seamless integration between MQTT and RabbitMQ.
+- **High Availability and Cluster Support**: EMQX and RabbitMQ both support the construction of highly available message broker clusters, ensuring that the system can continue to provide services even in the event of node failures. Leveraging the cluster capabilities also provides excellent scalability.
 - **Processing Capabilities in High-Throughput Scenarios**: RabbitMQ Data Bridge supports both synchronous and asynchronous write modes, allowing for a flexible balance between latency and throughput according to different scenarios.
 
 ## Before You Start
