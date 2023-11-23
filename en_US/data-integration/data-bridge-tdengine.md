@@ -1,16 +1,16 @@
 # Ingest MQTT Data into TDengine
 
-[TDengine](https://tdengine.com/) is an open-source, high-performance, cloud native time-series database optimized for Internet of Things (IoT), Connected Cars, Industrial IoT and DevOps. EMQX supports integration with TDengine so you can save MQTT messages and client events to TDengine, or use events to trigger the update or removal of data from TDengine to record the online status or online/offline of clients.
+[TDengine](https://tdengine.com/) 是一款专为物联网、工业互联网等场景设计并优化的大数据平台，其核心模块是高性能、集群开源、云原生、极简的时序数据库。EMQX 支持与 TDengine 集成，能够实现大量设备和数据采集器的海量数据传输、存储、分析和分发，对业务运行状态进行实时监测、预警，提供实时的商业洞察。
 
 This page provides a comprehensive introduction to the data integration between EMQX and TDengine with practical instructions on creating a rule and data bridge.
 
 ## How It Works
 
-TDengine data integration is a built-in feature in EMQX that combines the real-time data capturing and transmission capabilities of EMQX with the data storage and analysis capabilities of TDengine. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to TDengine for storage and analysis, eliminating the need for complex coding.
+TDengine data integration is a built-in feature in EMQX that combines the real-time data capturing and transmission capabilities of EMQX with the data storage and analysis capabilities of TDengine. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to TDengine, eliminating the need for complex coding.
 
 <!-- The diagram below illustrates the typical architecture of EMQX and TDengine data integration in the industrial IoT.-->
 
-EMQX forwards device data to TDengine through the rule engine and data bridge. TDengine analyzes the data using SQL statements, generates reports, charts, and other data analysis results, and displays them to users through TDengine's visualization tools. The workflow is as follows:
+EMQX forwards device data to TDengine through the rule engine and data bridge. 使用标准 SQL 和强大的时间序列扩展来实时分析您的数据, 与众多第三方批分析、实时分析、报表工具、AI/ML 工具、可视化工具无缝集成。以工业能耗管理场景为例，The workflow is as follows:
 
 1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.  
 2. **Rule Engine Processes Messages**: The built-in rule engine processes messages from specific sources based on topic matching. When a message arrives, it passes through the rule engine, which matches it with corresponding rules and processes the message data. This can include transforming data formats, filtering specific information, or enriching messages with context information.
@@ -19,16 +19,17 @@ EMQX forwards device data to TDengine through the rule engine and data bridge. T
 After energy consumption data is written to TDengine, you can flexibly use SQL statements to analyze the data. For example:
 
 - Connect to visualization tools such as Grafana to generate charts and display energy consumption data.
-- Connect to application systems such as ERP for production analysis and production plan adjustments.
+- Connect to application systems such as ERP or Power BI for production analysis and production plan adjustments.
 - Connect to business systems to perform real-time energy usage analysis, facilitating data-driven energy management.
 
 ## Features and Benefits
 
 Using TDengine data bridging in EMQX brings the following features and advantages to your business:
 
+- **高性能海量物联网数据**：EMQX 可以高效处理大量物联网设备连接和消息吞吐量，TDengine 充分利用了时序数据特点，在数据写入、存储、查询方面表现优异，满足物联网场景下的数据处理需求，不会对系统造成过大压力。
 - **Efficient Data Handling**: EMQX can handle a large number of IoT device connections and message throughput efficiently. TDengine excels in data writing, storage, and querying, meeting the data processing needs of IoT scenarios without overwhelming the system.
 - **Message Transformation**: Messages can undergo rich processing and transformation within EMQX rules before being written to TDengine.
-- **Efficient Storage and Scalability**: EMQX and TDengine both have cluster scaling capabilities, allowing flexible horizontal scaling as your business grows to meet expanding demands.
+- **Cluster and Scalability**: EMQX and TDengine 支持集群能力并基于云原生构建，能充分利用云平台的存储、计算、网络资源的弹性能力, allowing flexible horizontal scaling as your business grows to meet expanding demands.
 - **Advanced Querying Capabilities**: TDengine provides optimized functions, operators, and indexing techniques for efficient querying and analysis of timestamp data, enabling precise insights to be extracted from IoT time-series data.
 
 ## Before You Start
