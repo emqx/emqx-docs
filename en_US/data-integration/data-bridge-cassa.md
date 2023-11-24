@@ -8,7 +8,13 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 :::
 {% endemqxce %}
 
-Cassandra is a popular open-source, distributed NoSQL database management system. EMQX's integration with Apache Cassandra provides the ability to store messages and events in Cassandra database. The current implementation only supports Cassandra v3.x, not yet compatible with v4.x.
+Cassandra is a popular open-source, distributed NoSQL database management system, 旨在处理大规模数据集并用于构建高吞吐量的应用程序。
+
+EMQX's integration with Apache Cassandra provides the ability to store messages and events in Cassandra database, 实现时间序列数据存储、设备注册和管理以及实时数据分析等功能。
+
+:::tip
+The current implementation only supports Cassandra v3.x, not yet compatible with v4.x.
+:::
 
 This page provides a comprehensive introduction to the data integration between EMQX and Cassandra with practical instructions on creating and validating the data integration.
 
@@ -20,22 +26,23 @@ Cassandra data integration is an out-of-the-box feature in EMQX designed to brid
 
 Ingesting MQTT data into Cassandra works as follows:
 
-1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+1. **Message publication and reception**: IoT devices, whether they are part of connected vehicles, IIoT systems, or energy management platforms, establish successful connections to EMQX through the MQTT protocol and publish MQTT messages to specific topics. When EMQX receives these messages, it initiates the matching process within its rules engine.
 2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to Cassandra. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
 3. **Data ingestion into Cassandra**: Once the rule engine identifies a message for Cassandra storage, it triggers an action of forwarding the messages to Cassandra. Processed data will be seamlessly written into the collection of the Cassandra database.
-4. **Data Storage and Utilization**: With the data now stored in Cassandra, businesses can harness its querying power for various use cases. For instance, in logistics and supply chain management fields, data from IoT devices such as GPS trackers, temperature sensors, and inventory management systems can be monitored and analyzed for real-time tracking, route optimization, demand forecasting, and efficient inventory management.
+4. **Data storage and utilization**: With the data now stored in Cassandra, businesses can harness its querying power for various use cases. For instance, in the realm of connected vehicles, this stored data can inform fleet management systems about vehicle health, optimize route planning based on real-time metrics, or track assets. Similarly, in IIoT settings, the data might be used to monitor machinery health, forecast maintenance, or optimize production schedules.
 
 ## Features and Benefits
 
 The data integration with Cassandra offers a range of features and benefits tailored to ensure efficient data transmission, storage, and utilization:
 
+- **大规模时序数据存储**：EMQX 能够处理海量设备连接与消息传递，借助 Cassandra 高度可扩展性和分布式存储的特性，能够实现大规模数据集包括时序数据的存储和管理，并支持基于时间范围的查询和聚合操作。
 - **Real-time Data Streaming**: EMQX is built for handling real-time data streams, ensuring efficient and reliable data transmission from source systems to Cassandra. It enables organizations to capture and analyze data in real-time, making it ideal for use cases requiring immediate insights and actions.
-- **High Performance and Scalability**: EMQX's distributed architecture and Cassandra's columnar storage format enable seamless scalability as data volumes increase. This ensures consistent performance and responsiveness, even with large datasets.
+- **高可用性保障**: EMQX 与 Cassandra 均提供了集群能力，两者结合使用的情况下，设备连接以及数据可以分布在多台服务器上，当一个节点发生故障时，系统可以自动切换到其他可用节点，从而实现高度可扩展性和容错性。
 - **Flexibility in Data Transformation:** EMQX provides a powerful SQL-based Rule Engine, allowing organizations to pre-process data before storing it in Cassandra. It supports various data transformation mechanisms, such as filtering, routing, aggregation, and enrichment, enabling organizations to shape the data according to their needs.
-- **Easy Deployment and Management:** EMQX provides a user-friendly interface for configuring data sources, pre-processing data rules, and Cassandra storage settings. This simplifies the setup and ongoing management of the data integration process.
-- **Advanced Analytics:** Cassandra's powerful SQL-based query language and support for complex analytical functions empower users to gain valuable insights from IoT data, enabling predictive analytics, anomaly detection, and more.
+- **灵活的数据模型**：Cassandra 使用基于列的数据模型，支持灵活的数据模式和动态添加列，适用于存储和管理结构化的设备事件与消息数据，能够轻松存储不同的 MQTT 消息数据。
 
 ## Before You Start
+
 This section describes the preparations you need to complete before you start to create a TimescaleDB data bridge, including how to install a Cassandra server and create keyspace and table.
 
 ### Prerequisites

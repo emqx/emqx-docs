@@ -6,7 +6,9 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 :::
 {% endemqxce %}
 
-EMQX supports integration with DynamoDB, so you can save MQTT messages and client events to DynamoDB, or use events to trigger the update or removal of data to record the online status or online/offline of clients.
+[DynamoDB](https://www.amazonaws.cn/en/dynamodb/) 是在 AWS 上完全托管一种高性能、无服务器的键值存储数据库服务。它被设计用于处理需要快速、可扩展和可靠数据存储的应用程序。
+
+EMQX supports integration with DynamoDB, so you can save MQTT messages and client events to DynamoDB, 实现物联网设备的注册和管理、设备数据的长期存储和实时分析。
 
 This page provides a comprehensive introduction to the data integration between EMQX and DynamoDB with practical instructions on creating and validating the data integration.
 
@@ -18,20 +20,19 @@ DynamoDB data integration is an out-of-the-box feature in EMQX designed to bridg
 
 Ingesting MQTT data into DynamoDB works as follows:
 
-1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+1. **Message publication and reception**: IoT devices, whether they are part of connected vehicles, IIoT systems, or energy management platforms, establish successful connections to EMQX through the MQTT protocol and publish MQTT messages to specific topics. When EMQX receives these messages, it initiates the matching process within its rules engine.
 2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to DynamoDB. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
 3. **Data ingestion into DynamoDB**: Once the rule engine identifies a message for DynamoDB storage, it triggers an action of forwarding the messages to DynamoDB. Processed data will be seamlessly written into the collection of the DynamoDB database.
-4. **Data Storage and Utilization**: With the data now stored in DynamoDB, businesses can harness its querying power for various use cases. For instance, in logistics and supply chain management fields, data from IoT devices such as GPS trackers, temperature sensors, and inventory management systems can be monitored and analyzed for real-time tracking, route optimization, demand forecasting, and efficient inventory management.
+4. **Data storage and utilization**: With the data now stored in DynamoDB, businesses can harness its querying power for various use cases. For instance, in the realm of connected vehicles, this stored data can inform fleet management systems about vehicle health, optimize route planning based on real-time metrics, or track assets. Similarly, in IIoT settings, the data might be used to monitor machinery health, forecast maintenance, or optimize production schedules.
 
 ## Features and Benefits
 
 The data integration with DynamoDB offers a range of features and benefits tailored to ensure efficient data transmission, storage, and utilization:
 
 - **Real-time Data Streaming**: EMQX is built for handling real-time data streams, ensuring efficient and reliable data transmission from source systems to DynamoDB. It enables organizations to capture and analyze data in real-time, making it ideal for use cases requiring immediate insights and actions.
-- **High Performance and Scalability**: EMQX's distributed architecture and DynamoDB's columnar storage format enable seamless scalability as data volumes increase. This ensures consistent performance and responsiveness, even with large datasets.
 - **Flexibility in Data Transformation:** EMQX provides a powerful SQL-based Rule Engine, allowing organizations to pre-process data before storing it in DynamoDB. It supports various data transformation mechanisms, such as filtering, routing, aggregation, and enrichment, enabling organizations to shape the data according to their needs.
-- **Easy Deployment and Management:** EMQX provides a user-friendly interface for configuring data sources, pre-processing data rules, and DynamoDB storage settings. This simplifies the setup and ongoing management of the data integration process.
-- **Advanced Analytics:** DynamoDB's powerful SQL-based query language and support for complex analytical functions empower users to gain valuable insights from IoT data, enabling predictive analytics, anomaly detection, and more.
+- **灵活的数据模型**：DynamoDB 使用键值对和文档数据模型，适用于存储和管理结构化的设备事件与消息数据，能够轻松存储不同的 MQTT 消息结构。
+- **强大的扩展能力**：EMQX 提供了集群扩展能力，能够根据设备连接与消息量实现无缝的水平扩展；DynamoDB 无需管理服务器或基础设施，自动处理底层的资源管理和扩展。两者结合能够实现高性能、高可靠的数据存储与扩展。
 
 ## Before You Start
 
