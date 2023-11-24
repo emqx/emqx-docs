@@ -12,7 +12,7 @@ This page provides a comprehensive introduction to the data integration between 
 
 ## How It Works
 
-InfluxDB data integration is an out-of-the-box feature in EMQX that combines EMQX's real-time data capturing and transmission capabilities with InfluxDB's data storage and analysis functionality. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to InfluxDB for storage and analysis, eliminating the need for complex coding. EMQX forwards device data to InfluxDB through the rule engine and data bridge. InfluxDB analyzes the data generates reports, charts, and other data analysis results, and presents them to users through InfluxDB's visualization tools. 
+InfluxDB data integration is an out-of-the-box feature in EMQX that combines EMQX's real-time data capturing and transmission capabilities with InfluxDB's data storage and analysis functionality. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to InfluxDB for storage and analysis, eliminating the need for complex coding. EMQX forwards device data to InfluxDB for storage and analysis through the rule engine and data bridge. After analyzing the data, InfluxDB generates reports, charts, and other data analysis results, and then presents them to users through InfluxDB's visualization tools. 
 
 The diagram below illustrates the typical architecture of data integration between EMQX and InfluxDB in an energy storage scenario.
 
