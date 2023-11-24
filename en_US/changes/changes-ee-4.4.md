@@ -6,9 +6,9 @@
 
 ### Bug Fixes
 
-- Fixed the issue that the rule engine could not connect to `upstash` Redis.
+- Fixed the issue that the rule engine could not connect to [upstash](https://upstash.com/) Redis.
 
-  Before the fix, after establishing a TCP connection with the Redis service, the Redis driver of emqx used [Inline Commands](https://redis.io/docs/reference/protocol-spec/#inline-commands) to send AUTH and SELECT commands. However, the `upstash` Redis service did not support Inline Commands, which caused the rule engine to fail to connect to the `upstash` Redis service.
+  Before the fix, after establishing a TCP connection with the Redis service, the Redis driver of emqx used [Inline Commands](https://redis.io/docs/reference/protocol-spec/#inline-commands) to send AUTH and SELECT commands. However, the upstash Redis service did not support Inline Commands, which caused the rule engine to fail to connect to the upstash Redis service.
   After the fix, the redis driver of emqx uses RESP (REdis Serialization Protocol) to send AUTH and SELECT commands.
 
 - Added validity check for some parameters of the "Offline Msg to Redis" action and Redis resource.
