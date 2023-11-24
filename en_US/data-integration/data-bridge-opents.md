@@ -14,13 +14,13 @@ This page provides a comprehensive introduction to the data integration between 
 
 OpenTSDB data integration is an out-of-the-box feature in EMQX that combines EMQX's real-time data capturing and transmission capabilities with OpenTSDB's data storage and analysis functionality. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to OpenTSDB for storage and analysis, eliminating the need for complex coding.
 
-EMQX forwards device data to OpenTSDB through the rule engine and data bridge. OpenTSDB analyzes the data using SQL statements, generates reports, charts, and other data analysis results, and presents them to users through OpenTSDB's visualization tools. The workflow is as follows:
+EMQX insert device data to OpenTSDB through the rule engine and data bridge. OpenTSDB 提供丰富的查询功能, 支持 generates reports, charts, and other data analysis results. 以工业能耗管理场景为例，The workflow is as follows:
 
-1. **Message publication and reception**: IoT devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol, including information such as power consumption, input/output power, etc. When EMQX receives these messages, it initiates the matching process within its rules engine.  
-2. **Message data processing**: Using the built-in rule engine, messages from specific sources can be processed based on topic matching. When a message arrives, it passes through the rule engine, which matches it with the corresponding rule and processes the message data, such as transforming data formats, filtering specific information, or enriching messages with contextual information.
-3. **Data ingestion into OpenTSDB**: Rules defined in the rule engine trigger the operation of writing messages to OpenTSDB. The OpenTSDB data bridge provides SQL templates that allow flexible definitions of the data format to be written, mapping specific fields from the message to the corresponding tables and columns in OpenTSDB.
+1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+2. **Rule Engine Processes Messages**: The built-in rule engine processes messages from specific sources based on topic matching. When a message arrives, it passes through the rule engine, which matches it with corresponding rules and processes the message data. This can include transforming data formats, filtering specific information, or enriching messages with context information.
+3. **Data ingestion into OpenTSDB**: Rules defined in the rule engine trigger operations to write messages to OpenTSDB.
 
-After data is written to OpenTSDB, you can use SQL statements flexibly to analyze the data, for example:
+After data is written to OpenTSDB, 你可以灵活的使用数据，例如:
 
 - Connect to visualization tools like Grafana to generate charts based on the data, displaying energy storage data.
 - Connect to business systems for monitoring and alerting on the status of energy storage devices.
@@ -31,9 +31,9 @@ The OpenTSDB data integration offers the following features and advantages:
 
 - **Efficient Data Processing**: EMQX can handle a massive number of IoT device connections and message throughput, while OpenTSDB excels in data writing, storage, and querying, providing outstanding performance to meet the data processing needs of IoT scenarios without overburdening the system.
 - **Message Transformation**: Messages can undergo extensive processing and transformation through EMQX rules before being written into OpenTSDB.
+- **大规模数据存储**: 通过将 EMQX 与 OpenTSDB 集成，可以将海量设备数据直接存储到 OpenTSDB 中。OpenTSDB 是为存储和查询大规模时间序列数据而设计的数据库，能够高效地处理物联网设备产生的海量时间序列数据。
+- **Rich Query Capabilities**: OpenTSDB 优化过存储结构和索引能够实现数十亿个数据点快速写入和查询，这对于需要对物联网设备数据进行实时监控、分析和可视化的应用场景非常有益。
 - **Scalability**: Both EMQX and OpenTSDB are capable of cluster scaling, allowing flexible horizontal expansion of clusters as business needs grow.
-- **Rich Query Capabilities**: OpenTSDB offers optimized functions, operators, and indexing techniques, enabling efficient querying and analysis of timestamped data, and accurately extracting valuable insights from IoT time-series data.
-- **Efficient Storage**: OpenTSDB uses encoding methods with high compression ratios, significantly reducing storage costs. It also allows customization of storage durations for different data types to avoid unnecessary data occupying storage space.
 
 ## Before You Start
 
