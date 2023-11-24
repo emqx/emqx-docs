@@ -4,6 +4,12 @@
 
 *Release Date: 2023-11-24*
 
+### Enhancements
+
+- Improved the performance of message sending between EMQX nodes.
+
+  `gen_rpc` is the RPC channel used internally by EMQX for sending MQTT messages between nodes. In this improvement, we optimized the `gen_rpc`'s ability to handle backlogged messages in the channel, allowing the system to recover more quickly from traffic peaks.
+
 ### Bug Fixes
 
 - Fixed the issue that the rule engine could not connect to [upstash](https://upstash.com/) Redis.
@@ -15,8 +21,6 @@
 
   * Checked the "Redis Key TTL" parameter of the "Offline Msg to Redis" action.
   * Checked the "Redis Database" parameter of the Redis resource.
-
-- Fixed the occasional issue of the `gen_rpc` channel being blocked by a large number of messages under certain circumstances.
 
 ## e4.4.22
 
