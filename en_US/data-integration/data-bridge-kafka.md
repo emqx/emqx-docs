@@ -39,10 +39,9 @@ The diagram below illustrates a typical architecture of data integration between
 
 Streaming data into or from Apache Kafka involves creating data bridges to Kafka in two roles: producer (sends messages to Kafka) and consumer (receives messages from Kafka). EMQX enables you to create data bridges in either of the roles. If you configure the data bridge in a producer role, it works as follows:
 
-1. **Message publication from IoT devices:** The connected vehicles periodically publish messages containing status data using the MQTT protocol. These messages include information such as speed and direction.
-2. **Message reception by EMQX:** As an MQTT Broker, EMQX receives these MQTT messages from the connected vehicles. It serves as the centralized hub for handling MQTT-based communication.
-3. **Message data processing:** With an embedded rule engine working together with the broker as a single component, these MQTT messages can be processed based on topic matching rules. When a message arrives, it passes through the rule engine, which evaluates the defined rules for that message. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
-4. **Bridging to Kafka:** The rule defined in the rule engine triggers an action of forwarding the messages to Kafka. Using the Kafka bridging functionality, MQTT topics are mapped to pre-defined Kafka topics, and all processed messages and data are written into Kafka topics.
+1. **Message publication and reception**: IoT devices on connected vehicles establish successful connections to EMQX through the MQTT protocol and periodically publish messages containing status data via MQTT. When EMQX receives these messages, it initiates the matching process within its rules engine.
+2. **Message data processing:** With an embedded rule engine working together with the broker as a single component, these MQTT messages can be processed based on topic matching rules. When a message arrives, it passes through the rule engine, which evaluates the defined rules for that message. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
+3. **Bridging to Kafka:** The rule defined in the rule engine triggers the action of forwarding the messages to Kafka. Using the Kafka bridging functionality, MQTT topics are mapped to pre-defined Kafka topics, and all processed messages and data are written into Kafka topics.
 
 After the vehicle data are ingested into Kafka, you can flexibly access and utilize the data:
 
