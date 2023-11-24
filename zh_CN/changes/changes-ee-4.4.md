@@ -1,5 +1,21 @@
 # 版本发布
 
+## e4.4.23
+
+*发布日期: 2023-11-24*
+
+### 修复
+
+- 修复规则引擎无法连接到 `upstash` Redis 的问题。
+
+  修复前，在与 Redis 服务建立 TCP 连接之后，emqx 的 redis 驱动程序使用 [Inline Commands](https://redis.io/docs/reference/protocol-spec/#inline-commands) 来发送 AUTH 和 SELECT 命令。但 `upstash` Redis 服务不支持 Inline Commands，导致规则引擎无法连接到 `upstash` Redis 服务。
+  修复后，emqx 的 redis 驱动程序使用 RESP (REdis Serialization Protocol) 来发送 AUTH 和 SELECT 命令。
+
+- 为 "离线消息保存到 Redis" 动作和 Redis 资源的某些参数增加了合法性校验。
+
+  * 校验 "离线消息保存到 Redis" 动作的 "Redis Key 超期时间" 参数。
+  * 校验 Redis 资源的 "Redis 数据库" 参数。
+
 ## e4.4.22
 
 *发布日期: 2023-11-01*

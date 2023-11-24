@@ -1,5 +1,21 @@
 # Releases
 
+## e4.4.23
+
+*Release Date: 2023-11-24*
+
+### Bug Fixes
+
+- Fix the issue that the rule engine cannot connect to `upstash` Redis.
+
+  Before the fix, after establishing a TCP connection with the Redis service, the redis driver of emqx used [Inline Commands](https://redis.io/docs/reference/protocol-spec/#inline-commands) to send AUTH and SELECT commands. However, the `upstash` Redis service does not support Inline Commands, which causes the rule engine to fail to connect to the `upstash` Redis service.
+  After the fix, the redis driver of emqx uses RESP (REdis Serialization Protocol) to send AUTH and SELECT commands.
+
+- Add validity check for some parameters of the "Offline Msg to Redis" action and Redis resource.
+
+  * Check the "Redis Key TTL" parameter of the "Offline Msg to Redis" action.
+  * Check the "Redis Database" parameter of the Redis resource.
+
 ## e4.4.22
 
 *Release Date: 2023-11-01*
