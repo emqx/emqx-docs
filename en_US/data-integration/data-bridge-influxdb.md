@@ -22,7 +22,7 @@ EMQX and InfluxDB provide an extensible IoT platform for efficiently collecting 
 
 1. **Message publication and reception**: Energy storage devices and Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol, including information such as power consumption, input/output power, etc. When EMQX receives these messages, it initiates the matching process within its rules engine.  
 3. **Message data processing**: Using the built-in rule engine, messages from specific sources can be processed based on topic matching. When a message arrives, it passes through the rule engine, which matches it with the corresponding rule and processes the message data, such as transforming data formats, filtering specific information, or enriching messages with contextual information.
-4. **Data ingestion into InfluxDB**: Rules defined in the rule engine trigger the operation of writing messages to InfluxDB. The InfluxDB data bridge provides SQL templates that allow flexible definitions of the data format to be written, mapping specific fields from the message to the corresponding tables and columns in InfluxDB.
+4. **Data ingestion into InfluxDB**: Rules defined in the rule engine trigger the operation of writing messages to InfluxDB. The InfluxDB data bridge provides Line Protocol templates that allow flexible definitions of the data format to be written, mapping specific fields from the message to the corresponding measurement and field in InfluxDB.
 
 After energy consumption data is written to InfluxDB, you can use SQL statements flexibly to analyze the data, for example:
 

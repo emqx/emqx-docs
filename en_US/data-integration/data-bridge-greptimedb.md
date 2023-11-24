@@ -18,9 +18,9 @@ GreptimeDB data integration is a built-in feature in EMQX that combines the real
 
 1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.  
 2. **Rule Engine Processes Messages**: The built-in rule engine processes messages from specific sources based on topic matching. When a message arrives, it passes through the rule engine, which matches it with corresponding rules and processes the message data. This can include transforming data formats, filtering specific information, or enriching messages with context information.
-3. **Data ingestion into GreptimeDB**: Rules defined in the rule engine trigger operations to write messages to GreptimeDB. The GreptimeDB data bridge provides SQL templates that allow flexible definitions of the data format to write specific message fields to the corresponding tables and columns in GreptimeDB.
+3. **Data ingestion into GreptimeDB**: Rules defined in the rule engine trigger operations to write messages to GreptimeDB. The GreptimeDB data bridge provides Line Protocol templates that allow flexible definitions of the data format to write specific message fields to the corresponding tables and columns in GreptimeDB.
 
-After energy consumption data is written to GreptimeDB, you can flexibly use SQL statements to analyze the data. For example:
+After energy consumption data is written to GreptimeDB, you can flexibly use SQL statements or Prometheus query language to analyze the data. For example:
 
 - Connect to visualization tools such as Grafana to generate charts and display energy consumption data.
 - Connect to application systems such as ERP for production analysis and production plan adjustments.
@@ -30,6 +30,7 @@ After energy consumption data is written to GreptimeDB, you can flexibly use SQL
 
 The data integration with GreptimeDB brings the following features and advantages to your business:
 
+- **易于上手使用**：EMQX 与 GreptimeDB 在开发、部署方面均提供了用户友好的使用体验。EMQX 提供了标准 MQTT 协议以及开箱即用的各类认证、授权和集成功能，GreptimeDB 提供了 Time-Series Table，schemaless 等友好设计。两者的集成能够加快业务的整合与开发过程。
 - **Efficient Data Handling**: EMQX can handle a large number of IoT device connections and message throughput efficiently. GreptimeDB excels in data writing, storage, and querying, meeting the data processing needs of IoT scenarios without overwhelming the system.
 - **Message Transformation**: Messages can undergo rich processing and transformation within EMQX rules before being written to GreptimeDB.
 - **Efficient Storage and Scalability**: EMQX and GreptimeDB both have cluster scaling capabilities, allowing flexible horizontal scaling as your business grows to meet expanding demands.
