@@ -16,6 +16,8 @@
   * Checked the "Redis Key TTL" parameter of the "Offline Msg to Redis" action.
   * Checked the "Redis Database" parameter of the Redis resource.
 
+- Fixed the occasional issue of the `gen_rpc` channel being blocked by a large number of messages under certain circumstances.
+
 ## e4.4.22
 
 *Release Date: 2023-11-01*
