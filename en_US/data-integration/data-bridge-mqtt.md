@@ -59,13 +59,6 @@ The following section will use EMQX [public MQTT broker](https://www.emqx.com/en
 
 :::
 
-### Feature List
-
-- [Async mode](./data-bridges.md#async-mode)
-- [Buffer queue](./data-bridges.md#buffer-queue)
-
-<!--  Configuration parameters TODO 链接到配置手册对应配置章节。 -->
-
 ### Create MQTT Data Bridge via Dashboard
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.

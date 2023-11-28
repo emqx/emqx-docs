@@ -1,6 +1,14 @@
 # 将 MQTT 数据写入到 Microsoft SQL Server
 
-通过 Microsoft SQL Server 数据桥接可以将 MQTT 消息和客户端事件存储到 Microsoft SQL Server 中，也可以通过事件触发对 Microsoft SQL Server 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
+{% emqxce %}
+:::tip
+EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+:::
+{% endemqxce %}
+
+[SQL Server](https://www.microsoft.com/en-us/sql-server/) 是领先的关系型商业数据库解决方案之一，被广泛应用于各种规模和类型的企业和组织中。EMQX 支持与 SQL Server 集成，使您能够将 MQTT 消息和客户端事件保存到 SQL Server 以便于构建复杂的数据管道和分析流程实现数据管理和分析，或进行设备连接管理并与其他 ERP, CRM，BI 企业系统的集成。
+
+本页详细介绍了 EMQX 与 Microsoft SQL Server 的数据集成并提供了实用的规则和数据桥接创建指导。
 
 {% emqxee %}
 
@@ -10,34 +18,38 @@
 
 :::
 
-{% emqxee %}
+{% endemqxee %}
 
-{% emqxce %}
-:::tip
-EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
-:::
-{% endemqxce %}
+## 工作原理
 
-:::tip 前置准备
+Microsoft SQL Server 数据集成是 EMQX 的开箱即用功能，结合了 EMQX 的设备接入、消息传输能力与 Microsoft SQL Server 强大的数据存储能力。通过内置的[规则引擎](./rules.md)组件和数据桥接，您可以将 MQTT 消息和客户端事件存储到 Microsoft SQL Server 中，也可以通过事件触发对 Microsoft SQL Server 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。该集成简化了从 EMQX 到 Microsoft SQL Server 的数据摄取过程，无需复杂的编码。
+
+<!-- 下图展示了 EMQX 和 SQL Server 之间的数据集成的典型架构。 -->
+
+将 MQTT 数据摄取到 Microsoft SQL Server 的工作流程如下：
+
+1. **消息发布和接收**：工业物联网设备通过 MQTT 协议成功连接到 EMQX，并根据其运行状态、读数或触发的事件，从机器、传感器和生产线发布实时 MQTT 数据到 EMQX。当 EMQX 接收到这些消息时，它将在其规则引擎中启动匹配过程。
+2. **消息数据处理**：当消息到达时，它会通过规则引擎进行处理，然后由 EMQX 中定义的规则处理。规则根据预定义的标准确定哪些消息需要路由到 Microsoft SQL Server。如果任何规则指定了载荷转换，那么这些转换将被应用，例如转换数据格式、过滤出特定信息，或用额外的上下文丰富载荷。
+3. **数据写入到 Microsoft SQL Server**：规则触发将消息写入 Microsoft SQL Server 的操作。借助 SQL 模板，用户可以从规则处理结果中提取数据来构造 SQL 并发送到 Microsoft SQL Server 执行，从而将消息的特定字段写入或更新到数据库的相应表和列中。
+4. **数据存储和利用**：数据现存储在 Microsoft SQL Server 中，企业可以利用其查询能力应用于各种用例。
+
+## 特性与优势
+
+与 Microsoft SQL Server 的数据集成提供了一系列特性和优势，确保了数据传输、存储和利用的高效性：
+
+- **实时数据流**：EMQX 专为处理实时数据流而构建，确保了从源系统到 Microsoft SQL Server 的数据传输的高效性和可靠性。它使组织能够实时捕获和分析数据，非常适合需要立即洞察和行动的用例。
+- **高性能和可扩展性**：EMQX 和 Microsoft SQL Server 都具有扩展性和可靠性的特点，适用于处理大规模的物联网数据，并在需求增长时进行不停机的水平和垂直扩展，确保物联网应用程序的连续性和可靠性。
+- **数据转换的灵活性**：EMQX 提供了强大的基于 SQL 的规则引擎，允许组织在将数据存储到 Microsoft SQL Server 之前进行预处理。它支持各种数据转换机制，如过滤、路由、聚合和丰富，使组织能够根据他们的需求塑造数据。
+- **高级分析**：Microsoft SQL Server 提供了强大的分析能力，例如通过 Analysis Services 构建多维数据模型，以支持复杂的数据分析和数据挖掘，通过 Reporting Services 创建和发布报告，向利益相关者展示物联网数据的洞察和分析结果。
+
+## 桥接准备
+
+本节介绍了在 EMQX 中创建 Microsoft SQL Server 数据桥接之前需要做的准备工作，包括如何设置 Microsoft SQL Server 服务器并创建数据库和数据表、安装并配置 ODBC 驱动程序。
+
+### 前置准备
 
 - 了解 [规则](./rules.md)。
 - 了解 [数据桥接](./data-bridges.md)。
-
-:::
-
-## 功能清单
-
-- [连接池](./data-bridges.md#连接池)
-- [批量模式](./data-bridges.md#批量模式)
-- [缓存队列](./data-bridges.md#缓存队列)
-
-<!-- TODO 配置参数 需要补充链接到配置手册对应配置章节。 -->
-
-## 快速开始教程
-
-本节介绍如何配置 Microsoft SQL Server 数据桥接，包括如何设置 Microsoft SQL Server 服务器并创建数据库和数据表、安装并配置 ODBC 驱动程序、创建数据创建数据桥接和转发数据到 Microsoft SQL Server 的规则以及测试数据桥接和规则等主题。
-
-本教程假设您在本地机器上同时运行 EMQX 和 Microsoft SQL Server。 如果您有远程运行的 EMQX 和 Microsoft SQL Server，请相应地调整设置。
 
 ### 安装并连接到 Microsoft SQL Server
 
@@ -217,9 +229,9 @@ Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
 FileUsage   = 1
 ```
 
-### 创建 Microsoft SQL Server 数据桥接
+## 创建 Microsoft SQL Server 数据桥接
 
-本节介绍了如何在 EMQX Dashboard 上创建 Microsoft SQL Server 数据桥接以实现对客户端发布消息的存储或设备状态的记录。
+本节演示了如何在 EMQX Dashboard 上创建 Microsoft SQL Server 数据桥接以实现对客户端发布消息的存储或设备状态的记录。以下示例假设您在本地机器上同时运行 EMQX 和 Microsoft SQL Server。 如果您有远程运行的 EMQX 和 Microsoft SQL Server，请相应地调整设置。
 
 1. 在 Dashboard 点击 **数据集成** -> **数据桥接**。
 
@@ -260,7 +272,7 @@ FileUsage   = 1
 
 至此您已经完成数据桥接创建，Microsoft SQL Server 数据桥接应该出现在数据桥接列表（**数据集成** -> **数据桥接**）中，**资源状态**为**已连接**。
 
-### 创建数据转发规则
+## 创建数据转发规则
 
 本节介绍了如何为 Microsoft SQL Server 数据桥接创建规则。您需要为实现对客户端发布消息的存储或实现设备上下线状态的记录创建不同的规则。
 
@@ -297,7 +309,7 @@ FileUsage   = 1
 
 至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 Microsoft SQL Server 存储。
 
-### 测试数据桥接和规则
+## 测试数据桥接和规则
 
 使用 MQTTX 向 `t/1` 主题发布消息。
 

@@ -43,8 +43,6 @@ The data integration with Pulsar brings the following features and advantages to
 
 This section describes the preparations you need to complete before you start to create the Pulsar data bridges in EMQX Dashboard.
 
-This tutorial assumes you run EMQX and Pulsar on the local machine. If you have Pulsar and EMQX running remotely, adjust the settings accordingly.
-
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
@@ -70,7 +68,7 @@ docker exec -it pulsar bin/pulsar-admin topics create-partitioned-topic persiste
 
 ## Create Rule and Pulsar Data Bridge
 
-This section demonstrates how to create a Pulsar producer data bridge via the Dashboard.
+This section demonstrates how to create a Pulsar producer data bridge via the Dashboard. It assumes you run EMQX and Pulsar on the local machine. If you have Pulsar and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 

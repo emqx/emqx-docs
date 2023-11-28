@@ -22,7 +22,7 @@ EMQX forwards MQTT data to Amazon Kinesis through the rule engine and data bridg
 
 1. **IoT Devices Publish Messages**: Devices publish telemetry and status data through specific topics, triggering the rule engine.
 2. **Rule Engine Processes Messages**: Using the built-in rule engine, MQTT messages from specific sources are processed based on topic matching. The rule engine matches corresponding rules and processes messages, such as converting data formats, filtering specific information, or enriching messages with contextual information.
-3. **Bridging to Amazon Kinesis**: The rule triggers the action of forwarding messages to Amazon Kinesis, 可以自定义配置分区键，要写入的数据流以及消息格式，实现灵活的数据集成。
+3. **Bridging to Amazon Kinesis**: The action triggered by rules to forward messages to Amazon Kinesis allows for custom configuration of partition keys, the data stream to write to, and message format, enabling flexible data integration.
 
 After MQTT message data is written to Amazon Kinesis, you can perform flexible application development, such as:
 
