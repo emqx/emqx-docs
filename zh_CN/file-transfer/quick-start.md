@@ -4,7 +4,7 @@
 
 您可以按照以下说明在 EMQX 启用文件传输功能、使用客户端上传文件并通过 EMQX 提供的 API 访问上传的文件。
 
-## 上传文件并使用本地磁盘存储文件
+## 上传文件并将其存储在本地磁盘
 
 1. 在 EMQX 配置文件 `etc/emqx.conf` 中添加以下配置启用文件传输功能：
 
@@ -93,50 +93,40 @@
 7. 运行以下命令以使用提供的 API 下载文件：
 
    ```bash
-   $ curl -u '...' -s 'http://127.0.0.1:18083/api/v5/file_transfer/file?node=emqx%40127.0.0.1&fileref=8E%2FB5%2F7023DA998C12F0B2A6CA586027E48BEC6271%2Fclient-1%2Ffile-id-1%2Fuploaded-test-file.txt'
+   curl -u '...' -s 'http://127.0.0.1:18083/api/v5/file_transfer/file?node=emqx%40127.0.0.1&fileref=8E%2FB5%2F7023DA998C12F0B2A6CA586027E48BEC6271%2Fclient-1%2Ffile-id-1%2Fuploaded-test-file.txt'
    ```
 
-## 上传文件并使用 S3 存储桶存储
+## 上传文件并将其存储在 S3 存储桶
 
-文件传输允许将已上传的文件导出到兼容 S3 的对象存储系统，如 Amazon S3。
-
-::: tip 前置条件
-
-开始之前，请确保已安装并正确配置了`s3cmd`。您可以参考 [Official s3cmd repo](https://github.com/s3tools/s3cmd) 获取更多信息。
-
-:::
+文件传输允许将已上传的文件导出到兼容 S3 的对象存储系统，如 Amazon S3，Mino。在使用 S3 存储桶的情况下，EMQX 仅存储文件传输列表，而不存储文件本身。
 
 1. 在 EMQX 配置文件 `etc/emqx.conf` 中启用文件传输功能并配置 S3 存储桶：
 
    ```bash
    file_transfer {
-       enable = true
-       storage {
-           local {
-               enable = true
-               exporter {
-                   s3 {
-                       enable = true
-                       host = "s3.eu-north-1.amazonaws.com" # or any other S3-compatible storage
-                       port = "443"
+      # 启用文件传输功能
+      enable = true
 
-                       access_key_id = "..."
-                       secret_access_key = "..."
+      # 启用 s3 存储桶文件导出
+      storage.local.exporter.s3 {
+         enable = true
 
-                       bucket = "YOURBUCKET"
-                       acl = private
+         host = "s3.us-east-1.amazonaws.com"
+         port = 443
 
-                       transport_options {
-                           ssl {
-                               enable = true
-                               # Use verify = true and other SSL options ensuring
-                               # security for production
-                           }
-                       }
-                   }
-               }
-           }
-       }
+         # 用于访问 S3 的凭证
+         access_key_id = "AKIA27EZDDM9XLINWXFE"
+         secret_access_key = "******"
+
+         # 导出文件存储桶
+         bucket = "my-bucket"
+
+         # 用于与 S3 的底层 HTTP(S) 连接的设置，允许安全文件上传和连接池管理。
+         transport_options {
+            ssl.enable = true
+            connect_timeout = 15s
+         }
+      }
    }
    ```
 
@@ -177,6 +167,8 @@
 
 5. 使用 S3 命令行工具运行以下命令，手动列出已上传的文件：
 
+   请确保已安装并正确配置了`s3cmd`，您可以参考 [Official s3cmd repo](https://github.com/s3tools/s3cmd) 获取更多信息。
+
    ```bash
    $ s3cmd ls -r s3://YOURBUCKET/
    2023-06-12 22:58          168  s3://YOURBUCKET/client-1/file-id-1/uploaded-test-file.txt
@@ -184,9 +176,9 @@
 
    输出将显示指定 S3 存储桶中的文件。
 
-6. 运行以下命令，使用 HTTP API 检索已上传文件的列表。
+6. 运行以下命令，使用 REST API 列出已上传文件的列表。
 
-   ```
+   ```bash
    $ curl -u '...' -s 'http://127.0.0.1:18083/api/v5/file_transfer/files' | jq
    {
      "files": [
@@ -211,5 +203,5 @@
    :::
 
    ```bash
-   $ curl "https://s3.eu-north-1.amazonaws.com/YOURBUCKET/client-1/file-id-1/uploaded-test-file.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=...&X-Amz-SignedHeaders=host&X-Amz-Signature=..."
+   curl "https://s3.eu-north-1.amazonaws.com/YOURBUCKET/client-1/file-id-1/uploaded-test-file.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=...&X-Amz-SignedHeaders=host&X-Amz-Signature=..."
    ```

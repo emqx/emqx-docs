@@ -541,8 +541,8 @@
       collapsed: true
       children:
         - file-transfer/quick-start
-        - file-transfer/client
         - file-transfer/broker
+        - file-transfer/client
     - title_en: Multi-Protocol Gateway
       title_cn: 多协议网关
       path: gateway/gateway
