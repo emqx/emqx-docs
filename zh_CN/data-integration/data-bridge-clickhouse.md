@@ -46,9 +46,10 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
    cat >init.sql <<SQL_INIT
    CREATE DATABASE IF NOT EXISTS mqtt_data;
    CREATE TABLE IF NOT EXISTS mqtt_data.messages (
-       data String,
-       arrived UnixTimestamp
-   ) ENGINE = MergeTree();
+      data String,
+      arrived TIMESTAMP
+   ) ENGINE = MergeTree()
+   ORDER BY arrived;
    SQL_INIT
    ```
 
