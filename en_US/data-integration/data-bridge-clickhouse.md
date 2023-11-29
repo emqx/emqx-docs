@@ -56,13 +56,14 @@ This section introduces how to start a ClickHouse server using [Docker](https://
    cat >init.sql <<SQL_INIT
    CREATE DATABASE IF NOT EXISTS mqtt_data;
    CREATE TABLE IF NOT EXISTS mqtt_data.messages (
-       data String,
-       arrived UnixTimestamp
-   ) ENGINE = MergeTree();
+      data String,
+      arrived TIMESTAMP
+   ) ENGINE = MergeTree()
+   ORDER BY arrived;
    SQL_INIT
    ```
-   
-1. Start a ClickHouse server using the following command. The command defines the database name, port number, user name, and password. It will also mount the `init.sql` file in the current directory to the docker directory.
+
+2. Start a ClickHouse server using the following command. The command defines the database name, port number, user name, and password. It will also mount the `init.sql` file in the current directory to the docker directory.
 
    ```bash
    docker run \
