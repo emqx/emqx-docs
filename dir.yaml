@@ -23,6 +23,10 @@
     - title_en: What's New
       title_cn: 全新功能
       path: getting-started/new-features
+    - title_en: Feature Comparison
+      title_cn: 功能对比
+      path: getting-started/feature-comparison
+      edition: ce
     - title_en: Get Started
       title_cn: 快速开始
       path: getting-started/getting-started
