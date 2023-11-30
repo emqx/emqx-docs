@@ -11,18 +11,16 @@
 - [#11785](https://github.com/emqx/emqx/pull/11785) Allowed users with the "Viewer" role to change their own passwords. However, those with the "Viewer" role do not have permission to change the passwords of other users.
 - [#11787](https://github.com/emqx/emqx/pull/11787) Improved the performance of the `emqx` command.
 
-- [#11790](https://github.com/emqx/emqx/pull/11790) Added validation of Redis commands configured in Redis authorization source.
+- [#11790](https://github.com/emqx/emqx/pull/11790) Added validation to Redis commands in Redis authorization source.
   Additionally, this improvement refines the parsing of Redis commands during authentication and authorization processes.  The parsing now aligns with `redis-cli` compatibility standards and supports quoted arguments.
   
-- [#11541](https://github.com/emqx/emqx/pull/11541) Enhances file transfer capabilities in EMQX by introducing an additional interaction method. Now clients can send file transfer commands to `$file-async/...` topic instead of `$file/...`. Command execution results are delivered as messages to the `$file-response/{clientId}` topic. 
-  This enhancement simplifies file transfer feature usage in certain cases, for example, when a client uses MQTTv3 or when the broker is behind an MQTT bridge.
-  See the [EIP-0021](https://github.com/emqx/eip) for more details.
+- [#11541](https://github.com/emqx/emqx/pull/11541) Enhanced file transfer capabilities. Now, clients can use an asynchronous method for file transfer by sending commands to the `$file-async/...` topic and subscribing to command execution results on the `$file-response/{clientId}` topic. This improvement simplifies the use of the file transfer feature, particularly suitable for clients using MQTT v3.1/v3.1.1 or those employing MQTT bridging. For more details, please refer to [EIP-0021](https://github.com/emqx/eip).
 
 ## Bug Fixes
 
 - [#11757](https://github.com/emqx/emqx/pull/11757) Fixed the error response code when downloading non-existent trace files. Now the response returns `404` instead of `500`.
 
-- [#11762](https://github.com/emqx/emqx/pull/11762) Fixed an issue in the `built_in_database` authorization source of EMQX. With this fix, all Access Control List (ACL) records are now thoroughly removed upon the destruction of an authorization source. This addresses the previous concern where residual records remained in the database, potentially leading to complications when re-creating authorization sources.
+- [#11762](https://github.com/emqx/emqx/pull/11762) Fixed an issue in EMQX's `built_in_database` authorization source. With this update, all Access Control List (ACL) records are completely removed when an authorization source is deleted. This resolves the issue of residual records remaining in the database when re-creating authorization sources.
 
 - [#11771](https://github.com/emqx/emqx/pull/11771) Fixed validation of Bcrypt salt rounds in authentication management through the API/Dashboard.
 
@@ -40,7 +38,7 @@
 
   The problem occurred if the socket had already been closed by the time the connection process attempted to apply the `active_n` setting, resulting in a `case_clause` crash.
 
-- [#11731](https://github.com/emqx/emqx/pull/11731) Added file_transfer feature configs to hot-config schema.
+- [#11731](https://github.com/emqx/emqx/pull/11731) Added hot configuration support for the file transfer feature.
 
 - [#11754](https://github.com/emqx/emqx/pull/11754) Improved the log formatting specifically for the Postgres bridge in EMQX. It addresses issues related to Unicode characters in error messages returned by the driver.
 
