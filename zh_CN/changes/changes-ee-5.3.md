@@ -40,7 +40,7 @@
 
 - [#11731](https://github.com/emqx/emqx/pull/11731) 为文件传输功能添加了热配置支持。
 
-- [#11754](https://github.com/emqx/emqx/pull/11754) 改进了  Postgres 桥接的日志格式化功能，针对驱动程序返回的错误消息中的 Unicode 字符进行了处理。
+- [#11754](https://github.com/emqx/emqx/pull/11754) 改进了 Postgres 桥接的日志格式化功能，针对驱动程序返回的错误消息中的 Unicode 字符进行了处理。
 
 ## e5.3.1
 
