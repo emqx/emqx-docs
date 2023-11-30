@@ -4,53 +4,46 @@
 
 ## Enhancements
 
-- [#11752](https://github.com/emqx/emqx/pull/11752) Change default RPC driver from 'gen_rpc' to 'rpc' for core-replica database sync.
+- [#11752](https://github.com/emqx/emqx/pull/11752) Changed default RPC driver from `gen_rpc` to `rpc` for core-replica database synchronization.
 
   This improves core-replica data replication latency.
 
-- [#11785](https://github.com/emqx/emqx/pull/11785) Allow viewer to change their own passwords, viewer can't change other's password.
+- [#11785](https://github.com/emqx/emqx/pull/11785) Allowed users with the "Viewer" role to change their own passwords. However, those with the "Viewer" role do not have permission to change the passwords of other users.
 
-- [#11787](https://github.com/emqx/emqx/pull/11787) Improve `emqx` command performance.
-
-  Avoid loading EMQX application code in `nodetool` script unless necessary.
+- [#11787](https://github.com/emqx/emqx/pull/11787) Improved the performance of the `emqx` command.
 
 - [#11790](https://github.com/emqx/emqx/pull/11790) Added validation of Redis commands configured in Redis authorization source.
-  Also, improved Redis command parsing in authentication and authorization
-  so that it is `redis-cli` compatible and supports quoted arguments.
-
-- [#11541](https://github.com/emqx/emqx/pull/11541) Introduced additional way of file transfer interactions. Now client may send file transfer commands to `$file-async/...` topic instead of `$file/...` and receive command execution results as messages to `$file-response/{clientId}` topic.
-  This simplifies file transfer feature usage in certain cases, for example, when a client uses MQTTv3 or when the broker is behind an MQTT bridge.
+  Additionally, this improvement refines the parsing of Redis commands during authentication and authorization processes.  The parsing now aligns with `redis-cli` compatibility standards and supports quoted arguments.
+  
+- [#11541](https://github.com/emqx/emqx/pull/11541) Enhances file transfer capabilities in EMQX by introducing an additional interaction method. Now clients can send file transfer commands to `$file-async/...` topic instead of `$file/...`. Command execution results are delivered as messages to the `$file-response/{clientId}` topic. 
+  This enhancement simplifies file transfer feature usage in certain cases, for example, when a client uses MQTTv3 or when the broker is behind an MQTT bridge.
   See the [EIP-0021](https://github.com/emqx/eip) for more details.
 
 ## Bug Fixes
 
-- [#11757](https://github.com/emqx/emqx/pull/11757) Fixed 500 error response when downloading non-existent trace files, now returns 404.
+- [#11757](https://github.com/emqx/emqx/pull/11757) Fixed the error response code when downloading non-existent trace files. Now the response returns `404` instead of `500`.
 
-- [#11762](https://github.com/emqx/emqx/pull/11762) Fixed destruction of built_in_database authorization source. Now all the ACL records are removed when the authorization source is destroyed. Previosly, old records were left in the database, which could cause problems when creating authorization source back.
+- [#11762](https://github.com/emqx/emqx/pull/11762) Fixed an issue in the `built_in_database` authorization source of EMQX. With this fix, all Access Control List (ACL) records are now thoroughly removed upon the destruction of an authorization source. This addresses the previous concern where residual records remained in the database, potentially leading to complications when re-creating authorization sources.
 
 - [#11771](https://github.com/emqx/emqx/pull/11771) Fixed validation of Bcrypt salt rounds in authentication management through the API/Dashboard.
 
 - [#11780](https://github.com/emqx/emqx/pull/11780) Fixed validation of the `iterations` field of the `pbkdf2` password hashing algorithm. Now, `iterations` must be strictly positive. Previously, it could be set to 0, which led to a nonfunctional authenticator.
 
-- [#11791](https://github.com/emqx/emqx/pull/11791) Fixed an issue that prevented heartbeats from correctly keeping the CoAP Gateway connections alive.
+- [#11791](https://github.com/emqx/emqx/pull/11791) Fixed an issue in the EMQX CoAP Gateway where heartbeats were not effectively maintaining the connection's active status. This fix ensures that the heartbeat mechanism properly sustains the liveliness of CoAP Gateway connections.
 
-- [#11797](https://github.com/emqx/emqx/pull/11797) Modified HTTP API behavior for APIs managing the `built_in_database` authorization source: They will now return a `404` status code if `built_in_database` is not set as the authorization source, replacing the former `20X` response.
+- [#11797](https://github.com/emqx/emqx/pull/11797) Modified HTTP API behavior for APIs managing the `built_in_database` authorization source. They will now return a `404` status code if `built_in_database` is not set as the authorization source, replacing the former `20X` response.
 
-- [#11965](https://github.com/emqx/emqx/pull/11965) Fix EMQX graceful stop when there is an unavailable MongoDB resource present.
+- [#11965](https://github.com/emqx/emqx/pull/11965) Improved the termination of EMQX services to ensure a graceful stop even in the presence of an unavailable MongoDB resource. 
 
-- [#11975](https://github.com/emqx/emqx/pull/11975) Resolve redundant error logging on socket closure
+- [#11975](https://github.com/emqx/emqx/pull/11975) This fix addresses an issue where redundant error logs were generated due to a race condition during simultaneous socket closure by a peer and the server. Previously, concurrent socket close events triggered by the operating system and EMQX resulted in unnecessary error logging. The implemented fix improves event handling to eliminate unnecessary error messages.
 
-  Addressed a race condition causing duplicate error logs when a socket is closed by both a peer and the server.
-  Dual socket close events from the OS and EMQX previously led to excessive error logging.
-  The fix improves event handling to avoid redundant error-level logging.
+- [#11987](https://github.com/emqx/emqx/pull/11987) Fixed a bug where attempting to set the `active_n` option on a TCP/SSL socket could lead to a connection crash. 
 
-- [#11987](https://github.com/emqx/emqx/pull/11987) Fix connection crash when trying to set TCP/SSL socket `active_n` option.
+  The problem occurred if the socket had already been closed by the time the connection process attempted to apply the `active_n` setting, resulting in a `case_clause` crash.
 
-  Prior to this fix, if a socket is already closed when connection process tries to set `active_n` option, it causes a `case_clause` crash.
+- [#11731](https://github.com/emqx/emqx/pull/11731) Added file_transfer feature configs to hot-config schema.
 
-- [#11731](https://github.com/emqx/emqx/pull/11731) Add file_transfer feature configs to hot-config schema.
-
-- [#11754](https://github.com/emqx/emqx/pull/11754) Improved log formatting for Postgres bridge when there are unicode characters in the error messages returned by the driver.
+- [#11754](https://github.com/emqx/emqx/pull/11754) Improved the log formatting specifically for the Postgres bridge in EMQX. It addresses issues related to Unicode characters in error messages returned by the driver.
 
 
 ## e5.3.1
