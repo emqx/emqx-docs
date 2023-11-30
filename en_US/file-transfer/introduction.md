@@ -1,27 +1,59 @@
 # File Transfer over MQTT
 
-The File Transfer over MQTT feature provided by EMQX enhances the capabilities of MQTT client devices by enabling the transfer of large files to EMQX using the MQTT protocol. This feature is particularly useful in IoT applications where file transfers are required, such as streaming video from smart cameras, sending vehicle log files to an analytics server, or transmitting captured images from warehouse robots to a cloud server for auditing. By using the same MQTT protocol clients use for other operations, this feature eliminates the need for implementing additional protocols like HTTP or FTP.
+In the world of IoT applications, there's a growing need for diverse data transmission, where devices must swiftly and reliably transfer different types of data to and from the cloud. As IoT finds applications across more industries, a variety of use cases are emerging. Beyond real-time structured data like sensor readings and control commands, offline file data such as audio/video files, images, and diagnostic logs are playing an increasingly important role in the IoT field.
 
-## Disadvantages of Traditional Approaches
+EMQX offers file transfer capabilities based on the standard MQTT protocol, ensuring efficiency and reliability in data transfer.
 
-Before the introduction of File Transfer over MQTT, IoT devices had to implement other protocols like HTTP or FTP for transferring files. However, the HTTP or FTP protocols cannot support large-scale connections and poses challenges in terms of development, operations, and etc. due to multiple connection channels. This conventional approach also had some other disadvantages, including the need to implement additional protocols with their associated security and authentication mechanisms. Managing complex states on the client devices and maintaining separate services to handle file transfers further added to the challenges.
+## Limitations of Traditional Methods
 
-## File Transfer over MQTT in EMQX
+In the realm of file transfer, technologies like FTP and HTTP are well-established. Users can combine MQTT with these technologies – using HTTP/FTP for transferring file content and MQTT for transferring events and file location information.
 
-MQTT specification does not define any standard way to transfer files. Instead, EMQX extends the MQTT protocol to facilitate efficient and secure file transfers. It defines and implements a simple, application-level protocol on top of MQTT, eliminating the need for client devices to handle the complexities associated with file transfers.
+This hybrid approach theoretically maximizes the advantages of each technology to enhance the efficiency and flexibility of file transfer. However, in the IoT environment, users might face the following challenges:
 
-### Main Features
+- **Difficulties in Overall Flow Control**: In IoT devices operating in environments with low bandwidth and complex, unreliable networks, it becomes challenging to manage overall data flow and prioritize tasks when multiple connections are simultaneously sending data to the cloud. This is particularly problematic when transferring large files via HTTP/FTP, which may consume bandwidth for extended periods, hindering the transmission of critical MQTT messages.
+- **Coexistence of Multiple Technology Stacks**: IoT devices often have limited resources. Some devices may lack the space and processing power to incorporate additional technology stacks. MQTT, being lighter, is more adaptable than HTTP/FTP and can circumvent limitations to complete business development.
+- **Additional Development and Management Costs**: Existing MQTT channels already have comprehensive device authentication and authorization systems. Introducing new technologies like FTP and HTTP requires reimplementing these security and management systems, adding extra development and management costs.
+- **Performance Limitations**: HTTP/FTP technologies are not suitable for IoT applications that need to support a massive number of connections. Moreover, frequent reconnections and retransmissions under weak network conditions further amplify the disadvantages of HTTP/FTP file transfer, adding significant pressure to application development and operations.
 
-The following features are the highlights of the File Transfer over MQTT capability:
+## MQTT File Transfer in EMQX
 
-* Supports sharing the same MQTT connection with other services, fully leveraging the existing client management system.
+The MQTT standard does not define a standard method for file transfer. EMQX extends the MQTT protocol to assist client devices in efficient and secure file transfers. It defines and implements a simple application-level protocol built on top of MQTT, enabling client devices to handle file transfers easily.
 
-* Enables chunked transmission, allowing lightweight clients to handle large files and facilitating the transfer of files exceeding the MQTT protocol size limit (256MB).
+### Features
 
-* Supports resumable file transfer, allowing client devices to pause file transmission at any time for higher-priority data transfers or to resume transmission after a network interruption.
+File transfer based on MQTT faces several challenges, including ensuring reliability to guarantee 100% file integrity, addressing file management and long-term storage, and adapting to various application file reading interfaces for better service integration.
 
-* Ensures reliability by using QoS 1 level messages for transmission, providing verification and retransmission mechanisms to ensure file transfer integrity.
+To address these, the file transfer in EMQX has the following functionalities:
 
-* Offers flexible storage configuration, allowing uploaded files to be saved to a designated local directory or an S3-compatible object storage for convenient future use.
+- Support for using the same MQTT connection as other business operations, fully leveraging the existing client management system.
+
+- Support for chunked transfers, meaning lightweight clients can handle large files, and files exceeding MQTT's size limit (256MB) can be transferred.
+
+- Support for resumable transfers, allowing client devices to pause file transfers for higher priority data transmission or to recover from network interruptions.
+
+- Reliability assurance with QoS 1 level transmission, providing checksum and retransmission mechanisms to ensure file transfer integrity.
+
+- Flexible storage layer configuration, with the ability to save uploaded files to a local directory or S3-compatible object storage for later use.
 
   <!-- "The Dashboard allows listing and downloading files uploaded to the broker." This is not implemented in Dashboard yet.-->
+
+### Advantages
+
+MQTT, as a lightweight and flexible messaging protocol, offers a more convenient and efficient file transfer solution for enterprises. By integrating structured data and file-type data transmission, the scope of achievable IoT business applications expands.
+
+A unified MQTT data channel simplifies system architecture, reducing the complexity and maintenance costs of applications. By utilizing EMQX's MQTT file transfer functionality, enterprises can develop more convenient and diverse IoT applications.
+
+Protocol-wise, EMQX file transfer is based on standard MQTT, with the entire transfer process being executed via specified MQTT topics and payloads, requiring no modifications to existing clients and applications. For a detailed transfer protocol, refer to [File Transfer Client Development](./client.md).
+
+## Next Steps
+
+Learn more about MQTT file transfer in EMQX:
+
+- [File Transfer over MQTT: Transfer Large Payloads via One Protocol with Ease](https://www.emqx.com/en/blog/file-transfer-over-mqtt)
+
+How to use the file transfer feature in EMQX:
+
+- [Quick Start with MQTT File Transfer](./quick-start.md)
+- [Configure File Transfer Server-Side Settings](./broker.md)
+- [File Transfer Clients Development](./client.md)
+
