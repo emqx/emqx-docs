@@ -8,7 +8,7 @@
 
   This improves core-replica data replication latency.
 
-- [#11785](https://github.com/emqx/emqx/pull/11785) Allow viewer to change their own passwords, viewer can't change other's password.
+- [#11785](https://github.com/emqx/emqx/pull/11785) Allow `viewer` dashboard role to change their passwords.
 
 - [#11787](https://github.com/emqx/emqx/pull/11787) Improve `emqx` command performance.
 
