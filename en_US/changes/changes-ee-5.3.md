@@ -9,7 +9,6 @@
   This improves core-replica data replication latency.
 
 - [#11785](https://github.com/emqx/emqx/pull/11785) Allowed users with the "Viewer" role to change their own passwords. However, those with the "Viewer" role do not have permission to change the passwords of other users.
-
 - [#11787](https://github.com/emqx/emqx/pull/11787) Improved the performance of the `emqx` command.
 
 - [#11790](https://github.com/emqx/emqx/pull/11790) Added validation of Redis commands configured in Redis authorization source.
