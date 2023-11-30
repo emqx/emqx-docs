@@ -1,55 +1,59 @@
-# File Transfer on Clients
+# File Transfer Clients Development
 
-This page provides an overview of the file transfer process from the client's perspective along with detailed information on the commands utilized for uploading a file to EMQX. This information helps you to implement the file transfer feature for client development.
+This page provides an overview of the file transfer process from a client's perspective, along with detailed information on commands for uploading files to EMQX. It aims to assist in developing client-side file transfer functionality.
 
-## The Common Flow
+## General Process
 
-The typical flow for file transfer from the client side involves the following steps:
+The typical process for file transfer from the client side includes the following steps:
 
-1. A client device selects a file to upload and generates a unique `file_id` for the transfer session. This `file_id` will be used to identify the file transfer session.
-2. The client device publishes `init` command to the `$file/{file_id}/init` topic. The payload of the message contains the file metadata, including the file name, size, and checksum.
-3. The client sends consecutive `segment` commands to the `$file/{file_id}/{offset}[/{checksum}]` topic. Each `segment` command carries a chunk of the file data at the specified offset. The `checksum` field is optional and can contain the checksum of the data.
-4. The client sends `finish` command to the `$file/{file_id}/fin/{file_size}[/{checksum}]` topic. The payload of this message is not used. The `file_size` parameter represents the total size of the file, while the `checksum` parameter contains the checksum of the entire file.
+1. The client device selects a file to upload and generates a unique `file_id` for the transfer session.
+2. The client device publishes an `init` command to the `$file/{file_id}/init` topic. The message body contains metadata about the file, including its name, size, and checksum.
+3. The client sends successive `segment` commands to the `$file/{file_id}/{offset}[/{checksum}]` topic. Each `segment` command carries a block of file data at a specified offset. The `checksum` field is optional and contains the checksum of the data.
+4. The client sends a `finish` command to the `$file/{file_id}/fin/{file_size}[/{checksum}]` topic. This message does not use a message body. The `file_size` parameter indicates the total size of the file, while the `checksum` parameter contains the checksum of the entire file.
 
-All commands are published with QoS 1, ensuring reliability. The success status of each step is reported through the return code (RC) of the corresponding MQTT PUBACK message. If an error occurs, the client is typically required to restart the entire file transfer process. In case of a disconnection, the client can resume the file transfer by re-sending the unconfirmed commands.
+![EMQX File Transfer Process](./assets/emqx-ft-flow.jpg)
 
-The `finish` command may take considerable time to process because the EMQX needs to assemble the file from the received segments and export it to the configured storage. During this time, the client can continue sending other commands while waiting for the `finish` command to complete. If a disconnect happens during the `finish` command, the client can simply resend the command to resume the file transfer. If the file transfer has already been completed, EMQX will immediately respond with success.
+All commands are published with a QoS 1 message level to ensure reliability. The success status of each step is reported by the return code (RC) of the corresponding MQTT PUBACK message. If an error occurs, the client is typically required to restart the entire file transfer process. If a disconnection occurs, the client can resume file transfer by resending unacknowledged commands.
 
+Since EMQX needs to assemble the file from the received file segments and export it to configured storage, the `finish` command might take a longer time to process. During this period, the client can continue sending other commands while waiting for the `finish` command to complete. If a disconnection occurs during the `finish` command, the client can simply resend the command to resume file transfer. If the file transfer has already completed, EMQX will immediately reply with a successful transfer response.
 
 ## File Transfer Commands
 
-The file transfer commands are regular MQTT PUBLISH messages with QoS 1 sent to specific topics.
+File transfer commands are regular MQTT PUBLISH messages sent with QoS 1 to specific topics.
 
 ### Init Command
 
-The `init` command is used to initialize a file transfer session.
+The `init` command is used to initiate a file transfer session.
 
-Topic: `$file/{file_id}/init`
+- Topic: `$file/{file_id}/init`
 
-Payload: a JSON object with the following fields:
+- Message Body: A JSON object with the following fields:
 
-```json
-{
-  "name": "{name}",
-  "size": {size},
-  "checksum": "{checksum}"
-  "expire_at": {expire_at}
-  "segments_ttl": {segments_ttl}
-  "user_data": {user_data}
-}
-```
+  ```json
+  {
+    "name": "{name}",
+    "size": {size},
+    "checksum": "{checksum}",
+    "expire_at": {expire_at},
+    "segments_ttl": {segments_ttl},
+    "user_data": {user_data}
+  }
+  ```
 
-* `file_id`: Unique identifier for the file transfer session.
-* `name`: Name of the file. It will be sanitized using percent-encoding if it coincides with reserved file names (such as ".", "..") or if it contains characters like "/", "", "%", ":", or unprintable unicode characters. The binary length of the name should not exceed 240 bytes.
-* `size`: Size of the file in bytes (optional, informational field).
-* `checksum`: SHA256 checksum of the file (optional). EMQX will verify the file's checksum if provided.
-* `expire_at`: Timestamp (in seconds since the epoch) when the file may be deleted from storage (optional).
-* `segments_ttl`: Time-to-live of the file segments in seconds (optional). This value is clamped to the range specified by the `minimum_segments_ttl` and `maximum_segments_ttl` settings configured in EMQX. Refer to [Segment Settings](./broker.md#segment-settings) for details.
-* `user_data`: Arbitrary JSON object to store additional information about the file along with its metadata (optional).
+| Field          | Description                                                  |
+| -------------- | ------------------------------------------------------------ |
+| `file_id`      | The unique identifier for the file transfer session.         |
+| `name`         | The name of the file. If it conflicts with reserved filenames (like ".", "..") or contains special characters, it will be percent-encoded. The binary length of the filename should not exceed 240 bytes. |
+| `size`         | The size of the file.                                        |
+| `checksum`     | The SHA256 checksum of the file (optional). If provided, EMQX will verify the file's checksum. |
+| `expire_at`    | The timestamp when the file may be deleted from storage (seconds since epoch). |
+| `segments_ttl` | The TTL (in seconds) of the file segments. This value is limited within the range set by `minimum_segments_ttl` and `maximum_segments_ttl`. See [Segment Storage](./broker.md#segment-storage) for details. |
+| `user_data`    | An arbitrary JSON object for storing additional information and metadata about the file. |
 
-In the payload, the only required field is `name`.
+In the message body, the only required field is `name`.
 
 Example:
+
 ```json
 {
   "name": "ml-logs-data.log",
@@ -62,30 +66,33 @@ Example:
 
 ### Segment Command
 
-The `segment` command is used to upload a chunk of the file.
+The `segment` command is used to upload a block of the file.
 
-Topic: `$file/{file_id}/{offset}[/{checksum}]`
+- Topic: `$file/{file_id}/{offset}[/{checksum}]`
+- Message Body: The binary data of the file block.
 
-Payload: the binary data of the file chunk.
-
-* `file_id`: Unique identifier for the file transfer session.
-* `offset`: Offset in bytes from the beginning of the file where the chunk should be written.
+| Field      | Description                                                  |
+| ---------- | ------------------------------------------------------------ |
+| `file_id`  | The unique identifier for the file transfer session.         |
+| `offset`   | The starting offset (in bytes) where the file block should be written, calculated from the beginning of the file. |
+| `checksum` | Optional, the SHA256 checksum of the file block.             |
 
 ### Finish Command
 
-The `finish` command is used to finish the file transfer session.
+The `finish` command is used to complete the file transfer session.
 
-Topic: `$file/{file_id}/fin/{file_size}[/{checksum}]`
+- Topic: `$file/{file_id}/fin/{file_size}[/{checksum}]`
+- Message Body: Empty message body.
 
-Payload: not used.
+| Field       | Description                                                  |
+| ----------- | ------------------------------------------------------------ |
+| `file_id`   | The unique identifier for the file transfer session.         |
+| `file_size` | The total size of the file (in bytes).                       |
+| `checksum`  | Optional, the SHA256 checksum of the entire file. If specified, it takes precedence over the `checksum` field provided in the `init` command. |
 
-* `file_id`: Unique identifier for the file transfer session.
-* `file_size`: Total size of the file in bytes.
-* `checksum`: SHA256 checksum of the entire file. If specified, this value takes priority over the `checksum` field provided in the `init` command.
+After receiving the `finish` command, EMQX will verify whether all the segments required to assemble the file have been received. If the file is successfully exported and its checksum is valid, EMQX will respond with a successful return code (RC). If there are any errors, an appropriate error response will be sent.
 
-Upon receiving the `finish` command, EMQX verifies that it has received all the segments necessary to assemble the file. If the file is successfully exported and its checksum is valid, EMQX responds with a success return code (RC). In case of any errors, an appropriate error response is sent.
-
-## Client Code Sample
+## Client Code Examples
 
 Explore file transfer client code examples in various languages and client libraries:
 
