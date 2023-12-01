@@ -14,7 +14,9 @@ This page provides a comprehensive introduction to the data integration between 
 
 TDengine data integration is a built-in feature in EMQX. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to TDengine, eliminating the need for complex coding. EMQX forwards device data to TDengine through the rule engine and data bridge. Through the TDengine data bridge, MQTT messages and client events can be stored in TDengine. Additionally, data updates or deletions in TDengine can be triggered by events, thereby enabling the recording of information such as device online status and historical online/offline events.
 
-<!-- The diagram below illustrates the typical architecture of EMQX and TDengine data integration in the industrial IoT.-->
+The diagram below illustrates the typical architecture of EMQX and TDengine data integration in the industrial IoT:
+
+![EMQX Integration TDengine](./assets/emqx-integration-tdengine)
 
 Taking the industrial energy consumption management scenario as an example, the workflow is as follows:
 

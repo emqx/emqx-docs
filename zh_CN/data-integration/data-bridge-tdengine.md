@@ -14,7 +14,9 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 TDengine 数据集成是 EMQX 的开箱即用功能，通过通过内置的[规则引擎](./rules.md)组件和数据桥接将设备数据转发到 TDengine。通过 TDengine 数据桥接，MQTT 消息和客户端事件可以存储在 TDengine 中。此外，数据更新或在 TDengine 中的删除操作可以由事件触发，从而实现对设备在线状态和历史上下线事件的记录。该集成简化了从 EMQX 到 TDengine 的数据摄取过程，无需复杂编码。
 
-<!-- 下图展示了 EMQX 和 TDengine 数据集成在工业物联网中的典型架构。-->
+下图展示了 EMQX 和 TDengine 数据集成在工业物联网中的典型架构:
+
+![EMQX-TDengine 集成](./assets/emqx-integration-tdengine.png)
 
 以工业能耗管理场景为例，工作流程如下：
 

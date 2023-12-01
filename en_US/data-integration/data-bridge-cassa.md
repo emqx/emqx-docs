@@ -20,7 +20,9 @@ The current implementation only supports Cassandra v3.x, not yet compatible with
 
 Cassandra data integration is an out-of-the-box feature in EMQX that combines EMQX's device connectivity and message transmission capabilities with Cassendra's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to Cassandra for storage and management, eliminating the need for complex coding.
 
-<!-- The diagram below illustrates a typical architecture of data integration between EMQX and Cassandra. -->
+The diagram below illustrates a typical architecture of data integration between EMQX and Cassandra:
+
+![EMQX Integration Cassandra](./assets/emqx-integration-cassandra)
 
 Ingesting MQTT data into Cassandra works as follows:
 

@@ -14,7 +14,9 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 RocketMQ 数据集成是 EMQX 中的一个开箱即用功能，它结合了 EMQX 的设备接入以及实时数据捕获和传输能力与 RocketMQ 强大的消息队列处理能力。通过内置的[规则引擎](./rules.md)组件，该集成简化了将数据从 EMQX 引入到 RocketMQ 进行存储和管理的过程，无需复杂编码。
 
-<!-- 下图展示了 EMQX 与 RocketMQ 之间数据集成的典型架构。 -->
+下图展示了 EMQX 与 RocketMQ 之间数据集成的典型架构:
+
+![EMQX-RocketMQ 集成](./assets/emqx-integration-rocketmq.png)
 
 将 MQTT 数据引入 RocketMQ 的过程如下：
 

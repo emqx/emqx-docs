@@ -14,7 +14,9 @@ This page provides a comprehensive introduction to the data integration between 
 
 Redis data integration is an out-of-the-box feature in EMQX that combines the real-time data capturing and transmission capabilities of EMQX with Redis's rich data structures and powerful Key-Value read and write performance capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to Redis for data caching and operations., eliminating the need for complex coding.
 
-<!-- The diagram below illustrates a typical architecture of data integration between EMQX and Redis. -->
+The diagram below illustrates a typical architecture of data integration between EMQX and Redis:
+
+![EMQX Integration Redis](./assets/emqx-integration-redis)
 
 Ingesting MQTT data into Redis works as follows:
 

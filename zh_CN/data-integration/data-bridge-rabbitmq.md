@@ -16,7 +16,9 @@ RabbitMQ 数据桥接是 EMQX 企业版功能。EMQX 企业版可以为您带来
 
 RabbitMQ 数据集成是 EMQX 中的开箱即用功能，结合了 EMQX 的设备接入、消息传输能力与 RabbitMQ 强大的消息队列处理能力。通过内置的[规则引擎](./rules.md)组件，该集成简化了从 EMQX 到 RabbitMQ 的数据摄取过程，无需复杂编码。
 
-<!-- 下图展示了 EMQX 与 RabbitMQ 之间数据集成的典型架构。 -->
+下图展示了 EMQX 与 RabbitMQ 之间数据集成的典型架构:
+
+![EMQX-RabbitMQ 集成](./assets/emqx-integration-rabbitmq.png)
 
 MQTT 数据摄取到 RabbitMQ 的工作流程如下：
 

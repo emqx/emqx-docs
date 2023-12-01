@@ -14,6 +14,10 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 OpenTSDB 数据集成是 EMQX 的开箱即用功能，结合了 EMQX 的实时数据捕获和传输能力以及 OpenTSDB 的数据存储和分析功能。通过内置的[规则引擎](./rules.md)组件，集成简化了从 EMQX 到 OpenTSDB 的数据摄取过程，无需复杂编码。
 
+下图展示了 EMQX 和 OpentsDB 之间的数据集成的典型架构：
+
+![EMQX-OpentsDB 集成](./assets/emqx-integration-opentsdb.png)
+
 EMQX 通过规则引擎和数据桥接将设备数据插入到 OpenTSDB。OpenTSDB 提供丰富的查询功能，支持生成报告、图表和其他数据分析结果。以工业能耗管理场景为例，工作流程如下：
 
 1. **消息发布和接收**：工业设备通过 MQTT 协议成功连接到 EMQX，并定期使用 MQTT 协议发布能耗数据。这些数据包括生产线标识符和能耗值。当 EMQX 接收到这些消息时，它将在其规则引擎中启动匹配过程。

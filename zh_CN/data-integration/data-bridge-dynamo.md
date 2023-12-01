@@ -14,7 +14,9 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 DynamoDB 数据集成是 EMQX 中的开箱即用功能，它结合了 EMQX 的设备连接和消息传输能力以及 DynamoDB 强大的数据存储能力。通过内置的[规则引擎](./rules.md)组件，集成简化了从 EMQX 到 DynamoDB 的数据摄取过程，无需复杂的编码。
 
-<!-- 下图展示了 EMQX 和 DynamoDB 之间的数据集成的典型架构。 -->
+下图展示了 EMQX 和 DynamoDB 之间的数据集成的典型架构：
+
+![EMQX-DynamoDB 集成](./assets/emqx-integration-dynamodb.png)
 
 将 MQTT 数据摄取到 DynamoDB 的工作流程如下：
 

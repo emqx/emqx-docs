@@ -24,6 +24,10 @@ HSreamDB data integration is only supported in EMQX 5.2.0 and above.
 
 HStreamDB data bridge is an out-of-the-box feature of EMQX that combines EMQX's device connectivity and message transmission capabilities with HStreamDB's robust data storage and processing capabilities. With the built-in rule engine component, the data streaming and processing process is simplified between the two platforms.
 
+The diagram below illustrates a typical architecture of data integration between EMQX and HStreamDB:
+
+![EMQX Integration HStreamDB](./assets/emqx-integration-hstreamdb)
+
 EMQX forwards MQTT data to HStreamDB through the rule engine and configured data bridge, and the complete process is as follows:
 
 1. **Message publication and reception**: IoT devices establish successful connections through the MQTT protocol and subsequently publish telemetry and status data to specific topics. When EMQX receives these messages, it initiates the matching process within its rules engine.

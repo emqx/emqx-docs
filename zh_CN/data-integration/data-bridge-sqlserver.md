@@ -24,7 +24,9 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 Microsoft SQL Server 数据集成是 EMQX 的开箱即用功能，结合了 EMQX 的设备接入、消息传输能力与 Microsoft SQL Server 强大的数据存储能力。通过内置的[规则引擎](./rules.md)组件和数据桥接，您可以将 MQTT 消息和客户端事件存储到 Microsoft SQL Server 中，也可以通过事件触发对 Microsoft SQL Server 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。该集成简化了从 EMQX 到 Microsoft SQL Server 的数据摄取过程，无需复杂的编码。
 
-<!-- 下图展示了 EMQX 和 SQL Server 之间的数据集成的典型架构。 -->
+下图展示了 EMQX 和 SQL Server 之间的数据集成的典型架构:
+
+![EMQX-SQL Server 集成](./assets/emqx-integration-sql_server.png)
 
 将 MQTT 数据摄取到 Microsoft SQL Server 的工作流程如下：
 

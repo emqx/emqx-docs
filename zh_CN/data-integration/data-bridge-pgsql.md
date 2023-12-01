@@ -18,7 +18,9 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 PostgreSQL 数据集成是 EMQX 的开箱即用功能，结合了 EMQX 的设备接入、消息传输能力和 PostgreSQL 强大的数据存储能力。通过内置的[规则引擎](./rules.md)组件，该集成简化了从 EMQX 到 PostgreSQL 的数据摄取过程，用于存储和管理数据，无需复杂编码。通过 PostgreSQL 数据桥接可以将 MQTT 消息和客户端事件存储到 PostgreSQL 中，也可以通过事件触发对 PostgreSQL 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
 
-<!-- 下图展示了 EMQX 和 PostgreSQL 之间的数据集成的典型架构。 -->
+下图展示了 EMQX 和 PostgreSQL 之间的数据集成的典型架构:
+
+![EMQX-PostgeSQL集成](./assets/emqx-integration-postgesql.png)
 
 将 MQTT 数据摄取到 PostgreSQL 的工作流程如下：
 

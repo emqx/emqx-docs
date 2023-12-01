@@ -14,7 +14,9 @@ This page provides a comprehensive introduction to the data integration between 
 
 The RocketMQ data integration is an out-of-the-box feature in EMQX that combines the real-time data capturing and transmission capabilities of EMQX with RocketMQ's powerful message queue processing capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to RocketMQ for storage and management, eliminating the need for complex coding.
 
-<!-- The diagram below illustrates a typical architecture of data integration between EMQX and RocketMQ. -->
+The diagram below illustrates a typical architecture of data integration between EMQX and RocketMQ:
+
+![EMQX Integration RocketMQ](./assets/emqx-integration-rocketmq)
 
 Ingesting MQTT data into RocketMQ works as follows:
 

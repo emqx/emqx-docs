@@ -6,6 +6,10 @@ The MQTT data bridge is a channel for EMQX to communicate with other MQTT servic
 
 EMQX supports the MQTT data bridge that works in two primary modes: ingress and egress. The following sections explain how each mode works. Also, this section introduces the concept of connection pools used in both modes.
 
+The diagram below illustrates a typical architecture of data integration between EMQX and HStreamDB:
+
+![EMQX Integration MQTT](./assets/emqx-integration-mqtt)
+
 ### Ingress Mode
 
 In ingress mode, the local EMQX subscribes to the topics from the bridged remote MQTT brokers and distributes the received messages within the current cluster. Below is the message flow in **ingress** direction:

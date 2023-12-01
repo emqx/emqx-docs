@@ -24,6 +24,10 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 HStreamDB 数据桥接是 EMQX 的即开即用功能，结合了 EMQX 的设备连接和消息传输能力以及 HStreamDB 强大的数据存储和处理能力。内置的[规则引擎](./rules.md)组件简化了两个平台之间的数据流和处理过程。
 
+下图展示了 EMQX 和 HStreamDB 之间的数据集成的典型架构：
+
+![EMQX-HStreamDB 集成](./assets/emqx-integration-hstreamdb.png)
+
 EMQX 通过规则引擎和配置的数据桥将 MQTT 数据转发到 Apache HStreamDB，整个过程如下：
 
 1. **消息发布和接收**：物联网设备通过 MQTT 协议建立成功连接，随后发布遥测和状态数据到特定主题。当 EMQX 接收到这些消息时，它将在其规则引擎中启动匹配过程。

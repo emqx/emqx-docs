@@ -14,6 +14,10 @@ This page provides a comprehensive introduction to the data integration between 
 
 OpenTSDB data integration is an out-of-the-box feature in EMQX that combines EMQX's real-time data capturing and transmission capabilities with OpenTSDB's data storage and analysis functionality. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to OpenTSDB for storage and analysis, eliminating the need for complex coding.
 
+The diagram below illustrates a typical architecture of data integration between EMQX and OpenTSDB:
+
+![EMQX Integration OpenTSDB](./assets/emqx-integration-opentsdb)
+
 EMQX inserts device data to OpenTSDB through the rule engine and data bridge. OpenTSDB provides extensive query capabilities, supporting the generation of reports, charts, and other data analysis results. Taking industrial energy management scenarios as an example, the workflow is as follows:
 
 1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.  

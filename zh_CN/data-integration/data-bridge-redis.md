@@ -14,7 +14,9 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 Redis 数据集成是 EMQX 中的一个开箱即用的功能，结合了 EMQX 的设备接入、消息传输能力与 Redis 丰富的数据结构以及强大的键值读写性能。通过内置的[规则引擎](./rules.md)组件，该集成简化了将数据从 EMQX 写入到 Redis 进行数据缓存和操作的过程，无需复杂编码。
 
-<!-- 下图展示了 EMQX 与 Redis 之间数据集成的典型架构。 -->
+下图展示了 EMQX 与 Redis 之间数据集成的典型架构:
+
+![EMQX-Redis 集成](./assets/emqx-integration-redis.png)
 
 将 MQTT 数据写入 Redis 的过程如下：
 

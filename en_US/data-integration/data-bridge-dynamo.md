@@ -14,7 +14,9 @@ This page provides a comprehensive introduction to the data integration between 
 
 DynamoDB data integration is an out-of-the-box feature in EMQX that combines EMQX's device connectivity and message transmission capabilities with DynamoDB's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to DynamoDB for storage and management, eliminating the need for complex coding. 
 
-<!-- The diagram below illustrates a typical architecture of data integration between EMQX and DynamoDB. -->
+The diagram below illustrates a typical architecture of data integration between EMQX and DynamoDB:
+
+![EMQX Integration DynamoDB](./assets/emqx-integration-dynamodb)
 
 Ingesting MQTT data into DynamoDB works as follows:
 
