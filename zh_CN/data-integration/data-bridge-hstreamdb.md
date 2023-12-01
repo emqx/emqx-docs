@@ -1,6 +1,14 @@
 # 将 MQTT 数据写入到 HStreamDB
 
-[HStreamDB](https://hstream.io/zh) 是一个开源流数据平台，让您能够在一个平台上高效完成对所有实时消息、事件以及其它数据流的一站式摄取、存储、处理和分发。通过 HStreamDB 数据桥接可以将 MQTT 消息和客户端事件存储到 HStreamDB 中，也可以通过事件触发对 HStreamDB 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
+{% emqxce %}
+:::tip
+EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+:::
+{% endemqxce %}
+
+[HStreamDB](https://hstream.io/) 是一个开源的流数据平台，使您能够在一个统一的平台中高效地摄取、存储、处理和分发所有实时消息、事件和其他数据流。通过 EMQX 与 HStreamDB 的集成，您可以将 MQTT 消息和客户端事件保存到 HStreamDB 中，实现大规模物联网数据的采集、传输与存储，并使用标准 SQL 和物化视图对数据流进行实时处理以及监测和分析。
+
+本页详细介绍了 EMQX 与 HStreamDB 的数据集成并提供了实用的规则和数据桥接创建指导。
 
 {% emqxee %}
 
@@ -12,36 +20,49 @@
 
 {% emqxee %}
 
-{% emqxce %}
-:::tip
-EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
-:::
-{% endemqxce %}
+## 工作原理
 
-:::tip 前置准备
+HStreamDB 数据桥接是 EMQX 的即开即用功能，结合了 EMQX 的设备连接和消息传输能力以及 HStreamDB 强大的数据存储和处理能力。内置的[规则引擎](./rules.md)组件简化了两个平台之间的数据流和处理过程。
 
-- 了解 [规则](./rules.md)。
-- 了解 [数据桥接](./data-bridges.md)。
+下图展示了 EMQX 和 HStreamDB 之间的数据集成的典型架构：
 
-:::
+![EMQX-HStreamDB 集成](./assets/emqx-integration-hstreamdb.png)
 
-## 功能清单
+EMQX 通过规则引擎和配置的数据桥将 MQTT 数据转发到 Apache HStreamDB，整个过程如下：
 
-- [连接池](./data-bridges.md#连接池)
-- [批量模式](./data-bridges.md#批量模式)
-- [缓存队列](./data-bridges.md#缓存队列)
+1. **消息发布和接收**：物联网设备通过 MQTT 协议建立成功连接，随后发布遥测和状态数据到特定主题。当 EMQX 接收到这些消息时，它将在其规则引擎中启动匹配过程。
+2. **规则引擎处理消息**：使用内置的规则引擎，可以根据主题匹配处理来自特定来源的 MQTT 消息。规则引擎匹配相应规则并处理消息，例如数据格式转换、过滤特定信息或用上下文信息丰富消息。
+3. **数据流入 HStreamDB**：规则触发将消息转发到 HStreamDB 的动作，可以轻松配置数据到 HStreamDB 流名称、分区键和记录，便于后续的数据处理和分析。
 
-<!-- TODO 配置参数 需要补充链接到配置手册对应配置章节。 -->
+在 MQTT 消息数据写入 HStreamDB 后，您可以进行灵活的应用程序开发，例如：
 
-## 快速开始教程
+- 在接收到特定 MQTT 消息时，可以使用 HStreamDB 的规则引擎组件触发相应的动作或事件，实现跨系统和应用的事件驱动功能。
+- 在 HStreamDB 中实时分析 MQTT 数据流，检测异常或特定事件模式，并根据这些条件触发警报通知或执行相应动作。
+- 将多个 MQTT 主题的数据集中到一个统一的数据流中，并利用 HStreamDB 的计算能力进行实时聚合、计算和分析，以获得更全面的数据洞察。
 
-本节介绍如何配置 HStreamDB 数据桥接，包括如何设置 HStreamDB 服务器并创建 Stream 、创建数据桥接和转发数据到 HStreamDB 的规则以及测试数据桥接和规则等主题。
+## 特性与优势
+
+与 HStreamDB 的数据集成为您的业务带来以下特性和优势：
+
+- **可靠的物联网数据消息传递**：EMQX 能够可靠地批量发送 MQTT 消息到 HStreamDB，使物联网设备与 HStreamDB 和应用系统集成。
+- **MQTT 消息转换**：使用规则引擎，EMQX 可以过滤和转换 MQTT 消息。在发送到 HStreamDB 之前，消息可以经过数据提取、过滤、丰富和转换。
+- **大规模数据流存储**：HStreamDB 支持在专门设计的分布式、容错的日志存储集群中可靠地存储数百万数据流，并在需要的时候重放或推送实时数据流的更新到应用中。能够与 EMQX 消息模型完美结合，实现大规模物联网数据采集传输与存储。
+- **集群和可扩展性**：EMQX 和 HStreamDB 采用云原生架构构建，支持集群在线伸缩、动态扩缩容，随着业务增长灵活地水平扩展以满足不断扩大的需求。
+- **灵活的处理能力**：在 HStreamDB 可以使用熟悉的 SQL 来过滤、转换、聚合以及连接多个数据流，也支持使用标准 SQL 和物化视图进行数据流实时处理以及监测和分析，获取实时数据洞察。
+- **高吞吐量场景中的处理能力**：HStreamDB 数据桥支持同步和异步写入模式，允许根据不同场景在延迟和吞吐量之间灵活平衡。
+
+## 桥接准备
+
+本节介绍了在 EMQX 中创建 HStreamDB 数据桥接之前需要做的准备工作，包括如何设置 HStreamDB 服务器并创建 Stream。
+
+以下小节描述如何使用 Docker 镜像在 Linux/MacOS 安装启动 HStreamDB，因此请确保 Docker 已安装并尽可能使用 Docker Compose v2。关于其他 HStreamDB 的安装方式及 HStreamDB Platform，请参阅[使用 Docker-Compose 快速开始](https://docs.hstream.io/zh/start/quickstart-with-docker.html)以及[开始使用 HStream Platform](https://docs.hstream.io/zh/start/try-out-hstream-platform.html)。
 
 本教程假设您在本地机器上同时运行 EMQX 和容器内的 HStreamDB。 如果您有远程运行的 EMQX 和 HStreamDB，请相应地调整设置。
 
 ### 前置准备
 
-以下小节描述如何使用 Docker 镜像在 Linux/MacOS 安装启动 HStreamDB，因此请确保 Docker 已安装并尽可能使用 Docker Compose v2。关于其他 HStreamDB 的安装方式及 HStreamDB Platform，请参阅[使用 Docker-Compose 快速开始](https://docs.hstream.io/zh/start/quickstart-with-docker.html)以及[开始使用 HStream Platform](https://docs.hstream.io/zh/start/try-out-hstream-platform.html)。
+- 了解[规则](./rules.md)。
+- 了解[数据桥接](./data-bridges.md)。
 
 ### 启动 HStreamDB TCP 服务并创建 Stream
 
@@ -485,7 +506,7 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 
   </details>
 
-### 创建 HStreamDB 数据桥接
+## 创建 HStreamDB 数据桥接
 
 本节介绍了如何在 EMQX Dashboard 上创建 HStreamDB 数据桥接以实现对客户端发布消息的存储或设备状态的记录。
 
@@ -531,7 +552,7 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 
 至此您已经完成数据桥接创建，HStreamDB 数据桥接应该出现在数据桥接列表（**数据集成** -> **数据桥接**）中，**资源状态**为**已连接**。
 
-### 创建数据转发规则
+## 创建数据转发规则
 
 本节介绍了如何为 HStreamDB 数据桥接创建规则。您需要为实现对客户端发布消息的存储或实现设备上下线状态的记录创建不同的规则。
 
@@ -566,7 +587,7 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 
 至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 HStreamDB 存储。
 
-### 测试数据桥接和规则
+## 测试数据桥接和规则
 
 使用 MQTTX 向 `t/1` 主题发布消息。
 

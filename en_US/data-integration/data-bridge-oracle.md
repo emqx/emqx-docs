@@ -1,33 +1,48 @@
 # Ingest MQTT Data into Oracle Database
 
-EMQX supports integration with Oracle Database so you can save MQTT messages and client events to Oracle Database, or use events to trigger the update or removal of data to record the online status or online/offline of clients.
-
 {% emqxce %}
 ::: tip
 EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 :::
 {% endemqxce %}
 
-:::tip Prerequisites
+[Oracle Database](https://www.oracle.com/database/) is one of the leading relational commercial database solutions, widely used in enterprises and organizations of various sizes and types. EMQX supports integration with Oracle Database, enabling you to save MQTT messages and client events to Oracle Database. This allows for the construction of complex data pipelines and analytical processes for data management and analysis, or for managing device connections and integrating with other enterprise systems such as ERP and CRM.
+
+This page provides a comprehensive introduction to the data integration between EMQX and Oracle Database with practical instructions on creating a rule and data bridge.
+
+## How It Works
+
+Oracle Database data integration is an out-of-the-box feature in EMQX designed to bridge the gap between MQTT-based IoT data and Oracle Database's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to Oracle Database for storage and management, eliminating the need for complex coding.
+
+The diagram below illustrates a typical architecture of data integration between EMQX and Oracle Database:
+
+![EMQX Integration Oracel](./assets/emqx-integration-oracle.png)
+
+Ingesting MQTT data into Oracle Database works as follows:
+
+1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to Oracle Database. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
+3. **Data ingestion into Oracle Database**: The rule triggers the writing of messages to Oracle Database. With the help of SQL templates, users can extract data from the rule processing results to construct SQL and send it to Oracle Database for execution, so that specific fields of the message can be written or updated into the corresponding tables and columns of the database.
+4. **Data Storage and Utilization**: With the data now stored in Oracle Database, businesses can harness its querying power for various use cases. For instance, by utilizing Oracle's advanced analytics and predictive capabilities, users can extract valuable information and insights from IoT data.
+
+## Features and Benefits
+
+The data integration with Oracle Database offers a range of features and benefits tailored to ensure efficient data transmission, storage, and utilization:
+
+- **Real-time Data Streaming**: EMQX is built for handling real-time data streams, ensuring efficient and reliable data transmission from source systems to Oracle Database. It enables organizations to capture and analyze data in real-time, making it ideal for use cases requiring immediate insights and actions.
+- **High Performance and Scalability**: EMQX's cluster and distributed architecture is capable of handling the ever-increasing volume of device connections and message transmissions. Oracle offers a variety of expansion and scaling solutions, including data partitioning, data replication and redundancy, clustering, and high availability, providing users with flexible, reliable, and high-performance database solutions.
+- **Flexibility in Data Transformation:** EMQX provides a powerful SQL-based Rule Engine, allowing organizations to pre-process data before storing it in Oracle Database. It supports various data transformation mechanisms, such as filtering, routing, aggregation, and enrichment, enabling organizations to shape the data according to their needs.
+- **Easy Deployment and Management:** EMQX provides a user-friendly interface for configuring data sources, pre-processing data rules, and Oracle Database storage settings. This simplifies the setup and ongoing management of the data integration process.
+- **Advanced Analytics:** Oracle Database's powerful SQL-based query language and support for complex analytical functions empower users to gain valuable insights from IoT data, enabling predictive analytics, anomaly detection, and more.
+
+## Before You Start
+
+This section describes the preparations you need to complete before you start to create the Oracle Database data bridges, including how to set up the Oracle database server and create data tables.
+
+### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
-
-:::
-
-
-## Feature List
-
-- [Connection pool](./data-bridges.md#connection-pool)
-- [Batch mode](./data-bridges.md#batch-mode)
-- [Buffer queue](./data-bridges.md#buffer-queue)
-- [Prepared Statement](./data-bridges.md#prepared-statement)
-
-## Quick Start Tutorial
-
-This section introduces how to use the Oracle Database data bridge with a practical tutorial, covering topics like how to install the Oracle Database server and create data tables, create data bridges and rules for forwarding data to Oracle Database, and test the data bridges and rules.
-
-This tutorial assumes that you run both EMQX and Oracle Database on the local machine. If you have Oracle Database and EMQX running remotely, adjust the settings accordingly.
 
 ### Install Oracle Database Server
 
@@ -78,7 +93,9 @@ Use the following SQL statements to create data table `t_emqx_client_events` in 
   );
   ```
 
-### Create Oracle Database Data Bridges
+## Create Oracle Database Data Bridges
+
+This section demonstrates how to create Oracle Database data bridges. It assumes that you run both EMQX and Oracle Database on the local machine. If you have Oracle Database and EMQX running remotely, adjust the settings accordingly.
 
 Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to Oracle Database for message storage and event recording.
 
@@ -136,7 +153,7 @@ n
 
 Now the Oracle Database data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
-### Create Rules for Oracle Database Data Bridge
+## Create Rules for Oracle Database Data Bridge
 
 After you have successfully created the data bridges to Oracle Database, you can continue to create rules to specify the data to be saved into Oracle Database and rules for the online/offline status recording.
 
@@ -171,7 +188,7 @@ After you have successfully created the data bridges to Oracle Database, you can
 
 Now you have successfully created the data bridges to Oracle Database. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Oracle Database after parsing by rule  `my_rule`.
 
-### Test the Data Bridges and Rules
+## Test Data Bridges and Rules
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 

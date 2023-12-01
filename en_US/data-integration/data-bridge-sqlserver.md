@@ -1,6 +1,14 @@
 # Ingest MQTT Data into Microsoft SQL Server
 
-EMQX supports integration with Microsoft SQL Server. You can save MQTT messages and client online/offline events to Microsoft SQL Server.
+{% emqxce %}
+::: tip
+EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+:::
+{% endemqxce %}
+
+[SQL Server](https://www.microsoft.com/en-us/sql-server/) is one of the leading relational commercial database solutions, widely used in enterprises and organizations of various sizes and types. EMQX supports integration with SQL Server, enabling you to save MQTT messages and client events to SQL Server. This facilitates the construction of complex data pipelines and analytical processes for data management and analysis, or for managing device connections and integrating with other enterprise systems such as ERP, CRM, and BI.
+
+This page provides a comprehensive introduction to the data integration between EMQX and Microsoft SQL Server with practical instructions on creating a rule and data bridge.
 
 {% emqxee %}
 
@@ -12,34 +20,38 @@ The data integration with Microsoft SQL Server is supported in EMQX Enterprise 5
 
 {% endemqxee %}
 
-{% emqxce %}
-::: tip
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
-:::
-{% endemqxce %}
+## How It Works
 
-::: tip Prerequisites
+Microsoft SQL Server data integration is an out-of-the-box feature in EMQX, combining EMQX's device connectivity and message transmission capabilities with the powerful data storage capabilities of Microsoft SQL Server. Through the built-in [rule engine](./rules.md) component and data bridge, you can store MQTT messages and client events in Microsoft SQL Server. Additionally, events can trigger updates or deletions of data within Microsoft SQL Server, enabling the recording of information such as device online status and connection history. This integration simplifies the process of ingesting data from EMQX to SQL Server for storage and management, eliminating the need for complex coding.
+
+The diagram below illustrates a typical architecture of data integration between EMQX and SQL Server:
+
+![EMQX Integration SQL Server](./assets/emqx-integration-sql_server.png)
+
+Ingesting MQTT data into Microsoft SQL Server works as follows:
+
+1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to Microsoft SQL Server. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
+3. **Data ingestion into SQL Server**: The rule triggers the writing of messages to Microsoft SQL Server. With the help of SQL templates, users can extract data from the rule processing results to construct SQL and send it to SQL Server for execution, so that specific fields of the message can be written or updated into the corresponding tables and columns of the database.
+4. **Data Storage and Utilization**: With the data now stored in Microsoft SQL Server, businesses can harness its querying power for various use cases.
+
+## Features and Benefits
+
+The data integration with Microsoft SQL Server offers a range of features and benefits tailored to ensure efficient data transmission, storage, and utilization:
+
+- **Real-time Data Streaming**: EMQX is built for handling real-time data streams, ensuring efficient and reliable data transmission from source systems to Microsoft SQL Server. It enables organizations to capture and analyze data in real-time, making it ideal for use cases requiring immediate insights and actions.
+- **High Performance and Scalability**: Both EMQX and Microsoft SQL Server feature expandability and reliability, suitable for handling large-scale IoT data. They can undergo uninterrupted horizontal and vertical expansion as demands grow, ensuring the continuity and reliability of IoT applications.
+- **Flexibility in Data Transformation:** EMQX provides a powerful SQL-based Rule Engine, allowing organizations to pre-process data before storing it in Microsoft SQL Server. It supports various data transformation mechanisms, such as filtering, routing, aggregation, and enrichment, enabling organizations to shape the data according to their needs.
+- **Advanced Analytics:** Microsoft SQL Server offers powerful analytical capabilities, such as building multi-dimensional data models through Analysis Services to support complex data analysis and data mining. It also enables the creation and publication of reports through Reporting Services, presenting insights and analysis results of IoT data to stakeholders.
+
+## Before You Start
+
+This section describes the preparations you need to complete before you start to create the Microsoft SQL Server data bridges, including how to install and connect to the Microsoft SQL Server, create database and data tables, and install and configure the ODBC driver.
+
+### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-
 - Knowledge about [data bridge](./data-bridges.md)
-
-
-:::
-
-## Feature List
-
-- [Connection pool](./data-bridges.md#connection-pool)
-- [Batch mode](./data-bridges.md#batch-mode)
-- [Buffer queue](./data-bridges.md#buffer-queue)
-
-<!-- [Configuration parameters](#Configuration) TODO 链接到配置手册对应配置章节。 -->
-
-## Quick Start Tutorial
-
-This section introduces how to configure the Microsoft SQL Server data bridge, covering topics on how to install and connect to the Microsoft SQL Server, create database and data tables, install and configure ODBC driver, create data bridges and rules for forwarding data to Microsoft SQL Server, and test the data bridges and rules.
-
-This tutorial assumes that you run both EMQX and Microsoft SQL Server on the local machine. If you have Microsoft SQL Server and EMQX running remotely, adjust the settings accordingly.
 
 ### Install and Connect to Microsoft SQL Server
 
@@ -218,9 +230,9 @@ Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
 FileUsage   = 1
 ```
 
-### Create Microsoft SQL Server Data Bridge
+## Create Microsoft SQL Server Data Bridge
 
-This section introduces how to create Microsoft SQL Server data bridge for message storage and events recording.
+This section demonstrates how to create Microsoft SQL Server data bridge for message storage and events recording. It assumes that you run both EMQX and Microsoft SQL Server on the local machine. If you have Microsoft SQL Server and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
@@ -265,7 +277,7 @@ This section introduces how to create Microsoft SQL Server data bridge for messa
 Now that you have created the data bridge, and the Microsoft SQL Server data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
 
-### Create Rules for Microsoft SQL Server Data Bridge
+## Create Rules for Microsoft SQL Server Data Bridge
 
 After you have successfully created the data bridge to Microsoft SQL Server, you can continue to create rules to specify the data to be saved into Microsoft SQL Server and rules for the online/offline status recording.
 
@@ -303,7 +315,7 @@ After you have successfully created the data bridge to Microsoft SQL Server, you
 
 Now you have successfully created the rule for Microsoft SQL Server data bridge. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Microsoft SQL Server after parsing by rule  `my_rule`.
 
-### Test Data Bridge and Rule
+## Test Data Bridge and Rule
 
 Use MQTT X  to send a message to topic  `t/1`  to trigger an online/offline event.
 

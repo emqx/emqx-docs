@@ -1,29 +1,52 @@
 # Stream MQTT Data into Azure Event Hubs
 
-[Azure Event Hub](https://azure.microsoft.com/en-us/products/event-hubs) is a real-time managed event streaming platform for data ingestion. EMQX's integration with Azure Event Hub offers users dependable data transport and processing capabilities in high-throughput situations.  EMQX currently supports Azure Event Hub integration via its Apache Kafka endpoint that is compatible with the Kafka protocol, using SASL/PLAIN authentication.
-
 {% emqxce %}
 :::tip
 EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 :::
 {% endemqxce %}
 
-:::tip Prerequisites
+[Azure Event Hubs](https://azure.microsoft.com/en-us/products/event-hubs) is a real-time managed event streaming platform for data ingestion. EMQX's integration with Azure Event Hub offers users dependable data transport and processing capabilities in high-throughput situations. Azure Event Hubs can serve as a data channel between EMQX and Azure's rich cloud service applications, integrating IoT data into Azure Blob Storage, Azure Stream Analytics, and various applications and services deployed on Azure virtual machines. Currently, EMQX supports Azure Event Hub integration through SASL/PLAIN authentication and endpoints compatible with the Apache Kafka protocol.
+
+This page provides a comprehensive introduction to the data integration between EMQX and Azure Event Hubs with practical instructions on creating and validating the data integration.
+
+## How It Works
+
+Azure Event Hubs data bridge is an out-of-the-box feature of EMQX designed to help users seamlessly integrate MQTT data streams with Azure Event Hubs and leverage its rich services and capabilities for IoT application development.
+
+![event_hubs_architecture](./assets/event_hubs_architecture.svg)
+
+EMQX forwards MQTT data to Azure Event Hubs through the rule engine and data bridge. The complete process is as follows:
+
+1. **IoT Devices Publish Messages**: Devices publish telemetry and status data through specific topics, triggering the rule engine.
+2. **Rule Engine Processes Messages**: Using the built-in rule engine, MQTT messages from specific sources are processed based on topic matching. The rule engine matches corresponding rules and processes messages, such as converting data formats, filtering specific information, or enriching messages with contextual information.
+3. **Bridging to Azure Event Hubs**: The rule triggers the action of forwarding messages to Azure Event Hubs, allowing easy configuration of data properties, ordering keys, and mapping of MQTT topics to Azure Event Hubs headers. This provides richer context information and order assurance for data integration, enabling flexible IoT data processing.
+
+After MQTT message data is written to Azure Event Hubs, you can perform flexible application development, such as:
+
+- Real-time Data Processing and Analysis: Utilize powerful Azure Event Hubs data processing and analysis tools and its own streaming capabilities to perform real-time processing and analysis of message data, obtaining valuable insights and decision support.
+- Event-Driven Functionality: Trigger Azure event handling to achieve dynamic and flexible function triggering and processing.
+- Data Storage and Sharing: Transmit message data to Azure Event Hubs storage services for secure storage and management of large volumes of data. This allows you to share and analyze this data with other Azure services to meet various business needs.
+
+## Features and Benefits
+
+The data integration between EMQX and Azure Event Hubs can bring the following functions and advantages to your business:
+
+- **High-Performance Massive Message Throughput**: EMQX supports connections with a massive number of MQTT clients, with millions of messages per second continuously ingested into Azure Event Hubs. This enables extremely low message transmission and storage latency, and message volume control can be achieved by configuring retention time on Azure Event Hubs.
+- **Flexible Data Mapping**: Through the configured Azure Event Hubs, flexible mapping can be achieved between MQTT topics and Azure Event Hubs event centers. It also supports the mapping of MQTT user properties to Azure Event Hubs headers, providing richer context information and order assurance for data integration.
+- **Elastic Scaling Support**: Both EMQX and Azure Event Hubs support elastic scaling and can expand according to the application specifications, easily scaling IoT data sizes from several MBs to several TBs.
+- **Rich Ecosystem**: By adopting the standard MQTT protocol with the support for various mainstream IoT transmission protocols, EMQX can achieve the connection with various IoT devices. Combined with the support of Azure Event Hubs in Azure Functions, various programming language SDKs, and the Kafka ecosystem, it facilitates seamless IoT data access and processing from devices to the cloud.
+
+These functionalities enhance integration capabilities and flexibility, helping users quickly implement the connection of massive IoT device data with Azure. They enable users to more conveniently harness the data analysis and intelligence capabilities brought by cloud computing, building powerful data-driven applications.
+
+## Before You Start
+
+This section describes the preparations you need to complete before you start to create the Azure Event Hub data bridge in the EMQX Dashboard.
+
+### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
-
-:::
-
-## Feature List
-
-- [Async mode](./data-bridges.md#async-mode)
-- [Batch mode](./data-bridges.md#batch-mode)
-- [Buffer queue](./data-bridges.md#buffer-queue)
-
-## Quick Start Tutorial
-
-This section introduces how to stream data into or from Azure Event Hubs through the data bridge, covering topics like how to set up Azure Event Hub, how to create a bridge and a rule for forwarding data to the bridge, and how to test the data bridge and rule.
 
 ### Set Up Azure Event Hub
 
@@ -35,7 +58,7 @@ In order to use Azure Event Hub data integration, a Namespace and Event Hub must
 - [Get an Event Hubs connection string](https://learn.microsoft.com/en-us/azure/event-hubs/event-hubs-get-connection-string)
 - [What is Azure Event Hubs for Apache Kafka](https://learn.microsoft.com/en-us/azure/event-hubs/azure-event-hubs-kafka-overview)
 
-### Create Azure Event Hubs Data Bridge
+## Create Azure Event Hubs Data Bridge
 
 This section demonstrates how to create Azure Event Hubs producer data bridge via Dashboard.
 
@@ -75,7 +98,7 @@ This section demonstrates how to create Azure Event Hubs producer data bridge vi
 
 Now the Azure Event Hub data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
 
-### Create Rule for Azure Event Hubs Producer Data Bridge
+## Create Rule for Azure Event Hubs Producer Data Bridge
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -100,7 +123,7 @@ FROM
 
 Now you have successfully created the data bridge to Azure Event Hub producer data bridge. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Azure Event Hub after parsing by rule  `my_rule`.
 
-### Test the Data Bridge and Rule
+## Test Data Bridge and Rule
 
 To test if the Kafka producer data bridge and rule work as you expected, you can use the [MQTTX](https://mqttx.app/) to simulate a client to publish MQTT messages to EMQX.
 

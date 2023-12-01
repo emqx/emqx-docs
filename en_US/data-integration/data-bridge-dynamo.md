@@ -1,36 +1,49 @@
 # Ingest MQTT Data into DynamoDB
 
-EMQX supports integration with DynamoDB, so you can save MQTT messages and client events to DynamoDB, or use events to trigger the update or removal of data to record the online status or online/offline of clients.
-
 {% emqxce %}
 :::tip
 EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 :::
 {% endemqxce %}
 
-::: tip Prerequisites
+[DynamoDB](https://www.amazonaws.cn/en/dynamodb/) is a fully managed, high-performance, serverless key-value store database service on AWS. It is designed for applications that require fast, scalable, and reliable data storage. EMQX supports integration with DynamoDB, enabling you to save MQTT messages and client events to DynamoDB, facilitating the registration and management of IoT devices, as well as the long-term storage and real-time analysis of device data. Through the DynamoDB data bridge, MQTT messages and client events can be stored in DynamoDB, and events can also trigger updates or deletions of data within DynamoDB, thereby enabling the recording of information such as device online status and connection history.
+
+This page provides a comprehensive introduction to the data integration between EMQX and DynamoDB with practical instructions on creating and validating the data integration.
+
+## How It Works
+
+DynamoDB data integration is an out-of-the-box feature in EMQX that combines EMQX's device connectivity and message transmission capabilities with DynamoDB's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to DynamoDB for storage and management, eliminating the need for complex coding. 
+
+The diagram below illustrates a typical architecture of data integration between EMQX and DynamoDB:
+
+![EMQX Integration DynamoDB](./assets/emqx-integration-dynamodb.png)
+
+Ingesting MQTT data into DynamoDB works as follows:
+
+1. **Message publication and reception**: IoT devices, whether they are part of connected vehicles, IIoT systems, or energy management platforms, establish successful connections to EMQX through the MQTT protocol and publish MQTT messages to specific topics. When EMQX receives these messages, it initiates the matching process within its rules engine.
+2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to DynamoDB. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
+3. **Data ingestion into DynamoDB**: Once the rule engine identifies a message for DynamoDB storage, it triggers an action of forwarding the messages to DynamoDB. Processed data will be seamlessly written into the collection of the DynamoDB database.
+4. **Data storage and utilization**: With the data now stored in DynamoDB, businesses can harness its querying power for various use cases. For instance, in the realm of connected vehicles, this stored data can inform fleet management systems about vehicle health, optimize route planning based on real-time metrics, or track assets. Similarly, in IIoT settings, the data might be used to monitor machinery health, forecast maintenance, or optimize production schedules.
+
+## Features and Benefits
+
+The data integration with DynamoDB offers a range of features and benefits tailored to ensure efficient data transmission, storage, and utilization:
+
+- **Real-time Data Streaming**: EMQX is built for handling real-time data streams, ensuring efficient and reliable data transmission from source systems to DynamoDB. It enables organizations to capture and analyze data in real-time, making it ideal for use cases requiring immediate insights and actions.
+- **Flexibility in Data Transformation:** EMQX provides a powerful SQL-based Rule Engine, allowing organizations to pre-process data before storing it in DynamoDB. It supports various data transformation mechanisms, such as filtering, routing, aggregation, and enrichment, enabling organizations to shape the data according to their needs.
+- **Flexible Data Model**: DynamoDB uses key-value and document data models, suitable for storing and managing structured device events and message data, allowing for easy storage of different MQTT message structures.
+- **Powerful Scalability**: EMQX offers cluster scalability, capable of seamless horizontal scaling based on device connections and message volume; DynamoDB, requiring no server or infrastructure management, automatically handles underlying resource management and scaling. The combination of both provides high-performance and highly reliable data storage and scalability.
+
+## Before You Start
+
+This section describes the preparations you need to complete before you start to create a DynamoDB data bridge, including how to install a DynamoDB server and create a data table.
+
+### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
 
-:::
-
-## Features List
-
-- [Connection pool](./data-bridges.md#connection-pool)
-- [Async mode](./data-bridges.md#async-mode)
-- [Batch mode](./data-bridges.md#batch-mode)
-- [Buffer queue](./data-bridges.md#buffer-queue)
-- [SQL prepared statement](./data-bridges.md#prepared-statement)
-
-
-## Quick Start Tutorial
-
-This section introduces how to configure the DynamoDB data bridge, covering topics like how to set up the DynamoDB server, create data bridges and rules for forwarding data to DynamoDB and test the data bridges and rules.
-
-This tutorial assumes that you run both EMQX and DynamoDB on the local machine. If you have Dynamo and EMQX running remotely, adjust the settings accordingly.
-
-### Install DynamoDB Local Server
+### Install DynamoDB Local Server and Create Table
 
 1. Prepare a docker-compose file, `dynamo.yaml`, to set up the Dynamodb local server.
 
@@ -95,7 +108,9 @@ The following JSON will be printed if the table was created successfully.
 }
 ```
 
-### Create a DynamoDB Data Bridge
+## Create a DynamoDB Data Bridge
+
+This section demonstrates how to create a DynamoDB data bridge in EMQX Dashboard. It assumes that you run both EMQX and DynamoDB on the local machine. If you have Dynamo and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
