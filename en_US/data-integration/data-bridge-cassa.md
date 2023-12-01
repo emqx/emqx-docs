@@ -22,7 +22,7 @@ Cassandra data integration is an out-of-the-box feature in EMQX that combines EM
 
 The diagram below illustrates a typical architecture of data integration between EMQX and Cassandra:
 
-![EMQX Integration Cassandra](./assets/emqx-integration-cassandra)
+![EMQX Integration Cassandra](./assets/emqx-integration-cassandra.png)
 
 Ingesting MQTT data into Cassandra works as follows:
 

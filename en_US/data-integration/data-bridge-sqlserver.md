@@ -26,7 +26,7 @@ Microsoft SQL Server data integration is an out-of-the-box feature in EMQX, comb
 
 The diagram below illustrates a typical architecture of data integration between EMQX and SQL Server:
 
-![EMQX Integration SQL Server](./assets/emqx-integration-sql_server)
+![EMQX Integration SQL Server](./assets/emqx-integration-sql_server.png)
 
 Ingesting MQTT data into Microsoft SQL Server works as follows:
 

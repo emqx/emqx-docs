@@ -16,7 +16,7 @@ TDengine data integration is a built-in feature in EMQX. With a built-in [rule e
 
 The diagram below illustrates the typical architecture of EMQX and TDengine data integration in the industrial IoT:
 
-![EMQX Integration TDengine](./assets/emqx-integration-tdengine)
+![EMQX Integration TDengine](./assets/emqx-integration-tdengine.png)
 
 Taking the industrial energy consumption management scenario as an example, the workflow is as follows:
 

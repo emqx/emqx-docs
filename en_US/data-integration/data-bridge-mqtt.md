@@ -8,7 +8,7 @@ EMQX supports the MQTT data bridge that works in two primary modes: ingress and 
 
 The diagram below illustrates a typical architecture of data integration between EMQX and HStreamDB:
 
-![EMQX Integration MQTT](./assets/emqx-integration-mqtt)
+![EMQX Integration MQTT](./assets/emqx-integration-mqtt.png)
 
 ### Ingress Mode
 

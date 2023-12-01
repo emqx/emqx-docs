@@ -16,7 +16,7 @@ Oracle Database data integration is an out-of-the-box feature in EMQX designed t
 
 The diagram below illustrates a typical architecture of data integration between EMQX and Oracle Database:
 
-![EMQX Integration Oracel](./assets/emqx-integration-oracle)
+![EMQX Integration Oracel](./assets/emqx-integration-oracle.png)
 
 Ingesting MQTT data into Oracle Database works as follows:
 

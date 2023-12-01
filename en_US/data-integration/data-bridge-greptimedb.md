@@ -16,7 +16,7 @@ GreptimeDB data integration is a built-in feature in EMQX that combines the real
 
 The diagram below illustrates a typical architecture of data integration between EMQX and GreptimeDB:
 
-![EMQX Integration GreptimeDB](./assets/emqx-integration-greptimedb)
+![EMQX Integration GreptimeDB](./assets/emqx-integration-greptimedb.png)
 
 1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.  
 2. **Rule Engine Processes Messages**: The built-in rule engine processes messages from specific sources based on topic matching. When a message arrives, it passes through the rule engine, which matches it with corresponding rules and processes the message data. This can include transforming data formats, filtering specific information, or enriching messages with context information.

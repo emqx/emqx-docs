@@ -16,7 +16,7 @@ Redis data integration is an out-of-the-box feature in EMQX that combines the re
 
 The diagram below illustrates a typical architecture of data integration between EMQX and Redis:
 
-![EMQX Integration Redis](./assets/emqx-integration-redis)
+![EMQX Integration Redis](./assets/emqx-integration-redis.png)
 
 Ingesting MQTT data into Redis works as follows:
 

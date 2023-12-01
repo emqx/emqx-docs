@@ -26,7 +26,7 @@ HStreamDB data bridge is an out-of-the-box feature of EMQX that combines EMQX's 
 
 The diagram below illustrates a typical architecture of data integration between EMQX and HStreamDB:
 
-![EMQX Integration HStreamDB](./assets/emqx-integration-hstreamdb)
+![EMQX Integration HStreamDB](./assets/emqx-integration-hstreamdb.png)
 
 EMQX forwards MQTT data to HStreamDB through the rule engine and configured data bridge, and the complete process is as follows:
 

@@ -20,7 +20,7 @@ PostgreSQL data integration is an out-of-the-box feature in EMQX designed to bri
 
 The diagram below illustrates a typical architecture of data integration between EMQX and PostgreSQL:
 
-![EMQX Integration PostgreSQL](./assets/emqx-integration-postgesql)
+![EMQX Integration PostgreSQL](./assets/emqx-integration-postgesql.png)
 
 Ingesting MQTT data into PostgreSQL works as follows:
 

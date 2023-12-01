@@ -16,7 +16,7 @@ The RabbitMQ data integration is an out-of-the-box feature in EMQX designed to b
 
 The diagram below illustrates a typical architecture of data integration between EMQX and RabbitMQ:
 
-![EMQX Integration RabbitMQ](./assets/emqx-integration-rabbitmq)
+![EMQX Integration RabbitMQ](./assets/emqx-integration-rabbitmq.png)
 
 Ingesting MQTT data into RabbitMQ works as follows:
 
