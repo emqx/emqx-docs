@@ -13,6 +13,7 @@ The Multi-Protocol Gateway supports the MQTT-SN, STOMP, CoAP, and LwM2M protocol
 - [CoAP](./coap.md)
 - [LwM2M](./lwm2m.md)
 - [ExProto](./exproto.md)
+- [OCPP](./OCPP.md)
 
 ## How the Multi-Protocol Gateway Works
 
@@ -34,13 +35,14 @@ Here's a brief overview of each component:
 
 Each gateway can have multiple listeners enabled, and different protocol gateways support the following listener types:
 
-|         | TCP  | UDP  | SSL  | DTLS |
-| ------- | ---- | ---- | ---- | ---- |
-| MQTT-SN |      | ✔︎    |      | ✔︎    |
-| STOMP   | ✔︎    |      | ✔︎    |      |
-| CoAP    |      | ✔︎    |      | ✔︎    |
-| LwM2M   |      | ✔︎    |      | ✔︎    |
-| ExProto | ✔︎    | ✔︎    | ✔︎    | ✔︎    |
+|         | TCP  | UDP  | SSL  | DTLS | Websocket | Websocket over TLS |
+| ------- | ---- | ---- | ---- | ---- | --------- | ------------------ |
+| MQTT-SN |      | ✔︎    |      | ✔︎    |           |                    |
+| STOMP   | ✔︎    |      | ✔︎    |      |           |                    |
+| CoAP    |      | ✔︎    |      | ✔︎    |           |                    |
+| LwM2M   |      | ✔︎    |      | ✔︎    |           |                    |
+| ExProto | ✔︎    | ✔︎    | ✔︎    | ✔︎    |           |                    |
+| OCPP    | ✔︎    | ✔︎    | ✔︎    | ✔︎    | ✔︎         | ✔︎                  |
 
 ### Message Format
 

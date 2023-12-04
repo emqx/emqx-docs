@@ -551,7 +551,7 @@
         - gateway/coap
         - gateway/lwm2m
         - gateway/exproto
-       #- gateway/ocpp
+        - gateway/ocpp
        #- gateway/jt808
        #- gateway/gbt32960
        #- gateway/tcp
