@@ -166,9 +166,34 @@ jobs:
         fi
         python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/public/api/${DOCS_TYPE}_versions.json
 
+    - name: setup hocon
+      if: matrix.docs_type == 'enterprise'
+      run: |
+        echo "HOCON=true" >> $GITHUB_ENV
+        if [[ $DOCS_TYPE == "broker" ]];
+        then
+          cp -r docs-files/hocon/ce/*.json frontend/docs/public/api/
+        else
+          cp -r docs-files/hocon/ee/*.json frontend/docs/public/api/
+        fi
+
+        online_versions=$(curl -s https://docs.emqx.com/api/${DOCS_TYPE}_hocon_versions.json)
+        if [ $? -eq 0 ]; then
+          online_versions=$(echo $online_versions | jq -r '.'[])
+        else
+          online_versions=""
+        fi
+
+        local_versions=$(ls frontend/docs/public/api/hocon-*-*on | sed -E 's_.*/hocon-(.*)-(en|zh).json_\1_g' | uniq)
+        all_versions=$(echo -e "$online_versions\n$local_versions" | sort -u | awk NF | uniq)
+        all_versions=$(echo "$all_versions" | sort -rV)
+        jq -nR '[inputs]' <<< "$all_versions" > frontend/docs/public/api/${DOCS_TYPE}_hocon_versions.json
+        cat frontend/docs/public/api/${DOCS_TYPE}_hocon_versions.json
+
     - name: build docs
       run: |
         cd frontend
+        export NODE_OPTIONS=--max_old_space_size=4096
         pnpm install
         pnpm build
 
