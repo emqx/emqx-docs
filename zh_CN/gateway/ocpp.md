@@ -1,34 +1,32 @@
-# OCPP Gateway
+# OCPP 协议网关
 
-EMQX OCPP Gateway is a messaging protocol translator that bridges the gap between [OCPP](https://www.openchargealliance.org/) and MQTT protocols, allowing clients using these protocols to communicate with each other.
-
-This OCPP Gateway provides a lightweight and simple messaging solution for clients and servers, enabling message exchange in a variety of messaging environments. With its support for Websocket and Websocket over TLS listeners, the OCPP gateway is a flexible and versatile tool for building messaging systems.
+EMQX OCPP 网关是一个消息协议转换器，它解决了 [OCPP](https://www.openchargealliance.org/) 和 MQTT 协议之间的差距，使用这些协议的客户端能够相互通信。
 
 ::: tip
 
-The OCPP gateway is based on [OCPP v1.6](https://www.openchargealliance.org/protocols/ocpp-16/)
+OCPP 网关基于 [OCPP v1.6](https://www.openchargealliance.org/protocols/ocpp-16/)
 
 :::
 
-## Enable OCPP Gateway
+## 快速开始
 
-In EMQX 5.0, OCPP gateway can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps.
+在 EMQX 5.0 中，可以通过 Dashboard、HTTP API 和 配置文件 `emqx.conf` 来启用 OCPP 网关。
 
-On EMQX Dashboard, click **Management** -> **Gateways** on the left navigation menu. On the **Gateways** page, all supported gateways are listed. Locate **OCPP** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize OCPP** page.
+以 Dashboard 为例，在 EMQX 仪表板上，点击左侧导航菜单中的 **管理** -> **网关**。在网关页面上，列出了所有支持的网关。找到 OCPP，点击配置。然后，您将被引导到初始化页面。
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure with [`emqx.conf`](../configuration/configuration.md).
+如果您使用集群方式运行 EMQX，通过 Dashboard 或 HTTP API 进行的设置将会在整个集群范围生效。如果您只想更改一个节点的设置，请使用 [`emqx.conf`](../configuration/configuration.md) 进行配置。
 
 :::
 
-To simplify the configuration process, EMQX offers default values for all required fields on the **Gateways** page. If you don't need extensive customization, you can enable the OCPP Gateway in just 3 clicks:
+为了简化配置过程，EMQX 在网关页面上提供了所有必填字段的默认值。如果您不需要进行详细的自定义配置，只需要3次点击即可启用 OCPP 网关：
 
-1. Click **Next** in the **Basic Configuration** tab to accept all the default settings.
-2. Then you will be directed to the **Listeners** tab, where EMQX has pre-configured a Websocket listener on port `33033`. Click **Next** again to confirm the setting.
-3. Then click the **Enable** button to activate the OCPP Gateway.
+1. 在基本配置选项卡中点击 **下一步**，接受所有默认设置。
+2. 然后您将被引导到监听器选项卡，在这里 EMQX 预先配置了一个 Websocket 监听器，端口为 33033。再次点击下一步确认设置。
+3. 然后点击 **启用**按钮激活 OCP P网关。
 
-Upon completing the gateway activation process, you can return to the **Gateways** page and observe that the OCPP Gateway now displays an **Enabled** status.
+完成网关激活过程后，您可以返回网关列表页面，观察到 OCPP 网关现在显示为已启用状态。
 
 <img src="./assets/ocpp-enabled.png" alt="OCPP gateway enabled" style="zoom:50%;" />
 
