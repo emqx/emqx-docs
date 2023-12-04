@@ -186,7 +186,7 @@ This page lists features supported across different deployment types in detail.
     <td><span style="font-weight:normal">Up to 100M MQTT connections per cluster</span></td>
     <td><span style="font-weight:normal">0 ~ 1000 MQTT connections</span></td>
     <td><span style="font-weight:normal">1000 ～ unlimited MQTT connections</span></td>
-    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0">#Reaching 100M MQTT connections with EMQX 5.0</a></td>
+    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0">Reaching 100M MQTT connections with EMQX 5.0</a></td>
   </tr>
   <tr>
     <td><b>Availability</b></td>
@@ -202,7 +202,7 @@ This page lists features supported across different deployment types in detail.
     <td><span style="font-weight:normal">Data persistence in RocksDB</span></td>
     <td><span style="font-weight:normal">N/A</span></td>
     <td><span style="font-weight:normal">N/A</span></td>
-    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/zh/blog/mqtt-persistence-based-on-rocksdb">#基于 RocksDB 实现高可靠、低时延的 MQTT 数据持久化</a></td>
+    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/en/blog/mqtt-persistence-based-on-rocksdb">Highly Reliable MQTT Data Persistence Based on RocksDB</a></td>
   </tr>
   <tr>
     <td><b>Performance</b></td>
@@ -231,6 +231,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 ## Clustering Architecture
 
@@ -1201,7 +1202,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><img src="https://hub.docker.com/favicon.ico" width="14" height="14"><a href="https://hub.docker.com/_/emqx">#emqx - Official Image | Docker Hub</a> <br><img src="https://hub.docker.com/favicon.ico" width="14" height="14"><a href="https://hub.docker.com/r/emqx/emqx">#Docker</a></td>
+    <td><img src="https://hub.docker.com/favicon.ico" width="14" height="14"><a href="https://hub.docker.com/_/emqx">emqx - Official Image | Docker Hub</a> <br><img src="https://hub.docker.com/favicon.ico" width="14" height="14"><a href="https://hub.docker.com/r/emqx/emqx">Docker</a></td>
   </tr>
   <tr>
     <td><b>Kubernetes Operator</b></td>
@@ -1209,7 +1210,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/en/emqx-kubernetes-operator">#EMQX Kubernetes Operator</a></td>
+    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/en/emqx-kubernetes-operator">EMQX Kubernetes Operator</a></td>
   </tr>
   <tr>
     <td><b>Terraform</b></td>
@@ -1217,7 +1218,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/en/emqx-terraform">#EMQX Terraform</a></td>
+    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/en/emqx-terraform">EMQX Terraform</a></td>
   </tr>
   <tr>
     <td><b>AWS Marketplace</b></td>
@@ -1225,7 +1226,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQX is available on AWS Marketplace.<br><img src="https://d32gc0xr2ho6pa.cloudfront.net/img/general/favicon.ico" width="14" height="14"><a href="https://aws.amazon.com/marketplace/pp/prodview-cwa2e6xbrwtzi">#AWS Marketplace: EMQX Enterprise on Ubuntu 20.04</a> </td>
+    <td>EMQX is available on AWS Marketplace.<br><img src="https://d32gc0xr2ho6pa.cloudfront.net/img/general/favicon.ico" width="14" height="14"><a href="https://aws.amazon.com/marketplace/pp/prodview-cwa2e6xbrwtzi">AWS Marketplace: EMQX Enterprise on Ubuntu 20.04</a> </td>
   </tr>
 </tbody>
 </table>

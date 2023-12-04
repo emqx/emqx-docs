@@ -8,16 +8,16 @@
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Core/Enterprise Features</th>
-    <th colspan="2">Self-Hosted</th>
-    <th colspan="2">MQTT as a Service</th>
-    <th rowspan="2">Notes and Links</th>
+    <th rowspan="2">核型/企业版功能</th>
+    <th colspan="2">自托管模式</th>
+    <th colspan="2">云服务模式</th>
+    <th rowspan="2">备注和链接</th>
   </tr>
   <tr>
-    <td>EMQX Open Source</td>
-    <td>EMQX Enterprise</td>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
     <td>EMQX Cloud Serverless</td>
-    <td>EMQX Dedicated Cloud</td>
+    <td>EMQX Cloud 专有版</td>
   </tr>
 </thead>
 <tbody>
@@ -38,15 +38,15 @@
     <td> Coming in EMQX 5.3</td>
   </tr>
   <tr>
-    <td><b>MQTT Add-ons</b></td>
+    <td><b>MQTT 扩展</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/zh/v5.0/advanced/shared-subscriptions.html">Shared subscription</a><br>Exclusive subscription<br><a href="https://www.emqx.io/docs/en/v5.0/advanced/delayed-publish.html">Delayed Publish</a><br><a href="https://www.emqx.io/docs/en/v5.0/advanced/auto-subscriptions.html">Auto-subscription</a><br><a href="https://www.emqx.io/docs/en/v5.0/advanced/topic-rewrite.html">Topic rewrite</a></td>
+    <td><a href="https://www.emqx.io/docs/zh/v5.0/advanced/shared-subscriptions.html">公项订阅</a><br>排他订阅<br><a href="https://www.emqx.io/docs/en/v5.0/advanced/delayed-publish.html">延迟发布</a><br><a href="https://www.emqx.io/docs/en/v5.0/advanced/auto-subscriptions.html">自动订阅</a><br><a href="https://www.emqx.io/docs/en/v5.0/advanced/topic-rewrite.html">主题重写</a></td>
   </tr>
   <tr>
-    <td><b>Multi-protocol Gateways</b></td>
+    <td><b>多协议网关</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -54,7 +54,7 @@
     <td>MQTT-SN<br>CoAP<br>LwM2M<br>Stomp<br>TCP (Enterprise only)<br>OCPP (Enterprise only)<br>JT/808 (Enterprise only)</td>
   </tr>
   <tr>
-    <td><b>Multi-tenancy</b></td>
+    <td><b>多租户</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
@@ -62,7 +62,7 @@
     <td>Coming in EMQX 5.2</td>
   </tr>
   <tr>
-    <td><b>Geo-replication</b></td>
+    <td><b>异地备份</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -70,7 +70,7 @@
     <td>Coming in EMQX 6.0</td>
   </tr>
   <tr>
-    <td><b>Data Persistence</b></td>
+    <td><b>数据持久花</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> Built-in RocksDB backend or external databases</td>
     <td>N/A</td>
@@ -86,7 +86,7 @@
     <td><a href="https://docs.emqx.com/en/enterprise/v4.4/rule/schema-registry.html">https://docs.emqx.com/en/enterprise/v4.4/rule/schema-registry.html</a></td>
   </tr>
   <tr>
-    <td><b>Message Codec</b></td>
+    <td><b>消息编解码</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -94,7 +94,7 @@
     <td>JSON<br>Avro<br>Protobuf<br>Custom codec (HTTP/gRPC)</td>
   </tr>
   <tr>
-    <td><b>Rule Engine</b></td>
+    <td><b>规则引擎</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -102,7 +102,7 @@
     <td><a href="https://www.emqx.io/docs/en/v5.0/data-integration/rules.html">SQL-based built-in Rule Engine</a></td>
   </tr>
   <tr>
-    <td><b>Flow Editor</b></td>
+    <td><b>Flow 设计器</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -110,7 +110,7 @@
     <td><a href="https://www.emqx.com/zh/blog/iot-data-integration">https://www.emqx.com/zh/blog/iot-data-integration</a></td>
   </tr>
   <tr>
-    <td><b>File Transfer</b></td>
+    <td><b>文件传输</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -118,7 +118,7 @@
     <td>Coming in EMQX 5.1</td>
   </tr>
   <tr>
-    <td><b>Kafka Integration</b></td>
+    <td><b>Kafka 集成</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -126,7 +126,7 @@
     <td><a href="https://docs.emqx.com/en/enterprise/v4.4/rule/bridge_kafka.html">https://docs.emqx.com/en/enterprise/v4.4/rule/bridge_kafka.html</a></td>
   </tr>
   <tr>
-    <td><b>Enterprise Integrations</b></td>
+    <td><b>企业级数据集成</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 40+</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -134,7 +134,7 @@
     <td><a href="https://www.emqx.com/en/integrations">https://www.emqx.com/en/integrations</a></td>
   </tr>
   <tr>
-    <td><b>Troubleshooting</b></td>
+    <td><b>故障排查</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -150,7 +150,7 @@
     <td><a href="https://www.emqx.com/en/deployments">https://www.emqx.com/en/deployments</a></td>
   </tr>
   <tr>
-    <td><b>Edge Computing</b></td>
+    <td><b>边缘计算</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -161,76 +161,78 @@
 </table>
 </div>
 
+
 ## 可扩展性与性能
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Scalability/Performance</th>
-    <th colspan="2">Self-Hosted</th>
-    <th colspan="2">MQTT as a Service</th>
-    <th rowspan="2">Notes and Links</th>
+    <th rowspan="2">可扩展性/性能</th>
+    <th colspan="2">自托管模式</th>
+    <th colspan="2">云服务模式</th>
+    <th rowspan="2">备注和链接</th>
   </tr>
   <tr>
-    <td>EMQX Open Source</td>
-    <td>EMQX Enterprise</td>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
     <td>EMQX Cloud Serverless</td>
-    <td>EMQX Dedicated Cloud</td>
+    <td>EMQX Cloud 专有版</td>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td><b>Scalability</b></td>
-    <td><span style="font-weight:normal">&lt; 1M MQTT connections per cluster</span></td>
-    <td><span style="font-weight:normal">Up to 100M MQTT connections per cluster</span></td>
-    <td><span style="font-weight:normal">0 ~ 1000 MQTT connections</span></td>
-    <td><span style="font-weight:normal">1000 ～ unlimited MQTT connections</span></td>
-    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0">#Reaching 100M MQTT connections with EMQX 5.0</a></td>
+    <td><b>可扩展性</b></td>
+    <td><span style="font-weight:normal">单集群支持 MQTT 并发连接数&lt; 1M</span></td>
+    <td><span style="font-weight:normal">单集群支持 MQTT 并发连接数高达 1 亿条</span></td>
+    <td><span style="font-weight:normal">0 ~ 1000 条 MQTT 连接</span></td>
+    <td><span style="font-weight:normal">1000 ～ 无限 MQTT 连接</span></td>
+    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0">高度可扩展，EMQX 5.0 达成 1 亿 MQTT 连接</a></td>
   </tr>
   <tr>
-    <td><b>Availability</b></td>
-    <td><span style="font-weight:normal">Masterless cluster</span></td>
-    <td><span style="font-weight:normal">Masterless cluster</span></td>
-    <td><span style="font-weight:normal">Masterless cluster</span></td>
-    <td><span style="font-weight:normal">Masterless cluster</span></td>
+    <td><b>高可用性</b></td>
+    <td><span style="font-weight:normal">无主集群</span></td>
+    <td><span style="font-weight:normal">无主集群</span></td>
+    <td><span style="font-weight:normal">无主集群</span></td>
+    <td><span style="font-weight:normal">无主集群</span></td>
     <td><span style="font-weight:normal"> </span></td>
   </tr>
   <tr>
-    <td><b>Reliability</b></td>
-    <td><span style="font-weight:normal">Data storage in memory</span></td>
-    <td><span style="font-weight:normal">Data persistence in RocksDB</span></td>
+    <td><b>可靠性</b></td>
+    <td><span style="font-weight:normal">数据存储在内存中</span></td>
+    <td><span style="font-weight:normal">数据持久化到 RocksDB</span></td>
     <td><span style="font-weight:normal">N/A</span></td>
     <td><span style="font-weight:normal">N/A</span></td>
-    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/zh/blog/mqtt-persistence-based-on-rocksdb">#基于 RocksDB 实现高可靠、低时延的 MQTT 数据持久化</a></td>
+    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/zh/blog/mqtt-persistence-based-on-rocksdb">基于 RocksDB 实现高可靠、低时延的 MQTT 数据持久化</a></td>
   </tr>
   <tr>
-    <td><b>Performance</b></td>
-    <td><span style="font-weight:normal">&lt; 100k MQTT messages per second</span></td>
-    <td><span style="font-weight:normal">5M+ MQTT messages per second</span></td>
-    <td><span style="font-weight:normal">1000 MQTT messages per second</span></td>
-    <td><span style="font-weight:normal">5M+ MQTT messages per second</span></td>
+    <td><b>吞吐量</b></td>
+    <td><span style="font-weight:normal">&lt; 10 万 MQTT 消息每秒</span></td>
+    <td><span style="font-weight:normal">500 万+ MQTT 消息每秒</span></td>
+    <td><span style="font-weight:normal">1000 MQTT 消息每秒</span></td>
+    <td><span style="font-weight:normal">500 万+ MQTT 消息每秒</span></td>
     <td><span style="font-weight:normal"> </span></td>
   </tr>
   <tr>
-    <td><b>Latency</b></td>
-    <td><span style="font-weight:normal">1~5 millisecond</span></td>
-    <td><span style="font-weight:normal">1~5 millisecond</span></td>
-    <td><span style="font-weight:normal">1~5 millisecond</span></td>
-    <td><span style="font-weight:normal">1~5 millisecond</span></td>
+    <td><b>延迟</b></td>
+    <td><span style="font-weight:normal">1~5 毫秒</span></td>
+    <td><span style="font-weight:normal">1~5 毫秒</span></td>
+    <td><span style="font-weight:normal">1~5 毫秒</span></td>
+    <td><span style="font-weight:normal">1~5 毫秒</span></td>
     <td><span style="font-weight:normal"> </span></td>
   </tr>
   <tr>
-    <td><b>SLA</b></td>
-    <td><span style="font-weight:normal">99.9% uptime</span></td>
-    <td><span style="font-weight:normal">99.99% ~ 99.999% uptime</span></td>
-    <td><span style="font-weight:normal">99.9% uptime</span></td>
-    <td><span style="font-weight:normal">Up to 99.99%</span><br><span style="font-weight:normal">uptime</span></td>
+    <td><b>SLA 等级</b></td>
+    <td><span style="font-weight:normal">99.9% 正常运行时间</span></td>
+    <td><span style="font-weight:normal">99.99% ~ 99.999% 正常运行时间</span></td>
+    <td><span style="font-weight:normal">99.9% 正常运行时间</span></td>
+    <td><span style="font-weight:normal">最高可达 99.99%</span><br><span style="font-weight:normal">正常运行时间</span></td>
     <td><span style="font-weight:normal"> </span></td>
   </tr>
 </tbody>
 </table>
 </div>
+
 
 ## 集群架构
 
@@ -238,29 +240,29 @@
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Clustering Architecture<br></th>
-    <th colspan="2">Self-Hosted<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">集群架构<br></th>
+    <th colspan="2">自托管模式<br></th>
+    <th colspan="2">云服务模式<br></th>
+    <th rowspan="2">备注和链接<br></th>
   </tr>
   <tr>
-    <td>EMQX Open Source</td>
-    <td>EMQX Enterprise</td>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
     <td>EMQX Cloud Serverless</td>
-    <td>EMQX Dedicated Cloud</td>
+    <td>EMQX Cloud 专有版</td>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td><b>Nodes of Cluster</b></td>
+    <td><b>集群节点数</b></td>
     <td>20+</td>
     <td>20+</td>
-    <td>confidential</td>
-    <td>confidential</td>
+    <td>保密信息</td>
+    <td>保密信息</td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Elastic and resilient scaling at runtime</b></td>
+    <td><b>运行时弹性和韧性扩展</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -268,7 +270,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Autoscaling</b></td>
+    <td><b>自动扩展</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -276,15 +278,15 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Consistency</b></td>
+    <td><b>高一致性</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Strong consistency</td>
+    <td></td>
   </tr>
   <tr>
-    <td><b>Transaction</b></td>
+    <td><b>事务处理</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -292,7 +294,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Network Split Recovery</b></td>
+    <td><b>网络分区恢复</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -300,7 +302,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Node Evacuation &amp; Cluster Rebalance</b></td>
+    <td><b>节点疏散 &amp; 集群重平衡</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -308,12 +310,12 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Autocluster Discoveries</b></td>
+    <td><b>自动集群发现</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>static: Discovery based on a static node list<br>mcast: Discovery with UDP multicast mode<br>dns: Discovery based on DNS records<br>etcd: Discovery via etcd<br>k8s: Discovery via Kubernetes service</td>
+    <td>static: 静态节点列表自动集群<br>mcast: 采用 UDP 组播模式的自动群集<br>dns: DNS A 记录自动集群<br>etcd: Discovery via etcd<br>k8s: Kubernetes 服务自动集群</td>
   </tr>
   <tr>
     <td><b>Zero Downtime/Hot Upgrades</b></td>
@@ -359,22 +361,23 @@
 </table>
 </div>
 
+
 ## MQTT 与其他连接协议支持
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">MQTT &amp; Connectivity<br></th>
-    <th colspan="2">Self-Hosted<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">MQTT &amp; 其他连接协议<br></th>
+    <th colspan="2">自托管模式<br></th>
+    <th colspan="2">云服务模式<br></th>
+    <th rowspan="2">备注和链接<br></th>
   </tr>
   <tr>
-    <td>EMQX Open Source</td>
-    <td>EMQX Enterprise</td>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
     <td>EMQX Cloud Serverless</td>
-    <td>EMQX Dedicated Cloud</td>
+    <td>EMQX Cloud 专有版</td>
   </tr>
 </thead>
 <tbody>
@@ -395,7 +398,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>MQTT Retainer</b></td>
+    <td><b>MQTT 保留消息</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -432,10 +435,10 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQX is now the only MQTT broker in the world that supports QUIC transport.<br>comming soon.</td>
+    <td>EMQX 是现在全球唯一支持 QUIC 协议的 MQTT 消息服务器。<br>comming soon.</td>
   </tr>
   <tr>
-    <td><b>LB (Proxy Protocol)</b></td>
+    <td><b>LB (代理协议)</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -443,7 +446,7 @@
     <td>Proxy protocol v1, v2</td>
   </tr>
   <tr>
-    <td><b>IPv6 Support</b></td>
+    <td><b>IPv6 支持</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -451,7 +454,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Multi-protocol Gateway</b></td>
+    <td><b>多协议网关</b></b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -502,22 +505,23 @@
 </table>
 </div>
 
+
 ## 安全
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Security<br></th>
-    <th colspan="2">Self-Hosted<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">安全<br></th>
+    <th colspan="2">自托管模式<br></th>
+    <th colspan="2">云服务模式<br></th>
+    <th rowspan="2">备注和链接<br></th>
   </tr>
   <tr>
-    <td>EMQX Open Source</td>
-    <td>EMQX Enterprise</td>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
     <td>EMQX Cloud Serverless</td>
-    <td>EMQX Dedicated Cloud</td>
+    <td>EMQX Cloud 专有版</td>
   </tr>
 </thead>
 <tbody>
@@ -546,7 +550,7 @@
     <td>  Coming in EMQX 5.3</td>
   </tr>
   <tr>
-    <td><b>Audit Logs</b></td>
+    <td><b>审计日志</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -554,7 +558,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>SQL Injections Protection</b></td>
+    <td><b>SQL 注入保护</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -562,16 +566,17 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Black Duck Analysis</b></td>
+    <td><b>黑鸭分析</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td>Partner with Synopsis</td>
+    <td>与 Synopsis 合作</td>
   </tr>
 </tbody>
 </table>
 </div>
+
 
 ## 认证与授权
 
@@ -579,26 +584,26 @@
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Authentication/Authorization<br></th>
-    <th colspan="2">Self-Hosted<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">认证/授权<br></th>
+    <th colspan="2">自托管模式<br></th>
+    <th colspan="2">云服务模式<br></th>
+    <th rowspan="2">备注和链接<br></th>
   </tr>
   <tr>
-    <td>EMQX Open Source</td>
-    <td>EMQX Enterprise</td>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
     <td>EMQX Cloud Serverless</td>
-    <td>EMQX Dedicated Cloud</td>
+    <td>EMQX Cloud 专有版</td>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td><b>Username/Password</b></td>
+    <td><b>用户名/密码</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/v5.0/security/authn/mysql.html">https://www.emqx.io/docs/en/v5.0/security/authn/mysql.html</a></td>
+    <td><a src="./access-control/authn/pwoverview.html">密码认证</a></td>
   </tr>
   <tr>
     <td><b>JWT</b></td>
@@ -606,15 +611,15 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/v5.0/security/authn/jwt.html">https://www.emqx.io/docs/en/v5.0/security/authn/jwt.html</a></td>
+    <td><a src="./security/authn/jwt.html">JWT 认证</a></td>
   </tr>
   <tr>
-    <td><b>MQTT 5.0 Enhanced Authentication</b></td>
+    <td><b>MQTT 5.0 增强认证</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://www.emqx.io/docs/en/v5.0/security/authn/scram.html">https://www.emqx.io/docs/en/v5.0/security/authn/scram.html</a></td>
+    <td><a src="./security/authn/scram.html">MQTT 5.0 增强认证</a></td>
   </tr>
   <tr>
     <td><b>PSK</b></td>
@@ -622,13 +627,13 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/v5.0/security/ssl.html#psk-authentication">https://www.emqx.io/docs/en/v5.0/security/ssl.html#psk-authentication</a></td>
+    <td><a src="./security/ssl.html#psk-authentication">启用 PSK 验证</a></td>
   </tr>
   <tr>
-    <td><b>X.509 Certificates</b></td>
+    <td><b>X.509 证书</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />managed by EMQX Cloud</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />由 EMQX Cloud 管理</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
@@ -641,7 +646,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Fine-grained Access Control</b></td>
+    <td><b>细粒度访问控制</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -649,7 +654,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Authentication Database Backends</b></td>
+    <td><b>认证数据源</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -657,7 +662,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>ACL Database Backends</b></td>
+    <td><b>ACL 数据源</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -668,33 +673,34 @@
 </table>
 </div>
 
+
 ## 数据集成
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Data Integration<br></th>
-    <th colspan="2">Self-Hosted<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
+    <th rowspan="2">数据集成<br></th>
+    <th colspan="2">自托管模式<br></th>
+    <th colspan="2">云服务模式<br></th>
   </tr>
   <tr>
-    <td>EMQX Open Source</td>
-    <td>EMQX Enterprise</td>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
     <td>EMQX Cloud Serverless</td>
-    <td>EMQX Dedicated Cloud</td>
+    <td>EMQX Cloud 专有版</td>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td><b>Rule Engine</b></td>
+    <td><b>规则引擎</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>MQTT Bridge</b></td>
+    <td><b>MQTT 服务</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -708,7 +714,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>Data Bridge</b></td>
+    <td><b>数据桥接</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -853,27 +859,28 @@
 </div>
 
 
+
 ## 规则引擎
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Rule Engine<br></th>
-    <th colspan="2">Self-Hosted<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">规则引擎<br></th>
+    <th colspan="2">自托管模式<br></th>
+    <th colspan="2">云服务模式<br></th>
+    <th rowspan="2">备注和链接<br></th>
   </tr>
   <tr>
-    <td>EMQX Open Source</td>
-    <td>EMQX Enterprise</td>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
     <td>EMQX Cloud Serverless</td>
-    <td>EMQX Dedicated Cloud</td>
+    <td>EMQX Cloud 专有版</td>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td><b>Schema Registry</b></td>
+    <td><b>编解码</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -881,7 +888,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>JSON Codec</b></td>
+    <td><b>JSON 编解码</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -889,7 +896,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Avro Codec</b></td>
+    <td><b>Avro 编解码</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -897,7 +904,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>ProtoBuf Codec</b></td>
+    <td><b>ProtoBuf 编解码</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -905,15 +912,15 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Built-in Functions</b></td>
+    <td><b>内置 SQL 函数</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="https://docs.emqx.com/docs-images/favicon.ico" width="14" height="14"><a href="https://docs.emqx.com/en/enterprise/v4.4/rule/rule-engine_buildin_function.html#mathematical-functions">#Functions available in SQL statements</a></td>
+    <td><a src="./rule/rule-engine_buildin_function.html">内置 SQL 函数</a></td>
   </tr>
   <tr>
-    <td><b>JQ Functions</b></td>
+    <td><b>jq 函数</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -921,16 +928,17 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Event Trigger</b></td>
+    <td><b>客户端事件处理</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="https://docs.emqx.com/docs-images/favicon.ico" width="14" height="14"><a href="https://docs.emqx.com/en/enterprise/v4.4/rule/rule-engine.html#event-trigger">#Rule Engine</a></td>
+    <td><a src="./data-integration/rule-sql-events-and-fields.html#客户端事件">客户端事件</a></td>
   </tr>
 </tbody>
 </table>
 </div>
+
 
 ## 可扩展性
 
@@ -938,37 +946,37 @@
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Extensibility<br></th>
-    <th colspan="2">Self-Hosted<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">可扩展性<br></th>
+    <th colspan="2">自托管模式<br></th>
+    <th colspan="2">云服务模式<br></th>
+    <th rowspan="2">备注和链接<br></th>
   </tr>
   <tr>
-    <td>EMQX Open Source</td>
-    <td>EMQX Enterprise</td>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
     <td>EMQX Cloud Serverless</td>
-    <td>EMQX Dedicated Cloud</td>
+    <td>EMQX Cloud 专有版</td>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td><b>Hooks</b></td>
+    <td><b>钩子</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><img src="https://docs.emqx.com/docs-images/favicon.ico" width="14" height="14"><a href="https://docs.emqx.com/en/enterprise/v4.4/advanced/hooks.html#definition">#Hooks</a></td>
+    <td><a href="./extensions/hooks.html">钩子</a></td>
   </tr>
   <tr>
-    <td><b>Plugins</b></td>
+    <td><b>插件</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><img src="https://docs.emqx.com/docs-images/favicon.ico" width="14" height="14"><a href="https://docs.emqx.com/en/enterprise/v4.4/advanced/plugins.html#list-of-plugins">#Plugins</a></td>
+    <td><a src="./extensions/plugins.html">插件</a></td>
   </tr>
   <tr>
-    <td><b>Plugin Hot-loading</b></td>
+    <td><b>插件热加载</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
@@ -976,7 +984,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Gateways</b></td>
+    <td><b>网关</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
@@ -995,22 +1003,23 @@
 </table>
 </div>
 
+
 ## 可操作性
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Operability<br></th>
-    <th colspan="2">Self-Hosted<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">可操作性<br></th>
+    <th colspan="2">自托管模式<br></th>
+    <th colspan="2">云服务模式<br></th>
+    <th rowspan="2">备注和链接<br></th>
   </tr>
   <tr>
-    <td>EMQX Open Source</td>
-    <td>EMQX Enterprise</td>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
     <td>EMQX Cloud Serverless</td>
-    <td>EMQX Dedicated Cloud</td>
+    <td>EMQX Cloud 专有版</td>
   </tr>
 </thead>
 <tbody>
@@ -1020,15 +1029,15 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQX dashboard is feature-rich.<br>Configs can be hot udpated through dashboard.</td>
+    <td>EMQX Dashboard 具备丰富的功能。<br>可以通过 Dashboard 进行配置的热更新。</td>
   </tr>
   <tr>
-    <td><b>Configuration</b></td>
+    <td><b>功能配置</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />HOCON</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />HOCON</td>
     <td>N/A</td>
     <td>N/A</td>
-    <td>The HOCON format is simple and concise.</td>
+    <td>简洁明了的 HOCON 格式。</td>
   </tr>
   <tr>
     <td><b>HTTP API</b></td>
@@ -1047,7 +1056,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Config Hot Updates</b></td>
+    <td><b>配置热升级</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
@@ -1055,7 +1064,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Operational Auditing</b></td>
+    <td><b>运行审计</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -1066,22 +1075,23 @@
 </table>
 </div>
 
+
 ## 可观测性
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Observability<br></th>
-    <th colspan="2">Self-Hosted<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">可观测性<br></th>
+    <th colspan="2">自托管模式<br></th>
+    <th colspan="2">云服务模式<br></th>
+    <th rowspan="2">备注和链接<br></th>
   </tr>
   <tr>
-    <td>EMQX Open Source</td>
-    <td>EMQX Enterprise</td>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
     <td>EMQX Cloud Serverless</td>
-    <td>EMQX Dedicated Cloud</td>
+    <td>EMQX Cloud 专有版</td>
   </tr>
 </thead>
 <tbody>
@@ -1091,15 +1101,15 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Monitor clusters in real time with an elegant dashboard</td>
+    <td>通过优雅的 Dashboard 实时监控集群。</td>
   </tr>
   <tr>
-    <td><b>Metrics</b></td>
+    <td><b>单节点指标</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Node metrics</td>
+    <td></td>
   </tr>
   <tr>
     <td><b>Grafana</b></td>
@@ -1110,7 +1120,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Cluster Metrics</b></td>
+    <td><b>集群指标</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -1118,7 +1128,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Alarm Alerts</b></td>
+    <td><b>告警</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -1126,7 +1136,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Slow Subscription Monitoring</b></td>
+    <td><b>慢订阅监控</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -1134,7 +1144,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Topic Monitoring</b></td>
+    <td><b>主题监控</b></b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -1142,7 +1152,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Client Monitoring</b></td>
+    <td><b>客户端监控</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -1177,22 +1187,23 @@
 </table>
 </div>
 
+
 ## 云原生与 K8S
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Cloud Native &amp; K8s<br></th>
-    <th colspan="2">Self-Hosted<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">云原生 &amp; K8s<br></th>
+    <th colspan="2">自托管模式<br></th>
+    <th colspan="2">云服务模式<br></th>
+    <th rowspan="2">备注和链接<br></th>
   </tr>
   <tr>
-    <td>EMQX Open Source</td>
-    <td>EMQX Enterprise</td>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
     <td>EMQX Cloud Serverless</td>
-    <td>EMQX Dedicated Cloud</td>
+    <td>EMQX Cloud 专有版</td>
   </tr>
 </thead>
 <tbody>
@@ -1202,7 +1213,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><img src="https://hub.docker.com/favicon.ico" width="14" height="14"><a href="https://hub.docker.com/_/emqx">#emqx - Official Image | Docker Hub</a> <br><img src="https://hub.docker.com/favicon.ico" width="14" height="14"><a href="https://hub.docker.com/r/emqx/emqx">#Docker</a></td>
+    <td><a href="https://hub.docker.com/_/emqx">emqx - Official Image | Docker Hub</a> <br><a href="https://hub.docker.com/r/emqx/emqx">Docker</a></td>
   </tr>
   <tr>
     <td><b>Kubernetes Operator</b></td>
@@ -1210,7 +1221,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/en/emqx-kubernetes-operator">#EMQX Kubernetes Operator</a></td>
+    <td><a href="https://www.emqx.com/zh/emqx-kubernetes-operator">EMQX Kubernetes Operator</a></td>
   </tr>
   <tr>
     <td><b>Terraform</b></td>
@@ -1218,7 +1229,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/en/emqx-terraform">#EMQX Terraform</a></td>
+    <td><a href="https://www.emqx.com/zh/emqx-terraform">EMQX Terraform</a></td>
   </tr>
   <tr>
     <td><b>AWS Marketplace</b></td>
@@ -1226,11 +1237,12 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQX is available on AWS Marketplace.<br><img src="https://d32gc0xr2ho6pa.cloudfront.net/img/general/favicon.ico" width="14" height="14"><a href="https://aws.amazon.com/marketplace/pp/prodview-cwa2e6xbrwtzi">#AWS Marketplace: EMQX Enterprise on Ubuntu 20.04</a> </td>
+    <td>EMQX 已上架 AWS 市场。<br><a href="https://aws.amazon.com/marketplace/pp/prodview-cwa2e6xbrwtzi">AWS Marketplace: EMQX Enterprise on Ubuntu 20.04</a> </td>
   </tr>
 </tbody>
 </table>
 </div>
+
 
 ## MQTT 开发工具与 SDKs
 
@@ -1238,66 +1250,66 @@
 <table>
 <thead>
   <tr>
-    <th rowspan="2">MQTT Tools &amp; SDKs<br></th>
-    <th colspan="2">Self-Hosted<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">MQTT 开发工具 &amp; SDKs<br></th>
+    <th colspan="2">自托管模式<br></th>
+    <th colspan="2">云服务模式<br></th>
+    <th rowspan="2">备注和链接<br></th>
   </tr>
   <tr>
-    <td>EMQX Open Source</td>
-    <td>EMQX Enterprise</td>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
     <td>EMQX Cloud Serverless</td>
-    <td>EMQX Dedicated Cloud</td>
+    <td>EMQX Cloud 专有版</td>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td><b>MQTT Desktop Client</b></td>
+    <td><b>MQTTX 桌面版</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>MQTT X - The best tool for learning MQTT.<br><img src="https://mqttx.app/favicon.ico" width="14" height="14"><a href="https://mqttx.app/">MQTTX: Your All-in-one MQTT Client Toolbox</a></td>
+    <td>MQTTX - 学习 MQTT 最好的工具<br><a href="https://mqttx.app/zh">MQTTX: 你的全功能 MQTT 客户端工具</a></td>
   </tr>
   <tr>
-    <td><b>MQTT CLI</b></td>
+    <td><b>MQTTX 命令行版</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="https://mqttx.app/favicon.ico" width="14" height="14"><a href="https://mqttx.app/cli">MQTTX CLI: A Powerful and Easy-to-use MQTT CLI Tool</a></td>
+    <td><a href="https://mqttx.app/zh/cli">MQTTX CLI: 强大易用的 MQTT 5.0 命令行工具</a></td>
   </tr>
   <tr>
-    <td><b>MQTT Web Tool</b></td>
+    <td><b>MQTTX Web 版</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Feature-rich and Easy-to-use.<br><img src="https://mqttx.app/favicon.ico" width="14" height="14"><a href="https://mqttx.app/web">MQTTX Web: Easy-to-use MQTT Websocket Client Tool</a></td>
+    <td>功能丰富并且简单易用<br><a href="https://mqttx.app/zh/web">MQTTX Web: 易用的 MQTT 5.0 Websocket 客户端工具</a></td>
   </tr>
   <tr>
-    <td><b>MQTT Benchmark</b></td>
+    <td><b>MQTT 基准测试工具</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="https://github.com/fluidicon.png" width="14" height="14"><a href="https://github.com/emqx/emqtt-bench">GitHub - emqx/emqtt-bench: Lightweight MQTT benchmark tool written in Erlang</a></td>
+    <td><a href="https://github.com/emqx/emqtt-bench">GitHub - emqx/emqtt-bench: 用 Erlang 编写的轻量级 MQTT 基准测试工具。</a></td>
   </tr>
   <tr>
-    <td><b>MQTT Load Testing</b></td>
+    <td><b>MQTT 负载测试工具</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> XMeter</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>XMeter - The world’s #1 MQTT load testing tool</td>
+    <td>XMeter - 世界第一的 MQTT 负载测试工具。</td>
   </tr>
   <tr>
     <td><b>MQTT &amp; JMeter</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> JMeter Plugin</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> JMeter 插件</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> XMeter</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="https://github.com/fluidicon.png" width="14" height="14"><a href="https://github.com/emqx/mqtt-jmeter">GitHub - emqx/mqtt-jmeter: MQTT JMeter Plugin</a></td>
+    <td><img src="https://github.com/fluidicon.png" width="14" height="14"><a href="https://github.com/emqx/mqtt-jmeter">GitHub - emqx/mqtt-jmeter: MQTT JMeter 插件</a></td>
   </tr>
   <tr>
     <td><b>MQTT SDK for C</b></td>
@@ -1305,7 +1317,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> NanoSDK</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="https://github.com/fluidicon.png" width="14" height="14"><a href="https://github.com/nanomq/NanoSDK">GitHub - nanomq/NanoSDK: NanoSDK - MQTT 5.0-compliant SDK with QUIC support in NNG flavor</a></td>
+    <td><a href="https://github.com/nanomq/NanoSDK">GitHub - nanomq/NanoSDK: NanoSDK - 支持 QUIC 的 MQTT 5.0 兼容 SDK，采用 NNG 风格。</a></td>
   </tr>
   <tr>
     <td><b>MQTT Erlang SDK</b></td>
@@ -1313,7 +1325,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="https://github.com/fluidicon.png" width="14" height="14"><a href="https://github.com/emqx/emqtt">GitHub - emqx/emqtt: Erlang MQTT 5.0 Client</a></td>
+    <td><a href="https://github.com/emqx/emqtt">GitHub - emqx/emqtt: Erlang MQTT 5.0 客户端</a></td>
   </tr>
   <tr>
     <td><b>MQTT iOS SDK</b></td>
@@ -1321,19 +1333,20 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="https://github.com/fluidicon.png" width="14" height="14"><a href="https://github.com/emqx/CocoaMQTT">GitHub - emqx/CocoaMQTT: MQTT 5.0 client library for iOS and macOS written in Swift</a></td>
+    <td><a href="https://github.com/emqx/CocoaMQTT">GitHub - emqx/CocoaMQTT: 为 iOS 和 macOS 编写的 MQTT 5.0 客户端库，使用 Swift 语言。</a></td>
   </tr>
   <tr>
-    <td><b>MQTT QUIC Client</b></td>
+    <td><b>MQTT QUIC 客户端</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="https://github.com/fluidicon.png" width="14" height="14"><a href="https://github.com/emqx/quic">GitHub - emqx/quic: QUIC protocol for Erlang &amp; Elixir</a></td>
+    <td><a href="https://github.com/emqx/quic">GitHub - emqx/quic: 用于 Erlang 和 Elixir 的 QUIC 协议。</a></td>
   </tr>
 </tbody>
 </table>
 </div>
+
 
 ## 客户支持服务
 
@@ -1341,29 +1354,29 @@
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Support Services<br></th>
-    <th colspan="2">Self-Hosted<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">客户支持<br></th>
+    <th colspan="2">自托管模式<br></th>
+    <th colspan="2">云服务模式<br></th>
+    <th rowspan="2">备注和链接<br></th>
   </tr>
   <tr>
-    <td>EMQX Open Source</td>
-    <td>EMQX Enterprise</td>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
     <td>EMQX Cloud Serverless</td>
-    <td>EMQX Dedicated Cloud</td>
+    <td>EMQX Cloud 专有版</td>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td><b>Technical Support</b></td>
-    <td>Community &amp; Forum</td>
-    <td>5x8, 7x24 Global Support</td>
-    <td>5x8 Global Support</td>
-    <td>5x8, 7x24 Global Support</td>
+    <td><b>技术支持</b></td>
+    <td>社区和论坛</td>
+    <td>5*8, 7*24 全球支持</td>
+    <td>5*8 全球支持</td>
+    <td>5*8, 7*24 全球支持</td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Architecture Consulting</b></td>
+    <td><b>架构咨询</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -1371,7 +1384,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Project Integration</b></td>
+    <td><b>项目集成</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -1379,7 +1392,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>Custom Development</b></td>
+    <td><b>定制开发</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
