@@ -50,7 +50,7 @@ The above configuration can also be configured with HTTP API:
 **Example Code:**
 
 ```bash
-curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/coap' \
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/coap' \
   -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{
