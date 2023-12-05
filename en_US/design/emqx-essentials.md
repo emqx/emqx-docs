@@ -4,4 +4,3 @@ This chapter serves as a comprehensive guide to understanding the essential comp
 
 - [MQTT Guide](https://www.emqx.com/en/mqtt-guide) provides all you need to learn about MQTT.
 - [Design and Implementation](../design/overview.md) introduce the design principles of some key EMQX features.
-
