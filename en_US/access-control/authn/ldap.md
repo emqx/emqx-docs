@@ -8,7 +8,27 @@
 
 :::
 
+## Authentication Methods
+
+There are two different authentication methods in this feature:
+- Local Password Comparison
+
+   EMQX queries LDAP to retrieve the client's password and then compares it locally.
+   This method is more flexible and supports more features such as the `isSuperUser` flag, but it requires the user have permission to setup the schema and data into the LDAP server.
+
+- LDAP Bind Authentication
+
+  EMQX directly uses LDAP binding to authenticate the username and password.
+
+  This method only provides basic authentication through the LDAP `BIND` operation and is suitable for situations where the user already has account data in the LDAP server or does not have permission to add data.
+
 ## Data Schema and Query
+
+::: tip
+
+Please skip this section if using the `LDAP Bind Authentication` method.
+
+:::
 
 An LDAP schema defines the structure and rules for organizing and storing authentication data within an LDAP directory. The LDAP authenticator supports almost all LDAP schema. Here is an example schema for OpenLDAP:
 
@@ -141,6 +161,8 @@ Follow the instruction below on how to configure:
 
   :::
 
+- **Password Authentication Method**: Choose the authentication method
+
 - **Filter**: Filter for the LDAP query, defines the conditions that must be fulfilled in order for the search to match a given entry.
   The syntax of the filter follows [RFC 4515](#https://www.rfc-editor.org/rfc/rfc4515) and also supports placeholders.
 
@@ -156,15 +178,38 @@ You can configure the EMQX LDAP authenticator with EMQX configuration items.<!--
 
 LDAP authentication is identified with `mechanism = password_based` and `backend = ldap`.
 
-Sample configuration:
+Sample configuration for the **Local Password Comparison**:
 
 ```bash
 {
   backend = "ldap"
   mechanism = "password_based"
+  method {
+    type = hash
+    password_attribute = "userPassword"
+    is_superuser_attribute = "isSuperuser"
+  }
   server = "127.0.0.1:389"
-  password_attribute = "userPassword"
-  is_superuser_attribute = "isSuperuser"
+  query_timeout = "5s"
+  username = "root"
+  password = "root password"
+  pool_size = 8
+  base_dn = "uid=${username},ou=testdevice,dc=emqx,dc=io"
+  filter = "(objectClass=mqttUser)"
+}
+```
+
+Sample configuration for the **LDAP Bind Authentication**:
+
+```bash
+{
+  backend = "ldap"
+  mechanism = "password_based"
+  method {
+    type = bind
+    bind_password = "${password}"
+  }
+  server = "127.0.0.1:389"
   query_timeout = "5s"
   username = "root"
   password = "root password"
