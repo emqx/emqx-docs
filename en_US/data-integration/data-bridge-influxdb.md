@@ -6,7 +6,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 :::
 {% endemqxce %}
 
-InfluxDB is a database for storing and analyzing time series data. Its powerful data throughput capability and stable performance make it very suitable to be applied in the field of Internet of Things (IoT). EMQX now supports connection to mainstream versions of InfluxDB Cloud, InfluxDB OSS, or InfluxDB Enterprise. 
+[InfluxDB](https://www.influxdata.com/) is a database for storing and analyzing time series data. Its powerful data throughput capability and stable performance make it very suitable to be applied in the field of Internet of Things (IoT). EMQX now supports connection to mainstream versions of InfluxDB Cloud, InfluxDB OSS, or InfluxDB Enterprise. 
 
 This page provides a comprehensive introduction to the data integration between EMQX and InfluxDB with practical instructions on creating a rule and data bridge.
 

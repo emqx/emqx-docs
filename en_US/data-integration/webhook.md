@@ -10,6 +10,8 @@ When a client publishes a message to a specific topic or performs certain action
 
 You can configure Webhook to be triggered in the following scenarios. For the request content of each event, refer to [SQL Data Source and Fields](./rule-sql-events-and-fields.md).
 
+![EMQX Webhook 集成](./assets/emqx-integration-http.jpg)
+
 ### Messages
 
 When a publisher publishes a message, or the message status changes, including:
