@@ -146,22 +146,22 @@
           title_cn: API 文档
           lang: en
           edition: ce
-          path: https://www.emqx.io/docs/en/v5.3/admin/api-docs.html
+          path: https://www.emqx.io/docs/en/v${CE_MINOR_VERSION}/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: cn
           edition: ce
-          path: https://www.emqx.io/docs/zh/v5.3/admin/api-docs.html
+          path: https://www.emqx.io/docs/zh/v${CE_MINOR_VERSION}/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: en
           edition: ee
-          path: https://docs.emqx.com/en/enterprise/v5.3/admin/api-docs.html
+          path: https://docs.emqx.com/en/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: cn
           edition: ee
-          path: https://docs.emqx.com/zh/enterprise/v5.3/admin/api-docs.html
+          path: https://docs.emqx.com/zh/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
 
 - title_en: EMQX Clustering
   title_cn: 构建集群
@@ -355,27 +355,20 @@
           path: configuration/license
           lang: en
           edition: ee
-    - configuration/configuration-manual
-  # - title_en: Configuration Manual
-  #   title_cn: 配置手册
-  #   lang: cn
-  #   edition: ce
-  #   path: https://www.emqx.io/docs/zh/v5.0/configuration/configuration-manual.html
-  # - title_en: Configuration Manual
-  #   title_cn: 配置手册
-  #   lang: en
-  #   edition: ce
-  #   path: https://www.emqx.io/docs/en/v5.0/configuration/configuration-manual.html
-  # - title_en: Configuration Manual
-  #   title_cn: 配置手册
-  #   lang: cn
-  #   edition: ee
-  #   path: https://docs.emqx.com/zh/enterprise/v5.0/configuration/configuration-manual.html
-  # - title_en: Configuration Manual
-  #   title_cn: 配置手册
-  #   lang: en
-  #   edition: ee
-  #   path: https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html
+    - title_en: Configuration Manual
+      title_cn: 配置手册
+      edition: ce
+      path: configuration/configuration-manual
+    - title_en: Configuration Manual
+      title_cn: 配置手册
+      lang: cn
+      edition: ee
+      path: https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/
+    - title_en: Configuration Manual
+      title_cn: 配置手册
+      lang: en
+      edition: ee
+      path: https://docs.emqx.com/en/enterprise/v${EE_VERSION}/hocon/
     - title_en: Command Line Interface
       title_cn: 命令行接口
       path: admin/cli
