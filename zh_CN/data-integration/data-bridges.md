@@ -40,13 +40,18 @@ EMQX 开源版中支持以下两种数据集成：
 
 下列数据系统仅在 EMQX 企业版中支持：
 
-**消息队列**
+**云服务**
 
-- [Apache Kafka/Confluent](./data-bridge-kafka.md)
-- [HStreamDB](./data-bridge-hstreamdb.md)
-- [Pulsar](./data-bridge-pulsar.md)
-- [RabbitMQ](./data-bridge-rabbitmq.md)
-- [RocketMQ](./data-bridge-rocketmq.md)
+- [Amazon Kinesis](./data-bridge-kinesis.md)
+- [Azure EventHub](./data-bridge-azure-event-hub.md)
+- [GCP PubSub](./data-bridge-gcp-pubsub.md)
+
+**时序数据库**
+
+- [Apache IoTDB](./data-bridge-iotdb.md)
+- [InfluxDB](./data-bridge-influxdb.md)
+- [OpenTSDB](./data-bridge-opents.md)
+- [TimescalesDB](./data-bridge-timescale.md)
 
 **SQL**
 
@@ -65,18 +70,13 @@ EMQX 开源版中支持以下两种数据集成：
 - [Redis](./data-bridge-redis.md)
 - [TDengine](./data-bridge-tdengine.md)
 
-**时序数据库**
+**消息队列**
 
-- [Apache IoTDB](./data-bridge-iotdb.md)
-- [InfluxDB](./data-bridge-influxdb.md)
-- [OpenTSDB](./data-bridge-opents.md)
-- [TimescalesDB](./data-bridge-timescale.md)
-
-**云服务**
-
-- [Amazon Kinesis](./data-bridge-kinesis.md)
-- [Azure EventHub](./data-bridge-azure-event-hub.md)
-- [GCP PubSub](./data-bridge-gcp-pubsub.md)
+- [Apache Kafka/Confluent](./data-bridge-kafka.md)
+- [HStreamDB](./data-bridge-hstreamdb.md)
+- [Pulsar](./data-bridge-pulsar.md)
+- [RabbitMQ](./data-bridge-rabbitmq.md)
+- [RocketMQ](./data-bridge-rocketmq.md)
 
 {% endemqxce %}
 
@@ -84,18 +84,23 @@ EMQX 开源版中支持以下两种数据集成：
 
 EMQX 支持与以下数据系统的集成：
 
-**外部服务**
+**默认支持**
 
 - [MQTT](./data-bridge-mqtt.md)
 - [Webhook](./webhook.md)/[HTTPServer](./data-bridge-webhook.md)
 
-**消息队列**
+**云服务**
 
-- [Apache Kafka/Confluent](./data-bridge-kafka.md)
-- [HStreamDB](./data-bridge-hstreamdb.md)
-- [Pulsar](./data-bridge-pulsar.md)
-- [RabbitMQ](./data-bridge-rabbitmq.md)
-- [RocketMQ](./data-bridge-rocketmq.md)
+- [Amazon Kinesis](./data-bridge-kinesis.md)
+- [Azure EventHub](./data-bridge-azure-event-hub.md)
+- [GCP PubSub](./data-bridge-gcp-pubsub.md)
+
+**时序数据库**
+
+- [Apache IoTDB](./data-bridge-iotdb.md)
+- [InfluxDB](./data-bridge-influxdb.md)
+- [OpenTSDB](./data-bridge-opents.md)
+- [TimescalesDB](./data-bridge-timescale.md)
 
 **SQL**
 
@@ -114,18 +119,13 @@ EMQX 支持与以下数据系统的集成：
 - [Redis](./data-bridge-redis.md)
 - [TDengine](./data-bridge-tdengine.md)
 
-**时序数据库**
+**消息队列**
 
-- [Apache IoTDB](./data-bridge-iotdb.md)
-- [InfluxDB](./data-bridge-influxdb.md)
-- [OpenTSDB](./data-bridge-opents.md)
-- [TimescalesDB](./data-bridge-timescale.md)
-
-**云服务**
-
-- [Amazon Kinesis](./data-bridge-kinesis.md)
-- [Azure EventHub](./data-bridge-azure-event-hub.md)
-- [GCP PubSub](./data-bridge-gcp-pubsub.md)
+- [Apache Kafka/Confluent](./data-bridge-kafka.md)
+- [HStreamDB](./data-bridge-hstreamdb.md)
+- [Pulsar](./data-bridge-pulsar.md)
+- [RabbitMQ](./data-bridge-rabbitmq.md)
+- [RocketMQ](./data-bridge-rocketmq.md)
 
 {% endemqxee %}
 
