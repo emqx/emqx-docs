@@ -68,7 +68,7 @@ Apache Kafka 数据集成是 EMQX 的开箱即用功能，能够在基于 MQTT �
 
 ### 前置准备
 
-- 了解 EMQX 数据集成[规则](.rules.md)
+- 了解[规则引擎](./rules.md)
 - 了解[数据桥接](./data-bridges.md)
 
 ### 设置 Kafka 服务器
