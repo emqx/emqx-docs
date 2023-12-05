@@ -632,7 +632,7 @@
 
 - title_en: EMQX Essentials
   title_cn: EMQX 基础知识
-  path: mqtt/emqx-essentials
+  path: design/emqx-essentials
   collapsed: true
   children:
     - title_en: MQTT Guide
