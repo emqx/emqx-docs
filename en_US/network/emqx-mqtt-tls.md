@@ -96,3 +96,7 @@ You can also enable the SSL/TLS connection by modifying the `listeners.ssl.defau
    ```
 
 4. Restart EMQX to apply the configuration.
+
+## Rotating SSL/TLS certificates
+
+EMQX supports rotating SSL/TLS certificates without restarting the broker. By default, EMQX will reload the SSL/TLS certificates every 120 seconds.
