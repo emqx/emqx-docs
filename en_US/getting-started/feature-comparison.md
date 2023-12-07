@@ -59,7 +59,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>In Product Roadmap</td>
+    <td><a src="./roadmap.html">In Product Roadmap</a></td>
   </tr>
   <tr>
     <td><b>Data Persistence</b></td>
@@ -91,22 +91,22 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/v5.0/data-integration/rules.html">SQL-based built-in Rule Engine</a></td>
+    <td><a src="./data-integration/rules.html">SQL-based built-in Rule Engine</a></td>
   </tr>
   <tr>
     <td><b>Flow Designer</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />In product roadmap</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
     <td><a href="https://docs.emqx.com/en/enterprise/latest/flow-designer/introduction.html">Flow Designer</a></td>
   </tr>
   <tr>
     <td><b>File Transfer</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
     <td></td>
   </tr>
   <tr>
@@ -153,6 +153,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 
 ## Scalability and Performance
 
@@ -351,8 +352,6 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
-
-
 ## MQTT and Connectivity
 
 <div style="text-align: center;">
@@ -511,7 +510,7 @@ via Rule Engine and Data Bridge</a></td>
   <tr>
     <td><b>GBT32960</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />Coming in EMQX v5.4</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> Coming in EMQX v5.4</td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
@@ -519,7 +518,6 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
-
 
 ## Security
 
@@ -583,8 +581,6 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
-
-
 ## Authentication and Authorization
 
 <div style="text-align: center;">
@@ -666,7 +662,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./dashboard/system.html#users">Role-Based Access Control</a> </td>
+    <td><a href="https://docs.emqx.com/en/enterprise/latest/dashboard/system.html#users">Role-Based Access Control</a> </td>
   </tr>
   <tr>
     <td><b>Fine-grained Access Control</b></td>
@@ -695,7 +691,6 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
-
 
 ## Data Integration
 
@@ -922,8 +917,6 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
-
-
 ## Rule Engine
 
 <div style="text-align: center;">
@@ -1002,8 +995,6 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
-
-
 ## Extensibility
 
 <div style="text-align: center;">
@@ -1029,7 +1020,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="./extensions/hooks.html">Hooks</a></td>
+    <td><a src="./extensions/hooks.html">Hooks</a></td>
   </tr>
   <tr>
     <td><b>Plugins</b></td>
@@ -1066,7 +1057,6 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
-
 
 ## Operability
 
@@ -1138,8 +1128,6 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
-
-
 ## Observability
 
 <div style="text-align: center;">
@@ -1203,16 +1191,16 @@ via Rule Engine and Data Bridge</a></td>
     <td><b>Slow Subscription Monitoring</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
     <td> </td>
   </tr>
   <tr>
     <td><b>Topic Monitoring</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
     <td> </td>
   </tr>
   <tr>
@@ -1235,14 +1223,13 @@ via Rule Engine and Data Bridge</a></td>
     <td><b>Datadog</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
     <td>Coming in EMQX Enterprise 5.4</td>
   </tr>
 </tbody>
 </table>
 </div>
-
 
 ## Cloud Native and K8S
 
@@ -1269,7 +1256,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><img src="https://hub.docker.com/favicon.ico" width="14" height="14"><a href="https://hub.docker.com/_/emqx">emqx - Official Image | Docker Hub</a> <br><img src="https://hub.docker.com/favicon.ico" width="14" height="14"><a href="https://hub.docker.com/r/emqx/emqx">Docker</a></td>
+    <td><a href="https://hub.docker.com/_/emqx">emqx - Official Image | Docker Hub</a><a href="https://hub.docker.com/r/emqx/emqx">Docker</a></td>
   </tr>
   <tr>
     <td><b>Kubernetes Operator</b></td>
@@ -1277,7 +1264,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/en/emqx-kubernetes-operator">EMQX Kubernetes Operator</a></td>
+    <td><a href="https://www.emqx.com/en/emqx-kubernetes-operator">EMQX Kubernetes Operator</a></td>
   </tr>
   <tr>
     <td><b>Terraform</b></td>
@@ -1285,19 +1272,12 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/en/emqx-terraform">EMQX Terraform</a></td>
-  </tr>
-  <tr>
-    <td><b>AWS Marketplace</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQX is available on AWS Marketplace.<br><img src="https://d32gc0xr2ho6pa.cloudfront.net/img/general/favicon.ico" width="14" height="14"><a href="https://aws.amazon.com/marketplace/pp/prodview-cwa2e6xbrwtzi">AWS Marketplace: EMQX Enterprise on Ubuntu 20.04</a> </td>
+    <td><a href="https://www.emqx.com/en/emqx-terraform">EMQX Terraform</a></td>
   </tr>
 </tbody>
 </table>
 </div>
+
 ## Cloud Platform Availability
 
 <div style="text-align: center;">
@@ -1470,8 +1450,6 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
-
-
 ## Support Services
 
 <div style="text-align: center;">
@@ -1494,9 +1472,9 @@ via Rule Engine and Data Bridge</a></td>
   <tr>
     <td><b>Technical Support</b></td>
     <td>Community &amp; Forum</td>
-    <td>5x8, 7x24 Global Support</td>
-    <td>5x8 Global Support</td>
-    <td>5x8, 7x24 Global Support</td>
+    <td>5*8, 7*24 Global Support</td>
+    <td>5*8 Global Support</td>
+    <td>5*8, 7*24 Global Support</td>
     <td> </td>
   </tr>
   <tr>

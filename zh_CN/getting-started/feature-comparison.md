@@ -43,7 +43,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/zh/v5.0/advanced/shared-subscriptions.html">公项订阅</a><br>排他订阅<br><a href="https://www.emqx.io/docs/en/v5.0/advanced/delayed-publish.html">延迟发布</a><br><a href="https://www.emqx.io/docs/en/v5.0/advanced/auto-subscriptions.html">自动订阅</a><br><a href="https://www.emqx.io/docs/en/v5.0/advanced/topic-rewrite.html">主题重写</a></td>
+    <td><a src="./advanced/shared-subscriptions.html">共享订阅</a><br><a src="./messaging/mqtt-exclusive-subscription.html">排他订阅</a><br><a src="./advanced/delayed-publish.html">延迟发布</a><br><a src="./advanced/auto-subscriptions.html">自动订阅</a><br><a src="./advanced/topic-rewrite.html">主题重写</a></td>
   </tr>
   <tr>
     <td><b>多协议网关</b></td>
@@ -51,15 +51,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>MQTT-SN<br>CoAP<br>LwM2M<br>Stomp<br>TCP (Enterprise only)<br>OCPP (Enterprise only)<br>JT/808 (Enterprise only)</td>
-  </tr>
-  <tr>
-    <td><b>多租户</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td>Coming in EMQX 5.2</td>
+    <td></td>
   </tr>
   <tr>
     <td><b>异地备份</b></td>
@@ -67,15 +59,15 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Coming in EMQX 6.0</td>
+    <td><a src="./roadmap.html"></a>已规划</td>
   </tr>
   <tr>
-    <td><b>数据持久花</b></td>
+    <td><b>数据持久化</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> Built-in RocksDB backend or external databases</td>
     <td>N/A</td>
     <td>N/A</td>
-    <td>Coming in EMQX 5.1<br><a href="https://www.emqx.com/zh/blog/mqtt-persistence-based-on-rocksdb">https://www.emqx.com/zh/blog/mqtt-persistence-based-on-rocksdb</a></td>
+    <td>将于 EMQX 5.4 发布（预览功能）<br><a href="https://www.emqx.com/zh/blog/mqtt-persistence-based-on-rocksdb">基于 RocksDB 实现高可靠、低时延的 MQTT 数据持久化</a></td>
   </tr>
   <tr>
     <td><b>Schema Registry</b></td>
@@ -83,7 +75,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/enterprise/v4.4/rule/schema-registry.html">https://docs.emqx.com/en/enterprise/v4.4/rule/schema-registry.html</a></td>
+    <td><a href="https://docs.emqx.com/zh/enterprise/latest/data-integration/schema-registry.html">编解码</a></td>
   </tr>
   <tr>
     <td><b>消息编解码</b></td>
@@ -99,23 +91,23 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/v5.0/data-integration/rules.html">SQL-based built-in Rule Engine</a></td>
+    <td><a href="https://www.emqx.io/docs/en/v5.0/data-integration/rules.html">基于 SQL 的内置规则引擎</a></td>
   </tr>
   <tr>
     <td><b>Flow 设计器</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.com/zh/blog/iot-data-integration">https://www.emqx.com/zh/blog/iot-data-integration</a></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
+    <td><a href="https://docs.emqx.com/zh/enterprise/latest/flow-designer/introduction.html">Flow 设计器</a></td>
   </tr>
   <tr>
     <td><b>文件传输</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Coming in EMQX 5.1</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
+    <td></td>
   </tr>
   <tr>
     <td><b>Kafka 集成</b></td>
@@ -123,7 +115,7 @@
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/enterprise/v4.4/rule/bridge_kafka.html">https://docs.emqx.com/en/enterprise/v4.4/rule/bridge_kafka.html</a></td>
+    <td><a href="https://docs.emqx.com/zh/enterprise/latest/data-integration/data-bridge-kafka.html">将 MQTT 数据传输到 Apache Kafka</a></td>
   </tr>
   <tr>
     <td><b>企业级数据集成</b></td>
@@ -131,7 +123,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 40+</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />40+</td>
-    <td><a href="https://www.emqx.com/en/integrations">https://www.emqx.com/en/integrations</a></td>
+    <td><a href="https://www.emqx.com/zh/integrations">规则引擎与数据桥接，任意企业系统集成</a></td>
   </tr>
   <tr>
     <td><b>故障排查</b></td>
@@ -139,28 +131,27 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/v5.0/observability/tracer.html">Log tracing</a><br><a href="https://www.emqx.io/docs/en/v5.0/observability/slow_subscribers_statistics.html">Slow subscribers</a><br><a href="https://www.emqx.io/docs/en/v5.0/observability/slow_subscribers_statistics.html">Statistics</a></td>
+    <td><a src="./observability/tracer.html">日志追踪 (Trace)</a><br><a src="./observability/slow_subscribers_statistics.html">慢订阅统计</a></td>
   </tr>
   <tr>
     <td><b>Cloud-Native &amp; K8s</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.com/en/deployments">https://www.emqx.com/en/deployments</a></td>
+    <td>N/A</td>
+    <td>N/A</td>
+    <td><a href="https://www.emqx.com/zh/deployments">部署方式</a></td>
   </tr>
   <tr>
     <td><b>边缘计算</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://neugates.io/">https://neugates.io</a><br><a href="https://nanomq.io/">https://nanomq.io</a></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><a href="https://neugates.io/">Neuron</a><br><a href="https://nanomq.io/">NanoMQ</a></td>
   </tr>
 </tbody>
 </table>
 </div>
-
 
 ## 可扩展性与性能
 
@@ -183,11 +174,11 @@
 <tbody>
   <tr>
     <td><b>可扩展性</b></td>
-    <td><span style="font-weight:normal">单集群支持 MQTT 并发连接数&lt; 1M</span></td>
     <td><span style="font-weight:normal">单集群支持 MQTT 并发连接数高达 1 亿条</span></td>
-    <td><span style="font-weight:normal">0 ~ 1000 条 MQTT 连接</span></td>
-    <td><span style="font-weight:normal">1000 ～ 无限 MQTT 连接</span></td>
-    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0">高度可扩展，EMQX 5.0 达成 1 亿 MQTT 连接</a></td>
+    <td><span style="font-weight:normal">单集群支持 MQTT 并发连接数高达 1 亿条</span></td>
+    <td><span style="font-weight:normal">自动扩展，最多 1,000 条连接</span></td>
+    <td><span style="font-weight:normal">无限制</span></td>
+    <td><a href="https://www.emqx.com/zh/blog/reaching-100m-mqtt-connections-with-emqx-5-0">高度可扩展，EMQX 5.0 达成 1 亿 MQTT 连接</a></td>
   </tr>
   <tr>
     <td><b>高可用性</b></td>
@@ -203,7 +194,7 @@
     <td><span style="font-weight:normal">数据持久化到 RocksDB</span></td>
     <td><span style="font-weight:normal">N/A</span></td>
     <td><span style="font-weight:normal">N/A</span></td>
-    <td><img src="https://www.emqx.com/favicon.ico" width="14" height="14"><a href="https://www.emqx.com/zh/blog/mqtt-persistence-based-on-rocksdb">基于 RocksDB 实现高可靠、低时延的 MQTT 数据持久化</a></td>
+    <td><a href="https://www.emqx.com/zh/blog/mqtt-persistence-based-on-rocksdb">基于 RocksDB 实现高可靠、低时延的 MQTT 数据持久化</a></td>
   </tr>
   <tr>
     <td><b>吞吐量</b></td>
@@ -223,8 +214,8 @@
   </tr>
   <tr>
     <td><b>SLA 等级</b></td>
-    <td><span style="font-weight:normal">99.9% 正常运行时间</span></td>
-    <td><span style="font-weight:normal">99.99% ~ 99.999% 正常运行时间</span></td>
+    <td><span style="font-weight:normal">N/A</span></td>
+    <td><span style="font-weight:normal">N/A</span></td>
     <td><span style="font-weight:normal">99.9% 正常运行时间</span></td>
     <td><span style="font-weight:normal">最高可达 99.99%</span><br><span style="font-weight:normal">正常运行时间</span></td>
     <td><span style="font-weight:normal"> </span></td>
@@ -232,7 +223,6 @@
 </tbody>
 </table>
 </div>
-
 
 ## 集群架构
 
@@ -274,7 +264,7 @@
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
   <tr>
@@ -305,16 +295,16 @@
     <td><b>节点疏散 &amp; 集群重平衡</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td>N/A</td>
+    <td>N/A</td>
     <td> </td>
   </tr>
   <tr>
     <td><b>自动集群发现</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td>N/A</td>
+    <td>N/A</td>
     <td>static: 静态节点列表自动集群<br>mcast: 采用 UDP 组播模式的自动群集<br>dns: DNS A 记录自动集群<br>etcd: Discovery via etcd<br>k8s: Kubernetes 服务自动集群</td>
   </tr>
   <tr>
@@ -335,7 +325,7 @@
   </tr>
   <tr>
     <td><b>Overload Protection</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
@@ -360,7 +350,6 @@
 </tbody>
 </table>
 </div>
-
 
 ## MQTT 与其他连接协议支持
 
@@ -433,9 +422,9 @@
     <td><b>MQTT over QUIC</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQX 是现在全球唯一支持 QUIC 协议的 MQTT 消息服务器。<br>comming soon.</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 规划中</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 规划中</td>
+    <td>EMQX 是现在全球唯一支持 QUIC 协议的 MQTT 消息服务器。<br></td>
   </tr>
   <tr>
     <td><b>LB (代理协议)</b></td>
@@ -494,6 +483,14 @@
     <td> </td>
   </tr>
   <tr>
+    <td><b>ExProto</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
+  </tr>
+  <tr>
     <td><b>OCPP</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -501,10 +498,25 @@
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
+  <tr>
+    <td><b>JT/808</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 将于 EMQX v5.4 发布</td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>GBT32960</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 将于 EMQX v5.4 发布</td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
+  </tr>
 </tbody>
 </table>
 </div>
-
 
 ## 安全
 
@@ -534,20 +546,12 @@
     <td>EMQX: TLS 1.1, 1.2, 1.3</td>
   </tr>
   <tr>
-    <td><b>QUIC</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Coming in EMQX 5.3</td>
-  </tr>
-  <tr>
     <td><b>OCSP Stapling</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>  Coming in EMQX 5.3</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td></td>
   </tr>
   <tr>
     <td><b>审计日志</b></td>
@@ -576,7 +580,6 @@
 </tbody>
 </table>
 </div>
-
 
 ## 认证与授权
 
@@ -633,17 +636,33 @@
     <td><b>X.509 证书</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />由 EMQX Cloud 管理</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 由 EMQX Cloud 管理</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
+  </tr>
+  <tr>
+    <td><b>SSO</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><a src="./dashboard/sso.html">单点登录</a> </td>
   </tr>
   <tr>
     <td><b>LDAP</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />5.3</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
     <td> </td>
+  </tr>
+  <tr>
+    <td><b>RBAC</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><a href ="https://docs.emqx.com/zh/enterprise/latest/dashboard/system.html#%E7%94%A8%E6%88%B7">基于角色的权限管理</a></td>
   </tr>
   <tr>
     <td><b>细粒度访问控制</b></td>
@@ -673,7 +692,6 @@
 </table>
 </div>
 
-
 ## 数据集成
 
 <div style="text-align: center;">
@@ -700,6 +718,13 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
+    <td><b>数据桥接</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
     <td><b>MQTT 服务</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -714,14 +739,28 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>数据桥接</b></td>
+    <td><b>Apache Kafka/Confluent</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>Kafka/Confluent</b></td>
+    <td><b>Apache IoTDB</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
+    <td><b>Apache Pulsar</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
+    <td><b>AWS Kinesis</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -735,21 +774,70 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>Apache Pulsar</b></td>
+    <td><b>Cassandra</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>Apache RocketMQ</b></td>
+    <td><b>ClickHouse</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>RabbitMQ</b></td>
+    <td><b>DynamoDB</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
+    <td><b>GCP PubSub</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
+    <td><b>GreptimeDB</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
+    <td><b>HStreamDB</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
+    <td><b>HTTP Server</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
+    <td><b>InfluxDB</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
+    <td><b>Microsoft SQL Server</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
+    <td><b>MongoDB</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -764,6 +852,20 @@
     <td> </td>
   </tr>
   <tr>
+    <td><b>OpenTSDB</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
+    <td><b>Oracle Database</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
     <td><b>PostgreSQL</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -771,14 +873,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>SQL Server</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>MongoDB</b></td>
+    <td><b>RabbitMQ</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -792,35 +887,14 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>Cassandra</b></td>
+    <td><b>RocketMQ</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>AWS DynamoDB</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>ClickHouse</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>OpenTSDB</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>InfluxDB</b></td>
+    <td><b>TDengine</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -834,21 +908,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>Oracle DB</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
     <td><b>SAP Event Mesh</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>HStreamDB</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -857,7 +917,6 @@
 </tbody>
 </table>
 </div>
-
 
 
 ## 规则引擎
@@ -879,6 +938,30 @@
   </tr>
 </thead>
 <tbody>
+  <tr>
+    <td><b>客户端事件处理</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><a src="./data-integration/rule-sql-events-and-fields.html#客户端事件">客户端事件</a></td>
+  </tr>
+  <tr>
+    <td><b>内置 SQL 函数</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><a src="./rule/rule-engine_buildin_function.html">内置 SQL 函数</a></td>
+  </tr>
+  <tr>
+    <td><b>jq 函数</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
+  </tr>
   <tr>
     <td><b>编解码</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -911,34 +994,9 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
-  <tr>
-    <td><b>内置 SQL 函数</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./rule/rule-engine_buildin_function.html">内置 SQL 函数</a></td>
-  </tr>
-  <tr>
-    <td><b>jq 函数</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>客户端事件处理</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./data-integration/rule-sql-events-and-fields.html#客户端事件">客户端事件</a></td>
-  </tr>
 </tbody>
 </table>
 </div>
-
 
 ## 可扩展性
 
@@ -965,7 +1023,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="./extensions/hooks.html">钩子</a></td>
+    <td><a src="./extensions/hooks.html">钩子</a></td>
   </tr>
   <tr>
     <td><b>插件</b></td>
@@ -1002,7 +1060,6 @@
 </tbody>
 </table>
 </div>
-
 
 ## 可操作性
 
@@ -1074,8 +1131,6 @@
 </tbody>
 </table>
 </div>
-
-
 ## 可观测性
 
 <div style="text-align: center;">
@@ -1123,8 +1178,8 @@
     <td><b>集群指标</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td>N/A</td>
+    <td>N/A</td>
     <td> </td>
   </tr>
   <tr>
@@ -1139,16 +1194,16 @@
     <td><b>慢订阅监控</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
     <td> </td>
   </tr>
   <tr>
     <td><b>主题监控</b></b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
     <td> </td>
   </tr>
   <tr>
@@ -1168,25 +1223,16 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>StatsD</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
     <td><b>Datadog</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td>Coming in EMQX Enterprise 5.0</td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /> 已规划</td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /> 已规划</td>
+    <td>将于 EMQX v5.4 发布</td>
   </tr>
 </tbody>
 </table>
 </div>
-
 
 ## 云原生与 K8S
 
@@ -1243,6 +1289,75 @@
 </table>
 </div>
 
+## 云平台支持
+
+<div style="text-align: center;">
+<table>
+<thead>
+  <tr>
+    <th rowspan="2">云平台<br></th>
+    <th colspan="2">自托管模式<br></th>
+    <th colspan="2">云服务模式<br></th>
+    <th rowspan="2">备注和链接<br></th>
+  </tr>
+  <tr>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
+    <td>EMQX Cloud Serverless</td>
+    <td>EMQX Cloud 专有版</td>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td><b>AWS Marketplace</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td>EMQX 已上架 AWS 市场。<br><a href="https://aws.amazon.com/marketplace/pp/prodview-cwa2e6xbrwtzi">AWS Marketplace: EMQX Enterprise on Ubuntu 20.04</a> </td>
+  </tr>
+  <tr>
+    <td><b>Azure Marketplace</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
+    <td><b>GCP Marketplace</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><b>AWS</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><b>Azure</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><b>GCP</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td></td>
+  </tr>
+</tbody>
+</table>
+</div>
 
 ## MQTT 开发工具与 SDKs
 
@@ -1309,7 +1424,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> XMeter</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="https://github.com/fluidicon.png" width="14" height="14"><a href="https://github.com/emqx/mqtt-jmeter">GitHub - emqx/mqtt-jmeter: MQTT JMeter 插件</a></td>
+    <td><a href="https://github.com/emqx/mqtt-jmeter">GitHub - emqx/mqtt-jmeter: MQTT JMeter 插件</a></td>
   </tr>
   <tr>
     <td><b>MQTT SDK for C</b></td>
@@ -1346,7 +1461,6 @@
 </tbody>
 </table>
 </div>
-
 
 ## 客户支持服务
 
