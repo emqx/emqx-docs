@@ -8,7 +8,7 @@
 
 :::
 
-## 数据结构与查询
+## LDAP 数据结构与查询
 
 LDAP 授权器根据存储在 LDAP 目录中的授权数据检查客户端授权。LDAP 数据格式定义了组织和存储授权数据的结构和规则。LDAP 授权器支持几乎任何 LDAP 数据结构。以下是 OpenLDAP 的一个数据格式示例：
 
@@ -111,13 +111,13 @@ rootpw {SSHA}eoF7NhNrejVYYyGHqnt+MdKNBh4r1w3W
 directory       /usr/local/etc/openldap/data
 ```
 
-## 通过 Dashboard 配置
+## 通过 Dashboard 配置 LDAP 授权器
 
 您可以使用 EMQX Dashboard 配置如何使用 LDAP 进行授权。
 
 1. 在 EMQX Dashboard 页面上点击左侧导航栏的**访问控制** -> **客户端授权**，进入**客户端授权**页面。
 
-2. 单击**+ 创建**，选择 **LDAP** 作为 **数据源**。点击**下一步**进入**配置参数**页签：
+2. 单击**创建**，选择 **LDAP** 作为 **数据源**。点击**下一步**进入**配置参数**页签：
 
    <img src="./assets/authz-ldap.png" alt="authz-ldap" style="zoom:90%;" />
 
@@ -154,7 +154,7 @@ directory       /usr/local/etc/openldap/data
 
 4. 点击**创建**完成设置。
 
-## 通过配置文件配置
+## 通过配置文件配置 LDAP 授权器
 
 您也可通过配置文件配置 LDAP 授权器。
 
