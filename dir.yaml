@@ -487,8 +487,8 @@
                 - access-control/authn/mongodb
                 - access-control/authn/postgresql
                 - access-control/authn/redis
-                - title_en: LDAP
-                  title_cn: LDAP
+                - title_en: Integrate with LDAP
+                  title_cn: 使用 LDAP 进行密码认证
                   path: access-control/authn/ldap
                   edition: ee
                 - access-control/authn/http
