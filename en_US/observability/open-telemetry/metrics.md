@@ -1,10 +1,8 @@
-# Integrate with OpenTelemetry
-
-[OpenTelemetry](https://opentelemetry.io/docs/what-is-opentelemetry/) is an observability framework and toolkit designed to create and manage telemetry data such as traces, metrics, and logs. Crucially, OpenTelemetry is vendor- and tool-agnostic, meaning that it can be used with a broad variety of Observability backends, including open source tools like Jaeger and Prometheus, as well as commercial offerings. 
+# EMQX OpenTelemetry Metrics
 
 EMQX 5.2 has built-in support for pushing metrics directly to the OpenTelemetry Collector over the gRPC OTEL protocol. The Collector can then route, filter, and transform the data to any desired backend for storage and visualization. 
 
-This page introduces how to integrate OpenTelemetry with EMQX through EMQX Dashboard and view EMQX metrics through [Prometheus](./prometheus.md). Future versions of EMQX will also integrate trace and log data with the Collector, enabling full OpenTelemetry support.
+This page introduces how to integrate OpenTelemetry with EMQX through EMQX Dashboard and view EMQX metrics through [Prometheus](../prometheus.md). Future versions of EMQX will also integrate trace and log data with the Collector, enabling full OpenTelemetry support.
 
 ```
                                        -> StatsD
@@ -59,14 +57,14 @@ scrape_configs:
 
 You can use EMQX Dashboard to configure EMQX's integration with OpenTelemetry. In the EMQX Dashboard, click **Management** -> **Monitoring** on the left navigation menu, then click the **Integration** tab for the configuration.
 
-![OpenTelemetry-Dashboard](./assets/opentelemetry-dashboard-en.png)
+![OpenTelemetry-Dashboard](../assets/opentelemetry-dashboard-en.png)
 - **EndPoint**: Collector's gRPC address; `http://localhost:4317` by default.
 - **Export Interval**: Interval to push metrics to Collector; `10` seconds by default.
 
 ## Visualize EMQX Metrics in Prometheus
 
 The EMQX metrics can be viewed in Prometheus web console (http://otel-collector:9090):
-![OpenTelemetry-Prometheus](./assets/opentelemetry-prometheus.png)
+![OpenTelemetry-Prometheus](../assets/opentelemetry-prometheus.png)
 
 
 
