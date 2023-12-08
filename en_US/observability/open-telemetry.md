@@ -6,15 +6,7 @@ EMQX 5.2 has built-in support for pushing metrics directly to the OpenTelemetry 
 
 This page introduces how to integrate OpenTelemetry with EMQX through EMQX Dashboard and view EMQX metrics through [Prometheus](./prometheus.md). Future versions of EMQX will also integrate trace and log data with the Collector, enabling full OpenTelemetry support.
 
-```
-                                       -> StatsD
-                                       -> ElasticSearch        
-       GRPC                            -> InfluxDB
-EMQX    -->   Opentelemetry Collector  -> Prometheus
-       OTEL Protocol                   -> Datadog
-                                       -> Amazon CloudWatch
-                                       -> Any open source or vendor backend of your choice
-```
+![EMQX OpenTelemetry](./assets/emqx-opentelemetry.jpg)
 
 ## Prerequisites
 Before integrating with OpenTelemetry, you need to deploy and configure OpenTelemetry and Prometheus.
