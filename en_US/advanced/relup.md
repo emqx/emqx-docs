@@ -9,13 +9,13 @@ With the hot upgrade feature, users can quickly and safely upgrade the running E
 Currently EMQX for Windows and MacOSX does not support hot upgrade feature.
 :::
 
-:::
+:::warning NOTE
 EMQX only allows hot upgrade between patch versions (the third digit of the version number).
 i.e. upgrading from x.y.z to x.y.(z+N) is allowed, but upgrading from x.y to (x+N).(y+M) is not allowed.
 Please operate with caution.
 :::
 
-:::
+:::warning NOTE
 Hot upgrade between EMQX (opensource) and EMQX Enterprise is not allowed, please operate with caution.
 :::
 
@@ -47,13 +47,13 @@ The Zip package name format of EMQX Enterprise version 4.4 is:
 emqx-[EMQX Type]-[EMQX Version]-[OTP Version]-[OS Type]-[Arch].zip
 ```
 
-:::
+:::warning NOTE
 EMQX only allows hot upgrade between patch versions (the third digit of the version number).
 i.e. upgrading from x.y.z to x.y.(z+N) is allowed, but upgrading from x.y to (x+N).(y+M) is not allowed.
 Please operate with caution.
 :::
 
-:::
+:::warning NOTE
 Hot upgrade between EMQX (opensource) and EMQX Enterprise is not allowed, please operate with caution.
 :::
 
@@ -107,7 +107,7 @@ Installed versions:
 * 4.4.0	old
 ```
 
-::: warning
+:::warning NOTE
 Don't remove any files or directories under the `${EMQX_ROOT_DIR}/releases/`.
 If you want to remove the specified version, use the `emqx uninstall` command.
 :::
@@ -163,6 +163,12 @@ Release 4.4.0 is marked old, switching to it.
 Installed Release: 4.4.0
 Made release permanent: "4.4.0"
 ```
+
+:::warning NOTE
+Due to EMQX being backward compatible rather than forward compatible, only immediate downgrade after completing an upgrade is considered safe to ensure no data modifications occurred before the downgrade. If you modify any data through the dashboard, API, or CLI after the upgrade, the behavior of the downgraded system is unknown.
+
+Our recommendation is to only perform version upgrades and never version downgrades. If you encounter any issues after an upgrade, do not downgrade; instead, seek advice from the community or contact our technical support.
+:::
 
 ## Uninstall a Version
 

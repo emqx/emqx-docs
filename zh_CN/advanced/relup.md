@@ -23,13 +23,13 @@ ref:
 目前 Windows、MacOSX 暂不支持热升级功能。
 :::
 
-:::
+:::waning 注意
 EMQX 仅允许 Patch 版本（版本号的第三位）的热升级。
 即允许 x.y.z 热升级到 x.y.(z+N)，但不允许 x.y 热升级到 (x+N).(y+M)。
 请谨慎操作。
 :::
 
-:::
+:::waning 注意
 不允许 EMQX (开源版) 与 EMQX Enterprise 之间的热升级，请谨慎操作。
 :::
 
@@ -61,13 +61,13 @@ EMQX 企业版 4.4 的 Zip 包名格式为：
 emqx-[EMQX Type]-[EMQX Version]-[OTP Version]-[OS Type]-[Arch].zip
 ```
 
-:::
+:::waning 注意
 EMQX 仅允许 Patch 版本（版本号的第三位）的热升级。
 即允许 x.y.z 热升级到 x.y.(z+N)，但不允许 x.y 热升级到 (x+N).(y+M)。
 请谨慎操作。
 :::
 
-:::
+:::waning 注意
 不允许 EMQX (开源版) 与 EMQX Enterprise 之间的热升级，请谨慎操作。
 :::
 
@@ -121,7 +121,7 @@ Installed versions:
 * 4.4.0	old
 ```
 
-::: warning
+:::waning 注意
 不要手动删除 `${EMQX_ROOT_DIR}/releases/` 目录下的任何文件。
 如果要删除指定版本，请使用 `emqx uninstall` 命令
 :::
@@ -177,6 +177,12 @@ Release 4.4.0 is marked old, switching to it.
 Installed Release: 4.4.0
 Made release permanent: "4.4.0"
 ```
+
+:::warning 注意
+由于 EMQX 是向后兼容而不是向前兼容的，只有在升级完成后马上降级才是安全的，以确保在降级版本之前没有修改过任何数据。
+如果您在升级之后通过 Dashboard，API 或 CLI 修改了任何数据，降级后的系统的行为是未知的。
+我们的建议是只做版本升级，永远不做版本降级。如果您在升级后发现了任何问题，不要降级，请询问社区或者联系我们的技术支持。
+:::
 
 ## 卸载版本
 
