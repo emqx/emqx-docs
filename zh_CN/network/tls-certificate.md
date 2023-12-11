@@ -77,3 +77,10 @@ openssl x509 -req -in server.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateseria
 ```
 
 <!--申请或购买证书 -->
+
+## 下一步
+
+一旦您获得了 SSL/TLS 证书，您便可以启用客户端的 SSL/TLS 连接。您还可以在证书过期时更新证书。
+
+- [启用 SSL/TLS 连接](./emqx-mqtt-tls.md)
+- [更新证书](./emqx-mqtt-tls.md#更新-ssl-tls-证书)

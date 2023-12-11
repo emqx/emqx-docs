@@ -76,4 +76,10 @@ You can obtain the SSL/TLS certificate in the following two ways:
    └── server.key
    ```
 
-   
+
+## Next Step
+
+Once you obtain the SSL/TLS certificates, you can enable the client's SSL/TLS connections. You can also update the certificates when they are expired.
+
+- [Enable SSL/TLS Connection](./emqx-mqtt-tls.md)
+- [Update Certificates](./emqx-mqtt-tls.md#update-ssl-tls-certificates)
