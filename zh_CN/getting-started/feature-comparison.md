@@ -35,7 +35,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Coming in EMQX 5.3</td>
+    <td></td>
   </tr>
   <tr>
     <td><b>MQTT 扩展</b></td>
@@ -64,7 +64,7 @@
   <tr>
     <td><b>数据持久化</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> Built-in RocksDB backend or external databases</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 内置的 RocksDB 数据库或外部数据库</td>
     <td>N/A</td>
     <td>N/A</td>
     <td>将于 EMQX 5.4 发布（预览功能）<br><a href="https://www.emqx.com/zh/blog/mqtt-persistence-based-on-rocksdb">基于 RocksDB 实现高可靠、低时延的 MQTT 数据持久化</a></td>
@@ -122,7 +122,7 @@
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 40+</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />40+</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 40+</td>
     <td><a href="https://www.emqx.com/zh/integrations">规则引擎与数据桥接，任意企业系统集成</a></td>
   </tr>
   <tr>
@@ -152,6 +152,7 @@
 </tbody>
 </table>
 </div>
+
 
 ## 可扩展性与性能
 
@@ -917,8 +918,6 @@
 </tbody>
 </table>
 </div>
-
-
 ## 规则引擎
 
 <div style="text-align: center;">
