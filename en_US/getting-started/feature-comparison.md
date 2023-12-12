@@ -43,7 +43,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./advanced/shared-subscriptions.html">Shared subscription</a><br><a src="./messaging/mqtt-exclusive-subscription.html">Exclusive subscription</a><br><a src="./advanced/delayed-publish.html">Delayed publish</a><br><a src="./advanced/auto-subscriptions.html">Auto-subscription</a><br><a src="./advanced/topic-rewrite.html">Topic rewrite</a></td>
+    <td><a href="https://www.emqx.io/docs/en/latest/messaging/mqtt-shared-subscription.html">Shared subscription</a><br><a href="https://www.emqx.io/docs/en/latest/messaging/mqtt-exclusive-subscription.html">Exclusive subscription</a><br><a href="https://www.emqx.io/docs/en/latest/messaging/mqtt-delayed-publish.html">Delayed publish</a><br><a href="https://www.emqx.io/docs/en/latest/messaging/mqtt-auto-subscription.html">Auto-subscription</a><br><a href="https://www.emqx.io/docs/en/latest/messaging/mqtt-topic-rewrite.html">Topic rewrite</a></td>
   </tr>
   <tr>
     <td><b>Multi-protocol Gateways</b></td>
@@ -59,7 +59,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./roadmap.html">In Product Roadmap</a></td>
+    <td><a href="https://www.emqx.io/docs/en/latest/getting-started/roadmap.html">In Product Roadmap</a></td>
   </tr>
   <tr>
     <td><b>Data Persistence</b></td>
@@ -132,7 +132,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./observability/tracer.html">Log Trace</a><br><a src="./slow_subscribers_statistics.html">Slow Subscriptions</a></td>
+    <td><a href="https://www.emqx.io/docs/en/latest/observability/tracer.html">Log Trace</a><br><a href="https://www.emqx.io/docs/en/latest/observability/slow-subscribers-statistics.html">Slow Subscriptions</a></td>
   </tr>
   <tr>
     <td><b>Cloud-Native &amp; K8s</b></td>
@@ -153,6 +153,8 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
+
 
 
 ## Scalability and Performance
@@ -606,7 +608,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./access-control/authn/pwoverview.html">Password-Based Authentication</a></td>
+    <td><a href="https://www.emqx.io/docs/en/latest/access-control/authn/pwoverview.html">Password-Based Authentication</a></td>
   </tr>
   <tr>
     <td><b>JWT</b></td>
@@ -614,7 +616,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./security/authn/jwt.html">JWT Authentication</a></td>
+    <td><a href="https://www.emqx.io/docs/en/latest/access-control/authn/jwt.html">JWT Authentication</a></td>
   </tr>
   <tr>
     <td><b>MQTT 5.0 Enhanced Authentication</b></td>
@@ -622,7 +624,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a src="./security/authn/scram.html">MQTT 5.0 Enhanced Authentication</a></td>
+    <td><a href="https://www.emqx.io/docs/en/latest/access-control/authn/scram.html">MQTT 5.0 Enhanced Authentication</a></td>
   </tr>
   <tr>
     <td><b>PSK</b></td>
@@ -630,7 +632,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./security/ssl.html#psk-authentication">Enable PSK Authentication</a></td>
+    <td><a href="https://www.emqx.io/docs/en/latest/network/psk-authentication.html#enable-psk-authentication">Enable PSK Authentication</a></td>
   </tr>
   <tr>
     <td><b>X.509 Certificates</b></td>
@@ -646,7 +648,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./dashboard/sso.html">Single Sign-On</a> </td>
+    <td><a href="https://www.emqx.io/docs/en/latest/dashboard/sso.html">Single Sign-On</a> </td>
   </tr>
   <tr>
     <td><b>LDAP</b></td>
@@ -691,6 +693,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 
 ## Data Integration
 
@@ -942,7 +945,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./data-integration/rule-sql-events-and-fields.html#mqtt-events">MQTT Events</a></td>
+    <td><a href="https://www.emqx.io/docs/en/latest/data-integration/rule-sql-events-and-fields.html#mqtt-events">MQTT Events</a></td>
   </tr>
   <tr>
     <td><b>Built-in Functions</b></td>
@@ -950,7 +953,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./data-integration/rule-sql-builtin-functions.html">Functions available in SQL statements</a></td>
+    <td><a href="https://www.emqx.io/docs/en/latest/data-integration/rule-sql-builtin-functions.html">Functions available in SQL statements</a></td>
   </tr>
   <tr>
     <td><b>jq Functions</b></td>
@@ -995,6 +998,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 ## Extensibility
 
 <div style="text-align: center;">
@@ -1020,7 +1024,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a src="./extensions/hooks.html">Hooks</a></td>
+    <td><a href="https://www.emqx.io/docs/en/latest/extensions/hooks.html#hooks">Hooks</a></td>
   </tr>
   <tr>
     <td><b>Plugins</b></td>
@@ -1028,7 +1032,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a src="./extensions/plugins.html">Plugins</a></td>
+    <td><a href="https://www.emqx.io/docs/en/latest/extensions/plugins.html#plugins">Plugins</a></td>
   </tr>
   <tr>
     <td><b>Plugin Hot-loading</b></td>
@@ -1057,6 +1061,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 
 ## Operability
 
@@ -1397,7 +1402,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>><a href="https://github.com/emqx/emqtt-bench">GitHub - emqx/emqtt-bench: Lightweight MQTT benchmark tool written in Erlang</a></td>
+    <td><a href="https://github.com/emqx/emqtt-bench">GitHub - emqx/emqtt-bench: Lightweight MQTT benchmark tool written in Erlang</a></td>
   </tr>
   <tr>
     <td><b>MQTT Load Testing</b></td>
@@ -1450,6 +1455,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 ## Support Services
 
 <div style="text-align: center;">

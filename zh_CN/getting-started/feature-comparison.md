@@ -43,7 +43,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./advanced/shared-subscriptions.html">共享订阅</a><br><a src="./messaging/mqtt-exclusive-subscription.html">排他订阅</a><br><a src="./advanced/delayed-publish.html">延迟发布</a><br><a src="./advanced/auto-subscriptions.html">自动订阅</a><br><a src="./advanced/topic-rewrite.html">主题重写</a></td>
+    <td><a href="https://www.emqx.io/docs/zh/latest/messaging/mqtt-shared-subscription.html">共享订阅</a><br><a href="https://www.emqx.io/docs/zh/latest/messaging/mqtt-exclusive-subscription.html">排他订阅</a><br><a href="https://www.emqx.io/docs/zh/latest/messaging/mqtt-delayed-publish.html">延迟发布</a><br><a href="https://www.emqx.io/docs/zh/latest/messaging/mqtt-auto-subscription.html">自动订阅</a><br><a href="https://www.emqx.io/docs/zh/latest/messaging/mqtt-topic-rewrite.html">主题重写</a></td>
   </tr>
   <tr>
     <td><b>多协议网关</b></td>
@@ -91,7 +91,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/v5.0/data-integration/rules.html">基于 SQL 的内置规则引擎</a></td>
+    <td><a href="https://www.emqx.io/docs/zh/latest/data-integration/rules.html">基于 SQL 的内置规则引擎</a></td>
   </tr>
   <tr>
     <td><b>Flow 设计器</b></td>
@@ -131,7 +131,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./observability/tracer.html">日志追踪 (Trace)</a><br><a src="./observability/slow_subscribers_statistics.html">慢订阅统计</a></td>
+    <td><a href="https://www.emqx.io/docs/zh/latest/observability/tracer.html">日志追踪 (Trace)</a><br><a href="https://www.emqx.io/docs/zh/latest/observability/slow-subscribers-statistics.html">慢订阅统计</a></td>
   </tr>
   <tr>
     <td><b>Cloud-Native &amp; K8s</b></td>
@@ -152,6 +152,7 @@
 </tbody>
 </table>
 </div>
+
 
 
 ## 可扩展性与性能
@@ -607,7 +608,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./access-control/authn/pwoverview.html">密码认证</a></td>
+    <td><a href="https://www.emqx.io/docs/zh/latest/access-control/authn/pwoverview.html">密码认证</a></td>
   </tr>
   <tr>
     <td><b>JWT</b></td>
@@ -615,7 +616,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./security/authn/jwt.html">JWT 认证</a></td>
+    <td><a href="https://www.emqx.io/docs/zh/latest/access-control/authn/jwt.html">JWT 认证</a></td>
   </tr>
   <tr>
     <td><b>MQTT 5.0 增强认证</b></td>
@@ -623,7 +624,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a src="./security/authn/scram.html">MQTT 5.0 增强认证</a></td>
+    <td><a href="https://www.emqx.io/docs/zh/latest/access-control/authn/scram.html">MQTT 5.0 增强认证</a></td>
   </tr>
   <tr>
     <td><b>PSK</b></td>
@@ -631,7 +632,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./security/ssl.html#psk-authentication">启用 PSK 验证</a></td>
+    <td><a src="https://www.emqx.io/docs/zh/latest/network/psk-authentication.html">启用 PSK 验证</a></td>
   </tr>
   <tr>
     <td><b>X.509 证书</b></td>
@@ -647,7 +648,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./dashboard/sso.html">单点登录</a> </td>
+    <td><a src="https://www.emqx.io/docs/zh/latest/dashboard/sso.html">单点登录（SSO)</a> </td>
   </tr>
   <tr>
     <td><b>LDAP</b></td>
@@ -692,6 +693,7 @@
 </tbody>
 </table>
 </div>
+
 
 ## 数据集成
 
@@ -943,7 +945,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./data-integration/rule-sql-events-and-fields.html#客户端事件">客户端事件</a></td>
+    <td><a href="https://www.emqx.io/docs/zh/latest/data-integration/rule-sql-events-and-fields.html#%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BA%8B%E4%BB%B6">客户端事件</a></td>
   </tr>
   <tr>
     <td><b>内置 SQL 函数</b></td>
@@ -951,7 +953,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./rule/rule-engine_buildin_function.html">内置 SQL 函数</a></td>
+    <td><a href="https://www.emqx.io/docs/zh/latest/data-integration/rule-sql-builtin-functions.html">内置 SQL 函数</a></td>
   </tr>
   <tr>
     <td><b>jq 函数</b></td>
@@ -997,6 +999,7 @@
 </table>
 </div>
 
+
 ## 可扩展性
 
 <div style="text-align: center;">
@@ -1022,7 +1025,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a src="./extensions/hooks.html">钩子</a></td>
+    <td><a href="https://www.emqx.io/docs/zh/latest/extensions/hooks.html">钩子</a></td>
   </tr>
   <tr>
     <td><b>插件</b></td>
@@ -1030,7 +1033,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a src="./extensions/plugins.html">插件</a></td>
+    <td><a ref="https://www.emqx.io/docs/zh/latest/extensions/plugins.html">插件</a></td>
   </tr>
   <tr>
     <td><b>插件热加载</b></td>
@@ -1059,6 +1062,7 @@
 </tbody>
 </table>
 </div>
+
 
 ## 可操作性
 
@@ -1276,17 +1280,10 @@
     <td>N/A</td>
     <td><a href="https://www.emqx.com/zh/emqx-terraform">EMQX Terraform</a></td>
   </tr>
-  <tr>
-    <td><b>AWS Marketplace</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQX 已上架 AWS 市场。<br><a href="https://aws.amazon.com/marketplace/pp/prodview-cwa2e6xbrwtzi">AWS Marketplace: EMQX Enterprise on Ubuntu 20.04</a> </td>
-  </tr>
 </tbody>
 </table>
 </div>
+
 
 ## 云平台支持
 
@@ -1330,8 +1327,8 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td></td>
   </tr>
-  <tr>
-    <td><b>AWS</b></td>
+<tr>
+    <td><b>阿里云</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -1339,7 +1336,7 @@
     <td></td>
   </tr>
   <tr>
-    <td><b>Azure</b></td>
+    <td><b>华为云</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -1347,16 +1344,17 @@
     <td></td>
   </tr>
   <tr>
-    <td><b>GCP</b></td>
+    <td><b>腾讯云</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td></td>
   </tr>
 </tbody>
 </table>
 </div>
+
 
 ## MQTT 开发工具与 SDKs
 
