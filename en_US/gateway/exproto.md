@@ -70,7 +70,7 @@ The `ConnectionAdapter` service is implemented by the ExProto Gateway to provide
 
 ## Enable ExProto Gateway
 
-From EMQX 5.0, ExProto gateway can be configured and enabled through the Dashboard, HTTP API, or configuration file `emqx.conf`. This section demonstrates how to enable ExProto gateway via Dashboard.
+The ExProto gateway in EMQX can be configured and enabled through the Dashboard, HTTP API, or configuration file `emqx.conf`. This section demonstrates how to enable ExProto gateway via Dashboard.
 
 On EMQX Dashboard, click **Management** -> **Gateways** from the left navigation menu. On the **Gateways** page, all supported gateways are listed. Locate **ExProto** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize ExProto** page.
 

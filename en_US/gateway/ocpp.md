@@ -1,18 +1,19 @@
 # OCPP Gateway
 
-EMQX OCPP Gateway is a messaging protocol translator that bridges the gap between [OCPP](https://www.openchargealliance.org/) and MQTT protocols, allowing clients using these protocols to communicate with each other.
-
-This OCPP Gateway provides a lightweight and simple messaging solution for clients and servers, enabling message exchange in a variety of messaging environments. With its support for Websocket and Websocket over TLS listeners, the OCPP gateway is a flexible and versatile tool for building messaging systems.
-
 ::: tip
 
-The OCPP gateway is based on [OCPP v1.6](https://www.openchargealliance.org/protocols/ocpp-16/)
+EMQX Enterprise Edition feature. EMQX Enterprise Edition offers comprehensive coverage of critical business scenarios, richer data integration support, higher production-grade reliability, and 24/7 global technical support. Feel free to [try it for free](https://www.emqx.com/zh/try?product=enterprise).
 
-:::
+:::[
+OCPP](https://www.openchargealliance.org/) (Open Charge Point Protocol) is an open communication protocol that connects charging stations with central management systems, aiming to provide a unified communication standard for electric vehicle charging infrastructure. The OCPP gateway acts as a protocol translator, bridging the gap between OCPP and MQTT protocols, thus enabling clients that use these protocols to communicate with each other.
+
+EMQX has added a protocol gateway for [OCPP 1.6-J](https://www.openchargealliance.org/protocols/ocpp-16/), capable of connecting to charging station equipment of various brands that comply with the OCPP specifications. It integrates with management systems (Central System) through rule engines, data integration, REST APIs, and other methods, helping users quickly build electric vehicle charging infrastructures.
+
+This page introduces how to configure and use the OCPP gateway in EMQX.
 
 ## Enable OCPP Gateway
 
-In EMQX 5.0, OCPP gateway can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps.
+The OCPP gateway in EMQX can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps.
 
 On EMQX Dashboard, click **Management** -> **Gateways** on the left navigation menu. On the **Gateways** page, all supported gateways are listed. Locate **OCPP** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize OCPP** page.
 
@@ -28,11 +29,9 @@ To simplify the configuration process, EMQX offers default values for all requir
 2. Then you will be directed to the **Listeners** tab, where EMQX has pre-configured a Websocket listener on port `33033`. Click **Next** again to confirm the setting.
 3. Then click the **Enable** button to activate the OCPP Gateway.
 
-Upon completing the gateway activation process, you can return to the **Gateways** page and observe that the OCPP Gateway now displays an **Enabled** status.
+Upon completing the gateway activation process, you can return to the **Gateways** page and see that the OCPP Gateway now displays an **Enabled** status.
 
 <img src="./assets/ocpp-enabled.png" alt="OCPP gateway enabled" style="zoom:50%;" />
-
-In EMQX 5.0, OCPP gateways can be configured and enabled through the Dashboard.
 
 The above configuration can also be configured with HTTP API:
 
@@ -61,77 +60,80 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/ocpp' \
 
 ## Work with OCPP Clients
 
-After establishing the OCPP gateway, you can use the OCPP client tools to test the connections and ensure everything works as expected.
+Once the OCPP gateway is operational, you can utilize OCPP client tools for connection testing and to verify that the setup functions correctly.
 
-Using [ocpp-go](https://github.com/lorenzodonini/ocpp-go) as an example, we will demonstrate in this section how to access it to the OCPP Gateway.
+Take [ocpp-go](https://github.com/lorenzodonini/ocpp-go) as a practical example. This section demonstrates how to connect it to the OCPP Gateway in EMQX.
 
-1. We need to prepare an MQTT client to interact with the OCPP Gateway. Using [MQTTX](https://mqttx.app/downloads) as an example, we will connect it to EMQX and subscribe to the topic `ocpp/#`
+1. Begin by preparing an MQTT client to interface with the OCPP Gateway. For instance, using [MQTTX](https://mqttx.app/downloads), configure it to connect to EMQX and subscribe to the topic `ocpp/#`.
 
-![Create MQTT Connection](./assets/ocpp-mqttx-create-conn.png)
+   <img src="./assets/ocpp-mqttx-create-conn.png" alt="Create MQTT Connection" style="zoom:67%;" />
 
-2. Run the ocpp-go client and connect to the OCPP Gateway:
+2. Execute the ocpp-go client and establish a connection with the OCPP Gateway.
 
-Note: You need to replace `<host>` in the following command with the address of the machine where EMQX running.
+   **Note**: Replace `<host>` in the command below with the address of your EMQX server.
 
-```shell
-docker run -e CLIENT_ID=chargePointSim -e CENTRAL_SYSTEM_URL=ws://<host>:33033/ocpp -it --rm --name charge-point ldonini/ocpp1.6-charge- point:latest
-```
+   ```shell
+   docker run -e CLIENT_ID=chargePointSim -e CENTRAL_SYSTEM_URL=ws://<host>:33033/ocpp -it --rm --name charge-point ldonini/ocpp1.6-charge-point:latest
+   ```
 
-After a successful connected to EMQX, a log similar to the following is printed:
-```
-INFO[2023-12-01T03:08:39Z] connecting to server logger=websocket
-INFO[2023-12-01T03:08:39Z] connected to server as chargePointSim logger=websocket
-INFO[2023-12-01T03:08:39Z] connected to central system at ws://172.31.1.103:33033/ocpp
-INFO[2023-12-01T03:08:39Z] dispatched request 1200012677 to server logger=ocppj
-```
+   A successful connection will output logs similar to:
 
-3. At this point observe that MQTTX receives a message in the following format:
-```json
-Topic: ocpp/cp/chargePointSim
-{
-  "UniqueId": "1200012677",
-  "Payload": {
-    "chargePointVendor": "vendor1", "chargePointModel".
-    "chargePointModel": "model1"
-  },
-  "Action": "BootNotification"
-}
-```
-This message indicates that the ocpp-go client has connected to the OCPP Gateway and sent a request for a `BootNotification`.
+   ```css
+   INFO[2023-12-01T03:08:39Z] connecting to server logger=websocket
+   INFO[2023-12-01T03:08:39Z] connected to server as chargePointSim logger=websocket
+   INFO[2023-12-01T03:08:39Z] connected to central system at ws://172.31.1.103:33033/ocpp
+   INFO[2023-12-01T03:08:39Z] dispatched request 1200012677 to server logger=ocppj
+   ```
+
+3. Monitor MQTTX for an incoming message formatted as:
+
+   ```json
+   Topic: ocpp/cp/chargePointSim
+   {
+     "UniqueId": "1200012677",
+     "Payload": {
+       "chargePointVendor": "vendor1",
+       "chargePointModel": "model1"
+     },
+     "Action": "BootNotification"
+   }
+   ```
+
+   This message signifies that the ocpp-go client has connected to the OCPP Gateway and initiated a `BootNotification` request.
 
 
-4. fill in the topic of the MQTTX `ocpp/cs/chargePointSim` message body with the following and send it.
+4. In MQTTX, compose a message to the topic `ocpp/cs/chargePointSim` with the following content and send it.
 
-Note: The `UniqueId` needs to be filled in as the `UniqueId` received in the previous step.
+   **Note**: Ensure to replace `UniqueId` with the one received in the previous message.
 
-```json
-{
-  "MessageTypeId": 3,
-  "UniqueId": "***",
-  "Payload": {
-    "currentTime": "2023-12-01T14:20:39+00:00",
-    "interval": 300,
-    "status": "Accepted"
-  }
-}
-```
+   ```json
+   {
+     "MessageTypeId": 3,
+     "UniqueId": "***",
+     "Payload": {
+       "currentTime": "2023-12-01T14:20:39+00:00",
+       "interval": 300,
+       "status": "Accepted"
+     }
+   }
+   ```
 
-5. After that, you can see that MQTTX immediately receives a `StatusNotification` status report. This means that the OCPP client has successfully established a connection with the OCPP Gateway.
+5. Subsequently, MQTTX will receive a `StatusNotification` status report. This indicates that the OCPP client has successfully established a connection with the OCPP Gateway.
 
-```json
-Topic: ocpp/cp/chargePointSim
-Payload:
-{
-  "UniqueId": "3062609974",
-  "Payload": {
-    "status": "Available",
-    "errorCode": "NoError",
-    "connectorId": 0
-  },
-  "MessageTypeId": 2,
-  "Action": "StatusNotification"
-}
-```
+   ```json
+   Topic: ocpp/cp/chargePointSim
+   Payload:
+   {
+     "UniqueId": "3062609974",
+     "Payload": {
+       "status": "Available",
+       "errorCode": "NoError",
+       "connectorId": 0
+     },
+     "MessageTypeId": 2,
+     "Action": "StatusNotification"
+   }
+   ```
 
 ## Customize Your OCPP Gateway
 
@@ -143,38 +145,43 @@ In the **Basic Configuration** tab, you can set the maximum header allowed, the 
 
 <!--with a screenshot to be added later-->
 
-1. **Default Heartbeat Interval**: The default Heartbeat time interval, default: `60s`.
+- **Default Heartbeat Interval**: The default Heartbeat time interval, default: `60s`.
 
-2. **Heartbeat Checking Times Backoff**: The backoff for heartbeat checking times, default: `1`.
+- **Heartbeat Checking Times Backoff**: The backoff for heartbeat checking times, default: `1`.
 
-3. **Upstream**: The Upload stream configuration group.
-  - **Topic**: The topic for Upload stream Call Request messages, default: `cp/${cid}`.
-  - **topic_override_mapping**: Upload stream topic override mapping by Message Name.
-  - **Reply Topic**: The topic for Upload stream Reply messages, default: `cp/${cid}/Reply`.
-  - **Error Topic**: The topic for Upload stream Error messages, default: `cp/${cid}/Reply`.
+- **Upstream**: The Upload stream configuration group.
 
-4. **Dnstream**: The Download stream configuration group.
-    - **Topic**: Download stream topic to receive request/control messages from EMQX. This value is a wildcard topic name that subscribed by every connected Charge Point.
-      default: `cs/${cid}`.
+    - **Topic**: The topic for Upload stream Call Request messages, default: `cp/${cid}`.
+
+    - **topic_override_mapping**: Upload stream topic override mapping by Message Name.
+
+    - **Reply Topic**: The topic for Upload stream Reply messages, default: `cp/${cid}/Reply`.
+
+    - **Error Topic**: The topic for Upload stream Error messages, default: `cp/${cid}/Reply`.
+
+- **Dnstream**: The Download stream configuration group.
+
+    - **Topic**: Download stream topic to receive request/control messages from EMQX. This value is a wildcard topic name that is subscribed by every connected Charge Point. The default value is: `cs/${cid}`.
     - **max_mqueue_len**: The maximum message queue length for download stream message delivery. default: `100`.
 
-5. **Message Format Checking**: Whether to enable message format legality checking. EMQX checks the message format of the upload stream and download stream against the format defined in json-schema. When the check fails, emqx will reply with a corresponding answer message. The checking strategy can be one of the following values:
-    - `all`: check all messages
-    - `upstream_only`: check upload stream messages only
-    - `dnstream_only`: check download stream messages only
-    - `disable`: don't check any messages
+- **Message Format Checking**: Whether to enable message format legality checking. EMQX checks the message format of the upload stream and download stream against the format defined in json-schema. When the check fails, EMQX will reply with a corresponding answer message. The checking strategy can be one of the following values:
 
-6. **Json Schema Directory**: JSON Schema directory for OCPP message definitions, default: `${application}/priv/schemas`.
+    - `all`: Check all messages.
+    - `upstream_only`: Check upload stream messages only.
+    - `dnstream_only`: Check download stream messages only.
+    - `disable`: Do not check any messages.
 
-7. **Json Schema Id Prefix**: The ID prefix for the OCPP message schemas, default: `urn:OCPP:1.6:2019:12:`.
+- **Json Schema Directory**: JSON Schema directory for OCPP message definitions, default: `${application}/priv/schemas`.
 
-8. **Idle Timeout**: Set the maximum amount of time in seconds that the gateway will wait for a OCPP frame before closing the connection due to inactivity.
+- **Json Schema Id Prefix**: The ID prefix for the OCPP message schemas, default: `urn:OCPP:1.6:2019:12:`.
 
-9. **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: `true`, optional values: `true`, `false`.
+- **Idle Timeout**: Set the maximum amount of time in seconds that the gateway will wait for an OCPP frame before closing the connection due to inactivity.
 
-10. **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, *ocpp/*.
+- **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: `true`, optional values: `true`, `false`.
 
-   **Note**: This topic prefix is managed by the gateway. Clients do not need to add this prefix explicitly when publishing and subscribing.
+- **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, *ocpp/*.
+
+    **Note**: This topic prefix is managed by the gateway. Clients do not need to add this prefix explicitly when publishing and subscribing.
 
 ### Add Listeners
 
@@ -191,26 +198,26 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 **Basic settings**
 
 - **Name**: Set a unique identifier for the listener.
-- **Type**: Select the protocol type, for OCPP, this can be either **ws** or **wss**.
+- **Type**: Select the protocol type, for OCPP, this can be either `ws` or `wss`.
 - **Bind**: Set the port number on which the listener accepts incoming connections.
 - **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols.
 
 **Listener Settings**
 
 - **Path**: Sets the path prefix for the connection address. The client must carry this entire address for the connection, default value `/ocpp`.
-- **Acceptor**: Set the size of the acceptor pool, default **16**.
-- **Max Connections**: Set the maximum number of concurrent connections that the listener can handle, default: **1024000**.
-- **Max Connection Rate**: Set the maximum rate of new connections the listener can accept per second, default: **1000**.
+- **Acceptor**: Set the size of the acceptor pool, default `16`.
+- **Max Connections**: Set the maximum number of concurrent connections that the listener can handle, default: `1024000`.
+- **Max Connection Rate**: Set the maximum rate of new connections the listener can accept per second, default: `1000`.
 - **Proxy Protocol**: Set to enable protocol V1/2 if EMQX is configured behind the [load balancer](../deploy/cluster/lb.md).
-- **Proxy Protocol Timeout**: Set the maximum amount of time in seconds that the gateway will wait for the proxy protocol package before closing the connection due to inactivity, default: **3s**.
+- **Proxy Protocol Timeout**: Set the maximum amount of time in seconds that the gateway will wait for the proxy protocol package before closing the connection due to inactivity, default: `3s`.
 
 **TCP Settings**
 
 - **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://erlang.org/doc/man/inet.html#setopts-2).
 - **Buffer**: Set the size of the buffer used to store incoming and outgoing packets, unit: KB.
-- **TCP_NODELAY**: Set whether to enable the `TCP_NODELAY` flat for the connection, that is, whether the client needs to wait for the acknowledgment of the previous data before sending additional data; default: **false**, optional values: **true**, **false**.
+- **TCP_NODELAY**: Set whether to enable the `TCP_NODELAY` flat for the connection, that is, whether the client needs to wait for the acknowledgment of the previous data before sending additional data; default: `false`, optional values: `true`, `false`.
 - **SO_REUSEADDR**: Set whether to allow local reuse of port numbers. <!--not quite sure what this means-->
-- **Send Timeout**: Set the maximum amount of time in seconds that the gateway will wait for the proxy protocol package before closing the connection due to inactivity, default: **15s**.
+- **Send Timeout**: Set the maximum amount of time in seconds that the gateway will wait for the proxy protocol package before closing the connection due to inactivity, default: `15s`.
 - **Send Timeout**: Set whether to close the connection if the send timeout.
 
 **SSL Settings **(for SSL listeners only)
@@ -219,9 +226,9 @@ You can set whether to enable the TLS Verify by setting the toggle switch. But b
 
 Then you can continue to set:
 
-- **SSL Versions**: Set the SSL versions supported, default, **tlsv1.3** **tlsv1.2**, **tlsv1.1**, and **tlsv1**.
-- **Fail If No Peer Cert**: Set whether EMQX will reject the connection if the client sends an empty certificate, default: **false**, optional values: **true**, **false**.
-- **Intermediate Certificate Depth**: Set the maximum number of non-self-issued intermediate certificates that can be included in a valid certification path following the peer certificate, default, **10**.
+- **SSL Versions**: Set the SSL versions supported, default, `tlsv1.3`, `tlsv1.2`, `tlsv1.1`, and `tlsv1`.
+- **Fail If No Peer Cert**: Set whether EMQX will reject the connection if the client sends an empty certificate, default: `false`, optional values: `true`, `false`.
+- **Intermediate Certificate Depth**: Set the maximum number of non-self-issued intermediate certificates that can be included in a valid certification path following the peer certificate, default, `10`.
 - **Key Password**: Set the user's password, used only when the private key is password-protected.
 
 ## Configure Authentication

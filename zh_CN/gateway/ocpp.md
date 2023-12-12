@@ -1,16 +1,20 @@
 # OCPP 协议网关
 
-EMQX OCPP 网关是一个消息协议转换器，它解决了 [OCPP](https://www.openchargealliance.org/) 和 MQTT 协议之间的差距，使用这些协议的客户端能够相互通信。
-
 ::: tip
 
-OCPP 网关基于 [OCPP v1.6](https://www.openchargealliance.org/protocols/ocpp-16/)
+EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
 
 :::
 
-## 快速开始
+[OCPP](https://www.openchargealliance.org/) (Open Charge Point Protocol) 是一个连接充电桩与中央管理系统的开放通信协议，旨在为电动汽车充电基础设施提供统一的通信规范。OCPP 网关是一个消息协议转换器，它弥补了 OCPP 和 MQTT 协议之间的差距，因此使用这些协议的客户端能够相互通信。
 
-在 EMQX 5.0 中，可以通过 Dashboard、HTTP API 和 配置文件 `emqx.conf` 来启用 OCPP 网关。
+EMQX 新增了 [OCPP 1.6-J](https://www.openchargealliance.org/protocols/ocpp-16/) 版本的协议网关，能够接入符合 OCPP 规范的各品牌充电桩设备，并通过规则引擎与数据集成、REST API 等方式与管理系统（Central System）集成，帮助用户快速构建电动汽车充电基础设施。
+
+本页介绍了如何在 EMQX 中配置和使用 OCPP 网关。
+
+## 启用 OCPP 网关
+
+在 EMQX 中，可以通过 Dashboard、HTTP API 和 配置文件 `emqx.conf` 来启用 OCPP 网关。
 
 以 Dashboard 为例，在 EMQX 仪表板上，点击左侧导航菜单中的 **管理** -> **网关**。在网关页面上，列出了所有支持的网关。找到 OCPP，点击配置。然后，您将被引导到初始化页面。
 
@@ -30,11 +34,9 @@ OCPP 网关基于 [OCPP v1.6](https://www.openchargealliance.org/protocols/ocpp-
 
 <img src="./assets/ocpp-enabled.png" alt="OCPP gateway enabled" style="zoom:50%;" />
 
-In EMQX 5.0, OCPP gateways can be configured and enabled through the Dashboard.
+以上配置也可通过 REST API 完成。
 
-The above configuration can also be configured with HTTP API:
-
-**Example Code:**
+**示例代码：**
 
 ```bash
 curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/ocpp' \
@@ -57,192 +59,196 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/ocpp' \
 }'
 ```
 
-## Work with OCPP Clients
+## 测试 OCPP 客户端连接
 
-After establishing the OCPP gateway, you can use the OCPP client tools to test the connections and ensure everything works as expected.
+一旦 OCPP 网关开始运行，您可以使用 OCPP 客户端工具进行连接测试并验证设置是否正确。
 
-Using [ocpp-go](https://github.com/lorenzodonini/ocpp-go) as an example, we will demonstrate in this section how to access it to the OCPP Gateway.
+以 [ocpp-go](https://github.com/lorenzodonini/ocpp-go) 为实际例子，本节展示了如何将其连接到 EMQX 中的 OCPP 网关。
 
-1. We need to prepare an MQTT client to interact with the OCPP Gateway. Using [MQTTX](https://mqttx.app/downloads) as an example, we will connect it to EMQX and subscribe to the topic `ocpp/#`
+1. 首先准备一个 MQTT 客户端以与 OCPP 网关交互。例如，使用 [MQTTX](https://mqttx.app/downloads)，配置它连接到 EMQX 并订阅主题 `ocpp/#`。
 
-![Create MQTT Connection](./assets/ocpp-mqttx-create-conn.png)
+   ![创建 MQTT 连接](./assets/ocpp-mqttx-create-conn.png)
 
-2. Run the ocpp-go client and connect to the OCPP Gateway:
+2. 运行 ocpp-go 客户端并与 OCPP 网关建立连接。
 
-Note: You need to replace `<host>` in the following command with the address of the machine where EMQX running.
+   **注意**：请将下面命令中的 `<host>` 替换为您的 EMQX 服务器地址。
 
-```shell
-docker run -e CLIENT_ID=chargePointSim -e CENTRAL_SYSTEM_URL=ws://<host>:33033/ocpp -it --rm --name charge-point ldonini/ocpp1.6-charge- point:latest
-```
+   ```shell
+   docker run -e CLIENT_ID=chargePointSim -e CENTRAL_SYSTEM_URL=ws://<host>:33033/ocpp -it --rm --name charge-point ldonini/ocpp1.6-charge-point:latest
+   ```
 
-After a successful connected to EMQX, a log similar to the following is printed:
-```
-INFO[2023-12-01T03:08:39Z] connecting to server logger=websocket
-INFO[2023-12-01T03:08:39Z] connected to server as chargePointSim logger=websocket
-INFO[2023-12-01T03:08:39Z] connected to central system at ws://172.31.1.103:33033/ocpp
-INFO[2023-12-01T03:08:39Z] dispatched request 1200012677 to server logger=ocppj
-```
+   成功连接后，将打印类似于以下的日志：
 
-3. At this point observe that MQTTX receives a message in the following format:
-```json
-Topic: ocpp/cp/chargePointSim
-{
-  "UniqueId": "1200012677",
-  "Payload": {
-    "chargePointVendor": "vendor1", "chargePointModel".
-    "chargePointModel": "model1"
-  },
-  "Action": "BootNotification"
-}
-```
-This message indicates that the ocpp-go client has connected to the OCPP Gateway and sent a request for a `BootNotification`.
+   ```css
+   INFO[2023-12-01T03:08:39Z] connecting to server logger=websocket
+   INFO[2023-12-01T03:08:39Z] connected to server as chargePointSim logger=websocket
+   INFO[2023-12-01T03:08:39Z] connected to central system at ws://172.31.1.103:33033/ocpp
+   INFO[2023-12-01T03:08:39Z] dispatched request 1200012677 to server logger=ocppj
+   ```
 
+3. 观察 MQTTX 收到的以下格式的消息：
 
-4. fill in the topic of the MQTTX `ocpp/cs/chargePointSim` message body with the following and send it.
+   ```json
+   Topic: ocpp/cp/chargePointSim
+   {
+     "UniqueId": "1200012677",
+     "Payload": {
+       "chargePointVendor": "vendor1",
+       "chargePointModel": "model1"
+     },
+     "Action": "BootNotification"
+   }
+   ```
 
-Note: The `UniqueId` needs to be filled in as the `UniqueId` received in the previous step.
+   此消息表明 ocpp-go 客户端已连接到 OCPP 网关并发起了 `BootNotification` 请求。
 
-```json
-{
-  "MessageTypeId": 3,
-  "UniqueId": "***",
-  "Payload": {
-    "currentTime": "2023-12-01T14:20:39+00:00",
-    "interval": 300,
-    "status": "Accepted"
-  }
-}
-```
+4. 在 MQTTX 中，编写以下内容的消息并发送到主题 `ocpp/cs/chargePointSim`。
 
-5. After that, you can see that MQTTX immediately receives a `StatusNotification` status report. This means that the OCPP client has successfully established a connection with the OCPP Gateway.
+   **注意**：确保将 `UniqueId` 替换为之前收到的消息中的 `UniqueId`。
 
-```json
-Topic: ocpp/cp/chargePointSim
-Payload:
-{
-  "UniqueId": "3062609974",
-  "Payload": {
-    "status": "Available",
-    "errorCode": "NoError",
-    "connectorId": 0
-  },
-  "MessageTypeId": 2,
-  "Action": "StatusNotification"
-}
-```
+   ```json
+   {
+     "MessageTypeId": 3,
+     "UniqueId": "***",
+     "Payload": {
+       "currentTime": "2023-12-01T14:20:39+00:00",
+       "interval": 300,
+       "status": "Accepted"
+     }
+   }
+   ```
 
-## Customize Your OCPP Gateway
+5. 随后，MQTTX 将接收到 `StatusNotification` 状态报告。这表明 OCPP 客户端已成功与 OCPP 网关建立连接。
 
-In addition to the default settings, EMQX provides a variety of configuration options to better accommodate your specific business requirements. This section offers an in-depth overview of the various fields available on the **Gateways** page.
+   ```json
+   Topic: ocpp/cp/chargePointSim
+   Payload:
+   {
+     "UniqueId": "3062609974",
+     "Payload": {
+       "status": "Available",
+       "errorCode": "NoError",
+       "connectorId": 0
+     },
+     "MessageTypeId": 2,
+     "Action": "StatusNotification"
+   }
+   ```
 
-### Basic Configuration
+## 自定义您的 ExProto 网关
 
-In the **Basic Configuration** tab, you can set the maximum header allowed, the header length allowed, and whether to enable statistics or set the MountPoint string for this gateway. See the texts below the screenshot for a comprehensive explanation of each field.
+除了默认设置外，EMQX 还提供了各种配置选项，以更好地适应您的特定业务需求。本节提供了关于**网关**页面上可用配置选项的深入概述。
 
-<!--with a screenshot to be added later-->
+### 基本配置
 
-1. **Default Heartbeat Interval**: The default Heartbeat time interval, default: `60s`.
+在 **基本配置** 标签页中，您可以设置允许的最大报文头长度、报文头长度，以及是否启用统计或为此网关设置 MountPoint 字符串。具体每个字段的详细说明，请参阅屏幕截图下方的文本。
 
-2. **Heartbeat Checking Times Backoff**: The backoff for heartbeat checking times, default: `1`.
+<!--稍后将添加屏幕截图-->
 
-3. **Upstream**: The Upload stream configuration group.
-  - **Topic**: The topic for Upload stream Call Request messages, default: `cp/${cid}`.
-  - **topic_override_mapping**: Upload stream topic override mapping by Message Name.
-  - **Reply Topic**: The topic for Upload stream Reply messages, default: `cp/${cid}/Reply`.
-  - **Error Topic**: The topic for Upload stream Error messages, default: `cp/${cid}/Reply`.
+- **默认心跳间隔**：默认的心跳时间间隔，默认为 `60s`。
 
-4. **Dnstream**: The Download stream configuration group.
-    - **Topic**: Download stream topic to receive request/control messages from EMQX. This value is a wildcard topic name that subscribed by every connected Charge Point.
-      default: `cs/${cid}`.
-    - **max_mqueue_len**: The maximum message queue length for download stream message delivery. default: `100`.
+- **心跳检测次数回退**：心跳检测次数的回退策略，默认为 `1`。
 
-5. **Message Format Checking**: Whether to enable message format legality checking. EMQX checks the message format of the upload stream and download stream against the format defined in json-schema. When the check fails, emqx will reply with a corresponding answer message. The checking strategy can be one of the following values:
-    - `all`: check all messages
-    - `upstream_only`: check upload stream messages only
-    - `dnstream_only`: check download stream messages only
-    - `disable`: don't check any messages
+- **上行（Upstream）**：上传流配置组。
 
-6. **Json Schema Directory**: JSON Schema directory for OCPP message definitions, default: `${application}/priv/schemas`.
+  - **主题（Topic）**：上传流呼叫请求消息的主题，默认为 `cp/${cid}`。
+  - **topic_override_mapping**：根据消息名称重写上传流主题。
+  - **回复主题（Reply Topic）**：上传流回复消息的主题，默认为 `cp/${cid}/Reply`。
+  - **错误主题（Error Topic）**：上传流错误消息的主题，默认为 `cp/${cid}/Reply`。
 
-7. **Json Schema Id Prefix**: The ID prefix for the OCPP message schemas, default: `urn:OCPP:1.6:2019:12:`.
+- **下行（Dnstream）**：下载流配置组。
 
-8. **Idle Timeout**: Set the maximum amount of time in seconds that the gateway will wait for a OCPP frame before closing the connection due to inactivity.
+  - **主题（Topic）**：接收来自 EMQX 的请求/控制消息的下载流主题。该值为每个连接的充电点订阅的通配符主题名，默认为 `cs/${cid}`。
+  - **max_mqueue_len**：下载流消息传递的最大消息队列长度，默认为 `100`。
 
-9. **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: `true`, optional values: `true`, `false`.
+- **消息格式检查**：是否启用消息格式合法性检查。EMQX 会根据 json-schema 定义的格式检查上传流和下载流的消息格式。当检查失败时，EMQX 将回复相应的答复消息。检查策略可以是以下值之一：
 
-10. **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, *ocpp/*.
+  - `all`：检查所有消息。
+  - `upstream_only`：仅检查上传流消息。
+  - `dnstream_only`：仅检查下载流消息。
+  - `disable`：不检查任何消息。
 
-   **Note**: This topic prefix is managed by the gateway. Clients do not need to add this prefix explicitly when publishing and subscribing.
+- **Json Schema 目录**：OCPP 消息定义的 JSON Schema 目录，默认为 `${application}/priv/schemas`。
 
-### Add Listeners
+- **Json Schema ID 前缀**：OCPP 消息模式的 ID 前缀，默认为 `urn:OCPP:1.6:2019:12:`。
 
-One Websocket listener with the name of **default** is already configured on port `33033`, which allows a maximum of 16 acceptors in the pool, and support up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings, click **Delete** to delete the listener, or click **+ Add Listener** to add a new listener.
+- **空闲超时时间**：设置网关等待 OCPP 帧的最大时间（以秒为单位），在因不活动而关闭连接之前，网关将等待此设定的时间。
+
+- **启用统计**：设置是否允许网关收集和报告统计数据；默认为 `true`，可选值为 `true`、`false`。
+
+- **挂载点**：设置一个字符串，该字符串作为所有主题的前缀，在发布或订阅时使用，提供了一种在不同协议之间实现消息路由隔离的方式，例如 *ocpp/*。
+
+  **注意**：这个主题前缀由网关管理。客户端在发布和订阅时不需要显式添加此前缀。
+
+### 添加监听器
+
+名为 **default** 的 Websocket 监听器已在端口 `33033` 上配置，允许池中最多 16 个接收器，并支持多达 1,024,000 个并发连接。您可以点击 **设置** 进行更多自定义设置，点击 **删除** 来删除监听器，或点击 **+ 添加监听器** 来添加新的监听器。
 
 ::: tip
 
-The OCPP gateway only supports Websocket and Websocket over TLS types of listeners.
+OCPP 网关仅支持 Websocket 和 TLS 上的 Websocket 类型监听器。
 
 :::
 
-Click **Add Listener** to open **Add Listener** page, where you can continue with the following configuration fields:
+点击 **添加监听器** 打开 **添加监听器** 页面，在此您可以继续进行以下配置字段：
 
-**Basic settings**
+**基本设置**
 
-- **Name**: Set a unique identifier for the listener.
-- **Type**: Select the protocol type, for OCPP, this can be either **ws** or **wss**.
-- **Bind**: Set the port number on which the listener accepts incoming connections.
-- **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols.
+- **名称**：为监听器设置一个唯一标识符。
+- **类型**：选择协议类型，对于 OCPP，可以是 `ws` 或 `wss`。
+- **绑定**：设置监听器接受传入连接的端口号。
+- **MountPoint**（可选）：设置一个字符串，该字符串作为所有主题的前缀，在发布或订阅时使用，提供了一种在不同协议之间实现消息路由隔离的方式。
 
-**Listener Settings**
+**监听器设置**
 
-- **Path**: Sets the path prefix for the connection address. The client must carry this entire address for the connection, default value `/ocpp`.
-- **Acceptor**: Set the size of the acceptor pool, default **16**.
-- **Max Connections**: Set the maximum number of concurrent connections that the listener can handle, default: **1024000**.
-- **Max Connection Rate**: Set the maximum rate of new connections the listener can accept per second, default: **1000**.
-- **Proxy Protocol**: Set to enable protocol V1/2 if EMQX is configured behind the [load balancer](../deploy/cluster/lb.md).
-- **Proxy Protocol Timeout**: Set the maximum amount of time in seconds that the gateway will wait for the proxy protocol package before closing the connection due to inactivity, default: **3s**.
+- **路径**：设置连接地址的路径前缀。客户端必须携带整个地址进行连接，默认值 `/ocpp`。
+- **接收器**：设置接收器池的大小，默认为 `16`。
+- **最大连接数**：设置监听器可以处理的最大并发连接数，默认为 `1024000`。
+- **最大连接率**：设置监听器每秒可以接受的新连接的最大速率，默认为 `1000`。
+- **代理协议**：如果 EMQX 配置在[负载均衡器](../deploy/cluster/lb.md)后面，设置启用协议 V1/2。
+- **代理协议超时**：设置网关等待代理协议包的最大时间（以秒为单位），在因不活动而关闭连接之前，网关将等待此设定的时间，默认为 `3s`。
 
-**TCP Settings**
+**TCP 设置**
 
-- **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://erlang.org/doc/man/inet.html#setopts-2).
-- **Buffer**: Set the size of the buffer used to store incoming and outgoing packets, unit: KB.
-- **TCP_NODELAY**: Set whether to enable the `TCP_NODELAY` flat for the connection, that is, whether the client needs to wait for the acknowledgment of the previous data before sending additional data; default: **false**, optional values: **true**, **false**.
-- **SO_REUSEADDR**: Set whether to allow local reuse of port numbers. <!--not quite sure what this means-->
-- **Send Timeout**: Set the maximum amount of time in seconds that the gateway will wait for the proxy protocol package before closing the connection due to inactivity, default: **15s**.
-- **Send Timeout**: Set whether to close the connection if the send timeout.
+- **ActiveN**：设置套接字的 `{active, N}` 选项，即套接字可以主动处理的传入数据包的数量。详情参见 [Erlang 文档 - setopts/2](https://erlang.org/doc/man/inet.html#setopts-2)。
+- **缓冲区**：设置用于存储传入和传出数据包的缓冲区大小，单位：KB。
+- **TCP_NODELAY**：设置是否启用连接的 `TCP_NODELAY` 标志，即客户端是否需要等待前一数据的确认才能发送额外数据；默认为 `false`，可选值为 `true`、`false`。
+- **SO_REUSEADDR**：设置是否允许本地重用端口号。
+- **发送超时**：设置网关等待发送超时的最大时间（以秒为单位），默认为 `15s`。
+- **发送超时**：设置是否在发送超时时关闭连接。
 
-**SSL Settings **(for SSL listeners only)
+**SSL 设置**（仅适用于 SSL 监听器）
 
-You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
+您可以通过设置开关来设置是否启用 TLS 验证。但在此之前，您需要配置相关的 **TLS 证书**、**TLS 密钥** 和 **CA 证书** 信息，可以通过输入文件内容或使用 **选择文件** 按钮上传。详情参见 [启用 SSL/TLS 连接](../network/emqx-mqtt-tls.md)。
 
-Then you can continue to set:
+然后，您可以继续设置：
 
-- **SSL Versions**: Set the SSL versions supported, default, **tlsv1.3** **tlsv1.2**, **tlsv1.1**, and **tlsv1**.
-- **Fail If No Peer Cert**: Set whether EMQX will reject the connection if the client sends an empty certificate, default: **false**, optional values: **true**, **false**.
-- **Intermediate Certificate Depth**: Set the maximum number of non-self-issued intermediate certificates that can be included in a valid certification path following the peer certificate, default, **10**.
-- **Key Password**: Set the user's password, used only when the private key is password-protected.
+- **SSL 版本**：设置支持的 SSL 版本，默认为 `tlsv1.3`、`tlsv1.2`、`tlsv1.1` 和 `tlsv1`。
+- **如果无对等证书则拒绝**：设置如果客户端发送空证书时，EMQX 是否拒绝连接，默认为 `false`，可选值为 `true`、`false`。
+- **中间证书深度**：设置可以包含在跟随对等证书的有效认证路径中的非自签发中间证书的最大数量，默认为 `10`。
+- **密钥密码**：设置用户的密码，仅在私钥受密码保护时使用。
 
-## Configure Authentication
+### 配置认证
 
-As the concept of username and password is already defined in the connection message of the OCPP protocol, the OCPP supports a variety of authenticator types, such as:
+由于用户名和密码的概念已在 OCPP 协议的连接消息中定义，OCPP 支持多种认证器类型，例如：
 
-- [Built-in Database Authentication](../access-control/authn/mnesia.md)
-- [MySQL Authentication](../access-control/authn/mysql.md)
-- [MongoDB Authentication](../access-control/authn/mongodb.md)
-- [PostgreSQL Authentication](../access-control/authn/postgresql.md)
-- [Redis Authentication](../access-control/authn/redis.md)
-- [HTTP Server Authentication](../access-control/authn/http.md)
-- [JWT Authentication](../access-control/authn/jwt.md)
+- [内置数据库认证](../access-control/authn/mnesia.md)
+- [MySQL 认证](../access-control/authn/mysql.md)
+- [MongoDB 认证](../access-control/authn/mongodb.md)
+- [PostgreSQL 认证](../access-control/authn/postgresql.md)
+- [Redis 认证](../access-control/authn/redis.md)
+- [HTTP 服务器认证](../access-control/authn/http.md)
+- [JWT 认证](../access-control/authn/jwt.md)
 
-OCPP gateway uses the information in the Basic Authentication of the Websocket handshake message to generate the authentication fields for the client:
+OCPP 网关使用 Websocket 握手消息中的基本认证信息来生成客户端的认证字段：
 
-- Client ID: Valu of the part of the connection address after the fixed path prefix.
-- Username: Value of the Username in the Basic Authentication.
-- Password: Value of the Password in the Basic Authentication.
+- 客户端 ID：连接地址固定路径前缀后部分的值。
+- 用户名：基本认证中的用户名值。
+- 密码：基本认证中的密码值。
 
-You can also use HTTP API to create a built-in database authentication for a OCPP gateway:
+您还可以使用 HTTP API 为 OCPP 网关创建内置数据库认证：
 
-**Example Code:**
+**示例代码：**
 
 ```bash
 curl -X 'POST' \
@@ -263,8 +269,8 @@ curl -X 'POST' \
 
 ::: tip
 
-Unlike the MQTT protocol, **the gateway only supports the creation of an authenticator, not a list of authenticators (or an authentication chain)**.
+与 MQTT 协议不同，**网关仅支持创建一个认证器，而不支持创建认证器列表（或认证链）**。
 
-When no authenticator is enabled, all OCPP clients are allowed to log in.
+当没有启用任何认证器时，所有 OCPP 客户端都被允许登录。
 
 :::
