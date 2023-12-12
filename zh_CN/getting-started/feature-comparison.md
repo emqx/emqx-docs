@@ -8,7 +8,7 @@
 <table>
 <thead>
   <tr>
-    <th rowspan="2">核型/企业版功能</th>
+    <th rowspan="2">功能</th>
     <th colspan="2">自托管模式</th>
     <th colspan="2">云服务模式</th>
     <th rowspan="2">备注和链接</th>
