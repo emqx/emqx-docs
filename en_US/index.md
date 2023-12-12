@@ -108,10 +108,11 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
     <td>✔️ Pay as you go<br>✔️ Free quota every month<br>✔️ 1000 maximum connections<br>✔️ Start deployment in seconds<br>✔️ Auto scaling<br>✔️ 8/5 global technical support</td>
     <td>✔️ 14-days free trial<br>✔️ Hourly billing<br>✔️ Multi-cloud regions worldwide<br>✔️ Flexible specifications<br>✔️ VPC peering, NAT gateway, load balance and more<br>✔️ Out-of-box integration with over 40+ cloud services<br>✔️ 24/7 global technical support<br> </td>
     <td>✔️ Apache Version 2.0<br>✔️ MQTT over QUIC<br>✔️ Data storage in memory<br>✔️ Supports Webhook and MQTT data bridge.<br>✔️ Audit log and single sign-on (SSO)<br>✔️ Multi-protocol gateways, including MQTT-SN, STOMP and CoAP<br>✔️ Open source community<br> </td>
-    <td>✔️ Commercial license (Business source license)<br>✔️ MQTT over QUIC<br>✔️ Data persistence in RocksDB<br>✔️ Data integration with 40+ enterprise systems, including newly supported Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis etc.<br>✔️ Audit log and single sign-on (SSO)<br>✔️ Role-Based Access Control (RBAC)<br>✔️ File transfer<br>✔️ Message codec<br>✔️ Multi-protocol gateways, including newly supported OCPP, JT/808 and GBT32960<br>✔️ 24/7 global technical support<br> </td>
+    <td>✔️ Commercial license (Business source license)<br>✔️ MQTT over QUIC<br>✔️ Data persistence in RocksDB<br>✔️ Data integration with 40+ enterprise systems, including Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis etc.<br>✔️ Audit log and single sign-on (SSO)<br>✔️ Role-Based Access Control (RBAC)<br>✔️ File transfer<br>✔️ Message codec<br>✔️ Multi-protocol gateways, with extra support on OCPP, JT/808 and GBT32960<br>✔️ 24/7 global technical support<br> </td>
   </tr>
 </tbody>
 </table>
+
 
 {% endemqxce %}
 

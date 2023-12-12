@@ -95,7 +95,7 @@ This page lists features supported across different deployment types in detail.
   </tr>
   <tr>
     <td><b>Flow Designer</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
@@ -153,6 +153,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 
 
 
@@ -479,7 +480,7 @@ via Rule Engine and Data Bridge</a></td>
   </tr>
   <tr>
     <td><b>LwM2M</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -487,7 +488,7 @@ via Rule Engine and Data Bridge</a></td>
   </tr>
   <tr>
     <td><b>ExProto</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -520,6 +521,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 
 ## Security
 
@@ -626,8 +628,16 @@ via Rule Engine and Data Bridge</a></td>
     <td>N/A</td>
     <td><a href="https://www.emqx.io/docs/en/latest/access-control/authn/scram.html">MQTT 5.0 Enhanced Authentication</a></td>
   </tr>
+   <tr>
+    <td><b>LDAP Authentication</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td> </td>
+  </tr>
   <tr>
-    <td><b>PSK</b></td>
+    <td><b>PSK Authentication</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -649,14 +659,6 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><a href="https://www.emqx.io/docs/en/latest/dashboard/sso.html">Single Sign-On</a> </td>
-  </tr>
-  <tr>
-    <td><b>LDAP</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td> </td>
   </tr>
   <tr>
     <td><b>RBAC</b></td>
@@ -722,7 +724,7 @@ via Rule Engine and Data Bridge</a></td>
   </tr>
   <tr>
     <td><b>Data Bridge</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -820,7 +822,7 @@ via Rule Engine and Data Bridge</a></td>
   </tr>
   <tr>
     <td><b>HTTP Server</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -920,6 +922,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 ## Rule Engine
 
 <div style="text-align: center;">
@@ -1226,7 +1229,7 @@ via Rule Engine and Data Bridge</a></td>
   </tr>
   <tr>
     <td><b>Datadog</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
@@ -1235,6 +1238,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 
 ## Cloud Native and K8S
 
