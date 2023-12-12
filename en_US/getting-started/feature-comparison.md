@@ -8,7 +8,7 @@ This page lists features supported across different deployment types in detail.
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Core/Enterprise Features</th>
+    <th rowspan="2">Features</th>
     <th colspan="2">Self-Hosted</th>
     <th colspan="2">MQTT as a Service</th>
     <th rowspan="2">Notes and Links</th>
