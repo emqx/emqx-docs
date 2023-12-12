@@ -95,7 +95,7 @@
   </tr>
   <tr>
     <td><b>Flow 设计器</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
@@ -154,7 +154,6 @@
 </div>
 
 
-
 ## 可扩展性与性能
 
 <div style="text-align: center;">
@@ -192,8 +191,8 @@
   </tr>
   <tr>
     <td><b>可靠性</b></td>
-    <td><span style="font-weight:normal">数据存储在内存中</span></td>
-    <td><span style="font-weight:normal">数据持久化到 RocksDB</span></td>
+    <td><span style="font-weight:normal">基于内存的会话存储</span></td>
+    <td><span style="font-weight:normal">基于 RocksDB 的会话持久化</span></td>
     <td><span style="font-weight:normal">N/A</span></td>
     <td><span style="font-weight:normal">N/A</span></td>
     <td><a href="https://www.emqx.com/zh/blog/mqtt-persistence-based-on-rocksdb">基于 RocksDB 实现高可靠、低时延的 MQTT 数据持久化</a></td>
@@ -225,6 +224,7 @@
 </tbody>
 </table>
 </div>
+
 
 ## 集群架构
 
@@ -478,7 +478,7 @@
   </tr>
   <tr>
     <td><b>LwM2M</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -486,7 +486,7 @@
   </tr>
   <tr>
     <td><b>ExProto</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -519,6 +519,7 @@
 </tbody>
 </table>
 </div>
+
 
 ## 安全
 
@@ -627,7 +628,15 @@
     <td><a href="https://www.emqx.io/docs/zh/latest/access-control/authn/scram.html">MQTT 5.0 增强认证</a></td>
   </tr>
   <tr>
-    <td><b>PSK</b></td>
+    <td><b>LDAP 认证</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>PSK 验证</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -649,14 +658,6 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><a src="https://www.emqx.io/docs/zh/latest/dashboard/sso.html">单点登录（SSO)</a> </td>
-  </tr>
-  <tr>
-    <td><b>LDAP</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
-    <td> </td>
   </tr>
   <tr>
     <td><b>RBAC</b></td>
@@ -694,7 +695,6 @@
 </table>
 </div>
 
-
 ## 数据集成
 
 <div style="text-align: center;">
@@ -722,7 +722,7 @@
   </tr>
   <tr>
     <td><b>数据桥接</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -820,7 +820,7 @@
   </tr>
   <tr>
     <td><b>HTTP Server</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -920,6 +920,7 @@
 </tbody>
 </table>
 </div>
+
 ## 规则引擎
 
 <div style="text-align: center;">
@@ -998,8 +999,6 @@
 </tbody>
 </table>
 </div>
-
-
 ## 可扩展性
 
 <div style="text-align: center;">
@@ -1062,8 +1061,6 @@
 </tbody>
 </table>
 </div>
-
-
 ## 可操作性
 
 <div style="text-align: center;">
@@ -1227,7 +1224,7 @@
   </tr>
   <tr>
     <td><b>Datadog</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /> 已规划</td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /> 已规划</td>
@@ -1236,6 +1233,7 @@
 </tbody>
 </table>
 </div>
+
 
 ## 云原生与 K8S
 
@@ -1283,8 +1281,6 @@
 </tbody>
 </table>
 </div>
-
-
 ## 云平台支持
 
 <div style="text-align: center;">
@@ -1354,8 +1350,6 @@
 </tbody>
 </table>
 </div>
-
-
 ## MQTT 开发工具与 SDKs
 
 <div style="text-align: center;">

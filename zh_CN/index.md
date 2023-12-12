@@ -111,11 +111,10 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
     <td>✔️ 即用即付<br>✔️ 每月免费的使用额度<br>✔️ 最高 1000 同时在线连接<br>✔️ 极速部署<br>✔️ 自动伸缩<br>✔️ 5x8 技术支持</td>
     <td>✔️ 14 天免费试用<br>✔️ 按小时计费<br>✔️ 主流云平台多区域部署<br>✔️ 多种连接规格可选，连接无上限<br>✔️ VPC 对等连接, 数据集成等更多功能<br>✔️ 40+ 种完备的数据集成链路<br>✔️ 7x24 技术支持<br> </td>
     <td>✔️ Apache Version 2.0<br>✔️ MQTT over QUIC<br>✔️ 数据存储在内存中<br>✔️ 支持 Webhook 和 MQTT 数据桥接<br>✔️ 多协议网关支持，包括 MQTT-SN, STOMP 和 CoAP<br>✔️ 社区和论坛<br> </td>
-    <td>✔️ 商业许可证（商业源代码许可证）<br>✔️ 数据持久化到 RocksDB<br>✔️ 与 40 多种企业系统双向数据集成，包括最新支持的 Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis 等<br>✔️ 审计日志和单点登录<br>✔️ 基于角色的访问控制 （RBAC）<br>✔️ 文件传输<br>✔️ 消息编解码<br>✔️ 多协议网关支持，包括新增的 OCPP, JT/808 和 GBT32960 支持<br>✔️ 7x24 技术支持<br> </td>
+    <td>✔️ 商业许可证（商业源代码许可证）<br>✔️ 基于 RocksDB 的会话持久化<br>✔️ 与 40 多种企业系统双向数据集成，包括 Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis 等<br>✔️ 审计日志和单点登录<br>✔️ 基于角色的访问控制 （RBAC）<br>✔️ 文件传输<br>✔️ 消息编解码<br>✔️ 多协议网关支持，包括额外支持 OCPP, JT/808 和 GBT32960<br>✔️ 7x24 技术支持<br> </td>
   </tr>
 </tbody>
 </table>
-
 
 {% endemqxce %}
 
