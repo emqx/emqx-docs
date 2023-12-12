@@ -84,7 +84,6 @@ EMQX can be easily deployed on-premises or in public clouds using **Kubernetes O
 
 EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud Serverless and EMQX Dedicated Cloud) and two self-hosted options (EMQX Open Source and EMQX Enterprise). To help you choose the best deployment option for your requirements, the following table lists a comparison of feature support across different deployment types. For a comparison of supported features in detail, refer to [Feature Comparison](./getting-started/feature-comparison.md).
 
-<div style="text-align: center;">
 <table>
 <thead>
   <tr>
@@ -113,7 +112,6 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
   </tr>
 </tbody>
 </table>
-</div>
 
 {% endemqxce %}
 
