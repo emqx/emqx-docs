@@ -121,9 +121,9 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
   <tr>
     <td><b>数据集成（开箱即用）</b></td>
     <td>不支持</td>
-    <td style="text-align:left;">支持 40 多种数据集成，包括 Webhook、MQTT 数据桥接、MySQL、PostgreSQL、Kafka、MongoDB、Oracle 等。</td>
-    <td style="text-align:left;">支持 Webhook 和 MQTT 数据桥接</td>
-    <td style="text-align:left;">支持 40 多种数据集成，包括 Webhook、MQTT 数据桥接、MySQL、PostgreSQL、Kafka、MongoDB、Oracle 等。</td>
+    <td style="text-align:left;">支持 40 多种数据集成，包括 Webhook、MQTT 桥接、MySQL、PostgreSQL、Kafka、MongoDB、Oracle 等。</td>
+    <td style="text-align:left;">支持 Webhook 和 MQTT 桥接</td>
+    <td style="text-align:left;">支持 40 多种数据集成，包括 Webhook、MQTT 桥接、MySQL、PostgreSQL、Kafka、MongoDB、Oracle 等。</td>
   </tr>
   <tr>
     <td><b>MQTT 5.0 Broker</b></td>

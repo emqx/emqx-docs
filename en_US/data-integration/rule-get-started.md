@@ -120,5 +120,5 @@ You can click the rule ID on the **Flows** page or **Rules** page to view the ex
 
 Note: If you update the rule action or redefine the data source, the statistics listed on the page below will reset and start fresh.
 
-![Rule Statistics](./assets/rules/rule_statistics.png)
+![Rule Statistics](assets/rule_statistics.png)
 

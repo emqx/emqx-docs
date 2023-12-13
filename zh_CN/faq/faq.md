@@ -22,7 +22,7 @@ EMQX 公司主要提供[三个产品](https://www.emqx.com/zh/products/emqx)，�
 
 - EMQX Broker：EMQX 开源版，提供 MQTT 协议、CoAP 和 LwM2M 等常见物联网协议的支持；
 
-- EMQX Enterprise：EMQX 企业版，在开源版基础上，增加了数据持久化 Redis、MySQL、MongoDB 或 PostgreSQL，数据桥接转发 Kafka，LoRaWAN 支持，监控管理，Kubernetes 部署等方面的支持；支持百万级并发连接；
+- EMQX Enterprise：EMQX 企业版，在开源版基础上，增加了数据持久化 Redis、MySQL、MongoDB 或 PostgreSQL，Sink 转发 Kafka，LoRaWAN 支持，监控管理，Kubernetes 部署等方面的支持；支持百万级并发连接；
 
 - EMQX Cloud：[EMQX Cloud](https://www.emqx.com/zh/cloud) 是 EMQ 公司推出的一款面向物联网领域的 MQTT 消息中间件产品。作为全球首个全托管的 MQTT 5.0 公有云服务，EMQX Cloud 提供了一站式运维代管、独有隔离环境的 MQTT 消息服务。在万物互联的时代，EMQX Cloud 可以帮助您快速构建面向物联网领域的行业应用，轻松实现物联网数据的采集、传输、计算和持久化。
 
@@ -309,7 +309,7 @@ EMQX 支持多节点集群，集群下整个系统的性能会成倍高于单节
 
 ## EMQX 能把接入的 MQTT 消息保存到数据库吗？
 
-EMQX 企业版支持消息持久化，可以将消息保存到数据库，请参考 [数据桥接](../data-integration/data-bridges.md)。
+EMQX 企业版支持消息持久化，可以将消息保存到数据库，请参考 [Sink 与 Source](../data-integration/data-bridges.md)。
 
 ## 在服务器端能够直接断开一个 MQTT 连接吗？
 
@@ -322,7 +322,7 @@ EMQX 企业版支持消息持久化，可以将消息保存到数据库，请参
 
 能。目前 EMQX 企业版提供了内置的 Kafka 桥接方式，支持把消息桥接至 Kafka 进行流式处理。
 
-EMQX 使用 Kafka 参照 [数据桥接 - Apache Kafka](../data-integration/data-bridge-kafka.md)。
+EMQX 使用 Kafka 参照 [Sink - Apache Kafka](../data-integration/data-bridge-kafka.md)。
 
 ## EMQX 支持集群自动发现吗？有哪些实现方式？
 
@@ -330,7 +330,7 @@ EMQX 支持集群自动发现。集群可以通过手动配置或自动配置的
 
 ## 我可以把 MQTT 消息从 EMQX 转发其他消息中间件吗？例如 RabbitMQ？
 
-EMQX 支持转发消息到其他消息中间件，通过 EMQX 提供的桥接方式就可以做基于主题级别的配置，从而实现主题级别的消息转发。请参考 [数据桥接](../data-integration/data-bridges.md)。
+EMQX 支持转发消息到其他消息中间件，通过 EMQX 提供的桥接方式就可以做基于主题级别的配置，从而实现主题级别的消息转发。请参考 [Sink 与 SOurce](../data-integration/data-bridges.md)。
 
 ## 我可以把消息从 EMQX 转到公有云 MQTT 服务上吗？比如 AWS 或者 Azure 的 IoT Hub？
 
@@ -338,7 +338,7 @@ EMQX 可以转发消息到标准 MQTT Broker，包括其他 MQTT 实现、公有
 
 ## MQTT Broker（比如 Mosquitto）可以转发消息到 EMQX 吗？
 
-Mosquitto 可以配置转发消息到 EMQX，请参考[数据桥接 - MQTT](../data-integration/data-bridge-mqtt.md)。
+Mosquitto 可以配置转发消息到 EMQX，请参考[Sink - MQTT](../data-integration/data-bridge-mqtt.md)。
 
 ## 我想跟踪特定消息的发布和订阅过程，应该如何做？
 

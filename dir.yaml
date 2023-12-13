@@ -397,9 +397,9 @@
           title_cn: 数据集成
           path: dashboard/bridgeoverview
           children:
-            - dashboard/bridge
-            - dashboard/rules
             - dashboard/flows
+            - dashboard/rules
+            - dashboard/bridge
         - dashboard/configuration
         - dashboard/extensions
         - dashboard/diagnose
