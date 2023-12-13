@@ -435,13 +435,13 @@
           children:
             - title_en: Metrics
               title_ch: 指标
-              path: open-telemetry/metrics
+              path: observability/open-telemetry/metrics
             - title_en: Logs
               title_cn: 日志
-              path: open-telemetry/logs
+              path: observability/open-telemetry/logs
             - title_en: Traces
               title_cn: 追踪
-              path: open-telemetry/traces
+              path: observability/open-telemetry/traces
     - title_en: Backup and Restore
       title_cn: 备份与恢复
       path: operations/backup-restore
