@@ -76,7 +76,7 @@ EMQX 5.x 的规则引擎在原有 SQL 的基础上集成了 [jq](https://stedola
 
 同时，EMQX 5.0 还提供了数据集成可视化查看能力（Flows）。通过 Dashboard 页面，您可以清晰看到设备与云端之间的物联网数据处理和流转步骤。
 
-关于 EMQX 支持的桥接类型以及如何配置，可阅读[Sink 与 Source](../data-integration/data-bridges.md)。
+关于 EMQX 支持的桥接类型以及如何配置，可阅读[数据集成](../data-integration/data-bridges.md)。
 
 ## 灵活多样认证授权
 

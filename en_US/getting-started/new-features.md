@@ -88,7 +88,7 @@ Leveraging the bidirectional data bridging feature, you can process and send you
 
 EMQX visualizes the data integration process with the Flows feature on Dashboard. Now you can easily check how the rules engine processes IoT data and how data flows to external data services or devices.
 
-On different data bridging that EMQX supports and how to configure, see [Sink and Source](../data-integration/data-bridges.md).
+On different data bridging that EMQX supports and how to configure, see [Data Integration](../data-integration/data-bridges.md).
 
 ## Flexible Authentication/Authorization
 

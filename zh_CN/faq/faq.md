@@ -309,7 +309,7 @@ EMQX 支持多节点集群，集群下整个系统的性能会成倍高于单节
 
 ## EMQX 能把接入的 MQTT 消息保存到数据库吗？
 
-EMQX 企业版支持消息持久化，可以将消息保存到数据库，请参考 [Sink 与 Source](../data-integration/data-bridges.md)。
+EMQX 企业版支持消息持久化，可以将消息保存到数据库，请参考[数据集成](../data-integration/data-bridges.md)。
 
 ## 在服务器端能够直接断开一个 MQTT 连接吗？
 
@@ -330,7 +330,7 @@ EMQX 支持集群自动发现。集群可以通过手动配置或自动配置的
 
 ## 我可以把 MQTT 消息从 EMQX 转发其他消息中间件吗？例如 RabbitMQ？
 
-EMQX 支持转发消息到其他消息中间件，通过 EMQX 提供的桥接方式就可以做基于主题级别的配置，从而实现主题级别的消息转发。请参考 [Sink 与 SOurce](../data-integration/data-bridges.md)。
+EMQX 支持转发消息到其他消息中间件，通过 EMQX 提供的桥接方式就可以做基于主题级别的配置，从而实现主题级别的消息转发。请参考[数据集成](../data-integration/data-bridges.md)。
 
 ## 我可以把消息从 EMQX 转到公有云 MQTT 服务上吗？比如 AWS 或者 Azure 的 IoT Hub？
 

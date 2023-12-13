@@ -1,6 +1,6 @@
 # EMQX Rules
 
-EMQX provides users with the Rules feature for data processing, which works in conjunction with [data bridges](./data-bridges.md) to extract, filter, enrich, transform, and store IoT data. This accelerates application integration and drives business innovation.
+EMQX provides users with the Rules feature for data processing, which works in conjunction with [Data Integration](./data-bridges.md) to extract, filter, enrich, transform, and store IoT data. This accelerates application integration and drives business innovation.
 
 <img src="./assets/rule-engine.png" alt="SQL-based IoT Rule Engine" style="zoom:30%;" />
 

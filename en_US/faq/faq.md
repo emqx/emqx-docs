@@ -345,7 +345,7 @@ EMQX supports clustering. The EMQX performance can be scale-out with the increas
 
 ## Can EMQX store messages to database?
 
-The EMQX Enterprise supports data persistence. Please refer to [Sink and Source](../data-integration/data-bridges.md).
+The EMQX Enterprise supports data persistence. Please refer to [Data Integration](../data-integration/data-bridges.md).
 
 ## Can I disconnect an MQTT connection from EMQX server?
 
@@ -364,7 +364,7 @@ EMQX supports cluster auto discovery. EMQX clustering can be done manually or au
 
 ## Can I forward MQTT messages EMQX to other MQTT broker, like RabbitMQ?
 
-EMQX support forward messages to other MQTT broker. Using MQTT bridge, EMQX can forward messages of interested topics to other broker. Please refer to [Sink and Source](../data-integration/data-bridges.md).
+EMQX support forward messages to other MQTT broker. Using MQTT bridge, EMQX can forward messages of interested topics to other broker. Please refer to [Data Integration](../data-integration/data-bridges.md).
 
 ## Can I forward messages from EMQX to MQTT services hosted on public cloud?
 

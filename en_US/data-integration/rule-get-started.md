@@ -100,7 +100,7 @@ The console output action should only be used for debugging. If it is used in th
 
 ### Add Forwarding with Data Bridge Action
 
-You can also add actions to forward the processed results with data bridges. All you need is to select the target Data bridge from the Data bridge drop-down list. For details on creating data bridges in EMQX, see [the documentation for Data Bridges](./data-bridges.md).
+You can also add actions to forward the processed results with data bridges. All you need is to select the target Data bridge from the Data bridge drop-down list. For details on creating data bridges in EMQX, see [the documentation for Data Integration](./data-bridges.md).
 
 ## Test the Rule
 

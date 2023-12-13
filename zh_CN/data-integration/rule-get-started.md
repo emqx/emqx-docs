@@ -95,7 +95,7 @@ SQL 处理结果将以 JSON 形式呈现在**输出结果**部分。SQL 处理�
 
 ## 添加发送到 Sink 的动作
 
-您还可以添加使用 Sink 转发数据的动作，有关每种 Sink 的详细信息，请参阅 [Sink](./data-bridges.md)。
+您还可以添加使用 Sink 转发数据的动作，有关每种 Sink 的详细信息，请参阅[数据集成](./data-bridges.md)。
 
 ## 测试规则
 
