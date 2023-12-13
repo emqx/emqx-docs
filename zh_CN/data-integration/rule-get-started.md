@@ -12,7 +12,11 @@
 
 ::: tip
 
+{% emqxee %}
+
 本教程假设 payload 是 JSON 格式。您也可以使用[编解码](./schema-registry.md)来处理其他格式的消息。
+
+{% endemqxee %}
 
 EMQX 内置了丰富的 SQL 语句示例，以帮助您入门。您可以在 **SQL 编辑器**下点击 **SQL 示例**按钮进行探索。有关 SQL 语法和用法的更多详细信息，请参阅 [SQL 语法与示例](./rule-sql-syntax.md)。
 
