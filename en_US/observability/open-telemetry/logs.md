@@ -1,104 +1,97 @@
-# EMQX OpenTelemetry Logs
+# Integrate OpenTelemetry for Log Management
 
-EMQX 5.4 introduced a special log handler that allows to format log events according to (Open Telemetry log data model](https://opentelemetry.io/docs/specs/otel/logs/data-model/) and export them to the configured Open Telemetry collector or backend.
+This page provides a comprehensive guide on integrating the OpenTelemetry log handler with EMQX for advanced log management. It covers setting up the OpenTelemetry Collector, configuring the OpenTelemetry log handler in EMQX to export logs, and managing potential log overloads. This integration allows you to format EMQX log events according to [OpenTelemetry log data model](https://opentelemetry.io/docs/specs/otel/logs/data-model/) and export them to the configured OpenTelemetry Collector or backend system, offering improved monitoring and debugging capabilities.
 
-## Prerequisites
+## Set Up OpenTelemetry Collector
 
-Before enabling EMQX  OpenTelemetry logs, you need to deploy and configure OpenTelemetry Collector and some OpenTelemetry compatible logging collection system. In this example, we will deploy OpenTelemetry Collector and configure it to output the logs to `stdout` using debug exporter:
+Before enabling EMQX OpenTelemetry logging, you need to deploy and configure OpenTelemetry Collector and an OpenTelemetry compatible logging collection system. This guide walks you through deploying the [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started) and setting it up to redirect logs to `stdout` using the debug exporter.
 
- - [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started).
+1. Create the OpenTelemetry Collector configuration file named `otel-logs-collector-config.yaml`:
 
-## Local setup
+   ```yaml
+   receivers:
+     otlp:
+       protocols:
+         grpc:
+   
+   exporters:
+     logging:
+       verbosity: detailed
+   
+   processors:
+     batch:
+   
+   extensions:
+     health_check:
+   
+   service:
+     extensions: [health_check]
+     pipelines:
+       logs:
+         receivers: [otlp]
+         processors: [batch]
+         exporters: [logging]
+   ```
 
-1. Create OpenTelemetry Collector config file, `otel-logs-collector-config.yaml`:
+2. In the same directory, create a Docker Compose file `docker-compose-otel-logs.yaml`:
 
-```yaml
-receivers:
-  otlp:
-    protocols:
-      grpc:
+   ```yaml
+   version: '3.9'
+   
+   services:
+     # Collector
+     otel-collector:
+       image: otel/opentelemetry-collector:0.90.0
+       restart: always
+       command: ["--config=/etc/otel-collector-config.yaml", "${OTELCOL_ARGS}"]
+       volumes:
+         - ./otel-logs-collector-config.yaml:/etc/otel-collector-config.yaml
+       ports:
+         - "13133:13133" # Health check extension
+         - "4317:4317"   # OTLP gRPC receiver
+   ```
 
-exporters:
-  logging:
-    verbosity: detailed
+3. Launch the Collector using Docker Compose:
 
-processors:
-  batch:
+   ```bash
+   docker compose -f docker-compose-otel-logs.yaml up
+   ```
 
-extensions:
-  health_check:
-
-service:
-  extensions: [health_check]
-  pipelines:
-    logs:
-      receivers: [otlp]
-      processors: [batch]
-      exporters: [logging]
-```
-
-2. Create `docker-compose-otel-logs.yaml` in the same directory as the otel config file:
-
-```yaml
-version: '3.9'
-
-services:
-
-  # Collector
-  otel-collector:
-    image: otel/opentelemetry-collector:0.90.0
-    restart: always
-    command: ["--config=/etc/otel-collector-config.yaml", "${OTELCOL_ARGS}"]
-    volumes:
-      - ./otel-logs-collector-config.yaml:/etc/otel-collector-config.yaml
-    ports:
-      - "13133:13133" # health_check extension
-      - "4317:4317"   # OTLP gRPC receiver
-```
-
-3. Start the collector:
-
-```bash
-docker compose -f docker-compose-otel-logs.yaml up
-```
-
-4. Once the docker compose service is up, OpenTelemetry collector must be accessible on the host machine at http://localhost:4317.
+4. Once operational, the OpenTelemetry Collector should be accessible at [http://localhost:4317](http://localhost:4317/).
 
 
-## Configure EMQX OpenTelemetry logs integration
+## Enable OpenTelemetry Log Handler in EMQX
 
-1. Add the following configuration to EMQX cluster.hocon (assuming that EMQX is running on the same local machine):
+1. Add the configuration below to the EMQX `cluster.hocon` file (assuming EMQX runs locally):
 
-```
-opentelemetry {
-  exporter {endpoint = "http://localhost:4317"}
-  logs {enable = true, level = warning}
-}
-```
-::: tip Warning
+   ```bash
+   opentelemetry {
+     exporter {endpoint = "http://localhost:4317"}
+     logs {enable = true, level = warning}
+   }
+   ```
 
-`opentelemetry.logs.level` is superseded by the log level of the default [EMQX log handler(s)](../log.md).
-For example, if OpenTelemetry logs level is `info` but EMQX console log level is `error`, only log events that have `error` or higher level will be exported to the configured OpenTelemetry receiver.
-:::
+   ::: warning Note
 
-2. Start EMQX node.
+   The `opentelemetry.logs.level` setting is overridden by the default log level configured in [EMQX log handler(s)](../../observability/log.md). For instance, if OpenTelemetry log level is `info` but EMQX console log level is `error`, only `error` level events or higher will be exported. 
 
-3. Trigger some EMQX log events, for example by creating a bridge to a not accessible HTTP service using Dashboard:
+   :::
 
-   ![Otel-logs-HTTP-bridge-example](../assets/otel-logs-bridge-example-en.png)
+2. Start the EMQX node.
 
-4. After a short period of time (around 1s by default), Otel Collector is expected to print received EMQX log events about HTTP bridge connection failure:
+3. Generate EMQX log events, such as creating a bridge to an inaccessible HTTP service via the Dashboard:
 
-   ![Otel-collector-logs-debug-output](../assets/otel-collector-logs-debug-output.png)
+   <img src="./assets/otel-logs-bridge-example-en.png" alt="Otel-logs-HTTP-bridge-example" style="zoom:67%;" />
 
+4. Shortly after (default is around 1 second), the Otel Collector should display the received EMQX log events, like those indicating HTTP bridge connection failures:
 
-## Overload protection
+   ![Otel-collector-logs-debug-output](./assets/otel-collector-logs-debug-output.png)
+
+## Manage Log Overload
 
 EMQX accumulates log events and exports them periodically in batches.
-The exporting interval is controlled by `opentelemetry.logs.scheduled_delay` configuration parameter, which defaults to 1s.
-The batching logs handler has an overload protection mechanism, which allows to accumulate log events only up to a certain limit.
-
-This limit is configurable and defaults to 2048 spans:
+The frequency of this export is controlled by the `opentelemetry.logs.scheduled_delay` parameter, defaulting to 1 second. 
+The batching log handler incorporates an overload protection mechanism, allowing accumulating events only up to a specific limit, which defaults to 2048. You can configure this limit using the following configuration:
 
 ```
 opentelemetry {
@@ -107,8 +100,8 @@ opentelemetry {
 ```
 Once the `max_queue_size` limit is reached, new log events will be dropped until the current queue is exported.
 
-::: tip Warning
+::: warning Note
 
-OpenTelemetry logs overload protection works independently from the default [EMQX log handler(s)](../log.md) OLP.
-Thus, depending on the configuration, the same log event can be dropped by OpenTelemetry handler but logged by default EMQX log handler(s) or vice versa.
+OpenTelemetry logs overload protection works independently from the default [EMQX log handler(s)](../log.md) overload protection.
+Thus, depending on the configuration, the same log event can be dropped by OpenTelemetry handler but logged by default EMQX log handler(s), or vice versa.
 :::

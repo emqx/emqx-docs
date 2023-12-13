@@ -1,18 +1,8 @@
-# EMQX OpenTelemetry Metrics
+# Integrate OpenTelemetry to View Metrics
 
-EMQX 5.2 has built-in support for pushing metrics directly to the OpenTelemetry Collector over the gRPC OTEL protocol. The Collector can then route, filter, and transform the data to any desired backend for storage and visualization. 
+EMQX has built-in support for pushing metrics directly to the OpenTelemetry Collector over the gRPC OTEL protocol. The Collector can then route, filter, and transform the data to any desired backend for storage and visualization. 
 
-This page introduces how to integrate OpenTelemetry with EMQX through EMQX Dashboard and view EMQX metrics through [Prometheus](../prometheus.md). Future versions of EMQX will also integrate trace and log data with the Collector, enabling full OpenTelemetry support.
-
-```
-                                       -> StatsD
-                                       -> ElasticSearch        
-       GRPC                            -> InfluxDB
-EMQX    -->   Opentelemetry Collector  -> Prometheus
-       OTEL Protocol                   -> Datadog
-                                       -> Amazon CloudWatch
-                                       -> Any open source or vendor backend of your choice
-```
+This page introduces how to integrate OpenTelemetry with EMQX through the Dashboard and view EMQX metrics through [Prometheus](../../observability/prometheus.md). 
 
 ## Prerequisites
 Before integrating with OpenTelemetry, you need to deploy and configure OpenTelemetry and Prometheus.
@@ -53,18 +43,18 @@ scrape_configs:
       - targets: ['otel-collector:8888'] # collector metrics
 ```
 
-## Configurate Integration via Dashboard
+## Configure Integration via Dashboard
 
 You can use EMQX Dashboard to configure EMQX's integration with OpenTelemetry. In the EMQX Dashboard, click **Management** -> **Monitoring** on the left navigation menu, then click the **Integration** tab for the configuration.
 
-![OpenTelemetry-Dashboard](../assets/opentelemetry-dashboard-en.png)
+![OpenTelemetry-Dashboard](./assets/opentelemetry-dashboard-en.png)
 - **EndPoint**: Collector's gRPC address; `http://localhost:4317` by default.
 - **Export Interval**: Interval to push metrics to Collector; `10` seconds by default.
 
 ## Visualize EMQX Metrics in Prometheus
 
 The EMQX metrics can be viewed in Prometheus web console (http://otel-collector:9090):
-![OpenTelemetry-Prometheus](../assets/opentelemetry-prometheus.png)
+![OpenTelemetry-Prometheus](./assets/opentelemetry-prometheus.png)
 
 
 
