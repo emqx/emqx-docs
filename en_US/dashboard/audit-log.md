@@ -8,6 +8,12 @@ Audit logs for command-line operations may contain sensitive information, so tak
 
 :::
 
+## Dashboard
+
+<!-- TODO 5.4 -->
+
+![image-20231213181823164](./assets/image-20231213181823164.png)
+
 ## View Log File
 
 When the Audit Log is enabled in EMQX, change-related operations are saved in log format in the `./log/audit.log.1` file. It is easy for enterprise users to perform an in-depth analysis of audit records and integrate the results into existing log management systems, meeting compliance and data security requirements.
