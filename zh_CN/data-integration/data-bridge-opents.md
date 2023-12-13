@@ -46,7 +46,7 @@ EMQX 通过规则引擎和数据桥接将设备数据插入到 OpenTSDB。OpenTS
 ### 前置准备
 
 - 了解 [规则](./rules.md)。
-- 了解 [数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 安装 OpenTSDB
 

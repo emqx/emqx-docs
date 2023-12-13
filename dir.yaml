@@ -222,6 +222,7 @@
   path: data-integration/data-bridges
   collapsed: true
   children:
+    - data-integration/connector
     - title_en: Webhook
       title_cn: Webhook
       path: data-integration/webhook

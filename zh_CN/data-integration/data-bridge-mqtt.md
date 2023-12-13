@@ -68,7 +68,7 @@ MQTT 数据桥具有以下特性和优势：
 确保您已经了解以下内容：
 
 - [规则](./rules.md)
-- [数据桥接](./data-bridges.md)
+-[数据集成](./data-bridges.md)
 
 ## 通过 Dashboard 配置 MQTT 数据桥接
 

@@ -124,7 +124,7 @@ This section describes the preparations you need to complete before you start to
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [Data Integration](./data-bridges.md)
 - Knowledge about [MongoDB](https://www.mongodb.com/)
 
 ### Set Up MongoDB Server

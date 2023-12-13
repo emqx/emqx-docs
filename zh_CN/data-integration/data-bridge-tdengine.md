@@ -46,7 +46,7 @@ TDengine 数据集成为您的业务带来了以下功能和优势：
 ### 前置准备
 
 - 了解[规则](./rules.md)。
-- 了解[数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 安装 TDengine
 

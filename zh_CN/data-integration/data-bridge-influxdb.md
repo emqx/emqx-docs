@@ -49,7 +49,7 @@ InfluxDB 数据集成具有以下特性与优势：
 
 - 了解 [InfluxDB 行协议](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/)，InfluxDB 数据桥接使用行协议进行数据写入。
 - 了解 [规则](./rules.md)。
-- 了解 [数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 安装和设置 InfluxDB
 

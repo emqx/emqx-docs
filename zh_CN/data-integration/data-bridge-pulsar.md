@@ -46,7 +46,7 @@ MQTT 消息数据写入到 Apache Pulsar 后，您可以进行灵活的应用开
 ### 前置准备
 
 - 了解[规则](./rules.md)。
-- 了解[数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 安装 Pulsar 服务器
 
