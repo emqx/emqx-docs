@@ -6,7 +6,7 @@ MQTT 数据桥接是一种连接多个 EMQX 集群或其他 MQTT 服务的方式
 
 EMQX 支持在两种主要模式下工作的 MQTT 数据桥接：入口和出口。本节将详细介绍每种模式的工作原理。同时，还介绍了在这两种模式中使用的连接池。
 
-下图展示了 EMQX 和 其他 NQTT 服务之间的数据集成的典型架构：
+下图展示了 EMQX 和 其他 MQTT 服务之间的数据集成的典型架构：
 
 ![EMQX-MQTT 集成](./assets/emqx-integration-mqtt.png)
 
