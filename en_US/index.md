@@ -138,9 +138,9 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
   <tr>
     <td><b>Integrations (Out-of-the-box)</b></td>
     <td>Not supported.</td>
-    <td style="text-align:left;">Supports over 40 data integrations, including MQTT data bridge, Webhook, MySQL, PostgreSQL, Kafka, MongoDB, Oracle, etc.</td>
-    <td style="text-align:left;">Supports Webhook and MQTT data bridge.</td>
-    <td style="text-align:left;">Supports over 40 data integrations, including MQTT data bridge, Webhook, MySQL, PostgreSQL, Kafka, MongoDB, Oracle, etc.</td>
+    <td style="text-align:left;">Supports over 40 data integrations, including MQTT bridge, Webhook, MySQL, PostgreSQL, Kafka, MongoDB, Oracle, etc.</td>
+    <td style="text-align:left;">Supports Webhook and MQTT bridge.</td>
+    <td style="text-align:left;">Supports over 40 data integrations, including MQTT bridge, Webhook, MySQL, PostgreSQL, Kafka, MongoDB, Oracle, etc.</td>
   </tr>
   <tr>
     <td><b>MQTT 5.0 Broker</b></td>
@@ -302,7 +302,7 @@ Additionally, the Enterprise Edition offers [audit logs](./dashboard/audit-log.m
 
 ### Rule Engine and Data Integration
 
-EMQX Enterprise includes a powerful [rule engine](./data-integration/rules.md) that allows you to configure rules within EMQX to process and route incoming data based on your requirements. You can also use EMQX's data bridge feature to integrate EMQX Enterprise with cloud services or databases for transferring IoT data to the cloud for storage and analysis.
+EMQX Enterprise includes a powerful [rule engine](./data-integration/rules.md) that allows you to configure rules within EMQX to process and route incoming data based on your requirements. You can also use EMQX's Sink feature to integrate EMQX Enterprise with cloud services or databases for transferring IoT data to the cloud for storage and analysis.
 
 #### Real-Time Data Processing
 
@@ -310,7 +310,7 @@ With a built-in SQL-based rule engine, Schema Registry, message codecs, and [Flo
 
 #### Enterprise Data Integration
 
-Through out-of-the-box Webhooks and data bridges, you can seamlessly [integrate](./data-integration/data-bridges.md) IoT data with over 40 cloud services and enterprise systems, including Kafka, AWS RDS, MongoDB, Oracle, SAP, and time-series databases. This empowers enterprises to effectively manage, analyze, and utilize data from IoT devices, supporting various applications and business needs.
+Through out-of-the-box Webhooks and Sink/Source, you can seamlessly [integrate](./data-integration/data-bridges.md) IoT data with over 40 cloud services and enterprise systems, including Kafka, AWS RDS, MongoDB, Oracle, SAP, and time-series databases. This empowers enterprises to effectively manage, analyze, and utilize data from IoT devices, supporting various applications and business needs.
 
 ### Management and Monitoring Dashboard
 
@@ -320,7 +320,7 @@ EMQX Enterprise provides a graphical management system called the [Dashboard](./
 
 EMQX Enterprise is a comprehensive IoT messaging platform that plays a crucial role in different stages of IoT device connectivity and data transmission, providing powerful functionality and flexibility for various business needs.
 
-Based on the publish-subscribe message delivery model, it can achieve flexible message communication with millions of topics and different modes, meeting the real-time message delivery needs under various scenarios. Through its built-in rule engine and data bridge, EMQX Enterprise allows you to send messages to various cloud services, enabling seamless integration of device data with enterprise systems. It can easily support use cases such as data processing, storage, analysis, and business command issuance. Here are some typical use cases:
+Based on the publish-subscribe message delivery model, it can achieve flexible message communication with millions of topics and different modes, meeting the real-time message delivery needs under various scenarios. Through its built-in rule engine and Sink/Source, EMQX Enterprise allows you to send messages to various cloud services, enabling seamless integration of device data with enterprise systems. It can easily support use cases such as data processing, storage, analysis, and business command issuance. Here are some typical use cases:
 
 ### Bidirectional Communication
 
@@ -342,7 +342,7 @@ EMQX Enterprise provides MQTT protocol [file transfer](./file-transfer/introduct
 
 ### Cloud-Based Control Command Issuance
 
-EMQX Enterprise allows message issuance through MQTT messages, REST APIs, and data bridges with, for example, Kafka, enabling data push or remote device control. For example, in a financial trading scenario, cloud services can push real-time data based on user watchlists in groups. This mode provides topic mapping, data processing for issuance, and data reach statistics, enabling flexible and reliable data issuance.
+EMQX Enterprise allows message issuance through MQTT messages, REST APIs, and Source with, for example, Kafka, enabling data push or remote device control. For example, in a financial trading scenario, cloud services can push real-time data based on user watchlists in groups. This mode provides topic mapping, data processing for issuance, and data reach statistics, enabling flexible and reliable data issuance.
 
 <img src="./assets/use_case_4.png" alt="use_case_4" style="zoom:50%;" />
 

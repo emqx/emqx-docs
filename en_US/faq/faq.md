@@ -345,7 +345,7 @@ EMQX supports clustering. The EMQX performance can be scale-out with the increas
 
 ## Can EMQX store messages to database?
 
-The EMQX Enterprise supports data persistence. Please refer to [Data Bridges](../data-integration/data-bridges.md).
+The EMQX Enterprise supports data persistence. Please refer to [Sink and Source](../data-integration/data-bridges.md).
 
 ## Can I disconnect an MQTT connection from EMQX server?
 
@@ -356,7 +356,7 @@ Yes. You can do it by invoking REST API provided by EMQX, but the implementation
 
 ## Can EMQX forward messages to Kafka?
 
-The EMQX Enterprise integrates a Kafka bridge, it can bridge data to Kafka. Please refer to [Data Bridge - Apache Kafka](../data-integration/data-bridge-kafka.md).
+The EMQX Enterprise integrates a Kafka bridge, it can bridge data to Kafka. Please refer to [Sink - Apache Kafka](../data-integration/data-bridge-kafka.md).
 
 ## Does EMQX support cluster auto discovery? What clustering methods are supported?
 
@@ -364,7 +364,7 @@ EMQX supports cluster auto discovery. EMQX clustering can be done manually or au
 
 ## Can I forward MQTT messages EMQX to other MQTT broker, like RabbitMQ?
 
-EMQX support forward messages to other MQTT broker. Using MQTT bridge, EMQX can forward messages of interested topics to other broker. Please refer to [Data Bridges](../data-integration/data-bridges.md).
+EMQX support forward messages to other MQTT broker. Using MQTT bridge, EMQX can forward messages of interested topics to other broker. Please refer to [Sink and Source](../data-integration/data-bridges.md).
 
 ## Can I forward messages from EMQX to MQTT services hosted on public cloud?
 
@@ -372,7 +372,7 @@ EMQX can forward messages to IoT Hub hosted on public cloud, this is a feature o
 
 ## Can other MQTT broker (for example Mosquitto) forward messages to EMQX?
 
-EMQX can receive messages from other broker, but it depends also on the implementation of other brokers, Mosquitto can forward messages to EMQX, please refer to [Data Bridge - MQTT](../data-integration/data-bridge-mqtt.md).
+EMQX can receive messages from other broker, but it depends also on the implementation of other brokers, Mosquitto can forward messages to EMQX, please refer to [Sink - MQTT](../data-integration/data-bridge-mqtt.md).
 
 ## What should I do if I want trace the subscription and publish of some particular message?
 
