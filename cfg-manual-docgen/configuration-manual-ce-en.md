@@ -393,7 +393,7 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
 
   *Default*: `manual`
 
-  *Optional*: `manual | static | dns | etcd | k8s | mcast`
+  *Optional*: `manual | static | dns | etcd | k8s`
 
   Service discovery method for the cluster nodes. Possible values are:
 - manual: Use <code>emqx ctl cluster</code> command to manage cluster.<br/>
@@ -401,7 +401,6 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
 - dns: Use DNS A record to discover peer nodes.<br/>
 - etcd: Use etcd to discover peer nodes.<br/>
 - k8s: Use Kubernetes API to discover peer pods.
-- mcast: Deprecated since 5.1, will be removed in 5.2.
   This supports discovery via UDP multicast.
 
 
@@ -468,7 +467,6 @@ see [Create and manage clusters](../deploy/cluster/create-cluster.md)。
 | -------- | ------------------------------- |
 | manual   | Create cluster manually         |
 | static   | Autocluster by static node list |
-| mcast    | Autocluster by UDP Multicast    |
 | dns      | Autocluster by DNS A Record     |
 | etcd     | Autocluster using etcd          |
 | k8s      | Autocluster on Kubernetes       |

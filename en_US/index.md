@@ -82,160 +82,36 @@ EMQX can be easily deployed on-premises or in public clouds using **Kubernetes O
 
 ## Product Comparison
 
-EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud Serverless and EMQX Dedicated Cloud) and two self-hosted options (EMQX Open Source and EMQX Enterprise). To help you choose the best deployment option for your requirements, this page lists a comparison of feature support across different deployment types.
+EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud Serverless and EMQX Dedicated Cloud) and two self-hosted options (EMQX Open Source and EMQX Enterprise). To help you choose the best deployment option for your requirements, the following table lists a comparison of feature support across different deployment types. For a comparison of supported features in detail, refer to [Feature Comparison](./getting-started/feature-comparison.md). 
 
-<div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th>Features</th>
+    <th colspan="2">Self Hosted</th>
     <th colspan="2">MQTT as a Service</th>
-    <th colspan="2">Self-Hosted</th>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td width="10%" rowspan="2"></td>
-    <td width="22%">EMQX Cloud Serverless</td>
-    <td width="23%">EMQX Dedicated Cloud</td>
-    <td width="22%">EMQX Open Source</td>
-    <td width="23%">EMQX Enterprise</td>
+    <td>EMQX Open Source</td>
+    <td>EMQX Enterprise</td>
+    <td>EMQX Cloud Serverless</td>
+    <td>EMQX Dedicated Cloud</td>
   </tr>
   <tr>
-    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">Get Free Serverless</a></td>
-    <td><a href="https://www.emqx.com/en/try?product=broker">14-Day Free Trial</a></td>
     <td><a href="https://www.emqx.com/en/try?product=broker">Open Source Download</a></td>
     <td><a href="https://www.emqx.com/en/apply-licenses/emqx">Get a Free Trial License</a></td>
+    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">Get Started Free</a></td>
+    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">Start a Free 14-Day Trial</a></td>
   </tr>
   <tr>
-    <td><b>Scalability</b></td>
-    <td>1000 auto scale</td>
-    <td>1000 - unlimited</td>
-    <td style="text-align:left;">Up to 100M MQTT connections per cluster</td>
-    <td style="text-align:left;">Up to 100M MQTT connections per cluster</td>
-  </tr>
-  <tr>
-    <td><b>Throughput</b></td>
-    <td>1000 TPS</td>
-    <td>Unlimited</td>
-    <td>5M+ MQTT messages per second</td>
-    <td>5M+ MQTT messages per second</td>
-  </tr>
-  <tr>
-    <td><b>Reliability</b></td>
-    <td>Maintained by EMQX Cloud Team</td>
-    <td>Maintained by EMQX Cloud Team</td>
-    <td>Data storage in memory</td>
-    <td>Data persistence in RocksDB (Coming soon)</td>
-  </tr>
-  <tr>
-    <td><b>Latency</b></td>
-    <td>1~5 millisecond</td>
-    <td>1~5 millisecond</td>
-    <td>1~5 millisecond</td>
-    <td>1~5 millisecond</td>
-  </tr>
-  <tr>
-    <td><b>Integrations (Out-of-the-box)</b></td>
-    <td>Not supported.</td>
-    <td style="text-align:left;">Supports over 40 data integrations, including MQTT bridge, Webhook, MySQL, PostgreSQL, Kafka, MongoDB, Oracle, etc.</td>
-    <td style="text-align:left;">Supports Webhook and MQTT bridge.</td>
-    <td style="text-align:left;">Supports over 40 data integrations, including MQTT bridge, Webhook, MySQL, PostgreSQL, Kafka, MongoDB, Oracle, etc.</td>
-  </tr>
-  <tr>
-    <td><b>MQTT 5.0 Broker</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>MQTT over QUIC</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>MQTT Add-ons</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Multi-Protocol Gateways</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Schema Registry</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Message Codec</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Rule Engine</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>File Transfer</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Troubleshooting</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Cloud-Native &amp; K8s</b></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Service Level Agreement (SLA)</b></td>
-    <td>99.9%</td>
-    <td>Up to 99.99%</td>
-    <td>N/A</td>
-    <td>N/A</td>
-  </tr>
-  <tr>
-    <td><b>License Model</b></td>
-    <td>SaaS - pay as you go</td>
-    <td>SaaS - hourly billing</td>
-    <td>Apache Version 2.0</td>
-    <td>Commercial license (Business source license)</td>
-  </tr>
-  <tr>
-    <td><b>Technical Support</b></td>
-    <td>8/5 Global support</td>
-    <td>24/7 Global support</td>
-    <td>Open source community</td>
-    <td>24/7 Global support</td>
+    <td>✔️ Apache Version 2.0<br>✔️ MQTT over QUIC<br>✔️ Session storage in memory<br>✔️ Supports Webhook and MQTT data bridge.<br>✔️ Audit log and single sign-on (SSO)<br>✔️ Multi-protocol gateways, including MQTT-SN, STOMP and CoAP<br>✔️ Open source community<br> </td>
+    <td>✔️ Commercial license (Business source license)<br>✔️ MQTT over QUIC<br>✔️ Session persistence in RocksDB<br>✔️ Data integration with 40+ enterprise systems, including Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis etc.<br>✔️ Audit log and single sign-on (SSO)<br>✔️ Role-Based Access Control (RBAC)<br>✔️ File transfer<br>✔️ Message codec<br>✔️ Multi-protocol gateways, with extra support on OCPP, JT/808 and GBT32960<br>✔️ 24/7 global technical support<br> </td>
+    <td>✔️ Pay as you go<br>✔️ Free quota every month<br>✔️ 1000 maximum connections<br>✔️ Start deployment in seconds<br>✔️ Auto scaling<br>✔️ 8/5 global technical support</td>
+    <td>✔️ 14-days free trial<br>✔️ Hourly billing<br>✔️ Multi-cloud regions worldwide<br>✔️ Flexible specifications<br>✔️ VPC peering, NAT gateway, load balance and more<br>✔️ Out-of-box integration with over 40+ cloud services<br>✔️ 24/7 global technical support<br> </td>
   </tr>
 </tbody>
 </table>
-</div>
 
 {% endemqxce %}
 

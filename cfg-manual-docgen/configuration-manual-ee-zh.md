@@ -374,7 +374,7 @@ EMQX 节点可以组成一个集群，以提高总容量。<br/> 这里指定了
 
   *默认值*: `manual`
 
-  *可选值*: `manual | static | dns | etcd | k8s | mcast`
+  *可选值*: `manual | static | dns | etcd | k8s`
 
   集群节点发现方式。可选值为:
 - manual: 使用 <code>emqx ctl cluster</code> 命令管理集群。<br/>
@@ -444,7 +444,6 @@ EMQX 支持多种策略的节点自动发现与集群，详见 [创建集群](..
 | ------ | ----------------------- |
 | manual | 手工命令创建集群        |
 | static | 静态节点列表自动集群    |
-| mcast  | UDP 组播方式自动集群    |
 | dns    | DNS A 记录自动集群      |
 | etcd   | 通过 etcd 自动集群      |
 | k8s    | Kubernetes 服务自动集群 |
