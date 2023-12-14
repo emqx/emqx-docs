@@ -153,7 +153,6 @@
 </table>
 </div>
 
-
 ## 可扩展性与性能
 
 <div style="text-align: center;">
@@ -224,7 +223,6 @@
 </tbody>
 </table>
 </div>
-
 
 ## 集群架构
 
@@ -445,7 +443,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>多协议网关</b></b></td>
+    <td><b>多协议网关</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -519,7 +517,6 @@
 </tbody>
 </table>
 </div>
-
 
 ## 安全
 
@@ -1199,7 +1196,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>主题监控</b></b></td>
+    <td><b>主题监控</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
@@ -1233,7 +1230,6 @@
 </tbody>
 </table>
 </div>
-
 
 ## 云原生与 K8S
 
