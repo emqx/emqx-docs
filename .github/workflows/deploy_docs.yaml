@@ -154,7 +154,7 @@ jobs:
       run: |
         aws s3 rm --recursive s3://docs-emqx-com/zh/${DOCS_TYPE}/${VERSION} || true
         aws s3 rm --recursive s3://docs-emqx-com/en/${DOCS_TYPE}/${VERSION} || true
-        aws s3 cp --recursive frontend/docs/.vitepress/dist/ s3://docs-emqx-com/
+        aws s3 cp --recursive frontend/docs/.vuepress/dist/ s3://docs-emqx-com/
         aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DOCS_CLOUDFRONT_ID }} --paths "/zh/${DOCS_TYPE}/${VERSION}/*" "/en/${DOCS_TYPE}/${VERSION}/*" "/api/${DOCS_TYPE}_versions.json" "/sitemap_${DOCS_TYPE}_${VERSION}.xml"
 
     - name: upload ee file to tencent cos
