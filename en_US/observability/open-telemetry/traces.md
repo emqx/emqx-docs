@@ -66,7 +66,7 @@ Before integrating EMQX with OpenTelemetry traces, you need to deploy and config
          - "13133:13133" # Health check extension
          - "4317:4317"   # OTLP gRPC receiver
        depends_on:
-         - jaeger-all-in-one
+         - jaeger
    ```
 
 3. Start the services using Docker Compose:
