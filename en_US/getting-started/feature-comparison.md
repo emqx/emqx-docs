@@ -154,10 +154,6 @@ via Rule Engine and Data Bridge</a></td>
 </table>
 </div>
 
-
-
-
-
 ## Scalability and Performance
 
 <div style="text-align: center;">
@@ -355,6 +351,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 ## MQTT and Connectivity
 
 <div style="text-align: center;">
@@ -522,7 +519,6 @@ via Rule Engine and Data Bridge</a></td>
 </table>
 </div>
 
-
 ## Security
 
 <div style="text-align: center;">
@@ -585,6 +581,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 ## Authentication and Authorization
 
 <div style="text-align: center;">
@@ -695,7 +692,6 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
-
 
 ## Data Integration
 
@@ -1065,7 +1061,6 @@ via Rule Engine and Data Bridge</a></td>
 </table>
 </div>
 
-
 ## Operability
 
 <div style="text-align: center;">
@@ -1136,6 +1131,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 ## Observability
 
 <div style="text-align: center;">
@@ -1238,7 +1234,6 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
-
 
 ## Cloud Native and K8S
 
