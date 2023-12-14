@@ -66,7 +66,7 @@ EMQX 支持与分布式 [OpenTelemetry 追踪](https://opentelemetry.io/docs/con
          - "13133:13133" # 健康检查扩展
          - "4317:4317"   # OTLP gRPC 接收器
        depends_on:
-         - jaeger-all-in-one
+         - jaeger
    ```
 
 3. 使用 Docker Compose 启动服务：
