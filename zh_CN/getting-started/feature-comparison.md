@@ -996,6 +996,7 @@
 </tbody>
 </table>
 </div>
+
 ## 可扩展性
 
 <div style="text-align: center;">
@@ -1058,6 +1059,7 @@
 </tbody>
 </table>
 </div>
+
 ## 可操作性
 
 <div style="text-align: center;">
@@ -1128,6 +1130,7 @@
 </tbody>
 </table>
 </div>
+
 ## 可观测性
 
 <div style="text-align: center;">
@@ -1277,6 +1280,7 @@
 </tbody>
 </table>
 </div>
+
 ## 云平台支持
 
 <div style="text-align: center;">
@@ -1346,6 +1350,7 @@
 </tbody>
 </table>
 </div>
+
 ## MQTT 开发工具与 SDKs
 
 <div style="text-align: center;">
