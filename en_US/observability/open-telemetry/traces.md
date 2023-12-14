@@ -145,7 +145,7 @@ Once the `max_queue_size` limit is reached, new tracing spans will be dropped un
 ::: warning Note
 
 If a traced message is dispatched to a high number of subscribers (much higher than the value of `max_queue_size`),
-it is expected that only a small number of spans will be exported and most of the spams will be dropped by the overload protection.
+it is expected that only a small number of spans will be exported and most of the spans will be dropped by the overload protection.
 
 Increasing `max_queue_size` should always be done with extra care, as it can affect performance and memory consumption.
 :::
