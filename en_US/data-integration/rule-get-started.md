@@ -2,7 +2,7 @@
 
 This page mainly introduces how to create a rule for data processing and attach an action to the rule using the EMQX Dashboard. Log in to the EMQX Dashboard and click **Integration** -> **Rules** in the left navigation menu. Then click the **Create** button, which directs you to the **Rules** page. Here, you can define the data source for your rule and determine the subsequent actions for the filtered messages.
 
-The demonstration on this page takes the republish action as an example, describing how to create a rule that processes messages received on the topic `t/#` and republishes the message to the topic `a/1`. However, the actions "printing the result to the Console" and "forwarding with data bridges" are also mentioned in [Add Action](#add-action).
+The demonstration on this page takes the republish action as an example, describing how to create a rule that processes messages received on the topic `t/#` and republishes the message to the topic `a/1`. However, the actions "printing the result to the Console" and "forwarding with Sinks" are also mentioned in [Add Action](#add-action).
 
 ## Define a Data Source
 On the **Rules** page, input a name for your rule and add a note to facilitate future management.
@@ -98,9 +98,9 @@ Where
 The console output action should only be used for debugging. If it is used in the production environment, it may cause performance problems.
 :::
 
-### Add Forwarding with Data Bridge Action
+### Add Forwarding with Sinks Action
 
-You can also add actions to forward the processed results with data bridges. All you need is to select the target Data bridge from the Data bridge drop-down list. For details on creating data bridges in EMQX, see [the documentation for Data Integration](./data-bridges.md).
+You can also add actions to forward the processed results using sinks. All you need is to select the target Sink from the Type of Action drop-down list in the Dashboard. For details on each sink in EMQX, see [Data Integration](./data-bridges.md).
 
 ## Test the Rule
 

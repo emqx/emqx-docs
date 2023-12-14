@@ -8,9 +8,9 @@
 
 ::: tip 提示
 
-1. 自 EMQX v5.4.0 版本开始，原数据 Sink 按照数据方向拆分并重命名为 Sink 与 Source。
+- 自 EMQX v5.4.0 版本开始，原数据桥接按照数据流方向拆分并重命名为 Sink 与 Source。
 
-2. 目前，EMQX 仅支持与 MQTT、Kafka 和 GCP PubSub Source。
+- 目前，EMQX 仅支持 MQTT、Kafka 和 GCP PubSub Source。
 
 :::
 
@@ -18,11 +18,17 @@
 
 ## 工作原理
 
-用户需要通过[规则引擎](./rules.md)或 [Flow 设计器](../flow-designer/introduction.md)编排物联网设备与 Sink/Source 的连接。
+EMQX 数据集成是一个开箱即用的功能。作为一个 MQTT 消息平台，EMQX 通过 MQTT 协议从物联网设备接收数据。借助内置的规则引擎，接收到的数据会被规则引擎中配置的规则处理。规则将触发一个动作，通过配置的 Sink/Source 将处理后的数据转发到外部数据系统。您可以在 Dashboard 上使用[规则](./rule-get-started.md)或[流设计器](../flow-designer/introduction.md)轻松创建规则、添加动作并创建 Sink/Source，无需任何编码工作。
+
+### 规则引擎
+
+来自各种物联网设备和系统的数据源具有各种数据类型和格式。一个功能强大、带有内置 SQL 规则的内置规则引擎，是处理和分发基于 SQL 的数据的核心组件。内置 SQL 规则具有广泛的功能，如字符操作、数据类型转换功能和压缩/解压功能，允许灵活和复杂的数据处理。规则引擎可以实时处理来自客户端的事件和物联网数据，执行诸如数据提取、过滤、丰富和格式转换等任务，基于预定义规则。然后将处理后的数据发送到指定的 Sink/Source。
+
+您可以在[规则引擎](./rules.md)章节中找到关于规则引擎工作方式的详细信息。
 
 ### Sink
 
-Sink 是数据输出组件，被添加到规则的[动作](./rules.md#动作)中，当设备触发事件或消息到达 EMQX 时，系统将匹配并执行相应规则，对数据进行筛选和处理。处理完成后的数据通过 Sink 发送到外部数据系统，实现消息存储、数据更新和事件通知等操作。
+Sink 是数据输出组件，被添加到规则的[动作](./rules.md#动作)中，当设备触发事件或消息到达 EMQX 时，系统将匹配并执行相应规则，对数据进行筛选和处理。处理完成后的数据将被转发到指定的 Sink，再通过对应的[连接器](./connector.md)发送到外部数据系统，实现消息存储、数据更新和事件通知等操作。
 
 ```mermaid
 graph LR
@@ -30,27 +36,28 @@ graph LR
   A1[客户端] --> |发布消息| B
 
   subgraph 规则引擎
-    B -->  |执行动作| C[Kafka Sink]
+    B -->  |执行动作| C[Kafka Sink] --> D[Kafka 连接器]
   end
 
-C -->|消息存储| D[Kafka]
+D -->|消息存储| E[Kafka]
 ```
 
 ### Source
 
 Source 是数据输入组件，作为规则的[数据源](./rule-sql-events-and-fields.md)，通过规则 SQL 进行选择。
 
-Source 从外部 MQTT 或 Kafka 等外部数据系统订阅或消费消息，当新的消息到达时，EMQX 将匹配并执行相应规则，对数据进行筛选和处理，处理完成后的数据可以发布到指定 EMQX 主题中，实现消息 Sink 与云端指令下发等操作。
+Source 从外部 MQTT 或 Kafka 等外部数据系统订阅或消费消息，当新的消息通过连接器到达 EMQX 时，规则引擎将匹配并执行相应规则，对数据进行筛选和处理，处理完成后的数据可以发布到指定 EMQX 主题中，实现消息 Sink 与云端指令下发等操作。
 
 ```mermaid
 graph LR
-  A[Kafka] --> B[Kafka Source]
+  A[Kafka] --> B[Kafka 连接器]
   subgraph 规则引擎
-    B -->  |触发| C[规则]
-    C -->  |执行动作| C1[消息重发布]
+    B --> C[Kafka Source]
+    C -->  |触发| D[规则]
+    D -->  |执行动作| D1[消息重发布]
   end
 
-C1 -->|发布消息| D[客户端]
+D1 -->|发布消息| E[客户端]
 ```
 
 ## 支持的集成
@@ -154,7 +161,7 @@ EMQX 支持与以下数据系统的集成：
 
 ## Sink 的特性
 
-Sink 借助以下特性以增强易用性、进一步提高数据集成的性能和可靠性，并非所有数据 Sink 都完全实现了这些特性，具体支持情况请参照各自的说明文档。
+Sink 借助以下特性以增强易用性、进一步提高数据集成的性能和可靠性，并非所有 Sink 都完全实现了这些特性，具体支持情况请参照各自的说明文档。
 
 ### 异步请求模式
 
@@ -215,7 +222,7 @@ INSERT INTO msg(topic, qos, payload) VALUES(${topic}, ${qos}, ${payload});
 
 ## Sink 的状态与指标
 
-您可以在 Dashboard 上查看数据 Sink 的运行状态和数据集成统计信息，以了解 Sink 和集成是否正常运行。
+您可以在 Dashboard 上查看 Sink 的运行状态和数据集成统计信息，以了解 Sink 和集成是否正常运行。
 
 ### Sink 的状态
 
