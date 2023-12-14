@@ -53,7 +53,7 @@ log.audit {
 - **操作者**：Dashboard 用户名或者调用 REST API 的密钥名称。仅操作方式为 Dashboard 或 REST API 时有效。
 - **IP**：Dashboard 用户或调用 REST API 的客户端来源 IP。仅操作方式为 Dashboard 或 REST API 时有效。
 - **操作名称**：下拉选择审计日志支持记录的操作名称。
-- **操作结果**：下拉选择 success 或 failure。
+- **操作结果**：下拉选择 *成功* 或 *失败*。
 
 ### 列表说明
 
@@ -63,7 +63,7 @@ log.audit {
   - 对于 CLI 与控制台，这一列记录了操作的命令。
 - **操作者**：包括操作方式以及对应的操作者，当操作方式为 CLI 与控制台时，操作者为执行命令的 EMQX 节点名称。
 - **IP**：Dashboard 用户或调用 REST API 的客户端来源 IP。仅操作方式为 Dashboard 或 REST API 时显示。
-- **操作结果**：success 或 failure，failure 的情况包括表单校验不通过、资源无法删除。仅操作方式为 Dashboard 或 REST API 时显示，CLI 与控制台无法记录操作结果。
+- **操作结果**：*成功* 或 *失败*，*失败* 的情况包括表单校验不通过、资源无法删除。仅操作方式为 Dashboard 或 REST API 时显示，CLI 与控制台无法记录操作结果。
 
 ![EMQX 审计日志列表](./assets/audit-log-list.png)
 

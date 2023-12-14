@@ -12,7 +12,7 @@ Audit logs for command-line operations may contain sensitive information, so tak
 
 <!-- TODO 5.4 -->
 
-![image-20231213181823164](./assets/image-20231213181823164.png)
+![image-20231214143911786](./assets/image-20231214143911786.png)
 
 ## View Log File
 
