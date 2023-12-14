@@ -56,7 +56,11 @@ For example, if the EMQX cluster uses the built-in database authentication mecha
 Therefore, importing data to a non-clean EMQX cluster may require extra caution.
 :::
 
-## Example
+## Dashboard Example
+
+![EMQX backup & restore](./assets/backup-restore.png)
+
+## CLI Example
 
 This section shows how to import and export data using the command Line Interface.
 
