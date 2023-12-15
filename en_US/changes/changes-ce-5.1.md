@@ -59,7 +59,7 @@
 - [#11306](https://github.com/emqx/emqx/pull/11306) Fixed rule action metrics inconsistency where dropped requests were not accounted for.
 - [#11327](https://github.com/emqx/emqx/pull/11327) Updated ekka to version 0.15.8, mria to version 0.5.10, and optvar to 1.0.5.
   This fixes occasional assertion failures:
-  `{{badmatch,noproc},[{optvar,read,2,[{file,"optvar.erl"},{line,140}]},{optvar,read,1,[{file,"optvar.erl"},{line,124}]},...`
+  <code v-pre>{{badmatch,noproc},[{optvar,read,2,[{file,"optvar.erl"},{line,140}]},{optvar,read,1,[{file,"optvar.erl"},{line,124}]},...</code>
 - [#11337](https://github.com/emqx/emqx/pull/11337) Fixed HTTP API error when a publish topic rewrite rule targets a topic with wildcards. Now it returns error 400 (Bad Match) instead of error 500 (Internal Error).
 - [#11346](https://github.com/emqx/emqx/pull/11346) Updated ekka to version 0.15.9.
   This fixes dangling etcd locks occurred if acquiring the lock failed with a timeout.
