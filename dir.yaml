@@ -232,6 +232,9 @@
     - title_en: Apache Kafka
       title_cn: Apache Kafka
       path: data-integration/data-bridge-kafka
+    - title_en: Confluent
+      title_cn: Confluent
+      path: data-integration/confluent-sink
     - title_en: Apache IoTDB
       title_cn: Apache IoTDB
       path: data-integration/data-bridge-iotdb
