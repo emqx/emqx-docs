@@ -550,7 +550,14 @@
         - gateway/coap
         - gateway/lwm2m
         - gateway/exproto
-        - gateway/jt808
+        - title_en: JT/T 808 Gateway
+          title_cn: JT/T 808 协议网关
+          path: gateway/jt808
+          edition: ee
+          collapsed: true
+          children:
+            - gateway/jt808_data_exchange
+       # - gateway/jt808
        #- gateway/ocpp
        #- gateway/gbt32960
        #- gateway/tcp
