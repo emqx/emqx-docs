@@ -28,7 +28,7 @@ EMQX 5.0 中，可以通过 Dashboard 配置并启用 LwM2M 网关。
 ::: tab HTTP API
 
 ```bash
-curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m' \
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m' \
   -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{
