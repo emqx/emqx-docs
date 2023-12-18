@@ -550,7 +550,10 @@
         - gateway/coap
         - gateway/lwm2m
         - gateway/exproto
-        - gateway/ocpp
+        - title_en:
+          title_cn:
+          path: gateway/ocpp
+          edition: ee
        #- gateway/jt808
        #- gateway/gbt32960
        #- gateway/tcp

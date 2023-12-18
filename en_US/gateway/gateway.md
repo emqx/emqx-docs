@@ -8,12 +8,26 @@ Starting from 5.0, EMQX offers the Multi-Protocol Gateway defines a unified conc
 
 The Multi-Protocol Gateway supports the MQTT-SN, STOMP, CoAP, and LwM2M protocols. It can be enabled and configured directly in the Dashboard or managed using the HTTP API or `emqx.conf`. On how to enable these gateways and how to customize the settings to better suit your business needs, you can click the link below for details. 
 
+{% emqxce %}
+
+- [MQTT-SN](./mqttsn.md)
+- [STOMP](./stomp.md)
+- [CoAP](./coap.md)
+- [LwM2M](./lwm2m.md)
+- [ExProto](./exproto.md)
+
+{% endemqxce %}
+
+{% emqxee %}
+
 - [MQTT-SN](./mqttsn.md)
 - [STOMP](./stomp.md)
 - [CoAP](./coap.md)
 - [LwM2M](./lwm2m.md)
 - [ExProto](./exproto.md)
 - [OCPP](./ocpp.md)
+
+{% endemqxee %}
 
 ## How the Multi-Protocol Gateway Works
 
@@ -67,6 +81,7 @@ Different gateways may support different types of authenticators, but all gatewa
 | CoAP    | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
 | LwM2M   | ✔︎           |                   |       |         |            |       |      |      |
 | Exproto | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
+| OCPP    | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     |      | ✔︎    |
 
 Note: Any client can log in if no authenticator is configured. 
 
