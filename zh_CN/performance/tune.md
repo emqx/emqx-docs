@@ -1,6 +1,23 @@
 # 系统调优
 
-本章节提供生产部署与测试所需的 Linux 内核参数，网络协议栈参数，Erlang 虚拟机参数， EMQX 参数设置。
+由于物联网应用中的设备数量和数据量通常都很大，而 EMQX 作为消息服务器承担着处理和传递大量设备产生的消息的任务。在这种情况下，对 EMQX 进行系统调优变得尤为重要。
+
+通过调优可以获得以下性能的最大化：
+
+- **消息处理能力**：提高 EMQX 处理消息的速度和效率，确保它能够快速地接收、处理和转发设备产生的消息。
+
+- **吞吐量**：提高吞吐量，确保系统能够及时处理和传递设备产生的消息。
+
+- **稳定性**：减少高负载下的延迟、提高系统响应速度，并且降低系统崩溃或故障的风险。
+
+本页提供生产部署与测试所需的 Linux 内核参数，网络协议栈参数，Erlang 虚拟机参数以及 EMQX 参数调优设置。
+
+## 关闭交换分区
+
+Linux 交换分区可能会导致 Erlang 虚拟机出现不确定的内存延迟，严重影响系统的稳定性。 建议永久关闭交换分区。
+
+- 要立即关闭交换分区，执行命令 `sudo swapoff -a`。 
+- 要永久关闭交换分区，在 `/etc/fstab` 文件中注释掉 `swap` 行，然后重新启动主机。
 
 ## Linux 操作系统参数
 
@@ -21,7 +38,7 @@ ulimit -n 1048576
 
 ### /etc/sysctl.conf
 
-持久化 'fs.file-max' 设置到 /etc/sysctl.conf 文件:
+持久化 `fs.file-max` 设置到 /etc/sysctl.conf 文件:
 
 ```bash
 fs.file-max = 1048576
@@ -98,14 +115,11 @@ sysctl -w net.ipv4.tcp_fin_timeout=15
 
 ## Erlang 虚拟机参数
 
-优化设置 Erlang 虚拟机启动参数，配置文件 emqx/etc/emqx.conf:
+优化设置 Erlang 虚拟机启动参数，配置文件 etc/emqx.conf:
 
 ```bash
-## Erlang Process Limit
-node.process_limit = 2097152
-
-## Sets the maximum number of simultaneously existing ports for this system
-node.max_ports = 1048576
+## 设置 Erlang 系统同时存在的最大端口数
+node.max_ports = 2097152
 ```
 
 ## EMQX 消息服务器参数

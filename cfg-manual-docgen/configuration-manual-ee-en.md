@@ -304,6 +304,73 @@ until the RPC connection is considered lost.
   Enable compatibility with old RPC authentication.
 
 
+**rpc.ciphers**
+
+  *Type*: `array`
+
+  *Default*: `[]`
+
+  This config holds TLS cipher suite names separated by comma,
+or as an array of strings. e.g.
+<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
+<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
+<br/>
+Ciphers (and their ordering) define the way in which the
+client and server encrypts information over the network connection.
+Selecting a good cipher suite is critical for the
+application's data security, confidentiality and performance.
+
+The names should be in OpenSSL string format (not RFC format).
+All default values and examples provided by EMQX config
+documentation are all in OpenSSL format.<br/>
+
+NOTE: Certain cipher suites are only compatible with
+specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
+incompatible cipher suites will be silently dropped.
+For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
+configuring cipher suites for other versions will have no effect.
+<br/>
+
+NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
+If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
+PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
+RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+
+
+**rpc.tls_versions**
+
+  *Type*: `array`
+
+  *Default*: `["tlsv1.3","tlsv1.2"]`
+
+  All TLS/DTLS versions to be supported.<br/>
+NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
+In case PSK cipher suites are intended, make sure to configure
+<code>['tlsv1.2', 'tlsv1.1']</code> here.
+
+
+**rpc.listen_address**
+
+  *Type*: `string`
+
+  *Default*: `0.0.0.0`
+
+  Indicates the IP address for the RPC server to listen on. For example, use <code>"0.0.0.0"</code> for IPv4 or <code>"::"</code> for IPv6.
+
+
+**rpc.ipv6_only**
+
+  *Type*: `boolean`
+
+  *Default*: `false`
+
+  This setting is effective only when <code>rpc.listen_address</code> is assigned an IPv6 address.
+If set to <code>true</code>, the RPC client will exclusively use IPv6 for connections.
+Otherwise, the client might opt for IPv4, even if the server is on IPv6.
+
+
 
 ## Cluster Setup
 
@@ -326,7 +393,7 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
 
   *Default*: `manual`
 
-  *Optional*: `manual | static | dns | etcd | k8s | mcast`
+  *Optional*: `manual | static | dns | etcd | k8s`
 
   Service discovery method for the cluster nodes. Possible values are:
 - manual: Use <code>emqx ctl cluster</code> command to manage cluster.<br/>
@@ -334,7 +401,6 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
 - dns: Use DNS A record to discover peer nodes.<br/>
 - etcd: Use etcd to discover peer nodes.<br/>
 - k8s: Use Kubernetes API to discover peer pods.
-- mcast: Deprecated since 5.1, will be removed in 5.2.
   This supports discovery via UDP multicast.
 
 
@@ -362,11 +428,13 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
 
   *Default*: `inet_tcp`
 
-  *Optional*: `inet_tcp | inet6_tcp | inet_tls`
+  *Optional*: `inet_tcp | inet6_tcp | inet_tls | inet6_tls`
 
   The Erlang distribution protocol for the cluster.<br/>
 - inet_tcp: IPv4 TCP <br/>
-- inet_tls: IPv4 TLS, works together with <code>etc/ssl_dist.conf</code>
+- inet_tls: IPv4 TLS, works together with <code>etc/ssl_dist.conf</code> <br/>
+- inet6_tcp: IPv6 TCP <br/>
+- inet6_tls: IPv6 TLS, works together with <code>etc/ssl_dist.conf</code>
 
 
 **cluster.static**
@@ -399,7 +467,6 @@ see [Create and manage clusters](../deploy/cluster/create-cluster.md)。
 | -------- | ------------------------------- |
 | manual   | Create cluster manually         |
 | static   | Autocluster by static node list |
-| mcast    | Autocluster by UDP Multicast    |
 | dns      | Autocluster by DNS A Record     |
 | etcd     | Autocluster using etcd          |
 | k8s      | Autocluster on Kubernetes       |
@@ -930,28 +997,6 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
-**listeners.tcp.$name.authentication**
-
-  *Type*: `array`
-
-  *Default*: `[]`
-
-  Default authentication configs for all MQTT listeners.
-
-For per-listener overrides see <code>authentication</code> in listener configs
-
-This option can be configured with:
-<ul>
-  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
-  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
-  <li>chain: An array of structs.</li>
-</ul>
-
-When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
-
-If there is no decision after a full chain exhaustion, the login is rejected.
-
-
 **listeners.tcp.$name.tcp_options**
 
   *Type*: [broker:tcp_opts](#tcp_opts)
@@ -1091,28 +1136,6 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   *Default*: `3s`
 
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
-
-
-**listeners.ssl.$name.authentication**
-
-  *Type*: `array`
-
-  *Default*: `[]`
-
-  Default authentication configs for all MQTT listeners.
-
-For per-listener overrides see <code>authentication</code> in listener configs
-
-This option can be configured with:
-<ul>
-  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
-  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
-  <li>chain: An array of structs.</li>
-</ul>
-
-When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
-
-If there is no decision after a full chain exhaustion, the login is rejected.
 
 
 **listeners.ssl.$name.tcp_options**
@@ -1477,28 +1500,6 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
-**listeners.ws.$name.authentication**
-
-  *Type*: `array`
-
-  *Default*: `[]`
-
-  Default authentication configs for all MQTT listeners.
-
-For per-listener overrides see <code>authentication</code> in listener configs
-
-This option can be configured with:
-<ul>
-  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
-  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
-  <li>chain: An array of structs.</li>
-</ul>
-
-When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
-
-If there is no decision after a full chain exhaustion, the login is rejected.
-
-
 **listeners.ws.$name.tcp_options**
 
   *Type*: [broker:tcp_opts](#tcp_opts)
@@ -1643,28 +1644,6 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   *Default*: `3s`
 
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
-
-
-**listeners.wss.$name.authentication**
-
-  *Type*: `array`
-
-  *Default*: `[]`
-
-  Default authentication configs for all MQTT listeners.
-
-For per-listener overrides see <code>authentication</code> in listener configs
-
-This option can be configured with:
-<ul>
-  <li><code>[]</code>: The default value, it allows *ALL* logins</li>
-  <li>one: For example <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
-  <li>chain: An array of structs.</li>
-</ul>
-
-When a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.
-
-If there is no decision after a full chain exhaustion, the login is rejected.
 
 
 **listeners.wss.$name.tcp_options**
@@ -3691,160 +3670,8 @@ are distinguished by the topic prefix:
 ### Built-in Database 
 
 
-Configuration of authenticator using built-in database as data source.
-
-**authn:builtin_db.mechanism**
-
-  *Type*: `password_based`
-
-  Authentication mechanism.
-
-
-**authn:builtin_db.backend**
-
-  *Type*: `built_in_database`
-
-  Backend type.
-
-
-**authn:builtin_db.user_id_type**
-
-  *Type*: `enum`
-
-  *Default*: `username`
-
-  *Optional*: `clientid | username`
-
-  Specify whether to use `clientid` or `username` for authentication.
-
-
-**authn:builtin_db.password_hash_algorithm**
-
-  *Type*: [authn-hash:bcrypt_rw](#authn-hash:bcrypt_rw) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
-
-  *Default*: `{"salt_position":"prefix","name":"sha256"}`
-
-  Options for password hash creation and verification.
-
-
-**authn:builtin_db.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
-
-
 
 ### MySQL
-
-
-Configuration of authenticator using MySQL as authentication data source.
-
-**authn:mysql.mechanism**
-
-  *Type*: `password_based`
-
-  Authentication mechanism.
-
-
-**authn:mysql.backend**
-
-  *Type*: `mysql`
-
-  Backend type.
-
-
-**authn:mysql.password_hash_algorithm**
-
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
-
-  *Default*: `{"salt_position":"prefix","name":"sha256"}`
-
-  Options for password hash verification.
-
-
-**authn:mysql.query**
-
-  *Type*: `string`
-
-  SQL used to query data for authentication, such as password hash.
-
-
-**authn:mysql.query_timeout**
-
-  *Type*: `duration_ms`
-
-  *Default*: `5s`
-
-  Timeout for the SQL query.
-
-
-**authn:mysql.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
-
-
-**authn:mysql.server**
-
-  *Type*: `string`
-
-  The IPv4 or IPv6 address or the hostname to connect to.<br/>
-A host entry has the following form: `Host[:Port]`.<br/>
-The MySQL default port 3306 is used if `[:Port]` is not specified.
-
-
-**authn:mysql.database**
-
-  *Type*: `string`
-
-  Database name.
-
-
-**authn:mysql.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authn:mysql.username**
-
-  *Type*: `string`
-
-  *Default*: `root`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authn:mysql.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authn:mysql.auto_reconnect**
-
-  *Type*: `boolean`
-
-  Deprecated since v5.0.15.
-
-
-**authn:mysql.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
 
 
 
@@ -3853,672 +3680,16 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 #### MongoDB Single Node
 
 
-Configuration of authenticator using MongoDB (Standalone) as authentication data source.
-
-**authn:mongo_single.mechanism**
-
-  *Type*: `password_based`
-
-  Authentication mechanism.
-
-
-**authn:mongo_single.backend**
-
-  *Type*: `mongodb`
-
-  Backend type.
-
-
-**authn:mongo_single.collection**
-
-  *Type*: `string`
-
-  Collection used to store authentication data.
-
-
-**authn:mongo_single.filter**
-
-  *Type*: `map`
-
-  *Default*: `{}`
-
-  Conditional expression that defines the filter condition in the query.
-Filter supports the following placeholders:
-- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
-- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-
-
-**authn:mongo_single.password_hash_field**
-
-  *Type*: `string`
-
-  *Default*: `password_hash`
-
-  Document field that contains password hash.
-
-
-**authn:mongo_single.salt_field**
-
-  *Type*: `string`
-
-  *Default*: `salt`
-
-  Document field that contains the password salt.
-
-
-**authn:mongo_single.is_superuser_field**
-
-  *Type*: `string`
-
-  *Default*: `is_superuser`
-
-  Document field that defines if the user has superuser privileges.
-
-
-**authn:mongo_single.password_hash_algorithm**
-
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
-
-  *Default*: `{"salt_position":"prefix","name":"sha256"}`
-
-  Options for password hash verification.
-
-
-**authn:mongo_single.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
-
-
-**authn:mongo_single.mongo_type**
-
-  *Type*: `single`
-
-  *Default*: `single`
-
-  Standalone instance. Must be set to 'single' when MongoDB server is running in standalone mode.
-
-
-**authn:mongo_single.server**
-
-  *Type*: `string`
-
-  The IPv4 or IPv6 address or the hostname to connect to.<br/>
-A host entry has the following form: `Host[:Port]`.<br/>
-The MongoDB default port 27017 is used if `[:Port]` is not specified.
-
-
-**authn:mongo_single.w_mode**
-
-  *Type*: `enum`
-
-  *Default*: `unsafe`
-
-  *Optional*: `unsafe | safe`
-
-  Write mode.
-
-
-**authn:mongo_single.srv_record**
-
-  *Type*: `boolean`
-
-  *Default*: `false`
-
-  Use DNS SRV record.
-
-
-**authn:mongo_single.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authn:mongo_single.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authn:mongo_single.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authn:mongo_single.use_legacy_protocol**
-
-  *Type*: `enum`
-
-  *Default*: `auto`
-
-  *Optional*: `auto | true | false`
-
-  Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.
-
-
-**authn:mongo_single.auth_source**
-
-  *Type*: `string`
-
-  Database name associated with the user's credentials.
-
-
-**authn:mongo_single.database**
-
-  *Type*: `string`
-
-  Database name.
-
-
-**authn:mongo_single.topology**
-
-  *Type*: `topology`
-
-
-**authn:mongo_single.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
-
-
 
 #### MongoDB Replica Set
-
-
-Configuration of authenticator using MongoDB (Replica Set) as authentication data source.
-
-**authn:mongo_rs.mechanism**
-
-  *Type*: `password_based`
-
-  Authentication mechanism.
-
-
-**authn:mongo_rs.backend**
-
-  *Type*: `mongodb`
-
-  Backend type.
-
-
-**authn:mongo_rs.collection**
-
-  *Type*: `string`
-
-  Collection used to store authentication data.
-
-
-**authn:mongo_rs.filter**
-
-  *Type*: `map`
-
-  *Default*: `{}`
-
-  Conditional expression that defines the filter condition in the query.
-Filter supports the following placeholders:
-- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
-- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-
-
-**authn:mongo_rs.password_hash_field**
-
-  *Type*: `string`
-
-  *Default*: `password_hash`
-
-  Document field that contains password hash.
-
-
-**authn:mongo_rs.salt_field**
-
-  *Type*: `string`
-
-  *Default*: `salt`
-
-  Document field that contains the password salt.
-
-
-**authn:mongo_rs.is_superuser_field**
-
-  *Type*: `string`
-
-  *Default*: `is_superuser`
-
-  Document field that defines if the user has superuser privileges.
-
-
-**authn:mongo_rs.password_hash_algorithm**
-
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
-
-  *Default*: `{"salt_position":"prefix","name":"sha256"}`
-
-  Options for password hash verification.
-
-
-**authn:mongo_rs.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
-
-
-**authn:mongo_rs.mongo_type**
-
-  *Type*: `rs`
-
-  *Default*: `rs`
-
-  Replica set. Must be set to 'rs' when MongoDB server is running in 'replica set' mode.
-
-
-**authn:mongo_rs.servers**
-
-  *Type*: `string`
-
-  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
-For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
-A host entry has the following form: `Host[:Port]`.
-The MongoDB default port 27017 is used if `[:Port]` is not specified.
-
-
-**authn:mongo_rs.w_mode**
-
-  *Type*: `enum`
-
-  *Default*: `unsafe`
-
-  *Optional*: `unsafe | safe`
-
-  Write mode.
-
-
-**authn:mongo_rs.r_mode**
-
-  *Type*: `enum`
-
-  *Default*: `master`
-
-  *Optional*: `master | slave_ok`
-
-  Read mode.
-
-
-**authn:mongo_rs.replica_set_name**
-
-  *Type*: `string`
-
-  Name of the replica set.
-
-
-**authn:mongo_rs.srv_record**
-
-  *Type*: `boolean`
-
-  *Default*: `false`
-
-  Use DNS SRV record.
-
-
-**authn:mongo_rs.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authn:mongo_rs.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authn:mongo_rs.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authn:mongo_rs.use_legacy_protocol**
-
-  *Type*: `enum`
-
-  *Default*: `auto`
-
-  *Optional*: `auto | true | false`
-
-  Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.
-
-
-**authn:mongo_rs.auth_source**
-
-  *Type*: `string`
-
-  Database name associated with the user's credentials.
-
-
-**authn:mongo_rs.database**
-
-  *Type*: `string`
-
-  Database name.
-
-
-**authn:mongo_rs.topology**
-
-  *Type*: `topology`
-
-
-**authn:mongo_rs.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
 
 " 
 
 #### MongoDB Sharded Cluster
 
 
-Configuration of authenticator using MongoDB (Sharded Cluster) as authentication data source.
-
-**authn:mongo_sharded.mechanism**
-
-  *Type*: `password_based`
-
-  Authentication mechanism.
-
-
-**authn:mongo_sharded.backend**
-
-  *Type*: `mongodb`
-
-  Backend type.
-
-
-**authn:mongo_sharded.collection**
-
-  *Type*: `string`
-
-  Collection used to store authentication data.
-
-
-**authn:mongo_sharded.filter**
-
-  *Type*: `map`
-
-  *Default*: `{}`
-
-  Conditional expression that defines the filter condition in the query.
-Filter supports the following placeholders:
-- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
-- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-
-
-**authn:mongo_sharded.password_hash_field**
-
-  *Type*: `string`
-
-  *Default*: `password_hash`
-
-  Document field that contains password hash.
-
-
-**authn:mongo_sharded.salt_field**
-
-  *Type*: `string`
-
-  *Default*: `salt`
-
-  Document field that contains the password salt.
-
-
-**authn:mongo_sharded.is_superuser_field**
-
-  *Type*: `string`
-
-  *Default*: `is_superuser`
-
-  Document field that defines if the user has superuser privileges.
-
-
-**authn:mongo_sharded.password_hash_algorithm**
-
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
-
-  *Default*: `{"salt_position":"prefix","name":"sha256"}`
-
-  Options for password hash verification.
-
-
-**authn:mongo_sharded.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
-
-
-**authn:mongo_sharded.mongo_type**
-
-  *Type*: `sharded`
-
-  *Default*: `sharded`
-
-  Sharded cluster. Must be set to 'sharded' when MongoDB server is running in 'sharded' mode.
-
-
-**authn:mongo_sharded.servers**
-
-  *Type*: `string`
-
-  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
-For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
-A host entry has the following form: `Host[:Port]`.
-The MongoDB default port 27017 is used if `[:Port]` is not specified.
-
-
-**authn:mongo_sharded.w_mode**
-
-  *Type*: `enum`
-
-  *Default*: `unsafe`
-
-  *Optional*: `unsafe | safe`
-
-  Write mode.
-
-
-**authn:mongo_sharded.srv_record**
-
-  *Type*: `boolean`
-
-  *Default*: `false`
-
-  Use DNS SRV record.
-
-
-**authn:mongo_sharded.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authn:mongo_sharded.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authn:mongo_sharded.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authn:mongo_sharded.use_legacy_protocol**
-
-  *Type*: `enum`
-
-  *Default*: `auto`
-
-  *Optional*: `auto | true | false`
-
-  Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.
-
-
-**authn:mongo_sharded.auth_source**
-
-  *Type*: `string`
-
-  Database name associated with the user's credentials.
-
-
-**authn:mongo_sharded.database**
-
-  *Type*: `string`
-
-  Database name.
-
-
-**authn:mongo_sharded.topology**
-
-  *Type*: `topology`
-
-
-**authn:mongo_sharded.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
-
-
 
 ### PostgreSQL
-
-
-Configuration of authenticator using PostgreSQL as authentication data source.
-
-**authn:postgresql.mechanism**
-
-  *Type*: `password_based`
-
-  Authentication mechanism.
-
-
-**authn:postgresql.backend**
-
-  *Type*: `postgresql`
-
-  Backend type.
-
-
-**authn:postgresql.password_hash_algorithm**
-
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
-
-  *Default*: `{"salt_position":"prefix","name":"sha256"}`
-
-  Options for password hash verification.
-
-
-**authn:postgresql.query**
-
-  *Type*: `string`
-
-  SQL used to query data for authentication, such as password hash.
-
-
-**authn:postgresql.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
-
-
-**authn:postgresql.server**
-
-  *Type*: `string`
-
-  The IPv4 or IPv6 address or the hostname to connect to.<br/>
-A host entry has the following form: `Host[:Port]`.<br/>
-The PostgreSQL default port 5432 is used if `[:Port]` is not specified.
-
-
-**authn:postgresql.database**
-
-  *Type*: `string`
-
-  Database name.
-
-
-**authn:postgresql.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authn:postgresql.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authn:postgresql.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authn:postgresql.auto_reconnect**
-
-  *Type*: `boolean`
-
-  Deprecated since v5.0.15.
-
-
-**authn:postgresql.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
 
 
 
@@ -4527,333 +3698,12 @@ The PostgreSQL default port 5432 is used if `[:Port]` is not specified.
 #### Redis Single Node
 
 
-Configuration of authenticator using Redis (Standalone) as authentication data source.
-
-**authn:redis_single.mechanism**
-
-  *Type*: `password_based`
-
-  Authentication mechanism.
-
-
-**authn:redis_single.backend**
-
-  *Type*: `redis`
-
-  Backend type.
-
-
-**authn:redis_single.cmd**
-
-  *Type*: `string`
-
-  The Redis Command used to query data for authentication such as password hash, currently only supports <code>HGET</code> and <code>HMGET</code>.
-
-
-**authn:redis_single.password_hash_algorithm**
-
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
-
-  *Default*: `{"salt_position":"prefix","name":"sha256"}`
-
-  Options for password hash verification.
-
-
-**authn:redis_single.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
-
-
-**authn:redis_single.server**
-
-  *Type*: `string`
-
-  The IPv4 or IPv6 address or the hostname to connect to.<br/>
-A host entry has the following form: `Host[:Port]`.<br/>
-The Redis default port 6379 is used if `[:Port]` is not specified.
-
-
-**authn:redis_single.redis_type**
-
-  *Type*: `single`
-
-  *Default*: `single`
-
-  Single mode. Must be set to 'single' when Redis server is running in single mode.
-
-
-**authn:redis_single.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authn:redis_single.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authn:redis_single.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authn:redis_single.database**
-
-  *Type*: `non_neg_integer`
-
-  *Default*: `0`
-
-  Redis database ID.
-
-
-**authn:redis_single.auto_reconnect**
-
-  *Type*: `boolean`
-
-  Deprecated since v5.0.15.
-
-
-**authn:redis_single.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
-
-
 
 #### Redis Cluster 
 
 
-Configuration of authenticator using Redis (Cluster) as authentication data source.
-
-**authn:redis_cluster.mechanism**
-
-  *Type*: `password_based`
-
-  Authentication mechanism.
-
-
-**authn:redis_cluster.backend**
-
-  *Type*: `redis`
-
-  Backend type.
-
-
-**authn:redis_cluster.cmd**
-
-  *Type*: `string`
-
-  The Redis Command used to query data for authentication such as password hash, currently only supports <code>HGET</code> and <code>HMGET</code>.
-
-
-**authn:redis_cluster.password_hash_algorithm**
-
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
-
-  *Default*: `{"salt_position":"prefix","name":"sha256"}`
-
-  Options for password hash verification.
-
-
-**authn:redis_cluster.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
-
-
-**authn:redis_cluster.servers**
-
-  *Type*: `string`
-
-  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
-For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
-A host entry has the following form: `Host[:Port]`.
-The Redis default port 6379 is used if `[:Port]` is not specified.
-
-
-**authn:redis_cluster.redis_type**
-
-  *Type*: `cluster`
-
-  *Default*: `cluster`
-
-  Cluster mode. Must be set to 'cluster' when Redis server is running in clustered mode.
-
-
-**authn:redis_cluster.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authn:redis_cluster.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authn:redis_cluster.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authn:redis_cluster.auto_reconnect**
-
-  *Type*: `boolean`
-
-  Deprecated since v5.0.15.
-
-
-**authn:redis_cluster.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
-
-
 
 #### Redis Sentinel 
-
-
-Configuration of authenticator using Redis (Sentinel) as authentication data source.
-
-**authn:redis_sentinel.mechanism**
-
-  *Type*: `password_based`
-
-  Authentication mechanism.
-
-
-**authn:redis_sentinel.backend**
-
-  *Type*: `redis`
-
-  Backend type.
-
-
-**authn:redis_sentinel.cmd**
-
-  *Type*: `string`
-
-  The Redis Command used to query data for authentication such as password hash, currently only supports <code>HGET</code> and <code>HMGET</code>.
-
-
-**authn:redis_sentinel.password_hash_algorithm**
-
-  *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
-
-  *Default*: `{"salt_position":"prefix","name":"sha256"}`
-
-  Options for password hash verification.
-
-
-**authn:redis_sentinel.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
-
-
-**authn:redis_sentinel.servers**
-
-  *Type*: `string`
-
-  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
-For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
-A host entry has the following form: `Host[:Port]`.
-The Redis default port 6379 is used if `[:Port]` is not specified.
-
-
-**authn:redis_sentinel.redis_type**
-
-  *Type*: `sentinel`
-
-  *Default*: `sentinel`
-
-  Sentinel mode. Must be set to 'sentinel' when Redis server is running in sentinel mode.
-
-
-**authn:redis_sentinel.sentinel**
-
-  *Type*: `string`
-
-  The cluster name in Redis sentinel mode.
-
-
-**authn:redis_sentinel.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authn:redis_sentinel.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authn:redis_sentinel.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authn:redis_sentinel.database**
-
-  *Type*: `non_neg_integer`
-
-  *Default*: `0`
-
-  Redis database ID.
-
-
-**authn:redis_sentinel.auto_reconnect**
-
-  *Type*: `boolean`
-
-  Deprecated since v5.0.15.
-
-
-**authn:redis_sentinel.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
 
 
 
@@ -4862,377 +3712,14 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 #### HTTP GET Method
 
 
-Configuration of authenticator using HTTP Server as authentication service (Using GET request).
-
-**authn:http_get.method**
-
-  *Type*: `get`
-
-  HTTP request method.
-
-
-**authn:http_get.headers**
-
-  *Type*: `map`
-
-  *Default*: `{"keep-alive":"timeout=30, max=1000","connection":"keep-alive","cache-control":"no-cache","accept":"application/json"}`
-
-  List of HTTP headers (without <code>content-type</code>).
-
-
-**authn:http_get.mechanism**
-
-  *Type*: `password_based`
-
-  Authentication mechanism.
-
-
-**authn:http_get.backend**
-
-  *Type*: `http`
-
-  Backend type.
-
-
-**authn:http_get.url**
-
-  *Type*: `string`
-
-  URL of the HTTP server.
-
-
-**authn:http_get.body**
-
-  *Type*: `#{term => binary()}`
-
-  HTTP request body.
-
-
-**authn:http_get.request_timeout**
-
-  *Type*: `duration_ms`
-
-  *Default*: `5s`
-
-  HTTP request timeout.
-
-
-**authn:http_get.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
-
-
-**authn:http_get.connect_timeout**
-
-  *Type*: `timeout_duration_ms`
-
-  *Default*: `15s`
-
-  The timeout when connecting to the HTTP server.
-
-
-**authn:http_get.enable_pipelining**
-
-  *Type*: `pos_integer`
-
-  *Default*: `100`
-
-  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
-
-
-**authn:http_get.max_retries**
-
-  *Type*: `non_neg_integer`
-
-  Deprecated since 5.0.4.
-
-
-**authn:http_get.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  The pool size.
-
-
-**authn:http_get.request**
-
-  *Type*: `connector-http:request`
-
-  Configure HTTP request parameters.
-
-
-**authn:http_get.retry_interval**
-
-  *Type*: `timeout_duration`
-
-  Deprecated since 5.0.4.
-
-
-**authn:http_get.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
-
-
 
 #### HTTP POST Method
-
-
-Configuration of authenticator using HTTP Server as authentication service (Using POST request).
-
-**authn:http_post.method**
-
-  *Type*: `post`
-
-  HTTP request method.
-
-
-**authn:http_post.headers**
-
-  *Type*: `map`
-
-  *Default*: `{"keep-alive":"timeout=30, max=1000","content-type":"application/json","connection":"keep-alive","cache-control":"no-cache","accept":"application/json"}`
-
-  List of HTTP Headers.
-
-
-**authn:http_post.mechanism**
-
-  *Type*: `password_based`
-
-  Authentication mechanism.
-
-
-**authn:http_post.backend**
-
-  *Type*: `http`
-
-  Backend type.
-
-
-**authn:http_post.url**
-
-  *Type*: `string`
-
-  URL of the HTTP server.
-
-
-**authn:http_post.body**
-
-  *Type*: `#{term => binary()}`
-
-  HTTP request body.
-
-
-**authn:http_post.request_timeout**
-
-  *Type*: `duration_ms`
-
-  *Default*: `5s`
-
-  HTTP request timeout.
-
-
-**authn:http_post.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
-
-
-**authn:http_post.connect_timeout**
-
-  *Type*: `timeout_duration_ms`
-
-  *Default*: `15s`
-
-  The timeout when connecting to the HTTP server.
-
-
-**authn:http_post.enable_pipelining**
-
-  *Type*: `pos_integer`
-
-  *Default*: `100`
-
-  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
-
-
-**authn:http_post.max_retries**
-
-  *Type*: `non_neg_integer`
-
-  Deprecated since 5.0.4.
-
-
-**authn:http_post.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  The pool size.
-
-
-**authn:http_post.request**
-
-  *Type*: `connector-http:request`
-
-  Configure HTTP request parameters.
-
-
-**authn:http_post.retry_interval**
-
-  *Type*: `timeout_duration`
-
-  Deprecated since 5.0.4.
-
-
-**authn:http_post.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
 
 
 
 {% emqxee %}
 
 ### LDAP
-
-
-Configuration of authenticator using LDAP as authentication data source.
-
-**authn:ldap.mechanism**
-
-  *Type*: `password_based`
-
-  Authentication mechanism.
-
-
-**authn:ldap.backend**
-
-  *Type*: `ldap`
-
-  Backend type.
-
-
-**authn:ldap.password_attribute**
-
-  *Type*: `string`
-
-  *Default*: `userPassword`
-
-  Indicates which attribute is used to represent the user's password.
-
-
-**authn:ldap.is_superuser_attribute**
-
-  *Type*: `string`
-
-  *Default*: `isSuperuser`
-
-  Indicates which attribute is used to represent whether the user is a superuser.
-
-
-**authn:ldap.query_timeout**
-
-  *Type*: `timeout_duration_ms`
-
-  *Default*: `5s`
-
-  Timeout for the LDAP query.
-
-
-**authn:ldap.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
-
-
-**authn:ldap.server**
-
-  *Type*: `string`
-
-  The IPv4 or IPv6 address or the hostname to connect to.<br/>
-A host entry has the following form: `Host[:Port]`.<br/>
-The LDAP default port 389 is used if `[:Port]` is not specified.
-
-
-**authn:ldap.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authn:ldap.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authn:ldap.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authn:ldap.base_dn**
-
-  *Type*: `string`
-
-  The name of the base object entry (or possibly the root) relative to
-which the Search is to be performed.
-
-
-**authn:ldap.filter**
-
-  *Type*: `string`
-
-  *Default*: `(objectClass=mqttUser)`
-
-  The filter that defines the conditions that must be fulfilled in order
-for the Search to match a given entry.<br />
-The syntax of the filter follows RFC 4515 and also supports placeholders.
-
-
-**authn:ldap.request_timeout**
-
-  *Type*: `timeout_duration_ms`
-
-  *Default*: `5s`
-
-  Sets the maximum time in milliseconds that is used for each individual request.
-
-
-**authn:ldap.ssl**
-
-  *Type*: `ssl`
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
 
 
 
@@ -5243,7 +3730,7 @@ The syntax of the filter follows RFC 4515 and also supports placeholders.
 
 Settings for simple algorithms.
 
-**authn-hash:simple.name**
+**authentication.$INDEX.password_hash_algorithm.name**
 
   *Type*: `enum`
 
@@ -5252,7 +3739,7 @@ Settings for simple algorithms.
   Simple password hashing algorithm.
 
 
-**authn-hash:simple.salt_position**
+**authentication.$INDEX.password_hash_algorithm.salt_position**
 
   *Type*: `enum`
 
@@ -5267,7 +3754,7 @@ Settings for simple algorithms.
 
 Settings for bcrypt password hashing algorithm.
 
-**authn-hash:bcrypt.name**
+**authentication.$INDEX.password_hash_algorithm.name**
 
   *Type*: `bcrypt`
 
@@ -5278,14 +3765,14 @@ Settings for bcrypt password hashing algorithm.
 
 Settings for bcrypt password hashing algorithm (for DB backends with write capability).
 
-**authn-hash:bcrypt_rw.name**
+**authentication.$INDEX.password_hash_algorithm.name**
 
   *Type*: `bcrypt`
 
   BCRYPT password hashing.
 
 
-**authn-hash:bcrypt_rw.salt_rounds**
+**authentication.$INDEX.password_hash_algorithm.salt_rounds**
 
   *Type*: `integer`
 
@@ -5300,14 +3787,14 @@ Settings for bcrypt password hashing algorithm (for DB backends with write capab
 
 Settings for PBKDF2 password hashing algorithm.
 
-**authn-hash:pbkdf2.name**
+**authentication.$INDEX.password_hash_algorithm.name**
 
   *Type*: `pbkdf2`
 
   PBKDF2 password hashing.
 
 
-**authn-hash:pbkdf2.mac_fun**
+**authentication.$INDEX.password_hash_algorithm.mac_fun**
 
   *Type*: `enum`
 
@@ -5316,14 +3803,14 @@ Settings for PBKDF2 password hashing algorithm.
   Specifies mac_fun for PBKDF2 hashing algorithm.
 
 
-**authn-hash:pbkdf2.iterations**
+**authentication.$INDEX.password_hash_algorithm.iterations**
 
   *Type*: `integer`
 
   Iteration count for PBKDF2 hashing algorithm.
 
 
-**authn-hash:pbkdf2.dk_length**
+**authentication.$INDEX.password_hash_algorithm.dk_length**
 
   *Type*: `integer`
 
@@ -5334,293 +3821,10 @@ Settings for PBKDF2 password hashing algorithm.
 ## Authentication - JWT
 
 
-Configuration when the JWT for authentication is issued using the HMAC algorithm.
-
-**authn:jwt_hmac.algorithm**
-
-  *Type*: `enum`
-
-  *Optional*: `hmac-based`
-
-  JWT signing algorithm, Supports HMAC (configured as <code>hmac-based</code>) and RSA, ECDSA (configured as <code>public-key</code>).
-
-
-**authn:jwt_hmac.secret**
-
-  *Type*: `string`
-
-  The key to verify the JWT using HMAC algorithm.
-
-
-**authn:jwt_hmac.secret_base64_encoded**
-
-  *Type*: `boolean`
-
-  *Default*: `false`
-
-  Whether secret is base64 encoded.
-
-
-**authn:jwt_hmac.mechanism**
-
-  *Type*: `jwt`
-
-  Authentication mechanism.
-
-
-**authn:jwt_hmac.acl_claim_name**
-
-  *Type*: `string`
-
-  *Default*: `acl`
-
-  JWT claim name to use for getting ACL rules.
-
-
-**authn:jwt_hmac.verify_claims**
-
-  *Type*: `[term]`
-
-  *Default*: `[]`
-
-  A list of custom claims to validate, which is a list of name/value pairs.
-Values can use the following placeholders:
-- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
-- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.
-
-
-**authn:jwt_hmac.from**
-
-  *Type*: `enum`
-
-  *Default*: `password`
-
-  *Optional*: `username | password`
-
-  Field to take JWT from.
-
-
-**authn:jwt_hmac.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
-
-
-
-Configuration when JWTs used for authentication need to be fetched from the JWKS endpoint.
-
-**authn:jwt_jwks.use_jwks**
-
-  *Type*: `enum`
-
-  *Optional*: `true`
-
-  Whether to use JWKS.
-
-
-**authn:jwt_jwks.endpoint**
-
-  *Type*: `string`
-
-  JWKS endpoint, it's a read-only endpoint that returns the server's public key set in the JWKS format.
-
-
-**authn:jwt_jwks.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authn:jwt_jwks.refresh_interval**
-
-  *Type*: `integer`
-
-  *Default*: `300`
-
-  JWKS refresh interval.
-
-
-**authn:jwt_jwks.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL options.
-
-
-**authn:jwt_jwks.mechanism**
-
-  *Type*: `jwt`
-
-  Authentication mechanism.
-
-
-**authn:jwt_jwks.acl_claim_name**
-
-  *Type*: `string`
-
-  *Default*: `acl`
-
-  JWT claim name to use for getting ACL rules.
-
-
-**authn:jwt_jwks.verify_claims**
-
-  *Type*: `[term]`
-
-  *Default*: `[]`
-
-  A list of custom claims to validate, which is a list of name/value pairs.
-Values can use the following placeholders:
-- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
-- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.
-
-
-**authn:jwt_jwks.from**
-
-  *Type*: `enum`
-
-  *Default*: `password`
-
-  *Optional*: `username | password`
-
-  Field to take JWT from.
-
-
-**authn:jwt_jwks.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
-
 " 
-
-Configuration when the JWT for authentication is issued using RSA or ECDSA algorithm.
-
-**authn:jwt_public_key.algorithm**
-
-  *Type*: `enum`
-
-  *Optional*: `public-key`
-
-  JWT signing algorithm, Supports HMAC (configured as <code>hmac-based</code>) and RSA, ECDSA (configured as <code>public-key</code>).
-
-
-**authn:jwt_public_key.public_key**
-
-  *Type*: `string`
-
-  The public key used to verify the JWT.
-
-
-**authn:jwt_public_key.mechanism**
-
-  *Type*: `jwt`
-
-  Authentication mechanism.
-
-
-**authn:jwt_public_key.acl_claim_name**
-
-  *Type*: `string`
-
-  *Default*: `acl`
-
-  JWT claim name to use for getting ACL rules.
-
-
-**authn:jwt_public_key.verify_claims**
-
-  *Type*: `[term]`
-
-  *Default*: `[]`
-
-  A list of custom claims to validate, which is a list of name/value pairs.
-Values can use the following placeholders:
-- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
-- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.
-
-
-**authn:jwt_public_key.from**
-
-  *Type*: `enum`
-
-  *Default*: `password`
-
-  *Optional*: `username | password`
-
-  Field to take JWT from.
-
-
-**authn:jwt_public_key.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
-
 
 
 ## Authentication - Enhanced
-
-
-Settings for Salted Challenge Response Authentication Mechanism
-(SCRAM) authentication.
-
-**authn:scram.mechanism**
-
-  *Type*: `scram`
-
-  Authentication mechanism.
-
-
-**authn:scram.backend**
-
-  *Type*: `built_in_database`
-
-  Backend type.
-
-
-**authn:scram.algorithm**
-
-  *Type*: `enum`
-
-  *Default*: `sha256`
-
-  *Optional*: `sha256 | sha512`
-
-  Hashing algorithm.
-
-
-**authn:scram.iteration_count**
-
-  *Type*: `non_neg_integer`
-
-  *Default*: `4096`
-
-  Iteration count.
-
-
-**authn:scram.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
 
 
 
@@ -5772,242 +3976,16 @@ Settings for the authorization cache.
 ### ACL File
 
 
-Authorization using a static file.
-
-**authorization.sources.$INDEX.type**
-
-  *Type*: `file`
-
-  Backend type.
-
-
-**authorization.sources.$INDEX.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
-
-
-**authorization.sources.$INDEX.path**
-
-  *Type*: `string`
-
-  Path to the file which contains the ACL rules.
-If the file provisioned before starting EMQX node,
-it can be placed anywhere as long as EMQX has read access to it.
-That is, EMQX will treat it as read only.
-
-In case the rule-set is created or updated from EMQX Dashboard or HTTP API,
-a new file will be created and placed in `authz` subdirectory inside EMQX's `data_dir`,
-and the old file will not be used anymore.
-
-
 
 ### Built-in Database
-
-
-Authorization using a built-in database (mnesia).
-
-**authorization.sources.$INDEX.type**
-
-  *Type*: `built_in_database`
-
-  Backend type.
-
-
-**authorization.sources.$INDEX.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
 
 
 
 ### MySQL
 
 
-Authorization using a MySQL database.
-
-**authorization.sources.$INDEX.type**
-
-  *Type*: `mysql`
-
-  Backend type.
-
-
-**authorization.sources.$INDEX.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
-
-
-**authorization.sources.$INDEX.server**
-
-  *Type*: `string`
-
-  The IPv4 or IPv6 address or the hostname to connect to.<br/>
-A host entry has the following form: `Host[:Port]`.<br/>
-The MySQL default port 3306 is used if `[:Port]` is not specified.
-
-
-**authorization.sources.$INDEX.database**
-
-  *Type*: `string`
-
-  Database name.
-
-
-**authorization.sources.$INDEX.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authorization.sources.$INDEX.username**
-
-  *Type*: `string`
-
-  *Default*: `root`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authorization.sources.$INDEX.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authorization.sources.$INDEX.auto_reconnect**
-
-  *Type*: `boolean`
-
-  Deprecated since v5.0.15.
-
-
-**authorization.sources.$INDEX.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
-
-
-**authorization.sources.$INDEX.prepare_statement**
-
-  *Type*: `map`
-
-  Key-value list of SQL prepared statements.
-
-
-**authorization.sources.$INDEX.query**
-
-  *Type*: `string`
-
-  Database query used to retrieve authorization data.
-
-
 
 ### PostgreSQL
-
-
-Authorization using a PostgreSQL database.
-
-**authorization.sources.$INDEX.type**
-
-  *Type*: `postgresql`
-
-  Backend type.
-
-
-**authorization.sources.$INDEX.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
-
-
-**authorization.sources.$INDEX.server**
-
-  *Type*: `string`
-
-  The IPv4 or IPv6 address or the hostname to connect to.<br/>
-A host entry has the following form: `Host[:Port]`.<br/>
-The PostgreSQL default port 5432 is used if `[:Port]` is not specified.
-
-
-**authorization.sources.$INDEX.database**
-
-  *Type*: `string`
-
-  Database name.
-
-
-**authorization.sources.$INDEX.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authorization.sources.$INDEX.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authorization.sources.$INDEX.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authorization.sources.$INDEX.auto_reconnect**
-
-  *Type*: `boolean`
-
-  Deprecated since v5.0.15.
-
-
-**authorization.sources.$INDEX.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
-
-
-**authorization.sources.$INDEX.prepare_statement**
-
-  *Type*: `map`
-
-  Key-value list of SQL prepared statements.
-
-
-**authorization.sources.$INDEX.query**
-
-  *Type*: `string`
-
-  Database query used to retrieve authorization data.
 
 " 
 
@@ -6016,443 +3994,12 @@ The PostgreSQL default port 5432 is used if `[:Port]` is not specified.
 #### MongoDB Single Node
 
 
-Authorization using a single MongoDB instance.
-
-**authorization.sources.$INDEX.type**
-
-  *Type*: `mongodb`
-
-  Backend type.
-
-
-**authorization.sources.$INDEX.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
-
-
-**authorization.sources.$INDEX.collection**
-
-  *Type*: `string`
-
-  `MongoDB` collection containing the authorization data.
-
-
-**authorization.sources.$INDEX.filter**
-
-  *Type*: `map`
-
-  *Default*: `{}`
-
-  Conditional expression that defines the filter condition in the query.
-Filter supports the following placeholders<br/>
- - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>
- - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-
-
-**authorization.sources.$INDEX.mongo_type**
-
-  *Type*: `single`
-
-  *Default*: `single`
-
-  Standalone instance. Must be set to 'single' when MongoDB server is running in standalone mode.
-
-
-**authorization.sources.$INDEX.server**
-
-  *Type*: `string`
-
-  The IPv4 or IPv6 address or the hostname to connect to.<br/>
-A host entry has the following form: `Host[:Port]`.<br/>
-The MongoDB default port 27017 is used if `[:Port]` is not specified.
-
-
-**authorization.sources.$INDEX.w_mode**
-
-  *Type*: `enum`
-
-  *Default*: `unsafe`
-
-  *Optional*: `unsafe | safe`
-
-  Write mode.
-
-
-**authorization.sources.$INDEX.srv_record**
-
-  *Type*: `boolean`
-
-  *Default*: `false`
-
-  Use DNS SRV record.
-
-
-**authorization.sources.$INDEX.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authorization.sources.$INDEX.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authorization.sources.$INDEX.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authorization.sources.$INDEX.use_legacy_protocol**
-
-  *Type*: `enum`
-
-  *Default*: `auto`
-
-  *Optional*: `auto | true | false`
-
-  Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.
-
-
-**authorization.sources.$INDEX.auth_source**
-
-  *Type*: `string`
-
-  Database name associated with the user's credentials.
-
-
-**authorization.sources.$INDEX.database**
-
-  *Type*: `string`
-
-  Database name.
-
-
-**authorization.sources.$INDEX.topology**
-
-  *Type*: `topology`
-
-
-**authorization.sources.$INDEX.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
-
-
 
 #### MongoDB Replica Set
 
 
-Authorization using a MongoDB replica set.
-
-**authorization.sources.$INDEX.type**
-
-  *Type*: `mongodb`
-
-  Backend type.
-
-
-**authorization.sources.$INDEX.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
-
-
-**authorization.sources.$INDEX.collection**
-
-  *Type*: `string`
-
-  `MongoDB` collection containing the authorization data.
-
-
-**authorization.sources.$INDEX.filter**
-
-  *Type*: `map`
-
-  *Default*: `{}`
-
-  Conditional expression that defines the filter condition in the query.
-Filter supports the following placeholders<br/>
- - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>
- - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-
-
-**authorization.sources.$INDEX.mongo_type**
-
-  *Type*: `rs`
-
-  *Default*: `rs`
-
-  Replica set. Must be set to 'rs' when MongoDB server is running in 'replica set' mode.
-
-
-**authorization.sources.$INDEX.servers**
-
-  *Type*: `string`
-
-  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
-For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
-A host entry has the following form: `Host[:Port]`.
-The MongoDB default port 27017 is used if `[:Port]` is not specified.
-
-
-**authorization.sources.$INDEX.w_mode**
-
-  *Type*: `enum`
-
-  *Default*: `unsafe`
-
-  *Optional*: `unsafe | safe`
-
-  Write mode.
-
-
-**authorization.sources.$INDEX.r_mode**
-
-  *Type*: `enum`
-
-  *Default*: `master`
-
-  *Optional*: `master | slave_ok`
-
-  Read mode.
-
-
-**authorization.sources.$INDEX.replica_set_name**
-
-  *Type*: `string`
-
-  Name of the replica set.
-
-
-**authorization.sources.$INDEX.srv_record**
-
-  *Type*: `boolean`
-
-  *Default*: `false`
-
-  Use DNS SRV record.
-
-
-**authorization.sources.$INDEX.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authorization.sources.$INDEX.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authorization.sources.$INDEX.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authorization.sources.$INDEX.use_legacy_protocol**
-
-  *Type*: `enum`
-
-  *Default*: `auto`
-
-  *Optional*: `auto | true | false`
-
-  Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.
-
-
-**authorization.sources.$INDEX.auth_source**
-
-  *Type*: `string`
-
-  Database name associated with the user's credentials.
-
-
-**authorization.sources.$INDEX.database**
-
-  *Type*: `string`
-
-  Database name.
-
-
-**authorization.sources.$INDEX.topology**
-
-  *Type*: `topology`
-
-
-**authorization.sources.$INDEX.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
-
-
 
 #### MongoDB Sharded Cluster
-
-
-Authorization using a sharded MongoDB cluster.
-
-**authorization.sources.$INDEX.type**
-
-  *Type*: `mongodb`
-
-  Backend type.
-
-
-**authorization.sources.$INDEX.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
-
-
-**authorization.sources.$INDEX.collection**
-
-  *Type*: `string`
-
-  `MongoDB` collection containing the authorization data.
-
-
-**authorization.sources.$INDEX.filter**
-
-  *Type*: `map`
-
-  *Default*: `{}`
-
-  Conditional expression that defines the filter condition in the query.
-Filter supports the following placeholders<br/>
- - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>
- - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-
-
-**authorization.sources.$INDEX.mongo_type**
-
-  *Type*: `sharded`
-
-  *Default*: `sharded`
-
-  Sharded cluster. Must be set to 'sharded' when MongoDB server is running in 'sharded' mode.
-
-
-**authorization.sources.$INDEX.servers**
-
-  *Type*: `string`
-
-  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
-For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
-A host entry has the following form: `Host[:Port]`.
-The MongoDB default port 27017 is used if `[:Port]` is not specified.
-
-
-**authorization.sources.$INDEX.w_mode**
-
-  *Type*: `enum`
-
-  *Default*: `unsafe`
-
-  *Optional*: `unsafe | safe`
-
-  Write mode.
-
-
-**authorization.sources.$INDEX.srv_record**
-
-  *Type*: `boolean`
-
-  *Default*: `false`
-
-  Use DNS SRV record.
-
-
-**authorization.sources.$INDEX.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authorization.sources.$INDEX.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authorization.sources.$INDEX.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authorization.sources.$INDEX.use_legacy_protocol**
-
-  *Type*: `enum`
-
-  *Default*: `auto`
-
-  *Optional*: `auto | true | false`
-
-  Whether to use MongoDB's legacy protocol for communicating with the database.  The default is to attempt to automatically determine if the newer protocol is supported.
-
-
-**authorization.sources.$INDEX.auth_source**
-
-  *Type*: `string`
-
-  Database name associated with the user's credentials.
-
-
-**authorization.sources.$INDEX.database**
-
-  *Type*: `string`
-
-  Database name.
-
-
-**authorization.sources.$INDEX.topology**
-
-  *Type*: `topology`
-
-
-**authorization.sources.$INDEX.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
 
 
 
@@ -6461,414 +4008,18 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 #### Redis Single Node 
 
 
-Authorization using a single Redis instance.
-
-**authorization.sources.$INDEX.type**
-
-  *Type*: `redis`
-
-  Backend type.
-
-
-**authorization.sources.$INDEX.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
-
-
-**authorization.sources.$INDEX.server**
-
-  *Type*: `string`
-
-  The IPv4 or IPv6 address or the hostname to connect to.<br/>
-A host entry has the following form: `Host[:Port]`.<br/>
-The Redis default port 6379 is used if `[:Port]` is not specified.
-
-
-**authorization.sources.$INDEX.redis_type**
-
-  *Type*: `single`
-
-  *Default*: `single`
-
-  Single mode. Must be set to 'single' when Redis server is running in single mode.
-
-
-**authorization.sources.$INDEX.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authorization.sources.$INDEX.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authorization.sources.$INDEX.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authorization.sources.$INDEX.database**
-
-  *Type*: `non_neg_integer`
-
-  *Default*: `0`
-
-  Redis database ID.
-
-
-**authorization.sources.$INDEX.auto_reconnect**
-
-  *Type*: `boolean`
-
-  Deprecated since v5.0.15.
-
-
-**authorization.sources.$INDEX.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
-
-
-**authorization.sources.$INDEX.cmd**
-
-  *Type*: `string`
-
-  Database query used to retrieve authorization data.
-
-
 
 #### Redis Cluster
-
-
-Authorization using a Redis cluster.
-
-**authorization.sources.$INDEX.type**
-
-  *Type*: `redis`
-
-  Backend type.
-
-
-**authorization.sources.$INDEX.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
-
-
-**authorization.sources.$INDEX.servers**
-
-  *Type*: `string`
-
-  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
-For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
-A host entry has the following form: `Host[:Port]`.
-The Redis default port 6379 is used if `[:Port]` is not specified.
-
-
-**authorization.sources.$INDEX.redis_type**
-
-  *Type*: `cluster`
-
-  *Default*: `cluster`
-
-  Cluster mode. Must be set to 'cluster' when Redis server is running in clustered mode.
-
-
-**authorization.sources.$INDEX.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authorization.sources.$INDEX.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authorization.sources.$INDEX.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authorization.sources.$INDEX.auto_reconnect**
-
-  *Type*: `boolean`
-
-  Deprecated since v5.0.15.
-
-
-**authorization.sources.$INDEX.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
-
-
-**authorization.sources.$INDEX.cmd**
-
-  *Type*: `string`
-
-  Database query used to retrieve authorization data.
 
 " 
 
 #### Redis Sentinel
 
 
-Authorization using a Redis Sentinel.
-
-**authorization.sources.$INDEX.type**
-
-  *Type*: `redis`
-
-  Backend type.
-
-
-**authorization.sources.$INDEX.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
-
-
-**authorization.sources.$INDEX.servers**
-
-  *Type*: `string`
-
-  A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
-For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
-A host entry has the following form: `Host[:Port]`.
-The Redis default port 6379 is used if `[:Port]` is not specified.
-
-
-**authorization.sources.$INDEX.redis_type**
-
-  *Type*: `sentinel`
-
-  *Default*: `sentinel`
-
-  Sentinel mode. Must be set to 'sentinel' when Redis server is running in sentinel mode.
-
-
-**authorization.sources.$INDEX.sentinel**
-
-  *Type*: `string`
-
-  The cluster name in Redis sentinel mode.
-
-
-**authorization.sources.$INDEX.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authorization.sources.$INDEX.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authorization.sources.$INDEX.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authorization.sources.$INDEX.database**
-
-  *Type*: `non_neg_integer`
-
-  *Default*: `0`
-
-  Redis database ID.
-
-
-**authorization.sources.$INDEX.auto_reconnect**
-
-  *Type*: `boolean`
-
-  Deprecated since v5.0.15.
-
-
-**authorization.sources.$INDEX.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
-
-
-**authorization.sources.$INDEX.cmd**
-
-  *Type*: `string`
-
-  Database query used to retrieve authorization data.
-
-
 
 {% emqxee %}
 
 ### LDAP
-
-
-AuthZ with LDAP
-
-**authorization.sources.$INDEX.type**
-
-  *Type*: `ldap`
-
-  Backend type.
-
-
-**authorization.sources.$INDEX.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
-
-
-**authorization.sources.$INDEX.publish_attribute**
-
-  *Type*: `string`
-
-  *Default*: `mqttPublishTopic`
-
-  Indicates which attribute is used to represent the allowed topics list of the `publish`.
-
-
-**authorization.sources.$INDEX.subscribe_attribute**
-
-  *Type*: `string`
-
-  *Default*: `mqttSubscriptionTopic`
-
-  Indicates which attribute is used to represent the allowed topics list of the `subscribe`.
-
-
-**authorization.sources.$INDEX.all_attribute**
-
-  *Type*: `string`
-
-  *Default*: `mqttPubSubTopic`
-
-  Indicates which attribute is used to represent the both allowed topics list of  `publish` and `subscribe`.
-
-
-**authorization.sources.$INDEX.query_timeout**
-
-  *Type*: `timeout_duration_ms`
-
-  *Default*: `5s`
-
-  Timeout for the LDAP query.
-
-
-**authorization.sources.$INDEX.server**
-
-  *Type*: `string`
-
-  The IPv4 or IPv6 address or the hostname to connect to.<br/>
-A host entry has the following form: `Host[:Port]`.<br/>
-The LDAP default port 389 is used if `[:Port]` is not specified.
-
-
-**authorization.sources.$INDEX.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  Size of the connection pool towards the bridge target service.
-
-
-**authorization.sources.$INDEX.username**
-
-  *Type*: `string`
-
-  The username associated with the bridge in the external database used for authentication or identification purposes.
-
-
-**authorization.sources.$INDEX.password**
-
-  *Type*: `string`
-
-  The password associated with the bridge, used for authentication with the external database.
-
-
-**authorization.sources.$INDEX.base_dn**
-
-  *Type*: `string`
-
-  The name of the base object entry (or possibly the root) relative to
-which the Search is to be performed.
-
-
-**authorization.sources.$INDEX.filter**
-
-  *Type*: `string`
-
-  *Default*: `(objectClass=mqttUser)`
-
-  The filter that defines the conditions that must be fulfilled in order
-for the Search to match a given entry.<br />
-The syntax of the filter follows RFC 4515 and also supports placeholders.
-
-
-**authorization.sources.$INDEX.request_timeout**
-
-  *Type*: `timeout_duration_ms`
-
-  *Default*: `5s`
-
-  Sets the maximum time in milliseconds that is used for each individual request.
-
-
-**authorization.sources.$INDEX.ssl**
-
-  *Type*: `ssl`
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
 
 
 
@@ -6879,236 +4030,8 @@ The syntax of the filter follows RFC 4515 and also supports placeholders.
 #### HTTP GET Method
 
 
-Authorization using an external HTTP server (via GET requests).
-
-**authorization.sources.$INDEX.type**
-
-  *Type*: `http`
-
-  Backend type.
-
-
-**authorization.sources.$INDEX.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
-
-
-**authorization.sources.$INDEX.url**
-
-  *Type*: `string`
-
-  URL of the auth server.
-
-
-**authorization.sources.$INDEX.request_timeout**
-
-  *Type*: `string`
-
-  *Default*: `30s`
-
-  HTTP request timeout.
-
-
-**authorization.sources.$INDEX.body**
-
-  *Type*: `map`
-
-  HTTP request body.
-
-
-**authorization.sources.$INDEX.connect_timeout**
-
-  *Type*: `timeout_duration_ms`
-
-  *Default*: `15s`
-
-  The timeout when connecting to the HTTP server.
-
-
-**authorization.sources.$INDEX.enable_pipelining**
-
-  *Type*: `pos_integer`
-
-  *Default*: `100`
-
-  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
-
-
-**authorization.sources.$INDEX.max_retries**
-
-  *Type*: `non_neg_integer`
-
-  Deprecated since 5.0.4.
-
-
-**authorization.sources.$INDEX.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  The pool size.
-
-
-**authorization.sources.$INDEX.request**
-
-  *Type*: `connector-http:request`
-
-  Configure HTTP request parameters.
-
-
-**authorization.sources.$INDEX.retry_interval**
-
-  *Type*: `timeout_duration`
-
-  Deprecated since 5.0.4.
-
-
-**authorization.sources.$INDEX.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
-
-
-**authorization.sources.$INDEX.method**
-
-  *Type*: `get`
-
-  HTTP method.
-
-
-**authorization.sources.$INDEX.headers**
-
-  *Type*: `[{binary, binary()}]`
-
-  *Default*: `{"keep-alive":"timeout=30, max=1000","connection":"keep-alive","cache-control":"no-cache","accept":"application/json"}`
-
-  List of HTTP headers (without <code>content-type</code>).
-
-
 
 #### HTTP POST Method 
-
-
-Authorization using an external HTTP server (via POST requests).
-
-**authorization.sources.$INDEX.type**
-
-  *Type*: `http`
-
-  Backend type.
-
-
-**authorization.sources.$INDEX.enable**
-
-  *Type*: `boolean`
-
-  *Default*: `true`
-
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
-
-
-**authorization.sources.$INDEX.url**
-
-  *Type*: `string`
-
-  URL of the auth server.
-
-
-**authorization.sources.$INDEX.request_timeout**
-
-  *Type*: `string`
-
-  *Default*: `30s`
-
-  HTTP request timeout.
-
-
-**authorization.sources.$INDEX.body**
-
-  *Type*: `map`
-
-  HTTP request body.
-
-
-**authorization.sources.$INDEX.connect_timeout**
-
-  *Type*: `timeout_duration_ms`
-
-  *Default*: `15s`
-
-  The timeout when connecting to the HTTP server.
-
-
-**authorization.sources.$INDEX.enable_pipelining**
-
-  *Type*: `pos_integer`
-
-  *Default*: `100`
-
-  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
-
-
-**authorization.sources.$INDEX.max_retries**
-
-  *Type*: `non_neg_integer`
-
-  Deprecated since 5.0.4.
-
-
-**authorization.sources.$INDEX.pool_size**
-
-  *Type*: `pos_integer`
-
-  *Default*: `8`
-
-  The pool size.
-
-
-**authorization.sources.$INDEX.request**
-
-  *Type*: `connector-http:request`
-
-  Configure HTTP request parameters.
-
-
-**authorization.sources.$INDEX.retry_interval**
-
-  *Type*: `timeout_duration`
-
-  Deprecated since 5.0.4.
-
-
-**authorization.sources.$INDEX.ssl**
-
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
-
-
-**authorization.sources.$INDEX.method**
-
-  *Type*: `post`
-
-  HTTP method.
-
-
-**authorization.sources.$INDEX.headers**
-
-  *Type*: `[{binary, binary()}]`
-
-  *Default*: `{"keep-alive":"timeout=30, max=1000","content-type":"application/json","connection":"keep-alive","cache-control":"no-cache","accept":"application/json"}`
-
-  List of HTTP Headers.
 
 
 
@@ -7862,6 +4785,15 @@ Kafka Consumer configuration.
   Enable (true) or disable (false) this Kafka bridge.
 
 
+**bridges.kafka_consumer.$name.description**
+
+  *Type*: `string`
+
+  *Default*: `""`
+
+  Descriptive text.
+
+
 **bridges.kafka_consumer.$name.bootstrap_hosts**
 
   *Type*: `string`
@@ -7914,11 +4846,7 @@ Kafka Consumer configuration.
 
 **bridges.kafka_consumer.$name.ssl**
 
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
+  *Type*: `bridge_kafka:ssl_client_opts`
 
 
 **bridges.kafka_consumer.$name.kafka**
@@ -7972,7 +4900,7 @@ Kafka Consumer configuration.
 
 Template to render a Kafka message.
 
-**bridges.kafka.$name.kafka.message.key**
+**bridge_kafka:kafka_message.key**
 
   *Type*: `string`
 
@@ -7981,7 +4909,7 @@ Template to render a Kafka message.
   Template to render Kafka message key. If the template is rendered into a NULL value (i.e. there is no such data field in Rule Engine context) then Kafka's <code>NULL</code> (but not empty string) is used.
 
 
-**bridges.kafka.$name.kafka.message.value**
+**bridge_kafka:kafka_message.value**
 
   *Type*: `string`
 
@@ -7990,7 +4918,7 @@ Template to render a Kafka message.
   Template to render Kafka message value. If the template is rendered into a NULL value (i.e. there is no such data field in Rule Engine context) then Kafka's <code>NULL</code> (but not empty string) is used.
 
 
-**bridges.kafka.$name.kafka.message.timestamp**
+**bridge_kafka:kafka_message.timestamp**
 
   *Type*: `string`
 
@@ -8003,7 +4931,7 @@ Template to render a Kafka message.
 
 Kafka Producer configuration.
 
-**bridges.kafka.$name.enable**
+**bridges.kafka_producer.$name.enable**
 
   *Type*: `boolean`
 
@@ -8012,14 +4940,23 @@ Kafka Producer configuration.
   Enable (true) or disable (false) this Kafka bridge.
 
 
-**bridges.kafka.$name.bootstrap_hosts**
+**bridges.kafka_producer.$name.description**
+
+  *Type*: `string`
+
+  *Default*: `""`
+
+  Descriptive text.
+
+
+**bridges.kafka_producer.$name.bootstrap_hosts**
 
   *Type*: `string`
 
   A comma separated list of Kafka <code>host[:port]</code> endpoints to bootstrap the client. Default port number is 9092.
 
 
-**bridges.kafka.$name.connect_timeout**
+**bridges.kafka_producer.$name.connect_timeout**
 
   *Type*: `timeout_duration_ms`
 
@@ -8028,7 +4965,7 @@ Kafka Producer configuration.
   Maximum wait time for TCP connection establishment (including authentication time if enabled).
 
 
-**bridges.kafka.$name.min_metadata_refresh_interval**
+**bridges.kafka_producer.$name.min_metadata_refresh_interval**
 
   *Type*: `timeout_duration_ms`
 
@@ -8037,7 +4974,7 @@ Kafka Producer configuration.
   Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.
 
 
-**bridges.kafka.$name.metadata_request_timeout**
+**bridges.kafka_producer.$name.metadata_request_timeout**
 
   *Type*: `timeout_duration_ms`
 
@@ -8046,7 +4983,7 @@ Kafka Producer configuration.
   Maximum wait time when fetching metadata from Kafka.
 
 
-**bridges.kafka.$name.authentication**
+**bridges.kafka_producer.$name.authentication**
 
   *Type*: none | [bridge_kafka:auth_username_password](#bridge_kafka:auth_username_password) | [bridge_kafka:auth_gssapi_kerberos](#bridge_kafka:auth_gssapi_kerberos)
 
@@ -8055,37 +4992,33 @@ Kafka Producer configuration.
   Authentication configs.
 
 
-**bridges.kafka.$name.socket_opts**
+**bridges.kafka_producer.$name.socket_opts**
 
   *Type*: `bridge_kafka:socket_opts`
 
   Extra socket options.
 
 
-**bridges.kafka.$name.ssl**
+**bridges.kafka_producer.$name.ssl**
 
-  *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
-
-  *Default*: `{"enable":false}`
-
-  SSL connection settings.
+  *Type*: `bridge_kafka:ssl_client_opts`
 
 
-**bridges.kafka.$name.local_topic**
+**bridges.kafka_producer.$name.local_topic**
 
   *Type*: `string`
 
   MQTT topic or topic filter as data source (bridge input).  If rule action is used as data source, this config should be left empty, otherwise messages will be duplicated in Kafka.
 
 
-**bridges.kafka.$name.kafka**
+**bridges.kafka_producer.$name.parameters**
 
   *Type*: `bridge_kafka:producer_kafka_opts`
 
   Kafka producer configs.
 
 
-**bridges.kafka.$name.resource_opts**
+**bridges.kafka_producer.$name.resource_opts**
 
   *Type*: `bridge_kafka:resource_opts`
 
@@ -8166,21 +5099,21 @@ value of <code>kafka_headers</code> field before sending to Kafka.
 
 Kafka producer configs.
 
-**bridges.kafka.$name.kafka.topic**
+**bridge_kafka:producer_kafka_opts.topic**
 
   *Type*: `string`
 
   Kafka topic name
 
 
-**bridges.kafka.$name.kafka.message**
+**bridge_kafka:producer_kafka_opts.message**
 
   *Type*: `bridge_kafka:kafka_message`
 
   Template to render a Kafka message.
 
 
-**bridges.kafka.$name.kafka.max_batch_bytes**
+**bridge_kafka:producer_kafka_opts.max_batch_bytes**
 
   *Type*: `bytesize`
 
@@ -8189,7 +5122,7 @@ Kafka producer configs.
   Maximum bytes to collect in a Kafka message batch. Most of the Kafka brokers default to a limit of 1 MB batch size. EMQX's default value is less than 1 MB in order to compensate Kafka message encoding overheads (especially when each individual message is very small). When a single message is over the limit, it is still sent (as a single element batch).
 
 
-**bridges.kafka.$name.kafka.compression**
+**bridge_kafka:producer_kafka_opts.compression**
 
   *Type*: `enum`
 
@@ -8200,7 +5133,7 @@ Kafka producer configs.
   Compression method.
 
 
-**bridges.kafka.$name.kafka.partition_strategy**
+**bridge_kafka:producer_kafka_opts.partition_strategy**
 
   *Type*: `enum`
 
@@ -8214,7 +5147,7 @@ Kafka producer configs.
 <code>key_dispatch</code>: Hash Kafka message key to a partition number
 
 
-**bridges.kafka.$name.kafka.required_acks**
+**bridge_kafka:producer_kafka_opts.required_acks**
 
   *Type*: `enum`
 
@@ -8229,7 +5162,7 @@ Kafka producer configs.
 <code>none</code>: No need for Kafka to acknowledge at all.
 
 
-**bridges.kafka.$name.kafka.kafka_headers**
+**bridge_kafka:producer_kafka_opts.kafka_headers**
 
   *Type*: `string`
 
@@ -8241,7 +5174,7 @@ or an array of key-value pairs:
 <code>[{"key": "foo", "value": "bar"}]</code>
 
 
-**bridges.kafka.$name.kafka.kafka_ext_headers**
+**bridge_kafka:producer_kafka_opts.kafka_ext_headers**
 
   *Type*: `array`
 
@@ -8250,7 +5183,7 @@ The key-value pairs here will be combined with the
 value of <code>kafka_headers</code> field before sending to Kafka.
 
 
-**bridges.kafka.$name.kafka.kafka_header_value_encode_mode**
+**bridge_kafka:producer_kafka_opts.kafka_header_value_encode_mode**
 
   *Type*: `enum`
 
@@ -8264,7 +5197,7 @@ value of <code>kafka_headers</code> field before sending to Kafka.
 and encode it to JSON strings before sending.
 
 
-**bridges.kafka.$name.kafka.partition_count_refresh_interval**
+**bridge_kafka:producer_kafka_opts.partition_count_refresh_interval**
 
   *Type*: `timeout_duration_s`
 
@@ -8275,7 +5208,7 @@ After the number of partitions is increased in Kafka, EMQX will start taking the
 discovered partitions into account when dispatching messages per <code>partition_strategy</code>.
 
 
-**bridges.kafka.$name.kafka.max_inflight**
+**bridge_kafka:producer_kafka_opts.max_inflight**
 
   *Type*: `pos_integer`
 
@@ -8284,7 +5217,7 @@ discovered partitions into account when dispatching messages per <code>partition
   Maximum number of batches allowed for Kafka producer (per-partition) to send before receiving acknowledgement from Kafka. Greater value typically means better throughput. However, there can be a risk of message reordering when this value is greater than 1.
 
 
-**bridges.kafka.$name.kafka.buffer**
+**bridge_kafka:producer_kafka_opts.buffer**
 
   *Type*: `bridge_kafka:producer_buffer`
 
@@ -8293,7 +5226,7 @@ discovered partitions into account when dispatching messages per <code>partition
 Tell Kafka producer how to buffer messages when EMQX has more messages to send than Kafka can keep up, or when Kafka is down.
 
 
-**bridges.kafka.$name.kafka.query_mode**
+**bridge_kafka:producer_kafka_opts.query_mode**
 
   *Type*: `enum`
 
@@ -8304,7 +5237,7 @@ Tell Kafka producer how to buffer messages when EMQX has more messages to send t
   Query mode. Optional 'sync/async', default 'async'.
 
 
-**bridges.kafka.$name.kafka.sync_query_timeout**
+**bridge_kafka:producer_kafka_opts.sync_query_timeout**
 
   *Type*: `timeout_duration_ms`
 
@@ -8346,6 +5279,15 @@ Extra socket options.
   *Default*: `1MB`
 
   Fine tune the socket receive buffer. The default value is tuned for high throughput.
+
+
+**bridge_kafka:socket_opts.nodelay**
+
+  *Type*: `boolean`
+
+  *Default*: `true`
+
+  When set to 'true', TCP buffer is sent as soon as possible. Otherwise, the OS kernel may buffer small TCP packets for a while (40 ms by default).
 
 
 **bridge_kafka:socket_opts.tcp_keepalive**
@@ -9064,7 +6006,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 Username/password based authentication.
 
-**bridges.azure_event_hub_producer.$name.authentication.password**
+**bridge_azure_event_hub:auth_username_password.password**
 
   *Type*: `string`
 
@@ -9075,7 +6017,7 @@ Username/password based authentication.
 
 Template to render an Azure Event Hub message.
 
-**bridges.azure_event_hub_producer.$name.kafka.message.key**
+**bridge_azure_event_hub:kafka_message.key**
 
   *Type*: `string`
 
@@ -9084,7 +6026,7 @@ Template to render an Azure Event Hub message.
   Template to render Azure Event Hub message key. If the template is rendered into a NULL value (i.e. there is no such data field in Rule Engine context) then Azure Event Hub's <code>NULL</code> (but not empty string) is used.
 
 
-**bridges.azure_event_hub_producer.$name.kafka.message.value**
+**bridge_azure_event_hub:kafka_message.value**
 
   *Type*: `string`
 
@@ -9097,21 +6039,21 @@ Template to render an Azure Event Hub message.
 
 Azure Event Hub producer configs.
 
-**bridges.azure_event_hub_producer.$name.kafka.topic**
+**bridge_azure_event_hub:producer_kafka_opts.topic**
 
   *Type*: `string`
 
   Event Hub name
 
 
-**bridges.azure_event_hub_producer.$name.kafka.message**
+**bridge_azure_event_hub:producer_kafka_opts.message**
 
   *Type*: `bridge_azure_event_hub:kafka_message`
 
   Template to render an Azure Event Hub message.
 
 
-**bridges.azure_event_hub_producer.$name.kafka.max_batch_bytes**
+**bridge_azure_event_hub:producer_kafka_opts.max_batch_bytes**
 
   *Type*: `bytesize`
 
@@ -9120,7 +6062,7 @@ Azure Event Hub producer configs.
   Maximum bytes to collect in an Azure Event Hub message batch. Most of the Kafka brokers default to a limit of 1 MB batch size. EMQX's default value is less than 1 MB in order to compensate Kafka message encoding overheads (especially when each individual message is very small). When a single message is over the limit, it is still sent (as a single element batch).
 
 
-**bridges.azure_event_hub_producer.$name.kafka.partition_strategy**
+**bridge_azure_event_hub:producer_kafka_opts.partition_strategy**
 
   *Type*: `enum`
 
@@ -9134,7 +6076,7 @@ Azure Event Hub producer configs.
 <code>key_dispatch</code>: Hash Azure Event Hub message key to a partition number
 
 
-**bridges.azure_event_hub_producer.$name.kafka.required_acks**
+**bridge_azure_event_hub:producer_kafka_opts.required_acks**
 
   *Type*: `enum`
 
@@ -9148,7 +6090,7 @@ Azure Event Hub producer configs.
 <code>leader_only</code>: Require only the partition-leader's acknowledgement.
 
 
-**bridges.azure_event_hub_producer.$name.kafka.kafka_headers**
+**bridge_azure_event_hub:producer_kafka_opts.kafka_headers**
 
   *Type*: `string`
 
@@ -9160,7 +6102,7 @@ or an array of key-value pairs:
 <code>[{"key": "foo", "value": "bar"}]</code>
 
 
-**bridges.azure_event_hub_producer.$name.kafka.kafka_ext_headers**
+**bridge_azure_event_hub:producer_kafka_opts.kafka_ext_headers**
 
   *Type*: `array`
 
@@ -9169,7 +6111,7 @@ The key-value pairs here will be combined with the
 value of <code>kafka_headers</code> field before sending to Azure Event Hub.
 
 
-**bridges.azure_event_hub_producer.$name.kafka.kafka_header_value_encode_mode**
+**bridge_azure_event_hub:producer_kafka_opts.kafka_header_value_encode_mode**
 
   *Type*: `enum`
 
@@ -9183,7 +6125,7 @@ value of <code>kafka_headers</code> field before sending to Azure Event Hub.
 and encode it to JSON strings before sending.
 
 
-**bridges.azure_event_hub_producer.$name.kafka.partition_count_refresh_interval**
+**bridge_azure_event_hub:producer_kafka_opts.partition_count_refresh_interval**
 
   *Type*: `timeout_duration_s`
 
@@ -9194,7 +6136,7 @@ After the number of partitions is increased in Azure Event Hub, EMQX will start 
 discovered partitions into account when dispatching messages per <code>partition_strategy</code>.
 
 
-**bridges.azure_event_hub_producer.$name.kafka.max_inflight**
+**bridge_azure_event_hub:producer_kafka_opts.max_inflight**
 
   *Type*: `pos_integer`
 
@@ -9203,7 +6145,7 @@ discovered partitions into account when dispatching messages per <code>partition
   Maximum number of batches allowed for Azure Event Hub producer (per-partition) to send before receiving acknowledgement from Azure Event Hub. Greater value typically means better throughput. However, there can be a risk of message reordering when this value is greater than 1.
 
 
-**bridges.azure_event_hub_producer.$name.kafka.buffer**
+**bridge_azure_event_hub:producer_kafka_opts.buffer**
 
   *Type*: `bridge_kafka:producer_buffer`
 
@@ -9212,7 +6154,7 @@ discovered partitions into account when dispatching messages per <code>partition
 Tell Azure Event Hub producer how to buffer messages when EMQX has more messages to send than Azure Event Hub can keep up, or when Azure Event Hub is down.
 
 
-**bridges.azure_event_hub_producer.$name.kafka.query_mode**
+**bridge_azure_event_hub:producer_kafka_opts.query_mode**
 
   *Type*: `enum`
 
@@ -9223,7 +6165,7 @@ Tell Azure Event Hub producer how to buffer messages when EMQX has more messages
   Query mode. Optional 'sync/async', default 'async'.
 
 
-**bridges.azure_event_hub_producer.$name.kafka.sync_query_timeout**
+**bridge_azure_event_hub:producer_kafka_opts.sync_query_timeout**
 
   *Type*: `timeout_duration_ms`
 
@@ -9243,6 +6185,15 @@ Configuration for an Azure Event Hub bridge.
   *Default*: `true`
 
   Enable (true) or disable (false) this bridge.
+
+
+**bridges.azure_event_hub_producer.$name.description**
+
+  *Type*: `string`
+
+  *Default*: `""`
+
+  Descriptive text.
 
 
 **bridges.azure_event_hub_producer.$name.bootstrap_hosts**
@@ -9301,8 +6252,6 @@ Configuration for an Azure Event Hub bridge.
 
   *Default*: `{"enable":true}`
 
-  SSL connection settings.
-
 
 **bridges.azure_event_hub_producer.$name.local_topic**
 
@@ -9311,7 +6260,7 @@ Configuration for an Azure Event Hub bridge.
   MQTT topic or topic filter as data source (bridge input).  If rule action is used as data source, this config should be left empty, otherwise messages will be duplicated in Azure Event Hub.
 
 
-**bridges.azure_event_hub_producer.$name.kafka**
+**bridges.azure_event_hub_producer.$name.parameters**
 
   *Type*: `bridge_azure_event_hub:producer_kafka_opts`
 
@@ -9327,9 +6276,9 @@ Configuration for an Azure Event Hub bridge.
 
 
 
-Socket options for SSL clients.
+TLS/SSL options for Azure Event Hub client.
 
-**bridges.azure_event_hub_producer.$name.ssl.cacertfile**
+**bridge_azure_event_hub:ssl_client_opts.cacertfile**
 
   *Type*: `string`
 
@@ -9342,14 +6291,14 @@ NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
 
-**bridges.azure_event_hub_producer.$name.ssl.cacerts**
+**bridge_azure_event_hub:ssl_client_opts.cacerts**
 
   *Type*: `boolean`
 
   Deprecated since 5.1.4.
 
 
-**bridges.azure_event_hub_producer.$name.ssl.certfile**
+**bridge_azure_event_hub:ssl_client_opts.certfile**
 
   *Type*: `string`
 
@@ -9361,14 +6310,14 @@ Although the root CA certificate is optional, it should be placed at the end of
 the file if it is to be added.
 
 
-**bridges.azure_event_hub_producer.$name.ssl.keyfile**
+**bridge_azure_event_hub:ssl_client_opts.keyfile**
 
   *Type*: `string`
 
   PEM format private key file.
 
 
-**bridges.azure_event_hub_producer.$name.ssl.verify**
+**bridge_azure_event_hub:ssl_client_opts.verify**
 
   *Type*: `enum`
 
@@ -9379,7 +6328,7 @@ the file if it is to be added.
   Enable or disable peer verification.
 
 
-**bridges.azure_event_hub_producer.$name.ssl.reuse_sessions**
+**bridge_azure_event_hub:ssl_client_opts.reuse_sessions**
 
   *Type*: `boolean`
 
@@ -9389,7 +6338,7 @@ the file if it is to be added.
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
-**bridges.azure_event_hub_producer.$name.ssl.depth**
+**bridge_azure_event_hub:ssl_client_opts.depth**
 
   *Type*: `non_neg_integer`
 
@@ -9401,14 +6350,14 @@ if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
 if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
-**bridges.azure_event_hub_producer.$name.ssl.password**
+**bridge_azure_event_hub:ssl_client_opts.password**
 
   *Type*: `string`
 
   String containing the user's password. Only used if the private key file is password-protected.
 
 
-**bridges.azure_event_hub_producer.$name.ssl.versions**
+**bridge_azure_event_hub:ssl_client_opts.versions**
 
   *Type*: `array`
 
@@ -9420,7 +6369,7 @@ In case PSK cipher suites are intended, make sure to configure
 <code>['tlsv1.2', 'tlsv1.1']</code> here.
 
 
-**bridges.azure_event_hub_producer.$name.ssl.ciphers**
+**bridge_azure_event_hub:ssl_client_opts.ciphers**
 
   *Type*: `array`
 
@@ -9455,7 +6404,7 @@ RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
 RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
-**bridges.azure_event_hub_producer.$name.ssl.secure_renegotiate**
+**bridge_azure_event_hub:ssl_client_opts.secure_renegotiate**
 
   *Type*: `boolean`
 
@@ -9468,7 +6417,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
-**bridges.azure_event_hub_producer.$name.ssl.log_level**
+**bridge_azure_event_hub:ssl_client_opts.log_level**
 
   *Type*: `enum`
 
@@ -9479,7 +6428,7 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   Log level for SSL communication. Default is 'notice'. Set to 'debug' to inspect TLS handshake messages.
 
 
-**bridges.azure_event_hub_producer.$name.ssl.hibernate_after**
+**bridge_azure_event_hub:ssl_client_opts.hibernate_after**
 
   *Type*: `duration`
 
@@ -9488,7 +6437,7 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   Hibernate the SSL process after idling for amount of time reducing its memory footprint.
 
 
-**bridges.azure_event_hub_producer.$name.ssl.enable**
+**bridge_azure_event_hub:ssl_client_opts.enable**
 
   *Type*: `true`
 
@@ -9497,23 +6446,16 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   Enable TLS.
 
 
-**bridges.azure_event_hub_producer.$name.ssl.server_name_indication**
+**bridge_azure_event_hub:ssl_client_opts.server_name_indication**
 
-  *Type*: `disable | auto | string`
+  *Type*: `auto | disable | string`
 
   *Default*: `auto`
 
-  Specify the host name to be used in TLS Server Name Indication extension.<br/>
-For instance, when connecting to "server.example.net", the genuine server
-which accepts the connection and performs TLS handshake may differ from the
-host the TLS client initially connects to, e.g. when connecting to an IP address
-or when the host has multiple resolvable DNS records <br/>
-If not specified, it will default to the host name string which is used
-to establish the connection, unless it is IP addressed used.<br/>
-The host name is then also used in the host name verification of the peer
-certificate.<br/> The special value 'disable' prevents the Server Name
-Indication extension from being sent and disables the hostname
-verification check.
+  Server Name Indication (SNI) setting for TLS handshake.<br/>
+- <code>auto</code>: The client will use <code>"servicebus.windows.net"</code> as SNI.<br/>
+- <code>disable</code>: If you wish to prevent the client from sending the SNI.<br/>
+- Other string values it will be sent as-is.
 
 
 
@@ -13533,7 +10475,7 @@ which accepts the connection and performs TLS handshake may differ from the
 host the TLS client initially connects to, e.g. when connecting to an IP address
 or when the host has multiple resolvable DNS records <br/>
 If not specified, it will default to the host name string which is used
-to establish the connection, unless it is IP addressed used.<br/>
+to establish the connection, unless it is IP address used.<br/>
 The host name is then also used in the host name verification of the peer
 certificate.<br/> The special value 'disable' prevents the Server Name
 Indication extension from being sent and disables the hostname
@@ -15540,7 +12482,7 @@ which accepts the connection and performs TLS handshake may differ from the
 host the TLS client initially connects to, e.g. when connecting to an IP address
 or when the host has multiple resolvable DNS records <br/>
 If not specified, it will default to the host name string which is used
-to establish the connection, unless it is IP addressed used.<br/>
+to establish the connection, unless it is IP address used.<br/>
 The host name is then also used in the host name verification of the peer
 certificate.<br/> The special value 'disable' prevents the Server Name
 Indication extension from being sent and disables the hostname

@@ -1,34 +1,48 @@
 # Bridge MQTT Data into RocketMQ
 
-EMQX supports bridging data into RocketMQ, so you can forward MQTT messages and client events to RocketMQ, for example, use events to trigger the update of data to record the online status or online/offline of clients.
-
 {% emqxce %}
 ::: tip
 EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 :::
 {% endemqxce %}
 
-::: tip Prerequisites
+EMQX supports bridging data into [RocketMQ](https://rocketmq.apache.org/), so you can forward MQTT messages and client events to RocketMQ. For example, you can use RocketMQ to collect sensor data from devices, log data, etc.
+
+This page provides a comprehensive introduction to the data integration between EMQX and RocketMQ with practical instructions on creating a rule and data bridge.
+
+## How It Works
+
+The RocketMQ data integration is an out-of-the-box feature in EMQX that combines the real-time data capturing and transmission capabilities of EMQX with RocketMQ's powerful message queue processing capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to RocketMQ for storage and management, eliminating the need for complex coding.
+
+The diagram below illustrates a typical architecture of data integration between EMQX and RocketMQ:
+
+![EMQX Integration RocketMQ](./assets/emqx-integration-rocketmq.png)
+
+Ingesting MQTT data into RocketMQ works as follows:
+
+1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to RocketMQ. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
+3. **Data ingestion into RocketMQ**: Once the rule has processed the message, it triggers an action of forwarding the messages to RocketMQ. Processed data will be seamlessly written into RocketMQ.
+4. **Data Storage and Utilization**: With the data now stored in RocketMQ, businesses can harness its querying power for various use cases. For example, in the financial industry, RocketMQ can be used as a reliable high-performance message queue to store and manage data from payment terminals and transaction systems. It can connect messages to data analysis and regulatory platforms, fulfilling requirements such as risk management, fraud detection and prevention, and regulatory compliance.
+
+## Features and Benefits
+
+The data integration with RocketMQ brings the following features and advantages to your business:
+
+- **Reliable IoT Data Message Delivery**: EMQX can reliably batch and send MQTT messages to RocketMQ, enabling the integration of IoT devices with RocketMQ and application systems.
+- **MQTT Message Transformation**: Using the rule engine, EMQX can filter and transform MQTT messages. Messages can undergo data extraction, filtering, enrichment, and transformation before being sent to RocketMQ.
+- **Cloud-Native Elastic Scaling**: EMQX and RocketMQ are both applications built on cloud-native architecture, offering friendly Kubernetes (K8s) support and integration with the cloud-native ecosystem. They can infinitely and elastically scale to accommodate the rapid development of business needs.
+- **Flexible Topic Mapping**: RocketMQ Data Bridge supports flexible mapping of MQTT topics to RocketMQ topics, allowing easy configuration of keys (Key) and values (Value) for data in RocketMQ messages.
+- **Processing Capabilities in High-Throughput Scenarios**: RocketMQ Data Bridge supports both synchronous and asynchronous write modes, allowing for a flexible balance between latency and throughput according to different scenarios.
+
+## Before You Start
+
+This section describes the preparations you need to complete before you start to create the RocketMQ data bridges, including how to set up the RocketMQ server.
+
+### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
-
-:::
-
-## Features List
-
-- [Connection pool](./data-bridges.md#connection-pool)
-- [Async mode](./data-bridges.md#async-mode)
-- [Batch mode](./data-bridges.md#batch-mode)
-- [Buffer queue](./data-bridges.md#buffer-queue)
-- [SQL prepared statement](./data-bridges.md#prepared-statement)
-
-
-## Quick Start Tutorial
-
-This section introduces how to configure the RocketMQ data bridge, covering topics like how to set up the RocketMQ server, create data bridges and rules for forwarding data to RocketMQ and test the data bridges and rules.
-
-This tutorial assumes that you run both EMQX and RocketMQ on the local machine. If you have RocketMQ and EMQX running remotely, adjust the settings accordingly.
 
 ### Install RocketMQ 
 
@@ -120,7 +134,9 @@ In Linux, you should change the `host.docker.internal` to your real IP address.
 
 :::
 
-### Create RocketMQ Data Bridge
+## Create RocketMQ Data Bridge
+
+This section demonstrates how to create the RockeMQ data bridge in EMQX Dashboard. It assumes that you run both EMQX and RocketMQ on the local machine. If you have RocketMQ and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
@@ -150,7 +166,7 @@ In Linux, you should change the `host.docker.internal` to your real IP address.
 
 Now the RocketMQ data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
 
-### Create Rules for RocketMQ Data Bridge
+## Create Rules for RocketMQ Data Bridge
 
 Now that you have successfully created the data bridge to RocketMQ, you can continue to create rules to specify the data to be saved into RocketMQ. You need to create two different rules for messages forward and event records. 
 
@@ -191,7 +207,7 @@ Now that you have successfully created the data bridge to RocketMQ, you can cont
 
 Now you have successfully created the data bridge to RocketMQ. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to RocketMQ after parsing by rule `my_rule`. 
 
-### Test Data Bridge and Rule
+## Test Data Bridge and Rule
 
 Use MQTTX to send a message to topic `t/1` to trigger an online/offline event. 
 

@@ -28,7 +28,7 @@ EMQX also supports using TLS to secure the communication channel between EMQX no
 
 This section introduces how to configure TLS for EMQX clusters. On how to obtain an SSL/TLS certificate, see [Enable SSL/TLS Connection](../../network/emqx-mqtt-tls.md). 
 
-### Use TLS/SSL for Cluster RPC Connections
+## Use TLS/SSL for Cluster RPC Connections
 
 To configure TLS/SSL for cluster RPC below configuration items should be set in `emqx.conf`.
 

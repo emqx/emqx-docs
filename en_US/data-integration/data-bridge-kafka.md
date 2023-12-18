@@ -12,22 +12,21 @@ The Kafka data integration is an EMQX Enterprise Edition feature. EMQX Enterpris
 
 This page provides a comprehensive introduction to the data integration between EMQX and Kafka with practical instructions on how to create and validate the data integration. Here is a list of topics covered on this page:
 
-- [Stream MQTT Data into Apache Kafka](#stream-mqtt-data-into-apache-kafka)
-  - [How It Works](#how-it-works)
-  - [Features and Benefits](#features-and-benefits)
-  - [Before You Start](#before-you-start)
-    - [Prerequisites](#prerequisites)
-    - [Set Up a Kafka Server](#set-up-a-kafka-server)
-    - [Create Kafka Topics](#create-kafka-topics)
-  - [Kafka Producer Data Bridge](#kafka-producer-data-bridge)
-    - [Create Rule and Data Bridge to Kafka Producer](#create-rule-and-data-bridge-to-kafka-producer)
-    - [Test Kafka Producer Data Bridge and Rule](#test-kafka-producer-data-bridge-and-rule)
-  - [Kafka Consumer Data Bridge](#kafka-consumer-data-bridge)
-    - [Create Data Bridge to Kafka Consumer](#create-data-bridge-to-kafka-consumer)
-    - [Create Rule for Consumer Data Bridge (Optional)](#create-rule-for-consumer-data-bridge-optional)
-    - [Test Kafka Consumer Data Bridge and Rule](#test-kafka-consumer-data-bridge-and-rule)
-  - [Advanced Configurations](#advanced-configurations)
-  - [More Information](#more-information)
+- [How It Works](#how-it-works)
+- [Features and Benefits](#features-and-benefits)
+- [Before You Start](#before-you-start)
+  - [Prerequisites](#prerequisites)
+  - [Set Up a Kafka Server](#set-up-a-kafka-server)
+  - [Create Kafka Topics](#create-kafka-topics)
+- [Kafka Producer Data Bridge](#kafka-producer-data-bridge)
+  - [Create Rule and Data Bridge to Kafka Producer](#create-rule-and-data-bridge-to-kafka-producer)
+  - [Test Kafka Producer Data Bridge and Rule](#test-kafka-producer-data-bridge-and-rule)
+- [Kafka Consumer Data Bridge](#kafka-consumer-data-bridge)
+  - [Create Data Bridge to Kafka Consumer](#create-data-bridge-to-kafka-consumer)
+  - [Create Rule for Consumer Data Bridge (Optional)](#create-rule-for-consumer-data-bridge-optional)
+  - [Test Kafka Consumer Data Bridge and Rule](#test-kafka-consumer-data-bridge-and-rule)
+- [Advanced Configurations](#advanced-configurations)
+- [More Information](#more-information)
 
 ## How It Works
 
@@ -39,10 +38,9 @@ The diagram below illustrates a typical architecture of data integration between
 
 Streaming data into or from Apache Kafka involves creating data bridges to Kafka in two roles: producer (sends messages to Kafka) and consumer (receives messages from Kafka). EMQX enables you to create data bridges in either of the roles. If you configure the data bridge in a producer role, it works as follows:
 
-1. **Message publication from IoT devices:** The connected vehicles periodically publish messages containing status data using the MQTT protocol. These messages include information such as speed and direction.
-2. **Message reception by EMQX:** As an MQTT Broker, EMQX receives these MQTT messages from the connected vehicles. It serves as the centralized hub for handling MQTT-based communication.
-3. **Message data processing:** With an embedded rule engine working together with the broker as a single component, these MQTT messages can be processed based on topic matching rules. When a message arrives, it passes through the rule engine, which evaluates the defined rules for that message. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
-4. **Bridging to Kafka:** The rule defined in the rule engine triggers an action of forwarding the messages to Kafka. Using the Kafka bridging functionality, MQTT topics are mapped to pre-defined Kafka topics, and all processed messages and data are written into Kafka topics.
+1. **Message publication and reception**: IoT devices on connected vehicles establish successful connections to EMQX through the MQTT protocol and periodically publish messages containing status data via MQTT. When EMQX receives these messages, it initiates the matching process within its rules engine.
+2. **Message data processing:** With an embedded rule engine working together with the broker as a single component, these MQTT messages can be processed based on topic-matching rules. When a message arrives, it passes through the rule engine, which evaluates the defined rules for that message. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
+3. **Bridging to Kafka:** The rule defined in the rule engine triggers the action of forwarding the messages to Kafka. Using the Kafka bridging functionality, MQTT topics are mapped to pre-defined Kafka topics, and all processed messages and data are written into Kafka topics.
 
 After the vehicle data are ingested into Kafka, you can flexibly access and utilize the data:
 
@@ -238,8 +236,8 @@ This section demonstrates how to create a data bridge to receive data from Kafka
 
 9. **Offset Reset Policy**: Select the policy for resetting the offset where Kafaka consumers start to read from a Kafka topic partition when there is no consumer’s offset or the offset becomes invalid.
 
-   - Select **lastest** if you want the consumer to start reading messages from the latest offset, skipping messages that were produced before the consumer started.
-   - Select **earliest** if you want the consumer to start reading messages from the beginning of the partition, including messages that were produced before the consumer started, that is, to read all the historical data in a topic.
+   - Select `lastest` if you want the consumer to start reading messages from the latest offset, skipping messages that were produced before the consumer started.
+   - Select `earliest` if you want the consumer to start reading messages from the beginning of the partition, including messages that were produced before the consumer started, that is, to read all the historical data in a topic.
 
 10. Advanced settings (optional): See **Advanced Configurations.**
 

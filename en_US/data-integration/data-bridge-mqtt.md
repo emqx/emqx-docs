@@ -2,9 +2,13 @@
 
 The MQTT data bridge is a channel for EMQX to communicate with other MQTT services, including EMQX clusters that use the MQTT protocol. This page introduces how the MQTT data bridge works in EMQX and provides a quick start tutorial on how to create an MQTT data bridge in EMQX Dashboard or using the configuration file.
 
-## MQTT Data Bridge Modes
+## How MQTT Data Bridge Works
 
-EMQX supports the MQTT data bridge that works in two primary modes: ingress and egress. The following sections explain how each mode works. Also in this section, it introduces the concept of connection pools used in both modes.
+EMQX supports the MQTT data bridge that works in two primary modes: ingress and egress. The following sections explain how each mode works. Also, this section introduces the concept of connection pools used in both modes.
+
+The diagram below illustrates a typical architecture of data integration between EMQX and HStreamDB:
+
+![EMQX Integration MQTT](./assets/emqx-integration-mqtt.png)
 
 ### Ingress Mode
 
@@ -48,25 +52,27 @@ Because the MQTT protocol requires that a client connecting to the broker must h
 
 Although the connection pool applies to both ingress and egress modes, using the connection pool in ingress mode should consider a few caveats. When you have EMQX [cluster](../deploy/cluster/introduction.md) with more than 1 node, and configures an ingress MQTT bridge to subscribe non-shared topics from the remote broker, clients in the connection pool will receive duplicated messages if they all subscribe to the same topic. In that case, it will bring pressure to the brokers, so it is strongly advised to use [shared subscription](../messaging/mqtt-shared-subscription.md) as a kind of safety measure. For example, you can configure the topic of the remote MQTT Broker to `$share/name1/topic1` or `$share/name2/topic2/#` if topic filter is used. In non-shared subscription cases, the MQTT client connection pool will be downscaled to one client, which means only one client will be started.
 
-## Quick Start Tutorial
+## Features and Benefits
 
-The following section will use EMQX [public MQTT broker](https://www.emqx.com/en/mqtt/public-mqtt5-broker) as an example to illustrate how to configure a data bridge between EMQX and this public MQTT broker.
+The MQTT data bridge has the following features and benefits:
 
-:::tip Prerequisites
+- **Extensive Compatibility**: The MQTT data bridge uses the standard MQTT protocol, allowing it to bridge to various IoT platforms, including AWS IoT Core, Azure IoT Hubs, and also supports open-source or other industry MQTT brokers and IoT platforms. This enables seamless integration and communication with a variety of devices and platforms.
+- **Bidirectional Data Flow**: It supports bidirectional data flow, enabling the publishing of messages from EMQX locally to remote MQTT services, and also subscribing to messages from MQTT services and publishing them locally. This bidirectional communication capability makes data transfer between different systems more flexible and controllable.
+- **Flexible Topic Mapping**: Based on the MQTT publish-subscribe model, the MQTT data bridge implements flexible topic mapping. It supports adding prefixes to topics and dynamically constructing topics using the client's contextual information (such as client ID, username, etc.). This flexibility allows for customized processing and routing of messages according to specific needs.
+- **High Performance**: The MQTT data bridge offers performance optimization features, such as connection pools and shared subscriptions, to reduce the load on individual bridge clients, achieving lower bridge latency and higher bridge message throughput. Through these optimization measures, the overall system performance and scalability can be enhanced.
+- **Payload Transformation**: The MQTT data bridge allows for the processing of message payloads by defining SQL rules. This means that during message transmission, operations such as data extraction, filtering, enrichment, and transformation can be performed on the payload. For example, real-time metrics can be extracted from the payload and transformed and processed before the message is delivered to Kafka.
+- **Metrics Monitoring**: The runtime metrics monitoring is provided for each data bridge. It allows viewing of total message count, success/failure counts, current rates, etc., helping users to monitor and assess the performance and health of the bridge in real time.
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data bridges](./data-bridges.md)
+## Before You Start
 
-:::
+Make sure you have the knowledge about the following:
 
-### Feature List
+- EMQX data integration [rules](./rules.md)
+- [Data bridges](./data-bridges.md)
 
-- [Async mode](./data-bridges.md#async-mode)
-- [Buffer queue](./data-bridges.md#buffer-queue)
+## Create MQTT Data Bridge via Dashboard
 
-<!--  Configuration parameters TODO 链接到配置手册对应配置章节。 -->
-
-### Create MQTT Data Bridge via Dashboard
+This section uses EMQX [public MQTT broker](https://www.emqx.com/en/mqtt/public-mqtt5-broker) as an example to demonstrate how to configure a data bridge between EMQX and this public MQTT broker in the Dashboard.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
@@ -91,13 +97,60 @@ The following section will use EMQX [public MQTT broker](https://www.emqx.com/en
        
      - **Local MQTT Broker**: Forward the received messages to specific local topics or leave them blank, then these messages will first be processed by the configured rules and then forwarded with the [republish action](./rules.md).
        - **Topic**: Input `local/topic/ingress`.
+       
        - **QoS**: Select `0` or `${qos}` (to use the QoS of the received messages).
+       
        - **Retain**: Confirm whether the message will be published as a retained message.
-       - **Payload**: Payload template for the messages to be forwarded, and supports reading data using `${field}` syntax.
-     
+       
+       - **Payload**: Payload template for the messages to be forwarded, and supports reading data using `${field}` syntax. The supported fields are as follows:
+       
+         | Field Name                    | Description                                                  |
+         | ----------------------------- | ------------------------------------------------------------ |
+         | topic                         | The topic of the source message                              |
+         | server                        | The server address to which the data bridge is connected     |
+         | retain                        | Whether to be published as a retain the message, with a value of false |
+         | qos                           | Message Quality of Service                                      |
+         | pub_props                     | MQTT 5.0 message properties object, including user property pairs, user properties, and other properties |
+         | pub_props.User-Property-Pairs | Array of user property pairs, each containing key-value pairs, for example, `{"key":"foo", "value":"bar"}` |
+         | pub_props.User-Property       | User property object, containing key-value pairs, for example, `{"foo":"bar"}` |
+         | pub_props.*                   | Other message property key-value pairs, for example, `Content-Type: JSON` |
+         | payload                       | Message content                                              |
+         | message_received_at           | Message received timestamp in milliseconds                   |
+         | id                            | Message ID                                                   |
+         | dup                           | Whether it is a duplicate message                            |
+       
+         For example, when the message template is left blank, the following message will be published:
+       
+         ```json
+         {
+           "topic": "f/1",
+           "server": "broker.emqx.io:1883",
+           "retain": false,
+           "qos": 0,
+           "pub_props": {
+               "User-Property-Pairs": [
+                   {
+                       "value": "bar",
+                       "key": "foo"
+                   }
+               ],
+               "User-Property": {
+                   "foo": "bar"
+               },
+               "Message-Expiry-Interval": 3600,
+               "Content-Type": "JSON"
+           },
+           "payload": "Hello MQTTX CLI",
+           "message_received_at": 1699603701552,
+           "id": "000609C7D2E3D556F445000010E4000C",
+           "dup": false
+         }
+         ```
+       
      - **Connection Pool Size**: Specifies the size of the pool of MQTT client connections to the local broker. In this example, you can set `8`. This is safe as long as shared subscription is used for the remote topic.
      
    - **Egress** (optional): Set the rules to publish messages from specific local MQTT topics to remote MQTT brokers. In this example, you publish the messages from `local/topic/egress` to `remote/topic/egress`:
+
    - **Local MQTT Broker**: Specify the local message topics.
        - **Topic**: Input `local/topic/egress`.
      
@@ -108,16 +161,16 @@ The following section will use EMQX [public MQTT broker](https://www.emqx.com/en
        - **Payload**: Payload template for the messages to be forwarded, and Supports reading data using `${field}` syntax.
      
    - **MQTT Client Pool Size**: Specifies the size of the pool of MQTT client connections to the local broker. In this example, you can set `8`.
-   
+
 7. In **Query mode** field, you can configure whether to use sync/async mode and your buffer pool size as your business needs.
 
-7. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the MQTT broker.
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the MQTT broker.
 
-8. Click **Create** to finish the creation of the data bridge.
+9. Click **Create** to finish the creation of the data bridge.
 
-### Create MQTT Data Bridge via Configuration File
+## Create MQTT Data Bridge via Configuration File
 
-EMQX also supports to use configuration file to create an MQTT data bridge, and an example is as follows:
+EMQX also supports to use the configuration file to create an MQTT data bridge. This section uses EMQX [public MQTT broker](https://www.emqx.com/en/mqtt/public-mqtt5-broker) as an example to demonstrate how to configure a data bridge between EMQX and this public MQTT broker in the configuration file. The example code is as follows:
 
 ```bash
 bridges.mqtt.my_mqtt_bridge {

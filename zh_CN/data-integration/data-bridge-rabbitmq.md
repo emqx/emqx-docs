@@ -1,8 +1,4 @@
-# RabbitMQ
-
-作为一款广泛使用的开源消息代理，[RabbitMQ](https://www.rabbitmq.com/) 应用了高级消息队列协议（AMQP），为分布式系统之间的消息传递提供了一个强大而可扩展的平台。
-
-EMQX 支持与 RabbitMQ 的数据集成，能够让您将 MQTT 消息和事件转发至 RabbitMQ。
+# 将 MQTT 数据传输到 RabbitMQ
 
 {% emqxce %}
 :::tip
@@ -12,28 +8,46 @@ RabbitMQ 数据桥接是 EMQX 企业版功能。EMQX 企业版可以为您带来
 :::
 {% endemqxce %}
 
-::: tip 前置准备
+作为一款广泛使用的开源消息代理，[RabbitMQ](https://www.rabbitmq.com/) 应用了高级消息队列协议（AMQP），为分布式系统之间的消息传递提供了一个强大而可扩展的平台。EMQX 支持与 RabbitMQ 的数据集成，能够让您将 MQTT 消息和事件转发至 RabbitMQ。
+
+本页面提供了 EMQX 与 RabbitMQ 数据集成的全面介绍，并提供了创建规则和数据桥接的实用指导。
+
+## 工作原理
+
+RabbitMQ 数据集成是 EMQX 中的开箱即用功能，结合了 EMQX 的设备接入、消息传输能力与 RabbitMQ 强大的消息队列处理能力。通过内置的[规则引擎](./rules.md)组件，该集成简化了从 EMQX 到 RabbitMQ 的数据摄取过程，无需复杂编码。
+
+下图展示了 EMQX 与 RabbitMQ 之间数据集成的典型架构:
+
+![EMQX-RabbitMQ 集成](./assets/emqx-integration-rabbitmq.png)
+
+MQTT 数据摄取到 RabbitMQ 的工作流程如下：
+
+1. **消息发布和接收**：工业物联网设备通过 MQTT 协议与 EMQX 建立成功连接，并向 EMQX 发布实时 MQTT 数据。EMQX 收到这些消息后，将启动其规则引擎中的匹配过程。
+2. **消息数据处理**：消息到达后，它将通过规则引擎进行处理，然后由 EMQX 中定义的规则处理。根据预定义的标准，规则将决定哪些消息需要路由到 RabbitMQ。如果任何规则指定了载荷转换，则将应用这些转换，例如转换数据格式、过滤特定信息或用额外的上下文丰富载荷。
+3. **消息传入到 RabbitMQ**：规则处理完消息后，它将触发一个动作，将消息转发到 RabbitMQ。处理过的消息将无缝写入 RabbitMQ。
+4. **数据持久化和利用**：RabbitMQ 将消息存储在队列中，并将它们传递给适当的消费者。消息可以被其他应用程序或服务消费以进行进一步处理，如数据分析、可视化和存储。
+
+## 特性与优势
+
+RabbitMQ 数据集成为您的业务带来以下特性和优势：
+
+- **可靠的物联网数据消息传递**：EMQX 确保从设备到云的可靠连接和消息传递，而 RabbitMQ 负责消息的持久化和在不同服务之间的可靠传递，确保了各个流程中数据的可靠性。
+- **MQTT 消息转换**：使用规则引擎，EMQX 可以过滤和转换 MQTT 消息。在发送到 RabbitMQ 之前，消息可以经过数据提取、过滤、丰富和转换。
+- **灵活的消息映射**：RabbitMQ 数据桥支持灵活的将 MQTT 主题映射到 RabbitMQ Routing Key 和 Exchange，允许 MQTT 和 RabbitMQ 之间的无缝集成。
+- **高可用性和集群支持**：EMQX 和 RabbitMQ 都支持构建高可用的消息代理集群，确保即使在节点失败的情况下系统也能继续提供服务。利用集群能力还提供了出色的可扩展性。
+- **高吞吐量场景中的处理能力**：RabbitMQ 数据桥支持同步和异步写入模式，允许根据不同场景在延迟和吞吐量之间灵活平衡。
+
+## 桥接准备
+
+本节介绍了在 EMQX 中创建 RabbitMQ 数据桥接之前需要做的准备工作，包括启动 RabbitMQ 服务器并创建 RabbitMQ test exchange 和 queue。
+
+### 前置准备
 
 - 了解 EMQX 数据集成[规则](./rules.md)
 
 - 了解[数据桥接](./data-bridges.md)
 
 - 了解 UNIX 终端及命令
-
-:::
-
-## Feature List
-
-- [连接池](./data-bridges.md#连接池)
-- [异步请求模式](./data-bridges.md#异步请求模式)
-- [批量模式](./data-bridges.md#批量模式)
-- [缓存队列](./data-bridges.md#缓存队列)
-
-## 快速开始
-
-本节将指导您如何启动 RabbitMQ 服务器并创建 RabbitMQ test exchange 和 queue，然后在 EMQX 创建 RabbitMQ 的数据桥接，之后再通过创建一条规则来将数据转发至 RabbitMQ，并验证该数据桥接是否正常工作。
-
-本教程假定 EMQX 与 RabbitMQ 均在本地运行，如您在远程运行 EMQX 及 RabbitMQ，请根据实际情况调整相应配置。
 
 ### 启动 RabbitMQ 服务器
 
@@ -76,9 +90,9 @@ docker run -it --rm --name rabbitmq -p 127.0.0.1:5672:5672 -p 127.0.0.1:15672:15
    * **Arguments**: 留空
 7. 点击 **Bind** 按钮将 test_queue 通过指定的 routing key 与 test_exchange 绑定。
 
-### 创建 RabbitMQ 数据桥接
+## 创建 RabbitMQ 数据桥接
 
-本节将通过 Dashboard 演示如何创建到 RabbitMQ 的数据桥接。
+本节将通过 Dashboard 演示如何创建到 RabbitMQ 的数据桥接。以下示例假定 EMQX 与 RabbitMQ 均在本地运行，如您在远程运行 EMQX 及 RabbitMQ，请根据实际情况调整相应配置。
 
 1. 登陆 EMQX Dashboard，点击左侧目录菜单中的**数据集成** -> **数据桥接**。
 
@@ -146,7 +160,7 @@ docker run -it --rm --name rabbitmq -p 127.0.0.1:5672:5672 -p 127.0.0.1:15672:15
 
 至此，您已经完成数据桥接的创建，在 Dashboard 的数据桥接页面，可以看到 RabbitMQ 数据桥接的状态为**已连接**。
 
-### 创建数据转发规则
+## 创建数据转发规则
 
 1. 转到 Dashboard **数据集成** -> **规则**页面。
 
@@ -172,7 +186,7 @@ docker run -it --rm --name rabbitmq -p 127.0.0.1:5672:5672 -p 127.0.0.1:15672:15
 
 至此您已经完成数据桥接和转发规则的创建，您可前往 **数据集成** -> **Flows** 页面查看拓扑图，可看到 `t/#` 主题的消息被转发至 RabbitMQ。
 
-### 测试桥接和规则
+## 测试桥接和规则
 
 您可通过 EMQX Dashboard 内置的 WebSocket 客户端进行规则和数据桥接的验证。
 

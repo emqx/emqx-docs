@@ -42,8 +42,7 @@ Each gateway can have multiple listeners enabled, and different protocol gateway
 | CoAP    |      | ✔︎    |      | ✔︎    |           |                    |
 | LwM2M   |      | ✔︎    |      | ✔︎    |           |                    |
 | ExProto | ✔︎    | ✔︎    | ✔︎    | ✔︎    |           |                    |
-| OCPP    | ✔︎    | ✔︎    | ✔︎    | ✔︎    | ✔︎         | ✔︎                  |
-
+| OCPP    |      |      |      |      | ✔︎         | ✔︎                  |
 ### Message Format
 
 To ensure compatibility with the PUB/SUB messaging model, each gateway type must adapt to the presence or absence of a PUB/SUB concept in its underlying protocol.

@@ -1,37 +1,60 @@
 # Ingest MQTT Data into PostgreSQL
 
-EMQX supports integration with PostgreSQL so you can save MQTT messages and client events to PostgreSQL, or use events to trigger the update or removal of data to record the online status or online/offline of clients.
-
 {% emqxce %}
 ::: tip
 EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 :::
 {% endemqxce %}
 
+[PostgreSQL](https://www.postgresql.org/) is the world's most advanced open-source relational database, possessing robust data processing capabilities suitable for everything from simple applications to complex data tasks. EMQX supports integration with PostgreSQL, enabling efficient handling of real-time data streams from IoT devices. This integration supports large-scale data storage, precise querying, and complex data association analysis while ensuring data integrity. Leveraging EMQX's efficient message routing and PostgreSQL's flexible data model, it's easy to monitor device statuses, track events, and audit operations, providing businesses with deep data insights and robust business intelligence support.
+
+This page provides a comprehensive introduction to the data integration between EMQX and PostgreSQL with practical instructions on creating a rule and data bridge.
+
 ::: tip
-This section is also applicable to MatrixDB.
+This page is also applicable to MatrixDB.
 :::
 
-::: tip Prerequisites
+## How It Works
+
+PostgreSQL data integration is an out-of-the-box feature in EMQX designed to bridge the gap between MQTT-based IoT data and PostgreSQL's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to PostgreSQL for storage and management, eliminating the need for complex coding.
+
+The diagram below illustrates a typical architecture of data integration between EMQX and PostgreSQL:
+
+![EMQX Integration PostgreSQL](./assets/emqx-integration-postgesql.png)
+
+Ingesting MQTT data into PostgreSQL works as follows:
+
+- **IoT devices connect to EMQX**: After IoT devices are successfully connected through the MQTT protocol, online events will be triggered. The events include information such as device ID, source IP address, and other attributes.
+- **Message publication and reception**: The devices publish telemetry and status data to specific topics. When EMQX receives these messages, it initiates the matching process within its rules engine.
+- **Rule Engine Processing Messages**: With the built-in rules engine, messages and events from specific sources can be processed based on topic matching. The rules engine matches the corresponding rules and processes messages and events, such as converting data formats, filtering out specific information, or enriching messages with contextual information.
+- **Write to PostgreSQL**: The rule triggers the writing of messages to PostgreSQL. With the help of SQL templates, users can extract data from the rule processing results to construct SQL and send it to PostgreSQL for execution, so that specific fields of the message can be written or updated into the corresponding tables and columns of the database.
+
+After the event and message data are written to PostgreSQL, you can connect to PostgreSQL to read the data for flexible application development, such as:
+
+- Connect to visualization tools, such as Grafana, to generate charts based on data and show data changes.
+- Connect to the device management system, view the device list and status, detect abnormal device behavior, and eliminate potential problems in a timely manner.
+
+## Features and Benefits
+
+PostgreSQL is a popular open-source relational database with a rich set of features. The data integration with PostgreSQL can bring the following features and advantages to your business:
+
+- **Flexible Event Handling**: Through the EMQX rules engine, PostgreSQL can handle device lifecycle events, greatly facilitating the development of various management and monitoring tasks required for implementing IoT applications. By analyzing event data, you can promptly detect device failures, abnormal behavior, or trend changes to take appropriate measures.
+- **Message Transformation**: Messages can undergo extensive processing and transformation through EMQX rules before being written to PostgreSQL, making storage and usage more convenient.
+- **Flexible Data Operations**: With SQL templates provided by PostgreSQL data bridging, it's easy to write or update data from specific fields to the corresponding tables and columns in the PostgreSQL database, enabling flexible data storage and management.
+- **Integration of Business Processes**: PostgreSQL data bridging allows you to integrate device data with PostgreSQL's rich ecosystem applications, facilitating integration with systems like ERP, CRM, or other custom business systems to achieve advanced business processes and automation.
+- **Combining IoT with GIS Technology**: PostgreSQL offers GIS data storage and querying capabilities, supporting geospatial indexing, geofencing and alerts, real-time location tracking, and geographical data processing, among others. Combined with EMQX's reliable message transmission capability, it can efficiently process and analyze geographical location information from mobile devices such as vehicles, enabling real-time monitoring, intelligent decision-making, and business optimization.
+- **Runtime Metrics**: Support for viewing runtime metrics of each data bridge, such as total message count, success/failure counts, current rates, and more.
+
+Through flexible event handling, extensive message transformation, flexible data operations, and real-time monitoring and analysis capabilities, you can build efficient, reliable, and scalable IoT applications, benefiting your business decisions and optimizations.
+
+## Before You Start
+
+This section describes the preparations you need to complete before you start to create the PostgreSQL Database data bridges, including how to set up the PostgreSQL server and create data tables.
+
+### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
-
-:::
-
-## Features List
-
-- [Connection pool](./data-bridges.md#connection-pool)
-- [Async mode](./data-bridges.md#async-mode)
-- [Batch mode](./data-bridges.md#batch-mode)
-- [Buffer queue](./data-bridges.md#buffer-queue)
-- [SQL prepared statement](./data-bridges.md#prepared-statement)
-
-## Quick Start Tutorial
-
-This section introduces how to configure the PostgreSQL data bridge, covering topics like how to set up the PostgreSQL server, create data bridges and rules for forwarding data to PostgreSQL and test the data bridges and rules.
-
-This tutorial assumes that you run both EMQX and PostgreSQL on the local machine. If you have PostgreSQL and EMQX running remotely, adjust the settings accordingly.
 
 ### Install PostgreSQL
 
@@ -82,11 +105,13 @@ CREATE TABLE emqx_client_events (
 );
 ```
 
-### Create PostgreSQL Data Bridges
+## Create PostgreSQL Data Bridges
+
+This section demonstrates how to create PostgreSQL data bridges in EMQX Dashboard. It assumes that you run both EMQX and PostgreSQL on the local machine. If you have PostgreSQL and EMQX running remotely, adjust the settings accordingly.
 
 You need to create 2 data bridges to PostgreSQL for messages storage and event records respectively. 
 
-#### Message storage
+### Message storage
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
@@ -119,10 +144,10 @@ You need to create 2 data bridges to PostgreSQL for messages storage and event r
   ```
 
 7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md#configuration).
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the MySQL server.
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the PostgreSQL server.
 9. Then click **Create** to finish the creation of the data bridge.
 
-#### Online/Offline Status Recording
+### Online/Offline Status Recording
 
 The operating steps are similar to those at the [Message Storage](#message-storage) part expect for the SQL template and SQL rules. 
 
@@ -140,11 +165,11 @@ INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
 
 Now the PostgreSQL data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
 
-### Create Rules for PostgreSQL Data Bridge 
+## Create Rules for PostgreSQL Data Bridge 
 
 After you have successfully created the data bridge to PostgreSQL, you can continue to create rules to specify the data to be saved into PostgreSQL and rules for the online/offline status recording. 
 
-#### Message Storage
+### Message Storage
 
 1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
 
@@ -165,7 +190,7 @@ FROM
 5. Then, click the **Add** button. 
 6. Then click the **Create** button to finish the setup. 
 
-#### Online/Offline Status Recording
+### Online/Offline Status Recording
 
 The creating steps are similar to those at the [Message Storage](#message-storage) part except for the SQL rules.
 
@@ -180,7 +205,7 @@ FROM
 
 Now you have successfully created the data bridge to PostgreSQL. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to PostgreSQL after parsing by rule  `my_rule`. 
 
-### Test the Data Bridges and Rules
+## Test Data Bridges and Rules
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event. 
 

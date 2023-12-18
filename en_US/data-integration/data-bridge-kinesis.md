@@ -1,29 +1,54 @@
 # Stream MQTT Data into Amazon Kinesis
 
-EMQX supports seamless integration with [Amazon Kinesis Data Streams](https://aws.amazon.com/kinesis/data-streams/) which can be integrated to several other AWS Services for real-time extraction, processing and analysis of MQTT data.
-
 {% emqxce %}
 ::: tip
 EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 :::
 {% endemqxce %}
 
-:::tip Prerequisites
+[AWS Kinesis](https://aws.amazon.com/cn/kinesis/) is a fully managed real-time streaming data processing service on AWS that facilitates easy collection, processing, and analysis of streaming data. It can economically and efficiently handle streaming data of any scale in real-time and offers high flexibility, capable of low-latency processing of any amount of streaming data from hundreds of thousands of sources.
+
+EMQX supports seamless integration with [Amazon Kinesis Data Streams](https://aws.amazon.com/kinesis/data-streams/), enabling the connection of massive IoT devices for real-time message collection and transmission. Through a data bridge, it connects to Amazon Kinesis Data Streams for real-time data analysis and complex stream processing.
+
+This page provides a comprehensive introduction to the data integration between EMQX and Amazon Kinesis with practical instructions on creating and validating the data integration.
+
+## How It Works
+
+Amazon Kinesis data bridge is an out-of-the-box feature of EMQX designed to help users seamlessly integrate MQTT data streams with Amazon Kinesis and leverage its rich services and capabilities for IoT application development.
+
+![kinesis_architecture](./assets/kinesis_architecture.svg)
+
+EMQX forwards MQTT data to Amazon Kinesis through the rule engine and data bridge. The complete process is as follows:
+
+1. **IoT Devices Publish Messages**: Devices publish telemetry and status data through specific topics, triggering the rule engine.
+2. **Rule Engine Processes Messages**: Using the built-in rule engine, MQTT messages from specific sources are processed based on topic matching. The rule engine matches corresponding rules and processes messages, such as converting data formats, filtering specific information, or enriching messages with contextual information.
+3. **Bridging to Amazon Kinesis**: The action triggered by rules to forward messages to Amazon Kinesis allows for custom configuration of partition keys, the data stream to write to, and message format, enabling flexible data integration.
+
+After MQTT message data is written to Amazon Kinesis, you can perform flexible application development, such as:
+
+- Real-time Data Processing and Analysis: Utilize powerful Amazon Kinesis data processing and analysis tools and its own streaming capabilities to perform real-time processing and analysis of message data, obtaining valuable insights and decision support.
+- Event-Driven Functionality: Trigger Amazon event handling to achieve dynamic and flexible function triggering and processing.
+- Data Storage and Sharing: Transmit message data to Amazon Kinesis storage services for secure storage and management of large volumes of data. This allows you to share and analyze this data with other Amazon services to meet various business needs.
+
+## Features and Benefits
+
+The data integration between EMQX and AWS Kinesis Data Streams can bring the following functionalities and advantages to your business:
+
+- **Reliable Data Transmission and Sequence Guarantee**: Both EMQX and AWS Kinesis Data Streams provide reliable data transmission mechanisms. EMQX ensures the reliable transmission of messages through the MQTT protocol, while AWS Kinesis Data Streams uses partitions and sequence numbers to guarantee message ordering. Together, they ensure that messages sent from devices accurately reach their destination and are processed in the correct order.
+- **Real-time Data Processing**: High-frequency data from devices can undergo preliminary real-time processing through EMQX's rule SQL, effortlessly filtering, extracting, enriching, and transforming MQTT messages. After sending data to AWS Kinesis Data Streams, further real-time analysis can be implemented by combining AWS Lambda and AWS-managed Apache Flink.
+- **Elastic Scalability Support**: EMQX can easily connect millions of IoT devices and offers elastic scalability. AWS Kinesis Data Streams, on the other hand, employs on-demand automatic resource allocation and expansion. Applications built with both can scale with connection and data sizes, continuously meeting the growing needs of the business.
+- **Persistent Data Storage**: AWS Kinesis Data Streams provides persistent data storage capabilities, reliably saving millions of incoming device data streams per second. It allows for the retrieval of historical data when needed and facilitates offline analysis and processing.
+
+Utilizing AWS Kinesis Data Streams to build a streaming data pipeline significantly reduces the difficulty of integrating EMQX with the AWS platform, providing users with richer and more flexible data processing solutions. This can help EMQX users to build functionally complete and high-performance data-driven applications on AWS.
+
+## Before You Start
+
+This section describes the preparations you need to complete before you start to create an Amazon Kinesis data bridge, including how to set up the Kinesis service and emulate data streams service.
+
+### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data bridge](./data-bridges.md)
-
-:::
-
-## Feature List
-
-- [Connection pool](./data-bridges.md#connection-pool)
-- [Batch mode](./data-bridges.md#batch-mode)
-- [Buffer queue](./data-bridges.md#buffer-queue)
-
-## Quick Start Tutorial
-
-This section introduces how to configure the Amazon Kinesis data bridge, including how to set up the Kinesis service, create data bridges and rules for forwarding data to Kinesis and test the data bridges and rules.
+- Knowledge about [data bridges](./data-bridges.md)
 
 ### Create Stream in Amazon Kinesis Data Streams
 
@@ -57,7 +82,7 @@ To facilitate the development and test, you can emulate the Amazon Kinesis Data 
    awslocal kinesis create-stream --stream-name "my_stream" --shard-count 1
    ```
 
-### Create a Kinesis Data Bridge
+## Create a Kinesis Data Bridge
 
 1. Go to EMQX Dashboard, click **Integration** -> **Data Bridge**.
 2. Click **Create** on the top right corner of the page.
@@ -85,7 +110,7 @@ To facilitate the development and test, you can emulate the Amazon Kinesis Data 
 
     A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Amazon Kinesis. You can also create rules by following the steps in [Create Rules for Amazon Kinesis Data Bridge](#create-a-rule-for-amazon-kinesis-data-bridge).
 
-### Create a Rule for Amazon Kinesis Data Bridge
+## Create a Rule for Amazon Kinesis Data Bridge
 
 You can continue to create rules to specify the data to be saved into Amazon Kinesis.
 
@@ -112,7 +137,7 @@ You can continue to create rules to specify the data to be saved into Amazon Kin
 
 Now a rule to forward data to Amazon Kinesis Data Streams via the Amazon Kinesis bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to Amazon Kinesis Data Streams after parsing by rule `my_rule`.
 
-### Test the Data Bridge and Rule
+## Test Data Bridge and Rule
 
 1. Use MQTTX to send messages on the topic `t/my_topic`.
 
@@ -124,7 +149,7 @@ Now a rule to forward data to Amazon Kinesis Data Streams via the Amazon Kinesis
 
 3. Go to [Amazon Kinesis Data Viewer](https://docs.aws.amazon.com/streams/latest/dev/data-viewer.html). You should see the message when getting records.
 
-#### Use LocalStack to Check
+### Use LocalStack to Check
 
 If you use LocalStack, follow the steps below to check the received data.
 

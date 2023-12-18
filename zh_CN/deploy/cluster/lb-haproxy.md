@@ -161,7 +161,7 @@ backend mqtt_backend
   stick on req.payload(0，0)，mqtt_field_value(connect，client_identifier)
 
  # 增加 send-proxy 会把真实带给 EMQX，对应后端监听器需要启用 proxy_protocol
-  # server emqx1 emqx1-cluster.emqx.io:1883 check send-proxy
+  # server emqx1 emqx1-cluster.emqx.io:1883 check send-proxy-v2
   server emqx1 emqx1-cluster.emqx.io:1883
   server emqx2 emqx2-cluster.emqx.io:1883
   server emqx3 emqx3-cluster.emqx.io:1883
@@ -180,6 +180,15 @@ frontend mqtt_servers
 
 只需在 TCP 基础配置上添加 SSL 与证书相关参数即可：
 
+:::tip 提示
+HAProxy 的证书文件需要包含证书与密钥，可以使用 `cat` 命令将它们合并为一个文件。
+
+```bash
+cat server.crt server.key > server.pem
+```
+
+:::
+
 ```bash
 backend mqtt_backend
   mode tcp
@@ -192,8 +201,8 @@ backend mqtt_backend
 
 frontend mqtt_tls_frontend
   bind *:8883 ssl crt /etc/haproxy/certs/server.pem 
- # 双向认证
- # bind *:8883 ssl ca-file /etc/haproxy/certs/cacert.pem crt /etc/haproxy/certs/server.pem verify required
+  # 双向认证
+  # bind *:8883 ssl ca-file /etc/haproxy/certs/cacert.pem crt /etc/haproxy/certs/server.pem verify required
   mode tcp
   default_backend mqtt_backend
 ```
@@ -221,6 +230,15 @@ frontend mqtt_ws_frontend
 您可以通过以下配置使 HAProxy 反向代理 MQTT WebSocket 并解密 TLS 连接，将客户端加密的 MQTT 请求解密后转发至后端 MQTT 服务器，以确保通信安全性。需要使用  `server_name` 指定 HTTP 域名或 IP 地址。
 
 只需在 WebSocket 基础配置上添加 SSL 与证书相关参数即可：
+
+:::tip 提示
+HAProxy 的证书文件需要包含证书与密钥，可以使用 `cat` 命令将它们合并为一个文件。
+
+```bash
+cat server.crt server.key > server.pem
+```
+
+:::
 
 ```bash
 backend mqtt_ws_backend

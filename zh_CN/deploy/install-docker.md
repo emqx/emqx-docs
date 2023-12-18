@@ -50,59 +50,44 @@ docker run -d --name emqx-enterprise -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8
 
 1. 如果需要持久 Docker 容器 ，请将以下目录挂载到容器外部，这样即使容器被删除数据也不会丢失：
 
-  ```bash
-  /opt/emqx/data
-  /opt/emqx/etc
-  /opt/emqx/log
-  ```
+   ```bash
+   /opt/emqx/data
+   /opt/emqx/log
+   ```
 
-  注意：挂载 `/opt/etc` 前需要将目录下的文件复制到宿主机下。关于 EMQX 目录结构的详细信息请参考 [EMQX 文件和目录](./install.md#文件和目录)。
+   关于 EMQX 目录结构的详细信息请参考 [EMQX 文件和目录](./install.md#文件和目录)。
 
-  {% emqxce %}
+   {% emqxce %}
 
-  将 `/opt/emqx/etc` 目录下的文件复制到宿主机下：
+   启动容器并挂载目录：
 
-  ```bash
-  docker run --rm emqx/emqx:@CE_VERSION@ sh -c 'cd /opt/emqx && tar -c etc' | tar -C $PWD -x
-  ```
+   ```bash
+   docker run -d --name emqx \
+     -p 1883:1883 -p 8083:8083 \
+     -p 8084:8084 -p 8883:8883 \
+     -p 18083:18083 \
+     -v $PWD/data:/opt/emqx/data \
+     -v $PWD/log:/opt/emqx/log \
+     emqx/emqx:@CE_VERSION@
+   ```
 
-  启动容器并挂载目录：
+   {% endemqxce %}
 
-  ```bash
-  docker run -d --name emqx \
-    -p 1883:1883 -p 8083:8083 \
-    -p 8084:8084 -p 8883:8883 \
-    -p 18083:18083 \
-    -v $PWD/etc:/opt/emqx/etc \
-    -v $PWD/data:/opt/emqx/data \
-    -v $PWD/log:/opt/emqx/log \
-    emqx/emqx:@CE_VERSION@
-  ```
+   {% emqxee %}
 
-  {% endemqxce %}
+   启动容器并挂载目录：
 
-  {% emqxee %}
+   ```bash
+   docker run -d --name emqx-enterprise \
+     -p 1883:1883 -p 8083:8083 \
+     -p 8084:8084 -p 8883:8883 \
+     -p 18083:18083 \
+     -v $PWD/data:/opt/emqx/data \
+     -v $PWD/log:/opt/emqx/log \
+     emqx/emqx-enterprise:@EE_VERSION@
+   ```
 
-  将 `/opt/emqx/etc` 目录下的文件复制到宿主机下：
-
-  ```bash
-  docker run --rm emqx/emqx-enterprise:@EE_VERSION@ sh -c 'cd /opt/emqx && tar -c etc' | tar -C $PWD -x
-  ```
-
-  启动容器并挂载目录：
-
-  ```bash
-  docker run -d --name emqx-enterprise \
-    -p 1883:1883 -p 8083:8083 \
-    -p 8084:8084 -p 8883:8883 \
-    -p 18083:18083 \
-    -v $PWD/etc:/opt/emqx/etc \
-    -v $PWD/data:/opt/emqx/data \
-    -v $PWD/log:/opt/emqx/log \
-    emqx/emqx-enterprise:@EE_VERSION@
-  ```
-
-  {% endemqxee %}
+   {% endemqxee %}
 
 2. Docker 内的 `localhost` 或 `127.0.0.1` 指向的是容器内部地址，如需访问宿主机地址请使用宿主机的真实 IP 或使用 [host 网络模式](https://docs.docker.com/network/host/)。如果您使用的是 Docker for Mac 或 Docker for Windows，可以使用 `host.docker.internal` 作为宿主机地址。
 

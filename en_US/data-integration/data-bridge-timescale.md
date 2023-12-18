@@ -16,7 +16,7 @@ This page provides a comprehensive introduction to the data integration between 
 
 ## How It Works
 
-Timescale data integration is a built-in feature in EMQX that combines the real-time data capturing and transmission capabilities of EMQX with the data storage and analysis capabilities of TimescaleDB. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to TimescaleDB for storage and analysis, eliminating the need for complex coding.
+TimescaleDB data integration is a built-in feature in EMQX that combines the real-time data capturing and transmission capabilities of EMQX with the data storage and analysis capabilities of TimescaleDB. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to TimescaleDB for storage and analysis, eliminating the need for complex coding.
 
 The diagram below illustrates the typical architecture of EMQX and TimescaleDB data integration in the industrial IoT.
 
@@ -26,8 +26,7 @@ EMQX and TimescaleDB provide a scalable IoT platform for efficiently collecting 
 
 EMQX forwards device data to TimescaleDB through the rule engine and data bridge. TimescaleDB analyzes the data using SQL statements, generates reports, charts, and other data analysis results, and displays them to users through TimescaleDB's visualization tools. The workflow is as follows:
 
-1. **Message publication from IoT devices**: Industrial devices regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values.
-2. **Message reception by EMQX**: As an MQTT broker, EMQX receives data over MQTT from industrial devices by subscribing to the topics to which MQTT messages are published. It serves as the centralized hub for handling MQTT-based communication.
+1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.  
 3. **Rule Engine Processes Messages**: The built-in rule engine processes messages from specific sources based on topic matching. When a message arrives, it passes through the rule engine, which matches it with corresponding rules and processes the message data. This can include transforming data formats, filtering specific information, or enriching messages with context information.
 4. **Data ingestion into TimescaleDB**: Rules defined in the rule engine trigger operations to write messages to TimescaleDB. The TimescaleDB data bridge provides SQL templates that allow flexible definitions of the data format to write specific message fields to the corresponding tables and columns in TimescaleDB.
 

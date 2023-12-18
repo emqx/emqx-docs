@@ -1,44 +1,59 @@
 # 快速体验 MQTT 文件传输
 
-本页提供了在 EMQX 中快速开始使用 MQTT 文件传输功能的指南。它涵盖了两种场景：使用本地导出器和使用 S3 导出器进行文件存储。按照以下说明设置必要的配置、上传文件并使用提供的 API 访问上传的文件。
+本页提供了在 EMQX 中快速开始使用 MQTT 文件传输功能的指南。它涵盖了两种场景：使用本地磁盘和使用 S3 存储桶进行文件存储。
 
-## 上传文件并用本地导出器存储
+您可以按照以下说明在 EMQX 启用文件传输功能、使用客户端上传文件并通过 EMQX 提供的 API 访问上传的文件。
 
-1. 在 EMQX 配置文件 `etc/emqx.conf` 中设置以下配置启用文件传输功能：
+## 上传文件并将其存储在本地磁盘
+
+1. 在 EMQX 配置文件 `etc/emqx.conf` 中添加以下配置启用文件传输功能：
 
    ```bash
    file_transfer {
-       enable = true
+      enable = true
    }
    ```
+
+   该配置使用本地磁盘存储上传的分片文件，传输完成后并不会对分片文件进行合并。
 
 2. 运行以下命令启动 EMQX：
 
    ```bash
-   $ ./bin/emqx start
+   ./bin/emqx start
    ```
 
-3. 运行以下命令从 GitHub 克隆 `emqx-ft` 仓库，设置测试客户端环境：
+3. 运行以下命令下载文件传输示例程序 `emqx-ft`，并设置测试客户端环境：
 
    ```bash
-   $ git clone https://github.com/emqx/emqx-ft.git
-   $ cd emqx-ft
-   $ python3 -m venv .venv
-   $ source .venv/bin/activate
-   $ pip install .
+   git clone https://github.com/emqx/emqx-ft.git
+   cd emqx-ft
+   python3 -m venv .venv
+   source .venv/bin/activate
+   pip install .
    ```
 
 4. 使用 `emqx-ft` 命令行工具运行以下命令以上传文件：
 
-   ```
-   $ emqx-ft --file test-file.txt --file-id file-id-1 --segment-size 10 --client-id client-1 --file-name uploaded-test-file.txt
+   ```bash
+   emqx-ft --file test-file.txt \
+      --file-id file-id-1 --segment-size 10 \
+      --client-id client-1 \
+      --file-name uploaded-test-file.txt
    ```
 
-5. 运行以下命令导航到文件存储目录，手动列出已上传的文件。
+   命令参数说明：
 
-   显示的目录结构将包含已上传的文件。
+   | 参数             | 含义                                                                   |
+   | ---------------- | ---------------------------------------------------------------------- |
+   | `--file`         | 要上传的文件的路径。                                                   |
+   | `--file-id`      | 上传文件的唯一标识符。                                                 |
+   | `--segment-size` | 文件的分片大小，以字节为单位，该参数用于将大文件分成较小的段进行上传。 |
+   | `--client-id`    | 客户端 ID，用于标识进行文件上传操作的客户端。                          |
+   | `--file-name`    | 上传后的文件名。                                                       |
 
-   ```
+5. 运行以下命令列出已上传的分片文件：
+
+   ```bash
    $ tree /var/lib/emqx/file_transfer/exports
    /var/lib/emqx/file_transfer/exports
    _./data/file_transfer/exports
@@ -52,11 +67,9 @@
    └── tmp
    ```
 
-6. 运行以下命令以使用 HTTP API 检索已上传文件的列表。
+6. 使用 REST API 列出已上传文件列表，列表包含已上传文件的详细信息，包括名称、大小和时间戳：
 
-   返回内容将包含有关已上传文件的详细信息，包括名称、大小和时间戳。
-
-   ```
+   ```bash
    $ curl -u '...' -s 'http://127.0.0.1:18083/api/v5/file_transfer/files' | jq
    {
      "files": [
@@ -77,90 +90,95 @@
    }
    ```
 
-7. 运行以下命令以使用提供的 API 端点下载文件。下载的文件将从 EMQX 检索。
+7. 运行以下命令以使用提供的 API 下载文件：
 
+   ```bash
+   curl -u '...' -s 'http://127.0.0.1:18083/api/v5/file_transfer/file?node=emqx%40127.0.0.1&fileref=8E%2FB5%2F7023DA998C12F0B2A6CA586027E48BEC6271%2Fclient-1%2Ffile-id-1%2Fuploaded-test-file.txt'
    ```
-   $ curl -u '...' -s 'http://127.0.0.1:18083/api/v5/file_transfer/file?node=emqx%40127.0.0.1&fileref=8E%2FB5%2F7023DA998C12F0B2A6CA586027E48BEC6271%2Fclient-1%2Ffile-id-1%2Fuploaded-test-file.txt'
-   ```
 
-## 上传文件并用 S3 导出器存储
+## 上传文件并将其存储在 S3 存储桶
 
-文件传输允许将已上传的文件导出到兼容 S3 的对象存储系统，如 Amazon S3。
+文件传输允许将已上传的文件导出到兼容 S3 的对象存储系统，如 Amazon S3 和 MinIO。在使用 S3 存储桶的情况下，EMQX 仅存储文件传输列表，而不存储文件本身。
 
-::: tip 前置条件
-
-开始之前，请确保已安装并正确配置了`s3cmd`。您可以参考 [Official s3cmd repo](https://github.com/s3tools/s3cmd) 获取更多信息。
-
-:::
-
-1. 在 EMQX 配置文件 `etc/emqx.conf` 中启用文件传输功能并配置 S3 导出器：
+1. 在 EMQX 配置文件 `etc/emqx.conf` 中启用文件传输功能并配置 S3 存储桶：
 
    ```bash
    file_transfer {
-       enable = true
-       storage {
-           local {
-               enable = true
-               exporter {
-                   s3 {
-                       enable = true
-                       host = "s3.eu-north-1.amazonaws.com" # or any other S3-compatible storage
-                       port = "443"
+      # 启用文件传输功能
+      enable = true
 
-                       access_key_id = "..."
-                       secret_access_key = "..."
+      # 启用 s3 存储桶文件导出
+      storage.local.exporter.s3 {
+         enable = true
 
-                       bucket = "YOURBUCKET"
-                       acl = private
+         host = "s3.us-east-1.amazonaws.com"
+         port = 443
 
-                       transport_options {
-                           ssl {
-                               enable = true
-                               # Use verify = true and other SSL options ensuring
-                               # security for production
-                           }
-                       }
-                   }
-               }
-           }
-       }
+         # 用于访问 S3 的凭证
+         access_key_id = "AKIA27EZDDM9XLINWXFE"
+         secret_access_key = "******"
+
+         # 导出文件存储桶
+         bucket = "my-bucket"
+
+         # 用于与 S3 的底层 HTTP(S) 连接的设置，允许安全文件上传和连接池管理。
+         transport_options {
+            ssl.enable = true
+            connect_timeout = 15s
+         }
+      }
    }
    ```
 
 2. 运行以下命令启动 EMQX ：
 
    ```bash
-   $ ./bin/emqx start
+   ./bin/emqx start
    ```
 
-3. 运行以下命令从 GitHub 克隆 `emqx-ft` 仓库，设置测试客户端环境：
+3. 运行以下命令下载文件传输示例程序 `emqx-ft`，并设置测试客户端环境：
 
    ```bash
-   $ git clone https://github.com/emqx/emqx-ft.git
-   $ cd emqx-ft
-   $ python3 -m venv .venv
-   $ source .venv/bin/activate
-   $ pip install .
+   git clone https://github.com/emqx/emqx-ft.git
+   cd emqx-ft
+   python3 -m venv .venv
+   source .venv/bin/activate
+   pip install .
    ```
 
 4. 使用 `emqx-ft` 命令行工具运行以下命令以上传文件：
 
    ```bash
-   $ emqx-ft --file test-file.txt --file-id file-id-1 --segment-size 10 --client-id client-1 --file-name uploaded-test-file.txt
+   emqx-ft --file test-file.txt \
+      --file-id file-id-1 --segment-size 10 \
+      --client-id client-1 \
+      --file-name uploaded-test-file.txt
    ```
 
+   命令参数说明：
+
+   | 参数             | 含义                                                                   |
+   | ---------------- | ---------------------------------------------------------------------- |
+   | `--file`         | 要上传的文件的路径。                                                   |
+   | `--file-id`      | 上传文件的唯一标识符。                                                 |
+   | `--segment-size` | 文件的分片大小，以字节为单位，该参数用于将大文件分成较小的段进行上传。 |
+   | `--client-id`    | 客户端 ID，用于标识进行文件上传操作的客户端。                          |
+   | `--file-name`    | 上传后的文件名。    |
+
 5. 使用 S3 命令行工具运行以下命令，手动列出已上传的文件：
+
+   请确保已安装并正确配置了`s3cmd`，您可以参考 [Official s3cmd repo](https://github.com/s3tools/s3cmd) 获取更多信息。
 
    ```bash
    $ s3cmd ls -r s3://YOURBUCKET/
    2023-06-12 22:58          168  s3://YOURBUCKET/client-1/file-id-1/uploaded-test-file.txt
    ```
 
-   输出将显示指定的 S3 存储。
+   输出将显示指定 S3 存储桶中的文件。
 
-6. 运行以下命令，使用 HTTP API 检索已上传文件的列表。
+6. 运行以下命令，使用 REST API 列出已上传文件的列表。
 
-   ```
+   ```bash
    $ curl -u '...' -s 'http://127.0.0.1:18083/api/v5/file_transfer/files' | jq
    {
      "files": [
@@ -180,11 +198,10 @@
 
    ::: tip
 
-   在使用 S3 导出器的情况下，提供的下载链接不会指向 EMQX，而是直接指向 S3 存储，因此文件不会存储在EMQX 本地。
+   在使用 S3 存储桶的情况下，提供的下载链接不会指向 EMQX，而是直接指向 S3 存储，因此文件不会存储在 EMQX 本地。
 
    :::
 
    ```bash
-   $ curl "https://s3.eu-north-1.amazonaws.com/YOURBUCKET/client-1/file-id-1/uploaded-test-file.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=...&X-Amz-SignedHeaders=host&X-Amz-Signature=..."
+   curl "https://s3.eu-north-1.amazonaws.com/YOURBUCKET/client-1/file-id-1/uploaded-test-file.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=...&X-Amz-SignedHeaders=host&X-Amz-Signature=..."
    ```
-

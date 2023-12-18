@@ -1,24 +1,55 @@
 # Ingest MQTT Data into HTTP Server
 
-HTTP Server is the channel through which EMQX sends messages to HTTP services. Through HTTP servers, users can send messages to the remote HTTP service from a local topic, or from the output of a rule.
+The HTTP server data integration provides a quick way to integrate EMQX with external HTTP services. It supports flexible configuration of request methods and request data formats, offers secure communication through HTTPS, and provides authentication mechanisms. It can efficiently and flexibly transmit client messages and event data in real-time, enabling scenarios such as IoT device state notifications, alert notifications, and data integration.
 
-:::tip Prerequisites
+This page provides a detailed overview of the features and capabilities of the data integration with HTTP server and offers practical guidance on setting up an HTTP server data integration.
+
+:::tip 
+
+For users who need to integrate with HTTP services but do not require data processing using rules, we recommend using [Webhook](./webhook.md) as it is simpler and easier to use. 
+
+:::
+
+## How It Works
+
+HTTP server data integration is an out-of-the-box feature in EMQX, allowing integration with external HTTP services through simple configuration. With the HTTP service, users can write code in their preferred programming language and framework to implement custom, flexible, and complex data processing logic.
+
+<img src="./assets/emqx-integration-http.jpg" alt="emqx-integration-http" style="zoom:67%;" />
+
+EMQX forwards device events and data to the HTTP server through the rule engine and data bridge. The workflow is as follows:
+
+1. **Devices Connect to EMQX**: When IoT devices successfully connect, an online event is triggered, containing device ID, source IP address, and other attributes.
+2. **Devices Publish Messages**: Devices publish telemetry and status data through specific topics, triggering the rule engine.
+3. **Rule Engine Processes Messages**: Using the built-in rule engine, MQTT messages and events from specific sources are processed based on topic matching. The rule engine matches corresponding rules and processes messages and events, such as converting data formats, filtering specific information, or enriching messages with context information.
+4. **Bridging to HTTP Server**: The configured rule triggers the action of forwarding the processed messages and events to the HTTP server. Users can extract data from rule processing results and dynamically construct request headers, request bodies, or even URLs, allowing flexible integration of data with external services.
+
+After events and message data are sent to the HTTP server, you can perform flexible processing, such as:
+
+- Implementing device status updates and event logging for developing device management systems based on data.
+- Writing message data to a database to achieve lightweight data storage functionality.
+- For abnormal data filtered by SQL rules, you can directly use the HTTP service to trigger alert notification systems for device anomaly monitoring.
+
+## Features and Benefits
+
+Using EMQX's HTTP server integration can bring the following advantages to your business:
+
+- **Extend Data Delivery to More Downstream Systems**: The HTTP service enables seamless integration of MQTT data with various external systems, such as analytics platforms and cloud services, facilitating data distribution across multiple systems.
+- **Real-time Responses and Business Process Triggering**: Through the HTTP service, external systems can receive MQTT data in real-time and trigger business processes, ensuring quick responses. For example, receiving alert data and triggering business workflows.
+- **Custom Data Processing**: External systems can perform secondary processing on received data as per their needs, allowing for more complex business logic that is not limited by EMQX's capabilities.
+- **Loosely Coupled Integration**: The HTTP service uses a simple HTTP interface, providing a loosely coupled approach to system integration.
+
+In summary, the HTTP service offers real-time, flexible, and customizable data integration capabilities for your business, catering to flexible and diverse application development needs.
+
+## Before You Start
+
+This section describes the preparations you need to complete before you start to create the HTTP server data bridge, including setting up a simple HTTP server.
+
+### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 
 - Knowledge about [data bridge](./data-bridges.md)
 
-  :::
-
-## Feature List
-
-- [Connection pool](./data-bridges.md#connection-pool)
-- [Buffer queue](./data-bridges.md#buffer-queue)
-- [Async mode](./data-bridges.md#async-mode)
-
-## Quick Start Tutorial
-
-This section introduces how to configure an HTTP Server data bridge, including how to set up an HTTP server, configure an HTTP server data bridge to connect to the HTTP server, and test the data bridge and rule.
 
 ### Set up a Simple HTTP Server
 
@@ -47,7 +78,9 @@ pip install flask
 python3 http_server.py
 ```
 
-### Create an HTTP Server Data Bridge
+## Create an HTTP Server Data Bridge
+
+This section demonstrates how to configure an HTTP server data bridge to connect to the HTTP server.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
 
@@ -65,7 +98,7 @@ python3 http_server.py
 
 Now the HTTP server data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
 
-### Create a Rule for HTTP Server Data Bridge
+## Create a Rule for HTTP Server Data Bridge
 
 Now you have successfully created the data bridges to HTTP Server. you can continue to create a rule to forward data to the HTTP Server.
 
@@ -91,7 +124,7 @@ Now you have successfully created the data bridges to HTTP Server. you can conti
 
 Now a rule to forward data to the HTTP server via an HTTP Server data bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to the HTTP server.
 
-### Test the Data Bridge and Rule
+## Test Data Bridge and Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 

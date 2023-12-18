@@ -1,26 +1,52 @@
 # Ingest MQTT Data into TDengine
 
-EMQX supports integration with TDengine so you can save MQTT messages and client events to TDengine, or use events to trigger the update or removal of data from TDengine to record the online status or online/offline of clients.
+{% emqxce %}
+::: tip
+EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+:::
+{% endemqxce %}
 
-::: tip Prerequisites
+[TDengine](https://tdengine.com/) is a big data platform, designed and optimized specifically for the Internet of Things (IoT) and Industrial Internet of Things (IIoT) scenarios. At its heart lies a high-performance time-series database, characterized by its cluster-oriented architecture, cloud-native design, and minimalistic approach. EMQX supports integration with TDengine, enabling massive data transmission, storage, analysis, and distribution from a large number of devices and data collectors. It provides real-time monitoring and early warning of business operation states, offering real-time business insights.
+
+This page provides a comprehensive introduction to the data integration between EMQX and TDengine with practical instructions on creating a rule and data bridge.
+
+## How It Works
+
+TDengine data integration is a built-in feature in EMQX. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to TDengine, eliminating the need for complex coding. EMQX forwards device data to TDengine through the rule engine and data bridge. Through the TDengine data bridge, MQTT messages and client events can be stored in TDengine. Additionally, data updates or deletions in TDengine can be triggered by events, thereby enabling the recording of information such as device online status and historical online/offline events.
+
+The diagram below illustrates the typical architecture of EMQX and TDengine data integration in the industrial IoT:
+
+![EMQX Integration TDengine](./assets/emqx-integration-tdengine.png)
+
+Taking the industrial energy consumption management scenario as an example, the workflow is as follows:
+
+1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+2. **Rule Engine Processes Messages**: The built-in rule engine processes messages from specific sources based on topic matching. When a message arrives, it passes through the rule engine, which matches it with corresponding rules and processes the message data. This can include transforming data formats, filtering specific information, or enriching messages with context information.
+3. **Data ingestion into TDengine**: Rules defined in the rule engine trigger operations to write messages to TDengine. The TDengine data bridge provides SQL templates that allow flexible definitions of the data format to write specific message fields to the corresponding tables and columns in TDengine.
+
+After energy consumption data is written to TDengine, you can analyze your data in real-time using standard SQL and powerful time-series extensions, seamlessly integrating with numerous third-party batch analysis, real-time analysis, reporting tools, AI/ML tools, and visualization tools.For example:
+
+- Connect to visualization tools such as Grafana to generate charts and display energy consumption data.
+- Connect to application systems such as ERP or Power BI for production analysis and production plan adjustments.
+- Connect to business systems to perform real-time energy usage analysis, facilitating data-driven energy management.
+
+## Features and Benefits
+
+Using TDengine data bridging in EMQX brings the following features and advantages to your business:
+
+- **Efficient Data Handling**: EMQX can handle a large number of IoT device connections and message throughput efficiently. TDengine excels in data writing, storage, and querying, meeting the data processing needs of IoT scenarios without overwhelming the system.
+- **Message Transformation**: Messages can undergo rich processing and transformation within EMQX rules before being written to TDengine.
+- **Cluster and Scalability**: EMQX and TDengine support clustering capabilities and are built on cloud-native architecture, enabling full utilization of the cloud platform's elastic storage, computing, and network resources, allowing for flexible horizontal scaling as your business grows to meet expanding demands. 
+- **Advanced Querying Capabilities**: TDengine provides optimized functions, operators, and indexing techniques for efficient querying and analysis of timestamp data, enabling precise insights to be extracted from IoT time-series data.
+
+## Before You Start
+
+This section describes the preparations you need to complete before you start to create the TDengine data bridges, including how to set up the TDengine server and create data tables.
+
+### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
-
-:::
-
-## Features List
-
-- [Connection pool](./data-bridges.md#connection-pool)
-- [Async mode](./data-bridges.md#async-mode)
-- [Batch mode](./data-bridges.md#batch-mode)
-- [Buffer queue](./data-bridges.md#buffer-queue)
-
-## Quick Start Tutorial
-
-This section introduces how to configure the TDengine data bridge, covering topics like how to set up the EDengine server, create data bridges and rules for forwarding data to TDengine and test the data bridges and rules.
-
-This tutorial assumes that you run both EMQX and TDengine on the local machine. If you have TDengine and EMQX running remotely, adjust the settings accordingly.
 
 ### Install TDengine
 
@@ -69,7 +95,9 @@ Before you create data bridges for TDengine, you need to create two data tables 
        );
 ```
 
-### Create TDengine Data Bridges
+## Create TDengine Data Bridges
+
+This section demonstrate how to create TDengine data bridges in EMQX Dashboard. It assumes that you run both EMQX and TDengine on the local machine. If you have TDengine and EMQX running remotely, adjust the settings accordingly.
 
 Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to TDengine for messages storage and event recording.
 
@@ -123,7 +151,7 @@ Data bridges for message storage and event recording require different SQL templ
 
 Now the TDengine data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
 
-### Create Rules for TDengine Data Bridge
+## Create Rules for TDengine Data Bridge
 
 Now that you have successfully created the data bridge to TDengine, you can continue to create rules to specify the data to be saved into TDengine. You need to create two different rules for messages forward and event records.
 
@@ -161,7 +189,7 @@ Now that you have successfully created the data bridge to TDengine, you can cont
 
 Now you have successfully created the data bridge to TDengine. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to TDengine after parsing by rule `my_rule`. 
 
-### Test the Data Bridge and Rule
+## Test the Data Bridge and Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event. 
 

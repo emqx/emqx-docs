@@ -1,6 +1,4 @@
-# OpenTSDB
-
-EMQX 支持与 OpenTSDB 集成，因此可以将 MQTT 消息保存到 OpenTSDB 以便后续进行分析和检索。
+# 将 MQTT 数据写入到 OpenTSDB
 
 {% emqxce %}
 :::tip
@@ -8,39 +6,47 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 :::
 {% endemqxce %}
 
-::: tip 前置准备
+[OpenTSDB](http://opentsdb.net/) 是一个可扩展的分布式时间序列数据库。EMQX 支持与 OpenTSDB 集成，因此可以将 MQTT 消息保存到 OpenTSDB 以便后续进行分析和检索。
+
+本页详细介绍了 EMQX 与 OpenTSDB 的数据集成并提供了实用的规则和数据桥接创建指导。
+
+## 工作原理
+
+OpenTSDB 数据集成是 EMQX 的开箱即用功能，结合了 EMQX 的实时数据捕获和传输能力以及 OpenTSDB 的数据存储和分析功能。通过内置的[规则引擎](./rules.md)组件，集成简化了从 EMQX 到 OpenTSDB 的数据摄取过程，无需复杂编码。
+
+下图展示了 EMQX 和 OpentsDB 之间的数据集成的典型架构：
+
+![EMQX-OpentsDB 集成](./assets/emqx-integration-opentsdb.png)
+
+EMQX 通过规则引擎和数据桥接将设备数据插入到 OpenTSDB。OpenTSDB 提供丰富的查询功能，支持生成报告、图表和其他数据分析结果。以工业能耗管理场景为例，工作流程如下：
+
+1. **消息发布和接收**：工业设备通过 MQTT 协议成功连接到 EMQX，并定期使用 MQTT 协议发布能耗数据。这些数据包括生产线标识符和能耗值。当 EMQX 接收到这些消息时，它将在其规则引擎中启动匹配过程。
+2. **规则引擎处理消息**：内置的规则引擎根据主题匹配处理来自特定来源的消息。当消息到达时，它通过规则引擎进行匹配，规则引擎将处理消息数据。这可能包括转换数据格式、过滤特定信息或用上下文信息丰富消息。
+3. **数据写入到 OpenTSDB**：规则引擎中定义的规则触发操作将消息写入 OpenTSDB。
+
+在数据写入 OpenTSDB 后，你可以灵活地使用数据，例如：
+
+- 连接到如 Grafana 等可视化工具生成基于数据的图表，显示能源存储数据。
+- 连接到业务系统以监控和警报能源存储设备的状态。
+
+## 特性与优势
+
+在 EMQX 中使用 OpenTSDB 数据桥接能够为您的业务带来以下特性与优势：
+
+- **高效数据处理**：EMQX 能够处理大量物联网设备连接和消息吞吐量，而 OpenTSDB 在数据写入、存储和查询方面表现出色，提供出色的性能以满足物联网场景的数据处理需求，不会给系统带来过重负担。
+- **消息转换**：消息可以在写入 OpenTSDB 之前通过 EMQX 规则进行广泛的处理和转换。
+- **大规模数据存储**: 通过将 EMQX 与 OpenTSDB 集成，可以将海量设备数据直接存储到 OpenTSDB 中。OpenTSDB 是为存储和查询大规模时间序列数据而设计的数据库，能够高效地处理物联网设备产生的海量时间序列数据。
+- **丰富的查询能力**: OpenTSDB 优化过存储结构和索引能够实现数十亿个数据点快速写入和查询，这对于需要对物联网设备数据进行实时监控、分析和可视化的应用场景非常有益。
+- **可扩展性**：EMQX 和 OpenTSDB 均能够实现集群扩展，随着业务需求的增长允许灵活的水平扩展集群。
+
+## 桥接准备
+
+本节介绍了在 EMQX 中创建 MySQL 数据桥接之前需要做的准备工作，包括如何设置 OpenTSDB 服务器。
+
+### 前置准备
 
 - 了解 [规则](./rules.md)。
 - 了解 [数据桥接](./data-bridges.md)。
-
-:::
-
-## 特性
-
-- [连接池](./data-bridges.md#连接池)
-- [异步请求模式](./data-bridges.md#异步请求模式)
-- [批量模式](./data-bridges.md#批量模式)
-- [缓存队列](./data-bridges.md#缓存队列)
-- [SQL 预处理](./data-bridges.md#SQL-预处理)
-
-## 快速开始教程
-
-本节介绍如何配置 OpenTSDB 数据桥接，包括如何设置 OpenTSDB 服务器、创建数据桥接和规则以将数据转发到 OpenTSDB、以及如何测试数据桥接和规则。
-
-本教程假定您在本地机器上同时运行 EMQX 和 OpenTSDB。如果您在远程运行 OpenTSDB 和 EMQX，请相应地调整设置。
-
-本教程将使用如下数据进行演示
-- 主题: `t/opents`
-- 载荷:
-```json
-{
-  "metric": "cpu",
-  "tags": {
-    "host": "serverA"
-  },
-  "value":12
-}
-```
 
 ### 安装 OpenTSDB
 
@@ -53,7 +59,9 @@ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
 
 ```
 
-### 创建 OpenTSDB 桥接
+## 创建 OpenTSDB 桥接
+
+本节演示了如何在 Dashboard 中创建 OpenTSDB 数据桥接。以下示例假定您在本地机器上同时运行 EMQX 和 OpenTSDB。如果您在远程运行 OpenTSDB 和 EMQX，请相应地调整设置。
 
 1. 转到 Dashboard **数据集成** -> **数据桥接**页面。
 
@@ -76,9 +84,22 @@ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
 
    在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 OpenTSDB 的数据。您也可以按照[创建 OpenTSDB 数据桥接规则](#创建-opentsdb-数据桥接规则)章节的步骤来创建规则。
 
-### 创建 OpenTSDB 数据桥接规则
+## 创建 OpenTSDB 数据桥接规则
 
-至此您已经完成数据桥接创建，接下来将继续创建一条规则来指定需要写入的数据。
+至此您已经完成数据桥接创建，接下来将继续创建一条规则来指定需要写入的数据。以下数据将用于演示：
+
+- 主题: `t/opents`
+- payload:
+
+```json
+{
+  "metric": "cpu",
+  "tags": {
+    "host": "serverA"
+  },
+  "value":12
+}
+```
 
 1. 转到 Dashboard **数据集成** -> **规则**页面。
 
@@ -100,7 +121,7 @@ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
 
 至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 OpenTSDB 存储。
 
-### 测试桥接和规则
+## 测试桥接和规则
 
 使用 MQTTX 向 `t/opents` 主题发布一条消息:
 ```bash

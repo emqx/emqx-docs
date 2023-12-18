@@ -1,7 +1,7 @@
-# ClickHouse 
+# 将 MQTT 数据写入到 ClickHouse 
 
-ClickHouse 是一个高性能、列式存储的分布式数据库管理系统，专门用于处理大规模数据。它具有出色的查询性能、灵活的数据模型和可扩展的分布式架构，适用于多种数据分析场景。
-EMQX 将 MQTT 消息和客户端事件存储到 [ClickHouse](https://clickhouse.com/)。
+[ClickHouse](https://clickhouse.com/) 是一个高性能、列式存储的分布式数据库管理系统，专门用于处理大规模数据。它具有出色的查询性能、灵活的数据模型和可扩展的分布式架构，适用于多种数据分析场景。
+EMQX 将 MQTT 消息和客户端事件存储到 ClickHouse。
 
 {% emqxce %}
 :::tip
@@ -46,9 +46,10 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
    cat >init.sql <<SQL_INIT
    CREATE DATABASE IF NOT EXISTS mqtt_data;
    CREATE TABLE IF NOT EXISTS mqtt_data.messages (
-       data String,
-       arrived UnixTimestamp
-   ) ENGINE = MergeTree();
+      data String,
+      arrived TIMESTAMP
+   ) ENGINE = MergeTree()
+   ORDER BY arrived;
    SQL_INIT
    ```
 

@@ -23,6 +23,10 @@
     - title_en: What's New
       title_cn: 全新功能
       path: getting-started/new-features
+    - title_en: Feature Comparison
+      title_cn: 功能对比
+      path: getting-started/feature-comparison
+      edition: ce
     - title_en: Get Started
       title_cn: 快速开始
       path: getting-started/getting-started
@@ -146,22 +150,22 @@
           title_cn: API 文档
           lang: en
           edition: ce
-          path: https://www.emqx.io/docs/en/v5.3/admin/api-docs.html
+          path: https://www.emqx.io/docs/en/v${CE_MINOR_VERSION}/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: cn
           edition: ce
-          path: https://www.emqx.io/docs/zh/v5.3/admin/api-docs.html
+          path: https://www.emqx.io/docs/zh/v${CE_MINOR_VERSION}/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: en
           edition: ee
-          path: https://docs.emqx.com/en/enterprise/v5.3/admin/api-docs.html
+          path: https://docs.emqx.com/en/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: cn
           edition: ee
-          path: https://docs.emqx.com/zh/enterprise/v5.3/admin/api-docs.html
+          path: https://docs.emqx.com/zh/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
 
 - title_en: EMQX Clustering
   title_cn: 构建集群
@@ -186,7 +190,9 @@
       path: performance/overview
       children:
         - performance/tune
-        - performance/benchmark
+        - performance/benchmark-emqtt-bench
+        - performance/benchmark-xmeter
+        - performance/performance-reference
 
 - title_en: Rule Engine
   title_cn: 规则引擎
@@ -353,27 +359,20 @@
           path: configuration/license
           lang: en
           edition: ee
-    - configuration/configuration-manual
-  # - title_en: Configuration Manual
-  #   title_cn: 配置手册
-  #   lang: cn
-  #   edition: ce
-  #   path: https://www.emqx.io/docs/zh/v5.0/configuration/configuration-manual.html
-  # - title_en: Configuration Manual
-  #   title_cn: 配置手册
-  #   lang: en
-  #   edition: ce
-  #   path: https://www.emqx.io/docs/en/v5.0/configuration/configuration-manual.html
-  # - title_en: Configuration Manual
-  #   title_cn: 配置手册
-  #   lang: cn
-  #   edition: ee
-  #   path: https://docs.emqx.com/zh/enterprise/v5.0/configuration/configuration-manual.html
-  # - title_en: Configuration Manual
-  #   title_cn: 配置手册
-  #   lang: en
-  #   edition: ee
-  #   path: https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html
+    - title_en: Configuration Manual
+      title_cn: 配置手册
+      edition: ce
+      path: configuration/configuration-manual
+    - title_en: Configuration Manual
+      title_cn: 配置手册
+      lang: cn
+      edition: ee
+      path: https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/
+    - title_en: Configuration Manual
+      title_cn: 配置手册
+      lang: en
+      edition: ee
+      path: https://docs.emqx.com/en/enterprise/v${EE_VERSION}/hocon/
     - title_en: Command Line Interface
       title_cn: 命令行接口
       path: admin/cli
@@ -539,8 +538,8 @@
       collapsed: true
       children:
         - file-transfer/quick-start
-        - file-transfer/client
         - file-transfer/broker
+        - file-transfer/client
     - title_en: Multi-Protocol Gateway
       title_cn: 多协议网关
       path: gateway/gateway
@@ -670,6 +669,10 @@
       title_cn: 版本发布
       edition: ee
       path: changes/changes-ee-5.3
+    - title_en: Releases
+      title_cn: 版本发布
+      edition: ce
+      path: changes/changes-ce-5.3
     - title_en: 从 V4 升级到 V5 的不兼容更改
       title_cn: 从 V4 升级到 V5 的不兼容更改
       lang: cn

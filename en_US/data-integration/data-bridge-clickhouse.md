@@ -18,8 +18,7 @@ The diagram below illustrates a typical architecture of data integration between
 
 Ingesting MQTT data into ClickHouse works as follows:
 
-1. **Message publication from IoT devices**: Industrial IoT devices publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX.
-2. **Message reception by EMQX:** As an MQTT Broker, EMQX receives these MQTT data from the devices by subscribing to the topics to which MQTT messages are published. It serves as the centralized hub for handling MQTT-based communication.
+1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
 3. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to ClickHouse. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
 4. **Data ingestion into ClickHouse**: Once the rule engine identifies a message for ClickHouse storage, it triggers an action of forwarding the messages to ClickHouse. Processed data will be seamlessly written into the collection of the ClickHouse database.
 5. **Data Storage and Utilization**: With the data now stored in ClickHouse, businesses can harness its querying power for various use cases. For instance, in logistics and supply chain management fields, data from IoT devices such as GPS trackers, temperature sensors, and inventory management systems can be monitored and analyzed for real-time tracking, route optimization, demand forecasting, and efficient inventory management.
@@ -37,16 +36,6 @@ The data integration with ClickHouse offers a range of features and benefits tai
 ## Before You Start
 
 This section describes the preparations you need to complete before you start to create the ClickHouse data bridges in EMQX Dashboard.
-
-This tutorial assumes that you run both EMQX and ClickHouse on the local machine. If you have ClickHouse and EMQX running remotely, adjust the settings accordingly.
-
-### Prerequisites
-
-- Knowledge about EMQX data integration [rules](./rules.md)
-
-- Knowledge about [data bridges](./data-bridges.md)
-
-- Basic knowledge of UNIX terminal and commands 
 
 ### Prerequisites
 
@@ -66,13 +55,14 @@ This section introduces how to start a ClickHouse server using [Docker](https://
    cat >init.sql <<SQL_INIT
    CREATE DATABASE IF NOT EXISTS mqtt_data;
    CREATE TABLE IF NOT EXISTS mqtt_data.messages (
-       data String,
-       arrived UnixTimestamp
-   ) ENGINE = MergeTree();
+      data String,
+      arrived TIMESTAMP
+   ) ENGINE = MergeTree()
+   ORDER BY arrived;
    SQL_INIT
    ```
-   
-1. Start a ClickHouse server using the following command. The command defines the database name, port number, user name, and password. It will also mount the `init.sql` file in the current directory to the docker directory.
+
+2. Start a ClickHouse server using the following command. The command defines the database name, port number, user name, and password. It will also mount the `init.sql` file in the current directory to the docker directory.
 
    ```bash
    docker run \
@@ -93,6 +83,8 @@ You can find more information about running ClickHouse in docker [on dockerhub](
 ## Create Rule and ClickHouse Databridge
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured data bridge to ClickHouse. 
+
+This demonstration assumes that you run both EMQX and ClickHouse on the local machine. If you have ClickHouse and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules** from the left navigation menu.
 
@@ -116,7 +108,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 6. Click the **+** icon next to the **Data bridge** drop-down box to create a data bridge.
 
-7. Select **ClickHouse** from the **Type of Data Bridge** drop-down list. 
+7. Select `ClickHouse` from the **Type of Data Bridge** drop-down list. 
 
 8. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 

@@ -160,8 +160,8 @@ backend mqtt_backend
   stick-table type string len 32 size 100k expire 30m
   stick on req.payload(0，0)，mqtt_field_value(connect，client_identifier)
 
- # Adding send-proxy will pass the real IP to EMQX, and the corresponding backend listener needs to enable proxy_protocol
-  # server emqx1 emqx1-cluster.emqx.io:1883 check send-proxy
+  # Adding send-proxy will pass the real IP to EMQX, and the corresponding backend listener needs to enable proxy_protocol
+  # server emqx1 emqx1-cluster.emqx.io:1883 check send-proxy-v2
   server emqx1 emqx1-cluster.emqx.io:1883
   server emqx2 emqx2-cluster.emqx.io:1883
   server emqx3 emqx3-cluster.emqx.io:1883
@@ -180,20 +180,29 @@ You can use the following configuration to have HAProxy reverse proxy MQTT and d
 
 Simply add SSL and certificate-related parameters to the basic TCP configuration:
 
+:::tip Tip
+HAProxy's certificate file needs to include both the certificate and the key, and you can use the `cat` command to merge them into one file.
+
+```bash
+cat server.crt server.key > server.pem
+```
+
+:::
+
 ```bash
 backend mqtt_backend
   mode tcp
   balance roundrobin
  
- # Adding send-proxy will pass the real IP to EMQX, and the corresponding backend listener needs to enable proxy_protocol
+  # Adding send-proxy will pass the real IP to EMQX, and the corresponding backend listener needs to enable proxy_protocol
   server emqx1 emqx1-cluster.emqx.io:1883 check-send-proxy send-proxy-v2
   server emqx2 emqx2-cluster.emqx.io:1883 check-send-proxy send-proxy-v2
   server emqx3 emqx3-cluster.emqx.io:1883 check-send-proxy send-proxy-v2
 
 frontend mqtt_tls_frontend
   bind *:8883 ssl crt /etc/haproxy/certs/server.pem 
- # Mutual authentication
- # bind *:8883 ssl ca-file /etc/haproxy/certs/cacert.pem crt /etc/haproxy/certs/server.pem verify required
+  # Mutual authentication
+  # bind *:8883 ssl ca-file /etc/haproxy/certs/cacert.pem crt /etc/haproxy/certs/server.pem verify required
   mode tcp
   default_backend mqtt_backend
 ```
@@ -221,6 +230,15 @@ frontend mqtt_ws_frontend
 You can use the following configuration to have HAProxy reverse proxy MQTT WebSocket connections and decrypt TLS connections, forwarding encrypted MQTT requests from clients to backend MQTT servers to ensure communication security. Specify the HTTP domain name or IP address using `server_name`.
 
 Simply add SSL and certificate-related parameters to the basic WebSocket configuration:
+
+:::tip Tip
+HAProxy's certificate file needs to include both the certificate and the key, and you can use the `cat` command to merge them into one file.
+
+```bash
+cat server.crt server.key > server.pem
+```
+
+:::
 
 ```bash
 backend mqtt_ws_backend
