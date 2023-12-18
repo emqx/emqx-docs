@@ -42,7 +42,7 @@ Each gateway can have multiple listeners enabled, and different protocol gateway
 | CoAP    |      | ✔︎    |      | ✔︎    |           |                    |
 | LwM2M   |      | ✔︎    |      | ✔︎    |           |                    |
 | ExProto | ✔︎    | ✔︎    | ✔︎    | ✔︎    |           |                    |
-| OCPP    | ✔︎    | ✔︎    | ✔︎    | ✔︎    | ✔︎         | ✔︎                  |
+| OCPP    |      |      |      |      | ✔︎         | ✔︎                  |
 
 ### Message Format
 
