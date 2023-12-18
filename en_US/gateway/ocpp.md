@@ -189,7 +189,7 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 - **Name**: Set a unique identifier for the listener.
 - **Type**: Select the protocol type, for OCPP, this can be either **ws** or **wss**.
 - **Bind**: Set the port number on which the listener accepts incoming connections.
-- **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols.
+- **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols.
 
 **Listener Settings**
 
@@ -205,11 +205,11 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 - **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://erlang.org/doc/man/inet.html#setopts-2).
 - **Buffer**: Set the size of the buffer used to store incoming and outgoing packets, unit: KB.
 - **TCP_NODELAY**: Set whether to enable the `TCP_NODELAY` flat for the connection, that is, whether the client needs to wait for the acknowledgment of the previous data before sending additional data; default: **false**, optional values: **true**, **false**.
-- **SO_REUSEADDR**: Set whether to allow local reuse of port numbers. <!--not quite sure what this means-->
+- **SO_REUSEADDR**: Set whether to allow local reuse of port numbers.
 - **Send Timeout**: Set the maximum amount of time in seconds that the gateway will wait for the proxy protocol package before closing the connection due to inactivity, default: **15s**.
-- **Send Timeout**: Set whether to close the connection if the send timeout.
+- **Send Timeout Close**: Set whether to close the connection if the send timeout.
 
-**SSL Settings **(for SSL listeners only)
+**SSL Settings **(for wss listeners only)
 
 You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
 
@@ -244,7 +244,7 @@ You can also use HTTP API to create a built-in database authentication for a OCP
 
 ```bash
 curl -X 'POST' \
-  'http://127.0.0.1:18083/api/v5/gateway/ocpp/authentication' \
+  'http://127.0.0.1:18083/api/v5/gateways/ocpp/authentication' \
   -u <your-application-key>:<your-security-key> \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
