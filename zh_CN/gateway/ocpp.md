@@ -1,16 +1,20 @@
 # OCPP 协议网关
 
-EMQX OCPP 网关是一个消息协议转换器，它解决了 [OCPP](https://www.openchargealliance.org/) 和 MQTT 协议之间的差距，使用这些协议的客户端能够相互通信。
-
 ::: tip
 
-OCPP 网关基于 [OCPP v1.6](https://www.openchargealliance.org/protocols/ocpp-16/)
+EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
 
 :::
 
-## 快速开始
+[OCPP](https://www.openchargealliance.org/) (Open Charge Point Protocol) 是一个连接充电桩与中央管理系统的开放通信协议，旨在为电动汽车充电基础设施提供统一的通信规范。OCPP 网关是一个消息协议转换器，它弥补了 OCPP 和 MQTT 协议之间的差距，因此使用这些协议的客户端能够相互通信。
 
-在 EMQX 5.0 中，可以通过 Dashboard、HTTP API 和 配置文件 `emqx.conf` 来启用 OCPP 网关。
+EMQX 新增了 [OCPP 1.6-J](https://www.openchargealliance.org/protocols/ocpp-16/) 版本的协议网关，能够接入符合 OCPP 规范的各品牌充电桩设备，并通过规则引擎与数据集成、REST API 等方式与管理系统（Central System）集成，帮助用户快速构建电动汽车充电基础设施。
+
+本页介绍了如何在 EMQX 中配置和使用 OCPP 网关。
+
+## 启用 OCPP 网关
+
+在 EMQX 中，可以通过 Dashboard、HTTP API 和 配置文件 `emqx.conf` 来启用 OCPP 网关。
 
 以 Dashboard 为例，在 EMQX 仪表板上，点击左侧导航菜单中的 **管理** -> **网关**。在网关页面上，列出了所有支持的网关。找到 OCPP，点击配置。然后，您将被引导到初始化页面。
 
@@ -30,11 +34,9 @@ OCPP 网关基于 [OCPP v1.6](https://www.openchargealliance.org/protocols/ocpp-
 
 <img src="./assets/ocpp-enabled.png" alt="OCPP gateway enabled" style="zoom:50%;" />
 
-在 EMQX 5.0 中，可以通过 Dashboard 配置和启用 OCP P网关。
+以上配置也可通过 REST API 完成。
 
-上述配置也可以通过 HTTP API进行配置：
-
-**示例代码**：
+**示例代码：**
 
 ```bash
 curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/ocpp' \
@@ -57,80 +59,81 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/ocpp' \
 }'
 ```
 
-## 客户端接入示例
+## 测试 OCPP 客户端连接
 
-成功启用 OCPP 网关后，可以使用 OCPP 客户端工具测试连接，并确保一切按预期运行。
+一旦 OCPP 网关开始运行，您可以使用 OCPP 客户端工具进行连接测试并验证设置是否正确。
 
-以 [ocpp-go](https://github.com/lorenzodonini/ocpp-go) 为例，本节将展示如何访问 OCPP 网关。
+以 [ocpp-go](https://github.com/lorenzodonini/ocpp-go) 为实际例子，本节展示了如何将其连接到 EMQX 中的 OCPP 网关。
 
-1. 我们需要准备一个 MQTT 客户端与 OCPP 网关进行交互。以 [MQTTX](https://mqttx.app/downloads) 为例，我们将连接到EMQX并订阅主题 `ocpp/#`。
+1. 首先准备一个 MQTT 客户端以与 OCPP 网关交互。例如，使用 [MQTTX](https://mqttx.app/downloads)，配置它连接到 EMQX 并订阅主题 `ocpp/#`。
 
-![Create MQTT Connection](./assets/ocpp-mqttx-create-conn.png)
+   ![创建 MQTT 连接](./assets/ocpp-mqttx-create-conn.png)
 
-2. 运行 ocpp-go 客户端并连接到 OCPP 网关：
+2. 运行 ocpp-go 客户端并与 OCPP 网关建立连接。
 
-注意：您需要将以下命令中的`<host>` 替换为运行 EMQX 机器的地址。
+   **注意**：请将下面命令中的 `<host>` 替换为您的 EMQX 服务器地址。
 
-```shell
-docker run -e CLIENT_ID=chargePointSim -e CENTRAL_SYSTEM_URL=ws://<host>:33033/ocpp -it --rm --name charge-point ldonini/ocpp1.6-charge- point:latest
-```
+   ```shell
+   docker run -e CLIENT_ID=chargePointSim -e CENTRAL_SYSTEM_URL=ws://<host>:33033/ocpp -it --rm --name charge-point ldonini/ocpp1.6-charge-point:latest
+   ```
 
-成功连接到 EMQX 后，将打印类似以下内容的日志：
-```
-INFO[2023-12-01T03:08:39Z] connecting to server logger=websocket
-INFO[2023-12-01T03:08:39Z] connected to server as chargePointSim logger=websocket
-INFO[2023-12-01T03:08:39Z] connected to central system at ws://172.31.1.103:33033/ocpp
-INFO[2023-12-01T03:08:39Z] dispatched request 1200012677 to server logger=ocppj
-```
+   成功连接后，将打印类似于以下的日志：
 
-3. 此时，观察到 MQTTX 接收了以下格式的消息：
-```json
-Topic: ocpp/cp/chargePointSim
-{
-  "UniqueId": "1200012677",
-  "Payload": {
-    "chargePointVendor": "vendor1", "chargePointModel".
-    "chargePointModel": "model1"
-  },
-  "Action": "BootNotification"
-}
-```
-此消息表示 ocpp-go 客户端已连接到 OCPP 网关并发送了一个 `BootNotification` 请求。
+   ```css
+   INFO[2023-12-01T03:08:39Z] connecting to server logger=websocket
+   INFO[2023-12-01T03:08:39Z] connected to server as chargePointSim logger=websocket
+   INFO[2023-12-01T03:08:39Z] connected to central system at ws://172.31.1.103:33033/ocpp
+   INFO[2023-12-01T03:08:39Z] dispatched request 1200012677 to server logger=ocppj
+   ```
 
-4. 在 MQTTX 的消息体中填入以下内容，并发送到 `ocpp/cs/chargePointSim` 主题。
+3. 观察 MQTTX 收到的以下格式的消息：
 
-注意：消息体中的 `UniqueId`，即前一步中收到的 `UniqueId`。
+   ```json
+   Topic: ocpp/cp/chargePointSim
+   {
+     "UniqueId": "1200012677",
+     "Payload": {
+       "chargePointVendor": "vendor1",
+       "chargePointModel": "model1"
+     },
+     "Action": "BootNotification"
+   }
+   ```
 
-```json
-{
-  "MessageTypeId": 3,
-  "UniqueId": "***",
-  "Payload": {
-    "currentTime": "2023-12-01T14:20:39+00:00",
-    "interval": 300,
-    "status": "Accepted"
-  }
-}
-```
+   此消息表明 ocpp-go 客户端已连接到 OCPP 网关并发起了 `BootNotification` 请求。
 
-5. 此后，您会看到 MQTTX 立即接收到一个 `StatusNotification` 状态报告。这意味着 OCPP 客户端已成功与 OCPP 网关建立了连接。
+4. 在 MQTTX 中，编写以下内容的消息并发送到主题 `ocpp/cs/chargePointSim`。
 
-```json
-Topic: ocpp/cp/chargePointSim
-Payload:
-{
-  "UniqueId": "3062609974",
-  "Payload": {
-    "status": "Available",
-    "errorCode": "NoError",
-    "connectorId": 0
-  },
-  "MessageTypeId": 2,
-  "Action": "StatusNotification"
-}
-```
+   **注意**：确保将 `UniqueId` 替换为之前收到的消息中的 `UniqueId`。
 
-## 配置网关
+   ```json
+   {
+     "MessageTypeId": 3,
+     "UniqueId": "***",
+     "Payload": {
+       "currentTime": "2023-12-01T14:20:39+00:00",
+       "interval": 300,
+       "status": "Accepted"
+     }
+   }
+   ```
+5. 随后，MQTTX 将接收到 `StatusNotification` 状态报告。这表明 OCPP 客户端已成功与 OCPP 网关建立连接。
+
+   ```json
+   Topic: ocpp/cp/chargePointSim
+   Payload:
+   {
+     "UniqueId": "3062609974",
+     "Payload": {
+       "status": "Available",
+       "errorCode": "NoError",
+       "connectorId": 0
+     },
+     "MessageTypeId": 2,
+     "Action": "StatusNotification"
+   }
+   ```
+## 自定义您的 OCPP 网关
 
 除了默认设置外，EMQX 还提供了多种配置选项，以更好地满足您的特定业务需求。本节将深入介绍 **Gateways** 页面上可用的各种字段。
 
@@ -220,21 +223,21 @@ OCPP 网关仅支持 Websocket 和 Websocket over TLS 类型的监听器。
 
 鉴于 OCPP 协议的连接消息中已经定义了用户名和密码的概念，OCPP 可支持多种身份验证器类型，例如：
 
-- [Built-in Database Authentication](../access-control/authn/mnesia.md)
-- [MySQL Authentication](../access-control/authn/mysql.md)
-- [MongoDB Authentication](../access-control/authn/mongodb.md)
-- [PostgreSQL Authentication](../access-control/authn/postgresql.md)
-- [Redis Authentication](../access-control/authn/redis.md)
-- [HTTP Server Authentication](../access-control/authn/http.md)
-- [JWT Authentication](../access-control/authn/jwt.md)
+- [内置数据库认证](../access-control/authn/mnesia.md)
+- [MySQL 认证](../access-control/authn/mysql.md)
+- [MongoDB 认证](../access-control/authn/mongodb.md)
+- [PostgreSQL 认证](../access-control/authn/postgresql.md)
+- [Redis 认证](../access-control/authn/redis.md)
+- [HTTP 服务器认证](../access-control/authn/http.md)
+- [JWT 认证](../access-control/authn/jwt.md)
 
-OCPP 网关使用 Websocket 握手消息中的 Basic Authentication 信息来生成客户端的身份验证字段：
+OCPP 网关使用 Websocket 握手消息中的 Basic Authentication 信息来生成客户端的认证字段：
 
 - **Client ID**：客户端连接地址中固定路径前缀（Path）后的部分。
 - **Username**：Basic Authentication 中的用户名的值。
 - **Password**：Basic Authentication 中的密码的值。
 
-您还可以使用 HTTP API 为 OCPP 网关创建内置数据库身份验证。
+您还可以使用 HTTP API 为 OCPP 网关创建内置数据库认证：
 
 **示例代码：**
 
@@ -257,8 +260,8 @@ curl -X 'POST' \
 
 ::: tip
 
-与MQTT协议不同，**网关仅支持创建一个身份验证器，而不是身份验证器列表（或身份验证链）**。
+与 MQTT 协议不同，**网关仅支持创建一个认证器，而不支持创建认证器列表（或认证链）**。
 
-当没有启用身份验证器时，所有OCPP客户端都被允许登录。
+当没有启用任何认证器时，所有 OCPP 客户端都被允许登录。
 
 :::
