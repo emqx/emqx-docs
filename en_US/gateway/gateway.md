@@ -74,14 +74,14 @@ Authentication is the process of verifying the identity of a client attempting t
 
 Different gateways may support different types of authenticators, but all gateways support HTTP-based authentication. [HTTP-based authentication](../access-control/authn/http.md). See the table below for the authentication types supported:
 
-|         | HTTP Server | Built-in Database | MySQL | MongoDB | PostgreSQL | Redis | DTLS | JWT  |
-| ------- | ----------- | ----------------- | ----- | ------- | ---------- | ----- | ---- | ---- |
-| MQTT-SN | ✔︎           |                   |       |         |            |       |      |      |
-| STOMP   | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
-| CoAP    | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
-| LwM2M   | ✔︎           |                   |       |         |            |       |      |      |
-| Exproto | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
-| OCPP    | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     |      | ✔︎    |
+|         | HTTP Server | Built-in Database | MySQL | MongoDB | PostgreSQL | Redis | JWT  |
+| ------- | ----------- | ----------------- | ----- | ------- | ---------- | ----- | ---- |
+| MQTT-SN | ✔︎           |                   |       |         |            |       |      |
+| STOMP   | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    |
+| CoAP    | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    |
+| LwM2M   | ✔︎           |                   |       |         |            |       |      |
+| Exproto | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    |
+| OCPP    | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    |
 
 Note: Any client can log in if no authenticator is configured. 
 
