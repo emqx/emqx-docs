@@ -27,16 +27,8 @@
 - [#12040](https://github.com/emqx/emqx/pull/12040) Upgrade QUIC stack, more features on the way!
 
 
-- [#12089](https://github.com/emqx/emqx/pull/12089) Added a technical preview of the new persistent session implementation based on RocksDB.
-  Please note that this feature is in alpha stage and must not be enabled in the production systems.
 
-  Features missing in the early preview version of the new persistent session implementation:
 
-  - Shard failover
-  - Retained messages
-  - Will message handling
-  - Shared subscriptions
-  - Subscription IDs
 
 - [#11766](https://github.com/emqx/emqx/pull/11766) Implemented a preliminary Role-Based Access Control for the REST API.
 
@@ -51,7 +43,6 @@
 
 - [#11778](https://github.com/emqx/emqx/pull/11778) Support Azure Entra Id for saml single sign on.
 
-- [#11795](https://github.com/emqx/emqx/pull/11795) Integrated Nari Syskeeper 2000 as a new bridge backend.
 
 - [#11811](https://github.com/emqx/emqx/pull/11811) Improve the format for the REST API key bootstrap file to support initialize key with a role.
 
