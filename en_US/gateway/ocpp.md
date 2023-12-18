@@ -139,42 +139,38 @@ In addition to the default settings, EMQX provides a variety of configuration op
 
 ### Basic Configuration
 
-In the **Basic Configuration** tab, you can set the maximum header allowed, the header length allowed, and whether to enable statistics or set the MountPoint string for this gateway. See the texts below the screenshot for a comprehensive explanation of each field.
+In the **Basic Configuration** tab, you can configure the following fields:
 
-<!--with a screenshot to be added later-->
+![ocpp-basic-conf](./assets/ocpp-basic-conf.png)
 
-1. **Default Heartbeat Interval**: The default Heartbeat time interval, default: `60s`.
+1. **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, *ocpp/*.
 
-2. **Heartbeat Checking Times Backoff**: The backoff for heartbeat checking times, default: `1`.
+2. **Default Heartbeat Interval**: The default Heartbeat time interval, default: `60s`.
 
-3. **Upstream**: The Upload stream configuration group.
-  - **Topic**: The topic for Upload stream Call Request messages, default: `cp/${cid}`.
-  - **topic_override_mapping**: Upload stream topic override mapping by Message Name.
-  - **Reply Topic**: The topic for Upload stream Reply messages, default: `cp/${cid}/Reply`.
-  - **Error Topic**: The topic for Upload stream Error messages, default: `cp/${cid}/Reply`.
+3. **Heartbeat Checking Times Backoff**: The backoff for heartbeat checking times, default: `1`.
 
-4. **Dnstream**: The Download stream configuration group.
-    - **Topic**: Download stream topic to receive request/control messages from EMQX. This value is a wildcard topic name that subscribed by every connected Charge Point.
-      default: `cs/${cid}`.
-    - **max_mqueue_len**: The maximum message queue length for download stream message delivery. default: `100`.
-
-5. **Message Format Checking**: Whether to enable message format legality checking. EMQX checks the message format of the upload stream and download stream against the format defined in json-schema. When the check fails, emqx will reply with a corresponding answer message. The checking strategy can be one of the following values:
+4. **Message Format Checking**: Whether to enable message format legality checking. EMQX checks the message format of the upload stream and download stream against the format defined in json-schema. When the check fails, emqx will reply with a corresponding answer message. The checking strategy can be one of the following values:
     - `all`: check all messages
     - `upstream_only`: check upload stream messages only
     - `dnstream_only`: check download stream messages only
     - `disable`: don't check any messages
 
-6. **Json Schema Directory**: JSON Schema directory for OCPP message definitions, default: `${application}/priv/schemas`.
+5. **Json Schema Directory**: JSON Schema directory for OCPP message definitions, default: `${application}/priv/schemas`.
 
-7. **Json Schema Id Prefix**: The ID prefix for the OCPP message schemas, default: `urn:OCPP:1.6:2019:12:`.
+6. **Json Schema Id Prefix**: The ID prefix for the OCPP message schemas, default: `urn:OCPP:1.6:2019:12:`.
 
-8. **Idle Timeout**: Set the maximum amount of time in seconds that the gateway will wait for a OCPP frame before closing the connection due to inactivity.
+7. **Idle Timeout**: Set the maximum amount of time in seconds that the gateway will wait for a OCPP frame before closing the connection due to inactivity.
 
-9. **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: `true`, optional values: `true`, `false`.
+8. **Upstream**:
+  - **Topic**: The topic for Upload stream Call Request messages, default: `cp/${cid}`.
+  - **Reply Topic**: The topic for Upload stream Reply messages, default: `cp/${cid}/Reply`.
+  - **Error Topic**: The topic for Upload stream Error messages, default: `cp/${cid}/Reply`.
+  - **Topic Override Mapping**: Upload stream topic override mapping by Action in message payload.
 
-10. **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, *ocpp/*.
-
-   **Note**: This topic prefix is managed by the gateway. Clients do not need to add this prefix explicitly when publishing and subscribing.
+9. **Dnstream**:
+    - **Topic**: Download stream topic to receive request/control messages from EMQX. This value is a wildcard topic name that subscribed by every connected Charge Point.
+      default: `cs/${cid}`.
+    - **max_mqueue_len**: The maximum message queue length for download stream message delivery. default: `100`.
 
 ### Add Listeners
 
