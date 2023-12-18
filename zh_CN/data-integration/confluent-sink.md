@@ -14,7 +14,7 @@ Confluent Sink 是 EMQX 企业版的功能。EMQX 企业版可以为您带来更
 
 ![EMQX Confluent Integration](./assets/confluent-integration.png)
 
-本页面主要为您介绍了 Confluent 集成的特性和优势，并指导您如何配置 Confluent Cloud 以及如何在 EMQX 中创建 Confluent 消费者 Sink。
+本页面主要为您介绍了 Confluent 集成的特性和优势，并指导您如何配置 Confluent Cloud 以及如何在 EMQX 中创建 Confluent 生产者 Sink。
 
 ## 工作原理
 
@@ -83,7 +83,7 @@ Confluent 数据集成是 EMQX 的开箱即用功能，能够在基于 MQTT 的�
 
 您可以使用 Confluent Cloud CLI 来管理集群。以下是使用 Confluent Cloud CLI 的基本命令。
 
-#### 安装 Confluent Cloud CLI
+##### 安装 Confluent Cloud CLI
 
 ```bash
 curl -sL --http1.1 https://cnfl.io/cli | sh -s -- -b /usr/local/bin
@@ -95,13 +95,13 @@ curl -sL --http1.1 https://cnfl.io/cli | sh -s -- -b /usr/local/bin
 confluent update
 ```
 
-#### 登录到您的帐户
+##### 登录到您的帐户
 
 ```bash
 confluent login --save
 ```
 
-#### 选择环境
+##### 选择环境
 
 ```bash
 # list env
@@ -110,7 +110,7 @@ confluent environment list
 confluent environment use <environment_id>
 ```
 
-#### 选择集群
+##### 选择集群
 
 ```bash
 # list kafka cluster
@@ -119,7 +119,7 @@ confluent kafka cluster list
 confluent kafka cluster use <kafka_cluster_id>
 ```
 
-#### 使用 API 密钥和 Secret
+##### 使用 API 密钥和 Secret
 
 如果您想使用现有的 API 密钥，请使用以下命令将其添加到 CLI：
 
@@ -148,7 +148,7 @@ Save the API key and secret. The secret is not retrievable later.
 confluent api-key use <API_Key> --resource <kafka_cluster_id>
 ```
 
-#### 创建主题
+##### 创建主题
 
 您可以使用以下命令创建一个名为 `testtopic-in` 的主题：
 
@@ -162,7 +162,7 @@ confluent kafka topic create testtopic-in
 confluent kafka topic list
 ```
 
-#### 向主题生成消息
+##### 向主题生成消息
 
 您可以使用以下命令创建生产者。启动生产者后，输入一条消息并按 Enter 键。消息将被生成到相应的主题中。
 
@@ -170,7 +170,7 @@ confluent kafka topic list
 confluent kafka topic produce testtopic-in
 ```
 
-#### 从主题消费消息
+##### 从主题消费消息
 
 您可以使用以下命令创建消费者。它将输出相应主题中的所有消息。
 
@@ -220,7 +220,7 @@ confluent kafka topic consume -b testtopic-in
 
 6. 在下方的表单中输入 Sink 的名称与描述。
 
-7. 在**连接器**下拉框中选择刚刚创建的 `my-confluent` 连接器。您也可以点击下拉框旁边的 `+` 按钮，在弹出框中快捷创建新的连接器，所需的配置参数按照参照[创建连接器](#创建连接器)。
+7. 在**连接器**下拉框中选择刚刚创建的 `my-confluent` 连接器。您也可以点击下拉框旁边的创建按钮，在弹出框中快捷创建新的连接器，所需的配置参数按照参照[创建连接器](#创建连接器)。
 
 8. 配置 Sink 的数据发送方式，包括：
 
@@ -254,7 +254,7 @@ confluent kafka topic consume -b testtopic-in
    mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Confluent" }'
    ```
 
-2. 在 **Sink** 页面上点击 Sink 的名称查看统计信息。检查数据桥的运行状态，应该有一个新的传入消息和一个新的传出消息。
+2. 在 **Sink** 页面上点击 Sink 的名称查看统计信息。检查 Sink 的运行状态，应该有一个新的传入消息和一个新的传出消息。
 
 3. 使用以下 Confluent 命令检查消息是否被写入 `testtopic-in` 主题：
 
