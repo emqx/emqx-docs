@@ -82,7 +82,7 @@
 
    <img src="./assets/otel-logs-bridge-example-zh.png" alt="Otel-logs-HTTP-bridge-example" style="zoom:67%;" />
 
-4. 短时间后（默认约 1 秒），Otel Collector 应该显示接收到的 EMQX 日志事件，例如指示 HTTP 桥接连接失败的事件：
+4. 短时间后（默认约 1 秒），Otel Collector 应该显示接收到的 EMQX 日志事件，例如指示 HTTP 动作连接失败的事件：
 
    ![Otel-collector-logs-debug-output](./assets/otel-collector-logs-debug-output.png)
 
