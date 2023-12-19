@@ -124,7 +124,7 @@ EMQX 支持与分布式 [OpenTelemetry 追踪](https://opentelemetry.io/docs/con
 
 在此示例中，EMQX 追踪了两种不同类型的跨度：
 
-- `process_message` 跨度从接收并解析 PUBLISH 包的 EMQX 节点开始，直到消息被分发给本地订阅者和/或转发给其他有活跃订阅者的节点为止。每个跨度对应一个被追踪的已发布消息。
+- `process_message` 跨度从接收并解析 PUBLISH 包的 EMQX 节点开始，直到消息被分发给本地订阅者和转发给其他有活跃订阅者的节点（如果有）为止。每个跨度对应一个被追踪的已发布消息。
 - `send_published_message` 跨度从被订阅者的连接控制进程接收追踪消息开始，直到将外发包序列化并发送到连接套接字为止。每个活跃订阅者都会创建一个 `send_published_message` 跨度。
 
 ## 管理追踪跨度过载
