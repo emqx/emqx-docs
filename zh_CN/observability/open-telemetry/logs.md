@@ -78,7 +78,7 @@
    
 2. 启动 EMQX 节点。
 
-3. 生成 EMQX 日志事件，例如通过 Dashboard 创建到无法访问的 HTTP 服务的桥接：
+3. 生成 EMQX 日志事件，例如通过 Dashboard 创建一个无法访问的 HTTP 服务动作：
 
    <img src="./assets/otel-logs-bridge-example-zh.png" alt="Otel-logs-HTTP-bridge-example" style="zoom:67%;" />
 
