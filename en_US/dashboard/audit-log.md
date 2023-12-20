@@ -16,12 +16,14 @@ You can enable the audit log and modify the configuration parameters in the Dash
 
 <img src="./assets/audit_log_config.png" alt="Audit Log Configuration" style="zoom:50%;" />
 
-Audit log configuration options:
+You can configure the following options for Audit Log:
 
-- **Enable Log Handler**: Toggle the switch to enable or disable the audit log processing process. It is enabled by default.
+- **Enable Log Handler**: Enable or disable the audit log processing process. It is enabled by default.
 - **Audit Log File Name**: Specify the path and name of the audit log file. The default value is `${EMQX_LOG_DIR}/audit.log`, where `${EMQX_LOG_DIR}` is a variable and defaults to `./log`, meaning it is ultimately be saved in `./log/audit.log.1`.
 - **Maximum Log Files Number**: The maximum number of rotated log files. The default value is `10`.
 - **Rotation Size**: Set the size of log files, and when the specified size is reached, log files will be rotated. If disabled, log files will grow indefinitely. You can enter the desired value in the text box and select the unit from the dropdown list, with options such as `MB`, `GB`, and `KB`. The default value is `50MB`.
+- **Max Dashboard Record Size**: This setting determines the maximum number of records stored in the database, which can be accessed and retrieved through the Dashboard and the `/audit` API. The default value is `5000`.
+- **Ignore High Frequency Request**: This option controls whether to ignore high-frequency requests to prevent flooding the audit log with entries, such as requests related to publish/subscribe and kicking out clients. It is enabled by default.
 - **Time Offset**: Define the format of timestamps in the log. such as "-02:00" or "+00:00". By default, it is set to `system`.
 
 ### Enable Audit Log via Configuration File
