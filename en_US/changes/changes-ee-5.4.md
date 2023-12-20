@@ -98,7 +98,7 @@
 
 - [#12121](https://github.com/emqx/emqx/pull/12121) Fixed an issue with nodes in the cluster occasionally returning stale view when updating configurations on different nodes concurrently.
 
-- [#12158](https://github.com/emqx/emqx/pull/12158) Fix the issue that the rule engine cannot connect to `upstash` Redis.
+- [#12158](https://github.com/emqx/emqx/pull/12158) Fixed an issue when the rule engine cannot connect to Redis hosted by Upstash.
 
   Before the fix, after establishing a TCP connection with the Redis service, the Redis driver of EMQX used [Inline Commands](https://redis.io/docs/reference/protocol-spec/#inline-commands) to send AUTH and SELECT commands. However, the `upstash` Redis service does not support Inline Commands, which causes the rule engine to fail to connect to the `upstash` Redis service.
   After the fix, the Redis driver of EMQX uses RESP (REdis Serialization Protocol) to send AUTH and SELECT commands.
