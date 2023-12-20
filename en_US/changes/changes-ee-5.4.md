@@ -96,7 +96,7 @@
 
 - [#12111](https://github.com/emqx/emqx/pull/12111) Fixed an issue when API tokens were sometimes unavailable immediately after login due to race condition.
 
-- [#12121](https://github.com/emqx/emqx/pull/12121) Fixed occasionally return stale view when updating configurations on different nodes concurrently
+- [#12121](https://github.com/emqx/emqx/pull/12121) Fixed an issue with nodes in the cluster occasionally returning stale view when updating configurations on different nodes concurrently.
 
 - [#12158](https://github.com/emqx/emqx/pull/12158) Fix the issue that the rule engine cannot connect to `upstash` Redis.
 
