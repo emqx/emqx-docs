@@ -1,5 +1,7 @@
 # Integrate OpenTelemetry for Log Management
 
+Like file log, OpenTelemetry logs are used to record critical events, status information, and error messages, aiding developers and operations teams in understanding an application's behavior and troubleshooting. However, OpenTelemetry logs differ in that they employ a standardized logging format, making logs easier to parse, analyze, and process. Additionally, OpenTelemetry logs support the addition of rich contextual information to records, such as Trace IDs, tags, attributes, and more.
+
 This page provides a comprehensive guide on integrating the OpenTelemetry log handler with EMQX for advanced log management. It covers setting up the OpenTelemetry Collector, configuring the OpenTelemetry log handler in EMQX to export logs, and managing potential log overloads. This integration allows you to format EMQX log events according to [OpenTelemetry log data model](https://opentelemetry.io/docs/specs/otel/logs/data-model/) and export them to the configured OpenTelemetry Collector or backend system, offering improved monitoring and debugging capabilities.
 
 ## Set Up OpenTelemetry Collector
@@ -71,6 +73,8 @@ Before enabling EMQX OpenTelemetry logging, you need to deploy and configure Ope
    }
    ```
 
+   You can also go to **Management** -> **Monitoring** in Dashboard to configure OpenTelemetry log integration under the **Integration** tab on the page.
+
    ::: tip Note
 
    The `opentelemetry.logs.level` setting is overridden by the default log level configured in [EMQX log handler(s)](../../observability/log.md). For instance, if OpenTelemetry log level is `info` but EMQX console log level is `error`, only `error` level events or higher will be exported. 
@@ -101,7 +105,7 @@ opentelemetry {
 
 Once the `max_queue_size` limit is reached, new log events will be dropped until the current queue is exported.
 
-::: warning Note
+::: tip Note
 
 OpenTelemetry logs overload protection works independently from the default [EMQX log handler(s)](../log.md) overload protection.
 Thus, depending on the configuration, the same log event can be dropped by OpenTelemetry handler but logged by default EMQX log handler(s), or vice versa.
