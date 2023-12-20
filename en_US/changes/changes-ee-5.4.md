@@ -39,7 +39,7 @@
 
   - Publisher: This role is special for MQTT messages publish, it can only access publish-related endpoints.
 
-- [#11773](https://github.com/emqx/emqx/pull/11773) Support audit log filter via dashboard (http api).
+- [#11773](https://github.com/emqx/emqx/pull/11773) Implemented support for audit log filter via dashboard (http api).
 
 - [#11778](https://github.com/emqx/emqx/pull/11778) Implemented support for Microsoft Entra ID in SAML single sign on flow.
 
