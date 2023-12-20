@@ -9,9 +9,9 @@ EMQX 内置支持通过 gRPC OTEL 协议将指标直接推送到 OpenTelemetry C
 在集成 Opentelemetry 之前，您需要先部署和配置 OpenTelemetry 以及 Prometheus。
 
 - 部署 [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started)。
-- 配置 Collector GRPC 接收端口（端口默认为 4317 ），及导出为 Prometheus Metrics 的端口（8889）。
+- 配置 Collector gRPC接收端口（端口默认为 4317 ），及导出为 Prometheus Metrics 的端口（8889）。
 
-```
+```yaml
 # otel-collector-config.yaml
 receivers:
   otlp:
@@ -36,7 +36,7 @@ service:
 - 部署 [Prometheus](https://prometheus.io/docs/prometheus/latest/installation)。
 - 配置 Prometheus 拉取 Collector 收集的指标。
 
-```
+```yaml
 # prometheus.yaml
 scrape_configs:
   - job_name: 'otel-collector'
@@ -46,18 +46,24 @@ scrape_configs:
       - targets: ['otel-collector:8888'] # collector metrics
 ```
 
-## 通过 Dashboard 配置集成
+## 在 EMQX 中启用 OpenTelemetry 指标
 
-您可在 EMQX Dashboard 设置集成 OpenTelemetry。点击左侧导航目录中的**管理** -> **监控**，在**监控集成**页签，设置启用 OpenTelemetry。
+本节指导您如何在 EMQX 中启用 OpenTelemetry 指标。你也可以在 Dashboard **管理** -> **监控** 页面下的 **监控集成** 选项卡中配置 OpenTelemetry 指标集成。
 
-![OpenTelemetry-Dashboard](./assets/opentelemetry-dashboard-zh.png)
+将以下配置添加到 EMQX `cluster.hocon` 文件中（假设 EMQX 在本地机器上运行）：
 
-- 服务地址： OpenTelemetry Collector 的 GRPC 端口地址，默认为`http://localhost:4317`
-- 导出间隔：周期性推送指标到 Collector 的时间间隔，默认为 10 秒。
+   ```bash
+   opentelemetry {
+     exporter { endpoint = "http://localhost:4317" }
+     metrics {
+        enable = true
+        interval = "10s"
+     }
+   }
+   ```
 
 ## 通过 Prometheus 查看 EMQX 指标
 
 通过 Prometheus 的控制台（`http://otel-collector:9090`）可以查看到 EMQX 指标：
 
 ![OpenTelemetry-Prometheus](./assets/opentelemetry-prometheus.png)
-
