@@ -4,44 +4,40 @@
 
 ### Enhancements
 
-- [#11884](https://github.com/emqx/emqx/pull/11884) Modified the Prometheus API and configuration to:
-  - Restructure configuration sections to group related settings, improving readability and maintainability
-  - Introduced `enable_basic_auth` configuration for basic authentication on the scrape API endpoint, enhancing security
-  - Maintained backwards compatibility while refactoring code, avoiding breaking changes
+- [#11884](https://github.com/emqx/emqx/pull/11884) Modified the Prometheus API and configuration to implement the following improvements:
+  
+  - Restructured configuration sections to group related settings, improving readability and maintainability.
+  - Introduced `enable_basic_auth` configuration for basic authentication on the scrape API endpoint, enhancing security.
+  - Maintained backwards compatibility while refactoring code, avoiding breaking changes.
+  
+- [#11896](https://github.com/emqx/emqx/pull/11896) Introduced an enhancement for configuring sensitive authentication fields in bridges, such as passwords, tokens, and secret keys. This improvement allows the use of secrets stored as files in the file system. These secrets can be securely referenced in configuration files using the special `file://` prefix, enhancing the security of sensitive data handling in bridge configurations.
 
-- [#11896](https://github.com/emqx/emqx/pull/11896) Support configuring authentication-related sensitive fields in bridges (i.e. passwords, tokens, secret keys) via secrets stored as files in the file system, through special `file://` prefix.
-
-- [#11921](https://github.com/emqx/emqx/pull/11921) Introduced Open Telemetry Logs Handler that allows to format log events according to Open Telemetry log data model and
-  export them to the configured Open Telemetry collector or back-end.
-
-- [#11935](https://github.com/emqx/emqx/pull/11935) Switch to the new `v2` routing store schema by default. New schema improves both subscription and routing performance, especially so for scenarios with concurrent subscriptions to topic filters sharing common wildcard prefixes, at the cost of slightly increased memory usage. This schema also eliminates the need for a separate index, thus inconsistencies in the routing state rarely encountered in previous versions should no longer be possible.
+- [#11921](https://github.com/emqx/emqx/pull/11921) Introduced Open Telemetry Logs Handler that allows to format log events in alignment with the Open Telemetry log data model. This handler facilitates the exportation of formatted log events to a configured Open Telemetry collector or back-end, thereby enhancing log management and integration capabilities.
+  
+- [#11935](https://github.com/emqx/emqx/pull/11935) Switched to the new `v2` routing store schema by default. New schema improves both subscription and routing performance, especially in scenarios with concurrent subscriptions to topic filters sharing common wildcard prefixes. However, it does come with a minor increase in memory usage. This schema also eliminates the need for a separate index, thus inconsistencies in the routing state rarely encountered in previous versions should no longer be possible.
 
   If a cluster is rolling upgraded from older version, the cluster will continue to use `v1` store until a full cluster (non-rolling) restart happens.
 
-  The former schema can still be forced by setting `broker.routing.storage_schema` configuration option to `v1` and conducting full non-rolling cluster restart as well.
+  Users can still opt for the previous schema by configuring the `broker.routing.storage_schema` option to `v1`. However, this also requires a complete, non-rolling restart of the cluster to take effect.
 
 - [#11984](https://github.com/emqx/emqx/pull/11984) Implemented Open Telemetry distributed tracing feature.
 
-- [#12017](https://github.com/emqx/emqx/pull/12017) Implemented HTTP API for configuration and user data import/export.
+- [#12017](https://github.com/emqx/emqx/pull/12017) Implemented a dedicated HTTP API for the import and export of configuration and user data. 
 
-- [#12040](https://github.com/emqx/emqx/pull/12040) Upgraded QUIC stack.
+- [#12040](https://github.com/emqx/emqx/pull/12040) Upgraded QUIC protocol stack.
 
-- [#11608](https://github.com/emqx/emqx/pull/11608) Integrated the LDAP bind operation as a new authenticator.
+- [#11608](https://github.com/emqx/emqx/pull/11608) Integrated LDAP bind operation as a new authenticator, providing a more flexible and secure method for user authentication.
 
-
-
-- [#11766](https://github.com/emqx/emqx/pull/11766) Implemented a preliminary Role-Based Access Control for the REST API.
-
-  In this version, there are three predefined roles:
-  - Administrator: This role could access all resources.
-
+- [#11766](https://github.com/emqx/emqx/pull/11766) Implemented a preliminary Role-Based Access Control for the REST API. In this version, there are three predefined roles:
+- Administrator: This role can access all resources.
+  
   - Viewer: This role can only view resources and data, corresponding to all GET requests in the REST API.
 
-  - Publisher: This role is special for MQTT messages publish, it can only access publish-related endpoints.
+  - Publisher: Specifically tailored for MQTT message publishing, this role is confined to accessing endpoints related to message publication.
 
-- [#11773](https://github.com/emqx/emqx/pull/11773) Implemented support for audit log filter via dashboard (http api).
+- [#11773](https://github.com/emqx/emqx/pull/11773) Implemented Dashboard support for audit log management. Users can utilize this page to view all change operations performed on EMQX devices and data, such as kicking out devices, creating/deleting rules, etc.
 
-- [#11778](https://github.com/emqx/emqx/pull/11778) Implemented support for Microsoft Entra ID in SAML single sign on flow.
+- [#11778](https://github.com/emqx/emqx/pull/11778) Integrated Microsoft Entra Identity (formerly known as Azure Active Directory) support into the SAML single sign-on (SSO) process.
 
 
 - [#11811](https://github.com/emqx/emqx/pull/11811) Improved the format for the REST API key bootstrap file to support initializing key with a role.
@@ -50,53 +46,46 @@
 
   `role` is optional and its default value is `administrator`.
 
-- [#11852](https://github.com/emqx/emqx/pull/11852) Introduced a new gateway for vehicles to access EMQX through the GBT32960 protocol.
+- [#11852](https://github.com/emqx/emqx/pull/11852) Introduced a new GB/T 32960 gateway, enabling vehicles to connect with EMQX via the GBT32960 vehicular networking protocol. 
 
-- [#11883](https://github.com/emqx/emqx/pull/11883) Introduced a new gateway for vehicles to access EMQX through the JT/T 808 protocol.
+- [#11883](https://github.com/emqx/emqx/pull/11883) Introduced a new JT/T808 gateway, enabling vehicles to connect with EMQX via the JT/T 808 vehicular networking protocol. 
 
-- [#11885](https://github.com/emqx/emqx/pull/11885) Introduced a new gateway for Electric vehicle (EV) charging stations to access EMQX through the OCPP (Open Charge Point Protocol).
+- [#11885](https://github.com/emqx/emqx/pull/11885) Introduced a new OCPP gateway for Electric vehicle (EV) charging stations to access EMQX through the OCPP (Open Charge Point Protocol). 
 
-- [#11971](https://github.com/emqx/emqx/pull/11971) Made `/api/v5/load_rebalance/availability_check` public, i.e. not requiring authentication. This simplifies load balancer setup.
+- [#11971](https://github.com/emqx/emqx/pull/11971) Made `/api/v5/load_rebalance/availability_check` public, meaning it no longer requires authentication. This change simplifies the setup of load balancers.
 
-  Made rebalance/evacuation more graceful during the wait health check phase. The connections to nodes marked for eviction are now not prohibited during this phase.
-  During this phase it is unknown whether these nodes are all marked unhealthy by the load balancer, so prohibiting connections to them may cause multiple unssuccessful attempts to reconnect.
+  It improved the gracefulness of the rebalance/evacuation process during the wait health check phase. The connections to nodes marked for eviction are now not prohibited during this phase.
+  During this phase it is unknown whether these nodes are all marked unhealthy by the load balancer, so prohibiting connections to them may cause multiple unsuccessful reconnection attempts.
 
-- [#12013](https://github.com/emqx/emqx/pull/12013) The bridges for PostgreSQL, Timescale and Matrix have been split so they are available via the connectors and actions APIs. They are still backwards compatible with the old bridge API.
+- [#12013](https://github.com/emqx/emqx/pull/12013) The data bridging design has been adjusted to split it into connectors and actions (Sinks). Connectors are used to manage the integration of data with external systems and can be reused across multiple actions, while actions are used to configure how data is processed. This design provides greater flexibility and scalability, resulting in clearer data integration configuration and management. 
+
+  The adjusted data bridges includes PostgreSQL, Timescale, and Matrix, which have now been split into connectors and actions APIs, but they remain backward compatible with the old data bridge API.
 
 - [#12016](https://github.com/emqx/emqx/pull/12016) Enhanced license key management.
 
   EMQX can now load the license key from a specified file. This is enabled by setting the `license.key` configuration to a file path, which should be prefixed with `"file://"`.
   Also added the ability to revert to the default trial license by setting `license.key = default`. This option simplifies the process of returning to the trial license if needed.
 
-- [#12129](https://github.com/emqx/emqx/pull/12129) Default license renewal.
-
-  Replaced old license issued in Jan 2023.
-  New license supports up to 25 concurrent connections.
-
-
+- [#12129](https://github.com/emqx/emqx/pull/12129) Default license renewal. Replaced old license issued in Jan 2023. New license supports up to 25 concurrent connections.
 
 ### Bug Fixes
 
-- [#10976](https://github.com/emqx/emqx/pull/10976) Fix topic-filter overlapping handling in shared subscription.
+- [#10976](https://github.com/emqx/emqx/pull/10976) Fixed topic-filter overlapping handling in shared subscription.
   In the previous implementation, the storage method for subscription options did not provide adequate support for shared subscriptions. This resulted in message routing failures and leakage of routing tables between nodes during the "subscribe-unsubscribe" process with specific order and topics.
 
-- [#12048](https://github.com/emqx/emqx/pull/12048) Fix COAP gateway bug that caused it to ignore subscription options.
+- [#12048](https://github.com/emqx/emqx/pull/12048) Fixed COAP gateway bug that caused it to ignore subscription options.
 
-- [#12078](https://github.com/emqx/emqx/pull/12078) Upgrade grpc-erl to 0.6.12
+- [#12078](https://github.com/emqx/emqx/pull/12078) Upgraded grpc-erl to 0.6.12. This update addresses a potential deadlock issue where the grpc client started dependent apps lazily.
 
-  grpc-erl 0.6.12 fixes a potential deadlock that was possible because grpc client started dependent apps lazily.
-
-- [#12081](https://github.com/emqx/emqx/pull/12081) Updated `gen_rpc` library to version 3.3.0. The new version includes
-  several performance improvements:
-
-  - Avoid allocating extra memory for the packets before they are sent
-  to the wire in some cases
-
-  - Bypass network for the local calls
+- [#12081](https://github.com/emqx/emqx/pull/12081) Updated `gen_rpc` library to version 3.3.0. The new version includes several performance improvements:
+  
+  - Avoiding allocating extra memory for the packets before they are sent to the wire in some cases.
+  
+  - Bypassing network for the local calls.
 
 - [#12111](https://github.com/emqx/emqx/pull/12111) Fixed an issue when API tokens were sometimes unavailable immediately after login due to race condition.
 
-- [#12121](https://github.com/emqx/emqx/pull/12121) Fixed an issue with nodes in the cluster occasionally returning stale view when updating configurations on different nodes concurrently.
+- [#12121](https://github.com/emqx/emqx/pull/12121) Fixed an issue where nodes in the cluster would occasionally return a stale view when updating configurations on different nodes concurrently.
 
 - [#12158](https://github.com/emqx/emqx/pull/12158) Fixed an issue when the rule engine cannot connect to Redis hosted by Upstash.
 
