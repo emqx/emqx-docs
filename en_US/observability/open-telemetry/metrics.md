@@ -46,13 +46,21 @@ scrape_configs:
       - targets: ['otel-collector:8888'] # collector metrics
 ```
 
-## Configure Integration via Dashboard
+## Enable OpenTelemetry Metrics in EMQX
 
-You can use EMQX Dashboard to configure EMQX's integration with OpenTelemetry. In the EMQX Dashboard, click **Management** -> **Monitoring** on the left navigation menu, then click the **Integration** tab for the configuration.
+You can use EMQX Dashboard or configuration file to configure EMQX's integration with OpenTelemetry metrics feature. In the EMQX Dashboard, click **Management** -> **Monitoring** on the left navigation menu, then click the **Integration** tab for the configuration for Metrics.
 
-![OpenTelemetry-Dashboard](./assets/opentelemetry-dashboard-en.png)
-- **EndPoint**: Collector's gRPC address; `http://localhost:4317` by default.
-- **Export Interval**: Interval to push metrics to Collector; `10` seconds by default.
+Add the configuration below to the EMQX `cluster.hocon` file (assuming EMQX runs locally):
+
+   ```bash
+opentelemetry {
+  exporter { endpoint = "http://localhost:4317" }
+  metrics {
+     enable = true
+     interval = "10s"
+  }
+}
+   ```
 
 ## Visualize EMQX Metrics in Prometheus
 

@@ -1,8 +1,6 @@
 # 集成 OpenTelemetry 进行日志管理
 
-与基于文件的日志一样，OpenTelemetry 日志同样用于记录关键事件、状态信息和错误消息，帮助开发人员和运维团队理解应用程序的行为和故障排查。
-
-不同的是，OpenTelemetry 日志使用了规范化的日志记录格式，使得日志更易于解析、分析和处理。初次之外 OpenTelemetry 日志还支持在记录中添加丰富的上下文信息，如 Trace ID、标签、属性等。
+与基于文件的日志一样，OpenTelemetry 日志同样用于记录关键事件、状态信息和错误消息，帮助开发人员和运维团队理解应用程序的行为和故障排查。不同的是，OpenTelemetry 日志使用了规范化的日志记录格式，使得日志更易于解析、分析和处理。除此之外， OpenTelemetry 日志还支持在记录中添加丰富的上下文信息，如 Trace ID、标签、属性等。
 
 本页面提供了一个全面的指南，介绍了如何将 OpenTelemetry 与 EMQX 集成，以实现高级日志管理。内容涵盖了设置 OpenTelemetry Collector、在 EMQX 中启用 OpenTelemetry 日志处理进程导出日志，以及管理潜在的日志过载。与 OpenTelemetry 的集成允许您根据 [OpenTelemetry 日志数据模型](https://opentelemetry.io/docs/specs/otel/logs/data-model/) 格式化 EMQX 日志事件，并将它们导出到配置的 OpenTelemetry Collector 或后端系统，提高了对 EMQX 的监控和调试能力。
 
@@ -67,8 +65,6 @@
 
 1. 将以下配置添加到 EMQX `cluster.hocon` 文件中（假设 EMQX 在本地机器上运行）：
 
-你也可以在 Dashboard **管理** -> **监控** 页面下的 **监控集成** 选项卡中配置 OpenTelemetry 追踪集成。
-
    ```bash
    opentelemetry {
      exporter {endpoint = "http://localhost:4317"}
@@ -76,7 +72,9 @@
    }
    ```
 
-   ::: tip 提示
+   您也可以在 Dashboard **管理** -> **监控** 页面下的 **监控集成** 选项卡中配置 OpenTelemetry 日志集成。
+
+    ::: tip 提示
 
    `opentelemetry.logs.level` 设置将被默认配置在 [EMQX 日志处理进程](../../observability/log.md) 中的日志级别覆盖。例如，如果 OpenTelemetry 日志级别为 `info` 但 EMQX 控制台日志级别为 `error`，则只有 `error` 级别或更高级别的事件才会被导出。
 
