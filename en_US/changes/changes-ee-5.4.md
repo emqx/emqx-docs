@@ -94,7 +94,7 @@
 
   - Bypass network for the local calls
 
-- [#12111](https://github.com/emqx/emqx/pull/12111) Fix an issue where API tokens were sometimes unavailable by using sync_transaction function to ensure all updates are consistently synchronized to the replica node.
+- [#12111](https://github.com/emqx/emqx/pull/12111) Fixed an issue when API tokens were sometimes unavailable immediately after login due to race condition.
 
 - [#12121](https://github.com/emqx/emqx/pull/12121) Fixed occasionally return stale view when updating configurations on different nodes concurrently
 
