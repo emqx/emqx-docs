@@ -24,7 +24,7 @@
 
 - [#12017](https://github.com/emqx/emqx/pull/12017) Implemented HTTP API for configuration and user data import/export.
 
-- [#12040](https://github.com/emqx/emqx/pull/12040) Upgrade QUIC stack, more features on the way!
+- [#12040](https://github.com/emqx/emqx/pull/12040) Upgraded QUIC stack.
 
 - [#11608](https://github.com/emqx/emqx/pull/11608) Integrated the LDAP bind operation as a new authenticator.
 
