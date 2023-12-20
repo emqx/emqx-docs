@@ -44,7 +44,7 @@
 - [#11778](https://github.com/emqx/emqx/pull/11778) Support Azure Entra Id for saml single sign on.
 
 
-- [#11811](https://github.com/emqx/emqx/pull/11811) Improve the format for the REST API key bootstrap file to support initialize key with a role.
+- [#11811](https://github.com/emqx/emqx/pull/11811) Improved the format for the REST API key bootstrap file to support initializing key with a role.
 
   The new form is:`api_key:api_secret:role`.
 
