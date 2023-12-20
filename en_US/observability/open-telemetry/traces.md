@@ -2,7 +2,7 @@
 
 "Trace context" is a mechanism used in distributed tracing to track and identify requests or transactions that span multiple systems and services. In the [W3C Trace Context MQTT](https://w3c.github.io/trace-context-mqtt/) document, this concept is applied to the MQTT protocol to enable tracking of requests across different participants in MQTT message transmission. This allows system administrators or developers to understand how messages flow through the entire system. EMQX's inherent ability to propagate trace context enables it to seamlessly participate in distributed tracing systems. This propagation is achieved simply by forwarding the `traceparent` and `tracestate` user properties from the message publisher to the subscriber. When EMQX forwards an application message to a client, it ensures the integrity of the trace context is maintained and transmitted unchanged. This method is fully compliant with [MQTT specification 3.3.2.3.7](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901116), ensuring consistency and reliability in trace data transmission.
 
-::: warning Note
+::: tip Note
 
 User-Property was introduced in MQTT 5.0, so EMQX can extract and propagate Trace Context only when MQTT 5.0 is used.
 :::
@@ -10,7 +10,6 @@ User-Property was introduced in MQTT 5.0, so EMQX can extract and propagate Trac
 EMQX supports integration with distributed [OpenTelemetry tracing](https://opentelemetry.io/docs/concepts/signals/traces/), propagating trace context through MQTT user properties, which is beneficial for tracing EMQX-specific operations and spans. This additional level of trace integration enhances the visibility into the internal workings of EMQX, supplementing the standard trace context propagation mechanism, thereby enhancing monitoring and debugging capabilities.
 
 This page introduces how to integrate OpenTelemetry tracing with EMQX, detailing the setup of the OpenTelemetry Collector and the enabling and configuring of OpenTelemetry trace integration in EMQX, as well as managing tracing span overload.
-
 
 ## Set Up OpenTelemetry Collector
 
@@ -75,7 +74,7 @@ Before integrating EMQX with OpenTelemetry traces, you need to deploy and config
    docker compose -f docker-compose-otel-trace.yaml up
    ```
    
-4. After starting, the OpenTelemetry Collector listens on the default GRPC port (4317) on the host machine and Jaeger WEB UI can be accessed at http://localhost:16686.
+4. After starting, the OpenTelemetry Collector listens on the default gRPCport (4317) on the host machine and Jaeger WEB UI can be accessed at http://localhost:16686.
 
 
 ## Enable OpenTelemetry Tracing in EMQX
@@ -86,8 +85,13 @@ This section guides you through enabling OpenTelemetry tracing in EMQX, demonstr
 
    ```bash
    opentelemetry {
-     exporter {endpoint = "http://localhost:4317"}
-     traces {enable = true}
+     exporter { endpoint = "http://localhost:4317" }
+     traces {
+      enable = true
+      # Whether to trace all messages
+      # If a trace ID cannot be extracted from the message, a new trace ID will be generated.
+      # filter.trace_all = true
+    }
    }
    ```
    
@@ -98,19 +102,19 @@ This section guides you through enabling OpenTelemetry tracing in EMQX, demonstr
    - On the `emqx@127.0.0.1` node (default MQTT listener on port 1883):
 
      ```bash
-     mqttx-cli sub -t t/trace/test -h localhost -p 1883
+     mqttx sub -t t/trace/test -h localhost -p 1883
      ```
 
    - On the `emqx1@127.0.0.1` node (listener on port 1884):
 
      ```bash
-     mqttx-cli sub -t t/trace/test -h localhost -p 1884
+     mqttx sub -t t/trace/test -h localhost -p 1884
      ```
 
 4. Publish a message with Trace Context by sending a message to the topic including a valid `traceparent` User-Property:
 
    ```bash
-   mqttx-cli pub -t t/trace/test -h localhost -p 1883 -up "traceparent: 00-cce3a024ca134a7cb4b41e048e8d98de-cef47eaa4ebc3fae-01"
+   mqttx pub -t t/trace/test -h localhost -p 1883 -up "traceparent: 00-cce3a024ca134a7cb4b41e048e8d98de-cef47eaa4ebc3fae-01"
    ```
 
 5. After approximately 5 seconds (EMQX’s default interval for exporting trace data), navigate to the Jaeger WEB UI at [http://localhost:16686](http://localhost:16686/) to observe trace data:
@@ -135,14 +139,15 @@ EMQX accumulates tracing spans and exports them periodically in batches.
 The exporting interval is controlled by the `opentelemetry.trace.scheduled_delay` parameter, which defaults to 5 second.
 The batching trace spans processor incorporates an overload protection mechanism, allowing accumulating spans only up to a certain limit, which defaults to 2048 spans. You can configure this limit using the following configuration:
 
-```
+```bash
 opentelemetry {
-  traces {max_queue_size = 2048}
+  traces { max_queue_size = 2048 }
 }
 ```
+
 Once the `max_queue_size` limit is reached, new tracing spans will be dropped until the current queue is exported.
 
-::: warning Note
+::: tip Note
 
 If a traced message is dispatched to a high number of subscribers (much higher than the value of `max_queue_size`),
 it is expected that only a small number of spans will be exported and most of the spans will be dropped by the overload protection.

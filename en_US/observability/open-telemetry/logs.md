@@ -71,7 +71,7 @@ Before enabling EMQX OpenTelemetry logging, you need to deploy and configure Ope
    }
    ```
 
-   ::: warning Note
+   ::: tip Note
 
    The `opentelemetry.logs.level` setting is overridden by the default log level configured in [EMQX log handler(s)](../../observability/log.md). For instance, if OpenTelemetry log level is `info` but EMQX console log level is `error`, only `error` level events or higher will be exported. 
 
@@ -93,11 +93,12 @@ EMQX accumulates log events and exports them periodically in batches.
 The frequency of this export is controlled by the `opentelemetry.logs.scheduled_delay` parameter, defaulting to 1 second. 
 The batching log handler incorporates an overload protection mechanism, allowing accumulating events only up to a specific limit, which defaults to 2048. You can configure this limit using the following configuration:
 
-```
+```bash
 opentelemetry {
-  logs {max_queue_size = 2048}
+  logs { max_queue_size = 2048 }
 }
 ```
+
 Once the `max_queue_size` limit is reached, new log events will be dropped until the current queue is exported.
 
 ::: warning Note
