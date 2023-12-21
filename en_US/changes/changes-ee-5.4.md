@@ -96,6 +96,7 @@
   
   - Bypassing network for the local calls.
 
+  - Avoid senstive data leaking in debug logs [#12202](https://github.com/emqx/emqx/pull/12202)
 - [#12111](https://github.com/emqx/emqx/pull/12111) Fixed an issue when API tokens were sometimes unavailable immediately after login due to race condition.
 
 - [#12121](https://github.com/emqx/emqx/pull/12121) Fixed an issue where nodes in the cluster would occasionally return a stale view when updating configurations on different nodes concurrently.
