@@ -174,7 +174,7 @@ EMQX 企业版提供原生的[集群](./deploy/cluster/introduction.md)能力，
 
 ### 访问控制和数据安全
 
-通过 [TLS/SSL 加密](./network/overview.md)、[认证授权机制](./access-control/overview.md)，EMQX 企业版能够保障设备数据传输的机密性和完整性。
+通过 [TLS/SSL 加密](./network/overview.md)、[认证](./access-control/authn/authn.md)和[授权](./access-control/authz/authz.md)机制，EMQX 企业版能够保障设备数据传输的机密性和完整性。
 
 EMQX 企业版内置了多重客户端认证机制，包括用户名密码、JWT、增强认证以及 PSK、X.509 证书，提供了基于 ACL 的发布订阅授权机制。认证与授权数据支持通过 LDAP、HTTP 服务、SQL 和 NoSQL 数据库等外部企业安全系统进行集成管理，实现灵活多样的客户端安全保护方案。
 

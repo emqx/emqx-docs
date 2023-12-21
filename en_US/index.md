@@ -170,7 +170,7 @@ EMQX Enterprise offers native [clustering](./deploy/cluster/introduction.md) cap
 
 ### Access Control and Data Security
 
-Through [TLS/SSL encryption](./network/overview.md) and [authentication/authorization mechanisms](./access-control/overview.md), EMQX Enterprise ensures the confidentiality and integrity of device data transmission.
+Through [TLS/SSL encryption](./network/overview.md) and [authentication](./access-control/authn/authn.md)/[authorization](./access-control/authz/authz.md) mechanism EMQX Enterprise ensures the confidentiality and integrity of device data transmission.
 
 EMQX Enterprise includes multiple client authentication mechanisms, including username/password, JWT, enhanced authentication, PSK, and X.509 certificates. It provides publish/subscribe authorization mechanisms based on ACLs. Authentication and authorization data can be integrated and managed through external enterprise security systems, such as LDAP, HTTP services, SQL, and NoSQL databases, allowing for flexible and diverse client security protection solutions.
 
