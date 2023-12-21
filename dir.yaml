@@ -422,8 +422,14 @@
           edition: ee
     - title_en: Configuration Manual
       title_cn: 配置手册
+      lang: cn
       edition: ce
-      path: configuration/configuration-manual
+      path: https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/
+    - title_en: Configuration Manual
+      title_cn: 配置手册
+      lang: en
+      edition: ce
+      path: https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/
     - title_en: Configuration Manual
       title_cn: 配置手册
       lang: cn
