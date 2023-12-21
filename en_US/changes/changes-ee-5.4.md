@@ -90,7 +90,7 @@
 
 - [#12078](https://github.com/emqx/emqx/pull/12078) Upgraded grpc-erl to 0.6.12. This update addresses a potential deadlock issue where the grpc client started dependent apps lazily.
 
-- [#12081](https://github.com/emqx/emqx/pull/12081) Updated `gen_rpc` library to version 3.3.0. The new version includes several performance improvements:
+- [#12081](https://github.com/emqx/emqx/pull/12081) Updated `gen_rpc` library to version 3.3.1. The new version includes several performance improvements:
   
   - Avoiding allocating extra memory for the packets before they are sent to the wire in some cases.
   
