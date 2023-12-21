@@ -102,7 +102,7 @@ EMQX 5.x offers a built-in client authentication/authorization feature, users on
 - Achieve complete observability with statistics on execution speed and number of times;
 - Support authentication configuration on a listener-level, to provide more flexible access capabilities.
 
-On how to run authentication/authorization configuration with EMQX Dashboard or configuration files, you can continue to read [Access Control](../access-control/overview.md).
+On how to run authentication/authorization configuration with EMQX Dashboard or configuration files, you can continue to read [Authentication](../access-control/authn.md) and [Authorization](../access-control/authz.md).
 
 ## User-Friendly EMQX Dashboard
 
