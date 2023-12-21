@@ -4,6 +4,19 @@
 
 ### 增强
 
+- [#12201](https://github.com/emqx/emqx/pull/11994) 支持 TCP/SSL/WS/WSS MQTT 监听器配置热更新。
+  
+  大部分的监听器配置参数修改都不会导致监听器重启或客户端断开连接。但也还是有一些限制如下：
+	
+  - TCP/SSL监听器在修改下列参数时，会导致监听器重启，并且所有客户端断开连接。
+    * `bind`
+    * `tcp_options.backlog`
+    
+  -  WS/WSS (WebSocket)  监听器在修改下列参数时会导致监听器重启，但已建立的客户端连接不会断开。
+    * `bind`
+    * `tcp_options.*`
+    * `ssl_options.*`
+
 - [#11884](https://github.com/emqx/emqx/pull/11884) 对 Prometheus API 及其配置进行了以下改进：
   
   - 重构了配置部分，将相关设置分组，提高了可读性和可维护性。
