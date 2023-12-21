@@ -4,6 +4,19 @@
 
 ### Enhancements
 
+- [#12201](https://github.com/emqx/emqx/pull/11994) Support hot update of TCP/SSL/WS/WSS MQTT listeners configuration.
+
+  This allows changing most of the configuration parameters without restarting the listener and disconnecting the clients. The limitations are:
+
+  - For TCP/SSL listeners, changes to the following parameters still require listener restart and clients reconnect:
+    * `bind`
+    * `tcp_options.backlog`
+
+    - For WS/WSS (WebSocket) listeners, changing transport related parameters will cause listening socket to be re-opened, but established connections will stay uninterrupted.
+	 * `bind`
+	 * `tcp_options.*`
+	 * `ssl_options.*`
+
 - [#11884](https://github.com/emqx/emqx/pull/11884) Modified the Prometheus API and configuration to implement the following improvements:
   
   - Restructured configuration sections to group related settings, improving readability and maintainability.
