@@ -567,15 +567,22 @@
         - gateway/coap
         - gateway/lwm2m
         - gateway/exproto
+        - title_en: OCPP Gateway
+          title_cn: OCPP 网关
+          path: gateway/ocpp
+          edition: ee
         - title_en: JT/T 808 Gateway
           title_cn: JT/T 808 协议网关
           path: gateway/jt808
           collapsed: true
+          edition: ee
           children:
             - gateway/jt808_data_exchange
-         - gateway/ocpp
-         - gateway/gbt32960
-       #- gateway/tcp
+        - title_en: GB/T 32960 Gateway
+          title_cn: GB/T 32960 协议网关
+          path: gateway/gbt32960
+          edition: ee
+        #- gateway/tcp
 
 
 - title_en: Tutorials
