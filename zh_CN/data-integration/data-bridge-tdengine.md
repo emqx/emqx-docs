@@ -73,16 +73,16 @@ use mqtt;
 
 数据表 `t_mqtt_msg`，用于存储每条消息的发布者客户端 ID、主题、Payload 以及发布时间：
 
-  ```sql
-  CREATE TABLE t_mqtt_msg (
-    ts timestamp,
-    msgid NCHAR(64),
-    mqtt_topic NCHAR(255),
-    qos TINYINT,
-    payload BINARY(1024),
-    arrived timestamp
-  );
-  ```
+```sql
+CREATE TABLE t_mqtt_msg (
+  ts timestamp,
+  msgid NCHAR(64),
+  mqtt_topic NCHAR(255),
+  qos TINYINT,
+  payload BINARY(1024),
+  arrived timestamp
+);
+```
 
 数据表 `emqx_client_events`，用于存储上下线的客户端 ID、事件类型以及事件发生时间：
 
@@ -94,13 +94,9 @@ CREATE TABLE emqx_client_events (
 );
 ```
 
-## 创建连接器
+## 创建连接器 - 消息存储
 
-我们将创建两个 TDengine Sink 分别完成消息存储与事件记录：
-
-### 消息存储
-
-本节将创建第一个 TDengine Sink 来实现对客户端发布消息的存储。
+我们将创建两个 TDengine Sink 分别完成消息存储与事件记录。本节将创建第一个 TDengine Sink 来实现对客户端发布消息的存储。
 
 1. 转到 Dashboard **集成** -> **连接器**页面。
 
@@ -114,23 +110,23 @@ CREATE TABLE emqx_client_events (
 
 6. 配置 SQL 模板，可使用如下 SQL 完成数据插入。
 
-     ::: tip
-     
-     在 EMQX 5.1.1 中引入了一个重大变更。在 EMQX 5.1.1 之前，字符类型的占位符会被自动转义加上单引号，而现在需要手动加上单引号。
-     
-     :::
-     
-     ```sql
-     INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
-         VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
-     ```
+   ::: tip
+
+   在 EMQX 5.1.1 中引入了一个重大变更。在 EMQX 5.1.1 之前，字符类型的占位符会被自动转义加上单引号，而现在需要手动加上单引号。
+
+   :::
+
+   ```sql
+   INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived)
+       VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
+   ```
 
 7. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](#配置参数)。
 8. 点击**创建**按钮完成 Sink 创建。
 
 至此您已经完成 Sink 创建，接下来将继续创建一条规则来指定需要写入的数据。
 
-### 创建数据转发规则
+## 创建数据转发规则
 
 1. 转到 Dashboard **集成** -> **规则**页面。
 2. 点击页面右上角的**创建**。
@@ -149,13 +145,13 @@ CREATE TABLE emqx_client_events (
 
 至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flow 设计器** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 TDengine 存储。
 
-### 上下线记录
+## 创建连接器 - 上下线记录
 
 本节将演示如何通过 TDengine 实现对设备上下线的记录。
 
-注意：除 SQL 模板与规则外，其他操作步骤与[消息存储](#消息存储)章节完全相同。
+注意：除 SQL 模板与规则外，其他操作步骤与[消息存储](#创建连接器 - 消息存储)章节完全相同。
 
- Sink 的 SQL 模板如下，请注意字段不应当包含引号，SQL 末尾不要带 `;`:
+Sink 的 SQL 模板如下，请注意字段不应当包含引号，SQL 末尾不要带 `;`:
 
 ```sql
      INSERT INTO emqx_client_events(ts, clientid, event) VALUES (
@@ -171,7 +167,7 @@ CREATE TABLE emqx_client_events (
     SELECT
       *,
       now_timestamp('millisecond')  as ts
-    FROM 
+    FROM
       "$events/client_connected", "$events/client_disconnected"
 ```
 

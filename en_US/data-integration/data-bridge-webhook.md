@@ -96,7 +96,7 @@ This section demonstrates how to configure an HTTP server data bridge to connect
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into HTTP Server. You can also create rules by following the steps in [Create a Rule for HTTP Server Data Bridge](#create-a-rule-for-http-server-data-bridge).
 
-Now the HTTP server data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+Now the HTTP server data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
 
 ## Create a Rule for HTTP Server Data Bridge
 
@@ -124,7 +124,7 @@ Now you have successfully created the data bridges to HTTP Server. you can conti
 
 Now a rule to forward data to the HTTP server via an HTTP Server data bridge is created. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to the HTTP server.
 
-## Test Data Bridge and Rule
+## Test Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 

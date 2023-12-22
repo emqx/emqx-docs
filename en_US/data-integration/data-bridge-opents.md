@@ -84,7 +84,7 @@ This section demonstrates how to create an OpenTSDB data bridge in EMQX Dashboar
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into OpenTSDB. You can also create rules by following the steps in [Create Rules for OpenTSDB Data Bridge](#create-rules-for-opentsdb-data-bridge).
 
-Now the OpenTSDB data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+Now the OpenTSDB data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
 
 ## Create Rules for OpenTSDB Data Bridge
 

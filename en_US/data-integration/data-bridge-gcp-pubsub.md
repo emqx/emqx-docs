@@ -193,7 +193,7 @@ You can continue to create rules to specify the data to be saved into GCP PubSub
 
 Now a rule to forward data to GCP PubSub via a GCP PubSub bridge is created. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `/devices/+/events` are sent and saved to GCP PubSub after parsing by rule `my_rule`.
 
-## Test Data Bridge and Rule
+## Test Rule
 
 1. Use MQTTX to send messages on the topic `/devices/+/events`.
 

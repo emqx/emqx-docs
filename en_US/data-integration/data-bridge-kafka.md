@@ -87,7 +87,7 @@ bin/kafka-topics.sh --create --topic testtopic-in --bootstrap-server localhost:9
 bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:9092
 ```
 
-## Create a Connector
+## Create a Kafka Producer Connector
 
 Before adding a Kafka Sink action, you need to create a Kafka producer connector to establish a connection between EMQX and Kafka.
 
@@ -129,7 +129,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 6. Enter the name and description of the Sink in the corresponding text boxes below.
 
-7. In the **Connector** dropdown box, select the `my-kafka` connector you just created. You can also click the button next to the dropdown box to quickly create a new connector in the pop-up box, with the required configuration parameters referring to [Create a Connector](#create-a-connector).
+7. In the **Connector** dropdown box, select the `my-kafka` connector you just created. You can also click the button next to the dropdown box to quickly create a new connector in the pop-up box, with the required configuration parameters referring to [Create a Kafka Producer Connector](#create-a-kafka-producer-connector).
 
 8. Configure the data sending method for the Sink, including:
 
@@ -171,13 +171,9 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Kafka" }'
 
 <!--TODO 5.4 refactor-->
 
-## Create a Kafka Source Rule
+## Create a Kafka Consumer Connector
 
-This section provides instructions on how to create a  Source to consume messages from Kafka and optionally create a rule to further process the data and how to test the rule and Kafka Source.
-
-### Create Kafka Source
-
-This section demonstrates how to create a Source to consume messages from Kafka. Through the Source, messages of the Kafka topic `testtopic-out` will be forwarded to an MQTT topic `t/1` in EMQX.
+Before adding a Kafka Source action, you need to create a Kafka producer connector to establish a connection between EMQX and Kafka.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
 
@@ -237,7 +233,7 @@ This section demonstrates how to create a Source to consume messages from Kafka.
 
 <img src="./assets/Kafka_consumer_bridge.png" alt="Kafka_consumer_bridge" style="zoom:67%;" />
 
-### Create Rule for Kafka Source (Optional)
+## Create Rule for Kafka Source
 
 This section demonstrates how to create a rule in EMQX to further process the message forwarded by configured Kafka source and republish the message to MQTT topic.
 
@@ -267,7 +263,7 @@ This section demonstrates how to create a rule in EMQX to further process the me
 
 ![Kafka_consumer_rule](./assets/Kafka_consumer_rule.png)
 
-## Test Kafka Source and Rule
+## Test Kafka Source Rule
 
 To test if the Kafka source and rule work as expected, you can use [MQTTX](https://mqttx.app/) to simulate a client that subscribes to a topic in EMQX and use the Kafaka producer to produce data to a Kafka topic. Then, check if the data from Kafka is republished by EMQX to the topic subscribed by the client.
 

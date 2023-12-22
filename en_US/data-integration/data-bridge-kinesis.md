@@ -137,7 +137,7 @@ You can continue to create rules to specify the data to be saved into Amazon Kin
 
 Now a rule to forward data to Amazon Kinesis Data Streams via the Amazon Kinesis bridge is created. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to Amazon Kinesis Data Streams after parsing by rule `my_rule`.
 
-## Test Data Bridge and Rule
+## Test Rule
 
 1. Use MQTTX to send messages on the topic `t/my_topic`.
 
