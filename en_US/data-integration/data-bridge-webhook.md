@@ -82,7 +82,7 @@ python3 http_server.py
 
 This section demonstrates how to configure an HTTP server data bridge to connect to the HTTP server.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
 
 2. Click **Create** on the top right corner of the page. Click to select the **HTTP Server** and click **Next**:
 
@@ -122,7 +122,7 @@ Now you have successfully created the data bridges to HTTP Server. you can conti
 5. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge you just created under **Data bridge**. Then click the **Add** button.
 6. Click the **Create** button at the page bottom to finish the creation.
 
-Now a rule to forward data to the HTTP server via an HTTP Server data bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to the HTTP server.
+Now a rule to forward data to the HTTP server via an HTTP Server data bridge is created. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to the HTTP server.
 
 ## Test Data Bridge and Rule
 

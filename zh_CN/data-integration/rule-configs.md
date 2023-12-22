@@ -52,9 +52,9 @@ rule_engine {
 
 关于内置动作的细节，详见 [内置动作](./rule-actions.md)
 
-### 引用数据桥接作为动作
+### 引用 Sink 作为动作
 
-若把数据桥接作为动作，须要在 `actions` 字段里配置数据桥接的 ID：
+若把 Sink 作为动作，须要在 `actions` 字段里配置 Sink 的 ID：
 
 ```js{1-3,5-6}
 rule_engine {
@@ -65,9 +65,9 @@ rule_engine {
 }
 ```
 
-其中 `mqtt:my_egress_mqtt_bridge` 是一个数据桥接的 ID，其类型为 `mqtt`、名字为 `my_egress_mqtt_bridge`。
+其中 `mqtt:my_egress_mqtt_bridge` 是一个 Sink 的 ID，其类型为 `mqtt`、名字为 `my_egress_mqtt_bridge`。
 
-使用数据桥接之前，须要预先创建：
+使用 Sink 之前，须要预先创建：
 
 ```js
 bridges.mqtt.my_egress_mqtt_bridge {
@@ -89,13 +89,13 @@ bridges.mqtt.my_egress_mqtt_bridge {
 
 上面的配置比之前规则的配置稍微复杂了一些，但其实他只是创建了一个 MQTT 桥接。
 
-我们使用 `bridges` 命名空间用来创建数据桥接，
-`bridges.mqtt.my_egress_mqtt_bridge` 则创建了一个类型为 `mqtt`、名字为 `my_egress_mqtt_bridge` 的数据桥接，
+我们使用 `bridges` 命名空间用来创建 Sink ，
+`bridges.mqtt.my_egress_mqtt_bridge` 则创建了一个类型为 `mqtt`、名字为 `my_egress_mqtt_bridge` 的 Sink ，
 其 ID 为 `<type>:<name>`，即 `mqtt:my_egress_mqtt_bridge`。这个 ID 正是被前面的规则当做动作引用的。
 
 我们使用 `connector` 字段配置了 MQTT 连接相关的信息，比如服务地址和端口，以及用户名密码等。
 
-关于数据桥接的细节，详见[数据集成](./data-bridges.md)
+关于 Sink 的细节，详见[数据集成](./data-bridges.md)
 
 ## 配置处理消息的规则
 
@@ -149,9 +149,9 @@ rule_engine {
 除了客户端上下线事件以外，规则还支持订阅和取消订阅、消息投递等事件。
 规则支持的事件类型以及可用字段请参见：[事件主题和可用字段](./rule-sql-events-and-fields.md)
 
-## 配置使用数据桥接作为数据源的规则
+## 配置使用 Sink 作为数据源的规则
 
-有些数据桥接（如 MQTT 桥接）也可以作为规则的数据源，规则使用 **$bridges/** 开头的**数据桥接主题**处理由数据桥接触发的事件。下面给出了一个把 “MQTT 桥接” 作为数据源的规则的示例。
+有些 Sink （如 MQTT 桥接）也可以作为规则的数据源，规则使用 **$bridges/** 开头的** Sink 主题**处理由 Sink 触发的事件。下面给出了一个把 “MQTT 桥接” 作为数据源的规则的示例。
 
 在 `emqx.conf` 配置文件的最后，添加如下配置：
 
@@ -165,7 +165,7 @@ rule_engine {
 ```
 
 这个示例创建了一个 ID 为 `receive_msgs_from_remote_mqtt_broker` 的规则，
-SQL 语句里指定了一个数据桥接主题：`$bridges/mqtt:my_mqtt_source`，
+SQL 语句里指定了一个 Sink 主题：`$bridges/mqtt:my_mqtt_source`，
 其中 `mqtt:my_mqtt_source` 是一个 MQTT 桥接的 ID，其类型为 `mqtt`、名字为 `my_mqtt_source`。
 
 这个 MQTT 桥接需要预先创建：
@@ -184,12 +184,12 @@ bridges.mqtt.my_mqtt_source {
 }
 ```
 
-我们使用 `bridges` 命名空间用来创建数据桥接，
-`bridges.mqtt.my_mqtt_source` 则创建了一个类型为 `mqtt`、名字为 `my_mqtt_source` 的数据桥接，
+我们使用 `bridges` 命名空间用来创建 Sink ，
+`bridges.mqtt.my_mqtt_source` 则创建了一个类型为 `mqtt`、名字为 `my_mqtt_source` 的 Sink ，
 其 ID 为 `<type>:<name>`，即 `mqtt:my_mqtt_source`。
 
 其中 `connector` 字段配置了 mqtt 连接相关的配置，比如服务地址和用户名密码等。
-关于数据桥接的细节，详见[数据集成](./data-bridges.md)。
+关于 Sink 的细节，详见[数据集成](./data-bridges.md)。
 
 该规则在最后调用了 `console` 动作，这是一个调试动作，会把 SQL 语句筛选出的所有字段打印到 emqx 控制台里。
 因为这里 SQL 语句使用 `SELECT *` 输出了所有可用的字段，所以他会打印从远程 MQTT Broker 收到的消息相关的

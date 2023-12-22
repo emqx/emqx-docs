@@ -79,8 +79,8 @@ It assumes that you run both EMQX and Redis on the local machine. If you have Re
 
 You need to create 2 separate Redis data bridges for the messaging caching and statistics features. Follow the same connection configurations for both data bridges types, but you need to configure different **Redis Command Template** in the specific configuration step.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
-2. Click **Create** on the top right corner of the page. In the **Create Data Bridge** page, click to select **Redis**, and then click **Next**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
+2. Click **Create** on the top right corner of the page. In the **Create Connector** page, click to select **Redis**, and then click **Next**.
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 5. Set **Redis Mode** as the business needs, for example, **single**.
 6. Input the connection information. Input `127.0.0.1:6379` as the **Server Host**, `public` as the **Password**, and `0` for **Database ID**.
@@ -156,7 +156,7 @@ After you successfully created the data bridge to Redis, you can continue to cre
 
 6. Click the **Create** button to finish the setup.
 
-Now you have successfully finished creating the rules for the Redis data bridge. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to Redis.
+Now you have successfully finished creating the rules for the Redis data bridge. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to Redis.
 
 ### Test the Data Bridge and Rule
 

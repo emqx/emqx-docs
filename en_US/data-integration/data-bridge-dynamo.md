@@ -112,11 +112,11 @@ The following JSON will be printed if the table was created successfully.
 
 This section demonstrates how to create a DynamoDB data bridge in EMQX Dashboard. It assumes that you run both EMQX and DynamoDB on the local machine. If you have Dynamo and EMQX running remotely, adjust the settings accordingly.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **DynamoDB**, and then click **Next**.
+3. In the **Create Connector** page, click to select **DynamoDB**, and then click **Next**.
 
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
@@ -184,7 +184,7 @@ Now that you have successfully created the data bridge to DynamoDB, you can cont
 4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**.  Click the **Add** button. 
 5. Click the **Create** button to finish the setup. 
 
-Now you have successfully created the data bridge to DynamoDB. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to DynamoDB after parsing by rule `my_rule`. 
+Now you have successfully created the data bridge to DynamoDB. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to DynamoDB after parsing by rule `my_rule`. 
 
 ### Test Data Bridge and Rule
 

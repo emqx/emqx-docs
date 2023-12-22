@@ -96,7 +96,7 @@ This section demonstrates how to create a RabbitMQ data bridge in EMQX Dashboard
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **RabbitMQ**, and then click **Next**.
+3. In the **Create Connector** page, click to select **RabbitMQ**, and then click **Next**.
 
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 

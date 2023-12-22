@@ -101,11 +101,11 @@ This section demonstrate how to create TDengine data bridges in EMQX Dashboard. 
 
 Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to TDengine for messages storage and event recording.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **TDengine**, and then click **Next**.
+3. In the **Create Connector** page, click to select **TDengine**, and then click **Next**.
 
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
@@ -187,7 +187,7 @@ Now that you have successfully created the data bridge to TDengine, you can cont
 
 6. Click the **Create** button to finish the setup. 
 
-Now you have successfully created the data bridge to TDengine. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to TDengine after parsing by rule `my_rule`. 
+Now you have successfully created the data bridge to TDengine. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to TDengine after parsing by rule `my_rule`. 
 
 ## Test the Data Bridge and Rule
 

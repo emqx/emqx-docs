@@ -8,7 +8,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 [Oracle Database](https://www.oracle.com/database/) 是领先的关系型商业数据库解决方案之一，被广泛应用于各种规模和类型的企业和组织中。EMQX 支持与 Oracle Database 集成，因此您可以将 MQTT 消息和客户端事件保存到 Oracle Database 中， 构建复杂的数据管道和分析流程实现数据管理和分析，或进行设备连接管理并与其他 ERP, CRM 企业系统的集成。
 
-本页详细介绍了 EMQX 与 Oracle Database 的数据集成并提供了实用的规则和数据桥接创建指导。
+本页详细介绍了 EMQX 与 Oracle Database 的数据集成并提供了实用的规则和 Sink 创建指导。
 
 ## 工作原理
 
@@ -37,7 +37,7 @@ Oracle Database 数据集成是 EMQX 中的开箱即用功能，结合了 EMQX �
 
 ## 准备工作
 
-本节介绍了在 EMQX 中创建 MySQL 数据桥接之前需要做的准备工作，包括安装 Oracle Database 服务器并创建数据表。
+本节介绍了在 EMQX 中创建 MySQL Sink 之前需要做的准备工作，包括安装 Oracle Database 服务器并创建数据表。
 
 ### 前置准备
 
@@ -93,16 +93,16 @@ CREATE TABLE t_emqx_client_events (
 );
   ```
 
-## 创建 Oracle Database 数据桥接
+## 创建连接器
 
-本节演示了如何在 Dashboard 中创建 Oracle Database 数据桥接。以下示例假定 EMQX 与 Oracle Database 均在本地运行，如您在远程运行 EMQX 及 Oracle Database，请根据实际情况调整相应配置。
+本节演示了如何在 Dashboard 中创建 Oracle Database Sink 。以下示例假定 EMQX 与 Oracle Database 均在本地运行，如您在远程运行 EMQX 及 Oracle Database，请根据实际情况调整相应配置。
 
-消息存储和事件记录需要设置不同的 SQL 模版，因此您需要分别创建两个不同的数据桥接。
+消息存储和事件记录需要设置不同的 SQL 模版，因此您需要分别创建两个不同的 Sink 。
 
-1. 登陆 EMQX Dashboard，点击左侧目录菜单中的**数据集成** -> **数据桥接**。
+1. 登陆 EMQX Dashboard，点击左侧目录菜单中的**数据集成** -> **连接器**。
 2. 点击页面右上角的**创建**。
-3. 在**数据桥接类型**中选择 **Oracle Database**，点击**下一步**。
-4. 输入数据桥接名称，名称应为大/小写字母和数字的组合。
+3. 在**连接器类型**中选择 **Oracle Database**，点击**下一步**。
+4. 输入连接器名称，名称应为大/小写字母和数字的组合。
 5. 输入以下连接信息：
 
    - **服务器地址**：输入 `127.0.0.1:1521`，如果 Oracle Database 服务器在远程运行，则需输入实际地址。
@@ -115,7 +115,7 @@ CREATE TABLE t_emqx_client_events (
 
    注意：此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;` 。
 
-   - 想要为消息存储创建数据桥接，使用下面的 SQL 语句：
+   - 想要为消息存储创建 Sink ，使用下面的 SQL 语句：
 
      ```sql
      INSERT INTO t_mqtt_msgs(msgid, sender, topic, qos, retain, payload, arrived) VALUES(
@@ -129,7 +129,7 @@ CREATE TABLE t_emqx_client_events (
      )
      ```
 
-   - 想要为上下线状态记录创建数据桥接，使用下面的 SQL 语句：
+   - 想要为上下线状态记录创建 Sink ，使用下面的 SQL 语句：
 
      ```sql
      INSERT INTO t_emqx_client_events(clientid, event, created_at) VALUES (
@@ -143,17 +143,17 @@ CREATE TABLE t_emqx_client_events (
 
 8. 在完成创建之前，您可以点击**测试连接**来测试桥接可以连接到 Oracle Database 服务器。
 
-9. 点击**创建**按钮完成数据桥接创建。
+9. 点击**创建**按钮完成 Sink 创建。
 
-   在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 Oracle Database 的数据。详细步骤参考[创建 Oracle Database 数据桥接规则](#创建-oracle-database-数据桥接规则)。
+   在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 Oracle Database 的数据。详细步骤参考[创建 Oracle Database Sink 规则](#创建-oracle-database- Sink 规则)。
 
-至此，您已经完成数据桥接的创建，在 Dashboard 的数据桥接页面，可以看到 Oracle Database 数据桥接的状态为**已连接**。
+至此，您已经完成 Sink 的创建，在 Dashboard 的 Sink 页面，可以看到 Oracle Database Sink 的状态为**已连接**。
 
-## 创建 Oracle Database 数据桥接规则
+## 创建 Oracle Database Sink 规则
 
-在成功创建 Oracle Database 数据桥接之后，您需要继续为消息存储和设备上下线记录创建两条不同的转发规则。
+在成功创建 Oracle Database Sink 之后，您需要继续为消息存储和设备上下线记录创建两条不同的转发规则。
 
-1. 转到 Dashboard **数据集成** -> **规则**页面。
+1. 转到 Dashboard **集成** -> **规则**页面。
 
 2. 点击页面右上角的**创建**。
 
@@ -179,10 +179,10 @@ CREATE TABLE t_emqx_client_events (
        "$events/client_connected", "$events/client_disconnected"
      ```
 
-4. 点击**添加动作**，在动作下拉框中选择**使用数据桥接转发**选项，选择先前创建好的 Oracle Database 数据桥接。点击**添加**。
+4. 点击**添加动作**，从**动作类型**下拉列表中选择 Oracle Database，从**动作**下拉框中选择刚刚创建的连接器，点击**添加**按钮将其添加到规则中。。
 5. 点击**创建**按钮完成规则创建。
 
-至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果转发至 Oracle Database。
+至此您已经完成整个创建过程，可以前往 **集成** -> **Flow 设计器** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果转发至 Oracle Database。
 
 ## 测试桥接和规则
 
@@ -192,7 +192,7 @@ CREATE TABLE t_emqx_client_events (
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello Oracle Database" }'
 ```
 
-分别查看两个数据桥接运行统计，命中、发送成功次数均 +1。
+分别查看两个 Sink 运行统计，命中、发送成功次数均 +1。
 
 查看数据是否被写入 `t_mqtt_msgs` 数据表。
 

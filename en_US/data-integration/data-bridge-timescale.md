@@ -135,7 +135,7 @@ After the table is successfully created, you can view the information of the tab
 :::
 ::::
 
-## Create Rule and Data Bridge
+## Create Rule and Timescale Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured data bridge to TimescaleDB. 
 
@@ -185,7 +185,7 @@ The instructions below assume that you run both EMQX and Timescale (if self-depl
 
 12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
 
-Now you have successfully created the data bridge to Timescale. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Timescale after parsing by the rule `my_rule`. 
+Now you have successfully created the data bridge to Timescale. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Timescale after parsing by the rule `my_rule`. 
 
 
 ### Test Rule and Data Bridge

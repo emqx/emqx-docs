@@ -519,11 +519,11 @@ This section introduces how to create HStreamDB data bridges in EMQX Dashboard. 
 
 The demonstration in this section assumes you run EMQX and HStreaDB in docker on the local machine. If you have HStreamDB and EMQX running remotely, please adjust the settings accordingly.
 
-1. Go to EMQX Dashboard, click **Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, click **Integration** -> **Connector**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **HStreamDB**, and then click **Next**.
+3. In the **Create Connector** page, click to select **HStreamDB**, and then click **Next**.
 
 4. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
@@ -599,7 +599,7 @@ After you have successfully created the data bridge to HStreamDB, you can contin
 4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data Bridge**. Click the **Add** button.
 5. Click the **Create** button to finish the setup.
 
-Now you have successfully created the rule for HStreamDB data bridge. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to HStreamDB after parsing by rule  `my_rule`.
+Now you have successfully created the rule for HStreamDB data bridge. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to HStreamDB after parsing by rule  `my_rule`.
 
 ## Test Data Bridge and Rule
 
