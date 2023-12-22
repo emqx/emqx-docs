@@ -99,11 +99,11 @@ This section demonstrates how to create Oracle Database data bridges. It assumes
 
 Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to Oracle Database for message storage and event recording.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **Oracle Database**, and then click **Next**.
+3. In the **Create Connector** page, click to select **Oracle Database**, and then click **Next**.
 
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
@@ -186,7 +186,7 @@ After you have successfully created the data bridges to Oracle Database, you can
 4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the Oracle Database data bridge just created. Click the **Add** button.
 6. Click the **Create** button to finish the setup.
 
-Now you have successfully created the data bridges to Oracle Database. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Oracle Database after parsing by rule  `my_rule`.
+Now you have successfully created the data bridges to Oracle Database. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Oracle Database after parsing by rule  `my_rule`.
 
 ## Test Data Bridges and Rules
 

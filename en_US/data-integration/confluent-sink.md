@@ -241,7 +241,7 @@ Now you have successfully created the rule, and you can see the newly created ru
 
 You can also click **Integration** -> **Flow Designer** to view the topology. Through the topology, you can intuitively see that messages under topic `t/#` are sent and saved to Confluent after being parsed by rule `my_rule`.
 
-### Test the Confluent Producer Rule
+## Test the Confluent Producer Rule
 
 To test whether the Confluent Producer rule works as you expect, you can use [MQTTX](https://mqttx.app/en) to simulate a client publishing MQTT messages to EMQX.
 

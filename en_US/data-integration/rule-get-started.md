@@ -112,7 +112,7 @@ For details on how to build the connection between the MQTTX client tool and EMQ
 
 ## View the Rules
 
-EMQX 5.0 introduced the Flows editor to provide a visualized view of the rules you created. Click **Integration** -> **Flows** to access it. The window shows that you have created two rules for all messages with topics following the "t/#" pattern: "rule_4xjx" publishes the messages and streams data into Kafka, and "rule_z97h" prints the messages to the console.
+EMQX 5.0 introduced the Flows editor to provide a visualized view of the rules you created. Click **Integration** -> **Flow Designer** to access it. The window shows that you have created two rules for all messages with topics following the "t/#" pattern: "rule_4xjx" publishes the messages and streams data into Kafka, and "rule_z97h" prints the messages to the console.
 
 ![Flows Editor](./assets/rules/flow-eidtor.png)
 

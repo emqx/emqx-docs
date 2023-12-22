@@ -152,7 +152,7 @@ You can also click **Integration** -> **Flow Designer** to view the topology. Th
 
 ![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
 
-### Test Kafka Producer Rule
+## Test Kafka Producer Rule
 
 To test whether the Kafka Producer rule works as you expect, you can use [MQTTX](https://mqttx.app/en) to simulate a client publishing MQTT messages to EMQX.
 
@@ -267,7 +267,7 @@ This section demonstrates how to create a rule in EMQX to further process the me
 
 ![Kafka_consumer_rule](./assets/Kafka_consumer_rule.png)
 
-### Test Kafka Source and Rule
+## Test Kafka Source and Rule
 
 To test if the Kafka source and rule work as expected, you can use [MQTTX](https://mqttx.app/) to simulate a client that subscribes to a topic in EMQX and use the Kafaka producer to produce data to a Kafka topic. Then, check if the data from Kafka is republished by EMQX to the topic subscribed by the client.
 

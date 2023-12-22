@@ -96,11 +96,11 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
 ## Create a GCP Pub/Sub Bridge
 
-1. Go to EMQX Dashboard, click **Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, click **Integration** -> **Connector**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **Google PubSub**, and then click **Next**.
+3. In the **Create Connector** page, click to select **Google PubSub**, and then click **Next**.
 
 4. In the **Name** field, enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
@@ -191,7 +191,7 @@ You can continue to create rules to specify the data to be saved into GCP PubSub
 
 4. Click **Create** at the page bottom to finish the creation.
 
-Now a rule to forward data to GCP PubSub via a GCP PubSub bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `/devices/+/events` are sent and saved to GCP PubSub after parsing by rule `my_rule`.
+Now a rule to forward data to GCP PubSub via a GCP PubSub bridge is created. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `/devices/+/events` are sent and saved to GCP PubSub after parsing by rule `my_rule`.
 
 ## Test Data Bridge and Rule
 

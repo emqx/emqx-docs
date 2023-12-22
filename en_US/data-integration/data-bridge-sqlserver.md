@@ -234,11 +234,11 @@ FileUsage   = 1
 
 This section demonstrates how to create Microsoft SQL Server data bridge for message storage and events recording. It assumes that you run both EMQX and Microsoft SQL Server on the local machine. If you have Microsoft SQL Server and EMQX running remotely, adjust the settings accordingly.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **Microsoft SQL Server**, and then click **Next**.
+3. In the **Create Connector** page, click to select **Microsoft SQL Server**, and then click **Next**.
 
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
@@ -313,7 +313,7 @@ After you have successfully created the data bridge to Microsoft SQL Server, you
 
 5. Click the **Create** button to finish the setup.
 
-Now you have successfully created the rule for Microsoft SQL Server data bridge. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Microsoft SQL Server after parsing by rule  `my_rule`.
+Now you have successfully created the rule for Microsoft SQL Server data bridge. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Microsoft SQL Server after parsing by rule  `my_rule`.
 
 ## Test Data Bridge and Rule
 

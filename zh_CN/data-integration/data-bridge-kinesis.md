@@ -6,9 +6,9 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 :::
 {% endemqxce %}
 
-[AWS Kinesis](https://aws.amazon.com/cn/kinesis/) 是 AWS 上完全托管的实时流数据处理服务，可以轻松地进行流数据的收集、处理和分析。它可以经济高效地处理任意规模的实时流数据，并具有高度的灵活性，能够低时延的处理来自数十万个来源的任意数量的流数据。EMQX 支持与 [Amazon Kinesis Data Streams](https://aws.amazon.com/kinesis/data-streams/) 无缝集成，从而能够实现海量 IoT 设备连接，进行实时消息进行采集、传输，并通过数据桥接连接到 Amazon Kinesis Data Streams，进行实时数据分析与复杂的流处理。
+[AWS Kinesis](https://aws.amazon.com/cn/kinesis/) 是 AWS 上完全托管的实时流数据处理服务，可以轻松地进行流数据的收集、处理和分析。它可以经济高效地处理任意规模的实时流数据，并具有高度的灵活性，能够低时延的处理来自数十万个来源的任意数量的流数据。EMQX 支持与 [Amazon Kinesis Data Streams](https://aws.amazon.com/kinesis/data-streams/) 无缝集成，从而能够实现海量 IoT 设备连接，进行实时消息进行采集、传输，并通过 Sink 连接到 Amazon Kinesis Data Streams，进行实时数据分析与复杂的流处理。
 
-本页详细介绍了 EMQX 与 Amazon Kinesis 的数据集成并提供了实用的规则和数据桥接创建指导。
+本页详细介绍了 EMQX 与 Amazon Kinesis 的数据集成并提供了实用的规则和 Sink 创建指导。
 
 ## 工作原理
 
@@ -16,7 +16,7 @@ Amazon Kinesis 数据桥是 EMQX 的一个开箱即用功能，旨在帮助用�
 
 ![kinesis_architecture](./assets/kinesis_architecture.svg)
 
-EMQX 通过规则引擎和数据桥接将 MQTT 数据转发到 Amazon Kinesis。完整的过程如下：
+EMQX 通过规则引擎和 Sink 将 MQTT 数据转发到 Amazon Kinesis。完整的过程如下：
 
 1. **物联网设备发布消息**：设备通过特定主题发布遥测和状态数据，触发规则引擎。
 2. **规则引擎处理消息**：使用内置规则引擎，基于主题匹配处理来自特定来源的 MQTT 消息。规则引擎匹配相应的规则并处理消息，例如转换数据格式、过滤特定信息或用上下文信息丰富消息。
@@ -41,7 +41,7 @@ EMQX 与 AWS Kinesis Data Streams 的数据集成可以为您的业务带来以�
 
 ## 准备工作
 
-本节介绍了在 EMQX 中创建 Amazon Kinesis 数据桥接之前需要做的准备工作，包括如何创建 Kinesis 数据流并在本地模拟数据流服务。
+本节介绍了在 EMQX 中创建 Amazon Kinesis Sink 之前需要做的准备工作，包括如何创建 Kinesis 数据流并在本地模拟数据流服务。
 
 ### 前置准备
 
@@ -77,15 +77,15 @@ EMQX 与 AWS Kinesis Data Streams 的数据集成可以为您的业务带来以�
    awslocal kinesis create-stream --stream-name "my_stream" --shard-count 1
    ```
 
-## 创建 Amazon Kinesis 数据桥接
+## 创建连接器
 
-1. 转到 EMQX Dashboard，点击**集成**->**数据桥接**。
+1. 转到 EMQX Dashboard，点击**集成**-> **Sink** 。
 
 2. 点击页面右上角的**创建**。
 
-3. 在**创建数据桥接**页面，点击选择 **Amazon Kinesis**，然后点击**下一步**。
+3. 在**创建连接器**页面，点击选择 **Amazon Kinesis**，然后点击**下一步**。
 
-4. 为数据桥接输入一个名称。名称应为大写/小写字母和数字的组合。
+4. 为连接器输入一个名称。名称应为大写/小写字母和数字的组合。
 
 5. 输入 Amazon Kinesis Data Streams 服务的连接信息：
 
@@ -100,15 +100,15 @@ EMQX 与 AWS Kinesis Data Streams 的数据集成可以为您的业务带来以�
    - 如果留空，它将使用 JSON 格式编码 MQTT 消息中的所有可见输入，例如 clientid、topic、payload 等。
    - 如果使用定义的模板，`${variable_name}` 形式的占位符将使用 MQTT 上下文中的相应值进行填充。例如，如果 MQTT 消息主题是 `my/topic`，`${topic}` 将被替换为 `my/topic`。
 
-7. 高级配置（可选），根据情况配置队列与批量等参数，详细请参考[数据桥接简介](./data-bridges.md)中的配置参数。
+7. 高级配置（可选），根据情况配置队列与批量等参数，详细请参考[ Sink 简介](./data-bridges.md)中的配置参数。
 
 8. 在点击**创建**之前，您可以点击**测试连接性**以测试桥接。
 
-9. 点击**创建**按钮完成数据桥接创建。
+9. 点击**创建**按钮完成 Sink 创建。
 
-   在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 Amazon Kinesis 的数据。您也可以按照[创建 Amazon Kinesis 数据桥接规则](#创建-amazon-kinesis-数据桥接规则)中的步骤来创建规则。
+   在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 Amazon Kinesis 的数据。您也可以按照[创建 Amazon Kinesis Sink 规则](#创建-amazon-kinesis- Sink 规则)中的步骤来创建规则。
 
-## 创建 Amazon Kinesis 数据桥接规则
+## 创建 Amazon Kinesis Sink 规则
 
 接下来您可以创建一条规则以指定需要写入 Amazon Kinesis 的数据。
 
@@ -129,11 +129,11 @@ EMQX 与 AWS Kinesis Data Streams 的数据集成可以为您的业务带来以�
      "t/#"
    ```
 
-5. 点击**添加动作**，在动作下拉框中选择**使用数据桥接转发**选项，选择先前创建好的 Amazon Kinesis 数据桥接。点击**添加**。
+5. 点击**添加动作**，从**动作类型**下拉列表中选择 Amazon Kinesis，从**动作**下拉框中选择刚刚创建的连接器，点击**添加**按钮将其添加到规则中。。
 
 6. 点击最下方**创建**按钮完成规则创建。
 
-至此您已经完成整个 Amazon Kinesis 数据桥接创建过程，可以前往 **集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 Amazon Kinesis 存储。
+至此您已经完成整个 Amazon Kinesis Sink 创建过程，可以前往 **集成** -> **Flow 设计器** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 Amazon Kinesis 存储。
 
 ## 测试桥接和规则
 
@@ -143,7 +143,7 @@ EMQX 与 AWS Kinesis Data Streams 的数据集成可以为您的业务带来以�
    mqttx pub -i emqx_c -t t/my_topic -m '{ "msg": "hello Amazon Kinesis" }'
    ```
 
-2. 查看 Amazon Kinesis 的数据桥接中的运行统计，命中、发送成功次数均 +1。
+2. 查看 Amazon Kinesis 的 Sink 中的运行统计，命中、发送成功次数均 +1。
 
 3. 转到 [Amazon Kinesis 数据查看器](https://docs.aws.amazon.com/zh_cn/streams/latest/dev/data-viewer.html)。您应该可以看到数据流指定分片内的数据记录。
 

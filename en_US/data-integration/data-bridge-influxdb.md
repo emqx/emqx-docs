@@ -64,7 +64,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 2. With InfluxDB running, visit [http://localhost:8086](http://localhost:8086). Set the **Username**, **Password**, **Organization Name**, and **Bucket Name**.
 3. In the InfluxDB UI, click **Load Data** -> **API Token** and then follow the instructions to [create all-access tokens](https://docs.influxdata.com/influxdb/v2.5/install/#create-all-access-tokens).
 
-## Create Rule and InfluxDB Data Bridge
+## Create Rule and InfluxDB Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured data bridge to InfluxDB. 
 
@@ -126,7 +126,7 @@ This tutorial assumes that you run both EMQX and InfluxDB on the local machine. 
 
 10. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
 
-Now a rule to forward data to InfluxDB via an InfluxDB bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by the rule  `my_rule`.
+Now a rule to forward data to InfluxDB via an InfluxDB bridge is created. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by the rule  `my_rule`.
 
 ### Test Rule and Data Bridge
 
