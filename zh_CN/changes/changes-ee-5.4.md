@@ -22,7 +22,7 @@
 
 - [#11984](https://github.com/emqx/emqx/pull/11984)  实现了 Open Telemetry 分布式追踪特性。
 
-- [#12017](https://github.com/emqx/emqx/pull/12017) 实现了一个专用的 HTTP API，用于配置和用户数据的导入和导出。
+- [#12017](https://github.com/emqx/emqx/pull/12017) 实现了一个专用的 REST API，用于配置和用户数据的导入和导出。
 
 - [#12040](https://github.com/emqx/emqx/pull/12040) 升级了 QUIC 协议栈。
 
