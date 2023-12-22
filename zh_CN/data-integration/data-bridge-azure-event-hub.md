@@ -48,7 +48,7 @@ EMQX 与 Azure Event Hubs 的数据集成可以为您的业务带来以下功能
 ### 前置准备
 
 - 了解[规则](./rules.md)。
-- 了解[数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 设置 Azure Event Hubs
 

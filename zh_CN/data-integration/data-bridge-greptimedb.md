@@ -48,7 +48,7 @@ GreptimeDB 数据集成是 EMQX 开箱即用的功能，它结合了 EMQX 的实
 ### 前置准备
 
 - 了解 [规则](./rules.md)。
-- 了解 [数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 安装 GreptimeDB
 

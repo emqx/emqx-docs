@@ -95,7 +95,7 @@ bridges.mqtt.my_egress_mqtt_bridge {
 
 我们使用 `connector` 字段配置了 MQTT 连接相关的信息，比如服务地址和端口，以及用户名密码等。
 
-关于数据桥接的细节，详见 [数据桥接](./data-bridges.md)
+关于数据桥接的细节，详见[数据集成](./data-bridges.md)
 
 ## 配置处理消息的规则
 
@@ -189,7 +189,7 @@ bridges.mqtt.my_mqtt_source {
 其 ID 为 `<type>:<name>`，即 `mqtt:my_mqtt_source`。
 
 其中 `connector` 字段配置了 mqtt 连接相关的配置，比如服务地址和用户名密码等。
-关于数据桥接的细节，详见 [数据桥接](./data-bridges.md)。
+关于数据桥接的细节，详见[数据集成](./data-bridges.md)。
 
 该规则在最后调用了 `console` 动作，这是一个调试动作，会把 SQL 语句筛选出的所有字段打印到 emqx 控制台里。
 因为这里 SQL 语句使用 `SELECT *` 输出了所有可用的字段，所以他会打印从远程 MQTT Broker 收到的消息相关的

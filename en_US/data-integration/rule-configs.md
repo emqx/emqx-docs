@@ -96,7 +96,7 @@ This ID is referenced as an action by the previous rule.
 
 We use the `connector` field to configure the MQTT connection related information, such as the server address, port, username and password, etc.
 
-For details of data bridges, see [data bridges](./data-bridges.md)
+For details of data bridges, see [Data Integration](./data-bridges.md)
 
 ## Configure Rules to Handle Messages
 
@@ -195,7 +195,7 @@ its ID is `mqtt:my_mqtt_source`.
 
 The `connector` field configures MQTT connection related configurations, such as the server address, username and password.
 
-For details of data bridges, see [data bridges](./data-bridges.md)
+For details of data bridges, see [Data Integration](./data-bridges.md)
 
 
 The rule calls the `console` action at the end. This is a debugging action, which will print all the fields filtered out by the SQL statement to the EMQX console.

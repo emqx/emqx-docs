@@ -151,7 +151,7 @@ On the Gateways page, locate **ExProto**. Click **Settings** in the **Actions** 
 
 ### Add Listeners
 
-By default, one TCP listener with the name of **default** is already configured on port `7993`, which allows a maximum of 1,000 connections per second, and support up to 1,024,000 concurrent connections. You can click the **Listeners** tab for more customized settings, including editing, deleting, or adding a new listener.
+By default, one TCP listener with the name of **default** is already configured on port `7993`, which allows a maximum of 1,000 connections per second, and supports up to 1,024,000 concurrent connections. You can click the **Listeners** tab for more customized settings, including editing, deleting, or adding a new listener.
 
 <img src="./assets/exproto-listener.png" alt="exproto-listener" style="zoom:50%;" />
 
@@ -160,7 +160,7 @@ Click **+ Add Listener** to open **Add Listener** page, where you can continue w
 **Basic settings**
 
 - **Name**: Set a unique identifier for the listener.
-- **Type**: Select the protocol type, for MQTT-SN, this can be either `udp` or `dtls`.
+- **Type**: Select the protocol type, for ExProto, this can be either `udp` or `dtls`.
 - **Bind**: Set the port number on which the listener accepts incoming connections.
 - **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols.
 

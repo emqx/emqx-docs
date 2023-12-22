@@ -226,12 +226,16 @@
   path: data-integration/data-bridges
   collapsed: true
   children:
+    - data-integration/connector
     - title_en: Webhook
       title_cn: Webhook
       path: data-integration/webhook
     - title_en: Apache Kafka
       title_cn: Apache Kafka
       path: data-integration/data-bridge-kafka
+    - title_en: Confluent
+      title_cn: Confluent
+      path: data-integration/confluent-sink
     - title_en: Apache IoTDB
       title_cn: Apache IoTDB
       path: data-integration/data-bridge-iotdb
@@ -401,9 +405,9 @@
           title_cn: 数据集成
           path: dashboard/bridgeoverview
           children:
-            - dashboard/bridge
-            - dashboard/rules
             - dashboard/flows
+            - dashboard/rules
+            - dashboard/bridge
         - dashboard/configuration
         - dashboard/extensions
         - dashboard/diagnose
@@ -432,7 +436,20 @@
         - observability/tracer
         - observability/mqtt-system-topics
         - observability/prometheus
-        - observability/open-telemetry 
+        - title_en: Integrate with OpenTlelemetry
+          title_cn: 集成 OpenTelemetry
+          path: observability/open-telemetry/open-telemetry
+          collapsed: true
+          children:
+            - title_en: Metrics
+              title_ch: 指标
+              path: observability/open-telemetry/metrics
+            - title_en: Logs
+              title_cn: 日志
+              path: observability/open-telemetry/logs
+            - title_en: Traces
+              title_cn: 追踪
+              path: observability/open-telemetry/traces
     - title_en: Backup and Restore
       title_cn: 备份与恢复
       path: operations/backup-restore
@@ -473,8 +490,8 @@
                 - access-control/authn/mongodb
                 - access-control/authn/postgresql
                 - access-control/authn/redis
-                - title_en: LDAP
-                  title_cn: LDAP
+                - title_en: Integrate with LDAP
+                  title_cn: 使用 LDAP 进行密码认证
                   path: access-control/authn/ldap
                   edition: ee
                 - access-control/authn/http

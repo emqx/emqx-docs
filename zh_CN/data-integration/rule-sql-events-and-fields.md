@@ -1,6 +1,6 @@
 # SQL 数据源和字段
 
-规则的 SQL 语句可以处理的数据源有：MQTT 消息、客户端事件，或者是具有数据流入能力的数据桥接。
+规则的 SQL 语句可以处理的数据源有：MQTT 消息、客户端事件，或是连接外部数据系统的 Source。
 
 SQL 语句使用 `FROM` 来指定数据源，在 `SELECT` 和 `WHERE` 子句中可以引用相应的字段。
 数据源类型不同，可以使用的字段也不同。
@@ -573,16 +573,16 @@ FROM
 }
 ```
 
-## 数据桥接
+## Source
 
-规则使用 `$bridges/` 开头的主题来表示数据桥接的消息或事件。格式为：`$bridges/<type>:<name>`。
+规则使用 `$bridges/` 开头的主题来表示 Source 的消息或事件。格式为：`$bridges/<type>:<name>`。
 
-其中 `<type>:<name>` 部分是数据桥接的 ID，`<type>` 是数据桥接的类型，`<name>` 是数据桥接的名字。
+其中 `<type>:<name>` 部分是 Source 的 ID，`<type>` 是 Source 的类型，`<name>` 是 Source 的名字。
 比如 `$bridges/mqtt:my_mqtt_bridge`。
 
-### MQTT 桥接事件 ("$bridges/mqtt:*")
+### MQTT 订阅者事件 ("$bridges/mqtt:*")
 
-当该 MQTT 桥接从远程 MQTT Broker 接收到消息时触发规则
+当该 MQTT 订阅者从外部 MQTT Broker 接收到消息时触发规则
 
 | 字段                  | 解释                                                |
 | :-------------------- | :-------------------------------------------------- |

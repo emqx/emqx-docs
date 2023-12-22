@@ -55,7 +55,7 @@ PostgreSQL 是一款流行的开源关系型数据库，具备丰富的功能。
 ### 前置准备
 
 - 了解 [规则](./rules.md)。
-- 了解 [数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 安装 PostgreSQL
 

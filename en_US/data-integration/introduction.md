@@ -20,7 +20,7 @@ A data bridge is a channel used to connect EMQX and external data systems.
 Through data bridges, users can send messages from EMQX to external data systems in real time,
 or pull data from the external data system and send it to a topic of EMQX.
 
-For more information about data bridges, see [Data Bridges](./data-bridges.md).
+For more information about data bridges, see [Data Integration](./data-bridges.md).
 
 ## Flow Charts
 

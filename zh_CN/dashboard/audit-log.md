@@ -53,7 +53,7 @@ log.audit {
 记录来自 Dashboard 或 REST API 操作的审计日志包含操作用户、操作对象和操作结果等信息。日志消息格式示例如下：
 
 ```bash
-{"time":1695865935099311,"level":"info","msg":"from_api","username":"admin","query_string":{},"operate_id":"/mqtt/retainer/message/:topic","node":"emqx@127.0.0.1","method":"delete","headers":{"user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36","sec-fetch-site":"same-origin","sec-fetch-mode":"cors","sec-fetch-dest":"empty","sec-ch-ua-platform":"\"macOS\"","sec-ch-ua-mobile":"?0","sec-ch-ua":"\"Chromium\";v=\"116\", \"Not)A;Brand\";v=\"24\", \"Google Chrome\";v=\"116\"","referer":"http://localhost:18083/","origin":"http://localhost:18083","host":"localhost:18083","connection":"keep-alive","authorization":"******","accept-language":"zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7","accept-encoding":"gzip, deflate, br","accept":"*/*"},"from":"dashboard","duration_ms":1,"code":204,"body":{},"bindings":{"topic":"t/1"},"auth_type":"jwt_token"}
+{"time":1702604675872987,"level":"info","source_ip":"127.0.0.1","operation_type":"mqtt","operation_result":"success","http_status_code":204,"http_method":"delete","operation_id":"/mqtt/retainer/message/:topic","duration_ms":4,"auth_type":"jwt_token","query_string":{},"from":"dashboard","source":"admin","node":"emqx@127.0.0.1","http_request":{"method":"delete","headers":{"user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36","sec-fetch-site":"same-origin","sec-fetch-mode":"cors","sec-fetch-dest":"empty","sec-ch-ua-platform":"\"macOS\"","sec-ch-ua-mobile":"?0","sec-ch-ua":"\"Google Chrome\";v=\"119\", \"Chromium\";v=\"119\", \"Not?A_Brand\";v=\"24\"","referer":"http://localhost:18083/","origin":"http://localhost:18083","host":"localhost:18083","connection":"keep-alive","authorization":"******","accept-language":"zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7","accept-encoding":"gzip, deflate, br","accept":"*/*"},"body":{},"bindings":{"topic":"$SYS/brokers/emqx@127.0.0.1/version"}}}
 ```
 
 下面的表格中列出并解释了在以上日志示例中包含的字段：
@@ -63,26 +63,20 @@ log.audit {
 | time         | 整数 | 时间戳，表示日志记录的时间，以微秒为单位。                   |
 | level        | 字符 | 日志级别。                                                   |
 | msg          | 字符 | 操作描述。                                                   |
-| from         | 字符 | 请求来源，`dashboard`、`rest_api`、`cli`、`erlang_console` 分别表示来自 Dashboard、REST API、 CLI 以及 Erlang Shell 的操作。 |
+| from         | 字符 | 请求来源，`dashboard`、`rest_api` 分别表示来自 Dashboard、REST API。当值为 `cli`, `erlang_console` 时表示来自 CLI 以及 Erlang Shell 的操作，不适用此日志结构。 |
 | node         | 字符 | 节点名称，表示执行操作的节点或服务器。                       |
-| username     | 字符 | 执行操作的用户，当来源为 `rest_api` 时存在该字段。           |
+| source     | 字符 | 执行操作的 Dashboard 用户名或 API 密钥名称。           |
 | method       | 字符 | HTTP 请求方法，`post`, `put`, `delete` 对应创建、更新、删除操作。 |
 | operate_id   | 字符 | 请求的 REST API 路径，请参考 [REST API](../admin/api.md)。   |
 | bindings     | 对象 | 具体的请求对象信息，对应 `operate_id` 中的占位符。           |
-| auth_type    | 字符 | 认证类型，表示用于身份验证的方法或机制，固定为 `jwt_token`。 |
+| auth_type    | 字符 | 认证类型，表示用于身份验证的方法或机制，固定为 `jwt_token`(Dashboard) 或 `api_key`(REST API)。 |
 | query_string | 对象 | HTTP 请求中的 URL 查询参数。                                 |
 | code         | 整数 | HTTP 响应码，表示操作的结果状态。                            |
 | headers      | 对象 | HTTP 请求头信息，包括客户端标识、请求来源等。                |
 | duration_ms  | 整数 | 操作执行时间，以毫秒为单位。                                 |
 | body         | 对象 | HTTP 请求体，包含操作的详细信息。                            |
 
-### REST API 操作记录
-
-请求来源，`dashboard`、`rest`、`cli`、`erlang_conosle` 分别表示来自 Dashboard、REST API、 CLI 以及 Erlang Shell 的操作。
-
-
-
-### 命令行操作记录
+### 命令行/Erlang Console 操作记录
 
 记录命令行操作的审计日志包含执行的命令、调用参数等信息。日志消息格式示例如下：
 
@@ -96,7 +90,7 @@ log.audit {
 | ----------- | ---- | ------------------------------------------------------------ |
 | time        | 整数 | 时间戳，表示日志记录的时间，以微秒为单位。                   |
 | msg         | 字符 | 操作描述。                                                   |
-| from        | 字符 | 请求来源，`dashboard`、`cli` 分别表示来自 Dashboard 与 CLI 的操作。 |
+| from         | 字符 | 请求来源，值为 `cli`, `erlang_console` 分别表示来自 CLI 以及 Erlang Shell 的操作。当值为 `dashboard`、`rest_api` 表示来自 Dashboard、REST API，不适用此日志结构。 |
 | node        | 字符 | 节点名称，表示执行操作的节点或服务器。                       |
 | duration_ms | 整数 | 操作执行时间，以毫秒为单位。                                 |
 | cmd         | 字符 | 执行的具体命令操作，支持的命令请参考 [CLI](../admin/cli.md)。 |
