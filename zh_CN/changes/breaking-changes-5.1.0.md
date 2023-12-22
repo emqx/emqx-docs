@@ -148,8 +148,8 @@ API 经历了重大变化，其中一些 API 已经兼容。以下是常用 API 
 | emqx_sasl        | AuthN/AuthZ - MQTT 5 增强认证                     |
 | emqx_auth_ldap   | -                                                 |
 | emqx_rule_engine | 数据集成                                          |
-| emqx_bridge_mqtt | 数据桥接 - MQTT 桥接                              |
-| emqx_web_hook    | 数据桥接 - HTTP 服务                              |
+| emqx_bridge_mqtt | Sink - MQTT 桥接                              |
+| emqx_web_hook    | Sink - HTTP 服务                              |
 | emqx_coap        | CoAP 网关                                         |
 | emqx_dashboard   | 仪表板                                            |
 | emqx_exhook      | ExHook                                            |
@@ -286,7 +286,7 @@ authentication = [
 
 ## 规则引擎
 
-Rule SQL 与 EMQX 4.x 语法完全兼容，但规则下的操作被分为内置操作（republish、console）和数据桥接（HTTP 服务器、MQTT 桥接）两部分。
+Rule SQL 与 EMQX 4.x 语法完全兼容，但规则下的操作被分为内置操作（republish、console）和动作（Sink）两部分。
 
 ## 数据集成
 
@@ -297,14 +297,14 @@ Rule SQL 与 EMQX 4.x 语法完全兼容，但规则下的操作被分为内置�
 - 之前的**规则** -> **操作** -> **资源**流程已改为**规则** -> **桥接**。
 - **模块/消息发布**功能已移至桥接中。
 - 移除了**[保存离线消息](https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_redis.html)**、**[获取订阅关系](https://docs.emqx.com/zh/enterprise/v4.4/rule/get_subs_from_redis.html)**和 EMQX Bridge 功能。
-- 目前不支持 Tablestore、DolphinDB、Lindorm 和 SAP Event Mesh 数据桥接。
-- MQTT 数据桥接插件（`emqx_bridge_mqtt`）已移除。请使用数据集成中的内置 MQTT 数据桥接。
+- 目前不支持 Tablestore、DolphinDB、Lindorm 和 SAP Event Mesh 动作。
+- MQTT 桥接插件（`emqx_bridge_mqtt`）已移除。请使用数据集成中的内置 MQTT 动作。
 
 有关完整的兼容性报告，请参阅[数据集成从 EMQX 5.1 到 EMQX 4.4 的不兼容变更](./data-integration-4.4-to-5.1-incompatibility.md)。
 
 ## HTTP 服务
 
-WebHook 插件（`emqx_web_hook`）已转换为内置功能，现在称为 "HTTP 服务" 数据桥接。
+WebHook 插件（`emqx_web_hook`）已转换为内置功能，现在称为 "HTTP 服务" 动作。
 
 {% emqxee %}
 

@@ -51,7 +51,7 @@ Microsoft SQL Server 数据集成是 EMQX 的开箱即用功能，结合了 EMQX
 ### 前置准备
 
 - 了解 [规则](./rules.md)。
-- 了解 [数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 安装并连接到 Microsoft SQL Server
 

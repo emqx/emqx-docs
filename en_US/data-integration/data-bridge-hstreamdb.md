@@ -60,7 +60,7 @@ The sub-sections below describe how to install and connect to HStreamDB on Linux
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [Data Integration](./data-bridges.md)
 
 ### Start HStreamDB TCP Service and Create Streams
 

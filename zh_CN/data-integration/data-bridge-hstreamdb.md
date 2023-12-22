@@ -62,7 +62,7 @@ EMQX 通过规则引擎和配置的数据桥将 MQTT 数据转发到 Apache HStr
 ### 前置准备
 
 - 了解[规则](./rules.md)。
-- 了解[数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 启动 HStreamDB TCP 服务并创建 Stream
 

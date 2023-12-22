@@ -97,7 +97,7 @@ log {
 
 <img src="./assets/config-file-log-ee.png" alt="config-file-log-ee" style="zoom:35%;" />
 
-配置控制台日志处理进程的常规选项：
+配置文件日志处理进程的常规选项：
 
 - **启用日志处理进程**：单击切换开关以启用文件日志处理进程。
 

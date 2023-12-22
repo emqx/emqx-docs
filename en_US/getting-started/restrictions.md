@@ -57,8 +57,8 @@ The operating limitations can be classified into:
 | Number of rules                       | Unlimited                 |
 | Rule execution timeout                | Unlimited                 |
 | Number of single rule outputs         | Unlimited                 |
-| **Data Bridge**                       |                           |
-| Number of data bridges                | Unlimited                 |
+| **Sink/Source**                       |                           |
+| Number of Sink/Source                | Unlimited                 |
 | **REST API**                          |                           |
 | Max page size                         | 10000                     |
 | Number of API Keys                    | 100                       |

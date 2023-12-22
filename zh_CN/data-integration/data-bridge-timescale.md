@@ -49,7 +49,7 @@ EMQX 通过规则引擎与数据桥接将设备数据转发至 TimescaleDB，Tim
 ### 前置准备
 
 - 了解[规则](./rules.md)。
-- 了解[数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 安装 TimescaleDB 并创建数据表
 

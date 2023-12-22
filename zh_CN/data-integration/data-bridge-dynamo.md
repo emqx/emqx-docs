@@ -41,7 +41,7 @@ DynamoDB 数据集成是 EMQX 中的开箱即用功能，它结合了 EMQX 的�
 ### 前置准备
 
 - 了解数据桥接[规则](./rules.md)。
-- 了解[数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 安装 DynamoDB 本地服务器
 

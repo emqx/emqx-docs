@@ -46,7 +46,7 @@ EMQX 与 AWS Kinesis Data Streams 的数据集成可以为您的业务带来以�
 ### 前置准备
 
 - 了解[规则](./rules.md)。
-- 了解[数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 在 Amazon Kinesis Data Streams 中创建数据流
 

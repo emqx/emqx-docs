@@ -8,7 +8,7 @@
 
 :::
 
-## Data Schema and Query
+## LDAP Data Schema and Query
 
 The LDAP authorizer checks the client authorization against the authorization data stored within the LDAP directory. An LDAP schema defines the structure and rules for organizing and storing the authorization data. The LDAP authorizer supports almost any storage schema. Here is a schema example for OpenLDAP:
 
@@ -111,7 +111,7 @@ rootpw {SSHA}eoF7NhNrejVYYyGHqnt+MdKNBh4r1w3W
 directory       /usr/local/etc/openldap/data
 ```
 
-## Configure with Dashboard
+## Configure LDAP Authorizer via Dashboard
 
 You can use EMQX Dashboard to configure how to use LDAP for user authorization.
 
@@ -157,7 +157,7 @@ You can use EMQX Dashboard to configure how to use LDAP for user authorization.
 
 4. Click **Create** to finish the settings.
 
-## Configure with Configuration Items
+## Configure LDAP Authorizer via Configuration Items
 
 You can configure the EMQX LDAP authorizer with EMQX configuration items.
 

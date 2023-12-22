@@ -45,7 +45,7 @@ RabbitMQ 数据集成为您的业务带来以下特性和优势：
 
 - 了解 EMQX 数据集成[规则](./rules.md)
 
-- 了解[数据桥接](./data-bridges.md)
+- 了解[数据集成](./data-bridges.md)
 
 - 了解 UNIX 终端及命令
 
