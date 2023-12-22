@@ -74,7 +74,7 @@ Scroll down the page, and continue to configure the options for log file overloa
 - **Report Type**: Select the type from the drop-down list. Optional values: `error` and `progress`. Default value is `error`.
 - **Max Depth**: Enabled by default. You can specify the maximum depth for Erlang term log formatting and Erlang process message queue inspection. You can increase or decrease the value using the number spinner. 
 
-After you finished the configurations, click **Save Changes**.
+After you finish the configurations, click **Save Changes**.
 
 ### Configure File Log
 
@@ -116,7 +116,7 @@ Configuration options for log file overload kill feature and log burst control f
 
 When file logging is enabled (log.to = file or both), the following files will appear in the log directory:
 
-- **emqx.log.N:** L og file prefixed with emqx.log, that contains all the log messages of EMQX, such as `emqx.log.1`,` emqx.log.2` ...
+- **emqx.log.N:** Log file prefixed with emqx.log, that contains all the log messages of EMQX, such as `emqx.log.1`,` emqx.log.2` ...
 - **emqx.log.siz and emqx.log.idx:** System files used to record log rotation information. **Do not change manually**. 
 - **run_erl.log:** System file used to record startup information when starting EMQX in the background with `emqx start`.
 - **erlang.log.N:** Log file prefixed with erlang.log, which is a copy file of the console log when EMQX is started in the background with `emqx start`, such as `erlang.log.1`,` erlang.log.2` ...

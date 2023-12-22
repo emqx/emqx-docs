@@ -1,36 +1,63 @@
 # Data Integration
 
-With the power of a rule engine and data bridge, data integration allows you to transmit IoT data seamlessly to different data systems. A data bridge is a channel used to connect EMQX and external data systems, for example, databases like MySQL, MongoDB, message brokers like Apache Kafka and RabbitMQ, or even an HTTP server. Through data integration, users can send messages from EMQX to the external data system in real time. If bi-directional data integration is used, users can also pull data from the external data system and send it to a topic in EMQX.
+As an MQTT messaging platform, EMQX connects IoT devices through the MQTT protocol and transmits messages in real-time. Building on this, data integration in EMQX introduces connections to external data systems, thereby enabling seamless integration of devices with other business systems.
+
+Data integration uses Sink and Source components to connect with external data systems. Sinks are used to send messages to external data systems, such as MySQL, Kafka, or HTTP services, while Sources are used for receiving messages from external data systems, including MQTT, Kafka, or GCP PubSub.
+
+This process allows EMQX to extend beyond just message transmission between IoT devices, integrating device-generated data organically into the entire business ecosystem. It provides a broader range of application scenarios for IoT applications, enriching and diversifying interactions between devices and business systems.
 
 ::: tip Note
 
-Currently, EMQX only supports bi-directional data integration with MQTT Broker, Kafka and GCP PubSub.
+- Starting from EMQX v5.4.0, the original data bridge was separated according to the data flow direction and renamed as Sink and Source.
+- Currently, EMQX only supports MQTT, Kafka, and GCP PubSub Sources.
 
 :::
 
-This page provides an overall introduction to data integration, including the working principle, supported data systems, main features, and data bridge operation.
+This page offers a comprehensive overview of Sinks and Sources, including their working principles, supported external data systems, key features, and management methods.
 
 ## How It Works
 
-EMQX data integration is an out-of-the-box feature. As an MQTT messaging platform, EMQX receives data from IoT devices via MQTT protocol. With the help of a built-in rule engine, the received data is processed by the rules configured in the rule engine. The rule will trigger an action of forwarding the processed data to the external data system through a configured data bridge. You can easily create a rule, attach an action to the rule, and create a data bridge on EMQX Dashboard without any coding efforts.
+EMQX data integration is an out-of-the-box feature. As an MQTT messaging platform, EMQX receives data from IoT devices via MQTT protocol. With the help of a built-in rule engine, the received data is processed by the rules configured in the rule engine. The rule will trigger an action of forwarding the processed data to the external data system through a configured Sink/Source. You can easily create a rule, attach an action to the rule, and create a Sink/Source using [Rules](./rule-get-started.md) or [Flow Designer](../flow-designer/introduction.md) on the Dashboard without any coding efforts.
 
 ### Built-in Rule Engine
 
-A powerful built-in rule engine forms the core component for SQL-based data processing and distribution. It has the capability to process events and IoT data from clients in real time, performing tasks such as data extraction, filtering, enrichment, and format transformation based on predefined rules. The processed data is then sent to designated data bridges.
+Data sources from various IoT devices and systems have all kinds of data types and formats. A powerful built-in rule engine with built-in SQL rules is the core component for SQL-based data processing and distribution. SQL rules have a wide range of functions, such as character manipulation, data type conversion functions, and compression/decompression functions, allowing for flexible and complex data processing. the rule engine can process events and IoT data from clients in real-time, performing tasks such as data extraction, filtering, enrichment, and format transformation based on predefined rules. The processed data is then sent to designated Sinks/Sources.
 
 You can find detailed information on how the rule engine works in the [Rule Engine](./rules.md) chapter.
 
-### SQL-Based Data Processing
+### Sink
 
-Data sources from various IoT devices and systems have all kinds of data types and formats. The built-in SQL rules include a wide range of functions, such as character manipulation, data type conversion functions, and compression/decompression functions, allowing for flexible and complex data processing.
+A Sink is a data output component added to the [actions](./rules.md) of a rule. When a device triggers an event or a message arrives at EMQX, the system matches and executes the corresponding rule, filtering and processing the data. After processing, the data will be forwarded to a designated Sink, and then sent to external data systems through the corresponding [connector](./connector.md), facilitating operations such as message storage, data updates, and event notifications.
 
-For more information on SQL-based rules, see [Rule SQL Reference](./rule-sql-syntax.md).
+```mermaid
+graph LR
+  A[Client] -->|Publish message| B[Rule]
+  A1[Client] --> |Publish message| B
 
-### Data Bridge
+  subgraph Rule Engine
+    B -->  |Execute action| C[Kafka Sink] --> D[Kafka Connector]
+  end
 
-The data bridge is a crucial component for connecting EMQX with external data systems. It enables the seamless flow of data from EMQX to external databases, cloud platforms, or other systems. You can configure data bridges through the EMQX Dashboard, specifying the data forwarding destination and data format for efficient data exchange with external systems.
+D -->|Message storage| E[Kafka]
+```
 
-The [Supported Integrations](#supported-integrations) section provides links to the specific instructions for setting up different data bridges.
+### Source
+
+A Source is a data input component, serving as a [data source](./rule-sql-events-and-fields.md) for rules, and is selected through rule SQL.
+
+Source subscribes or consumes messages from external data systems such as MQTT or Kafka. When new messages arrive through the connector, the rule engine matches and executes the corresponding rules, filtering and processing the data. Once processed, the data can be published to a specified EMQX topic, enabling operations like message Sink and cloud command distribution.
+
+```mermaid
+graph LR
+  A[Kafka] --> B[Kafka Connector]
+  subgraph Rule Engine
+    B --> C[Kafka Source]
+    C -->  |Trigger| D[Rule]
+    D -->  |Execute action| D1[Message Republishing]
+  end
+
+D1 -->|Publish message| E[Client]
+```
 
 ## Supported Integrations
 
@@ -129,157 +156,79 @@ EMQX supports data integration with the following types of data systems.
 
 {% endemqxee %}
 
-## Main Features 
+## Features of Sink
 
-When configuring the data integration, you can further improve the performance and reliability of data integration with the following easy-to-use data integration features. 
+Sink enhances usability and further improves the performance and reliability of data integration with the following features. Not all Sinks fully implement these features; please refer to their respective documentation for specific support details.
 
-::: tip
+### Asynchronous Request Mode
 
-The features supported may differ depending on the data system you are connecting to. You may refer to the document about different data systems for feature support.
+Asynchronous request mode can prevent the message publishing service from being affected by I/O pressure. However, when asynchronous request mode is enabled, the chronological order of newly sent messages by clients might be affected due to historical messages queuing up in the Sink.
 
-:::
-
-### Connection Pool
-
-A connection pool is a set of reusable connection objects. With connection pooling, users no longer need to re-create connections for each request, which can help to significantly reduce resource consumption, improve connection efficiency, and achieves better support for high concurrent requests.
-
-EMQX will create a separate connection pool for each node with data integration to be created. For example, let's say you use a cluster with 3 EMQX nodes and set the connection pool size for each data integration to 8, then EMQX will create 3 x 8 = 24 connection. Note: Please ensure the number of connection pools to build should not exceed the connection limit of your resources.
-
-### Async Mode
-
-Async mode is the data processing mode of the data integration. By enabling the Async mode, we can prevent the message publishing services from being blocked by the I/O pressure. Note: The time series of the message publishing might be affected, as the data integration may be still processing the queued messages while the client has already sent several new messages.
-
-To improve the data processing efficiency, EMQX has enabled the Async mode by default. Use the following command to disable it if your application has strict requirements on the time series.
-
-Example code
-
-```bash
-bridges.mysql.foo {
-  server = "localhost"
-  database = "emqx"
-  enable = true
-  ...
-  resource_opts {
-  # sync | async
-    query_mode = "sync"
-    ...
-  }
-}
-```
+To improve data processing efficiency, EMQX enables asynchronous request mode by default. If you have strict requirements for the chronological order of messages, please disable this mode.
 
 ::: tip
 
-To ensure the time series of messages, please also add `max_inflight = 1` to the configuration file `emqx.conf`.
+To ensure the sequentiality of messages, set `max_inflight` to 1 at the same time.
 
 :::
 
 ### Batch Mode
 
-In batch mode, multiple pieces of data will be simultaneously written into the external data integrations. After enabling the Batching mode, EMQX will temporarily store the data of each request and put the data in batches into the target data system after reaching a specified batch time or size. You can configure the batch time and batch size as needed.
+Batch mode allows writing multiple data entries simultaneously into an external data integration system. When batch mode is enabled, EMQX will temporarily store each request's data (single entry) and write the entire batch of stored data to the target data system after reaching a certain time or accumulating a certain number of data entries (both of which can be configured).
 
-**Advantages**
+**Advantages:**
 
-- Improve writing efficiency: Compared with the single-message writing mode, the database system will usually use techniques like caching or preprocessing to optimize the batch files before further operations, so the writing efficiency can be improved.
-- Reduce network latency: The batch mode can reduce the times of net transmissions, thereby reducing network latency.
+- Improved write efficiency: Compared to writing single messages, batch mode allows database systems to cache or preprocess messages before formal processing, enhancing write efficiency.
+- Reduced network latency: Batch writing reduces the number of network transmissions, thereby decreasing network latency.
 
-**Disadvantages**
+**Issues:**
 
-- Hard to troubleshoot data errors: If data error occurs during batch writing, the data with error or even the entire batch of data will be discarded, so it is difficult to do troubleshooting.
-- Long data writing delay: Data will be written into the target data systems only after reaching the specified batch time or batch size, so the delay is prolonged. You can configure the batch time or size to control the delay.
-
-The Batch mode is enabled by default, you can disable it as needed.
-
-Example code
-
-```bash
-bridges.mysql.foo {
-  server = "localhost"
-  database = "emqx"
-  enable = true
-  ...
-  resource_opts {
-    batch_size = 100
-    batch_time = "20ms"
-    ...
-  }
-}
-```
+- Longer data writing delays: Data will only be written after reaching the set time or number of entries, resulting in longer delays. Note: You can adjust the settings for time or number of entries through the parameters below.
+- Some delay: Data will not be written immediately until the set time is reached or the accumulated number of data entries is met. This can be adjusted through parameters.
 
 ### Buffer Queue
 
-When external resources are unavailable, for example, due to network fluctuations or service downtime, the buffer queue feature can help to save the message generated during this period as memory or disk cache and then resume the messaging after the service is restored.
+The buffer queue provides a certain level of fault tolerance for Sink, and it's recommended to enable this option to improve data safety.
 
-It is recommended to enable this feature to improve the fault tolerance capability of the data integration.
+Each resource connection (not MQTT connection) has a buffer queue length (by capacity size), and data exceeding this length will be discarded according to the FIFO principle.
 
-For each resource connection (not MQTT connection), you can specify the cache queue size based on the storage size. If the cached size exceeds the limit, data will be discarded following the First In First Out (FIFO) rule.
+#### Buffer File Location
 
-#### Configuration
+For Kafka Sink, disk cache files are located in `data/kafka`, while for other Sinks, disk cache files are in `data/resource_worker`.
 
-For the data stream connecting to Kafka, the disk cache file is saved under `data/kafka`, for other data systems, the disk cache file is saved under `data/resource_worker`.
-
-In actual use, it is recommended to mount the `data` folder in a high-performance disk to improve the throughput capacity.
-
-Example code
-
-```bash
-bridges.mysql.foo {
-  server = "localhost"
-  database = "emqx"
-  enable = true
-  ...
-  resource_opts {
-    max_queue_bytes = "100MB"
-    query_mode = "async"
-    ...
-  }
-}
-```
+In actual use, the `data` directory can be mounted on a high-performance disk to improve throughput.
 
 ### Prepared Statement
 
-[Prepared statement](https://dev.mysql.com/doc/refman/8.0/en/sql-prepared-statements.html) provides a way to run SQL with prepared statements. It simplifies the operation and maintenance and also helps to avoid SQL injection and improve security.
+In SQL databases like MySQL, PostgreSQL, etc., SQL templates will undergo preprocessing execution without the need to explicitly specify field variables.
 
-For data integration supporting prepared statements, you need not explicitly specify the field variables; otherwise, you will need to explicitly specify the field variables.
-
-For example, you will insert the following data into the database:
-
-```json
-{
-  "topic": "t/1",
-  "qos": 0,
-  "payload": "Hello EMQX"
-}
-```
-
-- topic: message topic, string
-- payload: message body, string
-- qos: message QoS, integer
-
-For data integration not supporting prepared statements, the fields should be enclosed in quotation marks, as shown below:
+When executing SQL directly, you must explicitly set topic and payload as character types and qos as an int type using single quotes:
 
 ```sql
 INSERT INTO msg(topic, qos, payload) VALUES('${topic}', ${qos}, '${payload}');
 ```
 
-But for data integration supporting prepared statements, the fields in the SQL template should **NOT** be enclosed in quotation marks, as shown below:
+However, in Sinks that support prepared statements, the SQL template **must** use unquoted prepared statements:
 
 ```sql
 INSERT INTO msg(topic, qos, payload) VALUES(${topic}, ${qos}, ${payload});
 ```
 
-## Data Integration Status and Statistics
+In addition to automatically inferring field types, the prepared statement technology also prevents SQL injection to enhance security.
 
-You can view the running status and statistics of the data integration on the Dashboard to know if the data integration is operating properly.
+## Sink Status and Statistics
+
+You can view the running status and statistics of a Sink on the Dashboard to know if the Sink is operating properly.
 
 ### Running Status
 
-A data bridge can have the following status:
+A Sink can have the following status:
 
 - `connecting`: The initial state before any health probes are made, and the bridge is still attempting to connect to the external data system.
-- `connected`: The bridge is successfully connected and operating normally. If a health probe fails, the bridge may transition to either the `connecting` or `disconnected` state, depending on the severity of the failure.
-- `disconnected`: The bridge has failed the health probes and is in an unhealthy state. It may try periodically to reconnect automatically depending on its configuration.
-- `stopped`: The bridge has been manually disabled.
-- `inconsistent`: There is a disagreement on the bridge status among the cluster nodes.
+- `connected`: The Sink is successfully connected and operating normally. If a health probe fails, the Sink may transition to either the `connecting` or `disconnected` state, depending on the severity of the failure.
+- `disconnected`: The Sink has failed the health probes and is in an unhealthy state. It may try periodically to reconnect automatically depending on its configuration.
+- `stopped`: The Sink has been manually disabled.
+- `inconsistent`: There is a disagreement on the Sink status among the cluster nodes.
 
 ### Running Statistics
 
@@ -297,7 +246,7 @@ EMQX provides the running statistics of data integration in the following catego
 
 #### Matched
 
-The `matched` statistic counts the number of requests/messages that were routed to the bridge, regardless of its state.  Each message is ultimately accounted by other metrics, so the caluculation of `matched` is: `matched = success + failed + inflight + queuing + late_reply + dropped`.
+The `matched` statistic counts the number of requests/messages that were routed to the Sink, regardless of its state.  Each message is ultimately accounted by other metrics, so the caluculation of `matched` is: `matched = success + failed + inflight + queuing + late_reply + dropped`.
 
 #### Sent Successfully
 
@@ -313,8 +262,8 @@ The `dropped` statistic counts the number of messages that were dropped without 
 
 - `expired` : The message time-to-live (TTL) was reached during queuing before it got a chance to be sent.
 - `queue_full` : The maximum queue size was reached and the message was dropped to prevent memory overflow.
-- `resource_stopped` : The message being attempted for delivery when the bridge was already stopped.
-- `resource_not_found` : The message was attempted to be sent when the bridge was no longer found. It occurs rarely and usually due to race conditions during the removal of a bridge.
+- `resource_stopped` : The message being attempted for delivery when the Sink was already stopped.
+- `resource_not_found` : The message was attempted to be sent when the Sink was no longer found. It occurs rarely and usually due to race conditions during the removal of a Sink.
 
 #### Late Reply
 

@@ -17,7 +17,7 @@ Apache IoTDB 数据集成是 EMQX 企业版功能。EMQX 企业版可以为您�
 
 - 了解 EMQX 数据集成[规则](./rules.md)
 
-- 了解[数据桥接](./data-bridges.md)
+- 了解[数据集成](./data-bridges.md)
 
 - 了解 UNIX 终端和命令
 

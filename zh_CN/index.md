@@ -85,153 +85,37 @@ EMQX 5.0 单集群可支持 MQTT 并发连接数高达 **1 亿**条。
 
 ## 产品对比
 
-EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless 和 EMQX Cloud 专有版）和两种自托管模式（EMQX 开源版 和 EMQX 企业版）。以下列出了这些部署模式的主要功能对比，以帮助您根据业务需求进行选择。
+EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless 和 EMQX Cloud 专有版）和两种自托管模式（EMQX 开源版 和 EMQX 企业版）。以下表格列出了这些部署模式的对比，以帮助您根据业务需求进行选择。想进一步了解具体的功能对比，参考[功能对比](./getting-started/feature-comparison.md)。
 
-<div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th>主要特性</th>
+     <th colspan="2">自托管模式</th>
     <th colspan="2">云服务模式</th>
-    <th colspan="2">自托管模式</th>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td width="12%" rowspan="2"></td>
-    <td width="22%">EMQX Cloud Serverless</td>
-    <td width="22%">EMQX Cloud 专有版</td>
-    <td width="22%">EMQX 开源版</td>
-    <td width="22%">EMQX 企业版</td>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
+    <td>EMQX Cloud Serverless</td>
+    <td>EMQX Cloud 专有版</td>
   </tr>
   <tr>
-    <td><a href="https://accounts-zh.emqx.com/signup?continue=https%3A%2F%2Fcloud.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">免费使用 Serverless</a></td>
-    <td><a href="https://accounts-zh.emqx.com/signup?continue=https%3A%2F%2Fcloud.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">14 天免费试用</a></td>
-    <td><a href="https://www.emqx.com/zh/try?product=broker">立即下载</a></td>
-    <td><a href="https://www.emqx.com/zh/apply-licenses/emqx">免费试用</a></td>
+    <td><a href="https://www.emqx.com/en/try?product=broker">立即下载</a></td>
+    <td><a href="https://www.emqx.com/en/apply-licenses/emqx">免费试用</a></td>
+    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">免费使用 Serverless</a></td>
+    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">14 天免费试用</a></td>
   </tr>
   <tr>
-    <td><b>可扩展性</b></td>
-    <td>自动扩展，最多 1,000 条连接</td>
-    <td>无限制</td>
-    <td style="text-align:left;">单集群支持 MQTT 并发连接数高达 1 亿条</td>
-    <td style="text-align:left;">单集群支持 MQTT 并发连接数高达 1 亿条</td>
-  </tr>
-  <tr>
-    <td><b>吞吐量</b></td>
-    <td>1000 TPS</td>
-    <td>> 500 万 MQTT 消息每秒</td>
-    <td>> 500 万 MQTT 消息每秒</td>
-    <td>> 500 万 MQTT 消息每秒</td>
-  </tr>
-  <tr>
-    <td><b>延迟</b></td>
-    <td>1~5 毫秒</td>
-    <td>1~5 毫秒</td>
-    <td>1~5 毫秒</td>
-    <td>1~5 毫秒</td>
-  </tr>
-  <tr>
-    <td><b>数据集成（开箱即用）</b></td>
-    <td>不支持</td>
-    <td style="text-align:left;">支持 40 多种数据集成，包括 Webhook、MQTT 数据桥接、MySQL、PostgreSQL、Kafka、MongoDB、Oracle 等。</td>
-    <td style="text-align:left;">支持 Webhook 和 MQTT 数据桥接</td>
-    <td style="text-align:left;">支持 40 多种数据集成，包括 Webhook、MQTT 数据桥接、MySQL、PostgreSQL、Kafka、MongoDB、Oracle 等。</td>
-  </tr>
-  <tr>
-    <td><b>MQTT 5.0 Broker</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>MQTT over QUIC</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>MQTT 扩展</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>多协议网关</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Schema Registry</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>消息编解码</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>规则引擎</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>文件传输</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>故障排查</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Cloud-Native &amp; K8s</b></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>SLA 等级</b></td>
-    <td>99.9%</td>
-    <td>99.99%</td>
-    <td>N/A</td>
-    <td>N/A</td>
-  </tr>
-  <tr>
-    <td><b>License</b></td>
-    <td>SaaS 模式，按需计费</td>
-    <td>SaaS 模式，按小时计费</td>
-    <td>Apache Version 2.0</td>
-    <td>商业许可证（商业源代码许可证）</td>
-  </tr>
-  <tr>
-    <td><b>技术支持</b></td>
-    <td>5x8 全球支持</td>
-    <td>7x24 全球支持</td>
-    <td>开源社区</td>
-    <td>7x24 全球支持</td>
+    <td>✔️ Apache Version 2.0<br>✔️ MQTT over QUIC<br>✔️ 数据存储在内存中<br>✔️ 支持 Webhook 和 MQTT 数据桥接<br>✔️ 多协议网关支持，包括 MQTT-SN, STOMP 和 CoAP<br>✔️ 社区和论坛<br> </td>
+    <td>✔️ 商业许可证（商业源代码许可证）<br>✔️ 基于 RocksDB 的会话持久化<br>✔️ 与 40 多种企业系统双向数据集成，包括 Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis 等<br>✔️ 审计日志和单点登录<br>✔️ 基于角色的访问控制 （RBAC）<br>✔️ 文件传输<br>✔️ 消息编解码<br>✔️ 多协议网关支持，包括额外支持 OCPP, JT/808 和 GBT32960<br>✔️ 7x24 技术支持<br> </td>
+    <td>✔️ 即用即付<br>✔️ 每月免费的使用额度<br>✔️ 最高 1000 同时在线连接<br>✔️ 极速部署<br>✔️ 自动伸缩<br>✔️ 5x8 技术支持</td>
+    <td>✔️ 14 天免费试用<br>✔️ 按小时计费<br>✔️ 主流云平台多区域部署<br>✔️ 多种连接规格可选，连接无上限<br>✔️ VPC 对等连接, 数据集成等更多功能<br>✔️ 40+ 种完备的数据集成链路<br>✔️ 7x24 技术支持<br> </td>
   </tr>
 </tbody>
 </table>
-</div>
+
 
 {% endemqxce %}
 
@@ -298,7 +182,7 @@ EMQX 企业版内置了多重客户端认证机制，包括用户名密码、JWT
 
 ### 规则引擎与数据集成
 
-EMQX 企业版包含一个强大的[规则引擎](./data-integration/rules.md)，您可以根据您的需求在 EMQX 中配置规则 ，对传入的数据进行处理和路由。您还可以使用 EMQX 的数据桥接功能来实现将 EMQX 企业版与云端服务或数据库[集成](./data-integration/data-bridges.md)，以便将 IoT 数据传输到云端进行存储和分析。
+EMQX 企业版包含一个强大的[规则引擎](./data-integration/rules.md)，您可以根据您的需求在 EMQX 中配置规则 ，对传入的数据进行处理和路由。您还可以使用 EMQX 内置的 Sink 和 Source 来实现将 EMQX 企业版与云端服务或数据库[集成](./data-integration/data-bridges.md)，以便将 IoT 数据传输到云端进行存储和分析。
 
 #### **即时数据处理**
 
@@ -306,7 +190,7 @@ EMQX 企业版包含一个强大的[规则引擎](./data-integration/rules.md)�
 
 #### **企业数据集成**
 
-通过开箱即用的 Webhook 与数据桥接，将物联网数据与 40 多个云服务和企业系统进行完美整合，包括 Kafka、AWS RDS、MongoDB、Oracle、SAP 以及时序数据库等。助力企业有效地管理、分析和利用来自物联网设备的数据，从而支持各种应用和业务需求。
+通过开箱即用的 Webhook 与数据集成组件，将物联网数据与 40 多个云服务和企业系统进行完美整合，包括 Kafka、AWS RDS、MongoDB、Oracle、SAP 以及时序数据库等。助力企业有效地管理、分析和利用来自物联网设备的数据，从而支持各种应用和业务需求。
 
 ### 管理与监控仪表板
 
@@ -316,7 +200,7 @@ EMQX 企业版提供图形化的管理系统 [Dashboard](./dashboard/introductio
 
 EMQX 企业版是一个全面的物联网消息平台，它在物联网接入与数据传输的不同阶段发挥着关键作用，为各类业务需求提供了多种强大功能和灵活性。
 
-基于发布-订阅的消息传递模型，EMQX 企业版能够实现数百万主题、不同模式的灵活消息通信，满足各类场景下的实时消息传递。通过内置的规则引擎和数据桥接，EMQX 企业版允许您将消息发送到云端各类服务中，实现设备数据与企业系统之间的无缝集成，能够轻松实现数据处理、存储、分析以及业务指令下发等用例。以下是常见的用例：
+基于发布-订阅的消息传递模型，EMQX 企业版能够实现数百万主题、不同模式的灵活消息通信，满足各类场景下的实时消息传递。通过内置的规则引擎和数据集成组件，EMQX 企业版允许您将消息发送到云端各类服务中，实现设备数据与企业系统之间的无缝集成，能够轻松实现数据处理、存储、分析以及业务指令下发等用例。以下是常见的用例：
 
 ### 双向通信
 
@@ -338,7 +222,7 @@ EMQX 企业版提供了 MQTT 协议[文件传输](./file-transfer/introduction.m
 
 ### 云端控制指令下发
 
-EMQX 企业版允许通过 MQTT 消息、REST API 以及 Kafka 等数据桥接进行消息下发，推送数据或远程控制设备。例如金融交易场景下，云端服务可以根据用户关注列表，进行分组实时数据推送。此模式提供了主题映射、下发数据处理以及数据触达统计，能够实现灵活且可靠的数据下发。
+EMQX 企业版允许通过 MQTT 消息、REST API 以及 Kafka 进行消息下发，推送数据或远程控制设备。例如金融交易场景下，云端服务可以根据用户关注列表，进行分组实时数据推送。此模式提供了主题映射、下发数据处理以及数据触达统计，能够实现灵活且可靠的数据下发。
 
 <img src="./assets/use_case_4.png" alt="use_case_4" style="zoom:50%;" />
 

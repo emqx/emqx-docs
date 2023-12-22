@@ -130,7 +130,7 @@ log.audit {
 | time        | 整数 | 时间戳，表示日志记录的时间，以微秒为单位。                   |
 | level       | 字符 | 日志级别。                                                   |
 | msg         | 字符 | 操作描述。                                                   |
-| from        | 字符 | 请求来源，值为 `cli`, `erlang_console` 分别表示来自 CLI 以及 Erlang Shell 的操作。当值为 `dashboard`、`rest_api` 表示来自 Dashboard、REST API，不适用此日志结构。 |
+| from         | 字符 | 请求来源，值为 `cli`, `erlang_console` 分别表示来自 CLI 以及 Erlang Shell 的操作。当值为 `dashboard`、`rest_api` 表示来自 Dashboard、REST API，不适用此日志结构。 |
 | node        | 字符 | 节点名称，表示执行操作的节点或服务器。                       |
 | duration_ms | 整数 | 操作执行时间，以毫秒为单位。                                 |
 | cmd         | 字符 | 执行的具体命令操作，支持的命令请参考 [CLI](../admin/cli.md)。 |

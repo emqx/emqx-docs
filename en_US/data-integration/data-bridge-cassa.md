@@ -48,7 +48,7 @@ This section describes the preparations you need to complete before you start to
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [Data Integration](./data-bridges.md)
 
 ### Install Cassandra Server
 
@@ -101,7 +101,7 @@ This section demonstrates how to create a Cassandra data bridge in EMQX Dashboar
    insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
    ```
 
-7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Integration](./data-bridges.md).
+7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
 
 8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Cassandra server.
 

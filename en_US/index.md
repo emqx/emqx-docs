@@ -82,160 +82,36 @@ EMQX can be easily deployed on-premises or in public clouds using **Kubernetes O
 
 ## Product Comparison
 
-EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud Serverless and EMQX Dedicated Cloud) and two self-hosted options (EMQX Open Source and EMQX Enterprise). To help you choose the best deployment option for your requirements, this page lists a comparison of feature support across different deployment types.
+EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud Serverless and EMQX Dedicated Cloud) and two self-hosted options (EMQX Open Source and EMQX Enterprise). To help you choose the best deployment option for your requirements, the following table lists a comparison of feature support across different deployment types. For a comparison of supported features in detail, refer to [Feature Comparison](./getting-started/feature-comparison.md). 
 
-<div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th>Features</th>
+    <th colspan="2">Self Hosted</th>
     <th colspan="2">MQTT as a Service</th>
-    <th colspan="2">Self-Hosted</th>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td width="10%" rowspan="2"></td>
-    <td width="22%">EMQX Cloud Serverless</td>
-    <td width="23%">EMQX Dedicated Cloud</td>
-    <td width="22%">EMQX Open Source</td>
-    <td width="23%">EMQX Enterprise</td>
+    <td>EMQX Open Source</td>
+    <td>EMQX Enterprise</td>
+    <td>EMQX Cloud Serverless</td>
+    <td>EMQX Dedicated Cloud</td>
   </tr>
   <tr>
-    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">Get Free Serverless</a></td>
-    <td><a href="https://www.emqx.com/en/try?product=broker">14-Day Free Trial</a></td>
     <td><a href="https://www.emqx.com/en/try?product=broker">Open Source Download</a></td>
     <td><a href="https://www.emqx.com/en/apply-licenses/emqx">Get a Free Trial License</a></td>
+    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">Get Started Free</a></td>
+    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">Start a Free 14-Day Trial</a></td>
   </tr>
   <tr>
-    <td><b>Scalability</b></td>
-    <td>1000 auto scale</td>
-    <td>1000 - unlimited</td>
-    <td style="text-align:left;">Up to 100M MQTT connections per cluster</td>
-    <td style="text-align:left;">Up to 100M MQTT connections per cluster</td>
-  </tr>
-  <tr>
-    <td><b>Throughput</b></td>
-    <td>1000 TPS</td>
-    <td>Unlimited</td>
-    <td>5M+ MQTT messages per second</td>
-    <td>5M+ MQTT messages per second</td>
-  </tr>
-  <tr>
-    <td><b>Reliability</b></td>
-    <td>Maintained by EMQX Cloud Team</td>
-    <td>Maintained by EMQX Cloud Team</td>
-    <td>Data storage in memory</td>
-    <td>Data persistence in RocksDB (Coming soon)</td>
-  </tr>
-  <tr>
-    <td><b>Latency</b></td>
-    <td>1~5 millisecond</td>
-    <td>1~5 millisecond</td>
-    <td>1~5 millisecond</td>
-    <td>1~5 millisecond</td>
-  </tr>
-  <tr>
-    <td><b>Integrations (Out-of-the-box)</b></td>
-    <td>Not supported.</td>
-    <td style="text-align:left;">Supports over 40 data integrations, including MQTT data bridge, Webhook, MySQL, PostgreSQL, Kafka, MongoDB, Oracle, etc.</td>
-    <td style="text-align:left;">Supports Webhook and MQTT data bridge.</td>
-    <td style="text-align:left;">Supports over 40 data integrations, including MQTT data bridge, Webhook, MySQL, PostgreSQL, Kafka, MongoDB, Oracle, etc.</td>
-  </tr>
-  <tr>
-    <td><b>MQTT 5.0 Broker</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>MQTT over QUIC</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>MQTT Add-ons</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Multi-Protocol Gateways</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Schema Registry</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Message Codec</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Rule Engine</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>File Transfer</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Troubleshooting</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Cloud-Native &amp; K8s</b></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Service Level Agreement (SLA)</b></td>
-    <td>99.9%</td>
-    <td>Up to 99.99%</td>
-    <td>N/A</td>
-    <td>N/A</td>
-  </tr>
-  <tr>
-    <td><b>License Model</b></td>
-    <td>SaaS - pay as you go</td>
-    <td>SaaS - hourly billing</td>
-    <td>Apache Version 2.0</td>
-    <td>Commercial license (Business source license)</td>
-  </tr>
-  <tr>
-    <td><b>Technical Support</b></td>
-    <td>8/5 Global support</td>
-    <td>24/7 Global support</td>
-    <td>Open source community</td>
-    <td>24/7 Global support</td>
+    <td>✔️ Apache Version 2.0<br>✔️ MQTT over QUIC<br>✔️ Session storage in memory<br>✔️ Supports Webhook and MQTT data bridge.<br>✔️ Audit log and single sign-on (SSO)<br>✔️ Multi-protocol gateways, including MQTT-SN, STOMP and CoAP<br>✔️ Open source community<br> </td>
+    <td>✔️ Commercial license (Business source license)<br>✔️ MQTT over QUIC<br>✔️ Session persistence in RocksDB<br>✔️ Data integration with 40+ enterprise systems, including Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis etc.<br>✔️ Audit log and single sign-on (SSO)<br>✔️ Role-Based Access Control (RBAC)<br>✔️ File transfer<br>✔️ Message codec<br>✔️ Multi-protocol gateways, with extra support on OCPP, JT/808 and GBT32960<br>✔️ 24/7 global technical support<br> </td>
+    <td>✔️ Pay as you go<br>✔️ Free quota every month<br>✔️ 1000 maximum connections<br>✔️ Start deployment in seconds<br>✔️ Auto scaling<br>✔️ 8/5 global technical support</td>
+    <td>✔️ 14-days free trial<br>✔️ Hourly billing<br>✔️ Multi-cloud regions worldwide<br>✔️ Flexible specifications<br>✔️ VPC peering, NAT gateway, load balance and more<br>✔️ Out-of-box integration with over 40+ cloud services<br>✔️ 24/7 global technical support<br> </td>
   </tr>
 </tbody>
 </table>
-</div>
 
 {% endemqxce %}
 
@@ -302,7 +178,7 @@ Additionally, the Enterprise Edition offers [audit logs](./dashboard/audit-log.m
 
 ### Rule Engine and Data Integration
 
-EMQX Enterprise includes a powerful [rule engine](./data-integration/rules.md) that allows you to configure rules within EMQX to process and route incoming data based on your requirements. You can also use EMQX's data bridge feature to integrate EMQX Enterprise with cloud services or databases for transferring IoT data to the cloud for storage and analysis.
+EMQX Enterprise includes a powerful [rule engine](./data-integration/rules.md) that allows you to configure rules within EMQX to process and route incoming data based on your requirements. You can also use EMQX's Sink feature to integrate EMQX Enterprise with cloud services or databases for transferring IoT data to the cloud for storage and analysis.
 
 #### Real-Time Data Processing
 
@@ -310,7 +186,7 @@ With a built-in SQL-based rule engine, Schema Registry, message codecs, and [Flo
 
 #### Enterprise Data Integration
 
-Through out-of-the-box Webhooks and data bridges, you can seamlessly [integrate](./data-integration/data-bridges.md) IoT data with over 40 cloud services and enterprise systems, including Kafka, AWS RDS, MongoDB, Oracle, SAP, and time-series databases. This empowers enterprises to effectively manage, analyze, and utilize data from IoT devices, supporting various applications and business needs.
+Through out-of-the-box Webhooks and Sink/Source, you can seamlessly [integrate](./data-integration/data-bridges.md) IoT data with over 40 cloud services and enterprise systems, including Kafka, AWS RDS, MongoDB, Oracle, SAP, and time-series databases. This empowers enterprises to effectively manage, analyze, and utilize data from IoT devices, supporting various applications and business needs.
 
 ### Management and Monitoring Dashboard
 
@@ -320,7 +196,7 @@ EMQX Enterprise provides a graphical management system called the [Dashboard](./
 
 EMQX Enterprise is a comprehensive IoT messaging platform that plays a crucial role in different stages of IoT device connectivity and data transmission, providing powerful functionality and flexibility for various business needs.
 
-Based on the publish-subscribe message delivery model, it can achieve flexible message communication with millions of topics and different modes, meeting the real-time message delivery needs under various scenarios. Through its built-in rule engine and data bridge, EMQX Enterprise allows you to send messages to various cloud services, enabling seamless integration of device data with enterprise systems. It can easily support use cases such as data processing, storage, analysis, and business command issuance. Here are some typical use cases:
+Based on the publish-subscribe message delivery model, it can achieve flexible message communication with millions of topics and different modes, meeting the real-time message delivery needs under various scenarios. Through its built-in rule engine and Sink/Source, EMQX Enterprise allows you to send messages to various cloud services, enabling seamless integration of device data with enterprise systems. It can easily support use cases such as data processing, storage, analysis, and business command issuance. Here are some typical use cases:
 
 ### Bidirectional Communication
 
@@ -342,7 +218,7 @@ EMQX Enterprise provides MQTT protocol [file transfer](./file-transfer/introduct
 
 ### Cloud-Based Control Command Issuance
 
-EMQX Enterprise allows message issuance through MQTT messages, REST APIs, and data bridges with, for example, Kafka, enabling data push or remote device control. For example, in a financial trading scenario, cloud services can push real-time data based on user watchlists in groups. This mode provides topic mapping, data processing for issuance, and data reach statistics, enabling flexible and reliable data issuance.
+EMQX Enterprise allows message issuance through MQTT messages, REST APIs, and Source with, for example, Kafka, enabling data push or remote device control. For example, in a financial trading scenario, cloud services can push real-time data based on user watchlists in groups. This mode provides topic mapping, data processing for issuance, and data reach statistics, enabling flexible and reliable data issuance.
 
 <img src="./assets/use_case_4.png" alt="use_case_4" style="zoom:50%;" />
 
