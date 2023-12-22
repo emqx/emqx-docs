@@ -78,7 +78,7 @@ Before integrating EMQX with OpenTelemetry traces, you need to deploy and config
    docker compose -f docker-compose-otel-trace.yaml up
    ```
    
-4. After starting, the OpenTelemetry Collector listens on the default gRPCport (4317) on the host machine and Jaeger WEB UI can be accessed at http://localhost:16686.
+4. After starting, the OpenTelemetry Collector listens on the default gRPC port (4317) on the host machine and Jaeger WEB UI can be accessed at http://localhost:16686.
 
 
 ## Enable OpenTelemetry Tracing in EMQX
