@@ -194,6 +194,67 @@
         - performance/benchmark-xmeter
         - performance/performance-reference
 
+- title_en: Security Guide
+  title_cn: 安全指南
+  path: access-control/security-guide
+  collapsed: true
+  children:
+    - title_en: Authentication
+      title_cn: 认证
+      path: access-control/authn/authn
+      children:
+        - title_en: Password based
+          title_cn: 密码认证
+          path: access-control/authn/pwoverview
+          children:
+            - access-control/authn/mnesia
+            - access-control/authn/mysql
+            - access-control/authn/mongodb
+            - access-control/authn/postgresql
+            - access-control/authn/redis
+            - title_en: LDAP
+              title_cn: LDAP
+              path: access-control/authn/ldap
+              edition: ee
+            - access-control/authn/http
+            - access-control/authn/jwt
+            - access-control/authn/scram
+            - access-control/authn/user_management
+    - title_en: Authorization
+      title_cn: 授权
+      path: access-control/authz/authz
+      children:
+        - access-control/authz/file
+        - access-control/authz/mnesia
+        - access-control/authz/mysql
+        - access-control/authz/mongodb
+        - access-control/authz/postgresql
+        - access-control/authz/redis
+        - title_en: LDAP
+          title_cn: LDAP
+          path: access-control/authz/ldap
+          edition: ee
+        - access-control/authz/http
+    - access-control/blacklist
+    - access-control/flapping-detect
+    - title_en: Network and TLS
+      title_cn: 网络与 TLS
+      path: network/overview
+      collapsed: true
+      children:
+        - network/emqx-mqtt-tls
+        - network/mqtt-client-tls
+        - network/psk-authentication
+        - network/tls-certificate
+      # - network/crl-and-ocsp-stapling
+        - network/crl
+        - network/ocsp
+        - title_en: GMSSL
+          title_cn: 国密 SSL
+          lang: cn
+          path: network/gmssl
+      # - network/ipv6
+
 - title_en: Rule Engine
   title_cn: 规则引擎
   path: data-integration/rules
@@ -361,8 +422,14 @@
           edition: ee
     - title_en: Configuration Manual
       title_cn: 配置手册
+      lang: cn
       edition: ce
-      path: configuration/configuration-manual
+      path: https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/
+    - title_en: Configuration Manual
+      title_cn: 配置手册
+      lang: en
+      edition: ce
+      path: https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/
     - title_en: Configuration Manual
       title_cn: 配置手册
       lang: cn
@@ -449,72 +516,6 @@
       title_cn: 遥测
       path: telemetry/telemetry
       edition: ce
-
-- title_en: Security Guide
-  title_cn: 安全指南
-  path: access-control/security-guide
-  collapsed: true
-  children:
-    - title_en: Access Control
-      title_cn: 访问控制
-      path: access-control/overview
-      collapsed: true
-      children:
-        - title_en: Authentication
-          title_cn: 认证
-          path: access-control/authn/authn
-          children:
-            - title_en: Password based
-              title_cn: 密码认证
-              path: access-control/authn/pwoverview
-              children:
-                - access-control/authn/mnesia
-                - access-control/authn/mysql
-                - access-control/authn/mongodb
-                - access-control/authn/postgresql
-                - access-control/authn/redis
-                - title_en: LDAP
-                  title_cn: LDAP
-                  path: access-control/authn/ldap
-                  edition: ee
-                - access-control/authn/http
-            - access-control/authn/jwt
-            - access-control/authn/scram
-            - access-control/authn/user_management
-        - title_en: Authorization
-          title_cn: 授权
-          path: access-control/authz/authz
-          children:
-            - access-control/authz/file
-            - access-control/authz/mnesia
-            - access-control/authz/mysql
-            - access-control/authz/mongodb
-            - access-control/authz/postgresql
-            - access-control/authz/redis
-            - title_en: LDAP
-              title_cn: LDAP
-              path: access-control/authz/ldap
-              edition: ee
-            - access-control/authz/http
-        - access-control/blacklist
-        - access-control/flapping-detect
-    - title_en: Network and TLS
-      title_cn: 网络与 TLS
-      path: network/overview
-      collapsed: true
-      children:
-        - network/emqx-mqtt-tls
-        - network/mqtt-client-tls
-        - network/psk-authentication
-        - network/tls-certificate
-      # - network/crl-and-ocsp-stapling
-        - network/crl
-        - network/ocsp
-        - title_en: GMSSL
-          title_cn: 国密 SSL
-          lang: cn
-          path: network/gmssl
-      # - network/ipv6
 
 - title_en: Advanced Features
   title_cn: 高级功能

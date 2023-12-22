@@ -15,4 +15,4 @@
 
 - [Introduction to JSON Web Tokens](https://jwt.io/introduction)
 
-想要了解在 EMQX 中如何实现认证和鉴权以及如何进行功能配置，参见[访问控制](../access-control/overview.md)。
+想要了解在 EMQX 中如何实现认证和鉴权以及如何进行功能配置，参见[认证](../access-control/authn/authn.md)和[鉴权](../access-control/authz/authz.md)。
