@@ -97,6 +97,7 @@ Before you create data bridges for TDengine, you need to create two data tables 
 
 ## Create Connector
 
+
 This section demonstrate how to create TDengine data bridges in EMQX Dashboard. It assumes that you run both EMQX and TDengine on the local machine. If you have TDengine and EMQX running remotely, adjust the settings accordingly.
 
 Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to TDengine for messages storage and event recording.
@@ -151,7 +152,7 @@ Data bridges for message storage and event recording require different SQL templ
 
 Now the TDengine data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
 
-## Create Rules for TDengine Data Bridge
+## Create Connector
 
 Now that you have successfully created the data bridge to TDengine, you can continue to create rules to specify the data to be saved into TDengine. You need to create two different rules for messages forward and event records.
 

@@ -78,7 +78,7 @@ pip install flask
 python3 http_server.py
 ```
 
-## Create an HTTP Server Data Bridge
+## Create Connector
 
 This section demonstrates how to configure an HTTP server data bridge to connect to the HTTP server.
 
@@ -98,7 +98,7 @@ This section demonstrates how to configure an HTTP server data bridge to connect
 
 Now the HTTP server data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
 
-## Create a Rule for HTTP Server Data Bridge
+## Create Connector
 
 Now you have successfully created the data bridges to HTTP Server. you can continue to create a rule to forward data to the HTTP Server.
 

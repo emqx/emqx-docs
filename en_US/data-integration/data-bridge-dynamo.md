@@ -108,7 +108,7 @@ The following JSON will be printed if the table was created successfully.
 }
 ```
 
-## Create a DynamoDB Data Bridge
+## Create Connector
 
 This section demonstrates how to create a DynamoDB data bridge in EMQX Dashboard. It assumes that you run both EMQX and DynamoDB on the local machine. If you have Dynamo and EMQX running remotely, adjust the settings accordingly.
 
@@ -145,7 +145,7 @@ This section demonstrates how to create a DynamoDB data bridge in EMQX Dashboard
 
 Now the data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
 
-### Create a Rule for DynamoDB Data Bridge
+### Create Connector
 
 Now that you have successfully created the data bridge to DynamoDB, you can continue to create rules to specify the data to be saved into DynamoDB. You need to create two different rules for messages forward and event records. 
 

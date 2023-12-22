@@ -8,7 +8,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 [PostgreSQL](https://www.postgresql.org/) is the world's most advanced open-source relational database, possessing robust data processing capabilities suitable for everything from simple applications to complex data tasks. EMQX supports integration with PostgreSQL, enabling efficient handling of real-time data streams from IoT devices. This integration supports large-scale data storage, precise querying, and complex data association analysis while ensuring data integrity. Leveraging EMQX's efficient message routing and PostgreSQL's flexible data model, it's easy to monitor device statuses, track events, and audit operations, providing businesses with deep data insights and robust business intelligence support.
 
-This page provides a comprehensive introduction to the data integration between EMQX and PostgreSQL with practical instructions on creating a rule and data bridge.
+This page provides a comprehensive introduction to the data integration between EMQX and PostgreSQL with practical instructions on creating a rule and sink.
 
 ::: tip
 This page is also applicable to MatrixDB.
@@ -43,13 +43,13 @@ PostgreSQL is a popular open-source relational database with a rich set of featu
 - **Flexible Data Operations**: With SQL templates provided by PostgreSQL data bridging, it's easy to write or update data from specific fields to the corresponding tables and columns in the PostgreSQL database, enabling flexible data storage and management.
 - **Integration of Business Processes**: PostgreSQL data bridging allows you to integrate device data with PostgreSQL's rich ecosystem applications, facilitating integration with systems like ERP, CRM, or other custom business systems to achieve advanced business processes and automation.
 - **Combining IoT with GIS Technology**: PostgreSQL offers GIS data storage and querying capabilities, supporting geospatial indexing, geofencing and alerts, real-time location tracking, and geographical data processing, among others. Combined with EMQX's reliable message transmission capability, it can efficiently process and analyze geographical location information from mobile devices such as vehicles, enabling real-time monitoring, intelligent decision-making, and business optimization.
-- **Runtime Metrics**: Support for viewing runtime metrics of each data bridge, such as total message count, success/failure counts, current rates, and more.
+- **Runtime Metrics**: Support for viewing runtime metrics of each sink, such as total message count, success/failure counts, current rates, and more.
 
 Through flexible event handling, extensive message transformation, flexible data operations, and real-time monitoring and analysis capabilities, you can build efficient, reliable, and scalable IoT applications, benefiting your business decisions and optimizations.
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create the PostgreSQL Database data bridges, including how to set up the PostgreSQL server and create data tables.
+This section describes the preparations you need to complete before you start to create the PostgreSQL Database sinks, including how to set up the PostgreSQL server and create data tables.
 
 ### Prerequisites
 
@@ -58,7 +58,7 @@ This section describes the preparations you need to complete before you start to
 
 ### Install PostgreSQL
 
-Install PostgreSQL via Docker, and then run the docker image. 
+Install PostgreSQL via Docker, and then run the docker image.
 
 ```bash
 # To start the PostgreSQL docker image and set the password as public
@@ -79,22 +79,22 @@ CREATE DATABASE emqx_data;
 
 ### Create Data Tables
 
-Use the following SQL statements to create data table `t_mqtt_msg` in PostgreSQL database for storing the client ID, topic, payload, and creating time of every message. 
+Use the following SQL statements to create data table `t_mqtt_msg` in PostgreSQL database for storing the client ID, topic, payload, and creating time of every message.
 
-  ```sql
-  CREATE TABLE t_mqtt_msg (
-    id SERIAL primary key,
-    msgid character varying(64),
-    sender character varying(64),
-    topic character varying(255),
-    qos integer,
-    retain integer,
-    payload text,
-    arrived timestamp without time zone
-  );
-  ```
+```sql
+CREATE TABLE t_mqtt_msg (
+  id SERIAL primary key,
+  msgid character varying(64),
+  sender character varying(64),
+  topic character varying(255),
+  qos integer,
+  retain integer,
+  payload text,
+  arrived timestamp without time zone
+);
+```
 
-Use the following SQL statements to create data table `emqx_client_events` in PostgreSQL database for storing the client ID, event type, and creating time of every event. 
+Use the following SQL statements to create data table `emqx_client_events` in PostgreSQL database for storing the client ID, event type, and creating time of every event.
 
 ```sql
 CREATE TABLE emqx_client_events (
@@ -107,11 +107,7 @@ CREATE TABLE emqx_client_events (
 
 ## Create Connector
 
-This section demonstrates how to create PostgreSQL data bridges in EMQX Dashboard. It assumes that you run both EMQX and PostgreSQL on the local machine. If you have PostgreSQL and EMQX running remotely, adjust the settings accordingly.
-
-You need to create 2 data bridges to PostgreSQL for messages storage and event records respectively. 
-
-### Message storage
+Before add PostgreSQL Sink, you need to create the PostgreSQL connector. It assumes that you run both EMQX and PostgreSQL on the local machine. If you have PostgreSQL and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
 
@@ -119,7 +115,7 @@ You need to create 2 data bridges to PostgreSQL for messages storage and event r
 
 3. In the **Create Connector** page, click to select **PostgreSQL**, and then click **Next**.
 
-4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
+4. Input a name for the sink. The name should be a combination of upper/lower case letters and numbers.
 
 5. Input the connection information:
 
@@ -128,32 +124,72 @@ You need to create 2 data bridges to PostgreSQL for messages storage and event r
    - **Username**: Input `postgres`.
    - **Password**: Input `public`.
 
-6. Configure the **SQL Template**. Use the SQL statements below to insert data. 
+6. Click the **Create** button at the bottom to complete the rule creation. Now that you have finished creating the connector, you will move on to creating a Rule and Sink to specify the data that needs to be written.
 
-   Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements. 
+## Create Message Storage Rule
 
-  ```sql
-  INSERT INTO t_mqtt_msg(msgid, sender, topic, qos, payload, arrived) VALUES(
-    ${id},
-    ${clientid},
-    ${topic},
-    ${qos},
-    ${payload},
-    TO_TIMESTAMP((${timestamp} :: bigint)/1000)
-  )
-  ```
+You need to create two PostgreSQL Sinks for message storage and event logging. The following sections demonstrate the creation of a Sink for message storage and a Sink for event logging.
 
-7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md#configuration).
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the PostgreSQL server.
-9. Then click **Create** to finish the creation of the data bridge.
+In this section we will create our first PostgreSQL Sink to enable storage of client published messages.
 
-### Online/Offline Status Recording
+1. Go to the Dashboard **Integration** -> **Rules** page.
 
-The operating steps are similar to those at the [Message Storage](#message-storage) part expect for the SQL template and SQL rules. 
+2. Click **Create** in the upper right corner of the page.
 
-The SQL template for online/offline status recording is as follows. 
+3. Enter the rule ID `my_rule` and enter the rule in the SQL editor. Here we choose to store MQTT messages with `t/#` topic to PostgreSQL, make sure that the fields selected by the rule (in the SELECT section) contain all the variables used in the SQL template, here the rule SQL is as follows:
 
-Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+```sql
+SELECT
+*
+FROM
+"t/#"
+```
+
+4. To add an action, select PostgreSQL from the **Type of Action** drop-down, leave the **Action** drop-down at the default **Create Action** option, or you can select a previously created PostgreSQL action from the Action drop-down box. Here we create a brand new Sink and add it to the rule.
+
+5. Enter the name and description of the Sink in the form below.
+
+6. Configure the **SQL Template**. Use the SQL statements below to insert data.
+
+   Note: This is a [preprocessed SQL](./data-bridges.md#prepared-statement), so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+
+```sql
+INSERT INTO t_mqtt_msg(msgid, sender, topic, qos, payload, arrived) VALUES(
+  ${id},
+  ${clientid},
+  ${topic},
+  ${qos},
+  ${payload},
+  TO_TIMESTAMP((${timestamp} :: bigint)/1000)
+)
+```
+
+7. **Advanced Settings** (optional) to configure parameters such as synchronous/asynchronous mode, queue vs. batch, etc. as appropriate.
+
+8. Click the **Create** button to complete the creation of the Sink. After successful creation, the page will return to the Create Rule page, and the new Sink will be added to the Rule Action.
+
+9。 Go back to the Rule Creation page and click the **Create** button to complete the rule creation.
+
+Now that you have successfully created the rule, you can click **Integration** -> **Rules** page to see the newly created rule and also see the newly created PostgreSQL Sink in the **Action (Sink)** tab.
+
+You can also click **Integration** -> **Flow Designer** to see the topology, through which you can visualize that the messages under topic `t/#` are being written to PostgreSQL after being parsed by the rule `my_rule`.
+
+## Create Online/Offline Status Recording Rule
+
+The operating steps are similar to those at the [Message Storage](#create-message-storage-rule) part expect for the SQL template and SQL rules.
+
+The SQL template for online/offline status recording is as follows.
+
+```sql
+SELECT
+  *
+FROM
+  "$events/client_connected", "$events/client_disconnected"
+```
+
+The sink SQL rule is as follows.
+
+Note: This is a [preprocessed SQL](./data-bridges.md#prepared-statement), so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
 
 ```sql
 INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
@@ -163,57 +199,15 @@ INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
 )
 ```
 
-Now the PostgreSQL data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
+## Test Rules
 
-## Create Rules for PostgreSQL Data Bridge 
-
-After you have successfully created the data bridge to PostgreSQL, you can continue to create rules to specify the data to be saved into PostgreSQL and rules for the online/offline status recording. 
-
-### Message Storage
-
-1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
-
-2. Click **Create** on the top right corner of the page.
-
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `t/#`  to PostgreSQL, we can use the SQL syntax below. 
-
-   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part. 
-
-  ```sql
-SELECT 
-  *
-FROM
-  "t/#"
-  ```
-
-4. Then click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data bridge**.  
-5. Then, click the **Add** button. 
-6. Then click the **Create** button to finish the setup. 
-
-### Online/Offline Status Recording
-
-The creating steps are similar to those at the [Message Storage](#message-storage) part except for the SQL rules.
-
-The SQL rule is as follows: 
-
-```sql
-SELECT
-  *
-FROM 
-  "$events/client_connected", "$events/client_disconnected"
-```
-
-Now you have successfully created the data bridge to PostgreSQL. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to PostgreSQL after parsing by rule  `my_rule`. 
-
-## Test Data Bridges and Rules
-
-Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event. 
+Use MQTTX to send a message to topic `t/1` to trigger an online/offline event.
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello PostgreSQL" }'
 ```
 
-Check the running status of the two data bridges, there should be one new incoming and one new outgoing message. 
+Check the running status of the two sinks, there should be one new incoming and one new outgoing message.
 
 Check whether the data is written into the `t_mqtt_msg` data table.
 

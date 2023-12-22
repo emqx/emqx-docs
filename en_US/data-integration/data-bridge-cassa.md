@@ -81,7 +81,7 @@ docker exec -it cassa cqlsh "-e \
         PRIMARY KEY(msgid, topic));"
 ```
 
-## Create Cassandra Data Bridge
+## Create Connector
 
 This section demonstrates how to create a Cassandra data bridge in EMQX Dashboard. It assumes that you run both EMQX and Cassandra on the local machine. If you have Cassandra and EMQX running remotely, adjust the settings accordingly.
 
@@ -111,7 +111,7 @@ This section demonstrates how to create a Cassandra data bridge in EMQX Dashboar
 
 Now the Cassandra data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
 
-## Create a Rule for Cassandra Data Bridge
+## Create Connector
 
 Now that you have successfully created the data bridge, you can continue to create rules to specify the data to be stored in Cassandra. 
 

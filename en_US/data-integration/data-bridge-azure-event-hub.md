@@ -58,7 +58,7 @@ In order to use Azure Event Hub data integration, a Namespace and Event Hub must
 - [Get an Event Hubs connection string](https://learn.microsoft.com/en-us/azure/event-hubs/event-hubs-get-connection-string)
 - [What is Azure Event Hubs for Apache Kafka](https://learn.microsoft.com/en-us/azure/event-hubs/azure-event-hubs-kafka-overview)
 
-## Create Azure Event Hubs Data Bridge
+## Create Connector
 
 This section demonstrates how to create Azure Event Hubs producer data bridge via Dashboard.
 
@@ -98,7 +98,7 @@ This section demonstrates how to create Azure Event Hubs producer data bridge vi
 
 Now the Azure Event Hub data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**.
 
-## Create Rule for Azure Event Hubs Producer Data Bridge
+## Create Connector
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 

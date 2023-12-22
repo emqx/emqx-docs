@@ -68,7 +68,7 @@ OK
 
 Now you have successfully installed Redis and verified the installation with the `SET` and `GET` commands. For more Redis commands, see [Redis Commands](https://redis.io/commands/).
 
-### Create Redis Data Bridge
+### Create Connector
 
 This section introduces how to configure the Redis data bridges to:
 
@@ -115,7 +115,7 @@ You need to create 2 separate Redis data bridges for the messaging caching and s
 
 Now the Redis data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**.
 
-### Create Rules for Redis Data Bridge
+### Create Connector
 
 After you successfully created the data bridge to Redis, you can continue to create rules for message caching and message discard statistics.
 
