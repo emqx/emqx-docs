@@ -2,14 +2,14 @@
 
 EMQX 将主题重写、代理订阅等功能通过内置模块的形式提供，支持用户随时启停模块来启停相应功能。目前内置模块已支持以下功能：
 
-| Module Name              | Feature                                |
-| ------------------------ | -------------------------------------- |
-| `emqx_mod_delayed`       | [延迟发布](../mqtt/mqtt-delayed-publish.md)         |
-| `emqx_mod_topic_metrics` | [主题指标统计](../observability/topic-metrics.md) |
-| `emqx_mod_subscription`  | [代理订阅](../mqtt/mqtt-auto-subscription.md)    |
-| `emqx_mod_acl_internal`  | [内置 ACL](../access-control/authz/authz.md)                |
-| `emqx_mod_rewrite`       | [主题重写](../mqtt/mqtt-topic-rewrite.md)         |
-| `emqx_mod_presence`      | 上下线通知                             |
+| Module Name              | Feature                                            |
+|--------------------------|----------------------------------------------------|
+| `emqx_mod_delayed`       | [延迟发布](../messaging/mqtt-delayed-publish.md)   |
+| `emqx_mod_topic_metrics` | [主题指标统计](../observability/topic-metrics.md)  |
+| `emqx_mod_subscription`  | [代理订阅](../messaging/mqtt-auto-subscription.md) |
+| `emqx_mod_acl_internal`  | [内置 ACL](../access-control/authz/authz.md)       |
+| `emqx_mod_rewrite`       | [主题重写](../messaging/mqtt-topic-rewrite.md)     |
+| `emqx_mod_presence`      | 上下线通知                                         |
 
 EMQX 为内置模块提供了[命令行接口](../admin/cli.md#endpoint-modules)和 [HTTP API](./http-api.md#endpoint-modules)，用户可以很轻松地通过这些接口来启停模块，例如：
 
