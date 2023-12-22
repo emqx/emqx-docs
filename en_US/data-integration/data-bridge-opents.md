@@ -59,7 +59,7 @@ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
 
 ```
 
-## Create OpenTSDB Data Bridge
+## Create Connector
 
 This section demonstrates how to create an OpenTSDB data bridge in EMQX Dashboard. It assumes that you run both EMQX and OpenTSDB on the local machine. If you have OpenTSDB and EMQX running remotely, adjust the settings accordingly.
 
@@ -86,7 +86,7 @@ This section demonstrates how to create an OpenTSDB data bridge in EMQX Dashboar
 
 Now the OpenTSDB data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
 
-## Create Rules for OpenTSDB Data Bridge
+## Create Connector
 
 Now that you have successfully created the data bridge to OpenTSDB, you can continue to create rules to specify the data to be saved into OpenTSDB. The data reported by the client in this tutorial is as follows:
 

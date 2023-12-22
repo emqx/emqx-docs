@@ -95,6 +95,7 @@ Use the following SQL statements to create data table `t_emqx_client_events` in 
 
 ## Create Connector
 
+
 This section demonstrates how to create Oracle Database data bridges. It assumes that you run both EMQX and Oracle Database on the local machine. If you have Oracle Database and EMQX running remotely, adjust the settings accordingly.
 
 Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to Oracle Database for message storage and event recording.
@@ -153,7 +154,7 @@ n
 
 Now the Oracle Database data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**.
 
-## Create Rules for Oracle Database Data Bridge
+## Create Connector
 
 After you have successfully created the data bridges to Oracle Database, you can continue to create rules to specify the data to be saved into Oracle Database and rules for the online/offline status recording.
 
