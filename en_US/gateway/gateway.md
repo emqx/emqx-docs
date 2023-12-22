@@ -26,6 +26,8 @@ The Multi-Protocol Gateway supports the MQTT-SN, STOMP, CoAP, and LwM2M protocol
 - [LwM2M](./lwm2m.md)
 - [ExProto](./exproto.md)
 - [OCPP](./ocpp.md)
+- [GB/T 32960](./gbt32960.md)
+- [JT/T 808](./jt808.md)
 
 {% endemqxee %}
 
@@ -49,14 +51,16 @@ Here's a brief overview of each component:
 
 Each gateway can have multiple listeners enabled, and different protocol gateways support the following listener types:
 
-|         | TCP  | UDP  | SSL  | DTLS | Websocket | Websocket over TLS |
-| ------- | ---- | ---- | ---- | ---- | --------- | ------------------ |
-| MQTT-SN |      | ✔︎    |      | ✔︎    |           |                    |
-| STOMP   | ✔︎    |      | ✔︎    |      |           |                    |
-| CoAP    |      | ✔︎    |      | ✔︎    |           |                    |
-| LwM2M   |      | ✔︎    |      | ✔︎    |           |                    |
-| ExProto | ✔︎    | ✔︎    | ✔︎    | ✔︎    |           |                    |
-| OCPP    |      |      |      |      | ✔︎         | ✔︎                  |
+|            | TCP  | UDP  | SSL  | DTLS | Websocket | Websocket over TLS |
+| ---------- | ---- | ---- | ---- | ---- | --------- | ------------------ |
+| MQTT-SN    |      | ✔︎    |      | ✔︎    |           |                    |
+| STOMP      | ✔︎    |      | ✔︎    |      |           |                    |
+| CoAP       |      | ✔︎    |      | ✔︎    |           |                    |
+| LwM2M      |      | ✔︎    |      | ✔︎    |           |                    |
+| ExProto    | ✔︎    | ✔︎    | ✔︎    | ✔︎    |           |                    |
+| OCPP       |      |      |      |      | ✔︎         | ✔︎                  |
+| GB/T 32960 | ✔︎    |      | ✔︎    |      |           |                    |
+| JT/T 808   | ✔︎    |      |      | ✔︎    |           |                    |
 ### Message Format
 
 To ensure compatibility with the PUB/SUB messaging model, each gateway type must adapt to the presence or absence of a PUB/SUB concept in its underlying protocol.
@@ -74,14 +78,16 @@ Authentication is the process of verifying the identity of a client attempting t
 
 Different gateways may support different types of authenticators, but all gateways support HTTP-based authentication. [HTTP-based authentication](../access-control/authn/http.md). See the table below for the authentication types supported:
 
-|         | HTTP Server | Built-in Database | MySQL | MongoDB | PostgreSQL | Redis | JWT  |
-| ------- | ----------- | ----------------- | ----- | ------- | ---------- | ----- | ---- |
-| MQTT-SN | ✔︎           |                   |       |         |            |       |      |
-| STOMP   | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    |
-| CoAP    | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    |
-| LwM2M   | ✔︎           |                   |       |         |            |       |      |
-| Exproto | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    |
-| OCPP    | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    |
+|            | HTTP Server | Built-in Database | MySQL | MongoDB | PostgreSQL | Redis | JWT  |
+| ---------- | ----------- | ----------------- | ----- | ------- | ---------- | ----- | ---- |
+| MQTT-SN    | ✔︎           |                   |       |         |            |       |      |
+| STOMP      | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    |
+| CoAP       | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    |
+| LwM2M      | ✔︎           |                   |       |         |            |       |      |
+| Exproto    | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    |
+| OCPP       | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    |
+| GB/T 32960 | ✔︎           |                   |       |         |            |       |      |
+| JT/T 808   | N/A         | N/A               | N/A   | N/A     | N/A        | N/A   | N/A  |
 
 Note: Any client can log in if no authenticator is configured. 
 

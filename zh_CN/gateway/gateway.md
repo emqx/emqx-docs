@@ -25,6 +25,8 @@
 - [LwM2M](./lwm2m.md)
 - [ExProto](./exproto.md)
 - [OCPP](./ocpp.md)
+- [GB/T 32960](./gbt32960.md)
+- [JT/T 808](./jt808.md)
 
 {% endemqxee %}
 
