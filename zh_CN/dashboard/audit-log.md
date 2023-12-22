@@ -39,6 +39,8 @@ log.audit {
   rotation_count = 10
   rotation_size = 50MB
   time_offset = system
+  ignore_high_frequency_requst = true
+  max_filter_size = 5000
 }
 ```
 
