@@ -39,7 +39,7 @@ EMQX 与 AWS Kinesis Data Streams 的数据集成可以为您的业务带来以�
 
 利用 AWS Kinesis Data Streams 构建的流数据管道，可以大幅降低 EMQX 与 AWS 平台之间的接入难度，为用户提供更丰富、灵活的数据处理方案，助力 EMQX 用户在 AWS 上构建功能完备、性能卓越的数据驱动型应用。
 
-## 桥接准备
+## 准备工作
 
 本节介绍了在 EMQX 中创建 Amazon Kinesis 数据桥接之前需要做的准备工作，包括如何创建 Kinesis 数据流并在本地模拟数据流服务。
 
