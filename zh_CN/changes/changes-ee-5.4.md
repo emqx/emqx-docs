@@ -36,7 +36,7 @@
     - `tcp_options.*`
     - `ssl_options.*`
 
-- [#11608](https://github.com/emqx/emqx/pull/11608) 集成了 LDAP 绑定操作作为新的认证器，提供了更多灵活性和安全性的用户认证方式。
+- [#11608](https://github.com/emqx/emqx/pull/11608) 客户端认证 LDAP 数据源支持通过绑定操作进行认证，提供了更多灵活性和安全性的用户认证方式。
 
 - [#11766](https://github.com/emqx/emqx/pull/11766) 为 REST API 实现了初步的基于角色的访问控制。在这个版本中，有三个预定义的角色：
 
