@@ -14,15 +14,15 @@
 
 - [#11921](https://github.com/emqx/emqx/pull/11921) Introduced Open Telemetry Logs Handler that allows to format log events in alignment with the Open Telemetry log data model. This handler facilitates the exportation of formatted log events to a configured Open Telemetry collector or back-end, thereby enhancing log management and integration capabilities.
 
-- [#11935](https://github.com/emqx/emqx/pull/11935) Switched to the new `v2` routing store schema by default. New schema improves both subscription and routing performance, especially in scenarios with concurrent subscriptions to topic filters sharing common wildcard prefixes. However, it does come with a minor increase in memory usage. This schema also eliminates the need for a separate index, thus inconsistencies in the routing state rarely encountered in previous versions should no longer be possible.
+- [#11935](https://github.com/emqx/emqx/pull/11935) Switched to the new `v2` routing store schema by default. The new schema improves both subscription and routing performance, especially in scenarios with concurrent subscriptions to topic filters sharing common wildcard prefixes. However, it does come with a minor increase in memory usage. This schema also eliminates the need for a separate index, thus inconsistencies in the routing state rarely encountered in previous versions should no longer be possible.
 
-  If a cluster is rolling upgraded from older version, the cluster will continue to use `v1` store until a full cluster (non-rolling) restart happens.
+  If a cluster is rolling upgraded from an older version, the cluster will continue to use `v1` store until a full cluster (non-rolling) restart happens.
 
   Users can still opt for the previous schema by configuring the `broker. routing.storage_schema` option to `v1`. However, this also requires a complete, non-rolling restart of the cluster to take effect.
 
 - [#11984](https://github.com/emqx/emqx/pull/11984) Implemented Open Telemetry distributed tracing feature.
 
-- [#12017](https://github.com/emqx/emqx/pull/12017) Implemented a dedicated HTTP API for the import and export of configuration and user data. 
+- [#12017](https://github.com/emqx/emqx/pull/12017) Implemented a dedicated REST API for the import and export of configuration and user data. 
 
 - [#12040](https://github.com/emqx/emqx/pull/12040) Upgraded QUIC protocol stack.
 
@@ -37,8 +37,8 @@
 - [#12201](https://github.com/emqx/emqx/pull/11994) Added support for hot updates to TCP/SSL/WS/WSS MQTT listener configurations. This feature allows you to modify most configuration parameters without restarting the listener and disconnecting the clients. However, there are some limitations:
 
   - For TCP/SSL listeners, changes to the following parameters will still require a listener restart and client reconnection:
-    - `bind``
-    - ``tcp_options.backlog`
+    - `bind`
+    - `tcp_options.backlog`
   
   - For WS/WSS (WebSocket) listeners, modifying transport-related parameters (listed below) will result in the listening socket being reopened, but established connections will remain uninterrupted.
     - `bind`
