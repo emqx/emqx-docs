@@ -105,7 +105,7 @@ CREATE TABLE emqx_client_events (
 );
 ```
 
-## Create PostgreSQL Data Bridges
+## Create Connector
 
 This section demonstrates how to create PostgreSQL data bridges in EMQX Dashboard. It assumes that you run both EMQX and PostgreSQL on the local machine. If you have PostgreSQL and EMQX running remotely, adjust the settings accordingly.
 
@@ -163,7 +163,7 @@ INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
 )
 ```
 
-Now the PostgreSQL data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+Now the PostgreSQL data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
 
 ## Create Rules for PostgreSQL Data Bridge 
 

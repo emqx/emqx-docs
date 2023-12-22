@@ -176,7 +176,7 @@ Now the RabbitMQ data bridge should appear in the data bridge list (**Integratio
 
 Now a rule to forward data to RabbitMQ via a RabbitMQ bridge is created. You can click **Integration -> Flows** to view the topology. It can be seen that the messages under the topic `t/#` are sent and saved to RabbitMQ.
 
-## Test Data Bridge and Rule
+## Test Rule
 
 You can use the built-in WebSocket client in the EMQX dashboard to test our rule and bridge.
 

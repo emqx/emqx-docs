@@ -143,7 +143,7 @@ This section demonstrates how to create a DynamoDB data bridge in EMQX Dashboard
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into DynamoDB. You can also create rules by following the steps in [Create Rules for DynamoDB Data Bridge](#create-rules-for-dynamodb-data-bridge).
 
-Now the data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+Now the data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
 
 ### Create a Rule for DynamoDB Data Bridge
 
@@ -186,7 +186,7 @@ Now that you have successfully created the data bridge to DynamoDB, you can cont
 
 Now you have successfully created the data bridge to DynamoDB. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to DynamoDB after parsing by rule `my_rule`. 
 
-### Test Data Bridge and Rule
+### Test Rule
 
 Use MQTT X to send a message to topic `t/1` to trigger an online/offline event. 
 

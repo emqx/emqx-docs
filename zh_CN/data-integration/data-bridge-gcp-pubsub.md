@@ -66,7 +66,7 @@ MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发
 
 ### 在 GCP Pub/Sub 中创建主题
 
-1. 打开 [Pub/Sub 控制台](https://console.cloud.google.com/cloudpubsub)，点击 **CREATE TOPIC，**输入自定义的 **Topic ID，**点击 **CREATE** 即可完成创建。
+1. 打开 [Pub/Sub 控制台](https://console.cloud.google.com/cloudpubsub)，点击 **CREATE TOPIC**，输入自定义的 **Topic ID**，点击 **CREATE** 即可完成创建。
 
 ![GCP PubSub 创建主题](./assets/gcp_pubsub/gcp-pubsub-topic-create.png)
 

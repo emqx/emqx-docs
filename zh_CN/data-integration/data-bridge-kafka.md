@@ -86,7 +86,7 @@ bin/kafka-topics.sh --create --topic testtopic-in --bootstrap-server localhost:9
 bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:9092
 ```
 
-## 创建连接器
+## 创建 Kafka 生产者连接器
 
 在添加 Kafka Sink 前，您需要创建 Kafka 生产者连接器，以便 EMQX 与 Kafka 建立连接。
 
@@ -128,7 +128,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 6. 在下方的表单中输入 Sink 的名称与描述。
 
-7. 在**连接器**下拉框中选择刚刚创建的 `my-kafka` 连接器。您也可以点击下拉框旁边的创建按钮，在弹出框中快捷创建新的连接器，所需的配置参数按照参照[创建连接器](#创建连接器)。
+7. 在**连接器**下拉框中选择刚刚创建的 `my-kafka` 连接器。您也可以点击下拉框旁边的创建按钮，在弹出框中快捷创建新的连接器，所需的配置参数按照参照[创建 Kafka 生产者连接器](#创建 Kafka 生产者连接器)。
 
 8. 配置 Sink 的数据发送方式，包括：
 
@@ -151,7 +151,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 ![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
 
-### 测试 Kafka 生产者规则
+## 测试 Kafka Sink 规则
 
 为了测试 Kafka 生产者 Sink 和规则是否按照您的预期工作，您可以使用 [MQTTX](https://mqttx.app/zh) 来模拟客户端向 EMQX 发布 MQTT 消息。
 
@@ -169,13 +169,9 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
    bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092  --topic testtopic-in
    ```
 
-## 创建 Kafka Source 规则
+## 创建 Kafka 消费者连接器
 
-本节演示了如何创建 Kafka Source 以接收来自 Kafka 的数据，以及如何选择性地创建规则来进一步处理数据，还包括如何测试规则和 Kafka Source。
-
-### 创建 Kafka Source
-
-本节展示了如何创建 Soure 以接收来自 Kafka 的数据。通过 Source，Kafka 主题 `testtopic-out` 的消息将被转发到 EMQX 中的 MQTT 主题 `t/1`。
+在添加 Kafka Soure 前，您需要创建 Kafka 消费者连接器，以便 EMQX 与 Kafka 建立连接。
 
 1. 进入 EMQX Dashboard，并点击 **集成** -> **连接器**。
 
@@ -236,7 +232,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 <img src="./assets/Kafka_consumer_bridge.png" alt="Kafka_consumer_bridge" style="zoom:67%;" />
 
-### 为 Kafka Source 创建规则
+## 创建 Kafka Source 规则
 
 本节演示了如何在 EMQX 中创建规则，以进一步处理由配置的 Kafka Source 转发的消息，并将消息重新发布到 MQTT 主题。
 
@@ -268,7 +264,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 ![Kafka_consumer_rule](./assets/Kafka_consumer_rule.png)
 
-### 测试 Kafka Source 和规则
+## 测试 Kafka Source 规则
 
 为了测试 Kafka Source 和规则是否如预期工作，您可以使用 [MQTTX](https://mqttx.app/zh) 模拟一个客户端订阅 EMQX 中的主题，并使用 Kafka 生产者向 Kafka 主题生产数据。然后，检查 Kafka 的数据是否被 EMQX 重新发布到客户端订阅的主题。
 

@@ -96,7 +96,7 @@ This section demonstrates how to create Azure Event Hubs producer data bridge vi
 
    :::
 
-Now the Azure Event Hub data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
+Now the Azure Event Hub data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**.
 
 ## Create Rule for Azure Event Hubs Producer Data Bridge
 
@@ -123,7 +123,7 @@ FROM
 
 Now you have successfully created the data bridge to Azure Event Hub producer data bridge. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Azure Event Hub after parsing by rule  `my_rule`.
 
-## Test Data Bridge and Rule
+## Test Rule
 
 To test if the Kafka producer data bridge and rule work as you expected, you can use the [MQTTX](https://mqttx.app/) to simulate a client to publish MQTT messages to EMQX.
 

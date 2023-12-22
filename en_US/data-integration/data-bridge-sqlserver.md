@@ -274,7 +274,7 @@ This section demonstrates how to create Microsoft SQL Server data bridge for mes
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Microsoft SQL Server. You can also create rules by following the steps in [Create Rules for Microsoft SQL Server Data Bridge](#create-rules-for-sqlserver-data-bridge).
 
-Now that you have created the data bridge, and the Microsoft SQL Server data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
+Now that you have created the data bridge, and the Microsoft SQL Server data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**.
 
 
 ## Create Rules for Microsoft SQL Server Data Bridge
@@ -315,7 +315,7 @@ After you have successfully created the data bridge to Microsoft SQL Server, you
 
 Now you have successfully created the rule for Microsoft SQL Server data bridge. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Microsoft SQL Server after parsing by rule  `my_rule`.
 
-## Test Data Bridge and Rule
+## Test Rule
 
 Use MQTT X  to send a message to topic  `t/1`  to trigger an online/offline event.
 

@@ -105,7 +105,7 @@ This section demonstrates how to create a GreptimeDB data bridge in EMQX Dashboa
 
 9. Click the **Create** button to finish the setup.
 
-Now the GreptimeDB data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as `Connected`.
+Now the GreptimeDB data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as `Connected`.
 
 ## Create a Rule for GreptimeDB Bridge
 
@@ -131,7 +131,7 @@ You can continue to create rules to specify the data to be saved into GreptimeDB
 
 Now a rule to forward data to GreptimeDB via a GreptimeDB bridge is created. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to GreptimeDB after parsing by rule  `my_rule`.
 
-## Test Data Bridge and Rule
+## Test Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 

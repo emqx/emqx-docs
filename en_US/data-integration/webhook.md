@@ -83,7 +83,7 @@ python3 http_server.py
 
 ### Create Webhook
 
-1. Go to Dashboard **Data Integration** -> **Webhook** page.
+1. Go to Dashboard **Integration** -> **Webhook** page.
 2. Click the **Create** button at the top-right corner of the page.
 3. Enter Webhook name and notes, which should be a combination of uppercase and lowercase English letters and numbers. Here you can enter `my_webhook`.
 4. Select the trigger according to your needs, in this case, select **All messages and events**. For other options, refer to [How it Works](#how-it-works).

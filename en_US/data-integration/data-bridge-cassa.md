@@ -109,7 +109,7 @@ This section demonstrates how to create a Cassandra data bridge in EMQX Dashboar
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Cassandra. You can also create rules by following the steps in [Create Rules for Cassandra Data Bridge](#create-rules-for-cassandra-data-bridge).
 
-Now the Cassandra data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+Now the Cassandra data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
 
 ## Create a Rule for Cassandra Data Bridge
 
@@ -135,7 +135,7 @@ Now that you have successfully created the data bridge, you can continue to crea
 
 After creating the data bridge to Cassandra. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Cassandra after parsing by rule `my_rule`.
 
-## Test Data Bridge and Rule
+## Test Rule
 
 Use MQTTX to send messages to topic  `t/1`:
 

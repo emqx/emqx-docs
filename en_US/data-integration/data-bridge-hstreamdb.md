@@ -564,7 +564,7 @@ The demonstration in this section assumes you run EMQX and HStreaDB in docker on
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into HStreamDB. You can also create rules by following the steps in [Create Rules for HStreamDB Data Bridge](#create-rules-for-hstreamdb-data-bridge).
 
-Now the HStream data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
+Now the HStream data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**.
 
 ## Create Rules for HStreamDB Data Bridge
 
@@ -601,7 +601,7 @@ After you have successfully created the data bridge to HStreamDB, you can contin
 
 Now you have successfully created the rule for HStreamDB data bridge. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to HStreamDB after parsing by rule  `my_rule`.
 
-## Test Data Bridge and Rule
+## Test Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 

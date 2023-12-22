@@ -113,7 +113,7 @@ You need to create 2 separate Redis data bridges for the messaging caching and s
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Redis. You can also create rules by following the steps in [Create Rules for Redis Data Bridge](#create-rules-for-redis-data-bridge).
 
-Now the Redis data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
+Now the Redis data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**.
 
 ### Create Rules for Redis Data Bridge
 
