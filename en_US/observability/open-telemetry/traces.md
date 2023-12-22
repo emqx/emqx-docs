@@ -2,13 +2,16 @@
 
 [OpenTelemetry tracing](https://opentelemetry.io/docs/concepts/signals/traces/) is a specification for tracing the flow of requests in a distributed system, allowing you to trace how requests flow through a distributed system and providing the ability to visualize and analyze the performance and behavior of requests. In the MQTT scenario, this concept can be used to trace requests across different participants in MQTT message transmission (Publisher - MQTT server - Subscriber).
 
-"Trace context" is a mechanism used in distributed tracing to track and identify requests or transactions that span multiple systems and services. In the [W3C Trace Context MQTT](https://w3c.github.io/trace-context-mqtt/) document, this concept is applied to the MQTT protocol to enable tracking of requests across different participants in MQTT message transmission. This allows system administrators or developers to understand how messages flow through the entire system. 
+"Trace context" is a mechanism used in distributed tracing to track and identify requests or transactions that span multiple systems and services. In the [W3C Trace Context MQTT](https://w3c.github.io/trace-context-mqtt/) document, this concept is applied to the MQTT protocol to enable tracking of requests across different participants in MQTT message transmission. This allows system administrators or developers to understand how messages flow through the system. 
 
 EMQX's inherent ability to propagate trace context enables it to seamlessly participate in distributed tracing systems. This propagation is achieved simply by forwarding the `traceparent` and `tracestate` user properties from the message publisher to the subscriber. When EMQX forwards an application message to a client, it ensures the integrity of the trace context is maintained and transmitted unchanged. This method is fully compliant with [MQTT specification 3.3.2.3.7](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901116), ensuring consistency and reliability in trace data transmission.
 
 ::: tip Note
 
 User-Property was introduced in MQTT 5.0, so EMQX can extract and propagate Trace Context only when MQTT 5.0 is used.
+
+For non-MQTT 5.0 clients, it is necessary to enable the **Traces All Messages** option in EMQX. EMQX will automatically add a trace ID to messages for internal distributed tracing.
+
 :::
 
 With OpenTelemetry distributed tracing, EMQX system administrators or developers can monitor and analyze the performance and behavior of IoT applications in real-time. It allows for quick detection and resolution of issues when they occur.
