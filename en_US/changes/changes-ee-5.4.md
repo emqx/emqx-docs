@@ -4,29 +4,16 @@
 
 ### Enhancements
 
-- [#12201](https://github.com/emqx/emqx/pull/11994) Support hot update of TCP/SSL/WS/WSS MQTT listeners configuration.
-
-  This allows changing most of the configuration parameters without restarting the listener and disconnecting the clients. The limitations are:
-
-  - For TCP/SSL listeners, changes to the following parameters still require listener restart and clients reconnect:
-    * `bind`
-    * `tcp_options.backlog`
-
-    - For WS/WSS (WebSocket) listeners, changing transport related parameters will cause listening socket to be re-opened, but established connections will stay uninterrupted.
-	 * `bind`
-	 * `tcp_options.*`
-	 * `ssl_options.*`
-
 - [#11884](https://github.com/emqx/emqx/pull/11884) Modified the Prometheus API and configuration to implement the following improvements:
-  
-  - Restructured configuration sections to group related settings, improving readability and maintainability.
+
+  - Restructured configuration sections to group-related settings, improving readability and maintainability.
   - Introduced `enable_basic_auth` configuration for basic authentication on the scrape API endpoint, enhancing security.
-  - Maintained backwards compatibility while refactoring code, avoiding breaking changes.
-  
+  - Maintained backward compatibility while refactoring code, avoiding breaking changes.
+
 - [#11896](https://github.com/emqx/emqx/pull/11896) Introduced an enhancement for configuring sensitive authentication fields in bridges, such as passwords, tokens, and secret keys. This improvement allows the use of secrets stored as files in the file system. These secrets can be securely referenced in configuration files using the special `file://` prefix, enhancing the security of sensitive data handling in bridge configurations.
 
 - [#11921](https://github.com/emqx/emqx/pull/11921) Introduced Open Telemetry Logs Handler that allows to format log events in alignment with the Open Telemetry log data model. This handler facilitates the exportation of formatted log events to a configured Open Telemetry collector or back-end, thereby enhancing log management and integration capabilities.
-  
+
 - [#11935](https://github.com/emqx/emqx/pull/11935) Switched to the new `v2` routing store schema by default. New schema improves both subscription and routing performance, especially in scenarios with concurrent subscriptions to topic filters sharing common wildcard prefixes. However, it does come with a minor increase in memory usage. This schema also eliminates the need for a separate index, thus inconsistencies in the routing state rarely encountered in previous versions should no longer be possible.
 
   If a cluster is rolling upgraded from older version, the cluster will continue to use `v1` store until a full cluster (non-rolling) restart happens.
@@ -39,11 +26,23 @@
 
 - [#12040](https://github.com/emqx/emqx/pull/12040) Upgraded QUIC protocol stack.
 
+- [#12201](https://github.com/emqx/emqx/pull/11994) Added support for hot updates to TCP/SSL/WS/WSS MQTT listener configurations. This feature allows you to modify most configuration parameters without restarting the listener and disconnecting the clients. However, there are some limitations:
+
+  - For TCP/SSL listeners, changes to the following parameters will still require a listener restart and client reconnection:
+  - `bind`
+    - ``tcp_options.backlog`
+
+  - For WS/WSS (WebSocket) listeners, modifying transport-related parameters (listed below) will result in the listening socket being reopened, but established connections will remain uninterrupted.
+    - `bind`
+  - `tcp_options.*`
+    - `ssl_options.*`
+
 - [#11608](https://github.com/emqx/emqx/pull/11608) Integrated LDAP bind operation as a new authenticator, providing a more flexible and secure method for user authentication.
 
 - [#11766](https://github.com/emqx/emqx/pull/11766) Implemented a preliminary Role-Based Access Control for the REST API. In this version, there are three predefined roles:
-- Administrator: This role can access all resources.
-  
+
+  - Administrator: This role can access all resources.
+
   - Viewer: This role can only view resources and data, corresponding to all GET requests in the REST API.
 
   - Publisher: Specifically tailored for MQTT message publishing, this role is confined to accessing endpoints related to message publication.

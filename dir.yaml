@@ -668,17 +668,14 @@
     - title_en: Releases
       title_cn: 版本发布
       edition: ee
-      path: changes/changes-ee-5.3
+      path: changes/changes-ee-5.4
     - title_en: Releases
       title_cn: 版本发布
       edition: ce
-      path: changes/changes-ce-5.3
-    - title_en: 从 V4 升级到 V5 的不兼容更改
-      title_cn: 从 V4 升级到 V5 的不兼容更改
-      lang: cn
-      path: deploy/upgrade-from-v4
-    - title_en: Incompatible Changes
-      title_cn: 不兼容变更
+      path: changes/changes-ce-5.4
+    - changes/breaking-changes-5.4
+    - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
+      title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
       path: changes/breaking-changes-5.1.0
       children:
         - changes/auth-4.4-to-5.1-compatibility
