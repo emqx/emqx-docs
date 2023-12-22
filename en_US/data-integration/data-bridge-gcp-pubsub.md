@@ -166,7 +166,7 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
     A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into GCP PubSub. You can also create rules by following the steps in [Create Rules for GCP PubSub Data Bridge](#create-rules-for-GCP-PubSub-data-bridge).
 
-## Create a Rule for GCP PubSub Producer Data Bridge
+## Create Connector
 
 You can continue to create rules to specify the data to be saved into GCP PubSub.
 

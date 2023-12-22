@@ -134,7 +134,7 @@ In Linux, you should change the `host.docker.internal` to your real IP address.
 
 :::
 
-## Create RocketMQ Data Bridge
+## Create Connector
 
 This section demonstrates how to create the RockeMQ data bridge in EMQX Dashboard. It assumes that you run both EMQX and RocketMQ on the local machine. If you have RocketMQ and EMQX running remotely, adjust the settings accordingly.
 
@@ -166,7 +166,7 @@ This section demonstrates how to create the RockeMQ data bridge in EMQX Dashboar
 
 Now the RocketMQ data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
 
-## Create Rules for RocketMQ Data Bridge
+## Create Connector
 
 Now that you have successfully created the data bridge to RocketMQ, you can continue to create rules to specify the data to be saved into RocketMQ. You need to create two different rules for messages forward and event records. 
 

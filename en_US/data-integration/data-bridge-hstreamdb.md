@@ -513,7 +513,7 @@ Now the directory structure should be:
 
    </details>
 
-## Create HStreamDB Data Bridge
+## Create Connector
 
 This section introduces how to create HStreamDB data bridges in EMQX Dashboard. Data bridges for client message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges for message storage and event recording.
 
@@ -566,7 +566,7 @@ The demonstration in this section assumes you run EMQX and HStreaDB in docker on
 
 Now the HStream data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**.
 
-## Create Rules for HStreamDB Data Bridge
+## Create Connector
 
 After you have successfully created the data bridge to HStreamDB, you can continue to create rules to specify the data to be saved into HStreamDB and rules for the online/offline status recording.
 

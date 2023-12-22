@@ -230,7 +230,7 @@ Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
 FileUsage   = 1
 ```
 
-## Create Microsoft SQL Server Data Bridge
+## Create Connector
 
 This section demonstrates how to create Microsoft SQL Server data bridge for message storage and events recording. It assumes that you run both EMQX and Microsoft SQL Server on the local machine. If you have Microsoft SQL Server and EMQX running remotely, adjust the settings accordingly.
 
@@ -277,7 +277,7 @@ This section demonstrates how to create Microsoft SQL Server data bridge for mes
 Now that you have created the data bridge, and the Microsoft SQL Server data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**.
 
 
-## Create Rules for Microsoft SQL Server Data Bridge
+## Create Connector
 
 After you have successfully created the data bridge to Microsoft SQL Server, you can continue to create rules to specify the data to be saved into Microsoft SQL Server and rules for the online/offline status recording.
 

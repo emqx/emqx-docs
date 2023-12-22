@@ -127,7 +127,7 @@ CREATE TABLE emqx_client_events (
 
 2. 点击页面右上角的**创建**。
 
-3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将  `t/#`  主题的 MQTT 消息存储至 MySQL，请确保规则选择出来的字段（SELECT 部分）包含所有 SQL 模板中用到的变量，此处规则 SQL 如下：
+3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将  `t/#`  主题的 MQTT 消息存储至 PostgreSQL，请确保规则选择出来的字段（SELECT 部分）包含所有 SQL 模板中用到的变量，此处规则 SQL 如下：
 
    ```sql
    SELECT

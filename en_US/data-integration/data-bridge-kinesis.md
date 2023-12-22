@@ -82,7 +82,7 @@ To facilitate the development and test, you can emulate the Amazon Kinesis Data 
    awslocal kinesis create-stream --stream-name "my_stream" --shard-count 1
    ```
 
-## Create a Kinesis Data Bridge
+## Create Connector
 
 1. Go to EMQX Dashboard, click **Integration** -> **Connector**.
 2. Click **Create** on the top right corner of the page.
@@ -110,7 +110,7 @@ To facilitate the development and test, you can emulate the Amazon Kinesis Data 
 
     A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Amazon Kinesis. You can also create rules by following the steps in [Create Rules for Amazon Kinesis Data Bridge](#create-a-rule-for-amazon-kinesis-data-bridge).
 
-## Create a Rule for Amazon Kinesis Data Bridge
+## Create Connector
 
 You can continue to create rules to specify the data to be saved into Amazon Kinesis.
 
