@@ -50,7 +50,7 @@ These features enhance integration capabilities and flexibility, helping you est
 
 ## Before You Start
 
-This section describes the preparatory work needed to configure Confluent integration on the EMQX Dashboard.
+This section describes the preparatory work needed to configure Confluent data integration on the EMQX Dashboard.
 
 ### Prerequisites
 
@@ -193,7 +193,7 @@ Before adding a Confluent Sink action, you need to create a Confluent producer c
 
 Once created, the connector will automatically connect to Confluent Cloud. Next, you need to create a rule based on this connector to forward data to the Confluent cluster configured in the connector.
 
-## Create a Confluent Sink Rule
+## Create a Rule for Confluent Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the MQTT topic `t/#` and send the processed results to Confluent's `testtopic-in` topic using the configured Confluent Sink.
 
