@@ -47,7 +47,7 @@ Using TimescaleDB Sink in EMQX brings the following features and advantages to y
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create a TimescaleDB Sink, including installing Timescale and creating a data table.
+This section describes the preparations you need to complete before you start to create a TimescaleDB data integration, including installing TimescaleDB and creating a data table.
 
 ### Prerequisites
 
@@ -139,7 +139,7 @@ After the table is successfully created, you can view the information of the tab
 
 Before you create the TimescaleDB Sink, you need to create a TimescaleDB Connector to connect to the TimescaleDB service.
 
-The instructions below assume that you run both EMQX and Timescale (if self-deployed) on the local machine. If you have Timescale and EMQX running remotely, adjust the settings accordingly.
+The instructions below assume that you run both EMQX and TimescaleDG (if self-deployed) on the local machine. If you have TimescaleDB and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard and click **Integration** -> **Connector** from the left navigation menu.
 2. Click **+ Create** on the top right corner of the page.
@@ -148,9 +148,9 @@ The instructions below assume that you run both EMQX and Timescale (if self-depl
 5. Enter the connection information according to how the TimescaleDB is deployed. If it is deployed using Docker, input `127.0.0.1:5432` as **Server Host**, `tsdb` as **Database Name**,  `postgres` as **Username,** and `public` as **Password**.
 6. Click the **Create** button to complete the Connector creation.
 
-Now you have created a TimescaleDB Connector. Next, you need to create a rule and Sink to specify the data to be written into the Timescale database.
+Now you have created a TimescaleDB Connector. Next, you need to create a rule and Sink to specify the data to be written into the TimescaleDB database.
 
-## Create Rule and Timescale Sink
+## Create a Rule for TimescaleDB Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured Sink to TimescaleDB. 
 
@@ -198,9 +198,9 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 11. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
 
-Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. On the **Actions(Sink)** tab, you see the new TimescaleDB Sink. 
+Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new TimescaleDB Sink. 
 
-You can also click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Timescale after parsing by the rule `my_rule`. 
+You can also click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to TimescaleDB after parsing by the rule `my_rule`. 
 
 
 ### Test Rule 
@@ -213,7 +213,7 @@ mqttx pub -i emqx_c -t t/1 -m '{"temp":24,"humidity":30,"location":"hangzhou"}'
 
 Check the running status of the Sink, there should be one new Matched and one Sent Successfully message.
 
-Verify the Timescale table `sensor_data`. New records should be inserted:
+Verify the TimescaleDB table `sensor_data`. New records should be inserted:
 
 ```bash
 tsdb=# select * from sensor_data;

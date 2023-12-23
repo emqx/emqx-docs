@@ -44,7 +44,7 @@ EMQX 通过规则引擎与 Sink 将设备数据转发至 TimescaleDB，Timescale
 
 ## 准备工作
 
-本节介绍了在 EMQX 中创建 TimescaleDB Sink 之前需要做的准备工作，包括安装 TimescaleDB 和创建数据表。
+本节介绍了在 EMQX 中创建 TimescaleDB 数据集成之前需要做的准备工作，包括安装 TimescaleDB 和创建数据表。
 
 ### 前置准备
 

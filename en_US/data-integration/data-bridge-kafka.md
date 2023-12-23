@@ -102,7 +102,7 @@ Before adding a Kafka Sink action, you need to create a Kafka producer connector
 
 Once created, the connector will automatically connect to Kafka. Next, you need to create a rule based on this connector to forward data to the Kafka cluster configured in the connector.
 
-## Create a Kafka Sink Rule
+## Create a Rule with Kafka Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the MQTT topic `t/#` and send the processed results to Kafka's `testtopic-in` topic using the configured Kafka Sink.
 
@@ -233,7 +233,7 @@ Before adding a Kafka Source action, you need to create a Kafka producer connect
 
 <img src="./assets/Kafka_consumer_bridge.png" alt="Kafka_consumer_bridge" style="zoom:67%;" />
 
-## Create Rule for Kafka Source
+## Create a Rule with Kafka Source
 
 This section demonstrates how to create a rule in EMQX to further process the message forwarded by configured Kafka source and republish the message to MQTT topic.
 

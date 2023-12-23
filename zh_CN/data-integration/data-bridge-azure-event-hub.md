@@ -14,7 +14,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 ## 工作原理
 
-Azure Event Hubs 数据桥是 EMQX 的一个开箱即用功能，旨在帮助用户无缝集成 MQTT 数据流与 Azure Event Hubs，利用其丰富的服务和能力进行物联网应用开发。
+Azure Event Hubs 数据集成是 EMQX 的一个开箱即用功能，旨在帮助用户无缝集成 MQTT 数据流与 Azure Event Hubs，利用其丰富的服务和能力进行物联网应用开发。
 
 ![event_hubs_architecture](./assets/event_hubs_architecture.svg)
 
@@ -43,7 +43,7 @@ EMQX 与 Azure Event Hubs 的数据集成可以为您的业务带来以下功能
 
 ## 准备工作
 
-本节介绍了在 EMQX 中创建 Azure Event Hubs Sink 之前需要做的准备工作，包括如何设置 Azure Event Hubs。
+本节介绍了在 EMQX 中创建 Azure Event Hubs 数据集成之前需要做的准备工作，包括如何设置 Azure Event Hubs。
 
 ### 前置准备
 
@@ -62,7 +62,7 @@ EMQX 与 Azure Event Hubs 的数据集成可以为您的业务带来以下功能
 
 ## 创建连接器
 
-在添加 Azure Event Hubs Sink 前，您需要创建连接器。
+在添加 Azure Event Hubs Sink 前，您需要创建连接器用于将 Sink 连接到 Azure Event Hubs 服务器。
 
 1. 进入 EMQX Dashboard，点击**集成** -> **连接器**。
 
@@ -84,7 +84,7 @@ EMQX 与 Azure Event Hubs 的数据集成可以为您的业务带来以下功能
 
 ## 创建 Azure Event Hubs Sink 规则
 
-至此您已经完成 Sink 创建流程，接下来将继续创建一条规则来指定需要写入的数据：
+本节演示了如何在Dashboard 中创建规则和 Azure Event Hubs Sink，并将 Sink 添加到规则中。
 
 1. 转到 Dashboard **集成** -> **规则页面**。
 
@@ -92,7 +92,7 @@ EMQX 与 Azure Event Hubs 的数据集成可以为您的业务带来以下功能
 
 3. 输入规则 ID，例如  `my_rule`。
 
-4. 在 SQL 编辑器中输入规则，例如我们希望将 `t/#` 主题的 MQTT 消息存储至 Azure Event Hub，可通过如下规则实现：
+4. 在 SQL 编辑器中输入规则，例如我们希望将 `t/#` 主题的 MQTT 消息存储至 Azure Event Hubs，可通过如下规则实现：
 
    注意：如果要自定义 SQL 语句，请确保 `SELECT` 字段包含 Sink 中所需的所有字段。
 
@@ -103,7 +103,7 @@ EMQX 与 Azure Event Hubs 的数据集成可以为您的业务带来以下功能
    "t/#"
    ```
 
-5. 点击**添加动作**按钮，从**动作类型**下拉列表中选择 Azure Event Hubs，保持动作下拉框为默认的“创建动作”选项，您也可以从动作下拉框中选择一个之前已经创建好的 Azure Event Hubs 动作。此处我们创建一个全新的 Sink 并添加到规则中。
+5. 点击**添加动作**按钮，从**动作类型**下拉列表中选择 Azure Event Hubs，保持动作下拉框为默认的`创建动作`选项，您也可以从动作下拉框中选择一个之前已经创建好的 Azure Event Hubs 动作。此处我们创建一个全新的 Sink 并添加到规则中。
 6. 在下方的表单中输入 Sink 的名称与描述。
 
 7. 在连接器下拉框中选择刚刚创建的 `my-azure-event-hubs` 连接器。您也可以点击下拉框旁边的创建按钮，在弹出框中快捷创建新的连接器，所需的配置参数按照参照[创建连接器](#创建连接器)。
@@ -140,6 +140,6 @@ EMQX 与 Azure Event Hubs 的数据集成可以为您的业务带来以下功能
    mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Azure Event Hub" }'
 ```
 
-2. 在 **Sink** 页面点击桥接名称查看 Sink 运行统计，命中、发送成功次数应当 +1。
+2. 在 **规则** 页面点击规则名称查看 Sink 运行统计，命中、发送成功次数应当 +1。
 
 3. 在 Azure 门户仪表板中检查是否将消息写入配置的事件中心。使用任何兼容 Kafka 的消费者，检查消息是否被写入配置的事件中心。有关使用 Kafka CLI 的更多信息，请参阅 [Use the Kafka CLI to Send and Receive Messages to/from Azure Event Hubs for Apache Kafka Ecosystem](https://github.com/Azure/azure-event-hubs-for-kafka/tree/master/quickstart/kafka-cli)。
