@@ -897,7 +897,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/sub
 一次性取消订阅 `a`, `b` 主题
 
 ```bash
-$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/unsubscribe_batch" -d '[{"topic":"a","qos":1,"clientid":"example"},{"topic":"b","qos":1,"clientid":"example"}]'
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/unsubscribe_batch" -d '[{"topic":"a","clientid":"example"},{"topic":"b","clientid":"example"}]'
 
 {"code":0}
 ```
