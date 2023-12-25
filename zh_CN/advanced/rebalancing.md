@@ -148,7 +148,7 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 
 同样由于 MQTT 是有状态的长连接接入协议，即使在节点扩容后，现有节点的连接也不会自动切换到新增节点中，因此如果没有大量的新客户端接入，新增节点会长时间处于负载不足的状态。此时，您需要手动将连接从高负载节点迁移到低负载节点，实现集群负载均衡。
 
-<img src="assets/rebalancing.png" alt="EMQX 节点负载重平衡示意图" style="zoom:50%;" />
+<img src="./assets/rebalancing.png" alt="rebalancing" style="zoom:67%;" />
 
 ### 工作原理
 
