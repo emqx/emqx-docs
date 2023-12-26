@@ -700,6 +700,12 @@
       title_cn: 版本发布
       edition: ce
       path: changes/all-changes-ce
+    - changes/changes-${edition}-v5
+    - changes/changes-${edition}-v4
+    - title_en: Version 1-3
+      title_cn: v1-v3 版本
+      edition: ce
+      path: changes/changes-ce-v3
     - title_en: Incompatible Changes
       title_cn: 不兼容变更
       collapsed: true
@@ -708,17 +714,3 @@
         - changes/auth-4.4-to-5.1-compatibility
         - changes/data-integration-4.4-to-5.1-incompatibility
         - changes/gateway-4.4-to-5.1-incompatibility
-    - changes/changes-${edition}-5.4
-    - changes/changes-${edition}-5.3
-    - changes/changes-${edition}-5.2
-    - changes/changes-${edition}-5.1
-    - changes/changes-${edition}-5.0
-    - changes/changes-${edition}-4.4
-    - changes/changes-${edition}-4.3
-    - changes/changes-${edition}-4.2
-    - changes/changes-${edition}-4.1
-    - changes/changes-${edition}-4.0
-    - title_en: v0.1-v3.0
-      title_cn: v0.1-v3.0
-      edition: ce
-      path: changes/changes-ce-3.0
