@@ -1,6 +1,8 @@
-# Releases
+# v5.1
 
-## e5.1.1
+## 5.1.1
+
+*Release Date: 2023-07-27*
 
 ### Enhancements
 
@@ -224,7 +226,9 @@
 - [#11326](https://github.com/emqx/emqx/pull/11326) Fixed return error checking on table validation in the Oracle bridge.
 
 
-## e5.1.0
+## 5.1.0
+
+*Release Date: 2023-06-21*
 
 ### Enhancements
 

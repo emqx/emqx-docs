@@ -506,7 +506,7 @@
           collapsed: true
           children:
             - title_en: Metrics
-              title_ch: 指标
+              title_cn: 指标
               path: observability/open-telemetry/metrics
             - title_en: Logs
               title_cn: 日志
@@ -695,16 +695,30 @@
     - title_en: Releases
       title_cn: 版本发布
       edition: ee
-      path: changes/changes-ee-5.4
+      path: changes/all-changes-ee
     - title_en: Releases
       title_cn: 版本发布
       edition: ce
-      path: changes/changes-ce-5.4
-    - changes/breaking-changes-5.4
-    - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
-      title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
-      path: changes/breaking-changes-5.1.0
+      path: changes/all-changes-ce
+    - title_en: Incompatible Changes
+      title_cn: 不兼容变更
+      collapsed: true
       children:
+        - changes/breaking-changes-5.4
         - changes/auth-4.4-to-5.1-compatibility
         - changes/data-integration-4.4-to-5.1-incompatibility
         - changes/gateway-4.4-to-5.1-incompatibility
+    - changes/changes-${edition}-5.4
+    - changes/changes-${edition}-5.3
+    - changes/changes-${edition}-5.2
+    - changes/changes-${edition}-5.1
+    - changes/changes-${edition}-5.0
+    - changes/changes-${edition}-4.4
+    - changes/changes-${edition}-4.3
+    - changes/changes-${edition}-4.2
+    - changes/changes-${edition}-4.1
+    - changes/changes-${edition}-4.0
+    - title_en: v0.1-v3.0
+      title_cn: v0.1-v3.0
+      edition: ce
+      path: changes/changes-ce-3.0

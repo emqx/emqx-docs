@@ -1,6 +1,8 @@
-# Releases
+# v5.4
 
-## e5.4.0
+## 5.4.0
+
+*Release Date: 2023-12-23*
 
 ### Enhancements
 

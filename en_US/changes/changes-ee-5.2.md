@@ -1,6 +1,8 @@
-# Releases
+# v5.2
 
-## e5.2.1
+## 5.2.1
+
+*Release Date: 2023-09-20*
 
 ### Enhancements
 
@@ -21,9 +23,9 @@
 
 - [#11506](https://github.com/emqx/emqx/pull/11506) Previously, attempting to download a non-existent trace log file would result in downloading an empty file. After implementing this fix, when attempting to download an empty trace log file using the GET request `/api/v5/trace/clientempty/download`, the server will now respond with a 404 status code and the following JSON message: `{"code":"NOT_FOUND","message":"Trace is empty"}`. This response will be triggered if no events matching the trace condition are found in the log file. 
 
-- [#11522](https://github.com/emqx/emqx/pull/11522) Improved error message for rule engine schema registry when schema name exceeds the permissible length.
+- [#11522](https://github.com/emqx/emqx/pull/11522) Improved rule engine schema registry error message when schema name exceeds the permissible length.
 
-- [#11531](https://github.com/emqx/emqx/pull/11531) Fixed an issue where authorization cache cleaning cli was not working properly for specific client ID.
+- [#11531](https://github.com/emqx/emqx/pull/11531) Fixed an issue where authorization cache cleaning CLI was not working properly for specific client ID.
 
 - [#11564](https://github.com/emqx/emqx/pull/11564) Fixed cluster partition autoheal functionality. Implemented autohealing for the clusters that split into multiple partitions.
   
@@ -42,7 +44,9 @@
   
 - [#11630](https://github.com/emqx/emqx/pull/11630) Fixed an issue where the core node could get stuck in the `mria_schema:bootstrap/0` state, preventing new nodes from joining the cluster.
 
-## e5.2.0
+## 5.2.0
+
+*Release Date: 2023-09-07*
 
 ### Enhancements
 
