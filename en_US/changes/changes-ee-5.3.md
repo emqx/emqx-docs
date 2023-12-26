@@ -1,6 +1,8 @@
-# Releases
+# v5.3
 
-## e5.3.2
+## 5.3.2
+
+*Release Date: 2023-12-01*
 
 ### Enhancements
 
@@ -43,7 +45,9 @@
 - [#11754](https://github.com/emqx/emqx/pull/11754) Improved the log formatting specifically for the Postgres bridge in EMQX. It addresses issues related to Unicode characters in error messages returned by the driver.
 
 
-## e5.3.1
+## 5.3.1
+
+*Release Date: 2023-11-14*
 
 ### Enhancements
 
@@ -96,7 +100,9 @@
 
 - [#11897](https://github.com/emqx/emqx/pull/11897) Fixed the issue of waiting for a loop race condition during node configuration synchronization when cluster nodes are started approximately at the same time.
 
-## e5.3.0
+## 5.3.0
+
+*Release Date: 2023-09-29*
 
 ### Enhancements
 
