@@ -88,7 +88,7 @@ jobs:
     - name: use node.js
       uses: actions/setup-node@v3
       with:
-        node-version: 14.15
+        node-version: 14
 
     - name: generate directory.json
       run: |
