@@ -16,7 +16,7 @@ jobs:
     outputs:
       versions: ${{ steps.set_versions.outputs.versions}}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: set_versions
@@ -30,7 +30,7 @@ jobs:
             tag_list=$(git tag | egrep "^e.*$" | xargs echo -n)
           fi
           version_list=$(python3 .github/scripts/build_versions.py $current_branch $tag_list)
-          echo "::set-output name=versions::$version_list"
+          echo "versions=$version_list" >> $GITHUB_OUTPUT
 
   deploy:
     needs: prepare
@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: clone docs
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         ref: ${{ matrix.tag }}
         fetch-depth: 0
@@ -57,7 +57,7 @@ jobs:
         echo "LATEST_VERSION=${{ matrix.latest_version }}" >> $GITHUB_ENV
 
     - name: clone ce frontend
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       if: env.DOCS_TYPE == 'broker'
       with:
         repository: "emqx/emqx-io-docs-frontend"
@@ -65,7 +65,7 @@ jobs:
         path: frontend
 
     - name: clone ee frontend
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       if: env.DOCS_TYPE == 'enterprise'
       with:
         repository: 'emqx/docs-emqx-com-frontend'
@@ -73,7 +73,7 @@ jobs:
         path: frontend
 
     - name: use node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: 14.15
 
