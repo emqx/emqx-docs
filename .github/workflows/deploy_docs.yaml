@@ -90,11 +90,6 @@ jobs:
       with:
         node-version: 14.15
 
-    - name: use pnpm
-      uses: pnpm/action-setup@v2
-      with:
-          version: 8
-
     - name: generate directory.json
       run: |
         cd docs-files
@@ -167,8 +162,7 @@ jobs:
     - name: build docs
       run: |
         cd frontend
-        pnpm install
-        pnpm build
+        yarn && yarn build
 
     - name: build ce redoc
       if: matrix.docs_type == 'broker'
