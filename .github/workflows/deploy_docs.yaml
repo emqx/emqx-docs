@@ -11,32 +11,53 @@ on:
       - e*
 
 jobs:
-  deploy:
+  prepare:
     runs-on: ubuntu-20.04
-    if: github.repository_owner == 'emqx'
+    outputs:
+      versions: ${{ steps.set_versions.outputs.versions}}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: set_versions
+        id: set_versions
+        run: |
+          current_branch=$(echo ${{ github.ref }} | sed -r  "s ^refs/heads/|^refs/tags/(.*) \1 g")
+          if [[ $current_branch == v* ]];
+          then
+            tag_list=$(git tag | egrep "^v.*$" | xargs echo -n)
+          else
+            tag_list=$(git tag | egrep "^e.*$" | xargs echo -n)
+          fi
+          version_list=$(python3 .github/scripts/build_versions.py $current_branch $tag_list)
+          echo "::set-output name=versions::$version_list"
+
+  deploy:
+    needs: prepare
+    strategy:
+      matrix: ${{fromJSON(needs.prepare.outputs.versions)}}
+    runs-on: ubuntu-20.04
     steps:
     - name: clone docs
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
+        ref: ${{ matrix.tag }}
         fetch-depth: 0
         path: docs-files
 
     - name: set env
       run: |
-         BRANCH=$(echo ${{ github.ref }} | sed -r  "s ^refs/heads/|^refs/tags/(.*) \1 g")
-         echo "DOCS_BRANCH=$BRANCH" >> $GITHUB_ENV
-         version=${BRANCH%%-*}
-         if [[ $BRANCH == v* ]];
-         then
-           echo "DOCS_TYPE=broker" >> $GITHUB_ENV
-         else
-           version=${version/e/v}
-           echo "DOCS_TYPE=enterprise" >> $GITHUB_ENV
-         fi
-         echo "VERSION=$version" >> $GITHUB_ENV
+        real_version=$(echo ${{ matrix.tag }} | sed -r "s/^(.*)-.*$/\1/")
+        real_version=${real_version/e/v}
+        echo "DOCS_TYPE=${{ matrix.docs_type }}" >> $GITHUB_ENV
+        echo "DOCS_BRANCH=${{ matrix.tag }}" >> $GITHUB_ENV
+        echo "VERSION=${{ matrix.version }}" >> $GITHUB_ENV
+        echo "REAL_VERSION=$real_version" >> $GITHUB_ENV
+        echo "CANONICAL_VERSION=${{ matrix.canonical_version }}" >> $GITHUB_ENV
+        echo "LATEST_VERSION=${{ matrix.latest_version }}" >> $GITHUB_ENV
 
     - name: clone ce frontend
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       if: env.DOCS_TYPE == 'broker'
       with:
         repository: "emqx/emqx-io-docs-frontend"
@@ -44,7 +65,7 @@ jobs:
         path: frontend
 
     - name: clone ee frontend
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       if: env.DOCS_TYPE == 'enterprise'
       with:
         repository: 'emqx/docs-emqx-com-frontend'
@@ -61,9 +82,9 @@ jobs:
         cd docs-files
         if [[ $DOCS_TYPE == "broker" ]];
         then
-          python3 .ci/remove_unused.py directory.json $(pwd)
+          python3 .github/scripts/remove_unused.py directory.json $(pwd)
         else
-          python3 .ci/remove_unused.py directory_ee.json $(pwd)
+          python3 .github/scripts/remove_unused.py directory_ee.json $(pwd)
         fi
 
     - name: move ce files
@@ -92,7 +113,7 @@ jobs:
         mkdir -p frontend/docs/.vuepress/public/api/
         cp -r docs-files/en_US/* frontend/docs/en/${DOCS_TYPE}/${VERSION}/
         cp -r docs-files/zh_CN/* frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
-        cp docs-files/directory.json frontend/docs/.vuepress/config/directory.json
+        cp docs-files/directory_ee.json frontend/docs/.vuepress/config/directory.json
 
     - name: generate version config
       run: |
@@ -103,10 +124,8 @@ jobs:
         else
           version_list=$(git tag | egrep "^e.*$" | xargs echo -n)
         fi
-        python3 .ci/generate_version.py $version_list > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
+        python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
         cat ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
-        latest_version=$(cat ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json  | jq -r '.[0]')
-        echo "LATEST_VERSION=$latest_version" >> $GITHUB_ENV
 
     - name: build docs
       run: |
@@ -122,7 +141,23 @@ jobs:
         ./ossutil64 config -e https://oss-accelerate.aliyuncs.com -i ${{ secrets.ALI_OSS_ACCESSKEY_ID }} -k ${{ secrets.ALI_OSS_ACCESSKEY_SECRET }} -L CH
         ./ossutil64 cp -r dist/ oss://emqx-io-docs/docs/ -u
 
-    - name: upload ee file
+    - name: set aws credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      if: env.DOCS_TYPE == 'enterprise'
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+    - name: upload ee file to aws s3
+      if: env.DOCS_TYPE == 'enterprise'
+      run: |
+        aws s3 rm --recursive s3://docs-emqx-com/zh/${DOCS_TYPE}/${VERSION} || true
+        aws s3 rm --recursive s3://docs-emqx-com/en/${DOCS_TYPE}/${VERSION} || true
+        aws s3 cp --recursive frontend/docs/.vuepress/dist/ s3://docs-emqx-com/
+        aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DOCS_CLOUDFRONT_ID }} --paths "/zh/${DOCS_TYPE}/${VERSION}/*" "/en/${DOCS_TYPE}/${VERSION}/*" "/api/${DOCS_TYPE}_versions.json" "/sitemap_${DOCS_TYPE}_${VERSION}.xml"
+
+    - name: upload ee file to tencent cos
       if: env.DOCS_TYPE == 'enterprise'
       run: |
         pip3 install coscmd
@@ -150,16 +185,6 @@ jobs:
     - name: flush ee cdn
       if: env.DOCS_TYPE == 'enterprise'
       run: |
-        tccli cdn UpdateDomainConfig --cli-unfold-argument --Domain docs.emqx.com \
-            --UrlRedirect.Switch on \
-            --UrlRedirect.PathRules.0.RedirectStatusCode 302 \
-            --UrlRedirect.PathRules.0.Pattern "/zh/enterprise/latest/*" \
-            --UrlRedirect.PathRules.0.RedirectUrl "/zh/enterprise/${LATEST_VERSION}/\$1" \
-            --UrlRedirect.PathRules.0.RedirectHost https://docs.emqx.com \
-            --UrlRedirect.PathRules.1.RedirectStatusCode 302 \
-            --UrlRedirect.PathRules.1.Pattern "/en/enterprise/latest/*" \
-            --UrlRedirect.PathRules.1.RedirectUrl "/en/enterprise/${LATEST_VERSION}/\$1" \
-            --UrlRedirect.PathRules.1.RedirectHost https://docs.emqx.com
         tccli cdn PurgePathCache --cli-unfold-argument --Paths https://docs.emqx.com/zh/${DOCS_TYPE}/${VERSION}/ https://docs.emqx.com/en/${DOCS_TYPE}/${VERSION}/ --FlushType delete
         tccli cdn PurgeUrlsCache --cli-unfold-argument --Urls https://docs.emqx.com/api/${DOCS_TYPE}_versions.json https://docs.emqx.com/sitemap_${DOCS_TYPE}_${VERSION}.xml
 
