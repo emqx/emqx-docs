@@ -702,8 +702,8 @@
       path: changes/all-changes-ce
     - changes/changes-${edition}-v5
     - changes/changes-${edition}-v4
-    - title_en: Version 1-3
-      title_cn: v1-v3 版本
+    - title_en: Version 0.1 to 3.x
+      title_cn: v0.1-v3.x 版本
       edition: ce
       path: changes/changes-ce-v3
     - title_en: Incompatible Changes
@@ -711,6 +711,7 @@
       collapsed: true
       children:
         - changes/breaking-changes-5.4
+        - changes/breaking-changes-5.1.0
         - changes/auth-4.4-to-5.1-compatibility
         - changes/data-integration-4.4-to-5.1-incompatibility
         - changes/gateway-4.4-to-5.1-incompatibility
