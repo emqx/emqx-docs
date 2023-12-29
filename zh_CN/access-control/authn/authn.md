@@ -36,25 +36,6 @@ EMQX 支持通过密码进行身份验证。启用密码认证后，当客户端
 
 ## EMQX 认证器
 
-{% emqxce %}
-
-按照认证方式和数据源来划分，EMQX 内置了以下 8 种认证器：
-
-| 认证方式 | 数据源      | 说明                                                |
-| -------- | ----------- | --------------------------------------------------- |
-| 密码认证 | 内置数据库  | [使用内置数据库（Mnesia）进行密码认证](./mnesia.md) |
-| 密码认证 | MySQL       | [使用 MySQL 进行密码认证](mysql.md)                 |
-| 密码认证 | PostgreSQL  | [使用 PostgreSQL 进行密码认证](postgresql.md)       |
-| 密码认证 | MongoDB     | [使用 MongoDB 进行密码认证](./mongodb.md)           |
-| 密码认证 | Redis       | [使用 Redis 进行密码认证](./redis.md)               |
-| 密码认证 | HTTP Server | [使用 HTTP 服务进行密码认证](./http.md)             |
-| JWT      | --          | [JWT 认证](./jwt.md)                                |
-| 增强认证 | 内置数据库  | [MQTT 5.0 增强认证(SCRAM 认证)](./scram.md)         |
-
-{% endemqxce %}
-
-{% emqxee %}
-
 按照认证方式和数据源来划分，EMQX 内置了以下 9 种认证器：
 
 | 认证方式 | 数据源      | 说明                                                |
@@ -68,8 +49,6 @@ EMQX 支持通过密码进行身份验证。启用密码认证后，当客户端
 | 密码认证 | HTTP Server | [使用 HTTP 服务进行密码认证](./http.md)             |
 | JWT      | --          | [JWT 认证](./jwt.md)                                |
 | 增强认证 | 内置数据库  | [MQTT 5.0 增强认证(SCRAM 认证)](./scram.md)         |
-
-{% endemqxee %}
 
 ## 认证链
 
