@@ -96,16 +96,16 @@ Action Init Params: #{<<"a">> => 1}
 
 - `Selected Data` listed the fields that selected by the SQL.All
   available fields will be listed here, as we used `select *`.
-- `Envs` is the environment varibles that can be used internally in
+- `Envs` is the environment variables that can be used internally in
   the action.
 - `Action Init Params` is the params we passed to the action.
 
 
 
 
-## Creat WebHook Rules
+## Create WebHook Rules
 
-Setup a Web Service, here we setup a simple web service using the linux tool `nc`:
+Setup a Web Service, here we set up a simple web service using the Linux tool `nc`:
 ```bash
 $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9901; done;
 ```
@@ -135,7 +135,7 @@ Click on the "+ Add" button under "Action Handler", and then select
 Bind a resource to the action:
 
 Since the dropdown list "Resource" is empty for now, we create a new
-resource by clicking on the "New Resource" to the top right, and then
+resource by clicking on the "New Resource" at the top right, and then
 select "WebHook":
 
 ![image](./assets/rule-engine/webhook_action_1.png)
@@ -157,8 +157,8 @@ Back to the "Actions" dialog, and then click on the "Confirm"
 
 ![image](./assets/rule-engine/webhook_action_2.png)
 
-Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+Back to the creating rule page, click the "Create" button. The
+    rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/webhook_rule_rule_overview_0.png)
 
@@ -173,7 +173,7 @@ We have finished, testing the rule by sending an MQTT message to
 > Payload: "Hello web server"
 ```
 
-Then inspect the Web Service table, verify a new record has been
+Then inspect the Web Service table, and verify a new record has been
 received:
 
 ![image](./assets/rule-engine/webhook_result.png)
@@ -185,8 +185,8 @@ to 1:
 
 ## Create BridgeMQTT Rules
 
-Setup anther MQTT broker using mosquitto, change the port to 2883.
-    Taking Mac OSX for instance:
+Set up another MQTT broker using mosquitto, and change the port to 2883.
+    Take Mac OSX for instance:
 
 ```bash
 $ brew install mosquitto
@@ -242,8 +242,8 @@ Back to the "Actions" dialog, and then click on the "Confirm"
 
 ![image](./assets/rule-engine/mqtt_action_2.png)
 
-Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+Back to the creating rule page, click the "Create" button. The
+    rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/mqtt_rule_overview_0.png)
 
@@ -271,7 +271,7 @@ to 1:
 
 ## Create MySQL Rules
 
-Setup a MySQL database, and changes the username/password to root/public, taking Mac OSX for instance:
+Setup a MySQL database, and change the username/password to root/public, taking Mac OSX for instance:
 
 ```bash
 $ brew install mysql
@@ -315,7 +315,7 @@ CREATE TABLE `t_mqtt_msg` (
 
 Create a rule:
 
-Go to [emqx dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left.
+Go to [emqx dashboard](http://127.0.0.1:18083/#/rules), and select the "rule" tab on the menu to the left.
 
 Select "message.publish", then type in the following SQL:
 
@@ -334,10 +334,10 @@ Click on the "+ Add" button under "Action Handler", and then select
 
 Fill in the parameters required by the action:
 
-Two parameters is required by action "Data to MySQL":
+Two parameters are required by action "Data to MySQL":
 
 1). SQL template. SQL template is the sql command you'd like to run
-when the action is triggered. In this example we'll insert a message
+when the action is triggered. In this example, we'll insert a message
 into mysql, so type in the following sql
 template:
 
@@ -370,7 +370,7 @@ Back to the "Actions" dialog, and then click on the "Confirm" button.
 
 ![image](./assets/rule-engine/mysql_action_4.png)
 
-Back to the creating rule page, then click on "Create" button. The rule we created will be show in the rule list:
+Back to the creating rule page, click the "Create" button. The rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/mysql_rule_overview_1.png)
 
@@ -384,7 +384,7 @@ We have finished, testing the rule by sending an MQTT message to emqx:
 > Payload: "hello"
 ```
 
-Then inspect the MySQL table, verify a new record has been inserted:
+Then inspect the MySQL table, and verify a new record has been inserted:
 
 ![image](./assets/rule-engine/mysql_result_1.png)
 
@@ -462,10 +462,10 @@ Click on the "+ Add" button under "Action Handler", and then select
 
 Fill in the parameters required by the action:
 
-Two parameters is required by action "Data to PostgreSQL":
+Two parameters are required by action "Data to PostgreSQL":
 
 1). SQL template. SQL template is the sql command you'd like to run
-when the action is triggered. In this example we'll insert a message
+when the action is triggered. In this example, we'll insert a message
 into pgsql, so type in the following sql
 template:
 
@@ -493,7 +493,7 @@ keep all other configs as default, and click on the "Testing
 Connection" button to make sure the connection can be created
 successfully.
 
-Finally click on the "Create" button.
+Finally, click on the "Create" button.
 
 ![image](./assets/rule-engine/pgsql_resource_1.png)
 
@@ -502,8 +502,8 @@ Back to the "Actions" dialog, and then click on the "Confirm"
 
 ![image](./assets/rule-engine/pgsql_action_2.png)
 
-Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+Back to the creating rule page, click the "Create" button. The
+    rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/pgsql_rule_overview_1.png)
 
@@ -520,7 +520,7 @@ We have finished, testing the rule by sending an MQTT message to
 > Payload: "hello1"
 ```
 
-Then inspect the PgSQL table, verify a new record has been inserted:
+Then inspect the PgSQL table, and verify a new record has been inserted:
 
 ![image](./assets/rule-engine/pgsql_result_1.png)
 
@@ -531,7 +531,7 @@ to 1:
 
 ## Create Cassandra Rules
 
-Setup a Cassandra database, and changes the root/password to root/public, taking Mac OSX for instance:
+Setup a Cassandra database, and change the root/password to root/public, taking Mac OSX for instance:
 
 ```bash
 $ brew install cassandra
@@ -603,10 +603,10 @@ Click on the "+ Add" button under "Action Handler", and then select
 
 Fill in the parameters required by the action:
 
-Two parameters is required by action "Data to Cassandra":
+Two parameters are required by action "Data to Cassandra":
 
 1). SQL template. SQL template is the sql command you'd like to run
-when the action is triggered. In this example we'll insert a message
+when the action is triggered. In this example, we'll insert a message
 into Cassandra, so type in the following sql
 template:
 
@@ -640,7 +640,7 @@ Back to the "Actions" dialog, and then click on the "Confirm" button.
 
 ![image](./assets/rule-engine/cass_action_3.png)
 
-Back to the creating rule page, then click on "Create" button. The rule we created will be show in the rule list:
+Back to the creating rule page, click the "Create" button. The rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/cass_rule_overview_0.png)
 
@@ -652,7 +652,7 @@ We have finished, testing the rule by sending an MQTT message to emqx:
 > Retained: true
 > Payload: "hello"
 ```
-Then inspect the Cassandra table, verify a new record has been
+Then inspect the Cassandra table, and verify a new record has been
 inserted:
 
 ![image](./assets/rule-engine/cass_result.png)
@@ -664,7 +664,7 @@ to 1:
 
 ## Create MongoDB Rules
 
-Setup a MongoDB database, and changes the username/password to root/public, taking Mac OSX for instance:
+Setup a MongoDB database, and change the username/password to root/public, taking Mac OSX for instance:
 
 ```bash
 $ brew install mongodb
@@ -693,7 +693,7 @@ db.createCollection("t_mqtt_msg");
 
 Create a rule:
 
-Go to [emqx dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left.
+Go to [emqx dashboard](http://127.0.0.1:18083/#/rules), and select the "rule" tab on the menu to the left.
 
 Select "message.publish", then type in the following SQL:
 
@@ -715,7 +715,7 @@ Click on the "+ Add" button under "Action Handler", and then select
 
 Fill in the parameters required by the action:
 
-Two parameters is required by action "Data to MongoDB":
+Two parameters are required by action "Data to MongoDB":
 
 1). The mongodb collection. Set it to "t_mqtt_msg" we just created.
 
@@ -754,7 +754,7 @@ Back to the "Actions" dialog, and then click on the "Confirm" button.
 
 ![image](./assets/rule-engine/mongo_action_3.png)
 
-Back to the creating rule page, then click on "Create" button. The rule we created will be show in the rule list:
+Back to the creating rule page, click the "Create" button. The rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/mongo_rule_overview_0.png)
 
@@ -767,7 +767,7 @@ Retained: true
 Payload: "hello"
 ```
 
-Then inspect the MongoDB table, verify a new record has been inserted:
+Then inspect the MongoDB table, and verify a new record has been inserted:
 
 ![image](./assets/rule-engine/mongo_result.png)
 
@@ -839,7 +839,7 @@ Click on the "+ Add" button under "Action Handler", and then select
 
 Fill in the parameters required by the action:
 
-Four parameters is required by action "Data to DynamoDB":
+Four parameters are required by action "Data to DynamoDB":
 
 1). DynamoDB Table. Here set it to "mqtt_msg".
 
@@ -858,7 +858,7 @@ Resource" to the top right, and then select "DynamoDB":
 
 Configure the resource:
 
-Fill in the configs as following:
+Fill in the configs as follows:
 
 - DynamoDB Region: us-west-2
 - DynamoDB Server: <http://localhost:8000>
@@ -873,7 +873,7 @@ Back to the "Actions" dialog, and then click on the "Confirm" button.
 
 ![image](./assets/rule-engine/dynamo_action_3.png)
 
-Back to the creating rule page, then click on "Create" button. The rule we created will be show in the rule list:
+Back to the creating rule page, click the "Create" button. The rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/dynamo_rule_overview_0.png)
 
@@ -887,7 +887,7 @@ We have finished, testing the rule by sending an MQTT message to emqx:
 > Payload: "hello"
 ```
 
-Then inspect the DynamoDB table, verify a new record has been
+Then inspect the DynamoDB table, and verify a new record has been
 inserted:
 
 ![image](./assets/rule-engine/dynamo_result.png)
@@ -913,7 +913,7 @@ $ redis-server
 
 Create a rule:
 
-Go to [emqx dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left.
+Go to [emqx dashboard](http://127.0.0.1:18083/#/rules), and select the "rule" tab on the menu to the left.
 
 Select "message.publish", then type in the following SQL:
 
@@ -935,10 +935,10 @@ Bind an action:
 
 Fill in the parameters required by the action:
 
-Two parameters is required by action "Data to Redis":
+Two parameters are required by action "Data to Redis":
 
-1). Redis CMD. The redis command you'd like to run when the action is
-triggered. In this example we'll insert a message into redis, so type in the following command:
+1). Redis CMD. The Redis command you'd like to run when the action is
+triggered. In this example, we'll insert a message into Redis, so type in the following command:
 
 ```bash
 HMSET mqtt:msg:${id} id ${id} from ${client_id} qos ${qos} topic ${topic} payload ${payload} retain ${retain} ts ${timestamp}
@@ -965,8 +965,8 @@ Back to the "Actions" dialog, and then click on the "Confirm" button.
 
 ![image](./assets/rule-engine/redis_action_3.png)
 
-Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+Back to the creating rule page, click the "Create" button. The
+    rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/redis_rule_overview_0.png)
 
@@ -983,7 +983,7 @@ We have finished, testing the rule by sending an MQTT message to
 > Payload: "hello"
 ```
 
-Then inspect the Redis table, verify a new record has been inserted:
+Then inspect the Redis table, and verify a new record has been inserted:
 
 ```bash
 \$ redis-cli
@@ -1035,7 +1035,7 @@ Click on the "+ Add" button under "Action Handler", and then select
 
 Fill in the parameters required by the action:
 
-Six parameters is required by action "Data to OpenTSDB":
+Six parameters are required by action "Data to OpenTSDB":
 
 1). Details. Whether let OpenTSDB Server return the failed data point
 and their error reason, defaults to false.
@@ -1071,8 +1071,8 @@ Back to the "Actions" dialog, and then click on the "Confirm"
 
 ![image](./assets/rule-engine/opentsdb_action_3.png)
 
-Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+Back to the creating rule page, click the "Create" button. The
+    rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/opentsdb_rule_overview_0.png)
 
@@ -1089,7 +1089,7 @@ We have finished, testing the rule by sending an MQTT message to
 > Payload: {"metric":"cpu","tags":{"host":"serverA"},"value":12}
 ```
 
-Then inspect the OpenTSDB table, verify a new record has been
+Then inspect the OpenTSDB table, and verify a new record has been
 inserted:
 
 ```bash
@@ -1116,7 +1116,7 @@ Postman-Token: 69af0565-27f8-41e5-b0cd-d7c7f5b7a037
 }
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 ```
-The response should look like following:
+The response should look like the following:
 
 ```json
 [
@@ -1227,10 +1227,10 @@ Click on the "+ Add" button under "Action Handler", and then select
 
 Fill in the parameters required by the action:
 
-Two parameters is required by action "Data to TimescaleDB":
+Two parameters are required by action "Data to TimescaleDB":
 
 1). SQL template. SQL template is the sql command you'd like to run
-when the action is triggered. In this example we'll insert a message
+when the action is triggered. In this example, we'll insert a message
 into timescaledb, so type in the following sql
 template:
 
@@ -1263,8 +1263,8 @@ Back to the "Actions" dialog, and then click on the "Confirm" button.
 
 ![image](./assets/rule-engine/timescaledb_action_3.png)
 
-Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+Back to the creating rule page, click the "Create" button. The
+    rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/timescaledb_rule_overview_0.png)
 
@@ -1281,7 +1281,7 @@ We have finished, testing the rule by sending an MQTT message to
 > Payload: {"temp":24,"humidity":30,"location":"hangzhou"}
 ```
 
-Then inspect the TimescaleDB table, verify a new record has been
+Then inspect the TimescaleDB table, and verify a new record has been
 inserted:
 
  tutorial=\# SELECT \* FROM conditions LIMIT 100;
@@ -1344,7 +1344,7 @@ Click on the "+ Add" button under "Action Handler", and then select
 
 Fill in the parameters required by the action:
 
-Six parameters is required by action "Data to InfluxDB" :
+Six parameters are required by action "Data to InfluxDB" :
 
 1). Measurement: Measurement of the data point.
 
@@ -1378,7 +1378,7 @@ Back to the "Actions" dialog, and then click on the "Confirm" button.
 
 ![image](./assets/rule-engine/influxdb_action_3.png)
 
-Back to the creating rule page, then click on "Create" button. The rule we created will be show in the rule list:
+Back to the creating rule page, click the "Create" button. The rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/influxdb_rule_overview_0.png)
 
@@ -1396,7 +1396,7 @@ We have finished, testing the rule by sending an MQTT message to
 > {"host":"serverA","location":"roomA","internal":25,"external":37}
 ```
 
-Then inspect the InfluxDB table, verify a new record has been
+Then inspect the InfluxDB table, and verify a new record has been
 inserted:
 
 ```bash
@@ -1471,7 +1471,7 @@ Click on the "+ Add" button under "Action Handler", and then select
 
 Fill in the parameters required by the action:
 
-Two parameters is required by action "Data to Kafka":
+Two parameters are required by action "Data to Kafka":
 
 1). Kafka Topic
 
@@ -1495,8 +1495,8 @@ Back to the "Actions" dialog, and then click on the "Confirm"
 
 ![image](./assets/rule-engine/kafka_action_2.png)
 
-Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+Back to the creating rule page, click the "Create" button. The
+    rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/kafka_rule_overview_0.png)
 
@@ -1513,7 +1513,7 @@ We have finished, testing the rule by sending an MQTT message to
 > Payload: "hello"
 ```
 
-Then inspect Kafka by consume from the
+Then inspect Kafka by consuming from the
 topic:
 
 ```bash
@@ -1572,7 +1572,7 @@ Click on the "+ Add" button under "Action Handler", and then select
 
 Fill in the parameters required by the action:
 
-Two parameters is required by action "Data bridge to Pulsar":
+Two parameters are required by action "Data bridge to Pulsar":
 
 1). Pulsar Topic
 
@@ -1596,8 +1596,8 @@ Back to the "Actions" dialog, and then click on the "Confirm"
 
 ![image](./assets/rule-engine/pulsar_action_2.png)
 
-Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+Back to the creating rule page, click the "Create" button. The
+    rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/pulsar_rule_overview_0.png)
 
@@ -1661,7 +1661,7 @@ Bind an action:
 
 Fill in the parameters required by the action:
 
-Two parameters is required by action "Data bridge to RabbitMQ":
+Two parameters are required by action "Data bridge to RabbitMQ":
 
 1). RabbitMQ Exchange. Here set it to "messages"
 
@@ -1691,8 +1691,8 @@ Back to the "Actions" dialog, and then click on the "Confirm"
 
 ![image](./assets/rule-engine/rabbit_action_3.png)
 
-Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+Back to the creating rule page, click the "Create" button. The
+    rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/rabbit_rule_overview_0.png)
 
@@ -1709,8 +1709,8 @@ We have finished, testing the rule by sending an MQTT message to
 > Payload: "Hello, World\!"
 ```
 
-Write an AMQP Client to consume the messages, following is the one
-written in python:
+Write an AMQP Client to consume the messages, the following is the one
+written in Python:
 
 ```python
 #!/usr/bin/env python
@@ -1802,8 +1802,8 @@ Back to the "Actions" dialog, and then click on the "Confirm"
 
 ![image](./assets/rule-engine/rpc_action_2.png)
 
-Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+Back to the creating rule page, click the "Create" button. The
+    rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/rpc_rule_overview_0.png)
 
