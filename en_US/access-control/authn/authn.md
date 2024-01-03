@@ -77,7 +77,7 @@ Currently, EMQX only supports creating an authentication chain for MQTT clients.
 
 :::
 
-When the X.509 certificate authentication is applied, it must be executed before performing the authentication chain.
+When the X.509 certificate authentication is applied, it will be executed before performing the authentication chain.
 
 ### Workflow
 
