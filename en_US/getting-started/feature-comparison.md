@@ -200,7 +200,7 @@ via Rule Engine and Data Bridge</a></td>
   </tr>
   <tr>
     <td><b>Performance</b></td>
-    <td><span style="font-weight:normal">&lt; 100k MQTT messages per second</span></td>
+    <td><span style="font-weight:normal">5M+ MQTT messages per second</span></td>
     <td><span style="font-weight:normal">5M+ MQTT messages per second</span></td>
     <td><span style="font-weight:normal">1000 MQTT messages per second</span></td>
     <td><span style="font-weight:normal">5M+ MQTT messages per second</span></td>
