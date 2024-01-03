@@ -1,4 +1,4 @@
-# Client TLS
+# Client TLS Connection Code Examples
 
 EMQX provides sample MQTT client code and project example via the [MQTT-Client-Examples](https://github.com/emqx/MQTT-Client-Examples) Git repository, and TLS use guide is provided in the example.
 
