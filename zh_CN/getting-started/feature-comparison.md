@@ -198,7 +198,7 @@
   </tr>
   <tr>
     <td><b>吞吐量</b></td>
-    <td><span style="font-weight:normal">&lt; 10 万 MQTT 消息每秒</span></td>
+    <td><span style="font-weight:normal">500 万+ MQTT 消息每秒</span></td>
     <td><span style="font-weight:normal">500 万+ MQTT 消息每秒</span></td>
     <td><span style="font-weight:normal">1000 MQTT 消息每秒</span></td>
     <td><span style="font-weight:normal">500 万+ MQTT 消息每秒</span></td>
