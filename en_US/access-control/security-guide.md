@@ -2,13 +2,19 @@
 
 Security is a critical aspect of any MQTT-based application, and this guide is designed to help you understand and implement robust security measures in your EMQX deployments. This chapter explores various security-related topics, focusing on access control, authorization and network security using Transport Layer Security (TLS). 
 
+- [Networking and TLS](../network/overview.md) explain how EMQX supports end-to-end encrypted communication, including enabling SSL/TLS connections and obtaining SSL/TLS certificates.
+
 - [Authentication](./authn/authn.md)
 
   Authentication is the process of verifying the identity of a client. It is essential to most applications and can help protect our services from illegal client connections. EMQX supports several authentication mechanisms to better protect our clients, including:
 
+  - X.509 certificate authentication
   - Username/password authentication
   - JWT authentication
   - Enhanced authentication of MQTT 5.0
+  - PSK authentication
+
+  This section introduces how these authentication mechanisms work and how to configure them in EMQX.
 
 - [Authorization](./authz/authz.md)
 
@@ -21,6 +27,4 @@ Security is a critical aspect of any MQTT-based application, and this guide is d
 - [Flapping Detect](./flapping-detect.md)
 
   EMQX automatically bans frequently logging clients to prevent them from consuming server resources that may affect other clients. 
-
-- [Networking and TLS](../network/overview.md) explain how EMQX supports end-to-end encrypted communication, including enabling SSL/TLS connections, PSK authentication, and obtaining SSL/TLS certificates.
 
