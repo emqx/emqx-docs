@@ -218,11 +218,7 @@
       title_cn: 认证
       path: access-control/authn/authn
       children:
-        - title_en: X.509 Authentication
-          title_cn: X.509 证书认证
-          path: access-control/authn/x509
-          lang: cn
-        - access-control/authn/jwt
+        - access-control/authn/x509
         - title_en: Password based
           title_cn: 密码认证
           path: access-control/authn/pwoverview
@@ -235,6 +231,7 @@
             - access-control/authn/redis
             - access-control/authn/ldap
             - access-control/authn/http
+        - access-control/authn/jwt
         - access-control/authn/scram
         - network/psk-authentication
         - access-control/authn/user_management

@@ -36,7 +36,7 @@ EMQX provides comprehensive SSL/TLS capability support, enabling both one-way an
 
 You need to prepare the SSL/TLS certificates for authentication before establishing an SSL/TLS connection. EMQX only provides a set of SSL/TLS certificates (located in the `etc/certs` directory of the installation package) for testing purposes. When used in a production environment, reliable certificates signed by a trusted CA should be used. For information on how to apply for relevant certificates, see [Obtain SSL/TLS Certificates](./tls-certificate.md).
 
-## Enable SSL/TLS Connection with One-Way Authentication
+## Enable SSL/TLS with One-Way Authentication
 
 EMQX, by default, enables the SSL/TLS listener on port `8883` and sets it for one-way authentication. You can configure it through the Dashboard and configuration files to implement certificate replacement and modify other configuration items.
 
@@ -117,7 +117,7 @@ mqttx sub -t 't/1' -h localhost -p 8883 \
   --insecure
 ```
 
-## Enable SSL/TLS Connection with Two-Way Authentication
+## Enable SSL/TLS with Two-Way Authentication
 
 Two-way authentication is an extension of one-way authentication, where EMQX is further configured to verify client certificates, ensuring the legitimacy of the client's identity.
 
