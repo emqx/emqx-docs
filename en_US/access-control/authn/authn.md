@@ -2,21 +2,33 @@
 
 Authentication is the process of verifying the identity of a client. It is an essential part of most applications and can help to protect our services from illegal client connections. 
 
-EMQX supports several authentication mechanisms to better protect our clients and it also supports [TLS X.509 certificates](https://www.mongodb.com/docs/manual/core/security-x.509/) and [TLS-PSK](https://www.rfc-editor.org/rfc/rfc4279) protocols, which offers an option for the authentication request between the client and the server side. 
+EMQX supports several authentication mechanisms and also supports [TLS X.509](https://en.wikipedia.org/wiki/X.509) certificate authentication and [TLS-PSK](https://www.rfc-editor.org/rfc/rfc4279) authentication, which offers an option for the authentication request between the client and the server side. 
 
 This section covers the basic concepts of identity authentication and the settings. 
+
+::: tip
+
+By default, EMQX does not enable the authentication feature, meaning it allows all clients to connect. If you are using it in a production environment, make sure to configure at least one authentication method in advance.
+
+:::
 
 ## Authentication Mechanism
 
 The authentication mechanisms supported in EMQX include:
 
+- X.509 Certificate Authentication
 - Username/password authentication
 - JWT authentication
 - Enhanced authentication of MQTT 5.0
+- PSK Authentication
+
+### X.509 Certificate Authentication
+
+EMQX supports [X.509 certificate authentication](./x509.md) for client authentication. Using X.509 certificate authentication in EMQX, clients and servers can establish trusted connections through TLS/SSL, ensuring the authenticity of communication parties and the integrity of the data transmitted. EMQX allows for both one-way and two-way authentication: one-way authentication where only the server is authenticated by the client, and two-way authentication where both client and server mutually verify each other's certificates. This flexibility caters to various levels of security requirements and deployment scenarios.
 
 ### Password Authentication
 
-EMQX supports the simplest and most popular password authentication, which requires the client to provide credentials that can indicate identities, such as username, client ID, and the corresponding password. In some cases, users may choose to use some fields in the TLS certificate (such as the certificate's Common Name) as the client's identity credentials. Either way, these credentials are stored in advance in a database, where passwords are usually stored in salted and hashed forms.
+EMQX supports the simplest and most popular password authentication, which requires the client to provide credentials indicating identities, such as username, client ID, and the corresponding password. In some cases, users may choose to use some fields in the TLS certificate (such as the certificate's Common Name) as the client's identity credentials. Either way, these credentials are stored in advance in a database, where passwords are usually stored in salted and hashed forms.
 
 This is how password authentication in EMQX works: The client will carry the identity credentials when initiating a connect request, EMQX will query the database for the hashed password corresponding to the identity credentials provided by the client, and will only accept the connection after the match is successful.
 ![emqx-authn-flow](./assets/emqx-authn-flow.png)
@@ -27,13 +39,17 @@ EMQX can also be configured to delegate authentication work to external services
 
 ### JWT Authentication
 
-[JSON Web Token (JWT)](https://jwt.io/) is a token-based authentication mechanism, which does not rely on the server to retain client authentication information or session information.
+[JSON Web Token (JWT)](https://jwt.io/) is a token-based authentication mechanism that does not rely on the server to retain client authentication or session information.
 
 The client carries the JWT in the connection request, and EMQX uses the pre-configured secret or public key to verify the JWT signature. If the user configures a JWKS endpoint, the JWT authenticator verifies the JWT signature using the list of public keys queried from the JWKS endpoint.
 
 ### MQTT 5.0 Enhanced Authentication
 
-[MQTT 5.0 enhanced authentication](https://www.emqx.com/en/blog/mqtt5-enhanced-authentication) extends the basic authentication to include challenge/response style authentication. The implementation of enhanced authentication allows the use of various more secure authentication mechanisms, such as Salted Challenge Response Authentication Mechanism (SCRAM) authentication, Kerberos authentication, and etc. The concrete EMQX implementation of the enhanced authentication supports SCRAM and provides support for SCRAM user management through our built-in database.
+[MQTT 5.0 enhanced authentication](https://www.emqx.com/en/blog/mqtt5-enhanced-authentication) extends the basic authentication to include challenge/response style authentication. The implementation of enhanced authentication allows the use of various more secure authentication mechanisms, such as Salted Challenge Response Authentication Mechanism (SCRAM) authentication, Kerberos authentication, etc. The concrete EMQX implementation of the enhanced authentication supports SCRAM and provides support for SCRAM user management through our built-in database.
+
+### PSK Authentication
+
+[TLS PSK authentication](./psk-authentication.md) in EMQX provides a simpler yet secure alternative to certificate-based TLS. It relies on a shared secret key known both to the client and the server, bypassing the need for digital certificates. This mechanism is particularly useful in resource-constrained environments, where the overhead of handling certificates can be significant.
 
 ## EMQX Authenticator
 
@@ -53,15 +69,15 @@ EMQX supports 9 authentication methods (referred to as authenticator hereafter) 
 
 ## Authentication Chain
 
-EMQX allows the creation of authentication chain using multiple authenticators and follows the authenticator's position in the chain to perform the authentication. 
+EMQX allows the creation of authentication chain using multiple authenticators and follows the authenticator's position in the chain to perform the authentication. The authenticators for creating the authentication chain should be of different types.
 
 ::: tip
 
 Currently, EMQX only supports creating an authentication chain for MQTT clients. For gateways, it is recommended to use its own authenticator, and the authentication chain is also not supported. 
 
-Besides, the authenticators for creating the authentication chain should be of different types.
-
 :::
+
+When the X.509 certificate authentication is applied, it must be executed before performing the authentication chain.
 
 ### Workflow
 
@@ -70,7 +86,7 @@ With authentication chain configured, EMQX first tries to retrieve the matching 
 Taking the password-based authentication as an example, EMQX tries to retrieve the possible authentication information from the configured authenticators:
 
 1. If authentication credentials exist, and:
-   - the authentication information matches(e.g. password is correct, JWT is valid), the client will be allowed to connect.
+   - the authentication information matches (e.g. password is correct, JWT is valid), the client will be allowed to connect.
    - the authentication information does not match, and the client will be denied to connect.
 2. When multiple authenticators are configured, EMQX will look for credentials in order. Once the match is successful it will allow the client to connect.
    If no credentials are found in the current authenticator, it will:
@@ -165,13 +181,13 @@ EMQX currently supports the following placeholders:
 - `${cert_subject}`: It will be replaced by the subject of the client's TLS certificate at runtime, only applicable to TLS connections.
 - `${cert_common_name}`: It will be replaced by the Common Name of the client's TLS certificate at runtime,  only applicable to TLS connections.
 
-## Configure Authentication Mechanism
+## Configure Authenticators
 
 EMQX provides 3 ways to use authentication, namely: Dashboard, Configuration file and HTTP API.
 
 ### Configure with Dashboard
 
-EMQX Dashboard is an intuitive way to configure EMQX authenticators, where you can check their status or customize the settings. For example, as shown in the screenshot below, we have configured 2 authenticators: password authentication based on built-in database and JWT authentication. 
+EMQX Dashboard is an intuitive way to configure EMQX authenticators, where you can check their status or customize the settings. For example, as shown in the screenshot below, you have configured 2 authenticators: password authentication based on built-in database and JWT authentication. 
 
 ![](./assets/authn-dashboard-2.png)
 
