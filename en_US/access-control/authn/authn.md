@@ -49,7 +49,7 @@ The client carries the JWT in the connection request, and EMQX uses the pre-conf
 
 ### PSK Authentication
 
-[TLS PSK authentication](./psk-authentication.md) in EMQX provides a simpler yet secure alternative to certificate-based TLS. It relies on a shared secret key known both to the client and the server, bypassing the need for digital certificates. This mechanism is particularly useful in resource-constrained environments, where the overhead of handling certificates can be significant.
+[PSK authentication](../../network/psk-authentication.md) in EMQX provides a simpler yet secure alternative to certificate-based TLS. It relies on a shared secret key known both to the client and the server, bypassing the need for digital certificates. This mechanism is particularly useful in resource-constrained environments, where the overhead of handling certificates can be significant.
 
 ## EMQX Authenticator
 
