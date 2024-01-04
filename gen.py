@@ -57,6 +57,8 @@ def parse(children, lang, edition):
     acc=[]
     for i in range(len(children)):
         child = children[i]
+        if 'path' in child:
+            child['path'] = child['path'].replace('${edition}', edition)
         if isinstance(child, str):
             child = child.replace('${edition}', edition)
         if not is_lang_match(child, lang):

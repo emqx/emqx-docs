@@ -70,7 +70,6 @@ This is the release notes for EMQX:
 - [4.4.2](./changes-ce-v4.md#4.4.2): 2022-04-01
 - [4.4.1](./changes-ce-v4.md#4.4.1): 2022-02-21
 - [4.4.0](./changes-ce-v4.md#4.4.0): 2022-02-18
-- [4.4-beta.1](./changes-ce-v4.md#4.4-beta.1): 2021-12-21
 
 ## v4.3
 
@@ -113,7 +112,6 @@ This is the release notes for EMQX:
 - [4.2.2](./changes-ce-v4.md#4.2.2): 2020-10-24
 - [4.2.1](./changes-ce-v4.md#4.2.1): 2020-09-29
 - [4.2.0](./changes-ce-v4.md#4.2.0): 2020-09-05
-- [4.2-rc.2](./changes-ce-v4.md#4.2-rc.2): 2020-08-28
 
 ## v4.1
 
@@ -122,12 +120,6 @@ This is the release notes for EMQX:
 - [4.1.2](./changes-ce-v4.md#4.1.2): 2020-07-23
 - [4.1.1](./changes-ce-v4.md#4.1.1): 2020-07-03
 - [4.1.0](./changes-ce-v4.md#4.1.0): 2020-06-04
-- [4.1-rc.2](./changes-ce-v4.md#4.1-rc.2): 2020-05-23
-- [4.1-rc.1](./changes-ce-v4.md#4.1-rc.1): 2020-05-15
-- [4.1-beta.1](./changes-ce-v4.md#4.1-beta.1): 2020-04-26
-- [4.1-alpha.3](./changes-ce-v4.md#4.1-alpha.3): 2020-04-17
-- [4.1-alpha.2](./changes-ce-v4.md#4.1-alpha.2): 2020-04-11
-- [4.1-alpha.1](./changes-ce-v4.md#4.1-alpha.1): 2020-03-27
 
 ## v4.0
 
@@ -142,10 +134,6 @@ This is the release notes for EMQX:
 - [4.0.2](./changes-ce-v4.md#4.0.2): 2019-02-07
 - [4.0.1](./changes-ce-v4.md#4.0.1): 2019-01-17
 - [4.0.0](./changes-ce-v4.md#4.0.0): 2019-01-10
-- [4.0-beta.4](./changes-ce-v4.md#4.0-beta.4): 2019-11-18
-- [4.0-beta.3](./changes-ce-v4.md#4.0-beta.3): 2019-11-01
-- [4.0-beta.2](./changes-ce-v4.md#4.0-beta.2): 2019-10-14
-- [4.0-beta.1](./changes-ce-v4.md#4.0-beta.1): 2019-09-30
 
 ## v3.2
 
@@ -157,42 +145,17 @@ This is the release notes for EMQX:
 - [3.2.2](./changes-ce-v3.md#3.2.2): 2019-08-03
 - [3.2.1](./changes-ce-v3.md#3.2.1): 2019-07-20
 - [3.2.0](./changes-ce-v3.md#3.2.0): 2019-07-12
-- [3.2-rc.3](./changes-ce-v3.md#3.2-rc.3): 2019-07-06
-- [3.2-rc.2](./changes-ce-v3.md#3.2-rc.2): 2019-06-29
-- [3.2-rc.1](./changes-ce-v3.md#3.2-rc.1): 2019-06-22
-- [3.2-beta.3](./changes-ce-v3.md#3.2-beta.3): 2019-06-14
-- [3.2-beta.2](./changes-ce-v3.md#3.2-beta.2): 2019-06-06
-- [3.2-beta.1](./changes-ce-v3.md#3.2-beta.1): 2019-05-27
 
 ## v3.1
 
 - [3.1.2](./changes-ce-v3.md#3.1.2): 2019-06-06
 - [3.1.1](./changes-ce-v3.md#3.1.1): 2019-05-10
 - [3.1.0](./changes-ce-v3.md#3.1.0): 2019-04-26
-- [3.1-rc.3](./changes-ce-v3.md#3.1-rc.3): 2019-04-19
-- [3.1-rc.2](./changes-ce-v3.md#3.1-rc.2): 2019-04-13
-- [3.1-rc.1](./changes-ce-v3.md#3.1-rc.1): 2019-04-04
-- [3.1-beta.3](./changes-ce-v3.md#3.1-beta.3): 2019-04-26
-- [3.1-beta.2](./changes-ce-v3.md#3.1-beta.2): 2019-03-16
-- [3.1-beta.1](./changes-ce-v3.md#3.1-beta.1): 2019-02-28
 
 ## v3.0
 
 - [3.0.1](./changes-ce-v3.md#3.0.1): 2019-01-25
 - [3.0.0](./changes-ce-v3.md#3.0.0): 2018-12-22
-- [3.0-rc.5](./changes-ce-v3.md#3.0-rc.5): 2018-11-30
-- [3.0-rc.4](./changes-ce-v3.md#3.0-rc.4): 2018-11-24
-- [3.0-rc.3](./changes-ce-v3.md#3.0-rc.3): 2018-11-10
-- [3.0-rc.2](./changes-ce-v3.md#3.0-rc.2): 2018-10-27
-- [3.0-rc.1](./changes-ce-v3.md#3.0-rc.1): 2018-10-20
-- [3.0-beta.4](./changes-ce-v3.md#3.0-beta.4): 2018-09-30
-- [3.0-beta.3](./changes-ce-v3.md#3.0-beta.3): 2018-09-23
-- [3.0-beta.2](./changes-ce-v3.md#3.0-beta.2): 2018-09-10
-- [3.0-beta.1](./changes-ce-v3.md#3.0-beta.1): 2018-09-02
-- [3.0-Beta.4](./changes-ce-v3.md#3.0-Beta.4): 2018-09-29
-- [3.0-Beta.3](./changes-ce-v3.md#3.0-Beta.3): 2018-09-22
-- [3.0-Beta.2](./changes-ce-v3.md#3.0-Beta.2): 2018-09-10
-- [3.0-Beta.1](./changes-ce-v3.md#3.0-Beta.1): 2018-09-02
 
 ## v2.3
 
@@ -208,21 +171,10 @@ This is the release notes for EMQX:
 - [2.3.2](./changes-ce-v3.md#2.3.2): 2017-12-26
 - [2.3.1](./changes-ce-v3.md#2.3.1): 2017-12-03
 - [2.3.0 "Passenger's Log"](./changes-ce-v3.md#2.3.0 "Passenger's Log"): 2017-11-20
-- [2.3-rc.2](./changes-ce-v3.md#2.3-rc.2): 2017-10-22
-- [2.3-rc.1](./changes-ce-v3.md#2.3-rc.1): 2017-10-12
-- [2.3-beta.4](./changes-ce-v3.md#2.3-beta.4): 2017-09-13
-- [2.3-beta.3](./changes-ce-v3.md#2.3-beta.3): 2017-08-21
-- [2.3-beta.2](./changes-ce-v3.md#2.3-beta.2): 2017-08-12
-- [2.3-beta.1](./changes-ce-v3.md#2.3-beta.1): 2017-07-24
 
 ## v2.2
 
 - [2.2 "Nostalgia"](./changes-ce-v3.md#2.2 'Nostalgia'): 2017-07-08
-- [2.2-rc.2](./changes-ce-v3.md#2.2-rc.2): 2017-07-03
-- [2.2-rc.1](./changes-ce-v3.md#2.2-rc.1): 2017-06-14
-- [2.2-beta.3](./changes-ce-v3.md#2.2-beta.3): 2017-05-27
-- [2.2-beta.2](./changes-ce-v3.md#2.2-beta.2): 2017-05-20
-- [2.2-beta.1](./changes-ce-v3.md#2.2-beta.1): 2017-05-05
 - [2.2 "Nostalgia"](./changes-ce-v3.md#2.2-nostalgia): 2017-07-08
 
 ## v2.0
@@ -234,11 +186,6 @@ This is the release notes for EMQX:
 - [2.1.2](./changes-ce-v3.md#2.1.2): 2017-04-21
 - [2.1.1](./changes-ce-v3.md#2.1.1): 2017-04-14
 - [2.1.0](./changes-ce-v3.md#2.1.0): 2017-04-07
-- [2.1.0-rc.2](./changes-ce-v3.md#2.1.0-rc.2): 2017-03-31
-- [2.1.0-rc.1](./changes-ce-v3.md#2.1.0-rc.1): 2017-03-24
-- [2.1.0-beta.2](./changes-ce-v3.md#2.1.0-beta.2): 2017-03-13
-- [2.1.0-beta.1](./changes-ce-v3.md#2.1.0-beta.1): 2017-02-24
-- [2.1-beta](./changes-ce-v3.md#2.1-beta): 2017-02-18
 - [2.0.7](./changes-ce-v3.md#2.0.7): 2017-01-20
 - [2.0.6](./changes-ce-v3.md#2.0.6): 2017-01-08
 - [2.0.5](./changes-ce-v3.md#2.0.5): 2016-12-24
@@ -247,12 +194,6 @@ This is the release notes for EMQX:
 - [2.0.2](./changes-ce-v3.md#2.0.2): 2016-12-05
 - [2.0.1](./changes-ce-v3.md#2.0.1): 2016-11-30
 - [2.0 "West of West Lake"](./changes-ce-v3.md#2.0 'West of West Lake'): 2016-11-24
-- [2.0-rc.3](./changes-ce-v3.md#2.0-rc.3): 2016-11-01
-- [2.0-rc.2](./changes-ce-v3.md#2.0-rc.2): 2016-10-19
-- [2.0-rc.1](./changes-ce-v3.md#2.0-rc.1): 2016-10-03
-- [2.0-beta.3](./changes-ce-v3.md#2.0-beta.3): 2016-09-18
-- [2.0-beta.2](./changes-ce-v3.md#2.0-beta.2): 2016-09-10
-- [2.0-beta.1](./changes-ce-v3.md#2.0-beta.1): 2016-08-30
 
 ## v1.1
 
@@ -269,102 +210,12 @@ This is the release notes for EMQX:
 - [1.0 (The Seven Mile Journey)](./changes-ce-v3.md#1.0 'The Seven Mile Journey'): 2016-04-13
 - [1.0 (七英里)](./changes-ce-v3.md#1.0 '七英里'): 2016-04-13
 
-## v0.17
-
-- [0.17.1-beta](./changes-ce-v3.md#0.17.1-beta): 2016-03-22
-- [0.17.0-beta](./changes-ce-v3.md#0.17.0-beta): 2016-03-15
-
-## v0.16
-
-- [0.16.0-beta](./changes-ce-v3.md#0.16.0-beta): 2016-02-16
-
-## v0.15
-
-- [0.15.0-beta](./changes-ce-v3.md#0.15.0-beta): 2016-01-31
-
-## v0.14
-
-- [0.14.1-beta](./changes-ce-v3.md#0.14.1-beta): 2015-12-28
-- [0.14.0-beta](./changes-ce-v3.md#0.14.0-beta): 2015-12-18
-
-## v0.13
-
-- [0.13.1-beta](./changes-ce-v3.md#0.13.1-beta): 2015-11-28
-- [0.13.0-beta](./changes-ce-v3.md#0.13.0-beta): 2015-11-08
-
-## v0.12
-
-- [0.12.3-beta](./changes-ce-v3.md#0.12.3-beta): 2015-10-22
-- [0.12.2-beta](./changes-ce-v3.md#0.12.2-beta): 2015-10-16
-- [0.12.1-beta](./changes-ce-v3.md#0.12.1-beta): 2015-10-15
-- [0.12.0-beta](./changes-ce-v3.md#0.12.0-beta): 2015-10-08
-
-## v0.11
-
-- [0.11.0-beta](./changes-ce-v3.md#0.11.0-beta): 2015-09-25
-
-## v0.10
-
-- [0.10.4-beta](./changes-ce-v3.md#0.10.4-beta): 2015-09-18
-- [0.10.3-beta](./changes-ce-v3.md#0.10.3-beta): 2015-08-30
-- [0.10.2-beta](./changes-ce-v3.md#0.10.2-beta): 2015-08-26
-- [0.10.1-beta](./changes-ce-v3.md#0.10.1-beta): 2015-08-25
-- [0.10.0-beta](./changes-ce-v3.md#0.10.0-beta): 2015-08-20
-
-## v0.9
-
-- [0.9.3-alpha](./changes-ce-v3.md#0.9.3-alpha): 2015-07-25
-- [0.9.2-alpha](./changes-ce-v3.md#0.9.2-alpha): 2015-07-18
-- [0.9.1-alpha](./changes-ce-v3.md#0.9.1-alpha): 2015-07-10
-- [0.9.0-alpha](./changes-ce-v3.md#0.9.0-alpha): 2015-07-09
-
-## v0.8
-
-- [0.8.6-beta](./changes-ce-v3.md#0.8.6-beta): 2015-06-17
-- [0.8.5-beta](./changes-ce-v3.md#0.8.5-beta): 2015-06-10
-- [0.8.4-beta](./changes-ce-v3.md#0.8.4-beta): 2015-06-08
-- [0.8.3-beta](./changes-ce-v3.md#0.8.3-beta): 2015-06-05
-- [0.8.2-alpha](./changes-ce-v3.md#0.8.2-alpha): 2015-06-01
-- [0.8.1-alpha](./changes-ce-v3.md#0.8.1-alpha): 2015-05-28
-- [0.8.0-alpha](./changes-ce-v3.md#0.8.0-alpha): 2015-05-25
-
-## v0.7
-
-- [0.7.1-alpha](./changes-ce-v3.md#0.7.1-alpha): 2015-05-04
-- [0.7.0-alpha](./changes-ce-v3.md#0.7.0-alpha): 2015-05-02
-
-## v0.6
-
-- [0.6.2-alpha](./changes-ce-v3.md#0.6.2-alpha): 2015-04-24
-- [0.6.1-alpha](./changes-ce-v3.md#0.6.1-alpha): 2015-04-20
-- [0.6.0-alpha](./changes-ce-v3.md#0.6.0-alpha): 2015-04-17
-
-## v0.5
-
-- [0.5.5-beta](./changes-ce-v3.md#0.5.5-beta): 2015-04-09
-- [0.5.4-alpha](./changes-ce-v3.md#0.5.4-alpha): 2015-03-22
-- [0.5.3-alpha](./changes-ce-v3.md#0.5.3-alpha): 2015-03-19
-- [0.5.2-alpha](./changes-ce-v3.md#0.5.2-alpha): 2015-03-18
-- [0.5.1-alpha](./changes-ce-v3.md#0.5.1-alpha): 2015-03-13
-- [0.5.0-alpha](./changes-ce-v3.md#0.5.0-alpha): 2015-03-12
-
-## v0.4
-
-- [0.4.0-alpha](./changes-ce-v3.md#0.4.0-alpha): 2015-03-10
-
-## v0.3
-
-- [0.3.4-beta](./changes-ce-v3.md#0.3.4-beta): 2015-03-08
-- [0.3.3-beta](./changes-ce-v3.md#0.3.3-beta): 2015-03-07
-- [0.3.2-beta](./changes-ce-v3.md#0.3.2-beta): 2015-03-05
-- [0.3.1-beta](./changes-ce-v3.md#0.3.1-beta): 2015-03-02
-- [0.3.0-beta](./changes-ce-v3.md#0.3.0-beta): 2015-01-19
-- [0.3.0-alpha](./changes-ce-v3.md#0.3.0-alpha): 2015-01-08
-
 ## v0.2
 
-- [0.2.1-beta](./changes-ce-v3.md#0.2.1-beta): 2015-01-08
 - [0.2.0](./changes-ce-v3.md#0.2.0): 2014-12-07
+
+## v0.1
+
 - [0.1.5](./changes-ce-v3.md#0.1.5): 2013-01-05
 - [0.1.4](./changes-ce-v3.md#0.1.4): 2013-01-04
 - [0.1.3](./changes-ce-v3.md#0.1.3): 2013-01-04

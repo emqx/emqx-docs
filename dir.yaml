@@ -692,17 +692,10 @@
       path: https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack
 
 - title_en: Release Notes
-  title_cn: 版本发布说明
+  title_cn: 版本发布历史
   collapsed: true
+  path: changes/all-changes-${edition}
   children:
-    - title_en: Releases
-      title_cn: 版本发布
-      edition: ee
-      path: changes/all-changes-ee
-    - title_en: Releases
-      title_cn: 版本发布
-      edition: ce
-      path: changes/all-changes-ce
     - changes/changes-${edition}-v5
     - changes/changes-${edition}-v4
     - title_en: Version 0.1 to 3.x
