@@ -199,44 +199,6 @@
   path: access-control/security-guide
   collapsed: true
   children:
-    - title_en: Authentication
-      title_cn: 认证
-      path: access-control/authn/authn
-      children:
-        - title_en: Password based
-          title_cn: 密码认证
-          path: access-control/authn/pwoverview
-          children:
-            - access-control/authn/mnesia
-            - access-control/authn/mysql
-            - access-control/authn/mongodb
-            - access-control/authn/postgresql
-            - access-control/authn/redis
-            - title_en: LDAP
-              title_cn: LDAP
-              path: access-control/authn/ldap
-              edition: ee
-            - access-control/authn/http
-            - access-control/authn/jwt
-            - access-control/authn/scram
-            - access-control/authn/user_management
-    - title_en: Authorization
-      title_cn: 授权
-      path: access-control/authz/authz
-      children:
-        - access-control/authz/file
-        - access-control/authz/mnesia
-        - access-control/authz/mysql
-        - access-control/authz/mongodb
-        - access-control/authz/postgresql
-        - access-control/authz/redis
-        - title_en: LDAP
-          title_cn: LDAP
-          path: access-control/authz/ldap
-          edition: ee
-        - access-control/authz/http
-    - access-control/blacklist
-    - access-control/flapping-detect
     - title_en: Network and TLS
       title_cn: 网络与 TLS
       path: network/overview
@@ -244,9 +206,7 @@
       children:
         - network/emqx-mqtt-tls
         - network/mqtt-client-tls
-        - network/psk-authentication
         - network/tls-certificate
-      # - network/crl-and-ocsp-stapling
         - network/crl
         - network/ocsp
         - title_en: GMSSL
@@ -254,6 +214,42 @@
           lang: cn
           path: network/gmssl
       # - network/ipv6
+    - title_en: Authentication
+      title_cn: 认证
+      path: access-control/authn/authn
+      children:
+        - access-control/authn/x509
+        - access-control/authn/jwt
+        - title_en: Password based
+          title_cn: 密码认证
+          path: access-control/authn/pwoverview
+          collapsed: true
+          children:
+            - access-control/authn/mnesia
+            - access-control/authn/mysql
+            - access-control/authn/mongodb
+            - access-control/authn/postgresql
+            - access-control/authn/redis
+            - access-control/authn/ldap
+            - access-control/authn/http
+        - access-control/authn/scram
+        - network/psk-authentication
+        - access-control/authn/user_management
+    - title_en: Authorization
+      title_cn: 授权
+      path: access-control/authz/authz
+      collapsed: true
+      children:
+        - access-control/authz/file
+        - access-control/authz/mnesia
+        - access-control/authz/mysql
+        - access-control/authz/mongodb
+        - access-control/authz/postgresql
+        - access-control/authz/redis
+        - access-control/authz/ldap
+        - access-control/authz/http
+    - access-control/blacklist
+    - access-control/flapping-detect
 
 - title_en: Rule Engine
   title_cn: 规则引擎
