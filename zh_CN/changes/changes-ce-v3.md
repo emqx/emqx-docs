@@ -1114,11 +1114,13 @@ EMQ-2.0 版本正式发布！EMQ-1.0 版本产品环境下已支持 900K 并发�
 
 共享订阅(Shared Subscription)支持在多订阅者间采用分组负载平衡方式派发消息:
 
-    ---------
-    |       | --Msg1--> Subscriber1
-    Publisher--Msg1,Msg2,Msg3-->|  EMQ  | --Msg2--> Subscriber2
-    |       | --Msg3--> Subscriber3
-    ---------
+```bash
+---------
+|       | --Msg1--> Subscriber1
+Publisher--Msg1,Msg2,Msg3-->|  EMQ  | --Msg2--> Subscriber2
+|       | --Msg3--> Subscriber3
+---------
+```
 
 使用方式: 订阅者在主题(Topic)前增加'$queue'或'$share/\<group>/'前缀。
 
@@ -1148,25 +1150,29 @@ MQTT-SN 插件: [https://github.com/emqtt/emq_sn](https://github.com/emqtt/emq_s
 
 2.0 版本支持用户友好的'K = V'格式配置文件 etc/emq.conf:
 
-    node.name = emqttd@127.0.0.1
+```bash
+node.name = emqttd@127.0.0.1
 
-    ...
+...
 
-    mqtt.listener.tcp = 1883
+mqtt.listener.tcp = 1883
 
-    ...
+...
+```
 
 ### 操作系统环境变量
 
 2.0 版本支持操作系统环境变量。启动时通过环境变量设置 EMQ 节点名称、安全 Cookie 以及 TCP 端口号:
 
-    EMQ_NODE_NAME=emqttd@127.0.0.1
-    EMQ_NODE_COOKIE=emq_dist_cookie
-    EMQ_MAX_PORTS=65536
-    EMQ_TCP_PORT=1883
-    EMQ_SSL_PORT=8883
-    EMQ_HTTP_PORT=8083
-    EMQ_HTTPS_PORT=8084
+```bash
+EMQ_NODE_NAME=emqttd@127.0.0.1
+EMQ_NODE_COOKIE=emq_dist_cookie
+EMQ_MAX_PORTS=65536
+EMQ_TCP_PORT=1883
+EMQ_SSL_PORT=8883
+EMQ_HTTP_PORT=8083
+EMQ_HTTPS_PORT=8084
+```
 
 ### Docker 镜像支持
 
@@ -1178,15 +1184,15 @@ EMQ-2.0 版本支持 Docker 镜像制作，Dockerfile 开源在: [https://github
 
 ### 问题与改进
 
-#764: add mqtt.cache_acl option
+- 764: add mqtt.cache_acl option
 
-#667: Configuring emqttd from environment variables
+- 667: Configuring emqttd from environment variables
 
-#722: mqtt/superuser calls two times emqtt_auth_http
+- 722: mqtt/superuser calls two times emqtt_auth_http
 
-#754: "-heart" option for EMQ 2.0
+- 754: "-heart" option for EMQ 2.0
 
-#741: emq_auth_redis cannot use hostname as server address
+- 741: emq_auth_redis cannot use hostname as server address
 
 ### 扩展插件
 

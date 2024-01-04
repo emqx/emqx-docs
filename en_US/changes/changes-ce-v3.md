@@ -260,7 +260,7 @@ Bug fixes:
 
 - Fix the issue rendering resources list incorrectly in Dashboard on Safari
 
-Github PR: [emqx/emqx-dashboard#124 ](https://github.com/emqx/emqx-dashboard/pull/124) , [ emqx/emqx-dashboard#125 ](https://github.com/emqx/emqx-dashboard/pull/125) , [ emqx/emqx-dashboard#126](https://github.com/emqx/emqx-dashboard/pull/126)
+Github PR: [emqx/emqx-dashboard#124](https://github.com/emqx/emqx-dashboard/pull/124) , [emqx/emqx-dashboard#125](https://github.com/emqx/emqx-dashboard/pull/125) , [emqx/emqx-dashboard#126](https://github.com/emqx/emqx-dashboard/pull/126)
 
 ### emqx-lwm2m (plugin)
 
@@ -384,7 +384,7 @@ Bug fixes:
 
 - Configure and use `long_gc` 与 `long_schedule` correctly
 
-Github PR: [emqx/emqx#2504 ](https://github.com/emqx/emqx/pull/2504) , [ emqx/emqx#2513](https://github.com/emqx/emqx/pull/2513)
+Github PR: [emqx/emqx#2504](https://github.com/emqx/emqx/pull/2504) , [emqx/emqx#2513](https://github.com/emqx/emqx/pull/2513)
 
 - Fix the issue `suboptions/count` not been updated
 
@@ -476,7 +476,7 @@ Github PR: [emqx/emqx#2115](https://github.com/emqx/emqx/pull/2115)
 
 - Refactor the emqx bridge; Support bridge message persistence.
 
-Github PR: [emqx/emqx#2160 ](https://github.com/emqx/emqx/pull/2160) , [ emqx/emqx#2117 ](https://github.com/emqx/emqx/pull/2117) , [ emqx/emqx#2113 ](https://github.com/emqx/emqx/pull/2113) , [ emqx/emqx#2108 ](https://github.com/emqx/emqx/pull/2108) , [ emqx/emqx#2053](https://github.com/emqx/emqx/pull/2053)
+Github PR: [emqx/emqx#2160](https://github.com/emqx/emqx/pull/2160) , [emqx/emqx#2117](https://github.com/emqx/emqx/pull/2117) , [emqx/emqx#2113](https://github.com/emqx/emqx/pull/2113) , [emqx/emqx#2108](https://github.com/emqx/emqx/pull/2108) , [emqx/emqx#2053](https://github.com/emqx/emqx/pull/2053)
 
 - Optimize route matching
 
@@ -552,7 +552,7 @@ Enhancements:
 
 - Move addtional vm args to a separate vm.args file
 
-Github PR: [emqx/emqx#2033 ](https://github.com/emqx/emqx/pull/2033) , [ emqx/emqx#2057 ](https://github.com/emqx/emqx/pull/2057) , [ emqx/emqx#2070](https://github.com/emqx/emqx/pull/2070)
+Github PR: [emqx/emqx#2033](https://github.com/emqx/emqx/pull/2033) , [emqx/emqx#2057](https://github.com/emqx/emqx/pull/2057) , [emqx/emqx#2070](https://github.com/emqx/emqx/pull/2070)
 
 - Add will topic validation and acl check
 
@@ -1124,18 +1124,17 @@ The _EMQ_ Version 2.0, named "West of West Lake", has been released with a lot o
 
 Shared Subscription supports Load balancing to distribute MQTT messages between multiple subscribers in the same group:
 
-    ---------
-    |       | --Msg1--> Subscriber1
-    Publisher--Msg1,Msg2,Msg3-->|  EMQ  | --Msg2--> Subscriber2
-    |       | --Msg3--> Subscriber3
-    ---------
+```bash
+---------
+|       | --Msg1--> Subscriber1
+Publisher--Msg1,Msg2,Msg3-->|  EMQ  | --Msg2--> Subscriber2
+|       | --Msg3--> Subscriber3
+---------
+```
 
 Create a shared subscription with $queue/ or $share/\<group>/ prefix:
 
-> Prefix
-
-                |  Examples
-
+Prefix          |  Examples
 ----------------|---------------------------------------
 $queue/         |  mosquitto_sub -t '$queue/topic  
 $share/\<group>/ |  mosquitto_sub -t '$share/group/topic
@@ -1148,7 +1147,7 @@ Usage: subscribe a topic with $local/ prefix.
 
 ### erlang.mk and relx
 
-The _EMQ_ 2.0 adopts [erlang.mk ](https://erlang.mk) and [ relx](https://github.com/erlware/relx) tools to build the whole projects on Linux, Unix and Windows.
+The _EMQ_ 2.0 adopts [erlang.mk](https://erlang.mk) and [relx](https://github.com/erlware/relx) tools to build the whole projects on Linux, Unix and Windows.
 
 ### CoAP Support
 
@@ -1166,20 +1165,24 @@ MQTT-SN Plugin: [https://github.com/emqtt/emq_sn](https://github.com/emqtt/emq_s
 
 The release integrated with cuttlefish library, and adopted a more user-friendly k = v syntax for the new configuration file:
 
-    ## Node name
-    node.name = emqttd@127.0.0.1
-    ...
-    ## Max ClientId Length Allowed.
-    mqtt.max_clientid_len = 1024
-    ...
+```bash
+## Node name
+node.name = emqttd@127.0.0.1
+...
+## Max ClientId Length Allowed.
+mqtt.max_clientid_len = 1024
+...
+```
 
 The new configuration files will be preprocessed and translated to an Erlang app.config before the EMQ broker started:
 
-    ----------------------                                          2.0/schema/*.schema      -------------------
+```bash
+----------------------                                          2.0/schema/*.schema      -------------------
     | etc/emq.conf       |                   -----------------              \|/              | data/app.config |
     |       +            | --> mergeconf --> | data/app.conf | -->  cuttlefish generate  --> |                 |
     | etc/plugins/*.conf |                   -----------------                               | data/vm.args    |
     ----------------------                                                                   -------------------
+```
 
 ### OS Environment Variables
 
@@ -1202,15 +1205,15 @@ The _EMQ_ 2.0 fully supports Windows platform. You can run 'emqttd_ctl' command 
 
 ### Bugfix and Enhancements
 
-#764: add mqtt.cache_acl option
+- 764: add mqtt.cache_acl option
 
-#667: Configuring emqttd from environment variables
+- 667: Configuring emqttd from environment variables
 
-#722: mqtt/superuser calls two times emqtt_auth_http
+- 722: mqtt/superuser calls two times emqtt_auth_http
 
-#754: "-heart" option for EMQ 2.0
+- 754: "-heart" option for EMQ 2.0
 
-#741: emq_auth_redis cannot use hostname as server address
+- 741: emq_auth_redis cannot use hostname as server address
 
 ### Plugins
 
@@ -1289,9 +1292,11 @@ Upgrade eSockd library to 4.0 and Support IPv6
 
 Support to listen on specific IP Address:
 
-    {mqtt, {"192.168.1.20", 1883}, [
+```bash
+{mqtt, {"192.168.1.20", 1883}, [
         ...
     ]},
+```
 
 Add MongoDB, HTTP Authentication/ACL Plugins
 

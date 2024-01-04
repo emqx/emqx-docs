@@ -1935,7 +1935,7 @@ Previous commit: 34a6c6c88
 
 *发布日期: 2023-05-26*
 
-#### 增强功能
+### 增强功能
 
 - [#10389](https://github.com/emqx/emqx/pull/10389) 统一 `cluster.core_nodes` 和 `cluster.statics.seeds` 配置格式，同时支持数组 `["emqx1@127.0.0.1", "emqx2@127.0.0.1"]` 或逗号分隔的字符串 `"emqx1@127.0.0.1,emqx2@127.0.0.1"` 两种格式。
 
