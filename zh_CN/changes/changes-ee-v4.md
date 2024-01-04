@@ -2310,13 +2310,13 @@ EMQX 4.4.0 现已正式发布，主要包含以下改动:
 
 *发布日期: 2020-08-30*
 
-EMQ X 4.1.5 is released now, it fixes a bug in MQTT message parser.
+EMQX 4.1.5 is released now, it fixes a bug in MQTT message parser.
 
 ## 4.1.4
 
 *发布日期: 2020-08-29*
 
-EMQ X 4.1.4 is released now, it mainly includes the following changes:
+EMQX 4.1.4 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -2354,7 +2354,7 @@ EMQ X 4.1.4 is released now, it mainly includes the following changes:
 
 *发布日期: 2020-07-24*
 
-EMQ X 4.1.3 is released now, it mainly includes the following changes:
+EMQX 4.1.3 is released now, it mainly includes the following changes:
 
 ### emqx-management
 
@@ -2382,7 +2382,7 @@ EMQ X 4.1.3 is released now, it mainly includes the following changes:
 
 *发布日期: 2020-07-23*
 
-EMQ X 4.1.2 is released now, it mainly includes the following changes:
+EMQX 4.1.2 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -2426,7 +2426,7 @@ EMQ X 4.1.2 is released now, it mainly includes the following changes:
 
 *发布日期: 2020-07-09*
 
-EMQ X 4.1.1 is released now, it mainly includes the following changes:
+EMQX 4.1.1 is released now, it mainly includes the following changes:
 
 ### emqx-retainer
 
@@ -2483,7 +2483,7 @@ EMQ X 4.1.1 is released now, it mainly includes the following changes:
 
 *发布日期: 2020-06-04*
 
-EMQ X 4.1.0 is released now, it mainly includes the following changes:
+EMQX 4.1.0 is released now, it mainly includes the following changes:
 
 **Enhancements:**
 
@@ -2500,14 +2500,14 @@ EMQ X 4.1.0 is released now, it mainly includes the following changes:
 - Support for obtaining network addresses and ports when using the proxy protocol
 - Add authentication plugin based on Mnesia database (completely replace `emqx-auth-clientid` and `emqx-auth-username` plugins in subsequent versions)
 - Support for editing rules in rule engine
-- Support comment configuration items when running EMQ X through Docker
+- Support comment configuration items when running EMQX through Docker
 - LwM2M gateway plugin supports IPv6 and listens to multiple ports at the same time
 - CoAP gateway plugin supports IPv6
 - JWT authentication plugin supports configuration of jwerl signature format
 
 **Bug fixes:**
 
-- Fix the issue that EMQ X could not start when `etc/emqx.conf` was read-only
+- Fix the issue that EMQX could not start when `etc/emqx.conf` was read-only
 - Fix the issue that the connection process crashes in some cases
 - Fix the issue that the browser doesn't support the current SSL/TLS certificates
 - Fix the issue that the MQTT bridge plugin doesn't send heartbeat packets by default

@@ -2393,13 +2393,13 @@ Users planning to upgrade should be aware of the possibility that this change ma
 
 *Release Date: 2020-08-30*
 
-EMQ X 4.1.5 is released now, it fixes a bug in MQTT message parser.
+EMQX 4.1.5 is released now, it fixes a bug in MQTT message parser.
 
 ## 4.1.4
 
 *Release Date: 2020-08-29*
 
-EMQ X 4.1.4 is released now, it mainly includes the following changes:
+EMQX 4.1.4 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -2437,7 +2437,7 @@ EMQ X 4.1.4 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-07-24*
 
-EMQ X 4.1.3 is released now, it mainly includes the following changes:
+EMQX 4.1.3 is released now, it mainly includes the following changes:
 
 ### emqx-management
 
