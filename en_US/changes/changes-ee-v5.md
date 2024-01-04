@@ -1,5 +1,28 @@
 # Version 5
 
+## 5.4.1
+
+*Release Date: 2024-01-05*
+
+### Bug Fixes
+
+- [#12234](https://github.com/emqx/emqx/pull/12234) Fix old (prior to EMQX 5.4.0) Open Telemetry configuration incompatibility when the config is defined in emqx.conf.
+
+- [#12236](https://github.com/emqx/emqx/pull/12236) Ensure short client ID for MQTT bridges.
+
+- [#12238](https://github.com/emqx/emqx/pull/12238) Compatible with the configuration of error formats introduced by HTTP Action in 5.3.2.
+
+- [#12240](https://github.com/emqx/emqx/pull/12240) Modified the /file_transfer API to return the file transfer configuration in raw format rather than converting time units like "1h" to seconds, providing callers with the original configured values for consistency with other getter APIs
+
+- [#12241](https://github.com/emqx/emqx/pull/12241) Fix an issue where setting up extra HTTP headers for communication with S3 API would break File Transfers using S3 storage backend.
+
+- [#12246](https://github.com/emqx/emqx/pull/12246) Do not expose 11883 port by default in docker and remove it from helm chart since this port is no longer in use.
+
+- [#12249](https://github.com/emqx/emqx/pull/12249) Fixed issue where the response message from the /configs API would be garbled when attempting to update a read-only configuration value
+
+- [#12250](https://github.com/emqx/emqx/pull/12250) Fixed incorrect attempt to update the file_transfer configuration's secret_access_key value to masked stars ('*****')
+
+  
 ## 5.4.0
 
 *Release Date: 2023-12-23*
