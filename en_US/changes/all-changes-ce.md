@@ -1,6 +1,6 @@
 # Release Notes
 
-This is the release notes for EMQX:
+The release notes page for EMQX provides a comprehensive and detailed record of updates, enhancements, and fixes included in each version of EMQX.
 
 ## v5.4
 

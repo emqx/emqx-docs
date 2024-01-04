@@ -1,6 +1,6 @@
 # Release Notes for EMQX Enterprise
 
-This is the release notes for EMQX Enterprise:
+The release notes page for EMQX Enterprise provides a comprehensive and detailed record of updates, enhancements, and fixes included in each version of EMQX Enterprise.
 
 ## v5.4
 
