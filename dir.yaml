@@ -217,6 +217,7 @@
     - title_en: Authentication
       title_cn: 认证
       path: access-control/authn/authn
+      collapsed: true
       children:
         - access-control/authn/x509
         - access-control/authn/jwt
