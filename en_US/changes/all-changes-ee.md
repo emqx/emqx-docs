@@ -120,4 +120,4 @@ The release notes page for EMQX Enterprise provides a comprehensive and detailed
 - [4.0.3](./changes-ee-v4.md#_4-0-3): 2019-02-21
 - [4.0.2](./changes-ee-v4.md#_4-0-2): 2020-02-11
 - [4.0.1](./changes-ee-v4.md#_4-0-1): 2019-01-17
-- [4.0.0](./changes-ee-v4.md#_4-0-0): 2020-01-18
+- [4.0.0](./changes-ee-v4.md#_4-0-0): 2019-01-10
