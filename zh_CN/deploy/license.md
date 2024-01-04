@@ -2,7 +2,7 @@
 
 EMQX 企业版是 EMQX 的商业版本，使用时需要提供许可凭证 (License)。本页将指导您申请或购买 License 并导入到 EMQX 中。
 
-EMQX 企业版随安装包内置了一个试用 License，该 License 最大支持 100 个客户端并发连接。
+EMQX 企业版随安装包内置了一个试用 License，该 License 最大支持 25 个客户端并发连接。
 
 ## 获取 License
 

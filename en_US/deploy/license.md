@@ -8,7 +8,7 @@ description: EMQX Enterprise already includes a trial license, which is valid fo
 
 EMQX Enterprise is the commercial version of EMQX, which requires a license certificate (License) when using it.
 
-As part of the installation package, EMQX Enterprise already includes a trial license, which is valid for a maximum of 100 concurrent client connections. However,  if you want to satisfy higher concurrent demands, you need a formal license. 
+As part of the installation package, EMQX Enterprise already includes a trial license, which is valid for a maximum of 25 concurrent client connections. However,  if you want to satisfy higher concurrent demands, you need a formal license. 
 
 This page guides you through the process of obtaining a license and importing it into EMQX.
 
