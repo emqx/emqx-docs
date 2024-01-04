@@ -8,7 +8,7 @@ This section covers the basic concepts of identity authentication and the settin
 
 ::: tip
 
-By default, EMQX does not enable the authentication feature, meaning it allows all clients to connect. If you are using it in a production environment, make sure to configure at least one authentication method in advance.
+By default, EMQX does not enable the authentication feature, meaning it allows all clients to connect. If you are using it in a production environment, configure at least one authentication method in advance.
 
 :::
 
@@ -17,14 +17,20 @@ By default, EMQX does not enable the authentication feature, meaning it allows a
 The authentication mechanisms supported in EMQX include:
 
 - X.509 Certificate Authentication
-- Username/password authentication
 - JWT authentication
+- Username/password authentication
 - Enhanced authentication of MQTT 5.0
 - PSK Authentication
 
 ### X.509 Certificate Authentication
 
 EMQX supports [X.509 certificate authentication](./x509.md) for client authentication. Using X.509 certificate authentication in EMQX, clients and servers can establish trusted connections through TLS/SSL, ensuring the authenticity of communication parties and the integrity of the data transmitted. EMQX allows for both one-way and two-way authentication: one-way authentication where only the server is authenticated by the client, and two-way authentication where both client and server mutually verify each other's certificates. This flexibility caters to various levels of security requirements and deployment scenarios.
+
+### JWT Authentication
+
+[JSON Web Token (JWT)](https://jwt.io/) is a token-based authentication mechanism that does not rely on the server to retain client authentication or session information.
+
+The client carries the JWT in the connection request, and EMQX uses the pre-configured secret or public key to verify the JWT signature. If the user configures a JWKS endpoint, the JWT authenticator verifies the JWT signature using the list of public keys queried from the JWKS endpoint.
 
 ### Password Authentication
 
@@ -36,12 +42,6 @@ This is how password authentication in EMQX works: The client will carry the ide
 Besides the built-in database, EMQX also supports integration with various backend databases for password authentication, including MySQL, PostgreSQL, MongoDB, and Redis.
 
 EMQX can also be configured to delegate authentication work to external services, such as an HTTP server developed by our users.
-
-### JWT Authentication
-
-[JSON Web Token (JWT)](https://jwt.io/) is a token-based authentication mechanism that does not rely on the server to retain client authentication or session information.
-
-The client carries the JWT in the connection request, and EMQX uses the pre-configured secret or public key to verify the JWT signature. If the user configures a JWKS endpoint, the JWT authenticator verifies the JWT signature using the list of public keys queried from the JWKS endpoint.
 
 ### MQTT 5.0 Enhanced Authentication
 
