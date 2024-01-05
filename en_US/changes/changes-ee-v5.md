@@ -6,23 +6,21 @@
 
 ### Bug Fixes
 
-- [#12234](https://github.com/emqx/emqx/pull/12234) Fix old (prior to EMQX 5.4.0) Open Telemetry configuration incompatibility when the config is defined in emqx.conf.
+- [#12234](https://github.com/emqx/emqx/pull/12234) Resolved compatibility issues with Open Telemetry configurations defined in `emqx.conf` from versions before EMQX 5.4.0, ensuring smooth integration of legacy configurations with the latest EMQX release.
 
-- [#12236](https://github.com/emqx/emqx/pull/12236) Ensure short client ID for MQTT bridges.
+- [#12236](https://github.com/emqx/emqx/pull/12236) Implemented the use of short client IDs for MQTT Sink/Source.
 
-- [#12238](https://github.com/emqx/emqx/pull/12238) Compatible with the configuration of error formats introduced by HTTP Action in 5.3.2.
+- [#12238](https://github.com/emqx/emqx/pull/12238) Enhanced compatibility with the error format configurations introduced in the HTTP Action feature of EMQX version 5.3.2.
 
-- [#12240](https://github.com/emqx/emqx/pull/12240) Modified the /file_transfer API to return the file transfer configuration in raw format rather than converting time units like "1h" to seconds, providing callers with the original configured values for consistency with other getter APIs
+- [#12240](https://github.com/emqx/emqx/pull/12240) Modified the `/file_transfer` API to return file transfer configurations in their original raw format. This change prevents the conversion of time units, such as "1h", to seconds, ensuring that callers receive the initially configured values. This modification aligns with other getter APIs, maintaining consistency in data representation.
 
-- [#12241](https://github.com/emqx/emqx/pull/12241) Fix an issue where setting up extra HTTP headers for communication with S3 API would break File Transfers using S3 storage backend.
+- [#12241](https://github.com/emqx/emqx/pull/12241) Fixed a bug where configuring additional HTTP headers for S3 API interactions disrupted file transfers using the S3 storage backend, ensuring stable and uninterrupted file transfer operations.
 
-- [#12246](https://github.com/emqx/emqx/pull/12246) Do not expose 11883 port by default in docker and remove it from helm chart since this port is no longer in use.
+- [#12246](https://github.com/emqx/emqx/pull/12246) Stopped exposing port 11883 by default in Docker and removed it from Helm charts, as this port is no longer in use. 
 
-- [#12249](https://github.com/emqx/emqx/pull/12249) Fixed issue where the response message from the /configs API would be garbled when attempting to update a read-only configuration value
+- [#12249](https://github.com/emqx/emqx/pull/12249) Fixed an issue in the `/configs` API where attempting to modify a read-only configuration value resulted in a garbled response message.
 
-- [#12250](https://github.com/emqx/emqx/pull/12250) Fixed incorrect attempt to update the file_transfer configuration's secret_access_key value to masked stars ('*****')
-
-  
+- [#12250](https://github.com/emqx/emqx/pull/12250) Resolved an issue where the `file_transfer` configuration's `secret_access_key` value was erroneously being updated to masked stars ('*****'), ensuring that the original key value remains unaltered and secure.
 ## 5.4.0
 
 *Release Date: 2023-12-23*
