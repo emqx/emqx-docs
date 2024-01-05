@@ -21,7 +21,7 @@
 - [#12249](https://github.com/emqx/emqx/pull/12249) Fixed an issue in the `/configs` API where attempting to modify a read-only configuration value resulted in a garbled response message.
 
 - [#12250](https://github.com/emqx/emqx/pull/12250) Resolved an issue where the `file_transfer` configuration's `secret_access_key` value was erroneously being updated to masked stars ('*****'), ensuring that the original key value remains unaltered and secure.
-- [#12256](https://github.com/emqx/emqx/pull/12256) Fix an issue where connections to passwordless MySQL resources could not be established.
+- [#12256](https://github.com/emqx/emqx/pull/12256) Fixed an issue that prevented establishing connections to MySQL resources without a password.
 
 
 ## 5.4.0

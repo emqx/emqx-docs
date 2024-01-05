@@ -14,6 +14,7 @@
 - [#12246](https://github.com/emqx/emqx/pull/12246) 停止在 Docker 中默认暴露 11883 端口，并从 Helm 图表中移除，因为此端口不再使用。
 - [#12249](https://github.com/emqx/emqx/pull/12249) 修复了 `/configs` API 中尝试修改只读配置值导致响应消息乱码的问题。
 - [#12250](https://github.com/emqx/emqx/pull/12250) 解决了 `file_transfer` 配置的 `secret_access_key` 值错误更新为掩码星号 ('*****') 的问题，确保原始密钥值保持不变以保证安全性。
+- [#12256](https://github.com/emqx/emqx/pull/12256) 修复了没有密码就无法与 MySQL 资源建立连接的问题。
 
 ## 5.4.0
 
