@@ -7,7 +7,7 @@
 ### 增强
 
 - [#12234](https://github.com/emqx/emqx/pull/12234) 解决了 EMQX 5.4.0 之前版本在 `emqx.conf` 中定义的 Open Telemetry 配置的兼容性问题，确保最新 EMQX 发布版本能够平滑兼容旧版配置。
-- [#12236](https://github.com/emqx/emqx/pull/12236) 实现了使用简短的 MQTT Sink/Source 客户端 ID。
+- [#12236](https://github.com/emqx/emqx/pull/12236) MQTT Sink/Source 使用简短的客户端 ID。
 - [#12238](https://github.com/emqx/emqx/pull/12238) 增强了与 EMQX 5.3.2 版本中 HTTP Action 功能引入的错误格式配置的兼容性。
 - [#12240](https://github.com/emqx/emqx/pull/12240) 修改了 `/file_transfer` API，使其以原始格式返回文件传输配置。此更改防止了时间单位（如 "1h"）转换为秒，确保调用者接收到初始配置的值。此修改与其他 getter API 保持了数据表示的一致性。
 - [#12241](https://github.com/emqx/emqx/pull/12241) 修复了配置额外的 S3 API HTTP 头导致使用 S3 存储后端的文件传输中断的问题，确保稳定且不间断的文件传输操作。
