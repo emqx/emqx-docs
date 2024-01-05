@@ -16,7 +16,7 @@ HTTP server data integration is an out-of-the-box feature in EMQX, allowing inte
 
 <img src="./assets/emqx-integration-http.jpg" alt="emqx-integration-http" style="zoom:67%;" />
 
-EMQX forwards device events and data to the HTTP server through the rule engine and data bridge. The workflow is as follows:
+EMQX forwards device events and data to the HTTP server through the rule engine and Sink. The workflow is as follows:
 
 1. **Devices Connect to EMQX**: When IoT devices successfully connect, an online event is triggered, containing device ID, source IP address, and other attributes.
 2. **Devices Publish Messages**: Devices publish telemetry and status data through specific topics, triggering the rule engine.
@@ -42,13 +42,13 @@ In summary, the HTTP service offers real-time, flexible, and customizable data i
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create the HTTP server data bridge, including setting up a simple HTTP server.
+This section describes the preparations you need to complete before you start to create the HTTP server data integration, including setting up a simple HTTP server.
 
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 
-- Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [Data Integration](./data-bridges.md)
 
 
 ### Set up a Simple HTTP Server
@@ -78,39 +78,38 @@ pip install flask
 python3 http_server.py
 ```
 
-## Create an HTTP Server Data Bridge
+## Create a Connector
 
-This section demonstrates how to configure an HTTP server data bridge to connect to the HTTP server.
+This section demonstrates how to configure an HTTP server Connector that is used to connect the Sink to the HTTP server.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
 
 2. Click **Create** on the top right corner of the page. Click to select the **HTTP Server** and click **Next**:
 
-3. Input a name for the data bridge. The name should be a combination of upper/lower case letters or numbers, for example, `my_httpserver`. 
+3. Enter a name for the Connector. The name should be a combination of upper/lower case letters or numbers, for example, `my_httpserver`. 
 
-   Set **URL** to `http://localhost:5000`. For the rest, you can keep the default value.
+4. Set **URL** to `http://localhost:5000`. For the rest, you can keep the default value.
 
-4. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the HTTP server.
+5. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the HTTP server.
 
-5. Click **Create** to finish the creation of the data bridge.
+6. Click **Create** to complete the creation of the Connector.
 
-   A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into HTTP Server. You can also create rules by following the steps in [Create a Rule for HTTP Server Data Bridge](#create-a-rule-for-http-server-data-bridge).
 
-Now the HTTP server data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+Now you have created an HTTP Server Connector. Next, you need to create a rule and Sink to specify the data to be written into the HTTP Server.
 
-## Create a Rule for HTTP Server Data Bridge
+## Create a Rule for HTTP Server Sink
 
-Now you have successfully created the data bridges to HTTP Server. you can continue to create a rule to forward data to the HTTP Server.
+This section demonstrates how to create a rule with an HTTP Server Sink added to the rule.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. 
+3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor**. 
 
-4. Input the following statement in the **SQL Editor** as an example, which means the MQTT messages under topic `t/#`  will be saved to the HTTP server.
+4. Enter the following statement in the **SQL Editor** as an example, which means the MQTT messages under topic `t/#`  will be saved to the HTTP server.
 
-   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
+   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
 
    ```bash
    SELECT
@@ -119,12 +118,25 @@ Now you have successfully created the data bridges to HTTP Server. you can conti
      "t/#"
    ```
 
-5. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge you just created under **Data bridge**. Then click the **Add** button.
-6. Click the **Create** button at the page bottom to finish the creation.
+5. Click the **+ Add Action** button to define an action that will be triggered by the rule. Select `HTTP Server` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to HTTP Server. 
 
-Now a rule to forward data to the HTTP server via an HTTP Server data bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to the HTTP server.
+   Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select an HTTP Server action previously created. In this demonstration, you create a new Sink and add it to the rule.
 
-## Test Data Bridge and Rule
+6. Enter the name and description for the Sink in the **Name** and **Description** text boxes.
+
+7. Select the `my-httpserver` you just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-connector).
+
+8. Set **URL** to `http://localhost:5000`. Select `POST` from the **Method** dropdown box. For the rest, you can keep the default value.
+
+9. Click the **Add** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+
+10. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
+
+Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new HTTP Server Sink. 
+
+You can also click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to HTTP Server after parsing by the rule `my_rule`. 
+
+## Test Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 
@@ -132,7 +144,7 @@ Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello HTTP Server" }'
 ```
 
-Check the running status of the two data bridges, there should be one new incoming and one new outgoing message.
+Click the name of the rule on the **Rule** page to view the statistics. Check the running status of the Sink and there should be one new incoming and one new outgoing message.
 
 Verify whether the message has been sent to the HTTP server:
 

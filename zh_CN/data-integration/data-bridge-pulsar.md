@@ -8,15 +8,15 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 [Apache Pulsar](https://pulsar.apache.org/) 是一款流行的开源分布式事件流平台，专为处理实时数据流在应用程序和系统之间的传输而设计。Apache Pulsar 具有更高的可伸缩性，并提供了更快的吞吐量和更低的延迟。在物联网应用中，设备生成的数据通常通过轻量级的 MQTT 协议进行传输。通过与 Aphache Pulsar 的数据集成，用户可以轻松地将 MQTT 数据传入 Apache Pulsar，并与其他数据系统连接，实现对物联网设备生成的数据进行实时处理、存储和分析。
 
-本页详细介绍了 EMQX 与 Apache Pulsar 的数据集成并提供了实用的规则和数据桥接创建指导。
+本页详细介绍了 EMQX 与 Apache Pulsar 的数据集成并提供了实用的规则和 Sink 创建指导。
 
 ## 工作原理
 
-Apache Pulsar 数据桥接是 EMQX 的开箱即用功能，结合了 EMQX 的设备接入、消息传输能力与 Pulsar 的强大数据处理能力。借助内置的规则引擎组件，数据流传输和处理过程在两个平台之间更加简化。这意味着您可以轻松地将 MQTT 数据传输到 Pulsar，并利用 Pulsar 的强大功能进行数据处理，而无需额外的开发工作，使得物联网数据的管理和利用变得更加高效和方便。
+Apache Pulsar Sink 是 EMQX 的开箱即用功能，结合了 EMQX 的设备接入、消息传输能力与 Pulsar 的强大数据处理能力。借助内置的规则引擎组件，数据流传输和处理过程在两个平台之间更加简化。这意味着您可以轻松地将 MQTT 数据传输到 Pulsar，并利用 Pulsar 的强大功能进行数据处理，而无需额外的开发工作，使得物联网数据的管理和利用变得更加高效和方便。
 
 ![EMQX 数据集成 - Apache Pulsar](./assets/emqx-integration-pulsar.jpg)
 
-EMQX 通过规则引擎与数据桥接将 MQTT 数据转发至 Apache Pulsar，其完整流程如下：
+EMQX 通过规则引擎与 Sink 将 MQTT 数据转发至 Apache Pulsar，其完整流程如下：
 
 1. **设备消息发布与接收**：物联网设备通过 MQTT 协议连接成功后向特定的主题发布遥测和状态数据，EMQX 接收到消息后将在规则引擎中进行比对。
 2. **规则引擎处理消息**：通过内置的规则引擎，可以根据主题匹配处理特定来源的 MQTT 消息。规则引擎会匹配对应的规则，并对消息进行处理，例如转换数据格式、过滤掉特定信息或使用上下文信息丰富消息。
@@ -31,22 +31,22 @@ MQTT 消息数据写入到 Apache Pulsar 后，您可以进行灵活的应用开
 
 ## 特性与优势
 
-在 EMQX 中使用 Pulsar 数据桥接能够为您的业务带来以下特性与优势：
+在 EMQX 中使用 Pulsar Sink 能够为您的业务带来以下特性与优势：
 
 - **可靠的物联网数据消息传递**：EMQX 可以将 MQTT 消息可靠地批量发送到 Pulsar，实现物联网设备到 Pulsar 以及应用系统的集成。
 - **MQTT 消息转换**：EMQX 通过规则引擎可以对 MQTT 消息进行过滤和转换，消息可以在发送到 Pulsar 之前进行数据提取、过滤、丰富和转换。
-- **灵活的主题映射**：Pulsar 数据桥接支持将 MQTT 主题灵活映射到 Pulsar 主题，允许轻松配置数据到 Pulsar 消息的键（Key）和值（Value）。
-- **灵活的分区选择能力**：Pulsar 数据桥接可以根据 MQTT 主题或客户端，按照不同的策略选择 Pulsar 分区，更灵活的地组织和标识数据。
-- **高吞吐量场景下的处理能力**：Pulsar 数据桥接支持同步与异步不同的写入模式，可以根据不同场景实现延迟和吞吐量之间的灵活平衡。
+- **灵活的主题映射**：Pulsar Sink 支持将 MQTT 主题灵活映射到 Pulsar 主题，允许轻松配置数据到 Pulsar 消息的键（Key）和值（Value）。
+- **灵活的分区选择能力**：Pulsar Sink 可以根据 MQTT 主题或客户端，按照不同的策略选择 Pulsar 分区，更灵活的地组织和标识数据。
+- **高吞吐量场景下的处理能力**：Pulsar Sink 支持同步与异步不同的写入模式，可以根据不同场景实现延迟和吞吐量之间的灵活平衡。
 
-## 桥接准备
+## 准备工作
 
-本节介绍了在 EMQX 中创建 Pulsar 数据桥接之前需要做的准备工作，包括安装 Pulsar 服务器和创建 Pulsar 主题。
+本节介绍了在 EMQX 中创建 Pulsar Sink 之前需要做的准备工作，包括安装 Pulsar 服务器和创建 Pulsar 主题。
 
 ### 前置准备
 
 - 了解[规则](./rules.md)。
-- 了解[数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 安装 Pulsar 服务器
 
@@ -60,17 +60,17 @@ docker run --rm -it -p 6650:6650 --name pulsar apachepulsar/pulsar:2.11.0 bin/pu
 
 ### 创建 Pulsar 主题
 
-在 EMQX 中创建数据桥接之前需要先创建相关的 Pulsar 主题。在 Pulsar 的 `public` 租户、`default` 命名空间下创建名为 `my-topic` 的主题，并指定 1 个分区。使用以下命令创建主题 `my-topic`：
+在 EMQX 中创建 Sink 之前需要先创建相关的 Pulsar 主题。在 Pulsar 的 `public` 租户、`default` 命名空间下创建名为 `my-topic` 的主题，并指定 1 个分区。使用以下命令创建主题 `my-topic`：
 
 ```bash
 docker exec -it pulsar bin/pulsar-admin topics create-partitioned-topic persistent://public/default/my-topic -p 1
 ```
 
-## 创建 Pulsar 数据桥接
+## 创建连接器
 
-本节将演示如何通过 Dashboard 创建一个 Pulsar 生产者数据桥接。以下步骤假定 EMQX 与 Pulsar 均在本地运行，如您在远程运行 EMQX 及 Pulsar，请根据实际情况调整相应配置。
+本节将演示如何通过 Dashboard 创建一个 Pulsar 生产者连接器。以下步骤假定 EMQX 与 Pulsar 均在本地运行，如您在远程运行 EMQX 及 Pulsar，请根据实际情况调整相应配置。
 
-1. 转到 Dashboard **数据集成** -> **规则页面**。
+1. 转到 Dashboard **集成** -> **规则页面**。
 
 2. 点击页面右上角的创建。
 
@@ -78,7 +78,7 @@ docker exec -it pulsar bin/pulsar-admin topics create-partitioned-topic persiste
 
 4. 在 SQL 编辑器中输入规则，例如我们希望将 `t/#` 主题的 MQTT 消息存储至 Pulsar，可通过如下规则实现：
 
-   注意：如果要自定义 SQL 语句，请确保 `SELECT` 字段包含数据桥接中所需的所有字段。
+   注意：如果要自定义 SQL 语句，请确保 `SELECT` 字段包含 Sink 中所需的所有字段。
 
    ::: tip
 
@@ -99,13 +99,13 @@ docker exec -it pulsar bin/pulsar-admin topics create-partitioned-topic persiste
 
    :::
 
-5. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。在**动作**下拉框中选择`使用数据桥接转发`，该动作会将经规则处理的数据转发到 Pulsar。
+5. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。在**动作**下拉框中选择`使用 Sink 转发`，该动作会将经规则处理的数据转发到 Pulsar。
 
-6. 点击**数据桥接**下拉框右侧的**+**按钮创建数据桥接。在**数据桥接类型**下拉框中选择 `Pulsar`。
+6. 点击 **Sink** 下拉框右侧的**+**按钮创建 Sink 。在**连接器类型**下拉框中选择 `Pulsar`。
 
-7. 在**创建数据桥接**页面输入数据桥接名称，要求是大小写英文字母和数字的组合。
+7. 在**创建连接器**页面输入连接器名称，要求是大小写英文字母和数字的组合。
 
-8. 配置以下数据桥接选项：
+8. 配置以下 Sink 选项：
 
    - **桥接角色**：默认情况下选择 `Producer`。
    - 配置连接到 Pulsar 服务器和消息写入的信息：
@@ -120,14 +120,14 @@ docker exec -it pulsar bin/pulsar-admin topics create-partitioned-topic persiste
 
 9. 展开**高级设置**，根据需要配置高级设置选项（可选），详细请参考[高级设置](#高级设置)。
 
-10. 点击**添加**按钮完成数据桥接创建，此时会自动返回到**添加动作**页面，在**数据桥接**下拉框中选择您创建好的 Pulsar 数据桥接，点击**添加**以完成动作添加。
+10. 点击**添加**按钮完成 Sink 创建，新建的 Sink 将被添加到规则动作列表中。
 
     <img src="./assets/pulsar.png" alt="pulsar" style="zoom:67%;" />
 
 11. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中，**状态**为**已连接**。
 
 
-现在您已创建了通过 Pulsar 数据桥接将数据转发到 Pulsar 的规则。您可以单击 **集成** -> **拓扑** 来查看拓扑结构。可以看到，在规则 `my_rule` 解析后，主题 `t/#` 下的消息被发送并保存到 Pulsar。
+现在您已创建了通过 Pulsar Sink 将数据转发到 Pulsar 的规则。您可以单击 **集成** -> **拓扑** 来查看拓扑结构。可以看到，在规则 `my_rule` 解析后，主题 `t/#` 下的消息被发送并保存到 Pulsar。
 
 ## 测试桥接和规则
 
@@ -137,7 +137,7 @@ docker exec -it pulsar bin/pulsar-admin topics create-partitioned-topic persiste
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Pulsar" }'
 ```
 
-查看数据桥接运行统计，命中、发送成功次数应当 +1。
+查看 Sink 运行统计，命中、发送成功次数应当 +1。
 
 通过 Pulsar 命令查看 `persistent://public/default/my-topic` 主题是否写入消息：
 
@@ -147,7 +147,7 @@ docker exec -it pulsar bin/pulsar-client consume -n 0 -s mysubscriptionid -p Ear
 
 ## 高级设置
 
-本节将深入介绍可用于 Pulsar 数据桥接的高级配置选项。在 Dashboard 中配置数据桥接时，您可以根据您的特定需求展开**高级设置**，调整以下参数。
+本节将深入介绍可用于 Pulsar Sink 的高级配置选项。在 Dashboard 中配置 Sink 时，您可以根据您的特定需求展开**高级设置**，调整以下参数。
 
 | 字段名称            | 描述                                                         | 默认值     |
 | ------------------- | ------------------------------------------------------------ | ---------- |
@@ -161,5 +161,5 @@ docker exec -it pulsar bin/pulsar-client consume -n 0 -s mysubscriptionid -p Ear
 | Pular 分区缓存上限  | 每个 Pulsar 分区的最大允许缓冲区大小，以字节为单位。当达到此限制时，较旧的消息将被丢弃，以腾出缓冲区空间供新消息使用。此选项有助于平衡内存使用和性能。 | `2` GB     |
 | 缓存文件大小        | 此设置适用于缓存模式配置为 `disk` 或 `hybrid` 时。它控制用于存储消息的分段文件的大小，影响磁盘存储的优化级别。 | `100` MB   |
 | 内存过载保护        | 当缓存模式配置为 `memory` 时，此设置生效。EMQX 在遇到高内存压力时会自动丢弃较旧的缓存消息。它有助于防止由于内存使用过多而导致系统不稳定，确保系统可靠性。<br />**注意**：高内存使用的阈值在配置参数 `sysmon.os.sysmem_high_watermark` 中定义。此配置仅在 Linux 系统上生效。 | `disabled` |
-| 启动超时时间        | 确定 EMQX 数据桥接在自动启动的资源达到健康状态之前等待的最长时间间隔，然后才响应资源创建请求。此设置有助于确保数据桥接在执行操作之前验证已连接的资源（例如 Polar 中的实例）已完全运行并准备好处理数据事务。 | `5` 秒     |
-| 健康检查间隔        | 用于检查数据桥接运行状态的时间间隔。                         | `1` 秒     |
+| 启动超时时间        | 确定 EMQX Sink 在自动启动的资源达到健康状态之前等待的最长时间间隔，然后才响应资源创建请求。此设置有助于确保连接器在执行操作之前验证已连接的资源（例如 Polar 中的实例）已完全运行并准备好处理数据事务。 | `5` 秒     |
+| 健康检查间隔        | 用于检查 Sink 运行状态的时间间隔。                         | `1` 秒     |

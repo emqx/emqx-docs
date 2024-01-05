@@ -80,7 +80,7 @@ This section introduces how to start a ClickHouse server using [Docker](https://
 
 You can find more information about running ClickHouse in docker [on dockerhub](https://hub.docker.com/r/clickhouse/clickhouse-server).
 
-## Create Rule and ClickHouse Databridge
+## Create Rule and ClickHouse Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured data bridge to ClickHouse. 
 
@@ -141,7 +141,7 @@ This demonstration assumes that you run both EMQX and ClickHouse on the local ma
 
 13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. The rule you created should be shown in the rule list and the **status** should be connected.
 
-Now a rule to forward data to ClickHouse via a ClickHouse data bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to ClickHouse. 
+Now a rule to forward data to ClickHouse via a ClickHouse data bridge is created. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to ClickHouse. 
 
 ## Test Rule and Data Bridge
 

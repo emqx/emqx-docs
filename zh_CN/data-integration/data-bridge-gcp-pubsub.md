@@ -12,15 +12,15 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 [Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=en-us) 是一种异步消息传递服务，旨在实现极高的可靠性和可扩缩性。EMQX 支持与 Google Cloud Pub/Sub 的无缝集成，能够实时提取、处理和分析 MQTT 数据，并将数据推送到各类 Google Cloud 服务，如 Cloud Functions、App Engine、Cloud Run、Kubernetes Engine 和 Compute Engine 中，或将 Google Cloud 中的数据通过 MQTT 下发，帮助用户更快的基于 GCP 构建物联网应用。
 
-本页详细介绍了 EMQX 与 GCP Pub/Sub 的数据集成并提供了实用的规则和数据桥接创建指导。
+本页详细介绍了 EMQX 与 GCP Pub/Sub 的数据集成并提供了实用的规则和 Sink 创建指导。
 
 ## 工作原理
 
-GCP Pub/Sub 数据桥接是 EMQX 的开箱即用功能，旨在帮助用户轻松地将 MQTT 数据流与 Google Cloud 集成，并利用其丰富的服务和功能实现物联网应用开发。
+GCP Pub/Sub Sink 是 EMQX 的开箱即用功能，旨在帮助用户轻松地将 MQTT 数据流与 Google Cloud 集成，并利用其丰富的服务和功能实现物联网应用开发。
 
 ![GCP_bridge_architect](./assets/gcp_pubsub/GCP_bridge_architect.png)
 
-EMQX 通过规则引擎与数据桥接将 MQTT 数据转发至 GCP Pub/Sub，以 GCP Pub/Sub 生产者角色为例，其完整流程如下：
+EMQX 通过规则引擎与 Sink 将 MQTT 数据转发至 GCP Pub/Sub，以 GCP Pub/Sub 生产者角色为例，其完整流程如下：
 
 1. **物联网设备发布消息**：设备通过特定的主题发布遥测和状态数据，消息将触发规则引擎。
 2. **规则引擎处理消息**：通过内置的规则引擎，可以根据主题匹配处理特定来源的 MQTT 消息。规则引擎会匹配对应的规则，并对消息进行处理，例如转换数据格式、过滤掉特定信息或使用上下文信息丰富消息。
@@ -46,14 +46,14 @@ MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发
 
 综上所述，将 EMQX 和 GCP Pub/Sub 结合使用可以实现高可靠性、可扩展性的消息传递，并通过丰富工具和服务进行数据分析与集成，这使得你能够构建强大的物联网应用，并基于事件驱动的功能实现灵活的业务逻辑。
 
-## 桥接准备
+## 准备工作
 
 本节介绍如何配置 GCP Pub/Sub，并创建主题与获取连接凭证。
 
 ### 前置准备
 
 - 了解[规则](./rules.md)。
-- 了解[数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 创建服务账户凭证
 
@@ -66,7 +66,7 @@ MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发
 
 ### 在 GCP Pub/Sub 中创建主题
 
-1. 打开 [Pub/Sub 控制台](https://console.cloud.google.com/cloudpubsub)，点击 **CREATE TOPIC，**输入自定义的 **Topic ID，**点击 **CREATE** 即可完成创建。
+1. 打开 [Pub/Sub 控制台](https://console.cloud.google.com/cloudpubsub)，点击 **CREATE TOPIC**，输入自定义的 **Topic ID**，点击 **CREATE** 即可完成创建。
 
 ![GCP PubSub 创建主题](./assets/gcp_pubsub/gcp-pubsub-topic-create.png)
 
@@ -76,19 +76,19 @@ MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发
 
 3. 点击 **Subscription ID** → **MESSAGES** → **PULL** 可以在线查看发送到主题中的消息。
 
-## 创建 GCP Pub/Sub 数据桥接
+## 创建连接器
 
-本节介绍如何配置 GCP Pub/Sub 数据桥接，在配置 GCP Pub/Sub 之前，必须先在 GCP 上创建好对应的服务账户凭证以及 Pub/Sub 主题。
+本节介绍如何配置 GCP Pub/Sub 连接器，在配置 GCP Pub/Sub 之前，必须先在 GCP 上创建好对应的服务账户凭证以及 Pub/Sub 主题。
 
-1. 转到 Dashboard **数据集成** -> **数据桥接**页面。
+1. 转到 Dashboard **集成** -> **连接器**页面。
 
 2. 点击页面右上角的**创建**。
 
-3. 在**数据桥接类型**中选择 GCP Pub/Sub，点击**下一步**。
+3. 在**连接器类型**中选择 GCP Pub/Sub，点击**下一步**。
 
-4. 输入数据桥接名称，要求是大小写英文字母和数字的组合。
+4. 输入连接器名称，要求是大小写英文字母和数字的组合。
 
-5. 在**桥接角色**字段中，根据业务需求从下拉列表中选择`生产者 `或`消费者`，并完成相应的配置。
+5. 在**桥接角色**字段中，根据业务需求从下拉列表中选择`生产者`或`消费者`，并完成相应的配置。
 
    :::: tabs type:card
 
@@ -146,13 +146,13 @@ MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发
 
 6. 设置完成后，您可点击**测试连接**按钮进行验证。
 
-7.  点击**创建**按钮完成数据桥接创建。
+7.  点击**创建**按钮完成 Sink 创建。
 
-至此您已经完成数据桥接创建流程，接下来将继续创建一条规则来指定需要写入的数据。
+至此您已经完成 Sink 创建流程，接下来将继续创建一条规则来指定需要写入的数据。
 
 ## 创建数据转发规则
 
-1. 转到 Dashboard **数据集成** -> **规则页面**。
+1. 转到 Dashboard **集成** -> **规则页面**。
 2. 点击页面右上角的**创建**。
 3. 输入规则 ID，例如： `my_rule`。
 3. 在 SQL 编辑器中输入规则，请确保规则选择出来的字段（SELECT 部分）包含 HTTP 请求消息体模版中用到的变量。例如将 `/devices/+/events` 主题的 MQTT 消息集成到 GCP Pub/Sub，此处规则 SQL 如下：
@@ -165,13 +165,13 @@ MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发
     "/devices/+/events"
   ```
 
-5. 添加动作，在动作下拉框中选择 使用数据桥接转发 选项，选择先前创建好的 GCP Pub/Sub 数据桥接。
+5. 添加动作，从**动作类型**下拉列表中选择 GCP Pub/Sub，从**动作**下拉框中选择刚刚创建的连接器，点击**添加**按钮将其添加到规则中。
 
 6. 点击最下方创建按钮完成规则创建。
 
-至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `/devices/+/events` 主题的消息经过名为 `my_rule` 的规则处理，处理结果写入到 GCP Pub/Sub 中。
+至此您已经完成整个创建过程，可以前往 **集成** -> **Flow 设计器** 页面查看拓扑图，此时应当看到 `/devices/+/events` 主题的消息经过名为 `my_rule` 的规则处理，处理结果写入到 GCP Pub/Sub 中。
 
-## 测试数据桥接与规则
+## 测试规则
 
 1. 使用 MQTTX 向 `/devices/+/events` 主题发布消息：
 
@@ -179,6 +179,6 @@ MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发
 mqttx pub -i emqx_c -t /devices/+/events -m '{ "msg": "hello GCP PubSub" }'
 ```
 
-2. 查看数据桥接运行统计，命中、发送成功次数均 +1。
+2. 查看 Sink 运行统计，命中、发送成功次数均 +1。
 
 3. 前往 GCP Pub/Sub 控制台查看数据是否已经发送成功。

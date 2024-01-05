@@ -88,7 +88,7 @@ Leveraging the bidirectional data bridging feature, you can process and send you
 
 EMQX visualizes the data integration process with the Flows feature on Dashboard. Now you can easily check how the rules engine processes IoT data and how data flows to external data services or devices.
 
-On different data bridging that EMQX supports and how to configure, see [Data Bridges](../data-integration/data-bridges.md).
+On different data bridging that EMQX supports and how to configure, see [Data Integration](../data-integration/data-bridges.md).
 
 ## Flexible Authentication/Authorization
 
@@ -102,7 +102,7 @@ EMQX 5.x offers a built-in client authentication/authorization feature, users on
 - Achieve complete observability with statistics on execution speed and number of times;
 - Support authentication configuration on a listener-level, to provide more flexible access capabilities.
 
-On how to run authentication/authorization configuration with EMQX Dashboard or configuration files, you can continue to read [Access Control](../access-control/overview.md).
+On how to run authentication/authorization configuration with EMQX Dashboard or configuration files, you can continue to read [Authentication](../access-control/authn/authn.md) and [Authorization](../access-control/authz/authz.md).
 
 ## User-Friendly EMQX Dashboard
 

@@ -49,7 +49,7 @@ This section describes the preparations you need to complete before you start to
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 
-- Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [Data Integration](./data-bridges.md)
 
 
 ### Install and Set Up InfluxD
@@ -64,7 +64,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 2. With InfluxDB running, visit [http://localhost:8086](http://localhost:8086). Set the **Username**, **Password**, **Organization Name**, and **Bucket Name**.
 3. In the InfluxDB UI, click **Load Data** -> **API Token** and then follow the instructions to [create all-access tokens](https://docs.influxdata.com/influxdb/v2.5/install/#create-all-access-tokens).
 
-## Create Rule and InfluxDB Data Bridge
+## Create Rule and InfluxDB Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured data bridge to InfluxDB. 
 
@@ -126,7 +126,7 @@ This tutorial assumes that you run both EMQX and InfluxDB on the local machine. 
 
 10. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
 
-Now a rule to forward data to InfluxDB via an InfluxDB bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by the rule  `my_rule`.
+Now a rule to forward data to InfluxDB via an InfluxDB bridge is created. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by the rule  `my_rule`.
 
 ### Test Rule and Data Bridge
 
@@ -144,16 +144,16 @@ In the InfluxDB UI, you can confirm whether the message is written into the Infl
 
 This section delves deeper into the advanced configuration options available for the InfluxDB data bridge. When configuring the data bridge in the Dashboard, navigate to **Advanced Settings** to tailor the following parameters to meet your specific needs.
 
-| **Fields**                | **Descriptions**                                             | **Recommended Value** |
-| ------------------------- | ------------------------------------------------------------ | --------------------- |
-| **Start Timeout**         | Determines the maximum time interval, in seconds, that the EMQX data bridge will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the data bridge does not proceed with operations until it verifies that the connected resource—such as a database instance in InfluxDB—is fully operational and ready to handle data transactions. | `5`                   |
-| **Buffer Pool Size**      | Specifies the number of buffer worker processes that will be allocated for managing data flow in egress-type bridges between EMQX and InfluxDB. These worker processes are responsible for temporarily storing and handling data before it is sent to the target service. This setting is particularly relevant for optimizing performance and ensuring smooth data transmission in egress (outbound) scenarios. For bridges that only deal with ingress (inbound) data flow, this option can be set to "0" as it is not applicable. | `16`                  |
-| **Request TTL**           | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from InfluxDB, the request is deemed to have expired. | `45`                  |
-| **Health Check Interval** | Specifies the time interval, in seconds, at which the data bridge will perform automated health checks on the connection to InfluxDB. | `15`                  |
-| **Max Buffer Queue Size** | Specifies the maximum number of bytes that can be buffered by each buffer worker in the InfluxDB data bridge. Buffer workers temporarily store data before it is sent to InfluxDB, serving as an intermediary to handle data flow more efficiently. Adjust the value according to your system's performance and data transfer requirements. | `256`                 |
-| **Max Batch Size**        | Specifies the maximum size of data batches that can be transmitted from EMQX to InfluxDB in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and InfluxDB.<br />If the "Max Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | `1`                   |
-| **Query Mode**            | Allows you to choose `asynchronous` or `synchronous` query modes to optimize message transmission based on different requirements. In asynchronous mode, writing to InfluxDB does not block the MQTT message publish process. However, this might result in clients receiving messages ahead of their arrival in InfluxDB. | `Async`               |
-| **Inflight Window**       | An "in-flight query" refers to a query that has been initiated but has not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queries that can exist simultaneously when the data bridge is communicating with InfluxDB.<br/>When the **Query Mode** is set to `async` (asynchronous), the "Inflight Window" parameter gains special importance. If it is crucial for messages from the same MQTT client to be processed in strict order, you should set this value to 1. | `100`                 |
+| **Fields**            | **Descriptions**                                             | **Recommended Value** |
+| --------------------- | ------------------------------------------------------------ | --------------------- |
+| Start Timeout         | Determines the maximum time interval, in seconds, that the EMQX data bridge will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the data bridge does not proceed with operations until it verifies that the connected resource—such as a database instance in InfluxDB—is fully operational and ready to handle data transactions. | `5`                   |
+| Buffer Pool Size      | Specifies the number of buffer worker processes that will be allocated for managing data flow in egress-type bridges between EMQX and InfluxDB. These worker processes are responsible for temporarily storing and handling data before it is sent to the target service. This setting is particularly relevant for optimizing performance and ensuring smooth data transmission in egress (outbound) scenarios. For bridges that only deal with ingress (inbound) data flow, this option can be set to "0" as it is not applicable. | `16`                  |
+| Request TTL           | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from InfluxDB, the request is deemed to have expired. | `45`                  |
+| Health Check Interval | Specifies the time interval, in seconds, at which the data bridge will perform automated health checks on the connection to InfluxDB. | `15`                  |
+| Max Buffer Queue Size | Specifies the maximum number of bytes that can be buffered by each buffer worker in the InfluxDB data bridge. Buffer workers temporarily store data before it is sent to InfluxDB, serving as an intermediary to handle data flow more efficiently. Adjust the value according to your system's performance and data transfer requirements. | `256`                 |
+| Max Batch Size        | Specifies the maximum size of data batches that can be transmitted from EMQX to InfluxDB in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and InfluxDB.<br />If the "Max Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | `1`                   |
+| Query Mode            | Allows you to choose `asynchronous` or `synchronous` query modes to optimize message transmission based on different requirements. In asynchronous mode, writing to InfluxDB does not block the MQTT message publish process. However, this might result in clients receiving messages ahead of their arrival in InfluxDB. | `Async`               |
+| Inflight Window       | An "in-flight query" refers to a query that has been initiated but has not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queries that can exist simultaneously when the data bridge is communicating with InfluxDB.<br/>When the **Query Mode** is set to `async` (asynchronous), the "Inflight Window" parameter gains special importance. If it is crucial for messages from the same MQTT client to be processed in strict order, you should set this value to 1. | `100`                 |
 
 ## More Information
 

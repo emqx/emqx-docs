@@ -8,13 +8,13 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 [HStreamDB](https://hstream.io/) 是一个开源的流数据平台，使您能够在一个统一的平台中高效地摄取、存储、处理和分发所有实时消息、事件和其他数据流。通过 EMQX 与 HStreamDB 的集成，您可以将 MQTT 消息和客户端事件保存到 HStreamDB 中，实现大规模物联网数据的采集、传输与存储，并使用标准 SQL 和物化视图对数据流进行实时处理以及监测和分析。
 
-本页详细介绍了 EMQX 与 HStreamDB 的数据集成并提供了实用的规则和数据桥接创建指导。
+本页详细介绍了 EMQX 与 HStreamDB 的数据集成并提供了实用的规则和 Sink 创建指导。
 
 {% emqxee %}
 
 ::: tip
 
-仅 EMQX 5.2.0 及以上版本支持 HStreamDB 数据桥接功能。
+仅 EMQX 5.2.0 及以上版本支持 HStreamDB Sink 功能。
 
 :::
 
@@ -22,7 +22,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 ## 工作原理
 
-HStreamDB 数据桥接是 EMQX 的即开即用功能，结合了 EMQX 的设备连接和消息传输能力以及 HStreamDB 强大的数据存储和处理能力。内置的[规则引擎](./rules.md)组件简化了两个平台之间的数据流和处理过程。
+HStreamDB Sink 是 EMQX 的即开即用功能，结合了 EMQX 的设备连接和消息传输能力以及 HStreamDB 强大的数据存储和处理能力。内置的[规则引擎](./rules.md)组件简化了两个平台之间的数据流和处理过程。
 
 下图展示了 EMQX 和 HStreamDB 之间的数据集成的典型架构：
 
@@ -51,9 +51,9 @@ EMQX 通过规则引擎和配置的数据桥将 MQTT 数据转发到 Apache HStr
 - **灵活的处理能力**：在 HStreamDB 可以使用熟悉的 SQL 来过滤、转换、聚合以及连接多个数据流，也支持使用标准 SQL 和物化视图进行数据流实时处理以及监测和分析，获取实时数据洞察。
 - **高吞吐量场景中的处理能力**：HStreamDB 数据桥支持同步和异步写入模式，允许根据不同场景在延迟和吞吐量之间灵活平衡。
 
-## 桥接准备
+## 准备工作
 
-本节介绍了在 EMQX 中创建 HStreamDB 数据桥接之前需要做的准备工作，包括如何设置 HStreamDB 服务器并创建 Stream。
+本节介绍了在 EMQX 中创建 HStreamDB Sink 之前需要做的准备工作，包括如何设置 HStreamDB 服务器并创建 Stream。
 
 以下小节描述如何使用 Docker 镜像在 Linux/MacOS 安装启动 HStreamDB，因此请确保 Docker 已安装并尽可能使用 Docker Compose v2。关于其他 HStreamDB 的安装方式及 HStreamDB Platform，请参阅[使用 Docker-Compose 快速开始](https://docs.hstream.io/zh/start/quickstart-with-docker.html)以及[开始使用 HStream Platform](https://docs.hstream.io/zh/start/try-out-hstream-platform.html)。
 
@@ -62,7 +62,7 @@ EMQX 通过规则引擎和配置的数据桥将 MQTT 数据转发到 Apache HStr
 ### 前置准备
 
 - 了解[规则](./rules.md)。
-- 了解[数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 启动 HStreamDB TCP 服务并创建 Stream
 
@@ -506,17 +506,17 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 
   </details>
 
-## 创建 HStreamDB 数据桥接
+## 创建连接器
 
-本节介绍了如何在 EMQX Dashboard 上创建 HStreamDB 数据桥接以实现对客户端发布消息的存储或设备状态的记录。
+本节介绍了如何在 EMQX Dashboard 上创建 HStreamDB Sink 以实现对客户端发布消息的存储或设备状态的记录。
 
-1. 在 Dashboard 点击 **数据集成** -> **数据桥接**。
+1. 在 Dashboard 点击 **数据集成** -> **连接器**。
 
 2. 点击页面右上角的**创建**。
 
-3. 在数据桥接类型中选择 HStreamDB，点击**下一步**。
+3. 在连接器类型中选择 HStreamDB，点击**下一步**。
 
-4. 输入数据桥接名称，要求是大小写英文字母和数字的组合。
+4. 输入连接器名称，要求是大小写英文字母和数字的组合。
 
 5. 输入 HStreamDB 连接信息。（带星号字段为必填字段。）
    - **服务器地址**： `hstream://127.0.0.1:6570`，或使用实际的 HStreamDB 地址和端口。
@@ -544,19 +544,19 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 
 7. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](./data-bridges.md)。
 
-8. 在点击**创建**按钮完成数据桥接创建之前，您可以使用**测试连接**来测试当前 EMQX 到 HStreamDB 的连接是否成功。
+8. 在点击**创建**按钮完成 Sink 创建之前，您可以使用**测试连接**来测试当前 EMQX 到 HStreamDB 的连接是否成功。
 
-9. 点击**创建**按钮完成数据桥接创建。
+9. 点击**创建**按钮完成 Sink 创建。
 
-   在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 HStreamDB 的数据。您也可以按照[创建 HStreamDB 数据桥接规则](#创建-microsoft-sql-server-数据桥接规则)章节的步骤来创建规则。
+   在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 HStreamDB 的数据。您也可以按照[创建 HStreamDB Sink 规则](#创建-microsoft-sql-server- Sink 规则)章节的步骤来创建规则。
 
-至此您已经完成数据桥接创建，HStreamDB 数据桥接应该出现在数据桥接列表（**数据集成** -> **数据桥接**）中，**资源状态**为**已连接**。
+至此您已经完成 Sink 创建，HStreamDB Sink 应该出现在 Sink 列表（**数据集成** -> **连接器**）中，**资源状态**为**已连接**。
 
 ## 创建数据转发规则
 
-本节介绍了如何为 HStreamDB 数据桥接创建规则。您需要为实现对客户端发布消息的存储或实现设备上下线状态的记录创建不同的规则。
+本节介绍了如何为 HStreamDB Sink 创建规则。您需要为实现对客户端发布消息的存储或实现设备上下线状态的记录创建不同的规则。
 
-1. 转到 Dashboard **数据集成** -> **规则**页面。
+1. 转到 Dashboard **集成** -> **规则**页面。
 
 2. 点击页面右上角的**创建**。
 
@@ -581,13 +581,13 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
        "$events/client_connected", "$events/client_disconnected"
      ```
 
-4. 点击**添加动作**，在动作下拉框中选择**使用数据桥接转发**选项，选择先前创建好的 HStreamDB 数据桥接。
+4. 点击**添加动作**，从**动作类型**下拉列表中选择 HStreamDB，从**动作**下拉框中选择刚刚创建的连接器，点击**添加**按钮将其添加到规则中。
 
 5. 点击最下方**创建**按钮完成规则创建。
 
-至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 HStreamDB 存储。
+至此您已经完成整个创建过程，可以前往 **集成** -> **Flow 设计器** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 HStreamDB 存储。
 
-## 测试数据桥接和规则
+## 测试 Sink 和规则
 
 使用 MQTTX 向 `t/1` 主题发布消息。
 
@@ -595,9 +595,9 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello HStreamDB" }'
 ```
 
-查看 HStreamDB 数据桥接运行统计。
+查看 HStreamDB Sink 运行统计。
 
-- 用于消息存储的数据桥接，命中、发送成功次数均 +1。查看数据是否已经写入流 `mqtt_message` 中：
+- 用于消息存储的 Sink ，命中、发送成功次数均 +1。查看数据是否已经写入流 `mqtt_message` 中：
 
 ```bash
 # 读取 Stream `mqtt_message` 之后按 `Control-C` 停止
@@ -606,7 +606,7 @@ timestamp: "1693903488278", id: 1947758763121538-8589934593-0, key: "", record: 
 ^CRead Done.
 ```
 
-- 用于存储上下线事件的 HStreamDB 数据桥接，命中、发送次数均 +2，即一次上线和一次下线。查看设备状态是否已经写入流 `mqtt_connect` 中：
+- 用于存储上下线事件的 HStreamDB Sink ，命中、发送次数均 +2，即一次上线和一次下线。查看设备状态是否已经写入流 `mqtt_connect` 中：
 
 ```bash
 # 读取 Stream `mqtt_connect` 之后按 `Control-C` 停止

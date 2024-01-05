@@ -1,6 +1,8 @@
 # 网络与 TLS
 
-安全对于物联网场景下的端对端加密通信至关重要。EMQX 在以下几种应用中使用 SSL 和 TLS 协议来保障网络通信安全：
+信息安全对于物联网场景下的端对端加密通信至关重要。SSL 和 TLS 常被用于网络通信，以确保数据传输保持机密性，并且无法被攻击者截获或修改。SSL/TLS 加密功能在传输层加密网络连接，并涉及使用数字证书来验证涉及各方的身份并建立安全通信通道。
+
+EMQX 在以下几种应用中使用 SSL 和 TLS 协议来保障网络通信安全：
 
 - MQTT 客户端与 EMQX 建立连接
 - 连接到外部资源，比如外部数据库
@@ -8,17 +10,11 @@
 
 EMQX 提供了全面的 SSL/TLS 功能支持，包括单向/双向身份验证和 X.509 证书身份验证。当接受 MQTT 客户端或连接到外部资源（如数据库）时，EMQX 可以通过 SSL/TLS 建立安全连接。
 
-::: tip
-
-SSL 和 TLS 常被用于网络通信，以确保数据传输保持机密性，并且无法被攻击者截获或修改。SSL/TLS 加密功能在传输层加密网络连接，并涉及使用数字证书来验证涉及各方的身份并建立安全通信通道。
-
-:::
-
-本节主要介绍了 MQTT 客户端在建立与 EMQX 的连接时以及在连接到外部资源时启用 SSL/TLS，在[启用 PSK 验证](./psk-authentication.md)中还介绍了如何在 EMQX 中开启 TLS PSK 支持。此外，在[获取 SSL/TLS 证书](./tls-certificate.md)中介绍了创建自签名证书的方法。
-
 ## 启用 TLS 进行客户端加密连接
 
-[开启 SSL/TLS 连接](./emqx-mqtt-tls.md)页面详细介绍了如何在 MQTT 客户端与 EMQX 的连接中启用 SSL/TLS。在 SSL/TLS 启用的情况下，您可以同时开启 [CRL 检查](./crl.md)或 [OCSP stapling](./ocsp.md) 来验证证书的状态。[客户端 TLS](./mqtt-client-tls.md) 页面列举了 MQTT 客户端库接入示例和工程项目代码，在这些示例中包括了 TLS 使用指南。
+[开启 SSL/TLS 连接](./emqx-mqtt-tls.md)页面详细介绍了如何在 MQTT 客户端与 EMQX 的连接中启用 SSL/TLS。在[获取 SSL/TLS 证书](./tls-certificate.md)中介绍了创建自签名证书的方法。在 SSL/TLS 启用的情况下，您可以同时开启 [CRL 检查](./crl.md)或 [OCSP stapling](./ocsp.md) 来验证证书的状态。
+
+[客户端 TLS](./mqtt-client-tls.md) 页面列举了 MQTT 客户端库接入示例和工程项目代码，在这些示例中包括了 TLS 使用指南。
 
 ### 国密 SSL
 

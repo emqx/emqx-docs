@@ -2,7 +2,7 @@
 
 This page mainly introduces how to create a rule for data processing and attach an action to the rule using the EMQX Dashboard. Log in to the EMQX Dashboard and click **Integration** -> **Rules** in the left navigation menu. Then click the **Create** button, which directs you to the **Rules** page. Here, you can define the data source for your rule and determine the subsequent actions for the filtered messages.
 
-The demonstration on this page takes the republish action as an example, describing how to create a rule that processes messages received on the topic `t/#` and republishes the message to the topic `a/1`. However, the actions "printing the result to the Console" and "forwarding with data bridges" are also mentioned in [Add Action](#add-action).
+The demonstration on this page takes the republish action as an example, describing how to create a rule that processes messages received on the topic `t/#` and republishes the message to the topic `a/1`. However, the actions "printing the result to the Console" and "forwarding with Sinks" are also mentioned in [Add Action](#add-action).
 
 ## Define a Data Source
 On the **Rules** page, input a name for your rule and add a note to facilitate future management.
@@ -98,9 +98,9 @@ Where
 The console output action should only be used for debugging. If it is used in the production environment, it may cause performance problems.
 :::
 
-### Add Forwarding with Data Bridge Action
+### Add Forwarding with Sinks Action
 
-You can also add actions to forward the processed results with data bridges. All you need is to select the target Data bridge from the Data bridge drop-down list. For details on creating data bridges in EMQX, see [the documentation for Data Bridges](./data-bridges.md).
+You can also add actions to forward the processed results using sinks. All you need is to select the target Sink from the Type of Action drop-down list in the Dashboard. For details on each sink in EMQX, see [Data Integration](./data-bridges.md).
 
 ## Test the Rule
 
@@ -112,7 +112,7 @@ For details on how to build the connection between the MQTTX client tool and EMQ
 
 ## View the Rules
 
-EMQX 5.0 introduced the Flows editor to provide a visualized view of the rules you created. Click **Integration** -> **Flows** to access it. The window shows that you have created two rules for all messages with topics following the "t/#" pattern: "rule_4xjx" publishes the messages and streams data into Kafka, and "rule_z97h" prints the messages to the console.
+EMQX 5.0 introduced the Flows editor to provide a visualized view of the rules you created. Click **Integration** -> **Flow Designer** to access it. The window shows that you have created two rules for all messages with topics following the "t/#" pattern: "rule_4xjx" publishes the messages and streams data into Kafka, and "rule_z97h" prints the messages to the console.
 
 ![Flows Editor](./assets/rules/flow-eidtor.png)
 
@@ -120,5 +120,5 @@ You can click the rule ID on the **Flows** page or **Rules** page to view the ex
 
 Note: If you update the rule action or redefine the data source, the statistics listed on the page below will reset and start fresh.
 
-![Rule Statistics](./assets/rules/rule_statistics.png)
+![Rule Statistics](assets/rule_statistics.png)
 

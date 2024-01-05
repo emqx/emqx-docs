@@ -112,7 +112,7 @@
   <tr>
     <td><b>Kafka 集成</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><a href="https://docs.emqx.com/zh/enterprise/latest/data-integration/data-bridge-kafka.html">将 MQTT 数据传输到 Apache Kafka</a></td>
@@ -152,7 +152,6 @@
 </tbody>
 </table>
 </div>
-
 
 ## 可扩展性与性能
 
@@ -199,7 +198,7 @@
   </tr>
   <tr>
     <td><b>吞吐量</b></td>
-    <td><span style="font-weight:normal">&lt; 10 万 MQTT 消息每秒</span></td>
+    <td><span style="font-weight:normal">500 万+ MQTT 消息每秒</span></td>
     <td><span style="font-weight:normal">500 万+ MQTT 消息每秒</span></td>
     <td><span style="font-weight:normal">1000 MQTT 消息每秒</span></td>
     <td><span style="font-weight:normal">500 万+ MQTT 消息每秒</span></td>
@@ -224,7 +223,6 @@
 </tbody>
 </table>
 </div>
-
 
 ## 集群架构
 
@@ -445,7 +443,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>多协议网关</b></b></td>
+    <td><b>多协议网关</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -519,7 +517,6 @@
 </tbody>
 </table>
 </div>
-
 
 ## 安全
 
@@ -724,7 +721,7 @@
     <td><b>数据桥接</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
@@ -735,38 +732,38 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>Webhook</b></td>
+    <td><b>Webhook/HTTP Server</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 即将上线</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
     <td><b>Apache Kafka/Confluent</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 即将上线</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
     <td><b>Apache IoTDB</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
     <td><b>Apache Pulsar</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
     <td><b>AWS Kinesis</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
@@ -814,13 +811,6 @@
   <tr>
     <td><b>HStreamDB</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>HTTP Server</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -921,6 +911,7 @@
 </table>
 </div>
 
+
 ## 规则引擎
 
 <div style="text-align: center;">
@@ -999,6 +990,7 @@
 </tbody>
 </table>
 </div>
+
 ## 可扩展性
 
 <div style="text-align: center;">
@@ -1061,6 +1053,7 @@
 </tbody>
 </table>
 </div>
+
 ## 可操作性
 
 <div style="text-align: center;">
@@ -1131,6 +1124,7 @@
 </tbody>
 </table>
 </div>
+
 ## 可观测性
 
 <div style="text-align: center;">
@@ -1199,7 +1193,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>主题监控</b></b></td>
+    <td><b>主题监控</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
@@ -1233,7 +1227,6 @@
 </tbody>
 </table>
 </div>
-
 
 ## 云原生与 K8S
 
@@ -1281,6 +1274,7 @@
 </tbody>
 </table>
 </div>
+
 ## 云平台支持
 
 <div style="text-align: center;">
@@ -1350,6 +1344,7 @@
 </tbody>
 </table>
 </div>
+
 ## MQTT 开发工具与 SDKs
 
 <div style="text-align: center;">
@@ -1403,7 +1398,7 @@
   </tr>
   <tr>
     <td><b>MQTT 负载测试工具</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> XMeter</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -1452,6 +1447,7 @@
 </tbody>
 </table>
 </div>
+
 
 ## 客户支持服务
 

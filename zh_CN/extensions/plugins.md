@@ -5,14 +5,15 @@ EMQX 支持通过插件扩展自定义业务逻辑，或通过插件的协议扩
 插件开发和运行基本流程如下：
 
 - 下载并安装我们的 [rebar3 emqx-plugin 模板](https://github.com/emqx/emqx-plugin-template)。
-- 使用 EMQX 提供的插件模板生成相应的插件 tarball。  
+- 使用 EMQX 提供的插件模板生成相应的插件 tarball。
 - 通过 Dashboard 或 CLI 安装插件包。
 - 通过 Dashboard 或 CLI 启动/停止/卸载您的插件。
 
-:::tip 前置准备：
+::: tip 前置准备：
 
 - 了解 EMQX [钩子](./hooks.md)。
-  :::
+
+:::
 
 ## 开发 EMQX 插件
 
@@ -23,7 +24,7 @@ EMQX 提供了 [emqx-plugin-template](https://github.com/emqx/emqx-plugin-templa
 1. 下载 [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template)，运行:
 
 ```shell
-mkdir -p ~/.config/rebar3/templates  
+mkdir -p ~/.config/rebar3/templates
 pushd ~/.config/rebar3/templates
 git clone https://github.com/emqx/emqx-plugin-template
 popd
@@ -31,7 +32,7 @@ popd
 
 2. 现在从模板创建您的自定义插件
 
-```shell  
+```shell
 rebar3 new emqx-plugin my_emqx_plugin
 ```
 
@@ -65,13 +66,13 @@ my_emqx_plugin
 
 ### 测试您的开发环境
 
-{% emqxce %}  
+{% emqxce %}
 :::提示
 要使用可工作的开发环境，请参阅[从源代码安装](../deploy/install-source.md)。
 :::
 {% endemqxce %}
 
-运行 `make rel` 以测试插件是否可以成功编译和打包，此时无需编写代码。 
+运行 `make rel` 以测试插件是否可以成功编译和打包，此时无需编写代码。
 
 由于示例插件依赖 EMQX 主应用程序，它需要与依赖项一起下载然后作为主项目的一部分进行编译。请注意，编译过程可能需要较长时间才能完成。
 
@@ -96,7 +97,7 @@ load(Env) ->
 #### 定制访问控制代码
 
 ```erlang
-%% 只允许客户端ID名称匹配以下任一字符的连接: A-Z、a-z、0-9 和下划线。  
+%% 只允许客户端ID名称匹配以下任一字符的连接: A-Z、a-z、0-9 和下划线。
 on_client_authenticate(_ClientInfo = #{clientid := ClientId}, Result, _Env) ->
   case re:run(ClientId, "^[A-Za-z0-9_]+$", [{capture, none}]) of
     match -> {ok, Result};
@@ -116,7 +117,7 @@ on_client_authorize(_ClientInfo, _Pub, _Topic, Result, _Env) -> {ok, Result}.
 :::tip
 
 1. 确保先在配置中将 `authorization.no_match` 设置为 `deny`，即 EMQX 将拒绝任何未经授权的连接请求。
-2. 在此示例中，我们演示了如何自定义一个访问控制插件，您也可以[基于文件设置类似的授权规则](../access-control/authz/file.md)。 
+2. 在此示例中，我们演示了如何自定义一个访问控制插件，您也可以[基于文件设置类似的授权规则](../access-control/authz/file.md)。
 
 :::
 
@@ -153,7 +154,7 @@ on_client_authorize(_ClientInfo, _Pub, _Topic, Result, _Env) -> {ok, Result}.
 
 现在重新运行 release 命令:
 
-```shell 
+```shell
 make rel
 ...
 ===> Release successfully assembled: _build/default/rel/my_emqx_plugin
@@ -162,7 +163,7 @@ make rel
 
 这将创建一个新的 EMQX 插件 tarball `my_emqx_plugin-1.0.0.tar.gz`，您现在可以上传并安装到运行中的 EMQX 集群中。
 
-## 安装/启动插件  
+## 安装/启动插件
 
 使用 CLI 安装编译后的包:
 
@@ -174,7 +175,7 @@ make rel
 
 当不再需要该插件时，可以使用 CLI 轻松卸载它:
 
-```bash  
+```bash
 ./bin/emqx ctl plugins uninstall {pluginName}
 ```
 

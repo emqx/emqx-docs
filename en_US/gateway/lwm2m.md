@@ -22,7 +22,7 @@ It can also be enabled via the HTTP API, and emqx.conf e.g:
 ::: tab HTTP API
 
 ```bash
-curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m' \
+curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m' \
   -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{

@@ -74,11 +74,11 @@ Make sure you have the knowledge about the following:
 
 This section uses EMQX [public MQTT broker](https://www.emqx.com/en/mqtt/public-mqtt5-broker) as an example to demonstrate how to configure a data bridge between EMQX and this public MQTT broker in the Dashboard.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
 
 2. Click **Create** in the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **MQTT**, and then click **Next**.
+3. In the **Create Connector** page, click to select **MQTT**, and then click **Next**.
 
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters or numbers, for example, `my_mqtt_bridge`.
 

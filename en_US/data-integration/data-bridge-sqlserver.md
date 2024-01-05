@@ -51,7 +51,7 @@ This section describes the preparations you need to complete before you start to
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [Data Integration](./data-bridges.md)
 
 ### Install and Connect to Microsoft SQL Server
 
@@ -230,15 +230,15 @@ Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
 FileUsage   = 1
 ```
 
-## Create Microsoft SQL Server Data Bridge
+## Create Connector
 
 This section demonstrates how to create Microsoft SQL Server data bridge for message storage and events recording. It assumes that you run both EMQX and Microsoft SQL Server on the local machine. If you have Microsoft SQL Server and EMQX running remotely, adjust the settings accordingly.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **Microsoft SQL Server**, and then click **Next**.
+3. In the **Create Connector** page, click to select **Microsoft SQL Server**, and then click **Next**.
 
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
@@ -274,10 +274,10 @@ This section demonstrates how to create Microsoft SQL Server data bridge for mes
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Microsoft SQL Server. You can also create rules by following the steps in [Create Rules for Microsoft SQL Server Data Bridge](#create-rules-for-sqlserver-data-bridge).
 
-Now that you have created the data bridge, and the Microsoft SQL Server data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
+Now that you have created the data bridge, and the Microsoft SQL Server data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**.
 
 
-## Create Rules for Microsoft SQL Server Data Bridge
+## Create Connector
 
 After you have successfully created the data bridge to Microsoft SQL Server, you can continue to create rules to specify the data to be saved into Microsoft SQL Server and rules for the online/offline status recording.
 
@@ -313,9 +313,9 @@ After you have successfully created the data bridge to Microsoft SQL Server, you
 
 5. Click the **Create** button to finish the setup.
 
-Now you have successfully created the rule for Microsoft SQL Server data bridge. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Microsoft SQL Server after parsing by rule  `my_rule`.
+Now you have successfully created the rule for Microsoft SQL Server data bridge. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Microsoft SQL Server after parsing by rule  `my_rule`.
 
-## Test Data Bridge and Rule
+## Test Rule
 
 Use MQTT X  to send a message to topic  `t/1`  to trigger an online/offline event.
 

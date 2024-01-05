@@ -45,7 +45,7 @@ This section describes the preparations you need to complete before you start to
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [Data Integration](./data-bridges.md)
 
 ### Install GreptimeDB Server
 
@@ -67,15 +67,15 @@ greptime/greptimedb standalone start \
 2. The `user-provider` parameter configures the GreptimeDB authentication. You can configure it by file. For more information, refer to the [documentation](https://docs.greptime.com/user-guide/clients/authentication#authentication).
 3. With GreptimeDB running, visit [http://localhost:4000/dashboard](http://localhost:4000/dashboard) to use the GreptimeDB dashbaord. The username and password are `greptime_user` and `greptime_pwd`.
 
-## Create GreptimeDB Data Bridge
+## Create Connector
 
 This section demonstrates how to create a GreptimeDB data bridge in EMQX Dashboard. It assumes that you run both EMQX and GreptimeDB on the local machine. If you have GreptimeDB and EMQX running remotely, adjust the settings accordingly.
 
-1. Go to EMQX Dashboard, click **Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, click **Integration** -> **Connector**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **GreptimeDB**, and then click **Next**.
+3. In the **Create Connector** page, click to select **GreptimeDB**, and then click **Next**.
 
 4. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers. 
 
@@ -105,7 +105,7 @@ This section demonstrates how to create a GreptimeDB data bridge in EMQX Dashboa
 
 9. Click the **Create** button to finish the setup.
 
-Now the GreptimeDB data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as `Connected`.
+Now the GreptimeDB data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as `Connected`.
 
 ## Create a Rule for GreptimeDB Bridge
 
@@ -129,9 +129,9 @@ You can continue to create rules to specify the data to be saved into GreptimeDB
 4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge we just created under **Data Bridge**. Then click the **Add** button.
 5. Click **Create** at the page bottom to finish the creation.
 
-Now a rule to forward data to GreptimeDB via a GreptimeDB bridge is created. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to GreptimeDB after parsing by rule  `my_rule`.
+Now a rule to forward data to GreptimeDB via a GreptimeDB bridge is created. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to GreptimeDB after parsing by rule  `my_rule`.
 
-## Test Data Bridge and Rule
+## Test Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 

@@ -1,6 +1,6 @@
 # Ingest MQTT Data into Cassandra
 
-<!-- 提供一段简介，描述支数据桥接的基本工作方式、关键特性和价值，如果有局限性也应当在此处说明（如必须说明的版本限制、当前未解决的问题）。 -->
+<!-- 提供一段简介，描述支 Sink 的基本工作方式、关键特性和价值，如果有局限性也应当在此处说明（如必须说明的版本限制、当前未解决的问题）。 -->
 
 {% emqxce %}
 :::tip
@@ -48,7 +48,7 @@ This section describes the preparations you need to complete before you start to
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [Data Integration](./data-bridges.md)
 
 ### Install Cassandra Server
 
@@ -81,15 +81,15 @@ docker exec -it cassa cqlsh "-e \
         PRIMARY KEY(msgid, topic));"
 ```
 
-## Create Cassandra Data Bridge
+## Create Connector
 
 This section demonstrates how to create a Cassandra data bridge in EMQX Dashboard. It assumes that you run both EMQX and Cassandra on the local machine. If you have Cassandra and EMQX running remotely, adjust the settings accordingly.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **Cassandra**, and then click **Next**.
+3. In the **Create Connector** page, click to select **Cassandra**, and then click **Next**.
 
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
@@ -101,7 +101,7 @@ This section demonstrates how to create a Cassandra data bridge in EMQX Dashboar
    insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
    ```
 
-7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Integration](./data-bridges.md).
+7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
 
 8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Cassandra server.
 
@@ -109,9 +109,9 @@ This section demonstrates how to create a Cassandra data bridge in EMQX Dashboar
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Cassandra. You can also create rules by following the steps in [Create Rules for Cassandra Data Bridge](#create-rules-for-cassandra-data-bridge).
 
-Now the Cassandra data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+Now the Cassandra data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
 
-## Create a Rule for Cassandra Data Bridge
+## Create Connector
 
 Now that you have successfully created the data bridge, you can continue to create rules to specify the data to be stored in Cassandra. 
 
@@ -133,9 +133,9 @@ Now that you have successfully created the data bridge, you can continue to crea
 4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**. Click the **Add** button. 
 6. Click the **Create** button to finish the setup. 
 
-After creating the data bridge to Cassandra. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Cassandra after parsing by rule `my_rule`.
+After creating the data bridge to Cassandra. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Cassandra after parsing by rule `my_rule`.
 
-## Test Data Bridge and Rule
+## Test Rule
 
 Use MQTTX to send messages to topic  `t/1`:
 

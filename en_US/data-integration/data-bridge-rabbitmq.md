@@ -88,7 +88,7 @@ After the RabbitMQ server is started, you can create a test exchange and a queue
    * **Arguments**: Leave empty
 7. Click the **Bind** button to bind the test queue to the test exchange with the specified routing key.
 
-## Create a RabbitMQ Data Bridge
+## Create Connector
 
 This section demonstrates how to create a RabbitMQ data bridge in EMQX Dashboard. It assumes that you run both EMQX and RabbitMQ on the local machine. If you have RabbitMQ and EMQX running remotely, please adjust the settings accordingly.
 
@@ -96,7 +96,7 @@ This section demonstrates how to create a RabbitMQ data bridge in EMQX Dashboard
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **RabbitMQ**, and then click **Next**.
+3. In the **Create Connector** page, click to select **RabbitMQ**, and then click **Next**.
 
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
@@ -155,7 +155,7 @@ This section demonstrates how to create a RabbitMQ data bridge in EMQX Dashboard
 
 Now the RabbitMQ data bridge should appear in the data bridge list (**Integration -> Data Bridge**) with **Resource Status** as Connected. You can continue to create a rule to forward data to the new RabbitMQ bridge.
 
-## Create a Rule for RabbitMQ Data Bridge
+## Create Connector
 
 1. Go to the EMQX Dashboard, and click Data **Integration -> Rules**.
 2. Click **Create** on the top right corner of the page.
@@ -176,7 +176,7 @@ Now the RabbitMQ data bridge should appear in the data bridge list (**Integratio
 
 Now a rule to forward data to RabbitMQ via a RabbitMQ bridge is created. You can click **Integration -> Flows** to view the topology. It can be seen that the messages under the topic `t/#` are sent and saved to RabbitMQ.
 
-## Test Data Bridge and Rule
+## Test Rule
 
 You can use the built-in WebSocket client in the EMQX dashboard to test our rule and bridge.
 

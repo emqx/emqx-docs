@@ -60,7 +60,7 @@ The sub-sections below describe how to install and connect to HStreamDB on Linux
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [Data Integration](./data-bridges.md)
 
 ### Start HStreamDB TCP Service and Create Streams
 
@@ -513,17 +513,17 @@ Now the directory structure should be:
 
    </details>
 
-## Create HStreamDB Data Bridge
+## Create Connector
 
 This section introduces how to create HStreamDB data bridges in EMQX Dashboard. Data bridges for client message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges for message storage and event recording.
 
 The demonstration in this section assumes you run EMQX and HStreaDB in docker on the local machine. If you have HStreamDB and EMQX running remotely, please adjust the settings accordingly.
 
-1. Go to EMQX Dashboard, click **Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, click **Integration** -> **Connector**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **HStreamDB**, and then click **Next**.
+3. In the **Create Connector** page, click to select **HStreamDB**, and then click **Next**.
 
 4. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
@@ -564,9 +564,9 @@ The demonstration in this section assumes you run EMQX and HStreaDB in docker on
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into HStreamDB. You can also create rules by following the steps in [Create Rules for HStreamDB Data Bridge](#create-rules-for-hstreamdb-data-bridge).
 
-Now the HStream data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
+Now the HStream data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**.
 
-## Create Rules for HStreamDB Data Bridge
+## Create Connector
 
 After you have successfully created the data bridge to HStreamDB, you can continue to create rules to specify the data to be saved into HStreamDB and rules for the online/offline status recording.
 
@@ -599,9 +599,9 @@ After you have successfully created the data bridge to HStreamDB, you can contin
 4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data Bridge**. Click the **Add** button.
 5. Click the **Create** button to finish the setup.
 
-Now you have successfully created the rule for HStreamDB data bridge. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to HStreamDB after parsing by rule  `my_rule`.
+Now you have successfully created the rule for HStreamDB data bridge. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to HStreamDB after parsing by rule  `my_rule`.
 
-## Test Data Bridge and Rule
+## Test Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 

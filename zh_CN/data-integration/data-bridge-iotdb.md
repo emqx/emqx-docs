@@ -1,6 +1,6 @@
 # 将 MQTT 数据写入到 Apache IoTDB
 
-[Apache IoTDB (物联网数据库)](https://iotdb.apache.org/zh/) 是一款高性能可扩展的物联网时序数据库，用于处理由各种物联网设备和系统产生的海量时序数据。通过数据桥接将数据导入 Apache IoTDB，您可以将来自其他系统的数据转发到 Apache IoTDB 进行存储和分析。
+[Apache IoTDB (物联网数据库)](https://iotdb.apache.org/zh/) 是一款高性能可扩展的物联网时序数据库，用于处理由各种物联网设备和系统产生的海量时序数据。通过 Sink 将数据导入 Apache IoTDB，您可以将来自其他系统的数据转发到 Apache IoTDB 进行存储和分析。
 
 EMQX 支持与 Apache IoTDB 之间的数据集成, 使您能够通过它的 [REST API V2](https://iotdb.apache.org/zh/UserGuide/Master/API/RestServiceV2.html) 将时序数据转发到 Apache IoTDB。
 
@@ -17,7 +17,7 @@ Apache IoTDB 数据集成是 EMQX 企业版功能。EMQX 企业版可以为您�
 
 - 了解 EMQX 数据集成[规则](./rules.md)
 
-- 了解[数据桥接](./data-bridges.md)
+- 了解[数据集成](./data-bridges.md)
 
 - 了解 UNIX 终端和命令
 
@@ -32,7 +32,7 @@ Apache IoTDB 数据集成是 EMQX 企业版功能。EMQX 企业版可以为您�
 
 ## 快速开始
 
-本节为如何使用 Apache IoTDB 数据桥接提供了实用的教程，包括如何设置 Apache IoTDB 服务器、创建数据桥接和规则以将数据转发到 Apache IoTDB、以及如何测试数据桥接和规则。
+本节为如何使用 Apache IoTDB Sink 提供了实用的教程，包括如何设置 Apache IoTDB 服务器、创建 Sink 和规则以将数据转发到 Apache IoTDB、以及如何测试 Sink 和规则。
 
 本教程假定 EMQX 和 ApacheIoTDB 均在本地运行。如果您在远程运行 Apache IoTDB 和 EMQX，请根据实际情况调整相应配置。
 
@@ -64,17 +64,17 @@ docker run -d --name iotdb-service \
 
 有关如何通过 Docker 运行 IoTDB 的更多信息，请参阅： [IoTDB in Docker on Docker Hub](https://hub.docker.com/r/apache/iotdb)。
 
-### 创建 Apache IoTDB 数据桥接
+## 创建连接器
 
-本节将通过 Dashboard 演示如何创建到 Apache IoTDB 的数据桥接。
+本节将通过 Dashboard 演示如何创建到 Apache IoTDB 的连接器。
 
-1. 在 Dashboard 左侧导航目录中点击**数据集成** -> **数据桥接**。
+1. 在 Dashboard 左侧导航目录中点击**数据集成** -> **连接器**。
 
 2. 点击页面右上角的**创建**。
 
-3. 在**创建数据桥接**页面, 点击选择 **Apache IoTDB** 作为数据桥接类型, 然后点击 **下一步**。
+3. 在**创建连接器**页面, 点击选择 **Apache IoTDB** 作为 Sink 类型, 然后点击 **下一步**。
 
-4. 输入数据桥接名称，要求是大小写英文字母和数字的组合。
+4. 输入连接器名称，要求是大小写英文字母和数字的组合。
 
 5. 输入 Apache IoTDB 服务器链接信息：
 
@@ -96,17 +96,17 @@ docker run -d --name iotdb-service \
 
 8. 点击**创建**前，您可点击**测试连接**按钮确保能连接到 Apache IoTDB 服务器。
 
-9. 点击**创建**按钮完成数据桥接创建。
+9. 点击**创建**按钮完成 Sink 创建。
 
    在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 Apache IoTDB 的数据。详细步骤可参照[创建数据转发规则](#创建数据转发规则)章节的步骤来创建规则。
 
-至此，您已经完成数据桥接的创建，在 Dashboard 的数据桥接页面，可以看到 Apache IoTDB 数据桥接的状态为**已连接**。
+至此，您已经完成 Sink 的创建，在 Dashboard 的 Sink 页面，可以看到 Apache IoTDB Sink 的状态为**已连接**。
 
 ### 创建数据转发规则
 
 本节将介绍如何创建一条规则来指定需要转发至 Apache IoTDB 的数据。
 
-1. 转到 Dashboard **数据集成** -> **规则**页面。
+1. 转到 Dashboard **集成** -> **规则**页面。
 
 2. 点击页面右上角的**创建**。
 
@@ -151,11 +151,11 @@ docker run -d --name iotdb-service \
      "root/#"
    ```
 
-5. 点击**添加动作**按钮，在下拉框中选择**使用数据桥接转发**，选择之前创建好的 Apache IoTDB 数据桥接。
+5. 点击**添加动作**按钮，在下拉框中选择**使用 Sink 转发**，选择之前创建好的 Apache IoTDB Sink 。
 
    :::tip
 
-   如果您在创建完数据桥接后直接点击**创建规则**，这些选项已经过配置，您可以跳过这一步和下一步。
+   如果您在创建完 Sink 后直接点击**创建规则**，这些选项已经过配置，您可以跳过这一步和下一步。
 
    :::
 
@@ -163,11 +163,11 @@ docker run -d --name iotdb-service \
 
 7. 点击最下方**创建**按钮完成规则创建。
 
-至此我们已经完成数据桥接和转发规则的创建，您可前往 **数据集成** -> **Flows** 页面查看拓扑图，可看到 `root/#` 主题的消息被转发至 Apache IoTDB。
+至此我们已经完成 Sink 和转发规则的创建，您可前往 **数据集成** -> **Flow 设计器** 页面查看拓扑图，可看到 `root/#` 主题的消息被转发至 Apache IoTDB。
 
-### 测试数据桥接和规则
+### 测试 Sink 和规则
 
-您可通过 EMQX Dashboard 内置的 WebSocket 客户端进行规则和数据桥接的验证。
+您可通过 EMQX Dashboard 内置的 WebSocket 客户端进行规则和 Sink 的验证。
 
 1. 在 Dashboard 页面，点击左侧导航目录中的 **问题分析** -> **WebSocket 客户端**。
 
@@ -223,7 +223,7 @@ docker run -d --name iotdb-service \
 
 7. 点击**发布**完成消息的发送。
 
-   如果数据桥接和规则创建成功，消息应该已被转发至 Apache IoTDB 服务器里指定的时序数据表中。 
+   如果 Sink 和规则创建成功，消息应该已被转发至 Apache IoTDB 服务器里指定的时序数据表中。 
 
 8. 您可以使用 IoTDB 的命令行查看。如果服务器在 docker 中运行，可以使用下面的命令连接服务器：
 

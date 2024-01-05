@@ -85,7 +85,7 @@ docker run -d --name iotdb-service \
 
 You can find more information about running [IoTDB in Docker on Docker Hub](https://hub.docker.com/r/apache/iotdb).
 
-## Create Rule and Apache IoTDB Data Bridge
+## Create Rule and Apache IoTDB Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `root/#`  and send the processed results through the configured Apache IoTDB data bridge to store the time series data to IoTDB.
 

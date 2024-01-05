@@ -46,7 +46,7 @@ This section describes the preparations you need to complete before you start to
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [Data Integration](./data-bridges.md)
 
 ### Install TDengine
 
@@ -95,17 +95,18 @@ Before you create data bridges for TDengine, you need to create two data tables 
        );
 ```
 
-## Create TDengine Data Bridges
+## Create Connector
+
 
 This section demonstrate how to create TDengine data bridges in EMQX Dashboard. It assumes that you run both EMQX and TDengine on the local machine. If you have TDengine and EMQX running remotely, adjust the settings accordingly.
 
 Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to TDengine for messages storage and event recording.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **TDengine**, and then click **Next**.
+3. In the **Create Connector** page, click to select **TDengine**, and then click **Next**.
 
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
@@ -149,9 +150,9 @@ Data bridges for message storage and event recording require different SQL templ
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into TDengine. You can also create rules by following the steps in [Create Rules for TDengine Data Bridge](#create-rules-for-tdengine-data-bridge).
 
-Now the TDengine data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**. 
+Now the TDengine data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
 
-## Create Rules for TDengine Data Bridge
+## Create Connector
 
 Now that you have successfully created the data bridge to TDengine, you can continue to create rules to specify the data to be saved into TDengine. You need to create two different rules for messages forward and event records.
 
@@ -187,7 +188,7 @@ Now that you have successfully created the data bridge to TDengine, you can cont
 
 6. Click the **Create** button to finish the setup. 
 
-Now you have successfully created the data bridge to TDengine. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to TDengine after parsing by rule `my_rule`. 
+Now you have successfully created the data bridge to TDengine. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to TDengine after parsing by rule `my_rule`. 
 
 ## Test the Data Bridge and Rule
 

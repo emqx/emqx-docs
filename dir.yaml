@@ -194,6 +194,64 @@
         - performance/benchmark-xmeter
         - performance/performance-reference
 
+- title_en: Security Guide
+  title_cn: 安全指南
+  path: access-control/security-guide
+  collapsed: true
+  children:
+    - title_en: Network and TLS
+      title_cn: 网络与 TLS
+      path: network/overview
+      collapsed: true
+      children:
+        - network/emqx-mqtt-tls
+        - network/mqtt-client-tls
+        - network/tls-certificate
+        - network/crl
+        - network/ocsp
+        - title_en: GMSSL
+          title_cn: 国密 SSL
+          lang: cn
+          path: network/gmssl
+      # - network/ipv6
+    - title_en: Authentication
+      title_cn: 认证
+      path: access-control/authn/authn
+      collapsed: true
+      children:
+        - access-control/authn/x509
+        - access-control/authn/jwt
+        - title_en: Password based
+          title_cn: 密码认证
+          path: access-control/authn/pwoverview
+          collapsed: true
+          children:
+            - access-control/authn/mnesia
+            - access-control/authn/mysql
+            - access-control/authn/mongodb
+            - access-control/authn/postgresql
+            - access-control/authn/redis
+            - access-control/authn/ldap
+            - access-control/authn/http
+        - access-control/authn/scram
+        - network/psk-authentication
+        - access-control/authn/user_management
+    - title_en: Authorization
+      title_cn: 授权
+      path: access-control/authz/authz
+      collapsed: true
+      children:
+        - access-control/authz/file
+        - access-control/authz/mnesia
+        - access-control/authz/mysql
+        - access-control/authz/mongodb
+        - access-control/authz/postgresql
+        - access-control/authz/redis
+        - access-control/authz/ldap
+        - access-control/authz/http
+    - access-control/blacklist
+    - access-control/flapping-detect
+
 - title_en: Rule Engine
   title_cn: 规则引擎
   path: data-integration/rules
@@ -226,12 +284,16 @@
   path: data-integration/data-bridges
   collapsed: true
   children:
+    - data-integration/connector
     - title_en: Webhook
       title_cn: Webhook
       path: data-integration/webhook
     - title_en: Apache Kafka
       title_cn: Apache Kafka
       path: data-integration/data-bridge-kafka
+    - title_en: Confluent
+      title_cn: Confluent
+      path: data-integration/confluent-sink
     - title_en: Apache IoTDB
       title_cn: Apache IoTDB
       path: data-integration/data-bridge-iotdb
@@ -361,8 +423,14 @@
           edition: ee
     - title_en: Configuration Manual
       title_cn: 配置手册
+      lang: cn
       edition: ce
-      path: configuration/configuration-manual
+      path: https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/
+    - title_en: Configuration Manual
+      title_cn: 配置手册
+      lang: en
+      edition: ce
+      path: https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/
     - title_en: Configuration Manual
       title_cn: 配置手册
       lang: cn
@@ -401,9 +469,9 @@
           title_cn: 数据集成
           path: dashboard/bridgeoverview
           children:
-            - dashboard/bridge
-            - dashboard/rules
             - dashboard/flows
+            - dashboard/rules
+            - dashboard/bridge
         - dashboard/configuration
         - dashboard/extensions
         - dashboard/diagnose
@@ -432,7 +500,20 @@
         - observability/tracer
         - observability/mqtt-system-topics
         - observability/prometheus
-        - observability/open-telemetry 
+        - title_en: Integrate with OpenTlelemetry
+          title_cn: 集成 OpenTelemetry
+          path: observability/open-telemetry/open-telemetry
+          collapsed: true
+          children:
+            - title_en: Metrics
+              title_cn: 指标
+              path: observability/open-telemetry/metrics
+            - title_en: Logs
+              title_cn: 日志
+              path: observability/open-telemetry/logs
+            - title_en: Traces
+              title_cn: 追踪
+              path: observability/open-telemetry/traces
     - title_en: Backup and Restore
       title_cn: 备份与恢复
       path: operations/backup-restore
@@ -449,72 +530,6 @@
       title_cn: 遥测
       path: telemetry/telemetry
       edition: ce
-
-- title_en: Security Guide
-  title_cn: 安全指南
-  path: access-control/security-guide
-  collapsed: true
-  children:
-    - title_en: Access Control
-      title_cn: 访问控制
-      path: access-control/overview
-      collapsed: true
-      children:
-        - title_en: Authentication
-          title_cn: 认证
-          path: access-control/authn/authn
-          children:
-            - title_en: Password based
-              title_cn: 密码认证
-              path: access-control/authn/pwoverview
-              children:
-                - access-control/authn/mnesia
-                - access-control/authn/mysql
-                - access-control/authn/mongodb
-                - access-control/authn/postgresql
-                - access-control/authn/redis
-                - title_en: LDAP
-                  title_cn: LDAP
-                  path: access-control/authn/ldap
-                  edition: ee
-                - access-control/authn/http
-            - access-control/authn/jwt
-            - access-control/authn/scram
-            - access-control/authn/user_management
-        - title_en: Authorization
-          title_cn: 授权
-          path: access-control/authz/authz
-          children:
-            - access-control/authz/file
-            - access-control/authz/mnesia
-            - access-control/authz/mysql
-            - access-control/authz/mongodb
-            - access-control/authz/postgresql
-            - access-control/authz/redis
-            - title_en: LDAP
-              title_cn: LDAP
-              path: access-control/authz/ldap
-              edition: ee
-            - access-control/authz/http
-        - access-control/blacklist
-        - access-control/flapping-detect
-    - title_en: Network and TLS
-      title_cn: 网络与 TLS
-      path: network/overview
-      collapsed: true
-      children:
-        - network/emqx-mqtt-tls
-        - network/mqtt-client-tls
-        - network/psk-authentication
-        - network/tls-certificate
-      # - network/crl-and-ocsp-stapling
-        - network/crl
-        - network/ocsp
-        - title_en: GMSSL
-          title_cn: 国密 SSL
-          lang: cn
-          path: network/gmssl
-      # - network/ipv6
 
 - title_en: Advanced Features
   title_cn: 高级功能
@@ -550,10 +565,22 @@
         - gateway/coap
         - gateway/lwm2m
         - gateway/exproto
-       #- gateway/ocpp
-       #- gateway/jt808
-       #- gateway/gbt32960
-       #- gateway/tcp
+        - title_en: OCPP Gateway
+          title_cn: OCPP 网关
+          path: gateway/ocpp
+          edition: ee
+        - title_en: JT/T 808 Gateway
+          title_cn: JT/T 808 协议网关
+          path: gateway/jt808
+          collapsed: true
+          edition: ee
+          children:
+            - gateway/jt808_data_exchange
+        - title_en: GB/T 32960 Gateway
+          title_cn: GB/T 32960 协议网关
+          path: gateway/gbt32960
+          edition: ee
+        #- gateway/tcp
 
 
 - title_en: Tutorials
@@ -662,22 +689,22 @@
       path: https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack
 
 - title_en: Release Notes
-  title_cn: 版本发布说明
+  title_cn: 版本发布历史
   collapsed: true
+  path: changes/all-changes-${edition}
   children:
-    - title_en: Releases
-      title_cn: 版本发布
-      edition: ee
-      path: changes/changes-ee-5.4
-    - title_en: Releases
-      title_cn: 版本发布
+    - changes/changes-${edition}-v5
+    - changes/changes-${edition}-v4
+    - title_en: Version 0.1 to 3.x
+      title_cn: v0.1-v3.x 版本
       edition: ce
-      path: changes/changes-ce-5.4
-    - changes/breaking-changes-5.4
-    - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
-      title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
-      path: changes/breaking-changes-5.1.0
+      path: changes/changes-ce-v3
+    - title_en: Incompatible Changes
+      title_cn: 不兼容变更
+      collapsed: true
       children:
+        - changes/breaking-changes-5.4
+        - changes/breaking-changes-5.1.0
         - changes/auth-4.4-to-5.1-compatibility
         - changes/data-integration-4.4-to-5.1-incompatibility
         - changes/gateway-4.4-to-5.1-incompatibility

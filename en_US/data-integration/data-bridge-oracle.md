@@ -42,7 +42,7 @@ This section describes the preparations you need to complete before you start to
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [Data Integration](./data-bridges.md)
 
 ### Install Oracle Database Server
 
@@ -93,17 +93,18 @@ Use the following SQL statements to create data table `t_emqx_client_events` in 
   );
   ```
 
-## Create Oracle Database Data Bridges
+## Create Connector
+
 
 This section demonstrates how to create Oracle Database data bridges. It assumes that you run both EMQX and Oracle Database on the local machine. If you have Oracle Database and EMQX running remotely, adjust the settings accordingly.
 
 Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to Oracle Database for message storage and event recording.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Data Bridge**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Data Bridge** page, click to select **Oracle Database**, and then click **Next**.
+3. In the **Create Connector** page, click to select **Oracle Database**, and then click **Next**.
 
 4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
 
@@ -151,9 +152,9 @@ n
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Oracle Database. For detailed steps, refer to [Create Rules for Oracle Database Data Bridge](#create-rules-for-oracle-database-data-bridge).
 
-Now the Oracle Database data bridge should appear in the data bridge list (**Integration** -> **Data Bridge**) with **Resource Status** as **Connected**.
+Now the Oracle Database data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**.
 
-## Create Rules for Oracle Database Data Bridge
+## Create Connector
 
 After you have successfully created the data bridges to Oracle Database, you can continue to create rules to specify the data to be saved into Oracle Database and rules for the online/offline status recording.
 
@@ -186,7 +187,7 @@ After you have successfully created the data bridges to Oracle Database, you can
 4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the Oracle Database data bridge just created. Click the **Add** button.
 6. Click the **Create** button to finish the setup.
 
-Now you have successfully created the data bridges to Oracle Database. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Oracle Database after parsing by rule  `my_rule`.
+Now you have successfully created the data bridges to Oracle Database. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Oracle Database after parsing by rule  `my_rule`.
 
 ## Test Data Bridges and Rules
 

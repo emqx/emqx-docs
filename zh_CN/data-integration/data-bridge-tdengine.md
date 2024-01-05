@@ -8,11 +8,11 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 [TDengine](https://tdengine.com/) 是一款专为物联网、工业互联网等场景设计并优化的大数据平台，其核心模块是高性能、集群开源、云原生、极简的时序数据库。EMQX 支持与 TDengine 集成，能够实现大量设备和数据采集器的海量数据传输、存储、分析和分发，对业务运行状态进行实时监测、预警，提供实时的商业洞察。
 
-本页详细介绍了 EMQX 与 TDengine 的数据集成并提供了实用的规则和数据桥接创建指导。
+本页详细介绍了 EMQX 与 TDengine 的数据集成并提供了实用的规则和 Sink 创建指导。
 
 ## 工作原理
 
-TDengine 数据集成是 EMQX 的开箱即用功能，通过通过内置的[规则引擎](./rules.md)组件和数据桥接将设备数据转发到 TDengine。通过 TDengine 数据桥接，MQTT 消息和客户端事件可以存储在 TDengine 中。此外，数据更新或在 TDengine 中的删除操作可以由事件触发，从而实现对设备在线状态和历史上下线事件的记录。该集成简化了从 EMQX 到 TDengine 的数据摄取过程，无需复杂编码。
+TDengine 数据集成是 EMQX 的开箱即用功能，通过通过内置的[规则引擎](./rules.md)组件和 Sink 将设备数据转发到 TDengine。通过 TDengine Sink ，MQTT 消息和客户端事件可以存储在 TDengine 中。此外，数据更新或在 TDengine 中的删除操作可以由事件触发，从而实现对设备在线状态和历史上下线事件的记录。该集成简化了从 EMQX 到 TDengine 的数据摄取过程，无需复杂编码。
 
 下图展示了 EMQX 和 TDengine 数据集成在工业物联网中的典型架构:
 
@@ -39,14 +39,14 @@ TDengine 数据集成为您的业务带来了以下功能和优势：
 - **集群和可扩展性**：EMQX 和 TDengine 支持集群能力并基于云原生构建，能充分利用云平台的存储、计算、网络资源的弹性能力，随着业务增长灵活地水平扩展以满足不断扩大的需求。
 - **高级查询能力**：TDengine 为时戳数据的高效查询和分析提供了优化的功能、操作符和索引技术，使得能够从物联网时间序列数据中提取精确的洞察。
 
-## 桥接准备
+## 准备工作
 
-本节介绍了在 EMQX 中创建 TDengine 数据桥接之前需要做的准备工作，包括如何安装 TDengine 服务器并创建数据表。
+本节介绍了在 EMQX 中创建 TDengine Sink 之前需要做的准备工作，包括如何安装 TDengine 服务器并创建数据表。
 
 ### 前置准备
 
 - 了解[规则](./rules.md)。
-- 了解[数据桥接](./data-bridges.md)。
+- 了解[数据集成](./data-bridges.md)。
 
 ### 安装 TDengine
 
@@ -73,16 +73,16 @@ use mqtt;
 
 数据表 `t_mqtt_msg`，用于存储每条消息的发布者客户端 ID、主题、Payload 以及发布时间：
 
-  ```sql
-  CREATE TABLE t_mqtt_msg (
-    ts timestamp,
-    msgid NCHAR(64),
-    mqtt_topic NCHAR(255),
-    qos TINYINT,
-    payload BINARY(1024),
-    arrived timestamp
-  );
-  ```
+```sql
+CREATE TABLE t_mqtt_msg (
+  ts timestamp,
+  msgid NCHAR(64),
+  mqtt_topic NCHAR(255),
+  qos TINYINT,
+  payload BINARY(1024),
+  arrived timestamp
+);
+```
 
 数据表 `emqx_client_events`，用于存储上下线的客户端 ID、事件类型以及事件发生时间：
 
@@ -94,45 +94,41 @@ CREATE TABLE emqx_client_events (
 );
 ```
 
-## 创建 TDengine 数据桥接
+## 创建连接器 - 消息存储
 
-我们将创建两个 TDengine 数据桥接分别完成消息存储与事件记录：
+我们将创建两个 TDengine Sink 分别完成消息存储与事件记录。本节将创建第一个 TDengine Sink 来实现对客户端发布消息的存储。
 
-### 消息存储
-
-本节将创建第一个 TDengine 数据桥接来实现对客户端发布消息的存储。
-
-1. 转到 Dashboard **数据集成** -> **数据桥接**页面。
+1. 转到 Dashboard **集成** -> **连接器**页面。
 
 2. 点击页面右上角的**创建**。
 
-3. 在数据桥接类型中选择 TDengine，点击**下一步**。
+3. 在连接器类型中选择 TDengine，点击**下一步**。
 
-4. 输入数据桥接名称，要求是大小写英文字母和数字组合。
+4. 输入连接器名称，要求是大小写英文字母和数字组合。
 
 5. 输入 TDengine 连接信息，主机列表填写 **127.0.0.1:6041**，数据库填写 `mqtt`，用户名为 `root`，密码为 `taosdata`。
 
 6. 配置 SQL 模板，可使用如下 SQL 完成数据插入。
 
-     ::: tip
-     
-     在 EMQX 5.1.1 中引入了一个重大变更。在 EMQX 5.1.1 之前，字符类型的占位符会被自动转义加上单引号，而现在需要手动加上单引号。
-     
-     :::
-     
-     ```sql
-     INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
-         VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
-     ```
+   ::: tip
+
+   在 EMQX 5.1.1 中引入了一个重大变更。在 EMQX 5.1.1 之前，字符类型的占位符会被自动转义加上单引号，而现在需要手动加上单引号。
+
+   :::
+
+   ```sql
+   INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived)
+       VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
+   ```
 
 7. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](#配置参数)。
-8. 点击**创建**按钮完成数据桥接创建。
+8. 点击**创建**按钮完成 Sink 创建。
 
-至此您已经完成数据桥接创建，接下来将继续创建一条规则来指定需要写入的数据。
+至此您已经完成 Sink 创建，接下来将继续创建一条规则来指定需要写入的数据。
 
-### 创建数据转发规则
+## 创建数据转发规则
 
-1. 转到 Dashboard **数据集成** -> **规则**页面。
+1. 转到 Dashboard **集成** -> **规则**页面。
 2. 点击页面右上角的**创建**。
 3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息存储至 TDengine，请确认规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量，此处规则 SQL 如下：
 
@@ -144,18 +140,18 @@ CREATE TABLE emqx_client_events (
       "t/#"
 ```
 
-4. 添加动作，在动作下拉框中选择 **使用数据桥接转发** 选项，选择先前创建好的 TDengine 数据桥接。
+4. 添加动作，从**动作类型**下拉列表中选择 TDengine，从**动作**下拉框中选择刚刚创建的连接器，点击**添加**按钮将其添加到规则中。
 5. 点击最下方**创建**按钮完成规则创建。
 
-至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 TDengine 存储。
+至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flow 设计器** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 TDengine 存储。
 
-### 上下线记录
+## 创建连接器 - 上下线记录
 
 本节将演示如何通过 TDengine 实现对设备上下线的记录。
 
-注意：除 SQL 模板与规则外，其他操作步骤与[消息存储](#消息存储)章节完全相同。
+注意：除 SQL 模板与规则外，其他操作步骤与[消息存储](#创建连接器 - 消息存储)章节完全相同。
 
-数据桥接的 SQL 模板如下，请注意字段不应当包含引号，SQL 末尾不要带 `;`:
+Sink 的 SQL 模板如下，请注意字段不应当包含引号，SQL 末尾不要带 `;`:
 
 ```sql
      INSERT INTO emqx_client_events(ts, clientid, event) VALUES (
@@ -171,11 +167,11 @@ CREATE TABLE emqx_client_events (
     SELECT
       *,
       now_timestamp('millisecond')  as ts
-    FROM 
+    FROM
       "$events/client_connected", "$events/client_disconnected"
 ```
 
-## 测试数据桥接与规则
+## 测试规则
 
 使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
 
@@ -183,7 +179,7 @@ CREATE TABLE emqx_client_events (
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello TDengine" }'
 ```
 
-分别查看两个数据桥接运行统计，命中、发送成功次数均 +1。
+分别查看两个 Sink 运行统计，命中、发送成功次数均 +1。
 
 查看数据是否已经写入表中
 

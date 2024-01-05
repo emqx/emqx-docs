@@ -3,14 +3,14 @@
 {% emqxce %}
 :::tip
 
-RabbitMQ 数据桥接是 EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+RabbitMQ Sink 是 EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
 
 :::
 {% endemqxce %}
 
 作为一款广泛使用的开源消息代理，[RabbitMQ](https://www.rabbitmq.com/) 应用了高级消息队列协议（AMQP），为分布式系统之间的消息传递提供了一个强大而可扩展的平台。EMQX 支持与 RabbitMQ 的数据集成，能够让您将 MQTT 消息和事件转发至 RabbitMQ。
 
-本页面提供了 EMQX 与 RabbitMQ 数据集成的全面介绍，并提供了创建规则和数据桥接的实用指导。
+本页面提供了 EMQX 与 RabbitMQ 数据集成的全面介绍，并提供了创建规则和 Sink 的实用指导。
 
 ## 工作原理
 
@@ -37,15 +37,15 @@ RabbitMQ 数据集成为您的业务带来以下特性和优势：
 - **高可用性和集群支持**：EMQX 和 RabbitMQ 都支持构建高可用的消息代理集群，确保即使在节点失败的情况下系统也能继续提供服务。利用集群能力还提供了出色的可扩展性。
 - **高吞吐量场景中的处理能力**：RabbitMQ 数据桥支持同步和异步写入模式，允许根据不同场景在延迟和吞吐量之间灵活平衡。
 
-## 桥接准备
+## 准备工作
 
-本节介绍了在 EMQX 中创建 RabbitMQ 数据桥接之前需要做的准备工作，包括启动 RabbitMQ 服务器并创建 RabbitMQ test exchange 和 queue。
+本节介绍了在 EMQX 中创建 RabbitMQ Sink 之前需要做的准备工作，包括启动 RabbitMQ 服务器并创建 RabbitMQ test exchange 和 queue。
 
 ### 前置准备
 
 - 了解 EMQX 数据集成[规则](./rules.md)
 
-- 了解[数据桥接](./data-bridges.md)
+- 了解[数据集成](./data-bridges.md)
 
 - 了解 UNIX 终端及命令
 
@@ -90,17 +90,17 @@ docker run -it --rm --name rabbitmq -p 127.0.0.1:5672:5672 -p 127.0.0.1:15672:15
    * **Arguments**: 留空
 7. 点击 **Bind** 按钮将 test_queue 通过指定的 routing key 与 test_exchange 绑定。
 
-## 创建 RabbitMQ 数据桥接
+## 创建连接器
 
-本节将通过 Dashboard 演示如何创建到 RabbitMQ 的数据桥接。以下示例假定 EMQX 与 RabbitMQ 均在本地运行，如您在远程运行 EMQX 及 RabbitMQ，请根据实际情况调整相应配置。
+本节将通过 Dashboard 演示如何创建到 RabbitMQ 的连接器。以下示例假定 EMQX 与 RabbitMQ 均在本地运行，如您在远程运行 EMQX 及 RabbitMQ，请根据实际情况调整相应配置。
 
-1. 登陆 EMQX Dashboard，点击左侧目录菜单中的**数据集成** -> **数据桥接**。
+1. 登陆 EMQX Dashboard，点击左侧目录菜单中的**数据集成** -> **连接器**。
 
 2. 点击页面右上角的**创建**。
 
-3. 在**数据桥接类型**中选择 **RabbitMQ**，点击**下一步**。
+3. 在**连接器类型**中选择 **RabbitMQ**，点击**下一步**。
 
-4. 输入数据桥接名称，名称应为大/小写字母和数字的组合。
+4. 输入连接器名称，名称应为大/小写字母和数字的组合。
 
 5. 输入以下连接信息：
 
@@ -154,15 +154,15 @@ docker run -it --rm --name rabbitmq -p 127.0.0.1:5672:5672 -p 127.0.0.1:15672:15
 
 7. 点击**创建**前，您可点击**测试连接**按钮确保能连接到 RabbitMQ 服务器。
 
-8. 点击**创建**按钮完成数据桥接创建。
+8. 点击**创建**按钮完成 Sink 创建。
 
    在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 RabbitMQ 的数据。详细步骤可参照[创建数据转发规则](#创建数据转发规则)。
 
-至此，您已经完成数据桥接的创建，在 Dashboard 的数据桥接页面，可以看到 RabbitMQ 数据桥接的状态为**已连接**。
+至此，您已经完成 Sink 的创建，在 Dashboard 的 Sink 页面，可以看到 RabbitMQ Sink 的状态为**已连接**。
 
 ## 创建数据转发规则
 
-1. 转到 Dashboard **数据集成** -> **规则**页面。
+1. 转到 Dashboard **集成** -> **规则**页面。
 
 2. 点击页面右上角的**创建**。
 
@@ -178,17 +178,17 @@ docker run -it --rm --name rabbitmq -p 127.0.0.1:5672:5672 -p 127.0.0.1:15672:15
      "t/#"
    ```
 
-5. 点击**添加动作**按钮，在下拉框中选择**使用数据桥接转发**，选择之前创建好的 RabbitMQ 数据桥接。
+5. 点击**添加动作**按钮，在下拉框中选择**使用 Sink 转发**，选择之前创建好的 RabbitMQ Sink 。
 
 6. 点击**添加**按钮确认添加动作。
 
 7. 点击最下方**创建**按钮完成规则创建。
 
-至此您已经完成数据桥接和转发规则的创建，您可前往 **数据集成** -> **Flows** 页面查看拓扑图，可看到 `t/#` 主题的消息被转发至 RabbitMQ。
+至此您已经完成 Sink 和转发规则的创建，您可前往 **数据集成** -> **Flow 设计器** 页面查看拓扑图，可看到 `t/#` 主题的消息被转发至 RabbitMQ。
 
 ## 测试桥接和规则
 
-您可通过 EMQX Dashboard 内置的 WebSocket 客户端进行规则和数据桥接的验证。
+您可通过 EMQX Dashboard 内置的 WebSocket 客户端进行规则和 Sink 的验证。
 
 1. 在 Dashboard 页面，点击左侧导航目录中的**问题分析** -> **WebSocket 客户端**。
 
@@ -207,7 +207,7 @@ docker run -it --rm --name rabbitmq -p 127.0.0.1:5672:5672 -p 127.0.0.1:15672:15
 
 5. 点击 **发布** 完成消息的发送。
 
-   如果数据桥接和规则创建成功，改消息应已通过指定的路由键被发送到 RabbitMQ 指定的 exchange 中。
+   如果 Sink 和规则创建成功，改消息应已通过指定的路由键被发送到 RabbitMQ 指定的 exchange 中。
 
 6. 访问 RabbitMQ 管理界面 http://localhost:15672 并导航至 Queues 区域。
 

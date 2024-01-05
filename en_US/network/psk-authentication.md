@@ -1,4 +1,4 @@
-# Enable PSK Authentication
+# PSK Authentication
 
 Pre-Shared Key (PSK) authentication is a method of authentication that relies on a pre-shared key for identity verification. Using the PSK authentication method, both the client and EMQX must pre-share the same key before establishing a secured connection. The pre-shared key is then used to encrypt and decrypt data in establishing the TLS connection between the client and EMQX and in subsequent communications. With the PSK authentication enabled, the client and EMQX can authenticate each other and establish a secure connection without the need for certificates or certificate authorities. 
 
@@ -41,7 +41,7 @@ This page introduces how to enable PSK authentication in EMQX.
    ```bash
    listeners.ssl.default {
      acceptors = 4
-     bind = 1883
+     bind = 8883
      ssl_options {
        ciphers = ["RSA-PSK-AES256-GCM-SHA384","RSA-PSK-AES256-CBC-SHA384","RSA-PSK-AES128-GCM-SHA256","RSA-PSK-AES128-CBC-SHA256","RSA-PSK-AES256-CBC-SHA","RSA-PSK-AES128-CBC-SHA"]
        versions = ["tlsv1.2", "tlsv1.1", "tlsv1"]

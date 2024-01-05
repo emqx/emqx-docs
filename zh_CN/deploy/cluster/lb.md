@@ -56,7 +56,7 @@ listeners.tcp.default {
 
 目前可用的负载均衡产品很多，有开源的也有商业的，各个公有云服务商一般也都会提供各自的负载均衡服务。
 
-**公有云厂商 LB 产品：**
+### 公有云厂商 LB 产品
 
 | 云计算厂商                                | 是否支持 TLS 终结 | 是否支持 Proxy Protocol | LB 产品介绍                                                 |
 | ----------------------------------------- | ----------------- | ----------------------- | ----------------------------------------------------------- |
@@ -70,7 +70,7 @@ listeners.tcp.default {
 | [Azure](https://azure.microsoft.com)      | 未知              | 未知                    | <https://azure.microsoft.com/zh-cn/products/load-balancer/> |
 | [Google Cloud](https://cloud.google.com/) | 是                | 是                      | <https://cloud.google.com/load-balancing?hl=zh-cn>          |
 
-**私有部署 LB 服务器**
+### 私有部署 LB 服务器
 
 | 开源 LB                            | 是否支持 TLS 终结 | 是否支持 Proxy Protocol | 方案介绍                                                |
 | ---------------------------------- | ----------------- | ----------------------- | ------------------------------------------------------- |

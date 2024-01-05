@@ -124,7 +124,7 @@ This section describes the preparations you need to complete before you start to
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [Data Integration](./data-bridges.md)
 - Knowledge about [MongoDB](https://www.mongodb.com/)
 
 ### Set Up MongoDB Server
@@ -159,7 +159,7 @@ use emqx_data
 db.createCollection('emqx_messages')
 ```
 
-## Create Rule and MongoDB Data Bridge
+## Create Rule and MongoDB Sink
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -239,7 +239,7 @@ db.createCollection('emqx_messages')
 11. Click the **Add** button to complete the data bridge configuration. You will be redirected back to the **Add Action** page. Select the MongoDB Data Bridge you just created from the **Data bridge** drop-down list. Click the **Add** button at the bottom to include this action in the rule.
 12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
-Now you have successfully created the rule and data bridge. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to MongoDB after parsing by rule `my_rule`.
+Now you have successfully created the rule and data bridge. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to MongoDB after parsing by rule `my_rule`.
 
 ## Test MongoDB Data Bridge and Rule
 

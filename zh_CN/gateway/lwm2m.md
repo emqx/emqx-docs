@@ -4,8 +4,7 @@
 是为物联网设备和机器对机器通信设计的协议。它是一种轻量级协议，对处理能力和内存
 受限的设备非常友好。
 
-EMQX 中的 LwM2M 网关 可以接收 LwM2M 客户端连接并将其事件和消息转换为 MQTT Publish
-消息。
+EMQX 中的 LwM2M 网关 可以接收 LwM2M 客户端连接并将其事件和消息转换为 MQTT Publish 消息。
 
 在当前的实现中，它有以下限制：
 - 基于 UDP/DTLS 传输。
@@ -29,7 +28,7 @@ EMQX 5.0 中，可以通过 Dashboard 配置并启用 LwM2M 网关。
 ::: tab HTTP API
 
 ```bash
-curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m' \
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m' \
   -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{

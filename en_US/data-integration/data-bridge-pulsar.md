@@ -46,7 +46,7 @@ This section describes the preparations you need to complete before you start to
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [Data Integration](./data-bridges.md)
 
 ### Install Pulsar
 
@@ -66,7 +66,7 @@ Relevant Pulsar topics should be created before creating the data bridge in EMQX
 docker exec -it pulsar bin/pulsar-admin topics create-partitioned-topic persistent://public/default/my-topic -p 1
 ```
 
-## Create Rule and Pulsar Data Bridge
+## Create Rule and Pulsar Sink
 
 This section demonstrates how to create a Pulsar producer data bridge via the Dashboard. It assumes you run EMQX and Pulsar on the local machine. If you have Pulsar and EMQX running remotely, adjust the settings accordingly.
 
@@ -118,7 +118,7 @@ This section demonstrates how to create a Pulsar producer data bridge via the Da
 
 12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. The rule you created should be shown in the rule list and the **status** should be connected.
 
-Now a rule of forwarding data to Pulsar via a Pulsar data bridge is created.  You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to Pulsar after parsing by rule `my_rule`.
+Now a rule of forwarding data to Pulsar via a Pulsar data bridge is created.  You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to Pulsar after parsing by rule `my_rule`.
 
 ## Test Rule and Data Bridge
 

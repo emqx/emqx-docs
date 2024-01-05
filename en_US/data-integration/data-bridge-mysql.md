@@ -48,7 +48,7 @@ This section describes the preparations you need to complete before you start to
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 
-- Knowledge about [data bridge](./data-bridges.md)
+- Knowledge about [Data Integration](./data-bridges.md)
 
 ### Install MySQL Server
 
@@ -94,7 +94,7 @@ use emqx_data;
    );
    ```
 
-## Create Rule and MySQL Data Bridges
+## Create Rule and MySQL Sinks
 
 Data bridges for message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges to MySQL for message storage and event recording. 
 
@@ -171,7 +171,7 @@ This demonstration assumes that you run both EMQX and MySQL on the local machine
 
 12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
 
-Now you have successfully created the data bridge to MySQL. You can click **Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to MySQL after parsing by the rule `my_rule`. 
+Now you have successfully created the data bridge to MySQL. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to MySQL after parsing by the rule `my_rule`. 
 
 ### Event Recording
 
@@ -196,7 +196,7 @@ INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
 )
 ```
 
-## Test Data Bridge and Rule
+## Test Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 
