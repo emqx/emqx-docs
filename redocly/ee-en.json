@@ -1,6 +1,6 @@
 {
   "info": {
-    "version": "5.4.0",
+    "version": "5.4.1",
     "title": "EMQX Enterprise API"
   },
   "components": {
@@ -37568,9 +37568,9 @@
                     "headers": {
                       "Authorization": "Basic YWRtaW46Y2JraG55eWd5QDE="
                     },
-                    "push_gateway_server": "http://127.0.0.1:9091",
                     "job_name": "${name}/instance/${name}~${host}",
                     "mnesia_collector": "disabled",
+                    "push_gateway_server": "http://127.0.0.1:9091",
                     "vm_dist_collector": "disabled",
                     "vm_memory_collector": "disabled",
                     "vm_msacc_collector": "disabled",
@@ -37779,12 +37779,12 @@
             "application/json": {
               "examples": {
                 "evacuation": {
-                  "wait_takeover": "10s",
                   "wait_health_check": "10s",
-                  "sess_evict_rate": 100,
                   "migrate_to": [
                     "othernode@127.0.0.1"
                   ],
+                  "sess_evict_rate": 100,
+                  "wait_takeover": "10s",
                   "conn_evict_rate": 100,
                   "redirect_to": "othernode:1883"
                 }
@@ -37820,14 +37820,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -37890,8 +37890,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -38064,14 +38064,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -38134,8 +38134,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -38326,8 +38326,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -38451,14 +38451,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -38548,14 +38548,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -38618,8 +38618,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -38810,8 +38810,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -38937,14 +38937,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -39135,8 +39135,8 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "fail_if_no_peer_cert": false
+                      "fail_if_no_peer_cert": false,
+                      "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
                     "max_conn_rate": 1000
                   },
@@ -39263,14 +39263,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -39399,8 +39399,8 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "user_lookup_fun": "emqx_tls_psk:lookup",
-                        "fail_if_no_peer_cert": false
+                        "fail_if_no_peer_cert": false,
+                        "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
                       "max_conn_rate": 1000
                     },
@@ -39617,8 +39617,8 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "fail_if_no_peer_cert": false
+                      "fail_if_no_peer_cert": false,
+                      "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
                     "max_conn_rate": 1000
                   },
@@ -39757,7 +39757,8 @@
                     "code": {
                       "type": "string",
                       "enum": [
-                        "UPDATE_FAILED"
+                        "UPDATE_FAILED",
+                        "INVALID_CONFIG"
                       ]
                     },
                     "message": {
@@ -41683,14 +41684,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             }
           }
@@ -41705,82 +41706,82 @@
                   "lwm2m_client": {
                     "value": {
                       "recv_oct": 56,
-                      "ip_address": "127.0.0.1",
-                      "awaiting_rel_cnt": 0,
-                      "inflight_max": "infinity",
-                      "send_pkt": 1,
-                      "subscriptions_cnt": 0,
-                      "recv_msg": 0,
+                      "is_bridge": false,
+                      "send_msg": 0,
+                      "proto_ver": "1.0",
+                      "clean_start": true,
+                      "username": "guest",
                       "keepalive": 0,
                       "node": "emqx@127.0.0.1",
-                      "send_cnt": 1,
-                      "mqueue_dropped": 0,
-                      "subscriptions_max": "infinity",
-                      "proto_name": "LwM2M",
-                      "clean_start": true,
                       "disconnected_at": null,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "send_msg": 0,
+                      "send_cnt": 1,
+                      "ip_address": "127.0.0.1",
+                      "inflight_max": "infinity",
+                      "subscriptions_cnt": 0,
+                      "awaiting_rel_cnt": 0,
+                      "awaiting_rel_max": "infinity",
+                      "proto_name": "LwM2M",
+                      "lifetime": 86400,
                       "send_oct": 61,
                       "mqueue_len": 0,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "heap_size": 4185,
+                      "send_pkt": 1,
                       "expiry_interval": 0,
-                      "mqueue_max": "infinity",
-                      "mailbox_len": 0,
+                      "recv_pkt": 1,
                       "port": 50675,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "inflight_cnt": 0,
-                      "username": "guest",
-                      "proto_ver": "1.0",
-                      "is_bridge": false,
-                      "awaiting_rel_max": "infinity",
-                      "connected": true,
-                      "reductions": 72022,
-                      "lifetime": 86400,
-                      "recv_cnt": 1,
+                      "mailbox_len": 0,
                       "endpoint_name": "urn:imei:154928475237123",
-                      "recv_pkt": 1
+                      "mqueue_max": "infinity",
+                      "mqueue_dropped": 0,
+                      "recv_msg": 0,
+                      "inflight_cnt": 0,
+                      "connected": true,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "subscriptions_max": "infinity",
+                      "reductions": 72022,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "recv_cnt": 1
                     },
                     "summary": "LwM2M client info"
                   },
                   "general_client": {
                     "value": {
                       "recv_oct": 56,
-                      "ip_address": "127.0.0.1",
-                      "awaiting_rel_cnt": 0,
-                      "inflight_max": "infinity",
-                      "send_pkt": 1,
-                      "subscriptions_cnt": 0,
-                      "recv_msg": 0,
+                      "is_bridge": false,
+                      "send_msg": 0,
+                      "proto_ver": "1.0",
+                      "clean_start": true,
+                      "username": "guest",
                       "keepalive": 0,
                       "node": "emqx@127.0.0.1",
-                      "send_cnt": 1,
-                      "mqueue_dropped": 0,
-                      "subscriptions_max": "infinity",
-                      "proto_name": "STOMP",
-                      "clean_start": true,
                       "disconnected_at": null,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "send_msg": 0,
+                      "send_cnt": 1,
+                      "ip_address": "127.0.0.1",
+                      "inflight_max": "infinity",
+                      "subscriptions_cnt": 0,
+                      "awaiting_rel_cnt": 0,
+                      "awaiting_rel_max": "infinity",
+                      "proto_name": "STOMP",
                       "send_oct": 61,
                       "mqueue_len": 0,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "heap_size": 4185,
+                      "send_pkt": 1,
                       "expiry_interval": 0,
-                      "mqueue_max": "infinity",
-                      "mailbox_len": 0,
+                      "recv_pkt": 1,
                       "port": 50675,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "mailbox_len": 0,
+                      "mqueue_max": "infinity",
+                      "mqueue_dropped": 0,
+                      "recv_msg": 0,
                       "inflight_cnt": 0,
-                      "username": "guest",
-                      "proto_ver": "1.0",
-                      "is_bridge": false,
-                      "awaiting_rel_max": "infinity",
                       "connected": true,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "subscriptions_max": "infinity",
                       "reductions": 72022,
-                      "recv_cnt": 1,
-                      "recv_pkt": 1
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "recv_cnt": 1
                     },
                     "summary": "General client info"
                   }
@@ -41885,14 +41886,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             }
           }
@@ -42618,7 +42619,8 @@
                     "code": {
                       "type": "string",
                       "enum": [
-                        "UPDATE_FAILED"
+                        "UPDATE_FAILED",
+                        "INVALID_CONFIG"
                       ]
                     },
                     "message": {
@@ -44600,14 +44602,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -44746,8 +44748,8 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "user_lookup_fun": "emqx_tls_psk:lookup",
-                        "fail_if_no_peer_cert": false
+                        "fail_if_no_peer_cert": false,
+                        "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
                       "max_conn_rate": 1000
                     },
@@ -44867,14 +44869,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -45013,8 +45015,8 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "user_lookup_fun": "emqx_tls_psk:lookup",
-                        "fail_if_no_peer_cert": false
+                        "fail_if_no_peer_cert": false,
+                        "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
                       "max_conn_rate": 1000
                     },
@@ -45231,8 +45233,8 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "fail_if_no_peer_cert": false
+                      "fail_if_no_peer_cert": false,
+                      "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
                     "max_conn_rate": 1000
                   },
@@ -45306,14 +45308,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -45405,14 +45407,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -45693,8 +45695,8 @@
                         }
                       ],
                       "resource_metrics": {
-                        "success": 0,
                         "matched": 0,
+                        "success": 0,
                         "failed": 0,
                         "rate": 0.0,
                         "rate_last5m": 0.0,
@@ -45719,8 +45721,8 @@
                         {
                           "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "success": 0,
                             "matched": 0,
+                            "success": 0,
                             "failed": 0,
                             "rate": 0.0,
                             "rate_last5m": 0.0,
@@ -46257,8 +46259,8 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "enable_pipelining": 100,
@@ -46285,16 +46287,15 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "topic": "topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${.pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -46305,8 +46306,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${.pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "socket_opts": {
                       "nodelay": true,
@@ -46346,17 +46348,16 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "compression": "no_compression",
                       "topic": "kafka-topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -46367,8 +46368,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "local_topic": "mqtt/local/topic",
                     "min_metadata_refresh_interval": "3s",
@@ -46426,9 +46428,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -46473,9 +46475,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -46488,9 +46490,9 @@
                     "aws_secret_access_key": "******",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "endpoint": "https://kinesis.us-east-1.amazonaws.com",
@@ -46511,16 +46513,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "url": "http://localhost:9901/messages/${topic}",
                     "method": "post",
+                    "url": "http://localhost:9901/messages/${topic}",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -46545,9 +46547,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "payload_template": "",
@@ -46571,9 +46573,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -46595,9 +46597,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -46653,9 +46655,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     }
                   },
@@ -46712,9 +46714,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -46734,8 +46736,8 @@
                     "url": "http://127.0.0.1:6570",
                     "resource_opts": {
                       "batch_size": 100,
-                      "query_mode": "sync",
-                      "batch_time": "20ms"
+                      "batch_time": "20ms",
+                      "query_mode": "sync"
                     },
                     "record_template": "{ \"temperature\": ${payload.temperature}, \"humidity\": ${payload.humidity} }"
                   },
@@ -46824,9 +46826,20 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "query_mode": "sync",
                       "max_buffer_bytes": 104857600,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
+                    },
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "qos": "${qos}",
+                        "topic": "from_emqx/${topic}"
+                      }
                     },
                     "ingress": {
                       "local": {
@@ -46838,17 +46851,6 @@
                       "remote": {
                         "qos": 1,
                         "topic": "aws/#"
-                      }
-                    },
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "qos": "${qos}",
-                        "topic": "from_emqx/${topic}"
                       }
                     }
                   },
@@ -46866,9 +46868,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "servers": "127.0.0.1:9042",
@@ -46929,9 +46931,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -46954,9 +46956,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -46977,9 +46979,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -47041,9 +47043,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -47064,9 +47066,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -47488,8 +47490,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -47756,8 +47758,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -48947,8 +48949,8 @@
                         }
                       ],
                       "resource_metrics": {
-                        "success": 0,
                         "matched": 0,
+                        "success": 0,
                         "failed": 0,
                         "rate": 0.0,
                         "rate_last5m": 0.0,
@@ -48972,8 +48974,8 @@
                         {
                           "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "success": 0,
                             "matched": 0,
+                            "success": 0,
                             "failed": 0,
                             "rate": 0.0,
                             "rate_last5m": 0.0,
@@ -49651,14 +49653,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -49711,8 +49713,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -49885,14 +49887,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -49945,8 +49947,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -50137,8 +50139,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -50262,14 +50264,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -50349,14 +50351,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -50409,8 +50411,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -50601,8 +50603,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -51066,7 +51068,8 @@
                     "code": {
                       "type": "string",
                       "enum": [
-                        "UPDATE_FAILED"
+                        "UPDATE_FAILED",
+                        "INVALID_CONFIG"
                       ]
                     },
                     "message": {
@@ -51284,7 +51287,8 @@
                     "code": {
                       "type": "string",
                       "enum": [
-                        "UPDATE_FAILED"
+                        "UPDATE_FAILED",
+                        "INVALID_CONFIG"
                       ]
                     },
                     "message": {
@@ -51365,16 +51369,15 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "topic": "topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${.pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -51385,8 +51388,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${.pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "connector": "my_azure_event_hub_producer_connector",
                     "node_status": [
@@ -51409,16 +51413,15 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "topic": "topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${.pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -51429,8 +51432,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${.pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "connector": "my_confluent_producer_connector",
                     "node_status": [
@@ -51505,17 +51509,16 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "compression": "no_compression",
                       "topic": "kafka-topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -51526,8 +51529,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "connector": "my_kafka_producer_connector",
                     "node_status": [
@@ -51826,16 +51830,15 @@
                         },
                         "buffer": {
                           "mode": "hybrid",
-                          "memory_overload_protection": true,
                           "segment_bytes": "100MB",
-                          "per_partition_limit": "2GB"
+                          "per_partition_limit": "2GB",
+                          "memory_overload_protection": true
                         },
                         "topic": "topic",
                         "max_inflight": 10,
                         "required_acks": "all_isr",
                         "max_batch_bytes": "896KB",
-                        "partition_count_refresh_interval": "60s",
-                        "kafka_header_value_encode_mode": "none",
+                        "kafka_headers": "${.pub_props}",
                         "kafka_ext_headers": [
                           {
                             "kafka_ext_header_value": "${clientid}",
@@ -51846,8 +51849,9 @@
                             "kafka_ext_header_key": "topic"
                           }
                         ],
-                        "kafka_headers": "${.pub_props}",
-                        "partition_strategy": "random"
+                        "kafka_header_value_encode_mode": "none",
+                        "partition_strategy": "random",
+                        "partition_count_refresh_interval": "60s"
                       },
                       "connector": "my_azure_event_hub_producer_connector",
                       "node_status": [
@@ -51873,16 +51877,15 @@
                         },
                         "buffer": {
                           "mode": "hybrid",
-                          "memory_overload_protection": true,
                           "segment_bytes": "100MB",
-                          "per_partition_limit": "2GB"
+                          "per_partition_limit": "2GB",
+                          "memory_overload_protection": true
                         },
                         "topic": "topic",
                         "max_inflight": 10,
                         "required_acks": "all_isr",
                         "max_batch_bytes": "896KB",
-                        "partition_count_refresh_interval": "60s",
-                        "kafka_header_value_encode_mode": "none",
+                        "kafka_headers": "${.pub_props}",
                         "kafka_ext_headers": [
                           {
                             "kafka_ext_header_value": "${clientid}",
@@ -51893,8 +51896,9 @@
                             "kafka_ext_header_key": "topic"
                           }
                         ],
-                        "kafka_headers": "${.pub_props}",
-                        "partition_strategy": "random"
+                        "kafka_header_value_encode_mode": "none",
+                        "partition_strategy": "random",
+                        "partition_count_refresh_interval": "60s"
                       },
                       "connector": "my_confluent_producer_connector",
                       "node_status": [
@@ -51978,17 +51982,16 @@
                         },
                         "buffer": {
                           "mode": "hybrid",
-                          "memory_overload_protection": true,
                           "segment_bytes": "100MB",
-                          "per_partition_limit": "2GB"
+                          "per_partition_limit": "2GB",
+                          "memory_overload_protection": true
                         },
                         "compression": "no_compression",
                         "topic": "kafka-topic",
                         "max_inflight": 10,
                         "required_acks": "all_isr",
                         "max_batch_bytes": "896KB",
-                        "partition_count_refresh_interval": "60s",
-                        "kafka_header_value_encode_mode": "none",
+                        "kafka_headers": "${pub_props}",
                         "kafka_ext_headers": [
                           {
                             "kafka_ext_header_value": "${clientid}",
@@ -51999,8 +52002,9 @@
                             "kafka_ext_header_key": "topic"
                           }
                         ],
-                        "kafka_headers": "${pub_props}",
-                        "partition_strategy": "random"
+                        "kafka_header_value_encode_mode": "none",
+                        "partition_strategy": "random",
+                        "partition_count_refresh_interval": "60s"
                       },
                       "connector": "my_kafka_producer_connector",
                       "node_status": [
@@ -52328,16 +52332,15 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "topic": "topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${.pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -52348,8 +52351,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${.pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "connector": "my_azure_event_hub_producer_connector",
                     "local_topic": "mqtt/local/topic"
@@ -52368,16 +52372,15 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "topic": "topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${.pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -52388,8 +52391,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${.pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "connector": "my_confluent_producer_connector",
                     "local_topic": "mqtt/local/topic"
@@ -52454,17 +52458,16 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "compression": "no_compression",
                       "topic": "kafka-topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -52475,8 +52478,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "connector": "my_kafka_producer_connector",
                     "resource_opts": {
@@ -53110,13 +53114,13 @@
                   "nodes": [
                     "othernode@127.0.0.1"
                   ],
-                  "wait_takeover": "10s",
                   "wait_health_check": "10s",
                   "sess_evict_rate": 20,
+                  "wait_takeover": "10s",
                   "conn_evict_rate": 10,
                   "rel_sess_threshold": 1.5,
-                  "rel_conn_threshold": 1.5,
                   "abs_sess_threshold": 10,
+                  "rel_conn_threshold": 1.5,
                   "abs_conn_threshold": 10
                 }
               },
@@ -53452,8 +53456,8 @@
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "enable_pipelining": 100,
@@ -53481,16 +53485,15 @@
                         },
                         "buffer": {
                           "mode": "hybrid",
-                          "memory_overload_protection": true,
                           "segment_bytes": "100MB",
-                          "per_partition_limit": "2GB"
+                          "per_partition_limit": "2GB",
+                          "memory_overload_protection": true
                         },
                         "topic": "topic",
                         "max_inflight": 10,
                         "required_acks": "all_isr",
                         "max_batch_bytes": "896KB",
-                        "partition_count_refresh_interval": "60s",
-                        "kafka_header_value_encode_mode": "none",
+                        "kafka_headers": "${.pub_props}",
                         "kafka_ext_headers": [
                           {
                             "kafka_ext_header_value": "${clientid}",
@@ -53501,8 +53504,9 @@
                             "kafka_ext_header_key": "topic"
                           }
                         ],
-                        "kafka_headers": "${.pub_props}",
-                        "partition_strategy": "random"
+                        "kafka_header_value_encode_mode": "none",
+                        "partition_strategy": "random",
+                        "partition_count_refresh_interval": "60s"
                       },
                       "socket_opts": {
                         "nodelay": true,
@@ -53555,17 +53559,16 @@
                         },
                         "buffer": {
                           "mode": "hybrid",
-                          "memory_overload_protection": true,
                           "segment_bytes": "100MB",
-                          "per_partition_limit": "2GB"
+                          "per_partition_limit": "2GB",
+                          "memory_overload_protection": true
                         },
                         "compression": "no_compression",
                         "topic": "kafka-topic",
                         "max_inflight": 10,
                         "required_acks": "all_isr",
                         "max_batch_bytes": "896KB",
-                        "partition_count_refresh_interval": "60s",
-                        "kafka_header_value_encode_mode": "none",
+                        "kafka_headers": "${pub_props}",
                         "kafka_ext_headers": [
                           {
                             "kafka_ext_header_value": "${clientid}",
@@ -53576,8 +53579,9 @@
                             "kafka_ext_header_key": "topic"
                           }
                         ],
-                        "kafka_headers": "${pub_props}",
-                        "partition_strategy": "random"
+                        "kafka_header_value_encode_mode": "none",
+                        "partition_strategy": "random",
+                        "partition_count_refresh_interval": "60s"
                       },
                       "local_topic": "mqtt/local/topic",
                       "min_metadata_refresh_interval": "3s",
@@ -53642,9 +53646,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -53689,9 +53693,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -53704,9 +53708,9 @@
                       "aws_secret_access_key": "******",
                       "resource_opts": {
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
+                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "endpoint": "https://kinesis.us-east-1.amazonaws.com",
@@ -53727,16 +53731,16 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "url": "http://localhost:9901/messages/${topic}",
                       "method": "post",
+                      "url": "http://localhost:9901/messages/${topic}",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
+                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
@@ -53761,9 +53765,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "payload_template": "",
@@ -53787,9 +53791,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -53811,9 +53815,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -53869,9 +53873,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       }
                     },
@@ -53928,9 +53932,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -53950,8 +53954,8 @@
                       "url": "http://127.0.0.1:6570",
                       "resource_opts": {
                         "batch_size": 100,
-                        "query_mode": "sync",
-                        "batch_time": "20ms"
+                        "batch_time": "20ms",
+                        "query_mode": "sync"
                       },
                       "record_template": "{ \"temperature\": ${payload.temperature}, \"humidity\": ${payload.humidity} }"
                     },
@@ -54040,9 +54044,20 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "query_mode": "sync",
                         "max_buffer_bytes": 104857600,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
+                      },
+                      "egress": {
+                        "local": {
+                          "topic": "emqx/#"
+                        },
+                        "remote": {
+                          "retain": false,
+                          "payload": "${payload}",
+                          "qos": "${qos}",
+                          "topic": "from_emqx/${topic}"
+                        }
                       },
                       "ingress": {
                         "local": {
@@ -54054,17 +54069,6 @@
                         "remote": {
                           "qos": 1,
                           "topic": "aws/#"
-                        }
-                      },
-                      "egress": {
-                        "local": {
-                          "topic": "emqx/#"
-                        },
-                        "remote": {
-                          "retain": false,
-                          "payload": "${payload}",
-                          "qos": "${qos}",
-                          "topic": "from_emqx/${topic}"
                         }
                       }
                     },
@@ -54082,9 +54086,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "servers": "127.0.0.1:9042",
@@ -54145,9 +54149,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -54170,9 +54174,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -54200,9 +54204,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -54271,9 +54275,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
-                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -54301,9 +54305,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -54512,8 +54516,8 @@
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "enable_pipelining": 100,
@@ -54541,16 +54545,15 @@
                         },
                         "buffer": {
                           "mode": "hybrid",
-                          "memory_overload_protection": true,
                           "segment_bytes": "100MB",
-                          "per_partition_limit": "2GB"
+                          "per_partition_limit": "2GB",
+                          "memory_overload_protection": true
                         },
                         "topic": "topic",
                         "max_inflight": 10,
                         "required_acks": "all_isr",
                         "max_batch_bytes": "896KB",
-                        "partition_count_refresh_interval": "60s",
-                        "kafka_header_value_encode_mode": "none",
+                        "kafka_headers": "${.pub_props}",
                         "kafka_ext_headers": [
                           {
                             "kafka_ext_header_value": "${clientid}",
@@ -54561,8 +54564,9 @@
                             "kafka_ext_header_key": "topic"
                           }
                         ],
-                        "kafka_headers": "${.pub_props}",
-                        "partition_strategy": "random"
+                        "kafka_header_value_encode_mode": "none",
+                        "partition_strategy": "random",
+                        "partition_count_refresh_interval": "60s"
                       },
                       "socket_opts": {
                         "nodelay": true,
@@ -54615,17 +54619,16 @@
                         },
                         "buffer": {
                           "mode": "hybrid",
-                          "memory_overload_protection": true,
                           "segment_bytes": "100MB",
-                          "per_partition_limit": "2GB"
+                          "per_partition_limit": "2GB",
+                          "memory_overload_protection": true
                         },
                         "compression": "no_compression",
                         "topic": "kafka-topic",
                         "max_inflight": 10,
                         "required_acks": "all_isr",
                         "max_batch_bytes": "896KB",
-                        "partition_count_refresh_interval": "60s",
-                        "kafka_header_value_encode_mode": "none",
+                        "kafka_headers": "${pub_props}",
                         "kafka_ext_headers": [
                           {
                             "kafka_ext_header_value": "${clientid}",
@@ -54636,8 +54639,9 @@
                             "kafka_ext_header_key": "topic"
                           }
                         ],
-                        "kafka_headers": "${pub_props}",
-                        "partition_strategy": "random"
+                        "kafka_header_value_encode_mode": "none",
+                        "partition_strategy": "random",
+                        "partition_count_refresh_interval": "60s"
                       },
                       "local_topic": "mqtt/local/topic",
                       "min_metadata_refresh_interval": "3s",
@@ -54702,9 +54706,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -54749,9 +54753,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -54764,9 +54768,9 @@
                       "aws_secret_access_key": "******",
                       "resource_opts": {
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
+                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "endpoint": "https://kinesis.us-east-1.amazonaws.com",
@@ -54787,16 +54791,16 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "url": "http://localhost:9901/messages/${topic}",
                       "method": "post",
+                      "url": "http://localhost:9901/messages/${topic}",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
+                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
@@ -54821,9 +54825,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "payload_template": "",
@@ -54847,9 +54851,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -54871,9 +54875,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -54929,9 +54933,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       }
                     },
@@ -54988,9 +54992,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -55010,8 +55014,8 @@
                       "url": "http://127.0.0.1:6570",
                       "resource_opts": {
                         "batch_size": 100,
-                        "query_mode": "sync",
-                        "batch_time": "20ms"
+                        "batch_time": "20ms",
+                        "query_mode": "sync"
                       },
                       "record_template": "{ \"temperature\": ${payload.temperature}, \"humidity\": ${payload.humidity} }"
                     },
@@ -55100,9 +55104,20 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "query_mode": "sync",
                         "max_buffer_bytes": 104857600,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
+                      },
+                      "egress": {
+                        "local": {
+                          "topic": "emqx/#"
+                        },
+                        "remote": {
+                          "retain": false,
+                          "payload": "${payload}",
+                          "qos": "${qos}",
+                          "topic": "from_emqx/${topic}"
+                        }
                       },
                       "ingress": {
                         "local": {
@@ -55114,17 +55129,6 @@
                         "remote": {
                           "qos": 1,
                           "topic": "aws/#"
-                        }
-                      },
-                      "egress": {
-                        "local": {
-                          "topic": "emqx/#"
-                        },
-                        "remote": {
-                          "retain": false,
-                          "payload": "${payload}",
-                          "qos": "${qos}",
-                          "topic": "from_emqx/${topic}"
                         }
                       }
                     },
@@ -55142,9 +55146,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "servers": "127.0.0.1:9042",
@@ -55205,9 +55209,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -55230,9 +55234,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -55260,9 +55264,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -55331,9 +55335,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
-                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -55361,9 +55365,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -55565,8 +55569,8 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "enable_pipelining": 100,
@@ -55593,16 +55597,15 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "topic": "topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${.pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -55613,8 +55616,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${.pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "socket_opts": {
                       "nodelay": true,
@@ -55652,17 +55656,16 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "compression": "no_compression",
                       "topic": "kafka-topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -55673,8 +55676,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "local_topic": "mqtt/local/topic",
                     "min_metadata_refresh_interval": "3s",
@@ -55730,9 +55734,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -55775,9 +55779,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -55790,9 +55794,9 @@
                     "aws_secret_access_key": "******",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "endpoint": "https://kinesis.us-east-1.amazonaws.com",
@@ -55811,16 +55815,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "url": "http://localhost:9901/messages/${topic}",
                     "method": "post",
+                    "url": "http://localhost:9901/messages/${topic}",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -55845,9 +55849,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "payload_template": "",
@@ -55871,9 +55875,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -55895,9 +55899,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -55953,9 +55957,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     }
                   },
@@ -56012,9 +56016,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -56034,8 +56038,8 @@
                     "url": "http://127.0.0.1:6570",
                     "resource_opts": {
                       "batch_size": 100,
-                      "query_mode": "sync",
-                      "batch_time": "20ms"
+                      "batch_time": "20ms",
+                      "query_mode": "sync"
                     },
                     "record_template": "{ \"temperature\": ${payload.temperature}, \"humidity\": ${payload.humidity} }"
                   },
@@ -56120,9 +56124,20 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "query_mode": "sync",
                       "max_buffer_bytes": 104857600,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
+                    },
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "qos": "${qos}",
+                        "topic": "from_emqx/${topic}"
+                      }
                     },
                     "ingress": {
                       "local": {
@@ -56134,17 +56149,6 @@
                       "remote": {
                         "qos": 1,
                         "topic": "aws/#"
-                      }
-                    },
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "qos": "${qos}",
-                        "topic": "from_emqx/${topic}"
                       }
                     }
                   },
@@ -56162,9 +56166,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "servers": "127.0.0.1:9042",
@@ -56225,9 +56229,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -56250,9 +56254,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -56273,9 +56277,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -56335,9 +56339,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -56358,9 +56362,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -56667,7 +56671,8 @@
                     "code": {
                       "type": "string",
                       "enum": [
-                        "UPDATE_FAILED"
+                        "UPDATE_FAILED",
+                        "INVALID_CONFIG"
                       ]
                     },
                     "message": {
@@ -56746,14 +56751,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             }
           }
@@ -56871,14 +56876,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             }
           }
@@ -58265,14 +58270,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -58394,14 +58399,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -58547,14 +58552,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -58687,8 +58692,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -58849,8 +58854,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -59043,8 +59048,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -59635,16 +59640,15 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "topic": "topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${.pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -59655,8 +59659,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${.pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "connector": "my_azure_event_hub_producer_connector",
                     "local_topic": "mqtt/local/topic"
@@ -59675,16 +59680,15 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "topic": "topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${.pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -59695,8 +59699,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${.pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "connector": "my_confluent_producer_connector",
                     "local_topic": "mqtt/local/topic"
@@ -59761,17 +59766,16 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "compression": "no_compression",
                       "topic": "kafka-topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -59782,8 +59786,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "connector": "my_kafka_producer_connector",
                     "resource_opts": {
@@ -60641,14 +60646,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             }
           }
@@ -61591,14 +61596,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -61810,7 +61815,7 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/emqx_gateway_api.ocpp"
+                      "$ref": "#/components/schemas/emqx_gateway_api.gbt32960"
                     },
                     {
                       "$ref": "#/components/schemas/emqx_gateway_api.coap"
@@ -61822,16 +61827,16 @@
                       "$ref": "#/components/schemas/emqx_gateway_api.stomp"
                     },
                     {
-                      "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
+                      "$ref": "#/components/schemas/emqx_gateway_api.ocpp"
                     },
                     {
-                      "$ref": "#/components/schemas/emqx_gateway_api.jt808"
+                      "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
                     },
                     {
                       "$ref": "#/components/schemas/emqx_gateway_api.exproto"
                     },
                     {
-                      "$ref": "#/components/schemas/emqx_gateway_api.gbt32960"
+                      "$ref": "#/components/schemas/emqx_gateway_api.jt808"
                     }
                   ]
                 }
@@ -61885,14 +61890,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -62079,7 +62084,7 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.update_ocpp"
+                    "$ref": "#/components/schemas/emqx_gateway_api.update_gbt32960"
                   },
                   {
                     "$ref": "#/components/schemas/emqx_gateway_api.update_coap"
@@ -62091,19 +62096,19 @@
                     "$ref": "#/components/schemas/emqx_gateway_api.update_stomp"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.update_mqttsn"
+                    "$ref": "#/components/schemas/emqx_gateway_api.update_ocpp"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.update_jt808"
+                    "$ref": "#/components/schemas/emqx_gateway_api.update_mqttsn"
                   },
                   {
                     "$ref": "#/components/schemas/emqx_gateway_api.update_exproto"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.update_gbt32960"
+                    "$ref": "#/components/schemas/emqx_gateway_api.update_jt808"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.ocpp"
+                    "$ref": "#/components/schemas/emqx_gateway_api.gbt32960"
                   },
                   {
                     "$ref": "#/components/schemas/emqx_gateway_api.coap"
@@ -62115,16 +62120,16 @@
                     "$ref": "#/components/schemas/emqx_gateway_api.stomp"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
+                    "$ref": "#/components/schemas/emqx_gateway_api.ocpp"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.jt808"
+                    "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
                   },
                   {
                     "$ref": "#/components/schemas/emqx_gateway_api.exproto"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.gbt32960"
+                    "$ref": "#/components/schemas/emqx_gateway_api.jt808"
                   }
                 ]
               }
@@ -62211,16 +62216,15 @@
                         },
                         "buffer": {
                           "mode": "hybrid",
-                          "memory_overload_protection": true,
                           "segment_bytes": "100MB",
-                          "per_partition_limit": "2GB"
+                          "per_partition_limit": "2GB",
+                          "memory_overload_protection": true
                         },
                         "topic": "topic",
                         "max_inflight": 10,
                         "required_acks": "all_isr",
                         "max_batch_bytes": "896KB",
-                        "partition_count_refresh_interval": "60s",
-                        "kafka_header_value_encode_mode": "none",
+                        "kafka_headers": "${.pub_props}",
                         "kafka_ext_headers": [
                           {
                             "kafka_ext_header_value": "${clientid}",
@@ -62231,8 +62235,9 @@
                             "kafka_ext_header_key": "topic"
                           }
                         ],
-                        "kafka_headers": "${.pub_props}",
-                        "partition_strategy": "random"
+                        "kafka_header_value_encode_mode": "none",
+                        "partition_strategy": "random",
+                        "partition_count_refresh_interval": "60s"
                       },
                       "connector": "my_azure_event_hub_producer_connector",
                       "node_status": [
@@ -62258,16 +62263,15 @@
                         },
                         "buffer": {
                           "mode": "hybrid",
-                          "memory_overload_protection": true,
                           "segment_bytes": "100MB",
-                          "per_partition_limit": "2GB"
+                          "per_partition_limit": "2GB",
+                          "memory_overload_protection": true
                         },
                         "topic": "topic",
                         "max_inflight": 10,
                         "required_acks": "all_isr",
                         "max_batch_bytes": "896KB",
-                        "partition_count_refresh_interval": "60s",
-                        "kafka_header_value_encode_mode": "none",
+                        "kafka_headers": "${.pub_props}",
                         "kafka_ext_headers": [
                           {
                             "kafka_ext_header_value": "${clientid}",
@@ -62278,8 +62282,9 @@
                             "kafka_ext_header_key": "topic"
                           }
                         ],
-                        "kafka_headers": "${.pub_props}",
-                        "partition_strategy": "random"
+                        "kafka_header_value_encode_mode": "none",
+                        "partition_strategy": "random",
+                        "partition_count_refresh_interval": "60s"
                       },
                       "connector": "my_confluent_producer_connector",
                       "node_status": [
@@ -62363,17 +62368,16 @@
                         },
                         "buffer": {
                           "mode": "hybrid",
-                          "memory_overload_protection": true,
                           "segment_bytes": "100MB",
-                          "per_partition_limit": "2GB"
+                          "per_partition_limit": "2GB",
+                          "memory_overload_protection": true
                         },
                         "compression": "no_compression",
                         "topic": "kafka-topic",
                         "max_inflight": 10,
                         "required_acks": "all_isr",
                         "max_batch_bytes": "896KB",
-                        "partition_count_refresh_interval": "60s",
-                        "kafka_header_value_encode_mode": "none",
+                        "kafka_headers": "${pub_props}",
                         "kafka_ext_headers": [
                           {
                             "kafka_ext_header_value": "${clientid}",
@@ -62384,8 +62388,9 @@
                             "kafka_ext_header_key": "topic"
                           }
                         ],
-                        "kafka_headers": "${pub_props}",
-                        "partition_strategy": "random"
+                        "kafka_header_value_encode_mode": "none",
+                        "partition_strategy": "random",
+                        "partition_count_refresh_interval": "60s"
                       },
                       "connector": "my_kafka_producer_connector",
                       "node_status": [
@@ -62743,16 +62748,15 @@
                         },
                         "buffer": {
                           "mode": "hybrid",
-                          "memory_overload_protection": true,
                           "segment_bytes": "100MB",
-                          "per_partition_limit": "2GB"
+                          "per_partition_limit": "2GB",
+                          "memory_overload_protection": true
                         },
                         "topic": "topic",
                         "max_inflight": 10,
                         "required_acks": "all_isr",
                         "max_batch_bytes": "896KB",
-                        "partition_count_refresh_interval": "60s",
-                        "kafka_header_value_encode_mode": "none",
+                        "kafka_headers": "${.pub_props}",
                         "kafka_ext_headers": [
                           {
                             "kafka_ext_header_value": "${clientid}",
@@ -62763,8 +62767,9 @@
                             "kafka_ext_header_key": "topic"
                           }
                         ],
-                        "kafka_headers": "${.pub_props}",
-                        "partition_strategy": "random"
+                        "kafka_header_value_encode_mode": "none",
+                        "partition_strategy": "random",
+                        "partition_count_refresh_interval": "60s"
                       },
                       "connector": "my_azure_event_hub_producer_connector",
                       "node_status": [
@@ -62790,16 +62795,15 @@
                         },
                         "buffer": {
                           "mode": "hybrid",
-                          "memory_overload_protection": true,
                           "segment_bytes": "100MB",
-                          "per_partition_limit": "2GB"
+                          "per_partition_limit": "2GB",
+                          "memory_overload_protection": true
                         },
                         "topic": "topic",
                         "max_inflight": 10,
                         "required_acks": "all_isr",
                         "max_batch_bytes": "896KB",
-                        "partition_count_refresh_interval": "60s",
-                        "kafka_header_value_encode_mode": "none",
+                        "kafka_headers": "${.pub_props}",
                         "kafka_ext_headers": [
                           {
                             "kafka_ext_header_value": "${clientid}",
@@ -62810,8 +62814,9 @@
                             "kafka_ext_header_key": "topic"
                           }
                         ],
-                        "kafka_headers": "${.pub_props}",
-                        "partition_strategy": "random"
+                        "kafka_header_value_encode_mode": "none",
+                        "partition_strategy": "random",
+                        "partition_count_refresh_interval": "60s"
                       },
                       "connector": "my_confluent_producer_connector",
                       "node_status": [
@@ -62895,17 +62900,16 @@
                         },
                         "buffer": {
                           "mode": "hybrid",
-                          "memory_overload_protection": true,
                           "segment_bytes": "100MB",
-                          "per_partition_limit": "2GB"
+                          "per_partition_limit": "2GB",
+                          "memory_overload_protection": true
                         },
                         "compression": "no_compression",
                         "topic": "kafka-topic",
                         "max_inflight": 10,
                         "required_acks": "all_isr",
                         "max_batch_bytes": "896KB",
-                        "partition_count_refresh_interval": "60s",
-                        "kafka_header_value_encode_mode": "none",
+                        "kafka_headers": "${pub_props}",
                         "kafka_ext_headers": [
                           {
                             "kafka_ext_header_value": "${clientid}",
@@ -62916,8 +62920,9 @@
                             "kafka_ext_header_key": "topic"
                           }
                         ],
-                        "kafka_headers": "${pub_props}",
-                        "partition_strategy": "random"
+                        "kafka_header_value_encode_mode": "none",
+                        "partition_strategy": "random",
+                        "partition_count_refresh_interval": "60s"
                       },
                       "connector": "my_kafka_producer_connector",
                       "node_status": [
@@ -63265,16 +63270,15 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "topic": "topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${.pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -63285,8 +63289,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${.pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "connector": "my_azure_event_hub_producer_connector",
                     "local_topic": "mqtt/local/topic"
@@ -63303,16 +63308,15 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "topic": "topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${.pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -63323,8 +63327,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${.pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "connector": "my_confluent_producer_connector",
                     "local_topic": "mqtt/local/topic"
@@ -63383,17 +63388,16 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "compression": "no_compression",
                       "topic": "kafka-topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -63404,8 +63408,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "connector": "my_kafka_producer_connector",
                     "resource_opts": {
@@ -64174,14 +64179,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -69090,14 +69095,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -69242,14 +69247,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -69786,14 +69791,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             }
           },
@@ -70157,14 +70162,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -70276,14 +70281,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -70419,14 +70424,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -70518,14 +70523,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -70687,14 +70692,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -70829,14 +70834,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "gbt32960",
-                "exproto",
                 "jt808",
+                "exproto",
                 "mqttsn",
+                "ocpp",
                 "stomp",
                 "lwm2m",
                 "coap",
-                "ocpp"
+                "gbt32960"
               ]
             },
             "example": "stomp"
@@ -71464,7 +71469,8 @@
                     "code": {
                       "type": "string",
                       "enum": [
-                        "UPDATE_FAILED"
+                        "UPDATE_FAILED",
+                        "INVALID_CONFIG"
                       ]
                     },
                     "message": {
@@ -71817,8 +71823,8 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "enable_pipelining": 100,
@@ -71843,16 +71849,15 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "topic": "topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${.pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -71863,8 +71868,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${.pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "socket_opts": {
                       "nodelay": true,
@@ -71914,17 +71920,16 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "compression": "no_compression",
                       "topic": "kafka-topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -71935,8 +71940,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "local_topic": "mqtt/local/topic",
                     "min_metadata_refresh_interval": "3s",
@@ -71992,9 +71998,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -72033,9 +72039,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -72045,9 +72051,9 @@
                     "aws_secret_access_key": "******",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "endpoint": "https://kinesis.us-east-1.amazonaws.com",
@@ -72065,16 +72071,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "url": "http://localhost:9901/messages/${topic}",
                     "method": "post",
+                    "url": "http://localhost:9901/messages/${topic}",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -72096,9 +72102,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "payload_template": "",
@@ -72119,9 +72125,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -72140,9 +72146,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -72189,9 +72195,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     }
                   },
@@ -72239,9 +72245,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -72258,8 +72264,8 @@
                     "url": "http://127.0.0.1:6570",
                     "resource_opts": {
                       "batch_size": 100,
-                      "query_mode": "sync",
-                      "batch_time": "20ms"
+                      "batch_time": "20ms",
+                      "query_mode": "sync"
                     },
                     "record_template": "{ \"temperature\": ${payload.temperature}, \"humidity\": ${payload.humidity} }"
                   },
@@ -72336,9 +72342,20 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "query_mode": "sync",
                       "max_buffer_bytes": 104857600,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
+                    },
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "qos": "${qos}",
+                        "topic": "from_emqx/${topic}"
+                      }
                     },
                     "ingress": {
                       "local": {
@@ -72350,17 +72367,6 @@
                       "remote": {
                         "qos": 1,
                         "topic": "aws/#"
-                      }
-                    },
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "qos": "${qos}",
-                        "topic": "from_emqx/${topic}"
                       }
                     }
                   },
@@ -72375,9 +72381,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "servers": "127.0.0.1:9042",
@@ -72432,9 +72438,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -72454,9 +72460,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -72481,9 +72487,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -72546,9 +72552,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -72573,9 +72579,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -72752,8 +72758,8 @@
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "enable_pipelining": 100,
@@ -72781,16 +72787,15 @@
                         },
                         "buffer": {
                           "mode": "hybrid",
-                          "memory_overload_protection": true,
                           "segment_bytes": "100MB",
-                          "per_partition_limit": "2GB"
+                          "per_partition_limit": "2GB",
+                          "memory_overload_protection": true
                         },
                         "topic": "topic",
                         "max_inflight": 10,
                         "required_acks": "all_isr",
                         "max_batch_bytes": "896KB",
-                        "partition_count_refresh_interval": "60s",
-                        "kafka_header_value_encode_mode": "none",
+                        "kafka_headers": "${.pub_props}",
                         "kafka_ext_headers": [
                           {
                             "kafka_ext_header_value": "${clientid}",
@@ -72801,8 +72806,9 @@
                             "kafka_ext_header_key": "topic"
                           }
                         ],
-                        "kafka_headers": "${.pub_props}",
-                        "partition_strategy": "random"
+                        "kafka_header_value_encode_mode": "none",
+                        "partition_strategy": "random",
+                        "partition_count_refresh_interval": "60s"
                       },
                       "socket_opts": {
                         "nodelay": true,
@@ -72855,17 +72861,16 @@
                         },
                         "buffer": {
                           "mode": "hybrid",
-                          "memory_overload_protection": true,
                           "segment_bytes": "100MB",
-                          "per_partition_limit": "2GB"
+                          "per_partition_limit": "2GB",
+                          "memory_overload_protection": true
                         },
                         "compression": "no_compression",
                         "topic": "kafka-topic",
                         "max_inflight": 10,
                         "required_acks": "all_isr",
                         "max_batch_bytes": "896KB",
-                        "partition_count_refresh_interval": "60s",
-                        "kafka_header_value_encode_mode": "none",
+                        "kafka_headers": "${pub_props}",
                         "kafka_ext_headers": [
                           {
                             "kafka_ext_header_value": "${clientid}",
@@ -72876,8 +72881,9 @@
                             "kafka_ext_header_key": "topic"
                           }
                         ],
-                        "kafka_headers": "${pub_props}",
-                        "partition_strategy": "random"
+                        "kafka_header_value_encode_mode": "none",
+                        "partition_strategy": "random",
+                        "partition_count_refresh_interval": "60s"
                       },
                       "local_topic": "mqtt/local/topic",
                       "min_metadata_refresh_interval": "3s",
@@ -72942,9 +72948,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -72989,9 +72995,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -73004,9 +73010,9 @@
                       "aws_secret_access_key": "******",
                       "resource_opts": {
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
+                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "endpoint": "https://kinesis.us-east-1.amazonaws.com",
@@ -73027,16 +73033,16 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "url": "http://localhost:9901/messages/${topic}",
                       "method": "post",
+                      "url": "http://localhost:9901/messages/${topic}",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
+                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
@@ -73061,9 +73067,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "payload_template": "",
@@ -73087,9 +73093,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -73111,9 +73117,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -73169,9 +73175,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       }
                     },
@@ -73228,9 +73234,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -73250,8 +73256,8 @@
                       "url": "http://127.0.0.1:6570",
                       "resource_opts": {
                         "batch_size": 100,
-                        "query_mode": "sync",
-                        "batch_time": "20ms"
+                        "batch_time": "20ms",
+                        "query_mode": "sync"
                       },
                       "record_template": "{ \"temperature\": ${payload.temperature}, \"humidity\": ${payload.humidity} }"
                     },
@@ -73340,9 +73346,20 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "query_mode": "sync",
                         "max_buffer_bytes": 104857600,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
+                      },
+                      "egress": {
+                        "local": {
+                          "topic": "emqx/#"
+                        },
+                        "remote": {
+                          "retain": false,
+                          "payload": "${payload}",
+                          "qos": "${qos}",
+                          "topic": "from_emqx/${topic}"
+                        }
                       },
                       "ingress": {
                         "local": {
@@ -73354,17 +73371,6 @@
                         "remote": {
                           "qos": 1,
                           "topic": "aws/#"
-                        }
-                      },
-                      "egress": {
-                        "local": {
-                          "topic": "emqx/#"
-                        },
-                        "remote": {
-                          "retain": false,
-                          "payload": "${payload}",
-                          "qos": "${qos}",
-                          "topic": "from_emqx/${topic}"
                         }
                       }
                     },
@@ -73382,9 +73388,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "servers": "127.0.0.1:9042",
@@ -73445,9 +73451,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -73470,9 +73476,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -73500,9 +73506,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -73571,9 +73577,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
-                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -73601,9 +73607,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
-                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
+                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -73783,8 +73789,8 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "enable_pipelining": 100,
@@ -73811,16 +73817,15 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "topic": "topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${.pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -73831,8 +73836,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${.pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "socket_opts": {
                       "nodelay": true,
@@ -73872,17 +73878,16 @@
                       },
                       "buffer": {
                         "mode": "hybrid",
-                        "memory_overload_protection": true,
                         "segment_bytes": "100MB",
-                        "per_partition_limit": "2GB"
+                        "per_partition_limit": "2GB",
+                        "memory_overload_protection": true
                       },
                       "compression": "no_compression",
                       "topic": "kafka-topic",
                       "max_inflight": 10,
                       "required_acks": "all_isr",
                       "max_batch_bytes": "896KB",
-                      "partition_count_refresh_interval": "60s",
-                      "kafka_header_value_encode_mode": "none",
+                      "kafka_headers": "${pub_props}",
                       "kafka_ext_headers": [
                         {
                           "kafka_ext_header_value": "${clientid}",
@@ -73893,8 +73898,9 @@
                           "kafka_ext_header_key": "topic"
                         }
                       ],
-                      "kafka_headers": "${pub_props}",
-                      "partition_strategy": "random"
+                      "kafka_header_value_encode_mode": "none",
+                      "partition_strategy": "random",
+                      "partition_count_refresh_interval": "60s"
                     },
                     "local_topic": "mqtt/local/topic",
                     "min_metadata_refresh_interval": "3s",
@@ -73952,9 +73958,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -73999,9 +74005,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -74014,9 +74020,9 @@
                     "aws_secret_access_key": "******",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "endpoint": "https://kinesis.us-east-1.amazonaws.com",
@@ -74037,16 +74043,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "url": "http://localhost:9901/messages/${topic}",
                     "method": "post",
+                    "url": "http://localhost:9901/messages/${topic}",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -74071,9 +74077,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "payload_template": "",
@@ -74097,9 +74103,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -74121,9 +74127,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -74179,9 +74185,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     }
                   },
@@ -74238,9 +74244,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -74260,8 +74266,8 @@
                     "url": "http://127.0.0.1:6570",
                     "resource_opts": {
                       "batch_size": 100,
-                      "query_mode": "sync",
-                      "batch_time": "20ms"
+                      "batch_time": "20ms",
+                      "query_mode": "sync"
                     },
                     "record_template": "{ \"temperature\": ${payload.temperature}, \"humidity\": ${payload.humidity} }"
                   },
@@ -74350,9 +74356,20 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "query_mode": "sync",
                       "max_buffer_bytes": 104857600,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
+                    },
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "qos": "${qos}",
+                        "topic": "from_emqx/${topic}"
+                      }
                     },
                     "ingress": {
                       "local": {
@@ -74364,17 +74381,6 @@
                       "remote": {
                         "qos": 1,
                         "topic": "aws/#"
-                      }
-                    },
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "qos": "${qos}",
-                        "topic": "from_emqx/${topic}"
                       }
                     }
                   },
@@ -74392,9 +74398,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "servers": "127.0.0.1:9042",
@@ -74455,9 +74461,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -74480,9 +74486,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -74503,9 +74509,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -74567,9 +74573,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
-                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -74590,9 +74596,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
-                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
+                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
