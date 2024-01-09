@@ -12,7 +12,7 @@
 - [#12238](https://github.com/emqx/emqx/pull/12238) 解决了EMQX 5.3.2 版本 HTTP Action 功能中引入的错误格式配置的兼容性问题。
 - [#12246](https://github.com/emqx/emqx/pull/12246) 停止在 Docker 中默认暴露不再使用的 11883 端口，并从 Helm  Chart 中移除。
 - [#12249](https://github.com/emqx/emqx/pull/12249) 修复了 `/configs` API 中尝试修改只读配置值导致响应消息乱码的问题。
-- [#12264](https://github.com/emqx/emqx/pull/12264) 修复了滚动升级时5.4的副本节点加入5.4之前的核心节点失败问题。
+- [#12264](https://github.com/emqx/emqx/pull/12264) 修复5.4副本节点在滚动升级过程中无法加入运行早于 5.4 版本的核心节点所在集群的问题。
 
 ## 5.4.0
 

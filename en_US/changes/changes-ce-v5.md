@@ -12,7 +12,7 @@
 - [#12238](https://github.com/emqx/emqx/pull/12238) Resolved compatibility issue with the error format configurations introduced in the HTTP Action feature of EMQX version 5.3.2.
 - [#12246](https://github.com/emqx/emqx/pull/12246) Stopped exposing port 11883 by default in Docker and removed it from Helm charts, as this port is no longer in use. 
 - [#12249](https://github.com/emqx/emqx/pull/12249) Fixed an issue in the `/configs` API where attempting to modify a read-only configuration value resulted in a garbled response message.
-- [#12264](https://github.com/emqx/emqx/pull/12264) Fix rolling upgrade when replica nodes join cluster with core nodes prior to version 5.4.
+- [#12264](https://github.com/emqx/emqx/pull/12264) Fixed rolling upgrade when replica nodes join cluster with core nodes prior to version 5.4.
 
 ## 5.4.0
 
