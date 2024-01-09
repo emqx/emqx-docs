@@ -105,13 +105,13 @@ This section demonstrates how to create a Cassandra data bridge in EMQX Dashboar
 
 8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Cassandra server.
 
-9. Click **Create** to finish the creation of the data bridge. 
+9. Click **Create** to finish the creation of the Connector. 
 
    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Cassandra. You can also create rules by following the steps in [Create Rules for Cassandra Data Bridge](#create-rules-for-cassandra-data-bridge).
 
 Now the Cassandra data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
 
-## Create Connector
+## Create Rule
 
 Now that you have successfully created the data bridge, you can continue to create rules to specify the data to be stored in Cassandra. 
 
@@ -122,7 +122,7 @@ Now that you have successfully created the data bridge, you can continue to crea
 3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Suppose you want to forward the MQTT messages under topic `t/#` to Cassandra, you can use the SQL syntax below. 
 
    Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
-   
+
    ```sql
    SELECT 
      *
@@ -130,10 +130,28 @@ Now that you have successfully created the data bridge, you can continue to crea
      "t/#"
    ```
 
-4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**. Click the **Add** button. 
-6. Click the **Create** button to finish the setup. 
+4. Click the **+ Add Action** button to define an action that will be triggered by the rule. Select `Cassandra` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to Cassandra. 
 
-After creating the data bridge to Cassandra. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Cassandra after parsing by rule `my_rule`.
+   Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select a Cassandra action previously created. In this demonstration, you create a new Sink and add it to the rule.
+5. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+6. Enter the connection information. Input `127.0.0.1:9042` for the **Servers**, `mqtt` as the **Keyspace**, and leave others as default.
+
+7. Configure the **CQL template** to save `topic`, `id`, `clientid`, `qos`, `palyload` and `timestamp` to Cassandra. This template will be executed via Cassandra Query Language, and the sample code is as follows:
+
+   ```sql
+   insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
+   ```
+
+8. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
+
+9. Click the **Add** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+
+10. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
+
+
+Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you see the new Cassandra Sink. 
+
+You can also click **Integration** -> **Flow Designer** to view the topology. You can see that the messages under topic `t/#`  are sent and saved to Cassandra after parsing by the rule `my_rule`. 
 
 ## Test Rule
 
