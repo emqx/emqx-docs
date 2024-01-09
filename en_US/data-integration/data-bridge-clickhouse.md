@@ -35,13 +35,13 @@ The data integration with ClickHouse offers a range of features and benefits tai
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create the ClickHouse data bridges in EMQX Dashboard.
+This section describes the preparations you need to complete before you start to create the ClickHouse data integration in EMQX Dashboard.
 
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 
-- Knowledge about [data bridges](./data-bridges.md)
+- Knowledge about [data integration](./data-bridges.md)
 
 - Basic knowledge of UNIX terminal and commands 
 
@@ -80,11 +80,46 @@ This section introduces how to start a ClickHouse server using [Docker](https://
 
 You can find more information about running ClickHouse in docker [on dockerhub](https://hub.docker.com/r/clickhouse/clickhouse-server).
 
-## Create Rule and ClickHouse Sink
+## Create a Connector and Sink
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured data bridge to ClickHouse. 
+This section demonstrates how to create a Connector and Sink in EMQX Dashboard to connect to the ClickHouse server.
 
 This demonstration assumes that you run both EMQX and ClickHouse on the local machine. If you have ClickHouse and EMQX running remotely, adjust the settings accordingly.
+
+1. Log in to the EMQX Dashboard and click **Data Integration** -> **Connector** in the left navigation menu.
+
+2. Click **Create** on the top right corner of the page.
+
+3. On the **Type of Connector** step page, select `ClickHouse` and click **Next**.
+
+4. Enter a name for the Connector. The name should be a combination of uppercase/lowercase letters and numbers.
+
+5. Enter the connection information:
+
+   - **Server URL**: `http://127.0.0.1:18123`
+   - **Database Name**: `mqtt_data`
+   - **Username**: `emqx`
+   - **Password**: `public`
+
+6. Enter the following command in the SQL template (You can use the [Rule Engine](https://chat.openai.com/c/rules.md) to ensure that strings in the input SQL statement are properly escaped to prevent SQL injection attacks):
+
+   ```sql
+   INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})
+   ```
+
+   Here, `${data}` and `${timestamp}` represent the message content and timestamp, respectively, which will be configured later in the rules for message forwarding. EMQX will replace them with the corresponding content before forwarding the message.
+
+7. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
+
+8. Before clicking **Create**, you can click the **Test Connectivity** button to ensure that you can connect to the ClickHouse server.
+
+9. Click the **Create** button. In the pop-up dialogue, you can click **Back to Connector List** to complete the creation of the ClickHouse Connector or click **Create Rule** to enter the rule creation process.
+
+On the Dashboard's Connector page, you can see the status of the ClickHouse Connector as **Connected**. Next, you need to create a rule to specify the data to be forwarded to ClickHouse.
+
+## Create a Rule for Data Forward
+
+This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through the Connector and Sink to ClickHouse. 
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules** from the left navigation menu.
 
@@ -104,48 +139,17 @@ This demonstration assumes that you run both EMQX and ClickHouse on the local ma
 
    Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-5. Click the **+ Add Action** button to define an action that will be triggered by the rule. Select **Forwarding with Data Bridge** from the dropdown list. With this action, EMQX sends the data processed by the rule to ClickHouse.
+5. Add an action by selecting `ClickHouse` from the **Action Type** dropdown list, and select the Connector you created before from the **Action** dropdown. Click the **Add** button to add it to the **Action Outputs.**
 
-6. Click the **+** icon next to the **Data bridge** drop-down box to create a data bridge.
+6. Back on the Create Rule page, click the **Create** button at the bottom to complete the rule creation.
 
-7. Select `ClickHouse` from the **Type of Data Bridge** drop-down list. 
+You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new ClickHouse Sink.
 
-8. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
+You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#`  are sent and saved to ClickHouse. 
 
-9. Enter the connection information for connecting to the ClickHouse database:
+## Test the Rule
 
-   - **Server URL**: Enter `http://127.0.0.1:18123`, or the actual URL if the ClickHouse server is running remotely.
-   - **Database Name**: Enter `mqtt_data`.
-   - **Username**: Enter `emqx`.
-   - **Password**: Enter `public`.
-
-10. Enter the following statement in the **SQL Template**. 
-
-    ::: tip
-
-    You can use [Rule Engine](./rules.md) to ensure that strings in the specified SQL statement are escaped so the SQL statement is not vulnerable to SQL injection attacks.
-
-    :::
-
-    ```sql
-    INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})
-    ```
-
-    The `${data}` and `${timestamp}` are placeholders for the data and timestamp of the message coming from the rule you configured before. The placeholders will be replaced by the actual data before the message is sent to the ClickHouse server.
-
-2. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
-
-12. Click the **Add** button to complete the data bridge configuration. You will be redirected back to the **Add Action** page. Select the ClickHouse Data Bridge you just created from the **Data bridge** drop-down list. Click the **Add** button at the bottom to include this action in the rule.
-
-    <img src="./assets/clickhouse_bridge.png" alt="clickhouse_bridge" style="zoom:67%;" />
-
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. The rule you created should be shown in the rule list and the **status** should be connected.
-
-Now a rule to forward data to ClickHouse via a ClickHouse data bridge is created. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to ClickHouse. 
-
-## Test Rule and Data Bridge
-
-You can use the built-in WebSocket client in the EMQX dashboard to test our rule and bridge.
+You can use the built-in WebSocket client in the EMQX dashboard to test if the rule works as expected.
 
 Click **Diagnose** -> **WebSocket Client** in the left navigation menu of the Dashboard to access the WebSocket Client. Follow the steps below to set up a WebSocket client and send a message to the topic `t/test`:
 
@@ -172,21 +176,21 @@ Click **Diagnose** -> **WebSocket Client** in the left navigation menu of the Da
 
 ## Advanced Configurations
 
-This section delves deeper into the advanced configuration options available for the EMQX ClickHouse data bridge. When configuring the data bridge in the Dashboard, navigate to **Advanced Settings** to tailor the following parameters to meet your specific needs.
+This section delves deeper into the advanced configuration options available for the EMQX ClickHouse Connector. When configuring the Connector in the Dashboard, navigate to **Advanced Settings** to tailor the following parameters to meet your specific needs.
 
 | **Fields**                | **Descriptions**                                             | **Recommended Value** |
 | ------------------------- | ------------------------------------------------------------ | --------------------- |
-| **Batch Value Separator** | In this example, you can keep the default value ",". This setting only needs to be changed if you enable [batching](./data-bridges.md) for the bridge and if you specify an alternative format with [ClickHouse's FORMAT syntax](https://clickhouse.com/docs/en/sql-reference/statements/insert-into). | `,`                   |
+| **Batch Value Separator** | Used to distinguish multiple input items. In this example, you can keep the default value ",". This setting only needs to be changed if you enable [batch mode](./data-bridges.md) for the data integration and if you specify an alternative format with [ClickHouse's FORMAT syntax](https://clickhouse.com/docs/en/sql-reference/statements/insert-into). | `,`                   |
 | **Connection Pool Size**  | Specifies the number of concurrent connections that can be maintained in the connection pool when interfacing with the ClickHouse service. This option helps in managing the application's scalability and performance by limiting or increasing the number of active connections between EMQX and ClickHouse.<br/>**Note**: Setting an appropriate connection pool size depends on various factors such as system resources, network latency, and the specific workload of your application. Too large a pool size may lead to resource exhaustion, while too small a size may limit throughput. | `8`                   |
-| **Clickhouse Timeout**    | Specifies the maximum amount of time, in seconds, that the EMQX data bridge will wait while attempting to establish a connection with the ClickHouse server.<br/>**Note**: A carefully chosen timeout setting is crucial for balancing system performance and resource utilization. It is advisable to test the system under various network conditions to find the optimal timeout value for your specific use case. | `15`                  |
-| **Start Timeout**         | Determines the maximum time interval, in seconds, that the EMQX data bridge will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the data bridge does not proceed with operations until it verifies that the connected resource—such as a database instance in ClickHouse—is fully operational and ready to handle data transactions. | `5`                   |
-| **Buffer Pool Size**      | Specifies the number of buffer worker processes that will be allocated for managing data flow in egress-type bridges between EMQX and ClichHouse. These worker processes are responsible for temporarily storing and handling data before it is sent to the target service. This setting is particularly relevant for optimizing performance and ensuring smooth data transmission in egress (outbound) scenarios. For bridges that only deal with ingress (inbound) data flow, this option can be set to "0" as it is not applicable. | `16`                  |
+| **Clickhouse Timeout**    | Specifies the maximum amount of time, in seconds, that the Connector will wait while attempting to establish a connection with the ClickHouse server.<br/>**Note**: A carefully chosen timeout setting is crucial for balancing system performance and resource utilization. It is advisable to test the system under various network conditions to find the optimal timeout value for your specific use case. | `15`                  |
+| **Start Timeout**         | Determines the maximum time interval, in seconds, that the Connector will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the Connector does not proceed with operations until it verifies that the connected resource—such as a database instance in ClickHouse—is fully operational and ready to handle data transactions. | `5`                   |
+| **Buffer Pool Size**      | Specifies the number of buffer worker processes that will be allocated for managing data flow in egress-type sinks between EMQX and ClichHouse. These worker processes are responsible for temporarily storing and handling data before it is sent to the target service. This setting is particularly relevant for optimizing performance and ensuring smooth data transmission in egress (outbound) scenarios. For bridges that only deal with ingress (inbound) data flow, this option can be set to "0" as it is not applicable. | `16`                  |
 | **Request TTL**           | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from ClickHouse, the request is deemed to have expired. | `45`                  |
-| **Health Check Interval** | Specifies the time interval, in seconds, at which the data bridge will perform automated health checks on the connection to ClickHouse. | `15`                  |
-| **Max Buffer Queue Size** | Specifies the maximum number of bytes that can be buffered by each buffer worker in the ClickHouse data bridge. Buffer workers temporarily store data before it is sent to ClickHouse, serving as an intermediary to handle data flow more efficiently. Adjust the value according to your system's performance and data transfer requirements. | `256`                 |
+| **Health Check Interval** | Specifies the time interval, in seconds, at which the Connector will perform automated health checks on the connection to ClickHouse. | `15`                  |
+| **Max Buffer Queue Size** | Specifies the maximum number of bytes that can be buffered by each buffer worker in the ClickHouse Connector. Buffer workers temporarily store data before it is sent to ClickHouse, serving as an intermediary to handle data flow more efficiently. Adjust the value according to your system's performance and data transfer requirements. | `256`                 |
 | **Max Batch Size**        | Specifies the maximum size of data batches that can be transmitted from EMQX to ClickHouse in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and ClickHouse.<br />If the "Max Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | `1`                   |
 | **Query Mode**            | Allows you to choose `asynchronous` or `synchronous` query modes to optimize message transmission based on different requirements. In asynchronous mode, writing to ClickHouse does not block the MQTT message publish process. However, this might result in clients receiving messages ahead of their arrival in ClickHouse. | `Async`               |
-| **Inflight Window**       | An "in-flight query" refers to a query that has been initiated but has not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queries that can exist simultaneously when the data bridge is communicating with ClickHouse.<br/>When the **Query Mode** is set to `async` (asynchronous), the "Inflight Window" parameter gains special importance. If it is crucial for messages from the same MQTT client to be processed in strict order, you should set this value to 1. | `100`                 |
+| **Inflight Window**       | An "in-flight query" refers to a query that has been initiated but has not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queries that can exist simultaneously when the Connector is communicating with ClickHouse.<br/>When the **Query Mode** is set to `async` (asynchronous), the "Inflight Window" parameter gains special importance. If it is crucial for messages from the same MQTT client to be processed in strict order, you should set this value to 1. | `100`                 |
 
 ## More Information
 

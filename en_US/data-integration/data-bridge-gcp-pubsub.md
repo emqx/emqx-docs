@@ -12,11 +12,11 @@ This page provides a comprehensive introduction to the data integration between 
 
 ## How It Works
 
-GCP Pub/Sub data bridge is an out-of-the-box feature of EMQX designed to help users seamlessly integrate MQTT data streams with Google Cloud and leverage its rich services and capabilities for IoT application development.
+GCP Pub/Sub data integration is an out-of-the-box feature of EMQX designed to help users seamlessly integrate MQTT data streams with Google Cloud and leverage its rich services and capabilities for IoT application development.
 
 ![GCP_bridge_architect](./assets/gcp_pubsub/GCP_bridge_architect.png)
 
-EMQX forwards MQTT data to GCP Pub/Sub through the rule engine and data bridging. Taking the example of a GCP Pub/Sub producer role, the complete process is as follows:
+EMQX forwards MQTT data to GCP Pub/Sub through the rule engine and Sink. Taking the example of a GCP Pub/Sub producer role, the complete process is as follows:
 
 1. **IoT Devices Publish Messages**: Devices publish telemetry and status data through specific topics, triggering the rule engine.
 2. **Rule Engine Processes Messages**: Using the built-in rule engine, MQTT messages from specific sources are processed based on topic matching. The rule engine matches corresponding rules and processes messages, such as converting data formats, filtering specific information, or enriching messages with contextual information.
@@ -34,13 +34,13 @@ The data integration with GCP Pub/Sub offers a range of features and benefits:
 
 - **Robust Messaging Service**: Both EMQX and GCP Pub/Sub possess high availability and scalability features, ensuring the reliable reception, delivery, and processing of large-scale message streams. They support IoT data sequencing, message quality assurance, and persistence, ensuring the dependable transmission and handling of messages.
 - **Flexible Rules Engine**: With the built-in rules engine, specific source messages and events can be processed based on topic matching. Messages and events can be manipulated, such as data format conversion, filtering out specific information, or enriching messages with context information. Combining this with GCP Pub/Sub allows for further processing and analysis.
-- **Rich Contextual Information**: Through theGCP Pub/Sub data bridge, you can add richer contextual information to messages, mapping client attributes to Pub/Sub attributes, sorting keys, and more. This aids in performing more precise analysis and processing in subsequent application development and data handling.
+- **Rich Contextual Information**: Through the GCP Pub/Sub data integration, you can add richer contextual information to messages, mapping client attributes to Pub/Sub attributes, sorting keys, and more. This aids in performing more precise analysis and processing in subsequent application development and data handling.
 
 In summary, integrating EMQX and GCP Pub/Sub enables highly reliable, scalable message delivery, along with extensive tools and services for data analysis and integration. This empowers you to build robust IoT applications and implement flexible business logic based on event-driven capabilities.
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create the GCP Pub/Sub data bridges.
+This section describes the preparations you need to complete before you start to create the GCP Pub/Sub data integration.
 
 ### Prerequisites
 
@@ -65,7 +65,7 @@ You need to create a service account and a service account key to use the GCP Pu
 
 ### Create and Manage Topics in GCP
 
-Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic and be familiar with the basic management operation in GCP.
+Before configuring the GCP Pub/Sub data integration on EMQX, you need to create a topic and be familiar with the basic management operation in GCP.
 
 1. In the Google Cloud console, go to the **Pub/Sub** ->**Topics** page. For detailed instructions, see [Create and manage topics](https://cloud.google.com/pubsub/docs/create-topic).
 
@@ -94,7 +94,9 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
    <img src="./assets/gcp_pubsub/subscriptions-id-pull.png" alt="subscriptions-id-pull" style="zoom:50%;" />
 
-## Create a GCP Pub/Sub Bridge
+## Create a GCP Pub/Sub Connector and Sink
+
+This section demonstrates how to create a Connector to connect to the GCP Pub/Sub and how to configure the Sink for data processing.
 
 1. Go to EMQX Dashboard, click **Integration** -> **Connector**.
 
@@ -102,12 +104,12 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
 3. In the **Create Connector** page, click to select **Google PubSub**, and then click **Next**.
 
-4. In the **Name** field, enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
+4. In the **Name** field, enter a name for the Connector. The name should be a combination of upper/lower case letters and numbers.
 
 5. In the **Bridge Role** field, select `Producer` or `Consumer` from the drop-down list according to your business needs and complete the corresponding configurations. 
 
    :::: tabs type:card
-   
+
    ::: tab Configure as Producer Role
 
    - **GCP PubSub Topic**: Enter the topic ID `my-iot-core` you created in [Create and Manage Topic in GCP](#create-and-manage-topic-in-gcp).
@@ -160,25 +162,26 @@ Before configuring the GCP Pub/Sub Bridge on EMQX, you need to create a topic an
 
    ::::
 
-6. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the GCP PubSub server.
+6. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the GCP PubSub server.
 
-7. Click **Create** to finish the creation of the data bridge.
+7. Click the **Create** button. In the pop-up dialogue, you can click **Back to Connector List** to complete the creation of the GCP Pub/Sub Connector or click **Create Rule** to enter the rule creation process.
 
-    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into GCP PubSub. You can also create rules by following the steps in [Create Rules for GCP PubSub Data Bridge](#create-rules-for-GCP-PubSub-data-bridge).
 
-## Create Connector
+On the Dashboard's Connector page, you can see the status of the Google Pub/Sub Connector as **Connected**. Next, you need to create a rule to specify the data to be forwarded to GCP Pub/Sub.
+
+## Create a Rule for Data Forward
 
 You can continue to create rules to specify the data to be saved into GCP PubSub.
 
-1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Input `my_rule` as the rule ID.
+3. Enter `my_rule` as the rule ID.
 
-3. Set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `/devices/+/events`  to GCP PubSub, we can use the SQL syntax below.
+4. Set the rules in the **SQL Editor**. Here if you want to save the MQTT messages under topic `/devices/+/events`  to GCP PubSub, you can use the SQL syntax below.
 
-   Note: If you want to specify your own SQL syntax, make sure that the `SELECT` part includes all fields required by the payload template in the data bridge.
+   Note: If you want to specify your own SQL syntax, make sure that the `SELECT` part includes all fields required by the payload template in the Sink.
 
    ```sql
    SELECT
@@ -187,13 +190,17 @@ You can continue to create rules to specify the data to be saved into GCP PubSub
      "/devices/+/events"
    ```
 
-5. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**. Then click the **Add** button.
+   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-4. Click **Create** at the page bottom to finish the creation.
+5. Add an action by selecting `Google Pub/Sub` from the **Action Type** dropdown list, and select the Connector you created before from the **Action** dropdown. Click the **Add** button to add it to the **Action Outputs.**
 
-Now a rule to forward data to GCP PubSub via a GCP PubSub bridge is created. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `/devices/+/events` are sent and saved to GCP PubSub after parsing by rule `my_rule`.
+6. Back on the Create Rule page, click the **Create** button at the bottom to complete the rule creation.
 
-## Test Rule
+You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Google Pub/Sub Sink.
+
+You can also click **Integration** -> **Flow Designer** to view the topology and you can that the messages under topic `/devices/+/events` are sent and saved to GCP PubSub after parsing by rule `my_rule`.
+
+## Test the Rule
 
 1. Use MQTTX to send messages on the topic `/devices/+/events`.
 
@@ -201,6 +208,6 @@ Now a rule to forward data to GCP PubSub via a GCP PubSub bridge is created. You
    mqttx pub -i emqx_c -t /devices/+/events -m '{ "msg": "hello GCP PubSub" }'
    ```
 
-2. Check the running status of the data bridge, there should be one new incoming and one new outgoing message.
+2. Check the running status of the Sink, there should be one new incoming and one new outgoing message.
 
 3. Go to GCP **Pub/Sub** -> **Subscriptions**, click **MESSAGES** tab. You should see the message.
