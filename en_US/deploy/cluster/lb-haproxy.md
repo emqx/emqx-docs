@@ -169,6 +169,8 @@ backend mqtt_backend
 frontend mqtt_servers
   bind *:1883
   mode tcp
+  # Wait for the buffer to fill up to parse the MQTT message
+  tcp-request inspect-delay 10s
   # Reject non-MQTT connections
   tcp-request content reject unless { req.payload(0，0)，mqtt_is_valid }
   default_backend mqtt_backend
