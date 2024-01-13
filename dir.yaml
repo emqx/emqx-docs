@@ -324,6 +324,9 @@
     - title_en: HStreamDB
       title_cn: HStreamDB
       path: data-integration/data-bridge-hstreamdb   
+    - title_en: Elasticsearch
+      title_cn: Elasticsearch
+      path: data-integration/elasticsearch   
     - title_en: HTTP Server
       title_cn: HTTP Server
       path: data-integration/data-bridge-webhook
