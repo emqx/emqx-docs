@@ -94,19 +94,36 @@ Before configuring the GCP Pub/Sub data integration on EMQX, you need to create 
 
    <img src="./assets/gcp_pubsub/subscriptions-id-pull.png" alt="subscriptions-id-pull" style="zoom:50%;" />
 
-## Create a GCP Pub/Sub Connector and Sink
+## Create a Rule for Google PubSub Sink
 
-This section demonstrates how to create a Connector to connect to the GCP Pub/Sub and how to configure the Sink for data processing.
+This section demonstrates how to create a rule to specify the data to be saved into GCP PubSub.
 
-1. Go to EMQX Dashboard, click **Integration** -> **Connector**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. In the **Create Connector** page, click to select **Google PubSub**, and then click **Next**.
+3. Enter `my_rule` as the rule ID.
 
-4. In the **Name** field, enter a name for the Connector. The name should be a combination of upper/lower case letters and numbers.
+4. Set the rules in the **SQL Editor**. Here if you want to save the MQTT messages under topic `/devices/+/events`  to GCP PubSub, you can use the SQL syntax below.
 
-5. In the **Bridge Role** field, select `Producer` or `Consumer` from the drop-down list according to your business needs and complete the corresponding configurations. 
+   Note: If you want to specify your own SQL syntax, make sure that the `SELECT` part includes all fields required by the payload template in the Sink.
+
+   ```sql
+   SELECT
+     *
+   FROM
+     "/devices/+/events"
+   ```
+
+   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+
+5. Click the **+ Add Action** button to define an action that will be triggered by the rule. Select `Google PubSub` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to GCP Pub/Sub. 
+
+   Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select a Google Pub/Sub Sink previously created. In this demonstration, you create a new Sink and add it to the rule.
+
+6. In the **Name** field, enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+
+7. In the **Bridge Role** field, select `Producer` or `Consumer` from the drop-down list according to your business needs and complete the corresponding configurations. 
 
    :::: tabs type:card
 
@@ -115,11 +132,11 @@ This section demonstrates how to create a Connector to connect to the GCP Pub/Su
    - **GCP PubSub Topic**: Enter the topic ID `my-iot-core` you created in [Create and Manage Topic in GCP](#create-and-manage-topic-in-gcp).
    - **GCP Service Account Credentials**: Upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
    - **Payload Template**: Leave it blank or define a template.
-      - If left blank, it will encode all visible inputs from the MQTT message using JSON format, such as clientid, topic, payload, etc.
-      - If using the defined template, placeholders of the form `${variable_name}` will be filled with the corresponding value from the MQTT context.  For example, `${topic}` will be replaced with `my/topic` if such is the MQTT message topic.
+     - If left blank, it will encode all visible inputs from the MQTT message using JSON format, such as clientid, topic, payload, etc.
+     - If using the defined template, placeholders of the form `${variable_name}` will be filled with the corresponding value from the MQTT context.  For example, `${topic}` will be replaced with `my/topic` if such is the MQTT message topic.
    - **Attributes Template** and **Ordering Key Template** (optional): Similarly, you can define templates for formatting the attributes and/or ordering key of the outgoing message. 
-      - For **Attributes**, both keys and values may use placeholders of the form `${variable_name}`.  Such values will be extracted from the MQTT context.  If a key template resolves to an empty string, that key is omitted from the outgoing message to GCP PubSub.
-      - For **Ordering Key**, placeholders of the form `${variable_name}` may be used.  If the resolved value is an empty string, the `orderingKey` field will not be set for the GCP PubSub outgoing message.
+     - For **Attributes**, both keys and values may use placeholders of the form `${variable_name}`.  Such values will be extracted from the MQTT context.  If a key template resolves to an empty string, that key is omitted from the outgoing message to GCP PubSub.
+     - For **Ordering Key**, placeholders of the form `${variable_name}` may be used.  If the resolved value is an empty string, the `orderingKey` field will not be set for the GCP PubSub outgoing message.
    - Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed.
 
    :::
@@ -130,14 +147,14 @@ This section demonstrates how to create a Connector to connect to the GCP Pub/Su
 
    - The **Topic Mapping** field must contain at least one GCP PubSub-to-MQTT topic mapping. The **MQTT Payload Template** subfield specifies the MQTT payload that should be used, and has the following GCP PubSub message fields available for templating:
 
-     | Field Name        | Description                                                    |
-     |-------------------|----------------------------------------------------------------|
+     | Field Name        | Description                                                  |
+     | ----------------- | ------------------------------------------------------------ |
      | `attributes`      | (Optional) An object containing string key-value pairs, if any |
-     | `message_id`      | The message ID assigned by GCP PubSub to this message          |
-     | `ordering_key`    | (Optional) The message ordering key, if any                    |
-     | `publishing_time` | Message timestamp as defined by GCP PubSub                     |
-     | `topic`           | Originating GCP PubSub topic                                   |
-     | `value`           | (Optional) The message payload, if present                     |
+     | `message_id`      | The message ID assigned by GCP PubSub to this message        |
+     | `ordering_key`    | (Optional) The message ordering key, if any                  |
+     | `publishing_time` | Message timestamp as defined by GCP PubSub                   |
+     | `topic`           | Originating GCP PubSub topic                                 |
+     | `value`           | (Optional) The message payload, if present                   |
 
      The default value for **MQTT Payload Template** is `${.}`, which includes all available data encoded as a JSON object.  For example, choosing `${.}` as a template will produce the following for a GCP PubSub message containing all optional fields:
 
@@ -162,41 +179,13 @@ This section demonstrates how to create a Connector to connect to the GCP Pub/Su
 
    ::::
 
-6. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the GCP PubSub server.
+8. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md).
 
-7. Click the **Create** button. In the pop-up dialogue, you can click **Back to Connector List** to complete the creation of the GCP Pub/Sub Connector or click **Create Rule** to enter the rule creation process.
+9. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the GCP Pub/Sub server.
 
+10. Click the **Add** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
 
-On the Dashboard's Connector page, you can see the status of the Google Pub/Sub Connector as **Connected**. Next, you need to create a rule to specify the data to be forwarded to GCP Pub/Sub.
-
-## Create a Rule for Data Forward
-
-You can continue to create rules to specify the data to be saved into GCP PubSub.
-
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
-
-2. Click **Create** on the top right corner of the page.
-
-3. Enter `my_rule` as the rule ID.
-
-4. Set the rules in the **SQL Editor**. Here if you want to save the MQTT messages under topic `/devices/+/events`  to GCP PubSub, you can use the SQL syntax below.
-
-   Note: If you want to specify your own SQL syntax, make sure that the `SELECT` part includes all fields required by the payload template in the Sink.
-
-   ```sql
-   SELECT
-     *
-   FROM
-     "/devices/+/events"
-   ```
-
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
-
-5. Add an action by selecting `Google Pub/Sub` from the **Action Type** dropdown list, and select the Connector you created before from the **Action** dropdown. Click the **Add** button to add it to the **Action Outputs.**
-
-6. Back on the Create Rule page, click the **Create** button at the bottom to complete the rule creation.
-
-You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Google Pub/Sub Sink.
+You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Google PubSub Sink.
 
 You can also click **Integration** -> **Flow Designer** to view the topology and you can that the messages under topic `/devices/+/events` are sent and saved to GCP PubSub after parsing by rule `my_rule`.
 

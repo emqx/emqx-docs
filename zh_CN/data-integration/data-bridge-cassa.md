@@ -100,6 +100,8 @@ docker exec -it cassa cqlsh "-e \
 
 ## 创建 Cassandra Sink 规则
 
+本节演示了如何为 Cassandra Sink 创建一条规则以指定需要转发至 Cassandra 的数据。以下步骤假定 EMQX 与 Cassandra 均在本地运行，如您在远程运行 EMQX 及 Cassandra，请根据实际情况调整相应配置。
+
 1. 转到 Dashboard **集成** -> **规则**页面。
 
 2. 点击页面右上角的**创建**。
@@ -108,12 +110,12 @@ docker exec -it cassa cqlsh "-e \
 
    注意：如果您希望制定自己的 SQL 语法，需要确保规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量。
 
-```sql
-SELECT
-  *
-FROM
-  "t/#"
-```
+   ```sql
+   SELECT
+     *
+   FROM
+     "t/#"
+   ```
 
 4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。在**动作类型**下拉框中选择 Cassandra，保持**动作**下拉框为默认的“创建动作”选项，您也可以选择一个之前已经创建好的 Cassandra Sink。此处我们创建一个全新的 Sink 并添加到规则中。
 
@@ -127,7 +129,7 @@ FROM
    insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})
    ```
 
-8. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[数据集成](./data-bridges.md)。
+8. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
 
 9. 点击**创建**按钮完成 Sink 的创建，创建成功后页面将回到创建规则，新的 Sink 将添加到规则动作中。
 

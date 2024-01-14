@@ -1,40 +1,50 @@
 # 将 MQTT 数据写入到 ClickHouse
 
-[ClickHouse](https://clickhouse.com/) 是一个高性能、列式存储的分布式数据库管理系统，专门用于处理大规模数据。它具有出色的查询性能、灵活的数据模型和可扩展的分布式架构，适用于多种数据分析场景。
-EMQX 将 MQTT 消息和客户端事件存储到 ClickHouse。
-
 {% emqxce %}
 :::tip
 EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
 :::
 {% endemqxce %}
 
-::: tip 前置准备
+[ClickHouse](https://clickhouse.com/) 是一种高性能的列式 SQL 数据库管理系统（DBMS），用于在线分析处理（OLAP），擅长以最小延迟处理和分析大量数据。它具有出色的查询性能、灵活的数据模型和可扩展的分布式架构，适用于各种数据分析场景。EMQX 支持与 ClickHouse 的数据集成，使您能够将 MQTT 消息和事件数据导入 ClickHouse 进行进一步的分析和处理。
+
+## 工作原理
+
+ClickHouse 数据集成是 EMQX 中的开箱即用功能，旨在结合 MQTT 的实时数据捕获和传输能力与 ClickHouse 的强大数据处理功能。借助内置的规则引擎组件，集成简化了将数据从 EMQX 导入 ClickHouse 进行存储和分析的过程，无需复杂的编码。
+
+下图展示了 EMQX 与 ClickHouse 之间数据集成的典型架构。
+
+<img src="./assets/clickhouse_architecture.png" alt="clickhouse_architecture" style="zoom:67%;" />
+
+将 MQTT 数据导入 ClickHouse 的过程如下：
+
+1. **消息发布和接收**：工业物联网设备通过 MQTT 协议成功连接到 EMQX，并基于其操作状态、读数或触发事件，从机器、传感器和生产线发布实时 MQTT 数据到 EMQX。当 EMQX 收到这些消息时，它启动其规则引擎中的匹配过程。
+2. **消息数据处理**：消息到达后，经过规则引擎处理，然后由 EMQX 中定义的规则处理。基于预定义标准的规则确定哪些消息需要路由到 ClickHouse。如果任何规则指定了有效载荷转换，则应用这些转换，例如转换数据格式、过滤特定信息或使用额外上下文丰富有效载荷。
+3. **数据导入 ClickHouse**：一旦规则引擎识别出一个消息用于 ClickHouse 存储，它就会触发一个动作，将消息转发到 ClickHouse。处理过的数据将被无缝写入 ClickHouse 数据库的集合中。
+4. **数据存储和利用**：随着数据现在存储在 ClickHouse 中，企业可以利用其查询能力应用于各种用例。例如，在物流和供应链管理领域，可以监控和分析 IoT 设备（如 GPS 跟踪器、温度传感器和库存管理系统）的数据，进行实时跟踪、路线优化、需求预测和高效库存管理。
+
+## 功能和优势
+
+与 ClickHouse 的数据集成提供了一系列功能和优势，以确保高效的数据传输、存储和利用：
+
+- **实时数据流处理**：EMQX 专为处理实时数据流而构建，确保从源系统到 ClickHouse 的高效可靠数据传输。它使组织能够实时捕获和分析数据，非常适合需要立即洞察和行动的用例。
+- **高性能和可扩展性**：EMQX 的分布式架构和 ClickHouse 的列式存储格式实现随着数据量增加的无缝扩展。这确保了即使在大数据集下也能保持一致的性能和响应能力。
+- **灵活的数据转换**：EMQX 提供了强大的基于 SQL 的规则引擎，允许组织在将数据存储
+
+到 ClickHouse 之前对数据进行预处理。它支持各种数据转换机制，如过滤、路由、聚合和丰富，使组织能够根据其需求塑造数据。
+
+- **易于部署和管理**：EMQX 提供了用户友好的界面，用于配置数据源、预处理数据规则和 ClickHouse 存储设置。这简化了数据集成过程的设置和持续管理。
+- **高级分析**：ClickHouse 强大的基于 SQL 的查询语言和对复杂分析函数的支持，使用户能够从物联网数据中获得宝贵洞察力，实现预测分析、异常检测等。
+
+## 准备工作
+
+本节描述了您在开始在 EMQX Dashboard 中创建 ClickHouse 数据集成之前需要完成的准备工作。
+
+### 前置准备
 
 - 了解 EMQX 数据集成[规则](./rules.md)
-
 - 了解[数据集成](./data-bridges.md)
-
-- 了解 UNIX 终端及命令
-
-:::
-
-## 功能清单
-
-- [连接池](./data-bridges.md#连接池)
-- [异步请求模式](./data-bridges.md)
-- [批量模式](./data-bridges.md)
-- [缓存队列](./data-bridges.md)
-
-## 快速开始
-
-本节将带您创建一个 ClickHouse 服务器，然后在 EMQX 创建 ClickHouse 的 Sink ，之后再通过创建一条规则来将数据转发至 ClickHouse，以验证该 Sink 是否正常工作。
-
-:::tip
-
-本教程假定 EMQX 与 ClickHouse 均在本地运行，如您在远程运行 EMQX 及 ClickHouse，请根据实际情况调整相应配置。
-
-:::
+- 掌握 UNIX 终端和命令的基础知识
 
 ### 启动 ClickHouse 服务器
 
@@ -71,43 +81,9 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 有关如何通过 Docker 运行 ClickHouse 服务器的更多信息，可阅读 [Docker - ClickHouse Server](https://hub.docker.com/r/clickhouse/clickhouse-server)。
 
-## 创建连接器和 Sink
+## 创建 ClickHouse Sink 规则
 
-本节将通过 Dashboard 演示如何创建到 ClickHouse 的连接器和 Sink。
-
-1. 登陆 EMQX Dashboard，点击左侧目录菜单中的**数据集成** -> **连接器**。
-
-2. 点击页面右上角的**创建**。
-
-3. 在**连接器类型**中选择 **ClickHouse**，点击**下一步**。
-
-4. 输入连接器名称，名称应为大/小写字母和数字的组合。
-
-5. 输入连接信息：
-
-   - **服务器 URL**： `http://127.0.0.1:18123`
-   - **数据库名称**：`mqtt_data`
-   - **用户名**：`emqx`
-   - **密码**：`public`
-
-6. **分隔符**（可选）：用于区分多个输入项，本教程中可保留默认的 `,` 。注意：您只需在启用[批量模式](./data-bridges.md)、且使用其他 [ClickHouse 数据格式](https://clickhouse.com/docs/en/sql-reference/statements/insert-into)时才需更改设置。
-7. 在 SQL 模版中输入以下命令（您可通过[规则引擎](./rules.md)确保输入 SQL 语句中的字符串能被正确转义，以防 SQL 注入攻击）：
-
-   ```sql
-   INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})
-   ```
-
-   其中，`${data}` 和 `${timestamp}` 分别代表消息内容和时间戳，即稍后将在[规则](#创建数据转发规则)时进行配置的消息转发内容。EMQX 在进行消息转发前会按照设定将其替换为相应内容。
-
-8. 高级功能（可选）：具体可阅读[ Sink 的简介部分](./data-bridges.md)。
-
-9. 点击**创建**前，您可点击**测试连接**按钮确保能连接到 ClickHouse 服务器。
-
-10. 最后点击**创建**按钮完成连接器和 Sink 的创建。
-
-在 Dashboard 的连接器页面，可以看到 ClickHouse 的状态为**已连接**。接下来，我们将继续创建一条规则来指定需要转发至 ClickHouse 的数据。
-
-## 创建数据转发规则
+本节演示了如何为 ClickHouse Sink 创建一条规则以指定需要转发至 ClickHouse 的数据。以下步骤假定 EMQX 与 ClickHouse 均在本地运行，如您在远程运行 EMQX 及 ClickHouse，请根据实际情况调整相应配置。
 
 1. 转到 Dashboard **集成** -> **规则**页面。
 
@@ -125,12 +101,38 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
      "t/#"
    ```
 
-5. 点击**添加动作**按钮，在下拉框中选择 `ClickHouse`，在**动作**下拉框中选择之前创建好的 ClickHouse 连接器 。
+5. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。在**动作类型**下拉框中选择 `ClickHouse`，保持**动作**下拉框为默认的“创建动作”选项，您也可以选择一个之前已经创建好的 ClickHouse Sink。此处我们创建一个全新的 Sink 并添加到规则中。
 
-6. 点击**添加**按钮确认添加动作。
-7. 点击最下方**创建**按钮完成规则创建。
+6. 输入 Sink 名称，要求是大小写英文字母和数字组合。
 
-至此您已经完成 Sink 和转发规则的创建，您可以点击**集成** -> **规则**页面看到新建的规则，同时在**动作(Sink)** 标签页看到新建的 ClickHouse Sink。您还可以前往 **数据集成** -> **Flow 设计器** 页面查看拓扑图，可看到 `t/#` 主题的消息已被存储至 ClickHouse。
+7. 输入连接信息：
+
+   - **服务器 URL**： `http://127.0.0.1:18123`
+   - **数据库名称**：`mqtt_data`
+   - **用户名**：`emqx`
+   - **密码**：`public`
+
+8. **分隔符**（可选）：用于区分多个输入项，本示例中可保留默认的 `,` 。注意：您只需在启用[批量模式](./data-bridges.md)、且使用其他 [ClickHouse 数据格式](https://clickhouse.com/docs/en/sql-reference/statements/insert-into)时才需更改设置。
+
+9. 在 SQL 模版中输入以下命令（您可通过[规则引擎](./rules.md)确保输入 SQL 语句中的字符串能被正确转义，以防 SQL 注入攻击）：
+
+   ```sql
+   INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})
+   ```
+
+   其中，`${data}` 和 `${timestamp}` 分别代表消息内容和时间戳，即稍后将在[规则](#创建数据转发规则)时进行配置的消息转发内容。EMQX 在进行消息转发前会按照设定将其替换为相应内容。
+
+10. 高级功能（可选）：具体可阅读[ 高级配置](#高级配置)。
+
+11. 点击**创建**前，您可点击**测试连接**按钮确保能连接到 ClickHouse 服务器。
+
+12. 点击**创建**按钮完成 Sink 的创建，创建成功后页面将回到创建规则，新的 Sink 将添加到规则动作中。
+
+13. 回到规则创建页面，点击**创建**按钮完成整个规则创建。
+
+现在您已成功创建了规则，你可以点击**集成** -> **规则**页面看到新建的规则，同时在**动作(Sink)** 标签页看到新建的 ClickHouse Sink。
+
+至此已经完成整个创建过程，可以前往 **集成** -> **Flow 设计器** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果转发至 ClickHouse。
 
 ## 测试规则
 
