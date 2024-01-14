@@ -1,5 +1,22 @@
 # v5 版本
 
+## 5.4.1
+
+*发布日期: 2024-01-09*
+
+### 修复
+
+- [#12234](https://github.com/emqx/emqx/pull/12234) 解决了 EMQX 5.4.0 之前版本在 `emqx.conf` 中定义的 Open Telemetry 配置的兼容性问题，确保最新 EMQX 发布版本能够平滑兼容旧版配置。
+- [#12236](https://github.com/emqx/emqx/pull/12236) 修复了 MQTT 服务数据集成中客户端 ID 的生成方法，以符合 MQTT 3.1 规范的 23 字节限制。 客户端 ID 现在以用户分配的连接器名称为前缀，后跟节点名称的 SHA 哈希值和池成员 ID 的前 8 个字节。 如果生成的 ID 超过 23 字节，则会将 ID 重新使用 SHA 哈希，并取哈希的前 23 个字符以确保合规性。
+- [#12238](https://github.com/emqx/emqx/pull/12238) 解决了EMQX 5.3.2 版本 HTTP Action 功能中引入的错误格式配置的兼容性问题。
+- [#12240](https://github.com/emqx/emqx/pull/12240) 修改了 `/file_transfer` REST API，按照原始格式返回配置，避免将时间单位（如 "1h"）转换为秒，确保调用者接收到初始配置的值，此修改与其他 GET API 保持一致的数据格式。
+- [#12241](https://github.com/emqx/emqx/pull/12241) 修复了配置额外的 S3 HTTP 请求头导致文件传输中断的问题，确保稳定且不间断的文件传输操作。
+- [#12246](https://github.com/emqx/emqx/pull/12246) 停止在 Docker 中默认暴露不再使用的 11883 端口，并从 Helm  Chart 中移除。
+- [#12249](https://github.com/emqx/emqx/pull/12249) 修复了 `/configs` API 中尝试修改只读配置值导致响应消息乱码的问题。
+- [#12250](https://github.com/emqx/emqx/pull/12250) 解决了 `file_transfer` 配置的 `secret_access_key` 值错误更新为掩码星号 (`*****`) 的问题，确保原始密钥值保持不变以保证安全性。
+- [#12256](https://github.com/emqx/emqx/pull/12256) 修复了没有密码就无法与 MySQL 资源建立连接的问题。
+- [#12264](https://github.com/emqx/emqx/pull/12264) 修复5.4副本节点在滚动升级过程中无法加入运行早于 5.4 版本的核心节点所在集群的问题。
+
 ## 5.4.0
 
 *发布日期: 2023-12-23*
