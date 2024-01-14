@@ -2,7 +2,7 @@
 
 {% emqxce %}
 :::tip
-The ClickHouse bridge is an EMQX Enterprise Edition feature. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+The ClickHouse data integration is an EMQX Enterprise Edition feature. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 :::
 {% endemqxce %}
 
@@ -80,44 +80,7 @@ This section introduces how to start a ClickHouse server using [Docker](https://
 
 You can find more information about running ClickHouse in docker [on dockerhub](https://hub.docker.com/r/clickhouse/clickhouse-server).
 
-## Create a Connector and Sink
-
-This section demonstrates how to create a Connector and Sink in EMQX Dashboard to connect to the ClickHouse server.
-
-This demonstration assumes that you run both EMQX and ClickHouse on the local machine. If you have ClickHouse and EMQX running remotely, adjust the settings accordingly.
-
-1. Log in to the EMQX Dashboard and click **Data Integration** -> **Connector** in the left navigation menu.
-
-2. Click **Create** on the top right corner of the page.
-
-3. On the **Type of Connector** step page, select `ClickHouse` and click **Next**.
-
-4. Enter a name for the Connector. The name should be a combination of uppercase/lowercase letters and numbers.
-
-5. Enter the connection information:
-
-   - **Server URL**: `http://127.0.0.1:18123`
-   - **Database Name**: `mqtt_data`
-   - **Username**: `emqx`
-   - **Password**: `public`
-
-6. Enter the following command in the SQL template (You can use the [Rule Engine](https://chat.openai.com/c/rules.md) to ensure that strings in the input SQL statement are properly escaped to prevent SQL injection attacks):
-
-   ```sql
-   INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})
-   ```
-
-   Here, `${data}` and `${timestamp}` represent the message content and timestamp, respectively, which will be configured later in the rules for message forwarding. EMQX will replace them with the corresponding content before forwarding the message.
-
-7. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
-
-8. Before clicking **Create**, you can click the **Test Connectivity** button to ensure that you can connect to the ClickHouse server.
-
-9. Click the **Create** button. In the pop-up dialogue, you can click **Back to Connector List** to complete the creation of the ClickHouse Connector or click **Create Rule** to enter the rule creation process.
-
-On the Dashboard's Connector page, you can see the status of the ClickHouse Connector as **Connected**. Next, you need to create a rule to specify the data to be forwarded to ClickHouse.
-
-## Create a Rule for Data Forward
+## Create a Rule for Clickhouse Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through the Connector and Sink to ClickHouse. 
 
@@ -139,13 +102,37 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-5. Add an action by selecting `ClickHouse` from the **Action Type** dropdown list, and select the Connector you created before from the **Action** dropdown. Click the **Add** button to add it to the **Action Outputs.**
+5. Select `ClickHouse` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to ClickHouse. Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select a ClickHouse action previously created. In this demonstration, you create a new Sink and add it to the rule.
 
-6. Back on the Create Rule page, click the **Create** button at the bottom to complete the rule creation.
+6. Enter a name for the Connector. The name should be a combination of uppercase/lowercase letters and numbers.
 
-You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new ClickHouse Sink.
+7. Enter the connection information:
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#`  are sent and saved to ClickHouse. 
+   - **Server URL**: `http://127.0.0.1:18123`
+   - **Database Name**: `mqtt_data`
+   - **Username**: `emqx`
+   - **Password**: `public`
+
+8. Enter the following command in the SQL template (You can use the [Rule Engine](https://chat.openai.com/c/rules.md) to ensure that strings in the input SQL statement are properly escaped to prevent SQL injection attacks):
+
+   ```sql
+   INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})
+   ```
+
+   Here, `${data}` and `${timestamp}` represent the message content and timestamp, respectively, which will be configured later in the rules for message forwarding. EMQX will replace them with the corresponding content before forwarding the message.
+
+9. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
+
+10. Before clicking **Create**, you can click the **Test Connectivity** button to ensure that you can connect to the ClickHouse server.
+
+11. Click the **Add** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+
+12. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
+
+
+Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you see the new ClickHouse Sink. 
+
+You can also click **Integration** -> **Flow Designer** to view the topology. You can see that the messages under topic `t/#`  are sent and saved to ClickHouse after parsing by the rule `my_rule`. 
 
 ## Test the Rule
 
