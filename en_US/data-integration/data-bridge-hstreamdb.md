@@ -22,13 +22,13 @@ HSreamDB data integration is only supported in EMQX 5.2.0 and above.
 
 ## How It Works
 
-HStreamDB data bridge is an out-of-the-box feature of EMQX that combines EMQX's device connectivity and message transmission capabilities with HStreamDB's robust data storage and processing capabilities. With the built-in rule engine component, the data streaming and processing process is simplified between the two platforms.
+HStreamDB data integration is an out-of-the-box feature of EMQX that combines EMQX's device connectivity and message transmission capabilities with HStreamDB's robust data storage and processing capabilities. With the built-in rule engine component, the data streaming and processing process is simplified between the two platforms.
 
 The diagram below illustrates a typical architecture of data integration between EMQX and HStreamDB:
 
 ![EMQX Integration HStreamDB](./assets/emqx-integration-hstreamdb.png)
 
-EMQX forwards MQTT data to HStreamDB through the rule engine and configured data bridge, and the complete process is as follows:
+EMQX forwards MQTT data to HStreamDB through the rule engine and configured Sink, and the complete process is as follows:
 
 1. **Message publication and reception**: IoT devices establish successful connections through the MQTT protocol and subsequently publish telemetry and status data to specific topics. When EMQX receives these messages, it initiates the matching process within its rules engine.
 2. **Rule engine processes messages**: Using the built-in rule engine, MQTT messages from specific sources can be processed based on topic matching. The rule engine matches corresponding rules and processes messages, such as data format conversion, filtering specific information, or enriching messages with context information.
@@ -49,18 +49,18 @@ The data integration with HStreamDB brings the following features and advantages
 - **Large-Scale Data Stream Storage**: HStreamDB supports the reliable storage of millions of data streams in a specially designed distributed, fault-tolerant log storage cluster. It can replay or push real-time data stream updates to applications as needed. Perfectly integrating with EMQX's message model, it achieves large-scale IoT data collection, transmission, and storage.
 - **Cluster and Scalability**: Built with a cloud-native architecture, EMQX and HStreamDB support online scaling and dynamic expansion and contraction of clusters, allowing flexible horizontal scaling to meet growing business demands.
 - **Flexible Processing Capabilities**: In HStreamDB, you can use familiar SQL to filter, transform, aggregate, and join multiple data streams. It also supports real-time processing, monitoring, and analysis of data streams using standard SQL and materialized views, providing real-time data insights.
-- **Processing Capabilities in High-Throughput Scenarios**: HStreamDB Data Bridge supports both synchronous and asynchronous write modes, allowing for a flexible balance between latency and throughput according to different scenarios.
+- **Processing Capabilities in High-Throughput Scenarios**: HStreamDB data integration supports both synchronous and asynchronous write modes, allowing for a flexible balance between latency and throughput according to different scenarios.
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create a HStreamDB data bridge, including how to start HStreamDB services and create streams.
+This section describes the preparations you need to complete before you start to create a HStreamDB data integration, including how to start HStreamDB services and create streams.
 
 The sub-sections below describe how to install and connect to HStreamDB on Linux/MacOS using Docker images. Make sure you have installed Docker and use Docker Compose v2 if possible. For other installation methods of HStreamDB and HStreamDB Platform, please refer to [Quickstart with Docker-Compose](https://docs.hstream.io/start/quickstart-with-docker.html) and [Getting Started with HStream Platform](https://docs.hstream.io/start/try-out-hstream-platform.html).
 
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [Data Integration](./data-bridges.md)
+- Knowledge about [data integration](./data-bridges.md)
 
 ### Start HStreamDB TCP Service and Create Streams
 
@@ -513,64 +513,11 @@ Now the directory structure should be:
 
    </details>
 
-## Create Connector
+## Create a Rule for HStreamDB Sink
 
-This section introduces how to create HStreamDB data bridges in EMQX Dashboard. Data bridges for client message storage and event recording require different SQL templates. Therefore, you need to create 2 different data bridges for message storage and event recording.
+This section demonstrates how to create a rule to specify the data to be saved into HStreamDB and a rule for the online/offline status recording. It assumes that you run both EMQX and HStreamDB on the local machine. If you have HStreamDB and EMQX running remotely, adjust the settings accordingly. 
 
-The demonstration in this section assumes you run EMQX and HStreaDB in docker on the local machine. If you have HStreamDB and EMQX running remotely, please adjust the settings accordingly.
-
-1. Go to EMQX Dashboard, click **Integration** -> **Connector**.
-
-2. Click **Create** on the top right corner of the page.
-
-3. In the **Create Connector** page, click to select **HStreamDB**, and then click **Next**.
-
-4. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
-
-5. Enter the HStreamDB connection information. Fill in the required fields (marked with an asterisk).
-
-   - **HStreamDB Server URL**: `hstream://127.0.0.1:6570`, or use the actual HStreamDB address and port.
-     - Scheme supports `http`, `https`, `hstream`, and `hstreams`.
-     - For TLS connection, scheme needs to be `hstreams` or `https`, for example `hstreams://127.0.0.1:6570`.
-   - **HStreamDB Stream Name**: Enter the name of the Streams you created before.
-     - For client message storage, enter `mqtt_message`.
-     - For event recording, enter `mqtt_connect`.
-   - **HStreamDB Partition Key**: Sepecify the partition key that is used to determine where data will be stored within the HStreamDB's various partitions or nodes. For example, you can enter `${topic]}` to ensure that messages of the same topic are written into HStreamDB in order. If not specified, a default key is used and data will be mapped to some default shard.
-   - **HStreamDB gRPC Timeout**: Specify the maximum amount of time the system will wait for a response from the HStreamDB server when a gRPC request is made. The default value is `30` second.
-   - **Enable TLS**: You can click the toggle switch to enable the TLS connection if required. When TLS is enabled, disable **TLS Verify**. Upload the certificates and key generated under the `tls-deploy/ca` directory:
-     - Upload `ca/hstream.crt` to **TLS Cert**.
-     - Upload `ca/hstream.key` to **TLS Key**.
-     - Upload `ca/certs/root_ca.crt` to **CA Cert**.
-
-6. Configure **HStream Record Template** according to your business needs:
-
-   - To create a data bridge for forwarding messages to the specific topic, use the template below for data insert:
-
-     ```json
-     {"id": ${id}, "topic": "${topic}", "qos": ${qos}, "payload": "${payload}"}
-     ```
-
-   - To create a data bridge for online/offline status recording, use the following SQL statement for data insert:
-
-     ```json
-     {"clientid": "${clientid}", "event_type": "${event}", "event_time": ${timestamp}}
-     ```
-
-7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md).
-
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to HStreamDB.
-
-9. Click **Create** to finish the creation of the data bridge.
-
-   A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into HStreamDB. You can also create rules by following the steps in [Create Rules for HStreamDB Data Bridge](#create-rules-for-hstreamdb-data-bridge).
-
-Now the HStream data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**.
-
-## Create Connector
-
-After you have successfully created the data bridge to HStreamDB, you can continue to create rules to specify the data to be saved into HStreamDB and rules for the online/offline status recording.
-
-1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
@@ -578,7 +525,7 @@ After you have successfully created the data bridge to HStreamDB, you can contin
 
    - To create a rule for message storage, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to HStreamDB.
 
-     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
+     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in `SELECT` part.
 
      ```sql
      SELECT
@@ -596,10 +543,58 @@ After you have successfully created the data bridge to HStreamDB, you can contin
        "$events/client_connected", "$events/client_disconnected"
      ```
 
-4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data Bridge**. Click the **Add** button.
-5. Click the **Create** button to finish the setup.
+   ::: tip
 
-Now you have successfully created the rule for HStreamDB data bridge. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to HStreamDB after parsing by rule  `my_rule`.
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+
+   :::
+
+4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to HStreamDB.
+
+5. Select `HStreamDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+
+6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+
+7. Enter the HStreamDB connection information. Fill in the required fields (marked with an asterisk).
+
+   - **HStreamDB Server URL**: `hstream://127.0.0.1:6570`, or use the actual HStreamDB address and port.
+     - Scheme supports `http`, `https`, `hstream`, and `hstreams`.
+     - For TLS connection, scheme needs to be `hstreams` or `https`, for example `hstreams://127.0.0.1:6570`.
+   - **HStreamDB Stream Name**: Enter the name of the Streams you created before.
+     - For client message storage, enter `mqtt_message`.
+     - For event recording, enter `mqtt_connect`.
+   - **HStreamDB Partition Key**: Sepecify the partition key that is used to determine where data will be stored within the HStreamDB's various partitions or nodes. For example, you can enter `${topic]}` to ensure that messages of the same topic are written into HStreamDB in order. If not specified, a default key is used and data will be mapped to some default shard.
+   - **HStreamDB gRPC Timeout**: Specify the maximum amount of time the system will wait for a response from the HStreamDB server when a gRPC request is made. The default value is `30` seconds.
+   - **Enable TLS**: You can click the toggle switch to enable the TLS connection if required. When TLS is enabled, disable **TLS Verify**. Upload the certificates and key generated under the `tls-deploy/ca` directory:
+     - Upload `ca/hstream.crt` to **TLS Cert**.
+     - Upload `ca/hstream.key` to **TLS Key**.
+     - Upload `ca/certs/root_ca.crt` to **CA Cert**.
+
+8. Configure **HStream Record Template** according to your business needs:
+
+   - To create a Sink for forwarding messages to the specific topic, use the template below for data insert:
+
+     ```json
+     {"id": ${id}, "topic": "${topic}", "qos": ${qos}, "payload": "${payload}"}
+     ```
+
+   - To create a Sink for online/offline status recording, use the following SQL statement for data insert:
+
+     ```json
+     {"clientid": "${clientid}", "event_type": "${event}", "event_time": ${timestamp}}
+     ```
+
+9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md).
+
+10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the HStreamDB server.
+
+11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+
+You have now successfully created the rule for forwarding data and recording online/offline status through the HStreamDB Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new HStreamDB Sink.
+
+You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to HStreamDB after parsing by rule `my_rule`.
 
 ## Test Rule
 
@@ -609,9 +604,9 @@ Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello HStreamDB" }'
 ```
 
-Check the running status of the two data bridges.
+Check the running status of the two Sinks.
 
-- In the data bridge for message storage, there should be one new incoming and one new outgoing message. Check whether the data is written into the Stream ` mqtt_messages`:
+- For the Sink for message storage, there should be one new incoming and one new outgoing message. Check whether the data is written into the Stream ` mqtt_messages`:
 
 ```bash
 # Enter `Control-C` to stop after reading Stream `mqtt_message`
@@ -620,7 +615,7 @@ timestamp: "1693903488278", id: 1947758763121538-8589934593-0, key: "", record: 
 ^CRead Done.
 ```
 
-- For the data bridge used to record online/offline status, there should be two new events recorded: client connected and client disconnected. Check whether the status recording is written into the Stream `mqtt_connect`:
+- For the Sink used to record online/offline status, there should be two new events recorded: client connected and client disconnected. Check whether the status recording is written into the Stream `mqtt_connect`:
 
 ```bash
 # Enter `Control-C` to stop after reading Stream `mqtt_connect`

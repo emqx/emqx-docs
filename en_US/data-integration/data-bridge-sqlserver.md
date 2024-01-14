@@ -8,7 +8,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 [SQL Server](https://www.microsoft.com/en-us/sql-server/) is one of the leading relational commercial database solutions, widely used in enterprises and organizations of various sizes and types. EMQX supports integration with SQL Server, enabling you to save MQTT messages and client events to SQL Server. This facilitates the construction of complex data pipelines and analytical processes for data management and analysis, or for managing device connections and integrating with other enterprise systems such as ERP, CRM, and BI.
 
-This page provides a comprehensive introduction to the data integration between EMQX and Microsoft SQL Server with practical instructions on creating a rule and data bridge.
+This page provides a detailed overview of the data integration between EMQX and Microsoft SQL Server with practical instructions on creating and validating the data integration.
 
 {% emqxee %}
 
@@ -22,7 +22,7 @@ The data integration with Microsoft SQL Server is supported in EMQX Enterprise 5
 
 ## How It Works
 
-Microsoft SQL Server data integration is an out-of-the-box feature in EMQX, combining EMQX's device connectivity and message transmission capabilities with the powerful data storage capabilities of Microsoft SQL Server. Through the built-in [rule engine](./rules.md) component and data bridge, you can store MQTT messages and client events in Microsoft SQL Server. Additionally, events can trigger updates or deletions of data within Microsoft SQL Server, enabling the recording of information such as device online status and connection history. This integration simplifies the process of ingesting data from EMQX to SQL Server for storage and management, eliminating the need for complex coding.
+Microsoft SQL Server data integration is an out-of-the-box feature in EMQX, combining EMQX's device connectivity and message transmission capabilities with the powerful data storage capabilities of Microsoft SQL Server. Through the built-in [rule engine](./rules.md) component and Sink, you can store MQTT messages and client events in Microsoft SQL Server. Additionally, events can trigger updates or deletions of data within Microsoft SQL Server, enabling the recording of information such as device online status and connection history. This integration simplifies the process of ingesting data from EMQX to SQL Server for storage and management, eliminating the need for complex coding.
 
 The diagram below illustrates a typical architecture of data integration between EMQX and SQL Server:
 
@@ -46,12 +46,12 @@ The data integration with Microsoft SQL Server offers a range of features and be
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create the Microsoft SQL Server data bridges, including how to install and connect to the Microsoft SQL Server, create database and data tables, and install and configure the ODBC driver.
+This section describes the preparations you need to complete before you start to create the Microsoft SQL Server data integration, including how to install and connect to the Microsoft SQL Server, create database and data tables, and install and configure the ODBC driver.
 
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [Data Integration](./data-bridges.md)
+- Knowledge about [data integration](./data-bridges.md)
 
 ### Install and Connect to Microsoft SQL Server
 
@@ -230,66 +230,20 @@ Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
 FileUsage   = 1
 ```
 
-## Create Connector
 
-This section demonstrates how to create Microsoft SQL Server data bridge for message storage and events recording. It assumes that you run both EMQX and Microsoft SQL Server on the local machine. If you have Microsoft SQL Server and EMQX running remotely, adjust the settings accordingly.
+## Create a Rule for Microsoft SQL Server Sink
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
-
-2. Click **Create** on the top right corner of the page.
-
-3. In the **Create Connector** page, click to select **Microsoft SQL Server**, and then click **Next**.
-
-4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
-
-5. Input the connection information:
-
-   - **Server Host**: Input **127.0.0.1:1433**, or the URL if the Microsoft SQL Server is running remotely.
-   - **Database Name**: Input `mqtt`.
-   - **Username**: Input `sa`.
-   - **Password**: Input preset password `mqtt_public1`, or use the actual password.
-   - **SQL Server Driver Name**: Input `ms-sql`, as the DSN Name configured in `odbcinst.ini`
-
-6. Configure the **SQL Template** based on the feature to use:
-
-   - To configure the SQL template for message storage, use the following SQL statement:
-
-     Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
-
-     ```sql
-     insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
-     ```
-
-   - To configure the SQL template for online/offline status recording, use the following SQL statement:
-
-     ```sql
-     insert into t_mqtt_events(clientid, event_type, event_time) values ( ${clientid}, ${event}, DATEADD(MS, ${ms_shift}, DATEADD(S, ${s_shift}, '19700101 00:00:00:000') ) )
-     ```
-
-7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md).
-
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Microsoft SQL Server.
-
-9. Click **Create** to finish the creation of the data bridge.
-
-   A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Microsoft SQL Server. You can also create rules by following the steps in [Create Rules for Microsoft SQL Server Data Bridge](#create-rules-for-sqlserver-data-bridge).
-
-Now that you have created the data bridge, and the Microsoft SQL Server data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**.
-
-
-## Create Connector
-
-After you have successfully created the data bridge to Microsoft SQL Server, you can continue to create rules to specify the data to be saved into Microsoft SQL Server and rules for the online/offline status recording.
+This section demonstrates how to create rules to specify the data to be saved into Microsoft SQL Server and to record client's online/offline status. It assumes that you run both EMQX and Microsoft SQL Server on the local machine. If you have Microsoft SQL Server and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
+3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
 
    - To create a rule for message storage, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to Microsoft SQL Server.
 
-     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
+     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
 
      ```sql
      SELECT
@@ -309,13 +263,55 @@ After you have successfully created the data bridge to Microsoft SQL Server, you
        "$events/client_connected", "$events/client_disconnected"
      ```
 
-4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge we just created under **Data Bridge**. Click the **Add** button.
+   ::: tip
 
-5. Click the **Create** button to finish the setup.
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-Now you have successfully created the rule for Microsoft SQL Server data bridge. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Microsoft SQL Server after parsing by rule  `my_rule`.
+   :::
 
-## Test Rule
+4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to Microsoft SQL Server.
+
+5. Select `Microsoft SQL Server` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Microsoft SQL Server Sink if you have created one. This demonstration will create a new Sink.
+
+6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+
+7. Enter the connection information:
+
+   - **Server Host**: Enter `127.0.0.1:1433`, or the URL if the Microsoft SQL Server is running remotely.
+   - **Database Name**: Enter `mqtt`.
+   - **Username**: Enter `sa`.
+   - **Password**: Enter the preset password `mqtt_public1`, or use the actual password.
+   - **SQL Server Driver Name**: Enter `ms-sql`, as the DSN Name configured in `odbcinst.ini`
+
+8. Configure the **SQL Template** based on the feature to use:
+
+   - To configure the SQL template for message storage, use the following SQL statement:
+
+     Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+
+     ```sql
+     insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
+     ```
+
+   - To configure the SQL template for online/offline status recording, use the following SQL statement:
+
+     ```sql
+     insert into t_mqtt_events(clientid, event_type, event_time) values ( ${clientid}, ${event}, DATEADD(MS, ${ms_shift}, DATEADD(S, ${s_shift}, '19700101 00:00:00:000') ) )
+     ```
+
+9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md).
+
+10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Microsoft SQL Server.
+
+11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+
+You have now successfully created the rule for the Microsoft SQL Server Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Microsoft SQL Server Sink.
+
+You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to Microsoft SQL Server after parsing by rule `my_rule`.
+
+## Test the Rule
 
 Use MQTT X  to send a message to topic  `t/1`  to trigger an online/offline event.
 
@@ -323,9 +319,9 @@ Use MQTT X  to send a message to topic  `t/1`  to trigger an online/offline even
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello SQL Server" }'
 ```
 
-Check the running statistics of the Microsoft SQL Server data bridges.
+Check the running statistics of the Microsoft SQL Server Sink.
 
-- For the data bridge used to store messages, there should be one new matching and one new outgoing message. Check whether the data is written into the `mqtt.dbo.t_mqtt_msg` data table.
+- For the Sink used to store messages, there should be one new matching and one new outgoing message. Check whether the data is written into the `mqtt.dbo.t_mqtt_msg` data table.
 
 ```bash
 1> SELECT * from mqtt.dbo.t_mqtt_msg
@@ -338,7 +334,7 @@ id          msgid                                                            top
 1>
 ```
 
-- For the data bridge used to record online/offline status, there should be two new events recorded: client connected and client disconnected. Check whether the status recording is written into the `mqtt.dbo.t_mqtt_events` data table.
+- For the Sink used to record online/offline status, there should be two new events recorded: client connected and client disconnected. Check whether the status recording is written into the `mqtt.dbo.t_mqtt_events` data table.
 
 ```bash
 1> SELECT * from mqtt.dbo.t_mqtt_events

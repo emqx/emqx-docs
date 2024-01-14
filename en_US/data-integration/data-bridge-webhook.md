@@ -136,7 +136,7 @@ Now you have successfully created the rule and you can see the new rule appear o
 
 You can also click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to HTTP Server after parsing by the rule `my_rule`. 
 
-## Test Rule
+## Test the Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 

@@ -8,7 +8,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 EMQX supports bridging data into [RocketMQ](https://rocketmq.apache.org/), so you can forward MQTT messages and client events to RocketMQ. For example, you can use RocketMQ to collect sensor data from devices, log data, etc.
 
-This page provides a comprehensive introduction to the data integration between EMQX and RocketMQ with practical instructions on creating a rule and data bridge.
+This page provides a detailed overview of the data integration between EMQX and RocketMQ with practical instructions on creating and validating the data integration.
 
 ## How It Works
 
@@ -32,17 +32,17 @@ The data integration with RocketMQ brings the following features and advantages 
 - **Reliable IoT Data Message Delivery**: EMQX can reliably batch and send MQTT messages to RocketMQ, enabling the integration of IoT devices with RocketMQ and application systems.
 - **MQTT Message Transformation**: Using the rule engine, EMQX can filter and transform MQTT messages. Messages can undergo data extraction, filtering, enrichment, and transformation before being sent to RocketMQ.
 - **Cloud-Native Elastic Scaling**: EMQX and RocketMQ are both applications built on cloud-native architecture, offering friendly Kubernetes (K8s) support and integration with the cloud-native ecosystem. They can infinitely and elastically scale to accommodate the rapid development of business needs.
-- **Flexible Topic Mapping**: RocketMQ Data Bridge supports flexible mapping of MQTT topics to RocketMQ topics, allowing easy configuration of keys (Key) and values (Value) for data in RocketMQ messages.
-- **Processing Capabilities in High-Throughput Scenarios**: RocketMQ Data Bridge supports both synchronous and asynchronous write modes, allowing for a flexible balance between latency and throughput according to different scenarios.
+- **Flexible Topic Mapping**: RocketMQ data integration supports flexible mapping of MQTT topics to RocketMQ topics, allowing easy configuration of keys (Key) and values (Value) for data in RocketMQ messages.
+- **Processing Capabilities in High-Throughput Scenarios**: RocketMQ data integration supports both synchronous and asynchronous write modes, allowing for a flexible balance between latency and throughput according to different scenarios.
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create the RocketMQ data bridges, including how to set up the RocketMQ server.
+This section describes the preparations you need to complete before you start to create the RocketMQ data integration, including how to set up the RocketMQ server.
 
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [Data Integration](./data-bridges.md)
+- Knowledge about [data integration](./data-bridges.md)
 
 ### Install RocketMQ 
 
@@ -134,41 +134,11 @@ In Linux, you should change the `host.docker.internal` to your real IP address.
 
 :::
 
-## Create Connector
+## Create a Rule for RocketMQ Sink
 
-This section demonstrates how to create the RockeMQ data bridge in EMQX Dashboard. It assumes that you run both EMQX and RocketMQ on the local machine. If you have RocketMQ and EMQX running remotely, adjust the settings accordingly.
+This section demonstrates how to create a rule to specify the data to be saved into RocketMQ or to record client status. You need to create two different rules for messages forward and event records. 
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
-
-2. Click **Create** on the top right corner of the page.
-
-3. In the **Create Connector** page, click to select **RocketMQ**, and then click **Next**.
-
-4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
-
-5. Input the connection information. Input `127.0.0.1:9876` as the **Server**,  `TopicTest` as the **Topic**, and leave others as default.
-
-6. Leave the **Template** empty by default.
-
-   ::: tip
-
-   When this value is empty the whole message will be forwarded to the RocketMQ. The actual value is JSON template data.
-
-   :::
-
-7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
-
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the RocketMQ server.
-
-9. Then click **Create** to finish the creation of the data bridge.
-
-   A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into RocketMQ. You can also create rules by following the steps in [Create Rules for RocketMQ Data Bridge](#create-rules-for-rocketmq-data-bridge).
-
-Now the RocketMQ data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
-
-## Create Connector
-
-Now that you have successfully created the data bridge to RocketMQ, you can continue to create rules to specify the data to be saved into RocketMQ. You need to create two different rules for messages forward and event records. 
+It assumes that you run both EMQX and RocketMQ on the local machine. If you have RocketMQ and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -178,7 +148,7 @@ Now that you have successfully created the data bridge to RocketMQ, you can cont
 
    - To create a rule for message storage, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to RocketMQ.
 
-     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
+     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
 
      ```sql
      SELECT 
@@ -201,11 +171,40 @@ Now that you have successfully created the data bridge to RocketMQ, you can cont
      For convenience, the `TopicTest` topic will be reused to receive online/offline events.
 
      :::
+     
+     ::: tip
+     
+     If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+     
+     :::
 
-4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**. Click the **Add** button. 
-6. Click the **Create** button to finish the setup. 
+4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to RocketMQ.
 
-Now you have successfully created the data bridge to RocketMQ. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to RocketMQ after parsing by rule `my_rule`. 
+5. Select `RocketMQ` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+
+6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+
+7. Enter the connection information. Enter `127.0.0.1:9876` as the **Server**,  `TopicTest` as the **Topic**, and leave others as default.
+
+8. Leave the **Template** empty by default.
+
+   ::: tip
+
+   When this value is empty the whole message will be forwarded to the RocketMQ. The actual value is JSON template data.
+
+   :::
+
+9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md).
+
+10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the RocketMQ server.
+
+11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+
+You have now successfully created the rule for the RocketMQ Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new RockeMQ Sink.
+
+You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to RocketMQ after parsing by rule `my_rule`.
 
 ## Test Rule
 
@@ -215,7 +214,7 @@ Use MQTTX to send a message to topic `t/1` to trigger an online/offline event.
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello RocketMQ" }'
 ```
 
-Check the running status of the data bridge, there should be one new incoming and one new outgoing message. 
+Check the running status of the Sink, there should be one new incoming and one new outgoing message. 
 
 Check whether the data is forwarded to the `TopicTest` topic. 
 

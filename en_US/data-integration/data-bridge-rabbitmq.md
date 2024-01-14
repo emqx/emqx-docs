@@ -2,13 +2,13 @@
 
 {% emqxce %}
 :::tip
-The RabbitMQ bridge is an EMQX Enterprise Edition feature. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+The RabbitMQ data integration is an EMQX Enterprise Edition feature. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 :::
 {% endemqxce %}
 
 [RabbitMQ](https://www.rabbitmq.com/) is a widely used open-source message broker that implements the Advanced Message Queuing Protocol (AMQP). It provides a robust and scalable platform for messaging between distributed systems. EMQX supports integration with RabbitMQ, allowing you to forward MQTT messages and events to RabbitMQ.
 
-This page provides a comprehensive introduction to the data integration between EMQX and RabbitMQ with practical instructions on creating a rule and data bridge.
+This page provides a detailed overview of the data integration between EMQX and RabbitMQ with practical instructions on creating and validating the data integration.
 
 ## How It Works
 
@@ -31,19 +31,19 @@ The data integration with RabbitMQ brings the following features and advantages 
 
 - **Reliable IoT Data Message Delivery**: EMQX ensures reliable connections and message delivery from devices to the cloud, while RabbitMQ handles message persistence and reliable delivery across different services, ensuring data reliability throughout various processes. 
 - **MQTT Message Transformation**: Using the rule engine, EMQX can filter and transform MQTT messages. Messages can undergo data extraction, filtering, enrichment, and transformation before being sent to RabbitMQ.
-- **Flexible Message Mapping**: RabbitMQ Data Bridge supports flexible mapping of MQTT topics to RabbitMQ Routing Key and Exchange, allowing seamless integration between MQTT and RabbitMQ.
+- **Flexible Message Mapping**: RabbitMQ data integration supports flexible mapping of MQTT topics to RabbitMQ Routing Key and Exchange, allowing seamless integration between MQTT and RabbitMQ.
 - **High Availability and Cluster Support**: EMQX and RabbitMQ both support the construction of highly available message broker clusters, ensuring that the system can continue to provide services even in the event of node failures. Leveraging the cluster capabilities also provides excellent scalability.
-- **Processing Capabilities in High-Throughput Scenarios**: RabbitMQ Data Bridge supports both synchronous and asynchronous write modes, allowing for a flexible balance between latency and throughput according to different scenarios.
+- **Processing Capabilities in High-Throughput Scenarios**: RabbitMQ data integration supports both synchronous and asynchronous write modes, allowing for a flexible balance between latency and throughput according to different scenarios.
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create the RabbitMQ data bridges, including how to create a RabbitMQ server and create RabbitMQ test exchange and queue.
+This section describes the preparations you need to complete before you start to create the RabbitMQ data integration, including how to create a RabbitMQ server and create RabbitMQ test exchange and queue.
 
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 
-- Knowledge about [data bridges](./data-bridges.md)
+- Knowledge about [data integration](./data-bridges.md)
 
 - Basic knowledge of UNIX terminal and commands
 
@@ -88,80 +88,18 @@ After the RabbitMQ server is started, you can create a test exchange and a queue
    * **Arguments**: Leave empty
 7. Click the **Bind** button to bind the test queue to the test exchange with the specified routing key.
 
-## Create Connector
+## Create a Rule for RabbitMQ Sink
 
-This section demonstrates how to create a RabbitMQ data bridge in EMQX Dashboard. It assumes that you run both EMQX and RabbitMQ on the local machine. If you have RabbitMQ and EMQX running remotely, please adjust the settings accordingly.
-
-1. Go to the EMQX Dashboard, and click **Integration -> Data Bridge**.
-
-2. Click **Create** on the top right corner of the page.
-
-3. In the **Create Connector** page, click to select **RabbitMQ**, and then click **Next**.
-
-4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
-
-5. Input the connection information:
-   * **Server**: Input `localhost` or the actual hostname/IP if the RabbitMQ server is running remotely.
-   
-   * **Port**: Input `5672` or the actual port if different.
-   
-   * **Username**: Input `guest`.
-   
-   * **Password**: Input `guest`.
-   
-   * **Exchange**: Input `test_exchange` created before, which means messages will be published to this exchange.
-   
-   * **Routing Key**: Input `test_routing_key` created before, which is the RabbitMQ routing key to be used when publishing messages.
-   
-   * **Virtual Host**: Input RabbitMQ virtual host;  `/` by default.
-   
-   * In the **Message Delivery Mode** dropdown, choose between `non_persistent` and `persistent`:
-       * `non_persistent` (default): Messages are not persisted to disk and may be lost if RabbitMQ restarts or crashes.
-
-       * `persistent`: Messages are persisted to disk, providing durability in case RabbitMQ restarts or crashes. 
-       
-         ::: tip
-       
-         You may also need to set the queue and exchange as durable to prevent messages from being lost in case RabbitMQ is restarted. See the RabbitMQ [documentation](https://www.rabbitmq.com/documentation.html) for more information.
-       
-         :::
-   
-   * **Wait for Publish Confirmations**: Enabled by default to ensure that messages are successfully published to RabbitMQ. 
-   
-       ::: tip
-   
-       With this option enabled RabbitMQ broker acknowledges the receipt of a published message before considering it successfully published, which improves the reliability of your message delivery. 
-   
-       :::
-   
-   * **Publish Confirmation Timeout**: `30` seconds by default. The publish confirmation timeout determines the duration the publisher will wait for the broker's acknowledgment before considering the publish operation a failure.
-   
-   * **Payload Template**: The default value is an empty string, meaning the message payload will be forwarded as JSON-formatted text to RabbitMQ without modification.
-   
-       You can also define a custom message payload format using placeholders within the template to dynamically include data from the incoming MQTT messages. For example, if you want to include the MQTT message payload and its timestamp in the RabbitMQ message, you can use the following template:
-   
-       ```json
-       {"payload": "${payload}", "timestamp": ${timestamp}}
-       ```
-   
-       This template will produce a JSON-formatted message containing the payload and timestamp of the incoming MQTT message. `${payload}` and `${timestamp}` are placeholders and will be replaced by the actual values from the message when it is forwarded to the RabbitMQ server. 
-   
-6. Leave other options as default.
-7. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the RabbitMQ server.
-
-8. Click **Create** to finish the creation of the data bridge.
-
-   A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into RabbitMQ. For detailed steps, refer to [Create a Rule for RabbitMQ Data Bridge](#create-a-rule-for-rabbitmq-data-bridge).
-
-Now the RabbitMQ data bridge should appear in the data bridge list (**Integration -> Data Bridge**) with **Resource Status** as Connected. You can continue to create a rule to forward data to the new RabbitMQ bridge.
-
-## Create Connector
+This section demonstrates how to create a rule to specify the data to be forwarded to RabbitMQ. It assumes that you run both EMQX and RabbitMQ on the local machine. If you have RabbitMQ and EMQX running remotely, please adjust the settings accordingly.
 
 1. Go to the EMQX Dashboard, and click Data **Integration -> Rules**.
+
 2. Click **Create** on the top right corner of the page.
-3. Input a rule ID, for example, `my_rule`.
-4. Input the following statement in the SQL editor, which will forward the MQTT messages matching the topic pattern `t/#`:
-   
+
+3. Enter a rule ID, for example, `my_rule`.
+
+4. Enter the following statement in the SQL editor, which will forward the MQTT messages matching the topic pattern `t/#`:
+
    ```sql
    SELECT 
      payload as data,
@@ -169,16 +107,84 @@ Now the RabbitMQ data bridge should appear in the data bridge list (**Integratio
    FROM
      "t/#"
    ```
-   
-5. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**.
-6. Click the **Add** button to finish the setup.
-7. Click the **Create** button at the bottom of the page to finish the setup.
 
-Now a rule to forward data to RabbitMQ via a RabbitMQ bridge is created. You can click **Integration -> Flows** to view the topology. It can be seen that the messages under the topic `t/#` are sent and saved to RabbitMQ.
+   ::: tip
 
-## Test Rule
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-You can use the built-in WebSocket client in the EMQX dashboard to test our rule and bridge.
+   :::
+
+5. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to RabbitMQ.
+
+6. Select `RabbitMQ` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+
+7. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+
+8. Enter the connection information:
+
+   * **Server**: Enter `localhost` or the actual hostname/IP if the RabbitMQ server is running remotely.
+
+   * **Port**: Enter `5672` or the actual port if different.
+
+   * **Username**: Enter `guest`.
+
+   * **Password**: Enter `guest`.
+
+   * **Exchange**: Enter `test_exchange` created before, which means messages will be published to this exchange.
+
+   * **Routing Key**: Enter `test_routing_key` created before, which is the RabbitMQ routing key to be used when publishing messages.
+
+   * **Virtual Host**: Enter RabbitMQ virtual host;  `/` by default.
+
+   * In the **Message Delivery Mode** dropdown, select between `non_persistent` and `persistent`:
+
+     * `non_persistent` (default): Messages are not persisted to disk and may be lost if RabbitMQ restarts or crashes.
+
+     * `persistent`: Messages are persisted to disk, providing durability in case RabbitMQ restarts or crashes. 
+
+       ::: tip
+
+       You may also need to set the queue and exchange as durable to prevent messages from being lost in case RabbitMQ is restarted. See the RabbitMQ [documentation](https://www.rabbitmq.com/documentation.html) for more information.
+
+       :::
+
+   * **Wait for Publish Confirmations**: Enabled by default to ensure that messages are successfully published to RabbitMQ. 
+
+     ::: tip
+
+     With this option enabled RabbitMQ broker acknowledges the receipt of a published message before considering it successfully published, which improves the reliability of your message delivery. 
+
+     :::
+
+   * **Publish Confirmation Timeout**: `30` seconds by default. The publish confirmation timeout determines the duration the publisher will wait for the broker's acknowledgment before considering the publish operation a failure.
+
+   * **Payload Template**: The default value is an empty string, meaning the message payload will be forwarded as JSON-formatted text to RabbitMQ without modification.
+
+     You can also define a custom message payload format using placeholders within the template to dynamically include data from the incoming MQTT messages. For example, if you want to include the MQTT message payload and its timestamp in the RabbitMQ message, you can use the following template:
+
+     ```json
+     {"payload": "${payload}", "timestamp": ${timestamp}}
+     ```
+
+     This template will produce a JSON-formatted message containing the payload and timestamp of the incoming MQTT message. `${payload}` and `${timestamp}` are placeholders and will be replaced by the actual values from the message when it is forwarded to the RabbitMQ server. 
+
+9. Leave other options as default.
+
+10. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see the relevant configuration information in [Features of Sink](./data-bridges.md).
+
+11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the RabbitMQ server.
+
+12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+
+You have now successfully created the rule for forwarding data through the RabbitMQ Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new RabbitMQ Sink.
+
+You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to RabbitMQ after parsing by rule `my_rule`.
+
+## Test the Rule
+
+You can use the built-in WebSocket client in the EMQX dashboard to test our rule and Sink.
 
 1. Click **Diagnose** -> **WebSocket Client** in the left navigation menu of the Dashboard.
 
@@ -195,7 +201,7 @@ You can use the built-in WebSocket client in the EMQX dashboard to test our rule
    
 5. Click **Publish** to send the message. 
 
-   If the data bridge and rule are created successfully, a message should have been published to the specified exchange in the RabbitMQ server with the specified routing key. 
+   If the Sink and rule are created successfully, a message should have been published to the specified exchange in the RabbitMQ server with the specified routing key. 
 
 6. Visit the RabbitMQ Management Console at http://localhost:15672 and navigate to the Queues section. 
 
