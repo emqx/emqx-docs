@@ -28,11 +28,11 @@ EMQX 通过规则引擎与 Sink 将设备数据转发至 Elasticsearch，Elastic
 
 设备数据写入到 Elasticsearch 后，您可以灵活的使用 Elasticsearch 的搜索和分析能力对数据进行处理，例如：
 
-1. **日志监测**：物联网设备会生成大量的日志数据，这些数据可以被发送到 Elasticsearch 中进行存储和分析。通过连接到可视化工具，例如 Kibana，可以根据这些日志数据生成图表，实时展示设备状态、操作记录以及错误消息等信息。这样可以帮助开发者或运维人员快速定位和解决可能出现的问题。
+- **日志监测**：物联网设备会生成大量的日志数据，这些数据可以被发送到 Elasticsearch 中进行存储和分析。通过连接到可视化工具，例如 Kibana，可以根据这些日志数据生成图表，实时展示设备状态、操作记录以及错误消息等信息。这样可以帮助开发者或运维人员快速定位和解决可能出现的问题。
 
-2. **地理位置数据（Maps）**：物联网设备往往会生成地理位置数据，这些数据可以被存储在 Elasticsearch 中。通过 Kibana 的 Maps 功能，可以在地图上可视化设备的位置信息，进行设备位置的追踪和分析。
+- **地理位置数据（Maps）**：物联网设备往往会生成地理位置数据，这些数据可以被存储在 Elasticsearch 中。通过 Kibana 的 Maps 功能，可以在地图上可视化设备的位置信息，进行设备位置的追踪和分析。
 
-3. **终端安全**：物联网设备的安全日志数据可以被发送到 Elasticsearch，通过连接到 Elastic Security，可以生成安全报告，实时监控设备的安全状态，检测可能的安全威胁，并进行响应。
+- **终端安全**：物联网设备的安全日志数据可以被发送到 Elasticsearch，通过连接到 Elastic Security，可以生成安全报告，实时监控设备的安全状态，检测可能的安全威胁，并进行响应。
 
 ## 特性与优势
 
@@ -40,14 +40,14 @@ EMQX 通过规则引擎与 Sink 将设备数据转发至 Elasticsearch，Elastic
 
 本节介绍了在 EMQX 中创建 Elasticsearch 数据集成之前需要做的准备工作，包括安装 Elasticsearch 和创建索引。
 
-### 安装 Elasticsearch 并创建索引
-
-EMQX 支持与私有部署的 Elasticsearch 或与云上的 Elastic 集成。您可以使用 Elastic Cloud 或者 Docker 部署一个 Elasticsearch 实例。
-
 ### 前置准备
 
 - 了解[规则](./rules.md)。
 - 了解[数据集成](./data-bridges.md)。
+
+### 安装 Elasticsearch 并创建索引
+
+EMQX 支持与私有部署的 Elasticsearch 或与云上的 Elastic 集成。您可以使用 Elastic Cloud 或者 Docker 部署一个 Elasticsearch 实例。
 
 1. 如果没有 Docker 环境请[安装 Docker](https://docs.docker.com/install/)。
 
@@ -118,7 +118,7 @@ EMQX 支持与私有部署的 Elasticsearch 或与云上的 Elastic 集成。您
 
    :::
 
-4. 添加动作，从**动作类型**下拉列表中选择 Elasticsearch，保持动作下拉框为默认的“创建动作”选项，您也可以从动作下拉框中选择一个之前已经创建好的 Elasticsearch 动作。此处我们创建一个全新的 Sink 并添加到规则中。
+4. 点击**添加动作**，从**动作类型**下拉列表中选择 Elasticsearch，保持动作下拉框为默认的`创建动作`选项，您也可以从动作下拉框中选择一个之前已经创建好的 Elasticsearch 动作。本示例将创建一个全新的 Sink 并添加到规则中。
 
 5. 在下方的表单中输入 Sink 的名称与描述。
 
