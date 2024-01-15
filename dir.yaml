@@ -291,9 +291,6 @@
     - title_en: Apache Kafka
       title_cn: Apache Kafka
       path: data-integration/data-bridge-kafka
-    - title_en: Confluent
-      title_cn: Confluent
-      path: data-integration/confluent-sink
     - title_en: Apache IoTDB
       title_cn: Apache IoTDB
       path: data-integration/data-bridge-iotdb
@@ -312,9 +309,15 @@
     - title_en: ClickHouse
       title_cn: ClickHouse
       path: data-integration/data-bridge-clickhouse
+    - title_en: Confluent
+      title_cn: Confluent
+      path: data-integration/confluent-sink
     - title_en: DynamoDB
       title_cn: DynamoDB
       path: data-integration/data-bridge-dynamo
+    - title_en: Elasticsearch
+      title_cn: Elasticsearch
+      path: data-integration/elasticsearch
     - title_en: GCP PubSub
       title_cn: GCP PubSub
       path: data-integration/data-bridge-gcp-pubsub
@@ -323,10 +326,7 @@
       path: data-integration/data-bridge-greptimedb
     - title_en: HStreamDB
       title_cn: HStreamDB
-      path: data-integration/data-bridge-hstreamdb   
-    - title_en: Elasticsearch
-      title_cn: Elasticsearch
-      path: data-integration/elasticsearch   
+      path: data-integration/data-bridge-hstreamdb      
     - title_en: HTTP Server
       title_cn: HTTP Server
       path: data-integration/data-bridge-webhook
