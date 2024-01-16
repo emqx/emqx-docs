@@ -85,7 +85,29 @@ docker run -d --name iotdb-service \
 
 You can find more information about running [IoTDB in Docker on Docker Hub](https://hub.docker.com/r/apache/iotdb).
 
-## Create Rule and Apache IoTDB Sink
+## Create a Connector
+
+This section demonstrates how to configure an Apache IoTDB Connector that is used to connect the Sink to the Apache IoTDB.
+
+1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
+
+2. Click **Create** on the top right corner of the page. Click to select the **Apache IoTDB** and click **Next**:
+
+3. Enter a name for the Connector. The name should be a combination of upper/lower case letters or numbers, for example, `my_iotdb`.
+
+4. Set **URL** to `http://localhost:18080`.
+
+5. Fill in the `Username` and `Password` for this connector. For the rest, you can keep the default value.
+
+6. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
+
+7. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the Apache IoTDB.
+
+8. Click **Create** to complete the creation of the Connector.
+
+Now you have created an Apache Iotdb Connector. Next, you need to create a rule and Sink to specify the data to be written into the Apache IoTDB.
+
+## Create Rule and Apache IoTDB Data Bridge
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `root/#`  and send the processed results through the configured Apache IoTDB data bridge to store the time series data to IoTDB.
 
@@ -101,9 +123,49 @@ This section demonstrates how to create a rule in EMQX to process messages from 
      *
    FROM
      "root/#"
-   
+
    ```
-   If you need to specify your own rule, you need to include the required contextual information in the MQTT message in the `SELECT` part of the rule. For example, the client is sending a message with the payload in JSON format as follows: 
+
+5. Click the **Add Action** button, and select **Forwarding with Data Bridge** from the dropdown list. With this action, EMQX sends the data processed by the rule to the data bridge.
+
+6. Click the **+** icon next to the **Data bridge** drop-down box to create a data bridge.
+
+7. Select **Apache IoTDB** from the **Type of Data Bridge** drop-down list. Fill in the required fields (marked with an asterisk).
+
+8. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
+
+9. Select the `my-iotdb` just created from the Connector dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-connector).
+
+10. Enter the action information:
+
+   * **IoTDB Version**: Select the version of the IoTDB server you have installed.
+
+   * **Device ID** (optional): Enter a fixed device id used as the name of the device from which the timeseries data is forwarded and inserted into the IoTDB instance.
+
+     :::tip
+
+     When left empty, the device id can also be specified in the publishing message or configured in the rule. For example, when publishing a JSON-encoded message with a `device_id` field in it, the value of that field will define the output device id. To extract this information using the rule engine, you must use SQL like the following:
+
+     ```sql
+     SELECT
+       json_decode(payload) as payload, `my_device` as payload.device_id
+     ```
+
+     However, the fixed device id configured in this field takes precedence over any methods mentioned previously.
+
+     :::
+
+   - **Align Timeseries**: Disabled by default. Once enabled, the timestamp columns of a group of aligned timeseries are stored only once in IoTDB, rather than duplicating them for each individual timeseries within the group. For more information, see [Aligned timeseries](https://iotdb.apache.org/UserGuide/V1.1.x/Data-Concept/Data-Model-and-Terminology.html#aligned-timeseries).
+
+11. Set the **Write Data**
+
+   For historical reasons, there are two different ways to generate IoTDB data from MQTT messages:
+
+   * Payload-described
+
+   In this way you should leave **Write Data** empty and need to include the required contextual information in the MQTT message in the SELECT part of the rule.
+   For example, the client is sending a message with the payload in JSON format as follows:
+
    ```json
    {
      "measurement": "temp",
@@ -127,51 +189,33 @@ This section demonstrates how to create a rule in EMQX to process messages from 
      "root/#"
    ```
 
-5. Click the **Add Action** button, and select **Forwarding with Data Bridge** from the dropdown list. With this action, EMQX sends the data processed by the rule to the data bridge.
+   * Template-described
 
-6. Click the **+** icon next to the **Data bridge** drop-down box to create a data bridge.
+   In this way, you can add as many items as you want in the **Write Data** template with the required contextual information per row.
+   Once this template is provided the action will generate IoTDB data by applying it to the MQTT message.
 
-7. Select **Apache IoTDB** from the **Type of Data Bridge** drop-down list. Fill in the required fields (marked with an asterisk).
+   For example with this template:
 
-8. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
+   | Timestamp | Measurement | Data Type | Value    |
+   |-----------|-------------|-----------|----------|
+   |           | index       | INT32     | ${index} |
+   |           | temperature | FLOAT     | ${temp}  |
 
-9. Enter the connection information:
+   :::tip
 
-   * **IoTDB REST Service Base URL**: Enter `http://localhost:18080`, or the actual hostname/IP if the IoTDB server is running remotely.
+   Each column supports placeholder syntax to fill it with variables.
 
-   * **IoTDB Version**: Select the version of the IoTDB server you have installed.
+   When omitted the Timestamp, it will be filled with the current system time in millisecond.
 
-   * **Username**: Enter the IoTDB username.
+   :::
 
-   * **Password**: Enter the IoTDB password.
-
-   * **Device ID** (optional): Enter a fixed device id used as the name of the device from which the timeseries data is forwarded and inserted into the IoTDB instance.
-
-     :::tip
-
-     When left empty, the device id can also be specified in the publishing message or configured in the rule. For example, when publishing a JSON-encoded message with a `device_id` field in it, the value of that field will define the output device id. To extract this information using the rule engine, you must use SQL like the following:
-
-     ```sql
-     SELECT
-       json_decode(payload) as payload, `my_device` as payload.device_id
-     ```
-     
-     However, the fixed device id configured in this field takes precedence over any methods mentioned previously.
-     
-     :::
-
-   - **Align Timeseries**: Disabled by default. Once enabled, the timestamp columns of a group of aligned timeseries are stored only once in IoTDB, rather than duplicating them for each individual timeseries within the group. For more information, see [Aligned timeseries](https://iotdb.apache.org/UserGuide/V1.1.x/Data-Concept/Data-Model-and-Terminology.html#aligned-timeseries).
-   - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-
-10. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
-
-11. Click the **Add** button to complete the data bridge configuration. You will be redirected back to the **Add Action** page. Select the Apache IoTDB Data Bridge you just created from the **Data bridge** drop-down list. Click the **Add** button at the bottom to include this action in the rule.
-
-    <img src="./assets/IoTDB_bridge.png" alt="IoTDB_bridge" style="zoom:67%;" />
-
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
-
-Now a rule to forward data to Apache IoTDB via the data bridge is created. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under the topic `root/#` are sent and saved to Apache IoTDB.
+   Then, your MQTT message can organize as below:
+   ```json
+   {
+     "index": "42",
+     "temp": "32.67"
+   }
+   ```
 
 ## Test Apache IoTDB Data Bridge and Rule
 
