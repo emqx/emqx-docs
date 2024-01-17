@@ -6,7 +6,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 :::
 {% endemqxce %}
 
-[DynamoDB](https://www.amazonaws.cn/en/dynamodb/) is a fully managed, high-performance, serverless key-value store database service on AWS. It is designed for applications that require fast, scalable, and reliable data storage. EMQX supports integration with DynamoDB, enabling you to save MQTT messages and client events to DynamoDB, facilitating the registration and management of IoT devices, as well as the long-term storage and real-time analysis of device data. Through the DynamoDB data bridge, MQTT messages and client events can be stored in DynamoDB, and events can also trigger updates or deletions of data within DynamoDB, thereby enabling the recording of information such as device online status and connection history.
+[DynamoDB](https://www.amazonaws.cn/en/dynamodb/) is a fully managed, high-performance, serverless key-value store database service on AWS. It is designed for applications that require fast, scalable, and reliable data storage. EMQX supports integration with DynamoDB, enabling you to save MQTT messages and client events to DynamoDB, facilitating the registration and management of IoT devices, as well as the long-term storage and real-time analysis of device data. Through the DynamoDB data integration, MQTT messages and client events can be stored in DynamoDB, and events can also trigger updates or deletions of data within DynamoDB, thereby enabling the recording of information such as device online status and connection history.
 
 This page provides a comprehensive introduction to the data integration between EMQX and DynamoDB with practical instructions on creating and validating the data integration.
 
@@ -36,12 +36,12 @@ The data integration with DynamoDB offers a range of features and benefits tailo
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create a DynamoDB data bridge, including how to install a DynamoDB server and create a data table.
+This section describes the preparations you need to complete before you start to create a DynamoDB data integration, including how to install a DynamoDB server and create a data table.
 
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [Data Integration](./data-bridges.md)
+- Knowledge about [data integration](./data-bridges.md)
 
 ### Install DynamoDB Local Server and Create Table
 
@@ -108,56 +108,21 @@ The following JSON will be printed if the table was created successfully.
 }
 ```
 
-## Create Connector
+## Create Rule for DynamoDB Sink
 
-This section demonstrates how to create a DynamoDB data bridge in EMQX Dashboard. It assumes that you run both EMQX and DynamoDB on the local machine. If you have Dynamo and EMQX running remotely, adjust the settings accordingly.
+This section demonstrates how to create rules to specify the data to be saved into DynamoDB and add the action triggered by the rule. You need to create two different rules for messages forward and event records. 
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
-
-2. Click **Create** on the top right corner of the page.
-
-3. In the **Create Connector** page, click to select **DynamoDB**, and then click **Next**.
-
-4. Input a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
-
-5. Input the connection information:
-
-   - **Database Url**: Input `http://127.0.0.1:8000`, or the actual URL if the DynamoDB server is running remotely.
-   - **Table Name**: Input `mqtt_msg`.
-   - **AWS Access Key ID**: Input `root`.
-   - **AWS Secret Access Key**: Input `public`.
-
-6. Leave the **Template** empty by default.
-
-   ::: tip
-
-   When this value is empty the whole message will be stored in the database. The actual value is JSON template data.
-
-   :::
-
-7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
-
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the server.
-
-9. Then click **Create** to finish the creation of the data bridge.
-
-   A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into DynamoDB. You can also create rules by following the steps in [Create Rules for DynamoDB Data Bridge](#create-rules-for-dynamodb-data-bridge).
-
-Now the data bridge should appear in the data bridge list (**Integration** -> **Connector**) with **Resource Status** as **Connected**. 
-
-### Create Connector
-
-Now that you have successfully created the data bridge to DynamoDB, you can continue to create rules to specify the data to be saved into DynamoDB. You need to create two different rules for messages forward and event records. 
+It assumes that you run both EMQX and DynamoDB on the local machine. If you have Dynamo and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
+3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
 
    - To create a rule for message storage, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to DynamoDB.
 
-     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the data bridge in the `SELECT` part.
+     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
 
      ```sql
      SELECT 
@@ -180,13 +145,47 @@ Now that you have successfully created the data bridge to DynamoDB, you can cont
      For convenience, the `mqtt_msg` topic will be reused to receive online/offline events.
 
      :::
+     
+     ::: tip
+     
+     If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+     
+     :::
 
-4. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**.  Click the **Add** button. 
-5. Click the **Create** button to finish the setup. 
+4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to DynamoDB.
 
-Now you have successfully created the data bridge to DynamoDB. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to DynamoDB after parsing by rule `my_rule`. 
+5. Select `DynamoDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
 
-### Test Rule
+6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+
+7. Enter the connection information:
+
+   - **Database Url**: Input `http://127.0.0.1:8000`, or the actual URL if the DynamoDB server is running remotely.
+   - **Table Name**: Input `mqtt_msg`.
+   - **AWS Access Key ID**: Input `root`.
+   - **AWS Secret Access Key**: Input `public`.
+
+8. Leave the **Template** empty by default.
+
+   ::: tip
+
+   When this value is empty the whole message will be stored in the database. The actual value is JSON template data.
+
+   :::
+
+9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md).
+
+10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the server.
+
+11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+
+You have now successfully created the rule for forwarding data through the DynamoDB Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new DynamoDB Sink.
+
+You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to DynamoDB after parsing by rule `my_rule`.
+
+### Test the Rule
 
 Use MQTT X to send a message to topic `t/1` to trigger an online/offline event. 
 
@@ -194,7 +193,7 @@ Use MQTT X to send a message to topic `t/1` to trigger an online/offline event.
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello DynamoDB" }'
 ```
 
-Check the running status of the data bridge, there should be one new incoming and one new outgoing message. 
+Check the running status of the Sink, there should be one new incoming and one new outgoing message. 
 
 Check whether the data is written into the `mqtt_msg`  data table. 
 

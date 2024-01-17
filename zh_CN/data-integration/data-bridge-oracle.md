@@ -37,7 +37,7 @@ Oracle Database 数据集成是 EMQX 中的开箱即用功能，结合了 EMQX �
 
 ## 准备工作
 
-本节介绍了在 EMQX 中创建 MySQL Sink 之前需要做的准备工作，包括安装 Oracle Database 服务器并创建数据表。
+本节介绍了在 EMQX 中创建 MySQL 数据集成之前需要做的准备工作，包括安装 Oracle Database 服务器并创建数据表。
 
 ### 前置准备
 
@@ -93,17 +93,47 @@ CREATE TABLE t_emqx_client_events (
 );
   ```
 
-## 创建连接器
+## 创建 Oracle Database Sink 规则
 
-本节演示了如何在 Dashboard 中创建 Oracle Database Sink 。以下示例假定 EMQX 与 Oracle Database 均在本地运行，如您在远程运行 EMQX 及 Oracle Database，请根据实际情况调整相应配置。
+本节演示了如何在 Dashboard 中为消息存储和设备上下线记录创建两条不同的转发规则。 以下示例假定 EMQX 与 Oracle Database 均在本地运行，如您在远程运行 EMQX 及 Oracle Database，请根据实际情况调整相应配置。
 
-消息存储和事件记录需要设置不同的 SQL 模版，因此您需要分别创建两个不同的 Sink 。
+1. 转到 Dashboard **集成** -> **规则**页面。
 
-1. 登陆 EMQX Dashboard，点击左侧目录菜单中的**数据集成** -> **连接器**。
 2. 点击页面右上角的**创建**。
-3. 在**连接器类型**中选择 **Oracle Database**，点击**下一步**。
-4. 输入连接器名称，名称应为大/小写字母和数字的组合。
-5. 输入以下连接信息：
+
+3. 输入规则 ID `my_rule`，在 **SQL 编辑器**中根据业务实现需要输入规则：
+
+   - 如需实现对指定主题消息的转发，例如将 `t/#` 主题的 MQTT 消息转发至 Oracle Database，输入以下 SQL 语法：
+
+     注意：如果您希望制定自己的 SQL 语法，需要确保规则选出的字段（SELECT 部分）包含所有 Sink 的 SQL 模板中用到的变量。
+
+     ```sql
+     SELECT
+       *
+     FROM
+       "t/#"
+     ```
+
+   - 如需实现设备上下线记录，输入以下 SQL 语法：
+
+     ```sql
+     SELECT
+       *
+     FROM
+       "$events/client_connected", "$events/client_disconnected"
+     ```
+
+   ::: tip
+
+   如果您初次使用 SQL，可以点击 **SQL 示例** 和**启用调试**来学习和测试规则 SQL 的结果。
+
+   :::
+
+4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。在**动作类型**下拉框中选择 `Oracle Database`，保持**动作**下拉框为默认的`创建动作`选项，您也可以选择一个之前已经创建好的 Oracle Database Sink。此处我们创建一个全新的 Sink 并添加到规则中。
+
+5. 输入名称，名称应为大/小写字母和数字的组合。
+
+6. 输入以下连接信息：
 
    - **服务器地址**：输入 `127.0.0.1:1521`，如果 Oracle Database 服务器在远程运行，则需输入实际地址。
    - **数据库名字**: 输入 `XE`。
@@ -111,7 +141,7 @@ CREATE TABLE t_emqx_client_events (
    - **用户名**: 输入 `system`。
    - **密码**: 输入 `oracle`。
 
-6. 根据业务实现配置 **SQL 模版**。
+7. 根据业务实现配置 **SQL 模版**。
 
    注意：此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;` 。
 
@@ -139,52 +169,19 @@ CREATE TABLE t_emqx_client_events (
      )
      ```
 
-7. 其余选项均设为默认值。
+8. 其余选项均设为默认值。
 
-8. 在完成创建之前，您可以点击**测试连接**来测试桥接可以连接到 Oracle Database 服务器。
+9. 在完成创建之前，您可以点击**测试连接**来测试 Sink 可以连接到 Oracle Database 服务器。
 
-9. 点击**创建**按钮完成 Sink 创建。
+10. 点击**添加**按钮完成 Sink 创建，新建的 Sink 将被添加到**动作输出**列表中。
 
-   在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 Oracle Database 的数据。详细步骤参考[创建 Oracle Database Sink 规则](#创建-oracle-database- Sink 规则)。
+11. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中，**状态**为**已连接**。
 
-至此，您已经完成 Sink 的创建，在 Dashboard 的 Sink 页面，可以看到 Oracle Database Sink 的状态为**已连接**。
+现在您已成功创建了通过 Oracle Database Sink 将数据转发到 Oracle Database 的规则，同时在**规则**页面的**动作(Sink)** 标签页看到新建的 Oracle Database Sink。
 
-## 创建 Oracle Database Sink 规则
+您还可以点击 **集成** -> **Flow 设计器**可以查看拓扑，通过拓扑可以直观的看到，主题 `t/#` 下的消息在经过规则 `my_rule` 解析后被发送到 Oracle Database 中。
 
-在成功创建 Oracle Database Sink 之后，您需要继续为消息存储和设备上下线记录创建两条不同的转发规则。
-
-1. 转到 Dashboard **集成** -> **规则**页面。
-
-2. 点击页面右上角的**创建**。
-
-3. 输入规则 ID `my_rule`，在 **SQL 编辑器**中根据业务实现需要输入规则：
-
-   - 如需实现对指定主题消息的转发，例如将 `t/#` 主题的 MQTT 消息转发至 Oracle Database，输入以下 SQL 语法：
-
-     注意：如果您希望制定自己的 SQL 语法，需要确保规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量。
-
-     ```sql
-     SELECT
-       *
-     FROM
-       "t/#"
-     ```
-
-   - 如需实现设备上下线记录，输入以下 SQL 语法：
-
-     ```sql
-     SELECT
-       *
-     FROM
-       "$events/client_connected", "$events/client_disconnected"
-     ```
-
-4. 点击**添加动作**，从**动作类型**下拉列表中选择 Oracle Database，从**动作**下拉框中选择刚刚创建的连接器，点击**添加**按钮将其添加到规则中。。
-5. 点击**创建**按钮完成规则创建。
-
-至此您已经完成整个创建过程，可以前往 **集成** -> **Flow 设计器** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果转发至 Oracle Database。
-
-## 测试桥接和规则
+## 测试规则
 
 使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
 

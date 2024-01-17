@@ -8,17 +8,17 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 [AWS Kinesis](https://aws.amazon.com/cn/kinesis/) is a fully managed real-time streaming data processing service on AWS that facilitates easy collection, processing, and analysis of streaming data. It can economically and efficiently handle streaming data of any scale in real-time and offers high flexibility, capable of low-latency processing of any amount of streaming data from hundreds of thousands of sources.
 
-EMQX supports seamless integration with [Amazon Kinesis Data Streams](https://aws.amazon.com/kinesis/data-streams/), enabling the connection of massive IoT devices for real-time message collection and transmission. Through a data bridge, it connects to Amazon Kinesis Data Streams for real-time data analysis and complex stream processing.
+EMQX supports seamless integration with [Amazon Kinesis Data Streams](https://aws.amazon.com/kinesis/data-streams/), enabling the connection of massive IoT devices for real-time message collection and transmission. Through the data integration, it connects to Amazon Kinesis Data Streams for real-time data analysis and complex stream processing.
 
 This page provides a comprehensive introduction to the data integration between EMQX and Amazon Kinesis with practical instructions on creating and validating the data integration.
 
 ## How It Works
 
-Amazon Kinesis data bridge is an out-of-the-box feature of EMQX designed to help users seamlessly integrate MQTT data streams with Amazon Kinesis and leverage its rich services and capabilities for IoT application development.
+Amazon Kinesis data integration is an out-of-the-box feature of EMQX designed to help users seamlessly integrate MQTT data streams with Amazon Kinesis and leverage its rich services and capabilities for IoT application development.
 
 ![kinesis_architecture](./assets/kinesis_architecture.svg)
 
-EMQX forwards MQTT data to Amazon Kinesis through the rule engine and data bridge. The complete process is as follows:
+EMQX forwards MQTT data to Amazon Kinesis through the rule engine and Sink. The complete process is as follows:
 
 1. **IoT Devices Publish Messages**: Devices publish telemetry and status data through specific topics, triggering the rule engine.
 2. **Rule Engine Processes Messages**: Using the built-in rule engine, MQTT messages from specific sources are processed based on topic matching. The rule engine matches corresponding rules and processes messages, such as converting data formats, filtering specific information, or enriching messages with contextual information.
@@ -43,12 +43,12 @@ Utilizing AWS Kinesis Data Streams to build a streaming data pipeline significan
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create an Amazon Kinesis data bridge, including how to set up the Kinesis service and emulate data streams service.
+This section describes the preparations you need to complete before you start to create an Amazon Kinesis data integration, including how to set up the Kinesis service and emulate data streams service.
 
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data bridges](./data-bridges.md)
+- Knowledge about [data integration](./data-bridges.md)
 
 ### Create Stream in Amazon Kinesis Data Streams
 
@@ -82,37 +82,9 @@ To facilitate the development and test, you can emulate the Amazon Kinesis Data 
    awslocal kinesis create-stream --stream-name "my_stream" --shard-count 1
    ```
 
-## Create Connector
+## Create Rule for Amazon Kinesis Sinks
 
-1. Go to EMQX Dashboard, click **Integration** -> **Connector**.
-2. Click **Create** on the top right corner of the page.
-3. In the **Create Connector** page, click to select **Amazon Kinesis**, and then click **Next**.
-4. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
-5. Enter the connection information:
-
-   - **AWS Access Key ID**: Enter the [Access key ID](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html). If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), enter any value.
-   - **AWS Secret Access Key**: Enter the [secret access key](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html). If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), enter any value.
-   - **Amazon Kinesis Endpoint**: Enter the [Endpoint](https://docs.aws.amazon.com/general/latest/gr/ak.html) for the Kinesis service. If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), input `http://localhost:4566`.
-   - **Amazon Kinesis Stream**: Enter the stream name you created in [Create Stream in Amazon Kinesis Data Streams](#create-stream-in-amazon-kinesis-data-streams).
-   - **Partition Key**: Enter the Partition Key that shall be associated with records that are sent to this stream. Placeholders of the form `${variable_name}` are allowed (see next step for example on placeholders).
-6. In the **Payload Template** field, leave it blank or define a template.
-
-      -  If left blank, it will encode all visible inputs from the MQTT message using JSON format, such as clientid, topic, payload, etc.
-
-      - If using the defined template, placeholders of the form `${variable_name}` will be filled with the corresponding value from the MQTT context. For example, `${topic}` will be replaced with `my/topic` if such is the MQTT message topic.
-
-
-11. Advanced settings (optional): Choose whether to use buffer queue and batch mode as needed. For details, see [Data Integration](./data-bridges.md).
-
-11. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the Amazon Kinesis server.
-
-12. Click **Create** to finish the creation of the data bridge.
-
-    A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Amazon Kinesis. You can also create rules by following the steps in [Create Rules for Amazon Kinesis Data Bridge](#create-a-rule-for-amazon-kinesis-data-bridge).
-
-## Create Connector
-
-You can continue to create rules to specify the data to be saved into Amazon Kinesis.
+This section demonstrates how to create a rule to specify the data to be saved into Amazon Kinesis and add the action triggered by the rule.
 
 1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
 
@@ -120,9 +92,9 @@ You can continue to create rules to specify the data to be saved into Amazon Kin
 
 3. Input `my_rule` as the rule ID.
 
-3. Set the rules in the **SQL Editor**. If you want to save the MQTT messages under topic `t/#` to Amazon Kinesis Data Streams, you can use the SQL syntax below.
+4. Set the rules in the **SQL Editor**. If you want to save the MQTT messages under topic `t/#` to Amazon Kinesis Data Streams, you can use the SQL syntax below.
 
-   Note: If you want to specify your own SQL syntax, make sure that the `SELECT` part includes all fields required by the payload template in the data bridge.
+   Note: If you want to specify your own SQL syntax, make sure that the `SELECT` part includes all fields required by the payload template in the Sink.
 
    ```sql
    SELECT
@@ -131,13 +103,46 @@ You can continue to create rules to specify the data to be saved into Amazon Kin
      "t/#"
    ```
 
-5. Click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list, and then select the data bridge you just created under **Data Bridge**. Then click the **Add** button.
+   ::: tip
 
-4. Click **Create** at the page bottom to finish the creation.
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
-Now a rule to forward data to Amazon Kinesis Data Streams via the Amazon Kinesis bridge is created. You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#` are sent and saved to Amazon Kinesis Data Streams after parsing by rule `my_rule`.
+   :::
 
-## Test Rule
+5. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to Kinesis.
+
+6. Select `Amazon Kinesis` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+
+7. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+
+8. Enter the connection information:
+
+   - **AWS Access Key ID**: Enter the [Access key ID](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html). If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), enter any value.
+   - **AWS Secret Access Key**: Enter the [secret access key](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html). If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), enter any value.
+   - **Amazon Kinesis Endpoint**: Enter the [Endpoint](https://docs.aws.amazon.com/general/latest/gr/ak.html) for the Kinesis service. If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), input `http://localhost:4566`.
+   - **Amazon Kinesis Stream**: Enter the stream name you created in [Create Stream in Amazon Kinesis Data Streams](#create-stream-in-amazon-kinesis-data-streams).
+   - **Partition Key**: Enter the Partition Key that shall be associated with records that are sent to this stream. Placeholders of the form `${variable_name}` are allowed (see next step for example on placeholders).
+
+9. In the **Payload Template** field, leave it blank or define a template.
+
+   -  If left blank, it will encode all visible inputs from the MQTT message using JSON format, such as clientid, topic, payload, etc.
+
+   -  If using the defined template, placeholders of the form `${variable_name}` will be filled with the corresponding value from the MQTT context. For example, `${topic}` will be replaced with `my/topic` if such is the MQTT message topic.
+
+
+11. Advanced settings (optional): Choose whether to use buffer queue and batch mode as needed. For details, see [Data Integration](./data-bridges.md).
+
+12. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Amazon Kinesis server.
+
+13. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+14. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+
+You have now successfully created the rule for forwarding data through the Amazon Kinesis Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Amazon Kinesis Sink.
+
+You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to Amazon Kinesis Data Streams after parsing by rule `my_rule`.
+
+## Test the Rule
 
 1. Use MQTTX to send messages on the topic `t/my_topic`.
 
@@ -145,7 +150,7 @@ Now a rule to forward data to Amazon Kinesis Data Streams via the Amazon Kinesis
    mqttx pub -i emqx_c -t t/my_topic -m '{ "msg": "hello Amazon Kinesis" }'
    ```
 
-2. Check the running status of the data bridge, there should be one new incoming and one new outgoing message.
+2. Check the running status of the Sink, there should be one new incoming and one new outgoing message.
 
 3. Go to [Amazon Kinesis Data Viewer](https://docs.aws.amazon.com/streams/latest/dev/data-viewer.html). You should see the message when getting records.
 
@@ -153,7 +158,7 @@ Now a rule to forward data to Amazon Kinesis Data Streams via the Amazon Kinesis
 
 If you use LocalStack, follow the steps below to check the received data.
 
-1. Use the following command to get the *ShardIterator* before sending the message to the bridge.
+1. Use the following command to get the *ShardIterator* before sending the message to the EMQX.
    
    ```bash
    awslocal kinesis get-shard-iterator --stream-name my_stream --shard-id shardId-000000000000 --shard-iterator-type LATEST

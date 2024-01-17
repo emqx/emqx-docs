@@ -12,7 +12,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 [TimescaleDB](https://www.timescale.com/) (Timescale) is a database specifically designed for storing and analyzing time-series data. Its exceptional data throughput and reliable performance make it an ideal choice for the Internet of Things (IoT) domain, providing efficient and scalable data storage and analysis solutions for IoT applications.
 
-This page provides a comprehensive introduction to the data integration between EMQX and TimescaleDB with practical instructions on creating a rule and Sink.
+This page provides a comprehensive introduction to the data integration between EMQX and TimescaleDB with practical instructions on creating and validating the data integration.
 
 ## How It Works
 
@@ -38,7 +38,7 @@ After energy consumption data is written to TimescaleDB, you can flexibly use SQ
 
 ## Features and Benefits
 
-Using TimescaleDB Sink in EMQX brings the following features and advantages to your business:
+The TimescaleDB data integration in EMQX brings the following features and advantages to your business:
 
 - **Efficient Data Handling**: EMQX can handle a large number of IoT device connections and message throughput efficiently. TimescaleDB excels in data writing, storage, and querying, meeting the data processing needs of IoT scenarios without overwhelming the system.
 - **Message Transformation**: Messages can undergo rich processing and transformation within EMQX rules before being written to TimescaleDB.
@@ -52,7 +52,7 @@ This section describes the preparations you need to complete before you start to
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [Data Integration](./data-bridges.md)
+- Knowledge about [data integration](./data-bridges.md)
 
 ### Install Timescale and Create Data Table
 
@@ -144,7 +144,7 @@ The instructions below assume that you run both EMQX and TimescaleDG (if self-de
 1. Go to EMQX Dashboard and click **Integration** -> **Connector** from the left navigation menu.
 2. Click **+ Create** on the top right corner of the page.
 3. Select **TimescaleDB** from the connectors and click **Next**.
-4. Enter a name in the **Connector Name**, for example, `my-timescale`. The name should be a combination of upper/lower case letters and numbers.
+4. Enter a name in the **Connector Name**, for example, `my-timescale`. The name should combine upper/lower case letters and numbers.
 5. Enter the connection information according to how the TimescaleDB is deployed. If it is deployed using Docker, input `127.0.0.1:5432` as **Server Host**, `tsdb` as **Database Name**,  `postgres` as **Username,** and `public` as **Password**.
 6. Click the **Create** button to complete the Connector creation.
 

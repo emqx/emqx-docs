@@ -6,7 +6,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 :::
 {% endemqxce %}
 
-通过 [Redis](https://redis.io/) Sink 可以通过执行自定义 Redis 数据操作命令的方式，将 MQTT 消息和客户端事件存储到 Redis 中，借助 Redis 高性能与灵活数据结构，实现诸如消息暂存，发布订阅和消息丢弃行为的计数与统计等业务。
+[Redis](https://redis.io/) 数据集成可以通过执行自定义 Redis 数据操作命令的方式，将 MQTT 消息和客户端事件存储到 Redis 中，借助 Redis 高性能与灵活数据结构，实现诸如消息暂存，发布订阅和消息丢弃行为的计数与统计等业务。
 
 本页详细介绍了 EMQX 与 Redis 的数据集成并提供了实用的规则和 Sink 创建指导。
 
@@ -27,7 +27,7 @@ Redis 数据集成是 EMQX 中的一个开箱即用的功能，结合了 EMQX �
 
 ## 特性与优势
 
-在 EMQX 中使用 Redis Sink 能够为您的业务带来以下特性与优势：
+在 EMQX 中使用 Redis 数据集成能够为您的业务带来以下特性与优势：
 
 - **高性能和可扩展性**：在 EMQX 的分布式架构和 Redis 的集群模式支持下，应用可随着数据量的增加实现无缝扩展。即使对于大型数据集，也可以确保一致的性能和响应能力。
 - **实时数据流**：EMQX 专为处理实时数据流而构建，确保从设备到 Redis 的高效可靠的数据传输。Redis 能够快速执行数据操作，能够满足实时数据暂存，使其成为 EMQX 的理想数据存储组件。
@@ -36,7 +36,7 @@ Redis 数据集成是 EMQX 中的一个开箱即用的功能，结合了 EMQX �
 
 ## 准备工作
 
-本节介绍了在 EMQX 中创建 Redis Sink 之前需要做的准备工作，包括安装 Redis。
+本节介绍了在 EMQX 中创建 Redis 数据集成之前需要做的准备工作，包括安装 Redis。
 
 ### 前置准备
 
@@ -68,68 +68,61 @@ OK
 
 至此，您已经完成 Redis 的安装并使用 `SET` `GET` 命令验证了安装结果，更多 Redis 命令请参考 [Redis Commands](https://redis.io/commands/)。
 
-## 创建连接器
+### 创建消息暂存 Sink 规则
 
-在本示例中，我们将通过 Redis 实现：
+1. 转到 Dashboard **集成** -> **规则**页面。
 
-1. 暂存每个客户端最后一条消息；
-2. 每个主题消息丢弃计数。
-
-需要创建两个 Redis Sink 分别完成预设场景，它们连接配置方式是相同的：
-
-1. 转到 Dashboard **集成** -> **连接器**页面。
 2. 点击页面右上角的**创建**。
-3. 在**连接器类型**中选择 Redis，点击**下一步**。
-4. 输入连接器名称，要求是大小写英文字母和数字的组合。
-5. **部署模式**根据情况选择，此处选择 **single**。
-6. 输入 Redis 连接信息，**服务器地址**填写 **127.0.0.1:6379**，**密码**填写 **public**，**数据库 ID** 填写 **0**。
 
-至此，我们已经完成了到 Redis 的连接设置，Redis Command 模版会根据我们希望实现的功能场景略有不同，具体请看下文。
-
-### 消息暂存
-
-本节我们将演示如何通过 Redis 暂存每个客户端的最后一条消息。
-
-1. 完成上述 **连接到 Redis** 的配置。
-2. 配置 **Redis Command 模板**：使用 Redis [HSET](https://redis.io/commands/hset/) 命令与 hash 数据结构存储消息，数据格式以 `clientid` 为 key，存储 `username`、`payload` 和`timestamp` 等字段。为了便于与 Redis 中其他 key 区分，我们使用 `emqx_messages` 前缀作为 key 的命名空间并用 `:` 分割
-
-```bash
-# HSET key filed value [field value...]
-HSET emqx_messages:${clientid} username ${username} payload ${payload} timestamp ${timestamp}
-```
-
-  <!-- TODO 同时执行多个 Redis 命令? -->
-
-3. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](#配置参数)。
-4. 点击**创建**按钮完成 Sink 创建。
-
-至此我们已经完成了 Sink 创建，接下来将继续创建一条规则来指定需要写入的数据。
-
-### 创建数据转发规则
-
-1. 转到 Dashboard **集成** -> **规则**页面。此外在完成 Sink 的创建后，EMQX 会弹窗询问是否创建相应规则，您也可点击弹窗中的**创建规则**按钮前往规则页面。
-2. 点击页面右上角的**创建**。
 3. 输入规则 ID `cache_to_redis`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息暂存至 Redis，请确保规则选择出来的字段（SELECT 部分）包含所有 Redis Command 模板中用到的变量，此处规则 SQL 如下：
 
-```sql
-SELECT
-  *
-FROM
-  "t/#"
-```
+   ```sql
+   SELECT
+     *
+   FROM
+     "t/#"
+   ```
 
-4. 从**动作类型**下拉列表中选择 Redis，从**动作**下拉框中选择刚刚创建的连接器，点击**添加**按钮将其添加到规则中。
-5. 点击页面最下方的**创建**按钮完成规则创建。
+   ::: tip
 
-至此您已经完成消息暂存的创建过程。
+   如果您初次使用 SQL，可以点击 **SQL 示例**和**启用调试**来学习和测试规则 SQL 的结果。
 
-### 消息丢弃统计
+   :::
+
+4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。在**动作类型**下拉框中选择 `Redis`，保持**动作**下拉框为默认的`创建动作`选项，您也可以选择一个之前已经创建好的 Redis Sink。此处我们创建一个全新的 Sink 并添加到规则中。
+
+5. 输入 Sink 名称，名称应为大/小写字母和数字的组合。
+
+6. **部署模式**根据情况选择，此处选择 `single`。
+
+7. 输入 Redis 连接信息，**服务器地址**填写 `127.0.0.1:6379`，**密码**填写 `public`，**数据库 ID** 填写 `0`。
+
+8. 配置 **Redis Command 模板**：使用 Redis [HSET](https://redis.io/commands/hset/) 命令与 hash 数据结构存储消息，数据格式以 `clientid` 为 key，存储 `username`、`payload` 和`timestamp` 等字段。为了便于与 Redis 中其他 key 区分，我们使用 `emqx_messages` 前缀作为 key 的命名空间并用 `:` 分割:
+
+   ```bash
+   # HSET key filed value [field value...]
+   HSET emqx_messages:${clientid} username ${username} payload ${payload} timestamp ${timestamp}
+   ```
+
+9. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
+
+10. 点击**创建**前，您可点击**测试连接**按钮确保 Sink 能连接到 Redis 服务器。
+
+11. 点击**添加**按钮完成 Sink 创建，新建的 Sink 将被添加到**动作输出**列表中。
+
+12. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中，**状态**为**已连接**。
+
+现在您已成功创建了通过 Redis Sink 将数据转发到 Redis 的规则，同时在**规则**页面的**动作(Sink)** 标签页看到新建的 Redis Sink。
+
+您还可以点击 **集成** -> **Flow 设计器**可以查看拓扑，通过拓扑可以直观的看到，主题 `t/#` 下的消息在经过规则 `my_rule` 解析后被发送到 Redis 中。
+
+### 创建消息丢弃统计 Sink 规则
 
 本节我们将演示如何通过 Redis 统计 EMQX 消息丢弃情况。
 
-注意：除 Redis Command 模板与规则外，其他操作步骤与[消息暂存](#消息暂存)章节完全相同。
+注意：除 Redis Command 模板与规则外，其他操作步骤与[创建消息暂存 Sink 规则](#创建消息暂存-sink-规则)章节完全相同。
 
-** Sink 的 Redis Command 模板**
+**Sink 的 Redis Command 模板**
 
 使用 [HINCRBY](https://redis.io/commands/hincrby/) 命令，对每个主题消息丢弃数量计数，模板如下：
 

@@ -124,7 +124,7 @@ python3 http_server.py
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello HTTP Server" }'
 ```
 
-查看 HTTP 服务运行统计，命中、发送成功次数均 +1。
+查看 HTTP 服务 Sink 运行统计，命中、发送成功次数均 +1。
 
 查看消息是否已经转发到 HTTP 服务：
 
