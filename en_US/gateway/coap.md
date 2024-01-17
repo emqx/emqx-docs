@@ -414,3 +414,18 @@ For example, unsubscribe to `coap/test` in `Connection Mode`:
 ```bash
 coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
+
+### Short Parameter Names
+
+To save message size, the CoAP gateway supports short parameter names.
+For example, the parameter `clientid=barx` can be written as `c=bar`. Therefore, the supported short
+parameter names are supported as shown in the following table:
+
+| Parameter Name |  Short Name |
+| -------------- | ----------- |
+| `clientid`     | `c`         |
+| `username`     | `u`         |
+| `password`     | `p`         |
+| `token`        | `t`         |
+| `qos`          | `q`         |
+| `retain`       | `r`         |
