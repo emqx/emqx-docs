@@ -63,7 +63,7 @@ EMQX 支持与私有部署的 Elasticsearch 或与云上的 Elastic 集成。您
         docker.elastic.co/elasticsearch/elasticsearch:7.10.1
     ```
 
-3. 创建 `device_data` 索引用于存储设备发布的消息，请注意替换用户名和密码。
+3. 创建 `device_data` 索引用于存储设备发布的消息，请注意替换 Elasticsearch 用户名和密码。
 
     ```bash
     curl -u elastic:public -X PUT "localhost:9200/device_data?pretty" -H 'Content-Type: application/json' -d'
@@ -72,8 +72,10 @@ EMQX 支持与私有部署的 Elasticsearch 或与云上的 Elastic 集成。您
         "properties": {
           "ts": { "type": "date" },
           "clientid": { "type": "keyword" },
-          "temperature": { "type": "float" },
-          "humidity": { "type": "float" }
+          "payload": {
+            "type": "object",
+            "dynamic": true
+          }
         }
       }
     }'
@@ -111,8 +113,7 @@ EMQX 支持与私有部署的 Elasticsearch 或与云上的 Elastic 集成。您
    SELECT
      clientid,
      timestamp as ts,
-     payload.temperature as temperature,
-     payload.humidity as humidity
+     payload
    FROM
        "t/#"
    ```
@@ -139,16 +140,15 @@ EMQX 支持与私有部署的 Elasticsearch 或与云上的 Elastic 集成。您
 
   以下是创建操作时特有的参数：
 
-  - **是否覆盖文档**：当文档已经存在时是否覆盖文档，为否时文档将写入失败。
+- **是否覆盖文档**：当文档已经存在时是否覆盖文档，为否时文档将写入失败。
 
-  在本示例中，我们设置索引名称为 `device_data`，使用客户端 ID 与时间戳组合 `${clientid}_${ts}` 作为文档 ID，填写文档模板如下：
+  在本示例中，我们设置索引名称为 `device_data`，使用客户端 ID 与时间戳组合 `${clientid}_${ts}` 作为文档 ID，文档保存客户端 ID、当前时间戳以及整个消息体，填写文档模板如下：
 
   ```json
   {
     "clientid": "${clientid}",
     "ts": ${ts},
-    "temperature": ${temperature},
-    "humidity": ${humidity}
+    "payload": ${payload}
   }
   ```
 
@@ -162,7 +162,7 @@ EMQX 支持与私有部署的 Elasticsearch 或与云上的 Elastic 集成。您
 
 ## 测试规则
 
-使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
+使用 MQTTX 向 `t/1` 主题发布消息：
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{"temperature":24,"humidity":30}'
@@ -202,8 +202,10 @@ curl -u elastic:public -X GET "localhost:9200/device_data/_search?pretty"
         "_source" : {
           "clientid" : "emqx_c",
           "ts" : 1705479455289,
-          "temperature" : 24,
-          "humidity" : 30
+          "payload" : {
+            "temperature": 24,
+            "humidity": 30
+          }
         }
       }
     ]
