@@ -51,21 +51,22 @@ EMQX 支持与私有部署的 Elasticsearch 或与云上的 Elastic 集成。您
 
 1. 如果没有 Docker 环境请[安装 Docker](https://docs.docker.com/install/)。
 
-2. 启动 Elasticsearch 容器，设置初始密码为 `public`。
+2. 启动 Elasticsearch 容器，开启 X-Pack 安全认证，设置默认用户名 `elastic` 的密码为 `public`。
 
     ```bash
     docker run -d --name elasticsearch \
         -p 9200:9200 \
         -p 9300:9300 \
         -e "discovery.type=single-node" \
+        -e "xpack.security.enabled=true" \
         -e "ELASTIC_PASSWORD=public" \
         docker.elastic.co/elasticsearch/elasticsearch:7.10.1
     ```
 
-3. 创建 `device_data` 索引用于存储设备发布的消息。
+3. 创建 `device_data` 索引用于存储设备发布的消息，请注意替换用户名和密码。
 
     ```bash
-    curl -X PUT "localhost:9200/device_data?pretty" -H 'Content-Type: application/json' -d'
+    curl -u elastic:public -X PUT "localhost:9200/device_data?pretty" -H 'Content-Type: application/json' -d'
     {
       "mappings": {
         "properties": {
@@ -88,8 +89,12 @@ EMQX 支持与私有部署的 Elasticsearch 或与云上的 Elastic 集成。您
 2. 点击页面右上角的**创建**。
 3. 在连接器类型中选择 **Elasticsearch**，点击下一步。
 4. 输入连接器名称，要求是大小写英文字母和数字的组合。这里我们输入 `my-elasticsearch`。
-5. 输入 Elasticsearch 连接信息，根据你的部署方式输入对应的 Elasticsearch 连接信息，如果使用的是 Docker，<!-- TODO -->
+5. 输入 Elasticsearch 连接信息，根据你的部署方式输入对应的 Elasticsearch 连接信息。
+   1. **URL**: ElasticSearch 服务的 REST 接口 URL，此处填写 `http://localhost:9200`。
+   2. **用户名**: ElasticSearch 服务的用户名，此处填写 `elastic`。
+   3. **密码**: ElasticSearch 服务的密码，此处填写 `public`。
 6. 点击最下方**创建**按钮完成连接器创建。
+
 至此您已经完成连接器创建，接下来将继续创建一条规则和 Sink 来指定需要写入的数据。
 
 ## 创建 Elasticsearch Sink 规则
@@ -100,13 +105,13 @@ EMQX 支持与私有部署的 Elasticsearch 或与云上的 Elastic 集成。您
 
 2. 点击页面右上角的**创建**。
 
-3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息存储至 Elasticsearch，规则 SQL 如下：
+3. 输入规则 ID `my-es-rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息存储至 Elasticsearch，规则 SQL 如下：
 
    ```sql
    SELECT
      clientid,
-     ts,
-     payload.temp as temp,
+     timestamp as ts,
+     payload.temperature as temperature,
      payload.humidity as humidity
    FROM
        "t/#"
@@ -123,37 +128,85 @@ EMQX 支持与私有部署的 Elasticsearch 或与云上的 Elastic 集成。您
 5. 在下方的表单中输入 Sink 的名称与描述。
 
 6. 在连接器下拉框中选择刚刚创建的 `my-elasticsearch` 连接器。您也可以点击下拉框旁边的创建按钮，在弹出框中快捷创建新的连接器，所需的配置参数可以参考[创建连接器](#创建连接器)。
-7. 配置文档模板，使用如下模板插入 JSON 格式的数据。
+7. 配置文档模板，按照如下配置插入 JSON 格式的数据。
 
-  <!-- TODO 等待研发 -->
+   - **操作**：可选项为*创建*，*更新*和*删除*操作。
+   - **索引名称**：要执行操作的索引或索引别名的名称，支持 ${var} 格式的占位符。
+   - **文档 ID**：创建操作时为可选项，其他操作必填。索引内文档的唯一标识符，支持 `${var}` 格式的占位符。如果未指定 ID，则由 Elasticsearch 自动生成。
+   - **文档模板**：自定义文档模板，支持 `${var}` 格式的占位符，要求必须可以被转换为 JSON 对象。 例如 `{ "field": "${payload.field}"}` 或 `${payload}`。
+   - **最大重试次数**：当写入失败时，最大重试次数。默认为 3 次。
 
-8. 展开**高级设置**，根据需要配置高级设置选项（可选），详细请参考[高级设置](#高级设置)。
+  以下是创建操作时特有的参数：
 
-9. 其余参数使用默认值即可。点击**创建**按钮完成 Sink 的创建，创建成功后页面将回到创建规则，新的 Sink 将添加到规则动作中。
+  - **路由**：指定应将文档存储在索引的哪个分片中，留空则由 Elasticsearch 决定。
+  - **是否覆盖文档**：当文档已经存在时覆盖文档，否则文档将写入失败。
 
-10. 回到规则创建页面，点击**创建**按钮完成整个规则创建。
+  在本示例中，我们设置索引名称为 `device_data`，使用客户端 ID 与时间戳组合 `${clientid}_${ts}` 作为文档 ID，填写文档模板如下：
+
+  ```json
+  {
+    "clientid": "${clientid}",
+    "ts": ${ts},
+    "temperature": ${temperature},
+    "humidity": ${humidity}
+  }
+  ```
+
+8. 其余参数使用默认值即可。点击**创建**按钮完成 Sink 的创建，创建成功后页面将回到创建规则，新的 Sink 将添加到规则动作中。
+
+9. 回到规则创建页面，点击**创建**按钮完成整个规则创建。
 
 现在您已成功创建了规则，你可以在**规则**页面上看到新建的规则，同时在**动作(Sink)** 标签页看到新建的 Elasticsearch Sink。
 
-您也可以点击 **集成** -> **Flow 设计器**查看拓扑，通过拓扑可以直观的看到，主题 `t/#` 下的消息在经过规则 `my_rule` 解析后被写入到 Elasticsearch 中。
+您也可以点击 **集成** -> **Flow 设计器**查看拓扑，通过拓扑可以直观的看到，主题 `t/#` 下的消息在经过规则 `my-es-rule` 解析后被写入到 Elasticsearch 中。
 
 ## 测试规则
 
 使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
 
 ```bash
-mqttx pub -i emqx_c -t t/1 -m '{"temp":24,"humidity":30}'
+mqttx pub -i emqx_c -t t/1 -m '{"temperature":24,"humidity":30}'
 ```
 
-分别查看 Sink 运行统计，命中、发送成功次数均 +1。
+分别查看 Sink 运行统计，命中、成功次数均 +1。
 
 使用 `_search` API 来查看索引中的文档内容，查看数据是否已经写入 `device_data` 索引中：
 
 ```bash
-curl -X GET "localhost:9200/device_data/_search?pretty"
+curl -u elastic:public -X GET "localhost:9200/device_data/_search?pretty"
 ```
-<!-- TODO 等待研发 -->
 
-## 高级设置
+正确的响应结果如下：
 
-<!-- TODO -->
+````json
+  "took" : 1098,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 1,
+      "relation" : "eq"
+    },
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "device_data",
+        "_type" : "_doc",
+        "_id" : "emqx_c_1705479455289",
+        "_score" : 1.0,
+        "_source" : {
+          "clientid" : "emqx_c",
+          "ts" : 1705479455289,
+          "temperature" : 24,
+          "humidity" : 30
+        }
+      }
+    ]
+  }
+}
+```
