@@ -168,3 +168,9 @@ mqttx sub -t 't/1' -h localhost -p 8883 \
   --key certs/client-0001.key \
   --insecure
 ```
+
+## Update SSL/TLS certificates
+
+When your private SSL/TLS certificate files expire, you need to manually update them by replacing the old certificates with the new ones in the `./etc` or `/etc/emqx/etc` directory.
+
+EMQX supports rotating SSL/TLS certificates without restarting. By default, EMQX reloads the SSL/TLS certificates every 120 seconds.

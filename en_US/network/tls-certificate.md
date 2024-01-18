@@ -80,9 +80,15 @@ Use the CA certificate you just generated to issue a server certificate, which i
    └── server.key
    ```
 
-
 ## Issue Client Certificates
 
 The steps for issuing client certificates are similar to those for issuing server certificates. The only difference is that when creating the CSR, the Common Name should be set to a unique identifier for the client, such as a username, client ID, etc.
 
 The client certificate is signed using the same CA certificate as the server certificate. Therefore, the client certificate can also be signed with the aforementioned CA certificate.
+
+## Next Step
+
+Once you obtain the SSL/TLS certificates, you can enable the client's SSL/TLS connections. You can also update the certificates when they are expired.
+
+- [Enable SSL/TLS Connection](./emqx-mqtt-tls.md)
+- [Update Certificates](./emqx-mqtt-tls.md#update-ssl-tls-certificates)

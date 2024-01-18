@@ -165,3 +165,9 @@ mqttx sub -t 't/1' -h localhost -p 8883 \
   --key certs/client-0001.key \
   --insecure
 ```
+
+## 更新 SSL/TLS 证书
+
+当您的私有 SSL/TLS 证书文件过期时，需要使用新证书替换在 `./etc` 或 `/etc/emqx/etc` 目录下的旧证书来手动更新它们。
+
+EMQX 支持在不重启的情况下轮换 SSL/TLS 证书。默认情况下，EMQX 每 120 秒重新加载 SSL/TLS 证书。

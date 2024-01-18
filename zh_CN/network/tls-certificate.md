@@ -85,3 +85,10 @@ openssl req -new -key server.key -out server.csr
 签发客户端证书的步骤与签发服务器证书类似，只是在生成 CSR 时，需要将 Common Name 设置为客户端的唯一标识，如用户名、客户端 ID 等。
 
 客户端证书与服务端证书使用相同的 CA 证书签名，因此客户端证书也可以使用上述 CA 证书签名。
+
+## 下一步
+
+一旦您获得了 SSL/TLS 证书，您便可以启用客户端的 SSL/TLS 连接。您还可以在证书过期时更新证书。
+
+- [启用 SSL/TLS 连接](./emqx-mqtt-tls.md)
+- [更新证书](./emqx-mqtt-tls.md#更新-ssl-tls-证书)
