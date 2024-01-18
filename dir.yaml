@@ -660,25 +660,21 @@
       path: https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack
 
 - title_en: Release Notes
-  title_cn: 版本发布说明
+  title_cn: 版本发布历史
   collapsed: true
+  path: changes/all-changes-${edition}
   children:
-    - title_en: Releases
-      title_cn: 版本发布
-      edition: ee
-      path: changes/changes-ee-5.3
-    - title_en: Releases
-      title_cn: 版本发布
+    - changes/changes-${edition}-v5
+    - changes/changes-${edition}-v4
+    - title_en: Version 0.1 to 3.x
+      title_cn: v0.1-v3.x 版本
       edition: ce
-      path: changes/changes-ce-5.3
-    - title_en: 从 V4 升级到 V5 的不兼容更改
-      title_cn: 从 V4 升级到 V5 的不兼容更改
-      lang: cn
-      path: deploy/upgrade-from-v4
+      path: changes/changes-ce-v3
     - title_en: Incompatible Changes
       title_cn: 不兼容变更
-      path: changes/breaking-changes-5.1.0
+      collapsed: true
       children:
+        - changes/breaking-changes-5.1.0
         - changes/auth-4.4-to-5.1-compatibility
         - changes/data-integration-4.4-to-5.1-incompatibility
         - changes/gateway-4.4-to-5.1-incompatibility
