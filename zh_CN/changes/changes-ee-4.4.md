@@ -2323,7 +2323,7 @@ EMQX 4.4.0 现已正式发布，主要包含以下改动:
 - 重构emqx_auth_mnesia,兼容老版本emqx_auth_username和emqx_auth_clientid的数据导入
 - emqx主配置文件拆分,并且支持 include 配置文件
 
-##  4.1.5
+## 4.1.5
 
 *发布日期: 2020-08-30*
 
