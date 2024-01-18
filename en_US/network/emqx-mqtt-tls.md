@@ -1,17 +1,8 @@
 # Enable SSL/TLS Connection
 
-EMQX can establish secure connections via SSL/TLS when accepting the access of an MQTT Client. You can enable SSL/TLS encrypted connections for all connections, including MQTT connection, to ensure the security of access and message transmission.
+EMQX can establish secure connections via SSL/TLS when accepting the access of an MQTT Client. The SSL/TLS encryption functionality encrypts network connections at the transport layer, enhancing the security of communication data while ensuring its integrity.
 
-EMQX provides comprehensive SSL/TLS capability support, including support for one-way/two-way authentication and X.509 certificate authentication. One-way authentication only ensures that the communication is encrypted but cannot verify the client's identity. Two-way authentication also verifies the client's identity. If the client cannot provide a certificate, the SSL/TLS connection will be rejected. 
-
-For client SSL/TLS connections, you can choose one of the following two modes based on your usage scenario:
-
-| Usage Mode                                                   | Advantages                                                   | Disadvantages                                                |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Directly establish SSL/TLS connection between the client and EMQX. | Easy to use, no additional components required               | It will increase EMQX's resource consumption, and if the number of connections is huge, it may lead to high CPU and memory consumption. |
-| Terminate TLS connection through a proxy or load balancer.   | No impact on EMQX performance, and provides load balancing capabilities. | Only a few cloud vendors' load balancers support TCP SSL/TLS termination. In addition, users need to deploy software such as HAProxy themselves. |
-
-This page introduces how to directly establish an SSL/TLS connection between the client and EMQX via EMQX Dashboard and configuration file. For information on how to terminate TLS connections through a proxy or load balancer, refer to [Cluster Load Balancing](../deploy/cluster/lb.md).
+This page introduces the funtionalities and advantages of the SSL/TLS connection and how to establish an SSL/TLS connection between the client and EMQX. 
 
 ## Safety Benefits
 
@@ -21,21 +12,41 @@ Enabling SSL/TLS connection provides the following safety benefits:
 2. **Confidentiality**: Each session will be encrypted using the session key negotiated by both parties. No third party can know the communication content, so even if the session key is compromised, it does not affect the security of other sessions.
 3. **Integrity**: The possibility of data being tampered with in encrypted communication is extremely low.
 
-## Prerequisite
+## Two Usage Modes
 
-Before you start, you need to prepare the SSL/TLS certificates. EMQX only provides a set of SSL/TLS certificates (located in the `etc/certs` directory of the installation package) for testing purposes. When used in a production environment, reliable certificates signed by a trusted CA should be used. For information on how to apply for relevant certificates, see [Obtain SSL/TLS Certificates](./tls-certificate.md).
+You can enable SSL/TLS encrypted connections for all connections, including MQTT connection, to ensure the security of access and message transmission. For client SSL/TLS connections, you can choose one of the following two modes based on your usage scenario:
 
-## Enable SSL/TLS Connection via Dashboard
+| Usage Mode                                                   | Advantages                                                   | Disadvantages                                                |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Directly establish SSL/TLS connection between the client and EMQX. | Easy to use, no additional components required               | It will increase EMQX's resource consumption, and if the number of connections is huge, it may lead to high CPU and memory consumption. |
+| Terminate TLS connection through a proxy or load balancer.   | No impact on EMQX performance, and provides load balancing capabilities. | Only a few cloud vendors' load balancers support TCP SSL/TLS termination. In addition, users need to deploy software such as HAProxy themselves. |
 
-The SSL listener enabled on port `8883` is used to encrypt the transmission data between a client and EMQX. You can enable the SSL/TLS connection by editing the settings of the SSL listener in the EMQX Dashboard. 
+For information on how to terminate TLS connections through a proxy or load balancer, refer to [Cluster Load Balancing](../deploy/cluster/lb.md).
 
-1. Place your private SSL/TLS certificate files in the `etc/certs` directory of EMQX.
+## One-Way/Two-Way Authentication
 
-2. Go to EMQX Dashboard. Click **Management** -> **Listeners** from the left navigation menu.
+EMQX provides comprehensive SSL/TLS capability support, enabling both one-way and two-way client/server mutual trust authentication through X.509 certificates:
 
-3. On the **Listeners** page, click **default** from the **Name** column of the SSL listener. 
+| Authentication Method  | Description                                                  | Verification Method                                          | Pros and Cons                                                |
+| ---------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| One-way Authentication | The client verifies the server's identity, but the server does not verify the client's identity. | Clients typically do not need to provide a certificate, and only need to verify that the server's certificate is issued by a trusted Certificate Authority (CA). | Can only ensure the confidentiality and integrity of communication data, but cannot guarantee the identity of the communication parties. |
+| Two-way Authentication | Both the server and client mutually verify each other's identity. | Requires issuing certificates for each device, the server verifies the client's certificate to confirm its legitimacy. | Ensures mutual trust between the server and client, and prevents man-in-the-middle attacks. |
 
-   - **TLS Verify**: Disabled by default; If peer verification is required to verify the client's identity, click the toggle switch to enable the option. 
+## SSL/TLS Certificates
+
+You need to prepare the SSL/TLS certificates for authentication before establishing an SSL/TLS connection. EMQX only provides a set of SSL/TLS certificates (located in the `etc/certs` directory of the installation package) for testing purposes. When used in a production environment, reliable certificates signed by a trusted CA should be used. For information on how to apply for relevant certificates, see [Obtain SSL/TLS Certificates](./tls-certificate.md).
+
+## Enable SSL/TLS with One-Way Authentication
+
+EMQX, by default, enables the SSL/TLS listener on port `8883` and sets it for one-way authentication. You can configure it through the Dashboard and configuration files to implement certificate replacement and modify other configuration items.
+
+### Enable via Dashboard
+
+1. Go to EMQX Dashboard. Click **Management** -> **Listeners** from the left navigation menu.
+
+2. On the **Listeners** page, click **default** from the **Name** column of the SSL listener. 
+
+   - **TLS Verify**: Disabled by default for one-way authentication.
    - **TLS Cert**, **TLS Key** and **CA Cert**: Replace the current certificate files with your private certificate files by clicking the **Reset** button.
    - **SSL Versions**: All TLS/DTLS versions are supported. The default values are `tlsv1.3` and `tlsv1.2`. If PSK cipher suits are used for PSK authentication, make sure to configure `tlsv1.2` , `tlsv1.1` and `tlsv1` here. For more information on PSK authentication, see [Enable PSK Authentication](./psk-authentication.md).
    - **Fail If No Peer Cert**: Used together with **TLS Verify** is enabled. Set to `false` by default.
@@ -46,11 +57,11 @@ The SSL listener enabled on port `8883` is used to encrypt the transmission data
    - **Enable OCSP Stapling**: Disabled by default; If you need to obtain the revocation status of SSL/TLS certificates, you can enable it by clicking the toogle switch. For more information, see [OCSP Stapling](./ocsp.md).
    - **Enable CRL Check**: Disabled by default; If you need to verify whether connecting client certificates are not revoked, you can enable it by clicking the toogle switch. For more information, see [CRL Check](./crl.md).
 
-4. After you complete the editing, click the **Update** button.
+3. After you complete the editing, click the **Update** button.
 
    <img src="./assets/edit-listener.png" alt="edit-listener" style="zoom:40%;" />
 
-## Enable SSL/TLS Connection via Configuration File
+### Enable via Configuration File
 
 You can also enable the SSL/TLS connection by modifying the `listeners.ssl.default` configuration group in the configuration file.
 
@@ -64,41 +75,102 @@ You can also enable the SSL/TLS connection by modifying the `listeners.ssl.defau
 
    ```bash
    listeners.ssl.default {
-     bind = "0.0.0.0:8883"
-     max_connections = 512000
-     ssl_options {
-       # keyfile = "etc/certs/key.pem"
-       keyfile = "etc/certs/server.key"
-       # certfile = "etc/certs/cert.pem"
-       certfile = "etc/certs/server.crt"
-       # cacertfile = "etc/certs/cacert.pem"
-       cacertfile = "etc/certs/rootCA.crt"
+      bind = "0.0.0.0:8883"
+      ssl_options {
+        cacertfile = "etc/certs/rootCA.crt"
    
-       # Peer verification not enabled
-       verify = verify_none
-     }
-   }
-   ```
-
-   If you need to enable two-way authentication, add the following configuration to the `listeners.ssl.default` configuration group:
-
-   ```bash
-   listeners.ssl.default {
-     ...
-     ssl_options {
-       ...
-       # Peer verification enabled
-       verify = verify_peer
-       # Forced two-way authentication. If the client cannot provide a certificate, the SSL/TLS connection will be rejected.
-       fail_if_no_peer_cert = true
-     }
-   }
+        certfile = "etc/certs/server.crt"
+        keyfile = "etc/certs/server.key"
+        # Enter the password when the private key file is password protected
+        # password = "123456"
+   
+        # One-way authentication, peer verification not enabled
+        verify = verify_none
+      }
+    }
    ```
 
 4. Restart EMQX to apply the configuration.
 
+## Test Client Connection with One-way Authentication 
+
+You can use [MQTTX CLI](https://mqttx.app/) for testing. One-way authentication typically requires the client to provide a CA certificate, so the client can verify the server's identity:
+
+```bash
+mqttx sub -t 't/1' -h localhost -p 8883 \
+  --protocol mqtts \
+  --ca certs/rootCA.crt
+```
+
+If the server certificate Common Name (CN) does not match the server address specified by the client during connection, the following error will occur:
+
+```bash
+Error [ERR_TLS_CERT_ALTNAME_INVALID]: Hostname/IP does not match certificate's altnames: Host: localhost. is not cert's CN: Server
+```
+
+In this case, you can set the client certificate CN to match the server address, or ignore the certificate CN validation with the `--insecure` option:
+
+```bash
+mqttx sub -t 't/1' -h localhost -p 8883 \
+  --protocol mqtts \
+  --ca certs/rootCA.crt \
+  --insecure
+```
+
+## Enable SSL/TLS with Two-Way Authentication
+
+Two-way authentication is an extension of one-way authentication, where EMQX is further configured to verify client certificates, ensuring the legitimacy of the client's identity.
+
+In addition to this, you will need to generate certificates for the client. For specific operations, refer to [Issue Client Certificates](./tls-certificate.md#issue-client-certificates).
+
+For the Dashboard method, you can choose to **Enable** under **TLS Verify**, and configure the **Fail if No Peer Cert** option to `true` to enforce two-way authentication.
+
+You can also add the following configuration to the `listeners.ssl.default` configuration group in the configuration file:
+
+```bash
+listeners.ssl.default {
+  ...
+  ssl_options {
+    ...
+    # Peer verification enabled
+    verify = verify_peer
+    # Forced two-way authentication. If the client cannot provide a certificate, the SSL/TLS connection will be rejected.
+    fail_if_no_peer_cert = true
+  }
+}
+```
+
+## Test Client Connection with Two-way Authentication
+
+You can use [MQTTX CLI](https://mqttx.app/) for testing. In addition to providing a CA certificate, two-way authentication also requires the client to provide its own certificate:
+
+```bash
+mqttx sub -t 't/1' -h localhost -p 8883 \
+  --protocol mqtts \
+  --ca certs/rootCA.crt \
+  --cert certs/client-0001.crt \
+  --key certs/client-0001.key
+```
+
+If the server certificate CN does not match the server address specified by the client during the connection, the following error will occur:
+
+```bash
+Error [ERR_TLS_CERT_ALTNAME_INVALID]: Hostname/IP does not match certificate's altnames: Host: localhost. is not cert's CN: Server
+```
+
+In this case, you can set the client certificate CN to match the server address, or ignore the certificate CN validation with the `--insecure` option:
+
+```bash
+mqttx sub -t 't/1' -h localhost -p 8883 \
+  --protocol mqtts \
+  --ca certs/rootCA.crt \
+  --cert certs/client-0001.crt \
+  --key certs/client-0001.key \
+  --insecure
+```
+
 ## Update SSL/TLS certificates
 
-When your private SSL/TLS certificate files expire, you need to manually update them by replacing the old certificates with the new ones in the `./etc` or `/etc/emqx/etc` directory. 
+When your private SSL/TLS certificate files expire, you need to manually update them by replacing the old certificates with the new ones in the `./etc` or `/etc/emqx/etc` directory.
 
 EMQX supports rotating SSL/TLS certificates without restarting. By default, EMQX reloads the SSL/TLS certificates every 120 seconds.

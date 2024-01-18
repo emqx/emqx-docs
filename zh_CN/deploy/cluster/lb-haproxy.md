@@ -169,6 +169,8 @@ backend mqtt_backend
 frontend mqtt_servers
   bind *:1883
   mode tcp
+  # 等待缓冲区填满，以便解析 MQTT 报文
+  tcp-request inspect-delay 10s
   # 拒绝非 MQTT 连接
   tcp-request content reject unless { req.payload(0，0)，mqtt_is_valid }
   default_backend mqtt_backend

@@ -1,4 +1,4 @@
-# 启用 PSK 验证 
+# PSK 认证
 
 PSK（Pre-Shared Key）认证是一种基于预先共享的密钥进行身份验证的认证方式。使用PSK认证，客户端和 EMQX 在建立安全连接之前必须预先共享相同的密钥。在客户端和 EMQX 之间建立 TLS 连接时以及在后续的通信中预共享密钥会对数据进行加密和解密。启用 PSK 认证后，客户端和 EMQX 可以相互验证，并在无需证书或证书颁发机构的情况下建立安全连接。
 
@@ -41,15 +41,10 @@ PSK（Pre-Shared Key）认证是一种基于预先共享的密钥进行身份验
    ```bash
    listeners.ssl.default {
      acceptors = 4
-     bind = 1883
+     bind = 8883
      ssl_options {
        ciphers = ["RSA-PSK-AES256-GCM-SHA384","RSA-PSK-AES256-CBC-SHA384","RSA-PSK-AES128-GCM-SHA256","RSA-PSK-AES128-CBC-SHA256","RSA-PSK-AES256-CBC-SHA","RSA-PSK-AES128-CBC-SHA"]
        versions = ["tlsv1.2", "tlsv1.1", "tlsv1"]
      }
    }
    ```
-
-
-
-
-

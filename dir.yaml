@@ -23,6 +23,10 @@
     - title_en: What's New
       title_cn: 全新功能
       path: getting-started/new-features
+    - title_en: Feature Comparison
+      title_cn: 功能对比
+      path: getting-started/feature-comparison
+      edition: ce
     - title_en: Get Started
       title_cn: 快速开始
       path: getting-started/getting-started
@@ -146,22 +150,22 @@
           title_cn: API 文档
           lang: en
           edition: ce
-          path: https://www.emqx.io/docs/en/v5.3/admin/api-docs.html
+          path: https://www.emqx.io/docs/en/v${CE_MINOR_VERSION}/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: cn
           edition: ce
-          path: https://www.emqx.io/docs/zh/v5.3/admin/api-docs.html
+          path: https://www.emqx.io/docs/zh/v${CE_MINOR_VERSION}/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: en
           edition: ee
-          path: https://docs.emqx.com/en/enterprise/v5.3/admin/api-docs.html
+          path: https://docs.emqx.com/en/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
         - title_en: API Docs
           title_cn: API 文档
           lang: cn
           edition: ee
-          path: https://docs.emqx.com/zh/enterprise/v5.3/admin/api-docs.html
+          path: https://docs.emqx.com/zh/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
 
 - title_en: EMQX Clustering
   title_cn: 构建集群
@@ -189,6 +193,64 @@
         - performance/benchmark-emqtt-bench
         - performance/benchmark-xmeter
         - performance/performance-reference
+
+- title_en: Security Guide
+  title_cn: 安全指南
+  path: access-control/security-guide
+  collapsed: true
+  children:
+    - title_en: Network and TLS
+      title_cn: 网络与 TLS
+      path: network/overview
+      collapsed: true
+      children:
+        - network/emqx-mqtt-tls
+        - network/mqtt-client-tls
+        - network/tls-certificate
+        - network/crl
+        - network/ocsp
+        - title_en: GMSSL
+          title_cn: 国密 SSL
+          lang: cn
+          path: network/gmssl
+      # - network/ipv6
+    - title_en: Authentication
+      title_cn: 认证
+      path: access-control/authn/authn
+      collapsed: true
+      children:
+        - access-control/authn/x509
+        - access-control/authn/jwt
+        - title_en: Password based
+          title_cn: 密码认证
+          path: access-control/authn/pwoverview
+          collapsed: true
+          children:
+            - access-control/authn/mnesia
+            - access-control/authn/mysql
+            - access-control/authn/mongodb
+            - access-control/authn/postgresql
+            - access-control/authn/redis
+            - access-control/authn/ldap
+            - access-control/authn/http
+        - access-control/authn/scram
+        - network/psk-authentication
+        - access-control/authn/user_management
+    - title_en: Authorization
+      title_cn: 授权
+      path: access-control/authz/authz
+      collapsed: true
+      children:
+        - access-control/authz/file
+        - access-control/authz/mnesia
+        - access-control/authz/mysql
+        - access-control/authz/mongodb
+        - access-control/authz/postgresql
+        - access-control/authz/redis
+        - access-control/authz/ldap
+        - access-control/authz/http
+    - access-control/blacklist
+    - access-control/flapping-detect
 
 - title_en: Rule Engine
   title_cn: 规则引擎
@@ -355,27 +417,26 @@
           path: configuration/license
           lang: en
           edition: ee
-    - configuration/configuration-manual
-  # - title_en: Configuration Manual
-  #   title_cn: 配置手册
-  #   lang: cn
-  #   edition: ce
-  #   path: https://www.emqx.io/docs/zh/v5.0/configuration/configuration-manual.html
-  # - title_en: Configuration Manual
-  #   title_cn: 配置手册
-  #   lang: en
-  #   edition: ce
-  #   path: https://www.emqx.io/docs/en/v5.0/configuration/configuration-manual.html
-  # - title_en: Configuration Manual
-  #   title_cn: 配置手册
-  #   lang: cn
-  #   edition: ee
-  #   path: https://docs.emqx.com/zh/enterprise/v5.0/configuration/configuration-manual.html
-  # - title_en: Configuration Manual
-  #   title_cn: 配置手册
-  #   lang: en
-  #   edition: ee
-  #   path: https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html
+    - title_en: Configuration Manual
+      title_cn: 配置手册
+      lang: cn
+      edition: ce
+      path: https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/
+    - title_en: Configuration Manual
+      title_cn: 配置手册
+      lang: en
+      edition: ce
+      path: https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/
+    - title_en: Configuration Manual
+      title_cn: 配置手册
+      lang: cn
+      edition: ee
+      path: https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/
+    - title_en: Configuration Manual
+      title_cn: 配置手册
+      lang: en
+      edition: ee
+      path: https://docs.emqx.com/en/enterprise/v${EE_VERSION}/hocon/
     - title_en: Command Line Interface
       title_cn: 命令行接口
       path: admin/cli
@@ -452,72 +513,6 @@
       title_cn: 遥测
       path: telemetry/telemetry
       edition: ce
-
-- title_en: Security Guide
-  title_cn: 安全指南
-  path: access-control/security-guide
-  collapsed: true
-  children:
-    - title_en: Access Control
-      title_cn: 访问控制
-      path: access-control/overview
-      collapsed: true
-      children:
-        - title_en: Authentication
-          title_cn: 认证
-          path: access-control/authn/authn
-          children:
-            - title_en: Password based
-              title_cn: 密码认证
-              path: access-control/authn/pwoverview
-              children:
-                - access-control/authn/mnesia
-                - access-control/authn/mysql
-                - access-control/authn/mongodb
-                - access-control/authn/postgresql
-                - access-control/authn/redis
-                - title_en: LDAP
-                  title_cn: LDAP
-                  path: access-control/authn/ldap
-                  edition: ee
-                - access-control/authn/http
-            - access-control/authn/jwt
-            - access-control/authn/scram
-            - access-control/authn/user_management
-        - title_en: Authorization
-          title_cn: 授权
-          path: access-control/authz/authz
-          children:
-            - access-control/authz/file
-            - access-control/authz/mnesia
-            - access-control/authz/mysql
-            - access-control/authz/mongodb
-            - access-control/authz/postgresql
-            - access-control/authz/redis
-            - title_en: LDAP
-              title_cn: LDAP
-              path: access-control/authz/ldap
-              edition: ee
-            - access-control/authz/http
-        - access-control/blacklist
-        - access-control/flapping-detect
-    - title_en: Network and TLS
-      title_cn: 网络与 TLS
-      path: network/overview
-      collapsed: true
-      children:
-        - network/emqx-mqtt-tls
-        - network/mqtt-client-tls
-        - network/psk-authentication
-        - network/tls-certificate
-      # - network/crl-and-ocsp-stapling
-        - network/crl
-        - network/ocsp
-        - title_en: GMSSL
-          title_cn: 国密 SSL
-          lang: cn
-          path: network/gmssl
-      # - network/ipv6
 
 - title_en: Advanced Features
   title_cn: 高级功能

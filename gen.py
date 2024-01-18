@@ -23,6 +23,17 @@ def is_lang_match(i, en_or_cn):
 
 EDITION = sys.argv[1]
 
+# parser document env file
+def parse_env_file(file_path):
+    config = {}
+    with open(file_path, 'r') as file:
+        for line in file:
+            line = line.strip()
+            if line:
+                key, value = line.split('=')
+                config[key] = value
+    return config
+
 ## check if the 'edition' field matches expected input
 ## when no 'edition' is defined, it matches both 'ce' and 'ee'
 def is_edition_match(i, ce_or_ee):
@@ -84,9 +95,16 @@ def move_manual(lang, edition):
     shutil.copyfile(source_path, target_path)
 
 with open(r'dir.yaml', encoding='utf-8') as file:
+    # Read file and replace the str with env variable
+    content = file.read()
+    version = parse_env_file(r'current-version.env')
+    for key in version:
+        content = content.replace('${' + key + '}', version[key])
+
     # The FullLoader parameter handles the conversion from YAML
     # scalar values to Python the dictionary format
-    all = yaml.load(file, Loader=yaml.FullLoader)
+    all = yaml.load(content, Loader=yaml.FullLoader)
+
     move_manual('en', EDITION)
     move_manual('cn', EDITION)
     en = parse(all, 'en', EDITION)

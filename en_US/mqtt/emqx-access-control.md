@@ -15,4 +15,4 @@ This page contains learning resources for exploring the concepts of authenticati
 
 - [Introduction to JSON Web Tokens](https://jwt.io/introduction)
 
-To learn how authentication and authorization are implemented in EMQX and how to configure the access control functions, refer to [Access Control](../access-control/overview.md).
+To learn how authentication and authorization are implemented in EMQX and how to configure the access control functions, refer to [Authentication](../access-control/authn/authn.md) and [Authorization](../access-control/authz/authz.md).
