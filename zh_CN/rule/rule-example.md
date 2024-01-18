@@ -17,12 +17,12 @@ ref: undefined
 
 {% emqxce %}
 ::: danger
-EMQ X Broker 中仅适用以下操作：
+EMQX Broker 中仅适用以下操作：
 - 检查 (调试)
 - 发送数据到 Web 服务
 - 桥接数据到 MQTT Broker
 - 保存数据到 TDengine(使用 发送数据到 Web 服务 实现)
-其余均是 EMQ X Enterprise 专属功能。
+其余均是 EMQX Enterprise 专属功能。
 :::
 {% endemqxce %}
 
@@ -184,7 +184,7 @@ $ mosquitto
 ```
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -289,7 +289,7 @@ INDEX topic_index(`id`, `topic`)
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -397,7 +397,7 @@ CREATE TABLE t_mqtt_msg (
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -512,7 +512,7 @@ CREATE TABLE t_mqtt_msg (
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 ```bash
@@ -609,7 +609,7 @@ db.createCollection("t_mqtt_msg");
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -710,7 +710,7 @@ $ aws dynamodb create-table --cli-input-json file://mqtt_msg.json --endpoint-url
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -786,7 +786,7 @@ $ redis-server
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -896,7 +896,7 @@ create table t_mqtt_msg (msgid Nullable(String), topic Nullable(String), clienti
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -972,7 +972,7 @@ $ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -1118,7 +1118,7 @@ Postman-Token: 69af0565-27f8-41e5-b0cd-d7c7f5b7a037
 
 [TDengine](https://github.com/taosdata/TDengine) 是[涛思数据](https://www.taosdata.com/cn/)推出的一款开源的专为物联网、车联网、工业互联网、IT 运维等设计和优化的大数据平台。除核心的快 10 倍以上的时序数据库功能外，还提供缓存、数据订阅、流式计算等功能，最大程度减少研发和运维的复杂度。
 
-EMQ X 支持通过 **发送到 Web 服务** 的方式保存数据到 TDengine，也在企业版上提供原生的 TDengine 驱动实现直接保存。
+EMQX 支持通过 **发送到 Web 服务** 的方式保存数据到 TDengine，也在企业版上提供原生的 TDengine 驱动实现直接保存。
 
 使用 Docker 安装 TDengine 或在 [Cloud](https://marketplace.huaweicloud.com/product/OFFI454488918838128640) 上部署：
 
@@ -1156,7 +1156,7 @@ CREATE TABLE t_mqtt_msg (
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -1166,7 +1166,7 @@ SELECT * FROM "t/#"
 
 ![image](./assets/rule-engine/rule_sql.png)
 
-后续动作创建操作可以根据你的 EMQ X 版本灵活选择。
+后续动作创建操作可以根据你的 EMQX 版本灵活选择。
 
 ### 原生方式（企业版）
 
@@ -1209,13 +1209,13 @@ insert into test.t_mqtt_msg(ts, msgid, topic, qos, payload) values (now, '${id}'
 
 为支持各种不同类型平台的开发，TDengine 提供符合 REST 设计标准的 API。通过 [RESTful Connector](https://www.taosdata.com/cn/documentation/connector/#RESTful-Connector) 提供了最简单的连接方式，即使用 HTTP 请求携带认证信息与要执行的 SQL 操作 TDengine。
 
-EMQ X 规则引擎中有功能强大的**发送数据到 Web 服务功能**，可以实现无缝实现上述操作。
+EMQX 规则引擎中有功能强大的**发送数据到 Web 服务功能**，可以实现无缝实现上述操作。
 
 关联动作:
 
 在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “保存数据到 Web 服务“。
 
-EMQ X 规则引擎中有功能强大的***\*发送数据到 Web 服务功能\****，可以实现无缝实现上述操作。
+EMQX 规则引擎中有功能强大的***\*发送数据到 Web 服务功能\****，可以实现无缝实现上述操作。
 
 填写动作参数:
 
@@ -1310,7 +1310,7 @@ SELECT create_hypertable('conditions', 'time');
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -1402,7 +1402,7 @@ $ docker run --name=influxdb --rm -d -p 8086:8086 -p 8089:8089/udp -v ${PWD}/fil
 
 ```
 
-EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置文件：
+EMQX 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置文件：
 
 ```bash
 [[udp]]
@@ -1412,7 +1412,7 @@ EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置�
   database = "emqx"
 
   # InfluxDB precision for timestamps on received points ("" or "n", "u", "ms", "s", "m", "h")
-  # EMQ X 默认时间戳是毫秒
+  # EMQX 默认时间戳是毫秒
   precision = "ms"
 
   # 其他配置根据需要自行修改
@@ -1424,7 +1424,7 @@ EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置�
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -1541,7 +1541,7 @@ $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --part
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -1630,7 +1630,7 @@ $ ./bin/pulsar-admin topics create-partitioned-topic -p 5 testTopic
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -1721,7 +1721,7 @@ $ ./bin/mqbroker -n localhost:9876 -c conf/broker.conf
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -1797,7 +1797,7 @@ $ rabbitmq-server
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -1894,7 +1894,7 @@ channel.start_consuming()
 
 ## 桥接数据到 RPC 服务
 
-搭建 EMQ X Broker 环境，以 MaxOS X 为例:
+搭建 EMQX Broker 环境，以 MaxOS X 为例:
 
 ```bash
 $ brew tap emqx/emqx/emqx
@@ -1907,7 +1907,7 @@ $ emqx console
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 ```sql
@@ -1981,7 +1981,7 @@ $ redis-server
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 然后填写规则 SQL:
 
@@ -2110,7 +2110,7 @@ CREATE TABLE `mqtt_msg` (
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
 
 然后填写规则 SQL:
 
@@ -2229,7 +2229,7 @@ CREATE TABLE mqtt_msg (
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
 
 然后填写规则 SQL:
 
@@ -2363,7 +2363,7 @@ CREATE TABLE mqtt.mqtt_msg (
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
 
 然后填写规则 SQL:
 
@@ -2461,7 +2461,7 @@ db.createCollection("mqtt_msg");
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
 
 然后填写规则 SQL:
 
@@ -2551,7 +2551,7 @@ $ redis-server
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 然后填写规则 SQL:
 
@@ -2656,7 +2656,7 @@ CREATE TABLE `mqtt_sub` (
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
 
 然后填写规则 SQL:
 
@@ -2762,7 +2762,7 @@ CREATE TABLE mqtt_sub(
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
 
 然后填写规则 SQL:
 
@@ -2883,7 +2883,7 @@ CREATE TABLE mqtt_sub (
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
 
 然后填写规则 SQL:
 
@@ -2971,7 +2971,7 @@ db.createCollection("mqtt_sub");
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
 
 然后填写规则 SQL:
 
@@ -3032,7 +3032,7 @@ db.mqtt_sub.insert({clientid: "test", topic: "t1", qos: 1})
 ![](./assets/rule-engine/mongo_sub_10.png)
 
 
-## 从 Kafka 消费消息到 EMQ X
+## 从 Kafka 消费消息到 EMQX
 
 搭建 Kafka 环境，以 MaxOS X 为例:
 
@@ -3064,7 +3064,7 @@ $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --part
 ```
 创建资源:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “资源” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “资源” 选项卡。
 
 点击 “新建” 按钮:
 
@@ -3114,7 +3114,7 @@ Dashboard的websocket工具接收到了Kafka 生产的消息"hello-kafka":
 
 ![](./assets/rule-engine/kafka_consumer7.png)
 
-## 从 Pulsar 消费消息到 EMQ X
+## 从 Pulsar 消费消息到 EMQX
 
 搭建 Pulsar 环境，以 MaxOS X 为例:
 
@@ -3135,7 +3135,7 @@ $ ./bin/pulsar-admin topics create-partitioned-topic -p 5 testTopic
 ```
 创建资源:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “资源” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “资源” 选项卡。
 
 点击 “新建” 按钮:
 
@@ -3155,11 +3155,11 @@ $ ./bin/pulsar-admin topics create-partitioned-topic -p 5 testTopic
 
 3). Pulsar 的订阅主题
 
-4). EMQ X 的消息主题
+4). EMQX 的消息主题
 
 5). Pulsar 流控阈值 (Pulsar 流控阈值，配置 Pulsar 向消费者发送多少条消息后阻塞 Pulsar Consumer)
 
-6). EMQ X 重置流控阈值百分比 (Pulsar 流控阈值重置百分比。此配置让消费者处理完成一定数量的消息之后，提前重置 `Pulsar 流控阈值`。 比如，`Pulsar 流控阈值` 为 1000，`阈值重置百分比` 为 80%，则重置)
+6). EMQX 重置流控阈值百分比 (Pulsar 流控阈值重置百分比。此配置让消费者处理完成一定数量的消息之后，提前重置 `Pulsar 流控阈值`。 比如，`Pulsar 流控阈值` 为 1000，`阈值重置百分比` 为 80%，则重置)
 
 
 

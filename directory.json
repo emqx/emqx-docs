@@ -4,11 +4,11 @@
       "title": "产品概览",
       "children": [
         {
-          "title": "EMQ X 消息服务器简介",
+          "title": "EMQX 消息服务器简介",
           "path": "./"
         },
         {
-          "title": "EMQ X 消息服务器功能列表",
+          "title": "EMQX 消息服务器功能列表",
           "path": "introduction/checklist"
         }
       ]
@@ -21,7 +21,7 @@
           "path": "getting-started/install"
         },
         {
-          "title": "启动 EMQ X",
+          "title": "启动 EMQX",
           "path": "getting-started/start"
         },
         {
@@ -386,7 +386,7 @@
       "title": "Introduction",
       "children": [
         {
-          "title": "EMQ X Broker",
+          "title": "EMQX Broker",
           "path": "./"
         },
         {
@@ -403,7 +403,7 @@
           "path": "getting-started/install"
         },
         {
-          "title": "Start EMQ X",
+          "title": "Start EMQX",
           "path": "getting-started/start"
         },
         {

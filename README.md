@@ -1,4 +1,4 @@
-《*EMQ X* documentation》
+《*EMQX* documentation》
 ========================
 
 Support and Contact

@@ -27,13 +27,13 @@ ref:
 
   - [EMQ Official website](https://www.emqx.io?spm=docs)
   - [EMQ Official blog](https://www.emqx.io/blog?spm=docs)
-  - [EMQ X GitHub  depositary ](https://github.com/emqx/emqx)
+  - [EMQX GitHub  depositary ](https://github.com/emqx/emqx)
 
 ## Community, discussion, contribution and support
 
 You can contact the EMQ community and developers through the following channels:
 
-  - [EMQ X Slack](https://slack-invite.emqx.io)
+  - [EMQX Slack](https://slack-invite.emqx.io)
   - [Twitter](https://twitter.com/emqtt)
   - [Forum](https://groups.google.com/d/forum/emqtt)
   - [Medium](https://medium.com/@emqtt)
@@ -42,15 +42,15 @@ You can contact the EMQ community and developers through the following channels:
 You are welcome to submit any bugs, issues and feature requests to [emqx/emqx](https://github.com/emqx/emqx/issues)。
 
 
-## Projects using EMQ X Broker
+## Projects using EMQX Broker
 
-The following are submitted open source projects that use EMQ X Broker. Unsubmitted projects/commercial projects are not listed here:
+The following are submitted open source projects that use EMQX Broker. Unsubmitted projects/commercial projects are not listed here:
 
 - [ActorCloud](https://github.com/emqx/ActorCloud) -Open source one-stop IoT platform service
 
 ## Chinese tutorial
 
-For EMQ X Broker series of tutorials and Erlang/IoT related blogs and video sites, please leave a message or [Issues contribution](https://github.com/emqx/emqx-docs-cn).
+For EMQX Broker series of tutorials and Erlang/IoT related blogs and video sites, please leave a message or [Issues contribution](https://github.com/emqx/emqx-docs-cn).
 
 - None
 

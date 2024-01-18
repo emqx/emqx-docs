@@ -18,9 +18,9 @@ ref: undefined
 
 # 多语言支持
 
-从 4.1 开始，EMQ X 提供了专门的多语言支持插件：[emqx_extension_hook](https://github.com/emqx/emqx-extension-hook) 以优化多语言的支持效果。
+从 4.1 开始，EMQX 提供了专门的多语言支持插件：[emqx_extension_hook](https://github.com/emqx/emqx-extension-hook) 以优化多语言的支持效果。
 
-该插件允许你使用其它编程语言来处理 EMQ X 中的钩子事件，例如：
+该插件允许你使用其它编程语言来处理 EMQX 中的钩子事件，例如：
 
 - 认证某客户端的登录权限。
 - 校验某客户端的 PUB/SUB 的操作权限。
@@ -33,7 +33,7 @@ ref: undefined
 其整体的事件传递的架构如下：
 
 ```
-                            EMQ X
+                            EMQX
                             +============================+
                             |        Extension           |
  +----------+    CONNECT    | Hooks +----------------+   |
@@ -50,8 +50,8 @@ ref: undefined
              +=======================+
 ```
 
-- `emqx_extension_hook` 作为 EMQ X 的插件：
-    * 它会接收 EMQ X 所有的钩子事件，并将其分发到对应的 驱动(Driver) 上。
+- `emqx_extension_hook` 作为 EMQX 的插件：
+    * 它会接收 EMQX 所有的钩子事件，并将其分发到对应的 驱动(Driver) 上。
     * 提供对驱动的管理、各个指标的统计。
 
 - 不同语言的支持，需要对应的驱动支持。
@@ -73,14 +73,14 @@ Java 开发可参考：[emqx-extension-java-sdk](https://github.com/emqx/emqx-ex
 
 ## 其他
 
-在 EMQ X 4.1 之前。我们仅提供 Lua 的多语言支持。它的架构与上面提到的不同，它会将整个语言的运行时，包含在 Erlang VM 中：
+在 EMQX 4.1 之前。我们仅提供 Lua 的多语言支持。它的架构与上面提到的不同，它会将整个语言的运行时，包含在 Erlang VM 中：
 
 ![Old Multiple Lang Arch](./assets/lua-lang-arch.png)
 
 - 多语言支持是作为一个插件出现，不同的语言环境，需要有不同的语言支持插件。
 - 该支持插件内嵌了该语言运行时的所有环境。
 
-为了保持兼容，该插件仍然保留在 EMQ X 的发行版本中。
+为了保持兼容，该插件仍然保留在 EMQX 的发行版本中。
 
 ### Lua 
 Lua 的支持由 [emqx_lua_hook](https://github.com/emqx/emqx-lua-hook) 实现。它包括：
@@ -90,7 +90,7 @@ Lua 的支持由 [emqx_lua_hook](https://github.com/emqx/emqx-lua-hook) 实现�
 
 #### 示例
 
-在 EMQ X 发行包中，用户自定义的 Lua 脚本文件应该放在 `data/script/` 中。
+在 EMQX 发行包中，用户自定义的 Lua 脚本文件应该放在 `data/script/` 中。
 
 以控制消息的发送内容为例，新增文件 `data/script/test.lua`：
 

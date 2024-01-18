@@ -6,7 +6,7 @@ Erlang/OTP是出色的软实时 (Soft-Realtime)、低延时 (Low-Latency)、分�
 
 MQTT 是轻量的 (Lightweight)、发布订阅模式 (PubSub) 的物联网消息协议。
 
-EMQ X 设计目标是实现高可靠，并支持承载海量物联网终端的MQTT连接，支持在海量物联网设备间低延时消息路由:
+EMQX 设计目标是实现高可靠，并支持承载海量物联网终端的MQTT连接，支持在海量物联网设备间低延时消息路由:
 
 1. 稳定承载大规模的 MQTT 客户端连接，单服务器节点支持50万到100万连接。
 2. 分布式节点集群，快速低延时的消息路由，单集群支持1000万规模的路由。
@@ -18,8 +18,8 @@ EMQ X 设计目标是实现高可靠，并支持承载海量物联网终端的MQ
 
 ## 开始使用
   - [安装](getting-started/install.md)：不同操作系统与安装包类型的下载、安装步骤。
-  - [启动 EMQ X](getting-started/start.md)：启动 EMQ X 并查看启动状态。
-  - [Dashboard](getting-started/dashboard.md)：通过 Dashboard 管理 EMQ X 及在线设备。
+  - [启动 EMQX](getting-started/start.md)：启动 EMQX 并查看启动状态。
+  - [Dashboard](getting-started/dashboard.md)：通过 Dashboard 管理 EMQX 及在线设备。
 
 ## 认证鉴权
   - [认证简介](advanced/auth.md)：选择内置插件、外部数据库、JWT 或者 HTTP 服务作为认证数据源，验证客户端连接合法性。
@@ -28,15 +28,15 @@ EMQ X 设计目标是实现高可靠，并支持承载海量物联网终端的MQ
 
 ## HTTP API
 
-HTTP API 是物联网平台开发与 EMQ X 运维中频繁使用的功能，HTTP API 可以实现与外部系统的集成，例如查询并管理客户端信息、代理订阅、发布消息和创建规则等。
+HTTP API 是物联网平台开发与 EMQX 运维中频繁使用的功能，HTTP API 可以实现与外部系统的集成，例如查询并管理客户端信息、代理订阅、发布消息和创建规则等。
 
   - [HTTP API](advanced/http-api.md)：包含 HTTP API 接入点、接入认证方式。
-  - [基本信息](advanced/http-api.md#endpoint-brokers)：获取 EMQ X 版本、运行状态等基本信息。
-  - [节点](advanced/http-api.md#endpoint-nodes)：获取 EMQ X 节点信息。
+  - [基本信息](advanced/http-api.md#endpoint-brokers)：获取 EMQX 版本、运行状态等基本信息。
+  - [节点](advanced/http-api.md#endpoint-nodes)：获取 EMQX 节点信息。
   - [客户端](advanced/http-api.md#endpoint-clients)：查看在线客户端信息，支持踢出客户端。
   - [订阅信息](advanced/http-api.md#endpoint-subscriptions)：查看订阅主题列表与订阅关系。
   - [路由](advanced/http-api.md#endpoint-routes)：查看已订阅的主题。
-  - [消息发布](advanced/http-api.md#endpoint-publish)：通过 HTTP 调用 EMQ X 发布 MQTT 消息，应用程序与客户端通信可靠的方式。
+  - [消息发布](advanced/http-api.md#endpoint-publish)：通过 HTTP 调用 EMQX 发布 MQTT 消息，应用程序与客户端通信可靠的方式。
   - [主题订阅](advanced/http-api.md#endpoint-subscribe)：动态管理客户端订阅列表，无需客户端主动发起订阅/取消订阅。
   - [插件](advanced/http-api.md#endpoint-plugins)：插件的状态管理，启动、停止操作。
 
@@ -52,14 +52,14 @@ HTTP API 是物联网平台开发与 EMQ X 运维中频繁使用的功能，HTTP
 
 ## 数据存储
 
-EMQ X 企业版特有功能，数据存储将客户端上下线状态，订阅关系，离线消息、消息内容，消息抵达后发送的消息回执等操作记录到各种数据库中。数据存储包含运行时数据与消息数据，能够在服务崩溃、客户端异常离线后仍然保留数据。
+EMQX 企业版特有功能，数据存储将客户端上下线状态，订阅关系，离线消息、消息内容，消息抵达后发送的消息回执等操作记录到各种数据库中。数据存储包含运行时数据与消息数据，能够在服务崩溃、客户端异常离线后仍然保留数据。
 
   - [数据存储](backend/backend.md)：基本概念与使用场景。
   - [数据存储配置](backend/backend.md#redis-数据存储)：使用不同的数据源进行数据存储。
 
 ## 消息桥接
 
-EMQ X 企业版桥接转发 MQTT 消息到 Kafka、RabbitMQ、Pulsar、RocketMQ、MQTT Broker 或其他 EMQ X 节点。
+EMQX 企业版桥接转发 MQTT 消息到 Kafka、RabbitMQ、Pulsar、RocketMQ、MQTT Broker 或其他 EMQX 节点。
 
   - [MQTT 桥接](bridge/bridge.md#mqtt-桥接)：实现跨地域、跨集群部署。
   - [RPC 桥接](bridge/bridge.md#rpc-桥接)

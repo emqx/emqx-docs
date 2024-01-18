@@ -21,7 +21,7 @@ ref: undefined
 
 *Release Date: 2020-08-28*
 
-EMQ X 4.2-rc.2 is released now, it mainly includes the following changes:
+EMQX 4.2-rc.2 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -67,7 +67,7 @@ EMQ X 4.2-rc.2 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-08-28*
 
-EMQ X 4.1.4 is released now, it mainly includes the following changes:
+EMQX 4.1.4 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -105,7 +105,7 @@ EMQ X 4.1.4 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-08-22*
 
-EMQ X 4.2-rc.1 is released now, it mainly includes the following changes:
+EMQX 4.2-rc.1 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -171,7 +171,7 @@ EMQ X 4.2-rc.1 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-08-14*
 
-EMQ X 4.2-beta.1 is released now, it mainly includes the following changes:
+EMQX 4.2-beta.1 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -263,7 +263,7 @@ EMQ X 4.2-beta.1 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-08-04*
 
-EMQ X 4.1.3 is released now, it mainly includes the following changes:
+EMQX 4.1.3 is released now, it mainly includes the following changes:
 
 ### emqx-management
 
@@ -285,7 +285,7 @@ EMQ X 4.1.3 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-07-31*
 
-EMQ X 4.2-alpha.3 is released now, it mainly includes the following changes:
+EMQX 4.2-alpha.3 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -357,7 +357,7 @@ EMQ X 4.2-alpha.3 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-07-23*
 
-EMQ X 4.1.2 is released now, it mainly includes the following changes:
+EMQX 4.1.2 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -383,7 +383,7 @@ EMQ X 4.1.2 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-07-17*
 
-EMQ X 4.2-alpha.2 is released now, it mainly includes the following changes:
+EMQX 4.2-alpha.2 is released now, it mainly includes the following changes:
 
 ### emqx-statsd
 
@@ -453,7 +453,7 @@ EMQ X 4.2-alpha.2 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-07-03*
 
-EMQ X 4.1.1 is released now, it mainly includes the following changes:
+EMQX 4.1.1 is released now, it mainly includes the following changes:
 
 ### emqx-retainer
 
@@ -495,7 +495,7 @@ EMQ X 4.1.1 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-06-20*
 
-EMQ X 4.2-alpha.2 is released now, it mainly includes the following changes:
+EMQX 4.2-alpha.2 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -559,7 +559,7 @@ EMQ X 4.2-alpha.2 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-06-04*
 
-EMQ X 4.1.0 is released now, it mainly includes the following changes:
+EMQX 4.1.0 is released now, it mainly includes the following changes:
 
 **Enhancements:**
 
@@ -576,14 +576,14 @@ EMQ X 4.1.0 is released now, it mainly includes the following changes:
   - Support for obtaining network addresses and ports when using the proxy protocol
   - Add authentication plugin based on Mnesia database (completely replace `emqx-auth-clientid` and `emqx-auth-username` plugins in subsequent versions)
   - Support for editing rules in rule engine
-  - Support comment configuration items when running EMQ X through Docker
+  - Support comment configuration items when running EMQX through Docker
   - LwM2M gateway plugin supports IPv6 and listens to multiple ports at the same time
   - CoAP gateway plugin supports IPv6
   - JWT authentication plugin supports configuration of jwerl signature format
 
 **Bug fixes:**
 
-  - Fix the issue that EMQ X could not start when `etc/emqx.conf` was read-only
+  - Fix the issue that EMQX could not start when `etc/emqx.conf` was read-only
   - Fix the issue that the connection process crashes in some cases
   - Fix the issue that the browser doesn't support the current SSL/TLS certificates
   - Fix the issue that the MQTT bridge plugin doesn't send heartbeat packets by default
@@ -596,7 +596,7 @@ EMQ X 4.1.0 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-05-23*
 
-EMQ X 4.1-rc.2 is released now, it mainly includes the following changes:
+EMQX 4.1-rc.2 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -627,7 +627,7 @@ EMQ X 4.1-rc.2 is released now, it mainly includes the following changes:
 
 **Enhancements:**
 
-- Support comment configuration items when running EMQ X through Docker
+- Support comment configuration items when running EMQX through Docker
 
   Github PR: [emqx/emqx-rel#508](https://github.com/emqx/emqx-rel/pull/508)
 
@@ -651,7 +651,7 @@ EMQ X 4.1-rc.2 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-05-15*
 
-EMQ X 4.1-rc.1 is released now, it mainly includes the following changes:
+EMQX 4.1-rc.1 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -705,7 +705,7 @@ EMQ X 4.1-rc.1 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-05-09*
 
-EMQ X 4.0.7 is released now, which mainly includes the following changes:
+EMQX 4.0.7 is released now, which mainly includes the following changes:
 
 ### emqx
 
@@ -731,7 +731,7 @@ EMQ X 4.0.7 is released now, which mainly includes the following changes:
 
 *Release Date: 2020-04-26*
 
-EMQ X 4.1-beta.1 is released now, it mainly includes the following changes:
+EMQX 4.1-beta.1 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -765,7 +765,7 @@ EMQ X 4.1-beta.1 is released now, it mainly includes the following changes:
 
 **Bug fixes:**
 
-- Fix no EMQ X Broker Metrics
+- Fix no EMQX Broker Metrics
 
   Github PR: [emqx/emqx-statsd#55](https://github.com/emqx/emqx-statsd/pull/55)
 
@@ -816,7 +816,7 @@ EMQ X 4.1-beta.1 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-04-22*
 
-EMQ X 4.0.6 is released now, it mainly includes the following changes:
+EMQX 4.0.6 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -854,7 +854,7 @@ EMQ X 4.0.6 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-04-17*
 
-EMQ X 4.1-alpha.3 is released now, it mainly includes the following changes:
+EMQX 4.1-alpha.3 is released now, it mainly includes the following changes:
 
 ### emqx-coap
 
@@ -900,7 +900,7 @@ EMQ X 4.1-alpha.3 is released now, it mainly includes the following changes:
 
 *Release Date: 2020-04-11*
 
-EMQ X 4.1-alpha.2 is released now.
+EMQX 4.1-alpha.2 is released now.
 
 ### emqx
 
@@ -963,7 +963,7 @@ EMQ X 4.1-alpha.2 is released now.
 
 *Release Date: 2020-03-27*
 
-EMQ X 4.1-alpha.1 is released now.
+EMQX 4.1-alpha.1 is released now.
 
 ### emqx
 
@@ -1017,7 +1017,7 @@ EMQ X 4.1-alpha.1 is released now.
 
 *Release Date: 2020-03-17*
 
-EMQ X 4.0.5 is released now. This version mainly focuses on bug fixes.
+EMQX 4.0.5 is released now. This version mainly focuses on bug fixes.
 
 emqx
 ----
@@ -1033,7 +1033,7 @@ emqx
   Github issue: [emqx/emqx#3304](https://github.com/emqx/emqx/issues/3304), [emqx/emqx#3315](https://github.com/emqx/emqx/issues/3315)
   Github PR: [emqx/emqx#3321](https://github.com/emqx/emqx/pull/3321)
   
-- Fix the issue that CPU usage would increase abnormally every 15 seconds when EMQ X Broker was running in the docker environment
+- Fix the issue that CPU usage would increase abnormally every 15 seconds when EMQX Broker was running in the docker environment
 
 	Github issue: [emqx/emqx#3274](https://github.com/emqx/emqx/pull/3274)
   Github PR: [emqx/emqx-rel#462](https://github.com/emqx/emqx-rel/pull/462)
@@ -1067,7 +1067,7 @@ emqx-sn (plugin)
 
 *Release Date: 2019-03-06*
 
-EMQ X 4.0.4 is released now. This version mainly focuses on bug fixes.
+EMQX 4.0.4 is released now. This version mainly focuses on bug fixes.
 
 ### emqx
 
@@ -1128,7 +1128,7 @@ EMQ X 4.0.4 is released now. This version mainly focuses on bug fixes.
 
 *Release Date: 2019-02-21*
 
-EMQ X 4.0.3 is released now. This version mainly focuses on bug fixes.
+EMQX 4.0.3 is released now. This version mainly focuses on bug fixes.
 
 ### emqx
 
@@ -1175,7 +1175,7 @@ EMQ X 4.0.3 is released now. This version mainly focuses on bug fixes.
 
 *Release Date: 2019-02-07*
 
-EMQ X 4.0.2 is released now. This version mainly focuses on bug fixes
+EMQX 4.0.2 is released now. This version mainly focuses on bug fixes
 and performance optimizes.
 
 ### emqx
@@ -1240,7 +1240,7 @@ and performance optimizes.
 
 *Release Date: 2019-01-17*
 
-EMQ X 4.0.1 is released now. This version mainly focuses on bug fixes
+EMQX 4.0.1 is released now. This version mainly focuses on bug fixes
 and performance optimizes.
 
 ### emqx
@@ -1283,7 +1283,7 @@ and performance optimizes.
     
     Github PR: [emqx/emqx\#3196](https://github.com/emqx/emqx/pull/3196)
 
-  - Fix the issue that EMQ X may not send DISCONNECT packet when session
+  - Fix the issue that EMQX may not send DISCONNECT packet when session
     is takeovered
     
     Github PR: [emqx/emqx\#3208](https://github.com/emqx/emqx/pull/3208)
@@ -1315,7 +1315,7 @@ and performance optimizes.
 
 *Release Date: 2019-01-10*
 
-EMQ X 4.0.0 is now released. In this version we significantly improved
+EMQX 4.0.0 is now released. In this version we significantly improved
 the throughput performance by refactoring the session and channel,
 improved the extensibility by adding more hooks and counters, redesigned
 rule engine SQL that filter messages/events mainly by topics, and also
@@ -1374,7 +1374,7 @@ lots of improvements in edge.
 
 *Release Date: 2019-12-31*
 
-EMQ X 4.0-rc.4 is now released, including following changes:
+EMQX 4.0-rc.4 is now released, including following changes:
 
 ### emqx
 
@@ -1433,7 +1433,7 @@ EMQ X 4.0-rc.4 is now released, including following changes:
 
 *Release Date: 2019-12-21*
 
-EMQ X 4.0-rc.3 is now released, including following changes:
+EMQX 4.0-rc.3 is now released, including following changes:
 
 ### emqx
 
@@ -1559,7 +1559,7 @@ EMQ X 4.0-rc.3 is now released, including following changes:
 
 *Release Date: 2019-12-16*
 
-EMQ X 4.0-rc.2 is now available and includes the changes below:
+EMQX 4.0-rc.2 is now available and includes the changes below:
 
 ### emqx
 
@@ -1598,7 +1598,7 @@ EMQ X 4.0-rc.2 is now available and includes the changes below:
 
 **Bug fixes:**
 
-  - EMQ X cannot reply SUBACK to the client in a timely manner when
+  - EMQX cannot reply SUBACK to the client in a timely manner when
     there are a large number of retained messages
     
     Github PR:
@@ -1617,7 +1617,7 @@ EMQ X 4.0-rc.2 is now available and includes the changes below:
 
 *Release Date: 2019-12-07*
 
-EMQ X 4.0-rc.1 is now available. This release mainly optimizes the
+EMQX 4.0-rc.1 is now available. This release mainly optimizes the
 internal modules and the process of handling MQTT control packets.
 
 ### emqx
@@ -1665,7 +1665,7 @@ Enhancements:
 
 *Release Date: 2019-12-03*
 
-EMQ X 3.2.7 is now available. This version resupports to configure the
+EMQX 3.2.7 is now available. This version resupports to configure the
 default `username` and `clientid` through the configuration file.
 
 ### emqx-auth-username (plugin)
@@ -1692,7 +1692,7 @@ Enhancements:
 
 *Release Date: 2019-11-23*
 
-EMQ X 3.2.6 is now available. This version focuses on feature
+EMQX 3.2.6 is now available. This version focuses on feature
 improvements and bug fixes.
 
 ### emqx (major)
@@ -1712,7 +1712,7 @@ Bug fixes:
 
 *Release Date: 2019-11-18*
 
-EMQ X 4.0-beta.4 is now available. This version focuses on feature
+EMQX 4.0-beta.4 is now available. This version focuses on feature
 improvements and bug fixes.
 
 ### emqx (major)
@@ -1773,7 +1773,7 @@ Enhancements:
 
 *Release Date: 2019-11-15*
 
-EMQ X 3.2.5 is now available. This version focuses on bug fixes.
+EMQX 3.2.5 is now available. This version focuses on bug fixes.
 
 ### emqx-rule-engine (plugin)
 
@@ -1832,7 +1832,7 @@ Bug fixes:
 
 *Release Date: 2019-11-01*
 
-EMQ X 4.0-beta.3 is now available. This version mainly improves test
+EMQX 4.0-beta.3 is now available. This version mainly improves test
 coverage, and fixes bugs.
 
 Bug fixes:
@@ -1888,7 +1888,7 @@ Bug fixes:
 
 *Release Date: 2019-10-28*
 
-EMQ X 3.2.4 is now available. This version mainly adds IPv6 support for
+EMQX 3.2.4 is now available. This version mainly adds IPv6 support for
 Dashbaord and REST APIs, and fixes some bugs.
 
 Bug fixes:
@@ -1956,7 +1956,7 @@ Enhancements:
 
 *Release Date: 2019-10-14*
 
-EMQ X 4.0-beta.2 is now available. This version focuses on bug fixes and
+EMQX 4.0-beta.2 is now available. This version focuses on bug fixes and
 continues to optimize the internal module design.
 
 Bug fixes:
@@ -2000,14 +2000,14 @@ Bug fixes:
 
 *Release Date: 2019-09-30*
 
-EMQ X 4.0-beta.1 is now available. We redesigned the internal modules to
+EMQX 4.0-beta.1 is now available. We redesigned the internal modules to
 increase throughtput dramatically.
 
 ## Version 3.2.3
 
 *Release Date: 2019-09-16*
 
-EMQ X 3.2.3 is now available, and this version focuses on bug fixes.
+EMQX 3.2.3 is now available, and this version focuses on bug fixes.
 
 Bug fixes:
 
@@ -2042,7 +2042,7 @@ Bug fixes:
 
 *Release Date: 2019-08-03*
 
-EMQ X 3.2.2 is now available, and this version focuses on bug fixes.
+EMQX 3.2.2 is now available, and this version focuses on bug fixes.
 
 Enhancements:
 
@@ -2077,7 +2077,7 @@ Bug fixes:
 
 *Release Date: 2019-07-20*
 
-EMQ X 3.2.1 is now available. We've enhanced performance and fixed bugs.
+EMQX 3.2.1 is now available. We've enhanced performance and fixed bugs.
 
 Enhancements:
 
@@ -2151,7 +2151,7 @@ Enhancements:
     Github PR:
     [emqx/emqx-rel\#394](https://github.com/emqx/emqx-rel/pull/394)
 
-  - Delay EMQ X windows service auto start
+  - Delay EMQX windows service auto start
     
     Github PR:
     [emqx/emqx-rel\#395](https://github.com/emqx/emqx-rel/pull/395)
@@ -2160,7 +2160,7 @@ Enhancements:
 
 *Release Date: 2019-07-12*
 
-EMQ X 3.2.0 is mainly for improvements of rule engine.
+EMQX 3.2.0 is mainly for improvements of rule engine.
 
 ### Rule Engine
 
@@ -2191,7 +2191,7 @@ Fix Windows service registering issue.
 
 *Release Date: 2019-07-06*
 
-EMQ X 3.2-rc.3 is now available. We've enhanced features and fixed bugs.
+EMQX 3.2-rc.3 is now available. We've enhanced features and fixed bugs.
 
 Bug fixes:
 
@@ -2224,7 +2224,7 @@ Enhancements:
     disk queues
 
   - Fix the issue that MQTT/RPC Bridge of Rule Engine can’t bridge to
-    remote EMQ X node
+    remote EMQX node
     
     Github PR:
     [emqx/emqx-bridge-mqtt\#7](https://github.com/emqx/emqx-bridge-mqtt/pull/7)
@@ -2271,7 +2271,7 @@ Bug fixes:
 
 *Release Date: 2019-06-29*
 
-EMQ X 3.2-rc.2 is mainly for bug fixes.
+EMQX 3.2-rc.2 is mainly for bug fixes.
 
 Enhancements:
 
@@ -2339,7 +2339,7 @@ Bug fixes:
 
 *Release Date: 2019-06-22*
 
-EMQ X 3.2-rc.1 is now available. We've enhanced features and fixed bugs.
+EMQX 3.2-rc.1 is now available. We've enhanced features and fixed bugs.
 
 Enhancements:
 
@@ -2424,10 +2424,10 @@ Enhancements:
 
 *Release Date: 2019-06-14*
 
-EMQ X 3.2-beta.3 is now available. We've improved rule engine and fixed
+EMQX 3.2-beta.3 is now available. We've improved rule engine and fixed
 bugs.
 
-### EMQ X Core
+### EMQX Core
 
 Bug fixes:
 
@@ -2470,10 +2470,10 @@ Bug fixes:
 
 *Release Date: 2019-06-06*
 
-EMQ X 3.2-beta.2 is now available. We've improved rule engine and fixed
+EMQX 3.2-beta.2 is now available. We've improved rule engine and fixed
 bugs.
 
-### EMQ X Core
+### EMQX Core
 
 Bug fixes:
 
@@ -2578,10 +2578,10 @@ Bug fixes:
 
 *Release Date: 2019-05-27*
 
-EMQ X 3.2-beta.1 is now available. We've changed our build tool from
+EMQX 3.2-beta.1 is now available. We've changed our build tool from
 erlang.mk to rebar3, and improved the rule-engine.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -2655,9 +2655,9 @@ Bug fixes:
 
 *Release Date: 2019-06-06*
 
-EMQ X 3.1.2 is now available. We've fixed bugs and improved stability.
+EMQX 3.1.2 is now available. We've fixed bugs and improved stability.
 
-### EMQ X Core
+### EMQX Core
 
 Bug fixes:
 
@@ -2707,10 +2707,10 @@ Bug fixes:
 
 *Release Date: 2019-05-10*
 
-EMQ X 3.1.1 is now available. In this version we've fixed bugs and
+EMQX 3.1.1 is now available. In this version we've fixed bugs and
 improved stability.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -2753,11 +2753,11 @@ Bug fixes:
 
 *Release Date: 2019-04-26*
 
-EMQ X 3.1.0 is now available. The rule engine has become stable and
+EMQX 3.1.0 is now available. The rule engine has become stable and
 production ready. We've also introduced an emqx-edge manager - the
 `Storm`, and improved some code for flapping.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -2815,12 +2815,12 @@ Enhancements:
 
 *Release Date: 2019-04-19*
 
-EMQ X 3.1-rc.3 is now available. In this version we've enhanced the
+EMQX 3.1-rc.3 is now available. In this version we've enhanced the
 Rule-Engine and fixed some bugs. : Starting with this release, add
 OpenSUSE's installation package, and no longer provide Debian 7's
 installation package.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -2908,10 +2908,10 @@ Bug fixes:
 
 *Release Date: 2019-04-13*
 
-EMQ X 3.1-rc.2 is now available. In this version we've enhanced the
+EMQX 3.1-rc.2 is now available. In this version we've enhanced the
 Rule-Engine and fixed some bugs.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -2983,7 +2983,7 @@ Bug fixes:
 
 Bug fixes:
 
-  - Fix issue that EMQ X boots abortively on CentOS
+  - Fix issue that EMQX boots abortively on CentOS
     
     Github Commit:
     [emqx/emqx-packages\#64760523ea29ca0ad1d85b763f0e8a8e6954db9c](https://github.com/emqx/emqx-packages/commit/64760523ea29ca0ad1d85b763f0e8a8e6954db9c)
@@ -3006,10 +3006,10 @@ Enhancements:
 
 *Release Date: 2019-04-04*
 
-EMQ X 3.1-rc.1 is now available. In this version we've improved rule
+EMQX 3.1-rc.1 is now available. In this version we've improved rule
 engine, fixed some bugs, improved the stability, and so on.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -3098,10 +3098,10 @@ Bug fixes:
 
 *Release Date: 2019-04-26*
 
-EMQ X 3.1-beta.3 is now available. In this version we've introduced rule
+EMQX 3.1-beta.3 is now available. In this version we've introduced rule
 engine, improved plugin discovery mechanism, fixed some bugs, and so on.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -3155,10 +3155,10 @@ Bug fixes:
 
 *Release Date: 2019-03-16*
 
-EMQ X 3.1-beta.2 is now available. In this version we've redesigned the
+EMQX 3.1-beta.2 is now available. In this version we've redesigned the
 hooks, supported TLS/PSK, fixed some issues about gen\_rpc, and so on.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -3278,11 +3278,11 @@ Bug fixes:
 
 *Release Date: 2019-02-28*
 
-The EMQ X 3.1-beta.1 is now available. This version focuses on feature
+The EMQX 3.1-beta.1 is now available. This version focuses on feature
 improvements. We introduced new broker bridge, implemented the batch
 packets delivery, added supports for redis cluster, and so on.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -3342,10 +3342,10 @@ Enhancements:
 
 *Release Date: 2019-01-25*
 
-The EMQ X 3.0.1 is now available. Many improvements and bug fixes has
+The EMQX 3.0.1 is now available. Many improvements and bug fixes has
 been made.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -3437,11 +3437,11 @@ Enhancements:
 
 *Release Date: 2018-12-22*
 
-The EMQ X 3.0.0 is now available. In this release, we have re-designed
+The EMQX 3.0.0 is now available. In this release, we have re-designed
 the ETS tables for subscripions, and enhanced the performance by
 refactoring some modules and tuning the erlang vm args.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -3522,10 +3522,10 @@ Enhancements:
 
 *Release Date: 2018-11-30*
 
-The EMQ X 3.0-rc.5 is now available. The maintenance release fixes some
+The EMQX 3.0-rc.5 is now available. The maintenance release fixes some
 bugs and starts supporting batch update of metrics.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -3602,10 +3602,10 @@ Bug Fixes:
 
 *Release Date: 2018-11-24*
 
-The EMQ X 3.0-rc.4 release improves logging, enhances support for
+The EMQX 3.0-rc.4 release improves logging, enhances support for
 Rebar3.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -3717,10 +3717,10 @@ Enhancements:
 
 *Release Date: 2018-11-10*
 
-The EMQ X 3.0-rc.3 release rewrites emqx\_mqueue module, supports
+The EMQX 3.0-rc.3 release rewrites emqx\_mqueue module, supports
 MQTT-SN, CoAP and STOMP protocols.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -3812,10 +3812,10 @@ Enhancements:
 
 *Release Date: 2018-10-27*
 
-The EMQ X 3.0-rc.2 release improved the Will Message publishing
+The EMQX 3.0-rc.2 release improved the Will Message publishing
 mechanism, and add support for using ssl certificate as MQTT username.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -3841,10 +3841,10 @@ Bug Fixes:
 
 *Release Date: 2018-10-20*
 
-The EMQ X 3.0-rc.1 release is mainly for bug fixes and new features
+The EMQX 3.0-rc.1 release is mainly for bug fixes and new features
 improvements for MQTT 5.0.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -3885,7 +3885,7 @@ Bug Fixes:
 
 ### emqx-lwm2m
 
-  - Update LwM2M plugin for EMQ X 3.0
+  - Update LwM2M plugin for EMQX 3.0
     
     Github PR:
     [emqx/emqx-lwm2m\#3](https://github.com/emqx/emqx-lwm2m/pull/3)
@@ -3894,10 +3894,10 @@ Bug Fixes:
 
 *Release Date: 2018-09-30*
 
-The EMQ X 3.0-beta.4 release is mainly for bug fixes and feature
+The EMQX 3.0-beta.4 release is mainly for bug fixes and feature
 improvements on MQTT 5.0.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -3986,10 +3986,10 @@ Bug Fixes:
 
 *Release Date: 2018-09-23*
 
-The EMQ X 3.0-beta.3 release is mainly for bug fixes and feature
+The EMQX 3.0-beta.3 release is mainly for bug fixes and feature
 improvements on MQTT 5.0.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -4122,7 +4122,7 @@ Bug Fixes:
 
 Enhancements:
 
-  - Introduce emqx-coap into EMQ X 3.0
+  - Introduce emqx-coap into EMQX 3.0
     
     GitHub issues:
     [emqx/emqx-coap\#86](https://github.com/emqx/emqx-coap/pull/86),
@@ -4141,10 +4141,10 @@ Enhancements:
 
 *Release Date: 2018-09-10*
 
-The EMQ X 3.0-beta.2 release is mainly for bug fixes and new features
+The EMQX 3.0-beta.2 release is mainly for bug fixes and new features
 support for MQTT 5.0.
 
-### EMQ X Core
+### EMQX Core
 
 Enhancements:
 
@@ -4288,8 +4288,8 @@ core components.
 
   - Shared subscriptions
     
-    EMQ X 2.x supports shared subscription on single-node as an
-    unstandardized feature. Now in EMQ X 3.0, the shared subscription is
+    EMQX 2.x supports shared subscription on single-node as an
+    unstandardized feature. Now in EMQX 3.0, the shared subscription is
     cluster-wide.
 
   - Subscription ID
@@ -4308,7 +4308,7 @@ core components.
 
   - Maximum packet size
     
-    Broker specified max packet size was already implemented in EMQ X
+    Broker specified max packet size was already implemented in EMQX
     2.x. When an oversized message is received, it will be dropped, and
     broker will disconnect without informing about the reason. Now with
     MQTT 5.0 specification, client and broker can specify maximum
@@ -4363,7 +4363,7 @@ serve ten-millions of concurrent connections.
 ----------             ----------
 ```
 
-  - Ekka is introduced to auto-cluster EMQ X, and to auto-heal the
+  - Ekka is introduced to auto-cluster EMQX, and to auto-heal the
     cluster after net-split, following clustering methods are now
     supported:
       - manual: nodes joining a cluster manually;

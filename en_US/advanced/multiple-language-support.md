@@ -19,9 +19,9 @@ ref: undefinedM
 
 # Multi-language support
 
-From 4.1, EMQ X provides a dedicated multi-language support plug-in of [emqx_extension_hook](https://github.com/emqx/emqx-extension-hook) to optimize multi-language support.
+From 4.1, EMQX provides a dedicated multi-language support plug-in of [emqx_extension_hook](https://github.com/emqx/emqx-extension-hook) to optimize multi-language support.
 
-This plugin allows you to use other programming languages to handle hook events in EMQ X, for example:
+This plugin allows you to use other programming languages to handle hook events in EMQX, for example:
 
 - Authenticate the login authority of a client.
 - Check the operation permission of PUB/SUB of a client.
@@ -36,7 +36,7 @@ Message hooks are only supported in the Enterprise Edition.
 The overall event transfer architecture is as follows:
 
 ```
-                            EMQ X
+                            EMQX
                             +============================+
                             |        Extension           |
  +----------+    CONNECT    | Hooks +----------------+   |
@@ -53,8 +53,8 @@ The overall event transfer architecture is as follows:
              +=======================+
 ```
 
-- `emqx_extension_hook` as a plugin for EMQ X:
-  * It will receive all the hook events of EMQ X and distribute them to the corresponding driver.
+- `emqx_extension_hook` as a plugin for EMQX:
+  * It will receive all the hook events of EMQX and distribute them to the corresponding driver.
   * Provide drive management and statistics of various indicators.
 
 - Support for different languages that requires corresponding driver support.
@@ -76,14 +76,14 @@ Java development can refer to: [emqx-extension-java-sdk](https://github.com/emqx
 
 ## Other
 
-Before EMQ X 4.1. We only provide multi-language support for Lua. Its architecture is different from the above mentioned, which will include the entire language runtime in the Erlang VM:
+Before EMQX 4.1. We only provide multi-language support for Lua. Its architecture is different from the above mentioned, which will include the entire language runtime in the Erlang VM:
 
 ![Old Multiple Lang Arch](D:/emqx/emqx-docs-cn/advanced/assets/lua-lang-arch.png)
 
 - Multiple language support appears as a plug-in. For different language environments, different language support plugins are required.
 - This supported plugin embeds all the environments of the language runtime.
 
-To maintain compatibility, the plug-in remains in the release version of EMQ X.
+To maintain compatibility, the plug-in remains in the release version of EMQX.
 
 ## Lua 
 Support of Lua is achieved by [emqx_lua_hook](https://github.com/emqx/emqx-lua-hook)  which includes:
@@ -93,7 +93,7 @@ Support of Lua is achieved by [emqx_lua_hook](https://github.com/emqx/emqx-lua-h
 
 ### Example
 
-In the EMQ X Broker distribution, user-defined Lua script files should be placed in `data/script/`.
+In the EMQX Broker distribution, user-defined Lua script files should be placed in `data/script/`.
 
 Take the sending content of the control message as an example, and add the file `data/script/test.lua`:
 

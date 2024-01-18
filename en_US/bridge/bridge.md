@@ -17,7 +17,7 @@ ref:
 
 # Bridge
 
-EMQ X can bridge and forward messages to Kafka, RabbitMQ or other EMQ X nodes. Meanwhile, mosquitto and rsm can be bridged to EMQ X using common MQTT connection.
+EMQX can bridge and forward messages to Kafka, RabbitMQ or other EMQX nodes. Meanwhile, mosquitto and rsm can be bridged to EMQX using common MQTT connection.
 
 ## List of Bridge Plugins
 
@@ -30,10 +30,10 @@ EMQ X can bridge and forward messages to Kafka, RabbitMQ or other EMQ X nodes. M
 
 {% emqxce %}
 ::: danger
-Only the following functions are applicable in EMQ X Broker：
+Only the following functions are applicable in EMQX Broker：
 - MQTT bridge
 - RPC bridge
-The rest are exclusive to EMQ X Enterprise. It is recommended to use [rule engine] (../rule/rule-engine.md) to realize more flexible bridge function.
+The rest are exclusive to EMQX Enterprise. It is recommended to use [rule engine] (../rule/rule-engine.md) to realize more flexible bridge function.
 :::
 {% endemqxce %}
 
@@ -47,7 +47,7 @@ It is recommended to use [rule engine] (../rule/rule-engine.md) to realize more 
 
 ## MQTT Bridge
 
-EMQ X bridges and forwards MQTT messages to MQTT Broker:
+EMQX bridges and forwards MQTT messages to MQTT Broker:
 
 ![image](./assets/bridge_mqtt.png)
 
@@ -136,10 +136,10 @@ whose topic is "sensor1/hello", its topic will change to
 "<bridge/aws/emqx1@192.168.1.1/sensor1/hello>" when it reaches the
 remote node.
 
-Forwards: Messages forwarded to `forwards` specified by local EMQ X are
+Forwards: Messages forwarded to `forwards` specified by local EMQX are
 forwarded to the remote MQTT Broker.
 
-Subscription: Local EMQ X synchronizes messages from a remote MQTT
+Subscription: Local EMQX synchronizes messages from a remote MQTT
 Broker to local by subscribing to the topic of the remote MQTT Broker.
 
 ### Enable MQTT Bridge
@@ -229,7 +229,7 @@ Del-subscription topic successfully.
 
 ## RPC Bridge
 
-EMQ X bridges and forwards MQTT messages to remote EMQ X:
+EMQX bridges and forwards MQTT messages to remote EMQX:
 
 ![image](./assets/bridge_rpc.png)
 
@@ -257,8 +257,8 @@ whose topic is "sensor1/hello", its topic will change to
 "<bridge/aws/emqx1@192.168.1.1/sensor1/hello>" when it reaches the
 remote node.
 
-Forwards: Messages forwarded to `forwards` specified by local EMQ X are
-forwarded to the remote EMQ X.
+Forwards: Messages forwarded to `forwards` specified by local EMQX are
+forwarded to the remote EMQX.
 
 ### Bridge CLI Command
 
@@ -268,7 +268,7 @@ CLI of RPC bridge is used in the same way as the MQTT bridge.
 
 ## Kafka Bridge
 
-EMQ X bridges and forwards MQTT messages to Kafka cluster:
+EMQX bridges and forwards MQTT messages to Kafka cluster:
 
 ![image](./assets/bridges_1.png)
 
@@ -364,7 +364,7 @@ bridge.kafka.hook.message.acked.1        = {"filter": "#",  "topic": "message_ac
 
 ### Forward Client Connected / Disconnected Events to Kafka
 
-Client goes online, EMQ X forwards 'client\_connected' event message to
+Client goes online, EMQX forwards 'client\_connected' event message to
 Kafka:
 
 ```python
@@ -376,7 +376,7 @@ value = {
         }
 ```
 
-Client goes offline, EMQ X forwards 'client\_disconnected' event message
+Client goes offline, EMQX forwards 'client\_disconnected' event message
 to Kafka:
 
 ```python
@@ -514,7 +514,7 @@ the payload is base64 encoded
 
 ## RabbitMQ Bridge
 
-EMQ X bridges and forwards MQTT messages to RabbitMQ cluster:
+EMQX bridges and forwards MQTT messages to RabbitMQ cluster:
 
 ![image](./assets/bridges_2.png)
 
@@ -647,7 +647,7 @@ Sample of RabbitMQ client coding in other programming languages:
 
 ## Pulsar Bridge
 
-EMQ X bridges and forwards MQTT messages to Pulsar cluster:
+EMQX bridges and forwards MQTT messages to Pulsar cluster:
 
 ![image](./assets/bridge_pulsar.png)
 
@@ -734,7 +734,7 @@ bridge.pulsar.hook.message.acked.1        = {"filter": "#",  "topic": "message_a
 
 ### Forward Client Connected / Disconnected Events to Pulsar
 
-Client goes online, EMQ X forwards 'client\_connected' event message to
+Client goes online, EMQX forwards 'client\_connected' event message to
 Pulsar:
 
 ```python
@@ -747,7 +747,7 @@ value = {
         }
 ```
 
-Client goes offline, EMQ X forwards 'client\_disconnected' event message
+Client goes offline, EMQX forwards 'client\_disconnected' event message
 to Pulsar:
 
 ```python

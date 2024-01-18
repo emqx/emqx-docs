@@ -40,7 +40,7 @@ Client ID authentication uses sha256 for password hash encryption by default, wh
 auth.client.password_hash = sha256
 ```
 
-After configuring the [hash method](./auth.md#password-salting-rules-and-hash-methods), the new preset authentication data and authentication data added through the HTTP API will be stored in the built-in database of EMQ X Broker in hash cipher text.
+After configuring the [hash method](./auth.md#password-salting-rules-and-hash-methods), the new preset authentication data and authentication data added through the HTTP API will be stored in the built-in database of EMQX Broker in hash cipher text.
 
 
 
@@ -60,7 +60,7 @@ auth.clientid.2.clientid = wivwiv_client
 auth.clientid.2.password = public
 ```
 
-When the plugin is started, the preset authentication data is read and loaded into the built-in database of EMQ X Broker, and the authentication data on the nodes will be synchronized to the cluster at this stage.
+When the plugin is started, the preset authentication data is read and loaded into the built-in database of EMQX Broker, and the authentication data on the nodes will be synchronized to the cluster at this stage.
 
 <!-- TODO 补充加载规则 -->
 

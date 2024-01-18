@@ -17,7 +17,7 @@ ref: undefined
 
 # Plugins
 
-The EMQ X Broker distribution contains a large number of official plug-ins, which provide some basic or various extended functions.
+The EMQX Broker distribution contains a large number of official plug-ins, which provide some basic or various extended functions.
 
 They rely on the code API of  [emqx](https://github.com/emqx/emqx) or[hooks](hooks.md) for their special functions.
 
@@ -26,7 +26,7 @@ You can compile it with the [emqx](https://github.com/emqx/emqx) core project an
 
 ## List of plugins
 
- The official plug-ins provided by EMQ X include: 
+ The official plug-ins provided by EMQX include: 
 
 | Plugin                                                       | Configuration file                    | Description                        |
 | ------------------------------------------------------------ | ------------------------------------- | ---------------------------------- |
@@ -84,7 +84,7 @@ You can compile it with the [emqx](https://github.com/emqx/emqx) core project an
 
  **Start and stop plugin on command line** 
 
-When the EMQ X is running, plugins can be checked, loaded/unloaded by [CLI - Load/Unload Plugin](cli.md#load_plugin): 
+When the EMQX is running, plugins can be checked, loaded/unloaded by [CLI - Load/Unload Plugin](cli.md#load_plugin): 
 
  **Start and stop plugin on Dashboard** 
 
@@ -92,7 +92,7 @@ If Dashboard plugin is started (by default), the plugins can be start or stopped
 
 **Start and stop plugins using management API**
 
-When EMQ X Broker is running, you can view, start and stop a plugin through [Managing and Monitoring API - Load Plugin](#http-api.md#load_plugin).
+When EMQX Broker is running, you can view, start and stop a plugin through [Managing and Monitoring API - Load Plugin](#http-api.md#load_plugin).
 
 
 ## Plugin development
@@ -102,7 +102,7 @@ When EMQ X Broker is running, you can view, start and stop a plugin through [Man
 Refer to the [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) plugin template to create a new plugin project.
 
 ::: tip Tip
-The tag of` -emqx_plugin (? MODULE)`should be added to `<plugin name>_app.erl` file to indicate that this is an EMQ X Broker plugin.
+The tag of` -emqx_plugin (? MODULE)`should be added to `<plugin name>_app.erl` file to indicate that this is an EMQX Broker plugin.
 :::
 
 ### Create Authentication / Access Control Module
@@ -224,7 +224,7 @@ After the plugin is loaded, use `./bin/emqx_ctl`  to verify the new command line
 
 ### Plugin configuration file
 
-Plug-in configuration files are placed in  `etc/${plugin_name}.conf|config`. EMQ X Broker supports two plugin configuration formats:
+Plug-in configuration files are placed in  `etc/${plugin_name}.conf|config`. EMQX Broker supports two plugin configuration formats:
 
 1. Erlang native configuration file format-`${plugin_name}.config`:
 ```erlang
