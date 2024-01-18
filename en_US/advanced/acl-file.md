@@ -24,7 +24,7 @@ etc/acl.conf
 ```
 
 ::: tip
-The built-in ACL has the lowest priority and can be overridden by the ACL plugin. If you want to disable it, you can comment all the rules. After the rules file is changed, EMQ X Broker needs to be restarted to make them taking effect.
+The built-in ACL has the lowest priority and can be overridden by the ACL plugin. If you want to disable it, you can comment all the rules. After the rules file is changed, EMQX Broker needs to be restarted to make them taking effect.
 
 :::
 
@@ -84,7 +84,7 @@ The syntax rules of `acl.conf` are included in the comments at the top. Those fa
     - `{allow, all}`：Allow all operations
     - `{deny, all}`：Deny all operations
 
-After the `acl.conf` modification is completed, it will not be automatically loaded into the EMQ X Broker system, but needs to be performed manually:
+After the `acl.conf` modification is completed, it will not be automatically loaded into the EMQX Broker system, but needs to be performed manually:
 
 ```bash
 ./bin/emqx_ctl modules reload emqx_mod_acl_internal

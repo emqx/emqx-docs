@@ -31,15 +31,15 @@ true
 ['node2@127.0.0.1','node3@127.0.0.1','node4@127.0.0.1']
 ```
 
-## EMQ X 分布集群设计
+## EMQX 分布集群设计
 
-EMQ X 消息服务器集群基于 Erlang/OTP 分布式设计，集群原理可简述为下述两条规则:
+EMQX 消息服务器集群基于 Erlang/OTP 分布式设计，集群原理可简述为下述两条规则:
 
 MQTT 客户端订阅主题时，所在节点订阅成功后广播通知其他节点：某个主题(Topic)被本节点订阅。
 
 MQTT 客户端发布消息时，所在节点会根据消息主题(Topic)，检索订阅并路由消息到相关节点。
 
-EMQ X 消息服务器同一集群的所有节点，都会复制一份主题(Topic) -> 节点(Node)映射的路由表，例如:
+EMQX 消息服务器同一集群的所有节点，都会复制一份主题(Topic) -> 节点(Node)映射的路由表，例如:
 
 ```bash
 topic1 -> node1, node2
@@ -49,7 +49,7 @@ topic3 -> node2, node4
 
 ### 主题树(Topic Trie)与路由表(Route Table)
 
-EMQ X 消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表。
+EMQX 消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表。
 
 例如下述主题订阅关系:
 
@@ -88,11 +88,11 @@ client1 -> node1: Publish[t/a]
 
 
 ## 节点发现与自动集群
-EMQ X 支持基于 Ekka 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持
+EMQX 支持基于 Ekka 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持
 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、脑裂自动愈合 (Network Partition
 Autoheal)、自动删除宕机节点 (Autoclean)。
 
-EMQ X 支持多种节点发现策略:
+EMQX 支持多种节点发现策略:
 
 | 策略     | 说明                |
 | ------ | ----------------- |
@@ -104,7 +104,7 @@ EMQ X 支持多种节点发现策略:
 | k8s    | Kubernetes 服务自动集群 |
 
 ### 手动(manual) 方式管理集群介绍
-假设要在两台服务器 s1.emqx.io, s2.emqx.io 上部署 EMQ X 集群:
+假设要在两台服务器 s1.emqx.io, s2.emqx.io 上部署 EMQX 集群:
 
 |                节点名                 | 主机名 (FQDN)  |   IP 地址    |
 | ------------------------------------ | ------------- | ------------ |

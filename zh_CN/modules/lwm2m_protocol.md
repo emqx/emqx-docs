@@ -47,7 +47,7 @@ LwM2M 协议预定义了8种 Object 来满足基本的需求，分别是：
 
 ## 创建模块
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
 ![image-20200927213049265](./assets/modules.png)
 
@@ -74,8 +74,8 @@ LwM2M 协议预定义了8种 Object 来满足基本的需求，分别是：
 点击添加后，模块添加完成:
 ![image-20200927213049265](./assets/proto_lwm2m6.png)
 
-EMQX-LWM2M 是 EMQ X 服务器的一个网关模块，实现了 LwM2M 的大部分功能。MQTT 客户端可以通过 EMQX-LWM2M
-访问支持 LwM2M 的设备。设备也可以往 EMQX-LWM2M 上报 notification，为 EMQ X后端的服务采集数据。
+EMQX-LWM2M 是 EMQX 服务器的一个网关模块，实现了 LwM2M 的大部分功能。MQTT 客户端可以通过 EMQX-LWM2M
+访问支持 LwM2M 的设备。设备也可以往 EMQX-LWM2M 上报 notification，为 EMQX后端的服务采集数据。
 
 ### 配置参数
 

@@ -2,11 +2,11 @@
 
 ::: tip
 
-After EMQ X version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Bridge data to Kafka](../rule/bridge_kafka.md) to setup kafka bridges in rule engine.
+After EMQX version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Bridge data to Kafka](../rule/bridge_kafka.md) to setup kafka bridges in rule engine.
 
 :::
 
-EMQ X bridges and forwards MQTT messages to Kafka cluster:
+EMQX bridges and forwards MQTT messages to Kafka cluster:
 
 ![image](./assets/bridges_1.png)
 
@@ -102,7 +102,7 @@ bridge.kafka.hook.message.acked.1        = {"filter": "#",  "topic": "message_ac
 
 ## Forward Client Connected / Disconnected Events to Kafka
 
-Client goes online, EMQ X forwards 'client\_connected' event message to
+Client goes online, EMQX forwards 'client\_connected' event message to
 Kafka:
 
 ```python
@@ -114,7 +114,7 @@ value = {
         }
 ```
 
-Client goes offline, EMQ X forwards 'client\_disconnected' event message
+Client goes offline, EMQX forwards 'client\_disconnected' event message
 to Kafka:
 
 ```python

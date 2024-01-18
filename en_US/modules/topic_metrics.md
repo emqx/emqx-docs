@@ -1,10 +1,10 @@
 # Topic Metrics
 
-EMQ X provides a topic indicator statistics function, which can count the number of messages sent and received, rate and other indicators under a specified topic.
+EMQX provides a topic indicator statistics function, which can count the number of messages sent and received, rate and other indicators under a specified topic.
 
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![image-20200927213049265](./assets/modules.png)
 

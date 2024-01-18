@@ -17,11 +17,11 @@ ref: undefined
 
 ## Introduction
 
-EMQ X Broker provides Dashboard to facilitate users to manage equipment and monitor related indicators. Through Dashboard, you can view the basic information of the server, load and statistical data, you can view the connection status of a client and even disconnect it, and you can also dynamically load and unload specified plug-ins. In addition, EMQ X Dashboard also provides a visual operation interface of the rule engine, and also integrates a simple MQTT client tool for user testing.
+EMQX Broker provides Dashboard to facilitate users to manage equipment and monitor related indicators. Through Dashboard, you can view the basic information of the server, load and statistical data, you can view the connection status of a client and even disconnect it, and you can also dynamically load and unload specified plug-ins. In addition, EMQX Dashboard also provides a visual operation interface of the rule engine, and also integrates a simple MQTT client tool for user testing.
 
 ## Start Dashboard
 
-The EMQ X Dashboard function is implemented by the [emqx-dashboard](https://github.com/emqx/emqx-dashboard) plugin, which is enabled by default, and it will be automatically loaded when the EMQ X Broker starts. If you wish to disable the Dashboard function, you can modify `{emqx_dashboard, true}` in  `data/loaded_plugins` to `{emqx_dashboard, false} `.
+The EMQX Dashboard function is implemented by the [emqx-dashboard](https://github.com/emqx/emqx-dashboard) plugin, which is enabled by default, and it will be automatically loaded when the EMQX Broker starts. If you wish to disable the Dashboard function, you can modify `{emqx_dashboard, true}` in  `data/loaded_plugins` to `{emqx_dashboard, false} `.
 
 ```bash
 {emqx_dashboard, true}.
@@ -29,32 +29,32 @@ The EMQ X Dashboard function is implemented by the [emqx-dashboard](https://gith
 
 ## View Dashboard
 
-EMQ X Dashboard is a web application, and you can access it directly through the browser without installing any other software.
+EMQX Dashboard is a web application, and you can access it directly through the browser without installing any other software.
 
-When EMQ X Broker runs successfully on your local computer and EMQ X Dashboard is enabled by default, you can visit http://localhost:18083 to view your Dashboard. The default user name is admin and the password is public .
+When EMQX Broker runs successfully on your local computer and EMQX Dashboard is enabled by default, you can visit http://localhost:18083 to view your Dashboard. The default user name is admin and the password is public .
 
 ## Configure Dashboard
 
-You can view or modify the configuration of EMQ X Dashboard in  `etc/plugins/emqx_dashboard.conf`. Note that `etc` here does not refer to the system directory, see [directory structure](directory.md#) for details.
+You can view or modify the configuration of EMQX Dashboard in  `etc/plugins/emqx_dashboard.conf`. Note that `etc` here does not refer to the system directory, see [directory structure](directory.md#) for details.
 
-EMQ X Dashboard configuration items can be divided into two parts of default user and listener:
+EMQX Dashboard configuration items can be divided into two parts of default user and listener:
 
 **Default User** 
 
-EMQ X Dashboard can configure multiple users, but only the default user can be configured in the configuration file.
+EMQX Dashboard can configure multiple users, but only the default user can be configured in the configuration file.
 
 It should be noted that once you change the password of the default user through Dashboard, the relevant information of the default user will be based on your latest changes on the Dashboard, and the default user configuration in the configuration file will be ignored.
 
 **Listeners**
 
-EMQ X Dashboard supports both HTTP and HTTPS Listeners, but only HTTP Listeners with a listening port of 18083 are enabled by default. For the introduction of Listeners, please refer to [Configuration Instructions](config.md#).
+EMQX Dashboard supports both HTTP and HTTPS Listeners, but only HTTP Listeners with a listening port of 18083 are enabled by default. For the introduction of Listeners, please refer to [Configuration Instructions](config.md#).
 
 For the detailed configuration item description of Dashboard, please refer to [Configuration Item](../configuration/configuration.md).
 
 ## Dashboard interface
 
 
-In order to enable users to quickly locate and switch the current position during operation and browsing, EMQ X Dashboard adopts the mode of side navigation. By default, Dashboard includes the following first-level navigation items:
+In order to enable users to quickly locate and switch the current position during operation and browsing, EMQX Dashboard adopts the mode of side navigation. By default, Dashboard includes the following first-level navigation items:
 
 | Navigation  | Description                                                  |
 | ----------- | ------------------------------------------------------------ |
@@ -66,11 +66,11 @@ In order to enable users to quickly locate and switch the current position durin
 
 ### MONITORING
 
-EMQ X Dashboard provides a very rich data monitoring project, that completely covers the server and client. All of this information will be reasonably displayed to users on the page under `MONITORING`.
+EMQX Dashboard provides a very rich data monitoring project, that completely covers the server and client. All of this information will be reasonably displayed to users on the page under `MONITORING`.
 
 #### Overview
 
-As the default display page of Dashboard, `Overview` provides detailed information of EMQ X Broker ’s current nodes and key information of other nodes in the cluster to help users quickly get the status of each node.
+As the default display page of Dashboard, `Overview` provides detailed information of EMQX Broker ’s current nodes and key information of other nodes in the cluster to help users quickly get the status of each node.
 
 ![image](../assets/dashboard-overview.png)
 
@@ -125,7 +125,7 @@ Metric
 
 | Field                         | Description                         |
 | ---------------------------------- | -------------------------------------- |
-| Number of Bytes Received           | Number of bytes received by EMQ X Broker (same below) |
+| Number of Bytes Received           | Number of bytes received by EMQX Broker (same below) |
 | Number of TCP Packets Received     | Number of TCP Packets Received |
 | Number of MQTT Packets Received    | Number of MQTT Packets Received |
 | Number of PUBLISH Packets Received | Number of PUBLISH Packets Received |
@@ -146,27 +146,27 @@ The `Subscriptions` page provides all subscription information under the specifi
 
 ### RULE ENGINE
 
-The rule engine of EMQ X Broker can flexibly process messages and events, such as converting the message into a specified format and storing it in a database table or resending it to the message queue. In order to facilitate users to better use the rules engine, EMQ X Dashboard provides corresponding visual operation pages, and you can click the `RULE ENGINE` navigation item to access these pages.
+The rule engine of EMQX Broker can flexibly process messages and events, such as converting the message into a specified format and storing it in a database table or resending it to the message queue. In order to facilitate users to better use the rules engine, EMQX Dashboard provides corresponding visual operation pages, and you can click the `RULE ENGINE` navigation item to access these pages.
 
 Due to the complexity of the related concepts of the rule engine, the operations involved may occupy a considerable amount of space. Considering your reading experience, we will introduce the rule engine through additional documents of  [rule-engine](../rule/rule-engine.md#).
 
 ### MANAGEMENT
 
-Currently, the EMQ X Dashboard's `MANAGEMENT` navigation item mainly includes an monitoring management page for extension plug-in  and management page of AppID and AppSerect for HTTP API authentication.
+Currently, the EMQX Dashboard's `MANAGEMENT` navigation item mainly includes an monitoring management page for extension plug-in  and management page of AppID and AppSerect for HTTP API authentication.
 
 #### Plugins
 
-The `Plugins` page lists all the plug-ins that EMQ X Broker can find, including the official plug-ins of EMQ X and the plug-ins that you developed in accordance with the official standards of EMQ X. You can check the current running status of the plug-ins and start and stop the plug-ins at any time on this page.
+The `Plugins` page lists all the plug-ins that EMQX Broker can find, including the official plug-ins of EMQX and the plug-ins that you developed in accordance with the official standards of EMQX. You can check the current running status of the plug-ins and start and stop the plug-ins at any time on this page.
 
 ![image](../assets/dashboard-plugins.png)
 
-You can see that in addition to [emqx-dashboard](https://github.com/emqx/emqx-dashboard), EMQ X Broker will also start  other 4 plugins by default:
+You can see that in addition to [emqx-dashboard](https://github.com/emqx/emqx-dashboard), EMQX Broker will also start  other 4 plugins by default:
 
 ![image](../assets/dashboard-running-plugins.png)
 
 #### Applications
 
-The `Applications` page lists the currently created applications. You can perform operations such as creating applications, temporarily disabling or starting access permissions for an application on this page. EMQ X Broker will create a default application with AppID of `admin` and AppSecret of `publish` for users to access for the first time:
+The `Applications` page lists the currently created applications. You can perform operations such as creating applications, temporarily disabling or starting access permissions for an application on this page. EMQX Broker will create a default application with AppID of `admin` and AppSecret of `publish` for users to access for the first time:
 
 ![image](../assets/dashboard-applications.png)
 
@@ -176,14 +176,14 @@ You can click the `New App` button in the upper right corner of the `Application
 | ------------ | ------------------------------------------------------------ |
 | AppID        | It is used to distinguish different applications, so it is not repeatable. When creating an application, Dashboard will automatically generate a random suggested application ID for you |
 | AppName      | It can be repeated, but for your own convenience, we do not recommend using a duplicate application name |
-| AppSecret    | The application key assigned by EMQ X Broker that can be viewed in the application details |
+| AppSecret    | The application key assigned by EMQX Broker that can be viewed in the application details |
 | Expired date | The expiration time of the application, the default is to never expire |
 | Remark       | Your description of the application, facilitate later management |
-| Status       | There are only two types of application status: Allowed and Denied. In Denied status, EMQ X Broker will deny the access request of HTTP API using the AppID and App Secret |
+| Status       | There are only two types of application status: Allowed and Denied. In Denied status, EMQX Broker will deny the access request of HTTP API using the AppID and App Secret |
 
 ### TOOLS
 
-Currently, the `TOOLS`  navigation item of EMQ X Dashboard mainly includes WebSocket client tool page and HTTP API quick check page.
+Currently, the `TOOLS`  navigation item of EMQX Dashboard mainly includes WebSocket client tool page and HTTP API quick check page.
 
 #### Websocket
 
@@ -193,7 +193,7 @@ The `Websocket` page provides you with a simple but effective WebSocket client t
 
 #### HTTP API
 
-The `HTTP API` page lists all the HTTP APIs currently supported by EMQ X Broker and their descriptions:
+The `HTTP API` page lists all the HTTP APIs currently supported by EMQX Broker and their descriptions:
 
 ![image](../assets/dashboard-http-api.png)
 
@@ -207,12 +207,12 @@ You can view and manage users who can access and operate Dashboard on the `Users
 
 #### Settings
 
-Currently, EMQ X Dashboard only supports the modification of the topic and language settings:
+Currently, EMQX Dashboard only supports the modification of the topic and language settings:
 
 ![image](../assets/dashboard-settings.png)
 
 #### Help
 
-If you encounter any problems in using EMQ X Broker, we provide you with links to FAQ and other documents on the `Help` page. If our existing documents still cannot solve your problem, you can go to our open source community on Github to consult our technical staff.
+If you encounter any problems in using EMQX Broker, we provide you with links to FAQ and other documents on the `Help` page. If our existing documents still cannot solve your problem, you can go to our open source community on Github to consult our technical staff.
 
 ![image](../assets/dashboard-help.png)

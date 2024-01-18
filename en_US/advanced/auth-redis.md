@@ -86,7 +86,7 @@ auth.redis.password_hash = plain
 
 ## auth query cmd
 
-During authentication, EMQ X Broker will use the current client information to populate and execute the user-configured authentication query command to query the client's authentication data in the Redis.
+During authentication, EMQX Broker will use the current client information to populate and execute the user-configured authentication query command to query the client's authentication data in the Redis.
 
 ```bash
 # etc/plugins/emqx_auth_redis.conf
@@ -94,7 +94,7 @@ During authentication, EMQ X Broker will use the current client information to p
 auth.redis.auth_cmd = HMGET mqtt_user:%u password
 ```
 
-You can use the following placeholders in the command, and EMQ X Broker will be automatically populated with client information when executed:
+You can use the following placeholders in the command, and EMQX Broker will be automatically populated with client information when executed:
 
 - %u：Username
 - %c：Client ID
@@ -103,8 +103,8 @@ You can use the following placeholders in the command, and EMQ X Broker will be 
 
 You can adjust the authentication query command according to your business needs and use any  [Redis supported command](http://redisdoc.com/index.html). However, in any case, the authentication query command must meet the following conditions:
 
-1. The first data in the query result must be password. EMQ X Broker will use this field to compare with the client password.
-2. If the salting configuration is enabled, the second data in the query result must be the salt field. EMQ X Broker will use this field as the salt value.
+1. The first data in the query result must be password. EMQX Broker will use this field to compare with the client password.
+2. If the salting configuration is enabled, the second data in the query result must be the salt field. EMQX Broker will use this field as the salt value.
 
 
 

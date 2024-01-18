@@ -1,10 +1,10 @@
 # Stomp Protocol Gateway
 
-The Stomp protocol gateway provides EMQ X with the access capability of the Stomp protocol.
+The Stomp protocol gateway provides EMQX with the access capability of the Stomp protocol.
 
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![image-20200928161310952](./assets/modules.png)
 

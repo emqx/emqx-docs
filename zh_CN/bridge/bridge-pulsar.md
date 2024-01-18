@@ -2,11 +2,11 @@
 
 ::: tip
 
-EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[Pulsar 桥接](../rule/bridge_pulsar.md)规则引擎中创建 Pulsar 桥接
+EMQX 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[Pulsar 桥接](../rule/bridge_pulsar.md)规则引擎中创建 Pulsar 桥接
 
 :::
 
-EMQ X 桥接转发 MQTT 消息到 Pulsar 集群:
+EMQX 桥接转发 MQTT 消息到 Pulsar 集群:
 
 ![image](./assets/bridge_pulsar.png)
 
@@ -129,7 +129,7 @@ bridge.pulsar.hook.message.acked.1        = {"filter": "#",  "topic": "message_a
 
 ## 客户端上下线事件转发 Pulsar
 
-设备上线 EMQ X 转发上线事件消息到 Pulsar:
+设备上线 EMQX 转发上线事件消息到 Pulsar:
 
 ```bash
 topic = "client_connected",
@@ -141,7 +141,7 @@ value = {
         }
 ```
 
-设备下线 EMQ X 转发下线事件消息到 Pulsar:
+设备下线 EMQX 转发下线事件消息到 Pulsar:
 
 ```bash
 topic = "client_disconnected",

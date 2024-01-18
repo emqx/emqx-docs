@@ -2,7 +2,7 @@
 
 [TDengine](https://github.com/taosdata/TDengine) 是[涛思数据](https://www.taosdata.com/cn/)推出的一款开源的专为物联网、车联网、工业互联网、IT 运维等设计和优化的大数据平台。除核心的快 10 倍以上的时序数据库功能外，还提供缓存、数据订阅、流式计算等功能，最大程度减少研发和运维的复杂度。
 
-EMQ X 支持通过 **发送到 Web 服务** 的方式保存数据到 TDengine，也在企业版上提供原生的 TDengine 驱动实现直接保存。
+EMQX 支持通过 **发送到 Web 服务** 的方式保存数据到 TDengine，也在企业版上提供原生的 TDengine 驱动实现直接保存。
 
 使用 Docker 安装 TDengine 或在 [Cloud](https://marketplace.huaweicloud.com/product/OFFI454488918838128640) 上部署：
 
@@ -40,7 +40,7 @@ CREATE TABLE t_mqtt_msg (
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
@@ -50,7 +50,7 @@ SELECT * FROM "t/#"
 
 ![image](./assets/rule-engine/rule_sql.png)
 
-后续动作创建操作可以根据你的 EMQ X 版本灵活选择。
+后续动作创建操作可以根据你的 EMQX 版本灵活选择。
 
 ## 原生方式（企业版）
 
@@ -93,14 +93,14 @@ insert into test.t_mqtt_msg(ts, msgid, topic, qos, payload) values (now, '${id}'
 
 为支持各种不同类型平台的开发，TDengine 提供符合 REST 设计标准的 API。通过 [RESTful Connector](https://www.taosdata.com/cn/documentation/connector/#RESTful-Connector) 提供了最简单的连接方式，即使用 HTTP 请求携带认证信息与要执行的 SQL 操作 TDengine。
 
-EMQ X 规则引擎中有功能强大的**发送数据到 Web 服务功能**，可以实现无缝实现上述操作。
+EMQX 规则引擎中有功能强大的**发送数据到 Web 服务功能**，可以实现无缝实现上述操作。
 
 
 关联动作:
 
 在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “保存数据到 Web 服务“。
 
-EMQ X 规则引擎中有功能强大的***\*发送数据到 Web 服务功能\****，可以实现无缝实现上述操作。
+EMQX 规则引擎中有功能强大的***\*发送数据到 Web 服务功能\****，可以实现无缝实现上述操作。
 
 填写动作参数:
 

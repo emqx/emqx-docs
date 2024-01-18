@@ -16,7 +16,7 @@ ref: undefined
 
 # Mnesia  Authentication
 
-Mnesia authentication uses the built-in Mnesia database of EMQ X to store client Client ID/Username and password, and supports management of authentication data through HTTP API.
+Mnesia authentication uses the built-in Mnesia database of EMQX to store client Client ID/Username and password, and supports management of authentication data through HTTP API.
 
 Mnesia authentication does not depend on external data sources, and it is simple and lightweight to use.
 
@@ -48,7 +48,7 @@ Mnesia authentication uses sha256 for password hash encryption by default, which
 auth.mnesia.password_hash = sha256
 ```
 
-After configuring [Hash Method](./auth.md#加盐规则与哈希方法), the newly added preset authentication data and authentication data added through the HTTP API will be stored in the EMQ X built-in database in the format of hash ciphertext.
+After configuring [Hash Method](./auth.md#加盐规则与哈希方法), the newly added preset authentication data and authentication data added through the HTTP API will be stored in the EMQX built-in database in the format of hash ciphertext.
 
 
 
@@ -72,7 +72,7 @@ auth.mnesia.2.is_superuser = false
 
 In the authentication data, `login` will read the client's Username or Client ID based on the value of `auth.mnesia.as`.
 
-When the plugin starts, it will read the preset authentication data and load it into the EMQ X built-in database, and the authentication data on the node will be synchronized to the cluster at this stage.
+When the plugin starts, it will read the preset authentication data and load it into the EMQX built-in database, and the authentication data on the node will be synchronized to the cluster at this stage.
 
 <!-- TODO 补充加载规则 -->
 

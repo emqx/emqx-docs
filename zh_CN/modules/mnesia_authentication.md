@@ -1,16 +1,16 @@
 # 内置数据库 认证/访问控制
 
-内置数据库认证使用 EMQ X 内置 Mnesia 数据库存储客户端 Clientid/Username 与密码，支持通过 HTTP API 管理认证数据。
+内置数据库认证使用 EMQX 内置 Mnesia 数据库存储客户端 Clientid/Username 与密码，支持通过 HTTP API 管理认证数据。
 
 内置数据库认证不依赖外部数据源，使用上足够简单轻量。
 
 ## Dashboard 管理
 
-内置数据库认证可以通过 EMQ X Dashboard 的 “模块” 进行开关以及管理
+内置数据库认证可以通过 EMQX Dashboard 的 “模块” 进行开关以及管理
 
 ### 创建模块
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
 ![image-20200928161310952](./assets/modules.png)
 
@@ -38,7 +38,7 @@
 
 ![image-20200928141558866](./assets/auth_mnesia_5.png)
 
-当客户端连接 EMQ X 时，内置数据库认证会获取 CONNENT 报文中的 Clientid 与 Username，然后数据库中记录的密码进行匹配，一旦匹配成功则认证成功。
+当客户端连接 EMQX 时，内置数据库认证会获取 CONNENT 报文中的 Clientid 与 Username，然后数据库中记录的密码进行匹配，一旦匹配成功则认证成功。
 
 #### 访问控制数据
 
@@ -52,7 +52,7 @@
 
 ### Mnesia 认证
 
-Mnesia 认证使用 EMQ X 内置 Mnesia 数据库存储客户端 Client ID/Username 与密码，支持通过 HTTP API 管理认证数据。
+Mnesia 认证使用 EMQX 内置 Mnesia 数据库存储客户端 Client ID/Username 与密码，支持通过 HTTP API 管理认证数据。
 
 Mnesia 认证不依赖外部数据源，使用上足够简单轻量，Mnesia 支持使用 Client ID 或 Username 进行认证。
 
@@ -510,7 +510,7 @@ curl -i \
 
 ### Mnesia 访问控制
 
-Mnesia ACL 使用 EMQ X 内置的 Mnesia 数据库存储 ACL 规则，可以存储数据、动态管理 ACL，方便与外部设备管理系统集成
+Mnesia ACL 使用 EMQX 内置的 Mnesia 数据库存储 ACL 规则，可以存储数据、动态管理 ACL，方便与外部设备管理系统集成
 
 #### POST api/v4/acl
 

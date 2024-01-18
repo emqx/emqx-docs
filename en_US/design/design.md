@@ -17,7 +17,7 @@ ref: undefined
 
 ## Foreword
 
-In terms of the design of EMQ X Broker, it firstly separates the FrontEnd and Backend, and secondly separates the  Message Flow Plane and Monitor/Control Plane :
+In terms of the design of EMQX Broker, it firstly separates the FrontEnd and Backend, and secondly separates the  Message Flow Plane and Monitor/Control Plane :
 
 ![image](../assets/design_1.png)
 
@@ -25,19 +25,19 @@ In terms of the design of EMQ X Broker, it firstly separates the FrontEnd and Ba
 
 With Multi-core servers and modern operating system kernel, it can easily support 1 million TCP connections. The core issue is how to deal with business bottlenecks at the application level.
 
-EMQ X Broker solves all kinds of bottleneck problems of single node carrying 1 million connections at the business and application level. For the operating system kernel, TCP protocol stack, and Erlang virtual machine parameters of connection testing, see: <http://docs.emqtt.cn/zh_CN/latest/tune.html>
+EMQX Broker solves all kinds of bottleneck problems of single node carrying 1 million connections at the business and application level. For the operating system kernel, TCP protocol stack, and Erlang virtual machine parameters of connection testing, see: <http://docs.emqtt.cn/zh_CN/latest/tune.html>
 
 ### Fully asynchronous architecture
 
-EMQ X Broker is a fully asynchronous architecture based on the Erlang/OTP platform: asynchronous TCP connection processing, asynchronous Topic subscription, and asynchronous message publishing. Only for the resource load limitation part, it adopts synchronous design, such as TCP connection creation and Mnesia database transaction execution.
+EMQX Broker is a fully asynchronous architecture based on the Erlang/OTP platform: asynchronous TCP connection processing, asynchronous Topic subscription, and asynchronous message publishing. Only for the resource load limitation part, it adopts synchronous design, such as TCP connection creation and Mnesia database transaction execution.
 
-In the EMQ X 3.0 version, from the Publisher to the Subscriber, a MQTT message flows   with a series of Erlang processes Mailbox flows asynchronously inside the EMQ XBroker:
+In the EMQX 3.0 version, from the Publisher to the Subscriber, a MQTT message flows   with a series of Erlang processes Mailbox flows asynchronously inside the EMQXBroker:
 
 ![image](../assets/design_2.png)
 
 ### Message persistence
 
-EMQ X open source products do not support message persistence within the server, which is an architectural design choice. Firstly, the core problem solved by EMQ X is connection and routing; secondly, we think that built-in persistence is a wrong design.
+EMQX open source products do not support message persistence within the server, which is an architectural design choice. Firstly, the core problem solved by EMQX is connection and routing; secondly, we think that built-in persistence is a wrong design.
 
 Traditional MQ servers with built-in message persistence, such as the widely used JMS server ActiveMQ, have redesigned the persistence part in almost every major version. There are two design issues with built-in message persistence:
 
@@ -46,21 +46,21 @@ Traditional MQ servers with built-in message persistence, such as the widely use
 
 Kafka made a correct design on the above problem, which is a message server based entirely on disk-distributed Commit Log.
 
-After EMQ X separates message routing and message storage responsibilities in the design, the function of data replication, disaster recovery and even application integration can be implemented flexibly at the data level.
+After EMQX separates message routing and message storage responsibilities in the design, the function of data replication, disaster recovery and even application integration can be implemented flexibly at the data level.
 
-In EMQ X Enterprise Edition products, through rule engines or plugins, messages can be persisted to both databases such as Redis, MongoDB, Cassandra, MySQL, PostgreSQL, and message queues such as RabbitMQ, Kafka.
+In EMQX Enterprise Edition products, through rule engines or plugins, messages can be persisted to both databases such as Redis, MongoDB, Cassandra, MySQL, PostgreSQL, and message queues such as RabbitMQ, Kafka.
 
 ## System structure
 
 ### Conceptual model
 
-EMQ X Broker is more like a network Router or a Switch in concept, rather than the traditional enterprise-level message queue (MQ). Compared to network routers that route packets by IP address or MPLS label, EMQ X Broker routes MQTT messages between cluster nodes by publish-subscribe model of Topic Trie:
+EMQX Broker is more like a network Router or a Switch in concept, rather than the traditional enterprise-level message queue (MQ). Compared to network routers that route packets by IP address or MPLS label, EMQX Broker routes MQTT messages between cluster nodes by publish-subscribe model of Topic Trie:
 
 ![image](../assets/design_3.png)
 
 ### Design Philosophy
 
-1. The core problem solved by the EMQ X Broker is to process massive concurrent MQTT connection and routing messages.
+1. The core problem solved by the EMQX Broker is to process massive concurrent MQTT connection and routing messages.
 2. Embrace Erlang/OTP, the Soft-Realtime, Low-Latency, Concurrent and Fault-Tolerant Platform.
 3. Layered Design: Connection, Session, PubSub and Router Layers.
 4. Separate the Message Flow Plane and the Control/Management Plane.

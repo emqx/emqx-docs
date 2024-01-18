@@ -21,7 +21,7 @@ $ ./bin/pulsar-admin topics create-partitioned-topic -p 5 testTopic
 ```
 ## 创建模块
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
 ![image-20200927213049265](./assets/modules.png)
 
@@ -45,7 +45,7 @@ $ ./bin/pulsar-admin topics create-partitioned-topic -p 5 testTopic
 
 6). Pulsar 流控阈值 (Pulsar 流控阈值，配置 Pulsar 向消费者发送多少条消息后阻塞 Pulsar Consumer)
 
-7). EMQ X 重置流控阈值百分比 (Pulsar 流控阈值重置百分比。此配置让消费者处理完成一定数量的消息之后，提前重置 `Pulsar 流控阈值`。 比如，`Pulsar 流控阈值` 为 1000，`阈值重置百分比` 为 80%，则重置)
+7). EMQX 重置流控阈值百分比 (Pulsar 流控阈值重置百分比。此配置让消费者处理完成一定数量的消息之后，提前重置 `Pulsar 流控阈值`。 比如，`Pulsar 流控阈值` 为 1000，`阈值重置百分比` 为 80%，则重置)
 
 
 点击添加后，模块添加完成:

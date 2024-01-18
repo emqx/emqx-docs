@@ -1,6 +1,6 @@
-# EMQ X 文档贡献指南
+# EMQX 文档贡献指南
 
-欢迎您的参与，以帮助改善 EMQ X 文档。当您反馈问题，编辑、新增、翻译文档内容时，可以为 EMQ X 开源社区提供非常有价值的帮助。
+欢迎您的参与，以帮助改善 EMQX 文档。当您反馈问题，编辑、新增、翻译文档内容时，可以为 EMQX 开源社区提供非常有价值的帮助。
 
 
 ## 目录
@@ -22,7 +22,7 @@
 
 ## 如何贡献文档
 
-EMQ X 的文档发布在 [https://docs.emqx.cn/](https://docs.emqx.cn/)，您可以通过以下几种方式贡献文档。
+EMQX 的文档发布在 [https://docs.emqx.cn/](https://docs.emqx.cn/)，您可以通过以下几种方式贡献文档。
 
 > 注：以下几种方式都需要 GitHub 帐号进行操作，如果您还没有 GitHub 帐号，请点击 [GitHub 注册页面](https://github.com/join) 进行创建。
 
@@ -84,11 +84,11 @@ EMQ X 的文档发布在 [https://docs.emqx.cn/](https://docs.emqx.cn/)，您可
 
 ### 文档翻译
 
-EMQ X 中文文档一般会先于英文文档发布，所以文档翻译大多数情况下都是中译英。目前，我们通过文档仓库的 PR Label 来追踪翻译任务状态。您可通过如下几个简单步骤来翻译并提交文档。
+EMQX 中文文档一般会先于英文文档发布，所以文档翻译大多数情况下都是中译英。目前，我们通过文档仓库的 PR Label 来追踪翻译任务状态。您可通过如下几个简单步骤来翻译并提交文档。
 
 1. 查看待翻译 PR。
 
-   打开 [EMQ X 文档待翻译 PR 列表](https://github.com/emqx/emqx-docs/pulls?q=is%3Apr+is%3Aclosed+label%3Atranslation%2Ftodo)，即可看到所有已合并且打上了 `translation/todo` Label 的 PR，这些 PR 都是待翻译的。
+   打开 [EMQX 文档待翻译 PR 列表](https://github.com/emqx/emqx-docs/pulls?q=is%3Apr+is%3Aclosed+label%3Atranslation%2Ftodo)，即可看到所有已合并且打上了 `translation/todo` Label 的 PR，这些 PR 都是待翻译的。
 
 2. 认领 PR。
 

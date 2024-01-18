@@ -25,7 +25,7 @@ emqx_auth_jwt
 
 ## Authentication principle
 
-The client uses Token as the user name or password (depending on the plugin configuration). When initiating the connection, EMQ X Broker uses the key and certificate in the configuration to decrypt. If it can be successfully decrypted, the authentication successes, otherwise the authentication fails.
+The client uses Token as the user name or password (depending on the plugin configuration). When initiating the connection, EMQX Broker uses the key and certificate in the configuration to decrypt. If it can be successfully decrypted, the authentication successes, otherwise the authentication fails.
 
 After JWT authentication is enabled by default, you can connect with the following password and any username:
 

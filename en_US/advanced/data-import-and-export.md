@@ -1,8 +1,8 @@
 # Data import and export
 
-EMQ X provides users with data import and export function to meet the needs of server upgrade, migration and data backup. The data import and export function supports exporting the data (such as the blacklist, rule engine configuration) stored in Mnesia , the default database of EMQ x broker, to the local file in JSON format. Of course, the user does not need to care about the data content in the exported file. The exported file can be imported into other running instances of EMQ x broker. The EMQ x broker can be the same version or different versions, but it currently only supports `4.1.0` and later versions..
+EMQX provides users with data import and export function to meet the needs of server upgrade, migration and data backup. The data import and export function supports exporting the data (such as the blacklist, rule engine configuration) stored in Mnesia , the default database of EMQX broker, to the local file in JSON format. Of course, the user does not need to care about the data content in the exported file. The exported file can be imported into other running instances of EMQX broker. The EMQX broker can be the same version or different versions, but it currently only supports `4.1.0` and later versions..
 
-EMQ X Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and-export), [HTTP API](./http-api.md#endpoint-data- import-and-export) and Dashboard's visual interface (Enterprise Edition) for data import and export functions. The data currently supported for import and export are as follows:
+EMQX Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and-export), [HTTP API](./http-api.md#endpoint-data- import-and-export) and Dashboard's visual interface (Enterprise Edition) for data import and export functions. The data currently supported for import and export are as follows:
 
 - Rule engine configuration data (resources, rules)
 - Blacklist data
@@ -37,11 +37,11 @@ EMQ X Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and
    $ cp /var/lib/emqx/emqx-export-2020-5-15-17-39-0.json /tmp
    ```
 
-3. Reinstall EMQ X Broker and start it
+3. Reinstall EMQX Broker and start it
 
    ```
    $ ./emqx start
-   EMQ X Broker v4.1-rc.1 is started successfully!
+   EMQX Broker v4.1-rc.1 is started successfully!
    ```
 
 4. Import data. The name of the imported file must be specified as an absolute path

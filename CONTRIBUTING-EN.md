@@ -1,8 +1,8 @@
-# EMQ X Documentation Contributing Guide
+# EMQX Documentation Contributing Guide
 
 We welcome your participation to help make the documentation better!
 
-When you offer feedback, questions, edits, or new content, you help us, the projects you work on, and the EMQ X open source community.
+When you offer feedback, questions, edits, or new content, you help us, the projects you work on, and the EMQX open source community.
 
 
 ## Table of Contents
@@ -23,7 +23,7 @@ To ensure consistency throughout all EMQ documentation, we ask that all contribu
 
 ## How to contribute
 
-EMQ X's documentation will be published at [https://docs.emqx.io/](https://docs.emqx.io/). You can contribute documentation via the followings methods.
+EMQX's documentation will be published at [https://docs.emqx.io/](https://docs.emqx.io/). You can contribute documentation via the followings methods.
 
 > **Note:** The following methods require a GitHub account to operate. If you do not have a GitHub account, please click on the [GitHub registration page](https://github.com/join) to create one.
 

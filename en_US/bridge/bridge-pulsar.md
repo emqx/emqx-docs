@@ -2,11 +2,11 @@
 
 ::: tip
 
-After EMQ X version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Bridge data to Pulsar](../rule/bridge_pulsar.md) to setup pulasr bridges in rule engine.
+After EMQX version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Bridge data to Pulsar](../rule/bridge_pulsar.md) to setup pulasr bridges in rule engine.
 
 :::
 
-EMQ X bridges and forwards MQTT messages to Pulsar cluster:
+EMQX bridges and forwards MQTT messages to Pulsar cluster:
 
 ![image](./assets/bridge_pulsar.png)
 
@@ -93,7 +93,7 @@ bridge.pulsar.hook.message.acked.1        = {"filter": "#",  "topic": "message_a
 
 ## Forward Client Connected / Disconnected Events to Pulsar
 
-Client goes online, EMQ X forwards 'client\_connected' event message to
+Client goes online, EMQX forwards 'client\_connected' event message to
 Pulsar:
 
 ```python
@@ -106,7 +106,7 @@ value = {
         }
 ```
 
-Client goes offline, EMQ X forwards 'client\_disconnected' event message
+Client goes offline, EMQX forwards 'client\_disconnected' event message
 to Pulsar:
 
 ```python

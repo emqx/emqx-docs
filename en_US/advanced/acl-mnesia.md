@@ -15,7 +15,7 @@ ref: undefined
 
 # Mnesia ACL
 
-Mnesia ACL uses the built-in Mnesia database of EMQ X to store ACL rules, which can store data and dynamically manage ACLs to facilitate integration with external device management systems.
+Mnesia ACL uses the built-in Mnesia database of EMQX to store ACL rules, which can store data and dynamically manage ACLs to facilitate integration with external device management systems.
 
 Plugin:
 

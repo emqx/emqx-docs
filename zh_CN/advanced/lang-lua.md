@@ -15,14 +15,14 @@ ref:
 
 # 多语言 - Lua
 
-在 EMQ X 4.1 之前。我们仅提供 Lua 的多语言支持。它的架构与 4.1 之后的多语言架构不同，它会将整个语言的运行时包含在 Erlang VM 中：
+在 EMQX 4.1 之前。我们仅提供 Lua 的多语言支持。它的架构与 4.1 之后的多语言架构不同，它会将整个语言的运行时包含在 Erlang VM 中：
 
 ![Old Multiple Lang Arch](./assets/lua-lang-arch.png)
 
 - 多语言支持是作为一个插件出现，不同的语言环境，需要有不同的语言支持插件。
 - 该支持插件内嵌了该语言运行时的所有环境。
 
-为了保持兼容，该插件仍然保留在 EMQ X 的发行版本中。
+为了保持兼容，该插件仍然保留在 EMQX 的发行版本中。
 
 Lua 的支持由 [emqx-lua-hook](https://github.com/emqx/emqx-lua-hook) 实现。它包括：
 
@@ -31,7 +31,7 @@ Lua 的支持由 [emqx-lua-hook](https://github.com/emqx/emqx-lua-hook) 实现�
 
 ## 示例
 
-在 EMQ X 发行包中，用户自定义的 Lua 脚本文件应该放在 `data/script/` 中。
+在 EMQX 发行包中，用户自定义的 Lua 脚本文件应该放在 `data/script/` 中。
 
 以控制消息的发送内容为例，新增文件 `data/script/test.lua`：
 

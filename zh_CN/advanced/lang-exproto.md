@@ -18,7 +18,7 @@ ref:
 多语言的 **协议接入** 处理由 [emqx-exproto](https://github.com/emqx/emqx-exproto) 插件进行支持。该插件在 4.2.0 中首次引入。它允许用户使用其它的编程语言实现私有的，自定义的协议接入。例如：
 
 - 可接收基于 TCP/UDP/TLS/DTLS 及 PSK 的终端连接。
-- 允许 Python, Java 代码侧订阅主题，或发布消息到 EMQ X 系统。
+- 允许 Python, Java 代码侧订阅主题，或发布消息到 EMQX 系统。
 
 ## 设计
 
@@ -46,11 +46,11 @@ ref:
 
 #### 协议/会话层
 
-该部分主要提供 PUB/SUB 接口，以实现与 EMQ X Broker 系统的消息互通。包括：
+该部分主要提供 PUB/SUB 接口，以实现与 EMQX Broker 系统的消息互通。包括：
 
 - 提供 `register` 接口。供外部模块调用，用于向集群注册客户端。
-- 提供 `publish` 接口。供外部模块调用，用于发布消息 EMQ X Broker 中。
-- 提供 `subscribe` 接口。供外部模块调用，用于订阅某主题，以实现从 EMQ X Broker 中接收某些下行消息。
+- 提供 `publish` 接口。供外部模块调用，用于发布消息 EMQX Broker 中。
+- 提供 `subscribe` 接口。供外部模块调用，用于订阅某主题，以实现从 EMQX Broker 中接收某些下行消息。
 - 提供 `unsubscribe` 接口。供外部模块调用，用于取消订阅某主题。
 - 调用 `deliver` 回调。用于接收下行消息（在订阅主题成功后，如果主题上有消息，便会回调该方法）
 
@@ -63,7 +63,7 @@ ref:
 - Python: https://github.com/emqx/emqx-exproto-python-sdk
 - Java: https://github.com/emqx/emqx-exproto-java-sdk
 
-注：SDK 版本与 EMQ X 的第二位版本号进行兼容。例如，在 EMQ X v4.1.4 中，应该使用 v4.1.x 的 SDK
+注：SDK 版本与 EMQX 的第二位版本号进行兼容。例如，在 EMQX v4.1.4 中，应该使用 v4.1.x 的 SDK
 
 
 SDK 的概念参考：[多语言 - 钩子扩展#SDK](lang-exhook.md#sdk)

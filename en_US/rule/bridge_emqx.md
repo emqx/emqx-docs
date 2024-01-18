@@ -42,7 +42,7 @@ Bind a resource to the action. Since the dropdown list "Resource" is
 
 Configure the resource:
 ```
-Set "EMQ X Node Name" to the node name of the remote name, and keep
+Set "EMQX Node Name" to the node name of the remote name, and keep
 all other configs as default, and click on the "Testing Connection"
 button to make sure the connection can be created successfully, and
 then click on the "Create" button.

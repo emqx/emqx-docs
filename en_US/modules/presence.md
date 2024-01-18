@@ -1,11 +1,11 @@
 # Online and Offline notification
-EMQ X online and offline system message notification function automatically sends a system topic message when the client connection is successful or the client is disconnected, and EMQ X turns on the online and offline notification module by default.
+EMQX online and offline system message notification function automatically sends a system topic message when the client connection is successful or the client is disconnected, and EMQX turns on the online and offline notification module by default.
 
 ## Create module
 
 The online and offline notification module is started by default and can be started and stopped through the dashboard page.
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left:
 
 ![image-20200927213049265](./assets/modules.png)
 
@@ -23,8 +23,8 @@ There is no need to configure any parameters for the online and offline notifica
 
 | Topic | Description |
 | ------------------------ | ------------------------ ---------------- |
-| ${clientid}/connected | Online event. When any client goes online, EMQ X will publish a message on that topic |
-| ${clientid}/disconnected | Offline event. When any client goes offline, EMQ X will publish a message on that topic |
+| ${clientid}/connected | Online event. When any client goes online, EMQX will publish a message on that topic |
+| ${clientid}/disconnected | Offline event. When any client goes offline, EMQX will publish a message on that topic |
 
 The Payload of the `connected` event message is parsed into JSON format as follows:
 

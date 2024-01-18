@@ -14,10 +14,10 @@ ref: undefined
 ---
 
 # Bridge
-EMQ X Broker supports two bridging methods:
+EMQX Broker supports two bridging methods:
 
-- -RPC bridging: A bridge method that uses Erlang RPC protocol, only available between EMQ X Broker
-- MQTT Bridging: A bridge method that uses the MQTT protocol as a client to connect to a remote broker, and can bridge to other MQTT brokers and EMQ X Broker
+- -RPC bridging: A bridge method that uses Erlang RPC protocol, only available between EMQX Broker
+- MQTT Bridging: A bridge method that uses the MQTT protocol as a client to connect to a remote broker, and can bridge to other MQTT brokers and EMQX Broker
 
 The concept is shown in the following figure:
 
@@ -27,7 +27,7 @@ Publishers can publish messages to remote brokers via bridging:
 
 ![image](../assets/bridges_3.png)
 
-EMQ X Broker distinguishes different bridges based on different names. Bridge can be added in `etc/plugins/emqx_bridge_mqtt.conf` :
+EMQX Broker distinguishes different bridges based on different names. Bridge can be added in `etc/plugins/emqx_bridge_mqtt.conf` :
 
 ```bash
 bridge.mqtt.aws.address = 211.182.34.1:1883
@@ -37,7 +37,7 @@ bridge.mqtt.huawei.address = 54.33.120.8:1883
 
 This configuration declares two bridges with the name of `aws` and ` huawei`, which respectively point to the responding service address using MQTT bridging method.
 
-If the value of this configuration is the node name of another EMQ X Broker, the RPC bridging method is used:
+If the value of this configuration is the node name of another EMQX Broker, the RPC bridging method is used:
 ```bash
 bridge.mqtt.emqx2.address = emqx2@57.122.76.34
 ```
@@ -54,7 +54,7 @@ The advantage of RPC bridging is that it does not involve the MQTT protocol code
 
 The disadvantage of RPC bridging
 
-- RPC bridging can only bridge two EMQ X Brokers together (the version must be the same), and cannot bridge EMQ X Broker to other MQTT Brokers
+- RPC bridging can only bridge two EMQX Brokers together (the version must be the same), and cannot bridge EMQX Broker to other MQTT Brokers
 - RPC bridging can only forward local messages to remote bridge nodes, and cannot synchronize messages from remote bridge nodes to local nodes
 
 ## RPC bridging example 
@@ -86,7 +86,7 @@ bridge.mqtt.emqx2.mountpoint = bridge/emqx2/${node}/
 The mount point is good for `emqx2` to distinguish between bridged messages and local messages. For example, in the above configuration, the message with the original topic of `sensor1/hello` that will change into  `bridge/emqx2/emqx1@192.168.1.1/sensor1/hello` after being forwarded to ` emqx2`. 
 
 ## MQTT bridging example  
-For MQTT bridging, it makes EMQ X Broker connect as a MQTT client to a remote MQTT broker.
+For MQTT bridging, it makes EMQX Broker connect as a MQTT client to a remote MQTT broker.
 
 First you need to configure the MQTT client parameters:
 
@@ -175,8 +175,8 @@ bridge.mqtt.aws.subscription.1.topic = cmd/topic1
 bridge.mqtt.aws.subscription.1.qos = 1
 ```
 
-### EMQ X Broker's bridge cache configuration 
-EMQ X Broker's Bridge has a message cache mechanism. When the Bridge is disconnected, the message of the forwards topic is cached. When the bridge is restored, the message is re-forwarded to the remote node. The caching mechanism applies to both RPC and MQTT bridges.
+### EMQX Broker's bridge cache configuration 
+EMQX Broker's Bridge has a message cache mechanism. When the Bridge is disconnected, the message of the forwards topic is cached. When the bridge is restored, the message is re-forwarded to the remote node. The caching mechanism applies to both RPC and MQTT bridges.
 
 Set the total cache queue size:
 

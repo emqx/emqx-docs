@@ -16,15 +16,15 @@ ref:
 
 # MQTT Erlang 客户端库
 
-[emqtt](https://github.com/emqx/emqtt) 是开源 MQTT Broker EMQ X 官方提供的客户端库，适用于 Erlang 语言。
+[emqtt](https://github.com/emqx/emqtt) 是开源 MQTT Broker EMQX 官方提供的客户端库，适用于 Erlang 语言。
 
-Erlang 生态有多个 MQTT Broker 实现，如通过插件支持 MQTT 的 RabbitMQ ，VerenMQ、EMQ X 等。但受限于语言小众性，可用的 MQTT 客户端库几乎没有选择的余地，MQTT 社区收录的 Erlang 客户端库中 [emqtt](https://github.com/emqx/emqtt) 是最佳选择。
+Erlang 生态有多个 MQTT Broker 实现，如通过插件支持 MQTT 的 RabbitMQ ，VerenMQ、EMQX 等。但受限于语言小众性，可用的 MQTT 客户端库几乎没有选择的余地，MQTT 社区收录的 Erlang 客户端库中 [emqtt](https://github.com/emqx/emqtt) 是最佳选择。
 
 emqtt 完全由 Erlang 实现，完成整支持 MQTT v3.1.1 和 MQTT v5.0 协议版本，支持 SSL 单双向认证与 WebSocket 连接。另一款 MQTT 基准测试工具 [emqtt_bench](https://github.com/emqx/emqtt-bench) 就基于该客户端库构建。
 
 ## emqtt 使用示例
 
-本示例包含 Erlang 的 emqtt 客户端库连接 EMQ X Broker，并进行消息收发完整代码：
+本示例包含 Erlang 的 emqtt 客户端库连接 EMQX Broker，并进行消息收发完整代码：
 
 ```erlang
 ClientId = <<"test">>.

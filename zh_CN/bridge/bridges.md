@@ -16,7 +16,7 @@ ref:
 
 ## MQTT 桥接
 
-EMQ X 桥接转发 MQTT 消息到 MQTT Broker，支持桥接至常见 MQTT 云服务:
+EMQX 桥接转发 MQTT 消息到 MQTT Broker，支持桥接至常见 MQTT 云服务:
 
 ![image](./assets/bridge_mqtt.png)
 
@@ -195,7 +195,7 @@ Del-subscription topic successfully.
 
 ## RPC 桥接
 
-EMQ X 桥接转发 MQTT 消息到远程 EMQ X:
+EMQX 桥接转发 MQTT 消息到远程 EMQX:
 
 ![image](./assets/bridge_rpc.png)
 
@@ -230,7 +230,7 @@ sensor1/hello 的消息, 到达远程节点时主题为 bridge/aws/emqx1@192.168
 
 ## Kafka 桥接
 
-EMQ X 桥接转发 MQTT 消息到 Kafka 集群，Apache Kafka是一个快速、高可扩展、高吞吐的分布式日志系统，配合kafka Stream，在流式数据处理中非常常用。
+EMQX 桥接转发 MQTT 消息到 Kafka 集群，Apache Kafka是一个快速、高可扩展、高吞吐的分布式日志系统，配合kafka Stream，在流式数据处理中非常常用。
 
 ![image](./assets/bridge_kafka.png)
 
@@ -347,7 +347,7 @@ bridge.kafka.hook.message.acked.1        = {"filter": "#",  "topic": "message_ac
 
 ### 客户端上下线事件转发 Kafka
 
-设备上线 EMQ X 转发上线事件消息到 Kafka:
+设备上线 EMQX 转发上线事件消息到 Kafka:
 
 ```bash
 topic = "client_connected",
@@ -359,7 +359,7 @@ value = {
 }
 ```
 
-设备下线 EMQ X 转发下线事件消息到 Kafka:
+设备下线 EMQX 转发下线事件消息到 Kafka:
 
 ```bash
 topic = "client_disconnected",
@@ -497,7 +497,7 @@ payload 数据格式。
 
 ## RabbitMQ 桥接
 
-EMQ X 桥接转发 MQTT 消息到 RabbitMQ 集群:
+EMQX 桥接转发 MQTT 消息到 RabbitMQ 集群:
 
 ![image](./assets/bridge_rabbit.png)
 
@@ -630,7 +630,7 @@ channel.start_consuming()
 
 ## Pulsar 桥接
 
-EMQ X 桥接转发 MQTT 消息到 Pulsar 集群:
+EMQX 桥接转发 MQTT 消息到 Pulsar 集群:
 
 ![image](./assets/bridge_pulsar.png)
 
@@ -753,7 +753,7 @@ bridge.pulsar.hook.message.acked.1        = {"filter": "#",  "topic": "message_a
 
 ### 客户端上下线事件转发 Pulsar
 
-设备上线 EMQ X 转发上线事件消息到 Pulsar:
+设备上线 EMQX 转发上线事件消息到 Pulsar:
 
 ```bash
 topic = "client_connected",
@@ -765,7 +765,7 @@ value = {
         }
 ```
 
-设备下线 EMQ X 转发下线事件消息到 Pulsar:
+设备下线 EMQX 转发下线事件消息到 Pulsar:
 
 ```bash
 topic = "client_disconnected",
@@ -901,7 +901,7 @@ pulsar-client consume message_acked  -s "message_acked" -n 1000
 
 ## RocketMQ 桥接
 
-EMQ X 桥接转发 MQTT 消息到 RocketMQ 集群:
+EMQX 桥接转发 MQTT 消息到 RocketMQ 集群:
 
 ![image](./assets/bridge_rocket.png)
 
@@ -1010,7 +1010,7 @@ bridge.rocket.hook.message.acked.1        = {"filter": "#",  "topic": "MessageAc
 
 ### 客户端上下线事件转发 RocketMQ
 
-设备上线 EMQ X 转发上线事件消息到 RocketMQ:
+设备上线 EMQX 转发上线事件消息到 RocketMQ:
 
 ```bash
 topic = "ClientConnected",
@@ -1022,7 +1022,7 @@ value = {
         }
 ```
 
-设备下线 EMQ X 转发下线事件消息到 RocketMQ:
+设备下线 EMQX 转发下线事件消息到 RocketMQ:
 
 ```bash
 topic = "ClientDisconnected",

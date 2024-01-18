@@ -1,14 +1,14 @@
-# EMQ X Prometheus Agent
+# EMQX Prometheus Agent
 
-EMQ X Prometheus Agent supports pushing data to Pushgateway, and then pulling it by Promethues Server for storage.
+EMQX Prometheus Agent supports pushing data to Pushgateway, and then pulling it by Promethues Server for storage.
 
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![image-20200927213049265](./assets/modules.png)
 
-Choose EMQ X Prometheus Agent
+Choose EMQX Prometheus Agent
 
 ![image-20200927213049265](./assets/prometheus_agent_1.png)
 
@@ -22,6 +22,6 @@ After clicking add, the module is added
 
 ### Grafana Data Template
 
-The ʻemqx_prometheus` plugin provides template files for Grafana's Dashboard. These templates contain the display of all EMQ X monitoring data. Users can directly import it into Grafana to display the icon of EMQ X monitoring status.
+The ʻemqx_prometheus` plugin provides template files for Grafana's Dashboard. These templates contain the display of all EMQX monitoring data. Users can directly import it into Grafana to display the icon of EMQX monitoring status.
 
 The template file is located at: [emqx_prometheus/grafana_template](https://github.com/emqx/emqx-prometheus/tree/master/grafana_template).
