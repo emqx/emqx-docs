@@ -2,11 +2,11 @@
 
 ::: tip
 
-EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[RabbitMQ 桥接](../rule/bridge_rabbitmq.md)规则引擎中创建 RabbitMQ 桥接
+EMQX 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[RabbitMQ 桥接](../rule/bridge_rabbitmq.md)规则引擎中创建 RabbitMQ 桥接
 
 :::
 
-EMQ X 桥接转发 MQTT 消息到 RabbitMQ 集群:
+EMQX 桥接转发 MQTT 消息到 RabbitMQ 集群:
 
 ![image](./assets/bridge_rabbit.png)
 

@@ -16,12 +16,12 @@ The protocol supports the function of automatically discovering the gateway.
 MQTT-SN also supports the sleep function of the device. If the device enters the sleep state and cannot receive UDP data, the gateway will set the downstream PUBLISH
 The message is buffered and sent until the device wakes up.
 
-EMQX-SN is a gateway access module of EMQ X, which implements most of the functions of MQTT-SN. It is equivalent to an MQTT-SN gateway in the cloud, directly interacting with EMQ
+EMQX-SN is a gateway access module of EMQX, which implements most of the functions of MQTT-SN. It is equivalent to an MQTT-SN gateway in the cloud, directly interacting with EMQ
 X Broker is connected.
 
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![image-20200927213049265](./assets/modules.png)
 
@@ -52,8 +52,8 @@ After clicking Add, the module is added:
 
 | Configuration | Description                                                  |
 | ------------- | ------------------------------------------------------------ |
-| Username      | Optional parameter, which specifies the username of all MQTT-SN connections, used in the EMQ X authentication module |
-| Password      | Optional parameter, used with username in EMQ X authentication module |
+| Username      | Optional parameter, which specifies the username of all MQTT-SN connections, used in the EMQX authentication module |
+| Password      | Optional parameter, used with username in EMQX authentication module |
 
 ### MQTT-SN client library
 

@@ -15,7 +15,7 @@ ref: undefined
 
 # Alarm
 
-EMQ X Broker has built-in monitoring and alarm functions. Currently, it supports monitoring of CPU occupancy, (system, process) memory occupancy, number of processes, rule engine resource status, cluster partition and healing and it can alarm. Both activation and deactivation of alarms will generate a alarm log and the Broker will publish an MQTT message with the topic of `$SYS/brokers/<Node>/alarms/activate` or `$SYS/brokers/<Node>/alarms/deactivate`, Users can subscribe to the topics of `$SYS/brokers/+/alarms/avtivate` and `$SYS/brokers/+/alarms/deactivate` to get alarm notifications.
+EMQX Broker has built-in monitoring and alarm functions. Currently, it supports monitoring of CPU occupancy, (system, process) memory occupancy, number of processes, rule engine resource status, cluster partition and healing and it can alarm. Both activation and deactivation of alarms will generate a alarm log and the Broker will publish an MQTT message with the topic of `$SYS/brokers/<Node>/alarms/activate` or `$SYS/brokers/<Node>/alarms/deactivate`, Users can subscribe to the topics of `$SYS/brokers/+/alarms/avtivate` and `$SYS/brokers/+/alarms/deactivate` to get alarm notifications.
 
 The Payload of the alarm notification message is in Json format and contains the following fields:
 
@@ -32,9 +32,9 @@ Taking the alarm of high system memory usage  as an example, you will receive a 
 
 <!-- ![alarms_avtivate_msg](./assets/alarms_avtivate_msg.png) -->
 
-The alarm will not be generated repeatedly. That is to say, if the high CPU usage alarm has been activated, the same alarm will not appear during its activation. The alarm will be automatically deactivated when the monitored item returns to normal. However, it also supports manual deactivation by the user (if the user clearly does not care about the alarm). Users can view current alarms (activated alarms) and historical alarms (deactivated alarms) on the Dashboard, and they can also use the [HTTP API](./http-api.md#endpoint-alarms) provided by EMQ X Broker to Query and manage alarms.
+The alarm will not be generated repeatedly. That is to say, if the high CPU usage alarm has been activated, the same alarm will not appear during its activation. The alarm will be automatically deactivated when the monitored item returns to normal. However, it also supports manual deactivation by the user (if the user clearly does not care about the alarm). Users can view current alarms (activated alarms) and historical alarms (deactivated alarms) on the Dashboard, and they can also use the [HTTP API](./http-api.md#endpoint-alarms) provided by EMQX Broker to Query and manage alarms.
 
-EMQ X Broker allows users to adjust the alarm function to a certain extent to meet actual needs. The following configuration items are currently opened:
+EMQX Broker allows users to adjust the alarm function to a certain extent to meet actual needs. The following configuration items are currently opened:
 
 | Configuration item            | Type     | Default value | Description                                                  |
 | ----------------------------- | -------- | ------------- | ------------------------------------------------------------ |

@@ -1,8 +1,8 @@
 # Tuning guide
 
-For EMQ X Message Server 4.x version, MQTT connection stress test reached 1.3 million on an 8-core, 32G memory CentOS server.
+For EMQX Message Server 4.x version, MQTT connection stress test reached 1.3 million on an 8-core, 32G memory CentOS server.
 
-Linux kernel parameters, network protocol stack parameters, Erlang virtual machine parameters, and EMQ X message server parameter settings required for the 1 million connection test are as follows:
+Linux kernel parameters, network protocol stack parameters, Erlang virtual machine parameters, and EMQX message server parameter settings required for the 1 million connection test are as follows:
 
 ## Linux Kernel Tuning
 
@@ -88,7 +88,7 @@ node.process_limit = 2097152
 node.max_ports = 1048576
 ```
 
-## EMQ X Broker Tuning
+## EMQX Broker Tuning
 
  Tune the acceptor pool, max_clients limit and sockopts for TCP listener in etc/emqx.conf: 
 

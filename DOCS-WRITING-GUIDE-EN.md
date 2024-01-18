@@ -62,7 +62,7 @@ The corresponding configuration is:
       "title": "Introduction",
       "children": [
         {
-          "title": "EMQ X Broker",
+          "title": "EMQX Broker",
           "path": "./"
         },
         {

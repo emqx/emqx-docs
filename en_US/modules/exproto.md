@@ -1,8 +1,8 @@
 # Multi-language extension-protocol access
 
-In EMQ X Enterprise 4.2.0, we provide multi-language extension support. Among them, the **Multilingual Extended Protocol Access** module allows other programming languages ​​(such as Python, Java, etc.) to directly process byte data messages to achieve custom protocol analysis, and provides Pub/Sub interfaces to achieve message exchange with the system .
+In EMQX Enterprise 4.2.0, we provide multi-language extension support. Among them, the **Multilingual Extended Protocol Access** module allows other programming languages ​​(such as Python, Java, etc.) to directly process byte data messages to achieve custom protocol analysis, and provides Pub/Sub interfaces to achieve message exchange with the system .
 
-The scalability brought by this function to EMQ X is very powerful. It can process any proprietary protocol in a programming language familiar to users, and enjoy the advantages of extremely high concurrent connections brought by the EMQ X system.
+The scalability brought by this function to EMQX is very powerful. It can process any proprietary protocol in a programming language familiar to users, and enjoy the advantages of extremely high concurrent connections brought by the EMQX system.
 
 ## Features
 
@@ -26,12 +26,12 @@ The main contents of this module include:
     -Provide `Send` interface. Called by external modules, **used to send data packets**.
     -Provide `Close` interface. Called by external modules, **used to actively close the connection**.
 
-2. **Protocol/session layer:** This part mainly provides PUB/SUB interface** to realize message intercommunication with the EMQ X Broker system. include:
+2. **Protocol/session layer:** This part mainly provides PUB/SUB interface** to realize message intercommunication with the EMQX Broker system. include:
 
     -Provide ʻAuthenticate` interface. Used by external modules to register clients to the cluster.
     -Provide `StartTimer` interface. Called by external modules to start timers such as heartbeat for the connection process.
-    -Provide `Publish` interface. Used by external modules to publish messages in EMQ X Broker.
-    -Provide the `Subscribe` interface. It is used by external modules to subscribe to a topic in order to receive certain downlink messages from EMQ X Broker.
+    -Provide `Publish` interface. Used by external modules to publish messages in EMQX Broker.
+    -Provide the `Subscribe` interface. It is used by external modules to subscribe to a topic in order to receive certain downlink messages from EMQX Broker.
     -Provide the ʻUnsubscribe` interface. Called by external modules to unsubscribe a topic.
     -Call the ʻOnTimerTimeout` callback. It is used to handle events that the timer expires.
     -Call the ʻOnReceivedMessages` callback. Used to receive downlink messages (after subscribing to the topic successfully, if there is a message on the topic, this method will be called back)
@@ -103,7 +103,7 @@ The steps are as follows:
 2. Use the gRPC framework of the corresponding programming language to generate the gRPC server code of ʻexproto.proto`.
 3. Implement the interface of the `ConnectionHandler` service in exproto.proto.
 
-After the development is completed, the service needs to be deployed to a server that can communicate with EMQ X, and the port is open.
+After the development is completed, the service needs to be deployed to a server that can communicate with EMQX, and the port is open.
 
 The gRPC framework of each language can be referred to: [grpc-ecosystem/awesome-grpc](https://github.com/grpc-ecosystem/awesome-grpc)
 
@@ -116,7 +116,7 @@ After successfully deploying the gRPC service, you can open the multi-language e
 2. Configure **Listener (Listener)** to provide TCP/UDP/SSL/DTLS address monitoring. Used to monitor and receive device connections.
 3. Specify a service address of `ConnectionHandler` for each listener. A service used to send various event callbacks to users.
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![Modules](./assets/modules.png)
 

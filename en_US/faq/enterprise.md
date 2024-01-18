@@ -15,20 +15,20 @@ ref:
 
 # Business Service
 
-## What's the major difference between EMQ X enterprise and broker?
+## What's the major difference between EMQX enterprise and broker?
 
 **Tags:** [*Enterprise*](tags.md#enterprise)
 
 
-EMQ X Enterprise (enterprise version) is based on Broker (open source version), it includes all of the features of open source version.  Comparing to open source version, it has following difference:
+EMQX Enterprise (enterprise version) is based on Broker (open source version), it includes all of the features of open source version.  Comparing to open source version, it has following difference:
 
 - Concurrent connection level: the stable concurrent connection level for open source version is 100k, while enterprise version is 1M.
 - Data persistence: Enterprise version supports to persist data to several kinds of databases, includes the popular relational database, such as MySQL, PostgreSQL; Memory database, such as Redis; Non-SQL DB, such as MongoDB.
 - Kafka bridge: Forward MQTT message to Kafka clusters through internal bridge plugins, application can consume Kafka message to implement the streaming data process.
 - RabbitMQ bridge: Support to forward MQTT message to RabbitMQ, application can consume RabbitMQ message to integrate with 3rd party system.
-- System monitoring (EMQ X Control Center)
+- System monitoring (EMQX Control Center)
 
-  - EMQ X cluster monitor: Include statistics of connections, topics, message & sessions.
+  - EMQX cluster monitor: Include statistics of connections, topics, message & sessions.
 
   - Erlang VM monitor: Erlang process, threads, memory, distributed database & distributed locks etc.
 
@@ -38,7 +38,7 @@ EMQ X Enterprise (enterprise version) is based on Broker (open source version), 
 
 
 
-## Does EMQ X provide consulting service?
+## Does EMQX provide consulting service?
 
 **Tags:** [*Enterprise*](tags.md#enterprise)
 

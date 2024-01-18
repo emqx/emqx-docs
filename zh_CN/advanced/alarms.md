@@ -15,7 +15,7 @@ ref:
 
 # Alarm
 
-EMQ X Broker 内置监控与告警功能，目前支持监控 CPU 占用率、（系统、进程）内存占用率、进程数量、规则引擎资源状态、集群脑裂与愈合并进行告警。激活和取消告警都将产生一条警告日志并由 Broker 发布一个主题为 `$SYS/brokers/<Node>/alarms/activate` 或 `$SYS/brokers/<Node>/alarms/deactivate` 的 MQTT 消息，用户可以通过订阅 `$SYS/brokers/+/alarms/avtivate` 和 `$SYS/brokers/+/alarms/deactivate` 主题来获取告警通知。
+EMQX Broker 内置监控与告警功能，目前支持监控 CPU 占用率、（系统、进程）内存占用率、进程数量、规则引擎资源状态、集群脑裂与愈合并进行告警。激活和取消告警都将产生一条警告日志并由 Broker 发布一个主题为 `$SYS/brokers/<Node>/alarms/activate` 或 `$SYS/brokers/<Node>/alarms/deactivate` 的 MQTT 消息，用户可以通过订阅 `$SYS/brokers/+/alarms/avtivate` 和 `$SYS/brokers/+/alarms/deactivate` 主题来获取告警通知。
 
 告警通知消息的 Payload 为 Json 格式，包含以下字段：
 
@@ -32,9 +32,9 @@ EMQ X Broker 内置监控与告警功能，目前支持监控 CPU 占用率、�
 
 ![alarms_avtivate_msg](./assets/alarms_avtivate_msg.png)
 
-告警不会重复产生，即如果 CPU 占用率过高告警已经激活，则在其激活期间，不会出现第二个 CPU 占用率过高告警。告警会在被监控项恢复正常后自动取消激活，但同样支持用户手动取消激活（如果用户明确自己不关心该告警）。用户除了可以在 Dashboard 查看当前告警（激活中的告警）与历史告警（已取消激活的告警）以外，还可以通过 EMQ X Broker 提供的 [HTTP API](./http-api.md#endpoint-alarms) 查询和管理告警。
+告警不会重复产生，即如果 CPU 占用率过高告警已经激活，则在其激活期间，不会出现第二个 CPU 占用率过高告警。告警会在被监控项恢复正常后自动取消激活，但同样支持用户手动取消激活（如果用户明确自己不关心该告警）。用户除了可以在 Dashboard 查看当前告警（激活中的告警）与历史告警（已取消激活的告警）以外，还可以通过 EMQX Broker 提供的 [HTTP API](./http-api.md#endpoint-alarms) 查询和管理告警。
 
-EMQ X Broker 允许用户对告警功能进行一定程度的调整以适应实际需要，目前开放了以下配置项：
+EMQX Broker 允许用户对告警功能进行一定程度的调整以适应实际需要，目前开放了以下配置项：
 
 | 配置项                        | 类型     | 默认值      | 说明                                                         |
 | ----------------------------- | -------- | ----------- | ------------------------------------------------------------ |

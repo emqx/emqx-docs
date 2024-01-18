@@ -60,7 +60,7 @@ mqtt help
 
 ## MQTT.js usage example
 
-This example contains the complete code of MQTT.js in JavaScrip language connecting EMQ X Broker, sending and receiving messages:
+This example contains the complete code of MQTT.js in JavaScrip language connecting EMQX Broker, sending and receiving messages:
 
 ```javascript
 // const mqtt = require('mqtt')

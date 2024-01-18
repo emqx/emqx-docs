@@ -17,7 +17,7 @@ Although PUBLISH packets of QoS 1 and QoS 2 will be resent at the MQTT protocol 
 There are two scenarios that will cause the message to be resent:
 
 1. After the PUBLISH packet is sent to the peer, and no response is received within the specified time, the packet is resent.
-2. While maintaining the session, after the client reconnects, EMQ X Broker will automatically resend the *unanswered message* to ensure the correct QoS process.
+2. While maintaining the session, after the client reconnects, EMQX Broker will automatically resend the *unanswered message* to ensure the correct QoS process.
 
 It can be configured in `etc/emqx.conf`:
 
@@ -27,13 +27,13 @@ It can be configured in `etc/emqx.conf`:
 
 Generally speaking, you only need to care about the above content.
 
-For more details on how EMQ X Broker handles the retransmission of the MQTT protocol, see the following of this article.
+For more details on how EMQX Broker handles the retransmission of the MQTT protocol, see the following of this article.
 
 ## Protocol specification and design
 
 ### Retransmitted objects
 
-First, before understanding the retransmission mechanism design of EMQ X Broker, we need to ensure that you have understood the transmission process of QoS 1 and QoS 2 in the protocol, otherwise please refer to[MQTTv3.1.1 - QoS 1: At least once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718101) and [MQTTv3.1.1 - QoS 2: Exactly once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718102)
+First, before understanding the retransmission mechanism design of EMQX Broker, we need to ensure that you have understood the transmission process of QoS 1 and QoS 2 in the protocol, otherwise please refer to[MQTTv3.1.1 - QoS 1: At least once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718101) and [MQTTv3.1.1 - QoS 2: Exactly once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718102)
 
 Only a brief review is made to illustrate what are the retransmitted objects under different QoS.
 
@@ -83,7 +83,7 @@ In summary:
     * QoS 2 PUBLISH packet
     * QoS 2 PUBREL packet
 
-When EMQ X Broker acts as the receiver of PUBLISH messages, it does not require the retransmission operation.
+When EMQX Broker acts as the receiver of PUBLISH messages, it does not require the retransmission operation.
 
 
 ### Inflight window and maximum receiving value
@@ -92,17 +92,17 @@ For the definition and explanation of this concept, please refer to [Inflight Wi
 
 The purpose of introducing these two concepts is to understand:
 
-1. When EMQ X Broker is used as the sender, the retransmitted message must be the message stored in the inflight window.
-2. When EMQ X Broker is used as the receiver, and the sender retransmits the message:
-    - For QoS 1, EMQ X Broker directly reply PUBACK as response;
-    - For QoS 2, EMQ X Broker will release the stored PUBLISH or PUBREL packet in the *maximum received message* queue.
+1. When EMQX Broker is used as the sender, the retransmitted message must be the message stored in the inflight window.
+2. When EMQX Broker is used as the receiver, and the sender retransmits the message:
+    - For QoS 1, EMQX Broker directly reply PUBACK as response;
+    - For QoS 2, EMQX Broker will release the stored PUBLISH or PUBREL packet in the *maximum received message* queue.
 
 
 ### Message sequence
 
 Of course, the above concepts only need to be understood. What you need to care about most is the change in message order after **messages are retransmitted, especially for QoS type 1 messages**. E.g:
 
-Suppose that when the current inflight window is set to 2, EMQ X Broker plans to deliver 4 QoS 1 messages to a certain topic on the client. Assume that the client program or the network has experienced problems in the middle of the process, then the entire sending process will become:
+Suppose that when the current inflight window is set to 2, EMQX Broker plans to deliver 4 QoS 1 messages to a certain topic on the client. Assume that the client program or the network has experienced problems in the middle of the process, then the entire sending process will become:
 
 ```
 #1  [4,3,2,1 || ]   ----->   []
@@ -113,7 +113,7 @@ Suppose that when the current inflight window is set to 2, EMQ X Broker plans to
 #6  [ || ]          ----->   [1, 2, 3, 2, 3, 4]
 ```
 
-There are 6 steps in the process; the left indicates the message queue and inflight window of EMQ X Broker,  which is separated by `||`; the right indicates the sequence of messages received by the client, where each step indicates:
+There are 6 steps in the process; the left indicates the message queue and inflight window of EMQX Broker,  which is separated by `||`; the right indicates the sequence of messages received by the client, where each step indicates:
 
 1. Broker puts 4 messages into the message queue.
 2. Broker sequentially sends `1` `2` and puts it in the **inflight window**; the client only responds to the message `1`; and at this time due to a problem with the client's sending stream, subsequent responses cannot be sen.
@@ -124,7 +124,7 @@ There are 6 steps in the process; the left indicates the message queue and infli
 
 Although there are duplicate messages, this is in full compliance with the specifications of the protocol. The first appearance of each message is in order, and the message  `2` `3` repeatedly received will carry an identification bit, indicating that it is a retransmission message.
 
-The MQTT protocol and EMQ X Broker regard this topic as an `Ordered Topic`. See: [MQTTv3.1.1 - Message ordering](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718105).
+The MQTT protocol and EMQX Broker regard this topic as an `Ordered Topic`. See: [MQTTv3.1.1 - Message ordering](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718105).
 
 It ensures that under the same topic and QoS, messages are delivered and answered in order.
 

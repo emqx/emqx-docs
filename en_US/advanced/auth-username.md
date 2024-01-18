@@ -38,7 +38,7 @@ For username authentication, sha256 is used for password hash encryption by defa
 auth.user.password_hash = sha256
 ```
 
-After configuring the [hash method](./auth.md#password-salting-rules-and-hash-methods), the new preset authentication data and authentication data added through the HTTP API will be stored in the EMQ X Broker built-in database in hash cipher text. 
+After configuring the [hash method](./auth.md#password-salting-rules-and-hash-methods), the new preset authentication data and authentication data added through the HTTP API will be stored in the EMQX Broker built-in database in hash cipher text. 
 
 
 ## Preset authentication data
@@ -57,7 +57,7 @@ auth.user.2.username = wivwiv
 auth.user.2.password = public
 ```
 
-When the plugin is started, the preset authentication data is read and loaded into the EMQ X Broker built-in database, and the authentication data on the nodes will be synchronized to the cluster at this stage.
+When the plugin is started, the preset authentication data is read and loaded into the EMQX Broker built-in database, and the authentication data on the nodes will be synchronized to the cluster at this stage.
 
 <!-- TODO 补充加载规则 -->
 

@@ -60,7 +60,7 @@ mqtt help
 
 ## MQTT.js 使用示例
 
-本示例包含 JavaScrip 语言的 MQTT.js 连接 EMQ X Broker，并进行消息收发完整代码：
+本示例包含 JavaScrip 语言的 MQTT.js 连接 EMQX Broker，并进行消息收发完整代码：
 
 ```javascript
 // const mqtt = require('mqtt')

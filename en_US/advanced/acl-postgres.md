@@ -138,7 +138,7 @@ This is the table structure used by default configuration. After being familiar 
 
 ## Superuser  SQL（super_query）
 
-When performing ACL authentication, EMQ X Broker will use the current client information to execute the user-configured superuser SQL to query whether the client is a superuser. ACL SQL is skipped when the client is superuser.
+When performing ACL authentication, EMQX Broker will use the current client information to execute the user-configured superuser SQL to query whether the client is a superuser. ACL SQL is skipped when the client is superuser.
 
 ```bash
 # etc/plugins/emqx_auth_pgsql.conf
@@ -146,7 +146,7 @@ When performing ACL authentication, EMQ X Broker will use the current client inf
 auth.pgsql.super_query = select is_superuser from mqtt_user where username = '%u' limit 1
 ```
 
-You can use the following placeholders in SQL and EMQ X Broker will automatically populate with client information when executed:
+You can use the following placeholders in SQL and EMQX Broker will automatically populate with client information when executed:
 
 - %u：Username
 - %c：Client ID
@@ -165,7 +165,7 @@ If superuser functionality is not needed, it can be more efficient when commenti
 
 ## ACL SQL（acl_query）
 
-When performing ACL authentication, EMQ X Broker will use the current client information to populate and execute the user-configured superuser SQL. If superuser SQL is not enabled or the client is not a superuser, ACL SQL is used to query the client's ACL rules in the database.
+When performing ACL authentication, EMQX Broker will use the current client information to populate and execute the user-configured superuser SQL. If superuser SQL is not enabled or the client is not a superuser, ACL SQL is used to query the client's ACL rules in the database.
 
 ```bash
 # etc/plugins/emqx_auth_pgsql.conf
@@ -173,7 +173,7 @@ When performing ACL authentication, EMQ X Broker will use the current client inf
 auth.pgsql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 ```
 
-You can use the following placeholders in ACL SQL and EMQ X Broker will automatically populate with client information when executed:
+You can use the following placeholders in ACL SQL and EMQX Broker will automatically populate with client information when executed:
 
 - %a：Client address
 - %u：Username

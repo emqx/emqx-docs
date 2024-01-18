@@ -15,7 +15,7 @@ ref:
 
 # Delayed publish
 
-The delay-publish function of EMQ X Broker can implement the function of delaying the PUBLISH packet publishing according to the time interval configured by the user. When a client publishes a message to EMQ X Broker with the special topic prefix  `$delayed/{DelayInteval}` , the delay-publish function is triggered.
+The delay-publish function of EMQX Broker can implement the function of delaying the PUBLISH packet publishing according to the time interval configured by the user. When a client publishes a message to EMQX Broker with the special topic prefix  `$delayed/{DelayInteval}` , the delay-publish function is triggered.
 
 The specific format of the delay-publish topic is as follows:
 
@@ -24,7 +24,7 @@ $delayed/{DelayInterval}/{TopicName}
 ```
 
 - `$delayed`: Messages prefixed with `$delay` will be treated as messages that need to be delayed. The delay interval is determined by the content of the next topic level.
-- `{DelayInterval}`: Specify the time interval for delaying the publish of this MQTT message with the unit of second. The maximum allowed interval is 4294967 seconds. If `{DelayInterval}` cannot be parsed as an integer number, EMQ X Broker will discard the message and the client will not receive any information.
+- `{DelayInterval}`: Specify the time interval for delaying the publish of this MQTT message with the unit of second. The maximum allowed interval is 4294967 seconds. If `{DelayInterval}` cannot be parsed as an integer number, EMQX Broker will discard the message and the client will not receive any information.
 - `{TopicName}`: The topic name of the MQTT message.
 
 E.g:

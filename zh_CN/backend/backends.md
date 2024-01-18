@@ -13,7 +13,7 @@ category:
 ref:
 ---
 
-# EMQ X 规则引擎数据存储
+# EMQX 规则引擎数据存储
 
 ## Redis 数据存储
 
@@ -101,7 +101,7 @@ backend.redis.hook.message.acked.2       = {"topic": "pubsub/#", "action": {"fun
 Redis 存储支持用户采用 Redis Commands 语句配置 Action，例如:
 
 ```bash
-## 在客户端连接到 EMQ X 服务器后，执行一条 redis
+## 在客户端连接到 EMQX 服务器后，执行一条 redis
 backend.redis.hook.client.connected.3 = {"action": {"commands": ["SET conn:${clientid} ${clientid}"]}, "pool": "pool1"}
 ```
 
@@ -366,7 +366,7 @@ backend.mysql.hook.message.acked.1       = {"topic": "#", "action": {"function":
 MySQL 存储支持用户采用 SQL 语句配置 Action:
 
 ```bash
-## 在客户端连接到 EMQ X 服务器后，执行一条 sql 语句(支持多条 sql 语句)
+## 在客户端连接到 EMQX 服务器后，执行一条 sql 语句(支持多条 sql 语句)
 backend.mysql.hook.client.connected.3 = {"action": {"sql": ["insert into conn(clientid) values(${clientid})"]}, "pool": "pool1"}
 ```
 
@@ -676,7 +676,7 @@ backend.pgsql.hook.message.acked.1       = {"topic": "#", "action": {"function":
 PostgreSQL 存储支持用户采用SQL语句配置 Action，例如:
 
 ```bash
-## 在客户端连接到 EMQ X 服务器后，执行一条 sql 语句(支持多条sql语句)
+## 在客户端连接到 EMQX 服务器后，执行一条 sql 语句(支持多条sql语句)
 backend.pgsql.hook.client.connected.3 = {"action": {"sql": ["insert into conn(clientid) values(${clientid})"]}, "pool": "pool1"}
 ```
 
@@ -1271,7 +1271,7 @@ backend.cassa.hook.message.acked.1       = {"topic": "#", "action": {"function":
 在 etc/plugins/emqx_backend_cassa.conf 中添加如下配置:
 
 ```bash
-## 在客户端连接到 EMQ X 服务器后，执行一条 cql 语句(支持多条 cql 语句)
+## 在客户端连接到 EMQX 服务器后，执行一条 cql 语句(支持多条 cql 语句)
 backend.cassa.hook.client.connected.3 = {"action": {"cql": ["insert into conn(clientid) values(${clientid})"]}, "pool": "pool1"}
 ```
 
@@ -1760,7 +1760,7 @@ aws dynamodb scan --table-name mqtt_topic_msg_map --region us-west-2  --endpoint
 
 ### InfluxDB 配置
 
-EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置文件：
+EMQX 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置文件：
 
 ```bash
 [[udp]]
@@ -1770,7 +1770,7 @@ EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置�
   database = "emqx"
 
   # InfluxDB precision for timestamps on received points ("" or "n", "u", "ms", "s", "m", "h")
-  # EMQ X 默认时间戳是毫秒
+  # EMQX 默认时间戳是毫秒
   precision = "ms"
   
   # 其他配置根据需要自行修改
@@ -1906,7 +1906,7 @@ MQTT 消息中的数据。
 
 | Placeholder | Description                            |
 | ----------- | -------------------------------------- |
-| $id         | MQTT 消息 UUID, 由 EMQ X 分配               |
+| $id         | MQTT 消息 UUID, 由 EMQX 分配               |
 | $clientid   | 客户端使用的 Client ID                       |
 | $username   | 客户端使用的 Username                        |
 | $peerhost   | 客户端 IP                                 |
@@ -1914,7 +1914,7 @@ MQTT 消息中的数据。
 | $topic      | MQTT 消息主题                              |
 | $payload    | MQTT 消息载荷, 必须为合法的 Json                 |
 | $<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
-| $timestamp  | EMQ X 准备转发消息时设置的时间戳, 精度: 纳秒            |
+| $timestamp  | EMQX 准备转发消息时设置的时间戳, 精度: 纳秒            |
 
 **$payload 与 $<Number\>:**
 
@@ -2144,7 +2144,7 @@ MQTT 消息中的数据。
 
 | Placeholder | Description                            |
 | ----------- | -------------------------------------- |
-| $id         | MQTT 消息 UUID, 由 EMQ X 分配               |
+| $id         | MQTT 消息 UUID, 由 EMQX 分配               |
 | $clientid   | 客户端使用的 Client ID                       |
 | $username   | 客户端使用的 Username                        |
 | $peerhost   | 客户端 IP                                 |
@@ -2152,7 +2152,7 @@ MQTT 消息中的数据。
 | $topic      | MQTT 消息主题                              |
 | $payload    | MQTT 消息载荷, 必须为合法的 Json                 |
 | $<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
-| $timestamp  | EMQ X 准备转发消息时设置的时间戳, 精度: 毫秒            |
+| $timestamp  | EMQX 准备转发消息时设置的时间戳, 精度: 毫秒            |
 
 **$payload 与 $<Number\>:**
 
@@ -2355,7 +2355,7 @@ $2, $3)`。
 
 | Placeholder | Description                            |
 | ----------- | -------------------------------------- |
-| $id         | MQTT 消息 UUID, 由 EMQ X 分配               |
+| $id         | MQTT 消息 UUID, 由 EMQX 分配               |
 | $clientid   | 客户端使用的 Client ID                       |
 | $username   | 客户端使用的 Username                        |
 | $peerhost   | 客户端 IP                                 |
@@ -2363,7 +2363,7 @@ $2, $3)`。
 | $topic      | MQTT 消息主题                              |
 | $payload    | MQTT 消息载荷, 必须为合法的 Json                 |
 | $<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
-| $timestamp  | EMQ X 准备转发消息时设置的时间戳, 精度: 毫秒            |
+| $timestamp  | EMQX 准备转发消息时设置的时间戳, 精度: 毫秒            |
 
 **$payload 与 $<Number\>:**
 

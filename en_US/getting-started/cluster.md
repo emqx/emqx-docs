@@ -1,9 +1,9 @@
 # Create a cluster
 
 ## Node Discovery and Autocluster 
-EMQ X supports Autocluster based on the Ekka library. Ekka is a cluster management library developed for Erlang/OTP applications, supporting Erlang Node Auto-Discovery, Autocluster, Network Partition Autoheal and Autoclean.
+EMQX supports Autocluster based on the Ekka library. Ekka is a cluster management library developed for Erlang/OTP applications, supporting Erlang Node Auto-Discovery, Autocluster, Network Partition Autoheal and Autoclean.
 
-EMQ X supports multiple node discovery strategies:
+EMQX supports multiple node discovery strategies:
 
 | Strategy | Description      |
 | ------ | ----------------- |
@@ -15,7 +15,7 @@ EMQ X supports multiple node discovery strategies:
 | k8s    | Autocluster of Kubernetes service |
 
 ### Introduction to cluster management  through manual method
-Suppose you are going to deploy an EMQ X cluster on two servers of s1.emqx.io, s2.emqx.io:
+Suppose you are going to deploy an EMQX cluster on two servers of s1.emqx.io, s2.emqx.io:
 
 |                Node name                | Hostname (FQDN) |   IP address   |
 | ------------------------------------ | ------------- | ------------ |

@@ -1,5 +1,5 @@
 # Common Errors
-## EMQ X cannot connect to Mysql8.0
+## EMQX cannot connect to Mysql8.0
 
 **Tags:** [*MySQL*](tags.md#mysql)  [*Auth*](tags.md#auth)
 
@@ -56,13 +56,13 @@ The output error  from executing `./bin/emqx console` includes:
 \{application_start_failure,kernel,\{\{shutdown,\{failed_to_start_child,kernel_safe_sup,\{on_load_function_failed,crypto\}\}\}, ..\}
 ```
 
-It indicates that the "crypto" application in Erlang/OTP that EMQ X depends on failed to start.
+It indicates that the "crypto" application in Erlang/OTP that EMQX depends on failed to start.
 
 ### Solution
 
 #### Linux
 
-Go to the installation directory of EMQ X (If you use the package management tool to install EMQ X, you should enter the same level directory as the `lib` of EMQ X)
+Go to the installation directory of EMQX (If you use the package management tool to install EMQX, you should enter the same level directory as the `lib` of EMQX)
 
 ```bash
   ## Package installation
@@ -110,12 +110,12 @@ $ ln -s /usr/local/lib64/libssl.so.1.1 /usr/lib64/libssl.so.1.1
 $ ln -s /usr/local/lib64/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1
 ```
 
-After the completion, execute `ldd lib/crypto-*/priv/lib/crypto.so` in the lib-level directory of EMQ X to check whether it can be correctly identified. If there is no `.so` library in `not found`, you can start EMQ X normally.
+After the completion, execute `ldd lib/crypto-*/priv/lib/crypto.so` in the lib-level directory of EMQX to check whether it can be correctly identified. If there is no `.so` library in `not found`, you can start EMQX normally.
 
 
 #### macOS
 
-Go to the installation directory of EMQ X:
+Go to the installation directory of EMQX:
 
 ```bash
   ## package installation
@@ -148,7 +148,7 @@ If the file does not exist, you need to install the version of OPENSSL correspon
 $ brew install openssl@1.1
 ```
 
-After the installation is complete, you can start EMQ X normally.
+After the installation is complete, you can start EMQX normally.
 
 ## MSVCR120.dll is missing from Windows
 

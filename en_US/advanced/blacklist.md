@@ -1,6 +1,6 @@
 # Blacklist
 
-EMQ X Broker provides users with a blacklist function. Users can add specified clients to the blacklist through the relevant HTTP API to deny access of the client. In addition to the client identifier, it also supports direct ban of user names and even IP addresses.
+EMQX Broker provides users with a blacklist function. Users can add specified clients to the blacklist through the relevant HTTP API to deny access of the client. In addition to the client identifier, it also supports direct ban of user names and even IP addresses.
 
 For specific usage of the HTTP API, see  [HTTP API - blacklist](http-api.md#endpoint-banned) for reference.
 
@@ -8,7 +8,7 @@ For specific usage of the HTTP API, see  [HTTP API - blacklist](http-api.md#endp
 The blacklist is only applicable to a small number of client bans. If there are a large number of clients requiring authentication management, please use the [authentication](./auth.md)  function.。
 :::
 
-Based on the blacklist function, EMQ X Broker supports automatic banning of clients that are frequently logged in for a short period of time, and rejects these clients for a period of time to prevent such clients from occupying server resources so that  the normal use of other clients is affected.
+Based on the blacklist function, EMQX Broker supports automatic banning of clients that are frequently logged in for a short period of time, and rejects these clients for a period of time to prevent such clients from occupying server resources so that  the normal use of other clients is affected.
 
 It should be noted that the automatic ban function only bans the client identifier, not the user name and IP address. That is to say, the machine can continue to log in as long as the client identifier is changed.
 

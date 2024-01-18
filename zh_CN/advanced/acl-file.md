@@ -24,7 +24,7 @@ etc/acl.conf
 ```
 
 ::: tip
-内置 ACL 优先级最低，可以被 ACL 插件覆盖，如需禁用全部注释即可。规则文件更改后需重启 EMQ X 以应用生效。
+内置 ACL 优先级最低，可以被 ACL 插件覆盖，如需禁用全部注释即可。规则文件更改后需重启 EMQX 以应用生效。
 :::
 
 
@@ -87,7 +87,7 @@ etc/acl.conf
     - `{allow, all}`：允许所有操作
     - `{deny, all}`：拒绝所有操作
 
-在 `acl.conf` 修改完成后，并不会自动加载至 EMQ X 系统。需要手动执行：
+在 `acl.conf` 修改完成后，并不会自动加载至 EMQX 系统。需要手动执行：
 
 ```bash
 ./bin/emqx_ctl modules reload emqx_mod_acl_internal

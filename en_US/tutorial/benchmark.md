@@ -123,8 +123,8 @@ Two-way certificate:
 
 We verify the use of the tool in 2 most typical scenarios:
 
-1. Connections: Use `emqtt_bench` to create millions of connections to EMQ X Broker.
-2. Throughput: Use `emqtt_bench` to create `10W / s Qos0` message throughput in EMQ X Broker.
+1. Connections: Use `emqtt_bench` to create millions of connections to EMQX Broker.
+2. Throughput: Use `emqtt_bench` to create `10W / s Qos0` message throughput in EMQX Broker.
 
 ### Device and deployment topology
 
@@ -144,7 +144,7 @@ The topology structure is as follows:
 ```
 	+-----------------------+
 	| bench1: 192.168.0.100 | -------					+--------------------------+
-	+-----------------------+        \----->  |		    EMQ X Broker			 |
+	+-----------------------+        \----->  |		    EMQX Broker			 |
 	+-----------------------+        /----->  |       192.168.0.99	  	 |
 	| bench2: 192.168.0.200 | -------					+--------------------------+
 	+-----------------------+ 
@@ -188,7 +188,7 @@ Perform the same operation on `bench2`.
 
 
 
-After all connections are established, execute `./bin/emqx_ctl listeners` and find the following content to view the information about the number of connections in EMQ X Broker:
+After all connections are established, execute `./bin/emqx_ctl listeners` and find the following content to view the information about the number of connections in EMQX Broker:
 
 ```bash
 listener on mqtt:tcp:0.0.0.0:1883

@@ -34,7 +34,7 @@ Eclipse Paho Java Client 提供了MqttAsyncClient 和 MqttClient 异步和同步
 
 ## Paho Java 使用示例
 
-Java 体系中 Paho Java 是比较稳定、广泛应用的 MQTT 客户端库，本示例包含 Java 语言的 Paho Java 连接 EMQ X Broker，并进行消息收发完整代码：
+Java 体系中 Paho Java 是比较稳定、广泛应用的 MQTT 客户端库，本示例包含 Java 语言的 Paho Java 连接 EMQX Broker，并进行消息收发完整代码：
 
 **App.java**
 

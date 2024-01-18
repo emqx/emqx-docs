@@ -2,11 +2,11 @@
 
 [DolphinDB](https://www.dolphindb.cn) is a high-performance distributed time series database developed by Zhejiang  DolphinDB Co., Ltd, which integrates powerful programming language and high-capacity and high-speed flow data analysis system, providing a one-stop solution for rapid storage, retrieval, analysis and calculation of massive structured data. It is suitable for the area of quantitative finance and industrial Internet of things.
 
-EMQ X uses Erlang to implement DolphinDB's client API, which transmits data to DolphinDB for storage through TCP.
+EMQX uses Erlang to implement DolphinDB's client API, which transmits data to DolphinDB for storage through TCP.
 
 ## Set up DolphinDB
 
-Currently, EMQ X only adapts to DolphinDB 1.20.7 version.
+Currently, EMQX only adapts to DolphinDB 1.20.7 version.
 
 Taking the Linux version as an example, you can go to the official website to download the latest version of the Linux64 installation package from the community:https://www.dolphindb.cn/downloads.html
 
@@ -22,7 +22,7 @@ chmod +x ./dolphindb
 
 If the startup is successful and the correct output is obtained, it indicates that DolphinDB is successfully installed. Then use `<CRTL+D>` to close DolphinDB.
 
-Now, we need to open the publish / subscribe function of streamtable in dolphin dB and create relevant data tables to realize the function of EMQ x message storage and persistence:
+Now, we need to open the publish / subscribe function of streamtable in dolphin dB and create relevant data tables to realize the function of EMQX message storage and persistence:
 
 1. Modify the DolphinDB's configuration file `vim dolphindb.cfg` and add the following configuration items to enable the publish/subscribe function:
 ``` properties
@@ -85,7 +85,7 @@ For detailed DolphinDB usage documentation, please refer to:
 
 Create rules:
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
 
 Fill in the rule SQL:
 

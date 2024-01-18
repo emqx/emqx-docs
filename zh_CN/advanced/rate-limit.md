@@ -14,7 +14,7 @@ ref:
 ---
 
 # 速率限制
-EMQ X 提供对接入速度、消息速度的限制：当客户端连接请求速度超过指定限制的时候，暂停新连接的建立；当消息接收速度超过指定限制的时候，暂停接收消息。
+EMQX 提供对接入速度、消息速度的限制：当客户端连接请求速度超过指定限制的时候，暂停新连接的建立；当消息接收速度超过指定限制的时候，暂停接收消息。
 
 速率限制是一种 *backpressure* 方案，从入口处避免了系统过载，保证了系统的稳定和可预测的吞吐。速率限制可在 `etc/emqx.conf` 中配置：
 
@@ -28,10 +28,10 @@ EMQ X 提供对接入速度、消息速度的限制：当客户端连接请求�
 - **conn_messages_in** 是单个连接上接收 PUBLISH 报文的速率限制。`100,10s` 代表每个连接上允许收到的最大 PUBLISH 消息速率是每 10 秒 100 个。
 - **conn_bytes_in** 是单个连接上接收 TCP数据包的速率限制。`100KB,10s` 代表每个连接上允许收到的最大 TCP 报文速率是每 10 秒 100KB。
 
-`conn_messages_in` 和 `conn_bytes_in` 提供的都是针对单个连接的限制，EMQ X 目前没有提供全局的消息速率限制。
+`conn_messages_in` 和 `conn_bytes_in` 提供的都是针对单个连接的限制，EMQX 目前没有提供全局的消息速率限制。
 
 ## 速率限制原理
-EMQ X 使⽤[令牌桶 (Token Bucket)](https://en.wikipedia.org/wiki/Token_bucket) 算法来对所有的 Rate Limit 来做控制。 令牌桶算法 的逻辑如下图:
+EMQX 使⽤[令牌桶 (Token Bucket)](https://en.wikipedia.org/wiki/Token_bucket) 算法来对所有的 Rate Limit 来做控制。 令牌桶算法 的逻辑如下图:
 
 ![image-20190604103907875](../assets/token-bucket.jpg)
 
@@ -47,7 +47,7 @@ EMQ X 使⽤[令牌桶 (Token Bucket)](https://en.wikipedia.org/wiki/Token_bucke
 
   容易想到，最大速率 M 为：能在1个单位时间内消耗完满状态令牌桶的速度。而桶中令牌的消耗速度为 M - r，故可知：b / (M - r) = 1，得 M = b + r
 
-### 令牌桶算法在 EMQ X 中的应用
+### 令牌桶算法在 EMQX 中的应用
 
 当使用如下配置做报文速率限制的时候：
 
@@ -55,7 +55,7 @@ EMQ X 使⽤[令牌桶 (Token Bucket)](https://en.wikipedia.org/wiki/Token_bucke
 zone.external.rate_limit.conn_bytes_in = 100KB,10s
 ```
 
-EMQ X 将使用两个值初始化每个连接的 rate-limit 处理器：
+EMQX 将使用两个值初始化每个连接的 rate-limit 处理器：
 
 - rate = 100 KB / 10s = 10240 B/s
 - burst = 100 KB = 102400 B
@@ -65,7 +65,7 @@ EMQ X 将使用两个值初始化每个连接的 rate-limit 处理器：
 - 长期来看允许的平均速率限制为 10240 B/s
 - 允许的峰值速率为 102400 + 10240 = 112640 B/s
 
-为提高系统吞吐，EMQ X 的接入模块不会一条一条的从 socket 读取报文，而是每次从 socket 读取 N 条报文。rate-limit 检查的时机就是在收到这 N 条报文之后，准备继续收取下个 N 条报文之前。故实际的限制速率不会如算法一样精准。EMQ X 只提供了一个大概的速率限制。`N` 的值可以在 `etc/emqx.conf` 中配置：
+为提高系统吞吐，EMQX 的接入模块不会一条一条的从 socket 读取报文，而是每次从 socket 读取 N 条报文。rate-limit 检查的时机就是在收到这 N 条报文之后，准备继续收取下个 N 条报文之前。故实际的限制速率不会如算法一样精准。EMQX 只提供了一个大概的速率限制。`N` 的值可以在 `etc/emqx.conf` 中配置：
 
 |             配置项             |  类型  | 默认值 |               描述               |
 | ------------------------------ | ------ | ------ | -------------------------------- |

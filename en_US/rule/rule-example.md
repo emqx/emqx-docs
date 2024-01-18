@@ -3,13 +3,13 @@
 {% emqxce %}
 
 ::: danger
-Only the following operations are applicable in EMQ X Broker:
+Only the following operations are applicable in EMQX Broker:
 - Check (debug)
 - Send data to web service
 - Bridge data to MQTT Broker
 
 
-The rest are exclusive to EMQ X Enterprise.
+The rest are exclusive to EMQX Enterprise.
 :::
 
 {% endemqxce %}
