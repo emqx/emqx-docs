@@ -2108,7 +2108,7 @@ EMQX 4.0.9 现已发布，主要修复了 MQTT 消息解析的问题。
 *发布日期: 2020-04-22*
 
 EMQX 4.0.6 现已发布，主要包含以下改动：
-  
+
 ### emqx
 
 **错误修复:**
@@ -2162,7 +2162,7 @@ EMQX 4.0.5 现已发布。此版本主要进行了错误修复。
 
  Github issue: [emqx/emqx#3274](https://github.com/emqx/emqx/pull/3274)
   Github PR: [emqx/emqx-rel#462](https://github.com/emqx/emqx-rel/pull/462)
-  
+
 - 修复配置文件中 node.* 配置项不生效的问题
 
   Github issue: [emqx/emqx#3302](https://github.com/emqx/emqx/pull/3302)
@@ -3076,283 +3076,283 @@ Github PR: [emqx/emqx-management#21](https://github.com/emqx/emqx-management/pul
 
 *发布日期: 2018-07-23*
 
-### Bugfix and Enhancements
+### 错误修复和增强
 
-Fix the getting config REST API which throws exceptions.
+修复获取配置 REST API 抛出异常的问题。
 
-Support to restart listeners when emqttd is running.
+支持在 emqttd 运行时重启监听器。
 
-Specify a fixed tag for the dependency libraries.
+为依赖库指定固定标签。
 
 ### emq-auth-jwt
 
-Fix token verification with jwerl 1.0.0
+修复使用 jwerl 1.0.0 进行令牌验证的问题。
 
 ### emq-auth-mongo
 
-Support $all variable in ACL query. (emq-auth-mongo#123)
+支持 ACL 查询中的 $all 变量。（emq-auth-mongo#123）
 
-Support both clientid and username variables in all queries. (emq-auth-mongo#123)
+支持所有查询中的 clientid 和 username 变量。（emq-auth-mongo#123）
 
 ## 2.3.10
 
 *发布日期: 2018-06-27*
 
-### Bugfix and Enhancements
+### 错误修复和增强
 
-Upgrade the esockd library to v5.2.2
+将 esockd 库升级到 v5.2.2。
 
 ### emq-auth-http
 
-Ignore auth on ignore in body, allows for chaining methods
+在身份忽略时忽略认证，允许链式方法。
 
 ## 2.3.9
 
 *发布日期: 2018-05-20*
 
-### Bugfix and Enhancements
+### 错误修复和增强
 
-Bugfix: check params for REST publish API (#1599)
+修复：检查 REST 发布 API 的参数（#1599）。
 
-Upgrade the mongodb library to v3.0.5
+将 mongodb 库升级到 v3.0.5。
 
 ### esockd
 
-Bugfix: proxy protocol - set socket to binary mode (#78)
+修复：代理协议 - 将套接字设置为二进制模式（#78）。
 
 ## 2.3.8
 
 *发布日期: 2018-05-11*
 
-### Bugfix and Enhancements
+### 错误修复和增强
 
-Bugfix: unregister users CLI when unload emq_auth_username (#1588)
+修复：在卸载 emq_auth_username 时注销用户 CLI（#1588）。
 
-Bugfix: Should be an info level when change CleanSession (#1590)
+修复：更改 CleanSession 时应为信息级别（#1590）。
 
-Bugfix: emqttd_ctl crashed when emq_auth_usename doesn't exist (#1588)
+修复：emqttd_ctl 在 emq_auth_usename 不存在时崩溃（#1588）。
 
 ### emq-auth-mongo
 
-Improve: Support authentication database (authSource) (#116)
+改进：支持认证数据库（authSource）（#116）。
 
 ## 2.3.7
 
 *发布日期: 2018-04-22*
 
-### Bugfix and Enhancements
+### 错误修复和增强
 
-Bugfix: fixed spec of function setstats/3 (#1575)
+修复：修复函数 setstats/3 的规范（#1575）。
 
-Bugfix: clean dead persistent session on connect (#1575)
+修复：连接时清理死亡的持久会话（#1575）。
 
-Bugfix: dup flag not set when re-deliver (#1575)
+修复：重传时未设置 dup 标志（#1575）。
 
-Bugfix: Upgrade the lager_console_backend config (#1575)
+修复：升级 lager_console_backend 配置（#1575）。
 
-Improve: Support set k8s namespace (#1575)
+改进：支持设置 k8s 命名空间（#1575）。
 
-Upgrade the ekka library to v0.2.3 (#1575)
+将 ekka 库升级到 v0.2.3（#1575）。
 
-Improve: move PIPE_DIR dir from /tmp/${WHOAMI}_erl_pipes/$NAME/ to /$RUNNER_DATA_DIR/${WHOAMI}\_erl_pipes/$NAME/ (emq-relx#188)
+改进：将 PIPE_DIR 目录从 /tmp/${WHOAMI}_erl_pipes/$NAME/ 移动到 /$RUNNER_DATA_DIR/${WHOAMI}_erl_pipes/$NAME/（emq-relx#188）。
 
 ### emq-auth-http
 
-Improve: Retry 3 times when httpc:request occurred socket_closed_remotely error (emq-auth-http#70)
+改进：当 httpc:request 出现 socket_closed_remotely 错误时重试 3 次（emq-auth-http#70）。
 
 ## 2.3.6
 
 *发布日期: 2018-03-25*
 
-### Bugfix and Enhancements
+### 错误修复和增强
 
-Security: LWT message checking the ACL (#1524)
+安全性：检查 LWT 消息的 ACL（#1524）。
 
-Bugfix: Retain msgs should not be sent to existing subscriptions (#1529)
+修复：保留消息不应发送给现有订阅者（#1529）。
 
 ### emq-auth-jwt
 
-Validate JWT token using a expired field (#29)
+使用过期字段验证 JWT 令牌（#29）。
 
 ## 2.3.5
 
 *发布日期: 2018-03-03*
 
-### Bugfix and Enhancements
+### 错误修复和增强
 
-Feature: Add etc/ssl_dist.conf file for erlang SSL distribution (emq-relx#178)
+特性：为 Erlang SSL 分发添加 etc/ssl_dist.conf 文件（emq-relx#178）。
 
-Feature: Add node.ssl_dist_optfile option and etc/ssl_dist.conf file (#1512)
+特性：添加 node.ssl_dist_optfile 选项和 etc/ssl_dist.conf 文件（#1512）。
 
-Feature: Support Erlang Distribution over TLS (#1512)
+特性：支持通过 TLS 进行 Erlang 分发（#1512）。
 
-Improve: Tune off the 'tune_buffer' option for external MQTT connections (#1512)
+改进：为外部 MQTT 连接关闭 'tune_buffer' 选项（#1512）。
 
 ### emq-sn
 
-Clean registered topics if mqtt-sn client send a 2nd CONNECT in connected state (#76)
+如果 mqtt-sn 客户端在已连接状态下发送第二个 CONNECT，则清理已注册的主题（#76）。
 
-Upgrade the esockd library to v5.2.1 (#76)
+将 esockd 库升级到 v5.2.1（#76）。
 
 ### emq-auth-http
 
-Remove 'password' param from ACL and superuser requests (#66)
+从 ACL 和超级用户请求中移除 'password' 参数（#66）。
 
 ## 2.3.4
 
 *发布日期: 2018-01-29*
 
-### Bugfix and Enhancements
+### 错误修复和增强
 
-Feature: Forward real client IP using a reverse proxy for websocket (#1335)
+特性：使用反向代理转发 websocket 的真实客户端 IP（#1335）。
 
-Feature: EMQ node.name with link local ipv6 address not responding to ping (#1460)
+特性：EMQ 节点名称带有本地链路 ipv6 地址时无法响应 ping（#1460）。
 
-Feature: Add PROTO_DIST_ARG flag to support clustering via IPv6 address. (#1460)
+特性：添加 PROTO_DIST_ARG 标志以支持通过 IPv6 地址进行集群。（#1460）
 
-Bugfix: retain bit is not set when publishing to clients (when it should be set). (#1461)
+修复：发布给客户端时未设置保留位（应该设置）。（#1461）
 
-Bugfix: Can't search topic on web dashboard (#1473)
+修复：无法在 web 仪表板上搜索主题（#1473）。
 
 ### emq-sn
 
-Bugfix: CONNACK is not always sent to the client (emq-sn#67)
+修复：CONNACK 不总是发送给客户端（emq-sn#67）。
 
-Bugfix: Setting the port to ::1:2000 causes error (emq-sn#66)
+修复：将端口设置为 ::1:2000 会导致错误（emq-sn#66）。
 
 ## 2.3.3
 
 *发布日期: 2018-01-08*
 
-### Bugfix and Enhancements
+### 错误修复和增强
 
-Add a full documentation for emq.conf and plugins.
+为 emq.conf 和插件添加完整文档。
 
-Repair a dead link in README - missing emq-lwm2m. (#1430)
+修复 README 中的死链接 - 缺少 emq-lwm2m。（#1430）
 
-Subscriber with wildcard topic does not receive retained messages with sub topic has $ sign (#1398)
+订阅带有 $ 符号的主题的订阅者不会收到保留消息（#1398）。
 
-Web Interface with NGINX Reverse Proxy not working. (#953)
+Web 界面与 NGINX 反向代理不工作。（#953）
 
 ### emq-dashboard
 
-Add dashboard.default_user.login , dashboard.default_user.password options to support configuring default admin.
+添加 dashboard.default_user.login，dashboard.default_user.password 选项，支持配置默认管理员。
 
 ### emq-modules
 
-The emq-modules rewrite config is not right. (#35)
+emq-modules 重写配置不正确。（#35）
 
 ### emq-docker
 
-Upgrade alpine to 3.7 (#31)
+将 alpine 升级到 3.7（#31）
 
 ### emq-packages
 
-Support ARM Platform (#12)
+支持 ARM 平台（#12）
 
 ## 2.3.2
 
 *发布日期: 2017-12-26*
 
-### Bugfix and Enhancements
+### 错误修复和增强
 
-Support X.509 certificate based authentication (#1388)
+支持基于 X.509 证书的身份验证（#1388）
 
-Add proxy_protocol, proxy_protocol_timeout options for ws/wss listener.
+为 ws/wss 监听器添加 proxy_protocol, proxy_protocol_timeout 选项。
 
-Cluster discovery etcd nodes key must be created manually. (#1402)
+Cluster discovery etcd 节点键必须手动创建。（#1402）
 
-Will read an incorrect password at the last line of emq_auth_username.conf (#1372)
+在 emq_auth_username.conf 的最后一行读取错误密码。（#1372）
 
-How can I use SSL/TLS certificate based client authentication? (#794)
+如何使用基于 SSL/TLS 证书的客户端身份验证？（#794）
 
-Upgrade the esockd library to v5.2.
+将 esockd 库升级到 v5.2。
 
 ### esockd
 
-Improve the parser of proxy protocol v2.
+改进代理协议 v2 的解析器。
 
-Add 'send_timeout', 'send_timeout_close' options.
+添加 'send_timeout', 'send_timeout_close' 选项。
 
-Rename esockd_transport:port_command/2 function to async_send/2.
+重命名 esockd_transport:port_command/2 函数为 async_send/2。
 
-Add test case for esockd_transport:async_send/2 function.
+为 esockd_transport:async_send/2 函数添加测试用例。
 
-Add esockd_transport:peer_cert_subject/1, peer_cert_common_name/1 functions.
+添加 esockd_transport:peer_cert_subject/1, peer_cert_common_name/1 函数。
 
 ### emq-auth-mysql
 
-Update depends on emqtt/mysql-otp.
+更新依赖 emqtt/mysql-otp。
 
-Fixed the issue that Cannot connect to MySQL 5.7 (#67).
+修复无法连接到 MySQL 5.7 的问题。（#67）
 
 ### emq-relx
 
-Fix mergeconf/3 appending line break error. (#152)
+修复 mergeconf/3 追加换行符错误。（#152）
 
 ### emq-sn
 
-Fix crash in emq_sn_gateway:transform() function which handles SUBACK. (#57)
+修复 emq_sn_gateway:transform() 函数处理 SUBACK 时崩溃的问题。（#57）
 
-Define macro SN_RC_MQTT_FAILURE. (#59)
+定义宏 SN_RC_MQTT_FAILURE。（#59）
 
 ### emq-web-hook
 
-Filter auth_failure client for disconnected hook. (#30)
+过滤 auth_failure 客户端的断开连接钩子。（#30）
 
 ## 2.3.1
 
 *发布日期: 2017-12-03*
 
-### Bugfix and Enhancements
+### 错误修复和增强
 
-Remove the unnecessary transactions to optimize session management.
+移除不必要的事务以优化会话管理。
 
-Should not exit arbitrarily when clientid conflicts in mnesia.
+当 mnesia 中出现 clientid 冲突时，不应随意退出。
 
-Change the default value of 'mqtt.session.enable_stats' to 'on'.
+将 'mqtt.session.enable_stats' 的默认值更改为 'on'。
 
-The DUP flag should be set to 0 for all QoS0 messages. (emqttd#1319)
+所有 QoS0 消息的 DUP 标志应设置为 0。（emqttd#1319）
 
-Fix the 'no function clause' exception. (emqttd#1293)
+修复 'no function clause' 异常。（emqttd#1293）
 
-The retained flags should be propagated for bridge. (emqttd#1293)
+桥接时应传播保留标志。（emqttd#1293）
 
-The management API should listen on 0.0.0.0:8080. (emqttd#1353)
+管理 API 应监听 0.0.0.0:8080。（emqttd#1353）
 
-Fast close the invalid websocket in init/1 function.
+在 init/1 函数中快速关闭无效的 websocket。
 
-erlang:demonitor/1 the reference when erasing a monitor. (emqttd#1340)
+在擦除监视器时 erlang:demonitor/1 引用。（emqttd#1340）
 
 ### emq-retainer
 
-Don't clean the retain flag after the retained message is stored.
+存储保留消息后不清除保留标志。
 
-Add three CLIs for the retainer plugin. (emq-retainer#38)
+为保留插件添加三个 CLI。（emq-retainer#38）
 
 ### emq-dashboard
 
-Refactor(priv/www): improve the routing page. (emq-dashboard#185)
+重构(priv/www)：改进路由页面。（emq-dashboard#185）
 
 ### emq-modules
 
-Turn off the subscription module by default. (emq-modules#26)
+默认关闭订阅模块。（emq-modules#26）
 
 ### emq-sn
 
-Add an integration test case for sleeping device.
+为睡眠设备添加集成测试用例。
 
-Do not send will topic if client is kicked out.
+如果客户端被踢出，则不发送遗嘱主题。
 
-Prevent crash information in log when emq_sn_gateway getting timeout, since it is a possible procedure.
+防止 emq_sn_gateway 超时时，日志中出现崩溃信息，因为这是可能的过程。
 
 ### emq-relx
 
-Support node cookie value with = characters. (emq-relx#146)
+支持带有 = 字符的节点 cookie 值。（emq-relx#146）
 
 ### mochiweb
 
-Improve Req:get(peername) funciton to support x-forwarded-for and x-remote-port . (emqtt/mochiweb#9)
+改进 Req:get(peername) 函数以支持 x-forwarded-for 和 x-remote-port。（emqtt/mochiweb#9）
 
 ## 2.3.0 "Passenger's Log"
 
@@ -3360,47 +3360,47 @@ Improve Req:get(peername) funciton to support x-forwarded-for and x-remote-port 
 
 EMQ 2.3.0 版本正式发布，改进了 PubSub 设计与消息路由性能，更新 EMQ 自带的自签名 SSL 证书，改进 Dashboard 界面与 API 设计。
 
-### Bugfix and Enhancements
+### 错误修复和增强
 
-Fix the issue that Retained message is not sent for Subscribe to existing topic. (emqttd#1314)
+修复对已存在主题的订阅不发送保留消息的问题。（emqttd#1314）
 
-Fix the issue that The DUP flag MUST be set to 0 for all QoS0 messages.(emqttd#1319)
+修复所有 QoS0 消息的 DUP 标志必须设置为 0 的问题。（emqttd#1319）
 
-Improve the pubsub design and fix the race-condition issue. (emqttd#PR1342)
+改进 pubsub 设计并修复竞争条件问题。（emqttd#PR1342）
 
-Crash on macOS High Sierra (emqttd#1297)
+macOS High Sierra 上的崩溃问题（emqttd#1297）
 
-### emq-dashboard Plugin (emq-dashboard#PR174)
+### emq-dashboard 插件 (emq-dashboard#PR174)
 
-Upgraded the 'subscriptions' RESTful API.
+升级了 'subscriptions' RESTful API。
 
-Improvement of the auth failure log. (emq-dashboard#59)
+改进认证失败日志。（emq-dashboard#59）
 
-### emq-coap Plugin (emq-coap#PR61)
+### emq-coap 插件 (emq-coap#PR61)
 
-Replaced coap_client with er_coap_client.
+用 er_coap_client 替换 coap_client。
 
-Fix: correct the output format of coap_discover() to enable ".well-known/core".
+修复：纠正 coap_discover() 的输出格式以启用 ".well-known/core"。
 
-Refactor the coap_discover method.
+重构 coap_discover 方法。
 
 ### emq-relx
 
-Upgraded the bin/nodetool script to fix the rpcterms command.
+升级 bin/nodetool 脚本以修复 rpcterms 命令。
 
-### emq-web-hook Plugin
+### emq-web-hook 插件
 
-Fix the emq_web_hook plugin getting username from client.connected hook. (emq-web-hook#19)
+修复 emq_web_hook 插件从 client.connected 钩子获取用户名的问题。（emq-web-hook#19）
 
-### emq-auth-jwt Plugin(emq-auth-jwt#PR15)
+### emq-auth-jwt 插件 (emq-auth-jwt#PR15)
 
-Added test cases for emq_auth_jwt.
+为 emq_auth_jwt 添加测试用例。
 
-Fix jwt:decode/2 functions's return type.
+修复 jwt:decode/2 函数的返回类型。
 
-### emq-auth-mongo Plugin(emq-auth-mongo#PR92)
+### emq-auth-mongo 插件 (emq-auth-mongo#PR92)
 
-Updated the default MongoDB server configuration.
+更新默认的 MongoDB 服务器配置。
 
 ## 2.2 正式版 "Nostalgia"
 
@@ -3410,137 +3410,137 @@ Updated the default MongoDB server configuration.
 
 EMQ-2.2.0 版本正式发布！EMQ R2.2 版本完整支持 CoAP(RFC 7252)、MQTT-SN 协议，支持 Web Hook、Lua Hook、Proxy Protocol V2，支持 Elixir 语言插件开发。
 
-Feature: Add 'listeners restart/stop' CLI command (emqttd#1135)
+特性：添加 'listeners restart/stop' CLI 命令 (emqttd#1135)
 
-Bugfix: Exit Code from emqttd_ctl (emqttd#1133)
+错误修复：emqttd_ctl 退出代码 (emqttd#1133)
 
-Bugfix: Fix spec errors found by dialyzer (emqttd#1136)
+错误修复：修复 dialyzer 发现的规范错误 (emqttd#1136)
 
-Bugfix: Catch exceptions thrown from rpc:call/4 (emq-dashboard#128)
+错误修复：捕获 rpc:call/4 抛出的异常 (emq-dashboard#128)
 
-Bugfix: Topic has been decoded by gen-coap, no conversion needed (emq-coap#43)
+错误修复：主题已由 gen-coap 解码，无需转换 (emq-coap#43)
 
 ## 2.1.2
 
 *发布日期: 2017-04-21*
 
-Fix emqttd_ctl sessions list CLI
+修复 emqttd_ctl sessions list CLI
 
-Newline character in emq.conf causing error;(emqttd#1000)
+emq.conf 中的换行符导致错误；(emqttd#1000)
 
-Fix crash caused by duplicated PUBREC packet (emqttd#1004)
+修复重复 PUBREC 包引起的崩溃 (emqttd#1004)
 
-Unload the 'session.created' and 'session.teminated' hooks (emq-plugin-template)
+卸载 'session.created' 和 'session.teminated' 钩子 (emq-plugin-template)
 
 ## 2.1.1
 
 *发布日期: 2017-04-14*
 
-Localhost:8083/status returns 404 when AWS LB check the health of EMQ (emqttd#984)
+localhost:8083/status 在 AWS LB 检查 EMQ 健康时返回 404 (emqttd#984)
 
-Https listener not working in 2.1.0 as in 2.0.7 (emq-dashboard#105)
+2.1.0 中的 Https 监听器不像 2.0.7 那样工作 (emq-dashboard#105)
 
-Fix mqtt-sn Gateway not working (emq-sn#12)
+修复 mqtt-sn 网关不工作 (emq-sn#12)
 
-Upgrade emq-sn Plugin (emq-sn#11)
+升级 emq-sn 插件 (emq-sn#11)
 
-Upgrade emq-coap Plugin (emq-coap#21)
+升级 emq-coap 插件 (emq-coap#21)
 
 ## 2.1.0
 
 *发布日期: 2017-04-07*
 
-The stable release of 2.1 version.
+2.1 版本的稳定发布。
 
-Trouble with auth.mysql.acl_query (emq-auth-mysql#38)
+auth.mysql.acl_query 出现问题 (emq-auth-mysql#38)
 
-Filter the empty fields in ACL table (emq-auth-mysql#39)
+过滤 ACL 表中的空字段 (emq-auth-mysql#39)
 
 ## 2.0.7
 
 *发布日期: 2017-01-20*
 
-The Last Maintenance Release for EMQ 2.0, and support to build RPM/DEB Packages.
+EMQ 2.0 的最后一次维护发布，支持构建 RPM/DEB 包。
 
-emq-auth-http#9: Update the priv/emq_auth_http.schema, cuttlefish:unset() if no super_req/acl_req config exists
+emq-auth-http#9：更新 priv/emq_auth_http.schema，如果没有 super_req/acl_req 配置则使用 cuttlefish:unset()
 
-emq-auth-mongo#31: cuttlefish:unset() if no ACL/super config exists
+emq-auth-mongo#31：如果没有 ACL/super 配置则使用 cuttlefish:unset()
 
-emq-dashboard#91: Fix the exception caused by binary payload
+emq-dashboard#91：修复二进制有效载荷引起的异常
 
-emq-relx#21: Improve the binemqttd.cmd batch script for windows
+emq-relx#21：改进 Windows 的 binemqttd.cmd 批处理脚本
 
-emqttd#873: Documentation: installing-from-source
+emqttd#873：文档：从源代码安装
 
-emqttd#870: Documentation: The word in Documents is wrong
+emqttd#870：文档：文档中的单词错误
 
-emqttd#864: Hook 'client.unsubscribe' need to handle 'stop'
+emqttd#864：钩子 'client.unsubscribe' 需要处理 'stop'
 
-emqttd#856: Support variables in etc/emq.conf: {{ runner_etc_dir }}, {{ runner_etc_dir }}, {{ runner_data_dir }}
+emqttd#856：支持在 etc/emq.conf 中使用变量：{{ runner_etc_dir }}，{{ runner_etc_dir }}，{{ runner_data_dir }}
 
 ## 2.0.6
 
 *发布日期: 2017-01-08*
 
-Upgrade the [esockd](https://github.com/emqtt/esockd) library to v4.1.1
+将 [esockd](https://github.com/emqtt/esockd) 库升级到 v4.1.1
 
-esockd#41: Fast close the TCP socket if ssl:ssl_accept failed
+esockd#41：如果 ssl:ssl_accept 失败则快速关闭 TCP 套接字
 
-emq-relx#15: The EMQ 2.0 broker cannot run on Windows.
+emq-relx#15：EMQ 2.0 代理不能在 Windows 上运行。
 
-emq-auth-mongo#31: Mongodb ACL Cannot work?
+emq-auth-mongo#31：Mongodb ACL 不能工作？
 
 ## 2.0.5
 
 *发布日期: 2016-12-24*
 
-emq-auth-http#9: Disable ACL support
+emq-auth-http#9：禁用 ACL 支持
 
-emq-auth-mongo#29: Disable ACL support
+emq-auth-mongo#29：禁用 ACL 支持
 
-emq-auth-mongo#30: {datatype, flag}
+emq-auth-mongo#30：{datatype, flag}
 
 ## 2.0.4
 
 *发布日期: 2016-12-16*
 
-emqttd#822: Test cases for SSL connections
+emqttd#822：SSL 连接的测试用例
 
-emqttd#818: trap_exit to link WebSocket process
+emqttd#818：陷阱退出以链接 WebSocket 进程
 
-emqttd#799: Can't publish via HTTPS
+emqttd#799：无法通过 HTTPS 发布
 
 ## 2.0.3
 
 *发布日期: 2016-12-12*
 
-emqttd#796: Unable to forbidden tcp lisener
+emqttd#796：无法禁止 tcp 监听器
 
-emqttd#814: Cannot remove a 'DOWN' node from the cluster
+emqttd#814：无法从集群中删除 'DOWN' 节点
 
-emqttd#813: Change parameters order
+emqttd#813：更改参数顺序
 
-emqttd#795: Fix metrics of websocket connections
+emqttd#795：修复 websocket 连接的度量
 
-emq-dashboard#88: Rename the default topic from “/World” to “world”
+emq-dashboard#88：将默认主题从 “/World” 重命名为 “world”
 
-emq-dashboard#86: Lookup all online clients
+emq-dashboard#86：查找所有在线客户端
 
-emq-dashboard#85: Comment the default listener port
+emq-dashboard#85：注释默认监听端口
 
-emq-mod-retainer#3: Retained messages get lost after EMQTT broker restart.
+emq-mod-retainer#3：EMQTT 代理重启后保留的消息丢失。
 
 ## 2.0.2
 
 *发布日期: 2016-12-05*
 
-emqttd#787: Stop plugins before the broker stopped, clean routes when a node down
+emqttd#787：代理停止前停止插件，节点宕机时清理路由
 
-emqttd#790: Unable to start emqttd service if username/password contains special characters
+emqttd#790：如果用户名/密码包含特殊字符，则无法启动 emqttd 服务
 
-emq-auth-clientid#4: Improve the configuration of emq_auth_clientid.conf to resolve emqttd#790
+emq-auth-clientid#4：改进 emq_auth_clientid.conf 的配置以解决 emqttd#790
 
-emq-auth-username#4: Improve the configuration of emq_auth_username.conf to resolve emqttd#790
+emq-auth-username#4：改进 emq_auth_username.conf 的配置以解决 emqttd#790
 
 ## 2.0.1
 
@@ -3689,41 +3689,41 @@ EMQ-2.0 版本支持 Docker 镜像制作，Dockerfile 开源在: [https://github
 
 *发布日期: 2016-08-19*
 
-Support './bin/emqttd_ctl users list' CLI (#621)
+支持 './bin/emqttd_ctl users list' CLI 命令（#621）
 
-Cannot publish payloads with a size of the order 64K using WebSockets (#643)
+无法使用 WebSockets 发布约 64K 大小的有效载荷（#643）
 
-Optimize the procedures that retrieve the Broker version and Borker description in the tick timer (PR#627)
+优化在计时器中检索代理版本和代理描述的程序（PR#627）
 
-Fix SSL certfile, keyfile config (#651)
+修复 SSL certfile、keyfile 配置（#651）
 
 ## 1.1.2
 
 *发布日期: 2016-06-30*
 
-Upgrade mysql-otp driver to 1.2.0 (#564, #523, #586, #596)
+将 mysql-otp 驱动程序升级到 1.2.0（#564、#523、#586、#596）
 
-Fix WebSocket Client Leak (PR #612)
+修复 WebSocket 客户端泄漏（PR #612）
 
-java.io.EOFException using paho java client (#551)
+使用 paho java 客户端时出现 java.io.EOFException（#551）
 
-Send message from paho java client to javascript client (#552)
+从 paho java 客户端向 javascript 客户端发送消息（#552）
 
-Compatible with the Qos0 PUBREL packet (#575)
+兼容 Qos0 PUBREL 数据包（#575）
 
-Empty clientId with non-clean session accepted (#599)
+接受带有非清除会话的空 clientId（#599）
 
-Update docs to fix typos (#601, #607)
+更新文档以修复错别字（#601、#607）
 
 ## 1.1.1
 
 *发布日期: 2016-06-04*
 
-Compatible with the Qos0 PUBREL packet (#575)
+兼容 Qos0 PUBREL 数据包（#575）
 
-phpMqtt Client Compatibility (#572)
+phpMqtt 客户端兼容性（#572）
 
-java.io.EOFException using paho java client (#551)
+使用 paho java 客户端时出现 java.io.EOFException（#551）
 
 ## 1.1
 
@@ -3733,21 +3733,21 @@ java.io.EOFException using paho java client (#551)
 
 ### 问题与改进
 
-Allow human-friendly IP addresses (PR#395)
+允许使用用户友好的 IP 地址 (PR#395)
 
-File operation error: emfile (#445)
+文件操作错误：emfile (#445)
 
-emqttd_plugin_mongo not found in emqttd (#489)
+在 emqttd 中找不到 emqttd_plugin_mongo (#489)
 
-emqttd_plugin_mongo Error While Loading in emqttd (#505)
+emqttd_plugin_mongo 在 emqttd 中加载时出错 (#505)
 
-Feature request: HTTP Authentication (#541)
+功能请求：HTTP 认证 (#541)
 
-Compatible with the Qos0 PUBREL packet (#575)
+兼容 Qos0 PUBREL 数据包 (#575)
 
-Bugfix: function_clause exception occurs when registering a duplicated authentication module (#542)
+错误修复：注册重复的认证模块时出现 function_clause 异常 (#542)
 
-Bugfix: ./emqttd_top msg_q result: {"init terminating in do_boot",{undef,[{etop,start,[],[]},{init,start_it,1,[]},{init,start_em,1,[]}]}} (#557)
+错误修复：执行 ./emqttd_top msg_q 时出现结果：{"init terminating in do_boot",{undef,[{etop,start,[],[]},{init,start_it,1,[]},{init,start_em,1,[]}]}} (#557)
 
 ### Dashboard 插件
 
@@ -3755,7 +3755,7 @@ WebSocket 连接页面支持 Clean Session, Qos, Retained 参数设置 (emqttd_d
 
 升级 eSockd 库到 4.0 版本，Overview 页面显示 OTP 版本 (emqttd_dashboard#61)
 
-Changing dashboard credentials for username authentication (emqttd_dashboard#56)
+更改 Dashboard 登录信息用于用户名认证 (emqttd_dashboard#56)
 
 新增'./bin/emqttd_ctl admins'管理命令，支持通过命令行重新设置 admin 密码
 
@@ -3797,19 +3797,19 @@ Changing dashboard credentials for username authentication (emqttd_dashboard#56)
 
 *发布日期: 2016-05-04*
 
-Issue#534 - './bin/emqttd_ctl vm' - add 'port/count', 'port/limit' statistics
+问题#534 - './bin/emqttd_ctl vm' - 增加 'port/count'、'port/limit' 统计信息
 
-Issue#535 - emqttd_client should be terminated properly even if exception happened when sending data
+问题#535 - 即使在发送数据时发生异常，emqttd_client 应该被正确终止
 
-PR#519 - The erlang '-name' requires the fully qualified host name
+PR#519 - Erlang '-name' 需要完全限定的主机名
 
-emqttd_reloader plugin - help reload modified modules during development.
+emqttd_reloader 插件 - 帮助在开发过程中重新加载修改过的模块。
 
 ## 1.0.1
 
 *发布日期: 2016-04-16*
 
-PR#515 - Fix '$queue' pubsub, add 'pubsub_queue' test and update docs
+PR#515 - 修复 '$queue' 发布订阅，添加 'pubsub_queue' 测试并更新文档。
 
 ## 1.0 (七英里)
 
@@ -3830,11 +3830,11 @@ PR#515 - Fix '$queue' pubsub, add 'pubsub_queue' test and update docs
 
 1.0 版本主要发布完整项目文档，相比 0.17.1 版本很少代码变更:
 
-Possible race condition using emqttd_cm (#486)
+可能存在的 emqttd_cm 使用竞态条件问题 (#486)
 
-Improve the design of retained message expiration (#503)
+改进保留消息过期的设计 (#503)
 
-Should not expire the retained messages from $SYS/# topics (#500)
+不应该使 $SYS/# 主题下的保留消息过期 (#500)
 
 ### 项目文档
 
@@ -3858,60 +3858,60 @@ Should not expire the retained messages from $SYS/# topics (#500)
 
 乐队: 七英里(The Seven Mile Journey)，腰乐队，万能青年旅店
 
-## 0.2.0
+##  0.2.0
 
 *发布日期: 2014-12-07*
 
-rewrite the project, integrate with esockd, mochiweb
+重写项目，集成了 esockd 和 mochiweb
 
-support MQTT 3.1.1
+支持 MQTT 3.1.1
 
-support HTTP to publish message
+支持通过 HTTP 发布消息
 
 ## 0.1.5
 
 *发布日期: 2013-01-05*
 
-Bugfix: remove QOS_1 match when handle PUBREL request
+Bug 修复：处理 PUBREL 请求时移除了 QOS_1 匹配
 
-Bugfix: reverse word in emqtt_topic:words/1 function
+Bug 修复：修复了 emqtt_topic:words/1 函数中的单词顺序问题
 
 ## 0.1.4
 
 *发布日期: 2013-01-04*
 
-Bugfix: fix "mosquitto_sub -q 2 ......" bug
+Bug 修复：修复了 "mosquitto_sub -q 2 ....." 的问题
 
-Bugfix: fix keep alive bug
+Bug 修复：修复了保持活动状态的问题
 
 ## 0.1.3
 
 *发布日期: 2013-01-04*
 
-Feature: support QOS2 PUBREC, PUBREL,PUBCOMP messages
+新特性：支持 QOS2 PUBREC、PUBREL、PUBCOMP 消息
 
-Bugfix: fix emqtt_frame to encode/decoe PUBREC/PUBREL messages
+Bug 修复：修复了 emqtt_frame 对 PUBREC/PUBREL 消息的编码/解码问题
 
 ## 0.1.2
 
 *发布日期: 2012-12-27*
 
-Feature: release support like riak
+新特性：发布了类似 Riak 的支持
 
-Bugfix: use ?INFO/?ERROR to print log in tcp_listener.erl
+Bug 修复：在 tcp_listener.erl 中使用了 ?INFO/?ERROR 打印日志
 
 ## 0.1.1
 
 *发布日期: 2012-09-24*
 
-Feature: use rebar to generate release
+新特性：使用 rebar 生成发布版本
 
-Feature: support retained messages
+新特性：支持保留消息
 
-Bugfix: send will msg when network error
+Bug 修复：在网络错误时发送遗嘱消息
 
 ## 0.1.0
 
 *发布日期: 2012-09-21*
 
-The first public release.
+首次公开发布。

@@ -2323,47 +2323,47 @@ EMQX 4.4.0 现已正式发布，主要包含以下改动:
 - 重构emqx_auth_mnesia,兼容老版本emqx_auth_username和emqx_auth_clientid的数据导入
 - emqx主配置文件拆分,并且支持 include 配置文件
 
-## 4.1.5
+##  4.1.5
 
 *发布日期: 2020-08-30*
 
-EMQX 4.1.5 is released now, it fixes a bug in MQTT message parser.
+EMQX 4.1.5 已发布，它修复了 MQTT 消息解析器中的一个错误。
 
 ## 4.1.4
 
 *发布日期: 2020-08-29*
 
-EMQX 4.1.4 is released now, it mainly includes the following changes:
+EMQX 4.1.4 已发布，主要包括以下变更：
 
 ### emqx
 
-**Bug fixes:**
+**错误修复:**
 
-- Fix the issue of abnormal memory growth caused by the topic metrics feature
+- 修复主题度量功能导致的异常内存增长问题
 
   Github PR: [emqx#3680](https://github.com/emqx/emqx/pull/3680)
 
 ### emqx-bridge-mqtt
 
-**Enhancements:**
+**增强功能:**
 
-- The clientid configuration item supports `${node}` placeholders to optimize the user experience under the cluster
+- 客户端ID配置项支持 `${node}` 占位符，优化集群下的用户体验
 
   Github PR: [emqx-bridge-mqtt#99](https://github.com/emqx/emqx-bridge-mqtt/pull/99)
 
 ### emqx-management
 
-**Bug fixes:**
+**错误修复:**
 
-- Fix the issue that the data migration function is not available under Windows
+- 修复 Windows 下数据迁移功能不可用的问题
 
   Github PR: [emqx-management#262](https://github.com/emqx/emqx-management/pull/262)
 
 ### emqx-lua-hook
 
-**Bug fixes:**
+**错误修复:**
 
-- Fix the issue that the Username field cannot be obtained
+- 修复无法获取用户名字段的问题
 
   Github PR: [emqx-lua-hook#115](https://github.com/emqx/emqx-lua-hook/pull/115)
 
@@ -2371,21 +2371,21 @@ EMQX 4.1.4 is released now, it mainly includes the following changes:
 
 *发布日期: 2020-07-24*
 
-EMQX 4.1.3 is released now, it mainly includes the following changes:
+EMQX 4.1.3 已发布，主要包括以下变更：
 
 ### emqx-management
 
-**Bug fixes:**
+**错误修复:**
 
-- Add type checking for the payload field in PUBLISH API
+- 在 PUBLISH API 中为 payload 字段添加类型检查
 
   Github PR: [emqx/emqx-management#250](https://github.com/emqx/emqx-management/pull/250)
 
 ### emqx-retainer
 
-**Bug fixes:**
+**错误修复:**
 
-- Fix the issue that the retained message will not be sent when the subscription topic contains both '+' and '#'
+- 修复订阅主题同时包含 '+' 和 '#' 时，保留消息不会被发送的问题
 
   Github PR: [emqx/emqx-retainer#146](https://github.com/emqx/emqx-retainer/pull/146)
 
@@ -2394,32 +2394,6 @@ EMQX 4.1.3 is released now, it mainly includes the following changes:
 *发布日期: 2020-08-08*
 
 - 修复了一些已知问题
-
-## 4.1.2
-
-*发布日期: 2020-07-23*
-
-EMQX 4.1.2 is released now, it mainly includes the following changes:
-
-### emqx
-
-**Bug fixes:**
-
-- Fix the issue that the topic alias is not used to replace the topic
-
-  Github PR: [emqx/emqx#3616](https://github.com/emqx/emqx/pull/3616)
-
-- Fix the issue that some operations take up too much CPU
-
-  Github PR: [emqx/emqx#3581](https://github.com/emqx/emqx/pull/3581)
-
-### emqx-rel
-
-**Bug fixes:**
-
-- Fix the issue that the console no longer outputs the log after the log is filled with all log files when running emqx by docker
-
-  Github PR: [emqx/emqx-rel#559](https://github.com/emqx/emqx-rel/pull/559)
 
 ## 4.1.1
 
@@ -2439,48 +2413,6 @@ EMQX 4.1.2 is released now, it mainly includes the following changes:
 12. 规则引擎 保存数据到 MongoDB 动作支持消息模板
 13. 修复 HTTP Publish API 无法支持 payload 为 json 格式的问题
 
-## 4.1.1
-
-*发布日期: 2020-07-09*
-
-EMQX 4.1.1 is released now, it mainly includes the following changes:
-
-### emqx-retainer
-
-**Bug fixes:**
-
-- Fix performance issues
-
-  Github PR: [emqx/emqx-retainer#141](https://github.com/emqx/emqx-retainer/pull/141)
-
-### emqx-bridge-mqtt
-
-**Bug fixes:**
-
-- Change mount point to optional configuration
-
-  Github PR: [emqx/emqx-bridge-mqtt#84](https://github.com/emqx/emqx-bridge-mqtt/pull/84)
-
-### emqx-rel
-
-**Bug fixes:**
-
-- Hiding sensitive env from docker's logging out
-
-  Github Issue: [emqx/emqx-rel#524](https://github.com/emqx/emqx-rel/pull/524)
-
-  Github PR: [emqx/emqx-rel#542](https://github.com/emqx/emqx-rel/pull/542)
-
-  Thanks: [emqx/emqx-rel#525](https://github.com/emqx/emqx-rel/pull/525) - [daadu](https://github.com/daadu)
-
-### emqx-lua-hook
-
-**Bug fixes:**
-
-- Fix the issue that there is no unload script and CLI when the plugin is unloaded
-
-  Github PR: [emqx/emqx-lua-hook#106](https://github.com/emqx/emqx-lua-hook/pull/106)
-
 ## 4.1.0
 
 *发布日期: 2020-07-18*
@@ -2495,43 +2427,6 @@ EMQX 4.1.1 is released now, it mainly includes the following changes:
 8. 企业版多语言开发支持北向消息处理
 9. 规则引擎 添加离线消息保存到 redis 动作
 10. 规则引擎 添加从 redis 中获取订阅关系
-
-## 4.1.0
-
-*发布日期: 2020-06-04*
-
-EMQX 4.1.0 is released now, it mainly includes the following changes:
-
-**Enhancements:**
-
-- Support multi-language extension and provide SDK, supported languages: Python, Java
-- Support topic based metrics
-- Supports loading the latest configuration when the plugin starts
-- Support for topic aliases when messages are forwarded
-- Add subscription option configuration for proxy subscriptions
-- Support fuzzy query and multi condition query of client list
-- Support fuzzy query of subscription list
-- Support to add simple authentication information on Dashboard
-- Support data migration between versions
-- MQTT AUTH Packet is supported. At present, only SCRAM-SHA-1 authentication mechanism is supported and users can expand it by themselves
-- Support for obtaining network addresses and ports when using the proxy protocol
-- Add authentication plugin based on Mnesia database (completely replace `emqx-auth-clientid` and `emqx-auth-username` plugins in subsequent versions)
-- Support for editing rules in rule engine
-- Support comment configuration items when running EMQX through Docker
-- LwM2M gateway plugin supports IPv6 and listens to multiple ports at the same time
-- CoAP gateway plugin supports IPv6
-- JWT authentication plugin supports configuration of jwerl signature format
-
-**Bug fixes:**
-
-- Fix the issue that EMQX could not start when `etc/emqx.conf` was read-only
-- Fix the issue that the connection process crashes in some cases
-- Fix the issue that the browser doesn't support the current SSL/TLS certificates
-- Fix the issue that the MQTT bridge plugin doesn't send heartbeat packets by default
-- Fix the issue that the abnormal login detection function does not delete the expired data, resulting in memory growth
-- Fix the issue that the built-in ACL module did not clear the ACL cache when reloading
-- Fix the issue that `client.disconnected` event in WebHook plugin goes wrong in some cases
-- Fix the issue that MQTT-SN gateway plugin doesn't support specifying listening IP address and supports IPv6
 
 ## 4.0.5
 
@@ -2554,7 +2449,7 @@ EMQX 4.0.5 现已发布。此版本主要进行了错误修复。
 
  Github issue: [emqx/emqx#3274](https://github.com/emqx/emqx/pull/3274)
   Github PR: [emqx/emqx-rel#462](https://github.com/emqx/emqx-rel/pull/462)
-  
+
 - 修复配置文件中 node.* 配置项不生效的问题
 
   Github issue: [emqx/emqx#3302](https://github.com/emqx/emqx/pull/3302)
@@ -2580,7 +2475,7 @@ emqx-sn (plugin)
 
 *发布日期: 2019-03-06*
 
-EMQX 4.0.4 现已发布。此版本主要进行了错误修复。
+EMQX 4.0.4 现已发布。此版本主要进行了错误修复。
 
 ### emqx
 

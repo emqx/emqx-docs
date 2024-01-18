@@ -2606,56 +2606,51 @@ EMQX 4.0.4 is now released, which mainly fixed some bugs.
 
 ### emqx-retainer (plugin)
 
-**Bugs fixed:**
+**Bug fixes**
 
-- 保留消息达到最大存储数量后的行为由无法存储任何保留消息更正为可以替换已存在主题的保留消息
+- Improved the behavior for handling retained messages upon reaching the maximum storage limit. Previously, no new retained messages could be stored once the limit was reached. Now, the system allows for new retained messages to replace those of existing topics.
 
-    Github PR:
-    [emqx/emqx-retainer\#136](https://github.com/emqx/emqx-retainer/pull/136)
+  Github PR: [emqx/emqx-retainer#136](https://github.com/emqx/emqx-retainer/pull/136)
 
 ## 4.0.3
 
 *Release Date: 2019-02-21*
 
-EMQX 4.0.3 现已发布。此版本主要进行了错误修复。
+EMQX 4.0.3 has now been released. This version mainly includes bug fixes.
 
 ### emqx
 
-**功能增强:**
+**Enhancements**
 
-- 添加允许客户端绕过认证插件登录的选项
+- Added an option to allow clients to bypass authentication plugins for login.
 
-    Github PR: [emqx/emqx\#3253](https://github.com/emqx/emqx/pull/3253)
+  Github PR: [emqx/emqx#3253](https://github.com/emqx/emqx/pull/3253)
 
-**Bugs fixed:**
+**Bug fixes**
 
-- 修复某些竞争条件下会打印不必要的错误日志的问题
+- Fixed an issue where unnecessary error logs were printed under certain race conditions.
 
-    Github PR: [emqx/emqx\#3246](https://github.com/emqx/emqx/pull/3253)
+  Github PR: emqx/emqx#3246
 
 ### emqx-management (plugin)
 
-**Bugs fixed:**
+**Bug fixes:**
 
-- 移除不再使用的字段和函数以及修复字段值异常的问题
+- Removed fields and functions no longer in use and fixed issues with abnormal field values.
 
-    Github PR:
-    [emqx/emqx-management\#176](https://github.com/emqx/emqx-management/pull/176)
+  Github PR: [emqx/emqx-management#176](https://github.com/emqx/emqx-management/pull/176)
 
-- 修复集群环境下无法获取客户端列表的问题
+- Fixed an issue in cluster environments where the client list could not be obtained.
 
-    Github PR:
-    [emqx/emqx-management\#173](https://github.com/emqx/emqx-management/pull/173)
+  Github PR: [emqx/emqx-management#173](https://github.com/emqx/emqx-management/pull/173)
 
-- 修复 HTTPS 监听选项
+- Fixed HTTPS listening options.
 
-    Github PR:
-    [emqx/emqx-management\#172](https://github.com/emqx/emqx-management/pull/172)
+  Github PR: [emqx/emqx-management#172](https://github.com/emqx/emqx-management/pull/172)
 
-- 修复应用列表的返回格式
+- Fixed the return format of the applications list.
 
-    Github PR:
-    [emqx/emqx-management\#169](https://github.com/emqx/emqx-management/pull/169)
+  Github PR: [emqx/emqx-management#169](https://github.com/emqx/emqx-management/pull/169)
 
 ## 4.0.2
 
@@ -2715,72 +2710,65 @@ EMQX 4.0.3 现已发布。此版本主要进行了错误修复。
 
 *Release Date: 2019-01-17*
 
-EMQX 4.0.1 现已发布。此版本主要进行了错误修复和性能优化。
+EMQX 4.0.1 has been released. This version mainly includes bug fixes and performance optimizations.
 
 ### emqx
 
-**功能增强:**
+**Enhancements**
 
-- force\_shutdown\_policy 默认关闭
+- force_shutdown_policy is now off by default
 
-    Github PR: [emqx/emqx\#3184](https://github.com/emqx/emqx/pull/3184)
+  Github PR: [emqx/emqx#3184](https://github.com/emqx/emqx/pull/3184)
 
-- 支持定时全局 GC 并提供配置项
+- Support for scheduled global GC with configurable options
 
-    Github PR: [emqx/emqx\#3190](https://github.com/emqx/emqx/pull/3190)
+  Github PR: [emqx/emqx#3190](https://github.com/emqx/emqx/pull/3190)
 
-- 优化 `force_gc_policy` 的默认配置
+- Optimized the default configuration of `force_gc_policy`
 
-    Github PR:
-    [emqx/emqx\#3192](https://github.com/emqx/emqx/pull/3192),
-    [emqx/emqx\#3201](https://github.com/emqx/emqx/pull/3201)
+  Github PR: [emqx/emqx#3192](https://github.com/emqx/emqx/pull/3192), [emqx/emqx#3201](https://github.com/emqx/emqx/pull/3201)
 
-- 优化 Erlang VM 参数配置
+- Optimized Erlang VM parameter configuration
 
-    Github PR:
-    [emqx/emqx\#3195](https://github.com/emqx/emqx/pull/3195),
-    [emqx/emqx\#3197](https://github.com/emqx/emqx/pull/3197)
+  Github PR: [emqx/emqx#3195](https://github.com/emqx/emqx/pull/3195), [emqx/emqx#3197](https://github.com/emqx/emqx/pull/3197)
 
-**Bugs fixed:**
+**Bugs fixes:**
 
-- 修复使用错误的单位导致黑名单功能异常的问题
+- Fixed the issue of the blacklist feature malfunctioning due to the use of incorrect units
 
-    Github PR: [emqx/emqx\#3188](https://github.com/emqx/emqx/pull/3188)
+  Github PR: [emqx/emqx#3188](https://github.com/emqx/emqx/pull/3188)
 
-- 修复对 `Retain As Publish` 标志位的处理并且在桥接模式下保持 `Retain` 标识位的值
+- Fixed the handling of the `Retain As Publish` flag and maintained the `Retain` flag value in bridge mode
 
-    Github PR: [emqx/emqx\#3189](https://github.com/emqx/emqx/pull/3189)
+  Github PR: [emqx/emqx#3189](https://github.com/emqx/emqx/pull/3189)
 
-- 修复无法使用多个 Websocket 监听端口的问题
+- Fixed the issue with not being able to use multiple Websocket listening ports
 
-    Github PR: [emqx/emqx\#3196](https://github.com/emqx/emqx/pull/3196)
+  Github PR: [emqx/emqx#3196](https://github.com/emqx/emqx/pull/3196)
 
-- 修复会话 takeover 时 EMQX 可能不发送 DISCONNECT 报文的问题
+- Fixed the issue where EMQX might not send a DISCONNECT message during session takeover
 
-    Github PR: [emqx/emqx\#3208](https://github.com/emqx/emqx/pull/3208)
+  Github PR: [emqx/emqx#3208](https://github.com/emqx/emqx/pull/3208)
 
 ### emqx-rule-engine
 
-**功能增强:**
+**Enhancement:**
 
-- 提供更多操作数组的 SQL 函数
+- Provided more SQL functions for operating on arrays
 
-    Github PR:
-    [emqx/emqx-rule-engine\#136](https://github.com/emqx/emqx-rule-engine/pull/136)
+  Github PR: [emqx/emqx-rule-engine#136](https://github.com/emqx/emqx-rule-engine/pull/136)
 
-- 减少未配置任何规则时对性能的影响
+- Reduced performance impact when no rules are configured
 
-    Github PR:
-    [emqx/emqx-rule-engine\#138](https://github.com/emqx/emqx-rule-engine/pull/138)
+  Github PR: [emqx/emqx-rule-engine#138](https://github.com/emqx/emqx-rule-engine/pull/138)
 
 ### emqx-web-hook
 
-**Bugs fixed:**
+**Bug fix:**
 
-- 修复参数不匹配导致的崩溃问题
+- Fixed a crash caused by parameter mismatch
 
-    Github PR:
-    [emqx/emqx-web-hook\#167](https://github.com/emqx/emqx-web-hook/pull/167)
+  Github PR: [emqx/emqx-web-hook#167](https://github.com/emqx/emqx-web-hook/pull/167)
 
 ## 4.0.0
 
