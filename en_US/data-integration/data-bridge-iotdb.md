@@ -126,7 +126,8 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    ```
 
-5. Click the **Add Action** button, and select **Forwarding with Data Bridge** from the dropdown list. With this action, EMQX sends the data processed by the rule to the data bridge.
+5. Click the **+ Add Action** button to define an action that will be triggered by the rule. Select `Apache IoTDB` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to Apache IoTDB. 
+  Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select a Apache IoTDB Sink previously created. In this demonstration, you create a new Sink and add it to the rule.
 
 6. Click the **+** icon next to the **Data bridge** drop-down box to create a data bridge.
 
