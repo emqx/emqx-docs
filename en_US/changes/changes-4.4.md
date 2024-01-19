@@ -1311,7 +1311,7 @@ EMQX 4.3.3 is released now, it mainly includes the following changes:
 
 ## 4.3.2
 
-*Release Date: 2021-05-27*
+*Release Date: 2021-05-28*
 
 EMQX 4.3.2 is released now, it mainly includes the following changes:
 
@@ -1374,7 +1374,7 @@ EMQX 4.3.1 is released now, it mainly includes the following changes:
 
 ## 4.3.0
 
-*Release Date: 2021-05-06*
+*Release Date: 2021-05-08*
 
 ### Features and Enhancement
 
@@ -1509,19 +1509,19 @@ EMQX 4.2.13 is released now, it mainly includes the following changes:
 
 ## 4.2.12
 
-*Release Date: 2021-05-07*
+*Release Date: 2021-05-06*
 
 EMQX 4.2.12 is released now, it mainly includes the following changes:
 
 ### emqx
 
-** Bug Fix **:
+**Bug Fix**:
 
 Fixed a wait-for-table timeout bug which may lead to premature EMQX start up when there is a lot of Mnesia data to load.
 
 GitHub PR: [emqx#4724](https://github.com/emqx/emqx/pull/4724)
 
-** Performance Improvement **:
+**Performance Improvement**:
 
 Optimisation for massive concurrent subscribe/unsubscribe requests handling
 
@@ -1552,7 +1552,7 @@ EMQX 4.2.11 is released now, it mainly includes the following changes:
 
 ## 4.2.10
 
-*Release Date: 2021-04-12*
+*Release Date: 2021-03-26*
 
 EMQX 4.2.10 is released now, it mainly includes the following changes:
 
@@ -1570,7 +1570,7 @@ EMQX 4.2.10 is released now, it mainly includes the following changes:
 
 ## 4.2.9
 
-*Release Date: 2021-03-24*
+*Release Date: 2021-03-26*
 
 EMQX 4.2.9 is released now, it mainly includes the following changes:
 
@@ -1607,7 +1607,7 @@ EMQX 4.2.8 is released now, it fixes a bug in MQTT message parser.
 
 ## 4.2.7
 
-*Release Date: 2021-01-29*
+*Release Date: 2021-01-28*
 
 EMQX 4.2.7 is released now, it mainly includes the following changes:
 
@@ -1922,7 +1922,7 @@ EMQX 4.2.1 is released now, it mainly includes the following changes:
 
 ## 4.2.0
 
-*Release Date: 2020-09-05*
+*Release Date: 2020-09-11*
 
 EMQX 4.2.0 is released now, it mainly includes the following changes:
 
@@ -2128,7 +2128,7 @@ EMQX 4.1.0 is released now, it mainly includes the following changes:
 
 ## 4.0.7
 
-*Release Date: 2020-05-09*
+*Release Date: 2020-05-12*
 
 EMQX 4.0.7 is released now, which mainly includes the following changes:
 
@@ -2238,7 +2238,7 @@ EMQX 4.0.5 is released now. This version mainly focuses on bug fixes.
 
 ## 4.0.4
 
-*Release Date: 2019-03-06*
+*Release Date: 2020-03-21*
 
 EMQX 4.0.4 is released now. This version mainly focuses on bug fixes.
 
@@ -2299,7 +2299,7 @@ EMQX 4.0.4 is released now. This version mainly focuses on bug fixes.
 
 ## 4.0.3
 
-*Release Date: 2019-02-21*
+*Release Date: 2020-02-21*
 
 EMQX 4.0.3 is released now. This version mainly focuses on bug fixes.
 
@@ -2346,7 +2346,7 @@ EMQX 4.0.3 is released now. This version mainly focuses on bug fixes.
 
 ## 4.0.2
 
-*Release Date: 2019-02-07*
+*Release Date: 2020-02-07*
 
 EMQX 4.0.2 is released now. This version mainly focuses on bug fixes
 and performance optimizes.
@@ -2411,7 +2411,7 @@ and performance optimizes.
 
 ## 4.0.1
 
-*Release Date: 2019-01-17*
+*Release Date: 2020-01-17*
 
 EMQX 4.0.1 is released now. This version mainly focuses on bug fixes
 and performance optimizes.
@@ -2486,7 +2486,7 @@ and performance optimizes.
 
 ## 4.0.0
 
-*Release Date: 2019-01-10*
+*Release Date: 2020-01-17*
 
 EMQX 4.0.0 is now released. In this version we significantly improved
 the throughput performance by refactoring the session and channel,

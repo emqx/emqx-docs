@@ -2317,7 +2317,7 @@ Users planning to upgrade should be aware of the possibility that this change ma
 
 ## 4.2.6
 
-*Release date: 2021-04-28*
+*Release date: 2021-04-29*
 
 - Fix the problem that the module cannot be started after stopping under special circumstances
 - Fix the problem of the time format of the alarm list
@@ -2337,7 +2337,7 @@ Users planning to upgrade should be aware of the possibility that this change ma
 
 ## 4.2.4
 
-*Release date: 2021-02-18*
+*Release date: 2021-01-30*
 
 - New rule engine update resource logic
 - Added new rule engine, data bridge to kafka supports configuration of cache size
@@ -2349,7 +2349,7 @@ Users planning to upgrade should be aware of the possibility that this change ma
 
 ## 4.2.3
 
-*Release date: 2020-12-25*
+*Release date: 2020-12-05*
 
 - New GT/T32960 protocol access
 - New Rule Engine SQL statements support binary data operation functions
@@ -2360,7 +2360,7 @@ Users planning to upgrade should be aware of the possibility that this change ma
 
 ## 4.2.2
 
-*Release date: 2020-12-10*
+*Release date: 2020-12-05*
 
 - Optimize AuthHttp performance issues
 - Add new rule engine data save to Oracle
@@ -2373,7 +2373,7 @@ Users planning to upgrade should be aware of the possibility that this change ma
 
 ## 4.2.1
 
-*Release date: 2020-11-16*
+*Release date: 2020-11-13*
 
 - Added Dashboard module page to support management mqtt enhanced authentication
 - Added Dashboard module page to support management of lwm2m client
@@ -2392,7 +2392,7 @@ Users planning to upgrade should be aware of the possibility that this change ma
 
 ## 4.2.0
 
-*Release date: 2020-10-13*
+*Release date: 2020-10-12*
 
 - Rule engine Mysql/MongoDB/Cassandra/PGsql resource supports IPV6 and SSL connection
 - The rule engine "resources" supports uploading certificates
@@ -2407,13 +2407,13 @@ Users planning to upgrade should be aware of the possibility that this change ma
 
 ## 4.1.5
 
-*Release Date: 2020-08-30*
+*Release Date: 2021-03-12*
 
 EMQX 4.1.5 is released now, it fixes a bug in MQTT message parser.
 
 ## 4.1.4
 
-*Release Date: 2020-08-29*
+*Release Date: 2020-08-28*
 
 EMQX 4.1.4 is released now, it mainly includes the following changes:
 
@@ -2451,7 +2451,7 @@ EMQX 4.1.4 is released now, it mainly includes the following changes:
 
 ## 4.1.3
 
-*Release Date: 2020-07-24*
+*Release Date: 2020-08-04*
 
 EMQX 4.1.3 is released now, it mainly includes the following changes:
 
@@ -2473,13 +2473,13 @@ EMQX 4.1.3 is released now, it mainly includes the following changes:
 
 ## 4.1.2
 
-*Release Date: 2020-08-08*
+*Release Date: 2020-07-23*
 
 - Fixes some known issues
 
 ## 4.1.1
 
-*Release Date: 2020-08-07*
+*Release Date: 2020-07-03*
 
 1. rule_engine adds Pulsar consumer group resources
 2. rule_engine add Kafka consumer group resources
@@ -2497,7 +2497,7 @@ EMQX 4.1.3 is released now, it mainly includes the following changes:
 
 ## 4.1.0
 
-*Release Date: 2020-07-18*
+*Release Date: 2020-06-04*
 
 1. Built-in preview version license, you can start emqx directly without registering on the official website to get the license
 2. Modify the license expiration policy, the emqx service will not stop, but the new connection cannot log in
@@ -2559,7 +2559,7 @@ EMQX 4.0.5 is now released, which mainly fixed some bugs.
 
 ## 4.0.4
 
-*Release Date: 2019-03-06*
+*Release Date: 2020-03-06*
 
 EMQX 4.0.4 is now released, which mainly fixed some bugs.
 
@@ -2614,7 +2614,7 @@ EMQX 4.0.4 is now released, which mainly fixed some bugs.
 
 ## 4.0.3
 
-*Release Date: 2019-02-21*
+*Release Date: 2020-02-21*
 
 EMQX 4.0.3 has now been released. This version mainly includes bug fixes.
 
@@ -2654,7 +2654,7 @@ EMQX 4.0.3 has now been released. This version mainly includes bug fixes.
 
 ## 4.0.2
 
-*Release Date: 2019-02-07*
+*Release Date: 2020-02-07*
 
 ### emqx
 
@@ -2708,7 +2708,7 @@ EMQX 4.0.3 has now been released. This version mainly includes bug fixes.
 
 ## 4.0.1
 
-*Release Date: 2019-01-17*
+*Release Date: 2020-01-17*
 
 EMQX 4.0.1 has been released. This version mainly includes bug fixes and performance optimizations.
 
@@ -2772,7 +2772,7 @@ EMQX 4.0.1 has been released. This version mainly includes bug fixes and perform
 
 ## 4.0.0
 
-*Release Date: 2019-01-10*
+*Release Date: 2020-01-10*
 
 ### Introduction
 
