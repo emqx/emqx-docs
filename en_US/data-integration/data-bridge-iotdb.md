@@ -107,7 +107,7 @@ This section demonstrates how to configure an Apache IoTDB Connector that is use
 
 Now you have created an Apache Iotdb Connector. Next, you need to create a rule and Sink to specify the data to be written into the Apache IoTDB.
 
-## Create Rule and Apache IoTDB Data Bridge
+## Create Rule and Apache IoTDB Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `root/#`  and send the processed results through the configured Apache IoTDB data bridge to store the time series data to IoTDB.
 
