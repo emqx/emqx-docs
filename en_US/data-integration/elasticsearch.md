@@ -16,7 +16,7 @@ This page details the data integration between EMQX and Elasticsearch and provid
 
 ## How It Works
 
-Data integration with Elasticsearch is an out-of-the-box feature in EMQX, combining EMQX's device access, message transmission capabilities with Elasticsearch’s data storage and analysis capabilities. Seamless integration of MQTT data can be achieved through simple configuration.
+Data integration with Elasticsearch is an out-of-the-box feature in EMQX, combining EMQX's device access and message transmission capabilities with Elasticsearch’s data storage and analysis capabilities. Seamless integration of MQTT data can be achieved through simple configuration.
 
 EMQX and Elasticsearch provide a scalable IoT platform for efficiently collecting and analyzing real-time device data. In this architecture, EMQX acts as the IoT platform, responsible for device access, message transmission, and data routing, while Elasticsearch serves as the data storage and analysis platform, handling data storage, data search, and analysis.
 
@@ -34,9 +34,12 @@ Once device data is written to Elasticsearch, you can flexibly use Elasticsearch
 
 ## Features and Advantages
 
-The Elasticsearch data integration offers the following features and advantages:
+The Elasticsearch data integration offers the following features and advantages to your business:
 
-
+- **Efficient Data Indexing and Search**: Elasticsearch can easily handle large-scale real-time message data from EMQX. Its powerful full-text search and indexing capabilities enable IoT message data to be quickly and efficiently retrieved and queried.
+- **Data Visualization**: Through integration with Kibana (part of the Elastic Stack), powerful data visualization of IoT data is possible, aiding in understanding and analyzing the data.
+- **Flexible Data Manipulation**: EMQX's Elasticsearch integration supports dynamic setting of indices, document IDs, and document templates, allowing for the creation, update, and deletion of documents, suitable for a wider range of IoT data integration scenarios.
+- **Scalability**: Both Elasticsearch and EMQX support clustering and can easily expand their processing capabilities by adding more nodes, facilitating uninterrupted business expansion.
 
 ## Before you Start
 
@@ -53,28 +56,31 @@ EMQX supports integration with privately deployed Elasticsearch or with Elastic 
 
 1. If you don't have a Docker environment, [install Docker](https://docs.docker.com/install/).
 
-2. Start the Elasticsearch container, setting the initial password to `public`.
+2. Start an Elasticsearch container with X-Pack security authentication enabled. Set the default username `elastic` with the password `public`.
 
    ```bash
    docker run -d --name elasticsearch \
        -p 9200:9200 \
        -p 9300:9300 \
        -e "discovery.type=single-node" \
+       -e "xpack.security.enabled=true" \
        -e "ELASTIC_PASSWORD=public" \
        docker.elastic.co/elasticsearch/elasticsearch:7.10.1
    ```
 
-3. Create the `device_data` index for storing messages published by devices.
+3. Create the `device_data` index for storing messages published by devices. Make sure to replace Elasticsearch username and password.
 
    ```bash
-   curl -X PUT "localhost:9200/device_data?pretty" -H 'Content-Type: application/json' -d'
+   curl -u elastic:public -X PUT "localhost:9200/device_data?pretty" -H 'Content-Type: application/json' -d'
    {
      "mappings": {
        "properties": {
          "ts": { "type": "date" },
          "clientid": { "type": "keyword" },
-         "temperature": { "type": "float" },
-         "humidity": { "type": "float" }
+         "payload": {
+           "type": "object",
+           "dynamic": true
+         }
        }
      }
    }'
@@ -90,8 +96,13 @@ The following steps assume you are running EMQX and Elasticsearch on the same lo
 2. Click **Create** in the upper right corner of the page.
 3. Select **Elasticsearch** as the connector type and click next.
 4. Enter the connector name, for example, `my-elasticsearch`. The name must combine uppercase and lowercase letters and numbers.
-5. Enter Elasticsearch connection information according to your deployment method. If using Docker, <!-- TODO -->
+5. Enter Elasticsearch connection information according to your deployment method.
+   - **URL**: Enter the REST interface URL of the Elasticsearch service as `http://localhost:9200`.
+   - **Username**: Specify the Elasticsearch service username as `elastic`.
+   - **Password**: Provide the Elasticsearch service password as `public`.
 6. Click the **Create** button at the bottom to complete the connector creation.
+
+Now you have created the Connector. Next, you need to create a rule to specify the data that needs to be written into Elasticsearch.
 
 ## Create a Rule for Elasticsearch Sink 
 
@@ -106,31 +117,52 @@ This section demonstrates how to create a rule in EMQX to process messages from 
    ```sql
    SELECT
      clientid,
-     ts,
-     payload.temp as temp,
-     payload.humidity as humidity
+     timestamp as ts,
+     payload
    FROM
        "t/#"
    ```
-
+   
    ::: tip
-
+   
    If you are new to SQL, you can click **SQL Examples** and **Enable Debugging** to learn and test the rule SQL results.
-
+   
    :::
-
+   
 4. Click **Add Action**. Select `Elasticsearch` from the **Action Type** dropdown list. Keep the **Action** dropdown box as the default `Create Action` option. Or, you can select a previously created Elasticsearch action from the action dropdown box. This demonstration will create a new Sink and add it to the rule.
 
 5. Enter the name and description of the Sink.
 
 6. Select the `my-elasticsearch` connector you just created from the connector dropdown box. You can also click the button next to the dropdown box to create a new connector on the pop-up page. The required configuration parameters can be referred to [Create a Connector](#create-a-connector).
 
-7. Configure the document template, inserting JSON-formatted data using the following template.
+7. Configure the document template for inserting JSON-formatted data as follows:
 
-  <!-- TODO Waiting for development -->
+   - **Action**: Optional actions `Create`, `Update`, and `Delete`.
+
+   - **Index Name**: The name of the index or index alias on which to perform the action. Placeholders in `${var}` format are supported.
+
+   - **Document ID**: Optional for `Create` action, required for other actions. The unique identifier of a document within the index. Placeholders in `${var}` format are supported. If an ID is not specified, Elasticsearch will generate one automatically.
+
+   - **Routing**: Specifies which shard of the index the document should be stored in. If left blank, Elasticsearch will decide.
+
+   - **Document Template**: Custom document template, must be convertible into a JSON object and supports `${var}` format placeholders, e.g., `{ "field": "${payload.field}"}` or `${payload}`.
+
+   - **Max Retries**: The maximum number of times to retry when writing fails. The default is 3 attempts.
+
+   - **Overwrite Document** (Specific to `Create` action): Whether to overwrite the document if it already exists. If “No”, the document write will fail.
+
+     In this example, the index name is set to `device_data`, using a combination of client ID and timestamp `${clientid}_${ts}` as the document ID. The document stores the client ID, current timestamp, and the entire message body. The document template is as follows:
+
+     ```
+     jsonCopy code
+     {
+       "clientid": "${clientid}",
+       "ts": ${ts},
+       "payload": ${payload}
+     }
+     ```
 
 8. Keep the rest of the parameters at their default values. 
-9. Expand **Advanced Settings** and configure advanced settings options as needed (optional), for details refer to [Advanced Settings](https://chat.openai.com/c/49d81446-3d5c-437d-9dd0-f1097ff4ac64#advanced-settings).
 10. Click the **Create** button to complete the creation of the Sink. The new Sink will be added to the **Action Outputs**.
 11. Back on the Create Rule page, click the **Create** button to complete the entire rule creation.
 
@@ -140,7 +172,7 @@ You can also click **Integration** -> **Flow Designer** to view the topology. Th
 
 ## Test the Rule
 
-Use MQTTX to publish messages to the `t/1` topic, which will also trigger online/offline events:
+Use MQTTX to publish messages to the `t/1` topic:
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{"temp":24,"humidity":30}'
@@ -154,8 +186,43 @@ Use the `_search` API to view the document content in the index and check whethe
 curl -X GET "localhost:9200/device_data/_search?pretty"
 ```
 
-<!-- TODO Waiting for development -->
+The correct responding results are as follows:
 
-## Advanced Settings
+```json
+  "took" : 1098,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 1,
+      "relation" : "eq"
+    },
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "device_data",
+        "_type" : "_doc",
+        "_id" : "emqx_c_1705479455289",
+        "_score" : 1.0,
+        "_source" : {
+          "clientid" : "emqx_c",
+          "ts" : 1705479455289,
+          "payload" : {
+            "temperature": 24,
+            "humidity": 30
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+## <!-- Advanced Settings-->
 
 <!-- TODO -->
