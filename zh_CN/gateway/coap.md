@@ -395,10 +395,10 @@ coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test?clientid=123&token=3
 
 ### 短参数名称
 
-为节省报文大小，CoAP 网关支持短参数名称。例如，参数 `clientid=barx` 可以写作 `c=bar`。所以支持的短
+为节省报文大小，CoAP 网关支持短参数名称。例如，参数 `clientid=barx` 可以写作 `c=bar`。所有支持的短
 参数名称见下表：
 
-| Parameter Name |  Short Name |
+| 参数名称 |  短参数名称 |
 | -------------- | ----------- |
 | `clientid`     | `c`         |
 | `username`     | `u`         |
