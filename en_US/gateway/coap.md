@@ -417,9 +417,9 @@ coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test?clientid=123&token=3
 
 ### Short Parameter Names
 
-To save message size, the CoAP gateway supports short parameter names.
+To reduce message size, the CoAP gateway supports short parameter names.
 For example, the parameter `clientid=barx` can be written as `c=bar`. Therefore, the supported short
-parameter names are supported as shown in the following table:
+parameter names are listed in the following table:
 
 | Parameter Name |  Short Name |
 | -------------- | ----------- |
