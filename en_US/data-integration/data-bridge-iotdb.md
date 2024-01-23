@@ -96,15 +96,15 @@ To create the Apache IoTDB data integration, you need to create a Connector to c
 1. Go to the EMQX Dashboard and click on **Integrations** -> **Connectors**.
 2. Click **Create** in the top right corner of the page.
 3. On the **Create Connector** page, select **Apache IoTDB** as the Connector type, and click **Next**.
-4. Enter the name and description of the Connector. The name should be a combination of uppercase and lowercase letters and numbers, for example, `my_iotdb`.
+4. Enter the name and description of the Connector. The name can be a combination of uppercase/lowercase letters or numbers, for example, `my_iotdb`.
 5. Enter `http://localhost:18080` in the **IoTDB REST Service Base URL**.
 6. Enter the username and password for the Connector to access the Apache IoTDB server. 
 7. Leave the other options as default. For the configuration of **Advanced Settings** (optional):  See [Advanced Configurations](#advanced-configurations).
 8. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the Apache IoTDB.
-9. Click **Create** to complete the creation of the Connector. In the pop-up dialogue, you can click **Back to Connector List** or click **Create Rule** to continue to create a rule and a Sink for specifying the data to be written into Apache IoTDB.
+9. Click **Create** to complete the creation of the Connector. In the pop-up dialogue, you can click **Back to Connector List** or click **Create Rule** to continue to create a rule and a Sink for specifying the data to be written into Apache IoTDB. For detailed steps, see [Create a Rule and Apache IoTDB Sink](#create-a-rule-and-apache-iotdb-sink).
 
 
-## Create Rule and Apache IoTDB Sink
+## Create a Rule and Apache IoTDB Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `root/#`  and send the processed results through the configured Apache IoTDB Sink to store the time series data to Apache IoTDB.
 
@@ -217,7 +217,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
       ```
 
 11. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+12. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new Apache IoTDB Sink. 
 
