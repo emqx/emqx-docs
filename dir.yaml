@@ -360,6 +360,9 @@
     - title_en: RocketMQ
       title_cn: RocketMQ
       path: data-integration/data-bridge-rocketmq
+    - title_en: SysKeeper
+      title_cn: SysKeeper
+      path: data-integration/syskeeper
     - title_en: TDengine
       title_cn: TDengine
       path: data-integration/data-bridge-tdengine
