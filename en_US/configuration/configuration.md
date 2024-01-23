@@ -18,7 +18,7 @@ Depends on your installation mode, `emqx.conf` is stored in:
 
 
 As the main configuration file, `emqx.conf` contains most of the commonly used configuration items.
-You can follow the example provided in the `emqx.conf.example` file (located within the same directory) to customize the settings.
+You can follow the examples provided in the `examples` directory (located within the same directory) to customize the settings.
 EMQX uses the default settings if a config item is not found in the config files.
 
 ### Configuration Rewrite File
