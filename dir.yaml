@@ -305,10 +305,10 @@
       path: data-integration/data-bridge-kinesis
     - title_en: Azure Event Hubs
       title_cn: Azure Event Hubs
-      path: data-integration/data-bridge-azure-event-hub   
+      path: data-integration/data-bridge-azure-event-hub
     - title_en: Cassandra
       title_cn: Cassandra
-      path: data-integration/data-bridge-cassa 
+      path: data-integration/data-bridge-cassa
     - title_en: ClickHouse
       title_cn: ClickHouse
       path: data-integration/data-bridge-clickhouse
@@ -323,7 +323,7 @@
       path: data-integration/data-bridge-greptimedb
     - title_en: HStreamDB
       title_cn: HStreamDB
-      path: data-integration/data-bridge-hstreamdb   
+      path: data-integration/data-bridge-hstreamdb
     - title_en: HTTP Server
       title_cn: HTTP Server
       path: data-integration/data-bridge-webhook
@@ -366,6 +366,9 @@
     - title_en: TimescaleDB
       title_cn: TimescaleDB
       path: data-integration/data-bridge-timescale
+    - title_en: Syskeeper
+      title_cn: Syskeeper
+      path: data-integration/data-bridge-syskeeper
 
     # TODO
     # - title_en: Examples and Tutorials

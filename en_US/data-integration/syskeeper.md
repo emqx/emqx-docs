@@ -57,12 +57,13 @@ The data integration with SysKeeper offers a range of features and benefits tail
 
 ## Before You Start
 
-This section describes the preparations you must complete before creating the Nari SysKeeper data bridges in EMQX Dashboard.
+This section describes the preparations you must complete before creating the Nari SysKeeper sink in EMQX Dashboard.
 
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data bridges](./data-bridges.md)
+
+- Knowledge about [Data Integration](./data-bridges.md)
 
 ### Start a Nari SysKeeper Proxy in Security Zone III
 
@@ -78,9 +79,9 @@ This section introduces how to start a Nari SysKeeper proxy in Security Zone III
 
 4. Set **Listen Address** to `Address:9002`, for example: "172.17.0.1:9002". For the rest, you can keep the default value.
 
-Now you have created a Name SysKeeper Proxy in the Security Zone III. Next, you need to create a rule and Sink to specify the data to be written into the SysKeeper forwarding in the Security Zone I-II.
+Now you have created a Name SysKeeper Proxy in the Security Zone III. Next, you need to create a rule and sink to specify the data to be written into the SysKeeper Forwarder in the Security Zone I-II.
 
-## Create a Connector
+## Create a SysKeeper Forwarder Connector
 
 This section demonstrates how to configure a Nari SysKeeper forwarding in Security Zone I-II.
 
@@ -100,7 +101,7 @@ Now you have created a SysKeeper Forwarder Connector. Next, you need to create a
 
 ## Create Rule and SysKeeper Forwarder Action
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `root/#`  and send the processed results through the configured SysKeeper Forwarder data bridge to passthrough data to SysKeeper Proxy.
+This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `root/#`  and send the processed results through the configured SysKeeper Forwarder sink to passthrough data to SysKeeper Proxy.
 
 1. Go to the EMQX Dashboard, and click **Integration -> Rules**.
 
@@ -117,17 +118,13 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    ```
 
-5. Click the **Add Action** button, and select **Forwarding with Data Bridge** from the dropdown list. With this action, EMQX sends the data processed by the rule to the data bridge.
+5. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to SysKeeper Forwarder.
 
-6. Click the **+** icon next to the **Data bridge** drop-down box to create a data bridge.
+6. Select `SysKeeper Forwarder` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink
 
-7. Select **SysKeeper Forward** from the **Type of Data Bridge** drop-down list. Fill in the required fields (marked with an asterisk).
+7. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
 
-8. Enter a name for the data bridge. The name should be a combination of upper/lower case letters and numbers.
-
-9. Select the `my_sysk` just created from the Connector dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-connector).
-
-10. Enter the action information:
+8. Enter the action information:
 
    * **Topic**: The topic for the republish messages.
 
@@ -135,9 +132,9 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    * **Message Template**: The payload tempate for the republish messages.
 
-## Test SysKeeper Data Bridge and Rule
+## Test SysKeeper Forwarder and Rule
 
-You can use the built-in WebSocket client in the EMQX dashboard to test your SysKeeper data bridge and rule.
+You can use the built-in WebSocket client in the EMQX dashboard to test your SysKeeper sink and rule.
 
 1. In Security Zone III, Click **Diagnose** -> **WebSocket Client** in the left navigation menu of the Dashboard.
 
