@@ -49,9 +49,11 @@ To better handle the access pressure brought by a large number of publish/subscr
 
 - **Enable Cache**: Setting for whether to enable cache for the authorization data.
 
-- **Max number of cache per client**: The maximum number of cache for single client; the default setting is **32**.
+- **Max number of cached items**: The maximum number of cache for single client; the default setting is **32**.
 
-- **Cache TTL**: The living time of cache data; unit is **minute**.
+- **Time to live for the cached data**: The living time of cached data, defaulting to 1 minute.
+
+- **Excluded Topics**: Provides a list of topics for which authorization cache will not be generated.
 
 - **No Match Action**: The action to take when all authorizers fail to retrieve authorization information; values to choose: **allow** (to operate), **deny** (to operate); default value: **allow**.
 
@@ -227,6 +229,7 @@ authorization {
   cache {
     enable = true
     max_size = 32
+    excludes = ["t/1", "t/2"]
     ttl = 1m
   }
 }
@@ -244,6 +247,8 @@ Where,
 * `cache.enable`: Specifies whether to enable caching, default: `true`. If the authorization is solely based on the JWT packets, it is recommended to configure this field `false`.
   
 * `cache.max_size`: Specifies the maximum number of elements in the cache; default: 32. Older records will be removed from the cache if the specified number exceeds.
+  
+* `cache.excludes`: A list of excluded topics, for which authorization cache will not be generated; default value: `[]`.
   
 * `cache.ttl`: Specifies the effective time of cached values, default: `1m` (one minute). 
 

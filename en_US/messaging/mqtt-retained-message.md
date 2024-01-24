@@ -85,15 +85,17 @@ Now you have tried using the MQTTX Client to send a retained message. You can al
 
 ## View Retained Message in Dashboard
 
-When a user publishes a retained message, EMQX will save this message in the system. The user can view this message on the Retained Messages list page. When the user subscribes to the topic of this retained message, EMQX will publish this message to the topic, and users can receive this message immediately by subscribing to the topic.
+When you publish a retained message, EMQX will save this message in the system. you can view this message on the Retained Messages list page. When you subscribe to the topic of this retained message, EMQX will publish this message to the topic, and you can receive this message immediately by subscribing to the topic.
 
-The default expiration time of the retained message is never expired unless the user manually deletes this message.
+The default expiration time of the retained message is never expired unless you manually delete this message.
 
 ### Retained Messages List
 
-On the **Retained Messages** list page, users can view all retained messages in the system, including the topic, QoS, publish time, and client ID. The page also provides options to view the payload of a retained message and delete it using the **Show Payload** and **Delete** buttons respectively. Users can refresh the list using the **Refresh** button and access the retained message settings page using the **Settings** button.
+In the **Monitoring** -> **Retained Messages** page, you can view all the retained messages in the system, including the topic, QoS, publish time, and client ID. The search box allows for filtering through search, and it supports topic wildcards.
 
-The default will save three types of retained messages [system topics](./mqtt-concepts.md). If it is a cluster environment, it will keep different system topics' retained messages according to other node names. They are:
+The page also provides options to view the payload of a retained message and delete it using the **Show Payload** and **Delete** buttons respectively. You can refresh the list using the **Refresh** button and access the retained message settings page using the **Settings** button.
+
+You can see the following 3 types of retained messages from [system topics](./mqtt-concepts.md) by default:
 
 - $SYS/brokers/+/sysdescr: System description of the current EMQX node
 - $SYS/brokers/+/version: Version number of the current EMQX node
@@ -103,4 +105,4 @@ The default will save three types of retained messages [system topics](./mqtt-co
 
 ### Delete Retained Message
 
-To delete a retained message in EMQX, users can either publish an empty message to the topic of the retained message in the client or use the EMQX Dashboard. In the Dashboard, users can simply click the **Delete** button on the Retained Messages list page to remove a retained message. Additionally, users can also set the expiration time for retained messages on the Retained Messages configuration page, allowing EMQX to automatically delete them when they expire.
+To delete a retained message in EMQX, you can either publish an empty message to the topic of the retained message in the client or use the EMQX Dashboard. In the Dashboard, you can click the **Delete** button for a specific retained message to remove it. You can also delete all retained messages on the cluster by using the **Clear All** button. Additionally, you can also set the expiration time for retained messages on the Retained Messages configuration page, allowing EMQX to automatically delete them when they expire.
