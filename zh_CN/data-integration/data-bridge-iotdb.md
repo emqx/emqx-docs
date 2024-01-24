@@ -102,6 +102,43 @@ docker run -d --name iotdb-service \
 
 至此，您已经完成 Sink 的创建，在 Dashboard 的 Sink 页面，可以看到 Apache IoTDB Sink 的状态为**已连接**。
 
+### 批量设置
+
+<!-- 英文 
+## Batch Setting 
+
+模板根据中文翻译
+-->
+
+在 Apache IoTDB 中，可能需要同时写入数百条数据，在 Dashboard 上进行配置是具有挑战性的工作。为了解决这个问题，EMQX 提供了批量设置数据写入的功能。
+
+当配置**写入数据**操作时，您可以使用批量设置功能，从 CSV 文件中导入要进行插入操作的字段。
+
+1. 点击 **写入数据** 表格的 **批量设置** 按钮，打开批量设置弹窗。
+2. 根据指引，先下载批量设置模板文件，然后在模板文件中填入数据写入配置，默认的模板文件内容如下：
+
+| Timestamp | Measurement | Data Type | Value             | Remarks (Optional)                                                                               |
+| --------- | ----------- | --------- | ----------------- | ------------------------------------------------------------------------------------------------ |
+| now       | temp        | FLOAT     | ${payload.temp}   | 字段、值、数据类型是必填选项，数据类型可选的值为 BOOLEAN、 INT32、 INT64、 FLOAT、 DOUBLE、 TEXT |
+| now       | hum         | FLOAT     | ${payload.hum}    |                                                                                                  |
+| now       | status      | BOOLEAN   | ${payload.status} |                                                                                                  |
+| now       | clientid    | TEXT      | ${clientid}       |                                                                                                  |
+
+- **Timestamp**: 支持使用 ${var} 格式的占位符，要求是时间戳格式。也可以使用以下特殊字符插入系统时间：
+  - now: 当前毫秒级时间戳
+  - now_ms: 当前毫秒级时间戳
+  - now_us: 当前微秒级时间戳
+  - now_ns: 当前纳秒级时间戳
+- **Measurement**: 字段名，支持常量或 ${var} 格式的占位符。
+- **Data Type**: 数据类型，可选值包括 BOOLEAN、 INT32、 INT64、 FLOAT、 DOUBLE、 TEXT。
+- **Value**: 写入的数据值，支持常量或 ${var} 格式的占位符，需要与数据类型匹配。
+- **Remarks**: 仅用于 CSV 文件内字段的备注，无法导入到 EMQX 中。
+
+  注意，支持 1M 以内的 CSV 格式文件，文件中数据不能超过 2000 行。
+
+3. 将填好的模板文件保存并上传到导入批量设置弹窗中，点击**导入**完成批量设置。
+4. 导入完成后，您可以在 **写入数据** 表格中对数据进行进一步的调整。
+
 ### 创建数据转发规则
 
 本节将介绍如何创建一条规则来指定需要转发至 Apache IoTDB 的数据。

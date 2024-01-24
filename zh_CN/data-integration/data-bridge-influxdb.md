@@ -18,8 +18,6 @@ InfluxDB 数据集成是 EMQX 中开箱即用的功能，它结合了 EMQX 的�
 
 ![MQTT to InfluxDB](./assets/mqtt-to-influxdb.jpg)
 
-
-
 EMQX 和 InfluxDB 提供了一个可扩展的物联网平台，用于高效地实时收集和分析能耗数据。在此架构中，EMQX 作为物联网平台，负责设备接入、消息传输、数据路由等功能，InfluxDB 作为数据存储和分析平台，负责数据存储、数据分析等功能。具体的工作流程如下：
 
 1. **消息发布与接收**：储能设备通过 MQTT 协议连接成功后定期发布能耗数据，这些数据包括电量、输入输出功率信息。EMQX 接收到消息后将在规则引擎中进行比对。
@@ -112,9 +110,9 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
    - 定义解析数据， 指定数据格式与内容，使其能被解析并写入到 InfluxDB 中，可选项为 `JSON` 或 `Line Protocol`。
 
-     - 对于 JSON 格式，需设置数据的 **Measurement**，**Fields**，**Timestamp** 与 **Tags**，键值均支持变量或占位符，可按照[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。
+     - 对于 JSON 格式，需设置数据的 **Measurement**，**Fields**，**Timestamp** 与 **Tags**，键值均支持常量或占位符变量，可按照[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。其中 **Fields** 字段支持通过 CSV 文件批量设置，详细请参考[批量设置](#批量设置)。
 
-     - 对于 Line Protocol 格式，请通过一段语句指定数据点的 Measurement、Fields、Timestamp 与 Tags，键值均支持变量或占位符，可按照[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。
+     - 对于 Line Protocol 格式，请通过一段语句指定数据点的 Measurement、Fields、Timestamp 与 Tags，键值均支持常量或占位符变量，可按照[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。
 
        :::tip
 
@@ -131,7 +129,42 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
 至此您已经完成整个创建过程，可以前往 **集成** -> **Flow 设计器** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 InfluxDB 进行存储。
 
-## 测试规则和 Sink 
+### 批量设置
+
+<!-- 英文 
+## Batch Setting 
+
+| Field | Value | Remarks (Optional) |
+| --- |  --- |  --- |
+| temp | ${payload.temp} |  |
+| --- |  --- |  --- |
+| hum | ${payload.hum} |  |
+| precip | ${payload.precip}i | Append an i to the field value to tell InfluxDB to store the number as an integer. |
+-->
+
+在 InfluxDB 中，一个数据条目通常包含数百个字段（Fields），这使得数据格式的设置变得具有挑战性。为了解决这个问题，EMQX 提供了批量设置字段的功能。
+
+当通过 JSON 设置数据格式时，您可以使用批量设置功能，从 CSV 文件中导入字段的键值对。
+
+1. 点击 **Fields** 表格的 **批量设置** 按钮，打开批量设置弹窗。
+2. 根据指引，先下载批量设置模板文件，然后在模板文件中填入 Fields 键值对，默认的模板文件内容如下：
+
+  | Field | Value | Remarks (Optional) |
+  | --- |  --- |  --- |
+  | temp | ${payload.temp} |  |
+  | hum | ${payload.hum} |  |
+  | precip | ${payload.precip}i | 在字段值后追加 i，InfluxDB 则将该数值存储为整数类型。 |
+
+  - **Field**: 字段键，支持常量或 ${var} 格式的占位符。
+  - **Value**: 字段值，支持常量或占位符，可以按照行协议追加类型标识。
+  - **Remarks**: 仅用于 CSV 文件内字段的备注，无法导入到 EMQX 中。
+
+  注意，支持 1M 以内的 CSV 格式文件，文件中数据不能超过 2000 行。
+
+1. 将填好的模板文件保存并上传到导入批量设置弹窗中，点击**导入**完成批量设置。
+2. 导入完成后，您可以在 **Fields** 设置表格中进一步调整字段的键值对。
+
+## 测试规则和 Sink
 
 使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
 
@@ -167,4 +200,3 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello InfluxDB" }'
 [EMQX+InfluxDB+Grafana 构建物联网可视化平台](https://www.emqx.com/zh/blog/build-emqx-influxdb-grafana-iot-data-visualization-solution-in-one-hour)
 
 [EMQX 规则引擎系列（三）存储消息到 InfluxDB 时序数据库](https://www.emqx.com/zh/blog/emqx-rule-engine-series-store-messages-to-influxdb-time-series-database)
-
