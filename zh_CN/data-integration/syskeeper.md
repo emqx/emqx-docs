@@ -20,7 +20,7 @@ Nari SysKeeper 的数据集成是 EMQX 中的即用型功能，结合了 MQTT �
 
 <img src="./assets/syskeeper_bridge_architecture.png" alt="syskeeper_bridge_architecture" style="zoom:67%;" />
 
-穿透操作可以视为部署在安全区 I/II 与安全区 III 的两个 EMQX 集群之间的单向数据桥接，工作流程如下：
+穿透操作可以视为部署在安全区 I-II 与安全区 III 的两个 EMQX 集群之间的单向数据桥接，工作流程如下：
 
 1. **创建 SysKeeper 接收器**：需要在安全区 III 的 EMQX 上创建 SysKeeper 接收器，SysKeeper 接收器将启动一个特殊的 TCP 监听器，用于接收来自 SysKeeper 转发器的消息。
 2. **消息发布和接收**：电力系统各类设备通过直连到 EMQX，或通过网关（例如 [NeuronEX](https://www.emqx.com/zh/products/neuronex)）转换为 MQTT 协议成功连接到 EMQX，并根据其运行状态、读数或触发的事件通过 MQTT 发送消息。当 EMQX 接收到这些消息时，它会启动其规则引擎中的匹配过程。
