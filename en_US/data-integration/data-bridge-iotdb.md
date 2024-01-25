@@ -146,7 +146,8 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
         ```sql
         SELECT
-          json_decode(payload) as payload, `my_device` as payload.device_id
+         payload, 
+         `my_device` as payload.device_id
         ```
 
         However, the fixed device ID configured in this field takes precedence over any previously mentioned methods.
