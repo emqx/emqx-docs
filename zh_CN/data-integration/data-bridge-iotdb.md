@@ -147,7 +147,8 @@ docker run -d --name iotdb-service \
 
      ```sql
      SELECT
-       json_decode(payload) as payload, `my_device` as payload.device_id
+      payload,
+      `my_device` as payload.device_id
      ```
 
      但是，此字段中配置的固定设备ID优先于前面提到的任何方法。
