@@ -190,7 +190,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
     
     - **Template-Described**
     
-      With this approach, you can define a template in the **Write Data** section, including as many items as needed, each with the required contextual information per row. When this template is provided, the system will generate IoTDB data by applying it to the MQTT message.
+      With this approach, you can define a template in the **Write Data** section, including as many items as needed, each with the required contextual information per row. When this template is provided, the system will generate IoTDB data by applying it to the MQTT message. The template for writing data supports batch setting via CSV file. For details, refer to [Batch Setting](#batch-setting).
     
       For example, consider this template:
     
@@ -222,6 +222,39 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new Apache IoTDB Sink. 
 
 You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under the topic `root/#` are forwarded to Apache IoTDB after parsing by the rule `my_rule`. 
+
+### Batch Setting
+
+In Apache IoTDB, writing hundreds of data entries simultaneously can be challenging when configuring on the Dashboard. To address this issue, EMQX offers a functionality for batch setting data writes.
+
+When configuring **Write Data**, you can use the batch setting feature to import fields for insertion operations from a CSV file.
+
+1. Click the **Batch Setting** button in the **Write Data** table to open the **Import Batch Setting** popup.
+
+2. Follow the instructions to download the batch setting template file, then fill in the data writing configuration in the template file. The default template file content is as follows:
+
+   | Timestamp | Measurement | Data Type | Value             | Remarks (Optional)                                           |
+   | --------- | ----------- | --------- | ----------------- | ------------------------------------------------------------ |
+   | now       | temp        | FLOAT     | ${payload.temp}   | Fields, values, and data types are mandatory. Available data type options include BOOLEAN, INT32, INT64, FLOAT, DOUBLE, TEXT |
+   | now       | hum         | FLOAT     | ${payload.hum}    |                                                              |
+   | now       | status      | BOOLEAN   | ${payload.status} |                                                              |
+   | now       | clientid    | TEXT      | ${clientid}       |                                                              |
+
+   - **Timestamp**: Supports placeholders in ${var} format, requiring timestamp format. You can also use the following special characters to insert system time:
+     - now: Current millisecond timestamp
+     - now_ms: Current millisecond timestamp
+     - now_us: Current microsecond timestamp
+     - now_ns: Current nanosecond timestamp
+   - **Measurement**: Field name, supports constants or placeholders in ${var} format.
+   - **Data Type**: Data type, with options including BOOLEAN, INT32, INT64, FLOAT, DOUBLE, TEXT.
+   - **Value**: The data value to be written, supports constants or placeholders in ${var} format, and must match the data type.
+   - **Remarks**: Used only for notes within the CSV file, cannot be imported into EMQX.
+
+   Note that only CSV files under 1M and with data not exceeding 2000 lines are supported.
+
+3. Save the filled template file and upload it to the **Import Batch Setting** popup, then click **Import** to complete the batch setting.
+
+4. After importing, you can further adjust the data in the **Write Data** table.
 
 ## Test Apache IoTDB Sink and Rule
 
