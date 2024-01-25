@@ -123,7 +123,7 @@ CREATE TABLE emqx_client_events (
 
 6. 输入 TDengine 连接信息，主机列表填写 `127.0.0.1:6041`，数据库填写 `mqtt`，用户名为 `root`，密码为 `taosdata`。
 
-7. 配置 SQL 模板，可使用如下 SQL 完成数据插入。支持通过 CSV 文件批量设置，详细请参考[批量设置](#批量设置)。
+7. 配置 SQL 模板，可使用如下 SQL 完成数据插入，并支持通过 CSV 文件批量设置，详细请参考[批量设置](#批量设置)。
 
    ::: tip
 
@@ -150,46 +150,32 @@ CREATE TABLE emqx_client_events (
 
 ### 批量设置
 
-<!-- 英文 
-## Batch Setting 
-
-| Field | Value | Char Value |
-| --- |  --- |  --- |
-| ts | now | FALSE |
-| --- |  --- |  --- |
-| msgid | ${id} | TRUE |
-| mqtt\_topic | ${topic} | TRUE |
-| qos | ${qos} | FALSE |
-| temp | ${payload.temp} | FALSE |
-| hum | ${payload.hum} | FALSE |
-| status | ${payload.status} | FALSE |
--->
-
 在 TDengine 中，一条数据可能包含数百个数据点，这使得编写 SQL 语句变得具有挑战性。为了解决这个问题，EMQX 提供了批量设置 SQL 的功能。
 
 当编辑 SQL 模板时，您可以使用批量设置功能，从 CSV 文件中导入要进行插入操作的字段。
 
-1. 点击 **SQL 模板** 下方的 **批量设置** 按钮，打开批量设置弹窗。
+1. 点击 **SQL 模板**下方的**批量设置**按钮，打开**导入批量设置**弹窗。
+
 2. 根据指引，先下载批量设置模板文件，然后在模板文件中填入 Fields 键值对，默认的模板文件内容如下：
 
-| Field      | Value             | Char Value | Remarks (Optional) |
-| ---------- | ----------------- | ---------- | ------------------ |
-| ts         | now               | FALSE      | Example Remark     |
-| msgid      | ${id}             | TRUE       |                    |
-| mqtt_topic | ${topic}          | TRUE       |                    |
-| qos        | ${qos}            | FALSE      |                    |
-| temp       | ${payload.temp}   | FALSE      |                    |
-| hum        | ${payload.hum}    | FALSE      |                    |
-| status     | ${payload.status} | FALSE      |                    |
-  
-  - **Field**: 字段键，支持常量或 ${var} 格式的占位符。
-  - **Value**: 字段值，支持常量或 ${var} 格式的占位符。虽然 SQL 中要求字符类型需要通过引号包裹，但在模板文件中无需包裹引号，而是通过 `Char Value` 列来指定字段是否为字符类型。
-  - **Char Value**: 用于指定字段是否为字符类型，以便在导入生成 SQL 时为字段添加引号。如果字段是字符类型，则填写 `TRUE` 或 `1`，否则填写 `FALSE` 或 `0`。
-  - **Remarks**: 仅用于 CSV 文件内字段的备注，无法导入到 EMQX 中。
+   | Field      | Value             | Char Value | Remarks (Optional) |
+   | ---------- | ----------------- | ---------- | ------------------ |
+   | ts         | now               | FALSE      | Example Remark     |
+   | msgid      | ${id}             | TRUE       |                    |
+   | mqtt_topic | ${topic}          | TRUE       |                    |
+   | qos        | ${qos}            | FALSE      |                    |
+   | temp       | ${payload.temp}   | FALSE      |                    |
+   | hum        | ${payload.hum}    | FALSE      |                    |
+   | status     | ${payload.status} | FALSE      |                    |
 
-  注意，支持 1M 以内的 CSV 格式文件，文件中数据不能超过 2000 行。
+     - **Field**: 字段键，支持常量或 ${var} 格式的占位符。
+     - **Value**: 字段值，支持常量或 ${var} 格式的占位符。虽然 SQL 中要求字符类型需要通过引号包裹，但在模板文件中无需包裹引号，而是通过 `Char Value` 列来指定字段是否为字符类型。
+     - **Char Value**: 用于指定字段是否为字符类型，以便在导入生成 SQL 时为字段添加引号。如果字段是字符类型，则填写 `TRUE` 或 `1`，否则填写 `FALSE` 或 `0`。
+     - **Remarks**: 仅用于 CSV 文件内字段的备注，无法导入到 EMQX 中。
 
-3. 将填好的模板文件保存并上传到导入批量设置弹窗中，点击**导入**完成批量设置。
+     注意，支持 1M 以内的 CSV 格式文件，文件中数据不能超过 2000 行。
+
+3. 将填好的模板文件保存并上传到**导入批量设置**弹窗中，点击**导入**完成批量设置。
 4. 导入完成后，您可以在 **SQL 模板** 中对 SQL 进行进一步的调整，例如设置表名称，美化 SQL 等。
 
 ## 创建上下线记录 Sink 规则
