@@ -151,10 +151,11 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    - **Overwrite Document** (Specific to `Create` action): Whether to overwrite the document if it already exists. If “No”, the document write will fail.
 
+   - **Enable Upsert** (Specific to `Update` action): Treat the update operation as an insert operation when the document to be updated does not exist, and insert the provided document as a new document.
+
      In this example, the index name is set to `device_data`, using a combination of client ID and timestamp `${clientid}_${ts}` as the document ID. The document stores the client ID, current timestamp, and the entire message body. The document template is as follows:
 
-     ```
-     jsonCopy code
+     ```json
      {
        "clientid": "${clientid}",
        "ts": ${ts},
@@ -163,8 +164,8 @@ This section demonstrates how to create a rule in EMQX to process messages from 
      ```
 
 8. Keep the rest of the parameters at their default values. 
-10. Click the **Create** button to complete the creation of the Sink. The new Sink will be added to the **Action Outputs**.
-11. Back on the Create Rule page, click the **Create** button to complete the entire rule creation.
+9.  Click the **Create** button to complete the creation of the Sink. The new Sink will be added to the **Action Outputs**.
+10. Back on the Create Rule page, click the **Create** button to complete the entire rule creation.
 
 Now you have successfully created the rule. You can see the newly created rule on the **Rules** page and the new Elasticsearch Sink under the **Actions (Sink)** tab.
 
@@ -223,6 +224,6 @@ The correct responding results are as follows:
 }
 ```
 
-## <!-- Advanced Settings-->
+<!-- ## Advanced Settings-->
 
 <!-- TODO -->
