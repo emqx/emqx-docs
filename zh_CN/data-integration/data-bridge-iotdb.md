@@ -102,7 +102,7 @@ docker run -d --name iotdb-service \
 6. 输入连接器访问 Apache IoTDB 服务器的用户名和密码。
 7. 其他选项保留默认。关于 **高级设置** 的配置（可选）：参见[高级配置](#高级配置)。
 8. 在点击 **创建** 之前，您可以点击 **测试连接** 以测试连接器是否能够连接到 Apache IoTDB。
-9. 点击 **创建** 完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建规则和 Sink，以指定要写入Apache IoTDB 的数据。详细步骤可参照[创建规则和 Apache IoTDB Sink](#创建规则和-apache-iotdb-sink)章节的步骤来创建规则。
+9. 点击 **创建** 完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建规则和 Sink，以指定要写入Apache IoTDB 的数据。详细步骤可参照[创建规则和 Apache IoTDB Sink](#创建规则和-apache-iotdb-sink) 章节的步骤来创建规则。
 
 ## 创建规则和 Apache IoTDB Sink
 
@@ -156,7 +156,7 @@ docker run -d --name iotdb-service \
 
    - **对齐时间序列**：默认禁用。启用后，一组对齐的时序数据的时间戳列将在 IoTDB 中仅存储一次，而不是在该组内的每个单独时序数据中重复存储。有关更多信息，请参见[对齐时序数据](https://iotdb.apache.org/UserGuide/V1.1.x/Data-Concept/Data-Model-and-Terminology.html#aligned-timeseries)。
 
-10. 配置 **写入数据** 以指定从 MQTT 消息生成 IoTDB 数据的方式。由于历史原因，您可以选择以下方法之一：
+10. 为 Sink 配置 **写入数据** 以指定从 MQTT 消息生成 IoTDB 数据的方式。由于历史原因，您可以选择以下方法之一：
 
     - **Payload 描述**
 
@@ -191,7 +191,7 @@ docker run -d --name iotdb-service \
 
     - **模板描述**
 
-      使用这种方法，您可以在 **写入数据** 部分定义一个模板，包括所需的每行的上下文信息。当提供此模板时，系统将通过应用它到MQTT 消息来生成 IoTDB 数据。
+      使用这种方法，您可以在 **写入数据** 部分定义一个模板，包括所需的每行的上下文信息。当提供此模板时，系统将通过应用它到MQTT 消息来生成 IoTDB 数据。写入数据的模版支持通过 CSV 文件批量设置，详细说明请参考[批量设置](#批量设置)。
 
       例如，使用以下模板：
 
@@ -223,7 +223,40 @@ docker run -d --name iotdb-service \
 
 您可以点击 **集成** -> **Flow 设计器** 查看拓扑。可以看到 `root/#` 下的消息在通过规则 `my_rule` 解析后被转发到 Apache IoTDB。
 
-### 测试 Sink 和规则
+### 批量设置
+
+在 Apache IoTDB 中，可能需要同时写入数百条数据，在 Dashboard 上进行配置是具有挑战性的工作。为了解决这个问题，EMQX 提供了批量设置数据写入的功能。
+
+当配置 **写入数据** 时，您可以使用批量设置功能，从 CSV 文件中导入要进行插入操作的字段。
+
+1. 点击 **写入数据** 表格的 **批量设置** 按钮，打开 **导入批量设置** 弹窗。
+
+2. 根据指引，先下载批量设置模板文件，然后在模板文件中填入数据写入配置，默认的模板文件内容如下：
+
+   | Timestamp | Measurement | Data Type | Value             | Remarks (Optional)                                           |
+   | --------- | ----------- | --------- | ----------------- | ------------------------------------------------------------ |
+   | now       | temp        | FLOAT     | ${payload.temp}   | 字段、值、数据类型是必填选项，数据类型可选的值为 BOOLEAN、 INT32、 INT64、 FLOAT、 DOUBLE、 TEXT |
+   | now       | hum         | FLOAT     | ${payload.hum}    |                                                              |
+   | now       | status      | BOOLEAN   | ${payload.status} |                                                              |
+   | now       | clientid    | TEXT      | ${clientid}       |                                                              |
+
+   - **Timestamp**: 支持使用 ${var} 格式的占位符，要求是时间戳格式。也可以使用以下特殊字符插入系统时间：
+     - now: 当前毫秒级时间戳
+     - now_ms: 当前毫秒级时间戳
+     - now_us: 当前微秒级时间戳
+     - now_ns: 当前纳秒级时间戳
+   - **Measurement**: 字段名，支持常量或 ${var} 格式的占位符。
+   - **Data Type**: 数据类型，可选值包括 BOOLEAN、 INT32、 INT64、 FLOAT、 DOUBLE、 TEXT。
+   - **Value**: 写入的数据值，支持常量或 ${var} 格式的占位符，需要与数据类型匹配。
+   - **Remarks**: 仅用于 CSV 文件内字段的备注，无法导入到 EMQX 中。
+
+
+   注意，仅支持 1M 以内的 CSV 格式文件，文件中数据不能超过 2000 行。
+
+3. 将填好的模板文件保存并上传到 **导入批量设置** 弹窗中，点击**导入**完成批量设置。
+4. 导入完成后，您可以在 **写入数据** 表格中对数据进行进一步的调整。
+
+## 测试 Sink 和规则
 
 您可通过 EMQX Dashboard 内置的 WebSocket 客户端进行规则和 Sink 的验证。
 
