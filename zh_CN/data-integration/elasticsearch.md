@@ -14,9 +14,9 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 Elasticsearch 数据集成是 EMQX 中开箱即用的功能，它结合了 EMQX 的设备接入、消息传输能力与 Elasticsearch 的数据存储和分析能力，通过简单的配置即可实现 MQTT 数据的无缝集成。
 
-<!-- 下图展示了工业物联网中 EMQX 和 Elasticsearch 数据集成的典型架构。
+下图展示了 EMQX 和 Elasticsearch 数据集成的典型架构。
 
-![MQTT to Timescale](./assets/mqtt-to-Elasticsearch.jpg) -->
+![MQTT to Elasticsearch](./assets/mqtt-to-Elasticsearch.jpg)
 
 EMQX 和 Elasticsearch 提供了一个可扩展的物联网平台，用于高效地实时收集和分析设备数据。在此架构中，EMQX 作为物联网平台，负责设备接入、消息传输、数据路由等功能，Elasticsearch 作为数据存储和分析平台，负责数据存储、数据搜索和分析等功能。
 
