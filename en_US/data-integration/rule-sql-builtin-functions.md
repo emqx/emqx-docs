@@ -81,8 +81,10 @@ See the table below for a complete list of data type judgment functions supporte
 
 | Function Name | Description                                                  | Parameter |
 | ------------- | ------------------------------------------------------------ | --------- |
-| is_null       | Check if a field is undefined<br />Boolean                   | Data      |
-| is_not_null   | Check if a field is defined<br/>Boolean                      | Data      |
+| is_null       | Checks if a variable is null. Note: This function cannot determine the JSON `null` type, use `is_null_var` instead.<br/>Boolean | Data  |
+| is_not_null   | Checks if a variable is not null. Note: This function cannot determine the JSON `null` type, use `is_not_null_var` instead.<br/>Boolean | Data  |
+| is_null_var   | Checks if a variable is null.<br/>Boolean | Data  |
+| is_not_null_var | Checks if a variable is not null.<br/>Boolean | Data  |
 | is_str        | Check if the value is of String type<br/>Boolean             | Data      |
 | is_bool       | Check if the value is of Boolean type<br/>Boolean            | Data      |
 | is_int        | Check if the value is of Integer type<br/>Boolean            | Data      |
@@ -95,8 +97,14 @@ See the table below for a complete list of data type judgment functions supporte
 
 
 ```erlang
-is_null(undefined) = true
+is_null(undefined_var) = true
+is_null(mget('a', json_decode('{"a": null}'))) = false
 is_not_null(1) = true
+is_not_null(mget('a', json_decode('{"a": null}'))) = true
+is_null_var(undefined_var) = true
+is_null_var(mget('a', json_decode('{"a": null}'))) = true
+is_not_null_var(1) = true
+is_not_null_var(mget('a', json_decode('{"a": null}'))) = false
 is_str(1) = false
 is_str('val') = true
 is_bool(true) = true
@@ -182,6 +190,9 @@ See the table below for a complete list of string functions supported.
 | ascii                        | Return the ASCII code of a character                         | 1. Character                                                 |
 | find                         | Search and return a substring in a string (searching from the beginning) | 1. Original string <br />2. Substring to be found            |
 | find                         | Search and return a substring in a string (searching from the beginning) | 1. Original string <br />2. Substring to be found <br />3. 'leading' |
+| join_to_string               | Concatenate array elements into a string. It uses comma and space (`, `) as the separator | 1. Array                                        |
+| join_to_string<br />With separator string | Concatenate array elements into a string | 1. Separator string <br> 2. Array |
+| join_to_sql_values_string | Concatenate array elements into a string, wrapping string elements with single quotes. Useful for building SQL VALUES clauses. It uses comma and space (`, `) as the separator | 1. Array |
 
 **Examples:**
 
@@ -246,26 +257,50 @@ ascii('a') = 97
 find('eeabcabcee', 'abc') = 'abcabcee'
 find('eeabcabcee', 'abc', 'leading') = 'abcabcee'
 find('eeabcabcee', 'abc', 'trailing') = 'abcee'
+
+join_to_string(['a', 'b', 'c']) = 'a, b, c'
+join_to_string('-', ['a', 'b', 'c']) = 'a-b-c'
+join_to_sql_values_string(['a', 'b', 1]) = '\'a\', \'b\', 1'
 ```
 
 ## Map Functions
 
 EMQX has built-in functions that allow you to manipulate maps, and perform operations such as adding key-value pairs to a map and retrieving values. <!--is this only applicable to erlang maps? shall we add a note here?-->
 
-See the table below for a complete list of map functions supported. 
+## Map Function
 
-| Function Name                | Description                                                  | Parameter                                  |
-| ---------------------------- | ------------------------------------------------------------ | ------------------------------------------ |
-| map_get                      | Retrieve the value associated with a specified key in the Map <br />Or return null if the key is not found | 1. Key <br />2. Map                        |
-| map_get<br /> (with default) | Retrieve the value associated with a specified key in the Map, <br />Or return the specified default value if the key is not found | 1. Key <br />2. Map <br />3. Default Value |
-| map_put                      | Insert a key-value pair into the Map                         | 1. Key <br />2. Value <br />3. Map         |
+| Function Name | Description | Parameter |
+| ------------- | ----------- | --------- |
+| map_new | Creates an empty Map data type (Erlang Map type: `#{}`, equivalent to JSON objects `{}`) | None |
+| map_get | Retrieve the value associated with a specified key in the Map, <br />Or return null if the key is not found.<br />Supports nested Keys, e.g., "a.b.c" | 1. Key <br /> 2. Map |
+| map_get<br /> (with default) | Retrieve the value associated with a specified key in the Map, <br />Or return the specified default value if the key is not found.<br />Supports nested Keys, e.g., "a.b.c" | 1. Key <br /> 2. Map <br /> 3. Default Value |
+| map_put | Insert a value into the Map<br />Supports nested Keys, e.g., "a.b.c" | 1. Key <br /> 2. Value <br /> 3. Map |
+| mget | Retrieve the value associated with a specified key in the Map, <br />Or return null if the key is not found. Similar to map_get but does not support nested Keys | 1. Key <br /> 2. Map |
+| mget<br /> (with default) | Retrieve the value associated with a specified key in the Map, <br />Or return the specified default value if the key is not found. Similar to map_get but does not support nested Keys | 1. Key <br /> 2. Map <br /> 3. Default Value |
+| mput | Inserts a value into the Map. Similar to map_put but does not support nested Keys | 1. Key <br /> 2. Value <br /> 3. Map |
+| map_keys | Retrieve all keys of a Map, return an array containing all the keys | Map |
+| map_values | Retrieve all values of a Map, return an array containing all the values | Map |
+| map_to_entries | Converts a Map into an array of Key-Value pairs, return an array in the format `[#{key => Key}, #{value => Value}]`, equivalent to `[{"key": Key}, {"value": Value}]` in JSON | Map |
 
 **Examples:**
 
 ```erlang
+map_new() = #{}
+json_encode(map_new()) = '{}'
 map_get('a', json_decode( '{ "a" : 1 }' )) = 1
 map_get('b', json_decode( '{ "a" : 1 }' ), 2) = 2
 map_get('a', map_put('a', 2, json_decode( '{ "a" : 1 }' ))) = 2
+map_get('a.b', json_decode( '{ "a" : {"b": 2} }' )) = 2
+map_put('c', 1, map_new()) = #{c => 1}
+map_put('c.d', 1, map_new()) = #{c => #{d => 1}}
+json_encode(map_put('c.d', 1, map_new())) = '{"c":{"d":1}}'
+mget('a.b', json_decode( '{ "a.b" : 1 }' )) = 1
+mget('a.b', json_decode( '{ "a" : {"b": 2} }' )) = undefined
+mput('c.d', 1, map_new()) = #{<<"c.d">> => 1}
+json_encode(mput('c.d', 1, map_new())) = '{"c.d":1}'
+json_encode(map_to_entries('{"a": 1, "b": 2}')) = '[{"value":1,"key":"a"}, {"value":2,"key":"b"}]'
+map_keys(json_decode('{ "a" : 1, "b" : 2 }')) = ['a', 'b']
+map_values(json_decode('{ "a" : 1, "b" : 2 }')) = [1, 2]
 ```
 
 ## Array Functions
