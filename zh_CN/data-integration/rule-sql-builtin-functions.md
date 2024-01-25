@@ -59,8 +59,10 @@ log2(1024) = 10
 
 | 函数名      | 函数作用                                           | 参数 | 返回值                                                                |
 | ----------- | -------------------------------------------------- | ---- | --------------------------------------------------------------------- |
-| is_null     | 判断变量是否为空值                                 | Data | Boolean 类型的数据。如果为空值(undefined) 则返回 true，否则返回 false |
-| is_not_null | 判断变量是否为非空值                               | Data | Boolean 类型的数据。如果为空值(undefined) 则返回 false，否则返回 true |
+| is_null     | 判断变量是否为空值。注意：此函数无法判断 JSON 的 `null` 类型，请使用 `is_null_var` 替代 | Data |Boolean 类型的数据。如果为空值则返回 true，否则返回 false |
+| is_not_null | 判断变量是否为非空值。注意：此函数无法判断 JSON 的 `null` 类型，请使用 `is_not_null_var` 替代 | Data |Boolean 类型的数据。如果为空值则返回 false，否则返回 true |
+| is_null_var | 判断变量是否为空值| Data |Boolean 类型的数据。如果为空值则返回 true，否则返回 false |
+| is_not_null_var| 判断变量是否为非空值| Data | Boolean 类型的数据。如果为空值则返回 false，否则返回 true |
 | is_str      | 判断变量是否为 String 类型                         | Data | Boolean 类型的数据。                                                  |
 | is_bool     | 判断变量是否为 Boolean 类型                        | Data | Boolean 类型的数据。                                                  |
 | is_int      | 判断变量是否为 Integer 类型                        | Data | Boolean 类型的数据。                                                  |
@@ -70,8 +72,14 @@ log2(1024) = 10
 | is_array    | 判断变量是否为 Array 类型                          | Data | Boolean 类型的数据。                                                  |
 
 ```erlang
-is_null(undefined) = true
+is_null(undefined_var) = true
+is_null(mget('a', json_decode('{"a": null}'))) = false
 is_not_null(1) = true
+is_not_null(mget('a', json_decode('{"a": null}'))) = true
+is_null_var(undefined_var) = true
+is_null_var(mget('a', json_decode('{"a": null}'))) = true
+is_not_null_var(1) = true
+is_not_null_var(mget('a', json_decode('{"a": null}'))) = false
 is_str(1) = false
 is_str('val') = true
 is_bool(true) = true
@@ -143,6 +151,9 @@ float2str(20.2, 17) = '20.19999999999999928'
 | find          | 查找并返回字符串中的某个子串，从头部查找                     | 1. 原字符串 <br />2. 要查找的子串                            | 查抄到的子串，如找不到则返回空字符串 |
 | find          | 查找并返回字符串中的某个子串，从头部查找                     | 1. 原字符串 <br />2. 要查找的子串 <br />3. 'leading'         | 查抄到的子串，如找不到则返回空字符串 |
 | find          | 查找并返回字符串中的某个子串，从尾部查找                     | 1. 原字符串 <br />2. 要查找的子串 <br />3. 'trailing'        | 查抄到的子串，如找不到则返回空字符串 |
+| join_to_string | 拼接数组元素为字符串 | 1. 数组 | 拼接后的字符串，拼接符为逗号加空格 (`, `) |
+| join_to_string | 拼接数组元素为字符串 | 1. 拼接符 <br />2. 数组 | 拼接后的字符串 |
+| join_to_sql_values_string | 拼接数组元素为字符串，如果元素格式为字符串，将使用单引号包裹。此函数的字符串可以用作拼接 SQL 语句的 VALUES 子句 | 1. 数组 | 拼接后的字符串，拼接符为逗号加空格 (`, `) |
 
 ```erlang
 lower('AbC') = 'abc'
@@ -205,20 +216,44 @@ ascii('a') = 97
 find('eeabcabcee', 'abc') = 'abcabcee'
 find('eeabcabcee', 'abc', 'leading') = 'abcabcee'
 find('eeabcabcee', 'abc', 'trailing') = 'abcee'
+
+join_to_string(['a', 'b', 'c']) = 'a, b, c'
+join_to_string('-', ['a', 'b', 'c']) = 'a-b-c'
+join_to_sql_values_string(['a', 'b', 1]) = '\'a\', \'b\', 1'
 ```
 
 ## Map 函数
 
 | 函数名  | 函数作用                                         | 参数                                       | 返回值                                            |
 | ------- | ------------------------------------------------ | ------------------------------------------ | ------------------------------------------------- |
+| map_new | 构建一个空的 Map 类型数据 | 无 | 空的 Map 类型 (Erlang Map 类型：`#{}`，对应 JSON 中的对象类型 `{}`) |
 | map_get | 取 Map 中某个 Key 的值，如果没有则返回空值       | 1. Key <br />2. Map                        | Map 中某个 Key 的值。支持嵌套的 Key，比如 "a.b.c" |
 | map_get | 取 Map 中某个 Key 的值，如果没有则返回指定默认值 | 1. Key <br />2. Map <br />3. Default Value | Map 中某个 Key 的值。支持嵌套的 Key，比如 "a.b.c" |
 | map_put | 向 Map 中插入值                                  | 1. Key <br />2. Value <br />3. Map         | 插入后的 Map。支持嵌套的 Key，比如 "a.b.c"        |
+| mget | 取 Map 中某个 Key 的值，如果没有则返回空值。作用与 map_get 相同，但不支持嵌套的 Key|1. Key <br />2. Map|Map 中某个 Key 的值|
+| mget | 取 Map 中某个 Key 的值，如果没有则返回指定默认值。作用与 map_get 相同，但不支持嵌套的 Key|1. Key <br />2. Map <br />3. Default Value|Map 中某个 Key 的值|
+| mput | 向 Map 中插入值。作用与 map_put 相同，但不支持嵌套的 Key|1. Key <br />2. Value <br />3. Map|插入后的 Map|
+| map_keys | 获取 Map 类型数据的所有键|Map|包含所有键的数组|
+| map_values | 获取 Map 类型数据的所有值|Map|包含所有值的数组|
+| map_to_entries | 将 Map 转换为 Key-Value 键值对数组 |Map|`[#{key => Key}, #{value => Value}]` 格式的数组，对应的 JSON 类型为 `[{"key": Key}, {"value": Value}]`|
 
 ```erlang
+map_new() = #{}
+json_encode(map_new()) = '{}'
 map_get('a', json_decode( '{ "a" : 1 }' )) = 1
 map_get('b', json_decode( '{ "a" : 1 }' ), 2) = 2
 map_get('a', map_put('a', 2, json_decode( '{ "a" : 1 }' ))) = 2
+map_get('a.b', json_decode( '{ "a" : {"b": 2} }' )) = 2
+map_put('c', 1, map_new()) = #{c => 1}
+map_put('c.d', 1, map_new()) = #{c => #{d => 1}}
+json_encode(map_put('c.d', 1, map_new())) = '{"c":{"d":1}}'
+mget('a.b', json_decode( '{ "a.b" : 1 }' )) = 1
+mget('a.b', json_decode( '{ "a" : {"b": 2} }' )) = undefined
+mput('c.d', 1, map_new()) = #{<<"c.d">> => 1}
+json_encode(mput('c.d', 1, map_new())) = '{"c.d":1}'
+json_encode(map_to_entries('{"a": 1, "b": 2}')) = '[{"value":1,"key":"a"}, {"value":2,"key":"b"}]'
+map_keys(json_decode('{ "a" : 1, "b" : 2 }')) = ['a', 'b']
+map_values(json_decode('{ "a" : 1, "b" : 2 }')) = [1, 2]
 ```
 
 ## 数组函数
