@@ -8,15 +8,15 @@ Nari SysKeeper 数据集成是 EMQX 企业版功能。EMQX 企业版可以为您
 
 {% endemqxce %}
 
-Nari SysKeeper 2000 是一种网络物理隔离设备。作为一种安全管理系统，它广泛应用于各个行业，特别是在需要高级别安全措施的领域，如关键基础设施和企业 IT 系统。EMQX 支持穿透 SysKeeper 与另一个生产区的 EMQX 集群进行桥接，可以实现 MQTT 消息从 SysKeeper 内部更安全、受控的安全区 I-II 单向流向较不受限制的安全区 III。安全区 III 是一个限制较少的区域，充当了面向公众服务与更安全内部区域之间的桥梁。
+Nari SysKeeper 2000 是一种网络物理隔离设备。作为一种安全管理系统，它广泛应用于各个行业，特别是在需要高级别安全措施的领域，如关键基础设施和企业 IT 系统。EMQX 支持部署在不同生产区的 EMQX 集群之间的数据桥接。生产区按照安全级别划分为 I-III 3种类型，安全区 I-II 是更安全、受控的区域，而安全区 III 是一个限制较少的区域，充当了面向公众服务与更安全内部区域之间的桥梁。通常安全区 I-II 和安全区 III 之间是隔离的。通过数据桥接，MQTT 消息可以穿透安全区 I-II 与安全区 III 之间的单向 SysKeeper 网闸，与另一个安全区的 EMQX 集群进行桥接。
 
-本页面提供了不同隔离区中的 EMQX 进行桥接时，消息如何穿透 Nari SysKeeper 的全面介绍，以及创建和验证数据集成的实用指导。
+本页面提供了不同生产区中的 EMQX 进行桥接时，消息如何穿透 Nari SysKeeper 的全面介绍，以及创建和验证数据桥接的实用指导。
 
 ## 工作原理
 
-Nari SysKeeper 的数据集成是 EMQX 中的即用型功能，结合了 MQTT 的实时数据捕获和桥接能力与 SysKeeper 的强大安全隔离能力。通过内置的[规则引擎](./rules.md)组件，集成简化了 EMQX 桥接穿透 SysKeeper 的过程，无需复杂编码。
+Nari SysKeeper 的数据桥接是 EMQX 中的即用型功能，结合了 MQTT 的实时数据捕获和桥接能力与 SysKeeper 的强大安全隔离能力。通过内置的[规则引擎](./rules.md)组件，集成简化了 EMQX 桥接穿透 SysKeeper 的过程，无需复杂编码。
 
-下图展示了 EMQX 与 SysKeeper 之间的典型架构。<!-- 此图像需要修改为特定于SysKeeper的-->
+下图展示了 EMQX 与 SysKeeper 之间的典型架构。
 
 <img src="./assets/syskeeper_bridge_architecture.png" alt="syskeeper_bridge_architecture" style="zoom:67%;" />
 
@@ -32,7 +32,7 @@ Nari SysKeeper 的数据集成是 EMQX 中的即用型功能，结合了 MQTT �
 
 ## 准备工作
 
-本节描述了在 Dashboard 中创建 SysKeeper 数据集成之前必须完成的准备工作。
+本节描述了在 Dashboard 中创建 SysKeeper 数据桥接之前必须完成的准备工作。
 
 ### 前置准备
 
@@ -41,7 +41,7 @@ Nari SysKeeper 的数据集成是 EMQX 中的即用型功能，结合了 MQTT �
 
 ### 在安全区 III 启动 Nari SysKeeper 接收器
 
-要将 MQTT 消息传送到 Nari SysKeeper，您需要在安全区 III 启用 SysKeeper 接收器，以接收来自安全区 I-II 的 SysKeeper 转发器的连接。
+要将 MQTT 消息通过 Nari SysKeeper 传送，您需要在安全区 III 启用 SysKeeper 接收器，以接收来自安全区 I-II 的 SysKeeper 转发器的连接。
 
 本节介绍如何在安全区 III 启动 SysKeeper 接收器。
 
