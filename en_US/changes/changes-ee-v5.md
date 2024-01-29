@@ -121,7 +121,7 @@
 
 ### Bug Fixes
 
-- [#12232](https://github.com/emqx/emqx/pull/12232) Fixed issue where commit log info was incorrectly retained after forcefully leaving a cluster, removing unnecessary commit log data improves leave operation cleanup.
+- [#12232](https://github.com/emqx/emqx/pull/12232) Fixed an issue when cluster commit log table was not deleted after a node was forced to leave a cluster.
 
 - [#12243](https://github.com/emqx/emqx/pull/12243) Fixed a family of subtle race conditions that could lead to inconsistencies in the global routing state.
 
