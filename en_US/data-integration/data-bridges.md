@@ -21,13 +21,15 @@ EMQX data integration is an out-of-the-box feature. As an MQTT messaging platfor
 
 ### Built-in Rule Engine
 
-Data sources from various IoT devices and systems have all kinds of data types and formats. A powerful built-in rule engine with built-in SQL rules is the core component for SQL-based data processing and distribution. SQL rules have a wide range of functions, such as character manipulation, data type conversion functions, and compression/decompression functions, allowing for flexible and complex data processing. the rule engine can process events and IoT data from clients in real-time, performing tasks such as data extraction, filtering, enrichment, and format transformation based on predefined rules. The processed data is then sent to designated Sinks/Sources.
+Data sources from various IoT devices and systems have all kinds of data types and formats. EMQX is equipped with a powerful built-in rule engine based on SQL rules, which is a core component for processing and distributing data. The Rule Engine has a wide range of functionalities, including conditional judgments, string operations, data type conversions, and compression/decompression capabilities, enabling flexible handling of complex data.
+
+When clients trigger specific events or when messages reach EMQX, the Rule Engine can process the data in real-time according to predefined rules. It performs operations such as data extraction, filtering, enrichment, and format conversion, and then forwards the processed data to the designated Sink.
 
 You can find detailed information on how the rule engine works in the [Rule Engine](./rules.md) chapter.
 
 ### Sink
 
-A Sink is a data output component added to the [actions](./rules.md) of a rule. When a device triggers an event or a message arrives at EMQX, the system matches and executes the corresponding rule, filtering and processing the data. After processing, the data will be forwarded to a designated Sink, and then sent to external data systems through the corresponding [connector](./connector.md), facilitating operations such as message storage, data updates, and event notifications.
+A Sink is a data output component added to the [actions](./rules.md) of a rule. When a device triggers an event or a message arrives at EMQX, the system matches and executes the corresponding rule, filtering and processing the data. The data processed by the Rule Engine is forwarded to the specified Sink. In the Sink, you can configure how the data is handled, for example, by using `${var}` or `${.var}` syntax to extract variables from the data, dynamically generating SQL statements or data templates. Then, the data is sent to external data systems through a corresponding [connector](./connector.md), enabling operations such as message storage, data updates, and event notifications.
 
 ```mermaid
 graph LR
@@ -41,11 +43,16 @@ graph LR
 D -->|Message storage| E[Kafka]
 ```
 
+The variable extraction syntax supported in Sink is as follows:
+
+- `${var}`: This syntax is used to extract variables from the output results of a rule, for example, `${topic}`. If you wish to extract nested variables, you can use a period `.` for this, such as `${payload.temp}`. Note that if the variable you want to extract is not included in the output result, you will get the string `undefined`.
+- `${.var}`: This syntax first tries to extract a variable from the rule's output results. If the variable does not exist in the output, it attempts to extract it from the corresponding event data, for example, `${.topic}`. This also supports the use of `.` for extracting nested variables, such as `${.payload.temp}`. If the variable you want to extract is not present in either the rule output results or event data, you will receive the string `undefined`. You can also use `${.}` to extract all variables merged from the rule output results and event data.
+
 ### Source
 
 A Source is a data input component, serving as a [data source](./rule-sql-events-and-fields.md) for rules, and is selected through rule SQL.
 
-Source subscribes or consumes messages from external data systems such as MQTT or Kafka. When new messages arrive through the connector, the rule engine matches and executes the corresponding rules, filtering and processing the data. Once processed, the data can be published to a specified EMQX topic, enabling operations like message Sink and cloud command distribution.
+Source subscribes or consumes messages from external data systems such as MQTT or Kafka. When new messages arrive through the connector, the rule engine matches and executes the corresponding rules, filtering and processing the data. Once processed, the data can be published to a specified EMQX topic, enabling operations like cloud command distribution.
 
 ```mermaid
 graph LR
@@ -162,15 +169,11 @@ Sink enhances usability and further improves the performance and reliability of 
 
 ### Asynchronous Request Mode
 
-Asynchronous request mode can prevent the message publishing service from being affected by I/O pressure. However, when asynchronous request mode is enabled, the chronological order of newly sent messages by clients might be affected due to historical messages queuing up in the Sink.
+Asynchronous request mode is designed to prevent the message publish-subscribe process from being affected by the execution speed of the Sink. However, when asynchronous request mode is enabled, there might be instances where the subscriber receives the message, but it has not yet been written to the external data system.
 
-To improve data processing efficiency, EMQX enables asynchronous request mode by default. If you have strict requirements for the chronological order of messages, please disable this mode.
+To enhance data processing efficiency, EMQX enables asynchronous request mode by default. If you have strict requirements regarding the timing of message delivery to subscribers and external data systems, you should disable asynchronous request mode.
 
-::: tip
-
-To ensure the sequentiality of messages, set `max_inflight` to 1 at the same time.
-
-:::
+The `max_inflight` parameter also affects message order in asynchronous requests. Some Sinks have this parameter, and when the request mode is asynchronous, if it is necessary to strictly ensure that messages from the same MQTT client are processed in order, this value must be set to 1.
 
 ### Batch Mode
 
