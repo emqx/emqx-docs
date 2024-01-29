@@ -16,26 +16,26 @@
   For example:
 
   ```json
-  [
+[
   {
-  "permission": "allow",
-  "action": "pub",
-  "topic": "${username}/#",
-  "qos": [0,1],
-  "retain": true
+    "permission": "allow",
+    "action": "pub",
+    "topic": "${username}/#",
+    "qos": [0, 1],
+    "retain": true
   },
   {
-  "permission": "allow",
-  "action": "sub",
-  "topic": "eq ${username}/#",
-  "qos": [0,1]
+    "permission": "allow",
+    "action": "sub",
+    "topic": "eq ${username}/#",
+    "qos": [0, 1]
   },
   {
-  "permission": "deny",
-  "action": "all",
-  "topics": ["#"]
+    "permission": "deny",
+    "action": "all",
+    "topics": ["#"]
   }
-  ]
+]
   ```
 
   In this new format, when no matching rule is found, the action is not automatically denied.
