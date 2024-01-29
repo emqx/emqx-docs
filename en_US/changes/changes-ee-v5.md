@@ -144,7 +144,7 @@
 
 - [#12291](https://github.com/emqx/emqx/pull/12291) Fix inconsistency in how EMQX handles configuration updates where sensitive parameters are involved, which led to occurrences of stray `"******"` strings in the cluster configuration file.
 
-- [#12292](https://github.com/emqx/emqx/pull/12292) Fixed a crash when listing bridges via `GET /bridges` when a Syskeeper Forwarder bridge exists.
+- [#12292](https://github.com/emqx/emqx/pull/12292) Fixed `GET /bridges` API crash when a Syskeeper Forwarder bridge exists.
 
 - [#12301](https://github.com/emqx/emqx/pull/12301) Fixed issue where using line protocol to write numeric literals into InfluxDB, but the stored values end up being of string type.
 
