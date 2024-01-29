@@ -64,7 +64,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
 ## 创建连接器
 
-在添加 InfluxDB Sink 前，您需要创建连接器用于将 Sink 连接到 InfluxDB 服务器。
+本节演示了如何创建一个用于将 Sink 连接到 InfluxDB 服务器的连接器。
 
 以下步骤假定 EMQX 与 InfluxDB 均在本地运行，如您在远程运行 EMQX 及 InfluxDB，请根据实际情况调整相应配置。
 
@@ -78,7 +78,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
    - 输入 InfluxDB 服务器连接信息：
      - 服务器地址填写 `127.0.0.1:8086`。如果是 InfluxDB Cloud 需要指定端口为 443，即填入 `{url}:443` 并点击**启用 TLS** 以启用 TSL 连接。
      - 按照[安装 InfluxDB](#安装-influxdb) 中的设定完成 **Token**、**组织**及 **Bucket** 设置。注：如选择 InfluxDB v1 版本，请完成**数据库**、**用户名**及**密码**的设定。
-   - 设置是否启用TLS。有关 TLS 连接选项的详细信息，请参阅 [外部资源访问的 TLS](../network/overview.md#启用-tls-加密访问外部资源)。
+   - 设置是否启用TLS。有关 TLS 连接选项的详细信息，请参阅 [启用 TLS 加密访问外部资源](../network/overview.md#启用-tls-加密访问外部资源)。
 5. 在点击**创建**之前，您可以点击**测试连接**，以测试连接器是否能够连接到 InfluxDB 服务器。
 6. 点击最下方的**创建**按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建规则和 Sink，以指定要转发到 Influx 的数据。具体步骤请参见[创建规则和 InfluxDB Sink](#创建规则和-influxdb-sink)。
 
@@ -115,7 +115,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
 5. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。该动作会将经规则处理的数据转发到 InfluxDB。
 
-6. 在**动作**下拉框中选择`InfluxDB`，将 **动作** 下拉框保留为默认的 `创建动作` 。您也可以选择一个之前已经创建好的 InfluxDB Sink。本次演示将创建一个新的 Sink。
+6. 在**动作**下拉框中选择 `InfluxDB`，将 **动作** 下拉框保留为默认的 `创建动作` 。您也可以选择一个之前已经创建好的 InfluxDB Sink。本次演示将创建一个新的 Sink。
 
 7. 为 Sink 输入一个名称。名称应结合使用大写/小写字母和数字。
 
@@ -125,22 +125,23 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
 10. 定义解析数据， 指定**数据格式**与内容，使其能被解析并写入到 InfluxDB 中，可选项为 `JSON` 或 `Line Protocol`。
 
-   - 对于 JSON 格式，需设置数据的 **Measurement**，**Fields**，**Timestamp** 与 **Tags**，键值均支持常量或占位符变量，可按照[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。其中 **Fields** 字段支持通过 CSV 文件批量设置，详细请参考[批量设置](#批量设置)。
+    - 对于 JSON 格式，需设置数据的 **Measurement**，**Fields**，**Timestamp** 与 **Tags**，键值均支持常量或占位符变量，可按照[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。其中 **Fields** 字段支持通过 CSV 文件批量设置，详细请参考[批量设置](#批量设置)。
+    - 对于 Line Protocol 格式，请通过一段语句指定数据点的 Measurement、Fields、Timestamp 与 Tags，键值均支持常量或占位符变量，可按照[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。
 
-   - 对于 Line Protocol 格式，请通过一段语句指定数据点的 Measurement、Fields、Timestamp 与 Tags，键值均支持常量或占位符变量，可按照[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。
+    ::: tip
 
-     :::tip
+    如希望输入带符号的整型值，请在占位符后添加 `i` 作为类型标识，例如 `${payload.int}i`。参见 [InfluxDB 1.8 写入整型值](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb)。
 
-     如希望输入带符号的整型值，请在占位符后添加 `i` 作为类型标识，例如 `${payload.int}i`。参见 [InfluxDB 1.8 写入整型值](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb)。
-
-     对于 InfluxDB 2.x 中支持的无符号整型值，请在占位符后添加 `u` 作为类型标识，例如 `${payload.uint}u`。参见 [InfluxDB 2.6 无符号整型](https://docs.influxdata.com/influxdb/v2.6/reference/syntax/line-protocol/#uinteger)。
-     :::
+    对于 InfluxDB 2.x 中支持的无符号整型值，请在占位符后添加 `u` 作为类型标识，例如 `${payload.uint}u`。参见 [InfluxDB 2.6 无符号整型](https://docs.influxdata.com/influxdb/v2.6/reference/syntax/line-protocol/#uinteger)。
+    :::
 
 11. 展开**高级设置**，根据需要配置高级设置选项（可选），详细请参考[高级设置](#高级设置)。
 
-12. 点击**创建**完成 Sink 的创建。回到**创建规则**页面，您将看到新的 Sink 出现在**动作输出**标签下。
+12. 在点击**创建**之前，您可以点击**测试连接**，以测试 Sink 是否能够连接到 InfluxDB 服务器。
 
-13. 在**创建规则**页面，验证配置的信息。点击**创建**按钮生成规则。
+13. 点击**创建**完成 Sink 的创建。回到**创建规则**页面，您将看到新的 Sink 出现在**动作输出**标签下。
+
+14. 在**创建规则**页面，验证配置的信息。点击**创建**按钮生成规则。
 
 现在您已成功创建规则，您可以在**规则**页面上看到新的规则。点击**动作(Sink)**标签，您可以看到新的 InfluxDB Sink。
 

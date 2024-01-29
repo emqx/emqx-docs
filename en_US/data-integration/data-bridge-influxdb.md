@@ -66,7 +66,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
 ## Create a Connector
 
-Before adding an InfluxDB Sink, you need to create a connector to link the Sink to the InfluxDB server.
+This section demonstrates how to create a Connector to link the Sink to the InfluxDB server.
 
 The following steps assumes that you run both EMQX and InfluxDB on the local machine. If you have InfluxDB and EMQX running remotely, adjust the settings accordingly.
 
@@ -122,21 +122,23 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 10. Select **Data Format** as `JSON` or `Line Protocol` for how data should be parsed and written into InfluxDB.
 
-   - For JSON format, define data parsing method, including **Measurement**, **Timestamp**, **Fields,** and **Tags**. Note: All key values can be variables or placeholders, and you can also follow the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/) to set them. The **Fields** field supports batch setting via a CSV file; for details, refer to [Batch Setting](#batch-setting).
-   - For Line Protocol format, specify a text-based format that provides the measurement, tag set, field set, timestamp of a data point, and placeholder supported according to the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) syntax.
+    - For JSON format, define data parsing method, including **Measurement**, **Timestamp**, **Fields,** and **Tags**. Note: All key values can be variables or placeholders, and you can also follow the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/) to set them. The **Fields** field supports batch setting via a CSV file; for details, refer to [Batch Setting](#batch-setting).
+    - For Line Protocol format, specify a text-based format that provides the measurement, tag set, field set, timestamp of a data point, and placeholder supported according to the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) syntax.
 
-   ::: tip
+    ::: tip
 
-   - To write a signed integer type value to InfluxDB 1.x or 2.x, add `i` as the type identifier after the placeholder, for example, `${payload.int}i`. See also [InfluxDB 1.8 write integer value](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
-   - To write an unsigned integer type value to InfluxDB 1.x or 2.x, add `u` as the type identifier after the placeholder, for example, `${payload.int}u`. See also [InfluxDB 1.8 write integer value](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
+    - To write a signed integer type value to InfluxDB 1.x or 2.x, add `i` as the type identifier after the placeholder, for example, `${payload.int}i`. See also [InfluxDB 1.8 write integer value](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
+    - To write an unsigned integer type value to InfluxDB 1.x or 2.x, add `u` as the type identifier after the placeholder, for example, `${payload.int}u`. See also [InfluxDB 1.8 write integer value](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
 
-   :::
+    :::
 
 11. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
 
-12. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+12. Before clicking **Create**, you can click **Test Connectivity** to test if the Sink can be connected to the InfluxDB server.
 
-13. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+13. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+
+14. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new InfluxDB Sink.
 
@@ -167,7 +169,7 @@ When setting data formats via JSON, you can use the batch setting feature to imp
 3. Save the filled template file and upload it to the **Import Batch Setting** popup, then click **Import** to complete the batch setting.
 4. After importing, you can further adjust the key-value pairs of fields in the **Fields** setting table.
 
-## Test Rule and Sink
+## Test the Rule and Sink
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 
