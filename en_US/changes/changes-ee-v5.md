@@ -1,5 +1,156 @@
 # Version 5
 
+## 5.5.0
+
+*Release Date: 2024-01-31*
+
+### Enhancements
+
+- [#12085](https://github.com/emqx/emqx/pull/12085) Upgrade to OTP 26.1.2-2
+
+- [#12189](https://github.com/emqx/emqx/pull/12189) Enhanced JWT ACL Claim Format.
+
+  The JWT ACL claim has been upgraded to support a more versatile format.
+  It now accepts an array structure, which resembles the file-based ACL rules.
+
+  For example:
+
+  ```json
+  [
+  {
+  "permission": "allow",
+  "action": "pub",
+  "topic": "${username}/#",
+  "qos": [0,1],
+  "retain": true
+  },
+  {
+  "permission": "allow",
+  "action": "sub",
+  "topic": "eq ${username}/#",
+  "qos": [0,1]
+  },
+  {
+  "permission": "deny",
+  "action": "all",
+  "topics": ["#"]
+  }
+  ]
+  ```
+
+  In this new format, when no matching rule is found, the action is not automatically denied.
+  This allows the authorization process to proceed to other configured authorization sources.
+  If no match is found throughout the chain, the final decision defers to the default permission set in `authorization.no_match`.
+
+- [#12267](https://github.com/emqx/emqx/pull/12267) Add a new `timeout` parameter to the `cluster/:node/invite` interface.
+  Previously the default timeout was 5s which would often be caused by HTTP API calls due to emqx taking too long to join cluster.
+
+  Add a new endpoint `/cluster/:node/invite_async` to support an asynchronous way to invite nodes to join the cluster,
+  and a new endpoint `cluster/invitation` to inspect the join status.
+
+- [#12272](https://github.com/emqx/emqx/pull/12272) Added a new endpoint `DELETE /retainer/messages` to `retain` API to clean all retained messages
+
+  Also added an optional topic filter in the query string for the endpoint "GET /retainer/messages", e.g. "topic=t/1".
+
+- [#12277](https://github.com/emqx/emqx/pull/12277) Add `mqtt/delayed/messages/:topic` endpoint to remove delayed messages by topic name.
+
+- [#12278](https://github.com/emqx/emqx/pull/12278) In the REST API, the maximum limit of page queries is adjusted to 10,000.
+
+- [#12289](https://github.com/emqx/emqx/pull/12289) Add new config `authorization.cache.excludes` to support ACL cache exclusion.
+
+  When configured with a list of topic-filters, the publish or subscribe permission check results for a matching topic or topic filter will not be cached.
+
+- [#12299](https://github.com/emqx/emqx/pull/12299) Expose more metrics to improve observability:
+
+  Montior API:
+  - Add `retained_msg_count` field to `/api/v5/monitor_current`.
+  - Add `retained_msg_count` and `node_uptime` fields to `/api/v5/monitor_current/nodes/{node}`.
+
+  Prometheus API:
+  - Add `emqx_cert_expiry_at` to `/api/v5/prometheus/stats` to display TLS listener certificate expiration time.
+  - Add `/api/v5/prometheus/auth` endpoint to provide metrics such as execution count and running status for all authenticatiors and authorizators.
+  - Add `/api/v5/prometheus/data_integration` endpoint to provide metrics such as execution count and status for all rules, actions, and connectors.
+
+  Limitations:
+  Prometheus push gateway only supports content in `/api/v5/prometheus/stats?mode=node` for now.
+
+  For more API details and metric type information. Please see also in swagger api docs.
+
+- [#12329](https://github.com/emqx/emqx/pull/12329) Add `broker.routing.batch_sync` configuration that enables separate process pool used to synchronize subscriptions with the global routing table in a batched manner.
+  It's especially useful on nodes interconnected with the cluster through links with non-negligible latency, but might help in other scenarios by ensuring that the broker pool has less chance being overloaded.
+
+- [#12333](https://github.com/emqx/emqx/pull/12333) Add 'tags' field for actions and connectors
+
+  Similar to 'description' field (which is a free text annotation), 'tags' can be used to annotate actions and connectors for filtering/grouping.
+
+- [#12072](https://github.com/emqx/emqx/pull/12072) Supports async query mode for GreptimeDB data bridge. It provides better performance.
+
+
+
+- [#12194](https://github.com/emqx/emqx/pull/12194) Improve Kafka producer performance.
+
+- [#12247](https://github.com/emqx/emqx/pull/12247) The bridges for InfluxDB have been split so they are available via the connectors and actions APIs. They are still backwards compatible with the old bridge API.
+
+- [#12299](https://github.com/emqx/emqx/pull/12299) # Expose more metrics to improve observability:
+
+  Montior API:
+  - Add `retained_msg_count` field to `/api/v5/monitor_current`.
+  - Add `license_quota` field to `/api/v5/monitor_current`
+  - Add `retained_msg_count` and `node_uptime` fields to `/api/v5/monitor_current/nodes/{node}`.
+  - Add `retained_msg_count`, `license_quota` and `node_uptime` fields to `/api/v5/monitor_current/nodes/{node}`.
+
+  Prometheus API:
+  - Add `emqx_cert_expiry_at` and `emqx_license_expiry_at` to `/api/v5/prometheus/stats` to display TLS listener certificate expiration time and license expiration time.
+  - Add `/api/v5/prometheus/auth` endpoint to provide metrics such as execution count and running status for all authenticatiors and authorizators.
+  - Add `/api/v5/prometheus/data_integration` endpoint to provide metrics such as execution count and status for all rules, actions, and connectors.
+
+  Limitations:
+  Prometheus push gateway only supports the content in `/api/v5/prometheus/stats?mode=node`
+
+  For more API details and metric type information. Please see also in swagger api docs.
+
+- [#12196](https://github.com/emqx/emqx/pull/12196) Improve network efficiency during routes cleanup.
+
+  Previously, when a node node was down, a delete operation for every route to that node must have been exchanged between all other live nodes.
+  After this change, only one 'match and delete' operation is exchanged between all live nodes, meaning that much fewer packets are to be sent over inter-cluster network.
+  This optimization must be especially helpful for geo-distributed EMQX deployments, when network latency can be significantly high.
+
+- [#12354](https://github.com/emqx/emqx/pull/12354) Apply post config bridge changes in parallel.
+  This can greatly improve the performance when multiple bridges are being changed,
+  e.g. when a backup file is being imported.
+
+### Bug Fixes
+
+- [#12232](https://github.com/emqx/emqx/pull/12232) Fixed issue where commit log info was incorrectly retained after forcefully leaving a cluster, removing unnecessary commit log data improves leave operation cleanup.
+
+- [#12243](https://github.com/emqx/emqx/pull/12243) Fixed a family of subtle race conditions that could lead to inconsistencies in the global routing state.
+
+- [#12269](https://github.com/emqx/emqx/pull/12269) Returns 400 and more detailed error messages instead of 500 when query string validation fails in the `/clients` interface.
+
+- [#12285](https://github.com/emqx/emqx/pull/12285) The CoAP gateway supports short parameter names for slight savings in datagram size.
+  For example, `clientid=bar` can be written as `c=bar`.
+
+- [#12303](https://github.com/emqx/emqx/pull/12303) Fix message indexing in retainer. Previously, clients with wildcard subscriptions could receive excess retained messages, not belonging to the topics matching the subscription.
+
+- [#12305](https://github.com/emqx/emqx/pull/12305) Eliminated passing incomplete client/connection information into `emqx_cm`. This could lead to internal inconsistency and affect memory consumption and some processes like node evacuation.
+
+- [#12306](https://github.com/emqx/emqx/pull/12306) Fixed an issue that prevented probing a bridge from working after changing the password in the HTTP API request.
+
+- [#12359](https://github.com/emqx/emqx/pull/12359) Fixed an issue that could lead to error messages when restarting a node configured with some types of data bridges.  Said bridges could also start in a failed state, requiring manual restart.
+
+- [#12282](https://github.com/emqx/emqx/pull/12282) Improved HTTP API error message when the creation of a MySQL bridge fails.
+
+  Fixed an issue that prevented removing a MySQL bridge when its SQL contained undefined columns.
+
+- [#12291](https://github.com/emqx/emqx/pull/12291) Fix inconsistency in how EMQX handles configuration updates where sensitive parameters are involved, which led to occurrences of stray `"******"` strings in the cluster configuration file.
+
+- [#12292](https://github.com/emqx/emqx/pull/12292) Fixed a crash when listing bridges via `GET /bridges` when a Syskeeper Forwarder bridge exists.
+
+- [#12301](https://github.com/emqx/emqx/pull/12301) Fixed issue where using line protocol to write numeric literals into InfluxDB, but the stored values end up being of string type.
+
+- [#12317](https://github.com/emqx/emqx/pull/12317) Removed the `resource_opts.batch_size` field from the MongoDB Action schema, as it's still not supported.
+
+
 ## 5.4.1
 
 *Release Date: 2024-01-09*
