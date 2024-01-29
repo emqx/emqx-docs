@@ -85,7 +85,7 @@ The following steps assume that you run both EMQX and Redis on the local machine
    - **Password**: Enter `public`.
    - **Database ID**: Enter `0`.
    - Configure the other options according to your business needs.
-   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../overview.md/#tls-for-external-resource-access).
+   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
 8. Before clicking **Create**, you can click **Test Connectivity** to test if the Connector can connect to the Redis server.
 9. Click the **Create** button at the bottom to complete the creation of the Connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Redis. For detailed steps, see [Create a Rule and Redis Sink](#create-a-rule-and-redis-sink).
 
