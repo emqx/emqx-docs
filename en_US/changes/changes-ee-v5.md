@@ -88,6 +88,11 @@
   
 - [#12354](https://github.com/emqx/emqx/pull/12354) Applied post-config bridge changes in parallel. This can greatly improve the performance when multiple bridges are being changed, for example, when a backup file is being imported.
 
+- [#12396](https://github.com/emqx/emqx/pull/12396) Enhanced the `authentication/:id/import_users` interface for a more user-friendly user import feature:
+
+  - Add new parameter `?type=plain` to support importing users with plaintext passwords in addition to the current solution which only supports password hash.
+  - Support `content-type: application/json` to accept HTTP Body in JSON format in extension to the current solution which only supports `multipart/form-data` for csv format.
+
 ### Bug Fixes
 
 - [#12232](https://github.com/emqx/emqx/pull/12232) Fixed an issue when cluster commit log table was not deleted after a node was forced to leave a cluster.
@@ -106,11 +111,13 @@
 
 - [#12359](https://github.com/emqx/emqx/pull/12359) Fixed an issue causing error messages when restarting a node configured with some types of data bridges.  Additionally, these bridges were at risk of entering a failed state upon node restart, requiring a manual restart to restore functionality.
 
+- [#12404](https://github.com/emqx/emqx/pull/12404) Fixed an issue where restarting a busy data integration could lead to data integration metrics to stop being collected.
+
 - [#12282](https://github.com/emqx/emqx/pull/12282) Improved the HTTP API error response for MySQL bridge creation failures. It also resolved a problem with removing MySQL bridges containing undefined columns in their SQL.
 
 - [#12291](https://github.com/emqx/emqx/pull/12291) Fixed inconsistencies in EMQX’s handling of configuration updates involving sensitive parameters, which previously led to stray `"******"` strings in cluster configuration files.
 
-- [#12292](https://github.com/emqx/emqx/pull/12292) Fixed a crash in the `GET /bridges` API when creating a Syskeeper Forwarder connector and action.
+- [#11902](https://github.com/emqx/emqx/pull/11902) Integrated Nari Syskeeper 2000 as a new bridge backend.
 
 - [#12301](https://github.com/emqx/emqx/pull/12301) Fixed an issue with the line protocol in InfluxDB, where numeric literals were being stored as string types.
 
