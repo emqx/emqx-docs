@@ -26,10 +26,10 @@ The process of the authorization check is as follows:
 
 1. If EMQX successfully retrieves the client's permission information, it matches the client's operation to the retrieved permission list.
    - If they match, EMQX allows or denies the operation based on permission setting.
-   - If they do not match, EMQX switches to the next authenticator to continue the process.
+   - If they do not match, EMQX switches to the next authorizer to continue the process.
 
 2. If EMQX fails to retrieve the client's permission information, it checks if there are any other authorizers configured.
-   - If yes, EMQX switches to the next authenticator to continue the process.
+   - If yes, EMQX switches to the next authorizer to continue the process.
    - If it is already the last authorizer, EMQX follows the setting of `no_match` to determine whether to allow or reject the client operation.
 
 ::: tip Warning
