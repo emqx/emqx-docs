@@ -72,7 +72,7 @@ EMQX supports pushing metrics to Pushgateway, which is disabled by default. To e
 
 ::: tip 
 
-Currently, pushing metrics to Pushgateway only includes the content from the `/api/v5/stats` endpoint. 
+Currently, pushing metrics to Pushgateway only includes the content from the `/api/v5/prometheus/stats` endpoint. 
 
 :::
 
