@@ -30,7 +30,7 @@ EMQX 提供以下 REST API 供 Prometheus 采集系统指标：
 
 - `/api/v5/prometheus/data_integration`：包含规则引擎，连接器，动作，Sink/Source，编解码相关指标及计数器。
 
-在调用以上的 API 来获取指标时，我们可以使用 URL `mode` 查询参数来获取不同模式的指标数据。不同参数的含义如下：
+在调用以上的 API 来获取指标时，我们可以使用 URL 查询参数 `mode` 来获取不同模式的指标数据。不同参数的含义如下：
 
 
 :::: tabs type:card
