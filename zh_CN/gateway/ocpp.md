@@ -114,7 +114,8 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/ocpp' \
        "currentTime": "2023-12-01T14:20:39+00:00",
        "interval": 300,
        "status": "Accepted"
-     }
+     },
+     "Action": "BootNotification"
    }
    ```
 5. 随后，MQTTX 将接收到 `StatusNotification` 状态报告。这表明 OCPP 客户端已成功与 OCPP 网关建立连接。
