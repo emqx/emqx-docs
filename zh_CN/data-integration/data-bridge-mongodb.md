@@ -18,7 +18,7 @@ MongoDB 数据集成是 EMQX 中的开箱即用功能，旨在弥合基于 MQTT 
 
 <img src="./assets/mongdb_bridge_architecture.png" alt="mongdb_bridge_architecture" style="zoom:67%;" />
 
-将 MQTT 数据导入 MongoDB 的过程如下：
+将 MQTT 数据写入 MongoDB 的过程如下：
 
 1. **消息发布和接收**：无论是连接车辆、工业物联网系统还是能源管理平台的一部分，物联网设备都通过 MQTT 协议成功连接到 EMQX，并向特定主题发布 MQTT 消息。当 EMQX 收到这些消息时，它启动其规则引擎中的匹配过程。
 2. **消息数据处理**：消息到达后，经过规则引擎处理，然后由 EMQX 中定义的规则处理。基于预定义标准的规则确定哪些消息需要路由到 MongoDB。如果任何规则指定了有效载荷转换，则应用这些转换，例如转换数据格式、过滤特定信息或使用额外上下文丰富有效载荷。
@@ -156,7 +156,7 @@ db.createCollection('emqx_messages')
 
 本节演示如何创建一个连接器，将 MongoDB Sink 连接到 MongoDB 服务器。
 
-以下步骤假设您在本地机器上同时运行 EMQX 和 MongoDB。如果您的 MongDB 和 EMQX 运行在远程，请相应调整设置。
+以下步骤假设您在本地机器上同时运行 EMQX 和 MongoDB。如果您的 MongDB 部署在其他地方，请相应调整设置。
 
 1. 进入 Dashboard，点击**集成** -> **连接器**。
 2. 点击页面右上角的**创建**。
@@ -178,7 +178,7 @@ db.createCollection('emqx_messages')
 7. 在点击**创建**之前，您可以点击**测试连接**来测试连接器是否能连接到 MongoDB 服务器。
 8. 点击底部的**创建**按钮完成连接器的创建。在弹出的对话框中，您可以点击**返回连接器列表**或点击**创建规则**继续创建规则和 Sink 以指定转发到 MongoDB 的数据。具体步骤请参见[创建规则和 MongoDB Sink](#创建规则和-mongodb-sink)。
 
-## 创建规则和 MongoDB Sink
+## 创建 MongoDB Sink 规则
 
 本节演示了如何在 EMQX 中创建规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的结果发送到 MongoDB。
 

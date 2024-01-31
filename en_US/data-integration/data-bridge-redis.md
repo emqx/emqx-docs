@@ -72,7 +72,7 @@ Now you have successfully installed Redis and verified the installation with the
 
 This section demonstrates how to create a Connector to connect the Redis Sink to the Redis Server.
 
-The following steps assume that you run both EMQX and Redis on the local machine. If you have MongDB and EMQX running remotely, adjust the settings accordingly.
+The following steps assume that you run both EMQX and Redis on the local machine. If your Redis is deployed elsewhere, adjust the settings accordingly.
 
 1. Enter the Dashboard and click **Integration** -> **Connectors**.
 2. Click **Create** in the top right corner of the page.
@@ -172,7 +172,9 @@ You have now successfully created a rule for the Redis Sink. You can see the new
 
 You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to Redis after parsing by rule `my_rule`.
 
-### Test the Rule
+<!-- TODO 5.5 少了一个规则 -->
+
+## Test the Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger a message caching event. If topic  `t/1`  does not have any subscribers, the message will be discarded and trigger the message discard rule.
 
