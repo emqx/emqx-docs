@@ -210,7 +210,7 @@ When editing the SQL template, you can use the batch setting feature to import f
    - **Char Value**: Used to specify whether the field is a character type, to add quotes to the field when generating SQL upon import. If the field is a character type, fill in `TRUE` or `1`; otherwise, fill in `FALSE` or `0`.
    - **Remarks**: Used only for notes within the CSV file, cannot be imported into EMQX.
 
-   Please note, the data in the CSV file for batch setting should not exceed 2048 rows.
+   Note that the data in the CSV file for batch setting should not exceed 2048 rows.
 
 3. Save the filled template file and upload it to the **Import Batch Setting** popup, then click **Import** to complete the batch setting.
 
