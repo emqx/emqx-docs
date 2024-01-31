@@ -115,7 +115,8 @@ Take [ocpp-go](https://github.com/lorenzodonini/ocpp-go) as a practical example.
        "currentTime": "2023-12-01T14:20:39+00:00",
        "interval": 300,
        "status": "Accepted"
-     }
+     },
+     "Action": "BootNotification"
    }
    ```
 
