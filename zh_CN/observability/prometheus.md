@@ -69,7 +69,7 @@ EMQX 提供以下 API 端点供 Prometheus 采集系统指标：
 EMQX 支持向 Pushgateway 推送指标，此功能默认为关闭状态。如需启用 Pushgateway 服务，您可以在 Dashboard 中的 Prometheus 配置页面上打开**启用 Pushgateway** 按钮。
 
 :::tip
-向 Pushgateway 推送指标，目前仅包含 `/api/v5/stats` 端点的内容。
+向 Pushgateway 推送指标，目前仅包含 `/api/v5/prometheus/stats` 端点的内容。
 :::
 
 <img src="./assets/config_pushgateway.png" alt="config_pushgateway" style="zoom:67%;" />
