@@ -164,7 +164,7 @@ When setting data formats via JSON, you can use the batch setting feature to imp
    - **Value**: Field value, supports constants or placeholders, can append type identifiers according to the line protocol.
    - **Remarks**: Used only for notes within the CSV file, cannot be imported into EMQX.
 
-   Please note, the data in the CSV file for batch setting should not exceed 2048 rows.
+   Note that the data in the CSV file for batch setting should not exceed 2048 rows.
 
 3. Save the filled template file and upload it to the **Import Batch Setting** popup, then click **Import** to complete the batch setting.
 4. After importing, you can further adjust the key-value pairs of fields in the **Fields** setting table.
