@@ -131,7 +131,7 @@ This section describes the preparations you need to complete before you start to
 
 You can use the following commands to install MongoDB via Docker, run the docker image, and create a user.
 
-```
+```bash
 #  To start the MongoDB docker image and set the password as public
 docker run -d --name mongodb -p 27017:27017 mongo
 
@@ -151,7 +151,7 @@ db.createUser({ user: "admin", pwd: "public", roles: [ { role: "root", db: "admi
 
 You can use the following command to create a database and collection in MongoDB.
 
-```
+```bash
 # Create database emqx_data
 use emqx_data
 
@@ -163,7 +163,7 @@ db.createCollection('emqx_messages')
 
 This section demonstrates how to create a Connector to connect the MongoDB Sink to the MongoDB Server.
 
-The following steps assume that you run both EMQX and MongoDB on the local machine. If you have MongDB and EMQX running remotely, adjust the settings accordingly.
+The following steps assume that you run both EMQX and MongoDB on the local machine. If your MongDB is deployed elsewhere, adjust the settings accordingly.
 
 1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
 2. Click **Create** in the top right corner of the page.
@@ -187,7 +187,7 @@ The following steps assume that you run both EMQX and MongoDB on the local machi
 7. Before clicking **Create**, you can click **Test Connectivity** to test if the Connector can connect to the MongoDB server.
 8. Click the **Create** button at the bottom to complete the creation of the Connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to MongoDB. For detailed steps, see [Create a Rule and MongoDB Sink](#create-a-rule-and-mongodb-sink).
 
-## Create a Rule and MongoDB Sink
+## Create a Rule for MongoDB Sink
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
