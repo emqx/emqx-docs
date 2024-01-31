@@ -22,6 +22,6 @@ Where, <!--did not add the dashboard UI as it seems that most configurations lis
 
 To customize the settings via Dashboard, click **Access Control** -> **Blacklist** on the left navigation menu of the Dashboard. Once you configured these items with Dashboard, your settings will override the same configuration items in `emqx.conf`.
 
-EMQX has offered more configuration items to better serve customized needs, you can continue to read [Configuration Manual](./configuration-manual.html).
+EMQX has offered more configuration items to serve customized needs better. For details, you can continue to read [Configuration Manual](https://docs.emqx.com/en/enterprise/v${EE_VERSION}/hocon/).
 
 :::
