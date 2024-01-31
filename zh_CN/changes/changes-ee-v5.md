@@ -87,6 +87,14 @@
 
 - [#12354](https://github.com/emqx/emqx/pull/12354) 应用了并行处理配置后的桥接更改。这可以在更改多个桥接时大大提高性能，例如在导入备份文件时。
 
+- [#12396](https://github.com/emqx/emqx/pull/12396) 增强了 `authentication/:id/import_users` 接口中的用户导入功能：
+
+  - 新增 `?type=plain` 参数，用于更方便地导入使用明文密码的用户，补充现有的仅支持密码哈希的功能。
+  - 增强了对 `content-type: application/json` 的支持，允许以 JSON 格式提交 HTTP Body。这扩展了当前仅支持 `multipart/form-data` 用于 CSV 文件的功能。
+
+
+- [#11902](https://github.com/emqx/emqx/pull/11902) 新增支持 Nari Syskeeper 2000 数据集成。
+
 ### 修复
 
 - [#12232](https://github.com/emqx/emqx/pull/12232) 修复了节点被强制离开集群后集群提交日志表未被删除的问题。
@@ -97,6 +105,7 @@
 - [#12305](https://github.com/emqx/emqx/pull/12305) 修正了将不完整的客户端/连接信息传递到 `emqx_cm` 的问题，这可能导致内部不一致，并影响内存使用和节点疏散等操作。
 - [#12306](https://github.com/emqx/emqx/pull/12306) 修复了通过 HTTP API 更新密码后，连接器的连接测试无法正常工作的问题。
 - [#12359](https://github.com/emqx/emqx/pull/12359) 修复了配置有某些类型数据桥接的节点重启时可能出现的错误消息问题。此外，这些桥接在节点重启时有进入失败状态的风险，需要手动重启以恢复功能。
+- [#12404](https://github.com/emqx/emqx/pull/12404) 修复了一个问题，即在消息流量较大的情况下重启数据集成可能导致数据集成指标的收集停止。
 - [#12282](https://github.com/emqx/emqx/pull/12282) 改善了 MySQL 桥接创建失败时 HTTP API 的错误响应。同时解决了在 SQL 中包含未定义列的 MySQL 桥接无法删除的问题。
 - [#12291](https://github.com/emqx/emqx/pull/12291) 修复了 EMQX 在处理涉及敏感参数的配置更新时的不一致性，这以前导致集群配置文件中出现了错误的 `"******"` 字符串。
 - [#12292](https://github.com/emqx/emqx/pull/12292) 修复了创建 Syskeeper Forwarder 连接器和动作时 `GET /bridges` API 崩溃的问题。
