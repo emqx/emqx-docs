@@ -115,7 +115,7 @@ EMQX 支持向 Pushgateway 推送指标，再由 Prometheus 从 Pushgateway 采�
 - **请求头**：输入推送到 Pushgateway 的监控指标的 HTTP 头的键和值。您可以通过点击**添加**按钮添加请求头列表。类型为字符串，例如，{ Authorization = "some-authz-tokens"}。
 
 :::tip 提示
-Push 模式目前仅包含 EMQX 的基础指标及计数器，因此更推荐使用 Push 模式。
+Push 模式目前仅包含 EMQX 的基础指标及计数器，因此更推荐使用 Pull 模式。
 :::
 
 同时，您可以点击**帮助**按钮，参考**使用 Pushgateway** 标签页上的步骤进行配置。
