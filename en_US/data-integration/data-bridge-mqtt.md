@@ -1,162 +1,90 @@
 # Bridge MQTT Data into MQTT Broker
 
-The MQTT data integration is a channel for EMQX to communicate with other MQTT services, including EMQX clusters that use the MQTT protocol. This page introduces how the MQTT broker data integration works in EMQX and provides a quick start tutorial on creating an MQTT broker Sink/Source in EMQX Dashboard or using the configuration file.
+MQTT Broker data integration provides EMQX with functionality to connect to another EMQX cluster or another MQTT service for message bridge, enabling cross-network, cross-service data interaction and communication. This page introduces the working principle of the MQTT message bridge in EMQX and offers practical guidance on creating and verifying message bridges.
 
-## How MQTT Broker Data Integration Works
+## How It Works
 
-EMQX supports the MQTT data integration that works in two primary modes: ingress (Source) and egress (Sink). The following sections explain how each mode works. Also, this section introduces the concept of connection pools used in both modes.
+During bridging, EMQX establishes an MQTT connection with the target service as a client, achieving bidirectional message transmission through the publish-subscribe model:
 
-The diagram below illustrates a typical architecture of data integration between EMQX and other MQTT services:
+- Outgoing Messages (Sink): Publishes messages from local topics to specified topics on the remote MQTT service.
+- Incoming Messages (Source): Subscribes to topics on the remote MQTT service and forwards their messages to EMQX locally.
+
+EMQX supports configuring multiple bridging rules on the same connection, each with different topic mappings and message transformation rules, implementing a function similar to message routing. During bridging, you can also process messages through the Rule Engine to filter, enrich, and transform messages before forwarding.
+
+The diagram below shows a typical architecture of data integration between EMQX and other MQTT services:
 
 ![EMQX Integration MQTT](./assets/emqx-integration-mqtt.png)
 
-### Ingress (Source) Mode
-
-In ingress (Source) mode, the local EMQX subscribes to the topics from the remote MQTT brokers and distributes the received messages within the current cluster. Below is the message flow in the **ingress** direction:
-
-<img src="./assets/bridge_igress.png" alt="bridge_igress" style="zoom:50%;" />
-
-The MQTT broker Source can be used either alone or in conjunction with rules for more powerful and flexible data processing capabilities. In **ingress** direction, the Source can be used as the data source of the rule. The message flow for MQTT broker Source working with rules is as follows:
-
-<img src="./assets/bridge_igress_rule_link.png" alt="bridge_igress_rule_link" style="zoom:50%;" />
-
-### Egress (Sink) Mode
-
-In egress mode, the local EMQX forwards messages from the current cluster to the remote MQTT brokers following the rule settings. This is the message flow in the **egress** direction:
-
-<img src="./assets/bridge_egerss.png" alt="bridge_egerss" style="zoom:50%;" />
-
-Similar to the ingress mode, the MQTT broker Sink can also be used in conjunction with rules. In the **egress** direction, the Sink can be used as the action of the rule:
-
-<img src="./assets/bridge_egress_rule.png" alt="bridge_egress_rule" style="zoom: 50%;" />
-
-### Connection Pool
-
-EMQX allows more than one client to connect to the MQTT broker Sink/Source at the same time. When creating the data bridge, you can set a pool of MQTT client connections and configure the pool size indicating the number of the client connections in the pool. Enabling connection pool allows for efficient utilization of server resources, leading to greater message throughput.
-
-Because the MQTT protocol requires that a client connecting to the broker must have its own unique Client ID, EMQX automatically generates the Client ID for each client in the connection pool following the pattern below:
-
-```bash
-[${ClientIDPrefix}:]${BridgeName}:${Mode}:${NodeName}:${N}
-```
-
-| Fragment            | Description                                                  |
-| ------------------- | ------------------------------------------------------------ |
-| `${ClientIDPrefix}` | Prefix of the client ID as configured. If not set then whole first fragment is omitted. |
-| `${BridgeName}`     | User-provided name of the bridge.                            |
-| `${Mode}`           | Either `ingress` or `egress`.                                |
-| `${NodeName}`       | [Name of the node](../configuration/cluster.md#node-names) on which the MQTT client is running. |
-| `${N}`              | Number from `1` to the configured size of the connection pool. |
-
-#### Use Connection Pool in Ingress Mode
-
-Although the connection pool applies to both ingress and egress modes, using the connection pool in ingress mode should consider a few caveats. When you have EMQX [cluster](../deploy/cluster/introduction.md) with more than 1 node, and configure an ingress MQTT bridge to subscribe non-shared topics from the remote broker, clients in the connection pool will receive duplicated messages if they all subscribe to the same topic. In that case, it will bring pressure to the brokers, so it is strongly advised to use [shared subscription](../messaging/mqtt-shared-subscription.md) as a kind of safety measure. For example, you can configure the topic of the remote MQTT Broker to `$share/name1/topic1` or `$share/name2/topic2/#` if topic filter is used. In non-shared subscription cases, the MQTT client connection pool will be downscaled to one client, which means only one client will be started.
-
 ## Features and Benefits
 
-The MQTT broker data integration has the following features and benefits:
+The MQTT Broker data integration has the following features and benefits:
 
-- **Extensive Compatibility**: The MQTT broker data integration uses the standard MQTT protocol, allowing it to bridge to various IoT platforms, including AWS IoT Core, Azure IoT Hubs, and also supports open-source or other industry MQTT brokers and IoT platforms. This enables seamless integration and communication with a variety of devices and platforms.
+- **Extensive Compatibility**: It uses the standard MQTT protocol, allowing it to bridge to various IoT platforms, including AWS IoT Core, Azure IoT Hubs, and also supports open-source or other industry MQTT brokers and IoT platforms. This enables seamless integration and communication with a variety of devices and platforms.
 - **Bidirectional Data Flow**: It supports bidirectional data flow, enabling the publishing of messages from EMQX locally to remote MQTT services, and also subscribing to messages from MQTT services and publishing them locally. This bidirectional communication capability makes data transfer between different systems more flexible and controllable.
 - **Flexible Topic Mapping**: Based on the MQTT publish-subscribe model, the MQTT broker data integration implements flexible topic mapping. It supports adding prefixes to topics and dynamically constructing topics using the client's contextual information (such as client ID, username, etc.). This flexibility allows for customized processing and routing of messages according to specific needs.
-- **High Performance**: The MQTT broker Sink offers performance optimization features, such as connection pools and shared subscriptions, to reduce the load on individual bridge clients, achieving lower bridge latency and higher bridge message throughput. Through these optimization measures, the overall system performance and scalability can be enhanced.
-- **Payload Transformation**: The MQTT broker Sink allows for the processing of message payloads by defining SQL rules. This means that during message transmission, operations such as data extraction, filtering, enrichment, and transformation can be performed on the payload. For example, real-time metrics can be extracted from the payload and transformed and processed before the message is delivered to remote MQTT Broker.
-- **Metrics Monitoring**: The runtime metrics monitoring is provided for each Sink/Source. It allows viewing of total message count, success/failure counts, current rates, etc., helping users to monitor and assess the performance and health of the Sink/Source in real time.
+- **High Performance**: It offers performance optimization options like connection pooling and shared subscriptions to reduce the load on individual bridging clients, achieving lower bridging latency and higher message throughput. These optimization measures enhance the overall system performance and scalability.
+- **Payload Transformation**: It allows for the processing of message payloads by defining SQL rules. This means that during message transmission, operations such as data extraction, filtering, enrichment, and transformation can be performed on the payload. For example, real-time metrics can be extracted from the payload and transformed and processed before the message is delivered to the remote MQTT Broker.
+- **Metrics Monitoring**: The runtime metrics monitoring is provided for each Sink/Source. It allows viewing of total message count, success/failure counts, current rates, etc., helping users to monitor and assess the performance and health of the Sink/Source in real-time.
 
-## Before You Start
+## Prepare MQTT Connection Information
+
+::: tip Prerequisites
 
 Make sure you know the following:
 
-- EMQX data integration [rules](./rules.md)
+- [Rule Engine](./rules.md)
 - [Data Integration](./data-bridges.md)
 
-## Create MQTT Broker Connector
+:::
 
-This section uses EMQX [public MQTT broker](https://www.emqx.com/en/mqtt/public-mqtt5-broker) as an example to demonstrate how to configure a connection between EMQX and this public MQTT broker in the Dashboard.
+Before creating an MQTT Broker data integration, you need to obtain the connection information for the remote MQTT service, including:
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
+- **MQTT Service Address**: The address and port of the target MQTT service, for example, `broker.emqx.io:1883`.
+- **Username**: The username required for the connection. If the target service does not require authentication, this can be left blank.
+- **Password**: The password required for the connection. If the target service does not require authentication, this can also be left blank.
+- **Protocol Type**: It is important to determine whether the target service has enabled TLS and whether it is using MQTT over TCP/TLS protocol. Note that the EMQX MQTT bridge currently does not support protocols like MQTT over WebSocket and MQTT over QUIC.
+- **Protocol Version**: The protocol version used by the target MQTT service. EMQX supports MQTT 3.1, 3.1.1, and MQTT 5.0.
 
-2. Click **Create** in the top right corner of the page.
+The data integration provides good compatibility and support for EMQX or other standard MQTT servers. If you need to connect to other types of MQTT services, you can refer to their relevant documentation to obtain the connection information. Generally, most IoT platforms provide standard MQTT access methods, and you can convert device information into the aforementioned MQTT connection information based on their guidance.
 
-3. In the **Create Connector** page, click to select **MQTT Broker**, and then click **Next**.
+:::tip Note 
 
-4. Enter a name for the Connector. The name should be a combination of upper/lower case letters or numbers, for example, `my_mqtt_bridge`.
+When EMQX is running in cluster mode or when a connection pool is enabled, using the same client ID to connect multiple nodes to the same MQTT service usually leads to device conflicts. Therefore, the MQTT message bridge currently does not support setting a fixed client ID. 
 
-5. Enter the connection information. Enter `broker.emqx.io:1883` for **MQTT Broker**. As no authentication is required from the server side, you can leave the **Username** and **Password** blank. For the other fields in this section, you can keep the default value or set it as the actual condition.
+:::
 
-6. Configure the **Ingress** or **Egress** field.
+## Create a Connector
 
-   :::tip
-   You can choose to configure either the **Ingress** or **Egress** field or both fields, but at least one field should be set up. Turn on the toggle switch of the corresponding field to start the configuration.
-   :::
+This section guides you on how to configure a connection with a remote MQTT server, using EMQX's [online MQTT server](https://www.emqx.com/en/mqtt/public-mqtt5-broker) as an example.
 
-   - **Ingress** (optional): You can configure the following for forwarding the messages received from `remote/topic/ingress` topic to the local MQTT Broker:
-     
-     - **Topic**: In cluster mode, you can use the shared subscription to avoid repeated messages, therefore you can fill in `$share/g/remote/topic/ingress`.
-     - **QoS**: Select `0`.
-     
-     - **Connection Pool Size**: Specifies the size of the pool of MQTT client connections to the local broker. In this example, you can set `8`. This is safe as long as shared subscription is used for the remote topic.
-     
-     Messages subscribed to can be processed subsequently through the rule engine, such as forwarding messages to clients on EMQX nodes. The following fields can be obtained in the rules:
-     
-     | Field Name                    | Description                                                  |
-     | ----------------------------- | ------------------------------------------------------------ |
-     | topic                         | The topic of the source message                              |
-     | server                        | The server address to which the Source is connected          |
-     | retain                        | Whether to be published as a retain the message, with a value of false |
-     | qos                           | Message Quality of Service                                   |
-     | pub_props                     | MQTT 5.0 message properties object, including user property pairs, user properties, and other properties |
-     | pub_props.User-Property-Pairs | Array of user property pairs, each containing key-value pairs, for example, `{"key":"foo", "value":"bar"}` |
-     | pub_props.User-Property       | User property object, containing key-value pairs, for example, `{"foo":"bar"}` |
-     | pub_props.*                   | Other message property key-value pairs, for example, `Content-Type: JSON` |
-     | payload                       | Message content                                              |
-     | message_received_at           | Message received timestamp in milliseconds                   |
-     | id                            | Message ID                                                   |
-     | dup                           | Whether it is a duplicate message                            |
-     
-     For example, when the message template is left blank, the following message will be published:
-     
-     ```json
-     {
-       "topic": "f/1",
-       "server": "broker.emqx.io:1883",
-       "retain": false,
-       "qos": 0,
-       "pub_props": {
-           "User-Property-Pairs": [
-               {
-                   "value": "bar",
-                   "key": "foo"
-               }
-           ],
-           "User-Property": {
-               "foo": "bar"
-           },
-           "Message-Expiry-Interval": 3600,
-           "Content-Type": "JSON"
-       },
-       "payload": "Hello MQTTX CLI",
-       "message_received_at": 1699603701552,
-       "id": "000609C7D2E3D556F445000010E4000C",
-       "dup": false
-     }
-     ```
-     
-   - **Egress** (optional): Publish messages from specific local MQTT topics to remote MQTT brokers, which can be understood as the reverse data flow of an ingress configuration. If you want to forward messages to the `remote/topic/egress` topic of a remote MQTT service, the configuration can be done as follows
+1. Go to the **Integration** -> **Connector** page on the Dashboard.
+2. Click **Create** at the top right corner of the page.
+3. Select **MQTT Broker** from the list of connector types and click **Next**.
+4. Enter a **name** for the connector, which must be a combination of upper/lower case letters and numbers, for example, `my_mqtt_bridge`.
+5. Configure the connection information:
+   - **MQTT Broker**: Only supports MQTT over TCP/TLS. Set this to `broker.emqx.io:1883`.
+   - **ClientID Prefix**: This can be left blank. In actual use, specifying a client ID prefix can facilitate client management. EMQX will automatically generate client IDs based on the client ID prefix and the size of the connection pool.
+   - **Username** and **Password**: These can be left blank, as authentication is not required for this server.
 
-       - **Topic**: Enter `remote/topic/egress`.
-       - **QoS**: Select `0` or `${qos}` (to use the QoS of the received messages).
-       - **Retain**: Confirm whether the message will be published as a retained message.
-       - **Payload**: Payload template for the messages to be forwarded, and Supports reading data using `${field}` syntax.
-       - **MQTT Client Pool Size**: Specifies the size of the pool of MQTT client connections to the local broker. In this example, you can set `8`.
-   
-7. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
+Leave the other configurations as default and click the **Create** button to complete the creation of the Connector. The Connector can be used for both Sink and Source. Next, you can create data bridge rules based on this Connector.
 
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the bridge can connect to the MQTT broker.
+### Connection Pool and Client ID Generation Rules
 
-9. Click the **Create** button. In the pop-up dialogue, you can click **Back to Connector List** to complete the creation of the MQTT Broker Connector or click **Create Rule** to enter the rule creation process.
+EMQX enables multiple clients to simultaneously connect to the bridged MQTT service. When creating a Connector, you can set up an MQTT client connection pool and configure its size to indicate the number of client connections in the pool. The connection pool maximizes server resources for greater message throughput and better concurrent performance, which is crucial for handling high-load, high-concurrency scenarios.
 
-## Create Rule for MQTT Broker Sink
+As the MQTT protocol requires clients connected to an MQTT server to have a unique client ID, and since EMQX can be deployed in a cluster, each client in MQTT bridging is assigned a unique client ID. EMQX automatically generates client IDs according to the following pattern:
+
+```bash
+[Client ID Prefix]:{Connector Name}{8-digit Random String}:{Connection Sequence Number in the Pool}
+```
+
+For example, if the client ID prefix is `myprefix` and the Connector name is `foo`, an actual client ID might be:
+
+```bash
+myprefix:foo2bd61c44:1
+```
+
+## Create a Rule for MQTT Broker Sink
 
 This section demonstrates how to create a rule for specifying data to be forwarded to a remote MQTT service.
 
@@ -175,38 +103,160 @@ This section demonstrates how to create a rule for specifying data to be forward
      "t/#"
    ```
 
-5. Add an action by selecting `MQTT Broker` from the **Action Type** dropdown list, and select the Connector you created before from the **Action** dropdown. Click the **Add** button to add it to the **Action Outputs.**
+5. Add an action by selecting `MQTT Broker` from the **Action Type** dropdown list. Keep the **Action** dropdown as the default `Create Action` option. This demonstration creates a new Sink and adds it to the rule.
 
-6. Back on the Create Rule page, click the **Create** button at the bottom to complete the rule creation.
+6. Enter the name and description for the Sink in the form below.
+
+7. Select the `my_mqtt_bridge` connector you just created from the **Connector** dropdown. You can also create a new connector by clicking the create button next to the dropdown, using the configuration parameters in [Create a Connector](#create-a-connector).
+
+8. Configure the Sink information for publishing messages from EMQX to the external MQTT service:
+
+   - **Topic**: The topic to publish to the external MQTT service, supporting `${var}` placeholders. Enter `pub/${topic}` here, meaning the original topic will be prefixed with `pub/` for forwarding. For example, if the original message topic is `t/1`, the topic forwarded to the external MQTT service will be `pub/t/1`.
+   - **QoS**: The QoS for message publishing. Select from the dropdown options: `0`, `1`, `2`, or `${qos}`, or enter a placeholder to set QoS from another field. Here, select `${qos}` to follow the QoS of the original message.
+   - **Retain**: Select `true`, `false`, or `${falgs.retain}` to decide whether to publish the message as retained, or enter a placeholder to set the retain flag from other fields. Here, select `${falgs.retain}` to follow the retain flag of the original message.
+   - **Payload**: The template used to generate the payload for the forwarded message. Leave blank by default, which means forwarding the rule output result. Here, you can enter `${payload}` to forward only the payload.
+
+9. Use default values for other configurations and click the **Create** button to complete the creation of the Sink. Once created, you will be directed back to the Create Rule page, and the new Sink will be added to the Action Outputs of the rule.
+
+10. On the Create Rule page, click the **Create** button at the bottom to complete the rule creation.
 
 You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new MQTT Broker Sink.
 
 You can also click **Integration** -> **Flow Designer** to view the topology. The topology visually represents how messages under the topic `t/#` are sent to the remote MQTT Broker after being processed by the rule `my_rule`.
 
-## Create Rule for MQTT Broker Source
+## Test the Rule with MQTT Broker Sink
 
-This section demonstrates how to create a rule to forward data from a remote MQTT service to the local system.
+You can use the [MQTTX CLI](https://mqttx.app/zh/cli) to test the Rule for bridging messages published from the `t/#` topic in EMQX to the `pub/${topic}` topic in the external MQTT service. By publishing a message to `t/1` topic in EMQX, the message should be forwarded to the `pub/t/1` topic in the external MQTT service.
+
+Testing using [MQTTX CLI](https://mqttx.app/zh/cli):
+
+1. Subscribe to the `pub/#` topic in the external MQTT Service:
+
+   ```bash
+   mqttx sub -t pub/# -q 1 -h broker.emqx.io -v
+   ```
+
+2. Publish a message to the `t/1` topic using MQTTX:
+
+   ```bash
+   mqttx pub -t t/1 -m "hello world" -r
+   ```
+
+3. You can subscribe to the `pub/t/1` topic in MQTTX to receive the message, indicating that the message has been successfully forwarded from EMQX to the external MQTT service:
+
+   ```bash
+   [2024-1-31] [16:43:13] › topic: pub/t/1
+   payload: hello world
+   ```
+
+4. Repeat Step 1, and you should see the retained message from the `pub/t/1` topic in MQTTX:
+
+   ```bash
+   [2024-1-31] [16:44:29] › topic: pub/t/1
+   payload: hello world
+   retain: true
+   ```
+
+## Create a Rule with MQTT Broker Source
+
+This section demonstrates how to create a rule for forwarding data from a remote MQTT service to the local EMQX. You need to create an MQTT Source and a message republish action to achieve a subscription from the remote MQTT service to EMQX and forward the subscribed data.
+
+### Create MQTT Broker Source and Add It to Rule
 
 1. Go to the Dashboard **Integration** -> **Rules** page.
 
-2. Click **Create** at the top right of the page.
+2. Click **Create** in the top right corner of the page.
 
-3. Enter the rule ID `my_rule`.
+3. Enter the rule ID `my_rule_source`.
 
-4. In the **SQL Editor**, enter the rule. If you want to process messages subscribed to in the MQTT Source named `my_mqtt_bridge`, enter the following statement in the **SQL Editor**:
+4. Configure the trigger source (data input) for the rule. On the right side of the page, under the **Data Inputs** tab, delete the default **Message** type input and click **Add Input** to create an MQTT Source.
 
-   Note: If you want to specify your own SQL syntax, ensure the `SELECT` part contains all fields required for the message republish action set in later steps.
+5. In the **Add Input** popup, select `MQTT Broker` from the **Input Type** dropdown, and keep the Source dropdown at the default `Create Source` option. This demonstration creates a new Source and adds it to the rule.
+
+6. Enter a name and description for the Source in the form below.
+
+7. Select the previously created `my_mqtt_bridge` Connector from the dropdown. Alternatively, you can create a new Connector by clicking the create button next to the dropdown box, using the configuration parameters in [Create a Connector](#create-a-connector).
+
+8. Configure the Source information to complete the subscription from the external MQTT service to EMQX:
+
+   - **Topic**: The subscription topic, supporting the use of `+` and `#` wildcards. 
+
+     ::: tip
+
+     When EMQX is running in cluster mode or the Connector is configured with a connection pool, shared subscriptions must be used to avoid duplicate messages.
+
+     :::
+
+     Here you can enter `$queue/f/#`, indicating a subscription to all messages matching the `f/#` topic.
+
+   - **QoS**: The subscription QoS, select `0` or `1` from the dropdown.
+
+9. Use the default settings for other configurations and click the **Create** button to complete the Source creation, adding the Source to the rule data input. You will also notice that the rule SQL has changed to:
 
    ```sql
    SELECT
      *
-   FROM `$bridges/mqtt:my_mqtt_bridge` 
+   FROM
+     "$bridges/mqtt:my_source"
    ```
-   
-5. Click the + **Add Action** button to define the action triggered by the rule. Select `Message Republish` from the dropdown list.
 
-6. In the **Topic** and **Payload** fields, you can enter the topic and payload of the message you want to republish. For example, for this demonstration, enter `t/1` and `${.}`.
+   The rule SQL can extract the following fields from the MQTT Source, and you can adjust the SQL for data processing operations. The default SQL is sufficient for this example.
 
-7. Click **Add** to include this action in the rule.
+   | Field Name                    | Description                                                  |
+   | ----------------------------- | ------------------------------------------------------------ |
+   | topic                         | Originating message topic                                    |
+   | server                        | Server address of the connected Source                       |
+   | retain                        | Whether the message is a retained message, value is false    |
+   | qos                           | Message Quality of Service                                   |
+   | pub_props                     | MQTT 5.0 message properties object, including user property pairs, user properties, and other attributes |
+   | pub_props.User-Property-Pairs | Array of user property pairs, each containing a key-value pair, e.g., `{"key":"foo", "value":"bar"}` |
+   | pub_props.User-Property       | User property object, containing a key-value pair, e.g., `{"foo":"bar"}` |
+   | pub_props.*                   | Other included message property key-value pairs, e.g., `Content-Type: JSON` |
+   | payload                       | Message content                                              |
+   | message_received_at           | Message reception timestamp, in milliseconds                 |
+   | id                            | Message ID                                                   |
+   | dup                           | Whether the message is a duplicate                           |
 
-8. Return to the **Create Rule** page and click **Create**.
+Now you have completed the creation of the MQTT Source, but the subscribed data will not be directly published to EMQX locally. Next,  you to create a message republish action to forward the messages subscribed by the Source to EMQX locally.
+
+### Create a Republish Action
+
+1. Configure the rule action by switching to the **Action Outputs** tab on the right side of the Create Rule page and clicking the **Add Action** button. Select the `Republish` action from the **Type of Action** dropdown list.
+2. Configure the following fields for message republish:
+   - **Topic**: Enter `sub/${topic}`, which means adding a `sub/` prefix to the original topic for forwarding. For example, when the original message topic is `f/1`, the topic forwarded to EMQX will be `sub/f/1`.
+   - **QoS**: Select from `0`, `1`, `2`, or `${qos}`. You can also use placeholders to set QoS from other fields. Here, select `${qos}` to follow the QoS of the original message.
+   - **Retain**: Select `true` or `false` to confirm whether to publish the message as a retained message. You can also use placeholders to set the retain flag from other fields. In this case, you can select `false`.
+     - Since the data source is MQTT Source, the `${flags.retain}` option is not applicable here.
+     - You can also enter `${retain}` to follow the retain flag of the original message, but it only works when the message is retained through the external MQTT service's retention mechanism, not when the original message is published to EMQX locally.
+   - **Payload**: Used to generate the payload of the forwarded message. Leave it blank by default to forward the rule output result. Here, you can enter `${payload}` to only forward the Payload.
+
+3. Click the **Add** button to complete the action creation. You will be directed back to the Create Rule page and the new action will be added under the **Action Outputs** tab.
+4. On the Create Rule page, click the **Create** button at the bottom to complete the rule creation.
+
+Now you have successfully created the rule. You can go to **Integration** -> **Rules** to see the newly created rule, and on the **Source** tab, you can see the newly created MQTT Source.
+
+You can also click **Integration** -> **Flow Designer** to view the topology. From the topology, you can see that the messages from MQTT Source are republished to `sub/${topic}` through the republish action.
+
+## Test the Rule with MQTT Broker Source
+
+You can use [MQTTX CLI](https://mqttx.app/zh/cli) to test the configured rule for bridging messages from the `f/#` topic in the external MQTT service to the `sub/${topic}` topic in EMQX. By publishing a message to the `f/1` topic in the external MQTT service, it should be forwarded to the `sub/f/1` topic in EMQX
+
+1. Subscribe to the EMQX `sub/#` topic:
+
+   ```bash
+   mqttx sub -t sub/# -q 1 -v
+   ```
+
+2. Use MQTTX to publish a message to the `f/1` topic in the external MQTT service:
+
+   ```bash
+   mqttx pub -t f/1 -m "I'm from broker.emqx.io" -r -h broker.emqx.io
+   ```
+
+3. You can see the message published to the `sub/f/1` topic in MQTTX, indicating that the message has been successfully forwarded from the external MQTT service to EMQX:
+
+   ```bash
+   [2024-1-31] [16:49:22] › topic: sub/f/1
+   payload: I'm from broker.emqx.io
+   ```
+
