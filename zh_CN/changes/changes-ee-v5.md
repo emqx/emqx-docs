@@ -39,7 +39,7 @@
 
 - [#12267](https://github.com/emqx/emqx/pull/12267) 为 `cluster/:node/invite` 接口增加了一个新的 `timeout` 参数，解决了默认超时问题。之前设置的 5 秒默认超时，往往会导致 HTTP API 调用超时，因为 EMQX 加入集群通常需要更多时间。
 
-  此外，EMQX 还添加了一个新的端点 `/cluster/:node/invite_async`，以支持以异步方式邀请节点加入集群，并增加了一个新的端点 `cluster/invitation` 以检查加入状态。
+  此外，EMQX 还添加了一个新的 API `/cluster/:node/invite_async`，支持以异步方式邀请节点加入集群，并通过新增的 `cluster/invitation` API 检查加入状态。
 
 - [#12272](https://github.com/emqx/emqx/pull/12272) 对 EMQX 中的 `retain` API 进行了更新：
 
