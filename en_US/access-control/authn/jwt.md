@@ -18,25 +18,25 @@ If the signature verification is successful, the JWT authenticator proceeds to c
 
 The JWT authenticator essentially only checks the signature of the JWT, which means that the JWT authenticator does not guarantee the legitimacy of the client's identity.
 
-The best practice is to deploy an independent authentication server. The client first accesses the authentication server, the authentication server verifies the identity of the client, and issues JWT for the legitimate client, and then the client uses the obtained JWT to connect to EMQX .
+The best practice is to deploy an independent authentication server. The client first accesses the authentication server, the authentication server verifies the identity of the client, and issues JWT for the legitimate client, and then the client uses the obtained JWT to connect to EMQX.
 
 :::tip
 
 Since the payload in the JWT is only Base64 encoded, anyone who gets the JWT can decode the payload to get the original information by Base64 decoding. Therefore, it is not recommended to store some sensitive data in the payload of JWT.
 
-To reduce the possibility of JWT leakage and theft, it is recommended to set a reasonable validity period and also  enables TLS to encrypt client connections.
+To reduce the possibility of JWT leakage and theft, it is recommended to set a reasonable validity period and also enables TLS to encrypt client connections.
 
 :::
 
-## Authorization List (Optional)
+## Access Control List (Optional)
 
-This is an optional function, we define a private Claim `acl` to carry the access rules of publish/subscribe in the JWT as to control the permissions of the client after login.
+The Access Control List (ACL) is an optional function to control the permissions of the client after login. A private Claim `acl` is defined to carry a list of publish and subscribe permissions in the JWT.
 
 ::: tip
-Authorization (ACL) rules returned by JWT will be checked before all Authorizers. For details, see [Authorization](../authz/authz.md).
+ACL rules returned by JWT will be checked before all Authorizers. For details, see [Authorization](../authz/authz.md).
 :::
 
-Claim `acl` defines 3 optional fields, `pub`, `sub` and `all`, which are used to specify the whitelist of publish, subscribe and publish-subscribe topics respectively. Wildcards and placeholders  (currently only `${clientid}` and `${username}` ) are allowed in topic entries.  Since there may be cases where topic content conflicts with placeholder syntax, we also provide the `eq` syntax to cancel placeholder interpolation. 
+Claim `acl` defines 3 optional fields, `pub`, `sub` and `all`, which are used to specify the whitelist of publish, subscribe, and publish-subscribe topics respectively. Wildcards and placeholders  (currently only `${clientid}` and `${username}` ) are allowed in topic entries.  Since there may be cases where topic content conflicts with placeholder syntax, we also provide the `eq` syntax to cancel placeholder interpolation. 
 
 Example:
 
@@ -64,8 +64,6 @@ Example:
 ```
 
 Where `testpub1/${username}` will be replaced with `testpub1/myuser` at runtime, and `eq testpub2/${username}` will still be processed as `testpub2/${username}` at runtime.
-
-
 
 ## Configure with Dashboard
 

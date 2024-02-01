@@ -8,7 +8,7 @@
 
 - [#12085](https://github.com/emqx/emqx/pull/12085) EMQX has been upgraded to leverage the capabilities of OTP version 26.1.2-2. 
 
-- [#12189](https://github.com/emqx/emqx/pull/12189) The JWT Access Control List (ACL) claim format in EMQX has been enhanced for greater versatility. The updated format now supports an array structure, aligning more closely with the file-based ACL rules.
+- [#12189](https://github.com/emqx/emqx/pull/12189) Enhanced the [ACL](../access-control/authn/jwt.md#access-control-list-optional) claim format in EMQX JWT authentication for greater versatility. The updated format now supports an array structure, aligning more closely with the file-based ACL rules.
 
   For example:
 
@@ -38,26 +38,26 @@
   In this new format, the absence of a matching rule does not result in an automatic denial of the action. The authorization chain can advance to other configured authorizers if a match is not found in the JWT ACL. If no match is found throughout the chain, the final decision defers to the default permission set in `authorization.no_match`.
 
 - [#12267](https://github.com/emqx/emqx/pull/12267) Added a new `timeout` parameter to the `cluster/:node/invite` interface, addressing the issue of default timeouts. 
-  Previously set at 5 seconds, the default timeout often led to delays in HTTP API calls due to the time EMQX took to join a cluster.
+  The previously set 5-second default timeout often led to HTTP API call timeouts because joining an EMQX cluster usually requires more time.
 
-  In addition, EMQX added a new endpoint `/cluster/:node/invite_async` to support an asynchronous way to invite nodes to join the cluster, and a new endpoint `cluster/invitation` to inspect the join status.
+  In addition, EMQX added a new API `/cluster/:node/invite_async` to support an asynchronous way to invite nodes to join the cluster and introduced a new `cluster/invitation` API to inspect the join status.
 
 - [#12272](https://github.com/emqx/emqx/pull/12272) Introduced updates to the `retain` API in EMQX:
 
-  - Added a new endpoint `DELETE /retainer/messages` to clean all retained messages.
-  - Added an optional topic filter in the query string for the endpoint `GET /retainer/messages`. For example, using a query string like "topic=t/1" filters the retained messages for a specific topic, improving the efficiency in message retrieval.
+  - Added a new API `DELETE /retainer/messages` to clean all retained messages.
+  - Added an optional topic filter parameter `topic` in the query string for the API `GET /retainer/messages`. For example, using a query string `topic=t/1` filters the retained messages for a specific topic, improving the efficiency of message retrieval.
 
-- [#12277](https://github.com/emqx/emqx/pull/12277) Added `mqtt/delayed/messages/:topic` endpoint to remove delayed messages by topic name.
+- [#12277](https://github.com/emqx/emqx/pull/12277) Added `mqtt/delayed/messages/:topic` API to remove delayed messages by topic name.
 
-- [#12278](https://github.com/emqx/emqx/pull/12278) In the REST API, some APIs support pagination. You can control the pagination by using the `page` (page number) and `limit` (page size) parameters. The maximum page size is `10000`.
+- [#12278](https://github.com/emqx/emqx/pull/12278) Adjusted the maximum pagination size for paginated APIs in the REST API from `3000` to `10000`.
 
-- [#12289](https://github.com/emqx/emqx/pull/12289) Introduced a new configuration option `authorization.cache.excludes` in EMQX to enhance the flexibility of ACL caching. When this configuration is set with a list of topic filters, EMQX will bypass the cache for publish or subscribe permission checks that match any listed topic or topic filter. This means that for these specific topics, the permission checks will always be performed in real-time, ensuring up-to-date authorization decisions without relying on previously cached results.
+- [#12289](https://github.com/emqx/emqx/pull/12289) Authorization caching now supports the exclusion of specific topics. For the specified list of topics and topic filters, EMQX will not generate an authorization cache. The list can be set through the `authorization.cache.excludes` configuration item or via the Dashboard. For these specific topics, permission checks will always be conducted in real-time rather than relying on previous cache results, thus ensuring the timeliness of authorization outcomes.
 
-- [#12329](https://github.com/emqx/emqx/pull/12329) Added `broker.routing.batch_sync` configuration to EMQX. It enables a dedicated process pool that synchronizes subscriptions with the global routing table in batches, reducing the frequency of cross-node communication that can be slowed down by network latency. Processing multiple subscription updates collectively, not only accelerates synchronization between replica nodes and core nodes in a cluster but also reduces the load on the broker pool, minimizing the risk of overloading.
+- [#12329](https://github.com/emqx/emqx/pull/12329) Added `broker.routing.batch_sync` configuration item to enable a dedicated process pool that synchronizes subscriptions with the global routing table in batches, thus reducing the frequency of cross-node communication that can be slowed down by network latency. Processing multiple subscription updates collectively, not only accelerates synchronization between replica nodes and core nodes in a cluster but also reduces the load on the broker pool, minimizing the risk of overloading.
 
 - [#12333](https://github.com/emqx/emqx/pull/12333) Added a `tags` field for actions and connectors. Similar to the `description` field (which is a free text annotation), `tags` can be used to annotate actions and connectors for filtering and grouping.
 
-- [#12072](https://github.com/emqx/emqx/pull/12072) Supported asynchronized query mode for GreptimeDB data integration to provide better performance.
+- [#12072](https://github.com/emqx/emqx/pull/12072) GreptimeDB data integration now supports asynchronous data write operations to provide better performance.
 
 - [#12194](https://github.com/emqx/emqx/pull/12194) Improved Kafka producer performance.
 
@@ -86,14 +86,14 @@
   Previously, when a node was down, a delete operation for each route to that node must be exchanged between all the other live nodes. After this change, only one `match and delete` operation is exchanged between all live nodes, significantly reducing the number of necessary network packets and decreasing the load on the inter-cluster network.
   This optimization must be especially helpful for geo-distributed EMQX deployments where network latency can be significantly high.
 
-- [#12354](https://github.com/emqx/emqx/pull/12354) Applied post-config bridge changes in parallel. This can greatly improve the performance when multiple bridges are being changed, for example, when a backup file is being imported.
+- [#12354](https://github.com/emqx/emqx/pull/12354) The concurrent creation and updates of data integrations are now supported, significantly increasing operation speeds, such as when importing backup files.
 
 - [#12396](https://github.com/emqx/emqx/pull/12396) Enhanced the user import feature in the `authentication/:id/import_users` Interface:
 
   - Added a new parameter `?type=plain` for easier importing of users with plaintext passwords, complementing the existing functionality that supports hashed passwords.
   - Enhanced support for `content-type: application/json`, allowing HTTP Body submissions in JSON format. This extends the current capability that exclusively supports `multipart/form-data` for CSV files.
 
-- [#11902](https://github.com/emqx/emqx/pull/11902) Supported the data integration with Nari Syskeeper 2000.
+- [#11902](https://github.com/emqx/emqx/pull/11902) Enhanced EMQX's capability to facilitate MQTT message bridging through the one-way Nari SysKeeper 2000 network isolation gateway.
 
 ### Bug Fixes
 
@@ -103,10 +103,10 @@
 - [#12285](https://github.com/emqx/emqx/pull/12285) Updated the CoAP gateway to support short parameter names for slight savings in datagram size. For example, `clientid=bar` can be written as `c=bar`.
 - [#12303](https://github.com/emqx/emqx/pull/12303) Fixed the message indexing in retainer. Previously, clients with wildcard subscriptions might receive irrelevant retained messages not matching their subscription topics.
 - [#12305](https://github.com/emqx/emqx/pull/12305) Corrected an issue with incomplete client/connection information being passed into `emqx_cm`, which could lead to internal inconsistencies and affect memory usage and operations like node evacuation.
-- [#12306](https://github.com/emqx/emqx/pull/12306) Fixed an issue preventing the connectivity test for the Connector from functioning correctly after updating the password via the HTTP API.
+- [#12306](https://github.com/emqx/emqx/pull/12306) Fixed an issue preventing the connectivity test for the Connector from functioning correctly after updating the password parameter via the HTTP API.
 - [#12359](https://github.com/emqx/emqx/pull/12359) Fixed an issue causing error messages when restarting a node configured with some types of data bridges.  Additionally, these bridges were at risk of entering a failed state upon node restart, requiring a manual restart to restore functionality.
 - [#12404](https://github.com/emqx/emqx/pull/12404) Fixed an issue where restarting a data integration with heavy message flow could lead to a stop in the collection of data integration metrics. 
-- [#12282](https://github.com/emqx/emqx/pull/12282) Improved the HTTP API error response for MySQL bridge creation failures. It also resolved a problem with removing MySQL bridges containing undefined columns in their SQL.
+- [#12282](https://github.com/emqx/emqx/pull/12282) Improved the HTTP API error response for MySQL bridge creation failures. It also resolved a problem with removing MySQL Sinks containing undefined columns in their SQL.
 - [#12291](https://github.com/emqx/emqx/pull/12291) Fixed inconsistencies in EMQX’s handling of configuration updates involving sensitive parameters, which previously led to stray `"******"` strings in cluster configuration files.
 - [#12301](https://github.com/emqx/emqx/pull/12301) Fixed an issue with the line protocol in InfluxDB, where numeric literals were being stored as string types.
 - [#12317](https://github.com/emqx/emqx/pull/12317) Removed the `resource_opts.batch_size` field from the MongoDB Action schema, as it is not yet supported.
