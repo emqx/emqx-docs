@@ -97,7 +97,7 @@ curl -X 'POST' \
 
 每条规则应包括如下信息：
 
-- `permission`：是否允许当前客户端/用户的某类操作请求；可选值：`Allow`、`Deny`。
+- `permission`：是否允许当前客户端/用户的某类操作请求；可选值：`allow`、`deny`。
 - `action`：配置该条规则对应的操作；可选值: `publish`、`subscribe`、 `all`。
 - `topic`：配置该条规则对应的主题，支持[主题占位符](authz.md#主题占位符)。
 - `qos`: (可选) 使用数字数组指定规则适用的消息 QoS，如 `[0, 1]`、`[1, 2]`。默认为全部 QoS。
