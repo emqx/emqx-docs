@@ -131,7 +131,7 @@ This section describes the preparations you need to complete before you start to
 
 You can use the following commands to install MongoDB via Docker, run the docker image, and create a user.
 
-```
+```bash
 #  To start the MongoDB docker image and set the password as public
 docker run -d --name mongodb -p 27017:27017 mongo
 
@@ -151,7 +151,7 @@ db.createUser({ user: "admin", pwd: "public", roles: [ { role: "root", db: "admi
 
 You can use the following command to create a database and collection in MongoDB.
 
-```
+```bash
 # Create database emqx_data
 use emqx_data
 
@@ -159,15 +159,43 @@ use emqx_data
 db.createCollection('emqx_messages')
 ```
 
+## Create a Connector
+
+This section demonstrates how to create a Connector to connect the MongoDB Sink to the MongoDB Server.
+
+The following steps assume that you run both EMQX and MongoDB on the local machine. If your MongDB is deployed elsewhere, adjust the settings accordingly.
+
+1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+2. Click **Create** in the top right corner of the page.
+3. On the **Create Connector** page, select **MongoDB** and then click **Next**.
+4. Enter a name for the Connector. The name should be a combination of upper/lower case letters and numbers, for example, `my_mongodb`.
+5. Configure the MongoDB server connection information. Fill in the required fields (marked with an asterisk).
+
+   - **MongoDB Mode**: Select the type of MongoDB deployment you are connecting to based on your actual deployment mode. In this demonstration, you can select `single` for example.
+     - `single`: a single standalone MongoDB instance.
+     - `rs`: Replica Set, a group of `mongod` processes that maintain the same data set.
+     - `sharded`: a sharded cluster in MongoDB.
+   - **Server Host**: Enter `127.0.0.1:27017`, or the actual URL if the MongoDB server is running remotely.
+   - **Database Name**: Enter `emqx_data`.
+   - **Username**: Enter `admin`.
+   - **Password**: Enter `public`.
+   - **Srv Record**: Disabled by default. Once enabled, it allows EMQX to use DNS SRV records to discover the MongoDB hosts it should connect to, which makes it easier to connect to replica sets or sharded clusters without having to specify each host in the connection string. 
+   - Configure the other options according to your business needs.
+   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+
+6. Advanced settings (optional):  For details, see [Advanced Configurations](#advanced-configurations).
+7. Before clicking **Create**, you can click **Test Connectivity** to test if the Connector can connect to the MongoDB server.
+8. Click the **Create** button at the bottom to complete the creation of the Connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to MongoDB. For detailed steps, see [Create a Rule and MongoDB Sink](#create-a-rule-and-mongodb-sink).
+
 ## Create a Rule for MongoDB Sink
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. If you want to save the MQTT messages under topic `t/#`  to MongoDB, you can use the SQL syntax below. 
+3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor**. If you want to save the MQTT messages under topic `t/#`  to MongoDB, you can use the SQL syntax below. 
 
-   Note: If you want to specify your own SQL syntax, ensure you have included all fields required by the Sink  in the `SELECT` part.
+   Note: If you want to specify your own SQL syntax, ensure you have included all fields required by the Sink in the `SELECT` part.
 
    ```sql
    SELECT
@@ -193,22 +221,13 @@ db.createCollection('emqx_messages')
 
 5. Select `MongoDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
 
-6. Enter a name for the Connector. The name should be a combination of upper/lower case letters and numbers.
+6. Enter a name for the Sink. The name should combine upper/lower case letters and numbers.
 
-7. Configure the MongoDB server connection information. Fill in the required fields (marked with an asterisk).
+7. Select the Connector `my_mongodb` from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-   - **MongoDB Mode**: Select the type of MongoDB deployment you are connecting to based on your actual deployment mode. In this demonstration, you can select `single` for example.
-     - `single`: a single standalone MongoDB instance.
-     - `rs`: Replica Set, a group of `mongod` processes that maintain the same data set.
-     - `sharded`: a sharded cluster in MongoDB.
-   - **Srv Record**: Disabled by default. Once enabled, it allows EMQX to use DNS SRV records to discover the MongoDB hosts it should connect to, which makes it easier to connect to replica sets or sharded clusters without having to specify each host in the connection string. 
-   - **Server Host**: Enter `127.0.0.1:27017`, or the actual URL if the MongoDB server is running remotely.
-   - **Database Name**: Enter `emqx_data`.
-   - **Collection**: Enter `emqx_messages`.
-   - Configure the other options according to your business needs.
-   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](https://docs.emqx.com/en/enterprise/v5.2/network/overview.md/#tls-for-external-resource-access).
+8. In the **Collection** field, enter the collection where the data will be stored. It supports dynamic setting through the placeholder `${var_name}`. In this example, enter `emqx_messages`.
 
-8. Configure the **Payload template** to save `clientid`, `topic`, `qos`,  `timestamp`, and `payload` to MongoDB. This template will be executed via the MongoDB insert command, and the sample code is as follows:
+9. Configure the **Payload template** to save `clientid`, `topic`, `qos`,  `timestamp`, and `payload` to MongoDB. This template will be executed via the MongoDB insert command, and the sample code is as follows:
 
    ```json
    {
@@ -228,27 +247,27 @@ db.createCollection('emqx_messages')
      - Values do not need to be wrapped, otherwise, they will be recognized as characters;
      - For timestamp, date, and time types, if no special treatment is performed, they will be recognized as numeric or character types. To store them as date or time, use the `mongo_date` function in the rule SQL to process the fields. For details, see [Time and date functions](./rule-sql-builtin-functions.md#time-and-date-functions). 
 
-   - Nested objects are allowed, when value is a JSON object:
+   - Nested objects are allowed when the value is a JSON object:
      - It is not allowed to use `"` to nest the value in the template, otherwise, it will cause an execution error;
      - Objects will be nested and stored according to their own structure;
 
    - To store objects as JSON characters, use the `json_encode` function in rule SQL for the conversion, and the corresponding **value** in the template is still not allowed to be wrapped with `"`. 
 
-9. Advanced settings (optional):  For details, see [Advanced Configurations](#advanced-configurations).
+10. Advanced settings (optional):  For details, see [Advanced Configurations](#advanced-configurations).
 
-10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the MongoDB server.
+11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the MongoDB server.
 
-11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
 
-You have now successfully created the rule for forwarding data through the MongoDB Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new MongoDB Sink.
+Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new MongoDB Sink.
 
 You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to MongoDB after parsing by rule `my_rule`.
 
-## Test the Rule
+## Test the Rule and Sink
 
-To test if the rule work as you expected, you can use the [MQTTX](https://mqttx.app/) to simulate a client to publish MQTT messages to EMQX.
+To test if the rule and Sink work as you expected, you can use the [MQTTX](https://mqttx.app/) to simulate a client to publish MQTT messages to EMQX.
 
 1. Use MQTTX  to send a message to topic  `t/1`:
 

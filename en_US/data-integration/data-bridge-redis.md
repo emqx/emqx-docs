@@ -68,11 +68,32 @@ OK
 
 Now you have successfully installed Redis and verified the installation with the `SET` and `GET` commands. For more Redis commands, see [Redis Commands](https://redis.io/commands/).
 
-### Create a Rule for Redis Sink
+## Create a Connector
 
-This section demonstrates how to create rules for caching the last message of every client and collecting the message discard statistics. It assumes that you run both EMQX and Redis on the local machine. If you have Redis and EMQX running remotely, adjust the settings accordingly.
+This section demonstrates how to create a Connector to connect the Redis Sink to the Redis Server.
 
-You need to create 2 separate Redis Sinks for the messaging caching and statistics features. Follow the same connection configurations for both Sink types, but you need to configure different **Redis Command Template** in the specific configuration step.
+The following steps assume that you run both EMQX and Redis on the local machine. If your Redis is deployed elsewhere, adjust the settings accordingly.
+
+1. Enter the Dashboard and click **Integration** -> **Connectors**.
+2. Click **Create** in the top right corner of the page.
+3. On the **Create Connector** page, select **Redis** and then click **Next**.
+4. Enter a name for the Connector. The name should be a combination of upper/lower case letters and numbers, for example, `my_redis`.
+5. Set **Redis Mode** as the business needs, for example, `single`.
+6. Enter the connection information. 
+   - **Server Host**: Enter `127.0.0.1:6379`.
+   - **Username**: Enter `admin`.
+   - **Password**: Enter `public`.
+   - **Database ID**: Enter `0`.
+   - Configure the other options according to your business needs.
+   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+8. Before clicking **Create**, you can click **Test Connectivity** to test if the Connector can connect to the Redis server.
+9. Click the **Create** button at the bottom to complete the creation of the Connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Redis. For detailed steps, see [Create a Rule and Redis Sink](#create-a-rule-and-redis-sink).
+
+## Create a Rule and Redis Sink
+
+This section demonstrates how to create rules for caching the last message of every client and collecting the message discard statistics. 
+
+You need to create 2 separate Redis Sinks for the messaging caching and statistics features. Follow the specific **Redis Command Template** configuration instructions based on what type of Sinks you need to create.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -119,11 +140,9 @@ You need to create 2 separate Redis Sinks for the messaging caching and statisti
 
 6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
 
-7. Set **Redis Mode** as the business needs, for example, **single**.
+7. Select the Connector `my_redis` from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-8. Enter the connection information. Input `127.0.0.1:6379` as the **Server Host**, `public` as the **Password**, and `0` for **Database ID**.
-
-9. Configure **Redis Command Template** based on the feature to use:
+8. Configure **Redis Command Template** based on the feature to use:
 
    - To create a Sink for message caching, use the Redis [HSET](https://redis.io/commands/hset/) command and hash data structure to store messages, the data format uses `clientid` as the key, and stores fields such as `username`, `payload`, and `timestamp`. To distinguish it from other keys in Redis, add an `emqx_messages` prefix to the message and separate it with `:`
 
@@ -141,19 +160,21 @@ You need to create 2 separate Redis Sinks for the messaging caching and statisti
 
      Each time the command is executed, the corresponding counter is incremented by 1.
 
-10. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Configuration](./data-bridges.md#configuration).
+9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md).
 
-11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Redis server.
+10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Redis server.
 
-12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
 
-You have now successfully created the rule for the Redis Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Redis Sink.
+You have now successfully created a rule for the Redis Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Redis Sink.
 
 You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to Redis after parsing by rule `my_rule`.
 
-### Test the Rule
+<!-- TODO 5.5 少了一个规则 -->
+
+## Test the Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger a message caching event. If topic  `t/1`  does not have any subscribers, the message will be discarded and trigger the message discard rule.
 

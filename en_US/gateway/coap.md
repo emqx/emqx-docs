@@ -73,7 +73,7 @@ For a detailed HTTP API description, see [HTTP API - Gateway](../admin/api.md).
 
 If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your CoAP Gateway section](#customize-your-coap-gateway).
 
-The CoAP gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters, refer to: [Gateway Configuration - Listeners](../configuration/configuration-manual.html).
+The CoAP gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters, refer to: [Gateway Configuration - Listeners](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 ## Work with CoAP Clients
 
@@ -414,3 +414,18 @@ For example, unsubscribe to `coap/test` in `Connection Mode`:
 ```bash
 coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
+
+### Short Parameter Names
+
+To reduce message size, the CoAP gateway supports short parameter names.
+For example, the parameter `clientid=barx` can be written as `c=bar`. Therefore, the supported short
+parameter names are listed in the following table:
+
+| Parameter Name |  Short Name |
+| -------------- | ----------- |
+| `clientid`     | `c`         |
+| `username`     | `u`         |
+| `password`     | `p`         |
+| `token`        | `t`         |
+| `qos`          | `q`         |
+| `retain`       | `r`         |

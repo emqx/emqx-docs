@@ -145,6 +145,7 @@ EMQX supports data integration with the following types of data systems.
 - [MongoDB](./data-bridge-mongodb.md)
 - [Redis](./data-bridge-redis.md)
 - [TDengine](./data-bridge-tdengine.md)
+- [Elasticsearch](./elasticsearch.md)
 
 **Message Queue**
 
@@ -153,6 +154,10 @@ EMQX supports data integration with the following types of data systems.
 - [Pulsar](./data-bridge-pulsar.md)
 - [RabbitMQ](./data-bridge-rabbitmq.md)
 - [RocketMQ](./data-bridge-rocketmq.md)
+
+**Others**
+
+- [SysKeeper](./syskeeper.md)
 
 {% endemqxee %}
 

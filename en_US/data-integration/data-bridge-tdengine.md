@@ -119,7 +119,7 @@ It assumes that you run both EMQX and TDengine on the local machine. If you have
          "t/#"
      ```
 
-   - To create a rule for online/offline status recording, input the following statement:
+   - To create a rule for online/offline status recording, enter the following statement:
 
      ```sql
      SELECT
@@ -156,7 +156,7 @@ It assumes that you run both EMQX and TDengine on the local machine. If you have
 
    :::
 
-   - To create a Sink for message storage, use the statement below:
+   - To create a Sink for message storage, you can use the following SQL to complete data insertion. It also supports batch setting via CSV file. For details, refer to [Batch Setting](#batch-setting).
 
      ```sql
      INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
@@ -184,6 +184,37 @@ It assumes that you run both EMQX and TDengine on the local machine. If you have
 You have now successfully created the rule for the TDengine Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new TDengine Sink.
 
 You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to TDengine after parsing by rule `my_rule`.
+
+### Batch Setting
+
+In TDengine, a single data entry may contain hundreds of data points, making the task of writing SQL statements challenging. To address this issue, EMQX offers a feature for batch setting SQL.
+
+When editing the SQL template, you can use the batch setting feature to import fields for insertion operations from a CSV file.
+
+1. Click the **Batch Setting** button below the **SQL Template** to open the **Import Batch Setting** popup.
+
+2. Follow the instructions to download the batch setting template file, then fill in the key-value pairs of Fields in the template file. The default template file content is as follows:
+
+   | Field      | Value             | Char Value | Remarks (Optional) |
+   | ---------- | ----------------- | ---------- | ------------------ |
+   | ts         | now               | FALSE      | Example Remark     |
+   | msgid      | ${id}             | TRUE       |                    |
+   | mqtt_topic | ${topic}          | TRUE       |                    |
+   | qos        | ${qos}            | FALSE      |                    |
+   | temp       | ${payload.temp}   | FALSE      |                    |
+   | hum        | ${payload.hum}    | FALSE      |                    |
+   | status     | ${payload.status} | FALSE      |                    |
+
+   - **Field**: Field key, supports constants or ${var} format placeholders.
+   - **Value**: Field value, supports constants or ${var} format placeholders. Although SQL requires character types to be wrapped in quotes, quotes are not needed in the template file, but whether the field is a character type is specified in the `Char Value` column.
+   - **Char Value**: Used to specify whether the field is a character type, to add quotes to the field when generating SQL upon import. If the field is a character type, fill in `TRUE` or `1`; otherwise, fill in `FALSE` or `0`.
+   - **Remarks**: Used only for notes within the CSV file, cannot be imported into EMQX.
+
+   Note that the data in the CSV file for batch setting should not exceed 2048 rows.
+
+3. Save the filled template file and upload it to the **Import Batch Setting** popup, then click **Import** to complete the batch setting.
+
+4. After importing, you can further adjust the SQL in the **SQL Template**, such as setting table names, formatting SQL code, etc.
 
 ## Test the Rule
 
