@@ -69,13 +69,13 @@ Aggregate cluster metrics, returning the *arithmetic sum* or *logical sum* of al
 
 :::
 
-::: tab Cluster Non-aggregated Mode
+::: tab Cluster Unaggregated Mode
 
 ```
 mode=all_nodes_unaggregated
 ```
 
-This is the cluster non-aggregated metric mode, returning the individual metrics of all running nodes in the cluster.
+This is the cluster unaggregated metric mode, returning the individual metrics of all running nodes in the cluster.
 
 - The system will add node names as labels to distinguish the metrics of different nodes. For example:
 
