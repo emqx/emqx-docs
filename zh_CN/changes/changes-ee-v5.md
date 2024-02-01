@@ -103,7 +103,7 @@
 - [#12285](https://github.com/emqx/emqx/pull/12285) 更新了 CoAP 网关，以支持短参数名，从而节省了数据报大小。例如，`clientid=bar` 可以写成 `c=bar`。
 - [#12303](https://github.com/emqx/emqx/pull/12303) 修复了保留消息索引的问题。以前，具有通配符订阅的客户端可能会收到与其订阅主题不匹配的无关保留消息。
 - [#12305](https://github.com/emqx/emqx/pull/12305) 修正了将不完整的客户端/连接信息传递到 `emqx_cm` 的问题，这可能导致内部不一致，并影响内存使用和节点疏散等操作。
-- [#12306](https://github.com/emqx/emqx/pull/12306) 修复了通过 HTTP API 更新密码后，连接器的连接测试无法正常工作的问题。
+- [#12306](https://github.com/emqx/emqx/pull/12306) 修复了通过 HTTP API 更新连接器密码参数后，连接器的连接测试无法正常工作的问题。
 - [#12359](https://github.com/emqx/emqx/pull/12359) 修复了配置有某些类型数据桥接的节点重启时可能出现的错误消息问题。此外，这些桥接在节点重启时有进入失败状态的风险，需要手动重启以恢复功能。
 - [#12404](https://github.com/emqx/emqx/pull/12404) 修复了一个问题，即在消息流量较大的情况下重启数据集成可能导致数据集成指标的收集停止。
 - [#12282](https://github.com/emqx/emqx/pull/12282) 改善了 MySQL 桥接创建失败时 HTTP API 的错误响应。同时解决了在 SQL 中包含未定义列的 MySQL Sink 无法删除的问题。
