@@ -1,4 +1,4 @@
-# Ingest MQTT Data into Nari SysKeeper
+# Bridge MQTT Data through Nari SysKeeper
 
 {% emqxce %}
 ::: tip
@@ -8,7 +8,7 @@ The Nari SysKeeper data integration is an EMQX Enterprise Edition feature. EMQX 
 
 {% endemqxce %}
 
-Nari SysKeeper 2000 is a network physical isolation device. As a security management system, it is widely used in various industries, especially in fields requiring high-level security measures such as critical infrastructure and enterprise IT systems. EMQX supports data bridges between EMQX clusters deployed in different production zones. Production zones are divided into three security levels: I-III, where Security Zone I-II represents more secure, controlled areas, and Security Zone III is a less restrictive area, acting as a bridge between public-facing services and more secure internal areas. Typically, Security Zones I-II and III are isolated from each other. Through data bridging, MQTT messages can passthrough the one-way SysKeeper network gate between Security Zones I-II and III, bridging with another EMQX cluster in a different security zone.
+Nari SysKeeper 2000 is a network physical isolation device. As a security management system, it is widely used in various industries, especially in fields requiring high-level security measures such as critical infrastructure and enterprise IT systems. EMQX supports data bridges between EMQX clusters deployed in different production zones. Production zones are divided into three security levels: I-III, where Security Zone I-II represents more secure, controlled areas, and Security Zone III is a less restrictive area, acting as a bridge between public-facing services and more secure internal areas. Typically, Security Zones I-II and III are isolated from each other. Through data bridging, MQTT messages can pass through the one-way SysKeeper network gate between Security Zones I-II and III, bridging with another EMQX cluster in a different security zone.
 
 This page provides a comprehensive introduction to the data integration between EMQX and Nari SysKeeper with practical instructions on creating and validating the data integration.
 
