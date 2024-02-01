@@ -148,6 +148,7 @@ EMQX 支持与以下数据系统的集成：
 - [MongoDB](./data-bridge-mongodb.md)
 - [Redis](./data-bridge-redis.md)
 - [TDengine](./data-bridge-tdengine.md)
+- [Elasticsearch](./elasticsearch.md)
 
 **消息队列**
 
@@ -156,6 +157,10 @@ EMQX 支持与以下数据系统的集成：
 - [Pulsar](./data-bridge-pulsar.md)
 - [RabbitMQ](./data-bridge-rabbitmq.md)
 - [RocketMQ](./data-bridge-rocketmq.md)
+
+**其他**
+
+- [SysKeeper](./syskeeper.md)
 
 {% endemqxee %}
 
