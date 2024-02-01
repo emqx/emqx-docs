@@ -93,7 +93,7 @@
   - 增强了对 `content-type: application/json` 的支持，允许以 JSON 格式提交 HTTP Body。这扩展了当前仅支持 `multipart/form-data` 用于 CSV 文件的功能。
 
 
-- [#11902](https://github.com/emqx/emqx/pull/11902) 新增支持 Nari Syskeeper 2000 数据集成。
+- [#11902](https://github.com/emqx/emqx/pull/11902) EMQX 消息桥接时支持 Nari Syskeeper 2000 单向隔离网闸穿透。
 
 ### 修复
 
