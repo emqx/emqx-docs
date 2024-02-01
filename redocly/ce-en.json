@@ -1,6 +1,6 @@
 {
   "info": {
-    "version": "5.4.1",
+    "version": "5.5.0",
     "title": "EMQX API"
   },
   "components": {
@@ -65,6 +65,22 @@
         },
         "example": false
       },
+      "emqx_prometheus_api.mode": {
+        "in": "query",
+        "name": "mode",
+        "description": "<br/>Metrics format mode.<br/><br/>`node`:<br/>Return metrics from local node. And it is the default behaviour if `mode` not specified.<br/><br/>`all_nodes_aggregated`:<br/>Return metrics for all nodes.<br/>And if possible, calculate the arithmetic sum or logical sum of the indicators of all nodes.<br/><br/>`all_nodes_unaggregated`:<br/>Return metrics from all nodes, and the metrics are not aggregated.<br/>The node name will be included in the returned results to<br/>indicate that certain metrics were returned on a certain node.<br/>",
+        "required": false,
+        "schema": {
+          "default": "node",
+          "type": "string",
+          "enum": [
+            "node",
+            "all_nodes_aggregated",
+            "all_nodes_unaggregated"
+          ]
+        },
+        "example": "node"
+      },
       "listeners.listener_id": {
         "in": "path",
         "name": "id",
@@ -88,10 +104,10 @@
       "public.limit": {
         "in": "query",
         "name": "limit",
-        "description": "Results per page(max 1000)",
+        "description": "Results per page(max 10000)",
         "schema": {
           "default": 100,
-          "maximum": 1000,
+          "maximum": 10000,
           "type": "integer",
           "minimum": 1
         },
@@ -258,7 +274,14 @@
           "enable": {
             "default": true,
             "type": "boolean",
-            "description": "Enable or disable this connector"
+            "description": "Enable (true) or disable (false) this connector."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
           },
           "description": {
             "default": "",
@@ -738,6 +761,116 @@
         },
         "type": "object"
       },
+      "connector_mqtt.put_connector": {
+        "required": [
+          "server"
+        ],
+        "properties": {
+          "enable": {
+            "default": true,
+            "type": "boolean",
+            "description": "Enable (true) or disable (false) this connector."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "default": "",
+            "type": "string",
+            "description": "Descriptive text."
+          },
+          "pool_size": {
+            "default": 8,
+            "type": "integer",
+            "description": "Size of the pool of MQTT clients that will publish messages to the remote broker.<br/><br/>Each MQTT client will be assigned 'clientid' of the form '${clientid_prefix}:${bridge_name}:egress:${node}:${n}'<br/>where 'n' is the number of a client inside the pool.",
+            "minimum": 1
+          },
+          "resource_opts": {
+            "default": {},
+            "description": "Resource options.",
+            "$ref": "#/components/schemas/connector_mqtt.resource_opts"
+          },
+          "mode": {
+            "default": "cluster_shareload",
+            "type": "string",
+            "enum": [
+              "cluster_shareload"
+            ],
+            "deprecated": true,
+            "description": "The mode of the MQTT Bridge.<br/><br/>- cluster_shareload: create an MQTT connection on each node in the emqx cluster.<br/><br/>In 'cluster_shareload' mode, the incoming load from the remote broker is shared by<br/>using shared subscription.<br/><br/>Note that the 'clientid' is suffixed by the node name, this is to avoid<br/>clientid conflicts between different nodes. And we can only use shared subscription<br/>topic filters for <code>remote.topic</code> of ingress connections."
+          },
+          "server": {
+            "type": "string",
+            "description": "The host and port of the remote MQTT broker"
+          },
+          "clientid_prefix": {
+            "type": "string",
+            "description": "Optional prefix to prepend to the clientid used by egress bridges."
+          },
+          "reconnect_interval": {
+            "type": "string",
+            "deprecated": true
+          },
+          "proto_ver": {
+            "default": "v4",
+            "type": "string",
+            "enum": [
+              "v3",
+              "v4",
+              "v5"
+            ],
+            "description": "The MQTT protocol version"
+          },
+          "bridge_mode": {
+            "default": false,
+            "type": "boolean",
+            "description": "If enable bridge mode.<br/>NOTE: This setting is only for MQTT protocol version older than 5.0, and the remote MQTT<br/>broker MUST support this feature.<br/>If bridge_mode is set to true, the bridge will indicate to the remote broker that it is a bridge not an ordinary client.<br/>This means that loop detection will be more effective and that retained messages will be propagated correctly."
+          },
+          "username": {
+            "type": "string",
+            "description": "The username of the MQTT protocol"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "description": "The password of the MQTT protocol",
+            "example": "R4ND0M/S∃CЯ∃T"
+          },
+          "clean_start": {
+            "default": true,
+            "type": "boolean",
+            "description": "Whether to start a clean session when reconnecting a remote broker for ingress bridge"
+          },
+          "keepalive": {
+            "default": "300s",
+            "type": "string",
+            "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
+          },
+          "retry_interval": {
+            "default": "15s",
+            "type": "string",
+            "description": "Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
+          },
+          "max_inflight": {
+            "default": 32,
+            "type": "integer",
+            "description": "Max inflight (sent, but un-acked) messages of the MQTT protocol",
+            "minimum": 0
+          },
+          "ssl": {
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings.",
+            "$ref": "#/components/schemas/broker.ssl_client_opts"
+          }
+        },
+        "type": "object"
+      },
       "emqx_gateway_api.update_mqttsn": {
         "required": [
           "gateway_id"
@@ -1121,6 +1254,13 @@
             "type": "string",
             "description": "Name of the connector specified by the action, used for external resource selection."
           },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
+          },
           "description": {
             "default": "",
             "type": "string",
@@ -1161,6 +1301,13 @@
             "default": true,
             "type": "boolean",
             "description": "Enable or disable this bridge"
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
           },
           "description": {
             "default": "",
@@ -1367,6 +1514,13 @@
             "type": "string",
             "description": "Name of the connector specified by the action, used for external resource selection."
           },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
+          },
           "description": {
             "default": "",
             "type": "string",
@@ -1523,6 +1677,17 @@
         },
         "type": "object"
       },
+      "cluster.timeout": {
+        "properties": {
+          "timeout": {
+            "type": "integer",
+            "description": "Timeout in milliseconds",
+            "minimum": 0,
+            "example": "15000"
+          }
+        },
+        "type": "object"
+      },
       "authn.metrics_status_fields": {
         "properties": {
           "resource_metrics": {
@@ -1607,7 +1772,14 @@
           "enable": {
             "default": true,
             "type": "boolean",
-            "description": "Enable or disable this connector"
+            "description": "Enable (true) or disable (false) this connector."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
           },
           "description": {
             "default": "",
@@ -2066,6 +2238,32 @@
           "received": {
             "type": "number",
             "description": "Count of messages that is received from the remote system."
+          }
+        },
+        "type": "object"
+      },
+      "cluster.invitation_status": {
+        "properties": {
+          "succeed": {
+            "type": "array",
+            "description": "A list of information about nodes which are successfully invited",
+            "items": {
+              "$ref": "#/components/schemas/cluster.node_invitation_succeed"
+            }
+          },
+          "in_progress": {
+            "type": "array",
+            "description": "A list of information about nodes that are processing invitations",
+            "items": {
+              "$ref": "#/components/schemas/cluster.node_invitation_in_progress"
+            }
+          },
+          "failed": {
+            "type": "array",
+            "description": "A list of information about nodes that failed to be invited",
+            "items": {
+              "$ref": "#/components/schemas/cluster.node_invitation_failed"
+            }
           }
         },
         "type": "object"
@@ -2857,6 +3055,129 @@
         },
         "type": "object"
       },
+      "connector_mqtt.post_connector": {
+        "required": [
+          "name",
+          "server",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "mqtt"
+            ],
+            "description": "The type of the connector."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the connector."
+          },
+          "enable": {
+            "default": true,
+            "type": "boolean",
+            "description": "Enable (true) or disable (false) this connector."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "default": "",
+            "type": "string",
+            "description": "Descriptive text."
+          },
+          "pool_size": {
+            "default": 8,
+            "type": "integer",
+            "description": "Size of the pool of MQTT clients that will publish messages to the remote broker.<br/><br/>Each MQTT client will be assigned 'clientid' of the form '${clientid_prefix}:${bridge_name}:egress:${node}:${n}'<br/>where 'n' is the number of a client inside the pool.",
+            "minimum": 1
+          },
+          "resource_opts": {
+            "default": {},
+            "description": "Resource options.",
+            "$ref": "#/components/schemas/connector_mqtt.resource_opts"
+          },
+          "mode": {
+            "default": "cluster_shareload",
+            "type": "string",
+            "enum": [
+              "cluster_shareload"
+            ],
+            "deprecated": true,
+            "description": "The mode of the MQTT Bridge.<br/><br/>- cluster_shareload: create an MQTT connection on each node in the emqx cluster.<br/><br/>In 'cluster_shareload' mode, the incoming load from the remote broker is shared by<br/>using shared subscription.<br/><br/>Note that the 'clientid' is suffixed by the node name, this is to avoid<br/>clientid conflicts between different nodes. And we can only use shared subscription<br/>topic filters for <code>remote.topic</code> of ingress connections."
+          },
+          "server": {
+            "type": "string",
+            "description": "The host and port of the remote MQTT broker"
+          },
+          "clientid_prefix": {
+            "type": "string",
+            "description": "Optional prefix to prepend to the clientid used by egress bridges."
+          },
+          "reconnect_interval": {
+            "type": "string",
+            "deprecated": true
+          },
+          "proto_ver": {
+            "default": "v4",
+            "type": "string",
+            "enum": [
+              "v3",
+              "v4",
+              "v5"
+            ],
+            "description": "The MQTT protocol version"
+          },
+          "bridge_mode": {
+            "default": false,
+            "type": "boolean",
+            "description": "If enable bridge mode.<br/>NOTE: This setting is only for MQTT protocol version older than 5.0, and the remote MQTT<br/>broker MUST support this feature.<br/>If bridge_mode is set to true, the bridge will indicate to the remote broker that it is a bridge not an ordinary client.<br/>This means that loop detection will be more effective and that retained messages will be propagated correctly."
+          },
+          "username": {
+            "type": "string",
+            "description": "The username of the MQTT protocol"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "description": "The password of the MQTT protocol",
+            "example": "R4ND0M/S∃CЯ∃T"
+          },
+          "clean_start": {
+            "default": true,
+            "type": "boolean",
+            "description": "Whether to start a clean session when reconnecting a remote broker for ingress bridge"
+          },
+          "keepalive": {
+            "default": "300s",
+            "type": "string",
+            "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
+          },
+          "retry_interval": {
+            "default": "15s",
+            "type": "string",
+            "description": "Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
+          },
+          "max_inflight": {
+            "default": 32,
+            "type": "integer",
+            "description": "Max inflight (sent, but un-acked) messages of the MQTT protocol",
+            "minimum": 0
+          },
+          "ssl": {
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings.",
+            "$ref": "#/components/schemas/broker.ssl_client_opts"
+          }
+        },
+        "type": "object"
+      },
       "emqx_mgmt_api_banned.ban": {
         "required": [
           "as",
@@ -3255,7 +3576,7 @@
           "acl_claim_name": {
             "default": "acl",
             "type": "string",
-            "description": "JWT claim name to use for getting ACL rules."
+            "description": "The JWT claim designated for accessing ACL (Access Control List) rules can be specified,<br/>such as using the `acl` claim. A typical decoded JWT with this claim might appear as:<br/>`{\"username\": \"user1\", \"acl\": ...}`.<br/><br/>Supported ACL Rule Formats:<br/><br/>- Object Format:<br/>  Utilizes action types pub (publish), sub (subscribe), or all (both publish and subscribe).<br/>  The value is a list of topic filters.<br/>  Example: `{\"pub\": [\"topic1\"], \"sub\": [], \"all\": [\"${username}/#\"]}`.<br/>  This example signifies that the token owner can publish to topic1 and perform both publish and subscribe<br/>  actions on topics starting with their username.<br/>  Note: In this format, if no topic matches, the action is denied, and the authorization process terminates.<br/><br/>- Array Format (resembles File-Based ACL Rules):<br/>  Example: `[{\"permission\": \"allow\", \"action\": \"all\", \"topic\": \"${username}/#\"}]`.<br/>  Additionally, the `pub` or `publish` action rules can be extended with `qos` and `retain` field,<br/>  and `sub` or `subscribe` action rules can be extended with a `qos` field.<br/>  Note: Here, if no rule matches, the action is not immediately denied.<br/>  The process continues to other configured authorization sources,<br/>  and ultimately falls back to the default permission in config `authorization.no_match`.<br/><br/>The ACL claim utilizes MQTT topic wildcard matching rules for publishing or subscribing.<br/>A special syntax for the 'subscribe' action allows the use of `eq` for an exact match.<br/>For instance, `eq t/#` permits or denies subscription to `t/#`, but not to `t/1`."
           },
           "verify_claims": {
             "default": [],
@@ -3630,6 +3951,14 @@
             "type": "string",
             "description": "Time to live for the cached data.",
             "example": "12m"
+          },
+          "excludes": {
+            "default": [],
+            "type": "array",
+            "description": "Exclude caching ACL check results for topics matching the given patterns.",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "type": "object"
@@ -3712,6 +4041,77 @@
             "type": "string",
             "description": "Action. Only support reset",
             "example": "reset"
+          }
+        },
+        "type": "object"
+      },
+      "bridge_mqtt_publisher.get_source": {
+        "required": [
+          "connector",
+          "name",
+          "parameters",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "mqtt"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "connected",
+              "disconnected",
+              "connecting",
+              "inconsistent"
+            ],
+            "description": "The status of the bridge<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the bridge passes the health probes.<br/><br/>- <code>disconnected</code>: when the bridge can not pass health probes.<br/><br/>- <code>stopped</code>: when the bridge resource is requested to be stopped.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status."
+          },
+          "status_reason": {
+            "type": "string",
+            "description": "This is the reason given in case a bridge is failing to connect.",
+            "example": "Connection refused"
+          },
+          "node_status": {
+            "type": "array",
+            "description": "Node status.",
+            "items": {
+              "$ref": "#/components/schemas/bridge.node_status"
+            }
+          },
+          "enable": {
+            "default": true,
+            "type": "boolean",
+            "description": "Enable (true) or disable (false) this action."
+          },
+          "connector": {
+            "type": "string",
+            "description": "Name of the connector specified by the action, used for external resource selection."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "default": "",
+            "type": "string",
+            "description": "Descriptive text."
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.ingress_parameters"
+          },
+          "resource_opts": {
+            "default": {},
+            "description": "Resource options.",
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.source_resource_opts"
           }
         },
         "type": "object"
@@ -4002,6 +4402,82 @@
             "description": "The Message QoS",
             "minimum": 0,
             "example": 0
+          }
+        },
+        "type": "object"
+      },
+      "bridge_mqtt_publisher.get_bridge_v2": {
+        "required": [
+          "connector",
+          "name",
+          "parameters",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "mqtt"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "connected",
+              "disconnected",
+              "connecting",
+              "inconsistent"
+            ],
+            "description": "The status of the bridge<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the bridge passes the health probes.<br/><br/>- <code>disconnected</code>: when the bridge can not pass health probes.<br/><br/>- <code>stopped</code>: when the bridge resource is requested to be stopped.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status."
+          },
+          "status_reason": {
+            "type": "string",
+            "description": "This is the reason given in case a bridge is failing to connect.",
+            "example": "Connection refused"
+          },
+          "node_status": {
+            "type": "array",
+            "description": "Node status.",
+            "items": {
+              "$ref": "#/components/schemas/bridge.node_status"
+            }
+          },
+          "local_topic": {
+            "type": "string",
+            "description": "MQTT topic or topic filter as data source (action input).  If rule action is used as data source, this config should be left empty, otherwise messages will be duplicated in the remote system."
+          },
+          "enable": {
+            "default": true,
+            "type": "boolean",
+            "description": "Enable (true) or disable (false) this action."
+          },
+          "connector": {
+            "type": "string",
+            "description": "Name of the connector specified by the action, used for external resource selection."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "default": "",
+            "type": "string",
+            "description": "Descriptive text."
+          },
+          "parameters": {
+            "description": "Action specific configs.",
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.action_parameters"
+          },
+          "resource_opts": {
+            "default": {},
+            "description": "Resource options.",
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.action_resource_opts"
           }
         },
         "type": "object"
@@ -4468,6 +4944,26 @@
         },
         "type": "object"
       },
+      "bridge_mqtt_publisher.ingress_parameters": {
+        "required": [
+          "topic"
+        ],
+        "properties": {
+          "topic": {
+            "type": "string",
+            "description": "Receive messages from which topic of the remote broker"
+          },
+          "qos": {
+            "default": 1,
+            "maximum": 2,
+            "type": "integer",
+            "description": "The QoS level to be used when subscribing to the remote broker",
+            "minimum": 0,
+            "example": 0
+          }
+        },
+        "type": "object"
+      },
       "emqx_mgmt_api_publish.publish_message": {
         "required": [
           "payload",
@@ -4572,6 +5068,17 @@
             "description": "Work factor for BCRYPT password generation.",
             "minimum": 5,
             "example": 10
+          }
+        },
+        "type": "object"
+      },
+      "bridge_mqtt_publisher.source_resource_opts": {
+        "properties": {
+          "health_check_interval": {
+            "default": "15s",
+            "type": "string",
+            "description": "Health check interval.",
+            "example": "32s"
           }
         },
         "type": "object"
@@ -6168,7 +6675,7 @@
           "acl_claim_name": {
             "default": "acl",
             "type": "string",
-            "description": "JWT claim name to use for getting ACL rules."
+            "description": "The JWT claim designated for accessing ACL (Access Control List) rules can be specified,<br/>such as using the `acl` claim. A typical decoded JWT with this claim might appear as:<br/>`{\"username\": \"user1\", \"acl\": ...}`.<br/><br/>Supported ACL Rule Formats:<br/><br/>- Object Format:<br/>  Utilizes action types pub (publish), sub (subscribe), or all (both publish and subscribe).<br/>  The value is a list of topic filters.<br/>  Example: `{\"pub\": [\"topic1\"], \"sub\": [], \"all\": [\"${username}/#\"]}`.<br/>  This example signifies that the token owner can publish to topic1 and perform both publish and subscribe<br/>  actions on topics starting with their username.<br/>  Note: In this format, if no topic matches, the action is denied, and the authorization process terminates.<br/><br/>- Array Format (resembles File-Based ACL Rules):<br/>  Example: `[{\"permission\": \"allow\", \"action\": \"all\", \"topic\": \"${username}/#\"}]`.<br/>  Additionally, the `pub` or `publish` action rules can be extended with `qos` and `retain` field,<br/>  and `sub` or `subscribe` action rules can be extended with a `qos` field.<br/>  Note: Here, if no rule matches, the action is not immediately denied.<br/>  The process continues to other configured authorization sources,<br/>  and ultimately falls back to the default permission in config `authorization.no_match`.<br/><br/>The ACL claim utilizes MQTT topic wildcard matching rules for publishing or subscribing.<br/>A special syntax for the 'subscribe' action allows the use of `eq` for an exact match.<br/>For instance, `eq t/#` permits or denies subscription to `t/#`, but not to `t/1`."
           },
           "verify_claims": {
             "default": [],
@@ -7063,9 +7570,9 @@
           },
           "limit": {
             "default": 100,
-            "maximum": 1000,
+            "maximum": 10000,
             "type": "integer",
-            "description": "Results per page(max 1000)",
+            "description": "Results per page(max 10000)",
             "minimum": 1,
             "example": 50
           },
@@ -7169,6 +7676,13 @@
           "connector": {
             "type": "string",
             "description": "Name of the connector specified by the action, used for external resource selection."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
           },
           "description": {
             "default": "",
@@ -7438,6 +7952,13 @@
             "type": "boolean",
             "description": "Enable or disable this bridge"
           },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
+          },
           "description": {
             "default": "",
             "type": "string",
@@ -7603,6 +8124,26 @@
             "type": "string",
             "description": "Total heap size",
             "example": "1024KB"
+          }
+        },
+        "type": "object"
+      },
+      "cluster.node_invitation_succeed": {
+        "properties": {
+          "node": {
+            "type": "string",
+            "description": "Node name",
+            "example": "emqx2@127.0.0.1"
+          },
+          "started_at": {
+            "type": "string",
+            "description": "The time of the async invitation is started",
+            "example": "2024-01-30T15:24:39.355+08:00"
+          },
+          "finished_at": {
+            "type": "string",
+            "description": "The time of the async invitation result is received",
+            "example": "2024-01-30T15:24:39.355+08:00"
           }
         },
         "type": "object"
@@ -8674,6 +9215,21 @@
         },
         "type": "object"
       },
+      "cluster.node_invitation_in_progress": {
+        "properties": {
+          "node": {
+            "type": "string",
+            "description": "Node name",
+            "example": "emqx2@127.0.0.1"
+          },
+          "started_at": {
+            "type": "string",
+            "description": "The time of the async invitation is started",
+            "example": "2024-01-30T15:24:39.355+08:00"
+          }
+        },
+        "type": "object"
+      },
       "emqx_gateway_api.update_lwm2m": {
         "required": [
           "translators",
@@ -8850,7 +9406,14 @@
           "enable": {
             "default": true,
             "type": "boolean",
-            "description": "Enable or disable this connector"
+            "description": "Enable (true) or disable (false) this connector."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
           },
           "description": {
             "default": "",
@@ -9046,6 +9609,49 @@
         },
         "type": "object"
       },
+      "bridge_mqtt_publisher.action_parameters": {
+        "required": [
+          "topic"
+        ],
+        "properties": {
+          "topic": {
+            "type": "string",
+            "description": "Forward to which topic of the remote broker.<br/><br/>Template with variables is allowed."
+          },
+          "qos": {
+            "default": 1,
+            "description": "The QoS of the MQTT message to be sent.<br/><br/>Template with variables is allowed.",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "maximum": 2,
+                "type": "integer",
+                "minimum": 0,
+                "example": 0
+              }
+            ]
+          },
+          "retain": {
+            "default": false,
+            "description": "The 'retain' flag of the MQTT message to be sent.<br/><br/>Template with variables is allowed.",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "payload": {
+            "type": "string",
+            "description": "The payload of the MQTT message to be sent.<br/><br/>Template with variables is allowed."
+          }
+        },
+        "type": "object"
+      },
       "retainer.retainer": {
         "properties": {
           "enable": {
@@ -9077,6 +9683,7 @@
             "description": "When the retained flag of the `PUBLISH` message is set and Payload is empty,<br/>whether to continue to publish the message.<br/>See:<br/>http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718038"
           },
           "delivery_rate": {
+            "default": "1000/s",
             "type": "string",
             "description": "The maximum rate of delivering retained messages",
             "example": "1000/s"
@@ -10226,6 +10833,30 @@
         },
         "type": "object"
       },
+      "connector.node_status": {
+        "properties": {
+          "node": {
+            "type": "string",
+            "description": "The node name.",
+            "example": "emqx@127.0.0.1"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "connected",
+              "disconnected",
+              "connecting",
+              "inconsistent"
+            ]
+          },
+          "status_reason": {
+            "type": "string",
+            "description": "This is the reason given in case a connector is failing to connect.",
+            "example": "Connection refused"
+          }
+        },
+        "type": "object"
+      },
       "broker.ssl_client_opts": {
         "properties": {
           "cacertfile": {
@@ -10577,6 +11208,44 @@
         },
         "type": "object"
       },
+      "bridge_mqtt_publisher.put_source": {
+        "required": [
+          "connector",
+          "parameters"
+        ],
+        "properties": {
+          "enable": {
+            "default": true,
+            "type": "boolean",
+            "description": "Enable (true) or disable (false) this action."
+          },
+          "connector": {
+            "type": "string",
+            "description": "Name of the connector specified by the action, used for external resource selection."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "default": "",
+            "type": "string",
+            "description": "Descriptive text."
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.ingress_parameters"
+          },
+          "resource_opts": {
+            "default": {},
+            "description": "Resource options.",
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.source_resource_opts"
+          }
+        },
+        "type": "object"
+      },
       "mongo.topology": {
         "properties": {
           "max_overflow": {
@@ -10749,6 +11418,13 @@
             "default": true,
             "type": "boolean",
             "description": "Enable or disable this bridge"
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
           },
           "description": {
             "default": "",
@@ -11123,7 +11799,8 @@
       "authn.jwt_public_key": {
         "required": [
           "algorithm",
-          "mechanism"
+          "mechanism",
+          "public_key"
         ],
         "properties": {
           "algorithm": {
@@ -11147,7 +11824,7 @@
           "acl_claim_name": {
             "default": "acl",
             "type": "string",
-            "description": "JWT claim name to use for getting ACL rules."
+            "description": "The JWT claim designated for accessing ACL (Access Control List) rules can be specified,<br/>such as using the `acl` claim. A typical decoded JWT with this claim might appear as:<br/>`{\"username\": \"user1\", \"acl\": ...}`.<br/><br/>Supported ACL Rule Formats:<br/><br/>- Object Format:<br/>  Utilizes action types pub (publish), sub (subscribe), or all (both publish and subscribe).<br/>  The value is a list of topic filters.<br/>  Example: `{\"pub\": [\"topic1\"], \"sub\": [], \"all\": [\"${username}/#\"]}`.<br/>  This example signifies that the token owner can publish to topic1 and perform both publish and subscribe<br/>  actions on topics starting with their username.<br/>  Note: In this format, if no topic matches, the action is denied, and the authorization process terminates.<br/><br/>- Array Format (resembles File-Based ACL Rules):<br/>  Example: `[{\"permission\": \"allow\", \"action\": \"all\", \"topic\": \"${username}/#\"}]`.<br/>  Additionally, the `pub` or `publish` action rules can be extended with `qos` and `retain` field,<br/>  and `sub` or `subscribe` action rules can be extended with a `qos` field.<br/>  Note: Here, if no rule matches, the action is not immediately denied.<br/>  The process continues to other configured authorization sources,<br/>  and ultimately falls back to the default permission in config `authorization.no_match`.<br/><br/>The ACL claim utilizes MQTT topic wildcard matching rules for publishing or subscribing.<br/>A special syntax for the 'subscribe' action allows the use of `eq` for an exact match.<br/>For instance, `eq t/#` permits or denies subscription to `t/#`, but not to `t/1`."
           },
           "verify_claims": {
             "default": [],
@@ -11362,6 +12039,20 @@
           "max_rate": {
             "type": "integer",
             "description": "Maximum call rate of hooks"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_mgmt_api_clients.clients": {
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/emqx_mgmt_api_clients.client"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/public.meta"
           }
         },
         "type": "object"
@@ -12607,6 +13298,13 @@
             "type": "boolean",
             "description": "Enable or disable this bridge"
           },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
+          },
           "description": {
             "default": "",
             "type": "string",
@@ -12866,6 +13564,31 @@
             "type": "string",
             "description": "Resource Name",
             "example": "lwm2m-test"
+          }
+        },
+        "type": "object"
+      },
+      "cluster.node_invitation_failed": {
+        "properties": {
+          "node": {
+            "type": "string",
+            "description": "Node name",
+            "example": "emqx2@127.0.0.1"
+          },
+          "started_at": {
+            "type": "string",
+            "description": "The time of the async invitation is started",
+            "example": "2024-01-30T15:24:39.355+08:00"
+          },
+          "finished_at": {
+            "type": "string",
+            "description": "The time of the async invitation result is received",
+            "example": "2024-01-30T15:24:39.355+08:00"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Failure reason",
+            "example": "Bad RPC to target node"
           }
         },
         "type": "object"
@@ -13404,6 +14127,161 @@
         },
         "type": "object"
       },
+      "connector_mqtt.get_connector": {
+        "required": [
+          "name",
+          "server",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "mqtt"
+            ],
+            "description": "The type of the connector."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the connector."
+          },
+          "enable": {
+            "default": true,
+            "type": "boolean",
+            "description": "Enable (true) or disable (false) this connector."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "default": "",
+            "type": "string",
+            "description": "Descriptive text."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "connected",
+              "disconnected",
+              "connecting",
+              "inconsistent"
+            ],
+            "description": "The status of the connector<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the connector passes the health probes.<br/><br/>- <code>disconnected</code>: when the connector can not pass health probes.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status."
+          },
+          "status_reason": {
+            "type": "string",
+            "description": "This is the reason given in case a connector is failing to connect.",
+            "example": "Connection refused"
+          },
+          "node_status": {
+            "type": "array",
+            "description": "Node status.",
+            "items": {
+              "$ref": "#/components/schemas/connector.node_status"
+            }
+          },
+          "actions": {
+            "type": "array",
+            "description": "List of actions added to this connector.",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "my_action"
+            ]
+          },
+          "pool_size": {
+            "default": 8,
+            "type": "integer",
+            "description": "Size of the pool of MQTT clients that will publish messages to the remote broker.<br/><br/>Each MQTT client will be assigned 'clientid' of the form '${clientid_prefix}:${bridge_name}:egress:${node}:${n}'<br/>where 'n' is the number of a client inside the pool.",
+            "minimum": 1
+          },
+          "resource_opts": {
+            "default": {},
+            "description": "Resource options.",
+            "$ref": "#/components/schemas/connector_mqtt.resource_opts"
+          },
+          "mode": {
+            "default": "cluster_shareload",
+            "type": "string",
+            "enum": [
+              "cluster_shareload"
+            ],
+            "deprecated": true,
+            "description": "The mode of the MQTT Bridge.<br/><br/>- cluster_shareload: create an MQTT connection on each node in the emqx cluster.<br/><br/>In 'cluster_shareload' mode, the incoming load from the remote broker is shared by<br/>using shared subscription.<br/><br/>Note that the 'clientid' is suffixed by the node name, this is to avoid<br/>clientid conflicts between different nodes. And we can only use shared subscription<br/>topic filters for <code>remote.topic</code> of ingress connections."
+          },
+          "server": {
+            "type": "string",
+            "description": "The host and port of the remote MQTT broker"
+          },
+          "clientid_prefix": {
+            "type": "string",
+            "description": "Optional prefix to prepend to the clientid used by egress bridges."
+          },
+          "reconnect_interval": {
+            "type": "string",
+            "deprecated": true
+          },
+          "proto_ver": {
+            "default": "v4",
+            "type": "string",
+            "enum": [
+              "v3",
+              "v4",
+              "v5"
+            ],
+            "description": "The MQTT protocol version"
+          },
+          "bridge_mode": {
+            "default": false,
+            "type": "boolean",
+            "description": "If enable bridge mode.<br/>NOTE: This setting is only for MQTT protocol version older than 5.0, and the remote MQTT<br/>broker MUST support this feature.<br/>If bridge_mode is set to true, the bridge will indicate to the remote broker that it is a bridge not an ordinary client.<br/>This means that loop detection will be more effective and that retained messages will be propagated correctly."
+          },
+          "username": {
+            "type": "string",
+            "description": "The username of the MQTT protocol"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "description": "The password of the MQTT protocol",
+            "example": "R4ND0M/S∃CЯ∃T"
+          },
+          "clean_start": {
+            "default": true,
+            "type": "boolean",
+            "description": "Whether to start a clean session when reconnecting a remote broker for ingress bridge"
+          },
+          "keepalive": {
+            "default": "300s",
+            "type": "string",
+            "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
+          },
+          "retry_interval": {
+            "default": "15s",
+            "type": "string",
+            "description": "Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
+          },
+          "max_inflight": {
+            "default": 32,
+            "type": "integer",
+            "description": "Max inflight (sent, but un-acked) messages of the MQTT protocol",
+            "minimum": 0
+          },
+          "ssl": {
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings.",
+            "$ref": "#/components/schemas/broker.ssl_client_opts"
+          }
+        },
+        "type": "object"
+      },
       "authn.http_get": {
         "required": [
           "backend",
@@ -13905,7 +14783,7 @@
           },
           "is_bridge": {
             "type": "boolean",
-            "description": "Indicates whether the client is connectedvia bridge"
+            "description": "Indicates whether the client is connected via bridge"
           },
           "keepalive": {
             "type": "integer",
@@ -14096,6 +14974,13 @@
             "default": true,
             "type": "boolean",
             "description": "Enable or disable this bridge"
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
           },
           "description": {
             "default": "",
@@ -14641,6 +15526,13 @@
             "type": "boolean",
             "description": "Enable or disable this bridge"
           },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
+          },
           "description": {
             "default": "",
             "type": "string",
@@ -14935,6 +15827,55 @@
             "description": "The QoS level to be used when subscribing to the remote broker",
             "minimum": 0,
             "example": 0
+          }
+        },
+        "type": "object"
+      },
+      "bridge_mqtt_publisher.post_source": {
+        "required": [
+          "connector",
+          "name",
+          "parameters",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "mqtt"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "enable": {
+            "default": true,
+            "type": "boolean",
+            "description": "Enable (true) or disable (false) this action."
+          },
+          "connector": {
+            "type": "string",
+            "description": "Name of the connector specified by the action, used for external resource selection."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "default": "",
+            "type": "string",
+            "description": "Descriptive text."
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.ingress_parameters"
+          },
+          "resource_opts": {
+            "default": {},
+            "description": "Resource options.",
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.source_resource_opts"
           }
         },
         "type": "object"
@@ -15479,6 +16420,28 @@
         },
         "type": "object"
       },
+      "connector_mqtt.resource_opts": {
+        "properties": {
+          "health_check_interval": {
+            "default": "15s",
+            "type": "string",
+            "description": "Health check interval.",
+            "example": "32s"
+          },
+          "start_after_created": {
+            "default": true,
+            "type": "boolean",
+            "description": "Whether start the resource right after created."
+          },
+          "start_timeout": {
+            "default": "5s",
+            "type": "string",
+            "description": "Time interval to wait for an auto-started resource to become healthy before responding resource creation requests.",
+            "example": "32s"
+          }
+        },
+        "type": "object"
+      },
       "emqx_mgmt_api_data_backup.files_response": {
         "properties": {
           "data": {
@@ -15967,6 +16930,60 @@
           "reductions": {
             "type": "integer",
             "description": "Erlang reduction"
+          }
+        },
+        "type": "object"
+      },
+      "bridge_mqtt_publisher.post_bridge_v2": {
+        "required": [
+          "connector",
+          "name",
+          "parameters",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "mqtt"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "local_topic": {
+            "type": "string",
+            "description": "MQTT topic or topic filter as data source (action input).  If rule action is used as data source, this config should be left empty, otherwise messages will be duplicated in the remote system."
+          },
+          "enable": {
+            "default": true,
+            "type": "boolean",
+            "description": "Enable (true) or disable (false) this action."
+          },
+          "connector": {
+            "type": "string",
+            "description": "Name of the connector specified by the action, used for external resource selection."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "default": "",
+            "type": "string",
+            "description": "Descriptive text."
+          },
+          "parameters": {
+            "description": "Action specific configs.",
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.action_parameters"
+          },
+          "resource_opts": {
+            "default": {},
+            "description": "Resource options.",
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.action_resource_opts"
           }
         },
         "type": "object"
@@ -16726,6 +17743,61 @@
         },
         "type": "object"
       },
+      "bridge_mqtt_publisher.action_resource_opts": {
+        "properties": {
+          "worker_pool_size": {
+            "default": 16,
+            "maximum": 1024,
+            "type": "integer",
+            "description": "The number of buffer workers. Only applicable for egress type bridges.<br/>For bridges only have ingress direction data flow, it can be set to 0 otherwise must be greater than 0.",
+            "minimum": 1
+          },
+          "health_check_interval": {
+            "default": "15s",
+            "type": "string",
+            "description": "Health check interval.",
+            "example": "32s"
+          },
+          "query_mode": {
+            "default": "async",
+            "type": "string",
+            "enum": [
+              "sync",
+              "async"
+            ],
+            "description": "Query mode. Optional 'sync/async', default 'async'."
+          },
+          "request_ttl": {
+            "default": "45s",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "infinity"
+                ]
+              },
+              {
+                "type": "string",
+                "example": "32s"
+              }
+            ]
+          },
+          "inflight_window": {
+            "default": 100,
+            "type": "integer",
+            "description": "Query inflight window. When query_mode is set to async, this config has to be set to 1 if messages from the same MQTT client have to be strictly ordered.",
+            "minimum": 1
+          },
+          "max_buffer_bytes": {
+            "default": "256MB",
+            "type": "string",
+            "description": "Maximum number of bytes to buffer for each buffer worker.",
+            "example": "32MB"
+          }
+        },
+        "type": "object"
+      },
       "emqx_gateway_api_listeners.tcp_listener": {
         "properties": {
           "id": {
@@ -17271,6 +18343,49 @@
           },
           "websocket": {
             "$ref": "#/components/schemas/broker.ws_opts"
+          }
+        },
+        "type": "object"
+      },
+      "bridge_mqtt_publisher.put_bridge_v2": {
+        "required": [
+          "connector",
+          "parameters"
+        ],
+        "properties": {
+          "local_topic": {
+            "type": "string",
+            "description": "MQTT topic or topic filter as data source (action input).  If rule action is used as data source, this config should be left empty, otherwise messages will be duplicated in the remote system."
+          },
+          "enable": {
+            "default": true,
+            "type": "boolean",
+            "description": "Enable (true) or disable (false) this action."
+          },
+          "connector": {
+            "type": "string",
+            "description": "Name of the connector specified by the action, used for external resource selection."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "default": "",
+            "type": "string",
+            "description": "Descriptive text."
+          },
+          "parameters": {
+            "description": "Action specific configs.",
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.action_parameters"
+          },
+          "resource_opts": {
+            "default": {},
+            "description": "Resource options.",
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.action_resource_opts"
           }
         },
         "type": "object"
@@ -17946,6 +19061,20 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "description": "The import file template type, enum with `plain`,`hash`",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "plain",
+                "hash"
+              ]
+            },
+            "example": "hash"
           }
         ],
         "responses": {
@@ -17998,6 +19127,7 @@
           }
         },
         "requestBody": {
+          "description": "Import body",
           "content": {
             "multipart/form-data": {
               "schema": {
@@ -18008,6 +19138,23 @@
                     "format": "binary"
                   }
                 }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": [
+                  {
+                    "is_superuser": true,
+                    "password": "password1",
+                    "user_id": "user1"
+                  },
+                  {
+                    "is_superuser": false,
+                    "password": "password2",
+                    "user_id": "user2"
+                  }
+                ]
               }
             }
           }
@@ -18715,21 +19862,21 @@
                             {
                               "action": "publish",
                               "retain": "true",
-                              "topic": "test/topic/3",
                               "qos": [
                                 "1"
                               ],
+                              "topic": "test/topic/3",
                               "permission": "allow"
                             },
                             {
                               "action": "publish",
                               "retain": "all",
-                              "topic": "test/topic/4",
                               "qos": [
                                 "0",
                                 "1",
                                 "2"
                               ],
+                              "topic": "test/topic/4",
                               "permission": "allow"
                             }
                           ],
@@ -18842,21 +19989,21 @@
                         {
                           "action": "publish",
                           "retain": "true",
-                          "topic": "test/topic/3",
                           "qos": [
                             "1"
                           ],
+                          "topic": "test/topic/3",
                           "permission": "allow"
                         },
                         {
                           "action": "publish",
                           "retain": "all",
-                          "topic": "test/topic/4",
                           "qos": [
                             "0",
                             "1",
                             "2"
                           ],
+                          "topic": "test/topic/4",
                           "permission": "allow"
                         }
                       ],
@@ -19468,11 +20615,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -19535,8 +20682,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -19706,11 +20853,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -19773,8 +20920,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -19962,8 +21109,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -20084,11 +21231,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -20178,11 +21325,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -20245,8 +21392,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -20434,8 +21581,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -20558,11 +21705,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -20625,11 +21772,7 @@
                         }
                       }
                     ],
-                    "max_conn_rate": 1000,
-                    "access_rules": [
-                      "allow all"
-                    ],
-                    "max_connections": 1024000,
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "versions": [
@@ -20641,7 +21784,11 @@
                       "keyfile": "/etc/emqx/certs/key.pem",
                       "cacertfile": "/etc/emqx/certs/cacert.pem"
                     },
-                    "acceptors": 16
+                    "max_conn_rate": 1000,
+                    "access_rules": [
+                      "allow all"
+                    ],
+                    "max_connections": 1024000
                   },
                   {
                     "name": "ssl-def",
@@ -20679,12 +21826,12 @@
                         }
                       }
                     ],
+                    "acceptors": 16,
                     "max_conn_rate": 1000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_connections": 1024000
                   },
                   {
                     "name": "tcp-def",
@@ -20718,9 +21865,9 @@
                         }
                       }
                     ],
+                    "acceptors": 16,
                     "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_connections": 1024000
                   },
                   {
                     "name": "dtls-psk",
@@ -20741,8 +21888,7 @@
                         }
                       }
                     ],
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -20756,7 +21902,8 @@
                       "cacertfile": "/etc/emqx/certs/cacert.pem",
                       "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
-                    "acceptors": 16
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000
                   },
                   {
                     "name": "tcp-with-authn",
@@ -20785,9 +21932,9 @@
                         }
                       }
                     ],
+                    "acceptors": 16,
                     "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_connections": 1024000
                   }
                 ],
                 "schema": {
@@ -20881,11 +22028,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -20922,11 +22069,7 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "max_conn_rate": 1000,
-                      "access_rules": [
-                        "allow all"
-                      ],
-                      "max_connections": 1024000,
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "versions": [
@@ -20938,7 +22081,11 @@
                         "keyfile": "/etc/emqx/certs/key.pem",
                         "cacertfile": "/etc/emqx/certs/cacert.pem"
                       },
-                      "acceptors": 16
+                      "max_conn_rate": 1000,
+                      "access_rules": [
+                        "allow all"
+                      ],
+                      "max_connections": 1024000
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -20964,12 +22111,12 @@
                         "keyfile": "/etc/emqx/certs/key.pem",
                         "cacertfile": "/etc/emqx/certs/cacert.pem"
                       },
+                      "acceptors": 16,
                       "max_conn_rate": 1000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_connections": 1024000
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -20991,9 +22138,9 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
+                      "acceptors": 16,
                       "max_conn_rate": 1000,
-                      "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_connections": 1024000
                     },
                     "summary": "A simple TCP listener example"
                   },
@@ -21002,8 +22149,7 @@
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000,
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -21017,7 +22163,8 @@
                         "cacertfile": "/etc/emqx/certs/cacert.pem",
                         "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
-                      "acceptors": 16
+                      "max_conn_rate": 1000,
+                      "max_connections": 1024000
                     },
                     "summary": "A DTLS listener with PSK example"
                   },
@@ -21034,9 +22181,9 @@
                         },
                         "user_id_type": "username"
                       },
+                      "acceptors": 16,
                       "max_conn_rate": 1000,
-                      "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_connections": 1024000
                     },
                     "summary": "A TCP listener with authentication example"
                   }
@@ -21140,11 +22287,7 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
-                    "max_conn_rate": 1000,
-                    "access_rules": [
-                      "allow all"
-                    ],
-                    "max_connections": 1024000,
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "versions": [
@@ -21156,7 +22299,11 @@
                       "keyfile": "/etc/emqx/certs/key.pem",
                       "cacertfile": "/etc/emqx/certs/cacert.pem"
                     },
-                    "acceptors": 16
+                    "max_conn_rate": 1000,
+                    "access_rules": [
+                      "allow all"
+                    ],
+                    "max_connections": 1024000
                   },
                   "summary": "A simple DTLS listener example"
                 },
@@ -21182,12 +22329,12 @@
                       "keyfile": "/etc/emqx/certs/key.pem",
                       "cacertfile": "/etc/emqx/certs/cacert.pem"
                     },
+                    "acceptors": 16,
                     "max_conn_rate": 1000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_connections": 1024000
                   },
                   "summary": "A simple SSL listener example"
                 },
@@ -21209,9 +22356,9 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
+                    "acceptors": 16,
                     "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_connections": 1024000
                   },
                   "summary": "A simple TCP listener example"
                 },
@@ -21220,8 +22367,7 @@
                     "name": "dtls-psk",
                     "type": "dtls",
                     "bind": "22214",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -21235,7 +22381,8 @@
                       "cacertfile": "/etc/emqx/certs/cacert.pem",
                       "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
-                    "acceptors": 16
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000
                   },
                   "summary": "A DTLS listener with PSK example"
                 },
@@ -21252,9 +22399,9 @@
                       },
                       "user_id_type": "username"
                     },
+                    "acceptors": 16,
                     "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_connections": 1024000
                   },
                   "summary": "A TCP listener with authentication example"
                 }
@@ -21444,7 +22591,7 @@
           "content": {
             "application/json": {
               "example": [
-                "emqx_clienid_985bb09d",
+                "emqx_clientid_985bb09d",
                 "emqx_clientid_211cc01c"
               ],
               "schema": {
@@ -21525,9 +22672,157 @@
               "schema": {
                 "oneOf": [
                   {
+                    "$ref": "#/components/schemas/connector_mqtt.post_connector"
+                  },
+                  {
                     "$ref": "#/components/schemas/bridge_http.post_connector"
                   }
                 ]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/nodes/{node}/sources/{id}/{operation}": {
+      "post": {
+        "description": "Start bridge on a specific node.",
+        "tags": [
+          "Sources"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "node",
+            "description": "The node name, e.g. 'emqx@127.0.0.1'.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "emqx@127.0.0.1"
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "description": "The bridge id. Must be of format {type}:{name}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "http:my_http_action"
+          },
+          {
+            "in": "path",
+            "name": "operation",
+            "description": "Operation can be one of: 'start'.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "start"
+              ]
+            },
+            "example": "start"
+          }
+        ],
+        "summary": "Manually start a bridge on a given node",
+        "responses": {
+          "204": {
+            "description": "Operation success"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "BAD_REQUEST"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Problem with configuration of external service or bridge not enabled"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Bridge or node not found or invalid operation"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_IMPLEMENTED"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Not Implemented"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Service unavailable"
+                    }
+                  },
+                  "type": "object"
+                }
               }
             }
           }
@@ -21594,21 +22889,21 @@
                             {
                               "action": "publish",
                               "retain": "true",
-                              "topic": "test/topic/3",
                               "qos": [
                                 "1"
                               ],
+                              "topic": "test/topic/3",
                               "permission": "allow"
                             },
                             {
                               "action": "publish",
                               "retain": "all",
-                              "topic": "test/topic/4",
                               "qos": [
                                 "0",
                                 "1",
                                 "2"
                               ],
+                              "topic": "test/topic/4",
                               "permission": "allow"
                             }
                           ],
@@ -21699,21 +22994,21 @@
                         {
                           "action": "publish",
                           "retain": "true",
-                          "topic": "test/topic/3",
                           "qos": [
                             "1"
                           ],
+                          "topic": "test/topic/3",
                           "permission": "allow"
                         },
                         {
                           "action": "publish",
                           "retain": "all",
-                          "topic": "test/topic/4",
                           "qos": [
                             "0",
                             "1",
                             "2"
                           ],
+                          "topic": "test/topic/4",
                           "permission": "allow"
                         }
                       ],
@@ -22291,6 +23586,178 @@
         ]
       }
     },
+    "/sources": {
+      "get": {
+        "description": "List all created bridges.",
+        "tags": [
+          "Sources"
+        ],
+        "parameters": [],
+        "summary": "List sources",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "name": "mqtt_source",
+                    "status": "connected",
+                    "type": "mqtt",
+                    "description": "My example mqtt source",
+                    "enable": true,
+                    "parameters": {
+                      "qos": 1,
+                      "topic": "remote/topic"
+                    },
+                    "connector": "mqtt_connector",
+                    "node_status": [
+                      {
+                        "node": "emqx@localhost",
+                        "status": "connected"
+                      }
+                    ],
+                    "resource_opts": {
+                      "health_check_interval": "30s"
+                    }
+                  }
+                ],
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/bridge_mqtt_publisher.get_source"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "description": "Create a new bridge by type and name.",
+        "tags": [
+          "Sources"
+        ],
+        "parameters": [],
+        "summary": "Create source",
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "mqtt": {
+                    "value": {
+                      "name": "mqtt_source",
+                      "status": "connected",
+                      "type": "mqtt",
+                      "description": "My example mqtt source",
+                      "enable": true,
+                      "parameters": {
+                        "qos": 1,
+                        "topic": "remote/topic"
+                      },
+                      "connector": "mqtt_connector",
+                      "node_status": [
+                        {
+                          "node": "emqx@localhost",
+                          "status": "connected"
+                        }
+                      ],
+                      "resource_opts": {
+                        "health_check_interval": "30s"
+                      }
+                    },
+                    "summary": "MQTT Subscriber Source"
+                  }
+                },
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/bridge_mqtt_publisher.get_source"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "ALREADY_EXISTS"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Source already exists"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "mqtt": {
+                  "value": {
+                    "name": "mqtt_source",
+                    "type": "mqtt",
+                    "description": "My example mqtt source",
+                    "enable": true,
+                    "parameters": {
+                      "qos": 1,
+                      "topic": "remote/topic"
+                    },
+                    "connector": "mqtt_connector",
+                    "resource_opts": {
+                      "health_check_interval": "30s"
+                    }
+                  },
+                  "summary": "MQTT Subscriber Source"
+                }
+              },
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/bridge_mqtt_publisher.post_source"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/actions/{id}/enable/{enable}": {
       "put": {
         "description": "Enable or Disable bridge on all nodes in the cluster.",
@@ -22377,6 +23844,37 @@
             "bearerAuth": []
           }
         ]
+      }
+    },
+    "/prometheus/data_integration": {
+      "get": {
+        "description": "Get Prometheus Metrics for Data Integration",
+        "tags": [
+          "Monitor"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/emqx_prometheus_api.mode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get Prometheus Data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": []
       }
     },
     "/data/files/{filename}": {
@@ -22665,6 +24163,357 @@
         ]
       }
     },
+    "/sources/{id}": {
+      "get": {
+        "description": "Get a bridge by id.",
+        "tags": [
+          "Sources"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "The bridge id. Must be of format {type}:{name}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "http:my_http_action"
+          }
+        ],
+        "summary": "Get source",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "mqtt": {
+                    "value": {
+                      "name": "mqtt_source",
+                      "status": "connected",
+                      "type": "mqtt",
+                      "description": "My example mqtt source",
+                      "enable": true,
+                      "parameters": {
+                        "qos": 1,
+                        "topic": "remote/topic"
+                      },
+                      "connector": "mqtt_connector",
+                      "node_status": [
+                        {
+                          "node": "emqx@localhost",
+                          "status": "connected"
+                        }
+                      ],
+                      "resource_opts": {
+                        "health_check_interval": "30s"
+                      }
+                    },
+                    "summary": "MQTT Subscriber Source"
+                  }
+                },
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/bridge_mqtt_publisher.get_source"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Source not found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "description": "Update a bridge by id.",
+        "tags": [
+          "Sources"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "The bridge id. Must be of format {type}:{name}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "http:my_http_action"
+          }
+        ],
+        "summary": "Update source",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "mqtt": {
+                    "value": {
+                      "name": "mqtt_source",
+                      "status": "connected",
+                      "type": "mqtt",
+                      "description": "My example mqtt source",
+                      "enable": true,
+                      "parameters": {
+                        "qos": 1,
+                        "topic": "remote/topic"
+                      },
+                      "connector": "mqtt_connector",
+                      "node_status": [
+                        {
+                          "node": "emqx@localhost",
+                          "status": "connected"
+                        }
+                      ],
+                      "resource_opts": {
+                        "health_check_interval": "30s"
+                      }
+                    },
+                    "summary": "MQTT Subscriber Source"
+                  }
+                },
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/bridge_mqtt_publisher.get_source"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "BAD_REQUEST"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Update source failed"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Source not found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "mqtt": {
+                  "value": {
+                    "description": "My example mqtt source",
+                    "enable": true,
+                    "parameters": {
+                      "qos": 1,
+                      "topic": "remote/topic"
+                    },
+                    "connector": "mqtt_connector",
+                    "resource_opts": {
+                      "health_check_interval": "30s"
+                    }
+                  },
+                  "summary": "MQTT Subscriber Source"
+                }
+              },
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/bridge_mqtt_publisher.put_source"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "description": "Delete a bridge by id.",
+        "tags": [
+          "Sources"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "The bridge id. Must be of format {type}:{name}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "http:my_http_action"
+          },
+          {
+            "in": "query",
+            "name": "also_delete_dep_actions",
+            "description": "Whether to cascade delete dependent actions.",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "summary": "Delete source",
+        "responses": {
+          "204": {
+            "description": "Source deleted"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "rules": {
+                      "type": "array",
+                      "description": "Dependent Rule IDs",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "BAD_REQUEST"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Cannot delete bridge while active rules are defined for this source"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Source not found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Service unavailable"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/data/export": {
       "post": {
         "description": "Export a data backup file",
@@ -22725,11 +24574,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             }
           }
@@ -22744,82 +24593,82 @@
                   "lwm2m_client": {
                     "value": {
                       "recv_oct": 56,
-                      "recv_pkt": 1,
-                      "expiry_interval": 0,
+                      "subscriptions_max": "infinity",
+                      "mqueue_max": "infinity",
                       "disconnected_at": null,
-                      "mqueue_len": 0,
-                      "awaiting_rel_max": "infinity",
+                      "lifetime": 86400,
+                      "proto_name": "LwM2M",
+                      "recv_pkt": 1,
                       "keepalive": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "is_bridge": false,
-                      "awaiting_rel_cnt": 0,
-                      "username": "guest",
-                      "inflight_max": "infinity",
                       "ip_address": "127.0.0.1",
-                      "inflight_cnt": 0,
-                      "subscriptions_max": "infinity",
+                      "is_bridge": false,
+                      "username": "guest",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
                       "send_oct": 61,
-                      "heap_size": 4185,
-                      "clean_start": true,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "recv_msg": 0,
-                      "port": 50675,
-                      "lifetime": 86400,
-                      "mailbox_len": 0,
-                      "send_msg": 0,
-                      "endpoint_name": "urn:imei:154928475237123",
                       "subscriptions_cnt": 0,
-                      "proto_name": "LwM2M",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "send_pkt": 1,
+                      "mqueue_len": 0,
+                      "heap_size": 4185,
                       "proto_ver": "1.0",
                       "mqueue_dropped": 0,
+                      "awaiting_rel_cnt": 0,
+                      "mailbox_len": 0,
+                      "clean_start": true,
+                      "port": 50675,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "recv_msg": 0,
+                      "endpoint_name": "urn:imei:154928475237123",
+                      "inflight_max": "infinity",
+                      "inflight_cnt": 0,
+                      "send_pkt": 1,
+                      "send_msg": 0,
+                      "awaiting_rel_max": "infinity",
                       "connected": true,
                       "reductions": 72022,
-                      "mqueue_max": "infinity",
+                      "expiry_interval": 0,
                       "recv_cnt": 1,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE"
+                      "connected_at": "2021-12-07T10:44:02.721+08:00"
                     },
                     "summary": "LwM2M client info"
                   },
                   "general_client": {
                     "value": {
                       "recv_oct": 56,
-                      "recv_pkt": 1,
-                      "expiry_interval": 0,
+                      "subscriptions_max": "infinity",
+                      "mqueue_max": "infinity",
                       "disconnected_at": null,
-                      "mqueue_len": 0,
-                      "awaiting_rel_max": "infinity",
+                      "proto_name": "STOMP",
+                      "recv_pkt": 1,
                       "keepalive": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "is_bridge": false,
-                      "awaiting_rel_cnt": 0,
-                      "username": "guest",
-                      "inflight_max": "infinity",
                       "ip_address": "127.0.0.1",
-                      "inflight_cnt": 0,
-                      "subscriptions_max": "infinity",
+                      "is_bridge": false,
+                      "username": "guest",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
                       "send_oct": 61,
-                      "heap_size": 4185,
-                      "clean_start": true,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "recv_msg": 0,
-                      "port": 50675,
-                      "mailbox_len": 0,
-                      "send_msg": 0,
                       "subscriptions_cnt": 0,
-                      "proto_name": "STOMP",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "send_pkt": 1,
+                      "mqueue_len": 0,
+                      "heap_size": 4185,
                       "proto_ver": "1.0",
                       "mqueue_dropped": 0,
+                      "awaiting_rel_cnt": 0,
+                      "mailbox_len": 0,
+                      "clean_start": true,
+                      "port": 50675,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "recv_msg": 0,
+                      "inflight_max": "infinity",
+                      "inflight_cnt": 0,
+                      "send_pkt": 1,
+                      "send_msg": 0,
+                      "awaiting_rel_max": "infinity",
                       "connected": true,
                       "reductions": 72022,
-                      "mqueue_max": "infinity",
+                      "expiry_interval": 0,
                       "recv_cnt": 1,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE"
+                      "connected_at": "2021-12-07T10:44:02.721+08:00"
                     },
                     "summary": "General client info"
                   }
@@ -22924,11 +24773,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             }
           }
@@ -23346,21 +25195,21 @@
                         {
                           "action": "publish",
                           "retain": "true",
-                          "topic": "test/topic/3",
                           "qos": [
                             "1"
                           ],
+                          "topic": "test/topic/3",
                           "permission": "allow"
                         },
                         {
                           "action": "publish",
                           "retain": "all",
-                          "topic": "test/topic/4",
                           "qos": [
                             "0",
                             "1",
                             "2"
                           ],
+                          "topic": "test/topic/4",
                           "permission": "allow"
                         }
                       ],
@@ -23469,21 +25318,21 @@
                       {
                         "action": "publish",
                         "retain": "true",
-                        "topic": "test/topic/3",
                         "qos": [
                           "1"
                         ],
+                        "topic": "test/topic/3",
                         "permission": "allow"
                       },
                       {
                         "action": "publish",
                         "retain": "all",
-                        "topic": "test/topic/4",
                         "qos": [
                           "0",
                           "1",
                           "2"
                         ],
+                        "topic": "test/topic/4",
                         "permission": "allow"
                       }
                     ],
@@ -23762,6 +25611,9 @@
                 "schema": {
                   "oneOf": [
                     {
+                      "$ref": "#/components/schemas/connector_mqtt.get_connector"
+                    },
+                    {
                       "$ref": "#/components/schemas/bridge_http.get_connector"
                     }
                   ]
@@ -23852,6 +25704,9 @@
                 "schema": {
                   "oneOf": [
                     {
+                      "$ref": "#/components/schemas/connector_mqtt.get_connector"
+                    },
+                    {
                       "$ref": "#/components/schemas/bridge_http.get_connector"
                     }
                   ]
@@ -23925,6 +25780,9 @@
               },
               "schema": {
                 "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/connector_mqtt.put_connector"
+                  },
                   {
                     "$ref": "#/components/schemas/bridge_http.put_connector"
                   }
@@ -24272,11 +26130,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -24323,11 +26181,7 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "max_conn_rate": 1000,
-                      "access_rules": [
-                        "allow all"
-                      ],
-                      "max_connections": 1024000,
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "versions": [
@@ -24339,7 +26193,11 @@
                         "keyfile": "/etc/emqx/certs/key.pem",
                         "cacertfile": "/etc/emqx/certs/cacert.pem"
                       },
-                      "acceptors": 16
+                      "max_conn_rate": 1000,
+                      "access_rules": [
+                        "allow all"
+                      ],
+                      "max_connections": 1024000
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -24365,12 +26223,12 @@
                         "keyfile": "/etc/emqx/certs/key.pem",
                         "cacertfile": "/etc/emqx/certs/cacert.pem"
                       },
+                      "acceptors": 16,
                       "max_conn_rate": 1000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_connections": 1024000
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -24392,9 +26250,9 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
+                      "acceptors": 16,
                       "max_conn_rate": 1000,
-                      "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_connections": 1024000
                     },
                     "summary": "A simple TCP listener example"
                   },
@@ -24403,8 +26261,7 @@
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000,
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -24418,7 +26275,8 @@
                         "cacertfile": "/etc/emqx/certs/cacert.pem",
                         "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
-                      "acceptors": 16
+                      "max_conn_rate": 1000,
+                      "max_connections": 1024000
                     },
                     "summary": "A DTLS listener with PSK example"
                   },
@@ -24435,9 +26293,9 @@
                         },
                         "user_id_type": "username"
                       },
+                      "acceptors": 16,
                       "max_conn_rate": 1000,
-                      "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_connections": 1024000
                     },
                     "summary": "A TCP listener with authentication example"
                   }
@@ -24536,11 +26394,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -24587,11 +26445,7 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "max_conn_rate": 1000,
-                      "access_rules": [
-                        "allow all"
-                      ],
-                      "max_connections": 1024000,
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "versions": [
@@ -24603,7 +26457,11 @@
                         "keyfile": "/etc/emqx/certs/key.pem",
                         "cacertfile": "/etc/emqx/certs/cacert.pem"
                       },
-                      "acceptors": 16
+                      "max_conn_rate": 1000,
+                      "access_rules": [
+                        "allow all"
+                      ],
+                      "max_connections": 1024000
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -24629,12 +26487,12 @@
                         "keyfile": "/etc/emqx/certs/key.pem",
                         "cacertfile": "/etc/emqx/certs/cacert.pem"
                       },
+                      "acceptors": 16,
                       "max_conn_rate": 1000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_connections": 1024000
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -24656,9 +26514,9 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
+                      "acceptors": 16,
                       "max_conn_rate": 1000,
-                      "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_connections": 1024000
                     },
                     "summary": "A simple TCP listener example"
                   },
@@ -24667,8 +26525,7 @@
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000,
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -24682,7 +26539,8 @@
                         "cacertfile": "/etc/emqx/certs/cacert.pem",
                         "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
-                      "acceptors": 16
+                      "max_conn_rate": 1000,
+                      "max_connections": 1024000
                     },
                     "summary": "A DTLS listener with PSK example"
                   },
@@ -24699,9 +26557,9 @@
                         },
                         "user_id_type": "username"
                       },
+                      "acceptors": 16,
                       "max_conn_rate": 1000,
-                      "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_connections": 1024000
                     },
                     "summary": "A TCP listener with authentication example"
                   }
@@ -24805,11 +26663,7 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
-                    "max_conn_rate": 1000,
-                    "access_rules": [
-                      "allow all"
-                    ],
-                    "max_connections": 1024000,
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "versions": [
@@ -24821,7 +26675,11 @@
                       "keyfile": "/etc/emqx/certs/key.pem",
                       "cacertfile": "/etc/emqx/certs/cacert.pem"
                     },
-                    "acceptors": 16
+                    "max_conn_rate": 1000,
+                    "access_rules": [
+                      "allow all"
+                    ],
+                    "max_connections": 1024000
                   },
                   "summary": "A simple DTLS listener example"
                 },
@@ -24847,12 +26705,12 @@
                       "keyfile": "/etc/emqx/certs/key.pem",
                       "cacertfile": "/etc/emqx/certs/cacert.pem"
                     },
+                    "acceptors": 16,
                     "max_conn_rate": 1000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_connections": 1024000
                   },
                   "summary": "A simple SSL listener example"
                 },
@@ -24874,9 +26732,9 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
+                    "acceptors": 16,
                     "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_connections": 1024000
                   },
                   "summary": "A simple TCP listener example"
                 },
@@ -24885,8 +26743,7 @@
                     "name": "dtls-psk",
                     "type": "dtls",
                     "bind": "22214",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -24900,7 +26757,8 @@
                       "cacertfile": "/etc/emqx/certs/cacert.pem",
                       "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
-                    "acceptors": 16
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000
                   },
                   "summary": "A DTLS listener with PSK example"
                 },
@@ -24917,9 +26775,9 @@
                       },
                       "user_id_type": "username"
                     },
+                    "acceptors": 16,
                     "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_connections": 1024000
                   },
                   "summary": "A TCP listener with authentication example"
                 }
@@ -24972,11 +26830,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -25053,6 +26911,62 @@
         ]
       }
     },
+    "/sources/{id}/metrics/reset": {
+      "put": {
+        "description": "Reset a bridge metrics by id.",
+        "tags": [
+          "Sources"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "The bridge id. Must be of format {type}:{name}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "http:my_http_action"
+          }
+        ],
+        "summary": "Reset source metrics",
+        "responses": {
+          "204": {
+            "description": "Reset success"
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Source not found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/gateways/{name}/enable/{enable}": {
       "put": {
         "description": "Update the gateway basic configurations and running status.<br/><br/>Note: The Authentication and Listener configurations should be updated by other special APIs.",
@@ -25068,11 +26982,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -25654,8 +27568,8 @@
                     ],
                     "max_connections": 1024000,
                     "created_at": "2021-12-08T14:41:45.071+08:00",
-                    "current_connections": 0,
-                    "stopped_at": "2021-12-08T14:56:35.576+08:00"
+                    "stopped_at": "2021-12-08T14:56:35.576+08:00",
+                    "current_connections": 0
                   },
                   {
                     "name": "stomp",
@@ -25889,8 +27803,8 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "url": "http://localhost:9901/messages/${topic}",
                     "method": "post",
+                    "url": "http://localhost:9901/messages/${topic}",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
@@ -25931,12 +27845,12 @@
                       "local": {
                         "retain": "${retain}",
                         "payload": "${payload}",
-                        "topic": "from_aws/${topic}",
-                        "qos": "${qos}"
+                        "qos": "${qos}",
+                        "topic": "from_aws/${topic}"
                       },
                       "remote": {
-                        "topic": "aws/#",
-                        "qos": 1
+                        "qos": 1,
+                        "topic": "aws/#"
                       }
                     },
                     "egress": {
@@ -25946,8 +27860,8 @@
                       "remote": {
                         "retain": false,
                         "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
+                        "qos": "${qos}",
+                        "topic": "from_emqx/${topic}"
                       }
                     }
                   },
@@ -26059,10 +27973,14 @@
         "tags": [
           "Monitor"
         ],
-        "parameters": [],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/emqx_prometheus_api.mode"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Get Prometheus Data. Note that support for JSON output is deprecated and will be removed in v5.2.",
+            "description": "Get Prometheus Data.",
             "content": {
               "text/plain": {
                 "schema": {
@@ -26201,8 +28119,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -26466,8 +28384,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -26891,6 +28809,94 @@
                   }
                 },
                 "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/sources/{id}/enable/{enable}": {
+      "put": {
+        "description": "Enable or Disable bridge on all nodes in the cluster.",
+        "tags": [
+          "Sources"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "The bridge id. Must be of format {type}:{name}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "http:my_http_action"
+          },
+          {
+            "in": "path",
+            "name": "enable",
+            "description": "Whether to enable this bridge.",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            },
+            "example": true
+          }
+        ],
+        "summary": "Enable or disable bridge",
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Bridge not found or invalid operation"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Service unavailable"
+                    }
+                  },
+                  "type": "object"
+                }
               }
             }
           }
@@ -27463,6 +29469,83 @@
         ]
       }
     },
+    "/sources_probe": {
+      "post": {
+        "description": "Test creating a new bridge.",
+        "tags": [
+          "Sources"
+        ],
+        "parameters": [],
+        "summary": "Test creating bridge",
+        "responses": {
+          "204": {
+            "description": "Test bridge OK"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "TEST_FAILED"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "bridge test failed"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "mqtt": {
+                  "value": {
+                    "name": "mqtt_source",
+                    "type": "mqtt",
+                    "description": "My example mqtt source",
+                    "enable": true,
+                    "parameters": {
+                      "qos": 1,
+                      "topic": "remote/topic"
+                    },
+                    "connector": "mqtt_connector",
+                    "resource_opts": {
+                      "health_check_interval": "30s"
+                    }
+                  },
+                  "summary": "MQTT Subscriber Source"
+                }
+              },
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/bridge_mqtt_publisher.post_source"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/listeners": {
       "get": {
         "description": "List all running node's listeners for the specified type.",
@@ -27604,12 +29687,12 @@
                     "backlog": 1024,
                     "active_n": 100
                   },
+                  "acceptors": 16,
+                  "proxy_protocol": false,
                   "access_rules": [
                     "allow all"
                   ],
                   "max_connections": 204800,
-                  "acceptors": 16,
-                  "proxy_protocol": false,
                   "proxy_protocol_timeout": "3s",
                   "mountpoint": "/",
                   "current_connections": 10240
@@ -27678,12 +29761,12 @@
                   "backlog": 1024,
                   "active_n": 100
                 },
+                "acceptors": 16,
+                "proxy_protocol": false,
                 "access_rules": [
                   "allow all"
                 ],
                 "max_connections": 204800,
-                "acceptors": 16,
-                "proxy_protocol": false,
                 "proxy_protocol_timeout": "3s",
                 "mountpoint": "/",
                 "current_connections": 10240
@@ -27801,6 +29884,59 @@
             "description": "",
             "content": {
               "application/json": {
+                "example": {
+                  "heap_size": 610,
+                  "send_msg.dropped.expired": 0,
+                  "send_oct": 31,
+                  "recv_msg.qos1": 0,
+                  "is_persistent": false,
+                  "send_pkt": 4,
+                  "clean_start": true,
+                  "inflight_cnt": 0,
+                  "node": "emqx@127.0.0.1",
+                  "send_msg.dropped.queue_full": 0,
+                  "awaiting_rel_cnt": 0,
+                  "inflight_max": 32,
+                  "created_at": "2024-01-01T12:34:56.789+08:00",
+                  "subscriptions_cnt": 1,
+                  "mailbox_len": 0,
+                  "send_cnt": 4,
+                  "connected": true,
+                  "ip_address": "127.0.0.1",
+                  "awaiting_rel_max": 100,
+                  "recv_msg.qos2": 0,
+                  "proto_ver": 5,
+                  "mountpoint": "null",
+                  "proto_name": "MQTT",
+                  "port": 52571,
+                  "connected_at": "2024-01-01T12:34:56.789+08:00",
+                  "enable_authn": true,
+                  "expiry_interval": 0,
+                  "username": null,
+                  "recv_msg": 0,
+                  "recv_oct": 49,
+                  "send_msg.dropped.too_large": 0,
+                  "keepalive": 60,
+                  "send_msg.qos1": 0,
+                  "send_msg.qos2": 0,
+                  "recv_msg.qos0": 0,
+                  "send_msg.qos0": 0,
+                  "subscriptions_max": "infinity",
+                  "mqueue_max": 1000,
+                  "mqueue_dropped": 0,
+                  "clientid": "01",
+                  "is_bridge": false,
+                  "peerport": 52571,
+                  "send_msg": 0,
+                  "listener": "tcp:default",
+                  "recv_cnt": 4,
+                  "recv_pkt": 4,
+                  "recv_msg.dropped": 0,
+                  "send_msg.dropped": 0,
+                  "recv_msg.dropped.await_pubrel_timeout": 0,
+                  "reductions": 6836,
+                  "mqueue_len": 0
+                },
                 "schema": {
                   "$ref": "#/components/schemas/emqx_mgmt_api_clients.client"
                 }
@@ -27891,6 +30027,82 @@
         ]
       }
     },
+    "/sources/{id}/metrics": {
+      "get": {
+        "description": "Get bridge metrics by id.",
+        "tags": [
+          "Sources"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "The bridge id. Must be of format {type}:{name}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "http:my_http_action"
+          }
+        ],
+        "summary": "Get source metrics",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "metrics": {
+                      "description": "Bridge metrics.",
+                      "$ref": "#/components/schemas/bridge.metrics"
+                    },
+                    "node_metrics": {
+                      "type": "array",
+                      "description": "Node metrics.",
+                      "items": {
+                        "$ref": "#/components/schemas/bridge.node_metrics"
+                      }
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Source not found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/gateways/{name}/authentication": {
       "get": {
         "description": "Gets the configuration of the specified gateway authenticator.<br/><br/>Returns 404 when gateway or authentication is not enabled.",
@@ -27906,11 +30118,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -27963,8 +30175,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -28134,11 +30346,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -28191,8 +30403,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -28380,8 +30592,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -28502,11 +30714,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -28586,11 +30798,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -28643,8 +30855,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -28832,8 +31044,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -29066,6 +31278,141 @@
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/emqx_mgmt_api_clients.subscribe"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/sources/{id}/{operation}": {
+      "post": {
+        "description": "Start bridge on all nodes in the cluster.",
+        "tags": [
+          "Sources"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "The bridge id. Must be of format {type}:{name}.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "http:my_http_action"
+          },
+          {
+            "in": "path",
+            "name": "operation",
+            "description": "Operation can be one of: 'start'.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "start"
+              ]
+            },
+            "example": "start"
+          }
+        ],
+        "summary": "Manually start a bridge",
+        "responses": {
+          "204": {
+            "description": "Operation success"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "BAD_REQUEST"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Problem with configuration of external service"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Bridge not found or invalid operation"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_IMPLEMENTED"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Not Implemented"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Service unavailable"
+                    }
+                  },
+                  "type": "object"
                 }
               }
             }
@@ -29387,12 +31734,38 @@
                       "query_mode": "async",
                       "health_check_interval": "15s"
                     }
+                  },
+                  {
+                    "name": "mqtt_action",
+                    "status": "connected",
+                    "type": "mqtt",
+                    "description": "My example mqtt action",
+                    "enable": true,
+                    "parameters": {
+                      "retain": false,
+                      "payload": "${.payload}",
+                      "qos": 2,
+                      "topic": "remote/topic"
+                    },
+                    "connector": "mqtt_connector",
+                    "node_status": [
+                      {
+                        "node": "emqx@localhost",
+                        "status": "connected"
+                      }
+                    ],
+                    "resource_opts": {
+                      "health_check_interval": "30s"
+                    }
                   }
                 ],
                 "schema": {
                   "type": "array",
                   "items": {
                     "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/bridge_mqtt_publisher.get_bridge_v2"
+                      },
                       {
                         "$ref": "#/components/schemas/bridge_http.get_bridge_v2"
                       }
@@ -29451,10 +31824,39 @@
                       }
                     },
                     "summary": "HTTP Action"
+                  },
+                  "mqtt": {
+                    "value": {
+                      "name": "mqtt_action",
+                      "status": "connected",
+                      "type": "mqtt",
+                      "description": "My example mqtt action",
+                      "enable": true,
+                      "parameters": {
+                        "retain": false,
+                        "payload": "${.payload}",
+                        "qos": 2,
+                        "topic": "remote/topic"
+                      },
+                      "connector": "mqtt_connector",
+                      "node_status": [
+                        {
+                          "node": "emqx@localhost",
+                          "status": "connected"
+                        }
+                      ],
+                      "resource_opts": {
+                        "health_check_interval": "30s"
+                      }
+                    },
+                    "summary": "MQTT Producer Action"
                   }
                 },
                 "schema": {
                   "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/bridge_mqtt_publisher.get_bridge_v2"
+                    },
                     {
                       "$ref": "#/components/schemas/bridge_http.get_bridge_v2"
                     }
@@ -29509,10 +31911,32 @@
                     }
                   },
                   "summary": "HTTP Action"
+                },
+                "mqtt": {
+                  "value": {
+                    "name": "mqtt_action",
+                    "type": "mqtt",
+                    "description": "My example mqtt action",
+                    "enable": true,
+                    "parameters": {
+                      "retain": false,
+                      "payload": "${.payload}",
+                      "qos": 2,
+                      "topic": "remote/topic"
+                    },
+                    "connector": "mqtt_connector",
+                    "resource_opts": {
+                      "health_check_interval": "30s"
+                    }
+                  },
+                  "summary": "MQTT Producer Action"
                 }
               },
               "schema": {
                 "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/bridge_mqtt_publisher.post_bridge_v2"
+                  },
                   {
                     "$ref": "#/components/schemas/bridge_http.post_bridge_v2"
                   }
@@ -29568,6 +31992,82 @@
                     "message": {
                       "type": "string",
                       "description": "Node not found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/mqtt/delayed/messages/{topic}": {
+      "delete": {
+        "description": "Delete delayed message",
+        "tags": [
+          "MQTT"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "topic",
+            "description": "Topic",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Delete delayed message success"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "INVALID_TOPIC_NAME"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Bad Topic Name"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "MESSAGE_NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Not found delayed message for this topic"
                     }
                   },
                   "type": "object"
@@ -29828,6 +32328,54 @@
                     },
                     "meta": {
                       "$ref": "#/components/schemas/public.meta"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/cluster/{node}/invite_async": {
+      "put": {
+        "description": "Send a join invitation to a node to join the cluster but do not wait for the join result. Join status can be retrieved with `GET api/<version>/invitation`",
+        "tags": [
+          "Cluster"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/cluster.node"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "BAD_REQUEST"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error code to troubleshoot problems."
                     }
                   },
                   "type": "object"
@@ -30128,8 +32676,8 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "url": "http://localhost:9901/messages/${topic}",
                       "method": "post",
+                      "url": "http://localhost:9901/messages/${topic}",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
@@ -30170,12 +32718,12 @@
                         "local": {
                           "retain": "${retain}",
                           "payload": "${payload}",
-                          "topic": "from_aws/${topic}",
-                          "qos": "${qos}"
+                          "qos": "${qos}",
+                          "topic": "from_aws/${topic}"
                         },
                         "remote": {
-                          "topic": "aws/#",
-                          "qos": 1
+                          "qos": 1,
+                          "topic": "aws/#"
                         }
                       },
                       "egress": {
@@ -30185,8 +32733,8 @@
                         "remote": {
                           "retain": false,
                           "payload": "${payload}",
-                          "topic": "from_emqx/${topic}",
-                          "qos": "${qos}"
+                          "qos": "${qos}",
+                          "topic": "from_emqx/${topic}"
                         }
                       }
                     },
@@ -30273,8 +32821,8 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "url": "http://localhost:9901/messages/${topic}",
                       "method": "post",
+                      "url": "http://localhost:9901/messages/${topic}",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
@@ -30315,12 +32863,12 @@
                         "local": {
                           "retain": "${retain}",
                           "payload": "${payload}",
-                          "topic": "from_aws/${topic}",
-                          "qos": "${qos}"
+                          "qos": "${qos}",
+                          "topic": "from_aws/${topic}"
                         },
                         "remote": {
-                          "topic": "aws/#",
-                          "qos": 1
+                          "qos": 1,
+                          "topic": "aws/#"
                         }
                       },
                       "egress": {
@@ -30330,8 +32878,8 @@
                         "remote": {
                           "retain": false,
                           "payload": "${payload}",
-                          "topic": "from_emqx/${topic}",
-                          "qos": "${qos}"
+                          "qos": "${qos}",
+                          "topic": "from_emqx/${topic}"
                         }
                       }
                     },
@@ -30409,8 +32957,8 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "url": "http://localhost:9901/messages/${topic}",
                     "method": "post",
+                    "url": "http://localhost:9901/messages/${topic}",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
@@ -30449,12 +32997,12 @@
                       "local": {
                         "retain": "${retain}",
                         "payload": "${payload}",
-                        "topic": "from_aws/${topic}",
-                        "qos": "${qos}"
+                        "qos": "${qos}",
+                        "topic": "from_aws/${topic}"
                       },
                       "remote": {
-                        "topic": "aws/#",
-                        "qos": 1
+                        "qos": 1,
+                        "topic": "aws/#"
                       }
                     },
                     "egress": {
@@ -30464,8 +33012,8 @@
                       "remote": {
                         "retain": false,
                         "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
+                        "qos": "${qos}",
+                        "topic": "from_emqx/${topic}"
                       }
                     }
                   },
@@ -30758,11 +33306,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             }
           }
@@ -30778,8 +33326,8 @@
                     "value": [
                       {
                         "nl": 0,
-                        "topic": "test/topic",
                         "qos": 1,
+                        "topic": "test/topic",
                         "rap": 0,
                         "rh": 0
                       }
@@ -30880,11 +33428,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             }
           }
@@ -30899,8 +33447,8 @@
                   "general_subscription": {
                     "value": {
                       "nl": 0,
-                      "topic": "test/topic",
                       "qos": 1,
+                      "topic": "test/topic",
                       "rap": 0,
                       "rh": 0
                     },
@@ -30909,13 +33457,13 @@
                   "stomp_subscription": {
                     "value": {
                       "nl": 0,
-                      "topic": "stomp/topic",
                       "qos": 1,
+                      "topic": "stomp/topic",
+                      "rap": 0,
+                      "rh": 0,
                       "sub_props": {
                         "subid": "10"
-                      },
-                      "rap": 0,
-                      "rh": 0
+                      }
                     },
                     "summary": "A STOMP subscription"
                   }
@@ -30979,8 +33527,8 @@
                 "general_subscription": {
                   "value": {
                     "nl": 0,
-                    "topic": "test/topic",
                     "qos": 1,
+                    "topic": "test/topic",
                     "rap": 0,
                     "rh": 0
                   },
@@ -30989,13 +33537,13 @@
                 "stomp_subscription": {
                   "value": {
                     "nl": 0,
-                    "topic": "stomp/topic",
                     "qos": 1,
+                    "topic": "stomp/topic",
+                    "rap": 0,
+                    "rh": 0,
                     "sub_props": {
                       "subid": "10"
-                    },
-                    "rap": 0,
-                    "rh": 0
+                    }
                   },
                   "summary": "A STOMP subscription"
                 }
@@ -31054,6 +33602,15 @@
             }
           }
         },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/cluster.timeout"
+              }
+            }
+          }
+        },
         "security": [
           {
             "basicAuth": []
@@ -31105,6 +33662,15 @@
         "parameters": [
           {
             "in": "query",
+            "name": "topic",
+            "description": "Topic filter, supports wildcards, omit this to match all messages.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
             "name": "page",
             "description": "Page number of the results to fetch.",
             "schema": {
@@ -31117,10 +33683,10 @@
           {
             "in": "query",
             "name": "limit",
-            "description": "Results per page(max 1000)",
+            "description": "Results per page(max 10000)",
             "schema": {
               "default": 100,
-              "maximum": 1000,
+              "maximum": 10000,
               "type": "integer",
               "minimum": 1
             },
@@ -31171,6 +33737,26 @@
                 }
               }
             }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "description": "Delete all retained messages",
+        "tags": [
+          "Retainer"
+        ],
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
           }
         },
         "security": [
@@ -31381,21 +33967,21 @@
                         {
                           "action": "publish",
                           "retain": "true",
-                          "topic": "test/topic/3",
                           "qos": [
                             "1"
                           ],
+                          "topic": "test/topic/3",
                           "permission": "allow"
                         },
                         {
                           "action": "publish",
                           "retain": "all",
-                          "topic": "test/topic/4",
                           "qos": [
                             "0",
                             "1",
                             "2"
                           ],
+                          "topic": "test/topic/4",
                           "permission": "allow"
                         }
                       ],
@@ -31504,21 +34090,21 @@
                       {
                         "action": "publish",
                         "retain": "true",
-                        "topic": "test/topic/3",
                         "qos": [
                           "1"
                         ],
+                        "topic": "test/topic/3",
                         "permission": "allow"
                       },
                       {
                         "action": "publish",
                         "retain": "all",
-                        "topic": "test/topic/4",
                         "qos": [
                           "0",
                           "1",
                           "2"
                         ],
+                        "topic": "test/topic/4",
                         "permission": "allow"
                       }
                     ],
@@ -31901,17 +34487,17 @@
           "content": {
             "application/json": {
               "examples": {
-                "front": {
-                  "value": {
-                    "position": "front"
-                  },
-                  "summary": "front example"
-                },
                 "rear": {
                   "value": {
                     "position": "rear"
                   },
                   "summary": "rear example"
+                },
+                "front": {
+                  "value": {
+                    "position": "front"
+                  },
+                  "summary": "front example"
                 },
                 "relative_after": {
                   "value": {
@@ -32008,11 +34594,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -32134,11 +34720,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -32284,11 +34870,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -32421,8 +35007,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -32580,8 +35166,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -32771,8 +35357,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -33367,10 +35953,32 @@
                     }
                   },
                   "summary": "HTTP Action"
+                },
+                "mqtt": {
+                  "value": {
+                    "name": "mqtt_action",
+                    "type": "mqtt",
+                    "description": "My example mqtt action",
+                    "enable": true,
+                    "parameters": {
+                      "retain": false,
+                      "payload": "${.payload}",
+                      "qos": 2,
+                      "topic": "remote/topic"
+                    },
+                    "connector": "mqtt_connector",
+                    "resource_opts": {
+                      "health_check_interval": "30s"
+                    }
+                  },
+                  "summary": "MQTT Producer Action"
                 }
               },
               "schema": {
                 "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/bridge_mqtt_publisher.post_bridge_v2"
+                  },
                   {
                     "$ref": "#/components/schemas/bridge_http.post_bridge_v2"
                   }
@@ -33460,17 +36068,17 @@
           "content": {
             "application/json": {
               "examples": {
-                "front": {
-                  "value": {
-                    "position": "front"
-                  },
-                  "summary": "absolute position 'front'"
-                },
                 "rear": {
                   "value": {
                     "position": "rear"
                   },
                   "summary": "absolute position 'rear'"
+                },
+                "front": {
+                  "value": {
+                    "position": "front"
+                  },
+                  "summary": "absolute position 'front'"
                 },
                 "related_after": {
                   "value": {
@@ -33564,6 +36172,37 @@
             "bearerAuth": []
           }
         ]
+      }
+    },
+    "/prometheus/auth": {
+      "get": {
+        "description": "Get Prometheus Metrics for AuthN, AuthZ and Banned",
+        "tags": [
+          "Monitor"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/emqx_prometheus_api.mode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get Prometheus Data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": []
       }
     },
     "/mqtt/topic_metrics": {
@@ -33983,11 +36622,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             }
           }
@@ -34069,7 +36708,8 @@
                 "examples": {
                   "types": {
                     "value": [
-                      "http"
+                      "http",
+                      "mqtt"
                     ],
                     "summary": "Action types"
                   }
@@ -34079,7 +36719,8 @@
                   "items": {
                     "type": "string",
                     "enum": [
-                      "http"
+                      "http",
+                      "mqtt"
                     ]
                   }
                 }
@@ -34705,11 +37346,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -34738,8 +37379,8 @@
                       ],
                       "idle_timeout": "30s",
                       "mountpoint": "coap/",
-                      "connection_required": false,
                       "enable_stats": true,
+                      "connection_required": false,
                       "notify_type": "qos",
                       "publish_qos": "coap",
                       "subscribe_qos": "coap"
@@ -34921,19 +37562,19 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
-                    },
-                    {
                       "$ref": "#/components/schemas/emqx_gateway_api.exproto"
                     },
                     {
-                      "$ref": "#/components/schemas/emqx_gateway_api.coap"
+                      "$ref": "#/components/schemas/emqx_gateway_api.stomp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
                     },
                     {
                       "$ref": "#/components/schemas/emqx_gateway_api.lwm2m"
                     },
                     {
-                      "$ref": "#/components/schemas/emqx_gateway_api.stomp"
+                      "$ref": "#/components/schemas/emqx_gateway_api.coap"
                     }
                   ]
                 }
@@ -34987,11 +37628,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -35058,8 +37699,8 @@
                     "heartbeat": "30s",
                     "idle_timeout": "30s",
                     "mountpoint": "coap2/",
-                    "connection_required": false,
                     "enable_stats": true,
+                    "connection_required": false,
                     "notify_type": "qos",
                     "publish_qos": "coap",
                     "subscribe_qos": "coap"
@@ -35178,34 +37819,34 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.update_mqttsn"
-                  },
-                  {
                     "$ref": "#/components/schemas/emqx_gateway_api.update_exproto"
-                  },
-                  {
-                    "$ref": "#/components/schemas/emqx_gateway_api.update_coap"
-                  },
-                  {
-                    "$ref": "#/components/schemas/emqx_gateway_api.update_lwm2m"
                   },
                   {
                     "$ref": "#/components/schemas/emqx_gateway_api.update_stomp"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
+                    "$ref": "#/components/schemas/emqx_gateway_api.update_mqttsn"
+                  },
+                  {
+                    "$ref": "#/components/schemas/emqx_gateway_api.update_lwm2m"
+                  },
+                  {
+                    "$ref": "#/components/schemas/emqx_gateway_api.update_coap"
                   },
                   {
                     "$ref": "#/components/schemas/emqx_gateway_api.exproto"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.coap"
+                    "$ref": "#/components/schemas/emqx_gateway_api.stomp"
+                  },
+                  {
+                    "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
                   },
                   {
                     "$ref": "#/components/schemas/emqx_gateway_api.lwm2m"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.stomp"
+                    "$ref": "#/components/schemas/emqx_gateway_api.coap"
                   }
                 ]
               }
@@ -35305,10 +37946,39 @@
                       }
                     },
                     "summary": "HTTP Action"
+                  },
+                  "mqtt": {
+                    "value": {
+                      "name": "mqtt_action",
+                      "status": "connected",
+                      "type": "mqtt",
+                      "description": "My example mqtt action",
+                      "enable": true,
+                      "parameters": {
+                        "retain": false,
+                        "payload": "${.payload}",
+                        "qos": 2,
+                        "topic": "remote/topic"
+                      },
+                      "connector": "mqtt_connector",
+                      "node_status": [
+                        {
+                          "node": "emqx@localhost",
+                          "status": "connected"
+                        }
+                      ],
+                      "resource_opts": {
+                        "health_check_interval": "30s"
+                      }
+                    },
+                    "summary": "MQTT Producer Action"
                   }
                 },
                 "schema": {
                   "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/bridge_mqtt_publisher.get_bridge_v2"
+                    },
                     {
                       "$ref": "#/components/schemas/bridge_http.get_bridge_v2"
                     }
@@ -35399,10 +38069,39 @@
                       }
                     },
                     "summary": "HTTP Action"
+                  },
+                  "mqtt": {
+                    "value": {
+                      "name": "mqtt_action",
+                      "status": "connected",
+                      "type": "mqtt",
+                      "description": "My example mqtt action",
+                      "enable": true,
+                      "parameters": {
+                        "retain": false,
+                        "payload": "${.payload}",
+                        "qos": 2,
+                        "topic": "remote/topic"
+                      },
+                      "connector": "mqtt_connector",
+                      "node_status": [
+                        {
+                          "node": "emqx@localhost",
+                          "status": "connected"
+                        }
+                      ],
+                      "resource_opts": {
+                        "health_check_interval": "30s"
+                      }
+                    },
+                    "summary": "MQTT Producer Action"
                   }
                 },
                 "schema": {
                   "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/bridge_mqtt_publisher.get_bridge_v2"
+                    },
                     {
                       "$ref": "#/components/schemas/bridge_http.get_bridge_v2"
                     }
@@ -35477,10 +38176,30 @@
                     }
                   },
                   "summary": "HTTP Action"
+                },
+                "mqtt": {
+                  "value": {
+                    "description": "My example mqtt action",
+                    "enable": true,
+                    "parameters": {
+                      "retain": false,
+                      "payload": "${.payload}",
+                      "qos": 2,
+                      "topic": "remote/topic"
+                    },
+                    "connector": "mqtt_connector",
+                    "resource_opts": {
+                      "health_check_interval": "30s"
+                    }
+                  },
+                  "summary": "MQTT Producer Action"
                 }
               },
               "schema": {
                 "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/bridge_mqtt_publisher.put_bridge_v2"
+                  },
                   {
                     "$ref": "#/components/schemas/bridge_http.put_bridge_v2"
                   }
@@ -35913,11 +38632,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -36718,6 +39437,9 @@
                   "items": {
                     "oneOf": [
                       {
+                        "$ref": "#/components/schemas/connector_mqtt.get_connector"
+                      },
+                      {
                         "$ref": "#/components/schemas/bridge_http.get_connector"
                       }
                     ]
@@ -36776,6 +39498,9 @@
                 "schema": {
                   "oneOf": [
                     {
+                      "$ref": "#/components/schemas/connector_mqtt.get_connector"
+                    },
+                    {
                       "$ref": "#/components/schemas/bridge_http.get_connector"
                     }
                   ]
@@ -36829,6 +39554,9 @@
               },
               "schema": {
                 "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/connector_mqtt.post_connector"
+                  },
                   {
                     "$ref": "#/components/schemas/bridge_http.post_connector"
                   }
@@ -38386,6 +41114,35 @@
         ]
       }
     },
+    "/cluster/invitation": {
+      "get": {
+        "description": "Get the execution status of all asynchronous invite status per node",
+        "tags": [
+          "Cluster"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Get invitation progress created by async operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/cluster.invitation_status"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/configs": {
       "get": {
         "description": "Get all the configurations of the specified keys, including hot and non-hot updatable items.",
@@ -38432,6 +41189,7 @@
                 "rpc",
                 "rule_engine",
                 "slow_subs",
+                "sources",
                 "sys_topics",
                 "sysmon",
                 "telemetry",
@@ -38791,19 +41549,71 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/emqx_mgmt_api_clients.client"
-                      }
-                    },
-                    "meta": {
-                      "$ref": "#/components/schemas/public.meta"
+                "example": {
+                  "data": [
+                    {
+                      "heap_size": 610,
+                      "send_msg.dropped.expired": 0,
+                      "send_oct": 31,
+                      "recv_msg.qos1": 0,
+                      "is_persistent": false,
+                      "send_pkt": 4,
+                      "clean_start": true,
+                      "inflight_cnt": 0,
+                      "node": "emqx@127.0.0.1",
+                      "send_msg.dropped.queue_full": 0,
+                      "awaiting_rel_cnt": 0,
+                      "inflight_max": 32,
+                      "created_at": "2024-01-01T12:34:56.789+08:00",
+                      "subscriptions_cnt": 1,
+                      "mailbox_len": 0,
+                      "send_cnt": 4,
+                      "connected": true,
+                      "ip_address": "127.0.0.1",
+                      "awaiting_rel_max": 100,
+                      "recv_msg.qos2": 0,
+                      "proto_ver": 5,
+                      "mountpoint": "null",
+                      "proto_name": "MQTT",
+                      "port": 52571,
+                      "connected_at": "2024-01-01T12:34:56.789+08:00",
+                      "enable_authn": true,
+                      "expiry_interval": 0,
+                      "username": null,
+                      "recv_msg": 0,
+                      "recv_oct": 49,
+                      "send_msg.dropped.too_large": 0,
+                      "keepalive": 60,
+                      "send_msg.qos1": 0,
+                      "send_msg.qos2": 0,
+                      "recv_msg.qos0": 0,
+                      "send_msg.qos0": 0,
+                      "subscriptions_max": "infinity",
+                      "mqueue_max": 1000,
+                      "mqueue_dropped": 0,
+                      "clientid": "01",
+                      "is_bridge": false,
+                      "peerport": 52571,
+                      "send_msg": 0,
+                      "listener": "tcp:default",
+                      "recv_cnt": 4,
+                      "recv_pkt": 4,
+                      "recv_msg.dropped": 0,
+                      "send_msg.dropped": 0,
+                      "recv_msg.dropped.await_pubrel_timeout": 0,
+                      "reductions": 6836,
+                      "mqueue_len": 0
                     }
-                  },
-                  "type": "object"
+                  ],
+                  "meta": {
+                    "count": 1,
+                    "hasnext": false,
+                    "limit": 50,
+                    "page": 1
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/emqx_mgmt_api_clients.clients"
                 }
               }
             }
@@ -38856,11 +41666,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -38879,10 +41689,10 @@
           {
             "in": "query",
             "name": "limit",
-            "description": "Results per page(max 1000)",
+            "description": "Results per page(max 10000)",
             "schema": {
               "default": 100,
-              "maximum": 1000,
+              "maximum": 10000,
               "type": "integer",
               "minimum": 1
             },
@@ -39005,11 +41815,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -39155,12 +41965,12 @@
                     "backlog": 1024,
                     "active_n": 100
                   },
+                  "acceptors": 16,
+                  "proxy_protocol": false,
                   "access_rules": [
                     "allow all"
                   ],
                   "max_connections": 204800,
-                  "acceptors": 16,
-                  "proxy_protocol": false,
                   "proxy_protocol_timeout": "3s",
                   "mountpoint": "/",
                   "current_connections": 10240
@@ -39250,12 +42060,12 @@
                     "backlog": 1024,
                     "active_n": 100
                   },
+                  "acceptors": 16,
+                  "proxy_protocol": false,
                   "access_rules": [
                     "allow all"
                   ],
                   "max_connections": 204800,
-                  "acceptors": 16,
-                  "proxy_protocol": false,
                   "proxy_protocol_timeout": "3s",
                   "mountpoint": "/",
                   "current_connections": 10240
@@ -39346,12 +42156,12 @@
                   "backlog": 1024,
                   "active_n": 100
                 },
+                "acceptors": 16,
+                "proxy_protocol": false,
                 "access_rules": [
                   "allow all"
                 ],
                 "max_connections": 204800,
-                "acceptors": 16,
-                "proxy_protocol": false,
                 "proxy_protocol_timeout": "3s",
                 "mountpoint": "/",
                 "current_connections": 10240
@@ -39546,11 +42356,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             }
           },
@@ -39782,10 +42592,10 @@
           {
             "in": "query",
             "name": "limit",
-            "description": "Results per page(max 1000)",
+            "description": "Results per page(max 10000)",
             "schema": {
               "default": 100,
-              "maximum": 1000,
+              "maximum": 10000,
               "type": "integer",
               "minimum": 1
             },
@@ -39914,11 +42724,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -40030,11 +42840,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -40170,11 +42980,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -40266,11 +43076,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -40432,11 +43242,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -40465,10 +43275,10 @@
           {
             "in": "query",
             "name": "limit",
-            "description": "Results per page(max 1000)",
+            "description": "Results per page(max 10000)",
             "schema": {
               "default": 100,
-              "maximum": 1000,
+              "maximum": 10000,
               "type": "integer",
               "minimum": 1
             },
@@ -40571,11 +43381,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "stomp",
-                "lwm2m",
                 "coap",
-                "exproto",
-                "mqttsn"
+                "lwm2m",
+                "mqttsn",
+                "stomp",
+                "exproto"
               ]
             },
             "example": "stomp"
@@ -41403,8 +44213,8 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "url": "http://localhost:9901/messages/${topic}",
                     "method": "post",
+                    "url": "http://localhost:9901/messages/${topic}",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
@@ -41442,12 +44252,12 @@
                       "local": {
                         "retain": "${retain}",
                         "payload": "${payload}",
-                        "topic": "from_aws/${topic}",
-                        "qos": "${qos}"
+                        "qos": "${qos}",
+                        "topic": "from_aws/${topic}"
                       },
                       "remote": {
-                        "topic": "aws/#",
-                        "qos": 1
+                        "qos": 1,
+                        "topic": "aws/#"
                       }
                     },
                     "egress": {
@@ -41457,8 +44267,8 @@
                       "remote": {
                         "retain": false,
                         "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
+                        "qos": "${qos}",
+                        "topic": "from_emqx/${topic}"
                       }
                     }
                   }
@@ -41513,8 +44323,8 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "url": "http://localhost:9901/messages/${topic}",
                       "method": "post",
+                      "url": "http://localhost:9901/messages/${topic}",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
@@ -41555,12 +44365,12 @@
                         "local": {
                           "retain": "${retain}",
                           "payload": "${payload}",
-                          "topic": "from_aws/${topic}",
-                          "qos": "${qos}"
+                          "qos": "${qos}",
+                          "topic": "from_aws/${topic}"
                         },
                         "remote": {
-                          "topic": "aws/#",
-                          "qos": 1
+                          "qos": 1,
+                          "topic": "aws/#"
                         }
                       },
                       "egress": {
@@ -41570,8 +44380,8 @@
                         "remote": {
                           "retain": false,
                           "payload": "${payload}",
-                          "topic": "from_emqx/${topic}",
-                          "qos": "${qos}"
+                          "qos": "${qos}",
+                          "topic": "from_emqx/${topic}"
                         }
                       }
                     },
@@ -41629,8 +44439,8 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "url": "http://localhost:9901/messages/${topic}",
                     "method": "post",
+                    "url": "http://localhost:9901/messages/${topic}",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
@@ -41671,12 +44481,12 @@
                       "local": {
                         "retain": "${retain}",
                         "payload": "${payload}",
-                        "topic": "from_aws/${topic}",
-                        "qos": "${qos}"
+                        "qos": "${qos}",
+                        "topic": "from_aws/${topic}"
                       },
                       "remote": {
-                        "topic": "aws/#",
-                        "qos": 1
+                        "qos": 1,
+                        "topic": "aws/#"
                       }
                     },
                     "egress": {
@@ -41686,8 +44496,8 @@
                       "remote": {
                         "retain": false,
                         "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
+                        "qos": "${qos}",
+                        "topic": "from_emqx/${topic}"
                       }
                     }
                   },
@@ -41972,21 +44782,21 @@
                         {
                           "action": "publish",
                           "retain": "true",
-                          "topic": "test/topic/3",
                           "qos": [
                             "1"
                           ],
+                          "topic": "test/topic/3",
                           "permission": "allow"
                         },
                         {
                           "action": "publish",
                           "retain": "all",
-                          "topic": "test/topic/4",
                           "qos": [
                             "0",
                             "1",
                             "2"
                           ],
+                          "topic": "test/topic/4",
                           "permission": "allow"
                         }
                       ]
@@ -42088,21 +44898,21 @@
                       {
                         "action": "publish",
                         "retain": "true",
-                        "topic": "test/topic/3",
                         "qos": [
                           "1"
                         ],
+                        "topic": "test/topic/3",
                         "permission": "allow"
                       },
                       {
                         "action": "publish",
                         "retain": "all",
-                        "topic": "test/topic/4",
                         "qos": [
                           "0",
                           "1",
                           "2"
                         ],
+                        "topic": "test/topic/4",
                         "permission": "allow"
                       }
                     ]
