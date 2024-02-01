@@ -48,7 +48,7 @@
 
 - [#12277](https://github.com/emqx/emqx/pull/12277) 新增了 `mqtt/delayed/messages/:topic` API，用于按主题名称删除延迟消息。
 
-- [#12278](https://github.com/emqx/emqx/pull/12278) 在 REST API 中部分 API 支持分页，您可以通过 `page`（页码） 和 `limit`（分页大小） 参数来控制分页，分页大小最大值为 `10000`。
+- [#12278](https://github.com/emqx/emqx/pull/12278) 将 REST API 中支持分页的 API 的最大分页大小从 `3000` 调整到 `10000`。
 
 - [#12289](https://github.com/emqx/emqx/pull/12289) EMQX 引入了一个新的配置选项 `authorization.cache.excludes`，以增强 ACL 缓存的灵活性。当此配置设置了一系列主题过滤器时，EMQX 将绕过缓存，对与任何列出的主题或主题过滤器匹配的发布或订阅权限检查进行实时处理。这意味着对于这些特定主题，权限检查将始终实时执行，确保授权决策的及时性，而不依赖于之前缓存的结果。
 
