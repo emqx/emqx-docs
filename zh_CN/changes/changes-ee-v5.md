@@ -46,7 +46,7 @@
   - 增加了一个新的 API `DELETE /retainer/messages`，用于清除所有保留的消息。
   - 在 `GET /retainer/messages` API 的查询字符串中增加了一个可选的主题过滤器参数 `topic`。例如，使用 `topic=t/1` 可以过滤特定主题的保留消息，提高消息检索的效率。
 
-- [#12277](https://github.com/emqx/emqx/pull/12277) 新增了 `mqtt/delayed/messages/:topic` 端点，用于按主题名称删除延迟消息。
+- [#12277](https://github.com/emqx/emqx/pull/12277) 新增了 `mqtt/delayed/messages/:topic` API，用于按主题名称删除延迟消息。
 
 - [#12278](https://github.com/emqx/emqx/pull/12278) 在 REST API 中部分 API 支持分页，您可以通过 `page`（页码） 和 `limit`（分页大小） 参数来控制分页，分页大小最大值为 `10000`。
 
