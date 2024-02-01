@@ -20,6 +20,6 @@ Where,
 
 To configure the license via Dashboard, click **Update License** in the lower left corner of the Dashboard homepage. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
 
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v${EE_VERSION}/hocon/).
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 :::

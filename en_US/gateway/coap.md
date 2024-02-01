@@ -73,7 +73,7 @@ For a detailed HTTP API description, see [HTTP API - Gateway](../admin/api.md).
 
 If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your CoAP Gateway section](#customize-your-coap-gateway).
 
-The CoAP gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters, refer to: [Gateway Configuration - Listeners](https://docs.emqx.com/en/enterprise/v${EE_VERSION}/hocon/).
+The CoAP gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters, refer to: [Gateway Configuration - Listeners](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 ## Work with CoAP Clients
 

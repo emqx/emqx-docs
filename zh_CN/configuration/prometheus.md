@@ -26,6 +26,6 @@ where, <!--did not add the Dashboard UI, as it is quite obvious-->
 
 To configure listeners via Dashboard,  click **Configuration** -> **Monitoring** -> **Integration** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
 
-EMQX has offered more configuration items to serve customized needs better. For details, you can continue to read [Configuration Manual](https://docs.emqx.com/en/enterprise/v${EE_VERSION}/hocon/).
+EMQX has offered more configuration items to serve customized needs better. For details, you can continue to read [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 :::

@@ -64,6 +64,6 @@ Where,
 
 :::tip
 
-EMQX has offered more configuration items to serve customized needs better. For details, you can continue to read [Configuration Manual](https://docs.emqx.com/en/enterprise/v${EE_VERSION}/hocon/).
+EMQX has offered more configuration items to serve customized needs better. For details, you can continue to read [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 :::
