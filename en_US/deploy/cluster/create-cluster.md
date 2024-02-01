@@ -86,11 +86,23 @@ node {
 
 ### Configure Network Environment
 
-If there is a firewall or security group between nodes, ensure the cluster communication port has been opened. For details, see [Intra-cluster communication port](./security.md).
+Ensure that the network connections between nodes are functioning properly. If there is a firewall or security group between nodes, you need to open the ports for internal cluster communication, including:
+
+- **4370**: Erlang distributed transport port
+- **5370**: Cluster RPC port, suitable for physical machine environments
+- **5369**: Cluster RPC port, suitable for Docker environments
+
+If multiple EMQX nodes are deployed on a single server, each node will use different cluster communication ports. For details on firewall configurations, see [Intra-cluster communication port](./security.md).
 
 ## Quick Start
 
-This section demonstrates how to quickly create a cluster in a Docker network using two different methods:
+This section demonstrates how to quickly create a cluster in a Docker network using two different clustering methods:
+
+::: tip
+
+If you plan to run EMQX on Docker environments across multiple physical machines and form a cluster, additional setup will be required. Please refer to [Configure Network Environment](#configure-network-environment) to map the necessary cluster communication ports in the container and ensure these ports are open in the firewall.
+
+:::
 
 :::: tabs type:card
 

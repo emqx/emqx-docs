@@ -19,7 +19,9 @@ A will message is the last stored message that is defined in advance and is sent
 - The client closes the network connection before sending DISCONNECT packet.
 - The server closes the network connection before receiving the DISCONNECT packet.
 
-If a client wants to set a will message, it sets the topic and payload of the will message when it initiates the connect request. When another client subscribes to the topic of the will message, it receives the will message if the client disconnects to the server unexpectedly. For more information, see [Will Message](../mqtt/mqtt-last-will-and-testament.md) and [Use of MQTT Will Message](https://www.emqx.com/en/blog/use-of-mqtt-will-message).
+If a client wants to set a will message, it sets the topic and payload of the will message when it initiates the connect request.
+When another client subscribes to the topic of the will message, it receives the will message if the client disconnects to the server unexpectedly.
+For more information, see [Will Message](./mqtt-will-message.md) and [Use of MQTT Will Message](https://www.emqx.com/en/blog/use-of-mqtt-will-message).
 
 ### Use MQTTX Client to Verify
 
@@ -91,7 +93,7 @@ If a client wants to set a will message, it sets the topic and payload of the wi
 
 ## Retained Message
 
-When a message is retained, the EMQX server must store the last message under the topic. Future subscribers who subscribes to the specific topic can receive the latest retained message immediately without waiting for the next publishing. The retained message feature enables the subscribers actively fetch messages from publishers. It is useful in scenarios when messages are published in an irregular way. For more detailed information on retained message, see [The Beginner's Guide to MQTT Retained Messages](https://www.emqx.com/en/blog/mqtt5-features-retain-message?utm_source=mqttx&utm_medium=referral&utm_campaign=mqttx-help-to-blog) and [Retained Messages](../mqtt/mqtt-retained-messages.md).
+When a message is retained, the EMQX server must store the last message under the topic. Future subscribers who subscribes to the specific topic can receive the latest retained message immediately without waiting for the next publishing. The retained message feature enables the subscribers actively fetch messages from publishers. It is useful in scenarios when messages are published in an irregular way. For more detailed information on retained message, see [The Beginner's Guide to MQTT Retained Messages](https://www.emqx.com/en/blog/mqtt5-features-retain-message?utm_source=mqttx&utm_medium=referral&utm_campaign=mqttx-help-to-blog) and [Retained Messages](./mqtt-retained-message.md).
 
 The illustration below shows how a retained message is received.
 
@@ -175,7 +177,10 @@ The illustration below shows how a retained message is received.
 
 ## Shared Subscription
 
-When multiple clients subscribe to a same topic, they can form a group and receive messages with load balancing. With a shared subscription, the message is only sent to one of the subscribing clients. The next message published is sent to one of the other subscribing clients thus balancing the load on the clients and server. For more information on shared subscription, see [Shared Subscription](../mqtt/mqtt-shared-subscription.md).
+When multiple clients subscribe to a same topic, they can form a group and receive messages with load balancing.
+With a shared subscription, the message is only sent to one of the subscribing clients.
+The next message published is sent to one of the other subscribing clients thus balancing the load on the clients and server.
+For more information on shared subscription, see [Shared Subscription](./mqtt-shared-subscription.md).
 
 ### Use MQTTX Client to Verify
 
