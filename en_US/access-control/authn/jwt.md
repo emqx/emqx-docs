@@ -33,7 +33,7 @@ To reduce the possibility of JWT leakage and theft, it is recommended to set a r
 The Access Control List (ACL) is an optional function to control the permissions of the client after login. A private Claim `acl` is defined to carry a list of publish and subscribe permissions in the JWT.
 
 ::: tip
-ACL rules returned by JWT will be checked before all Authorizers. For details, see [Authorization](../authz/authz.md).
+ACL rules returned by JWT will be checked before all Authorizers. For details, see [Authorization Check Priority](../authz/authz.md#authorization-check-priority).
 :::
 
 :::: tabs type:board-card
