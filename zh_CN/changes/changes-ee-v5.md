@@ -58,7 +58,7 @@
 
 - [#12072](https://github.com/emqx/emqx/pull/12072)  GreptimeDB 数据集成支持异步操作，以提供更好的性能。
 
-- [#12194](https://github.com/emqx/emqx/pull/12194) 提高了 Kafka 生产者的性能。
+- [#12194](https://github.com/emqx/emqx/pull/12194) 提高了 Kafka 生产者数据集成的性能，降低了所连接的 Kafka 服务器 CPU 占用。
 
 - [#12247](https://github.com/emqx/emqx/pull/12247) 将 InfluxDB 的桥接分离出来，使其可以通过连接器和动作 APIs 使用。它们仍然与旧的桥接 API 兼容。
 
