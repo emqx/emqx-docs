@@ -56,7 +56,7 @@
 
 - [#12333](https://github.com/emqx/emqx/pull/12333) 为动作和连接器添加了一个 `tags` 字段。与 `description` 字段（即自由文本注释）类似，`tags` 可用于为动作和连接器添加注释，便于过滤和分组。
 
-- [#12072](https://github.com/emqx/emqx/pull/12072) 支持 GreptimeDB 数据集成的异步查询模式，以提供更好的性能。
+- [#12072](https://github.com/emqx/emqx/pull/12072)  GreptimeDB 数据集成支持异步操作，以提供更好的性能。
 
 - [#12194](https://github.com/emqx/emqx/pull/12194) 提高了 Kafka 生产者的性能。
 
