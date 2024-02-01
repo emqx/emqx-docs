@@ -106,7 +106,7 @@
 - [#12306](https://github.com/emqx/emqx/pull/12306) 修复了通过 HTTP API 更新密码后，连接器的连接测试无法正常工作的问题。
 - [#12359](https://github.com/emqx/emqx/pull/12359) 修复了配置有某些类型数据桥接的节点重启时可能出现的错误消息问题。此外，这些桥接在节点重启时有进入失败状态的风险，需要手动重启以恢复功能。
 - [#12404](https://github.com/emqx/emqx/pull/12404) 修复了一个问题，即在消息流量较大的情况下重启数据集成可能导致数据集成指标的收集停止。
-- [#12282](https://github.com/emqx/emqx/pull/12282) 改善了 MySQL 桥接创建失败时 HTTP API 的错误响应。同时解决了在 SQL 中包含未定义列的 MySQL 桥接无法删除的问题。
+- [#12282](https://github.com/emqx/emqx/pull/12282) 改善了 MySQL 桥接创建失败时 HTTP API 的错误响应。同时解决了在 SQL 中包含未定义列的 MySQL Sink 无法删除的问题。
 - [#12291](https://github.com/emqx/emqx/pull/12291) 修复了 EMQX 在处理涉及敏感参数的配置更新时的不一致性，这以前导致集群配置文件中出现了错误的 `"******"` 字符串。
 - [#12292](https://github.com/emqx/emqx/pull/12292) 修复了创建 Syskeeper Forwarder 连接器和动作时 `GET /bridges` API 崩溃的问题。
 - [#12301](https://github.com/emqx/emqx/pull/12301) 修复了 InfluxDB 中的行协议问题，其中数值字面量被存储为字符串类型。
