@@ -1,4 +1,4 @@
-# Bridge MQTT Data into MQTT Broker
+# Bridge with Other MQTT Services
 
 MQTT Broker data integration provides EMQX with functionality to connect to another EMQX cluster or another MQTT service for message bridge, enabling cross-network, cross-service data interaction and communication. This page introduces the working principle of the MQTT message bridge in EMQX and offers practical guidance on creating and verifying message bridges.
 
