@@ -709,6 +709,7 @@
       title_cn: 不兼容变更
       collapsed: true
       children:
+        - changes/breaking-changes-5.5
         - changes/breaking-changes-5.4
         - changes/breaking-changes-5.1.0
         - changes/auth-4.4-to-5.1-compatibility
