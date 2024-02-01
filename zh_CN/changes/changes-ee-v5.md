@@ -44,7 +44,7 @@
 - [#12272](https://github.com/emqx/emqx/pull/12272) 对 EMQX 中的 `retain` API 进行了更新：
 
   - 增加了一个新的 API `DELETE /retainer/messages`，用于清除所有保留的消息。
-  - 在 `GET /retainer/messages` 端点的查询字符串中增加了一个可选的主题过滤器。例如，使用类似 "topic=t/1" 的查询字符串可以过滤特定主题的保留消息，提高消息检索的效率。
+  - 在 `GET /retainer/messages` API 的查询字符串中增加了一个可选的主题过滤器参数 `topic`。例如，使用 `topic=t/1` 可以过滤特定主题的保留消息，提高消息检索的效率。
 
 - [#12277](https://github.com/emqx/emqx/pull/12277) 新增了 `mqtt/delayed/messages/:topic` 端点，用于按主题名称删除延迟消息。
 
