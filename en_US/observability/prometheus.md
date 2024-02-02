@@ -95,13 +95,13 @@ This is the cluster unaggregated metric mode, returning the individual metrics o
 
 {% emqxce %}
 
-For more information about Prometheus pull endpoints, refer to the API documentation: [Monitor](https://www.emqx.io/docs/en/@CE_MINOR_VERSION@/admin/api-docs.html#tag/Monitor).
+For more information about Prometheus pull endpoints, refer to the API documentation: [Monitor](https://www.emqx.io/docs/en/v@CE_MINOR_VERSION@/admin/api-docs.html#tag/Monitor).
 
 {% endemqxce %}
 
 {% emqxee %}
 
-For more information about Prometheus pull endpoints, refer to the API documentation: [Monitor](https://www.emqx.io/docs/en/@EE_MINOR_VERSION@/admin/api-docs.html#tag/Monitor).
+For more information about Prometheus pull endpoints, refer to the API documentation: [Monitor](https://www.emqx.io/docs/en/v@EE_MINOR_VERSION@/admin/api-docs.html#tag/Monitor).
 
 {% endemqxee %}
 
