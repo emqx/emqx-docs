@@ -89,7 +89,7 @@ The following steps assume that you run both EMQX and Redis on the local machine
 8. Before clicking **Create**, you can click **Test Connectivity** to test if the Connector can connect to the Redis server.
 9. Click the **Create** button at the bottom to complete the creation of the Connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Redis. For detailed steps, see [Create a Rule and Redis Sink](#create-a-rule-and-redis-sink).
 
-## Create a Rule and Redis Sink
+## Create a Rule with Redis Sink
 
 This section demonstrates how to create rules for caching the last message of every client and collecting the message discard statistics. 
 

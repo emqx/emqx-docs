@@ -10,7 +10,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 {% endemqxce %}
 
-[Elasticsearch](https://www.elastic.co/elasticsearch/) is a distributed, RESTful style search and data analysis engine that offers full-text search, structured search, and analysis capabilities for diverse data types. By integrating with Elasticsearch, EMQX enables seamless incorporation of MQTT data into Elasticsearch for storage. This integration leverages the powerful scalability and analysis capabilities of Elasticsearch, providing efficient and scalable data storage and analysis solutions for IoT applications.
+[Elasticsearch](https://www.elastic.co/elasticsearch/) is a distributed search and data analysis engine that offers full-text search, structured search, and analysis capabilities for diverse data types. By integrating with Elasticsearch, EMQX enables seamless incorporation of MQTT data into Elasticsearch for storage. This integration leverages the powerful scalability and analysis capabilities of Elasticsearch, providing efficient and scalable data storage and analysis solutions for IoT applications.
 
 This page details the data integration between EMQX and Elasticsearch and provides practical guidance on rule and Sink creation.
 
@@ -106,7 +106,7 @@ The following steps assume you are running EMQX and Elasticsearch on the same lo
 
 Now you have created the Connector. Next, you need to create a rule to specify the data that needs to be written into Elasticsearch.
 
-## Create a Rule for Elasticsearch Sink 
+## Create a Rule with Elasticsearch Sink 
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#` and write the processed results to the `device_data` index in Elasticsearch through the configured Sink.
 

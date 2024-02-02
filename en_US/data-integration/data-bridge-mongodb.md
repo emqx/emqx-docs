@@ -187,7 +187,7 @@ The following steps assume that you run both EMQX and MongoDB on the local machi
 7. Before clicking **Create**, you can click **Test Connectivity** to test if the Connector can connect to the MongoDB server.
 8. Click the **Create** button at the bottom to complete the creation of the Connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to MongoDB. For detailed steps, see [Create a Rule and MongoDB Sink](#create-a-rule-and-mongodb-sink).
 
-## Create a Rule for MongoDB Sink
+## Create a Rule with MongoDB Sink
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -265,7 +265,7 @@ Now you have successfully created the rule and you can see the new rule appear o
 
 You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to MongoDB after parsing by rule `my_rule`.
 
-## Test the Rule and Sink
+## Test the Rule
 
 To test if the rule and Sink work as you expected, you can use the [MQTTX](https://mqttx.app/) to simulate a client to publish MQTT messages to EMQX.
 

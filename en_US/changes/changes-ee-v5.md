@@ -95,6 +95,8 @@
 
 - [#11902](https://github.com/emqx/emqx/pull/11902) Enhanced EMQX's capability to facilitate MQTT message bridging through the one-way Nari SysKeeper 2000 network isolation gateway.
 
+- [#12348](https://github.com/emqx/emqx/pull/12348) Supported data integration with Elasticsearch.
+
 ### Bug Fixes
 
 - [#12232](https://github.com/emqx/emqx/pull/12232) Fixed an issue when cluster commit log table was not deleted after a node was forced to leave a cluster.

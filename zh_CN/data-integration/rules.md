@@ -2,7 +2,7 @@
 
 规则引擎是 EMQX 内置基于 SQL 的数据处理组件，搭配[数据集成](./data-bridges.md)无需编写代码即可实现一站式的 IoT 数据提取、过滤、转换、存储与处理，以加速应用集成和业务创新。
 
-![image](./assets/rules/data-integration-arch.png)
+![image](./assets/rules/data-integration-arch.jpg)
 
 ## 规则的组成
 

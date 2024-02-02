@@ -59,7 +59,7 @@ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
 
 ```
 
-## Create Connector
+## Create a Rule with OpenTSDB Sink
 
 This section demonstrates how to create rules to specify the data to be saved into OpenTSDB. It assumes that you run both EMQX and OpenTSDB on the local machine. If you have OpenTSDB and EMQX running remotely, adjust the settings accordingly. The data reported by the client in this tutorial is as follows:
 

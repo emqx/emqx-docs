@@ -84,7 +84,7 @@ For example, if the client ID prefix is `myprefix` and the Connector name is `fo
 myprefix:foo2bd61c44:1
 ```
 
-## Create a Rule for MQTT Broker Sink
+## Create a Rule with MQTT Broker Sink
 
 This section demonstrates how to create a rule for specifying data to be forwarded to a remote MQTT service.
 
@@ -127,8 +127,6 @@ You can also click **Integration** -> **Flow Designer** to view the topology. Th
 ## Test the Rule with MQTT Broker Sink
 
 You can use the [MQTTX CLI](https://mqttx.app/zh/cli) to test the Rule for bridging messages published from the `t/#` topic in EMQX to the `pub/${topic}` topic in the external MQTT service. By publishing a message to `t/1` topic in EMQX, the message should be forwarded to the `pub/t/1` topic in the external MQTT service.
-
-Testing using [MQTTX CLI](https://mqttx.app/zh/cli):
 
 1. Subscribe to the `pub/#` topic in the external MQTT Service:
 
