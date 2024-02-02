@@ -109,7 +109,6 @@
 - [#12404](https://github.com/emqx/emqx/pull/12404) 修复了一个问题，即在消息流量较大的情况下重启数据集成可能导致数据集成指标的收集停止。
 - [#12282](https://github.com/emqx/emqx/pull/12282) 改善了 MySQL 桥接创建失败时 HTTP API 的错误响应。同时解决了在 SQL 中包含未定义列的 MySQL Sink 无法删除的问题。
 - [#12291](https://github.com/emqx/emqx/pull/12291) 修复了 EMQX 在处理涉及敏感参数的配置更新时的不一致性，这以前导致集群配置文件中出现了错误的 `"******"` 字符串。
-- [#12292](https://github.com/emqx/emqx/pull/12292) 修复了创建 Syskeeper Forwarder 连接器和动作时 `GET /bridges` API 崩溃的问题。
 - [#12301](https://github.com/emqx/emqx/pull/12301) 修复了 InfluxDB 中的行协议问题，其中数值字面量被存储为字符串类型。
 - [#12317](https://github.com/emqx/emqx/pull/12317) 从 MongoDB Action 架构中移除了尚未支持的 `resource_opts.batch_size` 字段。
 
