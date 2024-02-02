@@ -2,13 +2,13 @@
 
 {% emqxee %}
 
-Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+Users can configure EMQX with configuration files or environment variables. This chapter introduces the EMQX configuration files. For detailed configuration items and introduction, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 {% endemqxee %}
 
 {% emqxce %}
 
-Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
+Users can configure EMQX with configuration files or environment variables. This chapter introduces the EMQX configuration files. For detailed configuration items and introduction, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
 
 {% endemqxce %}
 

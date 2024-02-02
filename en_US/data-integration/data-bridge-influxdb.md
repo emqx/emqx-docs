@@ -83,7 +83,7 @@ The following steps assumes that you run both EMQX and InfluxDB on the local mac
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the InfluxDB server.
 6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Influx. For detailed steps, see [Create Rule and InfluxDB Sink](#create-rule-and-influxdb-sink).
 
-## Create Rule and InfluxDB Sink
+## Create Rule with InfluxDB Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured Sink to InfluxDB. 
 
@@ -169,7 +169,7 @@ When setting data formats via JSON, you can use the batch setting feature to imp
 3. Save the filled template file and upload it to the **Import Batch Setting** popup, then click **Import** to complete the batch setting.
 4. After importing, you can further adjust the key-value pairs of fields in the **Fields** setting table.
 
-## Test the Rule and Sink
+## Test the Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 

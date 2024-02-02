@@ -62,8 +62,22 @@ Where,
 | `ssl_options.certfile`   | This sets the path to the file containing the SSL/TLS certificate for the listener. | --            | --                                                |
 | `ssl_options.keyfile`    | This sets the path to the file containing the private key corresponding to the SSL/TLS certificate. | --            | --                                                |
 
+{% emqxce %}
+
+:::tip
+
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
+
+:::
+
+{% endemqxce %}
+
+{% emqxee %}
+
 :::tip
 
 EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 :::
+
+{% endemqxee %}

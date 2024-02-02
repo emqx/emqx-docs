@@ -95,7 +95,7 @@ Before you create data bridges for TDengine, you need to create two data tables 
        );
 ```
 
-## Create a Rule for TDengine Sink
+## Create a Rule with TDengine Sink
 
 This section demonstrates how to create two different rules for specifying the data to be saved into TDengine and recording client's online/offline status.
 

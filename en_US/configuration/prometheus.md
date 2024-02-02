@@ -22,6 +22,20 @@ where, <!--did not add the Dashboard UI, as it is quite obvious-->
 - `headers` is to set the additional headers to be included in the HTTP request made to the Prometheus push gateway server.
 - `job_name` is to set the name of the job in Prometheus to which the metrics will be exported, default: `"${name}/instance/${name}~${host}"`
 
+{% emqxce %}
+
+:::tip
+
+To configure listeners via Dashboard,  click **Management** -> **Monitoring** -> **Integration** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
+
+:::
+
+{% endemqxce %}
+
+{% emqxee %}
+
 :::tip
 
 To configure listeners via Dashboard,  click **Management** -> **Monitoring** -> **Integration** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
@@ -29,3 +43,5 @@ To configure listeners via Dashboard,  click **Management** -> **Monitoring** ->
 EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 :::
+
+{% endemqxee %}

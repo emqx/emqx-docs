@@ -85,10 +85,26 @@ Where,
 | `level`                 | Log Level          | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
 | `formatted`             | Log Formatter      | This sets the log format                                     | `text`        | `text` for free text<br /> `json` for structured logging       |
 
+{% emqxce %}
+
 :::tip
 
-To configure listeners via Dashboard,  click **Configuration** -> **Log** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+To configure listeners via Dashboard,  click **Management** -> **Logging** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
 
-EMQX has offered more configuration items to serve customized needs better. For details, you can continue to read [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
 
 :::
+
+{% endemqxce %}
+
+{% emqxee %}
+
+:::tip
+
+To configure listeners via Dashboard,  click **Management** -> **Logging** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+
+:::
+
+{% endemqxee %}

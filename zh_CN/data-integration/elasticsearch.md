@@ -6,7 +6,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 :::
 {% endemqxce %}
 
-[Elasticsearch](https://www.elastic.co/elasticsearch/) 是一个分布式、RESTful 风格的搜索和数据分析引擎，提供了多样化数据的全文搜索、结构化搜索以及分析等功能。EMQX 通过与 Elasticsearch 集成，能够将 MQTT 数据无缝的集成到 Elasticsearch 进行存储，并借助其强大的可扩展性和分析能力，为物联网应用提供了高效、可扩展的数据存储和分析解决方案。
+[Elasticsearch](https://www.elastic.co/elasticsearch/) 是一个分布式的搜索和数据分析引擎，提供了多样化数据的全文搜索、结构化搜索以及分析等功能。EMQX 通过与 Elasticsearch 集成，能够将 MQTT 数据无缝的集成到 Elasticsearch 进行存储，并借助其强大的可扩展性和分析能力，为物联网应用提供了高效、可扩展的数据存储和分析解决方案。
 
 本页详细介绍了 EMQX 与 Elasticsearch 的数据集成并提供了实用的规则和 Sink 创建指导。
 

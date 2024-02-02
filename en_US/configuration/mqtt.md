@@ -163,6 +163,20 @@ Where,
 | `force_gc.count`                      | --                          | This sets the received message number that will trigger the forced garbage collection. | `16000`                                                      | `0` ~ `infinity`                     |
 | `force_gc.bytes`                      | --                          | This sets the received byte number that will trigger the forced garbage collection. | `16MB`<br />Unit: `MB`                                       | --                                   |
 
+{% emqxce %}
+
+:::tip
+
+To configure listeners via Dashboard,  click **Configuration** -> **MQTT** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
+
+:::
+
+{% endemqxce %}
+
+{% emqxee %}
+
 :::tip
 
 To configure listeners via Dashboard,  click **Configuration** -> **MQTT** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
@@ -170,3 +184,5 @@ To configure listeners via Dashboard,  click **Configuration** -> **MQTT** on th
 EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 :::
+
+{% endemqxee %}

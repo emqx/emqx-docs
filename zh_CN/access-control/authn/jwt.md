@@ -157,4 +157,14 @@ JWT 权限列表定义了 `pub`、`sub` 和 `all` 3 个可选字段，分别用�
 
 ## 通过配置文件配置
 
+{% emqxee %}
+
 您可以通过配置项完成相关配置，具体可参考[配置手册](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/#T-authentication-S-jwt_hmac)。
+
+{% endemqxee %}
+
+{% emqxce %}
+
+您可以通过配置项完成相关配置，具体可参考[配置手册](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/#T-authentication-S-jwt_hmac)。
+
+{% endemqxce %}

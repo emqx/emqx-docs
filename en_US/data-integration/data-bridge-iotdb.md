@@ -104,7 +104,7 @@ To create the Apache IoTDB data integration, you need to create a Connector to c
 9. Click **Create** to complete the creation of the Connector. In the pop-up dialogue, you can click **Back to Connector List** or click **Create Rule** to continue to create a rule and a Sink for specifying the data to be written into Apache IoTDB. For detailed steps, see [Create a Rule and Apache IoTDB Sink](#create-a-rule-and-apache-iotdb-sink).
 
 
-## Create a Rule and Apache IoTDB Sink
+## Create a Rule with Apache IoTDB Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `root/#`  and send the processed results through the configured Apache IoTDB Sink to store the time series data to Apache IoTDB.
 
@@ -257,7 +257,7 @@ When configuring **Write Data**, you can use the batch setting feature to import
 
 4. After importing, you can further adjust the data in the **Write Data** table.
 
-## Test Apache IoTDB Sink and Rule
+## Test the Rule
 
 You can use the built-in WebSocket client in the EMQX dashboard to test your Apache IoT Sink and rule.
 
