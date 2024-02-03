@@ -2,7 +2,7 @@
 
 <!--need to add a section about how users can work with a cluster with all nodes as core nodes-->
 
-EMQX 5.0 redesigns the cluster architecture with [Mria](https://github.com/emqx/mria), which significantly improves EMQX's horizontal scalability. The new design supports 100,000,000 MQTT connections with a single cluster. 
+EMQX 5.0 redesigns the cluster architecture with [Mria](https://github.com/emqx/mria), which significantly improves EMQX's horizontal scalability. The new design supports 100,000,000 MQTT connections with a single cluster.
 
 <img src="./assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 40%;" />
 
@@ -10,22 +10,23 @@ In this [Mria](https://github.com/emqx/mria), each node assumes one of two roles
 Core nodes serve as a data layer for the database.
 Replicant nodes connect to Core nodes and passively replicate data updates from Core nodes. On how core and replicant node works, you can continue to read the [EMQX clustering](../../design/clustering.md).
 
-By default, all nodes assume the Core node role, so the cluster behaves like that in [EMQX 4.x](https://docs.emqx.com/en/enterprise/v4.4/getting-started/cluster.html#node-discovery-and-autocluster), which is recommended for a small cluster with 3 nodes or fewer. The Core + Replicant mode is only recommended if there are more than 3 nodes in the cluster. 
+By default, all nodes assume the Core node role, so the cluster behaves like that in [EMQX 4.x](https://docs.emqx.com/en/enterprise/v4.4/getting-started/cluster.html#node-discovery-and-autocluster), which is recommended for a small cluster with 3 nodes or fewer. The Core + Replicant mode is only recommended if there are more than 3 nodes in the cluster.
 
 ## Enable Core + Replicant Mode
 
-To enable the  Core + Replicant mode, the backend database (`db_backend`) should be set to `rlog`, some nodes should assume the replicant role (`node.db_role`), and the core node (`core_node`) should be specified, as shown below:
+To enable the Core + Replicant mode, some nodes should assume the replicant role (by setting `node.role` parameter to `replicant`), and automatic cluster discovery strategy (`cluster.discovery_strategy`) should be enabled: replicant nodes are designed to be stateless, and therefore they have only limited support for `manual` strategy.
+
+Example:
 
 ```bash
-node { 
-    ##To set a node as a replicant node
-	db_role = replicant
+node {
+    ## To set a node as a replicant node:
+    role = replicant
 }
 cluster {
-		## Default setting, suitable for very large backend
-		db_backend = rlog	
-		##List of core nodes that the replicant will connect to, different nodes can be separated with a comma
-		core_nodes = "emqx1@192.168.0.1, emqx2@192.168.0.2 ..."
+    ## Enable static discovery strategy:
+    discovery_strategy = static
+    static.seeds = [emqx@host1.local, emqx@host2.local]
 }
 ```
 
@@ -37,7 +38,7 @@ The Mria performance can be monitored using Prometheus metrics or Erlang console
 
 ### Prometheus Indicators
 
-You can integrate with Prometheus to monitor the cluster operations. On how to integrate with Prometheus, see [Log and observability - Integrate with Prometheus](../../observability/prometheus.md). 
+You can integrate with Prometheus to monitor the cluster operations. On how to integrate with Prometheus, see [Log and observability - Integrate with Prometheus](../../observability/prometheus.md).
 
 #### Core Nodes
 
@@ -66,9 +67,9 @@ If EMQX cluster is operating normally, you can get a list of status information,
 
 <!--Here we need a query statement and the returned message, and can we link this Erlang console to https://www.erlang.org/doc/man/shell.html -->
 
-## Pseudo-Distributed Cluster 
+## Pseudo-Distributed Cluster
 
-EMQX also provides a pseudo-distributed cluster feature for testing and development purposes. It refers to a cluster setup where multiple instances of EMQX are running on a single machine, with each instance configured as a node in the cluster. 
+EMQX also provides a pseudo-distributed cluster feature for testing and development purposes. It refers to a cluster setup where multiple instances of EMQX are running on a single machine, with each instance configured as a node in the cluster.
 
 After starting the first node, use the following command to start the second node and join the cluster manually. To avoid port conflicts, we need to adjust some listening ports:
 
@@ -87,7 +88,7 @@ EMQX_NODE__NAME='emqx2@127.0.0.1' \
 ./bin/emqx ctl cluster join emqx1@127.0.0.1
 ```
 
-The above code example is to create a cluster manually, you can also refer to the [auto clustering](./create-cluster.md#auto-clustering) section on how to create a cluster automatically. 
+The above code example is to create a cluster manually, you can also refer to the [auto clustering](./create-cluster.md#auto-clustering) section on how to create a cluster automatically.
 
 The dashboard is designed under the assumption that all cluster nodes use the same port number. Using distinct ports on a single computer may cause Dashboard UI issues, therefore, it is not recommended in production.
 
