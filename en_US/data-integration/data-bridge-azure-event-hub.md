@@ -14,7 +14,7 @@ This page provides a comprehensive introduction to the data integration between 
 
 Azure Event Hubs data integration is an out-of-the-box feature of EMQX designed to help users seamlessly integrate MQTT data streams with Azure Event Hubs and leverage its rich services and capabilities for IoT application development.
 
-![event_hubs_architecture](./assets/event_hubs_architecture.svg)
+![emqx-integration-azure](./assets/emqx-integration-azure.jpg)
 
 EMQX forwards MQTT data to Azure Event Hubs through the rule engine and Sink. The complete process is as follows:
 
