@@ -14,7 +14,11 @@ By default, all nodes assume the Core node role, so the cluster behaves like tha
 
 ## Enable Core + Replicant Mode
 
-To enable the Core + Replicant mode, it is necessary to designate certain nodes as replicant nodes. This is achieved by setting `node.role` parameter to `replicant`. Additionally, you need to enable an automatic cluster discovery strategy (`cluster.discovery_strategy`). Given that replicant nodes are designed to be stateless, they have limited support for the `manual` discovery strategy.
+To enable the Core + Replicant mode, it is necessary to designate certain nodes as replicant nodes. This is achieved by setting `node.role` parameter to `replicant`. Additionally, you need to enable an automatic cluster discovery strategy (`cluster.discovery_strategy`). 
+
+::: tip
+Replicant nodes cannot use `manual` discovery strategy to discover core nodes. 
+:::
 
 Configuration example:
 
