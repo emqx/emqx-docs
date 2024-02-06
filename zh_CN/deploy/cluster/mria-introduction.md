@@ -60,7 +60,11 @@ Mria 是 Mnesia 的一个开源扩展，它为集群增加了最终的一致性�
 
 ### 启用 Core + Replicant 模式
 
-为了启用 Core + Replicant 模式，需要将某些节点指定为复制节点。这可以通过设置 `node.role` 参数为 `replicant` 来实现。此外，您需要启用一个自动集群发现策略（`cluster.discovery_strategy`）。鉴于复制节点被设计为无状态，它们仅有限支持 `manual` 发现策略。
+为了启用 Core + Replicant 模式，需要将某些节点指定为复制节点。这可以通过设置 `node.role` 参数为 `replicant` 来实现。此外，您需要启用一个自动集群发现策略（`cluster.discovery_strategy`）。
+
+:::tip
+Replicant 节点不能使用 `manual` 策略来发现 Core 节点集群。
+:::
 
 配置示例：
 
