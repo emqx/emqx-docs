@@ -81,9 +81,25 @@ docker exec -it cassa cqlsh "-e \
         PRIMARY KEY(msgid, topic));"
 ```
 
+## Create a Connector
+
+This section demonstrates how to create a Connector to connect the Sink to the Cassandra server.
+
+The following steps assume that you run both EMQX and Cassandra on the local machine. If you have Cassandra and EMQX running remotely, adjust the settings accordingly.
+
+1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+2. Click **Create** in the top right corner of the page.
+3. On the **Create Connector** page, select **Cassandra** and then click **Next**.
+4. In the **Configuration** step, configure the following information:
+   - Enter the connector name, which should be a combination of upper and lower case letters and numbers, for example: `my_cassandra`.
+   - Enter `127.0.0.1:9042` for the **Servers**, `mqtt` as the **Keyspace**, and leave others as default.
+   - Determine whether to enable TLS. For detailed information on TLS connection options, see [TLS for External Resource Access](../network/overview.md#enabling-tls-for-external-resource-access).
+5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Cassandra server.
+6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Cassandra. For detailed steps, see [Create Rule with Cassandra Sink](#create-rule-with-cassandra-sink).
+
 ## Create a Rule for Cassandra Sink
 
-This section demonstrates how to create a rule to specify the data to be stored in Cassandra. It assumes that you run both EMQX and Cassandra on the local machine. If you have Cassandra and EMQX running remotely, adjust the settings accordingly.
+This section demonstrates how to create a rule to specify the data to be stored in Cassandra. 
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -102,25 +118,25 @@ This section demonstrates how to create a rule to specify the data to be stored 
 
    Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-4. Click the **+ Add Action** button to define an action that will be triggered by the rule. Select `Cassandra` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to Cassandra. 
+4. Click the **+ Add Action** button to define an action that will be triggered by the rule.  With this action, EMQX sends the data processed by the rule to Cassandra. 
 
-   Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select a Cassandra action previously created. In this demonstration, you create a new Sink and add it to the rule.
+5. Select `Cassandra` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
 
-5. Enter a name for the Sink. The name should combine upper/lower case letters and numbers.
+6. Enter a name for the Sink. The name should combine upper/lower case letters and numbers.
 
-6. Enter the connection information. Input `127.0.0.1:9042` for the **Servers**, `mqtt` as the **Keyspace**, and leave others as default.
+7. Select the `my_cassandra` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-7. Configure the **CQL template** to save `topic`, `id`, `clientid`, `qos`, `palyload` and `timestamp` to Cassandra. This template will be executed via Cassandra Query Language, and the sample code is as follows:
+8. Configure the **CQL template** to save `topic`, `id`, `clientid`, `qos`, `palyload` and `timestamp` to Cassandra. This template will be executed via Cassandra Query Language, and the sample code is as follows:
 
    ```sql
    insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
    ```
 
-8. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
+9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Data Integration](./data-bridges.md).
 
-9. Click the **Add** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+10. Click the **Add** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
 
-10. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
+11. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
 
 
 Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you see the new Cassandra Sink. 
