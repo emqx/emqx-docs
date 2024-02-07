@@ -84,23 +84,35 @@ docker exec -it cassa cqlsh "-e \
         PRIMARY KEY(msgid, topic));"
 ```
 
-## <!-- 创建 Cassandra 连接器-->
+## 创建连接器
 
-<!-- 在创建 Cassandra Sink 之前，您需要创建一个 Cassandra 连接器，以便 EMQX 与 Cassandra 服务建立连接。以下示例假定您在本地机器上同时运行 EMQX 和 Cassandra。如果您在远程运行 Cassandra 和 EMQX，请相应地调整设置。-->
+在创建 Cassandra Sink 之前，您需要创建一个 Cassandra 连接器，以便 EMQX 与 Cassandra 服务建立连接。以下示例假定您在本地机器上同时运行 EMQX 和 Cassandra。如果您在远程运行 Cassandra 和 EMQX，请相应地调整设置。
 
-<!-- 转到 Dashboard **集成** -> **连接器** 页面。点击页面右上角的**创建**。
-在连接器类型中选择 **Cassandra**，点击**下一步**。
-输入连接器名称，要求是大小写英文字母和数字组合。
-输入 Cassandra 连接信息，**Servers** 地址填写 `127.0.0.1:9042`，**Keyspace** 填写 `mqtt`，其他使用默认值即可。
-配置 CQL 模版，将字段 `topic`, `id`, `clientid`, `qos`, `palyload` 和 `timestamp` 存储到 Cassandra 数据库中。该模板将通过 Cassandra 查询语言执行，对应模板如下：insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})-->
+1. 转到 Dashboard **集成** -> **连接器** 页面。点击页面右上角的**创建**。
 
-<!-- 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[数据集成](./data-bridges.md)。
-点击**创建**按钮完成连接器创建。
-在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 Cassandra 的数据。您也可以按照[创建 Cassandra Sink 规则](#创建-cassandra-sink-规则)章节的步骤来创建规则。-->
+2. 在连接器类型中选择 **Cassandra**，点击**下一步**。
+
+3. 在 **配置** 步骤，配置以下信息：
+
+   - 输入连接器名称，应为大写和小写字母及数字的组合，例如：`my_cassandra`。
+   - 对于 **服务器**，输入 `127.0.0.1:9042`，`mqtt` 作为 **键空间**，其它保留为默认。
+   - 决定是否启用 TLS。有关 TLS 连接选项的详细信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md#启用-tls-加密访问外部资源)。
+
+4. 配置 CQL 模版，将字段 `topic`, `id`, `clientid`, `qos`, `palyload` 和 `timestamp` 存储到 Cassandra 数据库中。该模板将通过 Cassandra 查询语言执行，对应模板如下：
+
+   ```sql
+   insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})
+   ```
+
+5. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
+
+6. 点击**创建**按钮完成连接器创建。
+
+7. 在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 Cassandra 的数据。您也可以按照[创建 Cassandra Sink 规则](#创建-cassandra-sink-规则)章节的步骤来创建规则。
 
 ## 创建 Cassandra Sink 规则
 
-本节演示了如何为 Cassandra Sink 创建一条规则以指定需要转发至 Cassandra 的数据。以下步骤假定 EMQX 与 Cassandra 均在本地运行，如您在远程运行 EMQX 及 Cassandra，请根据实际情况调整相应配置。
+本节演示了如何为 Cassandra Sink 创建一条规则以指定需要转发至 Cassandra 的数据。
 
 1. 转到 Dashboard **集成** -> **规则**页面。
 
@@ -117,23 +129,25 @@ docker exec -it cassa cqlsh "-e \
      "t/#"
    ```
 
-4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。在**动作类型**下拉框中选择 Cassandra，保持**动作**下拉框为默认的“创建动作”选项，您也可以选择一个之前已经创建好的 Cassandra Sink。此处我们创建一个全新的 Sink 并添加到规则中。
+4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。
 
-5. 输入名称，要求是大小写英文字母和数字组合。
+5. 在**动作类型**下拉框中选择 Cassandra，保持**动作**下拉框为默认的“创建动作”选项，您也可以选择一个之前已经创建好的 Cassandra Sink。此处我们创建一个全新的 Sink 并添加到规则中。
 
-6. 输入 Cassandra 连接信息，**Servers** 地址填写 `127.0.0.1:9042`，**Keyspace** 填写 `mqtt`，其他使用默认值即可。
+6. 输入名称，要求是大小写英文字母和数字组合。
 
-7. 配置 CQL 模版，将字段 `topic`, `id`, `clientid`, `qos`, `palyload` 和 `timestamp` 存储到 Cassandra 数据库中。该模板将通过 Cassandra 查询语言执行，对应模板如下：
+7. 从**连接器**下拉框中选择刚刚创建的 `my_cassandra`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
+
+8. 配置 CQL 模版，将字段 `topic`, `id`, `clientid`, `qos`, `palyload` 和 `timestamp` 存储到 Cassandra 数据库中。该模板将通过 Cassandra 查询语言执行，对应模板如下：
 
    ```sql
    insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})
    ```
 
-8. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
+9. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
 
-9. 点击**创建**按钮完成 Sink 的创建，创建成功后页面将回到创建规则，新的 Sink 将添加到规则动作中。
+10. 点击**创建**按钮完成 Sink 的创建，创建成功后页面将回到创建规则，新的 Sink 将添加到规则动作中。
 
-10. 回到规则创建页面，点击**创建**按钮完成整个规则创建。
+11. 回到规则创建页面，点击**创建**按钮完成整个规则创建。
 
 现在您已成功创建了规则，你可以点击**集成** -> **规则**页面看到新建的规则，同时在**动作(Sink)** 标签页看到新建的 Cassanadra Sink。
 
