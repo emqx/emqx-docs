@@ -9,7 +9,7 @@ Knowledge of [MQTT over QUIC](./introduction.md).
 
 ## Environment
 
-MQTT over QUIC is an experimental function currently not supported in CentOS 6, macOS, and Windows systems.
+MQTT over QUIC is an experimental function currently not supported in CentOS 6, macOS.
 
 {% emqxce %}
 

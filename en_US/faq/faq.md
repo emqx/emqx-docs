@@ -185,22 +185,6 @@ After the installation is complete, you can start EMQX normally.
 
 {% emqxce %}
 
-## MSVCR120.dll is missing from Windows
-
-### Phenomenon
-
-When Windows executes `./bin/emqx console`, an error window pops up:
-
-```bash
-This program cannot be started because MSVCR120.dll is missing from the computer. Please try to reinstall the program to resolve this issue.
-```
-
-### Solution
-
-Install [Microsoft Visual C++ RedistributablePackage](https://www.microsoft.com/en-us/download/search.aspx?q=redistributable+package.)
-
-{% endemqxce %}
-
 ## SSL Connection Error
 
 ### Phenomenon
@@ -462,8 +446,6 @@ Client disconnect link error code list:
 ## What's EMQX suggested OS?
 
 EMQX supports deployment on Linux, MacOS, ARM system, however it is recommended to deploy the product on one of the supported Linux distributions, such as CentOS, Ubuntu and Debian.
-
-Only EMQX Broker supports Windows and we don't suggestion deployment on Windows.
 
 ## How to estimate resource usage of EMQX?
 

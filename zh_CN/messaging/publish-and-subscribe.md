@@ -15,7 +15,7 @@
 
 ## MQTTX
 
-[MQTTX](https://mqttx.app/zh) 是 EMQ 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS, Linux, Windows，并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。MQTTX 包含三种类型的工具：
+[MQTTX](https://mqttx.app/zh) 是 EMQ 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS, Linux 并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。MQTTX 包含三种类型的工具：
 
 - MQTTX 客户端
 - MQTTX 命令行工具
