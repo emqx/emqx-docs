@@ -117,7 +117,7 @@ EMQX 的 HTTP API 可以用于修改很多配置，当一个 API 被调用，例
 EMQX 会为每个集群范围的配置修改生成一个 ID（tnxid），这个 ID 会在集群范围内严格递增，每个修改，例如从 Dashboard 修改一个配置之后，都会记录在数据库中。下面这个例子，展示的是查看第二（tnxid=2）个修改的内容（这是一个启用 TLS 监听器的操作）。
 
 ```bash
-$ emqx ctl conf cluster_sync tnxid 2
+$ emqx ctl conf cluster_sync inspect 2
 {atomic,#{created_at => {{2022,6,21},{21,57,50}},
           initiator => 'emqx@127.0.0.1',
           mfa =>

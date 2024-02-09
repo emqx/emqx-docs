@@ -117,7 +117,7 @@ If for some reason, this replication can not apply in a peer node, this command 
 EMQX generates an ID (tnxid) for each configuration modification within the cluster scope. This ID strictly increases within the cluster scope, and every modification, such as changing a configuration from the Dashboard, is recorded in the database. The following example shows viewing the content of the second modification (tnxid=2), which is an operation to enable a TLS listener.
 
 ```bash
-$ emqx ctl conf cluster_sync tnxid 2
+$ emqx ctl conf cluster_sync inspect 2
 {atomic,#{created_at => {{2022,6,21},{21,57,50}},
           initiator => 'emqx@127.0.0.1',
           mfa =>
