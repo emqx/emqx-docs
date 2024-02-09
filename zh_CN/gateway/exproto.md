@@ -6,7 +6,7 @@ Extension Protocol (ExProto) 协议是一个基于 gRPC 通信实现的自定义
 
 <!--a brief introduction of the architecture-->
 
-## ExProto 网关和 gPRC 服务的工作原理
+## ExProto 网关和 gRPC 服务的工作原理
 
 当 ExProto 网关在 EMQX 中启用 ，它将在特定端口（例如7993）上监听设备连接。当它接收到客户端设备的连接时，它将传递客户端设备生成的字节数据和事件给用户的 gRPC 服务。这需要 ExProto网 关中的 gRPC 客户端调用用户 gRPC 服务器中使用的`ConnectionUnaryHandler` 服务中的方法。
 
@@ -20,7 +20,7 @@ Extension Protocol (ExProto) 协议是一个基于 gRPC 通信实现的自定义
 
 `exproto.proto` 文件定义了 ExProto 网关和用户 gRPC  服务之间的接口。该文件指定了以下两个服务：
 
-- `ConnectionAdapter` 服务：由 ExProto 网关实现，为 gPRC 服务器提供接口。
+- `ConnectionAdapter` 服务：由 ExProto 网关实现，为 gRPC 服务器提供接口。
 - `ConnectionUnaryHandler` 服务：由用户的 gRPC 服务器实现，用于定义处理客户端 socket 连接和字节解析的方法。
 
 ### `ConnectionUnaryHandler` 服务
