@@ -2,6 +2,15 @@
 
 EMQX provides users with a banning functionality to deny the access from a specific client. You can add a client to the banned list by the client ID, user name or source IP address.
 
+Additionally, clients may be banned by matching rules based on:
+* matching client identifiers and usernames against a regular pattern;
+* matching source IP addresses against a CIDR range.
+
+::: tip
+A large number of matching rules will significantly impact performance because, unlike direct bans,
+all rules are checked for each connecting client.
+:::
+
 This page mainly introduces how to create and remove the banned clients on EMQX Dashboard, but you also use this function through [REST API](https://docs.emqx.com/en/enterprise/v5.2/admin/api-docs.html#tag/Banned).
 
 | API                      | Function                                                     |
@@ -17,9 +26,9 @@ The banned list is only applicable to a small number of client bans. If there ar
 
 ## Create Banned Clients
 
-1. Go to EMQX Dashboard, and click **Access Control** -> **Banned Clients** on the left navigation menu to enter the **Banned Clients** page. 
+1. Go to EMQX Dashboard, and click **Access Control** -> **Banned Clients** on the left navigation menu to enter the **Banned Clients** page.
 2. Click **Create** at the top right corner. In the **Create** dialog, specify a client to be banned.
-   - **Banned Object**: Choose how to enact a ban on a client by specifying either the **Client ID**, **Username**, or **IP Address** from the dropdown list, and then provide the associated value.
+   - **Banned Object**: Choose how to enact a ban on a client by specifying either the **Client ID**, **Username**, **IP Address**, **CLient ID Pattern**, **Username Pattern** or **IP Address Range** from the dropdown list, and then provide the associated value.
    - **Expire At** (optional): Click the clock icon to select the expiration time and date for this banning action.
    - **Reason** (optional): Fill in the reason why you want to ban this client in this text box.
 2. Click **Create** to finish the setting.
