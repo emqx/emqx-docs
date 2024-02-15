@@ -134,7 +134,7 @@ export EMQX_LISTENERS__SSL__DEFAULT__SSL_OPTIONS__CIPHERS='["TLS_AES_256_GCM_SHA
 
 # Configuration file
 listeners.ssl.default {
-  ...  
+  ...
     bind = "127.0.0.1:8883"
     ssl_options {
       ciphers = ["TLS_AES_256_GCM_SHA384"]
@@ -176,7 +176,7 @@ To avoid confusion, it is highly recommend NOT to have the same config keys in b
 2. If you're upgrading from e5.0.2/v5.0.22 or earlier to the latest version of EMQX, 
    the configuration overriding order will remain unchanged, `cluster.hocon` will not be created to keep compatibility.  
 3. The `cluster-override.conf` mechanism is scheduled to be removed in version 5.1.   
-:::   
+:::
 
 ### Override
 
@@ -258,42 +258,130 @@ authentication = [{ enable = true }]
 
 To make the HOCON objects type-safe, EMQX introduced a schema for it. The schema defines data types, and data fields' names and metadata for config value validation and more.
 
-::: tip Tip 
+{% emqxee %}
 
-The configuration document you are reading now is generated from schema metadata. 
+The [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) is generated from schema.
 
-:::
+{% endemqxee %}
+
+{% emqxce %}
+
+The [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/) is generated from schema.
+
+{% endemqxce %}
 
 ### Primitive Data Types
 
-Complex types define data 'boxes' which may contain other complex data or primitive values. There are quite some different primitive types, to name a few:
+Primitive data types in the configuration manual are largely self-explanatory, requiring minimal documentation. Below is a comprehensive list of all primitive types you will encounter.
 
-- `atom()`.
-- `boolean()`.
-- `string()`.
-- `integer()`.
-- `float()`.
-- `number()`.
-- `binary()`, another format of string().
-- `emqx_schema:duration()`, time duration, another format of integer()
-- ...
+#### Integer
 
-::: tip Tip 
+Represents a whole number. Examples include `42`, `-3`, `0`.
 
-The primitive types are mostly self-describing, so there is usually not a lot to document. For types that are not so clear by their names, the field description is to be used to find the details. 
+#### Integer(Min..Max)
 
-:::
+An integer that falls within a specified range. For example, `1..+inf` means from `1` to positive infinity (`+inf`), indicating that only positive integers are acceptable.
+
+#### Enum(symbol1, symbol2, ...)
+
+Defines an enumerated type that can only take one of the predefined symbols. For instance, `Enum(debug,info,warning,error)` defines acceptable logging levels.
+
+#### String
+
+The **String** data type represents a sequence of characters and supports several formats for diverse use cases:
+
+- **Unquoted**: Ideal for simple identifiers or names that avoid special characters (see below for details).
+
+- **Quoted Strings**: For strings that include special characters or whitespace,
+  use double quotes (`"`), utilizing the backslash (`\`) to escape characters as needed. Example: `"line1\nline2"`.
+
+- **Triple-quoted String**: Enclosed with triple quotes (`"""`), these strings do not require escapes (except for `\`),
+  simplifying the inclusion of complex content. Note that quotes adjacent to the triple-quotes must be escaped to be considered part of the string.
+
+- **Triple-quoted String with Indentation**: Surrounded by `"""~` and `~"""`,
+  introduced since EMQX 5.6, this format allows for indentation within the string for better layout in the configuration file, ideal for multi-line or formatted text.
+
+**Special Considerations for Unquoted Strings:**
+- Avoid "forbidden characters": `$`, `"`, `{`, `}`, `[`, `]`, `:`, `=`, `,`, `+`, `#`, `` ` ``, `^`, `?`, `!`, `*`, `&`, `\`, or whitespace.
+- Do not start with `//` (which introduces a comment).
+- Do not begin with `true`, `false`, or `null` in a way that could be misinterpreted as boolean or null values.
+
+**Guidelines for Triple-quoted Strings:**
+- To include a quote character adjacent to the triple-quotes, escape it or use the `~` delimiter for clarity.
+- Multiline strings support indentation with spaces (not tabs) for readability.
+  The indentation level is determined by the smallest number of leading spaces on any line.
+
+For example:
+
+``
+rule_xlu4 {
+  sql = """~
+    SELECT
+      *
+    FROM
+      "t/#"
+  ~"""
+}`
+```
+
+For additional details on string quoting conventions in HOCON, consult [the HOCON specification](https://github.com/lightbend/config/blob/main/HOCON.md#unquoted-strings).
+
+For insights into EMQ's specialized adaptations of the triple-quoted string with indentation, refer to the [emqx/hocon.git README](https://github.com/emqx/hocon?tab=readme-ov-file#divergence-from-spec-and-caveats).
+
+#### String("constant")
+
+A constant string value, effectively acting as a single-value enumeration (`Enum`). This could be used to define a static value that doesn't change, such as a specific setting or mode.
+
+#### Boolean
+
+Either `true` or `false`, which is case sensitive.
+
+#### Float
+
+A floating-point number, supporting decimals. Examples include `3.14`, `-0.001`.
+
+#### Duration
+
+Represents a span of time in a human-readable format. Examples and explanation of format.
+
+#### Duration(s)
+
+Specifies a `Duration` type with a precision level of seconds. Further details and examples.
+
+#### Secret
+
+A type intended for sensitive information, such as passwords and tokens. Explanation of its usage and importance.
+
 
 ### Complex Data Types
 
-There are 4 complex data types in EMQX's HOCON config:
+Complex data types in EMQX's HOCON configuration are designed to encapsulate data structures that can include both other complex types and primitive values.
+These data types enable flexible and hierarchical data representation.
 
-1. Struct: Named using an unquoted string, followed by a predefined list of fields. Only lowercase letters and digits are allowed in struct and field names. Also, only underscore can be used as a word separator.
-2. Map: Map is like Struct, however, the fields are not predefined.
-3. Union: `MemberType1 | MemberType2 | ...`
-4. Array: `[ElementType]`
+#### Struct `Struct(name)`
 
-::: tip Tip 
+Rrepresents a structure with fields enclosed between curly braces `{}`.
+The `name` parameter is a reference to a schema that specifies the structure's fields and their respective types.
+
+#### Map `Map($name-\>Type)`
+
+Similar to `Struct`, a `Map` holds key-value pairs without predefined names for the fields.
+
+The `$name` variable indicates that the keys can be any string (except for a string with dot `.` in it),
+representing the name of an entity or attribute.
+The `Type` specifies that all values in the map must be of the same data type, allowing for uniform collections of data items.
+
+#### OneOf `OneOf(Type1, Type2, ...)`
+
+Defines a union type that can include two or more types to indicate that one struct field can be any one of the member types.
+For example, this allows a configuration entry to be either `String(infinity)` or a `Duration`.
+
+#### Array `Array(Type)`
+
+Defines an array consisting of elements which adheres to the specified `Type`.
+
+
+::: tip
 
 If map filed name is a positive integer number, it is interpreted as an alternative representation of an `Array`. For example:
 
@@ -302,7 +390,7 @@ myarray.1 = 74
 myarray.2 = 75
 ```
 
-will be interpreted as `myarray = [74, 75]`, which is handy when trying to override array elements. 
+will be interpreted as `myarray = [74, 75]`, which is handy when trying to override array elements.
 
 :::
 
