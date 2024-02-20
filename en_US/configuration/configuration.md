@@ -12,13 +12,13 @@ Users can configure EMQX with configuration files or environment variables. This
 
 {% endemqxce %}
 
-## Configuration Files
+## Introduction
 
 ### **Main Configuration File**
 
 EMQX will create a group of directories after installation, among which, `etc` is the folder that keeps all the configuration files. This section will focus on the main configuration file: `emqx.conf`.
 
-Depends on your installation mode, `emqx.conf` is stored in:
+Depending on your installation mode, `emqx.conf` is stored in:
 
 | Installation                               | Path                      |
 | ------------------------------------------ | ------------------------- |
@@ -33,7 +33,7 @@ EMQX uses the default settings if a config item is not found in the config files
 
 ### Configuration Rewrite File
 
-`emqx.conf` defines settings at a global level, for cases where you need to customize the settings for a cluster or a node, EMQX also provides a configuration rewrite file which extends but does not override `emqx.conf`:
+`emqx.conf` defines settings at a global level, for cases where you need to customize the settings for a cluster or a node, EMQX also provides a configuration rewrite file that extends but does not override `emqx.conf`:
 
 **`cluster.hocon`**
 
@@ -313,8 +313,7 @@ The **String** data type represents a sequence of characters and supports severa
 
 For example:
 
-``
-rule_xlu4 {
+`rule_xlu4 {
   sql = """~
     SELECT
       *
@@ -322,7 +321,6 @@ rule_xlu4 {
       "t/#"
   ~"""
 }`
-```
 
 For additional details on string quoting conventions in HOCON, consult [the HOCON specification](https://github.com/lightbend/config/blob/main/HOCON.md#unquoted-strings).
 
@@ -360,7 +358,7 @@ These data types enable flexible and hierarchical data representation.
 
 #### Struct `Struct(name)`
 
-Rrepresents a structure with fields enclosed between curly braces `{}`.
+Represents a structure with fields enclosed between curly braces `{}`.
 The `name` parameter is a reference to a schema that specifies the structure's fields and their respective types.
 
 #### Map `Map($name-\>Type)`
@@ -378,14 +376,14 @@ For example, this allows a configuration entry to be either `String(infinity)` o
 
 #### Array `Array(Type)`
 
-Defines an array consisting of elements which adheres to the specified `Type`.
+Defines an array consisting of elements that adhere to the specified `Type`.
 
 
 ::: tip
 
-If map filed name is a positive integer number, it is interpreted as an alternative representation of an `Array`. For example:
+If a Map field name is a positive integer number, it is interpreted as an alternative representation of an `Array`. For example:
 
-```
+```bash
 myarray.1 = 74
 myarray.2 = 75
 ```
@@ -394,7 +392,7 @@ will be interpreted as `myarray = [74, 75]`, which is handy when trying to overr
 
 :::
 
-### Configuration Paths
+## Configuration Paths
 
 If we consider the whole EMQX config as a tree, to reference a primitive value, we can use dot-separated names from string for the path from the tree root (always a Struct) down to the primitive values at tree-leaves.
 

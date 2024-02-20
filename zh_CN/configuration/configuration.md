@@ -296,13 +296,13 @@ EMQX 的 [配置手册](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/) 就�
 - 开头不用`true`, `false`, 或`null`，以免被误解为布尔值或空值。
 
 **三引号字符串的指导原则：**
+
 - 要包含紧邻三引号的引号字符，需进行转义或使用`~`分隔符以增加清晰度。
 - 多行字符串支持使用空格（不是制表符）进行缩进以提高可读性。缩进级别由任何行上最小的前导空格数确定。
 
 示例：
 
-``
-rule_xlu4 {
+`rule_xlu4 {
   sql = """~
     SELECT
       *
@@ -310,7 +310,6 @@ rule_xlu4 {
       "t/#"
   ~"""
 }`
-```
 
 有关HOCON字符串引用约定的更多细节，请参阅[HOCON规范](https://github.com/lightbend/config/blob/main/HOCON.md#unquoted-strings)。
 
@@ -384,7 +383,7 @@ myarray.2 = 75
 会被解析成 `myarray = [74, 75]`，这个用法在重载数组元素的值时候非常有用。
 :::
 
-### 配置路径
+## 配置路径
 
 如果我们把 EMQX 的配置值理解成一个类似目录树的结构，如果文件系统中使用斜杠或反斜杠进行层级分割，则 EMQX 的层级分割符是 `.`：
 
