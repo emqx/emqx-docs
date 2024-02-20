@@ -1,8 +1,17 @@
 # Banned Clients
 
-EMQX provides users with a banning functionality to deny the access from a specific client. You can add a client to the banned list by the client ID, user name or source IP address.
+EMQX enables users to restrict access from particular clients through its banning feature. Clients can be added to the ban list using their client ID, username, or source IP address.
 
-This page mainly introduces how to create and remove the banned clients on EMQX Dashboard, but you also use this function through [REST API](https://docs.emqx.com/en/enterprise/v5.2/admin/api-docs.html#tag/Banned).
+Banning can also be applied through rules that include:
+
+- Regular patterns to match client identifiers and usernames.
+- CIDR ranges to match source IP addresses.
+
+::: tip
+Consider that a high volume of matching rules can adversely affect performance. This is because the system checks all rules for each client attempting to connect, in contrast to direct bans.
+:::
+
+This page focuses on managing banned clients via the EMQX Dashboard. The banning functionality can also be accessed through the [REST API](https://docs.emqx.com/en/enterprise/v5.2/admin/api-docs.html#tag/Banned).
 
 | API                      | Function                                                     |
 | ------------------------ | ------------------------------------------------------------ |
@@ -17,11 +26,11 @@ The banned list is only applicable to a small number of client bans. If there ar
 
 ## Create Banned Clients
 
-1. Go to EMQX Dashboard, and click **Access Control** -> **Banned Clients** on the left navigation menu to enter the **Banned Clients** page. 
+1. Go to EMQX Dashboard, and click **Access Control** -> **Banned Clients** on the left navigation menu to enter the **Banned Clients** page.
 2. Click **Create** at the top right corner. In the **Create** dialog, specify a client to be banned.
-   - **Banned Object**: Choose how to enact a ban on a client by specifying either the **Client ID**, **Username**, or **IP Address** from the dropdown list, and then provide the associated value.
+   - **Banned Object**: Choose how to enact a ban on a client by specifying either the **Client ID**, **Username**, **IP Address**, **Client ID Pattern**, **Username Pattern,** or **IP Address Range** from the dropdown list, and then provide the associated value.
    - **Expire At** (optional): Click the clock icon to select the expiration time and date for this banning action.
-   - **Reason** (optional): Fill in the reason why you want to ban this client in this text box.
+   - **Reason** (optional): Fill in why you want to ban this client in this text box.
 2. Click **Create** to finish the setting.
 
 <img src="./assets/blacklist_create_ee.png" alt="blacklist_create_ee" style="zoom:67%;" />
