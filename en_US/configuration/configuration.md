@@ -313,14 +313,14 @@ The **String** data type represents a sequence of characters and supports severa
 
 For example:
 
-`rule_xlu4 {
+``rule_xlu4 {
   sql = """~
     SELECT
       *
     FROM
       "t/#"
   ~"""
-}`
+}``
 
 For additional details on string quoting conventions in HOCON, consult [the HOCON specification](https://github.com/lightbend/config/blob/main/HOCON.md#unquoted-strings).
 
