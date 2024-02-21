@@ -302,7 +302,7 @@ EMQX 的 [配置手册](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/) 就�
 
 示例：
 
-``
+```
 rule_xlu4 {
   sql = """~
     SELECT
@@ -311,7 +311,7 @@ rule_xlu4 {
       "t/#"
   ~"""
 }
-``
+```
 
 有关HOCON字符串引用约定的更多细节，请参阅[HOCON规范](https://github.com/lightbend/config/blob/main/HOCON.md#unquoted-strings)。
 
