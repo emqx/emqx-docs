@@ -95,11 +95,27 @@ Before you create data bridges for TDengine, you need to create two data tables 
        );
 ```
 
+## Create a Connector
+
+This section demonstrates how to create a Connector to connect the Sink to the TDengine server.
+
+The following steps assume that you run both EMQX and TDengine on the local machine. If you have TDengine and EMQX running remotely, adjust the settings accordingly.
+
+1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+2. Click **Create** in the top right corner of the page.
+3. On the **Create Connector** page, select **TDengine** and then click **Next**.
+4. In the **Configuration** step, configure the following information:
+   - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower case letters and numbers, for example: `my_tdengine`.
+   - **Server Host**: Enter `http://127.0.0.1:6041`, or the actual URL if the TDengine server is running remotely.
+   - **Database Name**: Enter `mqtt`.
+   - **Username**: Enter `root`.
+   - **Password**: Enter `taosdata`.
+5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the TDengine server.
+6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to TDengine. For detailed steps, see [Create a Rule with TDengine Sink](#create-a-rule-with-tdengine-sink).
+
 ## Create a Rule with TDengine Sink
 
 This section demonstrates how to create two different rules for specifying the data to be saved into TDengine and recording client's online/offline status.
-
-It assumes that you run both EMQX and TDengine on the local machine. If you have Microsoft SQL Server and EMQX running remotely, adjust the settings accordingly. 
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -141,12 +157,7 @@ It assumes that you run both EMQX and TDengine on the local machine. If you have
 
 6. Enter a name for the Sink. The name should combine upper/lower case letters and numbers.
 
-7. Enter the connection information. 
-
-   - **Server Host**: Enter `http://127.0.0.1:6041`, or the actual URL if the TDengine server is running remotely.
-   - **Database Name**: Enter `mqtt`.
-   - **Username**: Enter `root`.
-   - **Password**: Enter `taosdata`.
+7. Select the `my_tdengine` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
 8. Configure the **SQL Template** based on the feature to use.
 
