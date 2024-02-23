@@ -95,7 +95,7 @@ The following steps assume that you run both EMQX and Cassandra on the local mac
    - Enter `127.0.0.1:9042` for the **Servers**, `mqtt` as the **Keyspace**, and leave others as default.
    - Determine whether to enable TLS. For detailed information on TLS connection options, see [TLS for External Resource Access](../network/overview.md#enabling-tls-for-external-resource-access).
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Cassandra server.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Cassandra. For detailed steps, see [Create Rule with Cassandra Sink](#create-rule-with-cassandra-sink).
+6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Cassandra. For detailed steps, see [Create a Rule with Cassandra Sink](#create-a-rule-with-cassandra-sink).
 
 ## Create a Rule for Cassandra Sink
 

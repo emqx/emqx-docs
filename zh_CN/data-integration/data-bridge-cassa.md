@@ -98,13 +98,7 @@ docker exec -it cassa cqlsh "-e \
    - 对于 **服务器**，输入 `127.0.0.1:9042`，`mqtt` 作为 **键空间**，其它保留为默认。
    - 决定是否启用 TLS。有关 TLS 连接选项的详细信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md#启用-tls-加密访问外部资源)。
 
-4. 配置 CQL 模版，将字段 `topic`, `id`, `clientid`, `qos`, `palyload` 和 `timestamp` 存储到 Cassandra 数据库中。该模板将通过 Cassandra 查询语言执行，对应模板如下：
-
-   ```sql
-   insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})
-   ```
-
-5. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
+4. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
 
 6. 点击**创建**按钮完成连接器创建。
 
@@ -131,7 +125,7 @@ docker exec -it cassa cqlsh "-e \
 
 4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。
 
-5. 在**动作类型**下拉框中选择 Cassandra，保持**动作**下拉框为默认的“创建动作”选项，您也可以选择一个之前已经创建好的 Cassandra Sink。此处我们创建一个全新的 Sink 并添加到规则中。
+5. 在**动作类型**下拉框中选择 `Cassandra`，保持**动作**下拉框为默认的`创建动作`选项，您也可以选择一个之前已经创建好的 Cassandra Sink。此处我们创建一个全新的 Sink 并添加到规则中。
 
 6. 输入名称，要求是大小写英文字母和数字组合。
 

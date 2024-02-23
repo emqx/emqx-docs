@@ -59,22 +59,25 @@ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
 
 ```
 
+## Create a Connector
+
+This section demonstrates how to create a Connector to connect the Sink to the OpenTSDB server.
+
+The following steps assume that you run both EMQX and OpenTSDB on the local machine. If you have OpenTSDB and EMQX running remotely, adjust the settings accordingly.
+
+1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+2. Click **Create** in the top right corner of the page.
+3. On the **Create Connector** page, select **OpenTSDB** and then click **Next**.
+4. In the **Configuration** step, configure the following information:
+   - Enter the connector name, which should be a combination of upper and lower case letters and numbers, for example: `my_opentsdb`.
+   - Enter `http://127.0.0.1:4242` as the **Server Host**, or the actual URL if the OpenTSDB server runs remotely.
+   - Leave other options as default.
+5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the OpenTSDB server.
+6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to OpenTSDB. For detailed steps, see [Create a Rule with OpenTSDB Sink](#create-a-rule-with-opentsdb-sink).
+
 ## Create a Rule with OpenTSDB Sink
 
-This section demonstrates how to create rules to specify the data to be saved into OpenTSDB. It assumes that you run both EMQX and OpenTSDB on the local machine. If you have OpenTSDB and EMQX running remotely, adjust the settings accordingly. The data reported by the client in this tutorial is as follows:
-
-- Topic: `t/opents`
-- Payload:
-
-```json
-{
-  "metric": "cpu",
-  "tags": {
-    "host": "serverA"
-  },
-  "value":12
-}
-```
+This section demonstrates how to create rules to specify the data to be saved into OpenTSDB. 
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -93,24 +96,43 @@ This section demonstrates how to create rules to specify the data to be saved in
 
    Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to OpenTSDB.
+4. Click the **+ Add Action** button to define an action that will be triggered by the rule.  With this action, EMQX sends the data processed by the rule to OpenTSDB. 
 
 5. Select `OpenTSDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
 
-6. Enter a name for the Connector. The name should be a combination of upper/lower case letters and numbers.
+6. Enter a name for the Sink. The name should combine upper/lower case letters and numbers.
 
-7. Enter the connection information:
+7. Select the `my_opentsdb` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-   - **URL**: Input `http://127.0.0.1:4242`, or the actual URL if the OpenTSDB server runs remotely.
-   - Leave other options as default.
+8. Specify how data is written into OpenTSDB in the **Write Data** field to correctly convert MQTT messages into the format required by OpenTSDB. For example, the client reports the following data:
 
-8. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see the relevant configuration information in [Features of Sink](./data-bridges.md).
+   - Topic: `t/opents`
+   - Payload:
 
-9. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the OpenTSDB server.
+   ```json
+   {
+     "metric": "cpu",
+     "tags": {
+       "host": "serverA"
+     },
+     "value": 12
+   }
+   ```
 
-10. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+   Based on the provided Payload data format, configure the following format information:
 
-11. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+   - **Timestamp**: OpenTSDB requires a timestamp to record the time of the data point. If the MQTT message does not provide a timestamp, you can use the current time as the timestamp when configuring the Sink in EMQX, or you may need to modify the client's reported data format to include a timestamp field.
+   - **Metric**: In this example, `"metric": "cpu"` indicates that the metric name is `cpu`.
+   - **Tags**: Tags are used to describe additional information about the metric. Here, the tag is `"tags": {"host": "serverA"}`, indicating that this metric data comes from host `serverA`.
+   - **Value**: This is the actual metric value. In this example, it is `"value": 12`, indicating the metric value is 12.
+
+9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see the relevant configuration information in [Features of Sink](./data-bridges.md).
+
+10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the OpenTSDB server.
+
+11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
 
 You have now successfully created the rule for forwarding data through the OpenTSDB Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new OpenTSDB Sink.
 
