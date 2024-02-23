@@ -35,7 +35,7 @@ Client sessions that don't meet the above criteria won't be affected by this fea
 
 EMQX treats the subscriptions of the persistent sessions in a special manner:
 when the client subscribes to a topic filter, EMQX marks topics matching the filter as "durable".
-In addition to routing the MQTT PUBLISH messages from such topics to the regular sessions, the broker will also save the messages to disc.
+In addition to routing the MQTT PUBLISH messages from such topics to the regular sessions, the broker will also save the messages on disc.
 
 Each durable MQTT message is stored on disc exactly once, regardless of the number of persistent sessions subscribing to the matching topic-filter, whether online or offline.
 This enables an efficient fan-out of messages to the persistent sessions.
