@@ -121,7 +121,7 @@ services:
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
     - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
     healthcheck:
-      test: ["CMD", "/opt/emqx/bin/emqx ctl", "status"]
+      test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
       interval: 5s
       timeout: 25s
       retries: 5
@@ -146,7 +146,7 @@ services:
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
     - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
     healthcheck:
-      test: ["CMD", "/opt/emqx/bin/emqx ctl", "status"]
+      test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
       interval: 5s
       timeout: 25s
       retries: 5
@@ -178,7 +178,7 @@ services:
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
     - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
     healthcheck:
-      test: ["CMD", "/opt/emqx/bin/emqx ctl", "status"]
+      test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
       interval: 5s
       timeout: 25s
       retries: 5
@@ -203,7 +203,7 @@ services:
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
     - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
     healthcheck:
-      test: ["CMD", "/opt/emqx/bin/emqx ctl", "status"]
+      test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
       interval: 5s
       timeout: 25s
       retries: 5
