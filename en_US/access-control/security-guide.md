@@ -27,7 +27,3 @@ Security is a critical aspect of any MQTT-based application, and this guide is d
 - [Flapping Detect](./flapping-detect.md)
 
   EMQX automatically bans frequently logging clients to prevent them from consuming server resources that may affect other clients.
-
-- [Dashboard](../dashboard/dashboard.md)
-
-  The Dashboard is a management interface for EMQX, there is also provides security strategy for it, for example, a frequent question is how to disable the swagger documentation, you can see its document for details.
