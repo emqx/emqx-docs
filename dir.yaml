@@ -420,7 +420,6 @@
           title_cn: Dashboard
           path: configuration/dashboard
           lang: en
-          edition: ce
         - title_en: License
           title_cn: License
           path: configuration/license
