@@ -158,7 +158,7 @@ defaults
 backend mqtt_backend
   mode tcp
   stick-table type string len 32 size 100k expire 30m
-  stick on req.payload(0，0)，mqtt_field_value(connect，client_identifier)
+  stick on req.payload(0,0), mqtt_field_value(connect, client_identifier)
 
  # 增加 send-proxy 会把真实带给 EMQX，对应后端监听器需要启用 proxy_protocol
   # server emqx1 emqx1-cluster.emqx.io:1883 check send-proxy-v2
@@ -172,7 +172,7 @@ frontend mqtt_servers
   # 等待缓冲区填满，以便解析 MQTT 报文
   tcp-request inspect-delay 10s
   # 拒绝非 MQTT 连接
-  tcp-request content reject unless { req.payload(0，0)，mqtt_is_valid }
+  tcp-request content reject unless { req.payload(0,0), mqtt_is_valid }
   default_backend mqtt_backend
 ```
 

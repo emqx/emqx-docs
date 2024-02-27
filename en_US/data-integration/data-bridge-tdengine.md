@@ -111,46 +111,34 @@ The following steps assume that you run both EMQX and TDengine on the local mach
    - **Username**: Enter `root`.
    - **Password**: Enter `taosdata`.
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the TDengine server.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to TDengine. For detailed steps, see [Create a Rule with TDengine Sink](#create-a-rule-with-tdengine-sink).
+6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to TDengine and to record client events. For detailed steps, see [Create a Rule with TDengine Sink for Message Storage](#create-a-rule-with-tdengine-sink-for-message-storage) and [Create a Rule with TDengine Sink for Events Recording](#create-a-rule-with-tdengine-sink-for-events-recording).
 
-## Create a Rule with TDengine Sink
+## Create a Rule with TDengine Sink for Message Storage
 
-This section demonstrates how to create two different rules for specifying the data to be saved into TDengine and recording client's online/offline status.
+This section demonstrates how to create a rule to specify the data to be saved into TDengine.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
+3. Enter `my_rule` as the rule ID, and create a rule for message storage in the **SQL Editor**. For example, entering the following statement means the MQTT messages under topic `t/#`  will be saved to TDengine.
 
-   - To create a rule for message storage, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to TDengine.
+   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
 
-     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
-
-     ```sql
-       SELECT
-         *,
-         now_timestamp('millisecond')  as ts
-       FROM
-         "t/#"
-     ```
-
-   - To create a rule for online/offline status recording, enter the following statement:
-
-     ```sql
+   ```sql
      SELECT
-           *,
-           now_timestamp('millisecond')  as ts
-         FROM 
-           "$events/client_connected", "$events/client_disconnected"
-     ```
-
+       *,
+       now_timestamp('millisecond')  as ts
+     FROM
+       "t/#"
+   ```
+   
    ::: tip
 
    If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
    :::
-
+   
 4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to TDengine.
 
 5. Select `TDengine` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a TDengine Sink if you have created one. This demonstration will create a new Sink.
@@ -159,7 +147,7 @@ This section demonstrates how to create two different rules for specifying the d
 
 7. Select the `my_tdengine` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-8. Configure the **SQL Template** based on the feature to use.
+8. Configure the **SQL Template** for the Sink. You can use the following SQL to complete data insertion. It also supports batch setting via CSV file. For details, refer to [Batch Setting](#batch-setting).
 
    ::: tip
 
@@ -167,26 +155,14 @@ This section demonstrates how to create two different rules for specifying the d
 
    :::
 
-   - To create a Sink for message storage, you can use the following SQL to complete data insertion. It also supports batch setting via CSV file. For details, refer to [Batch Setting](#batch-setting).
-
-     ```sql
-     INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
-         VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
-     ```
-
-   - To create a Sink for online/offline status recording, use the statement below:
-
-     ```sql
-     INSERT INTO emqx_client_events(ts, clientid, event) VALUES (
-           ${ts},
-           '${clientid}',
-           '${event}'
-         )
-     ```
-
+   ```sql
+   INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
+       VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
+   ```
+   
 9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed.
 
-10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the TDengine. For details, see [Features of Sink](./data-bridges.md).
+10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the TDengine. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
 11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
@@ -227,7 +203,35 @@ When editing the SQL template, you can use the batch setting feature to import f
 
 4. After importing, you can further adjust the SQL in the **SQL Template**, such as setting table names, formatting SQL code, etc.
 
-## Test the Rule
+## Create a Rule with TDengine Sink for Events Recording
+
+This section demonstrates how to create a rule for the online/offline status recording.
+
+The rule creation steps are similar to those in [Creating a rule with TDengine Sink for Message Storage](#create-a-rules-with-tdengine-sink-for-message-storage) except for the SQL rule syntax and SQL template.
+
+The SQL rule syntax for online/offline status recording is as follows:
+
+```sql
+SELECT
+      *,
+      now_timestamp('millisecond')  as ts
+    FROM 
+      "$events/client_connected", "$events/client_disconnected"
+```
+
+The SQL template for the Sink is as follows:
+
+Note: The fields should not include quotation marks, and do not end SQL statements with a semicolon (`;`).
+
+```sql
+INSERT INTO emqx_client_events(ts, clientid, event) VALUES (
+      ${ts},
+      '${clientid}',
+      '${event}'
+    )
+```
+
+## Test the Rules
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event. 
 
@@ -235,7 +239,7 @@ Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello TDengine" }'
 ```
 
-Check the running status of the two Sinks, there should be one new incoming and one new outgoing message. 
+Check the running status of the two Sinks, there should be 1 new incoming and 1 new outgoing message and 2 event records.
 
 Check whether the data is written into the `t_mqtt_msg` data table. 
 
@@ -245,7 +249,6 @@ taos> select * from t_mqtt_msg;
 ==============================================================================================================================================================
  2023-02-13 06:10:53.787 | 0005F48EB5A83865F440000014F... | t/1                            |    0 | { "msg": "hello TDengine" }    | 2023-02-13 06:10:53.787 |
 Query OK, 1 row(s) in set (0.002968s)
-
 ```
 
 `emqx_client_events`  table:
@@ -257,5 +260,4 @@ taos> select * from emqx_client_events;
  2023-02-13 06:10:53.777 | emqx_c                         | client.connected               |
  2023-02-13 06:10:53.791 | emqx_c                         | client.disconnected            |
 Query OK, 2 row(s) in set (0.002327s)
-
 ```
