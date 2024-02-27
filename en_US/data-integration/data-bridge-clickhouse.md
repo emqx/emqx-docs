@@ -74,13 +74,32 @@ This section introduces how to start a ClickHouse server using [Docker](https://
    -p 18123:8123 \
    -p 19000:9000 \
    --ulimit nofile=262144:262144 \
-   -v ./init.sql:/docker-entrypoint-initdb.d/init.sql \
+   -v $pwd/init.sql:/docker-entrypoint-initdb.d/init.sql \
    clickhouse/clickhouse-server
    ```
 
 You can find more information about running ClickHouse in docker [on dockerhub](https://hub.docker.com/r/clickhouse/clickhouse-server).
 
-## Create a Rule for Clickhouse Sink
+## Create a Connector
+
+This section demonstrates how to create a Connector to connect the Sink to the ClickHouse server.
+
+The following steps assume that you run both EMQX and ClickHouse on the local machine. If you have ClickHouse and EMQX running remotely, adjust the settings accordingly.
+
+1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+2. Click **Create** in the top right corner of the page.
+3. On the **Create Connector** page, select **ClickHouse** and then click **Next**.
+4. In the **Configuration** step, configure the following information:
+   - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_clickhouse`.
+   - **Server URL**: `http://127.0.0.1:18123`
+   - **Database Name**: `mqtt_data`
+   - **Username**: `emqx`
+   - **Password**: `public`
+5. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
+6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the ClickHouse server.
+7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to ClickHouse. For detailed steps, see [Create a Rule with ClickHouse Sink](#create-a-rule-with-clickhouse-sink).
+
+## Create a Rule with Clickhouse Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through the Connector and Sink to ClickHouse. 
 
@@ -102,32 +121,31 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-5. Select `ClickHouse` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to ClickHouse. Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select a ClickHouse action previously created. In this demonstration, you create a new Sink and add it to the rule.
+5. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to ClickHouse. 
 
-6. Enter a name for the Connector. The name should be a combination of uppercase/lowercase letters and numbers.
+6. Select `ClickHouse` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a ClickHouse Sink if you have created one. This demonstration will create a new Sink.
 
-7. Enter the connection information:
+7. Enter a name for the Sink. The name should combine upper/lower case letters and numbers.
 
-   - **Server URL**: `http://127.0.0.1:18123`
-   - **Database Name**: `mqtt_data`
-   - **Username**: `emqx`
-   - **Password**: `public`
+8. Select the `my_clickhouse` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-8. Enter the following command in the SQL template (You can use the [Rule Engine](https://chat.openai.com/c/rules.md) to ensure that strings in the input SQL statement are properly escaped to prevent SQL injection attacks):
+9. Keep the default value `,` in the **Batch Value Separator** to distinguish multiple input items. This setting only needs to be changed if you enable [batch mode](./data-bridges.md) for the data integration and if you specify an alternative format with [ClickHouse's FORMAT syntax](https://clickhouse.com/docs/en/sql-reference/statements/insert-into).
 
-   ```sql
-   INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})
-   ```
+10. Enter the following command in the SQL template (You can use the [Rule Engine](https://chat.openai.com/c/rules.md) to ensure that strings in the input SQL statement are properly escaped to prevent SQL injection attacks):
 
-   Here, `${data}` and `${timestamp}` represent the message content and timestamp, respectively, which will be configured later in the rules for message forwarding. EMQX will replace them with the corresponding content before forwarding the message.
+    ```sql
+    INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})
+    ```
 
-9. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
+    Here, `${data}` and `${timestamp}` represent the message content and timestamp, respectively, which will be configured later in the rules for message forwarding. EMQX will replace them with the corresponding content before forwarding the message.
 
-10. Before clicking **Create**, you can click the **Test Connectivity** button to ensure that you can connect to the ClickHouse server.
+11. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
 
-11. Click the **Add** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+12. Before clicking **Create**, you can click the **Test Connectivity** button to ensure that you can connect to the ClickHouse server.
 
-12. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
+13. Click the **Add** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+
+14. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
 
 
 Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you see the new ClickHouse Sink. 
@@ -158,7 +176,7 @@ Click **Diagnose** -> **WebSocket Client** in the left navigation menu of the Da
 5. If everything is working correctly the command above should print something like this (obviously, the timestamp will be different):
 
    ```
-   Hello World Clickhouse from EMQX        1679932005
+   Hello World Clickhouse from EMQX        2024-01-17 09:40:06
    ```
 
 ## Advanced Configurations
@@ -167,7 +185,6 @@ This section delves deeper into the advanced configuration options available for
 
 | **Fields**                | **Descriptions**                                             | **Recommended Value** |
 | ------------------------- | ------------------------------------------------------------ | --------------------- |
-| **Batch Value Separator** | Used to distinguish multiple input items. In this example, you can keep the default value ",". This setting only needs to be changed if you enable [batch mode](./data-bridges.md) for the data integration and if you specify an alternative format with [ClickHouse's FORMAT syntax](https://clickhouse.com/docs/en/sql-reference/statements/insert-into). | `,`                   |
 | **Connection Pool Size**  | Specifies the number of concurrent connections that can be maintained in the connection pool when interfacing with the ClickHouse service. This option helps in managing the application's scalability and performance by limiting or increasing the number of active connections between EMQX and ClickHouse.<br/>**Note**: Setting an appropriate connection pool size depends on various factors such as system resources, network latency, and the specific workload of your application. Too large a pool size may lead to resource exhaustion, while too small a size may limit throughput. | `8`                   |
 | **Clickhouse Timeout**    | Specifies the maximum amount of time, in seconds, that the Connector will wait while attempting to establish a connection with the ClickHouse server.<br/>**Note**: A carefully chosen timeout setting is crucial for balancing system performance and resource utilization. It is advisable to test the system under various network conditions to find the optimal timeout value for your specific use case. | `15`                  |
 | **Start Timeout**         | Determines the maximum time interval, in seconds, that the Connector will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the Connector does not proceed with operations until it verifies that the connected resource—such as a database instance in ClickHouse—is fully operational and ready to handle data transactions. | `5`                   |

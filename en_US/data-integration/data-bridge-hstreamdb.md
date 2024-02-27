@@ -513,7 +513,7 @@ Now the directory structure should be:
 
    </details>
 
-## Create a Rule for HStreamDB Sink
+## Create a Rule with HStreamDB Sink
 
 This section demonstrates how to create a rule to specify the data to be saved into HStreamDB and a rule for the online/offline status recording. It assumes that you run both EMQX and HStreamDB on the local machine. If you have HStreamDB and EMQX running remotely, adjust the settings accordingly. 
 
@@ -596,7 +596,7 @@ You have now successfully created the rule for forwarding data and recording onl
 
 You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to HStreamDB after parsing by rule `my_rule`.
 
-## Test Rule
+## Test the Rule
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 

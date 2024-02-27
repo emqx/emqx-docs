@@ -158,7 +158,7 @@ You can add the following configuration to HAProxy's configuration file to rever
 backend mqtt_backend
   mode tcp
   stick-table type string len 32 size 100k expire 30m
-  stick on req.payload(0，0)，mqtt_field_value(connect，client_identifier)
+  stick on req.payload(0,0), mqtt_field_value(connect, client_identifier)
 
   # Adding send-proxy will pass the real IP to EMQX, and the corresponding backend listener needs to enable proxy_protocol
   # server emqx1 emqx1-cluster.emqx.io:1883 check send-proxy-v2
@@ -172,7 +172,7 @@ frontend mqtt_servers
   # Wait for the buffer to fill up to parse the MQTT message
   tcp-request inspect-delay 10s
   # Reject non-MQTT connections
-  tcp-request content reject unless { req.payload(0，0)，mqtt_is_valid }
+  tcp-request content reject unless { req.payload(0,0), mqtt_is_valid }
   default_backend mqtt_backend
 ```
 
