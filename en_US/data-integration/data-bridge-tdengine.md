@@ -110,8 +110,9 @@ The following steps assume that you run both EMQX and TDengine on the local mach
    - **Database Name**: Enter `mqtt`.
    - **Username**: Enter `root`.
    - **Password**: Enter `taosdata`.
-5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the TDengine server.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to TDengine and to record client events. For detailed steps, see [Create a Rule with TDengine Sink for Message Storage](#create-a-rule-with-tdengine-sink-for-message-storage) and [Create a Rule with TDengine Sink for Events Recording](#create-a-rule-with-tdengine-sink-for-events-recording).
+5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the TDengine server.
+7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to TDengine and to record client events. For detailed steps, see [Create a Rule with TDengine Sink for Message Storage](#create-a-rule-with-tdengine-sink-for-message-storage) and [Create a Rule with TDengine Sink for Events Recording](#create-a-rule-with-tdengine-sink-for-events-recording).
 
 ## Create a Rule with TDengine Sink for Message Storage
 
@@ -160,9 +161,9 @@ This section demonstrates how to create a rule to specify the data to be saved i
        VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
    ```
    
-9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed.
+9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the TDengine. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the TDengine. 
 
 11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 

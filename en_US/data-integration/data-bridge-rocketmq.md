@@ -134,49 +134,47 @@ In Linux, you should change the `host.docker.internal` to your real IP address.
 
 :::
 
-## Create a Rule for RocketMQ Sink
+## Create a Connector
 
-This section demonstrates how to create a rule to specify the data to be saved into RocketMQ or to record client status. You need to create two different rules for messages forward and event records. 
+This section demonstrates how to create a Connector to connect the Sink to the RocketMQ server.
 
-It assumes that you run both EMQX and RocketMQ on the local machine. If you have RocketMQ and EMQX running remotely, adjust the settings accordingly.
+The following steps assume that you run both EMQX and RocketMQ on the local machine. If you have RocketMQ and EMQX running remotely, adjust the settings accordingly.
+
+1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+2. Click **Create** in the top right corner of the page.
+3. On the **Create Connector** page, select **RocketMQ** and then click **Next**.
+4. In the **Configuration** step, configure the following information:
+   - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_rocketmq`.
+   - **Server**: Enter `127.0.0.1:9876`.
+   - **Topic**: Enter `TopicTest`.
+   - Leave others as default.
+5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the RocketMQ server.
+6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to the RocketMQ and to record client events. For detailed steps, see [Create a Rule with RocketMQ Sink for Message Storage](#create-a-rule-with-rocketmq-sink-for-message-storage) and [Create a Rule with RocketMQ Sink for Events Recording](#create-a-rule-with-rocketmq-sink-for-events-recording).
+
+## Create a Rule with RocketMQ Sink for Message Storage
+
+This section demonstrates how to create a rule to specify the data to be saved into RocketMQ. 
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
+3. Enter `my_rule` as the rule ID. To create a rule for message storage, enter the following statement in the **SQL Editor**, which means the MQTT messages under topic `t/#`  will be saved to RocketMQ.
 
-   - To create a rule for message storage, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to RocketMQ.
+   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
 
-     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
+   ```sql
+   SELECT 
+     *
+   FROM
+     "t/#"
+   ```
 
-     ```sql
-     SELECT 
-       *
-     FROM
-       "t/#"
-     ```
+   ::: tip
 
-   - To create a rule for online/offline status recording, input the following statement:
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-     ```sql
-     SELECT
-       *
-     FROM 
-       "$events/client_connected", "$events/client_disconnected"
-     ```
-
-     ::: tip
-
-     For convenience, the `TopicTest` topic will be reused to receive online/offline events.
-
-     :::
-     
-     ::: tip
-     
-     If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
-     
-     :::
+   :::
 
 4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to RocketMQ.
 
@@ -184,9 +182,9 @@ It assumes that you run both EMQX and RocketMQ on the local machine. If you have
 
 6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
 
-7. Enter the connection information. Enter `127.0.0.1:9876` as the **Server**,  `TopicTest` as the **Topic**, and leave others as default.
+8. Select the `my_rocketmq` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-8. Leave the **Template** empty by default.
+9. Leave the **Template** empty by default.
 
    ::: tip
 
@@ -194,19 +192,40 @@ It assumes that you run both EMQX and RocketMQ on the local machine. If you have
 
    :::
 
-9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md).
+10. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md##features-of-sink).
 
-10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the RocketMQ server.
+11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the RocketMQ server.
 
-11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
 
-You have now successfully created the rule for the RocketMQ Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new RockeMQ Sink.
+You have now successfully created the rule for the RocketMQ Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new RocketMQ Sink.
 
 You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to RocketMQ after parsing by rule `my_rule`.
 
-## Test Rule
+## Create a Rule with RocketMQ Sink for Events Recording
+
+This section demonstrates how to create a rule for the online/offline status recording.
+
+The rule creation steps are similar to those in [Create a Rule with RocketMQ Sink for Message Storage](#create-a-rule-with-rocketmq-sink-for-message-storage) except for the SQL rule syntax.
+
+The SQL rule syntax for online/offline status recording is as follows:
+
+```sql
+SELECT
+  *
+FROM 
+  "$events/client_connected", "$events/client_disconnected"
+```
+
+::: tip
+
+For convenience, the `TopicTest` topic will be reused to receive online/offline events.
+
+:::
+
+## Test the Rules
 
 Use MQTTX to send a message to topic `t/1` to trigger an online/offline event. 
 
