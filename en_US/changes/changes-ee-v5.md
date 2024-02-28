@@ -6,19 +6,17 @@
 
 ## Enhancements
 
-- [#12497](https://github.com/emqx/emqx/pull/12497) Improve MongoDB connector performance.
-
-  - [mongodb-erlang PR](https://github.com/emqx/mongodb-erlang/pull/41)
+- [#12497](https://github.com/emqx/emqx/pull/12497) Improved MongoDB connector performance, resulting in more efficient database interactions. This enhancement is supported by improvements in the MongoDB Erlang driver as well ([mongodb-erlang PR](https://github.com/emqx/mongodb-erlang/pull/41)).
 
 ## Bug Fixes
 
-- [#12471](https://github.com/emqx/emqx/pull/12471) Fixed an issue that could prevent bridges from being correctly loaded when upgrading EMQX from 5.0.2 to the latest versions.
+- [#12471](https://github.com/emqx/emqx/pull/12471) Fixed an issue that data integration configurations failed to load correctly during upgrades from EMQX version 5.0.2 to newer releases.
 
-- [#12542](https://github.com/emqx/emqx/pull/12542) Redacted authorization headers from debug logs from HTTP bridge.
+- [#12542](https://github.com/emqx/emqx/pull/12542) Redacted authorization headers to exclude basic authorization credentials from debug logs in the HTTP Server connector, mitigating potential security risks.
 
-- [#12598](https://github.com/emqx/emqx/pull/12598) Fixed an issue that unable to subscribe or unsubscribe a shared topic filter via HTTP API.
+- [#12598](https://github.com/emqx/emqx/pull/12598) Fixed an issue that users were unable to subscribe to or unsubscribe from shared topic filters via HTTP API.
 
-  Releated APIs:
+  The affected APIs include:
 
   - `/clients/:clientid/subscribe`
   - `/clients/:clientid/subscribe/bulk`
@@ -26,7 +24,7 @@
   - `/clients/:clientid/unsubscribe`
   - `/clients/:clientid/unsubscribe/bulk`
 
-- [#12601](https://github.com/emqx/emqx/pull/12601) Fixed that the logs of LDAP driver would never be logged, now all of them are logged with `info` level.
+- [#12601](https://github.com/emqx/emqx/pull/12601) Fixed an issue where logs of the LDAP driver were not being captured. Now, all logs are recorded at the `info` level.
 
 
 ## 5.5.0

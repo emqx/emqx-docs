@@ -1,5 +1,30 @@
 # v5 版本
 
+## 5.5.1
+
+*发布日期: 2024-02-29*
+
+### 增强
+
+- [#12497](https://github.com/emqx/emqx/pull/12497) 改进了 MongoDB 连接器的性能，使与数据库的交互更加高效。此增强功能通过改进 MongoDB Erlang 驱动得到支持（见 [mongodb-erlang PR](https://github.com/emqx/mongodb-erlang/pull/41)）。
+
+### 修复
+
+- [#12471](https://github.com/emqx/emqx/pull/12471) 修复了在从 EMQX 版本 5.0.2 升级到新版本期间，数据集成配置未能正确加载的问题。
+
+- [#12542](https://github.com/emqx/emqx/pull/12542) 在 HTTP 服务连接器中对授权头进行了编辑，从调试日志中排除了基本授权凭证，以减少潜在的安全风险。
+
+- [#12598](https://github.com/emqx/emqx/pull/12598) 修复了用户无法通过 HTTP API 订阅或取消订阅共享主题过滤器的问题。
+
+  受影响的 API 包括：
+
+  - `/clients/:clientid/subscribe`
+  - `/clients/:clientid/subscribe/bulk`
+  - `/clients/:clientid/unsubscribe`
+  - `/clients/:clientid/unsubscribe/bulk`
+
+- [#12601](https://github.com/emqx/emqx/pull/12601) 修复了 LDAP 驱动的日志没有被捕获的问题。现在，所有日志都以 `info` 级别被记录。
+
 ## 5.5.0
 
 *发布日期: 2024-02-01*
