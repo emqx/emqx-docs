@@ -50,7 +50,7 @@ EMQX 通过规则引擎和 Sink 将设备数据插入到 OpenTSDB。OpenTSDB 提
 
 ### 安装 OpenTSDB
 
-通过 Docker 安装并启动 OpenTSDB：
+通过 Docker 安装并启动 OpenTSDB （目前仅支持 x86 平台）：
 
 ```bash
 docker pull petergrace/opentsdb-docker

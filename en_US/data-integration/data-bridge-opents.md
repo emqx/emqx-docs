@@ -50,7 +50,7 @@ This section describes the preparations you need to complete before you start to
 
 ### Install OpenTSDB
 
-Install OpenTSDB via Docker, and then run the docker image. 
+Install OpenTSDB via Docker, and then run the docker image (Only x86 platform is supported now). 
 
 ```bash
 docker pull petergrace/opentsdb-docker
