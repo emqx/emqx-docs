@@ -106,7 +106,7 @@ docker exec -it cassa cqlsh "-e \
 
 ## 创建 Cassandra Sink 规则
 
-本节演示了如何为 Cassandra Sink 创建一条规则以指定需要转发至 Cassandra 的数据。
+本节演示了如何在 Dashboard 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的结果写入到 Cassandra 的数据表 `mqtt_msg` 中。
 
 1. 转到 Dashboard **集成** -> **规则**页面。
 
@@ -123,7 +123,7 @@ docker exec -it cassa cqlsh "-e \
      "t/#"
    ```
 
-4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。
+4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。通过这个动作，EMQX 会将经规则处理的数据发送到 Cassandra。
 
 5. 在**动作类型**下拉框中选择 `Cassandra`，保持**动作**下拉框为默认的`创建动作`选项，您也可以选择一个之前已经创建好的 Cassandra Sink。此处我们创建一个全新的 Sink 并添加到规则中。
 
