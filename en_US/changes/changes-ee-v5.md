@@ -28,6 +28,10 @@
 
 - [#12606](https://github.com/emqx/emqx/pull/12606) The Prometheus API experienced crashes when the specified SSL certificate file did not exist in the given path. Now, when an SSL certificate file is missing, the `emqx_cert_expiry_at` metric will report a value of 0, indicating the non-existence of the certificate.
 
+- [#12608](https://github.com/emqx/emqx/pull/12608) Fixed a `function_clause` error for IoTDB action when there is no `payload` field in the query data.
+
+- [#12610](https://github.com/emqx/emqx/pull/12610) Fixed that the connection to the LDAP connector may be disconnected after a period of time.
+
 
 ## 5.5.0
 
