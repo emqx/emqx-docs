@@ -23,6 +23,7 @@ For example, you need to republish a message with the `name` field equal to `Sha
      ```json
      {
        "type":"record",
+       "name": "myrecord1",
        "fields":[
            {"name":"name", "type":"string"},
            {"name":"favorite_number", "type":["int", "null"]},
@@ -56,8 +57,8 @@ For example, you need to republish a message with the `name` field equal to `Sha
    - The `schema_decode` function decodes the contents of the payload field according to the Schema `avro_user`;
    - `as avro_user` stores the decoded value in the variable `avro_user`.
 
-4. Click **Add Action**.  Select `Republish` from the drop-down list of the **Action** field. 
-5. In the **Topic** field, type `avro_user/${avro_user.name}` as the destination topic. 
+4. Click **Add Action**.  Select `Republish` from the drop-down list of the **Action** field.
+5. In the **Topic** field, type `avro_user/${avro_user.name}` as the destination topic.
 6. In the **Payload** field, type message content template: `${avro_user}`.
 
 This action sends the decoded message to the topic `avro_user/${avro_user.name}` in JSON format. `${avro_user.name}` is a variable placeholder that will be replaced at runtime with the value of the `name` field from the decoded message.
@@ -80,7 +81,7 @@ def publish_msg(client):
 ```
 
 ### Check Rule Execution Results
-1) In the Dashboard, select **Diagnose** -> **WebSocket Client**. 
+1) In the Dashboard, select **Diagnose** -> **WebSocket Client**.
 2) Fill in the connection information for the current EMQX instance.
    - If you run EMQX locally, you can use the default value.
    - If you have changed EMQX's default configuration. For example, the configuration change on authentication can require you to type in a username and password.
@@ -91,7 +92,7 @@ def publish_msg(client):
 
    ```shell
    $ pip3 install avro paho-mqtt
-   
+
    $ python3 avro_mqtt.py
    Connected with result code 0
    publish to topic: t/1, payload: b'\nShawn\x00\xb4\n\x00\x06red'
@@ -132,9 +133,9 @@ Use the same schema as described in the [Decoding Scenario](#decoding-scenario).
    - `as avro_user` stores the encoded value in the variable `avro_user`;
    - `json_decode(payload)` is needed because `payload` is generally a JSON-encoded binary, and `schema_encode` requires a Map as its input.
 
-4. Click **Add Action**.  Select `Republish` from the drop-down list of the **Action** field. 
+4. Click **Add Action**.  Select `Republish` from the drop-down list of the **Action** field.
 
-5. In the **Topic** field, type `avro_out` as the destination topic. 
+5. In the **Topic** field, type `avro_out` as the destination topic.
 
 6. In the **Payload** field, type message content template: `${avro_user}`.
 
@@ -157,14 +158,14 @@ def on_message(client, userdata, msg):
 
 ### Check Rule Execution Results
 
-1) In the Dashboard, select **Diagnose** -> **WebSocket Client**. 
+1) In the Dashboard, select **Diagnose** -> **WebSocket Client**.
 2) Fill in the connection information for the current EMQX instance.
    - If you run EMQX locally, you can use the default value.
    - If you have changed EMQX's default configuration. For example, the configuration change on authentication can require you to type in a username and password.
 
 3. Click **Connect** to connect to the EMQX instance as an MQTT client.
 
-4. In the **Publish** area, type `avro_in` in the **Topic** field and type the following message in the **Payload** field: 
+4. In the **Publish** area, type `avro_in` in the **Topic** field and type the following message in the **Payload** field:
 
    ```json
    {"favorite_color":"red","favorite_number":666,"name":"Shawn"}
@@ -176,7 +177,7 @@ def on_message(client, userdata, msg):
 
    ```shell
    $ pip3 install avro paho-mqtt
-   
+
    $ python3 avro_mqtt_sub.py
    Connected with result code 0
    msg payload b'\nShawn\x00\xb4\n\x00\x06red'
