@@ -26,6 +26,8 @@
 
 - [#12601](https://github.com/emqx/emqx/pull/12601) Fixed an issue where logs of the LDAP driver were not being captured. Now, all logs are recorded at the `info` level.
 
+- [#12606](https://github.com/emqx/emqx/pull/12606) The Prometheus API experienced crashes when the specified SSL certificate file did not exist in the given path. Now, when an SSL certificate file is missing, the `emqx_cert_expiry_at` metric will report a value of 0, indicating the non-existence of the certificate.
+
 
 ## 5.5.0
 
