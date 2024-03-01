@@ -49,8 +49,7 @@ schema_encode(SchemaName, json_decode(Map)) -> Bytes
 When checking if JSON data can be validated against the JSON schema before encoding or after decoding.
 
 ```erlang
-schema_check_encode(SchemaName, Map) -> Boolean
-schema_check_decode(SchemaName, Bytes) -> Boolean
+schema_check(SchemaName, Map | Bytes) -> Boolean
 ```
 
 ## Schema Registry + Rule Engine
