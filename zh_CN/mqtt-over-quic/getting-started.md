@@ -9,7 +9,7 @@
 
 ## 环境要求
 
-在 CentOS 6、macOS 以及 Windows 系统下并未包含 QUIC 编译，请自行从源码编译并在编译前指定环境变量 `BUILD_WITH_QUIC=1`，其他操作系统和平台则可以正常使用。
+在 CentOS 6、macOS 系统下并未包含 QUIC 编译，请自行从源码编译并在编译前指定环境变量 `BUILD_WITH_QUIC=1`，其他操作系统和平台则可以正常使用。
 
 测试环境推荐使用 Docker 镜像，以下命令通过环境变量启用 QUIC 监听器并映射 UDP 14567 作为接入端口：
 
