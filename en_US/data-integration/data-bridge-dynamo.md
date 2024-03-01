@@ -129,7 +129,7 @@ The following steps assume that you run both EMQX and DynamoDB on the local mach
 
 ## Create a Rule with DynamoDB Sink for Message Storage
 
-This section demonstrates how to create a rule in the Dashboard to process messages from the source MQTT topic `t/#`  and write the processed data to the DynamoDB table `mqtt_msg` through an action with configured Sink. 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and writing the processed data to the DynamoDB table `mqtt_msg` via a configured Sink. 
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -182,7 +182,7 @@ You can also click **Integration** -> **Flow Designer** to view the topology and
 
 ## Create a Rule with DynamoDB Sink for Events Recording
 
-This section demonstrates how to create a rule to record the clients' online/offline status and write the events data to the DynamoDB table `mqtt_msg` through an action with configured Sink.
+This section demonstrates how to create a rule for recording the clients' online/offline status and writing the events data to the DynamoDB table `mqtt_msg` via a configured Sink.
 
 ::: tip
 

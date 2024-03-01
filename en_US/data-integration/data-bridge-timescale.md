@@ -152,7 +152,7 @@ Now you have created a TimescaleDB Connector. Next, you need to create a rule an
 
 ## Create a Rule for TimescaleDB Sink
 
-This section demonstrates how to create a rule in the Dashboard to process messages from the source MQTT topic `t/#`  and send the processed results through a configured Sink to TimescaleDB. 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and sending the processed results to TimescaleDB via a configured Sink. 
 
 1. Go to EMQX Dashboard and click **Integration** -> **Rules** from the left navigation menu.
 

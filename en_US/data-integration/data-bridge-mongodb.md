@@ -189,6 +189,8 @@ The following steps assume that you run both EMQX and MongoDB on the local machi
 
 ## Create a Rule with MongoDB Sink
 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to MongoDB via a configured Sink. 
+
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.

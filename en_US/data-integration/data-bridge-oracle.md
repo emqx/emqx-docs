@@ -115,7 +115,7 @@ The following steps assume that you run both EMQX and Oracle Database on the loc
 
 ## Create a Rule with Oracle Database Sink for Message Storage
 
-This section demonstrates how to create a rule in the Dashboard to process messages from the source MQTT topic `t/#`  and save the processed data to the Oracle data table `t_mqtt_msgs` through an action with configured Sink. 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the Oracle data table `t_mqtt_msgs` via a configured Sink. 
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -174,7 +174,7 @@ You can also click **Integration** -> **Flow Designer** to view the topology and
 
 ## Create a Rule with Oracle Database Sink for Events Recording
 
-This section demonstrates how to create a rule to record the clients' online/offline status and save the events data to the Oracle data table `t_emqx_client_events` through an action with configured Sink.
+This section demonstrates how to create a rule for recording the clients' online/offline status and saving the events data to the Oracle data table `t_emqx_client_events` via a configured Sink.
 
 The rule creation steps are similar to those in [Create a Rule with Oracle Database Sink for Message Storage](#create-a-rule-with-oracle-database-sink-for-message-storage) except for the SQL rule syntax and SQL template.
 

@@ -513,50 +513,17 @@ Now the directory structure should be:
 
    </details>
 
-## Create a Rule with HStreamDB Sink
+## Create a Connector
 
-This section demonstrates how to create a rule to specify the data to be saved into HStreamDB and a rule for the online/offline status recording. It assumes that you run both EMQX and HStreamDB on the local machine. If you have HStreamDB and EMQX running remotely, adjust the settings accordingly. 
+This section demonstrates how to create a Connector to connect the Sink to the HStreamDB server.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
+The following steps assume that you run both EMQX and HStreamDB on the local machine. If you have HStreamDB and EMQX running remotely, adjust the settings accordingly.
 
-2. Click **Create** on the top right corner of the page.
-
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
-
-   - To create a rule for message storage, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to HStreamDB.
-
-     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in `SELECT` part.
-
-     ```sql
-     SELECT
-       *
-     FROM
-       "t/#"
-     ```
-
-   - To create a rule for online/offline status recording, input the following statement:
-
-     ```sql
-     SELECT
-       *
-     FROM
-       "$events/client_connected", "$events/client_disconnected"
-     ```
-
-   ::: tip
-
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
-
-   :::
-
-4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to HStreamDB.
-
-5. Select `HStreamDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
-
-6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
-
-7. Enter the HStreamDB connection information. Fill in the required fields (marked with an asterisk).
-
+1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+2. Click **Create** in the top right corner of the page.
+3. On the **Create Connector** page, select **HStreamDB** and then click **Next**.
+4. In the **Configuration** step, configure the following information (Fields marked with an asterisk are required fields.):
+   - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_hstreamdb`.
    - **HStreamDB Server URL**: `hstream://127.0.0.1:6570`, or use the actual HStreamDB address and port.
      - Scheme supports `http`, `https`, `hstream`, and `hstreams`.
      - For TLS connection, scheme needs to be `hstreams` or `https`, for example `hstreams://127.0.0.1:6570`.
@@ -569,22 +536,50 @@ This section demonstrates how to create a rule to specify the data to be saved i
      - Upload `ca/hstream.crt` to **TLS Cert**.
      - Upload `ca/hstream.key` to **TLS Key**.
      - Upload `ca/certs/root_ca.crt` to **CA Cert**.
+5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the HStreamDB server.
+7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to the HStreamDB and to record client events. For detailed steps, see [Create a Rule with HStreamDB Sink for Message Storage](#create-a-rule-with-hstreamdb-sink-for-message-storage) and [Create a Rule with HStreamDB Sink for Events Recording](#create-a-rule-with-hstreamdb-sink-for-events-recording).
 
-8. Configure **HStream Record Template** according to your business needs:
+## Create a Rule with HStreamDB Sink for Message Storage
 
-   - To create a Sink for forwarding messages to the specific topic, use the template below for data insert:
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and writing the processed data to the HStreamDB stream `mqtt_message` via configured Sink. 
 
-     ```json
-     {"id": ${id}, "topic": "${topic}", "qos": ${qos}, "payload": "${payload}"}
-     ```
+1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
-   - To create a Sink for online/offline status recording, use the following SQL statement for data insert:
+2. Click **Create** on the top right corner of the page.
 
-     ```json
-     {"clientid": "${clientid}", "event_type": "${event}", "event_time": ${timestamp}}
-     ```
+3. Enter `my_rule` as the rule ID. Set the rules in the **SQL Editor** using the following statement, which means the MQTT messages under topic `t/#`  will be saved to HStreamDB.
 
-9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md).
+   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in `SELECT` part.
+
+   ```sql
+   SELECT
+     *
+   FROM
+     "t/#"
+   ```
+   
+   ::: tip
+
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+
+   :::
+   
+4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to HStreamDB.
+
+5. Select `HStreamDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+
+6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+
+7. Select the `my_hstreamdb` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+
+8. Configure **HStream Record Template** for forwarding messages to the specific topic by using the template below for data insert:
+
+   ```json
+   {"id": ${id}, "topic": "${topic}", "qos": ${qos}, "payload": "${payload}"}
+   ```
+   
+9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
 10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the HStreamDB server.
 
@@ -596,7 +591,28 @@ You have now successfully created the rule for forwarding data and recording onl
 
 You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to HStreamDB after parsing by rule `my_rule`.
 
-## Test the Rule
+## Create a Rule with HStreamDB Sink for Events Recording
+
+This section demonstrates how to create a rule for recording the clients' online/offline status and writing the events data to the HStreamDB stream `mqtt_connect` via configured Sink.
+
+The rule creation steps are similar to those in [Creating a rule with Stream Sink for Message Storage](#create-a-rules-with-hstream-sink-for-message-storage) except for the SQL rule syntax and Stream Record template.
+
+The SQL rule syntax for online/offline status recording is as follows:
+
+```sql
+SELECT
+  *
+FROM
+  "$events/client_connected", "$events/client_disconnected"
+```
+
+The **Stream Record Template** for the Sink is as follows:
+
+```sql
+{"clientid": "${clientid}", "event_type": "${event}", "event_time": ${timestamp}}
+```
+
+## Test the Rules
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 

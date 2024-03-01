@@ -154,7 +154,7 @@ The following steps assume that you run both EMQX and RocketMQ on the local mach
 
 ## Create a Rule with RocketMQ Sink for Message Storage
 
-This section demonstrates how to create a rule in the Dashboard to process messages from the source MQTT topic `t/#`  and forward the processed data to the target RocketMQ topic `TopicTest` through an action with configured Sink. 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and forwarding the processed data to the RocketMQ topic `TopicTest` via the configured Sink.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -207,7 +207,7 @@ You can also click **Integration** -> **Flow Designer** to view the topology and
 
 ## Create a Rule with RocketMQ Sink for Events Recording
 
-This section demonstrates how to create a rule to record the clients' online/offline status and forward the events data to the RocketMQ topic `TestTopic` through an action with configured Sink.
+This section demonstrates how to create a rule for recording the clients' online/offline status and forwarding the events data to the RocketMQ topic `TestTopic` via a configured Sink.
 
 The rule creation steps are similar to those in [Create a Rule with RocketMQ Sink for Message Storage](#create-a-rule-with-rocketmq-sink-for-message-storage) except for the SQL rule syntax.
 
