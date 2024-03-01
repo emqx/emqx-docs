@@ -99,7 +99,7 @@ The following steps assume that you run both EMQX and Cassandra on the local mac
 
 ## Create a Rule for Cassandra Sink
 
-This section demonstrates how to create a rule in the Dashboard to process messages from the source MQTT topic `t/#`  and save the processed results to the Cassandra table `mqtt_msg` through an action with configured Sink. 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`  and saving the processed results to the Cassandra table `mqtt_msg` through an action with configured Sink. 
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 

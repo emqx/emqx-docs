@@ -101,7 +101,7 @@ The following steps assume that you run both EMQX and ClickHouse on the local ma
 
 ## Create a Rule with Clickhouse Sink
 
-This section demonstrates how to create a rule in Dashboard to process messages from the source MQTT topic `t/#`  and forward the processed results to ClickHouse through an action with configured Sink. 
+This section demonstrates how to create a rule in Dashboard for processing messages from the source MQTT topic `t/#`  and forwarding the processed results to ClickHouse via a configured Sink. 
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules** from the left navigation menu.
 

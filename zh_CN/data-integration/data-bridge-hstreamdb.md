@@ -505,81 +505,93 @@ root@75c9351cbb38:/# hstream --tls-ca /data/server/certs/root_ca.crt stream list
 
 </details>
 
-## 创建规则
+## 创建连接器
 
-本节演示了如何在 Dashboard 中创建 HStreamDB 数据集成的规则来指定需要转发至 HStreamDB 的数据并为规则添加触发的动作。以下示例假设您在同一台本地机器上运行 EMQX 和 HStreamDB。如果您在远程运行 HStreamDB 和 EMQX，请相应调整设置。
+在创建 RocketMQ Sink 之前，您需要创建一个 HStreamDB 连接器，以便 EMQX 与 HStreamDB 服务建立连接。以下示例假定您在本地机器上同时运行 EMQX 和 HStreamDB。如果您在远程运行 HStreamDB 和 EMQX，请相应地调整设置。
 
-您需要为实现对客户端发布消息的存储或实现设备上下线状态的记录创建不同的规则。
+1. 转到 Dashboard **集成** -> **连接器** 页面。点击页面右上角的**创建**。
+2. 在连接器类型中选择 **HStreamDB**，点击**下一步**。
+3. 在 **配置** 步骤，配置以下信息（带星号字段为必填字段。）：
+
+   - **连接器名称**：应为大写和小写字母及数字的组合，例如：`my_hstreamdb`。
+   - **服务器地址**： `hstream://127.0.0.1:6570`，或使用实际的 HStreamDB 地址和端口。
+     - schema 支持 `http`、`https`、`hstream`、`hstreams`。
+     - 对与 TLS 连接，scheme 需要使用 `hstreams` 或 `https`，如 `hstreams://127.0.0.1:6570`。
+   - **HStreamDB 流名称**： 需要写入的 Stream 名，如  `mqtt_message` （用于消息存储）或 `mqtt_connect` （用于事件记录）。
+   - **HStreamDB 分区键**：指定用于确定数据将存储在 HStreamDB 的哪个分区或节点内的分区键。例如，您可以输入 `${topic}` 以确保相同主题的消息被有序写入 HStreamDB。如果未指定，将使用默认键，数据将被映射到某个默认的分片。
+   - **HStreamDB gRPC 超时**：指定当发出 gRPC 请求到 HStreamDB 服务器时，系统将等待响应的最长时间。默认值是 `30` 秒。
+   - **启用 TLS**： 启用 TLS 连接时，关闭**验证服务器证书**。
+     - `tls-deploy/ca` 目录下生成的证书及私钥文件： `ca/certs/root_ca.crt`，`ca/hstream.crt`，`ca/hstream.key` 分别填入 `CA Cert`，`TLS Cert`，`TLS Key`。
+4. 高级配置（可选）：详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
+5. 点击**创建**按钮完成连接器创建。
+6. 在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 HStreamDB 的数据和需要记录的客户端事件。您也可以按照[创建消息存储 Sink 规则](#创建消息存储-sink-规则)和[创建事件记录 Sink 规则](#创建事件记录-sink-规则)章节的步骤来创建规则。
+
+## 创建消息存储 Sink 规则
+
+本节演示了如何在 Dashboard 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的数据写入到 HStream 的 Stream `mqtt_message`。
 
 1. 转到 Dashboard **集成** -> **规则**页面。
 
 2. 点击页面右上角的**创建**。
 
-3. 输入规则 ID `my_rule`，在 **SQL 编辑器**中根据业务实现需要输入规则：
-
-   - 如需实现对指定主题消息的转发，例如将 `t/#` 主题的 MQTT 消息存储至 HStreamDB，输入以下 SQL 语句：
-     注意：如果您希望制定自己的 SQL 语句，需要确保规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量。
-
-     ```sql
-      SELECT
-        *
-      FROM
-        "t/#"
-     ```
-
-   - 如需实现设备上下线状态记录，输入以下 SQL 语句：
-
-     ```sql
-     SELECT
-       *
-     FROM
-       "$events/client_connected", "$events/client_disconnected"
-     ```
-
+3. 输入规则 ID `my_rule`。在 **SQL 编辑器**中输入规则以实现对指定主题消息的转发。例如将 `t/#` 主题的 MQTT 消息存储至 HStreamDB，输入以下 SQL 语句：
+   注意：如果您希望制定自己的 SQL 语句，需要确保规则选出的字段（SELECT 部分）包含之后配置的 HStream Record 模板中用到的所有变量。
+   
+   ```sql
+    SELECT
+      *
+    FROM
+      "t/#"
+   ```
+   
    ::: tip
 
    如果您初次使用 SQL，可以点击 **SQL 示例** 和**启用调试**来学习和测试规则 SQL 的结果。
 
    :::
-
+   
 4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。在**动作类型**下拉框中选择 `HStreamDB`，保持**动作**下拉框为默认的`创建动作`选项，您也可以选择一个之前已经创建好的 HStreamDB Sink。此处我们创建一个全新的 Sink 并添加到规则中。
 
 5. 输入 Sink 名称，名称应为大/小写字母和数字的组合。
 
-6. 输入 HStreamDB 连接信息。（带星号字段为必填字段。）
+6. 从**连接器**下拉框中选择刚刚创建的 `my_hstreamdb`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
 
-   - **服务器地址**： `hstream://127.0.0.1:6570`，或使用实际的 HStreamDB 地址和端口。
-     - schema 支持 `http`、`https`、`hstream`、`hstreams`。
-     - 对与 TLS 连接，scheme 需要使用 `hstreams` 或 `https`，如 `hstreams://127.0.0.1:6570`。
-   - **HStreamDB 流名称**： 需要写入的 Stream 名，如 `mqtt_connect` 或 `mqtt_message`。
-   - **HStreamDB 分区键**：指定用于确定数据将存储在 HStreamDB 的哪个分区或节点内的分区键。例如，您可以输入 `${topic}` 以确保相同主题的消息被有序写入 HStreamDB。如果未指定，将使用默认键，数据将被映射到某个默认的分片。
-   - **HStreamDB gRPC 超时**：指定当发出 gRPC 请求到 HStreamDB 服务器时，系统将等待响应的最长时间。默认值是 `30` 秒。
-   - **启用 TLS**： 启用 TLS 连接时，关闭**验证服务器证书**。
-     - `tls-deploy/ca` 目录下生成的证书及私钥文件： `ca/certs/root_ca.crt`，`ca/hstream.crt`，`ca/hstream.key` 分别填入 `CA Cert`，`TLS Cert`，`TLS Key`。
+7. 配置 **HStream Record 模板**以实现对指定主题消息的转发。使用如下 HRecord 模板完成数据插入：
 
-7. 根据业务实现需要配置 **HStream Record 模板**：
-
-   - 如需实现对指定主题消息的转发，使用如下 HRecord 模板完成数据插入：
-
-     ```json
-     {"id": ${id}, "topic": "${topic}", "qos": ${qos}, "payload": "${payload}"}
-     ```
-
-   - 如需实现实现设备上下线状态记录，可使用如下 SQL 语句完成数据插入：
-
-     ```json
-     {"clientid": "${clientid}", "event_type": "${event}", "event_time": ${timestamp}}
-     ```
-
-8. 高级配置（可选），根据情况配置同步/异步模式，队列等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
+   ```json
+   {"id": ${id}, "topic": "${topic}", "qos": ${qos}, "payload": "${payload}"}
+   ```
+   
+8. 高级配置（可选），根据情况配置同步/异步模式，队列等参数，详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
 
 9. 点击**添加**按钮完成 Sink 创建，新建的 Sink 将被添加到**动作输出**列表中。
 
-10. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中，**状态**为**已连接**。
+10. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中。
 
 现在您已成功创建了通过 HStreamDB Sink 将数据转发到 HStreamDB 的规则，同时在**规则**页面的**动作(Sink)** 标签页看到新建的 HStreamDB Sink。
 
 您还可以点击 **集成** -> **Flow 设计器**可以查看拓扑，通过拓扑可以直观的看到，主题 `t/#` 下的消息在经过规则 `my_rule` 解析后被发送到 HStreamDB 中。
+
+## 创建上下线记录 Sink 规则
+
+本节展示如何创建用于记录客户端上/下线状态的规则，并通过配置的 Sink 将记录写入到 HStreamDB 的 Stream `mqtt_connect` 中。
+
+注意：除规则 SQL 和 Sink 的 Stream Record 模板设置不同外，其他操作步骤与[创建消息存储 Sink 规则](#创建消息存储-sink-规则)章节完全相同。
+
+规则 SQL 模版设置如下：
+
+```sql
+SELECT
+  *
+FROM
+  "$events/client_connected", "$events/client_disconnected"
+```
+
+Sink 的 Stream Record 模板设置如下:
+
+```sql
+{"clientid": "${clientid}", "event_type": "${event}", "event_time": ${timestamp}}
+```
 
 ## 测试规则
 
