@@ -24,6 +24,9 @@
 
 - [#12606](https://github.com/emqx/emqx/pull/12606) The Prometheus API experienced crashes when the specified SSL certificate file did not exist in the given path. Now, when an SSL certificate file is missing, the `emqx_cert_expiry_at` metric will report a value of 0, indicating the non-existence of the certificate.
 
+- [#12620](https://github.com/emqx/emqx/pull/12620) Fixed an issue when sensitive headers for HTTP connector may be printed in the `debug` level log.
+
+- [#12632](https://github.com/emqx/emqx/pull/12632) Fix an issue when rule engine SQL built-in function `date_to_unix_ts` produced incorrect results for dates starting from 1st of March on leap years.
 ## 5.5.0
 
 *Release Date: 2024-02-01*
