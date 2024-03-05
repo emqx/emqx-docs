@@ -12,6 +12,8 @@
 
 - [#12471](https://github.com/emqx/emqx/pull/12471) Fixed an issue that data integration configurations failed to load correctly during upgrades from EMQX version 5.0.2 to newer releases.
 
+- [#12542](https://github.com/emqx/emqx/pull/12542) Redacted authorization headers from debug logs from HTTP bridge.
+
 - [#12598](https://github.com/emqx/emqx/pull/12598) Fixed an issue that users were unable to subscribe to or unsubscribe from shared topic filters via HTTP API.
 
   The affected APIs include:
