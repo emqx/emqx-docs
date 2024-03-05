@@ -12,8 +12,6 @@
 
 - [#12471](https://github.com/emqx/emqx/pull/12471) Fixed an issue that data integration configurations failed to load correctly during upgrades from EMQX version 5.0.2 to newer releases.
 
-- [#12542](https://github.com/emqx/emqx/pull/12542) Redacted authorization headers to exclude basic authorization credentials from debug logs in the HTTP Server connector, mitigating potential security risks.
-
 - [#12598](https://github.com/emqx/emqx/pull/12598) Fixed an issue that users were unable to subscribe to or unsubscribe from shared topic filters via HTTP API.
 
   The affected APIs include:
@@ -32,7 +30,7 @@
 
 - [#12610](https://github.com/emqx/emqx/pull/12610) Fixed an issue where connections to the LDAP connector could unexpectedly disconnect after a certain period of time.
 
-- [#12620](https://github.com/emqx/emqx/pull/12620) Fixed an issue when sensitive headers for HTTP Server connector may be printed in the `debug` level log.
+- [#12620](https://github.com/emqx/emqx/pull/12620) Redacted authorization headers to exclude basic authorization credentials from `debug` level logs in the HTTP Server connector, mitigating potential security risks.
 
 - [#12632](https://github.com/emqx/emqx/pull/12632) Fixed an issue where the rule engine's SQL built-in function `date_to_unix_ts` produced incorrect results for dates starting from March 1st on leap years.
 

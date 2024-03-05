@@ -12,8 +12,6 @@
 
 - [#12471](https://github.com/emqx/emqx/pull/12471) 修复了在从 EMQX 版本 5.0.2 升级到新版本期间，数据集成配置未能正确加载的问题。
 
-- [#12542](https://github.com/emqx/emqx/pull/12542) 在 HTTP 服务连接器中对授权头进行了编辑，从调试日志中排除了基本授权凭证，以减少潜在的安全风险。
-
 - [#12598](https://github.com/emqx/emqx/pull/12598) 修复了用户无法通过 HTTP API 订阅或取消订阅共享主题过滤器的问题。
 
   受影响的 API 包括：
@@ -30,6 +28,8 @@
 - [#12608](https://github.com/emqx/emqx/pull/12608) 修复了在查询数据中缺少 `payload` 字段时，IoTDB 动作的 `function_clause` 错误。
 
 - [#12610](https://github.com/emqx/emqx/pull/12610) 修复了与 LDAP 连接器的连接在一定时间后可能意外断开的问题。
+
+- [#12620](https://github.com/emqx/emqx/pull/12620) 在 HTTP 服务连接器中对授权头进行了编辑，从调试级别日志中排除了基本授权凭证，以减少潜在的安全风险。
 
 - [#12632](https://github.com/emqx/emqx/pull/12632) 修复了一个问题，即在闰年的3月1日起，规则引擎的 SQL 内置函数 `date_to_unix_ts` 会产生不正确的时间戳结果。
 
