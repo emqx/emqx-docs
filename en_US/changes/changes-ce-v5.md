@@ -25,6 +25,7 @@
 - [#12620](https://github.com/emqx/emqx/pull/12620) Redacted sensitive information in HTTP headers to exclude authentication and authorization credentials from `debug` level logs in the HTTP Server connector, mitigating potential security risks.
 
 - [#12632](https://github.com/emqx/emqx/pull/12632) Fixed an issue where the rule engine's SQL built-in function `date_to_unix_ts` produced incorrect timestamp results for dates starting from March 1st on leap years.
+
 ## 5.5.0
 
 *Release Date: 2024-02-01*

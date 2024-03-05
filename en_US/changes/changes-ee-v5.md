@@ -30,7 +30,7 @@
 
 - [#12610](https://github.com/emqx/emqx/pull/12610) Fixed an issue where connections to the LDAP connector could unexpectedly disconnect after a certain period of time.
 
-- [#12620](https://github.com/emqx/emqx/pull/12620) Redacted authorization headers to exclude basic authorization credentials from `debug` level logs in the HTTP Server connector, mitigating potential security risks.
+- [#12620](https://github.com/emqx/emqx/pull/12620) Redacted sensitive information in HTTP headers to exclude authentication and authorization credentials from `debug` level logs in the HTTP Server connector, mitigating potential security risks.
 
 - [#12632](https://github.com/emqx/emqx/pull/12632) Fixed an issue where the rule engine's SQL built-in function `date_to_unix_ts` produced incorrect results for dates starting from March 1st on leap years.
 
