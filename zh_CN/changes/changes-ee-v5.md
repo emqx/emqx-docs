@@ -29,7 +29,7 @@
 
 - [#12610](https://github.com/emqx/emqx/pull/12610) 修复了与 LDAP 连接器的连接在一定时间后可能意外断开的问题。
 
-- [#12620](https://github.com/emqx/emqx/pull/12620) 在 HTTP 服务连接器中对授权头进行了编辑，从调试级别日志中排除了基本授权凭证，以减少潜在的安全风险。
+- [#12620](https://github.com/emqx/emqx/pull/12620) 在 HTTP 服务连接器中对授权头中的敏感信息进行了编辑，从调试级别日志中排除了认证和授权信息，以减少潜在的安全风险。
 
 - [#12632](https://github.com/emqx/emqx/pull/12632) 修复了一个问题，即在闰年的3月1日起，规则引擎的 SQL 内置函数 `date_to_unix_ts` 会产生不正确的时间戳结果。
 
