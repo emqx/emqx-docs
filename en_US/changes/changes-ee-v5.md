@@ -2,7 +2,7 @@
 
 ## 5.5.1
 
-*Release Date: 2024-02-29*
+*Release Date: 2024-03-05*
 
 ## Enhancements
 
@@ -32,9 +32,9 @@
 
 - [#12610](https://github.com/emqx/emqx/pull/12610) Fixed an issue where connections to the LDAP connector could unexpectedly disconnect after a certain period of time.
 
-- [#12620](https://github.com/emqx/emqx/pull/12620) Fixed an issue when sensitive headers for HTTP connector may be printed in the `debug` level log.
+- [#12620](https://github.com/emqx/emqx/pull/12620) Fixed an issue when sensitive headers for HTTP Server connector may be printed in the `debug` level log.
 
-- [#12632](https://github.com/emqx/emqx/pull/12632) Fix an issue when rule engine SQL built-in function `date_to_unix_ts` produced incorrect results for dates starting from 1st of March on leap years.
+- [#12632](https://github.com/emqx/emqx/pull/12632) Fixed an issue where the rule engine's SQL built-in function `date_to_unix_ts` produced incorrect results for dates starting from March 1st on leap years.
 
 ## 5.5.0
 

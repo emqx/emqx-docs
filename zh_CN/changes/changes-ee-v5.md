@@ -2,7 +2,7 @@
 
 ## 5.5.1
 
-*发布日期: 2024-02-29*
+*发布日期: 2024-03-05*
 
 ### 增强
 
@@ -30,6 +30,8 @@
 - [#12608](https://github.com/emqx/emqx/pull/12608) 修复了在查询数据中缺少 `payload` 字段时，IoTDB 动作的 `function_clause` 错误。
 
 - [#12610](https://github.com/emqx/emqx/pull/12610) 修复了与 LDAP 连接器的连接在一定时间后可能意外断开的问题。
+
+- [#12632](https://github.com/emqx/emqx/pull/12632) 修复了一个问题，即在闰年的3月1日起，规则引擎的 SQL 内置函数 `date_to_unix_ts` 会产生不正确的时间戳结果。
 
 ## 5.5.0
 
