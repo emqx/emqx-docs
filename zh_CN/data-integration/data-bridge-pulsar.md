@@ -66,9 +66,35 @@ docker run --rm -it -p 6650:6650 --name pulsar apachepulsar/pulsar:2.11.0 bin/pu
 docker exec -it pulsar bin/pulsar-admin topics create-partitioned-topic persistent://public/default/my-topic -p 1
 ```
 
-## 创建规则
+## 创建连接器
 
-本节演示了如何在 Dashboard 中创建 Pulsar 数据集成的规则来指定需要转发至 Pulsar 的数据并为规则添加触发的动作。以下示例假设您在同一台本地机器上运行 EMQX 和 Pulsar。如果您在远程运行 Pulsar 和 EMQX，请相应调整设置。
+在创建 Pulsar Sink 之前，您需要创建一个 Pulsar 连接器，以便 EMQX 与 Pulsar 服务建立连接。以下示例假定您在本地机器上同时运行 EMQX 和 Pulsar。如果您在远程运行 Pulsar 和 EMQX，请相应地调整设置。
+
+1. 转到 Dashboard **集成** -> **连接器** 页面。点击页面右上角的**创建**。
+
+2. 在连接器类型中选择 **Pulsar**，点击**下一步**。
+
+3. 在 **配置** 步骤，配置以下信息：
+
+   - 输入连接器名称，应为大写和小写字母及数字的组合，例如：`my_pulsar`。
+   - **桥接角色**：默认情况下选择 `生产者`。
+   - 配置连接到 Pulsar 服务器和消息写入的信息：
+     - **服务器地址**：输入 `pulsar://localhost:6650`。如果远程运行 Pulsar 和 EMQX，请根据情况调整设置。
+     - **客户端认证**：根据实际情况选择身份认证方式：`none`、`基础认证` 或 `Token`。
+     - **Pulsar 主题名称**：输入 `persistent://public/default/my-topic`，即您之前创建的 Pulsar 主题。注意：这里不支持变量。
+     - **分区选择策略**：选择生产者将消息分派到 Pulsar 分区的方式：`random`、`roundrobin` 或 `Key_dispatch`。
+     - **压缩**：指定是否使用压缩算法以及在 Pulsar 消息中用于压缩/解压缩记录的算法。可选值为：`no_compression`、`snappy` 或 `zlib`。
+     - **启用 TLS**: 如果您想建立一个加密连接，单击切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md/#tls-for-external-resource-access)。
+
+4. 高级配置（可选），请参考 [高级设置](#高级设置)。
+
+5. 点击**创建**按钮完成连接器创建。
+
+6. 在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 OpenTSDB 的数据。您也可以按照[创建 Pulsar Sink 规则](#创建-pulsar-sink-规则)章节的步骤来创建规则。
+
+## 创建 Pulsar Sink 规则
+
+本节演示了如何在 Dashboard 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的结果写入到 Pulsar 的 `my-topic` 主题中。
 
 1. 转到 Dashboard **集成** -> **规则页面**。
 
@@ -76,7 +102,7 @@ docker exec -it pulsar bin/pulsar-admin topics create-partitioned-topic persiste
 
 3. 输入规则 ID，例如  `my_rule`。
 
-4. 在 **SQL 编辑器**中输入规则，例如我们希望将 `t/#` 主题的 MQTT 消息存储至 Pulsar，可通过如下规则实现：
+4. 在 **SQL 编辑器**中输入规则，例如我们希望将 `t/#` 主题的 MQTT 消息传输并存储至 Pulsar，可通过如下规则实现：
 
    注意：如果要自定义 SQL 语句，请确保 `SELECT` 字段包含 Sink 中所需的所有字段。
 
@@ -103,23 +129,17 @@ docker exec -it pulsar bin/pulsar-admin topics create-partitioned-topic persiste
 
 6. 输入 Sink 名称，名称应为大/小写字母和数字的组合。
 
-7. 配置以下 Sink 选项：
+7. 从**连接器**下拉框中选择刚刚创建的 `my_pulsar`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
 
-   - **桥接角色**：默认情况下选择 `生产者`。
-   - 配置连接到 Pulsar 服务器和消息写入的信息：
-     - **服务器地址**：输入 `pulsar://localhost:6650`。如果远程运行 Pulsar 和 EMQX，请根据情况调整设置。
-     - **客户端认证**：根据实际情况选择身份认证方式：`none`、`基础认证` 或 `Token`。
-     - **Pulsar 主题名称**：输入 `persistent://public/default/my-topic`，即您之前创建的 Pulsar 主题。注意：这里不支持变量。
-     - **分区选择策略**：选择生产者将消息分派到 Pulsar 分区的方式：`random`、`roundrobin` 或 `Key_dispatch`。
-     - **压缩**：指定是否使用压缩算法以及在 Pulsar 消息中用于压缩/解压缩记录的算法。可选值为：`no_compression`、`snappy` 或 `zlib`。
-     - **启用 TLS**: 如果您想建立一个加密连接，单击切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md/#tls-for-external-resource-access)。
+8. 配置以下 Sink 选项：
+
    - **消息的 Key**：Pulsar 消息密钥。在此处插入字符串，可以是纯字符串或包含占位符（${var}）的字符串。
    - **消息的 Value**：Pulsar 消息值。在此处插入字符串，可以是纯字符串或包含占位符（${var}）的字符串。
 
-6. 展开**高级设置**，根据需要配置高级设置选项（可选），详细请参考[高级设置](#高级设置)。
-7. 点击**创建**前，您可点击**测试连接**按钮确保能连接到 Pulsar 服务器。
-8. 点击**添加**按钮完成 Sink 创建，新建的 Sink 将被添加到**动作输出**列表中。
-9. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中，**状态**为**已连接**。
+9. 展开**高级设置**，根据需要配置高级设置选项（可选），详细请参考[高级设置](#高级设置)。
+10. 点击**创建**前，您可点击**测试连接**按钮确保能连接到 Pulsar 服务器。
+11. 点击**添加**按钮完成 Sink 创建，新建的 Sink 将被添加到**动作输出**列表中。
+12. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中，**状态**为**已连接**。
 
 现在您已成功创建了通过 Pulsar Sink 将数据转发到 Pulsar 的规则，同时在**规则**页面的**动作(Sink)** 标签页看到新建的 Pulsar Sink。
 
