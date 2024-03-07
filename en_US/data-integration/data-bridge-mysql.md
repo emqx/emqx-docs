@@ -94,11 +94,28 @@ use emqx_data;
    );
    ```
 
-## Create Rule and MySQL Sinks
+## Create a Connector
 
-MySQL Sinks for message storage and event recording require different SQL templates. Therefore, you need to create 2 different Sinks for message storage and event recording. 
+This section demonstrates how to create a Connector to connect the Sink to the MySQL server.
 
-### Message Storage
+The following steps assume that you run both EMQX and TDengine on the local machine. If you have TDengine and EMQX running remotely, adjust the settings accordingly.
+
+1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+2. Click **Create** in the top right corner of the page.
+3. On the **Create Connector** page, select **MySQL** and then click **Next**.
+4. In the **Configuration** step, configure the following information:
+   - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower case letters and numbers, for example: `my_mysql`.
+   - **Server Host**: Enter `127.0.0.1:3306`, or the actual hostname if the MySQL server is running remotely.
+   - **Database Name**: Enter `emqx_data`.
+   - **Username**: Enter `root`.
+   - **Password**: Enter `public`.
+5. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
+6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the MySQL server.
+7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to MySQL and to record client events. For detailed steps, see [Create a Rule with MySQL Sink for Message Storage](#create-a-rule-with-mysql-sink-for-message-storage) and [Create a Rule with MySQL Sink for Events Recording](#create-a-rule-with-mysql-sink-for-events-recording).
+
+## Create a Rule with MySQL Sink for Message Storage
+
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the MySQL data table `emqx_messages` via configured Sink. 
 
 This demonstration assumes that you run both EMQX and MySQL on the local machine. If you have MySQL and EMQX running remotely, adjust the settings accordingly.
 
@@ -129,12 +146,7 @@ This demonstration assumes that you run both EMQX and MySQL on the local machine
 
 6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
 
-7. Enter the following information for connecting to MySQL server:
-
-   - **Server Host**: Enter `127.0.0.1:3306`, or the actual hostname if the MySQL server is running remotely.
-   - **Database Name**: Enter `emqx_data`.
-   - **Username**: Enter `root`.
-   - **Password**: Enter `public`.
+7. Select the `my_mysql` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
 8. Configure the **SQL Template** based on the feature to use:
 
@@ -153,15 +165,17 @@ This demonstration assumes that you run both EMQX and MySQL on the local machine
 
 10. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-11. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
+11. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
 
 You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new MySQL Sink.
 
 You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#`  are sent and saved to MySQL. 
 
-### Event Recording
+## Create a Rule with MySQL Sink for Events Recording
 
-The steps for creating the rule and Sink for event recording are the same as those for message storage, except for the configured rule and SQL template for inserting the data.
+This section demonstrates how to create a rule for recording the clients' online/offline status and saving the events data to the MySQL table `emqx_client_events` via a configured Sink.
+
+The rule creation steps are similar to those in [Creating a rule with MySQL Sink for Message Storage](#create-a-rules-with-mysql-sink-for-message-storage) except for the SQL rule syntax and SQL template.
 
 To create a rule for online/offline status recording, you can enter the following statement in the **SQL Editor**:
 
@@ -182,7 +196,7 @@ INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
 )
 ```
 
-## Test the Rule
+## Test the Rules
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 
@@ -190,7 +204,7 @@ Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello MySQL" }'
 ```
 
-Check the running status of the two data bridges, there should be one new incoming and one new outgoing message.
+Check the running status of the two Sinks, there should be one new incoming and one new outgoing message, and 2 event records.
 
 Check whether the data is written into the `emqx_messages` data table.
 
