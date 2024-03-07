@@ -23,7 +23,7 @@ Before you begin, ensure you have created a cluster consisting of the following 
 | emqx2-cluster.emqx.io | 1883          | 8083                |
 | emqx3-cluster.emqx.io | 1883          | 8083                |
 
-The examples on this page will use a single Nginx server configured as a load balancer to distribute requests to a cluster composed of these three EMQX nodes.
+The examples on this page will use a single HAProxy server configured as a load balancer to distribute requests to a cluster composed of these three EMQX nodes.
 
 ## Quick Start
 

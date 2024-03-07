@@ -1,6 +1,16 @@
 # 配置文件简介
 
-EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX，本章节将介绍 EMQX 配置文件基本信息，配置项以及详细的介绍请参考 [配置手册](./configuration-manual.html)
+{% emqxce %}
+
+EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX，本章节将介绍 EMQX 配置文件基本信息，配置项以及详细的介绍请参考[配置手册](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)。
+
+{% endemqxce %}
+
+{% emqxee %}
+
+EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX，本章节将介绍 EMQX 配置文件基本信息，配置项以及详细的介绍请参考[配置手册](https://www.emqx.io/docs/zh/v${EE_VERSION}/hocon/)。
+
+{% endemqxee %}
 
 ## 配置文件介绍
 
@@ -42,7 +52,7 @@ EMQX 主配置文件为 `emqx.conf`，根据安装方式其所在位置有所不
 但是在集群环境下，所有节点的 data_dir 必须保持一致。
 :::
 
-通常情况下大多数配置项都在主配置文件中定义，需要通过 REST API、CLI 与 Dashboard 配置的内容（热配置）将写入到 `cluster.hocon` 中，一经配置将覆盖主配置文件的内容。覆盖规则参考 [配置覆盖规则(#配置覆盖规则)。
+通常情况下大多数配置项都在主配置文件中定义，需要通过 REST API、CLI 与 Dashboard 配置的内容（热配置）将写入到 `cluster.hocon` 中，一经配置将覆盖主配置文件的内容。覆盖规则参考 [配置覆盖规则](#配置覆盖规则)。
 
 :::tip
 有些配置项是不能被覆盖的（例如 `node.name`）。
@@ -142,7 +152,7 @@ listeners.ssl.default {
 
 HOCON 的值是分层覆盖的，最简单的规则如下：
 
-- 在同一个文件中，后（在文件底部）定义的值，覆盖前（在文件顶部）到值。
+- 在同一个文件中，后（在文件底部）定义的值，覆盖前（在文件顶部）定义的值。
 - 当按层级覆盖时，高层级的值覆盖低层级的值。
 EMQX 配置按以下顺序进行优先级排序：环境变量 > emqx.conf > API(cluster.hocon)。
 
@@ -154,10 +164,9 @@ EMQX 配置按以下顺序进行优先级排序：环境变量 > emqx.conf > API
 为避免混淆，强烈建议不要在 `cluster.hocon` 和 `emqx.conf` 中具有相同的配置键。
 
 ::: tip
-1. 如果您正在使用较旧的 EMQX 版本，特别是 e5.0.2/v5.0.22 或更早的版本（即 cluster-override.conf 文件仍存在于 EMQX 的数据目录中），
-2. 那么配置设置的优先顺序如下：`emqx.conf < ENV < HTTP API(cluster-override.conf)`。
+1. 如果您正在使用较旧的 EMQX 版本，特别是 e5.0.2/v5.0.22 或更早的版本（即 cluster-override.conf 文件仍存在于 EMQX 的数据目录中），那么配置设置的优先顺序如下：`emqx.conf < ENV < HTTP API(cluster-override.conf)`。
 3. 如果您正在从 e5.0.2/v5.0.22 或更早的版本升级到最新版本的 EMQX，配置的优先级将与以前的版本保持一致，以保持兼容性。
-4. `cluster-override.conf` 机制计划在 5.1 版本中删除。
+4. `cluster-override.conf` 机制在 5.1 版本中删除。
 :::
 
 ### 合并覆盖

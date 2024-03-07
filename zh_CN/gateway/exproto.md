@@ -202,6 +202,7 @@ ExProto 网关支持各种类型的认证器，例如：
 - [Redis 认证](../access-control/authn/redis.md)
 - [HTTP 服务器认证](../access-control/authn/http.md)
 - [JWT 认证](../access-control/authn/jwt.md)
+- [LDAP 认证](../access-control/authn/ldap.md)
 
 客户端信息的客户端 ID、用户名和密码都是从 ConnectionAdapter 的 Authenticate 方法中传递的参数中获取的。
 

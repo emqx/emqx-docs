@@ -65,7 +65,7 @@ Select **Republish** from the drop-down menu under **Action**, and configure the
 
 ![action-republish](./assets/action-republish.png)
 
-On the **Create Rules** page, click the **Create** button at the bottom to complete the rule creation. This rule will be added to as a new entry in the **Rules** page. You can view the rule ID, data source, enable or disable the rule, and creation time. You can also click **Settings** to modify the data source or add more action, or click the **More** button to duplicate or delete the rule.
+On the **Create Rules** page, click the **Create** button at the bottom to complete the rule creation. This rule will be added to as a new entry in the **Rules** page. You can view the rule ID, Source, Enable status, and Action Count. You can also click **Settings** to modify the data source or add more action, or click the **More** button to duplicate or delete the rule.
 
 ::: tip
 The republishing action does not prevent the delivery of the original message. For example, according to the rule, messages under topic "t/1" will be republished under topic "a/1", in the meantime "t/1" message will still be delivered to the clients subscribed to topic  "t/1".

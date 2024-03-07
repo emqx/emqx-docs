@@ -135,9 +135,23 @@ gateway.stomp {
 
 ::::
 
+{% emqxce %}
+
 详细参考：
+
 - [HTTP API - Gateway](../admin/api.md)
-- [配置文档-网关配置](../configuration/configuration-manual.html)
+- [配置文档-网关配置](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)
+
+{% endemqxce %}
+
+{% emqxee %}
+
+详细参考：
+
+- [HTTP API - Gateway](../admin/api.md)
+- [配置文档-网关配置](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/)
+
+{% endemqxee %}
 
 ::: tip
 通过配置文件配置网关，需要在每个节点中进行修改，但通过 Dashboard 或者 HTTP API 进行配置则会在整个集群中生效。

@@ -149,12 +149,6 @@ You can use EMQX Dashboard to configure how to use LDAP for user authorization.
    - **Filter**: The `filter` that defines the conditions that must be fulfilled in order for the `Search` to match a given entry.
      The syntax of the filter follows [RFC 4515](#https://www.rfc-editor.org/rfc/rfc4515) and also supports placeholders.
 
-   - **Publish_attribute**: Indicates which attribute is used to represent the allowed topics list of the `publish`.
-
-   - **Subscribe_attribute**: Indicates which attribute is used to represent the allowed topics list of the `subscribe`.
-
-   - **All_attribute**: Indicates which attribute is used to represent the both allowed topics list of `publish` and `subscribe`.
-
 4. Click **Create** to finish the settings.
 
 ## Configure LDAP Authorizer via Configuration Items

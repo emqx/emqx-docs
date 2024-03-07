@@ -136,7 +136,7 @@ def publish_msg(client):
    这里的关键点在于 `schema_encode('protobuf_person', json_decode(payload), 'Person')`:
 
    - `schema_encode` 函数将 payload 字段的内容按照 `protobuf_person` 这个 Schema 来编码;
-   - `as person` 将编码后的值保存到变量 `person` 里;
+   - `as protobuf_person` 将编码后的值保存到变量 `protobuf_person` 里;
    - `json_decode(payload)` 用来对 `payload` 进行解码，因为 `schema_encode` 的输入必须是 Map 数据格式，而 `payload` 通常是一个 JSON 编码的二进制消息。
    - 最后一个参数 `Person` 指明了 payload 中的消息的类型是 protobuf schema 里定义的 `Person` 类型。
 

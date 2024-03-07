@@ -23,13 +23,13 @@ HAProxy 用于 EMQX MQTT 负载均衡时有以下功能和优势：
 | emqx2-cluster.emqx.io | 1883          | 8083                |
 | emqx3-cluster.emqx.io | 1883          | 8083                |
 
-本页中的示例将使用单个 Nginx 服务器配置为负载均衡器，将请求转发到由这 3 个 EMQX 节点组成的集群。
+本页中的示例将使用单个 HAProxy 服务器配置为负载均衡器，将请求转发到由这 3 个 EMQX 节点组成的集群。
 
 ## 快速体验
 
 此处提供了一个具有实际示例的 Docker Compose 配置，让您能够轻松地进行验证和测试，您可以按照以下步骤来进行操作：
 
-1. 克隆示例仓库并进入 `mqtt-lb-nginx` 目录：
+1. 克隆示例仓库并进入 `mqtt-lb-haproxy` 目录：
 
 ```bash
 git clone https://github.com/emqx/emqx-usage-example

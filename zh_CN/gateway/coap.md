@@ -62,7 +62,17 @@ gateway.coap {
 通过配置文件来配置网关，需要在每个节点上手动同步配置文件；而通过 Dashboard 或者 HTTP API 管理则会自动同步至整个集群。
 :::
 
-CoAP 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表请参考：[网关配置 - 监听器](../configuration/configuration-manual.html)
+{% emqxce %}
+
+CoAP 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表请参考：[网关配置 - 监听器](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)。
+
+{% endemqxce %}
+
+{% emqxee %}
+
+CoAP 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表请参考：[网关配置 - 监听器](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/)。
+
+{% endemqxee %}
 
 ## 工作模式
 
@@ -106,6 +116,7 @@ gateway.coap {
 - [Redis 认证](../access-control/authn/redis.md)
 - [HTTP Server 认证](../access-control/authn/http.md)
 - [JWT 认证](../access-control/authn/jwt.md)
+- [LDAP 认证](../access-control/authn/ldap.md)
 
 例如，通过 HTTP API 或 emqx.conf 为 CoAP 网关创建一个内置数据库认证：
 
@@ -171,9 +182,19 @@ CoAP 网关基于 [Publish-Subscribe Broker for the CoAP](https://datatracker.ie
 
 ## 用户层接口
 
-- 配置说明参考：[网关配置 - CoAP 网关](../configuration/configuration-manual.html)
+{% emqxce %}
+
+- 配置说明参考：[网关配置 - CoAP 网关](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)
 - 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
 
+{% endemqxce %}
+
+{% emqxee %}
+
+- 配置说明参考：[网关配置 - CoAP 网关](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/)
+- 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
+
+{% endemqxee %}
 
 ## 客户端库
 

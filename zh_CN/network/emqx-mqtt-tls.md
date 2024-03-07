@@ -91,7 +91,7 @@ EMQX 默认在 `8883` 端口启用了 SSL/TLS 监听器并设置其为单向认�
 
 ## 单向认证客户端测试
 
-您可以使用 [MQTTX CLI](https://mqttx.app/) 进行测试，单向认证通常需要客户端提供 CA 证书，以便客户端验证服务器的身份：
+您可以使用 [MQTTX CLI](https://mqttx.app/zh/cli) 进行测试，单向认证通常需要客户端提供 CA 证书，以便客户端验证服务器的身份：
 
 ```bash
 mqttx sub -t 't/1' -h localhost -p 8883 \
@@ -139,7 +139,7 @@ mqttx sub -t 't/1' -h localhost -p 8883 \
 
 ## 双向认证客户端测试
 
-您可以使用 [MQTTX CLI](https://mqttx.app/) 进行测试，双向认证除了需要客户端提供 CA 证书外，还应当提供客户端证书：
+您可以使用 [MQTTX CLI](https://mqttx.app/zh/cli) 进行测试，双向认证除了需要客户端提供 CA 证书外，还应当提供客户端证书：
 
 ```bash
 mqttx sub -t 't/1' -h localhost -p 8883 \

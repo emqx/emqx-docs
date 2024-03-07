@@ -25,10 +25,8 @@ $delayed/{DelayInterval}/{TopicName}
 2. 在**延迟发布**页面，您可以进行以下配置：
 
    - **启用**: 启用或禁用延迟发布。默认情况下，已启用。
-   - 最大延迟消息数：延迟消息的最大数量。
-     - 如果您从下拉列表中选择了**无限制**，则无法指定具体数量。
-     - 如果您从下拉列表中选择了**自定义**，可以指定具体数量。
-
+   - **最大延迟消息数**：可以指定延迟消息的最大数量。
+   
    <img src="./assets/delay-publish-dashboard.png" alt="delay-publish-dashboard" style="zoom:50%;" />
 
 ## 使用 MQTTX Desktop 尝试延迟发布
@@ -47,7 +45,7 @@ $delayed/{DelayInterval}/{TopicName}
 
    ::: tip
 
-   [MQTTX Desktop](./publish-and-subscribe.md/#mqttx-desktop) 中介绍了更多详细的连接创建信息。
+   [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop) 中介绍了更多详细的连接创建信息。
 
    :::
 

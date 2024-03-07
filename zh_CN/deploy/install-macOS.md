@@ -6,7 +6,6 @@
 
 - macOS 13 （只适用于 Homebrew 安装包）
 - macOS 12
-- macOS 11
 
 {% emqxce %}
 

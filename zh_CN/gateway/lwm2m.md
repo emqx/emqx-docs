@@ -13,15 +13,9 @@ EMQX 中的 LwM2M 网关 可以接收 LwM2M 客户端连接并将其事件和消
 
 ## 快速开始
 
-EMQX 5.0 中，可以通过 Dashboard 配置并启用 LwM2M 网关。
-
-### 通过 Dashboard 配置
-
-
+EMQX 5.0 中，可以通过 Dashboard 配置并启用 LwM2M 网关，也可以通过 HTTP API 或 `emqx.conf` 来启用。
 
 ### 通过 HTTP API 或配置文件配置
-
-也可以通过 HTTP API 或 `emqx.conf` 来启用，例如：
 
 :::: tabs type:card
 
@@ -101,7 +95,17 @@ gateway.lwm2m {
 通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
 :::
 
-LwM2M 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](../configuration/configuration-manual.html)
+{% emqxce %}
+
+LwM2M 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)。
+
+{% endemqxce %}
+
+{% emqxee %}
+
+LwM2M 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/)。
+
+{% endemqxee %}
 
 ## 认证
 
@@ -173,7 +177,7 @@ gateway.lwm2m {
 
 ## 消息格式
 
-LwM2M 协议的消息传递模型基于[Resources Model and Operations](https://technical.openmobilealliance.org/OMNA/LwM2M/LwM2MRegistry.html)。这与 MQTT 协议的发布/订阅模型完全不同。因此，
+LwM2M 协议的消息传递模型基于 [Resources Model and Operations](https://technical.openmobilealliance.org/OMNA/LwM2M/LwM2MRegistry.html)。这与 MQTT 协议的发布/订阅模型完全不同。因此，
 在 LwM2M 网关中，定义了一种消息格式来兼容这两种消息模型。
 
 ### Client Registration Interface
@@ -783,8 +787,19 @@ Observe 命令的消息体格式应该为：
 
 ## 用户层接口
 
-- 详细配置说明参考：[网关配置 - LwM2M 网关](../configuration/configuration-manual.html)
+{% emqxce %}
+
+- 详细配置说明参考：[网关配置 - LwM2M 网关](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)
 - 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
+
+{% endemqxce %}
+
+{% emqxee %}
+
+- 详细配置说明参考：[网关配置 - LwM2M 网关](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/)
+- 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
+
+{% endemqxee %}
 
 ## 客户端库
 
