@@ -52,8 +52,6 @@ EMQX 目前提供开源和企业版两个版本，您可根据需要点击下方
 
 EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker.md)，通过 [EMQX Kubernetes Operator](https://www.emqx.com/zh/emqx-kubernetes-operator) 安装部署、或通过安装包的形式部署在物理服务器或虚拟机上，针对安装包部署形式，目前我们支持以下操作系统：
 
-{% emqxce %}
-
 - RedHat
 - CentOS
 - RockyLinux
@@ -62,22 +60,6 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 - Debian
 - macOS
 - Linux
-- Windows
-
-{% endemqxce %}
-
-{% emqxee %}
-
-- RedHat
-- CentOS
-- RockyLinux
-- AmazonLinux
-- Ubuntu
-- Debian
-- macOS
-- Linux
-
-{% endemqxee %}
 
 {% emqxce %}
 
@@ -200,7 +182,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 ::::
 
 ## 通过 MQTTX 快速验证
-[MQTTX](https://mqttx.app/zh) 是 EMQX 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS、Linux、Windows，并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。您可通过 MQTTX 一键式的连接方式和图形界面，您可轻松测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。
+[MQTTX](https://mqttx.app/zh) 是 EMQX 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS、Linux 并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。您可通过 MQTTX 一键式的连接方式和图形界面，您可轻松测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。
 
 本节讲介绍如何通过 [MQTTX Web 端](https://mqttx.app/zh) 快速验证 MQTT 连接，无需下载或安装任何程序。
 
