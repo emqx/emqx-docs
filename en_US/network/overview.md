@@ -6,7 +6,7 @@ EMQX adopts SSL and TLS cryptographic protocols to ensure secure network communi
 
 - Establishing a connection between MQTT clients and EMQX
 - Connecting to external resources, such as a database
-- Different EMQX nodes in a cluster communicate with each other 
+- Different EMQX nodes in a cluster communicate with each other
 
 EMQX provides comprehensive support for SSL/TLS capabilities, including support for one-way/two-way authentication and X.509 certificate authentication.
 
@@ -35,10 +35,13 @@ authentication {
 
   ssl {
     enable = true
+    # PEM format file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the clients.
     cacertfile = "etc/certs/cacert.pem"
+    # PEM format file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
     certfile = "etc/certs/cert.pem"
+    # PEM format file containing the private key corresponding to the SSL/TLS certificate
     keyfile = "etc/certs/key.pem"
-    ## `verify_peer` means turn on verification for server certificate
+    ## Set 'verify_peer' to verify the authenticity of the clients' certificates, otherwise 'verify_none'
     verify = verify_peer
   }
 }
@@ -47,18 +50,3 @@ authentication {
 ## TLS for Nodes Communication
 
 Instructions on how to enable SSL/TLS for cluster connections are not covered in this chapter, and you can refer to [Cluster Security](../deploy/cluster/security.md) for details.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

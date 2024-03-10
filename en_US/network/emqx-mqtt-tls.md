@@ -77,14 +77,15 @@ You can also enable the SSL/TLS connection by modifying the `listeners.ssl.defau
    listeners.ssl.default {
       bind = "0.0.0.0:8883"
       ssl_options {
-        cacertfile = "etc/certs/rootCA.crt"
-   
-        certfile = "etc/certs/server.crt"
-        keyfile = "etc/certs/server.key"
+        # PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
+        cacertfile = "etc/certs/rootCAs.pem"
+        # PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
+        certfile = "etc/certs/server-cert.pem"
+        # PEM file containing the private key corresponding to the SSL/TLS certificate.
+        keyfile = "etc/certs/server-key.pem"
         # Enter the password when the private key file is password protected
         # password = "123456"
-   
-        # One-way authentication, peer verification not enabled
+        # Set 'verify_peer' to verify the authenticity of the client certificates.
         verify = verify_none
       }
     }
@@ -92,7 +93,7 @@ You can also enable the SSL/TLS connection by modifying the `listeners.ssl.defau
 
 4. Restart EMQX to apply the configuration.
 
-## Test Client Connection with One-way Authentication 
+## Test Client Connection with One-way Authentication
 
 You can use [MQTTX CLI](https://mqttx.app/) for testing. One-way authentication typically requires the client to provide a CA certificate, so the client can verify the server's identity:
 

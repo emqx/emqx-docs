@@ -72,10 +72,12 @@ EMQX 默认在 `8883` 端口启用了 SSL/TLS 监听器并设置其为单向认�
     listeners.ssl.default {
       bind = "0.0.0.0:8883"
       ssl_options {
-        cacertfile = "etc/certs/rootCA.crt"
-
-        certfile = "etc/certs/server.crt"
-        keyfile = "etc/certs/server.key"
+        # PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
+        cacertfile = "etc/certs/rootCAs.pem"
+        # PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
+        certfile = "etc/certs/server-cert.pem"
+        # PEM file containing the private key corresponding to the SSL/TLS certificate.
+        keyfile = "etc/certs/server-keyi.pem"
         # 私钥文件受密码保护时需要输入密码
         # password = "123456"
 
