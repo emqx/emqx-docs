@@ -126,7 +126,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    - **Tags**: Tags are used to describe additional information about the metric. Here, the tag is `"tags": {"host": "serverA"}`, indicating that this metric data comes from host `serverA`.
    - **Value**: This is the actual metric value. In this example, it is `"value": 12`, indicating the metric value is 12.
 
-9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see the relevant configuration information in [Features of Sink](./data-bridges.md).
+9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see the relevant configuration information in [Features of Sink](./data-bridges.md#features-of-sink).
 
 10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the OpenTSDB server.
 
