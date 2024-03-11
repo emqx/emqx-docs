@@ -44,6 +44,8 @@ listeners.ssl.default {
     cacertfile = "etc/certs/cacert.pem"
     certfile = "etc/certs/cert.pem"
     keyfile = "etc/certs/key.pem"
+    verify = verify_none
+    fail_if_no_peer_cert = false
   }
 }
 ```
@@ -57,8 +59,8 @@ where:
     - `cacertfile`: PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
     - `certfile`: PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
     - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
-
- 
+    - `verify`:  Set 'verify_peer' to verify the authenticity of the clients' certificates, otherwise 'verify_none'.
+    - `fail_if_no_peer_cert`: If set to true, the server fails if the client does not have a certificate to send, that is, sends an empty certificate. If set to false, it fails only if the client sends an invalid certificate (an empty certificate is considered valid).
 
 ## Configure WebSocket Listener
 
@@ -101,7 +103,7 @@ listeners.wss.default {
     certfile = "etc/certs/cert.pem"
     keyfile = "etc/certs/key.pem"
   }
-  }
+}
 ```
 
 where:
@@ -110,12 +112,10 @@ where:
   - `bind` is the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `8084`. 
   - `max_connection` is the maximum number of concurrent connections allowed by the listener, default value: `infinity`.
   - `websocket.mqtt_path` is to set the path to the WebSocket’s MQTT protocol, which is `/mqtt` by default. 
-    - `ssl_options` is the SSL/TLS configuration option for the listener, it has three properties:
-      - `cacertfile`: PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
-      - `certfile`: PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
-      - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
-
-
+  - `ssl_options` is the SSL/TLS configuration option for the listener, it has three properties:
+    - `cacertfile`: PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
+    - `certfile`: PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
+    - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
 
 <!--To add QUIC-->
 

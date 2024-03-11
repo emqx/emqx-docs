@@ -40,6 +40,8 @@ listeners.ssl.default {
     keyfile = "/etc/emqx/certs/server.key"
     # Must verify peer certificats
     verify = verify_peer
+    # Force the client to send a non-empty certificate, otherwise fail the TLS handshake.
+    fail_if_no_peer_cert = true
     # Also verify client certificate's revocation status
     enable_crl_check = true
   }

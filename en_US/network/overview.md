@@ -35,13 +35,13 @@ authentication {
 
   ssl {
     enable = true
-    # PEM format file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the clients.
+    # PEM format file containing the trusted CA (certificate authority) certificates that the HTTP client uses to verify the authenticity of the HTTP server.
     cacertfile = "etc/certs/cacert.pem"
-    # PEM format file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
+    # PEM format file containing the SSL/TLS certificate chain for the HTTP client to send. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
     certfile = "etc/certs/cert.pem"
-    # PEM format file containing the private key corresponding to the SSL/TLS certificate
+    # PEM format file containing the private key corresponding to the certificate
     keyfile = "etc/certs/key.pem"
-    ## Set 'verify_peer' to verify the authenticity of the clients' certificates, otherwise 'verify_none'
+    ## Set 'verify_peer' to verify the authenticity of the server's certificate chain, otherwise 'verify_none'
     verify = verify_peer
   }
 }

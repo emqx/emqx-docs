@@ -87,6 +87,8 @@ You can also enable the SSL/TLS connection by modifying the `listeners.ssl.defau
         # password = "123456"
         # Set 'verify_peer' to verify the authenticity of the client certificates.
         verify = verify_none
+        # If set to true, the server fails if the client does not have a certificate to send, that is, sends an empty certificate. If set to false, it fails only if the client sends an invalid certificate (an empty certificate is considered valid).
+        fail_if_no_peer_cert = false
       }
     }
    ```

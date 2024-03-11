@@ -45,14 +45,14 @@ authentication {
 
   ssl {
     enable = true
-    # PEM format file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the clients.
+    # PEM 格式的文件，包含一个或多个用于验证 HTTP 服务器证书的根 CA 证书
     cacertfile = "etc/certs/cacert.pem"
-    # PEM format file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
+    # PEM 格式的客户端证书，如果证书不是直接由根 CA 签发，那么中间 CA 的证书必须加在服务器证书的后面组成一个证书链
     certfile = "etc/certs/cert.pem"
-    # PEM format file containing the private key corresponding to the SSL/TLS certificate
+    # PEM 格式的密钥文件
     keyfile = "etc/certs/key.pem"
-    ## Set 'verify_peer' to verify the authenticity of the clients' certificates, otherwise 'verify_none'
-    verify = verify_peer
+    # 设置成 'verify_peer' 来验证 HTTP 服务器端证书是否为 cacertfile 中某个根证书签发
+    verify = verify_none
   }
 }
 ```
