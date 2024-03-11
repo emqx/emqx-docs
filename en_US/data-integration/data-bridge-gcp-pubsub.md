@@ -269,7 +269,7 @@ This section demonstrates how to add a Republish action to the rule for forwardi
 
      Subfields from the GCP Pub/Sub message may be accessed with dot notation. For example, `${.value}` will resolve to the GCP Pub/Sub message value, and `${.attributes.h1}` will resolve to the value of the `h1` message attribute key if such a subfield exists.  Absent values will be replaced by empty strings.
 
-   - **MQTT 5.0 Message Properties**: Disabled by default. For detailed settings, see [Add Republish Action](./rule-get-started#add-republish-action).
+   - **MQTT 5.0 Message Properties**: Disabled by default. For detailed settings, see [Add Republish Action](./rule-get-started.md#add-republish-action).
 
 3. Click **Create** to complete the action creation. After successful creation, you will return to the create rule page, and the republish action will be added to the **Action Outputs** tab.
 
