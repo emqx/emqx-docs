@@ -6,13 +6,10 @@ For example,  configure a listener for EMQX Dashboard for accepting all incoming
 
 ```
 dashboard {
-  listener {
-    bind  =  "0.0.0.0:18083"
-    max_connections  =  512
-    ssl_options {
-      cacertfile = "etc/certs/cacert.pem"
-      certfile = "etc/certs/cert.pem"
-      keyfile = "etc/certs/key.pem"
+  listeners {
+    http {
+      bind = "0.0.0.0:18083"
+      max_connections = 512
     }
   }
 }
@@ -22,10 +19,8 @@ Where,
 
 - `bind  =  "0.0.0.0:18083"`  is to set the network address and port number that the listener will bind to. In this case, the listener will bind to all available network interfaces (`0.0.0.0`) on port `18083`.
 - `max_connections  =  512` is to set the maximum number of concurrent connections that the listener will accept. In this case, the maximum number of connections is set to `512`.
-- `ssl_options` is the SSL/TLS configuration option for the listener, it has three properties:
-  - `cacertfile`: This sets the path to the file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
-  - `certfile`: This sets the path to the file containing the SSL/TLS certificate for the listener.
-  - `keyfile`: This sets the path to the file containing the private key corresponding to the SSL/TLS certificate.
+
+See [EMQX Docs - Dashboard](https://www.emqx.io/docs/en/v5.5.1/hocon/#V-dashboard)
 
 {% emqxce %}
 
