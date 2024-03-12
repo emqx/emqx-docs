@@ -54,11 +54,11 @@ where:
   - `bind` is the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `8883`. 
   - `max_connection` is the maximum number of concurrent connections allowed by the listener, default value: `infinity`.
   - `ssl_options` is the SSL/TLS configuration option for the listener, it has three properties:
-    - `cacertfile`: This sets the path to the file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
-    - `certfile`: This sets the path to the file containing the SSL/TLS certificate for the listener.
-    - `keyfile`: This sets the path to the file containing the private key corresponding to the SSL/TLS certificate.
-
- 
+    - `cacertfile`: PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
+    - `certfile`: PEM file containing the SSL/TLS certificate chain for the listener.  If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
+    - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
+    - `verify`:  Set 'verify_peer' to verify the authenticity of the clients' certificates, otherwise 'verify_none'.
+    - `fail_if_no_peer_cert`: If set to true, the server fails if the client does not have a certificate to send, that is, sends an empty certificate. If set to false, it fails only if the client sends an invalid certificate (an empty certificate is considered valid).
 
 ## Configure WebSocket Listener
 
@@ -111,9 +111,9 @@ where:
   - `max_connection` is the maximum number of concurrent connections allowed by the listener, default value: `infinity`.
   - `websocket.mqtt_path` is to set the path to the WebSocket’s MQTT protocol, which is `/mqtt` by default. 
     - `ssl_options` is the SSL/TLS configuration option for the listener, it has three properties:
-      - `cacertfile`: This sets the path to the file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
-      - `certfile`: This sets the path to the file containing the SSL/TLS certificate for the listener.
-      - `keyfile`: This sets the path to the file containing the private key corresponding to the SSL/TLS certificate.
+      - `cacertfile`: PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
+      - `certfile`: PEM file containing the SSL/TLS certificate for chain the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
+      - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
 
 
 
