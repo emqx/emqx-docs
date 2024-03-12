@@ -1,6 +1,6 @@
 {
   "info": {
-    "version": "5.5.0",
+    "version": "5.5.1",
     "title": "EMQX API"
   },
   "components": {
@@ -278,7 +278,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -773,7 +773,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -1256,7 +1256,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -1304,7 +1304,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -1368,8 +1368,7 @@
             "enum": [
               "egress"
             ],
-            "deprecated": true,
-            "description": "已弃用，桥接方向，必须为'出口'"
+            "deprecated": true
           },
           "local_topic": {
             "type": "string",
@@ -1516,7 +1515,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -1776,7 +1775,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -3080,7 +3079,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -3955,7 +3954,7 @@
           "excludes": {
             "default": [],
             "type": "array",
-            "description": "Exclude caching ACL check results for topics matching the given patterns.",
+            "description": "排除主题列表，列表内的主题将不会生成授权缓存。",
             "items": {
               "type": "string"
             }
@@ -4095,7 +4094,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -4460,7 +4459,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -4471,7 +4470,7 @@
             "description": "描述性文本。"
           },
           "parameters": {
-            "description": "Action specific configs.",
+            "description": "动作的具体配置。",
             "$ref": "#/components/schemas/bridge_mqtt_publisher.action_parameters"
           },
           "resource_opts": {
@@ -7679,7 +7678,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -7954,7 +7953,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -8018,8 +8017,7 @@
             "enum": [
               "egress"
             ],
-            "deprecated": true,
-            "description": "已弃用，桥接方向，必须为'出口'"
+            "deprecated": true
           },
           "local_topic": {
             "type": "string",
@@ -9410,7 +9408,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -11225,7 +11223,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -11421,7 +11419,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -11485,8 +11483,7 @@
             "enum": [
               "egress"
             ],
-            "deprecated": true,
-            "description": "已弃用，桥接方向，必须为'出口'"
+            "deprecated": true
           },
           "local_topic": {
             "type": "string",
@@ -13300,7 +13297,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -14152,7 +14149,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -14977,7 +14974,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -15528,7 +15525,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -15859,7 +15856,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -16966,7 +16963,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -16977,7 +16974,7 @@
             "description": "描述性文本。"
           },
           "parameters": {
-            "description": "Action specific configs.",
+            "description": "动作的具体配置。",
             "$ref": "#/components/schemas/bridge_mqtt_publisher.action_parameters"
           },
           "resource_opts": {
@@ -18368,7 +18365,7 @@
           },
           "tags": {
             "type": "array",
-            "description": "Tags to annotate this config entry.",
+            "description": "连接器的标签",
             "items": {
               "type": "string"
             }
@@ -18379,7 +18376,7 @@
             "description": "描述性文本。"
           },
           "parameters": {
-            "description": "Action specific configs.",
+            "description": "动作的具体配置。",
             "$ref": "#/components/schemas/bridge_mqtt_publisher.action_parameters"
           },
           "resource_opts": {
@@ -19862,21 +19859,21 @@
                             {
                               "action": "publish",
                               "retain": "true",
+                              "topic": "test/topic/3",
                               "qos": [
                                 "1"
                               ],
-                              "topic": "test/topic/3",
                               "permission": "allow"
                             },
                             {
                               "action": "publish",
                               "retain": "all",
+                              "topic": "test/topic/4",
                               "qos": [
                                 "0",
                                 "1",
                                 "2"
                               ],
-                              "topic": "test/topic/4",
                               "permission": "allow"
                             }
                           ],
@@ -19989,21 +19986,21 @@
                         {
                           "action": "publish",
                           "retain": "true",
+                          "topic": "test/topic/3",
                           "qos": [
                             "1"
                           ],
-                          "topic": "test/topic/3",
                           "permission": "allow"
                         },
                         {
                           "action": "publish",
                           "retain": "all",
+                          "topic": "test/topic/4",
                           "qos": [
                             "0",
                             "1",
                             "2"
                           ],
-                          "topic": "test/topic/4",
                           "permission": "allow"
                         }
                       ],
@@ -20354,7 +20351,7 @@
     },
     "/prometheus": {
       "get": {
-        "description": "Get Prometheus config info",
+        "description": "获取 Prometheus 配置信息",
         "tags": [
           "Monitor"
         ],
@@ -20367,11 +20364,11 @@
                 "example": {
                   "collectors": {
                     "mnesia": "disabled",
-                    "vm_dist": "disabled",
-                    "vm_memory": "disabled",
                     "vm_msacc": "disabled",
+                    "vm_memory": "disabled",
+                    "vm_system_info": "disabled",
                     "vm_statistics": "disabled",
-                    "vm_system_info": "disabled"
+                    "vm_dist": "disabled"
                   },
                   "enable_basic_auth": false,
                   "push_gateway": {
@@ -20400,7 +20397,7 @@
         ]
       },
       "put": {
-        "description": "Update Prometheus config",
+        "description": "更新 Prometheus 配置",
         "tags": [
           "Monitor"
         ],
@@ -20413,11 +20410,11 @@
                 "example": {
                   "collectors": {
                     "mnesia": "disabled",
-                    "vm_dist": "disabled",
-                    "vm_memory": "disabled",
                     "vm_msacc": "disabled",
+                    "vm_memory": "disabled",
+                    "vm_system_info": "disabled",
                     "vm_statistics": "disabled",
-                    "vm_system_info": "disabled"
+                    "vm_dist": "disabled"
                   },
                   "enable_basic_auth": false,
                   "push_gateway": {
@@ -20444,11 +20441,11 @@
                   "value": {
                     "collectors": {
                       "mnesia": "disabled",
-                      "vm_dist": "disabled",
-                      "vm_memory": "disabled",
                       "vm_msacc": "disabled",
+                      "vm_memory": "disabled",
+                      "vm_system_info": "disabled",
                       "vm_statistics": "disabled",
-                      "vm_system_info": "disabled"
+                      "vm_dist": "disabled"
                     },
                     "enable_basic_auth": false,
                     "push_gateway": {
@@ -20471,12 +20468,12 @@
                     },
                     "push_gateway_server": "http://127.0.0.1:9091",
                     "job_name": "${name}/instance/${name}~${host}",
-                    "mnesia_collector": "disabled",
-                    "vm_dist_collector": "disabled",
-                    "vm_memory_collector": "disabled",
                     "vm_msacc_collector": "disabled",
+                    "vm_memory_collector": "disabled",
+                    "vm_system_info_collector": "disabled",
                     "vm_statistics_collector": "disabled",
-                    "vm_system_info_collector": "disabled"
+                    "mnesia_collector": "disabled",
+                    "vm_dist_collector": "disabled"
                   },
                   "summary": "legacy_deprecated_setting"
                 }
@@ -20615,10 +20612,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -20713,8 +20710,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -20853,10 +20850,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -20951,8 +20948,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -21140,8 +21137,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -21231,10 +21228,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -21325,10 +21322,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -21423,8 +21420,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -21612,8 +21609,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -21705,10 +21702,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -21772,6 +21769,7 @@
                         }
                       }
                     ],
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "cacertfile": "/etc/emqx/certs/cacert.pem",
@@ -21783,12 +21781,11 @@
                       ],
                       "fail_if_no_peer_cert": false
                     },
-                    "acceptors": 16,
+                    "max_connections": 1024000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000
+                    "max_conn_rate": 1000
                   },
                   {
                     "name": "ssl-def",
@@ -21827,11 +21824,11 @@
                       }
                     ],
                     "acceptors": 16,
+                    "max_connections": 1024000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000
+                    "max_conn_rate": 1000
                   },
                   {
                     "name": "tcp-def",
@@ -21866,8 +21863,8 @@
                       }
                     ],
                     "acceptors": 16,
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000
+                    "max_connections": 1024000,
+                    "max_conn_rate": 1000
                   },
                   {
                     "name": "dtls-psk",
@@ -21888,6 +21885,7 @@
                         }
                       }
                     ],
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -21901,9 +21899,8 @@
                       "fail_if_no_peer_cert": false,
                       "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000
+                    "max_connections": 1024000,
+                    "max_conn_rate": 1000
                   },
                   {
                     "name": "tcp-with-authn",
@@ -21933,8 +21930,8 @@
                       }
                     ],
                     "acceptors": 16,
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000
+                    "max_connections": 1024000,
+                    "max_conn_rate": 1000
                   }
                 ],
                 "schema": {
@@ -22028,10 +22025,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -22069,6 +22066,7 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "cacertfile": "/etc/emqx/certs/cacert.pem",
@@ -22080,12 +22078,11 @@
                         ],
                         "fail_if_no_peer_cert": false
                       },
-                      "acceptors": 16,
+                      "max_connections": 1024000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -22112,11 +22109,11 @@
                         "fail_if_no_peer_cert": false
                       },
                       "acceptors": 16,
+                      "max_connections": 1024000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -22139,8 +22136,8 @@
                         "active_n": 100
                       },
                       "acceptors": 16,
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000
+                      "max_connections": 1024000,
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple TCP listener example"
                   },
@@ -22149,6 +22146,7 @@
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -22162,9 +22160,8 @@
                         "fail_if_no_peer_cert": false,
                         "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000
+                      "max_connections": 1024000,
+                      "max_conn_rate": 1000
                     },
                     "summary": "A DTLS listener with PSK example"
                   },
@@ -22182,8 +22179,8 @@
                         "user_id_type": "username"
                       },
                       "acceptors": 16,
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000
+                      "max_connections": 1024000,
+                      "max_conn_rate": 1000
                     },
                     "summary": "A TCP listener with authentication example"
                   }
@@ -22287,6 +22284,7 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "cacertfile": "/etc/emqx/certs/cacert.pem",
@@ -22298,12 +22296,11 @@
                       ],
                       "fail_if_no_peer_cert": false
                     },
-                    "acceptors": 16,
+                    "max_connections": 1024000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple DTLS listener example"
                 },
@@ -22330,11 +22327,11 @@
                       "fail_if_no_peer_cert": false
                     },
                     "acceptors": 16,
+                    "max_connections": 1024000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple SSL listener example"
                 },
@@ -22357,8 +22354,8 @@
                       "active_n": 100
                     },
                     "acceptors": 16,
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000
+                    "max_connections": 1024000,
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple TCP listener example"
                 },
@@ -22367,6 +22364,7 @@
                     "name": "dtls-psk",
                     "type": "dtls",
                     "bind": "22214",
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -22380,9 +22378,8 @@
                       "fail_if_no_peer_cert": false,
                       "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000
+                    "max_connections": 1024000,
+                    "max_conn_rate": 1000
                   },
                   "summary": "A DTLS listener with PSK example"
                 },
@@ -22400,8 +22397,8 @@
                       "user_id_type": "username"
                     },
                     "acceptors": 16,
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000
+                    "max_connections": 1024000,
+                    "max_conn_rate": 1000
                   },
                   "summary": "A TCP listener with authentication example"
                 }
@@ -22889,21 +22886,21 @@
                             {
                               "action": "publish",
                               "retain": "true",
+                              "topic": "test/topic/3",
                               "qos": [
                                 "1"
                               ],
-                              "topic": "test/topic/3",
                               "permission": "allow"
                             },
                             {
                               "action": "publish",
                               "retain": "all",
+                              "topic": "test/topic/4",
                               "qos": [
                                 "0",
                                 "1",
                                 "2"
                               ],
-                              "topic": "test/topic/4",
                               "permission": "allow"
                             }
                           ],
@@ -22994,21 +22991,21 @@
                         {
                           "action": "publish",
                           "retain": "true",
+                          "topic": "test/topic/3",
                           "qos": [
                             "1"
                           ],
-                          "topic": "test/topic/3",
                           "permission": "allow"
                         },
                         {
                           "action": "publish",
                           "retain": "all",
+                          "topic": "test/topic/4",
                           "qos": [
                             "0",
                             "1",
                             "2"
                           ],
-                          "topic": "test/topic/4",
                           "permission": "allow"
                         }
                       ],
@@ -23607,8 +23604,8 @@
                     "description": "My example mqtt source",
                     "enable": true,
                     "parameters": {
-                      "qos": 1,
-                      "topic": "remote/topic"
+                      "topic": "remote/topic",
+                      "qos": 1
                     },
                     "connector": "mqtt_connector",
                     "node_status": [
@@ -23666,8 +23663,8 @@
                       "description": "My example mqtt source",
                       "enable": true,
                       "parameters": {
-                        "qos": 1,
-                        "topic": "remote/topic"
+                        "topic": "remote/topic",
+                        "qos": 1
                       },
                       "connector": "mqtt_connector",
                       "node_status": [
@@ -23727,8 +23724,8 @@
                     "description": "My example mqtt source",
                     "enable": true,
                     "parameters": {
-                      "qos": 1,
-                      "topic": "remote/topic"
+                      "topic": "remote/topic",
+                      "qos": 1
                     },
                     "connector": "mqtt_connector",
                     "resource_opts": {
@@ -23848,7 +23845,7 @@
     },
     "/prometheus/data_integration": {
       "get": {
-        "description": "Get Prometheus Metrics for Data Integration",
+        "description": "获取数据集成的 Prometheus 指标",
         "tags": [
           "Monitor"
         ],
@@ -24196,8 +24193,8 @@
                       "description": "My example mqtt source",
                       "enable": true,
                       "parameters": {
-                        "qos": 1,
-                        "topic": "remote/topic"
+                        "topic": "remote/topic",
+                        "qos": 1
                       },
                       "connector": "mqtt_connector",
                       "node_status": [
@@ -24287,8 +24284,8 @@
                       "description": "My example mqtt source",
                       "enable": true,
                       "parameters": {
-                        "qos": 1,
-                        "topic": "remote/topic"
+                        "topic": "remote/topic",
+                        "qos": 1
                       },
                       "connector": "mqtt_connector",
                       "node_status": [
@@ -24368,8 +24365,8 @@
                     "description": "My example mqtt source",
                     "enable": true,
                     "parameters": {
-                      "qos": 1,
-                      "topic": "remote/topic"
+                      "topic": "remote/topic",
+                      "qos": 1
                     },
                     "connector": "mqtt_connector",
                     "resource_opts": {
@@ -24574,10 +24571,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             }
@@ -24593,82 +24590,82 @@
                   "lwm2m_client": {
                     "value": {
                       "recv_oct": 56,
-                      "is_bridge": false,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "disconnected_at": null,
-                      "inflight_cnt": 0,
-                      "mqueue_max": "infinity",
-                      "lifetime": 86400,
-                      "subscriptions_cnt": 0,
+                      "mailbox_len": 0,
                       "expiry_interval": 0,
+                      "subscriptions_cnt": 0,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
                       "keepalive": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "mqueue_len": 0,
-                      "clean_start": true,
-                      "proto_ver": "1.0",
-                      "send_oct": 61,
-                      "subscriptions_max": "infinity",
-                      "heap_size": 4185,
-                      "endpoint_name": "urn:imei:154928475237123",
-                      "inflight_max": "infinity",
-                      "port": 50675,
-                      "recv_pkt": 1,
-                      "send_msg": 0,
-                      "recv_msg": 0,
-                      "mailbox_len": 0,
-                      "awaiting_rel_cnt": 0,
-                      "proto_name": "LwM2M",
-                      "awaiting_rel_max": "infinity",
-                      "send_pkt": 1,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "username": "guest",
                       "mqueue_dropped": 0,
+                      "awaiting_rel_max": "infinity",
+                      "proto_ver": "1.0",
+                      "inflight_max": "infinity",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "proto_name": "LwM2M",
+                      "send_oct": 61,
+                      "recv_pkt": 1,
+                      "heap_size": 4185,
+                      "send_pkt": 1,
+                      "is_bridge": false,
+                      "port": 50675,
+                      "awaiting_rel_cnt": 0,
+                      "mqueue_max": "infinity",
+                      "ip_address": "127.0.0.1",
+                      "clean_start": true,
+                      "mqueue_len": 0,
+                      "lifetime": 86400,
+                      "disconnected_at": null,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "connected": true,
                       "reductions": 72022,
-                      "ip_address": "127.0.0.1",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "recv_cnt": 1
+                      "recv_msg": 0,
+                      "recv_cnt": 1,
+                      "endpoint_name": "urn:imei:154928475237123",
+                      "inflight_cnt": 0,
+                      "send_msg": 0,
+                      "subscriptions_max": "infinity",
+                      "username": "guest"
                     },
                     "summary": "LwM2M client info"
                   },
                   "general_client": {
                     "value": {
                       "recv_oct": 56,
-                      "is_bridge": false,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "disconnected_at": null,
-                      "inflight_cnt": 0,
-                      "mqueue_max": "infinity",
-                      "subscriptions_cnt": 0,
+                      "mailbox_len": 0,
                       "expiry_interval": 0,
+                      "subscriptions_cnt": 0,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
                       "keepalive": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "mqueue_len": 0,
-                      "clean_start": true,
-                      "proto_ver": "1.0",
-                      "send_oct": 61,
-                      "subscriptions_max": "infinity",
-                      "heap_size": 4185,
-                      "inflight_max": "infinity",
-                      "port": 50675,
-                      "recv_pkt": 1,
-                      "send_msg": 0,
-                      "recv_msg": 0,
-                      "mailbox_len": 0,
-                      "awaiting_rel_cnt": 0,
-                      "proto_name": "STOMP",
-                      "awaiting_rel_max": "infinity",
-                      "send_pkt": 1,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "username": "guest",
                       "mqueue_dropped": 0,
+                      "awaiting_rel_max": "infinity",
+                      "proto_ver": "1.0",
+                      "inflight_max": "infinity",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "proto_name": "STOMP",
+                      "send_oct": 61,
+                      "recv_pkt": 1,
+                      "heap_size": 4185,
+                      "send_pkt": 1,
+                      "is_bridge": false,
+                      "port": 50675,
+                      "awaiting_rel_cnt": 0,
+                      "mqueue_max": "infinity",
+                      "ip_address": "127.0.0.1",
+                      "clean_start": true,
+                      "mqueue_len": 0,
+                      "disconnected_at": null,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "connected": true,
                       "reductions": 72022,
-                      "ip_address": "127.0.0.1",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "recv_cnt": 1
+                      "recv_msg": 0,
+                      "recv_cnt": 1,
+                      "inflight_cnt": 0,
+                      "send_msg": 0,
+                      "subscriptions_max": "infinity",
+                      "username": "guest"
                     },
                     "summary": "General client info"
                   }
@@ -24773,10 +24770,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             }
@@ -25195,21 +25192,21 @@
                         {
                           "action": "publish",
                           "retain": "true",
+                          "topic": "test/topic/3",
                           "qos": [
                             "1"
                           ],
-                          "topic": "test/topic/3",
                           "permission": "allow"
                         },
                         {
                           "action": "publish",
                           "retain": "all",
+                          "topic": "test/topic/4",
                           "qos": [
                             "0",
                             "1",
                             "2"
                           ],
-                          "topic": "test/topic/4",
                           "permission": "allow"
                         }
                       ],
@@ -25318,21 +25315,21 @@
                       {
                         "action": "publish",
                         "retain": "true",
+                        "topic": "test/topic/3",
                         "qos": [
                           "1"
                         ],
-                        "topic": "test/topic/3",
                         "permission": "allow"
                       },
                       {
                         "action": "publish",
                         "retain": "all",
+                        "topic": "test/topic/4",
                         "qos": [
                           "0",
                           "1",
                           "2"
                         ],
-                        "topic": "test/topic/4",
                         "permission": "allow"
                       }
                     ],
@@ -26130,10 +26127,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -26181,6 +26178,7 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "cacertfile": "/etc/emqx/certs/cacert.pem",
@@ -26192,12 +26190,11 @@
                         ],
                         "fail_if_no_peer_cert": false
                       },
-                      "acceptors": 16,
+                      "max_connections": 1024000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -26224,11 +26221,11 @@
                         "fail_if_no_peer_cert": false
                       },
                       "acceptors": 16,
+                      "max_connections": 1024000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -26251,8 +26248,8 @@
                         "active_n": 100
                       },
                       "acceptors": 16,
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000
+                      "max_connections": 1024000,
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple TCP listener example"
                   },
@@ -26261,6 +26258,7 @@
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -26274,9 +26272,8 @@
                         "fail_if_no_peer_cert": false,
                         "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000
+                      "max_connections": 1024000,
+                      "max_conn_rate": 1000
                     },
                     "summary": "A DTLS listener with PSK example"
                   },
@@ -26294,8 +26291,8 @@
                         "user_id_type": "username"
                       },
                       "acceptors": 16,
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000
+                      "max_connections": 1024000,
+                      "max_conn_rate": 1000
                     },
                     "summary": "A TCP listener with authentication example"
                   }
@@ -26394,10 +26391,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -26445,6 +26442,7 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "cacertfile": "/etc/emqx/certs/cacert.pem",
@@ -26456,12 +26454,11 @@
                         ],
                         "fail_if_no_peer_cert": false
                       },
-                      "acceptors": 16,
+                      "max_connections": 1024000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -26488,11 +26485,11 @@
                         "fail_if_no_peer_cert": false
                       },
                       "acceptors": 16,
+                      "max_connections": 1024000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -26515,8 +26512,8 @@
                         "active_n": 100
                       },
                       "acceptors": 16,
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000
+                      "max_connections": 1024000,
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple TCP listener example"
                   },
@@ -26525,6 +26522,7 @@
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -26538,9 +26536,8 @@
                         "fail_if_no_peer_cert": false,
                         "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000
+                      "max_connections": 1024000,
+                      "max_conn_rate": 1000
                     },
                     "summary": "A DTLS listener with PSK example"
                   },
@@ -26558,8 +26555,8 @@
                         "user_id_type": "username"
                       },
                       "acceptors": 16,
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000
+                      "max_connections": 1024000,
+                      "max_conn_rate": 1000
                     },
                     "summary": "A TCP listener with authentication example"
                   }
@@ -26663,6 +26660,7 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "cacertfile": "/etc/emqx/certs/cacert.pem",
@@ -26674,12 +26672,11 @@
                       ],
                       "fail_if_no_peer_cert": false
                     },
-                    "acceptors": 16,
+                    "max_connections": 1024000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple DTLS listener example"
                 },
@@ -26706,11 +26703,11 @@
                       "fail_if_no_peer_cert": false
                     },
                     "acceptors": 16,
+                    "max_connections": 1024000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple SSL listener example"
                 },
@@ -26733,8 +26730,8 @@
                       "active_n": 100
                     },
                     "acceptors": 16,
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000
+                    "max_connections": 1024000,
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple TCP listener example"
                 },
@@ -26743,6 +26740,7 @@
                     "name": "dtls-psk",
                     "type": "dtls",
                     "bind": "22214",
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -26756,9 +26754,8 @@
                       "fail_if_no_peer_cert": false,
                       "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000
+                    "max_connections": 1024000,
+                    "max_conn_rate": 1000
                   },
                   "summary": "A DTLS listener with PSK example"
                 },
@@ -26776,8 +26773,8 @@
                       "user_id_type": "username"
                     },
                     "acceptors": 16,
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000
+                    "max_connections": 1024000,
+                    "max_conn_rate": 1000
                   },
                   "summary": "A TCP listener with authentication example"
                 }
@@ -26830,10 +26827,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -26982,10 +26979,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -27267,8 +27264,8 @@
                         "rate_max": 0.0
                       },
                       "resource_metrics": {
-                        "success": 0,
                         "matched": 0,
+                        "success": 0,
                         "failed": 0,
                         "rate": 0.0,
                         "rate_last5m": 0.0,
@@ -27293,8 +27290,8 @@
                         {
                           "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "success": 0,
                             "matched": 0,
+                            "success": 0,
                             "failed": 0,
                             "rate": 0.0,
                             "rate_last5m": 0.0,
@@ -27535,6 +27532,7 @@
                         "current_connections": 0
                       }
                     ],
+                    "max_connections": 1024000,
                     "listeners": [
                       {
                         "id": "lwm2m:udp:default",
@@ -27543,7 +27541,6 @@
                         "type": "udp"
                       }
                     ],
-                    "max_connections": 1024000,
                     "created_at": "2021-12-08T14:41:26.171+08:00",
                     "current_connections": 0
                   },
@@ -27558,6 +27555,7 @@
                         "current_connections": 0
                       }
                     ],
+                    "max_connections": 1024000,
                     "listeners": [
                       {
                         "id": "mqttsn:udp:default",
@@ -27566,7 +27564,6 @@
                         "type": "udp"
                       }
                     ],
-                    "max_connections": 1024000,
                     "created_at": "2021-12-08T14:41:45.071+08:00",
                     "current_connections": 0,
                     "stopped_at": "2021-12-08T14:56:35.576+08:00"
@@ -27583,6 +27580,7 @@
                         "current_connections": 0
                       }
                     ],
+                    "max_connections": 1024000,
                     "listeners": [
                       {
                         "id": "stomp:tcp:default",
@@ -27591,7 +27589,6 @@
                         "type": "tcp"
                       }
                     ],
-                    "max_connections": 1024000,
                     "created_at": "2021-12-08T14:42:15.272+08:00",
                     "current_connections": 0
                   }
@@ -27810,10 +27807,10 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "health_check_interval": 15000,
                       "query_mode": "async",
-                      "health_check_interval": 15000
+                      "max_buffer_bytes": 104857600
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -27837,9 +27834,21 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
+                      "health_check_interval": "15s",
                       "query_mode": "sync",
-                      "health_check_interval": "15s"
+                      "max_buffer_bytes": 104857600
+                    },
+                    "ingress": {
+                      "local": {
+                        "retain": "${retain}",
+                        "payload": "${payload}",
+                        "topic": "from_aws/${topic}",
+                        "qos": "${qos}"
+                      },
+                      "remote": {
+                        "topic": "aws/#",
+                        "qos": 1
+                      }
                     },
                     "egress": {
                       "local": {
@@ -27848,20 +27857,8 @@
                       "remote": {
                         "retain": false,
                         "payload": "${payload}",
-                        "qos": "${qos}",
-                        "topic": "from_emqx/${topic}"
-                      }
-                    },
-                    "ingress": {
-                      "local": {
-                        "retain": "${retain}",
-                        "payload": "${payload}",
-                        "qos": "${qos}",
-                        "topic": "from_aws/${topic}"
-                      },
-                      "remote": {
-                        "qos": 1,
-                        "topic": "aws/#"
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
                       }
                     }
                   },
@@ -27969,7 +27966,7 @@
     },
     "/prometheus/stats": {
       "get": {
-        "description": "Get Prometheus Data",
+        "description": "获取 Prometheus 数据",
         "tags": [
           "Monitor"
         ],
@@ -28150,8 +28147,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -28415,8 +28412,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -29370,8 +29367,8 @@
                         "rate_max": 0.0
                       },
                       "resource_metrics": {
-                        "success": 0,
                         "matched": 0,
+                        "success": 0,
                         "failed": 0,
                         "rate": 0.0,
                         "rate_last5m": 0.0,
@@ -29395,8 +29392,8 @@
                         {
                           "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "success": 0,
                             "matched": 0,
+                            "success": 0,
                             "failed": 0,
                             "rate": 0.0,
                             "rate_last5m": 0.0,
@@ -29515,8 +29512,8 @@
                     "description": "My example mqtt source",
                     "enable": true,
                     "parameters": {
-                      "qos": 1,
-                      "topic": "remote/topic"
+                      "topic": "remote/topic",
+                      "qos": 1
                     },
                     "connector": "mqtt_connector",
                     "resource_opts": {
@@ -29688,11 +29685,11 @@
                     "active_n": 100
                   },
                   "acceptors": 16,
+                  "proxy_protocol": false,
+                  "max_connections": 204800,
                   "access_rules": [
                     "allow all"
                   ],
-                  "max_connections": 204800,
-                  "proxy_protocol": false,
                   "proxy_protocol_timeout": "3s",
                   "mountpoint": "/",
                   "current_connections": 10240
@@ -29762,11 +29759,11 @@
                   "active_n": 100
                 },
                 "acceptors": 16,
+                "proxy_protocol": false,
+                "max_connections": 204800,
                 "access_rules": [
                   "allow all"
                 ],
-                "max_connections": 204800,
-                "proxy_protocol": false,
                 "proxy_protocol_timeout": "3s",
                 "mountpoint": "/",
                 "current_connections": 10240
@@ -30118,10 +30115,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -30206,8 +30203,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -30346,10 +30343,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -30434,8 +30431,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -30623,8 +30620,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -30714,10 +30711,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -30798,10 +30795,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -30886,8 +30883,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -31075,8 +31072,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -31731,8 +31728,8 @@
                     ],
                     "resource_opts": {
                       "worker_pool_size": 16,
-                      "query_mode": "async",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "query_mode": "async"
                     }
                   },
                   {
@@ -31744,8 +31741,8 @@
                     "parameters": {
                       "retain": false,
                       "payload": "${.payload}",
-                      "qos": 2,
-                      "topic": "remote/topic"
+                      "topic": "remote/topic",
+                      "qos": 2
                     },
                     "connector": "mqtt_connector",
                     "node_status": [
@@ -31819,8 +31816,8 @@
                       ],
                       "resource_opts": {
                         "worker_pool_size": 16,
-                        "query_mode": "async",
-                        "health_check_interval": "15s"
+                        "health_check_interval": "15s",
+                        "query_mode": "async"
                       }
                     },
                     "summary": "HTTP Action"
@@ -31835,8 +31832,8 @@
                       "parameters": {
                         "retain": false,
                         "payload": "${.payload}",
-                        "qos": 2,
-                        "topic": "remote/topic"
+                        "topic": "remote/topic",
+                        "qos": 2
                       },
                       "connector": "mqtt_connector",
                       "node_status": [
@@ -31906,8 +31903,8 @@
                     "connector": "my_http_connector",
                     "resource_opts": {
                       "worker_pool_size": 16,
-                      "query_mode": "async",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "query_mode": "async"
                     }
                   },
                   "summary": "HTTP Action"
@@ -31921,8 +31918,8 @@
                     "parameters": {
                       "retain": false,
                       "payload": "${.payload}",
-                      "qos": 2,
-                      "topic": "remote/topic"
+                      "topic": "remote/topic",
+                      "qos": 2
                     },
                     "connector": "mqtt_connector",
                     "resource_opts": {
@@ -32045,7 +32042,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "description": "Bad Topic Name"
+                      "description": "错误的主题名称"
                     }
                   },
                   "type": "object"
@@ -32067,7 +32064,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "description": "Not found delayed message for this topic"
+                      "description": "此主题下没有找到延迟消息"
                     }
                   },
                   "type": "object"
@@ -32348,7 +32345,7 @@
     },
     "/cluster/{node}/invite_async": {
       "put": {
-        "description": "Send a join invitation to a node to join the cluster but do not wait for the join result. Join status can be retrieved with `GET api/<version>/invitation`",
+        "description": "向一个节点发送加入集群的邀请，但不等待加入结果。加入状态可以通过 `GET api/<version>/invitation` 获取。",
         "tags": [
           "Cluster"
         ],
@@ -32683,10 +32680,10 @@
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
-                        "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
+                        "health_check_interval": 15000,
                         "query_mode": "async",
-                        "health_check_interval": 15000
+                        "max_buffer_bytes": 104857600
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -32710,9 +32707,21 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "max_buffer_bytes": 104857600,
+                        "health_check_interval": "15s",
                         "query_mode": "sync",
-                        "health_check_interval": "15s"
+                        "max_buffer_bytes": 104857600
+                      },
+                      "ingress": {
+                        "local": {
+                          "retain": "${retain}",
+                          "payload": "${payload}",
+                          "topic": "from_aws/${topic}",
+                          "qos": "${qos}"
+                        },
+                        "remote": {
+                          "topic": "aws/#",
+                          "qos": 1
+                        }
                       },
                       "egress": {
                         "local": {
@@ -32721,20 +32730,8 @@
                         "remote": {
                           "retain": false,
                           "payload": "${payload}",
-                          "qos": "${qos}",
-                          "topic": "from_emqx/${topic}"
-                        }
-                      },
-                      "ingress": {
-                        "local": {
-                          "retain": "${retain}",
-                          "payload": "${payload}",
-                          "qos": "${qos}",
-                          "topic": "from_aws/${topic}"
-                        },
-                        "remote": {
-                          "qos": 1,
-                          "topic": "aws/#"
+                          "topic": "from_emqx/${topic}",
+                          "qos": "${qos}"
                         }
                       }
                     },
@@ -32828,10 +32825,10 @@
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
-                        "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
+                        "health_check_interval": 15000,
                         "query_mode": "async",
-                        "health_check_interval": 15000
+                        "max_buffer_bytes": 104857600
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -32855,9 +32852,21 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "max_buffer_bytes": 104857600,
+                        "health_check_interval": "15s",
                         "query_mode": "sync",
-                        "health_check_interval": "15s"
+                        "max_buffer_bytes": 104857600
+                      },
+                      "ingress": {
+                        "local": {
+                          "retain": "${retain}",
+                          "payload": "${payload}",
+                          "topic": "from_aws/${topic}",
+                          "qos": "${qos}"
+                        },
+                        "remote": {
+                          "topic": "aws/#",
+                          "qos": 1
+                        }
                       },
                       "egress": {
                         "local": {
@@ -32866,20 +32875,8 @@
                         "remote": {
                           "retain": false,
                           "payload": "${payload}",
-                          "qos": "${qos}",
-                          "topic": "from_emqx/${topic}"
-                        }
-                      },
-                      "ingress": {
-                        "local": {
-                          "retain": "${retain}",
-                          "payload": "${payload}",
-                          "qos": "${qos}",
-                          "topic": "from_aws/${topic}"
-                        },
-                        "remote": {
-                          "qos": 1,
-                          "topic": "aws/#"
+                          "topic": "from_emqx/${topic}",
+                          "qos": "${qos}"
                         }
                       }
                     },
@@ -32964,10 +32961,10 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "health_check_interval": 15000,
                       "query_mode": "async",
-                      "health_check_interval": 15000
+                      "max_buffer_bytes": 104857600
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -32989,9 +32986,21 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
+                      "health_check_interval": "15s",
                       "query_mode": "sync",
-                      "health_check_interval": "15s"
+                      "max_buffer_bytes": 104857600
+                    },
+                    "ingress": {
+                      "local": {
+                        "retain": "${retain}",
+                        "payload": "${payload}",
+                        "topic": "from_aws/${topic}",
+                        "qos": "${qos}"
+                      },
+                      "remote": {
+                        "topic": "aws/#",
+                        "qos": 1
+                      }
                     },
                     "egress": {
                       "local": {
@@ -33000,20 +33009,8 @@
                       "remote": {
                         "retain": false,
                         "payload": "${payload}",
-                        "qos": "${qos}",
-                        "topic": "from_emqx/${topic}"
-                      }
-                    },
-                    "ingress": {
-                      "local": {
-                        "retain": "${retain}",
-                        "payload": "${payload}",
-                        "qos": "${qos}",
-                        "topic": "from_aws/${topic}"
-                      },
-                      "remote": {
-                        "qos": 1,
-                        "topic": "aws/#"
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
                       }
                     }
                   },
@@ -33306,10 +33303,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             }
@@ -33326,8 +33323,8 @@
                     "value": [
                       {
                         "nl": 0,
-                        "qos": 1,
                         "topic": "test/topic",
+                        "qos": 1,
                         "rap": 0,
                         "rh": 0
                       }
@@ -33428,10 +33425,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             }
@@ -33447,8 +33444,8 @@
                   "general_subscription": {
                     "value": {
                       "nl": 0,
-                      "qos": 1,
                       "topic": "test/topic",
+                      "qos": 1,
                       "rap": 0,
                       "rh": 0
                     },
@@ -33457,8 +33454,8 @@
                   "stomp_subscription": {
                     "value": {
                       "nl": 0,
-                      "qos": 1,
                       "topic": "stomp/topic",
+                      "qos": 1,
                       "rap": 0,
                       "rh": 0,
                       "sub_props": {
@@ -33527,8 +33524,8 @@
                 "general_subscription": {
                   "value": {
                     "nl": 0,
-                    "qos": 1,
                     "topic": "test/topic",
+                    "qos": 1,
                     "rap": 0,
                     "rh": 0
                   },
@@ -33537,8 +33534,8 @@
                 "stomp_subscription": {
                   "value": {
                     "nl": 0,
-                    "qos": 1,
                     "topic": "stomp/topic",
+                    "qos": 1,
                     "rap": 0,
                     "rh": 0,
                     "sub_props": {
@@ -33663,7 +33660,7 @@
           {
             "in": "query",
             "name": "topic",
-            "description": "Topic filter, supports wildcards, omit this to match all messages.",
+            "description": "主题过滤器，支持通配符，省略此项以匹配所有消息。",
             "required": false,
             "schema": {
               "type": "string"
@@ -33749,7 +33746,7 @@
         ]
       },
       "delete": {
-        "description": "Delete all retained messages",
+        "description": "删除所有保留消息",
         "tags": [
           "Retainer"
         ],
@@ -33967,21 +33964,21 @@
                         {
                           "action": "publish",
                           "retain": "true",
+                          "topic": "test/topic/3",
                           "qos": [
                             "1"
                           ],
-                          "topic": "test/topic/3",
                           "permission": "allow"
                         },
                         {
                           "action": "publish",
                           "retain": "all",
+                          "topic": "test/topic/4",
                           "qos": [
                             "0",
                             "1",
                             "2"
                           ],
-                          "topic": "test/topic/4",
                           "permission": "allow"
                         }
                       ],
@@ -34090,21 +34087,21 @@
                       {
                         "action": "publish",
                         "retain": "true",
+                        "topic": "test/topic/3",
                         "qos": [
                           "1"
                         ],
-                        "topic": "test/topic/3",
                         "permission": "allow"
                       },
                       {
                         "action": "publish",
                         "retain": "all",
+                        "topic": "test/topic/4",
                         "qos": [
                           "0",
                           "1",
                           "2"
                         ],
-                        "topic": "test/topic/4",
                         "permission": "allow"
                       }
                     ],
@@ -34594,10 +34591,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -34720,10 +34717,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -34870,10 +34867,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -35032,8 +35029,8 @@
                   },
                   {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -35197,8 +35194,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -35388,8 +35385,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -35948,8 +35945,8 @@
                     "connector": "my_http_connector",
                     "resource_opts": {
                       "worker_pool_size": 16,
-                      "query_mode": "async",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "query_mode": "async"
                     }
                   },
                   "summary": "HTTP Action"
@@ -35963,8 +35960,8 @@
                     "parameters": {
                       "retain": false,
                       "payload": "${.payload}",
-                      "qos": 2,
-                      "topic": "remote/topic"
+                      "topic": "remote/topic",
+                      "qos": 2
                     },
                     "connector": "mqtt_connector",
                     "resource_opts": {
@@ -36176,7 +36173,7 @@
     },
     "/prometheus/auth": {
       "get": {
-        "description": "Get Prometheus Metrics for AuthN, AuthZ and Banned",
+        "description": "获取 AuthN、AuthZ 和 Banned 的 Prometheus 指标",
         "tags": [
           "Monitor"
         ],
@@ -36622,10 +36619,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             }
@@ -37346,10 +37343,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -37373,8 +37370,8 @@
                           "name": "default",
                           "type": "udp",
                           "bind": "5683",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000
+                          "max_connections": 1024000,
+                          "max_conn_rate": 1000
                         }
                       ],
                       "idle_timeout": "30s",
@@ -37402,8 +37399,8 @@
                           "name": "default",
                           "type": "tcp",
                           "bind": "7993",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000
+                          "max_connections": 1024000,
+                          "max_conn_rate": 1000
                         }
                       ],
                       "idle_timeout": "30s",
@@ -37422,8 +37419,8 @@
                           "name": "default",
                           "type": "tcp",
                           "bind": "7325",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000
+                          "max_connections": 1024000,
+                          "max_conn_rate": 1000
                         }
                       ],
                       "mountpoint": "gbt32960/${clientid}",
@@ -37442,8 +37439,8 @@
                           "name": "default",
                           "type": "udp",
                           "bind": "5783",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000
+                          "max_connections": 1024000,
+                          "max_conn_rate": 1000
                         }
                       ],
                       "idle_timeout": "30s",
@@ -37495,8 +37492,8 @@
                           "name": "default",
                           "type": "udp",
                           "bind": "1884",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000
+                          "max_connections": 1024000,
+                          "max_conn_rate": 1000
                         }
                       ],
                       "idle_timeout": "30s",
@@ -37548,8 +37545,8 @@
                           "name": "default",
                           "type": "tcp",
                           "bind": "61613",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000
+                          "max_connections": 1024000,
+                          "max_conn_rate": 1000
                         }
                       ],
                       "idle_timeout": "30s",
@@ -37565,16 +37562,16 @@
                       "$ref": "#/components/schemas/emqx_gateway_api.exproto"
                     },
                     {
-                      "$ref": "#/components/schemas/emqx_gateway_api.stomp"
+                      "$ref": "#/components/schemas/emqx_gateway_api.lwm2m"
                     },
                     {
                       "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
                     },
                     {
-                      "$ref": "#/components/schemas/emqx_gateway_api.lwm2m"
+                      "$ref": "#/components/schemas/emqx_gateway_api.coap"
                     },
                     {
-                      "$ref": "#/components/schemas/emqx_gateway_api.coap"
+                      "$ref": "#/components/schemas/emqx_gateway_api.stomp"
                     }
                   ]
                 }
@@ -37628,10 +37625,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -37822,31 +37819,31 @@
                     "$ref": "#/components/schemas/emqx_gateway_api.update_exproto"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.update_stomp"
+                    "$ref": "#/components/schemas/emqx_gateway_api.update_lwm2m"
                   },
                   {
                     "$ref": "#/components/schemas/emqx_gateway_api.update_mqttsn"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.update_lwm2m"
+                    "$ref": "#/components/schemas/emqx_gateway_api.update_coap"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.update_coap"
+                    "$ref": "#/components/schemas/emqx_gateway_api.update_stomp"
                   },
                   {
                     "$ref": "#/components/schemas/emqx_gateway_api.exproto"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.stomp"
+                    "$ref": "#/components/schemas/emqx_gateway_api.lwm2m"
                   },
                   {
                     "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.lwm2m"
+                    "$ref": "#/components/schemas/emqx_gateway_api.coap"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.coap"
+                    "$ref": "#/components/schemas/emqx_gateway_api.stomp"
                   }
                 ]
               }
@@ -37941,8 +37938,8 @@
                       ],
                       "resource_opts": {
                         "worker_pool_size": 16,
-                        "query_mode": "async",
-                        "health_check_interval": "15s"
+                        "health_check_interval": "15s",
+                        "query_mode": "async"
                       }
                     },
                     "summary": "HTTP Action"
@@ -37957,8 +37954,8 @@
                       "parameters": {
                         "retain": false,
                         "payload": "${.payload}",
-                        "qos": 2,
-                        "topic": "remote/topic"
+                        "topic": "remote/topic",
+                        "qos": 2
                       },
                       "connector": "mqtt_connector",
                       "node_status": [
@@ -38064,8 +38061,8 @@
                       ],
                       "resource_opts": {
                         "worker_pool_size": 16,
-                        "query_mode": "async",
-                        "health_check_interval": "15s"
+                        "health_check_interval": "15s",
+                        "query_mode": "async"
                       }
                     },
                     "summary": "HTTP Action"
@@ -38080,8 +38077,8 @@
                       "parameters": {
                         "retain": false,
                         "payload": "${.payload}",
-                        "qos": 2,
-                        "topic": "remote/topic"
+                        "topic": "remote/topic",
+                        "qos": 2
                       },
                       "connector": "mqtt_connector",
                       "node_status": [
@@ -38171,8 +38168,8 @@
                     "connector": "my_http_connector",
                     "resource_opts": {
                       "worker_pool_size": 16,
-                      "query_mode": "async",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "query_mode": "async"
                     }
                   },
                   "summary": "HTTP Action"
@@ -38184,8 +38181,8 @@
                     "parameters": {
                       "retain": false,
                       "payload": "${.payload}",
-                      "qos": 2,
-                      "topic": "remote/topic"
+                      "topic": "remote/topic",
+                      "qos": 2
                     },
                     "connector": "mqtt_connector",
                     "resource_opts": {
@@ -38632,10 +38629,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -41116,7 +41113,7 @@
     },
     "/cluster/invitation": {
       "get": {
-        "description": "Get the execution status of all asynchronous invite status per node",
+        "description": "获取每个节点所有异步邀请状态的执行状态",
         "tags": [
           "Cluster"
         ],
@@ -41666,10 +41663,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -41815,10 +41812,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -41966,11 +41963,11 @@
                     "active_n": 100
                   },
                   "acceptors": 16,
+                  "proxy_protocol": false,
+                  "max_connections": 204800,
                   "access_rules": [
                     "allow all"
                   ],
-                  "max_connections": 204800,
-                  "proxy_protocol": false,
                   "proxy_protocol_timeout": "3s",
                   "mountpoint": "/",
                   "current_connections": 10240
@@ -42061,11 +42058,11 @@
                     "active_n": 100
                   },
                   "acceptors": 16,
+                  "proxy_protocol": false,
+                  "max_connections": 204800,
                   "access_rules": [
                     "allow all"
                   ],
-                  "max_connections": 204800,
-                  "proxy_protocol": false,
                   "proxy_protocol_timeout": "3s",
                   "mountpoint": "/",
                   "current_connections": 10240
@@ -42157,11 +42154,11 @@
                   "active_n": 100
                 },
                 "acceptors": 16,
+                "proxy_protocol": false,
+                "max_connections": 204800,
                 "access_rules": [
                   "allow all"
                 ],
-                "max_connections": 204800,
-                "proxy_protocol": false,
                 "proxy_protocol_timeout": "3s",
                 "mountpoint": "/",
                 "current_connections": 10240
@@ -42356,10 +42353,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             }
@@ -42724,10 +42721,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -42840,10 +42837,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -42980,10 +42977,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -43076,10 +43073,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -43242,10 +43239,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -43381,10 +43378,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -44220,10 +44217,10 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "health_check_interval": 15000,
                       "query_mode": "async",
-                      "health_check_interval": 15000
+                      "max_buffer_bytes": 104857600
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -44244,9 +44241,21 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
+                      "health_check_interval": "15s",
                       "query_mode": "sync",
-                      "health_check_interval": "15s"
+                      "max_buffer_bytes": 104857600
+                    },
+                    "ingress": {
+                      "local": {
+                        "retain": "${retain}",
+                        "payload": "${payload}",
+                        "topic": "from_aws/${topic}",
+                        "qos": "${qos}"
+                      },
+                      "remote": {
+                        "topic": "aws/#",
+                        "qos": 1
+                      }
                     },
                     "egress": {
                       "local": {
@@ -44255,20 +44264,8 @@
                       "remote": {
                         "retain": false,
                         "payload": "${payload}",
-                        "qos": "${qos}",
-                        "topic": "from_emqx/${topic}"
-                      }
-                    },
-                    "ingress": {
-                      "local": {
-                        "retain": "${retain}",
-                        "payload": "${payload}",
-                        "qos": "${qos}",
-                        "topic": "from_aws/${topic}"
-                      },
-                      "remote": {
-                        "qos": 1,
-                        "topic": "aws/#"
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
                       }
                     }
                   }
@@ -44330,10 +44327,10 @@
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
-                        "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
+                        "health_check_interval": 15000,
                         "query_mode": "async",
-                        "health_check_interval": 15000
+                        "max_buffer_bytes": 104857600
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -44357,9 +44354,21 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "max_buffer_bytes": 104857600,
+                        "health_check_interval": "15s",
                         "query_mode": "sync",
-                        "health_check_interval": "15s"
+                        "max_buffer_bytes": 104857600
+                      },
+                      "ingress": {
+                        "local": {
+                          "retain": "${retain}",
+                          "payload": "${payload}",
+                          "topic": "from_aws/${topic}",
+                          "qos": "${qos}"
+                        },
+                        "remote": {
+                          "topic": "aws/#",
+                          "qos": 1
+                        }
                       },
                       "egress": {
                         "local": {
@@ -44368,20 +44377,8 @@
                         "remote": {
                           "retain": false,
                           "payload": "${payload}",
-                          "qos": "${qos}",
-                          "topic": "from_emqx/${topic}"
-                        }
-                      },
-                      "ingress": {
-                        "local": {
-                          "retain": "${retain}",
-                          "payload": "${payload}",
-                          "qos": "${qos}",
-                          "topic": "from_aws/${topic}"
-                        },
-                        "remote": {
-                          "qos": 1,
-                          "topic": "aws/#"
+                          "topic": "from_emqx/${topic}",
+                          "qos": "${qos}"
                         }
                       }
                     },
@@ -44446,10 +44443,10 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "health_check_interval": 15000,
                       "query_mode": "async",
-                      "health_check_interval": 15000
+                      "max_buffer_bytes": 104857600
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -44473,9 +44470,21 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
+                      "health_check_interval": "15s",
                       "query_mode": "sync",
-                      "health_check_interval": "15s"
+                      "max_buffer_bytes": 104857600
+                    },
+                    "ingress": {
+                      "local": {
+                        "retain": "${retain}",
+                        "payload": "${payload}",
+                        "topic": "from_aws/${topic}",
+                        "qos": "${qos}"
+                      },
+                      "remote": {
+                        "topic": "aws/#",
+                        "qos": 1
+                      }
                     },
                     "egress": {
                       "local": {
@@ -44484,20 +44493,8 @@
                       "remote": {
                         "retain": false,
                         "payload": "${payload}",
-                        "qos": "${qos}",
-                        "topic": "from_emqx/${topic}"
-                      }
-                    },
-                    "ingress": {
-                      "local": {
-                        "retain": "${retain}",
-                        "payload": "${payload}",
-                        "qos": "${qos}",
-                        "topic": "from_aws/${topic}"
-                      },
-                      "remote": {
-                        "qos": 1,
-                        "topic": "aws/#"
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
                       }
                     }
                   },
@@ -44782,21 +44779,21 @@
                         {
                           "action": "publish",
                           "retain": "true",
+                          "topic": "test/topic/3",
                           "qos": [
                             "1"
                           ],
-                          "topic": "test/topic/3",
                           "permission": "allow"
                         },
                         {
                           "action": "publish",
                           "retain": "all",
+                          "topic": "test/topic/4",
                           "qos": [
                             "0",
                             "1",
                             "2"
                           ],
-                          "topic": "test/topic/4",
                           "permission": "allow"
                         }
                       ]
@@ -44898,21 +44895,21 @@
                       {
                         "action": "publish",
                         "retain": "true",
+                        "topic": "test/topic/3",
                         "qos": [
                           "1"
                         ],
-                        "topic": "test/topic/3",
                         "permission": "allow"
                       },
                       {
                         "action": "publish",
                         "retain": "all",
+                        "topic": "test/topic/4",
                         "qos": [
                           "0",
                           "1",
                           "2"
                         ],
-                        "topic": "test/topic/4",
                         "permission": "allow"
                       }
                     ]
