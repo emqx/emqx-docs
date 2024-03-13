@@ -147,7 +147,7 @@ Configure the following fields for the general settings of the console log handl
 
 - **Queue Length before Entering Sync Mode**: Set the number limit of buffered log events. If the message queue grows larger than the set value, the handler starts handling log events synchronously, which means that the client process sending the event must wait for a response. It is set to `100` by default. 
 
-- **Queue Length before Entering Drop Mode**: Set the number limit of buffered log events. If message queue grous larger than the set value, the handler starts to drop new log events. It is set to `3000` by default.
+- **Queue Length before Entering Drop Mode**: Set the number limit of buffered log events. If message queue grows larger than the set value, the handler starts to drop new log events. It is set to `3000` by default.
 
 - **Flush Threshold**: Set the number limit of buffered log events. The handler starts to discard the buffered log messages. It is set to `8000` by default.
 
