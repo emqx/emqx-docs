@@ -46,7 +46,7 @@ When encoding data from MQTT messages which are JSON-encoded, you also need to d
 schema_encode(SchemaName, json_decode(Map)) -> Bytes
 ```
 
-When checking if JSON data can be validated against the JSON schema before encoding or after decoding.
+When checking if JSON data can be validated against the JSON schema before encoding or after decoding, use the following schema validation example:
 
 ```erlang
 schema_check(SchemaName, Map | Bytes) -> Boolean

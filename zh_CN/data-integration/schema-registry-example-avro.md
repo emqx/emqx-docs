@@ -20,20 +20,21 @@
 
    - **Schema**:
 
-     ```protobuf
+     ```json
      {
-     "type":"record",
-     "fields":[
-         {"name":"name", "type":"string"},
-         {"name":"favorite_number", "type":["int", "null"]},
-         {"name":"favorite_color", "type":["string", "null"]}
-     ]
+       "type":"record",
+       "name": "myrecord1",
+       "fields":[
+           {"name":"name", "type":"string"},
+           {"name":"favorite_number", "type":["int", "null"]},
+           {"name":"favorite_color", "type":["string", "null"]}
+       ]
      }
      ```
 
 3. 点击**创建**。
 
-<img src="./assets/avro_create1.png" alt="avro_create1" style="zoom:50%;" />
+<img src="./assets/avro_create1.png" alt="avro_create1"  />
 
 ### 创建规则
 
