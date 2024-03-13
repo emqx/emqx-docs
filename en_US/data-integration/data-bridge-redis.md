@@ -160,7 +160,7 @@ You need to create 2 separate Redis Sinks for the messaging caching and statisti
 
      Each time the command is executed, the corresponding counter is incremented by 1.
 
-9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md).
+9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
 10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Redis server.
 
