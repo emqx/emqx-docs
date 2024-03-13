@@ -240,7 +240,7 @@ Now you have now successfully created the GCP Pub/Sub Consumer Source, but the m
 
 ### Add Republish Action to the Rule
 
-This section demonstrates how to add a Republish action to the rule for forwarding the message consumed from the GCP Pub/Sub source and publishing to the EMQX topic `t/1`.
+This section demonstrates how to add a Republish action to the rule for forwarding the message consumed from the GCP Pub/Sub Consumer Source and publishing to the EMQX topic `t/1`.
 
 1. Select the **Action Output** tab on the right side of the page, click the **Add Action** button, and select the `Republish` action from the **Type of Action** dropdown list.
 
