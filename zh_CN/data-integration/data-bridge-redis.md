@@ -117,20 +117,20 @@ OK
 
 6. 从**连接器**下拉框中选择刚刚创建的 `my_redis`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
 
-8. 配置 **Redis Command 模板**：使用 Redis [HSET](https://redis.io/commands/hset/) 命令与 hash 数据结构存储消息，数据格式以 `clientid` 为 key，存储 `username`、`payload` 和`timestamp` 等字段。为了便于与 Redis 中其他 key 区分，我们使用 `emqx_messages` 前缀作为 key 的命名空间并用 `:` 分割:
+8. 配置 **Redis 命令模板**：使用 Redis [HSET](https://redis.io/commands/hset/) 命令与 hash 数据结构存储消息，数据格式以 `clientid` 为 key，存储 `username`、`payload` 和`timestamp` 等字段。为了便于与 Redis 中其他 key 区分，我们使用 `emqx_messages` 前缀作为 key 的命名空间并用 `:` 分割:
 
    ```bash
    # HSET key filed value [field value...]
    HSET emqx_messages:${clientid} username ${username} payload ${payload} timestamp ${timestamp}
    ```
 
-9. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
+9. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
 
 10. 点击**创建**前，您可点击**测试连接**按钮确保 Sink 能连接到 Redis 服务器。
 
-11. 点击**添加**按钮完成 Sink 创建，新建的 Sink 将被添加到**动作输出**列表中。
+11. 点击**创建**按钮完成 Sink 创建，新建的 Sink 将被添加到**动作输出**列表中。
 
-12. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中，**状态**为**已连接**。
+12. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中。
 
 现在您已成功创建了通过 Redis Sink 将数据转发到 Redis 的规则，同时在**规则**页面的**动作(Sink)** 标签页看到新建的 Redis Sink。
 

@@ -15,7 +15,7 @@ Apache IoTDB 数据集成是 EMQX 企业版功能。EMQX 企业版可以为您�
 
 ## 工作原理
 
-Apache IoTDB 的数据集成是 EMQX 中的一个开箱即用的功能，在基于 MQTT 的原始时序数据与 IoTDB 强大数据存储能力之间架起桥梁。通过内置的[规则引擎](https://chat.openai.com/c/rules.md)组件，该集成简化了从 EMQX 到 IoTDB 的数据摄取过程，以便存储和查询，无需复杂的编码。
+Apache IoTDB 的数据集成是 EMQX 中的一个开箱即用的功能，在基于 MQTT 的原始时序数据与 IoTDB 强大数据存储能力之间架起桥梁。通过内置的[规则引擎](./rules.md)组件，该集成简化了从 EMQX 到 IoTDB 的数据摄取过程，以便存储和查询，无需复杂的编码。
 
 下图展示了 EMQX 与 IoTDB 之间数据集成的典型架构。<!-- 这张图片需要修改为特定于IoTDB的-->
 
