@@ -158,69 +158,71 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 10. Configure the **Write Data** to specify the ways to generate IoTDB data from MQTT messages. Due to historical reasons, you can select either of the following methods:
 
-        - **Payload-Described**
+      - **Payload-Described**
 
-          In this approach, you should leave the **Write Data** field empty and include the required contextual information in the MQTT message in the `SELECT` part of the rule. For example, the client is sending a message with the payload in JSON format as follows: 
-
-          ```json
-          {
-            "measurement": "temp",
-            "data_type": "FLOAT",
-            "value": "32.67",
-            "device_id": "root.sg27" // optional
-          }
-          ```
-
-          You can use the following rule to present the fields `measurement`, `data_type` and `value`.
-
-          ```sql
-          SELECT
-            payload.measurement, payload.data_type, payload.value, clientid as payload.device_id
-          FROM
-            "root/#"
-          ```
-
-          If the payload is structured differently, you can use the rule to rewrite its structure like the following:
-
-          ```sql
-          SELECT
-            payload.measurement, payload.dtype as payload.data_type, payload.val as payload.value
-          FROM
-            "root/#"
-          ```
-
-      - **Template-Described**
-
-        With this approach, you can define a template in the **Write Data** section, including as many items as needed, each with the required contextual information per row. When this template is provided, the system will generate IoTDB data by applying it to the MQTT message. The template for writing data supports batch setting via CSV file. For details, refer to [Batch Setting](#batch-setting).
-
-        For example, consider this template:
-
-        | Timestamp | Measurement | Data Type | Value    |
-        | --------- | ----------- | --------- | -------- |
-        |           | index       | INT32     | ${index} |
-        |           | temperature | FLOAT     | ${temp}  |
-
-        :::tip
-
-        Each column supports placeholder syntax to fill it with variables.
-
-        If the Timestamp is omitted, it will be automatically filled with the current system time in milliseconds.
-
-        :::
-
-        Then, your MQTT message can be structured as follows:
+        In this approach, you should leave the **Write Data** field empty and include the required contextual information in the MQTT message in the `SELECT` part of the rule. For example, the client is sending a message with the payload in JSON format as follows: 
 
         ```json
         {
-        "index": "42",
-        "temp": "32.67"
+          "measurement": "temp",
+          "data_type": "FLOAT",
+          "value": "32.67",
+          "device_id": "root.sg27" // optional
         }
         ```
 
+        You can use the following rule to present the fields `measurement`, `data_type` and `value`.
+
+        ```sql
+        SELECT
+          payload.measurement, payload.data_type, payload.value, clientid as payload.device_id
+        FROM
+          "root/#"
+        ```
+
+        If the payload is structured differently, you can use the rule to rewrite its structure like the following:
+
+        ```sql
+        SELECT
+          payload.measurement, payload.dtype as payload.data_type, payload.val as payload.value
+        FROM
+          "root/#"
+        ```
+
+        - **Template-Described**
+
+          With this approach, you can define a template in the **Write Data** section, including as many items as needed, each with the required contextual information per row. When this template is provided, the system will generate IoTDB data by applying it to the MQTT message. The template for writing data supports batch setting via CSV file. For details, refer to [Batch Setting](#batch-setting).
+
+          For example, consider this template:
+
+          | Timestamp | Measurement | Data Type | Value    |
+          | --------- | ----------- | --------- | -------- |
+          |           | index       | INT32     | ${index} |
+          |           | temperature | FLOAT     | ${temp}  |
+
+          :::tip
+
+          Each column supports placeholder syntax to fill it with variables.
+
+          If the Timestamp is omitted, it will be automatically filled with the current system time in milliseconds.
+
+          :::
+
+          Then, your MQTT message can be structured as follows:
+
+          ```json
+          {
+          "index": "42",
+          "temp": "32.67"
+          }
+          ```
+
 11. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
+
 12. Before clicking **Create**, you can click **Test Connectivity** to test if the Sink can be connected to the Apache IoTDB server.
 
 13. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+
 14. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new Apache IoTDB Sink. 
