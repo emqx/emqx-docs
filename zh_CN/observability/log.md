@@ -4,7 +4,14 @@
 
 EMQX 支持两种不同的日志输出方式：控制台输出日志和文件输出日志。您可以根据需要选择输出方式或同时启用这两种方式。将日志数据输出到控制台或命令行界面通常在开发和调试过程中使用，这样开发人员能实时快速查看EMQX运行时的日志数据。将日志数据输出到文件通常在生产环境中使用，随着时间进展、日志数据能够被持久化以便进行分析和故障排除。
 
-此外，为避免日志数据过多或日志写入过慢等问题，EMQX 默认开启了过载保护机制，以确保正常业务不被日志影响。
+系统的默认日志处理行为可以通过环境变量 `EMQX_DEFAULT_LOG_HANDLER` 来配置，该环境变量接受以下设置：
+
+- `file`: 将日志输出定向到文件。
+- `console`: 将日志输出通道到控制台。
+
+环境变量 `EMQX_DEFAULT_LOG_HANDLER` 默认为 `console`，但当通过 systemd 的 emqx.service 文件启动 EMQX 时，会显式设置为 `file`。
+
+为避免日志数据过多或日志写入过慢等问题，EMQX 默认开启了过载保护机制，以确保正常业务不被日志影响。
 
 ## 日志级别
 
@@ -33,14 +40,16 @@ debug < info < notice < warning < error < critical < alert < emergency
 
 ```bash
 log {
-  file_handlers.default {
+  file {
+    enable = true
     level = warning
-    file = "log/emqx.log"
-    count = 10
-    max_size = 50MB
+    file = "/var/log/emqx/emqx.log"
+    routation_count = 10
+    routation_size = 50MB
     formatter = text
   }
-  console_handler {
+  console {
+    enable = true
     level = warning
     formatter = text
   }
