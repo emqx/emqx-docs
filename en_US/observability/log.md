@@ -26,45 +26,6 @@ The table below describes the meaning and output contents for each log level.
 | alert     | Severe problems that may cause the application to stop and need to take immediate action to prevent further losses. | The application has reached a critical threshold, such as running out of disk space or memory, or a critical system process has crashed or stopped responding. |
 | emergency | Extremely serious problems that prevent the application from running and require immediate action; happen in rare circumstances. | Failure in data synchronizing between different nodes.       |
 
-## Log Throttling
-
-Log throttling reduces the number of potentially flooding logged events by
-dropping all but the first event within a configured time window.
-This feature helps to keep logs more compact without compromising system observability.
-
-Throttling time window can be set either using Dashboard or via configuration file:
-
-```
-log {
-  throttling {
-    time_window = "5m"
-  }
-}
-```
-The default value is 1 minute, the minimum value is 1 second.
-
-
-Log throttling is always enabled, unless `console` or `file` log level is set to debug. In that case, throttling is automatically disabled and all events are logged.
-Throttling is applied only to the following log events:
- - "authorization_permission_denied",
- - "cannot_publish_to_topic_due_to_not_authorized",
- - "cannot_publish_to_topic_due_to_quota_exceeded",
- - "connection_rejected_due_to_license_limit_reached",
- - "dropped_msg_due_to_mqueue_is_full".
-
-::: tip Note
-The above list may be update in future.
-:::
-
-If there are throttled log events within the last time window, a warning message is logged displaying the numbers of dropped events per each event kind.
-For example, if 5 unauthorized subscribe attempts are made within one throttling time window, the following events will be logged:
-
-```
-2024-03-13T15:45:11.707574+02:00 [warning] clientid: test, msg: authorization_permission_denied, peername: 127.0.0.1:54870, username: test, topic: t/#, action: SUBSCRIBE(Q0), source: file
-2024-03-13T15:45:53.634909+02:00 [warning] msg: log_events_throttled_during_last_period, period: 1 minutes, 0 seconds, dropped: #{authorization_permission_denied => 4}
-```
-As it can be seen, the first "authorization_permission_denied" event is fully logged. The next four similar events are dropped but their number is mentioned in "log_events_throttled_during_last_period" statistics.
-
 ## Configure Logging via Dashboard
 
 This section mainly describes how to configure logging with EMQX Dashboard. Changes take effect immediately without restarting the node.
@@ -221,3 +182,42 @@ The fields in this log message are:
 - **date-time:** `2022-06-30T16:25:32.446873+08:00`
 - **level:** `[debug]`
 - **flat log-content:** `line: 150, mfa: emqx_retainer_mnesia:store_retained/2, msg: message_retained, topic: $SYS/brokers/emqx@127.0.0.1/sysdescr`
+
+## Log Throttling
+
+Log Throttling is a feature designed to mitigate the risk of log flooding by limiting the logging of repeated events within a specified time window. By only logging the first event and suppressing subsequent identical events within this window, log management becomes more efficient without sacrificing observability.
+
+You can configure the throttling time window through the Dashboard or directly in the configuration file as follows:
+
+```
+log {
+  throttling {
+    time_window = "5m"
+  }
+}
+```
+
+The default time window is set to 1 minute, with a minimum allowable value of 1 second.
+
+Log throttling is enabled by default and applies to selected log events such as authorization failures or message queue overflows. However, when the log level for `console` or `file` is set to debug, throttling is disabled to ensure detailed logging for troubleshooting.
+
+Throttling is applied only to the following log events:
+
+ - "authorization_permission_denied"
+ - "cannot_publish_to_topic_due_to_not_authorized"
+ - "cannot_publish_to_topic_due_to_quota_exceeded"
+ - "connection_rejected_due_to_license_limit_reached"
+ - "dropped_msg_due_to_mqueue_is_full"
+
+::: tip Note
+The list of throttled events is subject to updates.
+:::
+
+If any events are throttled within a time window, a summary warning message will log the count of dropped events for each type. For example, if 5 unauthorized subscription attempts occur within a window, the following events will be logged:
+
+```
+2024-03-13T15:45:11.707574+02:00 [warning] clientid: test, msg: authorization_permission_denied, peername: 127.0.0.1:54870, username: test, topic: t/#, action: SUBSCRIBE(Q0), source: file
+2024-03-13T15:45:53.634909+02:00 [warning] msg: log_events_throttled_during_last_period, period: 1 minutes, 0 seconds, dropped: #{authorization_permission_denied => 4}
+```
+
+As you can see, the first "authorization_permission_denied" event is fully logged. The next 4 similar events are dropped but their number is mentioned in "log_events_throttled_during_last_period" statistics.

@@ -47,7 +47,7 @@ log {
 }
 ```
 
-本章节将主要介绍如何通过 EMQX Dashboard 修改日志配置。保存修改后将立即生效，无需重启节点。
+本节将主要介绍如何通过 EMQX Dashboard 修改日志配置。保存修改后将立即生效，无需重启节点。
 
 点击左侧导航栏的 **管理**-> **日志**。选择相应的页签配置控制台输出日志或文件输出日志。
 
@@ -176,3 +176,43 @@ log {
 - **level:** `[debug]`
 - **flat log-content:** `line: 150, mfa: emqx_retainer_mnesia:store_retained/2, msg: message_retained, topic: $SYS/brokers/emqx@127.0.0.1/sysdescr`
 
+## 日志限制
+
+日志限制功能可以通过限制指定时间窗口内重复事件的记录来减少日志溢出的风险。通过仅记录第一个事件并在此窗口内抑制后续相同事件的记录，日志管理能够变得更加高效，同时不牺牲可观测性。
+
+您可以通过 Dashboard 或直接在配置文件中配置限制时间窗口：
+
+```bash
+log {
+  throttling {
+    time_window = "5m"
+  }
+}
+```
+
+默认的时间窗口设置为1分钟，最小允许值为1秒。
+
+日志限制默认启用，并适用于选定的日志事件，如授权失败或消息队列溢出等。然而，当 `console` 或 `file` 的日志级别设置为调试时，将禁用限制，以确保详细记录以便进行故障排除。
+
+限制仅应用于以下日志事件：
+
+- "authorization_permission_denied"
+- "cannot_publish_to_topic_due_to_not_authorized"
+- "cannot_publish_to_topic_due_to_quota_exceeded"
+- "connection_rejected_due_to_license_limit_reached"
+- "dropped_msg_due_to_mqueue_is_full"
+
+::: tip 注意 
+
+受限事件列表可能会更新。 
+
+:::
+
+如果在一个时间窗口内有事件被限制，一条摘要警告消息将记录每种类型丢弃事件的计数。例如，如果在一个窗口期内发生5次未授权的订阅尝试，将记录以下事件：
+
+```yaml
+2024-03-13T15:45:11.707574+02:00 [warning] clientid: test, msg: authorization_permission_denied, peername: 127.0.0.1:54870, username: test, topic: t/#, action: SUBSCRIBE(Q0), source: file
+2024-03-13T15:45:53.634909+02:00 [warning] msg: log_events_throttled_during_last_period, period: 1 minutes, 0 seconds, dropped: #{authorization_permission_denied => 4}
+```
+
+您可以看到，第一个 "authorization_permission_denied" 事件被完整记录。接下来的4个类似事件被丢弃，但在 "log_events_throttled_during_last_period" 统计中提到了它们的数量。
