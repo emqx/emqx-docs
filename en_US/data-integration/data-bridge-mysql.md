@@ -111,7 +111,7 @@ The following steps assume that you run both EMQX and TDengine on the local mach
    - **Password**: Enter `public`.
 5. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the MySQL server.
-7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to MySQL and to record client events. For detailed steps, see [Create a Rule with MySQL Sink for Message Storage](#create-a-rule-with-mysql-sink-for-message-storage) and [Create a Rule with MySQL Sink for Events Recording](#create-a-rule-with-mysql-sink-for-events-recording).
+7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to MySQL and record client events. For detailed steps, see [Create a Rule with MySQL Sink for Message Storage](#create-a-rule-with-mysql-sink-for-message-storage) and [Create a Rule with MySQL Sink for Events Recording](#create-a-rule-with-mysql-sink-for-events-recording).
 
 ## Create a Rule with MySQL Sink for Message Storage
 

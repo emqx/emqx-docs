@@ -230,76 +230,68 @@ Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
 FileUsage   = 1
 ```
 
+## Create a Connector
 
-## Create a Rule for Microsoft SQL Server Sink
+This section demonstrates how to create a Connector to connect the Sink to the Microsoft SQL server.
 
-This section demonstrates how to create rules to specify the data to be saved into Microsoft SQL Server and to record client's online/offline status. It assumes that you run both EMQX and Microsoft SQL Server on the local machine. If you have Microsoft SQL Server and EMQX running remotely, adjust the settings accordingly.
+The following steps assume that you run both EMQX and Microsoft SQL Server on the local machine. If you have Microsoft SQL Server and EMQX running remotely, adjust the settings accordingly.
+
+1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+2. Click **Create** in the top right corner of the page.
+3. On the **Create Connector** page, select **Microsoft SQL Server** and then click **Next**.
+4. In the **Configuration** step, configure the following information:
+   - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_sqlserver`.
+   - **Server Host**: Enter `127.0.0.1:1433`, or the URL if the Microsoft SQL Server is running remotely.
+   - **Database Name**: Enter `mqtt`.
+   - **Username**: Enter `sa`.
+   - **Password**: Enter the preset password `mqtt_public1`, or use the actual password.
+   - **SQL Server Driver Name**: Enter `ms-sql`, as the DSN Name configured in `odbcinst.ini`
+5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Microsoft SQL Server.
+7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to the Microsoft SQL Server and record client events. For detailed steps, see [Create a Rule with Microsoft SQL Server Sink for Message Storage](#create-a-rule-with-microsoft-sql-server-sink-for-message-storage) and [Create a Rule with Microsoft SQL Server Sink for Events Recording](#create-a-rule-with-microsoft-sql-server-sink-for-events-recording).
+
+## Create a Rule with Microsoft SQL Server Sink for Message Storage
+
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the Microsoft SQL Server table `mqtt.dbo.t_mqtt_msg` via the configured Sink.
 
 1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
+3. Enter `my_rule` as the rule ID. To create a rule for message storage, enter the following statement in the **SQL Editor**, which means the MQTT messages under topic `t/#`  will be saved to Microsoft SQL Server.
 
-   - To create a rule for message storage, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to Microsoft SQL Server.
+   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
 
-     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
-
-     ```sql
-     SELECT
-       *
-     FROM
-       "t/#"
-     ```
-
-   - To create a rule for online/offline status recording, input the following statement:
-
-     ```sql
-     SELECT
-       *,
-       floor(timestamp / 1000) as s_shift,
-       timestamp div 1000 as ms_shift
-     FROM
-       "$events/client_connected", "$events/client_disconnected"
-     ```
-
+   ```sql
+   SELECT
+     *
+   FROM
+     "t/#"
+   ```
+   
    ::: tip
 
    If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
-
+   
    :::
-
+   
 4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to Microsoft SQL Server.
 
 5. Select `Microsoft SQL Server` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Microsoft SQL Server Sink if you have created one. This demonstration will create a new Sink.
 
 6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
 
-7. Enter the connection information:
+7. From the **Connector** dropdown box, select the `my_sqlserver` created before . You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-   - **Server Host**: Enter `127.0.0.1:1433`, or the URL if the Microsoft SQL Server is running remotely.
-   - **Database Name**: Enter `mqtt`.
-   - **Username**: Enter `sa`.
-   - **Password**: Enter the preset password `mqtt_public1`, or use the actual password.
-   - **SQL Server Driver Name**: Enter `ms-sql`, as the DSN Name configured in `odbcinst.ini`
+8. Configure the **SQL Template** for message storage, use the following SQL statement:
 
-8. Configure the **SQL Template** based on the feature to use:
+   Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
 
-   - To configure the SQL template for message storage, use the following SQL statement:
-
-     Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
-
-     ```sql
-     insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
-     ```
-
-   - To configure the SQL template for online/offline status recording, use the following SQL statement:
-
-     ```sql
-     insert into t_mqtt_events(clientid, event_type, event_time) values ( ${clientid}, ${event}, DATEADD(MS, ${ms_shift}, DATEADD(S, ${s_shift}, '19700101 00:00:00:000') ) )
-     ```
-
-9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md).
+   ```sql
+   insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
+   ```
+   
+9. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
 10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Microsoft SQL Server.
 
@@ -311,7 +303,30 @@ You have now successfully created the rule for the Microsoft SQL Server Sink. Yo
 
 You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to Microsoft SQL Server after parsing by rule `my_rule`.
 
-## Test the Rule
+## Create a Rule with Microsoft SQL Server for Events Recording
+
+This section demonstrates how to create a rule for recording the clients' online/offline status and storing the events data to the Microsoft SQL Server table `mqtt.dbo.t_mqtt_events` via a configured Sink.
+
+The steps are similar to those in [Create a Rule with Microsoft SQL Server Sink for Message Storage](#create-a-rule-with-microsoft-sql-server-sink-for-message-storage) expect for the SQL template and SQL rules.
+
+The rule SQL statement for online/offline status recording is as follows.
+
+```sql
+SELECT
+  *,
+  floor(timestamp / 1000) as s_shift,
+  timestamp div 1000 as ms_shift
+FROM
+  "$events/client_connected", "$events/client_disconnected"
+```
+
+The SQL template for events recording is as follows.
+
+```sql
+insert into t_mqtt_events(clientid, event_type, event_time) values ( ${clientid}, ${event}, DATEADD(MS, ${ms_shift}, DATEADD(S, ${s_shift}, '19700101 00:00:00:000') ) )
+```
+
+## Test the Rules
 
 Use MQTT X  to send a message to topic  `t/1`  to trigger an online/offline event.
 
@@ -321,7 +336,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello SQL Server" }'
 
 Check the running statistics of the Microsoft SQL Server Sink.
 
-- For the Sink used to store messages, there should be one new matching and one new outgoing message. Check whether the data is written into the `mqtt.dbo.t_mqtt_msg` data table.
+- For the Sink used to store messages, there should be 1 new matching and 1 new outgoing message. Check whether the data is written into the `mqtt.dbo.t_mqtt_msg` data table.
 
 ```bash
 1> SELECT * from mqtt.dbo.t_mqtt_msg
@@ -334,7 +349,7 @@ id          msgid                                                            top
 1>
 ```
 
-- For the Sink used to record online/offline status, there should be two new events recorded: client connected and client disconnected. Check whether the status recording is written into the `mqtt.dbo.t_mqtt_events` data table.
+- For the Sink used to record online/offline status, there should be 2 new events recorded: client connected and client disconnected. Check whether the status recording is written into the `mqtt.dbo.t_mqtt_events` data table.
 
 ```bash
 1> SELECT * from mqtt.dbo.t_mqtt_events

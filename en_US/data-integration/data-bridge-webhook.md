@@ -90,9 +90,11 @@ This section demonstrates how to configure an HTTP server Connector that is used
 
 4. Set **URL** to `http://localhost:5000`. For the rest, you can keep the default value.
 
-5. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the HTTP server.
+5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-6. Click **Create** to complete the creation of the Connector.
+6. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the HTTP server.
+
+7. Click **Create** to complete the creation of the Connector.
 
 
 Now you have created an HTTP Server Connector. Next, you need to create a rule and Sink to specify the data to be written into the HTTP Server.

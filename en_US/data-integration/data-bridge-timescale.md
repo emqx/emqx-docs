@@ -135,18 +135,20 @@ After the table is successfully created, you can view the information of the tab
 :::
 ::::
 
-## Create Connector
+## Create a Connector
 
 Before you create the TimescaleDB Sink, you need to create a TimescaleDB Connector to connect to the TimescaleDB service.
 
 The instructions below assume that you run both EMQX and TimescaleDG (if self-deployed) on the local machine. If you have TimescaleDB and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard and click **Integration** -> **Connector** from the left navigation menu.
-2. Click **+ Create** on the top right corner of the page.
+2. Click **Create** on the top right corner of the page.
 3. Select **TimescaleDB** from the connectors and click **Next**.
 4. Enter a name in the **Connector Name**, for example, `my-timescale`. The name should combine upper/lower case letters and numbers.
-5. Enter the connection information according to how the TimescaleDB is deployed. If it is deployed using Docker, input `127.0.0.1:5432` as **Server Host**, `tsdb` as **Database Name**,  `postgres` as **Username,** and `public` as **Password**.
-6. Click the **Create** button to complete the Connector creation.
+5. Enter the connection information according to how the TimescaleDB is deployed. If it is deployed using Docker, enter `127.0.0.1:5432` as **Server Host**, `tsdb` as **Database Name**,  `postgres` as **Username,** and `public` as **Password**.
+6. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+7. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the TimescaleDB server.
+8. Click the **Create** button to complete the Connector creation.
 
 Now you have created a TimescaleDB Connector. Next, you need to create a rule and Sink to specify the data to be written into the TimescaleDB database.
 
