@@ -72,8 +72,9 @@ The following steps assume that you run both EMQX and OpenTSDB on the local mach
    - Enter the connector name, which should be a combination of upper and lower case letters and numbers, for example: `my_opentsdb`.
    - Enter `http://127.0.0.1:4242` as the **Server Host**, or the actual URL if the OpenTSDB server runs remotely.
    - Leave other options as default.
-5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the OpenTSDB server.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to OpenTSDB. For detailed steps, see [Create a Rule with OpenTSDB Sink](#create-a-rule-with-opentsdb-sink).
+5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the OpenTSDB server.
+7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to OpenTSDB. For detailed steps, see [Create a Rule with OpenTSDB Sink](#create-a-rule-with-opentsdb-sink).
 
 ## Create a Rule with OpenTSDB Sink
 

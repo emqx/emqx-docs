@@ -150,7 +150,7 @@ The following steps assume that you run both EMQX and RocketMQ on the local mach
    - Leave others as default.
 5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the RocketMQ server.
-7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to the RocketMQ and to record client events. For detailed steps, see [Create a Rule with RocketMQ Sink for Message Storage](#create-a-rule-with-rocketmq-sink-for-message-storage) and [Create a Rule with RocketMQ Sink for Events Recording](#create-a-rule-with-rocketmq-sink-for-events-recording).
+7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to the RocketMQ and record client events. For detailed steps, see [Create a Rule with RocketMQ Sink for Message Storage](#create-a-rule-with-rocketmq-sink-for-message-storage) and [Create a Rule with RocketMQ Sink for Events Recording](#create-a-rule-with-rocketmq-sink-for-events-recording).
 
 ## Create a Rule with RocketMQ Sink for Message Storage
 
@@ -183,7 +183,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
 
-8. Select the `my_rocketmq` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+8. From the **Connector** dropdown box, select the `my_rocketmq` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
 9. Leave the **Template** empty by default.
 
@@ -193,7 +193,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    :::
 
-10. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+10. Advanced settings (optional): For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
 11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the RocketMQ server.
 

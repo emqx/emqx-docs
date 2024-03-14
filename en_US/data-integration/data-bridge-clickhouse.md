@@ -143,7 +143,7 @@ This section demonstrates how to create a rule in Dashboard for processing messa
 
 12. Before clicking **Create**, you can click the **Test Connectivity** button to ensure that you can connect to the ClickHouse server.
 
-13. Click the **Add** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+13. Click the **Create** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
 
 14. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
 

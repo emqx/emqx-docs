@@ -309,4 +309,4 @@ EMQX 提供了大量关于与 Confluent/Kafka 的数据集成的学习资源。�
 
 **基准测试报告：**
 
-- [EMQX Enterprise Performance Benchmark Testing: Kafka Integration](https://www.emqx.com/zh/resources/emqx-enterprise-performance-benchmark-testing-kafka-integration)
+- [EMQX Enterprise Performance Benchmark Testing: Kafka Integration](https://www.emqx.com/en/resources/emqx-enterprise-performance-benchmark-testing-kafka-integration)
