@@ -54,47 +54,72 @@ GreptimeDB 数据集成是 EMQX 开箱即用的功能，它结合了 EMQX 的实
 
 1. 通过 Docker 安装并启动 GreptimeDB，详细步骤请参考[下载安装GreptimeDB](https://greptime.cn/download)。
 
-```bash
-# 启动一个 GreptimeDB 容器
-docker run -p 4000-4004:4000-4004 \
--p 4242:4242 -v "$(pwd)/greptimedb:/tmp/greptimedb" \
---name greptime --rm \
-greptime/greptimedb standalone start \
---http-addr 0.0.0.0:4000 \
---rpc-addr 0.0.0.0:4001 \
---mysql-addr 0.0.0.0:4002 \
---user-provider=static_user_provider:cmd:greptime_user=greptime_pwd
-```
+   ```bash
+   # 启动一个 GreptimeDB 容器
+   docker run -p 4000-4004:4000-4004 \
+   -p 4242:4242 -v "$(pwd)/greptimedb:/tmp/greptimedb" \
+   --name greptime --rm \
+   greptime/greptimedb standalone start \
+   --http-addr 0.0.0.0:4000 \
+   --rpc-addr 0.0.0.0:4001 \
+   --mysql-addr 0.0.0.0:4002 \
+   --user-provider=static_user_provider:cmd:greptime_user=greptime_pwd
+   ```
 
 2. `user-provider` 参数指定了 GreptimeDB 的用户鉴权账户，你还可以通过文件的方式指定，参考[鉴权](https://docs.greptime.cn/user-guide/clients/authentication#authentication)文档。
 
 3. GreptimeDB 正常启动后，你可以通过 [http://localhost:4000/dashboard](http://localhost:4000/dashboard) 访问 GreptimeDB Dashboard，其中 username 和 password 分别输入 `greptime_user` 和 `greptime_pwd`。
 
-## 创建规则
+## 创建连接器
 
-本节演示了如何在 Dashboard 中创建 GreptimeDB 数据集成的规则来指定需要转发至 GreptimeDB 的数据并为规则添加触发的动作。以下示例假设您在同一台本地机器上运行 EMQX 和 GreptimeDB。如果您在远程运行 GreptimeDB 和 EMQX，请相应调整设置。
+本节演示了如何创建一个用于将 Sink 连接到 GreptimeDB 服务器的连接器。
 
-1. 转到 Dashboard **集成** -> **规则页面**。
+以下步骤假定 EMQX 与 GreptimeDB 均在本地运行，如您在远程运行 EMQX 及 GreptimeDB，请根据实际情况调整相应配置。
+
+1. 进入 EMQX Dashboard，点击**集成** -> **连接器**。
 2. 点击页面右上角的**创建**。
-3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息存储至 GreptimeDB，请确规则选择出来的字段（SELECT 部分）包含 Sink 中用到的变量，此处规则 SQL 如下：
+3. 在 **创建连接器**页面，点击选择 **GreptimeDB**，然后点击**下一步**。
+4. 在**配置信息**步骤页中配置以下信息：
 
-
-  ```sql
-  SELECT
-    *
-  FROM
-    "t/#"
-  ```
-
-4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。在**动作类型**下拉框中选择 `GreptimeDB`，保持**动作**下拉框为默认的`创建动作`选项，您也可以选择一个之前已经创建好的 GreptimeDB Sink。此处我们创建一个全新的 Sink 并添加到规则中。
-5. 输入 Sink 名称，名称应为大/小写字母和数字的组合。
-6. 输入 GreptimeDB 连接信息：
-
+   - 输入连接器名称，要求是大小写英文字母和数字的组合，例如：`my_greptimedb`。
    - **服务器地址**：输入 `127.0.0.1:4001`。如果是 GreptimeCloud 需要指定端口为 443，即输入 `{url}:443` 。
    - **数据库**：输入数据库名称 `public`，如果 GreptiemCloud，请输入 service 名称。
    - **用户名**和**密码**：设置成 `greptime_user` 和 `greptime_pwd`。
-   - **时间精度**：默认为毫秒。
-7. 配置数据格式，通过一段语句指定数据点的测量、标签集、字段集和时间戳，键值均支持变量，可按照[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。<!--定义数据格式为 JSON 或 Line Protocol， -->GreptimeDB 使用和 InfluxDB 兼容的数据格式。
+5. 在点击**创建**之前，您可以点击**测试连接**，以测试连接器是否能够连接到 GreptimeDB 服务器。
+6. 点击最下方的**创建**按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建规则和 Sink，以指定要转发到 GreptimeDB 的数据。具体步骤请参见[创建 GreptimeDB Sink 规则](#创建-greptimedb-sink-规则)。
+
+## 创建 GreptimeDB Sink 规则
+
+本节演示了如何在 EMQX 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的结果发送到 GreptimeDB。
+
+1. 转到 Dashboard **集成** -> **规则页面**。
+
+2. 点击页面右上角的**创建**。
+
+3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息存储至 GreptimeDB，请确规则选择出来的字段（SELECT 部分）包含 Sink 中用到的变量，此处规则 SQL 如下：
+
+   ```sql
+   SELECT
+     *
+   FROM
+     "t/#"
+   ```
+
+   ::: tip
+
+   如果您初次使用 SQL，可以点击 **SQL 示例** 和**启用调试**来学习和测试规则 SQL 的结果。
+
+   :::
+
+4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。通过这个动作，EMQX 会将经规则处理的数据转发到 GreptimeDB。
+
+5. 在**动作类型**下拉框中选择 `GreptimeDB`，保持**动作**下拉框为默认的`创建动作`选项，您也可以选择一个之前已经创建好的 GreptimeDB Sink。此处我们创建一个全新的 Sink 并添加到规则中。
+
+6. 输入 Sink 名称，名称应为大/小写字母和数字的组合。
+
+7. 从**连接器**下拉框中选择之前创建的 `my_greptimedb`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
+
+8. 配置数据格式，通过一段语句指定数据点的测量、标签集、字段集和时间戳，键值均支持变量，可按照[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。<!--定义数据格式为 JSON 或 Line Protocol， -->GreptimeDB 使用和 InfluxDB 兼容的数据格式。
 
    <!--对于 **JSON** 格式，需设置数据的 **Measurement**，**Fields**，**Timestamp** 与 **Tags**，键值均支持变量，可以使用[行协议](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)进行设置。-->
 
@@ -107,11 +132,13 @@ greptime/greptimedb standalone start \
 
    :::
 
-8. 高级配置（可选），根据情况配置同步/异步模式，队列等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
+9. 选择**时间精度**：使用默认值`毫秒`。
 
-9. 点击**添加**按钮完成 Sink 创建，新建的 Sink 将被添加到**动作输出**列表中。
+10. 高级配置（可选），根据情况配置同步/异步模式，队列等参数，详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
 
-10. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中，**状态**为**已连接**。
+11. 点击**添加**按钮完成 Sink 创建，新建的 Sink 将被添加到**动作输出**列表中。
+
+12. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中。
 
 现在您已成功创建了通过 GreptimeDB Sink 将数据转发到 GreptimeDB 的规则，同时在**规则**页面的**动作(Sink)** 标签页看到新建的 GreptimeDB Sink。
 
@@ -125,6 +152,6 @@ greptime/greptimedb standalone start \
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello GreptimeDB" }'
 ```
 
-分别查看两个 Sink 运行统计，命中、发送成功次数均 +1。
+查看 Sink 运行统计，命中、发送成功次数均 +1。
 
 前往 GreptimeDB dashboard 查看数据是否已经写入 GreptimeDB 中。

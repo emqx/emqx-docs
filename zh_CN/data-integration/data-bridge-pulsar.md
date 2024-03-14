@@ -88,9 +88,11 @@ docker exec -it pulsar bin/pulsar-admin topics create-partitioned-topic persiste
 
 4. 高级配置（可选），请参考 [高级设置](#高级设置)。
 
-5. 点击**创建**按钮完成连接器创建。
+5. 在点击**创建**之前，您可以点击**测试连接**来测试连接器是否能连接到 Pulsar 服务器。
 
-6. 在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 Pulsar 的数据。您也可以按照[创建 Pulsar Sink 规则](#创建-pulsar-sink-规则)章节的步骤来创建规则。
+6. 点击**创建**按钮完成连接器创建。
+
+7. 在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 Pulsar 的数据。您也可以按照[创建 Pulsar Sink 规则](#创建-pulsar-sink-规则)章节的步骤来创建规则。
 
 ## 创建 Pulsar Sink 规则
 

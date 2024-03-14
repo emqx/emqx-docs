@@ -187,7 +187,7 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
 8. **模版**设置为默认值，即为空；模版为空时将会将整个消息转发给 RocketMQ，实际值为 JSON 模版数据。
 
-9. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[ Sink 的特性](./data-bridges.md#sink-的特性)中的配置参数章节。
+9. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细内容请参考[ Sink 的特性](./data-bridges.md#sink-的特性)中的配置参数章节。
 
 10. 在完成创建之前，您可以点击**测试连接**来测试 Sink 可以连接到 RockeMQ 服务器。
 

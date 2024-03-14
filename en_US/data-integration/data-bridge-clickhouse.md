@@ -131,7 +131,7 @@ This section demonstrates how to create a rule in Dashboard for processing messa
 
 9. Keep the default value `,` in the **Batch Value Separator** to distinguish multiple input items. This setting only needs to be changed if you enable [batch mode](./data-bridges.md) for the data integration and if you specify an alternative format with [ClickHouse's FORMAT syntax](https://clickhouse.com/docs/en/sql-reference/statements/insert-into).
 
-10. Enter the following command in the SQL template (You can use the [Rule Engine](https://chat.openai.com/c/rules.md) to ensure that strings in the input SQL statement are properly escaped to prevent SQL injection attacks):
+10. Enter the following command in the SQL template (You can use the [Rule Engine](./rules.md) to ensure that strings in the input SQL statement are properly escaped to prevent SQL injection attacks):
 
     ```sql
     INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})

@@ -116,7 +116,7 @@ EMQX 5.1
 
 - `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../network/overview.md#tls-for-external-resource-access)。
 
-- `auth_cmd` 已更改为 `cmd`。仅支持 [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) 数据结构和 `HGET` 和 `HMGET` 查询命令。在命令中使用 `${var}` 样式的[占位符](https://chat.openai.com/access-control/authn/authn.md#authentication-placeholders)。命令应至少获取 `password`（与 4.x 兼容）或 `password_hash` 字段，以及可选的 `salt` 和 `is_superuser` 字段。
+- `auth_cmd` 已更改为 `cmd`。仅支持 [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) 数据结构和 `HGET` 和 `HMGET` 查询命令。在命令中使用 `${var}` 样式的[占位符](../access-control/authn/authn.md#authentication-placeholders)。命令应至少获取 `password`（与 4.x 兼容）或 `password_hash` 字段，以及可选的 `salt` 和 `is_superuser` 字段。
 
 - 不再使用 `super_cmd`。请在 `cmd` 中提供 `is_superuser` 字段。如果需要给客户端提供超级用户权限，请将 `is_superuser` 字段添加到 Redis 查询命令中。
 

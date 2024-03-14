@@ -49,8 +49,8 @@ This section introduces the preparatory work needed before creating Elasticsearc
 
 ### Prerequisites
 
-- Understand [rules](https://chat.openai.com/c/rules.md).
-- Understand [data integration](https://chat.openai.com/c/data-bridges.md).
+- Understand [rules](./rules.md).
+- Understand [data integration](./data-bridges.md).
 
 ### Install Elasticsearch and Create Indices
 

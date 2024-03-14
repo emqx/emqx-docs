@@ -109,7 +109,7 @@ The following table shows the fields contained in the above log message samples.
 | source           | String  | The Dashboard username or API key name that performed the operation. |
 | node             | String  | Node name, indicating the node or server where the operation was executed. |
 | method           | String  | HTTP request method, `post`, `put`, `delete` correspond to create, update, delete operations. |
-| operate_id       | String  | The REST API path of the request, please refer to [REST API](https://chat.openai.com/admin/api.md). |
+| operate_id       | String  | The REST API path of the request, please refer to [REST API](../admin/api.md). |
 
 ### Operation Records from CLI or Erlang Console
 

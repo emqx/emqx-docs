@@ -116,7 +116,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 7. Enter a name for the Sink. The name should combine upper/lower case letters and numbers.
 
-8. Select the `my_influxdb` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+8. From the **Connector** dropdown box, select the `my_influxdb` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
 9. Set the **Time Precision**, it is set to millisecond by default. 
 
