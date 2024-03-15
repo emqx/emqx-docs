@@ -425,8 +425,9 @@ See the table below for a detailed explanation of the functions.
 
 | Function | Description | Parameters |
 | -------- | ------------------------------------|------------------------- |
-| `schema_encode` | Encode data according to a pre-defined schema. | 1. Schema ID defined by schema registry <br />2. Data to be encoded <br />3 ... N. Remaining arguments according to the schema type |
-| `schema_decode` | Decode data according to a pre-defined schema. | 1. Schema ID defined by schema registry<br /> 2. Data to be decoded <br />3..N. Remaining arguments according to the schema type |
+| `schema_encode` | Encode data according to a pre-defined schema. | 1. Schema ID defined by schema registry <br />2. Data to be encoded <br />3..N. Remaining arguments according to the schema type. For example, message name for protobuf |
+| `schema_decode` | Decode data according to a pre-defined schema. | 1. Schema ID defined by schema registry<br /> 2. Data to be decoded <br />3..N. Remaining arguments according to the schema type. For example, message name for protobuf |
+| `schema_check`  | Try to validate data against a pre-defined schema. | 1. Schema ID defined by schema registry<br /> 2. Data to be encoded or decoded <br />3..N. Remaining arguments according to the schema type. For example, message name for protobuf |
 
 ### **Sparkplug B Functions**
 
