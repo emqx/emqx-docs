@@ -348,8 +348,9 @@ bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 
 | 函数名          | 函数功能                                    | 参数                                                         | 返回值       |
 | --------------- | ------------------------------------------- | ------------------------------------------------------------ | ------------ |
-| `schema_encode` | 通过 Schema 做编码. 使用前需要先创建 Schema | 1. Schema registry 里定义的 Schema ID 2. 要编码的数据 3..N. 其他的参数，有哪些参数取决于 Schema 的类型 | 编码后的数据 |
-| `schema_decode` | 通过 Schema 做解码. 使用前需要先创建 Schema | 1. Schema registry 里定义的 Schema ID 2. 要解码的数据 3..N. 其他的参数，有哪些参数取决于 Schema 的类型 | 解码后的数据 |
+| `schema_encode` | 通过 Schema 做编码。使用前需要先创建 Schema | 1. Schema registry 里定义的 Schema ID 2. 要编码的数据 3..N. 其他的参数，有哪些参数取决于 Schema 的类型，例如 protobuf 的 message name | 编码后的数据 |
+| `schema_decode` | 通过 Schema 做解码。使用前需要先创建 Schema | 1. Schema registry 里定义的 Schema ID 2. 要解码的数据 3..N. 其他的参数，有哪些参数取决于 Schema 的类型，例如 protobuf 的 message name | 解码后的数据 |
+| `schema_check`  | 通过 Schema 来校验数据。使用前需要先创建 Schema | 1. Schema registry 里定义的 Schema ID 2. 要编码或解码的数据 3..N. 其他的参数，有哪些参数取决于 Schema 的类型，例如 protobuf 的 message name | 布尔值 |
 
 ### Sparkplug B
 
