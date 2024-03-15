@@ -7,7 +7,7 @@ EMQX 支持两种不同的日志输出方式：控制台输出日志和文件输
 系统的默认日志处理行为可以通过环境变量 `EMQX_DEFAULT_LOG_HANDLER` 来配置，该环境变量接受以下设置：
 
 - `file`: 将日志输出定向到文件。
-- `console`: 将日志输出通道到控制台。
+- `console`: 将日志输出传送到控制台。
 
 环境变量 `EMQX_DEFAULT_LOG_HANDLER` 默认为 `console`，但当通过 systemd 的 emqx.service 文件启动 EMQX 时，会显式设置为 `file`。
 
@@ -34,27 +34,7 @@ debug < info < notice < warning < error < critical < alert < emergency
 | alert     | 表示需要立即采取行动，以防止进一步的损失；此级别的日志记录将触发警报通知操作，并且可能导致应用程序的停止。 | 例如，应用程序已达到关键阈值，例如磁盘空间或内存耗尽，或关键系统进程已崩溃或停止响应。 |
 | emergency | 导致系统无法继续运行的严重错误；这种级别的日志通常只会在极少数情况下出现，并且需要立即对其进行处理。 | 例如，EMQX 节点间数据同步失败                                |
 
-## 修改日志配置
-
-您可通过 EMQX Dashboard 或者配置文件修改日志配置。比如，如果您想要将级别为 warning 的日志输出到日志文件和控制台，您可以在 `emqx.conf` 文件中修改 `log` 下的配置项，参见下面示例。重启节点后配置生效。
-
-```bash
-log {
-  file {
-    enable = true
-    level = warning
-    file = "/var/log/emqx/emqx.log"
-    routation_count = 10
-    routation_size = 50MB
-    formatter = text
-  }
-  console {
-    enable = true
-    level = warning
-    formatter = text
-  }
-}
-```
+## 通过 Dashboard 修改日志配置
 
 本章节将主要介绍如何通过 EMQX Dashboard 修改日志配置。保存修改后将立即生效，无需重启节点。
 
@@ -102,7 +82,7 @@ log {
 
 ### 文件输出日志
 
-在**日志**页面，选择**文件日志**页签。<!--Replace the image when "进入异步模式的队列长度"is fixed.-->
+在**日志**页面，选择**文件日志**页签。
 
 <img src="./assets/config-file-log-ee.png" alt="config-file-log-ee" style="zoom:35%;" />
 
@@ -144,6 +124,28 @@ log {
 - **emqx.log.siz 和 emqx.log.idx:** 用于记录日志滚动信息的系统文件，**请不要手动修改**。
 - **run_erl.log:** 以 `emqx start` 方式后台启动 EMQX 时，用于记录启动信息的系统文件。
 - **erlang.log.N:** 以 erlang.log 为前缀的文件为日志文件，是以 `emqx start` 方式后台启动 EMQX 时，控制台日志的副本文件。比如 `erlang.log.1`、`erlang.log.2` ...
+
+## 通过配置文件修改日志配置
+
+您可通过 EMQX Dashboard 或者配置文件修改日志配置。比如，如果您想要将级别为 warning 的日志输出到日志文件和控制台，您可以在 `emqx.conf` 文件中修改 `log` 下的配置项，参见下面示例。重启节点后配置生效。
+
+```bash
+log {
+  file {
+    enable = true
+    level = warning
+    file = "/var/log/emqx/emqx.log"
+    routation_count = 10
+    routation_size = 50MB
+    formatter = text
+  }
+  console {
+    enable = true
+    level = warning
+    formatter = text
+  }
+}
+```
 
 ## 日志格式
 
