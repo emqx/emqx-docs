@@ -32,7 +32,7 @@ The process of the authorization check is as follows:
    - If yes, EMQX switches to the next authorizer to continue the process.
    - If it is already the last authorizer, EMQX follows the setting of `no_match` to determine whether to allow or reject the client operation.
 
-::: warning Warning
+::: warning Note
 
 To avoid problems with the authorization, you need to remember to disable or remove the ACL file authorizer when necessary because it has `{allow, all}` at the end by default to allow all authz requests.
 
