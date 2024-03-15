@@ -4,6 +4,13 @@ Logs provide a reliable source of information for troubleshooting and system per
 
 EMQX supports both console logs and file logs. There are two different ways of outputting log data. You can choose the output method as needed or keep both. Console log refers to outputting log data to the console or command line interface. It is typically used during development and debugging, as it allows developers to quickly view log data in real-time as EMQX runs. File log refers to outputting log data to a file. This is typically used in production environments, where it is important to persist log data over time for analysis and troubleshooting.
 
+The system's default log handling behavior can be configured via the environment variable `EMQX_DEFAULT_LOG_HANDLER`, which accepts the following settings:
+
+- `file`: Directs log output to files.
+- `console`: Channels log output to the console.
+
+Environment variable `EMQX_DEFAULT_LOG_HANDLER` defaults `console`, but explicitly set to `file` when EMQX is initiated via systemd's `emqx.service` file.
+
 To minimize the impact of logs on system operation, for example, when the log data is too much or the log writing is too slow, EMQX activates the overload protection mechanism by default to better serve our users.
 
 ## Log Level
@@ -127,14 +134,16 @@ You can also configure EMQX logging through configuration files. For example, if
 
 ```bash
 log {
-  file_handlers.default {
+  file {
+    enable = true
     level = warning
-    file = "log/emqx.log"
-    count = 10
-    max_size = 50MB
+    path = "/var/log/emqx/emqx.log"
+    rotation_count = 10
+    rotation_size = 50MB
     formatter = text
   }
-  console_handler {
+  console {
+    enable = true
     level = warning
     formatter = text
   }
