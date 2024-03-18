@@ -77,6 +77,28 @@ EMQX 与 AWS Kinesis Data Streams 的数据集成可以为您的业务带来以�
    awslocal kinesis create-stream --stream-name "my_stream" --shard-count 1
    ```
 
+## 创建连接器
+
+在添加 Amazon Kinesis Sink 前，您需要创建连接器用于将 Sink 连接到 Amazone Kinesis Data Streams 服务。
+
+1. 进入 EMQX Dashboard，点击**集成** -> **连接器**。
+
+2. 点击页面右上角的**创建**。
+
+3. 在**创建连接器**页面，点击选择 **Amazon Kinesis**，然后点击**下一步**。
+
+4. 为连接器输入一个名称，名称应为大小写字母和数字的组合，此处我们输入 `my-kinesis`。
+
+5. 配置连接信息。
+
+   - **AWS 访问密钥 ID**：输入[访问密钥 ID](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html)。如果使用 LocalStack，可输入任何值。
+   - **AWS 秘密访问密钥**：输入[密钥](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html)。如果使用 LocalStack，可输入任何值。
+   - **Amazon Kinesis 端点**：输入 Kinesis 服务的[终端节点](https://docs.aws.amazon.com/zh_cn/general/latest/gr/ak.html)。如果使用 [LocalStack](#在本地模拟-amazon-kinesis-data-streams)，输入`http://localhost:4566`。
+
+6. 在点击 **创建** 之前，您可以点击 **测试连接** 以测试连接器是否能连接到 Amazon Kinesis Data Streams 服务。
+
+7. 点击底部的 **创建** 按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建带有 Amazone Kinesis Sink 的规则，以指定要转发到 Amazon Kinesis 的数据。详细步骤请参见 [创建 Amazon Kinesis Sink 规则](#创建-amazone-kinesis-sink-规则)。
+
 ## 创建 Amazon Kinesis Sink 规则
 
 本节演示了如何在 Dashboard 中创建一条规则以指定需要写入 Amazon Kinesis 的数据并为规则添加触发的动作。
@@ -106,26 +128,25 @@ EMQX 与 AWS Kinesis Data Streams 的数据集成可以为您的业务带来以�
 
 5. 输入 Sink 名称，名称应为大/小写字母和数字的组合。
 
-6. 输入 Amazon Kinesis Data Streams 服务的连接信息：
+6. 在**连接器**下拉框中选择刚刚创建的 `my-kinesis` 连接器。您也可以点击下拉框旁边的创建按钮，在弹出框中快捷创建新的连接器，所需的配置参数按照参照[创建连接器](#创建连接器)。
 
-   - **AWS 访问密钥 ID**：输入[访问密钥 ID](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html)。如果使用 LocalStack，可输入任何值。
-   - **AWS 秘密访问密钥**：输入[密钥](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html)。如果使用 LocalStack，可输入任何值。
-   - **Amazon Kinesis 端点**：输入 Kinesis 服务的[终端节点](https://docs.aws.amazon.com/zh_cn/general/latest/gr/ak.html)。如果使用 [LocalStack](#在本地模拟-amazon-kinesis-data-streams)，输入`http://localhost:4566`。
+7. 为 Sink 配置以下信息：
+
    - **AWS Kinesis 流**：输入您[在 Amazon Kinesis Data Streams 中创建数据流](#在-amazon-kinesis-data-streams-中创建数据流)中创建的数据流名称。
    - **分区键**：输入将与发送到此数据流的记录关联的分区键。允许使用 `${variable_name}` 形式的占位符（查看下一步以了解占位符示例）。
 
-7. 在 **Payload Template** 字段中，将其留空或定义模板。
+8. 在 **Payload Template** 字段中，将其留空或定义模板。
 
    - 如果留空，它将使用 JSON 格式编码 MQTT 消息中的所有可见输入，例如 clientid、topic、payload 等。
    - 如果使用定义的模板，`${variable_name}` 形式的占位符将使用 MQTT 上下文中的相应值进行填充。例如，如果 MQTT 消息主题是 `my/topic`，`${topic}` 将被替换为 `my/topic`。
 
-8. 高级配置（可选），根据情况配置队列与批量等参数，详细请参考[ Sink 的特性](./data-bridges.md)中的配置参数。
+9. 高级配置（可选），根据情况配置队列与批量等参数，详细请参考[ Sink 的特性](./data-bridges.md#sink-的特性)中的配置参数。
 
-9. 在点击**创建**之前，您可以点击**测试连接**以测试 Sink 是否能连接到 Amazon Kinesis Data Stream。
+10. 在点击**创建**之前，您可以点击**测试连接**以测试 Sink 是否能连接到 Amazon Kinesis Data Stream 服务。
 
-10. 点击**添加**按钮完成 Sink 创建，新建的 Sink 将被添加到**动作输出**列表中。
+11. 点击**创建**按钮完成 Sink 创建，新建的 Sink 将被添加到**动作输出**列表中。
 
-11. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中，**状态**为**已连接**。
+12. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中。
 
 现在您已成功创建了通过 Amazon Kinesis Sink 将数据转发到 Amazon Kinesis Data Streams 的规则，同时在**规则**页面的**动作(Sink)** 标签页看到新建的 Amazon Kinesis Sink。
 
