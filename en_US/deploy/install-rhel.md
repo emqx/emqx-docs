@@ -29,13 +29,20 @@ EMQX supports installing with Yum source to provide our users with a convenient 
    curl -s https://assets.emqx.com/scripts/install-emqx-rpm.sh | sudo bash
    ```
 
-2. Install EMQX:
+2. Install the following dependencies:
+
+   ```bash
+   yum install epel-release -y
+   yum install -y openssl11 openssl11-devel
+   ```
+
+3. Install EMQX:
 
    ```bash
    sudo yum install emqx -y
    ```
 
-3. Start EMQX:
+4. Start EMQX:
 
    ```bash
    sudo systemctl start emqx
@@ -175,7 +182,7 @@ After the installation, run the command below to start EMQX.
 
 1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
 2. Select `@EE_VERSION@` for **Version** and `CentOS` for **OS**, and click the **Download** button.
-3. On the Downloads and Install page, select `rpm` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
+3. On the Downloads and Install page, select `rpm` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instructions.
 
 ### Start EMQX
 
