@@ -1135,11 +1135,11 @@ EMQX Enterprise also supports using `schema_encode` and `schema_decode` function
 
 See the table below for a detailed explanation of the functions. 
 
-### schema_encode(SchemaID: string, Data: string) -> binary
+### schema_encode(SchemaID: string, Data: map) -> binary
 
 Encodes `Data` using the specified Avro Schema. Create a schema in the Schema Registry to get the ID.
 
-### schema_encode(SchemaID: string, Data: string, MsgType: string) -> binary
+### schema_encode(SchemaID: string, Data: map, MsgType: string) -> binary
 
 Encodes `Data` using the specified Protobuf Schema. Create a schema in the Schema Registry to get the ID. `MsgType` is used to specify the message type corresponding to `Data` in Protobuf Schema.
 

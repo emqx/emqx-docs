@@ -1134,11 +1134,11 @@ unzip(hexstr2bin('CB48CDC9C90700')) = 'hello'
 
 在 EMQX 企业版中， schema registry 提供了`schema_decode` 和 `schema_encode` 功能，可以为 [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) 和 [Avro](https://avro.apache.org/) 格式的数据进行编解码。 关于功能详情，请见[编解码](./schema-registry.md)。
 
-### schema_encode(SchemaID: string, Data: string) -> binary
+### schema_encode(SchemaID: string, Data: map) -> binary
 
 使用指定的 Avro Schema 对 `Data` 进行编码。在 Schema Registry 中创建 Schema 以获取 ID。
 
-### schema_encode(SchemaID: string, Data: string, MsgType: string) -> binary
+### schema_encode(SchemaID: string, Data: map, MsgType: string) -> binary
 
 使用指定的 Protobuf Schema 对 `Data` 进行编码。在 Schema Registry 中创建 Schema 以获取 ID。MsgType 用于指定 Data 在 Protobuf Schema 中对应的消息类型。
 
