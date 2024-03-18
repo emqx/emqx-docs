@@ -18,7 +18,6 @@ Since EMQX 5.0 version, EMQX also supports using  [jq Syntax](https://stedolan.g
 
 :::
 
-
 ## Mathematical Functions
 
 EMQX supports a wide range of mathematical functions:
@@ -27,7 +26,7 @@ EMQX supports a wide range of mathematical functions:
 - Numerical functions, include abs, ceil, floor, round, sqrt, fmod.
 - Exponential and logarithmic functions, include exp, power, log, log10, log2.
 
-#### abs(X: integer | float) -> integer | float
+### abs(X: integer | float) -> integer | float
 
 Returns the absolute value of number `X`. Example:
 
@@ -36,8 +35,7 @@ abs(-12) = 12
 abs(-1.2) = 1.2
 ```
 
-#### acos(X: integer | float) -> float
-
+### acos(X: integer | float) -> float
 
 Returns the arc cosine of `X`, expressed in radians. The range of `X` is `[-1, 1]`. Example:
 
@@ -45,7 +43,7 @@ Returns the arc cosine of `X`, expressed in radians. The range of `X` is `[-1, 1
 acos(0.5) = 1.0471975511965976
 ```
 
-#### acosh(X: integer | float) -> float
+### acosh(X: integer | float) -> float
 
 Returns the hyperbolic arccosine of `X`, expressed in radians. `X` must be greater than or equal to 1. Example:
 
@@ -53,7 +51,7 @@ Returns the hyperbolic arccosine of `X`, expressed in radians. `X` must be great
 acosh(1.5) = 0.9624236501192069
 ```
 
-#### asin(X: integer | float) -> float
+### asin(X: integer | float) -> float
 
 Returns the arc sine of `X`, expressed in radians. The range of `X` is `[-1, 1]`. Example:
 
@@ -61,7 +59,7 @@ Returns the arc sine of `X`, expressed in radians. The range of `X` is `[-1, 1]`
 asin(0.5) = 0.5235987755982988
 ```
 
-#### asinh(X: integer | float) -> float
+### asinh(X: integer | float) -> float
 
 Returns the hyperbolic arcsine of `X`. Example:
 
@@ -69,7 +67,7 @@ Returns the hyperbolic arcsine of `X`. Example:
 asinh(0.5) = 0.48121182505960347
 ```
 
-#### atan(X: integer | float) -> float
+### atan(X: integer | float) -> float
 
 Returns the arc tangent of `X`, expressed in radians. Example:
 
@@ -77,7 +75,7 @@ Returns the arc tangent of `X`, expressed in radians. Example:
 atan(0.5) = 0.46364760900080615
 ```
 
-#### atanh(X: integer | float) -> float
+### atanh(X: integer | float) -> float
 
 Returns the hyperbolic arctangent of `X`, where `X` ranges between `(-1, 1)`. Example:
 
@@ -85,7 +83,7 @@ Returns the hyperbolic arctangent of `X`, where `X` ranges between `(-1, 1)`. Ex
 atanh(0.5) = 0.5493061443340549
 ```
 
-#### ceil(X: integer | float) -> integer
+### ceil(X: integer | float) -> integer
 
 Rounds upward, yielding the smallest integer greater than or equal to the given `X`. Example:
 
@@ -93,7 +91,7 @@ Rounds upward, yielding the smallest integer greater than or equal to the given 
 ceil(0.8) = 1
 ```
 
-#### cos(X: integer | float) -> float
+### cos(X: integer | float) -> float
 
 Returns the cosine of the angle `X` expressed in radians. Example:
 
@@ -101,7 +99,7 @@ Returns the cosine of the angle `X` expressed in radians. Example:
 cos(0.5) = 0.8775825618903728
 ```
 
-#### cosh(X: integer | float) -> float
+### cosh(X: integer | float) -> float
 
 Returns the hyperbolic cosine of `X`. Example:
 
@@ -109,7 +107,7 @@ Returns the hyperbolic cosine of `X`. Example:
 cosh(0.5) = 1.1276259652063807
 ```
 
-#### exp(X: integer | float) -> float
+### exp(X: integer | float) -> float
 
 Returns the natural number e to the power of `X`, i.e., `e^X`. Example:
 
@@ -117,7 +115,7 @@ Returns the natural number e to the power of `X`, i.e., `e^X`. Example:
 exp(1) = 2.718281828459045
 ```
 
-#### floor(X: integer | float) -> integer
+### floor(X: integer | float) -> integer
 
 Returns the largest integer less than or equal to the given `X`. Example:
 
@@ -125,7 +123,7 @@ Returns the largest integer less than or equal to the given `X`. Example:
 floor(3.6) = 3
 ```
 
-#### fmod(X: integer | float, Y: integer | float) -> float
+### fmod(X: integer | float, Y: integer | float) -> float
 
 Returns the remainder of `X` divided by `Y` as a floating-point number. Example:
 
@@ -133,7 +131,7 @@ Returns the remainder of `X` divided by `Y` as a floating-point number. Example:
 fmod(6.5, 2.5) = 1.5
 ```
 
-#### log(X: integer | float) -> float
+### log(X: integer | float) -> float
 
 Returns the natural logarithm of the number `X`, where `X` must be greater than 0. Example:
 
@@ -141,7 +139,7 @@ Returns the natural logarithm of the number `X`, where `X` must be greater than 
 log(7.38905609893065) = 2.0
 ```
 
-#### log10(X: integer | float) -> float
+### log10(X: integer | float) -> float
 
 Returns the logarithm base 10 of the number `X`, where `X` must be greater than 0. Example:
 
@@ -149,7 +147,7 @@ Returns the logarithm base 10 of the number `X`, where `X` must be greater than 
 log10(100) = 2.0
 ```
 
-#### log2(X: integer | float) -> float
+### log2(X: integer | float) -> float
 
 Returns the logarithm base 2 of the number `X`, where `X` must be greater than 0. Example:
 
@@ -158,7 +156,7 @@ log2(8) = 3.0
 log2(8.5) = 3.0874628412503395
 ```
 
-#### round(X: integer | float) -> integer
+### round(X: integer | float) -> integer
 
 Rounds the number `X` to the nearest integer. Example:
 
@@ -166,7 +164,7 @@ Rounds the number `X` to the nearest integer. Example:
 round(4.5) = 5
 ```
 
-#### power(X: integer | float, Y: integer | float) -> float
+### power(X: integer | float, Y: integer | float) -> float
 
 Returns `X` to the power of `Y`, i.e., `X^Y`. Example:
 
@@ -174,7 +172,7 @@ Returns `X` to the power of `Y`, i.e., `X^Y`. Example:
 power(2, 3) = 8.0
 ```
 
-#### random() -> float
+### random() -> float
 
 Returns a random floating-point number in the range `[0, 1)`. Example:
 
@@ -182,7 +180,7 @@ Returns a random floating-point number in the range `[0, 1)`. Example:
 random() = 0.5400050092601868
 ```
 
-#### sin(X: integer | float) -> float
+### sin(X: integer | float) -> float
 
 Returns the sine of angle `X`, expressed in radians. Example:
 
@@ -190,7 +188,7 @@ Returns the sine of angle `X`, expressed in radians. Example:
 sin(0.5) = 0.479425538604203
 ```
 
-#### sinh(X: integer | float) -> float
+### sinh(X: integer | float) -> float
 
 Returns the hyperbolic sine of `X`. Example:
 
@@ -198,7 +196,7 @@ Returns the hyperbolic sine of `X`. Example:
 sinh(0.5) = 0.5210953054937474
 ```
 
-#### sqrt(X: integer | float) -> float
+### sqrt(X: integer | float) -> float
 
 Returns the square root of the number `X`. Example:
 
@@ -206,7 +204,7 @@ Returns the square root of the number `X`. Example:
 sqrt(9) = 3.0
 ```
 
-#### tan(X: integer | float) -> float
+### tan(X: integer | float) -> float
 
 Returns the tangent of angle `X` (expressed in radians). Example:
 
@@ -214,7 +212,7 @@ Returns the tangent of angle `X` (expressed in radians). Example:
 tan(0.5) = 0.5463024898437905
 ```
 
-#### tanh(X: integer | float) -> float
+### tanh(X: integer | float) -> float
 
 Returns the hyperbolic tangent of `X`. Example:
 
@@ -226,7 +224,7 @@ tanh(0.5) = 0.46211715726000974
 
 Data type judgment functions can be used to check the data type of a specified field and indicate whether the field conforms to the specified data type through a boolean value.
 
-#### is_array(Term: any) -> boolean
+### is_array(Term: any) -> boolean
 
 > 'any' signifies all data types.
 
@@ -240,7 +238,7 @@ is_array(0.5) = false
 is_array('[1, 2]') = false
 ```
 
-#### is_bool(Term: any) -> boolean
+### is_bool(Term: any) -> boolean
 
 Determine whether `Term` is of boolean type. Example:
 
@@ -250,7 +248,7 @@ is_bool(false) = false
 is_bool('true') = false
 ```
 
-#### is_float(Term: any) -> boolean
+### is_float(Term: any) -> boolean
 
 Determine whether `Term` is of float type. Example:
 
@@ -259,7 +257,7 @@ is_float(123.4) = true
 is_float(123) = false
 ```
 
-#### is_int(Term: any) -> boolean
+### is_int(Term: any) -> boolean
 
 Determine whether `Term` is of integer type. Example:
 
@@ -268,7 +266,7 @@ is_int(123) = true
 is_int(123.4) = false
 ```
 
-#### is_map(Term: any) -> boolean
+### is_map(Term: any) -> boolean
 
 Determine whether `Term` is of map type. Example:
 
@@ -277,7 +275,7 @@ is_map(json_decode('{"value": 1}')) = true
 is_map(json_decode('[{"value": 1}]')) = false
 ```
 
-#### is_null(Term: any) -> boolean
+### is_null(Term: any) -> boolean
 
 Determine whether the variable `Term` is undefined. Example:
 
@@ -286,7 +284,7 @@ is_null(this_is_an_unassigned_variable) = true
 is_null(map_get('b', json_decode('{"a": 1}'))) = true
 ```
 
-#### is_num(Term: any) -> boolean
+### is_num(Term: any) -> boolean
 
 Determine whether `Term` is of integer or float type. Example:
 
@@ -296,7 +294,7 @@ is_num(123.4) = true
 is_num('123') = false
 ```
 
-#### is_str(Term: any) -> boolean
+### is_str(Term: any) -> boolean
 
 Determine whether `Term` is of string type. Example:
 
@@ -307,7 +305,7 @@ is_str(123) = false
 
 ## Data Type Conversion Functions
 
-#### bool(Term: boolean | integer | string) -> boolean
+### bool(Term: boolean | integer | string) -> boolean
 
 Convert `Term` to a boolean. `Term` can only be boolean type, integer type with 0 and 1, or string type with true and false.
 
@@ -324,7 +322,7 @@ bool(20)
 bool('True')
 ```
 
-#### float(Term: float | integer | string) -> float
+### float(Term: float | integer | string) -> float
 
 Convert `Term` to a float.
 
@@ -346,7 +344,7 @@ float('0.12345678901234566') = 0.12345678901234566
 float('0.12345678901234567') = 0.12345678901234566
 ```
 
-#### float(Term: float | integer | string, Decimals: integer) -> float
+### float(Term: float | integer | string, Decimals: integer) -> float
 
 Convert `Term` to a floating-point number containing at most `Decimals` digits after the decimal point, with the range of `Decimals` being `(0, 253]`. The other behavior is the same as `float/1`. Example:
 
@@ -355,7 +353,7 @@ float('3.1415926', 3) = 3.142
 float('0.000012345', 5) = 0.00001
 ```
 
-#### float2str(Float: float, Decimals: integer) -> string
+### float2str(Float: float, Decimals: integer) -> string
 
 Convert the floating-point number `Float` to a string, at most containing `Decimals` digits following the decimal point, with trailing zeros being truncated. The range for `Decimals` is `[0, 253]`. If the significant digits of `Float` exceed 16, rounding errors may occur during the conversion.
 
@@ -377,7 +375,7 @@ float2str(123456789.01234565, 8) = '123456789.01234566'
 float2str(123456789.01234566, 8) = '123456789.01234566'
 ```
 
-#### int(Term: boolean | float | integer | string) -> integer
+### int(Term: boolean | float | integer | string) -> integer
 
 Convert `Term` into an integer.
 
@@ -407,7 +405,7 @@ int('-100+200')
 int('Number 100')
 ```
 
-#### str(Term: any) -> string
+### str(Term: any) -> string
 
 Convert any type of `Term` into a string.
 
@@ -435,7 +433,7 @@ str(0.000000314159265359) = '0.0000003142'
 
 String functions can be used for case transformations, space removal, substring extraction, replacement, and other operations.
 
-#### ascii(Char: string) -> integer
+### ascii(Char: string) -> integer
 
 Returns the ASCII code corresponding to character `Char`. If `Char` contains multiple characters, only the code for the first character is returned. Example:
 
@@ -444,7 +442,7 @@ ascii('a') = 97
 ascii('abc') = 97
 ```
 
-#### concat(Str1: string, Str2: string) -> string
+### concat(Str1: string, Str2: string) -> string
 
 Concatenates `Str1` and `Str2` into a single string. Example:
 
@@ -452,7 +450,7 @@ Concatenates `Str1` and `Str2` into a single string. Example:
 concat('Name:', 'John') = 'Name:John'
 ```
 
-#### find(String: string, SearchPattern: string) -> string
+### find(String: string, SearchPattern: string) -> string
 
 Searches for the substring `SearchPattern` in `String`, deletes all content before `SearchPattern` in `String`, and returns the remaining part of the string. If `SearchPattern` is not found, an empty string will be returned. This function is equivalent to `find(String, SearchPattern, 'leading')`.
 
@@ -463,7 +461,7 @@ find('..., Value: 1.2', 'Value:') = 'Value: 1.2'
 find('..., Value: 1.2', 'Data') = ''
 ```
 
-#### find(String: string, SearchPattern: string, Direction: string) -> string
+### find(String: string, SearchPattern: string, Direction: string) -> string
 
 Same as `find/2`, but allows the specification of the direction of the search for the substring `SearchPattern` using `Direction`. Example:
 
@@ -472,7 +470,7 @@ find('Front, Middle, End', ', ', 'leading') = ', Middle, End'
 find('Front, Middle, End', ', ', 'trailing') = ', End'
 ```
 
-#### lower(String: string) -> string
+### lower(String: string) -> string
 
 Converts uppercase letters in the string `String` to lowercase. Example:
 
@@ -480,7 +478,7 @@ Converts uppercase letters in the string `String` to lowercase. Example:
 lower('Hello') = 'hello'
 ```
 
-#### ltrim(String: string) -> string
+### ltrim(String: string) -> string
 
 Same as `trim/1`, but only removes leading whitespace characters from the `String`. Example:
 
@@ -489,7 +487,7 @@ ltrim('\t  hello  \n') = 'hello  \n'
 ltrim('\t  hello \r\n') = 'hello  \r\n'
 ```
 
-#### pad(String: string, Length: integer) -> string
+### pad(String: string, Length: integer) -> string
 
 Pads a `String` with trailing spaces to the specified length. Example:
 
@@ -497,7 +495,7 @@ Pads a `String` with trailing spaces to the specified length. Example:
 pad('hello', 8) = 'hello   '
 ```
 
-#### pad(String: string, Length: integer, Direction: string) -> string
+### pad(String: string, Length: integer, Direction: string) -> string
 
 Same as `pad/2`, but you can use `Direction` to specify the direction of padding. `leading` means filling leading spaces, `trailing` means filling trailing spaces, and `both` means filling both leading and trailing spaces.
 
@@ -511,7 +509,7 @@ pad('hello', 8, 'trailing') = 'hello   '
 pad('hello', 8, 'both') = ' hello  '
 ```
 
-#### pad(String: string, Length: integer, Direction: string, Char: string) -> string
+### pad(String: string, Length: integer, Direction: string, Char: string) -> string
 
 Same as `pad/3`, but can be padded with the specified grapheme cluster `Char`.
 
@@ -523,7 +521,7 @@ pad('hello', 8, 'trailing', '\r\n') = 'hello\r\n\r\n\r\n'
 pad('hello', 8, 'trailing', 'abc') = 'helloabcabcabc'
 ```
 
-#### regex_match(String: string, Expression: string) -> boolean
+### regex_match(String: string, Expression: string) -> boolean
 
 Determine whether the string `String`matches the regular expression `Expression`. Example:
 
@@ -532,7 +530,7 @@ regex_match('123', '^\d+$') = true
 regex_match('a23', '^\d+$') = false
 ```
 
-#### regex_replace(String: string, Expression: string, Replacement: string) -> string
+### regex_replace(String: string, Expression: string, Replacement: string) -> string
 
 Use string `Replacement` to replace the portion of `String` that matches the regular expression `Expression`. If no matching part is found, the original `String` will be returned. Example:
 
@@ -541,7 +539,7 @@ regex_replace('hello 123', '\d+', 'world') = 'hello world'
 regex_replace('a;b; c', ';\s*', ',') = 'a,b,c'
 ```
 
-#### replace(String: string, SearchPattern: string, Replacement: string) -> string
+### replace(String: string, SearchPattern: string, Replacement: string) -> string
 
 Replaces all `SearchPatterns` in `String` with `Replacement`. Example:
 
@@ -550,7 +548,7 @@ replace('ab..cd..ef', '..', '**') = 'ab**cd**ef'
 replace('ab..cd..ef', '..', '') = 'abcdef'
 ```
 
-#### replace(String: string, SearchPattern: string, Replacement: string, Where: string) -> string
+### replace(String: string, SearchPattern: string, Replacement: string, Where: string) -> string
 
 Replaces occurrences of `SearchPattern` in `String` with `Replacement`.
 
@@ -568,7 +566,7 @@ replace('ab..cd..ef', '..', '**', 'leading') = 'ab**cd..ef'
 replace('ab..cd..ef', '..', '**', 'trailing') = 'ab..cd**ef'
 ```
 
-#### reverse(String: string) -> string
+### reverse(String: string) -> string
 
 Reverse a string. Example:
 
@@ -576,7 +574,7 @@ Reverse a string. Example:
 reverse('hello') = 'olleh'
 ```
 
-#### rtrim(String: string) -> string
+### rtrim(String: string) -> string
 
 Same as `trim/1`, but only removes trailing whitespace characters from the `String`. Example:
 
@@ -585,7 +583,7 @@ rtrim('\t  hello  \n') = '\t  hello'
 rtrim('\t  hello \r\n') = '\t  hello'
 ```
 
-#### split(String: string, Separator: string) -> array
+### split(String: string, Separator: string) -> array
 
 Splits a `String` into substrings using `Separator` and returns an array of these substrings.
 
@@ -605,7 +603,7 @@ split('Sienna Blake; Howell Wise', ';') = ['Sienna Blake', ' Howell Wise']
 split('Sienna Blake; Howell Wise', '; ') = ['Sienna Blake', 'Howell Wise']
 ```
 
-#### split(String: string, Separator: string, Option: string) -> array
+### split(String: string, Separator: string, Option: string) -> array
 
 Same as `split/2`, but you can use `Option` to specify the position of the delimiter that needs to be processed, and whether the empty string needs to be returned.
 
@@ -627,7 +625,7 @@ split(';a;b;c', ';', 'leading_notrim') = ['', 'a;b;c']
 split('a;b;c;', ';', 'trailing_notrim') = ['a;b;c', '']
 ```
 
-#### sprintf(Format, ...) -> string
+### sprintf(Format, ...) -> string
 
 Returns a string formatted according to `Format`. The `Format` string contains ordinary characters and control sequences used for formatting.
 
@@ -642,7 +640,7 @@ sprintf('hello, ~s!', 'steve') = 'hello, steve!'
 sprintf('count: ~p~n', 100) = 'count: 100\n'
 ```
 
-#### strlen(String: string) -> integer
+### strlen(String: string) -> integer
 
 Returns the length of `String`. Example:
 
@@ -651,7 +649,7 @@ strlen('hello') = 5
 strlen('hello\n') = 6
 ```
 
-#### substr(String: string, Start: integer) -> string
+### substr(String: string, Start: integer) -> string
 
 Returns all characters in `String` starting from position `Start` to the end of the string. The subscript of the string starts from 0, that is, position 0 corresponds to "h" in the string "hello". Example:
 
@@ -660,7 +658,7 @@ substr('hello', 0) = 'hello'
 substr('hello world', 6) = 'world'
 ```
 
-#### substr(String: string, Start: integer, Length: integer) -> string
+### substr(String: string, Start: integer, Length: integer) -> string
 
 Returns the substring starting from position `Start` in `String` and having a maximum length of `Length`. The subscript of the string starts from 0. Example:
 
@@ -668,7 +666,7 @@ Returns the substring starting from position `Start` in `String` and having a ma
 substr('hello world!', 6, 5) = 'world'
 ```
 
-#### tokens(String: string, SeparatorList: string) -> array
+### tokens(String: string, SeparatorList: string) -> array
 
 Returns a list of substrings of `String` split by the characters in `SeparatorList`.
 
@@ -681,7 +679,7 @@ tokens('a,b;c,d', ',;') = ['a', 'b', 'c', 'd']
 tokens('a;;b', ';') = ['a', 'b']
 ```
 
-#### tokens(String: string, SeparatorList:string, NoCRLF: string) -> array
+### tokens(String: string, SeparatorList:string, NoCRLF: string) -> array
 
 Same as `tokens/2`, but you can specify `NoCRLF` as `nocrlf` to split carriage return and line feed characters at the same time. Example:
 
@@ -689,7 +687,7 @@ Same as `tokens/2`, but you can specify `NoCRLF` as `nocrlf` to split carriage r
 tokens('a\rb\nc\r\nd', ';', 'nocrlf') = ['a', 'b', 'c', 'd']
 ```
 
-#### trim(String: string) -> string
+### trim(String: string) -> string
 
 Removes leading and trailing characters from a `String` that should be considered whitespace, such as spaces, tabs, form feeds, and newline characters. Note that `\r\n` is considered a grapheme cluster in the Unicode standard, so `\r\n` will be deleted altogether. Example:
 
@@ -698,7 +696,7 @@ trim('\t  hello  \n') = 'hello'
 trim('\t  hello \r\n') = 'hello'
 ```
 
-#### upper(String: string) -> string
+### upper(String: string) -> string
 
 Converts lowercase letters in a `String` to uppercase letters. Example:
 
@@ -708,7 +706,7 @@ upper('hello') = 'Hello'
 
 ## Map Operation Functions
 
-#### map_get(Key: string, Map: map) -> any
+### map_get(Key: string, Map: map) -> any
 
 Returns the value of the specified `Key` in the `Map`, or `undefined` if the `Key` does not exist in the Map. Example:
 
@@ -717,7 +715,7 @@ map_get('msg', json_decode('{"msg": "hello"}')) = 'hello'
 map_get('data', json_decode('{"msg": "hello"}')) = undefined
 ```
 
-#### map_get(Key: srting, Map: map, Default: any) -> any
+### map_get(Key: srting, Map: map, Default: any) -> any
 
 Same as `map_get/2`, but when `Key` does not exist, the specified `Default` will be returned. Example:
 
@@ -726,7 +724,7 @@ map_get('data', json_decode('{"msg": "hello"}'), '') = ''
 map_get('value', json_decode('{"data": [1.2, 1.3]}'), []) = []
 ```
 
-#### map_put(Key: string, Value: any, Map: map) -> map
+### map_put(Key: string, Value: any, Map: map) -> map
 
 Insert the `Key` and associated `Value` into the `Map` and return the updated map. If the `Key` already exists in the original `Map`, the old associated value will be replaced with the new Value. Example:
 
@@ -735,7 +733,7 @@ map_get('b', map_put('b', 1, json_decode('{"a": 1}'))) = 1
 map_get('a', map_put('a', 2, json_decode('{"a": 1}'))) = 2
 ```
 
-#### mget(Key: string | array, Map: map) -> any
+### mget(Key: string | array, Map: map) -> any
 
 Returns the value of the specified `Key` in the `Map`, or `undefined` if the `Key` does not exist in the `Map`. You can use an array to specify multiple keys at once to get associated values from a nested map. Example:
 
@@ -745,7 +743,7 @@ json_decode(mget('a', json_decode('{"a": {"b": 1}}'))) = '{"b": 1}'
 mget(['a', 'b'], json_decode('{"a": {"b": 1}}')) = 1
 ```
 
-#### mput(Key: string | array, Value: any, Map: map) -> map
+### mput(Key: string | array, Value: any, Map: map) -> map
 
 Insert the `Key` and associated `Value` into the `Map` and return the updated map. If the `Key` already exists in the original `Map`, the old associated value will be replaced with the new value. You can use an array to specify multiple keys at once to insert data into a nested map. Example:
 
@@ -756,7 +754,7 @@ mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"c": 1}'))) = 2
 
 ## Array Operation Functions
 
-#### contains(Item: any, Array: array) -> boolean
+### contains(Item: any, Array: array) -> boolean
 
 Determine whether the array `Array` contains the specified `Item`. Example:
 
@@ -768,7 +766,7 @@ contains([1, 2], [a, b, [1, 2]]) = true
 contains(json_decode('{"a": 1}'), [json_decode('{"a": 1}'), json_decode('{"b": 2}')]) = true
 ```
 
-#### first(Array: array) -> any
+### first(Array: array) -> any
 
 Returns the first element in the array `Array`. `Array` cannot be empty. Example:
 
@@ -780,7 +778,7 @@ first(['John', 'David']) = 'John'
 first([])
 ```
 
-#### last(Array: array) -> any
+### last(Array: array) -> any
 
 Returns the last element in the array `Array`. `Array` cannot be empty. Example:
 
@@ -792,7 +790,7 @@ last(['John', 'David']) = 'David'
 last([])
 ```
 
-#### length(Array: array) -> integer
+### length(Array: array) -> integer
 
 Returns the length of the array `Array`, that is, the number of elements in the `Array`. Example:
 
@@ -801,7 +799,7 @@ length([1,2,3,4]) = 4
 length([]) = 0
 ```
 
-#### nth(N: integer, Array: array) -> any
+### nth(N: integer, Array: array) -> any
 
 Returns the Nth element in `Array`. `N` should not be larger than the length of `Array`. Example:
 
@@ -814,7 +812,7 @@ nth(0, [1,2,3])
 nth(4, [1,2,3])
 ```
 
-#### sublist(Length: integer, Array: array) -> any
+### sublist(Length: integer, Array: array) -> any
 
 Returns a subarray starting from the 1st element in the array `Array` and having a maximum length of `Length`. If `Length` is greater than the length of `Array`, the entire array will be returned. Example:
 
@@ -823,7 +821,7 @@ sublist(3, [1,2,3,4]) = [1,2,3]
 sublist(10, [1,2,3,4]) = [1,2,3,4]
 ```
 
-#### sublist(Start: integer, Length: integer, Array:array) -> any
+### sublist(Start: integer, Length: integer, Array:array) -> any
 
 Same as `sublist/2`, but you can use `Start` to specify which element to start returning from. If `Start` + `Length` is greater than the length of `Array`, the entire array will be returned. Example:
 
@@ -833,7 +831,7 @@ sublist(2, 10, [1,2,3,4]) = [2,3,4]
 
 ## Hashing Functions
 
-#### md5(String: string) -> string
+### md5(String: string) -> string
 
 Computes an MD5 hash value of a fixed length of 128 bits for a `String` of any length. The hash value will be returned as text consisting of 32 hexadecimal digits. The letters in the returned string are fixed to lowercase (a ~ f).
 
@@ -843,7 +841,7 @@ Example:
 md5('hello') = '5d41402abc4b2a76b9719d911017c592'
 ```
 
-#### sha(String: string) -> string
+### sha(String: string) -> string
 
 Computes a SHA hash value of a fixed length of 160 bits for a `String` of any length using the **SHA-1** algorithm. The hash value will be returned as text consisting of 40 hexadecimal digits. The letters in the returned string are fixed to lowercase (a ~ f).
 
@@ -853,7 +851,7 @@ Example:
 sha('hello') = 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d'
 ```
 
-#### sha256(String: string) -> string
+### sha256(String: string) -> string
 
 Computes a SHA hash value of a fixed length of 256 bits for a `String` of any length using the **SHA-2** algorithm. The hash value will be returned as text consisting of 64 hexadecimal digits. The letters in the returned string are fixed to lowercase (a ~ f).
 
@@ -867,7 +865,7 @@ sha256('hello') = '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9
 
 Note: Binary data cannot be JSON encoded directly, you must call the `bin2hexstr` function to convert it into the corresponding string composed of hexadecimal digits.
 
-#### gunzip(Data: binary) -> binary | string
+### gunzip(Data: binary) -> binary | string
 
 To decompress `Data`, `Data` must contain a gz header and a checksum at the end. Example:
 
@@ -875,7 +873,7 @@ To decompress `Data`, `Data` must contain a gz header and a checksum at the end.
 gunzip(hexstr2bin('1F8B0800000000000013CB48CDC9C9070086A6103605000000')) = 'hello'
 ```
 
-#### gzip(Data: binary | string) -> binary
+### gzip(Data: binary | string) -> binary
 
 Use the DEFLATE algorithm to compress `Data`, and the returned compression result includes the gz header and the checksum at the tail. Example:
 
@@ -883,7 +881,7 @@ Use the DEFLATE algorithm to compress `Data`, and the returned compression resul
 bin2hexstr(gzip('hello')) = '1F8B0800000000000013CB48CDC9C9070086A6103605000000'
 ```
 
-#### unzip(Data: binary) -> binary | string
+### unzip(Data: binary) -> binary | string
 
 Decompress `Data`. `Data` should not contain the zlib header and the checksum at the tail. Example:
 
@@ -891,7 +889,7 @@ Decompress `Data`. `Data` should not contain the zlib header and the checksum at
 unzip(hexstr2bin('CB48CDC9C90700')) = 'hello'
 ```
 
-#### zip(Data: binary | string) -> binary
+### zip(Data: binary | string) -> binary
 
 Use the DEFLATE algorithm to compress `Data`, and the returned compression result does not include the zlib header and the checksum at the tail. Example:
 
@@ -899,7 +897,7 @@ Use the DEFLATE algorithm to compress `Data`, and the returned compression resul
 bin2hexstr(zip('hello')) = 'CB48CDC9C90700'
 ```
 
-#### zip_compress(Data: binary | string) -> binary
+### zip_compress(Data: binary | string) -> binary
 
 Use the DEFLATE algorithm to compress `Data`. The returned compression result contains the zlib header and the checksum at the tail. Example:
 
@@ -907,7 +905,7 @@ Use the DEFLATE algorithm to compress `Data`. The returned compression result co
 bin2hexstr(zip_compress('hello')) = '789CCB48CDC9C90700062C0215'
 ```
 
-#### zip_uncompress(Data: binary) -> binary | string
+### zip_uncompress(Data: binary) -> binary | string
 
 To decompress `Data`, `Data` must contain a zlib header and a checksum at the end. Example:
 
@@ -917,7 +915,7 @@ zip_uncompress(hexstr2bin('789CCB48CDC9C90700062C0215')) = 'hello'
 
 ## Bit Operation Functions
 
-#### bitand(Num1: integer, Num2: integer) -> integer
+### bitand(Num1: integer, Num2: integer) -> integer
 
 Returns the **bitwise AND** result of `Num1` and `Num2`. Both input and output are signed integers. Example:
 
@@ -926,7 +924,7 @@ bitand(10, 8) = 8
 bitand(-10, -8) = -16
 ```
 
-#### bitnot(Num: integer) -> integer
+### bitnot(Num: integer) -> integer
 
 Returns the **bitwise negation** result of `Num`. Both input and output are signed integers. Example:
 
@@ -935,7 +933,7 @@ bitnot(10) = -11
 bitnot(-12) = 11
 ```
 
-#### bitsl(Num: integer, Shift: integer) -> integer
+### bitsl(Num: integer, Shift: integer) -> integer
 
 Shift `Num` bitwise to the left by `Shift` bits, filling the right margin with 0. Example:
 
@@ -944,7 +942,7 @@ bitsl(8, 2) = 32
 bitsl(-8, 2) = -32
 ```
 
-#### bitsr(Num: integer, Shift: integer) -> integer
+### bitsr(Num: integer, Shift: integer) -> integer
 
 Shift `Num` to the right by `Shift` bits, and fill the left blank with the sign bit (that is, 0 for positive numbers and 1 for negative numbers). Example:
 
@@ -955,7 +953,7 @@ bitsr(-8, 2) = -2
 bitsr(-8, 6) = -1
 ```
 
-#### bitor(Num1: integer, Num2: integer) -> integer
+### bitor(Num1: integer, Num2: integer) -> integer
 
 Returns the **bitwise OR** result of `Num1` and `Num2`. Example:
 
@@ -964,7 +962,7 @@ bitor(10, 8) = 10
 bitor(-10, -8) = -2
 ```
 
-#### bitxor(Num1: integer, Num2: integer) -> integer
+### bitxor(Num1: integer, Num2: integer) -> integer
 
 Returns the **bitwise XOR** result of `Num1` and `Num2`. Example:
 
@@ -989,7 +987,7 @@ Typically, it serves as an intermediate value before being converted to an integ
 
 :::
 
-#### bitsize(Bin: binary) -> integer
+### bitsize(Bin: binary) -> integer
 
 Returns the number of bits in the bit sequence `Bin`. Example:
 
@@ -998,7 +996,7 @@ bitsize('abc') = 24
 bitsize('你好') = 48
 ```
 
-#### byteszie(Bin: binary) -> integer
+### byteszie(Bin: binary) -> integer
 
 Returns the number of bytes in the byte sequence `Bin`. Example:
 
@@ -1007,7 +1005,7 @@ byteszie('abc') = 3
 byteszie('你好') = 6
 ```
 
-#### subbits(Bin: binary, BitNum: integer) -> integer
+### subbits(Bin: binary, BitNum: integer) -> integer
 
 Starting from the starting position of the byte sequence `Bin`, obtain the bits of length `BitNum` and convert them into unsigned integers according to the big-endian sequence. This function is equivalent to `subbits(Bytes, 1, BitNum, 'integer', 'unsigned', 'big')`.
 
@@ -1024,7 +1022,7 @@ subbits(hexstr2bin('9F4E58'), 16) = 40782
 subbits(base64_decode('n05Y'), 8) = 159
 ```
 
-#### subbits(Bin: binary, Start: integer, BitNum: integer) -> integer
+### subbits(Bin: binary, Start: integer, BitNum: integer) -> integer
 
 Starting from the position `Start` of the byte sequence `Bin` (the starting position is 1), obtain the bits with a length of `BitNum` and convert them into an unsigned integer according to the big-endian sequence. This function is equivalent to `subbits(Bytes, Start, BitNum, 'integer', 'unsigned', 'big')`.
 
@@ -1041,7 +1039,7 @@ subbits(hexstr2bin('9F4E58'), 9, 8) = 78
 subbits(base64_decode('n05Y'), 9, 4) = 4
 ```
 
-#### subbits(Bin: binary, Start: integer, BitNum: integer, OutputType: string, Signedness: string, Endianness: string) -> bitstring | integer | float
+### subbits(Bin: binary, Start: integer, BitNum: integer, OutputType: string, Signedness: string, Endianness: string) -> bitstring | integer | float
 
 Starting from position `Start` of the byte sequence `Bin` (the starting position is 1), obtain the bits of length `BitNum`, and in accordance with the requested byte order, `Endianness`, and sign attribute, `Signedness`, convert them into data of the specified type `OutputType`.
 
@@ -1079,7 +1077,7 @@ subbits(hexstr2bin('9F4E58'), 1, 16, 'float', 'signed', 'big') = -0.007133483886
 
 ## Encoding and Decoding Functions
 
-#### base64_decode(Data: string) -> bytes | string
+### base64_decode(Data: string) -> bytes | string
 
 Encode `Data` to base64 format. Example:
 
@@ -1088,7 +1086,7 @@ base64_decode('aGVsbG8=') = 'hello'
 bin2hexstr(base64_decode('y0jN')) = 'CB48CD'
 ```
 
-#### base64_encode(Data: binary | string) -> string
+### base64_encode(Data: binary | string) -> string
 
 Decode `Data` from base64 format. Example:
 
@@ -1097,7 +1095,7 @@ base64_encode('hello') = 'aGVsbG8='
 base64_encode(hexstr2bin('CB48CD')) = 'y0jN'
 ```
 
-#### json_decode(Data: string) -> array | map
+### json_decode(Data: string) -> array | map
 
 Decode `Data` from JSON format. Example:
 
@@ -1105,7 +1103,7 @@ Decode `Data` from JSON format. Example:
 map_get('a', json_decode('{"a": 1}')) = 1
 ```
 
-#### json_encode(Data: array | map) -> string
+### json_encode(Data: array | map) -> string
 
 Encode `Data` to JSON format. Example:
 
@@ -1113,7 +1111,7 @@ Encode `Data` to JSON format. Example:
 json_encode([1,2,3]) = '[1,2,3]'
 ```
 
-#### bin2hexstr(Data: binary) -> string
+### bin2hexstr(Data: binary) -> string
 
 Convert binary data to the corresponding string of hexadecimal digits. Example:
 
@@ -1121,7 +1119,7 @@ Convert binary data to the corresponding string of hexadecimal digits. Example:
 bin2hexstr(zip('hello')) = 'CB48CDC9C90700'
 ```
 
-#### hexstr2bin(Data: string) -> binary
+### hexstr2bin(Data: string) -> binary
 
 Converts a string of hexadecimal digits to the corresponding binary data. Example:
 
@@ -1137,19 +1135,19 @@ EMQX Enterprise also supports using `schema_encode` and `schema_decode` function
 
 See the table below for a detailed explanation of the functions. 
 
-#### schema_encode(SchemaID: string, Data: string) -> binary
+### schema_encode(SchemaID: string, Data: string) -> binary
 
 Encodes `Data` using the specified Avro Schema. Create a schema in the Schema Registry to get the ID.
 
-#### schema_encode(SchemaID: string, Data: string, MsgType: string) -> binary
+### schema_encode(SchemaID: string, Data: string, MsgType: string) -> binary
 
 Encodes `Data` using the specified Protobuf Schema. Create a schema in the Schema Registry to get the ID. `MsgType` is used to specify the message type corresponding to `Data` in Protobuf Schema.
 
-#### schema_decode(SchemaID: string, Bin: binary) -> map
+### schema_decode(SchemaID: string, Bin: binary) -> map
 
 Decodes `Bin` using the specified Avro Schema. Create a schema in the Schema Registry to get the ID.
 
-#### schema_decode(SchemaID: string, Bin: binary, MsgType: string) -> map
+### schema_decode(SchemaID: string, Bin: binary, MsgType: string) -> map
 
 Decodes `Bin` using the specified Protobuf Schema. Create a schema in the Schema Registry to get the ID. `MsgType` is used to specify the message type corresponding to Data in Protobuf Schema.
 
@@ -1161,7 +1159,7 @@ In EMQX Enterprise, there are also special purpose functions for decoding and en
 
 ## Date and Time Conversion Functions
 
-#### date_to_unix_ts(Unit: string, FormatString: string, DateTimeString: string) -> integer
+### date_to_unix_ts(Unit: string, FormatString: string, DateTimeString: string) -> integer
 
 Parses the datetime string `DateTimeString` according to the format string `FormatString`, converting it to Unix time in specified time unit `Unit`.
 
@@ -1190,7 +1188,7 @@ Example:
 date_to_unix_ts('second', '%Y-%m-%d %H:%M:%S%:z', '2024-02-23 15:00:00+08:00') = 1708671600
 ```
 
-#### date_to_unix_ts(Unit: string, Offset: string | integer, FormatString: string, DateTimeString: string) -> integer
+### date_to_unix_ts(Unit: string, Offset: string | integer, FormatString: string, DateTimeString: string) -> integer
 
 If the `DateTimeString` does not contain a time zone offset, you can use `Offset` to manually specify the offset, other behavior are the same as `date_to_unix_ts/3`. `Offset` can be a string or the number of seconds expressed directly as an integer.
 
@@ -1208,7 +1206,7 @@ date_to_unix_ts('second', 'Z', '%Y-%m-%d %H:%M:%S%:z', '2024-02-23 07:00:00') = 
 date_to_unix_ts('second', 14400, '%Y-%m-%d %H:%M:%S%:z', '2024-02-23 15:00:00') = 1708686000
 ```
 
-#### format_date(Unit: string, Offset: string | integer, FormatString: string, Time: Integer) -> string
+### format_date(Unit: string, Offset: string | integer, FormatString: string, Time: Integer) -> string
 
 Converts a Unix time to a datetime string in the specified format. `Unit` represents the time unit of the Unix time Time to be converted, `Offset` represents the time zone offset in the output date and time, and `FormatString` represents the output date and time format.
 
@@ -1224,7 +1222,7 @@ format_date('millisecond', 'Z', '%Y-%m-%d %H:%M:%S.%3N%:z', 1708933353472) = '20
 format_date('millisecond', 28800, '%Y-%m-%d %H:%M:%S.%3N%:z', 1708933353472) = '2024-02-26 15:42:33.472+08:00'
 ```
 
-#### now_rfc3339() -> string
+### now_rfc3339() -> string
 
 Returns the current system time as an RFC3339 datetime string in seconds. Example:
 
@@ -1232,7 +1230,7 @@ Returns the current system time as an RFC3339 datetime string in seconds. Exampl
 now_rfc3339() = '2024-02-23T10:26:20+08:00'
 ```
 
-#### now_rfc3339(Unit: string) -> string
+### now_rfc3339(Unit: string) -> string
 
 Same as `now_rfc3339/0`, but you can use `Unit` to specify the time unit, supporting `second`, `millisecond`, `microsecond` and `nanosecond`. Example:
 
@@ -1240,7 +1238,7 @@ Same as `now_rfc3339/0`, but you can use `Unit` to specify the time unit, suppor
 now_rfc3339('microsecond') = '2024-02-23T10:26:38.009706+08:00'
 ```
 
-#### now_timestamp() -> integer
+### now_timestamp() -> integer
 
 Returns the current system time as a Unix timestamp in seconds. Example:
 
@@ -1248,7 +1246,7 @@ Returns the current system time as a Unix timestamp in seconds. Example:
 now_timestamp() = 1708913853
 ```
 
-#### now_timestamp(Unit: string) -> integer
+### now_timestamp(Unit: string) -> integer
 
 Same as `now_timestamp/0`, but you can use `Unit` to specify the time unit, supporting `second`, `millisecond`, `microsecond` and `nanosecond`. Example:
 
@@ -1256,7 +1254,7 @@ Same as `now_timestamp/0`, but you can use `Unit` to specify the time unit, supp
 now_timestamp('microsecond') = 1708913828814315
 ```
 
-#### rfc3339_to_unix_ts(DateTimeString: string) -> integer
+### rfc3339_to_unix_ts(DateTimeString: string) -> integer
 
 Converts an RFC3339-compliant datetime string to a Unix timestamp. `2024-02-23T15:56:30Z` is a typical RFC3339 date and time string, which represents UTC time on February 23, 2024, 15:56:30.
 
@@ -1267,7 +1265,7 @@ rfc3339_to_unix_ts('2024-02-23T15:56:30Z') = 1708703790
 rfc3339_to_unix_ts('2024-02-23T15:56:30+08:00') = 1708674990
 ```
 
-#### rfc3339_to_unix_ts(DateTimeString: string, Unit: string) -> integer
+### rfc3339_to_unix_ts(DateTimeString: string, Unit: string) -> integer
 
 Same as `rfc3339_to_unix_ts/1`, but you can use `Unit` to specify the unit of returned Unix timestamp, supporting `second`, `millisecond`, `microsecond` and `nanosecond`. Example:
 
@@ -1278,7 +1276,7 @@ rfc3339_to_unix_ts('2024-02-23T15:56:30.87Z', 'microsecond') = 1708703790870000
 rfc3339_to_unix_ts('2024-02-23T15:56:30.535904509Z', 'nanosecond') = 1708703790535904509
 ```
 
-#### timezone_to_offset_seconds(Offset: string) -> integer
+### timezone_to_offset_seconds(Offset: string) -> integer
 
 Converts a time zone offset as a string to an integer in seconds. The following are supported time offset representations:
 
@@ -1294,7 +1292,7 @@ timezone_to_offset_seconds('+08:00') = 28800
 timezone_to_offset_seconds('local') = 28800
 ```
 
-#### unix_ts_to_rfc3339(Time: integer) -> string
+### unix_ts_to_rfc3339(Time: integer) -> string
 
 Converts a Unix timestamp in seconds to an RFC3339-compliant datetime string, using the system's local time zone. Example:
 
@@ -1302,7 +1300,7 @@ Converts a Unix timestamp in seconds to an RFC3339-compliant datetime string, us
 unix_ts_to_rfc3339(1708671600) = '2024-02-23T15:00:00+08:00'
 ```
 
-#### unix_ts_to_rfc3339(Time: integer, Unit: string) -> string
+### unix_ts_to_rfc3339(Time: integer, Unit: string) -> string
 
 Same as `unix_ts_to_rfc3339/0`, but you can use `Unit` to specify the time unit, supporting `second`, `millisecond`, `microsecond` and `nanosecond`. Example:
 
@@ -1314,7 +1312,7 @@ unix_ts_to_rfc3339(1708671600766, 'millisecond') = '2024-02-23T15:00:00.766+08:0
 
 ### MongoDB Time Functions
 
-#### mongo_date() -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
+### mongo_date() -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
 
 Returns the current time as a MongoDB ISODate type or string. Only supported for use in MongoDB related actions and SQL tests, and only in SQL tests `mongo_date()` returns a string, such as `ISODate("2024-02-23T15:00:00.123Z")`. Returns other than strings from `mongo_date()` are not currently supported as input to other functions.
 
@@ -1324,7 +1322,7 @@ Example:
 mongo_date() = 'ISODate("2024-02-23T15:00:00.123Z")'
 ```
 
-#### mongo_date(Timestamp: integer) -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
+### mongo_date(Timestamp: integer) -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
 
 Converts the specified Unix timestamp in milliseconds to the MongoDB ISODate type or string. Other behaviors are the same as `mongo_date/0`.
 
@@ -1334,7 +1332,7 @@ Example:
 mongo_date(now_timestamp('millisecond')) = 'ISODate(2024-02-23T15:48:57.871Z)'
 ```
 
-#### mongo_date(Timestamp: integer, Unit: string) -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
+### mongo_date(Timestamp: integer, Unit: string) -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
 
 Converts the specified Unix timestamp to the MongoDB ISODate type or string. You can specify the unit of the input timestamp through `Unit`. Other behaviors are the same as `mongo_date/0`.
 
@@ -1355,7 +1353,7 @@ mongo_date(now_timestamp('microsecond'), 'microsecond') = 'ISODate(2024-02-23T15
 
 ## UUID Functions
 
-#### uuid_v4() -> string
+### uuid_v4() -> string
 
 Generates a version 4 UUID. Example:
 
@@ -1363,7 +1361,7 @@ Generates a version 4 UUID. Example:
 uuid_v4() = 'f5bb7bea-a371-4df7-aa30-479add04632b'
 ```
 
-#### uuid_v4_no_hyphen() -> string
+### uuid_v4_no_hyphen() -> string
 
 Generates a version 4 UUID without hyphens. Example:
 
