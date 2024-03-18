@@ -78,9 +78,9 @@ EMQX 与 Azure Event Hubs 的数据集成可以为您的业务带来以下功能
    - **连接字符串**：输入命名空间的连接字符串。可以在命名空间共享访问策略的“连接字符串 - 主键”中找到。有关详细信息，请参阅 [获取事件中心连接字符串](https://learn.microsoft.com/zh-cn/azure/event-hubs/event-hubs-get-connection-string)。
    - **启用 TLS**：连接到 Azure Event Hub 时默认启用 TLS。有关 TLS 连接选项的详细信息，请参阅 [外部资源访问的 TLS](../network/overview.md#启用-tls-加密访问外部资源)。
 
-6. 点击最下方创建按钮完成规则创建。至此您已经完成连接器创建，接下来将继续创建一条规则和 Sink 来指定需要写入的数据。
+6. 在点击 **创建** 之前，您可以点击 **测试连接** 以测试连接器是否能连接到 Azure Event Hubs 服务器。
 
-现在，Azure Event Hubs 应该在连接器列表（**集成** -> **连接器**）中显示，**连接状态**为**已连接**。
+7. 点击底部的 **创建** 按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建带有 Azure Event Hubs Sink 的规则，以指定要转发到 Azure Event Hubs 的数据。详细步骤请参见 [创建 Azure Event Hubs Sink 规则](#创建-azure-event-hubs-sink-规则)。
 
 ## 创建 Azure Event Hubs Sink 规则
 
@@ -107,7 +107,7 @@ EMQX 与 Azure Event Hubs 的数据集成可以为您的业务带来以下功能
 
 6. 在下方的表单中输入 Sink 的名称与描述。
 
-7. 在连接器下拉框中选择刚刚创建的 `my-azure-event-hubs` 连接器。您也可以点击下拉框旁边的创建按钮，在弹出框中快捷创建新的连接器，所需的配置参数按照参照[创建连接器](#创建连接器)。
+7. 在**连接器**下拉框中选择刚刚创建的 `my-azure-event-hubs` 连接器。您也可以点击下拉框旁边的创建按钮，在弹出框中快捷创建新的连接器，所需的配置参数按照参照[创建连接器](#创建连接器)。
 
 8. 配置 Sink 信息，完成数据的写入：
 

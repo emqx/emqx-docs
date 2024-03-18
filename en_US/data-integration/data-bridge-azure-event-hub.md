@@ -72,7 +72,7 @@ To create the Azure Event Hubs data integration, you need to create a Connector 
    - **Enable TLS**: TLS is enabled by default when connecting to Azure Event Hub. For detailed TLS connection options, see [TLS for External Resource Access](../network/overview.md#enable-tls-encryption-for-accessing-external-resources).
 6. Click the **Create** button at the bottom to complete the Connector creation. 
 
-Now, Azure Event Hubs should be listed in the connector list (**Integrations** -> **Connectors**) with a **Connection Status** of **Connected**. Next, you need to create a rule and a Sink to specify the data to be streamed into the Azure Event Hubs.
+Now, Azure Event Hubs should be listed in the connector list (**Integration** -> **Connector**) with a **Connection Status** of **Connected**. Next, you need to create a rule and a Sink to specify the data to be streamed into the Azure Event Hubs.
 
 ## Create a Rule for Azure Event Hubs Sink 
 

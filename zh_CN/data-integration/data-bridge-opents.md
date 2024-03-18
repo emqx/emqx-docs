@@ -73,7 +73,7 @@ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
    - **服务器地址**填写 `http://127.0.0.1:4242`，如果您在远程运行 OpenTSDB 服务器，需填写实际地址。
    - 其他选项使用默认值即可。
 
-4. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
+4. 高级配置（可选），根据情况配置连接池等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
 
 5. 点击**创建**按钮完成连接器创建。
 

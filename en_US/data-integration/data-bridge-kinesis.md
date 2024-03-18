@@ -76,21 +76,36 @@ To facilitate the development and test, you can emulate the Amazon Kinesis Data 
    docker exec -it localstack bash
    ```
 
-2. Create a stream named **my_stream** with only one shard:
+2. Create a stream named `my_stream` with only one shard:
 
    ```bash
    awslocal kinesis create-stream --stream-name "my_stream" --shard-count 1
    ```
 
-## Create Rule for Amazon Kinesis Sinks
+## Create a Connector
 
-This section demonstrates how to create a rule to specify the data to be saved into Amazon Kinesis and add the action triggered by the rule.
+This section demonstrates how to create a Connector to connect the Sink to the Amazon Kinesis Data Streams service.
+
+1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+2. Click **Create** in the top right corner of the page.
+3. On the **Create Connector** page, select **Amazon Kinesis** and then click **Next**.
+4. In the **Configuration** step, configure the following information:
+   - Enter the connector name, which should be a combination of upper and lower case letters and numbers, for example: `my_kinesis`.
+   - **Amazon Kinesis Endpoint**: Enter the [Endpoint](https://docs.aws.amazon.com/general/latest/gr/ak.html) for the Kinesis service. If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), input `http://localhost:4566`.
+   - **AWS Access Key ID**: Enter the [Access key ID](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html). If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), enter any value.
+   - **AWS Secret Access Key**: Enter the [secret access key](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html). If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), enter any value.
+5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Amazon Kinesis Data Streams service.
+6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Amazon Kinesis. For detailed steps, see [Create a Rule with Amazon Kinesis Sink](#create-a-rule-with-amazon-kinesis-sink).
+
+## Create a Rule with Amazon Kinesis Sink
+
+This section demonstrates how to create a rule for processing messages from the source MQTT topic `t/#`  and streaming the processed results to the Amazon data stream `my_stream` through an action with configured Sink. 
 
 1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Input `my_rule` as the rule ID.
+3. Enter `my_rule` as the rule ID.
 
 4. Set the rules in the **SQL Editor**. If you want to save the MQTT messages under topic `t/#` to Amazon Kinesis Data Streams, you can use the SQL syntax below.
 
@@ -113,26 +128,24 @@ This section demonstrates how to create a rule to specify the data to be saved i
 
 6. Select `Amazon Kinesis` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
 
-7. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+7. Enter a name and description for the Sink. The name should be a combination of upper/lower case letters and numbers.
 
-8. Enter the connection information:
+8. From the **Connector** dropdown box, select `my_kinesis` you created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-   - **AWS Access Key ID**: Enter the [Access key ID](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html). If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), enter any value.
-   - **AWS Secret Access Key**: Enter the [secret access key](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html). If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), enter any value.
-   - **Amazon Kinesis Endpoint**: Enter the [Endpoint](https://docs.aws.amazon.com/general/latest/gr/ak.html) for the Kinesis service. If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), input `http://localhost:4566`.
+9. Enter the following information:
+
    - **Amazon Kinesis Stream**: Enter the stream name you created in [Create Stream in Amazon Kinesis Data Streams](#create-stream-in-amazon-kinesis-data-streams).
    - **Partition Key**: Enter the Partition Key that shall be associated with records that are sent to this stream. Placeholders of the form `${variable_name}` are allowed (see next step for example on placeholders).
 
-9. In the **Payload Template** field, leave it blank or define a template.
+10. In the **Payload Template** field, leave it blank or define a template.
 
-   -  If left blank, it will encode all visible inputs from the MQTT message using JSON format, such as clientid, topic, payload, etc.
+    - If left blank, it will encode all visible inputs from the MQTT message using JSON format, such as clientid, topic, payload, etc.
+    - If using the defined template, placeholders of the form `${variable_name}` will be filled with the corresponding value from the MQTT context. For example, `${topic}` will be replaced with `my/topic` if such is the MQTT message topic.
 
-   -  If using the defined template, placeholders of the form `${variable_name}` will be filled with the corresponding value from the MQTT context. For example, `${topic}` will be replaced with `my/topic` if such is the MQTT message topic.
 
+11. Advanced settings (optional): Choose whether to use buffer queue and batch mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-11. Advanced settings (optional): Choose whether to use buffer queue and batch mode as needed. For details, see [Data Integration](./data-bridges.md).
-
-12. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Amazon Kinesis server.
+12. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Amazon Kinesis Data Streams service.
 
 13. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
