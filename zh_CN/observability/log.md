@@ -180,7 +180,11 @@ log {
 
 日志限流功能可以通过限制指定时间窗口内重复事件的记录来减少日志溢出的风险。通过仅记录第一个事件并在此窗口内抑制后续相同事件的记录，日志管理能够变得更加高效，同时不牺牲可观测性。
 
-您可以通过 Dashboard 或直接在配置文件中配置限制时间窗口：
+您可以在 Dashboard 中配置限流时间窗口：选择左侧菜单中的**管理**->**日志**，并点击**日志限流**页签。默认的时间窗口设置为1分钟，最小允许值为1秒。
+
+<img src="./assets/log_throttling.png" alt="log_throttling" style="zoom:67%;" />
+
+您也可以直接在配置文件中配置限流时间窗口：
 
 ```bash
 log {
@@ -190,11 +194,9 @@ log {
 }
 ```
 
-默认的时间窗口设置为1分钟，最小允许值为1秒。
+日志限流默认启用，并适用于选定的日志事件，如授权失败或消息队列溢出等。然而，当 `console` 或 `file` 的日志级别设置为调试时，将禁用限制，以确保详细记录以便进行故障排除。
 
-日志限制默认启用，并适用于选定的日志事件，如授权失败或消息队列溢出等。然而，当 `console` 或 `file` 的日志级别设置为调试时，将禁用限制，以确保详细记录以便进行故障排除。
-
-限制仅应用于以下日志事件：
+限流仅应用于以下日志事件：
 
 - "authorization_permission_denied"
 - "cannot_publish_to_topic_due_to_not_authorized"
@@ -208,11 +210,11 @@ log {
 
 :::
 
-如果在一个时间窗口内有事件被限制，一条摘要警告消息将记录每种类型丢弃事件的计数。例如，如果在一个窗口期内发生5次未授权的订阅尝试，将记录以下事件：
+如果在一个时间窗口内有事件被限流，一条摘要警告消息将记录每种类型丢弃事件的计数。例如，如果在一个窗口期内发生5次未授权的订阅尝试，将记录以下事件：
 
 ```yaml
 2024-03-13T15:45:11.707574+02:00 [warning] clientid: test, msg: authorization_permission_denied, peername: 127.0.0.1:54870, username: test, topic: t/#, action: SUBSCRIBE(Q0), source: file
 2024-03-13T15:45:53.634909+02:00 [warning] msg: log_events_throttled_during_last_period, period: 1 minutes, 0 seconds, dropped: #{authorization_permission_denied => 4}
 ```
 
-您可以看到，第一个 "authorization_permission_denied" 事件被完整记录。接下来的4个类似事件被丢弃，但在 "log_events_throttled_during_last_period" 统计中提到了它们的数量。
+您可以看到，第一个 "authorization_permission_denied" 事件被完整记录。接下来的4个类似事件被丢弃，但在 "log_events_throttled_during_last_period" 统计中记录了它们的数量。

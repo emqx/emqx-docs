@@ -187,7 +187,11 @@ The fields in this log message are:
 
 Log Throttling is a feature designed to mitigate the risk of log flooding by limiting the logging of repeated events within a specified time window. By only logging the first event and suppressing subsequent identical events within this window, log management becomes more efficient without sacrificing observability.
 
-You can configure the throttling time window through the Dashboard or directly in the configuration file as follows:
+You can configure the throttling time window through the Dashboard by selecting **Management** -> **Logging** and clicking the **Throttling** tab. The default time window is set to 1 minute, with a minimum allowable value of 1 second.
+
+<img src="./assets/log_throttling-ee.png" alt="log_throttling-ee" style="zoom:67%;" />
+
+ You can also directly configure the time window in the configuration file as follows:
 
 ```
 log {
@@ -196,8 +200,6 @@ log {
   }
 }
 ```
-
-The default time window is set to 1 minute, with a minimum allowable value of 1 second.
 
 Log throttling is enabled by default and applies to selected log events such as authorization failures or message queue overflows. However, when the log level for `console` or `file` is set to debug, throttling is disabled to ensure detailed logging for troubleshooting.
 
@@ -220,4 +222,4 @@ If any events are throttled within a time window, a summary warning message will
 2024-03-13T15:45:53.634909+02:00 [warning] msg: log_events_throttled_during_last_period, period: 1 minutes, 0 seconds, dropped: #{authorization_permission_denied => 4}
 ```
 
-As you can see, the first "authorization_permission_denied" event is fully logged. The next 4 similar events are dropped but their number is mentioned in "log_events_throttled_during_last_period" statistics.
+As you can see, the first "authorization_permission_denied" event is fully logged. The next 4 similar events are dropped but their number is recorded in "log_events_throttled_during_last_period" statistics.
