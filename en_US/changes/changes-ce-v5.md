@@ -180,12 +180,6 @@
 
   Known issue: the total count returned by this API may overestimate the total number of clients.
 
-- [#12505](https://github.com/emqx/emqx/pull/12505) Upgrade Kafka producer client `wolff` from version 1.10.1 to 1.10.2
-
-  The new version client keeps a long-lived metadata connection for each connector.
-  This makes EMQX perform less new connection establishment for
-  action and connector healchecks.
-
 - [#12513](https://github.com/emqx/emqx/pull/12513) Change level of several flooding log events from warning to info.
 
 - [#12530](https://github.com/emqx/emqx/pull/12530) Enhanced `frame_too_large` and malformed CONNECT packet parse failures to include more information to help troubleshooting.
