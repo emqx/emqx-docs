@@ -112,32 +112,31 @@
   bytesize_field2 = 1024
   ```
 
-- [#12330](https://github.com/emqx/emqx/pull/12330) The bridges for Cassandra have been split so they are available via the connectors and actions APIs. They are still backwards compatible with the old bridge API.
+- [#12330](https://github.com/emqx/emqx/pull/12330) The Cassandra bridge has been split into connector and action components. They are backwards compatible with the bridge HTTP API. Configuration will be upgraded automatically.
 
-- [#12353](https://github.com/emqx/emqx/pull/12353) The bridges for OpentsDB have been split so it is available via the connectors and actions APIs. They are still backwards compatible with the old bridge API.
+- [#12353](https://github.com/emqx/emqx/pull/12353) The OpenTSDB bridge has been split into connector and action components. They are backwards compatible with the bridge HTTP API. Configuration will be upgraded automatically.
 
-- [#12376](https://github.com/emqx/emqx/pull/12376) The Kinesis bridge has been split into connector and action components. Old Kinesis bridges will be upgraded automatically.
+- [#12376](https://github.com/emqx/emqx/pull/12376) The Kinesis bridge has been split into connector and action components. They are backwards compatible with the bridge HTTP API. Configuration will be upgraded automatically.
 
-- [#12386](https://github.com/emqx/emqx/pull/12386) Split GreptimeDB bridge into connector and action components.
+- [#12386](https://github.com/emqx/emqx/pull/12386) The GreptimeDB bridge has been split into connector and action components. They are backwards compatible with the bridge HTTP API. Configuration will be upgraded automatically.
 
-- [#12423](https://github.com/emqx/emqx/pull/12423) Split RabbitMQ bridge into connector and action components.
-  RabbitMQ support source api to sink RabbitMQ message to EMQX broker.
+- [#12423](https://github.com/emqx/emqx/pull/12423) The RabbitMQ bridge has been split into connector, action and source components. They are backwards compatible with the bridge HTTP API. Configuration will be upgraded automatically.
 
-- [#12425](https://github.com/emqx/emqx/pull/12425) The bridges for ClickHouse have been split so they are available via the connectors and actions APIs. They are still backwards compatible with the old bridge API.
+- [#12425](https://github.com/emqx/emqx/pull/12425) The ClickHouse bridge has been split into connector and action components. They are backwards compatible with the bridge HTTP API. Configuration will be upgraded automatically.
 
-- [#12439](https://github.com/emqx/emqx/pull/12439) The Oracle bridge has been split into connector and action components. Old Oracle bridges will be upgraded automatically.
+- [#12439](https://github.com/emqx/emqx/pull/12439) The Oracle bridge has been split into connector and action components. They are backwards compatible with the bridge HTTP API. Configuration will be upgraded automatically.
 
-- [#12449](https://github.com/emqx/emqx/pull/12449) The bridges for TDengine have been split so it is available via the connectors and actions APIs. They are still backwards compatible with the old bridge API.
+- [#12449](https://github.com/emqx/emqx/pull/12449) The TDEngine bridge has been split into connector and action components. They are backwards compatible with the bridge HTTP API. Configuration will be upgraded automatically.
 
-- [#12488](https://github.com/emqx/emqx/pull/12488) The RocketMQ bridge has been split into connector and action components. Old RocketMQ bridges will be upgraded automatically.
+- [#12488](https://github.com/emqx/emqx/pull/12488) The RocketMQ bridge has been split into connector and action components. They are backwards compatible with the bridge HTTP API. Configuration will be upgraded automatically.
 
-- [#12512](https://github.com/emqx/emqx/pull/12512) The HStreamDB bridge has been split into connector and action components. Old HStreamDB bridges will be upgraded automatically but it is recommended to do the upgrade manually as new fields has been added to the configuration.
+- [#12512](https://github.com/emqx/emqx/pull/12512) The HSTreamDB bridge has been split into connector and action components. They are backwards compatible with the bridge HTTP API. Configuration will be upgraded automatically, however, it is recommended to do the upgrade manually as new fields have been added to the configuration.
 
-- [#12543](https://github.com/emqx/emqx/pull/12543) The DynamoDB bridge has been split into connector and action components. Old DynamoDB bridges will be upgraded automatically.
+- [#12543](https://github.com/emqx/emqx/pull/12543) The DynamoDB bridge has been split into connector and action components. They are backwards compatible with the bridge HTTP API. Configuration will be upgraded automatically.
 
-- [#12595](https://github.com/emqx/emqx/pull/12595) The Kafka Consumer bridge has been split into connector and source components. Old Kafka Consumer bridges will be upgraded automatically.
+- [#12595](https://github.com/emqx/emqx/pull/12595) The Kafka Consumer bridge has been split into connector and source components. They are backwards compatible with the bridge HTTP API. Configuration will be upgraded automatically.
 
-- [#12619](https://github.com/emqx/emqx/pull/12619) The Microsoft SQL Server bridge has been split into connector and action components. Old Microsoft SQL Server bridges will be upgraded automatically.
+- [#12619](https://github.com/emqx/emqx/pull/12619) The Microsoft SQL Server bridge has been split into connector and action components. They are backwards compatible with the bridge HTTP API. Configuration will be upgraded automatically.
 
 - [#12381](https://github.com/emqx/emqx/pull/12381) Added new SQL functions: `map_keys()`, `map_values()`, `map_to_entries()`, `join_to_string()`, `join_to_string()`, `join_to_sql_values_string()`, `is_null_var()`, `is_not_null_var()`.
 
