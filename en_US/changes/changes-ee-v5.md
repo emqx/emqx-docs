@@ -43,7 +43,6 @@
 
   Warning: large number of matching rules (not tied to a concrete clientid, username or host) will impact performance.
 
-
 - [#12509](https://github.com/emqx/emqx/pull/12509) Implement API to re-order all authenticators / authorization sources.
 
 - [#12517](https://github.com/emqx/emqx/pull/12517) Congifuration files now support multi-line string values with indentation.
@@ -60,35 +59,35 @@
   ~"""
   }
   ```
-  See [HOCON 0.42.0](https://github.com/emqx/hocon/releases/tag/0.42.0) release note for more dtails.
+  See [HOCON 0.42.0](https://github.com/emqx/hocon/releases/tag/0.42.0) release notes for more details.
 
 - [#12520](https://github.com/emqx/emqx/pull/12520) Implement log throttling. The feature reduces the number of potentially flooding logged events by
   dropping all but the first event within a configured time window.
   Throttling is applied to the following log events:
-  - authorization_permission_denied,
-  - cannot_publish_to_topic_due_to_not_authorized,
-  - cannot_publish_to_topic_due_to_quota_exceeded,
-  - connection_rejected_due_to_license_limit_reached,
-  - dropped_msg_due_to_mqueue_is_full.
+  - `authorization_permission_denied`
+  - `cannot_publish_to_topic_due_to_not_authorized`
+  - `cannot_publish_to_topic_due_to_quota_exceeded`
+  - `connection_rejected_due_to_license_limit_reached`
+  - `dropped_msg_due_to_mqueue_is_full`
 
 - [#12561](https://github.com/emqx/emqx/pull/12561) Implement HTTP APIs to get the list of client's inflight and mqueue messages.
 
   To get the first chunk of data:
-  - GET /clients/{clientid}/mqueue_messages?limit=100
-  - GET /clients/{clientid}/inflight_messages?limit=100
+  - `GET /clients/{clientid}/mqueue_messages?limit=100`
+  - `GET /clients/{clientid}/inflight_messages?limit=100`
 
   Alternatively:
-  - GET /clients/{clientid}/mqueue_messages?limit=100&after=none
-  - GET /clients/{clientid}/inflight_messages?limit=100&after=none
+  - `GET /clients/{clientid}/mqueue_messages?limit=100&after=none`
+  - `GET /clients/{clientid}/inflight_messages?limit=100&after=none`
 
   To get the next chunk of data:
-  - GET /clients/{clientid}/mqueue_messages?limit=100&after={last}
-  - GET /clients/{clientid}/inflight_messages?limit=100&after={last}
+  - `GET /clients/{clientid}/mqueue_messages?limit=100&after={last}`
+  - `GET /clients/{clientid}/inflight_messages?limit=100&after={last}`
 
-  Where {last} is a value (opaque string token) of "meta.last" field from the previous response.
+  Where `{last}` is a value (opaque string token) of `meta.last` field from the previous response.
 
-  If there is no more data, "last" = "end_of_data" is returned.
-  If a subsequent request is attempted with "after=end_of_data", a "400 Bad Request" error response will be received.
+  If there is no more data, `meta.last` = `end_of_data` is returned.
+  If a subsequent request is attempted with `after=end_of_data`, a `400 Bad Request` error response will be received.
 
   Mqueue messages are ordered according to the queue (FIFO) order.
   Inflight messages are ordered by MQTT Packet Id, which may not represent the chronological messages order.
@@ -119,18 +118,12 @@
 
 - [#12376](https://github.com/emqx/emqx/pull/12376) The Kinesis bridge has been split into connector and action components. Old Kinesis bridges will be upgraded automatically.
 
-- [#12381](https://github.com/emqx/emqx/pull/12381) Added new SQL functions: map_keys(), map_values(), map_to_entries(), join_to_string(), join_to_string(), join_to_sql_values_string(), is_null_var(), is_not_null_var().
-
-  For more information on the functions and their usage, refer to the documentation.
-
 - [#12386](https://github.com/emqx/emqx/pull/12386) Split GreptimeDB bridge into connector and action components.
 
 - [#12423](https://github.com/emqx/emqx/pull/12423) Split RabbitMQ bridge into connector and action components.
   RabbitMQ support source api to sink RabbitMQ message to EMQX broker.
 
 - [#12425](https://github.com/emqx/emqx/pull/12425) The bridges for ClickHouse have been split so they are available via the connectors and actions APIs. They are still backwards compatible with the old bridge API.
-
-- [#12427](https://github.com/emqx/emqx/pull/12427) Made possible to limit the number of Kafka partitions to utilize for Kafka data integration.
 
 - [#12439](https://github.com/emqx/emqx/pull/12439) The Oracle bridge has been split into connector and action components. Old Oracle bridges will be upgraded automatically.
 
@@ -142,17 +135,23 @@
 
 - [#12543](https://github.com/emqx/emqx/pull/12543) The DynamoDB bridge has been split into connector and action components. Old DynamoDB bridges will be upgraded automatically.
 
+- [#12595](https://github.com/emqx/emqx/pull/12595) The Kafka Consumer bridge has been split into connector and source components. Old Kafka Consumer bridges will be upgraded automatically.
+
+- [#12619](https://github.com/emqx/emqx/pull/12619) The Microsoft SQL Server bridge has been split into connector and action components. Old Microsoft SQL Server bridges will be upgraded automatically.
+
+- [#12381](https://github.com/emqx/emqx/pull/12381) Added new SQL functions: `map_keys()`, `map_values()`, `map_to_entries()`, `join_to_string()`, `join_to_string()`, `join_to_sql_values_string()`, `is_null_var()`, `is_not_null_var()`.
+
+  For more information on the functions and their usage, refer to the documentation.
+
+- [#12427](https://github.com/emqx/emqx/pull/12427) Made possible to limit the number of Kafka partitions to utilize for Kafka data integration.
+
 - [#12577](https://github.com/emqx/emqx/pull/12577) Changed the type of `service_account_json` of both GCP PubSub Producer and Consumer connectors to a string.  Now, it's possible to set this field to a JSON-encoded string.  Using the previous format (a HOCON map) is still supported but not encouraged.
 
 - [#12581](https://github.com/emqx/emqx/pull/12581) Add JSON schema to schema registry.
 
   JSON Schema supports [Draft 03](http://tools.ietf.org/html/draft-zyp-json-schema-03), [Draft 04](http://tools.ietf.org/html/draft-zyp-json-schema-04) and [Draft 06](https://datatracker.ietf.org/doc/html/draft-wright-json-schema-00).
 
-- [#12595](https://github.com/emqx/emqx/pull/12595) The Kafka Consumer bridge has been split into connector and source components. Old Kafka Consumer bridges will be upgraded automatically.
-
 - [#12602](https://github.com/emqx/emqx/pull/12602) Enhanced health checking for IoTDB connector, using its `ping` API instead of just checking for an existing socket connection.
-
-- [#12619](https://github.com/emqx/emqx/pull/12619) The Microsoft SQL Server bridge has been split into connector and action components. Old Microsoft SQL Server bridges will be upgraded automatically.
 
 - [#12336](https://github.com/emqx/emqx/pull/12336) Isolate channels cleanup from other async tasks (like routes cleanup) by using a dedicated pool,
   as this task can be quite slow under high network latency conditions.
@@ -163,8 +162,7 @@
 
 ### Bug Fixes
 
-- [#11868](https://github.com/emqx/emqx/pull/11868) Fix a bug that willmsg is not published after session takeover.
-
+- [#11868](https://github.com/emqx/emqx/pull/11868) Fix a bug when will message was not published after session takeover.
 
 - [#12347](https://github.com/emqx/emqx/pull/12347) Always render valid messages for egress MQTT data bridge from the data fetched by Rule SQL, even if the data is incomplete and placeholders used in the bridge configuration are missing.
   Previously, some messages were rendered as invalid and were discarded by the MQTT egress data bridge.
@@ -202,9 +200,9 @@
 
 - [#12566](https://github.com/emqx/emqx/pull/12566) Enhanced the bootstrap file for REST API keys:
 
-  - now the empty line will be skipped instead of throw an error
+  - now the empty line will be skipped instead of throwing an error
 
-  - keys from bootstrap file now have highest priority, if one of them is conflict with an old key, the old key will be deleted
+  - keys from bootstrap file now have highest priority, if one of them conflicts with an old key, the old key will be deleted
 
 - [#12646](https://github.com/emqx/emqx/pull/12646) Fix rule engine date time string parser.
 
