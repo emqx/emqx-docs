@@ -112,53 +112,12 @@
   bytesize_field2 = 1024
   ```
 
-- [#12330](https://github.com/emqx/emqx/pull/12330) The bridges for Cassandra have been split so they are available via the connectors and actions APIs. They are still backwards compatible with the old bridge API.
-
-- [#12353](https://github.com/emqx/emqx/pull/12353) The bridges for OpentsDB have been split so it is available via the connectors and actions APIs. They are still backwards compatible with the old bridge API.
-
-- [#12376](https://github.com/emqx/emqx/pull/12376) The Kinesis bridge has been split into connector and action components. Old Kinesis bridges will be upgraded automatically.
-
-- [#12386](https://github.com/emqx/emqx/pull/12386) Split GreptimeDB bridge into connector and action components.
-
-- [#12423](https://github.com/emqx/emqx/pull/12423) Split RabbitMQ bridge into connector and action components.
-  RabbitMQ support source api to sink RabbitMQ message to EMQX broker.
-
-- [#12425](https://github.com/emqx/emqx/pull/12425) The bridges for ClickHouse have been split so they are available via the connectors and actions APIs. They are still backwards compatible with the old bridge API.
-
-- [#12439](https://github.com/emqx/emqx/pull/12439) The Oracle bridge has been split into connector and action components. Old Oracle bridges will be upgraded automatically.
-
-- [#12449](https://github.com/emqx/emqx/pull/12449) The bridges for TDengine have been split so it is available via the connectors and actions APIs. They are still backwards compatible with the old bridge API.
-
-- [#12488](https://github.com/emqx/emqx/pull/12488) The RocketMQ bridge has been split into connector and action components. Old RocketMQ bridges will be upgraded automatically.
-
-- [#12512](https://github.com/emqx/emqx/pull/12512) The HStreamDB bridge has been split into connector and action components. Old HStreamDB bridges will be upgraded automatically but it is recommended to do the upgrade manually as new fields has been added to the configuration.
-
-- [#12543](https://github.com/emqx/emqx/pull/12543) The DynamoDB bridge has been split into connector and action components. Old DynamoDB bridges will be upgraded automatically.
-
-- [#12595](https://github.com/emqx/emqx/pull/12595) The Kafka Consumer bridge has been split into connector and source components. Old Kafka Consumer bridges will be upgraded automatically.
-
-- [#12619](https://github.com/emqx/emqx/pull/12619) The Microsoft SQL Server bridge has been split into connector and action components. Old Microsoft SQL Server bridges will be upgraded automatically.
-
 - [#12381](https://github.com/emqx/emqx/pull/12381) Added new SQL functions: `map_keys()`, `map_values()`, `map_to_entries()`, `join_to_string()`, `join_to_string()`, `join_to_sql_values_string()`, `is_null_var()`, `is_not_null_var()`.
 
   For more information on the functions and their usage, refer to the documentation.
 
-- [#12427](https://github.com/emqx/emqx/pull/12427) Made possible to limit the number of Kafka partitions to utilize for Kafka data integration.
-
-- [#12577](https://github.com/emqx/emqx/pull/12577) Changed the type of `service_account_json` of both GCP PubSub Producer and Consumer connectors to a string.  Now, it's possible to set this field to a JSON-encoded string.  Using the previous format (a HOCON map) is still supported but not encouraged.
-
-- [#12581](https://github.com/emqx/emqx/pull/12581) Add JSON schema to schema registry.
-
-  JSON Schema supports [Draft 03](http://tools.ietf.org/html/draft-zyp-json-schema-03), [Draft 04](http://tools.ietf.org/html/draft-zyp-json-schema-04) and [Draft 06](https://datatracker.ietf.org/doc/html/draft-wright-json-schema-00).
-
-- [#12602](https://github.com/emqx/emqx/pull/12602) Enhanced health checking for IoTDB connector, using its `ping` API instead of just checking for an existing socket connection.
-
 - [#12336](https://github.com/emqx/emqx/pull/12336) Isolate channels cleanup from other async tasks (like routes cleanup) by using a dedicated pool,
   as this task can be quite slow under high network latency conditions.
-
-- [#12494](https://github.com/emqx/emqx/pull/12494) Improve MongoDB connector performance.
-
-  - [mongodb-erlang PR](https://github.com/emqx/mongodb-erlang/pull/41)
 
 ### Bug Fixes
 
@@ -234,21 +193,6 @@
 
   Fixed the issue in endpoint: `/stats` that the values of fields `subscriptions.shared.count` and `subscriptions.shared.max`
   can not be updated in time when the client disconnected or unsubscribed the Shared-Subscription.
-
-- [#12390](https://github.com/emqx/emqx/pull/12390) Fixed /license API request maybe crash during cluster join processes.
-
-- [#12411](https://github.com/emqx/emqx/pull/12411) Fixed a bug where `null` values would be inserted as `1853189228` in `int` columns in Cassandra data integration.
-
-- [#12522](https://github.com/emqx/emqx/pull/12522) Improved parsing for Kafka bootstrap hosts.
-
-  Previously, spaces following commas in the Kafka bootstrap hosts list were included in the parsing result.
-  This inclusion led to connection timeouts or DNS resolution failures due to the malformed host entries.
-
-- [#12656](https://github.com/emqx/emqx/pull/12656) Added a topic check when creating a GCP PubSub Producer action, so it now fails when the topic does not exist or the provided credentials do not have enough permissions to use it.
-
-- [#12678](https://github.com/emqx/emqx/pull/12678) The DynamoDB connector now explicitly reports the error reason upon connection failure. This update addresses the previous limitation where connection failures did not result in any explanation.
-
-- [#12681](https://github.com/emqx/emqx/pull/12681) When sending messages to a RocketMQ bridge/action while debug level logging was activated, secrets could be emitted in debug level log messages. This has now been fixed.
 
 ## 5.5.1
 
