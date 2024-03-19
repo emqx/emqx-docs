@@ -255,7 +255,6 @@
 - [#12678](https://github.com/emqx/emqx/pull/12678) The DynamoDB connector now explicitly reports the error reason upon connection failure. This update addresses the previous limitation where connection failures did not result in any explanation.
 
 - [#12681](https://github.com/emqx/emqx/pull/12681) When sending messages to a RocketMQ bridge/action while debug level logging was activated, secrets could be emitted in debug level log messages. This has now been fixed.
-
   
 ## 5.5.1
 
