@@ -103,6 +103,7 @@ The following data systems are only supported in the EMQX enterprise version:
 - [MongoDB](./data-bridge-mongodb.md)
 - [Redis](./data-bridge-redis.md)
 - [TDengine](./data-bridge-tdengine.md)
+- [Elasticsearch](./elasticsearch.md)
 
 **Message Queue**
 
@@ -111,6 +112,11 @@ The following data systems are only supported in the EMQX enterprise version:
 - [Pulsar](./data-bridge-pulsar.md)
 - [RabbitMQ](./data-bridge-rabbitmq.md)
 - [RocketMQ](./data-bridge-rocketmq.md)
+
+**Others**
+
+- [SysKeeper](./syskeeper.md)
+- [Amazon S3](./s3.md)
 
 {% endemqxce %}
 
@@ -165,6 +171,7 @@ EMQX supports data integration with the following types of data systems.
 **Others**
 
 - [SysKeeper](./syskeeper.md)
+- [Amazon S3](./s3.md)
 
 {% endemqxee %}
 
