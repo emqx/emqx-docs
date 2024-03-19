@@ -1,6 +1,6 @@
 {
   "info": {
-    "version": "5.5.0",
+    "version": "5.5.1",
     "title": "EMQX API"
   },
   "components": {
@@ -265,11 +265,11 @@
             "enum": [
               "http"
             ],
-            "description": "The Bridge Type"
+            "description": "The action type."
           },
           "name": {
             "type": "string",
-            "description": "Bridge name, used as a human-readable description of the bridge."
+            "description": "Action name, used as a human-readable identifier."
           },
           "enable": {
             "default": true,
@@ -290,7 +290,7 @@
           },
           "url": {
             "type": "string",
-            "description": "The URL of the HTTP Bridge.<br/><br/>Template with variables is allowed in the path, but variables cannot be used in the scheme, host,<br/>or port part.<br/><br/>For example, <code> http://localhost:9901/${topic} </code> is allowed, but<br/><code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code><br/>is not allowed."
+            "description": "The URL of the HTTP action.<br/><br/>Template with variables is allowed in the path, but variables cannot be used in the scheme, host,<br/>or port part.<br/><br/>For example, <code> http://localhost:9901/${topic} </code> is allowed, but<br/><code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code><br/>is not allowed."
           },
           "headers": {
             "default": {
@@ -1239,16 +1239,16 @@
             "enum": [
               "http"
             ],
-            "description": "The Bridge Type"
+            "description": "The action type."
           },
           "name": {
             "type": "string",
-            "description": "Bridge name, used as a human-readable description of the bridge."
+            "description": "Action name, used as a human-readable identifier."
           },
           "enable": {
             "default": true,
             "type": "boolean",
-            "description": "Enable or disable this bridge"
+            "description": "Enable or disable this action."
           },
           "connector": {
             "type": "string",
@@ -1291,16 +1291,16 @@
               "webhook",
               "http"
             ],
-            "description": "The Bridge Type"
+            "description": "The action type."
           },
           "name": {
             "type": "string",
-            "description": "Bridge name, used as a human-readable description of the bridge."
+            "description": "Action name, used as a human-readable identifier."
           },
           "enable": {
             "default": true,
             "type": "boolean",
-            "description": "Enable or disable this bridge"
+            "description": "Enable or disable this action."
           },
           "tags": {
             "type": "array",
@@ -1361,19 +1361,18 @@
           },
           "url": {
             "type": "string",
-            "description": "The URL of the HTTP Bridge.<br/><br/>Template with variables is allowed in the path, but variables cannot be used in the scheme, host,<br/>or port part.<br/><br/>For example, <code> http://localhost:9901/${topic} </code> is allowed, but<br/><code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code><br/>is not allowed."
+            "description": "The URL of the HTTP action.<br/><br/>Template with variables is allowed in the path, but variables cannot be used in the scheme, host,<br/>or port part.<br/><br/>For example, <code> http://localhost:9901/${topic} </code> is allowed, but<br/><code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code><br/>is not allowed."
           },
           "direction": {
             "type": "string",
             "enum": [
               "egress"
             ],
-            "deprecated": true,
-            "description": "Deprecated, The direction of this bridge, MUST be 'egress'"
+            "deprecated": true
           },
           "local_topic": {
             "type": "string",
-            "description": "The MQTT topic filter to be forwarded to the HTTP server. All MQTT 'PUBLISH' messages with the topic<br/>matching the local_topic will be forwarded.<br/><br/>NOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is<br/>configured, then both the data got from the rule and the MQTT messages that match local_topic<br/>will be forwarded."
+            "description": "The MQTT topic filter to be forwarded to the HTTP server. All MQTT 'PUBLISH' messages with the topic<br/>matching the local_topic will be forwarded.<br/><br/>NOTE: If this action is used as the action of a rule (EMQX rule engine), and also local_topic is<br/>configured, then both the data got from the rule and the MQTT messages that match local_topic<br/>will be forwarded."
           },
           "method": {
             "default": "post",
@@ -1508,7 +1507,7 @@
           "enable": {
             "default": true,
             "type": "boolean",
-            "description": "Enable or disable this bridge"
+            "description": "Enable or disable this action."
           },
           "connector": {
             "type": "string",
@@ -1788,7 +1787,7 @@
           },
           "url": {
             "type": "string",
-            "description": "The URL of the HTTP Bridge.<br/><br/>Template with variables is allowed in the path, but variables cannot be used in the scheme, host,<br/>or port part.<br/><br/>For example, <code> http://localhost:9901/${topic} </code> is allowed, but<br/><code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code><br/>is not allowed."
+            "description": "The URL of the HTTP action.<br/><br/>Template with variables is allowed in the path, but variables cannot be used in the scheme, host,<br/>or port part.<br/><br/>For example, <code> http://localhost:9901/${topic} </code> is allowed, but<br/><code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code><br/>is not allowed."
           },
           "headers": {
             "default": {
@@ -7662,16 +7661,16 @@
             "enum": [
               "http"
             ],
-            "description": "The Bridge Type"
+            "description": "The action type."
           },
           "name": {
             "type": "string",
-            "description": "Bridge name, used as a human-readable description of the bridge."
+            "description": "Action name, used as a human-readable identifier."
           },
           "enable": {
             "default": true,
             "type": "boolean",
-            "description": "Enable or disable this bridge"
+            "description": "Enable or disable this action."
           },
           "connector": {
             "type": "string",
@@ -7950,7 +7949,7 @@
           "enable": {
             "default": true,
             "type": "boolean",
-            "description": "Enable or disable this bridge"
+            "description": "Enable or disable this action."
           },
           "tags": {
             "type": "array",
@@ -8011,19 +8010,18 @@
           },
           "url": {
             "type": "string",
-            "description": "The URL of the HTTP Bridge.<br/><br/>Template with variables is allowed in the path, but variables cannot be used in the scheme, host,<br/>or port part.<br/><br/>For example, <code> http://localhost:9901/${topic} </code> is allowed, but<br/><code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code><br/>is not allowed."
+            "description": "The URL of the HTTP action.<br/><br/>Template with variables is allowed in the path, but variables cannot be used in the scheme, host,<br/>or port part.<br/><br/>For example, <code> http://localhost:9901/${topic} </code> is allowed, but<br/><code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code><br/>is not allowed."
           },
           "direction": {
             "type": "string",
             "enum": [
               "egress"
             ],
-            "deprecated": true,
-            "description": "Deprecated, The direction of this bridge, MUST be 'egress'"
+            "deprecated": true
           },
           "local_topic": {
             "type": "string",
-            "description": "The MQTT topic filter to be forwarded to the HTTP server. All MQTT 'PUBLISH' messages with the topic<br/>matching the local_topic will be forwarded.<br/><br/>NOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is<br/>configured, then both the data got from the rule and the MQTT messages that match local_topic<br/>will be forwarded."
+            "description": "The MQTT topic filter to be forwarded to the HTTP server. All MQTT 'PUBLISH' messages with the topic<br/>matching the local_topic will be forwarded.<br/><br/>NOTE: If this action is used as the action of a rule (EMQX rule engine), and also local_topic is<br/>configured, then both the data got from the rule and the MQTT messages that match local_topic<br/>will be forwarded."
           },
           "method": {
             "default": "post",
@@ -9397,11 +9395,11 @@
             "enum": [
               "http"
             ],
-            "description": "The Bridge Type"
+            "description": "The action type."
           },
           "name": {
             "type": "string",
-            "description": "Bridge name, used as a human-readable description of the bridge."
+            "description": "Action name, used as a human-readable identifier."
           },
           "enable": {
             "default": true,
@@ -9422,7 +9420,7 @@
           },
           "url": {
             "type": "string",
-            "description": "The URL of the HTTP Bridge.<br/><br/>Template with variables is allowed in the path, but variables cannot be used in the scheme, host,<br/>or port part.<br/><br/>For example, <code> http://localhost:9901/${topic} </code> is allowed, but<br/><code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code><br/>is not allowed."
+            "description": "The URL of the HTTP action.<br/><br/>Template with variables is allowed in the path, but variables cannot be used in the scheme, host,<br/>or port part.<br/><br/>For example, <code> http://localhost:9901/${topic} </code> is allowed, but<br/><code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code><br/>is not allowed."
           },
           "headers": {
             "default": {
@@ -11408,16 +11406,16 @@
               "webhook",
               "http"
             ],
-            "description": "The Bridge Type"
+            "description": "The action type."
           },
           "name": {
             "type": "string",
-            "description": "Bridge name, used as a human-readable description of the bridge."
+            "description": "Action name, used as a human-readable identifier."
           },
           "enable": {
             "default": true,
             "type": "boolean",
-            "description": "Enable or disable this bridge"
+            "description": "Enable or disable this action."
           },
           "tags": {
             "type": "array",
@@ -11478,19 +11476,18 @@
           },
           "url": {
             "type": "string",
-            "description": "The URL of the HTTP Bridge.<br/><br/>Template with variables is allowed in the path, but variables cannot be used in the scheme, host,<br/>or port part.<br/><br/>For example, <code> http://localhost:9901/${topic} </code> is allowed, but<br/><code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code><br/>is not allowed."
+            "description": "The URL of the HTTP action.<br/><br/>Template with variables is allowed in the path, but variables cannot be used in the scheme, host,<br/>or port part.<br/><br/>For example, <code> http://localhost:9901/${topic} </code> is allowed, but<br/><code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code><br/>is not allowed."
           },
           "direction": {
             "type": "string",
             "enum": [
               "egress"
             ],
-            "deprecated": true,
-            "description": "Deprecated, The direction of this bridge, MUST be 'egress'"
+            "deprecated": true
           },
           "local_topic": {
             "type": "string",
-            "description": "The MQTT topic filter to be forwarded to the HTTP server. All MQTT 'PUBLISH' messages with the topic<br/>matching the local_topic will be forwarded.<br/><br/>NOTE: if this bridge is used as the action of a rule (EMQX rule engine), and also local_topic is<br/>configured, then both the data got from the rule and the MQTT messages that match local_topic<br/>will be forwarded."
+            "description": "The MQTT topic filter to be forwarded to the HTTP server. All MQTT 'PUBLISH' messages with the topic<br/>matching the local_topic will be forwarded.<br/><br/>NOTE: If this action is used as the action of a rule (EMQX rule engine), and also local_topic is<br/>configured, then both the data got from the rule and the MQTT messages that match local_topic<br/>will be forwarded."
           },
           "method": {
             "default": "post",
@@ -15519,7 +15516,7 @@
           },
           "name": {
             "type": "string",
-            "description": "Bridge name, used as a human-readable description of the bridge."
+            "description": "Bridge name, used as a human-readable identifier."
           },
           "enable": {
             "default": true,
@@ -17174,7 +17171,7 @@
             "default": 0,
             "maximum": 1,
             "type": "integer",
-            "description": "Default value 0.<br/>MQTT v3.1.1： if you subscribe to the topic published by yourself, you will receive all messages that you published.<br/>MQTT v5: if you set this option as 1 when subscribing, the server will not forward the message you published to you.",
+            "description": "Default value 0.<br/>MQTT v3.1.1: if you subscribe to the topic published by yourself, you will receive all messages that you published.<br/>MQTT v5: if you set this option as 1 when subscribing, the server will not forward the message you published to you.",
             "minimum": 0
           }
         },
@@ -20469,9 +20466,9 @@
                     "headers": {
                       "Authorization": "Basic YWRtaW46Y2JraG55eWd5QDE="
                     },
-                    "push_gateway_server": "http://127.0.0.1:9091",
                     "job_name": "${name}/instance/${name}~${host}",
                     "mnesia_collector": "disabled",
+                    "push_gateway_server": "http://127.0.0.1:9091",
                     "vm_dist_collector": "disabled",
                     "vm_memory_collector": "disabled",
                     "vm_msacc_collector": "disabled",
@@ -20615,10 +20612,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -20713,8 +20710,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -20853,10 +20850,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -20951,8 +20948,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -21140,8 +21137,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -21231,10 +21228,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -21325,10 +21322,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -21423,8 +21420,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -21612,8 +21609,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -21705,10 +21702,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -22028,10 +22025,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -24574,10 +24571,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             }
@@ -24593,82 +24590,82 @@
                   "lwm2m_client": {
                     "value": {
                       "recv_oct": 56,
-                      "subscriptions_max": "infinity",
-                      "mqueue_max": "infinity",
-                      "disconnected_at": null,
-                      "lifetime": 86400,
-                      "proto_name": "LwM2M",
-                      "recv_pkt": 1,
+                      "expiry_interval": 0,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "send_msg": 0,
+                      "mailbox_len": 0,
+                      "recv_msg": 0,
+                      "mqueue_dropped": 0,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "keepalive": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "ip_address": "127.0.0.1",
-                      "is_bridge": false,
-                      "username": "guest",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "send_oct": 61,
-                      "subscriptions_cnt": 0,
-                      "mqueue_len": 0,
-                      "heap_size": 4185,
-                      "proto_ver": "1.0",
-                      "mqueue_dropped": 0,
-                      "awaiting_rel_cnt": 0,
-                      "mailbox_len": 0,
-                      "clean_start": true,
-                      "port": 50675,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "recv_msg": 0,
-                      "endpoint_name": "urn:imei:154928475237123",
-                      "inflight_max": "infinity",
-                      "inflight_cnt": 0,
+                      "proto_name": "LwM2M",
                       "send_pkt": 1,
-                      "send_msg": 0,
+                      "is_bridge": false,
+                      "mqueue_len": 0,
                       "awaiting_rel_max": "infinity",
+                      "lifetime": 86400,
+                      "username": "guest",
+                      "send_oct": 61,
+                      "heap_size": 4185,
+                      "mqueue_max": "infinity",
+                      "ip_address": "127.0.0.1",
+                      "proto_ver": "1.0",
+                      "inflight_max": "infinity",
+                      "port": 50675,
+                      "subscriptions_cnt": 0,
+                      "disconnected_at": null,
+                      "recv_pkt": 1,
+                      "clean_start": true,
+                      "inflight_cnt": 0,
+                      "subscriptions_max": "infinity",
+                      "endpoint_name": "urn:imei:154928475237123",
                       "connected": true,
+                      "awaiting_rel_cnt": 0,
                       "reductions": 72022,
-                      "expiry_interval": 0,
-                      "recv_cnt": 1,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00"
+                      "recv_cnt": 1
                     },
                     "summary": "LwM2M client info"
                   },
                   "general_client": {
                     "value": {
                       "recv_oct": 56,
-                      "subscriptions_max": "infinity",
-                      "mqueue_max": "infinity",
-                      "disconnected_at": null,
-                      "proto_name": "STOMP",
-                      "recv_pkt": 1,
+                      "expiry_interval": 0,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "send_msg": 0,
+                      "mailbox_len": 0,
+                      "recv_msg": 0,
+                      "mqueue_dropped": 0,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "keepalive": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "ip_address": "127.0.0.1",
-                      "is_bridge": false,
-                      "username": "guest",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "send_oct": 61,
-                      "subscriptions_cnt": 0,
-                      "mqueue_len": 0,
-                      "heap_size": 4185,
-                      "proto_ver": "1.0",
-                      "mqueue_dropped": 0,
-                      "awaiting_rel_cnt": 0,
-                      "mailbox_len": 0,
-                      "clean_start": true,
-                      "port": 50675,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "recv_msg": 0,
-                      "inflight_max": "infinity",
-                      "inflight_cnt": 0,
+                      "proto_name": "STOMP",
                       "send_pkt": 1,
-                      "send_msg": 0,
+                      "is_bridge": false,
+                      "mqueue_len": 0,
                       "awaiting_rel_max": "infinity",
+                      "username": "guest",
+                      "send_oct": 61,
+                      "heap_size": 4185,
+                      "mqueue_max": "infinity",
+                      "ip_address": "127.0.0.1",
+                      "proto_ver": "1.0",
+                      "inflight_max": "infinity",
+                      "port": 50675,
+                      "subscriptions_cnt": 0,
+                      "disconnected_at": null,
+                      "recv_pkt": 1,
+                      "clean_start": true,
+                      "inflight_cnt": 0,
+                      "subscriptions_max": "infinity",
                       "connected": true,
+                      "awaiting_rel_cnt": 0,
                       "reductions": 72022,
-                      "expiry_interval": 0,
-                      "recv_cnt": 1,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00"
+                      "recv_cnt": 1
                     },
                     "summary": "General client info"
                   }
@@ -24773,10 +24770,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             }
@@ -26130,10 +26127,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -26394,10 +26391,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -26830,10 +26827,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -26982,10 +26979,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -27267,8 +27264,8 @@
                         "rate_max": 0.0
                       },
                       "resource_metrics": {
-                        "success": 0,
                         "matched": 0,
+                        "success": 0,
                         "failed": 0,
                         "rate": 0.0,
                         "rate_last5m": 0.0,
@@ -27293,8 +27290,8 @@
                         {
                           "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "success": 0,
                             "matched": 0,
+                            "success": 0,
                             "failed": 0,
                             "rate": 0.0,
                             "rate_last5m": 0.0,
@@ -27568,8 +27565,8 @@
                     ],
                     "max_connections": 1024000,
                     "created_at": "2021-12-08T14:41:45.071+08:00",
-                    "stopped_at": "2021-12-08T14:56:35.576+08:00",
-                    "current_connections": 0
+                    "current_connections": 0,
+                    "stopped_at": "2021-12-08T14:56:35.576+08:00"
                   },
                   {
                     "name": "stomp",
@@ -27809,11 +27806,11 @@
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
+                      "query_mode": "async",
+                      "health_check_interval": 15000,
                       "worker_pool_size": 1,
                       "max_buffer_bytes": 104857600,
-                      "inflight_window": 100,
-                      "query_mode": "async",
-                      "health_check_interval": 15000
+                      "inflight_window": 100
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -27837,9 +27834,9 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "max_buffer_bytes": 104857600
                     },
                     "ingress": {
                       "local": {
@@ -28150,8 +28147,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -28415,8 +28412,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -29370,8 +29367,8 @@
                         "rate_max": 0.0
                       },
                       "resource_metrics": {
-                        "success": 0,
                         "matched": 0,
+                        "success": 0,
                         "failed": 0,
                         "rate": 0.0,
                         "rate_last5m": 0.0,
@@ -29395,8 +29392,8 @@
                         {
                           "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "success": 0,
                             "matched": 0,
+                            "success": 0,
                             "failed": 0,
                             "rate": 0.0,
                             "rate_last5m": 0.0,
@@ -30118,10 +30115,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -30206,8 +30203,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -30346,10 +30343,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -30434,8 +30431,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -30623,8 +30620,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -30714,10 +30711,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -30798,10 +30795,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -30886,8 +30883,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -31075,8 +31072,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -31730,9 +31727,9 @@
                       }
                     ],
                     "resource_opts": {
-                      "worker_pool_size": 16,
                       "query_mode": "async",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "worker_pool_size": 16
                     }
                   },
                   {
@@ -31818,9 +31815,9 @@
                         }
                       ],
                       "resource_opts": {
-                        "worker_pool_size": 16,
                         "query_mode": "async",
-                        "health_check_interval": "15s"
+                        "health_check_interval": "15s",
+                        "worker_pool_size": 16
                       }
                     },
                     "summary": "HTTP Action"
@@ -31905,9 +31902,9 @@
                     },
                     "connector": "my_http_connector",
                     "resource_opts": {
-                      "worker_pool_size": 16,
                       "query_mode": "async",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "worker_pool_size": 16
                     }
                   },
                   "summary": "HTTP Action"
@@ -32682,11 +32679,11 @@
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
+                        "query_mode": "async",
+                        "health_check_interval": 15000,
                         "worker_pool_size": 1,
                         "max_buffer_bytes": 104857600,
-                        "inflight_window": 100,
-                        "query_mode": "async",
-                        "health_check_interval": 15000
+                        "inflight_window": 100
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -32710,9 +32707,9 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "max_buffer_bytes": 104857600,
                         "query_mode": "sync",
-                        "health_check_interval": "15s"
+                        "health_check_interval": "15s",
+                        "max_buffer_bytes": 104857600
                       },
                       "ingress": {
                         "local": {
@@ -32827,11 +32824,11 @@
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
+                        "query_mode": "async",
+                        "health_check_interval": 15000,
                         "worker_pool_size": 1,
                         "max_buffer_bytes": 104857600,
-                        "inflight_window": 100,
-                        "query_mode": "async",
-                        "health_check_interval": 15000
+                        "inflight_window": 100
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -32855,9 +32852,9 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "max_buffer_bytes": 104857600,
                         "query_mode": "sync",
-                        "health_check_interval": "15s"
+                        "health_check_interval": "15s",
+                        "max_buffer_bytes": 104857600
                       },
                       "ingress": {
                         "local": {
@@ -32963,11 +32960,11 @@
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
+                      "query_mode": "async",
+                      "health_check_interval": 15000,
                       "worker_pool_size": 1,
                       "max_buffer_bytes": 104857600,
-                      "inflight_window": 100,
-                      "query_mode": "async",
-                      "health_check_interval": 15000
+                      "inflight_window": 100
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -32989,9 +32986,9 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "max_buffer_bytes": 104857600
                     },
                     "ingress": {
                       "local": {
@@ -33306,10 +33303,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             }
@@ -33428,10 +33425,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             }
@@ -34594,10 +34591,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -34720,10 +34717,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -34870,10 +34867,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -35032,8 +35029,8 @@
                   },
                   {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -35197,8 +35194,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -35388,8 +35385,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -35947,9 +35944,9 @@
                     },
                     "connector": "my_http_connector",
                     "resource_opts": {
-                      "worker_pool_size": 16,
                       "query_mode": "async",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "worker_pool_size": 16
                     }
                   },
                   "summary": "HTTP Action"
@@ -36622,10 +36619,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             }
@@ -37346,10 +37343,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -37565,16 +37562,16 @@
                       "$ref": "#/components/schemas/emqx_gateway_api.exproto"
                     },
                     {
-                      "$ref": "#/components/schemas/emqx_gateway_api.stomp"
+                      "$ref": "#/components/schemas/emqx_gateway_api.lwm2m"
                     },
                     {
                       "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
                     },
                     {
-                      "$ref": "#/components/schemas/emqx_gateway_api.lwm2m"
+                      "$ref": "#/components/schemas/emqx_gateway_api.coap"
                     },
                     {
-                      "$ref": "#/components/schemas/emqx_gateway_api.coap"
+                      "$ref": "#/components/schemas/emqx_gateway_api.stomp"
                     }
                   ]
                 }
@@ -37628,10 +37625,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -37822,31 +37819,31 @@
                     "$ref": "#/components/schemas/emqx_gateway_api.update_exproto"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.update_stomp"
+                    "$ref": "#/components/schemas/emqx_gateway_api.update_lwm2m"
                   },
                   {
                     "$ref": "#/components/schemas/emqx_gateway_api.update_mqttsn"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.update_lwm2m"
+                    "$ref": "#/components/schemas/emqx_gateway_api.update_coap"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.update_coap"
+                    "$ref": "#/components/schemas/emqx_gateway_api.update_stomp"
                   },
                   {
                     "$ref": "#/components/schemas/emqx_gateway_api.exproto"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.stomp"
+                    "$ref": "#/components/schemas/emqx_gateway_api.lwm2m"
                   },
                   {
                     "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.lwm2m"
+                    "$ref": "#/components/schemas/emqx_gateway_api.coap"
                   },
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.coap"
+                    "$ref": "#/components/schemas/emqx_gateway_api.stomp"
                   }
                 ]
               }
@@ -37940,9 +37937,9 @@
                         }
                       ],
                       "resource_opts": {
-                        "worker_pool_size": 16,
                         "query_mode": "async",
-                        "health_check_interval": "15s"
+                        "health_check_interval": "15s",
+                        "worker_pool_size": 16
                       }
                     },
                     "summary": "HTTP Action"
@@ -38063,9 +38060,9 @@
                         }
                       ],
                       "resource_opts": {
-                        "worker_pool_size": 16,
                         "query_mode": "async",
-                        "health_check_interval": "15s"
+                        "health_check_interval": "15s",
+                        "worker_pool_size": 16
                       }
                     },
                     "summary": "HTTP Action"
@@ -38170,9 +38167,9 @@
                     },
                     "connector": "my_http_connector",
                     "resource_opts": {
-                      "worker_pool_size": 16,
                       "query_mode": "async",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "worker_pool_size": 16
                     }
                   },
                   "summary": "HTTP Action"
@@ -38632,10 +38629,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -41666,10 +41663,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -41815,10 +41812,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -42356,10 +42353,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             }
@@ -42724,10 +42721,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -42840,10 +42837,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -42980,10 +42977,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -43076,10 +43073,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -43242,10 +43239,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -43381,10 +43378,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "coap",
-                "lwm2m",
-                "mqttsn",
                 "stomp",
+                "coap",
+                "mqttsn",
+                "lwm2m",
                 "exproto"
               ]
             },
@@ -44219,11 +44216,11 @@
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
+                      "query_mode": "async",
+                      "health_check_interval": 15000,
                       "worker_pool_size": 1,
                       "max_buffer_bytes": 104857600,
-                      "inflight_window": 100,
-                      "query_mode": "async",
-                      "health_check_interval": 15000
+                      "inflight_window": 100
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -44244,9 +44241,9 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "max_buffer_bytes": 104857600
                     },
                     "ingress": {
                       "local": {
@@ -44329,11 +44326,11 @@
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
+                        "query_mode": "async",
+                        "health_check_interval": 15000,
                         "worker_pool_size": 1,
                         "max_buffer_bytes": 104857600,
-                        "inflight_window": 100,
-                        "query_mode": "async",
-                        "health_check_interval": 15000
+                        "inflight_window": 100
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -44357,9 +44354,9 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "max_buffer_bytes": 104857600,
                         "query_mode": "sync",
-                        "health_check_interval": "15s"
+                        "health_check_interval": "15s",
+                        "max_buffer_bytes": 104857600
                       },
                       "ingress": {
                         "local": {
@@ -44445,11 +44442,11 @@
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
+                      "query_mode": "async",
+                      "health_check_interval": 15000,
                       "worker_pool_size": 1,
                       "max_buffer_bytes": 104857600,
-                      "inflight_window": 100,
-                      "query_mode": "async",
-                      "health_check_interval": 15000
+                      "inflight_window": 100
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -44473,9 +44470,9 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "max_buffer_bytes": 104857600
                     },
                     "ingress": {
                       "local": {
