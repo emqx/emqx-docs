@@ -563,7 +563,7 @@
         - file-transfer/client
     - title_en: Durable MQTT Sessions and Messages
       title_cn: MQTT 会话与消息持久化
-      path: durability/introduction
+      path: durability/durability_introduction
     - title_en: Multi-Protocol Gateway
       title_cn: 多协议网关
       path: gateway/gateway
