@@ -30,7 +30,7 @@ CREATE TABLE `mqtt_sub` (
   PRIMARY KEY (`id`),
   KEY `mqtt_sub_idx` (`clientid`,`topic`,`qos`),
   UNIQUE KEY `mqtt_sub_key` (`clientid`,`topic`),
-  INDEX topic_index(`id`, `topic`)
+  INDEX topic_index(`topic`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 

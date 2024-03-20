@@ -35,7 +35,7 @@ CREATE TABLE `t_mqtt_msg` (
     `payload` blob,
     `arrived` datetime NOT NULL,
     PRIMARY KEY (`id`),
-    INDEX topic_index(`id`, `topic`)
+    INDEX topic_index(`topic`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 
