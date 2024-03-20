@@ -112,6 +112,17 @@
   bytesize_field2 = 1024
   ```
 
+- [#12719](https://github.com/emqx/emqx/pull/12719) Support multiple clientid and username Query string parameters in `/clients` API, and make it possible to specify which client info fields must be included in the response.
+
+  Multi clientid/username queries examples:
+  - `/clients?clientid=client1&clientid=client2`
+  - `/clients?username=user11&username=user2`
+  - `/clients?clientid=client1&clientid=client2&username=user1&username=user2`
+
+  Selecting which fields to include in response examples:
+  - `/clients?fields=all` (omitting `fields` query string parameter defaults to returning all fields)
+  - `/clients?fields=clientid,username`
+
 - [#12330](https://github.com/emqx/emqx/pull/12330) The Cassandra bridge has been split into connector and action components. They are backwards compatible with the bridge HTTP API. Configuration will be upgraded automatically.
 
 - [#12353](https://github.com/emqx/emqx/pull/12353) The OpenTSDB bridge has been split into connector and action components. They are backwards compatible with the bridge HTTP API. Configuration will be upgraded automatically.
@@ -255,6 +266,10 @@
 
 - [#12681](https://github.com/emqx/emqx/pull/12681) When sending messages to a RocketMQ bridge/action while debug level logging was activated, secrets could be emitted in debug level log messages. This has now been fixed.
   
+- [#12715](https://github.com/emqx/emqx/pull/12715) Fixed an issue when configuration update could crash if connector for corresponding ingress data integration source has active channels.
+
+- [#12740](https://github.com/emqx/emqx/pull/12740) Fixed an issue when durable session could not be kicked out.
+
 ## 5.5.1
 
 *Release Date: 2024-03-06*

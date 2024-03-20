@@ -112,6 +112,17 @@
   bytesize_field2 = 1024
   ```
 
+- [#12719](https://github.com/emqx/emqx/pull/12719) Support multiple clientid and username Query string parameters in `/clients` API, and make it possible to specify which client info fields must be included in the response.
+
+  Multi clientid/username queries examples:
+  - `/clients?clientid=client1&clientid=client2`
+  - `/clients?username=user11&username=user2`
+  - `/clients?clientid=client1&clientid=client2&username=user1&username=user2`
+
+  Selecting which fields to include in response examples:
+  - `/clients?fields=all` (omitting `fields` query string parameter defaults to returning all fields)
+  - `/clients?fields=clientid,username`
+
 - [#12381](https://github.com/emqx/emqx/pull/12381) Added new SQL functions: `map_keys()`, `map_values()`, `map_to_entries()`, `join_to_string()`, `join_to_string()`, `join_to_sql_values_string()`, `is_null_var()`, `is_not_null_var()`.
 
   For more information on the functions and their usage, refer to the documentation.
@@ -193,6 +204,10 @@
 
   Fixed the issue in endpoint: `/stats` that the values of fields `subscriptions.shared.count` and `subscriptions.shared.max`
   can not be updated in time when the client disconnected or unsubscribed the Shared-Subscription.
+
+- [#12715](https://github.com/emqx/emqx/pull/12715) Fixed an issue when configuration update could crash if connector for corresponding ingress data integration source has active channels.
+
+- [#12740](https://github.com/emqx/emqx/pull/12740) Fixed an issue when durable session could not be kicked out.
 
 ## 5.5.1
 
