@@ -120,8 +120,7 @@ CREATE TABLE `mqtt_client` (
   `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `mqtt_client_idx` (`clientid`),
-  UNIQUE KEY `mqtt_client_key` (`clientid`),
-  INDEX topic_index(`id`, `clientid`)
+  UNIQUE KEY `mqtt_client_key` (`clientid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 
@@ -172,7 +171,7 @@ CREATE TABLE `mqtt_sub` (
   PRIMARY KEY (`id`),
   KEY `mqtt_sub_idx` (`clientid`,`topic`,`qos`),
   UNIQUE KEY `mqtt_sub_key` (`clientid`,`topic`),
-  INDEX topic_index(`id`, `topic`)
+  INDEX topic_index(`topic`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 
@@ -220,7 +219,7 @@ CREATE TABLE `mqtt_msg` (
   `payload` blob,
   `arrived` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX topic_index(`id`, `topic`)
+  INDEX topic_index(`topic`, `id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 
@@ -260,8 +259,7 @@ CREATE TABLE `mqtt_retain` (
   `payload` blob,
   `arrived` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `mqtt_retain_key` (`topic`),
-  INDEX topic_index(`id`, `topic`)
+  UNIQUE KEY `mqtt_retain_key` (`topic`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 
@@ -300,8 +298,7 @@ CREATE TABLE `mqtt_acked` (
   `mid` int(11) unsigned DEFAULT NULL,
   `created` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `mqtt_acked_key` (`clientid`,`topic`),
-  INDEX topic_index(`id`, `topic`)
+  UNIQUE KEY `mqtt_acked_key` (`clientid`,`topic`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 
