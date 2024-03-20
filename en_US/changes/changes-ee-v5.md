@@ -64,6 +64,7 @@
 - [#12520](https://github.com/emqx/emqx/pull/12520) Implement log throttling. The feature reduces the number of potentially flooding logged events by
   dropping all but the first event within a configured time window.
   Throttling is applied to the following log events:
+  - `authentication_failure`
   - `authorization_permission_denied`
   - `cannot_publish_to_topic_due_to_not_authorized`
   - `cannot_publish_to_topic_due_to_quota_exceeded`
@@ -168,6 +169,10 @@
 - [#12494](https://github.com/emqx/emqx/pull/12494) Improve MongoDB connector performance.
 
   - [mongodb-erlang PR](https://github.com/emqx/mongodb-erlang/pull/41)
+
+- [#12746](https://github.com/emqx/emqx/pull/12746) Add `username` log field.
+
+  If MQTT client is connected with a non-empty username the logs and traces will include `username` field.
 
 ### Bug Fixes
 

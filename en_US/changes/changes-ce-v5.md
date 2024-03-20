@@ -64,6 +64,7 @@
 - [#12520](https://github.com/emqx/emqx/pull/12520) Implement log throttling. The feature reduces the number of potentially flooding logged events by
   dropping all but the first event within a configured time window.
   Throttling is applied to the following log events:
+  - `authentication_failure`
   - `authorization_permission_denied`
   - `cannot_publish_to_topic_due_to_not_authorized`
   - `cannot_publish_to_topic_due_to_quota_exceeded`
@@ -128,6 +129,10 @@
 
 - [#12336](https://github.com/emqx/emqx/pull/12336) Isolate channels cleanup from other async tasks (like routes cleanup) by using a dedicated pool,
   as this task can be quite slow under high network latency conditions.
+
+- [#12746](https://github.com/emqx/emqx/pull/12746) Add `username` log field.
+
+  If MQTT client is connected with a non-empty username the logs and traces will include `username` field.
 
 ### Bug Fixes
 
