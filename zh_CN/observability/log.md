@@ -164,6 +164,7 @@ log {
 
 限流仅应用于以下日志事件：
 
+- "authentication_failure"
 - "authorization_permission_denied"
 - "cannot_publish_to_topic_due_to_not_authorized"
 - "cannot_publish_to_topic_due_to_quota_exceeded"

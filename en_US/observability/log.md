@@ -176,6 +176,7 @@ Log throttling is enabled by default and applies to selected log events such as 
 
 Throttling is applied only to the following log events:
 
+ - "authentication_failure"
  - "authorization_permission_denied"
  - "cannot_publish_to_topic_due_to_not_authorized"
  - "cannot_publish_to_topic_due_to_quota_exceeded"
