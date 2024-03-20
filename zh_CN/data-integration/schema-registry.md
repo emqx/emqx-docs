@@ -4,7 +4,15 @@
 
 Schema Registry 管理编解码使用的 Schema、处理编码或解码请求并返回结果。Schema Registry 配合规则引擎，可适配各种场景的设备接入和规则设计。
 
-EMQX Schema Registry 目前可支持两种格式的编解码：[Avro](https://avro.apache.org) 和 [Protobuf](https://developers.google.com/protocol-buffers/)。Avro 和 Protobuf 是依赖 Schema 的数据格式，编码后的数据为二进制，解码后为 [Map 格式](#规则引擎内部数据格式-map)。解码后的数据可直接被规则引擎和其他插件使用。Schema Registry 为 Avro 和 Protobuf 等内置编码格式维护 Schema 文本。
+EMQX Schema Registry 目前可支持以下格式的编解码：
+
+- [Avro](https://avro.apache.org) 
+- [Protobuf](https://developers.google.com/protocol-buffers/)
+- [JSON Schema](https://json-schema.org/)
+
+Avro 和 Protobuf 是依赖 Schema 的数据格式，编码后的数据为二进制，解码后为 [Map 格式](#规则引擎内部数据格式-map)。解码后的数据可直接被规则引擎和其他插件使用。Schema Registry 为 Avro 和 Protobuf 等内置编码格式维护 Schema 文本。
+
+JSON schema 可以用来验证输入的 JSON 对象是否遵循了 schema 定义，或者在将数据输出到下游之前，规则引擎输出的 JSON 对象是否有效。
 
 下图展示了 Schema Registry 的一个应用案例。多个设备上报不同格式的数据，经过 Schema Registry 解码之后，变为统一的内部格式，然后转发给后台应用。
 
@@ -20,20 +28,26 @@ Schema Registry 既可以解码，也可以编码。Schema Registry 为 Avro 和
 
 编码调用示例：
 
-```c
-schema_encode(SchemaName, Data) -> RawData
+```erlang
+schema_encode(SchemaName, Map) -> Bytes
 ```
 
 解码调用示例：
 
-```c
-schema_decode(SchemaName, RawData) -> Data
+```erlang
+schema_decode(SchemaName, Bytes) -> Map
 ```
 
 当对 JSON 格式的 MQTT 消息进行编码时，在用 schema 编码之前，您也需要用 `json_decode` 先对其进行解码，使它变为规则引擎内部数据格式 (Map)，示例如下：
 
 ```erlang
-schema_encode(SchemaName, json_decode(Data))
+schema_encode(SchemaName, json_decode(Map)) -> Bytes
+```
+
+在编码前或解码后检查 JSON 数据是否可以根据 JSON schema 进行验证时，使用以下编解码验证示例：
+
+```erlang
+schema_check(SchemaName, Map | Bytes) -> Boolean
 ```
 
 ## 编解码 + 规则引擎
