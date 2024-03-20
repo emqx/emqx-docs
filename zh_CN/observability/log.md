@@ -107,40 +107,26 @@ log {
 日志消息的格式为（各个字段之间用空格分隔）：
 
 ```
-**date time level key-value-struct**
+**timestamp level tag clientid msg peername username ...**
 ```
 
-其中：
+其中
 
-- **date-time:** 当地时间的日期。格式为：`RFC3339`
-- **level:** 日志级别，使用中括号包裹。格式为：`[Level]`
-- **flat log-content**：扁平化日志消息内容。
+- **timestamp（时间戳）**：采用 RFC-3339 格式的时间戳，指明日志条目创建的时间。
+- **level（级别）**：日志的严重性级别，用括号包裹。格式为：`[level]`，其中 `level` 是标准的日志级别，如 `info`（信息）、`warning`（警告）、`error`（错误）等。
+- **tag（标签）**：必填项，一个全大写的单词，用于对日志进行分类，以简化搜索和分析。例如 `MQTT`、`AUTHN`（认证）、`AUTHZ`（授权）。
+- **clientid（客户端ID）**：仅当日志与特定客户端相关时包含。标识与日志条目相关的客户端。
+- **username（用户名）**：仅针对具有指定用户名的客户端相关的日志。指出涉及的客户端的用户名。
+- **peername（对端名称）**：客户端源 IP 地址和端口号，采用 `IP:端口` 格式，指示连接的来源。
+- **msg（消息）**：日志消息的内容。为了提高可搜索性和可读性，大多数消息采用 `snake_case` 格式，如 `mqtt_packet_received`（接收到MQTT包）。注意：不是所有消息都遵循此格式；有些可能会有所不同。
+- **...（其他）**：在 `msg` 字段之后，可能会跟随额外的任意字段，根据需要提供更多上下文或细节。
 
-### 日志消息举例 1：
+
+### 日志消息举例
 
 ```bash
-2022-06-30T16:07:47.689512+08:00 [debug] clientid: test, line: 792, mfa: emqx_connection:handle_incoming/2, msg: mqtt_packet_received, packet: PINGREQ(Q0, R0, D0), payload: [], peername: 127.0.0.1:64391, tag: MQTT
+2024-03-20T11:08:39.568980+01:00 [warning] tag: AUTHZ, clientid: client1, msg: cannot_publish_to_topic_due_to_not_authorized, peername: 127.0.0.1:47860, username: user1, topic: republish-event/1, reason: not_authorized
 ```
-
-此日志消息里各个字段分别为:
-
-- **datetime:** `2022-06-30T15:59:19.438914+08:00`
-- **level:** `[debug]`
-- **flat log-content:** `clientid: test, line: 792, mfa: emqx_connection:handle_incoming/2, msg: mqtt_packet_received, packet: PINGREQ(Q0, R0, D0), payload: [], peername: 127.0.0.1:64391, tag: MQTT`
-
-这条日志表示 EMQX 在 `2022-06-30T16:07:47.689512+08:00` 时 Client ID 为 `test` 客户端收到了一个 `PINGREQ(Q0,R0,D0)` 包。对应客户端的 IP 为 `127.0.0.1:64391`。
-
-### 日志消息举例 2：
-
-```bash
-2022-06-30T16:25:32.446873+08:00 [debug] line: 150, mfa: emqx_retainer_mnesia:store_retained/2, msg: message_retained, topic: $SYS/brokers/emqx@127.0.0.1/sysdescr
-```
-
-此日志消息里各个字段分别为:
-
-- **date-time:** `2022-06-30T16:25:32.446873+08:00`
-- **level:** `[debug]`
-- **flat log-content:** `line: 150, mfa: emqx_retainer_mnesia:store_retained/2, msg: message_retained, topic: $SYS/brokers/emqx@127.0.0.1/sysdescr`
 
 ## 日志限流
 

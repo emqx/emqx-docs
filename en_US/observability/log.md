@@ -112,47 +112,31 @@ log {
 }
 ```
 
-## Log Examples
+## Log Format
 
 The format of the log message (with different fields separated by spaces) is as follows:
 
 ```
-**date time level client_info module_info msg**
+**timestamp level tag clientid msg peername username ...**
 ```
 
 where,
 
-- **date:** Local data. The format is: YYYY-MM-DD
-- **time:** Local time, accurate to milliseconds. The format is: hh:mm:ss.ms
-- **level:** Log level, wrapped in brackets. The format is:[Level]
-- **client_info (optional):** Only exists if this log message is related to a client. The format is: ClientId@Peername or ClientId or Peername
-- **msg:** Log message content. The format is arbitrary and can contain spaces.
+- **timestamp:** An RFC-3339 formatted timestamp indicating when the log entry was created.
+- **level:** The severity level of the log, enclosed in brackets. Format: [level], which can be standard log levels such as `info`, `warning`, `error`, etc.
+- **tag:** All-uppercase single word used for categorizing logs for easier searching and analysis, e.g., MQTT, AUTHN, AUTHZ
+- **clientid:** Included only when the log is about a specific client. Identifies the client related to the log entry.
+- **msg:** The content of the log message. To enhance searchability and readability, most messages adopt a `snake_case` formatting style,
+           such as `mqtt_packet_received`. Note: Not all messages follow this format; some may vary.
+- **peername:** The client's source IP address and port number in `IP:port` format, indicating the connection origin.
+- **username:** Present only for logs associated with a client having a specified non-empty username. Indicates the username of the client involved.
+- **...:** Additional arbitrary fields may follow the msg field, providing more context or details as needed.
 
-### Log Message Example 1:
-
-```bash
-2022-06-30T16:07:47.689512+08:00 [debug] clientid: test, line: 792, mfa: emqx_connection:handle_incoming/2, msg: mqtt_packet_received, packet: PINGREQ(Q0, R0, D0), payload: [], peername: 127.0.0.1:64391, tag: MQTT
-```
-
-The fields in this log message are:
-
-- **datetime:** `2022-06-30T15:59:19.438914+08:00`
-- **level:** `[debug]`
-- **flat log-content:** `clientid: test, line: 792, mfa: emqx_connection:handle_incoming/2, msg: mqtt_packet_received, packet: PINGREQ(Q0, R0, D0), payload: [], peername: 127.0.0.1:64391, tag: MQTT`
-
-This log indicates that EMQX received a `PINGREQ(Q0,R0,D0)` packet at `2022-06-30T16:07:47.689512+08:00` with clientid `test`. The IP of the client is `127.0.0.1:64391`.
-
-### Log Message Example 2:
+### Log Message Example
 
 ```bash
-2022-06-30T16:25:32.446873+08:00 [debug] line: 150, mfa: emqx_retainer_mnesia:store_retained/2, msg: message_retained, topic: $SYS/brokers/emqx@127.0.0.1/sysdescr
+2024-03-20T11:08:39.568980+01:00 [warning] tag: AUTHZ, clientid: client1, msg: cannot_publish_to_topic_due_to_not_authorized, peername: 127.0.0.1:47860, username: user1, topic: republish-event/1, reason: not_authorized
 ```
-
-The fields in this log message are:
-
-- **date-time:** `2022-06-30T16:25:32.446873+08:00`
-- **level:** `[debug]`
-- **flat log-content:** `line: 150, mfa: emqx_retainer_mnesia:store_retained/2, msg: message_retained, topic: $SYS/brokers/emqx@127.0.0.1/sysdescr`
 
 ## Log Throttling
 
