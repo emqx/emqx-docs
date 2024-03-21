@@ -1,5 +1,206 @@
 # v5 版本
 
+## 5.6
+
+*发布日期: 2024-03-22*
+
+### 增强
+
+- [#12251](https://github.com/emqx/emqx/pull/12251) 优化了基于 RocksDB 的持久会话性能，减少了 RAM 使用和数据库请求频率。主要改进包括：
+
+  - 引入了脏会话状态以避免频繁的 mria 事务。
+  - 为持久消息引入了中间缓冲区。
+  - 为 QoS1 和 QoS2 消息使用了不同的 PacketIds 轨迹。
+  - 将每个流中连续未确认消息的数量限制为 1。
+
+- [#12326](https://github.com/emqx/emqx/pull/12326) 通过使用注册历史增强了会话跟踪。EMQX 现在能够监控会话注册的历史，包括那些已过期的会话。通过配置 `broker.session_history_retain`，EMQX 保留了指定时间内过期会话的记录。
+
+  - **会话计数 API**：使用 API `GET /api/v5/sessions_count?since=1705682238` 获取自给定 UNIX 纪元时间戳（精确到秒）以来保持活跃的集群内会话计数。这一增强有助于分析一段时间内的会话活动。
+
+  - 使用集群会话指标进行扩展：添加了新的指标 `cluster_sessions`，以更好地跟踪集群内的会话数量。此指标也集成到 Prometheus 中以便于监控：
+
+    ```
+    # TYPE emqx_cluster_sessions_count gauge
+    emqx_cluster_sessions_count 1234
+    ```
+
+    注意：请将此指标视为近似估计。由于数据收集和计算的异步性，精确度可能会有所不同。
+
+- [#12338](https://github.com/emqx/emqx/pull/12338) 为基于 RocksDB 的持久会话后端引入了基于时间的垃圾收集机制。这一特性通过自动清理过时消息，确保了存储消息的更高效管理，优化了存储利用率和系统性能。
+
+- [#12398](https://github.com/emqx/emqx/pull/12398) 在 Dashboard 配置中暴露了 `swagger_support` 选项，允许启用或禁用 Swagger API 文档。
+
+- [#12467](https://github.com/emqx/emqx/pull/12467) 支持使用 AAAA DNS 记录类型进行集群发现。
+
+- [#12483](https://github.com/emqx/emqx/pull/12483) 将 `emqx ctl conf cluster_sync tnxid ID` 重命名为 `emqx ctl conf cluster_sync inspect ID`。为了向后兼容，保留了 `tnxid`，但将在 5.7 版本中废弃。
+
+- [#12499](https://github.com/emqx/emqx/pull/12499) 通过扩展规则增强了客户端封禁能力，包括：
+
+  - 将 `clientid` 与指定的正则表达式进行匹配。
+  - 将客户端的 `username` 与指定的正则表达式进行匹配。
+  - 将客户端的对等地址与 CIDR 范围进行匹配。
+
+  **重要提示**：实施大量广泛匹配规则（不特定于单个 clientid、username 或主机）可能会影响系统性能。建议谨慎使用这些扩展封禁规则以保持最佳系统效率。
+
+- [#12509](https://github.com/emqx/emqx/pull/12509) 实现 API 重新排序所有认证器/授权源。
+
+- [#12517](https://github.com/emqx/emqx/pull/12517) 升级了配置文件以适应多行字符串值，保留缩进以提高可读性和可维护性。这一改进使用 `"""~` 和 `~"""` 标记来引用缩进行，为定义复杂配置提供了一种结构化和清晰的方式。例如：
+
+  ```
+  rule_xlu4 {
+  sql = """~
+  SELECT
+  *
+  FROM
+  "t/#"
+  ~"""
+  }
+  ```
+
+  有关详细信息，请参阅 [HOCON 0.42.0](https://github.com/emqx/hocon/releases/tag/0.42.0) 发行说明。
+
+- [#12520](https://github.com/emqx/emqx/pull/12520) 实现了日志节流。该特性通过在配置的时间窗口内只保留事件第一次发生的记录，减少了可能泛滥系统的日志事件量。 对以下关键且容易重复的日志事件应用了日志节流：
+
+  - `authentication_failure`
+  - `authorization_permission_denied`
+  - `cannot_publish_to_topic_due_to_not_authorized`
+  - `cannot_publish_to_topic_due_to_quota_exceeded`
+  - `connection_rejected_due_to_license_limit_reached`
+  - `dropped_msg_due_to_mqueue_is_full`
+
+- [#12561](https://github.com/emqx/emqx/pull/12561) 使用 HTTP API 获取客户端未确认消息和消息队列（mqueue）消息。这些 API 有助于深入了解和有效控制消息队列和未确认消息，确保消息处理和监控的效率。
+
+  获取第一批数据：
+
+  - `GET /clients/{clientid}/mqueue_messages?limit=100`
+  - `GET /clients/{clientid}/inflight_messages?limit=100`
+
+  或者，获取第一批数据而不指定起始位置：
+
+  - `GET /clients/{clientid}/mqueue_messages?limit=100&position=none`
+  - `GET /clients/{clientid}/inflight_messages?limit=100&position=none`
+
+  获取下一批数据：
+
+  - `GET /clients/{clientid}/mqueue_messages?limit=100&position={position}`
+  - `GET /clients/{clientid}/inflight_messages?limit=100&position={position}`
+
+  其中 `{position}` 是上一个响应中 `meta.position` 字段的值（不透明字符串令牌）。
+
+  排序和优先级：
+
+  - **Mqueue 消息**：这些消息基于它们在队列中的顺序（FIFO）进行排序和优先级划分，从高优先级到低优先级。默认情况下，mqueue 消息具有统一的优先级，为 0。
+  - **未确认消息**：根据它们被插入未确认存储的时间戳进行排序，从最旧到最新。
+
+- [#12590](https://github.com/emqx/emqx/pull/12590) 移除日志消息中的 `mfa` 元数据以提高清晰度。
+
+- [#12641](https://github.com/emqx/emqx/pull/12641) 改进了文本日志格式化的字段顺序。新的字段顺序如下：
+
+  `tag` > `clientid` > `msg` > `peername` > `username` > `topic` > [其他字段]
+
+- [#12670](https://github.com/emqx/emqx/pull/12670) 在端点 `/monitor_current` 和 `/monitor_current/nodes/:node` 中添加了 `shared_subscriptions` 字段。
+
+- [#12679](https://github.com/emqx/emqx/pull/12679) 将 Docker 镜像基础从 Debian 11 升级到 Debian 12。
+
+- [#12700](https://github.com/emqx/emqx/pull/12700) 在 bytesize hocon 字段中支持 "b" 和 "B" 单位。
+
+  例如，以下所有三个字段将具有 1024 字节的值：
+
+  ```
+  bytesize_field = "1024b"
+  bytesize_field2 = "1024B"
+  bytesize_field3 = 1024
+  ```
+
+- [#12719](https://github.com/emqx/emqx/pull/12719) `/clients` API 已升级，以同时容纳对多个 `clientid` 和 `username` 的查询，提供了一个更灵活、更强大的工具来监控客户端连接。此外，此更新引入了自定义 API 响应中包含哪些客户端信息字段的能力，为特定的监控需求进行了优化。
+
+  多客户端/用户名查询示例：
+
+  - 通过 ID 查询多个客户端：`/clients?clientid=client1&clientid=client2`
+  - 查询多个用户：`/clients?username=user11&username=user2`
+  - 在一个查询中组合多个客户端 ID 和用户名：`/clients?clientid=client1&clientid=client2&username=user1&username=user2`
+
+  选择响应字段的示例：
+
+  - 在响应中包含所有字段：`/clients?fields=all`（注意：省略 `fields` 参数默认返回所有字段。）
+  - 只指定某些字段：`/clients?fields=clientid,username`
+
+- [#12381](https://github.com/emqx/emqx/pull/12381) 新增 SQL 函数：`map_keys()`、`map_values()`、`map_to_entries()`、`join_to_string()`、`join_to_sql_values_string()`、`is_null_var()`、`is_not_null_var()`。
+
+  有关函数及其使用的更多信息，请参阅文档：[内置 SQL 函数](../data-integration/rule-sql-builtin-functions)。
+
+- [#12427](https://github.com/emqx/emqx/pull/12427) 实现了限制 Kafka 分区数量的功能以用于 Kafka 数据集成。
+
+- [#12577](https://github.com/emqx/emqx/pull/12577) 更新了 GCP PubSub 生产者和消费者连接器的 `service_account_json` 字段，使其能够接受 JSON 编码的字符串。现在，可以将此字段设置为 JSON 编码字符串。仍然支持使用先前的格式（HOCON 映射），但不推荐。
+
+- [#12581](https://github.com/emqx/emqx/pull/12581) 向模式注册中心添加了 JSON 架构。
+
+  JSON Schema 支持 [Draft 03](http://tools.ietf.org/html/draft-zyp-json-schema-03)、[Draft 04](http://tools.ietf.org/html/draft-zyp-json-schema-04) 和 [Draft 06](https://datatracker.ietf.org/doc/html/draft-wright-json-schema-00)。
+
+- [#12336](https://github.com/emqx/emqx/pull/12336) 通过将通道清理工作隔离到其专用池中，优化了异步任务的管理方式。这种分离解决了在高网络延迟条件下执行通道清理时遇到的性能问题，确保此类任务不会影响其他异步操作（如路由清理）的效率。
+
+- [#12746](https://github.com/emqx/emqx/pull/12746) 添加了 `username` 日志字段。如果 MQTT 客户端以非空用户名连接，日志和追踪将包含 `username` 字段。
+
+### 修复
+
+- [#11868](https://github.com/emqx/emqx/pull/11868) 修复了会话接管后未发布遗嘱消息的问题。
+
+- [#12347](https://github.com/emqx/emqx/pull/12347) 对 MQTT 出口数据桥接的规则 SQL 处理的消息进行了更新，确保即使在数据不完整或缺少某些在桥接配置中定义的占位符的情况下，消息也始终被视为有效。此调整防止了之前发生的消息被错误地视为无效并随后被 MQTT 出口数据桥接丢弃的情况。
+
+  当 `payload` 和 `topic` 模板中的变量未定义时，现在它们被渲染为空字符串，而不是字面量 `undefined` 字符串。
+
+- [#12472](https://github.com/emqx/emqx/pull/12472) 修复了在滚动升级过程中，某些读取操作在 `/api/v5/actions/` 和 `/api/v5/sources/` 端点可能导致返回 `500` 错误码的问题。
+
+- [#12492](https://github.com/emqx/emqx/pull/12492) EMQX 现在在 MQTT v5 客户端的 `CONNACK` 消息中返回 `Receive-Maximum` 属性。此实现考虑了客户端的 `Receive-Maximum` 设置和服务器的 `max_inflight` 配置的最小值作为允许的未确认（unacknowledged）消息数量的限制。之前，确定的值未在 `CONNACK` 消息中发送回客户端。
+
+- [#12500](https://github.com/emqx/emqx/pull/12500) 更新了 `GET /clients` 和 `GET /client/:clientid` HTTP API，以在其响应中包含断开的持久会话。
+
+  注意：当前已知的问题是，由于包含了断开的会话，这些增强的 API 响应提供的总客户端计数可能超过实际的客户端数量。
+
+- [#12505](https://github.com/emqx/emqx/pull/12505) 将 Kafka 生产者客户端 `wolff` 从版本 1.10.1 升级到 1.10.2。这个最新版本为每个连接器维持一个长期的元数据连接，通过减少为动作和连接器健康检查建立新连接的频率，优化了 EMQX 的性能。
+
+- [#12513](https://github.com/emqx/emqx/pull/12513) 将几个可能导致日志泛滥的事件级别从 `warning` 改为 `info`。
+
+- [#12530](https://github.com/emqx/emqx/pull/12530) 改进了 `frame_too_large` 事件和格式错误的 `CONNECT` 包解析失败的错误报告。这些更新现在提供了额外的信息，帮助故障排除。
+
+- [#12541](https://github.com/emqx/emqx/pull/12541) 为基于 DNS 自动集群引入了新的配置验证步骤，以确保 `node.name` 和 `cluster.discover_strategy` 之间的兼容性。具体来说，当使用 `dns` 策略并带有 `a` 或 `aaaa` 记录类型时，所有节点必须使用（静态）IP 地址作为主机名。
+
+- [#12562](https://github.com/emqx/emqx/pull/12562) 添加了一个新的配置根：`durable_storage`。此配置树包含与新的持久会话功能相关的设置。
+
+- [#12566](https://github.com/emqx/emqx/pull/12566) 增强了 REST API 密钥的引导文件：
+
+  - 文件中的空行现在将被跳过，消除了之前生成错误的行为。
+  - 引导文件中指定的 API 密钥被赋予最高优先级。如果引导文件中的新密钥与现有密钥冲突，旧密钥将被自动删除，以确保引导密钥无问题地生效。
+
+- [#12646](https://github.com/emqx/emqx/pull/12646) 修复了规则引擎日期时间字符串解析器的问题。之前，时区调整仅对以秒级精度指定的日期时间字符串有效。
+
+- [#12652](https://github.com/emqx/emqx/pull/12652) 修复了文档中有描述但实际实现中缺失的带有 4 和 5 个参数的 subbits 函数的问题。这些函数现已被添加。
+
+- [#12663](https://github.com/emqx/emqx/pull/12663) 确保通过 Prometheus 端点 `/prometheus/stats` 访问的 `emqx_vm_cpu_use` 和 `emqx_vm_cpu_idle` 指标准确反映当前的 CPU 使用和空闲情况，而不是自操作系统启动以来的平均 CPU 使用率，为监控目的提供更相关和及时的数据。
+
+- [#12668](https://github.com/emqx/emqx/pull/12668) 使用 `calendar:datetime_to_gregorian_seconds/1` 重构了 SQL 函数 `date_to_unix_ts()`。此更改还为输入日期格式添加了验证。
+
+- [#12672](https://github.com/emqx/emqx/pull/12672) 在生成节点启动配置的过程中加载 `{data_dir}/configs/cluster.hocon`。之前，通过Dashboard 进行的日志配置更改保存在 `{data_dir}/configs/cluster.hocon` 中，仅在使用 `etc/emqx.conf` 生成初始启动配置后应用，这可能导致在之后的重新配置中会丢失一些日志段文件。
+
+  现在，创建启动配置时 `{data_dir}/configs/cluster.hocon` 和 `etc/emqx.conf` 同时加载，且 `emqx.conf` 中的设置优先。
+
+- [#12696](https://github.com/emqx/emqx/pull/12696) 修复了尝试重新连接动作或 source 可能导致在 HTTP API 中返回错误的错误消息的问题。
+
+- [#12714](https://github.com/emqx/emqx/pull/12714) 修复了 Prometheus API `/prometheus/stats` 端点报告的几个指标不准确的问题。更正适用于以下指标：
+
+  - `emqx_cluster_sessions_count`
+  - `emqx_cluster_sessions_max`
+  - `emqx_cluster_nodes_running`
+  - `emqx_cluster_nodes_stopped`
+  - `emqx_subscriptions_shared_count`
+  - `emqx_subscriptions_shared_max`
+
+  此外，此修复纠正了 `/stats` 端点中 `subscriptions.shared.count` 和 `subscriptions.shared.max` 字段的问题。之前，这些值在客户端断开连接或取消订阅共享订阅后未能及时更新。
+
+- [#12715](https://github.com/emqx/emqx/pull/12715) 解决了当入口数据集成 source 的连接器存在活动通道时，进行配置更新可能导致系统崩溃的问题。
+
+- [#12740](https://github.com/emqx/emqx/pull/12740) 修复了无法踢出持久会话的问题。
+
 ## 5.5.1
 
 *发布日期: 2024-03-06*
