@@ -98,7 +98,7 @@ use emqx_data;
 
 This section demonstrates how to create a Connector to connect the Sink to the MySQL server.
 
-The following steps assume that you run both EMQX and TDengine on the local machine. If you have TDengine and EMQX running remotely, adjust the settings accordingly.
+The following steps assume that you run both EMQX and MySQL on the local machine. If you have MySQL and EMQX running remotely, adjust the settings accordingly.
 
 1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
 2. Click **Create** in the top right corner of the page.
