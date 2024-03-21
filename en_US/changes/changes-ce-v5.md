@@ -7,12 +7,12 @@
 ### Enhancements
 
 - [#12251](https://github.com/emqx/emqx/pull/12251) Optimized the performance of the RocksDB-based persistent sessions, achieving a reduction in  RAM usage and database request frequency. Key improvements include:
-  
+
   - Introduced dirty session state to avoid frequent mria transactions.
   - Introduced an intermediate buffer for the persistent messages.
   - Used separate tracks of PacketIds for QoS1 and QoS2 messages.
   - Limited the number of continuous ranges of inflight messages to 1 per stream.
-  
+
 - [#12326](https://github.com/emqx/emqx/pull/12326) Enhanced session tracking with registration history. EMQX now has the capability to monitor the history of session registrations, including those that have expired. By configuring `broker.session_history_retain`, EMQX retains records of expired sessions for a specified duration.
 
   - **Session count API**: Use the API `GET /api/v5/sessions_count?since=1705682238` to obtain a count of sessions across the cluster that remained active since the given UNIX epoch timestamp (with seconds precision). This enhancement aids in analyzing session activity over time.
@@ -32,7 +32,7 @@
 
 - [#12467](https://github.com/emqx/emqx/pull/12467) Supported cluster discovery using AAAA DNS record type.
 
-- [#12483](https://github.com/emqx/emqx/pull/12483) Renamed `emqx ctl conf cluster_sync tnxid ID` to `emqx ctl conf cluster_sync inspect ID`. 
+- [#12483](https://github.com/emqx/emqx/pull/12483) Renamed `emqx ctl conf cluster_sync tnxid ID` to `emqx ctl conf cluster_sync inspect ID`.
 
   For backward compatibility, `tnxid` is kept, but considered deprecated and will be removed in 5.7.
 
@@ -133,7 +133,9 @@
   For more information on the functions and their usage, refer to [Built-in SQL Functions](../data-integration/rule-sql-builtin-functions) the documentation.
 
 - [#12336](https://github.com/emqx/emqx/pull/12336) Refined the approach to managing asynchronous tasks by segregating the cleanup of channels into its own dedicated pool. This separation addresses performance issues encountered during channels cleanup under conditions of high network latency, ensuring that such tasks do not impede the efficiency of other asynchronous operations, such as route cleanup.
-  
+
+- [#12725](https://github.com/emqx/emqx/pull/12725) Implemented HTTP API to list the available source types.
+
 - [#12746](https://github.com/emqx/emqx/pull/12746) Added `username` log field. If MQTT client is connected with a non-empty username the logs and traces will include `username` field.
 
 ### Bug Fixes
@@ -142,21 +144,21 @@
 
 - [#12347](https://github.com/emqx/emqx/pull/12347) Implemented an update to ensure that messages processed by the Rule SQL for the MQTT egress data bridge are always rendered as valid, even in scenarios where the data is incomplete or lacks certain placeholders defined in the bridge configuration. This adjustment prevents messages from being incorrectly deemed invalid and subsequently discarded by the MQTT egress data bridge, as was the case previously.
 
-  When variables in `payload` and `topic` templates are undefined, they are now rendered as empty strings instead of the literal `undefined` string. 
+  When variables in `payload` and `topic` templates are undefined, they are now rendered as empty strings instead of the literal `undefined` string.
 
-- [#12472](https://github.com/emqx/emqx/pull/12472) Fixed an issue where certain read operations on `/api/v5/actions/` and `/api/v5/sources/` endpoints might result in a `500` error code during the process of rolling upgrades. 
+- [#12472](https://github.com/emqx/emqx/pull/12472) Fixed an issue where certain read operations on `/api/v5/actions/` and `/api/v5/sources/` endpoints might result in a `500` error code during the process of rolling upgrades.
 
 - [#12492](https://github.com/emqx/emqx/pull/12492) EMQX now returns the `Receive-Maximum` property in the `CONNACK` message for MQTT v5 clients, aligning with protocol expectations. This implementation considers the minimum value of the client's `Receive-Maximum` setting and the server's `max_inflight` configuration as the limit for the number of inflight (unacknowledged) messages permitted. Previously, the determined value was not sent back to the client in the `CONNACK` message.
 
 - [#12500](https://github.com/emqx/emqx/pull/12500) The `GET /clients` and `GET /client/:clientid` HTTP APIs have been updated to include disconnected persistent sessions in their responses.
 
-  NOTE: A current known issue with these enhanced API responses is that the total client count provided may exceed the actual number of clients due to the inclusion of disconnected sessions. 
+  NOTE: A current known issue with these enhanced API responses is that the total client count provided may exceed the actual number of clients due to the inclusion of disconnected sessions.
 
 - [#12513](https://github.com/emqx/emqx/pull/12513) Changed the level of several flooding log events from `warning` to `info`.
 
-- [#12530](https://github.com/emqx/emqx/pull/12530) Improved the error reporting for `frame_too_large` events and malformed `CONNECT` packet parsing failures. These updates now provide additional information, aiding in the troubleshooting process. 
+- [#12530](https://github.com/emqx/emqx/pull/12530) Improved the error reporting for `frame_too_large` events and malformed `CONNECT` packet parsing failures. These updates now provide additional information, aiding in the troubleshooting process.
 
-- [#12541](https://github.com/emqx/emqx/pull/12541) Introduced a new configuration validation step for autocluster by DNS records to ensure compatibility between `node.name` and `cluster.discover_strategy`. Specifically, when utilizing the `dns` strategy with either `a` or `aaaa` record types, it is mandatory for all nodes to use a (static) IP address as the host name. 
+- [#12541](https://github.com/emqx/emqx/pull/12541) Introduced a new configuration validation step for autocluster by DNS records to ensure compatibility between `node.name` and `cluster.discover_strategy`. Specifically, when utilizing the `dns` strategy with either `a` or `aaaa` record types, it is mandatory for all nodes to use a (static) IP address as the host name.
 
 - [#12562](https://github.com/emqx/emqx/pull/12562) Added a new configuration root: `durable_storage`. This configuration tree contains the settings related to the new persistent session feature.
 
@@ -166,7 +168,7 @@
 
   - API keys specified in the bootstrap file are assigned the highest precedence. In cases where a new key from the bootstrap file conflicts with an existing key, the older key will be automatically removed to ensure that the bootstrap keys take effect without issue.
 
-- [#12646](https://github.com/emqx/emqx/pull/12646) Fixed an issue with the rule engine's date-time string parser. Previously, time zone adjustments were only effective for date-time strings specified with second-level precision. 
+- [#12646](https://github.com/emqx/emqx/pull/12646) Fixed an issue with the rule engine's date-time string parser. Previously, time zone adjustments were only effective for date-time strings specified with second-level precision.
 
 - [#12652](https://github.com/emqx/emqx/pull/12652) Fixed a discrepancy where the subbits functions with 4 and 5 parameters, despite being documented, were missing from the actual implementation. These functions have now been added.
 
@@ -177,7 +179,7 @@
 
 - [#12672](https://github.com/emqx/emqx/pull/12672) Changed the process for generating the node boot configuration by incorporating the loading of `{data_dir}/configs/cluster.hocon`. Previously, changes to logging configurations made via the Dashboard and saved in `{data_dir}/configs/cluster.hocon` were only applied after the initial boot configuration was generated using `etc/emqx.conf`, leading to potential loss of some log segment files due to late reconfiguration.
 
-  Now, both `{data_dir}/configs/cluster.hocon` and `etc/emqx.conf` are loaded concurrently, with settings from `emqx.conf` taking precedence, to create the boot configuration. 
+  Now, both `{data_dir}/configs/cluster.hocon` and `etc/emqx.conf` are loaded concurrently, with settings from `emqx.conf` taking precedence, to create the boot configuration.
 
 - [#12696](https://github.com/emqx/emqx/pull/12696) Fixed an issue where attempting to reconnect an action or source could lead to wrong error messages being returned in the HTTP API.
 
@@ -190,7 +192,7 @@
   - `emqx_subscriptions_shared_count`
   - `emqx_subscriptions_shared_max`
 
-  Additionally, this fix rectified an issue within the `/stats` endpoint concerning the `subscriptions.shared.count` and `subscriptions.shared.max` fields. Previously, these values failed to update promptly following a client's disconnection or unsubscription from a Shared-Subscription. 
+  Additionally, this fix rectified an issue within the `/stats` endpoint concerning the `subscriptions.shared.count` and `subscriptions.shared.max` fields. Previously, these values failed to update promptly following a client's disconnection or unsubscription from a Shared-Subscription.
 
 - [#12715](https://github.com/emqx/emqx/pull/12715) Fixed a crash that could occur during configuration updates if the connector for the ingress data integration source had active channels.
 
@@ -259,7 +261,7 @@
 
   In this new format, the absence of a matching rule does not result in an automatic denial of the action. The authorization chain can advance to other configured authorizers if a match is not found in the JWT ACL. If no match is found throughout the chain, the final decision defers to the default permission set in `authorization.no_match`.
 
-- [#12267](https://github.com/emqx/emqx/pull/12267) Added a new `timeout` parameter to the `cluster/:node/invite` interface, addressing the issue of default timeouts. 
+- [#12267](https://github.com/emqx/emqx/pull/12267) Added a new `timeout` parameter to the `cluster/:node/invite` interface, addressing the issue of default timeouts.
   The previously set 5-second default timeout often led to HTTP API call timeouts because joining an EMQX cluster usually requires more time.
 
   In addition, EMQX added a new API `/cluster/:node/invite_async` to support an asynchronous way to invite nodes to join the cluster and introduced a new `cluster/invitation` API to inspect the join status.
@@ -322,7 +324,7 @@
 
 - [#12359](https://github.com/emqx/emqx/pull/12359) Fixed an issue causing error messages when restarting a node configured with some types of data bridges.  Additionally, these bridges were at risk of entering a failed state upon node restart, requiring a manual restart to restore functionality.
 
-- [#12404](https://github.com/emqx/emqx/pull/12404) Fixed an issue where restarting a data integration with heavy message flow could lead to a stop in the collection of data integration metrics. 
+- [#12404](https://github.com/emqx/emqx/pull/12404) Fixed an issue where restarting a data integration with heavy message flow could lead to a stop in the collection of data integration metrics.
 
 ## 5.4.1
 
@@ -334,7 +336,7 @@
 - [#12234](https://github.com/emqx/emqx/pull/12234) Resolved compatibility issues with Open Telemetry configurations defined in `emqx.conf` from versions before EMQX 5.4.0, ensuring smooth integration of legacy configurations with the latest EMQX release.
 - [#12236](https://github.com/emqx/emqx/pull/12236) Fixed client ID generation in MQTT broker data integration to comply with MQTT 3.1 specification of 23-byte limit. Client ID is now prefixed with user-assigned Connector name, followed by the first 8 bytes of node name's SHA hash and pool member ID. If the resulting ID exceeds 23 bytes, additional SHA hash and truncation for the first 23 characters are applied to ensure compliance.
 - [#12238](https://github.com/emqx/emqx/pull/12238) Resolved compatibility issue with the error format configurations introduced in the HTTP Action feature of EMQX version 5.3.2.
-- [#12246](https://github.com/emqx/emqx/pull/12246) Stopped exposing port 11883 by default in Docker and removed it from Helm charts, as this port is no longer in use. 
+- [#12246](https://github.com/emqx/emqx/pull/12246) Stopped exposing port 11883 by default in Docker and removed it from Helm charts, as this port is no longer in use.
 - [#12249](https://github.com/emqx/emqx/pull/12249) Fixed an issue in the `/configs` API where attempting to modify a read-only configuration value resulted in a garbled response message.
 - [#12264](https://github.com/emqx/emqx/pull/12264) Fixed an issue where version 5.4 replica nodes could not join clusters with core nodes running versions earlier than 5.4 during the rolling upgrade process.
 
@@ -363,7 +365,7 @@
 
 - [#11984](https://github.com/emqx/emqx/pull/11984) Implemented Open Telemetry distributed tracing feature.
 
-- [#12017](https://github.com/emqx/emqx/pull/12017) Implemented a dedicated REST API for the import and export of configuration and user data. 
+- [#12017](https://github.com/emqx/emqx/pull/12017) Implemented a dedicated REST API for the import and export of configuration and user data.
 
 - [#12040](https://github.com/emqx/emqx/pull/12040) Upgraded QUIC protocol stack.
 
@@ -377,7 +379,7 @@
   - For WS/WSS (WebSocket) listeners, modifying transport-related parameters (listed below) will result in the listening socket being reopened, but established connections will remain uninterrupted.
     - `bind`
     - `tcp_options.*`
-    
+
     - `ssl_options.*`
 
 - [#11608](https://github.com/emqx/emqx/pull/11608) Integrated LDAP bind operation as a new authenticator, providing a more flexible and secure method for user authentication.
@@ -401,18 +403,18 @@
 
   `role` is optional and its default value is `administrator`.
 
-- [#11852](https://github.com/emqx/emqx/pull/11852) Introduced a new GB/T 32960 gateway, enabling vehicles to connect with EMQX via the GBT32960 vehicular networking protocol. 
+- [#11852](https://github.com/emqx/emqx/pull/11852) Introduced a new GB/T 32960 gateway, enabling vehicles to connect with EMQX via the GBT32960 vehicular networking protocol.
 
-- [#11883](https://github.com/emqx/emqx/pull/11883) Introduced a new JT/T808 gateway, enabling vehicles to connect with EMQX via the JT/T 808 vehicular networking protocol. 
+- [#11883](https://github.com/emqx/emqx/pull/11883) Introduced a new JT/T808 gateway, enabling vehicles to connect with EMQX via the JT/T 808 vehicular networking protocol.
 
-- [#11885](https://github.com/emqx/emqx/pull/11885) Introduced a new OCPP gateway for Electric vehicle (EV) charging stations to access EMQX through the OCPP (Open Charge Point Protocol). 
+- [#11885](https://github.com/emqx/emqx/pull/11885) Introduced a new OCPP gateway for Electric vehicle (EV) charging stations to access EMQX through the OCPP (Open Charge Point Protocol).
 
 - [#11971](https://github.com/emqx/emqx/pull/11971) Made `/api/v5/load_rebalance/availability_check` public, meaning it no longer requires authentication. This change simplifies the setup of load balancers.
 
   It improved the gracefulness of the rebalance/evacuation process during the wait health check phase. The connections to nodes marked for eviction are now not prohibited during this phase.
   During this phase it is unknown whether these nodes are all marked unhealthy by the load balancer, so prohibiting connections to them may cause multiple unsuccessful reconnection attempts.
 
-- [#12013](https://github.com/emqx/emqx/pull/12013) The data bridging design has been adjusted to split it into connectors and actions (Sinks). Connectors are used to manage the integration of data with external systems and can be reused across multiple actions, while actions are used to configure how data is processed. This design provides greater flexibility and scalability, resulting in clearer data integration configuration and management. 
+- [#12013](https://github.com/emqx/emqx/pull/12013) The data bridging design has been adjusted to split it into connectors and actions (Sinks). Connectors are used to manage the integration of data with external systems and can be reused across multiple actions, while actions are used to configure how data is processed. This design provides greater flexibility and scalability, resulting in clearer data integration configuration and management.
 
   The adjusted data bridges includes PostgreSQL, Timescale, and Matrix, which have now been split into connectors and actions APIs, but they remain backward compatible with the old data bridge API.
 
@@ -433,9 +435,9 @@
 - [#12078](https://github.com/emqx/emqx/pull/12078) Upgraded grpc-erl to 0.6.12. This update addresses a potential deadlock issue where the grpc client started dependent apps lazily.
 
 - [#12081](https://github.com/emqx/emqx/pull/12081) Updated `gen_rpc` library to version 3.3.1. The new version includes several performance improvements:
-  
+
   - Avoiding allocating extra memory for the packets before they are sent to the wire in some cases.
-  
+
   - Bypassing network for the local calls.
 
   - Avoid senstive data leaking in debug logs [#12202](https://github.com/emqx/emqx/pull/12202)
@@ -468,7 +470,7 @@
 
 - [#11790](https://github.com/emqx/emqx/pull/11790) Added validation to Redis commands in Redis authorization source.
   Additionally, this improvement refines the parsing of Redis commands during authentication and authorization processes.  The parsing now aligns with `redis-cli` compatibility standards and supports quoted arguments.
-  
+
 - [#11541](https://github.com/emqx/emqx/pull/11541) Enhanced file transfer capabilities. Now, clients can use an asynchronous method for file transfer by sending commands to the `$file-async/...` topic and subscribing to command execution results on the `$file-response/{clientId}` topic. This improvement simplifies the use of the file transfer feature, particularly suitable for clients using MQTT v3.1/v3.1.1 or those employing MQTT bridging. For more details, please refer to [EIP-0021](https://github.com/emqx/eip).
 
 ### Bug Fixes
@@ -485,11 +487,11 @@
 
 - [#11797](https://github.com/emqx/emqx/pull/11797) Modified HTTP API behavior for APIs managing the `built_in_database` authorization source. They will now return a `404` status code if `built_in_database` is not set as the authorization source, replacing the former `20X` response.
 
-- [#11965](https://github.com/emqx/emqx/pull/11965) Improved the termination of EMQX services to ensure a graceful stop even in the presence of an unavailable MongoDB resource. 
+- [#11965](https://github.com/emqx/emqx/pull/11965) Improved the termination of EMQX services to ensure a graceful stop even in the presence of an unavailable MongoDB resource.
 
 - [#11975](https://github.com/emqx/emqx/pull/11975) This fix addresses an issue where redundant error logs were generated due to a race condition during simultaneous socket closure by a peer and the server. Previously, concurrent socket close events triggered by the operating system and EMQX resulted in unnecessary error logging. The implemented fix improves event handling to eliminate unnecessary error messages.
 
-- [#11987](https://github.com/emqx/emqx/pull/11987) Fixed a bug where attempting to set the `active_n` option on a TCP/SSL socket could lead to a connection crash. 
+- [#11987](https://github.com/emqx/emqx/pull/11987) Fixed a bug where attempting to set the `active_n` option on a TCP/SSL socket could lead to a connection crash.
 
   The problem occurred if the socket had already been closed by the time the connection process attempted to apply the `active_n` setting, resulting in a `case_clause` crash.
 
@@ -515,9 +517,9 @@
 - [#11676](https://github.com/emqx/emqx/pull/11676) Hid a few pieces of sensitive information from debug-level logs.
 
 - [#11697](https://github.com/emqx/emqx/pull/11697) Disabled outdated TLS versions and cipher suites in the EMQX backplane network (`gen_rpc`). Added support for tlsv1.3 on the backplane and introduced new configuration parameters: `EMQX_RPC__TLS_VERSIONS` and `EMQX_RPC__CIPHERS`.
-  
+
   The corresponding `gen_rpc` PR: https://github.com/emqx/gen_rpc/pull/36
-  
+
 - [#11734](https://github.com/emqx/emqx/pull/11734) Fixed clustering in IPv6 network. Added new configurations `rpc.listen_address` and `rpc.ipv6_only` to allow EMQX cluster RPC server and client to use IPv6.
 
 - [#11747](https://github.com/emqx/emqx/pull/11747) Updated QUIC stack to msquic 2.2.3.
@@ -529,10 +531,10 @@
 - [#11798](https://github.com/emqx/emqx/pull/11798) Fixed the issue where the node could not start after executing `./bin/emqx data import [FILE]`.
 
   The connection between `apikey_key` and `apikey_name` is also enhanced for better consistency and unique identification.
-  - `apikey_key`: When generating an API key via the dashboard, `apikey_key` will now create a unique value derived from the provided human-readable `apikey_name`. 
-  - `apikey_name` Conversely, when using a bootstrap file to generate an API key, `apikey_name` will be generated as a unique value based on the associated `apikey_key`. 
+  - `apikey_key`: When generating an API key via the dashboard, `apikey_key` will now create a unique value derived from the provided human-readable `apikey_name`.
+  - `apikey_name` Conversely, when using a bootstrap file to generate an API key, `apikey_name` will be generated as a unique value based on the associated `apikey_key`.
 
-- [#11813](https://github.com/emqx/emqx/pull/11813) Fixed the schema to ensure that RPC client SSL port aligns with the configured server port. This fix also guarantees that the RPC ports are correctly opened in the Helm chart. 
+- [#11813](https://github.com/emqx/emqx/pull/11813) Fixed the schema to ensure that RPC client SSL port aligns with the configured server port. This fix also guarantees that the RPC ports are correctly opened in the Helm chart.
 
 - [#11819](https://github.com/emqx/emqx/pull/11819) Upgraded opentelemetry library to v1.3.1-emqx. This opentelemetry release fixes invalid metrics timestamps in the exported metrics.
 
@@ -573,9 +575,9 @@
 
   In this version, there are two predefined roles:
   - Administrator: This role could access all resources.
-  
+
   - Viewer: This role can only view resources and data, corresponding to all GET requests in the REST API.
-  
+
 - [#11631](https://github.com/emqx/emqx/pull/11631) Added Single Sign-On (SSO) feature and integrated with LDAP.
 
 - [#11656](https://github.com/emqx/emqx/pull/11656) Integrated the SAML 2.0 Support for SSO.
@@ -622,18 +624,18 @@
 
 - [#11499](https://github.com/emqx/emqx/pull/11499) Upgraded Erlang/OTP to version 25.3.2-2, which now excludes sensitive data from mnesia_hook log messages.
 
-- [#11506](https://github.com/emqx/emqx/pull/11506) Previously, attempting to download a non-existent trace log file would result in downloading an empty file. After implementing this fix, when attempting to download an empty trace log file using the GET request `/api/v5/trace/clientempty/download`, the server will now respond with a 404 status code and the following JSON message: `{"code":"NOT_FOUND","message":"Trace is empty"}`. This response will be triggered if no events matching the trace condition are found in the log file. 
+- [#11506](https://github.com/emqx/emqx/pull/11506) Previously, attempting to download a non-existent trace log file would result in downloading an empty file. After implementing this fix, when attempting to download an empty trace log file using the GET request `/api/v5/trace/clientempty/download`, the server will now respond with a 404 status code and the following JSON message: `{"code":"NOT_FOUND","message":"Trace is empty"}`. This response will be triggered if no events matching the trace condition are found in the log file.
 
 - [#11522](https://github.com/emqx/emqx/pull/11522) Improved rule engine schema registry error message when schema name exceeds the permissible length.
 
 - [#11531](https://github.com/emqx/emqx/pull/11531) Fixed an issue where authorization cache cleaning CLI was not working properly for specific client ID.
 
 - [#11564](https://github.com/emqx/emqx/pull/11564) Fixed cluster partition autoheal functionality. Implemented autohealing for the clusters that split into multiple partitions.
-  
+
 - [#11568](https://github.com/emqx/emqx/pull/11568) Fixed an issue where an ill-defined built-in rule action config could be interpreted as a custom user function.
 
 - [#11394](https://github.com/emqx/emqx/pull/11394) Upgraded Kafka producer client `wolff` from 1.7.6 to 1.7.7. This fixed a potential race condition that might cause all Kafka producers to crash if some failed to initialize.
-  
+
 - [#11401](https://github.com/emqx/emqx/pull/11401) Fixed the behavior of the rule SQL `mongo_date` function in SQL statement testing in the EMQX Dashboard. The rule SQL `mongo_date` function now returns a string with the format `ISODate(*)`, where * is an ISO date string when running rules in test mode. This format aligns with how MongoDB stores dates.
 
 - [#11547](https://github.com/emqx/emqx/pull/11547) Fixed several emqx_bridge issues:
@@ -642,7 +644,7 @@
   - Fixed SQL Server bridge connect error caused by an empty password.
   - Made `username` a required field in Oracle bridge.
   - Fixed IoTDB bridge error caused by setting base URL without a scheme (e.g. `<host>:<port>`).
-  
+
 - [#11630](https://github.com/emqx/emqx/pull/11630) Fixed an issue where the core node could get stuck in the `mria_schema:bootstrap/0` state, preventing new nodes from joining the cluster.
 
 ## 5.2.0
@@ -668,13 +670,13 @@
 - [#11436](https://github.com/emqx/emqx/pull/11436) Added a new API endpoint `DELETE/banned` for clearing all `banned` data.
 
 - [#11438](https://github.com/emqx/emqx/pull/11438) Changed the type of the `mqtt.max_packet_size` from string to byteSize for a better representation of the valid numeric range. Strings will still be accepted for backward compatibility.
-  
+
 - [#11469](https://github.com/emqx/emqx/pull/11469) Added support for specifying username in Redis authentication.
 
 - [#11496](https://github.com/emqx/emqx/pull/11496) Disabled the Erlang VM Prometheus exporter by default to improve performance and security.
 
 - [#11497](https://github.com/emqx/emqx/pull/11497) Enhanced broker metrics collection and export by adding new metrics for messages, overload protection, authorization, authentication, and improving naming consistency for OpenTelemetry.
-  
+
 - [#10647](https://github.com/emqx/emqx/pull/10647) Implemented [GreptimeDB](https://github.com/GreptimeTeam/greptimedb) data integration.
 
 - [#11261](https://github.com/emqx/emqx/pull/11261) Implemented Amazon Kinesis Data Streams producer data integration.
@@ -708,7 +710,7 @@
 - [#11399](https://github.com/emqx/emqx/pull/11399) Improved the placeholder syntax in the rule engine. The republishing actions support placeholder syntax to
   dynamically fill in the content of strings in the payload variable. The format of the placeholder syntax is `\${key}`.
   Before this improvement, the `key` in `\${key}` could only contain letters, numbers, and underscores. Now the `key` supports any UTF8 characters.
-  
+
 - [#11405](https://github.com/emqx/emqx/pull/11405) Made the error message for `date_to_unix_ts` function more understandable.
 
 - [#11490](https://github.com/emqx/emqx/pull/11490) Added fast error handling for undefined passwords in various authentication backends. This improves the consistency and user-friendliness of the authentication process.
@@ -720,15 +722,15 @@
 - [#11279](https://github.com/emqx/emqx/pull/11279) Fixed an issue where clients could not send messages with large payloads when debug/trace logging was enabled in EMQX.
 
 - [#11296](https://github.com/emqx/emqx/pull/11296) Added support for importing additional configurations from EMQX backup file using the `emqx ctl import` command):
-  
+
   - rule_engine (previously not imported due to the bug)
   - topic_metrics (previously not implemented)
   - slow_subs (previously not implemented)
-  
+
 - [#11327](https://github.com/emqx/emqx/pull/11327) Updated ekka to version 0.15.8, mria to version 0.15.8, and optvar to 1.0.5. This fixes occasional assertion failures.
 
 - [#11346](https://github.com/emqx/emqx/pull/11346) Updated ekka to version 0.15.9. This fixes dangling etcd locks that occurred when acquiring the lock failed with a timeout.
-  
+
 - [#11347](https://github.com/emqx/emqx/pull/11347) Ensured that OCSP request path is properly URL encoded.
 
 - [#11352](https://github.com/emqx/emqx/pull/11352) Fixed a [crash issue](https://github.com/emqx/emqx/issues/11345) that occurred when starting on Windows or any other platform without RocksDB support.
@@ -737,18 +739,18 @@
 - [#11388](https://github.com/emqx/emqx/pull/11388) Increased `emqx_router_sup` restart intensity to improve tolerance for occasional crashes that can occur under normal conditions, without necessitating the shutdown of the entire EMQX application.
   For example, mria write/delete call delegated from a replicant to a core node by `emqx_router_helper` may fail,
   if the core node undergoes stopping, restarting, or is in an unready state. The modified restart intensity ensures that the system remains stable and operational.
-  
+
 
   This fixes issues found when trying to upgrade from 5.1.3 where that option was set in the configuration files or persisted in EMQX Operator settings.
 
 - [#11424](https://github.com/emqx/emqx/pull/11424) Added a check for the maximum value of the timestamp in the API to ensure it is a valid Unix timestamp.
 
 - [#11445](https://github.com/emqx/emqx/pull/11445) Removed os_mon application monitor support on Windows platforms to prevent VM crashes. Functionality remains on non-Windows platforms.
-  
+
 - [#11454](https://github.com/emqx/emqx/pull/11454) Fixed crashing when debugging/tracing with large payloads (introduced in [#11279](https://github.com/emqx/emqx/pull/11279)).
 
 - [#11456](https://github.com/emqx/emqx/pull/11456) Removed validation that enforced non-empty PEM for the CA cert file, allowing the CA certificate file PEM to be empty.
-  
+
 - [#11466](https://github.com/emqx/emqx/pull/11466) Fixed a crash that occurred when setting the `ssl_options.ciphers` configuration option to an empty string ("").
 
 - [#11480](https://github.com/emqx/emqx/pull/11480) Improves the error handling and testing of SQL functions in the rule engine when rule functions receive bad arguments.
@@ -793,20 +795,20 @@
 - [#11137](https://github.com/emqx/emqx/pull/11137) Refactored the Dashboard listener configuration to use a nested `ssl_options` field for SSL settings.
 
 - [#11138](https://github.com/emqx/emqx/pull/11138) Changed the default value of k8s `api_server` from `http://127.0.0.1:9091` to `https://kubernetes.default.svc:443`.
-  
+
   - `emqx_ctl conf show cluster` no longer displays irrelevant configuration items when `discovery_strategy=static`.
   Configuration information related to `etcd/k8s/dns` will not be shown.
   - Removed `zones `(deprecated config key) from `emqx_ctl conf show_keys`.
-  
+
 - [#11165](https://github.com/emqx/emqx/pull/11165) Removed the `/configs/limiter` API from `swagger.json`. Only the API documentation was removed,
   and the `/configs/limiter` API functionalities remain unchanged.
 
 - [#11166](https://github.com/emqx/emqx/pull/11166) Added 3 random SQL functions to the rule engine:
-  
+
   - `random()`: Generates a random number between 0 and 1 (0.0 =< X < 1.0).
   - `uuid_v4()`: Generates a random UUID (version 4) string.
   - `uuid_v4_no_hyphen()`: Generates a random UUID (version 4) string without hyphens.
-  
+
 - [#11180](https://github.com/emqx/emqx/pull/11180) Added a new configuration API `/configs` (GET/PUT) that supports reloading the HOCON format configuration file.
 
 - [#11226](https://github.com/emqx/emqx/pull/11226) Unified the listener switch to `enable`, while being compatible with the previous `enabled`.
@@ -825,7 +827,7 @@
   Now, EMQX can verify whether clients have the permission to publish/subscribe using specific QoS levels, and whether they have the permission to publish retained messages.
 
 - [#11207](https://github.com/emqx/emqx/pull/11207) Updated the driver versions of multiple data bridges to enhance security and ensure that sensitive data will not be leaked. This includes:
-  
+
   - TDengine
   - MongoDB
   - MySQL
@@ -889,7 +891,7 @@
 - [#11148](https://github.com/emqx/emqx/pull/11148) Fixed an issue when nodes tried to synchronize configuration update operations to a node which has already left the cluster.
 
 - [#11150](https://github.com/emqx/emqx/pull/11150) Wait for Mria table when emqx_psk app is being started to ensure that PSK data is synced to replicant nodes even if they don't have init PSK file.
-  
+
 - [#11151](https://github.com/emqx/emqx/pull/11151) The MySQL connector has been refactored into its own Erlang application to improve the code structure.
 
 - [#11158](https://github.com/emqx/emqx/pull/11158) Wait for Mria table when the mnesia backend of retainer starts to avoid a possible error of the retainer when joining a cluster.
@@ -899,18 +901,18 @@
 - [#11164](https://github.com/emqx/emqx/pull/11164) Reintroduced support for nested (i.e.: `${payload.a.b.c}`) placeholders for extracting data from rule action messages without the need for calling `json_decode(payload)` first.
 
 - [#11172](https://github.com/emqx/emqx/pull/11172) Fixed the `payload` field in rule engine SQL being duplicated in the below situations:
-  
+
   - When using a `foreach` sentence without the `as` sub-expression and selecting all fields (using the `*` or omitting the `do` sub-expression).
-  
+
   For example:
-  
+
   `FOREACH payload.sensors FROM "t/#"`
   - When selecting the `payload` field and all fields.
-  
+
   For example:
-  
+
   `SELECT payload.sensors, * FROM "t/#"`
-  
+
 - [#11174](https://github.com/emqx/emqx/pull/11174) Fixed the encoding of the `server` key coming from an ingress MQTT bridge.
 
   Before the fix, it was encoded as a list of integers corresponding to the ASCII characters of the server string.
@@ -918,7 +920,7 @@
 - [#11184](https://github.com/emqx/emqx/pull/11184) Config value for `mqtt.max_packet_size` now has a max value of 256MB as defined by the protocol.
 
 - [#11192](https://github.com/emqx/emqx/pull/11192) Fixed an issue with producing invalid HOCON file when an atom type was used. Also removed unnecessary `"` around keys and latin1 strings from HOCON file.
-  
+
 - [#11195](https://github.com/emqx/emqx/pull/11195) Fixed an issue where the REST API could create duplicate subscriptions for specified clients of the Stomp gateway.
 
 - [#11206](https://github.com/emqx/emqx/pull/11206) Made the `username` and `password` params of CoAP client optional in connection mode.
@@ -947,13 +949,13 @@
 - [#11306](https://github.com/emqx/emqx/pull/11306) Fixed rule action metrics inconsistency where dropped requests were not accounted for.
 
 - [#11309](https://github.com/emqx/emqx/pull/11309) Improved startup order of EMQX applications. Simplified build scripts and improved code reuse.
-  
+
 - [#11322](https://github.com/emqx/emqx/pull/11322) Added support for importing additional configurations from EMQX backup file (`emqx ctl import` command):
-  
+
   - rule_engine (previously not imported due to the bug)
   - topic_metrics (previously not implemented)
   - slow_subs (previously not implemented).
-  
+
 - [#10645](https://github.com/emqx/emqx/pull/10645) Changed health check for Oracle Database, PostgreSQL, MySQL and Kafka Producer data bridges to ensure target table/topic exists.
 
 - [#11107](https://github.com/emqx/emqx/pull/11107) MongoDB bridge health check now returns the failure reason.
@@ -967,7 +969,7 @@
 - [#11175](https://github.com/emqx/emqx/pull/11175) Now when using a nonexistent hostname for connecting to MySQL, a 400 error is returned rather than 503 in the REST API.
 
 - [#11198](https://github.com/emqx/emqx/pull/11198) Fixed global rebalance status evaluation on replicant nodes. Previously, `/api/v5/load_rebalance/global_status` API method could return incomplete results if handled by a replicant node.
-  
+
 - [#11223](https://github.com/emqx/emqx/pull/11223) In InfluxDB bridging, mixing decimals and integers in a field may lead to serialization failure in the Influx Line Protocol, resulting in the inability to write to the InfluxDB bridge (when the decimal point is 0, InfluxDB mistakenly interprets it as an integer).
 
   See also: [InfluxDB v2.7 Line-Protocol](https://docs.influxdata.com/influxdb/v2.7/reference/syntax/line-protocol/#float).
@@ -2774,7 +2776,7 @@ _Release Date: 2023-04-12_
 
 - [#10098](https://github.com/emqx/emqx/pull/10098) Fix an issue where the MongoDB connector crashed when MongoDB authorization was configured.
 
-- [#10100](https://github.com/emqx/emqx/pull/10100) Fix channel crash for slow clients with enhanced authentication.  
+- [#10100](https://github.com/emqx/emqx/pull/10100) Fix channel crash for slow clients with enhanced authentication.
   Previously, when the client was using enhanced authentication, but the Auth message was sent slowly or the Auth message was lost, the client process would crash.
 
 - [#10107](https://github.com/emqx/emqx/pull/10107) For operations on Bridges API if `bridge-id` is unknown we now return `404` instead of `400`.
@@ -2790,7 +2792,7 @@ _Release Date: 2023-04-12_
 
 - [#10130](https://github.com/emqx/emqx/pull/10130) Fix garbled config display in dashboard when the value is originally from environment variables.
 
-- [#10132](https://github.com/emqx/emqx/pull/10132) Fix some error logs generated by `systemctl stop emqx` command.  
+- [#10132](https://github.com/emqx/emqx/pull/10132) Fix some error logs generated by `systemctl stop emqx` command.
   Prior to the fix, the command was not stopping `jq` and `os_mon` applications properly.
 
 - [#10144](https://github.com/emqx/emqx/pull/10144) Fix an issue where emqx cli failed to set the Erlang cookie when the emqx directory was read-only.
