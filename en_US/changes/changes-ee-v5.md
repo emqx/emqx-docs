@@ -36,6 +36,8 @@
 
   For backward compatibility, `tnxid` is kept, but considered deprecated and will be removed in 5.7.
 
+- [#12495](https://github.com/emqx/emqx/pull/12495) Intorduced new AWS S3 connector and action.
+
 - [#12499](https://github.com/emqx/emqx/pull/12499) Enhanced client banning capabilities with extended rules, including:
 
   * Matching `clientid` against a specified regular expression.
