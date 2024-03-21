@@ -71,6 +71,8 @@
 
 - 在节点疏散期间，疏散所有连接已断开的会话，而不仅仅是那些以 `clean_start = false` 启动的会话。
 
+  修复前，如果客户端设置了 `clean_start = true` 和非零的 `Session-Expiry-Interval`，那么该会话不会被疏散，这将导致会话在节点关闭之后丢失。
+
 - 修复启用 OCSP Stapling 时，从旧版本热升级到 e4.4.23 失败的问题。
 
 - 修复从 Redis 中找不到对应的认证信息时，Redis 认证异常的问题。
