@@ -60,13 +60,13 @@ gateway.stomp {
 
 {% emqxce %}
 
-Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列表参考配置手册中的[网关配置 - 监听器](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)。
+Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列表参考配置手册中的[网关配置 - 监听器](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
 
 {% endemqxce %}
 
 {% emqxee %}
 
-Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列表参考配置手册中的[网关配置 - 监听器](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/)。
+Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列表参考配置手册中的[网关配置 - 监听器](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 {% endemqxee %}
 

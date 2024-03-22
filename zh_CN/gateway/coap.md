@@ -64,13 +64,13 @@ gateway.coap {
 
 {% emqxce %}
 
-CoAP 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表请参考：[网关配置 - 监听器](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)。
+CoAP 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表请参考：[网关配置 - 监听器](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
 
 {% endemqxce %}
 
 {% emqxee %}
 
-CoAP 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表请参考：[网关配置 - 监听器](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/)。
+CoAP 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表请参考：[网关配置 - 监听器](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 {% endemqxee %}
 
@@ -184,14 +184,14 @@ CoAP 网关基于 [Publish-Subscribe Broker for the CoAP](https://datatracker.ie
 
 {% emqxce %}
 
-- 配置说明参考：[网关配置 - CoAP 网关](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)
+- 配置说明参考：[网关配置 - CoAP 网关](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)
 - 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
 
 {% endemqxce %}
 
 {% emqxee %}
 
-- 配置说明参考：[网关配置 - CoAP 网关](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/)
+- 配置说明参考：[网关配置 - CoAP 网关](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
 - 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
 
 {% endemqxee %}

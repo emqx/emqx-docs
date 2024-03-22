@@ -65,13 +65,13 @@ gateway.mqttsn {
 
 {% emqxce %}
 
-MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)。
+MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
 
 {% endemqxce %}
 
 {% emqxee %}
 
-MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/)。
+MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 {% endemqx %}
 
@@ -160,14 +160,14 @@ MQTT-SN 协议已经定了发布/订阅的行为，MQTT-SN 网关未对其进行
 
 {% emqxce %}
 
-- 详细配置说明参考：[网关配置 - MQTT-SN 网关](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)
+- 详细配置说明参考：[网关配置 - MQTT-SN 网关](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)
 - 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
 
 {% endemqxce %}
 
 {% emqxee %}
 
-- 详细配置说明参考：[网关配置 - MQTT-SN 网关](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/)
+- 详细配置说明参考：[网关配置 - MQTT-SN 网关](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
 - 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
 
 {% endemqxee %}

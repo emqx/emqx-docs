@@ -26,13 +26,13 @@ Click add listener button, you can see a form for adding a listener on the right
 
 {% emqxce %}
 
-More about the listener configuration, please refer to [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
+More about the listener configuration, please refer to [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
 
 {% endemqxce %}
 
 {% emqxee %}
 
-More about the listener configuration, please refer to [Configuration Manual](https://www.emqx.io/docs/en/v${EE_VERSION}/hocon/).
+More about the listener configuration, please refer to [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 {% endemqxee %}
 

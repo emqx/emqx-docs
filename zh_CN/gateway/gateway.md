@@ -140,7 +140,7 @@ gateway.stomp {
 详细参考：
 
 - [HTTP API - Gateway](../admin/api.md)
-- [配置文档-网关配置](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)
+- [配置文档-网关配置](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)
 
 {% endemqxce %}
 
@@ -149,7 +149,7 @@ gateway.stomp {
 详细参考：
 
 - [HTTP API - Gateway](../admin/api.md)
-- [配置文档-网关配置](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/)
+- [配置文档-网关配置](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
 
 {% endemqxee %}
 

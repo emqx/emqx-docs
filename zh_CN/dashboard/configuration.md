@@ -26,13 +26,13 @@ EMQX 提供了热配置能力，可以在运行时动态修改配置，无需重
 
 {% emqxce %}
 
-更多关于监听器配置的详情，请参考[配置手册](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)。
+更多关于监听器配置的详情，请参考[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
 
 {% endemqxce %}
 
 {% emqxee %}
 
-更多关于监听器配置的详情，请参考[配置手册](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/)。
+更多关于监听器配置的详情，请参考[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 {% endemqxee %}
 
