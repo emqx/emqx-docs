@@ -70,7 +70,7 @@ Persistent sessions interact with this structure by fetching messages in batches
 
 ### Session Persistence Across Cluster
 
-Each node within an EMQX cluster is assigned a unique site ID, which serves as a stable identifier, independent of the Erlang node name (`emqx@...`). Site IDs are persistent, and they are randomly generated at the first startup of the node. This stability is crucial for maintaining the integrity of persistent sessions and messages, especially in scenarios where nodes might undergo name modifications or reconfigurations. 
+Each node within an EMQX cluster is assigned a unique site ID, which serves as a stable identifier, independent of the Erlang node name (`emqx@...`). Site IDs are persistent, and they are randomly generated at the first startup of the node. This stability maintains the integrity of persistent sessions and messages, especially in scenarios where nodes might undergo name modifications or reconfigurations. 
 
 By associating persistent sessions and messages with a unique site ID rather than just the node's name, EMQX ensures that these sessions can be reliably managed and recovered, even if the underlying node details change. 
 
