@@ -6,13 +6,6 @@
 
 ### 增强
 
-- [#12251](https://github.com/emqx/emqx/pull/12251) 优化了基于 RocksDB 的持久会话性能，减少了 RAM 使用和数据库请求频率。主要改进包括：
-
-  - 引入了脏会话状态以避免频繁的 mria 事务。
-  - 为持久消息引入了中间缓冲区。
-  - 为 QoS1 和 QoS2 消息使用了不同的 PacketIds 轨迹。
-  - 将每个流中连续未确认消息的数量限制为 1。
-
 - [#12326](https://github.com/emqx/emqx/pull/12326) 通过使用注册历史增强了会话跟踪。EMQX 现在能够监控会话注册的历史，包括那些已过期的会话。通过配置 `broker.session_history_retain`，EMQX 保留了指定时间内过期会话的记录。
 
   - **会话计数 API**：使用 API `GET /api/v5/sessions_count?since=1705682238` 获取自给定 UNIX 纪元时间戳（精确到秒）以来保持活跃的集群内会话计数。这一增强有助于分析一段时间内的会话活动。
@@ -25,8 +18,6 @@
     ```
 
     注意：请将此指标视为近似估计。由于数据收集和计算的异步性，精确度可能会有所不同。
-
-- [#12338](https://github.com/emqx/emqx/pull/12338) 为基于 RocksDB 的持久会话后端引入了基于时间的垃圾收集机制。这一特性通过自动清理过时消息，确保了存储消息的更高效管理，优化了存储利用率和系统性能。
 
 - [#12398](https://github.com/emqx/emqx/pull/12398) 在 Dashboard 配置中暴露了 `swagger_support` 选项，允许启用或禁用 Swagger API 文档。
 
@@ -126,14 +117,23 @@
   - 只指定某些字段：`/clients?fields=clientid,username`
 
 - [#12330](https://github.com/emqx/emqx/pull/12330) Cassandra 数据桥接已拆分为连接器和动作组件。它们与数据桥接 HTTP API 向后兼容。配置将自动升级。
+
 - [#12353](https://github.com/emqx/emqx/pull/12353) OpenTSDB 数据桥接已拆分为连接器和动作组件。它们与数据桥接 HTTP API 向后兼容。配置将自动升级。
+
 - [#12376](https://github.com/emqx/emqx/pull/12376) Kinesis 数据桥接已拆分为连接器和动作组件。它们与数据桥接 HTTP API 向后兼容。配置将自动升级。
+
 - [#12386](https://github.com/emqx/emqx/pull/12386) GreptimeDB 数据桥接已拆分为连接器和动作组件。它们与数据桥接 HTTP API 向后兼容。配置将自动升级。
+
 - [#12423](https://github.com/emqx/emqx/pull/12423) RabbitMQ 数据桥接已拆分为连接器、动作和 source 组件。它们与数据桥接 HTTP API 向后兼容。配置将自动升级。
+
 - [#12425](https://github.com/emqx/emqx/pull/12425) ClickHouse 数据桥接已拆分为连接器和动作组件。它们与数据桥接 HTTP API 向后兼容。配置将自动升级。
+
 - [#12439](https://github.com/emqx/emqx/pull/12439) Oracle 数据桥接已拆分为连接器和动作组件。它们与数据桥接 HTTP API 向后兼容。配置将自动升级。
+
 - [#12449](https://github.com/emqx/emqx/pull/12449) TDEngine 数据桥接已拆分为连接器和动作组件。它们与数据桥接 HTTP API 向后兼容。配置将自动升级。
+
 - [#12488](https://github.com/emqx/emqx/pull/12488) RocketMQ 数据桥接已拆分为连接器和动作组件。它们与数据桥接 HTTP API 向后兼容。配置将自动升级。
+
 - [#12512](https://github.com/emqx/emqx/pull/12512) HStreamDB 数据桥接已拆分为连接器和动作组件。它们与数据桥接 HTTP API 向后兼容。配置将自动升级，但鉴于配置中添加了新字段，建议手动进行升级。
 
 - [#12543](https://github.com/emqx/emqx/pull/12543) DynamoDB 数据桥接已拆分为连接器和动作组件。它们与数据桥接 HTTP API 向后兼容。配置将自动升级。

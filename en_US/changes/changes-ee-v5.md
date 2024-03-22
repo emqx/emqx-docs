@@ -6,13 +6,6 @@
 
 ### Enhancements
 
-- [#12251](https://github.com/emqx/emqx/pull/12251) Optimized the performance of the RocksDB-based persistent sessions, achieving a reduction in  RAM usage and database request frequency. Key improvements include:
-
-  - Introduced dirty session state to avoid frequent mria transactions.
-  - Introduced an intermediate buffer for the persistent messages.
-  - Used separate tracks of PacketIds for QoS1 and QoS2 messages.
-  - Limited the number of continuous ranges of inflight messages to 1 per stream.
-
 - [#12326](https://github.com/emqx/emqx/pull/12326) Enhanced session tracking with registration history. EMQX now has the capability to monitor the history of session registrations, including those that have expired. By configuring `broker.session_history_retain`, EMQX retains records of expired sessions for a specified duration.
 
   - **Session count API**: Use the API `GET /api/v5/sessions_count?since=1705682238` to obtain a count of sessions across the cluster that remained active since the given UNIX epoch timestamp (with seconds precision). This enhancement aids in analyzing session activity over time.
@@ -25,8 +18,6 @@
     ```
 
     NOTE: Please consider this metric as an approximate estimation. Due to the asynchronous nature of data collection and calculation, exact precision may vary.
-
-- [#12338](https://github.com/emqx/emqx/pull/12338) Introduced a time-based garbage collection mechanism to the RocksDB-based persistent session backend. This feature ensures more efficient management of stored messages, optimizing storage utilization and system performance by automatically purging outdated messages.
 
 - [#12398](https://github.com/emqx/emqx/pull/12398) Exposed the `swagger_support` option in the Dashboard configuration, allowing for the enabling or disabling of the Swagger API documentation.
 
