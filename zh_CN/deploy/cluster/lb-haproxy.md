@@ -13,23 +13,13 @@ HAProxy 用于 EMQX MQTT 负载均衡时有以下功能和优势：
 - 内置对 MQTT 协议的支持，可以解析 MQTT 报文实现会话黏性等智能负载均衡机制，以及识别非法连接进行丢弃，增强了安全防护。
 - 提供主备高可用机制，配合后端健康检查，可以实现毫秒级故障切换，确保服务的连续可用性。
 
-## 前置准备
-
-在开始使用之前，确保您已经创建了由以下 3 个 EMQX 节点组成的集群。需要了解如何创建 EMQX 集群，详见[创建与管理集群](./create-cluster.md)。
-
-| 节点地址              | MQTT TCP 端口 | MQTT WebSocket 端口 |
-| --------------------- | ------------- | ------------------- |
-| emqx1-cluster.emqx.io | 1883          | 8083                |
-| emqx2-cluster.emqx.io | 1883          | 8083                |
-| emqx3-cluster.emqx.io | 1883          | 8083                |
-
-本页中的示例将使用单个 Nginx 服务器配置为负载均衡器，将请求转发到由这 3 个 EMQX 节点组成的集群。
+![EMQX LB HAProxy](./assets/emqx-lb-haproxy.png)
 
 ## 快速体验
 
 此处提供了一个具有实际示例的 Docker Compose 配置，让您能够轻松地进行验证和测试，您可以按照以下步骤来进行操作：
 
-1. 克隆示例仓库并进入 `mqtt-lb-nginx` 目录：
+1. 克隆示例仓库并进入 `mqtt-lb-haproxy` 目录：
 
 ```bash
 git clone https://github.com/emqx/emqx-usage-example
@@ -76,6 +66,20 @@ mqttx bench conn -c 10
    ```
 
 通过以上步骤，您可以验证示例中的 HAProxy 负载均衡功能，以及 EMQX 集群中客户端连接的分布情况。您也可以更改 `emqx-usage-example/mqtt-lb-haproxy/haproxy.conf` 文件进行自定义的配置验证。
+
+接下来，我们将从头介绍如何安装并配置 HAProxy 实现各类场景下的负载均衡需求。
+
+## 前置准备
+
+在开始使用之前，确保您已经创建了由以下 3 个 EMQX 节点组成的集群。需要了解如何创建 EMQX 集群，详见[创建与管理集群](./create-cluster.md)。
+
+| 节点地址              | MQTT TCP 端口 | MQTT WebSocket 端口 |
+| --------------------- | ------------- | ------------------- |
+| emqx1-cluster.emqx.io | 1883          | 8083                |
+| emqx2-cluster.emqx.io | 1883          | 8083                |
+| emqx3-cluster.emqx.io | 1883          | 8083                |
+
+本页中的示例将使用单个 HAProxy 服务器配置为负载均衡器，将请求转发到由这 3 个 EMQX 节点组成的集群。
 
 ## 安装 HAProxy
 

@@ -12,18 +12,7 @@ Nginx 是一种高性能多功能的服务器软件，可以作为 Web 服务器
 - Nginx 可用于终结 MQTT 客户端与 EMQX 集群之间经 SSL 加密的 MQTT 连接，减轻 EMQX 集群的加密解密负担。从而提供多种优势，如提高性能、简化证书管理和增强安全性。
 - Nginx 具有灵活的负载均衡策略，以使用不同的策略来决定请求应该发送到集群中的哪个 EMQX 节点，有助于分摊流量和请求，提高性能和可靠性。例如粘性负载平衡，可将请求路由到同一后端服务器，从而提高性能和会话持久性。
 
-
-## 前置准备
-
-在开始使用之前，确保您已经创建了由以下 3 个 EMQX 节点组成的集群。需要了解如何创建 EMQX 集群，详见[创建与管理集群](./create-cluster.md)。
-
-| 节点地址              | MQTT TCP 端口 | MQTT WebSocket 端口 |
-| --------------------- | ------------- | ------------------- |
-| emqx1-cluster.emqx.io | 1883          | 8083                |
-| emqx2-cluster.emqx.io | 1883          | 8083                |
-| emqx3-cluster.emqx.io | 1883          | 8083                |
-
-本页中的示例将使用单个 Nginx 服务器配置为负载均衡器，将请求转发到由这 3 个 EMQX 节点组成的集群。
+![EMQX LB NGINX](./assets/emqx-lb-nginx.png)
 
 ## 快速体验
 
@@ -84,9 +73,23 @@ mqttx bench conn -c 10
 
 接下来，我们将从头介绍如何安装并配置 Nginx 实现各类场景下的负载均衡需求。
 
+## 前置准备
+
+在开始使用之前，确保您已经创建了由以下 3 个 EMQX 节点组成的集群。需要了解如何创建 EMQX 集群，详见[创建与管理集群](./create-cluster.md)。
+
+| 节点地址              | MQTT TCP 端口 | MQTT WebSocket 端口 |
+| --------------------- | ------------- | ------------------- |
+| emqx1-cluster.emqx.io | 1883          | 8083                |
+| emqx2-cluster.emqx.io | 1883          | 8083                |
+| emqx3-cluster.emqx.io | 1883          | 8083                |
+
+本页中的示例将使用单个 Nginx 服务器配置为负载均衡器，将请求转发到由这 3 个 EMQX 节点组成的集群。
+
 ## 安装 Nginx
 
-此处使用 Ubuntu 22.04 LTS 系统，通过源码编译安装的方式安装 Nginx。您也可以使用 Docker 或二进制包安装 Nginx。
+此处使用 Ubuntu 22.04 LTS 系统，通过源码编译安装的方式安装 Nginx。您还可以考虑使用 [NGINX Plus](https://www.nginx.com/products/nginx/)，它提供了适用于 MQTT 的特殊指令和变量，可以实现粘性会话负载均衡和客户端 ID 替换等功能，这些功能可以帮助您更好地管理和保护 MQTT 流量。
+
+以下是源码编译安装 Nginx 的步骤。
 
 ### 环境要求
 
@@ -185,7 +188,7 @@ sudo nginx -s reload
 sudo nginx stop
 ```
 
-## 反向代理 MQTT 
+## 反向代理 MQTT
 
 您可以在 Nginx 的配置文件中添加以下配置来反向代理来自客户端的 MQTT 连接请求，将请求转发至后端 MQTT 服务器。
 
@@ -261,7 +264,7 @@ stream {
 
 ```
 
-## 反向代理 MQTT WebSocket 
+## 反向代理 MQTT WebSocket
 
 您可以使用以下配置使 Nginx 反向代理 MQTT WebSocket 连接，将客户端请求转发至后端 MQTT 服务器。需要使用  `server_name` 指定 HTTP 域名或 IP 地址。
 
@@ -405,26 +408,65 @@ upstream backend_servers {
 }
 ```
 
-### MQTT 粘性（Sticky）会话
+## 使用 NGINX Plus 优化 EMQX 部署
 
-MQTT 粘性会话负载均衡仅在 Nginx Plus 版本中可用，本章节中编译安装的 Nginx 无法引用该配置。有关使用 Nginx Plus 优化 MQTT 连接的操作可参阅此[文档](https://www.nginx.com/blog/optimizing-mqtt-deployments-in-enterprise-environments-nginx-plus/)。
+以下仅在 NGINX Plus 版本中可用，本章节中编译安装的 NGINX 无法引用该配置。有关使用 NGINX Plus 优化 MQTT 连接的操作可参阅此[文档](https://www.nginx.com/blog/optimizing-mqtt-deployments-in-enterprise-environments-nginx-plus/)。
 
-「粘性」是负载均衡器在重新连接时将客户端路由到之前服务器的能力，在 MQTT 中可以避免会话接管。这对于多客户端频繁重新连接或有问题的客户端断开连接再次连接的情况特别有用，能够提高有效性。
+### MQTT 粘性（Sticky）会话负载均衡
+
+「粘性」是负载均衡器在重新连接时将客户端路由到之前服务器的能力，在 MQTT 中可以避免会话接管。这对于多客户端频繁重新连接或有问题的客户端断开连接再次连接的情况特别有用，能够优化数据流并减少连接开销。
 
 为了实现粘性，服务器需要识别连接请求中的客户端标识符（通常是客户端 ID），这需要负载均衡器检查 MQTT 数据包。一旦获取客户端标识符，对于静态集群，服务器可以将其散列到服务器 ID，或者负载均衡器可以维护客户端标识符到目标节点 ID 的映射表以提供更灵活的路由。
 
-```bash
-mqtt_preread on; 
+以下是该功能的配置示例：
 
-upstream backend_servers {
-    hash $mqtt_preread_clientid consistent;
-    server emqx1-cluster.emqx.io:1883;
-    server emqx2-cluster.emqx.io:1883;
-    server emqx3-cluster.emqx.io:1883;
+```bash
+stream {
+  mqtt_preread on;
+
+  upstream backend_servers {
+      hash $mqtt_preread_clientid consistent;
+      server emqx1-cluster.emqx.io:1883;
+      server emqx2-cluster.emqx.io:1883;
+      server emqx3-cluster.emqx.io:1883;
+  }
+
+  server {
+      listen 1883;
+      proxy_pass backend_servers;
+      proxy_connect_timeout 1s;
+  }
 }
 ```
 
 请注意，上述示例配置可能需要根据您的实际情况进行调整。配置中使用的模块（如 **`ip_hash`**、**`least_conn`**）都是 Nginx 内置的模块，无需额外的模块依赖。
+
+### 客户端 ID 替换
+
+安全性在 MQTT 通信中至关重要。设备通常会使用序列号等敏感数据作为客户端 ID，而将其存储在 MQTT 服务器的数据库中可能会带来安全风险。NGINX Plus 提供了客户端 ID 替换功能，允许将客户端 ID 替换为 NGINX Plus 配置中设置的其他值。
+
+以下是该功能的配置示例：
+
+```bash
+stream {
+    mqtt on;
+
+    server {
+        listen 1883 ssl;
+        ssl_certificate /etc/nginx/certs/emqx.pem;
+        ssl_certificate_key /etc/nginx/certs/emqx.key;
+        ssl_client_certificate /etc/nginx/certs/ca.crt;      
+        ssl_session_cache shared:SSL:10m;
+        ssl_verify_client on;
+        proxy_pass 10.0.0.113:1883;
+        proxy_connect_timeout 1s;  
+
+        mqtt_set_connect clientid $ssl_client_serial;
+    }
+}
+```
+
+在此示例中，我们为客户端启用了双向认证，并从客户端的 SSL 证书中提取证书序列号作为唯一标识符，使用它来替换原始的客户端 ID。您也可以使用其他值如 `$ssl_client_s_dn` 提取证书 DN。
 
 ## 性能优化与监控
 
@@ -523,3 +565,13 @@ Reading: 0 Writing: 1 Waiting: 1
 | ssl_client_certificate | 指定用于验证客户端证书的证书颁发机构 （CA）证书文件的路径。这个 CA 证书用于验证客户端证书的真实性。 |
 | ssl_verify_client      | 启用客户端证书验证。当设置为 `on` 时，Nginx 将会要求客户端提供有效的 SSL 证书。 |
 | ssl_verify_depth       | 设置验证客户端证书的最大深度。在这里，设置为 `1` 表示仅验证客户端证书和 CA 证书之间的一层，不再深入验证。 |
+
+## 更多信息
+
+EMQX 提供了大量关于与 NGINX 的集成的学习资源。请查看以下链接以了解更多信息：
+
+**博客：**
+
+- [Harnessing Sticky Sessions in EMQX with NGINX Plus: Using 'Client ID' as the Magic Key](https://www.emqx.com/en/blog/harnessing-sticky-sessions-for-mqtt-load-balancing-with-nginx-plus)
+- [Securing Your MQTT-Based Applications with NGINX Plus's Client ID Substitution and EMQX Enterprise](https://www.emqx.com/en/blog/securing-your-mqtt-based-applications-with-nginx-plus-client-id-substitution-and-emqx-enterprise)
+- [Elevating MQTT security with Client Certificate Authentication in EMQX and NGINX Plus](https://www.emqx.com/en/blog/elevating-mqtt-security-with-client-certificate-authentication)
