@@ -12,7 +12,7 @@ NGINX 是一种高性能多功能的服务器软件，可以作为 Web 服务器
 - NGINX 可用于终结 MQTT 客户端与 EMQX 集群之间经 SSL 加密的 MQTT 连接，减轻 EMQX 集群的加密解密负担。从而提供多种优势，如提高性能、简化证书管理和增强安全性。
 - NGINX 具有灵活的负载均衡策略，以使用不同的策略来决定请求应该发送到集群中的哪个 EMQX 节点，有助于分摊流量和请求，提高性能和可靠性。例如粘性负载平衡，可将请求路由到同一后端服务器，从而提高性能和会话持久性。
 
-![EMQX LB NGINX](./assets/emqx-lb-NGINX.png)
+![EMQX LB NGINX](./assets/emqx-lb-nginx.png)
 
 ## 快速体验
 

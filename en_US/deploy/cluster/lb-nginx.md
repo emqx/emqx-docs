@@ -12,7 +12,7 @@ Using NGINX to load balance an EMQX cluster offers several features and advantag
 - NGINX can be used to terminate SSL-encrypted MQTT connections between MQTT clients and the EMQX cluster, reducing the encryption and decryption load on the EMQX cluster. This offers several advantages, such as improved performance, simplified certificate management, and enhanced security.
 - NGINX provides flexible load balancing strategies to determine which EMQX node in the cluster should receive requests, helping distribute traffic and requests, thereby improving performance and reliability. For example, sticky load balancing can route requests to the same backend server, enhancing performance and session persistence.
 
-![EMQX LB NGINX](./assets/emqx-lb-NGINX.png)
+![EMQX LB NGINX](./assets/emqx-lb-nginx.png)
 
 ## Quick Start
 
