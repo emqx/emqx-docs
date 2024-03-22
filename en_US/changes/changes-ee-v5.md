@@ -241,6 +241,8 @@
 
 - [#12740](https://github.com/emqx/emqx/pull/12740) Fixed an issue when durable sessions could not be kicked out.
 
+- [#12767](https://github.com/emqx/emqx/pull/12767) Correctly migrate older Kafka Producer configurations (pre 5.0.2) to action and connector configurations.
+
 ## 5.5.1
 
 *Release Date: 2024-03-06*
