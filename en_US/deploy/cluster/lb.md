@@ -34,7 +34,7 @@ If you want to use a cloud service provider's LB as the connection and load bala
 
 Compared to directly using EMQX to handle TLS connections, this approach can get greater performance benefits. The deployment architecture is as follows:
 
-<img src="./assets/lb_6.png" alt="EMQX Load Balancing Hybrid Deployment" style="zoom:33%;" />
+<img src="./assets/lb_6.png" alt="EMQX Load Balancing Hybrid Deployment" style="zoom:80%;" />
 
 In addition to load balancing deployment clusters, you can also use DNS round-robin to connect directly to the EMQX cluster, which involves adding all nodes to the DNS round-robin list. Devices access the cluster via domain names or IP address lists. However, it is generally not recommended to use DNS round-robin for production environments.
 

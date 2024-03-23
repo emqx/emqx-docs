@@ -17,21 +17,21 @@
 
 在无需启用 SSL/TLS 时，可以使用 LB 作为连接和负载均衡层。LB 将负责处理 TCP 连接，并将接收到的 MQTT 连接和消息分发到不同的 EMQX 集群节点。以下是部署架构的示意图：
 
-<img src="./assets/lb_2.png" alt="EMQX TCP 负载均衡部署" style="zoom:33%;" />
+<img src="./assets/lb_2.png" alt="EMQX TCP 负载均衡部署" style="zoom: 50%;" />
 
 ### TLS 终结与负载均衡
 
 需要启用 SSL/TLS 时，推荐使用 LB 终结 SSL/TLS 连接：设备与 LB 之间采用 SSL/TLS 安全连接，LB 与 EMQX 之间普通 TCP 连接。这种模式能够使 EMQX 集群性能最大化，部署架构如下所示：
 
-<img src="./assets/lb_3.png" alt="EMQX 负载均衡终结 TLS 部署" style="zoom:33%;" />
+<img src="./assets/lb_3.png" alt="EMQX 负载均衡终结 TLS 部署" style="zoom: 50%;" />
 
 ### 混合部署
 
-如果想使用云服务商的 LB 作为连接和负载均衡层，但它不支持 TLS 终结或缺少某些 TLS 特性（如代理协议），可以采用混合部署架构：在 EMQX 前端部署 HAProxy 或 Nginx 来终结 SSL/TLS 连接。
+如果想使用云服务商的 LB 作为连接和负载均衡层，但它不支持 TLS 终结或缺少某些 TLS 特性（如代理协议），可以采用混合部署架构：在 EMQX 前端部署 HAProxy 或 NGINX 来终结 SSL/TLS 连接。
 
 相比直接使用 EMQX 处理 TLS 连接，这种方式可以获得更大的性能收益。部署架构如下所示：
 
-<img src="./assets/lb_6.png" alt="EMQX 负载均衡混合部署" style="zoom:33%;" />
+![lb_6](./assets/lb_6.png)
 
 除了负载均衡部署集群外，还可以使用 DNS 轮询直连 EMQX 集群，即将所有节点加入 DNS 轮询列表，设备通过域名或者 IP 地址列表访问集群，通常不建议在生产环境中采用 DNS 轮询直连方式。
 
@@ -75,9 +75,9 @@ listeners.tcp.default {
 | 开源 LB                            | 是否支持 TLS 终结 | 是否支持 Proxy Protocol | 方案介绍                                                |
 | ---------------------------------- | ----------------- | ----------------------- | ------------------------------------------------------- |
 | [HAProxy](https://www.haproxy.org) | 是                | 是                      | <https://www.haproxy.com/solutions/load-balancing.html> |
-| [Nginx](https://www.nginx.com)     | 是                | 是                      | <https://www.nginx.com/solutions/load-balancing/>       |
+| [NGINX](https://www.nginx.com)     | 是                | 是                      | <https://www.nginx.com/solutions/load-balancing/>       |
 
 下面两个页面将以私有部署 LB 服务器为例向您介绍如何配置并负载均衡 EMQX 集群：
 
-- [用 Nginx 负载均衡 EMQX 集群](./lb-nginx.md)
+- [用 NGINX 负载均衡 EMQX 集群](./lb-nginx.md)
 - [用 HAProxy 负载均衡 EMQX 集群](./lb-haproxy.md)
