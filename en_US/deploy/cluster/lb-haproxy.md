@@ -13,17 +13,7 @@ When using HAProxy for EMQX MQTT load balancing, you benefit from the following 
 - Built-in support for the MQTT protocol, enabling the parsing of MQTT messages to implement session stickiness and intelligent load balancing mechanisms, as well as identifying illegal connections for enhanced security protection.
 - Provides a high-availability mechanism with primary and standby servers, combined with backend health checks, enabling sub-millisecond fault switching to ensure continuous service availability.
 
-## Prerequisites
-
-Before you begin, ensure you have created a cluster consisting of the following three EMQX nodes. To learn how to create an EMQX cluster, see [Creating a Cluster](./create-cluster.md) for details.
-
-| Node Address          | MQTT TCP Port | MQTT WebSocket Port |
-| --------------------- | ------------- | ------------------- |
-| emqx1-cluster.emqx.io | 1883          | 8083                |
-| emqx2-cluster.emqx.io | 1883          | 8083                |
-| emqx3-cluster.emqx.io | 1883          | 8083                |
-
-The examples on this page will use a single Nginx server configured as a load balancer to distribute requests to a cluster composed of these three EMQX nodes.
+![EMQX LB HAProxy](./assets/emqx-lb-haproxy.png)
 
 ## Quick Start
 
@@ -77,7 +67,23 @@ mqttx bench conn -c 10
 
 Through these steps, you can verify the load-balancing functionality of HAProxy in the example and observe the distribution of client connections in the EMQX cluster. You can also customize the configuration for validation by modifying the `emqx-usage-example/mqtt-lb-haproxy/haproxy.conf` file.
 
-## Install HAProxy
+## Install and Use HAProxy
+
+This section introduces how to install and use HAProxy in detail.
+
+### Prerequisites
+
+Before you begin, ensure you have created a cluster consisting of the following three EMQX nodes. To learn how to create an EMQX cluster, see [Creating a Cluster](./create-cluster.md) for details.
+
+| Node Address          | MQTT TCP Port | MQTT WebSocket Port |
+| --------------------- | ------------- | ------------------- |
+| emqx1-cluster.emqx.io | 1883          | 8083                |
+| emqx2-cluster.emqx.io | 1883          | 8083                |
+| emqx3-cluster.emqx.io | 1883          | 8083                |
+
+The examples on this page will use a single HAProxy server configured as a load balancer to distribute requests to a cluster composed of these three EMQX nodes.
+
+### Install HAProxy
 
 Here are the steps to install HAProxy on an Ubuntu 22.04 LTS system:
 
@@ -92,7 +98,7 @@ sudo apt install haproxy
 haproxy -v
 ```
 
-## Get Started
+### Get Started
 
 HAProxy's configuration file is located by default at `/etc/haproxy/haproxy.cfg`. You can refer to the example in this page to add configuration to the end of the file. During the running, HAProxy continuously logs to `/var/log/haproxy.log`, which you can check for debugging purposes.
 
@@ -128,7 +134,11 @@ View the running status of HAProxy:
 sudo systemctl status haproxy
 ```
 
-## Basic Configuration
+## Configure HAProxy for Reverse Proxy and Load Balancing
+
+This section explains how to configure HAProxy to meet various load-balancing requirements.
+
+### Basic Configuration
 
 Here is a reference configuration you need to start a HAProxy server. Ensure that the `haproxy.cfg` configuration file includes these two configuration items.
 
@@ -150,7 +160,7 @@ defaults
   maxconn 20000
 ```
 
-## Reverse Proxy for MQTT
+### Configure Reverse Proxy for MQTT
 
 You can add the following configuration to HAProxy's configuration file to reverse proxy MQTT connections and route client requests to backend MQTT servers.
 
@@ -176,7 +186,7 @@ frontend mqtt_servers
   default_backend mqtt_backend
 ```
 
-## Reverse Proxy for MQTT SSL
+### Configure Reverse Proxy for MQTT SSL
 
 You can use the following configuration to have HAProxy reverse proxy MQTT and decrypt TLS connections, forwarding encrypted MQTT requests from clients to backend MQTT servers to ensure communication security.
 
@@ -209,7 +219,7 @@ frontend mqtt_tls_frontend
   default_backend mqtt_backend
 ```
 
-## Reverse Proxy for MQTT WebSocket
+### Configure Reverse Proxy for MQTT WebSocket
 
 You can use the following configuration to have HAProxy reverse proxy MQTT WebSocket connections, forwarding client requests to backend MQTT servers. Specify the HTTP domain name or IP address using `server_name`.
 
@@ -227,7 +237,7 @@ frontend mqtt_ws_frontend
   default_backend mqtt_ws_backend
 ```
 
-## Reverse Proxy for MQTT WebSocket SSL
+### Configure Reverse Proxy for MQTT WebSocket SSL
 
 You can use the following configuration to have HAProxy reverse proxy MQTT WebSocket connections and decrypt TLS connections, forwarding encrypted MQTT requests from clients to backend MQTT servers to ensure communication security. Specify the HTTP domain name or IP address using `server_name`.
 
@@ -256,13 +266,13 @@ frontend mqtt_ws_tls_frontend
   default_backend mqtt_ws_backend
 ```
 
-## Load-Balancing Strategies
+### Configure Load-Balancing Strategies
 
 HAProxy provides various load-balancing strategies to control how connections are distributed. In practical use, it's important to choose the appropriate load-balancing strategy based on your server performance, traffic requirements, and other factors.
 
 Here are load-balancing strategies supported by HAProxy along with their configuration examples.
 
-### Round Robin
+#### Round Robin
 
 This is the default load balancing strategy, which distributes requests to each backend server in a circular manner. This evenly distributes the load and is suitable for situations where backend servers have similar performance.
 
@@ -275,7 +285,7 @@ backend mqtt_backend
   server emqx3 emqx3-cluster.emqx.io:1883 check
 ```
 
-### Weighted Round Robin
+#### Weighted Round Robin
 
 Building on round robin, this strategy assigns different weights to each EMQX node to influence the distribution of requests. Servers with higher weights receive more requests.
 
@@ -288,7 +298,7 @@ backend mqtt_backend
   server emqx3 emqx3-cluster.emqx.io:1883 check weight 3
 ```
 
-### IP Hash
+#### IP Hash
 
 This strategy calculates a hash based on the client's IP address and then assigns the request to a fixed backend server. This ensures that requests from the same client are always directed to the same server.
 
@@ -301,7 +311,7 @@ backend mqtt_backend
   server emqx3 emqx3-cluster.emqx.io:1883
 ```
 
-### Least Connections
+#### Least Connections
 
 Requests are directed to the server with the fewest current connections, ensuring that the load is distributed as evenly as possible. This is suitable for situations where there is a significant difference in server performance.
 
@@ -314,7 +324,7 @@ backend mqtt_backend
   server emqx3 emqx3-cluster.emqx.io:1883
 ```
 
-### MQTT Sticky Sessions
+### Configure MQTT Sticky Sessions Load Balancing
 
 MQTT sticky session load balancing was introduced in HAProxy 2.4.
 
@@ -336,7 +346,7 @@ backend mqtt_backend
   server emqx3 emqx3-cluster.emqx.io:1883
 ```
 
-## HAProxy Status Monitoring
+## Monitor HAProxy Status
 
 HAProxy can be configured with a special frontend to enable status monitoring. This allows you to view the connection status of each backend and frontend, as well as global connection statistics. Refer to [Exploring the HAProxy Stats Page](https://www.haproxy.com/blog/exploring-the-haproxy-stats-page) for more details:
 
@@ -358,3 +368,12 @@ Open http://localhost:8888/stats to view the status data:
 HAProxy and Keepalived are a common combination of high-availability and load-balancing solutions. Keepalived is a lightweight high-availability solution for Linux that can manage virtual IP addresses (VIPs) across multiple servers and ensure that a VIP is moved to another server when one becomes unavailable, providing high availability. Keepalived can also monitor the HAProxy process and restart it when necessary to ensure the availability of the load-balancing service.
 
 By using Keepalived, you can ensure high availability for HAProxy. If the primary HAProxy server fails, Keepalived will automatically move the VIP to a backup server, ensuring the continuity of service. To learn how to implement this solution, refer to the [HAProxy documentation](https://www.haproxy.com/documentation/hapee/latest/high-availability/active-standby/).
+
+## More Information
+
+EMQX provides a wealth of resources for learning about HAProxy. Check out the following links for more information:
+
+**Blogs:**
+
+- [Build an EMQX cluster based on HAProxy](https://www.emqx.com/en/blog/emqx-haproxy)
+- [Sticky session load balancing - MQTT broker clustering part 2](https://www.emqx.com/en/blog/mqtt-broker-clustering-part-2-sticky-session-load-balancing)

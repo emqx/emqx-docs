@@ -1672,7 +1672,7 @@ EMQX 节点可以像以前的版本一样继续形成集群（命名为 `core`�
 
 在顶部附加了一个架构，现在配置是类型检查的。
 
-HOCON 支持类似 Nginx 的配置布局，并提供了原生数组语法。
+HOCON supports NGINX-like configuration layouts, and provides a native array syntax.
 
 但不用担心，如果你喜欢像版本4那样保持一切扁平化，旧的 `cuttlefish` 语法仍然受支持。
 
