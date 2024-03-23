@@ -243,7 +243,7 @@ You can use the following configuration to have HAProxy reverse proxy MQTT WebSo
 
 Simply add SSL and certificate-related parameters to the basic WebSocket configuration:
 
-:::tip Tip
+:::tip
 HAProxy's certificate file needs to include both the certificate and the key, and you can use the `cat` command to merge them into one file.
 
 ```bash

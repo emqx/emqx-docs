@@ -18,11 +18,11 @@ Using NGINX to load balance an EMQX cluster offers several features and advantag
 
 This section provides a Docker Compose configuration with actual examples to allow you to easily verify and test the NGINX function. You can follow these steps to proceed:
 
-1. Clone the example repository and enter the `mqtt-lb-NGINX` directory:
+1. Clone the example repository and enter the `mqtt-lb-nginx` directory:
 
 ```bash
 git clone https://github.com/emqx/emqx-usage-example
-cd emqx-usage-example/mqtt-lb-NGINX
+cd emqx-usage-example/mqtt-lb-nginx
 ```
 
 2. Start the example via Docker Compose:
@@ -70,7 +70,7 @@ mqttx bench conn -c 10
      live_connections.count        : 3
      ```
 
-Through these steps, you can verify the NGINX load balancing functionality in the example and the distribution of client connections in the EMQX cluster. You can also modify the `emqx-usage-example/mqtt-lb-NGINX/NGINX.conf` file for custom configuration verification.
+Through these steps, you can verify the NGINX load-balancing functionality in the example and the distribution of client connections in the EMQX cluster. You can also modify the `emqx-usage-example/mqtt-lb-nginx/nginx.conf` file for custom configuration verification.
 
 ## Install and Use NGINX
 
@@ -116,7 +116,7 @@ You can download the latest stable version of NGINX from the [NGINX official web
 wget https://nginx.org/download/nginx-1.24.0.tar.gz
 ```
 
-#### Configure and Compile
+#### Compile Configuration Naming
 
 After downloading, extract the source code and navigate to the source code directory:
 
@@ -139,13 +139,15 @@ Configure the compilation options with the following command:
 
 In the above command, the `--with-http_ssl_module` parameter is used to add SSL support, while the `--with-stream` and `--with-stream_ssl_module` parameters are used to add TCP reverse proxy support.
 
-#### Compile and Install
+#### Start to Compile
 
 Start the compilation with the following command:
 
 ```bash
 make
 ```
+
+#### Install
 
 After compilation, you can install NGINX with the following command:
 
@@ -175,7 +177,7 @@ If the NGINX configuration file is validated successfully, you can start NGINX:
 sudo nginx
 ```
 
-To reload a running NGINX and apply new configurations, it's recommended to check the configuration for errors before performing the operation:
+To reload a running NGINX and apply new configurations, it's recommended to check the configuration for errors before you perform the operation:
 
 ```bash
 sudo nginx -s reload
@@ -191,7 +193,7 @@ sudo nginx stop
 
 This section explains how to configure NGINX to meet various load-balancing requirements.
 
-### Configure Reverse Proxy MQTT
+### Configure Reverse for Proxy MQTT
 
 You can use the following configuration in NGINX's configuration file to reverse proxy MQTT connection requests from clients and forward them to the backend MQTT servers:
 
@@ -223,7 +225,7 @@ stream {
 }
 ```
 
-### Configure Reverse Proxy MQTT SSL
+### Configure Reverse Proxy for MQTT SSL
 
 You can configure NGINX to reverse proxy MQTT and decrypt TLS connections, forwarding encrypted MQTT requests from clients to the backend MQTT servers to ensure communication security. You only need to add SSL-related parameters on top of the TCP-based configuration:
 
@@ -263,7 +265,7 @@ stream {
 }
 ```
 
-### Configure Reverse Proxy MQTT WebSocket
+### Configure Reverse Proxy for MQTT WebSocket
 
 You can use the following configuration to reverse proxy MQTT WebSocket connections in NGINX, forwarding client requests to the backend MQTT servers. You need to specify an HTTP domain name or IP address using `server_name`:
 
@@ -304,7 +306,7 @@ http {
 }
 ```
 
-### Configure Reverse Proxy MQTT WebSocket SSL
+### Configure Reverse Proxy for MQTT WebSocket SSL
 
 You can configure NGINX to reverse proxy MQTT WebSocket and decrypt TLS connections, forwarding encrypted MQTT requests from clients to the backend MQTT servers to ensure communication security. Specify an HTTP domain name or IP address using `server_name`. To achieve this, you only need to add SSL and certificate-related parameters on top of the WebSocket-based configuration:
 
@@ -405,7 +407,7 @@ upstream backend_servers {
 
 ## Use NGINX Plus to Optimize EMQX Deployment
 
-This setion introduces how to configure the NGINX Plus specific features to optimize the EMQX deployment. Since the configuration examples for features in this section are only available in the NGINX Plus version, the NGINX version compiled and installed on this page cannot refer to these configurations. For information on optimizing MQTT connections using NGINX Plus, refer to this [document](https://www.nginx.com/blog/optimizing-mqtt-deployments-in-enterprise-environments-nginx-plus/).
+This section introduces how to configure the NGINX Plus specific features to optimize the EMQX deployment. Since the configuration examples for features in this section are only available in the NGINX Plus version, the NGINX version compiled and installed on this page cannot refer to these configurations. For information on optimizing MQTT connections using NGINX Plus, refer to this [document](https://www.nginx.com/blog/optimizing-mqtt-deployments-in-enterprise-environments-nginx-plus/).
 
 ### Configure MQTT Sticky Session Load Balancing
 

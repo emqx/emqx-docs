@@ -18,11 +18,11 @@ NGINX 是一种高性能多功能的服务器软件，可以作为 Web 服务器
 
 此处提供了一个具有实际示例的 Docker Compose 配置，让您能够轻松地进行验证和测试 NGINX 的功能。您可以按照以下步骤来进行操作：
 
-1. 克隆示例仓库并进入 `mqtt-lb-NGINX` 目录：
+1. 克隆示例仓库并进入 `mqtt-lb-nginx` 目录：
 
 ```bash
 git clone https://github.com/emqx/emqx-usage-example
-cd emqx-usage-example/mqtt-lb-NGINX
+cd emqx-usage-example/mqtt-lb-nginx
 ```
 
 2. 通过 Docker Compose 启动示例：
@@ -69,7 +69,7 @@ mqttx bench conn -c 10
     live_connections.count        : 3
     ```
 
-通过以上步骤，您可以验证示例中的 NGINX 负载均衡功能，以及 EMQX 集群中客户端连接的分布情况。您也可以更改 `emqx-usage-example/mqtt-lb-NGINX/NGINX.conf` 文件进行自定义的配置验证。
+通过以上步骤，您可以验证示例中的 NGINX 负载均衡功能，以及 EMQX 集群中客户端连接的分布情况。您也可以更改 `emqx-usage-example/mqtt-lb-nginx/nginx.conf` 文件进行自定义的配置验证。
 
 ## 安装和使用 NGINX
 
@@ -89,7 +89,7 @@ mqttx bench conn -c 10
 
 ### 安装 NGINX
 
-此处使用 Ubuntu 22.04 LTS 系统，通过源码编译安装的方式安装 NGINX。您还可以考虑使用 [NGINX Plus](https://www.NGINX.com/products/NGINX/)，它提供了适用于 MQTT 的特殊指令和变量，可以实现粘性会话负载均衡和客户端 ID 替换等功能，这些功能可以帮助您更好地管理和保护 MQTT 流量。
+此处使用 Ubuntu 22.04 LTS 系统，通过源码编译安装的方式安装 NGINX。您还可以考虑使用 [NGINX Plus](https://www.nginx.com/products/NGINX/)，它提供了适用于 MQTT 的特殊指令和变量，可以实现粘性会话负载均衡和客户端 ID 替换等功能，这些功能可以帮助您更好地管理和保护 MQTT 流量。
 
 以下是源码编译安装 NGINX 的步骤。
 
@@ -114,7 +114,7 @@ sudo apt-get install build-essential libpcre3-dev zlib1g-dev libssl-dev
 可以从 [NGINX 官方网站](https://NGINX.org/en/download.html)下载最新的稳定版本，例如：
 
 ```bash
-wget https://NGINX.org/download/NGINX-1.24.0.tar.gz
+wget https://nginx.org/download/nginx-1.24.0.tar.gz
 ```
 
 #### 编译配置命名
@@ -122,8 +122,8 @@ wget https://NGINX.org/download/NGINX-1.24.0.tar.gz
 下载完成后，需要解压并进入源码目录：
 
 ```bash
-tar -zxvf NGINX-1.24.0.tar.gz
-cd NGINX-1.24.0
+tar -zxvf nginx-1.24.0.tar.gz
+cd nginx-1.24.0
 ```
 
 使用以下命令进行编译配置：
@@ -159,35 +159,35 @@ sudo make install
 将 NGINX 可执行文件连接到系统 PATH 中的目录：
 
 ```bash
-sudo ln -s /usr/local/NGINX/sbin/NGINX /usr/local/bin/NGINX
+sudo ln -s /usr/local/nginx/sbin/nginx /usr/local/bin/nginx
 ```
 
 ### 开始使用
 
-NGINX 的配置文件默认位于 `/usr/local/NGINX/conf/NGINX.conf`，将本页的配置示例添加到文件末尾即可。NGINX 基本操作命令如下：
+NGINX 的配置文件默认位于 `/usr/local/nginx/conf/nginx.conf`，将本页的配置示例添加到文件末尾即可。NGINX 基本操作命令如下：
 
 检查配置文件：
 
 ```bash
-sudo NGINX -t
+sudo nginx -t
 ```
 
 如果 NGINX 配置文件验证成功，则可以启动 NGINX：
 
 ```bash
-sudo NGINX
+sudo nginx
 ```
 
 重新加载正在运行的 NGINX 并应用新配置，建议在操作前检查配置是否无误：
 
 ```bash
-sudo NGINX -s reload
+sudo nginx -s reload
 ```
 
 停止 NGINX：
 
 ```bash
-sudo NGINX stop
+sudo nginx stop
 ```
 
 ## 配置 NGINX 的反向代理和负载均衡功能
@@ -416,7 +416,7 @@ upstream backend_servers {
 
 ## 使用 NGINX Plus 优化 EMQX 部署
 
-本节介绍了如何通过配置 NGINX PlUS 中特有的功能优化 EMQX 部署。以下功能的配置示例仅在 NGINX Plus 版本中可用，本页中编译安装的 NGINX 无法引用这些配置。有关使用 NGINX Plus 优化 MQTT 连接的操作可参阅此[文档](https://www.NGINX.com/blog/optimizing-mqtt-deployments-in-enterprise-environments-NGINX-plus/)。
+本节介绍了如何通过配置 NGINX Plus 中特有的功能优化 EMQX 部署。以下功能的配置示例仅在 NGINX Plus 版本中可用，本页中编译安装的 NGINX 无法引用这些配置。有关使用 NGINX Plus 优化 MQTT 连接的操作可参阅此[文档](https://www.NGINX.com/blog/optimizing-mqtt-deployments-in-enterprise-environments-NGINX-plus/)。
 
 ### 配置 MQTT 粘性（Sticky）会话负载均衡
 
@@ -579,5 +579,5 @@ EMQX 提供了大量关于 NGINX 的学习资源。请查看以下链接以了�
 **博客：**
 
 - [利用 NGINX Plus 在 EMQX 中实现基于 Client ID 的会话保持](https://www.emqx.com/zh/blog/harnessing-sticky-sessions-for-mqtt-load-balancing-with-nginx-plus)
-- [利用 NGINX Plus 的 Client ID 替换功能和 EMQX Enterprise 保障 MQTT 应用安全](https://www.emqx.com/en/blog/securing-your-mqtt-based-applications-with-nginx-plus-client-id-substitution-and-emqx-enterprise)
-- [利用 EMQX 和 NGINX Plus 的客户端证书认证功能提升 MQTT 安全性](https://www.emqx.com/en/blog/elevating-mqtt-security-with-client-certificate-authentication)
+- [利用 NGINX Plus 的 Client ID 替换功能和 EMQX Enterprise 保障 MQTT 应用安全](https://www.emqx.com/zh/blog/securing-your-mqtt-based-applications-with-nginx-plus-client-id-substitution-and-emqx-enterprise)
+- [利用 EMQX 和 NGINX Plus 的客户端证书认证功能提升 MQTT 安全性](https://www.emqx.com/zh/blog/elevating-mqtt-security-with-client-certificate-authentication)
