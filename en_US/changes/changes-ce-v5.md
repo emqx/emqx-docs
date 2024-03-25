@@ -106,7 +106,8 @@
 
 - [#12679](https://github.com/emqx/emqx/pull/12679) Upgraded docker image base from Debian 11 to Debian 12.
 
-- [#12700](https://github.com/emqx/emqx/pull/12700) Supported "b" and "B" unit in bytesize hocon fields.
+- [#12700](https://github.com/emqx/emqx/pull/12700) Started supporting "b" and "B" unit in bytesize hocon fields.
+
 
   For example, all three fields below will have the value of 1024 bytes:
 
