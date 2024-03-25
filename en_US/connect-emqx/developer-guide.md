@@ -13,6 +13,7 @@ This chapter explores the core concepts of MQTT, MQTT-specific features, and som
 - [Exclusive Subscription](../messaging/mqtt-exclusive-subscription.md)
 - [Delayed Publish](../messaging/mqtt-delayed-publish.md)
 - [Auto Subscribe](../messaging/mqtt-auto-subscription.md)
+- [Topic Rewrite](../messaging/mqtt-topic-rewrite.md)
 
 EMQX's support of the MQTT protocol makes it compatible with most MQTT client libraries and SDKs. This guide also provides [step-by-step instructions and code samples](./introduction.md) to help developers quickly start building their MQTT projects. For a complete list of MQTT client SDKs and their comparison, see [MQTT client SDKs](https://www.emqx.com/en/mqtt-client-sdk).
 

@@ -127,7 +127,7 @@ In addition to the default settings, EMQX provides a variety of configuration op
 
 By default, one UDP listener with the name of **default** is already configured on port `5683`, which supports up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings, click **Delete** to delete the listener, or click **Add Listener** to add a new listener.
 
-<img src="./assets/mqttsn-listerner.png" alt="MQTTSN listener" style="zoom:50%;" />
+![coap-advanced-conf](./assets/coap-advanced-conf.png)
 
 Click **Add Listener** to open **Add Listener** page, where you can continue with the following configuration fields:
 
@@ -172,6 +172,7 @@ The client ID, username, and password are provided by the client's [Create Conne
 - [Redis Authentication](../access-control/authn/redis.md)
 - [HTTP Server Authentication](../access-control/authn/http.md)
 - [JWT Authentication](../access-control/authn/jwt.md)
+- [LDAP Authentication](../access-control/authn/ldap.md)
 
 This part takes the Dashboard as an example to illustrate how to do the authentication configuration.
 

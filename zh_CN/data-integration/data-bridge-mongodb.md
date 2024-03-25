@@ -12,7 +12,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 ## 工作原理
 
-MongoDB 数据集成是 EMQX 中的开箱即用功能，旨在弥合基于 MQTT 的物联网数据与 MongoDB 强大的数据存储能力之间的差距。借助内置的[规则引擎](https://chat.openai.com/c/rules.md)组件，集成简化了将数据从 EMQX 导入 MongoDB 进行存储和管理的过程，无需复杂的编码。
+MongoDB 数据集成是 EMQX 中的开箱即用功能，旨在弥合基于 MQTT 的物联网数据与 MongoDB 强大的数据存储能力之间的差距。借助内置的[规则引擎](./rules.md)组件，集成简化了将数据从 EMQX 导入 MongoDB 进行存储和管理的过程，无需复杂的编码。
 
 下图展示了 EMQX 与 MongoDB 之间数据集成的典型架构。
 

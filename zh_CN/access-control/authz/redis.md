@@ -48,9 +48,9 @@ Redis Authorizer 中添加的所有规则都是**允许**规则，即 Redis Auth
 
 ## 配置项
 
-Redis Authorizer 支持 3 种部署模式的 Redis，详细配置请参考 [redis_standalone](../../configuration/configuration-manual.html#authz:redis_standalone)、[authz:redis_sentinel](../../configuration/configuration-manual.html#authz:redis_sentinel) 与 [authz:redis_cluster](../../configuration/configuration-manual.html#authz:redis_cluster)。
+Redis authorizer 由 `type=redis` 标识。<!--详细配置请参考 [redis_standalone](../../configuration/configuration-manual.html#authz:redis_standalone)、[authz:redis_sentinel](../../configuration/configuration-manual.html#authz:redis_sentinel) 与 [authz:redis_cluster](../../configuration/configuration-manual.html#authz:redis_cluster)。-->
 
-Redis authorizer 由 `type=redis` 标识。
+Redis Authorizer 支持 3 种部署模式的 Redis。
 
 Standalone Redis:
 
@@ -133,7 +133,7 @@ Standalone Redis:
 
 ### ssl
 
-用于 [安全连接至 Redis](https://redis.io/docs/manual/security/encryption/) 的标准 [SSL options](../../configuration/configuration.md#tls-ciphers)。
+用于 [安全连接至 Redis](https://redis.io/docs/manual/security/encryption/) 的标准 SSL options。<!--(../../configuration/configuration.md#tls-ciphers)。-->
 
 ### Standalone Redis options (`redis_type = single`).
 
@@ -141,13 +141,13 @@ Standalone Redis:
 
 必选的字符串类型配置，格式为 `host:port`，用于指定 Redis 服务端地址。
 
-#### Redis Cluster options (`redis_type = cluster`).
+### Redis Cluster options (`redis_type = cluster`).
 
 #### servers
 
 必选的字符串类型配置，格式为 `host1:port1,host2:port2,...`，用于指定 Redis Cluster 端点地址列表。
 
-#### Redis Sentinel options (`redis_type = sentinel`).
+### Redis Sentinel options (`redis_type = sentinel`).
 
 #### servers
 

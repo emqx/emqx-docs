@@ -235,7 +235,7 @@ Current average donor node connection count: 300.0
 ./bin/emqx ctl rebalance stop
 ```
 
-**示例**：
+返回结果如下：
 
 ```bash
 ./bin/emqx ctl rebalance stop

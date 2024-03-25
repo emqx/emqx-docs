@@ -52,7 +52,7 @@ mqtt.exclusive_subscription {
 
    ::: tip
 
-   [MQTTX Desktop](./publish-and-subscribe.md/#mqttx-desktop) 中介绍了更多详细的连接创建信息。
+   [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop) 中介绍了更多详细的连接创建信息。
 
    :::
 
@@ -60,7 +60,7 @@ mqtt.exclusive_subscription {
 
 2. 创建另外两个 MQTT 客户端连接作为订阅者，并分别将它们配置为 `Subscriber1` 和 `Subscriber2`。
 
-3. 在**连接**窗格中选择客户端连接 `Subscriber1`。点击**+ 添加订阅**创建一个订阅。在**Topic**文本框中输入 `$exclusive/t/1`，以订阅该主题。点击**确定**。
+3. 在**连接**窗格中选择客户端连接 `Subscriber1`。点击**添加订阅**创建一个订阅。在 **Topic** 文本框中输入 `$exclusive/t/1`，以订阅该主题。点击**确定**。
 
    <img src="./assets/exclusive-sub-1.png" alt="exclusive-sub-1" style="zoom:40%;" />
 

@@ -51,7 +51,7 @@ filter { username = "${username}" }
 
 ## 配置项
 
-此认证器支持 3 种部署模式的 MongoDB，详细配置请参考 [authz:mongo_single](../../configuration/configuration-manual.html#authz:mongo_single)、[authz:mongo_sharded](../../configuration/configuration-manual.html#authz:mongo_sharded) 与 [authz:mongo_rs](../../configuration/configuration-manual.html#authz:mongo_rs)。
+此认证器支持 3 种部署模式的 MongoDB。<!--详细配置请参考 [authz:mongo_single](../../configuration/configuration-manual.html#authz:mongo_single)、[authz:mongo_sharded](../../configuration/configuration-manual.html#authz:mongo_sharded) 与 [authz:mongo_rs](../../configuration/configuration-manual.html#authz:mongo_rs)。-->
 
 MongoDB Authorizer 必需有 `type = mongodb`。
 
@@ -144,13 +144,13 @@ Standalone：
 
 ### ssl
 
-[SSL](../../configuration/configuration.md#tls-ciphers)客户端参数。
+SSL 客户端参数。
 
 ### srv_record
 
 可选的布尔类型参数。默认是 `false` 。该配置设置成 `true` 时，EMQX 会从 DNS 记录中查找指定的 MongoDB 地址和端口。
 
-详情请参考[DNS Seed List Connection Format](https://www.mongodb.com/docs/manual/reference/connection-string/#dns-seed-list-connection-format).
+详情请参考 [DNS Seed List Connection Format](https://www.mongodb.com/docs/manual/reference/connection-string/#dns-seed-list-connection-format).
 
 ### topology
 

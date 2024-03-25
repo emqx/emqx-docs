@@ -140,9 +140,9 @@ float2str(20.2, 17) = '20.19999999999999928'
 | regex_match   | 判断字符串是否与某正则表达式匹配                             | 1. 原字符串 <br />2. 正则表达式                              | true 或 false                        |
 | regex_replace | 替换字符串中匹配到某正则表达式的子串                         | 1. 原字符串 <br />2. 正则表达式 <br />3. 指定用于替换的字符串 | 替换后的字符串                       |
 | ascii         | 返回字符对应的 ASCII 码                                      | 1. 字符                                                      | 整数值，字符对应的 ASCII 码          |
-| find          | 查找并返回字符串中的某个子串，从头部查找                     | 1. 原字符串 <br />2. 要查找的子串                            | 查抄到的子串，如找不到则返回空字符串 |
-| find          | 查找并返回字符串中的某个子串，从头部查找                     | 1. 原字符串 <br />2. 要查找的子串 <br />3. 'leading'         | 查抄到的子串，如找不到则返回空字符串 |
-| find          | 查找并返回字符串中的某个子串，从尾部查找                     | 1. 原字符串 <br />2. 要查找的子串 <br />3. 'trailing'        | 查抄到的子串，如找不到则返回空字符串 |
+| find          | 查找并返回字符串中的某个子串，从头部查找                     | 1. 原字符串 <br />2. 要查找的子串                            | 查找到的子串，如找不到则返回空字符串 |
+| find          | 查找并返回字符串中的某个子串，从头部查找                     | 1. 原字符串 <br />2. 要查找的子串 <br />3. 'leading'         | 查找到的子串，如找不到则返回空字符串 |
+| find          | 查找并返回字符串中的某个子串，从尾部查找                     | 1. 原字符串 <br />2. 要查找的子串 <br />3. 'trailing'        | 查找到的子串，如找不到则返回空字符串 |
 
 ```erlang
 lower('AbC') = 'abc'
@@ -353,7 +353,7 @@ bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 
 ### Sparkplug B
 
-EMQX 企业版还有专门用于解码和编码 Sparkplug B 消息的特殊用途函数（`sparkplug_decode` 和`sparkplug_encode`）。您可以在 [Sparkplug B](https://chat.openai.com/sparkplug.md) 中了解有关 Sparkplug 函数的更多信息。
+EMQX 企业版还有专门用于解码和编码 Sparkplug B 消息的特殊用途函数（`sparkplug_decode` 和`sparkplug_encode`）。您可以在 [Sparkplug B](./sparkplug.md) 中了解有关 Sparkplug 函数的更多信息。
 
 {% endemqxee %}
 

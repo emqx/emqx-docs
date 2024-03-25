@@ -1,4 +1,4 @@
-# Use ACL file
+# Use ACL File
 
 EMQX supports authorization checks against the predefined rules stored in ACL files. You can configure multiple authorization check rules in the file. After receiving the client's operation request, EMQX matches the authorization rules in order from top to bottom. After successfully matching a rule, EMQX allows or denies the current request according to the setting, and stops matching subsequent rules. 
 
