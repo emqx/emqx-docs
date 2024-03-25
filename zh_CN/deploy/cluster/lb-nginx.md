@@ -416,7 +416,7 @@ upstream backend_servers {
 
 ## 使用 NGINX Plus 优化 EMQX 部署
 
-本节介绍了如何通过配置 NGINX Plus 中特有的功能优化 EMQX 部署。以下功能的配置示例仅在 NGINX Plus 版本中可用，本页中编译安装的 NGINX 无法引用这些配置。有关使用 NGINX Plus 优化 MQTT 连接的操作可参阅此[文档](https://www.NGINX.com/blog/optimizing-mqtt-deployments-in-enterprise-environments-NGINX-plus/)。
+本节介绍了如何通过配置 NGINX Plus 中特有的功能优化 EMQX 部署。以下功能的配置示例仅在 NGINX Plus 版本中可用，本页中编译安装的 NGINX 无法引用这些配置。有关使用 NGINX Plus 优化 MQTT 连接的操作可参阅此[文档](https://www.nginx.com/blog/optimizing-mqtt-deployments-in-enterprise-environments-nginx-plus/)。
 
 ### 配置 MQTT 粘性（Sticky）会话负载均衡
 
