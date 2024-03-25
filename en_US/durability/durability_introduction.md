@@ -41,7 +41,7 @@ The session persistence feature in EMQX is disabled by default. It can be enable
 
 ## How Session Persistence Works
 
-EMQX introduces a unique approach to manage message durability for persistent sessions. When a client with a persistent session subscribes to a topic filter, EMQX designates topics matching the filter as "durable." This ensures that, aside from routing MQTT PUBLISH messages from these topics to active sessions, the broker also saves these messages on disk.
+EMQX introduces a unique approach to manage message durability for persistent sessions. When a client with a persistent session subscribes to a topic filter, EMQX designates topics matching the filter as "durable." This ensures that, aside from routing MQTT PUBLISH messages from these topics to active sessions, the broker also saves these messages on disk. EMQX integrates directly with a built-in RocksDB database as the storage backend. 
 
 Each durable MQTT message is stored on disk exactly once, regardless of the number of persistent sessions subscribing to the matching topic filter and whether those sessions are currently connected or not. This enables an efficient fan-out of messages to the persistent sessions.
 
