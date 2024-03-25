@@ -2,7 +2,7 @@
 
 ## 5.6.0
 
-*Release Date: 2024-03-29*
+*Release Date: 2024-03-25*
 
 ### Enhancements
 
@@ -136,7 +136,7 @@
 
 - [#12336](https://github.com/emqx/emqx/pull/12336) Refined the approach to managing asynchronous tasks by segregating the cleanup of channels into its own dedicated pool. This separation addresses performance issues encountered during channels cleanup under conditions of high network latency, ensuring that such tasks do not impede the efficiency of other asynchronous operations, such as route cleanup.
 
-- [#12725](https://github.com/emqx/emqx/pull/12725) Implemented HTTP API to list the available source types.
+- [#12725](https://github.com/emqx/emqx/pull/12725) Implemented REST API to list the available source types.
 
 - [#12746](https://github.com/emqx/emqx/pull/12746) Added `username` log field. If MQTT client is connected with a non-empty username the logs and traces will include `username` field.
 

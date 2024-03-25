@@ -2,7 +2,7 @@
 
 ## 5.6.0
 
-*发布日期: 2024-03-22*
+*发布日期: 2024-03-25*
 
 ### 增强
 
@@ -21,9 +21,11 @@
 
 - [#12398](https://github.com/emqx/emqx/pull/12398) 在 Dashboard 配置中暴露了 `swagger_support` 选项，允许启用或禁用 Swagger API 文档。
 
-- [#12467](https://github.com/emqx/emqx/pull/12467) 支持使用 AAAA DNS 记录类型进行集群发现。
+- [#12467](https://github.com/emqx/emqx/pull/12467) 开始支持使用 AAAA DNS 记录类型进行集群发现。
 
 - [#12483](https://github.com/emqx/emqx/pull/12483) 将 `emqx ctl conf cluster_sync tnxid ID` 重命名为 `emqx ctl conf cluster_sync inspect ID`。为了向后兼容，保留了 `tnxid`，但将在 5.7 版本中废弃。
+
+- [#12495](https://github.com/emqx/emqx/pull/12495) 新增了 AWS S3 连接器和动作。
 
 - [#12499](https://github.com/emqx/emqx/pull/12499) 通过扩展规则增强了客户端封禁能力，包括：
 
@@ -93,7 +95,7 @@
 
 - [#12679](https://github.com/emqx/emqx/pull/12679) 将 Docker 镜像基础从 Debian 11 升级到 Debian 12。
 
-- [#12700](https://github.com/emqx/emqx/pull/12700) 在 bytesize hocon 字段中支持 "b" 和 "B" 单位。
+- [#12700](https://github.com/emqx/emqx/pull/12700) 在 bytesize hocon 字段中开始支持 "b" 和 "B" 单位。
 
   例如，以下所有三个字段将具有 1024 字节的值：
 
@@ -161,6 +163,8 @@
 - [#12494](https://github.com/emqx/emqx/pull/12494) 提高了 MongoDB 连接器的性能。
 
   - [mongodb-erlang PR](https://github.com/emqx/mongodb-erlang/pull/41)
+
+- [#12725](https://github.com/emqx/emqx/pull/12725) 添加了用于列出可用的 source 类型的 REST API。
 
 - [#12746](https://github.com/emqx/emqx/pull/12746) 添加了 `username` 日志字段。如果 MQTT 客户端以非空用户名连接，日志和追踪将包含 `username` 字段。
 
@@ -235,6 +239,8 @@
 - [#12715](https://github.com/emqx/emqx/pull/12715) 解决了当入口数据集成 source 的连接器存在活动通道时，进行配置更新可能导致系统崩溃的问题。
 
 - [#12740](https://github.com/emqx/emqx/pull/12740) 修复了无法踢出持久会话的问题。
+
+- [#12767](https://github.com/emqx/emqx/pull/12767) 修复了从 5.0.1 升级到 5.5.1 期间遇到的问题，特别是与 Kafka 生产者配置相关的问题，这些问题导致了升级失败。此修正确保 Kafka 生产者配置准确转换为 EMQX 版本 5.5.1 及更高版本所需的动作和连接器配置的新格式。
 
 ## 5.5.1
 

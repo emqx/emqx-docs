@@ -2,7 +2,7 @@
 
 ## 5.6.0
 
-*Release Date: 2024-03-29*
+*Release Date: 2024-03-25*
 
 ### Enhancements
 
@@ -27,7 +27,7 @@
 
   For backward compatibility, `tnxid` is kept, but considered deprecated and will be removed in 5.7.
 
-- [#12495](https://github.com/emqx/emqx/pull/12495) Intorduced new AWS S3 connector and action.
+- [#12495](https://github.com/emqx/emqx/pull/12495) Introduced new AWS S3 connector and action.
 
 - [#12499](https://github.com/emqx/emqx/pull/12499) Enhanced client banning capabilities with extended rules, including:
 
@@ -163,7 +163,7 @@
 
   - [mongodb-erlang PR](https://github.com/emqx/mongodb-erlang/pull/41)
 
-- [#12725](https://github.com/emqx/emqx/pull/12725) Implemented HTTP API to list the available source types.
+- [#12725](https://github.com/emqx/emqx/pull/12725) Implemented REST API to list the available source types.
 
 - [#12746](https://github.com/emqx/emqx/pull/12746) Added `username` log field. If MQTT client is connected with a non-empty username the logs and traces will include `username` field.
 
@@ -241,7 +241,7 @@
 
 - [#12740](https://github.com/emqx/emqx/pull/12740) Fixed an issue when durable sessions could not be kicked out.
 
-- [#12767](https://github.com/emqx/emqx/pull/12767) Correctly migrate older Kafka Producer configurations (pre 5.0.2) to action and connector configurations.
+- [#12767](https://github.com/emqx/emqx/pull/12767) Fixed issues encountered during upgrades from 5.0.1 to 5.5.1, specifically related to Kafka Producer configurations that led to upgrade failures. The correction ensures that Kafka Producer configurations are accurately transformed into the new action and connector configuration format required by EMQX version 5.5.1 and beyond.
 
 ## 5.5.1
 

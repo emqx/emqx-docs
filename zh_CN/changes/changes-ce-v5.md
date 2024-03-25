@@ -2,7 +2,7 @@
 
 ## 5.6
 
-*发布日期: 2024-03-22*
+*发布日期: 2024-03-25*
 
 ### 增强
 
@@ -30,7 +30,7 @@
 
 - [#12398](https://github.com/emqx/emqx/pull/12398) 在 Dashboard 配置中暴露了 `swagger_support` 选项，允许启用或禁用 Swagger API 文档。
 
-- [#12467](https://github.com/emqx/emqx/pull/12467) 支持使用 AAAA DNS 记录类型进行集群发现。
+- [#12467](https://github.com/emqx/emqx/pull/12467) 开始支持使用 AAAA DNS 记录类型进行集群发现。
 
 - [#12483](https://github.com/emqx/emqx/pull/12483) 将 `emqx ctl conf cluster_sync tnxid ID` 重命名为 `emqx ctl conf cluster_sync inspect ID`。为了向后兼容，保留了 `tnxid`，但将在 5.7 版本中废弃。
 
@@ -104,7 +104,7 @@
 
 - [#12679](https://github.com/emqx/emqx/pull/12679) 将 Docker 镜像基础从 Debian 11 升级到 Debian 12。
 
-- [#12700](https://github.com/emqx/emqx/pull/12700) 在 bytesize hocon 字段中支持 "b" 和 "B" 单位。
+- [#12700](https://github.com/emqx/emqx/pull/12700) 在 bytesize hocon 字段中开始支持 "b" 和 "B" 单位。
 
   例如，以下所有三个字段将具有 1024 字节的值：
 
@@ -140,6 +140,8 @@
   JSON Schema 支持 [Draft 03](http://tools.ietf.org/html/draft-zyp-json-schema-03)、[Draft 04](http://tools.ietf.org/html/draft-zyp-json-schema-04) 和 [Draft 06](https://datatracker.ietf.org/doc/html/draft-wright-json-schema-00)。
 
 - [#12336](https://github.com/emqx/emqx/pull/12336) 通过将通道清理工作隔离到其专用池中，优化了异步任务的管理方式。这种分离解决了在高网络延迟条件下执行通道清理时遇到的性能问题，确保此类任务不会影响其他异步操作（如路由清理）的效率。
+
+- [#12725](https://github.com/emqx/emqx/pull/12725) 添加了用于列出可用的 source 类型的 REST API。
 
 - [#12746](https://github.com/emqx/emqx/pull/12746) 添加了 `username` 日志字段。如果 MQTT 客户端以非空用户名连接，日志和追踪将包含 `username` 字段。
 
