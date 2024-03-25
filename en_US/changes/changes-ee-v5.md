@@ -153,7 +153,7 @@
 
 - [#12581](https://github.com/emqx/emqx/pull/12581) Added JSON schema to schema registry.
 
-  JSON Schema supports [Draft 03](http://tools.ietf.org/html/draft-zyp-json-schema-03), [Draft 04](http://tools.ietf.org/html/draft-zyp-json-schema-04) and [Draft 06](https://datatracker.ietf.org/doc/html/draft-wright-json-schema-00).
+  JSON Schema supports [Draft 03](http://tools.ietf.org/html/draft-zyp-json-schema-03), [Draft 04](http://tools.ietf.org/html/draft-zyp-json-schema-04) and [Draft 05](https://datatracker.ietf.org/doc/html/draft-wright-json-schema-00).
 
 - [#12602](https://github.com/emqx/emqx/pull/12602) Enhanced health checking for IoTDB connector, using its `ping` API instead of just checking for an existing socket connection.
 
