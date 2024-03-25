@@ -204,6 +204,7 @@ ExProto Gateway supports various types of authenticators, such as:
 - [Redis Authentication](../access-control/authn/redis.md)
 - [HTTP Server Authentication](../access-control/authn/http.md)
 - [JWT Authentication](../access-control/authn/jwt.md)
+- [LDAP Authentication](../access-control/authn/ldap.md)
 
 The Client ID, Username, and Password of the client information are all derived from the parameters passed in the Authenticate method of the ConnectionAdapter.
 

@@ -148,7 +148,7 @@ Example:
 | `vsn`                | Version of the response message format                       |
 | `topic`              | The command topic being responded to, e.g., `$file-async/somefileid/init` |
 | `packet_id`          | MQTT message ID of the command being responded to            |
-| `reason_code`        | Execution result code for the command. For details, see [Reason Codes](https://chat.openai.com/c/97d539b5-8d5c-4634-9dbe-6e7e40be5a8f#PUBACK-Reason-Codes) |
+| `reason_code`        | Execution result code for the command. For details, see [Reason Codes](#PUBACK-Reason-Codes) |
 | `reason_description` | Description of the execution result                          |
 
 Clients can obtain the actual operation results of commands via the `$file-response/{clientId}` topic, regardless of whether the operation is synchronous or asynchronous.

@@ -227,6 +227,7 @@ As the concept of username and password is already defined in the connection mes
 - [Redis Authentication](../access-control/authn/redis.md)
 - [HTTP Server Authentication](../access-control/authn/http.md)
 - [JWT Authentication](../access-control/authn/jwt.md)
+- [LDAP Authentication](../access-control/authn/ldap.md)
 
 OCPP gateway uses the information in the Basic Authentication of the Websocket handshake message to generate the authentication fields for the client:
 

@@ -76,7 +76,7 @@ sensor/1/temperature
 
    ::: tip
 
-   [MQTTX Desktop](./publish-and-subscribe.md/#mqttx-desktop) 中介绍了更多详细的连接创建信息。
+   [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop) 中介绍了更多详细的连接创建信息。
 
    :::
 
@@ -88,7 +88,7 @@ sensor/1/temperature
 
    <img src="./assets/wildcard-sub-1.png" alt="wildcard-sub-1" style="zoom: 40%;" />
 
-4. 在**连接**区域选中 `Subscriber`。在消息发布区域的主题栏中输入 `testtopic/room1/temperature`，在消息区域输入消息 payload `28 degree`。 点击发送按钮。 接着发布另一条相同 payload 且主题为 `testtopic/room2/temperature` 的消息。
+4. 在**连接**区域选中 `Demo`。在消息发布区域的主题栏中输入 `testtopic/room1/temperature`，在消息区域输入消息 payload `28 degree`。 点击发送按钮。 接着发布另一条相同 payload 且主题为 `testtopic/room2/temperature` 的消息。
 
       <img src="./assets/wildcard-sub-2.png" alt="wildcard-sub-2" style="zoom:38%;" />
 

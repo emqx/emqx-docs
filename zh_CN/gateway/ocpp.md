@@ -28,7 +28,7 @@ EMQX 新增了 [OCPP 1.6-J](https://www.openchargealliance.org/protocols/ocpp-16
 
 1. 在基本配置选项卡中点击 **下一步**，接受所有默认设置。
 2. 然后您将被引导到监听器选项卡，在这里 EMQX 预先配置了一个 Websocket 监听器，端口为 33033。再次点击下一步确认设置。
-3. 然后点击 **启用**按钮激活 OCP P网关。
+3. 然后点击 **启用**按钮激活 OCPP网关。
 
 完成网关激活过程后，您可以返回网关列表页面，观察到 OCPP 网关现在显示为已启用状态。
 
@@ -231,6 +231,7 @@ OCPP 网关仅支持 Websocket 和 Websocket over TLS 类型的监听器。
 - [Redis 认证](../access-control/authn/redis.md)
 - [HTTP 服务器认证](../access-control/authn/http.md)
 - [JWT 认证](../access-control/authn/jwt.md)
+- [LDAP 认证](../access-control/authn/ldap.md)
 
 OCPP 网关使用 Websocket 握手消息中的 Basic Authentication 信息来生成客户端的认证字段：
 

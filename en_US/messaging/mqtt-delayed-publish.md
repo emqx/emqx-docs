@@ -25,10 +25,8 @@ Example:
 2. On the **Delayed Publish** page, you can configure as follows:
 
    - **Enable**: Enable or disable delayed publish. By default, it is enabled.
-   - **Max Delayed Messages**: The max number of delayed messages.
-     - If you select **Unlimited** from the drop-down list, you cannot specify the number.
-     - If you select **Custom** from the drop-down list, you can specify the number.
-
+   - **Max Delayed Messages**: You can specify the max number of delayed messages.
+   
    <img src="./assets/configure-delayed-publish-dashboard.png" alt="configure-delayed-publish-dashboard" style="zoom:45%;" />
 
 ## Try Delayed Publish with MQTTX Desktop

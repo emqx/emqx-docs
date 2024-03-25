@@ -12,7 +12,7 @@
 
 EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实现基于 SAML 的单点登录：
 
-- [Okta](https://www.openldap.org/)
+- [Okta](https://www.okta.com/)
 - [OneLogin](https://www.onelogin.com/)
 
 其他身份提供商正在适配中，将在后续版本提供。
@@ -32,7 +32,7 @@ EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实�
 
 1. 以管理员身份登录 Okta，然后转至 **Okta 管理控制台**。
 
-2. 转到 **Applications ->  Applications** 页面，点击 **Create App integration** 按钮，在弹出框中选择 **Sign-in method** 为 `SAML 2.0`，点击 **Next **按钮。
+2. 转到 **Applications ->  Applications** 页面，点击 **Create App integration** 按钮，在弹出框中选择 **Sign-in method** 为 `SAML 2.0`，点击 **Next** 按钮。
 
 3. 在新打开的 **General Settings** 页签中，**App name** 输入您的应用名称，例如 `EMQX Dashboard`，点击 **Next** 按钮。
 4. 在 **Configure SAML** 页签中，配置第 1 步中 Dashboard 提供的信息：

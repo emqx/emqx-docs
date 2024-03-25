@@ -49,7 +49,7 @@ UTF-8 区域设置可以通过两种方式启用。
   sudo localectl set-locale LANG=C.UTF-8
   ```
 
-- 否则，使用 [`update-locale`](https://manpages.debian.org/buster/locales/update-locale.8.en.html) 命令启用：
+- 或者，使用 [`update-locale`](https://manpages.debian.org/buster/locales/update-locale.8.en.html) 命令启用：
 
   ```bash
   sudo update-locale LANG=C.UTF-8
@@ -103,7 +103,8 @@ EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是
 | [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | 是   | 是  |
 | [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是   | 是  |
 | [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | 是   | 是  |
-| [macOS](./install-macOS.md)       | macOS 11<br />macOS 12<br />macOS 13 (Homebrew)  | 是   | 是  |
+| [macOS](./install-macOS.md)       | macOS 12<br />macOS 13 (Homebrew)  | 是   | 是  |
+| [Windows](./install-windows.md)   | Windows Server 2019                              | 是   | 是  |
 
 {% endemqxce %}
 
@@ -115,7 +116,7 @@ EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是
 | [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | 是   | 是  |
 | [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是   | 是  |
 | [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | 是   | 是  |
-| [macOS](./install-macOS.md)       | macOS 11<br />macOS 12<br />                     | 是   | 是  |
+| [macOS](./install-macOS.md)       | macOS 12<br />macOS 13<br />                   | 是   | 是  |
 
 {% endemqxee %}
 
