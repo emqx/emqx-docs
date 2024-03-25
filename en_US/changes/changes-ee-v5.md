@@ -243,6 +243,12 @@
 
 - [#12767](https://github.com/emqx/emqx/pull/12767) Fixed issues encountered during upgrades from 5.0.1 to 5.5.1, specifically related to Kafka Producer configurations that led to upgrade failures. The correction ensures that Kafka Producer configurations are accurately transformed into the new action and connector configuration format required by EMQX version 5.5.1 and beyond.
 
+- [#12768](https://github.com/emqx/emqx/pull/12768) Fixed an issue which may occur when performing rolling upgrade, especially when upgrading from a version earlier than 5.4.0.
+
+When the cluster is empty (more precisely, routing tables are empty), try to additionally ask the cluster nodes for the routing schema in use, to make more informed decision about routing storage schema upon startup. This should make routing storage schema less likely to diverge across cluster nodes, especially when the cluster is composed of different versions of EMQX.
+
+The version also logs instructions for how to manually resolve if conflict is detected in a running cluster.
+
 ## 5.5.1
 
 *Release Date: 2024-03-06*

@@ -200,6 +200,12 @@
 
 - [#12740](https://github.com/emqx/emqx/pull/12740) Fixed an issue when durable sessions could not be kicked out.
 
+- [#12768](https://github.com/emqx/emqx/pull/12768) Fixed an issue which may occur when performing rolling upgrade, especially when upgrading from a version earlier than 5.4.0.
+
+When the cluster is empty (more precisely, routing tables are empty), try to additionally ask the cluster nodes for the routing schema in use, to make more informed decision about routing storage schema upon startup. This should make routing storage schema less likely to diverge across cluster nodes, especially when the cluster is composed of different versions of EMQX.
+
+The version also logs instructions for how to manually resolve if conflict is detected in a running cluster.
+
 ## 5.5.1
 
 *Release Date: 2024-03-06*
