@@ -30,7 +30,8 @@
 
 - [#12398](https://github.com/emqx/emqx/pull/12398) Exposed the `swagger_support` option in the Dashboard configuration, allowing for the enabling or disabling of the Swagger API documentation.
 
-- [#12467](https://github.com/emqx/emqx/pull/12467) Supported cluster discovery using AAAA DNS record type.
+- [#12467](https://github.com/emqx/emqx/pull/12467) Started supporting cluster discovery using AAAA DNS record type.
+
 
 - [#12483](https://github.com/emqx/emqx/pull/12483) Renamed `emqx ctl conf cluster_sync tnxid ID` to `emqx ctl conf cluster_sync inspect ID`.
 
