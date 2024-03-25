@@ -22,13 +22,20 @@ EMQX 支持通过 Yum 源安装，您可通过以下 Yum 命令从中自动下�
    curl -s https://assets.emqx.com/scripts/install-emqx-rpm.sh | sudo bash
    ```
 
-2. 运行以下命令安装 EMQX：
+2. 安装以下依赖项：
+
+   ```bash
+   yum install epel-release -y
+   yum install -y openssl11 openssl11-devel
+   ```
+
+3. 运行以下命令安装 EMQX：
 
    ```bash
    sudo yum install emqx -y
    ```
 
-3. 运行以下命令启动 EMQX：
+4. 运行以下命令启动 EMQX：
 
    ```bash
    sudo systemctl start emqx

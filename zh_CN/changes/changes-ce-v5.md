@@ -2647,7 +2647,7 @@ Starting from version 5, EMQX will use [HOCON](https://lightbend.github.io/confi
 
 With a schema on top, the configs are now type-checked.
 
-HOCON supports Nginx-like configuration layouts, and provides a native array syntax.
+HOCON supports NGINX-like configuration layouts, and provides a native array syntax.
 
 But don't worry, the old `cuttlefish` syntax is still supported if you prefer to keep everything flat like in version 4.
 
