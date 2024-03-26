@@ -2,7 +2,7 @@
 
 ## 5.6.0
 
-*Release Date: 2024-03-26*
+*Release Date: 2024-03-27*
 
 ### Enhancements
 
@@ -162,6 +162,15 @@
 - [#12725](https://github.com/emqx/emqx/pull/12725) Implemented REST API to list the available source types.
 
 - [#12746](https://github.com/emqx/emqx/pull/12746) Added `username` log field. If MQTT client is connected with a non-empty username the logs and traces will include `username` field.
+
+- [#12785](https://github.com/emqx/emqx/pull/12785) Added `timestamp_format` config option to log handers.
+
+This new config supports the following values:
+
+- `auto`: Automatically determines the timestamp format based on the log formatter being used.
+  Utilizes `rfc3339` format for text formatters, and `epoch` format for JSON formatters.
+- `epoch`: Represents timestamps in microseconds precision Unix epoch format.
+- `rfc3339`: Uses RFC3339 compliant format for date-time strings. For example: `2024-03-26T11:52:19.777087+00:00`.
 
 ### Bug Fixes
 
