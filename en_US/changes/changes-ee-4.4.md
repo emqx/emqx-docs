@@ -31,8 +31,8 @@
 
   * Checked that the `mqtt.max_topic_levels`, `mqtt.max_packet_size`, `keepalive_backoff` configuration options must be non-negative.
   * When starting SSL listeners, checked the dependencies of the `verify_peer`, `fail_if_no_peer_cert`, and `cacertfile` parameters. Previously, this check only occurred when SSL clients attempted to establish a connection.
-  * Checked that the acceptors, max_connections, max_conn_rate, and active_n parameters in listener configurations must be non-negative.
-  * Checked that the "Heartbeat Interval" and "Automatic Reconnection Interval" parameters in RabbitMQ resources must be correct time length strings.
+  * Checked that the `acceptors`, `max_connections`, `max_conn_rate`, and `active_n` parameters in listener configurations must be non-negative.
+  * Checked that the `Heartbeat Interval` and `Automatic Reconnection Interval` parameters in RabbitMQ resources must be correct time length strings.
   * Fixed an issue where duplicate ports were not checked for GB/T 32960 and JT/T808 listeners.
   * Fixed an issue in the GB/T 32960 and JT/T808 gateway configurations where certain parameter values were not validated.
 
@@ -68,7 +68,7 @@
 
 ### Bug Fixes
 
-- Fix the `date_to_unix_ts()` SQL function in the rule engine returns an incorrect value when the input date is a leap year.
+- Fixed the `date_to_unix_ts()` SQL function in the rule engine returns an incorrect value when the input date is a leap year.
 
 - During node evacuation, evacuate all disconnected sessions, not only those started with `clean_start` set to `false`.
 
