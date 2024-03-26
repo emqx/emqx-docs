@@ -12,7 +12,7 @@
 - [#12634](https://github.com/emqx/emqx/pull/12634) Triple-quote string values in HOCON config files no longer support escape sequence.
 
   The detailed information can be found in [this pull request](https://github.com/emqx/hocon/pull/290).
-  Here is a summary for the impact on EMQX users:
+  Here is a summary of the impact on EMQX users:
 
   - EMQX 5.6 is the first version to generate triple-quote strings in `cluster.hocon`,
   meaning for generated configs, there is no compatibility issue.
@@ -34,7 +34,7 @@
 - [#12634](https://github.com/emqx/emqx/pull/12634) Triple-quote string values in HOCON config files no longer support escape sequence.
 
   The detailed information can be found in [this pull request](https://github.com/emqx/hocon/pull/290).
-  Here is a summary for the impact on EMQX users:
+  Here is a summary of the impact on EMQX users:
 
   - EMQX 5.6 is the first version to generate triple-quote strings in `cluster.hocon`,
   meaning for generated configs, there is no compatibility issue.
