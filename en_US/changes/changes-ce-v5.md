@@ -142,7 +142,7 @@
 
 - [#12785](https://github.com/emqx/emqx/pull/12785) Added `timestamp_format` config option to log handers.
 
-This new config supports the following values:
+This new option supports the following values:
 
 - `auto`: Automatically determines the timestamp format based on the log formatter being used.
   Utilizes `rfc3339` format for text formatters, and `epoch` format for JSON formatters.
@@ -215,6 +215,8 @@ This new config supports the following values:
 
   If conflict is detected in a running cluster, EMQX writes instructions on how to manually resolve it in the log as part of the error message with `critical` severity. The same error message and instructions will also be written in the `error` level log to make sure this message will not get lost even if no log handler is configured.
 
+- [#12786](https://github.com/emqx/emqx/pull/12786) Added a strict check that prevents replicant nodes from connecting to the core nodes running with a different version of EMQX application.
+Effectively it means that during the rolling upgrades the replicant nodes can only work if there is at least one core node with the matching EMQX release.
 
 ## 5.5.1
 
