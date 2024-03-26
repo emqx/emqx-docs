@@ -2,7 +2,7 @@
 
 ## 5.6.0
 
-*Release Date: 2024-03-25*
+*Release Date: 2024-03-26*
 
 ### Enhancements
 
@@ -200,11 +200,12 @@
 
 - [#12740](https://github.com/emqx/emqx/pull/12740) Fixed an issue when durable sessions could not be kicked out.
 
-- [#12768](https://github.com/emqx/emqx/pull/12768) Fixed an issue which may occur when performing rolling upgrade, especially when upgrading from a version earlier than 5.4.0.
+- [#12768](https://github.com/emqx/emqx/pull/12768) Addressed a startup failure issue in EMQX version 5.4.0 and later, particularly noted during rolling upgrades from versions before 5.4.0. The issue was related to the initialization of the routing schema when both v1 and v2 routing tables were empty.
 
-When the cluster is empty (more precisely, routing tables are empty), try to additionally ask the cluster nodes for the routing schema in use, to make more informed decision about routing storage schema upon startup. This should make routing storage schema less likely to diverge across cluster nodes, especially when the cluster is composed of different versions of EMQX.
+  The node now attempts to retrieve the routing schema version in use across the cluster instead of using the v2 routing table by default when local routing tables are found empty at startup. This approach mitigates potential conflicts and reduces the chances of diverging routing storage schemas among cluster nodes, especially in a mixed-version cluster scenario. 
 
-The version also logs instructions for how to manually resolve if conflict is detected in a running cluster.
+  The version also logs instructions for how to manually resolve if conflict is detected in a running cluster.
+
 
 ## 5.5.1
 
