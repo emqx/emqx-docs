@@ -6,7 +6,7 @@
 
 ### 增强
 
-- 开放 `/load_rebalance/availability_check` 接口，即不需要身份验证，这将会简化负载平衡器的搭建。同时改进该接口，使其尽可能轻量，以避免 Broker 过载。
+- 开放 `/load_rebalance/availability_check` 接口，即不需要身份验证，这将会简化负载均衡器的搭建。同时改进该接口，使其尽可能轻量，以避免 Broker 过载。
 
 - 改进重平衡/节点疏散功能，更优雅地处理 “等待健康检查” 阶段的业务逻辑，不再阻止新的客户端与即将被疏散的节点建立连接。
 
@@ -30,8 +30,8 @@
 
   * 检查 `mqtt.max_topic_levels`，`mqtt.max_packet_size`，`keepalive_backoff` 配置项，须为非负值。
   * 在启动 SSL 监听器时，检查 `verify_peer`，`fail_if_no_peer_cert` 以及 `cacertfile` 参数的依赖关系。此前只会在 SSL 客户端尝试建立连接时检查。
-  * 检查监听器配置的 acceptors，max_connections，max_conn_rate，active_n 参数，须为非负值。
-  * 检查 RabbitMQ 资源的 “心跳间隔” 和 “自动重连间隔” 参数，须为正确的时间长度字符串。
+  * 检查监听器配置的 `acceptors`，`max_connections`，`max_conn_rate`，`active_n` 参数，须为非负值。
+  * 检查 RabbitMQ 资源的 `心跳间隔` 和 `自动重连间隔` 参数，须为正确的时间长度字符串。
   * 修复 GB/T 32960、JT/T808 监听器未校验重复端口的问题。
   * 修复 GB/T 32960、JT/T808 网关配置中，对某些参数的取值未作校验的问题。
 
