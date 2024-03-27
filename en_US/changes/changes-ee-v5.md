@@ -185,7 +185,6 @@
 
 - [#12492](https://github.com/emqx/emqx/pull/12492) EMQX now returns the `Receive-Maximum` property in the `CONNACK` message for MQTT v5 clients, aligning with protocol expectations. This implementation considers the minimum value of the client's `Receive-Maximum` setting and the server's `max_inflight` configuration as the limit for the number of inflight (unacknowledged) messages permitted. Previously, the determined value was not sent back to the client in the `CONNACK` message.
 
-- [#12500](https://github.com/emqx/emqx/pull/12500) The `GET /clients` and `GET /client/:clientid` HTTP APIs have been updated to include disconnected persistent sessions in their responses.
 
   NOTE: A current known issue with these enhanced API responses is that the total client count provided may exceed the actual number of clients due to the inclusion of disconnected sessions.
 
