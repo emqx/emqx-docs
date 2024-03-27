@@ -41,12 +41,12 @@
 
   ```
   rule_xlu4 {
-  sql = """~
-  SELECT
-  *
-  FROM
-  "t/#"
-  ~"""
+    sql = """~
+      SELECT
+        *
+      FROM
+        "t/#"
+    ~"""
   }
   ```
 
