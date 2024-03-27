@@ -44,14 +44,29 @@ debug < info < notice < warning < error < critical < alert < emergency
 
 在**日志**页面，选择**控制台日志**页签。
 
+{% emqxee %}
+
 <img src="./assets/config-console-log-1-ee.png" alt="config-console-log-1-ee" style="zoom:67%;" />
+
+{% endemqxee}
+
+{% emqxce %}
+
+<img src="./assets/config-console-log-1-ce.png" alt="config-console-log-1-ce" style="zoom:67%;" />
+
+{% endemqxce %}
 
 配置控制台日志处理进程的选项：
 
 - **启用日志处理进程**：单击切换开关以启用控制台日志处理进程。
 - **日志级别**：从下拉列表中选择要使用的日志级别。可选值为：`debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` 。默认值为：`warning`。
 - **日志格式类型**：从下拉列表中选择日志格式。可选值为：`text` 和 `json`。默认值为 `text`。
-- **时间偏移量**：定义日志中时间戳的格式。默认情况下为 `system`。
+- **时间戳格式**：从下拉列表中选择日志时间戳格式。可选值为：
+  - `auto`: 根据所使用的日志格式类型自动确定时间戳格式。对于文本格式类型，使用 `rfc3339` 格式；对于 JSON 格式类型，则使用 `epoch`格式。
+  - `epoch`: 时间戳以微秒精度的 Unix 纪元时间格式表示。
+  - `rfc3339`: 时间戳使用符合 RFC3339 标准的日期时间字符串格式，格式示例为 `2024-03-26T11:52:19.777087+00:00`。
+
+- **时间偏移量**：定义日志中时间相对 UTC 的偏移量，默认情况下跟随系统，默认值为 `system`。
 
 完成配置后，点击 **保存更改**。
 
@@ -59,7 +74,17 @@ debug < info < notice < warning < error < critical < alert < emergency
 
 在**日志**页面，选择**文件日志**页签。
 
+{% emqxee %}
+
 <img src="./assets/config-file-log-1-ee.png" alt="config-file-log-1-ee" style="zoom:67%;" />
+
+{% endemqxee %}
+
+{% emqxce %}
+
+<img src="./assets/config-file-log-1-ce.png" alt="config-file-log-1-ce" style="zoom:67%;" />
+
+{% endemqxce %}
 
 配置文件日志处理进程的选项：
 
@@ -69,7 +94,11 @@ debug < info < notice < warning < error < critical < alert < emergency
 - **日志文件轮换大小**：设置日志文件大小，达到设定的值时日志文件将进行轮换。如果禁用，则日志文件将无限增长。可在文本框输入设定的值，在下拉列表中选择单位，可选值为：`MB`, `GB`, `KB`。
 - **日志级别**：从下拉列表中选择要使用的日志级别。可选值为：`debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` 。默认值为：`warning`。
 - **日志格式类型**：从下拉列表中选择日志格式。可选值为：`text` 和 `json`。默认值为 `text`。
-- **时间偏移量**：定义日志中时间戳的格式。默认情况下为 `system`。
+- **时间戳格式**：从下拉列表中选择日志时间戳格式。可选值为：
+  - `auto`: 根据所使用的日志格式类型自动确定时间戳格式。对于文本格式类型，使用 `rfc3339` 格式；对于 JSON 格式类型，则使用 `epoch`格式。
+  - `epoch`: 时间戳以微秒精度的 Unix 纪元时间格式表示。
+  - `rfc3339`: 时间戳使用符合 RFC3339 标准的日期时间字符串格式，格式示例为 `2024-03-26T11:52:19.777087+00:00`。
+- **时间偏移量**：定义日志中时间相对 UTC 的偏移量，默认情况下跟随系统，默认值为 `system`。
 
 完成配置后，点击**保存修改**。
 
