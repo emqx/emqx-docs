@@ -196,7 +196,6 @@
 
 - [#12541](https://github.com/emqx/emqx/pull/12541) Introduced a new configuration validation step for autocluster by DNS records to ensure compatibility between `node.name` and `cluster.discover_strategy`. Specifically, when utilizing the `dns` strategy with either `a` or `aaaa` record types, it is mandatory for all nodes to use a (static) IP address as the host name.
 
-- [#12562](https://github.com/emqx/emqx/pull/12562) Added a new configuration root: `durable_storage`. This configuration tree contains the settings related to the new persistent session feature.
 
 - [#12566](https://github.com/emqx/emqx/pull/12566) Enhanced the bootstrap file for REST API keys:
 
