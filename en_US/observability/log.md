@@ -43,17 +43,33 @@ Go to EMQX Dashboard. Click **Management** -> **Logging** on the left navigation
 
 On the **Logging** page, select the **Console Log** tab.
 
+{% emqxee %}
+
 <img src="./assets/config-console-log-1-ee.png" alt="config-console-log-1-ee" style="zoom:67%;" />
+
+{% endemqxee %}
+
+{% emqxce %}
+
+<img src="./assets/config-console-log-1-ce.png" alt="config-console-log-1-ce" style="zoom:67%;" />
+
+{% endemqxce %}
 
 Configure the following settings for the console log handler:
 
 - **Enable Log Handler**: Click the toggle switch to enable the console log handler.
 
-- **Log Level**: Select the log level to use from the drop-down list. Default value is: `warning`.
+- **Log Level**: Select the log level to use from the drop-down list. The default value is `warning`.
 
-- **Log Formatter**: Select the log format from the drop-down list. Optional values are: `text` and `json`. Default value is `text`.
+- **Log Formatter**: Select the log format from the drop-down list. Optional values are `text` and `JSON`. The default value is `text`.
 
-- **Time Offset**: Define the format of the timestamp in the log. `system` is typed by default.
+- **Timestamp Format**: Select the format of the timestamp in the log. Optional values are:
+  - `auto`: Automatically determines the timestamp format based on the log formatter being used. Utilizes `rfc3339` format for text formatters, and `epoch` format for JSON formatters.
+
+  - `epoch`: Represents timestamps in microseconds precision Unix epoch format.
+  - `rfc3339`: Uses RFC3339 compliant format for date-time strings. For example, `2024-03-26T11:52:19.777087+00:00`.
+
+- **Time Offset**: Define the time offset relative to UTC in the log. By default, it follows the system, with a default value of `system`.
 
 After you finish the configurations, click **Save Changes**.
 
@@ -61,7 +77,17 @@ After you finish the configurations, click **Save Changes**.
 
 On the **Logging** page, select the **File Log** tab.
 
+{% emqxee %}
+
 <img src="./assets/config-file-log-1-ee.png" alt="config-file-log-1-ee" style="zoom:67%;" />
+
+{% endemqxee %}
+
+{% emqxce %}
+
+<img src="./assets/config-file-log-1-ce.png" alt="config-file-log-1-ce" style="zoom:67%;" />
+
+{% endemqxce %}
 
 Configure the following settings for file log handler:
 
@@ -69,17 +95,27 @@ Configure the following settings for file log handler:
 
 - **Log File Name**: Type the name of the log file. The default name is `log/emqx.log`.
 
-- **Max Log Files Number**: Specify the maximum number of rotated log files. Default value is `10`.
+- **Max Log Files Number**: Specify the maximum number of rotated log files. The default value is `10`.
 
 - **Rotation Size**: Log file will be rotated once it reaches the specified size. It is by default enabled. You can type the specific value in the text box below. If you disable it, the value will be `infinity`, which means the log file will grow indefinitely.
 
 - **Log Level**: Select the log level to use from the drop-down list. Optional values are: `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency`. Default value is: `warning`.
 
-- **Log Formatter**: Select the log format from the drop-down list. Optional values are: `text` and `json`. Default value is `text`.
+- **Log Formatter**: Select the log format from the drop-down list. Optional values are `text` and `JSON`. The default value is `text`.
 
-  Note: If you select `json`, it is recommended to disable the toggle switch for **Single Log Max Length**, otherwise you will get incomplete json data.
+  Note: If you select `JSON`, it is recommended to disable the toggle switch for **Single Log Max Length**, otherwise you will get incomplete JSON data.
 
-- **Time Offset**: Define the format of the timestamp in the log. `system` is typed by default.
+
+- **Timestamp Format**: Select the format of the timestamp in the log. Optional values are:
+
+  - `auto`: Automatically determines the timestamp format based on the log formatter being used. Utilizes `rfc3339` format for text formatters, and `epoch` format for JSON formatters.
+
+
+  - `epoch`: Represents timestamps in microseconds precision Unix epoch format.
+
+  - `rfc3339`: Uses RFC3339 compliant format for date-time strings. For example, `2024-03-26T11:52:19.777087+00:00`.
+
+- **Time Offset**: Define the time offset relative to UTC in the log. By default, it follows the system, with a default value of `system`.
 
 After you finish the configurations, click **Save Changes**.
 
