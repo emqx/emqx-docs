@@ -4,7 +4,7 @@ The release notes page for EMQX provides a comprehensive and detailed record of 
 
 ## v5.6
 
-- [5.6.0](./changes-ce-v5.md#_5-6-0): 2024-03-26
+- [5.6.0](./changes-ce-v5.md#_5-6-0): 2024-03-27
 
 ## v5.5
 

@@ -106,10 +106,7 @@
 
 - [#12679](https://github.com/emqx/emqx/pull/12679) Upgraded docker image base from Debian 11 to Debian 12.
 
-- [#12700](https://github.com/emqx/emqx/pull/12700) Started supporting "b" and "B" unit in bytesize hocon fields.
-
-
-  For example, all three fields below will have the value of 1024 bytes:
+- [#12700](https://github.com/emqx/emqx/pull/12700) Started supporting "b" and "B" unit in bytesize hocon fields. For example, all three fields below will have the value of 1024 bytes:
 
   ```
   bytesize_field = "1024b"
@@ -140,14 +137,15 @@
 
 - [#12746](https://github.com/emqx/emqx/pull/12746) Added `username` log field. If MQTT client is connected with a non-empty username the logs and traces will include `username` field.
 
-- [#12785](https://github.com/emqx/emqx/pull/12785) Added `timestamp_format` config option to log handers.
+- [#12785](https://github.com/emqx/emqx/pull/12785) Added `timestamp_format` configuration option to log handlers. This new option allows for the following settings:
 
-This new option supports the following values:
+  - `auto`: Automatically determines the timestamp format based on the log formatter being used.
+    Utilizes `rfc3339` format for text formatters, and `epoch` format for JSON formatters.
 
-- `auto`: Automatically determines the timestamp format based on the log formatter being used.
-  Utilizes `rfc3339` format for text formatters, and `epoch` format for JSON formatters.
-- `epoch`: Represents timestamps in microseconds precision Unix epoch format.
-- `rfc3339`: Uses RFC3339 compliant format for date-time strings. For example: `2024-03-26T11:52:19.777087+00:00`.
+  - `epoch`: Represents timestamps in microseconds precision Unix epoch format.
+
+  - `rfc3339`: Uses RFC3339 compliant format for date-time strings. For example, `2024-03-26T11:52:19.777087+00:00`.
+
 
 ### Bug Fixes
 
@@ -213,10 +211,11 @@ This new option supports the following values:
 
   The node now attempts to retrieve the routing schema version in use across the cluster instead of using the v2 routing table by default when local routing tables are found empty at startup. This approach mitigates potential conflicts and reduces the chances of diverging routing storage schemas among cluster nodes, especially in a mixed-version cluster scenario. 
 
-  If conflict is detected in a running cluster, EMQX writes instructions on how to manually resolve it in the log as part of the error message with `critical` severity. The same error message and instructions will also be written in the `error` level log to make sure this message will not get lost even if no log handler is configured.
+  If conflict is detected in a running cluster, EMQX writes instructions on how to manually resolve it in the log as part of the error message with `critical` severity. The same error message and instructions will also be written on standard error to make sure this message will not get lost even if no log handler is configured.
 
-- [#12786](https://github.com/emqx/emqx/pull/12786) Added a strict check that prevents replicant nodes from connecting to the core nodes running with a different version of EMQX application.
-Effectively it means that during the rolling upgrades the replicant nodes can only work if there is at least one core node with the matching EMQX release.
+- [#12786](https://github.com/emqx/emqx/pull/12786) Added a strict check that prevents replicant nodes from connecting to core nodes running with a different version of EMQX application.
+  This check ensures that during the rolling upgrades, the replicant nodes can only work when at least one core node is running the same EMQX release version.
+
 
 ## 5.5.1
 
