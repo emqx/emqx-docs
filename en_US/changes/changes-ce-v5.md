@@ -131,7 +131,8 @@
 
   For more information on the functions and their usage, refer to [Built-in SQL Functions](../data-integration/rule-sql-builtin-functions) the documentation.
 
-- [#12336](https://github.com/emqx/emqx/pull/12336) Refined the approach to managing asynchronous tasks by segregating the cleanup of channels into its own dedicated pool. This separation addresses performance issues encountered during channels cleanup under conditions of high network latency, ensuring that such tasks do not impede the efficiency of other asynchronous operations, such as route cleanup.
+- [#12336](https://github.com/emqx/emqx/pull/12336) Performance enhancement. Created a dedicated async task handler pool to handle client session cleanup tasks.
+
 
 - [#12725](https://github.com/emqx/emqx/pull/12725) Implemented REST API to list the available source types.
 
