@@ -43,12 +43,12 @@
 
   ```
   rule_xlu4 {
-  sql = """~
-  SELECT
-  *
-  FROM
-  "t/#"
-  ~"""
+    sql = """~
+      SELECT
+        *
+      FROM
+        "t/#"
+    ~"""
   }
   ```
   See [HOCON 0.42.0](https://github.com/emqx/hocon/releases/tag/0.42.0) release notes for details.
