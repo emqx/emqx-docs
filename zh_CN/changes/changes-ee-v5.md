@@ -194,7 +194,6 @@
 
 - [#12541](https://github.com/emqx/emqx/pull/12541) 为基于 DNS 自动集群引入了新的配置验证步骤，以确保 `node.name` 和 `cluster.discover_strategy` 之间的兼容性。具体来说，当使用 `dns` 策略并带有 `a` 或 `aaaa` 记录类型时，所有节点必须使用（静态）IP 地址作为主机名。
 
-- [#12562](https://github.com/emqx/emqx/pull/12562) 添加了一个新的配置根：`durable_storage`。此配置树包含与新的持久会话功能相关的设置。
 
 - [#12566](https://github.com/emqx/emqx/pull/12566) 增强了 REST API 密钥的引导文件：
 
