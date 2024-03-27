@@ -182,7 +182,6 @@
 
 - [#12492](https://github.com/emqx/emqx/pull/12492) EMQX 现在在 MQTT v5 客户端的 `CONNACK` 消息中返回 `Receive-Maximum` 属性。此实现考虑了客户端的 `Receive-Maximum` 设置和服务器的 `max_inflight` 配置的最小值作为允许的未确认（unacknowledged）消息数量的限制。之前，确定的值未在 `CONNACK` 消息中发送回客户端。
 
-- [#12500](https://github.com/emqx/emqx/pull/12500) 更新了 `GET /clients` 和 `GET /client/:clientid` HTTP API，以在其响应中包含断开的持久会话。
 
   注意：当前已知的问题是，由于包含了断开的会话，这些增强的 API 响应提供的总客户端计数可能超过实际的客户端数量。
 
