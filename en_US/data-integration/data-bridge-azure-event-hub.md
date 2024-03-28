@@ -74,7 +74,7 @@ To create the Azure Event Hubs data integration, you need to create a Connector 
 
 Now, Azure Event Hubs should be listed in the connector list (**Integration** -> **Connector**) with a **Connection Status** of **Connected**. Next, you need to create a rule and a Sink to specify the data to be streamed into the Azure Event Hubs.
 
-## Create a Rule for Azure Event Hubs Sink 
+## Create a Rule with Azure Event Hubs Sink 
 
 This section demonstrates how to create a rule with an Azure Event Hubs Sink added to the rule.
 
@@ -95,7 +95,7 @@ This section demonstrates how to create a rule with an Azure Event Hubs Sink add
      "t/#"
    ```
 
-5. Click the **+ Add Action** button to define an action that will be triggered by the rule. Select `Azure Event Hubs` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to Azure Event Hubs. 
+5. Click the **+ Add Action** button to define an action to be triggered by the rule. Select `Azure Event Hubs` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to Azure Event Hubs. 
 
    Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select an Azure Event Hubs action previously created. In this demonstration, you create a new Sink and add it to the rule.
 

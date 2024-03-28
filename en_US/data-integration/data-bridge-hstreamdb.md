@@ -565,7 +565,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    :::
    
-4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to HStreamDB.
+4. Click the + **Add Action** button to define an action that the rule will trigger. With this action, EMQX sends the data processed by the rule to HStreamDB.
 
 5. Select `HStreamDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
 

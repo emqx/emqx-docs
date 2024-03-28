@@ -121,12 +121,12 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 2. Click **Create** on the top right corner of the page.
 
-3. Enter `my_rule` as the rule ID, and enter the following SQL syntax in the **SQL Editor**, which means the MQTT messages under topic `t/#`  will be saved to Oracle Database
+3. Enter `my_rule` as the rule ID, and enter the following SQL syntax in the **SQL Editor**, which means the MQTT messages under topic `t/#`  will be saved to the Oracle Database.
 
    Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
 
    ```sql
-SELECT 
+   SELECT 
      *
    FROM
      "t/#"
@@ -134,7 +134,7 @@ SELECT
    
    Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to Oracle Database. 
+4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to Oracle Database. 
 
 5. Select `Oracle Database` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select an Oracle Database Sink if you have created one. This demonstration will create a new Sink.
 
