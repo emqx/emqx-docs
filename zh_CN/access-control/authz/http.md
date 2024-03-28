@@ -26,18 +26,18 @@ EMQX 支持基于 HTTP 应用进行授权。此时，用户需在外部自行搭
 
 - **URL**：输入 HTTP 应用的 IP 地址。
 
-- **Headers**（可选）：完成 HTTP 请求头的配置 <!--键、值和添加这块内容需要补充下-->
+- **请求头**（可选）：完成 HTTP 请求头的配置 <!--键、值和添加这块内容需要补充下-->
 
 **连接配置**：在此部分进行并发连接、连接超时等待时间、最大 HTTP 请求数以及请求超时时间。
 
-- **Pool size**（可选）：整数，指定从 EMQX 节点到外部 HTTP Server 的并发连接数；默认值：**8**。<!--有范围吗？-->
+- **连接池大小**（可选）：整数，指定从 EMQX 节点到外部 HTTP Server 的并发连接数；默认值：**8**。<!--有范围吗？-->
 - **连接超时**（可选）：填入连接超时等待时长，可选单位：**小时**、**分钟**、**秒**、**毫秒**。
 - **HTTP 管道**（可选）：正整数，指定无需等待响应可发出的最大 HTTP 请求数；默认值：**100**。
 - **请求超时**（可选）：填入连接超时等待时长，可选单位：**小时**、**分钟**、**秒**、**毫秒**
 
 **TLS 配置**：配置是否启用 TLS。
 
-**权限配置**：在此处完成 HTTP 请求体的配置。
+**请求体**：在此处完成 HTTP 请求体的配置。
 
 <!--需要补上相关信息-->
 
@@ -102,7 +102,7 @@ Body:
 
 ## 配置项
 
-支持 HTTP `POST` 和 `GET` 请求，它们各自都有一些特定的选项。详细配置请参考  [authz:http_post](../../configuration/configuration-manual.html#authz:http_post)与 [authz:http_get](../../configuration/configuration-manual.html#authz:http_get)。
+支持 HTTP `POST` 和 `GET` 请求，它们各自都有一些特定的选项。<!--详细配置请参考  [authz:http_post](../../configuration/configuration-manual.html#authz:http_post)与 [authz:http_get](../../configuration/configuration-manual.html#authz:http_get)。-->
 
 HTTP 授权必需使用 `type=http`的配置。
 
@@ -155,8 +155,6 @@ HTTP 授权必需使用 `type=http`的配置。
 ### url
 
 发送 HTTP 请求的 URL，可以使用如下[占位符](./authz.md#数据查询占位符):
-
-
 
 如果 URL 为 `https`，必须同时启用 `ssl`：
 
@@ -280,4 +278,4 @@ Content-Type: application/json
 
 ### ssl
 
-用于连接到外部 HTTP 服务器的标准 [SSL 选项](../../configuration/configuration.md#tls-ciphers)。
+用于连接到外部 HTTP 服务器的标准 SSL 选项。<!--(../../configuration/configuration.md#tls-ciphers)。-->

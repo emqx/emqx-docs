@@ -11,7 +11,7 @@ EMQX 提供了 Dashboard 与 HTTP API 来创建、更新、删除和查看内置
 
 MQTT 全局认证数据管理 API： `/api/v5/authentication/{id}/users`。
 
-MQTT 监听器认证数据管理 API： `/api/v5/listeners/{listener_id}/authentication/{id}/`。
+MQTT 监听器认证数据管理 API： `/api/v5/listeners/{listener_id}/authentication/{id}`。
 
 其他接入协议的全局认证数据管理 API： `/api/v5/gateway/{protocol}/authentication`。
 

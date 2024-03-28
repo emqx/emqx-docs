@@ -143,7 +143,7 @@
   </tr>
   <tr>
     <td><b>边缘计算</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -152,6 +152,7 @@
 </tbody>
 </table>
 </div>
+
 
 ## 可扩展性与性能
 
@@ -910,8 +911,6 @@
 </tbody>
 </table>
 </div>
-
-
 ## 规则引擎
 
 <div style="text-align: center;">
@@ -1220,13 +1219,14 @@
     <td><b>Datadog</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /> 已规划</td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /> 已规划</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
     <td>将于 EMQX v5.4 发布</td>
   </tr>
 </tbody>
 </table>
 </div>
+
 
 ## 云原生与 K8S
 

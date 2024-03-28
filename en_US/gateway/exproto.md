@@ -169,7 +169,7 @@ Click **+ Add Listener** to open **Add Listener** page, where you can continue w
 - **Acceptor**: Set the size of the acceptor pool, default: `16`.
 - **Max Connections**: Set the maximum number of concurrent connections that the listener can handle, default: `1024000`.
 - **Max Connection Rate**: Set the maximum rate of new connections the listener can accept per second, default: `1000`.
-- **Proxy Protocol**: Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or Nginx; default: `false`.
+- **Proxy Protocol**: Enable the Proxy Protocol V1/2 if the EMQX cluster is deployed behind HAProxy or NGINX; default: `false`.
 - **Proxy Protocol Timeout**: Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout; default: `3` seconds.
 
 **TCP Settings**
@@ -204,6 +204,7 @@ ExProto Gateway supports various types of authenticators, such as:
 - [Redis Authentication](../access-control/authn/redis.md)
 - [HTTP Server Authentication](../access-control/authn/http.md)
 - [JWT Authentication](../access-control/authn/jwt.md)
+- [LDAP Authentication](../access-control/authn/ldap.md)
 
 The Client ID, Username, and Password of the client information are all derived from the parameters passed in the Authenticate method of the ConnectionAdapter.
 

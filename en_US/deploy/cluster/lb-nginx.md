@@ -1,18 +1,82 @@
-# Load Balance EMQX Cluster with Nginx
+# Load Balance EMQX Cluster with NGINX
 
-Nginx is a high-performance, multifunctional server software that can serve as a web server and reverse proxy server. Additionally, Nginx can function as a load balancer, distributing client requests to multiple backend servers to ensure load balancing and performance optimization. Nginx is particularly well-suited for IoT applications, where handling a large number of concurrent requests is crucial. In IoT, there are typically a large number of devices, which requires a server that is capable of handling a high request load. EMQX natively supports a distributed cluster architecture consisting of multiple MQTT servers. Therefore, deploying Nginx for load balancing and an EMQX cluster ensures high availability and scalability.
+NGINX is a high-performance, multifunctional server software that can serve as a web server and reverse proxy server. Additionally, NGINX can function as a load balancer, distributing client requests to multiple backend servers to ensure load balancing and performance optimization. NGINX is particularly well-suited for IoT applications, where handling a large number of concurrent requests is crucial. In IoT, there are typically a large number of devices, which requires a server that is capable of handling a high request load. EMQX natively supports a distributed cluster architecture consisting of multiple MQTT servers. Therefore, deploying NGINX for load balancing and an EMQX cluster ensures high availability and scalability.
 
-This page primarily explains how to install and configure Nginx for reverse proxy and load balancing purposes to set up MQTT servers for an EMQX cluster.
+This page introduces how to install NGINX and configure NGINX for reverse proxy and load balancing purposes to set up MQTT servers for an EMQX cluster. It also introduces how to use NGINX Plus to optimize EMQX deployment.
 
 ## Features and Benefits
 
-Using Nginx to load balance an EMQX cluster offers several features and advantages:
+Using NGINX to load balance an EMQX cluster offers several features and advantages:
 
-- As a reverse proxy server, Nginx sits on the MQTT server side, representing MQTT clients to initiate MQTT connection requests to the EMQX cluster and handling requests on behalf of the EMQX cluster. It then returns the EMQX cluster's response to the MQTT clients. This configuration hides multiple clusters and exposes a single access point to MQTT clients. MQTT clients only need to communicate with Nginx and do not need to know about the number and layout of the clusters behind it. This approach enhances system maintainability and scalability.
-- Nginx can be used to terminate SSL-encrypted MQTT connections between MQTT clients and the EMQX cluster, reducing the encryption and decryption load on the EMQX cluster. This offers several advantages, such as improved performance, simplified certificate management, and enhanced security.
-- Nginx provides flexible load balancing strategies to determine which EMQX node in the cluster should receive requests, helping distribute traffic and requests, thereby improving performance and reliability. For example, sticky load balancing can route requests to the same backend server, enhancing performance and session persistence.
+- As a reverse proxy server, NGINX sits on the MQTT server side, representing MQTT clients to initiate MQTT connection requests to the EMQX cluster and handling requests on behalf of the EMQX cluster. It then returns the EMQX cluster's response to the MQTT clients. This configuration hides multiple clusters and exposes a single access point to MQTT clients. MQTT clients only need to communicate with NGINX and do not need to know about the number and layout of the clusters behind it. This approach enhances system maintainability and scalability.
+- NGINX can be used to terminate SSL-encrypted MQTT connections between MQTT clients and the EMQX cluster, reducing the encryption and decryption load on the EMQX cluster. This offers several advantages, such as improved performance, simplified certificate management, and enhanced security.
+- NGINX provides flexible load balancing strategies to determine which EMQX node in the cluster should receive requests, helping distribute traffic and requests, thereby improving performance and reliability. For example, sticky load balancing can route requests to the same backend server, enhancing performance and session persistence.
 
-## Prerequisites
+![EMQX LB NGINX](./assets/emqx-lb-nginx.png)
+
+## Quick Start
+
+This section provides a Docker Compose configuration with actual examples to allow you to easily verify and test the NGINX function. You can follow these steps to proceed:
+
+1. Clone the example repository and enter the `mqtt-lb-nginx` directory:
+
+```bash
+git clone https://github.com/emqx/emqx-usage-example
+cd emqx-usage-example/mqtt-lb-nginx
+```
+
+2. Start the example via Docker Compose:
+
+```bash
+docker compose up -d
+```
+
+3. Use the [MQTTX](https://mqttx.app) CLI to establish 10 TCP connections, simulating MQTT client connections:
+
+```bash
+mqttx bench conn -c 10
+```
+
+4. You can view the NGINX connection monitoring and the distribution of EMQX client connections:
+
+   - View NGINX connection monitoring with the following command:
+
+     ```bash
+     $ curl http://localhost:8888/status                                
+     Active connections: 11 
+     server accepts handled requests
+      60 60 65 
+     Reading: 0 Writing: 1 Waiting: 0
+     ```
+
+     This displays the current active connections and server request handling statistics, including reading, writing, and waiting states.
+
+   - Use the following commands to view the client connection situation of each EMQX node, respectively:
+
+     ```bash
+     docker exec -it emqx1 emqx ctl broker stats | grep connections.count
+     docker exec -it emqx2 emqx ctl broker stats | grep connections.count
+     docker exec -it emqx3 emqx ctl broker stats | grep connections.count
+     ```
+
+     This shows the number of connections for each node and the number of active connections, with the 10 connections evenly distributed across the cluster nodes:
+
+     ```bash
+     connections.count             : 3
+     live_connections.count        : 3
+     connections.count             : 4
+     live_connections.count        : 4
+     connections.count             : 3
+     live_connections.count        : 3
+     ```
+
+Through these steps, you can verify the NGINX load-balancing functionality in the example and the distribution of client connections in the EMQX cluster. You can also modify the `emqx-usage-example/mqtt-lb-nginx/nginx.conf` file for custom configuration verification.
+
+## Install and Use NGINX
+
+This section introduces how to install and use NGINX in detail.
+
+### Prerequisites
 
 Before getting started, ensure that you have created a cluster consisting of the following 3 EMQX nodes. To learn how to create an EMQX cluster, see [Create a Cluster](./create-cluster.md) for details.
 
@@ -22,75 +86,15 @@ Before getting started, ensure that you have created a cluster consisting of the
 | emqx2-cluster.emqx.io | 1883          | 8083                |
 | emqx3-cluster.emqx.io | 1883          | 8083                |
 
-The examples in this page will use a single Nginx server configured as a load balancer to forward requests to the cluster composed of these 3 EMQX nodes.
+The examples in this page will use a single NGINX server configured as a load balancer to forward requests to the cluster composed of these 3 EMQX nodes.
 
-## Quick Start
+### Install NGINX
 
-Here's a Docker Compose configuration with a real-world example that allows you to easily try and validate the setup. Follow these steps:
+The demonstration installs NGINX on an Ubuntu 22.04 LTS system using source code compilation. You can also install NGINX using Docker or binary packages.
 
-1. Clone the example repository and navigate to the `mqtt-lb-nginx` directory:
+#### Required Dependencies 
 
-```bash
-git clone https://github.com/emqx/emqx-usage-example
-cd emqx-usage-example/mqtt-lb-nginx
-```
-
-2. Start the example using Docker Compose:
-
-```bash
-docker compose up -d
-```
-
-3. Establish 10 TCP connections using [MQTTX](https://mqttx.app/) CLI to simulate MQTT client connections:
-
-```bash
-mqttx bench conn -c 10
-```
-
-4. You can monitor the Nginx connection status and the distribution of EMQX client connections:
-
-   - Use the following command to view Nginx connection monitoring:
-
-   ```bash
-   $ curl http://localhost:8888/status                                
-   Active connections: 11 
-   server accepts handled requests
-    60 60 65 
-   Reading: 0 Writing: 1 Waiting: 0
-   ```
-
-   This will display the current active connection count and server request processing statistics, including reading, writing, and waiting states.
-
-   - Use the following commands to view the client connection status of each EMQX node:
-
-   ```bash
-   docker exec -it emqx1 emqx ctl broker stats | grep connections.count
-   docker exec -it emqx2 emqx ctl broker stats | grep connections.count
-   docker exec -it emqx3 emqx ctl broker stats | grep connections.count
-   ```
-
-   This will display the connection count and active connection count for each node, with 10 connections evenly distributed across the cluster nodes:
-
-   ```bash
-   connections.count             : 3
-   live_connections.count        : 3
-   connections.count             : 4
-   live_connections.count        : 4
-   connections.count             : 3
-   live_connections.count        : 3
-   ```
-
-Through these steps, you can verify the Nginx load-balancing functionality in the example and observe the distribution of client connections in the EMQX cluster. You can also customize the configuration for testing by modifying the `emqx-usage-example/mqtt-lb-nginx/nginx.conf` file.
-
-Next, we will start from scratch and explain how to install and configure Nginx to meet various load-balancing requirements.
-
-## Install Nginx
-
-The demonstration installs Nginx on an Ubuntu 22.04 LTS system using source code compilation. You can also install Nginx using Docker or binary packages.
-
-### Prerequisites
-
-Before compiling and installing Nginx, ensure that the following dependencies are installed on your system:
+Before compiling and installing NGINX, ensure that the following dependencies are installed on your system:
 
 - GNU C and C++ compilers
 - PCRE (Perl Compatible Regular Expressions) library
@@ -104,15 +108,15 @@ sudo apt-get update
 sudo apt-get install build-essential libpcre3-dev zlib1g-dev libssl-dev
 ```
 
-### Download Source Code
+#### Download Source Code
 
-You can download the latest stable version of Nginx from the [Nginx official website](https://nginx.org/en/download.html). For example:
+You can download the latest stable version of NGINX from the [NGINX official website](https://nginx.org/en/download.html). For example:
 
 ```bash
 wget https://nginx.org/download/nginx-1.24.0.tar.gz
 ```
 
-### Configure and Compile
+#### Compile Configuration Naming
 
 After downloading, extract the source code and navigate to the source code directory:
 
@@ -135,29 +139,31 @@ Configure the compilation options with the following command:
 
 In the above command, the `--with-http_ssl_module` parameter is used to add SSL support, while the `--with-stream` and `--with-stream_ssl_module` parameters are used to add TCP reverse proxy support.
 
+#### Start to Compile
+
 Start the compilation with the following command:
 
 ```bash
 make
 ```
 
-### Install Nginx
+#### Install
 
-After compilation, you can install Nginx with the following command:
+After compilation, you can install NGINX with the following command:
 
 ```bash
 sudo make install
 ```
 
-Create a symbolic link to the Nginx executable in a directory in your system's PATH:
+Create a symbolic link to the NGINX executable in a directory in your system's PATH:
 
 ```bash
 sudo ln -s /usr/local/nginx/sbin/nginx /usr/local/bin/nginx
 ```
 
-## Get Started
+### Get Started
 
-Nginx's configuration file is located by default at `/usr/local/nginx/conf/nginx.conf`. Simply add the configuration examples from this page to the end of the file. The basic Nginx operation commands are as follows:
+NGINX's configuration file is located by default at `/usr/local/nginx/conf/nginx.conf`. Simply add the configuration examples from this page to the end of the file. The basic NGINX operation commands are as follows:
 
 Check the configuration file:
 
@@ -165,27 +171,31 @@ Check the configuration file:
 sudo nginx -t
 ```
 
-If the Nginx configuration file is validated successfully, you can start Nginx:
+If the NGINX configuration file is validated successfully, you can start NGINX:
 
 ```bash
 sudo nginx
 ```
 
-To reload a running Nginx and apply new configurations, it's recommended to check the configuration for errors before performing the operation:
+To reload a running NGINX and apply new configurations, it's recommended to check the configuration for errors before you perform the operation:
 
 ```bash
 sudo nginx -s reload
 ```
 
-To stop Nginx:
+To stop NGINX:
 
 ```bash
 sudo nginx stop
 ```
 
-## Reverse Proxy MQTT
+## Configure NGINX for Reverse Proxy and Load Balancing
 
-You can use the following configuration in Nginx's configuration file to reverse proxy MQTT connection requests from clients and forward them to the backend MQTT servers:
+This section explains how to configure NGINX to meet various load-balancing requirements.
+
+### Configure Reverse for Proxy MQTT
+
+You can use the following configuration in NGINX's configuration file to reverse proxy MQTT connection requests from clients and forward them to the backend MQTT servers:
 
 ```bash
 stream {
@@ -215,9 +225,9 @@ stream {
 }
 ```
 
-## Reverse Proxy MQTT SSL
+### Configure Reverse Proxy for MQTT SSL
 
-You can configure Nginx to reverse proxy MQTT and decrypt TLS connections, forwarding encrypted MQTT requests from clients to the backend MQTT servers to ensure communication security. You only need to add SSL-related parameters on top of the TCP-based configuration:
+You can configure NGINX to reverse proxy MQTT and decrypt TLS connections, forwarding encrypted MQTT requests from clients to the backend MQTT servers to ensure communication security. You only need to add SSL-related parameters on top of the TCP-based configuration:
 
 ```bash
 stream {
@@ -255,9 +265,9 @@ stream {
 }
 ```
 
-## Reverse Proxy MQTT WebSocket
+### Configure Reverse Proxy for MQTT WebSocket
 
-You can use the following configuration to reverse proxy MQTT WebSocket connections in Nginx, forwarding client requests to the backend MQTT servers. You need to specify an HTTP domain name or IP address using `server_name`:
+You can use the following configuration to reverse proxy MQTT WebSocket connections in NGINX, forwarding client requests to the backend MQTT servers. You need to specify an HTTP domain name or IP address using `server_name`:
 
 ```bash
 http {
@@ -296,9 +306,9 @@ http {
 }
 ```
 
-## Reverse Proxy MQTT WebSocket SSL
+### Configure Reverse Proxy for MQTT WebSocket SSL
 
-You can configure Nginx to reverse proxy MQTT WebSocket and decrypt TLS connections, forwarding encrypted MQTT requests from clients to the backend MQTT servers to ensure communication security. Specify an HTTP domain name or IP address using `server_name`. To achieve this, you only need to add SSL and certificate-related parameters on top of the WebSocket-based configuration:
+You can configure NGINX to reverse proxy MQTT WebSocket and decrypt TLS connections, forwarding encrypted MQTT requests from clients to the backend MQTT servers to ensure communication security. Specify an HTTP domain name or IP address using `server_name`. To achieve this, you only need to add SSL and certificate-related parameters on top of the WebSocket-based configuration:
 
 ```bash
 http {
@@ -341,11 +351,11 @@ http {
 }
 ```
 
-## Load-Balancing Strategies
+### Configure Load-Balancing Strategies
 
-Nginx provides several load-balancing strategies for controlling how connections are distributed. In real-world usage, it's essential to choose the appropriate load-balancing strategy based on your server performance, traffic requirements, and other factors. Here are some common Nginx load-balancing strategies that you can configure in the `upstream` block:
+NGINX provides several load-balancing strategies for controlling how connections are distributed. In real-world usage, it's essential to choose the appropriate load-balancing strategy based on your server performance, traffic requirements, and other factors. Here are some common NGINX load-balancing strategies that you can configure in the `upstream` block:
 
-### Round Robin
+#### Round Robin
 
 This is the default load-balancing strategy. It evenly distributes requests to each backend server in a circular manner. This is suitable when backend servers have similar performance.
 
@@ -357,7 +367,7 @@ upstream backend_servers {
 }
 ```
 
-### Weighted Round Robin
+#### Weighted Round Robin
 
 Building on Round Robin, you can assign different weights to each EMQX node. This affects the distribution ratio of requests. Servers with higher weights receive more requests.
 
@@ -369,7 +379,7 @@ upstream backend_servers {
 }
 ```
 
-### IP Hash
+#### IP Hash
 
 This strategy calculates a hash based on the client's IP address and then assigns the request to a specific backend server. This ensures that requests from the same client are always routed to the same server.
 
@@ -382,7 +392,7 @@ upstream backend_servers {
 }
 ```
 
-### Least Connections
+#### Least Connections
 
 Requests are distributed to the server with the fewest current connections, ensuring that the load on each server is as balanced as possible. This is suitable when there are significant differences in server performance.
 
@@ -395,13 +405,17 @@ upstream backend_servers {
 }
 ```
 
-### MQTT Sticky Session
+## Use NGINX Plus to Optimize EMQX Deployment
 
-MQTT sticky session load balancing is only available in the Nginx Plus version. The Nginx version compiled and installed in this chapter cannot reference this configuration. For information on optimizing MQTT connections using Nginx Plus, refer to this [document](https://www.nginx.com/blog/optimizing-mqtt-deployments-in-enterprise-environments-nginx-plus/).
+This section introduces how to configure the NGINX Plus specific features to optimize the EMQX deployment. Since the configuration examples for features in this section are only available in the NGINX Plus version, the NGINX version compiled and installed on this page cannot refer to these configurations. For information on optimizing MQTT connections using NGINX Plus, refer to this [document](https://www.nginx.com/blog/optimizing-mqtt-deployments-in-enterprise-environments-nginx-plus/).
+
+### Configure MQTT Sticky Session Load Balancing
 
 "Sticky" refers to the load balancer's ability to route clients back to the same server when they reconnect, preventing session takeover. This is particularly useful for clients that frequently reconnect or problematic clients that disconnect and reconnect, improving efficiency.
 
 To implement stickiness, the server needs to identify the client identifier (usually the client ID) in the connection request. This requires the load balancer to inspect MQTT packets. Once the client identifier is obtained, for static clusters, the server can hash it to a server ID, or the load balancer can maintain a mapping table of client identifiers to destination node IDs for more flexible routing.
+
+Here is a configuration example for this feature:
 
 ```bash
 mqtt_preread on;
@@ -414,13 +428,40 @@ upstream backend_servers {
 }
 ```
 
-Please note that the example configuration above may need adjustments according to your specific setup. The modules used in the configuration (such as `ip_hash` and `least_conn`) are built-in Nginx modules and do not require additional module dependencies.
+Please note that the example above may need adjustments according to your specific setup. The modules used in the configuration (such as `ip_hash` and `least_conn`) are built-in NGINX modules and do not require additional module dependencies.
 
-## Performance Optimization and Monitoring
+### Configure Client ID Replacement Feature
 
-This section explains how to optimize the performance of Nginx through configuration and enable the status monitoring feature.
+Security is crucial in MQTT communication. Devices often use sensitive data such as serial numbers as their Client IDs, and storing them in the MQTT server's database may pose security risks. NGINX Plus offers a client ID replacement feature, allowing the client ID to be replaced with another value set in the NGINX Plus configuration.
 
-### Nginx Basic Configuration Adjustments
+Here is a configuration example for this feature:
+
+```bash
+stream {
+    mqtt on;
+
+    server {
+        listen 1883 ssl;
+        ssl_certificate /etc/NGINX/certs/emqx.pem;
+        ssl_certificate_key /etc/NGINX/certs/emqx.key;
+        ssl_client_certificate /etc/NGINX/certs/ca.crt;      
+        ssl_session_cache shared:SSL:10m;
+        ssl_verify_client on;
+        proxy_pass 10.0.0.113:1883;
+        proxy_connect_timeout 1s;  
+
+        mqtt_set_connect clientid $ssl_client_serial;
+    }
+}
+```
+
+In this example, we enabled mutual authentication for the client and extracted the certificate serial number from the client's SSL certificate as a unique identifier to replace the original client ID. You can also use other values like `$ssl_client_s_dn` to extract the certificate DN.
+
+## Optimize NGINX Performance and Enable Monitoring
+
+This section explains how to optimize the performance of NGINX through configuration and enable the status monitoring feature.
+
+### NGINX Basic Configuration Adjustments
 
 - `worker_processes`: The number of worker processes. Set it close to the number of CPU cores on your server, but avoid setting too many processes to prevent resource contention.
 - `worker_connections`: The maximum number of simultaneous connections that a single worker process can handle. Ensure it does not exceed the maximum file descriptor limit allowed by the operating system.
@@ -433,11 +474,11 @@ events {
 }
 ```
 
-### Nginx Multi-NIC Support for Handling Massive Connections in Reverse Proxy
+### NGINX Multi-NIC Support for Handling Massive Connections in Reverse Proxy
 
-In reverse proxy scenarios, Nginx establishes connections to backend EMQX nodes as a client. In such cases, a single IP address can create approximately 60,000 long-lived connections at most. To support more connections, you can choose to deploy multiple Nginx servers or configure multiple IP addresses.
+In reverse proxy scenarios, NGINX establishes connections to backend EMQX nodes as a client. In such cases, a single IP address can create approximately 60,000 long-lived connections at most. To support more connections, you can choose to deploy multiple NGINX servers or configure multiple IP addresses.
 
-Here's an example of configuring multiple IPs using Nginx's built-in `split_clients` module to define a variable `$multi_ip`. It distributes requests based on the client's IP address and port number. Ensure that the IP addresses you use are available locally.
+Here's an example of configuring multiple IPs using NGINX's built-in `split_clients` module to define a variable `$multi_ip`. It distributes requests based on the client's IP address and port number. Ensure that the IP addresses you use are available locally.
 
 ```bash
 stream {
@@ -463,9 +504,9 @@ stream {
 }
 ```
 
-### Nginx Status Monitoring
+### NGINX Status Monitoring
 
-To enable Nginx status monitoring, ensure that the monitoring module `http_stub_status_module` is installed. If it's installed, you can enable status monitoring for Nginx:
+To enable NGINX status monitoring, ensure that the monitoring module `http_stub_status_module` is installed. If it's installed, you can enable status monitoring for NGINX:
 
 ```bash
 http {
@@ -492,14 +533,14 @@ Reading: 0 Writing: 1 Waiting: 1
 
 ## Appendix: Explanation of Main Parameters
 
-Here are explanations of the main parameters used in the example configurations. These parameters ensure stable connections to the backend MQTT servers or ensure that MQTT communication is encrypted and protected via Nginx while following best security practices to safeguard communication privacy and integrity for IoT applications.
+Here are explanations of the main parameters used in the example configurations. These parameters ensure stable connections to the backend MQTT servers or ensure that MQTT communication is encrypted and protected via NGINX while following best security practices to safeguard communication privacy and integrity for IoT applications.
 
 | Parameter Name         | Explanation                                                  |
 | ---------------------- | ------------------------------------------------------------ |
-| proxy_protocol         | Enables the PROXY protocol, allowing Nginx to attach additional proxy information at the beginning of the connection when forwarding requests. This ensures that EMQX can obtain the real client IP. |
+| proxy_protocol         | Enables the PROXY protocol, allowing NGINX to attach additional proxy information at the beginning of the connection when forwarding requests. This ensures that EMQX can obtain the real client IP. |
 | proxy_pass             | Defines the address of the backend MQTT servers, indicating that all requests from clients will be forwarded to this address. |
-| proxy_connect_timeout  | Timeout for establishing a connection to the backend MQTT servers. If the connection is not established within this time, Nginx will abort the connection attempt. |
-| proxy_timeout          | Timeout for the backend MQTT server. If no response is received from the backend within this time, Nginx will close the connection. |
+| proxy_connect_timeout  | Timeout for establishing a connection to the backend MQTT servers. If the connection is not established within this time, NGINX will abort the connection attempt. |
+| proxy_timeout          | Timeout for the backend MQTT server. If no response is received from the backend within this time, NGINX will close the connection. |
 | proxy_buffer_size      | Size of the buffer used to store data received from the backend MQTT server. Ensures a sufficient buffer size to handle large data streams. |
 | tcp_nodelay            | Enables the TCP_NODELAY option and disables the Nagle algorithm. This can reduce packet transmission latency, benefiting real-time MQTT communication. |
 | ssl_session_cache      | Configures a shared SSL session cache. This stores the state of SSL sessions to speed up the handshake process when clients reconnect. `shared:SSL:10m` specifies the cache name and size, which is 10MB here. |
@@ -509,5 +550,15 @@ Here are explanations of the main parameters used in the example configurations.
 | ssl_protocols          | Specifies the allowed SSL/TLS protocol versions.             |
 | ssl_ciphers            | Configures allowed encryption algorithms (cipher suites). `HIGH:!aNULL:!MD5` specifies the use of strong cipher suites while excluding some insecure options, such as empty cipher suites and the MD5 hashing algorithm. |
 | ssl_client_certificate | Specifies the path to the Certificate Authority (CA) certificate file used to verify the authenticity of client certificates. |
-| ssl_verify_client      | Enables client certificate verification. When set to `on`, Nginx requires clients to provide valid SSL certificates. |
+| ssl_verify_client      | Enables client certificate verification. When set to `on`, NGINX requires clients to provide valid SSL certificates. |
 | ssl_verify_depth       | Sets the maximum depth for verifying client certificates. Here, it's set to `1`, indicating that only one level of verification beyond the client certificate and CA certificate is performed. |
+
+## More Information
+
+EMQX provides a wealth of resources for learning about NGINX. Check out the following links for more information:
+
+**Blogs:**
+
+- [Harnessing Sticky Sessions in EMQX with NGINX Plus: Using 'Client ID' as the Magic Key](https://www.emqx.com/en/blog/harnessing-sticky-sessions-for-mqtt-load-balancing-with-nginx-plus)
+- [Securing Your MQTT-Based Applications with NGINX Plus's Client ID Substitution and EMQX Enterprise](https://www.emqx.com/en/blog/securing-your-mqtt-based-applications-with-nginx-plus-client-id-substitution-and-emqx-enterprise)
+- [Elevating MQTT security with Client Certificate Authentication in EMQX and NGINX Plus](https://www.emqx.com/en/blog/elevating-mqtt-security-with-client-certificate-authentication)

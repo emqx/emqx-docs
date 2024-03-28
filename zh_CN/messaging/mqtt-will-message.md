@@ -20,7 +20,7 @@ EMQX 实现了 MQTT 的遗嘱消息功能。如果为客户端设置了遗嘱消
 
    ::: tip
 
-   [MQTTX Desktop](./publish-and-subscribe.md/#mqttx-desktop) 中介绍了更多详细的连接创建信息。
+   [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop) 中介绍了更多详细的连接创建信息。
 
    :::
 
@@ -28,11 +28,11 @@ EMQX 实现了 MQTT 的遗嘱消息功能。如果为客户端设置了遗嘱消
 
    将页面下拉，在 **Last Will and Testament** 部分，填写遗嘱消息的配置。
 
-   - **Last-Will Topic**：输入 `offline`。
-   - **Last-Will QoS**：保持默认值 `0`。
-   - **Last-Will Retain**：默认禁用。如果启用，遗嘱消息也将是一个保留消息。
-   - **Last-Will Payload**：输入 `I'm offline`。
-   - **Will Delay Intervals (s)**：设置为 `5` 秒。
+   - **遗嘱消息主题**：输入 `offline`。
+   - **遗嘱消息 QoS**：保持默认值 `0`。
+   - **遗嘱消息保留标志**：默认禁用。如果启用，遗嘱消息也将是一个保留消息。
+   - **遗嘱消息**：输入 `I'm offline`。
+   - **遗嘱消息延迟时间**：设置为 `5` 秒。
 
    其他设置保持默认。点击**连接**按钮。
 

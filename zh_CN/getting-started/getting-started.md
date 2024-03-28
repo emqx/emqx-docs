@@ -119,11 +119,11 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 ::: tab 通过 zip/tar.gz 压缩包快速安装
 
+{% emqxce %}
+
 您也可以选择通过 zip/tar.gz 压缩包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。本节我们将以 [macOS](https://www.emqx.io/zh/downloads?os=macOS) (macOS11 amd64) 为例演示如何下载并安装 EMQX。
 
 由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，**不建议**在生产环境中使用。
-
-{% emqxce %}
 
 1. 在命令行工具中输入如下命令，下载 zip 文件。
 
@@ -141,16 +141,20 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 {% emqxee %}
 
+您也可以选择通过 zip/tar.gz 压缩包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。本节我们将以 [macOS](https://www.emqx.com/zh/try?product=enterprise) (macOS12 amd64) 为例演示如何下载并安装 EMQX。
+
+由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，**不建议**在生产环境中使用。
+
 1. 在命令行工具中输入如下命令，下载 zip 文件。
 
    ```bash
-      wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos11-amd64.zip
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos12-amd64.zip
    ```
 
 2. 通过以下命令安装 EMQX。
 
    ```bash
-   mkdir -p emqx && unzip emqx-enterprise-5.0.0-macos11-amd64.zip -d emqx
+   mkdir -p emqx && unzip emqx-enterprise-5.0.0-macos12-amd64.zip -d emqx
    ```
 
 {% endemqxee %}

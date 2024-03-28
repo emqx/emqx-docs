@@ -68,10 +68,10 @@ If a network partition is detected, EMQX will isolate the affected nodes and con
 
 Cluster node autoclean feature will automatically remove the disconnected nodes from the cluster after the configured time interval. This feature helps to ensure that the cluster is running efficiently and prevent performance degradation over time.
 
-This feature is enabled by default, you can customize the waiting period before removing the disconnected nodes. Default: `5m`
+This feature is enabled by default, you can customize the waiting period before removing the disconnected nodes. Default: `24h`
 
 ```bash
-cluster.autoclean = 5m
+cluster.autoclean = 24h
 ```
 
 ### Session Across Nodes

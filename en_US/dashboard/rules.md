@@ -67,9 +67,9 @@ After completing the editing of the SQL statement and the rule debugging, we can
 1. Console Output, which can print the resulting output to the console, can be used for debugging in the real scene;
 2. Republish, which can republish the output data of the rule processing to the specified topic again.
 
-Using data bridging to forwarding data requires selecting an existing data bridge or creating a new data bridge on the current page. After adding a data bridge to the rule action, the output data of the rule will be forwarded to the corresponding external system resource using the data bridge. The configuration of the data bridge can be referred to [Data Bridge](./bridge.md).
+Using data bridging to forwarding data requires selecting an existing data bridge or creating a new data bridge on the current page. After adding a data bridge to the rule action, the output data of the rule will be forwarded to the corresponding external system resource using the data bridge.
 
-For more details about rule actions, please refer to [Actions](../data-integration/rules.md#actions).
+For more details about rule actions, refer to [Actions](../data-integration/rules.md#how-rule-engine-works).
 
 ![image](./assets/rule-create.png)
 
