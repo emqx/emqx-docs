@@ -2,7 +2,7 @@
 
 ## 5.6.0
 
-*发布日期: 2024-03-27*
+*发布日期: 2024-03-28*
 
 ### 增强
 
@@ -139,7 +139,7 @@
 
   JSON Schema 支持 [Draft 03](http://tools.ietf.org/html/draft-zyp-json-schema-03)、[Draft 04](http://tools.ietf.org/html/draft-zyp-json-schema-04) 和 [Draft 06](https://datatracker.ietf.org/doc/html/draft-wright-json-schema-00)。
 
-- [#12336](https://github.com/emqx/emqx/pull/12336) 通过将通道清理工作隔离到其专用池中，优化了异步任务的管理方式。这种分离解决了在高网络延迟条件下执行通道清理时遇到的性能问题，确保此类任务不会影响其他异步操作（如路由清理）的效率。
+- [#12336](https://github.com/emqx/emqx/pull/12336) 性能提升。创建了一个专门的异步任务处理池来处理客户端会话清理任务。
 
 - [#12725](https://github.com/emqx/emqx/pull/12725) 添加了用于列出可用的 source 类型的 REST API。
 
