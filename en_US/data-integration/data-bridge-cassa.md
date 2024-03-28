@@ -97,7 +97,7 @@ The following steps assume that you run both EMQX and Cassandra on the local mac
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Cassandra server.
 6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Cassandra. For detailed steps, see [Create a Rule with Cassandra Sink](#create-a-rule-with-cassandra-sink).
 
-## Create a Rule for Cassandra Sink
+## Create a Rule with Cassandra Sink
 
 This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`  and saving the processed results to the Cassandra table `mqtt_msg` through an action with configured Sink. 
 

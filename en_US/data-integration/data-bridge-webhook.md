@@ -99,7 +99,7 @@ This section demonstrates how to configure an HTTP server Connector that is used
 
 Now you have created an HTTP Server Connector. Next, you need to create a rule and Sink to specify the data to be written into the HTTP Server.
 
-## Create a Rule for HTTP Server Sink
+## Create a Rule with HTTP Server Sink
 
 This section demonstrates how to create a rule with an HTTP Server Sink added to the rule.
 
@@ -120,7 +120,7 @@ This section demonstrates how to create a rule with an HTTP Server Sink added to
      "t/#"
    ```
 
-5. Click the **+ Add Action** button to define an action that will be triggered by the rule. Select `HTTP Server` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to HTTP Server. 
+5. Click the **+ Add Action** button to define an action to be triggered by the rule. Select `HTTP Server` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to the HTTP Server. 
 
    Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select an HTTP Server action previously created. In this demonstration, you create a new Sink and add it to the rule.
 
@@ -136,7 +136,7 @@ This section demonstrates how to create a rule with an HTTP Server Sink added to
 
 Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new HTTP Server Sink. 
 
-You can also click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to HTTP Server after parsing by the rule `my_rule`. 
+You can also click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to the HTTP Server after parsing by the rule `my_rule`. 
 
 ## Test the Rule
 

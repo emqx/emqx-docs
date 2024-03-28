@@ -147,7 +147,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    :::
 
-4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to PostgreSQL.
+4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to PostgreSQL.
 
 5. Select PostgreSQL from the **Type of Action** drop-down, leave the **Action** drop-down at the default `Create Action` option, or you can select a previously created PostgreSQL action from the Action drop-down box. This example will create a brand new Sink and add it to the rule.
 

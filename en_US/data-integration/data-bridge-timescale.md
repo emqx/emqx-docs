@@ -152,7 +152,7 @@ The instructions below assume that you run both EMQX and TimescaleDG (if self-de
 
 Now you have created a TimescaleDB Connector. Next, you need to create a rule and Sink to specify the data to be written into the TimescaleDB database.
 
-## Create a Rule for TimescaleDB Sink
+## Create a Rule with TimescaleDB Sink
 
 This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and sending the processed results to TimescaleDB via a configured Sink. 
 
@@ -175,7 +175,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-5. Click the **+ Add Action** button to define an action that will be triggered by the rule. Select `TimescaleDB` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to TimescaleDB. 
+5. Click the **+ Add Action** button to define an action to be triggered by the rule. Select `TimescaleDB` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to TimescaleDB. 
 
    Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select a TimescaleDB action previously created. In this demonstration, you create a new Sink and add it to the rule.
 
