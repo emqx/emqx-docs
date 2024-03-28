@@ -85,7 +85,7 @@ The following data systems are only supported in the EMQX enterprise version:
 - [Apache IoTDB](./data-bridge-iotdb.md)
 - [InfluxDB](./data-bridge-influxdb.md)
 - [OpenTSDB](./data-bridge-opents.md)
-- [TimescalesDB](./data-bridge-timescale.md)
+- [TimescaleDB](./data-bridge-timescale.md)
 
 **SQL**
 
@@ -198,7 +198,7 @@ Batch mode allows writing multiple data entries simultaneously into an external 
 
 **Issues:**
 
-- Longer data writing delays: Data will only be written after reaching the set time or number of entries, resulting in longer delays. Note: You can adjust the settings for time or number of entries through the parameters below.
+- Longer data writing delays: Data will only be written after reaching the set time or number of entries, resulting in longer delays. <!--Note: You can adjust the settings for time or number of entries through the parameters below.-->
 - Some delay: Data will not be written immediately until the set time is reached or the accumulated number of data entries is met. This can be adjusted through parameters.
 
 ### Buffer Queue

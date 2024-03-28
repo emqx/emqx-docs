@@ -157,6 +157,7 @@ As the concept of username and password is already defined in the connection mes
 - [Redis Authentication](../access-control/authn/redis.md)
 - [HTTP Server Authentication](../access-control/authn/http.md)
 - [JWT Authentication](../access-control/authn/jwt.md)
+- [LDAP Authentication](../access-control/authn/ldap.md)
 
 Stomp gateway uses the information in the `CONNECT` or `STOMP` message of the STOMP protocol to generate the authentication fields for the client:
 

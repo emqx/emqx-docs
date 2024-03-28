@@ -21,7 +21,7 @@ EMQX 实现了 MQTT 的保留消息功能。您可以将某个特定主题下发
 
    ::: tip
 
-   [MQTTX Desktop](./publish-and-subscribe.md/#mqttx-) 中介绍了更多详细的连接创建信息。
+   [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop) 中介绍了更多详细的连接创建信息。
 
    :::
 

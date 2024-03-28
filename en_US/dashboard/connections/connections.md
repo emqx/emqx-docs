@@ -1,6 +1,6 @@
 # Connections
 
-Users can view clients currently connecting to the broker or session which has not expired and can view detailed information and metrics for a client. You can use [MQTTX](https://mqttx.app/) as a client to connect to EMQX for publishing subscriptions. You can also quickly implement a client connection to EMQX using the [client libraries available in each language](https://www.emqx.io/docs/en/v5.0/development/client.html).
+Users can view clients currently connecting to the broker or session which has not expired and can view detailed information and metrics for a client. You can use [MQTTX](https://mqttx.app/) as a client to connect to EMQX for publishing subscriptions. You can also quickly implement a client connection to EMQX using the [client libraries available in each language](../../connect-emqx/introduction.md).
 
 ## Connection List
 

@@ -12,7 +12,7 @@
 
 EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实现基于 SAML 的单点登录：
 
-- [Okta](https://www.openldap.org/)
+- [Okta](https://www.okta.com/)
 - [OneLogin](https://www.onelogin.com/)
 
 其他身份提供商正在适配中，将在后续版本提供。

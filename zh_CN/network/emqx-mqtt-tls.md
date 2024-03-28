@@ -19,7 +19,7 @@ SSL/TLS 加密功能会在传输层对网络连接进行加密，它能在提升
 | 使用方式                                  | 优势                                       | 缺点                                                                                                                |
 | ----------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
 | 在 EMQX 上开启 SSL/TLS | 简单易用，不需要额外的组件。               | 会增加 EMQX 的资源消耗，如果连接数量巨大，可能会导致较高的 CPU 和内存消耗。                                         |
-| 通过代理或负载均衡终结 TLS 连接           | 不影响 EMQX 性能，同时提供了负载均衡能力。 | 需要额外部署 [HAProxy](../deploy/cluster/lb-haproxy.md)、[Nginx](../deploy/cluster/lb-nginx.md) 或使用[云厂商负载均衡服务](../deploy/cluster/lb.md#公有云厂商-lb-产品)，其中只有部分云厂商支持 TCP SSL/TLS 终结。 |
+| 通过代理或负载均衡终结 TLS 连接           | 不影响 EMQX 性能，同时提供了负载均衡能力。 | 需要额外部署 [HAProxy](../deploy/cluster/lb-haproxy.md)、[NGINX](../deploy/cluster/lb-nginx.md) 或使用[云厂商负载均衡服务](../deploy/cluster/lb.md#公有云厂商-lb-产品)，其中只有部分云厂商支持 TCP SSL/TLS 终结。 |
 
 有关如何通过代理或负载均衡终结 TLS 连接，请参考[集群负载均衡](../deploy/cluster/lb.md)。
 
@@ -94,7 +94,7 @@ EMQX 默认在 `8883` 端口启用了 SSL/TLS 监听器并设置其为单向认�
 
 ## 单向认证客户端测试
 
-您可以使用 [MQTTX CLI](https://mqttx.app/) 进行测试，单向认证通常需要客户端提供 CA 证书，以便客户端验证服务器的身份：
+您可以使用 [MQTTX CLI](https://mqttx.app/zh/cli) 进行测试，单向认证通常需要客户端提供 CA 证书，以便客户端验证服务器的身份：
 
 ```bash
 mqttx sub -t 't/1' -h localhost -p 8883 \
@@ -142,7 +142,7 @@ mqttx sub -t 't/1' -h localhost -p 8883 \
 
 ## 双向认证客户端测试
 
-您可以使用 [MQTTX CLI](https://mqttx.app/) 进行测试，双向认证除了需要客户端提供 CA 证书外，还应当提供客户端证书：
+您可以使用 [MQTTX CLI](https://mqttx.app/zh/cli) 进行测试，双向认证除了需要客户端提供 CA 证书外，还应当提供客户端证书：
 
 ```bash
 mqttx sub -t 't/1' -h localhost -p 8883 \

@@ -36,7 +36,7 @@ The topic `a/1` is configured as the auto-subscribe topic in [Configure Auto Sub
 
 :::tip Prerequisite
 
-Basic publishing and subscribing operations using [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop)
+Basic publishing and subscribing operations using [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
 
 :::
 
@@ -83,7 +83,7 @@ Basic publishing and subscribing operations using [MQTTX CLI](./publish-and-subs
 1. Create a new connection with client ID as `emqx_c`.
 
    ```bash
-   mqttx conn -c emqx_c
+   mqttx conn -i emqx_c
    ```
 
 2. Go to EMQX Dashboard. Click **Monitoring** ->**Subscriptions** in the left navigation menu. It shows the client `emqx_c` subscribes to the topic `a/1`.

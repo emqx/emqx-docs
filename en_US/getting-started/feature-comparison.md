@@ -912,8 +912,6 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
-
-
 ## Rule Engine
 
 <div style="text-align: center;">
@@ -969,7 +967,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><b>JSON Codec</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
@@ -992,6 +990,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 
 ## Extensibility
 

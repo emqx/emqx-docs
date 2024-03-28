@@ -217,7 +217,7 @@
       children:
         - access-control/authn/x509
         - access-control/authn/jwt
-        - title_en: Password based
+        - title_en: Password-Based Authentication
           title_cn: 密码认证
           path: access-control/authn/pwoverview
           collapsed: true

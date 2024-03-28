@@ -236,7 +236,7 @@ The CLI command to stop rebalancing is:
 emqx ctl rebalance stop
 ```
 
-**Example**
+Below is an example of the returned results:
 
 ```bash
 ./bin/emqx ctl rebalance stop

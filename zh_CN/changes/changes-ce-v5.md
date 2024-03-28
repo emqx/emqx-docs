@@ -451,8 +451,6 @@
 
 *发布日期: 2023-12-01*
 
-*发布日期: 2023-11-30*
-
 ### 增强
 
 - [#11752](https://github.com/emqx/emqx/pull/11752) 将 core-replica 数据库同步的默认 RPC 驱动从 `gen_rpc` 更改为 `rpc`。
@@ -494,8 +492,6 @@
 - [#11754](https://github.com/emqx/emqx/pull/11754) 改进了 Postgres 桥接的日志格式化功能，针对驱动程序返回的错误消息中的 Unicode 字符进行了处理。
 
 ## 5.3.1
-
-*发布日期: 2023-11-14*
 
 *发布日期: 2023-11-14*
 
@@ -559,8 +555,6 @@
 
 *发布日期: 2023-09-29*
 
-*发布日期: 2023-09-29*
-
 ### 增强
 
 - [#11597](https://github.com/emqx/emqx/pull/11597)  将 Ekka 升级到 0.15.13，包括以下增强：
@@ -619,8 +613,6 @@
 
 *发布日期: 2023-09-20*
 
-*发布日期: 2023-09-20*
-
 ### 增强
 
 - [#11487](https://github.com/emqx/emqx/pull/11487) 将认证功能中，基于 bcrypt 算法的密码加密的计算强度因子 (work factor) 限制在5-10的范围内，因为较高的值会消耗太多 CPU 资源。Bcrypt 库已更新以允许并行哈希计算。
@@ -647,8 +639,6 @@
 - [#11630](https://github.com/emqx/emqx/pull/11630) 修复了核心节点可能会卡在 `mria_schema:bootstrap/0` 状态，导致新节点加入集群失败。
 
 ## 5.2.0
-
-*发布日期: 2023-09-11*
 
 *发布日期: 2023-09-07*
 
@@ -745,8 +735,6 @@
 - [#11527](https://github.com/emqx/emqx/pull/11527) 修复了与 Kafka header 模板处理相关的问题。该问题发生在占位符解析为键值对数组时（例如：`[{"key": "foo", "value": "bar"}]`）。
 
 ## 5.1.1
-
-*发布日期: 2023-07-05*
 
 *发布日期: 2023-07-27*
 
@@ -1092,1970 +1080,888 @@
 
 ## 5.0.26
 
-*发布日期: 2023-05-29*
+*发布日期：2023-05-29*
 
-### Enhancements
+### 增强
 
-- [#10584](https://github.com/emqx/emqx/pull/10584) Add log level configuration to SSL communication
+- [#10584](https://github.com/emqx/emqx/pull/10584) 为 SSL 通信添加日志级别配置
+- [#10702](https://github.com/emqx/emqx/pull/10702) 引入更直观的配置选项 `keepalive_multiplier` 并废弃旧的 `keepalive_backoff` 配置。经过此次增强，EMQX 通过将“客户端请求的保活间隔”乘以 `keepalive_multiplier` 来检查客户端的保活超时状态。
+- [#10713](https://github.com/emqx/emqx/pull/10713) 我们隐藏了 webhook 的 resource_option 中的 request_timeout，使其与 webhook 的 http request_timeout 保持一致。从现在开始，通过 API 或配置文件配置 webhook 时，不再需要配置资源的 request_timeout。只需配置 http request_timeout 即可，资源中的 request_timeout 将自动与 http request_timeout 保持一致。
+- [#10511](https://github.com/emqx/emqx/pull/10511) 通过在数据中掩盖敏感信息，提高某些资源日志的安全性和隐私性。
+- [#10678](https://github.com/emqx/emqx/pull/10678) 优化计数器增加调用，避免增量为零时的工作。
+- [#10690](https://github.com/emqx/emqx/pull/10690) 为 webhook 桥接添加了重试机制，尝试提高吞吐量。这种优化在高消息率的情况下，通过不阻塞缓冲层重试请求失败，可以提高吞吐量。
+- [#10698](https://github.com/emqx/emqx/pull/10698) 优化运行时访问配置时的内存使用。
 
-- [#10702](https://github.com/emqx/emqx/pull/10702) Introduce a more straightforward configuration option `keepalive_multiplier` and
-  deprecate the old `keepalive_backoff` configuration.
-  After this enhancement, EMQX checks the client's keepalive timeout status
-  period by multiplying the "Client Requested Keepalive Interval" with `keepalive_multiplier`.
+### 修复
 
-- [#10713](https://github.com/emqx/emqx/pull/10713) We hide the request_timeout in resource_option of the webhook to keep it consistent with the http request_timeout of the webhook.
-  From now on, when configuring a webhook through API or configuration files,
-  it is no longer necessary to configure the request_timeout of the resource. Only configuring the http request_timeout is sufficient, and the request_timeout in the resource will automatically be consistent with the http request_timeout.
-
-- [#10511](https://github.com/emqx/emqx/pull/10511) Improve the security and privacy of some resource logs by masking sensitive information in the data.
-
-- [#10678](https://github.com/emqx/emqx/pull/10678) Optimized counter increment calls to avoid work if increment is zero.
-
-- [#10690](https://github.com/emqx/emqx/pull/10690) Added a retry mechanism to webhook bridge that attempts to improve throughput.
-
-  This optimization retries request failures without blocking the buffering layer, which can improve throughput in situations of high messaging rate.
-
-- [#10698](https://github.com/emqx/emqx/pull/10698) Optimize memory usage when accessing the configuration during runtime.
-
-### Bug Fixes
-
-- [#10340](https://github.com/emqx/emqx/pull/10340) Fixed the issue that could lead to crash logs being printed when stopping EMQX via systemd.
-
-- [#10563](https://github.com/emqx/emqx/pull/10563) Corrected an issue where the no_local flag was not functioning correctly.
-
-- [#10600](https://github.com/emqx/emqx/pull/10600) Deleted emqx_statsd application.
-
-- [#10653](https://github.com/emqx/emqx/pull/10653) Store gateway authentication TLS certificates and keys in the data directory.
-
-- [#10677](https://github.com/emqx/emqx/pull/10677) In Rule API, reapond with 404 HTTP error code when trying to delete a rule that does not exist.
-
-- [#10682](https://github.com/emqx/emqx/pull/10682) Fix the timestamp for the will message is incorrectly assigned at the session creation time, now this timestamp is the disconnected time of the session.
-
-- [#10701](https://github.com/emqx/emqx/pull/10701) RPM package for Amazon Linux 2 did not support TLS v1.3 as it was assembled with Erlang/OTP built with openssl 1.0.
-
-- [#10715](https://github.com/emqx/emqx/pull/10715) Postpone trimming the connection information structure until after `client.connected` hooks have been executed. These hooks once again have access to the client's peer certificate.
-
-- [#10717](https://github.com/emqx/emqx/pull/10717) Fixed an issue where the buffering layer processes could use a lot of CPU when inflight window is full.
-
-- [#10724](https://github.com/emqx/emqx/pull/10724) A summary has been added for all endpoints in the HTTP API documentation (accessible at "http://emqx_host_name:18083/api-docs").
-
-- [#10726](https://github.com/emqx/emqx/pull/10726) Validate Health Check Interval and Auto Restart Interval against the range from 1ms to 1 hour.
-
-- [#10728](https://github.com/emqx/emqx/pull/10728) Fixed an issue where the rule engine was unable to access variables exported by `FOREACH` in the `DO` clause.
-
-  Given a payload: `{"date": "2023-05-06", "array": ["a"]}`, as well as the following SQL statement:
-
-  ```
-  FOREACH payload.date as date, payload.array as elem
-  DO date, elem
-  FROM "t/#"
-  ```
-
-  Prior to the fix, the `date` variable exported by `FOREACH` could not be accessed in the `DO` clause of the above SQL, resulting in the following output for the SQL statement:
-  `[{"elem": "a","date": "undefined"}]`.
-  After the fix, the output of the SQL statement is: `[{"elem": "a","date": "2023-05-06"}]`
-
-- [#10737](https://github.com/emqx/emqx/pull/10737) Fix the issue where the HTTP API interface of Gateway cannot handle ClientIDs with
-  special characters, such as: `!@#$%^&*()_+{}:"<>?/`.
-
-- [#10742](https://github.com/emqx/emqx/pull/10742) Check the correctness of the rules before saving the authorization file source.
-  Previously, Saving wrong rules could lead to restart failure.
-
-- [#10743](https://github.com/emqx/emqx/pull/10743) Fixes an issue where trying to get a bridge info or metrics could result in a crash when a node is joining a cluster.
-
-- [#10746](https://github.com/emqx/emqx/pull/10746) Add missing support of the event `$events/delivery_dropped` into the rule engine test API `rule_test`.
-
-- [#10747](https://github.com/emqx/emqx/pull/10747) Refactor date and time functions, `format_date` and `date_to_unix_ts`, in the rule engine to fix the implementation problem.
-
-- [#10755](https://github.com/emqx/emqx/pull/10755) Fixed data bridge resource update race condition.
-
-  In the 'delete + create' process for EMQX resource updates,
-  long bridge creation times could cause dashboard request timeouts.
-  If a bridge resource update was initiated before completion of its creation,
-  it led to an erroneous deletion from the runtime, despite being present in the config file.
-
-  This fix addresses the race condition in bridge resource updates,
-  ensuring the accurate identification and addition of new resources,
-  maintaining consistency between runtime and configuration file statuses.
-
-- [#10760](https://github.com/emqx/emqx/pull/10760) Fix Internal Error 500 that occurred sometimes when bridge statistics page was updated while a node was (re)joining the cluster.
-
-- [#10761](https://github.com/emqx/emqx/pull/10761) Fixing the issue where the default value of SSL certificate for Dashboard Listener was not correctly interpolated, which caused HTTPS to be inaccessible when verify_peer and cacertfile were using the default configuration.
-
-- [#10785](https://github.com/emqx/emqx/pull/10785) Ensure `EMQX_LOG_DIR` is set by Windows boot script.
-
-  The environment variable `EMQX_LOG_DIR` was missing in v5.0.25, caused EMQX Windows package fail to boot unless set by sysadmin.
-
-- [#10801](https://github.com/emqx/emqx/pull/10801) Avoid duplicated percent decode the topic name in API `/topics/{topic}` and `/topics`.
-
-- [#10809](https://github.com/emqx/emqx/pull/10809) Address `** ERROR ** Mnesia post_commit hook failed: error:badarg` error messages happening during node shutdown or restart.
-  Mria pull request: https://github.com/emqx/mria/pull/142
-
-- [#10817](https://github.com/emqx/emqx/pull/10817) Fix the error of not being able to configure `auto_restart_interval` as infinity
-
-- [#10818](https://github.com/emqx/emqx/pull/10818) Fixing `emqx_ctl traces` command.
-
-- [#10820](https://github.com/emqx/emqx/pull/10820) In case the cluster updated license before the new node join in. The new node will not apply the updated license.
-  After this change, the new joined node will use the cluster's license key.
-
-  Sometimes the new node must start with a outdated license.
-  e.g. use emqx-operator deployed and needed to scale up after license expired.
-  At the time the cluster's license key already updated by API/CLI, but the new node won't use it.
-
-- [#10833](https://github.com/emqx/emqx/pull/10833) Only include enabled authenticators and authorizers in telemetry report, not all of them.
-
-- [#10851](https://github.com/emqx/emqx/pull/10851) Obfuscated sensitive data in the bad API logging.
+- [#10340](https://github.com/emqx/emqx/pull/10340) 修复了通过 systemd 停止 EMQX 时可能导致崩溃日志打印的问题。
+- [#10563](https://github.com/emqx/emqx/pull/10563) 修正了 no_local 标志未正确工作的问题。
+- [#10600](https://github.com/emqx/emqx/pull/10600) 删除了 emqx_statsd 应用。
+- [#10653](https://github.com/emqx/emqx/pull/10653) 将网关认证 TLS 证书和密钥存储在数据目录中。
+- [#10677](https://github.com/emqx/emqx/pull/10677) 在规则 API 中，尝试删除不存在的规则时，使用 404 HTTP 错误码响应。
+- [#10682](https://github.com/emqx/emqx/pull/10682) 修复了遗嘱消息的时间戳错误地在会话创建时分配，现在这个时间戳是会话断开连接的时间。
+- [#10701](https://github.com/emqx/emqx/pull/10701) Amazon Linux 2 的 RPM 包不支持 TLS v1.3，因为它是用 openssl 1.0 构建的 Erlang/OTP 组装的。
+- [#10715](https://github.com/emqx/emqx/pull/10715) 将连接信息结构的修剪推迟到 `client.connected` 钩子执行之后。这些钩子再次可以访问客户端的对等证书。
+- [#10717](https://github.com/emqx/emqx/pull/10717) 修复了当 inflight 窗口满时，缓冲层进程可能会使用大量 CPU 的问题。
+- [#10724](https://github.com/emqx/emqx/pull/10724) 为 HTTP API 文档的所有端点添加了摘要（可在 "http://emqx_host_name:18083/api-docs" 访问）。
+- [#10726](https://github.com/emqx/emqx/pull/10726) 验证健康检查间隔和自动重启间隔在 1ms 到 1 小时的范围内。
+- [#10728](https://github.com/emqx/emqx/pull/10728) 修复了规则引擎无法访问 `FOREACH` 在 `DO` 子句中导出的变量的问题。
+- [#10737](https://github.com/emqx/emqx/pull/10737) 修复了网关的 HTTP API 接口无法处理包含特殊字符的 ClientIDs 的问题，例如：`!@#$%^&*()_+{}:"<>?/`。
+- [#10742](https://github.com/emqx/emqx/pull/10742) 在保存授权文件源之前检查规则的正确性。以前，保存错误的规则可能导致重启失败。
+- [#10743](https://github.com/emqx/emqx/pull/10743) 修复了尝试获取桥接信息或指标可能导致在节点加入集群时崩溃的问题。
+- [#10746](https://github.com/emqx/emqx/pull/10746) 在规则引擎测试 API `rule_test` 中添加缺失的事件 `$events/delivery_dropped` 支持。
+- [#10747](https://github.com/emqx/emqx/pull/10747) 在规则引擎中重构日期和时间函数 `format_date` 和 `date_to_unix_ts`，以修复实现问题。
+- [#10755](https://github.com/emqx/emqx/pull/10755) 修复了数据桥接资源更新的竞态条件。
+- [#10760](https://github.com/emqx/emqx/pull/10760) 修复了有时在节点（重新）加入集群时更新桥接统计页面时发生的内部错误 500。
+- [#10761](https://github.com/emqx/emqx/pull/10761) 修复了 Dashboard监听器的 SSL 证书默认值未正确插值的问题，导致在使用默认配置的 verify_peer 和 cacertfile 时 HTTPS 不可访问。
+- [#10785](https://github.com/emqx/emqx/pull/10785) 确保 Windows 启动脚本设置了 `EMQX_LOG_DIR`。
+- [#10801](https://github.com/emqx/emqx/pull/10801) 避免在 API `/topics/{topic}` 和 `/topics` 中重复解码主题名称。
+- [#10809](https://github.com/emqx/emqx/pull/10809) 解决在节点关闭或重启期间发生的 `** ERROR ** Mnesia post_commit hook failed: error:badarg` 错误消息。Mria 拉取请求：https://github.com/emqx/mria/pull/142
+- [#10817](https://github.com/emqx/emqx/pull/10817) 修复无法将 `auto_restart_interval` 配置为无限的错误
+- [#10818](https://github.com/emqx/emqx/pull/10818) 修复 `emqx_ctl traces` 命令。
+- [#10820](https://github.com/emqx/emqx/pull/10820) 如果集群在新节点加入前更新了许可证。新加入的节点将不会应用更新后的许可证。此更改后，新加入的节点将使用集群的许可证密钥。
+- [#10833](https://github.com/emqx/emqx/pull/10833) 在遥测报告中只包括启用的认证器和授权器，而不是全部。
+- [#10851](https://github.com/emqx/emqx/pull/10851) 在 API 日志记录中隐藏敏感数据。
 
 ## 5.0.25
 
-*发布日期: 2023-05-12*
+*发布日期：2023-05-12*
 
-### Enhancements
+### 增强
 
-- [#10568](https://github.com/emqx/emqx/pull/10568) Add shutdown counter information to `emqx ctl listeners` command
+- [#10568](https://github.com/emqx/emqx/pull/10568) 在 `emqx ctl listeners` 命令中添加关闭计数器信息
 
-- [#10571](https://github.com/emqx/emqx/pull/10571) Do not emit useless crash report when EMQX stops.
-  Previously, when EMQX (and `emqx_topic_metrics` in particular) stopped and removed underlying tables, some messages were still being handled and crashed.
+- [#10571](https://github.com/emqx/emqx/pull/10571) 当 EMQX 停止时不产生无用的崩溃报告。以前，当 EMQX（特别是 `emqx_topic_metrics`）停止并移除底层表时，一些消息仍在处理中并导致崩溃。
 
-- [#10588](https://github.com/emqx/emqx/pull/10588) Increase the time precision of trace logs from second to microsecond.
-  For example, change from `2023-05-02T08:43:50+00:00` to `2023-05-02T08:43:50.237945+00:00`.
+- [#10588](https://github.com/emqx/emqx/pull/10588) 将跟踪日志的时间精度从秒增加到微秒。例如，从 `2023-05-02T08:43:50+00:00` 改为 `2023-05-02T08:43:50.237945+00:00`。
 
-- [#10623](https://github.com/emqx/emqx/pull/10623) Renamed `max_message_queue_len` to `max_mailbox_size` in the `force_shutdown` configuration. Old name is kept as an alias, so this change is backward compatible.
+- [#10623](https://github.com/emqx/emqx/pull/10623) 在 `force_shutdown` 配置中将 `max_message_queue_len` 重命名为 `max_mailbox_size`。旧名称作为别名保留，因此此更改向后兼容。
 
-- [#10417](https://github.com/emqx/emqx/pull/10417) Improve get config performance by eliminating temporary references.
+- [#10417](https://github.com/emqx/emqx/pull/10417) 通过消除临时引用来提高获取配置性能。
 
-- [#10525](https://github.com/emqx/emqx/pull/10525) Reduce resource usage per MQTT packet handling.
+- [#10525](https://github.com/emqx/emqx/pull/10525) 减少每个 MQTT 包处理的资源使用。
 
-- [#10528](https://github.com/emqx/emqx/pull/10528) Reduce memory footprint in hot code path.
+- [#10528](https://github.com/emqx/emqx/pull/10528) 在热代码路径中减少内存占用。
 
-- [#10573](https://github.com/emqx/emqx/pull/10573) Improved performance of Webhook bridge when using synchronous query mode.
-  This also should improve the performance of other bridges when they are configured with no batching.
+- [#10573](https://github.com/emqx/emqx/pull/10573) 当使用同步查询模式时，提高了 Webhook 桥接的性能。这也应该提高其他桥接在未配置批处理时的性能。
 
-- [#10591](https://github.com/emqx/emqx/pull/10591) Improve the configuration of the limiter.
+- \#10591
 
-  - Simplify the memory representation of the limiter configuration.
-  - Make sure the node-level limiter can really work when the listener's limiter configuration is omitted.
+   改进限制器的配置。
 
-- [#10625](https://github.com/emqx/emqx/pull/10625) Simplify limiter configuration.
-  - Reduce the complexity of the limiter's configuration.
-    e.g. now users can use `limiter.messages_rate = 1000/s` to quickly set the node-level limit for the message publish.
-  - Update the `configs/limiter` API to suit this refactor.
+  - 简化限制器配置的内存表示。
+  - 确保当省略监听器的限制器配置时，节点级限制器确实可以工作。
 
-### Bug Fixes
+- \#10625
 
-- [#10548](https://github.com/emqx/emqx/pull/10548) Fixed a race condition in the HTTP driver that would result in an error rather than a retry of the request.
-  Related fix in the driver: https://github.com/emqx/ehttpc/pull/45
+   简化限制器配置。
 
-- [#10556](https://github.com/emqx/emqx/pull/10556) Wrap potentially sensitive data in `emqx_connector_http` if `Authorization` headers are being passed at initialization.
+  - 减少限制器配置的复杂性。例如，现在用户可以使用 `limiter.messages_rate = 1000/s` 快速设置消息发布的节点级限制。
+  - 更新 `configs/limiter` API 以适应此重构。
 
-- [#10659](https://github.com/emqx/emqx/pull/10659) Fix the issue where emqx cannot start when `sysmon.os.mem_check_interval` is disabled.
+### 修复
+
+- [#10548](https://github.com/emqx/emqx/pull/10548) 修复了 HTTP 驱动中的一个竞态条件，该条件会导致错误而不是重试请求。相关驱动修复：https://github.com/emqx/ehttpc/pull/45
+- [#10556](https://github.com/emqx/emqx/pull/10556) 如果在初始化时传递了 `Authorization` 头，则在 `emqx_connector_http` 中包装潜在敏感数据。
+- [#10659](https://github.com/emqx/emqx/pull/10659) 修复了当 `sysmon.os.mem_check_interval` 被禁用时，emqx 无法启动的问题。
 
 ## 5.0.24
 
-*发布日期: 2023-04-26*
+*发布日期：2023-04-26*
 
-### Enhancements
+### 增强
 
-- [#10457](https://github.com/emqx/emqx/pull/10457) Deprecates the integration with StatsD.
+- [#10457](https://github.com/emqx/emqx/pull/10457) 废弃与 StatsD 的集成。似乎没有用户使用 StatsD 集成，因此我们决定暂时隐藏此功能。我们将根据未来的需求决定是移除还是复活它。
+- [#10458](https://github.com/emqx/emqx/pull/10458) 将插件配置选项的级别设置为低级别，在大多数情况下，用户只需要在 Dashboard上管理插件，无需手动修改，因此我们降低了级别。
+- [#10491](https://github.com/emqx/emqx/pull/10491) 将 `etcd.ssl` 重命名为 `etcd.ssl_options` 以保持配置文件中所有 SSL 选项的一致性。
+- [#10512](https://github.com/emqx/emqx/pull/10512) 改进数据文件中 Unicode 字符的存储格式，现在我们可以正常存储 Unicode 字符。例如："SELECT * FROM "t/1" WHERE clientid = "-测试专用-""
+- [#10487](https://github.com/emqx/emqx/pull/10487) 优化速率为 `infinity` 的限制器实例以减少内存和 CPU 使用。
+- [#10490](https://github.com/emqx/emqx/pull/10490) 移除了默认的连接速率限制，以前默认为 `1000/s`
 
-  There seemd to be no user using StatsD integration, so we have decided to hide this feature
-  for now. We will either remove or revive it based on requirements in the future.
+### 修复
 
-- [#10458](https://github.com/emqx/emqx/pull/10458) Set the level of plugin configuration options to low level,
-  in most cases, users only need to manage plugins on the dashboard
-  without the need for manual modification, so we lowered the level.
+- [#10407](https://github.com/emqx/emqx/pull/10407) 通过使用 Mnesia 脏操作和避免从 `emqx_resource_manager` 不必要的调用来重新激活已激活的警报来改善 `emqx_alarm` 的性能。使用新的安全 `emqx_alarm` API 激活/停用警报，以确保 `emqx_resource_manager` 不会因为警报超时而崩溃。当以下条件同时发生时，可能会出现崩溃：
 
-- [#10491](https://github.com/emqx/emqx/pull/10491) Rename `etcd.ssl` to `etcd.ssl_options` to keep all of SSL options consistent in the configuration file.
+  - 相对较高数量的失败资源，例如桥接尝试在重复错误时激活警报；
+  - 系统经历非常高的负载。
 
-- [#10512](https://github.com/emqx/emqx/pull/10512) Improved the storage format of Unicode characters in data files,
-  Now we can store Unicode characters normally.
-  For example: "SELECT \* FROM \"t/1\" WHERE clientid = \"-测试专用-\""
+- [#10420](https://github.com/emqx/emqx/pull/10420) 修复在认证和授权模块中组合 HTTP 请求 URL 时处理 HTTP 路径的问题。
 
-- [#10487](https://github.com/emqx/emqx/pull/10487) Optimize the instance of limiter for whose rate is `infinity` to reduce memory and CPU usage.
+  - 避免不必要的 URL 规范化，因为我们不能假设外部服务器将原始 URL 和规范化 URL 视为等同。这导致了像 [#10411](https://github.com/emqx/emqx/issues/10411) 这样的错误。
+  - 修复路径段可能被 HTTP 编码两次的问题。
 
-- [#10490](https://github.com/emqx/emqx/pull/10490) Remove the default limit of connect rate which used to be `1000/s`
+- [#10422](https://github.com/emqx/emqx/pull/10422) 修复了独立节点集群中无法通过环境变量配置外部插件的错误。
 
-### Bug Fixes
+- [#10448](https://github.com/emqx/emqx/pull/10448) 修复了 v5.0.23 引入的限制器配置兼容性问题，如果 `capacity` 为 `infinity`，则破坏了从以前版本升级的能力。在 v5.0.23 中，我们用 `burst` 替换了 `capacity`。此修复后，`capacity = infinity` 配置将自动转换为等价的 `burst = 0`。
 
-- [#10407](https://github.com/emqx/emqx/pull/10407) Improve 'emqx_alarm' performance by using Mnesia dirty operations and avoiding
-  unnecessary calls from 'emqx_resource_manager' to reactivate alarms that have been already activated.
-  Use new safe 'emqx_alarm' API to activate/deactivate alarms to ensure that emqx_resource_manager
-  doesn't crash because of alarm timeouts.
-  The crashes were possible when the following conditions co-occurred:
+- [#10449](https://github.com/emqx/emqx/pull/10449) 在创建认证 HTTP (`authn_http`) 时，验证 `ssl_options` 和头部配置。在此之前，错误的 `ssl` 配置可能导致成功创建但整个 authn 不可用。
 
-  - a relatively high number of failing resources, e.g. bridges tried to activate alarms on re-occurring errors;
-  - the system experienced a very high load.
+- [#10455](https://github.com/emqx/emqx/pull/10455) 修复了可能导致日志中（否则无害的）噪声的问题。在一些特别慢的同步调用桥接期间，一些迟到的回复可能被发送到不再期待回复的连接进程，然后发出类似错误日志：
 
-- [#10420](https://github.com/emqx/emqx/pull/10420) Fix HTTP path handling when composing the URL for the HTTP requests in authentication and authorization modules.
-
-  - Avoid unnecessary URL normalization since we cannot assume that external servers treat original and normalized URLs equally. This led to bugs like [#10411](https://github.com/emqx/emqx/issues/10411).
-  - Fix the issue that path segments could be HTTP encoded twice.
-
-- [#10422](https://github.com/emqx/emqx/pull/10422) Fixed a bug where external plugins could not be configured via environment variables in a lone-node cluster.
-
-- [#10448](https://github.com/emqx/emqx/pull/10448) Fix a compatibility issue of limiter configuration introduced by v5.0.23 which broke the upgrade from previous versions if the `capacity` is `infinity`.
-
-  In v5.0.23 we have replaced `capacity` with `burst`. After this fix, a `capacity = infinity` config will be automatically converted to equivalent `burst = 0`.
-
-- [#10449](https://github.com/emqx/emqx/pull/10449) Validate the ssl_options and header configurations when creating authentication http (`authn_http`).
-  Prior to this, incorrect `ssl` configuration could result in successful creation but the entire authn being unusable.
-
-- [#10455](https://github.com/emqx/emqx/pull/10455) Fixed an issue that could cause (otherwise harmless) noise in the logs.
-
-  During some particularly slow synchronous calls to bridges, some late replies could be sent to connections processes that were no longer expecting a reply, and then emit an error log like:
-
-  ```
+  ```yaml
   2023-04-19T18:24:35.350233+00:00 [error] msg: unexpected_info, mfa: emqx_channel:handle_info/2, line: 1278, peername: 172.22.0.1:36384, clientid: caribdis_bench_sub_1137967633_4788, info: {#Ref<0.408802983.1941504010.189402>,{ok,200,[{<<"cache-control">>,<<"max-age=0, ...">>}}
   ```
 
-  Those logs are harmless, but they could flood and worry the users without need.
+  这些日志是无害的，但它们可能无需地让用户担忧。
 
-- [#10462](https://github.com/emqx/emqx/pull/10462) Deprecate config `broker.shared_dispatch_ack_enabled`.
-  This was designed to avoid dispatching messages to a shared-subscription session which has the client disconnected.
-  However since v5.0.9, this feature is no longer useful because the shared-subscrption messages in a expired session will be redispatched to other sessions in the group.
-  See also: https://github.com/emqx/emqx/pull/9104
+- [#10462](https://github.com/emqx/emqx/pull/10462) 废弃配置 `broker.shared_dispatch_ack_enabled`。这是设计来避免向已断开客户端的共享订阅会话分发消息。然而，自 v5.0.9 起，此功能不再有用，因为过期会话中的共享订阅消息将被重新分发给组中的其他会话。参见：https://github.com/emqx/emqx/pull/9104
 
-- [#10463](https://github.com/emqx/emqx/pull/10463) Improve bridges API error handling.
-  If Webhook bridge URL is not valid, bridges API will return '400' error instead of '500'.
+- [#10463](https://github.com/emqx/emqx/pull/10463) 改进桥接 API 错误处理。如果 Webhook 桥接 URL 无效，桥接 API 将返回 '400' 错误而不是 '500'。
 
-- [#10484](https://github.com/emqx/emqx/pull/10484) Fix the issue that the priority of the configuration cannot be set during rolling upgrade.
-  For example, when authorization is modified in v5.0.21 and then upgraded v5.0.23 through rolling upgrade,
-  the authorization will be restored to the default.
+- [#10484](https://github.com/emqx/emqx/pull/10484) 修复了在滚动升级期间无法设置配置优先级的问题。例如，当在 v5.0.21 中修改授权然后通过滚动升级升级到 v5.0.23 时，授权将被恢复为默认设置。
 
-- [#10495](https://github.com/emqx/emqx/pull/10495) Add the limiter API `/configs/limiter` which was deleted by mistake back.
+- [#10495](https://github.com/emqx/emqx/pull/10495) 误删的限制器 API `/configs/limiter` 被加回。
 
-- [#10500](https://github.com/emqx/emqx/pull/10500) Add several fixes, enhancements and features in Mria:
+- [#10500](https://github.com/emqx/emqx/pull/10500) 在 Mria 中添加了几个修复、增强和功能：
 
-  - protect `mria:join/1,2` with a global lock to prevent conflicts between
-    two nodes trying to join each other simultaneously
-    [Mria PR](https://github.com/emqx/mria/pull/137)
-  - implement new function `mria:sync_transaction/4,3,2`, which blocks the caller until
-    a transaction is imported to the local node (if the local node is a replicant, otherwise,
-    it behaves exactly the same as `mria:transaction/3,2`)
-    [Mria PR](https://github.com/emqx/mria/pull/136)
-  - optimize `mria:running_nodes/0`
-    [Mria PR](https://github.com/emqx/mria/pull/135)
-  - optimize `mria:ro_transaction/2` when called on a replicant node
-    [Mria PR](https://github.com/emqx/mria/pull/134).
+  - 使用全局锁保护 `mria:join/1,2`，以防止两个节点同时尝试加入对方时发生冲突 [Mria PR](https://github.com/emqx/mria/pull/137)
+  - 实现新函数 `mria:sync_transaction/4,3,2`，该函数阻塞调用者直到事务被导入到本地节点（如果本地节点是副本，则行为完全相同如 `mria:transaction/3,2`）[Mria PR](https://github.com/emqx/mria/pull/136)
+  - 优化 `mria:running_nodes/0` [Mria PR](https://github.com/emqx/mria/pull/135)
+  - 当在副本节点上调用时，优化 `mria:ro_transaction/2` [Mria PR](https://github.com/emqx/mria/pull/134)。
 
-- [#10518](https://github.com/emqx/emqx/pull/10518) Add the following fixes and features in Mria:
-  - call `mria_rlog:role/1` safely in mria_membership to ensure that mria_membership
-    gen_server won't crash if RPC to another node fails
-    [Mria PR](https://github.com/emqx/mria/pull/139)
-  - Add extra field to ?rlog_sync table to facilitate extending this functionality in future
-    [Mria PR](https://github.com/emqx/mria/pull/138).
+- [#10518](https://github.com/emqx/emqx/pull/10518) 在 Mria 中添加以下修复和功能：
+
+  - 在 mria_membership 中安全调用 `mria_rlog:role/1`，以确保如果 RPC 到另一个节点失败，mria_membership gen_server 不会崩溃 [Mria PR](https://github.com/emqx/mria/pull/139)
+  - 在 ?rlog_sync 表中添加额外字段，以便于在未来扩展此功能 [Mria PR](https://github.com/emqx/mria/pull/138)。
 
 ## 5.0.23
 
-*发布日期: 2023-04-18*
+*发布日期：2023-04-18*
 
-### Enhancements
+### 增强
 
-- [#10156](https://github.com/emqx/emqx/pull/10156) Change the priority of the configuration:
+- [#10156](https://github.com/emqx/emqx/pull/10156) 更改配置的优先级：
 
-  1. If it is a new installation of EMQX, the priority of configuration is `ENV > emqx.conf > HTTP API`.
-  2. If EMQX is upgraded from an old version (i.e., the cluster-override.conf file still exists in EMQX's data directory), then the configuration priority remains the same as before. That is, `HTTP API > ENV > emqx.conf`.
+  1. 如果是新安装的 EMQX，配置的优先级为 `ENV > emqx.conf > HTTP API`。
+  2. 如果是从旧版本升级的 EMQX（即，EMQX 数据目录中仍存在 cluster-override.conf 文件），则配置优先级保持不变，即 `HTTP API > ENV > emqx.conf`。
 
-  Deprecated data/configs/local-override.conf.
+  废弃 data/configs/local-override.conf。
 
-  Stabilizing the HTTP API for hot updates.
+  稳定 HTTP API 的热更新。
 
-- [#10354](https://github.com/emqx/emqx/pull/10354) More specific error messages when configure with bad max_heap_size value.
-  Log current value and the max value when the `message_queue_too_long` error is thrown.
+- [#10354](https://github.com/emqx/emqx/pull/10354) 当配置错误的 max_heap_size 值时，提供更具体的错误消息。当抛出 `message_queue_too_long` 错误时，记录当前值和最大值。
 
-- [#10359](https://github.com/emqx/emqx/pull/10359) Metrics now are not implicitly collected in places where API handlers don't make any use of them. Instead, a separate backplane RPC gathers cluster-wide metrics.
+- [#10359](https://github.com/emqx/emqx/pull/10359) 在 API 处理程序不使用它们的地方，现在不会隐式收集指标。相反，单独的后台 RPC 收集集群范围内的指标。
 
-- [#10373](https://github.com/emqx/emqx/pull/10373) Deprecate the trace.payload_encode configuration.
-  Add payload_encode=[text,hidden,hex] option when creating a trace via HTTP API.
+- [#10373](https://github.com/emqx/emqx/pull/10373) 废弃 trace.payload_encode 配置。在通过 HTTP API 创建跟踪时添加 payload_encode=[text,hidden,hex] 选项。
 
-- [#10389](https://github.com/emqx/emqx/pull/10389) Unify the config formats for `cluster.core_nodes` and `cluster.statics.seeds`.
-  Now they both support formats in array `["emqx1@127.0.0.1", "emqx2@127.0.0.1"]` or semicolon-separated string `"emqx1@127.0.0.1,emqx2@127.0.0.1"`.
+- [#10389](https://github.com/emqx/emqx/pull/10389) 统一 `cluster.core_nodes` 和 `cluster.statics.seeds` 的配置格式。现在它们都支持数组格式 `["emqx1@127.0.0.1", "emqx2@127.0.0.1"]` 或分号分隔的字符串 `"emqx1@127.0.0.1,emqx2@127.0.0.1"`。
 
-- [#10391](https://github.com/emqx/emqx/pull/10391) Hide a large number of advanced options to simplify the configuration file.
+- [#10391](https://github.com/emqx/emqx/pull/10391) 隐藏大量高级选项以简化配置文件。包括 `rewrite`、`topic_metric`、`persistent_session_store`、`overload_protection`、`flapping_detect`、`conn_congestion`、`stats,auto_subscribe`、`broker_perf`、`shared_subscription_group`、`slow_subs`、`ssl_options.user_lookup_fun` 以及 `node` 和 `dashboard` 部分的一些高级项目，[#10358](https://github.com/emqx/emqx/pull/10358)、[#10381](https://github.com/emqx/emqx/pull/10381)、[#10385](https://github.com/emqx/emqx/pull/10385)。
 
-  That includes `rewrite`, `topic_metric`, `persistent_session_store`, `overload_protection`,
-  `flapping_detect`, `conn_congestion`, `stats,auto_subscribe`, `broker_perf`,
-  `shared_subscription_group`, `slow_subs`, `ssl_options.user_lookup_fun` and some advance items
-  in `node` and `dashboard` section, [#10358](https://github.com/emqx/emqx/pull/10358),
-  [#10381](https://github.com/emqx/emqx/pull/10381), [#10385](https://github.com/emqx/emqx/pull/10385).
+- [#10392](https://github.com/emqx/emqx/pull/10392) 新增一个将格式化日期转换为整数时间戳的函数：date_to_unix_ts/3
 
-- [#10392](https://github.com/emqx/emqx/pull/10392) A new function to convert a formatted date to an integer timestamp has been added: date_to_unix_ts/3
+- [#10404](https://github.com/emqx/emqx/pull/10404) 将缓冲工作队列的默认模式更改为 `memory_only`。此更改之前，默认队列模式为 `volatile_offload`。在高消息速率压力下，当资源无法跟上这种速率时，由于不断的磁盘操作，缓冲性能大幅降低。
 
-- [#10404](https://github.com/emqx/emqx/pull/10404) Change the default queue mode for buffer workers to `memory_only`.
-  Before this change, the default queue mode was `volatile_offload`. When under high message rate pressure and when the resource is not keeping up with such rate, the buffer performance degraded a lot due to the constant disk operations.
+- [#10426](https://github.com/emqx/emqx/pull/10426) 优化配置优先级机制，修复了重启 EMQX 后对 `etc/emqx.conf` 进行的配置更改不生效的问题。关于新机制的更多介绍：配置覆盖规则
 
-- [#10426](https://github.com/emqx/emqx/pull/10426) Optimize the configuration priority mechanism to fix the issue where the configuration
-  changes made to `etc/emqx.conf` do not take effect after restarting EMQX.
+- [#10376](https://github.com/emqx/emqx/pull/10376) 简化限制器功能的配置并优化一些代码
 
-  More introduction about the new mechanism: [Configure Override Rules](https://www.emqx.io/docs/en/v5.0/configuration/configuration.html#configure-override-rules)
+  - 将 `message_in` 重命名为 `messages`
+  - 将 `bytes_in` 重命名为 `bytes`
+  - 使用 `burst` 而不是 `capacity`
+  - 隐藏非重要字段
+  - 优化不同速率设置下的限制器实例
 
-- [#10376](https://github.com/emqx/emqx/pull/10376) Simplify the configuration of the limiter feature and optimize some codes
+- [#10430](https://github.com/emqx/emqx/pull/10430) 简化 `retainer` 功能的配置。
 
-  - Rename `message_in` to `messages`
-  - Rename `bytes_in` to `bytes`
-  - Use `burst` instead of `capacity`
-  - Hide non-importance fields
-  - Optimize limiter instances in different rate settings
+  - 将 `flow_control` 标记为非重要字段。
 
-- [#10430](https://github.com/emqx/emqx/pull/10430) Simplify the configuration of the `retainer` feature.
-  - Mark `flow_control` as non-importance field.
+### 修复
 
-### Bug Fixes
+- [#10369](https://github.com/emqx/emqx/pull/10369) 修复 `/api/v5/monitor_current` API 端点的错误，该错误发生在一些 EMQX 节点宕机时。在此修复之前，有时请求返回 HTTP 代码 500 和以下消息：
 
-- [#10369](https://github.com/emqx/emqx/pull/10369) Fix error in `/api/v5/monitor_current` API endpoint that happens when some EMQX nodes are down.
-
-  Prior to this fix, sometimes the request returned HTTP code 500 and the following message:
-
-  ```
+  ```less
   {"code":"INTERNAL_ERROR","message":"error, badarg, [{erlang,'++',[{error,nodedown},[{node,'emqx@10.42.0.150'}]], ...
   ```
 
-- [#10410](https://github.com/emqx/emqx/pull/10410) Fix config check failed when gateways are configured in emqx.conf.
-  This issue was first introduced in v5.0.22 via [#10278](https://github.com/emqx/emqx/pull/10278), the boot-time config check was missing.
+- [#10410](https://github.com/emqx/emqx/pull/10410) 修复在 emqx.conf 中配置网关时配置检查失败的问题。这个问题首次出现在 v5.0.22 中通过 [#10278](https://github.com/emqx/emqx/pull/10278)，启动时配置检查缺失。
 
 ## 5.0.22
 
-*发布日期: 2023-04-13*
+*发布日期：2023-04-13*
 
-### Enhancements
+### 增强
 
-- [#10077](https://github.com/emqx/emqx/pull/10077) Add support for QUIC TLS password protected certificate file.
+- [#10077](https://github.com/emqx/emqx/pull/10077) 添加对 QUIC TLS 密码保护证书文件的支持。
+- [#10128](https://github.com/emqx/emqx/pull/10128) 为 SSL MQTT 监听器添加对 OCSP stapling 的支持。
+- [#10164](https://github.com/emqx/emqx/pull/10164) 为 TLS MQTT 监听器添加 CRL 检查支持。
+- [#10206](https://github.com/emqx/emqx/pull/10206) 将查询模式与缓冲工作者的底层调用模式解耦。
+- [#10207](https://github.com/emqx/emqx/pull/10207) 在 OpenAPI 规范中使用 i18n 文件中的 'label' 作为 'summary'。
+- [#10210](https://github.com/emqx/emqx/pull/10210) 当 Mria 停止时注销 Mnesia post commit 钩子。
+- [#10224](https://github.com/emqx/emqx/pull/10224) 在 Helm 图表中添加自定义 `clusterIP` 选项的功能。
+- [#10263](https://github.com/emqx/emqx/pull/10263) 添加命令 'eval-ex' 用于 Elixir 表达式评估。
+- [#10278](https://github.com/emqx/emqx/pull/10278) 重构所有网关的目录结构。
+- [#10306](https://github.com/emqx/emqx/pull/10306) 为大多数桥接添加对 `async` 查询模式的支持。
+- [#10318](https://github.com/emqx/emqx/pull/10318) 规则引擎语言的 FROM 子句现支持双引号 (") 和单引号 (') 包围的字符串。
+- [#10336](https://github.com/emqx/emqx/pull/10336) 添加 `/rule_engine` API 端点来管理规则引擎的配置。
 
-- [#10128](https://github.com/emqx/emqx/pull/10128) Add support for OCSP stapling for SSL MQTT listeners.
+### 修复
 
-- [#10164](https://github.com/emqx/emqx/pull/10164) Add CRL check support for TLS MQTT listeners.
-
-- [#10206](https://github.com/emqx/emqx/pull/10206) Decouple the query mode from the underlying call mode for buffer
-  workers.
-
-  Prior to this change, setting the query mode of a resource
-  such as a bridge to `sync` would force the buffer to call the
-  underlying connector in a synchronous way, even if it supports async
-  calls.
-
-- [#10207](https://github.com/emqx/emqx/pull/10207) Use 'label' from i18n file as 'summary' in OpenAPI spec.
-
-- [#10210](https://github.com/emqx/emqx/pull/10210) Unregister Mnesia post commit hook when Mria is being stopped.
-  This fixes hook failures occasionally occurring on stopping/restarting Mria.
-
-  [Mria PR](https://github.com/emqx/mria/pull/133)
-
-- [#10224](https://github.com/emqx/emqx/pull/10224) Add the option to customize `clusterIP` in Helm chart, so that a user may set it to a fixed IP.
-
-- [#10263](https://github.com/emqx/emqx/pull/10263) Add command 'eval-ex' for Elixir expression evaluation.
-
-- [#10278](https://github.com/emqx/emqx/pull/10278) Refactor the directory structure of all gateways.
-
-- [#10306](https://github.com/emqx/emqx/pull/10306) Add support for `async` query mode for most bridges.
-
-  Before this change, some bridges (Cassandra, MongoDB, MySQL, Postgres, Redis, RocketMQ, TDengine) were only allowed to be created with a `sync` query mode.
-
-- [#10318](https://github.com/emqx/emqx/pull/10318) Now, the rule engine language's FROM clause supports both strings enclosed in double quotes (") and single quotes (').
-
-- [#10336](https://github.com/emqx/emqx/pull/10336) Add `/rule_engine` API endpoint to manage configuration of rule engine.
-
-### Bug Fixes
-
-- [#10145](https://github.com/emqx/emqx/pull/10145) Fix `bridges` API to report error conditions for a failing bridge as
-  `status_reason`. Also when creating an alarm for a failing resource we include
-  this error condition with the alarm's message.
-
-- [#10154](https://github.com/emqx/emqx/pull/10154) Change the default `resume_interval` for bridges and connectors to be
-  the minimum of `health_check_interval` and `request_timeout / 3`.
-  Also exposes it as a hidden configuration to allow fine tuning.
-
-  Before this change, the default values for `resume_interval` meant
-  that, if a buffer ever got blocked due to resource errors or high
-  message volumes, then, by the time the buffer would try to resume its
-  normal operations, almost all requests would have timed out.
-
-- [#10172](https://github.com/emqx/emqx/pull/10172) Fix the incorrect default ACL rule, which was:
-
-  ```
-  {allow, {username, "^dashboard?"}, subscribe, ["$SYS/#"]}.
-  ```
-
-  However, it should use `{re, "^dashboard$"}` to perform a regular expression match:
-
-  ```
-  {allow, {username, {re,"^dashboard$"}}, subscribe, ["$SYS/#"]}.
-  ```
-
-- [#10174](https://github.com/emqx/emqx/pull/10174) Upgrade library `esockd` from 5.9.4 to 5.9.6.
-  Fix an unnecessary error level logging when a connection is closed before proxy protocol header is sent by the proxy.
-
-- [#10195](https://github.com/emqx/emqx/pull/10195) Add labels to API schemas where description contains HTML and breaks formatting of generated documentation otherwise.
-
-- [#10196](https://github.com/emqx/emqx/pull/10196) Use lower-case for schema summaries and descritptions to be used in menu of generated online documentation.
-
-- [#10209](https://github.com/emqx/emqx/pull/10209) Fix bug where a last will testament (LWT) message could be published
-  when kicking out a banned client.
-
-- [#10211](https://github.com/emqx/emqx/pull/10211) Hide `broker.broker_perf` config and API documents.
-  The two configs `route_lock_type` and `trie_compaction` are rarely used and requires a full cluster restart to take effect. They are not suitable for being exposed to users.
-  Detailed changes can be found here: https://gist.github.com/zmstone/01ad5754b9beaeaf3f5b86d14d49a0b7/revisions
-
-- [#10225](https://github.com/emqx/emqx/pull/10225) Allow installing a plugin if its name matches the beginning of another (already installed) plugin name.
-  For example: if plugin "emqx_plugin_template_a" is installed, it must not block installing plugin "emqx_plugin_template".
-
-- [#10226](https://github.com/emqx/emqx/pull/10226) Don't crash on validation error in `/bridges` API, return `400` instead.
-
-- [#10237](https://github.com/emqx/emqx/pull/10237) Ensure we return `404` status code for unknown node names in `/nodes/:node[/metrics|/stats]` API.
-
-- [#10242](https://github.com/emqx/emqx/pull/10242) Fixed a log data field name clash.
-  Piror to this fix, some debug logs may report a wrong Erlang PID which may affect troubleshooting session takeover issues.
-
-- [#10251](https://github.com/emqx/emqx/pull/10251) Consider bridges referenced in `FROM` rule clauses as dependencies.
-
-  Before this fix, when one tried to delete an ingress rule referenced in an action like `select * from "$bridges/mqtt:ingress"`, the UI would not trigger a warning about dependent rule actions.
-
-- [#10257](https://github.com/emqx/emqx/pull/10257) Fixed the issue where `auto_observe` was not working in LwM2M Gateway.
-
-  Before the fix, OBSERVE requests were sent without a token, causing failures
-  that LwM2M clients could not handle.
-
-  After the fix, LwM2M Gateway can correctly observe the resource list carried by
-  client, furthermore, unknown resources will be ignored and printing the following
-  warning log:
-
-  ```
-  2023-03-28T18:50:27.771123+08:00 [warning] msg: ignore_observer_resource, mfa: emqx_lwm2m_session:observe_object_list/3, line: 522, peername: 127.0.0.1:56830, clientid: testlwm2mclient, object_id: 31024, reason: no_xml_definition
-  ```
-
-- [#10286](https://github.com/emqx/emqx/pull/10286) Enhance logging behaviour during boot failure.
-  When EMQX fails to start due to corrupted configuration files, excessive logging is eliminated and no crash dump file is generated.
-
-- [#10297](https://github.com/emqx/emqx/pull/10297) Keeps `eval` command backward compatible with v4 by evaluating only Erlang expressions, even on Elixir node. For Elixir expressions, use `eval-ex` command.
-
-- [#10300](https://github.com/emqx/emqx/pull/10300) Fixed an issue where a build made with Elixir could not receive uploaded plugins until the `plugins` folder was created manually to receive the uploaded files.
-
-- [#10313](https://github.com/emqx/emqx/pull/10313) Ensure that when the core or replicant node starting, the `cluster-override.conf` file is only copied from the core node.
-  Previously, when sorting nodes by startup time, the core node may have copied this file from the replicant node.
-
-- [#10314](https://github.com/emqx/emqx/pull/10314) Fix /monitor_current API so that it only looks at the current node.
-  Fix /stats API to not crash when one or more nodes in the cluster are down.
-
-- [#10315](https://github.com/emqx/emqx/pull/10315) Fix crash checking `limit` and `page` parameters in `/mqtt/delayed/messages` API call.
-
-- [#10317](https://github.com/emqx/emqx/pull/10317) Do not expose listener level authentications before extensive verification.
-
-- [#10323](https://github.com/emqx/emqx/pull/10323) For security reasons, the value of the `password` field in the API examples is replaced with `******`.
-
-- [#10327](https://github.com/emqx/emqx/pull/10327) Don't increment 'actions.failed.unknown' rule metrics counter upon receiving unrecoverable bridge errors.
-  This counter is displayed on the dashboard's rule overview tab ('Action statistics' - 'Unknown').
-  The fix is only applicable for synchronous bridges, as all rule actions for asynchronous bridges
-  are counted as successful (they increment 'actions.success' which is displayed as 'Action statistics' - 'Success').
+- [#10145](https://github.com/emqx/emqx/pull/10145) 修复 `bridges` API 以报告失败桥接的错误条件为 `status_reason`。
+- [#10154](https://github.com/emqx/emqx/pull/10154) 更改桥接和连接器的默认 `resume_interval` 为 `health_check_interval` 和 `request_timeout / 3` 的最小值。
+- [#10172](https://github.com/emqx/emqx/pull/10172) 修复错误的默认 ACL 规则。
+- [#10174](https://github.com/emqx/emqx/pull/10174) 将库 `esockd` 从 5.9.4 升级到 5.9.6。
+- [#10195](https://github.com/emqx/emqx/pull/10195) 为包含 HTML 的 API 架构添加标签，否则会破坏生成文档的格式。
+- [#10196](https://github.com/emqx/emqx/pull/10196) 在生成的在线文档菜单中使用小写字母的架构摘要和描述。
+- [#10209](https://github.com/emqx/emqx/pull/10209) 修复踢出被禁客户端时可能发布的遗嘱消息问题。
+- [#10211](https://github.com/emqx/emqx/pull/10211) 隐藏 `broker.broker_perf` 配置和 API 文档。
+- [#10225](https://github.com/emqx/emqx/pull/10225) 允许安装插件，如果其名称与另一个已安装插件名称的开头匹配。
+- [#10226](https://github.com/emqx/emqx/pull/10226) `/bridges` API 验证错误时不崩溃，返回 `400`。
+- [#10237](https://github.com/emqx/emqx/pull/10237) 确保 `/nodes/:node[/metrics|/stats]` API 未知节点名返回 `404` 状态码。
+- [#10242](https://github.com/emqx/emqx/pull/10242) 修复日志数据字段名称冲突问题。
+- [#10251](https://github.com/emqx/emqx/pull/10251) 将 `FROM` 规则子句中引用的桥接视为依赖项。
+- [#10257](https://github.com/emqx/emqx/pull/10257) 修复 LwM2M 网关中 `auto_observe` 不工作的问题。
+- [#10286](https://github.com/emqx/emqx/pull/10286) 增强启动失败时的日志行为。
+- [#10297](https://github.com/emqx/emqx/pull/10297) 使 `eval` 命令与 v4 向后兼容，即使在 Elixir 节点上也只评估 Erlang 表达式。对于 Elixir 表达式，使用 `eval-ex` 命令。
+- [#10300](https://github.com/emqx/emqx/pull/10300) 修复使用 Elixir 构建的版本在未手动创建 `plugins` 文件夹以接收上传文件之前无法接收上传的插件问题。
+- [#10313](https://github.com/emqx/emqx/pull/10313) 确保核心节点或副本节点启动时，`cluster-override.conf` 文件仅从核心节点复制。
+- [#10314](https://github.com/emqx/emqx/pull/10314) 修复 `/monitor_current` API 使其仅查看当前节点。
+- [#10315](https://github.com/emqx/emqx/pull/10315) 修复 `/mqtt/delayed/messages` API 调用中检查 `limit` 和 `page` 参数时崩溃问题。
+- [#10317](https://github.com/emqx/emqx/pull/10317) 在广泛验证之前不公开监听器级别的认证。
+- [#10323](https://github.com/emqx/emqx/pull/10323) 出于安全原因，API 示例中的 `password` 字段值替换为 `******`。
+- [#10327](https://github.com/emqx/emqx/pull/10327) 不在接收到不可恢复的桥接错误时增加 'actions.failed.unknown' 规则指标计数器。
 
 ## 5.0.21
 
-*发布日期: 2023-03-24*
+*发布日期：2023-03-24*
 
-### Enhancements
+### 增强
 
-- [#10022](https://github.com/emqx/emqx/pull/10022) Start releasing Rocky Linux 9 (compatible with Enterprise Linux 9) and MacOS 12 packages
+- [#10022](https://github.com/emqx/emqx/pull/10022) 开始发布 Rocky Linux 9（兼容 Enterprise Linux 9）和 MacOS 12 包
+- [#10139](https://github.com/emqx/emqx/pull/10139) 在 EMQX Helm 图表中添加 `extraVolumeMounts`，使其能够将用户自己的文件挂载到 EMQX 实例中，例如，如 [#9052](https://github.com/emqx/emqx/issues/9052) 中提到的 ACL 规则文件
+- [#9893](https://github.com/emqx/emqx/pull/9893) 使用 `clean_start=false` 连接时，EMQX 将过滤掉被禁止客户端发布的消息。以前，被禁止客户端发送的消息可能仍会在此场景中传递给订阅者
+- [#9986](https://github.com/emqx/emqx/pull/9986) 对于 helm 图表，添加 MQTT 入站桥接；并删除过时的 `mgmt` 引用
+- [#10123](https://github.com/emqx/emqx/pull/10123) 提高 `/bridges` API 的性能。之前，当集群中的节点数量较多或节点繁忙时，API 可能会出现请求超时
+- [#9998](https://github.com/emqx/emqx/pull/9998) 出于安全原因，对认证错误日志中的 HTTP 请求体进行隐藏
 
-- [#10139](https://github.com/emqx/emqx/pull/10139) Add `extraVolumeMounts` to EMQX Helm Chart, it will have the ability to mount the user-own files into the EMQX instance, for example, ACL rule files as mentioned in [#9052](https://github.com/emqx/emqx/issues/9052)
+### 修复
 
-  Done of [#10116](https://github.com/emqx/emqx/issues/10116)
-
-- [#9893](https://github.com/emqx/emqx/pull/9893) When connecting with the flag `clean_start=false`, EMQX will filter out messages that published by banned clients.
-  Previously, the messages sent by banned clients may still be delivered to subscribers in this scenario.
-
-- [#9986](https://github.com/emqx/emqx/pull/9986) For helm charts, add MQTT ingress bridge; and removed stale `mgmt` references.
-
-- [#10123](https://github.com/emqx/emqx/pull/10123) Improve the performance of `/bridges` API.
-  Earlier, when the number of nodes in the cluster was large or the node was busy, the API may have a request timeout.
-
-- [#9998](https://github.com/emqx/emqx/pull/9998) Redact the HTTP request body in the authentication error logs for security reasons.
-
-### Bug Fixes
-
-- [#10013](https://github.com/emqx/emqx/pull/10013) Fix return type structure for error case in API schema for `/gateways/:name/clients`.
-  u
-- [#10014](https://github.com/emqx/emqx/pull/10014) In dashboard API for `/monitor(_current)/nodes/:node` return `404` instead of `400` if node does not exist.
-
-- [#10026](https://github.com/emqx/emqx/pull/10026) Metrics are now only exposed via the /bridges/:id/metrics endpoint. Metrics are no longer returned in other API operations such as getting the list of all bridges, or in the response when a bridge has been created.
-
-- [#10027](https://github.com/emqx/emqx/pull/10027) Allow setting node name from `EMQX_NODE__NAME` when running in docker.
-  Prior to this fix, only `EMQX_NODE_NAME` is allowed.
-
-- [#10050](https://github.com/emqx/emqx/pull/10050) Ensure Bridge API returns `404` status code consistently for resources that don't exist.
-
-- [#10052](https://github.com/emqx/emqx/pull/10052) Improve daemon mode startup failure logs.
-
-  Before this change, it was difficult for users to understand the reason for EMQX 'start' command failed to boot the node.
-  The only information they received was that the node did not start within the expected time frame,
-  and they were instructed to boot the node with 'console' command in the hope of obtaining some logs.
-  However, the node might actually be running, which could cause 'console' mode to fail for a different reason.
-
-  With this new change, when daemon mode fails to boot, a diagnosis is issued. Here are the possible scenarios:
-
-  - If the node cannot be found from `ps -ef`, the user is instructed to find information in log files `erlang.log.*`.
-  - If the node is found to be running but not responding to pings, the user is advised to check if the host name is resolvable and reachable.
-  - If the node is responding to pings, but the EMQX app is not running, it is likely a bug. In this case, the user is advised to report a Github issue.
-
-- [#10055](https://github.com/emqx/emqx/pull/10055) Fix: configuration parameter `mqtt.max_awaiting_rel` had no effect.
-
-- [#10056](https://github.com/emqx/emqx/pull/10056) Fix `/bridges` API status code.
-
-  - Return `400` instead of `403` in case of removing a data bridge that is dependent on an active rule.
-  - Return `400` instead of `403` in case of calling operations (start|stop|restart) when Data-Bridging is not enabled.
-
-- [#10066](https://github.com/emqx/emqx/pull/10066) Improve error messages for `/briges_probe` and `[/node/:node]/bridges/:id/:operation` API calls to make them more readable. And set HTTP status code to `400` instead of `500`.
-
-- [#10074](https://github.com/emqx/emqx/pull/10074) Check if type in `PUT /authorization/sources/:type` matches `type` given in body of request.
-
-- [#10079](https://github.com/emqx/emqx/pull/10079) Fix description of `shared_subscription_strategy`.
-
-- [#10085](https://github.com/emqx/emqx/pull/10085) Consistently return `404` for all requests on non existent source in `/authorization/sources/:source[/*]`.
-
-- [#10098](https://github.com/emqx/emqx/pull/10098) A crash with an error in the log file that happened when the MongoDB authorization module queried the database has been fixed.
-
-- [#10100](https://github.com/emqx/emqx/pull/10100) Fix channel crash for slow clients with enhanced authentication.
-  Previously, when the client was using enhanced authentication, but the Auth message was sent slowly or the Auth message was lost, the client process would crash.
-
-- [#10107](https://github.com/emqx/emqx/pull/10107) For operations on `bridges API` if `bridge-id` is unknown we now return `404`
-  instead of `400`. Also a bug was fixed that caused a crash if that was a node
-  operation. Additionally we now also check if the given bridge is enabled when
-  doing the cluster operation `start` . Affected endpoints:
-
-  - [cluster] `/bridges/:id/:operation`,
-  - [node] `/nodes/:node/bridges/:id/:operation`, where `operation` is one of
-    `[start|stop|restart]`.
-    Moreover, for a node operation, EMQX checks if node name is in our cluster and
-    return `404` instead of `501`.
-
-- [#10117](https://github.com/emqx/emqx/pull/10117) Fix an error occurring when a joining node doesn't have plugins that are installed on other nodes in the cluster.
-  After this fix, the joining node will copy all the necessary plugins from other nodes.
-
-- [#10118](https://github.com/emqx/emqx/pull/10118) Fix problems related to manual joining of EMQX replicant nodes to the cluster.
-  Previously, after manually executing joining and then leaving the cluster, the `replicant` node can only run normally after restarting the node after joining the cluster again.
-
-  [Mria PR](https://github.com/emqx/mria/pull/128)
-
-- [#10119](https://github.com/emqx/emqx/pull/10119) Fix crash when `statsd.server` is set to an empty string.
-
-- [#10124](https://github.com/emqx/emqx/pull/10124) The default heartbeat period for MongoDB has been increased to reduce the risk of too excessive logging to the MongoDB log file.
-
-- [#10130](https://github.com/emqx/emqx/pull/10130) Fix garbled config display in dashboard when the value is originally from environment variables.
-  For example, `env EMQX_STATSD__SERVER='127.0.0.1:8124' . /bin/emqx start` results in unreadable string (not '127.0.0.1:8124') displayed in Dashboard's Statsd settings page.
-  Related PR: [HOCON#234](https://github.com/emqx/hocon/pull/234).
-
-- [#10132](https://github.com/emqx/emqx/pull/10132) Fix some error logs generated by `systemctl stop emqx` command.
-  Prior to the fix, the command was not stopping jq and os_mon applications properly.
-
-- [#10144](https://github.com/emqx/emqx/pull/10144) Add `-setcookie` emulator flag when invoking `emqx ctl` to prevent problems with emqx cli when home directory is read only. Fixes [#10142](https://github.com/emqx/emqx/issues/10142).
-
-- [#10157](https://github.com/emqx/emqx/pull/10157) Fixed default rate limit configuration not being applied correctly when creating a new listener.
+- [#10013](https://github.com/emqx/emqx/pull/10013) 修复 `/gateways/:name/clients` API 架构错误情况下的返回类型结构
+- [#10014](https://github.com/emqx/emqx/pull/10014) 在 Dashboard API `/monitor(_current)/nodes/:node` 中，如果节点不存在，则返回 `404` 而不是 `400`
+- [#10026](https://github.com/emqx/emqx/pull/10026) 现在仅通过 `/bridges/:id/metrics` 端点公开指标。在获取所有桥接列表或创建桥接时，不再在其他 API 操作中返回指标
+- [#10027](https://github.com/emqx/emqx/pull/10027) 允许在 docker 中运行时从 `EMQX_NODE__NAME` 设置节点名称。在此修复之前，只允许 `EMQX_NODE_NAME`
+- [#10050](https://github.com/emqx/emqx/pull/10050) 确保桥接 API 对不存在的资源一致返回 `404` 状态码
+- [#10052](https://github.com/emqx/emqx/pull/10052) 改进守护进程模式启动失败的日志
+- [#10055](https://github.com/emqx/emqx/pull/10055) 修复配置参数 `mqtt.max_awaiting_rel` 无效的问题
+- [#10056](https://github.com/emqx/emqx/pull/10056) 修复 `/bridges` API 状态码
+- [#10066](https://github.com/emqx/emqx/pull/10066) 改进 `/briges_probe` 和 `[/node/:node]/bridges/:id/:operation` API 调用的错误消息，使其更易读，并将 HTTP 状态码设置为 `400` 而不是 `500`
+- [#10074](https://github.com/emqx/emqx/pull/10074) 检查 `PUT /authorization/sources/:type` 中的类型是否与请求体中给定的 `type` 匹配
+- [#10079](https://github.com/emqx/emqx/pull/10079) 修复 `shared_subscription_strategy` 的描述
+- [#10085](https://github.com/emqx/emqx/pull/10085) 对 `/authorization/sources/:source[/*]` 中所有不存在源的请求一致返回 `404`
+- [#10098](https://github.com/emqx/emqx/pull/10098) 修复了 MongoDB 授权模块查询数据库时日志文件中出现的崩溃错误
+- [#10100](https://github.com/emqx/emqx/pull/10100) 修复使用增强认证的慢客户端通道崩溃问题
+- [#10107](https://github.com/emqx/emqx/pull/10107) 对 `bridges API` 操作，如果 `bridge-id` 未知，现在返回 `404` 而不是 `400`
+- [#10117](https://github.com/emqx/emqx/pull/10117) 修复加入节点在集群中其他节点上安装的插件不存在时发生的错误
+- [#10118](https://github.com/emqx/emqx/pull/10118) 修复手动将 EMQX 副本节点加入集群的相关问题
+- [#10119](https://github.com/emqx/emqx/pull/10119) 修复当 `statsd.server` 设置为空字符串时的崩溃问题
+- [#10124](https://github.com/emqx/emqx/pull/10124) 增加 MongoDB 的默认心跳周期，以减少 MongoDB 日志文件中过度记录的风险
+- [#10130](https://github.com/emqx/emqx/pull/10130) 修复 Dashboard中由环境变量原始值导致的配置显示乱码问题
+- [#10132](https://github.com/emqx/emqx/pull/10132) 修复 `systemctl stop emqx` 命令生成的一些错误日志
+- [#10144](https://github.com/emqx/emqx/pull/10144) 在调用 `emqx ctl` 时添加 `-setcookie` 模拟器标志，以防止在家目录为只读时 emqx cli 出现问题
+- [#10157](https://github.com/emqx/emqx/pull/10157) 修复创建新监听器时默认速率限制配置未正确应用的问题
 
 ## 5.0.20
 
-*发布日期: 2023-03-10*
+*发布日期：2023-03-10*
 
-### Enhancements
+### 增强
 
-- [#10059](https://github.com/emqx/emqx/pull/10059) Errors returned by rule engine API are formatted in a more human readable way rather than dumping the raw error including the stacktrace.
+- [#10059](https://github.com/emqx/emqx/pull/10059) 规则引擎 API 返回的错误以更易读的方式格式化，而不是直接返回包含堆栈跟踪的原始错误。
 
-### Bug Fixes
+### 修复
 
-- [#10032](https://github.com/emqx/emqx/pull/10032) When resources on some nodes in the cluster are still in the 'initializing/connecting' state, the `bridges/` API will crash due to missing Metrics information for those resources. This fix will ignore resources that do not have Metrics information.
-
-- [#10044](https://github.com/emqx/emqx/pull/10044) Fix node information formatter for stopped nodes in the cluster. The bug was introduced by v5.0.18.
-
-- [#10054](https://github.com/emqx/emqx/pull/10054) Fix the problem that the obfuscated password is used when using the `/bridges_probe` API to test the connection in Data-Bridge.
-
-- [#10058](https://github.com/emqx/emqx/pull/10058) Deprecate unused QUIC TLS options.
-  Only following TLS options are kept for the QUIC listeners:
-
+- [#10032](https://github.com/emqx/emqx/pull/10032) 当集群中某些节点上的资源仍处于“初始化/连接”状态时，由于这些资源缺少 Metrics 信息，`bridges/` API 将会崩溃。此修复将忽略没有 Metrics 信息的资源。
+- [#10044](https://github.com/emqx/emqx/pull/10044) 修复集群中已停止节点的节点信息格式化问题。此 bug 由 v5.0.18 引入。
+- [#10054](https://github.com/emqx/emqx/pull/10054) 修复在使用 `/bridges_probe` API 测试 Data-Bridge 连接时使用的是混淆后的密码的问题。
+- [#10058](https://github.com/emqx/emqx/pull/10058) 废弃未使用的 QUIC TLS 选项。只保留以下 TLS 选项供 QUIC 监听器使用：
   - cacertfile
   - certfile
   - keyfile
   - verify
-
-- [#10076](https://github.com/emqx/emqx/pull/10076) Fix webhook bridge error handling: connection timeout should be a retriable error.
-  Prior to this fix, connection timeout was classified as unrecoverable error and led to request being dropped.
-
-- [#10078](https://github.com/emqx/emqx/pull/10078) Fix an issue that invalid QUIC listener setting could casue segfault.
-
-- [#10084](https://github.com/emqx/emqx/pull/10084) Fix problem when joining core nodes running different EMQX versions into a cluster.
-
-  [Mria PR](https://github.com/emqx/mria/pull/127)
-
-- [#10086](https://github.com/emqx/emqx/pull/10086) Upgrade HTTP client ehttpc to `0.4.7`.
-  Prior to this upgrade, HTTP clients for authentication, authorization and webhook may crash
-  if `body` is empty but content-type HTTP header is set.
-  For more details see [ehttpc PR#44](https://github.com/emqx/ehttpc/pull/44).
+- [#10076](https://github.com/emqx/emqx/pull/10076) 修复 webhook 桥接错误处理：连接超时应该是一个可重试的错误。在此修复之前，连接超时被归类为不可恢复错误并导致请求被丢弃。
+- [#10078](https://github.com/emqx/emqx/pull/10078) 修复无效的 QUIC 监听器设置可能导致段错误的问题。
+- [#10084](https://github.com/emqx/emqx/pull/10084) 修复将运行不同 EMQX 版本的核心节点加入集群的问题。[Mria PR](https://github.com/emqx/mria/pull/127)
+- [#10086](https://github.com/emqx/emqx/pull/10086) 将 HTTP 客户端 ehttpc 升级到 `0.4.7`。在此升级之前，如果 `body` 为空但设置了 content-type HTTP 头，用于认证、授权和 webhook 的 HTTP 客户端可能会崩溃。更多详情见 [ehttpc PR#44](https://github.com/emqx/ehttpc/pull/44)。
 
 ## 5.0.19
 
-*发布日期: 2023-03-01*
+*发布日期：2023-03-01*
 
-### Bug Fixes
+### 修复
 
-- [#10032](https://github.com/emqx/emqx/pull/10032) When the resource manager is busy trying to establish a connection with the remote, the resource might yet lack any metrics information. Prior to this fix, the `bridges/` API handler crashed in such circumstances.
+- [#10032](https://github.com/emqx/emqx/pull/10032) 当资源管理器忙于尝试与远端建立连接时，资源可能还没有任何指标信息。在此修复之前，`bridges/` API 处理程序在这种情况下会崩溃。
 
-- [#10037](https://github.com/emqx/emqx/pull/10037) Fix Swagger API doc rendering crash.
-  In version 5.0.18, a bug was introduced that resulted in duplicated field names in the configuration schema. This, in turn, caused the Swagger schema generated to become invalid.
+- [#10037](https://github.com/emqx/emqx/pull/10037) 修复 Swagger API 文档渲染崩溃问题。在 5.0.18 版本中，引入了一个导致配置架构中字段名重复的错误。这反过来导致生成的 Swagger 架构变得无效。
 
-- [#10041](https://github.com/emqx/emqx/pull/10041) For influxdb bridge, added integer value placeholder annotation hint to `write_syntax` documentation.
-  Also supported setting a constant value for the `timestamp` field.
+- [#10041](https://github.com/emqx/emqx/pull/10041) 对 influxdb 桥接，向 `write_syntax` 文档添加整数值占位符注释提示。同时支持为 `timestamp` 字段设置常量值。
 
-- [#10042](https://github.com/emqx/emqx/pull/10042) Improve behavior of the `replicant` nodes when the `core` cluster becomes partitioned (for example when a core node leaves the cluster).
-  Previously, the replicant nodes were unable to rebalance connections to the core nodes, until the core cluster became whole again.
-  This was indicated by the error messages: `[error] line: 182, mfa: mria_lb:list_core_nodes/1, msg: mria_lb_core_discovery divergent cluster`.
+- [#10042](https://github.com/emqx/emqx/pull/10042) 改进 `replicant` 节点在 `core` 集群分区时的行为（例如当核心节点离开集群时）。以前，副本节点无法重新平衡到核心节点的连接，直到核心集群再次成为一个整体。这由错误消息表示：`[error] line: 182, mfa: mria_lb:list_core_nodes/1, msg: mria_lb_core_discovery divergent cluster`。[Mria PR](https://github.com/emqx/mria/pull/123/files)
 
-  [Mria PR](https://github.com/emqx/mria/pull/123/files)
+- \#10043
 
-- [#10043](https://github.com/emqx/emqx/pull/10043) Fixed two bugs introduced in v5.0.18.
+   修复在 v5.0.18 中引入的两个错误。
 
-  - The environment varialbe `SSL_DIST_OPTFILE` was not set correctly for non-boot commands.
-  - When cookie is overridden from environment variable, EMQX node is unable to start.
+  - 环境变量 `SSL_DIST_OPTFILE` 对于非启动命令设置不正确。
+  - 当从环境变量覆盖 cookie 时，EMQX 节点无法启动。
 
-- [#10044](https://github.com/emqx/emqx/pull/10044) Fix node information formatter for stopped nodes in the cluster.
+- [#10044](https://github.com/emqx/emqx/pull/10044) 修复集群中已停止节点的节点信息格式化问题。
 
 ## 5.0.18
 
-*发布日期: 2023-02-24*
+*发布日期：2023-02-24*
 
-### Enhancements
+### 增强
 
-- [#10019](https://github.com/emqx/emqx/pull/10019) Add low level tuning settings for QUIC listeners.
+- [#10019](https://github.com/emqx/emqx/pull/10019) 为 QUIC 监听器添加低级调优设置。
+- [#9213](https://github.com/emqx/emqx/pull/9213) 在 helm 图表中添加 pod 破坏预算。
+- [#9949](https://github.com/emqx/emqx/pull/9949) QUIC 传输多流支持和 QUIC TLS cacert 支持。
+- [#9967](https://github.com/emqx/emqx/pull/9967) 新的通用 TLS 选项 'hibernate_after' 用于减少每个空闲连接的内存占用，默认值：5秒。
 
-- [#9213](https://github.com/emqx/emqx/pull/9213) Add pod disruption budget to helm chart
+### 修复
 
-- [#9949](https://github.com/emqx/emqx/pull/9949) QUIC transport Multistreams support and QUIC TLS cacert support.
-
-- [#9967](https://github.com/emqx/emqx/pull/9967) New common TLS option 'hibernate_after' to reduce memory footprint per idle connecion, default: 5s.
-
-### Bug Fixes
-
-- [#10009](https://github.com/emqx/emqx/pull/10009) Validate `bytes` param to `GET /trace/:name/log` to not exceed signed 32bit integer.
-
-- [#10015](https://github.com/emqx/emqx/pull/10015) To prevent errors caused by an incorrect EMQX node cookie provided from an environment variable,
-  we have implemented a fail-fast mechanism.
-  Previously, when an incorrect cookie was provided, the command would still attempt to ping the node,
-  leading to the error message 'Node xxx not responding to pings'.
-  With the new implementation, if a mismatched cookie is detected,
-  a message will be logged to indicate that the cookie is incorrect,
-  and the command will terminate with an error code of 1 without trying to ping the node.
-
-- [#10020](https://github.com/emqx/emqx/pull/10020) Fix bridge metrics when running in async mode with batching enabled (`batch_size` > 1).
-
-- [#10021](https://github.com/emqx/emqx/pull/10021) Fix error message when the target node of `emqx_ctl cluster join` command is not running.
-
-- [#9939](https://github.com/emqx/emqx/pull/9939) Allow 'emqx ctl cluster' command to be issued before Mnesia starts.
-  Prior to this change, EMQX `replicant` could not use `manual` discovery strategy.
-  Now it's possible to join cluster using 'manual' strategy.
-
-- [#9958](https://github.com/emqx/emqx/pull/9958) Fix bad http response format when client ID is not found in `clients` APIs
-
-- [#9961](https://github.com/emqx/emqx/pull/9961) Avoid parsing config files for node name and cookie when executing non-boot commands in bin/emqx.
-
-- [#9974](https://github.com/emqx/emqx/pull/9974) Report memory usage to statsd and prometheus using the same data source as dashboard.
-  Prior to this fix, the memory usage data source was collected from an outdated source which did not work well in containers.
-
-- [#9978](https://github.com/emqx/emqx/pull/9978) Fixed configuration issue when choosing to use SSL for a Postgres connection (`authn`, `authz` and bridge).
-  The connection could fail to complete with a previously working configuration after an upgrade from 5.0.13 to newer EMQX versions.
-
-- [#9997](https://github.com/emqx/emqx/pull/9997) Fix Swagger API schema generation. `deprecated` metadata field is now always boolean, as [Swagger specification](https://swagger.io/specification/) suggests.
+- [#10009](https://github.com/emqx/emqx/pull/10009) 验证 `GET /trace/:name/log` 的 `bytes` 参数不超过有符号 32 位整数。
+- [#10015](https://github.com/emqx/emqx/pull/10015) 为了防止因环境变量提供的错误 EMQX 节点 cookie 导致的错误，我们实现了快速失败机制。以前，当提供了错误的 cookie 时，命令仍会尝试 ping 节点，导致错误消息 'Node xxx not responding to pings'。新实现中，如果检测到 cookie 不匹配，将记录一条消息指示 cookie 错误，并且命令将以错误代码 1 终止，不尝试 ping 节点。
+- [#10020](https://github.com/emqx/emqx/pull/10020) 在启用批处理 (`batch_size` > 1) 的异步模式下修复桥接指标。
+- [#10021](https://github.com/emqx/emqx/pull/10021) 修复 `emqx_ctl cluster join` 命令的目标节点未运行时的错误消息。
+- [#9939](https://github.com/emqx/emqx/pull/9939) 允许在 Mnesia 启动之前发出 'emqx ctl cluster' 命令。在此更改之前，EMQX `replicant` 无法使用 `manual` 发现策略。现在可以使用 'manual' 策略加入集群。
+- [#9958](https://github.com/emqx/emqx/pull/9958) 修复在 `clients` API 中找不到客户端 ID 时的错误 HTTP 响应格式。
+- [#9961](https://github.com/emqx/emqx/pull/9961) 在执行 bin/emqx 中的非启动命令时避免解析配置文件以获取节点名称和 cookie。
+- [#9974](https://github.com/emqx/emqx/pull/9974) 使用与 Dashboard相同的数据源向 statsd 和 prometheus 报告内存使用情况。在此修复之前，内存使用数据源是从过时的源收集的，在容器中表现不佳。
+- [#9978](https://github.com/emqx/emqx/pull/9978) 修复选择使用 SSL 连接 Postgres (`authn`、`authz` 和 bridge) 时的配置问题。从 5.0.13 升级到更新的 EMQX 版本后，之前正常工作的配置可能无法完成连接。
+- [#9997](https://github.com/emqx/emqx/pull/9997) 修复 Swagger API 架构生成。`deprecated` 元数据字段现在始终为布尔值，如 [Swagger 规范](https://swagger.io/specification/) 建议。
 
 ## 5.0.17
 
-*发布日期: 2023-02-13*
+*发布日期：2023-02-13*
 
-### Enhancements
+### 增强
 
-- [#9802](https://github.com/emqx/emqx/pull/9802) Support HAProxy protocol for HTTP API.
+- [#9802](https://github.com/emqx/emqx/pull/9802) 对 HTTP API 支持 HAProxy 协议。
+- [#9871](https://github.com/emqx/emqx/pull/9871) 允许在 `authz` 规则的主题中任何位置使用占位符。例如：`{allow, {username, "who"}, publish, ["t/foo${username}boo/${clientid}xxx"]}`。
+- [#9910](https://github.com/emqx/emqx/pull/9910) 在桥接 API 中添加 `start` 操作，允许在失败后手动重新连接。
+- [#9917](https://github.com/emqx/emqx/pull/9917) 停止构建基于 debian slim 的 -alpine docker 镜像，因为它的大小比常规的大。
+- [#9930](https://github.com/emqx/emqx/pull/9930) 将统计数据 `live_connections.count` 和 `live_connections.max` 暴露给 Prometheus。
+- [#9936](https://github.com/emqx/emqx/pull/9936) 默认情况下在发行版中禁用 disksup（os_mon 的一部分），当发生磁盘错误时不发出警告。
+- [#9954](https://github.com/emqx/emqx/pull/9954) 提高桥接性能。
 
-- [#9871](https://github.com/emqx/emqx/pull/9871) Allow the placeholder to be anywhere in the topic for `authz` rules.
-  e.g:
-  `{allow, {username, "who"}, publish, ["t/foo${username}boo/${clientid}xxx"]}.`
+### 修复
 
-- [#9910](https://github.com/emqx/emqx/pull/9910) Add `start` operation to bridges API to allow manual reconnect after failure.
-
-- [#9917](https://github.com/emqx/emqx/pull/9917) Stop building -alpine docker image because it's size is larger than the regular one based on debian slim
-
-- [#9930](https://github.com/emqx/emqx/pull/9930) Expose the stats `live_connections.count` and `live_connections.max` to Prometheus.
-
-- [#9936](https://github.com/emqx/emqx/pull/9936) Disable disksup (part of os_mon) in releases by default, no warnings are issued when a disk error occurs.
-
-- [#9954](https://github.com/emqx/emqx/pull/9954) Improve bridge performance
-
-### Bug fixes
-
-- [#9864](https://github.com/emqx/emqx/pull/9864) Fix the exclusive topics aren't removed when the session has already been cleaned.
-
-- [#9875](https://github.com/emqx/emqx/pull/9875) Return `400` if a broken plugin package is uploaded from HTTP API, also cleanup if plugin is not accepted.
-
-- [#9916](https://github.com/emqx/emqx/pull/9916) Fix MQTT bridge fails to verify TLS wildcard server certificate.
-
-- [#9922](https://github.com/emqx/emqx/pull/9922) Fix the issue with the bridge resource buffer where it might become stuck if enough async queries fill the inflight window full before failing with retryable errors.
-
-- [#9923](https://github.com/emqx/emqx/pull/9923) Fix REPORT_CB/2 CRASH error logs when errors happen during boot-up or shutdown.
-
-- [#9938](https://github.com/emqx/emqx/pull/9938) Report some egress MQTT bridge errors as recoverable, and thus retryable.
-
-- [#9946](https://github.com/emqx/emqx/pull/9946) Add back `reconnect_interval` as deprecated field for MQTT bridge.
-  The field was removed from v5.0.16/e5.0.0 by mistake, caused new version unable to start on old config.
-  Now it's added back as deprecated (config value is ignored if provided).
-
-- [#9951](https://github.com/emqx/emqx/pull/9951) Propagate errors from operations (`start|stop|restart`) on bridges API if called for all nodes.
-
-- [#9952](https://github.com/emqx/emqx/pull/9952) Disallow subscribing with QoS 2 for ingress MQTT bridges.
-  Allow user to configure `clean_start` option for ingress MQTT bridges, however.
+- [#9864](https://github.com/emqx/emqx/pull/9864) 修复会话已经清理时独占主题未被移除的问题。
+- [#9875](https://github.com/emqx/emqx/pull/9875) 如果从 HTTP API 上传的插件包损坏，返回 `400`，同时如果插件未被接受则进行清理。
+- [#9916](https://github.com/emqx/emqx/pull/9916) 修复 MQTT 桥接无法验证 TLS 通配符服务器证书的问题。
+- [#9922](https://github.com/emqx/emqx/pull/9922) 修复桥接资源缓冲区的问题，如果足够多的异步查询在失败前填满 inflight 窗口，则可能导致缓冲区卡住。
+- [#9923](https://github.com/emqx/emqx/pull/9923) 当启动或关闭过程中发生错误时，修复 REPORT_CB/2 CRASH 错误日志。
+- [#9938](https://github.com/emqx/emqx/pull/9938) 将一些出站 MQTT 桥接错误报告为可恢复的，因此可以重试。
+- [#9946](https://github.com/emqx/emqx/pull/9946) 为 MQTT 桥接添加回 `reconnect_interval` 作为已弃用字段。该字段在 v5.0.16/e5.0.0 中被错误移除，导致新版本无法在旧配置上启动。现在它作为已弃用字段被添加回来（如果提供，则忽略配置值）。
+- [#9951](https://github.com/emqx/emqx/pull/9951) 如果为所有节点调用桥接 API 上的操作（`start|stop|restart`），则传播错误。
+- [#9952](https://github.com/emqx/emqx/pull/9952) 禁止对入站 MQTT 桥接使用 QoS 2 进行订阅。不过，允许用户为入站 MQTT 桥接配置 `clean_start` 选项。
 
 ## 5.0.16
 
-*发布日期: 2023-02-02*
+*发布日期：2023-02-02*
 
-### Bug fixes
+### 修复
 
-- [#9824](https://github.com/emqx/emqx/pull/9824) The `topics/{topic}` API endpoint would return `500 - Internal Error` if a topic had multiple routes. This is fixed by returning a list of routes.
-
-- [#9832](https://github.com/emqx/emqx/pull/9832) Improve error log when bridge in 'sync' mode timed out to get response.
-
-- [#9834](https://github.com/emqx/emqx/pull/9834) Allow `mqtt.idle_timeout` to be set to `infinity`
-
-- [#9839](https://github.com/emqx/emqx/pull/9839) Make sure that the content of an authorization header that users have specified for a webhook bridge is not printed to log files.
-
-- [#9884](https://github.com/emqx/emqx/pull/9884) Do not resume all buffer workers on successful health check of any individual resource.
-  Previously after any successful healthcheck, all buffer workers (for all resources) were resumed
+- [#9824](https://github.com/emqx/emqx/pull/9824) 如果一个主题有多个路由，`topics/{topic}` API 端点会返回 `500 - 内部错误`。通过返回路由列表修复了这个问题。
+- [#9832](https://github.com/emqx/emqx/pull/9832) 改进 'sync' 模式下桥接超时未获得响应时的错误日志。
+- [#9834](https://github.com/emqx/emqx/pull/9834) 允许将 `mqtt.idle_timeout` 设置为 `infinity`（无限）。
+- [#9839](https://github.com/emqx/emqx/pull/9839) 确保用户为 webhook 桥接指定的授权头的内容不会被打印到日志文件中。
+- [#9884](https://github.com/emqx/emqx/pull/9884) 不要在任何单个资源的成功健康检查后恢复所有缓冲工作器。以前，在任何成功的健康检查后，所有资源的所有缓冲工作器都会被恢复。
 
 ## 5.0.15
 
-*发布日期: 2023-01-20*
+*发布日期：2023-01-20*
 
-### Enhancements
+### 增强
 
-- [#9569](https://github.com/emqx/emqx/pull/9569) Refactor `/authorization/sources/built_in_database/` by adding `rules/` to the path.
+- [#9569](https://github.com/emqx/emqx/pull/9569) 通过在路径中添加 `rules/` 重构 `/authorization/sources/built_in_database/`。
+- [#9585](https://github.com/emqx/emqx/pull/9585) `/bridges_probe` API 端点用于测试创建新数据桥的参数。
+- [#9586](https://github.com/emqx/emqx/pull/9586) 基本认证不再允许用于 API 调用，必须改用 API 密钥。
+- [#9628](https://github.com/emqx/emqx/pull/9628) 暴露额外的资源配置参数：`start_after_created` 和 `start_timeout`。
+- [#9722](https://github.com/emqx/emqx/pull/9722) 为推送指标到 Prometheus Push Gateway 添加以下配置选项：
+  - `headers`：允许自定义 HTTP 请求头。
+  - `job_name`：允许自定义推送到 Push Gateway 的作业名称。
+- [#9725](https://github.com/emqx/emqx/pull/9725) 从 emqx_authz、emqx_authn 和数据桥组件中移除配置 `auto_reconnect`。这是因为我们有另一个具有类似功能的配置：`resource_opts.auto_restart_interval`。
+- [#9736](https://github.com/emqx/emqx/pull/9736) 重构 /bridges API 以使其与其他 API 更一致：
+  - 桥接启用/禁用现在通过端点 `/bridges/{id}/enable/[true,false]` 完成。
+  - `/bridges/{id}/operation/{operation}` 端点现在为 `/bridges/{id}/{operation}`。
+  - 指标从 GET `/bridges/{id}` 响应中移出，现在可以通过 `/bridges/{id}/metrics` 获取。
+  - 端点 `bridges/{id}/reset_metrics` 现在为 `/bridges/{id}/metrics/reset`。
+- [#9774](https://github.com/emqx/emqx/pull/9774) 在通过 API 添加或修改 Dashboard 用户时，添加密码复杂度要求。现在密码必须包含字母、数字和特殊字符中的至少两种，并且长度必须为 8 到 64 个字符。
 
-- [#9585](https://github.com/emqx/emqx/pull/9585) `/bridges_probe` API endpoint to test params for creating a new data bridge.
+### 修复
 
-- [#9586](https://github.com/emqx/emqx/pull/9586) Basic auth is no longer allowed for API calls, must use API key instead.
-
-- [#9628](https://github.com/emqx/emqx/pull/9628) Expose additional resource configuration parameters: `start_after_created` and `start_timeout`.
-
-- [#9722](https://github.com/emqx/emqx/pull/9722) Add the following configuration options for Pushing metrics to Prometheus Push Gateway:
-
-  - `headers`: Allows custom HTTP request headers.
-  - `job_name`: allows to customize the name of the Job pushed to Push Gateway.
-
-- [#9725](https://github.com/emqx/emqx/pull/9725) Remove the config `auto_reconnect` from the emqx_authz, emqx_authn and data-bridge componets.
-  This is because we have another config with similar functions: `resource_opts.auto_restart_interval`。
-
-  The functions of these two config are difficult to distinguish, which will lead to confusion.
-  After this change, `auto_reconnect` will not be configurable (always be true), and the underlying
-  drivers that support this config will automatically reconnect the abnormally disconnected
-  connection every `2s`.
-
-  And the config `resource_opts.auto_restart_interval` is still available for user.
-  It is the time interval that emqx restarts the resource when the connection cannot be
-  established for some reason.
-
-- [#9736](https://github.com/emqx/emqx/pull/9736) Refactor of /bridges API to make it more consistent with other APIs:
-
-  - bridge enable/disable is now done via the endpoint `/bridges/{id}/enable/[true,false]`
-  - `/bridges/{id}/operation/{operation}` endpoints are now `/bridges/{id}/{operation}`
-  - metrics are moved out from the GET `/bridges/{id}` response and can now be fetched via `/bridges/{id}/metrics`
-  - the `bridges/{id}/reset_metrics` endpoint is now `/bridges/{id}/metrics/reset`
-
-- [#9774](https://github.com/emqx/emqx/pull/9774) Add a password complexity requirement when adding or modifying Dashboard users via the API.
-  Now password must contain at least 2 of alphabetic, numeric and special characters,
-  and must be 8 to 64 characters long.
-
-### Bug fixes
-
-- [#9626](https://github.com/emqx/emqx/pull/9626) Return authorization settings with default values.
-  The authorization cache is enabled by default, but due to the missing default value in `GET` response of `/authorization/settings`, it seemed to be disabled from the dashboard.
-
-- [#9680](https://github.com/emqx/emqx/pull/9680) Fix the problem that username and password authentication is mandatory in Influxdb v1 write API.
-
-- [#9726](https://github.com/emqx/emqx/pull/9726) Client fuzzy search API results were missing information which could tell if more results are available in the next pages, this is now fixed by providing `hasnext` flag in the response.
-
-- [#9735](https://github.com/emqx/emqx/pull/9735) Password information has been removed from information log messages for http, ldap, mongo, mqtt, mysql, pgsql and redis.
-
-- [#9748](https://github.com/emqx/emqx/pull/9748) Listeners not configured with `max_connections` will cause the cluster `/listeners` API to return 500 error.
-
-- [#9749](https://github.com/emqx/emqx/pull/9749) In some cases search APIs could respond with an incorrect `count` value in the metadata, that is usually much bigger than expected, this is now fixed.
-
-- [#9750](https://github.com/emqx/emqx/pull/9750) Reload overriding configs after boot.
-  Prior to this change, two configs were allow to change from dashboard, but will not take effect after reboot:
-
-  - Logging (such as level)
-  - Prometheus configs
-
-- [#9751](https://github.com/emqx/emqx/pull/9751) Fix that obsoleted cert file will not be deleted after the listener is updated/deleted
-
-- [#9763](https://github.com/emqx/emqx/pull/9763) Fix an authentication exception when password is not provided
-
-- [#9765](https://github.com/emqx/emqx/pull/9765) Parse decimals as password from environment variable overrides correctly.
-  Prior to this change, config values for passwords are not allowed to be decimals.
-  e.g. `EMQX_FOOBAR__PASSWORD=12344` or `emqx.foobar.password=1234`
-  would result in a type check error, unless quoted as:
-  `EMQX_FOOBAR__PASSWORD='"12344"'` or `emqx.foobar.password="1234"`.
-  After this fix, the value does not have to be quoted.
-
-- [#9769](https://github.com/emqx/emqx/pull/9769) Fix Erlang shell prompt version prefix. e5.0.15 -> v5.0.15
-
-- [#9780](https://github.com/emqx/emqx/pull/9780) When creating disk queue directory for resource worker, substitute ':' with '-' in worker id.
-
-- [#9781](https://github.com/emqx/emqx/pull/9781) Trace files were left on a node when creating a zip file for download. They are now removed when the file is sent. Also, concurrent downloads will no longer interfere with each other.
-
-- [#9785](https://github.com/emqx/emqx/pull/9785) Stop authentication hook chain if `emqx_authentication` provides a definitive result.
-
-- [#9787](https://github.com/emqx/emqx/pull/9787) Fix a compatible problem for the `webhook` bridge configuration which was created before the v5.0.12.
+- [#9626](https://github.com/emqx/emqx/pull/9626) 返回带有默认值的授权设置。
+- [#9680](https://github.com/emqx/emqx/pull/9680) 修复 Influxdb v1 写入 API 中用户名和密码认证是强制的问题。
+- [#9726](https://github.com/emqx/emqx/pull/9726) 修复客户端模糊搜索 API 结果缺少信息的问题，该信息可以告知下一页是否有更多结果。
+- [#9735](https://github.com/emqx/emqx/pull/9735) 从 http、ldap、mongo、mqtt、mysql、pgsql 和 redis 的信息日志消息中移除密码信息。
+- [#9748](https://github.com/emqx/emqx/pull/9748) 未配置 `max_connections` 的监听器将导致集群 `/listeners` API 返回 500 错误。
+- [#9749](https://github.com/emqx/emqx/pull/9749) 修复某些情况下搜索 API 响应中的 `count` 值不正确的问题。
+- [#9750](https://github.com/emqx/emqx/pull/9750) 启动后重新加载覆盖配置。
+- [#9751](https://github.com/emqx/emqx/pull/9751) 修复更新/删除监听器后废弃的证书文件不会被删除的问题。
+- [#9763](https://github.com/emqx/emqx/pull/9763) 修复未提供密码时的认证异常。
+- [#9765](https://github.com/emqx/emqx/pull/9765) 正确解析环境变量覆盖中作为密码的小数。
+- [#9769](https://github.com/emqx/emqx/pull/9769) 修复 Erlang shell 提示符版本前缀。e5.0.15 -> v5.0.15
+- [#9780](https://github.com/emqx/emqx/pull/9780) 为资源工作器创建磁盘队列目录时，将工作器 id 中的 ':' 替换为 '-'。
+- [#9781](https://github.com/emqx/emqx/pull/9781) 创建下载的 zip 文件时，跟踪文件留在节点上。现在文件发送时会被删除，且并发下载不会再相互干扰。
+- [#9785](https://github.com/emqx/emqx/pull/9785) 如果 `emqx_authentication` 提供了明确结果，则停止认证钩子链。
+- [#9787](https://github.com/emqx/emqx/pull/9787) 修复 v5.0.12 之前创建的 `webhook` 桥接配置的兼容问题。
 
 ## 5.0.14
 
-*发布日期: 2023-01-11*
+*发布日期：2023-01-11*
 
-### Enhancements
+### 增强
 
-- https://github.com/emqx/emqx/pull/8329 The MongoDB library has been upgraded to support MongoDB 5.1+
+- [#8329](https://github.com/emqx/emqx/pull/8329) MongoDB 库已升级，支持 MongoDB 5.1+。
+- [#9593](https://github.com/emqx/emqx/pull/9593) 通过 API 查询桥接信息时，对敏感数据进行了脱敏处理。
+- [#9614](https://github.com/emqx/emqx/pull/9614) 现在可以不加引号配置环境变量中的 host:port。之前，从环境变量覆盖 host:port 配置值时，必须加引号：`env EMQX_BRIDGES**MQTT**XYZ**SERVER='"localhost:1883"'`。现在可以不加引号设置：`env EMQX_BRIDGES**MQTT**XYZ**SERVER='localhost:1883'`。
+- [#9642](https://github.com/emqx/emqx/pull/9642) 废弃桥接/资源的 enable_batch 和 enable_queue 选项。此更改后，桥接的队列始终启用，批处理由 batch_size 选项控制：batch_size > 1 表示将启用批处理。
+- [#9671](https://github.com/emqx/emqx/pull/9671) 实现滑动窗口平均指标。
+- [#9674](https://github.com/emqx/emqx/pull/9674) 使规则引擎行为与桥接行为在指标方面更一致：如果规则引擎被禁用，其指标现在将被重置。
+- [#9675](https://github.com/emqx/emqx/pull/9675) HTTP 客户端库 ehttpc 从 0.4.2 升级到 0.4.3。管理 Redis 集群客户端的库 eredis_cluster 从 0.7.1 升级到 0.7.5。
+- [#9713](https://github.com/emqx/emqx/pull/9713) 引入 api_key.bootstrap_file 以在启动时初始化 API 密钥。废弃 dashboard.bootstrap_users_file。将 API 密钥的最大数量限制为 100 而不是 30。
 
-- https://github.com/emqx/emqx/pull/9593 Obfuscated sensitive data in the response when querying bridges information by API.
+### 修复
 
-- https://github.com/emqx/emqx/pull/9614 Make it possible to configure host:port from environment variables without quotes.
-  Prior to this change, when overriding a host:port config value from the environment variable, one has to quote it as:
-  env EMQX_BRIDGES**MQTT**XYZ**SERVER='"localhost:1883"'.
-  Now it's possible to set it without quote as env EMQX_BRIDGES**MQTT**XYZ**SERVER='localhost:1883'.
-
-- https://github.com/emqx/emqx/pull/9642 Deprecates enable_batch and enable_queue options for bridges/resources. After this change, queuing is always enabled for bridges, and batching is controlled by the batch_size option: batch_size > 1 means batching will be enabled.
-
-- https://github.com/emqx/emqx/pull/9671 Implement sliding window average metrics.
-
-- https://github.com/emqx/emqx/pull/9674 Made rule engine behavior more consistent with bridge behavior regarding metrics: if a rule engine is disabled, its metrics are now reset.
-
-- https://github.com/emqx/emqx/pull/9675 HTTP client library ehttpc upgraded from 0.4.2 to 0.4.3.
-  Library eredis_cluster which manages clients to Redis clusters upgraded from 0.7.1 to 0.7.5.
-
-- https://github.com/emqx/emqx/pull/9713 Introduce api_key.bootstrap_file to initialize the api key at boot time.
-  Deprecate dashboard.bootstrap_users_file.
-  Limit the maximum number of api keys to 100 instead of 30.
-
-### Bug fixes
-
-- https://github.com/emqx/emqx/pull/8648 When deleting a non-existing bridge the server gave a successful response. This has been fixed so that the server instead gives an error response when the user attempts to delete a non-existing bridge.
-
-- https://github.com/emqx/emqx/pull/9637 Fix the expiry_interval fields of the clients HTTP API to measure in seconds.
-
-- https://github.com/emqx/emqx/pull/9638 Fix the problem of data loss and bad match when the MySQL driver is disconnected.
-
-- https://github.com/emqx/emqx/pull/9641 Fix an issue where testing the GCP PubSub could leak memory and an issue where its JWT token would fail to refresh a second time.
-
-- https://github.com/emqx/emqx/pull/9642 Fix some issues that could lead to wrong bridge metrics.
-  Fix an issue that could lead to message loss and wrong metrics with the Kafka Producer bridge when Kafka or the connection to it is down.
-  Fix some issues that could lead to the same message being delivered more than once when using batching for bridges and when the batch was retried.
-
-- https://github.com/emqx/emqx/pull/9667 Remove the possibility to set clientid for /publish and /publish/bulk HTTP APIs. This is to reduce the risk of security confusion.
-
-- https://github.com/emqx/emqx/pull/9687 Fix the problem that sending messages to data-bridges failed because of incorrect handling of some data-bridges without local_topic field configured.
-  Before this change, if some bridges have configured the local_topic field but others have not, a function_clause error will occur when forwarding messages to the data-bridges.
-
-- https://github.com/emqx/emqx/pull/9689 Fix handling of HTTP authorization result when a request failure (e.g.: HTTP resource is down) would cause a function_clause error.
-
-- https://github.com/emqx/emqx/pull/9703 Set the default value of the qos field of the HTTP API /clients/:clientid/subscribe to 0.
-  Before this fix, the qos field has no default value, which leads to a function_clause error
-  when querying this API.
-
-- https://github.com/emqx/emqx/pull/9705 Remove the default value of Webhook.
-  Before this repair, the default value of the body field of Webhook is ${payload},
-  but there is no payload field in the available fields of other events except the message
-  publishing in the rule, so in this case, the webhook will send a string with the
-  message body as "undefined" to the HTTP service.
-  This fix removes the default value of the body field. When the body field is
-  not configured, Webhook will send all available fields of the current event in
-  the format of a JSON object.
-
-- https://github.com/emqx/emqx/pull/9712 Fixed the problem of '404 Not Found' when calling the HTTP API '/clients/:clientid/subscribe/bulk'
-  from the plug-ins and data-bridges on handling the 'client.connected' event.
-
-- https://github.com/emqx/emqx/pull/9714 Fix /mqtt/auto_subscribe API's bad swagger schema, and make sure swagger always checks if the schema is correct.
-
-- https://github.com/emqx/emqx/pull/9716 MQTT bridge config compatibility fix. The config created before v5.0.12 may encounter a compatibility issue after upgrading to v5.0.13.
-
-- https://github.com/emqx/emqx/pull/9717 Prior to this fix, if it always times out when trying to connect a bridge server, it's not possible to change other configs even when the bridge is disabled.
+- [#8648](https://github.com/emqx/emqx/pull/8648) 删除不存在的桥接时，服务器返回成功响应。现已修复，当用户尝试删除不存在的桥接时，服务器会给出错误响应。
+- [#9637](https://github.com/emqx/emqx/pull/9637) 修复 clients HTTP API 的 expiry_interval 字段以秒为单位。
+- [#9638](https://github.com/emqx/emqx/pull/9638) 修复 MySQL 驱动断开连接时的数据丢失和 bad match 问题。
+- [#9641](https://github.com/emqx/emqx/pull/9641) 修复测试 GCP PubSub 可能导致内存泄露和 JWT 令牌第二次刷新失败的问题。
+- [#9642](https://github.com/emqx/emqx/pull/9642) 修复可能导致错误桥接指标的一些问题。修复当 Kafka 或其连接断开时，可能导致消息丢失和错误指标的 Kafka 生产者桥接问题。修复使用批处理和批处理重试时，相同消息可能被多次交付的一些问题。
+- [#9667](https://github.com/emqx/emqx/pull/9667) 移除 /publish 和 /publish/bulk HTTP API 设置 clientid 的可能性，以减少安全混淆的风险。
+- [#9687](https://github.com/emqx/emqx/pull/9687) 修复因错误处理未配置 local_topic 字段的某些数据桥接而导致向数据桥接发送消息失败的问题。
+- [#9689](https://github.com/emqx/emqx/pull/9689) 修复 HTTP 授权结果处理问题，当请求失败（例如：HTTP 资源宕机）可能导致 function_clause 错误。
+- [#9703](https://github.com/emqx/emqx/pull/9703) 将 HTTP API /clients/:clientid/subscribe 的 qos 字段的默认值设置为 0。
+- [#9705](https://github.com/emqx/emqx/pull/9705) 移除 Webhook 的默认值。
+- [#9712](https://github.com/emqx/emqx/pull/9712) 修复从插件和数据桥处理 'client.connected' 事件时调用 HTTP API '/clients/:clientid/subscribe/bulk' 导致的 '404 Not Found' 问题。
+- [#9714](https://github.com/emqx/emqx/pull/9714) 修复 /mqtt/auto_subscribe API 的错误 Swagger 架构，并确保 Swagger 始终检查架构是否正确。
+- [#9716](https://github.com/emqx/emqx/pull/9716) MQTT 桥接配置兼容性修复。在 v5.0.12 之前创建的配置在升级到 v5.0.13 后可能遇到兼容性问题。
+- [#9717](https://github.com/emqx/emqx/pull/9717) 在此修复之前，如果尝试连接桥接服务器总是超时，即使桥接被禁用也无法更改其他配置。
 
 ## 5.0.13
 
-*发布日期: 2022-12-27*
+*发布日期：2022-12-27*
 
-### Enhancements
+### 增强
 
-- Add `limiter` update API [#9133](https://github.com/emqx/emqx/pull/9133).
+- 添加 `limiter` 更新 API [#9133](https://github.com/emqx/emqx/pull/9133)。
+- 在集群启动时同步数据目录时避免创建临时 zip 文件 [#9429](https://github.com/emqx/emqx/pull/9429)。
+- 重构：将 `/mqtt/sys_topics` 移至通用 `/configs/sys_topics` [#9511](https://github.com/emqx/emqx/pull/9511)。
+- 重构：对 `/users/{name}/change_pwd` 使用 `POST` 而不是 `PUT` [#9533](https://github.com/emqx/emqx/pull/9533)。
+- 在规则引擎中添加压缩函数 `zip`、`gzip`、`zip_compress` 及相应的解压缩函数 [#9573](https://github.com/emqx/emqx/pull/9573)。
+- 对 `PUT /authenticator/:id` 返回 `204` 而不是 `200` [#9434](https://github.com/emqx/emqx/pull/9434/)。
+- 添加选项以自定义出站 MQTT 桥接的 clientid 前缀。[#9609](https://github.com/emqx/emqx/pull/9609)
+- 确保 `banned` 的默认过期时间足够大 [#9599](https://github.com/emqx/emqx/pull/9599/)。
 
-- Avoid creating temporary zip files when syncing data directory during cluster startup [#9429](https://github.com/emqx/emqx/pull/9429).
+### 修复
 
-- Refactor: move `/mqtt/sys_topics` to generic `/configs/sys_topics` [#9511](https://github.com/emqx/emqx/pull/9511).
-
-- Refactor: use `POST` not `PUT` for `/users/{name}/change_pwd` [#9533](https://github.com/emqx/emqx/pull/9533).
-
-- Add compression functions `zip`, `gzip`, `zip_compress` in Rule-Engine and corresponding decompression functions [#9573](https://github.com/emqx/emqx/pull/9573).
-
-- Return `204` instead of `200` for `PUT /authenticator/:id` [#9434](https://github.com/emqx/emqx/pull/9434/).
-
-- Added the option to customize the clientid prefix of egress MQTT bridges. [#9609](https://github.com/emqx/emqx/pull/9609)
-
-- Ensure the default expiration time of `banned` is large enough [#9599](https://github.com/emqx/emqx/pull/9599/).
-
-### Bug fixes
-
-- Trigger `message.dropped` hook when QoS2 message is resend by client with a same packet id, or 'awaiting_rel' queue is full [#9487](https://github.com/emqx/emqx/pull/9487).
-
-- Fix shared subscription 'sticky' strategy [#9578](https://github.com/emqx/emqx/pull/9578).
-  Prior to this change, a 'sticky' subscriber may continue to receive messages after unsubscribing.
-
-- Add check to ensure that a given key is among the prepared statements on query in the mysql connector [#9571](https://github.com/emqx/emqx/pull/9571).
-
-- Fix password leak to logs for connectors [#9608](https://github.com/emqx/emqx/pull/9608).
+- 当 QoS2 消息由客户端使用相同的包 ID 重新发送，或 `awaiting_rel` 队列已满时，触发 `message.dropped` 钩子 [#9487](https://github.com/emqx/emqx/pull/9487)。
+- 修复共享订阅 'sticky' 策略 [#9578](https://github.com/emqx/emqx/pull/9578)。在此更改之前，'sticky' 订阅者在取消订阅后可能继续接收消息。
+- 添加检查以确保给定的键在 mysql 连接器的查询中属于准备好的语句之一 [#9571](https://github.com/emqx/emqx/pull/9571)。
+- 修复连接器中密码泄露到日志的问题 [#9608](https://github.com/emqx/emqx/pull/9608)。
 
 ## 5.0.12
 
-*发布日期: 2022-12-14*
+*发布日期：2022-12-14*
 
-### Highlights
+### 亮点
 
-- This version included a refactoring of MQTT bridge config. The older version config file created from v5.0.11 or earlier will be converted to according to the new schema. Please note though, the request body of `/bridges` API to configure MQTT brdige is changed in a incompatible way.
-- Start releasing packages for Apple M1/M2 (MacOS-12).
-- Start releasing packages for Amazon Linux 2 (e.g. emqx-5.0.12-amzn2-amd64.rpm).
-- Retained message index performance improvement.
+- 此版本包括 MQTT 桥接配置的重构。从 v5.0.11 或更早版本创建的旧版本配置文件将根据新架构进行转换。请注意，配置 MQTT 桥接的 `/bridges` API 的请求体已以不兼容的方式更改。
+- 开始为 Apple M1/M2 (MacOS-12) 发布软件包。
+- 开始为 Amazon Linux 2 发布软件包（例如 emqx-5.0.12-amzn2-amd64.rpm）。
+- 保留消息索引性能改进。
 
-### Enhancements
+### 增强
 
-- Disable global garbage collection by `node.global_gc_interval = disabled` [#9418](https://github.com/emqx/emqx/pull/9418)。
+- 通过 `node.global_gc_interval = disabled` 禁用全局垃圾回收 [#9418](https://github.com/emqx/emqx/pull/9418)。
+- 改进 CLI 以避免在输入错误时浪费原子表 [#9416](https://github.com/emqx/emqx/pull/9416)。
+- 开始为 Apple Silicon 硬件构建 MacOS 软件包 [#9423](https://github.com/emqx/emqx/pull/9423)。
+- 移除使用非标准 `$queue` 功能设置共享订阅的支持 [#9412](https://github.com/emqx/emqx/pull/9412)。共享订阅现已成为 MQTT 规范的一部分。请改用 `$share`。
+- 通过替换 `POST /authentication/{id}/move` 为 `PUT /authentication/{id}/position/{position}` 重构 authn API [#9419](https://github.com/emqx/emqx/pull/9419)。对 `/listeners/{listener_id}/authentication/id/...` 也做了相同处理。
+- 重新设计 `/rules` API，使 `metrics` 成为专门的资源而不是包含在每个响应中 [#9461](https://github.com/emqx/emqx/pull/9461)。
+- 增加更多 PSK 密码支持 [#9505](https://github.com/emqx/emqx/pull/9505)。
+- 提高 `emqx_retainer` 写入性能：在写入时摆脱事务 [#9372](https://github.com/emqx/emqx/pull/9372)。
+- HTTP 客户端库 `ehttpc` 从 `0.4.0` 升级到 `0.4.2` [#9520](https://github.com/emqx/emqx/pull/9520)。
+- 为 MQTT SSL 监听器添加 `handshake_timeout` 选项 [#9502](https://github.com/emqx/emqx/pull/9502)。
+- 将 Dashboard升级到 [v1.1.3](https://github.com/emqx/emqx-dashboard-web-new/releases/tag/v1.1.3)。
+- 用户可以在 EMQX Helm 图表中定义服务的 `externalTrafficPolicy` [#9527](https://github.com/emqx/emqx/pull/9527)。
+- 对 `POST /gateway/lwm2m/clients/{clientid}/{read,write,observe}` 返回 `204` 而不是 `200` [#9480](https://github.com/emqx/emqx/pull/9480)。
+- 使完全从环境变量创建认证成为可能 [#9547](https://github.com/emqx/emqx/pull/9547)。例如，现在可以启用 MySQL 认证： `env EMQX_AUTHENTICATION__1='{mechanism="password_based",backend="mysql",server="localhost:3306",database="emqx",username="emqx",password="******",query="SELECT password_hash,salt FROM mqtt_user WHERE username=${username} LIMIT 1",enable=true}'`。
+- 开始为 Amazon Linux 2 构建软件包 [#9537](https://github.com/emqx/emqx/pull/9537)。
 
-- Improve the CLI to avoid waste atom table when typing erros [#9416](https://github.com/emqx/emqx/pull/9416).
+### 修复
 
-- Start building MacOS packages for Apple Silicon hadrdware [#9423](https://github.com/emqx/emqx/pull/9423).
-
-- Remove support for setting shared subscriptions using the non-standard `$queue` feature [#9412](https://github.com/emqx/emqx/pull/9412).
-  Shared subscriptions are now part of the MQTT spec. Use `$share` instead.
-
-- Refactor authn API by replacing `POST /authentication/{id}/move` with `PUT /authentication/{id}/position/{position}`. [#9419](https://github.com/emqx/emqx/pull/9419).
-  Same is done for `/listeners/{listener_id}/authentication/id/...`.
-
-- Redesign `/rules` API to make `metrics` a dedicated resources rather than being included with every response [#9461](https://github.com/emqx/emqx/pull/9461).
-
-- Add more PSK ciphers support [#9505](https://github.com/emqx/emqx/pull/9505).
-
-- Improve `emqx_retainer` write performance: get rid of transactions on write [#9372](https://github.com/emqx/emqx/pull/9372).
-
-- HTTP client library `ehttpc` upgraded from `0.4.0` to `0.4.2` [#9520](https://github.com/emqx/emqx/pull/9520).
-
-- Add `handshake_timeout` option to MQTT SSL listener [#9502](https://github.com/emqx/emqx/pull/9502).
-
-- Upgrade dashboard to [v1.1.3](https://github.com/emqx/emqx-dashboard-web-new/releases/tag/v1.1.3).
-
-- Users can define the `externalTrafficPolicy` of service in EMQX Helm Chart [#9527](https://github.com/emqx/emqx/pull/9527).
-
-- Return `204` instead of `200` for `POST /gateway/lwm2m/clients/{clientid}/{read,write,observe}` [#9480](https://github.com/emqx/emqx/pull/9480).
-
-- Make possible to create an authentication entirely from environment variable [#9547](https://github.com/emqx/emqx/pull/9547).
-  As an example, one can now enable MySQL auth with:
-  `env EMQX_AUTHENTICATION__1='{mechanism="password_based",backend="mysql",server="localhost:3306",database="emqx",username="emqx",password="******",query="SELECT password_hash,salt FROM mqtt_user WHERE username=${username} LIMIT 1",enable=true}'`.
-  Prior to this change, overrides only work on top of existing authentication, for example, if there is already MySQL auth configured in `emqx.conf`
-  but we want to disable it, we can do it with `env EMQX_AUTHENTICATION__1__ENABLE=false`.
-
-- Start building packages for Amazon Linux 2 [#9537](https://github.com/emqx/emqx/pull/9537).
-
-### Bug fixes
-
-- Fix that the obsolete SSL files aren't deleted after the ExHook config update [#9432](https://github.com/emqx/emqx/pull/9432).
-
-- Fix doc and schema for `/trace` API [#9468](https://github.com/emqx/emqx/pull/9468).
-
-- Return `404` for `/telemetry/data` in case it's disabled [#9464](https://github.com/emqx/emqx/pull/9464).
-
-- Fix some potential MQTT packet parse errors [#9477](https://github.com/emqx/emqx/pull/9477).
-
-- Fixed EMQX Helm Chart deployment error [#9509](https://github.com/emqx/emqx/pull/9509).
-
-  - Fixed the `Discovery error: no such service` error occurred during helm chart deployment, resulting in an abnormal discovery of cluster nodes.
-  - Fixed issue that caused EMQX Helm Chart to fail when modifying some of EMQX's configuration items via environment variables.
-
-- Fix shadowing `'client.authenticate'` callbacks by `emqx_authenticator`. Now `emqx_authenticator`
-  passes execution to the further callbacks if none of the authenticators matches [#9496](https://github.com/emqx/emqx/pull/9496).
-
-- Return `400` if query param `node` is not a known node in `/trace/:id/download?node={node}` [#9478](https://github.com/emqx/emqx/pull/9478).
-
-- `POST /traces` to return `409` in case of duplicate [#9494](https://github.com/emqx/emqx/pull/9494).
-
-- Fix bridging function, when both ingress and egress bridges are configured, egress bridge does not work [#9523](https://github.com/emqx/emqx/pull/9523).
-
-- Fix EMQX Helm Chart using incorrect secret values when custom credentials are provided [#9536](https://github.com/emqx/emqx/pull/9536).
+- 修复 ExHook 配置更新后过时的 SSL 文件未被删除的问题 [#9432](https://github.com/emqx/emqx/pull/9432)。
+- 修复 `/trace` API 的文档和架构 [#9468](https://github.com/emqx/emqx/pull/9468)。
+- 如果 `/telemetry/data` 被禁用，则返回 `404` [#9464](https://github.com/emqx/emqx/pull/9464)。
+- 修复一些潜在的 MQTT 数据包解析错误 [#9477](https://github.com/emqx/emqx/pull/9477)。
+- 修复 EMQX Helm 图表部署错误 [#9509](https://github.com/emqx/emqx/pull/9509)。
+- 修复 `emqx_authenticator` 遮蔽 `'client.authenticate'` 回调的问题。现在，如果没有任何认证器匹配，`emqx_authenticator` 会将执行传递给更多的回调 [#9496](https://github.com/emqx/emqx/pull/9496)。
+- 如果 `/trace/:id/download?node={node}` 中的查询参数 `node` 不是已知节点，则返回 `400` [#9478](https://github.com/emqx/emqx/pull/9478)。
+- 如果出现重复，则 `POST /traces` 返回 `409` [#9494](https://github.com/emqx/emqx/pull/9494)。
+- 修复桥接功能，当同时配置入站和出站桥接时，出站桥接不工作 [#9523](https://github.com/emqx/emqx/pull/9523)。
+- 修复 EMQX Helm 图表在提供自定义凭据时使用错误的密钥值问题 [#9536](https://github.com/emqx/emqx/pull/9536)。
 
 ## 5.0.11
 
-*发布日期: 2022-11-27*
+*发布日期：2022-11-27*
 
-### Enhancements
+### 增强
 
-- Security enhancement for retained messages [#9326](https://github.com/emqx/emqx/pull/9326).
-  The retained messages will not be published if the publisher client is banned.
+- 保留消息的安全增强 [#9326](https://github.com/emqx/emqx/pull/9326)。 如果发布者客户端被禁止，则不会发布保留消息。
+- `subscribe` API 的安全增强 [#9355](https://github.com/emqx/emqx/pull/9355)。
+- 增强 `banned` 功能 [#9367](https://github.com/emqx/emqx/pull/9367)。 现在，当客户端通过 `clientid` 被禁止时，相应的会话将被踢出。
+- 重新设计 `/gateways` API [9364](https://github.com/emqx/emqx/pull/9364)。 使用 `PUT /gateways/{name}` 替代 `POST /gateways`，如果需要，网关将自动加载。使用 `PUT /gateways/{name}/enable/{true|false}` 来启用或禁用网关。不再使用 `DELETE /gateways/{name}`。
+- 支持 `statsd {tags: {"user-defined-tag" = "tag-value"}` 配置并提高 `emqx_statsd` 的稳定性 [#9363](http://github.com/emqx/emqx/pull/9363)。
+- 改进节点名称生成规则，以避免潜在的原子表溢出风险 [#9387](https://github.com/emqx/emqx/pull/9387)。
+- 将主题的最大级别的默认值设置为 128 [#9406](https://github.com/emqx/emqx/pull/9406)。
+- 保持 MQTT v5 用户属性对从桥接接收的 MQTT 消息到桥接目标的转发 [#9398](https://github.com/emqx/emqx/pull/9398)。
 
-- Security enhancement for the `subscribe` API [#9355](https://github.com/emqx/emqx/pull/9355).
+### 修复
 
-- Enhance the `banned` feature [#9367](https://github.com/emqx/emqx/pull/9367).
-  Now the corresponding session will be kicked when client is banned by `clientid`.
-
-- Redesign `/gateways` API [9364](https://github.com/emqx/emqx/pull/9364).
-  Use `PUT /gateways/{name}` instead of `POST /gateways`, gateway gets 'loaded'
-  automatically if needed. Use `PUT /gateways/{name}/enable/{true|false}` to
-  enable or disable gateway. No more `DELETE /gateways/{name}`.
-
-- Support `statsd {tags: {"user-defined-tag" = "tag-value"}` configure and improve stability of `emqx_statsd` [#9363](http://github.com/emqx/emqx/pull/9363).
-
-- Improve node name generation rules to avoid potential atom table overflow risk [#9387](https://github.com/emqx/emqx/pull/9387).
-
-- Set the default value for the maximum level of a topic to 128 [#9406](https://github.com/emqx/emqx/pull/9406).
-
-- Keep MQTT v5 User-Property pairs from bridge ingested MQTT messsages to bridge target [#9398](https://github.com/emqx/emqx/pull/9398).
-
-### Bug fixes
-
-- Fix `ssl.existingName` option of helm chart not working [#9307](https://github.com/emqx/emqx/issues/9307).
-
-- Fix create trace sometime failed by end_at time has already passed. [#9303](https://github.com/emqx/emqx/pull/9303)
-
-- Return 404 for status of unknown authenticator in `/authenticator/{id}/status` [#9328](https://github.com/emqx/emqx/pull/9328).
-
-- Fix that JWT ACL rules are only applied if an `exp` claim is set [#9368](https://github.com/emqx/emqx/pull/9368).
-
-- Fix that `/configs/global_zone` API cannot get the default value of the configuration [#9392](https://github.com/emqx/emqx/pull/9392).
-
-- Fix mountpoint not working for will-msg [#9399](https://github.com/emqx/emqx/pull/9399).
+- 修复 helm 图表的 `ssl.existingName` 选项不工作的问题 [#9307](https://github.com/emqx/emqx/issues/9307)。
+- 修复有时由于 `end_at` 时间已过而创建跟踪失败的问题。[#9303](https://github.com/emqx/emqx/pull/9303)
+- 对 `/authenticator/{id}/status` 中未知认证器的状态返回 404 [#9328](https://github.com/emqx/emqx/pull/9328)。
+- 修复仅当设置了 `exp` 声明时，JWT ACL 规则才会应用的问题 [#9368](https://github.com/emqx/emqx/pull/9368)。
+- 修复 `/configs/global_zone` API 无法获取配置默认值的问题 [#9392](https://github.com/emqx/emqx/pull/9392)。
+- 修复遗嘱消息的挂载点不工作问题 [#9399](https://github.com/emqx/emqx/pull/9399)。
 
 ## 5.0.10
 
-*发布日期: 2022-11-09*
+*发布日期：2022-11-09*
 
-Release had to be recreated due to an issue in GitHub action which failed to upload/publish packages.
-Previous commit: 34a6c6c88
+由于 GitHub Action 发布包上传失败的问题，需要重新创建发布版本。 之前的提交：34a6c6c88
 
-### Enhancements
+### 增强
 
-- Improve `/nodes` API responsiveness [#9221](https://github.com/emqx/emqx/pull/9221).
+- 提高 `/nodes` API 的响应性能 [#9221](https://github.com/emqx/emqx/pull/9221)。
+- 改进 `banned` 和 `delayed` 功能的集成 [#9326](https://github.com/emqx/emqx/pull/9326)。 现在在发布延迟消息之前会先检查其来源客户端是否被禁止，如果是，则忽略此发布操作。
+- 将 `gen_rpc` 库更新至 3.0 版本 [#9187](https://github.com/emqx/emqx/pull/9187)。
+- 在引导副本节点时改善核心节点的内存使用 [#9236](https://github.com/emqx/emqx/pull/9236)。
+- 提高 Prometheus Push Gateway 的稳定性，并在 POST 失败时记录错误 [#9235](http://github.com/emqx/emqx/pull/9235)。
+- 现在可以选择不在 prometheus 统计中包含 VM 内部指标 [#9222](https://github.com/emqx/emqx/pull/9222)。 当系统负载较高时，报告过多的指标数据可能会导致 prometheus 统计 API 超时。
+- 提高将 `binary`、`lists` 等类型转换为 `atom` 类型的安全性 [#9279](https://github.com/emqx/emqx/pull/9279), [#9286](https://github.com/emqx/emqx/pull/9286)。
+- 添加 `/trace/:name/log_detail` HTTP API 以返回跟踪文件的大小和修改时间 [#9152](https://github.com/emqx/emqx/pull/9152)。
+- 将 `/status` HTTP API 端点添加到 API 文档中 [#9230](https://github.com/emqx/emqx/pull/9230)。
+- 所有平台的二进制包现在基于 Erlang/OTP 版本 24.3.4.2 构建 [#9293](https://github.com/emqx/emqx/pull/9293)。
 
-- Improve the integration of the `banned` and the `delayed` feature [#9326](https://github.com/emqx/emqx/pull/9326).
-  Now when publishing a delayed message will check first if its source client is banned, if true, this publish will be ignored.
+### 修复
 
-- Update `gen_rpc` library to version 3.0 [#9187](https://github.com/emqx/emqx/pull/9187).
-
-- Improve memory usage on core nodes when bootstrapping a replicant [#9236](https://github.com/emqx/emqx/pull/9236).
-
-- Improve stability of Prometheus Push Gateway and log errors when POST fails [#9235](http://github.com/emqx/emqx/pull/9235).
-
-- Now it is possible to opt out VM internal metrics in prometheus stats [#9222](https://github.com/emqx/emqx/pull/9222).
-  When system load is high, reporting too much metrics data may cause the prometheus stats API timeout.
-
-- Improve security when converting types such as `binary` `lists` to `atom` types [#9279](https://github.com/emqx/emqx/pull/9279), [#9286](https://github.com/emqx/emqx/pull/9286).
-
-- Add `/trace/:name/log_detail` HTTP API to return trace file's size and mtime [#9152](https://github.com/emqx/emqx/pull/9152).
-
-- Add `/status` HTTP API endpoint to api documentation [#9230](https://github.com/emqx/emqx/pull/9230).
-
-- Binary packages for all platforms are now built on Erlang/OTP version 24.3.4.2 [#9293](https://github.com/emqx/emqx/pull/9293).
-
-### Bug fixes
-
-- Fix error log message when `mechanism` is missing in authentication config [#8924](https://github.com/emqx/emqx/pull/8924).
-
-- Fix HTTP 500 issue when unknown `status` parameter is used in `/gateway` API call [#9225](https://github.com/emqx/emqx/pull/9225).
-
-- Fixed the HTTP response status code for the `/status` endpoint [#9211](https://github.com/emqx/emqx/pull/9211).
-  Before the fix, it always returned `200` even if the EMQX application was not running. Now it returns `503` in that case.
-
-- Fix message delivery related event encoding [#9228](https://github.com/emqx/emqx/pull/9228).
-  This bug was introduced in v5.0.9. For Rule-Engine's input events like `$events/message_delivered`
-  and `$events/message_dropped`, if the message was delivered to a shared-subscription,
-  the encoding (to JSON) of the event will fail.
-
-- Fix bad HTTP response status code for `/gateways` API, when Gateway name is unknown, it should return `404` instead of `400` [#9268](https://github.com/emqx/emqx/pull/9268).
-
-- Fix incorrect topic authorize checking of delayed messages [#9290](https://github.com/emqx/emqx/pull/9290).
-  Now will determine the actual topic of the delayed messages, e.g. `$delayed/1/t/foo` will be treated as `t/foo` in authorize checks.
-
-- Add property `code` to error response for `/authentication/sources/:type` [9299](https://github.com/emqx/emqx/pull/9299).
-
-- Align documentation for `/authentication/sources` with what we actually send [9299](https://github.com/emqx/emqx/pull/9299).
-
-- Fix query string parameter 'node' to `/configs` resource being ignored, return 404 if node does not exist [#9310](https://github.com/emqx/emqx/pull/9310/).
-
-- Avoid re-dispatching shared-subscription session messages when a session is kicked or taken-over (to a new session) [#9123](https://github.com/emqx/emqx/pull/9123).
+- 修复认证配置中缺少 `mechanism` 时的错误日志消息 [#8924](https://github.com/emqx/emqx/pull/8924)。
+- 修复在 `/gateway` API 调用中使用未知的 `status` 参数时的 HTTP 500 问题 [#9225](https://github.com/emqx/emqx/pull/9225)。
+- 修复 `/status` 端点的 HTTP 响应状态码 [#9211](https://github.com/emqx/emqx/pull/9211)。 在修复之前，即使 EMQX 应用程序没有运行，它始终返回 `200`。现在，在这种情况下会返回 `503`。
+- 修复消息传递相关事件编码 [#9228](https://github.com/emqx/emqx/pull/9228)。 这个 bug 在 v5.0.9 中引入。对于规则引擎的输入事件，如 `$events/message_delivered` 和 `$events/message_dropped`，如果消息被传递给共享订阅，事件的编码（转为 JSON）将失败。
+- 修复 `/gateways` API 的错误 HTTP 响应状态码，当网关名称未知时，应返回 `404` 而非 `400` [#9268](https://github.com/emqx/emqx/pull/9268)。
+- 修复延迟消息的主题授权检查错误 [#9290](https://github.com/emqx/emqx/pull/9290)。 现在将确定延迟消息的实际主题，例如 `$delayed/1/t/foo` 将在授权检查中被视为 `t/foo`。
+- 为 `/authentication/sources/:type` 的错误响应添加 `code` 属性 [9299](https://github.com/emqx/emqx/pull/9299)。
+- 使 `/authentication/sources` 的文档与我们实际发送的内容保持一致 [9299](https://github.com/emqx/emqx/pull/9299)。
+- 修复 `/configs` 资源中查询字符串参数 'node' 被忽略的问题，如果节点不存在则返回 404 [#9310](https://github.com/emqx/emqx/pull/9310/)。
+- 避免在会话被踢出或被接管（到新会话）时重新分派共享订阅会话消息 [#9123](https://github.com/emqx/emqx/pull/9123)。
 
 ## 5.0.9
 
-*发布日期: 2022-10-24*
+*发布日期：2022-10-24*
 
-### Enhancements
+### 增强
 
-- Add `cert_common_name` and `cert_subject` placeholder support for authz_http and authz_mongo [#8973](https://github.com/emqx/emqx/pull/8973).
+- 为 authz_http 和 authz_mongo 添加 `cert_common_name` 和 `cert_subject` 占位符支持 [#8973](https://github.com/emqx/emqx/pull/8973)。
+- 在 emqx_delayed 内部使用毫秒存储发布时间，提高精度 [#9060](https://github.com/emqx/emqx/pull/9060)。
+- 更严格的拍动检查以提高系统稳定性 [#9136](https://github.com/emqx/emqx/pull/9136)。
+- 消息发布 API 不再回显消息 [#9155](https://github.com/emqx/emqx/pull/9155)。 在此修复之前，消息发布 API（`api/v5/publish` 和 `api/v5/publish/bulk`）会将消息回显给客户端的 HTTP 正文中。 此更改修复它，只发送回消息 ID。
 
-- Use milliseconds internally in emqx_delayed to store the publish time, improving precision [#9060](https://github.com/emqx/emqx/pull/9060).
+### 修复
 
-- More rigorous checking of flapping to improve stability of the system [#9136](https://github.com/emqx/emqx/pull/9136).
-
-- No message(s) echo for the message publish APIs [#9155](https://github.com/emqx/emqx/pull/9155).
-  Prior to this fix, the message publish APIs (`api/v5/publish` and `api/v5/publish/bulk`) echos the message back to the client in HTTP body.
-  This change fixed it to only send back the message ID.
-
-### Bug fixes
-
-- Check ACLs for last will testament topic before publishing the message [#8930](https://github.com/emqx/emqx/pull/8930).
-
-- Fix GET /listeners API crash when some nodes (in a cluster) is still loading the configs [#9002](https://github.com/emqx/emqx/pull/9002).
-
-- Fix empty variable interpolation in authentication and authorization [#8963](https://github.com/emqx/emqx/pull/8963).
-  Placeholders for undefined variables are rendered now as empty strings and do not cause errors anymore.
-
-- Fix the latency statistics error of the slow subscription stats [#8986](https://github.com/emqx/emqx/pull/8986).
-  Prior to this change when `stats_type` is `internal` or `response`, the begin time stamp was taken at wrong precision.
-
-- Fix shared subscription message re-dispatches [#9104](https://github.com/emqx/emqx/pull/9104).
-
-  - When discarding QoS 2 inflight messages, there were excessive logs
-  - For wildcard deliveries, the re-dispatch used the wrong topic (the publishing topic,
-    but not the subscribing topic), caused messages to be lost when dispatching.
-
-- Upgrade http client `gun` from 1.3.7 to [1.3.9](https://github.com/emqx/gun/tree/1.3.9)
-  Prior to this fix, long-lived HTTPS connections for HTTP auth or webhook integrations
-  may stall indefinitely, causing massive timeouts for HTTP requests.
+- 在发布遗嘱消息之前检查 ACL [#8930](https://github.com/emqx/emqx/pull/8930)。
+- 修复某些节点（在集群中）仍在加载配置时 GET /listeners API 崩溃的问题 [#9002](https://github.com/emqx/emqx/pull/9002)。
+- 修复认证和授权中的空变量插值问题 [#8963](https://github.com/emqx/emqx/pull/8963)。 未定义变量的占位符现在呈现为空字符串，不再引起错误。
+- 修复慢订阅统计的延迟统计错误 [#8986](https://github.com/emqx/emqx/pull/8986)。 在此更改之前，当 `stats_type` 是 `internal` 或 `response` 时，开始时间戳的精度错误。
+- 修复共享订阅消息重新分发 [#9104](https://github.com/emqx/emqx/pull/9104)。
+  - 丢弃 QoS 2 inflight 消息时，日志过多
+  - 对于通配符交付，重新分发使用了错误的主题（发布主题，而不是订阅主题），导致分发时消息丢失。
+- 将 HTTP 客户端 `gun` 从 1.3.7 升级到 [1.3.9](https://github.com/emqx/gun/tree/1.3.9) 在此修复之前，用于 HTTP 认证或 webhook 集成的长期 HTTPS 连接可能无限期停滞，导致 HTTP 请求大量超时。
 
 ## 5.0.8
 
-*发布日期: 2022-09-17*
+*发布日期：2022-09-17*
 
-### Changes Worth Mentioning
+### 值得一提的变化
 
-### Enhancements
+### 增强
 
-- An independent RPC implementation is used between nodes to forward shared subscription messages instead of Erlang's own RPC to reduce the cluster pressure when the shared subscription load is high. [#8893](https://github.com/emqx/emqx/pull/8893)
-- Print a warning message when boot with the default (insecure) Erlang cookie. [#8905](https://github.com/emqx/emqx/pull/8905)
-- The configuration in `local-override.conf` will not allow synchronous updates in the cluster to the entire cluster at runtime. [#8851](https://github.com/emqx/emqx/pull/8851)
-- Add `POST /listeners` interface for creating listeners. [#8876](https://github.com/emqx/emqx/pull/8876)
-- Change `/gateway` API path to plural form. [#8823](https://github.com/emqx/emqx/pull/8823)
-- The `exp`, `nbf` and `iat` claims in JWT authentication support non-integer timestamps. [#8867](https://github.com/emqx/emqx/pull/8867)
-- Improve the request performance of ExProto and gRPC Server. [#8866](https://github.com/emqx/emqx/pull/8866)
+- 使用独立的 RPC 实现在节点之间转发共享订阅消息，而不是使用 Erlang 自己的 RPC，以减少在共享订阅负载高时的集群压力。[#8893](https://github.com/emqx/emqx/pull/8893)
+- 当使用默认（不安全）的 Erlang cookie 启动时，打印警告消息。[#8905](https://github.com/emqx/emqx/pull/8905)
+- `local-override.conf` 中的配置将不允许在运行时对整个集群进行同步更新。[#8851](https://github.com/emqx/emqx/pull/8851)
+- 添加 `POST /listeners` 接口用于创建监听器。[#8876](https://github.com/emqx/emqx/pull/8876)
+- 将 `/gateway` API 路径改为复数形式。[#8823](https://github.com/emqx/emqx/pull/8823)
+- JWT 认证中的 `exp`、`nbf` 和 `iat` 声明支持非整数时间戳。[#8867](https://github.com/emqx/emqx/pull/8867)
+- 提高 ExProto 和 gRPC 服务器的请求性能。[#8866](https://github.com/emqx/emqx/pull/8866)
 
-### Bug Fixes
+### 修复
 
-- Fix the issue that password authentication using Redis as the data source directly terminates the authentication when no authentication data is retrieved. [#8934](https://github.com/emqx/emqx/pull/8934)
-- Fix inaccurate delayed publish due to OS time changes. [#8926](https://github.com/emqx/emqx/pull/8926)
-- Fix the issue that EMQX could not be started after disabling the retained message feature. [#8911](https://github.com/emqx/emqx/pull/8911)
-- Fix the slow response of updating the configuration when a node in the cluster is down. [#8857](https://github.com/emqx/emqx/pull/8857)
-- Fix the issue that the authorization would terminate the execution of the `client.authorize` hook when no rules were matched. [#8780](https://github.com/emqx/emqx/pull/8780)
-- Fix the issue that Payload must be configured in MQTT Bridge. [#8949](https://github.com/emqx/emqx/pull/8949)
-- Fix the issue that the log directory cannot be configured through environment variables. [#8892](https://github.com/emqx/emqx/pull/8892)
-- Fix the issue that the CoAP gateway introduced an extra `/` prefix when parsing topics. [#8658](https://github.com/emqx/emqx/pull/8658)
-- Fix the issue that MQTT Bridge returned the content of the TLS file in the API response. [#8872](https://github.com/emqx/emqx/pull/8872), [#8958](https://github.com/emqx/emqx/pull/8958)
-- Fix the issue that client authentication failure would trigger the release of will messages. [#8887](https://github.com/emqx/emqx/pull/8887)
-- Fix ExProto's imperfect Keep Alive check mechanism that could cause the client to never expire. [#8866](https://github.com/emqx/emqx/pull/8866)
+- 修复使用 Redis 作为数据源直接进行密码认证时，如果没有检索到认证数据就终止认证的问题。[#8934](https://github.com/emqx/emqx/pull/8934)
+- 由于操作系统时间变化导致延迟发布不准确的问题。[#8926](https://github.com/emqx/emqx/pull/8926)
+- 修复禁用保留消息功能后无法启动 EMQX 的问题。[#8911](https://github.com/emqx/emqx/pull/8911)
+- 修复集群中一个节点宕机时更新配置的响应速度慢的问题。[#8857](https://github.com/emqx/emqx/pull/8857)
+- 修复当没有匹配规则时，授权会终止执行 `client.authorize` 钩子的问题。[#8780](https://github.com/emqx/emqx/pull/8780)
+- 修复 MQTT 桥接必须配置 Payload 的问题。[#8949](https://github.com/emqx/emqx/pull/8949)
+- 修复日志目录无法通过环境变量配置的问题。[#8892](https://github.com/emqx/emqx/pull/8892)
+- 修复 CoAP 网关在解析主题时引入额外的 `/` 前缀的问题。[#8658](https://github.com/emqx/emqx/pull/8658)
+- 修复 MQTT 桥接在 API 响应中返回 TLS 文件内容的问题。[#8872](https://github.com/emqx/emqx/pull/8872), [#8958](https://github.com/emqx/emqx/pull/8958)
+- 修复客户端认证失败会触发遗嘱消息释放的问题。[#8887](https://github.com/emqx/emqx/pull/8887)
+- 修复 ExProto 不完善的保活检查机制可能导致客户端永不过期的问题。[#8866](https://github.com/emqx/emqx/pull/8866)
 
-### Dependency Upgrades
+### 依赖升级
 
-- `grpc-erl` upgrades from `0.6.6` to `0.6.7`, [#8866](https://github.com/emqx/emqx/pull/8866)
+- `grpc-erl` 从 `0.6.6` 升级到 `0.6.7`，[#8866](https://github.com/emqx/emqx/pull/8866)
 
 ## 5.0.7
 
 *发布日期: 2022-09-01*
 
-### Enhancements
+### 增强
 
-- Simplify TLS cipher suite configuration
-- Add confirmation before listener closes on Dashboard
-- Unify the configuration of TLS on Dashboard
-- Supports viewing EMQX version and node role on Dashboard overview page
-- Increase restrictions on plugin file types
+- 简化 TLS 密码套件配置
+- 在 Dashboard 上关闭监听器之前添加确认提示
+- 在 Dashboard 上统一 TLS 配置
+- 支持在 Dashboard 概览页面查看 EMQX 版本和节点角色
+- 增加对插件文件类型的限制
 
-### Bug fixes
+### Bug 修复
 
-- Fix the issue that Mria transactions of replicated nodes could not be executed when nodes of mixed versions formed a cluster
-- Fix the issue that the Authorization settings page of Dashboard could not display data
-- Fix the issue that the monitoring topic data could not be reset on Dashboard
+- 修复了当混合版本的节点形成集群时，复制节点的 Mria 事务无法执行的问题
+- 修复了 Dashboard 的授权设置页面无法显示数据的问题
+- 修复了在 Dashboard 上无法重置监控主题数据的问题
 
-### Other changes
+### 其他变更
 
-- Remove will message related fields in the response of the client query interface
+- 在客户端查询接口的响应中移除了与遗嘱消息相关的字段
 
 ## 5.0.6
 
 *发布日期: 2022-08-22*
 
-### Bug fixes
+### Bug 修复
 
-- Fix incorrect display of node status on Dashboard
+- 修复了 Dashboard 上节点状态显示不正确的问题
 
 ## 5.0.4
 
-*发布日期: 2023-05-26*
-
-### 增强功能
-
-- [#10389](https://github.com/emqx/emqx/pull/10389) 统一 `cluster.core_nodes` 和 `cluster.statics.seeds` 配置格式，同时支持数组 `["emqx1@127.0.0.1", "emqx2@127.0.0.1"]` 或逗号分隔的字符串 `"emqx1@127.0.0.1,emqx2@127.0.0.1"` 两种格式。
-
-- [#10392](https://github.com/emqx/emqx/pull/10392) 新增函数 date_to_unix_ts/3，用于将格式化的日期转换成整数类型的时间戳：
-
-  `date_to_unix_ts(TimeUnit, FormatString, InputDateTimeString)`
-
-- [#10426](https://github.com/emqx/emqx/pull/10426) 优化配置优先级机制，修复重启 EMQX 后 `etc/emqx.conf` 中的配置不生效的问题。有关配置优先级请参考[配置重写规则](https://docs.emqx.com/zh/enterprise/v5.0/configuration/configuration.html#%E9%85%8D%E7%BD%AE%E8%A6%86%E7%9B%96%E8%A7%84%E5%88%99)
-
-- [#10457](https://github.com/emqx/emqx/pull/10457) 移除 StatsD 指标监控功能。
-
-- [#10458](https://github.com/emqx/emqx/pull/10458) 调整插件配置在示例配置文件中的位置，大多数情况下用户都在 Dashboard 上管理插件，不需要手动修改配置，因此我们将插件配置调整到更靠后的位置。
-
-- [#10491](https://github.com/emqx/emqx/pull/10491) 将 `etcd.ssl` 重命名为 `etcd.ssl_options` ，使其与配置文件中其他 SSL 相关配置项保持一致的命名。
-
-- [#10512](https://github.com/emqx/emqx/pull/10512) 改进了数据文件存储格式，现已支持正常存储 Unicode 字符，例如包含 Unicode 字符的规则 SQL `SELECT * FROM "t/1" WHERE clientid = "-测试专用-"`。
-
-- [#10568](https://github.com/emqx/emqx/pull/10568) 为 `emqx ctl listeners` 命令返回结果添加连接关闭计数指标 `shutdown_count`。
-
-- [#10588](https://github.com/emqx/emqx/pull/10588) 将日志跟踪记录的时间精度从秒提高到微秒。例如，从 `2023-05-02T08:43:50+00:00` 到 `2023-05-02T08:43:50.237945+00:00` 。
-
-- [#10623](https://github.com/emqx/emqx/pull/10623) 在 `force_shutdown` 配置中，将 `max_message_queue_len` 重命名为 `max_mailbox_size` ，旧名称作为别名被保留，保证向后兼容性。
-
-- [#10713](https://github.com/emqx/emqx/pull/10713) 为减少歧义与配置复杂度，隐藏 WebHook `resource_option.request_timeout` 配置项，并使用 `http` `request_timeout` 来设置该值。
-
-- [#10075](https://github.com/emqx/emqx/pull/10075) 新增节点再平衡/节点疏散功能，功能设计与使用请参考 [EIP 文档](https://github.com/emqx/eip/blob/main/active/0020-node-rebalance.md)。
-
-- [#10378](https://github.com/emqx/emqx/pull/10378) 新增 Pulsar 数据桥接，目前仅支持单向数据集成即 Pulsar 生产者角色。
-
-- [#10408](https://github.com/emqx/emqx/pull/10408) 规则 SQL 新增三个内置函数，用于写入日期类型的值到 MongoDB 中。
-
-- [#10409](https://github.com/emqx/emqx/pull/10409) [#10337](https://github.com/emqx/emqx/pull/10337) 规则引擎新增 [Protocol Buffer](https://protobuf.dev/)  和 [Apache Avro](https://avro.apache.org/) 格式消息编解码功能。
-
-- [#10425](https://github.com/emqx/emqx/pull/10425) 新增 OpenTSDB 数据桥接。
-
-- [#10498](https://github.com/emqx/emqx/pull/10498) 新增 Oracle 数据桥接。
-
-- [#10560](https://github.com/emqx/emqx/pull/10560) 新增 Apache IoTDB 数据桥接。
-
-- [#10417](https://github.com/emqx/emqx/pull/10417) 通过解除临时引用来提高配置项读取性能。
-
-- [#10430](https://github.com/emqx/emqx/pull/10430) 简化 `retainer` 的配置，将 `flow_control` 标记为不重要的字段。
-
-- [#10511](https://github.com/emqx/emqx/pull/10511) 对资源相关的日志进行脱敏以提升隐私与安全性。
-
-- [#10525](https://github.com/emqx/emqx/pull/10525) 提高 MQTT 数据包处理的性能。
-
-- [#10528](https://github.com/emqx/emqx/pull/10528) 在代码的热路径（hot code path）中减少内存占用。热路径包括在消息处理、连接管理、认证授权等核心功能中被频繁执行的代码。
-
-- [#10591](https://github.com/emqx/emqx/pull/10591) [#10625](https://github.com/emqx/emqx/pull/10625) 改进并简化速率限制器的配置：
-
-  - 降低速率限制器配置的复杂度。
-
-  - 更新 `configs/limiter` API。
-
-  - 减少速率限制器配置内存占用。
-
-- [#10487](https://github.com/emqx/emqx/pull/10487) 优化不设置速率限制(`infinity`)时速率限制器的性能表现，减少了内存和 CPU 的使用量。
-
-- [#10490](https://github.com/emqx/emqx/pull/10490) 移除默认 `1000/s` 的连接速率限制。
-
-- [#10077](https://github.com/emqx/emqx/pull/10077) QUIC TLS 现已支持密码保护证书文件。
-
-#### 错误修复
-
-- [#10340](https://github.com/emqx/emqx/pull/10340) 修复通过 `systemd` 停止 EMQX 时可能导致的日志打印崩溃问题。
-
-- [#10369](https://github.com/emqx/emqx/pull/10369) 修复 `/api/v5/monitor_current` API，修复前，当某些 EMQX 节点出现故障时，该 API 请求会返回 500 和以下信息：
-
-  `{"code":"INTERNAL_ERROR","message":"error, badarg, [{erlang,'++',[{error,nodedown},[{node,'emqx@10.42.0.150'}]], ...`
-
-- [#10407](https://github.com/emqx/emqx/pull/10407) 修复告警崩溃问题
-
-  - 通过使用 Mnesia dirty 操作和避免不必要的调用。
-
-  - 使用 'emqx_resource_manager' 来重新激活已经激活的告警，提高'emqx_alarm'性能。
-
-  - 使用新的安全的 'emqx_alarm' API 来激活/停用告警，确保 emqx_resource_manager 不会因为警报超时而崩溃。
-
-  - 当以下条件同时出现时告警系统容易崩溃：
-
-    - 失败的资源数量相对较多，例如，桥接试图激活重复出现的错误的警报。
-
-    - 系统经历了一个非常高的负载。
-
-- [#10420](https://github.com/emqx/emqx/pull/10420) 修复认证和授权 HTTP 路径可能被多次编码的问题：
-
-  - 由于无法假定外部服务器对原始和规范化 URL 的处理方式，因此将尽量避免不必要的 URL 编码，以免导致类似 [#10411](https://github.com/emqx/emqx/issues/10411) 的 bug。
-
-- [#10422](https://github.com/emqx/emqx/pull/10422) 修正单节点集群中，外部插件无法通过环境变量进行配置的问题。
-
-- [#10448](https://github.com/emqx/emqx/pull/10448) 修复由 e5.0.3 引入的速率限制器配置（用 `burst` 代替 `capacity` ）的兼容性问题，修复前，如 `capacity` 设为 `infinity` ，将无法从之前的版本进行升级。修复后，`capacity = infinity` 配置将自动转换为等同的 `burst = 0` 。
-
-- [#10462](https://github.com/emqx/emqx/pull/10462) 废弃已经无效的 `broker.shared_dispatch_ack_enabled` 配置项 。该配置项旨在避免向存在连接断开客户端的共享订阅组中派发回消息。但实际从 e5.0.0 版本开始，消息会被重新派发到组内的其他已经连接的会话中，该配置已经失效。请参考: <https://github.com/emqx/emqx/pull/9104> 。
-
-- [#10463](https://github.com/emqx/emqx/pull/10463) 修复数据桥接 API 的错误处理问题，例如 WebHook 桥接 URL 无效时， API 将返回 '400' 而非 '500'。
-
-- [#10484](https://github.com/emqx/emqx/pull/10484) 修复滚动升级时无法设置配置优先级的问题。例如，在 e5.0.2 中修改了授权的优先级，当通过滚动升级升级到 e5.0.3 时，授权的优先级将被恢复为默认。
-
-- [#10495](https://github.com/emqx/emqx/pull/10495) 恢复了被误删的速率限制器 API `/configs/limiter`。
-
-- [#10500](https://github.com/emqx/emqx/pull/10500) 修复并增强了 Mria 中的一些功能：
-
-  - 通过全局锁来保护 `mria:join/1,2` 函数，避免两个同时试图加入对方的节点之间的冲突 [Mria PR](https://github.com/emqx/mria/pull/137)
-
-  - 提供了新函数 `mria:sync_transaction/4,3,2`，该函数会阻止调用者，直到事务被导入到本地节点（当本地节点是复制者时有效，否则它的行为与`mria:transaction/3,2` 函数完全一样）。
-
-  - 优化  `mria:running_nodes/0`  函数 [Mria PR](https://github.com/emqx/mria/pull/135)
-
-  - 优化单个复制节点调用  `mria:ro_transaction/2`  函数时的性能 [Mria PR](https://github.com/emqx/mria/pull/134).
-
-- [#10518](https://github.com/emqx/emqx/pull/10518) 在 Mria 中增加以下修复和功能：
-
-  - 在 mria_membership 中安全地调用 `mria_rlog:role/1`，以确保 mria_membership gen_server 在 RPC 到另一个节点失败时不会崩溃 [Mria PR](https://github.com/emqx/mria/pull/139)。
-
-  - 在 `?rlog_sync` 表中添加额外的字段，以方便在未来的扩展这一功能 [Mria PR](https://github.com/emqx/mria/pull/138)。
-
-- [#10556](https://github.com/emqx/emqx/pull/10556) 加密`emqx_connector_http`  携带的  `Authorization header`。
-
-- [#10571](https://github.com/emqx/emqx/pull/10571) 尝试通过 API 获取主题统计中不存在的主题时，不会产生无意义的崩溃报告。
-
-- [#10659](https://github.com/emqx/emqx/pull/10659) 修复当 `sysmon.os.mem_check_interval` 被禁用时，EMQX 无法启动的问题。
-
-- [#10717](https://github.com/emqx/emqx/pull/10717) 修复当飞行窗口拥塞时，缓冲层进程 CPU 占用过高的问题。
-
-- [#10724](https://github.com/emqx/emqx/pull/10724) 为 HTTP API 文档所有 API 添加摘要字段以便查找 API（访问地址为 "http://<emqx_host_name\>:18083/api-docs")。
-
-- [#10726](https://github.com/emqx/emqx/pull/10726) 对健康检查间隔和自动重启间隔的范围进行验证，支持 1 ms 到 1 小时的时间范围。
-
-- [#10728](https://github.com/emqx/emqx/pull/10728) 修复规则引擎 SQL `FOREACH - DO`语句执行问题，例如在以下 SQL 语句中：
-
-  `FOREACH   payload.date as date, payload.array as elem DO   date, elem FROM "t/#"  -- {"date": "2023-05-06", "array": ["a"]}`
-
-  修复前，由 `FOREACH` 导出的 `date` 变量无法在 `DO` 子句中访问，导致该 SQL 输出如下： `[{"elem": "a","date": "undefined"}]` 。
-
-  修复后，该 SQL 语句将能正确输出：`[{"elem": "a","date": "2023-05-06"}]`
-
-- [#10742](https://github.com/emqx/emqx/pull/10742) 在保存授权文件前对规则进行正确性检查，避免由于错误规则导致 EMQX 无法启动。
-
-- [#10743](https://github.com/emqx/emqx/pull/10743) 修复节点加入集群后，尝试获取桥接信息或指标时可能导致的崩溃问题。
-
-- [#10755](https://github.com/emqx/emqx/pull/10755) 修复了数据桥接资源更新中的竞争条件。
-
-  在 EMQX 的资源更新中，进行了"删除+创建"的操作。如果桥接器的创建时间过长，可能导致 Dashboard 请求超时。如果在桥接创建完成之前进行更新操作，可能会导致桥接被删除。
-
-  此修复解决了桥接器资源更新中的竞争条件，确保准确识别和添加新数据桥接，并保持运行时和配置文件状态的一致性。
-
-- [#10761](https://github.com/emqx/emqx/pull/10761) 修复了 Dashboard Listener 的 SSL 证书的默认值没能被正确设置的问题，当 `verify_peer` 和 `cacertfile` 使用默认配置时，将导致 HTTPS 无法访问。
-
-- [#10672](https://github.com/emqx/emqx/pull/10672) 修复当监听器中缺少 `ssl_options` 的默认值导致启动失败的问题。修复前， `EMQX_LISTENERS__WSS__DEFAULT__BIND='0.0.0.0:8089' ./bin/emqx console` 类似的命令将导致 EMQX 崩溃。
-
-- [#10738](https://github.com/emqx/emqx/pull/10738) 修复 TDengine 数据桥不支持子表以及自动建表问题。在此之前，子表插入 SQL 语句将执行失败：
-
-  - `insert into ${clientid} using msg TAGS (${clientid}) values (${ts},${msg})`
-
-* [#10746](https://github.com/emqx/emqx/pull/10746)  在规则引擎的测试 API `rule_test` 中增加对事件`$events/delivery_dropped`的支持。
-* [#10747](https://github.com/emqx/emqx/pull/10747)  移植 4.4 版本中一些规则引擎的时间格式化函数的修复到当前版本。
-* [#10760](https://github.com/emqx/emqx/pull/10760)  修复在节点加入集群是访问数据桥接数据统计页面是出现 "internal error 500" 错误的问题。
-* [#10801](https://github.com/emqx/emqx/pull/10801)  避免在 API `/topics/{topic}`  和  `/topics` 中对主题名进行双重百分号解码。
-* [#10817](https://github.com/emqx/emqx/pull/10817)  修复对桥接配置项`auto_restart_interval`的值的处理，现在支持设置为`infinity`。
-
-## 5.0.4
-
-*发布日期: 2022-07-28*
-
-### Enhancements
-
-- Rules in data Integration support paging and searching. Note that the `GET /rules` API will return the page meta information after the update, i.e. `{"data": [RuleObj1, RuleObj2], "meta": {"count": 2, "limit": 100, "page": 1}}`. [#8472](https://github.com/emqx/emqx/pull/8472)
-- Improve the health check of WebHook in data integration, if TLS is enabled, it will now check if the TLS handshake was successful. [#8443](https://github.com/emqx/emqx/pull/8443)
-- Falls back to using Mnesia to persist sessions when RocksDB is unavailable. [#8528](https://github.com/emqx/emqx/pull/8528)
-- Support for updating thresholds of alarms at runtime via the HTTP API. [#8532](https://github.com/emqx/emqx/pull/8532)
-- Log trace will show the detailed authentication process. [#8554](https://github.com/emqx/emqx/pull/8554)
-- Supports listening on IPv6 addresses, for example: `[::1]:1883` or `::1:1883`. [#8547](https://github.com/emqx/emqx/pull/8547)
-- Updated the Listener API's request and response formats to align with the behavior of other APIs. This will introduce some incompatible updates, see [#8571](https://github.com/emqx/emqx/pull/8571)。
-- Dashboard will prompt to change the default password.
-- Optimize Dashboard's overview page for rules and data bridges of data integration.
-- Add result statistics for data integration rules on Dashboard.
-- Optimize the charts in the Dashboard homepage.
-- Add MQTT 5.0 subscription options display to subscription list on Dashboard.
-
-### Bug fixes
-
-- Fix the issue that when the log type format is set to `json`, the configuration of the maximum length of a single log is invalid. [#8518](http://github.com/emqx/emqx/pull/8518)
-- Fix the issue that `jq` in data integration cannot be used when the path of the EMQX installation directory contains spaces. [#8455](https://github.com/emqx/emqx/pull/8455)
-- Fix the issue that super user does not take effect. [#8452](https://github.com/emqx/emqx/pull/8452)
-- Aligned system topic format for stats with metrics. [#8464](https://github.com/emqx/emqx/pull/8464)
-- Fix the issue that the creation time of the rules in the data integration was not persistent, causing it to be updated to the EMQX startup time every time. [#8443](https://github.com/emqx/emqx/pull/8443)
-- Fix an issue where the `cluster-override.conf` file would be emptied when there was an error updating the configuration via the HTTP API, causing all modified configurations to be lost. [#8443](https://github.com/emqx/emqx/pull/8443)
-- Fix the issue that the Sentinel field was not required to be set when using Redis sentinel mode in authentication and authorization. [#8458](https://github.com/emqx/emqx/pull/8458)
-- Fix formatting errors in OpenAPI documentation. [#8517](https://github.com/emqx/emqx/pull/8517)
-- Fix the issue that multilingual hook extensions might not be dispatched in the order in which client events were fired. [#8530](https://github.com/emqx/emqx/pull/8530)
-- Fix authentication placeholders `cert_subject` and `cert_common_name` not being available. [#8531](https://github.com/emqx/emqx/pull/8531)
-- Fix TCP connection process leak in WebHook. [ehttpc#34](https://github.com/emqx/ehttpc/pull/34), [#8580](https://github.com/emqx/emqx/pull/8580)
-- Fix CLI not printing listeners that only listen on ports. [#8547](https://github.com/emqx/emqx/pull/8547)
-- Fix incorrect TLS field checking in JWKS authentication. [#8458](https://github.com/emqx/emqx/pull/8458)
-- Fix listener API not returning connection information on all nodes in the cluster. [#8538](https://github.com/emqx/emqx/pull/8538)
-- Fix the issue that replicant nodes might not receive Mnesia events, causing operations such as configuration updates to fail. [#8502](https://github.com/emqx/emqx/pull/8502)
-
-## 5.0.3
-
-*发布日期: 2023-05-08*
-
-### 优化
-
-- [#10128](https://github.com/emqx/emqx/pull/10128) SSL MQTT 监听器增加对 OCSP Stapling 的支持。
-
-- [#10156](https://github.com/emqx/emqx/pull/10156) 调整配置文件覆盖顺序机制。
-
-  对于新安装的 EMQX，emqx.conf 和环境变量中的配置会覆盖 API 传入的配置（即 `cluster.hocon` 中的配置）
-
-  对于从旧版本升级的 EMQX（即 `data` 文件夹中包含 `cluster-override.conf` 文件），保留之前的覆盖规则， 即 `cluster-override.conf` 中的配置会覆盖 `emqx.conf` 和环境变量的配置。
-
-  注意：`data/configs/cluster-override.conf` 已弃用。升级后，建议您在 `emqx.conf` 中重新配置之前被 `cluster-override.conf` 覆盖的配置项，并将 cluster-override.conf 中的配置迁移到 `cluster.hocon` 中。
-
-  升级后，EMQX 将像以前一样继续读取 `local-override.conf` (如果存在的话)，但建议您将配置合并到 `emqx.conf` 中。
-
-- [#10164](https://github.com/emqx/emqx/pull/10164) TLS MQTT 监听器增加对 CRL 检查的支持。
-
-- [#10207](https://github.com/emqx/emqx/pull/10207) 提高 OpenAPI (swagger) 文档的可读性。 在此更改之前，文档中有一些 `Summary` 字段冗长且缺乏翻译，现在使用了 i18n 数据库中更简洁的 `label` 字段。
-
-- [#10210](https://github.com/emqx/emqx/pull/10210) 解决停止/重启 Mria 时 Mnesia callback 可能出现的问题。优化后，当 Mria 被停止前会取消 Mnesia callback 的注册。详情见 [Mria PR](https://github.com/emqx/mria/pull/133)。
-
-- [#10224](https://github.com/emqx/emqx/pull/10224) 在 Helm 图表中增加自定义 `clusterIP` 选项，用户可以将其设置为固定 IP。
-
-- [#10263](https://github.com/emqx/emqx/pull/10263) 添加用于评估 Elixir 表达式的命令 `eval-ex`。
-
-- [#10278](https://github.com/emqx/emqx/pull/10278) 重构所有网关的目录结构。
-
-- [#10206](https://github.com/emqx/emqx/pull/10206) 所有数据桥接支持异步查询模式。
-
-  优化前，如将某项资源（如数据桥接）的查询模式设为 sync（同步模式），缓存将以同步的模式调用底层连接器，即使它支持异步调用。
-
-- [#10306](https://github.com/emqx/emqx/pull/10306) 大多数数据桥接支持 async 查询模式。
-  这是 [#10206](https://github.com/emqx/emqx/pull/10206) 的后续优化, 优化前，Cassandra、MongoDB、MySQL、Postgres、Redis、RocketMQ、TDengine 等数据桥接只支持同步查询模式。
-
-- [#10318](https://github.com/emqx/emqx/pull/10318) 规则引擎中的 FROM 语句新增支持由单引号（'）包裹的字符串。
-
-- [#10336](https://github.com/emqx/emqx/pull/10336) 添加 API Endpoint `/rule_engine`，用以管理规则引擎的配置。
-
-- [#10354](https://github.com/emqx/emqx/pull/10354) 优化 `max_heap_size` 配置错误时的报错信息。当发生 `message_queue_too_long` 报错时，会在日志文件中记录当前值和最大值。
-
-- [#10358](https://github.com/emqx/emqx/pull/10358) 隐藏 `flapping_detect/conn_congestion/stats` 配置。弃用 `flapping_detect.enable` 配置项。
-
-- [#10359](https://github.com/emqx/emqx/pull/10359) 通过独立的 RPC 收集针对集群级别的指标，不再隐式收集不被 API 调用的指标。
-
-- [#10373](https://github.com/emqx/emqx/pull/10373) 废弃 `trace.payload_encode` 配置项。可以在通过 HTTP API 创建的日志追踪时使用 `trace.payload_encode = [text, hidden, hex]` 字段替代。
-
-- [#10381](https://github.com/emqx/emqx/pull/10381) 隐藏 `auto_subscribe` 配置项，后续将只能通过 HTTP API 来修改自动订阅规则。
-
-- [#10391](https://github.com/emqx/emqx/pull/10391) 简化配置文件并隐藏大量的配置项，包括 `rewrite`、`topic_metric`、`persistent_session_store`、`overload_protection`、`flapping_detect`、`conn_congestion`、`stats`、`auto_subscribe`、`broker_perf`、`shared_subscription_group`、`slow_subs`、`ssl_options.user_lookup_fun`、 `node` 和 `dashboard` 相关的部分高级配置项，[#10358](https://github.com/emqx/emqx/pull/10358), [#10381](https://github.com/emqx/emqx/pull/10381), [#10385](https://github.com/emqx/emqx/pull/10385)。
-
-- [#10404](https://github.com/emqx/emqx/pull/10404) 将缓冲区工作线程的默认队列模式更改为 `memory_only`。在此优化前，默认队列模式为 `volatile_offload`，当消息速率很高，资源无法满足该需求时，缓冲区性能会由于频繁的磁盘操作而受影响。
-
-- [#10140](https://github.com/emqx/emqx/pull/10140) 新增 Cassandra 数据桥接，目前仅支持 Cassandra 3.x 版本，暂不支持 4.x 版本。
-
-- [#10143](https://github.com/emqx/emqx/pull/10143) 新增 RocketMQ 数据桥接。
-
-- [#10165](https://github.com/emqx/emqx/pull/10165) InfluxDB 数据桥接中的 `write_syntax` 中支持转义特殊字符。优化后，用户可根据 InfluxDB Line Protocol 在字符串中使用经转义的特殊字符。
-
-- [#10211](https://github.com/emqx/emqx/pull/10211) 隐藏 `broker.broker_perf` 配置和相关 API 文档。其中的两个配置项 `route_lock_type` 和 `trie_compaction` 很少使用，而且需要重新启动整个集群才能生效，不必要暴露给用户。更多信息可阅读：<https://gist.github.com/zmstone/01ad5754b9beaeaf3f5b86d14d49a0b7/revisions>。
-
-- [#10294](https://github.com/emqx/emqx/pull/10294) 配置 MongoDB 数据桥接时，现支持通过占位符 `${field}` 语法来引用消息中的字段，从而动态地选择要插入的数据集合。
-
-- [#10363](https://github.com/emqx/emqx/pull/10363) 新增 Microsoft SQL Server 数桥接。
-
-- [#10573](https://github.com/emqx/emqx/pull/10573) 提升了 WebHook 在同步请求模式下的性能表现，以及其他数据桥接在未配置批处理时的性能表现。
-
-### 修复
-
-- [#10145](https://github.com/emqx/emqx/pull/10145) 在针对 `GET /bridges/:id` 的 API 调用响应中，如桥接的状态为断开，且内部健康检查返回错误，添加 `status_reason` 字段说明错误原因。在相应的告警信息中，同样增加 `status_reason` 字段说明断开原因。
-
-- [#10172](https://github.com/emqx/emqx/pull/10172) 修复默认 ACL 规则中不正确的正则表达式，从而允许 dashboard 用户名订阅 `$SYS/#` 主题。
-
-- [#10174](https://github.com/emqx/emqx/pull/10174) 将库 `esockd` 从 5.9.4 升级至 5.9.6。如连接在代理发送代理协议头之前关闭，将不再产生的一条错误级别日志。
-
-- [#10195](https://github.com/emqx/emqx/pull/10195) 对包含 HTML 的 API Schema 添加标签，解决之前会破坏生成文档格式的问题。
-
-- [#10196](https://github.com/emqx/emqx/pull/10196) 针对用于生成在线文档菜单中的模式摘要和描述，使用小写字母。
-
-- [#10209](https://github.com/emqx/emqx/pull/10209) 修复在断开禁用客户端时，此类客户端仍可发布遗嘱消息的错误。
-
-- [#10225](https://github.com/emqx/emqx/pull/10225) 对于名称与已安装的插件开头相同的插件，用户仍可继续安装。例如：如果插件 `emqx_plugin_template_a` 已安装，用户仍可安装名为 `emqx_plugin_template` 的插件。
-
-- [#10226](https://github.com/emqx/emqx/pull/10226) 在 `/bridges` API 验证错误时，返回 `400` 而非 `500`。
-
-- [#10242](https://github.com/emqx/emqx/pull/10242) 修复日志中数据字段名称冲突。修复前，一些调试日志可能会报告错误的 Erlang PID，影响解决会话接管类问题。
-
-- [#10257](https://github.com/emqx/emqx/pull/10257) 修复 LwM2M 网关中 `auto_observe` 无法正常工作的问题。
-
-  修复前，在发送 `OBSERVE` 请求时没有发送 token，导致 LwM2M 网关无法处理客户端请求。
-
-  修复后，LwM2M 网关可以正确观察到客户端携带的资源列表，此外，未知资源将被忽并打印以下警告日志：
-
-  ```
-  2023-03-28T18:50:27.771123+08:00 [warning] msg: ignore_observer_resource, mfa: emqx_lwm2m_session:observe_object_list/3, line: 522, peername: 127.0.0.1:56830, clientid: testlwm2mclient, object_id: 31024, reason: no_xml_definition
-  ```
-
-- [#10286](https://github.com/emqx/emqx/pull/10286) 优化 EMQX 启动失败时的日志记录行为。当 EMQX 由于配置文件破坏无法启动时，不会再产生过多的日志记录，也不会再产生崩溃转储文件。
-
-- [#10297](https://github.com/emqx/emqx/pull/10297) 通过仅评估 Erlang 表达式实现 `eval` 命令与 v4 版本的向后兼容，该更新同样适用于 Elixir 节点。对于 Elixir 表达式，请使用 `eval-ex` 命令。
-
-- [#10300](https://github.com/emqx/emqx/pull/10300) 针对通过 Elixir 构建的项目，修复无法通过环境变量配置插件的问题。
-
-- [#10315](https://github.com/emqx/emqx/pull/10315) 修复在 `/mqtt/delayed/messages` API 调用中，在检查 `limit` 和 `page` 参数时的崩溃问题。
-
-- [#10317](https://github.com/emqx/emqx/pull/10317) 在经过充分验证前，隐藏监听器级别的认证信息。
-
-- [#10323](https://github.com/emqx/emqx/pull/10323) 出于安全原因，API 示例中 `password` 字段的值被替换为 `******`。
-
-- [#10410](https://github.com/emqx/emqx/pull/10410) 针对由`emqx.conf` 配置的网关，修复配置检查失败问题。
-  此问题最早在 v5.0.22 版本中由 [#10278](https://github.com/emqx/emqx/pull/10278)引入，启动时缺少配置检查。
-
-- [#10533](https://github.com/emqx/emqx/pull/10533) 修复可能导致日志中的出现无害的噪音的问题。
-
-  在对数据桥接进行同步调用时，一些迟到的回复可能会发送到不再期待回复的连接进程，导致产生错误日志，如：
-
-  ```
-  2023-04-19T18:24:35.350233+00:00 [error] msg: unexpected_info, mfa: emqx_channel:handle_info/2, line: 1278, peername: 172.22.0.1:36384, clientid: caribdis_bench_sub_1137967633_4788, info: {#Ref<0.408802983.1941504010.189402>,{ok,200,[{<<"cache-control">>,<<"max-age=0, ...">>}}
-  ```
-
-  这些日志是无害的，但它们可能会泛滥成灾，引起用户不必要的担心。
-
-- [#10449](https://github.com/emqx/emqx/pull/10449) 在通过 HTTP 服务（`authn_http`）创建身份验证时，将进行 `ssl_options` 和 `header` 配置验证。在此修复前，用户通过错误的 ssl 配置也可成功创建身份验证，但该验证整体不生效。
-
-- [#10548](https://github.com/emqx/emqx/pull/10548) 修复了 HTTP 驱动程序在竞争条件下会导致错误而不去重试的问题。
-  相关的驱动程序修复：[emqx/ehttpc#45](https://github.com/emqx/ehttpc/pull/45)
-
-- [#10201](https://github.com/emqx/emqx/pull/10201) 在 TDengine 数据桥接中，移除 SQL 模板中冗余的数据库名称。
-
-- [#10270](https://github.com/emqx/emqx/pull/10270) 在创建 ClickHouse 数据桥接时，优化用户点击测试按钮时的错误信息。
-
-- [#10324](https://github.com/emqx/emqx/pull/10324) 针对配置有误的 ClickHouse 数据桥接，当用户尝试通过 Dashboard 重连时，将收到报错。修复前，用户不会收到报错。
-
-- [#10438](https://github.com/emqx/emqx/pull/10438) 修复 DynamoDB 数据桥接中的部分术语使用错误：
-
-  - 将 `database` 修改为 `table`
-  - 将 `username` 修改为 `aws_access_key_id`
-  - 将 `password` 修改为 `aws_secret_access_key`
-
-## 5.0.3
-
-*发布日期: 2022-07-07*
-
-## 5.0.3
-
-### Bug fixes
-
-- Websocket listener failed to read headers `X-Forwared-For` and `X-Forwarded-Port` [8415](https://github.com/emqx/emqx/pull/8415)
-- Deleted `cluster_singleton` from MQTT bridge config document. This config is no longer applicable in 5.0 [8407](https://github.com/emqx/emqx/pull/8407)
-- Fix `emqx/emqx:latest` docker image publish to use the Erlang flavor, but not Elixir flavor [8414](https://github.com/emqx/emqx/pull/8414)
-- Changed the `exp` field in JWT auth to be optional rather than required to fix backwards compatability with 4.X releases. [8425](https://github.com/emqx/emqx/pull/8425)
-
-### Enhancements
-
-- Improve the speed of dashboard's HTTP API routing rule generation, which sometimes causes timeout [8438](https://github.com/emqx/emqx/pull/8438)
-
-## 5.0.2
-
-*发布日期: 2023-04-12*
-
-### 优化
-
-- [#10022](https://github.com/emqx/emqx/pull/10022) 发布 Rocky Linux 9 (兼容 Red Hat Enterprise Linux 9) 以及 macOS 12 Intel 平台的安装包。
-
-- [#10139](https://github.com/emqx/emqx/pull/10139) 在 EMQX Helm Chart 中添加 `extraVolumeMounts`，可以挂载用户自己的文件到 EMQX 实例中，例如在 [#9052](https://github.com/emqx/emqx/issues/9052) 中提到的 ACL 规则文件。
-
-- [#9893](https://github.com/emqx/emqx/pull/9893) 当使用 `clean_start=false` 标志连接时，EMQX 将过滤掉会话中被被黑名单功能禁止的客户端发布的消息。以前，在这种情况下，被黑名单功能禁止的客户端发送的消息仍可能被传递给订阅者。
-
-- [#9986](https://github.com/emqx/emqx/pull/9986) 在 helm charts 中增加 MQTT ingress 并删除过时的 `mgmt` 引用。
-
-- [#9564](https://github.com/emqx/emqx/pull/9564) 数据桥接新增 Kafka Consumer，支持从 Kafka 消费消息并将它们发布到 MQTT 主题。
-
-- [#9881](https://github.com/emqx/emqx/pull/9881) 改进了与 InfluxDB 连接的健康检查相关的错误日志。
-
-- [#9985](https://github.com/emqx/emqx/pull/9985) 添加 ClickHouse 数据桥接。
-
-- [#10123](https://github.com/emqx/emqx/pull/10123) 改进了 `/bridges` API 的性能。避免了当集群节点数量较多时可能出现的请求响应超时。
-
-- [#9998](https://github.com/emqx/emqx/pull/9998) 出于安全原因，在使用 HTTP 服务进行客户端认证时，对错误日志中的请求体进行脱敏处理。
-
-- [#10026](https://github.com/emqx/emqx/pull/10026) 仅在 `/bridges/:id/metrics` API 中返回指标数据。
-
-- [#10052](https://github.com/emqx/emqx/pull/10052) 改进守护进程模式下启动失败后的日志。
-
-### 修复
-
-- [#10013](https://github.com/emqx/emqx/pull/10013) 修复 `/gateways/:name/clients` API 在错误情况下的返回类型结构。
-
-- [#10014](https://github.com/emqx/emqx/pull/10014) 当节点不存在时，`/monitor(_current)/nodes/:node` API 返回 `404` 错误代码而不是 `400` 。
-
-- [#10027](https://github.com/emqx/emqx/pull/10027) 允许在 Docker 中通过 `EMQX_NODE__NAME` 设置节点名称。
-
-- [#10050](https://github.com/emqx/emqx/pull/10050) 当调用 Bridge API 时若资源不能存在则返回 `404` 状态码。
-
-- [#10055](https://github.com/emqx/emqx/pull/10055) 修复配置项 `mqtt.max_awaiting_rel` 设置无效的问题。
-
-- [#10056](https://github.com/emqx/emqx/pull/10056) 修复 `/bridges` API 状态码返回错误。当被删除的 Bridge 存在依赖，或 Bridge 未启用时进行启用、停止、重启等操作时返回 `400` 状态码。
-
-- [#10066](https://github.com/emqx/emqx/pull/10066) 优化 `/briges_probe` 和 `[/node/:node]/bridges/:id/:operation` API 调用的错误消息，使其更易理解。并修正错误状态码为`400`。
-
-- [#10074](https://github.com/emqx/emqx/pull/10074) 增加 `PUT /authorization/sources/:type` 请求参数 `type` 的值与请求体中的实际类型的一致性检查。
-
-- [#10079](https://github.com/emqx/emqx/pull/10079) 修复文档中关于 `shared_subscription_strategy` 的描述错误。
-
-- [#10085](https://github.com/emqx/emqx/pull/10085) 对于 `/authorization/sources/:source[/*]` API 中不存在的资源的所有请求，始终返回 `404`。
-
-- [#10098](https://github.com/emqx/emqx/pull/10098) 修复了当配置 MongoDB 授权时 MongoDB 连接器崩溃的问题。
-
-- [#10100](https://github.com/emqx/emqx/pull/10100) 修复了当客户端使用增强认证时，认证消息发送缓慢或者消息丢失时客户端进程崩溃的问题。
-
-- [#10107](https://github.com/emqx/emqx/pull/10107) 当调用 `bridges API` 时如果 `bridge-id` 不存在则返回 `404` 状态码。
-
-- [#10117](https://github.com/emqx/emqx/pull/10117) 修复当加入的节点没有安装在集群其他节点上的插件时发生的错误。修复后，加入的节点将从其他节点复制所有必要的插件。
-
-- [#10118](https://github.com/emqx/emqx/pull/10118) 修复手动添加 EMQX 副本类型节点到集群的相关问题。
-
-- [#10119](https://github.com/emqx/emqx/pull/10119) 修复了当 `statsd.server` 设置为空字符串时会崩溃的问题。
-
-- [#10124](https://github.com/emqx/emqx/pull/10124) 调整 MongoDB 的默认心跳周期，以降低日志文件记录过多的风险。
-
-- [#10130](https://github.com/emqx/emqx/pull/10130) 修复了通过环境变量设置的值，在 Dashboard 中显示乱码的问题。
-
-- [#10132](https://github.com/emqx/emqx/pull/10132) 修复了 `systemctl stop emqx` 命令无法正确停止 `jq` 和 `os_mon` 应用的问题。
-
-- [#10144](https://github.com/emqx/emqx/pull/10144) 修复了当 emqx 目录只读时， emqx cli 设置 Erlang cookie 失败的问题。
-
-- [#10154](https://github.com/emqx/emqx/pull/10154) 将数据桥接和连接器的 `resume_interval` 参数值设为 `health_check_interval` 和 `request_timeout / 3` 中的较小值，以解决请求超时的问题。
-
-- [#10157](https://github.com/emqx/emqx/pull/10157) 修复在创建新的监听器时默认速率限制不生效的问题。
-
-- [#10237](https://github.com/emqx/emqx/pull/10237) 当调用 `/nodes/:node[/metrics|/stats]` API，若节点不存在则返回 `404` 状态码。
-
-- [#10251](https://github.com/emqx/emqx/pull/10251) 修复了当删除一个使用中的 ingress 类型的桥接时，未提示存在规则依赖的问题。
-
-- [#10313](https://github.com/emqx/emqx/pull/10313) 确保在核心节点或副本节点启动时，仅从核心节点复制 `cluster-override.conf` 文件。
-
-- [#10327](https://github.com/emqx/emqx/pull/10327) 数据桥接出现不可恢复的错误不再计入到 `actions.failed.unknown` 指标中。
-
-- [#10095](https://github.com/emqx/emqx/pull/10095) 修复当 MySQL 连接器处于批处理模式时，会发生客户端在每个批次上不断使用不必要的 `PREPARE` 语句查询服务器，可能会导致服务器资源耗尽的问题。
-
-## 5.0.2
-
-*发布日期: 2022-07-02*
-
-Announcemnet: EMQX team has decided to stop supporting relup for opensouce edition.
-Going forward, it will be an enterprise only feature.
-
-Main reason: relup requires carefully crafted upgrade instructions from ALL previous versions.
-
-For example, 4.3 is now at 4.3.16, we have `4.3.0->4.3.16`, `4.3.1->4.3.16`, ... 16 such upgrade paths in total to maintain.
-This had been the biggest obstacle for EMQX team to act agile enought in deliverying enhancements and fixes.
-
-### Bug fixes
-
-- Fixed a typo in `bin/emqx` which affects macOS release when trying to enable Erlang distribution over TLS [8398](https://github.com/emqx/emqx/pull/8398)
-
-## 5.0.1
-
-*发布日期: 2023-03-10*
+*发布日期：2022-07-28*
 
 ### 增强
 
-- [#10019](https://github.com/emqx/emqx/pull/10019) 为 QUIC 监听器添加更多底层调优选项。
-- [#10059](https://github.com/emqx/emqx/pull/10059) 规则引擎 API 在出错时返回用户可读的错误信息而不是原始的异常堆栈信息。
-- [#9213](https://github.com/emqx/emqx/pull/9213) 在 Helm Chart 中支持 PodDisruptionBudget。
-- [#9949](https://github.com/emqx/emqx/pull/9949) QUIC 支持多流传输与 TLS。
-- [#9932](https://github.com/emqx/emqx/pull/9932) 添加 TDengine 数据桥接。
-- [#9967](https://github.com/emqx/emqx/pull/9967) 新增 TLS 配置项 `hibernate_after`，通过在闲置一段时间后休眠 TLS 进程以减少其内存占用，默认： 5s 。
+- 数据集成中的规则支持分页和搜索。请注意，更新后 `GET /rules` API 将返回分页元信息，即 `{"data": [RuleObj1, RuleObj2], "meta": {"count": 2, "limit": 100, "page": 1}}`。[#8472](https://github.com/emqx/emqx/pull/8472)
+- 改进数据集成中 WebHook 的健康检查，如果启用了 TLS，现在会检查 TLS 握手是否成功。[#8443](https://github.com/emqx/emqx/pull/8443)
+- 当 RocksDB 不可用时，回退使用 Mnesia 持久化会话。[#8528](https://github.com/emqx/emqx/pull/8528)
+- 支持通过 HTTP API 在运行时更新警报的阈值。[#8532](https://github.com/emqx/emqx/pull/8532)
+- 日志跟踪将显示详细的认证过程。[#8554](https://github.com/emqx/emqx/pull/8554)
+- 支持监听 IPv6 地址，例如：`[::1]:1883` 或 `::1:1883`。[#8547](https://github.com/emqx/emqx/pull/8547)
+- 更新监听器 API 的请求和响应格式，以与其他 API 的行为保持一致。这将引入一些不兼容的更新，详见 [#8571](https://github.com/emqx/emqx/pull/8571)。
+-  Dashboard将提示更改默认密码。
+- 优化数据集成的规则和数据桥的 Dashboard概览页面。
+- 在 Dashboard上添加数据集成规则的结果统计。
+- 优化 Dashboard首页的图表。
+- 在 Dashboard的订阅列表中添加 MQTT 5.0 订阅选项显示。
 
 ### 修复
 
-- [#10009](https://github.com/emqx/emqx/pull/10009) `GET /trace/:name/log` API 添加 `bytes` 参数校验，长度不超过 32 位有符号整数。
-- [#10015](https://github.com/emqx/emqx/pull/10015) 执行 CLI 时，如果节点 cookie 配置错误则快速抛出错误。
-  在此修复前，即使 cookie 配置错误，EMQX 命令仍然会尝试去 ping EMQX 节点，
-  并得到一个 'Node xxx not responding to pings' 的错误。
-  修复后，如果发现 cookie 不一致，立即打印不一致的错误信息并退出。
-- [#10020](https://github.com/emqx/emqx/pull/10020) 修复使用异步和批量配置的桥接计数不准确的问题。
-- [#10021](https://github.com/emqx/emqx/pull/10021) 修正执行`emqx_ctl cluster join`命令时，目标节点未运行时的错误信息。
-- [#10032](https://github.com/emqx/emqx/pull/10032) 当集群中某些节点上的资源仍处于 **初始化/连接中** 状态时，调用 `/bridges` API 获取 metrics 时将因为没有 metrics 数据而崩溃，此修复将忽略没有 metrics 数据的资源。
-- [#10041](https://github.com/emqx/emqx/pull/10041) 为 InfluxDB 桥接配置项 `write_syntax` 描述文档添加了整数占位符注释说明。
-  另外在配置中支持 `timestamp` 使用一个常量。
-- [#10042](https://github.com/emqx/emqx/pull/10042) 当 core 节点离开集群时，改进 replicant 节点的行为。
-  以前，直到所有 core 节点全部起来前， replicant 节点无法重新平衡与 core 节点的连接。
-  该情况会打印以下日志：
-  `[error] line: 182, mfa: mria_lb:list_core_nodes/1, msg: mria_lb_core_discovery divergent cluster`。
-- [#10054](https://github.com/emqx/emqx/pull/10054) 修复了对于已有的 Data Bridge 进行测试连接时需要手工输入一遍密码的问题。
-- [#10058](https://github.com/emqx/emqx/pull/10058) 优化未使用的 QUIC TLS 选项。
-  QUIC 监听器只保留以下 TLS 选项:
-  - cacertfile
-  - certfile
-  - keyfile
-  - verify
-- [#10076](https://github.com/emqx/emqx/pull/10076) 修复 Webhook 桥接的一个异常处理：连接超时错误发生后，发生错误的请求可以被重试。
-  在此修复前，连接超时后，被当作不可重试类型的错误处理，导致请求被丢弃。
-- [#10078](https://github.com/emqx/emqx/pull/10078) 修复了无效的 QUIC 监听器设置可能导致 segfault 的问题。
-- [#10084](https://github.com/emqx/emqx/pull/10084) 修正将运行不同 EMQX 版本的 core 节点加入集群的问题。
-- [#10086](https://github.com/emqx/emqx/pull/10086) HTTP 客户端库 `ehttpc` 升级到 0.4.7。
-  在升级前，如果 HTTP 客户端，例如 认证，授权，webhook 等配置中使用了 content-type HTTP 头，但是没有配置 body，则可能会发生异常。
-  详情见 [ehttpc PR#44](https://github.com/emqx/ehttpc/pull/44)。
-- [#9939](https://github.com/emqx/emqx/pull/9939) 允许 `emqx ctl cluster join` 命令在 Mnesia 启动前调用。
-  在此修复前， EMQX 的 `replicant` 类型节点无法使用 `manual` 集群发现策略。
-- [#9958](https://github.com/emqx/emqx/pull/9958) 修复 `clients` API 在 Client ID 不存在时返回的错误码和错误提示。
-- [#9961](https://github.com/emqx/emqx/pull/9961) 在 bin/emqx 脚本中，避免在运行非启动命令时解析 emqx.conf 来获取节点名称和 cookie。
-- [#9974](https://github.com/emqx/emqx/pull/9974) Statsd 和 prometheus 使用跟 Dashboard 相同的内存用量数据源。
-  在此修复前，内存的总量和用量统计使用了过时的（在容器环境中不准确）的数据源。
-- [#9997](https://github.com/emqx/emqx/pull/9997) 修复生成 Swagger API 时没有遵循[标准](https://swagger.io/specification/)将元数据字段 `deprecated` 设置为布尔值的问题。
-- [#10007](https://github.com/emqx/emqx/pull/10007) Kafka 桥接的配置参数 `memory_overload_protection` 默认值从 `true` 改成了 `false`。
-  尽管内存过载后消息被丢弃会产生日志和计数，如果没有基于这些日志或计数的告警，系统管理员可能无法及时发现消息被丢弃。
-  当前更好的选择是：让管理员显式的配置该项，迫使他们理解这个配置的好处以及风险。
-- [#10087](https://github.com/emqx/emqx/pull/10087) 往 InfluxDB 中插入数据时，如果时间戳为空（未定义），则使用默认的占位符 `${timestamp}`。
-  在此修复前，如果时间戳字段没有设置，InfluxDB 桥接使用了一个错误的时间戳。
+- 修复了日志类型格式设置为 `json` 时，单个日志的最大长度配置无效的问题。[#8518](http://github.com/emqx/emqx/pull/8518)
+- 修复了当 EMQX 安装目录路径包含空格时，数据集成中的 `jq` 无法使用的问题。[#8455](https://github.com/emqx/emqx/pull/8455)
+- 修复了超级用户不生效的问题。[#8452](https://github.com/emqx/emqx/pull/8452)
+- 将系统主题格式的统计与指标对齐。[#8464](https://github.com/emqx/emqx/pull/8464)
+- 修复了数据集成中规则创建时间不持久化的问题，导致每次都更新为 EMQX 启动时间。[#8443](https://github.com/emqx/emqx/pull/8443)
+- 修复了通过 HTTP API 更新配置时出现错误，导致 `cluster-override.conf` 文件被清空，所有修改的配置都丢失的问题。[#8443](https://github.com/emqx/emqx/pull/8443)
+- 修复了在认证和授权中使用 Redis 哨兵模式时，Sentinel 字段未被要求设置的问题。[#8458](https://github.com/emqx/emqx/pull/8458)
+- 修复了 OpenAPI 文档中的格式错误。[#8517](https://github.com/emqx/emqx/pull/8517)
+- 修复了多语言钩子扩展可能不按客户端事件触发的顺序分发的问题。[#8530](https://github.com/emqx/emqx/pull/8530)
+- 修复了认证占位符 `cert_subject` 和 `cert_common_name` 不可用的问题。[#8531](https://github.com/emqx/emqx/pull/8531)
+- 修复了 WebHook 中 TCP 连接进程泄漏的问题。[ehttpc#34](https://github.com/emqx/ehttpc/pull/34)，[#8580](https://github.com/emqx/emqx/pull/8580)
+- 修复了 CLI 不打印仅监听端口的监听器的问题。[#8547](https://github.com/emqx/emqx/pull/8547)
+- 修复了 JWKS 认证中 TLS 字段检查不正确的问题。[#8458](https://github.com/emqx/emqx/pull/8458)
+- 修复了监听器 API 未在集群中所有节点上返回连接信息的问题。[#8538](https://github.com/emqx/emqx/pull/8538)
+- 修复了副本节点可能未接收到 Mnesia 事件的问题，导致配置更新等操作失败。[#8502](https://github.com/emqx/emqx/pull/8502)
+
+## 5.0.3
+
+*发布日期：2022-07-07*
+
+### 修复
+
+- Websocket 监听器未能读取头部 `X-Forwarded-For` 和 `X-Forwarded-Port` [8415](https://github.com/emqx/emqx/pull/8415)
+- 从 MQTT 桥接配置文档中删除了 `cluster_singleton`。在 5.0 中，此配置不再适用 [8407](https://github.com/emqx/emqx/pull/8407)
+- 修复 `emqx/emqx:latest` Docker 镜像发布使用 Erlang 版本，而不是 Elixir 版本 [8414](https://github.com/emqx/emqx/pull/8414)
+- 将 JWT 认证中的 `exp` 字段更改为可选而不是必需，以修复与 4.X 版本的向后兼容问题。[8425](https://github.com/emqx/emqx/pull/8425)
+
+### 增强
+
+- 提高了 Dashboard HTTP API 路由规则生成的速度，有时会导致超时 [8438](https://github.com/emqx/emqx/pull/8438)
+
+## 5.0.2
+
+*发布日期：2022-07-02*
+
+公告：EMQX 团队已决定停止支持开源版的 relup 功能。今后，这将是一个仅限企业版的功能。
+
+主要原因：relup 需要从所有以前的版本仔细编写升级说明。
+
+例如，4.3现在是4.3.16，我们有`4.3.0->4.3.16`、`4.3.1->4.3.16`，...总共16条这样的升级路径需要维护。这一直是 EMQX 团队在快速交付增强和修复方面的最大障碍。
+
+### 修复
+
+- 修复了`bin/emqx`中的一个打字错误，该错误影响了尝试在 macOS 发布版上启用 TLS 上的 Erlang 分布 [8398](https://github.com/emqx/emqx/pull/8398)
 
 ## 5.0.1
 
-*发布日期: 2022-07-01*
+*发布日期：2022-07-01*
 
-### Enhancements
+### 增强
 
-- Removed management API auth for prometheus scraping endpoint /api/v5/prometheus/stats [8299](https://github.com/emqx/emqx/pull/8299)
-- Added more TCP options for exhook (gRPC) connections. [8317](https://github.com/emqx/emqx/pull/8317)
-- HTTP Servers used for authentication and authorization will now indicate the result via the response body. [8374](https://github.com/emqx/emqx/pull/8374) [8377](https://github.com/emqx/emqx/pull/8377)
-- Bulk subscribe/unsubscribe APIs [8356](https://github.com/emqx/emqx/pull/8356)
-- Added exclusive subscription [8315](https://github.com/emqx/emqx/pull/8315)
-- Provide authentication counter metrics [8352](https://github.com/emqx/emqx/pull/8352) [8375](https://github.com/emqx/emqx/pull/8375)
-- Do not allow admin user self-deletion [8286](https://github.com/emqx/emqx/pull/8286)
-- After restart, ensure to copy `cluster-override.conf` from the clustered node which has the greatest `tnxid`. [8333](https://github.com/emqx/emqx/pull/8333)
+- 移除了 Prometheus 抓取端点 /api/v5/prometheus/stats 的管理 API 认证 [8299](https://github.com/emqx/emqx/pull/8299)
+- 为 exhook (gRPC) 连接添加了更多 TCP 选项。[8317](https://github.com/emqx/emqx/pull/8317)
+- 用于认证和授权的 HTTP 服务器现在将通过响应体指示结果。[8374](https://github.com/emqx/emqx/pull/8374) [8377](https://github.com/emqx/emqx/pull/8377)
+- 批量订阅/取消订阅 API [8356](https://github.com/emqx/emqx/pull/8356)
+- 添加了独占订阅功能 [8315](https://github.com/emqx/emqx/pull/8315)
+- 提供认证计数器指标 [8352](https://github.com/emqx/emqx/pull/8352) [8375](https://github.com/emqx/emqx/pull/8375)
+- 不允许管理员用户自我删除 [8286](https://github.com/emqx/emqx/pull/8286)
+- 重启后，确保从具有最大 `tnxid` 的集群节点复制 `cluster-override.conf`。[8333](https://github.com/emqx/emqx/pull/8333)
 
-### Bug fixes
+### 修复
 
-- A bug fix ported from 4.x: allow deleting subscriptions from `client.subscribe` hookpoint callback result. [8304](https://github.com/emqx/emqx/pull/8304) [8347](https://github.com/emqx/emqx/pull/8377)
-- Fixed Erlang distribution over TLS [8309](https://github.com/emqx/emqx/pull/8309)
-- Made possible to override authentication configs from environment variables [8323](https://github.com/emqx/emqx/pull/8309)
-- Made authentication passwords in Mnesia database backward compatible to 4.x, so we can support data migration better. [8351](https://github.com/emqx/emqx/pull/8351)
-- Fix plugins upload for rpm/deb installations [8379](https://github.com/emqx/emqx/pull/8379)
-- Sync data/authz/acl.conf and data/certs from clustered nodes after a new node joins the cluster [8369](https://github.com/emqx/emqx/pull/8369)
-- Ensure auto-retry of failed resources [8371](https://github.com/emqx/emqx/pull/8371)
-- Fix the issue that the count of `packets.connack.auth_error` is inaccurate when the client uses a protocol version below MQTT v5.0 to access [8178](https://github.com/emqx/emqx/pull/8178)
+- 从 4.x 移植的一个错误修复：允许从 `client.subscribe` 钩子点回调结果中删除订阅。[8304](https://github.com/emqx/emqx/pull/8304) [8347](https://github.com/emqx/emqx/pull/8377)
+- 修复了 TLS 上的 Erlang 分布问题 [8309](https://github.com/emqx/emqx/pull/8309)
+- 可以从环境变量覆盖认证配置 [8323](https://github.com/emqx/emqx/pull/8309)
+- 使 Mnesia 数据库中的认证密码向后兼容到 4.x，以便我们可以更好地支持数据迁移。[8351](https://github.com/emqx/emqx/pull/8351)
+- 修复了 rpm/deb 安装的插件上传问题 [8379](https://github.com/emqx/emqx/pull/8379)
+- 在新节点加入集群后，从集群节点同步 data/authz/acl.conf 和 data/certs [8369](https://github.com/emqx/emqx/pull/8369)
+- 确保失败资源的自动重试 [8371](https://github.com/emqx/emqx/pull/8371)
+- 修复了客户端使用低于 MQTT v5.0 协议版本访问时 `packets.connack.auth_error` 计数不准确的问题 [8178](https://github.com/emqx/emqx/pull/8178)
 
-### Others
+### 其他
 
-- Rate limiter interface is hidden so far, it's subject to a UX redesign.
-- QUIC library upgraded to 0.0.14.
-- Now the default packages will be released withot otp version number in the package name.
-- Renamed config exmpale file name in `etc` dir.
-
-## 5.0.0
-
-*发布日期: 2023-02-03*
-
-EMQX 企业版 5.0 是一个全新的版本。在这个版本中，我们采用了全新的集群架构，并对主要功能进行了改进，同时还引入了大量新功能。
-
-### 集群水平扩展性与可靠性
-
-基于开创性的 Core + Replica 集群架构，EMQX 企业版 5.0 获得了更好的集群水平扩展性和可靠性：
-
-- 单个集群支持至多 23 个节点并能够承载超过 1 亿 MQTT 连接，相比 4.x 版本实现了 [10 倍的接入能力提升](https://www.emqx.com/zh/blog/how-emqx-5-0-achieves-100-million-mqtt-connections)。
-- 使用 Core-Replicant 模式部署时，由于 Replicant 节点是无状态的，动态伸缩增减 Replicant 节点数量不会影响集群稳定性。
-- 大规模部署时节点脑裂风险以及脑裂后对业务产生的影响显著降低，为企业用户提供更加稳定可靠的服务。
-
-目前 [EMQX Kubernetes Operator](https://www.emqx.com/zh/emqx-kubernetes-operator) 已经针对新集群架构进行了适配，结合新集群架构能够将 EMQX 部署为一个弹性的、无状态的 MQTT 服务。
-
-### MQTT over QUIC，下一代物联网传输协议
-
-QUIC 是下一代互联网协议 HTTP/3 的底层传输协议，它的出现能够大大扩充现有物联网的应用场景。
-
-EMQX 企业版 5.0 将 QUIC 作为传输层引入到 MQTT 中，以满足多样化的应用场景并统一接入设备进行管理。
-
-MQTT over QUIC 适用于位置不固定、或是需要频繁断连不适合做长连接的设备。
-
-多项与 TCP/TLS 测试的对比表明，在弱网与多变的网络环境下，QUIC 都能够满足其高质量、稳定的消息通信需求，弥补了现有 TCP/TLS 传输层的不足。车联网、移动数据采集等场景的用户将从中受益。
-
-现在，用户可以创建一个 MQTT over QUIC 监听器并使用 EMQ 提供的 SDK 接入物联网设备，EMQ 也正在以 OASIS 成员身份推动 MQTT over QUIC 的标准化落地。
-
-更多信息请参考： [从零开始上手 MQTT over QUIC：快速体验下一代物联网标准协议](https://www.emqx.com/zh/blog/getting-started-with-mqtt-over-quic-from-scratch)
-
-### 可视化双向数据集成
-
-EMQX 企业版 5.0 数据集成包括规则引擎与数据桥接功能，能够以灵活、低代码的配置方式进行物联网数据的实时处理和与第三方数据系统的集成。
-
-**Flow Editor 可视化编排规则处理数据流**
-
-通过可视化查看 Flows 页面，改善规则数量较多情况下的维护和管理难度。现在，用户可以清晰看到数据筛选、处理与桥接的整个步骤，并实时监控这一链路中每个步骤的状态。
-
-后续版本 EMQX 将允许用户在 Dashboard 上以拖拽的方式自由编排规则和数据桥接，通过可视化界面将物联网硬件数据流轻松连接在一起，使开发者专注于自有业务开发。
-
-**更灵活的双向数据集成**
-
-除了将设备数据桥接至外部系统外，还能从外部数据系统如另一个 MQTT 服务、Kafka 中桥接数据至 EMQX，并经过规则处理后发送到指定客户端。
-
-双向数据集成适用于云端下发场景，在支撑持续大规模消息实时处理与下发，为物联网业务开发提供了更多的可能性。
-
-**数据桥接磁盘缓存**
-
-为数据桥接集成增加了磁盘缓存功能，数据桥接连接异常的情况下能够将期间产生的消息缓存起来，待连接恢复后继续发送，这为数据集成提供了极佳的可靠性，大大提升业务可用性。
-
-**数据集成支持情况**
-
-EMQX 企业版 5.0 中首批已获支持的数据集成包括 Webhook、MQTT、Kafka、InfluxDB、MySQL、Redis、GCP PubSub 以及 MongoDB，更多数据集成将在后续的维护版本（5.0.x 版本）中陆续加入。
-
-### 全面的安全保障
-
-**更灵活的访问控制**
-
-EMQX 企业版 5.0 提供了用户名/密码、LDAP、JWT、PSK 和 X.509 证书等多种身份认证，以及消息发布订阅授权检查功能。
-
-访问控制功能可以通过 Dashboard 进行配置，无需重启操作即可为整个集群启用访问控制安全设置，拥有更灵活、易用的操作体验。
-
-认证授权还具有详细的统计指标，可以分别统计集群以及单个节点上认证器和授权检查器的执行情况，包括以下数据：
-
-- 允许数：允许通过认证或授权检查的次数
-- 拒绝数：拒绝通过认证或授权检查的次数
-- 不匹配数：没有找到用户凭证或权限列表的次数
-- 当前速率：当前执行速度
-
-通过认证授权统计指标，用户可以及时发现如大量的失败认证/授权检查，及时感知安全系统的异常情况。
-
-**过载保护与速率限制**
-
-引入了过载保护功能，新的速率限制系统也提供了精度更高的分层速率控制支持，能够从客户端、监听器以及节点多个层面限制客户端行为确保应用按照用户预期的负载运行。
-
-两者结合可以避免客户端过于繁忙以及过多的请求流量导致服务不稳定或故障。
-
-### 全新的 Dashboard
-
-采用全新 UI 设计风格的 Dashboard，优化了关键数据和指标数据的显示方式与内容，在提升视觉体验的同时，也提供了更全面、强大、易用的内置功能，为用户使用 EMQX 进行更多物联网业务开发提供了便利。
-
-主要改进如下：
-
-- 提供了访问控制管理页面
-- 改进的数据集成管理 UI，支持可视化数据集成查看
-- 更强大的热配置功能
-- 更多诊断工具，例如慢订阅和在线追踪
-- 更多数据管理：能够在 Dashboard 上管理保留消息、延迟发布数据
-
-### 更好的扩展性
-
-**新的插件机制** 允许通过插件包的的形式编译、分发、安装插件，当用户需要扩展功能时，可以下载独立的插件安装包，在 Web 界面完成上传即可进行安装，整个过程甚至不需要重启 EMQX 集群。
-
-同时，一个规范的插件将会随身附带使用说明、插件主页地址等信息，普通用户可以依照说明快速将插件用起来，也为插件开发者提供了与用户沟通的渠道。
-
-**更易用的 ExHook/gRPC 扩展** 允许创建多个 ExHook 实例，并为每个实例提供了详细的使用情况统计，同时还可以查看每个 Exhook 实例注册的钩子以及钩子参数，能够更好地感知 Exhook 扩展负载情况。
-
-**更"原生"的多协议接入**
-
-网关以统一的设计语言重新实现，针对每种协议特性提供不同的客户端管理页面、安全认证配置，让用户以更原生的方式接入。
-
-由于每个网关都可以配置自己独立的认证，不同网关设备的认证信息现在可以相互隔离，满足更多场景的需求。
+- 目前速率限制器接口被隐藏，它将接受用户体验重设计。
+- QUIC 库升级到 0.0.14。
+- 现在默认包将不在包名中包含 otp 版本号。
+- 在 `etc` 目录中重命名了配置示例文件名。
 
 ## 5.0.0
 
-*发布日期: 2022-06-17*
+*发布日期：2022-06-17*
 
-### Horizontal Scalability
+### 水平可扩展性
 
-An extension to the Mnesia database was introduced, named 'Mria'.
+引入了对 Mnesia 数据库的扩展，命名为 `Mria`。
 
-EMQX nodes can continue to form a cluster (named 'core') exactly as in previous versions.
+EMQX 节点可以像以前的版本一样继续形成集群（命名为 `core`）。
 
-In version 5, Mria allows more nodes to join the cluster as 'replicants'.
+在版本5中，Mria 允许更多节点作为`副本`加入集群。
 
-The difference is, replicant nodes apply changes in the routing table (and configurations etc.) asynchronously, and the replicant nodes can be scaled up and down without affecting the data consistency.
+不同之处在于，副本节点异步应用路由表（和配置等）的更改，且副本节点可以在不影响数据一致性的情况下进行扩展或缩减。
 
-This reduces the networking overheads of forming a full-mesh cluster.
+这减少了形成全网状集群的网络开销。
 
-In our most recent test, we managed to achieve 100 million MQTT clients connecting to a 23 nodes Mria cluster.
+在我们最近的测试中，我们设法实现了100万 MQTT 客户端连接到一个23节点的 Mria 集群。
 
-It's a 3 times larger cluster size compared to a typical version 4 cluster,
+与典型的版本4集群相比，集群大小增加了3倍，
 
-and 10 times more capacity comparing to our previous [10 million achievement](https://www.emqx.com/en/resources/emqx-v-4-3-0-ten-million-connections-performance-test-report)
+与我们之前的[1000万成就](https://www.emqx.com/en/resources/emqx-v-4-3-0-ten-million-connections-performance-test-report)相比，容量增加了10倍。
 
-### Reliability
+### 可靠性
 
-With the help of the Mria clustering topology, the risk of suffering a split-view of the cluster due to network partitioning, and improves cluster stability in general.
+借助 Mria 集群拓扑，减少了由于网络分区导致的集群分裂视图的风险，并总体上提高了集群稳定性。
 
-- Only core nodes are involved in transactional writes
-- Data is fully replicated to replicant nodes so they can read from local copy (i.e., from RAM)
-- While core nodes are fully functional MQTT broker, one can also opt to dedicate them as pure data base nodes
+- 只有核心节点参与事务写入
+- 数据完全复制到副本节点，因此它们可以从本地副本（即，从 RAM）读取
+- 虽然核心节点是功能完备的 MQTT 代理，但也可以选择将它们专用作纯数据库节点
 
-### The new Dashboard
+### 全新 Dashboard
 
-Version 5 comes with a fresh new design for the dashboard. Powered by `vue.js` at the frontend, and OpenAPI at the backend, it provides the most easy-to-use MQTT broker management UI.
+版本5带来了 Dashboard 的全新设计。前端由`vue.js`驱动，后端使用 OpenAPI，提供了最易用的 MQTT 代理管理 UI。
 
-Key improvements compared to version 4:
+与版本4相比的主要改进：
 
-- Access control (authentication and authorization) management
-- Improved rule engine and action management UI
-- Visual aid view to display data flow e.g., from MQTT topics to destination data sink
-- Online config update
-- Gateway/Extension management
-- More diagnosis tools, such as slow subscriptions and online tracing
+- 访问控制（认证和授权）管理
+- 改进的规则引擎和动作管理UI
+- 视觉辅助视图，显示数据流，例如，从 MQTT 主题到目标数据汇
+- 在线配置更新
+- 网关/扩展管理
+- 更多诊断工具，如慢订阅和在线追踪
 
-### Typesafe Config
+### 类型安全配置
 
-Starting from version 5, EMQX will use [HOCON](https://lightbend.github.io/config/) for the configuration syntax.
+从版本5开始，EMQX 将使用 [HOCON](https://lightbend.github.io/config/) 作为配置语法。
 
-With a schema on top, the configs are now type-checked.
+在顶部附加了一个架构，现在配置是类型检查的。
 
-HOCON supports Nginx-like configuration layouts, and provides a native array syntax.
+HOCON supports NGINX-like configuration layouts, and provides a native array syntax.
 
-But don't worry, the old `cuttlefish` syntax is still supported if you prefer to keep everything flat like in version 4.
+但不用担心，如果你喜欢像版本4那样保持一切扁平化，旧的 `cuttlefish` 语法仍然受支持。
 
-The EMQX team have put huge effort into providing sane-default values, as a result, the default configuration file is now less than 100 lines including comments.
+EMQX 团队付出巨大努力提供合理的默认值，因此现在默认配置文件不包括注释的情况下少于100行。
 
-Provided side-by-side, there is a full-blown example configuration (generated from the schema) to help us quickly find examples to copy from.
+并列提供了一个完整的示例配置（从架构生成），帮助我们快速找到示例进行复制。
 
-### Operability
+### 可操作性
 
-In version 5, the interface descriptions for the Dashboard-enabled management APIs follow the OpenAPI specification 3.0. Behind the scene, the specification is actually generated from the configuration schema, the same schema which type-checks the files.
+在版本5中，Dashboard 启用的管理 API 的接口描述遵循 OpenAPI 规范3.0。幕后，这些规范实际上是从配置架构生成的，这同样的架构用于检查文件。
 
-Now we have a single source of schema, which is used to guard both the configuration file and HTTP interface, also to generate config and API documents.
+现在我们有了一个单一的架构来源，用于保护配置文件和 HTTP 接口，并生成配置和 API 文档。
 
-Another nice thing about Swagger, is that it comes with the Swagger-UI in which we can click a "try it out" button to test the API directly from the web browser, or copy-paste the `curl` command example to a console to test it out.
+关于 Swagger 的另一好处是，它附带了 Swagger-UI，我们可以点击“尝试一下”按钮直接从网页浏览器测试 API，或复制粘贴 `curl` 命令示例到控制台进行测试。
 
-Another major change in operability compared to version 4 is that the changes are persisted back on disk as configuration file (in HOCON syntax).
+与版本4相比，可操作性的另一个主要变化是更改会持久化回磁盘作为配置文件（使用 HOCON 语法）。
 
-The immediate benefit from unifying the config file interface and HTTP API interface is the hot-configuration.
+统一配置文件接口和 HTTP API 接口的直接好处是热配置。
 
-Hot-configuration was a feature only available in EMQX Enterprise edition, it allows us to change a lot of configurations from Dashboard or through the APIs at runtime without having to restart the service.
+热配置是 EMQX 企业版中的一个功能，它允许我们在运行时从 Dashboard 或通过API更改许多配置，而无需重启服务。
 
-In enterprise edition version 4, the hot-values were stored in the database, but not in config files, which was not very convenient for users who want to change the overridden values from the config file interface.
+在企业版版本4中，热值存储在数据库中，而不是配置文件中，这对于希望从配置文件接口更改覆盖值的用户来说并不方便。
 
-### Observability
+### 可观测性
 
-The dashboard comes with more detailed monitoring metrics. We can now view up to 7 days of historical metrics data on Dashboard, and integrate with Prometheus with one click. Add log tracking and slow subscription diagnostic tools to effectively improve the user experience when troubleshooting and diagnosing abnormal client behaviors.
+ Dashboard 带来了更详细的监控指标。我们现在可以在 Dashboard 上查看长达7天的历史指标数据，并一键与 Prometheus 集成。添加日志跟踪和慢订阅诊断工具，有效提升了在排查和诊断异常客户端行为时的用户体验。
 
-Another enhancement in observability is the introduction of structured logging, now most of the logs emitted from EMQX have a `msg` field. The text of this filed is an underscore-separated words, to make it more search-friendly for humans but also helps the log indexing tools to index the logs.
+可观测性的另一个增强是引入了结构化日志，现在 EMQX 发出的大多数日志都有一个 `msg` 字段。这个字段的文本是下划线分隔的单词，不仅对用户搜索友好，也帮助日志索引工具索引日志。
 
-### Data Integration (The Old Rule Engine)
+### 数据集成（旧规则引擎）
 
-As you may notice from the dashboard, the old 'Rule Engine' has been renamed to 'Data integration'.
+正如你可能从 Dashboard 上注意到的，旧的'规则引擎'已被重命名为'数据集成'。
 
-It includes two major functionalities: rules and data bridges.
+它包括两个主要功能：规则和数据桥。
 
-Rule is a data processing language in SQL syntax (in addition a [`jq` language support](https://www.youtube.com/watch?v=_GwF8zvhNcQ)), which helps to filter and transform IoT messages.
+规则是一种数据处理语言，使用 SQL 语法（另外还支持[`jq`语言](https://www.youtube.com/watch?v=_GwF8zvhNcQ)），帮助过滤和转换 IoT 消息。
 
-Data bridge provides the ability to ingest data into EMQX or export data outside of EMQX.
+数据桥提供了将数据摄入 EMQX 或导出 EMQX 外部的能力。
 
-Through the dashboard, users can now clearly see how IoT data is processed with rules and how the data flows from/to external data services.
+通过 Dashboard ，用户现在可以清楚地看到IoT数据是如何通过规则处理的，以及数据是如何从/到外部数据服务流动的。
 
-Another important change: now rules and actions are configs (in config files), but not data in Mnesia (the built-in database, which is quite opaque for non-Erlang developers), meaning we'll be able to configure rules with various deployment/orchestration tools a lot easier.
+另一个重要变化：现在规则和动作是配置（在配置文件中），而不是 Mnesia（内置数据库，对非 Erlang 开发人员来说相当不透明）中的数据，这意味着我们将能够使用各种部署/编排工具更容易地配置规则。
 
-### Access Control
+### 访问控制
 
-Now we can manage authentication and authorization from the dashboard without having to restart the broker.
+现在我们可以从 Dashboard 管理认证和授权，而无需重启代理。
 
-Previously provided as plugins, authentication and authorization (ACL) configurations are scattered in different files, and changes will often require a restart of the broker to take effect.
-In version 5, all the commonly used security configurations are grouped together. There is also a user management UI provided in the dashboard, allowing you to manage users and access rules on the fly.
+之前作为插件提供的认证和授权（ACL）配置分散在不同的文件中，更改通常会需要重启代理才能生效。 在版本5中，所有常用的安全配置都聚集在一起。 Dashboard 上还提供了一个用户管理 UI，允许您即时管理用户和访问规则。
 
-We can even configure different authentication rules per listener.
+我们甚至可以为每个监听器配置不同的认证规则。
 
-### Gateway
+### 网关
 
-The gateway is re-implemented with a unified design language, providing independent management interfaces and security authentication capabilities for various protocols with different client attributes and life cycles, allowing users to access in a more native way. Since each gateway can be configured with its own independent authentication, authentication information of different gateway devices can now be isolated from each other to meet the needs of more scenarios.
+网关采用统一的设计语言重新实现，为不同的协议提供独立的管理接口和安全认证能力，具有不同客户端属性和生命周期的用户可以以更本地化的方式访问。由于每个网关都可以配置自己的独立认证，不同网关设备的认证信息现在可以彼此隔离，以满足更多场景的需求。
 
 ### MQTT over QUIC
 
-QUIC [RFC 9000](https://datatracker.ietf.org/doc/html/rfc9000), the next generation transport layer for the internet, brings amazing opportunities (and challenges too) to IoT.
+QUIC [RFC 9000](https://datatracker.ietf.org/doc/html/rfc9000)，互联网的下一代传输层，为 IoT 带来了惊人的机遇（以及挑战）。
 
-EMQX team cannot wait to start experimenting MQTT on top of it.
+EMQX团队迫不及待地开始尝试在其上运行 MQTT。
 
-Coming with the 5.0 release, one can configure a QUIC listener to experiment with MQTT over QUIC.
+随着5.0版本的发布，现在可以配置一个 QUIC 监听器来尝试 MQTT over QUIC。
 
-### Extension
+### 扩展
 
-EMQX 5.0 keeps and to a certain extent enhances the ability of plugin extensions. The plugins can now be compiled, distributed as a standalone package, and then uploaded on the Dashboard to complete the installation for the entire cluster, so they do not have to repeat the steps for each node.
+EMQX 5.0保持并在一定程度上增强了插件扩展的能力。插件现在可以编译、作为独立包分发，然后上传到 Dashboard 完成整个集群的安装，因此它们不必为每个节点重复步骤。
 
-### Hello Elixir
+### 你好，Elixir
 
-EMQX 5 is still a rebar3 project, but it now compiles with mix, if you know Elixir, you know what it means. Happy hacking.
+EMQX 5仍然是一个 rebar3项目，但现在它与 mix 一起编译，如果你了解 Elixir，你就知道这意味着什么。快乐的黑客活动。

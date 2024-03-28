@@ -2,7 +2,7 @@
 
 As one of the most important capabilities EMQX provides for building IoT data infrastructure, data integration helps users to process and distribute all business data quickly without writing additional code. Data integration capability consists of data bridging and rules. Users can use data bridging or MQTT topics to access data, use rules to process data, and then send data to external applications through data bridging. For more details, please visit [Rule Engine](../data-integration/rules.md).
 
-Data Bridges allows users to send messages from EMQX to an external data system or pull data from an external data system and send it to an EMQX topic in real-time. The EMQX Dashboard provides the ability to visually create data bridges by simply configuring the relevant resources on the page. For more details, please visit [Introduction to Data Bridges](../data-integration/data-bridges.md).
+Data Bridges allows users to send messages from EMQX to an external data system or pull data from an external data system and send it to an EMQX topic in real-time. The EMQX Dashboard provides the ability to visually create data bridges by simply configuring the relevant resources on the page. For more details, please visit [Data Integration](../data-integration/data-bridges.md).
 
 Under the Data Integration menu on the left, users can access the Data Bridge page, where they can quickly create and manage the created data bridges.
 
