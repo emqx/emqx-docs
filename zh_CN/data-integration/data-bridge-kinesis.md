@@ -103,7 +103,7 @@ EMQX 与 AWS Kinesis Data Streams 的数据集成可以为您的业务带来以�
 
 本节演示了如何在 Dashboard 中创建一条规则以指定需要写入 Amazon Kinesis 的数据并为规则添加触发的动作。
 
-1. 在 EMQX Dashboard 左侧导航栏中点击**集成** -> **规则 **。
+1. 在 EMQX Dashboard 左侧导航栏中点击**集成** -> **规则**。
 
 2. 点击页面右上角的**创建**。
 

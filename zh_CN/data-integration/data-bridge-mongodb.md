@@ -220,7 +220,7 @@ db.createCollection('emqx_messages')
 
 6. 从**连接器**下拉框中选择刚刚创建的 `my_mongodb`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
 
-7. 在**集合 (Collection)**中填写存储数据的集合，支持通过占位符 `${var_name}` 动态设置，本示例中填入 `emqx_messages`。
+7. 在**集合** **(Collection)** 中填写存储数据的集合，支持通过占位符 `${var_name}` 动态设置，本示例中填入 `emqx_messages`。
 
 8. 配置 **有效载荷模板**，将 `clientid`、`topic`、`qos`、`timestamp`、`payload` 字段存储到 MongoDB 中，该模板将通过 MongoDB insert 命令执行，对应模板如下：
 
