@@ -173,9 +173,13 @@ The section below will take Ubuntu 22.04 as an example to illustrate how to down
 
 ## Install with deb
 
-1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=Ubuntu=currentOS=Ubuntu22&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
+1. Go to the [official site for EMQX](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=Ubuntu=currentOS=Ubuntu22&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
+
 2. Select `@EE_VERSION@` for **Version** and `Ubuntu` for **OS**, and click the **Download** button.
-3. On the Downloads and Install page, select `deb` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
+
+3. On the Downloads and Install page, select `deb` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Click **Download Now**.
+
+   You can also follow the command instructions on the page.
 
 ### Start EMQX
 
@@ -213,9 +217,11 @@ sudo apt remove --purge emqx
 
 ## Install with tar.gz 
 
-1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=Ubuntu=currentOS=Ubuntu22&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
+1. Go to the [official site for EMQX](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=Ubuntu=currentOS=Ubuntu22&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
 2. Select `@EE_VERSION@` for **Version** and `Ubuntu` for **OS**, and click the **Download** button.
-3. On the Downloads and Install page, select `tar.gz` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
+3. On the Downloads and Install page, select `tar.gz` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Click **Download Now**.
+
+   You can also follow the command instructions on the page.
 
 ### Start EMQX
 
