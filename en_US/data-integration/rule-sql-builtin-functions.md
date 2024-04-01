@@ -1,10 +1,20 @@
 # Built-in SQL Functions
 
-EMQX rules use a SQL-like syntax and support a variety of built-in functions for doing basic data transformation, including [mathematical](#mathematical-functions), [data type judgment](#data-type-judgment-function), [conversion](#data-type-conversion-functions), [string](#string-functions), [map](#map-functions), [array](#array-functions), [hash](#hash-function), [compression and decompression](#compression-and-decompression-functions), [bit](#bit-functions), [decoding and encoding](#decoding-and-encoding-functions), and [time and date](#time-and-date-functions) functions that are available in EMQX.
+The rule engine proffers a variety of built-in functions. You can utilize these functions within SQL to accomplish basic data processing, encompassing [Mathematical](#mathematical-functions), [Data Type Judgment](#data-type-judgment-functions),[Data Type Conversion](#data-type-conversion-functions), [String Operations](#string-operation-functions), [Map Operations](#map-operation-functions), [Array Operations](#array-operation-functions), [Hashing](#hashing-functions), [Compression and Decompression](#compression-and-decompression-functions), [Bit Operations](#bit-operation-functions), [Bit Sequence Operations](#bit-sequence-operation-functions), [Encoding and Decoding](#encoding-and-decoding-functions), as well as [Date and Time Conversion](#date-and-time-conversion-functions).
+
+In this section, all function declarations conform to the following format:
+
+```
+FuncName(Arg 1: Type 1 | ..., ...) -> Type 1 | ...
+```
+
+For instance, `abs(X: integer | float) -> integer | float` implies that the data type of argument `X` can be either integer or float, and correspondingly, the return value's data type can also be integer or float.
+
+Be aware that if the provided argument exceeds the stipulated range or employs an unsupported data type, it will result in the current SQL execution failing, incrementing the failure count by one.
 
 :::tip
 
-Since EMQX 5.0 version, EMQX also supports using  [jq language](https://stedolan.github.io/jq/manual/) for complex data transformation, you may read the [jq Fucntion](./rule-sql-jq.md) section for more information.
+Since EMQX 5.0 version, EMQX also supports using  [jq Syntax](https://stedolan.github.io/jq/manual/) for complex data transformation, you may read the [jq Fucntion](./rule-sql-jq.md) section for more information.
 
 :::
 
@@ -12,407 +22,1109 @@ Since EMQX 5.0 version, EMQX also supports using  [jq language](https://stedolan
 
 EMQX supports a wide range of mathematical functions:
 
-- Trigonometric and hyperbolic functions: include sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, asinh, acosh, atanh
-- Numerical functions: include abs, ceil, floor, round, sqrt, fmod
-- Exponential and logarithmic functions: including exp, power, log, log10, and log2
+- Trigonometric and hyperbolic functions, include sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, asinh, acosh, atanh.
+- Numerical functions, include abs, ceil, floor, round, sqrt, fmod.
+- Exponential and logarithmic functions, include exp, power, log, log10, log2.
 
-See the table below for a complete list of mathematical functions supported. 
+### abs(X: integer | float) -> integer | float
 
-| Function Name | Description                             | Parameter                                  |
-| ------------- | --------------------------------------- | ------------------------------------------ |
-| abs           | Absolute value                          | Operand                                    |
-| cos           | Cosine value                            | Operand                                    |
-| cosh          | Hyperbolic cosine value                 | Operand                                    |
-| acos          | Inverse cosine value                    | Operand                                    |
-| acosh         | Inverse hyperbolic cosine value         | Operand                                    |
-| sin           | Sine value                              | Operand                                    |
-| sinh          | Hyperbolic sine value                   | Operand                                    |
-| asin          | Arcsine value                           | Operand                                    |
-| asinh         | Inverse hyperbolic sine value           | Operand                                    |
-| tan           | Tangent value                           | Operand                                    |
-| tanh          | Hyperbolic tangent value                | Operand                                    |
-| atan          | Arc tangent value                       | Operand                                    |
-| atanh         | Inverse hyperbolic tangent value        | Operand                                    |
-| ceil          | Round up (integer)                      | Operand                                    |
-| floor         | Round down (integer)                    | Operand                                    |
-| round         | Rounding (integer)                      | Operand                                    |
-| fmod          | modulo<br /> (remainder)                | 1. Left Operand <br />2. Right Operand     |
-| exp           | Exponentiation<br />x power of e        | Operand                                    |
-| power         | Exponential operation<br />y power of X | 1. Left operand x <br />2. Right operand y |
-| sqrt          | Square root                             | Operand                                    |
-| log           | Logarithm to e                          | Operand                                    |
-| log10         | Logarithm to 10                         | Operand                                    |
-| log2          | Logarithm to 2                          | Operand                                    |
-| random        | Pseudo-random numbers                   | 0 < Operand <= 1                           |
+Returns the absolute value of number `X`. Example:
 
-**Examples:**
-
-```erlang
+```
 abs(-12) = 12
-cos(1.5) = 0.0707372016677029
-cosh(1.5) = 2.352409615243247
-acos(0.0707372016677029) = 1.5
-acosh(2.352409615243247) = 1.5
-sin(0.5) = 0.479425538604203
-sinh(0.5) = 0.5210953054937474
-asin(0.479425538604203) = 0.5
-asinh(0.5210953054937474) = 0.5
-tan(1.4) = 5.797883715482887
-tanh(1.4) = 0.8853516482022625
-atan(5.797883715482887) = 1.4
-atanh(0.8853516482022625) = 1.4000000000000001
-ceil(1.34) = 2
-floor(1.34) = 1
-round(1.34) = 1
-round(1.54) = 2
-exp(10) = 22026.465794806718
-power(2, 10) = 1024
-sqrt(2) = 1.4142135623730951
-fmod(-32, 5) = -2
-log10(1000) = 3
-log2(1024) = 10
+abs(-1.2) = 1.2
 ```
 
-## Data Type Judgment Function
+### acos(X: integer | float) -> float
 
-EMQX has built-in functions for data type judgments. These functions are used to check the data type of a specific field in a message and return a boolean value indicating whether or not the field conforms to the specified data type. 
+Returns the arc cosine of `X`, expressed in radians. The range of `X` is `[-1, 1]`. Example:
 
-See the table below for a complete list of data type judgment functions supported. 
+```
+acos(0.5) = 1.0471975511965976
+```
 
-| Function Name | Description                                                  | Parameter |
-| ------------- | ------------------------------------------------------------ | --------- |
-| is_null       | Check if a field is undefined<br />Boolean                   | Data      |
-| is_not_null   | Check if a field is defined<br/>Boolean                      | Data      |
-| is_str        | Check if the value is of String type<br/>Boolean             | Data      |
-| is_bool       | Check if the value is of Boolean type<br/>Boolean            | Data      |
-| is_int        | Check if the value is of Integer type<br/>Boolean            | Data      |
-| is_float      | Check if the value is of Float type<br/>Boolean              | Data      |
-| is_num        | Check if the value is of numeric type<br />Integer or Float<br/>Boolean | Data      |
-| is_map        | Check if the value is of Map type<br/>Boolean                | Data      |
-| is_array      | Check if the value is of Array type<br/>Boolean              | Data      |
+### acosh(X: integer | float) -> float
 
-**Examples:**
+Returns the hyperbolic arccosine of `X`, expressed in radians. `X` must be greater than or equal to 1. Example:
 
+```
+acosh(1.5) = 0.9624236501192069
+```
 
-```erlang
-is_null(undefined) = true
-is_not_null(1) = true
-is_str(1) = false
-is_str('val') = true
+### asin(X: integer | float) -> float
+
+Returns the arc sine of `X`, expressed in radians. The range of `X` is `[-1, 1]`. Example:
+
+```
+asin(0.5) = 0.5235987755982988
+```
+
+### asinh(X: integer | float) -> float
+
+Returns the hyperbolic arcsine of `X`. Example:
+
+```
+asinh(0.5) = 0.48121182505960347
+```
+
+### atan(X: integer | float) -> float
+
+Returns the arc tangent of `X`, expressed in radians. Example:
+
+```
+atan(0.5) = 0.46364760900080615
+```
+
+### atanh(X: integer | float) -> float
+
+Returns the hyperbolic arctangent of `X`, where `X` ranges between `(-1, 1)`. Example:
+
+```
+atanh(0.5) = 0.5493061443340549
+```
+
+### ceil(X: integer | float) -> integer
+
+Rounds upward, yielding the smallest integer greater than or equal to the given `X`. Example:
+
+```
+ceil(0.8) = 1
+```
+
+### cos(X: integer | float) -> float
+
+Returns the cosine of the angle `X` expressed in radians. Example:
+
+```
+cos(0.5) = 0.8775825618903728
+```
+
+### cosh(X: integer | float) -> float
+
+Returns the hyperbolic cosine of `X`. Example:
+
+```
+cosh(0.5) = 1.1276259652063807
+```
+
+### exp(X: integer | float) -> float
+
+Returns the natural number e to the power of `X`, i.e., `e^X`. Example:
+
+```
+exp(1) = 2.718281828459045
+```
+
+### floor(X: integer | float) -> integer
+
+Returns the largest integer less than or equal to the given `X`. Example:
+
+```
+floor(3.6) = 3
+```
+
+### fmod(X: integer | float, Y: integer | float) -> float
+
+Returns the remainder of `X` divided by `Y` as a floating-point number. Example:
+
+```
+fmod(6.5, 2.5) = 1.5
+```
+
+### log(X: integer | float) -> float
+
+Returns the natural logarithm of the number `X`, where `X` must be greater than 0. Example:
+
+```
+log(7.38905609893065) = 2.0
+```
+
+### log10(X: integer | float) -> float
+
+Returns the logarithm base 10 of the number `X`, where `X` must be greater than 0. Example:
+
+```
+log10(100) = 2.0
+```
+
+### log2(X: integer | float) -> float
+
+Returns the logarithm base 2 of the number `X`, where `X` must be greater than 0. Example:
+
+```
+log2(8) = 3.0
+log2(8.5) = 3.0874628412503395
+```
+
+### round(X: integer | float) -> integer
+
+Rounds the number `X` to the nearest integer. Example:
+
+```
+round(4.5) = 5
+```
+
+### power(X: integer | float, Y: integer | float) -> float
+
+Returns `X` to the power of `Y`, i.e., `X^Y`. Example:
+
+```
+power(2, 3) = 8.0
+```
+
+### random() -> float
+
+Returns a random floating-point number in the range `[0, 1)`. Example:
+
+```
+random() = 0.5400050092601868
+```
+
+### sin(X: integer | float) -> float
+
+Returns the sine of angle `X`, expressed in radians. Example:
+
+```
+sin(0.5) = 0.479425538604203
+```
+
+### sinh(X: integer | float) -> float
+
+Returns the hyperbolic sine of `X`. Example:
+
+```
+sinh(0.5) = 0.5210953054937474
+```
+
+### sqrt(X: integer | float) -> float
+
+Returns the square root of the number `X`. Example:
+
+```
+sqrt(9) = 3.0
+```
+
+### tan(X: integer | float) -> float
+
+Returns the tangent of angle `X` (expressed in radians). Example:
+
+```
+tan(0.5) = 0.5463024898437905
+```
+
+### tanh(X: integer | float) -> float
+
+Returns the hyperbolic tangent of `X`. Example:
+
+```
+tanh(0.5) = 0.46211715726000974
+```
+
+## Data Type Judgment Functions
+
+Data type judgment functions can be used to check the data type of a specified field and indicate whether the field conforms to the specified data type through a boolean value.
+
+### is_array(Term: any) -> boolean
+
+> 'any' signifies all data types.
+
+Determine whether `Term` is of array type. Example:
+
+```
+is_array([1, 2]) = true
+is_array(json_decode('[{"value": 1}]')) = true
+is_array(json_decode('{"value": 1}')) = false
+is_array(0.5) = false
+is_array('[1, 2]') = false
+```
+
+### is_bool(Term: any) -> boolean
+
+Determine whether `Term` is of boolean type. Example:
+
+```
 is_bool(true) = true
-is_int(1) = true
-is_float(1) = false
-is_float(1.234) = true
-is_num(2.3) = true
-is_num('val') = false
+is_bool(false) = false
+is_bool('true') = false
+```
+
+### is_float(Term: any) -> boolean
+
+Determine whether `Term` is of float type. Example:
+
+```
+is_float(123.4) = true
+is_float(123) = false
+```
+
+### is_int(Term: any) -> boolean
+
+Determine whether `Term` is of integer type. Example:
+
+```
+is_int(123) = true
+is_int(123.4) = false
+```
+
+### is_map(Term: any) -> boolean
+
+Determine whether `Term` is of map type. Example:
+
+```
+is_map(json_decode('{"value": 1}')) = true
+is_map(json_decode('[{"value": 1}]')) = false
+```
+
+### is_null(Term: any) -> boolean
+
+Determine whether the variable `Term` is undefined. Example:
+
+```sql
+is_null(this_is_an_unassigned_variable) = true
+is_null(map_get('b', json_decode('{"a": 1}'))) = true
+```
+
+### is_num(Term: any) -> boolean
+
+Determine whether `Term` is of integer or float type. Example:
+
+```
+is_num(123) = true
+is_num(123.4) = true
+is_num('123') = false
+```
+
+### is_str(Term: any) -> boolean
+
+Determine whether `Term` is of string type. Example:
+
+```
+is_str('123') = true
+is_str(123) = false
 ```
 
 ## Data Type Conversion Functions
 
-EMQX has built-in functions that allow you to convert the data type of a specific field in a message to a new data type.
+### bool(Term: boolean | integer | string) -> boolean
 
-See the table below for a complete list of data type judgment functions supported. 
+Convert `Term` to a boolean. `Term` can only be boolean type, integer type with 0 and 1, or string type with true and false.
 
-| Function Name | Description                                          | Parameter                          |
-| ------------- | ---------------------------------------------------- | ---------------------------------- |
-| str *         | Convert data to String type                          | Data                               |
-| str_utf8      | Convert data to UTF-8 String type                    | Data                               |
-| bool          | Convert data to Boolean type                         | Data                               |
-| int           | Convert data to Integer type                         | Data                               |
-| float         | Convert data to Float type                           | Data                               |
-| float2str     | Convert a float to a string with the given precision | 1. Float Number <br />2. Precision |
-| map           | Convert data to Map type                             | Data                               |
+Example:
 
-[^*]: When converting a floating-point type to a string, the output may need to be rounded.
+```
+# Correct
+bool(true) = true
+bool(0) = false
+bool('false') = false
 
-**Examples:**
-
-```erlang
-str(1234) = '1234'
-str_utf8(1234) = '1234'
-bool('true') = true
-int('1234') = 1234
-float('3.14') = 3.14
-float2str(20.2, 10) = '20.2'
-float2str(20.2, 17) = '20.19999999999999928'
+# Wrong
+bool(20)
+bool('True')
 ```
 
-:::tip
+### float(Term: float | integer | string) -> float
 
-Data type conversion failures will cause SQL matching to fail, please proceed with caution. 
+Convert `Term` to a float.
 
-:::
+if the type of `Term` is string, scientific notation can be used, such as `float('3.14e4')`. The float type supports up to 16 significant digits. When the valid digits of the floating-point number represented by the string 'Term' exceed 16, rounding errors may occur in the conversion.
 
-## String Functions
+Example:
 
-EMQX provides several built-in functions for manipulating strings in the rule engine, for example, case conversion, space removing, and sting length count. 
+```
+float(20) = 20.0
 
-See the table below for a complete list of string functions supported. 
+float('3.14') = 3.14
+float('3.14e4') = 31400
+float('3.14e+4') = 31400
+float('3.14e-4') = 0.000314
+float('3.14E-4') = 0.000314
 
-| Function Name                | Description                                                  | Parameter                                                    |
-| ---------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| lower                        | Convert to lowercase                                         | Input string                                                 |
-| upper                        | Convert to uppercase                                         | Input string                                                 |
-| trim                         | Remove left and right space                                  | Input string                                                 |
-| ltrim                        | Remove left space                                            | Input string                                                 |
-| rtrim                        | Remove right space                                           | Input string                                                 |
-| reverse                      | String inversion                                             | Input string                                                 |
-| strlen                       | String length                                                | Input string                                                 |
-| substr                       | Take a substring of characters                               | 1. Input string <br />2. Start position (starting at position 0) |
-| substr<br />(with end)       | Take a substring of characters                               | 1. Input string <br />2. Start position (starting at position 0)<br />3. Substring length  <br /> |
-| split                        | String split                                                 | 1. Input string <br />2. Separator                           |
-| split <br />(with direction) | String split                                                 | 1. Input string <br />2. Separator <br />3. Direction, optional value: `leading` or `trailing` |
-| concat                       | String concatenation                                         | 1. Left string <br />2. Right substring                      |
-| tokens                       | String splitting (based on a specified delimiter)            | 1. Input string <br />2. Delimiter or substring              |
-| tokens                       | String splitting (based on a specified delimiter and line break) | 1. Input string <br />2. Delimiter or substring <br />3. 'nocrlf' |
-| sprintf                      | String formatting, see the Format section in  https://erlang.org/doc/man/io.html#fwrite-1 for usage | 1. Format string <br />2,3,4... Parameter list. The number of parameters may vary |
-| pad                          | String padding with spaces from the end                      | 1. Original string <br />2. Total character length           |
-| pad                          | String padding with spaces from the end                      | 1. Original string <br />2. Total character length <br />3. 'trailing' |
-| pad                          | String padding with spaces from both sides                   | 1. Original string <br />2. Total character length <br />3. 'both' |
-| pad                          | String padding with spaces from the beginning                | 1. Original string <br />2. Total character length <br />3. 'leading' |
-| pad                          | String padding with a specified character from the end       | 1. Original string <br />2. Total character length <br />3. 'trailing' <br />4. Character used for padding |
-| pad                          | String padding with a specified character from both sides    | 1. Original string <br />2. Total character length <br />3. 'both' <br />4. Character used for padding |
-| pad                          | String padding with a specified character from the beginning | 1. Original string <br />2. Total character length <br />3. 'leading' <br />4. Character used for padding |
-| replace                      | Replace a substring in a string (replace all occurrences)    | 1. Original string <br />2. Substring to be replaced <br />3. String used for replacement |
-| replace                      | Replace a substring in a string (replace all occurrences)    | 1. Original string <br />2. Substring to be replaced <br />3. String used for replacement <br />4. 'all' |
-| replace                      | Replace a substring in a string (replace the first occurrence from the end) | 1. Original string <br />2. Substring to be replaced <br />3. String used for replacement <br />4. 'trailing' |
-| replace                      | Replace a substring in a string (replace the first occurrence from the beginning) | 1. Original string <br />2. Substring to be replaced <br />3. String used for replacement <br />4. 'leading' |
-| regex_match                  | Check if a string matches a regular expression               | 1. Original string <br />2. Regular expression               |
-| regex_replace                | Replace substrings in a string that match a regular expression | 1. Original string <br />2. Regular expression <br />3. String used for replacement |
-| ascii                        | Return the ASCII code of a character                         | 1. Character                                                 |
-| find                         | Search and return a substring in a string (searching from the beginning) | 1. Original string <br />2. Substring to be found            |
-| find                         | Search and return a substring in a string (searching from the beginning) | 1. Original string <br />2. Substring to be found <br />3. 'leading' |
+# Once the significant digits exceed 16, due to rounding errors, disparate inputs may yield identical outputs.
+float('0.12345678901234566') = 0.12345678901234566
+float('0.12345678901234567') = 0.12345678901234566
+```
 
-**Examples:**
+### float(Term: float | integer | string, Decimals: integer) -> float
 
-```erlang
-lower('AbC') = 'abc'
-lower('abc') = 'abc'
+Convert `Term` to a floating-point number containing at most `Decimals` digits after the decimal point, with the range of `Decimals` being `(0, 253]`. The other behavior is the same as `float/1`. Example:
 
-upper('AbC') = 'ABC'` `lower('ABC') = 'ABC'
+```
+float('3.1415926', 3) = 3.142
+float('0.000012345', 5) = 0.00001
+```
 
-trim(' hello  ') = 'hello'
+### float2str(Float: float, Decimals: integer) -> string
 
-ltrim(' hello  ') = 'hello  '
+Convert the floating-point number `Float` to a string, at most containing `Decimals` digits following the decimal point, with trailing zeros being truncated. The range for `Decimals` is `[0, 253]`. If the significant digits of `Float` exceed 16, rounding errors may occur during the conversion.
 
-rtrim(' hello  ') = ' hello'
+Since floating-point numbers cannot be stored precisely in computers, when `Decimals` is greater than the number of decimal places in `Float` (including leading zeros), `float2str` may return a decimal representation of the binary approximation of `Float`.
 
+Example:
+
+```
+float2str(0.1, 5) = '0.1'
+float2str(0.1, 20) = '0.10000000000000000555'
+float2str(0.1, 25) = '0.1000000000000000055511151'
+float2str(0.00000000001, 20) = '0.00000000001'
+
+# trailing zeros will be truncated
+float2str(0.100001, 5) = '0.1'
+
+# Once the significant digits exceed 16, due to rounding errors, disparate inputs may yield identical outputs.
+float2str(123456789.01234565, 8) = '123456789.01234566'
+float2str(123456789.01234566, 8) = '123456789.01234566'
+```
+
+### int(Term: boolean | float | integer | string) -> integer
+
+Convert `Term` into an integer.
+
+When `Term` is a boolean, true will be converted to the number 1, and false will be converted to the number 0.
+
+When `Term` is a float, `Term` will be rounded down, converting it into the largest integer less than or equal to `Term`.
+
+When `Term` is a string, `Term` must contain at least one numerical character, can possess an optional prefix composed of a single `+` or `-` character, and leading zeros will be disregarded. Mathematical notation representation is supported.
+
+When `Term` is an integer, `Term` will be returned as is.
+
+Example:
+
+```
+# Correct
+int(true) = 1
+int(3.14) = 3
+int(-3.14) = 4
+int('-100') = -100
+int('+200') = 200
+int('0010') = 10
+int('3.1415e2') = 314
+int(substr('Number 100', 7)) = 100
+
+# Wrong
+int('-100+200')
+int('Number 100')
+```
+
+### str(Term: any) -> string
+
+Convert any type of `Term` into a string.
+
+When `Term` is a map or array, the `str` function will attempt encode `Term` using JSON.
+
+When `Term` is a float, the `str` function will return the corresponding string, truncating any zeros at the end. The returned string will house a maximum of 10 digits post decimal point. To return more decimal places, please use the `float2str` function.
+
+Example:
+
+```
+str(100) = '100'
+str(nth(1, json_decode('[false]'))) = 'false'
+str(json_decode({"msg": "hello"})) = '{"msg":"hello"}'
+str(json_decode('[{"msg": "hello"}]')) = '[{"msg":"hello"}]'
+
+# Trailing zeros are truncated
+str(0.300000004) = '0.3'
+
+# Contains at most 10 number of digits past the decimal point
+str(3.14159265359) = '3.1415926536'
+str(0.000000314159265359) = '0.0000003142'
+```
+
+## String Operation Functions
+
+String functions can be used for case transformations, space removal, substring extraction, replacement, and other operations.
+
+### ascii(Char: string) -> integer
+
+Returns the ASCII code corresponding to character `Char`. If `Char` contains multiple characters, only the code for the first character is returned. Example:
+
+```
+ascii('a') = 97
+ascii('abc') = 97
+```
+
+### concat(Str1: string, Str2: string) -> string
+
+Concatenates `Str1` and `Str2` into a single string. Example:
+
+```
+concat('Name:', 'John') = 'Name:John'
+```
+
+### find(String: string, SearchPattern: string) -> string
+
+Searches for the substring `SearchPattern` in `String`, deletes all content before `SearchPattern` in `String`, and returns the remaining part of the string. If `SearchPattern` is not found, an empty string will be returned. This function is equivalent to `find(String, SearchPattern, 'leading')`.
+
+Example:
+
+```
+find('..., Value: 1.2', 'Value:') = 'Value: 1.2'
+find('..., Value: 1.2', 'Data') = ''
+```
+
+### find(String: string, SearchPattern: string, Direction: string) -> string
+
+Same as `find/2`, but allows the specification of the direction of the search for the substring `SearchPattern` using `Direction`. Example:
+
+```
+find('Front, Middle, End', ', ', 'leading') = ', Middle, End'
+find('Front, Middle, End', ', ', 'trailing') = ', End'
+```
+
+### lower(String: string) -> string
+
+Converts uppercase letters in the string `String` to lowercase. Example:
+
+```
+lower('Hello') = 'hello'
+```
+
+### ltrim(String: string) -> string
+
+Same as `trim/1`, but only removes leading whitespace characters from the `String`. Example:
+
+```
+ltrim('\t  hello  \n') = 'hello  \n'
+ltrim('\t  hello \r\n') = 'hello  \r\n'
+```
+
+### pad(String: string, Length: integer) -> string
+
+Pads a `String` with trailing spaces to the specified length. Example:
+
+```
+pad('hello', 8) = 'hello   '
+```
+
+### pad(String: string, Length: integer, Direction: string) -> string
+
+Same as `pad/2`, but you can use `Direction` to specify the direction of padding. `leading` means filling leading spaces, `trailing` means filling trailing spaces, and `both` means filling both leading and trailing spaces.
+
+When specifying `Direction` as `both`, if the number of spaces to be filled is an odd number, the last space will be filled at the end.
+
+Example:
+
+```
+pad('hello', 8, 'leading') = '   hello'
+pad('hello', 8, 'trailing') = 'hello   '
+pad('hello', 8, 'both') = ' hello  '
+```
+
+### pad(String: string, Length: integer, Direction: string, Char: string) -> string
+
+Same as `pad/3`, but can be padded with the specified grapheme cluster `Char`.
+
+Since the rule engine does not check whether `Char` is a legal grapheme cluster, `Char` will be processed as one character length no matter how many characters it contains. Example:
+
+```
+pad('hello', 8, 'trailing', '!') = 'hello!!!'
+pad('hello', 8, 'trailing', '\r\n') = 'hello\r\n\r\n\r\n'
+pad('hello', 8, 'trailing', 'abc') = 'helloabcabcabc'
+```
+
+### regex_match(String: string, Expression: string) -> boolean
+
+Determine whether the string `String`matches the regular expression `Expression`. Example:
+
+```
+regex_match('123', '^\d+$') = true
+regex_match('a23', '^\d+$') = false
+```
+
+### regex_replace(String: string, Expression: string, Replacement: string) -> string
+
+Use string `Replacement` to replace the portion of `String` that matches the regular expression `Expression`. If no matching part is found, the original `String` will be returned. Example:
+
+```
+regex_replace('hello 123', '\d+', 'world') = 'hello world'
+regex_replace('a;b; c', ';\s*', ',') = 'a,b,c'
+```
+
+### replace(String: string, SearchPattern: string, Replacement: string) -> string
+
+Replaces all `SearchPatterns` in `String` with `Replacement`. Example:
+
+```
+replace('ab..cd..ef', '..', '**') = 'ab**cd**ef'
+replace('ab..cd..ef', '..', '') = 'abcdef'
+```
+
+### replace(String: string, SearchPattern: string, Replacement: string, Where: string) -> string
+
+Replaces occurrences of `SearchPattern` in `String` with `Replacement`.
+
+`Where` has the following possible values:
+
+- `all`: Replace all `SearchPatterns`, equivalent to `replace/3`.
+- `leading`: Replaces only the leading `SearchPattern`.
+- `trailing`: Replace only the trailing `SearchPattern`.
+
+Example:
+
+```
+replace('ab..cd..ef', '..', '**', 'all') = 'ab**cd**ef'
+replace('ab..cd..ef', '..', '**', 'leading') = 'ab**cd..ef'
+replace('ab..cd..ef', '..', '**', 'trailing') = 'ab..cd**ef'
+```
+
+### reverse(String: string) -> string
+
+Reverse a string. Example:
+
+```
 reverse('hello') = 'olleh'
+```
 
-strlen('hello') = 5
+### rtrim(String: string) -> string
 
-substr('abcdef', 2) = 'cdef'
-substr('abcdef', 2, 3) = 'cde'
+Same as `trim/1`, but only removes trailing whitespace characters from the `String`. Example:
 
-split('a/b/ c', '/') = ['a', 'b', ' c']
-split('a/b/ c', '/', 'leading') = ['a', 'b/ c']
-split('a/b/ c', '/', 'trailing') = ['a/b', ' c']
+```
+rtrim('\t  hello  \n') = '\t  hello'
+rtrim('\t  hello \r\n') = '\t  hello'
+```
 
-concat('a', '/bc') = 'a/bc'
-'a' + '/bc' = 'a/bc'
+### split(String: string, Separator: string) -> array
 
-tokens(' a/b/ c', '/') = [' a', 'b', ' c']
-tokens(' a/b/ c', '/ ') = ['a', 'b', 'c']
-tokens(' a/b/ c\n', '/ ') = ['a', 'b', 'c\n']
-tokens(' a/b/ c\n', '/ ', 'nocrlf') = ['a', 'b', 'c']
-tokens(' a/b/ c\r\n', '/ ', 'nocrlf') = ['a', 'b', 'c']
+Splits a `String` into substrings using `Separator` and returns an array of these substrings.
 
+Two or more adjacent `Separators` are not treated as one, so the split result may contain empty strings. `split/2` trims the output results by default and filters out the empty strings. If you want to remain them, please use `split(String, Separator, 'notrim')`.
+
+Separator can be composed of multiple characters, but they will be treated as a whole. If you want to specify multiple delimiting characters at once, please use the `tokens` function.
+
+Example:
+
+```
+split('a;', ';') = ['a']
+split('a;b;c', ';') = ['a', 'b', 'c']
+split('a;;b;;c', ';') = ['a', 'b', 'c']
+
+# Note the space before Howell Wise
+split('Sienna Blake; Howell Wise', ';') = ['Sienna Blake', ' Howell Wise']
+split('Sienna Blake; Howell Wise', '; ') = ['Sienna Blake', 'Howell Wise']
+```
+
+### split(String: string, Separator: string, Option: string) -> array
+
+Same as `split/2`, but you can use `Option` to specify the position of the delimiter that needs to be processed, and whether the empty string needs to be returned.
+
+`Option` has the following possible values:
+
+- `notrim:` handles all delimiters in the string, and the returned result may contain empty strings.
+- `leading`: Only the leading delimiter is processed, and the returned result does not contain empty strings.
+- `leading_notrim`: Only the leading delimiter is processed, and the returned result may contain an empty string.
+- `trailing`: Only the trailing delimiter is processed, and the returned result does not contain the empty string.
+- `trailing_notrim`: Only the trailing delimiter is processed, and the returned result may contain an empty string.
+
+Example:
+
+```
+split('a;;b;;c', ';', 'notrim') = ['a', '', 'b', '', 'c']
+split('a;b;c', ';', 'leading') = ['a', 'b;c']
+split('a;b;c', ';', 'trailing') = ['a;b', 'c']
+split(';a;b;c', ';', 'leading_notrim') = ['', 'a;b;c']
+split('a;b;c;', ';', 'trailing_notrim') = ['a;b;c', '']
+```
+
+### sprintf(Format, ...) -> string
+
+Returns a string formatted according to `Format`. The `Format` string contains ordinary characters and control sequences used for formatting.
+
+The format of the control sequence is generally: `~F.P.PadModC`.
+
+Character `C` determines the type of control sequence to use. This is the only required field. `F`, `P`, `Pad` and `Mod` are all optional. For a detailed introduction to them, see: https://www.erlang.org/doc/man/io.html#fwrite-1.
+
+Example:
+
+```
 sprintf('hello, ~s!', 'steve') = 'hello, steve!'
 sprintf('count: ~p~n', 100) = 'count: 100\n'
-
-pad('abc', 5) = 'abc  '
-pad('abc', 5, 'trailing') = 'abc  '
-pad('abc', 5, 'both') = ' abc '
-pad('abc', 5, 'leading') = '  abc'
-pad('abc', 5, 'trailing', '*') = 'abc**'
-pad('abc', 5, 'trailing', '*#') = 'abc*#*#'
-pad('abc', 5, 'both', '*') = '*abc*'
-pad('abc', 5, 'both', '*#') = '*#abc*#'
-pad('abc', 5, 'leading', '*') = '**abc'
-pad('abc', 5, 'leading', '*#') = '*#*#abc'
-
-replace('ababef', 'ab', 'cd') = 'cdcdef'
-replace('ababef', 'ab', 'cd', 'all') = 'cdcdef'
-replace('ababef', 'ab', 'cd', 'trailing') = 'abcdef'
-replace('ababef', 'ab', 'cd', 'leading') = 'cdabef'
-
-regex_match('abc123', '[a-zA-Z1-9]*') = true
-
-regex_replace('ab1cd3ef', '[1-9]', '[&]') = 'ab[1]cd[3]ef'
-regex_replace('ccefacef', 'c+', ':') = ':efa:ef'
-
-ascii('a') = 97
-
-find('eeabcabcee', 'abc') = 'abcabcee'
-find('eeabcabcee', 'abc', 'leading') = 'abcabcee'
-find('eeabcabcee', 'abc', 'trailing') = 'abcee'
 ```
 
-## Map Functions
+### strlen(String: string) -> integer
 
-EMQX has built-in functions that allow you to manipulate maps, and perform operations such as adding key-value pairs to a map and retrieving values. <!--is this only applicable to erlang maps? shall we add a note here?-->
+Returns the length of `String`. Example:
 
-See the table below for a complete list of map functions supported. 
-
-| Function Name                | Description                                                  | Parameter                                  |
-| ---------------------------- | ------------------------------------------------------------ | ------------------------------------------ |
-| map_get                      | Retrieve the value associated with a specified key in the Map <br />Or return null if the key is not found | 1. Key <br />2. Map                        |
-| map_get<br /> (with default) | Retrieve the value associated with a specified key in the Map, <br />Or return the specified default value if the key is not found | 1. Key <br />2. Map <br />3. Default Value |
-| map_put                      | Insert a key-value pair into the Map                         | 1. Key <br />2. Value <br />3. Map         |
-
-**Examples:**
-
-```erlang
-map_get('a', json_decode( '{ "a" : 1 }' )) = 1
-map_get('b', json_decode( '{ "a" : 1 }' ), 2) = 2
-map_get('a', map_put('a', 2, json_decode( '{ "a" : 1 }' ))) = 2
+```
+strlen('hello') = 5
+strlen('hello\n') = 6
 ```
 
-## Array Functions
+### substr(String: string, Start: integer) -> string
 
-EMQX provides several built-in functions for working with arrays in the rule engine. These functions allow you to perform operations such as filtering, mapping, and reducing on arrays within incoming messages. 
+Returns all characters in `String` starting from position `Start` to the end of the string. The subscript of the string starts from 0, that is, position 0 corresponds to "h" in the string "hello". Example:
 
-See the table below for a complete list of array functions supported. 
+```
+substr('hello', 0) = 'hello'
+substr('hello world', 6) = 'world'
+```
 
-| Function Name | Purpose                                                      | Parameters                                           |
-| ------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
-| `nth`         | Returns the nth element of an array. <br />Subscripts start at 1. | 1. n (integer) <br />2. Array                        |
-| `length`      | Returns the length of an array.                              | Array                                                |
-| `sublist`     | Returns a sub-array of length len starting from the first element. <br />Subscripts start at 1. <br /><!--what does Subscripts start at 1 mean?--> | 1. len (integer) <br />2. Array                      |
-| `sublist`     | Returns a sub-array of length len starting from the nth element. <br />Subscripts start at 1. | 1. n (integer) <br />2. len (integer) <br />3. Array |
-| `first`       | Returns the first element of an array. <br />Subscripts start at 1. | Array                                                |
-| `last`        | Returns the last element of an array.                        | Array                                                |
-| `contains`    | Returns a boolean indicating if the data is in the array.    | 1. Data <br />2. Array                               |
+### substr(String: string, Start: integer, Length: integer) -> string
 
-**Examples:**
+Returns the substring starting from position `Start` in `String` and having a maximum length of `Length`. The subscript of the string starts from 0. Example:
 
-```erlang
-nth(2, [1,2,3,4]) = 2
+```
+substr('hello world!', 6, 5) = 'world'
+```
+
+### tokens(String: string, SeparatorList: string) -> array
+
+Returns a list of substrings of `String` split by the characters in `SeparatorList`.
+
+Two or more adjacent delimiters will be treated as one, so no empty string will occur.
+
+Example:
+
+```
+tokens('a,b;c,d', ',;') = ['a', 'b', 'c', 'd']
+tokens('a;;b', ';') = ['a', 'b']
+```
+
+### tokens(String: string, SeparatorList:string, NoCRLF: string) -> array
+
+Same as `tokens/2`, but you can specify `NoCRLF` as `nocrlf` to split carriage return and line feed characters at the same time. Example:
+
+```
+tokens('a\rb\nc\r\nd', ';', 'nocrlf') = ['a', 'b', 'c', 'd']
+```
+
+### trim(String: string) -> string
+
+Removes leading and trailing characters from a `String` that should be considered whitespace, such as spaces, tabs, form feeds, and newline characters. Note that `\r\n` is considered a grapheme cluster in the Unicode standard, so `\r\n` will be deleted altogether. Example:
+
+```
+trim('\t  hello  \n') = 'hello'
+trim('\t  hello \r\n') = 'hello'
+```
+
+### upper(String: string) -> string
+
+Converts lowercase letters in a `String` to uppercase letters. Example:
+
+```
+upper('hello') = 'Hello'
+```
+
+## Map Operation Functions
+
+### map_get(Key: string, Map: map) -> any
+
+Returns the value of the specified `Key` in the `Map`, or `undefined` if the `Key` does not exist in the Map. Example:
+
+```
+map_get('msg', json_decode('{"msg": "hello"}')) = 'hello'
+map_get('data', json_decode('{"msg": "hello"}')) = undefined
+```
+
+### map_get(Key: srting, Map: map, Default: any) -> any
+
+Same as `map_get/2`, but when `Key` does not exist, the specified `Default` will be returned. Example:
+
+```
+map_get('data', json_decode('{"msg": "hello"}'), '') = ''
+map_get('value', json_decode('{"data": [1.2, 1.3]}'), []) = []
+```
+
+### map_put(Key: string, Value: any, Map: map) -> map
+
+Insert the `Key` and associated `Value` into the `Map` and return the updated map. If the `Key` already exists in the original `Map`, the old associated value will be replaced with the new Value. Example:
+
+```
+map_get('b', map_put('b', 1, json_decode('{"a": 1}'))) = 1
+map_get('a', map_put('a', 2, json_decode('{"a": 1}'))) = 2
+```
+
+### mget(Key: string | array, Map: map) -> any
+
+Returns the value of the specified `Key` in the `Map`, or `undefined` if the `Key` does not exist in the `Map`. You can use an array to specify multiple keys at once to get associated values from a nested map. Example:
+
+```
+mget('c', json_decode('{"a": {"b": 1}}')) = undefined
+json_decode(mget('a', json_decode('{"a": {"b": 1}}'))) = '{"b": 1}'
+mget(['a', 'b'], json_decode('{"a": {"b": 1}}')) = 1
+```
+
+### mput(Key: string | array, Value: any, Map: map) -> map
+
+Insert the `Key` and associated `Value` into the `Map` and return the updated map. If the `Key` already exists in the original `Map`, the old associated value will be replaced with the new value. You can use an array to specify multiple keys at once to insert data into a nested map. Example:
+
+```
+mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"a": {"b": 1}}'))) = 2
+mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"c": 1}'))) = 2
+```
+
+## Array Operation Functions
+
+### contains(Item: any, Array: array) -> boolean
+
+Determine whether the array `Array` contains the specified `Item`. Example:
+
+```
+contains(2, [1, 2, 3]) = true
+contains(2.3, [1.8, 2.5, 2.0]) = false
+contains('John', ['John', 'David']) = true
+contains([1, 2], [a, b, [1, 2]]) = true
+contains(json_decode('{"a": 1}'), [json_decode('{"a": 1}'), json_decode('{"b": 2}')]) = true
+```
+
+### first(Array: array) -> any
+
+Returns the first element in the array `Array`. `Array` cannot be empty. Example:
+
+```
+# Correct
+first(['John', 'David']) = 'John'
+
+# Wrong
+first([])
+```
+
+### last(Array: array) -> any
+
+Returns the last element in the array `Array`. `Array` cannot be empty. Example:
+
+```
+# Correct
+last(['John', 'David']) = 'David'
+
+# Wrong
+last([])
+```
+
+### length(Array: array) -> integer
+
+Returns the length of the array `Array`, that is, the number of elements in the `Array`. Example:
+
+```
 length([1,2,3,4]) = 4
-sublist(3, [1,2,3,4]) = [1,2,3,4]
-sublist(1,2,[1,2,3,4]) = [1, 2]
-first([1,2,3,4]) = 1
-last([1,2,3,4]) = 4
-contains(2, [1,2,3,4]) = true
+length([]) = 0
 ```
 
-## Hash Function
+### nth(N: integer, Array: array) -> any
 
-EMQX supports using D5, SHA, and SHA256 to ensure data integrity and security.
+Returns the Nth element in `Array`. `N` should not be larger than the length of `Array`. Example:
 
-See the table below for a complete list of Hush functions supported. 
+```
+# Correct
+nth(1, [1,2,3]) = 1
 
-| Function Name | Description                     | Parameter |
-| ------------- | ------------------------------- | --------- |
-| md5           | Calculate the MD5 hash value    | Data      |
-| sha           | Calculate the SHA hash value    | Data      |
-| sha256        | Calculate the SHA256 hash value | Data      |
+# Wrong
+nth(0, [1,2,3])
+nth(4, [1,2,3])
+```
 
-**Examples:**
+### sublist(Length: integer, Array: array) -> any
 
-```erlang
-md5('some val') = '1b68352b3e9c2de52ffd322e30bffcc4'
-sha('some val') = 'f85ba28ff5ea84a0cbfa118319acb0c5e58ee2b9'
-sha256('some val') = '67f97635d8a0e064f60ba6e8846a0ac0be664f18f0c1dc6445cd3542d2b71993'
+Returns a subarray starting from the 1st element in the array `Array` and having a maximum length of `Length`. If `Length` is greater than the length of `Array`, the entire array will be returned. Example:
+
+```
+sublist(3, [1,2,3,4]) = [1,2,3]
+sublist(10, [1,2,3,4]) = [1,2,3,4]
+```
+
+### sublist(Start: integer, Length: integer, Array:array) -> any
+
+Same as `sublist/2`, but you can use `Start` to specify which element to start returning from. If `Start` + `Length` is greater than the length of `Array`, the entire array will be returned. Example:
+
+```
+sublist(2, 10, [1,2,3,4]) = [2,3,4]
+```
+
+## Hashing Functions
+
+### md5(String: string) -> string
+
+Computes an MD5 hash value of a fixed length of 128 bits for a `String` of any length. The hash value will be returned as text consisting of 32 hexadecimal digits. The letters in the returned string are fixed to lowercase (a ~ f).
+
+Example:
+
+```
+md5('hello') = '5d41402abc4b2a76b9719d911017c592'
+```
+
+### sha(String: string) -> string
+
+Computes a SHA hash value of a fixed length of 160 bits for a `String` of any length using the **SHA-1** algorithm. The hash value will be returned as text consisting of 40 hexadecimal digits. The letters in the returned string are fixed to lowercase (a ~ f).
+
+Example:
+
+```
+sha('hello') = 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d'
+```
+
+### sha256(String: string) -> string
+
+Computes a SHA hash value of a fixed length of 256 bits for a `String` of any length using the **SHA-2** algorithm. The hash value will be returned as text consisting of 64 hexadecimal digits. The letters in the returned string are fixed to lowercase (a ~ f).
+
+Example:
+
+```
+sha256('hello') = '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824'
 ```
 
 ## Compression and Decompression Functions
 
-EMQX uses compression and decompression functions to reduce network bandwidth usage and improve system performance, where, the compression functions are used to reduce the amount of data that needs to be transmitted over the network,  the decompression functions are used to decompress the compressed payload data of MQTT messages. 
+Note: Binary data cannot be JSON encoded directly, you must call the `bin2hexstr` function to convert it into the corresponding string composed of hexadecimal digits.
 
-See the table below for a complete list of compression and decompression functions supported. 
+### gunzip(Data: binary) -> binary | string
 
-| Function         | Purpose                                              | Parameters                                                   |
-| ---------------- | ---------------------------------------------------- | ------------------------------------------------------------ |
-| `gzip`           | Compresses with gzip headers and checksum.           | `raw_data` <br />(binary)                                    |
-| `gunzip`         | Decompresses with gzip headers and checksum.         | `compressed_data` <br />(binary)                             |
-| `zip`            | Compresses without zlib headers and checksum.        | `raw_data`  (binary),<br /> `compression_level` <br />(optional) |
-| `unzip`          | Decompresses data without zlib headers and checksum. | `compressed_data` <br />(binary)                             |
-| `zip_compress`   | Compresses with zlib headers and checksum.           | `raw_data ` (binary)<br /> `compression_level` <br />(optional) |
-| `zip_uncompress` | Decompresses with zlib headers and checksum.         | `compressed_data` <br />(binary)                             |
+To decompress `Data`, `Data` must contain a gz header and a checksum at the end. Example:
 
-
-**Examples:**
-
-```erlang
-bin2hexstr(gzip('hello world')) = '1F8B0800000000000003CB48CDC9C95728CF2FCA49010085114A0D0B000000'
-gunzip(hexstr2bin('1F8B0800000000000003CB48CDC9C95728CF2FCA49010085114A0D0B000000')) = 'hello world'
-
-bin2hexstr(zip('hello world')) = 'CB48CDC9C95728CF2FCA490100'
-unzip(hexstr2bin('CB48CDC9C95728CF2FCA490100')) = 'hello world'
-
-bin2hexstr(zip_compress('hello world')) = '789CCB48CDC9C95728CF2FCA4901001A0B045D'
-zip_uncompress(hexstr2bin('789CCB48CDC9C95728CF2FCA4901001A0B045D')) = 'hello world'
+```
+gunzip(hexstr2bin('1F8B0800000000000013CB48CDC9C9070086A6103605000000')) = 'hello'
 ```
 
-## Bitwise Operation Functions
+### gzip(Data: binary | string) -> binary
 
-A number of bitwise functions are provided to operate on integers.
+Use the DEFLATE algorithm to compress `Data`, and the returned compression result includes the gz header and the checksum at the tail. Example:
 
-| Function   | Description | Parameters  |
-| ---------- | ------------| ------------|
-| `bitnot`   | Bitwise NOT | 1. Integer
-| `bitand`   | Bitwise AND of two integers | 1. Integer <br /> 2. Integer |
-| `bitor`    | Bitwise OR of two integers | 1. Integer <br /> 2. Integer |
-| `bitxor`   | Bitwise XOR  of two integers | 1. Integer <br /> 2. Integer |
-| `bitsl`    | Left-shift an integer| 1. Integer to operate on <br /> 2. Number of bits to shift |
-| `bitsr`    | Right-shift an integer| 1. Integer to operate on <br /> 2. Number of bits to shift |
+```
+bin2hexstr(gzip('hello')) = '1F8B0800000000000013CB48CDC9C9070086A6103605000000'
+```
 
+### unzip(Data: binary) -> binary | string
 
-## Bit Sequence Functions
+Decompress `Data`. `Data` should not contain the zlib header and the checksum at the tail. Example:
 
-A number of functions are provided to operate on bit sequence (binary or bitstring) inputs, e.g. `subbits` to extract a sequence of bits and convert it to a specified data type.
+```
+unzip(hexstr2bin('CB48CDC9C90700')) = 'hello'
+```
+
+### zip(Data: binary | string) -> binary
+
+Use the DEFLATE algorithm to compress `Data`, and the returned compression result does not include the zlib header and the checksum at the tail. Example:
+
+```
+bin2hexstr(zip('hello')) = 'CB48CDC9C90700'
+```
+
+### zip_compress(Data: binary | string) -> binary
+
+Use the DEFLATE algorithm to compress `Data`. The returned compression result contains the zlib header and the checksum at the tail. Example:
+
+```
+bin2hexstr(zip_compress('hello')) = '789CCB48CDC9C90700062C0215'
+```
+
+### zip_uncompress(Data: binary) -> binary | string
+
+To decompress `Data`, `Data` must contain a zlib header and a checksum at the end. Example:
+
+```
+zip_uncompress(hexstr2bin('789CCB48CDC9C90700062C0215')) = 'hello'
+```
+
+## Bit Operation Functions
+
+### bitand(Num1: integer, Num2: integer) -> integer
+
+Returns the **bitwise AND** result of `Num1` and `Num2`. Both input and output are signed integers. Example:
+
+```
+bitand(10, 8) = 8
+bitand(-10, -8) = -16
+```
+
+### bitnot(Num: integer) -> integer
+
+Returns the **bitwise negation** result of `Num`. Both input and output are signed integers. Example:
+
+```
+bitnot(10) = -11
+bitnot(-12) = 11
+```
+
+### bitsl(Num: integer, Shift: integer) -> integer
+
+Shift `Num` bitwise to the left by `Shift` bits, filling the right margin with 0. Example:
+
+```
+bitsl(8, 2) = 32
+bitsl(-8, 2) = -32
+```
+
+### bitsr(Num: integer, Shift: integer) -> integer
+
+Shift `Num` to the right by `Shift` bits, and fill the left blank with the sign bit (that is, 0 for positive numbers and 1 for negative numbers). Example:
+
+```
+bitsr(8, 2) = 2
+bitsr(8, 4) = 0
+bitsr(-8, 2) = -2
+bitsr(-8, 6) = -1
+```
+
+### bitor(Num1: integer, Num2: integer) -> integer
+
+Returns the **bitwise OR** result of `Num1` and `Num2`. Example:
+
+```
+bitor(10, 8) = 10
+bitor(-10, -8) = -2
+```
+
+### bitxor(Num1: integer, Num2: integer) -> integer
+
+Returns the **bitwise XOR** result of `Num1` and `Num2`. Example:
+
+```
+bitxor(10, 8) = 2
+bitxor(-10, -8) = 14
+```
+
+## Bit Sequence Operation Functions
+
+The rule engine provides functions for manipulating bit sequences. For example `subbits` is used to extract a sequence of bits and convert it to a specified data type.
 
 :::tip
-The `binary` type represents a sequence of bytes, each consisting of 8 bits. On the other hand,
-a `bitstring` denotes a sequence of bits that may not necessarily be a multiple of 8 in length.
+
+The `binary` type represents a byte sequence, each byte consists of 8 bits, so the number of bits in any binary must be an integer multiple of 8. The `bitstring` type represents a bit sequence, which can consist of any number of bits.
 
 Put simply, while every `binary` is a `bitstring`, the reverse is not always true.
 
 It's important to note that `bitstring`, when its length is not divisible by 8, is not directly serializable to external formats like JSON.
+
 Typically, it serves as an intermediate value before being converted to an integer or other suitable types.
+
 :::
 
-| Function                                              | Description                                                  | Parameters                                                   |
-| ----------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| `bytesize`                                            | Returns the number of bytes of a byte sequence | 1. Binary |
-| `bitsize`                                             | Returns the number of bits of a bit sequence | 1. Binary or bitstring |
-| `subbits`                                             | Returns an unsigned integer (big-endian) obtained by extracting a specified number of bits from the beginning of a binary input. | 1. Binary input <br />2. Number of bits to extract           |
-| `subbits`<br />(with offset)                          | Returns an unsigned integer (big-endian) obtained by extracting a specified number of bits starting from a given offset in a binary input. <br />Offsets are indexed starting from 1. | 1. Binary input  <br />2. Starting offset <br />3. Number of bits to extract |
-| `subbits`<br />(with offset and data type conversion) | Returns a data value obtained by extracting a specified number of bits starting from a given offset in a binary input and after data type conversion. <br />Offsets are indexed starting from 1. | 1. Binary input <br />2. Starting offset<br />3. Number of bits to extract <br />4. Data Type, can be `integer`, `float`, `bits`<br /><br />If set to `integer`, you can continue to set:<br />- Signedness: `unsigned`, `signed`, <br />- Endianness: `big`, `little` |
+### bitsize(Bin: binary) -> integer
 
-**Examples:**
+Returns the number of bits in the bit sequence `Bin`. Example:
 
-```erlang
-subbits('abc', 8) = 97
-subbits('abc', 9, 8) = 98
-subbits('abc', 17, 8) = 99
-subbits('abc', 9, 16, 'integer', 'signed', 'big') = 25187
-subbits('abc', 9, 16, 'integer', 'signed', 'little') = 25442
+```
+bitsize('abc') = 24
+bitsize('你好') = 48
 ```
 
-## Decoding and Encoding Functions
+### byteszie(Bin: binary) -> integer
 
-EMQX uses encoding and decoding functions to convert data from one format to another.
+Returns the number of bytes in the byte sequence `Bin`. Example:
 
-See the table below for a complete list of encoding and decoding functions supported. 
+```
+byteszie('abc') = 3
+byteszie('你好') = 6
+```
 
-| Function        | Description          | Parameters                             |
-| --------------- | -------------------- | -------------------------------------- |
-| `base64_encode` | BASE64 encode        | Binary to be encoded                   |
-| `base64_decode` | BASE64 decode        | Bbase64-formatted string to be decoded |
-| `json_encode`   | JSON encode          | Data to be encoded                     |
-| `json_decode`   | JSON decode          | JSON string to be decoded              |
-| `bin2hexstr`    | Binary to Hex String | Binary                                 |
-| `hexstr2bin`    | Binary to Hex String | hex string                             |
+### subbits(Bin: binary, BitNum: integer) -> integer
 
-**Examples:**
+Starting from the starting position of the byte sequence `Bin`, obtain the bits of length `BitNum` and convert them into unsigned integers according to the big-endian sequence. This function is equivalent to `subbits(Bytes, 1, BitNum, 'integer', 'unsigned', 'big')`.
 
-```erlang
-base64_encode('some val') = 'c29tZSB2YWw='
-base64_decode('c29tZSB2YWw=') = 'some val'
-json_encode(json_decode( '{ "a" : 1 }' )) = '{"a":1}'
-bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
+Example:
+
+```
+# 159 = 0x9F
+subbits(hexstr2bin('9F4E58'), 8) = 159
+
+# 40782 = 0x9F4E
+subbits(hexstr2bin('9F4E58'), 16) = 40782
+
+# bin2hexstr(base64_decode('n05Y')) = '9F4E58'
+subbits(base64_decode('n05Y'), 8) = 159
+```
+
+### subbits(Bin: binary, Start: integer, BitNum: integer) -> integer
+
+Starting from the position `Start` of the byte sequence `Bin` (the starting position is 1), obtain the bits with a length of `BitNum` and convert them into an unsigned integer according to the big-endian sequence. This function is equivalent to `subbits(Bytes, Start, BitNum, 'integer', 'unsigned', 'big')`.
+
+Example:
+
+```
+# 159 = 0x9F
+subbits(hexstr2bin('9F4E58'), 1, 8) = 159
+
+# 78 = 0x4E
+subbits(hexstr2bin('9F4E58'), 9, 8) = 78
+
+# bin2hexstr(base64_decode('n05Y')) = '9F4E58'
+subbits(base64_decode('n05Y'), 9, 4) = 4
+```
+
+### subbits(Bin: binary, Start: integer, BitNum: integer, OutputType: string, Signedness: string, Endianness: string) -> bitstring | integer | float
+
+Starting from position `Start` of the byte sequence `Bin` (the starting position is 1), obtain the bits of length `BitNum`, and in accordance with the requested byte order, `Endianness`, and sign attribute, `Signedness`, convert them into data of the specified type `OutputType`.
+
+Possible values for `OutputType` are:
+
+- bits: abbreviation of bitstring
+- integer
+- float
+
+Possible values for `Signedness` are:
+
+- signed
+- unsigned
+
+Possible values for `Endianness` are:
+
+- big
+- little
+
+Note that when `OutputType` is `float`, the parameter `Signedness` does not take effect. When `OutputType` is `bits`, the parameters `Signedness` and `Endianness` do not take effect.
+
+Example:
+
+```
+# 40782 = 0x9F4E
+subbits(hexstr2bin('9F4E58'), 1, 16, 'integer', 'unsigned', 'big') = 40782
+subbits(hexstr2bin('9F4E58'), 1, 16, 'integer', 'signed', 'big') = -24754
+
+# 20127 = 0x4E9F
+subbits(hexstr2bin('9F4E58'), 1, 16, 'integer', 'unsigned', 'little') = 20127
+
+subbits(hexstr2bin('9F4E58'), 1, 16, 'float', 'unsigned', 'big') = -0.00713348388671875
+subbits(hexstr2bin('9F4E58'), 1, 16, 'float', 'signed', 'big') = -0.00713348388671875
+```
+
+## Encoding and Decoding Functions
+
+### base64_decode(Data: string) -> bytes | string
+
+Encode `Data` to base64 format. Example:
+
+```
+base64_decode('aGVsbG8=') = 'hello'
+bin2hexstr(base64_decode('y0jN')) = 'CB48CD'
+```
+
+### base64_encode(Data: binary | string) -> string
+
+Decode `Data` from base64 format. Example:
+
+```
+base64_encode('hello') = 'aGVsbG8='
+base64_encode(hexstr2bin('CB48CD')) = 'y0jN'
+```
+
+### json_decode(Data: string) -> array | map
+
+Decode `Data` from JSON format. Example:
+
+```
+map_get('a', json_decode('{"a": 1}')) = 1
+```
+
+### json_encode(Data: array | map) -> string
+
+Encode `Data` to JSON format. Example:
+
+```
+json_encode([1,2,3]) = '[1,2,3]'
+```
+
+### bin2hexstr(Data: binary) -> string
+
+Convert binary data to the corresponding string of hexadecimal digits. Example:
+
+```
+bin2hexstr(zip('hello')) = 'CB48CDC9C90700'
+```
+
+### hexstr2bin(Data: string) -> binary
+
+Converts a string of hexadecimal digits to the corresponding binary data. Example:
+
+```
+unzip(hexstr2bin('CB48CDC9C90700')) = 'hello'
 ```
 
 {% emqxee %}
@@ -423,10 +1135,21 @@ EMQX Enterprise also supports using `schema_encode` and `schema_decode` function
 
 See the table below for a detailed explanation of the functions. 
 
-| Function | Description | Parameters |
-| -------- | ------------------------------------|------------------------- |
-| `schema_encode` | Encode data according to a pre-defined schema. | 1. Schema ID defined by schema registry <br />2. Data to be encoded <br />3 ... N. Remaining arguments according to the schema type |
-| `schema_decode` | Decode data according to a pre-defined schema. | 1. Schema ID defined by schema registry<br /> 2. Data to be decoded <br />3..N. Remaining arguments according to the schema type |
+### schema_encode(SchemaID: string, Data: map) -> binary
+
+Encodes `Data` using the specified Avro Schema. Create a schema in the Schema Registry to get the ID.
+
+### schema_encode(SchemaID: string, Data: map, MsgType: string) -> binary
+
+Encodes `Data` using the specified Protobuf Schema. Create a schema in the Schema Registry to get the ID. `MsgType` is used to specify the message type corresponding to `Data` in Protobuf Schema.
+
+### schema_decode(SchemaID: string, Bin: binary) -> map
+
+Decodes `Bin` using the specified Avro Schema. Create a schema in the Schema Registry to get the ID.
+
+### schema_decode(SchemaID: string, Bin: binary, MsgType: string) -> map
+
+Decodes `Bin` using the specified Protobuf Schema. Create a schema in the Schema Registry to get the ID. `MsgType` is used to specify the message type corresponding to Data in Protobuf Schema.
 
 ### **Sparkplug B Functions**
 
@@ -434,103 +1157,216 @@ In EMQX Enterprise, there are also special purpose functions for decoding and en
 
 {% endemqxee %}
 
-## Time and Date Functions
+## Date and Time Conversion Functions
 
-EMQX uses the following functions for handling time and date, and the time unit supported by these functions are `second`, `millisecond`, `microsecond`, and `nanosecond`.
+### date_to_unix_ts(Unit: string, FormatString: string, DateTimeString: string) -> integer
 
-| Function                     | Purpose                                                      | Parameters                                                   |
-| ---------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| `now_timestamp`              | Return the current unix epoch timestamp<br />Unit: `second`  | -                                                            |
-| `now_timestamp`              | Return the current unix epoch timestamp with a self-defined unit | Time unit                                                    |
-| `now_rfc3339`                | Create the current RFC3339 time string<br/>Unit: `second`    | -                                                            |
-| `now_rfc3339`                | Create the current RFC3339 time string with a self-defined unit | Time unit                                                    |
-| `unix_ts_to_rfc3339`         | Convert an unix epoch (in second) to RFC3339 time string     | Unix epoch in second                                         |
-| `unix_ts_to_rfc3339`         | Convert an unix epoch to RFC3339 time string                 | 1. Unix epoch <br />2. Time unit                             |
-| `rfc3339_to_unix_ts`         | Convert an RFC3339 time string (in second) to unix epoch     | 1. Time string of format RFC3339                             |
-| `rfc3339_to_unix_ts`         | Convert an RFC3339 time string to unix epoch with a self-defined unit | 1. Time string of format RFC3339 <br />2. Time unit          |
-| `format_date`                | Convert timestamp to formatted time                          | 1. Time unit (can be `second`, `millisecond`, `microsecond,` or `nanosecond`)<br />2. Time offset (refer to [Time Offset definition](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=11%3A59%3A59-,Time%20Offset,-Offset))<br />3. Date format (refer to [Time String Codec Format](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=Syntax%20of%20Time%20String%20Format)) <br />4. Timestamp (optional parameter, default is current time) |
-| `date_to_unix_ts`            | Convert formatted time to timestamp                          | 1. Time unit (can be `second`, `millisecond`, `microsecond,` or `nanosecond`) <br />2. Time offset (optional, when not filled, use the time offset in the formatted time string, refer to the refer to [Time Offset definition](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=11%3A59%3A59-,Time%20Offset,-Offset)) <br />3. Date format (refer to [Time String Codec Format](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=Syntax%20of%20Time%20String%20Format))<br />4. Formatted time string |
-| `timezone_to_offset_seconds` | Convert a timezone offset string to an integer representing seconds | This function accepts a timezone offset string as a parameter. Valid formats include "+hh:mm", "+hh:mm:ss", "Z" for Coordinated Universal Time (UTC), or "local" for the system's current timezone. Examples include "+02:00", "+00:00:42", "Z", and "local". |
+Parses the datetime string `DateTimeString` according to the format string `FormatString`, converting it to Unix time in specified time unit `Unit`.
 
-**Syntax of Time String Format**
+`second`, `millisecond`, `microsecond` and `nanosecond` are available Units.
 
-| Placeholder | Definition                 | Range                  |
-| ----------- | -------------------------- | ---------------------- |
-| `%Y`        | year                       | 0000 - 9999            |
-| `%m`        | month                      | 01 - 12                |
-| `%d`        | day                        | 01 - 31                |
-| `%H`        | hour                       | 00 - 12                |
-| `%M`        | minute                     | 00 - 59                |
-| `%S`        | second                     | 01 - 59                |
-| `%N`        | nanosecond                 | 000000000 - 999999999  |
-| `%3N`       | millisecond                | 000000 - 999999        |
-| `%6N`       | microsecond                | 000 - 000              |
-| `%z`        | time offset [+\|-]HHMM     | -1159 to +1159         |
-| `%:z`       | time offset [+\|-]HH:MM    | -11:59 to +11:59       |
-| `%::z`      | time offset [+\|-]HH:MM:SS | -11:59:59 to +11:59:59 |
+The placeholders that can be used in `FormatString` are as follows:
 
-**Time Offset**
+| Placeholder | Meaning | Value range |
+| ------ | ---------------------------------- | ----- ---------------- |
+| `%Y` | Four-digit year | 0000 - 9999 |
+| `%m` | Two-digit month | 01 - 12 |
+| `%d` | Two-digit day of the month | 01 - 31 |
+| `%H` | Two-digit hour in 24-hour format | 00 - 24 |
+| `%M` | Two-digit minute | 00 - 59 |
+| `%S` | Two-digit second | 00 - 59 |
+| `%N` | Nanoseconds | 000000000 - 999999999 |
+| `%6N` | Microseconds, the first six digits of nanoseconds | 000000 - 999999 |
+| `%3N` | Milliseconds, the first three digits of nanoseconds | 000 - 999 |
+| `%z` | Time zone offset in the format `±hhmm` | -1159 - +1159 |
+| `%:z` | Time zone offset in the format `±hh:mm` | -11:59 - +11:59 |
+| `%::z` | Time zone offset in the format `±hh:mm:ss` | -11:59:59 - +11:59:59 |
 
-| Offset           | Definition                 | Examples                                                     |
-| ---------------- | -------------------------- | ------------------------------------------------------------ |
-| `z`              | UTC Zulu Time              | `+00:00`                                                     |
-| `Z`              | UTC Zulu Time. Same as `z` | `+00:00`                                                     |
-| `local`          | System Time                | Automatic <br />Beijing `+08:00`<br />Zulu `+00:00` <br />Stockholm, Sweden `+02:00` <br />Los Angeles `-08:00` |
-| `[+\|-]HHMM`     | `%z`                       | Beijing `+0800` <br />Zulu `+0000` <br />Stockholm, Sweden `+0200` <br />Los Angeles `-0800` |
-| `[+\|-]HH:MM`    | `%:z`                      | Beijing `+08:00` <br />Zulu `+00:00` <br />Stockholm, Sweden `+02:00` <br />Los Angeles `-08:00` |
-| `[+\|-]HH:MM:SS` | `%::z`                     | Beijing `+08:00:00` <br />Zulu `+00:00:00` <br />Stockholm, Sweden `+02:00:00` <br />Los Angeles `-08:00:00` |
-| integer()        | Seconds                    | Beijing 28800 <br />Zulu 0 <br />Stockholm, Sweden 7200 <br />Los Angeles -28800 |
+Example:
 
-**Examples:**
+```
+date_to_unix_ts('second', '%Y-%m-%d %H:%M:%S%:z', '2024-02-23 15:00:00+08:00') = 1708671600
+```
 
-```SQL
-now_timestamp() = 1650874276
-now_timestamp('millisecond') = 1650874318331
-now_rfc3339() = '2022-04-25T16:08:41+08:00'
-now_rfc3339('millisecond') = '2022-04-25T16:10:10.652+08:00'
-unix_ts_to_rfc3339(1650874276) = '2022-04-25T16:11:16+08:00'
-unix_ts_to_rfc3339(1650874318331, 'millisecond') = '2022-04-25T16:11:58.331+08:00'
-rfc3339_to_unix_ts('2022-04-25T16:11:16+08:00') = 1650874276
-rfc3339_to_unix_ts('2022-04-25T16:11:58.331+08:00', 'millisecond') = 1650874318331
-format_date('second', '+0800', '%Y-%m-%d %H:%M:%S%:z', 1653561612) = '2022-05-26 18:40:12+08:00'
-format_date('second', 'local', '%Y-%m-%d %H:%M:%S%:z') = "2022-05-26 18:48:01+08:00"
-format_date('second', 0, '%Y-%m-%d %H:%M:%S%:z') = '2022-05-26 10:42:41+00:00'
-date_to_unix_ts('second', '%Y-%m-%d %H:%M:%S%:z', '2022-05-26 18:40:12+08:00') = 1653561612
-date_to_unix_ts('second', 'local', '%Y-%m-%d %H-%M-%S', '2022-05-26 18:40:12') = 1653561612
-date_to_unix_ts('second', '%Y-%m-%d %H-%M-%S', '2022-05-26 10:40:12') = 1653561612
+### date_to_unix_ts(Unit: string, Offset: string | integer, FormatString: string, DateTimeString: string) -> integer
+
+If the `DateTimeString` does not contain a time zone offset, you can use `Offset` to manually specify the offset, other behavior are the same as `date_to_unix_ts/3`. `Offset` can be a string or the number of seconds expressed directly as an integer.
+
+When `Offset` is a string, the following format can be used:
+
+- `Z` or `z`, representing UTC offset 00:00.
+- `±hh[:mm][:ss]` or `±hh[mm][ss]`, positive or negative time offset from UTC.
+- `local`, indicates the offset corresponding to the system's local time zone.
+
+Example:
+
+```
+date_to_unix_ts('second', '+08:00', '%Y-%m-%d %H:%M:%S%:z', '2024-02-23 15:00:00') = 1708671600
+date_to_unix_ts('second', 'Z', '%Y-%m-%d %H:%M:%S%:z', '2024-02-23 07:00:00') = 1708671600
+date_to_unix_ts('second', 14400, '%Y-%m-%d %H:%M:%S%:z', '2024-02-23 15:00:00') = 1708686000
+```
+
+### format_date(Unit: string, Offset: string | integer, FormatString: string, Time: Integer) -> string
+
+Converts a Unix time to a datetime string in the specified format. `Unit` represents the time unit of the Unix time Time to be converted, `Offset` represents the time zone offset in the output date and time, and `FormatString` represents the output date and time format.
+
+See `date_to_unix_ts/3, 4` for possible values of `Unit`, `Offset` and `FormatString`.
+
+Example:
+
+```
+format_date('millisecond', '+08:00', '%Y-%m-%d %H:%M:%S.%6N%z', 1708933353472) = '2024-02-26 15:42:33.472000+0800'
+format_date('millisecond', '+08:00', '%Y-%m-%d %H:%M:%S.%6N%:z', 1708933353472) = '2024-02-26 15:42:33.472000+08:00'
+format_date('millisecond', '+08:20:30', '%Y-%m-%d %H:%M:%S.%3N%::z', 1708933353472) = '2024-02-26 16:03:03.472+08:20:30'
+format_date('millisecond', 'Z', '%Y-%m-%d %H:%M:%S.%3N%:z', 1708933353472) = '2024-02-26 07:42:33.472+08:00'
+format_date('millisecond', 28800, '%Y-%m-%d %H:%M:%S.%3N%:z', 1708933353472) = '2024-02-26 15:42:33.472+08:00'
+```
+
+### now_rfc3339() -> string
+
+Returns the current system time as an RFC3339 datetime string in seconds. Example:
+
+```
+now_rfc3339() = '2024-02-23T10:26:20+08:00'
+```
+
+### now_rfc3339(Unit: string) -> string
+
+Same as `now_rfc3339/0`, but you can use `Unit` to specify the time unit, supporting `second`, `millisecond`, `microsecond` and `nanosecond`. Example:
+
+```
+now_rfc3339('microsecond') = '2024-02-23T10:26:38.009706+08:00'
+```
+
+### now_timestamp() -> integer
+
+Returns the current system time as a Unix timestamp in seconds. Example:
+
+```
+now_timestamp() = 1708913853
+```
+
+### now_timestamp(Unit: string) -> integer
+
+Same as `now_timestamp/0`, but you can use `Unit` to specify the time unit, supporting `second`, `millisecond`, `microsecond` and `nanosecond`. Example:
+
+```
+now_timestamp('microsecond') = 1708913828814315
+```
+
+### rfc3339_to_unix_ts(DateTimeString: string) -> integer
+
+Converts an RFC3339-compliant datetime string to a Unix timestamp. `2024-02-23T15:56:30Z` is a typical RFC3339 date and time string, which represents UTC time on February 23, 2024, 15:56:30.
+
+Example:
+
+```
+rfc3339_to_unix_ts('2024-02-23T15:56:30Z') = 1708703790
+rfc3339_to_unix_ts('2024-02-23T15:56:30+08:00') = 1708674990
+```
+
+### rfc3339_to_unix_ts(DateTimeString: string, Unit: string) -> integer
+
+Same as `rfc3339_to_unix_ts/1`, but you can use `Unit` to specify the unit of returned Unix timestamp, supporting `second`, `millisecond`, `microsecond` and `nanosecond`. Example:
+
+```
+rfc3339_to_unix_ts('2024-02-23T15:56:30.87Z', 'second') = 1708703790
+rfc3339_to_unix_ts('2024-02-23T15:56:30.87Z', 'millisecond') = 1708703790870
+rfc3339_to_unix_ts('2024-02-23T15:56:30.87Z', 'microsecond') = 1708703790870000
+rfc3339_to_unix_ts('2024-02-23T15:56:30.535904509Z', 'nanosecond') = 1708703790535904509
+```
+
+### timezone_to_offset_seconds(Offset: string) -> integer
+
+Converts a time zone offset as a string to an integer in seconds. The following are supported time offset representations:
+
+- `Z` or `z`, representing UTC offset 00:00.
+- `±hh[:mm][:ss]` or `±hh[mm][ss]`, positive or negative time offset from UTC.
+- `local`, indicates the offset corresponding to the system's local time zone.
+
+Example:
+
+```
+timezone_to_offset_seconds('Z') = 0
+timezone_to_offset_seconds('+08:00') = 28800
+timezone_to_offset_seconds('local') = 28800
+```
+
+### unix_ts_to_rfc3339(Time: integer) -> string
+
+Converts a Unix timestamp in seconds to an RFC3339-compliant datetime string, using the system's local time zone. Example:
+
+```
+unix_ts_to_rfc3339(1708671600) = '2024-02-23T15:00:00+08:00'
+```
+
+### unix_ts_to_rfc3339(Time: integer, Unit: string) -> string
+
+Same as `unix_ts_to_rfc3339/0`, but you can use `Unit` to specify the time unit, supporting `second`, `millisecond`, `microsecond` and `nanosecond`. Example:
+
+```
+unix_ts_to_rfc3339(1708671600766, 'millisecond') = '2024-02-23T15:00:00.766+08:00'
 ```
 
 {% emqxee %}
 
 ### MongoDB Time Functions
 
-| Function | Purpose | Parameters |
-| -------- | ------------------------------------|-------------------------- |
-| `mongo_date` | Create a mongodb ISODate type of now | - |
-| `mongo_date` | Create a mongodb ISODate type from the given unix epoch in millisecond | 1. Unix epoch in millisecond |
-| `mongo_date` | Create a mongodb ISODate type from the given unix epoch in given time unit | 1. Unix epoch <br />2. Time unit, can be one of 'second', 'millisecond', 'microsecond' or 'nanosecond' |
+### mongo_date() -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
 
-The time unit can be one of 'second', 'millisecond', 'microsecond' or 'nanosecond'.
+Returns the current time as a MongoDB ISODate type or string. Only supported for use in MongoDB related actions and SQL tests, and only in SQL tests `mongo_date()` returns a string, such as `ISODate("2024-02-23T15:00:00.123Z")`. Returns other than strings from `mongo_date()` are not currently supported as input to other functions.
 
-```SQL
-mongo_date() = 'ISODate("2012-12-19T06:01:17.171Z")'
-mongo_date(timestamp) = 'ISODate("2012-12-19T06:01:17.171Z")'
-mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
+Example:
+
+```
+mongo_date() = 'ISODate("2024-02-23T15:00:00.123Z")'
+```
+
+### mongo_date(Timestamp: integer) -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
+
+Converts the specified Unix timestamp in milliseconds to the MongoDB ISODate type or string. Other behaviors are the same as `mongo_date/0`.
+
+Example:
+
+```
+mongo_date(now_timestamp('millisecond')) = 'ISODate(2024-02-23T15:48:57.871Z)'
+```
+
+### mongo_date(Timestamp: integer, Unit: string) -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
+
+Converts the specified Unix timestamp to the MongoDB ISODate type or string. You can specify the unit of the input timestamp through `Unit`. Other behaviors are the same as `mongo_date/0`.
+
+Possible values for `Unit` are:
+
+- `second`
+- `millisecond`
+- `microsecond`
+- `nanosecond`
+
+Example:
+
+```
+mongo_date(now_timestamp('microsecond'), 'microsecond') = 'ISODate(2024-02-23T15:51:01.232Z)'
 ```
 
 {% endemqxee %}
 
-## UUID Function
+## UUID Functions
 
-| Function          | Purpose                                           | Parameters | Return Value |
-| ----------------- | ------------------------------------------------- | ---------- | ------------ |
-| uuid_v4           | Generates Version 4 standard UUID                 | -          | UUID         |
-| uuid_v4_no_hyphen | Generates Version 4 standard UUID without hyphens | -          | UUID         |
+### uuid_v4() -> string
 
+Generates a version 4 UUID. Example:
 
-```erlang
-uuid_v4() = '4b90d7b7-a185-4bf0-9b97-3f6b8f83b61d'
-uuid_v4_no_hyphen() = 'fb00db84f64a4731b49f42b9ea2e3e34'
+```
+uuid_v4() = 'f5bb7bea-a371-4df7-aa30-479add04632b'
+```
+
+### uuid_v4_no_hyphen() -> string
+
+Generates a version 4 UUID without hyphens. Example:
+
+```
+uuid_v4_no_hyphen() = 'd7a39aa4195a42068b962eb9a665503e'
 ```
 
 {% emqxee %}
