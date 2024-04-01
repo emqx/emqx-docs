@@ -18,32 +18,90 @@ If the signature verification is successful, the JWT authenticator proceeds to c
 
 The JWT authenticator essentially only checks the signature of the JWT, which means that the JWT authenticator does not guarantee the legitimacy of the client's identity.
 
-The best practice is to deploy an independent authentication server. The client first accesses the authentication server, the authentication server verifies the identity of the client, and issues JWT for the legitimate client, and then the client uses the obtained JWT to connect to EMQX .
+The best practice is to deploy an independent authentication server. The client first accesses the authentication server, the authentication server verifies the identity of the client, and issues JWT for the legitimate client, and then the client uses the obtained JWT to connect to EMQX.
 
 :::tip
 
 Since the payload in the JWT is only Base64 encoded, anyone who gets the JWT can decode the payload to get the original information by Base64 decoding. Therefore, it is not recommended to store some sensitive data in the payload of JWT.
 
-To reduce the possibility of JWT leakage and theft, it is recommended to set a reasonable validity period and also  enables TLS to encrypt client connections.
+To reduce the possibility of JWT leakage and theft, it is recommended to set a reasonable validity period and also enable TLS to encrypt client connections.
 
 :::
 
-## Authorization List (Optional)
+## Access Control List (Optional)
 
-This is an optional function, we define a private Claim `acl` to carry the access rules of publish/subscribe in the JWT as to control the permissions of the client after login.
+The Access Control List (ACL) is an optional function to control the permissions of the client after login. A private Claim `acl` is defined to carry a list of publish and subscribe permissions in the JWT.
 
 ::: tip
-Authorization (ACL) rules returned by JWT will be checked before all Authorizers. For details, see [Authorization](../authz/authz.md).
+
+ACL rules returned by JWT will be checked before all Authorizers. For details, see [Authorization Check Priority](../authz/authz.md#authorization-check-priority).
 :::
 
-Claim `acl` defines 3 optional fields, `pub`, `sub` and `all`, which are used to specify the whitelist of publish, subscribe and publish-subscribe topics respectively. Wildcards and placeholders  (currently only `${clientid}` and `${username}` ) are allowed in topic entries.  Since there may be cases where topic content conflicts with placeholder syntax, we also provide the `eq` syntax to cancel placeholder interpolation. 
+:::: tabs type:board-card
+
+::: tab New Format
+
+The new format, supported starting from v5.5.0, utilizes an ACL to specify multiple permissions, closely resembling the semantics of ACL rules and offering greater flexibility.
+
+Unlike the old format, the new format continues to other authorization checks if a client operation does not match any rule. While the old format remains compatible, the new format is recommended for use.
+
+The ACL includes the following fields:
+
+| Field      | Required | Description                                                  |
+| ---------- | -------- | ------------------------------------------------------------ |
+| permission | Yes      | Specifies whether the current client's operation request is allowed or denied; options: `allow`, `deny` |
+| action     | Yes      | The operation associated with the rule; options: `publish`, `subscribe`, `all` |
+| topic      | Yes      | The topic associated with the rule, supports [topic placeholders](https://chat.openai.com/authz/authz.md#topic-placeholders) |
+| qos        | No       | An array specifying the QoS levels applicable to the rule, e.g., `[0, 1]`, `[1, 2]`, default is all QoS levels |
+| retain     | No       | Boolean, used only for publish operations, specifies if the current rule supports retained messages, options are `true`, `false`, default allows retained messages. |
 
 Example:
 
 ```json
 {
+  "exp": 1706844358,
+  "username": "emqx_u",
+  "acl": [
+    {
+      // Allows the client to publish messages to the topic t/${clientid}, e.g., t/emqx_c
+      "permission": "allow",
+      "action": "publish",
+      "topic": "t/${clientid}"
+    },
+    {
+      // Allows the client to subscribe to the topic t/1 with QoS 1, while QoS 0 or 2 is allowed
+      "permission": "deny",
+      "action": "subscribe",
+      "topic": "t/1",
+      "qos": [1]
+    },
+    {
+      // Denies the client from publishing retained messages to the topic t/2, non-retained messages are allowed
+      "permission": "deny",
+      "action": "publish",
+      "topic": "t/2",
+      "retain": true
+    },
+    {
+      // Denies the client from publishing or subscribing to the topic t/3, including all QoS levels and retained messages
+      "permission": "deny",
+      "action": "all",
+      "topic": "t/3"
+    }
+  ]
+}
+```
+
+:::
+
+::: tab Old Format
+
+The JWT permission list defines `pub`, `sub`, and `all` as three optional fields, specifying the whitelist of topics for publishing, subscribing, or both. Topics may include topic wildcards and placeholders (currently supports `${clientid}` and `${username}`). To address potential conflicts between topic content and placeholder syntax, the `eq` syntax is provided to bypass placeholder interpolation. Example:
+
+```json
+{
   "exp": 1654254601,
-  "username": "myuser",
+  "username": "emqx_u",
   "acl": {
     "pub": [
       "testpub1/${username}",
@@ -51,7 +109,7 @@ Example:
     ],
     "sub": [
       "testsub1/${username}",
-      "testpub2/${clientid}",
+      "testsub2/${clientid}",
       "testsub2/#"
     ],
     "all": [
@@ -63,9 +121,11 @@ Example:
 }
 ```
 
-Where `testpub1/${username}` will be replaced with `testpub1/myuser` at runtime, and `eq testpub2/${username}` will still be processed as `testpub2/${username}` at runtime.
+In this example, `testpub1/${username}` is replaced at runtime with `testpub1/emqx_u`, whereas `eq testpub2/${username}` is processed as `testpub2/${username}` at runtime.
 
+:::
 
+::::
 
 ## Configure with Dashboard
 

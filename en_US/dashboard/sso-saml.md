@@ -12,7 +12,7 @@ Be familiar with the basic concepts of [Single Sign-On (SSO)](./sso.md).
 
 The EMQX Dashboard can integrate with identity services that support the SAML 2.0 protocol to enable SAML-based single sign-on, such as:
 
-- [Okta](https://www.openldap.org/)
+- [Okta](https://www.okta.com/)
 - [OneLogin](https://www.onelogin.com/)
 
 Other identity providers are in the process of integration and will be supported in future versions.

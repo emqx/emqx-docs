@@ -1,5 +1,133 @@
 # Version 5
 
+## 5.5.1
+
+*Release Date: 2024-03-06*
+
+### Bug Fixes
+
+- [#12471](https://github.com/emqx/emqx/pull/12471) Fixed an issue that data integration configurations failed to load correctly during upgrades from EMQX version 5.0.2 to newer releases.
+
+- [#12598](https://github.com/emqx/emqx/pull/12598) Fixed an issue that users were unable to subscribe to or unsubscribe from shared topic filters via HTTP API.
+
+  The affected APIs include:
+
+  - `/clients/:clientid/subscribe`
+  - `/clients/:clientid/subscribe/bulk`
+
+  - `/clients/:clientid/unsubscribe`
+  - `/clients/:clientid/unsubscribe/bulk`
+
+- [#12601](https://github.com/emqx/emqx/pull/12601) Fixed an issue where logs of the LDAP driver were not being captured. Now, all logs are recorded at the `info` level.
+
+- [#12606](https://github.com/emqx/emqx/pull/12606) The Prometheus API experienced crashes when the specified SSL certificate file did not exist in the given path. Now, when an SSL certificate file is missing, the `emqx_cert_expiry_at` metric will report a value of 0, indicating the non-existence of the certificate.
+
+- [#12620](https://github.com/emqx/emqx/pull/12620) Redacted sensitive information in HTTP headers to exclude authentication and authorization credentials from `debug` level logs in the HTTP Server connector, mitigating potential security risks.
+
+- [#12632](https://github.com/emqx/emqx/pull/12632) Fixed an issue where the rule engine's SQL built-in function `date_to_unix_ts` produced incorrect timestamp results for dates starting from March 1st on leap years.
+
+## 5.5.0
+
+*Release Date: 2024-02-01*
+
+### Enhancements
+
+- [#12085](https://github.com/emqx/emqx/pull/12085) EMQX has been upgraded to leverage the capabilities of OTP version 26.1.2-2. NOTE: Docker images are still built with OTP 25.3.2.
+
+- [#12189](https://github.com/emqx/emqx/pull/12189) Enhanced the [ACL](../access-control/authn/jwt.md#access-control-list-optional) claim format in EMQX JWT authentication for greater versatility. The updated format now supports an array structure, aligning more closely with the file-based ACL rules.
+
+  For example:
+
+  ```json
+  [
+  {
+    "permission": "allow",
+    "action": "pub",
+    "topic": "${username}/#",
+    "qos": [0, 1],
+    "retain": true
+  },
+  {
+    "permission": "allow",
+    "action": "sub",
+    "topic": "eq ${username}/#",
+    "qos": [0, 1]
+  },
+  {
+    "permission": "deny",
+    "action": "all",
+    "topics": ["#"]
+  }
+  ]
+  ```
+
+  In this new format, the absence of a matching rule does not result in an automatic denial of the action. The authorization chain can advance to other configured authorizers if a match is not found in the JWT ACL. If no match is found throughout the chain, the final decision defers to the default permission set in `authorization.no_match`.
+
+- [#12267](https://github.com/emqx/emqx/pull/12267) Added a new `timeout` parameter to the `cluster/:node/invite` interface, addressing the issue of default timeouts. 
+  The previously set 5-second default timeout often led to HTTP API call timeouts because joining an EMQX cluster usually requires more time.
+
+  In addition, EMQX added a new API `/cluster/:node/invite_async` to support an asynchronous way to invite nodes to join the cluster and introduced a new `cluster/invitation` API to inspect the join status.
+
+- [#12272](https://github.com/emqx/emqx/pull/12272) Introduced updates to the `retain` API in EMQX:
+
+  - Added a new API `DELETE /retainer/messages` to clean all retained messages.
+  - Added an optional topic filter parameter `topic` in the query string for the API `GET /retainer/messages`. For example, using a query string `topic=t/1` filters the retained messages for a specific topic, improving the efficiency of message retrieval.
+
+- [#12277](https://github.com/emqx/emqx/pull/12277) Added `mqtt/delayed/messages/:topic` API to remove delayed messages by topic name.
+
+- [#12278](https://github.com/emqx/emqx/pull/12278) Adjusted the maximum pagination size for paginated APIs in the REST API from `3000` to `10000`.
+
+- [#12289](https://github.com/emqx/emqx/pull/12289) Authorization caching now supports the exclusion of specific topics. For the specified list of topics and topic filters, EMQX will not generate an authorization cache. The list can be set through the `authorization.cache.excludes` configuration item or via the Dashboard. For these specific topics, permission checks will always be conducted in real-time rather than relying on previous cache results, thus ensuring the timeliness of authorization outcomes.
+
+- [#12329](https://github.com/emqx/emqx/pull/12329) Added `broker.routing.batch_sync` configuration item to enable a dedicated process pool that synchronizes subscriptions with the global routing table in batches, thus reducing the frequency of cross-node communication that can be slowed down by network latency. Processing multiple subscription updates collectively, not only accelerates synchronization between replica nodes and core nodes in a cluster but also reduces the load on the broker pool, minimizing the risk of overloading.
+
+- [#12333](https://github.com/emqx/emqx/pull/12333) Added a `tags` field for actions and connectors. Similar to the `description` field (which is a free text annotation), `tags` can be used to annotate actions and connectors for filtering and grouping.
+
+- [#12299](https://github.com/emqx/emqx/pull/12299) Exposed more metrics to improve observability:
+
+  Montior API:
+  - Added `retained_msg_count` field to `/api/v5/monitor_current`.
+  - Added `license_quota` field to `/api/v5/monitor_current`
+  - Added `retained_msg_count` and `node_uptime` fields to `/api/v5/monitor_current/nodes/{node}`.
+  - Added `retained_msg_count`, `license_quota` and `node_uptime` fields to `/api/v5/monitor_current/nodes/{node}`.
+
+  Prometheus API:
+  - Added `emqx_cert_expiry_at` and `emqx_license_expiry_at` to `/api/v5/prometheus/stats` to display TLS listener certificate expiration time and license expiration time.
+  - Added `/api/v5/prometheus/auth` endpoint to provide metrics such as execution count and running status for all authenticatiors and authorizators.
+  - Added `/api/v5/prometheus/data_integration` endpoint to provide metrics such as execution count and status for all rules, actions, and connectors.
+
+  Limitations:
+  Prometheus push gateway only supports the content in `/api/v5/prometheus/stats?mode=node`.
+
+  For more API details and metric type information, please see swagger api docs.
+
+- [#12196](https://github.com/emqx/emqx/pull/12196) Improved network efficiency during routes cleanup.
+
+  Previously, when a node was down, a delete operation for each route to that node must be exchanged between all the other live nodes. After this change, only one `match and delete` operation is exchanged between all live nodes, significantly reducing the number of necessary network packets and decreasing the load on the inter-cluster network.
+  This optimization must be especially helpful for geo-distributed EMQX deployments where network latency can be significantly high.
+
+- [#12354](https://github.com/emqx/emqx/pull/12354) The concurrent creation and updates of data integrations are now supported, significantly increasing operation speeds, such as when importing backup files.
+
+### Bug Fixes
+
+- [#12232](https://github.com/emqx/emqx/pull/12232) Fixed an issue when cluster commit log table was not deleted after a node was forced to leave a cluster.
+
+- [#12243](https://github.com/emqx/emqx/pull/12243) Fixed a family of subtle race conditions that could lead to inconsistencies in the global routing state.
+
+- [#12269](https://github.com/emqx/emqx/pull/12269) Improved error handling in the `/clients` interface; now returns a 400 status with more detailed error messages, instead of a generic 500, for query string validation failures.
+
+- [#12285](https://github.com/emqx/emqx/pull/12285) Updated the CoAP gateway to support short parameter names for slight savings in datagram size. For example, `clientid=bar` can be written as `c=bar`.
+
+- [#12303](https://github.com/emqx/emqx/pull/12303) Fixed the message indexing in retainer. Previously, clients with wildcard subscriptions might receive irrelevant retained messages not matching their subscription topics.
+
+- [#12305](https://github.com/emqx/emqx/pull/12305) Corrected an issue with incomplete client/connection information being passed into `emqx_cm`, which could lead to internal inconsistencies and affect memory usage and operations like node evacuation.
+
+- [#12306](https://github.com/emqx/emqx/pull/12306) Fixed an issue preventing the connectivity test for the Connector from functioning correctly after updating the password parameter via the HTTP API.
+
+- [#12359](https://github.com/emqx/emqx/pull/12359) Fixed an issue causing error messages when restarting a node configured with some types of data bridges.  Additionally, these bridges were at risk of entering a failed state upon node restart, requiring a manual restart to restore functionality.
+
+- [#12404](https://github.com/emqx/emqx/pull/12404) Fixed an issue where restarting a data integration with heavy message flow could lead to a stop in the collection of data integration metrics. 
+
 ## 5.4.1
 
 *Release Date: 2024-01-09*
@@ -2621,118 +2749,6 @@ _Release Date: 2022-07-01_
 
 ## 5.0.0
 
-_Release Date: 2023-02-03_
-
-EMQX Enterprise 5.0 is a completely new release. In this version, we have implemented a new cluster architecture and refined the main features, as well as introduced many new features.
-
-### **New Core + Replica clustering architecture**
-
-EMQX Enterprise 5.0 adopts a brand-new Core + Replica clustering architecture, offering better scalability and reliability.
-
-- A single cluster can now support up to 23 nodes and 100+ million MQTT connections, a [10x increase](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections) compared with EMQX Enterprise 4.x.
-- The stateless nature of Replicant nodes ensures a stable cluster performance during dynamic scaling.
-- Reduce the risk of split-brain under large-scale deployment and minimize the impact of split-brain on business.
-
-The [EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator) has been adapted for this new clustering architecture so that you can deploy a scalable and stateless MQTT service with EMQX effortlessly.
-
-### Support MQTT over QUIC
-
-By adopting QUIC as a transport layer, EMQX Enterprise 5.0 now supports the MQTT over QUIC transmission protocol.
-
-MQTT over QUIC (Quick UDP Internet Connections) is a new transport protocol that aims to provide low-latency, reliable, and secure data communication in IoT (Internet of Things) networks. As demonstrated from some performance tests, MQTT over QUIC can overcome some of the challenges of traditional networking protocols, such as slow and unreliable data transmission, high latency, and security vulnerabilities. Therefore, it is said that MQTT over QUIC has the potential to revolutionize the way how data is collected in the Internet of Vehicles (IoV) and mobile data acquisition scenarios.
-
-With EMQX Enterprise 5.0, users can now create an MQTT over QUIC listener and use the EMQ SDK to connect to IoT devices. EMQ is submitting a draft to the MQTT protocol as a member of OASIS.
-
-For more information, please refer to [MQTT over QUIC: Next-Generation IoT Standard Protocol](https://www.emqx.com/en/blog/getting-started-with-mqtt-over-quic-from-scratch).
-
-### Visualized **rules orchestration and bidirectional data integration**
-
-EMQX Enterprise 5.0 offers real-time processing capability for IoT data and supports integration with third-party data systems in a more flexible and low-code way.
-
-**Visualized orchestration rules with Flows editor**
-
-EMQX Enterprise 5.0 has added a visualized Flows page in EMQX Dashboard to facilitate the management of rules. In the Flows editor, users can now easily view and monitor the data filtering, processing, and bridging flow. With this Flow editor to visualize the connection between the IoT hardware and data flow, developers can now focus on works with business significance.
-
-EMQX plans to support rules orchestration and data bridge creation by drag and drop in future releases.
-
-**More flexible bidirectional data integration**
-
-Besides bridging device data to external systems, EMQX Enterprise 5.0 also supports bridging data from external data systems to specific clients after rule processing, for example, other MQTT services and Kafka.
-
-Bidirectional data integration is suitable for sending messages from the cloud to the device, with our support for real-time processing and delivering under large-scale messages, EMQX 5.0 offers more possibilities for IoT service application scenarios.
-
-**Disk-based buffer queue**
-
-EMQX Enterprise 5.0 also provides a buffer queue feature to better support our data bridging services. With this buffer queue feature, messages generated under abnormal connections can be cached for the moment and continue to be sent after the connection is resumed.
-
-This buffer queue feature helps to ensure excellent reliability for data integration and greatly improves business availability.
-
-**Supported data integrations**
-
-EMQX Enterprise 5.0 currently supports integration with the following data systems:
-
-1. Webhook
-2. MQTT
-3. Kafka
-4. InfluxDB
-5. MySQL
-6. Redis
-7. GCP Pub/Sub
-8. MongoDB
-
-We plan to add support to more data systems, please stay tuned.
-
-### **Improved security management**
-
-**More flexible access control**
-
-EMQX Enterprise 5.0 provides authentication options such as password-based authentication, LDAP, JWT, PSK, and X.509 certificates. It also provides authorization checking for message publishing and subscriptions.
-
-Besides the configuration files, users can also configure their access control with EMQX Dashboard, a more flexible and user-friendly method. With this Dashboard configuration option, you can enable access control for EMQX clusters without rebooting.
-
-EMQX also offers statistical metrics at both cluster and node levels to help our users better monitor access control running status, including:
-
-- Allow: Number of authentication/authorization passed
-- Deny: Number of authentication/authorization failed
-- No match: Number of client authentication/authorization data not found
-- Rate: Rate of request
-
-**Overload protection with Limiter**
-
-EMQX introduces the overload protection mechanism and a new Limiter feature. This Limiter delivers a more accurate and layered rate control and ensures that the system operates under the expected workload, because it supports limiting client behavior at the client, listener, or node levels.
-
-The combination of these 2 features prevents the clients from becoming too busy or receiving excessive request traffic and ensures stable system operation.
-
-### User-friendly EMQX Dashboard with better observability
-
-In EMQX Enterprise 5.0, we have redesigned the EMQX Dashboard with a new UI design style, enhancing the visual experience and supporting more powerful and user-friendly features. Users can manage client connections, authenticate/authorize various subscribe/publish requests, and integrate with different data systems via data bridges and rule engine with our brand-new EMQX Dashboard.
-
-**The main improvements are as follows：**
-
-- Access control management
-- Introduce the Flows editor to visualize the data integration
-- More powerful hot configuration
-- More diagnostic tools, such as slow subscriptions and log trace
-- Powerful data managing capability: users can manage retained messages or postpone the publishing schedules with Dashboard
-
-### More flexible extensions
-
-With EMQX Enterprise 5.0, users can now compile, distribute, and install extension plugins with standalone plugin packages. You can upload these packages via the Dashboard to finish the configuration with no need to reboot the EMQX cluster.
-
-A standard plugin will come with complete documentation and a website URL, so users can easily follow the instructions to use the plugins and communicate with the developers.
-
-**Easy-to-use ExHook/gRPC**
-
-Users can create multiple ExHooks at the same time. With the relevant metrics, users can view the detailed usage statics and hooks (and their arguments) registered under each Exhook, so they can better understand the load of the ExHook extensions.
-
-**More "native" multi-protocol connectivity**
-
-The gateway is re-implemented in a unified design layer. EMQX Enterprise 5.0 provides unique client management pages and security authentication configurations for each protocol feature, so users can manage the access in a more protocol-native manner.
-
-As each gateway can be configured with its authentication methods, the authentication credentials of different gateway devices can now be isolated from each other to meet advanced security requirements.
-
-## 5.0.0
-
 _Release Date: 2022-06-17_
 
 ### Horizontal Scalability
@@ -2780,7 +2796,7 @@ Starting from version 5, EMQX will use [HOCON](https://lightbend.github.io/confi
 
 With a schema on top, the configs are now type-checked.
 
-HOCON supports Nginx-like configuration layouts, and provides a native array syntax.
+HOCON supports NGINX-like configuration layouts, and provides a native array syntax.
 
 But don't worry, the old `cuttlefish` syntax is still supported if you prefer to keep everything flat like in version 4.
 

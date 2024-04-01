@@ -113,7 +113,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
    - **Username**: `emqx`
    - **Password**: `public`
 
-8. Enter the following command in the SQL template (You can use the [Rule Engine](https://chat.openai.com/c/rules.md) to ensure that strings in the input SQL statement are properly escaped to prevent SQL injection attacks):
+8. Enter the following command in the SQL template (You can use the [Rule Engine](./rules.md) to ensure that strings in the input SQL statement are properly escaped to prevent SQL injection attacks):
 
    ```sql
    INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})

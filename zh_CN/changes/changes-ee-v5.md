@@ -1,5 +1,150 @@
 # v5 版本
 
+## 5.5.1
+
+*发布日期: 2024-03-06*
+
+### 增强
+
+- [#12497](https://github.com/emqx/emqx/pull/12497) 改进了 MongoDB 连接器的性能，使与数据库的交互更加高效。此增强功能通过改进 MongoDB Erlang 驱动得到支持（见 [mongodb-erlang PR](https://github.com/emqx/mongodb-erlang/pull/41)）。
+
+### 修复
+
+- [#12471](https://github.com/emqx/emqx/pull/12471) 修复了在从 EMQX 版本 5.0.2 升级到新版本期间，数据集成配置未能正确加载的问题。
+
+- [#12598](https://github.com/emqx/emqx/pull/12598) 修复了用户无法通过 HTTP API 订阅或取消订阅共享主题过滤器的问题。
+
+  受影响的 API 包括：
+
+  - `/clients/:clientid/subscribe`
+  - `/clients/:clientid/subscribe/bulk`
+  - `/clients/:clientid/unsubscribe`
+  - `/clients/:clientid/unsubscribe/bulk`
+
+- [#12601](https://github.com/emqx/emqx/pull/12601) 修复了 LDAP 驱动的日志没有被捕获的问题。现在，所有日志都以 `info` 级别被记录。
+
+- [#12606](https://github.com/emqx/emqx/pull/12606) 修复了一个问题， 即当指定的 SSL 证书文件在给定路径中不存在时，Prometheus API 会崩溃。现在，如果缺少 SSL 证书文件，`emqx_cert_expiry_at` 指标会报告一个值为 0，表示证书不存在。
+
+- [#12608](https://github.com/emqx/emqx/pull/12608) 修复了在查询数据中缺少 `payload` 字段时，IoTDB 动作的 `function_clause` 错误。
+
+- [#12610](https://github.com/emqx/emqx/pull/12610) 修复了与 LDAP 连接器的连接在一定时间后可能意外断开的问题。
+
+- [#12620](https://github.com/emqx/emqx/pull/12620) 在 HTTP 服务连接器中对授权头中的敏感信息进行了编辑，从调试级别日志中排除了认证和授权信息，以减少潜在的安全风险。
+
+- [#12632](https://github.com/emqx/emqx/pull/12632) 修复了一个问题，即在闰年的3月1日起，规则引擎的 SQL 内置函数 `date_to_unix_ts` 会产生不正确的时间戳结果。
+
+## 5.5.0
+
+*发布日期: 2024-02-01*
+
+### 增强
+
+- [#12085](https://github.com/emqx/emqx/pull/12085) EMQX 已升级，以利用 OTP 版本 26.1.2-2 的功能。注意：Docker 镜像仍然使用 OTP 25.3.2 构建。
+
+- [#12189](https://github.com/emqx/emqx/pull/12189) 增强了 EMQX JWT 认证中的[权限列表](../access-control/authn/jwt.md#权限列表)声明格式，使其具有更高的灵活性。更新后的格式现在支持数组结构，更加符合基于文件的 ACL 规则。
+
+  例如：
+
+  ```json
+  [
+  {
+    "permission": "allow",
+    "action": "pub",
+    "topic": "${username}/#",
+    "qos": [0, 1],
+    "retain": true
+  },
+  {
+    "permission": "allow",
+    "action": "sub",
+    "topic": "eq ${username}/#",
+    "qos": [0, 1]
+  },
+  {
+    "permission": "deny",
+    "action": "all",
+    "topics": ["#"]
+  }
+  ]
+  ```
+
+  在这种新格式中，找不到匹配的规则不会自动导致操作被拒绝。如果在 JWT 权限列表中找不到匹配项，授权链可以将请求交由下一授权检查器继续检查。如果在整个链中都找不到匹配项，最终检查结果将根据 `authorization.no_match` 中设置的默认权限决定。
+
+- [#12267](https://github.com/emqx/emqx/pull/12267) 为 `cluster/:node/invite` 接口增加了一个新的 `timeout` 参数，解决了默认超时问题。之前设置的 5 秒默认超时，往往会导致 HTTP API 调用超时，因为 EMQX 加入集群通常需要更多时间。
+
+  此外，EMQX 还添加了一个新的 API `/cluster/:node/invite_async`，支持以异步方式邀请节点加入集群，并通过新增的 `cluster/invitation` API 检查加入状态。
+
+- [#12272](https://github.com/emqx/emqx/pull/12272) 对 EMQX 中的 `retain` API 进行了更新：
+
+  - 增加了一个新的 API `DELETE /retainer/messages`，用于清除所有保留的消息。
+  - 在 `GET /retainer/messages` API 的查询字符串中增加了一个可选的主题过滤器参数 `topic`。例如，使用 `topic=t/1` 可以过滤特定主题的保留消息，提高消息检索的效率。
+
+- [#12277](https://github.com/emqx/emqx/pull/12277) 新增了 `mqtt/delayed/messages/:topic` API，用于按主题名称删除延迟消息。
+
+- [#12278](https://github.com/emqx/emqx/pull/12278) 将 REST API 中支持分页的 API 的最大分页大小从 `3000` 调整到 `10000`。
+
+- [#12289](https://github.com/emqx/emqx/pull/12289) 授权缓存支持排除特定的主题列表。对于指定的主题和主题过滤器列表，EMQX 将不会生成授权缓存。列表可以通过 `authorization.cache.excludes` 配置项或在 Dashboard 上设置。对于这些特定的主题权限检查将会始终实时进行，而不是依赖于之前的缓存结果，从而确保了授权结果的及时性。
+
+- [#12329](https://github.com/emqx/emqx/pull/12329) 新增了 `broker.routing.batch_sync` 配置项。这个配置启用了一个专门的进程池，能够批量地将订阅信息与全局路由表同步，从而减少了可能由于网络延迟导致的跨节点通信的减慢。通过集中处理多个订阅更新，它不仅加速了集群中副本节点和核心节点之间的同步，而且还减轻了代理池的负载，从而最大限度地减少了过载的风险。
+
+- [#12333](https://github.com/emqx/emqx/pull/12333) 为动作和连接器添加了一个 `tags` 字段。与 `description` 字段（即自由文本注释）类似，`tags` 可用于为动作和连接器添加注释，便于过滤和分组。
+
+- [#12072](https://github.com/emqx/emqx/pull/12072)  GreptimeDB 数据集成支持异步操作，以提供更好的性能。
+
+- [#12194](https://github.com/emqx/emqx/pull/12194) 提高了 Kafka 生产者数据集成的性能，降低了所连接的 Kafka 服务器 CPU 占用。
+
+- [#12247](https://github.com/emqx/emqx/pull/12247) 将 InfluxDB 的桥接分离出来，使其可以通过连接器和动作 APIs 使用。它们仍然与旧的桥接 API 兼容。
+
+- [#12299](https://github.com/emqx/emqx/pull/12299) 公开了更多 EMQX 指标信息以提高可观测性：
+
+  监控 API：
+
+  - 在 `/api/v5/monitor_current` 中添加了 `retained_msg_count` 字段。
+  - 在 `/api/v5/monitor_current` 中添加了 `license_quota` 字段。
+  - 在 `/api/v5/monitor_current/nodes/{node}` 中添加了 `retained_msg_count` 和 `node_uptime` 字段。
+  - 在 `/api/v5/monitor_current/nodes/{node}` 中添加了 `retained_msg_count`、`license_quota` 和 `node_uptime` 字段。
+
+  Prometheus API：
+
+  - 在 `/api/v5/prometheus/stats` 中添加了 `emqx_cert_expiry_at` 和 `emqx_license_expiry_at`，用于显示 TLS 监听器证书的过期时间和许可证的过期时间。
+  - 添加了 `/api/v5/prometheus/auth` 端点，提供所有认证器和授权器的执行次数和运行状态等指标。
+  - 添加了 `/api/v5/prometheus/data_integration` 端点，提供所有规则、动作和连接器的执行次数和状态等指标。
+
+  限制： 
+
+  Prometheus push gateway 仅支持 `/api/v5/prometheus/stats?mode=node` 中的内容。
+
+  有关更多 API 详情和指标类型信息，请参阅 swagger api 文档。
+
+- [#12196](https://github.com/emqx/emqx/pull/12196) 在路由清理过程中提高了网络效率。之前，当一个节点宕机时，所有其他存活节点之间必须交换针对该节点的每个路由的删除操作。在这次更改之后，所有存活节点之间只需交换一个 `match and delete`（匹配并删除）操作，这显著减少了所需的网络数据包数量并降低了集群间网络的负载。 这种优化对于地理分布式的 EMQX 部署尤为有用，在这些部署中网络延迟可能会非常高。
+
+- [#12354](https://github.com/emqx/emqx/pull/12354) 支持并发创建和更新数据集成，大大提高了例如导入备份文件时的操作速度。
+
+- [#12396](https://github.com/emqx/emqx/pull/12396) 增强了 `authentication/:id/import_users` 接口中的用户导入功能：
+
+  - 新增 `?type=plain` 参数，用于更方便地导入使用明文密码的用户，补充现有的仅支持密码哈希的功能。
+  - 增强了对 `content-type: application/json` 的支持，允许以 JSON 格式提交 HTTP Body。这扩展了当前仅支持 `multipart/form-data` 用于 CSV 文件的功能。
+
+
+- [#11902](https://github.com/emqx/emqx/pull/11902) EMQX 消息桥接时支持 Nari Syskeeper 2000 单向隔离网闸穿透。
+- [#12348](https://github.com/emqx/emqx/pull/12348) EMQX 支持与 Elasticsearch 的数据集成。
+
+### 修复
+
+- [#12232](https://github.com/emqx/emqx/pull/12232) 修复了节点被强制离开集群后集群提交日志表未被删除的问题。
+- [#12243](https://github.com/emqx/emqx/pull/12243) 修复了一系列细微的竞争条件，这些条件可能导致全局路由状态不一致。
+- [#12269](https://github.com/emqx/emqx/pull/12269) 改进了 `/clients` 接口的错误处理；现在在查询字符串验证失败时返回 400 状态和更详细的错误信息，而不是通用的 500。
+- [#12285](https://github.com/emqx/emqx/pull/12285) 更新了 CoAP 网关，以支持短参数名，从而节省了数据报大小。例如，`clientid=bar` 可以写成 `c=bar`。
+- [#12303](https://github.com/emqx/emqx/pull/12303) 修复了保留消息索引的问题。以前，具有通配符订阅的客户端可能会收到与其订阅主题不匹配的无关保留消息。
+- [#12305](https://github.com/emqx/emqx/pull/12305) 修正了将不完整的客户端/连接信息传递到 `emqx_cm` 的问题，这可能导致内部不一致，并影响内存使用和节点疏散等操作。
+- [#12306](https://github.com/emqx/emqx/pull/12306) 修复了通过 HTTP API 更新连接器密码参数后，连接器的连接测试无法正常工作的问题。
+- [#12359](https://github.com/emqx/emqx/pull/12359) 修复了配置有某些类型数据桥接的节点重启时可能出现的错误消息问题。此外，这些桥接在节点重启时有进入失败状态的风险，需要手动重启以恢复功能。
+- [#12404](https://github.com/emqx/emqx/pull/12404) 修复了一个问题，即在消息流量较大的情况下重启数据集成可能导致数据集成指标的收集停止。
+- [#12282](https://github.com/emqx/emqx/pull/12282) 改善了 MySQL 桥接创建失败时 HTTP API 的错误响应。同时解决了在 SQL 中包含未定义列的 MySQL Sink 无法删除的问题。
+- [#12291](https://github.com/emqx/emqx/pull/12291) 修复了 EMQX 在处理涉及敏感参数的配置更新时的不一致性，这以前导致集群配置文件中出现了错误的 `"******"` 字符串。
+- [#12301](https://github.com/emqx/emqx/pull/12301) 修复了 InfluxDB 中的行协议问题，其中数值字面量被存储为字符串类型。
+- [#12317](https://github.com/emqx/emqx/pull/12317) 从 MongoDB Action 架构中移除了尚未支持的 `resource_opts.batch_size` 字段。
+
 ## 5.4.1
 
 *发布日期: 2024-01-09*

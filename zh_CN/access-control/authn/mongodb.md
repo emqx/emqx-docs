@@ -82,9 +82,9 @@ MongoDB 认证器支持将认证数据存储为 MongoDB 文档。用户需要提
   - 选择 **bcrypt** 算法，需配置:
   - **Salt Rounds**：指定散列需要的计算次数（2^Salt Rounds），也称成本因子。默认值：**10**，可选值：**4～31**；数值越高，加密的安全性越高，因此建议采用较大的值，但相应的用户验证的耗时也会增加，您可根据业务需求进行配置。
   - 选择 **pkbdf2** 算法，需配置：
-  - **伪随机函数**：指定生成密钥使用的散列函数，如 sha256 等。
-  - **迭代次数**：指定散列次数，默认值：**4096**。<!--后续补充取值范围-->
-  - **密钥长度**（可选）：指定希望得到的密钥长度。如不指定，密钥长度将由**伪随机函数**确定。
+    - **伪随机函数**：指定生成密钥使用的散列函数，如 sha256 等。
+    - **迭代次数**：指定散列次数，默认值：**4096**。<!--后续补充取值范围-->
+    - **密钥长度**（可选）：指定希望得到的密钥长度。如不指定，密钥长度将由**伪随机函数**确定。
 - **is_superuser 字段名**：指定 MongoDB 数据中超级用户标志位字段。
 - **salt 字段名**：指定 MongoDB 数据中盐的字段。
 - **查询 Filter**：MongoDB filter，用于过滤数据，支持[认证占位符](../authn/authn.md#认证占位符)
@@ -93,11 +93,11 @@ MongoDB 认证器支持将认证数据存储为 MongoDB 文档。用户需要提
 
 ## 通过配置文件配置
 
-您也可以通过配置文件完成相关配置，关于 单节点、ReplicaSet 和 Sharding 的详细配置方式，可参考：
+您也可以通过配置文件完成相关配置。<!--关于 单节点、ReplicaSet 和 Sharding 的详细配置方式，可参考：-->
 
-- [authn-mongodb:standalone](../../configuration/configuration-manual.html#authn-mongodb:standalone)
-- [authn-mongodb:sharded-cluster](../../configuration/configuration-manual.html#authn-mongodb:sharded-cluster)
-- [authn-mongodb:replica-set](../../configuration/configuration-manual.html#authn-mongodb:replica-set)
+- <!-- [authn-mongodb:standalone](../../configuration/configuration-manual.html#authn-mongodb:standalone)-->
+- <!--[authn-mongodb:sharded-cluster](../../configuration/configuration-manual.html#authn-mongodb:sharded-cluster) -->
+- <!--[authn-mongodb:replica-set ](../../configuration/configuration-manual.html#authn-mongodb:replica-set)-->
 
 以下为各部署模式下的配置文件示例：
 

@@ -2,7 +2,7 @@
 
 作为 EMQX 为物联网数据基础设施构建提供的最重要能力之一，数据集成帮助用户将所有的业务数据无需额外编写代码即可快速完成处理与分发。数据集成能力由数据桥接和规则两部分组成，用户可以使用数据桥接或 MQTT 主题来接入数据，使用规则处理数据后，再通过数据桥接将数据发送到外部应用系统中。详情请查看[规则引擎](../data-integration/rules.md)。
 
-通过数据桥接，用户可以实时地将消息从 EMQX 发送到外部数据系统，或者从外部数据系统拉取数据并发送到 EMQX 的某个主题。而 EMQX Dashboard 提供了可视化创建数据桥接的能力，只需在页面中配置相关资源即可。详情请查看[数据桥接简介](../data-integration/data-bridges.md)。
+通过数据桥接，用户可以实时地将消息从 EMQX 发送到外部数据系统，或者从外部数据系统拉取数据并发送到 EMQX 的某个主题。而 EMQX Dashboard 提供了可视化创建数据桥接的能力，只需在页面中配置相关资源即可。详情请查看[数据集成](../data-integration/data-bridges.md)。
 
 在左侧的数据集成菜单下，用户可以进入到数据桥接页面，数据桥接页面中用户可以快速创建和管理创建好的数据桥接。
 
@@ -25,7 +25,7 @@
 
 ![image](./assets/bridge-webhook.png)
 
-更多关于 Webhook 类型的数据桥接的使用详情，请访问 [Webhook](../data-integration/data-bridge-webhook.md)
+更多关于 Webhook 类型的数据桥接的使用详情，请访问 [Webhook](../data-integration/data-bridge-webhook.md)。
 
 ## MQTT
 

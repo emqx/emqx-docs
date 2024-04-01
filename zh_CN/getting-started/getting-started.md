@@ -52,8 +52,6 @@ EMQX 目前提供开源和企业版两个版本，您可根据需要点击下方
 
 EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker.md)，通过 [EMQX Kubernetes Operator](https://www.emqx.com/zh/emqx-kubernetes-operator) 安装部署、或通过安装包的形式部署在物理服务器或虚拟机上，针对安装包部署形式，目前我们支持以下操作系统：
 
-{% emqxce %}
-
 - RedHat
 - CentOS
 - RockyLinux
@@ -62,22 +60,6 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 - Debian
 - macOS
 - Linux
-- Windows
-
-{% endemqxce %}
-
-{% emqxee %}
-
-- RedHat
-- CentOS
-- RockyLinux
-- AmazonLinux
-- Ubuntu
-- Debian
-- macOS
-- Linux
-
-{% endemqxee %}
 
 {% emqxce %}
 
@@ -137,11 +119,11 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 ::: tab 通过 zip/tar.gz 压缩包快速安装
 
+{% emqxce %}
+
 您也可以选择通过 zip/tar.gz 压缩包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。本节我们将以 [macOS](https://www.emqx.io/zh/downloads?os=macOS) (macOS11 amd64) 为例演示如何下载并安装 EMQX。
 
 由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，**不建议**在生产环境中使用。
-
-{% emqxce %}
 
 1. 在命令行工具中输入如下命令，下载 zip 文件。
 
@@ -159,16 +141,20 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 {% emqxee %}
 
+您也可以选择通过 zip/tar.gz 压缩包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。本节我们将以 [macOS](https://www.emqx.com/zh/try?product=enterprise) (macOS12 amd64) 为例演示如何下载并安装 EMQX。
+
+由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，**不建议**在生产环境中使用。
+
 1. 在命令行工具中输入如下命令，下载 zip 文件。
 
    ```bash
-      wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos11-amd64.zip
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos12-amd64.zip
    ```
 
 2. 通过以下命令安装 EMQX。
 
    ```bash
-   mkdir -p emqx && unzip emqx-enterprise-5.0.0-macos11-amd64.zip -d emqx
+   mkdir -p emqx && unzip emqx-enterprise-5.0.0-macos12-amd64.zip -d emqx
    ```
 
 {% endemqxee %}
@@ -200,7 +186,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 ::::
 
 ## 通过 MQTTX 快速验证
-[MQTTX](https://mqttx.app/zh) 是 EMQX 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS、Linux、Windows，并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。您可通过 MQTTX 一键式的连接方式和图形界面，您可轻松测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。
+[MQTTX](https://mqttx.app/zh) 是 EMQX 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS、Linux 并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。您可通过 MQTTX 一键式的连接方式和图形界面，您可轻松测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。
 
 本节讲介绍如何通过 [MQTTX Web 端](https://mqttx.app/zh) 快速验证 MQTT 连接，无需下载或安装任何程序。
 

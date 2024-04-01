@@ -8,6 +8,16 @@ You can combine the [retained message](./mqtt-retained-message.md) and [delayed 
 Authorization checks are performed before the topic is rewritten.
 :::
 
+:::tip
+
+Topic rewriting only applies to the actual topics when it comes to client subscriptions/unsubscriptions for shared subscription topics. In other words, it only affects the portion of shared subscription topics after removing the prefix `$share/<group-name>/` or `$queue`.
+
+For example, when a client subscribes/unsubscribes to a shared subscription topic filter like `$share/group/t/1` or `$queue/t/2`, it will only attempt to match and rewrite `t/1` or `t/2`, ignoring `$share/group/` and `$queue/`.
+
+For more information about shared subscriptions and `$queue`, please refer to [Shared Subscriptions](./mqtt-shared-subscription).
+
+:::
+
 ## Configure Topic Rewrite Rules
 
 EMQX topic rewrite rules need to be configured.

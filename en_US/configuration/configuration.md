@@ -1,6 +1,16 @@
 # Configuration Files
 
-Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual](./configuration-manual.html).
+{% emqxce %}
+
+Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
+
+{% endemqxce %}
+
+{% emqxee %}
+
+Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+
+{% endemqxee %}
 
 ## Configuration Files
 
@@ -18,7 +28,7 @@ Depends on your installation mode, `emqx.conf` is stored in:
 
 
 As the main configuration file, `emqx.conf` contains most of the commonly used configuration items.
-You can follow the example provided in the `emqx.conf.example` file (located within the same directory) to customize the settings.
+You can follow the examples provided in the `examples` directory (located within the same directory) to customize the settings.
 EMQX uses the default settings if a config item is not found in the config files.
 
 ### Configuration Rewrite File
@@ -45,7 +55,7 @@ It is possible to change data directory from config `node.data_dir` or environme
 
 By default, most global settings are defined in the `emqx.conf` file, if you perform certain operations on the cluster level from Dashboard, REST API or CLI, the changes will be stored in `cluster.hocon`. And this whole process is called hot reload.
 
-For override rules, see [Configure override rules](#Configure+override+rules).
+For override rules, see [Configure override rules](#configure-override-rules).
 
 ::: tip
 
@@ -161,11 +171,10 @@ Changes made through EMQX Dashboard UI, HTTP API, or CLI are persisted in `data/
 To avoid confusion, it is highly recommend NOT to have the same config keys in both `cluster.hocon` and `emqx.conf`.
 
 ::: tip
-1. If you're using an older version of EMQX, specifically version e5.0.2/v5.0.22 or earlier(i.e. the `cluster-override.conf` file still exists in EMQX's data directory),
-   then the order of priority for configuring your settings is as follows: `emqx.conf < ENV < HTTP API(cluster-override.conf)`.
+1. If you're using an older version of EMQX, specifically version e5.0.2/v5.0.22 or earlier(i.e. the `cluster-override.conf` file still exists in EMQX's data directory), then the order of priority for configuring your settings is as follows: `emqx.conf < ENV < HTTP API(cluster-override.conf)`.
 2. If you're upgrading from e5.0.2/v5.0.22 or earlier to the latest version of EMQX, 
    the configuration overriding order will remain unchanged, `cluster.hocon` will not be created to keep compatibility.  
-3. The `cluster-override.conf` mechanism is scheduled to be removed in version 5.1.   
+3. The `cluster-override.conf` mechanism is removed in version 5.1.   
 :::   
 
 ### Override

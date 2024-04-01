@@ -771,8 +771,6 @@ contains(json_decode('{"a": 1}'), [json_decode('{"a": 1}'), json_decode('{"b": 2
 
 ### first(Array: array) -> any
 
-返回数组 Array 中的第一个元素。Array 不可为空。示例：
-
 ```
 # Correct
 first(['John', 'David']) = 'John'
@@ -1152,7 +1150,7 @@ unzip(hexstr2bin('CB48CDC9C90700')) = 'hello'
 
 ### Sparkplug B
 
-EMQX 企业版还有专门用于解码和编码 Sparkplug B 消息的特殊用途函数（`sparkplug_decode` 和`sparkplug_encode`）。您可以在 [Sparkplug B](https://chat.openai.com/sparkplug.md) 中了解有关 Sparkplug 函数的更多信息。
+EMQX 企业版还有专门用于解码和编码 Sparkplug B 消息的特殊用途函数（`sparkplug_decode` 和`sparkplug_encode`）。您可以在 [Sparkplug B](./sparkplug.md) 中了解有关 Sparkplug 函数的更多信息。
 
 {% endemqxee %}
 

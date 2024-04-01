@@ -58,7 +58,7 @@ EMQX 实现了 MQTT 的共享订阅功能。共享订阅是一种订阅模式，
 
    ::: tip
 
-   [MQTTX Desktop](./publish-and-subscribe.md/#mqttx-desktop) 中介绍了更多详细的连接创建信息。
+   [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop) 中介绍了更多详细的连接创建信息。
 
    :::
 

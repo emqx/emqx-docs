@@ -44,7 +44,7 @@
 
    ::: tip
 
-   [MQTTX Desktop](./publish-and-subscribe.md/#mqttx-desktop) 中介绍了更多详细的连接创建信息。
+   [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop) 中介绍了更多详细的连接创建信息。
 
    :::
 
@@ -79,7 +79,7 @@
 1. 创建一个以 `emqx_c` 为客户端 ID 的新连接。
 
    ```bash
-   mqttx conn -c emqx_c
+   mqttx conn -i emqx_c
    ```
 
 2. 进入 EMQX Dashboard。在左侧导航菜单中点击**监控** -> **订阅管理**。显示客户端 `emqx_c` 订阅了主题 `a/1`。

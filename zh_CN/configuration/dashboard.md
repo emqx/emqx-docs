@@ -27,10 +27,26 @@ Where,
   - `certfile`: This sets the path to the file containing the SSL/TLS certificate for the listener.
   - `keyfile`: This sets the path to the file containing the private key corresponding to the SSL/TLS certificate.
 
+{% emqxce %}
+
 :::tip
 
-To add a listener via Dashboard, click **Management** -> **Listeners** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+To add a listener via Dashboard, click **Management** -> **Listeners **on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
 
-EMQX has offered more configuration items to better serve customized needs, For more configuration items, see [Configuration Manual](./configuration-manual.html).
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
 
 :::
+
+{% endemqxce %}
+
+{% emqxee %}
+
+:::tip
+
+To add a listener via Dashboard, click **Management** -> **Listeners **on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+
+:::
+
+{% endemqxee %}

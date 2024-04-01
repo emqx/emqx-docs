@@ -36,10 +36,22 @@ listeners.tcp.default {
 }
 ```
 
+{% emqxce %}
+
 :::tip
 
-To configure the license via Dashboard,  click **Configuration** -> **Limiter** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
-EMQX has offered more configuration items to better serve customized needs, you can continue to read [Configuration Manual](./configuration-manual.html).
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
 
 :::
+
+{% endemqxce %}
+
+{% emqxee %}
+
+:::tip
+
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+
+:::
+
+{% endemqxee %}

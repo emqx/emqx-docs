@@ -73,7 +73,7 @@ For a detailed HTTP API description, see [HTTP API - Gateway](../admin/api.md).
 
 If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your CoAP Gateway section](#customize-your-coap-gateway).
 
-The CoAP gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters, refer to: [Gateway Configuration - Listeners](../configuration/configuration-manual.html).
+The CoAP gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters, refer to: [Gateway Configuration - Listeners](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 ## Work with CoAP Clients
 
@@ -127,7 +127,7 @@ In addition to the default settings, EMQX provides a variety of configuration op
 
 By default, one UDP listener with the name of **default** is already configured on port `5683`, which supports up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings, click **Delete** to delete the listener, or click **Add Listener** to add a new listener.
 
-<img src="./assets/mqttsn-listerner.png" alt="MQTTSN listener" style="zoom:50%;" />
+![coap-advanced-conf](./assets/coap-advanced-conf.png)
 
 Click **Add Listener** to open **Add Listener** page, where you can continue with the following configuration fields:
 
@@ -172,6 +172,7 @@ The client ID, username, and password are provided by the client's [Create Conne
 - [Redis Authentication](../access-control/authn/redis.md)
 - [HTTP Server Authentication](../access-control/authn/http.md)
 - [JWT Authentication](../access-control/authn/jwt.md)
+- [LDAP Authentication](../access-control/authn/ldap.md)
 
 This part takes the Dashboard as an example to illustrate how to do the authentication configuration.
 
@@ -414,3 +415,18 @@ For example, unsubscribe to `coap/test` in `Connection Mode`:
 ```bash
 coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
+
+### Short Parameter Names
+
+To reduce message size, the CoAP gateway supports short parameter names.
+For example, the parameter `clientid=barx` can be written as `c=bar`. Therefore, the supported short
+parameter names are listed in the following table:
+
+| Parameter Name |  Short Name |
+| -------------- | ----------- |
+| `clientid`     | `c`         |
+| `username`     | `u`         |
+| `password`     | `p`         |
+| `token`        | `t`         |
+| `qos`          | `q`         |
+| `retain`       | `r`         |

@@ -128,9 +128,9 @@ This section demonstrates how to create a rule with an HTTP Server Sink added to
 
 8. Set **URL** to `http://localhost:5000`. Select `POST` from the **Method** dropdown box. For the rest, you can keep the default value.
 
-9. Click the **Add** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+9. Click the **Create** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
 
-10. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
+10. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. 
 
 Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new HTTP Server Sink. 
 

@@ -80,7 +80,7 @@ FROM
 
 ::: tip
 
-默仍情况下，客户端无法直接订阅客户端事件消息。 本节介绍了如何使用规则来订阅这些消息，您也可以通过订阅[系统主题](../observability/mqtt-system-topics.md)直接获取客户端事件消息。
+默认情况下，客户端无法直接订阅客户端事件消息。 本节介绍了如何使用规则来订阅这些消息，您也可以通过订阅[系统主题](../observability/mqtt-system-topics.md)直接获取客户端事件消息。
 
 :::
 
@@ -333,17 +333,17 @@ FROM
 
 当客户端连接断开时触发规则。
 
-| 字段             | 解释                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| reason           | 客户端连接断开原因：<br/>normal：客户端主动断开<br/>kicked：服务端踢出，通过 REST API<br/>keepalive\_timeout：keepalive 超时<br/>not\_authorized：认证失败，或者 acl\_nomatch = disconnect 时没有权限的 Pub/Sub 会主动断开客户端<br/>tcp\_closed：对端关闭了网络连接<br/>discarded: another client connected with the same ClientID and set `clean_start = true`<br/>takenover: another client connected with the same ClientID and set `clean_start = false`<br/>internal\_error：畸形报文或其他未知错误<br/> |
-| clientid         | 消息目的 Client ID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| username         | 消息目的用户名                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| peername         | 客户端的 IPAddress 和 Port                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| sockname         | emqx 监听的 IPAddress 和 Port                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| disconnected\_at | 客户端连接断开时间 (单位：毫秒)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| disconn\_props   | DISCONNECT Properties (仅适用于 MQTT 5.0)                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| timestamp        | 事件触发时间 (单位：毫秒)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| node             | 事件触发所在节点                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| 字段             | 解释                                                         |
+| :--------------- | :----------------------------------------------------------- |
+| reason           | 客户端连接断开原因：<br/>normal：客户端主动断开<br/>kicked：服务端踢出，通过 REST API<br/>keepalive\_timeout：keepalive 超时<br/>not\_authorized：认证失败，或者 acl\_nomatch = disconnect 时没有权限的 Pub/Sub 会主动断开客户端<br/>tcp\_closed：对端关闭了网络连接<br/>discarded: 另一个客户端使用相同的 ClientID 连接并设置 `clean_start = true`<br/>takenover: 另一个客户端使用相同的 ClientID 连接并设置 `clean_start = false`<br/>internal\_error：畸形报文或其他未知错误<br/> |
+| clientid         | 消息目的 Client ID                                           |
+| username         | 消息目的用户名                                               |
+| peername         | 客户端的 IPAddress 和 Port                                   |
+| sockname         | emqx 监听的 IPAddress 和 Port                                |
+| disconnected\_at | 客户端连接断开时间 (单位：毫秒)                              |
+| disconn\_props   | DISCONNECT Properties (仅适用于 MQTT 5.0)                    |
+| timestamp        | 事件触发时间 (单位：毫秒)                                    |
+| node             | 事件触发所在节点                                             |
 
 示例
 

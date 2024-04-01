@@ -14,7 +14,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 Amazon Kinesis 数据集成是 EMQX 的一个开箱即用功能，旨在帮助用户无缝集成 MQTT 数据流与 Amazon Kinesis，并利用其丰富的服务和能力进行物联网应用开发。
 
-![kinesis_architecture](./assets/kinesis_architecture.svg)
+![emqx-integration-aws](./assets/emqx-integration-aws.jpg)
 
 EMQX 通过规则引擎和 Sink 将 MQTT 数据转发到 Amazon Kinesis。完整的过程如下：
 

@@ -94,7 +94,7 @@ You can also enable the SSL/TLS connection by modifying the `listeners.ssl.defau
 
 ## Test Client Connection with One-way Authentication 
 
-You can use [MQTTX CLI](https://mqttx.app/) for testing. One-way authentication typically requires the client to provide a CA certificate, so the client can verify the server's identity:
+You can use [MQTTX CLI](https://mqttx.app/cli) for testing. One-way authentication typically requires the client to provide a CA certificate, so the client can verify the server's identity:
 
 ```bash
 mqttx sub -t 't/1' -h localhost -p 8883 \
@@ -142,7 +142,7 @@ listeners.ssl.default {
 
 ## Test Client Connection with Two-way Authentication
 
-You can use [MQTTX CLI](https://mqttx.app/) for testing. In addition to providing a CA certificate, two-way authentication also requires the client to provide its own certificate:
+You can use [MQTTX CLI](https://mqttx.app/cli) for testing. In addition to providing a CA certificate, two-way authentication also requires the client to provide its own certificate:
 
 ```bash
 mqttx sub -t 't/1' -h localhost -p 8883 \

@@ -115,7 +115,8 @@ Take [ocpp-go](https://github.com/lorenzodonini/ocpp-go) as a practical example.
        "currentTime": "2023-12-01T14:20:39+00:00",
        "interval": 300,
        "status": "Accepted"
-     }
+     },
+     "Action": "BootNotification"
    }
    ```
 
@@ -226,6 +227,7 @@ As the concept of username and password is already defined in the connection mes
 - [Redis Authentication](../access-control/authn/redis.md)
 - [HTTP Server Authentication](../access-control/authn/http.md)
 - [JWT Authentication](../access-control/authn/jwt.md)
+- [LDAP Authentication](../access-control/authn/ldap.md)
 
 OCPP gateway uses the information in the Basic Authentication of the Websocket handshake message to generate the authentication fields for the client:
 

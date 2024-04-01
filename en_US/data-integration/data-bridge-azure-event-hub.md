@@ -14,7 +14,7 @@ This page provides a comprehensive introduction to the data integration between 
 
 Azure Event Hubs data integration is an out-of-the-box feature of EMQX designed to help users seamlessly integrate MQTT data streams with Azure Event Hubs and leverage its rich services and capabilities for IoT application development.
 
-![event_hubs_architecture](./assets/event_hubs_architecture.svg)
+![emqx-integration-azure](./assets/emqx-integration-azure.jpg)
 
 EMQX forwards MQTT data to Azure Event Hubs through the rule engine and Sink. The complete process is as follows:
 
@@ -60,19 +60,19 @@ To use Azure Event Hub data integration, a Namespace and Event Hub must be set u
 
 ## Create a Connector
 
-Before you create the Azure Event Hubs Sink, you need to create a Connector that is used to connect Sink to the Azure Event Hubs.
+To create the Azure Event Hubs data integration, you need to create a Connector to connect the Azure Event Hubs Sink to the Azure Event Hubs.
 
 1. Go to the EMQX Dashboard and click on **Integrations** -> **Connectors**.
 2. Click **Create** in the top right corner of the page.
-3. On the **Create Connector** page, click to select **Azure Event Hubs**, then click **Next**.
-4. Enter the name and description of the Connector. The name should be a combination of uppercase and lowercase letters and numbers. In this demonstration, you can enter `my-azure-event-hubs`.
+3. On the **Create Connector** page, select **Azure Event Hubs** as the Connector type then click **Next**.
+4. Enter the name and description of the Connector. The name should be a combination of uppercase and lowercase letters and numbers, for example, `my-azure-event-hubs`.
 5. Configure the connection details.
    - **Bootstrap Host**: Enter the hostname of your namespace. The default port is `9093`. Set other fields as per your actual setup.
    - **Connection String**: Enter the connection string for your namespace, which can be found in the "Connection string - primary key" of the namespace's Shared access policies. For more details, see [Get an Event Hubs connection string](https://learn.microsoft.com/en-us/azure/event-hubs/event-hubs-get-connection-string).
    - **Enable TLS**: TLS is enabled by default when connecting to Azure Event Hub. For detailed TLS connection options, see [TLS for External Resource Access](../network/overview.md#enable-tls-encryption-for-accessing-external-resources).
 6. Click the **Create** button at the bottom to complete the Connector creation. 
 
-Now, Azure Event Hubs should be listed in the connector list (**Integrations** -> **Connectors**) with a **Connection Status** of **Connected**. Next, you will proceed to create a rule and a Sink to specify the data to be written.
+Now, Azure Event Hubs should be listed in the connector list (**Integrations** -> **Connectors**) with a **Connection Status** of **Connected**. Next, you need to create a rule and a Sink to specify the data to be streamed into the Azure Event Hubs.
 
 ## Create a Rule for Azure Event Hubs Sink 
 

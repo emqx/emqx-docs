@@ -71,10 +71,6 @@
       title_cn: Kubernetes
       lang: cn
       path: "https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html"
-    - title_en: Windows
-      title_cn: Windows
-      path: deploy/install-windows
-      edition: ce
     - title_en: Install from Source Code
       title_cn: 源码编译安装
       path: deploy/install-source
@@ -221,7 +217,7 @@
       children:
         - access-control/authn/x509
         - access-control/authn/jwt
-        - title_en: Password based
+        - title_en: Password-Based Authentication
           title_cn: 密码认证
           path: access-control/authn/pwoverview
           collapsed: true
@@ -291,9 +287,6 @@
     - title_en: Apache Kafka
       title_cn: Apache Kafka
       path: data-integration/data-bridge-kafka
-    - title_en: Confluent
-      title_cn: Confluent
-      path: data-integration/confluent-sink
     - title_en: Apache IoTDB
       title_cn: Apache IoTDB
       path: data-integration/data-bridge-iotdb
@@ -312,9 +305,15 @@
     - title_en: ClickHouse
       title_cn: ClickHouse
       path: data-integration/data-bridge-clickhouse
+    - title_en: Confluent
+      title_cn: Confluent
+      path: data-integration/confluent-sink
     - title_en: DynamoDB
       title_cn: DynamoDB
       path: data-integration/data-bridge-dynamo
+    - title_en: Elasticsearch
+      title_cn: Elasticsearch
+      path: data-integration/elasticsearch
     - title_en: GCP PubSub
       title_cn: GCP PubSub
       path: data-integration/data-bridge-gcp-pubsub
@@ -323,7 +322,7 @@
       path: data-integration/data-bridge-greptimedb
     - title_en: HStreamDB
       title_cn: HStreamDB
-      path: data-integration/data-bridge-hstreamdb   
+      path: data-integration/data-bridge-hstreamdb      
     - title_en: HTTP Server
       title_cn: HTTP Server
       path: data-integration/data-bridge-webhook
@@ -360,6 +359,9 @@
     - title_en: RocketMQ
       title_cn: RocketMQ
       path: data-integration/data-bridge-rocketmq
+    - title_en: SysKeeper
+      title_cn: SysKeeper
+      path: data-integration/syskeeper
     - title_en: TDengine
       title_cn: TDengine
       path: data-integration/data-bridge-tdengine
@@ -632,7 +634,7 @@
 
 - title_en: EMQX Essentials
   title_cn: EMQX 基础知识
-  path: mqtt/emqx-essentials
+  path: design/emqx-essentials
   collapsed: true
   children:
     - title_en: MQTT Guide
@@ -703,6 +705,7 @@
       title_cn: 不兼容变更
       collapsed: true
       children:
+        - changes/breaking-changes-5.5
         - changes/breaking-changes-5.4
         - changes/breaking-changes-5.1.0
         - changes/auth-4.4-to-5.1-compatibility

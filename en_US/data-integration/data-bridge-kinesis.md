@@ -16,7 +16,7 @@ This page provides a comprehensive introduction to the data integration between 
 
 Amazon Kinesis data integration is an out-of-the-box feature of EMQX designed to help users seamlessly integrate MQTT data streams with Amazon Kinesis and leverage its rich services and capabilities for IoT application development.
 
-![kinesis_architecture](./assets/kinesis_architecture.svg)
+![emqx-integration-aws](./assets/emqx-integration-aws.jpg)
 
 EMQX forwards MQTT data to Amazon Kinesis through the rule engine and Sink. The complete process is as follows:
 

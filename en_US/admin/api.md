@@ -186,6 +186,30 @@ EMQX follows the [HTTP Response Status Code](https://developer.mozilla.org/en-US
 | 409   | Conflict. The object already exists or the number limit is exceeded |
 | 500   | Internal Server Error. Check the reason in the Body and logs |
 
+## Pagination
+
+Some APIs support pagination. You can control the pagination by using the `page` (page number) and `limit` (page size) parameters. The maximum page size is `10000`. If the `limit` parameter is not specified, the default is `100`.
+
+For example:
+
+```bash
+GET /clients?page=1&limit=100
+```
+
+In the response result, the `meta` field will contain pagination information. For requests that use search conditions, EMQX cannot predict how many data entries there are, so the `meta.hasnext` field indicates whether there is more data on the next page:
+
+```json
+{
+  "data":[],
+  "meta":{
+    "count":0,
+    "limit":20,
+    "page":1,
+    "hasnext":false
+  }
+}
+```
+
 ## Error Codes
 
 Besides the HTTP response status codes, EMQX also defines a list of error codes to identify specific errors.
