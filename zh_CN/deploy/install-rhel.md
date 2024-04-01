@@ -168,9 +168,13 @@ EMQX 同时支持通过下载 tar.gz 安装包进行安装。本节以 CentOS 8 
 
 ## 通过 rpm 安装
 
-1. 前往 [EMQ 官网](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)，**版本**选择 `@EE_VERSION@`，**系统**选择 `CentOS`，点击**免费下载**按钮进入下载页面。
+1. 前往 [EMQX 官方下载页面](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)。
 
-2. 在安装与下载页面中，**安装方式**选择 `rpm`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
+2. 在**下载 EMQX Enterprise** 中，**版本**选择 `@EE_VERSION@`，**系统**选择 `CentOS`，点击**免费下载**按钮。
+
+3. 在安装与下载页面中，**安装方式**选择 `rpm`，选择合适的 **CPU 架构**，点击**立即下载**。
+
+   您也可以参照命令行指导步骤进行下载与安装。
 
 ### 启动 EMQX 
 
@@ -208,9 +212,13 @@ EMQX 同时支持通过下载 tar.gz 安装包进行安装。本节以 CentOS 8 
 ## 通过 tar.gz 安装
 
 
-1. 前往 [EMQ 官网](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)，**版本**选择 `@EE_VERSION@`，**系统**选择 `CentOS`，点击**免费下载**按钮进入下载页面。
+1. 前往 [EMQX 官方下载页面](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)。
 
-2. 在安装与下载页面中，**安装方式**选择 `tar.gz`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
+2. 在**下载 EMQX Enterprise** 中，**版本**选择 `@EE_VERSION@`，**系统**选择 `CentOS`，点击**免费下载**按钮。
+
+3. 在安装与下载页面中，**安装方式**选择 `tar.gz`，选择合适的 **CPU 架构**，点击**立即下载**。
+
+   您也可以参照命令行指导步骤进行下载与安装。
 
 ### 启动 EMQX
 

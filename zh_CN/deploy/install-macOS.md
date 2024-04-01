@@ -96,9 +96,13 @@ emqx ctl status
 
 ## 安装 EMQX
 
-1. 前往 [EMQ 官网](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=macOS=currentOS=macOS12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)，**版本**选择 `@EE_VERSION@`，**系统**选择 `macOS`，点击**免费下载**按钮进入下载页面。
+1. 前往 [EMQX 官方下载页面](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=macOS=currentOS=macOS12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)。
 
-2. 在安装与下载页面中，**安装方式**选择 `zip`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
+2. 在**下载 EMQX Enterprise** 中，**版本**选择 `@EE_VERSION@`，**系统**选择 `macOS`，点击**免费下载**按钮。
+
+3. 在安装与下载页面中，**安装方式**选择 `zip`，选择合适的 **CPU 架构**，点击**立即下载**。
+
+   您也可以参照命令行指导步骤进行下载与安装。
 
 ## 启动和停止 EMQX
 
