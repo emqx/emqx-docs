@@ -771,6 +771,8 @@ contains(json_decode('{"a": 1}'), [json_decode('{"a": 1}'), json_decode('{"b": 2
 
 ### first(Array: array) -> any
 
+返回数组 Array 中的第一个元素。Array 不可为空。示例：
+
 ```
 # Correct
 first(['John', 'David']) = 'John'
