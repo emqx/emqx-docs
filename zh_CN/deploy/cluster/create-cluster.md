@@ -62,10 +62,10 @@ cluster {
 node.name = emqx@s1.emqx.io
 ```
 
-您还可以使用环境变量覆盖节点名称：
+您还可以使用环境变量覆盖节点名称。例如 `docker run` 命令的 `-e` 选项，或者 systemd 的 `emqx.service` 文件中加入如下环境变量：
 
 ```bash
-env EMQX_NODE__NAME='emqx@s1.emqx.io' ./bin/emqx start
+EMQX_NODE__NAME='emqx@s1.emqx.io'
 ```
 
 为其他节点重复上述步骤以加入集群。

@@ -63,11 +63,10 @@ node.name = emqx@s1.emqx.io
 
 ```
 
-You can also override the node name with an environment variable:
+You can also override the node name with an environment variable. For example in `docker run` command's `-e` option, or systemd's `emqx.service` file, define the environment variable as below:
 
 ```bash
-env EMQX_NODE__NAME='emqx@s1.emqx.io' ./bin/emqx start
-
+EMQX_NODE__NAME='emqx@s1.emqx.io'
 ```
 
 Repeat the above step for the other node to join the cluster.
