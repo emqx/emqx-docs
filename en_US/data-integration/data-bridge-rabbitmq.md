@@ -14,7 +14,7 @@ This page provides a detailed overview of the data integration between EMQX and 
 
 The RabbitMQ data integration is an out-of-the-box feature in EMQX designed to bridge the gap between MQTT-based IoT data and RabbitMQ's powerful message queue processing capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to RabbitMQ for storage and management, eliminating the need for complex coding.
 
-Take the RabbitMQ Sink for an example, the diagram below illustrates a typical architecture of data integration between EMQX and RabbitMQ: <!-- Update the illustration to show bi-directional data flow?-->
+Take the RabbitMQ Sink for an example, the diagram below illustrates a typical architecture of data integration between EMQX and RabbitMQ: 
 
 ![EMQX Integration RabbitMQ](./assets/emqx-integration-rabbitmq.png)
 
