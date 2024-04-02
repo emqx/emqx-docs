@@ -74,8 +74,8 @@ SQL 处理结果将以 JSON 形式呈现在**输出结果**部分。SQL 处理�
 
 控制台输出动作用于查看规则的输出结果，结果将以日志的形式打印到控制台或日志中。
 
-- 如果 EMQX 是通过 `emqx console` 启动的，则结果将打印到 `emqx console` 被调用的终端。
-- 如果 EMQX 是通过 `emqx start` 启动的，则结果将打印到 EMQX 的 `log` 目录下的日志文件（`erlang log.*`）。
+- 如果 EMQX 是通过 `console` 或 `foreground` （docker 的默认模式）模式启动的，则结果将打印到终端。
+- 否则则结果将打印到 EMQX 的 `log` 目录下的日志文件（`erlang.log.*`）。
 
 输出格式如下所示：
 

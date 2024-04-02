@@ -77,8 +77,8 @@ In addition to the republishing action, you can choose to print the output of th
 
 The console output action is used to print the result message of a rule to the console or log file.
 
-* If EMQX is started with `emqx console`, the results will be printed to the terminal where `emqx console` was invoked.
-* If EMQX is started with `emqx start`, the results will be printed to a log file (`erlang log.*`) under the `log` dir of EMQX.
+* If EMQX is started in `console` or `foreground` mode (`foreground` is the default mode when running in docker), the results will be printed to the console.
+* Otherwise the results will be printed to a log file (`erlang.log.*`) under the `log` dir.
 
 The output will be in the format below
 
