@@ -1680,7 +1680,7 @@ Note: Please set the parameter with caution as long idle time will lead to resou
   - `round_robin_per_group`: select the subscribers in round-robin fashion within each shared subscriber group
   - `local`: select random local subscriber otherwise select random cluster-wide
   - `sticky`: always use the last selected subscriber to dispatch, until the subscriber disconnects.
-  - `hash_clientid`: select the subscribers by hashing the `clientIds`
+  - `hash_clientid`: select the subscribers by hashing the `clientIds` of senders.
   - `hash_topic`: select the subscribers by hashing the source topic
 
 
