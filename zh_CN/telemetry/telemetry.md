@@ -21,7 +21,7 @@ telemetry {
 或者启动时通过环境变量在本次启动中禁用遥测：
 
 ```bash
-export EMQX_TELEMETRY__ENABLE=false && ./bin/emqx start
+export EMQX_TELEMETRY__ENABLE=false && ./bin/emqx foreground
 ```
 
 ### 运行中禁用

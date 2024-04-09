@@ -92,29 +92,11 @@ This section takes CentOS 8 as an example to illustrate how to download the late
 
 ### Start EMQX
 
-EMQX offers 3 different options to start EMQX:
+Start EMQX as a systemd service.
 
-- To start EMQX directly, run:
-
-  ```bash
-  $ emqx start
-  EMQX @CE_VERSION@ is started successfully!
-  
-  $ emqx ctl status
-  Node 'emqx@127.0.0.1' @CE_VERSION@ is started
-  ```
-
-- To start EMQX with systemctl, run:
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- To start EMQX as a service, run:
-
-  ```bash
-  sudo service emqx start
-  ```
+```bash
+sudo systemctl start emqx
+```
 
 ### Uninstall EMQX
 
@@ -171,7 +153,7 @@ This section takes CentOS 8 as an example to illustrate how to download the late
 After the installation, run the command below to start EMQX.
 
 ```bash
-./emqx/bin/emqx start
+./emqx/bin/emqx foreground
 ```
 
 {% endemqxce %}
@@ -186,30 +168,11 @@ After the installation, run the command below to start EMQX.
 
 ### Start EMQX
 
-EMQX offers 3 different options to start EMQX:
+Start EMQX as a systemd service.
 
-- To start EMQX directly, run:
-
-  ```bash
-  $ emqx start
-  EMQX @EE_VERSION@ is started successfully!
-  
-  $ emqx ctl status
-  Node 'emqx@127.0.0.1' @EE_VERSION@ is started
-  ```
-
-- To start EMQX with systemctl, run:
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- To start EMQX as a service, run:
-
-  ```bash
-  sudo service emqx start
-  ```
-
+```bash
+sudo systemctl start emqx
+```
 ### Uninstall EMQX
 
 To uninstall EMQX, run:
@@ -229,7 +192,7 @@ sudo yum remove emqx
 After the installation, run the command below to start EMQX.
 
 ```bash
-./emqx/bin/emqx start
+./emqx/bin/emqx foreground
 ```
 
 {% endemqxee %}

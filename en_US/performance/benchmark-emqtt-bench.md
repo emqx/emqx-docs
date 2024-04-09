@@ -190,13 +190,7 @@ Both the client's press and the server's machine need to perform system paramete
 
 ### Connection Test
 
-After performing system tuning, start the server:
-
-```bash
-./bin/emqx start
-```
-
-Then start 50 thousand connections on each network card on `bench1`, which is a total of 50w connections:
+After performing system tuning, start EMQX, then start 50 thousand connections on each network card on `bench1`, which is a total of 50w connections:
 
 ```bash
 
@@ -226,13 +220,7 @@ listener on mqtt:tcp:0.0.0.0:1883
 
 ### Throughput Test
 
-Similarly, first start the server:
-
-```bash
-./bin/emqx start
-```
-
-Start 500 subscription clients in `bench1`:
+Similarly, first start EMQX, then start 500 subscription clients in `bench1`:
 
 ```bash
 ./emqtt_bench sub -t t -h 192.168.0.99 -c 500

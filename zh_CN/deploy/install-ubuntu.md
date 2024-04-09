@@ -76,37 +76,19 @@ EMQX 支持通过 deb 包或 tar.gz 包进行安装。下文将以 Ubuntu 22.04 
 
 #### 启动 EMQX
 
-您可通过如下三种方式启动 EMQX。
+启动为一个 systemd 服务：
 
-- 直接启动：
-
-  ```bash
-  $ emqx start
-  EMQX @CE_VERSION@ is started successfully!
-  
-  $ emqx ctl status
-  Node 'emqx@127.0.0.1' @CE_VERSION@ is started
-  ```
-
-- systemctl 启动：
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- service 启动：
-
-  ```bash
-  sudo service emqx start
-  ```
+```bash
+sudo systemctl start emqx
+```
 
 #### 卸载 EMQX
 
 服务完成后，可通过如下命令卸载 EMQX：
 
-  ```shell
+```shell
 sudo apt remove --purge emqx
-  ```
+```
 
 ### 通过 tar.gz 安装
 
@@ -148,7 +130,7 @@ sudo apt remove --purge emqx
 安装完成后，可通过如下命令启动 EMQX。
 
 ```bash
-./emqx/bin/emqx start
+./emqx/bin/emqx foreground
 ```
 
 {% endemqxce %}
@@ -165,37 +147,19 @@ sudo apt remove --purge emqx
 
 ### 启动 EMQX
 
-您可通过如下三种方式启动 EMQX。
+启动为一个 systemd 服务：
 
-- 直接启动：
-
-  ```bash
-  $ emqx start
-  EMQX @EE_VERSION@ is started successfully!
-
-  $ emqx ctl status
-  Node 'emqx@127.0.0.1' @EE_VERSION@ is started
-  ```
-
-- systemctl 启动：
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- service 启动：
-
-  ```bash
-  sudo service emqx start
-  ```
+```bash
+sudo systemctl start emqx
+```
 
 ### 卸载 EMQX
 
 服务完成后，可通过如下命令卸载 EMQX：
 
-  ```shell
-  sudo apt remove --purge emqx
-  ```
+```shell
+sudo apt remove --purge emqx
+```
 
 ## 通过 tar.gz 安装
 
@@ -206,7 +170,7 @@ sudo apt remove --purge emqx
 安装完成后，可通过如下命令启动 EMQX。
 
 ```bash
-./emqx/bin/emqx start
+./emqx/bin/emqx foreground
 ```
 
 {% endemqxee %}

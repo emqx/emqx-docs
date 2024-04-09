@@ -83,27 +83,11 @@ EMQX 同时支持通过下载 rpm 安装包进行安装。本节以 CentOS 8 系
 
 ### 启动 EMQX
 
-您可通过如下 3 种方式启动 EMQX。
+启动为一个 systemd 服务：
 
-- 直接启动：
-
-  ```bash
-  $ emqx start
-  EMQX @CE_VERSION@ is started successfully!
-  
-  $ emqx ctl status
-  Node 'emqx@127.0.0.1' @CE_VERSION@ is started
-- systemctl 启动：
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- service 启动：
-
-  ```bash
-  sudo service emqx start
-  ```
+```bash
+sudo systemctl start emqx
+```
 
 ### 卸载 EMQX
 
@@ -157,7 +141,7 @@ EMQX 同时支持通过下载 tar.gz 安装包进行安装。本节以 CentOS 8 
 安装完成后，可通过如下命令启动 EMQX。
 
 ```bash
-./emqx/bin/emqx start
+./emqx/bin/emqx foreground
 ```
 
 {% endemqxce %}
@@ -172,38 +156,21 @@ EMQX 同时支持通过下载 tar.gz 安装包进行安装。本节以 CentOS 8 
 
 2. 在安装与下载页面中，**安装方式**选择 `rpm`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
 
-### 启动 EMQX 
+### 启动 EMQX
 
-您可通过如下 3 种方式启动 EMQX。 
-- 直接启动：
+启动为一个 systemd 服务：
 
-  ```bash
-  $ emqx start
-  EMQX @EE_VERSION@ is started successfully!
-
-  $ emqx ctl status
-  Node 'emqx@127.0.0.1' @EE_VERSION@ is started
-  ```
-
-- systemctl 启动：
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- service 启动：
-
-  ```bash
-  sudo service emqx start
-  ```
+```bash
+sudo systemctl start emqx
+```
 
 ### 卸载 EMQX
 
 服务完成后，可通过如下命令卸载 EMQX：
 
-  ```shell
-  sudo yum remove emqx
-  ```
+```shell
+sudo yum remove emqx
+```
 
 ## 通过 tar.gz 安装
 
@@ -217,7 +184,7 @@ EMQX 同时支持通过下载 tar.gz 安装包进行安装。本节以 CentOS 8 
 安装完成后，可通过如下命令启动 EMQX。
 
 ```
-./emqx/bin/emqx start
+./emqx/bin/emqx foreground
 ```
 
 {% endemqxee %}
