@@ -178,6 +178,12 @@ Note: Considering all the runtime dependencies, it is recommended to use zip/tar
 3. To run EMQX, enter:
 
    ```bash
+   ./emqx/bin/emqx foreground
+   ```
+   This will start EMQX in an interactive shell. Closing the shell will stop EMQX.
+   Alternatively (but not recommended), you can also start EMQX in the background with below command:
+
+   ```bash
    ./emqx/bin/emqx start
    ```
 

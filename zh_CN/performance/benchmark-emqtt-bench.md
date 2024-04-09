@@ -189,11 +189,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### 连接量测试
 
-在执行完系统调优后，首先启动服务端：
-
-```bash
-./bin/emqx start
-```
+在执行完系统调优后，首先启动 EMQX。
 
 然后在 `bench1` 上的每张网卡上启动 5w 的连接数，共计 50w 的连接：
 
@@ -225,13 +221,7 @@ listener on mqtt:tcp:0.0.0.0:1883
 
 ### 吞吐测试
 
-同样的，首先启动服务端：
-
-```bash
-./bin/emqx start
-```
-
-在 `bench1` 启动 500 个订阅客户端：
+同样的，首先启动服 EMQX，然后在 `bench1` 启动 500 个订阅客户端：
 
 ```bash
 ./emqtt_bench sub -t t -h 192.168.0.99 -c 500

@@ -161,6 +161,11 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 3. 运行以下命令启动 EMQX。
 
+   前台启动
+   ```bash
+   ./emqx/bin/emqx foreground
+   ```
+   或后台（不推荐）启动
    ```bash
    ./emqx/bin/emqx start
    ```
