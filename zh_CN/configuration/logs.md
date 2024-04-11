@@ -1,30 +1,29 @@
-# Logs
+# 日志配置
 
-This page introduces how to configure logging behaviour for EMQX. You can configure EMQX logs with Dashboard or configuration files. To configure with EMQX Dashboard, you can click **Management** -> **Logging** on the left navigation menu to configure. For more detailed descriptions of logs and Dashboard configurations, see [Logs and observability - Logs](../observability/log.md).
+本页主要介绍如何通过配置文件配置 EMQX 的日志记录行为。您也可以通过 Dashboard 来配置 EMQX 日志。如果通过 Dashboard 配置，您可以点击左侧导航菜单的 **管理** -> **日志** 进行配置。有关日志和 Dashboard 配置的更详细描述，请参见[日志与可观测性 - 日志](../observability/log.md)。
 
 ::: tip
 
-This page also introduces the Dashboard UI fields corresponding to the configuration items.
-If you configured these items with the Dashboard, the new settings can only temporarily override the same configuration items in `emqx.conf` until the next restart.
+本页面还介绍了与配置项对应的 Dashboard UI字段。 如果您通过 Dashboard 配置了这些项，新设置将只能临时覆盖 `emqx.conf` 中相同的配置项，直到下次重启。
 
 :::
 
-EMQX provides support for two primary log handlers: `file` and `console`, with an additional `audit` handler specifically designed to always direct logs to files.
+EMQX 支持两种主要的日志输出方式：控制台输出日志和文件输出日志。另外还一个[审计日志](../dashboard/audit-log.md)，始终将日志输出定向到文件。
 
-The system's default log handling behavior can be configured via the environment variable `EMQX_DEFAULT_LOG_HANDLER`, which accepts the following settings:
+系统的默认日志处理行为可以通过环境变量 `EMQX_DEFAULT_LOG_HANDLER` 配置，它接受以下设置：
 
-- `file`: Directs log output to files.
-- `console`: Channels log output to the console.
+- `file`：将日志输出定向到文件。
+- `console`：将日志输出定向到控制台。
 
-Environment variable `EMQX_DEFAULT_LOG_HANDLER` defaults `console`, but explicitly set to `file` when EMQX is initiated via systemd's `emqx.service` file.
+环境变量 `EMQX_DEFAULT_LOG_HANDLER` 的默认值为 `console`，但当通过 systemd 的 `emqx.service` 文件启动EMQX 时，明确设置为 `file`。
 
-## Output Logs as a File
+## 文件输出日志
 
-EMQX's log output directory is determined by the environment variable `EMQX_LOG_DIR` which is set to `/var/log/emqx` if installed via RPM or DEB packages. Otherwise, the log directory is `log` in the EMQX installation directory.
+EMQX 的日志输出目录由环境变量 `EMQX_LOG_DIR` 确定，如果通过 RPM 或 DEB 包安装，则设置为 `/var/log/emqx`。否则，日志目录为 EMQX 安装目录下的 `log`。
 
-For EMQX docker container, the installation directory is `/opt/emqx`, hence the log directory is `/opt/emqx/log`.
+对于 EMQX docker 容器，安装目录为 `/opt/emqx`，因此日志目录为 `/opt/emqx/log`。
 
-To output logs as a file, you may either configure the log handler in the Dashboard or modify the `emqx.conf` file directly as below:
+要将日志输出为文件，您可以在 Dashboard 上配置日志处理器或直接修改 `emqx.conf` 文件，如下所示：
 
 ```bash
 log {
@@ -38,20 +37,19 @@ log {
   }
 ```
 
- Where,
+其中，
 
-| Configuration Item | Dashboard UI         | Description                                                  | Default Value | Optional Values                                              |
-| ------------------ | -------------------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
-| `level`            | Log Level            | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
-| `path`             | Log File Name        | This sets the path and name of the log file. <br />By default, EMQX writes the log file to the `emqx.log` file in the `log` directory of the EMQX installation directory. | `emqx.log`    | --                                                           |
-| `rotation_count`   | Max Log Files Number | This sets the max number of log files that can be saved.     | `10`          | `1` ~ `2,048`                                                |
-| `rotation_size`    | Rotation Size        | This sets the maximum size of a single log file before it is rotated. The old log file will be renamed and moved to an archive directory once it reached the specified value unless it is set to `infinity`, indicating the log file will not be rotated. | `50MB`        | `1` ~ `infinity`                                             |
-| `formatter`        | Log Formatter        | This sets the log format.                                    | `text`        | `text` for free text<br /> `json` for structured logging     |
+| 配置项           | Dashboard UI     | 描述                                                         | 默认值     | 可选值                                                       |
+| ---------------- | ---------------- | ------------------------------------------------------------ | ---------- | ------------------------------------------------------------ |
+| `level`          | 日志级别         | 设置当前日志处理进程的日志级别，即您想要记录的最低日志级别。 | `warning`  | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
+| `path`           | 日志文件名称     | 设置日志文件的路径和名称。<br />默认情况下，EMQX 将日志文件写入EMQX 安装目录下的 `log` 目录中的 `emqx.log` 文件。 | `emqx.log` | --                                                           |
+| `rotation_count` | 最大日志文件数   | 设置可以保存的最大日志文件数量。                             | `10`       | `1` - `2,048`                                                |
+| `rotation_size`  | 日志文件轮换大小 | 在轮换前单个日志文件的最大大小。达到指定值时，旧日志文件将被重命名并移动到归档目录，除非设置为 `infinity`，表示日志文件不会被轮换。 | `50MB`     | `1` - `infinity`                                             |
+| `formatter`      | 日志格式类型     | 设置日志格式。                                               | `text`     | `text` 为自由文本。<br /> `json` 为结构化日志。              |
 
-## Output logs with Console
+## 控制台输出日志
 
-When EMQX is started in a docker container, the default log handler is `console`.
-You can configure the log level and log format with the following configuration items.
+当 EMQX 在 docker 容器中启动时，默认的日志处理器是 `console`。 您可以通过以下配置项配置日志级别和日志格式。
 
 ```bash
 log {
@@ -63,38 +61,22 @@ log {
 }
 ```
 
-Where, 
+其中，
 
-| Configuration Item      | Dashboard UI       | Description                                                  | Default Value | Optional Values                                              |
-| ----------------------- | ------------------ | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
-| `file_handlers.default` | Enable Log Handler | This sets whether to enable outputting logs with the console. | `enabled`     | `enable`, `disable`                                          |
-| `level`                 | Log Level          | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
-| `formatter`             | Log Formatter      | This sets the log format.                                    | `text`        | `text` for free text<br /> `json` for structured logging     |
-
-{% emqxce %}
-
-::: tip
+| 配置项                  | Dashboard UI     | 描述                                                         | 默认值    | 可选值                                                       |
+| ----------------------- | ---------------- | ------------------------------------------------------------ | --------- | ------------------------------------------------------------ |
+| `file_handlers.default` | 启用日志处理进程 | 设置是否启用通过控制台输出日志。                             | `enabled` | `enable`, `disable`                                          |
+| `level`                 | 日志级别         | 设置当前日志处理进程的日志级别，即您想要记录的最低日志级别。 | `warning` | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
+| `formatter`             | 日志格式类型     | 设置日志格式。                                               | `text`    | `text` 为自由文本。<br /> `json` 为结构化日志。              |
 
 {% emqxce %}
 
-:::tip
-
-To configure logs via Dashboard,  click **Management** -> **Logging** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
-
-:::
+EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参见[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
 
 {% endemqxce %}
 
 {% emqxee %}
 
-:::tip
-
-To configure logs via Dashboard,  click **Management** -> **Logging** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
-
-:::
+EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参见[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 {% endemqxee %}

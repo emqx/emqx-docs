@@ -1,6 +1,6 @@
-# Logs
+# Logs Configuration
 
-This page introduces how to configure logging behaviour for EMQX. You can configure EMQX logs with Dashboard or configuration files. To configure with EMQX Dashboard, you can click **Management** -> **Logging** on the left navigation menu to configure. For more detailed descriptions of logs and Dashboard configurations, see [Logs and observability - Logs](../observability/log.md).
+This page introduces how to configure logging behavior for EMQX via the configuration file. You can also configure EMQX logs with Dashboard. To configure with EMQX Dashboard, you can click **Management** -> **Logging** on the left navigation menu to configure. For more detailed descriptions of logs and Dashboard configurations, see [Logs and Observability - Logs](../observability/log.md).
 
 ::: tip
 
@@ -9,9 +9,9 @@ If you configured these items with the Dashboard, the new settings can only temp
 
 :::
 
-EMQX provides support for two primary log handlers: `file` and `console`, with an additional `audit` handler specifically designed to always direct logs to files.
+EMQX provides support for two primary log handlers: Console Log and File Log, with an additional [Audit Log](../dashboard/audit-log.md) handler specifically designed to always direct logs to files.
 
-The system's default log handling behavior can be configured via the environment variable `EMQX_DEFAULT_LOG_HANDLER`, which accepts the following settings:
+The system's default log-handling behavior can be configured via the environment variable `EMQX_DEFAULT_LOG_HANDLER`, which accepts the following settings:
 
 - `file`: Directs log output to files.
 - `console`: Channels log output to the console.
@@ -44,9 +44,9 @@ log {
 | ------------------ | -------------------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
 | `level`            | Log Level            | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
 | `path`             | Log File Name        | This sets the path and name of the log file. <br />By default, EMQX writes the log file to the `emqx.log` file in the `log` directory of the EMQX installation directory. | `emqx.log`    | --                                                           |
-| `rotation_count`   | Max Log Files Number | This sets the max number of log files that can be saved.     | `10`          | `1` ~ `2,048`                                                |
-| `rotation_size`    | Rotation Size        | This sets the maximum size of a single log file before it is rotated. The old log file will be renamed and moved to an archive directory once it reached the specified value unless it is set to `infinity`, indicating the log file will not be rotated. | `50MB`        | `1` ~ `infinity`                                             |
-| `formatter`        | Log Formatter        | This sets the log format.                                    | `text`        | `text` for free text<br /> `json` for structured logging     |
+| `rotation_count`   | Max Log Files Number | This sets the max number of log files that can be saved.     | `10`          | `1` - `2,048`                                                |
+| `rotation_size`    | Rotation Size        | This sets the maximum size of a single log file before it is rotated. The old log file will be renamed and moved to an archive directory once it reached the specified value unless it is set to `infinity`, indicating the log file will not be rotated. | `50MB`        | `1` - `infinity`                                             |
+| `formatter`        | Log Formatter        | This sets the log format.                                    | `text`        | `text` is for free text.<br /> `json` is for structured logging. |
 
 ## Output logs with Console
 
@@ -73,28 +73,12 @@ Where,
 
 {% emqxce %}
 
-::: tip
-
-{% emqxce %}
-
-:::tip
-
-To configure logs via Dashboard,  click **Management** -> **Logging** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
-
-:::
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
 
 {% endemqxce %}
 
 {% emqxee %}
 
-:::tip
-
-To configure logs via Dashboard,  click **Management** -> **Logging** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
 EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
-
-:::
 
 {% endemqxee %}
