@@ -21,7 +21,7 @@ node {
 其中，
 
 - `name ` 指的是所需的节点名称，例如，`emqx@localhost`。
-- `role` 指的是 EMQX 节点在 EMQX 集群中执行的功能。有两种类型的角色：核心节点和复制节点。关于核心节点和复制节点的详细解释，请参见 [EMQX 集群 - 核心节点和复制节点](../design/clustering.md)。
+- `role` 指的是 EMQX 节点在 EMQX 集群中执行的功能。有两种类型的角色：核心节点和复制节点。关于核心节点和复制节点的详细解释，请参见 [EMQX 集群 - 核心节点和复制节点](../deploy/cluster/mria-introduction.md)。
   - 默认值：`core`
   - 可选值：`core` 或 `replicant`
 
