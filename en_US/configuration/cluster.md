@@ -21,7 +21,7 @@ node {
 Where, 
 
 - `name` refers to the desired node name, for example, `emqx@localhost`.
-- `role` refers to the function that an EMQX node performs within an EMQX cluster. There are 2 types of roles: core nodes and replicant codes. For a detailed explanation of core nodes and replicant nodes, see [EMQX Clustering - Core and Replicant Nodes](../design/clustering.md). 
+- `role` refers to the function that an EMQX node performs within an EMQX cluster. There are 2 types of roles: core nodes and replicant codes. For a detailed explanation of core nodes and replicant nodes, see [EMQX Clustering - Core and Replicant Nodes](../deploy/cluster/mria-introduction.md). 
   - Default value: `core` 
   - Optional value: `core` or `replicant`
 
