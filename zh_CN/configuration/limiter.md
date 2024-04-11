@@ -1,46 +1,31 @@
-# Rate Limiter
+# 速率限制器配置
 
-Limiter is a new feature introduced in EMQX 5.0, it is a mechanism to restrict the number of messages that a client or topic can publish or subscribe to in a specified time period. For more information on the Limiter and how it works, see [Rate limit](../rate-limit/rate-limit.md). 
+速率限制器是在 EMQX 5.0 中引入的一项新功能，它是一种机制，用于限制客户端或主题在指定时间段内可以发布或订阅的消息数量。有关限制器及其工作原理的更多信息，请参见[速率限制](../rate-limit/rate-limit.md)。
 
-For the moment, you can restrict the message rates from the following perspectives:
+目前，EMQX 使用以下几种类型的限制器来限制速率：
 
-| **Type**     | Dashboard UI | **Description**                           | **Recovery Behavior**           |
-| ------------ | ------------ | ----------------------------------------- | ------------------------------- |
-| `bytes_in`   | Bytes In     | Incoming message size in bytes per second | Pause receiving client messages |
-| `message_in` | Message In   | Incoming messages per second              | Pause receiving client messages |
-| `connection` | Connection   | Connections per second                    | Pause receiving new connections |
+| **类型**        | Dashboard UI | **描述**                                     | **过载后行为**     |
+| --------------- | ------------ | -------------------------------------------- | ------------------ |
+| `bytes_rate`    | 数据发布速率 | 每个客户端每秒接收的消息大小（以字节为单位） | 暂停接收客户端消息 |
+| `messages_rate` | 消息发布速率 | 每个客户端每秒接收的消息数量                 | 暂停接收客户端消息 |
+| `max_conn_rate` | 最大连接速率 | 每个监听器每秒的连接数                       | 暂停接收新连接     |
 
-The limiter can be set both on EMQX or the client side, as shown below: 
-
-```bash
-limiter {
-  bytes_in.rate  =  infinity
-  message_in.rate  =  infinity
-  connection.rate  =  infinity
-  
-  client.bytes_in.rate = infinity
-  client.message_in.rate = infinity
-  client.connection.rate = infinity
-}
-```
-
-Limiter can work on the node level or the listener level, for example, to set a Limiter for the default TCP listener, you can work with the code below:
+例如，要为默认的 TCP 监听器设置一个限制器，您可以使用以下配置：
 
 ```bash
 listeners.tcp.default {
   bind = "0.0.0.0:1883"
-  max_connections = 1024000
-  limiter.client.message_in {
-  rate = "100/s"
-  }
+  max_conn_rate = "1000/s"
+  messages_rate = "1000/s"
+  bytes_rate = "1MB/s"
 }
 ```
 
 {% emqxce %}
 
-:::tip
+::: tip
 
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
+EMQX 提供了更多配置项以更好地满足定制化需求。详细信息参考[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
 
 :::
 
@@ -48,10 +33,8 @@ EMQX has offered more configuration items to serve customized needs better. For 
 
 {% emqxee %}
 
-:::tip
+::: tip
 
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQX 提供了更多配置项以更好地满足定制化需求。详细信息参考[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 :::
-
-{% endemqxee %}

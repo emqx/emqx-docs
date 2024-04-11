@@ -389,41 +389,32 @@
       collapsed: true
       children:
         - title_en: Cluster
-          title_cn: Cluster
+          title_cn: 集群
           path: configuration/cluster
-          lang: en
         - title_en: Listener
-          title_cn: Listener
+          title_cn: 监听器
           path: configuration/listener
-          lang: en
         - title_en: MQTT
           title_cn: MQTT
           path: configuration/mqtt
-          lang: en
-        - title_en: Flapping
-          title_cn: Flapping
+        - title_en: Flapping Detection
+          title_cn: 连接抖动
           path: configuration/flapping
-          lang: en
         - title_en: Limiter
-          title_cn: Limiter
+          title_cn: 速率限制器
           path: configuration/limiter
-          lang: en
         - title_en: Logs
-          title_cn: Logs
+          title_cn: 日志
           path: configuration/logs
-          lang: en
         - title_en: Prometheus
           title_cn: Prometheus
           path: configuration/prometheus
-          lang: en
         - title_en: Dashboard
           title_cn: Dashboard
           path: configuration/dashboard
-          lang: en
         - title_en: License
           title_cn: License
           path: configuration/license
-          lang: en
           edition: ee
     - title_en: Configuration Manual
       title_cn: 配置手册

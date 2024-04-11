@@ -1,6 +1,8 @@
-# License
+# License 配置
 
-This is to configure the license for EMQX. 
+您可以通过配置文件 `emqx.conf` 更新您的 License 文件并配置 License 连接配额使用的设置。配置完成后，您可以在 [EMQX 命令行工具](../admin/cli.md) 中运行 `emqx ctl license reload` 来重新加载 License。
+
+下面是配置 EMQX 企业版 License 设置的示例：
 
 ```bash
 license {
@@ -10,32 +12,31 @@ license {
 }
 ```
 
-Where,
+其中，
 
-- `key` is the field contains a license key encoded in base64 format.
-- `connection_low_watermark` is to set a threshold below which license connection quota usage alarms are deactivated; default: `"75%"`
-- `connection_high_watermark` is to set a threshold above which license connection quota usage alarms are activated; default: `"80%"`
+- `key` 字段包含以 base64 格式编码的 License 密钥。
+- `connection_low_watermark` 用于设置 License 连接配额使用率报警解除的阈值；默认值：`"75%"`。
+- `connection_high_watermark` 用于设置 License 连接配额使用率报警激活的阈值；默认值：`"80%"`。
+
+执行后，您可以运行 `emqx ctl license info` 来确认新的 License 文件已生效。
 
 {% emqxce %}
 
-:::tip
-
-To configure the license via Dashboard, click **Update License** in the lower left corner of the Dashboard homepage. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
-
-:::
+EMQX 还提供了更多配置项以更好地满足定制化需求。详细信息请参考[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
 
 {% endemqxce %}
 
 {% emqxee %}
 
-:::tip
+EMQX 还提供了更多配置项以更好地满足定制化需求。详细信息请参考[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
-To configure the license via Dashboard, click **Update License** in the lower left corner of the Dashboard homepage. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+::: tip
 
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+您也可以通过 EMQX Dashboard 或关于如何通过 Dashboard 配置 License，请参见[配置 License](../deploy/license.md)。
+
+一旦您通过 Dashboard 配置了这些配置项，您的设置将覆盖 `emqx.conf` 中相同的配置项。
 
 :::
 
 {% endemqxee %}
+

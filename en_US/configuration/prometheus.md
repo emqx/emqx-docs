@@ -1,10 +1,8 @@
-# Prometheus
+# Prometheus Configuration
 
-[Prometheus](https://prometheus.io/) is the monitoring solution open-sourced by SoundCloud, featuring its support for a multidimensional data model, flexible query language, and powerful alarm management.
+[Prometheus](https://prometheus.io/) is the monitoring solution open-sourced by SoundCloud, featuring its support for a multidimensional data model, flexible query language, and powerful alarm management. EMQX supports integration with Prometheus as a third-party monitoring system. For more information about this feature, see [Integrate with Prometheus](../observability/prometheus.md).
 
-You can use Dashboard to configure monitoring data integration to the Prometheus platform, for detailed operation steps, see [Integrate with Prometheus](../observability/prometheus.md).
-
-Or work with the `emqx.conf` configuration file: 
+You can enable and configure the Pushgateway through the `emqx.conf` configuration file, for example: 
 
 ```bash
 prometheus {
@@ -24,24 +22,20 @@ where, <!--did not add the Dashboard UI, as it is quite obvious-->
 
 {% emqxce %}
 
-:::tip
-
-To configure listeners via Dashboard,  click **Management** -> **Monitoring** -> **Integration** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
-
-:::
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
 
 {% endemqxce %}
 
 {% emqxee %}
 
-:::tip
-
-To configure listeners via Dashboard,  click **Management** -> **Monitoring** -> **Integration** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
 EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
-:::
-
 {% endemqxee %}
+
+::: tip
+
+You can also use Dashboard to configure the push mode integration with the Prometheus by clicking **Management** -> **Monitoring** -> **Integration** on the left navigation menu.
+
+Once you configured the integration via the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+
+:::

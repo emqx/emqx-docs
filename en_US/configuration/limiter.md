@@ -1,16 +1,16 @@
-# Rate Limiter
+# Rate Limiter Configuration
 
-Limiter is a new feature introduced in EMQX 5.0, it is a mechanism to restrict the number of messages that a client or topic can publish or subscribe to in a specified time period. For more information on the Limiter and how it works, see [Rate limit](../rate-limit/rate-limit.md). 
+Limiter is a new feature introduced in EMQX 5.0, it is a mechanism to restrict the number of messages that a client or topic can publish or subscribe to in a specified time. For more information on the Limiter and how it works, see [Rate Limit](../rate-limit/rate-limit.md). 
 
 For the moment, you can restrict the message rates from the following perspectives:
 
 | **Type**        | Dashboard UI            | **Description**                           | **Recovery Behavior**           |
 | --------------- | ----------------------- | ----------------------------------------- | ------------------------------- |
-| `bytes_rate`    | Data Publish Rate per Client       | Incoming message size in bytes per second per client | Pause receiving client messages |
-| `messages_rate`  | Messages Publish Rate per Client   | Incoming messages per second  per client | Pause receiving client messages |
-| `max_conn_rate` | Maximum Connection Rate per Listener | Connections per second per listener | Pause receiving new connections |
+| `bytes_rate`    | Data Publish Rate       | Incoming message size in bytes per second per client | Pause receiving client messages |
+| `messages_rate`  | Messages Publish Rate   | Incoming messages per second  per client | Pause receiving client messages |
+| `max_conn_rate` | Maximum Connection Rate | Connections per second per listener | Pause receiving new connections |
 
-For example, to set a limiter for the default TCP listener, you can work with the code below:
+For example, to set a limiter for the default TCP listener, you can use the configuration below:
 
 ```bash
 listeners.tcp.default {
@@ -25,7 +25,7 @@ listeners.tcp.default {
 
 :::tip
 
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
 
 :::
 
