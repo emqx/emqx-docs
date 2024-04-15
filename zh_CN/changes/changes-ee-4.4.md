@@ -73,8 +73,6 @@
 
   修复前，如果客户端设置了 `clean_start = true` 和非零的 `Session-Expiry-Interval`，那么该会话不会被疏散，这将导致会话在节点关闭之后丢失。
 
-- 修复启用 OCSP Stapling 时，从旧版本热升级到 e4.4.23 失败的问题。
-
 - 修复从 Redis 中找不到对应的认证信息时，Redis 认证异常的问题。
 
 - 修复在 EMQX 节点启动过程中访问 HTTP API 时，ETS 表为初始化导致的异常。
