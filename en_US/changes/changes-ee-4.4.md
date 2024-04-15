@@ -74,8 +74,6 @@
 
   Before the fix, if the client sets `clean_start = true` and a non-zero `Session-Expiry-Interval`, the session will not be evacuated, resulting in the loss of the session after the node is closed.
 
-- Fixed the issue of failing to upgrade from older versions to e4.4.23 when OCSP Stapling is enabled.
-
 - Fixed the Redis authentication exception when corresponding authentication information is not found in Redis.
 
 - Fixed the exception caused by uninitialized ETS table during the startup process of an EMQX node when accessing the HTTP API.
