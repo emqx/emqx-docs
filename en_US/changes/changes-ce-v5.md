@@ -6,46 +6,38 @@
 
 ### Bug Fixes
 
-- [#12759](https://github.com/emqx/emqx/pull/12759) Do not save invalid uploaded backup files.
+- [#12759](https://github.com/emqx/emqx/pull/12759) EMQX now automatically removes invalid backup files that fail during upload due to schema validation errors. This fix ensures that only valid configuration files are displayed and stored, enhancing system reliability.
 
-- [#12766](https://github.com/emqx/emqx/pull/12766) Rename `message_queue_too_long` error reason to `mailbox_overflow`
+- [#12766](https://github.com/emqx/emqx/pull/12766) Renamed `message_queue_too_long` error reason to `mailbox_overflow`
 
-  `mailbox_overflow` is consistent with the corresponding config parameter: `force_shutdown.max_mailbox_size`.
+  `mailbox_overflow`. The latter is consistent with the corresponding config parameter: `force_shutdown.max_mailbox_size`.
 
-- [#12773](https://github.com/emqx/emqx/pull/12773) Upgrade HTTP client libraries.
+- [#12773](https://github.com/emqx/emqx/pull/12773) Upgraded HTTP client libraries.
 
-  The HTTP client library (`gun-1.3`) incorrectly appends a `:portnumber` suffix to the `Host` header for
-  standard ports (`http` on port 80, `https` on port 443). This could cause compatibility issues with servers or
-  gateways performing strict `Host` header checks (e.g., AWS Lambda, Alibaba Cloud HTTP gateways), leading to
-  errors such as `InvalidCustomDomain.NotFound` or "The specified CustomDomain does not exist."
+  The HTTP client library (`gun-1.3`) incorrectly appended a `:portnumber` suffix to the `Host` header for
+  standard ports (`http` on port 80, `https` on port 443). This could cause compatibility issues with servers or gateways performing strict `Host` header checks (e.g., AWS Lambda, Alibaba Cloud HTTP gateways), leading to errors such as `InvalidCustomDomain.NotFound` or "The specified CustomDomain does not exist."
 
-- [#12802](https://github.com/emqx/emqx/pull/12802) Improve cluster discovery behaviour when a node is manually removed from a cluster using 'emqx ctl cluster leave' command.
-  Previously, if the configured cluster 'discovery_strategy' was not 'manual', the left node might re-discover and re-join the same cluster shortly after it left (unless it was stopped).
-  After this change, 'cluster leave' command disables automatic cluster_discovery, so that the left node won't re-join the same cluster again. Cluster discovery can be re-enabled by running 'emqx ctl discovery enable` or by restarting the left node.
+- [#12802](https://github.com/emqx/emqx/pull/12802) Improved how EMQX handles node removal from clusters via the `emqx ctl cluster leave` command. Previously, nodes could unintentionally rejoin the same cluster (unless it was stopped) if the configured cluster `discovery_strategy` was not `manual`. With the latest update, executing the `cluster leave` command now automatically disables cluster discovery for the node, preventing it from rejoining. To re-enable cluster discovery, use the `emqx ctl discovery enable` command or simply restart the node.
 
-- [#12814](https://github.com/emqx/emqx/pull/12814) Handle several errors in `/clients/{clientid}/mqueue_messages` and `/clients/{clientid}/inflight_messages` APIs:
+- [#12814](https://github.com/emqx/emqx/pull/12814) Improved error handling for the `/clients/{clientid}/mqueue_messages` and `/clients/{clientid}/inflight_messages` APIs in EMQX. These updates address:
 
-  - Internal timeout, which means that EMQX failed to get the list of Inflight/Mqueue messages within the default timeout of 5 s. This error may occur when the system is under a heavy load. The API will return 500 `{"code":"INTERNAL_ERROR","message":"timeout"}` response and log additional details.
-  - Client shutdown. The error may occur if the client connection is shutdown during the API call. The API will return 404 `{"code": "CLIENT_SHUTDOWN", "message": "Client connection has been shutdown"}` response in this case.
+  - **Internal Timeout**: If EMQX fails to retrieve the list of Inflight or Mqueue messages within the default 5-second timeout, likely under heavy system load, the API will return 500 error with the response `{"code":"INTERNAL_ERROR","message":"timeout"}`, and log additional details for troubleshooting.
+  - **Client Shutdown**: Should the client connection be terminated during an API call, the API now returns a 404 error, with the response `{"code": "CLIENT_SHUTDOWN", "message": "Client connection has been shutdown"}`. This ensures clearer feedback when client connections are interrupted.
 
-- [#12824](https://github.com/emqx/emqx/pull/12824) Make sure stats `'subscribers.count'` `'subscribers.max'` countains shared-subscribers.
-  It only contains non-shared subscribers previously.
+- [#12824](https://github.com/emqx/emqx/pull/12824) Updated the statistics metrics `subscribers.count` and `subscribers.max` to include shared subscribers. Previously, these metrics accounted only for non-shared subscribers. 
 
-- [#12826](https://github.com/emqx/emqx/pull/12826) Fixed an issue that prevented importing source data integrations and retained messages.
+- [#12826](https://github.com/emqx/emqx/pull/12826) Fixed issues related to the import functionality of source data integrations and retained messages in EMQX. Before this update:
 
-  Before the fix:
+  - The data integration sources specified in backup files were not being imported. This included configurations under the `sources.mqtt` category with specific connectors and parameters such as QoS and topics.
+  - Importing the `mnesia` table for retained messages was not supported.
 
-  - source data integrations are ignored from the backup file
-  - importing the `mnesia` table for retained messages are not supported
+- [#12843](https://github.com/emqx/emqx/pull/12843) Fixed `cluster_rpc_commit` transaction ID cleanup procedure on replicator nodes after executing the `emqx ctl cluster leave` command. Previously, failing to properly clear these transaction IDs impeded configuration updates on the core node. 
 
-- [#12843](https://github.com/emqx/emqx/pull/12843) Fixed `cluster_rpc_commit` transaction ID cleanup procedure after `cluster leave` on replicant nodes.
-  Previously, the transaction id of the core node would be deleted prematurely, blocking configuration updates on the core node.
+- [#12885](https://github.com/emqx/emqx/pull/12885) Fixed an issue in EMQX where users were unable to view "Retained Messages" under the "Monitoring" menu in the Dashboard. 
 
-- [#12885](https://github.com/emqx/emqx/pull/12885) Fixed an issue when users were not able to see the "Retained Messages" under the "Monitoring" menu in the admin dashboard.
+  The "Retained messages" backend API uses the `qlc` library. This problem was due to a permission issue where the `qlc` library's `file_sorter` function tried to use a non-writable directory, `/opt/emqx`, to store temporary files, resulting from recent changes in directory ownership permissions in Docker deployments. 
 
-"Retained messages" backend API uses `qlc`, and `qlc` uses `file_sorter` that puts temporary files in the working directory by default, which is not writable by emqx user since 58d0f04.
-
-This patch fixes this by making `/opt/emqx` directory owned by `emqx:emqx`.
+  This update modifies the ownership settings of the `/opt/emqx` directory to `emqx:emqx`, ensuring that all necessary operations, including retained messages retrieval, can proceed without access errors. 
 
 ## 5.6.0
 
