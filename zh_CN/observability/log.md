@@ -48,7 +48,7 @@ debug < info < notice < warning < error < critical < alert < emergency
 
 <img src="./assets/config-console-log-1-ee.png" alt="config-console-log-1-ee" style="zoom:67%;" />
 
-{% endemqxee}
+{% endemqxee %}
 
 {% emqxce %}
 
