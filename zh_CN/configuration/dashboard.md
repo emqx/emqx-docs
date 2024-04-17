@@ -1,6 +1,6 @@
 # Dashboard 配置
 
-在EMQX中， Dashboard 是一个基于 Web 的图形界面，用于实时管理和监控 EMQX 及连接的设备。您可以在下 Dashboard 配置项：
+在EMQX中， Dashboard 是一个基于 Web 的图形界面，用于实时管理和监控 EMQX 及连接的设备。您可以配置以下 Dashboard 配置项：
 
 - `listeners`
 - `token_expired_time`

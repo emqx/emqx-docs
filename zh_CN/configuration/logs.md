@@ -29,23 +29,28 @@ EMQX 的日志输出目录由环境变量 `EMQX_LOG_DIR` 确定，如果通过 R
 log {
   file {
     enable = true
+    formatter = text
     level = warning
     path = "/var/log/emqx/emqx.log"
     rotation_count = 10
     rotation_size = 50MB
-    formatter = text
+    time_offset = system
+    timestamp_format = auto
+    
   }
 ```
 
 其中，
 
-| 配置项           | Dashboard UI     | 描述                                                         | 默认值     | 可选值                                                       |
-| ---------------- | ---------------- | ------------------------------------------------------------ | ---------- | ------------------------------------------------------------ |
-| `level`          | 日志级别         | 设置当前日志处理进程的日志级别，即您想要记录的最低日志级别。 | `warning`  | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
-| `path`           | 日志文件名称     | 设置日志文件的路径和名称。<br />默认情况下，EMQX 将日志文件写入EMQX 安装目录下的 `log` 目录中的 `emqx.log` 文件。 | `emqx.log` | --                                                           |
-| `rotation_count` | 最大日志文件数   | 设置可以保存的最大日志文件数量。                             | `10`       | `1` - `2,048`                                                |
-| `rotation_size`  | 日志文件轮换大小 | 在轮换前单个日志文件的最大大小。达到指定值时，旧日志文件将被重命名并移动到归档目录，除非设置为 `infinity`，表示日志文件不会被轮换。 | `50MB`     | `1` - `infinity`                                             |
-| `formatter`      | 日志格式类型     | 设置日志格式。                                               | `text`     | `text` 为自由文本。<br /> `json` 为结构化日志。              |
+| 配置项             | Dashboard UI     | 描述                                                         | 默认值     | 可选值                                                       |
+| ------------------ | ---------------- | ------------------------------------------------------------ | ---------- | ------------------------------------------------------------ |
+| `formatter`        | 日志格式类型     | 设置日志格式。                                               | `text`     | `text` 为自由文本。<br /> `json` 为结构化日志。              |
+| `level`            | 日志级别         | 设置当前日志处理进程的日志级别，即您想要记录的最低日志级别。 | `warning`  | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
+| `path`             | 日志文件名称     | 设置日志文件的路径和名称。<br />默认情况下，EMQX 将日志文件写入EMQX 安装目录下的 `log` 目录中的 `emqx.log` 文件。 | `emqx.log` | --                                                           |
+| `rotation_count`   | 最大日志文件数   | 设置可以保存的最大日志文件数量。                             | `10`       | `1` - `2,048`                                                |
+| `rotation_size`    | 日志文件轮换大小 | 在轮换前单个日志文件的最大大小。达到指定值时，旧日志文件将被重命名并移动到归档目录，除非设置为 `infinity`，表示日志文件不会被轮换。 | `50MB`     | `1` - `infinity`                                             |
+| `time_offset`      | 时间偏移量       | 定义日志中时间相对 UTC 的偏移量，默认情况下跟随系统。        | `system`   | --                                                           |
+| `timestamp_format` | 时间戳格式       | 从下拉列表中选择日志时间戳格式。                             | `auto`     | `auto`: 根据所使用的日志格式类型自动确定时间戳格式。对于文本格式类型，使用 `rfc3339` 格式；对于 JSON 格式类型，则使用 `epoch`格式。<br />`epoch`: 以微秒精度的 Unix 纪元时间格式。<br />`rfc3339`: 符合 RFC3339 标准的日期时间字符串格式。 |
 
 ## 控制台输出日志
 
@@ -55,19 +60,22 @@ log {
 log {
   console {
     enable = true
+    formatter = json
     level = warning
-    formatter = text
+    time_offset = system
+    timestamp_format = auto
   }
 }
 ```
 
 其中，
 
-| 配置项                  | Dashboard UI     | 描述                                                         | 默认值    | 可选值                                                       |
-| ----------------------- | ---------------- | ------------------------------------------------------------ | --------- | ------------------------------------------------------------ |
-| `file_handlers.default` | 启用日志处理进程 | 设置是否启用通过控制台输出日志。                             | `enabled` | `enable`, `disable`                                          |
-| `level`                 | 日志级别         | 设置当前日志处理进程的日志级别，即您想要记录的最低日志级别。 | `warning` | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
-| `formatter`             | 日志格式类型     | 设置日志格式。                                               | `text`    | `text` 为自由文本。<br /> `json` 为结构化日志。              |
+| 配置项             | Dashboard UI | 描述                                                         | 默认值    | 可选值                                                       |
+| ------------------ | ------------ | ------------------------------------------------------------ | --------- | ------------------------------------------------------------ |
+| `formatter`        | 日志格式类型 | 设置日志格式。                                               | `text`    | `text` 为自由文本。<br /> `json` 为结构化日志。              |
+| `level`            | 日志级别     | 设置当前日志处理进程的日志级别，即您想要记录的最低日志级别。 | `warning` | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
+| `time_offset`      | 时间偏移量   | 定义日志中时间相对 UTC 的偏移量，默认情况下跟随系统。        | `system`  | --                                                           |
+| `timestamp_format` | 时间戳格式   | 从下拉列表中选择日志时间戳格式。                             | `auto`    | `auto`: 对于文本格式类型，使用 `rfc3339` 格式；对于 JSON 格式类型，则使用 `epoch`格式。<br />`epoch`: 以微秒精度的 Unix 纪元时间格式。<br />`rfc3339`: 符合 RFC3339 标准的日期时间字符串格式。 |
 
 {% emqxce %}
 

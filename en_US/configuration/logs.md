@@ -30,23 +30,27 @@ To output logs as a file, you may either configure the log handler in the Dashbo
 log {
   file {
     enable = true
+    formatter = text
     level = warning
     path = "/var/log/emqx/emqx.log"
     rotation_count = 10
     rotation_size = 50MB
-    formatter = text
+    time_offset = system
+    timestamp_format = auto
   }
 ```
 
  Where,
 
-| Configuration Item | Dashboard UI         | Description                                                  | Default Value | Optional Values                                              |
-| ------------------ | -------------------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
-| `level`            | Log Level            | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
-| `path`             | Log File Name        | This sets the path and name of the log file. <br />By default, EMQX writes the log file to the `emqx.log` file in the `log` directory of the EMQX installation directory. | `emqx.log`    | --                                                           |
-| `rotation_count`   | Max Log Files Number | This sets the max number of log files that can be saved.     | `10`          | `1` - `2,048`                                                |
-| `rotation_size`    | Rotation Size        | This sets the maximum size of a single log file before it is rotated. The old log file will be renamed and moved to an archive directory once it reached the specified value unless it is set to `infinity`, indicating the log file will not be rotated. | `50MB`        | `1` - `infinity`                                             |
-| `formatter`        | Log Formatter        | This sets the log format.                                    | `text`        | `text` is for free text.<br /> `json` is for structured logging. |
+| Configuration Item    | Dashboard UI         | Description                                                  | Default Value | Optional Values                                              |
+| --------------------- | -------------------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
+| `formatter`           | Log Formatter        | This sets the log format.                                    | `text`        | `text` is for free text.<br /> `json` is for structured logging. |
+| `level`               | Log Level            | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
+| `path`                | Log File Name        | This sets the path and name of the log file. <br />By default, EMQX writes the log file to the `emqx.log` file in the `log` directory of the EMQX installation directory. | `emqx.log`    | --                                                           |
+| `rotation_count`      | Max Log Files Number | This sets the max number of log files that can be saved.     | `10`          | `1` - `2,048`                                                |
+| `rotation_size`       | Rotation Size        | This sets the maximum size of a single log file before it is rotated. The old log file will be renamed and moved to an archive directory once it reached the specified value unless it is set to `infinity`, indicating the log file will not be rotated. | `50MB`        | `1` - `infinity`                                             |
+| `time_offset`         | Time Offset          | The time offset relative to UTC in the log.                  | `system`      | --                                                           |
+| `timestamp_formatter` | Timestamp Format     | The format of the timestamp in the log.                      | `auto`        | `auto`: Automatically determines the timestamp format based on the log formatter being used. Utilizes `rfc3339` format for text formatters, and `epoch` format for JSON formatters.<br />`epoch`: Microseconds precision Unix epoch format.<br />`rfc3339`: RFC3339 compliant format for date-time strings. |
 
 ## Output logs with Console
 
@@ -57,19 +61,22 @@ You can configure the log level and log format with the following configuration 
 log {
   console {
     enable = true
+    formatter = json
     level = warning
-    formatter = text
+    time_offset = system
+    timestamp_format = auto
   }
 }
 ```
 
 Where, 
 
-| Configuration Item      | Dashboard UI       | Description                                                  | Default Value | Optional Values                                              |
-| ----------------------- | ------------------ | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
-| `file_handlers.default` | Enable Log Handler | This sets whether to enable outputting logs with the console. | `enabled`     | `enable`, `disable`                                          |
-| `level`                 | Log Level          | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
-| `formatter`             | Log Formatter      | This sets the log format.                                    | `text`        | `text` for free text<br /> `json` for structured logging     |
+| Configuration Item    | Dashboard UI     | Description                                                  | Default Value | Optional Values                                              |
+| --------------------- | ---------------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
+| `formatter`           | Log Formatter    | This sets the log format.                                    | `text`        | `text` for free text.<br /> `json` for structured logging.   |
+| `level`               | Log Level        | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
+| `time_offset`         | Time Offset      | The time offset relative to UTC in the log.                  | `system`      | --                                                           |
+| `timestamp_formatter` | Timestamp Format | The format of the timestamp in the log.                      | `auto`        | `auto`: Automatically determines the timestamp format based on the log formatter being used. Utilizes `rfc3339` format for text formatters, and `epoch` format for JSON formatters.<br />`epoch`: Microseconds precision Unix epoch format.<br />`rfc3339`: RFC3339 compliant format for date-time strings. |
 
 {% emqxce %}
 
