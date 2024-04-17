@@ -179,8 +179,8 @@ make rel
 ./bin/emqx ctl plugins uninstall {pluginName}
 ```
 
-{% emqxee %}
-**注意**:插件需要在热升级后重新安装。
+<!-- {% emqxee %} -->
+<!-- **注意**:插件需要在热升级后重新安装。 -->
 
-{% endemqxee %}
+<!-- {% endemqxee %} -->
 
