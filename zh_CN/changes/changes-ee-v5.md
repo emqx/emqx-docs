@@ -1,8 +1,46 @@
 # v5 版本
 
+## 5.6.1
+
+*发布日期：2024-04-17*
+
+### 修复
+
+- [#12759](https://github.com/emqx/emqx/pull/12759) EMQX 现在会自动删除由于 shcema 验证错误而上传失败的无效备份文件。此修复确保只显示和存储有效的配置文件，提升系统可靠性。
+
+- [#12766](https://github.com/emqx/emqx/pull/12766) 将 `message_queue_too_long` 错误原因重命名为 `mailbox_overflow`，与对应的配置参数 `force_shutdown.max_mailbox_size` 保持一致。
+
+- [#12773](https://github.com/emqx/emqx/pull/12773) 升级了 HTTP 客户端库。
+
+  HTTP 客户端库（`gun-1.3`）在标准端口（`http` 为 80 端口，`https` 为 443 端口）错误地在 `Host` 标头添加了 `:portnumber` 后缀。这可能导致与执行严格 `Host` 标头检查的服务器或网关（例如，AWS Lambda、阿里云 HTTP 网关）的兼容性问题，从而引发 `InvalidCustomDomain.NotFound` 或 "指定的 CustomDomain 不存在" 等错误。
+
+- [#12802](https://github.com/emqx/emqx/pull/12802) 改进了 EMQX 通过 `emqx ctl cluster leave` 命令处理节点从集群中移除的方式。之前，如果配置的集群 `discovery_strategy` 不是 `manual`，节点可能会无意中重新加入同一个集群（除非它被停止）。最新的更新中，执行 `cluster leave` 命令现在会自动禁用节点的集群节点发现功能，防止它重新加入。要重新启用集群节点发现，请使用 `emqx ctl discovery enable` 命令或简单地重启节点。
+
+- [#12814](https://github.com/emqx/emqx/pull/12814) 改进了 EMQX 中 `/clients/{clientid}/mqueue_messages` 和 `/clients/{clientid}/inflight_messages` API 的错误处理。这些更新包括：
+
+  - **内部超时**：如果 EMQX 在默认的 5 秒超时内无法检索到 Inflight 或 Mqueue 消息列表（这通常在系统负载较重时发生），API 将返回 500 错误，响应为 `{"code":"INTERNAL_ERROR","message":"timeout"}`，并记录额外的信息以便排错。
+  - **客户端关闭**：如果在 API 调用期间客户端连接被终止，API 现在将返回 404 错误，响应为 `{"code": "CLIENT_SHUTDOWN", "message": "Client connection has been shutdown"}`。这确保了在客户端连接中断时提供更清晰的反馈。
+
+- [#12824](https://github.com/emqx/emqx/pull/12824) 更新了统计指标 `subscribers.count` 和 `subscribers.max`，以包括共享订阅者。之前，这些指标仅计算非共享订阅者。
+
+- [#12826](https://github.com/emqx/emqx/pull/12826) 修复了 EMQX 中与数据集成 Source 和保留消息的导入功能相关的问题。在此更新之前：
+
+  - 备份文件中指定的数据集成 Source 未被导入。这包括 `sources.mqtt` 类别下的特定连接器和参数，如 QoS 和主题。
+  - 不支持导入用于保留消息的 `mnesia` 表。
+
+- [#12843](https://github.com/emqx/emqx/pull/12843) 修复了在执行 `emqx ctl cluster leave` 命令后，在复制节点上的 `cluster_rpc_commit` 事务 ID 清理程序。以前，未能适当清除这些事务 ID 阻碍了核心节点上的配置更新。
+
+- [#12882](https://github.com/emqx/emqx/pull/12882) 修复了 EMQX 数据集成中 RocketMQ 动作的问题，确保消息正确路由到其配置的主题。之前，当多个动作共享单个 RocketMQ 连接器时，所有消息错误地发送到了第一个配置的主题。此修复为每个主题启动一组独立的 RocketMQ 工作进程，防止跨主题消息传递错误。
+
+- [#12885](https://github.com/emqx/emqx/pull/12885) 修复了 EMQX 中用户无法在 Dashboard 的 "监控" 菜单下查看 "保留消息" 的问题。
+
+  "保留消息" 后端 API 使用 `qlc` 库。这个问题是由于权限问题引起的，`qlc` 库的 `file_sorter` 功能试图使用不可写的目录 `/opt/emqx` 存储临时文件，这是由于 Docker 部署中目录所有权权限的最近更改所致。
+
+  此更新修改了 `/opt/emqx` 目录的所有权设置为 `emqx:emqx`，确保所有必要的操作，包括保留消息检索，可以在没有访问错误的情况下进行。
+
 ## 5.6.0
 
-*发布日期: 2024-03-28*
+*发布日期：2024-03-28*
 
 ### 增强
 
