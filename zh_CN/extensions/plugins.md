@@ -67,7 +67,7 @@ my_emqx_plugin
 ### 测试您的开发环境
 
 {% emqxce %}
-:::提示
+::: tip 提示
 要使用可工作的开发环境，请参阅[从源代码安装](../deploy/install-source.md)。
 :::
 {% endemqxce %}
