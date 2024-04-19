@@ -1,6 +1,6 @@
 {
   "info": {
-    "version": "5.6.0",
+    "version": "5.6.1",
     "title": "EMQX Enterprise API"
   },
   "components": {
@@ -6945,11 +6945,6 @@
             "description": "Number of messages received from the client, equal to the sum of messages.qos0.received\fmessages.qos1.received and messages.qos2.received",
             "minimum": 0
           },
-          "messages.retained": {
-            "type": "integer",
-            "description": "Number of retained messages",
-            "minimum": 0
-          },
           "messages.sent": {
             "type": "integer",
             "description": "Number of messages sent to the client, equal to the sum of messages.qos0.sent\fmessages.qos1.sent and messages.qos2.sent",
@@ -13272,11 +13267,6 @@
           "messages.received": {
             "type": "integer",
             "description": "Number of messages received from the client, equal to the sum of messages.qos0.received\fmessages.qos1.received and messages.qos2.received",
-            "minimum": 0
-          },
-          "messages.retained": {
-            "type": "integer",
-            "description": "Number of retained messages",
             "minimum": 0
           },
           "messages.sent": {
@@ -49783,6 +49773,7 @@
                     "vm_statistics": "disabled",
                     "vm_dist": "disabled"
                   },
+                  "enable_basic_auth": false,
                   "push_gateway": {
                     "interval": "15s",
                     "headers": {
@@ -49790,8 +49781,7 @@
                     },
                     "url": "http://127.0.0.1:9091",
                     "job_name": "${name}/instance/${name}~${host}"
-                  },
-                  "enable_basic_auth": false
+                  }
                 },
                 "schema": {
                   "$ref": "#/components/schemas/prometheus.recommend_setting"
@@ -49829,6 +49819,7 @@
                     "vm_statistics": "disabled",
                     "vm_dist": "disabled"
                   },
+                  "enable_basic_auth": false,
                   "push_gateway": {
                     "interval": "15s",
                     "headers": {
@@ -49836,8 +49827,7 @@
                     },
                     "url": "http://127.0.0.1:9091",
                     "job_name": "${name}/instance/${name}~${host}"
-                  },
-                  "enable_basic_auth": false
+                  }
                 },
                 "schema": {
                   "$ref": "#/components/schemas/prometheus.recommend_setting"
@@ -49860,6 +49850,7 @@
                       "vm_statistics": "disabled",
                       "vm_dist": "disabled"
                     },
+                    "enable_basic_auth": false,
                     "push_gateway": {
                       "interval": "15s",
                       "headers": {
@@ -49867,8 +49858,7 @@
                       },
                       "url": "http://127.0.0.1:9091",
                       "job_name": "${name}/instance/${name}~${host}"
-                    },
-                    "enable_basic_auth": false
+                    }
                   },
                   "summary": "recommend_setting"
                 },
@@ -49879,14 +49869,14 @@
                     "headers": {
                       "Authorization": "Basic YWRtaW46Y2JraG55eWd5QDE="
                     },
+                    "push_gateway_server": "http://127.0.0.1:9091",
                     "job_name": "${name}/instance/${name}~${host}",
                     "vm_msacc_collector": "disabled",
                     "vm_memory_collector": "disabled",
                     "vm_system_info_collector": "disabled",
                     "vm_statistics_collector": "disabled",
                     "mnesia_collector": "disabled",
-                    "vm_dist_collector": "disabled",
-                    "push_gateway_server": "http://127.0.0.1:9091"
+                    "vm_dist_collector": "disabled"
                   },
                   "summary": "legacy_deprecated_setting"
                 }
@@ -50093,10 +50083,10 @@
                   "wait_takeover": "10s",
                   "sess_evict_rate": 100,
                   "conn_evict_rate": 100,
+                  "wait_health_check": "10s",
                   "migrate_to": [
                     "othernode@127.0.0.1"
                   ],
-                  "wait_health_check": "10s",
                   "redirect_to": "othernode:1883"
                 }
               },
@@ -50201,8 +50191,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -50232,8 +50222,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -50445,8 +50435,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -50476,8 +50466,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -50637,8 +50627,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -50668,8 +50658,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -50929,8 +50919,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -50960,8 +50950,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -51121,8 +51111,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -51152,8 +51142,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -51330,11 +51320,11 @@
                       ],
                       "fail_if_no_peer_cert": false
                     },
+                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "access_rules": [
                       "allow all"
-                    ],
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    ]
                   },
                   {
                     "name": "ssl-def",
@@ -51373,11 +51363,11 @@
                         }
                       }
                     ],
+                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "access_rules": [
                       "allow all"
-                    ],
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    ]
                   },
                   {
                     "name": "tcp-def",
@@ -51412,8 +51402,8 @@
                         }
                       }
                     ],
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   {
                     "name": "dtls-psk",
@@ -51445,11 +51435,11 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "fail_if_no_peer_cert": false,
-                      "user_lookup_fun": "emqx_tls_psk:lookup"
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "fail_if_no_peer_cert": false
                     },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   {
                     "name": "tcp-with-authn",
@@ -51479,8 +51469,8 @@
                         }
                       }
                     ],
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   }
                 ],
                 "schema": {
@@ -51630,11 +51620,11 @@
                         ],
                         "fail_if_no_peer_cert": false
                       },
+                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "access_rules": [
                         "allow all"
-                      ],
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      ]
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -51661,11 +51651,11 @@
                         ],
                         "fail_if_no_peer_cert": false
                       },
+                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "access_rules": [
                         "allow all"
-                      ],
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      ]
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -51688,8 +51678,8 @@
                         "active_n": 100
                       },
                       "max_connections": 1024000,
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple TCP listener example"
                   },
@@ -51709,11 +51699,11 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "fail_if_no_peer_cert": false,
-                        "user_lookup_fun": "emqx_tls_psk:lookup"
+                        "user_lookup_fun": "emqx_tls_psk:lookup",
+                        "fail_if_no_peer_cert": false
                       },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A DTLS listener with PSK example"
                   },
@@ -51731,8 +51721,8 @@
                         "user_id_type": "username"
                       },
                       "max_connections": 1024000,
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A TCP listener with authentication example"
                   }
@@ -51848,11 +51838,11 @@
                       ],
                       "fail_if_no_peer_cert": false
                     },
+                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "access_rules": [
                       "allow all"
-                    ],
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    ]
                   },
                   "summary": "A simple DTLS listener example"
                 },
@@ -51879,11 +51869,11 @@
                       ],
                       "fail_if_no_peer_cert": false
                     },
+                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "access_rules": [
                       "allow all"
-                    ],
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    ]
                   },
                   "summary": "A simple SSL listener example"
                 },
@@ -51906,8 +51896,8 @@
                       "active_n": 100
                     },
                     "max_connections": 1024000,
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A simple TCP listener example"
                 },
@@ -51927,11 +51917,11 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "fail_if_no_peer_cert": false,
-                      "user_lookup_fun": "emqx_tls_psk:lookup"
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "fail_if_no_peer_cert": false
                     },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A DTLS listener with PSK example"
                 },
@@ -51949,8 +51939,8 @@
                       "user_id_type": "username"
                     },
                     "max_connections": 1024000,
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A TCP listener with authentication example"
                 }
@@ -52664,19 +52654,19 @@
                       "start_after_created": true,
                       "health_check_interval": "30s"
                     },
-                    "pipelining": 100,
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    }
+                    },
+                    "pipelining": 100
                   },
                   "summary": "GCP PubSub Consumer Connector"
                 },
@@ -52844,19 +52834,19 @@
                     "resource_opts": {
                       "request_ttl": "60s"
                     },
-                    "pipelining": 100,
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    }
+                    },
+                    "pipelining": 100
                   },
                   "summary": "GCP PubSub Producer Connector"
                 },
@@ -55646,82 +55636,82 @@
                   "lwm2m_client": {
                     "value": {
                       "recv_oct": 56,
-                      "disconnected_at": null,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "awaiting_rel_cnt": 0,
-                      "ip_address": "127.0.0.1",
-                      "proto_ver": "1.0",
-                      "inflight_cnt": 0,
-                      "mailbox_len": 0,
-                      "keepalive": 0,
-                      "is_bridge": false,
-                      "node": "emqx@127.0.0.1",
-                      "send_msg": 0,
-                      "send_cnt": 1,
-                      "recv_msg": 0,
-                      "username": "guest",
-                      "subscriptions_max": "infinity",
-                      "lifetime": 86400,
-                      "clean_start": true,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "send_oct": 61,
-                      "proto_name": "LwM2M",
-                      "heap_size": 4185,
-                      "mqueue_max": "infinity",
-                      "inflight_max": "infinity",
-                      "awaiting_rel_max": "infinity",
-                      "port": 50675,
-                      "subscriptions_cnt": 0,
                       "mqueue_dropped": 0,
-                      "expiry_interval": 0,
-                      "send_pkt": 1,
+                      "inflight_cnt": 0,
+                      "recv_msg": 0,
+                      "keepalive": 0,
+                      "node": "emqx@127.0.0.1",
+                      "send_cnt": 1,
                       "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
                       "endpoint_name": "urn:imei:154928475237123",
-                      "connected": true,
-                      "reductions": 72022,
+                      "inflight_max": "infinity",
+                      "mqueue_max": "infinity",
+                      "username": "guest",
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "send_oct": 61,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "recv_pkt": 1,
+                      "heap_size": 4185,
+                      "mqueue_len": 0,
+                      "awaiting_rel_max": "infinity",
+                      "mailbox_len": 0,
+                      "ip_address": "127.0.0.1",
+                      "subscriptions_max": "infinity",
+                      "port": 50675,
+                      "awaiting_rel_cnt": 0,
+                      "lifetime": 86400,
+                      "is_bridge": false,
+                      "proto_ver": "1.0",
+                      "proto_name": "LwM2M",
+                      "send_msg": 0,
+                      "expiry_interval": 0,
+                      "disconnected_at": null,
+                      "send_pkt": 1,
+                      "connected": true,
+                      "subscriptions_cnt": 0,
+                      "reductions": 72022,
                       "recv_cnt": 1,
-                      "mqueue_len": 0
+                      "clean_start": true
                     },
                     "summary": "LwM2M client info"
                   },
                   "general_client": {
                     "value": {
                       "recv_oct": 56,
-                      "disconnected_at": null,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "awaiting_rel_cnt": 0,
-                      "ip_address": "127.0.0.1",
-                      "proto_ver": "1.0",
+                      "mqueue_dropped": 0,
                       "inflight_cnt": 0,
-                      "mailbox_len": 0,
-                      "keepalive": 0,
-                      "is_bridge": false,
-                      "node": "emqx@127.0.0.1",
-                      "send_msg": 0,
-                      "send_cnt": 1,
                       "recv_msg": 0,
+                      "keepalive": 0,
+                      "node": "emqx@127.0.0.1",
+                      "send_cnt": 1,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "inflight_max": "infinity",
+                      "mqueue_max": "infinity",
                       "username": "guest",
-                      "subscriptions_max": "infinity",
-                      "clean_start": true,
                       "created_at": "2021-12-07T10:44:02.721+08:00",
                       "send_oct": 61,
-                      "proto_name": "STOMP",
-                      "heap_size": 4185,
-                      "mqueue_max": "infinity",
-                      "inflight_max": "infinity",
-                      "awaiting_rel_max": "infinity",
-                      "port": 50675,
-                      "subscriptions_cnt": 0,
-                      "mqueue_dropped": 0,
-                      "expiry_interval": 0,
-                      "send_pkt": 1,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "connected": true,
-                      "reductions": 72022,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "recv_pkt": 1,
+                      "heap_size": 4185,
+                      "mqueue_len": 0,
+                      "awaiting_rel_max": "infinity",
+                      "mailbox_len": 0,
+                      "ip_address": "127.0.0.1",
+                      "subscriptions_max": "infinity",
+                      "port": 50675,
+                      "awaiting_rel_cnt": 0,
+                      "is_bridge": false,
+                      "proto_ver": "1.0",
+                      "proto_name": "STOMP",
+                      "send_msg": 0,
+                      "expiry_interval": 0,
+                      "disconnected_at": null,
+                      "send_pkt": 1,
+                      "connected": true,
+                      "subscriptions_cnt": 0,
+                      "reductions": 72022,
                       "recv_cnt": 1,
-                      "mqueue_len": 0
+                      "clean_start": true
                     },
                     "summary": "General client info"
                   }
@@ -57340,19 +57330,19 @@
                         "start_after_created": true,
                         "health_check_interval": "30s"
                       },
-                      "pipelining": 100,
                       "service_account_json": {
                         "type": "service_account",
                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                         "client_id": "123812831923812319190",
+                        "project_id": "myproject",
                         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                         "client_email": "test@myproject.iam.gserviceaccount.com",
                         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                         "private_key_id": "kid",
-                        "project_id": "myproject",
                         "token_uri": "https://oauth2.googleapis.com/token"
-                      }
+                      },
+                      "pipelining": 100
                     },
                     "summary": "GCP PubSub Consumer Connector"
                   },
@@ -57612,19 +57602,19 @@
                       "resource_opts": {
                         "request_ttl": "60s"
                       },
-                      "pipelining": 100,
                       "service_account_json": {
                         "type": "service_account",
                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                         "client_id": "123812831923812319190",
+                        "project_id": "myproject",
                         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                         "client_email": "test@myproject.iam.gserviceaccount.com",
                         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                         "private_key_id": "kid",
-                        "project_id": "myproject",
                         "token_uri": "https://oauth2.googleapis.com/token"
-                      }
+                      },
+                      "pipelining": 100
                     },
                     "summary": "GCP PubSub Producer Connector"
                   },
@@ -58554,19 +58544,19 @@
                         "start_after_created": true,
                         "health_check_interval": "30s"
                       },
-                      "pipelining": 100,
                       "service_account_json": {
                         "type": "service_account",
                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                         "client_id": "123812831923812319190",
+                        "project_id": "myproject",
                         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                         "client_email": "test@myproject.iam.gserviceaccount.com",
                         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                         "private_key_id": "kid",
-                        "project_id": "myproject",
                         "token_uri": "https://oauth2.googleapis.com/token"
-                      }
+                      },
+                      "pipelining": 100
                     },
                     "summary": "GCP PubSub Consumer Connector"
                   },
@@ -58826,19 +58816,19 @@
                       "resource_opts": {
                         "request_ttl": "60s"
                       },
-                      "pipelining": 100,
                       "service_account_json": {
                         "type": "service_account",
                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                         "client_id": "123812831923812319190",
+                        "project_id": "myproject",
                         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                         "client_email": "test@myproject.iam.gserviceaccount.com",
                         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                         "private_key_id": "kid",
-                        "project_id": "myproject",
                         "token_uri": "https://oauth2.googleapis.com/token"
-                      }
+                      },
+                      "pipelining": 100
                     },
                     "summary": "GCP PubSub Producer Connector"
                   },
@@ -59466,19 +59456,19 @@
                       "start_after_created": true,
                       "health_check_interval": "30s"
                     },
-                    "pipelining": 100,
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    }
+                    },
+                    "pipelining": 100
                   },
                   "summary": "GCP PubSub Consumer Connector"
                 },
@@ -59630,19 +59620,19 @@
                     "resource_opts": {
                       "request_ttl": "60s"
                     },
-                    "pipelining": 100,
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    }
+                    },
+                    "pipelining": 100
                   },
                   "summary": "GCP PubSub Producer Connector"
                 },
@@ -60202,11 +60192,11 @@
                         ],
                         "fail_if_no_peer_cert": false
                       },
+                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "access_rules": [
                         "allow all"
-                      ],
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      ]
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -60233,11 +60223,11 @@
                         ],
                         "fail_if_no_peer_cert": false
                       },
+                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "access_rules": [
                         "allow all"
-                      ],
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      ]
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -60260,8 +60250,8 @@
                         "active_n": 100
                       },
                       "max_connections": 1024000,
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple TCP listener example"
                   },
@@ -60281,11 +60271,11 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "fail_if_no_peer_cert": false,
-                        "user_lookup_fun": "emqx_tls_psk:lookup"
+                        "user_lookup_fun": "emqx_tls_psk:lookup",
+                        "fail_if_no_peer_cert": false
                       },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A DTLS listener with PSK example"
                   },
@@ -60303,8 +60293,8 @@
                         "user_id_type": "username"
                       },
                       "max_connections": 1024000,
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A TCP listener with authentication example"
                   }
@@ -60469,11 +60459,11 @@
                         ],
                         "fail_if_no_peer_cert": false
                       },
+                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "access_rules": [
                         "allow all"
-                      ],
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      ]
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -60500,11 +60490,11 @@
                         ],
                         "fail_if_no_peer_cert": false
                       },
+                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "access_rules": [
                         "allow all"
-                      ],
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      ]
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -60527,8 +60517,8 @@
                         "active_n": 100
                       },
                       "max_connections": 1024000,
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple TCP listener example"
                   },
@@ -60548,11 +60538,11 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "fail_if_no_peer_cert": false,
-                        "user_lookup_fun": "emqx_tls_psk:lookup"
+                        "user_lookup_fun": "emqx_tls_psk:lookup",
+                        "fail_if_no_peer_cert": false
                       },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A DTLS listener with PSK example"
                   },
@@ -60570,8 +60560,8 @@
                         "user_id_type": "username"
                       },
                       "max_connections": 1024000,
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A TCP listener with authentication example"
                   }
@@ -60687,11 +60677,11 @@
                       ],
                       "fail_if_no_peer_cert": false
                     },
+                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "access_rules": [
                       "allow all"
-                    ],
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    ]
                   },
                   "summary": "A simple DTLS listener example"
                 },
@@ -60718,11 +60708,11 @@
                       ],
                       "fail_if_no_peer_cert": false
                     },
+                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "access_rules": [
                       "allow all"
-                    ],
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    ]
                   },
                   "summary": "A simple SSL listener example"
                 },
@@ -60745,8 +60735,8 @@
                       "active_n": 100
                     },
                     "max_connections": 1024000,
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A simple TCP listener example"
                 },
@@ -60766,11 +60756,11 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "fail_if_no_peer_cert": false,
-                      "user_lookup_fun": "emqx_tls_psk:lookup"
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "fail_if_no_peer_cert": false
                     },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A DTLS listener with PSK example"
                 },
@@ -60788,8 +60778,8 @@
                       "user_id_type": "username"
                     },
                     "max_connections": 1024000,
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A TCP listener with authentication example"
                 }
@@ -61586,8 +61576,8 @@
                       }
                     ],
                     "created_at": "2021-12-08T14:41:45.071+08:00",
-                    "stopped_at": "2021-12-08T14:56:35.576+08:00",
-                    "current_connections": 0
+                    "current_connections": 0,
+                    "stopped_at": "2021-12-08T14:56:35.576+08:00"
                   },
                   {
                     "name": "stomp",
@@ -62136,8 +62126,8 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
@@ -62391,19 +62381,19 @@
                 },
                 "gcp_pubsub": {
                   "value": {
-                    "pubsub_topic": "mytopic",
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    }
+                    },
+                    "pubsub_topic": "mytopic"
                   },
                   "summary": "GCP PubSub Producer Bridge"
                 },
@@ -62530,12 +62520,12 @@
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
                     }
                   },
@@ -62631,8 +62621,8 @@
                     },
                     "kafka": {
                       "max_batch_bytes": "896KB",
-                      "offset_reset_policy": "latest",
-                      "offset_commit_interval_seconds": 5
+                      "offset_commit_interval_seconds": 5,
+                      "offset_reset_policy": "latest"
                     },
                     "min_metadata_refresh_interval": "3s",
                     "topic_mapping": [
@@ -62650,9 +62640,9 @@
                       }
                     ],
                     "bootstrap_hosts": "localhost:9092",
+                    "metadata_request_timeout": "4s",
                     "value_encoding_mode": "none",
-                    "key_encoding_mode": "none",
-                    "metadata_request_timeout": "4s"
+                    "key_encoding_mode": "none"
                   },
                   "summary": "Kafka Consumer Bridge"
                 },
@@ -63118,8 +63108,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -63149,8 +63139,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -63386,8 +63376,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -63417,8 +63407,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -65211,12 +65201,12 @@
                     "active_n": 100
                   },
                   "max_connections": 204800,
+                  "proxy_protocol_timeout": "3s",
+                  "acceptors": 16,
                   "access_rules": [
                     "allow all"
                   ],
-                  "acceptors": 16,
                   "proxy_protocol": false,
-                  "proxy_protocol_timeout": "3s",
                   "mountpoint": "/",
                   "current_connections": 10240
                 },
@@ -65285,12 +65275,12 @@
                   "active_n": 100
                 },
                 "max_connections": 204800,
+                "proxy_protocol_timeout": "3s",
+                "acceptors": 16,
                 "access_rules": [
                   "allow all"
                 ],
-                "acceptors": 16,
                 "proxy_protocol": false,
-                "proxy_protocol_timeout": "3s",
                 "mountpoint": "/",
                 "current_connections": 10240
               },
@@ -65701,8 +65691,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -65732,8 +65722,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -65935,8 +65925,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -65966,8 +65956,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -66127,8 +66117,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -66158,8 +66148,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -66399,8 +66389,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -66430,8 +66420,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -66591,8 +66581,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -66622,8 +66612,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -67659,14 +67649,14 @@
                     "enable": true,
                     "parameters": {
                       "payload_template": "${payload}",
+                      "pubsub_topic": "mytopic",
                       "attributes_template": [
                         {
                           "value": "${payload.attrs.v}",
                           "key": "${payload.attrs.k}"
                         }
                       ],
-                      "ordering_key_template": "${payload.ok}",
-                      "pubsub_topic": "mytopic"
+                      "ordering_key_template": "${payload.ok}"
                     },
                     "connector": "my_connector_name",
                     "node_status": [
@@ -68039,8 +68029,8 @@
                         "value": "${.}",
                         "key": "${.clientid}"
                       },
-                      "pulsar_topic": "test_topic",
-                      "sync_timeout": "5s"
+                      "sync_timeout": "5s",
+                      "pulsar_topic": "test_topic"
                     },
                     "connector": "pulsar_connector",
                     "node_status": [
@@ -68553,14 +68543,14 @@
                       "enable": true,
                       "parameters": {
                         "payload_template": "${payload}",
+                        "pubsub_topic": "mytopic",
                         "attributes_template": [
                           {
                             "value": "${payload.attrs.v}",
                             "key": "${payload.attrs.k}"
                           }
                         ],
-                        "ordering_key_template": "${payload.ok}",
-                        "pubsub_topic": "mytopic"
+                        "ordering_key_template": "${payload.ok}"
                       },
                       "connector": "my_connector_name",
                       "node_status": [
@@ -68978,8 +68968,8 @@
                           "value": "${.}",
                           "key": "${.clientid}"
                         },
-                        "pulsar_topic": "test_topic",
-                        "sync_timeout": "5s"
+                        "sync_timeout": "5s",
+                        "pulsar_topic": "test_topic"
                       },
                       "connector": "pulsar_connector",
                       "node_status": [
@@ -69478,14 +69468,14 @@
                     "enable": true,
                     "parameters": {
                       "payload_template": "${payload}",
+                      "pubsub_topic": "mytopic",
                       "attributes_template": [
                         {
                           "value": "${payload.attrs.v}",
                           "key": "${payload.attrs.k}"
                         }
                       ],
-                      "ordering_key_template": "${payload.ok}",
-                      "pubsub_topic": "mytopic"
+                      "ordering_key_template": "${payload.ok}"
                     },
                     "connector": "my_connector_name",
                     "resource_opts": {
@@ -69798,8 +69788,8 @@
                         "value": "${.}",
                         "key": "${.clientid}"
                       },
-                      "pulsar_topic": "test_topic",
-                      "sync_timeout": "5s"
+                      "sync_timeout": "5s",
+                      "pulsar_topic": "test_topic"
                     },
                     "connector": "pulsar_connector",
                     "resource_opts": {
@@ -70592,10 +70582,10 @@
                   "sess_evict_rate": 20,
                   "conn_evict_rate": 10,
                   "wait_health_check": "10s",
-                  "abs_conn_threshold": 10,
+                  "rel_sess_threshold": 1.5,
                   "rel_conn_threshold": 1.5,
                   "abs_sess_threshold": 10,
-                  "rel_sess_threshold": 1.5
+                  "abs_conn_threshold": 10
                 }
               },
               "schema": {
@@ -71238,8 +71228,8 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "method": "post",
                       "url": "http://localhost:9901/messages/${topic}",
+                      "method": "post",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
@@ -71493,19 +71483,19 @@
                   },
                   "gcp_pubsub": {
                     "value": {
-                      "pubsub_topic": "mytopic",
                       "service_account_json": {
                         "type": "service_account",
                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                         "client_id": "123812831923812319190",
+                        "project_id": "myproject",
                         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                         "client_email": "test@myproject.iam.gserviceaccount.com",
                         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                         "private_key_id": "kid",
-                        "project_id": "myproject",
                         "token_uri": "https://oauth2.googleapis.com/token"
-                      }
+                      },
+                      "pubsub_topic": "mytopic"
                     },
                     "summary": "GCP PubSub Producer Bridge"
                   },
@@ -71632,12 +71622,12 @@
                         "type": "service_account",
                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                         "client_id": "123812831923812319190",
+                        "project_id": "myproject",
                         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                         "client_email": "test@myproject.iam.gserviceaccount.com",
                         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                         "private_key_id": "kid",
-                        "project_id": "myproject",
                         "token_uri": "https://oauth2.googleapis.com/token"
                       }
                     },
@@ -71747,8 +71737,8 @@
                       ],
                       "kafka": {
                         "max_batch_bytes": "896KB",
-                        "offset_reset_policy": "latest",
-                        "offset_commit_interval_seconds": 5
+                        "offset_commit_interval_seconds": 5,
+                        "offset_reset_policy": "latest"
                       },
                       "min_metadata_refresh_interval": "3s",
                       "topic_mapping": [
@@ -71766,9 +71756,9 @@
                         }
                       ],
                       "bootstrap_hosts": "localhost:9092",
+                      "metadata_request_timeout": "4s",
                       "value_encoding_mode": "none",
-                      "key_encoding_mode": "none",
-                      "metadata_request_timeout": "4s"
+                      "key_encoding_mode": "none"
                     },
                     "summary": "Kafka Consumer Bridge"
                   },
@@ -72332,8 +72322,8 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "method": "post",
                       "url": "http://localhost:9901/messages/${topic}",
+                      "method": "post",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
@@ -72587,19 +72577,19 @@
                   },
                   "gcp_pubsub": {
                     "value": {
-                      "pubsub_topic": "mytopic",
                       "service_account_json": {
                         "type": "service_account",
                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                         "client_id": "123812831923812319190",
+                        "project_id": "myproject",
                         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                         "client_email": "test@myproject.iam.gserviceaccount.com",
                         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                         "private_key_id": "kid",
-                        "project_id": "myproject",
                         "token_uri": "https://oauth2.googleapis.com/token"
-                      }
+                      },
+                      "pubsub_topic": "mytopic"
                     },
                     "summary": "GCP PubSub Producer Bridge"
                   },
@@ -72726,12 +72716,12 @@
                         "type": "service_account",
                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                         "client_id": "123812831923812319190",
+                        "project_id": "myproject",
                         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                         "client_email": "test@myproject.iam.gserviceaccount.com",
                         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                         "private_key_id": "kid",
-                        "project_id": "myproject",
                         "token_uri": "https://oauth2.googleapis.com/token"
                       }
                     },
@@ -72841,8 +72831,8 @@
                       ],
                       "kafka": {
                         "max_batch_bytes": "896KB",
-                        "offset_reset_policy": "latest",
-                        "offset_commit_interval_seconds": 5
+                        "offset_commit_interval_seconds": 5,
+                        "offset_reset_policy": "latest"
                       },
                       "min_metadata_refresh_interval": "3s",
                       "topic_mapping": [
@@ -72860,9 +72850,9 @@
                         }
                       ],
                       "bootstrap_hosts": "localhost:9092",
+                      "metadata_request_timeout": "4s",
                       "value_encoding_mode": "none",
-                      "key_encoding_mode": "none",
-                      "metadata_request_timeout": "4s"
+                      "key_encoding_mode": "none"
                     },
                     "summary": "Kafka Consumer Bridge"
                   },
@@ -73390,8 +73380,8 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
@@ -73645,19 +73635,19 @@
                 },
                 "gcp_pubsub": {
                   "value": {
-                    "pubsub_topic": "mytopic",
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    }
+                    },
+                    "pubsub_topic": "mytopic"
                   },
                   "summary": "GCP PubSub Producer Bridge"
                 },
@@ -73780,12 +73770,12 @@
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
                     }
                   },
@@ -73879,8 +73869,8 @@
                     },
                     "kafka": {
                       "max_batch_bytes": "896KB",
-                      "offset_reset_policy": "latest",
-                      "offset_commit_interval_seconds": 5
+                      "offset_commit_interval_seconds": 5,
+                      "offset_reset_policy": "latest"
                     },
                     "min_metadata_refresh_interval": "3s",
                     "topic_mapping": [
@@ -73898,9 +73888,9 @@
                       }
                     ],
                     "bootstrap_hosts": "localhost:9092",
+                    "metadata_request_timeout": "4s",
                     "value_encoding_mode": "none",
-                    "key_encoding_mode": "none",
-                    "metadata_request_timeout": "4s"
+                    "key_encoding_mode": "none"
                   },
                   "summary": "Kafka Consumer Bridge"
                 },
@@ -74486,11 +74476,11 @@
                       "nl": 0,
                       "topic": "stomp/topic",
                       "qos": 1,
+                      "rap": 0,
+                      "rh": 0,
                       "sub_props": {
                         "subid": "10"
-                      },
-                      "rap": 0,
-                      "rh": 0
+                      }
                     },
                     "summary": "A STOMP subscription"
                   }
@@ -74566,11 +74556,11 @@
                     "nl": 0,
                     "topic": "stomp/topic",
                     "qos": 1,
+                    "rap": 0,
+                    "rh": 0,
                     "sub_props": {
                       "subid": "10"
-                    },
-                    "rap": 0,
-                    "rh": 0
+                    }
                   },
                   "summary": "A STOMP subscription"
                 }
@@ -76440,8 +76430,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -76465,8 +76455,8 @@
                   },
                   {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -76602,8 +76592,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -76633,8 +76623,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -76796,8 +76786,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -76827,8 +76817,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -77686,14 +77676,14 @@
                     "enable": true,
                     "parameters": {
                       "payload_template": "${payload}",
+                      "pubsub_topic": "mytopic",
                       "attributes_template": [
                         {
                           "value": "${payload.attrs.v}",
                           "key": "${payload.attrs.k}"
                         }
                       ],
-                      "ordering_key_template": "${payload.ok}",
-                      "pubsub_topic": "mytopic"
+                      "ordering_key_template": "${payload.ok}"
                     },
                     "connector": "my_connector_name",
                     "resource_opts": {
@@ -78006,8 +77996,8 @@
                         "value": "${.}",
                         "key": "${.clientid}"
                       },
-                      "pulsar_topic": "test_topic",
-                      "sync_timeout": "5s"
+                      "sync_timeout": "5s",
+                      "pulsar_topic": "test_topic"
                     },
                     "connector": "pulsar_connector",
                     "resource_opts": {
@@ -80102,8 +80092,8 @@
                       ],
                       "idle_timeout": "30s",
                       "mountpoint": "coap/",
-                      "enable_stats": true,
                       "connection_required": false,
+                      "enable_stats": true,
                       "notify_type": "qos",
                       "publish_qos": "coap",
                       "subscribe_qos": "coap"
@@ -80434,8 +80424,8 @@
                     "heartbeat": "30s",
                     "idle_timeout": "30s",
                     "mountpoint": "coap2/",
-                    "enable_stats": true,
                     "connection_required": false,
+                    "enable_stats": true,
                     "notify_type": "qos",
                     "publish_qos": "coap",
                     "subscribe_qos": "coap"
@@ -80871,14 +80861,14 @@
                       "enable": true,
                       "parameters": {
                         "payload_template": "${payload}",
+                        "pubsub_topic": "mytopic",
                         "attributes_template": [
                           {
                             "value": "${payload.attrs.v}",
                             "key": "${payload.attrs.k}"
                           }
                         ],
-                        "ordering_key_template": "${payload.ok}",
-                        "pubsub_topic": "mytopic"
+                        "ordering_key_template": "${payload.ok}"
                       },
                       "connector": "my_connector_name",
                       "node_status": [
@@ -81296,8 +81286,8 @@
                           "value": "${.}",
                           "key": "${.clientid}"
                         },
-                        "pulsar_topic": "test_topic",
-                        "sync_timeout": "5s"
+                        "sync_timeout": "5s",
+                        "pulsar_topic": "test_topic"
                       },
                       "connector": "pulsar_connector",
                       "node_status": [
@@ -81866,14 +81856,14 @@
                       "enable": true,
                       "parameters": {
                         "payload_template": "${payload}",
+                        "pubsub_topic": "mytopic",
                         "attributes_template": [
                           {
                             "value": "${payload.attrs.v}",
                             "key": "${payload.attrs.k}"
                           }
                         ],
-                        "ordering_key_template": "${payload.ok}",
-                        "pubsub_topic": "mytopic"
+                        "ordering_key_template": "${payload.ok}"
                       },
                       "connector": "my_connector_name",
                       "node_status": [
@@ -82291,8 +82281,8 @@
                           "value": "${.}",
                           "key": "${.clientid}"
                         },
-                        "pulsar_topic": "test_topic",
-                        "sync_timeout": "5s"
+                        "sync_timeout": "5s",
+                        "pulsar_topic": "test_topic"
                       },
                       "connector": "pulsar_connector",
                       "node_status": [
@@ -82799,14 +82789,14 @@
                     "enable": true,
                     "parameters": {
                       "payload_template": "${payload}",
+                      "pubsub_topic": "mytopic",
                       "attributes_template": [
                         {
                           "value": "${payload.attrs.v}",
                           "key": "${payload.attrs.k}"
                         }
                       ],
-                      "ordering_key_template": "${payload.ok}",
-                      "pubsub_topic": "mytopic"
+                      "ordering_key_template": "${payload.ok}"
                     },
                     "connector": "my_connector_name",
                     "resource_opts": {
@@ -83093,8 +83083,8 @@
                         "value": "${.}",
                         "key": "${.clientid}"
                       },
-                      "pulsar_topic": "test_topic",
-                      "sync_timeout": "5s"
+                      "sync_timeout": "5s",
+                      "pulsar_topic": "test_topic"
                     },
                     "connector": "pulsar_connector",
                     "resource_opts": {
@@ -85363,19 +85353,19 @@
                       "start_after_created": true,
                       "health_check_interval": "30s"
                     },
-                    "pipelining": 100,
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    }
+                    },
+                    "pipelining": 100
                   },
                   {
                     "name": "clickhouse_connector",
@@ -85605,19 +85595,19 @@
                     "resource_opts": {
                       "request_ttl": "60s"
                     },
-                    "pipelining": 100,
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    }
+                    },
+                    "pipelining": 100
                   },
                   {
                     "name": "my_timescale_connector",
@@ -86509,19 +86499,19 @@
                         "start_after_created": true,
                         "health_check_interval": "30s"
                       },
-                      "pipelining": 100,
                       "service_account_json": {
                         "type": "service_account",
                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                         "client_id": "123812831923812319190",
+                        "project_id": "myproject",
                         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                         "client_email": "test@myproject.iam.gserviceaccount.com",
                         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                         "private_key_id": "kid",
-                        "project_id": "myproject",
                         "token_uri": "https://oauth2.googleapis.com/token"
-                      }
+                      },
+                      "pipelining": 100
                     },
                     "summary": "GCP PubSub Consumer Connector"
                   },
@@ -86781,19 +86771,19 @@
                       "resource_opts": {
                         "request_ttl": "60s"
                       },
-                      "pipelining": 100,
                       "service_account_json": {
                         "type": "service_account",
                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                         "client_id": "123812831923812319190",
+                        "project_id": "myproject",
                         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                         "client_email": "test@myproject.iam.gserviceaccount.com",
                         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                         "private_key_id": "kid",
-                        "project_id": "myproject",
                         "token_uri": "https://oauth2.googleapis.com/token"
-                      }
+                      },
+                      "pipelining": 100
                     },
                     "summary": "GCP PubSub Producer Connector"
                   },
@@ -87457,19 +87447,19 @@
                       "start_after_created": true,
                       "health_check_interval": "30s"
                     },
-                    "pipelining": 100,
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    }
+                    },
+                    "pipelining": 100
                   },
                   "summary": "GCP PubSub Consumer Connector"
                 },
@@ -87637,19 +87627,19 @@
                     "resource_opts": {
                       "request_ttl": "60s"
                     },
-                    "pipelining": 100,
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    }
+                    },
+                    "pipelining": 100
                   },
                   "summary": "GCP PubSub Producer Connector"
                 },
@@ -90885,12 +90875,12 @@
                     "active_n": 100
                   },
                   "max_connections": 204800,
+                  "proxy_protocol_timeout": "3s",
+                  "acceptors": 16,
                   "access_rules": [
                     "allow all"
                   ],
-                  "acceptors": 16,
                   "proxy_protocol": false,
-                  "proxy_protocol_timeout": "3s",
                   "mountpoint": "/",
                   "current_connections": 10240
                 },
@@ -90980,12 +90970,12 @@
                     "active_n": 100
                   },
                   "max_connections": 204800,
+                  "proxy_protocol_timeout": "3s",
+                  "acceptors": 16,
                   "access_rules": [
                     "allow all"
                   ],
-                  "acceptors": 16,
                   "proxy_protocol": false,
-                  "proxy_protocol_timeout": "3s",
                   "mountpoint": "/",
                   "current_connections": 10240
                 },
@@ -91076,12 +91066,12 @@
                   "active_n": 100
                 },
                 "max_connections": 204800,
+                "proxy_protocol_timeout": "3s",
+                "acceptors": 16,
                 "access_rules": [
                   "allow all"
                 ],
-                "acceptors": 16,
                 "proxy_protocol": false,
-                "proxy_protocol_timeout": "3s",
                 "mountpoint": "/",
                 "current_connections": 10240
               },
@@ -92472,8 +92462,8 @@
                       "start_at": "2022-01-11",
                       "expiry": false,
                       "customer_type": 10,
-                      "deployment": "bar-deployment",
                       "customer": "Foo",
+                      "deployment": "bar-deployment",
                       "expiry_at": "2295-10-27"
                     }
                   }
@@ -92516,8 +92506,8 @@
                       "start_at": "2022-01-11",
                       "expiry": false,
                       "customer_type": 10,
-                      "deployment": "bar-deployment",
                       "customer": "Foo",
+                      "deployment": "bar-deployment",
                       "expiry_at": "2295-10-27"
                     }
                   }
@@ -93588,8 +93578,8 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
@@ -93807,19 +93797,19 @@
                     "influxdb_type": "influxdb_api_v1"
                   },
                   {
-                    "pubsub_topic": "mytopic",
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    }
+                    },
+                    "pubsub_topic": "mytopic"
                   },
                   {
                     "name": "redis_bridge",
@@ -93934,12 +93924,12 @@
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
                     }
                   },
@@ -94037,8 +94027,8 @@
                     ],
                     "kafka": {
                       "max_batch_bytes": "896KB",
-                      "offset_reset_policy": "latest",
-                      "offset_commit_interval_seconds": 5
+                      "offset_commit_interval_seconds": 5,
+                      "offset_reset_policy": "latest"
                     },
                     "min_metadata_refresh_interval": "3s",
                     "topic_mapping": [
@@ -94056,9 +94046,9 @@
                       }
                     ],
                     "bootstrap_hosts": "localhost:9092",
+                    "metadata_request_timeout": "4s",
                     "value_encoding_mode": "none",
-                    "key_encoding_mode": "none",
-                    "metadata_request_timeout": "4s"
+                    "key_encoding_mode": "none"
                   },
                   {
                     "name": "foo",
@@ -94584,8 +94574,8 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "method": "post",
                       "url": "http://localhost:9901/messages/${topic}",
+                      "method": "post",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
@@ -94839,19 +94829,19 @@
                   },
                   "gcp_pubsub": {
                     "value": {
-                      "pubsub_topic": "mytopic",
                       "service_account_json": {
                         "type": "service_account",
                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                         "client_id": "123812831923812319190",
+                        "project_id": "myproject",
                         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                         "client_email": "test@myproject.iam.gserviceaccount.com",
                         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                         "private_key_id": "kid",
-                        "project_id": "myproject",
                         "token_uri": "https://oauth2.googleapis.com/token"
-                      }
+                      },
+                      "pubsub_topic": "mytopic"
                     },
                     "summary": "GCP PubSub Producer Bridge"
                   },
@@ -94978,12 +94968,12 @@
                         "type": "service_account",
                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                         "client_id": "123812831923812319190",
+                        "project_id": "myproject",
                         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                         "client_email": "test@myproject.iam.gserviceaccount.com",
                         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                         "private_key_id": "kid",
-                        "project_id": "myproject",
                         "token_uri": "https://oauth2.googleapis.com/token"
                       }
                     },
@@ -95093,8 +95083,8 @@
                       ],
                       "kafka": {
                         "max_batch_bytes": "896KB",
-                        "offset_reset_policy": "latest",
-                        "offset_commit_interval_seconds": 5
+                        "offset_commit_interval_seconds": 5,
+                        "offset_reset_policy": "latest"
                       },
                       "min_metadata_refresh_interval": "3s",
                       "topic_mapping": [
@@ -95112,9 +95102,9 @@
                         }
                       ],
                       "bootstrap_hosts": "localhost:9092",
+                      "metadata_request_timeout": "4s",
                       "value_encoding_mode": "none",
-                      "key_encoding_mode": "none",
-                      "metadata_request_timeout": "4s"
+                      "key_encoding_mode": "none"
                     },
                     "summary": "Kafka Consumer Bridge"
                   },
@@ -95628,8 +95618,8 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
@@ -95883,19 +95873,19 @@
                 },
                 "gcp_pubsub": {
                   "value": {
-                    "pubsub_topic": "mytopic",
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    }
+                    },
+                    "pubsub_topic": "mytopic"
                   },
                   "summary": "GCP PubSub Producer Bridge"
                 },
@@ -96022,12 +96012,12 @@
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
                       "client_id": "123812831923812319190",
+                      "project_id": "myproject",
                       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
                       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                       "client_email": "test@myproject.iam.gserviceaccount.com",
                       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test%40myproject.iam.gserviceaccount.com",
                       "private_key_id": "kid",
-                      "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
                     }
                   },
@@ -96123,8 +96113,8 @@
                     },
                     "kafka": {
                       "max_batch_bytes": "896KB",
-                      "offset_reset_policy": "latest",
-                      "offset_commit_interval_seconds": 5
+                      "offset_commit_interval_seconds": 5,
+                      "offset_reset_policy": "latest"
                     },
                     "min_metadata_refresh_interval": "3s",
                     "topic_mapping": [
@@ -96142,9 +96132,9 @@
                       }
                     ],
                     "bootstrap_hosts": "localhost:9092",
+                    "metadata_request_timeout": "4s",
                     "value_encoding_mode": "none",
-                    "key_encoding_mode": "none",
-                    "metadata_request_timeout": "4s"
+                    "key_encoding_mode": "none"
                   },
                   "summary": "Kafka Consumer Bridge"
                 },
