@@ -73,7 +73,7 @@ MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数�
 
 MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
-{% endemqx %}
+{% endemqxee %}
 
 ## 认证
 
