@@ -576,7 +576,7 @@
           path: gateway/gbt32960
           edition: ee
         #- gateway/tcp
-
+    - alias-extraction/alias-extraction 
 
 - title_en: Tutorials
   title_cn: 实用教程

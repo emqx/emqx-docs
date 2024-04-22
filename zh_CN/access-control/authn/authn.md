@@ -170,6 +170,8 @@ SELECT password_hash, salt FROM mqtt_user where username = 'emqx_u' LIMIT 1
 
 - `${cert_common_name}`: 将在运行时被替换为客户端 TLS 证书的通用名称（Common Name），仅适用于 TLS 连接。
 
+- `${client_attrs.{NAME}}`：将在运行时被从客户端元数据中提取的自定义属性名称所替换。有关属性提取的详细信息，请参见[MQTT 客户端属性提取](../../alias-extraction/alias-extraction.md)。
+
 ## 认证配置方式
 
 EMQX 提供了 3 种使用认证的配置方式，分别为：Dashboard、配置文件和 HTTP API。
