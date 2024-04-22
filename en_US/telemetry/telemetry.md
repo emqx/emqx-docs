@@ -16,10 +16,10 @@ You can permanently disable telemetry through the configuration file `etc/emqx.c
 telemetry.enable = false
 ```
 
-Or to disable telemetry in this boot via environment variables at startup: 
+Or to disable telemetry in this boot via environment variables at startup:
 
 ```bash
-export EMQX_TELEMETRY__ENABLE=false && ./bin/emqx start
+export EMQX_TELEMETRY__ENABLE=false && ./bin/emqx foreground
 ```
 
 ### Disable While Running EMQX

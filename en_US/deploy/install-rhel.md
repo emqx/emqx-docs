@@ -92,29 +92,11 @@ This section takes CentOS 8 as an example to illustrate how to download the late
 
 ### Start EMQX
 
-EMQX offers 3 different options to start EMQX:
+Start EMQX as a systemd service.
 
-- To start EMQX directly, run:
-
-  ```bash
-  $ emqx start
-  EMQX @CE_VERSION@ is started successfully!
-  
-  $ emqx ctl status
-  Node 'emqx@127.0.0.1' @CE_VERSION@ is started
-  ```
-
-- To start EMQX with systemctl, run:
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- To start EMQX as a service, run:
-
-  ```bash
-  sudo service emqx start
-  ```
+```bash
+sudo systemctl start emqx
+```
 
 ### Uninstall EMQX
 
@@ -171,7 +153,7 @@ This section takes CentOS 8 as an example to illustrate how to download the late
 After the installation, run the command below to start EMQX.
 
 ```bash
-./emqx/bin/emqx start
+./emqx/bin/emqx foreground
 ```
 
 {% endemqxce %}
@@ -180,36 +162,21 @@ After the installation, run the command below to start EMQX.
 
 ## Install with rpm
 
-1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
+1. Go to the [official site for EMQX](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
+
 2. Select `@EE_VERSION@` for **Version** and `CentOS` for **OS**, and click the **Download** button.
-3. On the Downloads and Install page, select `rpm` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instructions.
+
+3. On the Downloads and Install page, select `rpm` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Click **Download Now**.
+
+   You can also follow the command instructions on the page.
 
 ### Start EMQX
 
-EMQX offers 3 different options to start EMQX:
+Start EMQX as a systemd service.
 
-- To start EMQX directly, run:
-
-  ```bash
-  $ emqx start
-  EMQX @EE_VERSION@ is started successfully!
-  
-  $ emqx ctl status
-  Node 'emqx@127.0.0.1' @EE_VERSION@ is started
-  ```
-
-- To start EMQX with systemctl, run:
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- To start EMQX as a service, run:
-
-  ```bash
-  sudo service emqx start
-  ```
-
+```bash
+sudo systemctl start emqx
+```
 ### Uninstall EMQX
 
 To uninstall EMQX, run:
@@ -220,16 +187,18 @@ sudo yum remove emqx
 
 ## Install with tar.gz
 
-1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
+1. Go to the [official site for EMQX](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
 2. Select `@EE_VERSION@` for **Version** and `CentOS` for **OS**, and click the **Download** button.
-3. On the Downloads and Install page, select `tar.gz` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
+3. On the Downloads and Install page, select `tar.gz` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Click **Download Now**.
+
+   You can also follow the command instructions on the page.
 
 ### Start EMQX
 
 After the installation, run the command below to start EMQX.
 
 ```bash
-./emqx/bin/emqx start
+./emqx/bin/emqx foreground
 ```
 
 {% endemqxee %}

@@ -1,4 +1,4 @@
-# Listeners
+# Listener Configuration
 
 In EMQX, listener is configured to receive requests from MQTT clients. EMQX supports the following message transfer protocols, including:
 
@@ -22,11 +22,12 @@ listeners.tcp.default {
 }
 ```
 
-where, <!--did not add the dashboard UI as here is a much simplified version-->
+where, 
 
 - `listeners.tcp.default` is to enable the listener, and here `default` is the name of the listener, you can change it to your own listener name. 
-  - `bind` is to set the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `1883`. 
-  - `max_connection` is to set the maximum number of concurrent connections allowed by the listener; default value: `infinity`.
+
+- `bind` is to set the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `1883`. 
+- `max_connection` is to set the maximum number of concurrent connections allowed by the listener; default value: `infinity`.
 
 ## Configure SSL Listener
 
@@ -53,14 +54,15 @@ listeners.ssl.default {
 where:
 
 - `listeners.ssl.default` is to enable the listener. 
-  - `bind` is the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `8883`. 
-  - `max_connection` is the maximum number of concurrent connections allowed by the listener, default value: `infinity`.
-  - `ssl_options` is the SSL/TLS configuration option for the listener, it has three properties:
-    - `cacertfile`: PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
-    - `certfile`: PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
-    - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
-    - `verify`:  Set 'verify_peer' to verify the authenticity of the clients' certificates, otherwise 'verify_none'.
-    - `fail_if_no_peer_cert`: If set to true, the server fails if the client does not have a certificate to send, that is, sends an empty certificate. If set to false, it fails only if the client sends an invalid certificate (an empty certificate is considered valid).
+
+- `bind` is the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `8883`. 
+- `max_connection` is the maximum number of concurrent connections allowed by the listener, default value: `infinity`.
+- `ssl_options` is the SSL/TLS configuration option for the listener, it has three properties:
+  - `cacertfile`: PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
+  - `certfile`: PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
+  - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
+  - `verify`:  Set 'verify_peer' to verify the authenticity of the clients' certificates, otherwise 'verify_none'.
+  - `fail_if_no_peer_cert`: If set to `true`, the server fails if the client does not have a certificate to send, that is, sends an empty certificate. If set to false, it fails only if the client sends an invalid certificate (an empty certificate is considered valid).
 
 ## Configure WebSocket Listener
 
@@ -81,9 +83,10 @@ listeners.ws.default {
 where:
 
 - `listeners.ws.default` is to enable the listener. 
-  - `bind` is the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `8083`. 
-  - `max_connection` is the maximum number of concurrent connections allowed by the listener, default value: `infinity`.
-  - `websocket.mqtt_path` is to set the path to the WebSocket’s MQTT protocol, which is `/mqtt` by default. 
+
+- `bind` is the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `8083`. 
+- `max_connection` is the maximum number of concurrent connections allowed by the listener, default value: `infinity`.
+- `websocket.mqtt_path` is to set the path to the WebSocket’s MQTT protocol, which is `/mqtt` by default. 
 
 ## Configure Secure WebSocket Listener
 
@@ -109,13 +112,14 @@ listeners.wss.default {
 where:
 
 - `listeners.wss.default` is to enable the listener. 
-  - `bind` is the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `8084`. 
-  - `max_connection` is the maximum number of concurrent connections allowed by the listener, default value: `infinity`.
-  - `websocket.mqtt_path` is to set the path to the WebSocket’s MQTT protocol, which is `/mqtt` by default. 
-  - `ssl_options` is the SSL/TLS configuration option for the listener, it has three properties:
-    - `cacertfile`: PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
-    - `certfile`: PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
-    - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
+
+- `bind` is the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `8084`. 
+- `max_connection` is the maximum number of concurrent connections allowed by the listener, default value: `infinity`.
+- `websocket.mqtt_path` is to set the path to the WebSocket’s MQTT protocol, which is `/mqtt` by default. 
+- `ssl_options` is the SSL/TLS configuration option for the listener, it has three properties:
+  - `cacertfile`: PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
+  - `certfile`: PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
+  - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
 
 <!--To add QUIC-->
 
@@ -123,24 +127,18 @@ where:
 
 {% emqxce %}
 
-:::tip
-
-To configure listeners via Dashboard,  click **Management** -> **Listener** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
-
-:::
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
 
 {% endemqxce %}
 
 {% emqxee %}
 
-:::tip
-
-To configure listeners via Dashboard,  click **Management** -> **Listener** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
 EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
-:::
-
 {% endemqxee %}
+
+:::tip
+
+You can also configure listeners via Dashboard by clicking **Management** -> **Listener** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+
+:::

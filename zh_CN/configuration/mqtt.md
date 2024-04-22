@@ -1,20 +1,20 @@
 # MQTT
 
-[MQTT](https://mqtt.org/) is a standard messaging protocol for the Internet of Things (IoT). It is designed as an extremely lightweight publish/subscribe messaging transport that is ideal for connecting remote devices with a small code footprint and minimal network bandwidth. 
+[MQTT](https://mqtt.org/) 是物联网 (IoT) 的标准消息传输协议。它被设计为一个极轻量级的发布/订阅消息传输机制，非常适合于需要小代码占用和最小网络带宽的远程设备连接。
 
-EMQX is 100% MQTT 5.0 and 3.x compliant, this section will introduce the basic configuration items for MQTT-related features, covering topics like basic MQTT settings, subscription settings, session settings, force shutdown settings, and forced garbage collection settings.
+EMQX 完全兼容 MQTT 5.0 和 3.x，本节将介绍 MQTT 相关功能的基本配置项，包括基本 MQTT 设置、订阅设置、会话设置、强制关闭设置和强制垃圾回收设置等。
 
-## Basic MQTT Configurations
+## 基本 MQTT 配置
 
-This section will introduce the configuration settings that determine how the MQTT protocol will behave in terms of packet size, client ID length, topic levels, quality of service (QoS), topic alias, and retention. 
+本节将介绍决定 MQTT 协议行为的配置设置，包括数据包大小、客户端 ID 长度、主题级别、服务质量（QoS）、主题别名和保留等。
 
-:::tip
+::: tip
 
-You can also find the corresponding configuration items in EMQX Dashboard (**Configuration** -> **MQTT** -> **General**). Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+您也可以在 EMQX Dashboard 中找到对应的配置项（**管理** -> **MQTT 配置** -> **通用**）。一旦您通过 Dashboard 配置了这些项，您的设置将覆盖 `emqx.conf` 中的相同配置项。
 
 :::
 
-**Example Code:**
+**示例代码：**
 
 ```bash
 mqtt {
@@ -27,32 +27,30 @@ mqtt {
 }  
 ```
 
-Where, 
+其中，
 
-| **Configuration Items** | Dashboard UI         | **Description**                                              | **Default value** | **Optinal Values** |
-| ----------------------- | -------------------- | ------------------------------------------------------------ | ----------------- | ------------------ |
-| `max_packet_size`       | Max Packet Size      | MQTT packets are used to send messages between MQTT clients and EMQX.<br /><br /> This sets the maximum MQTT packet size allowed. | `1MB`             |                    |
-| `max_clientid_len`      | Max Client ID Length | This sets the maximum length of an MQTT client ID.<br /><br />It can help to prevent clients from using excessively long client IDs that could cause issues. | `65535`           | `23` ～ `65535`    |
-| `max_topic_levels`      | Max Topic Levels     | MQTT topics are used to organize and categorize messages. <br /><br />This sets the maximum number of levels allowed in an MQTT topic. | `128`             | `1` ～ `65535`     |
-| `max_qos_allowed`       | Max QoS              | QoS levels determine the level of reliability and delivery assurance for messages.<br /><br /> This sets maximum quality of service (QoS) level that is allowed for MQTT messages. |                   |                    |
-| `max_topic_alias`       | Max Topic Alias      | Topic aliases are a way to reduce the size of MQTT packets by using a shorter alias instead of the full topic name.<br /><br /> This sets the maximum number of topic aliases that can be used in an MQTT session. | `65535`           | `1` ～ `65535`     |
-| `retain_available`      | Retain Available     | Retained messages are used to store the last message published to a topic, so that new subscribers to the topic can receive the most recent message.<br /><br /> This sets whether to enable retained messages feature in MQTT. | `true`            | `true`, `false`    |
+| **配置项**         | Dashboard UI       | **描述**                                                     | **默认值** | **可选值**      |
+| ------------------ | ------------------ | ------------------------------------------------------------ | ---------- | --------------- |
+| `max_packet_size`  | 最大报文大小       | MQTT 报文用于在 MQTT 客户端和 EMQX 之间发送消息。<br /><br />此设置允许的最大 MQTT 报文大小。 | `1MB`      |                 |
+| `max_clientid_len` | 最大客户端 ID 长度 | 此设置 MQTT 客户端 ID 的最大长度。<br /><br />它可以帮助防止客户端使用过长的客户端 ID 导致问题。 | `65535`    | `23` - `65535`  |
+| `max_topic_levels` | 最大主题层级       | MQTT 主题用于组织和分类消息。<br /><br />此设置允许 MQTT 主题中的最大级别数量。 | `128`      | `1` - `65535`   |
+| `max_qos_allowed`  | 最大 QoS           | QoS 等级决定了消息的可靠性和传递保证等级。<br /><br />此设置允许 MQTT 消息的最大服务质量（QoS）等级。 |            |                 |
+| `max_topic_alias`  | 最大主题别名数     | 主题别名是通过使用较短的别名代替完整主题名称来减少 MQTT 数据包大小的一种方式。<br /><br />此设置允许在 MQTT 会话中使用的最大主题别名数量。 | `65535`    | `1` - `65535`   |
+| `retain_available` | 启用保留消息       | 保留消息用于存储发布到主题的最后一条消息，以便新订阅该主题的客户端可以接收到最新的消息。<br /><br />此设置是否启用 MQTT 中的保留消息功能。 | `true`     | `true`, `false` |
 
+## 订阅设置
 
+在 EMQX 中，订阅指的是客户端在 EMQX 上订阅主题的过程。当客户端订阅一个主题时，它表示希望接收发布到该主题的消息。
 
-## Subscription Settings
+本节介绍如何配置共享订阅、通配符订阅和排它订阅。
 
-In EMQX, subscription refers to the process of a client subscribing to a topic on EMQX. When a client subscribes to a topic, it is indicating that it wants to receive messages published to that topic.
+::: tip
 
-This section introduces how to configure shared subscription, wildcard subscription, and exclusive subscription. 
-
-:::tip
-
-You can also find the corresponding configuration items in EMQX Dashboard (**Configuration** -> **MQTT** -> **General**). Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+您也可以在 EMQX Dashboard 中找到对应的配置项（**管理** -> **MQTT 配置** -> **通用**）。一旦您通过 Dashboard 配置了这些项，您的设置将覆盖 `emqx.conf` 中的相同配置项。
 
 :::
 
-**Example code:** <!--code to be reviewed-->
+**示例代码：** <!--待审核代码-->
 
 ```bash
 mqtt {
@@ -63,22 +61,20 @@ mqtt {
 }
 ```
 
-Where, 
+其中，
 
-| **Configuration Items**        | Dashboard UI                    | **Description**                                              | **Default value** | Optinal Values                                               |
-| ------------------------------ | ------------------------------- | ------------------------------------------------------------ | ----------------- | ------------------------------------------------------------ |
-| `wildcard_subscription`        | Wildcard Subscription Available | Wildcard subscriptions allow MQTT clients to subscribe to multiple topics using a single subscription, using wildcards such as `+` and `#`. <br /><br />This sets whether to enable wildcard subscription. | `true`            | `true`, `false`                                              |
-| `exclusive_subscription`       | Exclusive Subscription          | Exclusive subscriptions allow only one MQTT client to subscribe to a topic at a time.<br /><br />This sets whether to enable exclusive subscriptions. | `true`            | `true`, `false`                                              |
-| `shared_subscription`          | Shared Subscription Available   | Shared subscriptions allow multiple MQTT clients to share a subscription to a topic. <br /><br />This sets whether to enable shared subscriptions in MQTT. | `true`            | `true`, `false`                                              |
-| `shared_subscription_strategy` |                                 | This setting defines the strategy for distributing messages among MQTT clients that share a subscription.<br /><br />Needed only `shared_subscription` is set to `true`. | `round_robin`     | - `random` (Dispatch the message to a random selected subscriber) <br /><br />- `round_robin` (Select the subscribers in a round-robin manner) <br /><br />-  `sticky` (Always use the last selected subscriber to dispatch, until the subscriber disconnects.)<br /><br />- `hash` (Select the subscribers by the hash of `clientIds`)<br /> |
+| **配置项**                     | Dashboard UI   | **描述**                                                     | **默认值**    | 可选值                                                       |
+| ------------------------------ | -------------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
+| `wildcard_subscription`        | 允许通配符订阅 | 通配符订阅允许 MQTT 客户端使用单个订阅通过通配符如 `+` 和 `#` 订阅多个主题。<br /><br />此设置是否启用通配符订阅。 | `true`        | `true`, `false`                                              |
+| `exclusive_subscription`       | 允许排它订阅   | 排它订阅允许一次只有一个 MQTT 客户端可以订阅一个主题。<br /><br />此设置是否启用排它订阅。 | `true`        | `true`, `false`                                              |
+| `shared_subscription`          | 允许共享订阅   | 共享订阅允许多个 MQTT 客户端共享对主题的订阅。<br /><br />此设置是否在 MQTT 中启用共享订阅。 | `true`        | `true`, `false`                                              |
+| `shared_subscription_strategy` | 共享订阅策略   | 此设置定义了在共享订阅的 MQTT 客户端之间分发消息的策略。<br /><br />仅当 `shared_subscription` 设置为 `true` 时需要。 | `round_robin` | - `random` (将消息随机分发给选定的订阅者)<br /><br />- `round_robin` (以轮询方式选择订阅者)<br /><br />- `sticky` (总是使用最后选定的订阅者进行分发，直到订阅者断开连接。)<br /><br />- `hash` (根据 `clientIds` 的哈希选择订阅者) |
 
-## Delayed Publish Settings
+## 延迟发布设置
 
-The Delayed Publish feature allows clients to delay the publishing of a message to a topic for a specified amount of time. This feature is useful for scenarios where messages need to be published at specific times or when a certain condition is met.
+本节介绍如何启用延迟发布以及如何设置允许的最大延迟消息数量。延迟发布功能允许客户端将消息延迟一定时间后发布到主题。这个功能对于需要在特定时间或满足某个条件时发布消息的场景非常有用。
 
-This section introduces how to enable delayed publishing and how to set the maximum of delayed messages allowed:
-
-**Example code:**
+**示例代码：**
 
 ```bash
 delay {
@@ -87,33 +83,31 @@ delay {
 }
 ```
 
-Where, 
+其中，
 
-- `delayed_publish_enabled` sets whether to enable the Delayed Publish feature in EMQX; default value: `true`, optional values: `true`, `false`.
-- `max_delayed_messages` sets the maximum number of delayed messages allowed; default value: `0`.
+- `delayed_publish_enabled` 设置是否在 EMQX 中启用延迟发布功能；默认值：`true`，可选值：`true`, `false`。
+- `max_delayed_messages` 设置允许的最大延迟消息数量；默认值：`0`。
 
-## Keep Alive Settings
+## Keep Alive 设置
 
-Keep Alive is the mechanism that ensures that a connection between an MQTT client and EMQX remains active even if no data is transmitted. This is how it works: when an MQTT client creates a connection to EMQX, it can set the Keep Alive variable header field in the connection request protocol packet to a non-zero value. For details about how Keep Alive works, see [What is the MQTT Keep Alive parameter for?](https://www.emqx.com/en/blog/mqtt-keep-alive)
+Keep Alive 是一种机制，确保即使没有数据传输，MQTT 客户端和 EMQX 之间的连接仍然保持活动。其工作原理如下：当 MQTT 客户端创建到 EMQX 的连接时，可以在连接请求协议包的 Keep Alive 变量头字段中设置非零值。有关 Keep Alive 工作原理的详细信息，请参见 [MQTT 协议 Keep Alive 详解](https://www.emqx.com/zh/blog/mqtt-keep-alive)。
 
-For clients with Keep Alive enabled, you can continue to customize the coefficient EMQX uses to confirm whether the keep alive duration of the client expires.
+对于启用了 Keep Alive 的客户端，您可以继续自定义 EMQX 用来确认客户端 Keep Alive 时长是否过期的系数。
 
 ```bash
 keepalive_backoff = 0.75
 ```
 
-Where, **Keep Alive Backoff** (`keepalive_backoff`) is the coefficient EMQX uses to confirm whether the keep alive duration of the client expires. Default: `0.75`. The calculation formular is as follows:
+其中，**Keep Alive Backoff**（`keepalive_backoff`）是 EMQX 用来确认客户端 Keep Alive 时长是否过期的系数。默认值：`0.75`。计算公式如下：
 $$
 Keep Alive * Backoff * 2
 $$
 
-## Session Settings
+## 会话设置
 
-In MQTT, a session refers to the connection between a client and a broker. As in EMQX, When a client connects to EMQX, it establishes a session that allows it to subscribe to topics and receive messages, as well as publish messages to EMQX.
+本节介绍如何配置会话。在 MQTT 中，会话指的是客户端与代理之间的连接。如在 EMQX 中，当客户端连接到 EMQX 时，它建立了一个会话，允许它订阅主题并接收消息，以及向 EMQX 发布消息。
 
-This section introduces how to configure sessions.
-
-**Example code:**
+**示例代码：**
 
 ```bash
 session {
@@ -141,35 +135,35 @@ session {
   }
 ```
 
-Where, 
+其中，
 
-| **Configuration Item**                | Dashboard UI                | **Description**                                              | **Default Value**                                            | **Optional Values**                  |
-| ------------------------------------- | --------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------ |
-| `max_subscriptions`                   | Max Subscriptions           | This sets the maximum number of subscriptions that the client is allowed to have | `infinity`                                                   | `1` ~ `infinity`                     |
-| `upgrade_qos`                         | Upgrade QoS                 | This sets whether the client is allowed to upgrade the QoS (Quality of Service) level of a message after it has been published. | `false` (disabled)                                           | `true`, `false`                      |
-| `max_inflight`                        | Max Inflight                | This sets the maximum number of QoS 1 and QoS 2 messages that can be in flight (i.e., sent but not yet acknowledged) at any given time | `32`                                                         | `1` ~ `65535`                        |
-| `retry_interval`                      | Retry Interval              | This sets the interval at which the client should retry sending a QoS 1 or QoS 2 message. | `30s`<br />unit: s                                           | --                                   |
-| `max_awaiting_rel`                    | Max Awaiting PUBREL         | This sets the pending QoS 2 messages in each session until either `PUBREL` is received or timed out. After reaching this limit, new QoS 2 `PUBLISH` requests will be rejected with error code `147(0x93)`.<br />In MQTT, `PUBREL` is a control packet used in the message flow for QoS  2, which provides guaranteed message delivery. | `100`                                                        | `1` ~ `infinity`                     |
-| `await_rel_timeout`                   | Max Awaiting PUBREL TIMEOUT | This sets the amount of time to wait for a release of a QoS 2 message before receiving `PUBREL`.  After reaching this limit, EMQX will release the packet ID and also generate a warning level log. <br />Note:  ﻿EMQX will forwarding of the received QoS 2 message whether it has received the `PUBREL`﻿ or not. | `300s`<br />unit: s                                          | --                                   |
-| `session_expiry_interval`             | Session Expiry Interval     | This sets the amount of time that a session can be idle before it is automatically closed. Note: For non-MQTT 5.0 clients only. | `2h`                                                         |                                      |
-| `max_mqueue_len`                      | Max Message Queue Length    | This sets the maximum allowed queue length when persistent clients are disconnected or inflight window is full. | `1000`                                                       | `0` ~ `infinity`                     |
-| `mqueue_priorities`                   | Topic Priorities            | This sets the topic priorities, the configuration here will override that defined in `mqueue_default_priority`. | `disabled` <br />The session uses the priority set by `mqueue_default_priority`. | `disabled`<br />or<br />`1` ～ `255` |
-| `mqueue_default_priority`             | Default Topic Priorities    | This sets the default topic priority.                        | `lowest`                                                     | `highest`， `lowest`                 |
-| `mqueue_store_qos0`                   | Store QoS 0 Message         | This sets whether to store QoS 0 message in the message queue when the connection is down but the session remains. | `true`                                                       | `true`, `false`                      |
-| `force_shutdown`                      | --                          | This sets whether to enable the force shutdown feature if the queue length (`max_message_queue_le`) or heap size (`max_heap_size`) reaches the specified value. | `true`                                                       | `true`, `false`                      |
-| `force_shutdown.max_message_queue_le` | --                          | This sets the maximum queue length to trigger a forced shutdown. | `1000`                                                       | `1` ~ `infinity`                     |
-| `force_shutdown.max_heap_size`        | --                          | This sets the maximum heap size to trigger a forced shutdown. | `32MB`                                                       | --                                   |
-| `force_gc`                            | --                          | This sets whether to enable forced garbage collection if the specified message number (`count`) or byte received (`bytes`)  is reached: | `true`                                                       | `true`, `false`                      |
-| `force_gc.count`                      | --                          | This sets the received message number that will trigger the forced garbage collection. | `16000`                                                      | `0` ~ `infinity`                     |
-| `force_gc.bytes`                      | --                          | This sets the received byte number that will trigger the forced garbage collection. | `16MB`<br />Unit: `MB`                                       | --                                   |
+| **配置项**                            | Dashboard UI         | **描述**                                                     | **默认值**                                                   | **可选值**                          |
+| ------------------------------------- | -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------------------------- |
+| `max_subscriptions`                   | 最大订阅数量         | 此设置允许客户端拥有的最大订阅数。                           | `infinity`                                                   | `1` - `infinity`                    |
+| `upgrade_qos`                         | 升级 QoS             | 此设置是否允许客户端在消息发布后升级消息的 QoS (服务质量) 等级。 | `false` (禁用)                                               | `true`, `false`                     |
+| `max_inflight`                        | 最大飞行窗口         | 此设置允许同时在途（即已发送但尚未确认）的 QoS 1 和 QoS 2 消息的最大数量。 | `32`                                                         | `1` - `65535`                       |
+| `retry_interval`                      | 消息重试间隔         | 此设置客户端应该以多久的间隔重试发送 QoS 1 或 QoS 2 消息。   | `30s`<br />单位: 秒                                          | --                                  |
+| `max_awaiting_rel`                    | 最大待发 PUBREL 数量 | 此设置每个会话中挂起的 QoS 2 消息数量，直到收到 `PUBREL` 或超时。达到此限制后，新的 QoS 2 `PUBLISH` 请求将被拒绝，并返回错误码 `147(0x93)`。<br />在 MQTT 中，`PUBREL` 是 QoS 2 消息流中用于确保消息交付的控制包。 | `100`                                                        | `1` - `infinity`                    |
+| `await_rel_timeout`                   | 最大 PUBREL 等待时长 | 此设置等待接收到 QoS 2 消息的 `PUBREL` 的时间。达到此限制后，EMQX 将释放包 ID 并生成警告级别日志。<br />注意：无论是否收到 `PUBREL`，EMQX 都会转发收到的 QoS 2 消息。 | `300s`<br />单位: 秒                                         | --                                  |
+| `session_expiry_interval`             | 会话过期间隔         | 此设置会话可以空闲多久之后自动关闭。注意：仅对非 MQTT 5.0 客户端有效。 | `2`<br />单位：小时                                          |                                     |
+| `max_mqueue_len`                      | 最大消息队列长度     | 此设置当持久客户端断开连接或在途窗口已满时允许的最大队列长度。 | `1000`                                                       | `0` - `infinity`                    |
+| `mqueue_priorities`                   | 主题优先级           | 此设置主题优先级，此处的配置将覆盖 `mqueue_default_priority` 定义的优先级。 | `disabled` <br />会话使用 `mqueue_default_priority` 设置的优先级。 | `disabled`<br />或<br />`1` - `255` |
+| `mqueue_default_priority`             | 默认主题优先级       | 此设置默认主题优先级。                                       | `lowest`                                                     | `highest`， `lowest`                |
+| `mqueue_store_qos0`                   | 存储 QoS 0 消息      | 此设置在连接断开但会话保持时是否存储 QoS 0 消息在消息队列中。 | `true`                                                       | `true`, `false`                     |
+| `force_shutdown`                      | --                   | 此设置是否启用强制关闭功能，如果队列长度（`max_message_queue_le`）或堆大小（`max_heap_size`）达到指定值。 | `true`                                                       | `true`, `false`                     |
+| `force_shutdown.max_message_queue_le` | --                   | 此设置触发强制关闭的最大队列长度。                           | `1000`                                                       | `1` - `infinity`                    |
+| `force_shutdown.max_heap_size`        | --                   | 此设置触发强制关闭的最大堆大小。                             | `32 MB`                                                      | --                                  |
+| `force_gc`                            | --                   | 此设置是否启用强制垃圾回收，如果达到指定的消息数量（`count`）或接收字节（`bytes`）： | `true`                                                       | `true`, `false`                     |
+| `force_gc.count`                      | --                   | 此设置将触发强制垃圾回收的接收消息数量。                     | `16000`                                                      | `0` - `infinity`                    |
+| `force_gc.bytes`                      | --                   | 此设置将触发强制垃圾回收的接收字节数量。                     | `16 MB`<br />单位: `MB`                                      | --                                  |
 
 {% emqxce %}
 
 :::tip
 
-To configure listeners via Dashboard,  click **Configuration** -> **MQTT** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+要通过 Dashboard 配置 MQTT，请点击 Dashboard 左侧导航菜单的 **管理** -> **MQTT 配置**。一旦您通过 Dashboard 配置了这些项，您的设置将覆盖 `emqx.conf` 中的相同配置项。
 
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
+EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参见[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
 
 :::
 
@@ -179,9 +173,9 @@ EMQX has offered more configuration items to serve customized needs better. For 
 
 :::tip
 
-To configure listeners via Dashboard,  click **Configuration** -> **MQTT** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+要通过 Dashboard 配置 MQTT，请点击 Dashboard 左侧导航菜单的 **管理** -> **MQTT 配置**。一旦您通过 Dashboard 配置了这些项，您的设置将覆盖 `emqx.conf` 中的相同配置项。
 
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参见[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 :::
 

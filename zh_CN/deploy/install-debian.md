@@ -76,37 +76,19 @@ EMQX 同时支持通过下载包进行安装。下文将以 Debian 11 系统为�
 
 #### 启动 EMQX
 
-您可通过如下三种方式启动 EMQX
+systemctl 启动：
 
-- 直接启动：
-
-  ```bash
-  $ emqx start
-  EMQX @CE_VERSION@ is started successfully!
-  
-  $ emqx ctl status
-  Node 'emqx@127.0.0.1' @CE_VERSION@ is started
-  ```
-
-- systemctl 启动：
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- service 启动：
-
-  ```bash
-  sudo service emqx start
-  ```
+```bash
+sudo systemctl start emqx
+```
 
 #### 卸载 EMQX
 
 服务完成后，可通过如下命令卸载 EMQX：
 
-  ```shell
+```shell
 sudo apt remove --purge emqx
-  ```
+```
 
 ## 通过 tar.gz 安装
 
@@ -148,7 +130,7 @@ sudo apt remove --purge emqx
 安装完成后，可通过如下命令启动 EMQX。
 
 ```bash
-./emqx/bin/emqx start
+./emqx/bin/emqx foreground
 ```
 
 {% endemqxce %}
@@ -157,53 +139,44 @@ sudo apt remove --purge emqx
 
 ## 通过 deb 安装
 
-1. 前往 [EMQ 官网](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=Debian=currentOS=Debian12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)，**版本**选择 `@EE_VERSION@`，**系统**选择 `Debian`，点击**免费下载**按钮进入下载页面。
+1. 前往 [EMQX 官方下载页面](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=Debian=currentOS=Debian12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)。
 
-2. 在安装与下载页面中，**安装方式**选择 `deb`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
+2. 在**下载 EMQX Enterprise** 中，**版本**选择 `@EE_VERSION@`，**系统**选择 `Debian`，点击**免费下载**按钮。
+
+3. 在安装与下载页面中，**安装方式**选择 `deb`，选择合适的 **CPU 架构**，点击**立即下载**。
+
+   您也可以参照命令行指导步骤进行下载与安装。
 
 ### 启动 EMQX 
 
-您可通过如下3种方式启动 EMQX。
-- 直接启动：
+systemctl 启动：
 
-  ```bash
-  $ emqx start
-  EMQX @EE_VERSION@ is started successfully!
-
-  $ emqx ctl status
-  Node 'emqx@127.0.0.1' @EE_VERSION@ is started
-  ```
-
-- systemctl 启动：
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- service 启动：
-
-  ```bash
-  sudo service emqx start
-  ```
+```bash
+sudo systemctl start emqx
+```
 
 ### 卸载 EMQX
 
 服务完成后，可通过如下命令卸载 EMQX：
 
-  ```shell
-  sudo apt remove --purge emqx
-  ```
+```shell
+sudo apt remove --purge emqx
+```
 
 ## 通过 tar.gz 安装
 
-1. 前往 [EMQ 官网](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=Debian=currentOS=Debian12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)，**版本**选择 `@EE_VERSION@`，**系统**选择 `Debian`，点击**免费下载**按钮进入下载页面。
+1. 前往 [EMQX 官方下载页面](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=Debian=currentOS=Debian12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)。
 
-2. 在安装与下载页面中，**安装方式**选择 `tar.gz`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
+2. 在**下载 EMQX Enterprise** 中，**版本**选择 `@EE_VERSION@`，**系统**选择 `Debian`，点击**免费下载**按钮。
+
+3. 在安装与下载页面中，**安装方式**选择 `tar.gz`，选择合适的 **CPU 架构**，点击**立即下载**。
+
+   您也可以参照命令行指导步骤进行下载与安装。
 
 安装完成后，可通过如下命令启动 EMQX。
 
 ```bash
-./emqx/bin/emqx start
+./emqx/bin/emqx foreground
 ```
 
 {% endemqxee %}

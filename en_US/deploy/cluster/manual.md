@@ -37,10 +37,10 @@ node.name = emqx@s1.emqx.io
 
 or
 
-You can also override the node name with an environment variable:
+You can also override the node name with an environment variable. For example, in `docker run` command's `-e` option, or in systemd's `emqx.service` file, add environment variable as below:
 
 ```bash
-env EMQX_NODE__NAME='emqx@s1.emqx.io' ./bin/emqx start
+EMQX_NODE__NAME='emqx@s1.emqx.io'
 ```
 
 ::: tip

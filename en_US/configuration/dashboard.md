@@ -1,16 +1,23 @@
-# Dashboard
+# Dashboard Configuration
 
-In EMQX, Dashboard is a web-based graphic interface to manage and monitor EMQX and connected devices in real time.
+In EMQX, Dashboard is a web-based graphic interface to manage and monitor EMQX and connected devices in real time. You can configure the following Dashboard configuration items:
 
-For example,  configure a listener for EMQX Dashboard for accepting all incoming connections.
+- `listeners`
+- `token_expired_time`
+- `cors`
+- `swagger_support`
+- `sso`
 
-```
+For example, to configure `swagger_support` and a listener for the EMQX Dashboard for accepting all incoming connections, you can use the following configuration:
+
+```bash
 dashboard {
   listeners {
     http {
       bind = "0.0.0.0:18083"
       max_connections = 512
     }
+  swagger_support = true
   }
 }
 ```
@@ -23,11 +30,9 @@ Where,
 
 {% emqxce %}
 
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/#V-dashboard).
+::: tip
 
-:::tip
-
-To add a listener via Dashboard, click **Management** -> **Listeners **on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/#V-dashboard).
 
 :::
 
@@ -35,11 +40,9 @@ To add a listener via Dashboard, click **Management** -> **Listeners **on the le
 
 {% emqxee %}
 
+::: tip
+
 EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/#V-dashboard).
-
-:::tip
-
-To add a listener via Dashboard, click **Management** -> **Listeners **on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
 
 :::
 

@@ -121,43 +121,21 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 {% emqxce %}
 
-您也可以选择通过 zip/tar.gz 压缩包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。本节我们将以 [macOS](https://www.emqx.io/zh/downloads?os=macOS) (macOS11 amd64) 为例演示如何下载并安装 EMQX。
+您也可以选择通过 zip/tar.gz 压缩包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。以下步骤将以 [macOS](https://www.emqx.io/zh/downloads?os=macOS) (macOS12 amd64) 为例演示如何下载并安装 EMQX。
 
 由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，**不建议**在生产环境中使用。
 
 1. 在命令行工具中输入如下命令，下载 zip 文件。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-macos11-amd64.zip
+   wget https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-macos12-amd64.zip
    ```
 
 2. 通过以下命令安装 EMQX。
 
    ```bash
-   mkdir -p emqx && unzip emqx-@CE_VERSION@-macos11-amd64.zip -d emqx
+   mkdir -p emqx && unzip emqx-@CE_VERSION@-macos12-amd64.zip -d emqx
    ```
-
-{% endemqxce %}
-
-{% emqxee %}
-
-您也可以选择通过 zip/tar.gz 压缩包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。本节我们将以 [macOS](https://www.emqx.com/zh/try?product=enterprise) (macOS12 amd64) 为例演示如何下载并安装 EMQX。
-
-由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，**不建议**在生产环境中使用。
-
-1. 在命令行工具中输入如下命令，下载 zip 文件。
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos12-amd64.zip
-   ```
-
-2. 通过以下命令安装 EMQX。
-
-   ```bash
-   mkdir -p emqx && unzip emqx-enterprise-5.0.0-macos12-amd64.zip -d emqx
-   ```
-
-{% endemqxee %}
 
 3. 运行以下命令启动 EMQX。
 
@@ -181,6 +159,51 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 后续如需卸载 EMQX，您可直接删除 EMQX 目录即可完成卸载。
 
+{% endemqxce %}
+
+{% emqxee %}
+
+您也可以选择通过 zip/tar.gz 压缩包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。以下步骤将以 [macOS](https://www.emqx.com/zh/try?product=enterprise) (macOS 12 amd64) 为例演示如何下载并安装 EMQX。
+
+由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，**不建议**在生产环境中使用。
+
+1. 前往 [EMQX 官方下载页面](https://www.emqx.com/zh/try?product=enterprise)。
+
+2. 在**下载 EMQX Enterprise** 中，**版本**选择 `@EE_VERSION@`，**系统**选择 `macOS 12`，点击**免费下载**按钮。
+
+3. 在下载与安装页面中，**安装方式**选择 `zip`，选择合适的 **CPU 架构**，点击**立即下载**。
+
+   您也可以参照页面中的命令指导步骤进行下载与安装。
+
+4. 运行以下命令启动 EMQX。
+
+   前台启动
+   ```bash
+   ./emqx/bin/emqx foreground
+   ```
+   或后台（不推荐）启动
+   ```bash
+   ./emqx/bin/emqx start
+   ```
+
+5. 现在您可通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
+
+   默认用户名及密码：
+
+   `admin`
+
+   `public`
+
+6. 运行以下命令停止 EMQX。
+
+   ```bash
+   ./emqx/bin/emqx stop
+   ```
+
+后续如需卸载 EMQX，您可直接删除 EMQX 目录即可完成卸载。
+
+{% endemqxee %}
+
 :::
 
 ::::
@@ -188,47 +211,66 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 ## 通过 MQTTX 快速验证
 [MQTTX](https://mqttx.app/zh) 是 EMQX 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS、Linux 并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。您可通过 MQTTX 一键式的连接方式和图形界面，您可轻松测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。
 
-本节讲介绍如何通过 [MQTTX Web 端](https://mqttx.app/zh) 快速验证 MQTT 连接，无需下载或安装任何程序。
+本节介绍如何使用 [MQTTX Web 版](https://mqttx.app/zh/web) 模拟客户端快速连接到 EMQX，无需下载或安装任何程序。
 
 :::tip 前置准备
 
 测试连接之前，应首先获取：
 
-- 服务器地址：通常是您的服务器 IP 地址；
-- 端口信息：可在 EMQX Dashboard **功能配置**的**监听器**部分获取。
+- **服务器地址**：通常是您的服务器 IP 地址；
+- **端口信息**：可在 EMQX Dashboard **功能配置**的**监听器**部分获取。
 
 :::
+
+### 创建连接
 
 1. 访问  [MQTTX Web](http://www.emqx.io/online-mqtt-client#/recent_connections) 页面。
 
 2. 配置并建立 MQTT 连接。点击 **+** **新建连接** 进入配置页面，您只需配置：
 
-   - **名称**：连接名称，如 **MQTTX_Test**；
+   - **名称**：连接名称，如 `MQTTX_Test`。
 
    - **服务器地址**
 
-     - 通过选择该连接的协议类型，如 WebSockets 协议，**ws://**；目前 MQTTX Web 端仅支持 WebSocket 协议，如希望测试 SSL/TLS 认证连接，请下载 [MQTT 客户端](https://mqttx.app/zh)；
-     - 填入之前获取的 EMQX 地址，如 **emqx@127.0.0.1**
+     - 通过选择该连接的协议类型，如 WebSockets 协议，选择 `ws://`；目前 MQTTX Web 端仅支持 WebSocket 协议，如希望测试 SSL/TLS 认证连接，请下载 [MQTTX 桌面版](https://mqttx.app/zh/downloads)。
+     - 填入之前获取的 EMQX 地址，如 `emqx@127.0.0.1`。
 
-   - **端口**：如 WebSockets 协议对应的 **8083** 端口
+   - **端口**：如 WebSockets 协议对应的 **8083** 端口。
 
      其他项目保持默认配置，你也可以根据具体业务场景修改。有关页面字段的配置说明，可参考 [MQTT 手册 - 快速建立连接](https://mqttx.app/zh/docs/get-started)。
 
-   配置完成后，点击页面右上角的**连接**按钮建立连接。
 
-3. 订阅相关主题。连接成功后即可快速订阅多个主题。点击页面中部的**添加订阅**按钮，按照默认配置，我们将订阅匹配 testtopic/# 主题的所有消息，QoS 等级为 0。您可多次重复该项操作以订阅不同主题，MQTTX Web 会通过不同颜色区分各主题。
+3. 配置完成后，点击页面右上角的**连接**按钮建立连接。
 
-4. 测试消息的发送与接收。点击页面右下角聊天区域的发送按钮，可以在上方的聊天窗口中看到消息已成功发送。
+### 订阅和发布消息
+
+连接成功后即可快速订阅多个主题并向主题发送消息。
+
+1. 点击页面中部的**添加订阅**按钮，按照默认配置，我们将订阅匹配 testtopic/# 主题的所有消息，QoS 等级为 0。您可多次重复该项操作以订阅不同主题，MQTTX Web 会通过不同颜色区分各主题。
+
+2. 测试消息的发送与接收。点击页面右下角聊天区域的发送按钮，可以在上方的聊天窗口中看到消息已成功发送。
 
 ![MQTTX Web test](./assets/MQTTXWeb-test.png)
 
 除上述测试外，您也可以通过 MQTTX 进行单/双向 SSL 认证、或通过自定义脚本模拟测试数据。更多消息，可访问 [MQTTX 官方网页](https://mqttx.app/zh)。
 
-回到 EMQX Dashboard 的**仪表盘**部分，可以看到**连接数**、**主题数**、和**订阅数**部分数据的变化，在下方的可视化窗格，还可以看到这段时间流入的消息数量曲线。
+### 查看数据
+
+回到 EMQX Dashboard 的**监控** -> **集群概览**，可以看到**连接数**、**主题数**、和**订阅数**部分数据的变化，在下方的可视化窗格，还可以看到这段时间流入的消息数量曲线。
+
+{% emqxce %}
 
 <img src="./assets/emqx-dashboard.png" alt="EMQX dashboard" style="zoom:67%;" />
 
-## 进阶操作
+{% endemqxce %}
+
+{% emqxee %}
+
+![emqx-dashboard_ee](./assets/emqx-dashboard_ee.png)
+
+{% endmeqxee %}
+
+## 下一步
 
 至此，我们已经完成基本的 EMQX 安装、启动和接入测试，您还可以继续进行 [访问控制](../access-control/authn/authn.md)、[规则引擎数据处理](../data-integration/rules.md) 等操作。
 

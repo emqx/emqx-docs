@@ -37,7 +37,7 @@ The table below describes the meaning and output contents for each log level.
 
 This section mainly describes how to configure logging with EMQX Dashboard. Changes take effect immediately without restarting the node.
 
-Go to EMQX Dashboard. Click **Management** -> **Logging** on the left navigation menu. Select the corresponding tab for configurations on console log or file log.
+Go to EMQX Dashboard. Click **Management** -> **Logging** on the left navigation menu. Select the corresponding tab for configurations on the console log or file log.
 
 ### Configure Console Log
 
@@ -123,8 +123,6 @@ When file logging is enabled (log.to = file or both), the following files will a
 
 - **emqx.log.N:** Log file prefixed with emqx.log, that contains all the log messages of EMQX, such as `emqx.log.1`,` emqx.log.2` ...
 - **emqx.log.siz and emqx.log.idx:** System files used to record log rotation information. **Do not change manually**.
-- **run_erl.log:** System file used to record startup information when starting EMQX in the background with `emqx start`.
-- **erlang.log.N:** Log file prefixed with erlang.log, which is a copy file of the console log when EMQX is started in the background with `emqx start`, such as `erlang.log.1`,` erlang.log.2` ...
 
 ## Configure Logging via Configuration File
 
@@ -133,17 +131,22 @@ You can also configure EMQX logging through configuration files. For example, if
 ```bash
 log {
   file {
-    enable = true
-    level = warning
-    path = "/var/log/emqx/emqx.log"
-    rotation_count = 10
-    rotation_size = 50MB
-    formatter = text
+    default {
+      enable = true
+      formatter = text
+      level = warning
+      path = "/Users/emqx/Downloads/emqx-560/log/emqx.log"
+      rotation_count = 10
+      rotation_size = 50MB
+      time_offset = system
+      timestamp_format = auto
   }
   console {
     enable = true
-    level = warning
-    formatter = text
+    formatter = json
+    level = debug
+    time_offset = system
+    timestamp_format = auto
   }
 }
 ```
@@ -163,7 +166,7 @@ where,
 - **tag:** All-uppercase single word used for categorizing logs for easier searching and analysis, e.g., MQTT, AUTHN, AUTHZ
 - **clientid:** Included only when the log is about a specific client. Identifies the client related to the log entry.
 - **msg:** The content of the log message. To enhance searchability and readability, most messages adopt a `snake_case` formatting style,
-           such as `mqtt_packet_received`. Note: Not all messages follow this format; some may vary.
+      such as `mqtt_packet_received`. Note: Not all messages follow this format; some may vary.
 - **peername:** The client's source IP address and port number in `IP:port` format, indicating the connection origin.
 - **username:** Present only for logs associated with a client having a specified non-empty username. Indicates the username of the client involved.
 - **...:** Additional arbitrary fields may follow the msg field, providing more context or details as needed.

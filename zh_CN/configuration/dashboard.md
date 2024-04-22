@@ -1,39 +1,38 @@
-# Dashboard
+# Dashboard 配置
 
-In EMQX, Dashboard is a web-based graphic interface to manage and monitor EMQX and connected devices in real time. 
+在EMQX中， Dashboard 是一个基于 Web 的图形界面，用于实时管理和监控 EMQX 及连接的设备。您可以配置以下 Dashboard 配置项：
 
-For example,  configure a listener for EMQX Dashboard for accepting all incoming connections.
+- `listeners`
+- `token_expired_time`
+- `cors`
+- `swagger_support`
+- `sso`
 
-```
+例如，要为EMQX Dashboard 配置 `swagger_support` 和一个监听器，以接受所有传入连接，您可以使用以下配置：
+
+```bash
 dashboard {
-  listener {
-    bind  =  "0.0.0.0:18083"
-    max_connections  =  512
-    ssl_options {
-      cacertfile = "etc/certs/cacert.pem"
-      certfile = "etc/certs/cert.pem"
-      keyfile = "etc/certs/key.pem"
+  listeners {
+    http {
+      bind = "0.0.0.0:18083"
+      max_connections = 512
     }
+  swagger_support = true
   }
 }
 ```
 
-Where,
+其中，
 
-- `bind  =  "0.0.0.0:18083"`  is to set the network address and port number that the listener will bind to. In this case, the listener will bind to all available network interfaces (`0.0.0.0`) on port `18083`.
-- `max_connections  =  512` is to set the maximum number of concurrent connections that the listener will accept. In this case, the maximum number of connections is set to `512`.
-- `ssl_options` is the SSL/TLS configuration option for the listener, it has three properties:
-  - `cacertfile`: PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
-  - `certfile`: PEM the file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
-  - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
+- `swagger_support = true` 用于启用所有与 swagger 相关的功能，如生成Swagger API文档。默认情况下，其值始终为 `true`，您可以将值设置为 `false` 以禁用它。
+- `bind = "0.0.0.0:18083"` 用于设置监听器绑定的网络地址和端口号。在这种情况下，监听器将绑定到所有可用的网络接口（`0.0.0.0`）上的端口 `18083`。
+- `max_connections = 512` 用于设置监听器将接受的最大并发连接数。在这种情况下，最大连接数设置为 `512`。
 
 {% emqxce %}
 
-:::tip
+::: tip
 
-To add a listener via Dashboard, click **Management** -> **Listeners **on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/).
+EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参考[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
 
 :::
 
@@ -41,11 +40,9 @@ EMQX has offered more configuration items to serve customized needs better. For 
 
 {% emqxee %}
 
-:::tip
+::: tip
 
-To add a listener via Dashboard, click **Management** -> **Listeners **on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参考[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 :::
 

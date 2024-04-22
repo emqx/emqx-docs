@@ -4,7 +4,7 @@ This page provides a step-by-step guide to quickly get started with the File Tra
 
 ## Upload a File and Store It on Local Disk
 
-1. Enable the file transfer feature by setting the following configuration in the EMQX configuration file `etc/emqx.conf`:
+1. Start EMQX with file transfer feature enabled by setting the following configuration in the EMQX configuration file `etc/emqx.conf`:
 
    ```bash
    file_transfer {
@@ -14,13 +14,7 @@ This page provides a step-by-step guide to quickly get started with the File Tra
 
    This configuration uses local disk storage for the uploaded fragment files, and the fragment files will not be merged after the transfer is completed.
 
-2. Start EMQX by executing the following command:
-
-   ```bash
-   ./bin/emqx start
-   ```
-
-3. Run the following command to download the file transfer example program `emqx-ft`, and set up the test client environment:
+2. In another shell, run the following command to download the file transfer example program `emqx-ft`, and set up the test client environment:
 
    ```bash
    git clone https://github.com/emqx/emqx-ft.git
@@ -30,7 +24,7 @@ This page provides a step-by-step guide to quickly get started with the File Tra
    pip install .
    ```
 
-4. Upload a file by using the `emqx-ft` command-line tool to run the following command:
+3. Upload a file by using the `emqx-ft` command-line tool to run the following command:
 
    ```bash
    emqx-ft --file test-file.txt \
@@ -49,7 +43,7 @@ This page provides a step-by-step guide to quickly get started with the File Tra
    | `--client-id`    | The client ID, used to identify the client performing the file upload operation. |
    | `--file-name`    | The name of the file after uploading.                        |
 
-5. Manually list the uploaded files by using the following command to navigate to the file storage directory.
+4. Manually list the uploaded files by using the following command to navigate to the file storage directory.
 
    ```bash
    $ tree /var/lib/emqx/file_transfer/exports
@@ -65,7 +59,7 @@ This page provides a step-by-step guide to quickly get started with the File Tra
    └── tmp
    ```
 
-6. Retrieve a list of uploaded files through the HTTP API by running the following command.
+5. Retrieve a list of uploaded files through the HTTP API by running the following command.
 
    The response contains details about the uploaded file, including its name, size, and timestamp.
 
@@ -90,7 +84,7 @@ This page provides a step-by-step guide to quickly get started with the File Tra
    }
    ```
 
-7. Download the file through the provided API endpoint by using the following command.
+6. Download the file through the provided API endpoint by using the following command.
 
    The downloaded file will be retrieved from EMQX.
 
@@ -108,27 +102,27 @@ Before you start, you need to ensure that `s3cmd` is installed and configured co
 
 :::
 
-1. Enable the file transfer feature in the EMQX configuration file `etc/emqx.conf` and configure the S3 bucket:
+1. Start EMQX with file transfer feature enabled in config file `etc/emqx.conf` and configure the S3 bucket:
 
    ```bash
    file_transfer {
       # Enable file transfer feature
       enable = true
-   
+
       # Enable file export to s3 bucket
       storage.local.exporter.s3 {
          enable = true
-   
+
          host = "s3.us-east-1.amazonaws.com"
          port = 443
-   
+
          # Credentials for accessing S3
          access_key_id = "AKIA27EZDDM9XLINWXFE"
          secret_access_key = "******"
-   
+
          # Bucket for exporting files
          bucket = "my-bucket"
-   
+
          # Settings for the underlying HTTP(S) connection with S3, allowing secure file upload and connection pool management.
          transport_options {
             ssl.enable = true
@@ -138,13 +132,7 @@ Before you start, you need to ensure that `s3cmd` is installed and configured co
    }
    ```
 
-2. Start EMQX by executing the following command:
-
-   ```bash
-   ./bin/emqx start
-   ```
-
-3. Run the following command to download the file transfer example program `emqx-ft`, and set up the test client environment:
+2. In another shell, run the following command to download the file transfer example program `emqx-ft`, and set up the test client environment:
 
    ```bash
    git clone https://github.com/emqx/emqx-ft.git
@@ -154,7 +142,7 @@ Before you start, you need to ensure that `s3cmd` is installed and configured co
    pip install .
    ```
 
-4. Upload a file by using the `emqx-ft` command-line tool to run the following command:
+3. Upload a file by using the `emqx-ft` command-line tool to run the following command:
 
    ```bash
    emqx-ft --file test-file.txt \
@@ -173,7 +161,7 @@ Before you start, you need to ensure that `s3cmd` is installed and configured co
    | `--client-id`    | The client ID, used to identify the client performing the file upload operation. |
    | `--file-name`    | The name of the file after uploading.                        |
 
-5. Manually list the uploaded files by using the S3 command-line tool to run the following command:
+4. Manually list the uploaded files by using the S3 command-line tool to run the following command:
 
    ::: tip
 
@@ -188,7 +176,7 @@ Before you start, you need to ensure that `s3cmd` is installed and configured co
 
    The output will display the uploaded file in the specified S3 bucket.
 
-6. Retrieve a list of uploaded files through the HTTP API by using the following command:
+5. Retrieve a list of uploaded files through the HTTP API by using the following command:
 
    ```bash
    $ curl -u '...' -s 'http://127.0.0.1:18083/api/v5/file_transfer/files' | jq
@@ -206,7 +194,7 @@ Before you start, you need to ensure that `s3cmd` is installed and configured co
    }
    ```
 
-7. Download the file directly from the S3 storage through the provided URI by using the following command.
+6. Download the file directly from the S3 storage through the provided URI by using the following command.
 
    ::: tip
 
