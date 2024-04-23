@@ -43,7 +43,9 @@ The session persistence feature in EMQX is disabled by default. It can be enable
 
 EMQX introduces a unique approach to manage message durability for persistent sessions. When a client with a persistent session subscribes to a topic filter, EMQX designates topics matching the filter as "durable." This ensures that, aside from routing MQTT PUBLISH messages from these topics to active sessions, the broker also saves these messages on disk. EMQX integrates directly with a built-in RocksDB database as the storage backend. 
 
-Each durable MQTT message is stored on disk exactly once, regardless of the number of persistent sessions subscribing to the matching topic filter and whether those sessions are currently connected or not. This enables an efficient fan-out of messages to the persistent sessions.
+Strong durability and high availability guarantees are achieved by replicating the message and session data across multiple nodes in an EMQX cluster in a consistent manner. The *replication factor*, which determines the number of copies each message or session should have, can be adjusted to achieve a desired balance between durability and performance.
+
+Each durable MQTT message is stored exactly once on each replica, regardless of the number of persistent sessions subscribing to the matching topic filter and whether those sessions are currently connected or not. This enables an efficient fan-out of messages to the persistent sessions.
 
 ### Durable Storage Architecture
 
@@ -51,7 +53,9 @@ The architecture of EMQX’s durable storage is organized into a hierarchical st
 
 #### Shard
 
-This level segregates messages by client, storing them in distinct shards determined by the publisher's client ID. The number of shards is determined by `session_persistence.storage.builtin.n_shards` configuration parameter during the initial startup of EMQX.
+This level segregates messages by client, storing them in distinct shards determined by the publisher's client ID. The number of shards is determined by `durable_storage.messages.n_shards` configuration parameter during the initial startup of EMQX.
+
+A shard is also a unit of replication, and EMQX ensures that each shard is consistently replicated `durable_storage.messages.replication_factor` times across different nodes in the cluster, so that each shard replica contains the same set of messages in the same order.
 
 #### Generation
 
@@ -82,7 +86,7 @@ When session persistence is enabled, EMQX saves the metadata of persistent sessi
 
 The storage requirements can be estimated according to the following guidelines:
 
-- **Message Storage**: The space required for storing messages is proportional to the rate of incoming messages multiplied by the duration specified by the `session_persistence.message_retention_period` parameter. This parameter dictates how long messages are retained, influencing the total storage needed.
+- **Message Storage**: The space required for storing messages on each replica is proportional to the rate of incoming messages multiplied by the duration specified by the `session_persistence.message_retention_period` parameter. This parameter dictates how long messages are retained, influencing the total storage needed.
 - **Session Metadata Storage**: The amount of storage for session metadata is proportional to the number of sessions multiplied by the number of streams to which they are subscribed.
 - **Stream Calculation**: The number of streams is proportional to the number of shards.
 
