@@ -481,7 +481,7 @@ The following factors will have an impact on EMQX resource consumption, mainly o
 
 If client devices connect to EMQX through TLS, more CPU resource is required for encryption and decryption. Our suggested solution is to add a load balancer in front of EMQX nodes, the TLS is offloaded at load balance node, connections between load balancer and backend EMQX nodes use plain TCP connections.
 
-You can use our online calculation tool [https://www.emqx.com/en/server-estimate](https://www.emqx.com/en/server-estimate) to estimate the resource consumption.
+<!-- You can use our online calculation tool [https://www.emqx.com/en/server-estimate](https://www.emqx.com/en/server-estimate) to estimate the resource consumption.-->
 
 ## My connections number is small, do I still need to deploy multiple nodes in production?
 
