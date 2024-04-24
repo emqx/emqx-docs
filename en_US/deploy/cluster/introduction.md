@@ -85,16 +85,8 @@ To use this feature:
 
 Then EMQX will keep the previous session data associated with the Client ID when the client disconnects. If this client reconnects, EMQX will resume the previous sessions, deliver any messages that were queued during the client's disconnection, and maintain the client's subscriptions.
 
-## Network and Hardware Specifications
+## Network Requirements
 
-Below are the network requirements and hardware specifications recommend to run EMQX clusters.
-
-**Network**
-
-Network latency: < 10 ms. The cluster will not be available if the latency is higher than 100 ms.
+To ensure optimal performance, the network latency for operating EMQX clusters should be less than 10 milliseconds. The cluster will not be available if the latency is higher than 100 ms.
 
 The core nodes should be under the same private network. In Mria+RLOG mode, it is also recommended to deploy the replicant nodes in the same private network.
-
-**CPU and Memory**
-
-You can use the [Server Estimate](https://www.emqx.com/en/server-estimate) to calculate the CPU and memory resources needed under various connections and Pub&Sub TPS. It is recommended to configure a higher memory of the Core nodes. 
