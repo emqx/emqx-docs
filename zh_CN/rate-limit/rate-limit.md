@@ -25,7 +25,7 @@ listeners.tcp.default {
 }
 ```
 
-注意：如果您使用的是 emqx v5.0.24 及之前的版本，您应该使用以下配置：
+注意：如果您使用的是 EMQX v5.0.24 及之前的版本，您应该使用以下配置：
 
 ```
 listeners.tcp.default {
