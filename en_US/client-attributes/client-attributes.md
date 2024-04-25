@@ -1,12 +1,14 @@
-# MQTT Client Attribute Extraction
+# MQTT Client Attributes
 
-Apart from using predefined names like `clientid` and `username` as MQTT client identifiers, the client attribute extraction feature allows setting custom attributes upon connection for use in functions such as authentication and authorization. It is designed to support flexible templating for MQTT client identification by extracting client attribute values from various client metadata sources. This feature is particularly useful in contexts such as multi-tenancy, personalized client configurations, and streamlined authentication processes.
+Apart from using predefined names like `clientid` and `username` as MQTT client identifiers, the client attribute extraction feature allows setting custom attributes upon connection for use in functions such as authentication and authorization. It is designed to support flexible templating for MQTT client identification by extracting client attribute values from various client metadata sources. This feature is particularly useful in contexts such as personalized client configurations, and streamlined authentication processes.
 
 ## Introduction
 
 When a client connects to EMQX, its client attributes are initialized. During initialization, EMQX extracts attributes based on predefined rules set in the `mqtt.client_attrs_init` configuration. For example, it can extract a substring from the clientID, username, or client certificate common name. This extraction happens before the authentication process, ensuring that the attributes are ready to be used in subsequent steps, such as used in the HTTP request body template or SQL template for composing authentication and authorization requests.
 
-Once initialized, client attributes are stored in a field called `client_attrs` within the client's session or connection context. This `client_attrs` info field acts like a dictionary or a map, holding the attributes as key-value pairs. This field is maintained in memory associated with the client's session for quick access during the client's connection lifecycle.
+Client attributes are stored in a field called `client_attrs` within the client's session or connection context. This `client_attrs` info field acts like a dictionary or a map, holding the attributes as key-value pairs. This field is maintained in memory associated with the client's session for quick access during the client's connection lifecycle.
+
+After initialization `client_attrs` object can be extended with more data fields from authentication results, such as JWT's `client_attrs` claim, and `client_attrs` field in HTTP authentication response body.
 
 ### Extract Client Attributes
 
@@ -20,20 +22,28 @@ In EMQX, client metadata and attributes originate from various sources and are s
 - **TLS Certificates**: If the client connects using TLS, the client's TLS certificate can provide additional metadata, such as:
   - `cn` (Common Name): Part of the certificate that can identify the device or user.
   - `dn` (Distinguished Name): The full subject field within the certificate that includes several descriptive fields about the certificate owner.
-  - Server Name Indication (SNI): Currently used as multi-tenancy tenant id.
 - **IP Connection Data**: This includes the client’s IP address and port number, which are automatically captured by EMQX when a client connects.
 
 #### Extraction Expressions
 
-The extraction process uses variform expressions that allow function calls and variable references to define how attributes should be extracted and dynamically process the data. However, the expressions are not fully programmable and support only predefined functions and variables.
+The extraction process uses an function-call style expression which we call `variform`. It allows function calls and variable references to define how attributes should be extracted and dynamically process the data. However, the expressions are not fully programmable and support only predefined functions and variables.
 
 ##### Syntax
 
-`function_call(clientid, another_function_call(username))` can be used to combine or manipulate client data. The configuration example is as follows:
+As an example, the expression `function_call(clientid, another_function_call(username))` can be used to combine or manipulate client ID and username to make a new string value.
+
+The configuration example is as follows:
 
 ```bash
 mqtt {
-    client_attrs_init = [{expression = "conat([clientid, username])"}]
+    client_attrs_init = [
+        {
+            # Extract the prefix of client ID before the first -
+            expression = "nth(1,tokens(clientid, '-'))"
+            # And set as client_attrs.group
+            set_as_attr = group
+        }
+    ]
 }
 ```
 
@@ -74,29 +84,23 @@ Below are the functions that can be used in the expressions:
 
 ##### Example Expressions
 
- `nth(1, tokens(clientid, '.'))`:  Extract the prefix of a dot-separated client ID.
+`nth(1, tokens(clientid, '.'))`:  Extract the prefix of a dot-separated client ID.
 
 `strlen(username, 0, 5)`: Extract a partial username.
 
-### Merge Authentication Data
+### Extend Attributes from Authentication Response
 
-EMQX can also merge attributes from different sources such as JSON Web Token (JWT) claims or HTTP authentication responses into the client's attributes. 
+EMQX merges attributes from authentication results. Below are the authentication mechanisms supported so far.
 
 - **JWT claims**: If JWTs are used for authentication, they can include `client_attrs` claims that carry additional metadata about the client, such as roles, permissions, or other identifiers.
+
 - **HTTP Authentication Responses**: If EMQX is configured to use an external HTTP service for authentication, the response from this service might include additional attributes or metadata about the client, which can be configured to be captured and stored within EMQX. For example, if an HTTP response includes `"client_attrs": {"group": "g1"}`, EMQX will incorporate this data into the client's existing attributes, which can then be utilized in authorization requests.
 
 ## Application of Client Attributes
 
-The extracted and merged attributes can be used in constructing authentication and authorization requests. The `client_attrs.{NAME}` can be used in authentication and authorization template rendering. If an attribute named `client_attrs.alias` is defined, it can be incorporated into an HTTP request body or SQL query, enhancing the flexibility and specificity of these requests.
+The extracted and merged attributes can be used in constructing authentication and authorization requests. The `client_attrs.NAME` can be used in authentication and authorization template rendering. If an attribute named `client_attrs.alias` is defined, it can be incorporated into an HTTP request body or SQL query, enhancing the flexibility and specificity of these requests.
 
 For example, for an attribute named `client_attrs.alias`, you can use `${client_attrs.alais}` to build an HTTP request body as an HTTP authentication request.  For more details, see [Authentication Placeholders](../access-control/authn/authn.md#authentication-placeholders).
-
-Other applications include: <!-- Need some descriptions about how it is used -->
-
-- Multi-tenancy tenant ID (more flexible tenant ID assignment)
-- Per client mountpoint
-- Simple match for Authentication (e.g. GOCSP wanted to compare certificate CN with clientid prefix)
-- Data field in ACL rules or requests
 
 ## Configure Attribute Extraction
 
