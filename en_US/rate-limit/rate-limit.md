@@ -23,7 +23,7 @@ listeners.tcp.default {
 }
 ```
 
-Note: if you use the emqx v5.0.24 and before, you should use the following configuration:
+Note: If you use EMQX v5.0.24 and before, you should use the following configuration:
 ```
 listeners.tcp.default {
   bind = "0.0.0.0:1883"
