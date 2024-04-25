@@ -31,7 +31,7 @@ Example:
 %% Deny "All Users" subscribe to "$SYS/#" "#" Topics
 {deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.
 
-%% Allow any other publish/subscribe operation
+%% As the last guard, it should be changed to `{deny, all}.` in production.
 {allow, all}.
 ```
 
