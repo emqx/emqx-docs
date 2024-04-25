@@ -24,15 +24,38 @@ In EMQX, client metadata and attributes originate from various sources and are s
   - `dn` (Distinguished Name): The full subject field within the certificate that includes several descriptive fields about the certificate owner.
 - **IP Connection Data**: This includes the client’s IP address and port number, which are automatically captured by EMQX when a client connects.
 
-#### Extraction Expressions
+#### Variform Expression
 
-The extraction process uses an function-call style expression which we call `variform`. It allows function calls and variable references to define how attributes should be extracted and dynamically process the data. However, the expressions are not fully programmable and support only predefined functions and variables.
+The extraction process uses an function-call style template render expression which we call Variform.
+This method is designed to dynamically process data by allowing function calls and variable references to dictate attribute extraction.
+It's important to note that Variform expressions are not fully programmable and are restricted to predefined functions and variables.
 
-##### Syntax
+##### Syntax Overview
 
-As an example, the expression `function_call(clientid, another_function_call(username))` can be used to combine or manipulate client ID and username to make a new string value.
+To illustrate, consider the expression:
 
-The configuration example is as follows:
+```
+function_call(clientid, another_function_call(username))
+```
+This expression combines or manipulates clientid and username to generate a new string value.
+
+Variform supports below literals:
+- Integer: For example, `42`.
+- Float: For example, `3.14`.
+- String: ASCII characters between single quotes `'` or double quotes `"`.
+- Array: Elements between `[` and `]`, separated by a comma `,`.
+- Variable: Referencing to predefined values, for example `clientid`.
+- Function: Predefined functions, for example, `concat([...])`.
+
+Variform does not support the following:
+- Arithmetic operations
+- Conditional statements
+- Loops
+- User-defined variables
+- User-defined functions
+- Exception handling and error recovery
+
+Owing to its concise design, it is ideally suited for embedding in configurations. Below is an example.
 
 ```bash
 mqtt {
@@ -66,7 +89,7 @@ EMQX includes a rich set of string, array, random, and hashing functions similar
 
 Below are the functions that can be used in the expressions:
 
-- **String functions**: 
+- **String functions**:
   - [String Operation Functions](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
   - A new function any_to_string/1 is also added to convert any intermediate non-string value to a string.
 - **Array functions**: [nth/2](../data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
@@ -82,11 +105,22 @@ Below are the functions that can be used in the expressions:
   - hash_to_range(Input, Min, Max): Use sha256 to hash the Input data and map the hash to an integer between Min and Max inclusive ( Min =< X =< Max)
   - map_to_rage(Input, Min, Max): Map the input to an integer between Min and Max inclusive (Min =< X =< Max)
 
+##### Error Handling
+
+As the default behavior of scripting environments like Bash, Variform expression is designed to yield an empty string ("") in scenarios where errors occur, such as unbound variables or exceptions during runtime.
+
+- Unbound Variables: If an expression references a variable that has not been defined or is out of scope (unbound), the expression will evaluate to an empty string.
+- Runtime Exceptions: Any exceptions that occur during the execution of an expression, whether due to incorrect function usage, invalid data types, or other unforeseen issues, will result in the expression yielding an empty string. For example, array index out of range.
+
+NOTE: Empty strings are discarded, but not added to `client_attrs`.
+
 ##### Example Expressions
 
 `nth(1, tokens(clientid, '.'))`:  Extract the prefix of a dot-separated client ID.
 
 `strlen(username, 0, 5)`: Extract a partial username.
+
+`coalesce(regex_extract(clientid,'(\\d+)'),'000')`: Extract digits from client ID using a regular expression. If the regular expression yields empty string, then return `'000'`.
 
 ### Extend Attributes from Authentication Response
 

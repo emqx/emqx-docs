@@ -25,18 +25,51 @@
   - 服务器名称指示（SNI）：当前用作多租户租户 ID。
 - **IP 连接数据**：包括客户端的 IP 地址和端口号，这些都是客户端连接时 EMQX 自动捕获的。
 
-#### 属性表达式
+#### Variform 表达式
 
-提取过程使用允许函数调用和变量引用的多样形式表达式来定义如何提取属性，并动态处理数据。然而，这些表达式不是完全可编程的，只支持预定义的函数和变量。
+提取过程使用了一种称为 Variform 的函数调用风格模板渲染表达式。
+这种方法设计用来通过允许函数调用和变量引用来指定属性提取，动态处理数据。
+需要注意的是，Variform 表达式不是完全可编程的，并且仅限于预定义的函数和变量。
 
-##### 语法
+作为示例，考虑以下表达式：
 
-可以使用 `function_call(clientid, another_function_call(username))` 来组合或操作客户端数据。配置示例如下：
+```
+function_call(clientid, another_function_call(username))
+```
+此表达式结合或操作 `clientid` 和 `username` 以生成新的字符串值。
+
+Variform 支持以下字面量：
+
+- 整数：例如，`42`。
+- 浮点数：例如，`3.14`。
+- 字符串：单引号 `'` 或双引号 `"` 之间的 ASCII 字符。
+- 数组：元素位于 `[` 和 `]` 之间，以逗号 `,` 分隔。
+- 变量：引用预定义的值，例如 `clientid`。
+- 函数：预定义的函数，例如 `concat([...])`。
+
+Variform 不支持以下功能：
+
+- 算术运算
+- 条件语句
+- 循环
+- 用户定义的变量
+- 用户定义的函数
+- 异常处理和错误恢复
+
+由于其设计简洁，非常适合嵌入配置中。以下是一个示例。
 
 ```bash
 mqtt {
-    client_attrs_init = [{expression = "concat([clientid, username])"}]
+    client_attrs_init = [
+        {
+            # 提取客户端 ID 在第一个 `-` 字符前面的前缀
+            expression = "nth(1,tokens(clientid, '-'))"
+            # 然后把提取的字符串赋值给 client_attrs.group 这个字段
+            set_as_attr = group
+        }
+    ]
 }
+
 ```
 
 ##### 预绑定变量
@@ -79,6 +112,8 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
 `nth(1, tokens(clientid, '.'))`：提取以点分隔的客户端ID的前缀。
 
 `strlen(username, 0, 5)`: 提取部分用户名。
+
+`coalesce(regex_extract(clientid,'(\\d+)'),'000')`: 使用正则表达式提取客户端 ID 中的数字，如果正则表达式提取不到，则返回 `'000'`。
 
 ### 合并认证数据
 
