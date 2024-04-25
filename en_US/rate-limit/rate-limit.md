@@ -23,6 +23,16 @@ listeners.tcp.default {
 }
 ```
 
+Note: if you use the emqx v5.0.24 and before, you should use the following configuration:
+```
+listeners.tcp.default {
+  bind = "0.0.0.0:1883"
+  limiter.connection.rate = "1000/s"
+  limiter.messages.rate = "1000/s"
+  limiter.bytes.rate = "1000MB/s"
+}
+```
+
 ## Rate Unit
 
 ### Time Unit
