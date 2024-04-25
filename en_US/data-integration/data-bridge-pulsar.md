@@ -80,7 +80,7 @@ The following steps assume that you run both EMQX and Pulsar on the local machin
    - **Bridge Role**: `Producer` is selected by default.
    - Configure the information for connecting to the Pulsar server and message writing:
      - **Servers**: Enter `pulsar://localhost:6650` for the **Servers**. If you have Pulsar and EMQX running remotely, adjust the settings accordingly.
-     - **Authentication**: Select the authentication method based on your actual situation: `none`, `Basic auth`, or `token`.
+     - **Authentication**: Select the authentication method: `none`, `Basic auth`, or `token`. For `Basic auth`, EMQX joins `Username` and `Password` with `:` to make the authentication string.
      - **Pulsar Topic Name**: Enter `persistent://public/default/my-topic`, the pulsar topic you created before. Note: Variables are not supported here.
      - **Partition Strategy**: Select the way for the producer to dispatch messages to Pulsar partitions: `random`, `roundrobin`, or `key_dispatch`.
      - **Compression**: Specify whether or not to use compression algorithms and which algorithms are used to compress/decompress the records in a Pulsar message. The optional values are: `no_compression`, `snappy`, or `zlib`.

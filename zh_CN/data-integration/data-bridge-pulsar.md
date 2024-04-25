@@ -80,7 +80,7 @@ docker exec -it pulsar bin/pulsar-admin topics create-partitioned-topic persiste
    - **桥接角色**：默认情况下选择 `生产者`。
    - 配置连接到 Pulsar 服务器和消息写入的信息：
      - **服务器地址**：输入 `pulsar://localhost:6650`。如果远程运行 Pulsar 和 EMQX，请根据情况调整设置。
-     - **客户端认证**：根据实际情况选择身份认证方式：`none`、`基础认证` 或 `Token`。
+     - **客户端认证**：根据实际情况选择身份认证方式：`none`、`基础认证` 或 `Token`。使用 `基础认证` 时，EMQX会使用 `:` 分隔符拼接用户名和密码来构造一个认证字符串发送给 Pulsar。
      - **Pulsar 主题名称**：输入 `persistent://public/default/my-topic`，即您之前创建的 Pulsar 主题。注意：这里不支持变量。
      - **分区选择策略**：选择生产者将消息分派到 Pulsar 分区的方式：`random`、`roundrobin` 或 `Key_dispatch`。
      - **压缩**：指定是否使用压缩算法以及在 Pulsar 消息中用于压缩/解压缩记录的算法。可选值为：`no_compression`、`snappy` 或 `zlib`。
