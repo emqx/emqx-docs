@@ -125,6 +125,14 @@ where:
 
 <!--To add code sample for adding multiple listeners.-->
 
+## Link listener to a config zone
+
+Each listener is configured with a zone, which defaults to a logical zone named `default`.
+
+Associating a listener with a specific zone causes MQTT clients connected to that listener to inherit the zone's settings.
+
+For additional details, refer to the [Zone Override](../configuration/configuration.md#zone-override) section in the configuration documentation.
+
 {% emqxce %}
 
 EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
