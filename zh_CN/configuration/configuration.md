@@ -244,6 +244,52 @@ authentication = [{ enable = true }]
 
 :::
 
+### 区域覆盖 
+
+EMQX 中的区域是一种配置分组的概念。可以通过将 `zone` 字段设置为所需区域的名称，将区域与监听器关联。与某个区域关联的监听器连接的 MQTT 客户端将继承该区域的配置，这些配置可能会覆盖全局设置。
+
+::: tip
+
+默认情况下，监听器与一个名为 `default` 的区域关联。`default` 区域是一个逻辑分组，在配置文件中并不存在。 
+
+:::
+
+以下配置项可以在区域级别进行覆盖： 
+
+- `mqtt`：MQTT 连接和会话设置，例如允许在特定区域内的 MQTT 消息具有更大的最大数据包大小。
+- `force_shutdown`：强制关闭策略。 
+- `force_gc`：Erlang 进程垃圾回收的微调。 
+- `flapping_detect`：客户端抖动检测。 
+- `session_persistence`：会话持久性设置，例如在特定区域启用 MQTT 会话的持久存储。
+
+在 EMQX 版本 5 中，默认配置文件没有包含任何区域，这与版本 4 不同，在版本 4 中有两个默认区域：`internal` 和 `external`。 
+
+要创建一个区域，需要在 `emqx.conf` 文件中定义，例如：
+
+```bash
+zones {
+  # 可以定义多个区域
+  my_zone1 {
+    # 区域使用与全局配置相同的配置模式
+    mqtt {
+      # 允许该区域内的连接具有更大的数据包大小
+      max_packet_size = 10M
+    }
+    force_shutdown {
+      # 区域特定的配置
+      ...
+    }
+    session_persistence {
+      # 仅为该区域的会话启用持久存储
+      ...
+    }
+  }
+  my_zone2 {
+    ...
+  }
+}
+```
+
 ## Schema 手册
 
 为了确保配置正确，EMQX 引入了 schema。schema 定义了数据类型，以及数据字段的名称和元数据，用于配置值的类型检查等。
@@ -259,6 +305,12 @@ EMQX 的 [配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/
 EMQX 的 [配置手册](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/) 就是从这个 Schema 生成的。
 
 {% endemqxce %}
+
+::: tip
+
+区域配置的 schema 未包含在配置手册中，因为每个组的配置是相同的。例如，`zones.my_zone1.mqtt {...}` 与 `mqtt {...}` 具有相同的 schema。 
+
+:::
 
 ### 基本数据类型
 

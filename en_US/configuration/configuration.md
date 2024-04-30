@@ -234,7 +234,7 @@ authentication.1.enable = false
 
 ::: tip
 
-Arrays (in list format) will be fully overwritten and original value cannot be kept, for example:
+Arrays (in list format) will be fully overwritten and the original value cannot be kept, for example:
 
 ```bash
 authentication = [
@@ -251,46 +251,41 @@ authentication = [{ enable = true }]
 
 :::
 
-## Zone Override
+### Zone Override
 
-Zone in EMQX is a concept of configuration grouping.
-A zone can be linked to a listener by configuring `the `zone` field with a zone name.
-MQTT clients connected to a listener which linked to a zone will inherit the group of settings from
-the zone configurations which override the global settings.
+A zone in EMQX is a concept for grouping configurations. Zones can be associated with listeners by setting the `zone` field to the name of the desired zone. MQTT clients connected to listeners associated with a zone will inherit the configurations from that zone, which may override global settings.
 
 ::: tip
-Listeners are by default linked to a zone named `default`.
-The `default` zone is just a logical group which does not exist in configuration files.
+By default, listeners are linked to a zone named `default`. The `default` zone is a logical grouping and does not exist in the configuration files.
 :::
 
-Below config items can be overridden in the `zone` level:
+The following configuration items can be overridden at the zone level:
 
-- `mqtt`: MQTT connection and session settings. e.g. grant a greater maximum packet size for MQTT messages only in a specific zone.
-- `force_shutdown`: Force shutdown policies.
-- `force_gc`: Fine-tune the Erlang process garbage collection.
-- `flapping_detect`: To detect the flapping of the clients.
-- `session_persistence`: Session persistence settings. e.g. when one wants support durable storage for MQTT sessions only in a specific zone.
+- `mqtt`: MQTT connection and session settings, such as allowing a greater maximum packet size for MQTT messages in a specific zone.
+- `force_shutdown`: Policies for forced shutdowns.
+- `force_gc`: Fine-tuning for Erlang process garbage collection.
+- `flapping_detect`: Detection of client flapping.
+- `session_persistence`: Session persistence settings, such as enabling durable storage for MQTT sessions in a specific zone.
 
-In EMQX version 5, the default configuration file does not come with any zones.
-This is different from version 4, in which there are two default zones: 'internal' and 'external'.
+In EMQX version 5, the default configuration file does not include any zones, which differs from version 4, where there are two default zones: `internal` and `external`.
 
 To create a zone, you need to define it in `emqx.conf`, for example:
 
-```
+```bash
 zones {
-  # there can be multiple zones
+  # Multiple zones can be defined
   my_zone1 {
-    # zones share the same config schema/layout as the global configs
+    # Zones share the same configuration schema as the global configurations
     mqtt {
-      # allow larger packet size for connections in this zone
+      # Allow a larger packet size for connections in this zone
       max_packet_size = 10M
     }
     force_shutdown {
-      # allow larger heap size for connections in this zone
+      # Configuration specific to this zone
       ...
     }
     session_persistence {
-      # only apply durable storage for sessions in this zone
+      # Enable durable storage for sessions in this zone
       ...
     }
   }
@@ -302,23 +297,22 @@ zones {
 
 ## Schema
 
-To make the HOCON objects type-safe, EMQX introduced a schema for it. The schema defines data types, and data fields' names and metadata for config value validation and more.
+To make the HOCON objects type-safe, EMQX introduced a schema for it. This schema defines data types, field names, and metadata, allowing for configuration value validation and more.
 
 {% emqxee %}
 
-The [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) is generated from schema.
+The [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) is generated from the schema.
 
 {% endemqxee %}
 
 {% emqxce %}
 
-The [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/) is generated from schema.
+The [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/) is generated from the schema.
 
 {% endemqxce %}
 
 ::: tip
-The Zone config schema is not generated in the in the configuration manual docs because the schemas are identical to each group respectively.
-For example, `zones.my_zone1.mqtt {...}` has ideltical schema as `mqtt {...}`.
+The zone configuration schema is not included in the configuration manual because it is identical for each group. For example, `zones.my_zone1.mqtt {...}` has the same schema as `mqtt {...}`.
 :::
 
 ### Primitive Data Types

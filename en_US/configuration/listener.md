@@ -7,6 +7,24 @@ In EMQX, listener is configured to receive requests from MQTT clients. EMQX supp
 - Websocket listener: `8083`
 - Secure websocket listener: `8084`
 
+:::tip
+
+You can also configure listeners via Dashboard by clicking **Management** -> **Listener** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+
+:::
+
+{% emqxce %}
+
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
+
+{% endemqxce %}
+
+{% emqxee %}
+
+EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+
+{% endemqxee %}
+
 ## Configure TCP Listener
 
 TCP listener is a network service that listens for incoming TCP connections on a specific network port. It plays an essential role in establishing and managing connections between clients and EMQX over TCP/IP networks. 
@@ -125,28 +143,11 @@ where:
 
 <!--To add code sample for adding multiple listeners.-->
 
-## Link listener to a config zone
+## Link Listener to a Configuration zone
 
-Each listener is configured with a zone, which defaults to a logical zone named `default`.
+Each listener in EMQX is associated with a zone, which by default is set to a logical zone named `default`.
 
-Associating a listener with a specific zone causes MQTT clients connected to that listener to inherit the zone's settings.
+When a listener is linked to a specific zone, MQTT clients connected to that listener inherit the settings from that zone.
 
-For additional details, refer to the [Zone Override](../configuration/configuration.md#zone-override) section in the configuration documentation.
+For more information, see the [Zone Override](./configuration.md#zone-override) section in the configuration documentation.
 
-{% emqxce %}
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
-
-{% endemqxce %}
-
-{% emqxee %}
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
-
-{% endemqxee %}
-
-:::tip
-
-You can also configure listeners via Dashboard by clicking **Management** -> **Listener** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
-:::
