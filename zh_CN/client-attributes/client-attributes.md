@@ -27,11 +27,13 @@
 
 #### Variform 表达式
 
-提取过程使用了一种称为 Variform 的函数调用风格模板渲染表达式。
-这种方法设计用来通过允许函数调用和变量引用来指定属性提取，动态处理数据。
+提取过程使用了一种称为 Variform 的函数调用风格模板渲染表达式。这种方法通过允许函数调用和变量引用来指定属性提取，动态处理数据。
+
 需要注意的是，Variform 表达式不是完全可编程的，并且仅限于预定义的函数和变量。
 
-作为示例，考虑以下表达式：
+##### 语法概览
+
+以下面的表达式作为示例：
 
 ```
 function_call(clientid, another_function_call(username))
@@ -76,13 +78,13 @@ mqtt {
 
 预绑定变量可以直接在提取表达式中使用。包括以下预绑定变量：
 
-- `cn`：客户证书常用名称。
-- `dn`：客户证书区分名称（主题）。
+- `cn`：客户证书常用名称
+- `dn`：客户证书区分名称（主题）
 - `clientid`
 - `username`
-- `user_property`：客户在 MQTT v5 连接包中提供的用户属性。
-- `ip_address`：客户端的源 IP 地址。
-- `port`：客户端的源端口号。
+- `user_property`：客户在 MQTT v5 连接包中提供的用户属性
+- `ip_address`：客户端的源 IP 地址
+- `port`：客户端的源端口号
 - `zone`：区域名称
 
 ##### 预定义函数
@@ -129,32 +131,22 @@ EMQX 会将认证结果中的 `client_attrs` 字段合并到初始化的 `client
 
 例如，对于名为 `client_attrs.alias` 的属性，您可以使用 `${client_attrs.alias}` 来构建作为HTTP认证请求的HTTP请求体。有关更多详情，请参见[认证占位符](../access-control/authn/authn.md#authentication-placeholders)。
 
-## 配置属性提取
+## 配置客户端属性
 
-您可以通过配置文件或仪表板配置属性提取功能。
+您可以通过配置文件或 Dashboard 配置客户端属性功能。
 
-### 通过配置文件配置属性提取
+想要在 Dashboard 中配置客户端属性，点击左侧导航中的**管理** -> **MQTT 配置**，在**客户端属性**配置中点击**添加**，填写属性名称和属性表达式。
 
-配置示例：
-
-```
-<!-- 代码示例 -->
-```
-
-配置项解释：
+![client_attributes_config_ee](./assets/client_attributes_config_ee.png)
 
 {% emqxce %}
 
-有关配置的详细信息，请参见[配置手册](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/)。
+更多客户端属性配置的详细信息，请参见[配置手册](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/)。
 
 {% endemqxce %}
 
 {% emqxee %}
 
-有关配置的详细信息，请参见[配置手册](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)。
+更多客户端属性配置的详细信息，请参见[配置手册](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)。
 
 {% endemqxee %}
-
-### 通过 Dashboard 配置属性提取
-
-<!-- 在前端开发完成后添加描述 -->
