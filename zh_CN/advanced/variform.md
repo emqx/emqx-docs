@@ -1,52 +1,53 @@
-# Variform Expressions
+# Variform 表达式
 
-Variform is a lightweight, expressive language designed for string manipulation and runtime evaluation.
-It is not a full-fledged programming language but rather a specialized tool that can be embedded within
-configurations or EMQX to perform string operations dynamically.
+Variform 是一种轻量级、富有表现力的语言,旨在进行字符串操作和运行时求值。
+它不是一种全功能的编程语言，而是一种专门的工具，可以嵌入配置中，用来态执行字符串操作。
 
-## Syntax
+## 语法概览
 
-To illustrate:
+以下面的表达式作为示例：
 
-```js
+```
 function_call(clientid, another_function_call(username))
 ```
+此表达式结合或操作 `clientid` 和 `username` 以生成新的字符串值。
 
-This expression combines or manipulates clientid and username to generate a new string value.
+Variform 支持以下字面量：
 
-Variform supports below literals:
+- 整数：例如，`42`。
+- 浮点数：例如，`3.14`。
+- 字符串：单引号 `'` 或双引号 `"` 之间的 ASCII 字符。
+- 数组：元素位于 `[` 和 `]` 之间，以逗号 `,` 分隔。
+- 变量：引用预定义的值，例如 `clientid`。
+- 函数：预定义的函数，例如 `concat([...])`。
 
-- Integer: For example, `42`.
-- Float: For example, `3.14`.
-- String: ASCII characters between single quotes `'` or double quotes `"`.
-- Array: Elements between `[` and `]`, separated by a comma `,`.
-- Variable: Referencing to predefined values, for example `clientid`.
-- Function: Predefined functions, for example, `concat([...])`.
+Variform 不支持以下功能：
 
-Variform does not support the following:
-
-- Arithmetic operations
-- Loops
-- User-defined variables
-- User-defined functions
-- Exception handling and error recovery
+- 算术运算
+- 条件语句
+- 循环
+- 用户定义的变量
+- 用户定义的函数
+- 异常处理和错误恢复
 - Boolean literals. Booleans may be produced intermediately as return values from a built-in functions such as `num_gt` (which stands for 'is number greater'),
   but cannot be wirtten as a literal. The condition functions (`iif` and `coalesce`) take empty string for `false` otherwise `true`.
 - Escape sequence in string literals. Call the `unescape` function to unescape special characters.
 
-Below is a configuration example with a Variform expression embedded.
 
-```js
+以下是一个嵌入配置文件中的示例。
+
+```bash
 mqtt {
     client_attrs_init = [
         {
-            # Extract the prefix of client ID before the first -
-            expression = "nth(1, tokens(clientid, '-'))"
-            # And set as client_attrs.group
+            # 提取客户端 ID 在第一个 `-` 字符前面的前缀
+            expression = "nth(1,tokens(clientid, '-'))"
+            # 然后把提取的字符串赋值给 client_attrs.group 这个字段
             set_as_attr = group
         }
     ]
 }
+
 ```
 
 ::: tip
@@ -61,29 +62,28 @@ expression = """nth(1, tokens(clientid, unescape('\n')))"""
 ```
 :::
 
-## Pre-defined Functions
 
-EMQX includes a rich set of string, array, random, and hashing functions similar to those available in rule engine string functions.
-These functions can be used to manipulate and format the extracted data. For instance, `lower()`, `upper()`,
-and `concat()` help in adjusting the format of extracted strings, while `hash()` and `hash_to_range()` allow for creating hashed or ranged outputs based on the data.
+## 预定义函数
 
-Below are the functions that can be used in the expressions:
+EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似于规则引擎字符串函数中可用的那些。这些函数可以用来操作和格式化提取的数据。例如，`lower()`、`upper()` 和 `concat()` 可以帮助调整提取字符串的格式，而 `hash()` 和 `hash_to_range()` 可以基于数据创建散列或范围输出。
 
-- **String functions**:
-  - [String Operation Functions](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
-  - A new function any_to_string/1 is also added to convert any intermediate non-string value to a string.
-- **Array functions**: [nth/2](../data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
-- **Random functions**: rand_str, rand_int
-- **Schema-less encode/decode functions**:
+以下是可以在表达式中使用的函数：
+
+- **字符串函数**：
+  - [字符串操作函数](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
+  - 还添加了一个新函数 any_to_string/1，用于将任何中间非字符串值转换为字符串。
+- **数组函数**：[nth/2](../data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
+- **随机函数**：rand_str, rand_int
+- **无模式编码/解码函数**：
   - [bin2hexstr/1](../data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
   - [hexstr2bin/1](../data-integration/rule-sql-builtin-functions.md#hexstr2bin-data-string-binary)
   - [base64_decode/1](../data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)
   - [base64_encode/1](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
   - int2hexstr/1
-- **Hash functions**:
-  - hash(Algorihtm, Data), where  algorithm can be one of: md4 | md5, sha (or sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
-  - hash_to_range(Input, Min, Max): Use sha256 to hash the Input data and map the hash to an integer between Min and Max inclusive ( Min =< X =< Max)
-  - map_to_rage(Input, Min, Max): Map the input to an integer between Min and Max inclusive (Min =< X =< Max)
+- **散列函数**：
+  - hash(算法, 数据)，其中算法可以是以下之一：md4 | md5, sha (或 sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
+  - hash_to_range(输入, 最小值, 最大值)：使用 sha256 散列输入数据，并将散列映射到最小值和最大值之间的整数（包括最小值和最大值）。
+  - map_to_rage(输入, 最小值, 最大值)：将输入映射到最小值和最大值之间的整数（包括最小值和最大值）。
 
 ## Conditions
 
@@ -116,7 +116,7 @@ As the default behavior of scripting environments like Bash, Variform expression
 - Unbound Variables: If an expression references a variable that has not been defined or is out of scope (unbound), the expression will evaluate to an empty string.
 - Runtime Exceptions: Any exceptions that occur during the execution of an expression, whether due to incorrect function usage, invalid data types, or other unforeseen issues, will result in the expression yielding an empty string. For example, array index out of range.
 
-## Example Expressions
+## 示例表达式
 
 - `nth(1, tokens(clientid, '.'))`:  Extract the prefix of a dot-separated client ID.
 - `strlen(username, 0, 5)`: Extract a partial username.

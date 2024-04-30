@@ -24,98 +24,44 @@
   - `dn`（区分名称）：证书中包含关于证书持有者的几个描述性字段的完整主题字段。
   - 服务器名称指示（SNI）：当前用作多租户租户 ID。
 - **IP 连接数据**：包括客户端的 IP 地址和端口号，这些都是客户端连接时 EMQX 自动捕获的。
+- **Properties from Listener Config**: A client may also inherit properties like `zone` from MQTT listener.
 
-#### Variform 表达式
+The extraction process uses an function-call style template render expression which we call Variform.
+For example, this expression extracts the prefix of a dot-separated client ID.
 
-提取过程使用了一种称为 Variform 的函数调用风格模板渲染表达式。这种方法通过允许函数调用和变量引用来指定属性提取，动态处理数据。
-
-需要注意的是，Variform 表达式不是完全可编程的，并且仅限于预定义的函数和变量。
-
-##### 语法概览
-
-以下面的表达式作为示例：
-
+```js
+nth(1, tokens(clientid, '.'))
 ```
-function_call(clientid, another_function_call(username))
-```
-此表达式结合或操作 `clientid` 和 `username` 以生成新的字符串值。
 
-Variform 支持以下字面量：
+And the configuration may look like below.
 
-- 整数：例如，`42`。
-- 浮点数：例如，`3.14`。
-- 字符串：单引号 `'` 或双引号 `"` 之间的 ASCII 字符。
-- 数组：元素位于 `[` 和 `]` 之间，以逗号 `,` 分隔。
-- 变量：引用预定义的值，例如 `clientid`。
-- 函数：预定义的函数，例如 `concat([...])`。
-
-Variform 不支持以下功能：
-
-- 算术运算
-- 条件语句
-- 循环
-- 用户定义的变量
-- 用户定义的函数
-- 异常处理和错误恢复
-
-由于其设计简洁，非常适合嵌入配置中。以下是一个示例。
-
-```bash
+```js
 mqtt {
     client_attrs_init = [
         {
-            # 提取客户端 ID 在第一个 `-` 字符前面的前缀
-            expression = "nth(1,tokens(clientid, '-'))"
-            # 然后把提取的字符串赋值给 client_attrs.group 这个字段
+            expression = "nth(1, tokens(clientid, '-'))"
+            # And set as client_attrs.group
             set_as_attr = group
         }
     ]
 }
-
 ```
 
-##### 预绑定变量
+Pre-bound variables can be directly used in the extraction expressions.
+For client attributes extraction, below variables are pre-bound:
 
-预绑定变量可以直接在提取表达式中使用。包括以下预绑定变量：
-
-- `cn`：客户证书常用名称
-- `dn`：客户证书区分名称（主题）
+- `cn`: Client certificate common name
+- `dn`: Client certificate distinguish name (Subject)
 - `clientid`
 - `username`
-- `user_property`：客户在 MQTT v5 连接包中提供的用户属性
-- `ip_address`：客户端的源 IP 地址
-- `port`：客户端的源端口号
-- `zone`：区域名称
+- `user_property`: The user properties provided in the MQTT v5 CONNECT packet sent by the client
+- `ip_address`: The source IP of the client
+- `port`: The source port number of the client
+- `zone`: The zone name
 
-##### 预定义函数
-
-EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似于规则引擎字符串函数中可用的那些。这些函数可以用来操作和格式化提取的数据。例如，`lower()`、`upper()` 和 `concat()` 可以帮助调整提取字符串的格式，而 `hash()` 和 `hash_to_range()` 可以基于数据创建散列或范围输出。
-
-以下是可以在表达式中使用的函数：
-
-- **字符串函数**：
-  - [字符串操作函数](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
-  - 还添加了一个新函数 any_to_string/1，用于将任何中间非字符串值转换为字符串。
-- **数组函数**：[nth/2](../data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
-- **随机函数**：rand_str, rand_int
-- **无模式编码/解码函数**：
-  - [bin2hexstr/1](../data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
-  - [hexstr2bin/1](../data-integration/rule-sql-builtin-functions.md#hexstr2bin-data-string-binary)
-  - [base64_decode/1](../data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)
-  - [base64_encode/1](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
-  - int2hexstr/1
-- **散列函数**：
-  - hash(算法, 数据)，其中算法可以是以下之一：md4 | md5, sha (或 sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
-  - hash_to_range(输入, 最小值, 最大值)：使用 sha256 散列输入数据，并将散列映射到最小值和最大值之间的整数（包括最小值和最大值）。
-  - map_to_rage(输入, 最小值, 最大值)：将输入映射到最小值和最大值之间的整数（包括最小值和最大值）。
-
-##### 示例表达式
-
-`nth(1, tokens(clientid, '.'))`：提取以点分隔的客户端ID的前缀。
-
-`strlen(username, 0, 5)`: 提取部分用户名。
-
-`coalesce(regex_extract(clientid,'(\\d+)'),'000')`: 使用正则表达式提取客户端 ID 中的数字，如果正则表达式提取不到，则返回 `'000'`。
+::: tip
+Read more about [Variform](../advanced/variform.md).
+:::
 
 ### 合并认证数据
 
