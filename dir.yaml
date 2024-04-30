@@ -577,6 +577,7 @@
           edition: ee
         #- gateway/tcp
     - client-attributes/client-attributes
+    - advanced/variform
 
 - title_en: Tutorials
   title_cn: 实用教程

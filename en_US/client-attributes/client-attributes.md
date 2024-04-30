@@ -16,53 +16,30 @@ This section describes from which client attributes EMQX extracts and how attrib
 
 #### Sources of Client Metadata and Attributes
 
-In EMQX, client metadata and attributes originate from various sources and are stored within specific system properties for use throughout the client's connection lifecycle. Here's a breakdown of where these existing client information come from and where they are stored:
+In EMQX, client metadata and attributes originate from various sources and are stored within specific properties for use throughout the client's connection lifecycle.
+Here's a breakdown of where these existing client information come from and where they are stored:
 
 - **MQTT CONNECT Packet**: When a client connects to EMQX, it sends a CONNECT packet that includes several pieces of information, such as `clientid`, `username`, `password`, and `user properties`.
 - **TLS Certificates**: If the client connects using TLS, the client's TLS certificate can provide additional metadata, such as:
   - `cn` (Common Name): Part of the certificate that can identify the device or user.
   - `dn` (Distinguished Name): The full subject field within the certificate that includes several descriptive fields about the certificate owner.
 - **IP Connection Data**: This includes the client’s IP address and port number, which are automatically captured by EMQX when a client connects.
-
-#### Variform Expression
+- **Properties from Listener Config**: A client may also inherit properties like `zone` from MQTT listener.
 
 The extraction process uses an function-call style template render expression which we call Variform.
-This method is designed to dynamically process data by allowing function calls and variable references to dictate attribute extraction.
-It's important to note that Variform expressions are not fully programmable and are restricted to predefined functions and variables.
+For example, this expression extracts the prefix of a dot-separated client ID.
 
-##### Syntax Overview
-
-To illustrate, consider the expression:
-
+```js
+nth(1, tokens(clientid, '.'))
 ```
-function_call(clientid, another_function_call(username))
-```
-This expression combines or manipulates clientid and username to generate a new string value.
 
-Variform supports below literals:
-- Integer: For example, `42`.
-- Float: For example, `3.14`.
-- String: ASCII characters between single quotes `'` or double quotes `"`.
-- Array: Elements between `[` and `]`, separated by a comma `,`.
-- Variable: Referencing to predefined values, for example `clientid`.
-- Function: Predefined functions, for example, `concat([...])`.
+And the configuration may look like below.
 
-Variform does not support the following:
-- Arithmetic operations
-- Conditional statements
-- Loops
-- User-defined variables
-- User-defined functions
-- Exception handling and error recovery
-
-Owing to its concise design, it is ideally suited for embedding in configurations. Below is an example.
-
-```bash
+```js
 mqtt {
     client_attrs_init = [
         {
-            # Extract the prefix of client ID before the first -
-            expression = "nth(1,tokens(clientid, '-'))"
+            expression = "nth(1, tokens(clientid, '-'))"
             # And set as client_attrs.group
             set_as_attr = group
         }
@@ -70,9 +47,8 @@ mqtt {
 }
 ```
 
-##### Pre-bound Variables
-
-Pre-bound variables can be directly used in the extraction expressions. A set of variables are pre-bound, including:
+Pre-bound variables can be directly used in the extraction expressions.
+For client attributes extraction, below variables are pre-bound:
 
 - `cn`: Client certificate common name.
 - `dn`: Client certificate distinguish name (Subject).
@@ -83,44 +59,9 @@ Pre-bound variables can be directly used in the extraction expressions. A set of
 - `port`: The source port number of the client
 - `zone`: The zone name
 
-##### Pre-defined Functions
-
-EMQX includes a rich set of string, array, random, and hashing functions similar to those available in rule engine string functions. These functions can be used to manipulate and format the extracted data. For instance, `lower()`, `upper()`, and `concat()` help in adjusting the format of extracted strings, while `hash()` and `hash_to_range()` allow for creating hashed or ranged outputs based on the data.
-
-Below are the functions that can be used in the expressions:
-
-- **String functions**:
-  - [String Operation Functions](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
-  - A new function any_to_string/1 is also added to convert any intermediate non-string value to a string.
-- **Array functions**: [nth/2](../data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
-- **Random functions**: rand_str, rand_int
-- **Schema-less encode/decode functions**:
-  - [bin2hexstr/1](../data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
-  - [hexstr2bin/1](../data-integration/rule-sql-builtin-functions.md#hexstr2bin-data-string-binary)
-  - [base64_decode/1](../data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)
-  - [base64_encode/1](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
-  - int2hexstr/1
-- **Hash functions**:
-  - hash(Algorihtm, Data), where  algorithm can be one of: md4 | md5, sha (or sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
-  - hash_to_range(Input, Min, Max): Use sha256 to hash the Input data and map the hash to an integer between Min and Max inclusive ( Min =< X =< Max)
-  - map_to_rage(Input, Min, Max): Map the input to an integer between Min and Max inclusive (Min =< X =< Max)
-
-##### Error Handling
-
-As the default behavior of scripting environments like Bash, Variform expression is designed to yield an empty string ("") in scenarios where errors occur, such as unbound variables or exceptions during runtime.
-
-- Unbound Variables: If an expression references a variable that has not been defined or is out of scope (unbound), the expression will evaluate to an empty string.
-- Runtime Exceptions: Any exceptions that occur during the execution of an expression, whether due to incorrect function usage, invalid data types, or other unforeseen issues, will result in the expression yielding an empty string. For example, array index out of range.
-
-NOTE: Empty strings are discarded, but not added to `client_attrs`.
-
-##### Example Expressions
-
-`nth(1, tokens(clientid, '.'))`:  Extract the prefix of a dot-separated client ID.
-
-`strlen(username, 0, 5)`: Extract a partial username.
-
-`coalesce(regex_extract(clientid,'(\\d+)'),'000')`: Extract digits from client ID using a regular expression. If the regular expression yields empty string, then return `'000'`.
+::: tip
+Read more about [Variform](../advanced/variform.md).
+:::
 
 ### Extend Attributes from Authentication Response
 
