@@ -8,7 +8,7 @@ When a client connects to EMQX, its client attributes are initialized. During in
 
 Client attributes are stored in a field called `client_attrs` within the client's session or connection context. This `client_attrs` info field acts like a dictionary or a map, holding the attributes as key-value pairs. This field is maintained in memory associated with the client's session for quick access during the client's connection lifecycle.
 
-After initialization `client_attrs` object can be extended with more data fields from authentication results, such as JWT's `client_attrs` claim, and `client_attrs` field in HTTP authentication response body.
+After initialization, `client_attrs` object can be extended with more data fields from authentication results, such as JWT's `client_attrs` claim, and `client_attrs` field in HTTP authentication response body.
 
 ### Extract Client Attributes
 
@@ -26,8 +26,8 @@ In EMQX, client metadata and attributes originate from various sources and are s
 
 #### Variform Expression
 
-The extraction process uses an function-call style template render expression which we call Variform.
-This method is designed to dynamically process data by allowing function calls and variable references to dictate attribute extraction.
+The extraction process uses a function-call style template render expression which is called Variform. This method is designed to dynamically process data by allowing function calls and variable references to dictate attribute extraction. 
+
 It's important to note that Variform expressions are not fully programmable and are restricted to predefined functions and variables.
 
 ##### Syntax Overview
@@ -74,12 +74,12 @@ mqtt {
 
 Pre-bound variables can be directly used in the extraction expressions. A set of variables are pre-bound, including:
 
-- `cn`: Client certificate common name.
-- `dn`: Client certificate distinguish name (Subject).
+- `cn`: Client certificate common name
+- `dn`: Client certificate distinguish name (Subject)
 - `clientid`
 - `username`
-- `user_property`: The user properties provided in the MQTT v5 CONNECT packet sent by the client.
-- `ip_address`: The source IP of the client.
+- `user_property`: The user properties provided in the MQTT v5 CONNECT packet sent by the client
+- `ip_address`: The source IP of the client
 - `port`: The source port number of the client
 - `zone`: The zone name
 
@@ -140,31 +140,18 @@ For example, for an attribute named `client_attrs.alias`, you can use `${client_
 
 You can configure the attribute extraction feature through the configuration file or Dashboard.
 
-### Configure Attribute Extraction via Configuration File
+To configure the attribute extraction via the Dashboard, click **Management** -> **MQTT Settings**. At **Client Attributes**, click **Add** to add the attribute name and expression.
 
-Configuration example:
-
-```
-<!-- code example -->
-```
-
-Explanations of the configuration items:
-
-
+![client_attributes_config_ee](./assets/client_attributes_config_ee.png)
 
 {% emqxce %}
 
-For detailed information about the configuration, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
+For detailed information about the client attributes configurations, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
 
 {% endemqxce %}
 
 {% emqxee %}
 
-For detailed information about the configuration, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+For detailed information about the client attributes configuration, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 {% endemqxee %}
-
-### Configure Attribute Extraction via Dashboard
-
-<!-- Add description after Frontend dev. Complete -->
-
