@@ -79,11 +79,22 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
   - [hexstr2bin/1](../data-integration/rule-sql-builtin-functions.md#hexstr2bin-data-string-binary)
   - [base64_decode/1](../data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)
   - [base64_encode/1](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
-  - int2hexstr/1
+  - `int2hexstr(Integer)`: Encode an integer to hex string. e.g. 15 as 'F' (uppercase).
 - **散列函数**：
   - hash(算法, 数据)，其中算法可以是以下之一：md4 | md5, sha (或 sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
   - hash_to_range(输入, 最小值, 最大值)：使用 sha256 散列输入数据，并将散列映射到最小值和最大值之间的整数（包括最小值和最大值）。
   - map_to_rage(输入, 最小值, 最大值)：将输入映射到最小值和最大值之间的整数（包括最小值和最大值）。
+- **Compare functions**:
+  - `num_eq(A, B)`: Return 'true' if two numbers are the same, otherwise 'false'.
+  - `num_gt(A, B)`: Return 'true' if A is greater than B, otherwise 'false'.
+  - `num_gte(A, B)`: Return 'true' if A is not less than B, otherwise 'false'.
+  - `num_lt(A, B)`: Return 'true' if A is less than B, otherwise 'false'.
+  - `num_lte(A, B)`: Return 'true' if A is not greater than B, otherwise 'false'.
+  - `str_eq(A, B)`: Return 'true' if two strings are the same, otherwise 'false', otherwise 'false'.
+  - `str_gt(A, B)`: Return 'true' if A is behind B in lexicographic order, otherwise 'false'.
+  - `str_gte(A, B)`: Return 'true' if A is not before B in lexicographic order, otherwise 'false'.
+  - `str_lt(A, B)`: Return 'true' if A is before B in lexicographic order, otherwise 'false'.
+  - `str_lte(A, B)`: Return 'true' if A is not after B in lexicographic order, otherwise 'false'.
 
 ## Conditions
 

@@ -75,15 +75,26 @@ Below are the functions that can be used in the expressions:
 - **Array functions**: [nth/2](../data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
 - **Random functions**: rand_str, rand_int
 - **Schema-less encode/decode functions**:
-  - [bin2hexstr/1](../data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
-  - [hexstr2bin/1](../data-integration/rule-sql-builtin-functions.md#hexstr2bin-data-string-binary)
-  - [base64_decode/1](../data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)
-  - [base64_encode/1](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
-  - int2hexstr/1
+  - [bin2hexstr(Data)](../data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
+  - [hexstr2bin(Data)](../data-integration/rule-sql-builtin-functions.md#hexstr2bin-data-string-binary)
+  - [base64_decode(Data)](../data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)
+  - [base64_encode(Data)](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
+  - `int2hexstr(Integer)`: Encode an integer to hex string. e.g. 15 as 'F' (uppercase).
 - **Hash functions**:
-  - hash(Algorihtm, Data), where  algorithm can be one of: md4 | md5, sha (or sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
-  - hash_to_range(Input, Min, Max): Use sha256 to hash the Input data and map the hash to an integer between Min and Max inclusive ( Min =< X =< Max)
-  - map_to_rage(Input, Min, Max): Map the input to an integer between Min and Max inclusive (Min =< X =< Max)
+  - `hash(Algorihtm, Data)`: Algorithm can be one of: md4 | md5, sha (or sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
+  - `hash_to_range(Input, Min, Max)`: Use sha256 to hash the Input data and map the hash to an integer between Min and Max inclusive ( Min =< X =< Max)
+  - `map_to_rage(Input, Min, Max)`: Map the input to an integer between Min and Max inclusive (Min =< X =< Max)
+- **Compare functions**:
+  - `num_eq(A, B)`: Return 'true' if two numbers are the same, otherwise 'false'.
+  - `num_gt(A, B)`: Return 'true' if A is greater than B, otherwise 'false'.
+  - `num_gte(A, B)`: Return 'true' if A is not less than B, otherwise 'false'.
+  - `num_lt(A, B)`: Return 'true' if A is less than B, otherwise 'false'.
+  - `num_lte(A, B)`: Return 'true' if A is not greater than B, otherwise 'false'.
+  - `str_eq(A, B)`: Return 'true' if two strings are the same, otherwise 'false', otherwise 'false'.
+  - `str_gt(A, B)`: Return 'true' if A is behind B in lexicographic order, otherwise 'false'.
+  - `str_gte(A, B)`: Return 'true' if A is not before B in lexicographic order, otherwise 'false'.
+  - `str_lt(A, B)`: Return 'true' if A is before B in lexicographic order, otherwise 'false'.
+  - `str_lte(A, B)`: Return 'true' if A is not after B in lexicographic order, otherwise 'false'.
 
 ## Conditions
 
