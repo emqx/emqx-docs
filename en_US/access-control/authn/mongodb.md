@@ -87,8 +87,8 @@ Follow the instruction below on how to configure:
 - **Password Hash**: Select the Hash function for storing the password in the database, for example, plain, md5, sha, bcrypt, pbkdf2. There are some extra items to be configured based on the function you selected: 
   - If **plain**, **md5**, **sha**, **sha256** or **sha512** are selected, you also need to configure:
     - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. You can keep the default value unless you are migrating user credentials from external storage into EMQX built-in database. Note: If **plain** is selected, the **Salt Position** should be **disable**. 
-  - If **bcrypt** is selected, you also need to configure:
-    - **Salt Rounds**: Specify the calculation times of Hush function (2^Salt Rounds). Default value: **10**; Value range **4~31**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by 1 doubles the necessary time. 
+  - If **bcrypt** is selected, we also need to configure:
+    - **Salt Rounds**: Specify the calculation times of Hush function (2^Salt Rounds). Default value: **10**; Value range **5~10**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by one doubles the necessary time for authentication.
   - If **pkbdf2** is selected, you also need to configure:
     - **Pseudorandom Function**: Specify the Hush functions to generate the key, such as sha256. 
     - **Iteration Count**: Specify the iteration times; Default: 4096
