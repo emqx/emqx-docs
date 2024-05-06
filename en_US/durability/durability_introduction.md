@@ -19,9 +19,9 @@ For more information on sessions, see [MQTT Persistent Session and Clean Session
 
 :::
 
-### Regular Client Sessions
+### Ephemeral Client Sessions
 
-Regular client sessions are temporary and exist for the duration of the client's connection to EMQX. When a client with a regular session disconnects, all session information, including subscriptions and undelivered messages, is discarded. 
+Ephemeral client sessions are temporary and exist for the duration of the client's connection to EMQX. When a client with an ephemeral session disconnects, all session information, including subscriptions and undelivered messages, is discarded. 
 
 ### Persistent Client Sessions
 
@@ -41,9 +41,9 @@ The session persistence feature in EMQX is disabled by default. It can be enable
 
 ## How Session Persistence Works
 
-EMQX introduces a unique approach to manage message durability for persistent sessions. When a client with a persistent session subscribes to a topic filter, EMQX designates topics matching the filter as "durable." This ensures that, aside from routing MQTT PUBLISH messages from these topics to active sessions, the broker also saves these messages on disk. EMQX integrates directly with a built-in RocksDB database as the storage backend. 
+EMQX introduces a unique method to ensure message durability for persistent sessions. When a client with a persistent session subscribes to a topic filter, EMQX designates topics matching the filter as "durable." This ensures that, aside from routing MQTT PUBLISH messages from these topics to active sessions, the broker also saves these messages on disk. EMQX integrates directly with a built-in RocksDB database as the storage backend. 
 
-Strong durability and high availability guarantees are achieved by replicating the message and session data across multiple nodes in an EMQX cluster in a consistent manner. The *replication factor*, which determines the number of copies each message or session should have, can be adjusted to achieve a desired balance between durability and performance.
+The session persistence feature ensures robust durability and high availability by consistently replicating message and session data across multiple nodes within an EMQX cluster. The configurable *replication factor* determines the number of replicas for each message or session, enabling users to customize the balance between durability and performance to meet their specific requirements.
 
 Each durable MQTT message is stored exactly once on each replica, regardless of the number of persistent sessions subscribing to the matching topic filter and whether those sessions are currently connected or not. This enables an efficient fan-out of messages to the persistent sessions.
 
@@ -53,18 +53,15 @@ The architecture of EMQX’s durable storage is organized into a hierarchical st
 
 #### Shard
 
-This level segregates messages by client, storing them in distinct shards determined by the publisher's client ID. The number of shards is determined by `durable_storage.messages.n_shards` configuration parameter during the initial startup of EMQX.
+At this level, messages are segregated by client, and stored in distinct shards based on the publisher's client ID. The number of shards is determined by `durable_storage.messages.n_shards` configuration parameter during the initial startup of EMQX.
 
-A shard is also a unit of replication, and EMQX ensures that each shard is consistently replicated `durable_storage.messages.replication_factor` times across different nodes in the cluster, so that each shard replica contains the same set of messages in the same order.
+A shard is also a unit of replication, and EMQX ensures that each shard is consistently replicated `durable_storage.messages.replication_factor` times across different nodes in the cluster so that each shard replica contains the same set of messages in the same order.
 
 #### Generation
 
-Within each shard, data is further divided into generations that span specific time frames. 
-New messages are written only into the current generation, while the previous generations are only accessible for reading. EMQX cleans up old messages by deleting old generations. For how long messages are retained is specified by the `session_persistence.message_retention_period` parameter.
+Messages within a shard are further segmented into generations corresponding to specific time frames. New messages are written only for the current generation, while the previous generations are only accessible for reading. EMQX cleans up old messages by deleting old generations. EMQX manages the data lifecycle by deleting older generations, with the retention period defined by the `session_persistence.message_retention_period` parameter.
 
-Different generations can organize the data in a different manner, according to the *storage layout* specification. Currently only one layout is supported, designed to optimize the throughput of wildcard subscriptions covering very large number of topics, and the throughput of single-topic subscriptions.
-
-Future updates will introduce additional layouts to optimize for the different types of workloads, such as prioritizing low latency over high throughput for certain applications.
+Different generations can organize the data differently, according to the *storage layout* specification. Currently, only one layout is supported, optimized for managing the high throughput of wildcard subscriptions spanning a large number of topics and single-topic subscriptions. Future updates will introduce additional layouts to optimize for the different types of workloads, such as prioritizing low latency over high throughput for certain applications.
 
 #### Stream
 
@@ -78,7 +75,7 @@ Each node within an EMQX cluster is assigned a unique site ID, which serves as a
 
 By associating persistent sessions and messages with a unique site ID rather than just the node's name, EMQX ensures that these sessions can be reliably managed and recovered, even if the underlying node details change. 
 
-To manage and monitor persistent sessions across the cluster, administrators can use `emqx_ctl ds info` CLI command to inspect the status of different sites.
+Administrators can manage and monitor persistent sessions across the cluster by using the `emqx_ctl ds info` CLI command to view the status of different sites.
 
 ## Hardware Requirements for Session Persistence
 

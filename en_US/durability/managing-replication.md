@@ -4,7 +4,7 @@ If you plan to run EMQX in a single-node configuration, you can skip this sectio
 
 ## Initial Cluster Setup
 
-If you are setting up a new EMQX cluster with session persistence enabled, or upgrading an existing cluster to enable session persistence, there are a few configuration parameters that influence how the cluster initially sets up durable storage and starts replicating data. Be sure to review these parameters as changing them will not take any effect once the durable storage is initialized.
+Suppose you are setting up a new EMQX cluster with session persistence enabled, or upgrading an existing cluster to enable session persistence. In that case, there are a few configuration parameters that influence how the cluster initially sets up durable storage and starts replicating data. Be sure to review these parameters as changing them will not take any effect once the durable storage is initialized.
 
 ### Replication Factor
 
