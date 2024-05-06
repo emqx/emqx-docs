@@ -88,9 +88,9 @@ Follow the instruction below on how to configure:
   - If **plain**, **md5**, **sha**, **sha256** or **sha512** are selected, you also need to configure:
     - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. You can keep the default value unless you are migrating user credentials from external storage into EMQX built-in database. Note: If **plain** is selected, the **Salt Position** should be **disable**. 
   - If **bcrypt** is selected, we also need to configure:
-    - **Salt Rounds**: Specify the calculation times of Hush function (2^Salt Rounds). Default value: **10**; Value range **5~10**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by one doubles the necessary time for authentication.
+    - **Salt Rounds**: Specify the calculation times of Hash function (2^Salt Rounds). Default value: **10**; Value range **5~10**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by one doubles the necessary time for authentication.
   - If **pkbdf2** is selected, you also need to configure:
-    - **Pseudorandom Function**: Specify the Hush functions to generate the key, such as sha256. 
+    - **Pseudorandom Function**: Specify the Hash functions to generate the key, such as sha256. 
     - **Iteration Count**: Specify the iteration times; Default: 4096
     - **Derived Key Length** (optional): Specify the generated key length. You can leave this field blank, then the key length will be determined by the pseudorandom function you selected.  
 - **Salt Field**: Salt field in MongoDB. 

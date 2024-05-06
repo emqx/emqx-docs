@@ -25,10 +25,10 @@ On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Con
 1. If **plain**, **md5**, **sha**, **sha256** or **sha512** are selected, we also need to configure:
    - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. You can keep the default value unless you are migrating user credentials from external storage into EMQX built-in database. Note: If you choose **plain**, the **Salt Position** should be set to **disable**.
 2. If **bcrypt** is selected, we also need to configure:
-   - **Salt Rounds**: Specify the calculation times of Hush function (2^Salt Rounds). Default value: **10**; Value range **5~10**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by one doubles the necessary time for authentication.
+   - **Salt Rounds**: Specify the calculation times of Hash function (2^Salt Rounds). Default value: **10**; Value range **5~10**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by one doubles the necessary time for authentication.
 3. If **pkbdf2** is selected, we also need to configure: 
-   - **Pseudorandom Function**: Specify the Hush function for generating the key, for example,  sha256.
-   - **Iteration Count**: Specify the calculation times of Hush function. Default: **4096**.
+   - **Pseudorandom Function**: Specify the Hash function for generating the key, for example,  sha256.
+   - **Iteration Count**: Specify the calculation times of Hash function. Default: **4096**.
    - **Derived Key Length** (optional): Specify the generated key length. You can leave this field blank, then the key length will be determined by the pseudorandom function you selected.
 
 After you finish the settings, click **Create**.
