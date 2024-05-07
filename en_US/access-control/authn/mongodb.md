@@ -1,10 +1,10 @@
 # Integrate with MongoDB
 
-EMQX supports integrating with MongoDB for password authentication. EMQX MongoDB authenticator currently supports connecting to MongoDB running in three different modes, which are Single, [Replica Set](https://www.mongodb.com/docs/manual/reference/replica-configuration/) and [Sharding](https://www.mongodb.com/docs/manual/sharding/). This section gives detailed instructions on the data schema supported and on how to configure with EMQX Dashboard and configuration file. 
+EMQX supports integrating with MongoDB for password authentication. EMQX MongoDB authenticator currently supports connecting to MongoDB running in three different modes, which are Single, [Replica Set](https://www.mongodb.com/docs/manual/reference/replica-configuration/) and [Sharding](https://www.mongodb.com/docs/manual/sharding/). This page gives detailed instructions on the data schema supported and on how to configure with EMQX Dashboard and configuration file. 
 
 ::: tip
 
-- Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
+Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
 
 :::
 
@@ -53,48 +53,48 @@ For this MongoDB data schema, the corresponding Dashboard configuration paramete
 
 You can use EMQX Dashboard to configure how to use MongoDB for password authentication. 
 
-On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **Password-Based** as **Mechanism**, and **MongoDB** as **Backend**, this will lead us to the **Configuration** tab, as shown below. 
+In the EMQX Dashboard, click **Access Control** -> **Authentication** from the left navigation menu. On the **Authentication** page, click **Create** at the top right corner. Click to select **Password-Based** as **Mechanism**, and **MongoDB** as **Backend** to go to the **Configuration** tab, as shown below. 
 
 <img src="./assets/authn-mongodb-1.png" alt="Authenticate with MondoDB" style="zoom:67%;" />
 
-Follow the instruction below on how to configure:
+Follow the instructions below on how to configure the authentication:
 
-**Connect**: Fill in the information needed to connect MongoDB.
+**Connect**: Enter the information for connecting to MongoDB.
 
-- **MongoDB Mode**: Select how MongoDB is deployed, including **Single**, **Replica Set** and **Sharding**. 
-- **Server**: Specify the MongoDB server address that EMQX is to connect, if **MongoDB Mode** is set to **Replica Set** or **Sharding**, you will need to input all MondoDB servers (separated with a `,`) that EMQX is to connect.
-- **Replica Set Name**: Specify the Replica Set name to use; type: strings; only needed if you set **MongoDB Mode** to **Replica Set**.
+- **MongoDB Mode**: Select how MongoDB is deployed, including `Single`, `Replica Set` and `Sharding`. 
+- **Server**: Specify the MongoDB server address that EMQX is to connect, if **MongoDB Mode** is set to `Replica Set` or `Sharding`, you will need to input all MondoDB servers (separated with a `,`) that EMQX is to connect.
+- **Replica Set Name**: Specify the Replica Set name to use; type: strings; only needed if you set **MongoDB Mode** to `Replica Set`.
 - **Database**: MongoDB database name; Data type: strings.
 - **Collection**: Name of MongoDB collection where authentication rules are stored; Data type: strings.
 - **Username** (optional): Specify MongoDB user name. 
 - **Password** (optional): Specify MongoDB user password. 
-- **Read Mode** (optional): Only needed if you set **MongoDB Mode** to **Replica Set**; Default: **master**; Options: **master**, **slave_ok**. 
-  - **master**: Indicate each query in a sequence must only read fresh data (from a master/primary server). If the connected server is not a master then the first read will fail, and the remaining operations will be aborted. 
-  - **slave_ok**: Indicate every query is allowed to read stale data from a slave/secondary (or fresh data from a master).
+- **Read Mode** (optional): Only needed if you set **MongoDB Mode** to `Replica Set`; Default: `master`; Options: `master`, `slave_ok`. 
+  - **master**: Indicate each query in a sequence must only read fresh data (from a master/primary server). If the connected server is not a master, the first read will fail, and subsequent operations will be aborted.
+  - **slave_ok**: Allows queries to read stale data from a secondary/slave server or fresh data from a master.
 
-- **Write Mode** (optional): Only needed if you set **MongoDB Mode** to **Replica Set**; Options: **unsafe**, **safe**; Default: **safe**.
+- **Write Mode** (optional): Only needed if you set **MongoDB Mode** to `Replica Set`; Options: `unsafe`, `safe`; Default: `safe`.
 
 **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
 
 **Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
 
-- **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to a MongoDB server. Default: **8**. 
-- **Connect Timeout** (optional): Specify the waiting period before EMQX assumes the connection is timed out. Units supported include milliseconds, second, minute, and hour. 
+- **Pool size** (optional): Specify the number of concurrent connections from an EMQX node to a MongoDB server. Default: `8`. 
+- **Connect Timeout** (optional): Define the duration to wait before considering a connection as timed out. Supported units: milliseconds, seconds, minutes, hours.
 
-**Authentication configuration**: Fill in the authentication-related settings:
+**Authentication configuration**: Configure settings related to authentication:
 
 - **Password Hash Field**: Specify the field name of the password.
-- **Password Hash**: Select the Hash function for storing the password in the database, for example, plain, md5, sha, bcrypt, pbkdf2. There are some extra items to be configured based on the function you selected: 
-  - If **plain**, **md5**, **sha**, **sha256** or **sha512** are selected, you also need to configure:
-    - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. You can keep the default value unless you are migrating user credentials from external storage into EMQX built-in database. Note: If **plain** is selected, the **Salt Position** should be **disable**. 
-  - If **bcrypt** is selected, we also need to configure:
-    - **Salt Rounds**: Specify the calculation times of Hash function (2^Salt Rounds). Default value: **10**; Value range **5~10**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by one doubles the necessary time for authentication.
-  - If **pkbdf2** is selected, you also need to configure:
-    - **Pseudorandom Function**: Specify the Hash functions to generate the key, such as sha256. 
-    - **Iteration Count**: Specify the iteration times; Default: 4096
+- **Password Hash**: Select the hashing function for password storage, such as `plain`, `md5`, `sha`, `bcrypt`, or `pbkdf2`. Additional configurations depend on the selected function:
+  - For `plain`, `md5`, `sha`, `sha256`, or `sha512`:
+    - **Salt Position**: Define how salt (random data) is added to the password. Options are`suffix`, `prefix`, or `disable`. You can keep the default value unless you migrate user credentials from external storage into the EMQX built-in database. Note: Set **Salt Position** to `disable` if `plain` is selected.
+  - For `bcrypt`:
+    - **Salt Rounds**: Set the number of hash function applications, expressed as 2^Salt Rounds, also known as the "cost factor". Default: `10`; Range: `5-10`. Higher values are recommended for better security. Note: Increasing the cost factor by 1 doubles the necessary time for authentication.
+  - For `pkbdf2`:
+    - **Pseudorandom Function**: Specify the hash functions to generate the key, such as `sha256`. 
+    - **Iteration Count**: Specify the iteration times; Default: `4096`.
     - **Derived Key Length** (optional): Specify the generated key length. You can leave this field blank, then the key length will be determined by the pseudorandom function you selected.  
-- **Salt Field**: Salt field in MongoDB. 
-- **is_superuser Field**: Specify if the user is a super user. 
+- **Salt Field**: Specify the salt field in MongoDB.
+- **is_superuser Field**: Determine if the user is a super user. 
 - **Filter**: A map interpreted as MongoDB selector for credential lookup. [Placeholders](./authn.md#authentication-placeholders) are supported. 
 
 After you finish the settings, click **Create**.
