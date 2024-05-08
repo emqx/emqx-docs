@@ -58,9 +58,7 @@ By default, most global settings are defined in the `emqx.conf` file, if you per
 For override rules, see [Configure override rules](#configure-override-rules).
 
 ::: tip
-
 Some configuration items cannot be overridden, for example, `node.name`.
-
 :::
 
 Since version 5.1, when cluster configuration changes, EMQX backups the `cluster.hocon` file before overwriting it.
@@ -134,7 +132,7 @@ export EMQX_LISTENERS__SSL__DEFAULT__SSL_OPTIONS__CIPHERS='["TLS_AES_256_GCM_SHA
 
 # Configuration file
 listeners.ssl.default {
-  ...
+    ...
     bind = "127.0.0.1:8883"
     ssl_options {
       ciphers = ["TLS_AES_256_GCM_SHA384"]
@@ -172,10 +170,10 @@ To avoid confusion, it is highly recommend NOT to have the same config keys in b
 
 ::: tip
 1. If you're using an older version of EMQX, specifically version e5.0.2/v5.0.22 or earlier(i.e. the `cluster-override.conf` file still exists in EMQX's data directory), then the order of priority for configuring your settings is as follows: `emqx.conf < ENV < HTTP API(cluster-override.conf)`.
-2. If you're upgrading from e5.0.2/v5.0.22 or earlier to the latest version of EMQX, 
-   the configuration overriding order will remain unchanged, `cluster.hocon` will not be created to keep compatibility.  
-3. The `cluster-override.conf` mechanism is removed in version 5.1.   
-:::   
+2. If you're upgrading from e5.0.2/v5.0.22 or earlier to the latest version of EMQX,
+   the configuration overriding order will remain unchanged, `cluster.hocon` will not be created to keep compatibility.
+3. The `cluster-override.conf` mechanism is removed in version 5.1.
+:::
 
 ### Override
 
@@ -196,12 +194,12 @@ log.console_handler.level = debug
 The packet size limit was first set to 1MB, then overridden to 10MB:
 
 ```bash
-zone {
+zones {
   zone1 {
     mqtt.max_packet_size = 1M
   }
 }
-zone.zone1.mqtt.max_packet_size = 10M
+zones.zone1.mqtt.max_packet_size = 10M
 ```
 
 ### List Element Override
@@ -236,7 +234,7 @@ authentication.1.enable = false
 
 ::: tip
 
-Arrays (in list format) will be fully overwritten and original value cannot be kept, for example:
+Arrays (in list format) will be fully overwritten and the original value cannot be kept, for example:
 
 ```bash
 authentication = [
@@ -253,21 +251,79 @@ authentication = [{ enable = true }]
 
 :::
 
+### Zone Override
+
+A zone in EMQX is a concept for grouping configurations. Zones can be associated with listeners by setting the `zone` field to the name of the desired zone. MQTT clients connected to listeners associated with a zone will inherit the configurations from that zone, which may override global settings.
+
+::: tip
+By default, listeners are linked to a zone named `default`. The `default` zone is a logical grouping and does not exist in the configuration files.
+:::
+
+The following configuration items can be overridden at the zone level:
+
+- `mqtt`: MQTT connection and session settings, such as allowing a greater maximum packet size for MQTT messages in a specific zone.
+- `force_shutdown`: Policies for forced shutdowns.
+- `force_gc`: Fine-tuning for Erlang process garbage collection.
+- `flapping_detect`: Detection of client flapping.
+- `session_persistence`: Session persistence settings, such as enabling durable storage for MQTT sessions in a specific zone.
+
+In EMQX version 5, the default configuration file does not include any zones, which differs from version 4, where there are two default zones: `internal` and `external`.
+
+To create a zone, you need to define it in `emqx.conf`, for example:
+
+```bash
+zones {
+  # Multiple zones can be defined
+  my_zone1 {
+    # Zones share the same configuration schema as the global configurations
+    mqtt {
+      # Allow a larger packet size for connections in this zone
+      max_packet_size = 10M
+    }
+    force_shutdown {
+      # Configuration specific to this zone
+      ...
+    }
+    session_persistence {
+      # Enable durable storage for sessions in this zone
+      ...
+    }
+  }
+  my_zone2 {
+    ...
+  }
+}
+```
+
+In a listener, set the `zone` field to associate it with a zone that has been created.
+
+```bash
+listeners.tcp.default {
+    bind = 1883
+    zone = my_zone1
+    ...
+}
+```
+
 ## Schema
 
-To make the HOCON objects type-safe, EMQX introduced a schema for it. The schema defines data types, and data fields' names and metadata for config value validation and more.
+To make the HOCON objects type-safe, EMQX introduced a schema for it. This schema defines data types, field names, and metadata, allowing for configuration value validation and more.
 
 {% emqxee %}
 
-The [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) is generated from schema.
+The [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) is generated from the schema.
 
 {% endemqxee %}
 
 {% emqxce %}
 
-The [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/) is generated from schema.
+The [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/) is generated from the schema.
 
 {% endemqxce %}
+
+::: tip
+The zone configuration schema is not included in the configuration manual because it is identical for each group. For example, `zones.my_zone1.mqtt {...}` has the same schema as `mqtt {...}`.
+:::
 
 ### Primitive Data Types
 
@@ -406,4 +462,3 @@ node.name = "emqx.127.0.0.1"
 zone.zone1.max_packet_size = "10M"
 authentication.1.enable = true
 ```
-

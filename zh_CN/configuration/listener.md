@@ -7,6 +7,25 @@
 - WebSocket：端口 `8083`
 - 安全 WebSocket（WSS）：端口 `8084`
 
+::: tip
+
+您也可以通过在 Dashboard 点击左侧导航菜单中的**管理** -> **监听器**来配置监听器。
+注意，如果监听器在  `emqx.conf` 中显式配置，那么在 Dashboard 中进行的修改只能临时生效直到下次 EMQX 重启。
+
+:::
+
+{% emqxce %}
+
+EMQX 提供了更多配置项以更好地满足定制化需求。详细信息参考[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
+
+{% endemqxce %}
+
+{% emqxee %}
+
+EMQX 提供了更多配置项以更好地满足定制化需求。详细信息参考[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
+
+{% endemqxee %}
+
 ## 配置 TCP 监听器
 
 TCP 监听器是一种网络服务，它在特定的网络端口上监听传入的 TCP 连接。它在客户端与 EMQX 之间通过 TCP/IP 网络建立和维护连接中发挥重要作用。
@@ -118,20 +137,10 @@ listeners.wss.default {
 - `websocket.mqtt_path` 设置 WebSocket 的 MQTT 协议路径，默认为 `/mqtt`。
 - `ssl_options` 包括 SSL/TLS 配置选项，详细说明参见 [配置 SSL 监听器](#配置-ssl-监听器)。
 
-{% emqxce %}
+## 将监听器关联到配置区域
 
-EMQX 提供了更多配置项以更好地满足定制化需求。详细信息参考[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
+EMQX 中的每个监听器都与一个区域相关联，默认设置为名为 `default` 的逻辑区域。
 
-{% endemqxce %}
+当监听器关联到特定区域时，连接到该监听器的 MQTT 客户端将继承该区域的设置。
 
-{% emqxee %}
-
-EMQX 提供了更多配置项以更好地满足定制化需求。详细信息参考[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
-
-{% endemqxee %}
-
-::: tip
-
-您也可以通过在 Dashboard 点击左侧导航菜单中的**管理** -> **监听器**来配置监听器。一旦您通过 Dashboard 配置了这些项目，您的设置将覆盖 `emqx.conf` 中的相同配置项。
-
-:::
+更多信息，请查看配置文件简介中的[区域覆盖](./configuration.md#区域覆盖)部分。
