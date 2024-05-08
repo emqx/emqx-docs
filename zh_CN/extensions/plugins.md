@@ -48,7 +48,9 @@ my_emqx_plugin
 ├── erlang_ls.config
 ├── get-rebar3
 ├── priv
-│   └── config.hocon
+│   ├── config.hocon
+│   ├── config_i18n.json.example
+│   └── config_schmea.avsc.example
 ├── rebar.config
 └── src
     ├── emqx_cli_demo.erl
@@ -162,6 +164,142 @@ make rel
 ```
 
 这将创建一个新的 EMQX 插件 tarball `my_emqx_plugin-1.0.0.tar.gz`，您现在可以上传并安装到运行中的 EMQX 集群中。
+
+#### 为插件编写 Config Schema （可选）
+
+我们在 EMQX 5.7 中为插件引入了 Avro Schema 以提供在运行时更新插件配置的能力。
+并且可以在该 Schema 中提供 UI 声明，从而可以在 EMQX Dashboard 中渲染配置表单以便使用。
+
+::: tip **提示**
+
+您可以在项目目录中找到两个示例文件：`priv/config_schmea.avsc.example`, `priv/config_i18n.json.example`。
+
+:::
+
+这需要您的插件包提供一个 Avro Schema 配置文件，它应位于 `priv/config_schmea.avsc`。
+该文件应当遵守 Apache Avro 规范（详情请参阅 [Apache Avro Specification (1.11.1)](https://avro.apache.org/docs/1.11.1/specification/)）。
+此外它也同时也包含了关于 UI 的描述声明。即可以使用 Avro Schema 的 metadata 配置一个 `$ui` 字段，EMQX Dashborad 将根据 `$ui` 字段中提供的信息来生成一份配置表单页。
+
+此外还有一个**可选的** 国际化配置文件以提供多语言支持， i18n 文件应位于 `priv/config_i18n.json`。
+它是一个键值对文件，如：`{ "$msgid": { "zh": "消息", "en": "Message" } }`。如果 `$ui` 配置中的字段名称、描述、验证规则的消息等需要支持多语言，需要在对应的配置里使用以 `$` 开头的 `$msgid`
+
+#### 声明式 UI 使用参考 （可选）
+
+UI 声明被用于动态渲染表单，支持各种字段类型和自定义组件。以下是可用组件及其配置说明。
+
+配置项说明：
+
+- `component`<br />
+  必填。为该字段配置一个组件，用于显示和配置不同值和类型的数据，以下为支持的组件列表
+  | 组件名             | 描述                                               |
+  |:-------------------|:---------------------------------------------------|
+  | `input`            | 用于简短文本或字符串的文本输入框                   |
+  | `input-password`   | 隐藏输入内容的密码输入框                           |
+  | `input-number`     | 只允许数字输入的数字输入框                         |
+  | `input-textarea`   | 适用于较长的文本输入的文本域                       |
+  | `input-array`      | 输入值以逗号分隔，支持字符串和数字数组的数组输入框 |
+  | `switch`           | 用于布尔值输入的开关                               |
+  | `select`           | 用于枚举类型的下拉选择框                           |
+  | `code-editor`      | 支持特定格式的代码（如 SQL、JSON 等）的代码编辑器  |
+  | `key-value-editor` | 用于编辑 Avro 中的 map 类型的键值对编辑器          |
+  | `maps-editor`      | 用于编辑 Avro 中的对象数组类型的对象数组编辑器     |
+- `label`<br />
+  必填。字段的标签或名称，可使用 $msgid。若不配置 i18n，将直接显示原文。
+- `description`<br />
+  可选。字段的详细描述，可使用 $msgid。若不配置 i18n，将直接显示原文。
+- `flex`<br />
+  必填。定义字段在网格布局中占据的比例，满格（24）表示占据一整行，半格（12）表示占据半行
+- `required`<br />
+  可选。指示字段是否为必填项
+- `format` (仅 code-editor 组件适用)<br />
+  可选。代码编辑器支持的格式，目前支持的数据格式为 `sql` 或 `json`。
+- `options` (仅 select 组件适用)<br />
+  可选。定义枚举类型的可选项，应与 Avro Schema 中的 symbols 保持一致。示例：
+  ```json
+  [
+    {
+      "label": "$mysql",
+      "value": "MySQL"
+    },
+    {
+      "label": "$pgsql",
+      "value": "postgreSQL"
+    }
+  ]
+  ```
+- `items` (仅 maps-editor 组件适用)<br />
+  可选。当使用 maps-editor 组件时，指定表单内项目的字段名和描述。例如：
+  ```json
+  {
+    "items": {
+      "optionName": {
+        "label": "$optionNameLabel",
+        "description": "$optionDesc",
+        "type": "string"
+      },
+      "optionValue": {
+        "label": "$optionValueLabel",
+        "description": "$optionValueDesc",
+        "type": "string"
+      }
+    }
+  }
+  ```
+- `rules`<br />
+  可选。用于定义字段的校验规则，一个规则可以配置多个。目前支持下述类型：
+  - `pattern`，正则表达式验证，需要配置一个正则表达式进行验证。正则表达式写在 pattern 字段里。
+  - `range`，用来验证输入数字的大小范围，最小值 min，最大值 max，可以同时配置，也可以单独配置一个。
+  - `length`，用来验证输入的字符长度大小的限制，最短长度 minLength，最大长度 maxLength，可以同时配置，也可以单独配置。
+  验证不通过时的错误消息：
+  - `message`，支持配置 i18n 的 `$msgid`
+
+以下为几个示例片段，更详细的示例请参考 `priv/config_schema.avsc.example`：
+
+```json
+{
+    "rules": [
+    {
+      "type": "pattern",
+      "pattern": "^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\\\\\\\-]{0,61}[a-zA-Z0-9])(\\\\\\\\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\\\\\\\-]{0,61}[a-zA-Z0-9]))*$",
+      "message": "$hostname_validate"
+    }
+  ]
+}
+```
+
+```json
+{
+    "rules": [
+    {
+      "type": "range",
+      "min": 1,
+      "max": 65535,
+      "message": "$port_range_validate"
+    }
+  ]
+}
+```
+
+```json
+{
+    "rules": [
+    {
+      "type": "length",
+      "minLength": 8,
+      "maxLength": 128,
+      "message": "$password_length_validate"
+    },
+    {
+      "type": "pattern",
+      "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\\\\\d)[a-zA-Z\\\\\\\\d]*$",
+      "message": "$password_validate"
+    }
+  ]
+}
+```
+
+在插件编译打包时，如果您提供了 Avro Schema 文件及 i18n 文件，它们将被一同添加至 tarball 中。
+在您的插件代码中，可以使用函数 `emqx_plugins:get_config/1,2,3,4` 来获取插件配置文件。
 
 ## 安装/启动插件
 
