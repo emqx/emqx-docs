@@ -295,6 +295,16 @@ zones {
 }
 ```
 
+In a listener, set the `zone` field to associate it with a zone that has been created.
+
+```bash
+listeners.tcp.default {
+    bind = 1883
+    zone = my_zone1
+    ...
+}
+```
+
 ## Schema
 
 To make the HOCON objects type-safe, EMQX introduced a schema for it. This schema defines data types, field names, and metadata, allowing for configuration value validation and more.

@@ -290,6 +290,16 @@ zones {
 }
 ```
 
+可以用如下方式把一个监听器跟一个 Zone 关联起来。
+
+```bash
+listeners.tcp.default {
+    bind = 1883
+    zone = my_zone1
+    ...
+}
+```
+
 ## Schema 手册
 
 为了确保配置正确，EMQX 引入了 schema。schema 定义了数据类型，以及数据字段的名称和元数据，用于配置值的类型检查等。
