@@ -9,7 +9,8 @@ In EMQX, listener is configured to receive requests from MQTT clients. EMQX supp
 
 :::tip
 
-You can also configure listeners via Dashboard by clicking **Management** -> **Listener** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+You can also configure listeners via Dashboard by clicking **Management** -> **Listener** on the left navigation menu of the Dashboard.
+However if the listeners are configured from `emqx.conf`, the changes made from the dashboard will only take effect temporarily until EMQX restart.
 
 :::
 
