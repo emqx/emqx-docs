@@ -175,26 +175,26 @@ emqx:unhook(Name, {Module, Function}).
 
 (参数数据结构参见：[emqx_types.erl](https://github.com/emqx/emqx/tree/master/apps/emqx/src/emqx_types.erl))
 
-| 名称                 | 入参                                                         | 返回                |
-| -------------------- | ------------------------------------------------------------ | ------------------- |
-| client.connect       | `ConnInfo`：客户端连接层参数<br />`Props`：MQTT v5.0  连接报文的 Properties 属性 | 新的 `Props`        |
-| client.connack       | `ConnInfo`：客户端连接层参数 <br />`Rc`：返回码<br />`Props`：MQTT v5.0  连接应答报文的 Properties 属性 | 新的 `Props`        |
-| client.connected     | `ClientInfo`：客户端信息参数<br />`ConnInfo`： 客户端连接层参数 | -                   |
-| client.disconnected  | `ClientInfo`：客户端信息参数<br />`ConnInfo`：客户端连接层参数<br />`ReasonCode`：错误码 | -                   |
-| client.authenticate  | `ClientInfo`：客户端信息参数<br />`AuthNResult`：认证结果    | 新的 `AuthNResult`  |
-| client.authorize     | `ClientInfo`：客户端信息参数<br />`Topic`：发布/订阅的主题<br />`PubSub`：发布或订阅<br />`AuthZResult`：授权结果 | 新的 `AuthZResult`  |
-| client.subscribe     | `ClientInfo`：客户端信息参数<br />`Props`：MQTT v5.0 订阅报文的 Properties 参数<br />`TopicFilters`：需订阅的主题列表 | 新的 `TopicFilters` |
+| 名称                 | 入参                                                                                                                          | 返回                |
+|----------------------|-------------------------------------------------------------------------------------------------------------------------------|---------------------|
+| client.connect       | `ConnInfo`：客户端连接层参数<br />`Props`：MQTT v5.0  连接报文的 Properties 属性                                              | 新的 `Props`        |
+| client.connack       | `ConnInfo`：客户端连接层参数 <br />`Rc`：返回码<br />`Props`：MQTT v5.0  连接应答报文的 Properties 属性                       | 新的 `Props`        |
+| client.connected     | `ClientInfo`：客户端信息参数<br />`ConnInfo`： 客户端连接层参数                                                               | -                   |
+| client.disconnected  | `ClientInfo`：客户端信息参数<br />`ConnInfo`：客户端连接层参数<br />`ReasonCode`：错误码                                      | -                   |
+| client.authenticate  | `ClientInfo`：客户端信息参数<br />`AuthNResult`：认证结果                                                                     | 新的 `AuthNResult`  |
+| client.authorize     | `ClientInfo`：客户端信息参数<br />`Topic`：发布/订阅的主题<br />`PubSub`：发布或订阅<br />`AuthZResult`：授权结果             | 新的 `AuthZResult`  |
+| client.subscribe     | `ClientInfo`：客户端信息参数<br />`Props`：MQTT v5.0 订阅报文的 Properties 参数<br />`TopicFilters`：需订阅的主题列表         | 新的 `TopicFilters` |
 | client.unsubscribe   | `ClientInfo`：客户端信息参数<br />`Props`：MQTT v5.0 取消订阅报文的 Properties 参数<br />`TopicFilters`：需取消订阅的主题列表 | 新的 `TopicFilters` |
-| session.created      | `ClientInfo`：客户端信息参数<br />`SessInfo`：会话信息       | -                   |
-| session.subscribed   | `ClientInfo`：客户端信息参数<br />`Topic`：订阅的主题<br />`SubOpts`：订阅操作的配置选项 | -                   |
-| session.unsubscribed | `ClientInfo`：客户端信息参数<br />`Topic`：取消订阅的主题<br />`SubOpts`：取消订阅操作的配置选项 | -                   |
-| session.resumed      | `ClientInfo`：客户端信息参数<br />`SessInfo`：会话信息       | -                   |
-| session.discarded    | `ClientInfo`：客户端信息参数<br />`SessInfo`：会话信息       | -                   |
-| session.takenover    | `ClientInfo`：客户端信息参数<br />`SessInfo`：会话信息       |                     |
-| session.terminated   | `ClientInfo`：客户端信息参数<br />`Reason`：终止原因 <br />`SessInfo`：会话信息 | -                   |
-| message.publish      | `Message`：消息对象                                          | 新的 `Message`      |
-| message.delivered    | `ClientInfo`：客户端信息参数<br />`Message`：消息对象        | 新的 `Message`      |
-| message.acked        | `ClientInfo`：客户端信息参数<br />`Message`：消息对象        | -                   |
-| message.dropped      | `Message`：消息对象<br />`By`：被谁丢弃<br />`Reason`：丢弃原因 | -                   |
+| session.created      | `ClientInfo`：客户端信息参数<br />`SessInfo`：会话信息                                                                        | -                   |
+| session.subscribed   | `ClientInfo`：客户端信息参数<br />`Topic`：订阅的主题<br />`SubOpts`：订阅操作的配置选项                                      | -                   |
+| session.unsubscribed | `ClientInfo`：客户端信息参数<br />`Topic`：取消订阅的主题<br />`SubOpts`：取消订阅操作的配置选项                              | -                   |
+| session.resumed      | `ClientInfo`：客户端信息参数<br />`SessInfo`：会话信息                                                                        | -                   |
+| session.discarded    | `ClientInfo`：客户端信息参数<br />`SessInfo`：会话信息                                                                        | -                   |
+| session.takenover    | `ClientInfo`：客户端信息参数<br />`SessInfo`：会话信息                                                                        |                     |
+| session.terminated   | `ClientInfo`：客户端信息参数<br />`Reason`：终止原因 <br />`SessInfo`：会话信息                                               | -                   |
+| message.publish      | `Message`：消息对象                                                                                                           | 新的 `Message`      |
+| message.delivered    | `ClientInfo`：客户端信息参数<br />`Message`：消息对象                                                                         | 新的 `Message`      |
+| message.acked        | `ClientInfo`：客户端信息参数<br />`Message`：消息对象                                                                         | -                   |
+| message.dropped      | `Message`：消息对象<br />`By`：被谁丢弃<br />`Reason`：丢弃原因                                                               | -                   |
 
 具体对于这些钩子的应用，参见：[emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)
