@@ -48,7 +48,9 @@ my_emqx_plugin
 ├── erlang_ls.config
 ├── get-rebar3
 ├── priv
-│   └── config.hocon
+│   ├── config.hocon
+│   ├── config_i18n.json.example
+│   └── config_schmea.avsc.example
 ├── rebar.config
 └── src
     ├── emqx_cli_demo.erl
@@ -161,6 +163,142 @@ make rel
 ```
 
 This created a new EMQX plugin tarball  `my_emqx_plugin-1.0.0.tar.gz` that you can now upload and install to your running EMQX cluster.
+
+#### Write Config Schema for the plugin (Optional)
+
+We introduced Avro Schema for plugins in EMQX 5.7 to provide the ability to update plugin configurations at runtime.
+Furthermore, you can declare UI in this schema, allowing the EMQX Dashboard to render configuration forms for ease of use.
+
+::: tip **Tip**
+
+You can find two example files in the project directory: `priv/config_schmea.avsc.example`, `priv/config_i18n.json.example`.
+
+:::
+
+This requires your plugin package to provide an Avro Schema configuration file, which should be located at `priv/config_schema.avsc`.
+The file should comply with the Apache Avro specification (see [Apache Avro Specification (1.11.1)](https://avro.apache.org/docs/1.11.1/specification/) for details).
+In addition, it also contains declarations about the UI. That is, you can use Avro Schema metadata to configure a `$ui` field, and the EMQX Dashborad will generate a configuration form page based on the information provided in the `$ui` field.
+
+There is also an **optional** internationalization config file. the i18n file should be located in `priv/config_i18n.json`.
+It is a key-value pair file, for example: `{ "$msgid": { "zh": "消息", "en": "Message" } }`. If the field names, descriptions, validation rules messages, etc., in the `$ui` configuration need to support multiple languages, you should use use `$msgid` starting with `$` in the corresponding configuration.
+
+#### Declarative UI usage reference (Optional)
+
+UI declarations are used to dynamically render forms, supporting various field types and custom components. Here are the available components and their configuration descriptions.
+
+Configuration Item Description:
+
+- `component`<br />
+  Required. Configure a component for this field to display and configure data with different values and types. Below is the list of supported components:
+  | Component Name     | Description                                                                      |
+  |:-------------------|:---------------------------------------------------------------------------------|
+  | `input`            | Text input box for short text or strings                                         |
+  | `input-password`   | Password input box that hides input content                                      |
+  | `input-number`     | Number input box allowing only numeric input                                     |
+  | `input-textarea`   | Text area for longer text input                                                  |
+  | `input-array`      | Array input box for comma-separated values, supporting string and numeric arrays |
+  | `switch`           | Toggle switch for boolean input                                                  |
+  | `select`           | Dropdown selection box for enumerated types                                      |
+  | `code-editor`      | Code editor for specific formats (e.g., SQL, JSON)                               |
+  | `key-value-editor` | Editor for editing key-value pairs in Avro maps                                  |
+  | `maps-editor`      | Editor for editing object arrays in Avro objects                                 |
+- `label`<br />
+  Required. The label or name of the field, can use `$msgid`. If i18n is not configured, the original text will be displayed directly.
+- `description`<br />
+  Optional. Detailed description of the field, can use `$msgid`. If i18n is not configured, the original text will be displayed directly.
+- `flex`<br />
+  Required. Defines the proportion of the field in the grid layout, with a full grid (24) representing a whole row and a half grid (12) representing half a row.
+- `required`<br />
+  Optional. Indicates whether the field is required.
+- `format` (Only applicable for code-editor component)<br />
+  Optional. Supported formats for the code editor, currently supported data formats are `sql` or `json`.
+- `options` (Only applicable for select component)<br />
+  Optional. Defines the options for enum types, should be consistent with the symbols in the Avro Schema. Example:
+  ```json
+  [
+    {
+      "label": "$mysql",
+      "value": "MySQL"
+    },
+    {
+      "label": "$pgsql",
+      "value": "postgreSQL"
+    }
+  ]
+  ```
+- `items` (Only applicable for maps-editor component)<br />
+  Optional. When using the maps-editor component, specify the field name and description of the items in the form. For example:
+  ```json
+  {
+    "items": {
+      "optionName": {
+        "label": "$optionNameLabel",
+        "description": "$optionDesc",
+        "type": "string"
+      },
+      "optionValue": {
+        "label": "$optionValueLabel",
+        "description": "$optionValueDesc",
+        "type": "string"
+      }
+    }
+  }
+  ```
+- `rules`<br />
+  Optional. Used to define validation rules for the field, where multiple rules can be configured. Currently supported types include:
+  - `pattern`, regular expression validation, requiring configuration of a regular expression for validation. The regular expression is written in the pattern field.
+  - `range`, used to validate the size range of input numbers, with minimum value min and maximum value max, which can be configured simultaneously or separately.
+  - `length`, used to validate the size limit of input character length, with minimum length minLength and maximum length maxLength, which can be configured simultaneously or separately.
+  Error message when validation fails:
+  - `message`, supports configuration of i18n `$msgid`.
+
+The following are several example snippets. For more detailed examples, please refer to `priv/config_schema.avsc.example`:
+
+```json
+{
+    "rules": [
+    {
+      "type": "pattern",
+      "pattern": "^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\\\\\\\-]{0,61}[a-zA-Z0-9])(\\\\\\\\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\\\\\\\-]{0,61}[a-zA-Z0-9]))*$",
+      "message": "$hostname_validate"
+    }
+  ]
+}
+```
+
+```json
+{
+    "rules": [
+    {
+      "type": "range",
+      "min": 1,
+      "max": 65535,
+      "message": "$port_range_validate"
+    }
+  ]
+}
+```
+
+```json
+{
+    "rules": [
+    {
+      "type": "length",
+      "minLength": 8,
+      "maxLength": 128,
+      "message": "$password_length_validate"
+    },
+    {
+      "type": "pattern",
+      "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\\\\\d)[a-zA-Z\\\\\\\\d]*$",
+      "message": "$password_validate"
+    }
+  ]
+}
+```
+
+During plugin compilation and packaging, if you provide Avro Schema and i18n files, they will be included in the tarball together.
+In your plugin code, you can use the function `emqx_plugins:get_config/1,2,3,4` to retrieve the plugin configuration.
 
 ## Install/launch the plugin
 
