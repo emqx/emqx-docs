@@ -10,8 +10,6 @@ titleTemplate: false
 # EMQX Overview
 {% endemqxce %}
 
-
-
 {% emqxce %}
 
 EMQX is an [open-source](https://github.com/emqx/emqx), highly scalable, and feature-rich MQTT broker designed for IoT and real-time messaging applications. It supports up to 100 million concurrent IoT device connections per cluster while maintaining a throughput of 1 million messages per second and a millisecond latency.
@@ -112,6 +110,57 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
   </tr>
 </tbody>
 </table>
+## Use Cases
+
+As an MQTT broker designed for IoT and real-time messaging applications, EMQX is often used to fulfill various business requirements in the following scenarios.
+
+## Reliable and Efficient Pub/Sub Messaging
+
+EMQX supports multiple protocols, including MQTT (3.1, 3.1.1, and 5.0), HTTP, QUIC, and WebSocket. It also provides secure bi-directional communication with MQTT over TLS/SSL and various authentication mechanisms, ensuring reliable and efficient communication infrastructure for IoT devices and applications.
+
+Using EMQX in mission-critical applications brings you key benefits as follows:
+
+- **Topic-Based Pub/Sub Messaging:** EMQX's topic-based publish/subscribe model streamlines the data flow to ensure efficient and flexible message routing.
+- **Ultra-Low Latency Delivery:** Achieve rapid data transfer with latencies as low as 1 millisecond, ensuring real-time responsiveness.
+- **Comprehensive Quality of Service (QoS) Guarantees:** EMQX offers end-to-end multi-level QoS guarantees, providing reliable and flexible message delivery.
+
+EMQX can help you in various scenarios listed below.
+
+### Peer-to-Peer Communication
+
+![use_case_1_ce](./assets/use_case_1_ce.png)
+
+You can build up peer-to-peer communications with EMQX. In the asynchronous Pub/Sub model, the message publisher and subscriber are decoupled from each other, as they can be dynamically added or removed as needed. This decoupling provides flexibility to your applications and message communication.
+
+### Message Broadcasting to a Large Audience
+
+![use_case_2_ce](./assets/use_case_2_ce.png)
+
+EMQX excels in scenarios where one-to-many messaging is vital, such as financial market updates. It effectively broadcasts messages to a large number of clients, ensuring timely information dissemination.
+
+### Data Consolidation from Massive Endpoints
+
+![use_case_3_ce](./assets/use_case_3_ce.png)
+
+The many-to-one message pattern in EMQX is ideal for consolidating data in large-scale networks, such as factory plats, modern buildings, retail chains, or electricity grids. EMQX can help you transfer and transmit the data from the endpoints in the network to your centralized backend servers on the cloud or on-premise.
+
+### Traceable Communication with Request-Response Awareness
+
+![use_case_4_ce](./assets/use_case_4_ce.png)
+
+EMQX supports the MQTT 5.0 feature Request-Response. With this feature, you can now increase communication awareness and traceability in your asynchronous communication architect.
+
+### Data Integration Across Different Networks
+
+![use_case_5_ce](./assets/use_case_5_ce.png)
+
+In a partitioned, or limited network environment, EMQX can create the data integrations, provide you with a seamless messaging environment.
+
+### Flowing Data Transformation
+
+![use_case_6_ce](./assets/use_case_6_ce.png)
+
+With a built-in powerful SQL-based [rules engine](./data-integration/rules.md), EMQX can extract, filter, enrich, and transform the flowing data in real-time. Processed ata can be easily ingested into external HTTP servers and MQTT services. If you are using EMQX Enterprise, you can also ingest data into mainstream databases, data storage, and message queues.
 
 {% endemqxce %}
 
@@ -192,11 +241,11 @@ Through out-of-the-box Webhooks and Sink/Source, you can seamlessly [integrate](
 
 EMQX Enterprise provides a graphical management system called the [Dashboard](./dashboard/introduction.md), allowing you to monitor key metrics and operational statuses in real time. It simplifies the management of client connections and feature configurations. The Dashboard also enables diagnostics and debugging of client and cluster anomalies, facilitating end-to-end troubleshooting of MQTT devices online, significantly reducing troubleshooting time. In addition, it supports the integration of observability metrics into external services such as Prometheus, Datadog, and services supporting OpenTelemetry, enhancing operational monitoring capabilities.
 
-## Use Cases
+## Use Cases and Industry Solutions
 
 EMQX Enterprise is a comprehensive IoT messaging platform that plays a crucial role in different stages of IoT device connectivity and data transmission, providing powerful functionality and flexibility for various business needs.
 
-Based on the publish-subscribe message delivery model, it can achieve flexible message communication with millions of topics and different modes, meeting the real-time message delivery needs under various scenarios. Through its built-in rule engine and Sink/Source, EMQX Enterprise allows you to send messages to various cloud services, enabling seamless integration of device data with enterprise systems. It can easily support use cases such as data processing, storage, analysis, and business command issuance. Here are some typical use cases:
+Based on the publish-subscribe message delivery model, it can achieve flexible message communication with millions of topics and different modes, meeting the real-time message delivery needs under various scenarios. Through its built-in rule engine and Sink/Source, EMQX Enterprise allows you to send messages to various cloud services, enabling seamless integration of device data with enterprise systems. It can easily support use cases such as data processing, storage, analysis, and business command issuance. Here are some typical use cases and industry solutions:
 
 ### Bidirectional Communication
 
@@ -221,5 +270,77 @@ EMQX Enterprise provides MQTT protocol [file transfer](./file-transfer/introduct
 EMQX Enterprise allows message issuance through MQTT messages, REST APIs, and Source with, for example, Kafka, enabling data push or remote device control. For example, in a financial trading scenario, cloud services can push real-time data based on user watchlists in groups. This mode provides topic mapping, data processing for issuance, and data reach statistics, enabling flexible and reliable data issuance.
 
 <img src="./assets/use_case_4.png" alt="use_case_4" style="zoom:50%;" />
+
+### Automotive
+
+#### Internet of Vehicle and Telematics Service Provider
+
+The future of TSP platforms is to be "data-driven" and "service-oriented". To succeed, the TSP platform needs to ensure reliable connections with cars, efficient data transmission, and flexible data processing. EMQX is essential to make a robust, high-performance, and easy-to-maintain data infrastructure. [**Learn More →**](https://www.emqx.com/en/blog/revolutionizing-tsp-platforms)
+
+![use_case_5](./assets/use_case_5.png)
+
+
+
+#### Smart Cockpit and In-Vehicle Infotainment
+
+Based on EMQ's cloud-side end-to-end collaborative software architecture, we help car manufacturers build the core capabilities of the smart cockpit with vehicle-cloud collaboration. [**Learn More →**](https://www.emqx.com/en/use-cases/smart-cockpit)
+
+![use_case_6](./assets/use_case_6.png)
+
+#### Electric Vehicle Charging Network
+
+EV Power uses EMQX to empower the charging piles operation platform, solving the problems of scattered equipment areas that are difficult to control, harsh deployment environments, etc. [**Learn More →**](https://www.emqx.com/en/customers/ev-power)
+
+![use_case_7](./assets/use_case_7.png)
+
+### Traffic and Transportation
+
+#### Logistics Asset Management
+
+EMQ provides a comprehensive data-driven solution for logistics asset management with capabilities to collect, transmit, and process data. This helps companies monitor their assets in real-time and gain useful information, leading to informed decisions for management and improved competitiveness. [**Learn More →**](https://www.emqx.com/en/blog/a-data-driven-solution-for-logistics-asset-tracking-and-maintenance)
+
+![use_case_8](./assets/use_case_8.png)
+
+#### Fleet Management
+
+With the logistics industry's complex and dynamic nature, effective monitoring, scheduling, and optimization of vehicle fleets are essential throughout the transportation and delivery processes. The timely and reliable delivery of goods, cost optimization, and customer satisfaction heavily rely on efficient fleet management practices. [**Learn More →**](https://www.emqx.com/en/blog/how-emqx-revolutionizes-logistics-fleet-management)
+
+![design_9](./assets/use_case_9.png)
+
+#### Vehicle to Everything Communication (V2X)
+
+[V2X (vehicle-to-everything)](https://www.emqx.com/en/blog/what-is-v2x-and-the-future-of-vehicle-to-everything-connectivity) is a communication technology that enables vehicles to exchange data with various elements in their environment, including other vehicles (V2V), pedestrians (V2P), infrastructure (V2I), and networks (V2N). CVIS(Cooperative Vehicle-Infrastructure System) is a promising direction of the intelligent transportation system that requires V2X technology integrating with various sensor technologies, cloud computing, edge computing, and traffic control. See how EMQX plays an important role in the whole picture. [**Learn More →**](https://www.emqx.com/en/blog/enhancing-v2x-connectivity-with-emq)
+
+![use_case_10](./assets/use_case_10.png)
+
+### Manufacturing and IIoT
+
+EMQ smart factory solution is designed to establish comprehensive data collection, transmission, distribution, and other mechanisms. This solution empowers factories to rapidly deploy a wide array of intelligent applications, including equipment health management, optimization of energy consumption equipment, production monitoring and analysis, product quality traceability, parameter optimization in the supply chain, predictive maintenance, and defect detection. [**Learn More →**](https://www.emqx.com/en/blog/data-infrastructure-for-smart-factory)
+
+![use_case_11](./assets/use_case_11.png)
+
+### Oil & Gas
+
+EMQ provides IoT data collection solutions for the oil industry that support real-time data collection and cloud-side collaborative management of oilfield IoT terminal devices. [**Learn More →**](https://www.emqx.com/en/use-cases/oil-extraction-transportation)
+
+![use_case_11](./assets/use_case_12.png)
+
+### Finance & Payment
+
+EMQ financial payment industry solutions help customers realize 7*24h continuous service, and it has continuously provided more than five years of stable operation and service for enterprise-level users. [**Learn More →**](https://www.emqx.com/en/customers/emqx-in-finance-and-payment-iot)
+
+![use_case_13](./assets/use_case_13.png)
+
+### Energy & Utilities
+
+Leveraging EMQ's technological leadership in IoT messaging middleware and SGITG's strengths in national grid technology and markets, the two companies are working closely together to create next-generation power IoT products. [**Learn More →**](https://www.emqx.com/en/customers/sgitg-sgcc)
+
+### Carrier
+
+Through in-depth cooperation with EMQ, E-Surfing IoT has built CTWing into the world's largest group-level NB-IoT device access platform. The cumulative number of connected devices on this IoT platform has reached millions. [**Learn More →**](https://www.emqx.com/en/customers/china-telecom)
+
+### Consumer Electronics and AIoT
+
+An IoT data access platform based on EMQX provides a stable and efficient data access service for an intelligent service robot company, helping it to reach more than 5000 end customers. [**Learn More →**](https://www.emqx.com/en/customers/intelligent-service-robot-aiot)
 
 {% endemqxee %}
