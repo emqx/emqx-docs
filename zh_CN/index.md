@@ -115,7 +115,57 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
   </tr>
 </tbody>
 </table>
+## 应用场景
 
+作为专为物联网和实时消息传递应用设计的 MQTT 代理，EMQX 常用于以下场景以满足各种业务需求。
+
+## 可靠且高效的发布/订阅消息传递
+
+EMQX支持多种协议，包括 MQTT（3.1、3.1.1 和 5.0）、HTTP、QUIC 和 WebSocket。它还通过 TLS/SSL 提供 MQTT 的安全双向通信和多种认证机制，确保为物联网设备和应用提供可靠高效的通信基础设施。
+
+在关键任务应用中使用 EMQX 可以带来以下优势：
+
+- **基于主题的发布/订阅消息传递：**EMQX 的主题基发布/订阅模型优化了数据流，确保消息路由的高效和灵活。
+- **超低延迟传输：**实现低至1毫秒的数据传输延迟，确保实时响应。
+- **全面的服务质量（QoS）保证：**EMQX 提供端到端的多级 QoS 保证，实现可靠和灵活的消息传递。
+
+EMQX 可以帮助您在下列各种场景中实现。
+
+### 点对点通信
+
+![use_case_1_ce](./assets/use_case_1_ce.png)
+
+您可以使用 EMQX 建立点对点通信。在异步发布/订阅模型中，消息发布者和订阅者是解耦的，根据需要可以动态添加或移除。这种解耦为您的应用程序和消息通信提供了灵活性。
+
+### 向大量客户端广播消息
+
+![use_case_2_ce](./assets/use_case_2_ce.png)
+
+在需要一对多消息传递的场景中，如金融市场更新，EMQX 表现出色。它能有效地向大量客户端广播消息，确保信息及时传达。
+
+### 从大量端点整合数据
+
+![use_case_3_ce](./assets/use_case_3_ce.png)
+
+EMQX 中的多对一消息模式非常适合在如工厂、现代建筑、零售连锁或电网等大规模网络中整合数据。EMQX 可以帮助您将网络端点的数据传输和传送到云端或现场的中心后端服务器。
+
+### 可追踪的通信与请求-响应感知
+
+![use_case_4_ce](./assets/use_case_4_ce.png)
+
+EMQX 支持 MQTT 5.0 的请求-响应功能。利用此功能，您现在可以增强您的异步通信架构中的通信感知和可追踪性。
+
+### 跨网络的数据集成
+
+![use_case_5_ce](./assets/use_case_5_ce.png)
+
+在分区或网络环境受限的情况下，EMQX 可以实现数据集成，为您提供无缝的消息传递环境。
+
+### 流数据转换
+
+![use_case_6_ce](./assets/use_case_6_ce.png)
+
+通过基于 SQL 的内置强大[规则引擎](./data-integration/rules.md)，EMQX 可以实时提取、过滤、丰富和转换流数据。处理后的数据可以轻松摄取到外部 HTTP 服务和MQTT 服务。如果您使用的是 EMQX 企业版，还可以将数据摄取到主流数据库、数据存储和消息队列。
 
 {% endemqxce %}
 
@@ -196,11 +246,11 @@ EMQX 企业版包含一个强大的[规则引擎](./data-integration/rules.md)�
 
 EMQX 企业版提供图形化的管理系统 [Dashboard](./dashboard/introduction.md)，能够实时监控关键指标与运行状态，轻松管理客户端连接与功能配置。它还允许对客户端和集群异常行为进行诊断与调试，在线进行 MQTT 设备端到端的问题分析，大大缩短故障排查的时间。除此之外，还支持将可观测性指标集成到外部 Prometheus，Datadog 以及支持 OpenTelemetry 的服务中，实现更完善的运维监控能力。
 
-## 典型用例
+## 典型用例及行业解决方案
 
 EMQX 企业版是一个全面的物联网消息平台，它在物联网接入与数据传输的不同阶段发挥着关键作用，为各类业务需求提供了多种强大功能和灵活性。
 
-基于发布-订阅的消息传递模型，EMQX 企业版能够实现数百万主题、不同模式的灵活消息通信，满足各类场景下的实时消息传递。通过内置的规则引擎和数据集成组件，EMQX 企业版允许您将消息发送到云端各类服务中，实现设备数据与企业系统之间的无缝集成，能够轻松实现数据处理、存储、分析以及业务指令下发等用例。以下是常见的用例：
+基于发布-订阅的消息传递模型，EMQX 企业版能够实现数百万主题、不同模式的灵活消息通信，满足各类场景下的实时消息传递。通过内置的规则引擎和数据集成组件，EMQX 企业版允许您将消息发送到云端各类服务中，实现设备数据与企业系统之间的无缝集成，能够轻松实现数据处理、存储、分析以及业务指令下发等用例。以下是常见的用例以及针对不同行业的解决方案：
 
 ### 双向通信
 
@@ -225,5 +275,77 @@ EMQX 企业版提供了 MQTT 协议[文件传输](./file-transfer/introduction.m
 EMQX 企业版允许通过 MQTT 消息、REST API 以及 Kafka 进行消息下发，推送数据或远程控制设备。例如金融交易场景下，云端服务可以根据用户关注列表，进行分组实时数据推送。此模式提供了主题映射、下发数据处理以及数据触达统计，能够实现灵活且可靠的数据下发。
 
 <img src="./assets/use_case_4.png" alt="use_case_4" style="zoom:50%;" />
+
+### 汽车行业
+
+#### 车联网及车联网服务提供商
+
+TSP 平台的未来应当是“数据驱动”和“服务导向”的。为了取得成功，TSP 平台必须保障与汽车的稳定连接、数据传输的高效率及数据处理的灵活性。在此基础上，EMQX 对于打造一个坚固、高效且易于维护的数据基础设施发挥着至关重要的作用。[**了解更多 →**](https://www.emqx.com/zh/blog/revolutionizing-tsp-platforms)
+
+![use_case_5](./assets/use_case_5.png)
+
+
+
+#### 智能驾驶舱与车载信息娱乐系统
+
+依托 EMQ 的云端端到端协同软件架构，我们帮助汽车制造商构建以车云协作为核心能力的智能驾驶舱。[**了解更多 →**](https://www.emqx.com/zh/use-cases/smart-cockpit)
+
+![use_case_6](./assets/use_case_6.png)
+
+#### 电动车充电网络
+
+EV Power 利用 EMQX 赋能充电桩运营平台，解决设备区域分散难以控制、部署环境恶劣等问题。[**了解更多 →**](https://www.emqx.com/zh/customers/ev-power)
+
+![use_case_7](./assets/use_case_7.png)
+
+### 交通运输
+
+#### 物流资产管理
+
+EMQX 提供一个全面的数据驱动解决方案，用于物流资产管理，具备数据收集、传输和处理的能力。这有助于企业实时监控其资产，并获取有用信息，从而做出明智的管理决策，并提高竞争力。[**了解更多 →**](https://www.emqx.com/zh/blog/a-data-driven-solution-for-logistics-asset-tracking-and-maintenance)
+
+![use_case_8](./assets/use_case_8.png)
+
+#### 车队管理
+
+鉴于物流行业的复杂和动态性质，有效地监控、调度和优化车队在运输和交付过程中至关重要。及时可靠的货物交付、成本优化和顾客满意度都严重依赖于高效的车队管理实践。[**了解更多 →**](https://www.emqx.com/zh/blog/how-emqx-revolutionizes-logistics-fleet-management)
+
+![design_9](./assets/use_case_9.png)
+
+#### 车辆与一切通信 (V2X)
+
+[V2X (车辆与一切通信)](https://www.emqx.com/zh/blog/what-is-v2x-and-the-future-of-vehicle-to-everything-connectivity)是一种通信技术，使车辆能够与其环境中的各种元素交换数据，包括其他车辆（V2V）、行人（V2P）、基础设施（V2I）和网络（V2N）。合作车辆基础设施系统（CVIS）代表了智能交通系统的一个前景广阔的发展方向，其需整合V2X技术、各类传感器技术、云计算、边缘计算以及交通控制技术。探索 EMQX 在这一整体架构中所扮演的重要角色。[**了解更多 →**](https://www.emqx.com/zh/blog/enhancing-v2x-connectivity-with-emq)
+
+![use_case_10](./assets/use_case_10.png)
+
+### 制造业与 IIoT
+
+EMQ 智能工厂解决方案旨在建立全面的数据收集、传输、分发等机制。这一解决方案使工厂能够迅速部署广泛的智能应用，包括设备健康管理、能源消耗设备的优化、生产监控与分析、产品质量追溯、供应链中的参数优化、预测性维护和缺陷检测。[**了解更多 →**](https://www.emqx.com/zh/blog/data-infrastructure-for-smart-factory)
+
+![use_case_11](./assets/use_case_11.png)
+
+### 石油与天然气
+
+EMQ 为石油行业提供物联网数据收集解决方案，支持油田物联网终端设备的实时数据收集和云端协同管理。[**了解更多 →**](https://www.emqx.com/zh/use-cases/oil-extraction-transportation)
+
+![use_case_11](./assets/use_case_12.png)
+
+### 金融与支付
+
+EMQ 的金融支付行业解决方案帮助客户实现7*24小时连续服务，已为企业级用户提供了5年以上的稳定运营和服务。[**了解更多 →**](https://www.emqx.com/zh/customers/emqx-in-finance-and-payment-iot)
+
+![use_case_13](./assets/use_case_13.png)
+
+### 能源与公用事业
+
+利用 EMQ 在物联网消息中间件技术方面的领先优势以及 SGITG 在国家电网技术和市场方面的实力，两家公司正紧密合作开发下一代电力物联网产品。[**了解更多 →**](https://www.emqx.com/zh/customers/sgitg-sgcc)
+
+### 运营商
+
+通过与 EMQ 的深入合作，天翼物联网已将 CTWing 建设成为全球最大的集团级 NB-IoT 设备接入平台，该物联网平台的累计连接设备数量已达数百万。[**了解更多 →**](https://www.emqx.com/zh/customers/china-telecom)
+
+### 消费电子与AIoT
+
+基于 EMQX 的物联网数据访问平台为一家智能服务机器人公司提供了稳定高效的数据访问服务，帮助其服务超过5000名终端客户。[**了解更多 →**](https://www.emqx.com/zh/customers/intelligent-service-robot-aiot)
 
 {% endemqxee %}
