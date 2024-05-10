@@ -167,7 +167,13 @@ make rel
 
 #### 为插件编写 Config Schema （可选）
 
-我们在 EMQX 5.7 中为插件引入了 Avro Schema 以提供在运行时更新插件配置的能力。
+{% emqxce %}
+::: tip Tip
+EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+:::
+{% endemqxce %}
+
+我们在 EMQX 企业版 5.7.0 中为插件引入了 Avro Schema 以提供在运行时更新插件配置的能力。
 并且可以在该 Schema 中提供 UI 声明，从而可以在 EMQX Dashboard 中渲染配置表单以便使用。
 
 ::: tip **提示**
