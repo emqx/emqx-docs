@@ -39,6 +39,8 @@ from t
 
 上面的示例中，`payload` 指的是要解码的原始 Sparkplug B 消息。
 
+[Sparkplug B Protobuf schema](https://github.com/emqx/emqx/blob/039e27a153422028e3d0e7d517a521a84787d4a8/lib-ee/emqx_ee_schema_registry/priv/sparkplug_b.proto) 可以进一步揭示消息结构的详细信息。
+
 ### sparkplug_encode
 
 `sparkplug_encode` 函数用于将消息编码为 Sparkplug B 数据格式。这在您需要向 MQTT 客户端或系统的其他组件发送 Sparkplug B 格式消息时特别有用。
