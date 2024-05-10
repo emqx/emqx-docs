@@ -79,6 +79,7 @@ See the table below for the supported event topic list.
 | [$events/client_disconnected](#disconnect-event-events-client-disconnected) | Disconnect                      |
 | [$events/client_connack](#connection-acknowlege-event-events-client-connack) | Connection acknowledged         |
 | [$events/client_check_authz_complete](#authorization-check-complete-event-events-client-check-authz-complete) | Authorization check complete    |
+| [$events/client_check_authn_complete](#authentication-check-complete-event-events-client-check-authn-complete) | Authentication check complete    |
 | [$events/session_subscribed](#subscriber-event-events-session-subscribed) | Subscribe                       |
 | [$events/session_unsubscribed](#unsubcribe-event-events-session-unsubscribed) | Unsubscribe                     |
 
@@ -506,6 +507,46 @@ Refer to the table below for fields that can be extracted.
 | `authz_source `  | The authorization source |
 | `timestamp` | Timestamp (unit: ms)                                         |
 | `node`      | EMQX node where the event is triggered.                      |
+
+### Authentication Check Complete Event ("$events/client_check_authn_complete")
+
+This event topic can be used to trigger a rule when the authentication check for the client is complete.
+
+Example:
+
+```sql
+SELECT
+  clientid,
+  username,
+  reason_code,
+  is_superuser,
+  is_anonymous
+FROM
+  "$events/client_check_authn_complete"
+```
+
+Output:
+
+```json
+{
+  "clientid": "c_emqx",
+  "username": "u_emqx",
+  "reason_code": "success",
+  "is_superuser": true,
+  "is_anonymous": false
+}
+```
+
+Refer to the table below for fields that can be extracted.
+
+| Field       | Explanation                                                  |
+| ----------- | :----------------------------------------------------------- |
+| `clientid`  | Client ID                                                    |
+| `username`  | Username                                                     |
+| `peername`  | Client IP Address                                            |
+| `reason_code`     | Authentication result                                  |
+| `is_superuser`    | Whether this client is a super user                    |
+| `is_anonymous`    | Whether this client is a anonymous user                |
 
 ### Subscriber Event ("$events/session_subscribed")
 
