@@ -33,7 +33,7 @@ EMQX 提供了两个规则引擎 SQL 函数用于编码和解码 Sparkplug B 数
 
 ```sql
 select
-  sparkplug_encode(json_decode(payload)) as encoded
+  sparkplug_decode(payload) as decoded
 from t
 ```
 
