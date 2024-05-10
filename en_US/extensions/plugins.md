@@ -166,7 +166,13 @@ This created a new EMQX plugin tarball  `my_emqx_plugin-1.0.0.tar.gz` that you c
 
 #### Write Config Schema for the plugin (Optional)
 
-We introduced Avro Schema for plugins in EMQX 5.7 to provide the ability to update plugin configurations at runtime.
+{% emqxce %}
+::: tip Tip
+EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+:::
+{% endemqxce %}
+
+We introduced Avro Schema for plugins in EMQX Enterprise Edition 5.7.0 to provide the ability to update plugin configurations at runtime.
 Furthermore, you can declare UI in this schema, allowing the EMQX Dashboard to render configuration forms for ease of use.
 
 ::: tip **Tip**
