@@ -9,9 +9,9 @@ EMQX 支持通过插件扩展自定义业务逻辑，或通过插件的协议扩
 - 通过 Dashboard 或 CLI 安装插件包。
 - 通过 Dashboard 或 CLI 启动/停止/卸载您的插件。
 
-::: tip 前置准备：
+::: tip 前置准备
 
-- 了解 EMQX [钩子](./hooks.md)。
+了解 EMQX [钩子](./hooks.md)。
 
 :::
 
@@ -30,7 +30,7 @@ git clone https://github.com/emqx/emqx-plugin-template
 popd
 ```
 
-2. 现在从模板创建您的自定义插件
+2. 现在从模板创建您的自定义插件：
 
 ```shell
 rebar3 new emqx-plugin my_emqx_plugin
@@ -116,14 +116,14 @@ on_client_authorize(_ClientInfo, _Pub, _Topic, Result, _Env) -> {ok, Result}.
 
 在上面的代码示例中，我们只允许匹配规范的客户端登录。这些客户端只能订阅主题 `/room/{clientid}`，从而建立一个简单的聊天室，即客户端可以向任何其他客户端发送消息，但每个客户端只能订阅与自己相关的主题。
 
-:::tip
+::: tip
 
 1. 确保先在配置中将 `authorization.no_match` 设置为 `deny`，即 EMQX 将拒绝任何未经授权的连接请求。
 2. 在此示例中，我们演示了如何自定义一个访问控制插件，您也可以[基于文件设置类似的授权规则](../access-control/authz/file.md)。
 
 :::
 
-**打包定制的插件**
+#### 打包定制的插件
 
 通过 `rebar.config` 修改插件的版本信息:
 
@@ -173,14 +173,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 :::
 {% endemqxce %}
 
-{% emqxce %}
-::: tip Tip
-EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
-:::
-{% endemqxce %}
-
-我们在 EMQX 企业版 5.7.0 中为插件引入了 Avro Schema 以提供在运行时更新插件配置的能力。
-并且可以在该 Schema 中提供 UI 声明，从而可以在 EMQX Dashboard 中渲染配置表单以便使用。
+我们在 EMQX 企业版 5.7.0 中为插件引入了 Avro Schema 以提供在运行时更新插件配置的能力，并且可以在该 Schema 中提供 UI 声明，从而可以在 EMQX Dashboard 中渲染配置表单以便使用。
 
 ::: tip **提示**
 
@@ -188,21 +181,19 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 :::
 
-这需要您的插件包提供一个 Avro Schema 配置文件，它应位于 `priv/config_schmea.avsc`。
-该文件应当遵守 Apache Avro 规范（详情请参阅 [Apache Avro Specification (1.11.1)](https://avro.apache.org/docs/1.11.1/specification/)）。
-此外它也同时也包含了关于 UI 的描述声明。即可以使用 Avro Schema 的 metadata 配置一个 `$ui` 字段，EMQX Dashborad 将根据 `$ui` 字段中提供的信息来生成一份配置表单页。
+这需要您的插件包提供一个 Avro Schema 配置文件，它应位于 `priv/config_schmea.avsc`。该文件应当遵守 Apache Avro 规范（详情请参阅 [Apache Avro Specification (1.11.1)](https://avro.apache.org/docs/1.11.1/specification/)）。此外它也同时也包含了关于 UI 的描述声明。即可以使用 Avro Schema 的 metadata 配置一个 `$ui` 字段，EMQX Dashborad 将根据 `$ui` 字段中提供的信息来生成一份配置表单页。
 
-此外还有一个**可选的** 国际化配置文件以提供多语言支持， i18n 文件应位于 `priv/config_i18n.json`。
-它是一个键值对文件，如：`{ "$msgid": { "zh": "消息", "en": "Message" } }`。如果 `$ui` 配置中的字段名称、描述、验证规则的消息等需要支持多语言，需要在对应的配置里使用以 `$` 开头的 `$msgid`
+此外还有一个**可选的**国际化配置文件以提供多语言支持， i18n 文件应位于 `priv/config_i18n.json`。它是一个键值对文件，如：`{ "$msgid": { "zh": "消息", "en": "Message" } }`。如果 `$ui` 配置中的字段名称、描述、验证规则的消息等需要支持多语言，需要在对应的配置里使用以 `$` 开头的 `$msgid`。
 
 #### 声明式 UI 使用参考 （可选）
 
 UI 声明被用于动态渲染表单，支持各种字段类型和自定义组件。以下是可用组件及其配置说明。
 
-配置项说明：
+**配置项说明**
 
 - `component`<br />
-  必填。为该字段配置一个组件，用于显示和配置不同值和类型的数据，以下为支持的组件列表
+  必填。为该字段配置一个组件，用于显示和配置不同值和类型的数据，以下为支持的组件列表：
+  
   | 组件名             | 描述                                               |
   |:-------------------|:---------------------------------------------------|
   | `input`            | 用于简短文本或字符串的文本输入框                   |
@@ -220,9 +211,9 @@ UI 声明被用于动态渲染表单，支持各种字段类型和自定义组�
 - `description`<br />
   可选。字段的详细描述，可使用 $msgid。若不配置 i18n，将直接显示原文。
 - `flex`<br />
-  必填。定义字段在网格布局中占据的比例，满格（24）表示占据一整行，半格（12）表示占据半行
+  必填。定义字段在网格布局中占据的比例，满格（24）表示占据一整行，半格（12）表示占据半行。
 - `required`<br />
-  可选。指示字段是否为必填项
+  可选。指示字段是否为必填项。
 - `format` (仅 code-editor 组件适用)<br />
   可选。代码编辑器支持的格式，目前支持的数据格式为 `sql` 或 `json`。
 - `options` (仅 select 组件适用)<br />
@@ -262,8 +253,9 @@ UI 声明被用于动态渲染表单，支持各种字段类型和自定义组�
   - `pattern`，正则表达式验证，需要配置一个正则表达式进行验证。正则表达式写在 pattern 字段里。
   - `range`，用来验证输入数字的大小范围，最小值 min，最大值 max，可以同时配置，也可以单独配置一个。
   - `length`，用来验证输入的字符长度大小的限制，最短长度 minLength，最大长度 maxLength，可以同时配置，也可以单独配置。
-  验证不通过时的错误消息：
-  - `message`，支持配置 i18n 的 `$msgid`
+  - `message`，验证不通过时的错误消息：支持配置 i18n 的 `$msgid`。
+
+**示例片段**
 
 以下为几个示例片段，更详细的示例请参考 `priv/config_schema.avsc.example`：
 
@@ -310,8 +302,7 @@ UI 声明被用于动态渲染表单，支持各种字段类型和自定义组�
 }
 ```
 
-在插件编译打包时，如果您提供了 Avro Schema 文件及 i18n 文件，它们将被一同添加至 tarball 中。
-在您的插件代码中，可以使用函数 `emqx_plugins:get_config/1,2,3,4` 来获取插件配置文件。
+在插件编译打包时，如果您提供了 Avro Schema 文件及 i18n 文件，它们将被一同添加至 tarball 中。在您的插件代码中，可以使用函数 `emqx_plugins:get_config/1,2,3,4` 来获取插件配置文件。
 
 ## 安装/启动插件
 
