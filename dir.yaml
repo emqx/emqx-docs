@@ -302,7 +302,11 @@
       title_cn: Sparkplug
       path: data-integration/sparkplug
       edition: ee
-
+    - title_en: Message Validation
+      title_cn: 消息验证
+      path: message-validation/message-validation
+      edition: ee
+      
 - title_en: Flow Designer
   title_cn: Flow 设计器
   path: flow-designer/introduction
