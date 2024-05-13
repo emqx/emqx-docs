@@ -22,7 +22,7 @@ Clients may publish non-standard messages to the Broker, which could lead to exc
 
 When a message is published, it is validated against predefined rules. If validation succeeds, the process continues; otherwise, user-configured actions are executed, such as message discarding or disconnection.
 
-1. When a message is published, first, the publish permissions are checked. After passing the permission check, validation rules are matched based on the publishing topic from a user-configured list of validators. A validator can be set for multiple topics or topic filters.
+1. When a message is published, the publish permissions are first checked through the [authorization mechanism](../access-control/authz/authz.md) in EMQX. After passing the permission check, validation rules are matched based on the publishing topic from a user-configured list of validators. A validator can be set for multiple topics or topic filters.
 
 2. Once a validation rule is matched, the message is validated against the preset Schema or SQL.
 
