@@ -1,10 +1,11 @@
-# Managing Replication
+# Replication Management
 
-If you plan to run EMQX in a single-node configuration, you can skip this section. However, if you later decide to scale your deployment to a multi-node cluster, the information and procedures described here will be essential.
+This document describes how to setup data replication and high availability for the EMQX durable storage.
 
 ## Initial Cluster Setup
 
-If you are setting up a new EMQX cluster with session persistence enabled, or upgrading an existing cluster to enable session persistence, there are a few configuration parameters that influence how the cluster initially sets up durable storage and starts replicating data. Be sure to review these parameters as changing them will not take any effect once the durable storage is initialized.
+Initial setup of the durable storage requires careful planning and consideration of certain configuration parameters.
+Currently certain parameters can't be modified once the EMQX cluster is created, so they should be chosen and reviewed in advance.
 
 ### Replication Factor
 
