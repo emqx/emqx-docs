@@ -34,12 +34,12 @@
 
   - Publisher: Specifically tailored for MQTT message publishing, this role is confined to accessing endpoints related to message publication.
 
-- [#12201](https://github.com/emqx/emqx/pull/11994) Added support for hot updates to TCP/SSL/WS/WSS MQTT listener configurations. This feature allows you to modify most configuration parameters without restarting the listener and disconnecting the clients. However, there are some limitations:
+- [#12201](https://github.com/emqx/emqx/pull/12201) Added support for hot updates to TCP/SSL/WS/WSS MQTT listener configurations. This feature allows you to modify most configuration parameters without restarting the listener and disconnecting the clients. However, there are some limitations:
 
   - For TCP/SSL listeners, changes to the following parameters will still require a listener restart and client reconnection:
     - `bind`
     - `tcp_options.backlog`
-  
+
   - For WS/WSS (WebSocket) listeners, modifying transport-related parameters (listed below) will result in the listening socket being reopened, but established connections will remain uninterrupted.
     - `bind`
     - `tcp_options.*`

@@ -1,19 +1,19 @@
-{% emqxee %}
-# Installation EMQX Enterprise
-{% endemqxee %}
-
-{% emqxce %}
-# Installation EMQX
-{% endemqxce %}
+# Installation and Migration
 
 
 This chapter walks you through the basic installation steps for EMQX, the minimum hardware specification, and the file and directory locations to facilitate future configuration and maintenance jobs.
 
 {% emqxee %}
 
-This chapter will also cover how to configure a license for EMQX and how to migrate from EMQX 4.4 to EMQX 5.1.
+This chapter also covers how to configure a license for EMQX and how to migrate from EMQX 4.4 to EMQX 5.1.
 
 {% endemqxee %}
+
+{% emqxce %}
+
+This chapter also covers how to migrate from EMQX 4.4 to EMQX 5.1.
+
+{% endemqxce %}
 
 ## Installation Environment
 
@@ -82,14 +82,14 @@ sudo update-locale LANG=C.UTF-8
 
 EMQX releases the installation packages for different operating systems or platforms in each release. You may click the links below to download.
 
-- EMQX website: <https://www.emqx.io/downloads>
+EMQX website: <https://www.emqx.io/downloads>
 
 You can also download the alpha, beta, or rc versions from our [GitHub pages](https://github.com/emqx/emqx/releases).
 {% endemqxce %}
 
 {% emqxee %}
 
-EMQX releases the corresponding Docker image and the installation packages for different operating systems or platforms in each release. You may click the link below to download.
+EMQX releases the corresponding Docker image and the installation packages for different operating systems or platforms in each release. You may click the link below to download it.
 
 EMQX website: <https://www.emqx.com/en/try?product=enterprise>
 
@@ -127,9 +127,9 @@ The table below lists the operating systems and versions that EMQX supports.
 
 {% endemqxee %}
 
-## Hardware Specification
+## <!--Hardware Specification
 
-Depending on the number of client connections, message rate, message size, and enabled features, the minimum hardware specification for EMQX varies.
+Depending on the number of client connections, message rate, message size, and enabled features, the minimum hardware specification for EMQX varies. 
 
 Below are hardware specifications for running EMQX with simple workloads, supporting 100,000 client connections and 100,000 messages per second of throughput.
 
@@ -144,7 +144,7 @@ Below are hardware specifications for running EMQX with simple workloads, suppor
 
 In production environments, you can use the [Server Estimate](https://www.emqx.com/en/server-estimate) calculator to calculate the recommended hardware specification under various maximum connections and message throughput.
 
-:::
+::: -->
 
 ## Files and Directories
 
