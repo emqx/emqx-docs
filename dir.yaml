@@ -112,6 +112,7 @@
       path: deploy/license
     - title_en: Upgrade Guide
       title_cn: 升级指南
+      collapsed: true
       children:
         - title_en: Rolling Upgrade
           title_cn: 滚动升级
