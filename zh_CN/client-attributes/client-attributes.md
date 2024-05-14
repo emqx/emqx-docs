@@ -1,89 +1,70 @@
-# MQTT 客户端属性
+# 客户端属性
 
-在 EMQX 中，用户除了可以使用预定义的名称，如 `clientid` 和 `username` 作为 MQTT 客户端标识符外，还可以通过客户端属性提取功能在客户端连接时设置自定义属性，并将其用于认证和授权等功能。这一功能旨在通过从客户端元数据的各个来源提取客户端属性值，支持灵活模板化的 MQTT 客户端识别。这一功能在多租户环境、个性化客户端配置和简化的认证过程等场景中尤为有用。
+客户端属性是 EMQX 提供的一种机制，允许开发人员根据不同的应用场景需求，为 MQTT 客户端设置额外的属性。这些属性可以用于 EMQX 的认证授权、数据集成和 MQTT 扩展功能等功能中，在实现灵活开发中发挥重要作用。
 
-## 功能介绍
+## 工作流程
 
-当客户端连接到 EMQX 时，其客户端属性会被初始化。在初始化期间，EMQX 根据在 `mqtt.client_attrs_init` 配置中设置的预定义规则提取属性。例如，它可以从客户端 ID、用户名或客户证书的常用名称中提取子串。这种提取在认证过程之前发生，确保属性在后续步骤中能够被使用，如在 HTTP 请求体模板或 SQL 模板中用于组成认证和授权请求时。
+客户端属性的设置、存储和使用流程如下：
 
-客户端属性就存储在一个称为 `client_attrs` 的字段中，该字段位于客户端的会话或连接上下文中。`client_attrs` 信息字段保存以键值对形式的属性。这个字段保持在与客户端会话相关的内存中，以便在客户端连接生命周期中快速访问。
+**1. 设置客户端属性：**
 
-`client_attrs` 在初始化之后还可以使用认证结果携带的信息来扩展。例如 JWT 中的 `client_attrs` 字段，和HTTP 认证响应中的 `client_attrs` 字段。
+当客户端成功连接到 EMQX 时，EMQX 会触发连接与认证事件，并在此过程中根据预先定义的配置来[设置客户端属性](#设置客户端属性)。
 
-### 提取客户端属性
+**2. 客户端属性存储与销毁：**
 
-本节描述了 EMQX 从哪些客户端属性中提取以及如何提取属性。
+一旦设定了属性，它们会以键值对的形式存储在客户端会话的 `client_attrs` 字段中。当客户端会话结束时，这些属性会被删除。
 
-#### 客户端元数据和属性的来源
+对于保留会话，客户端接管时，会并覆盖会话中已有的客户端属性。除此之外，无法通过其他方式修改或删除客户端属性。
 
-在 EMQX 中，客户端元数据和属性有各种来源，并存储在特定的系统属性中，以便在客户端连接生命周期中使用。以下是这些现有客户端信息的来源和存储位置：
+**3. 使用客户端属性：**
 
-- **MQTT 连接报文**：当客户端连接到 EMQX 时，它发送一个包含多个信息片段的连接报文，如 `clientid`、`username`、`password` 和 `user properties`。
-- **TLS 证书**：如果客户端使用 TLS 连接，客户的 TLS 证书可以提供额外的元数据，例如：
-  - `cn`（常用名称）：证书的一部分，可以识别设备或用户。
-  - `dn`（区分名称）：证书中包含关于证书持有者的几个描述性字段的完整主题字段。
-  - 服务器名称指示（SNI）：当前用作多租户租户 ID。
-- **IP 连接数据**：包括客户端的 IP 地址和端口号，这些都是客户端连接时 EMQX 自动捕获的。
-- **Properties from Listener Config**: A client may also inherit properties like `zone` from MQTT listener.
+EMQX 的其他功能允许在相关配置项中使用 `${client_attrs.NAME}` 占位符，动态提取属性值，并将其配置或数据的一部分来使用。
 
-The extraction process uses an function-call style template render expression which we call Variform.
-For example, this expression extracts the prefix of a dot-separated client ID.
+## 设置客户端属性
 
-```js
-nth(1, tokens(clientid, '.'))
-```
+当客户端成功连接到 EMQX 时，EMQX 会触发连接和认证事件，并根据预先定义的配置来设置客户端属性。目前支持两种设置方式：
 
-And the configuration may look like below.
+### 从客户端元数据中提取
 
-```js
-mqtt {
-    client_attrs_init = [
-        {
-            expression = "nth(1, tokens(clientid, '-'))"
-            # And set as client_attrs.group
-            set_as_attr = group
-        }
-    ]
-}
-```
+通过预设的配置，从客户端连接时的用户名、客户端 ID 等元数据中提取并处理生成子串，并将其设置为客户端属性。
 
-Pre-bound variables can be directly used in the extraction expressions.
-For client attributes extraction, below variables are pre-bound:
-
-- `cn`: Client certificate common name
-- `dn`: Client certificate distinguish name (Subject)
-- `clientid`
-- `username`
-- `user_property`: The user properties provided in the MQTT v5 CONNECT packet sent by the client
-- `ip_address`: The source IP of the client
-- `port`: The source port number of the client
-- `zone`: The zone name
-
-::: tip
-Read more about [Variform](../advanced/variform.md).
-:::
-
-### 合并认证数据
-
-EMQX 会将认证结果中的 `client_attrs` 字段合并到初始化的 `client_attrs` 中。当前支持合并的认证模式如下：
-
-- **JWT 声明**：如果使用 JWT 进行认证，它们可以包含 `client_attrs` 声明，携带有关客户的额外元数据，如角色、权限或其他标识符。
-
-- **HTTP 认证响应**：如果 EMQX 配置为使用外部 HTTP 服务进行认证，此服务的响应可能包含有关客户的额外属性或元数据，可以配置为在 EMQX 中捕获并存储。例如，如果 HTTP 响应包括 `"client_attrs": {"group": "g1"}`，EMQX 将把这些数据合并到客户现有的属性中，然后可以在授权请求中使用这些属性。
-
-## 客户端属性的应用
-
-提取和合并的属性可以用于构建认证和授权请求。 `client_attrs.NAME` 可以用于认证和授权模板渲染。如果定义了名为 `client_attrs.alias` 的属性，可以将其合并到 HTTP 请求体或 SQL 查询中，增强这些请求的灵活性和特异性。
-
-例如，对于名为 `client_attrs.alias` 的属性，您可以使用 `${client_attrs.alias}` 来构建作为HTTP认证请求的HTTP请求体。有关更多详情，请参见[认证占位符](../access-control/authn/authn.md#authentication-placeholders)。
-
-## 配置客户端属性
+这个过程是在认证之前发生的，确保了属性可以在认证过程中使用。
 
 您可以通过配置文件或 Dashboard 配置客户端属性功能。
 
 想要在 Dashboard 中配置客户端属性，点击左侧导航中的**管理** -> **MQTT 配置**，在**客户端属性**配置中点击**添加**，填写属性名称和属性表达式。
 
-![client_attributes_config_ee](./assets/client_attributes_config_ee.png)
+![客户端属性设置](./assets/client_attributes_config_ee.png)
+
+其中，**属性**为属性的名称，**属性表达式**为属性的提取配置，支持配置以下值：
+
+- `clientid`：客户端 ID
+- `username`：用户名
+- `cn`：TLS 证书的 CN 字段
+- `dn`：TLS 证书的 DN 字段
+- `user_property.*`：从 MQTT CONNECT 数据包的 User-Property 中提取属性值，例如 `user_property.foo`
+
+支持使用 [Variform 表达式](../configuration/configuration.md#variform-表达式) 以及其中[预定义的函数](../configuration/configuration.md#预定义函数)对值进行动态处理。例如:
+
+- 要提取由点分隔的客户端 ID 的前缀：`nth(1, tokens(clientid, '.'))`
+- 要截取用户名部分信息：`substr(username, 0, 5)`
+
+对应的配置文件如下：
+
+```bash
+mqtt {
+    client_attrs_init = [
+        {
+            expression = "nth(1, tokens(clientid, '.'))"
+            set_as_attr = clientid_prefix
+        },
+        {
+            expression = "substr(username, 0, 5)"
+            set_as_attr = sub_username
+        }
+    ]
+}
+```
 
 {% emqxce %}
 
@@ -96,3 +77,70 @@ EMQX 会将认证结果中的 `client_attrs` 字段合并到初始化的 `client
 更多客户端属性配置的详细信息，请参见[配置手册](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)。
 
 {% endemqxee %}
+
+### 在客户端认证过程中设置
+
+在客户端认证过程中，可以通过认证器返回的信息设置客户端属性，目前支持：
+
+- [JWT 认证](../access-control/authn/jwt.md)：签发 Token 时，在 Payload 中通过 `client_attrs` 字段设置客户端属性。
+- [HTTP 认证](../access-control//authn/http.md)：在认证成功的 HTTP 响应中，通过 `client_attrs` 字段设置客户端属性。
+
+这种方式允许根据认证结果动态地设置属性，增加了使用的灵活性。
+
+### 合并认证数据
+
+当同时通过 2 种设置方式，或使用多个认证器设置客户端属性时，EMQX 会按照属性名称以及设置的先后顺序对属性进行合并：
+
+- 从客户端元数据中提取的属性将被认证器中设置的属性覆盖
+- 认证链中多个认证器设置属性时，后设置的属性将覆盖前面的属性
+
+## 客户端属性的应用
+
+在其他 EMQX 功能中，客户端属性可以通过 `${client_attrs.NAME}` 占位符提取，并作为配置或数据的一部分来使用。目前仅支持用于客户端认证与授权，更多功能将来后续开放。
+
+### 客户端认证
+
+通过 [认证占位符](../access-control/authn/authn.md#认证占位符)用于 SQL 语句、查询命令或 HTTP 请求体中的动态参数，例如：
+
+```sql
+# MySQL/PostgreSQL - 认证查询 SQL
+SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE sn = ${client_attrs.sn} LIMIT 1
+
+# HTTP - 认证请求 Body
+{ 
+ "sn": "${client_attrs.sn}",
+ "password": "${password}"
+}
+```
+
+具体使用方式请参考每个认证器对应的文档。
+
+::: tip
+客户端认证仅能使用从客户端元数据中提取设置的属性。
+:::
+
+### 客户端授权
+
+通过 [数据查询占位符](../access-control/authz/authz.md# 数据查询占位符) 与[主题占位符](../access-control/authz/authz.md#主题占位符)，用于 SQL 语句、查询命令，以及主题当中。
+
+示例场景：
+
+通过客户端属性，为每个客户端设置了各自的 `role`, `productId`, `deviceId` 属性。需要将这些属性用于授权检查中：
+
+- **role**: 用来限制客户端的访问权限，只允许 role 为 `admin` 的客户端订阅和发布管理消息，如匹配 `admin/#` 的主题；
+- **productId**: 用来限制客户端只能订阅适用于当前产品的 OTA 消息，如 `OTA/{prodoctId}`；
+- **deviceId**: 用来限制客户端只能在属于自己的主题上发布和订阅消息：
+- 发布：`up/{productId}/{deviceId}`
+- 订阅：`down/{productId}/{deviceId}`
+
+可以使用[授权-内置数据库](../access-control/authz/mnesia.md) 配置如下规则实现：
+
+| 权限 | 操作 | 主题 |
+| --- |  --- |  --- |
+| 允许 | 订阅和发布 | `${client_attrs.role}/#` |
+| --- |  --- |  --- |
+| 允许 | 订阅 | `OTA/${client_attrs.productId}` |
+| 允许 | 发布 | `up/${client_attrs.productId}/${client_attrs.deviceId}` |
+| 允许 | 订阅 | `down/${client_attrs.productId}/${client_attrs.deviceId}` |
+
+相较于直接使用客户端 ID 等静态属性，更灵活地管理客户端的授权。这种灵活性使得我们能够基于不同的角色、产品和设备来细粒度地控制客户端的访问权限。
