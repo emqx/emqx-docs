@@ -145,9 +145,11 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 3. 在 **配置** 步骤，配置以下信息：
 
    - **连接器名称**：应为大写和小写字母及数字的组合，例如：`my_rocketmq`。
-   - **服务器地址**: 输入 `127.0.0.1:9876`。
-   - **RocketMQ 主题**：输入 `TopicTest`。
-   - 其他使用默认值即可。
+   - **服务器列表**: 输入 `127.0.0.1:9876`。
+   - **命名空间**：
+   - **Accesskey**:
+   - **Secretkey**:
+   - **安全令牌**：
 4. 高级配置（可选）：详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
 5. 在点击**创建**之前，您可以点击**测试连接**来测试连接器是否能连接到 RocketMQ 服务器。
 6. 点击**创建**按钮完成连接器创建。
@@ -186,7 +188,9 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
 7. 从**连接器**下拉框中选择刚刚创建的 `my_rocketmq`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
 
-8. **模版**设置为默认值，即为空；模版为空时将会将整个消息转发给 RocketMQ，实际值为 JSON 模版数据。
+7. **RocketMQ 主题**：输入 `TopicTest`。
+
+8. **消息模版**设置为默认值，即为空；模版为空时将会将整个消息转发给 RocketMQ，实际值为 JSON 模版数据。
 
 9. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细内容请参考[ Sink 的特性](./data-bridges.md#sink-的特性)中的配置参数章节。
 

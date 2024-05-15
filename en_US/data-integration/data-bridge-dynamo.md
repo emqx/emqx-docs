@@ -160,13 +160,21 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 7. Select the `my_dynamodb` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-8. Leave the **Template** empty by default.
+8. Confiture the following settings:
 
-   ::: tip
+   - **Table**:
 
-   When this value is empty the whole message will be stored in the database. The actual value is JSON template data.
+   - **Hash Key**:
 
-   :::
+   - **Range Key** (optional):
+
+   - **Message Template**: Leave the template empty by default.
+
+     ::: tip
+
+     When this value is empty the whole message will be stored in the database. The actual value is JSON template data.
+
+     :::
 
 9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
