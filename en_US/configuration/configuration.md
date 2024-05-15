@@ -395,9 +395,14 @@ will be interpreted as `myarray = [74, 75]`, which is handy when trying to overr
 
 ### Variform Expressions
 
-Variform is a lightweight, expressive language designed for string manipulation and runtime evaluation.
-It is not a full-fledged programming language but rather a specialized tool that can be embedded within
-configurations or EMQX to perform string operations dynamically.
+Variform is a lightweight, expressive language designed for string manipulation and runtime evaluation. It is not a full-fledged programming language but a specialized tool that can be embedded within
+configurations for EMQX to perform string operations dynamically.
+
+::: tip
+
+Variform expressions are only applicable to certain configuration items. Do not use them unless specifically stated.
+
+:::
 
 #### Syntax
 
@@ -425,8 +430,8 @@ Variform does not support the following:
 - User-defined variables
 - User-defined functions
 - Exception handling and error recovery
-- Boolean literals. Booleans may be produced intermediately as return values from a built-in functions such as `num_gt` (which stands for 'is number greater'),
-  but cannot be wirtten as a literal. The condition functions (`iif` and `coalesce`) take empty string for `false` otherwise `true`.
+- Boolean literals. Booleans may be produced intermediately as return values from a built-in function such as `num_gt` (which stands for 'is number greater'),
+  but cannot be written as a literal. The condition functions (`iif` and `coalesce`) take an empty string for `false` or otherwise `true`.
 - Escape sequence in string literals. Call the `unescape` function to unescape special characters.
 
 Below is a configuration example with a Variform expression embedded.
@@ -445,8 +450,7 @@ mqtt {
 ```
 
 ::: tip
-When unescape function is required in the expression, it's a good idea to use triple quote (`"""`) strings in HOCON config
-so there is no need to perform double escaping.
+When an unescape function is required in the expression, it's a good idea to use triple quote (`"""`) strings in HOCON config so there is no need to perform double escaping.
 
 For example
 
@@ -493,10 +497,7 @@ Below are the functions that can be used in the expressions:
 
 #### Conditions
 
-Variform expression so far has no comprehensive control flows. The `iif` function is a conditional expression used
-to evaluate a condition and return one of two values depending on the result of the condition. This function is
-inspired by similar constructs in other programming languages, adapted here for use in a programming expression
-that lacks loops and variable bindings.
+The variform expression so far has no comprehensive control flows. The `iif` function is a conditional expression used to evaluate a condition and return one of two values depending on the result of the condition. This function is inspired by similar constructs in other programming languages, adapted here for use in a programming expression that lacks loops and variable bindings.
 
 ```js
 iif(Condition, ThenExpression, ElseExpression)
@@ -506,9 +507,9 @@ iif(Condition, ThenExpression, ElseExpression)
 
 - **Condition** (Boolean or String): Specifies the condition to be evaluated.
   - If a Boolean (`true` or `false`), it directly evaluates to `true` or `false`.
-    - If a String, it evaluates to `false` if the string is empty, and `true` otherwise.
-    - **ThenExpression**: The expression or value that is returned if `Condition` evaluates to `true`.
-    - **ElseExpression**: The expression or value that is returned if `Condition` evaluates to `false`.
+  - If a String, it evaluates to `false` if the string is empty, and `true` otherwise.
+- **ThenExpression**: The expression or value that is returned if `Condition` evaluates to `true`.
+- **ElseExpression**: The expression or value that is returned if `Condition` evaluates to `false`.
 
 ##### Returns
 
@@ -519,8 +520,8 @@ iif(Condition, ThenExpression, ElseExpression)
 
 As the default behavior of scripting environments like Bash, Variform expression is designed to yield an empty string ("") in scenarios where errors occur, such as unbound variables or exceptions during runtime.
 
-- Unbound Variables: If an expression references a variable that has not been defined or is out of scope (unbound), the expression will evaluate to an empty string.
-- Runtime Exceptions: Any exceptions that occur during the execution of an expression, whether due to incorrect function usage, invalid data types, or other unforeseen issues, will result in the expression yielding an empty string. For example, array index out of range.
+- Unbound Variables: If an expression references a variable that has not been defined or is out of scope (unbound), the expression will be evaluated as an empty string.
+- Runtime Exceptions: Any exceptions that occur during the execution of an expression, whether due to incorrect function usage, invalid data types, or other unforeseen issues, will result in the expression yielding an empty string. For example, the array index is out of range.
 
 #### Example Expressions
 

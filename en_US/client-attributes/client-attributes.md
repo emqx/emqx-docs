@@ -1,89 +1,84 @@
 # MQTT Client Attributes
 
-Apart from using predefined names like `clientid` and `username` as MQTT client identifiers, the client attribute extraction feature allows setting custom attributes upon connection for use in functions such as authentication and authorization. It is designed to support flexible templating for MQTT client identification by extracting client attribute values from various client metadata sources. This feature is particularly useful in contexts such as personalized client configurations, and streamlined authentication processes.
+Client attributes in EMQX provides a mechanism that allows developers to define and set additional attributes for MQTT clients based on the requirements of different application scenarios. These attributes are integral to enhancing authentication, authorization, data integration, and MQTT extension functionalities within EMQX, thereby facilitating flexible development. By leveraging client metadata, this feature also supports flexible templating for MQTT client identification, which is essential for personalized client configurations and streamlined authentication processes, enhancing the adaptability and efficiency of development efforts.
 
-## Introduction
+## Workflow
 
-When a client connects to EMQX, its client attributes are initialized. During initialization, EMQX extracts attributes based on predefined rules set in the `mqtt.client_attrs_init` configuration. For example, it can extract a substring from the clientID, username, or client certificate common name. This extraction happens before the authentication process, ensuring that the attributes are ready to be used in subsequent steps, such as used in the HTTP request body template or SQL template for composing authentication and authorization requests.
+The process of setting, storing, and using client attributes is as follows:
 
-Client attributes are stored in a field called `client_attrs` within the client's session or connection context. This `client_attrs` info field acts like a dictionary or a map, holding the attributes as key-value pairs. This field is maintained in memory associated with the client's session for quick access during the client's connection lifecycle.
+**1. Set Client Attributes**
 
-After initialization, `client_attrs` object can be extended with more data fields from authentication results, such as JWT's `client_attrs` claim, and `client_attrs` field in HTTP authentication response body.
+When a client successfully connects to EMQX, EMQX triggers connection and authentication events, and during this process, [client attributes are set](#setting-client-attributes) based on predefined configurations.
 
-### Extract Client Attributes
+**2. Store and Destroy Client Attributes**
 
-This section describes from which client attributes EMQX extracts and how attributes are extracted.
+Once set, the attributes are stored as key-value pairs in the `client_attrs` field of the client session. When the client session ends, these attributes are deleted.
 
-#### Sources of Client Metadata and Attributes
+For persistent sessions, when a client takes over, it will replace and overwrite the client attributes in the session. Besides this, there is no way to modify or delete client attributes.
 
-In EMQX, client metadata and attributes originate from various sources and are stored within specific properties for use throughout the client's connection lifecycle.
-Here's a breakdown of where these existing client information come from and where they are stored:
+**3. Use Client Attributes**
 
-- **MQTT CONNECT Packet**: When a client connects to EMQX, it sends a CONNECT packet that includes several pieces of information, such as `clientid`, `username`, `password`, and `user properties`.
-- **TLS Certificates**: If the client connects using TLS, the client's TLS certificate can provide additional metadata, such as:
-  - `cn` (Common Name): Part of the certificate that can identify the device or user.
-  - `dn` (Distinguished Name): The full subject field within the certificate that includes several descriptive fields about the certificate owner.
-- **IP Connection Data**: This includes the client’s IP address and port number, which are automatically captured by EMQX when a client connects.
-- **Properties from Listener Config**: A client may also inherit properties like `zone` from MQTT listener.
+Other functionalities of EMQX allow the use of the `${client_attrs.NAME}` placeholder in related configuration items, dynamically extracting attribute values to be used as part of their configuration or data.
 
-The extraction process uses an function-call style template render expression which we call Variform.
-For example, this expression extracts the prefix of a dot-separated client ID.
+## Set Client Attributes
 
-```js
-nth(1, tokens(clientid, '.'))
-```
+When a client successfully connects to EMQX, EMQX triggers connection and authentication events and sets client attributes based on predefined configurations. Currently, the following 2 methods are supported:
 
-And the configuration may look like below.
+- Extracting from client metadata
+- Setting during the client authentication process
 
-```js
+### Extract from Client Metadata
+
+Through preset configurations, substrings are extracted and processed from client connection metadata such as usernames and client IDs and set as client attributes. This extraction happens before the authentication process, ensuring that the attributes are ready to be used in subsequent steps, such as used in the HTTP request body template or SQL template for composing authentication and authorization requests. 
+
+You can configure the client attribute functionality via the configuration file or Dashboard. To configure the attribute extraction via the Dashboard, click **Management** -> **MQTT Settings**. At **Client Attributes**, click **Add** to add the attribute name and attribute expression.
+
+![client_attributes_config_ee](./assets/client_attributes_config_ee.png)
+
+Where, 
+
+- **Attribute** is the name of the attribute. 
+- **Attribute Expression** is the configuration for extracting the attribute.
+
+The attribute expression upports using [Variform expressions](../configuration/configuration.md#variform-expressions) and [predefined functions](../configuration/configuration.md#predefined-functions) to dynamically process values. For example:
+
+- To extract the prefix of a client ID delimited by a dot: `nth(1, tokens(clientid, '.'))`
+- To truncate part of the username: `substr(username, 0, 5)`
+
+The corresponding configuration file is as follows:
+
+```bash
 mqtt {
     client_attrs_init = [
         {
-            expression = "nth(1, tokens(clientid, '-'))"
-            # And set as client_attrs.group
-            set_as_attr = group
+            expression = "nth(1, tokens(clientid, '.'))"
+            set_as_attr = clientid_prefix
+        },
+        {
+            expression = "substr(username, 0, 5)"
+            set_as_attr = sub_username
         }
     ]
 }
 ```
 
-Pre-bound variables can be directly used in the extraction expressions.
-For client attributes extraction, below variables are pre-bound:
+The attribute expression supports the configuration of the following values:
 
-- `cn`: Client certificate common name
-- `dn`: Client certificate distinguish name (Subject)
-- `clientid`
-- `username`
-- `user_property`: The user properties provided in the MQTT v5 CONNECT packet sent by the client
+- `clientid`: Client ID
+
+- `username`: Username
+
+- `cn`: CN field of the TLS certificate
+
+- `dn`: DN field of the TLS certificate
+
+- `user_property.*`: Extracts attribute values from User-Property in the MQTT CONNECT packet, e.g., `user_property.foo`
+
 - `ip_address`: The source IP of the client
+
 - `port`: The source port number of the client
-- `zone`: The zone name
 
-::: tip
-Read more about [Variform](../advanced/variform.md).
-:::
-
-### Extend Attributes from Authentication Response
-
-EMQX merges attributes from authentication results. Below are the authentication mechanisms supported so far.
-
-- **JWT claims**: If JWTs are used for authentication, they can include `client_attrs` claims that carry additional metadata about the client, such as roles, permissions, or other identifiers.
-
-- **HTTP Authentication Responses**: If EMQX is configured to use an external HTTP service for authentication, the response from this service might include additional attributes or metadata about the client, which can be configured to be captured and stored within EMQX. For example, if an HTTP response includes `"client_attrs": {"group": "g1"}`, EMQX will incorporate this data into the client's existing attributes, which can then be utilized in authorization requests.
-
-## Application of Client Attributes
-
-The extracted and merged attributes can be used in constructing authentication and authorization requests. The `client_attrs.NAME` can be used in authentication and authorization template rendering. If an attribute named `client_attrs.alias` is defined, it can be incorporated into an HTTP request body or SQL query, enhancing the flexibility and specificity of these requests.
-
-For example, for an attribute named `client_attrs.alias`, you can use `${client_attrs.alais}` to build an HTTP request body as an HTTP authentication request.  For more details, see [Authentication Placeholders](../access-control/authn/authn.md#authentication-placeholders).
-
-## Configure Attribute Extraction
-
-You can configure the attribute extraction feature through the configuration file or Dashboard.
-
-To configure the attribute extraction via the Dashboard, click **Management** -> **MQTT Settings**. At **Client Attributes**, click **Add** to add the attribute name and expression.
-
-![client_attributes_config_ee](./assets/client_attributes_config_ee.png)
+- `zone`: The zone name inherited from MQTT listener
 
 {% emqxce %}
 
@@ -96,3 +91,71 @@ For detailed information about the client attributes configurations, see [Config
 For detailed information about the client attributes configuration, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 {% endemqxee %}
+
+### Set During the Client Authentication Process
+
+During the client authentication process, client attributes can be set based on information returned by the authenticator, currently supported:
+
+- [JWT Authentication](../access-control/authn/jwt.md): Set client attributes in the `client_attrs` field in the Token payload when issuing a Token.
+- [HTTP Authentication](../access-control//authn/http.md): Set client attributes in the `client_attrs` field in the successful HTTP response.
+
+The key and value of the attributes must be string. This method allows for dynamic setting of attributes based on the results of authentication, adding flexibility in use.
+
+### Merge Authentication Data
+
+When setting client attributes through both methods or using multiple authenticators, EMQX merges the attributes based on the attribute names and the order of settings:
+
+- Attributes extracted from client metadata are overwritten by attributes set by the authenticators.
+- When multiple authenticators set attributes in the authentication chain, later set attributes overwrite earlier ones.
+
+## Application of Client Attributes
+
+In other EMQX functionalities, client attributes can be extracted using the `${client_attrs.NAME}` placeholder and used as part of the configuration or data. Currently, it is only supported for client authentication and authorization, with more features to be opened in the future.
+
+### Client Authentication
+
+Use [authentication placeholders](../access-control/authn/authn.md#authentication-placeholders) for SQL statements, query commands, or HTTP request bodies as dynamic parameters, for example:
+
+```sql
+# MySQL/PostgreSQL - Authentication query SQL
+SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE sn = ${client_attrs.sn} LIMIT 1
+
+# HTTP - Authentication request Body
+{ 
+ "sn": "${client_attrs.sn}",
+ "password": "${password}"
+}
+```
+
+For specific usage, refer to the documentation for each authenticator.
+
+::: tip
+
+Client authentication can only use attributes set from client metadata.
+
+:::
+
+### Client Authorization
+
+Use [data query placeholders](../access-control/authz/authz.md#data-query-placeholders) and [topic placeholders](../access-control/authz/authz.md#topic-placeholders) for SQL statements, query commands, and topics.
+
+#### Example Scenario:
+
+Client attributes such as `role`, `productId`, `deviceId` are set for each client. These attributes are used for authorization checks:
+
+- **role**: Used to restrict client access rights, only allowing clients with the `admin` role to subscribe and publish management messages, such as topics matching `admin/#`.
+- **productId**: Used to restrict clients to only subscribe to OTA messages applicable to the current product, like `OTA/{productId}`.
+- **deviceId**: Used to restrict clients to only publish and subscribe to messages on topics belonging to themselves:
+  - Publish: `up/{productId}/{deviceId}`
+  - Subscribe: `down/{productId}/{deviceId}`
+
+Use [Authorization - Built-in Database](../access-control/authz/mnesia.md) to configure the following rules to implement:
+
+| Permission | Operation           | Topic                                                     |
+| ---------- | ------------------- | --------------------------------------------------------- |
+| Allow      | Subscribe & Publish | `${client_attrs.role}/#`                                  |
+| Allow      | Subscribe           | `OTA/${client_attrs.productId}`                           |
+| Allow      | Publish             | `up/${client_attrs.productId}/${client_attrs.deviceId}`   |
+| Allow      | Subscribe           | `down/${client_attrs.productId}/${client_attrs.deviceId}` |
+
+Compared to directly using static properties like client ID, this approach more flexibly manages client authorization. This flexibility allows for granular control of client access rights based on different roles, products, and devices.

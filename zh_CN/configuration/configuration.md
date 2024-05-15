@@ -386,8 +386,7 @@ myarray.2 = 75
 
 ### Variform 表达式
 
-Variform 是一种轻量级、富有表现力的语言,旨在进行字符串操作和运行时求值。
-它不是一种全功能的编程语言，而是一种专门的工具，可以嵌入配置中，用来态执行字符串操作。
+Variform 是一种轻量级、富有表现力的语言,旨在进行字符串操作和运行时求值。它不是一种全功能的编程语言，而是一种专门的工具，可以嵌入配置中，用来态执行字符串操作。
 
 ::: tip
 
@@ -422,9 +421,8 @@ Variform 不支持以下功能：
 - 用户定义的变量
 - 用户定义的函数
 - 异常处理和错误恢复
-- Boolean literals. Booleans may be produced intermediately as return values from a built-in functions such as `num_gt` (which stands for 'is number greater'),
-  but cannot be wirtten as a literal. The condition functions (`iif` and `coalesce`) take empty string for `false` otherwise `true`.
-- Escape sequence in string literals. Call the `unescape` function to unescape special characters.
+- 布尔字面量。布尔值可能作为内置函数（如 `num_gt`，意为“数字是否更大”）的返回值间接产生，但不能直接写作字面量。条件函数（`iif` 和 `coalesce`）将空字符串视为 `false`，其他情况视为 `true`。
+- 字符串字面量中的转义序列。调用 `unescape` 函数来对特殊字符进行反转义。
 
 以下是一个嵌入配置文件中的示例。
 
@@ -443,13 +441,12 @@ mqtt {
 ```
 
 ::: tip
-When unescape function is required in the expression, it's a good idea to use triple quote (`"""`) strings in HOCON config
-so there is no need to perform double escaping.
+当表达式中需要使用 unescape 函数时，建议在 HOCON 配置中使用三引号（`"""`）字符串，这样就无需进行双重转义。
 
-For example
+例如
 
 ```bash
-#### For multi-line client ID, take the first line.
+#### 对于多行客户端 ID，取第一行。
 expression = """nth(1, tokens(clientid, unescape('\n')))"""
 ```
 
@@ -473,61 +470,58 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
   - [base64_encode/1](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
   - `int2hexstr(Integer)`: Encode an integer to hex string. e.g. 15 as 'F' (uppercase).
 - **散列函数**：
-  - hash(算法, 数据)，其中算法可以是以下之一：md4 | md5, sha (或 sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
-  - hash_to_range(输入, 最小值, 最大值)：使用 sha256 散列输入数据，并将散列映射到最小值和最大值之间的整数（包括最小值和最大值）。
-  - map_to_rage(输入, 最小值, 最大值)：将输入映射到最小值和最大值之间的整数（包括最小值和最大值）。
-- **Compare functions**:
-  - `num_eq(A, B)`: Return 'true' if two numbers are the same, otherwise 'false'.
-  - `num_gt(A, B)`: Return 'true' if A is greater than B, otherwise 'false'.
-  - `num_gte(A, B)`: Return 'true' if A is not less than B, otherwise 'false'.
-  - `num_lt(A, B)`: Return 'true' if A is less than B, otherwise 'false'.
-  - `num_lte(A, B)`: Return 'true' if A is not greater than B, otherwise 'false'.
-  - `str_eq(A, B)`: Return 'true' if two strings are the same, otherwise 'false', otherwise 'false'.
-  - `str_gt(A, B)`: Return 'true' if A is behind B in lexicographic order, otherwise 'false'.
-  - `str_gte(A, B)`: Return 'true' if A is not before B in lexicographic order, otherwise 'false'.
-  - `str_lt(A, B)`: Return 'true' if A is before B in lexicographic order, otherwise 'false'.
-  - `str_lte(A, B)`: Return 'true' if A is not after B in lexicographic order, otherwise 'false'.
+  - `hash(Algorithm, Data)`：其中算法可以是以下之一：md4 | md5, sha (或 sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
+  - `hash_to_range(Input, Min, Max)`：使用 sha256 散列输入数据，并将散列映射到最小值和最大值之间的整数（包括 Min 和 Max：Min =< X =< Max））。
+  - `map_to_range(Input, Min, Max)`：将输入映射到最小值和最大值之间的整数（包括 Min 和 Max：Min =< X =< Max）。
+- 比较函数：
+  - `num_eq(A, B)`：如果两个数字相同，则返回 'true'，否则返回 'false'。
+  - `num_gt(A, B)`：如果 A 大于 B，则返回 'true'，否则返回 'false'。
+  - `num_gte(A, B)`：如果 A 不小于 B，则返回 'true'，否则返回 'false'。
+  - `num_lt(A, B)`：如果 A 小于 B，则返回 'true'，否则返回 'false'。
+  - `num_lte(A, B)`：如果 A不大于 B，则返回 'true'，否则返回 'false'。
+  - `str_eq(A, B)`：如果两个字符串相同，则返回 'true'，否则返回 'false'。
+  - `str_gt(A, B)`：如果 A 在字典顺序上位于 B 之后，则返回 'true'，否则返回 'false'。
+  - `str_gte(A, B)`：如果 A 在字典顺序上不位于 B 之前，则返回 'true'，否则返回 'false'。
+  - `str_lt(A, B)`：如果 A 在字典顺序上位于 B 之前，则返回 'true'，否则返回 'false'。
+  - `str_lte(A, B)`：如果 A 在字典顺序上不位于 B 之后，则返回 'true'，否则返回 'false'。
 
-#### Conditions
+#### 条件
 
-Variform expression so far has no comprehensive control flows. The `iif` function is a conditional expression used
-to evaluate a condition and return one of two values depending on the result of the condition. This function is
-inspired by similar constructs in other programming languages, adapted here for use in a programming expression
-that lacks loops and variable bindings.
+到目前为止，Variform 表达式没有全面的控制流程。`iif` 函数是一种条件表达式，用于评估条件并根据条件的结果返回两个值中的一个。这个函数的灵感来自于其他编程语言中的类似结构，在这里被适配用于缺乏循环和变量绑定的编程表达式中。
 
 ```js
-iif(Condition, ThenExpression, ElseExpression)
+iif(条件, 真值表达式, 假值表达式)
 ```
 
-##### Parameters
+##### 参数
 
-- **Condition** (Boolean or String): Specifies the condition to be evaluated.
-  - If a Boolean (`true` or `false`), it directly evaluates to `true` or `false`.
-    - If a String, it evaluates to `false` if the string is empty, and `true` otherwise.
-    - **ThenExpression**: The expression or value that is returned if `Condition` evaluates to `true`.
-    - **ElseExpression**: The expression or value that is returned if `Condition` evaluates to `false`.
+- **条件（布尔或字符串）**：指定要评估的条件。
+  - 如果是布尔值（`true` 或 `false`），则直接评估为 `true` 或 `false`。
+  - 如果是字符串，如果字符串为空，则评估为 `false`，否则为 `true`。
+- **真值表达式**：如果条件评估为 `true`，返回的表达式或值。
+- **假值表达式**：如果条件评估为 `false`，返回的表达式或值。
 
-##### Returns
+##### 返回
 
-- The result of `ThenExpression` if `Condition` is `true`.
-- The result of `ElseExpression` if `Condition` is `false`.
+- 如果条件为 `true`，则结果为 `真值表达式`。
+- 如果条件为 `false`，则结果为 `假值表达式`。
 
-#### Error Handling
+#### 错误处理
 
-As the default behavior of scripting environments like Bash, Variform expression is designed to yield an empty string ("") in scenarios where errors occur, such as unbound variables or exceptions during runtime.
+与 Bash 等脚本环境的默认行为一样，Variform 表达式在出现错误时，如遇到未绑定的变量或运行时异常，会生成空字符串（""）。
 
-- Unbound Variables: If an expression references a variable that has not been defined or is out of scope (unbound), the expression will evaluate to an empty string.
-- Runtime Exceptions: Any exceptions that occur during the execution of an expression, whether due to incorrect function usage, invalid data types, or other unforeseen issues, will result in the expression yielding an empty string. For example, array index out of range.
+- 未绑定的变量：如果表达式引用了未定义或超出作用域（未绑定）的变量，该表达式将被评估为一个空字符串。
+- 运行时异常：在表达式执行过程中发生的任何异常，无论是由于函数使用不当、数据类型无效还是其他未预见的问题，都会导致表达式产生空字符串。例如，数组索引超出范围。
 
 #### 示例表达式
 
-- `nth(1, tokens(clientid, '.'))`: Extract the prefix of a dot-separated client ID.
-- `strlen(username, 0, 5)`: Extract a partial username.
-- `coalesce(regex_extract(clientid,'[0-9]+'),'vin-1000')`: Extract digits from client ID using a regular expression. If the regular expression yields empty string, then return `'000'`.
-- `iif(true, "Value if true", "Value if false")`: Returns `Value if true`
-- `iif("", "Value if true", "Value if false")`: Returns `Value if false`
-- `iif("hello", "Value if true", "Value if false")`: Returns `Value if true`
-- `iif(regex_match(clientid,'^foo\.+*'),'foo','bar')`: Returns `foo` if `clientid` starts with `foo.`, otherwise `bar`.
+- `nth(1, tokens(clientid, '.'))`：提取以点分隔的客户端 ID 的前缀。
+- `strlen(username, 0, 5)`：提取部分用户名。
+- `coalesce(regex_extract(clientid,'[0-9]+'),'vin-1000')`：使用正则表达式从客户端 ID 中提取数字。如果正则表达式产生空字符串，则返回 `'000'`。
+- `iif(true, "如果为真的值", "如果为假的值")`：返回 `如果为真的值`
+- `iif("", "如果为真的值", "如果为假的值")`：返回 `如果为假的值`
+- `iif("hello", "如果为真的值", "如果为假的值")`：返回 `如果为真的值`
+- `iif(regex_match(clientid,'^foo\.+*'),'foo','bar')`：如果 `clientid` 以 `foo.` 开头，则返回 `foo`，否则返回 `bar`。
 
 ## 配置路径
 
