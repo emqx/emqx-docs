@@ -127,6 +127,23 @@ In this example, `testpub1/${username}` is replaced at runtime with `testpub1/em
 
 ::::
 
+## Client Attributes
+
+Starting from EMQX v5.7.0, you can use the optional `client_attrs` field in the JWT Payload to set [client attributes](../../client-attributes/client-attributes.md). Please note that both the keys and values must be of string type.
+
+Example:
+
+```json
+{
+  "exp": 1654254601,
+  "username": "emqx_u",
+  "client_attrs": {
+      "role": "admin",
+      "sn": "10c61f1a1f47"
+  }
+}
+
+
 ## Configure with Dashboard
 
 On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **Password-Based** as **Mechanism**, and **JWT** as **Backend**, this will lead us to the **Configuration** tab, as shown below. 

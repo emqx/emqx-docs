@@ -11,7 +11,7 @@
 
 客户端在连接请求中携带 JWT，将使用预先配置的密钥或公钥对 JWT 签名进行验证。如果用户配置了 JWKS 端点，EMQX 将通过从 JWKS 端点查询到的公钥列表对 JWT 签名进行验证。
 
-如果签名验证成功，EMQX 会继续检查 Claims。如果存在 `iat`、`nbf` 或 `exp` 等 Claims，EMQX 会主动根据这些 Claims 检查 JWT 的合法性。之外，EMQX 也支持用户自定义的 Claims 检查。签名验证和 Claims 检查均通过后，EMQX 才会接受客户端的连接请求。
+如果签名验证成功，EMQX 会继续检查 JWT 声明（Claims）。如果存在 `iat`、`nbf` 或 `exp` 等声明，EMQX 会主动根据这些声明检查 JWT 的合法性。之外，EMQX 也支持用户自定义的声明检查。签名验证和声明检查均通过后，EMQX 才会接受客户端的连接请求。
 
 ## 推荐用法
 
@@ -122,6 +122,23 @@ JWT 权限列表定义了 `pub`、`sub` 和 `all` 3 个可选字段，分别用�
 :::
 
 ::::
+
+## 客户端属性
+
+从 EMQX v5.7.0 版本开始，您可以在 JWT Payload 中使用可选的 `client_attrs` 字段设置[客户端属性](../../client-attributes/client-attributes.md)。请注意，键和值都必须是字符串类型。
+
+示例：
+
+```json
+{
+  "exp": 1654254601,
+  "username": "emqx_u",
+  "client_attrs": {
+      "role": "admin",
+      "sn": "10c61f1a1f47"
+  }
+}
+```
 
 ## 通过 Dashboard 配置
 
