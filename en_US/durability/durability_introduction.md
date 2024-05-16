@@ -60,7 +60,7 @@ State of durable sessions, as well as messages routed to the durable sessions ar
 This session implementation is disabled by default. It can be enabled by setting `session_persistence.enable` configuration parameter to `true`.
 
 The session persistence feature ensures robust durability and high availability by consistently replicating session metadata and MQTT messages sent to the durable sessions across multiple nodes within an EMQX cluster.
-The configurable *replication factor* determines the number of replicas for each message or session, enabling users to customize the balance between durability and performance to meet their specific requirements.
+The configurable [replication factor](./managing-replication.md#replication-factor) determines the number of replicas for each message or session, enabling users to customize the balance between durability and performance to meet their specific requirements.
 
 This implementation has the following advantages:
 - Durable sessions can be resumed after restarting or stopping of EMQX nodes.
@@ -90,7 +90,7 @@ Storage encapsulates all data of a certain type, such as MQTT messages or MQTT s
 
 #### Shard
 
-At this level, messages are segregated by client, and stored in distinct shards based on the publisher's client ID. The number of shards is determined by `durable_storage.messages.n_shards` configuration parameter during the initial startup of EMQX.
+At this level, messages are segregated by client, and stored in distinct shards based on the publisher's client ID. The number of shards is determined by [n_shards](./managing-replication.md#number-of-shards) configuration parameter during the initial startup of EMQX.
 
 A shard is also a unit of replication, and EMQX ensures that each shard is consistently replicated `durable_storage.messages.replication_factor` times across different nodes in the cluster so that each shard replica contains the same set of messages in the same order.
 
@@ -99,6 +99,9 @@ A shard is also a unit of replication, and EMQX ensures that each shard is consi
 Messages within a shard are further segmented into generations corresponding to specific time frames. New messages are written only into the current generation, while the previous generations are only accessible for reading. EMQX cleans up old messages by deleting old generations in their entirety. The retention period of the older generations is defined by the `session_persistence.message_retention_period` parameter.
 
 Different generations can organize the data differently, according to the *storage layout* specification. Currently, only one layout is supported, optimized for managing the high throughput of wildcard subscriptions spanning a large number of topics and single-topic subscriptions. Future updates will introduce additional layouts to optimize for the different types of workloads, such as prioritizing low latency over high throughput for certain applications.
+
+Storage layout used for the new generations is configured by `durable_storage.messages.layout` parameter.
+Each layout engine can define its own set of configuration parameters, depending on its type.
 
 #### Stream
 

@@ -586,6 +586,7 @@
       path: durability/durability_introduction
       children:
         - durability/managing-replication
+        - durability/management
     - title_en: Multi-Protocol Gateway
       title_cn: 多协议网关
       path: gateway/gateway
