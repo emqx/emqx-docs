@@ -6,28 +6,28 @@ This document describes configuration, and operation and management interfaces r
 
 Configuration related to the durable sessions is split into two sub-trees:
 
-- `session_persistence` contains the configuration related to the MQTT clients' sessions and how they consume data from the durable storage, as well as data retention parameters.
+- `durable_sessions` contains the configuration related to the MQTT clients' sessions and how they consume data from the durable storage, as well as data retention parameters.
 - `durable_storage` contains the configuration of the durable storage holding the data.
 
 ### Session configuration
 
-| Parameter                                        | Description                                                                                                                                                                                                                          |
-|--------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `session_persistence.enable`                     | Enables session durability                                                                                                                                                                                                           |
-| `session_persistence.batch_size`                 | Durable sessions consume MQTT messages from the storage in batches. This parameter controls maximum size of the batch.                                                                                                               |
-| `session_persistence.idle_poll_interval`         | This parameter controls how often the durable sessions query the storage for the new messages. When new messages are found, the sessions ask for the next batch immediately (as long as the client has space in the in-flight queue) |
-| `session_persistence.last_alive_update_interval` | Session heartbeat interval. On each heartbeat the sessions save their metadata (such as list of subscriptions, acked packet IDs) to the durable storage.                                                                             |
-| `session_persistence.renew_streams_interval`     | This parameter defines how often sessions query the durable storage for the new streams.                                                                                                                                             |
-| `session_persistence.session_gc_interval`        | This parameter defines how often EMQX sweeps through the sessions and deletes the expired ones.                                                                                                                                      |
-| `session_persistence.message_retention_period`   | This parameter defines the retention period of MQTT messages in the durable storage. Note: this parameter is global.                                                                                                                 |
+| Parameter                                     | Description                                                                                                                                                                                                                          |
+|-----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `durable_sessions.enable`                     | Enables session durability. Note: this setting cannot be changed in the runtime. EMQX node should be restarted for it to take an effect.                                                                                             |
+| `durable_sessions.batch_size`                 | Durable sessions consume MQTT messages from the storage in batches. This parameter controls maximum size of the batch.                                                                                                               |
+| `durable_sessions.idle_poll_interval`         | This parameter controls how often the durable sessions query the storage for the new messages. When new messages are found, the sessions ask for the next batch immediately (as long as the client has space in the in-flight queue) |
+| `durable_sessions.last_alive_update_interval` | Session heartbeat interval. On each heartbeat the sessions save their metadata (such as list of subscriptions, acked packet IDs) to the durable storage.                                                                             |
+| `durable_sessions.renew_streams_interval`     | This parameter defines how often sessions query the durable storage for the new streams.                                                                                                                                             |
+| `durable_sessions.session_gc_interval`        | This parameter defines how often EMQX sweeps through the sessions and deletes the expired ones.                                                                                                                                      |
+| `durable_sessions.message_retention_period`   | This parameter defines the retention period of MQTT messages in the durable storage. Note: this parameter is global.                                                                                                                 |
 
 
 The following parameters can be overridden per zone:
 
-- `session_persistence.enable`
-- `session_persistence.batch_size`
-- `session_persistence.idle_poll_interval`
-- `session_persistence.renew_streams_interval`
+- `durable_sessions.enable`
+- `durable_sessions.batch_size`
+- `durable_sessions.idle_poll_interval`
+- `durable_sessions.renew_streams_interval`
 
 ### Durable storage configuration
 
@@ -69,7 +69,7 @@ Layout configuration, contained under the `durable_storage.<DS>.layout` sub-tree
 
 Wildcard-optimized layout is designed to maximize the efficiency of wildcard subscriptions covering large numbers of topics.
 It accumulates the knowledge about the topic structure in the background over time, and uses a very lightweight machine learning algorithm to predict what wildcard topic filters the clients are likely to subscribe to.
-Then it uses this information to groups such topics together into a single stream that can be efficiently consumed in a single batch.
+Then it uses this information to group such topics together into a single stream that can be efficiently consumed in a single batch.
 
 
 | Parameter              | Description                             |
@@ -113,27 +113,34 @@ Example:
 $ emqx_ctl ds info
 
 THIS SITE:
-B2A7DBB2413CD6EE
+D8894F95DC86DFDB
 
 SITES:
-B2A7DBB2413CD6EE    'emqx@127.0.0.1'    up
+5C6028D6CE9459C7    'emqx@n2.local'        up
+D8894F95DC86DFDB    'emqx@n1.local'        up
+F4E92DEA197C8EBC    'emqx@n3.local'    (x) down
 
 SHARDS:
-Id                             Replicas
-emqx_persistent_message/0      B2A7DBB2413CD6EE
-emqx_persistent_message/1      B2A7DBB2413CD6EE
-emqx_persistent_message/10     B2A7DBB2413CD6EE
-emqx_persistent_message/11     B2A7DBB2413CD6EE
-emqx_persistent_message/12     B2A7DBB2413CD6EE
-emqx_persistent_message/2      B2A7DBB2413CD6EE
-emqx_persistent_message/3      B2A7DBB2413CD6EE
-emqx_persistent_message/4      B2A7DBB2413CD6EE
-emqx_persistent_message/5      B2A7DBB2413CD6EE
-emqx_persistent_message/6      B2A7DBB2413CD6EE
-emqx_persistent_message/7      B2A7DBB2413CD6EE
-emqx_persistent_message/8      B2A7DBB2413CD6EE
-emqx_persistent_message/9      B2A7DBB2413CD6EE
+Shard                             Replicas
+messages/0                        5C6028D6CE9459C7
+messages/1                        5C6028D6CE9459C7
+messages/10                       5C6028D6CE9459C7
+messages/11                       5C6028D6CE9459C7
+messages/2                        5C6028D6CE9459C7
+messages/3                        5C6028D6CE9459C7
+messages/4                        5C6028D6CE9459C7
+messages/5                        5C6028D6CE9459C7
+messages/6                        5C6028D6CE9459C7
+messages/7                        5C6028D6CE9459C7
+messages/8                        5C6028D6CE9459C7
+messages/9                        5C6028D6CE9459C7
 ```
+
+The output of this command is comprised of several sections:
+
+- `THIS SITE`:  ID of the site claimed by the local EMQX node
+- `SITES`: list of all known sites together with names of the EMQX nodes claiming them, and their statuses
+- `SHARDS`: list of durable storage shards and sites IDs where their replicas are located
 
 ### `emqx_ctl ds set_replicas <DS> <Site1> <Site2> ...`
 
@@ -147,18 +154,56 @@ Updating the list of durable storage replicas is a costly operation, since it ma
 Example:
 
 ```bash
-$ emqx_ctl ds info
-THIS SITE:
-B2A7DBB2413CD6EE
-
-SITES:
-B2A7DBB2413CD6EE    'emqx@127.0.0.1'    up
-A1DDBBB24BBCDA23    'emqx@127.0.0.1'    up
-...
-
-$ bin/emqx_ctl ds set_replicas emqx_persistent_message B2A7DBB2413CD6EE A1DDBBB24BBCDA23
+$ emqx_ctl ds set_replicas messages 5C6028D6CE9459C7 D8894F95DC86DFDB F4E92DEA197C8EBC
 ok
 ```
+
+After execution of this command the output of `ds info` may look like this:
+
+```bash
+$ emqx_ctl ds info
+
+THIS SITE:
+D8894F95DC86DFDB
+
+SITES:
+5C6028D6CE9459C7    'emqx@n2.local'        up
+D8894F95DC86DFDB    'emqx@n1.local'        up
+F4E92DEA197C8EBC    'emqx@n3.local'        up
+
+SHARDS:
+Shard                             Replicas
+messages/0                        5C6028D6CE9459C7      D8894F95DC86DFDB
+messages/1                        5C6028D6CE9459C7      D8894F95DC86DFDB
+messages/10                       5C6028D6CE9459C7
+messages/11                       5C6028D6CE9459C7      D8894F95DC86DFDB
+messages/2                        5C6028D6CE9459C7      D8894F95DC86DFDB
+messages/3                        5C6028D6CE9459C7
+messages/4                        5C6028D6CE9459C7      D8894F95DC86DFDB
+messages/5                        5C6028D6CE9459C7      D8894F95DC86DFDB
+messages/6                        5C6028D6CE9459C7
+messages/7                        5C6028D6CE9459C7      D8894F95DC86DFDB
+messages/8                        5C6028D6CE9459C7      D8894F95DC86DFDB
+messages/9                        5C6028D6CE9459C7
+
+REPLICA TRANSITIONS:
+Shard                         Transitions
+messages/0                    +F4E92DEA197C8EBC
+messages/1                    +F4E92DEA197C8EBC
+messages/10                   +F4E92DEA197C8EBC  +D8894F95DC86DFDB
+messages/11                   +F4E92DEA197C8EBC
+messages/2                    +F4E92DEA197C8EBC
+messages/3                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
+messages/4                    +F4E92DEA197C8EBC
+messages/5                    +F4E92DEA197C8EBC
+messages/6                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
+messages/7                    +F4E92DEA197C8EBC
+messages/8                    +F4E92DEA197C8EBC
+messages/9                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
+```
+
+Note a new section `REPLICA TRANSITIONS` containing the list of pending operations.
+Once all pending operations are complete, this list becomes empty.
 
 ### `emqx_ctl ds join <DS> <Site>` / `emqx_ctl ds leave <DS> <Site>`
 
@@ -168,7 +213,7 @@ They are similar to `set_replicas` command, but update one site at a time.
 Example:
 
 ```bash
-$ bin/emqx_ctl ds join emqx_persistent_message B2A7DBB2413CD6EE
+$ bin/emqx_ctl ds join messages B2A7DBB2413CD6EE
 ok
 ```
 

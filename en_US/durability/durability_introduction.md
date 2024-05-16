@@ -3,6 +3,11 @@
 Starting from release v5.7, EMQX contains an embedded durable storage for MQTT sessions and messages.
 This page gives a high-level introduction of the session durability feature in EMQX and how it ensures the resumption of sessions after restart of EMQX nodes.
 
+:::warning
+EMQX v5.7.0 don't support shared subscriptions for the durable sessions yet.
+This feature will be implemented in a later release.
+:::
+
 ## Types of Client Sessions in EMQX
 
 According to the MQTT standard, client sessions facilitate the management of client connections and states within the MQTT broker.
@@ -27,11 +32,11 @@ EMQX contains two alternative implementations for the client sessions, optimized
 - **RAM**
 - **Durable**
 
-Choice of the implementation depends on the type of the session (persistent or ephemeral) and the value of `session_persistence.enable` configuration parameter, global or per zone.
+Choice of the implementation depends on the type of the session (persistent or ephemeral) and the value of `durable_sessions.enable` configuration parameter, global or per zone.
 
 Implementation is chosen according to the following rule:
 
-| `session_persistence.enable` | Ephemeral | Persistent |
+| `durable_sessions.enable` | Ephemeral | Persistent |
 |------------------------------|-----------|------------|
 | `false`                      | RAM       | RAM        |
 | `true`                       | RAM       | durable    |
@@ -57,7 +62,7 @@ They also have some disadvantages:
 
 Durable sessions is an implementation of the client session introduced in EMQX v5.7.
 State of durable sessions, as well as messages routed to the durable sessions are stored on disk.
-This session implementation is disabled by default. It can be enabled by setting `session_persistence.enable` configuration parameter to `true`.
+This session implementation is disabled by default. It can be enabled by setting `durable_sessions.enable` configuration parameter to `true`.
 
 The session persistence feature ensures robust durability and high availability by consistently replicating session metadata and MQTT messages sent to the durable sessions across multiple nodes within an EMQX cluster.
 The configurable [replication factor](./managing-replication.md#replication-factor) determines the number of replicas for each message or session, enabling users to customize the balance between durability and performance to meet their specific requirements.
@@ -96,7 +101,7 @@ A shard is also a unit of replication, and EMQX ensures that each shard is consi
 
 #### Generation
 
-Messages within a shard are further segmented into generations corresponding to specific time frames. New messages are written only into the current generation, while the previous generations are only accessible for reading. EMQX cleans up old messages by deleting old generations in their entirety. The retention period of the older generations is defined by the `session_persistence.message_retention_period` parameter.
+Messages within a shard are further segmented into generations corresponding to specific time frames. New messages are written only into the current generation, while the previous generations are only accessible for reading. EMQX cleans up old messages by deleting old generations in their entirety. The retention period of the older generations is defined by the `durable_sessions.message_retention_period` parameter.
 
 Different generations can organize the data differently, according to the *storage layout* specification. Currently, only one layout is supported, optimized for managing the high throughput of wildcard subscriptions spanning a large number of topics and single-topic subscriptions. Future updates will introduce additional layouts to optimize for the different types of workloads, such as prioritizing low latency over high throughput for certain applications.
 
@@ -107,7 +112,7 @@ Each layout engine can define its own set of configuration parameters, depending
 
 Messages in each shard and generation are split into streams. Streams serve as units of message serialization in EMQX. Streams can contain messages from multiple topics. Various storage layouts can employ different strategies for mapping topics into streams.
 
-Persistent sessions interact with this structure by fetching messages in batches from the streams, with the batch size adjustable via the `session_persistence.batch_size` parameter.
+Persistent sessions interact with this structure by fetching messages in batches from the streams, with the batch size adjustable via the `durable_sessions.batch_size` parameter.
 
 ### Session Persistence Across Cluster
 
@@ -122,6 +127,6 @@ When session persistence is enabled, EMQX saves the metadata of persistent sessi
 
 The storage requirements can be estimated according to the following guidelines:
 
-- **Message Storage**: The space required for storing messages on each replica is proportional to the rate of incoming messages multiplied by the duration specified by the `session_persistence.message_retention_period` parameter. This parameter dictates how long messages are retained, influencing the total storage needed.
+- **Message Storage**: The space required for storing messages on each replica is proportional to the rate of incoming messages multiplied by the duration specified by the `durable_sessions.message_retention_period` parameter. This parameter dictates how long messages are retained, influencing the total storage needed.
 - **Session Metadata Storage**: The amount of storage for session metadata is proportional to the number of sessions multiplied by the number of streams to which they are subscribed.
 - **Stream Calculation**: The number of streams is proportional to the number of shards. It also depends (in a non-linear fashion) on the number of topics. EMQX automatically combines topics that have a similar structure into the same stream, ensuring that the number of streams doesn't grow too fast with the number of topics, minimizing the volume of metadata stored per session.

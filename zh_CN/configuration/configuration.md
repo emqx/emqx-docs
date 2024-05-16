@@ -260,7 +260,7 @@ EMQX 中的 Zone 是一种配置分组的概念。可以通过将监听器的 `z
 - `force_shutdown`：强制关闭策略。
 - `force_gc`：Erlang 进程垃圾回收的微调。
 - `flapping_detect`：客户端抖动检测。
-- `session_persistence`：会话持久性设置，例如在特定 Zone 启用 MQTT 会话的持久存储。
+- `durable_sessions`：会话持久性设置，例如在特定 Zone 启用 MQTT 会话的持久存储。
 
 在 EMQX 版本 5 中，默认配置文件没有包含任何 Zone，这与版本 4 不同，在版本 4 中有两个默认 Zone：`internal` 和 `external`。
 
@@ -279,7 +279,7 @@ zones {
       # Zone 特定的配置
       ...
     }
-    session_persistence {
+    durable_sessions {
       # 仅为该 Zone 的会话启用持久存储
       ...
     }

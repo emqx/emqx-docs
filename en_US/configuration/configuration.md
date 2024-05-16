@@ -265,7 +265,7 @@ The following configuration items can be overridden at the zone level:
 - `force_shutdown`: Policies for forced shutdowns.
 - `force_gc`: Fine-tuning for Erlang process garbage collection.
 - `flapping_detect`: Detection of client flapping.
-- `session_persistence`: Session persistence settings, such as enabling durable storage for MQTT sessions in a specific zone.
+- `durable_sessions`: Session persistence settings, such as enabling durable storage for MQTT sessions in a specific zone.
 
 In EMQX version 5, the default configuration file does not include any zones, which differs from version 4, where there are two default zones: `internal` and `external`.
 
@@ -284,8 +284,9 @@ zones {
       # Configuration specific to this zone
       ...
     }
-    session_persistence {
+    durable_sessions {
       # Enable durable storage for sessions in this zone
+      enable = true
       ...
     }
   }
