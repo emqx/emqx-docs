@@ -51,7 +51,7 @@ my_emqx_plugin
 ├── priv
 │   ├── config.hocon
 │   ├── config_i18n.json.example
-│   └── config_schmea.avsc.example
+│   └── config_schema.avsc.example
 ├── rebar.config
 └── src
     ├── emqx_cli_demo.erl
