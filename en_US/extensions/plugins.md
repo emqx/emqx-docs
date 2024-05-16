@@ -102,7 +102,7 @@ load(Env) ->
   ok.
 ```
 
-Here, `on_client_authenticate/3` handles client authentication, while `on_client_authorize/5` manages access control. 
+Here, `on_client_authenticate/3` handles client authentication, while `on_client_authorize/5` manages access control.
 
 As one hook function may be mounted by both EMQX and customized plugins, you need to specify the execution order when mounting it to the plugin.  `HP_HIGHEST` specifies that the current hook function has the highest priority and is executed first.
 
@@ -207,7 +207,7 @@ Declarative UI components enable dynamic form rendering within the Dashboard, ac
 
 - `component`<br />
   Required. Specifies the component type for displaying and configuring data of different values and types. Supported components include:
-  
+
   | Component Name     | Description                                                  |
   | :----------------- | :----------------------------------------------------------- |
   | `input`            | Text input box for short texts or strings                    |
@@ -232,7 +232,7 @@ Declarative UI components enable dynamic form rendering within the Dashboard, ac
   Optional. Specifies the supported data formats, such as `sql` or `json`.
 - `options` (Applicable only for `select` component)<br />
   Optional. Lists the selectable options, aligned with the symbols in the Avro Schema. Example:
-  
+
   ```json
   [
     {
@@ -247,7 +247,7 @@ Declarative UI components enable dynamic form rendering within the Dashboard, ac
   ```
 - `items` (Applicable only for maps-editor component)<br />
   Optional. When using the maps-editor component, specify the field name and description of the items in the form. For example:
-  
+
   ```json
   {
     "items": {
@@ -266,7 +266,7 @@ Declarative UI components enable dynamic form rendering within the Dashboard, ac
   ```
 - `rules`<br />
   Optional. Defines validation rules for the field, where multiple rules can be configured. Supported types include:
-  
+
   - `pattern`: Requires a regular expression for validation.
   - `range`: Validates numeric input within a specified range. This validation can be configured with both a minimum value (`min`) and a maximum value (`max`), which can be set either together or independently.
   - `length`: Validates the character count of input, ensuring it falls within a specified range. This validation rule allows for the configuration of both a minimum length (`minLength`) and a maximum length (`maxLength`), which can be set either together or individually.
@@ -281,7 +281,7 @@ The following are several example snippets. For more detailed examples, refer to
     "rules": [
     {
       "type": "pattern",
-      "pattern": "^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\\\\\\\-]{0,61}[a-zA-Z0-9])(\\\\\\\\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\\\\\\\-]{0,61}[a-zA-Z0-9]))*$",
+      "pattern": "^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])(\\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9]))*$",
       "message": "$hostname_validate"
     }
   ]
@@ -312,7 +312,7 @@ The following are several example snippets. For more detailed examples, refer to
     },
     {
       "type": "pattern",
-      "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\\\\\d)[a-zA-Z\\\\\\\\d]*$",
+      "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]*$",
       "message": "$password_validate"
     }
   ]
