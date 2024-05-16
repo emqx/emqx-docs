@@ -332,10 +332,10 @@
       path: data-integration/s3
     - title_en: Azure Event Hubs
       title_cn: Azure Event Hubs
-      path: data-integration/data-bridge-azure-event-hub   
+      path: data-integration/data-bridge-azure-event-hub
     - title_en: Cassandra
       title_cn: Cassandra
-      path: data-integration/data-bridge-cassa 
+      path: data-integration/data-bridge-cassa
     - title_en: ClickHouse
       title_cn: ClickHouse
       path: data-integration/data-bridge-clickhouse
@@ -356,7 +356,7 @@
       path: data-integration/data-bridge-greptimedb
     - title_en: HStreamDB
       title_cn: HStreamDB
-      path: data-integration/data-bridge-hstreamdb      
+      path: data-integration/data-bridge-hstreamdb
     - title_en: HTTP Server
       title_cn: HTTP Server
       path: data-integration/data-bridge-webhook
@@ -584,6 +584,8 @@
     - title_en: Durable MQTT Sessions and Messages
       title_cn: MQTT 会话与消息持久化
       path: durability/durability_introduction
+      children:
+        - durability/managing-replication
     - title_en: Multi-Protocol Gateway
       title_cn: 多协议网关
       path: gateway/gateway
