@@ -181,14 +181,13 @@ In the following configuration, the `debug` value of `level` defined in the last
 
 ```bash
 log {
-  console_handler{
-    enable = true
+  console {
     level = error
   }
 }
 
 ## Set the console log printing level to debug, and keep the other configurations
-log.console_handler.level = debug
+log.console.level = debug
 ```
 
 The packet size limit was first set to 1MB, then overridden to 10MB:

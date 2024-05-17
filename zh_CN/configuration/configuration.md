@@ -175,14 +175,13 @@ EMQX 配置按以下顺序进行优先级排序：环境变量 > emqx.conf > API
 
 ```bash
 log {
-  console_handler{
-    enable = true
+  console {
     level = error
   }
 }
 
 ## 将 console 日志打印级别设置为 debug，其他配置保持不变
-log.console_handler.level = debug
+log.console.level = debug
 ```
 
 报文大小限制最先被设置成 1MB，后被覆写为 10MB：
