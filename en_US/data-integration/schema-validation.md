@@ -1,6 +1,6 @@
 ## Schema Validation
 
-EMQX includes built-in schema validation capabilities to ensure that only messages conforming to predefined data formats are published to subscribers from specified topics. schema validation supports multiple schema formats such as JSON Schema, Protobuf, and Avro and built-in SQL statement validation. This page describes the schema validation feature and how to use it.
+EMQX includes built-in schema validation capabilities to ensure that only messages conforming to predefined data formats are published to subscribers from specified topics. Schema validation supports multiple schema formats such as JSON Schema, Protobuf, and Avro and built-in SQL statement validation. This page describes the schema validation feature and how to use it.
 
 ## Introduction
 
@@ -48,7 +48,7 @@ This section demonstrates how to configure the schema validation feature and how
 
 ### Configure Schema Validation in Dashboard
 
-This section demonstrates how to create and configure a message validator in the Dashboard.
+This section demonstrates how to create and configure a schema validator in the Dashboard.
 
 1. Click on **Integrations** -> **Schema Validation** in the left navigation of the Dashboard.
 2. Click **Create** at the top right of the **Schema Validation** page.
@@ -60,7 +60,7 @@ This section demonstrates how to create and configure a message validator in the
      - **Validation Strategy**: Specify the relationship between multiple validation strategies.
        - **All Pass** (by default): Considered passing only when all validation methods pass.
        - **Any Pass**: Stops further validation and is considered passing if any validation method passes.
-     - **Validation List**: select the schema from the **Type** dropdown, and add Schema or SQL. For how to create each type of Schema, see [Create Validation Schema](#create-validation-schema).
+     - **Validation List**: select the schema from the **Type** dropdown, and add schema or SQL. For how to create a schema, see [Create Validation Schema](#create-validation-schema).
    - **Validation Failure Operation**: 
      - **Action After Failure**: Select the actions to perform if validation fails:
        - **Drop Message**: Terminate the publish and discard the message, returning a specific reason code for QoS 1 and QoS 2 messages via PUBACK.
@@ -79,7 +79,7 @@ For configuration details, see [Configuration Manual](https://docs.emqx.com/en/e
 
 ### Create Validation Schema
 
-Requirements for the JSON Schema:
+This section demonstrates how to create a validation schema, using JSON Schema as an example. The JSON Schema must meet the following requirements:
 
 - The JSON object must include a property named `temp`.
 - The `temp` property must be an integer.
@@ -101,17 +101,21 @@ Requirements for the JSON Schema:
 
 ### Test Schema Validation Setup
 
-Test method:
+You can use the example schema created in [Creating Validation Schema](#create-validation-schema) to test your schema validation setup.
+
+Use [mqttx](https://mqttx.app/cli) to publish a message with a payload that conforms to the MQTT message rules:
 
 ```bash
-# Fails
-mqttx pub -t t/1 -m '{"temp": 100}'
-
-# Passes
 mqttx pub -t t/1 -m '{"temp": 102}'
 ```
 
-When validation fails, output the log:
+Use mqttx to publish a message with a payload that does not conform to the MQTT message rules:
+
+```bash
+mqttx pub -t t/1 -m '{"temp": 100}'
+```
+
+The log output should look like the following:
 
 ```bash
 2024-05-16T06:24:10.733827+00:00 [warning] tag: SCHEMA_VALIDATION, clientid: mqttx_1db4547e, msg: validation_failed, peername: 127.0.0.1:40850, action: drop, validation: <<"check-json">>
