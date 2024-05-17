@@ -79,8 +79,6 @@ For configuration details, see [Configuration Manual](https://docs.emqx.com/en/e
 
 ### Create Validation Schema
 
-
-
 Requirements for the JSON Schema:
 
 - The JSON object must include a property named `temp`.
@@ -113,9 +111,11 @@ mqttx pub -t t/1 -m '{"temp": 100}'
 mqttx pub -t t/1 -m '{"temp": 102}'
 ```
 
-Printed log:
+When validation fails, output the log:
 
-<!-- to be added-->
+```bash
+2024-05-16T06:24:10.733827+00:00 [warning] tag: SCHEMA_VALIDATION, clientid: mqttx_1db4547e, msg: validation_failed, peername: 127.0.0.1:40850, action: drop, validation: <<"check-json">>
+```
 
 ### REST API
 
