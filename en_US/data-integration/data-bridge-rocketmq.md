@@ -10,6 +10,12 @@ EMQX supports bridging data into [RocketMQ](https://rocketmq.apache.org/), so yo
 
 This page provides a detailed overview of the data integration between EMQX and RocketMQ with practical instructions on creating and validating the data integration.
 
+::: tip Note
+
+This data integration does not support batch mode when using the Alibaba Cloud-hosted RockstMQ service.
+
+:::
+
 ## How It Works
 
 The RocketMQ data integration is an out-of-the-box feature in EMQX that combines the real-time data capturing and transmission capabilities of EMQX with RocketMQ's powerful message queue processing capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to RocketMQ for storage and management, eliminating the need for complex coding.
