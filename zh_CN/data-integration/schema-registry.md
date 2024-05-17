@@ -1,18 +1,18 @@
-# 编解码
+# Schema
 
 物联网设备终端种类繁杂，各厂商使用的编码格式各异，所以在接入物联网平台的时候就产生了统一数据格式的需求，以便平台之上的应用进行设备管理。
 
 Schema Registry 管理编解码使用的 Schema、处理编码或解码请求并返回结果。Schema Registry 配合规则引擎，可适配各种场景的设备接入和规则设计。
 
-EMQX Schema Registry 目前可支持以下格式的编解码：
+EMQX Schema Registry 目前可支持以下格式的 Schema：
 
-- [Avro](https://avro.apache.org) 
+- [Avro](https://avro.apache.org)
 - [Protobuf](https://developers.google.com/protocol-buffers/)
 - [JSON Schema](https://json-schema.org/)
 
 Avro 和 Protobuf 是依赖 Schema 的数据格式，编码后的数据为二进制，解码后为 [Map 格式](#规则引擎内部数据格式-map)。解码后的数据可直接被规则引擎和其他插件使用。Schema Registry 为 Avro 和 Protobuf 等内置编码格式维护 Schema 文本。
 
-JSON schema 可以用来验证输入的 JSON 对象是否遵循了 schema 定义，或者在将数据输出到下游之前，规则引擎输出的 JSON 对象是否有效。
+JSON Schema 可以用来验证输入的 JSON 对象是否遵循了 schema 定义，或者在将数据输出到下游之前，规则引擎输出的 JSON 对象是否有效。
 
 下图展示了 Schema Registry 的一个应用案例。多个设备上报不同格式的数据，经过 Schema Registry 解码之后，变为统一的内部格式，然后转发给后台应用。
 
@@ -20,7 +20,7 @@ JSON schema 可以用来验证输入的 JSON 对象是否遵循了 schema 定义
 
 ## 架构设计
 
-Schema Registry 既可以解码，也可以编码。Schema Registry 为 Avro 和 Protobuf 内置编码格式维护 Schema 文本。Schema API 提供了通过 Schema Name 的添加、查询和删除操作，因此编码和解码时需要指定 Schema Name。
+EMQX 可以将 Schema 用于消息的编码、解码，以及验证发布的消息是否符合 Schema 规范。Schema Registry 为 Avro 和 Protobuf 内置编码格式维护 Schema 文本。Schema API 提供了通过 Schema Name 的添加、查询和删除操作，因此编码和解码时需要指定 Schema Name。
 
 ![schema_registry1](./assets/schema_registry1.svg)
 
@@ -62,7 +62,7 @@ EMQX 的 PUB/SUB 系统将消息路由到指定的主题。规则引擎可以灵
 
 规则引擎内部使用的数据格式为 Erlang Map，所以如果原数据内容为二进制或者其他格式，必须使用编解码函数(比如上面提到的 schema_decode 和 json_decode 函数) 将其转换为 Map。
 
-Map 是一个 Key-Value 形式的数据结构，形如 #{key => value}。例如，`user = #{id => 1, name => "Steve"} ` 定义了一个 `id` 为 `1`，`name` 为 `"Steve"` 的 `user` Map。
+Map 是一个 Key-Value 形式的数据结构，形如 #{key => value}。例如，`user = #{id => 1, name => "Steve"}` 定义了一个 `id` 为 `1`，`name` 为 `"Steve"` 的 `user` Map。
 
 SQL 语句提供了 "." 操作符嵌套地提取和添加 Map 字段。下面是使用 SQL 语句对这个 Map 操作的示例:
 

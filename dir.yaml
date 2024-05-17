@@ -290,22 +290,22 @@
     - data-integration/rule-sql-jq
     # - data-integration/rule-sql-user-defined-function
     - title_en: Schema Registry
-      title_cn: 编解码
+      title_cn: Schema
       path: data-integration/schema-registry
       edition: ee
       collapsed: true
       children:
         - data-integration/schema-registry-example-avro
         - data-integration/schema-registry-example-protobuf
-    - title_en: Sparkplug
-      title_cn: Sparkplug
-      path: data-integration/sparkplug
-      edition: ee
     - title_en: Schema Validation
       title_cn: Schema 验证
       path: data-integration/schema-validation
       edition: ee
-      
+    - title_en: Sparkplug
+      title_cn: Sparkplug
+      path: data-integration/sparkplug
+      edition: ee
+  
 - title_en: Flow Designer
   title_cn: Flow 设计器
   path: flow-designer/introduction

@@ -10,7 +10,7 @@
 
 ### 创建 Schema
 
-1. 在 Dashboard 左侧导航栏中选择**数据集成** -> **编解码**。
+1. 在 Dashboard 左侧导航栏中选择**数据集成** -> **Schema**。
 
 2. 使用下面的参数创建一个 Avro Schema：
 
