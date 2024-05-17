@@ -74,10 +74,6 @@ The attribute expression supports the configuration of the following values:
 
 - `user_property.*`: Extracts attribute values from User-Property in the MQTT CONNECT packet, e.g., `user_property.foo`
 
-- `ip_address`: The source IP of the client
-
-- `port`: The source port number of the client
-
 - `zone`: The zone name inherited from MQTT listener
 
 {% emqxce %}

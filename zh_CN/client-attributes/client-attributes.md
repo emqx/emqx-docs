@@ -66,8 +66,6 @@ mqtt {
 - `cn`：TLS 证书的 CN 字段
 - `dn`：TLS 证书的 DN 字段
 - `user_property.*`：从 MQTT CONNECT 数据包的 User-Property 中提取属性值，例如 `user_property.foo`
-- `ip_address`：客户端的源 IP 地址
-- `port`：客户端的源端口号
 - `zone`：继承自 MQTT 监听器的 zone 名称
 
 {% emqxce %}
