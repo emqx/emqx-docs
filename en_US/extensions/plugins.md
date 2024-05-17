@@ -187,7 +187,8 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 :::
 {% endemqxce %}
 
-EMQX Enterprise version 5.7.0 introduced Avro Schema for plugins, enhancing the ability to update plugin configurations dynamically during runtime. This feature also allows for the declaration of a user interface in the schema, enabling the EMQX Dashboard to dynamically generate configuration forms for easier management.
+EMQX version 5.7.0 introduced REST API for plugin configuration management and Avro Schema for configuration validation, enhancing the ability to update plugin configurations dynamically during runtime.
+For Enterprise edition, it also allows the declaration of a user interface in the schema, enabling the EMQX Dashboard to dynamically generate configuration forms for easier management.
 
 ::: tip **Tip**
 
