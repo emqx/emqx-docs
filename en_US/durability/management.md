@@ -1,4 +1,4 @@
-# Operation and management
+# Configure and Manage Durable Storage 
 
 This document describes configuration, and operation and management interfaces related to the durable sessions.
 
