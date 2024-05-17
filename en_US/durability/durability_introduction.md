@@ -37,9 +37,9 @@ Choice of the implementation depends on the type of the session (persistent or e
 Implementation is chosen according to the following rule:
 
 | `durable_sessions.enable` | Ephemeral | Persistent |
-|------------------------------|-----------|------------|
-| `false`                      | RAM       | RAM        |
-| `true`                       | RAM       | durable    |
+|---------------------------|-----------|------------|
+| `false`                   | RAM       | RAM        |
+| `true`                    | RAM       | durable    |
 
 ### RAM Client Sessions
 
