@@ -40,7 +40,7 @@ When a message is published, it is validated against predefined rules. If valida
    - **Disconnect and Discard Message**: Discard the message and disconnect the publishing client.
    - **Ignore**: No additional actions are taken.
 
-   Regardless of the configured action, a log entry can be generated upon validation failure; users can configure the log's output level, which defaults to `warning`. A validation failure can also trigger a rule engine event `$events/message_cluster_validation_failed`, allowing users to catch this event for custom handling, such as publishing the erroneous message to another topic or sending it to Kafka for analysis.
+   Regardless of the configured action, a log entry can be generated upon validation failure; users can configure the log's output level, which defaults to `warning`. A validation failure can also trigger a rule engine event `$events/schema_validation_failed`, allowing users to catch this event for custom handling, such as publishing the erroneous message to another topic or sending it to Kafka for analysis.
 
 ## User Guide
 
