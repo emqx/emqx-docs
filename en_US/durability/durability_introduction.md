@@ -32,7 +32,7 @@ The implementation choice depends on the session type (persistent or ephemeral) 
 
 ::: tip
 
-For more information on zone, see [Zone Override](../configuration/confiugration.md#zone-override).
+For more information on zone, see [Zone Override](../configuration/configuration.md#zone-override).
 
 :::
 
