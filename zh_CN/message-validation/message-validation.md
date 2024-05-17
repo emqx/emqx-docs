@@ -120,7 +120,7 @@ mqttx pub -t t/1 -m '{"temp": 102}'
 使用 mqttx 发布一条消息 payload 不符合规则的 MQTT 消息：
 
 ```bash
-mqttx pub -t t/1 -m '{"temp": 102}'
+mqttx pub -t t/1 -m '{"temp": 100}'
 ```
 
 <!-- TODO 增加 log output -->
