@@ -176,6 +176,7 @@ EMQX 配置按以下顺序进行优先级排序：环境变量 > emqx.conf > API
 ```bash
 log {
   console {
+    enable = true
     level = error
   }
 }

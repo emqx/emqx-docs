@@ -182,6 +182,7 @@ In the following configuration, the `debug` value of `level` defined in the last
 ```bash
 log {
   console {
+    enable = true
     level = error
   }
 }
