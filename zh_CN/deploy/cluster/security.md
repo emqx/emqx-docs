@@ -56,9 +56,17 @@ TLS 是以增加 CPU 负载和 RAM 使用为代价的。
 ```
 rpc {
   driver = ssl
-  certfile = /path/to/cert/domain.pem
-  cacertfile = /path/to/cert/ca.pem
-  keyfile = /path/to/cert/domain.key
+  # PEM format file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the cluster peers.
+  cacertfile = "/path/to/cert/ca.pem"
+  # PEM format file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
+  certfile = "/path/to/cert/domain.pem"
+  # PEM format file containing the private key corresponding to the SSL/TLS certificate
+  keyfile = "/path/to/cert/domain.key"
+  # Set to 'verify_peer' to verify the authenticity of the clients' certificates, otherwise 'verify_none'.
+  verify = verify_peer
+  # If set to true, the handshake fails if the peer does not have a certificate to send, that is, sends an empty certificate. If set to false, it fails only if the peer sends an invalid certificate (an empty certificate is considered valid).
+  fail_if_no_peer_cert = true
+
 }
 ```
 

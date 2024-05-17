@@ -130,7 +130,7 @@ Use the same schema as described in the [decoding scenario](#decoding-scenario).
    The key point here is `schema_encode('protobuf_person', json_decode(payload), 'Person')`:
 
    - The `schema_encode` function encodes the contents of the payload field according to the schema `protobuf_person`;
-   - `as person` stores the encoded value in the variable `person`;
+   - `as protobuf_person` stores the encoded value in the variable `protobuf_person`;
    - The last argument `Person` specifies that the message type in the payload is the `Person` type defined in the Protobuf schema.
    - `json_decode(payload)` is needed because `payload` is generally a JSON-encoded binary, and `schema_encode` requires a Map as its input.
 

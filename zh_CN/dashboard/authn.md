@@ -77,7 +77,7 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 
 #### JWT & JWKS
 
-选择使用 JWT 的认证方式话，无需选择数据源，可直接配置 JWT 的相关信息。设置 JWT 所需要的 Token 来源于客户端的 `username` 还是 `password` 字段。这样客户端连接时只需要将 Token 填充到对应的字段上，即可进行 JWT 认证。然后选择 JWT 的加密方式，根据加密方式不同来设置 `Secret` 或 `Public Key`，是否设置 `Secret` 为 Base64 编码，最后输入需要校验获取的信息在 `Payload` 中，就可以完成对 JWT 认证的配置。
+如果选择使用 JWT 的认证方式，则无需选择数据源，可直接配置 JWT 的相关信息。设置 JWT 所需要的 Token 来源于客户端的 `username` 还是 `password` 字段。这样客户端连接时只需要将 Token 填充到对应的字段上，即可进行 JWT 认证。然后选择 JWT 的加密方式，根据加密方式不同来设置 `Secret` 或 `Public Key`，是否设置 `Secret` 为 Base64 编码，最后输入需要校验获取的信息在 `Payload` 中，就可以完成对 JWT 认证的配置。
 
 选择 JWKS 可以从 `JWKS Endpoint` 上定期获取最新的 JWKS，JWKS 本质上就是一组公钥，它们将被用于验证授权服务器颁发并使用 RSA 或者 ECDSA 算法签名的任何 JWT，并配置 JWKS 的刷新间隔时间（单位为秒）。最后再配置 `Payload` 项即可完成 JWKS 的配置。
 

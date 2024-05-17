@@ -108,49 +108,49 @@ The following JSON will be printed if the table was created successfully.
 }
 ```
 
-## Create Rule for DynamoDB Sink
+## Create a Connector
 
-This section demonstrates how to create rules to specify the data to be saved into DynamoDB and add the action triggered by the rule. You need to create two different rules for messages forward and event records. 
+This section demonstrates how to create a connector to connect the Sink to the DynamoDB server.
 
-It assumes that you run both EMQX and DynamoDB on the local machine. If you have Dynamo and EMQX running remotely, adjust the settings accordingly.
+The following steps assume that you run both EMQX and DynamoDB on the local machine. If you have DynamoDB and EMQX running remotely, adjust the settings accordingly.
+
+1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+2. Click **Create** in the top right corner of the page.
+3. On the **Create Connector** page, select **DynamoDB** and then click **Next**.
+4. In the **Configuration** step, configure the following information:
+   - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_dynamodb`.
+   - **Database Url**: Enter `http://127.0.0.1:8000`, or the actual URL if the DynamoDB server is running remotely.
+   - **Table Name**: Enter `mqtt_msg`.
+   - **AWS Access Key ID**: Enter `root`.
+   - **AWS Secret Access Key**: Enter `public`.
+5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the DynamoDB server.
+7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to the DynamoDB and to record client events. For detailed steps, see [Create a Rule with DynamoDB Sink for Message Storage](#create-a-rule-with-dynamodb-sink-for-message-storage) and [Create a Rule with DynamoDB Sink for Events Recording](#create-a-rule-with-dynamodb-sink-for-events-recording).
+
+## Create a Rule with DynamoDB Sink for Message Storage
+
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and writing the processed data to the DynamoDB table `mqtt_msg` via a configured Sink. 
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
+3. Enter `my_rule` as the rule ID. To create a rule for message storage, enter the following statement in the **SQL Editor**, which means the MQTT messages under topic `t/#`  will be saved to DynamoDB.
 
-   - To create a rule for message storage, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to DynamoDB.
+   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
 
-     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
+   ```sql
+   SELECT 
+     *
+   FROM
+     "t/#"
+   ```
 
-     ```sql
-     SELECT 
-       *
-     FROM
-       "t/#"
-     ```
+   ::: tip
 
-   - To create a rule for online/offline status recording, input the following statement:
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-     ```sql
-     SELECT
-       str(event) + timestamp as id, *
-     FROM 
-       "$events/client_connected", "$events/client_disconnected"
-     ```
-
-     ::: tip
-
-     For convenience, the `mqtt_msg` topic will be reused to receive online/offline events.
-
-     :::
-     
-     ::: tip
-     
-     If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
-     
-     :::
+   :::
 
 4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to DynamoDB.
 
@@ -158,12 +158,7 @@ It assumes that you run both EMQX and DynamoDB on the local machine. If you have
 
 6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
 
-7. Enter the connection information:
-
-   - **Database Url**: Input `http://127.0.0.1:8000`, or the actual URL if the DynamoDB server is running remotely.
-   - **Table Name**: Input `mqtt_msg`.
-   - **AWS Access Key ID**: Input `root`.
-   - **AWS Secret Access Key**: Input `public`.
+7. Select the `my_dynamodb` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
 8. Leave the **Template** empty by default.
 
@@ -173,7 +168,7 @@ It assumes that you run both EMQX and DynamoDB on the local machine. If you have
 
    :::
 
-9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md).
+9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
 10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the server.
 
@@ -185,7 +180,28 @@ You have now successfully created the rule for forwarding data through the Dynam
 
 You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to DynamoDB after parsing by rule `my_rule`.
 
-### Test the Rule
+## Create a Rule with DynamoDB Sink for Events Recording
+
+This section demonstrates how to create a rule for recording the clients' online/offline status and writing the events data to the DynamoDB table `mqtt_msg` via a configured Sink.
+
+::: tip
+
+For convenience, the `mqtt_msg` topic will be reused to receive online/offline events.
+
+:::
+
+The rule and action creation steps are similar to those in [Create a Rule with DynamoDB Sink for Message Storage](#create-a-rule-with-dynamodb-sink-for-message-storage) except for the SQL rule syntax.
+
+The SQL rule syntax for online/offline status recording is as follows:
+
+```sql
+SELECT
+  str(event) + timestamp as id, *
+FROM 
+  "$events/client_connected", "$events/client_disconnected"
+```
+
+### Test the Rules
 
 Use MQTT X to send a message to topic `t/1` to trigger an online/offline event. 
 
@@ -193,7 +209,7 @@ Use MQTT X to send a message to topic `t/1` to trigger an online/offline event.
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello DynamoDB" }'
 ```
 
-Check the running status of the Sink, there should be one new incoming and one new outgoing message. 
+Check the running status of the Sinks, there should be 1 new incoming and 1 new outgoing message and 2 event records.
 
 Check whether the data is written into the `mqtt_msg`  data table. 
 

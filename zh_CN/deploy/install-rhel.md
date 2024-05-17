@@ -22,13 +22,20 @@ EMQX 支持通过 Yum 源安装，您可通过以下 Yum 命令从中自动下�
    curl -s https://assets.emqx.com/scripts/install-emqx-rpm.sh | sudo bash
    ```
 
-2. 运行以下命令安装 EMQX：
+2. 安装以下依赖项：
+
+   ```bash
+   yum install epel-release -y
+   yum install -y openssl11 openssl11-devel
+   ```
+
+3. 运行以下命令安装 EMQX：
 
    ```bash
    sudo yum install emqx -y
    ```
 
-3. 运行以下命令启动 EMQX：
+4. 运行以下命令启动 EMQX：
 
    ```bash
    sudo systemctl start emqx
@@ -76,27 +83,11 @@ EMQX 同时支持通过下载 rpm 安装包进行安装。本节以 CentOS 8 系
 
 ### 启动 EMQX
 
-您可通过如下 3 种方式启动 EMQX。
+启动为一个 systemd 服务：
 
-- 直接启动：
-
-  ```bash
-  $ emqx start
-  EMQX @CE_VERSION@ is started successfully!
-  
-  $ emqx ctl status
-  Node 'emqx@127.0.0.1' @CE_VERSION@ is started
-- systemctl 启动：
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- service 启动：
-
-  ```bash
-  sudo service emqx start
-  ```
+```bash
+sudo systemctl start emqx
+```
 
 ### 卸载 EMQX
 
@@ -150,7 +141,7 @@ EMQX 同时支持通过下载 tar.gz 安装包进行安装。本节以 CentOS 8 
 安装完成后，可通过如下命令启动 EMQX。
 
 ```bash
-./emqx/bin/emqx start
+./emqx/bin/emqx foreground
 ```
 
 {% endemqxce %}
@@ -161,56 +152,47 @@ EMQX 同时支持通过下载 tar.gz 安装包进行安装。本节以 CentOS 8 
 
 ## 通过 rpm 安装
 
-1. 前往 [EMQ 官网](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)，**版本**选择 `@EE_VERSION@`，**系统**选择 `CentOS`，点击**免费下载**按钮进入下载页面。
+1. 前往 [EMQX 官方下载页面](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)。
 
-2. 在安装与下载页面中，**安装方式**选择 `rpm`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
+2. 在**下载 EMQX Enterprise** 中，**版本**选择 `@EE_VERSION@`，**系统**选择 `CentOS`，点击**免费下载**按钮。
 
-### 启动 EMQX 
+3. 在安装与下载页面中，**安装方式**选择 `rpm`，选择合适的 **CPU 架构**，点击**立即下载**。
 
-您可通过如下 3 种方式启动 EMQX。 
-- 直接启动：
+   您也可以参照命令行指导步骤进行下载与安装。
 
-  ```bash
-  $ emqx start
-  EMQX @EE_VERSION@ is started successfully!
+### 启动 EMQX
 
-  $ emqx ctl status
-  Node 'emqx@127.0.0.1' @EE_VERSION@ is started
-  ```
+启动为一个 systemd 服务：
 
-- systemctl 启动：
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- service 启动：
-
-  ```bash
-  sudo service emqx start
-  ```
+```bash
+sudo systemctl start emqx
+```
 
 ### 卸载 EMQX
 
 服务完成后，可通过如下命令卸载 EMQX：
 
-  ```shell
-  sudo yum remove emqx
-  ```
+```shell
+sudo yum remove emqx
+```
 
 ## 通过 tar.gz 安装
 
 
-1. 前往 [EMQ 官网](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)，**版本**选择 `@EE_VERSION@`，**系统**选择 `CentOS`，点击**免费下载**按钮进入下载页面。
+1. 前往 [EMQX 官方下载页面](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=CentOS=currentOS=Centos8&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)。
 
-2. 在安装与下载页面中，**安装方式**选择 `tar.gz`，选择合适的 **CPU 架构**，按照提示进行下载与安装。
+2. 在**下载 EMQX Enterprise** 中，**版本**选择 `@EE_VERSION@`，**系统**选择 `CentOS`，点击**免费下载**按钮。
+
+3. 在安装与下载页面中，**安装方式**选择 `tar.gz`，选择合适的 **CPU 架构**，点击**立即下载**。
+
+   您也可以参照命令行指导步骤进行下载与安装。
 
 ### 启动 EMQX
 
 安装完成后，可通过如下命令启动 EMQX。
 
 ```
-./emqx/bin/emqx start
+./emqx/bin/emqx foreground
 ```
 
 {% endemqxee %}

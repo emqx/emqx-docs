@@ -42,10 +42,10 @@ node.name = emqx@s1.emqx.io
 node.name = emqx@192.168.0.10
 ```
 
-也可通过环境变量:
+也可通过环境变量。例如在 `docker run` 的 `-e` 选项，或者 systemd 的 `emqx.service` 文件中，使用如下环境变量：
 
 ```bash
-export EMQX_NODE__NAME=emqx@s1.emqx.io && ./bin/emqx start
+EMQX_NODE__NAME='emqx@s1.emqx.io'
 ```
 
 ::: tip

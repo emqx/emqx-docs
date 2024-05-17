@@ -188,37 +188,42 @@ This section demonstrates how to create a rule in EMQX to process messages from 
         FROM
           "root/#"
         ```
-    
-    - **Template-Described**
-    
-      With this approach, you can define a template in the **Write Data** section, including as many items as needed, each with the required contextual information per row. When this template is provided, the system will generate IoTDB data by applying it to the MQTT message. The template for writing data supports batch setting via CSV file. For details, refer to [Batch Setting](#batch-setting).
-    
-      For example, consider this template:
-    
-      | Timestamp | Measurement | Data Type | Value    |
-      | --------- | ----------- | --------- | -------- |
-      |           | index       | INT32     | ${index} |
-      |           | temperature | FLOAT     | ${temp}  |
-    
-      :::tip
-    
-      Each column supports placeholder syntax to fill it with variables.
-    
-      If the Timestamp is omitted, it will be automatically filled with the current system time in milliseconds.
-    
-      :::
-    
-      Then, your MQTT message can be structured as follows:
-    
-      ```json
-      {
-      "index": "42",
-      "temp": "32.67"
-      }
-      ```
 
-11. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
-12. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+        - **Template-Described**
+
+          With this approach, you can define a template in the **Write Data** section, including as many items as needed, each with the required contextual information per row. When this template is provided, the system will generate IoTDB data by applying it to the MQTT message. The template for writing data supports batch setting via CSV file. For details, refer to [Batch Setting](#batch-setting).
+
+          For example, consider this template:
+
+          | Timestamp | Measurement | Data Type | Value    |
+          | --------- | ----------- | --------- | -------- |
+          |           | index       | INT32     | ${index} |
+          |           | temperature | FLOAT     | ${temp}  |
+
+          :::tip
+
+          Each column supports placeholder syntax to fill it with variables.
+
+          If the Timestamp is omitted, it will be automatically filled with the current system time in milliseconds.
+
+          :::
+
+          Then, your MQTT message can be structured as follows:
+
+          ```json
+          {
+          "index": "42",
+          "temp": "32.67"
+          }
+          ```
+
+11. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
+
+12. Before clicking **Create**, you can click **Test Connectivity** to test if the Sink can be connected to the Apache IoTDB server.
+
+13. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+
+14. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new Apache IoTDB Sink. 
 
@@ -293,23 +298,23 @@ You can use the built-in WebSocket client in the EMQX dashboard to test your Apa
 
    - **Topic**: `root/sg27`
 
-   - **Payload**:
+     :::tip
 
+     If your topic does not start with `root` it will automatically be prefixed. For example, if you publish the message to `test/sg27` the resulting device name will be `root.test.sg27`. Make sure your rule and topic are configured correctly, so it forwards messages from that topic to the Sink.
+   
+     :::
+   
+   - **Payload**:
+   
      ```json
-     {
+    {
        "measurement": "temp",
-       "data_type": "FLOAT",
+    "data_type": "FLOAT",
        "value": "37.6"
-     }
+    }
      ```
 
    - **QoS**: `2`
-
-   :::tip
-
-   If your topic does not start with `root` it will automatically be prefixed. For example, if you publish the message to `test/sg27` the resulting device name will be `root.test.sg27`. Make sure your rule and topic are configured correctly, so it forwards messages from that topic to the Sink.
-
-   :::
 
 7. Click **Publish** to send the message.
 

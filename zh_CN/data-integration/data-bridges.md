@@ -89,7 +89,7 @@ EMQX 开源版中支持以下两种数据集成：
 - [Apache IoTDB](./data-bridge-iotdb.md)
 - [InfluxDB](./data-bridge-influxdb.md)
 - [OpenTSDB](./data-bridge-opents.md)
-- [TimescalesDB](./data-bridge-timescale.md)
+- [TimescaleDB](./data-bridge-timescale.md)
 
 **SQL**
 
@@ -107,6 +107,7 @@ EMQX 开源版中支持以下两种数据集成：
 - [MongoDB](./data-bridge-mongodb.md)
 - [Redis](./data-bridge-redis.md)
 - [TDengine](./data-bridge-tdengine.md)
+- [Elasticsearch](./elasticsearch.md)
 
 **消息队列**
 
@@ -115,6 +116,11 @@ EMQX 开源版中支持以下两种数据集成：
 - [Pulsar](./data-bridge-pulsar.md)
 - [RabbitMQ](./data-bridge-rabbitmq.md)
 - [RocketMQ](./data-bridge-rocketmq.md)
+
+**其他**
+
+- [SysKeeper](./syskeeper.md)
+- [Amazon S3](./s3.md)
 
 {% endemqxce %}
 
@@ -169,6 +175,7 @@ EMQX 支持与以下数据系统的集成：
 **其他**
 
 - [SysKeeper](./syskeeper.md)
+- [Amazon S3](./s3.md)
 
 {% endemqxee %}
 
@@ -196,7 +203,7 @@ Sink 借助以下特性以增强易用性、进一步提高数据集成的性能
 
 **问题：**
 
-- 数据写入时延较长：数据在达到设置的时间或条数之后才会被写入，时延较长。注意：您可以通过下方参数对设置时间或条数进行调整。
+- 数据写入时延较长：数据在达到设置的时间或条数之后才会被写入，时延较长。<!--注意：您可以通过下方参数对设置时间或条数进行调整。-->
 - 有一定延迟：在达到设置的时间或累积数据条数之前数据不会立即写入，可通过参数进行调整。
 
 ### 缓冲队列

@@ -4,7 +4,14 @@
 
 EMQX 支持两种不同的日志输出方式：控制台输出日志和文件输出日志。您可以根据需要选择输出方式或同时启用这两种方式。将日志数据输出到控制台或命令行界面通常在开发和调试过程中使用，这样开发人员能实时快速查看EMQX运行时的日志数据。将日志数据输出到文件通常在生产环境中使用，随着时间进展、日志数据能够被持久化以便进行分析和故障排除。
 
-此外，为避免日志数据过多或日志写入过慢等问题，EMQX 默认开启了过载保护机制，以确保正常业务不被日志影响。
+系统的默认日志处理行为可以通过环境变量 `EMQX_DEFAULT_LOG_HANDLER` 来配置，该环境变量接受以下设置：
+
+- `file`: 将日志输出定向到文件。
+- `console`: 将日志输出传送到控制台。
+
+环境变量 `EMQX_DEFAULT_LOG_HANDLER` 默认为 `console`，但当通过 systemd 的 emqx.service 文件启动 EMQX 时，会显式设置为 `file`。
+
+为避免日志数据过多或日志写入过慢等问题，EMQX 默认开启了过载保护机制，以确保正常业务不被日志影响。
 
 ## 日志级别
 
@@ -27,27 +34,9 @@ debug < info < notice < warning < error < critical < alert < emergency
 | alert     | 表示需要立即采取行动，以防止进一步的损失；此级别的日志记录将触发警报通知操作，并且可能导致应用程序的停止。 | 例如，应用程序已达到关键阈值，例如磁盘空间或内存耗尽，或关键系统进程已崩溃或停止响应。 |
 | emergency | 导致系统无法继续运行的严重错误；这种级别的日志通常只会在极少数情况下出现，并且需要立即对其进行处理。 | 例如，EMQX 节点间数据同步失败                                |
 
-## 修改日志配置
+## 通过 Dashboard 修改日志配置
 
-您可通过 EMQX Dashboard 或者配置文件修改日志配置。比如，如果您想要将级别为 warning 的日志输出到日志文件和控制台，您可以在 `emqx.conf` 文件中修改 `log` 下的配置项，参见下面示例。重启节点后配置生效。
-
-```bash
-log {
-  file_handlers.default {
-    level = warning
-    file = "log/emqx.log"
-    count = 10
-    max_size = 50MB
-    formatter = text
-  }
-  console_handler {
-    level = warning
-    formatter = text
-  }
-}
-```
-
-本章节将主要介绍如何通过 EMQX Dashboard 修改日志配置。保存修改后将立即生效，无需重启节点。
+本节将主要介绍如何通过 EMQX Dashboard 修改日志配置。保存修改后将立即生效，无需重启节点。
 
 点击左侧导航栏的 **管理**-> **日志**。选择相应的页签配置控制台输出日志或文件输出日志。
 
@@ -55,124 +44,157 @@ log {
 
 在**日志**页面，选择**控制台日志**页签。
 
-<img src="./assets/config-console-log-ee.png" alt="config-console-log-ee" style="zoom:40%;" />
+{% emqxee %}
 
-配置控制台日志处理进程的常规选项：
+<img src="./assets/config-console-log-1-ee.png" alt="config-console-log-1-ee" style="zoom:67%;" />
+
+{% endemqxee %}
+
+{% emqxce %}
+
+<img src="./assets/config-console-log-1-ce.png" alt="config-console-log-1-ce" style="zoom:67%;" />
+
+{% endemqxce %}
+
+配置控制台日志处理进程的选项：
 
 - **启用日志处理进程**：单击切换开关以启用控制台日志处理进程。
-
 - **日志级别**：从下拉列表中选择要使用的日志级别。可选值为：`debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` 。默认值为：`warning`。
-
-- **时间偏移量**：定义日志中时间戳的格式。默认情况下为 `system`。
-
-- **单条日志长度限制**：默认禁用，即不限制单条日志消息的最大长度。如果您启用切换开关，则可以指定最大长度。当长度超过限制时，日志消息将被截断。
-
 - **日志格式类型**：从下拉列表中选择日志格式。可选值为：`text` 和 `json`。默认值为 `text`。
+- **时间戳格式**：从下拉列表中选择日志时间戳格式。可选值为：
+  - `auto`: 根据所使用的日志格式类型自动确定时间戳格式。对于文本格式类型，使用 `rfc3339` 格式；对于 JSON 格式类型，则使用 `epoch`格式。
+  - `epoch`: 时间戳以微秒精度的 Unix 纪元时间格式表示。
+  - `rfc3339`: 时间戳使用符合 RFC3339 标准的日期时间字符串格式，格式示例为 `2024-03-26T11:52:19.777087+00:00`。
 
-  注意：如果选择 `json`，建议禁用 **单条日志最大长度**，否则 json 数据不会完整显示。
-
-- **单行模式**：默认启用。如果禁用，日志消息打印时会自动换行。
-
-- **进入同步模式的队列长度**：设置缓冲日志事件的数量限制。如果消息队列超过设置值，则处理进程开始同步处理日志事件，这表明发送事件的客户端进程必须等待响应。默认设置为 `100`。
-
-- **进入丢弃模式的队列长度**：设置缓冲日志事件的数量限制。如果消息队列超过设置值，则处理程序开始丢弃新的日志事件。默认设置为 `3000`。
-
-- **冲刷阈值**：设置缓冲日志事件的数量阀值。如果超过设置的阀值，处理进程会开始丢弃缓冲的日志消息。默认设置为 `8000`。
-
-- **日志处理进程超载保护**: 默认启用，即当日志处理程序超载时，将会终止该进程。
-- **日志处理进程允许使用的最大内存**: 输入数值来指定日志处理程序允许使用的最大内存。从下拉列表中选择单位，可选值为：`MB`，`GB` 和 `KB`。默认值为 `30 MB`。
-- **最大队列长度**: 在文本框中输入数值来指定允许的最大队列长度。默认值为 `2000`。
-- **处理进程重启延迟**: 默认启用，这意味着在处理程序终止后，会自动延迟一段时间后重新启动。您可以在文本框中指定延迟时间，并从下拉列表中选择单位。可选值为 `milliseconds`、`second`、`minute` 和 `hour`。默认值为 `5 second`。如果您禁用改选项，该值将为 `infinity`，这将阻止任何后续的重启。
-- **日志限流保护**: 默认启用日志限流保护机制。
-- **日志事件数**: 指定在 `window_time` 时间间隔内要处理的最大日志事件数。默认值为 `10000`。
-- **Window Time**: 指定处理日志事件的时间窗口。从下拉列表中选择单位，可选值为 `milliseconds`，`second`，`minute` 和 `hour`。默认值为 `1 second`。
-- **报告类型**: 从下拉列表中选择类型。可选值为：`error` 和 `progress`。默认值为 `error`。
-- **最大深度**: 默认启用。您可以指定 Erlang 术语日志格式和 Erlang 进程消息队列检查的最大深度。您可以使用数字微调器来增加或减少该值。
+- **时间偏移量**：定义日志中时间相对 UTC 的偏移量，默认情况下跟随系统，默认值为 `system`。
 
 完成配置后，点击 **保存更改**。
 
 ### 文件输出日志
 
-在**日志**页面，选择**文件日志**页签。<!--Replace the image when "进入异步模式的队列长度"is fixed.-->
+在**日志**页面，选择**文件日志**页签。
 
-<img src="./assets/config-file-log-ee.png" alt="config-file-log-ee" style="zoom:35%;" />
+{% emqxee %}
 
-配置文件日志处理进程的常规选项：
+<img src="./assets/config-file-log-1-ee.png" alt="config-file-log-1-ee" style="zoom:67%;" />
+
+{% endemqxee %}
+
+{% emqxce %}
+
+<img src="./assets/config-file-log-1-ce.png" alt="config-file-log-1-ce" style="zoom:67%;" />
+
+{% endemqxce %}
+
+配置文件日志处理进程的选项：
 
 - **启用日志处理进程**：单击切换开关以启用文件日志处理进程。
-
 - **日志文件名字**：填写日志文件的名称。默认为`log/emqx.log`。
-
-- **日志轮换**：默认启用，启用后生成日志文件后缀会加上对应的索引数字。
-
 - **最大日志文件数**：轮换的最大日志文件数。默认值为`10`。
-
 - **日志文件轮换大小**：设置日志文件大小，达到设定的值时日志文件将进行轮换。如果禁用，则日志文件将无限增长。可在文本框输入设定的值，在下拉列表中选择单位，可选值为：`MB`, `GB`, `KB`。
-
 - **日志级别**：从下拉列表中选择要使用的日志级别。可选值为：`debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` 。默认值为：`warning`。
-
-- **时间偏移量**：定义日志中时间戳的格式。默认情况下为 `system`。
-
-- **单条日志长度限制**：默认禁用，即不限制单条日志消息的最大长度。如果您启用切换开关，则可以指定最大长度。当长度超过限制时，日志消息将被截断。
-
 - **日志格式类型**：从下拉列表中选择日志格式。可选值为：`text` 和 `json`。默认值为 `text`。
+- **时间戳格式**：从下拉列表中选择日志时间戳格式。可选值为：
+  - `auto`: 根据所使用的日志格式类型自动确定时间戳格式。对于文本格式类型，使用 `rfc3339` 格式；对于 JSON 格式类型，则使用 `epoch`格式。
+  - `epoch`: 时间戳以微秒精度的 Unix 纪元时间格式表示。
+  - `rfc3339`: 时间戳使用符合 RFC3339 标准的日期时间字符串格式，格式示例为 `2024-03-26T11:52:19.777087+00:00`。
+- **时间偏移量**：定义日志中时间相对 UTC 的偏移量，默认情况下跟随系统，默认值为 `system`。
 
-  注意：如果选择 `json`，建议禁用 **单条日志最大长度** 的切换开关，否则 json 数据不会完整显示。
-
-- **单行模式**：默认启用。如果禁用切换开关，日志消息打印时会自动换行。
-
-- **进入同步模式的队列长度**：设置缓冲日志事件的数量限制。如果消息队列超过设置值，则处理进程开始同步处理日志事件，这意味着发送事件的客户端进程必须等待响应。默认设置为 `100`。
-
-- **进入丢弃模式的队列长度**：设置缓冲日志事件的数量限制。如果消息队列超过设置值，则处理程序开始丢弃新的日志事件。默认设置为 `3000`。
-
-- **冲刷阈值**：设置缓冲日志事件的数量阀值。如果超过设置的阀值，处理进程会开始丢弃缓冲的日志消息。默认设置为 `8000`。
-
-参照控制台输出日志继续配置日志处理进程过载保护和日志限流保护功能选项。完成配置后，点击**保存修改**。
+完成配置后，点击**保存修改**。
 
 在文件日志启用后，日志目录下会有如下几种文件:
 
 - **emqx.log.N:** 以 emqx.log 为前缀的文件为日志文件，包含了 EMQX 的所有日志消息。比如 `emqx.log.1`、`emqx.log.2` ...
 - **emqx.log.siz 和 emqx.log.idx:** 用于记录日志滚动信息的系统文件，**请不要手动修改**。
-- **run_erl.log:** 以 `emqx start` 方式后台启动 EMQX 时，用于记录启动信息的系统文件。
-- **erlang.log.N:** 以 erlang.log 为前缀的文件为日志文件，是以 `emqx start` 方式后台启动 EMQX 时，控制台日志的副本文件。比如 `erlang.log.1`、`erlang.log.2` ...
+
+## 通过配置文件修改日志配置
+
+您可通过 EMQX Dashboard 或者配置文件修改日志配置。比如，如果您想要将级别为 warning 的日志输出到日志文件和控制台，您可以在 `emqx.conf` 文件中修改 `log` 下的配置项，参见下面示例。重启节点后配置生效。
+
+```bash
+log {
+  file {
+    enable = true
+    level = warning
+    file = "/var/log/emqx/emqx.log"
+    routation_count = 10
+    routation_size = 50MB
+    formatter = text
+  }
+  console {
+    enable = true
+    level = warning
+    formatter = text
+  }
+}
+```
 
 ## 日志格式
 
 日志消息的格式为（各个字段之间用空格分隔）：
 
 ```
-**date time level key-value-struct**
+**timestamp level tag clientid msg peername username ...**
 ```
 
-其中：
+其中
 
-- **date-time:** 当地时间的日期。格式为：`RFC3339`
-- **level:** 日志级别，使用中括号包裹。格式为：`[Level]`
-- **flat log-content**：扁平化日志消息内容。
+- **timestamp（时间戳）**：采用 RFC-3339 格式的时间戳，指明日志条目创建的时间。
+- **level（级别）**：日志的严重性级别，用括号包裹。格式为：`[level]`，其中 `level` 是标准的日志级别，如 `info`（信息）、`warning`（警告）、`error`（错误）等。
+- **tag（标签）**：必填项，一个全大写的单词，用于对日志进行分类，以简化搜索和分析。例如 `MQTT`、`AUTHN`（认证）、`AUTHZ`（授权）。
+- **clientid（客户端ID）**：仅当日志与特定客户端相关时包含。标识与日志条目相关的客户端。
+- **username（用户名）**：仅针对具有指定用户名的客户端相关的日志。指出涉及的客户端的用户名。
+- **peername（对端名称）**：客户端源 IP 地址和端口号，采用 `IP:端口` 格式，指示连接的来源。
+- **msg（消息）**：日志消息的内容。为了提高可搜索性和可读性，大多数消息采用 `snake_case` 格式，如 `mqtt_packet_received`（接收到MQTT包）。注意：不是所有消息都遵循此格式；有些可能会有所不同。
+- **...（其他）**：在 `msg` 字段之后，可能会跟随额外的任意字段，根据需要提供更多上下文或细节。
 
-### 日志消息举例 1：
+
+### 日志消息举例
 
 ```bash
-2022-06-30T16:07:47.689512+08:00 [debug] clientid: test, line: 792, mfa: emqx_connection:handle_incoming/2, msg: mqtt_packet_received, packet: PINGREQ(Q0, R0, D0), payload: [], peername: 127.0.0.1:64391, tag: MQTT
+2024-03-20T11:08:39.568980+01:00 [warning] tag: AUTHZ, clientid: client1, msg: cannot_publish_to_topic_due_to_not_authorized, peername: 127.0.0.1:47860, username: user1, topic: republish-event/1, reason: not_authorized
 ```
 
-此日志消息里各个字段分别为:
+## 日志限流
 
-- **datetime:** `2022-06-30T15:59:19.438914+08:00`
-- **level:** `[debug]`
-- **flat log-content:** `clientid: test, line: 792, mfa: emqx_connection:handle_incoming/2, msg: mqtt_packet_received, packet: PINGREQ(Q0, R0, D0), payload: [], peername: 127.0.0.1:64391, tag: MQTT`
+日志限流功能可以通过限制指定时间窗口内重复事件的记录来减少日志溢出的风险。通过仅记录第一个事件并在此窗口内抑制后续相同事件的记录，日志管理能够变得更加高效，同时不牺牲可观测性。
 
-这条日志表示 EMQX 在 `2022-06-30T16:07:47.689512+08:00` 时 Client ID 为 `test` 客户端收到了一个 `PINGREQ(Q0,R0,D0)` 包。对应客户端的 IP 为 `127.0.0.1:64391`。
+您可以在 Dashboard 中配置限流时间窗口：选择左侧菜单中的**管理**->**日志**，并点击**日志限流**页签。默认的时间窗口设置为1分钟，最小允许值为1秒。
 
-### 日志消息举例 2：
+<img src="./assets/log_throttling.png" alt="log_throttling" style="zoom:67%;" />
+
+您也可以直接在配置文件中配置限流时间窗口：
 
 ```bash
-2022-06-30T16:25:32.446873+08:00 [debug] line: 150, mfa: emqx_retainer_mnesia:store_retained/2, msg: message_retained, topic: $SYS/brokers/emqx@127.0.0.1/sysdescr
+log {
+  throttling {
+    time_window = "5m"
+  }
+}
 ```
 
-此日志消息里各个字段分别为:
+日志限流默认启用，并适用于选定的日志事件，如授权失败或消息队列溢出等。然而，当 `console` 或 `file` 的日志级别设置为调试时，将禁用限制，以确保详细记录以便进行故障排除。
 
-- **date-time:** `2022-06-30T16:25:32.446873+08:00`
-- **level:** `[debug]`
-- **flat log-content:** `line: 150, mfa: emqx_retainer_mnesia:store_retained/2, msg: message_retained, topic: $SYS/brokers/emqx@127.0.0.1/sysdescr`
+限流仅应用于以下日志事件：
 
+- "authentication_failure"
+- "authorization_permission_denied"
+- "cannot_publish_to_topic_due_to_not_authorized"
+- "cannot_publish_to_topic_due_to_quota_exceeded"
+- "connection_rejected_due_to_license_limit_reached"
+- "dropped_msg_due_to_mqueue_is_full"
+
+::: tip 注意 
+
+受限事件列表可能会更新。 
+
+:::
+
+如果在一个时间窗口内有事件被限流，一条摘要警告消息将记录每种类型丢弃事件的计数。例如，如果在一个窗口期内发生5次未授权的订阅尝试，将记录以下事件：
+
+```yaml
+2024-03-13T15:45:11.707574+02:00 [warning] clientid: test, msg: authorization_permission_denied, peername: 127.0.0.1:54870, username: test, topic: t/#, action: SUBSCRIBE(Q0), source: file
+2024-03-13T15:45:53.634909+02:00 [warning] msg: log_events_throttled_during_last_period, period: 1 minutes, 0 seconds, dropped: #{authorization_permission_denied => 4}
+```
+
+您可以看到，第一个 "authorization_permission_denied" 事件被完整记录。接下来的4个类似事件被丢弃，但在 "log_events_throttled_during_last_period" 统计中记录了它们的数量。

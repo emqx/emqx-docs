@@ -62,10 +62,10 @@ cluster {
 node.name = emqx@s1.emqx.io
 ```
 
-您还可以使用环境变量覆盖节点名称：
+您还可以使用环境变量覆盖节点名称。例如 `docker run` 命令的 `-e` 选项，或者 systemd 的 `emqx.service` 文件中加入如下环境变量：
 
 ```bash
-env EMQX_NODE__NAME='emqx@s1.emqx.io' ./bin/emqx start
+EMQX_NODE__NAME='emqx@s1.emqx.io'
 ```
 
 为其他节点重复上述步骤以加入集群。
@@ -400,7 +400,7 @@ cluster {
 
 ### 基于 etcd 自动集群
 
-[etcd](https://etcd.io/) 是 CoreOS 发起的开源项目，etcd 的应用场景多间于服务发现，解决分布式系统中同一个集群的进程之间如何相互发现并建立连接的问题，这个功能正是 EMQX 自动集群所需要的。
+[etcd](https://etcd.io/) 是 CoreOS 发起的开源项目，etcd 的应用场景多见于服务发现，解决分布式系统中同一个集群的进程之间如何相互发现并建立连接的问题，这个功能正是 EMQX 自动集群所需要的。
 
 当网络中存在 etcd 服务器（集群）的时候，EMQX 集群可以使用 ectd 的方式自动建立集群。安装和配置 etcd 服务集群请参考 [etcd install](https://etcd.io/docs/latest/install/)。
 

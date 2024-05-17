@@ -58,7 +58,17 @@ gateway.stomp {
 通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
 :::
 
-Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](../configuration/configuration-manual.html)
+{% emqxce %}
+
+Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列表参考配置手册中的[网关配置 - 监听器](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
+
+{% endemqxce %}
+
+{% emqxee %}
+
+Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列表参考配置手册中的[网关配置 - 监听器](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
+
+{% endemqxee %}
 
 
 ## 认证
@@ -71,6 +81,7 @@ Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列
 - [Redis 认证](../access-control/authn/redis.md)
 - [HTTP Server 认证](../access-control/authn/http.md)
 - [JWT 认证](../access-control/authn/jwt.md)
+- [LDAP 认证](../access-control/authn/ldap.md)
 
 Stomp 网关使用 STOMP 协议的 CONNECT 或 STOMP 报文中的信息来生成客户端的认证信息。默认情况下：
 
@@ -125,7 +136,7 @@ gateway.stomp {
 
 与 MQTT 协议不同，**网关仅支持创建一个认证器，而不是认证器列表（或认证链）**。当不启用任何认证器时，表示允许所有的 Stomp 客户端都具有接入的权限。
 
-其他类型的认证器的配置格式参考：[安全- 认证器](../access-control/authn/authn.md)
+其他类型的认证器的配置格式参考：[安全- 认证器](../access-control/authn/authn.md)。
 
 ## 发布订阅
 
@@ -139,8 +150,19 @@ Stomp 协议完全兼容发布订阅的消息模式，Stomp 网关使用：
 
 ## 用户层接口
 
-- 详细配置说明参考：[网关配置 - Stomp 网关](../configuration/configuration-manual.html)
+{% emqxee %}
+
+- 详细配置说明参考：[网关配置 - Stomp 网关](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/)
 - 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
+
+{% endemqxee %}
+
+{% emqxce %}
+
+- 详细配置说明参考：[网关配置 - Stomp 网关](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)
+- 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
+
+{% endemqxce %}
 
 ## 客户端库
 

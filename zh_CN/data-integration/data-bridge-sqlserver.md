@@ -231,38 +231,42 @@ Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
 FileUsage   = 1
 ```
 
-## 创建 Microsoft SQL Server Sink 规则
+## 创建连接器
 
-本节将通过 Dashboard 演示如何创建一条规则指定需要写入 Microsoft SQL Server 的消息或记录设备上下线状态。您需要为消息转发和设备上下线记录创建不同的规则。
+在创建 Microsoft SQL Server Sink 之前，您需要创建一个连接器，以便 EMQX 与 Microsoft SQL Server 服务建立连接。以下示例假定您在本地机器上同时运行 EMQX 和 Microsoft SQL Server。如果您在远程运行 Microsoft SQL Server 和 EMQX，请相应地调整设置。
 
-以下示例假设您在本地机器上同时运行 EMQX 和 Microsoft SQL Server。 如果您有远程运行的 EMQX 和 Microsoft SQL Server，请相应地调整设置。
+1. 转到 Dashboard **集成** -> **连接器** 页面。点击页面右上角的**创建**。
+2. 在连接器类型中选择 **Microsoft SQL Server**，点击**下一步**。
+3. 在 **配置** 步骤，配置以下信息：
+
+   - **连接器名称**：应为大写和小写字母及数字的组合，例如：`my_sqlserver`。
+   - **服务器地址**： `127.0.0.1:1433`，或使用实际的 Microsoft SQL Server 地址和端口
+   - **数据库名字**： `mqtt`
+   - **用户名**： `sa`
+   - **密码**： `mqtt_public1`
+   - **SQL Server Driver 名称**： `ms-sql`，即您在 `odbcinst.ini` 中配置的 DSN Name
+4. 高级配置（可选）：详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
+5. 在点击**创建**之前，您可以点击**测试连接**来测试连接器是否能连接到 Microsoft SQL Server 服务器。
+6. 点击**创建**按钮完成连接器创建。
+7. 在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 RocketMQ 的数据和需要记录的客户端事件。您也可以按照[创建消息存储 Sink 规则](#创建消息存储-sink-规则)和[创建事件记录 Sink 规则](#创建事件记录-sink-规则)章节的步骤来创建规则。
+
+## 创建消息存储 Sink 规则
+
+本节演示了如何在 Dashboard 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的结果写入到 Microsoft SQL Server 的数据表 `mqtt.dbo.t_mqtt_msg` 中。
 
 1. 转到 Dashboard **集成** -> **规则**页面。
 
 2. 点击页面右上角的**创建**。
 
-3. 输入规则 ID `my_rule`，在 **SQL 编辑器**中根据业务实现需要输入规则：
+3. 输入规则 ID `my_rule`。如需实现对指定主题消息的转发，例如将 `t/#` 主题的 MQTT 消息存储至 Microsoft SQL Server，在 **SQL 编辑器**中输入以下 SQL 语句：
+   注意：如果您希望制定自己的 SQL 语句，需要确保规则选出的字段（SELECT 部分）包含之后在 Sink 中配置的 SQL 模板中所有用到的变量。
 
-   - 如需实现对指定主题消息的转发，例如将 `t/#` 主题的 MQTT 消息存储至 Microsoft SQL Server，输入以下 SQL 语句：
-     注意：如果您希望制定自己的 SQL 语句，需要确保规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量。
-
-     ```sql
-      SELECT
-        *
-      FROM
-        "t/#"
-     ```
-
-   - 如需实现设备上下线状态记录，输入以下 SQL 语句：
-
-     ```sql
-     SELECT
-       *,
-       floor(timestamp / 1000) as s_shift,
-       timestamp div 1000 as ms_shift
-     FROM
-       "$events/client_connected", "$events/client_disconnected"
-     ```
+   ```sql
+    SELECT
+      *
+    FROM
+      "t/#"
+   ```
 
    ::: tip
 
@@ -270,43 +274,54 @@ FileUsage   = 1
 
    :::
 
-4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。在**动作类型**下拉框中选择 `Microsoft SQL Server`，保持**动作**下拉框为默认的`创建动作`选项，您也可以选择一个之前已经创建好的 Microsoft SQL Server Sink。此处我们创建一个全新的 Sink 并添加到规则中。
+4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。通过这个动作，EMQX 会将经规则处理的数据发送到 Microsoft SQL Server。
 
-5. 输入 Sink 名称，名称应为大/小写字母和数字的组合。
+5. 在**动作类型**下拉框中选择 `Microsoft SQL Server`，保持**动作**下拉框为默认的`创建动作`选项，您也可以选择一个之前已经创建好的 Microsoft SQL Server Sink。此示例将创建一个全新的 Sink 并添加到规则中。
 
-6. 输入 Microsoft SQL Server 连接信息。
+6. 输入 Sink 名称，名称应为大/小写字母和数字的组合。
 
-   - **服务器地址**： `127.0.0.1:1433`，或使用实际的 Microsoft SQL Server 地址和端口
-   - **数据库名字**： `mqtt`
-   - **用户名**： `sa`
-   - **密码**： `mqtt_public1`
-   - **SQL Server Driver 名称**： `ms-sql`，即您在 `odbcinst.ini` 中配置的 DSN Name
+7. 从**连接器**下拉框中选择刚刚创建的 `my_sqlserver`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
 
-7. 根据业务实现需要配置 SQL 模板：
+9. 配置 SQL 模板。如需实现对指定主题消息的转发，使用如下 SQL 语句完成数据插入。此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`。
 
-   - 如需实现对指定主题消息的转发，使用如下 SQL 语句完成数据插入。此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`。
+   ```sql
+   insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
+   ```
+   
+10. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
 
-     ```sql
-     insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
-     ```
+11. 在点击**创建**按钮完成 Sink 创建之前，您可以使用**测试连接**来测试当前 Sink 到 Microsoft SQL Server 的连接是否成功。
 
-   - 如需实现实现设备上下线状态记录，可使用如下 SQL 语句完成数据插入：
+12. 点击**创建**按钮完成 Sink 创建，新建的 Sink 将被添加到**动作输出**列表中。
 
-     ```sql
-     insert into t_mqtt_events(clientid, event_type, event_time) values ( ${clientid}, ${event}, DATEADD(MS, ${ms_shift}, DATEADD(S, ${s_shift}, '19700101 00:00:00:000') ) )
-     ```
-
-8. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
-
-9. 在点击**创建**按钮完成 Sink 创建之前，您可以使用**测试连接**来测试当前 Sink 到 Microsoft SQL Server 的连接是否成功。
-
-10. 点击**添加**按钮完成 Sink 创建，新建的 Sink 将被添加到**动作输出**列表中。
-
-11. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中，**状态**为**已连接**。
+13. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中。
 
 现在您已成功创建了通过 Microsoft SQL Server Sink 将数据转发到 Microsoft SQL Server 的规则，同时在**规则**页面的**动作(Sink)** 标签页看到新建的 Microsoft SQL Server Sink。
 
 您还可以点击 **集成** -> **Flow 设计器**可以查看拓扑，通过拓扑可以直观的看到，主题 `t/#` 下的消息在经过规则 `my_rule` 解析后被发送到 Microsoft SQL Server 中。
+
+## 创建事件记录 Sink 规则
+
+本节展示如何创建用于记录客户端上/下线状态的规则，并通过配置的 Sink 将记录写入到 Microsoft SQL Server 的数据表 `mqtt.dbo.t_mqtt_events` 中。
+
+注意：除规则 SQL 和 Sink 的 SQL 模板设置不同外，其他操作步骤与[创建消息存储 Sink 规则](#创建消息存储-sink-规则)章节完全相同。
+
+规则 SQL 如下：
+
+```sql
+SELECT
+  *,
+  floor(timestamp / 1000) as s_shift,
+  timestamp div 1000 as ms_shift
+FROM
+  "$events/client_connected", "$events/client_disconnected"
+```
+
+Sink 的 SQL 模板如下:
+
+```sql
+insert into t_mqtt_events(clientid, event_type, event_time) values ( ${clientid}, ${event}, DATEADD(MS, ${ms_shift}, DATEADD(S, ${s_shift}, '19700101 00:00:00:000') ) )
+```
 
 ## 测试规则
 

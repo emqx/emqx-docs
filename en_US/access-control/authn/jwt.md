@@ -51,7 +51,7 @@ The ACL includes the following fields:
 | ---------- | -------- | ------------------------------------------------------------ |
 | permission | Yes      | Specifies whether the current client's operation request is allowed or denied; options: `allow`, `deny` |
 | action     | Yes      | The operation associated with the rule; options: `publish`, `subscribe`, `all` |
-| topic      | Yes      | The topic associated with the rule, supports [topic placeholders](https://chat.openai.com/authz/authz.md#topic-placeholders) |
+| topic      | Yes      | The topic associated with the rule, supports [topic placeholders](../authz/authz.md#topic-placeholders) |
 | qos        | No       | An array specifying the QoS levels applicable to the rule, e.g., `[0, 1]`, `[1, 2]`, default is all QoS levels |
 | retain     | No       | Boolean, used only for publish operations, specifies if the current rule supports retained messages, options are `true`, `false`, default allows retained messages. |
 

@@ -2,13 +2,13 @@
 
 {% emqxce %}
 
-EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX，本章节将介绍 EMQX 配置文件基本信息，配置项以及详细的介绍请参考 [配置手册](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)。
+EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX，本章节将介绍 EMQX 配置文件基本信息，配置项以及详细的介绍请参考[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
 
 {% endemqxce %}
 
 {% emqxee %}
 
-EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX，本章节将介绍 EMQX 配置文件基本信息，配置项以及详细的介绍请参考 [配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
+EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX，本章节将介绍 EMQX 配置文件基本信息，配置项以及详细的介绍请参考[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 {% endemqxee %}
 
@@ -52,7 +52,7 @@ EMQX 主配置文件为 `emqx.conf`，根据安装方式其所在位置有所不
 但是在集群环境下，所有节点的 data_dir 必须保持一致。
 :::
 
-通常情况下大多数配置项都在主配置文件中定义，需要通过 REST API、CLI 与 Dashboard 配置的内容（热配置）将写入到 `cluster.hocon` 中，一经配置将覆盖主配置文件的内容。覆盖规则参考 [配置覆盖规则(#配置覆盖规则)。
+通常情况下大多数配置项都在主配置文件中定义，需要通过 REST API、CLI 与 Dashboard 配置的内容（热配置）将写入到 `cluster.hocon` 中，一经配置将覆盖主配置文件的内容。覆盖规则参考 [配置覆盖规则](#配置覆盖规则)。
 
 :::tip
 有些配置项是不能被覆盖的（例如 `node.name`）。
@@ -152,7 +152,7 @@ listeners.ssl.default {
 
 HOCON 的值是分层覆盖的，最简单的规则如下：
 
-- 在同一个文件中，后（在文件底部）定义的值，覆盖前（在文件顶部）到值。
+- 在同一个文件中，后（在文件底部）定义的值，覆盖前（在文件顶部）定义的值。
 - 当按层级覆盖时，高层级的值覆盖低层级的值。
 EMQX 配置按以下顺序进行优先级排序：环境变量 > emqx.conf > API(cluster.hocon)。
 
@@ -164,10 +164,9 @@ EMQX 配置按以下顺序进行优先级排序：环境变量 > emqx.conf > API
 为避免混淆，强烈建议不要在 `cluster.hocon` 和 `emqx.conf` 中具有相同的配置键。
 
 ::: tip
-1. 如果您正在使用较旧的 EMQX 版本，特别是 e5.0.2/v5.0.22 或更早的版本（即 cluster-override.conf 文件仍存在于 EMQX 的数据目录中），
-2. 那么配置设置的优先顺序如下：`emqx.conf < ENV < HTTP API(cluster-override.conf)`。
+1. 如果您正在使用较旧的 EMQX 版本，特别是 e5.0.2/v5.0.22 或更早的版本（即 cluster-override.conf 文件仍存在于 EMQX 的数据目录中），那么配置设置的优先顺序如下：`emqx.conf < ENV < HTTP API(cluster-override.conf)`。
 3. 如果您正在从 e5.0.2/v5.0.22 或更早的版本升级到最新版本的 EMQX，配置的优先级将与以前的版本保持一致，以保持兼容性。
-4. `cluster-override.conf` 机制计划在 5.1 版本中删除。
+4. `cluster-override.conf` 机制在 5.1 版本中删除。
 :::
 
 ### 合并覆盖
@@ -245,6 +244,62 @@ authentication = [{ enable = true }]
 
 :::
 
+### Zone 覆盖
+
+EMQX 中的 Zone 是一种配置分组的概念。可以通过将监听器的 `zone` 字段设置为所需 Zone 的名称，将 Zone 与监听器关联。与某个 Zone 关联的监听器连接的 MQTT 客户端将继承该 Zone 的配置，这些配置可能会覆盖全局设置。
+
+::: tip
+
+默认情况下，监听器与一个名为 `default` 的 Zone 关联。`default` Zone 是一个逻辑分组，在配置文件中并不存在。
+
+:::
+
+以下配置项可以在 Zone 级别进行覆盖：
+
+- `mqtt`：MQTT 连接和会话设置，例如允许在特定 Zone 内的 MQTT 消息具有更大的最大数据包大小。
+- `force_shutdown`：强制关闭策略。
+- `force_gc`：Erlang 进程垃圾回收的微调。
+- `flapping_detect`：客户端抖动检测。
+- `durable_sessions`：会话持久性设置，例如在特定 Zone 启用 MQTT 会话的持久存储。
+
+在 EMQX 版本 5 中，默认配置文件没有包含任何 Zone，这与版本 4 不同，在版本 4 中有两个默认 Zone：`internal` 和 `external`。
+
+要创建一个 Zone，需要在 `emqx.conf` 文件中定义，例如：
+
+```bash
+zones {
+  # 可以定义多个 Zone
+  my_zone1 {
+    # Zone 使用与全局配置相同的配置模式
+    mqtt {
+      # 允许该 Zone 内的连接具有更大的数据包大小
+      max_packet_size = 10M
+    }
+    force_shutdown {
+      # Zone 特定的配置
+      ...
+    }
+    durable_sessions {
+      # 仅为该 Zone 的会话启用持久存储
+      ...
+    }
+  }
+  my_zone2 {
+    ...
+  }
+}
+```
+
+可以用如下方式把一个监听器跟一个 Zone 关联起来。
+
+```bash
+listeners.tcp.default {
+    bind = 1883
+    zone = my_zone1
+    ...
+}
+```
+
 ## Schema 手册
 
 为了确保配置正确，EMQX 引入了 schema。schema 定义了数据类型，以及数据字段的名称和元数据，用于配置值的类型检查等。
@@ -260,6 +315,12 @@ EMQX 的 [配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/
 EMQX 的 [配置手册](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/) 就是从这个 Schema 生成的。
 
 {% endemqxce %}
+
+::: tip
+
+Zone 配置的 schema 未包含在配置手册中，因为每个组的配置是相同的。例如，`zones.my_zone1.mqtt {...}` 与 `mqtt {...}` 具有相同的 schema。
+
+:::
 
 ### 基本数据类型
 

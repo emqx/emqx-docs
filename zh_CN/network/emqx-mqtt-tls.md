@@ -19,7 +19,7 @@ SSL/TLS 加密功能会在传输层对网络连接进行加密，它能在提升
 | 使用方式                                  | 优势                                       | 缺点                                                                                                                |
 | ----------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
 | 在 EMQX 上开启 SSL/TLS | 简单易用，不需要额外的组件。               | 会增加 EMQX 的资源消耗，如果连接数量巨大，可能会导致较高的 CPU 和内存消耗。                                         |
-| 通过代理或负载均衡终结 TLS 连接           | 不影响 EMQX 性能，同时提供了负载均衡能力。 | 需要额外部署 [HAProxy](../deploy/cluster/lb-haproxy.md)、[Nginx](../deploy/cluster/lb-nginx.md) 或使用[云厂商负载均衡服务](../deploy/cluster/lb.md#公有云厂商-lb-产品)，其中只有部分云厂商支持 TCP SSL/TLS 终结。 |
+| 通过代理或负载均衡终结 TLS 连接           | 不影响 EMQX 性能，同时提供了负载均衡能力。 | 需要额外部署 [HAProxy](../deploy/cluster/lb-haproxy.md)、[NGINX](../deploy/cluster/lb-nginx.md) 或使用[云厂商负载均衡服务](../deploy/cluster/lb.md#公有云厂商-lb-产品)，其中只有部分云厂商支持 TCP SSL/TLS 终结。 |
 
 有关如何通过代理或负载均衡终结 TLS 连接，请参考[集群负载均衡](../deploy/cluster/lb.md)。
 
@@ -72,15 +72,18 @@ EMQX 默认在 `8883` 端口启用了 SSL/TLS 监听器并设置其为单向认�
     listeners.ssl.default {
       bind = "0.0.0.0:8883"
       ssl_options {
-        cacertfile = "etc/certs/rootCA.crt"
-
-        certfile = "etc/certs/server.crt"
-        keyfile = "etc/certs/server.key"
+        # PEM 格式的文件，包含一个或多个用于验证客户端证书的根 CA 证书
+        cacertfile = "etc/certs/rootCAs.pem"
+        # PEM 格式的服务器证书，如果证书不是直接由根 CA 签发，那么中间 CA 的证书必须加在服务器证书的后面组成一个证书链
+        certfile = "etc/certs/server-cert.pem"
+        # PEM 格式的密钥文件
+        keyfile = "etc/certs/server-keyi.pem"
         # 私钥文件受密码保护时需要输入密码
         # password = "123456"
-
-        # 单向认证，不验证客户端证书
+        # 设置成 'verify_peer' 来验证客户端证书是否为 cacertfile 中某个根证书签发
         verify = verify_none
+        # 如果设置成 true，但是客户端在握手时候没有发送证书，服务端会终止握手，如果设置成 false，那么服务端只有在客户端发送一个非法证书时才会终止握手
+        fail_if_no_peer_cert = false
       }
     }
    ```
@@ -91,7 +94,7 @@ EMQX 默认在 `8883` 端口启用了 SSL/TLS 监听器并设置其为单向认�
 
 ## 单向认证客户端测试
 
-您可以使用 [MQTTX CLI](https://mqttx.app/) 进行测试，单向认证通常需要客户端提供 CA 证书，以便客户端验证服务器的身份：
+您可以使用 [MQTTX CLI](https://mqttx.app/zh/cli) 进行测试，单向认证通常需要客户端提供 CA 证书，以便客户端验证服务器的身份：
 
 ```bash
 mqttx sub -t 't/1' -h localhost -p 8883 \
@@ -139,7 +142,7 @@ mqttx sub -t 't/1' -h localhost -p 8883 \
 
 ## 双向认证客户端测试
 
-您可以使用 [MQTTX CLI](https://mqttx.app/) 进行测试，双向认证除了需要客户端提供 CA 证书外，还应当提供客户端证书：
+您可以使用 [MQTTX CLI](https://mqttx.app/zh/cli) 进行测试，双向认证除了需要客户端提供 CA 证书外，还应当提供客户端证书：
 
 ```bash
 mqttx sub -t 't/1' -h localhost -p 8883 \

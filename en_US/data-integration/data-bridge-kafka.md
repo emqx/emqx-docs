@@ -227,15 +227,15 @@ Before adding a Kafka Source action, you need to create a Kafka producer connect
 
 9. Advanced settings (optional): See **Advanced Configurations.**
 
-10. Before clicking **Create**, you can click **Test Connection** to test that the bridge can connect to the Kafka server.
+10. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
 
 11. Click **Create**. You will be offered the option of creating an associated rule. For the Kafka source, it is not strictly necessary to create a rule for further data processing. If you need to create a rule for the source, see [Create Rule for Kafka Source](#create-rule-for-kafka-source-optional).
 
 <img src="./assets/Kafka_consumer_bridge.png" alt="Kafka_consumer_bridge" style="zoom:67%;" />
 
-## Create a Rule with Kafka Source
+## Create a Rule with Kafka Consumer Source
 
-This section demonstrates how to create a rule in EMQX to further process the message forwarded by configured Kafka source and republish the message to MQTT topic.
+This section demonstrates how to create a rule in EMQX to further process the message forwarded by a configured Kafka Consumer source and republish the message to an MQTT topic.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 

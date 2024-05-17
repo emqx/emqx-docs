@@ -193,7 +193,7 @@ confluent kafka topic consume -b testtopic-in
 
 创建成功后，连接器将自动连接到 Confluent Cloud。接下来，我们将基于此连接器创建一条规则，将数据转发到连接器所配置的 Confluent 集群中。
 
-## 创建 Confluent Sink 规则
+## 创建 Confluent 生产者 Sink 规则
 
 本节演示了如何在 EMQX 中创建规则，以处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Confluent Sink 发送处理结果以产生数据到 Confluent 的 `testtopic-in` 主题。
 
@@ -244,7 +244,7 @@ confluent kafka topic consume -b testtopic-in
 
 您也可以点击 **集成** -> **Flow 设计器** 查看拓扑，通过拓扑可以直观的看到，主题 `t/#` 下的消息在经过规则 `my_rule` 解析后被发送并保存到 Confluent。
 
-## 测试 Confluent 生产者规则
+## 测试 Confluent 生产者 Sink 规则
 
 为了测试 Confluent 生产者规则是否按照您的预期工作，您可以使用 [MQTTX](https://mqttx.app/zh) 来模拟客户端向 EMQX 发布 MQTT 消息。
 
@@ -309,4 +309,4 @@ EMQX 提供了大量关于与 Confluent/Kafka 的数据集成的学习资源。�
 
 **基准测试报告：**
 
-- [EMQX Enterprise Performance Benchmark Testing: Kafka Integration](https://www.emqx.com/zh/resources/emqx-enterprise-performance-benchmark-testing-kafka-integration)
+- [EMQX Enterprise Performance Benchmark Testing: Kafka Integration](https://www.emqx.com/en/resources/emqx-enterprise-performance-benchmark-testing-kafka-integration)

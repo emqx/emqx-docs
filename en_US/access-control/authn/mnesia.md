@@ -51,8 +51,6 @@ Example:
 }
 ```
 
-
-
 ## Migrate from external storage to EMQX built-in database
 
 To migrate user credentials from external storage to EMQX built-in database, you can use .csv or .json files for batch import. For operating details, see [Import User](./user_management.md#importing-users).

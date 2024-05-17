@@ -15,10 +15,40 @@
 #   the path is relative inside the per-language sub-dir i.e. en_US and zh_CN
 # - A node with 'title_en' 'title_cn' and 'path'
 
-- title_en: Quick Start
-  title_cn: 快速开始
+- title_en: EMQX Enterprise Overview
+  title_cn: EMQX 企业版概览
   path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
   collapsed: true
+  edition: ee
+  children:
+    - title_en: What's New
+      title_cn: 全新功能
+      path: getting-started/new-features
+    - title_en: Feature Comparison
+      title_cn: 功能对比
+      path: getting-started/feature-comparison
+      edition: ce
+    - title_en: Get Started
+      title_cn: 快速开始
+      path: getting-started/getting-started
+    - title_en: Operating Limitations
+      title_cn: 使用限制
+      path: getting-started/restrictions
+    - title_en: FAQ
+      title_cn: 常见问题解答
+      path: faq/faq
+    - title_en: Technical Support
+      title_cn: 技术支持
+      path: support/technical-support
+    - title_en: Product Roadmap
+      title_cn: 产品路线图
+      path: getting-started/roadmap
+
+- title_en: EMQX Overview
+  title_cn: EMQX 概览
+  path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
+  collapsed: true
+  edition: ce
   children:
     - title_en: What's New
       title_cn: 全新功能
@@ -71,10 +101,6 @@
       title_cn: Kubernetes
       lang: cn
       path: "https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html"
-    - title_en: Windows
-      title_cn: Windows
-      path: deploy/install-windows
-      edition: ce
     - title_en: Install from Source Code
       title_cn: 源码编译安装
       path: deploy/install-source
@@ -86,6 +112,7 @@
       path: deploy/license
     - title_en: Upgrade Guide
       title_cn: 升级指南
+      collapsed: true
       children:
         - title_en: Rolling Upgrade
           title_cn: 滚动升级
@@ -221,7 +248,7 @@
       children:
         - access-control/authn/x509
         - access-control/authn/jwt
-        - title_en: Password based
+        - title_en: Password-Based Authentication
           title_cn: 密码认证
           path: access-control/authn/pwoverview
           collapsed: true
@@ -300,12 +327,15 @@
     - title_en: AWS Kinesis
       title_cn: AWS Kinesis
       path: data-integration/data-bridge-kinesis
+    - title_en: AWS S3
+      title_cn: AWS S3
+      path: data-integration/s3
     - title_en: Azure Event Hubs
       title_cn: Azure Event Hubs
-      path: data-integration/data-bridge-azure-event-hub   
+      path: data-integration/data-bridge-azure-event-hub
     - title_en: Cassandra
       title_cn: Cassandra
-      path: data-integration/data-bridge-cassa 
+      path: data-integration/data-bridge-cassa
     - title_en: ClickHouse
       title_cn: ClickHouse
       path: data-integration/data-bridge-clickhouse
@@ -326,7 +356,7 @@
       path: data-integration/data-bridge-greptimedb
     - title_en: HStreamDB
       title_cn: HStreamDB
-      path: data-integration/data-bridge-hstreamdb      
+      path: data-integration/data-bridge-hstreamdb
     - title_en: HTTP Server
       title_cn: HTTP Server
       path: data-integration/data-bridge-webhook
@@ -390,42 +420,32 @@
       collapsed: true
       children:
         - title_en: Cluster
-          title_cn: Cluster
+          title_cn: 集群
           path: configuration/cluster
-          lang: en
         - title_en: Listener
-          title_cn: Listener
+          title_cn: 监听器
           path: configuration/listener
-          lang: en
         - title_en: MQTT
           title_cn: MQTT
           path: configuration/mqtt
-          lang: en
-        - title_en: Flapping
-          title_cn: Flapping
+        - title_en: Flapping Detection
+          title_cn: 连接抖动
           path: configuration/flapping
-          lang: en
         - title_en: Limiter
-          title_cn: Limiter
+          title_cn: 速率限制器
           path: configuration/limiter
-          lang: en
         - title_en: Logs
-          title_cn: Logs
+          title_cn: 日志
           path: configuration/logs
-          lang: en
         - title_en: Prometheus
           title_cn: Prometheus
           path: configuration/prometheus
-          lang: en
         - title_en: Dashboard
           title_cn: Dashboard
           path: configuration/dashboard
-          lang: en
-          edition: ce
         - title_en: License
           title_cn: License
           path: configuration/license
-          lang: en
           edition: ee
     - title_en: Configuration Manual
       title_cn: 配置手册
@@ -564,6 +584,9 @@
     - title_en: Durable MQTT Sessions and Messages
       title_cn: MQTT 会话与消息持久化
       path: durability/durability_introduction
+      children:
+        - durability/managing-replication
+        - durability/management
     - title_en: Multi-Protocol Gateway
       title_cn: 多协议网关
       path: gateway/gateway
@@ -712,6 +735,7 @@
       title_cn: 不兼容变更
       collapsed: true
       children:
+        - changes/breaking-changes-5.6
         - changes/breaking-changes-5.5
         - changes/breaking-changes-5.4
         - changes/breaking-changes-5.1.0

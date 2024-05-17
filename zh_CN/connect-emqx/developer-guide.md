@@ -11,6 +11,7 @@
 - [排他订阅](../messaging/mqtt-exclusive-subscription.md)
 - [延迟发布](../messaging/mqtt-delayed-publish.md)
 - [自动订阅](../messaging/mqtt-auto-subscription.md)
+- [主题重写](../messaging/mqtt-topic-rewrite.md)
 
 由于 EMQX 支持 MQTT 协议，所以能够兼容大多数 MQTT 客户端库和 SDK。本指南中还提供了[代码示例](./introduction.md)，帮助开发者快速开始构建其 MQTT 项目。有关 MQTT 客户端 SDK 及其比较的完整列表，参见 [MQTT 客户端 & SDKs](https://www.emqx.com/zh/mqtt-client-sdk)。
 

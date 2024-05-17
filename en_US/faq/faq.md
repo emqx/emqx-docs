@@ -185,22 +185,6 @@ After the installation is complete, you can start EMQX normally.
 
 {% emqxce %}
 
-## MSVCR120.dll is missing from Windows
-
-### Phenomenon
-
-When Windows executes `./bin/emqx console`, an error window pops up:
-
-```bash
-This program cannot be started because MSVCR120.dll is missing from the computer. Please try to reinstall the program to resolve this issue.
-```
-
-### Solution
-
-Install [Microsoft Visual C++ RedistributablePackage](https://www.microsoft.com/en-us/download/search.aspx?q=redistributable+package.)
-
-{% endemqxce %}
-
 ## SSL Connection Error
 
 ### Phenomenon
@@ -463,8 +447,6 @@ Client disconnect link error code list:
 
 EMQX supports deployment on Linux, MacOS, ARM system, however it is recommended to deploy the product on one of the supported Linux distributions, such as CentOS, Ubuntu and Debian.
 
-Only EMQX Broker supports Windows and we don't suggestion deployment on Windows.
-
 ## How to estimate resource usage of EMQX?
 
 The following factors will have an impact on EMQX resource consumption, mainly on CPU and memory usage.
@@ -481,7 +463,7 @@ The following factors will have an impact on EMQX resource consumption, mainly o
 
 If client devices connect to EMQX through TLS, more CPU resource is required for encryption and decryption. Our suggested solution is to add a load balancer in front of EMQX nodes, the TLS is offloaded at load balance node, connections between load balancer and backend EMQX nodes use plain TCP connections.
 
-You can use our online calculation tool [https://www.emqx.com/en/server-estimate](https://www.emqx.com/en/server-estimate) to estimate the resource consumption.
+<!-- You can use our online calculation tool [https://www.emqx.com/en/server-estimate](https://www.emqx.com/en/server-estimate) to estimate the resource consumption.-->
 
 ## My connections number is small, do I still need to deploy multiple nodes in production?
 

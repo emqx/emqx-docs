@@ -75,21 +75,38 @@ ClickHouse 数据集成是 EMQX 中的开箱即用功能，旨在结合 MQTT 的
    -p 18123:8123 \
    -p 19000:9000 \
    --ulimit nofile=262144:262144 \
-   -v ./init.sql:/docker-entrypoint-initdb.d/init.sql \
+   -v $pwd/init.sql:/docker-entrypoint-initdb.d/init.sql \
    clickhouse/clickhouse-server
    ```
 
 有关如何通过 Docker 运行 ClickHouse 服务器的更多信息，可阅读 [Docker - ClickHouse Server](https://hub.docker.com/r/clickhouse/clickhouse-server)。
 
+## 创建连接器
+
+在创建 ClickHouse Sink 之前，您需要创建一个 ClickHouse 连接器，以便 EMQX 与 ClickHouse 服务建立连接。以下示例假定您在本地机器上同时运行 EMQX 和 ClickHouse。如果您在远程运行 ClickHouse 和 EMQX，请相应地调整设置。
+
+1. 转到 Dashboard **集成** -> **连接器** 页面。点击页面右上角的**创建**。
+2. 在连接器类型中选择 **ClickHouse**，点击**下一步**。
+3. 在 **配置** 步骤，配置以下信息：
+
+   - **连接器名称**：应为大写和小写字母及数字的组合，例如：`my_clickhouse`。
+   - **服务器 URL**： `http://127.0.0.1:18123`
+   - **数据库名称**：`mqtt_data`
+   - **用户名**：`emqx`
+   - **密码**：`public`
+4. 高级设置（可选）：具体可阅读[ 高级配置](#高级配置)。
+5. 点击**创建**按钮完成连接器创建。
+6. 在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 ClickHouse 的数据。您也可以按照[创建 ClickHouse Sink 规则](#创建-clickhouse-sink-规则)章节的步骤来创建规则。
+
 ## 创建 ClickHouse Sink 规则
 
-本节演示了如何为 ClickHouse Sink 创建一条规则以指定需要转发至 ClickHouse 的数据。以下步骤假定 EMQX 与 ClickHouse 均在本地运行，如您在远程运行 EMQX 及 ClickHouse，请根据实际情况调整相应配置。
+本节演示了如何在 Dashboard 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的结果写入到 ClickHouse 中。
 
 1. 转到 Dashboard **集成** -> **规则**页面。
 
 2. 点击页面右上角的**创建**。
 
-3. 输入规则 ID，例如 `my_rule` 。
+3. 输入规则 ID，例如 `my_rule`。
 
 4. 在 SQL 编辑器中输入规则，例如我们希望将 `t/#` 主题的 MQTT 消息转发至 ClickHouse，可通过如下规则 SQL 实现：
 
@@ -101,20 +118,23 @@ ClickHouse 数据集成是 EMQX 中的开箱即用功能，旨在结合 MQTT 的
      "t/#"
    ```
 
-5. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。在**动作类型**下拉框中选择 `ClickHouse`，保持**动作**下拉框为默认的“创建动作”选项，您也可以选择一个之前已经创建好的 ClickHouse Sink。此处我们创建一个全新的 Sink 并添加到规则中。
+   ::: tip
 
-6. 输入 Sink 名称，要求是大小写英文字母和数字组合。
+   如果您初次使用 SQL，可以点击 **SQL 示例**和**启用调试**来学习和测试规则 SQL 的结果。
 
-7. 输入连接信息：
+   :::
 
-   - **服务器 URL**： `http://127.0.0.1:18123`
-   - **数据库名称**：`mqtt_data`
-   - **用户名**：`emqx`
-   - **密码**：`public`
+5. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。通过这个动作，EMQX 会将经规则处理的数据发送到 ClickHouse。
 
-8. **分隔符**（可选）：用于区分多个输入项，本示例中可保留默认的 `,` 。注意：您只需在启用[批量模式](./data-bridges.md)、且使用其他 [ClickHouse 数据格式](https://clickhouse.com/docs/en/sql-reference/statements/insert-into)时才需更改设置。
+6. 在**动作类型**下拉框中选择 `ClickHouse`，保持**动作**下拉框为默认的`创建动作`选项，您也可以选择一个之前已经创建好的 ClickHouse Sink。此处我们创建一个全新的 Sink 并添加到规则中。
 
-9. 在 SQL 模版中输入以下命令（您可通过[规则引擎](./rules.md)确保输入 SQL 语句中的字符串能被正确转义，以防 SQL 注入攻击）：
+7. 输入 Sink 名称，名称应为大/小写字母和数字的组合。
+
+8. 从**连接器**下拉框中选择刚刚创建的 `my_clickhouse`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
+
+9. **批量值分隔符**（可选）：用于区分多个输入项，本示例中可保留默认的 `,` 。注意：您只需在启用[批量模式](./data-bridges.md)、且使用其他 [ClickHouse 数据格式](https://clickhouse.com/docs/en/sql-reference/statements/insert-into)时才需更改设置。
+
+10. 在 SQL 模版中输入以下命令（您可通过[规则引擎](./rules.md)确保输入 SQL 语句中的字符串能被正确转义，以防 SQL 注入攻击）：
 
    ```sql
    INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})
@@ -122,13 +142,13 @@ ClickHouse 数据集成是 EMQX 中的开箱即用功能，旨在结合 MQTT 的
 
    其中，`${data}` 和 `${timestamp}` 分别代表消息内容和时间戳，即稍后将在[规则](#创建数据转发规则)时进行配置的消息转发内容。EMQX 在进行消息转发前会按照设定将其替换为相应内容。
 
-10. 高级功能（可选）：具体可阅读[ 高级配置](#高级配置)。
+11. 高级设置（可选）：具体可阅读[ 高级配置](#高级配置)。
 
-11. 点击**创建**前，您可点击**测试连接**按钮确保能连接到 ClickHouse 服务器。
+12. 点击**创建**前，您可点击**测试连接**按钮确保能连接到 ClickHouse 服务器。
 
-12. 点击**创建**按钮完成 Sink 的创建，创建成功后页面将回到创建规则，新的 Sink 将添加到规则动作中。
+13. 点击**创建**按钮完成 Sink 的创建，创建成功后页面将回到创建规则，新的 Sink 将添加到规则动作中。
 
-13. 回到规则创建页面，点击**创建**按钮完成整个规则创建。
+14. 回到规则创建页面，点击**创建**按钮完成整个规则创建。
 
 现在您已成功创建了规则，你可以点击**集成** -> **规则**页面看到新建的规则，同时在**动作(Sink)** 标签页看到新建的 ClickHouse Sink。
 
@@ -157,7 +177,7 @@ curl -u emqx:public -X POST -d "SELECT * FROM mqtt_data.messages" http://localho
 如消息被正确转发，将能看到类似的返回结果：
 
 ```bash
-Hello World Clickhouse from EMQX        1679932005
+Hello World Clickhouse from EMQX        2024-01-17 09:40:06
 ```
 
 ## 高级配置
@@ -166,7 +186,6 @@ Hello World Clickhouse from EMQX        1679932005
 
 | **字段**                | **描述**                                                     | **推荐值** |
 | ----------------------- | ------------------------------------------------------------ | ---------- |
-| **批量值分隔符**        | 用于区分多个输入项。在本示例中，您可以保持默认值 ","。仅当您为连接器启用[批处理](./data-bridges.md)并且使用 [ClickHouse 的 FORMAT 语法](https://clickhouse.com/docs/en/sql-reference/statements/insert-into)指定其他格式时，才需要更改此设置。 | `,`        |
 | **连接池大小**          | 指定与 ClickHouse 服务交互时连接池中可以维护的并发连接数量。此选项通过限制或增加 EMQX 与 ClickHouse 之间的活动连接数量，帮助管理应用的可伸缩性和性能。<br/>**注意**：设置合适的连接池大小取决于多种因素，如系统资源、网络延迟和您应用的特定工作负载。过大的池大小可能导致资源耗尽，而过小的大小可能限制吞吐量。 | `8`        |
 | **Clickhouse 超时时间** | 指定连接器尝试与 ClickHouse 服务器建立连接时的最大等待时间（以秒为单位）。<br/>**注意**：谨慎选择超时设置对于平衡系统性能和资源利用至关重要。建议在各种网络条件下测试系统，以找到适合您特定用例的最佳超时值。 | `15`       |
 | **启动超时时间**        | 确定连接器在响应资源创建请求之前等待自动启动资源达到健康状态的最大时间间隔（以秒为单位）。此设置有助于确保连接器在验证连接的资源 - 如 ClickHouse 中的数据库实例 - 已完全运行并准备处理数据事务之前，不会继续进行操作。 | `5`        |

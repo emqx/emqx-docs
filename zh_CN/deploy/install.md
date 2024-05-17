@@ -1,12 +1,18 @@
-# 概览
+# 安装部署和迁移
 
-本章将向您介绍如何下载和安装 EMQX，运行 EMQX 所需满足的最低硬件规则，以及安装完成后 EMQX 所在目录的文件夹结构，以便后续的配置和维护操作。
+本章将向您介绍如何下载和安装 EMQX，支持的操作系统和平台，以及安装完成后 EMQX 所在目录的文件夹结构，以便后续的配置和维护操作。
 
 {% emqxee %}
 
-本章还将介绍许可证的配置，以及如何从 EMQX 4.4 迁移至 EMQX 5.1。
+本章还介绍了许可证的配置，以及如何从 EMQX 4.4 迁移至 EMQX 5.1。
 
 {% endemqxee %}
+
+{% emqxce %}
+
+本章还介绍了如何从 EMQX 4.4 迁移至 EMQX 5.1。
+
+{% endemqxce %}
 
 ## 安装环境
 
@@ -49,7 +55,7 @@ UTF-8 区域设置可以通过两种方式启用。
   sudo localectl set-locale LANG=C.UTF-8
   ```
 
-- 否则，使用 [`update-locale`](https://manpages.debian.org/buster/locales/update-locale.8.en.html) 命令启用：
+- 或者，使用 [`update-locale`](https://manpages.debian.org/buster/locales/update-locale.8.en.html) 命令启用：
 
   ```bash
   sudo update-locale LANG=C.UTF-8
@@ -103,8 +109,7 @@ EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是
 | [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | 是   | 是  |
 | [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是   | 是  |
 | [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | 是   | 是  |
-| [macOS](./install-macOS.md)       | macOS 11<br />macOS 12<br />macOS 13 (Homebrew)  | 是   | 是  |
-| [Windows](./install-windows.md)   | Windows Server 2019                              | 是   | 是  |
+| [macOS](./install-macOS.md)       | macOS 12<br />macOS 13 (Homebrew)  | 是   | 是  |
 
 {% endemqxce %}
 
@@ -116,11 +121,11 @@ EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是
 | [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | 是   | 是  |
 | [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是   | 是  |
 | [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | 是   | 是  |
-| [macOS](./install-macOS.md)       | macOS 11<br />macOS 12<br />                     | 是   | 是  |
+| [macOS](./install-macOS.md)       | macOS 12<br />macOS 13<br />                   | 是   | 是  |
 
 {% endemqxee %}
 
-## 硬件规格
+## <!--硬件规格
 
 EMQX 的硬件要求根据客户端连接数、消息消息速率和消息大小以及启用的功能而异。
 下面的最低硬件规格适用于运行 EMQX 并进行简单的功能验证，推荐配置能够支撑 10 万客户端连接以及每秒 10 万条消息吞吐。
@@ -136,7 +141,7 @@ EMQX 的硬件要求根据客户端连接数、消息消息速率和消息大小
 
 在生产环境中，您可通过我们的[配置估算计算器](https://www.emqx.com/zh/server-estimate)来计算不同连接与消息吞吐下的推荐硬件规格。
 
-:::
+:::-->
 
 ## 文件和目录
 
@@ -169,7 +174,7 @@ EMQX 安装完成后会创建一些目录用来存放运行文件和配置文件
 |bin | 存放可执行文件       | 读   | `emqx` 和`emqx.cmd`：EMQX 的可执行文件，具体使用可以查看[命令行接口](../admin/cli.md)。 |
 |etc | 存放配置文件         | 读   |`emqx.conf`：EMQX 的主配置文件，默认包含常用的配置项。<br /><br />`emqx-example-en.conf`：EMQX 示例配置文件，包含所有可选的配置项。<br /><br />`acl.conf`：默认 ACL 规则。<br /><br />`vm.args`：Erlang 虚拟机的运行参数。<br /><br />`certs/`：X.509 的密钥和证书文件。这些文件被用于 EMQX 的 SSL/TLS 监听器；当要与和外部系统集成时，也可用于建立 SSL/TLS 连接。 |
 |data | 存放 EMQX 的运行数据 | 写   |`authz`：Dashboard 或 REST API 上传的 [基于文件进行授权](../access-control/authz/file.md) 规则内容。<br /><br />`certs`：Dashboard 或 REST API 上传的证书。<br /><br />`configs`：启动时生成的配置文件，或者从 Dashboard/REST API/CLI 进行功能设置时覆盖的配置文件。<br /><br />`mnesia`：内置数据库目录，用于存储自身运行数据，例如告警记录、客户端认证与权限数据、Dashboard 用户信息等数据，**一旦删除该目录，所有业务数据将丢失。**<br /><br />  —  可包含以节点命名的子目录，如 `emqx@127.0.0.1`；如节点被重新命名，应手动将旧的目录删除或移走。<br /><br />  —  可通过 `emqx_ctl mnesia` 命令查询 EMQX 中 Mnesia 数据库的系统信息，具体请查看 [管理命令 CLI](../admin/cli.md)。<br /><br />`patches`：用于存储热补丁 `.beam` 文件，用于补丁修复。<br /><br />`trace`: 在线日志追踪文件目录。<br /><br /><br />在生产环境中，建议定期备份该文件夹下除 `trace` 之外的所有目录。 |
-|log  | 日志文件             | 读   |`emqx.log.*`：EMQX 运行时产生的日志文件，具体请查看[日志](../observability/log.md)。<br /><br />`erlang.log.*`：当以 `emqx start` 方式后台启动 EMQX 时，控制台日志的副本文件。 |
+|log  | 日志文件             | 读   |`emqx.log.*`：EMQX 运行时产生的日志文件，具体请查看[日志](../observability/log.md)。|
 
 :::tip
 

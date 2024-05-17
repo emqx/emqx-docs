@@ -123,7 +123,7 @@ $ mqttx sub -u emqx_u -t t/3 -q 1
 
 详细配置请参考 [authz:mysql](../../configuration/configuration-manual.html#authz:mysql)。
 
-MySQL authorizer 由 `type=mysql` 标识。
+<!--MySQL authorizer 由 `type=mysql` 标识。-->
 
 配置示例：
 

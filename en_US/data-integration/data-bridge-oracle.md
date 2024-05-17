@@ -37,7 +37,7 @@ The data integration with Oracle Database offers a range of features and benefit
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create the Oracle Database data integration, including how to set up the Oracle database server and create data tables.
+This section describes the preparations you need to complete before you start to create the Oracle Database data integration, including how to set up the Oracle Database server and create data tables.
 
 ### Prerequisites
 
@@ -93,85 +93,74 @@ Use the following SQL statements to create data table `t_emqx_client_events` in 
   );
   ```
 
-## Create Rules for Oracle Database Sinks
+## Create a Connector
 
-This section demonstrates how to create rules to specify the data to be saved into Oracle Database and rules for the online/offline status recording. It assumes that you run both EMQX and Oracle Database on the local machine. If you have Oracle Database and EMQX running remotely, adjust the settings accordingly. 
+This section demonstrates how to create a Connector to connect the Sink to the Oracle Database server.
 
-Rules for message storage and event recording require different SQL templates. Therefore, you need to create 2 different Sinks Oracle Database for message storage and event recording.
+The following steps assume that you run both EMQX and Oracle Database on the local machine. If you have Oracle Database and EMQX running remotely, adjust the settings accordingly.
 
-1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
+1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+2. Click **Create** in the top right corner of the page.
+3. On the **Create Connector** page, select **Oracle Database** and then click **Next**.
+4. In the **Configuration** step, configure the following information:
+   - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_oracle`.
+   - **Server Host**: Enter `127.0.0.1:1521`, or the actual hostname if the Oracle Database server is running remotely.
+   - **Database Name**: Enter `XE`.
+   - **Oracle Database SID**: Enter `XE`.
+   - **Username**: Enter `system`.
+   - **Password**: Enter `oracle`.
+5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Oracle Database server.
+7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to the Oracle Database and to record client events. For detailed steps, see [Create a Rule with Oracle Database Sink for Message Storage](#create-a-rule-with-oracle-database-sink-for-message-storage) and [Create a Rule with Oracle Database Sink for Events Recording](#create-a-rule-with-oracle-database-sink-for-events-recording).
+
+## Create a Rule with Oracle Database Sink for Message Storage
+
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the Oracle data table `t_mqtt_msgs` via a configured Sink. 
+
+1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
+3. Enter `my_rule` as the rule ID, and enter the following SQL syntax in the **SQL Editor**, which means the MQTT messages under topic `t/#`  will be saved to the Oracle Database.
 
-   - To create a rule for message storage, input the following SQL syntax, which means the MQTT messages under topic `t/#`  will be saved to Oracle Database.
+   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
 
-     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
-
-     ```sql
-     SELECT 
-       *
-     FROM
-       "t/#"
-     ```
-
-   - To create a rule for online/offline status recording, input the following SQL syntax:
-
-     ```sql
-     SELECT
-       *
-     FROM
-       "$events/client_connected", "$events/client_disconnected"
-     ```
-
+   ```sql
+   SELECT 
+     *
+   FROM
+     "t/#"
+   ```
+   
    Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to Oracle Database.
+4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to Oracle Database. 
 
-5. Select `Oracle Database` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+5. Select `Oracle Database` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select an Oracle Database Sink if you have created one. This demonstration will create a new Sink.
 
-6. Enter a name for the Connector. The name should be a combination of upper/lower case letters and numbers.
+6. Enter a name for the Sink. The name should combine upper/lower case letters and numbers.
 
-7. Enter the connection information:
-
-   - **Server Host**: Input `127.0.0.1:1521`, or the actual hostname if the Oracle Database server is running remotely.
-   - **Database Name**: Input `XE`.
-   - **Oracle Database SID**: Input `XE`.
-   - **Username**: Input `system`.
-   - **Password**: Input `oracle`.
+7. Select the `my_oracle` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
 8. Configure the **SQL Template** based on the feature to use.
 
    Note: This is a [preprocessed SQL](./data-bridges.md#prepared-statement), so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
 
-   - To create a Sink for message storage, use the SQL statement below:
-
-     ```sql
-     INSERT INTO t_mqtt_msgs(msgid, sender, topic, qos, retain, payload, arrived) VALUES(
-       ${id},
-       ${clientid},
-       ${topic},
-       ${qos},
-       ${flags.retain},
-       ${payload},
-       TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') + NUMTODSINTERVAL(${timestamp}/1000, 'SECOND')
-     )
-     ```
-
-   - To create a Sink for online/offline status recording, use the SQL statement below:
-
-     ```sql
-     INSERT INTO t_emqx_client_events(clientid, event, created_at) VALUES (
-       ${clientid},
-       ${event},
-       TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') + NUMTODSINTERVAL(${timestamp}/1000, 'SECOND')
-     )
-     ```
-
+   ```sql
+   INSERT INTO t_mqtt_msgs(msgid, sender, topic, qos, retain, payload, arrived) VALUES(
+     ${id},
+     ${clientid},
+     ${topic},
+     ${qos},
+     ${flags.retain},
+     ${payload},
+     TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') + NUMTODSINTERVAL(${timestamp}/1000, 'SECOND')
+   )
+   ```
+   
 9. Leave other options as default.
 
-10. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see the relevant configuration information in [Features of Sink](./data-bridges.md).
+10. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see the relevant configuration information in [Features of Sink](./data-bridges.md#features-of-sink).
 
 11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Oracle Database server.
 
@@ -183,6 +172,33 @@ You have now successfully created the rule for forwarding data through the Oracl
 
 You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to Oracle Database after parsing by rule `my_rule`.
 
+## Create a Rule with Oracle Database Sink for Events Recording
+
+This section demonstrates how to create a rule for recording the clients' online/offline status and saving the events data to the Oracle data table `t_emqx_client_events` via a configured Sink.
+
+The rule creation steps are similar to those in [Create a Rule with Oracle Database Sink for Message Storage](#create-a-rule-with-oracle-database-sink-for-message-storage) except for the SQL rule syntax and SQL template.
+
+The SQL rule syntax for online/offline status recording is as follows:
+
+```sql
+SELECT
+  *
+FROM
+  "$events/client_connected", "$events/client_disconnected"
+```
+
+The SQL template for the Sink is as follows:
+
+Note: This is a [preprocessed SQL](./data-bridges.md#prepared-statement), so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+
+```sql
+INSERT INTO t_emqx_client_events(clientid, event, created_at) VALUES (
+  ${clientid},
+  ${event},
+  TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') + NUMTODSINTERVAL(${timestamp}/1000, 'SECOND')
+)
+```
+
 ## Test the Rules
 
 Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
@@ -191,7 +207,7 @@ Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello Oracle Database" }'
 ```
 
-Check the running status of the two Sinks, there should be one new incoming and one new outgoing message.
+Check the running status of the two Sinks, there should be one new incoming and one new outgoing message and 2 event records.
 
 Check whether the data is written into the `t_mqtt_msgs` data table.
 

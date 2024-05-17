@@ -6,7 +6,15 @@ Because of the variety of IoT device terminals and the different coding formats 
 The Schema Registry manages the Schema used for coding and decoding, processes the encoding or decoding requests, and returns the results. The Schema Registry in collaboration with the rule engine can be adapted for device access and rule design in
 various scenarios.
 
-EMQX Schema Registry currently supports codecs in two formats: [Avro](https://avro.apache.org) and [Protobuf](https://developers.google.com/protocol-buffers/). Avro and Protobuf are Schema-dependent data formats. The encoded data is binary and the decoded data is in [Map format](#rule-engine-internal-data-format-map). The decoded data can be used directly by the rule engine and other plugins. Schema Registry maintains Schema text for built-in encoding formats such as Avro and Protobuf.
+EMQX Schema Registry currently supports codecs in below formats:
+
+- [Avro](https://avro.apache.org)
+- [Protobuf](https://developers.google.com/protocol-buffers/)
+- [JSON Schema](https://json-schema.org/)
+
+Avro and Protobuf are Schema-dependent data formats. The encoded data is binary and the decoded data is in [Map format](#rule-engine-internal-data-format-map). The decoded data can be used directly by the rule engine and other plugins. Schema Registry maintains Schema text for built-in encoding formats such as Avro and Protobuf.
+
+JSON schema can be used to validate if input JSON object is following the schema definetions or if the JSON object output from the rule engine is valid before producing the data to downstream.
 
 The diagram below shows an example of a Schema Registry application. Multiple devices report data in different formats, which are decoded by Schema Registry into a uniform internal format and then forwarded to the backend application.
 
@@ -23,19 +31,25 @@ A common use case is to use the rule engine to call the encoding and decoding in
 Example of an encoding call:
 
 ```erlang
-schema_encode(SchemaName, Data) -> RawData
+schema_encode(SchemaName, Map) -> Bytes
 ```
 
 Example of a decoding call:
 
 ```erlang
-schema_decode(SchemaName, RawData) -> Data
+schema_decode(SchemaName, Bytes) -> Map
 ```
 
 When encoding data from MQTT messages which are JSON-encoded, you also need to decode it to the Map internal format using the `json_decode` function before encoding with the schema function.  For example:
 
 ```erlang
-schema_encode(SchemaName, json_decode(Data))
+schema_encode(SchemaName, json_decode(Map)) -> Bytes
+```
+
+When checking if JSON data can be validated against the JSON schema before encoding or after decoding, use the following schema validation example:
+
+```erlang
+schema_check(SchemaName, Map | Bytes) -> Boolean
 ```
 
 ## Schema Registry + Rule Engine

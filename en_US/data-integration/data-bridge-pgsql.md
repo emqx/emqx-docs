@@ -105,32 +105,28 @@ CREATE TABLE emqx_client_events (
 );
 ```
 
-## Create Connector
+## Create a Connector
 
 Before add PostgreSQL Sink, you need to create the PostgreSQL connector. It assumes that you run both EMQX and PostgreSQL on the local machine. If you have PostgreSQL and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
-
 2. Click **Create** on the top right corner of the page.
-
 3. In the **Create Connector** page, click to select **PostgreSQL**, and then click **Next**.
+4. Enter a name for the sink. The name should be a combination of upper/lower case letters and numbers, for example, `my_psql`.
+5. Enter the connection information:
 
-4. Input a name for the sink. The name should be a combination of upper/lower case letters and numbers.
+   - **Server Host**: Enter `127.0.0.1:5432`, or the actual hostname if the PostgreSQL server is running remotely.
+   - **Database Name**: Enter `emqx_data`.
+   - **Username**: Enter `postgres`.
+   - **Password**: Enter `public`.
+   - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+6. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+7. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the PostgreSQL server.
+8. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to PostgreSQL and record client events. For detailed steps, see [Create a Rule with PostgreSQL Sink for Message Storage](#create-a-rule-with-postresql-sink-for-message-storage) and [Create a Rule with PostgreSQL Sink for Events Recording](#create-a-rule-with-postgresql-sink-for-events-recording).
 
-5. Input the connection information:
+## Create a Rule with PostgreSQL Sink for Message Storage
 
-   - **Server Host**: Input `127.0.0.1:5432`, or the actual hostname if the PostgreSQL server is running remotely.
-   - **Database Name**: Input `emqx_data`.
-   - **Username**: Input `postgres`.
-   - **Password**: Input `public`.
-
-6. Click the **Create** button at the bottom to complete the rule creation. Now that you have finished creating the connector, you will move on to creating a Rule and Sink to specify the data that needs to be written.
-
-## Create Message Storage Rule
-
-You need to create two PostgreSQL Sinks for message storage and event logging. The following sections demonstrate the creation of a Sink for message storage and a Sink for event logging.
-
-In this section we will create our first PostgreSQL Sink to enable storage of client published messages.
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the PostgreSQL table `t_mqtt_msg` via the configured Sink.
 
 1. Go to the Dashboard **Integration** -> **Rules** page.
 
@@ -138,47 +134,61 @@ In this section we will create our first PostgreSQL Sink to enable storage of cl
 
 3. Enter the rule ID `my_rule` and enter the rule in the SQL editor. Here we choose to store MQTT messages with `t/#` topic to PostgreSQL, make sure that the fields selected by the rule (in the SELECT section) contain all the variables used in the SQL template, here the rule SQL is as follows:
 
-```sql
-SELECT
-*
-FROM
-"t/#"
-```
+   ```sql
+   SELECT
+   *
+   FROM
+   "t/#"
+   ```
 
-4. To add an action, select PostgreSQL from the **Type of Action** drop-down, leave the **Action** drop-down at the default **Create Action** option, or you can select a previously created PostgreSQL action from the Action drop-down box. Here we create a brand new Sink and add it to the rule.
+   ::: tip
 
-5. Enter the name and description of the Sink in the form below.
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-6. Configure the **SQL Template**. Use the SQL statements below to insert data.
+   :::
+
+4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to PostgreSQL.
+
+5. Select PostgreSQL from the **Type of Action** drop-down, leave the **Action** drop-down at the default `Create Action` option, or you can select a previously created PostgreSQL action from the Action drop-down box. This example will create a brand new Sink and add it to the rule.
+
+6. Enter the name and description of the Sink in the form below.
+
+7. From the **Connector** dropdown box, select the `my_psql` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+
+8. Configure the **SQL Template**. Use the SQL statements below to insert data.
 
    Note: This is a [preprocessed SQL](./data-bridges.md#prepared-statement), so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
 
-```sql
-INSERT INTO t_mqtt_msg(msgid, sender, topic, qos, payload, arrived) VALUES(
-  ${id},
-  ${clientid},
-  ${topic},
-  ${qos},
-  ${payload},
-  TO_TIMESTAMP((${timestamp} :: bigint)/1000)
-)
-```
+   ```sql
+   INSERT INTO t_mqtt_msg(msgid, sender, topic, qos, payload, arrived) VALUES(
+     ${id},
+     ${clientid},
+     ${topic},
+     ${qos},
+     ${payload},
+     TO_TIMESTAMP((${timestamp} :: bigint)/1000)
+   )
+   ```
 
-7. **Advanced Settings** (optional) to configure parameters such as synchronous/asynchronous mode, queue vs. batch, etc. as appropriate.
+9. Advanced settings (optional): For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-8. Click the **Create** button to complete the creation of the Sink. After successful creation, the page will return to the Create Rule page, and the new Sink will be added to the Rule Action.
+10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the PostgreSQL server.
 
-9。 Go back to the Rule Creation page and click the **Create** button to complete the rule creation.
+11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
 
 Now that you have successfully created the rule, you can click **Integration** -> **Rules** page to see the newly created rule and also see the newly created PostgreSQL Sink in the **Action (Sink)** tab.
 
 You can also click **Integration** -> **Flow Designer** to see the topology, through which you can visualize that the messages under topic `t/#` are being written to PostgreSQL after being parsed by the rule `my_rule`.
 
-## Create Online/Offline Status Recording Rule
+## Create a Rule with PostgreSQL for Events Recording
 
-The operating steps are similar to those at the [Message Storage](#create-message-storage-rule) part expect for the SQL template and SQL rules.
+This section demonstrates how to create a rule for recording the clients' online/offline status and storing the events data to the PostgreSQL table `emqx_client_events` via a configured Sink.
 
-The SQL template for online/offline status recording is as follows.
+The steps are similar to those in [Create a Rule with PostgreSQL Sink for Message Storage](#create-a-rule-with-postresql-sink-for-message-storage) expect for the SQL template and SQL rules.
+
+The rule SQL statement for online/offline status recording is as follows.
 
 ```sql
 SELECT
@@ -187,7 +197,7 @@ FROM
   "$events/client_connected", "$events/client_disconnected"
 ```
 
-The sink SQL rule is as follows.
+The SQL template for events recording is as follows.
 
 Note: This is a [preprocessed SQL](./data-bridges.md#prepared-statement), so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
 
@@ -199,7 +209,7 @@ INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
 )
 ```
 
-## Test Rules
+## Test the Rules
 
 Use MQTTX to send a message to topic `t/1` to trigger an online/offline event.
 
@@ -207,7 +217,7 @@ Use MQTTX to send a message to topic `t/1` to trigger an online/offline event.
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello PostgreSQL" }'
 ```
 
-Check the running status of the two sinks, there should be one new incoming and one new outgoing message.
+Check the running status of the two sinks. For the message storage Sink, there should be 1 new incoming and 1 new outgoing message. For the events recording Sink, there 2 events records.
 
 Check whether the data is written into the `t_mqtt_msg` data table.
 
@@ -221,7 +231,7 @@ emqx_data=# select * from t_mqtt_msg;
 
 ```
 
-Check whether the data is written into the`emqx_client_events` table.
+Check whether the data is written into the `emqx_client_events` table.
 
 ```bash
 emqx_data=# select * from emqx_client_events;

@@ -66,9 +66,32 @@ Relevant Pulsar topics should be created before creating the data integration in
 docker exec -it pulsar bin/pulsar-admin topics create-partitioned-topic persistent://public/default/my-topic -p 1
 ```
 
-## Create Rule for Pulsar Sink
+## Create a Connector
 
-This section demonstrates how to create a Pulsar Producer Rule and add action to the rule via the Dashboard. It assumes you run EMQX and Pulsar on the local machine. If you have Pulsar and EMQX running remotely, adjust the settings accordingly.
+This section demonstrates how to create a Connector to connect the Sink to the Pulsar server.
+
+The following steps assume that you run both EMQX and Pulsar on the local machine. If you have Pulsar and EMQX running remotely, adjust the settings accordingly.
+
+1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+2. Click **Create** in the top right corner of the page.
+3. On the **Create Connector** page, select **Pulsar** and then click **Next**.
+4. In the **Configuration** step, configure the following information:
+   - Enter the connector name, which should be a combination of upper and lower case letters and numbers, for example: `my_pulsar`.
+   - **Bridge Role**: `Producer` is selected by default.
+   - Configure the information for connecting to the Pulsar server and message writing:
+     - **Servers**: Enter `pulsar://localhost:6650` for the **Servers**. If you have Pulsar and EMQX running remotely, adjust the settings accordingly.
+     - **Authentication**: Select the authentication method: `none`, `Basic auth`, or `token`. For `Basic auth`, EMQX joins `Username` and `Password` with `:` to make the authentication string.
+     - **Pulsar Topic Name**: Enter `persistent://public/default/my-topic`, the pulsar topic you created before. Note: Variables are not supported here.
+     - **Partition Strategy**: Select the way for the producer to dispatch messages to Pulsar partitions: `random`, `roundrobin`, or `key_dispatch`.
+     - **Compression**: Specify whether or not to use compression algorithms and which algorithms are used to compress/decompress the records in a Pulsar message. The optional values are: `no_compression`, `snappy`, or `zlib`.
+     - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+5. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
+6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Pulsar server.
+7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Pulsar. For detailed steps, see [Create a Rule with Pulsar Sink](#create-a-rule-with-pulsar-sink).
+
+## Create a Rule with Pulsar Sink
+
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the Pulsar topic `my-topic` via a configured Sink. 
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -97,26 +120,20 @@ This section demonstrates how to create a Pulsar Producer Rule and add action to
 
 8. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
 
-9. Configure the following options for the Sink: 
+9. Select the `my_pulsar` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-   - **Bridge Role**: `Producer` is selected by default.
-   - Configure the information for connecting to the Pulsar server and message writing:
-     - **Servers**: Enter `pulsar://localhost:6650` for the **Servers**. If you have Pulsar and EMQX running remotely, adjust the settings accordingly.
-     - **Authentication**: Select the authentication method based on your actual situation: `none`, `Basic auth`, or `token`.
-     - **Pulsar Topic Name**: Enter `persistent://public/default/my-topic`, the pulsar topic you created before. Note: Variables are not supported here.
-     - **Partition Strategy**: Select the way for the producer to dispatch messages to Pulsar partitions: `random`, `roundrobin`, or `key_dispatch`.
-     - **Compression**: Specify whether or not to use compression algorithms and which algorithms are used to compress/decompress the records in a Pulsar message. The optional values are: `no_compression`, `snappy`, or `zlib`.
-     - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
-   - **Message Key**: Pulsar message key. Insert a string here, either a plain string or a string containing placeholders (${var}).
-   - **Message Value**: Pulsar message value. Insert a string here, either a plain string or a string containing placeholders (${var}).
+10. Configure the following options for the Sink:
 
-10. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
+    - **Message Key**: Pulsar message key. Insert a string here, either a plain string or a string containing placeholders (${var}).
+    - **Message Value**: Pulsar message value. Insert a string here, either a plain string or a string containing placeholders (${var}).
 
-11. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the Pulsar server.
+11. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
 
-12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+12. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the Pulsar server.
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+13. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+14. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
 
 
 You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Pulsar Sink.

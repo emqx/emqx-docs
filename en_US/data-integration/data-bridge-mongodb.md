@@ -177,17 +177,20 @@ The following steps assume that you run both EMQX and MongoDB on the local machi
      - `sharded`: a sharded cluster in MongoDB.
    - **Server Host**: Enter `127.0.0.1:27017`, or the actual URL if the MongoDB server is running remotely.
    - **Database Name**: Enter `emqx_data`.
+   - **Write Mode**: Keep the default value `unsafe`.
    - **Username**: Enter `admin`.
    - **Password**: Enter `public`.
+   - **Auth Source**: Enter the aatabase name associated with the user's credentials.
+   - **Use Legacy Protocol**: Determine if MongoDB's legacy communication protocol should be used (MongoDB introduced a new wire protocol in version 3.6, with the legacy protocol retained for backward compatibility.). This setting can be set to `true`, `false`, or `auto`. In `auto` mode (default option), EMQX will automatically determine which protocol to use based on the detected MongoDB version.
    - **Srv Record**: Disabled by default. Once enabled, it allows EMQX to use DNS SRV records to discover the MongoDB hosts it should connect to, which makes it easier to connect to replica sets or sharded clusters without having to specify each host in the connection string. 
-   - Configure the other options according to your business needs.
    - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
-
 6. Advanced settings (optional):  For details, see [Advanced Configurations](#advanced-configurations).
 7. Before clicking **Create**, you can click **Test Connectivity** to test if the Connector can connect to the MongoDB server.
 8. Click the **Create** button at the bottom to complete the creation of the Connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to MongoDB. For detailed steps, see [Create a Rule and MongoDB Sink](#create-a-rule-and-mongodb-sink).
 
 ## Create a Rule with MongoDB Sink
+
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to MongoDB via a configured Sink. 
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -309,17 +312,16 @@ To test if the rule and Sink work as you expected, you can use the [MQTTX](https
 
 ## Advanced Configurations
 
-This section delves deeper into the advanced configuration options available for the EMQX MongoDB Connector and Sink. When configuring the Connector and Sink, navigate to **Advanced Settings** to tailor the following parameters to meet your specific needs.
+This section introduces some of the advanced configuration options available for the EMQX MongoDB Connector and Sink. When configuring the Connector and Sink, expand **Advanced Settings** to tailor the following parameters to meet your specific needs.
 
-| **Fields**                   | **Descriptions**                                                                                                                                                                                                                                                                                                                                                            | **Recommended Value** |
-|------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
-| **Connect Timeout**          | The time duration EMQX will wait while attempting to establish a connection to MongoDB before timing out.                                                                                                                                                                                                                                                                   | 30s                   |
-| **Socket Timeout**           | This determines how long EMQX will wait while trying to send or receive data on a socket connection with MongoDB before it times out.                                                                                                                                                                                                                                       | 30s                   |
-| **Max Overflow Workers**     | Specifies the additional number of workers that can be created when all existing workers are occupied. This setting is crucial in times of workload surges to permit more concurrent connections to MongoDB.                                                                                                                                                                | 0                     |
-| **Wait Queue Timeout**       | The maximum duration a worker can remain idle while waiting for a connection to MongoDB to become available.                                                                                                                                                                                                                                                                | 10s                   |
-| **Heartbeat Period**         | Defines the interval at which the driver checks the state of the MongoDB deployment. This specifies the time between consecutive checks, effectively controlling the frequency of these heartbeat signals to ensure MongoDB's operational status.                                                                                                                           | 200s                  |
-| **Minimum Heartbeat Period** | Sets the shortest time interval allowed between heartbeats, ensuring that the driver doesn't check the MongoDB state too frequently. This is vital for avoiding unnecessary loads and ensuring efficient communication between EMQX and MongoDB.                                                                                                                            | 200s                  |
-| **Use Legacy Protocol**      | Determines if MongoDB's legacy communication protocol should be used. MongoDB introduced a new wire protocol in version 3.6, with the legacy protocol retained for backward compatibility. This setting can be set to true, false, or auto. In "auto" mode (default option), EMQX will automatically determine which protocol to use based on the detected MongoDB version. | auto                  |
+| **Fields**                   | **Descriptions**                                             | **Recommended Value** |
+| ---------------------------- | ------------------------------------------------------------ | --------------------- |
+| **Connect Timeout**          | The time duration EMQX will wait while attempting to establish a connection to MongoDB before timing out. | 30s                   |
+| **Socket Timeout**           | This determines how long EMQX will wait while trying to send or receive data on a socket connection with MongoDB before it times out. | 30s                   |
+| **Max Overflow Workers**     | Specifies the additional number of workers that can be created when all existing workers are occupied. This setting is crucial in times of workload surges to permit more concurrent connections to MongoDB. | 0                     |
+| **Wait Queue Timeout**       | The maximum duration a worker can remain idle while waiting for a connection to MongoDB to become available. | 10s                   |
+| **Heartbeat Period**         | Defines the interval at which the driver checks the state of the MongoDB deployment. This specifies the time between consecutive checks, effectively controlling the frequency of these heartbeat signals to ensure MongoDB's operational status. | 200s                  |
+| **Minimum Heartbeat Period** | Sets the shortest time interval allowed between heartbeats, ensuring that the driver doesn't check the MongoDB state too frequently. This is vital for avoiding unnecessary loads and ensuring efficient communication between EMQX and MongoDB. | 200s                  |
 
 
 ## More Information

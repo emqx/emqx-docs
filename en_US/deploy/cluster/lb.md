@@ -30,11 +30,11 @@ If SSL/TLS is enabled, it is recommended to terminate the SSL/TLS connection at 
 
 ### Hybrid Deployment
 
-If you want to use a cloud service provider's LB as the connection and load balancing layer but it does not support TLS termination or lacks certain TLS features (such as proxy protocol), you can select a hybrid deployment architecture: deploy HAProxy or Nginx in front of EMQX to terminate SSL/TLS connections.
+If you want to use a cloud service provider's LB as the connection and load balancing layer but it does not support TLS termination or lacks certain TLS features (such as proxy protocol), you can select a hybrid deployment architecture: deploy HAProxy or NGINX in front of EMQX to terminate SSL/TLS connections.
 
 Compared to directly using EMQX to handle TLS connections, this approach can get greater performance benefits. The deployment architecture is as follows:
 
-<img src="./assets/lb_6.png" alt="EMQX Load Balancing Hybrid Deployment" style="zoom:33%;" />
+<img src="./assets/lb_6.png" alt="EMQX Load Balancing Hybrid Deployment" style="zoom:80%;" />
 
 In addition to load balancing deployment clusters, you can also use DNS round-robin to connect directly to the EMQX cluster, which involves adding all nodes to the DNS round-robin list. Devices access the cluster via domain names or IP address lists. However, it is generally not recommended to use DNS round-robin for production environments.
 
@@ -76,6 +76,6 @@ LB products for the public cloud:
 
 The following two pages will use a privately deployed LB server as an example to introduce how to configure and load balance an EMQX cluster:
 
-- [Load Balance EMQX Cluster with Nginx](./lb-nginx.md)
+- [Load Balance EMQX Cluster with NGINX](./lb-nginx.md)
 - [Load Balance EMQX Cluster with HAProxy](./lb-haproxy.md)
 

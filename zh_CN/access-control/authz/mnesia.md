@@ -28,7 +28,7 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的授
 - `type`：授权检查器的数据源类型，此处填入 `built_in_database`
 - `enable`：是否激活该检查器，可选值：`true`、`false`
 
-详细参数列表，请参考 [authz-mnesia](../../configuration/configuration-manual.html#authz-mnesia)。
+<!--详细参数列表，请参考 [authz-mnesia](../../configuration/configuration-manual.html#authz-mnesia)。-->
 
 ## 配置授权检查规则
 
@@ -38,7 +38,7 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的授
 
 在 Dashboard 的 **授权** 页面，点击 **Built-in Database** 数据源对应的 **操作 **栏下的 **权限管理**，即可进行授权检查规则的配置。
 
-您可根据需要从客户端 ID**、**用户名或直接从主题角度设置授权检查。
+您可根据需要从客户端 ID、用户名或直接从主题角度设置授权检查。
 
 - **客户端 ID**：见 **客户端 ID**  页签，指定适用此条规则的客户端
 - **用户名**：见 **用户名** 页签，指定适用此条规则的用户名

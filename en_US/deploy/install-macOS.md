@@ -15,7 +15,6 @@ Supported versions:
 
 - macOS 13 (Homebrew package only)
 - macOS 12
-- macOS 11
 
 ## Install EMQX with Homebrew
 
@@ -104,16 +103,20 @@ This page guides you on installing and starting EMQX on macOS with a zip file.
 
 Supported versions:
 
+- macOS 13
 - macOS 12
-- macOS 11
 
 The instructions below will take macOS 12 as an example to illustrate how to download the latest version of EMQX. If you want to install a different version or in a different system, please visit the [EMQX Deployment page](https://www.emqx.com/en/try?product=enterprise). 
 
 ## Install EMQX
 
-1. Go to [EMQ Official Site](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=macOS=currentOS=macOS12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
+1. Go to the [official site for EMQX](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=macOS=currentOS=macOS12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
+
 2. Select `@EE_VERSION@` for **Version** and `macOS` for **OS**, and click the **Download** button.
-3. On the Downloads and Install page, select `zip` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Download and install the package according to the instruction.
+
+3. On the Downloads and Install page, select `zip` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Click **Download Now**.
+
+   You can also follow the command instructions on the page.
 
 ## Start and Stop EMQX
 

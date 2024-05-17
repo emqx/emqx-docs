@@ -193,7 +193,7 @@ Before adding a Confluent Sink action, you need to create a Confluent producer c
 
 Once created, the connector will automatically connect to Confluent Cloud. Next, you need to create a rule based on this connector to forward data to the Confluent cluster configured in the connector.
 
-## Create a Rule for Confluent Sink
+## Create a Rule with Confluent Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the MQTT topic `t/#` and send the processed results to Confluent's `testtopic-in` topic using the configured Confluent Sink.
 
@@ -216,7 +216,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    Note: If you are a beginner, you can click **SQL Example** and **Enable Test** to learn and test SQL rules.
 
-5. Click the + **Add Action** button to define the action triggered by the rule. From the **Type of Action** dropdown list, select `Confluent Producer`, keep the **Action** dropdown box to the default `Create Action` option, or choose a previously created Confluent Producer action from the **Action** dropdown box. This demonstration creates a new rule and adds it to the rule.
+5. Click the + **Add Action** button to define the action to be triggered by the rule. From the **Type of Action** dropdown list, select `Confluent Producer`, keep the **Action** dropdown box to the default `Create Action` option, or choose a previously created Confluent Producer action from the **Action** dropdown box. This demonstration creates a new rule and adds it to the rule.
 
 6. Enter the name and description of the Sink in the corresponding text boxes below.
 

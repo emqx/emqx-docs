@@ -65,7 +65,7 @@ Select **Republish** from the drop-down menu under **Action**, and configure the
 
 ![action-republish](./assets/action-republish.png)
 
-On the **Create Rules** page, click the **Create** button at the bottom to complete the rule creation. This rule will be added to as a new entry in the **Rules** page. You can view the rule ID, data source, enable or disable the rule, and creation time. You can also click **Settings** to modify the data source or add more action, or click the **More** button to duplicate or delete the rule.
+On the **Create Rules** page, click the **Create** button at the bottom to complete the rule creation. This rule will be added to as a new entry in the **Rules** page. You can view the rule ID, Source, Enable status, and Action Count. You can also click **Settings** to modify the data source or add more action, or click the **More** button to duplicate or delete the rule.
 
 ::: tip
 The republishing action does not prevent the delivery of the original message. For example, according to the rule, messages under topic "t/1" will be republished under topic "a/1", in the meantime "t/1" message will still be delivered to the clients subscribed to topic  "t/1".
@@ -77,8 +77,8 @@ In addition to the republishing action, you can choose to print the output of th
 
 The console output action is used to print the result message of a rule to the console or log file.
 
-* If EMQX is started with `emqx console`, the results will be printed to the terminal where `emqx console` was invoked.
-* If EMQX is started with `emqx start`, the results will be printed to a log file (`erlang log.*`) under the `log` dir of EMQX.
+- When EMQX is launched in either `console` or `foreground` mode, with `foreground` being the default mode in Docker environments, its output is directed to the console.
+- If EMQX is started via systemd, the output is captured and stored by the journal system. This can be examined using the `journalctl` command.
 
 The output will be in the format below
 

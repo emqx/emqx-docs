@@ -6,7 +6,7 @@
 
 ## 上传文件并将其存储在本地磁盘
 
-1. 在 EMQX 配置文件 `etc/emqx.conf` 中添加以下配置启用文件传输功能：
+1. 在 EMQX 配置文件 `etc/emqx.conf` 中添加以下配置启用文件传输功能，并启动 EMQX：
 
    ```bash
    file_transfer {
@@ -16,13 +16,7 @@
 
    该配置使用本地磁盘存储上传的分片文件，传输完成后并不会对分片文件进行合并。
 
-2. 运行以下命令启动 EMQX：
-
-   ```bash
-   ./bin/emqx start
-   ```
-
-3. 运行以下命令下载文件传输示例程序 `emqx-ft`，并设置测试客户端环境：
+2. 运行以下命令下载文件传输示例程序 `emqx-ft`，并设置测试客户端环境：
 
    ```bash
    git clone https://github.com/emqx/emqx-ft.git
@@ -32,7 +26,7 @@
    pip install .
    ```
 
-4. 使用 `emqx-ft` 命令行工具运行以下命令以上传文件：
+3. 使用 `emqx-ft` 命令行工具运行以下命令以上传文件：
 
    ```bash
    emqx-ft --file test-file.txt \
@@ -51,7 +45,7 @@
    | `--client-id`    | 客户端 ID，用于标识进行文件上传操作的客户端。                          |
    | `--file-name`    | 上传后的文件名。                                                       |
 
-5. 运行以下命令列出已上传的分片文件：
+4. 运行以下命令列出已上传的分片文件：
 
    ```bash
    $ tree /var/lib/emqx/file_transfer/exports
@@ -67,7 +61,7 @@
    └── tmp
    ```
 
-6. 使用 REST API 列出已上传文件列表，列表包含已上传文件的详细信息，包括名称、大小和时间戳：
+5. 使用 REST API 列出已上传文件列表，列表包含已上传文件的详细信息，包括名称、大小和时间戳：
 
    ```bash
    $ curl -u '...' -s 'http://127.0.0.1:18083/api/v5/file_transfer/files' | jq
@@ -90,7 +84,7 @@
    }
    ```
 
-7. 运行以下命令以使用提供的 API 下载文件：
+6. 运行以下命令以使用提供的 API 下载文件：
 
    ```bash
    curl -u '...' -s 'http://127.0.0.1:18083/api/v5/file_transfer/file?node=emqx%40127.0.0.1&fileref=8E%2FB5%2F7023DA998C12F0B2A6CA586027E48BEC6271%2Fclient-1%2Ffile-id-1%2Fuploaded-test-file.txt'
@@ -100,7 +94,7 @@
 
 文件传输允许将已上传的文件导出到兼容 S3 的对象存储系统，如 Amazon S3 和 MinIO。在使用 S3 存储桶的情况下，EMQX 仅存储文件传输列表，而不存储文件本身。
 
-1. 在 EMQX 配置文件 `etc/emqx.conf` 中启用文件传输功能并配置 S3 存储桶：
+1. 在 EMQX 配置文件 `etc/emqx.conf` 中启用文件传输功能并配置 S3 存储桶，并启动 EMQX：
 
    ```bash
    file_transfer {
@@ -130,13 +124,7 @@
    }
    ```
 
-2. 运行以下命令启动 EMQX ：
-
-   ```bash
-   ./bin/emqx start
-   ```
-
-3. 运行以下命令下载文件传输示例程序 `emqx-ft`，并设置测试客户端环境：
+2. 运行以下命令下载文件传输示例程序 `emqx-ft`，并设置测试客户端环境：
 
    ```bash
    git clone https://github.com/emqx/emqx-ft.git
@@ -146,7 +134,7 @@
    pip install .
    ```
 
-4. 使用 `emqx-ft` 命令行工具运行以下命令以上传文件：
+3. 使用 `emqx-ft` 命令行工具运行以下命令以上传文件：
 
    ```bash
    emqx-ft --file test-file.txt \
@@ -165,7 +153,7 @@
    | `--client-id`    | 客户端 ID，用于标识进行文件上传操作的客户端。                          |
    | `--file-name`    | 上传后的文件名。    |
 
-5. 使用 S3 命令行工具运行以下命令，手动列出已上传的文件：
+4. 使用 S3 命令行工具运行以下命令，手动列出已上传的文件：
 
    请确保已安装并正确配置了`s3cmd`，您可以参考 [Official s3cmd repo](https://github.com/s3tools/s3cmd) 获取更多信息。
 
@@ -176,7 +164,7 @@
 
    输出将显示指定 S3 存储桶中的文件。
 
-6. 运行以下命令，使用 REST API 列出已上传文件的列表。
+5. 运行以下命令，使用 REST API 列出已上传文件的列表。
 
    ```bash
    $ curl -u '...' -s 'http://127.0.0.1:18083/api/v5/file_transfer/files' | jq
@@ -194,7 +182,7 @@
    }
    ```
 
-7. 运行以下命令，使用提供的 URI 直接从 S3 存储下载文件。
+6. 运行以下命令，使用提供的 URI 直接从 S3 存储下载文件。
 
    ::: tip
 
