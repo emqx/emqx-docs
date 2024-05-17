@@ -97,7 +97,7 @@ EMQX 授权支持的数据查询占位符如下：
 
 - `${cert_subject}`: 将在运行时被替换为客户端 TLS 证书的主题（Subject），仅适用于 TLS 连接。
 
-- `${client_attrs.NAME}`: 某一个客户端属性，`NAME` 替换成 `mqtt.client_attrs_init` 规则提取的某一个字段名称。
+- `${client_attrs.NAME}`: 某一个客户端属性，`NAME` 替换成 [客户端属性](../../client_attributes/client_attributes.md) 设置的属性名称。
 
 <!-- TODO
 确认 HTTP AuthZ 为什么会多出几个

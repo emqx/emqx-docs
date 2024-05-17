@@ -91,7 +91,7 @@ The following placeholders are supported in query statements:
 * `${peerhost}`: It is replaced with the client's IP address at runtime. EMQX supports [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt), that is, even if EMQX is deployed behind some TCP proxy or load balancer, users can still use this placeholder to get the real IP address.
 * `${cert_common_name}`: It is replaced by the Common Name of the client's TLS certificate at runtime, only applicable to TLS connections.
 * `${cert_subject}`:  It is replaced by the subject of the client's TLS certificate at runtime, only applicable to TLS connections.
-* `${client_attrs.NAME}`: A client attribute. `NAME` is to be replaced by an attribute name extraction rule configured in `mqtt.client_attrs_init`.
+* `${client_attrs.NAME}`: A client attribute. `NAME` is to be replaced by an [attribute name] (../../client_attributes/client_attributes.md) set per attribute extraction rules.
 
 #### Topic Placeholders
 

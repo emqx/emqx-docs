@@ -35,9 +35,7 @@ Body:
 }
 ```
 
-
-
-`client_attrs` 是可选的
+`client_attrs` is optional.
 
 ::: tip EMQX 4.x Compatibility Notes
 
