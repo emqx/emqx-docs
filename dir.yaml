@@ -304,7 +304,7 @@
       edition: ee
     - title_en: Schema Validation
       title_cn: Schema 验证
-      path: message-validation/message-validation
+      path: data-integration/schema-validation
       edition: ee
       
 - title_en: Flow Designer
