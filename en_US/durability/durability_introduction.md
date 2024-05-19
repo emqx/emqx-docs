@@ -85,6 +85,8 @@ Each durable MQTT message is stored exactly once on each replica, regardless of 
 
 EMQX's durable storage is organized into a hierarchical structure comprising storages, shards, generations, and streams.
 
+![Diagram of EMQX durable storage sharding](./assets/emqx_ds_sharding.png)
+
 #### Storage
 
 Storage encapsulates all data of a certain type, such as MQTT messages or MQTT sessions.
