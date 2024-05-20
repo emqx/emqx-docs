@@ -1,4 +1,4 @@
-# Configure and Manage Durable Storage 
+# Configure and Manage Durable Storage
 
 This document describes configuration, and operation and management interfaces related to the durable sessions.
 
@@ -253,17 +253,17 @@ This counter is incremented every time when writing data to the durable storage 
 
 ### `emqx_ds_egress_flush_time`
 
-This is a rolling average of time spent writing batches to the durable storage.
+This is a rolling average of time (in μs) spent writing batches to the durable storage.
 It's a key indicator of the replication speed.
 
 ### `emqx_ds_store_batch_time`
 
-This is a rolling average of time spent writing batches to the local RocksDB storage.
+This is a rolling average of time (in μs) spent writing batches to the local RocksDB storage.
 Unlike `emqx_ds_egress_flush_time`, it does not include network replication costs, so it's the key indicator of the disk IO efficiency.
 
 ### `emqx_ds_builtin_next_time`
 
-This is a rolling average of time spent consuming a batch of messages from the durable storage.
+This is a rolling average of time (in μs) spent consuming a batch of messages from the durable storage.
 
 ### `emqx_ds_storage_bitfield_lts_counter_seek` and `emqx_ds_storage_bitfield_lts_counter_next`
 
