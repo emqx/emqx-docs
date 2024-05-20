@@ -60,7 +60,7 @@ WebSocket 是一种在基于 HTTP 协议上支持全双工通讯的协议，通�
 
 ## 什么是离线消息？
 
-一般情况下 MQTT 客户端仅在连接到消息服务器的时候，如果客户端离线将收不到消息。但是在客户端有固定的 ClientID，clean_session 为 false，且 QoS 设置满足服务器端的配置要求时，在客户端离线时，服务器可以为客户端保持一定量的离线消息，并在客户端再次连接是发送给客户端。
+一般情况下 MQTT 客户端仅在连接到消息服务器的时候，如果客户端离线将收不到消息。但是在客户端有固定的 ClientID，clean_session 为 false，且 QoS 设置满足服务器端的配置要求时，在客户端离线时，服务器可以为客户端保持一定量的离线消息，并在客户端再次连接时发送给客户端。
 
 离线消息在网络连接不是很稳定时，或者对 QoS 有一定要求时非常有用。
 
@@ -427,7 +427,7 @@ EMQX 对资源的使用主要有以下的影响因素，每个因素都会对计
 
 另外，如果设备通过 TLS（加密的连接）连接 EMQX，EMQX 会需要额外的资源（主要是 CPU 资源）。推荐方案是在 EMQX 前面部署负载均衡，由负载均衡节点卸载 TLS，实现职责分离。
 
-可参考 [https://www.emqx.com/zh/server-estimate](https://www.emqx.com/zh/server-estimate) 来预估计算资源的使用。
+<!--可参考 [https://www.emqx.com/zh/server-estimate](https://www.emqx.com/zh/server-estimate) 来预估计算资源的使用-->
 
 ## 我的连接数目并不大，EMQX 生产环境部署需要多节点吗？
 

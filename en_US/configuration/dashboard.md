@@ -14,19 +14,32 @@ For example, to configure `swagger_support` and a listener for the EMQX Dashboar
 dashboard {
   listeners {
     http {
+      # set 'bind = 0' will disable this listener
       bind = "0.0.0.0:18083"
       max_connections = 512
     }
-  swagger_support = true
+    https {
+      # set 'bind = 0' will disable this listener
+      bind = "0.0.0.0:18084"
+      ssl_options {
+        certfile = "${EMQX_ETC_DIR}/certs/cert.pem"
+        keyfile = "${EMQX_ETC_DIR}/certs/key.pem"
+      }
+    }
   }
+  swagger_support = true
+  default_password = jEdOgGS6vzQ
 }
 ```
 
 Where,
 
-- `swagger_support  =  true` is to enable all swagger-related features such as generating the Swagger API documentation. By default, its value is always `true`, and you can set the value to `false` to disable it.
-- `bind  =  "0.0.0.0:18083"`  is to set the network address and port number that the listener will bind to. In this case, the listener will bind to all available network interfaces (`0.0.0.0`) on port `18083`.
-- `max_connections  =  512` is to set the maximum number of concurrent connections that the listener will accept. In this case, the maximum number of connections is set to `512`.
+- `swagger_support = true`: Enable Swagger (OpenAPI) UI available at the endpoint `/api-docs`. Set to `false` to disable.
+- `bind = "0.0.0.0:18083"`:  Address and port number that the listener will bind to. In this case, the listener will bind to all available network interfaces (`0.0.0.0`) on port `18083`. set to port number `0` will disable this listener.
+- `max_connections = 512`: Set the maximum number of concurrent connections that the listener will accept. In this case, the maximum number of connections is set to `512`.
+- `ssl_options.certfile`: Path to the PEM format certificates chain file. Server certificate as the first one, followed by its immediate issuer certificate then the issuer's issuer certificate, and so on. Root CA certificate is optional. The path prefix (only prefix) can be an environment variable.
+- `ssl_options.keyfile`: Path to the PEM format private key file.
+- `default_password`: The password used to **initialize** the database record for `admin` user. NOTE: Changing this config after EMQX has booted for the first time has no effect. Once initialized, the default password `public` (which comes with the installation) must be changed from dashboard or CLI.
 
 {% emqxce %}
 

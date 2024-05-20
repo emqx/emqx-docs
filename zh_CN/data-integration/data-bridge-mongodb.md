@@ -138,8 +138,8 @@ docker run -d --name mongodb -p 27017:27017 mongo
 # 进入容器
 docker exec -it mongodb bash
 
-# 在容器中连接到 MongoDB 服务器，
-mongo
+# 在容器中连接到 MongoDB 服务器（4.x 版本请使用命令 `mongo`）
+mongosh
 
 # 创建用户
 use admin
