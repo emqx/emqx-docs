@@ -1,6 +1,6 @@
 # MQTT Client Attributes
 
-Client attributes in EMQX provides a mechanism that allows developers to define and set additional attributes for MQTT clients based on the requirements of different application scenarios. These attributes are integral to enhancing authentication, authorization, data integration, and MQTT extension functionalities within EMQX, thereby facilitating flexible development. By leveraging client metadata, this feature also supports flexible templating for MQTT client identification, which is essential for personalized client configurations and streamlined authentication processes, enhancing the adaptability and efficiency of development efforts.
+Client attributes in EMQX provide a mechanism that allows developers to define and set additional attributes for MQTT clients based on the requirements of different application scenarios. These attributes are integral to enhancing authentication, authorization, data integration, and MQTT extension functionalities within EMQX, thereby facilitating flexible development. By leveraging client metadata, this feature also supports flexible templating for MQTT client identification, which is essential for personalized client configurations and streamlined authentication processes, enhancing the adaptability and efficiency of development efforts.
 
 ## Workflow
 
