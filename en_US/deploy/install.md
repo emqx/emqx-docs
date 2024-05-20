@@ -128,7 +128,7 @@ The table below lists the operating systems and versions that EMQX supports.
 
 {% endemqxee %}
 
-## <!--Hardware Specification
+<!-- ## Hardware Specification
 
 Depending on the number of client connections, message rate, message size, and enabled features, the minimum hardware specification for EMQX varies. 
 
