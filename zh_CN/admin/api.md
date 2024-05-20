@@ -41,6 +41,14 @@ api_key = {
 - Secret Key: 使用随机字符串作为密钥
 - Role: 可选，指定密钥的[角色](#角色与权限)，仅适用于企业版
 
+例如：
+
+```bash
+my-app:AAA4A275-BEEC-4AF8-B70B-DAAC0341F8EB
+ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL:viewer
+foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
+```
+
 通过此方式创建的 API 密钥有效期为永久有效。
 
 每次 EMQX 启动时，会将文件中设置的数据将添加到 API 密钥列表中，如果存在相同的 API Key，则将更新其 Secret Key 与 Role。
@@ -49,7 +57,7 @@ api_key = {
 
 在企业版中，REST API 实现了基于角色的访问控制，API 密钥创建时，可以分配以下三个预定义的角色：
 
-- 管理员：此角色可以访问所有资源。对应的角色标识为 `administrator`。
+- 管理员：此角色可以访问所有资源，未指定角色时默认使用此值。对应的角色标识为 `administrator`。
 - 查看者：此角色只能查看资源和数据，对应于 REST API 中的所有 GET 请求。对应的角色标识为 `viewer`。
 - 发布者：专门为 MQTT 消息发布定制，此角色仅限于访问与消息发布相关的 API。对应的角色标识为 `publisher`。
 
