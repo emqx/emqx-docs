@@ -14,18 +14,18 @@ When the client initiates a subscription or publishing operation, the HTTP Autho
 
 ### Request
 
-The request can use JSON format, with the following placeholders in URL and request body:
+The request can use JSON format, with the following placeholders in the URL and request body:
 
-- `${clientid}`: The client ID
-- `${username}`: The username used by client on login
-- `${client_attrs.NAME}`: Client attributes. `NAME` is to be replaced with the attributes initialized from `mqtt.client_attrs_init` config.
-- `${peerhost}`: The source IP address of the client 
-- `${proto_name}`: The protocol name used by client, e.g. `MQTT`, `CoAP`
-- `${mountpoint}`: The mountpoint of the gateway listener (topic prefix)
-- `${action}`: The action being requested, e.g. `publish`, `subscribe`  
-- `${topic}`: The topic (or topic filter) to be published or subscribed in current request
-- `${qos}`: The QoS of the message to be published or subscribed in current request
-- `${retain}`: Whether the message to be published in current request is a retained message
+- `${clientid}`: The client ID.
+- `${username}`: The username used by the client on login.
+- `${client_attrs.NAME}`: A client attribute. `NAME` will be replaced by an attribute name set based on predefined configurations at runtime. For details about the client attributes, see [MQTT Client Attributes](../../client-attributes/client-attributes.md).
+- `${peerhost}`: The source IP address of the client.
+- `${proto_name}`: The protocol name used by the client, e.g. `MQTT`, `CoAP`.
+- `${mountpoint}`: The mountpoint of the gateway listener (topic prefix).
+- `${action}`: The action being requested, e.g. `publish`, `subscribe`.
+- `${topic}`: The topic (or topic filter) to be published or subscribed in the current request.
+- `${qos}`: The QoS of the message to be published or subscribed in the current request.
+- `${retain}`: Whether the message to be published in current request is a retained message.
 
 
 
