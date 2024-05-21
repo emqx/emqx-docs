@@ -113,7 +113,7 @@ This section demonstrates how to create a rule for specifying data to be forward
 
    - **Topic**: The topic to publish to the external MQTT service, supporting `${var}` placeholders. Enter `pub/${topic}` here, meaning the original topic will be prefixed with `pub/` for forwarding. For example, if the original message topic is `t/1`, the topic forwarded to the external MQTT service will be `pub/t/1`.
    - **QoS**: The QoS for message publishing. Select from the dropdown options: `0`, `1`, `2`, or `${qos}`, or enter a placeholder to set QoS from another field. Here, select `${qos}` to follow the QoS of the original message.
-   - **Retain**: Select `true`, `false`, or `${falgs.retain}` to decide whether to publish the message as retained, or enter a placeholder to set the retain flag from other fields. Here, select `${falgs.retain}` to follow the retain flag of the original message.
+   - **Retain**: Select `true`, `false`, or `${flags.retain}` to decide whether to publish the message as retained, or enter a placeholder to set the retain flag from other fields. Here, select `${flags.retain}` to follow the retain flag of the original message.
    - **Payload**: The template used to generate the payload for the forwarded message. Leave blank by default, which means forwarding the rule output result. Here, you can enter `${payload}` to forward only the payload.
 
 9. Use default values for other configurations and click the **Create** button to complete the creation of the Sink. Once created, you will be directed back to the Create Rule page, and the new Sink will be added to the Action Outputs of the rule.
