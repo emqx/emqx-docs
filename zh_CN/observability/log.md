@@ -163,6 +163,7 @@ log {
 - "cannot_publish_to_topic_due_to_quota_exceeded"
 - "connection_rejected_due_to_license_limit_reached"
 - "dropped_msg_due_to_mqueue_is_full"
+- "socket_receive_paused_by_rate_limit"
 
 ::: tip 注意 
 
