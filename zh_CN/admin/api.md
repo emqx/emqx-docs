@@ -12,22 +12,18 @@ EMQX 在 REST API 上做了版本控制，EMQX 5.0.0 以后的所有 API 调用�
 
 ## 认证
 
-EMQX 的 REST API 使用 [HTTP Basic 认证](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication#%E9%80%9A%E7%94%A8%E7%9A%84_http_%E8%AE%A4%E8%AF%81%E6%A1%86%E6%9E%B6) 携带 API 密钥作为认证凭据。
+EMQX 的 REST API 使用 [HTTP Basic 认证](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication#%E9%80%9A%E7%94%A8%E7%9A%84_http_%E8%AE%A4%E8%AF%81%E6%A1%86%E6%9E%B6) 携带 API 密钥作为认证凭据。在开始使用 EMQX REST API 之前，您需要创建 API 密钥。
 
-在开始使用 EMQX REST API 之前之前，您需要创建 API 密钥。
-
-:::tip
+::: tip
 出于安全考虑，从 EMQX 5.0.0 开始 Dashboard 用户无法用于 REST API 认证。
 API 凭证区分角色是 EMQX 企业版中的功能。
 :::
 
 ### 创建 API 密钥
 
-您可以在 Dashboard **系统设置** -> **API 密钥** 界面中手动创建用于认证的 API 密钥，详细操作请参考 [Dashboard - API 密钥](../dashboard/system.md#api-密钥)。
+您可以在 Dashboard **系统设置** -> **API 密钥** 页面中手动创建用于认证的 API 密钥，详细操作请参考 [Dashboard - API 密钥](../dashboard/system.md#api-密钥)。
 
-也可以通过 bootstrap 文件的方式创建 API 密钥：
-
-在 `emqx.conf` 配置文件中添加以下配置，指定文件位置：
+您也可以通过 bootstrap 文件的方式创建 API 密钥。在 `emqx.conf` 配置文件中添加以下配置，指定文件位置：
 
 ```bash
 api_key = {
@@ -37,9 +33,9 @@ api_key = {
 
 在指定的文件中通过多行分割的 `{API Key}:{Secret Key}:{?Role}` 的格式添加多个 API 密钥：
 
-- API Key: 任意字符串作为密钥标识
-- Secret Key: 使用随机字符串作为密钥
-- Role: 可选，指定密钥的[角色](#角色与权限)，仅适用于企业版
+- API Key：任意字符串作为密钥标识。
+- Secret Key：使用随机字符串作为密钥。
+- Role （可选）：指定密钥的[角色](#角色与权限)，仅适用于企业版。
 
 例如：
 
@@ -55,11 +51,11 @@ foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
 
 ### 角色与权限
 
-在企业版中，REST API 实现了基于角色的访问控制，API 密钥创建时，可以分配以下三个预定义的角色：
+在 EMQX 企业版中，REST API 实现了基于角色的访问控制，API 密钥创建时，可以分配以下3个预定义的角色：
 
-- 管理员：此角色可以访问所有资源，未指定角色时默认使用此值。对应的角色标识为 `administrator`。
-- 查看者：此角色只能查看资源和数据，对应于 REST API 中的所有 GET 请求。对应的角色标识为 `viewer`。
-- 发布者：专门为 MQTT 消息发布定制，此角色仅限于访问与消息发布相关的 API。对应的角色标识为 `publisher`。
+- **管理员**：此角色可以访问所有资源，未指定角色时默认使用此值。对应的角色标识为 `administrator`。
+- **查看者**：此角色只能查看资源和数据，对应于 REST API 中的所有 GET 请求。对应的角色标识为 `viewer`。
+- **发布者**：专门为 MQTT 消息发布定制，此角色仅限于访问与消息发布相关的 API。对应的角色标识为 `publisher`。
 
 ### 认证方式
 
@@ -230,7 +226,7 @@ EMQX 遵循 [HTTP 响应状态码](https://developer.mozilla.org/en-US/docs/Web/
 
 ## 分页
 
-在一些数据量较大的 API 中，提供了分页功能，根据数据特性，有两种分页方式。
+在一些数据量较大的 API 中，提供了分页功能，根据数据特性，有2种分页方式。
 
 ### 页码分页
 
