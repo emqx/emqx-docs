@@ -47,7 +47,7 @@ SHARDS:
 当新节点加入集群时，它会被分配一个 *站点 ID*，并可以纳入持久性存储中。一些分片副本的责任将转移到新站点，然后它将开始复制数据。
 
 ```shell
-$ emqx ctl ds join emqx_durable_storage <Site ID>
+$ emqx ctl ds join messages <Site ID>
 ok
 ```
 
@@ -60,7 +60,7 @@ ok
 移除一个站点意味着将分片副本的责任从被移除的站点转移出去。类似于添加站点，此过程可能需要一些时间和资源。
 
 ```shell
-$ emqx ctl ds leave emqx_durable_storage <Site ID>
+$ emqx ctl ds leave messages <Site ID>
 ok
 ```
 
@@ -71,7 +71,7 @@ ok
 可以在单个操作中执行一系列更改，以设置持久性存储副本所在站点的集合。
 
 ```shell
-$ emqx ctl ds set_replicas emqx_durable_storage <Site ID 1> <Site ID 2> ...
+$ emqx ctl ds set_replicas messages <Site ID 1> <Site ID 2> ...
 ```
 
 这种方法可以最大程度地减少站点之间的数据传输量，同时确保尽可能地维持复制因子。

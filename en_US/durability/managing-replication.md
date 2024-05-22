@@ -51,7 +51,7 @@ SHARDS:
 
 When a new node joins the cluster, it is assigned a *Site ID* and can be included in the durable storage. Some shard replica responsibilities will be transferred to the new site, which will then start replicating the data.
 ```shell
-$ emqx ctl ds join emqx_durable_storage <Site ID>
+$ emqx ctl ds join messages <Site ID>
 ok
 ```
 
@@ -63,7 +63,7 @@ Changes to the set of durable storage sites are durably stored, ensuring that no
 
 Removing a site involves transferring shard replica responsibilities away from the site being removed. Similar to adding a site, this process can take time and resources.
 ```shell
-$ emqx ctl ds leave emqx_durable_storage <Site ID>
+$ emqx ctl ds leave messages <Site ID>
 ok
 ```
 
@@ -73,7 +73,7 @@ Removing a site can cause the effective replication factor to drop below the con
 
 A series of changes to the set of sites holding durable storage replicas can be performed in a single operation.
 ```shell
-$ emqx ctl ds set_replicas emqx_durable_storage <Site ID 1> <Site ID 2> ...
+$ emqx ctl ds set_replicas messages <Site ID 1> <Site ID 2> ...
 ```
 
 This approach minimizes the volume of data transferred between sites, while ensuring that the replication factor is maintained if possible.
