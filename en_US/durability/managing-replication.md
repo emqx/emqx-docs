@@ -1,44 +1,44 @@
-# Replication Management
+# Manage Replication
 
-This document describes how to setup data replication and high availability for the EMQX durable storage.
-It is relevant when setting up a new EMQX cluster with session persistence enabled, or upgrading an existing cluster to enable session persistence.
+This guide provides instructions on configuring data replication and ensuring high availability for EMQX durable storage. This guide consists of instructions for two scenarios: setting up a new EMQX cluster with durable storage and upgrading an existing cluster to enable durable storage.
 
 ## Initial Cluster Setup
 
-There are a few configuration parameters that influence how the cluster initially sets up durable storage and starts replicating data. These parameters can't be changed in the runtime, and modifying them will not take any effect once the durable storage is initialized.
+During the initial setup of the cluster, several configuration parameters influence how durable storage is established and data replication starts. These parameters cannot be changed in the runtime, and modifying them will not take any effect once the durable storage is initialized.
 
 ### Replication Factor
 
-The replication factor, controlled with `durable_storage.messages.replication_factor` configuration parameter, determines the number of replicas each shard should have across the cluster. The default value is 3. As a rule of thumb, the replication factor should be set to an odd number. This is because the replication factor is used to determine the quorum size needed to consider a write operation successful. The larger the replication factor, the more copies of the data are stored across the cluster, thus improving high availability.
-However, this comes at the expense of increased storage and network overhead, because more communication is needed to achieve consensus.
+The replication factor, controlled with `durable_storage.messages.replication_factor` configuration parameter, determines the number of replicas each shard should have across the cluster. The default value is `3`.
 
-Note that the replication factor is not strictly enforced in smaller clusters. For example, in a two-node cluster, the real replication factor is effectively 2, as each shard is replicated on both nodes, and there is no point in replicating it further. In general, EMQX allocates the replicas of each shard to different sites in the cluster, so that no two replicas are stored on the same node.
+Setting the replication factor to an odd number is advisable as it influences the quorum size required for successful write operations. A higher replication factor results in more copies of data distributed across the cluster, thereby enhancing high availability. However, it also increases storage and network overhead due to additional communication needed to achieve consensus.
+
+::: tip
+
+In smaller clusters, the replication factor is not strictly enforced. For instance, in a two-node cluster, the effective replication factor is `2`, as each shard is replicated on both nodes, eliminating the need for further replication. EMQX allocates replicas of each shard to different nodes in the cluster to ensure redundancy.
+
+:::
 
 ### Number of Shards
 
 The builtin durable storage is split into shards, which are replicated independently from each other.
-Larger number of shards makes publishing and consuming MQTT messages from the durable storage more parallel.
-However, each shard requires system resources, such as file descriptors.
-Additionally, it increases the volume of metadata stored per session.
+A higher number of shards allows for more parallel publishing and consuming of MQTT messages from the durable storage. However, each shard consumes system resources, such as file descriptors, and increases the volume of metadata stored per session.
 
-This number is controlled by the `durable_storage.messages.n_shards` parameter.
-The number of shards can't be changed once the durable storage in the EMQX cluster has been initialized.
+The `durable_storage.messages.n_shards` parameter controls the number of shards, which remains fixed once the durable storage is initialized.
 
 ### Number of Sites
 
-The number of sites, as controlled by the `durable_storage.messages.n_sites` configuration parameter, determines the _minimum_ number of sites that must be online in the cluster for the durable storage to even initialize and start accepting writes. Once the minimum number of sites is online, the durable storage will start allocating shards to the available sites in a fair manner.
+The `durable_storage.messages.n_sites` configuration parameter determines the minimum number of sites that must be online for the durable storage to initialize and start accepting writes. Once this minimum is met, the durable storage begins allocating shards to the available sites in a balanced manner.
 
-The default value is 1, which in actuality means that (depending on clustering strategy) each node may initially consider itself an only site responsible for storing the data, and initialize the durable storage accordingly.
-This default has been optimized for the base case of a single-node EMQX cluster. In this case once the cluster is formed, a single view of the cluster will eventually take precedence, which will cause the other nodes to abandon the data they have stored so far.
-Therefore, in a multi-node cluster it's recommended to set the number of sites to an initial cluster size to avoid such situations.
+The default value is `1`, meaning each node may initially consider itself the sole site responsible for data storage. This setup is optimized for single-node EMQX clusters. When the cluster forms, one node's view will eventually dominate, causing other nodes to abandon their stored data.
 
-Once the durable storage is initialized, changes to this parameter will not take any effect.
+In multi-node clusters, it is recommended to set the number of sites to the initial cluster size to prevent such conflicts. Note that once the durable storage is initialized, this parameter cannot be changed.
 
-## Changing Existing Cluster
+## Change Existing Cluster
 
-At some point an existing cluster may need to be reconfigured. Changes to required capacity, durability, or client traffic, decommissioning old nodes and replacing them with new ones are most common reasons for reconfiguration. This can be achieved by joining new sites to the set of sites the durable storage is replicated to, or by removing the sites that are no longer needed.
+Existing clusters may require reconfiguration due to changes in capacity, durability, or client traffic, or the need to decommission old nodes and replace them with new ones. This can be achieved by adding new sites to the set of sites with durable storage replication or removing sites no longer required.
 
-One can always look up the current allocation of shards through `emqx ctl` CLI. The `ds` subcommand stands for "durable storage".
+You can use the `emqx ctl` CLI can be used with the `ds` subcommand to view the current shard allocation:
+
 ```shell
 $ emqx ctl ds info
 SITES:
@@ -47,37 +47,33 @@ SHARDS:
 ...
 ```
 
-### Adding Sites
+### Add Sites
 
-As soon as the new node is part of the cluster, it's assigned _Site ID_ and can be made a part of the durable storage.
+When a new node joins the cluster, it is assigned a *Site ID* and can be included in the durable storage. Some shard replica responsibilities will be transferred to the new site, which will then start replicating the data.
 ```shell
 $ emqx ctl ds join emqx_durable_storage <Site ID>
 ok
 ```
 
-Responsibility over some of the shard replicas will be transferred to this new site, and it will start replicating the data.
+Depending on the cluster's data volume, joining a new site may take some time. While this process does not compromise the availability of durable storage, it may temporarily affect cluster performance due to the background data transfer between sites.
 
-Depending on the amount of data stored in the cluster, the process of joining a new site may take some time. This does not compromise availability of the durable storage, but may affect the performance of the cluster, because the data must be transferred between the sites in the background.
+Changes to the set of durable storage sites are durably stored, ensuring that node restarts or network partitions do not affect the outcome. The cluster will eventually achieve the desired state consistently.
 
-Any changes to the set of durable storage sites are durably stored as well, so that node restarts or network partitions do not affect the outcome. Cluster will eventually reach the desired state in a consistent manner.
+### Remove Sites
 
-### Removing Sites
-
-Removing a site implies transferring the responsibility over the shard replicas away from the site being removed.
+Removing a site involves transferring shard replica responsibilities away from the site being removed. Similar to adding a site, this process can take time and resources.
 ```shell
 $ emqx ctl ds leave emqx_durable_storage <Site ID>
 ok
 ```
 
-This process is similar to adding a site, and may take time and resources as well.
+Removing a site can cause the effective replication factor to drop below the configured value. For example, if the replication factor is `3` and one site in a 3-node cluster is removed, the replication factor will effectively drop to `2`. To avoid this risk when permanently replacing a site, it is recommended to add a new site before decommissioning the old one or perform both operations simultaneously.
 
-However, removing a site may cause the effective replication factor to drop below the configured value. For example, if the replication factor is 3 and one of the sites in a 3-node cluster is removed, the replication factor will effectively drop to 2. This could be risky in a situations when the goal is to permanently replace a site, so it's recommended to add the new site first, and only then decommission the old one. Or, alternatively, perform both operations simultaneously.
+### Assign Sites
 
-### Assigning Sites
-
-Series of changes to the set of sites holding the durable storage replicas (as in the aforementioned example) can be performed in a single operation.
+A series of changes to the set of sites holding durable storage replicas can be performed in a single operation.
 ```shell
 $ emqx ctl ds set_replicas emqx_durable_storage <Site ID 1> <Site ID 2> ...
 ```
 
-This will help to minimize the volume of data transferred between the sites, while at the same time ensuring that the replication factor is maintained if possible.
+This approach minimizes the volume of data transferred between sites, while ensuring that the replication factor is maintained if possible.

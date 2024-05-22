@@ -1,44 +1,39 @@
-# Replication Management
+# 管理副本
 
-This document describes how to setup data replication and high availability for the EMQX durable storage.
-It is relevant when setting up a new EMQX cluster with session persistence enabled, or upgrading an existing cluster to enable session persistence.
+本页为您提供了如何设置数据复本 (replication) 并确保 EMQX 持久性存储高可用性的指导，主要分为两部分：设置具有持久性存储的新 EMQX 集群和升级现有集群以启用持久性存储。
 
-## Initial Cluster Setup
+## 集群初始设置
 
-There are a few configuration parameters that influence how the cluster initially sets up durable storage and starts replicating data. These parameters can't be changed in the runtime, and modifying them will not take any effect once the durable storage is initialized.
+在集群的初始设置过程中，有几个配置参数影响持久性存储如何建立以及数据复制如何开始。这些参数在运行时无法更改，一旦初始化了持久性存储，对其进行修改将不会产生任何影响。
 
-### Replication Factor
+### 复制因子 (replication factor)
 
-The replication factor, controlled with `durable_storage.messages.replication_factor` configuration parameter, determines the number of replicas each shard should have across the cluster. The default value is 3. As a rule of thumb, the replication factor should be set to an odd number. This is because the replication factor is used to determine the quorum size needed to consider a write operation successful. The larger the replication factor, the more copies of the data are stored across the cluster, thus improving high availability.
-However, this comes at the expense of increased storage and network overhead, because more communication is needed to achieve consensus.
+复制因子由 `durable_storage.messages.replication_factor` 配置参数控制，它确定了集群中每个分片应该具有的副本数量。默认值为 `3`。
 
-Note that the replication factor is not strictly enforced in smaller clusters. For example, in a two-node cluster, the real replication factor is effectively 2, as each shard is replicated on both nodes, and there is no point in replicating it further. In general, EMQX allocates the replicas of each shard to different sites in the cluster, so that no two replicas are stored on the same node.
+建议将复制因子设置为奇数，因为它影响到成功写入操作所需的副本数量。较高的复制因子意味着数据的副本分布在集群中的数量更多，从而提高了高可用性。但是，这也会增加存储和网络开销，因为需要进行更多的通信以达成共识。
 
-### Number of Shards
+在较小的集群中，复制因子并不严格执行。例如，在一个两节点集群中，实际的复制因子是 `2`，因为每个分片都在两个节点上复制，不需要进一步的复制。EMQX 将每个分片的副本分配给集群中的不同节点，以确保冗余。
 
-The builtin durable storage is split into shards, which are replicated independently from each other.
-Larger number of shards makes publishing and consuming MQTT messages from the durable storage more parallel.
-However, each shard requires system resources, such as file descriptors.
-Additionally, it increases the volume of metadata stored per session.
+### 分片 (shard) 数量
 
-This number is controlled by the `durable_storage.messages.n_shards` parameter.
-The number of shards can't be changed once the durable storage in the EMQX cluster has been initialized.
+内置的持久性存储被分割成独立的分片，各个分片之间相互独立地复制。较多的分片数量允许更多的 MQTT 消息从持久性存储中并行发布和消费。然而，每个分片都会消耗系统资源，比如文件描述符，并且会增加每个会话存储的元数据量。
 
-### Number of Sites
+`durable_storage.messages.n_shards` 参数控制分片的数量，一旦持久性存储被初始化，这个数量就不会改变。
 
-The number of sites, as controlled by the `durable_storage.messages.n_sites` configuration parameter, determines the _minimum_ number of sites that must be online in the cluster for the durable storage to even initialize and start accepting writes. Once the minimum number of sites is online, the durable storage will start allocating shards to the available sites in a fair manner.
+### 站点 (site) 数量
 
-The default value is 1, which in actuality means that (depending on clustering strategy) each node may initially consider itself an only site responsible for storing the data, and initialize the durable storage accordingly.
-This default has been optimized for the base case of a single-node EMQX cluster. In this case once the cluster is formed, a single view of the cluster will eventually take precedence, which will cause the other nodes to abandon the data they have stored so far.
-Therefore, in a multi-node cluster it's recommended to set the number of sites to an initial cluster size to avoid such situations.
+`durable_storage.messages.n_sites` 配置参数确定了必须在线的最小站点数，以便持久性存储初始化并开始接受写入。一旦达到了这个最小值，持久性存储就会开始向可用站点平衡地分配分片。
 
-Once the durable storage is initialized, changes to this parameter will not take any effect.
+默认值为 `1`，意味着每个节点最初可能认为自己是唯一负责数据存储的站点。这种设置针对单节点 EMQX 集群进行了优化。当集群形成时，一个节点的视图最终会占主导地位，导致其他节点放弃他们存储的数据。
 
-## Changing Existing Cluster
+在多节点集群中，建议将站点数量设置为初始集群大小，以避免此类冲突。请注意，一旦初始化了持久性存储，此参数将无法更改。
 
-At some point an existing cluster may need to be reconfigured. Changes to required capacity, durability, or client traffic, decommissioning old nodes and replacing them with new ones are most common reasons for reconfiguration. This can be achieved by joining new sites to the set of sites the durable storage is replicated to, or by removing the sites that are no longer needed.
+## 更改现有集群
 
-One can always look up the current allocation of shards through `emqx ctl` CLI. The `ds` subcommand stands for "durable storage".
+现有集群可能需要重新配置，原因可能是容量、可靠性或客户端流量的变化，或者需要停用旧节点并用新节点替换它们。可以通过添加新站点到具有持久性存储复制的站点集合中，或者移除不再需要的站点来实现这一点。
+
+您可以使用 `emqx ctl` CLI 并带有 `ds` 子命令来查看当前的分片分配情况：
+
 ```shell
 $ emqx ctl ds info
 SITES:
@@ -47,37 +42,36 @@ SHARDS:
 ...
 ```
 
-### Adding Sites
+### 添加站点
 
-As soon as the new node is part of the cluster, it's assigned _Site ID_ and can be made a part of the durable storage.
+当新节点加入集群时，它会被分配一个 *站点 ID*，并可以纳入持久性存储中。一些分片副本的责任将转移到新站点，然后它将开始复制数据。
+
 ```shell
 $ emqx ctl ds join emqx_durable_storage <Site ID>
 ok
 ```
 
-Responsibility over some of the shard replicas will be transferred to this new site, and it will start replicating the data.
+根据集群的数据量，加入新站点的过程可能需要一些时间。虽然这个过程不会影响持久性存储的可用性，但它可能会暂时影响集群的性能，因为站点之间的后台数据传输。
 
-Depending on the amount of data stored in the cluster, the process of joining a new site may take some time. This does not compromise availability of the durable storage, but may affect the performance of the cluster, because the data must be transferred between the sites in the background.
+对持久性存储站点集合的任何更改都是持久存储的，确保节点重启或网络分区不会影响结果。集群最终会以一种一致的方式达到期望的状态。
 
-Any changes to the set of durable storage sites are durably stored as well, so that node restarts or network partitions do not affect the outcome. Cluster will eventually reach the desired state in a consistent manner.
+### 移除站点
 
-### Removing Sites
+移除一个站点意味着将分片副本的责任从被移除的站点转移出去。类似于添加站点，此过程可能需要一些时间和资源。
 
-Removing a site implies transferring the responsibility over the shard replicas away from the site being removed.
 ```shell
 $ emqx ctl ds leave emqx_durable_storage <Site ID>
 ok
 ```
 
-This process is similar to adding a site, and may take time and resources as well.
+移除站点可能导致有效复制因子低于配置的值。例如，如果复制因子为 `3`，而一个 3 节点集群中的一个站点被移除，那么有效复制因子将有效降低到 `2`。为了避免在永久替换站点时出现此风险，建议先添加一个新站点，然后再停用旧站点，或者同时执行这两个操作。
 
-However, removing a site may cause the effective replication factor to drop below the configured value. For example, if the replication factor is 3 and one of the sites in a 3-node cluster is removed, the replication factor will effectively drop to 2. This could be risky in a situations when the goal is to permanently replace a site, so it's recommended to add the new site first, and only then decommission the old one. Or, alternatively, perform both operations simultaneously.
+### 分配站点
 
-### Assigning Sites
+可以在单个操作中执行一系列更改，以设置持久性存储副本所在站点的集合。
 
-Series of changes to the set of sites holding the durable storage replicas (as in the aforementioned example) can be performed in a single operation.
 ```shell
 $ emqx ctl ds set_replicas emqx_durable_storage <Site ID 1> <Site ID 2> ...
 ```
 
-This will help to minimize the volume of data transferred between the sites, while at the same time ensuring that the replication factor is maintained if possible.
+这种方法可以最大程度地减少站点之间的数据传输量，同时确保尽可能地维持复制因子。

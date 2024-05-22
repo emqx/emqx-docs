@@ -1,91 +1,76 @@
-# Configure and Manage Durable Storage
+# 配置和管理持久性存储
 
-This document describes configuration, and operation and management interfaces related to the durable sessions.
+本文档提供了有关在 EMQX 中配置、管理和优化持久性存储的参考和说明，包括会话和存储配置。
 
-## Configuration
+## 配置参数
 
-Configuration related to the durable sessions is split into two sub-trees:
+持久性存储的配置分为两个主要类别：
 
-- `durable_sessions` contains the configuration related to the MQTT clients' sessions and how they consume data from the durable storage, as well as data retention parameters.
-- `durable_storage` contains the configuration of the durable storage holding the data.
+- `durable_sessions`：包含与 MQTT 客户端会话相关的设置，包括它们如何从持久性存储中消费数据以及数据保留参数。
+- `durable_storage`：管理持久性存储系统保存 MQTT 消息数据的设置。
 
-### Session configuration
+### 持久会话配置
 
-| Parameter                                   | Description                                                                                                                                                                                                                          |
-|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `durable_sessions.enable`                   | Enables session durability. Note: this setting cannot be changed in the runtime. EMQX node should be restarted for it to take an effect.                                                                                             |
-| `durable_sessions.batch_size`               | Durable sessions consume MQTT messages from the storage in batches. This parameter controls maximum size of the batch.                                                                                                               |
-| `durable_sessions.idle_poll_interval`       | This parameter controls how often the durable sessions query the storage for the new messages. When new messages are found, the sessions ask for the next batch immediately (as long as the client has space in the in-flight queue) |
-| `durable_sessions.heartbeat_interval`       | Every heartbeat interval durable sessions save their metadata (such as list of subscriptions, processed packet IDs, etc.) to the durable storage.                                                                                    |
-| `durable_sessions.renew_streams_interval`   | This parameter defines how often sessions query the durable storage for the new streams.                                                                                                                                             |
-| `durable_sessions.session_gc_interval`      | This parameter defines how often EMQX sweeps through the sessions and deletes the expired ones.                                                                                                                                      |
-| `durable_sessions.message_retention_period` | This parameter defines the retention period of MQTT messages in the durable storage. Note: this parameter is global.                                                                                                                 |
+| 参数                                        | 描述                                                         |
+| ------------------------------------------- | ------------------------------------------------------------ |
+| `durable_sessions.enable`                   | 启用会话持久性。注意：需要重新启动 EMQX 节点才能使更改生效。 |
+| `durable_sessions.batch_size`               | 控制持久会话从存储中消费的消息批次的最大大小。               |
+| `durable_sessions.idle_poll_interval`       | 控制持久会话查询新消息的频率。如果发现新消息，则下一批将立即从存储中检索，如果客户端的传输队列有空间的话。 |
+| `durable_sessions.heartbeat_interval`       | 指定将会话元数据保存到持久性存储的间隔。                     |
+| `durable_sessions.renew_streams_interval`   | 定义会话多久查询存储以获取新流。                             |
+| `durable_sessions.session_gc_interval`      | 指定清除会话并删除过期会话的间隔。                           |
+| `durable_sessions.message_retention_period` | 定义持久性存储中 MQTT 消息的保留期。注意：此参数是全局的。   |
 
-
-The following parameters can be overridden per zone:
-
+以下参数可以在 [zone](../configuration/configuration.md#zone-override) 级别覆盖：
 - `durable_sessions.enable`
 - `durable_sessions.batch_size`
 - `durable_sessions.idle_poll_interval`
 - `durable_sessions.renew_streams_interval`
 
-### Durable storage configuration
+### 持久性存储配置
 
-`<DS>` stands for "durable storage". Currently, the following durable storages are available:
+`<DS>` 占位符代表 "durable storage"。当前，`<DS>` 的可用参数为 `message`。
 
-- `messages`
+| 参数                                      | 描述                                                         |
+| ----------------------------------------- | ------------------------------------------------------------ |
+| `durable_storage.<DS>.data_dir`           | EMQX 存储数据的文件系统中的目录。                            |
+| `durable_storage.<DS>.n_shards`           | 设置[分片数量](./managing-replication.md#number-of-shards)。 |
+| `durable_storage.<DS>.n_sites`            | 设置[站点数量](./managing-replication.md##number-of-sites)。 |
+| `durable_storage.<DS>.replication_factor` | 设置[复制因子](./managing-replication.md#replication-factor)以确定每个分片的副本数量。 |
+| `durable_storage.<DS>.local_write_buffer` | 包含与消息缓冲相关的参数。请参阅[本地写缓冲配置](#local-write-buffer-configuration)。 |
+| `durable_storage.<DS>.layout`             | 包含控制 EMQX 如何在磁盘上布局数据的参数。请参阅[存储布局配置](#storage-layout-configuration)。 |
 
-| Parameter                                 | Description                                                                                                        |
-|-------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| `durable_storage.<DS>.data_dir`           | Directory in the file system where EMQX stores the data                                                            |
-| `durable_storage.<DS>.n_shards`           | [Numer of shards](./managing-replication.md#number-of-shards)                                                      |
-| `durable_storage.<DS>.n_sites`            | [Number of sites](./managing-replication.md##number-of-sites)                                                      |
-| `durable_storage.<DS>.replication_factor` | [Replication factor](./managing-replication.md#replication-factor) determines the number of replicas for each shard |
-| `durable_storage.<DS>.local_write_buffer` | This sub-tree contains parameters related to the message buffering. See description below.                         |
-| `durable_storage.<DS>.layout`             | This sub-tree contains the parameters that control how EMQX lays out the data on disk. See description below.      |
+#### 本地写缓冲配置
 
-### Local write buffer configuration
+为了最大化吞吐量，EMQX 将来自客户端的 MQTT 消息批量写入持久性存储。批处理是使用 `durable_storage.<DS>.layout` 配置子树下的以下参数进行配置的：
 
-In order to maximize the throughput, EMQX writes MQTT messages from the clients to the durable storage in batches.
-Batching is configured using the following parameters under `durable_storage.<DS>.layout` configuration sub-tree:
+| 参数             | 描述                                                 |
+| ---------------- | ---------------------------------------------------- |
+| `max_items`      | 当缓冲区大小达到此值时，将刷新缓冲区。               |
+| `flush_interval` | 如果缓冲区包含至少一条消息，将在此间隔内刷新缓冲区。 |
 
-| Parameter        | Description                                                                                            |
-|------------------|--------------------------------------------------------------------------------------------------------|
-| `max_items`      | The buffer is flushed when its size reaches this value                                                 |
-| `flush_interval` | Additionally, the buffer is flushed every flush interval, as long as it contains at least one message. |
+#### 存储布局配置
 
-### Storage layout configuration
+存储布局决定了 EMQX 如何在磁盘上组织数据。设置 `durable_storage.<DS>.layout.type` 参数可以更改新一代中使用的布局。此更改不会影响现有的生成。每种布局类型的配置都不同，包含在 `durable_storage.<DS>.layout` 子树下。当前，可用的布局类型是 `wildcard_optimized`。
 
-Storage layout determines how EMQX organizes data on disk.
-Layout used by the new [generations](./durability_introduction.html#generation) can be changed by setting `durable_storage.<DS>.layout.type` parameter.
-It does not affect the generations that has been already created.
-Currently, the following layouts are available:
+##### `wildcard_optimized` 布局类型的配置
 
-- `wildcard_optimized`
+`wildcard_optimized` 布局旨在优化广泛的主题通配符订阅。它通过随时间自动积累关于主题结构的知识来实现这一目标。利用轻量级机器学习算法，它预测客户端可能订阅的通配符主题过滤器。随后，它将这些主题组织成统一的流，从而在单个批次中实现高效消费。
 
-Layout configuration, contained under the `durable_storage.<DS>.layout` sub-tree, varies by type.
+| 参数                   | 描述                                                         |
+| ---------------------- | ------------------------------------------------------------ |
+| `bits_per_topic_level` | 确定主题级别哈希的大小。                                     |
+| `epoch_bits`           | 定义了一个 epoch 内的消息偏移量，使用消息时间戳（微秒）的最低有效位来计算。偏移量所占的位数由此参数确定。 |
+| `topic_index_bytes`    | 指定流标识符的大小，以字节为单位。                           |
 
-#### Configuration of `wildcard_optimized` layout type
+**Epoch 配置**
 
-Wildcard-optimized layout is designed to maximize the efficiency of wildcard subscriptions covering large numbers of topics.
-It accumulates the knowledge about the topic structure in the background over time, and uses a very lightweight machine learning algorithm to predict what wildcard topic filters the clients are likely to subscribe to.
-Then it uses this information to group such topics together into a single stream that can be efficiently consumed in a single batch.
+通配符优化流被分成称为 epoch 的时间间隔。每个 epoch 内的消息可以在单个扫描中处理，从而提高效率和吞吐量。但是，较大的 epoch 会引入延迟，因为当前 epoch 中的消息无法立即消费。
 
-
-| Parameter              | Description                             |
-|------------------------|-----------------------------------------|
-| `bits_per_topic_level` | Determines size of the topic level hash |
-| `epoch_bits`           | See description below.                  |
-| `topic_index_bytes`    | Size of the stream identifier in bytes  |
-
-Wildcard-optimized streams are split into time intervals called epochs.
-Offset of the message within the epoch is calculated by taking the least significant bits of the message timestamp (in microseconds).
-The number of bits comprising the offset is determined by `epoch_bits` parameter.
-Therefore, the time interval covered by the epoch can be calculated by the formula:
-`epoch length (μs) = 2 ^ epoch_bits`.
+每个 epoch 覆盖的时间间隔可以使用以下公式计算：`epoch length (μs) = 2 ^ epoch_bits`。
 
 | Epoch bits | Epoch length |
-|------------|--------------|
+| ---------- | ------------ |
 | 1          | 2 μs         |
 | 2          | 4 μs         |
 | 10         | ~1 ms        |
@@ -94,21 +79,17 @@ Therefore, the time interval covered by the epoch can be calculated by the formu
 | 21         | ~2 s         |
 | 24         | ~17 s        |
 
-Messages within each epoch can be consumed in a single sweep, leading to higher efficiency and better throughput.
-However, larger epochs lead to higher latency, since messages from the current epoch can't be consumed immediately.
+默认情况下，`epoch_bits` 参数配置为 20（~1 秒），在延迟和效率之间取得平衡。调整此值可以微调延迟和吞吐量之间的权衡。
 
-The default value of `epoch_bits` is 20 (~1 s), striking good balance between latency and efficiency.
+## CLI 命令
 
-## CLI
-
-The following CLI commands are available for managing the durable storage:
+以下是用于管理持久性存储的 CLI 命令：
 
 ### `emqx_ctl ds info`
 
-Get a quick overview of the durable storage state.
+显示持久性存储状态的概述。
 
-Example:
-
+示例：
 ```bash
 $ emqx_ctl ds info
 
@@ -136,30 +117,29 @@ messages/8                        5C6028D6CE9459C7
 messages/9                        5C6028D6CE9459C7
 ```
 
-The output of this command is comprised of several sections:
+此命令输出包括： 
 
-- `THIS SITE`:  ID of the site claimed by the local EMQX node
-- `SITES`: list of all known sites together with names of the EMQX nodes claiming them, and their statuses
-- `SHARDS`: list of durable storage shards and sites IDs where their replicas are located
+- `THIS SITE`：本地 EMQX 节点声明的站点 ID。 
+- `SITES`：所有已知站点的列表，包括 EMQX 节点名称及其状态。 
+- `SHARDS`：持久性存储分片列表以及其副本所在的站点 ID。
 
 ### `emqx_ctl ds set_replicas <DS> <Site1> <Site2> ...`
 
-This command allows to set the list of sites containing replicas of the durable storage in the cluster.
-Once executed, it creates a plan of operations that leads to fair allocation of the shards between the sites, and then continues to execute it in the background.
+此命令允许设置包含集群中持久性存储副本的站点列表。 一旦执行，它会创建一个操作计划，以在站点之间公平分配分片，并继续在后台执行。 
 
 ::: warning
-Updating the list of durable storage replicas is a costly operation, since it may involve copying large volumes of data between the sites.
-:::
 
-Example:
+更新持久性存储副本列表可能成本高昂，因为可能涉及在站点之间复制大量数据。 
 
+::: 
+
+示例：
 ```bash
 $ emqx_ctl ds set_replicas messages 5C6028D6CE9459C7 D8894F95DC86DFDB F4E92DEA197C8EBC
 ok
 ```
 
-After execution of this command the output of `ds info` may look like this:
-
+执行此命令后，`ds info` 的输出类似如下所示：
 ```bash
 $ emqx_ctl ds info
 
@@ -202,75 +182,67 @@ messages/8                    +F4E92DEA197C8EBC
 messages/9                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
 ```
 
-Note a new section `REPLICA TRANSITIONS` containing the list of pending operations.
-Once all pending operations are complete, this list becomes empty.
+新的 `REPLICA TRANSITIONS` 部分列出了待处理的操作。一旦所有操作完成，此列表将为空。
 
 ### `emqx_ctl ds join <DS> <Site>` / `emqx_ctl ds leave <DS> <Site>`
 
-These commands allow to add or remove a site from the list of replicas of the durable storage.
-They are similar to `set_replicas` command, but update one site at a time.
+这些命令将一个站点添加到持久性存储副本列表中或从中移除。它们类似于 `set_replicas` 命令，但每次更新一个站点。 
 
-Example:
-
+示例：
 ```bash
 $ bin/emqx_ctl ds join messages B2A7DBB2413CD6EE
 ok
 ```
 
+更多详细内容，请见[添加站点](./management.md#添加站点)和[移除站点](./management.md#移除站点)。
+
 ## REST API
 
-The following REST API endpoints are available for managing and monitoring the builtin durable storage:
+以下是用于管理和监控内置持久性存储的 REST API 端点：
 
-- `/ds/sites` — list known sites
-- `/ds/sites/:site` — get information about the site (its status, current EMQX node name managing the site, etc.)
-- `/ds/storages` — list durable storages
-- `/ds/storages/:ds` — get information about the durable storage and its shards
-- `/ds/storages/:ds/replicas` — list or update sites that contain replicas of a durable storage
-- `/ds/storages/:ds/replicas/:site` — allows to add or remove replica of the durable storage on the site
+- `/ds/sites`：列出已知站点。
+- `/ds/sites/:site`：提供有关站点的信息（状态、管理站点的当前 EMQX 节点名称等）。
+- `/ds/storages`：列出持久性存储。
+- `/ds/storages/:ds`：提供有关持久性存储及其分片的信息。
+- `/ds/storages/:ds/replicas`：列出或更新包含持久性存储副本的站点。
+- `/ds/storages/:ds/replicas/:site`：在站点上添加或删除持久性存储的副本。
 
-See EMQX OpenAPI schema for more information.
+有关更多信息，请参阅 EMQX OpenAPI schema。
 
-## Metrics
+## 指标
 
-This section lists Prometheus metrics relevant to the durable sessions.
+以下 Prometheus 指标与持久会话相关：
 
 ### `emqx_ds_egress_batches`
 
-This counter is increased every time when a batch of messages is successfully written to the durable storage.
+每次成功将一批消息写入持久性存储时递增。
 
 ### `emqx_ds_egress_messages`
 
-This metric counts messages successfully written to the durable storage.
+计算成功写入持久性存储的消息数量。
 
 ### `emqx_ds_egress_bytes`
 
-This metric counts total volume of payload data successfully written to the durable storage.
-Note: this counter only takes message payloads into consideration, so the actual volume of data written to the durable storage may be larger.
+计算成功写入持久性存储的有效载荷数据总量。注意：此指标仅考虑消息有效载荷，因此实际写入的数据量可能更大。
 
 ### `emqx_ds_egress_batches_failed`
 
-This counter is incremented every time when writing data to the durable storage fails for any reason.
+每次写入持久性存储失败时递增。
 
 ### `emqx_ds_egress_flush_time`
 
-This is a rolling average of time (in μs) spent writing batches to the durable storage.
-It's a key indicator of the replication speed.
+记录写入批次到持久性存储所花费时间（以微秒为单位）的滚动平均值。这是复制速度的关键指标。
 
 ### `emqx_ds_store_batch_time`
 
-This is a rolling average of time (in μs) spent writing batches to the local RocksDB storage.
-Unlike `emqx_ds_egress_flush_time`, it does not include network replication costs, so it's the key indicator of the disk IO efficiency.
+记录写入批次到本地 RocksDB 存储所花费时间（以微秒为单位）的滚动平均值。与 `emqx_ds_egress_flush_time` 不同，它不包括网络复制成本，因此是磁盘 I/O 效率的关键指标。
 
 ### `emqx_ds_builtin_next_time`
 
-This is a rolling average of time (in μs) spent consuming a batch of messages from the durable storage.
+记录从持久性存储中消费一批消息所花费时间（以微秒为单位）的滚动平均值。
 
-### `emqx_ds_storage_bitfield_lts_counter_seek` and `emqx_ds_storage_bitfield_lts_counter_next`
+### `emqx_ds_storage_bitfield_lts_counter_seek` 和 `emqx_ds_storage_bitfield_lts_counter_next`
 
-These counters are specific to the "wildcard optimized" storage layout.
-They measure the efficiency of consuming data from the local storage.
+这些计数器特定于 "wildcard optimized" 存储布局。它们衡量从本地存储消费数据的效率。`seek` 操作通常较慢，因此理想情况下 `emqx_ds_storage_bitfield_lts_counter_next` 的增长速度应快于 `seek`。
 
-Wildcard optimized layout uses two primitives for looking up data in RocksDB: one that searches for a key (seek), and one that simply jumps to the next key (next).
-`seek` primitive is generally slower, so ideally the rate of growth of `emqx_ds_storage_bitfield_lts_counter_next` counter must be much greater than the rate of growth of `seek` counter.
-
-Increasing `durable_storage.messages.layout.epoch_bits` parameter can help to increase this ratio.
+增加 `durable_storage.messages.layout.epoch_bits` 参数可以帮助改善此比率。
