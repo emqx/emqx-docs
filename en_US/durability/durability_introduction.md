@@ -30,11 +30,26 @@ EMQX offers 2 different implementations for client sessions, each optimized for 
 
 The implementation choice depends on the session type (persistent or ephemeral) and the `durable_sessions.enable` configuration parameter, which can be set globally or per zone. 
 
-::: tip
+- **Persistent**: persistent sessions are kept by the broker after the client's connection terminates, and can be resumed if the client reconnects to the broker within the session expiry interval.
+- **Volatile**: volatile sessions expire immediately after the client disconnects from the broker.
 
 For more information on zone, see [Zone Override](../configuration/configuration.md#zone-override).
 
-:::
+1. For the clients using MQTT 5 protocol,
+   [Session Expiry Interval](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901048) property of `CONNECT` or `DISCONNECT` packet is set to a value greater than zero.
+
+2. For the clients using MQTT 3.* protocol,
+   [Clean Session](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718030) flag is set to 0,
+   and `mqtt.session_expiry_interval` configuration parameter is set to a value greater than 0.
+
+Client sessions that don't meet the above criteria are considered volatile.
+
+## Session Implementations
+
+EMQX contains two alternative implementations for the client sessions:
+
+- **RAM**
+- **Durable**
 
 The implementation is selected based on the following criteria:
 
