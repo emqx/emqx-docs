@@ -119,10 +119,7 @@
   Start building packages for Ubuntu 24.04 Noble Numbat (LTS).
 
 - [#12898](https://github.com/emqx/emqx/pull/12898) IoTDB bridge support for iotdb 1.3.0 and batch insert(batch_size/batch_time) options.
-
 - [#12899](https://github.com/emqx/emqx/pull/12899) Added support for namespace and key dispatch strategy.
-
-
 
 ### Bug Fixes
 
@@ -196,6 +193,19 @@
 - [#12888](https://github.com/emqx/emqx/pull/12888) Fix License related configuration loss after importing backup data.
 
 - [#12895](https://github.com/emqx/emqx/pull/12895) Complemented some necessary but missed keys for the DynamoDB connector and the action.
+  
+- [#12909](https://github.com/emqx/emqx/pull/12909) Fixed UDP listener process handling on errors or closure, The fix ensures the UDP listener is cleanly stopped and restarted as needed if these error conditions occur.
+
+- [#12950](https://github.com/emqx/emqx/pull/12950) Added a validation to prevent duplicated topics when configuring a message validation.
+
+- [#13001](https://github.com/emqx/emqx/pull/13001) Fixed an issue where the syskeeper forwarder would never reconnect when the connection was lost.
+
+- [#13010](https://github.com/emqx/emqx/pull/13010) Fixed the issue where the JT/T 808 gateway could not correctly reply to the REGISTER_ACK message when requesting authentication from the registration service failed.
+
+- [#13018](https://github.com/emqx/emqx/pull/13018) Reduced log spamming when connection goes down in a Postgres/Timescale/Matrix connector.
+
+
+
 
 
 ## 5.6.1
