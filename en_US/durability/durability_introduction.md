@@ -1,4 +1,4 @@
-# Durable MQTT Sessions and Messages
+# Durable MQTT Sessions
 
 Starting from release v5.7.0, EMQX contains embedded durable storage for MQTT sessions and messages.
 This page gives a high-level introduction to the session durability feature in EMQX and how it ensures the resumption of sessions after the restart of EMQX nodes.
