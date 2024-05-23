@@ -1,16 +1,8 @@
 # MQTT 会话持久化
 
-EMQX contains embedded durable storage for MQTT sessions.
-This page gives a high-level introduction to the session durability feature in EMQX and how it ensures the resumption of sessions after the restart of EMQX nodes.
-
 EMQX 内置了 MQTT 会话持久化（Durable Sessions）功能，可以将会话和消息持久化存储到磁盘，并提供高可用副本以保证数据的冗余和一致性。通过会话持久化功能，可以实现有效的故障转移和恢复机制，确保服务的连续性和可用性，从而提高系统的可靠性。
 
 本页面介绍了 EMQX 中会话持久化的概念、原理和使用方法。
-
-::: warning Important Notice
-EMQX v5.7.0 does not support shared subscriptions for the durable sessions yet.
-This feature will be implemented in a later release.
-:::
 
 ::: warning 重要提示
 该功能自 EMQX v5.7.0 版本起可用。然而，尚不支持共享订阅会话的持久化，计划在后续版本中实现。
@@ -18,50 +10,139 @@ This feature will be implemented in a later release.
 
 ## 基本概念
 
-在 MQTT 的使用场景中，持久会话（Persistent Sessions）和会话持久化（Durable Sessions）这两个概念可能容易引起混淆，因此本节将对这两个概念进行详细介绍。
+在了解 EMQX 中的会话持久化功能之前，您需要先了解关于 MQTT 会话的一些基本概念。
 
-- **持久会话（Persistent Sessions）**：MQTT 协议中的一个特性，当客户端与服务器建立连接时可以设置是否当前会话，这样，即使客户端断开连接再重新连接，它之前订阅的主题关系、为发送完成的消息等状态都会被保留。简而言之，它是关于客户端连接状态和消息队列的持久性保持。
+### MQTT 会话类型
 
-- **会话持久化（Durable Sessions）**：与 MQTT 协议无关的特性，它指的是是否将客户端会话保存到持久存储（磁盘）中，保证消息传递的可靠性。
+EMQX 的会话持久化功能只对持久会话生效，因此我们有必要先了解 MQTT 会话的类型划分。
 
-EMQX 的会话持久化功能只对持久会话生效，因此我们有必要先了解 [MQTT 会话](https://www.emqx.com/zh/blog/mqtt-session)的类型划分。
+根据 MQTT 标准，客户端会话有助于在 MQTT 代理中管理客户端连接和状态。在 EMQX 中，客户端会话通常分为以下两个逻辑类别：
 
-<!-- 
-词汇表：
-Broker -> 服务器 
-Persistent -> 持久会话
-Ephemeral -> 临时会话
--->
+- **临时会话**: 临时会话仅在客户端连接到 EMQX 的持续时间内存在。当具有临时会话的客户端断开连接时，所有会话信息，包括订阅和未传递的消息，都将被丢弃。
+- **持久会话**: 持久会话在客户端连接终止后由服务器保留，并且如果客户端在会话到期间隔内重新连接到服务器，则可以恢复该会话。在客户端离线时发送到主题的消息将被传递。
 
-According to the MQTT standard, client sessions facilitate the management of client connections and states within the MQTT broker. Informally, EMQX separates client sessions into 2 logical categories:
+以下情况的客户端会话被视为持久会话：
 
-- **Persistent**: Persistent sessions are kept by the broker after the client's connection terminates, and can be resumed if the client reconnects to the broker within the session expiry interval. Messages sent to the topics while the client was offline are delivered.
+- 对于使用 MQTT 5 协议的客户端，如果 `CONNECT` 或 `DISCONNECT` 数据包的 [Session Expiry Interval](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901048) 属性设置为大于零的值。
+- 对于使用 MQTT 3.* 协议的客户端，如果 [Clean Session](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718030) 标志设置为 0，并且 `mqtt.session_expiry_interval` 配置参数设置为大于 0 的值。
 
-  持久会话主要有以下三个作用：
+了解更多关于 MQTT 持久会话的信息，参阅 [MQTT 持久会话与 Clean Session 详解](https://www.emqx.com/zh/blog/mqtt-session)。
 
-  1. 避免因网络中断导致需要反复订阅带来的额外开销。
+### 概念区分
 
-  2. 避免错过离线期间的消息。
+在 MQTT 的使用场景中，持久会话（Persistent Sessions）和会话持久化（Durable Sessions）这两个概念可能容易引起混淆，因此本节对这两个概念进行了区分。
 
-  3. 确保 QoS 1 和 QoS 2 的消息质量保证不被网络中断影响。
+- **持久会话（Persistent Sessions）**：MQTT 协议中的一个特性，当客户端与服务器建立连接时可以设置是否保持当前会话，这样，即使客户端断开连接再重新连接，它之前订阅的主题关系、未发送完成的消息等状态都会被保留。简而言之，它是关于客户端连接状态和消息队列的持久性保持。
 
-- **Ephemeral**: Ephemeral sessions exist only for the duration of the client's connection to EMQX. When a client with an ephemeral session disconnects, all session information, including subscriptions and undelivered messages, is discarded.
+- **会话持久化（Durable Sessions）**：与 MQTT 协议无关的特性，它是指是否将客户端会话保存到持久存储（磁盘）中，保证消息传递的可靠性。
 
-The client session is considered persistent in following cases:
+## EMQX 中的会话存储方式
 
-- For the clients using the MQTT 5 protocol, [Session Expiry Interval](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901048) property of `CONNECT` or `DISCONNECT` packet is set to a value greater than zero.
+EMQX 提供了两种不同的客户端会话存储实现，每种都针对特定的使用场景进行了优化：
 
-- For the clients using MQTT 3.* protocol, [Clean Session](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718030) flag is set to 0, and `mqtt.session_expiry_interval` configuration parameter is set to a value greater than 0.
+- **内存 (RAM) 会话**：使用节点所在服务器内存存储会话，会话是非持久的。
+- **持久存储 (durable)**：增加了持久层，在目前的版本中基于本地的 RocksDB + 节点本地磁盘存储会话。
 
-## 快速开始
+实现选择取决于会话类型（临时或持久）和 `durable_sessions.enable` 配置参数，该参数可以全局设置，也可以根据 [zone](../configuration/configuration.md#zone-override) 进行设置。可以根据以下标准选择实现：
+
+| `durable_sessions.enable` | 临时会话 | 持久会话 |
+| ------------------------- | -------- | -------- |
+| `false`                   | RAM      | RAM      |
+| `true`                    | RAM      | durable  |
+
+EMQX 使用一种独特的方法来管理消息的持久性，允许 RAM 和持久化会话共存，同时最小化存储成本。
+
+当持久化会话订阅一个主题过滤器时，EMQX 将匹配该过滤器的主题标记为“持久化”。这确保除了将这些主题的 MQTT PUBLISH 消息路由到 RAM 会话之外，代理还将这些消息保存到持久化存储中。
+
+每个持久化的 MQTT 消息在每个副本上仅存储一次，不管订阅的持久化会话的数量或它们的连接状态如何。这种高效的分发方式最小化了磁盘写入。
+
+### 内存会话与持久存储对比
+
+客户端会话的管理策略是确保服务稳定可靠的重要因素之一。本节将对比分析 EMQX 中 MQTT 会话的内存存储与持久存储的特点，帮助开发者更好地理解各自的特性和适用场景，从而做出更加精准的部署决策。
+
+#### 内存会话
+
+RAM 客户端会话实现是默认的，并且在 EMQX 5.7 版本之前的所有版本中都已经使用过。顾名思义，RAM 会话的状态完全保存在易失性内存中。
+
+RAM 会话的优点包括：
+
+- 非常高的吞吐量和低延迟。
+- 立即将消息分发给客户端。
+
+然而，也存在一些缺点：
+
+- 当承载会话的 EMQX 节点停止或重新启动时，会话数据会丢失，这是由于 RAM 的易失性导致的。
+- 未传递的消息存储在内存队列中，有一个限制以防止内存耗尽。当达到此限制时，新消息将被丢弃，可能导致消息丢失。
+
+#### 持久存储
+
+会话持久化实现是在 EMQX 5.7 版本中引入的，它将会话状态和路由到持久化会话的消息存储在磁盘上。
+
+持久化会话通过在 EMQX 集群中的多个节点之间持续复制会话元数据和 MQTT 消息，提供了强大的持久性和高可用性。可配置的[复制因子](./managing-replication.md#复制因子-replication-factor)决定了每条消息或会话的副本数量，使用户能够根据其特定要求自定义持久性和性能之间的平衡。
+
+持久化客户端会话的优点包括：
+
+- 在 EMQX 节点重新启动或停止后，会话可以恢复。
+- MQTT 消息存储在共享的、复制的、持久的存储中，而不是存储在内存队列中，这降低了在线和离线会话的 RAM 使用量。
+
+然而，也存在一些缺点：
+
+- 将消息存储在磁盘上会导致系统总吞吐量降低。
+- 与 RAM 会话相比，持久化会话具有更高的延迟，因为 MQTT 消息的写入和读取都是批量执行的。虽然批处理提高了吞吐量，但也增加了端到端延迟（客户端看到发布消息之前的延迟）。
+
+## 持久化存储架构
+
+EMQX 的持久化存储以一个分层结构来组织，包括存储 (Storage)、分片 (Shard)、代 (Generation) 和流 (Stream)。
+
+![Diagram of EMQX durable storage sharding](./assets/emqx_ds_sharding.png)
+
+#### 存储 (Storage)
+
+存储封装了某种类型的所有数据，例如 MQTT 消息或 MQTT 会话。
+
+#### 分片 (Shard)
+
+消息根据客户端进行隔离，并根据发布者的客户端 ID 存储在分片中。分片数量在 EMQX 初始启动时由 [n_shards](./managing-replication.md#number-of-shards) 配置参数决定。分片也是复制的单位。每个分片会根据 `durable_storage.messages.replication_factor` 在不同节点间进行一致性复制，确保每个副本中的消息集是相同的。
+
+#### 代 (Generation)
+
+分片中的消息根据特定时间段划分为代。新消息写入当前代，而以前的代是只读的。旧的代如超过设定的 MQTT 消息保留期则被删除，保留期由 `durable_sessions.message_retention_period` 参数定义。
+
+代可以根据存储布局规范以不同方式组织数据。目前，仅支持一种布局，优化了通配符和单一主题订阅的高吞吐量。未来更新将引入针对不同工作负载优化的布局。
+
+新代的存储布局通过 `durable_storage.messages.layout` 参数配置，每个布局引擎定义其自己的配置参数。
+
+#### 流 (Stream)
+
+每个分片和代中的消息被划分为多个流。流作为 EMQX 中消息序列化的单位。流可以包含多个主题的消息。不同的存储布局可以采用不同的策略将主题映射到流中。
+
+持久会话以批量方式从流中获取消息，批量大小可以通过 `durable_sessions.batch_size` 参数调整。
+
+### 集群中的持久会话
+
+EMQX 集群中的每个节点都分配有唯一的 *站点 ID*，该 ID 作为稳定标识符，与 Erlang 节点名称 (`emqx@...`) 无关。站点 ID 是持久的，并且在节点第一次启动时随机生成。这种稳定性维护了数据的完整性，特别是在节点可能经历名称修改或重新配置的情况下。
+
+管理员可以使用 `emqx_ctl ds info` CLI 命令查看不同站点的状态，以管理和监控集群中的持久会话。
+
+## 会话持久化的硬件要求
+
+当会话持久化启用时，EMQX 会将持久会话的元数据和发送到持久会话的 MQTT 消息保存到磁盘上。因此，EMQX 必须部署在具有足够大存储容量的服务器上。为了获得最佳吞吐量，建议使用固态硬盘（SSD）存储。
+
+存储需求可以根据以下指南进行估算：
+
+- **消息存储**：每个副本上存储消息所需的空间与传入消息的速率乘以 `durable_sessions.message_retention_period` 参数指定的持续时间成正比。此参数决定了消息的保留时间，从而影响所需的总存储量。
+- **会话元数据存储**：会话元数据的存储量与会话数量乘以它们订阅的流数量成正比。
+- **流计算**：流的数量与分片的数量成正比。它还（以非线性方式）取决于主题的数量。EMQX 会自动将结构相似的主题组合到同一个流中，确保流的数量不会随着主题数量的增加而过快增长，从而最小化每个会话存储的元数据量。
+
+## 快速体验会话持久化
 
 本章节将帮助您快速了解如何在 EMQX 与 MQTT 客户端上使用会话持久化功能，并介绍简单的会话持久化工作流程。
 
-**注意**：
+::: tip **注意**
 
-即使没有启用持久会话，步骤 2-4 的操作仍然使用，即会话仍然会被保留、消息也将会保存在客户端队列中。
+即使没有启用持久会话，通过步骤 2-4 的操作会话仍然会被保留、消息也将会保存在客户端队列中。不同之处在于会话是否持久存储，以及步骤 5 中会话是否能在节点重启后恢复。
 
-不同之处在于会话是否持久存储，以及步骤 5 中会话是否能在节点重启后恢复。
+:::
 
 ### 1. 在 EMQX 上启用会话持久化
 
@@ -123,128 +204,16 @@ mqttx sub -t t/1 -i emqx_c --no-clean
 ...
 ```
 
-**注意**：
+::: tip **注意**
 
 - 必须使用相同的客户端 ID `emqx_c`，并指定 `--no-clean` 选项以将 `Clean Start` 设置为 `false`，确保满足这两项要求才能恢复持久的会话。
 - 由于会话中已经保存了之前的订阅信息，即使重连时不重新订阅 `t/1` 主题，消息也会派发到客户端。
 
-## How Durable Sessions Work
+:::
 
-### 会话存储方式
+## 下一步
 
-EMQX offers 2 different storage implementations for client sessions, each optimized for specific use cases:
+想要了解如何对会话持久化功能进行配置和管理，以及如何对 EMQX 集群中的会话持久化进行初始设置和更改设置，请参阅以下页面：
 
-- **RAM**：使用节点所在服务器内存存储会话，会话是非持久的
-- **Durable**：增加了持久层，在目前的版本中基于本地的 RocksDB + 节点本地磁盘存储会话
-
-The implementation choice depends on the session type (persistent or ephemeral) and the `durable_sessions.enable` configuration parameter, which can be set globally or per [zone](../configuration/configuration.md#zone-override).
-
-The implementation is selected based on the following criteria:
-
-| `durable_sessions.enable` | Ephemeral | Persistent |
-|------------------------------|-----------|------------|
-| `false`                      | RAM       | RAM        |
-| `true`                       | RAM       | durable   |
-
-EMQX uses a unique approach to manage message durability, allowing RAM and durable sessions to coexist while minimizing storage costs.
-
-When a durable session subscribes to a topic filter, EMQX marks topics matching the filter as "durable." This ensures that, aside from routing MQTT PUBLISH messages from these topics to RAM sessions, the broker also saves such messages to the durable storage.
-
-Each durable MQTT message is stored exactly once on each replica, regardless of the number of subscribing durable sessions or their connection status. This efficient fan-out minimizes disk writes.
-
-### Durable Storage Architecture
-
-EMQX's durable storage is organized into a hierarchical structure comprising storages, shards, generations, and streams.
-
-![Diagram of EMQX durable storage sharding](./assets/emqx_ds_sharding.png)
-
-<!-- 
-术语表：
-标题上需要中英文对照：
-
-Storage: 存储（Storage）
-Shard: 分片（Shard）
-Generation: 代 or 生成??（Generation） TODO 问一下 stone
-Stream: 流（Stream）
- -->
-
-#### Storage
-
-Storage encapsulates all data of a certain type, such as MQTT messages or MQTT sessions.
-
-#### Shard
-
-Messages are segregated by client and stored in shards based on the publisher's client ID. The number of shards is determined by [n_shards](./managing-replication.md#number-of-shards) configuration parameter during the initial startup of EMQX. A shard is also a unit of replication. Each shard is consistently replicated the number of times specified by `durable_storage.messages.replication_factor` across different nodes, ensuring identical message sets in each replica.
-
-#### Generation
-
-Messages within a shard are segmented into generations corresponding to specific time frames. New messages are written to the current generation, while previous generations are read-only. Old generations are deleted based on the `durable_sessions.message_retention_period` parameter.
-
-Generations can organize data differently according to the storage layout specification. Currently, only one layout is supported, optimized for high throughput of wildcard and single-topic subscriptions. Future updates will introduce layouts optimized for different workloads.
-
-The storage layout for new generations is configured by the `durable_storage.messages.layout` parameter, with each layout engine defining its own configuration parameters.
-
-#### Stream
-
-Messages in each shard and generation are split into streams. Streams serve as units of message serialization in EMQX. Streams can contain messages from multiple topics. Various storage layouts can employ different strategies for mapping topics into streams.
-
-Durable sessions fetch messages in batches from the streams, with batch size adjustable via the `durable_sessions.batch_size` parameter.
-
-### Durable Session Across Cluster
-
-Each node within an EMQX cluster is assigned a unique *Site ID*, which serves as a stable identifier, independent of the Erlang node name (`emqx@...`). Site IDs are persistent, and they are randomly generated at the first startup of the node. This stability maintains the integrity of the data, especially in scenarios where nodes might undergo name modifications or reconfigurations.
-
-Administrators can manage and monitor durable sessions across the cluster by using the `emqx_ctl ds info` CLI command to view the status of different sites.
-
-## 内存会话与持久存储对比
-
-客户端会话的管理策略是确保服务稳定可靠的重要因素之一。本段落将对比分析 EMQX 中 MQTT 会话的内存存储与持久存储的特点，帮助开发者更好地理解各自的特性和适用场景，从而做出更加精准的部署决策。
-
-### RAM Client Sessions
-
-The RAM session implementation is the default and has been used in all EMQX releases before version 5.7. As the name implies, the state of RAM sessions is maintained entirely in volatile memory.
-
-Advantages of RAM client sessions include:
-
-- Very high throughput and low latency.
-- Immediate message dispatch to clients.
-
-However, there are some drawbacks:
-
-- Session data is lost when the EMQX node hosting the session stops or restarts, due to the volatility of RAM.
-- Undelivered messages are stored in a memory queue, with a limit to prevent memory exhaustion. New messages are discarded when this limit is reached, leading to potential message loss.
-
-### Durable Client Sessions
-
-Introduced in EMQX v5.7.0, the durable session implementation stores session state and messages routed to the durable sessions on disk.
-
-Durable sessions provide robust durability and high availability by consistently replicating session metadata and MQTT messages across multiple nodes within an EMQX cluster. The configurable [replication factor](./managing-replication.md#replication-factor) determines the number of replicas for each message or session, enabling users to customize the balance between durability and performance to meet their specific requirements.
-
-Advantages of durable client sessions include:
-
-- Sessions can be resumed after EMQX nodes are restarted or stopped.
-- MQTT messages are stored in a shared, replicated, durable storage instead of a memory queue, reducing RAM usage for both online and offline sessions.
-
-However, there are some disadvantages:
-
-- Storing messages on disk results in lower overall system throughput.
-- Durable sessions have higher latency compared to RAM sessions because both writing and reading MQTT messages are performed in batches. While batching improves throughput, it also increases end-to-end latency (the delay before clients see the published messages).
-
-
-## Hardware Requirements for 会话持久化
-
-When 会话持久化 is enabled, EMQX saves the metadata of persistent sessions and MQTT messages sent to the persistent sessions on disk. Therefore, EMQX must be deployed on a server with sufficiently large storage capacity. To achieve the best throughput, it is recommended to use Solid State Drive (SSD) storage.
-
-The storage requirements can be estimated according to the following guidelines:
-
-- **Message Storage**: The space required for storing messages on each replica is proportional to the rate of incoming messages multiplied by the duration specified by the `durable_sessions.message_retention_period` parameter. This parameter dictates how long messages are retained, influencing the total storage needed.
-- **Session Metadata Storage**: The amount of storage for session metadata is proportional to the number of sessions multiplied by the number of streams to which they are subscribed.
-- **Stream Calculation**: The number of streams is proportional to the number of shards. It also depends (in a non-linear fashion) on the number of topics. EMQX automatically combines topics that have a similar structure into the same stream, ensuring that the number of streams doesn't grow too fast with the number of topics, minimizing the volume of metadata stored per session.
-
-
-## Next Step
-
-You can learn more about the durable session configuration and function operation and management through the following pages:
-
-- [Configure and Manage Durable Storage](./management.md)
-- [Manage Data Replication](./managing-replication.md)
+- [配置和管理会话持久化](./management.md)
+- [管理副本](./managing-replication.md)

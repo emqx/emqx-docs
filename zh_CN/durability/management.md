@@ -1,13 +1,13 @@
-# 配置和管理持久性存储
+# 配置和管理会话持久化
 
-本文档提供了有关在 EMQX 中配置、管理和优化持久性存储的参考和说明，包括会话和存储配置。
+本文档提供了有关在 EMQX 中配置、管理和优化会话持久化功能的参考和说明，包括会话和存储配置。
 
 ## 配置参数
 
-持久性存储的配置分为两个主要类别：
+会话持久化的配置分为两个主要类别：
 
-- `durable_sessions`：包含与 MQTT 客户端会话相关的设置，包括它们如何从持久性存储中消费数据以及数据保留参数。
-- `durable_storage`：管理持久性存储系统保存 MQTT 消息数据的设置。
+- `durable_sessions`：包含与 MQTT 客户端会话相关的设置，包括它们如何从会话持久化中消费数据以及数据保留参数。
+- `durable_storage`：管理会话持久化系统保存 MQTT 消息数据的设置。
 
 ### 持久会话配置
 
@@ -16,10 +16,10 @@
 | `durable_sessions.enable`                   | 启用会话持久性。注意：需要重新启动 EMQX 节点才能使更改生效。 |
 | `durable_sessions.batch_size`               | 控制持久会话从存储中消费的消息批次的最大大小。               |
 | `durable_sessions.idle_poll_interval`       | 控制持久会话查询新消息的频率。如果发现新消息，则下一批将立即从存储中检索，如果客户端的传输队列有空间的话。 |
-| `durable_sessions.heartbeat_interval`       | 指定将会话元数据保存到持久性存储的间隔。                     |
+| `durable_sessions.heartbeat_interval`       | 指定将会话元数据保存到会话持久化的间隔。                     |
 | `durable_sessions.renew_streams_interval`   | 定义会话多久查询存储以获取新流。                             |
 | `durable_sessions.session_gc_interval`      | 指定清除会话并删除过期会话的间隔。                           |
-| `durable_sessions.message_retention_period` | 定义持久性存储中 MQTT 消息的保留期。注意：此参数是全局的。   |
+| `durable_sessions.message_retention_period` | 定义会话持久化中 MQTT 消息的保留期。注意：此参数是全局的。   |
 
 以下参数可以在 [zone](../configuration/configuration.md#zone-override) 级别覆盖：
 - `durable_sessions.enable`
@@ -27,7 +27,7 @@
 - `durable_sessions.idle_poll_interval`
 - `durable_sessions.renew_streams_interval`
 
-### 持久性存储配置
+### 会话持久化配置
 
 `<DS>` 占位符代表 "durable storage"。当前，`<DS>` 的可用参数为 `message`。
 
@@ -42,7 +42,7 @@
 
 #### 本地写缓冲配置
 
-为了最大化吞吐量，EMQX 将来自客户端的 MQTT 消息批量写入持久性存储。批处理是使用 `durable_storage.<DS>.layout` 配置子树下的以下参数进行配置的：
+为了最大化吞吐量，EMQX 将来自客户端的 MQTT 消息批量写入会话持久化。批处理是使用 `durable_storage.<DS>.layout` 配置子树下的以下参数进行配置的：
 
 | 参数             | 描述                                                 |
 | ---------------- | ---------------------------------------------------- |
@@ -83,11 +83,11 @@
 
 ## CLI 命令
 
-以下是用于管理持久性存储的 CLI 命令：
+以下是用于管理会话持久化的 CLI 命令：
 
 ### `emqx_ctl ds info`
 
-显示持久性存储状态的概述。
+显示会话持久化状态的概述。
 
 示例：
 ```bash
@@ -121,15 +121,15 @@ messages/9                        5C6028D6CE9459C7
 
 - `THIS SITE`：本地 EMQX 节点声明的站点 ID。 
 - `SITES`：所有已知站点的列表，包括 EMQX 节点名称及其状态。 
-- `SHARDS`：持久性存储分片列表以及其副本所在的站点 ID。
+- `SHARDS`：会话持久化分片列表以及其副本所在的站点 ID。
 
 ### `emqx_ctl ds set_replicas <DS> <Site1> <Site2> ...`
 
-此命令允许设置包含集群中持久性存储副本的站点列表。 一旦执行，它会创建一个操作计划，以在站点之间公平分配分片，并继续在后台执行。 
+此命令允许设置包含集群中会话持久化副本的站点列表。 一旦执行，它会创建一个操作计划，以在站点之间公平分配分片，并继续在后台执行。 
 
 ::: warning
 
-更新持久性存储副本列表可能成本高昂，因为可能涉及在站点之间复制大量数据。 
+更新会话持久化副本列表可能成本高昂，因为可能涉及在站点之间复制大量数据。 
 
 ::: 
 
@@ -186,7 +186,7 @@ messages/9                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
 
 ### `emqx_ctl ds join <DS> <Site>` / `emqx_ctl ds leave <DS> <Site>`
 
-这些命令将一个站点添加到持久性存储副本列表中或从中移除。它们类似于 `set_replicas` 命令，但每次更新一个站点。 
+这些命令将一个站点添加到会话持久化副本列表中或从中移除。它们类似于 `set_replicas` 命令，但每次更新一个站点。 
 
 示例：
 ```bash
@@ -198,14 +198,14 @@ ok
 
 ## REST API
 
-以下是用于管理和监控内置持久性存储的 REST API 端点：
+以下是用于管理和监控内置会话持久化的 REST API 端点：
 
 - `/ds/sites`：列出已知站点。
 - `/ds/sites/:site`：提供有关站点的信息（状态、管理站点的当前 EMQX 节点名称等）。
-- `/ds/storages`：列出持久性存储。
-- `/ds/storages/:ds`：提供有关持久性存储及其分片的信息。
-- `/ds/storages/:ds/replicas`：列出或更新包含持久性存储副本的站点。
-- `/ds/storages/:ds/replicas/:site`：在站点上添加或删除持久性存储的副本。
+- `/ds/storages`：列出会话持久化。
+- `/ds/storages/:ds`：提供有关会话持久化及其分片的信息。
+- `/ds/storages/:ds/replicas`：列出或更新包含会话持久化副本的站点。
+- `/ds/storages/:ds/replicas/:site`：在站点上添加或删除会话持久化的副本。
 
 有关更多信息，请参阅 EMQX OpenAPI schema。
 
@@ -215,23 +215,23 @@ ok
 
 ### `emqx_ds_egress_batches`
 
-每次成功将一批消息写入持久性存储时递增。
+每次成功将一批消息写入会话持久化时递增。
 
 ### `emqx_ds_egress_messages`
 
-计算成功写入持久性存储的消息数量。
+计算成功写入会话持久化的消息数量。
 
 ### `emqx_ds_egress_bytes`
 
-计算成功写入持久性存储的有效载荷数据总量。注意：此指标仅考虑消息有效载荷，因此实际写入的数据量可能更大。
+计算成功写入会话持久化的有效载荷数据总量。注意：此指标仅考虑消息有效载荷，因此实际写入的数据量可能更大。
 
 ### `emqx_ds_egress_batches_failed`
 
-每次写入持久性存储失败时递增。
+每次写入会话持久化失败时递增。
 
 ### `emqx_ds_egress_flush_time`
 
-记录写入批次到持久性存储所花费时间（以微秒为单位）的滚动平均值。这是复制速度的关键指标。
+记录写入批次到会话持久化所花费时间（以微秒为单位）的滚动平均值。这是复制速度的关键指标。
 
 ### `emqx_ds_store_batch_time`
 
@@ -239,7 +239,7 @@ ok
 
 ### `emqx_ds_builtin_next_time`
 
-记录从持久性存储中消费一批消息所花费时间（以微秒为单位）的滚动平均值。
+记录从会话持久化中消费一批消息所花费时间（以微秒为单位）的滚动平均值。
 
 ### `emqx_ds_storage_bitfield_lts_counter_seek` 和 `emqx_ds_storage_bitfield_lts_counter_next`
 

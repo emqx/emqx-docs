@@ -1,13 +1,13 @@
-# Configure and Manage Durable Storage
+# Configure and Manage Durable Sessions
 
-This document provides references and instructions for configuring, managing, and optimizing durable storage within EMQX, including sessions and storage configuration.
+This document provides references and instructions for configuring, managing, and optimizing durable sessions within EMQX, including sessions and storage configuration.
 
 ## Configuration Parameters
 
-Configuration for durable storage is divided into 2 main categories:
+Configuration for durable sessions is divided into 2 main categories:
 
-- `durable_sessions`: Contains settings related to MQTT clients' sessions, including how they consume data from durable storage and data retention parameters.
-- `durable_storage` Manages the settings of the durable storage system holding the MQTT message data.
+- `durable_sessions`: Contains settings related to MQTT clients' sessions, including how they consume data from durable sessions and data retention parameters.
+- `durable_storage` Manages the settings of the durable sessions system holding the MQTT message data.
 
 ### Durable Sessions Configuration
 
@@ -16,10 +16,10 @@ Configuration for durable storage is divided into 2 main categories:
 | `durable_sessions.enable`                   | Enables session durability. Note: Restart of the EMQX node is required for changes to take effect. |
 | `durable_sessions.batch_size`               | Controls the maximum size of message batches consumed from the storage by durable sessions. |
 | `durable_sessions.idle_poll_interval`       | Controls the frequency of querying the storage for new messages by durable sessions. If new messages are found, the next batch is retrieved immediately if the client's in-flight queue has space. |
-| `durable_sessions.heartbeat_interval`       | Specifies the interval for saving session metadata to the durable storage. |
+| `durable_sessions.heartbeat_interval`       | Specifies the interval for saving session metadata to the durable sessions. |
 | `durable_sessions.renew_streams_interval`   | Defines how often sessions query the storage for new streams. |
 | `durable_sessions.session_gc_interval`      | Specifies the interval for sweeping through sessions and deleting expired ones. |
-| `durable_sessions.message_retention_period` | Defines the retention period of MQTT messages in durable storage. Note: this parameter is global. |
+| `durable_sessions.message_retention_period` | Defines the retention period of MQTT messages in durable sessions. Note: this parameter is global. |
 
 
 The following parameters can be overridden per [zone](../configuration/configuration.md#zone-override):
@@ -29,9 +29,9 @@ The following parameters can be overridden per [zone](../configuration/configura
 - `durable_sessions.idle_poll_interval`
 - `durable_sessions.renew_streams_interval`
 
-### Durable Storage Configuration
+### Durable Sessions Configuration
 
-The `<DS>` placeholder stands for "durable storage".  Currently, the available parameter for `<DS>` is `message`.
+The `<DS>` placeholder stands for "durable sessions".  Currently, the available parameter for `<DS>` is `message`.
 
 | Parameter                                 | Description                                                  |
 | ----------------------------------------- | ------------------------------------------------------------ |
@@ -44,7 +44,7 @@ The `<DS>` placeholder stands for "durable storage".  Currently, the available p
 
 #### Local Write Buffer Configuration
 
-To maximize the throughput, EMQX writes MQTT messages from the clients to the durable storage in batches. Batching is configured using the following parameters under `durable_storage.<DS>.layout` configuration sub-tree:
+To maximize the throughput, EMQX writes MQTT messages from the clients to the durable sessions in batches. Batching is configured using the following parameters under `durable_storage.<DS>.layout` configuration sub-tree:
 
 | Parameter        | Description                                                  |
 | ---------------- | ------------------------------------------------------------ |
@@ -57,7 +57,7 @@ Storage layout determines how EMQX organizes data on disk. Setting `durable_stor
 
 ##### Configuration of `wildcard_optimized` Layout Type
 
-The `wildcard_optimized` layout is aimed to optimize wildcard subscriptions across a vast array of topics. It achieves this by autonomously accumulating knowledge about topic structures over time. Leveraging a lightweight machine learning algorithm, it predicts the wildcard topic filters that clients are likely to subscribe to. Subsequently, it organizes these topics into a unified stream, facilitating efficient consumption in a single batch.
+The `wildcard_optimized` layout is aimed to optimize wildcard subscriptions matching a large number of MQTT topics. It achieves this by autonomously accumulating knowledge about topic structures over time. Leveraging a lightweight machine learning algorithm, it predicts the wildcard topic filters that clients are likely to subscribe to. Subsequently, it organizes these topics into a unified stream, allowing efficient consumption in a single sweep.
 
 
 | Parameter              | Description                                                  |
@@ -86,11 +86,11 @@ By default, the `epoch_bits` parameter is configured to 20 (~1 s), striking a ba
 
 ## CLI Commands
 
-The following CLI commands are available for managing the durable storage:
+The following CLI commands are available for managing the durable sessions:
 
 ### `emqx_ctl ds info`
 
-Displays an overview of the durable storage state.
+Displays an overview of the durable sessions state.
 
 Example:
 
@@ -125,15 +125,15 @@ This command output includes:
 
 - `THIS SITE`: ID of the site claimed by the local EMQX node.
 - `SITES`: List of all known sites, including EMQX node names and their statuses.
-- `SHARDS`: List of durable storage shards and site IDs where their replicas are located.
+- `SHARDS`: List of durable sessions shards and site IDs where their replicas are located.
 
 ### `emqx_ctl ds set_replicas <DS> <Site1> <Site2> ...`
 
-This command allows to set the list of sites containing replicas of the durable storage in the cluster.
+This command allows to set the list of sites containing replicas of the durable sessions in the cluster.
 Once executed, it creates a plan of operations that leads to fair allocation of the shards between the sites, and then continues to execute it in the background.
 
 ::: warning
-Updating the list of durable storage replicas can be costly as it may involve copying large volumes of data between sites.
+Updating the list of durable sessions replicas can be costly as it may involve copying large volumes of data between sites.
 :::
 
 Example:
@@ -191,7 +191,7 @@ The new section `REPLICA TRANSITIONS` lists pending operations. Once all operati
 
 ### `emqx_ctl ds join <DS> <Site>` / `emqx_ctl ds leave <DS> <Site>`
 
-These commands add or remove a site from the list of replicas of the durable storage. They are similar to the `set_replicas` command but update one site at a time.
+These commands add or remove a site from the list of replicas of the durable sessions. They are similar to the `set_replicas` command but update one site at a time.
 
 Example:
 
@@ -204,14 +204,14 @@ For more detailed information, see [Add Sites](./management.md#add-sites) and [R
 
 ## REST API
 
-The following REST API endpoints are available for managing and monitoring the built-in durable storage:
+The following REST API endpoints are available for managing and monitoring the built-in durable sessions:
 
 - `/ds/sites`: Lists known sites.
 - `/ds/sites/:site`: Provides information about a site (status, current EMQX node name managing the site, etc.).
-- `/ds/storages`: Lists durable storages.
-- `/ds/storages/:ds`: Provides information about the durable storage and its shards.
-- `/ds/storages/:ds/replicas`: Lists or updates sites containing replicas of a durable storage.
-- `/ds/storages/:ds/replicas/:site`: Adds or removes a replica of the durable storage on a site.
+- `/ds/storages`: Lists durable sessionss.
+- `/ds/storages/:ds`: Provides information about the durable sessions and its shards.
+- `/ds/storages/:ds/replicas`: Lists or updates sites containing replicas of a durable sessions.
+- `/ds/storages/:ds/replicas/:site`: Adds or removes a replica of the durable sessions on a site.
 
 See EMQX OpenAPI schema for more information.
 
@@ -221,23 +221,23 @@ The following Prometheus metrics are relevant to durable sessions:
 
 ### `emqx_ds_egress_batches`
 
-Increments each time a batch of messages is successfully written to durable storage.
+Increments each time a batch of messages is successfully written to durable sessions.
 
 ### `emqx_ds_egress_messages`
 
-Counts messages successfully written to durable storage.
+Counts messages successfully written to durable sessions.
 
 ### `emqx_ds_egress_bytes`
 
-Counts the total volume of payload data successfully written to durable storage. Note: This metric only considers message payloads, so the actual volume of data written may be larger.
+Counts the total volume of payload data successfully written to durable sessions. Note: This metric only considers message payloads, so the actual volume of data written may be larger.
 
 ### `emqx_ds_egress_batches_failed`
 
-Increments each time writing data to durable storage fails for any reason.
+Increments each time writing data to durable sessions fails for any reason.
 
 ### `emqx_ds_egress_flush_time`
 
-A rolling average of time (in μs) spent writing batches to durable storage. It's a key indicator of replication speed.
+A rolling average of time (in μs) spent writing batches to durable sessions. It's a key indicator of replication speed.
 
 ### `emqx_ds_store_batch_time`
 
@@ -245,7 +245,7 @@ A rolling average of time (in μs) spent writing batches to the local RocksDB st
 
 ### `emqx_ds_builtin_next_time`
 
-A rolling average of time (in μs) spent consuming a batch of messages from durable storage.
+A rolling average of time (in μs) spent consuming a batch of messages from durable sessions.
 
 ### `emqx_ds_storage_bitfield_lts_counter_seek` and `emqx_ds_storage_bitfield_lts_counter_next`
 
