@@ -15,6 +15,7 @@ The authentication process is similar to an HTTP API call where EMQX, as the req
 - The response encoding format `content-type` must be `application/json`.
 - The authentication result is marked by `result` in the body, option value: `allow`, `deny`, `ignore`.
 - Superuser is marked by `is_superuser` in the body, option value: `true`, `false`.
+- Starting from EMQX v5.7.0, you can set [client attributes](../../client-attributes/client-attributes.md) using the optional `client_attrs` field. Note that both keys and values must be strings.
 - The HTTP response status code `Status Code` should be `200` or `204`, the `4xx/5xx` status code returned will ignore the body and determine the result to be `ignore` and continue with the authentication chain.
 
 Example response:
@@ -26,7 +27,11 @@ Headers: Content-Type: application/json
 Body:
 {
     "result": "allow", // options: "allow" | "deny" | "ignore"
-    "is_superuser": true // options: true | fals, default value: false
+    "is_superuser": true, // options: true | false, default value: false
+    "client_attrs": {
+        "role": "admin",
+        "sn": "10c61f1a1f47"
+    }
 }
 ```
 

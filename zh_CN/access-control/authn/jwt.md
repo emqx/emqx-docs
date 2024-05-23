@@ -125,6 +125,23 @@ JWT 权限列表定义了 `pub`、`sub` 和 `all` 3 个可选字段，分别用�
 
 ::::
 
+## 客户端属性
+
+从 EMQX v5.7.0 版本开始，您可以在 JWT Payload 中使用可选的 `client_attrs` 字段设置[客户端属性](../../client-attributes/client-attributes.md)。请注意，键和值都必须是字符串类型。
+
+示例：
+
+```json
+{
+  "exp": 1654254601,
+  "username": "emqx_u",
+  "client_attrs": {
+      "role": "admin",
+      "sn": "10c61f1a1f47"
+  }
+}
+```
+
 ## 通过 Dashboard 配置 JWT 认证
 
 1. 在 EMQX Dashboard 中点击左侧导航栏的**访问控制** -> **认证**。

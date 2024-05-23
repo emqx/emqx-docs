@@ -611,7 +611,7 @@
           path: gateway/gbt32960
           edition: ee
         #- gateway/tcp
-
+    - client-attributes/client-attributes
 
 - title_en: Tutorials
   title_cn: 实用教程

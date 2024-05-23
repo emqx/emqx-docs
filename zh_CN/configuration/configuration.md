@@ -446,6 +446,145 @@ myarray.2 = 75
 会被解析成 `myarray = [74, 75]`，这个用法在重载数组元素的值时候非常有用。
 :::
 
+### Variform 表达式
+
+Variform 是一种轻量级、富有表现力的语言,旨在进行字符串操作和运行时求值。它不是一种全功能的编程语言，而是一种专门的工具，可以嵌入配置中，用来态执行字符串操作。
+
+::: tip
+
+Variform 表达式仅适用于部分配置项中，如无明确说明请不要使用。
+
+:::
+
+#### 语法概览
+
+以下面的表达式作为示例：
+
+```bash
+function_call(clientid, another_function_call(username))
+```
+
+此表达式结合或操作 `clientid` 和 `username` 以生成新的字符串值。
+
+Variform 支持以下字面量：
+
+- 整数：例如，`42`。
+- 浮点数：例如，`3.14`。
+- 字符串：单引号 `'` 或双引号 `"` 之间的 ASCII 字符。
+- 数组：元素位于 `[` 和 `]` 之间，以逗号 `,` 分隔。
+- 变量：引用预定义的值，例如 `clientid`。
+- 函数：预定义的函数，例如 `concat([...])`。
+
+Variform 不支持以下功能：
+
+- 算术运算
+- 条件语句
+- 循环
+- 用户定义的变量
+- 用户定义的函数
+- 异常处理和错误恢复
+- 布尔字面量。布尔值可能作为内置函数（如 `num_gt`，意为“数字是否更大”）的返回值间接产生，但不能直接写作字面量。条件函数（`iif` 和 `coalesce`）将空字符串视为 `false`，其他情况视为 `true`。
+- 字符串字面量中的转义序列。调用 `unescape` 函数来对特殊字符进行反转义。
+
+以下是一个嵌入配置文件中的示例。
+
+```bash
+mqtt {
+    client_attrs_init = [
+        {
+            # 提取客户端 ID 在第一个 `-` 字符前面的前缀
+            expression = "nth(1,tokens(clientid, '-'))"
+            # 然后把提取的字符串赋值给 client_attrs.group 这个字段
+            set_as_attr = group
+        }
+    ]
+}
+
+```
+
+::: tip
+当表达式中需要使用 unescape 函数时，建议在 HOCON 配置中使用三引号（`"""`）字符串，这样就无需进行双重转义。
+
+例如
+
+```bash
+#### 对于多行客户端 ID，取第一行。
+expression = """nth(1, tokens(clientid, unescape('\n')))"""
+```
+
+:::
+
+#### 预定义函数
+
+EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似于规则引擎字符串函数中可用的那些。这些函数可以用来操作和格式化提取的数据。例如，`lower()`、`upper()` 和 `concat()` 可以帮助调整提取字符串的格式，而 `hash()` 和 `hash_to_range()` 可以基于数据创建散列或范围输出。
+
+以下是可以在表达式中使用的函数：
+
+- **字符串函数**：
+  - [字符串操作函数](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
+  - 还添加了一个新函数 any_to_string/1，用于将任何中间非字符串值转换为字符串。
+- **数组函数**：[nth/2](../data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
+- **随机函数**：rand_str, rand_int
+- **无模式编码/解码函数**：
+  - [bin2hexstr/1](../data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
+  - [hexstr2bin/1](../data-integration/rule-sql-builtin-functions.md#hexstr2bin-data-string-binary)
+  - [base64_decode/1](../data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)
+  - [base64_encode/1](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
+  - `int2hexstr(Integer)`: Encode an integer to hex string. e.g. 15 as 'F' (uppercase).
+- **散列函数**：
+  - `hash(Algorithm, Data)`：其中算法可以是以下之一：md4 | md5, sha (或 sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
+  - `hash_to_range(Input, Min, Max)`：使用 sha256 散列输入数据，并将散列映射到最小值和最大值之间的整数（包括 Min 和 Max：Min =< X =< Max））。
+  - `map_to_range(Input, Min, Max)`：将输入映射到最小值和最大值之间的整数（包括 Min 和 Max：Min =< X =< Max）。
+- 比较函数：
+  - `num_eq(A, B)`：如果两个数字相同，则返回 'true'，否则返回 'false'。
+  - `num_gt(A, B)`：如果 A 大于 B，则返回 'true'，否则返回 'false'。
+  - `num_gte(A, B)`：如果 A 不小于 B，则返回 'true'，否则返回 'false'。
+  - `num_lt(A, B)`：如果 A 小于 B，则返回 'true'，否则返回 'false'。
+  - `num_lte(A, B)`：如果 A不大于 B，则返回 'true'，否则返回 'false'。
+  - `str_eq(A, B)`：如果两个字符串相同，则返回 'true'，否则返回 'false'。
+  - `str_gt(A, B)`：如果 A 在字典顺序上位于 B 之后，则返回 'true'，否则返回 'false'。
+  - `str_gte(A, B)`：如果 A 在字典顺序上不位于 B 之前，则返回 'true'，否则返回 'false'。
+  - `str_lt(A, B)`：如果 A 在字典顺序上位于 B 之前，则返回 'true'，否则返回 'false'。
+  - `str_lte(A, B)`：如果 A 在字典顺序上不位于 B 之后，则返回 'true'，否则返回 'false'。
+
+#### 条件
+
+到目前为止，Variform 表达式没有全面的控制流程。`iif` 函数是一种条件表达式，用于评估条件并根据条件的结果返回两个值中的一个。这个函数的灵感来自于其他编程语言中的类似结构，在这里被适配用于缺乏循环和变量绑定的编程表达式中。
+
+```js
+iif(条件, 真值表达式, 假值表达式)
+```
+
+##### 参数
+
+- **条件（布尔或字符串）**：指定要评估的条件。
+  - 如果是布尔值（`true` 或 `false`），则直接评估为 `true` 或 `false`。
+  - 如果是字符串，如果字符串为空，则评估为 `false`，否则为 `true`。
+- **真值表达式**：如果条件评估为 `true`，返回的表达式或值。
+- **假值表达式**：如果条件评估为 `false`，返回的表达式或值。
+
+##### 返回
+
+- 如果条件为 `true`，则结果为 `真值表达式`。
+- 如果条件为 `false`，则结果为 `假值表达式`。
+
+#### 错误处理
+
+与 Bash 等脚本环境的默认行为一样，Variform 表达式在出现错误时，如遇到未绑定的变量或运行时异常，会生成空字符串（""）。
+
+- 未绑定的变量：如果表达式引用了未定义或超出作用域（未绑定）的变量，该表达式将被评估为一个空字符串。
+- 运行时异常：在表达式执行过程中发生的任何异常，无论是由于函数使用不当、数据类型无效还是其他未预见的问题，都会导致表达式产生空字符串。例如，数组索引超出范围。
+
+#### 示例表达式
+
+- `nth(1, tokens(clientid, '.'))`：提取以点分隔的客户端 ID 的前缀。
+- `strlen(username, 0, 5)`：提取部分用户名。
+- `coalesce(regex_extract(clientid,'[0-9]+'),'vin-1000')`：使用正则表达式从客户端 ID 中提取数字。如果正则表达式产生空字符串，则返回 `'000'`。
+- `iif(true, "如果为真的值", "如果为假的值")`：返回 `如果为真的值`
+- `iif("", "如果为真的值", "如果为假的值")`：返回 `如果为假的值`
+- `iif("hello", "如果为真的值", "如果为假的值")`：返回 `如果为真的值`
+- `iif(regex_match(clientid,'^foo\.+*'),'foo','bar')`：如果 `clientid` 以 `foo.` 开头，则返回 `foo`，否则返回 `bar`。
+
 ## 配置路径
 
 如果我们把 EMQX 的配置值理解成一个类似目录树的结构，如果文件系统中使用斜杠或反斜杠进行层级分割，则 EMQX 的层级分割符是 `.`：

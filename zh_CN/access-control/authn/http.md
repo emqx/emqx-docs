@@ -14,6 +14,7 @@ EMQX 支持通过外部 HTTP 服务进行密码认证。客户端连接时，EMQ
 - 响应编码格式 `content-type` 必须是 `application/json`。
 - 认证结果通过 body 中的 `result` 标示，可选 `allow`、`deny`、`ignore`。
 - 超级用户通过 body 中的 `is_superuser` 标示，可选 `true`、`false`。
+- 从 EMQX v5.7.0 版本开始，您可以使用可选的 `client_attrs` 字段设置[客户端属性](../../client-attributes/client-attributes.md)。请注意，键和值都必须是字符串类型。
 - HTTP 响应状态码 `Status Code` 应当为 `200` 或 `204`，返回 `4xx/5xx` 状态码时将忽略 body 并判定结果为 `ignore`，继续执行认证链。
 
 响应示例：
@@ -25,7 +26,11 @@ Headers: Content-Type: application/json
 Body:
 {
     "result": "allow", // 可选 "allow" | "deny" | "ignore"
-    "is_superuser": true // 可选 true | false，该项为空时默认为 false
+    "is_superuser": true, // 可选 true | false，该项为空时默认为 false
+    "client_attrs": {
+        "role": "admin",
+        "sn": "10c61f1a1f47"
+    }
 }
 ```
 
