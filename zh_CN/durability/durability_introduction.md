@@ -96,15 +96,15 @@ EMQX 的持久化存储以一个分层结构来组织，包括存储 (Storage)�
 
 ![Diagram of EMQX durable storage sharding](./assets/emqx_ds_sharding.png)
 
-#### 存储 (Storage)
+### 存储 (Storage)
 
 存储封装了某种类型的所有数据，例如 MQTT 消息或 MQTT 会话。
 
-#### 分片 (Shard)
+### 分片 (Shard)
 
 消息根据客户端进行隔离，并根据发布者的客户端 ID 存储在分片中。分片数量在 EMQX 初始启动时由 [n_shards](./managing-replication.md#number-of-shards) 配置参数决定。分片也是复制的单位。每个分片会根据 `durable_storage.messages.replication_factor` 在不同节点间进行一致性复制，确保每个副本中的消息集是相同的。
 
-#### 代 (Generation)
+### 代 (Generation)
 
 分片中的消息根据特定时间段划分为代。新消息写入当前代，而以前的代是只读的。旧的代如超过设定的 MQTT 消息保留期则被删除，保留期由 `durable_sessions.message_retention_period` 参数定义。
 
@@ -112,7 +112,7 @@ EMQX 的持久化存储以一个分层结构来组织，包括存储 (Storage)�
 
 新代的存储布局通过 `durable_storage.messages.layout` 参数配置，每个布局引擎定义其自己的配置参数。
 
-#### 流 (Stream)
+### 流 (Stream)
 
 每个分片和代中的消息被划分为多个流。流作为 EMQX 中消息序列化的单位。流可以包含多个主题的消息。不同的存储布局可以采用不同的策略将主题映射到流中。
 
