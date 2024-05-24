@@ -36,9 +36,9 @@ See the table below for a complete list of mathematical functions supported.
 | ceil          | Round up (integer)                    | Operand                                    |
 | floor         | Round down (integer)                  | Operand                                    |
 | round         | Rounding (integer)                    | Operand                                    |
-| fmod          | modulo<br> (remainder)                | 1. Left Operand <br />2. Right Operand     |
-| exp           | Exponentiation<br>x power of e        | Operand                                    |
-| power         | Exponential operation<br>y power of X | 1. Left operand x <br />2. Right operand y |
+| fmod          | modulo<br/> (remainder)                | 1. Left Operand <br />2. Right Operand     |
+| exp           | Exponentiation<br/>x power of e        | Operand                                    |
+| power         | Exponential operation<br/>y power of X | 1. Left operand x <br />2. Right operand y |
 | sqrt          | Square root                           | Operand                                    |
 | log           | Logarithm to e                        | Operand                                    |
 | log10         | Logarithm to 10                       | Operand                                    |
@@ -80,13 +80,13 @@ See the table below for a complete list of data type judgment functions supporte
 
 | Function Name | Description                                                  | Parameter |
 | ------------- | ------------------------------------------------------------ | --------- |
-| is_null       | Check if a field is undefined<br>Boolean                     | Data      |
+| is_null       | Check if a field is undefined<br/>Boolean                     | Data      |
 | is_not_null   | Check if a field is defined<br/>Boolean                      | Data      |
 | is_str        | Check if the value is of String type<br/>Boolean             | Data      |
 | is_bool       | Check if the value is of Boolean type<br/>Boolean            | Data      |
 | is_int        | Check if the value is of Integer type<br/>Boolean            | Data      |
 | is_float      | Check if the value is of Float type<br/>Boolean              | Data      |
-| is_num        | Check if the value is of numeric type<br>Integer or Float<br/>Boolean | Data      |
+| is_num        | Check if the value is of numeric type<br/>Integer or Float<br/>Boolean | Data      |
 | is_map        | Check if the value is of Map type<br/>Boolean                | Data      |
 | is_array      | Check if the value is of Array type<br/>Boolean              | Data      |
 
@@ -119,7 +119,7 @@ See the table below for a complete list of data type judgment functions supporte
 | bool          | Convert data to Boolean type                         | Data                             |
 | int           | Convert data to Integer type                         | Data                             |
 | float         | Convert data to Float type                           | Data                             |
-| float2str     | Convert a float to a string with the given precision | 1. Float Number <br>2. Precision |
+| float2str     | Convert a float to a string with the given precision | 1. Float Number <br/>2. Precision |
 | map           | Convert data to Map type                             | Data                             |
 
 [^*]: When converting a floating-point type to a string, the output may need to be rounded.
@@ -158,9 +158,9 @@ See the table below for a complete list of string functions supported.
 | reverse                    | String inversion               | Input string                                                 |
 | strlen                     | String length                  | Input string                                                 |
 | substr                     | Take a substring of characters | 1. Input string <br />2. Start position (starting at position 1) |
-| substr<br>(with end)       | Take a substring of characters | 1. Input string <br />2. Start position (starting at position 1).<br />3. End position <br> |
+| substr<br/>(with end)       | Take a substring of characters | 1. Input string <br />2. Start position (starting at position 1).<br />3. End position <br/> |
 | split                      | String split                   | 1. Input string <br />2. Separator                           |
-| split <br>(with direction) | String split                   | 1. Input string <br />2. Separator <br />3. Direction, optional value: `leading` or `trailing` |
+| split <br/>(with direction) | String split                   | 1. Input string <br />2. Separator <br />3. Direction, optional value: `leading` or `trailing` |
 
 **Examples:**
 
@@ -196,8 +196,8 @@ See the table below for a complete list of map functions supported.
 
 | Function Name              | Description                                                  | Parameter                                  |
 | -------------------------- | ------------------------------------------------------------ | ------------------------------------------ |
-| map_get                    | Retrieve the value associated with a specified key in the Map <br>Or return null if the key is not found | 1. Key <br />2. Map                        |
-| map_get<br> (with default) | Retrieve the value associated with a specified key in the Map, <br>Or return the specified default value if the key is not found | 1. Key <br />2. Map <br />3. Default Value |
+| map_get                    | Retrieve the value associated with a specified key in the Map <br/>Or return null if the key is not found | 1. Key <br />2. Map                        |
+| map_get<br/> (with default) | Retrieve the value associated with a specified key in the Map, <br/>Or return the specified default value if the key is not found | 1. Key <br />2. Map <br />3. Default Value |
 | map_put                    | Insert a key-value pair into the Map                         | 1. Key <br />2. Value <br />3. Map         |
 
 **Examples:**
@@ -216,11 +216,11 @@ See the table below for a complete list of array functions supported.
 
 | Function Name | Purpose                                                      | Parameters                                           |
 | ------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
-| `nth`         | Returns the nth element of an array. <br>Subscripts start at 1. | 1. Array <br />2. n (integer)                        |
+| `nth`         | Returns the nth element of an array. <br/>Subscripts start at 1. | 1. Array <br />2. n (integer)                        |
 | `length`      | Returns the length of an array.                              | Array                                                |
-| `sublist`     | Returns a sub-array of length len starting from the first element. <br>Subscripts start at 1. <br><!--what does Subscripts start at 1 mean?--> | 1. Array <br />2. len (integer)                      |
-| `sublist`     | Returns a sub-array of length len starting from the nth element. <br>Subscripts start at 1. | 1. Array <br />2. n (integer) <br />3. len (integer) |
-| `first`       | Returns the first element of an array. <br>Subscripts start at 1. | Array                                                |
+| `sublist`     | Returns a sub-array of length len starting from the first element. <br/>Subscripts start at 1. <br/><!--what does Subscripts start at 1 mean?--> | 1. Array <br />2. len (integer)                      |
+| `sublist`     | Returns a sub-array of length len starting from the nth element. <br/>Subscripts start at 1. | 1. Array <br />2. n (integer) <br />3. len (integer) |
+| `first`       | Returns the first element of an array. <br/>Subscripts start at 1. | Array                                                |
 | `last`        | Returns the last element of an array.                        | Array                                                |
 | `contains`    | Returns a boolean indicating if the data is in the array.    | 1. Data <br />2. Array                               |
 
@@ -264,12 +264,12 @@ See the table below for a complete list of compression and decompression functio
 
 | Function         | Purpose                                              | Parameters                                                   |
 | ---------------- | ---------------------------------------------------- | ------------------------------------------------------------ |
-| `gzip`           | Compresses with gzip headers and checksum.           | `raw_data` <br>(binary)                                      |
-| `gunzip`         | Decompresses with gzip headers and checksum.         | `compressed_data` <br>(binary)                               |
-| `zip`            | Compresses without zlib headers and checksum.        | `raw_data`  (binary),<br> `compression_level` <br>(optional) |
-| `unzip`          | Decompresses data without zlib headers and checksum. | `compressed_data` <br>(binary)                               |
-| `zip_compress`   | Compresses with zlib headers and checksum.           | `raw_data ` (binary)<br> `compression_level` <br>(optional)  |
-| `zip_uncompress` | Decompresses with zlib headers and checksum.         | `compressed_data` <br>(binary)                               |
+| `gzip`           | Compresses with gzip headers and checksum.           | `raw_data` <br/>(binary)                                      |
+| `gunzip`         | Decompresses with gzip headers and checksum.         | `compressed_data` <br/>(binary)                               |
+| `zip`            | Compresses without zlib headers and checksum.        | `raw_data`  (binary),<br/> `compression_level` <br/>(optional) |
+| `unzip`          | Decompresses data without zlib headers and checksum. | `compressed_data` <br/>(binary)                               |
+| `zip_compress`   | Compresses with zlib headers and checksum.           | `raw_data ` (binary)<br/> `compression_level` <br/>(optional)  |
+| `zip_uncompress` | Decompresses with zlib headers and checksum.         | `compressed_data` <br/>(binary)                               |
 
 
 **Examples:**
@@ -294,8 +294,8 @@ See the table below for the syntax supported.
 | Function                                            | Description                                                  | Parameters                                                   |
 | --------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | `subbits`                                           | Returns an unsigned integer (big-endian) obtained by extracting a specified number of bits from the beginning of a binary input. | 1. Binary input <br />2. Number of bits to extract           |
-| `subbits`<br>(with offset)                          | Returns an unsigned integer (big-endian) obtained by extracting a specified number of bits starting from a given offset in a binary input. <br>Offsets are indexed starting from 1. | 1. Binary input  <br />2. Starting offset <br />3. Number of bits to extract |
-| `subbits`<br>(with offset and data type conversion) | Returns a data value obtained by extracting a specified number of bits starting from a given offset in a binary input and after data type conversion. <br>Offsets are indexed starting from 1. | 1. Binary input <br />2. Starting offset<br />3. Number of bits to extract <br />4. Data Type, can be `integer`, `float`, `bits`<br /><br>If set to `integer`, you can continue to set:<br>- Signedness: `unsigned`, `signed`, <br />- Endianness: `big`, `little` |
+| `subbits`<br/>(with offset)                          | Returns an unsigned integer (big-endian) obtained by extracting a specified number of bits starting from a given offset in a binary input. <br/>Offsets are indexed starting from 1. | 1. Binary input  <br />2. Starting offset <br />3. Number of bits to extract |
+| `subbits`<br/>(with offset and data type conversion) | Returns a data value obtained by extracting a specified number of bits starting from a given offset in a binary input and after data type conversion. <br/>Offsets are indexed starting from 1. | 1. Binary input <br />2. Starting offset<br />3. Number of bits to extract <br />4. Data Type, can be `integer`, `float`, `bits`<br /><br/>If set to `integer`, you can continue to set:<br/>- Signedness: `unsigned`, `signed`, <br />- Endianness: `big`, `little` |
 
 **Examples:**
 
@@ -337,8 +337,8 @@ EMQX Enterprise also supports using schema encoding and decoding functions to en
 
 | Function | Description | Parameters |
 | -------- | ------------------------------------|------------------------- |
-| `schema_encode` | Encode data according to a pre-defined schema. | 1. Schema ID defined by schema registry <br>2. Data to be encoded <br>3 ... N. Remaining arguments according to the schema type |
-| `schema_decode` | Decode data according to a pre-defined schema. | 1. Schema ID defined by schema registry<br> 2. Data to be decoded <br>3..N. Remaining arguments according to the schema type |
+| `schema_encode` | Encode data according to a pre-defined schema. | 1. Schema ID defined by schema registry <br/>2. Data to be encoded <br/>3 ... N. Remaining arguments according to the schema type |
+| `schema_decode` | Decode data according to a pre-defined schema. | 1. Schema ID defined by schema registry<br/> 2. Data to be decoded <br/>3..N. Remaining arguments according to the schema type |
 
 <!-- For examples of schema_encode() and schema_decode(), see [schema registry](schema-registry.md) -->
 {% endemqxee %}
@@ -349,16 +349,16 @@ EMQX uses the following functions for handling time and date, and the time unit 
 
 | Function                     | Purpose                                                      | Parameters                                                   |
 | ---------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| `now_timestamp`              | Return the current unix epoch timestamp<br>Unit: `second`    | -                                                            |
+| `now_timestamp`              | Return the current unix epoch timestamp<br/>Unit: `second`    | -                                                            |
 | `now_timestamp`              | Return the current unix epoch timestamp with a self-defined unit | Time unit                                                    |
 | `now_rfc3339`                | Create the current RFC3339 time string<br/>Unit: `second`    | -                                                            |
 | `now_rfc3339`                | Create the current RFC3339 time string with a self-defined unit | Time unit                                                    |
 | `unix_ts_to_rfc3339`         | Convert an unix epoch (in second) to RFC3339 time string     | Unix epoch in second                                         |
-| `unix_ts_to_rfc3339`         | Convert an unix epoch to RFC3339 time string                 | 1. Unix epoch <br>2. Time unit                               |
+| `unix_ts_to_rfc3339`         | Convert an unix epoch to RFC3339 time string                 | 1. Unix epoch <br/>2. Time unit                               |
 | `rfc3339_to_unix_ts`         | Convert an RFC3339 time string (in second) to unix epoch     | 1. Time string of format RFC3339                             |
-| `rfc3339_to_unix_ts`         | Convert an RFC3339 time string to unix epoch with a self-defined unit | 1. Time string of format RFC3339 <br>2. Time unit            |
-| `format_date`                | Convert timestamp to formatted time                          | 1. Time unit (can be `second`, `millisecond`, `microsecond,` or `nanosecond`)<br>2. Time offset (refer to [Time Offset definition](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=11%3A59%3A59-,Time%20Offset,-Offset))<br>3. Date format (refer to [Time String Codec Format](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=Syntax%20of%20Time%20String%20Format)) <br>4. Timestamp (optional parameter, default is current time) |
-| `date_to_unix_ts`            | Convert formatted time to timestamp                          | 1. Time unit (can be `second`, `millisecond`, `microsecond,` or `nanosecond`) <br>2. Time offset (optional, when not filled, use the time offset in the formatted time string, refer to the refer to [Time Offset definition](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=11%3A59%3A59-,Time%20Offset,-Offset)) <br>3. Date format (refer to [Time String Codec Format](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=Syntax%20of%20Time%20String%20Format))<br>4. Formatted time string |
+| `rfc3339_to_unix_ts`         | Convert an RFC3339 time string to unix epoch with a self-defined unit | 1. Time string of format RFC3339 <br/>2. Time unit            |
+| `format_date`                | Convert timestamp to formatted time                          | 1. Time unit (can be `second`, `millisecond`, `microsecond,` or `nanosecond`)<br/>2. Time offset (refer to [Time Offset definition](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=11%3A59%3A59-,Time%20Offset,-Offset))<br/>3. Date format (refer to [Time String Codec Format](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=Syntax%20of%20Time%20String%20Format)) <br/>4. Timestamp (optional parameter, default is current time) |
+| `date_to_unix_ts`            | Convert formatted time to timestamp                          | 1. Time unit (can be `second`, `millisecond`, `microsecond,` or `nanosecond`) <br/>2. Time offset (optional, when not filled, use the time offset in the formatted time string, refer to the refer to [Time Offset definition](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=11%3A59%3A59-,Time%20Offset,-Offset)) <br/>3. Date format (refer to [Time String Codec Format](https://github.com/emqx/emqx-docs/blob/762ade37e1bfb112b30f8e202c9770936ef44623/en_US/data-integration/rule-sql-builtin-functions.md#:~:text=Syntax%20of%20Time%20String%20Format))<br/>4. Formatted time string |
 | `timezone_to_offset_seconds` | Convert a timezone offset string to an integer representing seconds | This function accepts a timezone offset string as a parameter. Valid formats include "+hh:mm", "+hh:mm:ss", "Z" for Coordinated Universal Time (UTC), or "local" for the system's current timezone. Examples include "+02:00", "+00:00:42", "Z", and "local". |
 
 **Syntax of Time String Format**
@@ -384,11 +384,11 @@ EMQX uses the following functions for handling time and date, and the time unit 
 | ---------------- | -------------------------- | ------------------------------------------------------------ |
 | `z`              | UTC Zulu Time              | `+00:00`                                                     |
 | `Z`              | UTC Zulu Time. Same as `z` | `+00:00`                                                     |
-| `local`          | System Time                | Automatic <br>Beijing `+08:00`<br>Zulu `+00:00` <br>Stockholm, Sweden `+02:00` <br>Los Angeles `-08:00` |
-| `[+\|-]HHMM`     | `%z`                       | Beijing `+0800` <br>Zulu `+0000` <br>Stockholm, Sweden `+0200` <br>Los Angeles `-0800` |
-| `[+\|-]HH:MM`    | `%:z`                      | Beijing `+08:00` <br>Zulu `+00:00` <br>Stockholm, Sweden `+02:00` <br>Los Angeles `-08:00` |
-| `[+\|-]HH:MM:SS` | `%::z`                     | Beijing `+08:00:00` <br>Zulu `+00:00:00` <br>Stockholm, Sweden `+02:00:00` <br>Los Angeles `-08:00:00` |
-| integer()        | Seconds                    | Beijing 28800 <br>Zulu 0 <br>Stockholm, Sweden 7200 <br>Los Angeles -28800 |
+| `local`          | System Time                | Automatic <br/>Beijing `+08:00`<br/>Zulu `+00:00` <br/>Stockholm, Sweden `+02:00` <br/>Los Angeles `-08:00` |
+| `[+\|-]HHMM`     | `%z`                       | Beijing `+0800` <br/>Zulu `+0000` <br/>Stockholm, Sweden `+0200` <br/>Los Angeles `-0800` |
+| `[+\|-]HH:MM`    | `%:z`                      | Beijing `+08:00` <br/>Zulu `+00:00` <br/>Stockholm, Sweden `+02:00` <br/>Los Angeles `-08:00` |
+| `[+\|-]HH:MM:SS` | `%::z`                     | Beijing `+08:00:00` <br/>Zulu `+00:00:00` <br/>Stockholm, Sweden `+02:00:00` <br/>Los Angeles `-08:00:00` |
+| integer()        | Seconds                    | Beijing 28800 <br/>Zulu 0 <br/>Stockholm, Sweden 7200 <br/>Los Angeles -28800 |
 
 **Examples:**
 
@@ -417,7 +417,7 @@ date_to_unix_ts('second', '%Y-%m-%d %H-%M-%S', '2022-05-26 10:40:12') = 16535616
 | -------- | ------------------------------------|-------------------------- |
 | `mongo_date` | Create a mongodb ISODate type of now | - |
 | `mongo_date` | Create a mongodb ISODate type from the given unix epoch in millisecond | 1. Unix epoch in millisecond |
-| `mongo_date` | Create a mongodb ISODate type from the given unix epoch in given time unit | 1. Unix epoch <br>2. Time unit, can be one of 'second', 'millisecond', 'microsecond' or 'nanosecond' |
+| `mongo_date` | Create a mongodb ISODate type from the given unix epoch in given time unit | 1. Unix epoch <br/>2. Time unit, can be one of 'second', 'millisecond', 'microsecond' or 'nanosecond' |
 
 The time unit can be one of 'second', 'millisecond', 'microsecond' or 'nanosecond'.
 

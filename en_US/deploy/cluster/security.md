@@ -57,7 +57,7 @@ EMQX uses a port mapping rule for clustering to ensure that the communication be
 | Channel                       | Description                                                  | Default Port                                       |
 | ----------------------------- | ------------------------------------------------------------ | -------------------------------------------------- |
 | **Erlang Distribution Ports** | For node communications                                      | `4370`                                             |
-| **Cluster RPC Ports**         | For node administrative tasks, such as node joining or leaving | `5370` or<br>`5369` if EMQX is deployed via Docker |
+| **Cluster RPC Ports**         | For node administrative tasks, such as node joining or leaving | `5370` or<br/>`5369` if EMQX is deployed via Docker |
 
 EMQX applies the same port mapping rule for Erlang Distribution Ports and Cluster RPC Ports, which is: 
 

@@ -30,8 +30,9 @@ cluster {
 ```
 
 <!---cluster.core_nodes:
-<!--v5.0.23 之前仅支持 "emqx1,emqx2" ["emqx1@192.168.0.1", "emqx2@192.168.0.2", ...]-->
-<!--v5.0.23 之后 ["emqx1@192.168.0.1", "emqx2@192.168.0.2", ...]和"emqx1,emqx2" 都支持-->
+v5.0.23 之前仅支持 "emqx1,emqx2" ["emqx1@192.168.0.1", "emqx2@192.168.0.2", ...]
+v5.0.23 之后 ["emqx1@192.168.0.1", "emqx2@192.168.0.2", ...]和"emqx1,emqx2" 都支持
+-->
 
 ## Monitor and Debug
 
@@ -50,7 +51,7 @@ You can integrate with Prometheus to monitor the cluster operations. On how to i
 | `emqx_mria_last_intercepted_trans` | Transactions received by the shard since the node started    |
 | `emqx_mria_weight`                 | Instantaneous load of the Core node                          |
 | `emqx_mria_replicants`             | Replicant nodes connected to the Core node Numbers are grouped per shard. |
-| `emqx_mria_server_mql`             | Pending transactions waiting to be sent to the replicant nodes. Less is optimal. <br>If this indicator shows a growing trend, more Core nodes are needed. |
+| `emqx_mria_server_mql`             | Pending transactions waiting to be sent to the replicant nodes. Less is optimal. <br/>If this indicator shows a growing trend, more Core nodes are needed. |
 
 #### Replicant Nodes
 

@@ -117,7 +117,7 @@ You can check the connection status in the **Status** column:
 | Status       | Meaning                                                      | Troubleshooting                                              |
 | ------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Connected    | All nodes are connected to the data source successfully.     | -                                                            |
-| Disconnected | Parts of or all nodes are not connected to the data source (database, file). | Check if the data source is available; <br>Restart the authorizer manually (**Disable** and **Enable** again) after troubleshooting. |
+| Disconnected | Parts of or all nodes are not connected to the data source (database, file). | Check if the data source is available; <br/>Restart the authorizer manually (**Disable** and **Enable** again) after troubleshooting. |
 | Connecting   | Parts of or all nodes are reconnecting to the data source (database, file). | Check if the data source is available; <br/>Restart the authorizer manually (**Disable** and **Enable** again) after troubleshooting. |
 
 ### Running Metrics

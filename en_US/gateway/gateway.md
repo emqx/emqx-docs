@@ -101,7 +101,7 @@ However, due to the differences in semantics among various gateways, only a subs
 | `client.connected`    | Required        | Number of clients connected successfully                     | All gateways        |
 | `client.disconnected` | Required        | Number of clients disconnected, including active or abnormal disconnections | All gateways        |
 | `client.authorize`    | Required        | Number of authorized clients publish/subscribe requests      | All gateways        |
-| `client.subscribe`    | Optional        | Number of client's attempts to subscribe to a topic          | MQTT-SN<br>STOMP    |
+| `client.subscribe`    | Optional        | Number of client's attempts to subscribe to a topic          | MQTT-SN<br/>STOMP    |
 | `client.unsubscribe`  | Optional        | Number of client's attempts to unsubscribe from a topic      | MQTT-SN<br/>STOMP   |
 
 Session and message-related hooks have no heterogeneity issues between protocols, so these hooks are fully supported for each type of gateway.
