@@ -128,8 +128,8 @@ A `FOREACH` statement starts with a `FOREACH`-clause that is used to create an a
 
 | Clause   | Optional/Required | Description                                                  |
 | -------- | ----------------- | ------------------------------------------------------------ |
-| `DO`     | Optional          | Transform each element in the array selected by `FOREACH`.<br><br>Correspond to the `SELECT` clause in the `SELECT` statement and accepts the same expressions. |
-| `INCASE` | Optional          | Filter out array elements that do not match the specified conditions.<br><br>Accepts the same expressions as the `WHERE` clause. |
+| `DO`     | Optional          | Transform each element in the array selected by `FOREACH`.<br/><br/>Correspond to the `SELECT` clause in the `SELECT` statement and accepts the same expressions. |
+| `INCASE` | Optional          | Filter out array elements that do not match the specified conditions.<br/><br/>Accepts the same expressions as the `WHERE` clause. |
 
 ::: tip
 
