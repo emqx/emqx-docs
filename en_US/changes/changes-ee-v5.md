@@ -6,11 +6,9 @@
 
 ### Enhancements
 
-- 实现了会话持久化（Durable Session）
+- Implemented Durable Sessions, which persists MQTT Persistent Sessions and their messages to disk, and continuously replicates session metadata and MQTT messages among multiple nodes in the EMQX cluster. This achieves effective failover and recovery mechanisms, ensuring service continuity and high availability, thereby enhancing system reliability.
 
-  将 MQTT 持久会话（Persistent Session）及其消息存储到磁盘上，并在 EMQX 集群的多个节点之间持续复制会话元数据和 MQTT 消息，实现了有效的故障转移和恢复机制，确保服务的连续性和高可用性，从而提高系统的可靠性。
-
-  Added metrics related to EMQX durable storage to Prometheus. New metrics:
+  Added metrics related to EMQX durable storage to Prometheus:
 
   - `emqx_ds_egress_batches`
 
@@ -36,88 +34,76 @@
 
   Note: these metrics are only visible when session persistence is enabled.
 
-  Number of persisted messages has been also added to the dashboard.
+  The number of persisted messages has also been added to the Dashboard.
 
-- [#12711](https://github.com/emqx/emqx/pull/12711) Implemented schema validation feature.
+- [#12711](https://github.com/emqx/emqx/pull/12711) Implemented schema validation feature. With this feature, once validations are configured for certain topic filters, the configured checks are run against published messages. If the checking results are not accepted by validation, the message is dropped and the client may be disconnected, depending on the configuration.
 
-  With this feature, once validations are configured for certain topic filters, the configured checks are run against published messages and, if they are not accepted by a validation, the message is dropped and the client may be disconnected, depending on the configuration.
+- [#12863](https://github.com/emqx/emqx/pull/12863) You can now format trace log entries as JSON objects by setting the formatter parameter to "json" when creating the trace pattern.
 
-- [#12872](https://github.com/emqx/emqx/pull/12872) 实现了客户端属性功能。
+- [#12872](https://github.com/emqx/emqx/pull/12872) Implemented Client Attributes feature. It allows setting additional properties for each client using key-value pairs. Property values can be generated from MQTT client connection information (such as username, client ID, TLS certificate) or set from data accompanying successful authentication returns. Properties can be used in EMQX for authentication, authorization, data integration, and MQTT extension functions. Compared to using static properties like client ID directly, client properties offer greater flexibility in various business scenarios, simplifying the development process and enhancing adaptability and efficiency in development work.
 
-  允许使用键值对的方式为每个客户端设置额外的属性。属性值可以从 MQTT 客户端连接信息（如用户名、客户端 ID、TLS 证书）处理生成，也可以从认证成功返回的附带的数据中设置。
+  **Initialization of `client_attrs`**
 
-  属性可以用于 EMQX 的认证授权、数据集成和 MQTT 扩展功能等功能中。
-  相较于直接使用客户端 ID 等静态属性，客户端属性能够更灵活的用在各类业务场景中，并简化开发流程，增强开发工作的适应性和效率。
+  The `client_attrs` fields can be initially populated from one of the following `clientinfo` fields:
 
-  #### Initialization of `client_attrs`
+    - `cn`: The common name from the TLS client's certificate.
 
-  - The `client_attrs` fields can be initially populated from one of the
-  following `clientinfo` fields:
-  - `cn`: The common name from the TLS client's certificate.
-  - `dn`: The distinguished name from the TLS client's certificate, that is, the certificate "Subject".
-  - `clientid`: The MQTT client ID provided by the client.
-  - `username`: The username provided by the client.
-  - `user_property`: Extract a property value from 'User-Property' of the MQTT CONNECT packet.
+    - `dn`: The distinguished name from the TLS client's certificate, that is, the certificate "Subject".
 
-  #### Extension through Authentication Responses
+    - `clientid`: The MQTT client ID provided by the client.
 
-  - Additional attributes may be merged into `client_attrs` from authentication responses. Supported
+    - `username`: The username provided by the client.
+
+    - `user_property`: Extract a property value from 'User-Property' of the MQTT CONNECT packet.
+
+  **Extension through Authentication Responses**
+
+  Additional attributes may be merged into `client_attrs` from authentication responses. Supported
   authentication backends include:
-  - **HTTP**: Attributes can be included in the JSON object of the HTTP response body through a
-  `client_attrs` field.
-  - **JWT**: Attributes can be included via a `client_attrs` claim within the JWT.
 
-  #### Usage in Authentication and Authorization
+    - **HTTP**: Attributes can be included in the JSON object of the HTTP response body through a
+      `client_attrs` field.
 
-  - If `client_attrs` is initialized before authentication, it can be used in external authentication
+    - **JWT**: Attributes can be included via a `client_attrs` claim within the JWT.
+
+  **Usage in Authentication and Authorization**
+
+  If `client_attrs` is initialized before authentication, it can be used in external authentication
   requests. For instance, `${client_attrs.property1}` can be used within request templates
-  directed at an HTTP server for the purpose of authenticity validation.
+    directed at an HTTP server for authenticity validation.
 
-  - The `client_attrs` can be utilized in authorization configurations or request templates, enhancing
-  flexibility and control. Examples include:
-  - In `acl.conf`, use `{allow, all, all, ["${client_attrs.namespace}/#"]}` to apply permissions
-  based on the `namespace` attribute.
-  - In other authorization backends, `${client_attrs.namespace}` can be used within request templates
-  to dynamically include client attributes.
+    - The `client_attrs` can be utilized in authorization configurations or request templates, enhancing
+      flexibility and control. Examples include: In `acl.conf`, use `{allow, all, all, ["${client_attrs.namespace}/#"]}` to apply permissions based on the `namespace` attribute.
 
-- [#12671](https://github.com/emqx/emqx/pull/12671) An `unescape` function has been added to the rule engine SQL language to handle expansion of escape sequences in strings. This addition has been done because string literals in the SQL language don't support any escape codes (e.g., `\n` and `\t`). This enhancement allows for more flexible string manipulation within SQL expressions.
+    - In other authorization backends, `${client_attrs.namespace}` can be used within request templates to dynamically include client attributes.
+
+
+- [#12671](https://github.com/emqx/emqx/pull/12671) An `unescape` function has been added to the rule engine SQL language to handle the expansion of escape sequences in strings. This addition has been done because string literals in the SQL language don't support any escape codes (e.g., `\n` and `\t`). This enhancement allows for more flexible string manipulation within SQL expressions.
 
 - [#12798](https://github.com/emqx/emqx/pull/12798) Added new `GET /api/v5/clients_v2` API that uses cursors instead of page numbers for pagination.  This should be more efficient than the old API endpoint, which currently traverses tables multiple times.
 
-- [#12827](https://github.com/emqx/emqx/pull/12827) It is now possible to trace rules with a new Rule ID trace filter as well as with the Client ID filter. For testing purposes it is now also possible to use a new HTTP API endpoint (rules/:id/test) to artificially apply a rule and optionally stop its actions after they have been rendered.
+- [#12827](https://github.com/emqx/emqx/pull/12827) It is now possible to trace rules with a new Rule ID trace filter as well as with the Client ID filter. For testing purposes, it is now also possible to use a new HTTP API endpoint (rules/:id/test) to artificially apply a rule and optionally stop its actions after they have been rendered.
 
 - [#12863](https://github.com/emqx/emqx/pull/12863) You can now format trace log entries as JSON objects by setting the formatter parameter to "json" when creating the trace pattern.
 
 - [#12923](https://github.com/emqx/emqx/pull/12923) Provided more specific error when importing wrong format into builtin authenticate database.
 
-- [#12940](https://github.com/emqx/emqx/pull/12940) Add `ignore_readonly` argument to `PUT /configs` API.
+- [#12940](https://github.com/emqx/emqx/pull/12940) Added `ignore_readonly` argument to `PUT /configs` API.
 
-  Prior to this change, EMQX would retrun 400 (BAD_REQUEST) if the raw config
-  included readonly root keys (`cluster`, `rpc`, and `node`).
+  Before this change, EMQX would return 400 (BAD_REQUEST) if the raw config included read-only root keys (`cluster`, `rpc`, and `node`).
 
-  After this enhancement it can be called as `PUT /configs?ignore_readonly=true`,
-  EMQX will in this case ignore readonly root config keys, and apply the rest.
+After this enhancement it can be called as `PUT /configs?ignore_readonly=true`, EMQX will in this case ignore readonly root config keys, and apply the rest. For observability purposes, an info level message is logged if any readonly keys are dropped.
 
-  For observability purposes, an info level message is logged if any readonly keys are dropped.
+  Also fixed an exception when config has bad HOCON syntax (returns 500). Now bad syntax will cause the API to return 400 (BAD_REQUEST).
 
-  Also fixed an exception when config has bad HOCON syntax (returns 500).
-  Now bad syntax will cause the API to return 400 (BAD_REQUEST).
+- [#12947](https://github.com/emqx/emqx/pull/12947) For JWT authentication, support new `disconnect_after_expire` option. When enabled, the client will be disconnected after the JWT token expires.
 
-- [#12947](https://github.com/emqx/emqx/pull/12947) ## Breaking changes
+  Note: This is a breaking change. This option is enabled by default, so the default behavior is changed. Previously, the clients with actual JWTs could connect to the broker and stay connected even after the JWT token expired. Now, the client will be disconnected after the JWT token expires. To preserve the previous behavior, set `disconnect_after_expire` to `false`.
 
-  For JWT authentication, support new `disconnect_after_expire` option. When enabled, the client will be disconnected after the JWT token expires.
-
-  This option is enabled by default, so the default behavior is changed.
-  Previously, the clients with actual JWTs could connect to the broker and stay connected
-  even after the JWT token expired.
-  Now, the client will be disconnected after the JWT token expires.
-
-  To preserve the previous behavior, set `disconnect_after_expire` to `false`.
-
-- [#12957](https://github.com/emqx/emqx/pull/12957) Start building packages for macOS 14 (Apple Silicon).
-  Start building packages for Ubuntu 24.04 Noble Numbat (LTS).
+- [#12957](https://github.com/emqx/emqx/pull/12957) Started building packages for macOS 14 (Apple Silicon) and Ubuntu 24.04 Noble Numbat (LTS).
 
 - [#12898](https://github.com/emqx/emqx/pull/12898) IoTDB bridge support for iotdb 1.3.0 and batch insert(batch_size/batch_time) options.
+
 - [#12899](https://github.com/emqx/emqx/pull/12899) Added support for namespace and key dispatch strategy.
 
 ### Bug Fixes
@@ -136,59 +122,53 @@
 
 - [#12707](https://github.com/emqx/emqx/pull/12707) Keep IP and port of the durable client sessions in the database.
 
-- [#12765](https://github.com/emqx/emqx/pull/12765) Make sure stats `'subscribers.count'` `'subscribers.max'` countains shared-subscribers.
-  It only contains non-shared subscribers previously.
+- [#12765](https://github.com/emqx/emqx/pull/12765) Make sure stats `subscribers.count` `subscribers.max` countains shared-subscribers. It only contains non-shared subscribers previously.
 
 - [#12812](https://github.com/emqx/emqx/pull/12812) Made resource health checks non-blocking operations.  This means that operations such as updating or removing a resource won't be blocked by a lengthy running health check.
 
-- [#12830](https://github.com/emqx/emqx/pull/12830) Made channel (action/source) health checks non-blocking operations.  This means that operations such as updating or removing an action/source data integration won't be blocked by a lengthy running health check.
+- [#12830](https://github.com/emqx/emqx/pull/12830) Made channel (action/source) health checks non-blocking operations. This means that operations such as updating or removing an action/source data integration won't be blocked by a lengthy running health check.
 
-- [#12874](https://github.com/emqx/emqx/pull/12874) - Ensure consistency of the durable message replay when the subscriptions are modified before session reconnects
+- [#12874](https://github.com/emqx/emqx/pull/12874) Ensure consistency of the durable message replay when the subscriptions are modified before session reconnects:
 
-  - Persistent sessions save inflight packet IDs for the received QoS2 messages
+  - Persistent sessions save inflight packet IDs for the received QoS2 messages.
 
-  - Make behavior of the persistent sessions consistent with the non-persistent sessions in regard to overlapping subscriptions
+- Ensuring consistent behavior between persistent and non-persistent sessions regarding overlapping subscriptions.
 
-  - List persistent subscriptions in the REST API
+  - List persistent subscriptions in the REST API.
 
-- [#12887](https://github.com/emqx/emqx/pull/12887) Fix MQTT enhanced auth with sasl scram.
+- [#12887](https://github.com/emqx/emqx/pull/12887) Fixed MQTT enhanced auth with sasl scram.
+
 
 - [#12932](https://github.com/emqx/emqx/pull/12932) Previously, if a HTTP action request received a 503 (Service Unavailable) status, it was marked as a failure and the request was not retried. This has now been fixed so that the request is retried a configurable number of times.
 
 - [#12948](https://github.com/emqx/emqx/pull/12948) Fixed an issue where sensitive HTTP header values like `Authorization` would be substituted by `******` after updating a connector.
 
-- [#12962](https://github.com/emqx/emqx/pull/12962) TLS clients can now verify server hostname against wildcard certificate.
+- [#12962](https://github.com/emqx/emqx/pull/12962) TLS clients can now verify server hostname against wildcard certificate. For example, if a certificate is issued for host `*.example.com`, TLS clients is able to verify server hostnames like `srv1.example.com`.
 
-  For example, if a certificate is issued for host `*.example.com`,
-  TLS clients is able to verify server hostnames like `srv1.example.com`.
+- [#12993](https://github.com/emqx/emqx/pull/12993) Fixed listener config update API when handling an unknown zone.
 
-- [#12993](https://github.com/emqx/emqx/pull/12993) Fix listener config update API when handling an unknown zone.
+  Before this fix, when a listener config is updated with an unknown zone, for example `{"zone": "unknown"}`, the change would be accepted, causing all clients to crash when connected.
+  After this fix, updating the listener with an unknown zone name will get a "Bad request" response.
 
-  Prior to this fix, when a listener config is updated with an unknown zone, for example `{"zone": "unknown"}`,
-  the change would be accepted, causing all clients to crash when connect.
-  After this fix, updating listener with an unknown zone name will get a "Bad request" response.
-
-- [#12996](https://github.com/emqx/emqx/pull/12996) Fix process leak in `emqx_retainer` application. Previously, client disconnection while receiving retained messages could cause a process leak.
+- [#12996](https://github.com/emqx/emqx/pull/12996) Fixed process leak in `emqx_retainer` application. Previously, client disconnection while receiving retained messages could cause a process leak.
 
 - [#13012](https://github.com/emqx/emqx/pull/13012) The MQTT listerners config option `access_rules` has been improved in the following ways:
 
   * The listener no longer crash with an incomprehensible error message if a non-valid access rule is configured. Instead a configuration error is generated.
   * One can now add several rules in a single string by separating them by comma (for example, "allow 10.0.1.0/24, deny all").
 
-- [#13041](https://github.com/emqx/emqx/pull/13041) Improve HTTP authentication error log message.
+- [#13041](https://github.com/emqx/emqx/pull/13041) Improved HTTP authentication error log message. If HTTP content-type header is missing for POST method, it now emits a meaningful error message instead of a less readable exception with stack trace.
 
-  If HTTP content-type header is missing for POST method, it now emits a meaningful error message instead of a less readable exception with stack trace.
-
-- [#13077](https://github.com/emqx/emqx/pull/13077) Updates to action configurations would sometimes not take effect without disabling and enabling the action. This means that an action could sometimes run with the old (previous) configuration even though it would look like the action configuration has been updated successfully.
+- [#13077](https://github.com/emqx/emqx/pull/13077) This fix makes EMQX only read action configurations from the global configuration when the connector starts or restarts, and instead stores the latest configurations for the actions in the connector. Previously, updates to action configurations would sometimes not take effect without disabling and enabling the action. This means that an action could sometimes run with the old (previous) configuration even though it would look like the action configuration has been updated successfully.
 
 - [#13090](https://github.com/emqx/emqx/pull/13090) Attempting to start an action or source whose connector is disabled will no longer attempt to start the connector itself.
 
-- [#12871](https://github.com/emqx/emqx/pull/12871) Fix startup process of evacuated node. Previously, if a node was evacuated and stoped without stopping evacuation, it would not start back.
+- [#12871](https://github.com/emqx/emqx/pull/12871) Fixed startup process of evacuated node. Previously, if a node was evacuated and stoped without stopping evacuation, it would not start back.
 
-- [#12888](https://github.com/emqx/emqx/pull/12888) Fix License related configuration loss after importing backup data.
+- [#12888](https://github.com/emqx/emqx/pull/12888) Fixed License related configuration loss after importing backup data.
 
 - [#12895](https://github.com/emqx/emqx/pull/12895) Complemented some necessary but missed keys for the DynamoDB connector and the action.
-  
+
 - [#12909](https://github.com/emqx/emqx/pull/12909) Fixed UDP listener process handling on errors or closure, The fix ensures the UDP listener is cleanly stopped and restarted as needed if these error conditions occur.
 
 - [#12950](https://github.com/emqx/emqx/pull/12950) Added a validation to prevent duplicated topics when configuring a schema validation.
