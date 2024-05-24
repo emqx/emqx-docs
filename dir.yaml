@@ -17,7 +17,7 @@
 
 - title_en: Introduction
   title_cn: 概览
-  path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
+  path: "./" # this is the index page, {en_US,zh_CN}/index.md is the content
 
 - title_en: Get Started
   title_cn: 快速开始

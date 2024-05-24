@@ -18,13 +18,12 @@ docker rm emqx-doc-preview > /dev/null 2>&1 || true
 if [ "$PRODUCT" = "ce" ]; then
     python3 "$THIS_DIR/gen.py" ce > directory.json
     docker run -p ${PORT}:8080 -it --name emqx-doc-preview \
-        -v "$THIS_DIR"/directory.json:/app/docs/.vuepress/config/directory.json \
-        -v "$THIS_DIR"/en_US:/app/docs/en/latest \
-        -v "$THIS_DIR"/zh_CN:/app/docs/zh/latest \
-        -v "$THIS_DIR"/swagger:/app/docs/.vuepress/public/api \
-        -e DOCS_TYPE=broker \
+        -v "$THIS_DIR"/directory.json:/app/docs/.vitepress/config/directory.json \
+        -v "$THIS_DIR"/en_US:/app/docs/en/emqx/latest \
+        -v "$THIS_DIR"/zh_CN:/app/docs/zh/emqx/latest \
+        -e DOCS_TYPE=emqx \
         -e VERSION=latest \
-    ghcr.io/emqx/emqx-io-docs-frontend:latest
+    ghcr.io/emqx/docs-emqx-com-next:latest
 else
     python3 "$THIS_DIR/gen.py" ee > directory_ee.json
     docker run -p ${PORT}:8080 -it --name emqx-doc-preview \
@@ -33,5 +32,5 @@ else
         -v "$THIS_DIR"/zh_CN:/app/docs/zh/enterprise/latest \
         -e DOCS_TYPE=enterprise \
         -e VERSION=latest \
-    ghcr.io/emqx/docs-emqx-com-frontend:latest
+    ghcr.io/emqx/docs-emqx-com-next:latest
 fi
