@@ -1,5 +1,4 @@
 ---
-
 # How it is organised
 #
 # - Each doc node is a yaml dict
@@ -17,7 +16,7 @@
 
 - title_en: EMQX Enterprise Overview
   title_cn: EMQX 企业版概览
-  path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
+  path: './' # this is the index page, {en_US,zh_CN}/README.md is the content
   collapsed: true
   edition: ee
   children:
@@ -46,7 +45,7 @@
 
 - title_en: EMQX Overview
   title_cn: EMQX 概览
-  path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
+  path: './' # this is the index page, {en_US,zh_CN}/README.md is the content
   collapsed: true
   edition: ce
   children:
@@ -96,11 +95,11 @@
     - title_en: Kubernetes
       title_cn: Kubernetes
       lang: en
-      path: "https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html"
+      path: 'https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html'
     - title_en: Kubernetes
       title_cn: Kubernetes
       lang: cn
-      path: "https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html"
+      path: 'https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html'
     - title_en: Install from Source Code
       title_cn: 源码编译安装
       path: deploy/install-source
@@ -143,7 +142,7 @@
       children:
         - messaging/mqtt-concepts
         - messaging/publish-and-subscribe
-      # - messaging/explore-mqtt
+        # - messaging/explore-mqtt
         - messaging/mqtt-shared-subscription
         - messaging/mqtt-retained-message
         - messaging/mqtt-will-message
@@ -336,10 +335,10 @@
       path: data-integration/s3
     - title_en: Azure Event Hubs
       title_cn: Azure Event Hubs
-      path: data-integration/data-bridge-azure-event-hub   
+      path: data-integration/data-bridge-azure-event-hub
     - title_en: Cassandra
       title_cn: Cassandra
-      path: data-integration/data-bridge-cassa 
+      path: data-integration/data-bridge-cassa
     - title_en: ClickHouse
       title_cn: ClickHouse
       path: data-integration/data-bridge-clickhouse
@@ -360,7 +359,7 @@
       path: data-integration/data-bridge-greptimedb
     - title_en: HStreamDB
       title_cn: HStreamDB
-      path: data-integration/data-bridge-hstreamdb      
+      path: data-integration/data-bridge-hstreamdb
     - title_en: HTTP Server
       title_cn: HTTP Server
       path: data-integration/data-bridge-webhook
@@ -474,6 +473,12 @@
     - title_en: Command Line Interface
       title_cn: 命令行接口
       path: admin/cli
+    - title_en: MQTT Durable Sessions
+      title_cn: MQTT 会话持久化
+      path: durability/durability_introduction
+      children:
+        - durability/managing-replication
+        - durability/management
     - title_en: EMQX Dashboard
       title_cn: EMQX Dashboard
       path: dashboard/introduction
@@ -554,7 +559,7 @@
       children:
         - extensions/hooks
         - extensions/plugins
-      # - extensions/lang-lua
+        # - extensions/lang-lua
         - extensions/exhook
     - title_en: Telemetry
       title_cn: 遥测
@@ -644,19 +649,18 @@
 # - operations/diagnostic-mode
 # - operations/production-notes
 
-
 ## Device connectivity
 
 # - title_en: Advanced MQTT Features
 #   title_cn: MQTT 高级特性
 #   children:
-    # - advanced/retained
-    # - advanced/shared-subscriptions
-    # - advanced/delayed-publish
-    # - advanced/auto-subscriptions
-    # - advanced/topic-rewrite
-    # - advanced/system-topic
-    # - advanced/quic
+# - advanced/retained
+# - advanced/shared-subscriptions
+# - advanced/delayed-publish
+# - advanced/auto-subscriptions
+# - advanced/topic-rewrite
+# - advanced/system-topic
+# - advanced/quic
 
 ## Developers & Testers
 
