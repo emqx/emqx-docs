@@ -729,6 +729,7 @@
       title_cn: 不兼容变更
       collapsed: true
       children:
+        - changes/breaking-changes-5.7
         - changes/breaking-changes-5.6
         - changes/breaking-changes-5.5
         - changes/breaking-changes-5.4
