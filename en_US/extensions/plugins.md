@@ -192,7 +192,7 @@ For Enterprise edition, it also allows the declaration of a user interface in th
 
 ::: tip **Tip**
 
-Check out the example files located in your project directory:  `priv/config_schmea.avsc.example` and `priv/config_i18n.json.example`.
+Check out the example files located in your project directory:  `priv/config_schema.avsc.example` and `priv/config_i18n.json.example`.
 
 :::
 
