@@ -65,7 +65,6 @@
 
 - [#12798](https://github.com/emqx/emqx/pull/12798) 新增 `GET /api/v5/clients_v2` API，该 API 使用游标代替页码进行分页。这样比旧的 API 端点更高效，因为旧的 API 会多次遍历表。
 
-- [#12827](https://github.com/emqx/emqx/pull/12827) 现在可以使用新的规则 ID 跟踪过滤器以及客户端 ID 过滤器跟踪规则。为了测试目的，现在还可以使用新的 HTTP API 端点（rules/:id/test）来人为地应用规则，并在渲染完动作后选择性地停止它们。
 
 - [#12863](https://github.com/emqx/emqx/pull/12863) 当创建跟踪模式时，您现在可以通过将 formatter 参数设置为 "json"，将跟踪日志条目格式化为 JSON 对象。
 
