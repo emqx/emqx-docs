@@ -143,7 +143,7 @@
 
 - [#12871](https://github.com/emqx/emqx/pull/12871) 修复了被疏散节点的启动过程。以前，如果一个节点被疏散并在没有停止疏散的情况下停止了节点，节点将无法重新启动。
 
-- [#12888](https://github.com/emqx/emqx/pull/12888) 修复了在导入备份数据后丢失许可相关配置的问题。
+- [#12888](https://github.com/emqx/emqx/pull/12888) 修复了在导入备份数据后丢失 License 相关配置的问题。
 
 - [#12895](https://github.com/emqx/emqx/pull/12895) 为 DynamoDB 连接器和动作补充了一些必要但遗漏的键。
 
