@@ -6,18 +6,11 @@
 
 ### Enhancements
 
-- [#12671](https://github.com/emqx/emqx/pull/12671) An `unescape` function has been added to the rule engine SQL language to handle expansion of escape sequences in strings. This addition has been done because string literals in the SQL language don't support any escape codes (e.g., `\n` and `\t`). This enhancement allows for more flexible string manipulation within SQL expressions.
+- 实现了会话持久化（Durable Session）
 
-- [#12711](https://github.com/emqx/emqx/pull/12711) Implemented message validation feature.
+  将 MQTT 持久会话（Persistent Session）及其消息存储到磁盘上，并在 EMQX 集群的多个节点之间持续复制会话元数据和 MQTT 消息，实现了有效的故障转移和恢复机制，确保服务的连续性和高可用性，从而提高系统的可靠性。
 
-  With this feature, once validations are configured for certain topic filters, the configured checks are run against published messages and, if they are not accepted by a validation, the message is dropped and the client may be disconnected, depending on the configuration.
-
-- [#12739](https://github.com/emqx/emqx/pull/12739) Make it possible to override `durable_sessions` settings per zone.
-  Since durable sessions are inherently more expensive to maintain than the regular sessions, it's desirable to grant the operator finer control of session durability for different classes of clients.
-
-- [#12781](https://github.com/emqx/emqx/pull/12781) Added metrics related to EMQX durable storage to Prometheus.
-
-  New metrics:
+  Added metrics related to EMQX durable storage to Prometheus. New metrics:
 
   - `emqx_ds_egress_batches`
 
@@ -45,18 +38,16 @@
 
   Number of persisted messages has been also added to the dashboard.
 
-- [#12798](https://github.com/emqx/emqx/pull/12798) Added new `GET /api/v5/clients_v2` API that uses cursors instead of page numbers for pagination.  This should be more efficient than the old API endpoint, which currently traverses tables multiple times.
+- [#12711](https://github.com/emqx/emqx/pull/12711) Implemented schema validation feature.
 
-- [#12827](https://github.com/emqx/emqx/pull/12827) It is now possible to trace rules with a new Rule ID trace filter as well as with the Client ID filter. For testing purposes it is now also possible to use a new HTTP API endpoint (rules/:id/test) to artificially apply a rule and optionally stop its actions after they have been rendered.
+  With this feature, once validations are configured for certain topic filters, the configured checks are run against published messages and, if they are not accepted by a validation, the message is dropped and the client may be disconnected, depending on the configuration.
 
-- [#12863](https://github.com/emqx/emqx/pull/12863) You can now format trace log entries as JSON objects by setting the formatter parameter to "json" when creating the trace pattern.
+- [#12872](https://github.com/emqx/emqx/pull/12872) 实现了客户端属性功能。
 
-- [#12872](https://github.com/emqx/emqx/pull/12872) Customizable client attributes in `clientinfo`.
+  允许使用键值对的方式为每个客户端设置额外的属性。属性值可以从 MQTT 客户端连接信息（如用户名、客户端 ID、TLS 证书）处理生成，也可以从认证成功返回的附带的数据中设置。
 
-  Introduced a new field `client_attrs` in the `clientinfo` object.
-  This enhancement enables the initialization of `client_attrs` with specific
-  attributes derived from the `clientinfo` fields, immediately up on accepting
-  an MQTT connection.
+  属性可以用于 EMQX 的认证授权、数据集成和 MQTT 扩展功能等功能中。
+  相较于直接使用客户端 ID 等静态属性，客户端属性能够更灵活的用在各类业务场景中，并简化开发流程，增强开发工作的适应性和效率。
 
   #### Initialization of `client_attrs`
 
@@ -88,6 +79,14 @@
   based on the `namespace` attribute.
   - In other authorization backends, `${client_attrs.namespace}` can be used within request templates
   to dynamically include client attributes.
+
+- [#12671](https://github.com/emqx/emqx/pull/12671) An `unescape` function has been added to the rule engine SQL language to handle expansion of escape sequences in strings. This addition has been done because string literals in the SQL language don't support any escape codes (e.g., `\n` and `\t`). This enhancement allows for more flexible string manipulation within SQL expressions.
+
+- [#12798](https://github.com/emqx/emqx/pull/12798) Added new `GET /api/v5/clients_v2` API that uses cursors instead of page numbers for pagination.  This should be more efficient than the old API endpoint, which currently traverses tables multiple times.
+
+- [#12827](https://github.com/emqx/emqx/pull/12827) It is now possible to trace rules with a new Rule ID trace filter as well as with the Client ID filter. For testing purposes it is now also possible to use a new HTTP API endpoint (rules/:id/test) to artificially apply a rule and optionally stop its actions after they have been rendered.
+
+- [#12863](https://github.com/emqx/emqx/pull/12863) You can now format trace log entries as JSON objects by setting the formatter parameter to "json" when creating the trace pattern.
 
 - [#12923](https://github.com/emqx/emqx/pull/12923) Provided more specific error when importing wrong format into builtin authenticate database.
 
@@ -129,7 +128,7 @@
 
   The following is now permitted, for example:
 
-  ```
+  ```bash
   select
   [21 + 21, abs(-abs(-2)), [1 + 1], 4] as my_array
   from "t/#"
@@ -153,7 +152,6 @@
   - List persistent subscriptions in the REST API
 
 - [#12887](https://github.com/emqx/emqx/pull/12887) Fix MQTT enhanced auth with sasl scram.
-
 
 - [#12932](https://github.com/emqx/emqx/pull/12932) Previously, if a HTTP action request received a 503 (Service Unavailable) status, it was marked as a failure and the request was not retried. This has now been fixed so that the request is retried a configurable number of times.
 
@@ -181,24 +179,6 @@
 
   If HTTP content-type header is missing for POST method, it now emits a meaningful error message instead of a less readable exception with stack trace.
 
-- [#13060](https://github.com/emqx/emqx/pull/13060) - Rename durable storage for MQTT messages from `emqx_persistent_message` to  `messages`
-  - Rename configuration root from `session_persistence` to `durable_sessions`
-
-- [#13062](https://github.com/emqx/emqx/pull/13062) Rename configuration parameter `durable_sessions.last_alive_update_interval` to `durable_sessions.heartbeat_interval`.
-
-- [#13067](https://github.com/emqx/emqx/pull/13067) Adds a new `durable_subscriptions.count` statistic to track subscriptions that are tied to durable sessions.  `subscriptions.count` does not include such subscriptions.
-
-- [#13072](https://github.com/emqx/emqx/pull/13072) Various fixes related to the `durable_sessions` feature:
-
-  - Add an option to execute read operations on the leader.
-  - `drop_generation` operation can be replayed multiple times by the replication layer, but it's not idempotent. This PR adds a workaround that avoids a crash when `drop_generation` doesn't succeed. In the future, however, we want to make `drop_generation` idempotent in a nicer way.
-  - Wrap storage layer events in a small structure containing the generation ID, to make sure events are handled by the same layout CBM & context that produced them.
-  - Fix crash when storage event arrives to the dropped generation (now removed `storage_layer:generation_at` function didn't handle the case of dropped generations).
-  - Implement `format_status` callback for several workers to minimize log spam
-  - Move the responsibility of `end_of_stream` detection to the layout CBM. Previously storage layer used a heuristic: old generations that return an empty batch won't produce more data. This was, obviously, incorrect: for example, bitfield-LTS layout MAY return empty batch while waiting for safe cutoff time.
-  - `reference` layout has been enabled in prod build. It could be useful for integration testing.
-  - Fix incorrect epoch calculation in `bitfield_lts:handle_event` callback that lead to missed safe cutoff time updates, and effectively, subscribers being unable to fetch messages until a fresh batch was published.
-
 - [#13077](https://github.com/emqx/emqx/pull/13077) Updates to action configurations would sometimes not take effect without disabling and enabling the action. This means that an action could sometimes run with the old (previous) configuration even though it would look like the action configuration has been updated successfully.
 
 - [#13090](https://github.com/emqx/emqx/pull/13090) Attempting to start an action or source whose connector is disabled will no longer attempt to start the connector itself.
@@ -211,7 +191,7 @@
   
 - [#12909](https://github.com/emqx/emqx/pull/12909) Fixed UDP listener process handling on errors or closure, The fix ensures the UDP listener is cleanly stopped and restarted as needed if these error conditions occur.
 
-- [#12950](https://github.com/emqx/emqx/pull/12950) Added a validation to prevent duplicated topics when configuring a message validation.
+- [#12950](https://github.com/emqx/emqx/pull/12950) Added a validation to prevent duplicated topics when configuring a schema validation.
 
 - [#13001](https://github.com/emqx/emqx/pull/13001) Fixed an issue where the syskeeper forwarder would never reconnect when the connection was lost.
 
