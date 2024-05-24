@@ -27,7 +27,7 @@
 - `durable_sessions.idle_poll_interval`
 - `durable_sessions.renew_streams_interval`
 
-### 会话持久化配置
+### 持久存储配置
 
 `<DS>` 占位符代表 "durable storage"。当前，`<DS>` 的可用参数为 `message`。
 
@@ -42,7 +42,7 @@
 
 #### 本地写缓冲配置
 
-为了最大化吞吐量，EMQX 将来自客户端的 MQTT 消息批量写入会话持久化。批处理是使用 `durable_storage.<DS>.layout` 配置子树下的以下参数进行配置的：
+为了最大化吞吐量，EMQX 将来自客户端的 MQTT 消息批量写入持久存储。批处理是使用 `durable_storage.<DS>.layout` 配置子树下的以下参数进行配置的：
 
 | 参数             | 描述                                                 |
 | ---------------- | ---------------------------------------------------- |
@@ -83,11 +83,11 @@
 
 ## CLI 命令
 
-以下是用于管理会话持久化的 CLI 命令：
+以下是用于管理持久存储的 CLI 命令：
 
 ### `emqx_ctl ds info`
 
-显示会话持久化状态的概述。
+显示持久存储状态的概述。
 
 示例：
 ```bash
@@ -125,11 +125,11 @@ messages/9                        5C6028D6CE9459C7
 
 ### `emqx_ctl ds set_replicas <DS> <Site1> <Site2> ...`
 
-此命令允许设置包含集群中会话持久化副本的站点列表。 一旦执行，它会创建一个操作计划，以在站点之间公平分配分片，并继续在后台执行。 
+此命令允许设置包含集群中持久存储副本的站点列表。 一旦执行，它会创建一个操作计划，以在站点之间公平分配分片，并继续在后台执行。 
 
 ::: warning
 
-更新会话持久化副本列表可能成本高昂，因为可能涉及在站点之间复制大量数据。 
+更新持久存储副本列表可能成本高昂，因为可能涉及在站点之间复制大量数据。 
 
 ::: 
 
@@ -186,7 +186,7 @@ messages/9                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
 
 ### `emqx_ctl ds join <DS> <Site>` / `emqx_ctl ds leave <DS> <Site>`
 
-这些命令将一个站点添加到会话持久化副本列表中或从中移除。它们类似于 `set_replicas` 命令，但每次更新一个站点。 
+这些命令将一个站点添加到持久存储副本列表中或从中移除。它们类似于 `set_replicas` 命令，但每次更新一个站点。 
 
 示例：
 ```bash
@@ -202,10 +202,10 @@ ok
 
 - `/ds/sites`：列出已知站点。
 - `/ds/sites/:site`：提供有关站点的信息（状态、管理站点的当前 EMQX 节点名称等）。
-- `/ds/storages`：列出会话持久化。
-- `/ds/storages/:ds`：提供有关会话持久化及其分片的信息。
-- `/ds/storages/:ds/replicas`：列出或更新包含会话持久化副本的站点。
-- `/ds/storages/:ds/replicas/:site`：在站点上添加或删除会话持久化的副本。
+- `/ds/storages`：列出持久存储。
+- `/ds/storages/:ds`：提供有关持久存储及其分片的信息。
+- `/ds/storages/:ds/replicas`：列出或更新包含持久存储副本的站点。
+- `/ds/storages/:ds/replicas/:site`：在站点上添加或删除持久存储的副本。
 
 有关更多信息，请参阅 EMQX OpenAPI schema。
 
