@@ -178,11 +178,11 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 ::: tip **提示**
 
-您可以在项目目录中找到两个示例文件：`priv/config_schmea.avsc.example`, `priv/config_i18n.json.example`。
+您可以在项目目录中找到两个示例文件：`priv/config_schema.avsc.example`, `priv/config_i18n.json.example`。
 
 :::
 
-这需要您的插件包提供一个 Avro Schema 配置文件，它应位于 `priv/config_schmea.avsc`。该文件应当遵守 Apache Avro 规范（详情请参阅 [Apache Avro Specification (1.11.1)](https://avro.apache.org/docs/1.11.1/specification/)）。此外它也同时也包含了关于 UI 的描述声明。即可以使用 Avro Schema 的 metadata 配置一个 `$ui` 字段，EMQX Dashborad 将根据 `$ui` 字段中提供的信息来生成一份配置表单页。
+这需要您的插件包提供一个 Avro Schema 配置文件，它应位于 `priv/config_schema.avsc`。该文件应当遵守 Apache Avro 规范（详情请参阅 [Apache Avro Specification (1.11.1)](https://avro.apache.org/docs/1.11.1/specification/)）。此外它也同时也包含了关于 UI 的描述声明。即可以使用 Avro Schema 的 metadata 配置一个 `$ui` 字段，EMQX Dashborad 将根据 `$ui` 字段中提供的信息来生成一份配置表单页。
 
 此外还有一个**可选的**国际化配置文件以提供多语言支持， i18n 文件应位于 `priv/config_i18n.json`。它是一个键值对文件，如：`{ "$msgid": { "zh": "消息", "en": "Message" } }`。如果 `$ui` 配置中的字段名称、描述、验证规则的消息等需要支持多语言，需要在对应的配置里使用以 `$` 开头的 `$msgid`。
 
