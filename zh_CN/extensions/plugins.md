@@ -173,7 +173,8 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 :::
 {% endemqxce %}
 
-我们在 EMQX 企业版 5.7.0 中为插件引入了 Avro Schema 以提供在运行时更新插件配置的能力，并且可以在该 Schema 中提供 UI 声明，从而可以在 EMQX Dashboard 中渲染配置表单以便使用。
+我们在 EMQX v5.7.0 中引入了用于插件配置管理的 REST API 和用于配置验证的 Avro Schema，增强了在运行期间动态更新插件配置的能力。
+对于企业版，它还允许在 Schema 中声明配置界面，从而使 EMQX Dashboard 能够动态生成配置表单，方便插件的配置和管理。
 
 ::: tip **提示**
 
