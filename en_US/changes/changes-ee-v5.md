@@ -188,6 +188,21 @@
 
 - [#13067](https://github.com/emqx/emqx/pull/13067) Adds a new `durable_subscriptions.count` statistic to track subscriptions that are tied to durable sessions.  `subscriptions.count` does not include such subscriptions.
 
+- [#13072](https://github.com/emqx/emqx/pull/13072) Various fixes related to the `durable_sessions` feature:
+
+  - Add an option to execute read operations on the leader.
+  - `drop_generation` operation can be replayed multiple times by the replication layer, but it's not idempotent. This PR adds a workaround that avoids a crash when `drop_generation` doesn't succeed. In the future, however, we want to make `drop_generation` idempotent in a nicer way.
+  - Wrap storage layer events in a small structure containing the generation ID, to make sure events are handled by the same layout CBM & context that produced them.
+  - Fix crash when storage event arrives to the dropped generation (now removed `storage_layer:generation_at` function didn't handle the case of dropped generations).
+  - Implement `format_status` callback for several workers to minimize log spam
+  - Move the responsibility of `end_of_stream` detection to the layout CBM. Previously storage layer used a heuristic: old generations that return an empty batch won't produce more data. This was, obviously, incorrect: for example, bitfield-LTS layout MAY return empty batch while waiting for safe cutoff time.
+  - `reference` layout has been enabled in prod build. It could be useful for integration testing.
+  - Fix incorrect epoch calculation in `bitfield_lts:handle_event` callback that lead to missed safe cutoff time updates, and effectively, subscribers being unable to fetch messages until a fresh batch was published.
+
+- [#13077](https://github.com/emqx/emqx/pull/13077) Updates to action configurations would sometimes not take effect without disabling and enabling the action. This means that an action could sometimes run with the old (previous) configuration even though it would look like the action configuration has been updated successfully.
+
+- [#13090](https://github.com/emqx/emqx/pull/13090) Attempting to start an action or source whose connector is disabled will no longer attempt to start the connector itself.
+
 - [#12871](https://github.com/emqx/emqx/pull/12871) Fix startup process of evacuated node. Previously, if a node was evacuated and stoped without stopping evacuation, it would not start back.
 
 - [#12888](https://github.com/emqx/emqx/pull/12888) Fix License related configuration loss after importing backup data.
@@ -203,9 +218,6 @@
 - [#13010](https://github.com/emqx/emqx/pull/13010) Fixed the issue where the JT/T 808 gateway could not correctly reply to the REGISTER_ACK message when requesting authentication from the registration service failed.
 
 - [#13018](https://github.com/emqx/emqx/pull/13018) Reduced log spamming when connection goes down in a Postgres/Timescale/Matrix connector.
-
-
-
 
 
 ## 5.6.1
