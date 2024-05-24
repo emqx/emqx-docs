@@ -138,8 +138,8 @@ docker run -d --name mongodb -p 27017:27017 mongo
 # Access the container
 docker exec -it mongodb bash
 
-# Locate the MongoDB server in the container
-mongo
+# Locate the MongoDB server in the container (use `mongo` with 4.x versions)
+mongosh
 
 # Create a user
 use admin

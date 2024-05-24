@@ -52,17 +52,16 @@ EMQX 支持基于 HTTP 应用进行授权。此时，用户需在外部自行搭
 
 根据授权服务要求而定，可以使用 JSON 格式，支持在 URL 与请求体中使用以下占位符：
 
-- `${clientid}`: 客户端的 ID
-- `${username}`: 客户端登录时用的用户名
-- `${peerhost}`: 客户端的源 IP 地址
-- `${proto_name}`: 客户端使用的协议名称。例如 `MQTT`，`CoAP` 等
-- `${mountpoint}`: 网关监听器的挂载点（主题前缀）
-- `${action}`: 当前执行的动作请求，例如 `publish`，`subscribe`
-- `${topic}`: 当前请求想要发布或订阅的主题（或主题过滤器）
-- `${qos}`: 当前请求想要发布或订阅的消息 QoS
-- `${retain}`: 当前请求想要发布的消息是否为保留消息
-
-
+- `${clientid}`: 客户端的 ID。
+- `${username}`: 客户端登录时用的用户名。
+- `${client_attrs.NAME}`：某个客户端属性。`NAME` 将在运行时根据预定义配置替换为属性名称。有客户端属性的详细信息，请参见 [MQTT 客户端属性](../../client-attributes/client-attributes.md)。
+- `${peerhost}`: 客户端的源 IP 地址。
+- `${proto_name}`: 客户端使用的协议名称。例如 `MQTT`，`CoAP` 等。
+- `${mountpoint}`: 网关监听器的挂载点（主题前缀）。
+- `${action}`: 当前执行的动作请求，例如 `publish`， `subscribe`。
+- `${topic}`: 当前请求想要发布或订阅的主题（或主题过滤器）。
+- `${qos}`: 当前请求想要发布或订阅的消息 QoS。
+- `${retain}`: 当前请求想要发布的消息是否为保留消息。
 
 
 ### 响应格式

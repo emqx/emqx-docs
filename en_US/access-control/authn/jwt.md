@@ -4,7 +4,7 @@
 
 ::: tip
 
-- Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
+Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
 
 :::
 
@@ -12,7 +12,9 @@
 
 The client carries the JWT in the connection request, and EMQX uses the pre-configured secret or public key to verify the JWT signature. If the user configures a JWKS endpoint, the JWT authenticator will verify the JWT signature using the list of public keys queried from the JWKS endpoint. 
 
-If the signature verification is successful, the JWT authenticator proceeds to check the claims. If there are claims such as `iat`, `nbf` or `exp`, the JWT authenticator will actively check the validity of the JWT based on these claims. In addition to this, we also allow users to specify some additional claims checks. The client is finally allowed to login only if the signature verification and claims check pass together.
+If the signature verification is successful, the JWT authenticator proceeds to check the claims. The JWT authenticator actively checks the validity of the JWT based on these claims such as `iat` (Issued At), `nbf` (Not Before), and `exp` (Expiration Time). Additional custom claims can also be specified for verification. The client is granted access only if both the signature and claims verifications are successful.
+
+Starting from EMQX version 5.7.0, JWT authentication includes an option to disconnect clients after their JWT expires. The configuration parameter `disconnect_after_expire` is set to `true` by default. To keep clients connected even after their JWT has expired, you can set this parameter to `false`.
 
 ## Best Practice
 
@@ -127,37 +129,64 @@ In this example, `testpub1/${username}` is replaced at runtime with `testpub1/em
 
 ::::
 
-## Configure with Dashboard
+## Client Attributes
 
-On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **Password-Based** as **Mechanism**, and **JWT** as **Backend**, this will lead us to the **Configuration** tab, as shown below. 
+Starting from EMQX v5.7.0, you can use the optional `client_attrs` field in the JWT Payload to set [client attributes](../../client-attributes/client-attributes.md). Please note that both the keys and values must be of string type.
 
-<img src="./assets/authn-jwt.png" alt="JWT" style="zoom:67%;" />
+Example:
 
-Follow the instruction below on how to configure:
+```json
+{
+  "exp": 1654254601,
+  "username": "emqx_u",
+  "client_attrs": {
+      "role": "admin",
+      "sn": "10c61f1a1f47"
+  }
+}
+```
 
-**JWT From**: Specify the location of the JWT in the client connection request; option values are `password` and `username`. For MQTT clients, these are the `Password` and `Username` fields in the MQTT `CONNECT` packet.
+## Configure JWT Authentication in Dashboard
 
-**Algorithm**: Specify the encryption algorithm of JWT, optional values ​​are `hmac-based` and `public-key`. For different encryption methods, the JWT authenticator will have different configuration requirements.
+1. Select **Access Control** -> **Authentication** from the left navigation menu. 
 
-1. If configured as `hmac-based`, indicating that JWT will use symmetric secret to generate signature and verify signature (support HS256, HS384 and HS512 algorithms), we also need to configure:
-   - `Secret`: the key used to verify the signature (the same key used to generate the signature)
-   - `Secret Base64 Encode`: indicating whether the `Secret` is Base64 encrypted, that is, whether EMQX needs to perform Base64 decryption on the secret when verifying the signature.
+2. On the **Authentication** page, click **Create** at the top right corner. Click to select **JWT** as **Mechanism**, and click **Next**. Skip the Backend selection and go to the **Configuration** tab. 
 
-2. If configured as `public-key`, indicating that JWT uses the private key to generate the signature, and needs to use the public key to verify the signature (supports RS256, RS384, RS512, ES256, ES384 and ES512 algorithms), we also need to configure:
-   - `Public Key`: specifying the public key in PEM format used to verify the signature
+   <img src="./assets/authn-jwt.png" alt="JWT" style="zoom:67%;" />
 
-**Payload**: Specify additional claims checks that the user wants to perform. Users can define multiple key-value pairs with the **Claim** and **Expacted Value** fields, where the key is used to find the corresponding claim in the JWT, so it needs to have the same name as the JWT claim to be checked, and the value is used to compare with the actual value of the claim. Currently the placeholders supported are `${clientid}` and `${username}`, 
+3. Configure the following options:
 
-EMQX also supports periodically obtaining the latest JWKS from the JWKS endpoint, which is essentially a set of public keys that will be used to verify any JWT issued by the authorization server and signed using the RSA or ECDSA algorithm. If we want to use this feature, we first need to switch to the **JWKS** configuration page.
+   - **JWT From**: Determines where the JWT is located in the client connection request. Available options are `password` and `username`, corresponding to the `Password` and `Username` fields in the MQTT `CONNECT` packet for MQTT clients.
 
-![](./assets/authn-jwt-2.png)
+   - **Algorithm**: Specify the encryption algorithm of JWT. Optional values ​​are `hmac-based` and `public-key`. Each selection dictates different configuration requirements.
 
-So as shown above, we now have two brand-new configuration items:
+     - `hmac-based`: Uses a symmetric key for both generating and verifying the JWT's signature. Supported algorithms include HS256, HS384, and HS512. Configuration must include:
+       - `Secret`: The key used to verify the signature, identical to the one used for signature generation.
+       - `Secret Base64 Encode`: Configures whether the `Secret` is Base64 encoded, which determines if EMQX needs to decode the secret during signature verification.
 
-1. `JWKS Server`: Specify the server endpoint address for EMQX to query JWKS, the endpoint needs to support GET requests and return a JWKS that conforms to the specification.
-2. `JWKS Refresh Interval`: Specify the refresh interval of JWKS, that is, the interval for EMQX to query JWKS.
+     - `public-key`: Uses a private key to generate the JWT's signature and a public key for verification. Supported algorithms are RS256, RS384, RS512, ES256, ES384, and ES512. Configuration must include:
+        - `Public Key`: Specify the public key in PEM format used to verify the signature.
 
-## <!--Configure with Configuration Items-->
+   - **Disconnect After Expiration**: Configures whether to disconnect clients after their JWT expires, enabled by default.
+   - **Payload**: Specify additional claims checks that the user wants to perform. Users can define multiple key-value pairs with the **Claim** and **Expacted Value** fields, where the key is used to find the corresponding claim in the JWT, so it needs to have the same name as the JWT claim to be checked, and the value is used to compare with the actual value of the claim. Currently, the placeholders supported are `${clientid}` and `${username}`. 
 
-<!--You can also configuration items for the configuration. For detailed steps, see [authn-jwt:*](../../configuration/configuration-manual.html#authn-jwt:hmac-based). -->
+4. Click **Create** to complete the configuration.
 
+
+EMQX also supports periodically obtaining the latest JWKS from the JWKS endpoint, which is essentially a set of public keys used to verify any JWT issued by the authorization server and signed using the RSA or ECDSA algorithm. If you want to use this feature, you need to switch to the **JWKS** configuration page.
+
+<img src="./assets/authn-jwt-2.png" style="zoom:67%;" />
+
+You need to configure the following JWKS-specific configuration items:
+
+- **JWKS Server**: Specify the server endpoint address for EMQX to query JWKS, the endpoint needs to support GET requests and return a JWKS that conforms to the specification.
+- **JWKS Refresh Interval**: Specify the refresh interval of JWKS, that is, the interval for EMQX to query JWKS.
+
+Click **Create** to complete the configuration.
+
+<!-- ## Configure with Configuration Items
+
+You can also configuration items for the configuration. For detailed steps, see [authn-jwt:*](../../configuration/configuration-manual.html#authn-jwt:hmac-based). -->
+
+
+```

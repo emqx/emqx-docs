@@ -97,6 +97,8 @@ EMQX 授权支持的数据查询占位符如下：
 
 - `${cert_subject}`: 将在运行时被替换为客户端 TLS 证书的主题（Subject），仅适用于 TLS 连接。
 
+- `${client_attrs.NAME}`: 某个客户端属性。`NAME` 将在运行时根据预定义配置替换为属性名称。有客户端属性的详细信息，请参见 [MQTT 客户端属性](../../client-attributes/client-attributes.md)。
+
 <!-- TODO
 确认 HTTP AuthZ 为什么会多出几个
 ?PH_PROTONAME,
@@ -111,6 +113,7 @@ EMQX 还允许在主题中使用占位符，在匹配规则时将当前客户端
 
 - `${clientid}`
 - `${username}`
+- `${client_attrs.NAME}`: 某一个客户端属性，`NAME` 替换成 `mqtt.client_attrs_init` 规则提取的某一个字段名称。
 
 占位符只能用于替换主题的整个字段，例如 `a/b/${username}/c/d`，但是不能用于替换字段的一部分，例如 `a/b${username}c/d`。
 

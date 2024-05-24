@@ -180,6 +180,7 @@ EMQX currently supports the following placeholders:
 - `${peerhost}`: It will be replaced with the client's IP address at runtime. EMQX supports [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt), that is, even if EMQX is deployed behind some TCP proxy or load balancer, users can still use this placeholder to get the real IP address.
 - `${cert_subject}`: It will be replaced by the subject of the client's TLS certificate at runtime, only applicable to TLS connections.
 - `${cert_common_name}`: It will be replaced by the Common Name of the client's TLS certificate at runtime,  only applicable to TLS connections.
+- `${client_attrs.NAME}`: A client attribute. `NAME` will be replaced by an attribute name set based on predefined configurations at runtime. For details about the client attributes, see [MQTT Client Attributes](../../client-attributes/client-attributes.md).
 
 ## Configure Authenticators
 

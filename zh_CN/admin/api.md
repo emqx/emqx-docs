@@ -12,11 +12,52 @@ EMQX 在 REST API 上做了版本控制，EMQX 5.0.0 以后的所有 API 调用�
 
 ## 认证
 
-EMQX 的 REST API 使用 [HTTP Basic 认证](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication#%E9%80%9A%E7%94%A8%E7%9A%84_http_%E8%AE%A4%E8%AF%81%E6%A1%86%E6%9E%B6) 携带认证凭据，您可以在 Dashboard **系统设置** -> **API 密钥** 界面中创建用于认证的 API 密钥，详细操作请参考 [Dashboard - API 密钥](../dashboard/system.md#api-密钥)。
+EMQX 的 REST API 使用 [HTTP Basic 认证](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication#%E9%80%9A%E7%94%A8%E7%9A%84_http_%E8%AE%A4%E8%AF%81%E6%A1%86%E6%9E%B6) 携带 API 密钥作为认证凭据。在开始使用 EMQX REST API 之前，您需要创建 API 密钥。
 
-:::tip
+::: tip
 出于安全考虑，从 EMQX 5.0.0 开始 Dashboard 用户无法用于 REST API 认证。
+API 凭证区分角色是 EMQX 企业版中的功能。
 :::
+
+### 创建 API 密钥
+
+您可以在 Dashboard **系统设置** -> **API 密钥** 页面中手动创建用于认证的 API 密钥，详细操作请参考 [Dashboard - API 密钥](../dashboard/system.md#api-密钥)。
+
+您也可以通过 bootstrap 文件的方式创建 API 密钥。在 `emqx.conf` 配置文件中添加以下配置，指定文件位置：
+
+```bash
+api_key = {
+  bootstrap_file = "etc/default_api_key.conf"
+}
+```
+
+在指定的文件中通过多行分割的 `{API Key}:{Secret Key}:{?Role}` 的格式添加多个 API 密钥：
+
+- API Key：任意字符串作为密钥标识。
+- Secret Key：使用随机字符串作为密钥。
+- Role （可选）：指定密钥的[角色](#角色与权限)，仅适用于企业版。
+
+例如：
+
+```bash
+my-app:AAA4A275-BEEC-4AF8-B70B-DAAC0341F8EB
+ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL:viewer
+foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
+```
+
+通过此方式创建的 API 密钥有效期为永久有效。
+
+每次 EMQX 启动时，会将文件中设置的数据将添加到 API 密钥列表中，如果存在相同的 API Key，则将更新其 Secret Key 与 Role。
+
+### 角色与权限
+
+在 EMQX 企业版中，REST API 实现了基于角色的访问控制，API 密钥创建时，可以分配以下3个预定义的角色：
+
+- **管理员**：此角色可以访问所有资源，未指定角色时默认使用此值。对应的角色标识为 `administrator`。
+- **查看者**：此角色只能查看资源和数据，对应于 REST API 中的所有 GET 请求。对应的角色标识为 `viewer`。
+- **发布者**：专门为 MQTT 消息发布定制，此角色仅限于访问与消息发布相关的 API。对应的角色标识为 `publisher`。
+
+### 认证方式
 
 使用生成的 API Key 以及 Secret Key 分别作为 Basic 认证的用户名与密码，请求示例如下：
 
@@ -185,7 +226,11 @@ EMQX 遵循 [HTTP 响应状态码](https://developer.mozilla.org/en-US/docs/Web/
 
 ## 分页
 
-部分 API 支持分页，您可以通过 `page`（页码） 和 `limit`（分页大小） 参数来控制分页，分页大小最大值为 `10000`，如果不指定 `limit` 参数，则默认为 `100`。
+在一些数据量较大的 API 中，提供了分页功能，根据数据特性，有2种分页方式。
+
+### 页码分页
+
+支持分页的绝大多数 API 中，您可以通过 `page`（页码） 和 `limit`（分页大小） 参数来控制分页，分页大小最大值为 `10000`，如果不指定 `limit` 参数，则默认为 `100`。
 
 例如：
 
@@ -206,6 +251,44 @@ GET /clients?page=1&limit=100
   }
 }
 ```
+
+### 游标分页
+
+在少数数据变化较快、页码分页效率较低的 API 中，使用游标分页的方式。
+
+您可以通过 `position` 或 `cursor`（起始位置）指定数据的开始位置， `limit`（分页大小）指定自开始位置之后加载的数据数量。分页大小最大值为 `10000`，如果不指定 `limit` 参数，则默认为 `100`。
+
+例如：
+
+```bash
+GET /clients/{clientid}/mqueue_messages?position=1716187698257189921_0&limit=100
+```
+
+响应结果中的 `meta` 字段将包含分页信息，`meta.position` 或 `meta.cursor` 指示了下一页开始的位置：
+
+```json
+{
+    "meta": {
+        "start": "1716187698009179275_0",
+        "position": "1716187698491337643_0"
+    },
+    "data": [
+        {
+            "inserted_at": "1716187698260190832",
+            "publish_at": 1716187698260,
+            "from_clientid": "mqttx_70e2eecf_10",
+            "from_username": "undefined",
+            "msgid": "000618DD161F682DF4450000F4160011",
+            "mqueue_priority": 0,
+            "qos": 0,
+            "topic": "t/1",
+            "payload": "SGVsbG8gRnJvbSBNUVRUWCBDTEk="
+        }
+    ]
+}
+```
+
+通过这种分页方式，可以高效处理数据变化较快的场景，确保数据的连续性和获取效率。
 
 ## 错误码
 

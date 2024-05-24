@@ -22,7 +22,9 @@ The diagram below shows an example of a Schema Registry application. Multiple de
 
 ## Architecture Design
 
-The Schema Registry can perform both decoding and encoding and it maintains schema text for built-in encoding formats Avro and Protobuf. The Schema API provides for add, query, and delete operations via schema name, so the schema name needs to be specified when encoding and decoding.
+EMQX can use schema for encoding, decoding, and validating whether the published messages comply with the schema specifications. It maintains schema text for built-in encoding formats, including Avro and Protobuf.
+
+The Schema API provides for add, query, and delete operations via schema name, so the schema name needs to be specified when encoding and decoding.
 
 ![architecture](./assets/schema_registry/schema_registry1.svg)
 
