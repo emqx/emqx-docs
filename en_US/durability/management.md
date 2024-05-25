@@ -16,7 +16,7 @@ Configuration for durable sessions is divided into 2 main categories:
 | `durable_sessions.enable`                   | Enables session durability. Note: Restart of the EMQX node is required for changes to take effect. |
 | `durable_sessions.batch_size`               | Controls the maximum size of message batches consumed from the storage by durable sessions. |
 | `durable_sessions.idle_poll_interval`       | Controls the frequency of querying the storage for new messages by durable sessions. If new messages are found, the next batch is retrieved immediately if the client's in-flight queue has space. |
-| `durable_sessions.heartbeat_interval`       | Specifies the interval for saving session metadata to the durable sessions. |
+| `durable_sessions.heartbeat_interval`       | Specifies the interval for saving session metadata. |
 | `durable_sessions.renew_streams_interval`   | Defines how often sessions query the storage for new streams. |
 | `durable_sessions.session_gc_interval`      | Specifies the interval for sweeping through sessions and deleting expired ones. |
 | `durable_sessions.message_retention_period` | Defines the retention period of MQTT messages in durable sessions. Note: this parameter is global. |
@@ -31,7 +31,7 @@ The following parameters can be overridden per [zone](../configuration/configura
 
 ### Durable Storage Configuration
 
-The `<DS>` placeholder stands for "durable storage".  Currently, the available parameter for `<DS>` is `message`.
+The `<DS>` placeholder stands for "durable storage".  Currently, the available parameter for `<DS>` is `messages`.
 
 | Parameter                                 | Description                                                  |
 | ----------------------------------------- | ------------------------------------------------------------ |
@@ -252,4 +252,3 @@ A rolling average of time (in μs) spent consuming a batch of messages from dura
 These counters are specific to the "wildcard optimized" storage layout. They measure the efficiency of consuming data from local storage. The `seek` primitive is generally slower, so the rate of `emqx_ds_storage_bitfield_lts_counter_next` should ideally grow faster than `seek`.
 
 Increasing the `durable_storage.messages.layout.epoch_bits` parameter can help improve this ratio.
-
