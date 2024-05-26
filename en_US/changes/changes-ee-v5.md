@@ -13,29 +13,18 @@
   Added metrics related to EMQX durable storage to Prometheus:
 
   - `emqx_ds_egress_batches`
-
   - `emqx_ds_egress_batches_retry`
-
   - `emqx_ds_egress_batches_failed`
-
   - `emqx_ds_egress_messages`
-
   - `emqx_ds_egress_bytes`
-
   - `emqx_ds_egress_flush_time`
-
   - `emqx_ds_store_batch_time`
-
   - `emqx_ds_builtin_next_time`
-
   - `emqx_ds_storage_bitfield_lts_counter_seek`
-
   - `emqx_ds_storage_bitfield_lts_counter_next`
-
   - `emqx_ds_storage_bitfield_lts_counter_collision`
 
   Note: these metrics are only visible when session persistence is enabled.
-
   The number of persisted messages has also been added to the Dashboard.
 
 #### Data Processing and Integration
@@ -61,13 +50,9 @@
   The `client_attrs` fields can be initially populated from one of the following `clientinfo` fields:
 
     - `cn`: The common name from the TLS client's certificate.
-
     - `dn`: The distinguished name from the TLS client's certificate, that is, the certificate "Subject".
-
     - `clientid`: The MQTT client ID provided by the client.
-
     - `username`: The username provided by the client.
-
     - `user_property`: Extract a property value from 'User-Property' of the MQTT CONNECT packet.
 
   **Extension through Authentication Responses**
@@ -164,11 +149,8 @@
 
 <!-- This is a fix for not new feature in this release
 - [#12874](https://github.com/emqx/emqx/pull/12874) Ensure consistency of the durable message replay when the subscriptions are modified before session reconnects:
-
   - Persistent sessions save inflight packet IDs for the received QoS2 messages.
-
-- Ensuring consistent behavior between persistent and non-persistent sessions regarding overlapping subscriptions.
-
+  - Ensuring consistent behavior between persistent and non-persistent sessions regarding overlapping subscriptions.
   - List persistent subscriptions in the REST API.
 -->
 
@@ -217,9 +199,9 @@
 
   The HTTP client library (`gun-1.3`) incorrectly appended a `:portnumber` suffix to the `Host` header for
   standard ports (`http` on port 80, `https` on port 443). This could cause compatibility issues with servers or gateways performing strict `Host` header checks (e.g., AWS Lambda, Alibaba Cloud HTTP gateways), leading to errors such as `InvalidCustomDomain.NotFound` or "The specified CustomDomain does not exist."
-  
+
 - [#12802](https://github.com/emqx/emqx/pull/12802) Improved how EMQX handles node removal from clusters via the `emqx ctl cluster leave` command. Previously, nodes could unintentionally rejoin the same cluster (unless it was stopped) if the configured cluster `discovery_strategy` was not `manual`. With the latest update, executing the `cluster leave` command now automatically disables cluster discovery for the node, preventing it from rejoining. To re-enable cluster discovery, use the `emqx ctl discovery enable` command or simply restart the node.
-  
+
 - [#12814](https://github.com/emqx/emqx/pull/12814) Improved error handling for the `/clients/{clientid}/mqueue_messages` and `/clients/{clientid}/inflight_messages` APIs in EMQX. These updates address:
 
   - **Internal Timeout**: If EMQX fails to retrieve the list of Inflight or Mqueue messages within the default 5-second timeout, likely under heavy system load, the API will return 500 error with the response `{"code":"INTERNAL_ERROR","message":"timeout"}`, and log additional details for troubleshooting.
