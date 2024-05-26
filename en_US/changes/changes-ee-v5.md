@@ -37,6 +37,9 @@
 
 - [#12898](https://github.com/emqx/emqx/pull/12898) IoTDB bridge support for iotdb 1.3.0 and batch insert(batch_size/batch_time) options.
 
+- [#12934](https://github.com/emqx/emqx/pull/12934) Added CSV format file aggregation for s3 action.
+
+
 #### Observability
 
 - [#12863](https://github.com/emqx/emqx/pull/12863) You can now format trace log entries as JSON objects by setting the formatter parameter to "json" when creating the trace pattern.
@@ -75,6 +78,8 @@
       flexibility and control. Examples include: In `acl.conf`, use `{allow, all, all, ["${client_attrs.namespace}/#"]}` to apply permissions based on the `namespace` attribute.
 
     - In other authorization backends, `${client_attrs.namespace}` can be used within request templates to dynamically include client attributes.
+
+- [#12910](https://github.com/emqx/emqx/pull/12910) Added plugin configuration management and schema validation. For EMQX enterprise edition, one can also annotate the schema with metadata to facilitate UI rendering in the Dashboard. See more details in the [plugin template](https://github.com/emqx/emqx-plugin-template/pull/126) and plugin [documentation](../../extensions/plugins.md).
 
 #### Operations and Management
 
@@ -136,6 +141,8 @@
 -->
 
 - [#13018](https://github.com/emqx/emqx/pull/13018) Reduced log spamming when connection goes down in a Postgres/Timescale/Matrix connector.
+
+- [#13118](https://github.com/emqx/emqx/pull/13118) Fix a performance issue in the rule engine template rendering.
 
 #### Observability
 
