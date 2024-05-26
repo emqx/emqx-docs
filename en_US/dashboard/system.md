@@ -50,7 +50,8 @@ On the API Keys page, you can generate an API key and secret key for accessing t
 
 2. On the Create API Key dialog, configure in the detailed information for the API key. 
 
-   If the **Expire At** textbox is left empty, the API key will never expire.
+   - The API key will never expire if the Expire At box is left empty.
+   - Select a role for API key (optional), applicable only in the Enterprise edition. For more information about roles, see [Roles and Permissions](../admin/api.md#roles-and-permissions).
 
 3. Click the **Confirm** button, and the API key and secret Key are created and displayed in the **Created Successfully** dialog. 
 

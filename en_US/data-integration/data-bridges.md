@@ -46,7 +46,7 @@ D -->|Message storage| E[Kafka]
 The variable extraction syntax supported in Sink is as follows:
 
 - `${var}`: This syntax is used to extract variables from the output results of a rule, for example, `${topic}`. If you wish to extract nested variables, you can use a period `.` for this, such as `${payload.temp}`. Note that if the variable you want to extract is not included in the output result, you will get the string `undefined`.
-- `${.var}`: This syntax first tries to extract a variable from the rule's output results. If the variable does not exist in the output, it attempts to extract it from the corresponding event data, for example, `${.topic}`. This also supports the use of `.` for extracting nested variables, such as `${.payload.temp}`. If the variable you want to extract is not present in either the rule output results or event data, you will receive the string `undefined`. You can also use `${.}` to extract all variables merged from the rule output results and event data.
+- `${.}`, `${.var}`: The `${.}` syntax is used to extract the JSON string containing all the output results of the rule, while `${.var}` has the same meaning as `${var}` syntax.
 
 ### Source
 
