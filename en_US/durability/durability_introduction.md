@@ -16,9 +16,9 @@ Before learning the durable sessions feature in EMQX, it's essential to first un
 
 ### Sessions and Durable Storages
 
-**Session** is a lightweight process within EMQX that is created for every client connection. Sessions implement the behaviors prescribed to the broker by the MQTT Standard, including initial connection, subscribing and unsubscribing to topics, and message dispatching.
+**Session** is a lightweight process within EMQX that is created for every client connection. Sessions implement behaviors prescribed to the broker by MQTT Standard, including initial connection, subscribing and unsubscribing to topics, and message dispatching.
 
-**Durable Storage** is an internal database within EMQX. Sessions may use it to save their state, as well as MQTT messages sent to the topics. Database engine powering durable storages uses [RocksDB](https://rocksdb.org/) to save the data on disk, and [Raft](https://raft.github.io/) to consistently replicate the data across the cluster. Durable storages should not be confused with the **Durable Sessions**.
+**Durable Storage** is an internal database within EMQX. Sessions may use it to save their state as well as MQTT messages sent to the topics. Database engine powering durable storages uses [RocksDB](https://rocksdb.org/) to save the data on disk, and [Raft](https://raft.github.io/) to consistently replicate the data across the cluster. Durable storages should not be confused with the **Durable Sessions**.
 
 ### Session Expiry Interval
 
@@ -64,7 +64,7 @@ However, there are some drawbacks:
 
 - Session data is lost when the EMQX node hosting the session stops or restarts.
 - Undelivered messages are stored in the session's memory queue, increasing memory footprint of the broker.
-- EMQX imposes a limit on the size of the memory queue to prevent memory exhaustion. New messages are discarded when this limit is reached, leading to potential message loss of undelivered messages.
+- EMQX imposes a limit on the size of the memory queue to prevent memory exhaustion. New messages are discarded when this limit is reached, leading to potential loss of undelivered messages.
 
 #### Durable Sessions
 
