@@ -18,7 +18,7 @@ Before learning the durable sessions feature in EMQX, it's essential to understa
 
 **Session**: A session is a lightweight process within EMQX created for every client connection. Sessions implement behaviors prescribed to the broker by MQTT Standard, including initial connection, subscribing and unsubscribing to topics, and message dispatching.
 
-**Durable Storage**: Durable storage is an internal database within EMQX. Sessions may use it to save their state and MQTT messages sent to the topics. Database engine powering durable storage uses [RocksDB](https://rocksdb.org/) to save the data on disk, and [Raft](https://raft.github.io/) to consistently replicate data across the cluster. It is important not to confuse durable storage with **Durable Sessions**.
+**Durable Storage**: Durable storage is an internal database within EMQX. Sessions may use it to save their state and MQTT messages sent to the topics. Database engine powering durable storage uses [RocksDB](https://rocksdb.org/) to save the data on disk, and [Raft algorithm](https://raft.github.io/) to consistently replicate data across the cluster. It is important not to confuse durable storage with **Durable Sessions**.
 
 ### Session Expiry Interval
 
