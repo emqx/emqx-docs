@@ -43,7 +43,7 @@ Note: This is a breaking change. This option is enabled by default, so the defau
 
 - [#12898](https://github.com/emqx/emqx/pull/12898) IoTDB bridge support for iotdb 1.3.0 and batch insert(batch_size/batch_time) options.
 
-- [#12934](https://github.com/emqx/emqx/pull/12934) Added CSV format file aggregation for s3 action.
+- [#12934](https://github.com/emqx/emqx/pull/12934) Added CSV format file aggregation for AWS S3 action.
 
 #### Observability
 
