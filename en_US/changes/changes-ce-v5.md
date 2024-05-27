@@ -104,8 +104,8 @@ Note: This is a breaking change. This option is enabled by default, so the defau
   from "t/#"
   ```
   <!-- This is a fix for not new feature in this release
-- [#12707](https://github.com/emqx/emqx/pull/12707) Keep IP and port of the durable client sessions in the database.
--->
+  - [#12707](https://github.com/emqx/emqx/pull/12707) Keep IP and port of the durable client sessions in the database.
+  -->
 
 - [#12932](https://github.com/emqx/emqx/pull/12932) Previously, if a HTTP action request received a 503 (Service Unavailable) status, it was marked as a failure and the request was not retried. This has now been fixed so that the request is retried a configurable number of times.
 
@@ -123,11 +123,12 @@ Note: This is a breaking change. This option is enabled by default, so the defau
 - [#12812](https://github.com/emqx/emqx/pull/12812) Made resource health checks non-blocking operations.  This means that operations such as updating or removing a resource won't be blocked by a lengthy running health check.
 
 - [#12830](https://github.com/emqx/emqx/pull/12830) Made channel (action/source) health checks non-blocking operations. This means that operations such as updating or removing an action/source data integration won't be blocked by a lengthy running health check.
-<!-- This is a fix for not new feature in this release
-- [#12874](https://github.com/emqx/emqx/pull/12874) Ensure consistency of the durable message replay when the subscriptions are modified before session reconnects:
-  - Persistent sessions save inflight packet IDs for the received QoS2 messages.
-  - Ensuring consistent behavior between persistent and non-persistent sessions regarding overlapping subscriptions.
-  - List persistent subscriptions in the REST API.
+
+  <!-- This is a fix for not new feature in this release
+  - [#12874](https://github.com/emqx/emqx/pull/12874) Ensure consistency of the durable message replay when the subscriptions are modified before session reconnects:
+    - Persistent sessions save inflight packet IDs for the received QoS2 messages.
+    - Ensuring consistent behavior between persistent and non-persistent sessions regarding overlapping subscriptions.
+    - List persistent subscriptions in the REST API.
   -->
 
 - [#12993](https://github.com/emqx/emqx/pull/12993) Fixed listener config update API when handling an unknown zone.
