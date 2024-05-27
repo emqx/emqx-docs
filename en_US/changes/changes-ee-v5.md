@@ -79,7 +79,7 @@
 
     - In other authorization backends, `${client_attrs.namespace}` can be used within request templates to dynamically include client attributes.
 
-- [#12910](https://github.com/emqx/emqx/pull/12910) Added plugin configuration management and schema validation. For EMQX enterprise edition, one can also annotate the schema with metadata to facilitate UI rendering in the Dashboard. See more details in the [plugin template](https://github.com/emqx/emqx-plugin-template/pull/126) and plugin [documentation](../../extensions/plugins.md).
+- [#12910](https://github.com/emqx/emqx/pull/12910) Added plugin configuration management and schema validation. For EMQX enterprise edition, one can also annotate the schema with metadata to facilitate UI rendering in the Dashboard. See more details in the [plugin template](https://github.com/emqx/emqx-plugin-template/pull/126) and plugin [documentation](../extensions/plugins.md).
 
 #### Operations and Management
 

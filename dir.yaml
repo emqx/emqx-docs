@@ -561,6 +561,7 @@
         - extensions/plugins
         # - extensions/lang-lua
         - extensions/exhook
+        - extensions/plugins
     - title_en: Telemetry
       title_cn: 遥测
       path: telemetry/telemetry
