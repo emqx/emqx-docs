@@ -45,7 +45,6 @@ Note: This is a breaking change. This option is enabled by default, so the defau
 
 - [#12934](https://github.com/emqx/emqx/pull/12934) Added CSV format file aggregation for s3 action.
 
-
 #### Observability
 
 - [#12827](https://github.com/emqx/emqx/pull/12827) It is now possible to trace rules with a new Rule ID trace filter as well as with the Client ID filter. For testing purposes, it is now also possible to use a new HTTP API endpoint (rules/:id/test) to artificially apply a rule and optionally stop its actions after they have been rendered.
@@ -93,6 +92,10 @@ Note: This is a breaking change. This option is enabled by default, so the defau
 <!-- This is not ready to GA in 5.7
 - [#12798](https://github.com/emqx/emqx/pull/12798) Added new `GET /api/v5/clients_v2` API that uses cursors instead of page numbers for pagination.  This should be more efficient than the old API endpoint, which currently traverses tables multiple times.
 -->
+
+- [#12827](https://github.com/emqx/emqx/pull/12827) It is now possible to trace rules with a new Rule ID trace filter as well as with the Client ID filter. For testing purposes, it is now also possible to use a new HTTP API endpoint (rules/:id/test) to artificially apply a rule and optionally stop its actions after they have been rendered.
+
+- [#12863](https://github.com/emqx/emqx/pull/12863) You can now format trace log entries as JSON objects by setting the formatter parameter to "json" when creating the trace pattern.
 
 - [#12923](https://github.com/emqx/emqx/pull/12923) Provided more specific error when importing wrong format into builtin authenticate database.
 
