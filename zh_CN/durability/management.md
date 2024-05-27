@@ -16,7 +16,7 @@
 | `durable_sessions.enable`                   | 启用会话持久性。注意：需要重新启动 EMQX 节点才能使更改生效。 |
 | `durable_sessions.batch_size`               | 控制持久会话从存储中消费的消息批次的最大大小。               |
 | `durable_sessions.idle_poll_interval`       | 控制持久会话查询新消息的频率。如果发现新消息，则下一批将立即从存储中检索，如果客户端的传输队列有空间的话。 |
-| `durable_sessions.heartbeat_interval`       | 指定将会话元数据保存到会话持久化的间隔。                     |
+| `durable_sessions.heartbeat_interval`       | 指定保存会话元数据的间隔。                                   |
 | `durable_sessions.renew_streams_interval`   | 定义会话多久查询存储以获取新流。                             |
 | `durable_sessions.session_gc_interval`      | 指定清除会话并删除过期会话的间隔。                           |
 | `durable_sessions.message_retention_period` | 定义会话持久化中 MQTT 消息的保留期。注意：此参数是全局的。   |

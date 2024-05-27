@@ -1,6 +1,6 @@
 # MQTT Durable Sessions
 
-EMQX includes a built-in durable sessions feature, which allows MQTT sessions and messages to be persistently stored on disk, providing high availability replicas to ensure data redundancy and consistency. With session persistence, effective failover and recovery mechanisms can be implemented, ensuring service continuity and availability, thereby improving system reliability.
+EMQX includes a durable sessions feature, which allows MQTT sessions and messages to be persistently stored on disk, providing high-availability replicas to ensure data redundancy and consistency. With session durability, effective failover and recovery mechanisms can be implemented, ensuring service continuity and availability, thereby improving system reliability.
 
 This page introduces the concepts, principles, and usage of session persistence in EMQX.
 
@@ -12,83 +12,81 @@ This feature is available starting from EMQX v5.7.0. However, it does not yet su
 
 ## Basic Concepts
 
-Before learning the durable sessions feature in EMQX, it's essential to first understand some basic concepts about MQTT sessions.
+Before learning the durable sessions feature in EMQX, it's essential to understand some basic concepts about EMQX.
 
-### Types of Client Sessions
+### Sessions and Durable Storage
 
-The durable sessions in EMQX only applies to persistent sessions, so it's necessary to first understand the categorization of MQTT client sessions.
+**Session**: A session is a lightweight process within EMQX created for every client connection. Sessions implement behaviors prescribed to the broker by MQTT Standard, including initial connection, subscribing and unsubscribing to topics, and message dispatching.
 
-According to the MQTT standard, client sessions facilitate the management of client connections and states within the MQTT broker. Informally, EMQX separates client sessions into 2 logical categories:
+**Durable Storage**: Durable storage is an internal database within EMQX. Sessions may use it to save their state and MQTT messages sent to the topics. Database engine powering durable storage uses [RocksDB](https://rocksdb.org/) to save the data on disk, and [Raft](https://raft.github.io/) to consistently replicate data across the cluster. It is important not to confuse durable storage with **Durable Sessions**.
 
-- **Persistent Sessions**: Persistent sessions are kept by the broker after the client's connection terminates, and can be resumed if the client reconnects to the broker within the session expiry interval. Messages sent to the topics while the client was offline are delivered.
-- **Ephemeral Sessions**: Ephemeral sessions exist only for the duration of the client's connection to EMQX. When a client with an ephemeral session disconnects, all session information, including subscriptions and undelivered messages, is discarded.
+### Session Expiry Interval
 
-The client session is considered persistent in following cases:
+According to the MQTT standard, client sessions facilitate the management of client connections and states within the MQTT broker. **Expiry Interval** is a property of a session that controls how long the broker keeps the session state after the client connection terminates. This property plays a crucial role in the context of this document.
 
-- For the clients using the MQTT 5 protocol, [Session Expiry Interval](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901048) property of `CONNECT` or `DISCONNECT` packet is set to a value greater than zero.
+Sessions configured with an expiry interval of 0 exist only during the client's connection to EMQX. When the client disconnects, all session information, including subscriptions and undelivered messages, is immediately discarded. For sessions with a non-zero expiry interval, the broker keeps them even after the client's connection terminates. They can be resumed if the client reconnects to the broker within the session expiry interval. Messages sent to the topics while the client was offline are delivered.
 
-- For the clients using MQTT 3.* protocol, [Clean Session](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718030) flag is set to 0, and `mqtt.session_expiry_interval` configuration parameter is set to a value greater than 0.
+- Clients using the MQTT 5 protocol can explicitly specify session expiry interval using the [Session Expiry Interval](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901048) property of `CONNECT` or `DISCONNECT` packets.
 
-### Conceptual Differentiation
+- For the clients using MQTT 3.* protocol, EMQX derives the session expiry interval according to the following rule: if the [Clean Session](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718030) flag is `true`, then the session expiry interval is set to 0. Otherwise, the value of `mqtt.session_expiry_interval` configuration parameter is used.
 
-In the context of MQTT usage, the concepts of Persistent Sessions and Durable Sessions may be easily confused, so this section aims to differentiate between the two.
+## Session Implementations in EMQX
 
-- **Persistent Sessions**: A feature in the MQTT protocol where a client can choose to maintain its current session when establishing a connection with the server. Even if the client disconnects and reconnects, its previously subscribed topics, unsent messages, and other states are retained. In essence, it pertains to the persistence of client connection states and message queues.
-- **Durable Sessions**: This is an MQTT protocol-independent feature that refers to whether client sessions are saved to persistent storage (disk), ensuring message delivery reliability.
+EMQX provides 2 different client session implementations, each optimized for specific use cases:
 
-## Session Storage Implementations in EMQX
+- **Regular sessions**: Sessions that keep their state in the memory of a running EMQX node. Their state is lost when the EMQX node restarts.
+- **Durable sessions**: Sessions that back up their state and received messages in the durable storage. They can be resumed after restart of the EMQX node.
 
-EMQX provides 2 different client session storage implementations, each optimized for specific use cases:
+The choice of session implementation depends on the session expiry interval and the `durable_sessions.enable` configuration parameter, which can be set globally or per [zone](../configuration/configuration.md#zone-override). The implementation can be selected based on the following criteria:
 
-- **RAM Storage**: Sessions are stored in the memory of the EMQX node, making them non-persistent.
-- **Durable Storage**: Adds a persistence layer, with sessions stored using local RocksDB and the node's local disk in the current version.
+| `durable_sessions.enable` | Session Expiry Interval = 0 | Session Expiry Interval > 0 |
+| ------------------------- | --------------------------- | --------------------------- |
+| `false`                   | Regular                     | Regular                     |
+| `true`                    | Regular                     | Durable                     |
 
-The choice of implementation depends on the session type (ephemeral or persistent) and the `durable_sessions.enable` configuration parameter, which can be set globally or per [zone](../configuration/configuration.md#zone-override). The implementation can be selected based on the following criteria:
+EMQX uses a unique approach to manage message durability, allowing regular and durable sessions to coexist while minimizing storage costs.
 
-| `durable_sessions.enable` | Ephemeral Session | Persistent Session |
-| ------------------------- | ----------------- | ------------------ |
-| `false`                   | RAM               | RAM                |
-| `true`                    | RAM               | durable            |
+### Comparison of the Session Implementations
 
-EMQX uses a unique approach to manage message durability, allowing RAM and durable sessions to coexist while minimizing storage costs.
+The management strategy for client sessions is a crucial factor in ensuring service stability and reliability. This section provides a comparative analysis of the characteristics of the 2 session implementations. It aims to help developers better understand their respective features and applicable scenarios, enabling more precise deployment decisions.
 
-When a durable session subscribes to a topic filter, EMQX marks the topics matching that filter as "durable." This ensures that, in addition to routing MQTT PUBLISH messages from these topics to RAM sessions, the broker also saves these messages to durable storage.
+#### Regular Sessions
 
-Each durable MQTT message is stored exactly once on each replica, regardless of the number of subscribing durable sessions or their connection status. This efficient fan-out minimizes disk writes.
+This session implementation is the default and has been used in all EMQX releases before version 5.7. State of regular sessions is maintained entirely in RAM of the running EMQX node.
 
-### Comparison of RAM Storage and Durable Storage
-
-The management strategy for client sessions is a crucial factor in ensuring service stability and reliability. This section provides a comparative analysis of the characteristics of RAM storage and durable storage for MQTT sessions in EMQX. It aims to help developers better understand their respective features and applicable scenarios, enabling more precise deployment decisions.
-
-#### RAM Storage
-
-The RAM storage implementation is the default and has been used in all EMQX releases before version 5.7. As the name implies, the state of RAM sessions is maintained entirely in volatile memory.
-
-Advantages of RAM storage include:
+Advantages of regular sessions include:
 
 - Very high throughput and low latency.
 - Immediate message dispatch to clients.
 
 However, there are some drawbacks:
 
-- Session data is lost when the EMQX node hosting the session stops or restarts, due to the volatility of RAM.
-- Undelivered messages are stored in a memory queue, with a limit to prevent memory exhaustion. New messages are discarded when this limit is reached, leading to potential message loss.
+- Session data is lost when the EMQX node hosting the session stops or restarts.
+- Undelivered messages are stored in the session's memory queue, increasing memory footprint of the broker.
+- EMQX imposes a limit on the size of the memory queue to prevent memory exhaustion. New messages are discarded when this limit is reached, leading to potential loss of undelivered messages.
 
-#### Durable Storage
+#### Durable Sessions
 
 Introduced in EMQX v5.7.0, the durable session implementation stores session state and messages routed to the durable sessions on disk. This feature is disabled by default and can be enabled by setting the `durable_sessions.enable` configuration parameter to `true`.
 
-Durable sessions provide robust durability and high availability by consistently replicating session metadata and MQTT messages across multiple nodes within an EMQX cluster. The configurable [replication factor](./managing-replication.md#replication-factor) determines the number of replicas for each message or session, enabling users to customize the balance between durability and performance to meet their specific requirements.
+When a durable session subscribes to a topic filter, EMQX marks the topics matching that filter as "durable." This ensures that, in addition to routing MQTT PUBLISH messages from these topics to regular sessions, the broker also saves these messages to durable storage called `messages`. 
 
-Advantages of durable storage include:
+It is important to note that message dispatch protocol depends on the durability of the subscriber's session rather than the publisher's.
+
+Each durable MQTT message is stored exactly once on each replica, regardless of the number of subscribing durable sessions or their connection status. This ensures efficient message fan-out and minimizes disk writes.
+
+Durable storage provides robust durability and high availability by consistently replicating session metadata and MQTT messages across multiple nodes within an EMQX cluster. The configurable [replication factor](./managing-replication.md#replication-factor) determines the number of replicas for each message or session, enabling users to customize the balance between durability and performance to meet their specific requirements.
+
+Advantages of durable sessions include:
 
 - Sessions can be resumed after EMQX nodes are restarted or stopped.
 - MQTT messages are stored in a shared, replicated, durable storage instead of a memory queue, reducing RAM usage for both online and offline sessions.
+- There is no upper limit on the number of undelivered messages, and undelivered messages are never discarded due to memory queue overrun.
 
 However, there are some disadvantages:
 
 - Storing messages on disk results in lower overall system throughput.
-- Durable sessions have higher latency compared to RAM sessions because both writing and reading MQTT messages are performed in batches. While batching improves throughput, it also increases end-to-end latency (the delay before clients see the published messages).
+- Durable sessions have higher latency compared to regular sessions because both writing and reading MQTT messages are performed in batches. While batching improves throughput, it also increases end-to-end latency (the delay before clients see the published messages).
 
 ## Quick Start with Durable Sessions
 
@@ -100,9 +98,9 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
 
 :::
 
-1. Enable durable sessions on EMQX.
+1. Enable the durable sessions feature on EMQX.
 
-   By default, EMQX does not enable the durable sessions. You need to modify the `etc/emqx.conf` file and add the following configuration to enable this feature:
+   By default, EMQX does not enable durable sessions. You need to modify the `etc/emqx.conf` file and add the following configuration to enable this feature:
 
    ```bash
    durable_sessions {
@@ -112,7 +110,7 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
 
    Restart EMQX to apply the configuration.
 
-2. Adjust MQTT client connection parameters to enable persistent sessions.
+2. Adjust MQTT client connection parameters to implement durable sessions.
 
    Using [MQTTX CLI](https://mqttx.app/cli) as an example, which defaults to using MQTT 5.0 protocol, add the `--no-clean` option to set `Clean Start = false`, and specify the client ID as `emqx_c`. Connect to EMQX and subscribe to the `t/1` topic:
 
@@ -165,9 +163,9 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
 
    :::
 
-## Durable Sessions Architecture
+## Durable Storage Architecture
 
-EMQX's durable sessions is organized into a hierarchical structure comprising storages, shards, generations, and streams.
+The database engine powering EMQX's builtin durability facilities organizes data into a hierarchical structure comprising storages, shards, generations, and streams.
 
 ![Diagram of EMQX durable storage sharding](./assets/emqx_ds_sharding.png)
 
@@ -193,17 +191,17 @@ Messages in each shard and generation are split into streams. Streams serve as u
 
 Durable sessions fetch messages in batches from the streams, with batch size adjustable via the `durable_sessions.batch_size` parameter.
 
-## Durable Sessions Across Cluster
+## Durable Storages Across Cluster
 
 Each node within an EMQX cluster is assigned a unique *Site ID*, which serves as a stable identifier, independent of the Erlang node name (`emqx@...`). Site IDs are persistent, and they are randomly generated at the first startup of the node. This stability maintains the integrity of the data, especially in scenarios where nodes might undergo name modifications or reconfigurations.
 
-Administrators can manage and monitor durable sessions across the cluster by using the `emqx_ctl ds info` CLI command to view the status of different sites.
+Administrators can manage and monitor durable storage status across the cluster by using the `emqx_ctl ds info` CLI command to view the status of different sites.
 
-## Hardware Requirements for Session Persistence
+## Hardware Requirements for Durable Sessions
 
-When session persistence is enabled, EMQX saves the metadata of persistent sessions and MQTT messages sent to the persistent sessions on disk. Therefore, EMQX must be deployed on a server with sufficiently large storage capacity. To achieve the best throughput, it is recommended to use Solid State Drive (SSD) storage.
+When session durability is enabled, EMQX saves the metadata of durable sessions and MQTT messages sent to the durable sessions on disk. Therefore, EMQX must be deployed on a server with sufficiently large storage capacity. To achieve the best throughput, it is recommended to use Solid State Drive (SSD) storage.
 
-The storage requirements can be estimated according to the following guidelines:
+The disk space requirements can be estimated according to the following guidelines:
 
 - **Message Storage**: The space required for storing messages on each replica is proportional to the rate of incoming messages multiplied by the duration specified by the `durable_sessions.message_retention_period` parameter. This parameter dictates how long messages are retained, influencing the total storage needed.
 - **Session Metadata Storage**: The amount of storage for session metadata is proportional to the number of sessions multiplied by the number of streams to which they are subscribed.
