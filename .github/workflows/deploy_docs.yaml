@@ -136,6 +136,13 @@ jobs:
 
     - name: setup hocon
       run: |
+        version_number=$(echo "${VERSION}" | tr -d v | awk -F. '{ printf("%d%02d%02d", $1,$2,$3) }')
+        if [ $version_number -lt 50300 ];
+        then
+          echo "Skip set hocon"
+          exit 0
+        fi
+
         echo "HOCON=true" >> $GITHUB_ENV
         if [[ $DOCS_TYPE == "emqx" ]];
         then
@@ -165,7 +172,7 @@ jobs:
         pnpm build
 
     - name: build ce redoc
-      if: matrix.docs_type == 'emqx'
+      if: matrix.docs_type == 'emqx' && !contains(fromJSON('["v1.", "v2.", "v3.", "v4."]'), matrix.version)
       run: |
         cd frontend
         yarn global add redoc-cli
@@ -182,7 +189,7 @@ jobs:
         done
 
     - name: build ee redoc
-      if: matrix.docs_type == 'enterprise'
+      if: matrix.docs_type == 'enterprise' && !contains(fromJSON('["v1.", "v2.", "v3.", "v4."]'), matrix.version)
       run: |
         cd frontend
         yarn global add redoc-cli
