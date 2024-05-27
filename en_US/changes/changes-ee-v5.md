@@ -40,10 +40,6 @@
 - [#12934](https://github.com/emqx/emqx/pull/12934) Added CSV format file aggregation for s3 action.
 
 
-#### Observability
-
-- [#12863](https://github.com/emqx/emqx/pull/12863) You can now format trace log entries as JSON objects by setting the formatter parameter to "json" when creating the trace pattern.
-
 #### Extensibility
 
 - [#12872](https://github.com/emqx/emqx/pull/12872) Implemented Client Attributes feature. It allows setting additional properties for each client using key-value pairs. Property values can be generated from MQTT client connection information (such as username, client ID, TLS certificate) or set from data accompanying successful authentication returns. Properties can be used in EMQX for authentication, authorization, data integration, and MQTT extension functions. Compared to using static properties like client ID directly, client properties offer greater flexibility in various business scenarios, simplifying the development process and enhancing adaptability and efficiency in development work.
@@ -86,6 +82,10 @@
 <!-- This is not ready to GA in 5.7
 - [#12798](https://github.com/emqx/emqx/pull/12798) Added new `GET /api/v5/clients_v2` API that uses cursors instead of page numbers for pagination.  This should be more efficient than the old API endpoint, which currently traverses tables multiple times.
 -->
+
+- [#12827](https://github.com/emqx/emqx/pull/12827) It is now possible to trace rules with a new Rule ID trace filter as well as with the Client ID filter. For testing purposes, it is now also possible to use a new HTTP API endpoint (rules/:id/test) to artificially apply a rule and optionally stop its actions after they have been rendered.
+
+- [#12863](https://github.com/emqx/emqx/pull/12863) You can now format trace log entries as JSON objects by setting the formatter parameter to "json" when creating the trace pattern.
 
 - [#12923](https://github.com/emqx/emqx/pull/12923) Provided more specific error when importing wrong format into builtin authenticate database.
 
