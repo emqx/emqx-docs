@@ -1,9 +1,5 @@
 name: Deploy Docs
 
-concurrency: 
-  group: ${{ github.ref }}
-  cancel-in-progress: true
-
 on:
   push:
     tags:
@@ -204,7 +200,6 @@ jobs:
 
     - name: set aws credentials
       uses: aws-actions/configure-aws-credentials@v4
-      if: matrix.docs_type == 'enterprise'
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -218,7 +213,6 @@ jobs:
         aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DOCS_CLOUDFRONT_ID }} --paths "/zh/${DOCS_TYPE}/${VERSION}/*" "/en/${DOCS_TYPE}/${VERSION}/*" "/api/${DOCS_TYPE}_versions.json" "/sitemap_${DOCS_TYPE}_${VERSION}.xml"
 
     - name: upload files to tencent cos
-      if: matrix.docs_type == 'enterprise'
       run: |
         pip3 install coscmd
         coscmd config -a ${{ secrets.TENCENT_COS_ID }} -s ${{ secrets.TENCENT_COS_KEY }} -b docs-1302406139 -r ap-shanghai
