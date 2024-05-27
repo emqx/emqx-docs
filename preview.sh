@@ -34,9 +34,9 @@ if [ "$PRODUCT" = "ce" ]; then
         -v "$THIS_DIR"/en_US:/app/docs/en/latest \
         -v "$THIS_DIR"/zh_CN:/app/docs/zh/latest \
         -v "$THIS_DIR"/swagger:/app/docs/.vitepress/public/api \
-        -e DOCS_TYPE=broker \
+        -e DOCS_TYPE=emqx \
         -e VERSION=latest \
-    ghcr.io/emqx/emqx-io-docs-next:latest
+    ghcr.io/emqx/docs-emqx-com-next:latest
 else
     python3 "$THIS_DIR/gen.py" ee > directory_ee.json
     docker run -p ${HOST_PORT}:8080 -it --name "$CONTAINER_NAME" \
