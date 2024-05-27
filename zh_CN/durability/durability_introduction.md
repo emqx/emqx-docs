@@ -107,7 +107,7 @@ durable_sessions {
 
 重启 EMQX 以应用配置。
 
-### 2. 调整 MQTT 客户端连接参数以采用持久会话
+### 2. 调整 MQTT 客户端连接参数以启用持久会话
 
 以 [MQTTX CLI](https://mqttx.app/zh/cli) 为例，它默认使用了 MQTT 5.0 协议，添加 `--no-clean` 选项以设置 `Clean Start = false`，同时指定客户端 ID 为 `emqx_c`，连接到 EMQX 并订阅 `t/1` 主题：
 
