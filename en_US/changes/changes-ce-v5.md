@@ -7,27 +7,33 @@
 ### Enhancements
 
 #### MQTT
-- Implemented Durable Sessions, which persists MQTT Persistent Sessions and their messages to disk, and continuously replicates session metadata and MQTT messages among multiple nodes in the EMQX cluster. This achieves effective failover and recovery mechanisms, ensuring service continuity and high availability, thereby enhancing system reliability.
-  Added metrics related to EMQX durable storage to Prometheus:
+Implemented Durable Sessions, which persists MQTT Persistent Sessions and their messages to disk, and continuously replicates session metadata and MQTT messages among multiple nodes in the EMQX cluster. This achieves effective failover and recovery mechanisms, ensuring service continuity and high availability, thereby enhancing system reliability.
+Added metrics related to EMQX durable storage to Prometheus:
 
-  - `emqx_ds_egress_batches`
-  - `emqx_ds_egress_batches_retry`
-  - `emqx_ds_egress_batches_failed`
-  - `emqx_ds_egress_messages`
-  - `emqx_ds_egress_bytes`
-  - `emqx_ds_egress_flush_time`
-  - `emqx_ds_store_batch_time`
-  - `emqx_ds_builtin_next_time`
-  - `emqx_ds_storage_bitfield_lts_counter_seek`
-  - `emqx_ds_storage_bitfield_lts_counter_next`
-  - `emqx_ds_storage_bitfield_lts_counter_collision`
+- `emqx_ds_egress_batches`
+- `emqx_ds_egress_batches_retry`
+- `emqx_ds_egress_batches_failed`
+- `emqx_ds_egress_messages`
+- `emqx_ds_egress_bytes`
+- `emqx_ds_egress_flush_time`
+- `emqx_ds_store_batch_time`
+- `emqx_ds_builtin_next_time`
+- `emqx_ds_storage_bitfield_lts_counter_seek`
+- `emqx_ds_storage_bitfield_lts_counter_next`
+- `emqx_ds_storage_bitfield_lts_counter_collision`
 
-  Note: these metrics are only visible when session persistence is enabled.
-  The number of persisted messages has also been added to the Dashboard.
+Note: these metrics are only visible when session persistence is enabled.
+The number of persisted messages has also been added to the Dashboard.
+
+#### Security
+
+[#12947](https://github.com/emqx/emqx/pull/12947) For JWT authentication, support new `disconnect_after_expire` option. When enabled, the client will be disconnected after the JWT token expires.
+
+Note: This is a breaking change. This option is enabled by default, so the default behavior is changed. Previously, the clients with actual JWTs could connect to the broker and stay connected even after the JWT token expired. Now, the client will be disconnected after the JWT token expires. To preserve the previous behavior, set `disconnect_after_expire` to `false`.
 
 #### Data Processing and Integration
 
-- [#12671](https://github.com/emqx/emqx/pull/12671) An `unescape` function has been added to the rule engine SQL language to handle the expansion of escape sequences in strings. This addition has been done because string literals in the SQL language don't support any escape codes (e.g., `\n` and `\t`). This enhancement allows for more flexible string manipulation within SQL expressions.
+[#12671](https://github.com/emqx/emqx/pull/12671) An `unescape` function has been added to the rule engine SQL language to handle the expansion of escape sequences in strings. This addition has been done because string literals in the SQL language don't support any escape codes (e.g., `\n` and `\t`). This enhancement allows for more flexible string manipulation within SQL expressions.
 
 #### Extensibility
 
@@ -81,9 +87,9 @@
 
 #### MQTT
 
-- [#12996](https://github.com/emqx/emqx/pull/12996) Fixed process leak in `emqx_retainer` application. Previously, client disconnection while receiving retained messages could cause a process leak.
+[#12996](https://github.com/emqx/emqx/pull/12996) Fixed process leak in `emqx_retainer` application. Previously, client disconnection while receiving retained messages could cause a process leak.
 
-#### Data processing and Integration
+#### Data Processing and Integration
 
 - [#12653](https://github.com/emqx/emqx/pull/12653) The rule engine function `bin2hexstr` now supports bitstring inputs with a bit size that is not divisible by 8. Such bitstrings can be returned by the rule engine function `subbits`.
 
@@ -94,7 +100,7 @@
   [21 + 21, abs(-abs(-2)), [1 + 1], 4] as my_array
   from "t/#"
   ```
-<!-- This is a fix for not new feature in this release
+  <!-- This is a fix for not new feature in this release
 - [#12707](https://github.com/emqx/emqx/pull/12707) Keep IP and port of the durable client sessions in the database.
 -->
 
@@ -106,7 +112,7 @@
 
 #### Observability
 
-- [#12765](https://github.com/emqx/emqx/pull/12765) Make sure stats `subscribers.count` `subscribers.max` contains shared-subscribers. It only contains non-shared subscribers previously.
+[#12765](https://github.com/emqx/emqx/pull/12765) Make sure stats `subscribers.count` `subscribers.max` contains shared-subscribers. It only contains non-shared subscribers previously.
 
 #### Operations and Management
 
@@ -118,7 +124,7 @@
   - Persistent sessions save inflight packet IDs for the received QoS2 messages.
   - Ensuring consistent behavior between persistent and non-persistent sessions regarding overlapping subscriptions.
   - List persistent subscriptions in the REST API.
--->
+  -->
 
 - [#12993](https://github.com/emqx/emqx/pull/12993) Fixed listener config update API when handling an unknown zone.
   Before this fix, when a listener config is updated with an unknown zone, for example `{"zone": "unknown"}`, the change would be accepted, causing all clients to crash whens connected.
