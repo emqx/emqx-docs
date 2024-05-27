@@ -1,6 +1,6 @@
 {
   "info": {
-    "version": "5.6.1",
+    "version": "5.7.0",
     "title": "EMQX API"
   },
   "components": {
@@ -72,6 +72,7 @@
                   "inflight_max",
                   "ip_address",
                   "is_bridge",
+                  "is_expired",
                   "keepalive",
                   "mailbox_len",
                   "mqueue_dropped",
@@ -105,7 +106,16 @@
                   "subscriptions_cnt",
                   "subscriptions_max",
                   "username",
-                  "mountpoint"
+                  "mountpoint",
+                  "durable",
+                  "n_streams",
+                  "seqno_q1_comm",
+                  "seqno_q1_dup",
+                  "seqno_q1_next",
+                  "seqno_q2_comm",
+                  "seqno_q2_dup",
+                  "seqno_q2_rec",
+                  "seqno_q2_next"
                 ]
               }
             },
@@ -173,6 +183,25 @@
           "type": "string"
         },
         "example": "emqx_plugin_template-5.0-rc.1"
+      },
+      "public.cursor": {
+        "in": "query",
+        "name": "cursor",
+        "description": "Opaque value representing the current iteration state.",
+        "schema": {
+          "default": "none",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string",
+              "enum": [
+                "none"
+              ]
+            }
+          ]
+        }
       },
       "public.limit": {
         "in": "query",
@@ -411,7 +440,8 @@
             },
             "type": "object",
             "description": "HTTP 请求头。<br/><br/>允许使用带有变量的模板。",
-            "example": {}
+            "example": {},
+            "is_template": true
           },
           "connect_timeout": {
             "default": "15s",
@@ -653,6 +683,14 @@
               "md5"
             ],
             "description": "使用对端证书中的 CN、DN 字段或整个证书内容来作为客户端 ID。仅适用于 TLS 连接；<br/>目前支持：<br/>- <code>cn</code>: 取证书的 CN 字段<br/>- <code>dn</code>: 取证书的 DN 字段<br/>- <code>crt</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书的内容<br/>- <code>pem</code>: 将 <code>DER</code> 证书内容转换为 <code>PEM</code> 格式作为客户端 ID<br/>- <code>md5</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书内容的 MD5 值"
+          },
+          "client_attrs_init": {
+            "default": [],
+            "type": "array",
+            "description": "Specify how to initialize client attributes.<br/>Each client attribute can be initialized as `client_attrs.{NAME}`,<br/>where `{NAME}` is the name of the attribute specified in the config field `set_as_attr`.<br/>The initialized client attribute will be stored in the `client_attrs` property with the specified name,<br/>and can be used as a placeholder in a template for authentication and authorization.<br/>For example, use `${client_attrs.alias}` to render an HTTP POST body when `set_as_attr = alias`,<br/>or render listener config `moutpoint = devices/${client_attrs.alias}/` to initialize a per-client topic namespace.",
+            "items": {
+              "$ref": "#/components/schemas/emqx.client_attrs_init"
+            }
           },
           "session_expiry_interval": {
             "default": "2h",
@@ -962,6 +1000,166 @@
           "is_superuser": {
             "default": false,
             "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_mgmt_api_stats.per_node_data": {
+        "properties": {
+          "node": {
+            "type": "string",
+            "description": "Node name",
+            "example": "emqx@127.0.0.1"
+          },
+          "durable_subscriptions.count": {
+            "type": "integer",
+            "description": "Number of current subscriptions from durable sessions in the cluster",
+            "minimum": 0,
+            "example": 0
+          },
+          "channels.count": {
+            "type": "integer",
+            "description": "sessions.count",
+            "minimum": 0,
+            "example": 0
+          },
+          "channels.max": {
+            "type": "integer",
+            "description": "session.max",
+            "minimum": 0,
+            "example": 0
+          },
+          "connections.count": {
+            "type": "integer",
+            "description": "Number of current connections",
+            "minimum": 0,
+            "example": 0
+          },
+          "connections.max": {
+            "type": "integer",
+            "description": "Historical maximum number of connections",
+            "minimum": 0,
+            "example": 0
+          },
+          "delayed.count": {
+            "type": "integer",
+            "description": "Number of delayed messages",
+            "minimum": 0,
+            "example": 0
+          },
+          "delayed.max": {
+            "type": "integer",
+            "description": "Historical maximum number of delayed messages",
+            "minimum": 0,
+            "example": 0
+          },
+          "live_connections.count": {
+            "type": "integer",
+            "description": "Number of current live connections",
+            "minimum": 0,
+            "example": 0
+          },
+          "live_connections.max": {
+            "type": "integer",
+            "description": "Historical maximum number of live connections",
+            "minimum": 0,
+            "example": 0
+          },
+          "cluster_sessions.count": {
+            "type": "integer",
+            "description": "Number of sessions in the cluster",
+            "minimum": 0,
+            "example": 0
+          },
+          "cluster_sessions.max": {
+            "type": "integer",
+            "description": "Historical maximum number of sessions in the cluster",
+            "minimum": 0,
+            "example": 0
+          },
+          "retained.count": {
+            "type": "integer",
+            "description": "Number of currently retained messages",
+            "minimum": 0,
+            "example": 0
+          },
+          "retained.max": {
+            "type": "integer",
+            "description": "Historical maximum number of retained messages",
+            "minimum": 0,
+            "example": 0
+          },
+          "sessions.count": {
+            "type": "integer",
+            "description": "Number of current sessions",
+            "minimum": 0,
+            "example": 0
+          },
+          "sessions.max": {
+            "type": "integer",
+            "description": "Historical maximum number of sessions",
+            "minimum": 0,
+            "example": 0
+          },
+          "suboptions.count": {
+            "type": "integer",
+            "description": "subscriptions.count",
+            "minimum": 0,
+            "example": 0
+          },
+          "suboptions.max": {
+            "type": "integer",
+            "description": "subscriptions.max",
+            "minimum": 0,
+            "example": 0
+          },
+          "subscribers.count": {
+            "type": "integer",
+            "description": "Number of current subscribers",
+            "minimum": 0,
+            "example": 0
+          },
+          "subscribers.max": {
+            "type": "integer",
+            "description": "Historical maximum number of subscribers",
+            "minimum": 0,
+            "example": 0
+          },
+          "subscriptions.count": {
+            "type": "integer",
+            "description": "Number of current subscriptions, including shared subscriptions, but not subscriptions from durable sessions",
+            "minimum": 0,
+            "example": 0
+          },
+          "subscriptions.max": {
+            "type": "integer",
+            "description": "Historical maximum number of subscriptions",
+            "minimum": 0,
+            "example": 0
+          },
+          "subscriptions.shared.count": {
+            "type": "integer",
+            "description": "Number of current shared subscriptions",
+            "minimum": 0,
+            "example": 0
+          },
+          "subscriptions.shared.max": {
+            "type": "integer",
+            "description": "Historical maximum number of shared subscriptions",
+            "minimum": 0,
+            "example": 0
+          },
+          "topics.count": {
+            "type": "integer",
+            "description": "Number of current topics",
+            "minimum": 0,
+            "example": 0
+          },
+          "topics.max": {
+            "type": "integer",
+            "description": "Historical maximum number of topics",
+            "minimum": 0,
+            "example": 0
           }
         },
         "type": "object"
@@ -1641,7 +1839,8 @@
             },
             "type": "object",
             "description": "HTTP 请求头。<br/><br/>允许使用带有变量的模板。",
-            "example": {}
+            "example": {},
+            "is_template": true
           },
           "body": {
             "type": "string",
@@ -1979,6 +2178,11 @@
             "type": "string",
             "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端 B（与客户端 A 连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username"
           },
+          "zone": {
+            "default": "default",
+            "type": "string",
+            "description": "监听器所属的配置组。"
+          },
           "enable_authn": {
             "default": true,
             "type": "string",
@@ -2047,7 +2251,11 @@
             "type": "array",
             "description": "警报激活时触发的动作。<br/>目前，支持以下操作：<code>log</code> 和 <code>publish</code>.<br/><code>log</code> 将告警写入日志 (控制台或者文件).<br/><code>publish</code> 将告警作为 MQTT 消息发布到系统主题:<br/><code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and<br/><code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate</code>",
             "items": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "log",
+                "publish"
+              ]
             },
             "example": [
               "log",
@@ -2194,7 +2402,8 @@
             },
             "type": "object",
             "description": "HTTP 请求头。<br/><br/>允许使用带有变量的模板。",
-            "example": {}
+            "example": {},
+            "is_template": true
           },
           "connect_timeout": {
             "default": "15s",
@@ -2245,155 +2454,6 @@
             "default": {},
             "description": "资源相关的选项。",
             "$ref": "#/components/schemas/bridge_http.connector_resource_opts"
-          }
-        },
-        "type": "object"
-      },
-      "emqx_mgmt_api_stats.node_stats_data": {
-        "properties": {
-          "channels.count": {
-            "type": "integer",
-            "description": "sessions.count",
-            "minimum": 0,
-            "example": 0
-          },
-          "channels.max": {
-            "type": "integer",
-            "description": "session.max",
-            "minimum": 0,
-            "example": 0
-          },
-          "connections.count": {
-            "type": "integer",
-            "description": "Number of current connections",
-            "minimum": 0,
-            "example": 0
-          },
-          "connections.max": {
-            "type": "integer",
-            "description": "Historical maximum number of connections",
-            "minimum": 0,
-            "example": 0
-          },
-          "delayed.count": {
-            "type": "integer",
-            "description": "Number of delayed messages",
-            "minimum": 0,
-            "example": 0
-          },
-          "delayed.max": {
-            "type": "integer",
-            "description": "Historical maximum number of delayed messages",
-            "minimum": 0,
-            "example": 0
-          },
-          "live_connections.count": {
-            "type": "integer",
-            "description": "Number of current live connections",
-            "minimum": 0,
-            "example": 0
-          },
-          "live_connections.max": {
-            "type": "integer",
-            "description": "Historical maximum number of live connections",
-            "minimum": 0,
-            "example": 0
-          },
-          "cluster_sessions.count": {
-            "type": "integer",
-            "description": "Number of sessions in the cluster",
-            "minimum": 0,
-            "example": 0
-          },
-          "cluster_sessions.max": {
-            "type": "integer",
-            "description": "Historical maximum number of sessions in the cluster",
-            "minimum": 0,
-            "example": 0
-          },
-          "retained.count": {
-            "type": "integer",
-            "description": "Number of currently retained messages",
-            "minimum": 0,
-            "example": 0
-          },
-          "retained.max": {
-            "type": "integer",
-            "description": "Historical maximum number of retained messages",
-            "minimum": 0,
-            "example": 0
-          },
-          "sessions.count": {
-            "type": "integer",
-            "description": "Number of current sessions",
-            "minimum": 0,
-            "example": 0
-          },
-          "sessions.max": {
-            "type": "integer",
-            "description": "Historical maximum number of sessions",
-            "minimum": 0,
-            "example": 0
-          },
-          "suboptions.count": {
-            "type": "integer",
-            "description": "subscriptions.count",
-            "minimum": 0,
-            "example": 0
-          },
-          "suboptions.max": {
-            "type": "integer",
-            "description": "subscriptions.max",
-            "minimum": 0,
-            "example": 0
-          },
-          "subscribers.count": {
-            "type": "integer",
-            "description": "Number of current subscribers",
-            "minimum": 0,
-            "example": 0
-          },
-          "subscribers.max": {
-            "type": "integer",
-            "description": "Historical maximum number of subscribers",
-            "minimum": 0,
-            "example": 0
-          },
-          "subscriptions.count": {
-            "type": "integer",
-            "description": "Number of current subscriptions, including shared subscriptions",
-            "minimum": 0,
-            "example": 0
-          },
-          "subscriptions.max": {
-            "type": "integer",
-            "description": "Historical maximum number of subscriptions",
-            "minimum": 0,
-            "example": 0
-          },
-          "subscriptions.shared.count": {
-            "type": "integer",
-            "description": "Number of current shared subscriptions",
-            "minimum": 0,
-            "example": 0
-          },
-          "subscriptions.shared.max": {
-            "type": "integer",
-            "description": "Historical maximum number of shared subscriptions",
-            "minimum": 0,
-            "example": 0
-          },
-          "topics.count": {
-            "type": "integer",
-            "description": "Number of current topics",
-            "minimum": 0,
-            "example": 0
-          },
-          "topics.max": {
-            "type": "integer",
-            "description": "Historical maximum number of topics",
-            "minimum": 0,
-            "example": 0
           }
         },
         "type": "object"
@@ -2781,6 +2841,11 @@
             "default": "",
             "type": "string",
             "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端 B（与客户端 A 连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username"
+          },
+          "zone": {
+            "default": "default",
+            "type": "string",
+            "description": "监听器所属的配置组。"
           },
           "enable_authn": {
             "default": true,
@@ -4072,6 +4137,11 @@
             "description": "需要验证的自定义声明列表，是一个由名称/值对组成的列表。指定一个键(Key)来查找 JWT 中对应的声明(Claim)，并提供一个预期值(Expected Value)来与声明的实际值进行比较，以确保只有满足特定条件的 JWT 才能被接受和使用。<br/>例如要求 JWT 中的特定声明(如 clientid)的值必须与当前连接的客户端 ID 相匹配。<br/>预期值可以使用以下占位符：<br/>- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名<br/>- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端 ID<br/>身份认证将确认 JWT 中的声明值（从密码字段中获取）与 <code>verify_claims</code> 中要求的内容是否匹配。",
             "example": {}
           },
+          "disconnect_after_expire": {
+            "default": true,
+            "type": "boolean",
+            "description": "Disconnect the client after the token expires."
+          },
           "from": {
             "default": "password",
             "type": "string",
@@ -4189,6 +4259,19 @@
             },
             "description": "启用 SSL 连接。",
             "$ref": "#/components/schemas/emqx.ssl_client_opts"
+          }
+        },
+        "type": "object"
+      },
+      "emqx.client_attrs_init": {
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "A one line expression to evaluate a set of predefined string functions (like in the rule engine SQL statements).<br/>The expression can be a function call with nested calls as its arguments, or direct variable reference.<br/>So far, it does not provide user-defined variable binding (like `var a=1`) or user-defined functions.<br/>As an example, to extract the prefix of client ID delimited by a dot: `nth(1, tokens(clientid, '.'))`.<br/><br/>The variables pre-bound variables are:<br/>- `cn`: Client's TLS certificate common name.<br/>- `dn`: Client's TLS certificate distinguished name (the subject).<br/>- `clientid`: MQTT Client ID.<br/>- `username`: MQTT Client's username.<br/>- `user_property.{NAME}`: User properties in the CONNECT packet.<br/><br/>You can read more about variform expressions in EMQX docs."
+          },
+          "set_as_attr": {
+            "type": "string",
+            "description": "The name of the client attribute extracted from the client data.<br/>The extracted attribute will be stored in the `client_attrs` property with this name."
           }
         },
         "type": "object"
@@ -4833,7 +4916,8 @@
           "headers": {
             "type": "object",
             "description": "HTTP 请求头列表。",
-            "example": {}
+            "example": {},
+            "is_template": true
           },
           "max_retries": {
             "type": "integer",
@@ -6127,6 +6211,11 @@
             "type": "string",
             "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端 B（与客户端 A 连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username"
           },
+          "zone": {
+            "default": "default",
+            "type": "string",
+            "description": "监听器所属的配置组。"
+          },
           "enable_authn": {
             "default": true,
             "type": "string",
@@ -6255,6 +6344,11 @@
             "default": "",
             "type": "string",
             "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端 B（与客户端 A 连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username"
+          },
+          "zone": {
+            "default": "default",
+            "type": "string",
+            "description": "监听器所属的配置组。"
           },
           "enable_authn": {
             "default": true,
@@ -6614,6 +6708,11 @@
             "type": "string",
             "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端 B（与客户端 A 连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username"
           },
+          "zone": {
+            "default": "default",
+            "type": "string",
+            "description": "监听器所属的配置组。"
+          },
           "enable_authn": {
             "default": true,
             "type": "string",
@@ -6726,6 +6825,23 @@
             "default": true,
             "type": "boolean",
             "description": "设为 <code>true</code> 或 <code>false</code> 以禁用此认证数据源。"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_mgmt_api_ds.db_shard": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Shard ID",
+            "example": "1"
+          },
+          "replicas": {
+            "type": "array",
+            "description": "List of sites containing replicas of the storage",
+            "items": {
+              "$ref": "#/components/schemas/emqx_mgmt_api_ds.db_site"
+            }
           }
         },
         "type": "object"
@@ -6870,6 +6986,11 @@
             "default": "",
             "type": "string",
             "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端 B（与客户端 A 连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username"
+          },
+          "zone": {
+            "default": "default",
+            "type": "string",
+            "description": "监听器所属的配置组。"
           },
           "enable_authn": {
             "default": true,
@@ -7037,6 +7158,11 @@
             "type": "object",
             "description": "需要验证的自定义声明列表，是一个由名称/值对组成的列表。指定一个键(Key)来查找 JWT 中对应的声明(Claim)，并提供一个预期值(Expected Value)来与声明的实际值进行比较，以确保只有满足特定条件的 JWT 才能被接受和使用。<br/>例如要求 JWT 中的特定声明(如 clientid)的值必须与当前连接的客户端 ID 相匹配。<br/>预期值可以使用以下占位符：<br/>- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名<br/>- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端 ID<br/>身份认证将确认 JWT 中的声明值（从密码字段中获取）与 <code>verify_claims</code> 中要求的内容是否匹配。",
             "example": {}
+          },
+          "disconnect_after_expire": {
+            "default": true,
+            "type": "boolean",
+            "description": "Disconnect the client after the token expires."
           },
           "from": {
             "default": "password",
@@ -7602,6 +7728,11 @@
             "type": "string",
             "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端 B（与客户端 A 连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username"
           },
+          "zone": {
+            "default": "default",
+            "type": "string",
+            "description": "监听器所属的配置组。"
+          },
           "enable_authn": {
             "default": true,
             "type": "string",
@@ -7968,6 +8099,11 @@
             "default": "",
             "type": "string",
             "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端 B（与客户端 A 连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username"
+          },
+          "zone": {
+            "default": "default",
+            "type": "string",
+            "description": "监听器所属的配置组。"
           },
           "enable_authn": {
             "default": true,
@@ -8604,7 +8740,8 @@
             },
             "type": "object",
             "description": "HTTP 请求头。<br/><br/>允许使用带有变量的模板。",
-            "example": {}
+            "example": {},
+            "is_template": true
           },
           "body": {
             "type": "string",
@@ -9717,6 +9854,11 @@
             "type": "string",
             "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端 B（与客户端 A 连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username"
           },
+          "zone": {
+            "default": "default",
+            "type": "string",
+            "description": "监听器所属的配置组。"
+          },
           "enable_authn": {
             "default": true,
             "type": "string",
@@ -9991,7 +10133,8 @@
             },
             "type": "object",
             "description": "HTTP 请求头。<br/><br/>允许使用带有变量的模板。",
-            "example": {}
+            "example": {},
+            "is_template": true
           },
           "connect_timeout": {
             "default": "15s",
@@ -10574,6 +10717,11 @@
             "type": "string",
             "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端 B（与客户端 A 连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username"
           },
+          "zone": {
+            "default": "default",
+            "type": "string",
+            "description": "监听器所属的配置组。"
+          },
           "enable_authn": {
             "default": true,
             "type": "string",
@@ -10828,160 +10976,6 @@
           "result": {
             "type": "string",
             "description": "允许或禁止"
-          }
-        },
-        "type": "object"
-      },
-      "emqx_mgmt_api_stats.aggergate_data": {
-        "properties": {
-          "node": {
-            "type": "string",
-            "description": "Node name",
-            "example": "emqx@127.0.0.1"
-          },
-          "channels.count": {
-            "type": "integer",
-            "description": "sessions.count",
-            "minimum": 0,
-            "example": 0
-          },
-          "channels.max": {
-            "type": "integer",
-            "description": "session.max",
-            "minimum": 0,
-            "example": 0
-          },
-          "connections.count": {
-            "type": "integer",
-            "description": "Number of current connections",
-            "minimum": 0,
-            "example": 0
-          },
-          "connections.max": {
-            "type": "integer",
-            "description": "Historical maximum number of connections",
-            "minimum": 0,
-            "example": 0
-          },
-          "delayed.count": {
-            "type": "integer",
-            "description": "Number of delayed messages",
-            "minimum": 0,
-            "example": 0
-          },
-          "delayed.max": {
-            "type": "integer",
-            "description": "Historical maximum number of delayed messages",
-            "minimum": 0,
-            "example": 0
-          },
-          "live_connections.count": {
-            "type": "integer",
-            "description": "Number of current live connections",
-            "minimum": 0,
-            "example": 0
-          },
-          "live_connections.max": {
-            "type": "integer",
-            "description": "Historical maximum number of live connections",
-            "minimum": 0,
-            "example": 0
-          },
-          "cluster_sessions.count": {
-            "type": "integer",
-            "description": "Number of sessions in the cluster",
-            "minimum": 0,
-            "example": 0
-          },
-          "cluster_sessions.max": {
-            "type": "integer",
-            "description": "Historical maximum number of sessions in the cluster",
-            "minimum": 0,
-            "example": 0
-          },
-          "retained.count": {
-            "type": "integer",
-            "description": "Number of currently retained messages",
-            "minimum": 0,
-            "example": 0
-          },
-          "retained.max": {
-            "type": "integer",
-            "description": "Historical maximum number of retained messages",
-            "minimum": 0,
-            "example": 0
-          },
-          "sessions.count": {
-            "type": "integer",
-            "description": "Number of current sessions",
-            "minimum": 0,
-            "example": 0
-          },
-          "sessions.max": {
-            "type": "integer",
-            "description": "Historical maximum number of sessions",
-            "minimum": 0,
-            "example": 0
-          },
-          "suboptions.count": {
-            "type": "integer",
-            "description": "subscriptions.count",
-            "minimum": 0,
-            "example": 0
-          },
-          "suboptions.max": {
-            "type": "integer",
-            "description": "subscriptions.max",
-            "minimum": 0,
-            "example": 0
-          },
-          "subscribers.count": {
-            "type": "integer",
-            "description": "Number of current subscribers",
-            "minimum": 0,
-            "example": 0
-          },
-          "subscribers.max": {
-            "type": "integer",
-            "description": "Historical maximum number of subscribers",
-            "minimum": 0,
-            "example": 0
-          },
-          "subscriptions.count": {
-            "type": "integer",
-            "description": "Number of current subscriptions, including shared subscriptions",
-            "minimum": 0,
-            "example": 0
-          },
-          "subscriptions.max": {
-            "type": "integer",
-            "description": "Historical maximum number of subscriptions",
-            "minimum": 0,
-            "example": 0
-          },
-          "subscriptions.shared.count": {
-            "type": "integer",
-            "description": "Number of current shared subscriptions",
-            "minimum": 0,
-            "example": 0
-          },
-          "subscriptions.shared.max": {
-            "type": "integer",
-            "description": "Historical maximum number of shared subscriptions",
-            "minimum": 0,
-            "example": 0
-          },
-          "topics.count": {
-            "type": "integer",
-            "description": "Number of current topics",
-            "minimum": 0,
-            "example": 0
-          },
-          "topics.max": {
-            "type": "integer",
-            "description": "Historical maximum number of topics",
-            "minimum": 0,
-            "example": 0
           }
         },
         "type": "object"
@@ -11503,9 +11497,29 @@
             "type": "integer",
             "description": "Sent messages per 10 seconds"
           },
+          "persisted_rate": {
+            "type": "integer",
+            "description": "Messages saved to the durable storage per 10 seconds"
+          },
           "received_msg_rate": {
             "type": "integer",
             "description": "Dropped messages per 10 seconds"
+          },
+          "validation_failed_rate": {
+            "type": "integer",
+            "description": "Schema validations failed per 10 seconds"
+          },
+          "validation_succeeded_rate": {
+            "type": "integer",
+            "description": "Schema validations succeeded per 10 seconds"
+          },
+          "disconnected_durable_sessions": {
+            "type": "integer",
+            "description": "Disconnected durable sessions at the time of sampling. Can only represent an approximate state."
+          },
+          "subscriptions_durable": {
+            "type": "integer",
+            "description": "Subscriptions from durable sessions at the time of sampling. Can only represent an approximate state."
           },
           "subscriptions": {
             "type": "integer",
@@ -11717,6 +11731,23 @@
             "default": {},
             "description": "资源相关的选项。",
             "$ref": "#/components/schemas/bridge_mqtt_publisher.source_resource_opts"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_mgmt_api_ds.db": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the durable storage",
+            "example": "messages"
+          },
+          "shards": {
+            "type": "array",
+            "description": "List of storage shards",
+            "items": {
+              "$ref": "#/components/schemas/emqx_mgmt_api_ds.db_shard"
+            }
           }
         },
         "type": "object"
@@ -11998,7 +12029,8 @@
             },
             "type": "object",
             "description": "HTTP 请求头。<br/><br/>允许使用带有变量的模板。",
-            "example": {}
+            "example": {},
+            "is_template": true
           },
           "body": {
             "type": "string",
@@ -12157,6 +12189,14 @@
             "description": "Timestamp",
             "minimum": 0
           },
+          "disconnected_durable_sessions": {
+            "type": "integer",
+            "description": "Disconnected durable sessions at the time of sampling. Can only represent an approximate state."
+          },
+          "subscriptions_durable": {
+            "type": "integer",
+            "description": "Subscriptions from durable sessions at the time of sampling. Can only represent an approximate state."
+          },
           "subscriptions": {
             "type": "integer",
             "description": "Subscriptions at the time of sampling. Can only represent an approximate state."
@@ -12181,9 +12221,21 @@
             "type": "integer",
             "description": "Sent messages last 10 seconds"
           },
+          "validation_succeeded": {
+            "type": "integer",
+            "description": "Schema validations succeeded last 10 seconds"
+          },
+          "validation_failed": {
+            "type": "integer",
+            "description": "Schema validations failed last 10 seconds"
+          },
           "dropped": {
             "type": "integer",
             "description": "Dropped messages last 10 seconds"
+          },
+          "persisted": {
+            "type": "integer",
+            "description": "Messages saved to the durable storage last 10 seconds"
           }
         },
         "type": "object"
@@ -12286,6 +12338,11 @@
             "description": "需要验证的自定义声明列表，是一个由名称/值对组成的列表。指定一个键(Key)来查找 JWT 中对应的声明(Claim)，并提供一个预期值(Expected Value)来与声明的实际值进行比较，以确保只有满足特定条件的 JWT 才能被接受和使用。<br/>例如要求 JWT 中的特定声明(如 clientid)的值必须与当前连接的客户端 ID 相匹配。<br/>预期值可以使用以下占位符：<br/>- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名<br/>- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端 ID<br/>身份认证将确认 JWT 中的声明值（从密码字段中获取）与 <code>verify_claims</code> 中要求的内容是否匹配。",
             "example": {}
           },
+          "disconnect_after_expire": {
+            "default": true,
+            "type": "boolean",
+            "description": "Disconnect the client after the token expires."
+          },
           "from": {
             "default": "password",
             "type": "string",
@@ -12327,6 +12384,9 @@
             "default": {},
             "description": "测试事件的上下文",
             "oneOf": [
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_schema_validation_failed"
+              },
               {
                 "$ref": "#/components/schemas/rule_engine.ctx_delivery_dropped"
               },
@@ -12521,6 +12581,11 @@
             "type": "string",
             "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端 B（与客户端 A 连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username"
           },
+          "zone": {
+            "default": "default",
+            "type": "string",
+            "description": "监听器所属的配置组。"
+          },
           "enable_authn": {
             "default": true,
             "type": "string",
@@ -12604,6 +12669,61 @@
           "ssl_options": {
             "description": "gRPC 客户端的 SSL 配置。",
             "$ref": "#/components/schemas/emqx.ssl_client_opts"
+          }
+        },
+        "type": "object"
+      },
+      "rule_engine.rule_apply_test": {
+        "properties": {
+          "context": {
+            "default": {},
+            "description": "测试事件的上下文",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_schema_validation_failed"
+              },
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_delivery_dropped"
+              },
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_bridge_mqtt"
+              },
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_check_authz_complete"
+              },
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_connack"
+              },
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_disconnected"
+              },
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_connected"
+              },
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_dropped"
+              },
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_acked"
+              },
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_delivered"
+              },
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_unsub"
+              },
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_sub"
+              },
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_pub"
+              }
+            ]
+          },
+          "stop_action_after_template_rendering": {
+            "default": true,
+            "type": "boolean",
+            "description": "Set this to true if the action should be stopped after its template has been rendered (default is true)."
           }
         },
         "type": "object"
@@ -12792,6 +12912,11 @@
             "default": "",
             "type": "string",
             "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端 B（与客户端 A 连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username"
+          },
+          "zone": {
+            "default": "default",
+            "type": "string",
+            "description": "监听器所属的配置组。"
           },
           "enable_authn": {
             "default": true,
@@ -13155,7 +13280,8 @@
             "enum": [
               "clientid",
               "topic",
-              "ip_address"
+              "ip_address",
+              "ruleid"
             ],
             "description": "过滤器类型",
             "example": "clientid"
@@ -13174,6 +13300,10 @@
             "type": "string",
             "description": "如果过滤器类型为 'ip_address' 则该字段可以指定用于匹配的客户端 IP 地址。",
             "example": "127.0.0.1"
+          },
+          "ruleid": {
+            "type": "string",
+            "example": "my_rule"
           },
           "status": {
             "type": "string",
@@ -13238,6 +13368,24 @@
               {
                 "node": "emqx@127.0.0.1",
                 "size": 1024
+              }
+            ]
+          },
+          "formatter": {
+            "description": "The formatter that will be used to format the trace log entries. Set this to text to format the log entries as plain text (default). Set it to json to format each log entry as a JSON object.",
+            "example": "text",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "json"
+                ]
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "text"
+                ]
               }
             ]
           }
@@ -14153,6 +14301,11 @@
             "type": "string",
             "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端 B（与客户端 A 连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username"
           },
+          "zone": {
+            "default": "default",
+            "type": "string",
+            "description": "监听器所属的配置组。"
+          },
           "enable_authn": {
             "default": true,
             "type": "string",
@@ -14391,6 +14544,155 @@
         },
         "type": "object"
       },
+      "emqx_mgmt_api_stats.aggregated_data": {
+        "properties": {
+          "channels.count": {
+            "type": "integer",
+            "description": "sessions.count",
+            "minimum": 0,
+            "example": 0
+          },
+          "channels.max": {
+            "type": "integer",
+            "description": "session.max",
+            "minimum": 0,
+            "example": 0
+          },
+          "connections.count": {
+            "type": "integer",
+            "description": "Number of current connections",
+            "minimum": 0,
+            "example": 0
+          },
+          "connections.max": {
+            "type": "integer",
+            "description": "Historical maximum number of connections",
+            "minimum": 0,
+            "example": 0
+          },
+          "delayed.count": {
+            "type": "integer",
+            "description": "Number of delayed messages",
+            "minimum": 0,
+            "example": 0
+          },
+          "delayed.max": {
+            "type": "integer",
+            "description": "Historical maximum number of delayed messages",
+            "minimum": 0,
+            "example": 0
+          },
+          "live_connections.count": {
+            "type": "integer",
+            "description": "Number of current live connections",
+            "minimum": 0,
+            "example": 0
+          },
+          "live_connections.max": {
+            "type": "integer",
+            "description": "Historical maximum number of live connections",
+            "minimum": 0,
+            "example": 0
+          },
+          "cluster_sessions.count": {
+            "type": "integer",
+            "description": "Number of sessions in the cluster",
+            "minimum": 0,
+            "example": 0
+          },
+          "cluster_sessions.max": {
+            "type": "integer",
+            "description": "Historical maximum number of sessions in the cluster",
+            "minimum": 0,
+            "example": 0
+          },
+          "retained.count": {
+            "type": "integer",
+            "description": "Number of currently retained messages",
+            "minimum": 0,
+            "example": 0
+          },
+          "retained.max": {
+            "type": "integer",
+            "description": "Historical maximum number of retained messages",
+            "minimum": 0,
+            "example": 0
+          },
+          "sessions.count": {
+            "type": "integer",
+            "description": "Number of current sessions",
+            "minimum": 0,
+            "example": 0
+          },
+          "sessions.max": {
+            "type": "integer",
+            "description": "Historical maximum number of sessions",
+            "minimum": 0,
+            "example": 0
+          },
+          "suboptions.count": {
+            "type": "integer",
+            "description": "subscriptions.count",
+            "minimum": 0,
+            "example": 0
+          },
+          "suboptions.max": {
+            "type": "integer",
+            "description": "subscriptions.max",
+            "minimum": 0,
+            "example": 0
+          },
+          "subscribers.count": {
+            "type": "integer",
+            "description": "Number of current subscribers",
+            "minimum": 0,
+            "example": 0
+          },
+          "subscribers.max": {
+            "type": "integer",
+            "description": "Historical maximum number of subscribers",
+            "minimum": 0,
+            "example": 0
+          },
+          "subscriptions.count": {
+            "type": "integer",
+            "description": "Number of current subscriptions, including shared subscriptions, but not subscriptions from durable sessions",
+            "minimum": 0,
+            "example": 0
+          },
+          "subscriptions.max": {
+            "type": "integer",
+            "description": "Historical maximum number of subscriptions",
+            "minimum": 0,
+            "example": 0
+          },
+          "subscriptions.shared.count": {
+            "type": "integer",
+            "description": "Number of current shared subscriptions",
+            "minimum": 0,
+            "example": 0
+          },
+          "subscriptions.shared.max": {
+            "type": "integer",
+            "description": "Historical maximum number of shared subscriptions",
+            "minimum": 0,
+            "example": 0
+          },
+          "topics.count": {
+            "type": "integer",
+            "description": "Number of current topics",
+            "minimum": 0,
+            "example": 0
+          },
+          "topics.max": {
+            "type": "integer",
+            "description": "Historical maximum number of topics",
+            "minimum": 0,
+            "example": 0
+          }
+        },
+        "type": "object"
+      },
       "emqx_dashboard_monitor_api.sampler_current": {
         "properties": {
           "dropped_msg_rate": {
@@ -14401,9 +14703,29 @@
             "type": "integer",
             "description": "Sent messages per 10 seconds"
           },
+          "persisted_rate": {
+            "type": "integer",
+            "description": "Messages saved to the durable storage per 10 seconds"
+          },
           "received_msg_rate": {
             "type": "integer",
             "description": "Dropped messages per 10 seconds"
+          },
+          "validation_failed_rate": {
+            "type": "integer",
+            "description": "Schema validations failed per 10 seconds"
+          },
+          "validation_succeeded_rate": {
+            "type": "integer",
+            "description": "Schema validations succeeded per 10 seconds"
+          },
+          "disconnected_durable_sessions": {
+            "type": "integer",
+            "description": "Disconnected durable sessions at the time of sampling. Can only represent an approximate state."
+          },
+          "subscriptions_durable": {
+            "type": "integer",
+            "description": "Subscriptions from durable sessions at the time of sampling. Can only represent an approximate state."
           },
           "subscriptions": {
             "type": "integer",
@@ -15247,6 +15569,10 @@
             "type": "boolean",
             "description": "Indicates whether the client is connected via bridge"
           },
+          "is_expired": {
+            "type": "boolean",
+            "description": "Indicates whether the client session is expired"
+          },
           "keepalive": {
             "type": "integer",
             "description": "keepalive time, with the unit of second"
@@ -15382,6 +15708,50 @@
           "mountpoint": {
             "type": "string",
             "description": "Topic mountpoint"
+          },
+          "durable": {
+            "type": "boolean",
+            "description": "Session is durable"
+          },
+          "n_streams": {
+            "type": "integer",
+            "description": "Number of streams used by the durable session",
+            "minimum": 0
+          },
+          "seqno_q1_comm": {
+            "type": "integer",
+            "description": "Sequence number of the last PUBACK received from the client (Durable sessions only)",
+            "minimum": 0
+          },
+          "seqno_q1_dup": {
+            "type": "integer",
+            "description": "Sequence number of the last QoS1 message sent to the client, that hasn't been acked (Durable sessions only)",
+            "minimum": 0
+          },
+          "seqno_q1_next": {
+            "type": "integer",
+            "description": "Sequence number of next QoS1 message to be added to the batch (Durable sessions only)",
+            "minimum": 0
+          },
+          "seqno_q2_comm": {
+            "type": "integer",
+            "description": "Sequence number of the last PUBCOMP received from the client (Durable sessions only)",
+            "minimum": 0
+          },
+          "seqno_q2_dup": {
+            "type": "integer",
+            "description": "Sequence number of last unacked QoS2 PUBLISH message sent to the client (Durable sessions only)",
+            "minimum": 0
+          },
+          "seqno_q2_rec": {
+            "type": "integer",
+            "description": "Sequence number of last PUBREC received from the client (Durable sessions only)",
+            "minimum": 0
+          },
+          "seqno_q2_next": {
+            "type": "integer",
+            "description": "Sequence number of next QoS2 message to be added to the batch (Durable sessions only)",
+            "minimum": 0
           }
         },
         "type": "object"
@@ -15577,6 +15947,11 @@
             "type": "integer",
             "description": "Retain Handling",
             "example": 0
+          },
+          "durable": {
+            "type": "boolean",
+            "description": "Durable subscription",
+            "example": false
           }
         },
         "type": "object"
@@ -15819,6 +16194,11 @@
             "default": "",
             "type": "string",
             "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端 B（与客户端 A 连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username"
+          },
+          "zone": {
+            "default": "default",
+            "type": "string",
+            "description": "监听器所属的配置组。"
           },
           "enable_authn": {
             "default": true,
@@ -16858,6 +17238,26 @@
         },
         "type": "object"
       },
+      "emqx_mgmt_api_ds.sites_shard": {
+        "properties": {
+          "storage": {
+            "type": "string",
+            "description": "Durable storage ID",
+            "example": "messages"
+          },
+          "id": {
+            "type": "string",
+            "description": "Shard ID",
+            "example": "1"
+          },
+          "status": {
+            "type": "string",
+            "description": "Shard status",
+            "example": "up"
+          }
+        },
+        "type": "object"
+      },
       "emqx_authz_api_sources.request_sources_order": {
         "required": [
           "type"
@@ -16891,6 +17291,24 @@
           },
           "meta": {
             "$ref": "#/components/schemas/public.meta"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_mgmt_api_ds.db_site": {
+        "properties": {
+          "site": {
+            "type": "string",
+            "description": "Site ID",
+            "example": "AFA18CB1C22F0157"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "up",
+              "joining"
+            ],
+            "description": "Status of the replica"
           }
         },
         "type": "object"
@@ -17227,6 +17645,27 @@
             "type": "integer",
             "description": "指定客户端压缩上下文的大小。",
             "minimum": 8
+          }
+        },
+        "type": "object"
+      },
+      "emqx_mgmt_api_ds.site": {
+        "properties": {
+          "node": {
+            "type": "string",
+            "description": "Name of the EMQX handling the site",
+            "example": "'emqx@example.com'"
+          },
+          "up": {
+            "type": "boolean",
+            "description": "Site is up and running"
+          },
+          "shards": {
+            "type": "array",
+            "description": "Durable storages that have replicas at the site",
+            "items": {
+              "$ref": "#/components/schemas/emqx_mgmt_api_ds.sites_shard"
+            }
           }
         },
         "type": "object"
@@ -17652,6 +18091,49 @@
         },
         "type": "object"
       },
+      "emqx.durable_sessions": {
+        "properties": {
+          "enable": {
+            "default": false,
+            "type": "boolean",
+            "description": "Use durable storage for client sessions persistence.<br/>If enabled, sessions configured to outlive client connections, along with their corresponding messages, will be durably stored and survive broker downtime.<br/><br/>:::warning<br/>This feature is currently experimental. Please don't enable it in the production environments that contain valuable data.<br/>:::"
+          },
+          "batch_size": {
+            "default": 100,
+            "type": "integer",
+            "description": "此值影响持久会话的流量控制。<br/>持久会话以批次查询持久消息存储。<br/>此值指定批次的大小。<br/><br/>注意：较大的批次通常提高系统的吞吐量和整体性能，但会增加每个客户端的 RAM 使用量。",
+            "minimum": 1
+          },
+          "idle_poll_interval": {
+            "default": "100ms",
+            "type": "string",
+            "example": "12m"
+          },
+          "heartbeat_interval": {
+            "default": "5000ms",
+            "type": "string",
+            "example": "12m"
+          },
+          "session_gc_interval": {
+            "default": "10m",
+            "type": "string",
+            "description": "执行持久会话垃圾回收的间隔。",
+            "example": "12m"
+          },
+          "session_gc_batch_size": {
+            "default": 100,
+            "type": "integer",
+            "description": "每次迭代要垃圾回收的过期持久会话的批量大小。",
+            "minimum": 1
+          },
+          "message_retention_period": {
+            "default": "1d",
+            "type": "string",
+            "example": "12m"
+          }
+        },
+        "type": "object"
+      },
       "emqx_authz_schema.metrics_status_fields": {
         "properties": {
           "resource_metrics": {
@@ -17741,6 +18223,56 @@
             "type": "integer",
             "description": "默认值为 0。<br/>MQTT v3.1.1：如果你订阅了自己发布的主题，你将收到所有自己发布的消息。<br/>MQTT v5：如果在订阅时将此选项设置为 1，服务器将不会将你发布的消息转发给你。",
             "minimum": 0
+          }
+        },
+        "type": "object"
+      },
+      "rule_engine.ctx_schema_validation_failed": {
+        "required": [
+          "event_type"
+        ],
+        "properties": {
+          "event_type": {
+            "type": "string",
+            "enum": [
+              "schema_validation_failed"
+            ],
+            "description": "事件类型"
+          },
+          "validation": {
+            "type": "string",
+            "description": "Validation"
+          },
+          "clientid": {
+            "type": "string",
+            "description": "客户端 ID"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户名"
+          },
+          "payload": {
+            "type": "string",
+            "description": "消息负载"
+          },
+          "peerhost": {
+            "type": "string",
+            "description": "对等客户端的 IP 地址"
+          },
+          "topic": {
+            "type": "string",
+            "description": "消息主题"
+          },
+          "publish_received_at": {
+            "type": "integer",
+            "description": "消息被接受的时间"
+          },
+          "qos": {
+            "maximum": 2,
+            "type": "integer",
+            "description": "消息的 QoS",
+            "minimum": 0,
+            "example": 0
           }
         },
         "type": "object"
@@ -18627,6 +19159,7 @@
               "$events/message_delivered",
               "$events/message_acked",
               "$events/message_dropped",
+              "$events/schema_validation_failed",
               "$events/delivery_dropped"
             ],
             "description": "事件主题"
@@ -18747,6 +19280,11 @@
             "default": "",
             "type": "string",
             "description": "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。<br/><br/>将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。<br/><br/>例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/><br/>类似地，如果另一个客户端 B（与客户端 A 连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/><br/><br/>设置为<code>\"\"</code> 以禁用该功能<br/><br/><br/>mountpoint 字符串中的变量：<br/>- <code>${clientid}</code>: clientid<br/>- <code>${username}</code>: username"
+          },
+          "zone": {
+            "default": "default",
+            "type": "string",
+            "description": "监听器所属的配置组。"
           },
           "enable_authn": {
             "default": true,
@@ -19002,7 +19540,8 @@
             },
             "type": "object",
             "description": "HTTP 请求头。<br/><br/>允许使用带有变量的模板。",
-            "example": {}
+            "example": {},
+            "is_template": true
           },
           "body": {
             "type": "string",
@@ -19039,6 +19578,63 @@
     }
   },
   "paths": {
+    "/plugins/{name}/schema": {
+      "get": {
+        "description": "Get plugin's config AVRO schema.",
+        "tags": [
+          "Plugins"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/plugins.name"
+          }
+        ],
+        "summary": "Get installed plugin's AVRO schema",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND",
+                        "FILE_NOT_EXISTED"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Plugin Not Found or Plugin not given a schema file"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/authentication/{id}/position/{position}": {
       "put": {
         "description": "调整全局认证链上指定认证器的顺序。",
@@ -19925,7 +20521,7 @@
     },
     "/plugins/{name}": {
       "get": {
-        "description": "Describs plugin according to its `release.json` and `README.md`.",
+        "description": "Describe a plugin according to its `release.json` and `README.md`.",
         "tags": [
           "Plugins"
         ],
@@ -20216,13 +20812,13 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/emqx_mgmt_api_stats.aggergate_data"
-                      }
+                      "$ref": "#/components/schemas/emqx_mgmt_api_stats.aggregated_data"
                     },
                     {
-                      "$ref": "#/components/schemas/emqx_mgmt_api_stats.node_stats_data"
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/emqx_mgmt_api_stats.per_node_data"
+                      }
                     }
                   ]
                 }
@@ -20508,7 +21104,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/emqx_mgmt_api_stats.node_stats_data"
+                  "$ref": "#/components/schemas/emqx_mgmt_api_stats.aggregated_data"
                 }
               }
             }
@@ -20709,9 +21305,9 @@
                 "name": "default",
                 "ssl": {
                   "enable": false,
-                  "cacertfile": "/etc/emqx/certs/cacert.pem",
                   "certfile": "/etc/emqx/certs/cert.pem",
-                  "keyfile": "/etc/emqx/certs/key.pem"
+                  "keyfile": "/etc/emqx/certs/key.pem",
+                  "cacertfile": "/etc/emqx/certs/cacert.pem"
                 },
                 "pool_size": 8,
                 "enable": true,
@@ -22231,23 +22827,23 @@
                         }
                       }
                     ],
-                    "acceptors": 16,
+                    "max_conn_rate": 1000,
+                    "access_rules": [
+                      "allow all"
+                    ],
+                    "max_connections": 1024000,
                     "dtls_options": {
                       "verify": "verify_none",
                       "versions": [
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "cacertfile": "/etc/emqx/certs/cacert.pem",
-                      "certfile": "/etc/emqx/certs/cert.pem",
-                      "keyfile": "/etc/emqx/certs/key.pem",
-                      "fail_if_no_peer_cert": false
+                      "fail_if_no_peer_cert": false,
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
-                    "max_connections": 1024000,
-                    "access_rules": [
-                      "allow all"
-                    ],
-                    "max_conn_rate": 1000
+                    "acceptors": 16
                   },
                   {
                     "name": "ssl-def",
@@ -22270,10 +22866,10 @@
                         "tlsv1.1",
                         "tlsv1"
                       ],
-                      "cacertfile": "/etc/emqx/certs/cacert.pem",
-                      "certfile": "/etc/emqx/certs/cert.pem",
-                      "keyfile": "/etc/emqx/certs/key.pem",
-                      "fail_if_no_peer_cert": false
+                      "fail_if_no_peer_cert": false,
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
                     "node_status": [
                       {
@@ -22285,12 +22881,12 @@
                         }
                       }
                     ],
-                    "acceptors": 16,
-                    "max_connections": 1024000,
+                    "max_conn_rate": 1000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "max_conn_rate": 1000
+                    "max_connections": 1024000,
+                    "acceptors": 16
                   },
                   {
                     "name": "tcp-def",
@@ -22324,9 +22920,112 @@
                         }
                       }
                     ],
-                    "acceptors": 16,
+                    "max_conn_rate": 1000,
                     "max_connections": 1024000,
-                    "max_conn_rate": 1000
+                    "acceptors": 16
+                  },
+                  {
+                    "name": "ws-def",
+                    "status": {
+                      "running": true,
+                      "max_connections": 1024000,
+                      "current_connections": 10
+                    },
+                    "type": "ws",
+                    "bind": "33043",
+                    "tcp_options": {
+                      "buffer": "10KB",
+                      "high_watermark": "1MB",
+                      "keepalive": "none",
+                      "nodelay": false,
+                      "recbuf": "10KB",
+                      "reuseaddr": true,
+                      "send_timeout": "15s",
+                      "send_timeout_close": true,
+                      "sndbuf": "10KB",
+                      "backlog": 1024,
+                      "active_n": 100
+                    },
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "running": true,
+                          "max_connections": 1024000,
+                          "current_connections": 10
+                        }
+                      }
+                    ],
+                    "websocket": {
+                      "path": "/ocpp",
+                      "compress": false,
+                      "fail_if_no_subprotocol": true,
+                      "supported_subprotocols": "ocpp1.6",
+                      "check_origins": "http://localhost:18083, http://127.0.0.1:18083",
+                      "check_origin_enable": false,
+                      "piggyback": "single"
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "acceptors": 16
+                  },
+                  {
+                    "name": "ws-ssl-def",
+                    "status": {
+                      "running": true,
+                      "max_connections": 1024000,
+                      "current_connections": 10
+                    },
+                    "type": "wss",
+                    "bind": "33053",
+                    "tcp_options": {
+                      "buffer": "10KB",
+                      "high_watermark": "1MB",
+                      "keepalive": "none",
+                      "nodelay": false,
+                      "recbuf": "10KB",
+                      "reuseaddr": true,
+                      "send_timeout": "15s",
+                      "send_timeout_close": true,
+                      "sndbuf": "10KB",
+                      "backlog": 1024,
+                      "active_n": 100
+                    },
+                    "ssl_options": {
+                      "verify": "verify_none",
+                      "versions": [
+                        "tlsv1.3",
+                        "tlsv1.2",
+                        "tlsv1.1",
+                        "tlsv1"
+                      ],
+                      "fail_if_no_peer_cert": false,
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                    },
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "running": true,
+                          "max_connections": 1024000,
+                          "current_connections": 10
+                        }
+                      }
+                    ],
+                    "websocket": {
+                      "path": "/ocpp",
+                      "compress": false,
+                      "fail_if_no_subprotocol": true,
+                      "supported_subprotocols": "ocpp1.6",
+                      "check_origins": "http://localhost:18083, http://127.0.0.1:18083",
+                      "check_origin_enable": false,
+                      "piggyback": "single"
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "acceptors": 16
                   },
                   {
                     "name": "dtls-psk",
@@ -22347,7 +23046,8 @@
                         }
                       }
                     ],
-                    "acceptors": 16,
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
                     "dtls_options": {
                       "verify": "verify_none",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -22355,14 +23055,13 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "cacertfile": "/etc/emqx/certs/cacert.pem",
-                      "certfile": "/etc/emqx/certs/cert.pem",
-                      "keyfile": "/etc/emqx/certs/key.pem",
                       "fail_if_no_peer_cert": false,
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
-                    "max_connections": 1024000,
-                    "max_conn_rate": 1000
+                    "acceptors": 16
                   },
                   {
                     "name": "tcp-with-authn",
@@ -22391,9 +23090,9 @@
                         }
                       }
                     ],
-                    "acceptors": 16,
+                    "max_conn_rate": 1000,
                     "max_connections": 1024000,
-                    "max_conn_rate": 1000
+                    "acceptors": 16
                   }
                 ],
                 "schema": {
@@ -22528,23 +23227,23 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "acceptors": 16,
+                      "max_conn_rate": 1000,
+                      "access_rules": [
+                        "allow all"
+                      ],
+                      "max_connections": 1024000,
                       "dtls_options": {
                         "verify": "verify_none",
                         "versions": [
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "cacertfile": "/etc/emqx/certs/cacert.pem",
-                        "certfile": "/etc/emqx/certs/cert.pem",
-                        "keyfile": "/etc/emqx/certs/key.pem",
-                        "fail_if_no_peer_cert": false
+                        "fail_if_no_peer_cert": false,
+                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
-                      "max_connections": 1024000,
-                      "access_rules": [
-                        "allow all"
-                      ],
-                      "max_conn_rate": 1000
+                      "acceptors": 16
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -22565,17 +23264,17 @@
                           "tlsv1.1",
                           "tlsv1"
                         ],
-                        "cacertfile": "/etc/emqx/certs/cacert.pem",
-                        "certfile": "/etc/emqx/certs/cert.pem",
-                        "keyfile": "/etc/emqx/certs/key.pem",
-                        "fail_if_no_peer_cert": false
+                        "fail_if_no_peer_cert": false,
+                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
-                      "acceptors": 16,
-                      "max_connections": 1024000,
+                      "max_conn_rate": 1000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "max_conn_rate": 1000
+                      "max_connections": 1024000,
+                      "acceptors": 16
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -22597,18 +23296,98 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "acceptors": 16,
+                      "max_conn_rate": 1000,
                       "max_connections": 1024000,
-                      "max_conn_rate": 1000
+                      "acceptors": 16
                     },
                     "summary": "A simple TCP listener example"
+                  },
+                  "ws_listener": {
+                    "value": {
+                      "name": "ws-def",
+                      "type": "ws",
+                      "bind": "33043",
+                      "tcp_options": {
+                        "buffer": "10KB",
+                        "high_watermark": "1MB",
+                        "keepalive": "none",
+                        "nodelay": false,
+                        "recbuf": "10KB",
+                        "reuseaddr": true,
+                        "send_timeout": "15s",
+                        "send_timeout_close": true,
+                        "sndbuf": "10KB",
+                        "backlog": 1024,
+                        "active_n": 100
+                      },
+                      "websocket": {
+                        "path": "/ocpp",
+                        "compress": false,
+                        "fail_if_no_subprotocol": true,
+                        "supported_subprotocols": "ocpp1.6",
+                        "check_origins": "http://localhost:18083, http://127.0.0.1:18083",
+                        "check_origin_enable": false,
+                        "piggyback": "single"
+                      },
+                      "max_conn_rate": 1000,
+                      "max_connections": 1024000,
+                      "acceptors": 16
+                    },
+                    "summary": "A simple WebSocket listener example"
+                  },
+                  "wss_listener": {
+                    "value": {
+                      "name": "ws-ssl-def",
+                      "type": "wss",
+                      "bind": "33053",
+                      "tcp_options": {
+                        "buffer": "10KB",
+                        "high_watermark": "1MB",
+                        "keepalive": "none",
+                        "nodelay": false,
+                        "recbuf": "10KB",
+                        "reuseaddr": true,
+                        "send_timeout": "15s",
+                        "send_timeout_close": true,
+                        "sndbuf": "10KB",
+                        "backlog": 1024,
+                        "active_n": 100
+                      },
+                      "ssl_options": {
+                        "verify": "verify_none",
+                        "versions": [
+                          "tlsv1.3",
+                          "tlsv1.2",
+                          "tlsv1.1",
+                          "tlsv1"
+                        ],
+                        "fail_if_no_peer_cert": false,
+                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                      },
+                      "websocket": {
+                        "path": "/ocpp",
+                        "compress": false,
+                        "fail_if_no_subprotocol": true,
+                        "supported_subprotocols": "ocpp1.6",
+                        "check_origins": "http://localhost:18083, http://127.0.0.1:18083",
+                        "check_origin_enable": false,
+                        "piggyback": "single"
+                      },
+                      "max_conn_rate": 1000,
+                      "max_connections": 1024000,
+                      "acceptors": 16
+                    },
+                    "summary": "A simple WebSocket/TLS listener example"
                   },
                   "dtls_listener_with_psk_ciphers": {
                     "value": {
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
-                      "acceptors": 16,
+                      "max_conn_rate": 1000,
+                      "max_connections": 1024000,
                       "dtls_options": {
                         "verify": "verify_none",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -22616,14 +23395,13 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "cacertfile": "/etc/emqx/certs/cacert.pem",
-                        "certfile": "/etc/emqx/certs/cert.pem",
-                        "keyfile": "/etc/emqx/certs/key.pem",
                         "fail_if_no_peer_cert": false,
+                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
-                      "max_connections": 1024000,
-                      "max_conn_rate": 1000
+                      "acceptors": 16
                     },
                     "summary": "A DTLS listener with PSK example"
                   },
@@ -22640,9 +23418,9 @@
                         },
                         "user_id_type": "username"
                       },
-                      "acceptors": 16,
+                      "max_conn_rate": 1000,
                       "max_connections": 1024000,
-                      "max_conn_rate": 1000
+                      "acceptors": 16
                     },
                     "summary": "A TCP listener with authentication example"
                   }
@@ -22746,23 +23524,23 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
-                    "acceptors": 16,
+                    "max_conn_rate": 1000,
+                    "access_rules": [
+                      "allow all"
+                    ],
+                    "max_connections": 1024000,
                     "dtls_options": {
                       "verify": "verify_none",
                       "versions": [
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "cacertfile": "/etc/emqx/certs/cacert.pem",
-                      "certfile": "/etc/emqx/certs/cert.pem",
-                      "keyfile": "/etc/emqx/certs/key.pem",
-                      "fail_if_no_peer_cert": false
+                      "fail_if_no_peer_cert": false,
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
-                    "max_connections": 1024000,
-                    "access_rules": [
-                      "allow all"
-                    ],
-                    "max_conn_rate": 1000
+                    "acceptors": 16
                   },
                   "summary": "A simple DTLS listener example"
                 },
@@ -22783,17 +23561,17 @@
                         "tlsv1.1",
                         "tlsv1"
                       ],
-                      "cacertfile": "/etc/emqx/certs/cacert.pem",
-                      "certfile": "/etc/emqx/certs/cert.pem",
-                      "keyfile": "/etc/emqx/certs/key.pem",
-                      "fail_if_no_peer_cert": false
+                      "fail_if_no_peer_cert": false,
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
-                    "acceptors": 16,
-                    "max_connections": 1024000,
+                    "max_conn_rate": 1000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "max_conn_rate": 1000
+                    "max_connections": 1024000,
+                    "acceptors": 16
                   },
                   "summary": "A simple SSL listener example"
                 },
@@ -22815,18 +23593,98 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
-                    "acceptors": 16,
+                    "max_conn_rate": 1000,
                     "max_connections": 1024000,
-                    "max_conn_rate": 1000
+                    "acceptors": 16
                   },
                   "summary": "A simple TCP listener example"
+                },
+                "ws_listener": {
+                  "value": {
+                    "name": "ws-def",
+                    "type": "ws",
+                    "bind": "33043",
+                    "tcp_options": {
+                      "buffer": "10KB",
+                      "high_watermark": "1MB",
+                      "keepalive": "none",
+                      "nodelay": false,
+                      "recbuf": "10KB",
+                      "reuseaddr": true,
+                      "send_timeout": "15s",
+                      "send_timeout_close": true,
+                      "sndbuf": "10KB",
+                      "backlog": 1024,
+                      "active_n": 100
+                    },
+                    "websocket": {
+                      "path": "/ocpp",
+                      "compress": false,
+                      "fail_if_no_subprotocol": true,
+                      "supported_subprotocols": "ocpp1.6",
+                      "check_origins": "http://localhost:18083, http://127.0.0.1:18083",
+                      "check_origin_enable": false,
+                      "piggyback": "single"
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "acceptors": 16
+                  },
+                  "summary": "A simple WebSocket listener example"
+                },
+                "wss_listener": {
+                  "value": {
+                    "name": "ws-ssl-def",
+                    "type": "wss",
+                    "bind": "33053",
+                    "tcp_options": {
+                      "buffer": "10KB",
+                      "high_watermark": "1MB",
+                      "keepalive": "none",
+                      "nodelay": false,
+                      "recbuf": "10KB",
+                      "reuseaddr": true,
+                      "send_timeout": "15s",
+                      "send_timeout_close": true,
+                      "sndbuf": "10KB",
+                      "backlog": 1024,
+                      "active_n": 100
+                    },
+                    "ssl_options": {
+                      "verify": "verify_none",
+                      "versions": [
+                        "tlsv1.3",
+                        "tlsv1.2",
+                        "tlsv1.1",
+                        "tlsv1"
+                      ],
+                      "fail_if_no_peer_cert": false,
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                    },
+                    "websocket": {
+                      "path": "/ocpp",
+                      "compress": false,
+                      "fail_if_no_subprotocol": true,
+                      "supported_subprotocols": "ocpp1.6",
+                      "check_origins": "http://localhost:18083, http://127.0.0.1:18083",
+                      "check_origin_enable": false,
+                      "piggyback": "single"
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "acceptors": 16
+                  },
+                  "summary": "A simple WebSocket/TLS listener example"
                 },
                 "dtls_listener_with_psk_ciphers": {
                   "value": {
                     "name": "dtls-psk",
                     "type": "dtls",
                     "bind": "22214",
-                    "acceptors": 16,
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
                     "dtls_options": {
                       "verify": "verify_none",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -22834,14 +23692,13 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "cacertfile": "/etc/emqx/certs/cacert.pem",
-                      "certfile": "/etc/emqx/certs/cert.pem",
-                      "keyfile": "/etc/emqx/certs/key.pem",
                       "fail_if_no_peer_cert": false,
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
-                    "max_connections": 1024000,
-                    "max_conn_rate": 1000
+                    "acceptors": 16
                   },
                   "summary": "A DTLS listener with PSK example"
                 },
@@ -22858,9 +23715,9 @@
                       },
                       "user_id_type": "username"
                     },
-                    "acceptors": 16,
+                    "max_conn_rate": 1000,
                     "max_connections": 1024000,
-                    "max_conn_rate": 1000
+                    "acceptors": 16
                   },
                   "summary": "A TCP listener with authentication example"
                 }
@@ -22886,6 +23743,163 @@
                     "$ref": "#/components/schemas/emqx_gateway_api.tcp_listener"
                   }
                 ]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/plugins/{name}/config": {
+      "get": {
+        "description": "Get plugin config. Config schema is defined by user's schema.avsc file.<br/>",
+        "tags": [
+          "Plugins"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/plugins.name"
+          }
+        ],
+        "summary": "Get plugin config",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "BAD_CONFIG"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Plugin Config Not Found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Plugin Not Found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "description": "Update plugin config. Config schema defined by user's schema.avsc file.<br/>",
+        "tags": [
+          "Plugins"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/plugins.name"
+          }
+        ],
+        "summary": "Update plugin config",
+        "responses": {
+          "204": {
+            "description": "Config updated successfully"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "BAD_CONFIG",
+                        "UNEXPECTED_ERROR"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Update plugin config failed"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Plugin Not Found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
               }
             }
           }
@@ -24650,8 +25664,8 @@
         ],
         "summary": "Trigger action on an installed plugin",
         "responses": {
-          "200": {
-            "description": "OK"
+          "204": {
+            "description": "Trigger action successfully"
           },
           "404": {
             "description": "",
@@ -25160,82 +26174,82 @@
                   "lwm2m_client": {
                     "value": {
                       "recv_oct": 56,
-                      "mqueue_dropped": 0,
-                      "ip_address": "127.0.0.1",
-                      "subscriptions_max": "infinity",
+                      "recv_pkt": 1,
+                      "awaiting_rel_max": "infinity",
+                      "mqueue_len": 0,
+                      "username": "guest",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "send_msg": 0,
+                      "endpoint_name": "urn:imei:154928475237123",
                       "keepalive": 0,
-                      "subscriptions_cnt": 0,
+                      "is_bridge": false,
+                      "mqueue_max": "infinity",
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "proto_ver": "1.0",
-                      "inflight_max": "infinity",
-                      "clean_start": true,
-                      "mailbox_len": 0,
-                      "is_bridge": false,
-                      "inflight_cnt": 0,
-                      "username": "guest",
-                      "expiry_interval": 0,
-                      "send_oct": 61,
-                      "awaiting_rel_max": "infinity",
-                      "awaiting_rel_cnt": 0,
-                      "heap_size": 4185,
+                      "mqueue_dropped": 0,
                       "disconnected_at": null,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "send_msg": 0,
-                      "mqueue_len": 0,
+                      "expiry_interval": 0,
+                      "inflight_cnt": 0,
+                      "send_oct": 61,
+                      "inflight_max": "infinity",
+                      "heap_size": 4185,
+                      "awaiting_rel_cnt": 0,
                       "port": 50675,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "lifetime": 86400,
+                      "subscriptions_max": "infinity",
+                      "subscriptions_cnt": 0,
                       "proto_name": "LwM2M",
-                      "endpoint_name": "urn:imei:154928475237123",
-                      "connected": true,
-                      "mqueue_max": "infinity",
-                      "reductions": 72022,
+                      "clean_start": true,
+                      "proto_ver": "1.0",
+                      "lifetime": 86400,
+                      "ip_address": "127.0.0.1",
                       "send_pkt": 1,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "recv_cnt": 1,
                       "recv_msg": 0,
-                      "recv_pkt": 1
+                      "connected": true,
+                      "reductions": 72022,
+                      "recv_cnt": 1,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "mailbox_len": 0
                     },
                     "summary": "LwM2M client info"
                   },
                   "general_client": {
                     "value": {
                       "recv_oct": 56,
-                      "mqueue_dropped": 0,
-                      "ip_address": "127.0.0.1",
-                      "subscriptions_max": "infinity",
+                      "recv_pkt": 1,
+                      "awaiting_rel_max": "infinity",
+                      "mqueue_len": 0,
+                      "username": "guest",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "send_msg": 0,
                       "keepalive": 0,
-                      "subscriptions_cnt": 0,
+                      "is_bridge": false,
+                      "mqueue_max": "infinity",
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "proto_ver": "1.0",
-                      "inflight_max": "infinity",
-                      "clean_start": true,
-                      "mailbox_len": 0,
-                      "is_bridge": false,
-                      "inflight_cnt": 0,
-                      "username": "guest",
-                      "expiry_interval": 0,
-                      "send_oct": 61,
-                      "awaiting_rel_max": "infinity",
-                      "awaiting_rel_cnt": 0,
-                      "heap_size": 4185,
+                      "mqueue_dropped": 0,
                       "disconnected_at": null,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "send_msg": 0,
-                      "mqueue_len": 0,
+                      "expiry_interval": 0,
+                      "inflight_cnt": 0,
+                      "send_oct": 61,
+                      "inflight_max": "infinity",
+                      "heap_size": 4185,
+                      "awaiting_rel_cnt": 0,
                       "port": 50675,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "subscriptions_max": "infinity",
+                      "subscriptions_cnt": 0,
                       "proto_name": "STOMP",
-                      "connected": true,
-                      "mqueue_max": "infinity",
-                      "reductions": 72022,
+                      "clean_start": true,
+                      "proto_ver": "1.0",
+                      "ip_address": "127.0.0.1",
                       "send_pkt": 1,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "recv_cnt": 1,
                       "recv_msg": 0,
-                      "recv_pkt": 1
+                      "connected": true,
+                      "reductions": 72022,
+                      "recv_cnt": 1,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "mailbox_len": 0
                     },
                     "summary": "General client info"
                   }
@@ -26748,23 +27762,23 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "acceptors": 16,
+                      "max_conn_rate": 1000,
+                      "access_rules": [
+                        "allow all"
+                      ],
+                      "max_connections": 1024000,
                       "dtls_options": {
                         "verify": "verify_none",
                         "versions": [
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "cacertfile": "/etc/emqx/certs/cacert.pem",
-                        "certfile": "/etc/emqx/certs/cert.pem",
-                        "keyfile": "/etc/emqx/certs/key.pem",
-                        "fail_if_no_peer_cert": false
+                        "fail_if_no_peer_cert": false,
+                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
-                      "max_connections": 1024000,
-                      "access_rules": [
-                        "allow all"
-                      ],
-                      "max_conn_rate": 1000
+                      "acceptors": 16
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -26785,17 +27799,17 @@
                           "tlsv1.1",
                           "tlsv1"
                         ],
-                        "cacertfile": "/etc/emqx/certs/cacert.pem",
-                        "certfile": "/etc/emqx/certs/cert.pem",
-                        "keyfile": "/etc/emqx/certs/key.pem",
-                        "fail_if_no_peer_cert": false
+                        "fail_if_no_peer_cert": false,
+                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
-                      "acceptors": 16,
-                      "max_connections": 1024000,
+                      "max_conn_rate": 1000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "max_conn_rate": 1000
+                      "max_connections": 1024000,
+                      "acceptors": 16
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -26817,18 +27831,98 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "acceptors": 16,
+                      "max_conn_rate": 1000,
                       "max_connections": 1024000,
-                      "max_conn_rate": 1000
+                      "acceptors": 16
                     },
                     "summary": "A simple TCP listener example"
+                  },
+                  "ws_listener": {
+                    "value": {
+                      "name": "ws-def",
+                      "type": "ws",
+                      "bind": "33043",
+                      "tcp_options": {
+                        "buffer": "10KB",
+                        "high_watermark": "1MB",
+                        "keepalive": "none",
+                        "nodelay": false,
+                        "recbuf": "10KB",
+                        "reuseaddr": true,
+                        "send_timeout": "15s",
+                        "send_timeout_close": true,
+                        "sndbuf": "10KB",
+                        "backlog": 1024,
+                        "active_n": 100
+                      },
+                      "websocket": {
+                        "path": "/ocpp",
+                        "compress": false,
+                        "fail_if_no_subprotocol": true,
+                        "supported_subprotocols": "ocpp1.6",
+                        "check_origins": "http://localhost:18083, http://127.0.0.1:18083",
+                        "check_origin_enable": false,
+                        "piggyback": "single"
+                      },
+                      "max_conn_rate": 1000,
+                      "max_connections": 1024000,
+                      "acceptors": 16
+                    },
+                    "summary": "A simple WebSocket listener example"
+                  },
+                  "wss_listener": {
+                    "value": {
+                      "name": "ws-ssl-def",
+                      "type": "wss",
+                      "bind": "33053",
+                      "tcp_options": {
+                        "buffer": "10KB",
+                        "high_watermark": "1MB",
+                        "keepalive": "none",
+                        "nodelay": false,
+                        "recbuf": "10KB",
+                        "reuseaddr": true,
+                        "send_timeout": "15s",
+                        "send_timeout_close": true,
+                        "sndbuf": "10KB",
+                        "backlog": 1024,
+                        "active_n": 100
+                      },
+                      "ssl_options": {
+                        "verify": "verify_none",
+                        "versions": [
+                          "tlsv1.3",
+                          "tlsv1.2",
+                          "tlsv1.1",
+                          "tlsv1"
+                        ],
+                        "fail_if_no_peer_cert": false,
+                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                      },
+                      "websocket": {
+                        "path": "/ocpp",
+                        "compress": false,
+                        "fail_if_no_subprotocol": true,
+                        "supported_subprotocols": "ocpp1.6",
+                        "check_origins": "http://localhost:18083, http://127.0.0.1:18083",
+                        "check_origin_enable": false,
+                        "piggyback": "single"
+                      },
+                      "max_conn_rate": 1000,
+                      "max_connections": 1024000,
+                      "acceptors": 16
+                    },
+                    "summary": "A simple WebSocket/TLS listener example"
                   },
                   "dtls_listener_with_psk_ciphers": {
                     "value": {
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
-                      "acceptors": 16,
+                      "max_conn_rate": 1000,
+                      "max_connections": 1024000,
                       "dtls_options": {
                         "verify": "verify_none",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -26836,14 +27930,13 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "cacertfile": "/etc/emqx/certs/cacert.pem",
-                        "certfile": "/etc/emqx/certs/cert.pem",
-                        "keyfile": "/etc/emqx/certs/key.pem",
                         "fail_if_no_peer_cert": false,
+                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
-                      "max_connections": 1024000,
-                      "max_conn_rate": 1000
+                      "acceptors": 16
                     },
                     "summary": "A DTLS listener with PSK example"
                   },
@@ -26860,9 +27953,9 @@
                         },
                         "user_id_type": "username"
                       },
-                      "acceptors": 16,
+                      "max_conn_rate": 1000,
                       "max_connections": 1024000,
-                      "max_conn_rate": 1000
+                      "acceptors": 16
                     },
                     "summary": "A TCP listener with authentication example"
                   }
@@ -27012,23 +28105,23 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "acceptors": 16,
+                      "max_conn_rate": 1000,
+                      "access_rules": [
+                        "allow all"
+                      ],
+                      "max_connections": 1024000,
                       "dtls_options": {
                         "verify": "verify_none",
                         "versions": [
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "cacertfile": "/etc/emqx/certs/cacert.pem",
-                        "certfile": "/etc/emqx/certs/cert.pem",
-                        "keyfile": "/etc/emqx/certs/key.pem",
-                        "fail_if_no_peer_cert": false
+                        "fail_if_no_peer_cert": false,
+                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
-                      "max_connections": 1024000,
-                      "access_rules": [
-                        "allow all"
-                      ],
-                      "max_conn_rate": 1000
+                      "acceptors": 16
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -27049,17 +28142,17 @@
                           "tlsv1.1",
                           "tlsv1"
                         ],
-                        "cacertfile": "/etc/emqx/certs/cacert.pem",
-                        "certfile": "/etc/emqx/certs/cert.pem",
-                        "keyfile": "/etc/emqx/certs/key.pem",
-                        "fail_if_no_peer_cert": false
+                        "fail_if_no_peer_cert": false,
+                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
-                      "acceptors": 16,
-                      "max_connections": 1024000,
+                      "max_conn_rate": 1000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "max_conn_rate": 1000
+                      "max_connections": 1024000,
+                      "acceptors": 16
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -27081,18 +28174,98 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "acceptors": 16,
+                      "max_conn_rate": 1000,
                       "max_connections": 1024000,
-                      "max_conn_rate": 1000
+                      "acceptors": 16
                     },
                     "summary": "A simple TCP listener example"
+                  },
+                  "ws_listener": {
+                    "value": {
+                      "name": "ws-def",
+                      "type": "ws",
+                      "bind": "33043",
+                      "tcp_options": {
+                        "buffer": "10KB",
+                        "high_watermark": "1MB",
+                        "keepalive": "none",
+                        "nodelay": false,
+                        "recbuf": "10KB",
+                        "reuseaddr": true,
+                        "send_timeout": "15s",
+                        "send_timeout_close": true,
+                        "sndbuf": "10KB",
+                        "backlog": 1024,
+                        "active_n": 100
+                      },
+                      "websocket": {
+                        "path": "/ocpp",
+                        "compress": false,
+                        "fail_if_no_subprotocol": true,
+                        "supported_subprotocols": "ocpp1.6",
+                        "check_origins": "http://localhost:18083, http://127.0.0.1:18083",
+                        "check_origin_enable": false,
+                        "piggyback": "single"
+                      },
+                      "max_conn_rate": 1000,
+                      "max_connections": 1024000,
+                      "acceptors": 16
+                    },
+                    "summary": "A simple WebSocket listener example"
+                  },
+                  "wss_listener": {
+                    "value": {
+                      "name": "ws-ssl-def",
+                      "type": "wss",
+                      "bind": "33053",
+                      "tcp_options": {
+                        "buffer": "10KB",
+                        "high_watermark": "1MB",
+                        "keepalive": "none",
+                        "nodelay": false,
+                        "recbuf": "10KB",
+                        "reuseaddr": true,
+                        "send_timeout": "15s",
+                        "send_timeout_close": true,
+                        "sndbuf": "10KB",
+                        "backlog": 1024,
+                        "active_n": 100
+                      },
+                      "ssl_options": {
+                        "verify": "verify_none",
+                        "versions": [
+                          "tlsv1.3",
+                          "tlsv1.2",
+                          "tlsv1.1",
+                          "tlsv1"
+                        ],
+                        "fail_if_no_peer_cert": false,
+                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                      },
+                      "websocket": {
+                        "path": "/ocpp",
+                        "compress": false,
+                        "fail_if_no_subprotocol": true,
+                        "supported_subprotocols": "ocpp1.6",
+                        "check_origins": "http://localhost:18083, http://127.0.0.1:18083",
+                        "check_origin_enable": false,
+                        "piggyback": "single"
+                      },
+                      "max_conn_rate": 1000,
+                      "max_connections": 1024000,
+                      "acceptors": 16
+                    },
+                    "summary": "A simple WebSocket/TLS listener example"
                   },
                   "dtls_listener_with_psk_ciphers": {
                     "value": {
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
-                      "acceptors": 16,
+                      "max_conn_rate": 1000,
+                      "max_connections": 1024000,
                       "dtls_options": {
                         "verify": "verify_none",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -27100,14 +28273,13 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "cacertfile": "/etc/emqx/certs/cacert.pem",
-                        "certfile": "/etc/emqx/certs/cert.pem",
-                        "keyfile": "/etc/emqx/certs/key.pem",
                         "fail_if_no_peer_cert": false,
+                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
-                      "max_connections": 1024000,
-                      "max_conn_rate": 1000
+                      "acceptors": 16
                     },
                     "summary": "A DTLS listener with PSK example"
                   },
@@ -27124,9 +28296,9 @@
                         },
                         "user_id_type": "username"
                       },
-                      "acceptors": 16,
+                      "max_conn_rate": 1000,
                       "max_connections": 1024000,
-                      "max_conn_rate": 1000
+                      "acceptors": 16
                     },
                     "summary": "A TCP listener with authentication example"
                   }
@@ -27230,23 +28402,23 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
-                    "acceptors": 16,
+                    "max_conn_rate": 1000,
+                    "access_rules": [
+                      "allow all"
+                    ],
+                    "max_connections": 1024000,
                     "dtls_options": {
                       "verify": "verify_none",
                       "versions": [
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "cacertfile": "/etc/emqx/certs/cacert.pem",
-                      "certfile": "/etc/emqx/certs/cert.pem",
-                      "keyfile": "/etc/emqx/certs/key.pem",
-                      "fail_if_no_peer_cert": false
+                      "fail_if_no_peer_cert": false,
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
-                    "max_connections": 1024000,
-                    "access_rules": [
-                      "allow all"
-                    ],
-                    "max_conn_rate": 1000
+                    "acceptors": 16
                   },
                   "summary": "A simple DTLS listener example"
                 },
@@ -27267,17 +28439,17 @@
                         "tlsv1.1",
                         "tlsv1"
                       ],
-                      "cacertfile": "/etc/emqx/certs/cacert.pem",
-                      "certfile": "/etc/emqx/certs/cert.pem",
-                      "keyfile": "/etc/emqx/certs/key.pem",
-                      "fail_if_no_peer_cert": false
+                      "fail_if_no_peer_cert": false,
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
-                    "acceptors": 16,
-                    "max_connections": 1024000,
+                    "max_conn_rate": 1000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "max_conn_rate": 1000
+                    "max_connections": 1024000,
+                    "acceptors": 16
                   },
                   "summary": "A simple SSL listener example"
                 },
@@ -27299,18 +28471,98 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
-                    "acceptors": 16,
+                    "max_conn_rate": 1000,
                     "max_connections": 1024000,
-                    "max_conn_rate": 1000
+                    "acceptors": 16
                   },
                   "summary": "A simple TCP listener example"
+                },
+                "ws_listener": {
+                  "value": {
+                    "name": "ws-def",
+                    "type": "ws",
+                    "bind": "33043",
+                    "tcp_options": {
+                      "buffer": "10KB",
+                      "high_watermark": "1MB",
+                      "keepalive": "none",
+                      "nodelay": false,
+                      "recbuf": "10KB",
+                      "reuseaddr": true,
+                      "send_timeout": "15s",
+                      "send_timeout_close": true,
+                      "sndbuf": "10KB",
+                      "backlog": 1024,
+                      "active_n": 100
+                    },
+                    "websocket": {
+                      "path": "/ocpp",
+                      "compress": false,
+                      "fail_if_no_subprotocol": true,
+                      "supported_subprotocols": "ocpp1.6",
+                      "check_origins": "http://localhost:18083, http://127.0.0.1:18083",
+                      "check_origin_enable": false,
+                      "piggyback": "single"
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "acceptors": 16
+                  },
+                  "summary": "A simple WebSocket listener example"
+                },
+                "wss_listener": {
+                  "value": {
+                    "name": "ws-ssl-def",
+                    "type": "wss",
+                    "bind": "33053",
+                    "tcp_options": {
+                      "buffer": "10KB",
+                      "high_watermark": "1MB",
+                      "keepalive": "none",
+                      "nodelay": false,
+                      "recbuf": "10KB",
+                      "reuseaddr": true,
+                      "send_timeout": "15s",
+                      "send_timeout_close": true,
+                      "sndbuf": "10KB",
+                      "backlog": 1024,
+                      "active_n": 100
+                    },
+                    "ssl_options": {
+                      "verify": "verify_none",
+                      "versions": [
+                        "tlsv1.3",
+                        "tlsv1.2",
+                        "tlsv1.1",
+                        "tlsv1"
+                      ],
+                      "fail_if_no_peer_cert": false,
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                    },
+                    "websocket": {
+                      "path": "/ocpp",
+                      "compress": false,
+                      "fail_if_no_subprotocol": true,
+                      "supported_subprotocols": "ocpp1.6",
+                      "check_origins": "http://localhost:18083, http://127.0.0.1:18083",
+                      "check_origin_enable": false,
+                      "piggyback": "single"
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "acceptors": 16
+                  },
+                  "summary": "A simple WebSocket/TLS listener example"
                 },
                 "dtls_listener_with_psk_ciphers": {
                   "value": {
                     "name": "dtls-psk",
                     "type": "dtls",
                     "bind": "22214",
-                    "acceptors": 16,
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
                     "dtls_options": {
                       "verify": "verify_none",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -27318,14 +28570,13 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "cacertfile": "/etc/emqx/certs/cacert.pem",
-                      "certfile": "/etc/emqx/certs/cert.pem",
-                      "keyfile": "/etc/emqx/certs/key.pem",
                       "fail_if_no_peer_cert": false,
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
-                    "max_connections": 1024000,
-                    "max_conn_rate": 1000
+                    "acceptors": 16
                   },
                   "summary": "A DTLS listener with PSK example"
                 },
@@ -27342,9 +28593,9 @@
                       },
                       "user_id_type": "username"
                     },
-                    "acceptors": 16,
+                    "max_conn_rate": 1000,
                     "max_connections": 1024000,
-                    "max_conn_rate": 1000
+                    "acceptors": 16
                   },
                   "summary": "A TCP listener with authentication example"
                 }
@@ -27520,6 +28771,114 @@
                   },
                   "type": "object"
                 }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/rules/{id}/test": {
+      "post": {
+        "description": "Apply a rule with the given message and environment",
+        "tags": [
+          "Rules"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "my_rule_id"
+          }
+        ],
+        "summary": "Apply a rule for testing",
+        "responses": {
+          "200": {
+            "description": "Rule Applied"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "BAD_REQUEST"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Invalid Parameters"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "RULE_NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "The rule could not be found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_MATCH"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "SQL Not Match"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/rule_engine.rule_apply_test"
               }
             }
           }
@@ -27834,8 +29193,8 @@
                         "rate_max": 0.0
                       },
                       "resource_metrics": {
-                        "success": 0,
                         "matched": 0,
+                        "success": 0,
                         "failed": 0,
                         "rate": 0.0,
                         "rate_last5m": 0.0,
@@ -27860,8 +29219,8 @@
                         {
                           "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "success": 0,
                             "matched": 0,
+                            "success": 0,
                             "failed": 0,
                             "rate": 0.0,
                             "rate_last5m": 0.0,
@@ -28102,7 +29461,6 @@
                         "current_connections": 0
                       }
                     ],
-                    "max_connections": 1024000,
                     "listeners": [
                       {
                         "id": "lwm2m:udp:default",
@@ -28111,6 +29469,7 @@
                         "type": "udp"
                       }
                     ],
+                    "max_connections": 1024000,
                     "created_at": "2021-12-08T14:41:26.171+08:00",
                     "current_connections": 0
                   },
@@ -28125,7 +29484,6 @@
                         "current_connections": 0
                       }
                     ],
-                    "max_connections": 1024000,
                     "listeners": [
                       {
                         "id": "mqttsn:udp:default",
@@ -28134,9 +29492,10 @@
                         "type": "udp"
                       }
                     ],
+                    "max_connections": 1024000,
                     "created_at": "2021-12-08T14:41:45.071+08:00",
-                    "stopped_at": "2021-12-08T14:56:35.576+08:00",
-                    "current_connections": 0
+                    "current_connections": 0,
+                    "stopped_at": "2021-12-08T14:56:35.576+08:00"
                   },
                   {
                     "name": "stomp",
@@ -28150,7 +29509,6 @@
                         "current_connections": 0
                       }
                     ],
-                    "max_connections": 1024000,
                     "listeners": [
                       {
                         "id": "stomp:tcp:default",
@@ -28159,6 +29517,7 @@
                         "type": "tcp"
                       }
                     ],
+                    "max_connections": 1024000,
                     "created_at": "2021-12-08T14:42:15.272+08:00",
                     "current_connections": 0
                   }
@@ -28376,11 +29735,11 @@
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
+                      "worker_pool_size": 1,
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
                       "query_mode": "async",
-                      "health_check_interval": 15000,
-                      "worker_pool_size": 1
+                      "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -28399,6 +29758,17 @@
                     "enable": true,
                     "password": "******",
                     "username": "foo",
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
+                      }
+                    },
                     "proto_ver": "v4",
                     "clean_start": true,
                     "retry_interval": "15s",
@@ -28418,17 +29788,6 @@
                       "remote": {
                         "topic": "aws/#",
                         "qos": 1
-                      }
-                    },
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
                       }
                     }
                   },
@@ -29264,6 +30623,9 @@
                     },
                     "force_gc": {
                       "$ref": "#/components/schemas/emqx.force_gc"
+                    },
+                    "durable_sessions": {
+                      "$ref": "#/components/schemas/emqx.durable_sessions"
                     }
                   },
                   "type": "object"
@@ -29305,6 +30667,9 @@
                     },
                     "force_gc": {
                       "$ref": "#/components/schemas/emqx.force_gc"
+                    },
+                    "durable_sessions": {
+                      "$ref": "#/components/schemas/emqx.durable_sessions"
                     }
                   },
                   "type": "object"
@@ -29373,6 +30738,9 @@
                   },
                   "force_gc": {
                     "$ref": "#/components/schemas/emqx.force_gc"
+                  },
+                  "durable_sessions": {
+                    "$ref": "#/components/schemas/emqx.durable_sessions"
                   }
                 },
                 "type": "object"
@@ -29937,8 +31305,8 @@
                         "rate_max": 0.0
                       },
                       "resource_metrics": {
-                        "success": 0,
                         "matched": 0,
+                        "success": 0,
                         "failed": 0,
                         "rate": 0.0,
                         "rate_last5m": 0.0,
@@ -29962,8 +31330,8 @@
                         {
                           "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "success": 0,
                             "matched": 0,
+                            "success": 0,
                             "failed": 0,
                             "rate": 0.0,
                             "rate_last5m": 0.0,
@@ -30254,13 +31622,14 @@
                     "backlog": 1024,
                     "active_n": 100
                   },
-                  "acceptors": 16,
-                  "proxy_protocol": false,
-                  "max_connections": 204800,
+                  "proxy_protocol_timeout": "3s",
                   "access_rules": [
                     "allow all"
                   ],
-                  "proxy_protocol_timeout": "3s",
+                  "max_connections": 204800,
+                  "acceptors": 16,
+                  "proxy_protocol": false,
+                  "zone": "default",
                   "mountpoint": "/",
                   "current_connections": 10240
                 },
@@ -30328,13 +31697,14 @@
                   "backlog": 1024,
                   "active_n": 100
                 },
-                "acceptors": 16,
-                "proxy_protocol": false,
-                "max_connections": 204800,
+                "proxy_protocol_timeout": "3s",
                 "access_rules": [
                   "allow all"
                 ],
-                "proxy_protocol_timeout": "3s",
+                "max_connections": 204800,
+                "acceptors": 16,
+                "proxy_protocol": false,
+                "zone": "default",
                 "mountpoint": "/",
                 "current_connections": 10240
               },
@@ -30475,6 +31845,7 @@
                   "proto_ver": 5,
                   "mountpoint": "null",
                   "proto_name": "MQTT",
+                  "durable": false,
                   "port": 52571,
                   "connected_at": "2024-01-01T12:34:56.789+08:00",
                   "enable_authn": true,
@@ -32297,9 +33668,9 @@
                       }
                     ],
                     "resource_opts": {
+                      "worker_pool_size": 16,
                       "query_mode": "async",
-                      "health_check_interval": "15s",
-                      "worker_pool_size": 16
+                      "health_check_interval": "15s"
                     }
                   },
                   {
@@ -32385,9 +33756,9 @@
                         }
                       ],
                       "resource_opts": {
+                        "worker_pool_size": 16,
                         "query_mode": "async",
-                        "health_check_interval": "15s",
-                        "worker_pool_size": 16
+                        "health_check_interval": "15s"
                       }
                     },
                     "summary": "HTTP Action"
@@ -32472,9 +33843,9 @@
                     },
                     "connector": "my_http_connector",
                     "resource_opts": {
+                      "worker_pool_size": 16,
                       "query_mode": "async",
-                      "health_check_interval": "15s",
-                      "worker_pool_size": 16
+                      "health_check_interval": "15s"
                     }
                   },
                   "summary": "HTTP Action"
@@ -32559,6 +33930,184 @@
                     "message": {
                       "type": "string",
                       "description": "Node not found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ds/storages/{ds}/replicas/{site}": {
+      "put": {
+        "description": "Add site as a replica for the durable storage",
+        "tags": [
+          "Durable storage"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ds",
+            "description": "Durable storage ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "messages"
+              ]
+            },
+            "example": "messages"
+          },
+          {
+            "in": "path",
+            "name": "site",
+            "description": "Site ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "AFA18CB1C22F0157"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "BAD_REQUEST"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Bad request"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Object not found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "description": "Remove site as a replica for the durable storage",
+        "tags": [
+          "Durable storage"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ds",
+            "description": "Durable storage ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "messages"
+              ]
+            },
+            "example": "messages"
+          },
+          {
+            "in": "path",
+            "name": "site",
+            "description": "Site ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "AFA18CB1C22F0157"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "BAD_REQUEST"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Bad request"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Object not found"
                     }
                   },
                   "type": "object"
@@ -33249,11 +34798,11 @@
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
+                        "worker_pool_size": 1,
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
                         "query_mode": "async",
-                        "health_check_interval": 15000,
-                        "worker_pool_size": 1
+                        "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -33272,6 +34821,17 @@
                       "enable": true,
                       "password": "******",
                       "username": "foo",
+                      "egress": {
+                        "local": {
+                          "topic": "emqx/#"
+                        },
+                        "remote": {
+                          "retain": false,
+                          "payload": "${payload}",
+                          "topic": "from_emqx/${topic}",
+                          "qos": "${qos}"
+                        }
+                      },
                       "proto_ver": "v4",
                       "clean_start": true,
                       "retry_interval": "15s",
@@ -33291,17 +34851,6 @@
                         "remote": {
                           "topic": "aws/#",
                           "qos": 1
-                        }
-                      },
-                      "egress": {
-                        "local": {
-                          "topic": "emqx/#"
-                        },
-                        "remote": {
-                          "retain": false,
-                          "payload": "${payload}",
-                          "topic": "from_emqx/${topic}",
-                          "qos": "${qos}"
                         }
                       }
                     },
@@ -33394,11 +34943,11 @@
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
+                        "worker_pool_size": 1,
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
                         "query_mode": "async",
-                        "health_check_interval": 15000,
-                        "worker_pool_size": 1
+                        "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -33417,6 +34966,17 @@
                       "enable": true,
                       "password": "******",
                       "username": "foo",
+                      "egress": {
+                        "local": {
+                          "topic": "emqx/#"
+                        },
+                        "remote": {
+                          "retain": false,
+                          "payload": "${payload}",
+                          "topic": "from_emqx/${topic}",
+                          "qos": "${qos}"
+                        }
+                      },
                       "proto_ver": "v4",
                       "clean_start": true,
                       "retry_interval": "15s",
@@ -33436,17 +34996,6 @@
                         "remote": {
                           "topic": "aws/#",
                           "qos": 1
-                        }
-                      },
-                      "egress": {
-                        "local": {
-                          "topic": "emqx/#"
-                        },
-                        "remote": {
-                          "retain": false,
-                          "payload": "${payload}",
-                          "topic": "from_emqx/${topic}",
-                          "qos": "${qos}"
                         }
                       }
                     },
@@ -33530,11 +35079,11 @@
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
+                      "worker_pool_size": 1,
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
                       "query_mode": "async",
-                      "health_check_interval": 15000,
-                      "worker_pool_size": 1
+                      "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -33551,6 +35100,17 @@
                     "enable": true,
                     "password": "******",
                     "username": "foo",
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
+                      }
+                    },
                     "proto_ver": "v4",
                     "clean_start": true,
                     "retry_interval": "15s",
@@ -33570,17 +35130,6 @@
                       "remote": {
                         "topic": "aws/#",
                         "qos": 1
-                      }
-                    },
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
                       }
                     }
                   },
@@ -34026,11 +35575,11 @@
                       "nl": 0,
                       "topic": "stomp/topic",
                       "qos": 1,
+                      "rap": 0,
+                      "rh": 0,
                       "sub_props": {
                         "subid": "10"
-                      },
-                      "rap": 0,
-                      "rh": 0
+                      }
                     },
                     "summary": "A STOMP subscription"
                   }
@@ -34106,11 +35655,11 @@
                     "nl": 0,
                     "topic": "stomp/topic",
                     "qos": 1,
+                    "rap": 0,
+                    "rh": 0,
                     "sub_props": {
                       "subid": "10"
-                    },
-                    "rap": 0,
-                    "rh": 0
+                    }
                   },
                   "summary": "A STOMP subscription"
                 }
@@ -34347,10 +35896,10 @@
             "$ref": "#/components/parameters/plugins.name"
           }
         ],
-        "summary": "Move plugin within plugin hiearchy",
+        "summary": "Move plugin within plugin hierarchy",
         "responses": {
-          "200": {
-            "description": "OK"
+          "204": {
+            "description": "Boot order changed successfully"
           },
           "400": {
             "description": "",
@@ -34898,6 +36447,38 @@
         ]
       }
     },
+    "/ds/storages": {
+      "get": {
+        "description": "List durable storages",
+        "tags": [
+          "Durable storage"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List durable storages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/subscriptions": {
       "get": {
         "description": "获取集群的订阅列表。",
@@ -34968,6 +36549,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "durable",
+            "description": "Filter subscriptions by durability",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -35024,6 +36614,38 @@
                     }
                   },
                   "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ds/sites": {
+      "get": {
+        "description": "List sites",
+        "tags": [
+          "Durable storage"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List sites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -36373,7 +37995,8 @@
                     "enum": [
                       "clientid",
                       "topic",
-                      "ip_address"
+                      "ip_address",
+                      "ruleid"
                     ],
                     "description": "过滤器类型",
                     "example": "clientid"
@@ -36392,6 +38015,10 @@
                     "type": "string",
                     "description": "如果过滤器类型为 'ip_address' 则该字段可以指定用于匹配的客户端 IP 地址。",
                     "example": "127.0.0.1"
+                  },
+                  "ruleid": {
+                    "type": "string",
+                    "example": "my_rule"
                   },
                   "payload_encode": {
                     "default": "text",
@@ -36432,6 +38059,24 @@
                         "type": "string",
                         "format": "date-time",
                         "example": "2022-01-01T00:00:00.000Z"
+                      }
+                    ]
+                  },
+                  "formatter": {
+                    "description": "The formatter that will be used to format the trace log entries. Set this to text to format the log entries as plain text (default). Set it to json to format each log entry as a JSON object.",
+                    "example": "text",
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "json"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "text"
+                        ]
                       }
                     ]
                   }
@@ -36801,9 +38446,9 @@
                     },
                     "connector": "my_http_connector",
                     "resource_opts": {
+                      "worker_pool_size": 16,
                       "query_mode": "async",
-                      "health_check_interval": "15s",
-                      "worker_pool_size": 16
+                      "health_check_interval": "15s"
                     }
                   },
                   "summary": "HTTP Action"
@@ -37744,6 +39389,152 @@
         ]
       }
     },
+    "/ds/storages/{ds}/replicas": {
+      "get": {
+        "description": "List replicas of the durable storage",
+        "tags": [
+          "Durable storage"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ds",
+            "description": "Durable storage ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "messages"
+              ]
+            },
+            "example": "messages"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List sites that contain replicas of the durable storage",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Durable storage not found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "description": "Update replicas of the durable storage",
+        "tags": [
+          "Durable storage"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ds",
+            "description": "Durable storage ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "messages"
+              ]
+            },
+            "example": "messages"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "BAD_REQUEST"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Bad request"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/mqtt/delayed/messages": {
       "get": {
         "description": "查看延迟消息列表",
@@ -38080,9 +39871,9 @@
                 "name": "default",
                 "ssl": {
                   "enable": false,
-                  "cacertfile": "/etc/emqx/certs/cacert.pem",
                   "certfile": "/etc/emqx/certs/cert.pem",
-                  "keyfile": "/etc/emqx/certs/key.pem"
+                  "keyfile": "/etc/emqx/certs/key.pem",
+                  "cacertfile": "/etc/emqx/certs/cacert.pem"
                 },
                 "pool_size": 8,
                 "enable": true,
@@ -38093,6 +39884,68 @@
               },
               "schema": {
                 "$ref": "#/components/schemas/exhook.server_config"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ds/sites/{site}": {
+      "get": {
+        "description": "Get sites",
+        "tags": [
+          "Durable storage"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "site",
+            "description": "Site ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "AFA18CB1C22F0157"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get information about the site",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/emqx_mgmt_api_ds.site"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Site not found"
+                    }
+                  },
+                  "type": "object"
+                }
               }
             }
           }
@@ -38379,8 +40232,8 @@
                           "name": "default",
                           "type": "udp",
                           "bind": "5683",
-                          "max_connections": 1024000,
-                          "max_conn_rate": 1000
+                          "max_conn_rate": 1000,
+                          "max_connections": 1024000
                         }
                       ],
                       "idle_timeout": "30s",
@@ -38408,8 +40261,8 @@
                           "name": "default",
                           "type": "tcp",
                           "bind": "7993",
-                          "max_connections": 1024000,
-                          "max_conn_rate": 1000
+                          "max_conn_rate": 1000,
+                          "max_connections": 1024000
                         }
                       ],
                       "idle_timeout": "30s",
@@ -38428,8 +40281,8 @@
                           "name": "default",
                           "type": "tcp",
                           "bind": "7325",
-                          "max_connections": 1024000,
-                          "max_conn_rate": 1000
+                          "max_conn_rate": 1000,
+                          "max_connections": 1024000
                         }
                       ],
                       "mountpoint": "gbt32960/${clientid}",
@@ -38448,8 +40301,8 @@
                           "name": "default",
                           "type": "udp",
                           "bind": "5783",
-                          "max_connections": 1024000,
-                          "max_conn_rate": 1000
+                          "max_conn_rate": 1000,
+                          "max_connections": 1024000
                         }
                       ],
                       "idle_timeout": "30s",
@@ -38501,8 +40354,8 @@
                           "name": "default",
                           "type": "udp",
                           "bind": "1884",
-                          "max_connections": 1024000,
-                          "max_conn_rate": 1000
+                          "max_conn_rate": 1000,
+                          "max_connections": 1024000
                         }
                       ],
                       "idle_timeout": "30s",
@@ -38554,8 +40407,8 @@
                           "name": "default",
                           "type": "tcp",
                           "bind": "61613",
-                          "max_connections": 1024000,
-                          "max_conn_rate": 1000
+                          "max_conn_rate": 1000,
+                          "max_connections": 1024000
                         }
                       ],
                       "idle_timeout": "30s",
@@ -38946,9 +40799,9 @@
                         }
                       ],
                       "resource_opts": {
+                        "worker_pool_size": 16,
                         "query_mode": "async",
-                        "health_check_interval": "15s",
-                        "worker_pool_size": 16
+                        "health_check_interval": "15s"
                       }
                     },
                     "summary": "HTTP Action"
@@ -39069,9 +40922,9 @@
                         }
                       ],
                       "resource_opts": {
+                        "worker_pool_size": 16,
                         "query_mode": "async",
-                        "health_check_interval": "15s",
-                        "worker_pool_size": 16
+                        "health_check_interval": "15s"
                       }
                     },
                     "summary": "HTTP Action"
@@ -39176,9 +41029,9 @@
                     },
                     "connector": "my_http_connector",
                     "resource_opts": {
+                      "worker_pool_size": 16,
                       "query_mode": "async",
-                      "health_check_interval": "15s",
-                      "worker_pool_size": 16
+                      "health_check_interval": "15s"
                     }
                   },
                   "summary": "HTTP Action"
@@ -41386,8 +43239,8 @@
         "parameters": [],
         "summary": "Install a new plugin",
         "responses": {
-          "200": {
-            "description": "OK"
+          "204": {
+            "description": "Install plugin successfully"
           },
           "400": {
             "description": "",
@@ -42439,6 +44292,15 @@
                 "merge"
               ]
             }
+          },
+          {
+            "in": "query",
+            "name": "ignore_readonly",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -42499,9 +44361,6 @@
             "$ref": "#/components/parameters/public.page"
           },
           {
-            "$ref": "#/components/parameters/public.limit"
-          },
-          {
             "in": "query",
             "name": "node",
             "description": "Node name",
@@ -42510,6 +44369,9 @@
               "type": "string"
             },
             "example": "emqx@127.0.0.1"
+          },
+          {
+            "$ref": "#/components/parameters/public.limit"
           },
           {
             "in": "query",
@@ -42710,6 +44572,7 @@
                       "proto_ver": 5,
                       "mountpoint": "null",
                       "proto_name": "MQTT",
+                      "durable": false,
                       "port": 52571,
                       "connected_at": "2024-01-01T12:34:56.789+08:00",
                       "enable_authn": true,
@@ -43100,13 +44963,14 @@
                     "backlog": 1024,
                     "active_n": 100
                   },
-                  "acceptors": 16,
-                  "proxy_protocol": false,
-                  "max_connections": 204800,
+                  "proxy_protocol_timeout": "3s",
                   "access_rules": [
                     "allow all"
                   ],
-                  "proxy_protocol_timeout": "3s",
+                  "max_connections": 204800,
+                  "acceptors": 16,
+                  "proxy_protocol": false,
+                  "zone": "default",
                   "mountpoint": "/",
                   "current_connections": 10240
                 },
@@ -43195,13 +45059,14 @@
                     "backlog": 1024,
                     "active_n": 100
                   },
-                  "acceptors": 16,
-                  "proxy_protocol": false,
-                  "max_connections": 204800,
+                  "proxy_protocol_timeout": "3s",
                   "access_rules": [
                     "allow all"
                   ],
-                  "proxy_protocol_timeout": "3s",
+                  "max_connections": 204800,
+                  "acceptors": 16,
+                  "proxy_protocol": false,
+                  "zone": "default",
                   "mountpoint": "/",
                   "current_connections": 10240
                 },
@@ -43291,13 +45156,14 @@
                   "backlog": 1024,
                   "active_n": 100
                 },
-                "acceptors": 16,
-                "proxy_protocol": false,
-                "max_connections": 204800,
+                "proxy_protocol_timeout": "3s",
                 "access_rules": [
                   "allow all"
                 ],
-                "proxy_protocol_timeout": "3s",
+                "max_connections": 204800,
+                "acceptors": 16,
+                "proxy_protocol": false,
+                "zone": "default",
                 "mountpoint": "/",
                 "current_connections": 10240
               },
@@ -45354,11 +47220,11 @@
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
+                      "worker_pool_size": 1,
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
                       "query_mode": "async",
-                      "health_check_interval": 15000,
-                      "worker_pool_size": 1
+                      "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -45374,6 +47240,17 @@
                     "enable": true,
                     "password": "******",
                     "username": "foo",
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
+                      }
+                    },
                     "proto_ver": "v4",
                     "clean_start": true,
                     "retry_interval": "15s",
@@ -45393,17 +47270,6 @@
                       "remote": {
                         "topic": "aws/#",
                         "qos": 1
-                      }
-                    },
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
                       }
                     }
                   }
@@ -45464,11 +47330,11 @@
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
+                        "worker_pool_size": 1,
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
                         "query_mode": "async",
-                        "health_check_interval": 15000,
-                        "worker_pool_size": 1
+                        "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -45487,6 +47353,17 @@
                       "enable": true,
                       "password": "******",
                       "username": "foo",
+                      "egress": {
+                        "local": {
+                          "topic": "emqx/#"
+                        },
+                        "remote": {
+                          "retain": false,
+                          "payload": "${payload}",
+                          "topic": "from_emqx/${topic}",
+                          "qos": "${qos}"
+                        }
+                      },
                       "proto_ver": "v4",
                       "clean_start": true,
                       "retry_interval": "15s",
@@ -45506,17 +47383,6 @@
                         "remote": {
                           "topic": "aws/#",
                           "qos": 1
-                        }
-                      },
-                      "egress": {
-                        "local": {
-                          "topic": "emqx/#"
-                        },
-                        "remote": {
-                          "retain": false,
-                          "payload": "${payload}",
-                          "topic": "from_emqx/${topic}",
-                          "qos": "${qos}"
                         }
                       }
                     },
@@ -45580,11 +47446,11 @@
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
+                      "worker_pool_size": 1,
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
                       "query_mode": "async",
-                      "health_check_interval": 15000,
-                      "worker_pool_size": 1
+                      "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -45603,6 +47469,17 @@
                     "enable": true,
                     "password": "******",
                     "username": "foo",
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
+                      }
+                    },
                     "proto_ver": "v4",
                     "clean_start": true,
                     "retry_interval": "15s",
@@ -45622,17 +47499,6 @@
                       "remote": {
                         "topic": "aws/#",
                         "qos": 1
-                      }
-                    },
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
                       }
                     }
                   },
@@ -46054,6 +47920,71 @@
               },
               "schema": {
                 "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ds/storages/{ds}": {
+      "get": {
+        "description": "Get durable storage",
+        "tags": [
+          "Durable storage"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ds",
+            "description": "Durable storage ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "messages"
+              ]
+            },
+            "example": "messages"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get information about a durable storage",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/emqx_mgmt_api_ds.db"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Durable storage not found"
+                    }
+                  },
+                  "type": "object"
+                }
               }
             }
           }
