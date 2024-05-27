@@ -40,7 +40,7 @@ Dashboard 上也增加了持久消息的数量。
 - [#12899](https://github.com/emqx/emqx/pull/12899) RocketMQ 数据集成添加了命名空间和键调度策略的支持。
 - [#12671](https://github.com/emqx/emqx/pull/12671) 在规则引擎 SQL 语言中添加了一个 `unescape` 函数，用于处理字符串中转义序列的展开。之所以添加这个功能，是因为 SQL 语言中的字符串字面量不支持任何转义码（例如 `\n` 和 `\t`）。这一增强功能使得在 SQL 表达式中对字符串进行更灵活的处理成为可能。
 - [#12898](https://github.com/emqx/emqx/pull/12898) IoTDB 数据集成支持 1.3.0 版本和批量插入（batch_size/batch_time）选项。
-- [#12934](https://github.com/emqx/emqx/pull/12934) 为 s3 动作添加了 CSV 格式文件聚合功能。
+- [#12934](https://github.com/emqx/emqx/pull/12934) 为 AWS S3 数据集成添加了 CSV 格式文件聚合功能。
 
 #### 可观测性
 
