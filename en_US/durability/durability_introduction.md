@@ -110,7 +110,7 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
 
    Restart EMQX to apply the configuration.
 
-2. Adjust MQTT client connection parameters to implement durable sessions.
+2. Adjust MQTT client connection parameters to activate session durability.
 
    Using [MQTTX CLI](https://mqttx.app/cli) as an example, which defaults to using MQTT 5.0 protocol, add the `--no-clean` option to set `Clean Start = false`, and specify the client ID as `emqx_c`. Connect to EMQX and subscribe to the `t/1` topic:
 
