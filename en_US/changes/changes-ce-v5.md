@@ -6,27 +6,6 @@
 
 ### Enhancements
 
-#### MQTT
-Implemented the Durable Sessions feature, which persists MQTT Persistent Sessions and their messages to disk, and continuously replicates session metadata and MQTT messages among multiple nodes in the EMQX cluster. This achieves effective failover and recovery mechanisms, ensuring service continuity and high availability, thereby enhancing system reliability.
-Added metrics related to EMQX durable storage to Prometheus:
-
-- `emqx_ds_egress_batches`
-- `emqx_ds_egress_batches_retry`
-- `emqx_ds_egress_batches_failed`
-- `emqx_ds_egress_messages`
-- `emqx_ds_egress_bytes`
-- `emqx_ds_egress_flush_time`
-- `emqx_ds_store_batch_time`
-- `emqx_ds_builtin_next_time`
-- `emqx_ds_storage_bitfield_lts_counter_seek`
-- `emqx_ds_storage_bitfield_lts_counter_next`
-- `emqx_ds_storage_bitfield_lts_counter_collision`
-
-Note: these metrics are only visible when session persistence is enabled.
-The number of persisted messages has also been added to the Dashboard.
-
-For more information about the Durable Sessions feature, see [MQTT Durable Sessions](../durability/durability_introduction.md).
-
 #### Security
 
 [#12947](https://github.com/emqx/emqx/pull/12947) For JWT authentication, support new `disconnect_after_expire` option. When enabled, the client will be disconnected after the JWT token expires.

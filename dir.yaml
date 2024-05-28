@@ -477,6 +477,7 @@
       title_cn: MQTT 会话持久化
       path: durability/durability_introduction
       collapsed: true
+      edition: ee
       children:
         - durability/managing-replication
         - durability/management

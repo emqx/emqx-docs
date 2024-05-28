@@ -6,30 +6,6 @@
 
 ### 增强
 
-#### MQTT
-
-实现了会话持久化（Durable Sessions）。将 MQTT 持久会话（Persistent Session）及其消息存储到磁盘上，并在 EMQX 集群的多个节点之间持续复制会话元数据和 MQTT 消息，实现了有效的故障转移和恢复机制，确保服务的连续性和高可用性，从而提高系统的可靠性。
-
-向 Prometheus 添加了与 EMQX 持久存储相关的指标：
-
-- `emqx_ds_egress_batches`
-- `emqx_ds_egress_batches_retry`
-- `emqx_ds_egress_batches_failed`
-- `emqx_ds_egress_messages`
-- `emqx_ds_egress_bytes`
-- `emqx_ds_egress_flush_time`
-- `emqx_ds_store_batch_time`
-- `emqx_ds_builtin_next_time`
-- `emqx_ds_storage_bitfield_lts_counter_seek`
-- `emqx_ds_storage_bitfield_lts_counter_next`
-- `emqx_ds_storage_bitfield_lts_counter_collision`
-
-注意：这些指标仅在启用会话持久化时可见。
-
-Dashboard 上也增加了持久消息的数量。
-
-更多关于会话持久化功能的详细信息，参见 [MQTT 会话持久化](../durability/durability_introduction.md)。
-
 #### 安全
 
 [#12947](https://github.com/emqx/emqx/pull/12947) 对于 JWT 认证，支持新的 `disconnect_after_expire` 选项。启用时，客户端将在 JWT token 过期后断开连接。
