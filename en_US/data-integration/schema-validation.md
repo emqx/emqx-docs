@@ -2,7 +2,7 @@
 
 EMQX includes built-in schema validation capabilities to ensure that only messages conforming to predefined data formats are published to subscribers from specified topics. Schema validation supports multiple schema formats such as JSON Schema, Protobuf, and Avro and built-in SQL statement validation. This page describes the schema validation feature and how to use it.
 
-### Why Validate Data
+## Why Validate Data
 
 Clients may publish non-standard messages to the Broker, which could lead to exceptions in subscribers and data systems or pose security risks. EMQX can identify and block these non-compliant messages by validating data formats early, ensuring system stability and reliability. schema validation brings benefits in the following aspects:
 
@@ -14,7 +14,7 @@ Clients may publish non-standard messages to the Broker, which could lead to exc
 - **Interoperability**: Ensures messages conform to standardized formats, facilitating communication between different devices and systems.
 - **Debugging**: Easily identify and debug invalid or incorrectly formatted messages.
 
-### Workflow
+## Workflow
 
 When a message is published, it is validated against predefined rules. If validation succeeds, the process continues; otherwise, user-configured actions are executed, such as message discarding or disconnection.
 
