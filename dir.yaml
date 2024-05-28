@@ -476,6 +476,7 @@
     - title_en: MQTT Durable Sessions
       title_cn: MQTT 会话持久化
       path: durability/durability_introduction
+      collapsed: true
       children:
         - durability/managing-replication
         - durability/management
@@ -561,7 +562,6 @@
         - extensions/plugins
         # - extensions/lang-lua
         - extensions/exhook
-        - extensions/plugins
     - title_en: Telemetry
       title_cn: 遥测
       path: telemetry/telemetry
