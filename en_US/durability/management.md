@@ -132,7 +132,7 @@ This command output includes:
 This command allows to set the list of sites containing replicas of the durable storage in the cluster.
 Once executed, it creates a plan of operations that leads to fair allocation of the shards between the sites, and then continues to execute it in the background.
 
-::: warning
+::: warning Important Notice
 Updating the list of durable storage replicas can be costly as it may involve copying large volumes of data between sites.
 :::
 

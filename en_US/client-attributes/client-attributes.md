@@ -8,7 +8,7 @@ The process of setting, storing, and using client attributes is as follows:
 
 **1. Set Client Attributes**
 
-When a client successfully connects to EMQX, EMQX triggers connection and authentication events, and during this process, [client attributes are set](#setting-client-attributes) based on predefined configurations.
+When a client successfully connects to EMQX, EMQX triggers connection and authentication events, and during this process, [client attributes are set](#set-client-attributes) based on predefined configurations.
 
 **2. Store and Destroy Client Attributes**
 
@@ -40,7 +40,7 @@ Where,
 - **Attribute** is the name of the attribute. 
 - **Attribute Expression** is the configuration for extracting the attribute.
 
-The attribute expression upports using [Variform expressions](../configuration/configuration.md#variform-expressions) and [predefined functions](../configuration/configuration.md#predefined-functions) to dynamically process values. For example:
+The attribute expression upports using [Variform expressions](../configuration/configuration.md#variform-expressions) and [predefined functions](../configuration/configuration.md#pre-defined-functions) to dynamically process values. For example:
 
 - To extract the prefix of a client ID delimited by a dot: `nth(1, tokens(clientid, '.'))`
 - To truncate part of the username: `substr(username, 0, 5)`
@@ -93,7 +93,7 @@ For detailed information about the client attributes configuration, see [Configu
 During the client authentication process, client attributes can be set based on information returned by the authenticator, currently supported:
 
 - [JWT Authentication](../access-control/authn/jwt.md): Set client attributes in the `client_attrs` field in the Token payload when issuing a Token.
-- [HTTP Authentication](../access-control//authn/http.md): Set client attributes in the `client_attrs` field in the successful HTTP response.
+- [HTTP Authentication](../access-control/authn/http.md): Set client attributes in the `client_attrs` field in the successful HTTP response.
 
 The key and value of the attributes must be string. This method allows for dynamic setting of attributes based on the results of authentication, adding flexibility in use.
 
@@ -133,7 +133,7 @@ Client authentication can only use attributes set from client metadata.
 
 ### Client Authorization
 
-Use [data query placeholders](../access-control/authz/authz.md#data-query-placeholders) and [topic placeholders](../access-control/authz/authz.md#topic-placeholders) for SQL statements, query commands, and topics.
+Use [data query placeholders](../access-control/authz/authz.md#placeholders-in-data-queries) and [topic placeholders](../access-control/authz/authz.md#topic-placeholders) for SQL statements, query commands, and topics.
 
 #### Example Scenario:
 

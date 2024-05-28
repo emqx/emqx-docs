@@ -129,7 +129,7 @@ mqttx pub -t t/1 -m '{"temp": 100}'
 
 ### REST API
 
-有关通过 REST API 使用 Schema 验证的详细信息，请参见 [EMQX 企业版 API](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION/admin/api-docs.html)。
+有关通过 REST API 使用 Schema 验证的详细信息，请参见 [EMQX 企业版 API](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)。
 
 ## 统计与指标
 

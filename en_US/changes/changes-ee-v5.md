@@ -8,7 +8,7 @@
 
 #### MQTT
 
-Implemented Durable Sessions, which persists MQTT Persistent Sessions and their messages to disk, and continuously replicates session metadata and MQTT messages among multiple nodes in the EMQX cluster. This achieves effective failover and recovery mechanisms, ensuring service continuity and high availability, thereby enhancing system reliability.
+Implemented the Durable Sessions feature, which persists MQTT Persistent Sessions and their messages to disk, and continuously replicates session metadata and MQTT messages among multiple nodes in the EMQX cluster. This achieves effective failover and recovery mechanisms, ensuring service continuity and high availability, thereby enhancing system reliability.
 
 Added metrics related to EMQX durable storage to Prometheus:
 
@@ -27,15 +27,17 @@ Added metrics related to EMQX durable storage to Prometheus:
 Note: these metrics are only visible when session persistence is enabled.
 The number of persisted messages has also been added to the Dashboard.
 
+For more information about the Durable Sessions feature, see [MQTT Durable Sessions](../durability/durability_introduction.md).
+
 #### Security
 
-- [#12947](https://github.com/emqx/emqx/pull/12947) For JWT authentication, support new `disconnect_after_expire` option. When enabled, the client will be disconnected after the JWT token expires.
+[#12947](https://github.com/emqx/emqx/pull/12947) For JWT authentication, support new `disconnect_after_expire` option. When enabled, the client will be disconnected after the JWT token expires.
 
 Note: This is a breaking change. This option is enabled by default, so the default behavior is changed. Previously, the clients with actual JWTs could connect to the broker and stay connected even after the JWT token expired. Now, the client will be disconnected after the JWT token expires. To preserve the previous behavior, set `disconnect_after_expire` to `false`.
 
 #### Data Processing and Integration
 
-- [#12711](https://github.com/emqx/emqx/pull/12711) Added schema validation feature. With this feature, once validations are configured for certain topic filters, the configured checks are run against published messages. If the checking results are not accepted by validation, the message is dropped and the client may be disconnected, depending on the configuration.
+- [#12711](https://github.com/emqx/emqx/pull/12711) Added the Schema Validation feature. With this feature, once validations are configured for certain topic filters, the configured checks are run against published messages. If the checking results are not accepted by validation, the message is dropped and the client may be disconnected, depending on the configuration. For more information about the Schema Validation feature, see [Schema Validation](../data-integration/schema-validation.md).
 
 - [#12899](https://github.com/emqx/emqx/pull/12899) For RocketMQ data integration, added support for namespace and key dispatch strategy.
 
@@ -84,6 +86,8 @@ Note: This is a breaking change. This option is enabled by default, so the defau
       flexibility and control. Examples include: In `acl.conf`, use `{allow, all, all, ["${client_attrs.namespace}/#"]}` to apply permissions based on the `namespace` attribute.
 
     - In other authorization backends, `${client_attrs.namespace}` can be used within request templates to dynamically include client attributes.
+
+  For more information about the Client Attributes feature, see [Client Attributes](../client-attributes/client-attributes.md).
 
 - [#12910](https://github.com/emqx/emqx/pull/12910) Added plugin configuration management and schema validation. It is also possible to annotate the schema with metadata to facilitate UI rendering in the Dashboard. See more details in the [plugin template](https://github.com/emqx/emqx-plugin-template/pull/126) and [plugin documentation](../extensions/plugins.md).
 

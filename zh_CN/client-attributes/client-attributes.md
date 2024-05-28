@@ -70,13 +70,13 @@ mqtt {
 
 {% emqxce %}
 
-更多客户端属性配置的详细信息，请参见[配置手册](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/)。
+更多客户端属性配置的详细信息，请参见[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
 
 {% endemqxce %}
 
 {% emqxee %}
 
-更多客户端属性配置的详细信息，请参见[配置手册](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)。
+更多客户端属性配置的详细信息，请参见[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 {% endemqxee %}
 
@@ -85,7 +85,7 @@ mqtt {
 在客户端认证过程中，可以通过认证器返回的信息设置客户端属性，目前支持：
 
 - [JWT 认证](../access-control/authn/jwt.md)：签发 Token 时，在 Payload 中通过 `client_attrs` 字段设置客户端属性。
-- [HTTP 认证](../access-control//authn/http.md)：在认证成功的 HTTP 响应中，通过 `client_attrs` 字段设置客户端属性。
+- [HTTP 认证](../access-control/authn/http.md)：在认证成功的 HTTP 响应中，通过 `client_attrs` 字段设置客户端属性。
 
 属性的键值均要求是字符串。这种方式允许根据认证结果动态地设置属性，增加了使用的灵活性。
 

@@ -7,7 +7,7 @@
 ### Enhancements
 
 #### MQTT
-Implemented Durable Sessions, which persists MQTT Persistent Sessions and their messages to disk, and continuously replicates session metadata and MQTT messages among multiple nodes in the EMQX cluster. This achieves effective failover and recovery mechanisms, ensuring service continuity and high availability, thereby enhancing system reliability.
+Implemented the Durable Sessions feature, which persists MQTT Persistent Sessions and their messages to disk, and continuously replicates session metadata and MQTT messages among multiple nodes in the EMQX cluster. This achieves effective failover and recovery mechanisms, ensuring service continuity and high availability, thereby enhancing system reliability.
 Added metrics related to EMQX durable storage to Prometheus:
 
 - `emqx_ds_egress_batches`
@@ -25,36 +25,39 @@ Added metrics related to EMQX durable storage to Prometheus:
 Note: these metrics are only visible when session persistence is enabled.
 The number of persisted messages has also been added to the Dashboard.
 
+For more information about the Durable Sessions feature, see [MQTT Durable Sessions](../durability/durability_introduction.md).
+
 #### Security
 
-- [#12947](https://github.com/emqx/emqx/pull/12947) For JWT authentication, support new `disconnect_after_expire` option. When enabled, the client will be disconnected after the JWT token expires.
+[#12947](https://github.com/emqx/emqx/pull/12947) For JWT authentication, support new `disconnect_after_expire` option. When enabled, the client will be disconnected after the JWT token expires.
 
 
 Note: This is a breaking change. This option is enabled by default, so the default behavior is changed. Previously, the clients with actual JWTs could connect to the broker and stay connected even after the JWT token expired. Now, the client will be disconnected after the JWT token expires. To preserve the previous behavior, set `disconnect_after_expire` to `false`.
 
 #### Data Processing and Integration
 
-- [#12671](https://github.com/emqx/emqx/pull/12671) An `unescape` function has been added to the rule engine SQL language to handle the expansion of escape sequences in strings. This addition has been done because string literals in the SQL language don't support any escape codes (e.g., `\n` and `\t`). This enhancement allows for more flexible string manipulation within SQL expressions.
+[#12671](https://github.com/emqx/emqx/pull/12671) An `unescape` function has been added to the rule engine SQL language to handle the expansion of escape sequences in strings. This addition has been done because string literals in the SQL language don't support any escape codes (e.g., `\n` and `\t`). This enhancement allows for more flexible string manipulation within SQL expressions.
 
 
 #### Extensibility
 
-- [#12872](https://github.com/emqx/emqx/pull/12872) Implemented Client Attributes feature. It allows setting additional properties for each client using key-value pairs. Property values can be generated from MQTT client connection information (such as username, client ID, TLS certificate) or set from data accompanying successful authentication returns. Properties can be used in EMQX for authentication, authorization, data integration, and MQTT extension functions. Compared to using static properties like client ID directly, client properties offer greater flexibility in various business scenarios, simplifying the development process and enhancing adaptability and efficiency in development work.
+- [#12872](https://github.com/emqx/emqx/pull/12872) Implemented the Client Attributes feature. It allows setting additional properties for each client using key-value pairs. Property values can be generated from MQTT client connection information (such as username, client ID, TLS certificate) or set from data accompanying successful authentication returns. Properties can be used in EMQX for authentication, authorization, data integration, and MQTT extension functions. Compared to using static properties like client ID directly, client properties offer greater flexibility in various business scenarios, simplifying the development process and enhancing adaptability and efficiency in development work.
   **Initialization of `client_attrs`**
   The `client_attrs` fields can be initially populated from one of the following `clientinfo` fields:
+  
     - `cn`: The common name from the TLS client's certificate.
     - `dn`: The distinguished name from the TLS client's certificate, that is, the certificate "Subject".
     - `clientid`: The MQTT client ID provided by the client.
     - `username`: The username provided by the client.
     - `user_property`: Extract a property value from 'User-Property' of the MQTT CONNECT packet.
-
+  
   **Extension through Authentication Responses**
   Additional attributes may be merged into `client_attrs` from authentication responses. Supported
   authentication backends include:
     - **HTTP**: Attributes can be included in the JSON object of the HTTP response body through a
       `client_attrs` field.
     - **JWT**: Attributes can be included via a `client_attrs` claim within the JWT.
-
+  
   **Usage in Authentication and Authorization**
   If `client_attrs` is initialized before authentication, it can be used in external authentication
   requests. For instance, `${client_attrs.property1}` can be used within request templates
@@ -62,7 +65,9 @@ Note: This is a breaking change. This option is enabled by default, so the defau
     - The `client_attrs` can be utilized in authorization configurations or request templates, enhancing
       flexibility and control. Examples include: In `acl.conf`, use `{allow, all, all, ["${client_attrs.namespace}/#"]}` to apply permissions based on the `namespace` attribute.
     - In other authorization backends, `${client_attrs.namespace}` can be used within request templates to dynamically include client attributes.
-
+  
+  For more information about the Client Attributes feature, see [Client Attributes](../client-attributes/client-attributes.md).
+  
 - [#12910](https://github.com/emqx/emqx/pull/12910) Added plugin configuration management and schema validation. For EMQX enterprise edition, one can also annotate the schema with metadata to facilitate UI rendering in the Dashboard. See more details in the [plugin template](https://github.com/emqx/emqx-plugin-template/pull/126) and plugin [documentation](../extensions/plugins.md).
 
 #### Operations and Management
@@ -129,7 +134,7 @@ Note: This is a breaking change. This option is enabled by default, so the defau
     - Persistent sessions save inflight packet IDs for the received QoS2 messages.
     - Ensuring consistent behavior between persistent and non-persistent sessions regarding overlapping subscriptions.
     - List persistent subscriptions in the REST API.
-  -->
+    -->
 
 - [#12993](https://github.com/emqx/emqx/pull/12993) Fixed listener config update API when handling an unknown zone.
   Before this fix, when a listener config is updated with an unknown zone, for example `{"zone": "unknown"}`, the change would be accepted, causing all clients to crash whens connected.

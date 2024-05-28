@@ -28,15 +28,17 @@
 
 Dashboard 上也增加了持久消息的数量。
 
+更多关于会话持久化功能的详细信息，参见 [MQTT 会话持久化](../durability/durability_introduction.md)。
+
 #### 安全
 
-- [#12947](https://github.com/emqx/emqx/pull/12947) 对于 JWT 认证，支持新的 `disconnect_after_expire` 选项。启用时，客户端将在 JWT token 过期后断开连接。
+[#12947](https://github.com/emqx/emqx/pull/12947) 对于 JWT 认证，支持新的 `disconnect_after_expire` 选项。启用时，客户端将在 JWT token 过期后断开连接。
 
 注意：这是一个不兼容变更。此选项默认启用，因此默认行为已更改。以前，带有实际 JWT 的客户端可以连接到服务器并在 JWT token 过期后保持连接。现在，客户端将在 JWT token 过期后断开连接。要保留以前的行为，请将 `disconnect_after_expire` 设置为 `false`。
 
 #### 数据处理和集成
 
-- [#12711](https://github.com/emqx/emqx/pull/12711) 实现了 Schema 验证功能。通过此功能，一旦为某些主题过滤器配置了验证，发布的消息将进行配置的检查。如果未通过验证，消息将被丢弃，根据配置客户端可能会被断开连接。
+- [#12711](https://github.com/emqx/emqx/pull/12711) 实现了 Schema 验证功能。通过此功能，一旦为某些主题过滤器配置了验证，发布的消息将进行配置的检查。如果未通过验证，消息将被丢弃，根据配置客户端可能会被断开连接。更多关于该功能的详细信息，参见 [Schema 验证](../data-integration/schema-validation.md)。
 - [#12899](https://github.com/emqx/emqx/pull/12899) RocketMQ 数据集成添加了命名空间和键调度策略的支持。
 - [#12671](https://github.com/emqx/emqx/pull/12671) 在规则引擎 SQL 语言中添加了一个 `unescape` 函数，用于处理字符串中转义序列的展开。之所以添加这个功能，是因为 SQL 语言中的字符串字面量不支持任何转义码（例如 `\n` 和 `\t`）。这一增强功能使得在 SQL 表达式中对字符串进行更灵活的处理成为可能。
 - [#12898](https://github.com/emqx/emqx/pull/12898) IoTDB 数据集成支持 1.3.0 版本和批量插入（batch_size/batch_time）选项。
@@ -77,6 +79,8 @@ Dashboard 上也增加了持久消息的数量。
     在 `acl.conf` 中，使用 `{allow, all, all, ["${client_attrs.namespace}/#"]}` 来基于 `namespace` 属性应用权限。
 
   - 在其他授权后端中，可以在请求模板中使用 `${client_attrs.namespace}` 动态包含客户端属性。
+
+  更多关于客户端属性功能的详细信息，参见[客户端属性](../client-attributes/client-attributes.md)。
 
 - [#12910](https://github.com/emqx/emqx/pull/12910) 添加了插件配置管理和 schema 验证功能。还可以使用元数据注释 schema，以便在 Dashboard 中进行 UI 渲染。更多详细信息请参见[插件模板](https://github.com/emqx/emqx-plugin-template/pull/126)和[插件文档](../extensions/plugins.md)。
 

@@ -28,6 +28,8 @@
 
 Dashboard 上也增加了持久消息的数量。
 
+更多关于会话持久化功能的详细信息，参见 [MQTT 会话持久化](../durability/durability_introduction.md)。
+
 #### 安全
 
 - [#12947](https://github.com/emqx/emqx/pull/12947) 对于 JWT 认证，支持新的 `disconnect_after_expire` 选项。启用时，客户端将在 JWT token 过期后断开连接。
@@ -70,6 +72,8 @@ Dashboard 上也增加了持久消息的数量。
     在 `acl.conf` 中，使用 `{allow, all, all, ["${client_attrs.namespace}/#"]}` 来基于 `namespace` 属性应用权限。
 
   - 在其他授权后端中，可以在请求模板中使用 `${client_attrs.namespace}` 动态包含客户端属性。
+
+  更多关于客户端属性功能的详细信息，参见[客户端属性](../client-attributes/client-attributes.md)。
 
 - [#12910](https://github.com/emqx/emqx/pull/12910) 添加了插件配置管理和 schema 验证功能。还可以使用元数据注释 schema，以便在 Dashboard 中进行 UI 渲染。更多详细信息请参见[插件模板](https://github.com/emqx/emqx-plugin-template/pull/126)和[插件文档](../extensions/plugins.md)。
 

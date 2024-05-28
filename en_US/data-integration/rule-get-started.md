@@ -25,7 +25,7 @@ EMQX has embedded rich SQL statement samples to help you get started, you can cl
 
 ## Test SQL Statement
 
-You can use simulated data to execute SQL statements. Before adding actions and creating rules, you can verify whether the SQL execution results meet expectations. This is an optional step, but it is recommended if you are new to EMQX rules. If you want to test the execution of the entire rule, refer to [Test the Rule](#test-the-rule).
+You can use simulated data to execute SQL statements. Before adding actions and creating rules, you can verify whether the SQL execution results meet expectations. This is an optional step, but it is recommended if you are new to EMQX rules. If you want to test the execution of the entire rule, refer to [Test Rule](#test-rule).
 
 Follow the instructions below to test the SQL statement:
 
