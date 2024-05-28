@@ -503,11 +503,11 @@ This check ensures that during the rolling upgrades, the replicant nodes can onl
 
 *Release Date: 2024-03-06*
 
-## Enhancements
+### Enhancements
 
 - [#12497](https://github.com/emqx/emqx/pull/12497) Improved MongoDB connector performance, resulting in more efficient database interactions. This enhancement is supported by improvements in the MongoDB Erlang driver as well ([mongodb-erlang PR](https://github.com/emqx/mongodb-erlang/pull/41)).
 
-## Bug Fixes
+### Bug Fixes
 
 - [#12471](https://github.com/emqx/emqx/pull/12471) Fixed an issue that data integration configurations failed to load correctly during upgrades from EMQX version 5.0.2 to newer releases.
 
