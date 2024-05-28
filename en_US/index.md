@@ -110,6 +110,7 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
   </tr>
 </tbody>
 </table>
+
 ## Use Cases
 
 As an MQTT broker designed for IoT and real-time messaging applications, EMQX is often used to fulfill various business requirements in the following scenarios.
