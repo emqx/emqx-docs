@@ -114,7 +114,7 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
 
 As an MQTT broker designed for IoT and real-time messaging applications, EMQX is often used to fulfill various business requirements in the following scenarios.
 
-## Reliable and Efficient Pub/Sub Messaging
+### Reliable and Efficient Pub/Sub Messaging
 
 EMQX supports multiple protocols, including MQTT (3.1, 3.1.1, and 5.0), HTTP, QUIC, and WebSocket. It also provides secure bi-directional communication with MQTT over TLS/SSL and various authentication mechanisms, ensuring reliable and efficient communication infrastructure for IoT devices and applications.
 

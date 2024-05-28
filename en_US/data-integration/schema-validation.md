@@ -1,10 +1,6 @@
-## Schema Validation
+# Schema Validation
 
 EMQX includes built-in schema validation capabilities to ensure that only messages conforming to predefined data formats are published to subscribers from specified topics. Schema validation supports multiple schema formats such as JSON Schema, Protobuf, and Avro and built-in SQL statement validation. This page describes the schema validation feature and how to use it.
-
-## Introduction
-
-This section describes why schema validation is crucial for EMQX and how it works.
 
 ### Why Validate Data
 
@@ -101,7 +97,7 @@ This section demonstrates how to create a validation schema, using JSON Schema a
 
 ### Test Schema Validation Setup
 
-You can use the example schema created in [Creating Validation Schema](#create-validation-schema) to test your schema validation setup.
+You can use the example schema created in [Create Validation Schema](#create-validation-schema) to test your schema validation setup.
 
 Use [mqttx](https://mqttx.app/cli) to publish a message with a payload that conforms to the MQTT message rules:
 
@@ -123,7 +119,7 @@ The log output should look like the following:
 
 ### REST API
 
-For detailed information on how to use schema validation through the REST API, see [EMQX Enterprise API](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION/admin/api-docs.html).
+For detailed information on how to use schema validation through the REST API, see [EMQX Enterprise API](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
 
 ## Statistics and Indicators
 
