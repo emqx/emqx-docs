@@ -72,7 +72,6 @@
     - title_en: Install from Source Code
       title_cn: 源码编译安装
       path: deploy/install-source
-      edition: ce
     # - deploy/install-marketplace
     - title_en: Work with License
       title_cn: 配置 License
