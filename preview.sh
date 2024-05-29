@@ -31,8 +31,8 @@ if [ "$PRODUCT" = "ce" ]; then
     python3 "$THIS_DIR/gen.py" ce > directory.json
     docker run -p ${HOST_PORT}:8080 -it --name "$CONTAINER_NAME" \
         -v "$THIS_DIR"/directory.json:/app/docs/.vitepress/config/directory.json \
-        -v "$THIS_DIR"/en_US:/app/docs/en/latest \
-        -v "$THIS_DIR"/zh_CN:/app/docs/zh/latest \
+        -v "$THIS_DIR"/en_US:/app/docs/en/emqx/latest \
+        -v "$THIS_DIR"/zh_CN:/app/docs/zh/emqx/latest \
         -v "$THIS_DIR"/swagger:/app/docs/.vitepress/public/api \
         -e DOCS_TYPE=emqx \
         -e VERSION=latest \
