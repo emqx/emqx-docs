@@ -2,15 +2,9 @@
 description: This section lists the new features introduced in EMQX 5.0 and 5.1.
 ---
 
-{% emqxee %}
-# What's New in EMQX Enterprise 5.0 and 5.1
-{% endemqxee %}
+# New Features
 
-{% emqxce %}
-# What's New in EMQX 5.0 and 5.1
-{% endemqxce %}
-
-This section lists the new features introduced in EMQX after version 5.0.
+This section lists the new features introduced in EMQX Enterprise after version 5.0.
 
 ## Core + Replica Cluster Architecture
 
@@ -24,19 +18,23 @@ To get started, see [Create an EMQX Cluster](../deploy/cluster/create-cluster.md
 
 ## Rolling Upgrades without Downtime
 
-Starting with EMQX Enterprise 5.1.0, the system now supports seamless rolling upgrades for the cluster. This enhances the overall system availability and reliability by allowing transitions to newer versions without any service interruption.
+Starting with EMQX 5.1, the system now supports seamless rolling upgrades for the cluster. This enhances the overall system availability and reliability by allowing transitions to newer versions without any service interruption.
 
 ## MQTT over QUIC
 
-EMQX 5.0 introduced QUIC support (MQTT over QUIC) as an experimental feature and designs a unique messaging mechanism and management approach. In EMQX 5.1 we added [QUIC multistream](https://www.emqx.com/en/blog/emqx-newsletter-202302) support and from now on consider this feature as "generally available".
+EMQX 5.0 introduces QUIC support (MQTT over QUIC) as an experimental feature and designs a unique messaging mechanism and management approach. In EMQX 5.1 we added [QUIC multistream](https://www.emqx.com/en/blog/emqx-newsletter-202302) support and from now on consider this feature as "generally available".
 
 As the underlying transport protocol of the next-generation Internet protocol HTTP/3,  [QUIC](https://datatracker.ietf.org/doc/html/rfc9000) can provide connectivity for the modern mobile Internet with less connection overhead and message latency compared to TCP/TLS protocols. Therefore, EMQX attempted to replace the transport layer of MQTT with QUIC, which led to the MQTT over QUIC.
 
 To evaluate MQTT over QUIC and verify how it could improve network connectivity, please read [Use MQTT over QUIC ](../mqtt-over-quic/getting-started.md).
 
-{% emqxee %}
-
 ## File Transfer over MQTT 
+
+::: tip
+
+The File Transfer over MQTT is an EMQX Enterprise feature.
+
+:::
 
 EMQX 5.1 introduces File Transfer over MQTT, which supports file transfer using the MQTT protocol.
 
@@ -45,8 +43,6 @@ This feature is implemented based on the extended implementation of the standard
 Compared to HTTP/FTP protocols, MQTT has the advantages of low bandwidth consumption and minimal resource utilization, enabling fast and efficient file transfer. The unified IoT data channel also simplifies system architecture, reducing application complexity and maintenance costs.
 
 Get started with [File Transfer over MQTT](../file-transfer/introduction.md) now.
-
-{% endemqxee %}
 
 ## Backup and Restore
 
@@ -74,21 +70,11 @@ Find more details on [Backup and Restore](../operations/backup-restore.md) page.
 
 Besides SQL, EMQX 5.x Rule Engine also supports [jq](https://stedolan.github.io/jq/), so it is capable of handling more complex JSON data formats. See more at the [jq Functions documentation](../data-integration/rule-sql-jq.md).
 
-{% emqxce %}
+The EMQX Open Source edition supports sending data to WebHook or establishing bidirectional data integration with external MQTT services.
 
-Support sending data to WebHook or establishing bidirectional data bridging with external MQTT services.
+The EMQX Enterprise edition also supports bidirectional data integration. You can process and send your IoT data to over 40 cloud services and enterprise systems in real-time, or retrieve data from them and send it to designated MQTT topics after processing. EMQX 5.0 provides the Flows feature for visualizing the data integration process on the Dashboard. Now you can easily check how the rules engine processes IoT data and how data flows to external data services or devices.
 
-{% endemqxce %}
-
-{% emqxee %}
-
-Leveraging the bidirectional data bridging feature, you can process and send your IoT data to over 40 cloud services and enterprise systems in real-time, or retrieve data from them and send it to designated MQTT topics after processing.
-
-{% endemqxee %}
-
-EMQX visualizes the data integration process with the Flows feature on Dashboard. Now you can easily check how the rules engine processes IoT data and how data flows to external data services or devices.
-
-On different data bridging that EMQX supports and how to configure, see [Data Integration](../data-integration/data-bridges.md).
+For different data integrations that EMQX supports and how to configure them, see [Data Integration](../data-integration/data-bridges.md).
 
 ## Flexible Authentication/Authorization
 
