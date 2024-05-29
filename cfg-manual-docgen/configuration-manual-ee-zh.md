@@ -12,7 +12,7 @@ EMQX 配置文件手册。
 
   *默认值*: `emqx@127.0.0.1`
 
-  节点名。格式为 \<name>@\<host>。其中 <host> 可以是 IP 地址，也可以是 FQDN。
+  节点名。格式为 \<name>@\<host>。其中 \<host> 可以是 IP 地址，也可以是 FQDN。
 详见 http://erlang.org/doc/reference_manual/distributed.html。
 
 
@@ -598,7 +598,7 @@ DNS SRV 记录服务发现。
   *默认值*: `emqxcl`
 
   指定 etcd 路径的前缀。每个节点在 etcd 中都会创建一个路径:
-v2/keys/<prefix>/<cluster.name>/<node.name> <br/>
+v2/keys/\<prefix>/\<cluster.name>/\<node.name> <br/>
 当 cluster.discovery_strategy 为 etcd 时，此配置项才有效。
 
 
