@@ -38,7 +38,7 @@ The File Transfer over MQTT is an EMQX Enterprise feature.
 
 EMQX 5.1 introduces File Transfer over MQTT, which supports file transfer using the MQTT protocol.
 
-This feature is implemented based on the extended implementation of the standard MQTT protocol, allowing integration with existing clients and applications without modification. Clients can send file segments to specific topics using the MQTT protocol. After the transfer is complete, the server merges the file segments and saves them to local disk or exports them to object storage compatible with the S3 protocol.
+This feature is implemented based on the extended implementation of the standard MQTT protocol, allowing integration with existing clients and applications without modification. Clients can send file segments to specific topics using the MQTT protocol. After the transfer is complete, the server merges the file segments and saves them to the local disk or exports them to object storage compatible with the S3 protocol.
 
 Compared to HTTP/FTP protocols, MQTT has the advantages of low bandwidth consumption and minimal resource utilization, enabling fast and efficient file transfer. The unified IoT data channel also simplifies system architecture, reducing application complexity and maintenance costs.
 

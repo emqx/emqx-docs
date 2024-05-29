@@ -555,7 +555,6 @@
     - title_en: File Transfer over MQTT
       title_cn: 基于 MQTT 的文件传输
       path: file-transfer/introduction
-      edition: ee
       collapsed: true
       children:
         - file-transfer/quick-start
