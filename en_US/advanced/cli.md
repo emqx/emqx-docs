@@ -48,7 +48,7 @@ $ ./bin/emqx_ctl mgmt list
 app_id: 901abdba8eb8c, secret: MjgzMzQ5MjM1MzUzMTc4MjgyMjE3NzU4ODcwMDg0NjQ4OTG, name: hello, desc: , status: true, expired: undefined
 ```
 
-### mgmt insert <AppId> <Name>
+### mgmt insert \<AppId> \<Name>
 
 Add the HTTP API application:
 
@@ -57,7 +57,7 @@ $ ./bin/emqx_ctl mgmt insert dbcb6e023370b world
 AppSecret: MjgzMzQ5MjYyMTY3ODk4MjA5NzMwODExODMxMDM1NDk0NDA
 ```
 
-### mgmt update <AppId> <status>
+### mgmt update \<AppId> \<status>
 
 Update the HTTP API application:
 
@@ -66,7 +66,7 @@ $ ./bin/emqx_ctl mgmt update dbcb6e023370b stop
 update successfully.
 ```
 
-### mgmt lookup <AppId>
+### mgmt lookup \<AppId>
 
 Get application details of the HTTP API:
 
@@ -80,7 +80,7 @@ status: stop
 expired: undefined
 ```
 
-### mgmt delete <AppId>
+### mgmt delete \<AppId>
 
 Remove the HTTP API application:
 
@@ -359,7 +359,7 @@ Return the properties of the Client object:
 | connected\_at             | Client connection timestamp |
 | disconnected_at | Client disconnection timestamp (appears only if the disconnection also retains the session) |
 
-### clients show <ClientId>
+### clients show \<ClientId>
 
 Query the client with the specified ClientId:
 
@@ -368,7 +368,7 @@ $ ./bin/emqx_ctl clients show "mosqsub/43832-airlee.lo"
 Client (mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62747, clean_start=false, keepalive=60, session_expiry_interval=7200, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576479557, connected_at=1576479557)
 ```
 
-### clients kick <ClientId>
+### clients kick \<ClientId>
 
 Kick out the client with the specified ClientId:
 
@@ -398,7 +398,7 @@ t2/# -> emqx2@127.0.0.1
 t/+/x -> emqx2@127.0.0.1,emqx@127.0.0.1
 ```
 
-### routes show <Topic>
+### routes show \<Topic>
 
 Query the route with the specified topic:
 
@@ -428,7 +428,7 @@ mosqsub/91042-airlee.lo -> t/y:1
 mosqsub/90475-airlee.lo -> t/+/x:2
 ```
 
-### subscriptions show <ClientId>
+### subscriptions show \<ClientId>
 
 Query certain client's subscription:
 
@@ -437,7 +437,7 @@ $ ./bin/emqx_ctl subscriptions show 'mosqsub/90475-airlee.lo'
 mosqsub/90475-airlee.lo -> t/+/x:2
 ```
 
-### subscriptions add <ClientId> <Topic> <QoS>
+### subscriptions add \<ClientId> \<Topic> \<QoS>
 
 Add subscription relationship manually:
 
@@ -446,7 +446,7 @@ $ ./bin/emqx_ctl subscriptions add 'mosqsub/90475-airlee.lo' '/world' 1
 ok
 ```
 
-### subscriptions del <ClientId> <Topic>
+### subscriptions del \<ClientId> \<Topic>
 
 Delete subscription relationship manually:
 
@@ -466,7 +466,7 @@ The plugins command is used to load, unload, and query plugin applications. EMQ 
 | `plugins unload <Plugin> `| Unload plugins |
 | `plugins reload <Plugin> `| Reload plugins |
 
-When the configuration file changesand it needs to take effect immediately, you can execute the `emqx_ctl reload <Plugin \>` command, even if the plugin is not running when the configuration is modified. You should use this command instead of `emqx_ctl load <Plugin\>` . Because `emqx_ctl load <Plugin \>` does not compile the new configuration file.
+When the configuration file changesand it needs to take effect immediately, you can execute the `emqx_ctl reload <Plugin>` command, even if the plugin is not running when the configuration is modified. You should use this command instead of `emqx_ctl load <Plugin>` . Because `emqx_ctl load <Plugin>` does not compile the new configuration file.
 
 ### plugins list
 
@@ -510,7 +510,7 @@ Plugin properties:
 | description | Plugin description |
 | active      | Whether loaded     |
 
-### plugins load <Plugin>
+### plugins load \<Plugin>
 
 Load plugin:
 
@@ -519,7 +519,7 @@ $ ./bin/emqx_ctl plugins load emqx_lua_hook
 Plugin emqx_lua_hook loaded successfully.
 ```
 
-### plugins unload <Plugin>
+### plugins unload \<Plugin>
 
 Unload plugin:
 
@@ -528,7 +528,7 @@ $ ./bin/emqx_ctl plugins unload emqx_lua_hook
 Plugin emqx_lua_hook unloaded successfully.
 ```
 
-### plugins reload <Plugin>
+### plugins reload \<Plugin>
 
 Reload plugin:
 
@@ -705,7 +705,7 @@ The log command is used to set the log level. Visit [Documentation of logger](ht
 
 The levels of the logs from low to high are: `debug | info | notice | warning | error | critical | alert | emergency`. The lower the log level, the more logs the system outputs, and the more system resources it consumes. To improve system performance, the default primary log level is error.
 
-### log set-level <Level>
+### log set-level \<Level>
 
 Set the primary log level and all Handlers log levels
 
@@ -723,7 +723,7 @@ $ ./bin/emqx_ctl log primary-level
 debug
 ```
 
-### log primary-level <Level>
+### log primary-level \<Level>
 
 Set the primary log level:
 
@@ -743,7 +743,7 @@ LogHandler (id=file, level=debug, destination=log/emqx.log)
 LogHandler (id=default, level=debug, destination=console)
 ```
 
-### log handlers set-level <HandlerId> <Level>
+### log handlers set-level \<HandlerId> \<Level>
 
 Set the log level with the specified Hanlder:
 
@@ -764,7 +764,7 @@ The trace command is used to trace a client or topic, and print log information 
 | `trace start topic <Topic> <File> [<Level>]    ` | Start Topic trace and store logs of specified level to a file |
 | `trace stop topic <Topic>                      ` | Stop Topic trace                                             |
 
-### trace start client <ClientId> <File> [ <Level> ]
+### trace start client \<ClientId> \<File> [ \<Level> ]
 
 Start client trace:
 
@@ -779,7 +779,7 @@ $ ./bin/emqx_ctl trace start client clientid2 log/clientid2_trace.log error
 trace clientid clientid2 successfully
 ```
 
-### trace stop client <ClientId>
+### trace stop client \<ClientId>
 
 Stop client trace:
 
@@ -788,7 +788,7 @@ $ ./bin/emqx_ctl trace stop client clientid
 stop tracing clientid clientid successfully
 ```
 
-### trace start topic <Topic> <File> [ <Level> ]
+### trace start topic \<Topic> \<File> [ \<Level> ]
 
 Start Topic trace:
 
@@ -803,7 +803,7 @@ $ ./bin/emqx_ctl trace start topic topic2 log/topic2_trace.log error
 trace topic topic2 successfully
 ```
 
-### trace stop topic <Topic>
+### trace stop topic \<Topic>
 
 Stop Topic trace:
 
@@ -879,11 +879,11 @@ listener parameter description:
 | Name            | Description |
 | --------------- | ------------------- |
 | acceptors       | TCP Acceptor pool  |
-| max\_conns      | Maximum allowed connections |
-| current\_conns  | Current connections |
-| shutdown\_count | Statistics of connection shutdown reasons |
+| max_conns      | Maximum allowed connections |
+| current_conns  | Current connections |
+| shutdown_count | Statistics of connection shutdown reasons |
 
-### listeners stop <Proto> <Port>
+### listeners stop \<Proto> \<Port>
 
 Stop listener port:
 
@@ -945,7 +945,7 @@ $ ./bin/emqx_ctl retainer clean
 Cleaned 3 retained messages
 ```
 
-### retainer clean <Topic>
+### retainer clean \<Topic>
 
 Clear the retained messages with the specified topic:
 
@@ -964,7 +964,7 @@ It is used to create and delete administrator's accounts and reset the administr
 | `admins passwd <Username> <Password>     ` | Reset admin password |
 | `admins del <Username>                   ` | Delete admin account |
 
-### admins add <Username> <Password> <Tags>
+### admins add \<Username> \<Password> \<Tags>
 
 Create admin account:
 
@@ -973,7 +973,7 @@ $ ./bin/emqx_ctl admins add root public test
 ok
 ```
 
-### admins passwd <Username> <Password>
+### admins passwd \<Username> \<Password>
 
 Reset admin password:
 
@@ -982,7 +982,7 @@ $ ./bin/emqx_ctl admins passwd root private
 ok
 ```
 
-### admins del <Username>
+### admins del \<Username>
 
 Delete admin account:
 
