@@ -246,7 +246,7 @@ The cluster command is used to manage a cluster of multiple EMQ X Broker nodes (
 
 Example:
 
-To demonstrate the cluster command in a better way, we first start two nodes on the local machine and create a cluster. To avoid port conflicts, we have adjusted the listening port of the emqx2 node. For example, the MQTT/TCP listening port was changed from the default 1883 to 2883. Please refer to [Configuration Instructions](getting-started/config.md) and  [Configuration Items](configuration/index.md) for details.
+To demonstrate the cluster command in a better way, we first start two nodes on the local machine and create a cluster. To avoid port conflicts, we have adjusted the listening port of the emqx2 node. For example, the MQTT/TCP listening port was changed from the default 1883 to 2883. Please refer to [Configuration Instructions](../getting-started/config.md) and  [Configuration Items](../configuration/configuration.md) for details.
 
 Start emqx1 :
 
@@ -406,7 +406,7 @@ t2/# -> emqx2@127.0.0.1
 t/+/x -> emqx2@127.0.0.1,emqx@127.0.0.1
 ```
 
-### routes show <Topic>
+### routes show \<Topic>
 
 Query the route with the specified topic:
 
@@ -474,7 +474,7 @@ The plugins command is used to load, unload, and query plugin applications. EMQ 
 | `plugins unload <Plugin> `| Unload plugins |
 | `plugins reload <Plugin> `| Reload plugins |
 
-When the configuration file changesand it needs to take effect immediately, you can execute the `emqx_ctl reload <Plugin \>` command, even if the plugin is not running when the configuration is modified. You should use this command instead of `emqx_ctl load <Plugin\>` . Because `emqx_ctl load <Plugin \>` does not compile the new configuration file.
+When the configuration file changesand it needs to take effect immediately, you can execute the `emqx_ctl reload <Plugin>` command, even if the plugin is not running when the configuration is modified. You should use this command instead of `emqx_ctl load <Plugin>` . Because `emqx_ctl load <Plugin>` does not compile the new configuration file.
 
 ### plugins list
 
@@ -518,7 +518,7 @@ Plugin properties:
 | description | Plugin description |
 | active      | Whether loaded     |
 
-### plugins load <Plugin>
+### plugins load \<Plugin>
 
 Load plugin:
 
@@ -527,7 +527,7 @@ $ ./bin/emqx_ctl plugins load emqx_lua_hook
 Plugin emqx_lua_hook loaded successfully.
 ```
 
-### plugins unload <Plugin>
+### plugins unload \<Plugin>
 
 Unload plugin:
 
@@ -536,7 +536,7 @@ $ ./bin/emqx_ctl plugins unload emqx_lua_hook
 Plugin emqx_lua_hook unloaded successfully.
 ```
 
-### plugins reload <Plugin>
+### plugins reload \<Plugin>
 
 Reload plugin:
 
@@ -713,7 +713,7 @@ The log command is used to set the log level. Visit [Documentation of logger](ht
 
 The levels of the logs from low to high are: `debug | info | notice | warning | error | critical | alert | emergency`. The lower the log level, the more logs the system outputs, and the more system resources it consumes. To improve system performance, the default primary log level is error.
 
-### log set-level <Level>
+### log set-level \<Level>
 
 Set the primary log level and all Handlers log levels
 
@@ -731,7 +731,7 @@ $ ./bin/emqx_ctl log primary-level
 debug
 ```
 
-### log primary-level <Level>
+### log primary-level \<Level>
 
 Set the primary log level:
 
@@ -751,7 +751,7 @@ LogHandler (id=file, level=debug, destination=log/emqx.log)
 LogHandler (id=default, level=debug, destination=console)
 ```
 
-### log handlers set-level <HandlerId> <Level>
+### log handlers set-level \<HandlerId> \<Level>
 
 Set the log level with the specified Hanlder:
 
@@ -762,7 +762,7 @@ error
 
 ## trace command
 
-The trace command is used to trace a client or topic, and print log information to a file. For details, see [Log and Trace](getting-started/log.md).
+The trace command is used to trace a client or topic, and print log information to a file. For details, see [Log and Trace](../getting-started/log.md).
 
 | Command                                          | Description                                                  |
 | ------------------------------------------------ | ------------------------------------------------------------ |
@@ -796,7 +796,7 @@ $ ./bin/emqx_ctl trace stop client clientid
 stop tracing clientid clientid successfully
 ```
 
-### trace start topic <Topic> <File> [ <Level> ]
+### trace start topic \<Topic> \<File> [ \<Level> ]
 
 Start Topic trace:
 
@@ -811,7 +811,7 @@ $ ./bin/emqx_ctl trace start topic topic2 log/topic2_trace.log error
 trace topic topic2 successfully
 ```
 
-### trace stop topic <Topic>
+### trace stop topic \<Topic>
 
 Stop Topic trace:
 
@@ -891,7 +891,7 @@ listener parameter description:
 | current\_conns  | Current connections |
 | shutdown\_count | Statistics of connection shutdown reasons |
 
-### listeners stop <Proto> <Port>
+### listeners stop \<Proto> \<Port>
 
 Stop listener port:
 
@@ -953,7 +953,7 @@ $ ./bin/emqx_ctl retainer clean
 Cleaned 3 retained messages
 ```
 
-### retainer clean <Topic>
+### retainer clean \<Topic>
 
 Clear the retained messages with the specified topic:
 
@@ -972,7 +972,7 @@ It is used to create and delete administrator's accounts and reset the administr
 | `admins passwd <Username> <Password>     ` | Reset admin password |
 | `admins del <Username>                   ` | Delete admin account |
 
-### admins add <Username> <Password> <Tags>
+### admins add \<Username> \<Password> \<Tags>
 
 Create admin account:
 
@@ -981,7 +981,7 @@ $ ./bin/emqx_ctl admins add root public test
 ok
 ```
 
-### admins passwd <Username> <Password>
+### admins passwd \<Username> \<Password>
 
 Reset admin password:
 
@@ -990,7 +990,7 @@ $ ./bin/emqx_ctl admins passwd root private
 ok
 ```
 
-### admins del <Username>
+### admins del \<Username>
 
 Delete admin account:
 

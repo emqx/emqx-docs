@@ -1945,7 +1945,7 @@ MQTT 消息中的数据。
 | $<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
 | $timestamp  | EMQ X 准备转发消息时设置的时间戳, 精度: 纳秒            |
 
-**$payload 与 $<Number\>:**
+**$payload 与 `$<Number>`:**
 
 你可以直接使用 `$payload` 取得完整的消息载荷, 也可以通过 `["$payload", <Key>, ...]`
 取得消息载荷内部的数据。
@@ -2175,7 +2175,7 @@ MQTT 消息中的数据。
 | $<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
 | $timestamp  | EMQ X 准备转发消息时设置的时间戳, 精度: 毫秒            |
 
-**$payload 与 $<Number\>:**
+**$payload 与 `$<Number>`:**
 
 你可以直接使用 `$payload` 取得完整的消息载荷, 也可以通过 `["$payload", <Key>, ...]`
 取得消息载荷内部的数据。
@@ -2386,9 +2386,9 @@ $2, $3)`。
 | $<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
 | $timestamp  | EMQ X 准备转发消息时设置的时间戳, 精度: 毫秒            |
 
-**$payload 与 $<Number\>:**
+**$payload 与 `$<Number>`:**
 
-你可以直接使用 `$payload` 取得完整的消息载荷, 也可以通过 `["$payload", <Key>, ...]`
+你可以直接使用 `$payload` 取得完整的消息载荷, 也可以通过 `["$payload", <Key>, ...]`
 取得消息载荷内部的数据。
 
 例如 `payload` 为 `{"data": {"temperature": 23.9}}`, 你可以通过占位符 `["$payload",

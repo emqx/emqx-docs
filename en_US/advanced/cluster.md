@@ -80,7 +80,7 @@ Each node in the Erlang cluster can be connected through TCPv4, TCPv6 or TLS, an
 
 | Configuration name | Type | Default value | Description |
 | ----- | --- | ----- | ---- |
-| cluster.proto_dist | enum | `inet_tcp` | Distributed protocol with optional values are as follows:<br />  - inet_tcp: use TCP IPv4<br/>  - inet6_tcp: use TCP IPv6<br/>  - inet_tls: use TLS |
+| cluster.proto_dist | enum | `inet_tcp` | Distributed protocol with optional values are as follows:<br />  - inet_tcp: use TCP IPv4<br />  - inet6_tcp: use TCP IPv6<br />  - inet_tls: use TLS |
 | node.ssl_dist_optfile | file path | `etc/ssl_dist.conf` | When `cluster.proto_dist` is selected as inet_tls, you need to configure the ` etc/ssl_dist.conf` file, and specify the TLS certificate. |
 
 ## EMQ X Broker Distributed cluster design
@@ -158,7 +158,7 @@ EMQ X supports multiple node discovery strategies:
 | k8s      | Autocluster of Kubernetes service |
 
 ### Creating a cluster manually
-The default configuration is to manually create a cluster. Nodes should be added via the command of ./bin/emqx\_ctl join \ <Node \>:
+The default configuration is to manually create a cluster. Nodes should be added via the command of `./bin/emqx_ctl join <Node >`:
 
 ```bash
 cluster.discovery = manual

@@ -132,7 +132,7 @@ For different events, the content of the request body is different. The followin
 
 | Key        | Type    | Description                                                 |
 | ---------- | ------- | ----- |
-| action     | string  | event name<br/>fixed at: "client_connack" |
+| action     | string  | event name<br />fixed at: "client_connack" |
 | clientid   | string  | client ClientId |
 | username   | string  | client Username, When not existed, the value is "undefined" |
 | ipaddress  | string  | client source IP address |
@@ -168,7 +168,7 @@ For different events, the content of the request body is different. The followin
 
 | Key         | Type   | Description                                                 |
 | ----------- | ------- | ----- |
-| action      | string  | event name<br/>fixed at: "client_subscribe" |
+| action      | string  | event name<br />fixed at: "client_subscribe" |
 | clientid    | string  | Client ClientId |
 | username    | string  | Client Username, When not existed, the value is "undefined" |
 | topic       | string  | Topics to be subscribed |
@@ -184,7 +184,7 @@ opts includes
 
 | Key         | Type   | Description                                                 |
 | ----------- | ------- | ----- |
-| action      | string  | event name<br/>fixed at:"client_unsubscribe" |
+| action      | string  | event name<br />fixed at:"client_unsubscribe" |
 | clientid    | string  | client ClientId |
 | username    | string  | client Username, When not existed, the value is "undefined" |
 | topic       | string  | unsubscribed topic |
@@ -199,7 +199,7 @@ opts includes
 
 | Key            | Type    | Description                                                  |
 | -------------- | ------- | ----- |
-| action         | string  | event name<br/>fixed at: "message_publish" |
+| action         | string  | event name<br />fixed at: "message_publish" |
 | from_client_id | string  | Publisher's ClientId |
 | from_username  | string  | Publisher's Username, When not existed, the value is "undefined" |
 | topic          | string  | Unsubscribed topic |
@@ -213,7 +213,7 @@ opts includes
 
 | Key            | Type    | Description                                                  |
 | -------------- | ------- | ----- |
-| action         | string  | event name<br/>fixed at: "message_delivered" |
+| action         | string  | event name<br />fixed at: "message_delivered" |
 | clientid       | string  | Receiver's ClientId |
 | username       | string  | Receiver's Username, When not existed, the value is "undefined" |
 | from_client_id | string  | Publisher's ClientId |
@@ -229,7 +229,7 @@ opts includes
 
 | Key            |  Type   | Description  |
 | -------------- | ------- | ----- |
-| action         | string  | event name<br/>fixed at: "message_acked" |
+| action         | string  | event name<br />fixed at: "message_acked" |
 | clientid       | string  | Receiver's ClientId |
 | from_client_id | string  | Publisher's ClientId |
 | from_username  | string  | Publisher's Username, When not existed, the value is "undefined" |

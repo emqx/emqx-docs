@@ -17,9 +17,17 @@ EMQ X 设计目标是实现高可靠，并支持承载海量物联网终端的MQ
 **建议您在使用前仔细阅读一遍下面列出的文档，未列出的其他文档可以按需选择查看：**
 
 ## 开始使用
+{% emqxce %}
   - [安装](getting-started/install.md)：不同操作系统与安装包类型的下载、安装步骤。
   - [启动 EMQ X](getting-started/start.md)：启动 EMQ X 并查看启动状态。
   - [Dashboard](getting-started/dashboard.md)：通过 Dashboard 管理 EMQ X 及在线设备。
+{% endemqxce %}
+
+{% emqxee %}
+  - [安装](getting-started/install-ee.md)：不同操作系统与安装包类型的下载、安装步骤。
+  - [启动 EMQ X](getting-started/start.md)：启动 EMQ X 并查看启动状态。
+  - [Dashboard](getting-started/dashboard-ee.md)：通过 Dashboard 管理 EMQ X 及在线设备。
+{% endemqxee %}
 
 ## 认证鉴权
   - [认证简介](advanced/auth.md)：选择内置插件、外部数据库、JWT 或者 HTTP 服务作为认证数据源，验证客户端连接合法性。
@@ -84,6 +92,7 @@ EMQ X 企业版桥接转发 MQTT 消息到 Kafka、RabbitMQ、Pulsar、RocketMQ�
  - [LwM2M 协议](development/protocol.md#lwm2m-协议)
  - [私有 TCP 协议](development/protocol.md#私有-tcp-协议)
 
+{% emqxce %}
 ## 其他
  - [资源](awesome/awesome.md)：社区交流，包含社区热门教程、项目展示等资源。
-
+{% endemqxce %}

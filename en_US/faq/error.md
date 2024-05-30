@@ -44,11 +44,11 @@ Different from previous versions, Mysql8.0 uses the `caching_sha2_password` plug
 
 - Restart Mysql
 
-  ### Incorrect OPENSSL version
+### Incorrect OPENSSL version
 
   **Tags:** [*fail to start*](tags.md#启动失败)
 
-  #### Phenomenon
+#### Phenomenon
 
   The output error  from executing `./bin/emqx console` includes:
 
@@ -58,9 +58,9 @@ Different from previous versions, Mysql8.0 uses the `caching_sha2_password` plug
 
   It indicates that the "crypto" application in Erlang/OTP that EMQ X depends on failed to start.
 
-  #### Solution
+#### Solution
 
-  ##### Linux
+##### Linux
 
   Go to the installation directory of EMQ X (If you use the package management tool to install EMQ X, you should enter the same level directory as the `lib` of EMQ X)
 
@@ -113,7 +113,7 @@ Different from previous versions, Mysql8.0 uses the `caching_sha2_password` plug
   After the completion, execute `ldd lib/crypto-*/priv/lib/crypto.so` in the lib-level directory of EMQ X to check whether it can be correctly identified. If there is no `.so` library in `not found`, you can start EMQ X normally.
 
 
-  ##### macOS
+##### macOS
 
   Go to the installation directory of EMQ X:
 
@@ -150,11 +150,11 @@ Different from previous versions, Mysql8.0 uses the `caching_sha2_password` plug
 
   After the installation is complete, you can start EMQ X normally.
 
-  ### MSVCR120.dll is missing from Windows
+### MSVCR120.dll is missing from Windows
 
   **Tags:** [*fail to start*](tags.md#启动失败)
 
-  #### Phenomenon
+#### Phenomenon
 
   When Windows executes `./bin/emqx console`, an error window pops up:
 
@@ -164,6 +164,6 @@ Different from previous versions, Mysql8.0 uses the `caching_sha2_password` plug
 
   <!-- ![error](D:/emqx/emqx-docs-cn/faq/static/WechatIMG18396.png) -->
 
-  #### Solution
+#### Solution
 
   Install [Microsoft Visual C++ RedistributablePackage](https://www.microsoft.com/en-us/download/search.aspx?q=redistributable+package.)

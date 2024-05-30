@@ -171,18 +171,18 @@ The input parameters and returned value of the callback function are shown in th
 | client.disconnected  | `ClientInfo`：Client information parameters<br>`ConnInfo`：Client connection layer parameters<br>`ReasonCode`：Reason code | -                   |
 | client.authenticate  | `ClientInfo`：Client information parameters<br>`AuthResult`：Authentication results | New `AuthResult` |
 | client.check_acl     | `ClientInfo`：Client information parameters<br>`Topic`：Publish/subscribe topic<br>`PubSub`:  Publish/subscribe<br>`ACLResult`：Authentication result | New `ACLResult` |
-| client.subscribe     | `ClientInfo`：Client information parameters<br/>`Props`：Properties parameters of MQTT v5.0 subscription messages<br>`TopicFilters`：List of topics of subscription | New `TopicFilters` |
-| client.unsubscribe   | `ClientInfo`：Client information parameters<br/>`Props`：Properties parameters of MQTT v5.0 unsubscription messages<br/>`TopicFilters`：List of topics of unsubscription | New `TopicFilters` |
-| session.created      | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information | -                   |
-| session.subscribed   | `ClientInfo`：Client information parameters<br/>`Topic`：subscribed topic<br>`SubOpts`：Configuration options for subscribe operations | -                   |
-| session.unsubscribed | `ClientInfo`：Client information parameters<br/>`Topic`：unsubscribed topic<br/>`SubOpts`：Configuration options for unsubscribe operations | -                   |
-| session.resumed      | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information | -                   |
-| session.discarded    | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information | -                   |
-| session.takeovered   | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information |                     |
-| session.terminated   | `ClientInfo`：Client information parameters<br/>`Reason`：Termination reason <br>`SessInfo`：Session information | -   |
+| client.subscribe     | `ClientInfo`：Client information parameters<br />`Props`：Properties parameters of MQTT v5.0 subscription messages<br>`TopicFilters`：List of topics of subscription | New `TopicFilters` |
+| client.unsubscribe   | `ClientInfo`：Client information parameters<br />`Props`：Properties parameters of MQTT v5.0 unsubscription messages<br />`TopicFilters`：List of topics of unsubscription | New `TopicFilters` |
+| session.created      | `ClientInfo`：Client information parameters<br />`SessInfo`：Session information | -                   |
+| session.subscribed   | `ClientInfo`：Client information parameters<br />`Topic`：subscribed topic<br>`SubOpts`：Configuration options for subscribe operations | -                   |
+| session.unsubscribed | `ClientInfo`：Client information parameters<br />`Topic`：unsubscribed topic<br />`SubOpts`：Configuration options for unsubscribe operations | -                   |
+| session.resumed      | `ClientInfo`：Client information parameters<br />`SessInfo`：Session information | -                   |
+| session.discarded    | `ClientInfo`：Client information parameters<br />`SessInfo`：Session information | -                   |
+| session.takeovered   | `ClientInfo`：Client information parameters<br />`SessInfo`：Session information |                     |
+| session.terminated   | `ClientInfo`：Client information parameters<br />`Reason`：Termination reason <br>`SessInfo`：Session information | -   |
 | message.publish      | `Message`：Message object                            | New `Message`   |
-| message.delivered    | `ClientInfo`：Client information parameters<br/>`Message`：Message object | New `Message`   |
-| message.acked        | `ClientInfo`：Client information parameters<br/>`Message`：Message object | -                   |
+| message.delivered    | `ClientInfo`：Client information parameters<br />`Message`：Message object | New `Message`   |
+| message.acked        | `ClientInfo`：Client information parameters<br />`Message`：Message object | -                   |
 | message.dropped      | `Message`：Message object<br>`By`：Dropped by<br>`Reason`：Drop reason | -                   |
 
 

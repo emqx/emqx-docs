@@ -237,7 +237,7 @@ In this version we significantly improved the throughput of the broker by refact
 
 - Support returning the real topic of shared subscription in the subscriptions API:
 
-  Now the shared subscriptions are shown in the form of '$shared/<group>/topic'.
+  Now the shared subscriptions are shown in the form of `$shared/<group>/topic`.
 
 - Support configuring the default AppID and AppSecret:
   

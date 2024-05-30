@@ -799,11 +799,11 @@ Where to output the log. The optional values are:
 
 | Type | Optional Value                                                                     | Default   |
 | ---- | ---------------------------------------------------------------------------------- | --------- |
-| enum | `debug`, `info`, `notice`, `warning`<br/>`error`, `critical`, `alert`, `emergency` | `warning` |
+| enum | `debug`, `info`, `notice`, `warning`<br />`error`, `critical`, `alert`, `emergency` | `warning` |
 
 ##### Description
 
-Global log level. This includes the primary log level and all log handlers. For details, see [log level and log handlers](../getting-started/log.md#log-level-and-log-handlers).
+Global log level. This includes the primary log level and all log handlers. For details, see [log level and log handlers](../getting-started/log.md).
 
 <br />
 
@@ -867,7 +867,7 @@ Set the total number of log files. If this number is exceeded, the next log file
 
 <br />
 
-### log.<level>.file
+### log.\<level>.file
 
 | Type   | Default |
 | ------ | ------- |
@@ -994,7 +994,7 @@ What to do after the ACL check fails.
 
 Specify the `Flapping` inspection strategy.
 
-Format: <threshold>,<duration>,<banned>`.
+Format: `<threshold>,<duration>,<banned>`.
 
 For example, `30, 1m, 5m`, it means that if the client disconnects 30 times within 1 minute, then login is prohibited for the next 5 minutes
 
@@ -3701,8 +3701,8 @@ Set the system topic (`$SYS`) message release interval.
 
 Set the system heartbeat message release interval. The system heartbeat message includes the following two topics:
 
-- "$SYS/brokers/<node>/uptime"
-- "$SYS/brokers/<node>/datetime"
+- "$SYS/brokers/\<node>/uptime"
+- "$SYS/brokers/\<node>/datetime"
 
 <br />
 
@@ -3941,7 +3941,7 @@ When the percentage of the current number of processes in the maximum number of 
 
 ## [emqx-auth-clientid](https://github.com/emqx/emqx-auth-clientid)
 
-### auth.client.<Number>.clientid` & `auth.client.<Number>.password
+### `auth.client.<Number>.clientid` & `auth.client.<Number>.password`
 
 | Type   | Default |
 | ------ | ------- |
@@ -4168,7 +4168,7 @@ When the HTTP request fails, the retry interval uses the exponential backoff alg
 
 <br />
 
-### auth.http.header.<Key>
+### auth.http.header.\<Key>
 
 | Type   | Default |
 | ------ | ------- |
@@ -4276,7 +4276,7 @@ Enable or disable Claims verification.
 
 <br />
 
-### auth.jwt.verify_claims.<claims>
+### auth.jwt.verify_claims.\<claims>
 
 | Type   | Default |
 | ------ | ------- |
@@ -5442,7 +5442,7 @@ ACL query commands. Available placeholders are:
 
 ## [emqx-auth-username](https://github.com/emqx/emqx-auth-username)
 
-### auth.user.<Number>.username` & `auth.user.<Number>.password
+### `auth.user.<Number>.username` & `auth.user.<Number>.password`
 
 | Type   | Default |
 | ------ | ------- |
@@ -6830,7 +6830,7 @@ Ignore system messages ($ SYS). The rule engine will not process system messages
 
 <br />
 
-### rule_engine.events.<event-name>
+### rule_engine.events.\<event-name>
 
 | Type | Optional Value | Default |
 | ---- | -------------- | ------- |
@@ -7003,7 +7003,7 @@ Specify the collection interval of Statsd data in milliseconds.
 
 <br />
 
-### prometheus.collector.<N>
+### prometheus.collector.\<N>
 
 | Type   | Default       |
 | ------ | ------------- |

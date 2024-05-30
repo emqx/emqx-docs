@@ -78,8 +78,6 @@ Java development can refer to: [emqx-extension-java-sdk](https://github.com/emqx
 
 Before EMQ X 4.1. We only provide multi-language support for Lua. Its architecture is different from the above mentioned, which will include the entire language runtime in the Erlang VM:
 
-![Old Multiple Lang Arch](D:/emqx/emqx-docs-cn/advanced/assets/lua-lang-arch.png)
-
 - Multiple language support appears as a plug-in. For different language environments, different language support plugins are required.
 - This supported plugin embeds all the environments of the language runtime.
 
