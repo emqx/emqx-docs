@@ -178,7 +178,7 @@ FROM
 | 字段                  | 解释                                                                                                                                                              |
 | :-------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | id                    | MQTT 消息 ID                                                                                                                                                      |
-| reason                | 消息丢弃原因，可能的原因：<br/>no\_subscribers: 没有订阅者<br/>receive\_maximum\_exceeded: awaiting\_rel 队列已满</br>packet\_identifier\_inuse: 消息 ID 已被使用 |
+| reason                | 消息丢弃原因，可能的原因：<br/>no\_subscribers: 没有订阅者<br/>receive\_maximum\_exceeded: awaiting\_rel 队列已满<br />packet\_identifier\_inuse: 消息 ID 已被使用 |
 | clientid              | 消息来源 Client ID                                                                                                                                                |
 | username              | 消息来源用户名                                                                                                                                                    |
 | payload               | MQTT 消息体                                                                                                                                                       |

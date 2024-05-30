@@ -4,7 +4,7 @@
 
 > Please refer to the official Tablestore documentation for the steps to create an instance.
 
-</br>Click `Instances` . `Time Series Table`. `Create Time Series Table`.
+<br />Click `Instances` . `Time Series Table`. `Create Time Series Table`.
 
 ![img](./assets/rule-engine/tablestore/instance_manage.png)
 
@@ -24,9 +24,9 @@ Click `Rule Engine` `Resources` `Create`. Find the `Tablestore(Time Series)`.
 
 Using the created instance properties, fill in the corresponding `Tablestore server` and `Instance` names.
 
-</br>
+<br />
 AccessKey & Secret need to use Alibaba Cloud account application, detailed application steps, please refer to the official documentation of Tablestore.
-</br>
+<br />
 Please fill in different domain names according to the deployment method for the server address.
 
 ![img](./assets/rule-engine/tablestore/tablestore_data.png)

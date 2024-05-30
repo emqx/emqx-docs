@@ -2,7 +2,7 @@
 
 创建数据库实例（创建实例操作步骤请参考 Tablestore 官方文档）。
 
-</br>点击实例管理，点击时序表列表。创建时序表。
+<br />点击实例管理，点击时序表列表。创建时序表。
 
 ![img](./assets/rule-engine/tablestore/instance_manage.png)
 
@@ -20,9 +20,9 @@
 ![img](./assets/rule-engine/tablestore/create_resource.png)
 
 使用创建出的实例属性，填写对应 `Tablestore 服务器` 和 `实例` 名称。
-</br>
+<br />
 AccessKey & Secret 需要使用阿里账号申请，详细申请步骤，请参考 Tablestore 官方文档。
-</br>
+<br />
 服务器地址请按照部署方式的不同，填写不同的域名。
 
 ![img](./assets/rule-engine/tablestore/tablestore_data.png)

@@ -119,7 +119,7 @@ QoS: 1
 Payload: "hello"
 ```
 
-In the rule list, click the "View" button or the rule ID connection to preview the rule you just created:</br>
+In the rule list, click the "View" button or the rule ID connection to preview the rule you just created:<br />
 
 Here we can see that metrics has been increased.
 
