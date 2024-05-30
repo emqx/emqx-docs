@@ -171,7 +171,7 @@ EMQX 的 认证，访问控制，钩子等功能也适用于 CoAP 接入网关�
 ### Well-known locations
 --------------------
 
-CoAP 接入网关的 well-known 发现恒定的返回 "</mqtt>,</ps>"
+CoAP 接入网关的 well-known 发现恒定的返回 "\<mqtt>,\<ps>"
 
 例如：
 ```
