@@ -42,32 +42,34 @@ This command creates a standard Erlang application structured as follows, with `
 ```shell
 $ tree my_emqx_plugin
 my_emqx_plugin
-├── License
+├── LICENSE
 ├── Makefile
 ├── README.md
-├── check-svn.sh
 ├── erlang_ls.config
-├── get-rebar3
 ├── priv
-│   ├── config.hocon
+│   ├── config.hocon.example
 │   ├── config_i18n.json.example
+│   ├── config_schema.avsc.enterprise.example
 │   └── config_schema.avsc.example
 ├── rebar.config
+├── scripts
+│   ├── ensure-rebar3.sh
+│   └── get-otp-vsn.sh
 └── src
-    ├── emqx_cli_demo.erl
-    ├── my_emqx_plugin.app.src
-    ├── my_emqx_plugin.erl
     ├── my_emqx_plugin_app.erl
+    ├── my_emqx_plugin.app.src
+    ├── my_emqx_plugin_cli.erl
+    ├── my_emqx_plugin.erl
     └── my_emqx_plugin_sup.erl
 
-3 directories, 13 files
+4 directories, 16 files
 ```
 
 Review the `rebar.config` file and adjust it as necessary for your plugin's requirements.
 
 The project also includes an example module demonstrating how to add custom `emqx ctl` commands (`emqx_cli_demo.erl`).
 
-**Note:** As the template depends on `emqx`, it requires a custom version of `rebar3`, which you can install using the included `get-rebar3` script.
+**Note:** As the template depends on `emqx`, it requires a custom version of `rebar3`, which you can install using the included `./scripts/ensure-rebar3.sh` script.
 
 ### Test Your Development Environment
 
@@ -179,30 +181,53 @@ This generates a new tarball, `my_emqx_plugin-1.0.0.tar.gz`, which you can uploa
 
 #### Write Configuration Schema for the Plugin (Optional)
 
+EMQX version 5.7.0 introduced REST API for plugin configuration management and Avro Schema for configuration validation, enhancing the ability to update plugin configurations dynamically during runtime.
+In addition, if you write an Avro Schema to validate the plugin's configuration, you are required to provide a default configuration file that matches the Avro Schema rules. This file should be located in `priv/config.hocon`.
+
+Configuration updates made at runtime will be written in HOCON format to `data/plugins/<PLUGIN_NAME>/config.hocon`, and the old configuration file will be backed up each time the configuration is updated.
+
+
+::: tip **Tip**
+
+Check out the example files located in your project directory: `priv/config.hocon.example`, `priv/config_schema.avsc.example`, `priv/config_schema.avsc.enterprise.example` and `priv/config_i18n.json.example`.
+Plugins that support configuration and configuration validation can be written based on these files.
+
 {% emqxce %}
-::: tip
+
+Note that `priv/config_schema.avsc.enterprise.example` and `priv/config_i18n.json.example` contain the UI declarations and their internationalization configurations.
+Using UI declarations to render plugin configuration form pages is an enterprise edition feature.
+
+{% endemqxce %}
+
+:::
+
+
+Your plugin package needs to include an Avro Schema configuration file, located at `priv/config_schema.avsc`. This file must adhere to the [Apache Avro specification](https://avro.apache.org/docs/1.11.1/specification/).
+
+{% emqxee %}
+
+Additionally, it also includes descriptive declarations about the UI. Specifically, an `$ui` field can be configured using the metadata of the Avro Schema. The EMQX Dashboard will generate a configuration form page based on the information provided in the `$ui` field.
+
+{% endemqxee %}
+
+
+#### Declarative UI Usage Reference (Optional)
+
+{% emqxce %}
+::: tip **TIP**
 
 EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 
 :::
 {% endemqxce %}
 
-EMQX version 5.7.0 introduced REST API for plugin configuration management and Avro Schema for configuration validation, enhancing the ability to update plugin configurations dynamically during runtime.
-For Enterprise edition, it also allows the declaration of a user interface in the schema, enabling the EMQX Dashboard to dynamically generate configuration forms for easier management.
+Declarative UI components enable dynamic form rendering within the Dashboard, accommodating a variety of field types and custom components.
+Below is a description of the available components and their configurations.
 
-::: tip **Tip**
+UI declarations are used for dynamic form rendering, allowing the EMQX Dashboard to dynamically generate configuration forms, making it easier to configure and manage plugins. Various field types and custom components are supported. Below are the available components and their configuration descriptions.
 
-Check out the example files located in your project directory:  `priv/config_schema.avsc.example` and `priv/config_i18n.json.example`.
-
-:::
-
-Your plugin package needs to include an Avro Schema configuration file, located at `priv/config_schema.avsc`. This file must adhere to the [Apache Avro specification](https://avro.apache.org/docs/1.11.1/specification/). Additionally, the schema supports UI declarations, allowing you to configure a `$ui` field. The EMQX Dashboard uses this field to create a configuration form page.
-
-There is also an **optional** internationalization (i18n) config file, located at `priv/config_i18n.json`. This file is structured as key-value pairs, for example: `{ "$msgid": { "zh": "消息", "en": "Message" } }`. To support multiple languages in field names, descriptions, validation rule messages, and other UI elements in the `$ui` configuration, use `$msgid` prefixed with `$` in the relevant UI configurations.
-
-#### Declarative UI Usage Reference (Optional)
-
-Declarative UI components enable dynamic form rendering within the Dashboard, accommodating a variety of field types and custom components. Below is a description of the available components and their configurations:
+There is also an **optional** internationalization (i18n) config file, located at `priv/config_i18n.json`. This file is structured as key-value pairs, for example: `{ "$msgid": { "zh": "消息", "en": "Message" } }`.
+To support multiple languages in field names, descriptions, validation rule messages, and other UI elements in the `$ui` configuration, use `$msgid` prefixed with `$` in the relevant UI configurations.
 
 **Configuration Item Descriptions**
 

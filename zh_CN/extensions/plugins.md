@@ -41,30 +41,32 @@ rebar3 new emqx-plugin my_emqx_plugin
 ```shell
 $ tree my_emqx_plugin
 my_emqx_plugin
-├── License
+├── LICENSE
 ├── Makefile
 ├── README.md
-├── check-svn.sh
 ├── erlang_ls.config
-├── get-rebar3
 ├── priv
-│   ├── config.hocon
+│   ├── config.hocon.example
 │   ├── config_i18n.json.example
+│   ├── config_schema.avsc.enterprise.example
 │   └── config_schema.avsc.example
 ├── rebar.config
+├── scripts
+│   ├── ensure-rebar3.sh
+│   └── get-otp-vsn.sh
 └── src
-    ├── emqx_cli_demo.erl
-    ├── my_emqx_plugin.app.src
-    ├── my_emqx_plugin.erl
     ├── my_emqx_plugin_app.erl
+    ├── my_emqx_plugin.app.src
+    ├── my_emqx_plugin_cli.erl
+    ├── my_emqx_plugin.erl
     └── my_emqx_plugin_sup.erl
 
-3 directories， 13 files
+4 directories, 16 files
 ```
 
 它还包含一个示例模块，演示如何添加自定义 `emqx ctl` 命令 `emqx_cli_demo`。
 
-**注意**: 由于示例依赖 `emqx`，所以这个插件需要一个定制版本的 `rebar3`，它将通过提供的 `get-rebar3` 脚本安装。
+**注意**: 由于示例依赖 `emqx`，所以这个插件需要一个定制版本的 `rebar3`，它将通过提供的 `./scripts/ensure-rebar3.sh` 脚本安装。
 
 ### 测试您的开发环境
 
@@ -167,28 +169,49 @@ make rel
 
 #### 为插件编写 Config Schema （可选）
 
-{% emqxce %}
-:::tip
-EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
-:::
-{% endemqxce %}
-
 我们在 EMQX v5.7.0 中引入了用于插件配置管理的 REST API 和用于配置验证的 Avro Schema，增强了在运行期间动态更新插件配置的能力。
-对于企业版，它还允许在 Schema 中声明配置界面，从而使 EMQX Dashboard 能够动态生成配置表单，方便插件的配置和管理。
+此外如果编写了 Avro Schema 以验证插件的配置，需要同时提供与 Avro Schema 规则匹配的默认配置文件。该文件应位于 `priv/config.hocon`，
+
+在运行时更新的配置，会以 hocon 格式写入 `data/plugins/<PLUGIN_NAME>/config.hocon` ，并在每次更新配置时将旧配置文件备份。
+
 
 ::: tip **提示**
 
-您可以在项目目录中找到两个示例文件：`priv/config_schema.avsc.example`, `priv/config_i18n.json.example`。
+您可以在项目目录中找到几个个示例文件：`priv/config.hocon.example`, `priv/config_schema.avsc.example`, `priv/config_schema.avsc.enterprise.example`, `priv/config_i18n.json.example`。
+可以根据这些文件来编写支持配置及配置验证的 Plugin 。
+
+{% emqxce %}
+
+注意 `priv/config_schema.avsc.enterprise.example`, `priv/config_i18n.json.example` 包含了 UI 声明及其国际化配置，使用 UI 声明渲染插件配置表单页面为企业版功能。
+
+{% endemqxce %}
 
 :::
 
-这需要您的插件包提供一个 Avro Schema 配置文件，它应位于 `priv/config_schema.avsc`。该文件应当遵守 Apache Avro 规范（详情请参阅 [Apache Avro Specification (1.11.1)](https://avro.apache.org/docs/1.11.1/specification/)）。此外它也同时也包含了关于 UI 的描述声明。即可以使用 Avro Schema 的 metadata 配置一个 `$ui` 字段，EMQX Dashborad 将根据 `$ui` 字段中提供的信息来生成一份配置表单页。
 
-此外还有一个**可选的**国际化配置文件以提供多语言支持， i18n 文件应位于 `priv/config_i18n.json`。它是一个键值对文件，如：`{ "$msgid": { "zh": "消息", "en": "Message" } }`。如果 `$ui` 配置中的字段名称、描述、验证规则的消息等需要支持多语言，需要在对应的配置里使用以 `$` 开头的 `$msgid`。
+这需要您的插件包提供一个 Avro Schema 配置文件，它应位于 `priv/config_schema.avsc`。该文件应当遵守 Apache Avro 规范，详情请参阅 [Apache Avro Specification (1.11.1)](https://avro.apache.org/docs/1.11.1/specification/)。
+
+{% emqxee %}
+
+此外它也同时也包含了关于 UI 的描述声明。即可以使用 Avro Schema 的 metadata 配置一个 `$ui` 字段，EMQX Dashborad 将根据 `$ui` 字段中提供的信息来生成一份配置表单页。
+
+{% endemqxee %}
 
 #### 声明式 UI 使用参考 （可选）
 
-UI 声明被用于动态渲染表单，支持各种字段类型和自定义组件。以下是可用组件及其配置说明。
+{% emqxce %}
+
+::: tip **提示**
+EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+:::
+
+{% endemqxce %}
+
+UI 声明被用于动态渲染表单，从而使 EMQX Dashboard 能够动态生成配置表单，方便插件的配置和管理。
+支持各种字段类型和自定义组件。以下是可用组件及其配置说明。
+
+此外还有一个**可选的**国际化配置文件以提供多语言支持， i18n 文件应位于 `priv/config_i18n.json`。它是一个键值对文件，如：`{ "$msgid": { "zh": "消息", "en": "Message" } }`。
+如果 `$ui` 配置中的字段名称、描述、验证规则的消息等需要支持多语言，需要在对应的配置里使用以 `$` 开头的 `$msgid`。
 
 **配置项说明**
 
@@ -303,7 +326,7 @@ UI 声明被用于动态渲染表单，支持各种字段类型和自定义组�
 }
 ```
 
-在插件编译打包时，如果您提供了 Avro Schema 文件及 i18n 文件，它们将被一同添加至 tarball 中。在您的插件代码中，可以使用函数 `emqx_plugins:get_config/1,2,3,4` 来获取插件配置文件。
+在插件编译打包时，如果您提供了 Avro Schema 文件及 i18n 文件，它们将被一同添加至 tarball 中。在您的插件代码中，可以使用函数 `emqx_plugins:get_config/1,2,3,4` 来获取插件配置。
 
 ## 安装/启动插件
 
