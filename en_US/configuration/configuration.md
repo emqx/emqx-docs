@@ -865,7 +865,7 @@ Set the total number of log files. If this number is exceeded, the next log file
 
 
 
-### log.<level>.file
+### log.\<level>.file
 
 | Type   | Default |
 | ------ | ------- |
@@ -992,7 +992,7 @@ What to do after the ACL check fails.
 
 Specify the `Flapping` inspection strategy.
 
-Format: <threshold>,<duration>,<banned>`.
+Format:`<threshold>,<duration>,<banned>`.
 
 For example, `30, 1m, 5m`, it means that if the client disconnects 30 times within 1 minute, then login is prohibited for the next 5 minutes
 
@@ -1193,7 +1193,7 @@ When a certain number of messages, or bytes, are received, a garbage collection 
 
 Format: `<Number> | <Bytes>`.
 
-For example, `16000|16MB` means that when ` 16000` messages are received, or a byte of `16MB` flows in, a garbage collection is forced.
+For example, `16000|16MB` means that when `16000` messages are received, or a byte of `16MB` flows in, a garbage collection is forced.
 
 
 
@@ -3938,7 +3938,7 @@ When the percentage of the current number of processes in the maximum number of 
 
 ## [emqx-auth-clientid](https://github.com/emqx/emqx-auth-clientid)
 
-### auth.client.<Number>.clientid` & `auth.client.<Number>.password
+### `auth.client.<Number>.clientid` & `auth.client.<Number>.password`
 
 | Type   | Default |
 | ------ | ------- |
@@ -4165,7 +4165,7 @@ When the HTTP request fails, the retry interval uses the exponential backoff alg
 
 
 
-### auth.http.header.<Key>
+### auth.http.header.\<Key>
 
 | Type   | Default |
 | ------ | ------- |
@@ -4273,7 +4273,7 @@ Enable or disable Claims verification.
 
 
 
-### auth.jwt.verify_claims.<claims>
+### auth.jwt.verify_claims.\<claims>
 
 | Type   | Default |
 | ------ | ------- |
@@ -4886,7 +4886,7 @@ MongoDB topology parameters, which determines how often to check for idle thread
 
 #### Description
 
-MongoDB topology parameters, which is to select the strategy of the secondary node used to process user requests. The minimum value of the RTT of all nodes is LowestRTT, then only those secondary nodes with RTT <LowestRTT + local_threshold_ms will be selected.
+MongoDB topology parameters, which is to select the strategy of the secondary node used to process user requests. The minimum value of the RTT of all nodes is LowestRTT, then only those secondary nodes with RTT LowestRTT + local_threshold_ms will be selected.
 
 
 
@@ -5034,7 +5034,7 @@ MySQL database name.
 
 MySQL data query timeout. The query timeout means user data was not found.
 
-<br >
+
 
 ### auth.mysql.auth_query
 
@@ -5425,7 +5425,7 @@ ACL query commands. Available placeholders are:
 
 ## [emqx-auth-username](https://github.com/emqx/emqx-auth-username)
 
-### auth.user.<Number>.username` & `auth.user.<Number>.password
+### `auth.user.<Number>.username` & `auth.user.<Number>.password`
 
 | Type   | Default |
 | ------ | ------- |
@@ -6813,7 +6813,7 @@ Ignore system messages ($SYS). The rule engine will not process system messages 
 
 
 
-### rule_engine.events.<event-name>
+### rule_engine.events.\<event-name>
 
 | Type | Optional Value | Default |
 | ---- | -------------- | ------- |
@@ -6986,7 +6986,7 @@ Specify the collection interval of Statsd data in milliseconds.
 
 
 
-### prometheus.collector.<N>
+### prometheus.collector.\<N>
 
 | Type   | Default       |
 | ------ | ------------- |
