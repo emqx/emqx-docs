@@ -31,7 +31,7 @@ EMQX 的集群功能的关键步骤之一是节点发现，节点发现在不同
 
 注意：mcast发现策略已被废弃，在未来的版本中会被删除。
 
-EMQX 默认配置为手动创建集群，节点须通过 ./bin/emqx\_ctl join <Node\> 命令加入:
+EMQX 默认配置为手动创建集群，节点须通过 `./bin/emqx_ctl join <Node>` 命令加入:
 
 ```bash
 cluster.discovery = manual
