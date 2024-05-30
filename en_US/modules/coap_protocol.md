@@ -171,7 +171,7 @@ The authentication, access control, hook and other functions of EMQX are also ap
 ### Well-known locations
 --------------------
 
-The well-known of the CoAP access gateway found constant return "</mqtt>,</ps>"
+The well-known of the CoAP access gateway found constant return "\</mqtt>,\</ps>"
 
 E.g:
 ```
