@@ -278,7 +278,7 @@ For examples of schema_encode() and schema_decode(), see [schema registry](schem
 | `now_rfc3339` | Create a RFC3339 time string of now in second | - | The time string of format RFC3339 |
 | `now_rfc3339` | Create a RFC3339 time string of now, in given time unit | 1. The time unit | The time string of format RFC3339 |
 | `unix_ts_to_rfc3339` | Convert an unix epoch (in second) to RFC3339 time string | 1. The unix epoch in second | The time string of format RFC3339 |
-| `unix_ts_to_rfc3339` | Convert an unix epoch to RFC3339 time string, using the given time unit | 1. The unix epoch </br>2. The time unit | The time string of format RFC3339 |
+| `unix_ts_to_rfc3339` | Convert an unix epoch to RFC3339 time string, using the given time unit | 1. The unix epoch <br />2. The time unit | The time string of format RFC3339 |
 | `rfc3339_to_unix_ts` | Convert a RFC3339 time string (in second) to unix epoch | 1. The time string of format RFC3339 | The unix epoch |
 | `rfc3339_to_unix_ts` | Convert a RFC3339 time string to unix epoch, using the given time unit | 1. The time string of format RFC3339 <br>2. The time unit | The unix epoch |
 | `format_date` | Timestamp to formatted time | 1. The time unit (refer to The time unit)<br>2. The time offset (refer to time offset definition)<br>3. The date format (refer to time string codec format)<br>4. The timestamp (optional parameter, default is current time) | Formatted time |
@@ -316,11 +316,11 @@ For examples of schema_encode() and schema_decode(), see [schema registry](schem
 | -- | -- | -- |
 | `z` | UTC Zulu Time | `+00:00` |
 | `Z` | UTC Zulu Time. Same as `z` | `+00:00` |
-| `local` | System Time | Automatic </br>Beijing `+08:00`</br> Zulu `+00:00` </br>Stockholm, Sweden `+02:00` </br>Los Angeles `-08:00` |
-| `[+\|-]HHMM` | `%z` | Beijing `+0800` </br>Zulu `+0000` </br>Stockholm, Sweden `+0200` </br>Los Angeles `-0800` |
-| `[+\|-]HH:MM` | `%:z` | Beijing `+08:00` </br>Zulu `+00:00` </br>Stockholm, Sweden `+02:00` </br>Los Angeles `-08:00` |
-| `[+\|-]HH:MM:SS` | `%::z` | Beijing `+08:00:00` </br>Zulu `+00:00:00` </br>Stockholm, Sweden `+02:00:00` </br>Los Angeles `-08:00:00` |
-| integer() | Seconds | Beijing 28800 </br>Zulu 0 </br>Stockholm, Sweden 7200 </br>Los Angeles -28800 |
+| `local` | System Time | Automatic <br />Beijing `+08:00`<br /> Zulu `+00:00` <br />Stockholm, Sweden `+02:00` <br />Los Angeles `-08:00` |
+| `[+\|-]HHMM` | `%z` | Beijing `+0800` <br />Zulu `+0000` <br />Stockholm, Sweden `+0200` <br />Los Angeles `-0800` |
+| `[+\|-]HH:MM` | `%:z` | Beijing `+08:00` <br />Zulu `+00:00` <br />Stockholm, Sweden `+02:00` <br />Los Angeles `-08:00` |
+| `[+\|-]HH:MM:SS` | `%::z` | Beijing `+08:00:00` <br />Zulu `+00:00:00` <br />Stockholm, Sweden `+02:00:00` <br />Los Angeles `-08:00:00` |
+| integer() | Seconds | Beijing 28800 <br />Zulu 0 <br />Stockholm, Sweden 7200 <br />Los Angeles -28800 |
 
 ```SQL
 now_timestamp() = 1650874276

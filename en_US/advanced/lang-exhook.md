@@ -122,7 +122,7 @@ The hook events part:
 For details of the interface and parameter data structures refer to: [exhook.proto](https://github.com/emqx/emqx/blob/v4.3-beta.1/apps/emqx_exhook/priv/protos/exhook.proto)
 
 ::: tip
-It should be noted that the hooks and the topic filter list configured by the message type hook hooks are confirmed only once when the HookProvider is loaded. And the subsequent gRPC requests will be based on the configured when loading. </br>
+It should be noted that the hooks and the topic filter list configured by the message type hook hooks are confirmed only once when the HookProvider is loaded. And the subsequent gRPC requests will be based on the configured when loading. <br />
 If the list of hooks to be mounted has changed, or the list of topic filters concerned by the message type hook has changed, it needs to be reloaded. That is, the ExHook plugin/module needs to be restarted in EMQX.
 :::
 
