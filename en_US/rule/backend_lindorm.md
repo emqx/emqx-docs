@@ -1,12 +1,12 @@
 # Ingest Data into Lindorm (since e3.3.6, and e4.4.1)
 
 First, make sure that the Lindorm database service is enabled.
-</br>
+<br />
 For the condition that the database is not deployed in Alibaba Cloud, open the access control whitelist, ensure that the IP of the deployed machine is in the access whitelist, and open the public network access address. For detailed operation steps, please refer to the Ali Lindorm operations documentation.
 
 Ensure that the IP of the host where EMQX is deployed is in the access whitelist. If EMQX is deployed in Alibaba Cloud, it can access Lindorm through the cloud host intranet. For other types of deployment, the Lindorm Internet access function should be enabled for access. For detailed operation steps, please refer to the Ali Lindorm operation documentation.
 
-</br>
+<br />
 Create database
 
 ```SQL
