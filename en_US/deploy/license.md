@@ -14,7 +14,7 @@ This page guides you through the process of obtaining a license and importing it
 
 ## Apply for a License
 
-To apply for a license, contact your EMQ sales representative or fill out the contact information on our [Contact Us](https://www.emqx.com/en/contact?product=emqx&channel=apply-Licenses) page to apply for a license. Our sales representative will contact you as soon as possible. 
+To apply for a license, contact your EMQ sales representative or fill out the contact information on our [Contact Us](https://www.emqx.com/en/contact?product=emqx&channel=apply-Licenses) page to apply for a License. Our sales representative will contact you as soon as possible. 
 
 If you prefer to try EMQX Enterprise before purchasing, you can apply for a trial license on our [trial license application page](https://www.emqx.com/en/apply-licenses/emqx) and the license file will be sent to your email box immediately:
 

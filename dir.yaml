@@ -46,37 +46,69 @@
   path: deploy/install
   collapsed: true
   children:
-    - title_en: Deploy
-      title_cn: Docker
-      path: deploy/install-docker
-    - title_en: Debian
-      title_cn: Debian
-      path: deploy/install-debian
-    - title_en: Ubuntu
-      title_cn: Ubuntu
-      path: deploy/install-ubuntu
-    - title_en: CentOS/RHEL
-      title_cn: CentOS/RHEL
-      path: deploy/install-rhel
-    - title_en: macOS
-      title_cn: macOS
-      path: deploy/install-macOS
-    - title_en: Kubernetes
-      title_cn: Kubernetes
-      lang: en
-      path: 'https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html'
-    - title_en: Kubernetes
-      title_cn: Kubernetes
-      lang: cn
-      path: 'https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html'
-    - title_en: Install from Source Code
-      title_cn: 源码编译安装
-      path: deploy/install-source
-    # - deploy/install-marketplace
-    - title_en: Work with License
-      title_cn: 配置 License
-      edition: ee
-      path: deploy/license
+    - title_en: Install EMQX Open Source
+      title_cn: 安装 EMQX 开源版
+      path: deploy/install-open-source
+      collapsed: true
+      children:
+        - title_en: Deploy
+          title_cn: Docker
+          path: deploy/install-docker-ce
+        - title_en: Debian
+          title_cn: Debian
+          path: deploy/install-debian-ce
+        - title_en: Ubuntu
+          title_cn: Ubuntu
+          path: deploy/install-ubuntu-ce
+        - title_en: CentOS/RHEL
+          title_cn: CentOS/RHEL
+          path: deploy/install-rhel-ce
+        - title_en: macOS
+          title_cn: macOS
+          path: deploy/install-macOS-ce
+        - title_en: Kubernetes
+          title_cn: Kubernetes
+          lang: en
+          path: 'https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html'
+        - title_en: Kubernetes
+          title_cn: Kubernetes
+          lang: cn
+          path: 'https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html'
+        - title_en: Install from Source Code
+          title_cn: 源码编译安装
+          path: deploy/install-source
+    - title_en: Install EMQX Enterprise
+      title_cn: 安装 EMQX 企业版
+      path: deploy/install-enterprise
+      collapsed: true
+      children:
+        - title_en: Deploy
+          title_cn: Docker
+          path: deploy/install-docker
+        - title_en: Debian
+          title_cn: Debian
+          path: deploy/install-debian
+        - title_en: Ubuntu
+          title_cn: Ubuntu
+          path: deploy/install-ubuntu
+        - title_en: CentOS/RHEL
+          title_cn: CentOS/RHEL
+          path: deploy/install-rhel
+        - title_en: macOS
+          title_cn: macOS
+          path: deploy/install-macOS
+        - title_en: Kubernetes
+          title_cn: Kubernetes
+          lang: en
+          path: 'https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html'
+        - title_en: Kubernetes
+          title_cn: Kubernetes
+          lang: cn
+          path: 'https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html'
+          # - deploy/install-marketplace
+        - title_en: Work with License
+          title_cn: 配置 License
+          path: deploy/license
     - title_en: Upgrade Guide
       title_cn: 升级指南
       collapsed: true
@@ -685,8 +717,13 @@
       title_cn: MQTT 术语
       path: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901003
     - title_en: MQTT 5.0 Features
+      title_cn: MQTT 5.0 Features
+      lang: en
+      path: https://www.emqx.com/en/blog/introduction-to-mqtt-5
+    - title_en: MQTT 5.0 特性
       title_cn: MQTT 5.0 特性
-      path: https://www.emqx.com/en/mqtt/mqtt5
+      lang: cn
+      path: https://www.emqx.com/zh/blog/introduction-to-mqtt-5
     - title_en: MQTT Reason Code
       title_cn: MQTT 原因码
       path: https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack

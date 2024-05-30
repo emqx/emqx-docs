@@ -1,21 +1,21 @@
-# 通过 Docker 运行 EMQX 企业版
+# 通过 Docker 运行 EMQX 开源版
 
 本页将指导您使用官方 Docker 镜像快速安装和运行 EMQX，并使用 Docker Compose 实现集群搭建。
 
 ## 通过 Docker 运行单个 EMQX 节点
 
-本节主要介绍如何通过 Docker 镜像安装最新版本的 EMQX。有关 EMQX 官方镜像的更多信息，请查看 [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise)。
+本节主要介绍如何通过 Docker 镜像安装最新版本的 EMQX。有关 EMQX 官方镜像的更多信息，请查看 [Docker Hub - emqx](https://hub.docker.com/_/emqx)。
 
 1. 运行以下命令获取 Docker 镜像：
 
    ```bash
-   docker pull emqx/emqx-enterprise:@EE_VERSION@
+   docker pull emqx/emqx:@CE_VERSION@
    ```
 
 2. 运行以下命令启动 Docker 容器。
 
    ```bash
-   docker run -d --name emqx-enterprise -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:@EE_VERSION@
+   docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:@CE_VERSION@
    ```
 
 ### Docker 部署注意事项
@@ -29,8 +29,6 @@
 
    关于 EMQX 目录结构的详细信息请参考 [EMQX 文件和目录](./install.md#文件和目录)。
 
-   {% emqxce %}
-
    启动容器并挂载目录：
 
    ```bash
@@ -43,24 +41,6 @@
      emqx/emqx:@CE_VERSION@
    ```
 
-   {% endemqxce %}
-
-   {% emqxee %}
-
-   启动容器并挂载目录：
-
-   ```bash
-   docker run -d --name emqx-enterprise \
-     -p 1883:1883 -p 8083:8083 \
-     -p 8084:8084 -p 8883:8883 \
-     -p 18083:18083 \
-     -v $PWD/data:/opt/emqx/data \
-     -v $PWD/log:/opt/emqx/log \
-     emqx/emqx-enterprise:@EE_VERSION@
-   ```
-
-   {% endemqxee %}
-
 2. Docker 内的 `localhost` 或 `127.0.0.1` 指向的是容器内部地址，如需访问宿主机地址请使用宿主机的真实 IP 或使用 [host 网络模式](https://docs.docker.com/network/host/)。如果您使用的是 Docker for Mac 或 Docker for Windows，可以使用 `host.docker.internal` 作为宿主机地址。
 
 3. 由于 EMQX 使用 `data/mnesia/<节点名>` 作为数据存储目录，请使用 hostname 或者 FQDN 等固定的信息作为节点名，避免因为节点名称变动导致数据丢失。
@@ -69,7 +49,7 @@
 
 Docker Compose 是一个用于编排和运行多容器的工具，下面将指导您通过 Docker Compose 创建简单的 EMQX 静态集群用于测试。
 
-请注意，本章节中的 Docker Compose 示例文件仅适用于本地测试，如果您需要在生产环境中部署集群请参考 [构建集群](./cluster/introduction.md)。
+请注意，本节中的 Docker Compose 示例文件仅适用于本地测试，如果您需要在生产环境中部署集群请参考 [构建集群](./cluster/introduction.md)。
 
 :::tip
 
@@ -84,12 +64,12 @@ Docker Compose 是一个用于编排和运行多容器的工具，下面将指�
    
    services:
      emqx1:
-       image: emqx/emqx-enterprise:@EE_VERSION@
+       image: emqx:@CE_VERSION@
        container_name: emqx1
        environment:
-       - "EMQX_NODE_NAME=emqx@node1.emqx.com"
+       - "EMQX_NODE_NAME=emqx@node1.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
-       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
+       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
        healthcheck:
          test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
          interval: 5s
@@ -98,23 +78,23 @@ Docker Compose 是一个用于编排和运行多容器的工具，下面将指�
        networks:
          emqx-bridge:
            aliases:
-           - node1.emqx.com
+           - node1.emqx.io
        ports:
          - 1883:1883
          - 8083:8083
          - 8084:8084
          - 8883:8883
-         - 18083:18083
+         - 18083:18083 
        # volumes:
        #   - $PWD/emqx1_data:/opt/emqx/data
    
      emqx2:
-       image: emqx/emqx-enterprise:@EE_VERSION@
+       image: emqx:@CE_VERSION@
        container_name: emqx2
        environment:
-       - "EMQX_NODE_NAME=emqx@node2.emqx.com"
+       - "EMQX_NODE_NAME=emqx@node2.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
-       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
+       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
        healthcheck:
          test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
          interval: 5s
@@ -123,7 +103,7 @@ Docker Compose 是一个用于编排和运行多容器的工具，下面将指�
        networks:
          emqx-bridge:
            aliases:
-           - node2.emqx.com
+           - node2.emqx.io
        # volumes:
        #   - $PWD/emqx2_data:/opt/emqx/data
    

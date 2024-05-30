@@ -1,19 +1,7 @@
 # Installation and Migration
 
 
-This chapter walks you through the basic installation steps for EMQX, the minimum hardware specification, and the file and directory locations to facilitate future configuration and maintenance jobs.
-
-{% emqxee %}
-
-This chapter also covers how to configure a license for EMQX and how to migrate from EMQX 4.4 to EMQX 5.1.
-
-{% endemqxee %}
-
-{% emqxce %}
-
-This chapter also covers how to migrate from EMQX 4.4 to EMQX 5.1.
-
-{% endemqxce %}
+This chapter walks you through the basic installation steps for EMQX, the minimum hardware specification, and the file and directory locations to facilitate future configuration and maintenance jobs. It also covers how to configure a license for EMQX Enterprise and migrate from EMQX 4.4 to EMQX 5.1.
 
 ## Installation Environment
 
@@ -76,30 +64,6 @@ sudo update-locale LANG=C.UTF-8
 
 ::::
 
-## Download
-
-{% emqxce %}
-
-EMQX releases the installation packages for different operating systems or platforms in each release. You may click the links below to download.
-
-EMQX website: <https://www.emqx.io/downloads>
-
-You can also download the alpha, beta, or rc versions from our [GitHub pages](https://github.com/emqx/emqx/releases).
-{% endemqxce %}
-
-{% emqxee %}
-
-EMQX releases the corresponding Docker image and the installation packages for different operating systems or platforms in each release. You may click the link below to download it.
-
-EMQX website: <https://www.emqx.com/en/try?product=enterprise>
-
-{% endemqxee %}
-
-:::tip
-
-Besides the above deployment methods, you are also welcome to try our [EMQX Cloud](https://www.emqx.com/en/cloud), a fully managed MQTT service for IoT. You only need to [register for an account](https://www.emqx.com/en/signup?continue=https://www.emqx.com/en/cloud) before starting your MQTT services and connecting your IoT devices to any cloud with zero need for infrastructure maintenance.
-:::
-
 ## Supported Operating Systems
 
 The table below lists the operating systems and versions that EMQX supports.
@@ -123,7 +87,7 @@ The table below lists the operating systems and versions that EMQX supports.
 | [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | Yes | Yes |
 | [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | Yes | Yes |
 | [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | Yes | Yes |
-| [macOS](./install-macOS.md)       | macOS 12<br />macOS 13<br />                   | Yes | Yes |
+| [macOS](./install-macOS.md)       | macOS 13<br />macOS 14<br />                 | Yes | Yes |
 
 {% endemqxee %}
 

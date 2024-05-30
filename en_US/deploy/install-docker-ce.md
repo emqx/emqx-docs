@@ -1,25 +1,28 @@
 ---
 description: This page introduces how to use the official Docker image to install and run EMQX, and how to use Docker Compose to build an EMQX cluster.
+
 ---
 
-# Install EMQX Enterprise Using Docker
-This page introduces how to use the official Docker image to install and run the EMQX Enterprise edition, and how to use Docker Compose to build an EMQX cluster.
+# Install EMQX Open Source Using Docker
+
+This page introduces how to use the official Docker image to install and run the EMQX Open Source edition, and how to use Docker Compose to build an EMQX cluster.
 
 ## Use Docker to Run A Single EMQX Node
 
-This section will introduce how to use the Docker image to install the latest version of EMQX. For more information about EMQX official docker image, see [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise). 
+This section will introduce how to use the Docker image to install the latest version of EMQX.For more information about EMQX official docker image, see [Docker Hub - emqx](https://hub.docker.com/_/emqx). 
 
 1. To get the Docker image, run: 
 
    ```bash
-   docker pull emqx/emqx-enterprise:@EE_VERSION@
+   docker pull emqx/emqx:@CE_VERSION@
    ```
 
 2. To start the Docker container, run:
 
    ```bash
-   docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx/emqx-enterprise:@EE_VERSION@
+   docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx:@CE_VERSION@
    ```
+
 
 ### Docker Deployment Precautions
 
@@ -29,21 +32,21 @@ This section will introduce how to use the Docker image to install the latest ve
    /opt/emqx/data
    /opt/emqx/log
    ```
-   
+
    For more details on EMQX directory structure, refer to [EMQX - Files and Directories](./install.md#files-and-directories).
-   
+
     Start container and mount directories:
-   
+
    ```bash
-   docker run -d --name emqx-enterprise \
+   docker run -d --name emqx \
      -p 1883:1883 -p 8083:8083 \
      -p 8084:8084 -p 8883:8883 \
      -p 18083:18083 \
      -v $PWD/data:/opt/emqx/data \
      -v $PWD/log:/opt/emqx/log \
-     emqx/emqx-enterprise:@EE_VERSION@
+     emqx/emqx:@CE_VERSION@\
    ```
-   
+
 2. In Docker environments, `localhost` or `127.0.0.1` refers to the container's own internal network interface, not that of the host machine. To access services running on the host machine, use the host's IP address or use [host networking settings](https://docs.docker.com/network/host/). If you are using Docker for Mac or Docker for Windows, you can use `host.docker.internal` as the host address.
 
 3. EMQX employs the `data/mnesia/<node_name>` directory for data storage. It's crucial to choose a stable identifier, such as a hostname or Fully Qualified Domain Name (FQDN), to serve as the node name. This practice avoids data loss caused by node name changes.
@@ -67,12 +70,12 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
    
    services:
      emqx1:
-       image: emqx/emqx-enterprise:@EE_VERSION@
+       image: emqx:@CE_VERSION@
        container_name: emqx1
        environment:
-       - "EMQX_NODE_NAME=emqx@node1.emqx.com"
+       - "EMQX_NODE_NAME=emqx@node1.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
-       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
+       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
        healthcheck:
          test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
          interval: 5s
@@ -81,23 +84,23 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
        networks:
          emqx-bridge:
            aliases:
-           - node1.emqx.com
+           - node1.emqx.io
        ports:
          - 1883:1883
          - 8083:8083
          - 8084:8084
          - 8883:8883
-         - 18083:18083
+         - 18083:18083 
        # volumes:
        #   - $PWD/emqx1_data:/opt/emqx/data
    
      emqx2:
-       image: emqx/emqx-enterprise:@EE_VERSION@
+       image: emqx:@CE_VERSION@
        container_name: emqx2
        environment:
-       - "EMQX_NODE_NAME=emqx@node2.emqx.com"
+       - "EMQX_NODE_NAME=emqx@node2.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
-       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
+       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
        healthcheck:
          test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
          interval: 5s
@@ -106,7 +109,7 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
        networks:
          emqx-bridge:
            aliases:
-           - node2.emqx.com
+           - node2.emqx.io
        # volumes:
        #   - $PWD/emqx2_data:/opt/emqx/data
    
