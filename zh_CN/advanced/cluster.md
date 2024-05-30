@@ -172,7 +172,7 @@ EMQX 支持多种节点发现策略:
 
 ### manual 手动创建集群
 
-默认配置为手动创建集群，节点须通过 ./bin/emqx\_ctl join <Node\> 命令加入:
+默认配置为手动创建集群，节点须通过 `./bin/emqx_ctl join <Node>` 命令加入:
 
 ```bash
 cluster.discovery = manual

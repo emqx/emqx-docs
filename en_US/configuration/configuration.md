@@ -3699,8 +3699,8 @@ Set the system topic (`$SYS`) message release interval.
 
 Set the system heartbeat message release interval. The system heartbeat message includes the following two topics:
 
-- "$SYS/brokers/<node>/uptime"
-- "$SYS/brokers/<node>/datetime"
+- "$SYS/brokers/\<node>/uptime"
+- "$SYS/brokers/\<node>/datetime"
 
 
 

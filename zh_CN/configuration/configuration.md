@@ -3728,8 +3728,8 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 设置系统心跳消息的发布间隔。系统心跳消息包括下面两个主题：
 
-- "$SYS/brokers/<node>/uptime"
-- "$SYS/brokers/<node>/datetime"
+- "$SYS/brokers/\<node>/uptime"
+- "$SYS/brokers/\<node>/datetime"
 
 <br />
 
