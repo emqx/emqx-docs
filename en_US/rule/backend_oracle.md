@@ -20,8 +20,6 @@ Fill in the rule SQL:
 SELECT * FROM "t/#"
 ```
 
-<img src="/Users/lena/Documents/GitHub/rebalancing/emqx-docs/en_US/rule/assets/rule-engine/rule_sql.png" alt="image-20230522183143104" style="zoom:50%;" />
-
 ## Add an Action
 
 In the "Response Action" interface, select "Add", and then select "Save Data to Oracle Database" in the "Action" drop-down box.
