@@ -698,7 +698,7 @@
         },
         {
           "title": "其他资源",
-          "path": "development/resource"
+          "path": "https://www.emqx.com/zh/mqtt-client-sdk"
         }
       ]
     },
@@ -1432,7 +1432,7 @@
         },
         {
           "title": "Others",
-          "path": "development/resource"
+          "path": "https://www.emqx.com/en/mqtt-client-sdk"
         }
       ]
     },
