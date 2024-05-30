@@ -209,7 +209,6 @@
         - deploy/cluster/lb-haproxy
     - title_en: Node Evacuation and Cluster Load Rebalancing
       title_cn: 节点疏散与集群负载重平衡
-      edition: ee
       path: deploy/cluster/rebalancing
     - title_en: Performance and Tuning
       title_cn: 性能与调优

@@ -35,6 +35,6 @@ Install the EMQX Open Source on macOS with Homebrew and a zip package.
 
 Use the EMQX Operator to deploy the EMQX Open Source.
 
-**[Install from Source Code](./install-source-ce.md)**
+**[Install from Source Code](./install-source.md)**
 
 Use the EMQX Builder to compile and install EMQX Open Source from source code.

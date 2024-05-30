@@ -36,6 +36,6 @@
 
 使用 EMQX Operator 部署 EMQX 开源版。
 
-**[源码编译安装](./install-source-ce.md)**
+**[源码编译安装](./install-source.md)**
 
 使用 EMQX Builder 从源码编译并启动 EMQX 开源版。
