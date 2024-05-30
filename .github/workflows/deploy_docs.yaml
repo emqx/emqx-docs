@@ -159,40 +159,6 @@ jobs:
         pnpm install
         pnpm build
 
-    - name: build ce redoc
-      if: matrix.docs_type == 'emqx' && !contains(fromJSON('["v1.", "v2.", "v3.", "v4."]'), matrix.version)
-      run: |
-        cd frontend
-        yarn global add redoc-cli
-        LANGS=(zh en)
-        for lang in "${LANGS[@]}"; do
-          redoc-cli bundle redoc/ce-${lang}.json -t redoc/template.hbs \
-            --output docs/.vitepress/dist/${lang}/${DOCS_TYPE}/${VERSION}/admin/api-docs.html \
-            --options.theme.colors.primary.main=#00b173 \
-            --options.theme.typography.headings.fontFamily='Roboto, sans-serif' \
-            --options.hide-hostname --templateOptions.title "EMQX ${VERSION} API Documentation" \
-            --templateOptions.description "EMQX ${VERSION} API Documentation" \
-            --templateOptions.version "${VERSION}" \
-            $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
-        done
-
-    - name: build ee redoc
-      if: matrix.docs_type == 'enterprise' && !contains(fromJSON('["v1.", "v2.", "v3.", "v4."]'), matrix.version)
-      run: |
-        cd frontend
-        yarn global add redoc-cli
-        LANGS=(zh en)
-        for lang in "${LANGS[@]}"; do
-          redoc-cli bundle redoc/ee-${lang}.json -t redoc/template.hbs \
-            --output docs/.vitepress/dist/${lang}/${DOCS_TYPE}/${VERSION}/admin/api-docs.html \
-            --options.theme.colors.primary.main=#5e4eff \
-            --options.theme.typography.headings.fontFamily='Roboto, sans-serif' \
-            --options.hide-hostname --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \
-            --templateOptions.description "EMQX Enterprise ${VERSION} API Documentation" \
-            --templateOptions.version "${VERSION}" \
-            $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
-        done
-
     - name: set aws credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
