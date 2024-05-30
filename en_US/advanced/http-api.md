@@ -81,14 +81,14 @@ Return basic information of all nodes in the cluster.
 
 | Name | Type | Required | Description |
 | ---- | --------- | ------------| ----------- |
-| node | String    | False       | Node name, such as "emqx@127.0.0.1. <br/> If not specified, returns all node information |
+| node | String    | False       | Node name, such as "emqx@127.0.0.1. <br /> If not specified, returns all node information |
 
 **Success Response Body (JSON):**
 
 | Name | Type | Description |
 | ---- | --------- | ----------- |
 | code | Integer   | 0         |
-| data | Object/Array of Objects | Returns the information of the specified node when the parameter exists, <br/>otherwise, returns the information of all nodes |
+| data | Object/Array of Objects | Returns the information of the specified node when the parameter exists, <br />otherwise, returns the information of all nodes |
 | data.datetime    | String    | Current time, in the format of "YYYY-MM-DD HH: mm: ss" |
 | data.node        | String    | Node name                                             |
 | data.node_status | String    | Node status                                           |
@@ -123,14 +123,14 @@ Return the status of the node.
 
 | Name | Type | Required | Description |
 | ---- | --------- | ------------| ----------- |
-| node | String    | False       | Node name, such as "emqx@127.0.0.1。<br/>If not specified, returns all node information |
+| node | String    | False       | Node name, such as "emqx@127.0.0.1。<br />If not specified, returns all node information |
 
 **Success Response Body (JSON):**
 
 | Name | Type | Description |
 | ---- | --------- | ----------- |
 | code | Integer   | 0         |
-| data | Object/Array of Objects | Returns node information when node parameter exists,<br/>otherwise, returns information about all nodes in an Array |
+| data | Object/Array of Objects | Returns node information when node parameter exists,<br />otherwise, returns information about all nodes in an Array |
 | data.connections       | Integer   | Number of clients currently connected to this node |
 | data.load1             | String    | CPU average load in 1 minute |
 | data.load5             | String    | CPU average load in 5 minute |
@@ -209,7 +209,7 @@ After version 4.1, multiple conditions and fuzzy queries are supported. The quer
 | data[0].port              | Integer   | Client port |
 | data[0].is_bridge         | Boolean   | Indicates whether the client is connected via bridge |
 | data[0].connected_at      | String    | Client connection time, in the format of "YYYY-MM-DD HH:mm:ss" |
-| data[0].disconnected_at   | String    | Client offline time, in the formatof "YYYY-MM-DD HH:mm:ss"，<br/>This field is only valid and returned when `connected` is` false` |
+| data[0].disconnected_at   | String    | Client offline time, in the formatof "YYYY-MM-DD HH:mm:ss"，<br />This field is only valid and returned when `connected` is` false` |
 | data[0].connected         | Boolean   | Whether the client is connected |
 | data[0].zone              | String    | Indicate the configuration group used by the client |
 | data[0].keepalive         | Integer   | keepalive time, with the unit of second |
@@ -270,7 +270,7 @@ Returns information for the specified client
 | Name | Type | Description |
 | ---- | --------- | ----------- |
 | code | Integer   | 0         |
-| data | Array of Objects | Client information, for details, see<br/>[GET /api/v4/clients](#endpoint-get-clients) |
+| data | Array of Objects | Client information, for details, see<br />[GET /api/v4/clients](#endpoint-get-clients) |
 
 **Examples:**
 
@@ -346,7 +346,7 @@ Similar with [GET /api/v4/clients/{clientid}](#endpoint-get-a-client)，return i
 | Name | Type | Description |
 | ---- | --------- | ----------- |
 | code | Integer   | 0         |
-| data | Object | Information about all clients, for details, see<br/>[GET /api/v4/clients](#endpoint-get-clients) |
+| data | Object | Information about all clients, for details, see<br />[GET /api/v4/clients](#endpoint-get-clients) |
 
 **Examples:**
 
@@ -393,7 +393,7 @@ Query client information by Username. Since there may be multiple clients using 
 | Name | Type | Description |
 | ---- | --------- | ----------- |
 | code | Integer   | 0         |
-| data | Array of Objects | Information about clients, for details, see<br/>[GET /api/v4/clients](#endpoint-get-clients) |
+| data | Array of Objects | Information about clients, for details, see<br />[GET /api/v4/clients](#endpoint-get-clients) |
 
 **Examples:**
 
@@ -417,7 +417,7 @@ Similar with [GET /api/v4/clients/username/{username}](#endpoint-get-clients-by-
 | Name | Type | Description |
 | ---- | --------- | ----------- |
 | code | Integer   | 0         |
-| data | Array of Objects | Information about clients, for details, see<br/>[GET /api/v4/clients](#endpoint-get-clients) |
+| data | Array of Objects | Information about clients, for details, see<br />[GET /api/v4/clients](#endpoint-get-clients) |
 
 **Examples:**
 
@@ -859,7 +859,7 @@ Returns information of all plugins in the cluster.
 | data[0].plugins.version     | String    | Plugin version |
 | data[0].plugins.description | String    | Plugin description |
 | data[0].plugins.active      | Boolean   | Whether the plugin is active |
-| data[0].plugins.type        | String    | Plug-in type, currently includes<br/>`auth`、`bridge`、`feature`、`protocol` |
+| data[0].plugins.type        | String    | Plug-in type, currently includes<br />`auth`、`bridge`、`feature`、`protocol` |
 
 **Examples:**
 
@@ -884,7 +884,7 @@ Similar with [GET /api/v4/plugins](#endpoint-get-plugins), return the plugin inf
 | data[0].version     | String    | Plugin version |
 | data[0].description | String    | Plugin description |
 | data[0].active      | Boolean   | Whether the plugin is active |
-| data[0].type        | String    | Plug-n type, currently include<br/>`auth`、`bridge`、`feature`、`protocol` |
+| data[0].type        | String    | Plug-n type, currently include<br />`auth`、`bridge`、`feature`、`protocol` |
 
 **Examples:**
 

@@ -21,7 +21,7 @@ EMQ X 的代理订阅功能使得客户端在连接建立时，不需要发送�
 
 ### 开启代理订阅功能
 
-代理订阅功能由 `emqx_mod_subscription` 内置模块提供，此功能默认关闭，支持在 EMQ X Broker 运行期间动态启停，请参见 [内置模块](./internal-modules.md)。
+代理订阅功能由 `emqx_mod_subscription` 内置模块提供，此功能默认关闭，支持在 EMQ X Broker 运行期间动态启停。
 
 ### 配置代理订阅规则
 

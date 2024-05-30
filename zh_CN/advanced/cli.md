@@ -406,7 +406,7 @@ t2/# -> emqx2@127.0.0.1
 t/+/x -> emqx2@127.0.0.1,emqx@127.0.0.1
 ```
 
-### routes show <Topic>
+### routes show \<Topic>
 
 查询指定 Topic d的路由:
 
@@ -474,7 +474,7 @@ plugins 命令用于加载、卸载、查询插件应用。EMQ X 通过插件扩
 | `plugins unload <Plugin> `| 卸载插件 (Plugin)   |
 | `plugins reload <Plugin> `| 重载插件 (Plugin)   |
 
- 当配置文件发生更改，如果需要配置立即生效，你可以执行 `emqx_ctl reload <Plugin\> 命令，即使插件在配置修改时并未处于运行状态，你也应当使用此命令而不是 `emqx_ctl load <Plugin\>，因为 `emqx_ctl load <Plugin\> 不会编译新的配置文件。
+ 当配置文件发生更改，如果需要配置立即生效，你可以执行 `emqx_ctl reload <Plugin>` 命令，即使插件在配置修改时并未处于运行状态，你也应当使用此命令而不是 `emqx_ctl load <Plugin>`，因为 `emqx_ctl load <Plugin>` 不会编译新的配置文件。
 
 ### plugins list
 
@@ -518,7 +518,7 @@ Plugin (emqx_web_hook, version=v4.0.0, description=EMQ X Webhook Plugin, active=
 | description | 插件描述   |
 | active      | 是否已加载 |
 
-### plugins load <Plugin>
+### plugins load \<Plugin>
 
 加载插件:
 
@@ -527,7 +527,7 @@ $ ./bin/emqx_ctl plugins load emqx_lua_hook
 Plugin emqx_lua_hook loaded successfully.
 ```
 
-### plugins unload <Plugin>
+### plugins unload \<Plugin>
 
 卸载插件:
 
@@ -536,7 +536,7 @@ $ ./bin/emqx_ctl plugins unload emqx_lua_hook
 Plugin emqx_lua_hook unloaded successfully.
 ```
 
-### plugins reload <Plugin>
+### plugins reload \<Plugin>
 
 重载插件:
 
@@ -713,7 +713,7 @@ log 命令用于设置日志等级。访问 [Documentation of logger](http://erl
 
 日志的等级由低到高分别为：`debug | info | notice | warning | error | critical | alert | emergency`，日志等级越低，系统输出的日志数量越多，消耗的系统资源越大。为提高系统运行性能，默认的主日志等级是 error。
 
-### log set-level <Level>
+### log set-level \<Level>
 
 设置主日志等级和所有 Handlers 日志等级:
 
@@ -731,7 +731,7 @@ $ ./bin/emqx_ctl log primary-level
 debug
 ```
 
-### log primary-level <Level>
+### log primary-level \<Level>
 
 设置主日志等级:
 
@@ -751,7 +751,7 @@ LogHandler (id=file, level=debug, destination=log/emqx.log)
 LogHandler (id=default, level=debug, destination=console)
 ```
 
-### log handlers set-level <HandlerId> <Level>
+### log handlers set-level \<HandlerId> \<Level>
 
 设置指定 Hanlder 的日志等级:
 
@@ -891,7 +891,7 @@ listener 参数说明:
 | current\_conns  | 当前连接数          |
 | shutdown\_count | 连接关闭原因统计 |
 
-### listeners stop <Proto> <Port>
+### listeners stop \<Proto> \<Port>
 
 停止监听端口:
 
@@ -953,7 +953,7 @@ $ ./bin/emqx_ctl retainer clean
 Cleaned 3 retained messages
 ```
 
-### retainer clean <Topic>
+### retainer clean \<Topic>
 
 清除指定的主题下的保留的消息:
 
@@ -972,7 +972,7 @@ Cleaned 1 retained messages
 | `admins passwd <Username> <Password>     `| 重置 admin 密码 |
 | `admins del <Username>                   `| 删除 admin 账号 |
 
-### admins add <Username> <Password> <Tags>
+### admins add \<Username> \<Password> \<Tags>
 
 创建 admin 账户:
 
@@ -981,7 +981,7 @@ $ ./bin/emqx_ctl admins add root public test
 ok
 ```
 
-### admins passwd <Username> <Password>
+### admins passwd \<Username> \<Password>
 
 重置 admin 账户密码:
 
@@ -990,7 +990,7 @@ $ ./bin/emqx_ctl admins passwd root private
 ok
 ```
 
-### admins del <Username>
+### admins del \<Username>
 
 删除 admin 账户:
 
@@ -1019,14 +1019,15 @@ ok
 - *`-d <descr>`*: 可选，规则描述信息
 
 使用举例:
+```
+## 创建一个测试规则，简单打印所有发送到 't/a' 主题的消息内容
+$ ./bin/emqx_ctl rules create \
+    'select * from "t/a"' \
+  '[{"name":"inspect", "params": {"a": 1}}]' \
+  -d 'Rule for debug'
 
-    ## 创建一个测试规则，简单打印所有发送到 't/a' 主题的消息内容
-    $ ./bin/emqx_ctl rules create \
-      'select * from "t/a"' \
-      '[{"name":"inspect", "params": {"a": 1}}]' \
-      -d 'Rule for debug'
-
-    Rule rule:9a6a725d created
+Rule rule:9a6a725d created
+```
 
 上例创建了一个 ID 为 `rule:9a6a725d` 的规则，动作列表里只有一个动作：动作名为 inspect，动作的参数是
 `{"a": 1}`。
@@ -1034,29 +1035,31 @@ ok
 #### rules list
 
 列出当前所有的规则:
+```
+$ ./bin/emqx_ctl rules list
 
-    $ ./bin/emqx_ctl rules list
-
-    rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
+rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
+```
 
 #### rules show
 
 查询规则:
 
-    ## 查询 RuleID 为 'rule:9a6a725d' 的规则
-    $ ./bin/emqx_ctl rules show 'rule:9a6a725d'
+```
+## 查询 RuleID 为 'rule:9a6a725d' 的规则
+$ ./bin/emqx_ctl rules show 'rule:9a6a725d'
 
-    rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
-
+rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
+```
 #### rules delete
 
 删除规则:
+```
+## 删除 RuleID 为 'rule:9a6a725d' 的规则
+$ ./bin/emqx_ctl rules delete 'rule:9a6a725d'
 
-    ## 删除 RuleID 为 'rule:9a6a725d' 的规则
-    $ ./bin/emqx_ctl rules delete 'rule:9a6a725d'
-
-    ok
-
+ok
+```
 ### rule-actions 命令
 
 | 命令                           | 描述            |
@@ -1073,21 +1076,24 @@ ok
 
 查询动作:
 
-    ## 查询名为 'inspect' 的动作
-    $ ./bin/emqx_ctl rule-actions show 'inspect'
+```
+## 查询名为 'inspect' 的动作
+$ ./bin/emqx_ctl rule-actions show 'inspect'
 
-    action(name='inspect', app='emqx_rule_engine', types=[], title ='Inspect (debug)', description='Inspect the details of action params for debug purpose')
+action(name='inspect', app='emqx_rule_engine', types=[], title ='Inspect (debug)', description='Inspect the details of action params for debug purpose')
+```
 
 #### rule-actions list
 
 列出符合条件的动作:
 
-    ## 列出当前所有的动作
-    $ ./bin/emqx_ctl rule-actions list
+```
+## 列出当前所有的动作
+$ ./bin/emqx_ctl rule-actions list
 
-    action(name='data_to_rabbit', app='emqx_bridge_rabbit', types=[bridge_rabbit], title ='Data bridge to RabbitMQ', description='Store Data to Kafka')
-    action(name='data_to_timescaledb', app='emqx_backend_pgsql', types=[timescaledb], title ='Data to TimescaleDB', description='Store data to TimescaleDB')
-    ...
+action(name='data_to_rabbit', app='emqx_bridge_rabbit', types=[bridge_rabbit], title ='Data bridge to RabbitMQ', description='Store Data to Kafka')
+action(name='data_to_timescaledb', app='emqx_backend_pgsql', types=[timescaledb], title ='Data to TimescaleDB', description='Store data to TimescaleDB')
+```
 
 ### resources 命令
 

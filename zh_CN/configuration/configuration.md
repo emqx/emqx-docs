@@ -810,7 +810,7 @@ TCP 调优参数。用户态的 Socket 缓冲区大小。
 
 | Type | Optional Value                                                                     | Default   |
 | ---- | ---------------------------------------------------------------------------------- | --------- |
-| enum | `debug`, `info`, `notice`, `warning`<br/>`error`, `critical`, `alert`, `emergency` | `warning` |
+| enum | `debug`, `info`, `notice`, `warning`<br />`error`, `critical`, `alert`, `emergency` | `warning` |
 
 ##### 说明
 
@@ -878,7 +878,7 @@ TCP 调优参数。用户态的 Socket 缓冲区大小。
 
 <br />
 
-### log.<level>.file
+### log.\<level>.file
 
 | Type   | Default |
 | ------ | ------- |
@@ -3730,8 +3730,8 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 设置系统心跳消息的发布间隔。系统心跳消息包括下面两个主题：
 
-- "$SYS/brokers/<node>/uptime"
-- "$SYS/brokers/<node>/datetime"
+- "$SYS/brokers/\<node>/uptime"
+- "$SYS/brokers/\<node>/datetime"
 
 <br />
 
@@ -3972,7 +3972,7 @@ EMQ X 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pr
 
 ## [emqx-auth-clientid](https://github.com/emqx/emqx-auth-clientid)
 
-### auth.client.<Number>.clientid` & `auth.client.<Number>.password
+### `auth.client.<Number>.clientid` & `auth.client.<Number>.password`
 
 | Type   | Default |
 | ------ | ------- |
@@ -4199,7 +4199,7 @@ HTTP 请求失败时的重试间隔使用了指数退避算法，此配置项用
 
 <br />
 
-### auth.http.header.<Key>
+### auth.http.header.\<Key>
 
 | Type   | Default |
 | ------ | ------- |
@@ -4307,7 +4307,7 @@ CA 证书文件路径。
 
 <br />
 
-### auth.jwt.verify_claims.<claims>
+### auth.jwt.verify_claims.\<claims>
 
 | Type   | Default |
 | ------ | ------- |
@@ -5475,7 +5475,7 @@ ACL 查询命令。可用的占位符有：
 
 ## [emqx-auth-username](https://github.com/emqx/emqx-auth-username)
 
-### auth.user.<Number>.username` & `auth.user.<Number>.password
+### `auth.user.<Number>.username` & `auth.user.<Number>.password`
 
 | Type   | Default |
 | ------ | ------- |
@@ -6861,7 +6861,7 @@ CA 证书文件路径。
 
 <br />
 
-### rule-engine.events.<event-name>
+### rule-engine.events.\<event-name>
 
 | Type | Optional Value | Default |
 | ---- | -------------- | ------- |
@@ -7033,7 +7033,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 <br />
 
-### prometheus.collector.<N>
+### prometheus.collector.\<N>
 
 | Type   | Default           |
 | ------ | ----------------- |

@@ -81,14 +81,14 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4"
 
 | Name | Type | Required | Description |
 | ---- | --------- | ------------| ----------- |
-| node | String    | False       | 节点名字，如 "emqx@127.0.0.1。<br/>不指定时返回所有节点的信息 |
+| node | String    | False       | 节点名字，如 "emqx@127.0.0.1。<br />不指定时返回所有节点的信息 |
 
 **Success Response Body (JSON):**
 
 | Name | Type | Description |
 | ---- | --------- | ----------- |
 | code | Integer   | 0         |
-| data | Object/Array of Objects | node 参数存在时返回指定节点信息，<br/>不存在时返回所有节点的信息|
+| data | Object/Array of Objects | node 参数存在时返回指定节点信息，<br />不存在时返回所有节点的信息|
 | data.datetime    | String    | 当前时间，格式为 "YYYY-MM-DD HH:mm:ss"                       |
 | data.node        | String    | 节点名称                                                     |
 | data.node_status | String    | 节点状态                                                     |
@@ -123,14 +123,14 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/brokers/e
 
 | Name | Type | Required | Description |
 | ---- | --------- | ------------| ----------- |
-| node | String    | False       | 节点名字，如 "emqx@127.0.0.1。<br/>不指定时返回所有节点的信息 |
+| node | String    | False       | 节点名字，如 "emqx@127.0.0.1。<br />不指定时返回所有节点的信息 |
 
 **Success Response Body (JSON):**
 
 | Name | Type | Description |
 | ---- | --------- | ----------- |
 | code | Integer   | 0         |
-| data | Object/Array of Objects | node 参数存在时返回指定节点信息，<br/>不存在时以 Array 形式返回所有节点的信息|
+| data | Object/Array of Objects | node 参数存在时返回指定节点信息，<br />不存在时以 Array 形式返回所有节点的信息|
 | data.connections       | Integer   | 当前接入此节点的客户端数量          |
 | data.load1             | String    | 1 分钟内的 CPU 平均负载             |
 | data.load5             | String    | 5 分钟内的 CPU 平均负载             |
@@ -211,7 +211,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 | data[0].port              | Integer   | 客户端的端口 |
 | data[0].is_bridge         | Boolean   | 指示客户端是否通过桥接方式连接 |
 | data[0].connected_at      | String    | 客户端连接时间，格式为 "YYYY-MM-DD HH:mm:ss" |
-| data[0].disconnected_at   | String    | 客户端离线时间，格式为 "YYYY-MM-DD HH:mm:ss"，<br/>此字段仅在 `connected` 为 `false` 时有效并被返回 |
+| data[0].disconnected_at   | String    | 客户端离线时间，格式为 "YYYY-MM-DD HH:mm:ss"，<br />此字段仅在 `connected` 为 `false` 时有效并被返回 |
 | data[0].connected         | Boolean   | 客户端是否处于连接状态 |
 | data[0].zone              | String    | 指示客户端使用的配置组 |
 | data[0].keepalive         | Integer   | 保持连接时间，单位：秒 |
@@ -270,7 +270,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/clients?_
 | Name | Type | Description |
 | ---- | --------- | ----------- |
 | code | Integer   | 0         |
-| data | Array of Objects | 客户端的信息，详细请参见<br/>[GET /api/v4/clients](#endpoint-get-clients)|
+| data | Array of Objects | 客户端的信息，详细请参见<br />[GET /api/v4/clients](#endpoint-get-clients)|
 
 **Examples:**
 
@@ -346,7 +346,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 | Name | Type | Description |
 | ---- | --------- | ----------- |
 | code | Integer   | 0         |
-| data | Object | 客户端的信息，详细请参见<br/>[GET /api/v4/clients](#endpoint-get-clients)|
+| data | Object | 客户端的信息，详细请参见<br />[GET /api/v4/clients](#endpoint-get-clients)|
 
 **Examples:**
 
@@ -393,7 +393,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/nodes/
 | Name | Type | Description |
 | ---- | --------- | ----------- |
 | code | Integer   | 0         |
-| data | Array of Objects | 客户端的信息，详细请参见<br/>[GET /api/v4/clients](#endpoint-get-clients)|
+| data | Array of Objects | 客户端的信息，详细请参见<br />[GET /api/v4/clients](#endpoint-get-clients)|
 
 **Examples:**
 
@@ -417,7 +417,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/clients/u
 | Name | Type | Description |
 | ---- | --------- | ----------- |
 | code | Integer   | 0         |
-| data | Array of Objects | 客户端的信息，详细请参见<br/>[GET /api/v4/clients](#endpoint-get-clients)|
+| data | Array of Objects | 客户端的信息，详细请参见<br />[GET /api/v4/clients](#endpoint-get-clients)|
 
 **Examples:**
 
@@ -858,7 +858,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/uns
 | data[0].plugins.version     | String    | 插件版本 |
 | data[0].plugins.description | String    | 插件描述 |
 | data[0].plugins.active      | Boolean   | 插件是否启动 |
-| data[0].plugins.type        | String    | 插件类型，目前有<br/>`auth`、`bridge`、`feature`、`protocol` 四种类型 |
+| data[0].plugins.type        | String    | 插件类型，目前有<br />`auth`、`bridge`、`feature`、`protocol` 四种类型 |
 
 **Examples:**
 
@@ -883,7 +883,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/plugins"
 | data[0].version     | String    | 插件版本 |
 | data[0].description | String    | 插件描述 |
 | data[0].active      | Boolean   | 插件是否启动 |
-| data[0].type        | String    | 插件类型，目前有<br/>`auth`、`bridge`、`feature`、`protocol` 四种类型 |
+| data[0].type        | String    | 插件类型，目前有<br />`auth`、`bridge`、`feature`、`protocol` 四种类型 |
 
 **Examples:**
 

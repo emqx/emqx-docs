@@ -173,18 +173,18 @@ emqx:unhook(Name, {Module, Function}).
 | client.disconnected  | `ClientInfo`：客户端信息参数<br>`ConnInfo`：客户端连接层参数<br>`ReasonCode`：错误码 | -                   |
 | client.authenticate  | `ClientInfo`：客户端信息参数<br>`AuthResult`：认证结果       | 新的 `AuthResult`   |
 | client.check_acl     | `ClientInfo`：客户端信息参数<br>`Topic`：发布/订阅的主题<br>`PubSub`:  发布或订阅<br>`ACLResult`：鉴权结果 | 新的 `ACLResult`    |
-| client.subscribe     | `ClientInfo`：客户端信息参数<br/>`Props`：MQTT v5.0 订阅报文的 Properties 参数<br>`TopicFilters`：需订阅的主题列表 | 新的 `TopicFilters` |
-| client.unsubscribe   | `ClientInfo`：客户端信息参数<br/>`Props`：MQTT v5.0 取消订阅报文的 Properties 参数<br/>`TopicFilters`：需取消订阅的主题列表 | 新的 `TopicFilters` |
-| session.created      | `ClientInfo`：客户端信息参数<br/>`SessInfo`：会话信息        | -                   |
-| session.subscribed   | `ClientInfo`：客户端信息参数<br/>`Topic`：订阅的主题<br>`SubOpts`：订阅操作的配置选项 | -                   |
-| session.unsubscribed | `ClientInfo`：客户端信息参数<br/>`Topic`：取消订阅的主题<br/>`SubOpts`：取消订阅操作的配置选项 | -                   |
-| session.resumed      | `ClientInfo`：客户端信息参数<br/>`SessInfo`：会话信息        | -                   |
-| session.discarded    | `ClientInfo`：客户端信息参数<br/>`SessInfo`：会话信息        | -                   |
-| session.takeovered   | `ClientInfo`：客户端信息参数<br/>`SessInfo`：会话信息        |                     |
-| session.terminated   | `ClientInfo`：客户端信息参数<br/>`Reason`：终止原因 <br>`SessInfo`：会话信息 | -   |
+| client.subscribe     | `ClientInfo`：客户端信息参数<br />`Props`：MQTT v5.0 订阅报文的 Properties 参数<br>`TopicFilters`：需订阅的主题列表 | 新的 `TopicFilters` |
+| client.unsubscribe   | `ClientInfo`：客户端信息参数<br />`Props`：MQTT v5.0 取消订阅报文的 Properties 参数<br />`TopicFilters`：需取消订阅的主题列表 | 新的 `TopicFilters` |
+| session.created      | `ClientInfo`：客户端信息参数<br />`SessInfo`：会话信息        | -                   |
+| session.subscribed   | `ClientInfo`：客户端信息参数<br />`Topic`：订阅的主题<br>`SubOpts`：订阅操作的配置选项 | -                   |
+| session.unsubscribed | `ClientInfo`：客户端信息参数<br />`Topic`：取消订阅的主题<br />`SubOpts`：取消订阅操作的配置选项 | -                   |
+| session.resumed      | `ClientInfo`：客户端信息参数<br />`SessInfo`：会话信息        | -                   |
+| session.discarded    | `ClientInfo`：客户端信息参数<br />`SessInfo`：会话信息        | -                   |
+| session.takeovered   | `ClientInfo`：客户端信息参数<br />`SessInfo`：会话信息        |                     |
+| session.terminated   | `ClientInfo`：客户端信息参数<br />`Reason`：终止原因 <br>`SessInfo`：会话信息 | -   |
 | message.publish      | `Message`：消息对象                                          | 新的 `Message`      |
-| message.delivered    | `ClientInfo`：客户端信息参数<br/>`Message`：消息对象         | 新的 `Message`      |
-| message.acked        | `ClientInfo`：客户端信息参数<br/>`Message`：消息对象         | -                   |
+| message.delivered    | `ClientInfo`：客户端信息参数<br />`Message`：消息对象         | 新的 `Message`      |
+| message.acked        | `ClientInfo`：客户端信息参数<br />`Message`：消息对象         | -                   |
 | message.dropped      | `Message`：消息对象<br>`By`：被谁丢弃<br>`Reason`：丢弃原因  | -                   |
 
 

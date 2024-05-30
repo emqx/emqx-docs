@@ -2030,7 +2030,7 @@ follows:
 | $<Number\> | It must be used with $paylaod to retrieve data from Json Array                      |
 | $timestamp  | The timestamp EMQ X sets when preparing to forward messages, precision: Nanoseconds |
 
-**$payload and $<Number\>:**
+**$payload and `$<Number>`:**
 
 You can directly use `$content` to obtain the complete message payload,
 you can use `["$payload", <Key>, ...]` to get the data inside the
@@ -2041,7 +2041,7 @@ For example `payload` is `{"data": {"temperature": 23.9}}`, you can via
 
 In the case of array data type in Json, we introduced `$0` and
 `$<pos_integer>`, `$0` means to get all elements in the array, and
-`$<pos_integer>` means to get the <pos\_integer\>th element in the
+`$<pos_integer>` means to get the \<pos_integer>th element in the
 array.
 
 A simple example, `["$payload", "$0", "temp"]` will get `[20, 21]` from

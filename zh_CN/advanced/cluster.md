@@ -82,7 +82,7 @@ Erlang 集群中各节点可通过 TCPv4、TCPv6 或 TLS 方式连接，可在 `
 
 | 配置名 | 类型 | 默认值 | 描述 |
 | ----- | --- | ----- | ---- |
-| cluster.proto_dist | enum | `inet_tcp` | 分布式协议，可选值：<br />  - inet_tcp: 使用 TCP IPv4<br/>  - inet6_tcp: 使用 TCP IPv6<br/>  - inet_tls: 使用 TLS |
+| cluster.proto_dist | enum | `inet_tcp` | 分布式协议，可选值：<br />  - inet_tcp: 使用 TCP IPv4<br />  - inet6_tcp: 使用 TCP IPv6<br />  - inet_tls: 使用 TLS |
 | node.ssl_dist_optfile | 文件路径 | `etc/ssl_dist.conf` | 当 `cluster.proto_dist` 选定为 inet_tls 时，需要配置 `etc/ssl_dist.conf` 文件，指定 TLS 证书等 |
 
 ## EMQ X 分布式集群设计 
@@ -162,7 +162,7 @@ EMQ X 支持多种节点发现策略:
 | k8s    | Kubernetes 服务自动集群 |
 
 ### manual 手动创建集群 
-默认配置为手动创建集群，节点须通过 ./bin/emqx\_ctl join <Node\> 命令加入:
+默认配置为手动创建集群，节点须通过 `./bin/emqx_ctl join <Node>` 命令加入:
 
 ```bash
 cluster.discovery = manual
