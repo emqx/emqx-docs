@@ -55,11 +55,11 @@ The percentage data ending in `%` , that will eventually be converted to `float`
 
 **enum**
 
-Usually we will list all its optional values near the configuration item of type `enum`. Of course, you can also search for  [configuration item](../configuration/index.md#).
+Usually we will list all its optional values near the configuration item of type `enum`. Of course, you can also search for  [configuration item](../configuration/configuration.md).
 
 **ip**
 
-When you see that the data type of a configuration item is `ip`, it means that you can set the configuration item in the form of \<IP>: \<Port>`, for example, `0.0.0.0: 1883`.
+When you see that the data type of a configuration item is `ip`, it means that you can set the configuration item in the form of `<IP>: <Port>`, for example, `0.0.0.0: 1883`.
 
 **string**
 
@@ -83,7 +83,7 @@ A value of type `atom` will eventually be converted into Erlang ’s `atom`, but
 
 **flag**
 
-`flag` is used for variables that have two possible values. The default available values of `flag` are `on` and `off`, which will be mapped to `true` and `false` for application. If we have established other mapping relationships for a configuration item, we will indicate it in the configuration file, and you can also find this information in [configuration item](../configuration/index.md#).
+`flag` is used for variables that have two possible values. The default available values of `flag` are `on` and `off`, which will be mapped to `true` and `false` for application. If we have established other mapping relationships for a configuration item, we will indicate it in the configuration file, and you can also find this information in [configuration item](../configuration/configuration.md).
 
 **duration**
 
@@ -144,6 +144,6 @@ Of course, in this case, we recommend that you copy the default Listener configu
 
 ### Zone
 
-A Zone defines a set of configuration items (such as the maximum number of connections), and the Listener can specify the Zone through the configuration item `listener.<Protocol>.<Listener Name>.zone` to use all the configurations under the Zone. Multiple Listeners can share the same Zone. The naming rule of Zone is `zone.<Zone Name>.xxx`. `Zone Name` can be named at will, but it is also recommended to be all lowercase. `xxx` is a specific configuration item, you can find it in [configuration item](../configuration/index.md#) to view all configuration items supported by Zone.
+A Zone defines a set of configuration items (such as the maximum number of connections), and the Listener can specify the Zone through the configuration item `listener.<Protocol>.<Listener Name>.zone` to use all the configurations under the Zone. Multiple Listeners can share the same Zone. The naming rule of Zone is `zone.<Zone Name>.xxx`. `Zone Name` can be named at will, but it is also recommended to be all lowercase. `xxx` is a specific configuration item, you can find it in [configuration item](../configuration/configuration.md) to view all configuration items supported by Zone.
 
 At this time, there are three available values for each of our configuration items, which are the global value, the value set in Zone and the default value, and their priority order is: Zone> Global> Default.

@@ -32,7 +32,7 @@ Take  [Prometheus](https://prometheus.io) as an example:
 
 The `emqx_statsd` plugin internally starts a timer to collect the monitoring data in EMQ X Broker every interval.
 
-For the specific fields and meanings of the monitoring data pushed by `emqx_statsd`, see [Metrics & Stats](metrics.md)
+For the specific fields and meanings of the monitoring data pushed by `emqx_statsd`, see [Metrics & Stats](../advanced/metrics-and-stats.md)
 
 The configuration file is located in `etc/plugins/emqx_statsd.conf`, where:
 

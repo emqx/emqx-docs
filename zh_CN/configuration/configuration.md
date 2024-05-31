@@ -807,7 +807,7 @@ TCP 调优参数。用户态的 Socket 缓冲区大小。
 
 ##### 说明
 
-全局的日志级别。这包括 primary log level 以及所有的 log handlers。详情请参见 [日志级别和 log handlers](../getting-started/log.md#log-level-and-log-handlers)。
+全局的日志级别。这包括 primary log level 以及所有的 log handlers。详情请参见 [日志级别和 log handlers](../getting-started/log.md)。
 
 <br />
 
@@ -3941,7 +3941,7 @@ EMQ X 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pr
 
 ## [emqx-auth-clientid](https://github.com/emqx/emqx-auth-clientid)
 
-### auth.client.\<Number>.clientid` & `auth.client.\<Number>.password
+### `auth.client.<Number>.clientid` & `auth.client.<Number>.password`
 
 | Type   | Default |
 | ------ | ------- |
@@ -5444,7 +5444,7 @@ ACL 查询命令。可用的占位符有：
 
 ## [emqx-auth-username](https://github.com/emqx/emqx-auth-username)
 
-### auth.user.\<Number>.username` & `auth.user.\<Number>.password
+### `auth.user.<Number>.username` & `auth.user.<Number>.password`
 
 | Type   | Default |
 | ------ | ------- |

@@ -158,7 +158,7 @@ EMQ X supports multiple node discovery strategies:
 | k8s      | Autocluster of Kubernetes service |
 
 ### Creating a cluster manually
-The default configuration is to manually create a cluster. Nodes should be added via the command of ./bin/emqx\_ctl join \ <Node \>:
+The default configuration is to manually create a cluster. Nodes should be added via the command of `./bin/emqx_ctl join <Node>`:
 
 ```bash
 cluster.discovery = manual

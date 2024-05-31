@@ -300,7 +300,7 @@
         },
         {
           "title": "其他资源",
-          "path": "development/resource"
+          "path": "https://www.emqx.com/zh/mqtt-client-sdk"
         }
       ]
     },
@@ -461,6 +461,10 @@
             {
               "title": "Cliend ID",
               "path": "advanced/auth-clientid"
+            },
+            {
+              "title": "Mnesia",
+              "path": "advanced/auth-mnesia"
             },
             {
               "title": "HTTP",
@@ -662,7 +666,7 @@
         },
         {
           "title": "Others",
-          "path": "development/resource"
+          "path": "https://www.emqx.com/en/mqtt-client-sdk"
         }
       ]
     },

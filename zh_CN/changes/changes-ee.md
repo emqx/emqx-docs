@@ -4940,8 +4940,10 @@ emqttd\_ctl: better error message (\#450)
 
 ./bin/emqttd\_ctl: add 'routes' command
 
-`` ` routes list # List all routes routes show <Topic> # Show a
-route``\`
+```
+routes list # List all routes routes show <Topic> # Show a
+route
+```
 
 Add 'backend\_subscription' table and support static subscriptions
 (emqttd\_backend)
@@ -4975,9 +4977,11 @@ Licensed under the Apache License, Version 2.0 Now.
 Improve the design of cluster, support to join or leave the cluster
 (\#449):
 
-`` ` $ ./bin/emqttd_ctl cluster cluster join <Node> #Join the cluster
+```
+$ ./bin/emqttd_ctl cluster cluster join <Node> #Join the cluster
 cluster leave #Leave the cluster cluster remove <Node> #Remove the node
-from cluster cluster status #Cluster status``\`
+from cluster cluster status #Cluster status
+```
 
 Improve the design of Trie and Route, only the wildcard topics stored in
 Trie.

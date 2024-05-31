@@ -162,7 +162,7 @@ EMQ X 支持多种节点发现策略:
 | k8s    | Kubernetes 服务自动集群 |
 
 ### manual 手动创建集群 
-默认配置为手动创建集群，节点须通过 ./bin/emqx\_ctl join <Node\> 命令加入:
+默认配置为手动创建集群，节点须通过 `./bin/emqx_ctl join <Node>` 命令加入:
 
 ```bash
 cluster.discovery = manual

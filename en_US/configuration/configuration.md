@@ -803,7 +803,7 @@ Where to output the log. The optional values are:
 
 ##### Description
 
-Global log level. This includes the primary log level and all log handlers. For details, see [log level and log handlers](../getting-started/log.md#log-level-and-log-handlers).
+Global log level. This includes the primary log level and all log handlers. For details, see [log level and log handlers](../getting-started/log.md).
 
 <br />
 
@@ -994,7 +994,7 @@ What to do after the ACL check fails.
 
 Specify the `Flapping` inspection strategy.
 
-Format: \<threshold>,\<duration>,\<banned>`.
+Format: `<threshold>,<duration>,<banned>`.
 
 For example, `30, 1m, 5m`, it means that if the client disconnects 30 times within 1 minute, then login is prohibited for the next 5 minutes
 
@@ -3941,7 +3941,7 @@ When the percentage of the current number of processes in the maximum number of 
 
 ## [emqx-auth-clientid](https://github.com/emqx/emqx-auth-clientid)
 
-### auth.client.\<Number>.clientid` & `auth.client.\<Number>.password
+### `auth.client.<Number>.clientid` & `auth.client.<Number>.password`
 
 | Type   | Default |
 | ------ | ------- |
@@ -5442,7 +5442,7 @@ ACL query commands. Available placeholders are:
 
 ## [emqx-auth-username](https://github.com/emqx/emqx-auth-username)
 
-### auth.user.\<Number>.username` & `auth.user.\<Number>.password
+### `auth.user.<Number>.username` & `auth.user.<Number>.password`
 
 | Type   | Default |
 | ------ | ------- |
