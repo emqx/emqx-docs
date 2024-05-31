@@ -467,7 +467,7 @@ plugins 命令用于加载、卸载、查询插件应用。EMQ X 通过插件扩
 | `plugins unload <Plugin> `| 卸载插件 (Plugin)   |
 | `plugins reload <Plugin> `| 重载插件 (Plugin)   |
 
- 当配置文件发生更改，如果需要配置立即生效，你可以执行 `emqx_ctl reload <Plugin\> 命令，即使插件在配置修改时并未处于运行状态，你也应当使用此命令而不是 `emqx_ctl load \<Plugin\>，因为 `emqx_ctl load \<Plugin\> 不会编译新的配置文件。
+ 当配置文件发生更改，如果需要配置立即生效，你可以执行 `emqx_ctl reload <Plugin>` 命令，即使插件在配置修改时并未处于运行状态，你也应当使用此命令而不是 `emqx_ctl load <Plugin>`，因为 `emqx_ctl load <Plugin>` 不会编译新的配置文件。
 
 ### plugins list
 
