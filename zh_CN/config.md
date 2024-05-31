@@ -161,7 +161,7 @@ EMQ R2.3 版本支持多种策略的节点自动发现与集群:
 
 ### 基于 etcd 自动集群
 
-基于 [ etcd ]() 自动发现并创建集群:
+基于 etcd 自动发现并创建集群:
 
     cluster.discovery = etcd
 
@@ -176,7 +176,7 @@ EMQ R2.3 版本支持多种策略的节点自动发现与集群:
 
 ### 基于 Kubernetes 自动集群
 
-[ Kubernetes ]() 下自动发现并创建集群:
+Kubernetes 下自动发现并创建集群:
 
     cluster.discovery = k8s
 

@@ -293,7 +293,7 @@ EMQ 消息服务器在客户端上下线、主题订阅、消息收发位置设�
                         |                             |                             |
                    stop | {stop, NewAcc}         stop | {stop, NewAcc}         stop | {stop, NewAcc}
 
-不同钩子的回调函数输入参数不同，用户可参考插件模版的 [ emqttd_plugin_template ]() 模块，每个回调函数应该返回:
+不同钩子的回调函数输入参数不同，用户可参考插件模版的 emqttd_plugin_template 模块，每个回调函数应该返回:
 
 | 返回           | 说明                 |
 | -------------- | -------------------- |
