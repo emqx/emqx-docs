@@ -103,8 +103,6 @@
 
       # 启用 s3 存储桶文件导出
       storage.local.exporter.s3 {
-         enable = true
-
          host = "s3.us-east-1.amazonaws.com"
          port = 443
 

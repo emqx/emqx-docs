@@ -109,10 +109,8 @@ Before you start, you need to ensure that `s3cmd` is installed and configured co
       # Enable file transfer feature
       enable = true
 
-      # Enable file export to s3 bucket
+      # File export to s3 bucket
       storage.local.exporter.s3 {
-         enable = true
-
          host = "s3.us-east-1.amazonaws.com"
          port = 443
 
