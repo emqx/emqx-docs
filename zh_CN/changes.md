@@ -432,7 +432,7 @@ Cannot kick transient client out when clientId collision (#357)
 
 Fix the order of emqttd_app:start_server/1 (#367)
 
-emqttd\_ [ session:subscribe/2 ](session:subscribe/2) will crash (#374)
+emqttd_session:subscribe/2 will crash (#374)
 
 ### Benchmark
 
@@ -886,8 +886,7 @@ Bugfix: fix errors found by dialyzer
 
 _发布日期: 2015-05-02_
 
-[MQTT over WebSocket(SSL)]( [ https://github.com/emqtt/emqttd/wiki/MQTT-Over-
-WebSocket ](https://github.com/emqtt/emqttd/wiki/MQTT-Over-WebSocket) ) Now!
+[MQTT over WebSocket(SSL)](https://github.com/emqtt/emqttd/wiki/MQTT-Over-WebSocket) Now!
 
 [Plugin Achitecture]( [ https://github.com/emqtt/emqttd/wiki/Plugin%20Design
 ](https://github.com/emqtt/emqttd/wiki/Plugin%20Design) ) based on OTP
