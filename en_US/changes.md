@@ -4618,7 +4618,7 @@ Installation and Configuration Guide released on [ http://docs.emqtt.com ](http:
 
 Improve and Consolidate the design of Hook, Server, PubSub and Router 
 
-Upgrade the [Web Dashboard]( [ https://github.com/emqtt/emqttd_dashboard ](https://github.com/emqtt/emqttd_dashboard) ) to support pagination 
+Upgrade the [Web Dashboard](https://github.com/emqtt/emqttd_dashboard) to support pagination 
 
 Bridge emqttd broker to another emqttd broker & emqttd to mosquitto bridge (#438) 
 
@@ -4799,7 +4799,7 @@ BugFix: emqttd_plugin_pgsql - error using same query with latest update plugin (
 
 ### Highlights 
 
-Rate Limiting based on [Token Bucket]( [ https://en.wikipedia.org/wiki/Token_bucket ](https://en.wikipedia.org/wiki/Token_bucket) ) and [Leaky Bucket]( [ https://en.wikipedia.org/wiki/Leaky_bucket#The_Leaky_Bucket_Algorithm_as_a_Meter ](https://en.wikipedia.org/wiki/Leaky_bucket#The_Leaky_Bucket_Algorithm_as_a_Meter) ) Algorithm 
+Rate Limiting based on [Token Bucket](https://en.wikipedia.org/wiki/Token_bucket) and [Leaky Bucket](https://en.wikipedia.org/wiki/Leaky_bucket#The_Leaky_Bucket_Algorithm_as_a_Meter) Algorithm 
 
 Upgrade eSockd and MochiWeb libraries to support Parameterized Connection Module 
 
@@ -4817,7 +4817,7 @@ TCP sndbuf, recbuf, buffer tuning (#359)
 
 emqttd_client.erl to handle 'inet_async', 'inet_reply' properly (#360) 
 
-Refator the [client/session management design]( [ https://github.com/emqtt/emqttd/blob/master/doc/design/ClientSession.md ](https://github.com/emqtt/emqttd/blob/master/doc/design/ClientSession.md) ) 
+Refator the [client/session management design](https://github.com/emqtt/emqttd/blob/master/doc/design/ClientSession.md) 
 
 ### Bugfix 
 
@@ -4825,11 +4825,11 @@ Cannot kick transient client out when clientId collision (#357)
 
 Fix the order of emqttd_app:start_server/1 (#367) 
 
-emqttd_ [ session:subscribe/2 ](session:subscribe/2) will crash (#374) 
+emqttd_session:subscribe/2 will crash (#374) 
 
 ### Benchmark 
 
-[benchmark for 0.13.0 release]( [ https://github.com/emqtt/emqttd/wiki/benchmark-for-0.13.0-release ](https://github.com/emqtt/emqttd/wiki/benchmark-for-0.13.0-release) ) 
+[benchmark for 0.13.0 release](https://github.com/emqtt/emqttd/wiki/benchmark-for-0.13.0-release) 
 
 3.1G memory and 50+ CPU/core: 
     
@@ -4884,7 +4884,7 @@ Benchmark: About 900K concurrent connections established on a 20Core, 32G CentOS
 
 Enhance the **emqttd_ctl** module to allow plugins to register new commands (#256) 
 
-Add [emqttd_recon plugin]( [ https://github.com/emqtt/emqttd_recon ](https://github.com/emqtt/emqttd_recon) ) to debug/optimize the broker (#235) 
+Add [emqttd_recon plugin](https://github.com/emqtt/emqttd_recon) to debug/optimize the broker (#235) 
 
 Add **'./bin/emqttd_ctl broker pubsub'** command to check the status of core pubsub processes 
 
@@ -4912,7 +4912,7 @@ Behaviour emqttd_auth_mod is missing init callback (#318)
 
 ### Benchmark 
 
-Write a new [benchmark tool]( [ https://github.com/emqtt/emqtt_benchmark ](https://github.com/emqtt/emqtt_benchmark) ) to benchmark this release 
+Write a new [benchmark tool](https://github.com/emqtt/emqtt_benchmark) to benchmark this release 
 
 Hw requirements - 5K users, 25-50 msgs/sec, QoS=1 (#209) 
 
@@ -4924,7 +4924,7 @@ Supported Number of Connections Greatly Reduced When Clients are Subscribing (#3
 
 Highlight: Rebar to manage plugin dependencies. 
 
-Highlight: [Stomp]( [ https://github.com/emqtt/emqttd_stomp ](https://github.com/emqtt/emqttd_stomp) ) and [SockJS]( [ https://github.com/emqtt/emqttd_sockjs ](https://github.com/emqtt/emqttd_sockjs) ) Plugins! 
+Highlight: [Stomp](https://github.com/emqtt/emqttd_stomp) and [SockJS](https://github.com/emqtt/emqttd_sockjs) Plugins! 
 
 Improve: add rel/files/emqttd.config.development|production. 
 
@@ -4950,7 +4950,7 @@ Bugfix: issue#312 - unsubcribe will lead to crash if emqttd_plugin_template plug
 
 Optimize session management and upgrade eSockd library to 2.7.1 
 
-[Benchmark for 0.10.4 release]( [ https://github.com/emqtt/emqttd/wiki/benchmark-for-0.10.4-release ](https://github.com/emqtt/emqttd/wiki/benchmark-for-0.10.4-release) ) 
+[Benchmark for 0.10.4 release](https://github.com/emqtt/emqttd/wiki/benchmark-for-0.10.4-release) 
 
 Improve: issue#294 - [error] failed to start connection on 0.0.0.0:1883 - enotconn 
 
@@ -4988,13 +4988,13 @@ Feature: issue#262 - Add ' [ http://host:8083/mqtt/status ](http://host:8083/mqt
 
 *Release Date: 2015-08-20*
 
-[Web Dashboard]( [ https://github.com/emqtt/emqttd_dashboard ](https://github.com/emqtt/emqttd_dashboard) ) and [MySQL]( [ https://github.com/emqtt/emqttd_plugin_mysql ](https://github.com/emqtt/emqttd_plugin_mysql) ), [PostgreSQL]( [ https://github.com/emqtt/emqttd_plugin_pgsql ](https://github.com/emqtt/emqttd_plugin_pgsql) ) Authentication/ACL Plugins! 
+[Web Dashboard](https://github.com/emqtt/emqttd_dashboard) and [MySQL](https://github.com/emqtt/emqttd_plugin_mysql), [PostgreSQL](https://github.com/emqtt/emqttd_plugin_pgsql) Authentication/ACL Plugins! 
 
 Highlight: Web Dashboard to monitor Statistics, Metrics, Clients, Sessions and Topics of the broker. 
 
 Highlight: JSON/HTTP API to query all clients connected to broker. 
 
-Highlight: A new [Plugin Design]( [ https://github.com/emqtt/emqttd/wiki/Plugin%20Design ](https://github.com/emqtt/emqttd/wiki/Plugin%20Design) ) and a [Template project]( [ https://github.com/emqtt/emqttd_plugin_template ](https://github.com/emqtt/emqttd_plugin_template) ) for plugin development. 
+Highlight: A new [Plugin Design](https://github.com/emqtt/emqttd/wiki/Plugin%20Design) and a [Template project](https://github.com/emqtt/emqttd_plugin_template) for plugin development. 
 
 Highlight: Authentication/ACL with MySQL, PostreSQl databases (#194, #172) 
 
@@ -5034,7 +5034,7 @@ Bugfix: emqttd_pooler cannot work
 
 *Release Date: 2015-07-25*
 
-Wiki: [Bridge]( [ https://github.com/emqtt/emqttd/wiki/Bridge ](https://github.com/emqtt/emqttd/wiki/Bridge) ) 
+Wiki: [Bridge](https://github.com/emqtt/emqttd/wiki/Bridge) 
 
 Improve: emqttd_protocol.hrl to define 'QOS_I' 
 
@@ -5062,7 +5062,7 @@ Bugfix: issue #193 - 'client.ack' hook should be renamed to 'message.acked', and
 
 *Release Date: 2015-07-09*
 
-[Session, Queue, Inflight Window, Hooks, Global MessageId and More Protocol Compliant]( [ https://github.com/emqtt/emqttd/releases/tag/0.9.0-alpha ](https://github.com/emqtt/emqttd/releases/tag/0.9.0-alpha) ) Now! 
+[Session, Queue, Inflight Window, Hooks, Global MessageId and More Protocol Compliant](https://github.com/emqtt/emqttd/releases/tag/0.9.0-alpha) Now! 
 
 Feature: Session/Queue/Inflight Window Design (#145). 
 
@@ -5094,7 +5094,7 @@ Improve: issue #174 - add 'from' field to mqtt_message record.
 
 Improve: issue #170 - $SYS Topics should support alarms. 
 
-Improve: issue #169 - Add More [Hooks]( [ https://github.com/emqtt/emqttd/wiki/Hooks-Design ](https://github.com/emqtt/emqttd/wiki/Hooks-Design) ) 
+Improve: issue #169 - Add More [Hooks](https://github.com/emqtt/emqttd/wiki/Hooks-Design) 
 
 Improve: issue #167 - Inflight window to assure message ordering. 
 
@@ -5156,7 +5156,7 @@ Bugfix: issue #146 - emqttd_auth_ldap: fill(Username, UserDn) is not right
 
 *Release Date: 2015-05-28*
 
-Client [Presence]( [ https://github.com/emqtt/emqttd/wiki/Presence ](https://github.com/emqtt/emqttd/wiki/Presence) ) Support and [$SYS Topics]( [ https://github.com/emqtt/emqttd/wiki/$SYS-Topics ](https://github.com/emqtt/emqttd/wiki/$SYS-Topics) ) Redesigned! 
+Client [Presence](https://github.com/emqtt/emqttd/wiki/Presence) Support and [$SYS Topics](https://github.com/emqtt/emqttd/wiki/$SYS-Topics) Redesigned! 
 
 Bugfix: issue #138 - when client disconnected normally, broker will not publish disconnected $SYS message 
 
@@ -5170,7 +5170,7 @@ Improve: rel/reltool.config to exclude unnecessary apps.
 
 *Release Date: 2015-05-25*
 
-[Hooks]( [ https://github.com/emqtt/emqttd/wiki/Hooks%20Design ](https://github.com/emqtt/emqttd/wiki/Hooks%20Design) ), Modules and [Plugins]( [ https://github.com/emqtt/emqttd/wiki/Plugin%20Design ](https://github.com/emqtt/emqttd/wiki/Plugin%20Design) ) to extend the broker Now! 
+[Hooks](https://github.com/emqtt/emqttd/wiki/Hooks%20Design), Modules and [Plugins](https://github.com/emqtt/emqttd/wiki/Plugin%20Design) to extend the broker Now! 
 
 Plugin: emqttd_auth_mysql - MySQL authentication plugin (issues #116, #120) 
 
@@ -5212,11 +5212,11 @@ Bugfix: fix errors found by dialyzer
 
 *Release Date: 2015-05-02*
 
-[MQTT over WebSocket(SSL)]( [ https://github.com/emqtt/emqttd/wiki/MQTT-Over-WebSocket ](https://github.com/emqtt/emqttd/wiki/MQTT-Over-WebSocket) ) Now! 
+[MQTT over WebSocket(SSL)](https://github.com/emqtt/emqttd/wiki/MQTT-Over-WebSocket) Now! 
 
-[Plugin Achitecture]( [ https://github.com/emqtt/emqttd/wiki/Plugin%20Design ](https://github.com/emqtt/emqttd/wiki/Plugin%20Design) ) based on OTP application 
+[Plugin Achitecture](https://github.com/emqtt/emqttd/wiki/Plugin%20Design) based on OTP application 
 
-[Trace MQTT Packets or Messages]( [ https://github.com/emqtt/emqttd/wiki/Trace%20Design ](https://github.com/emqtt/emqttd/wiki/Trace%20Design) ) to log files 
+[Trace MQTT Packets or Messages](https://github.com/emqtt/emqttd/wiki/Trace%20Design) to log files 
 
 Feature: issue #40, #115 - WebSocket/SSL Support 
 
@@ -5258,7 +5258,7 @@ Improve: move mnesia dir config from etc/app.config to etc/vm.args
 
 *Release Date: 2015-04-20*
 
-Integrate with [gproc library]( [ https://github.com/uwiger/gproc ](https://github.com/uwiger/gproc) ) to support pool 
+Integrate with [gproc library](https://github.com/uwiger/gproc) to support pool 
 
 Feature: issues#91 - should use worker_pool to handle some async work? 
 
@@ -5266,15 +5266,15 @@ Feature: issues#95 - Topic filters in ACL rule should support 'eq' tag
 
 Improve: issues#84 - emqttd_pubsub is redesigned again to protect mnesia transaction 
 
-Improve: issues#74 - ACL Support and update [ACL Design Wiki]( [ https://github.com/emqtt/emqttd/wiki/ACL-Design ](https://github.com/emqtt/emqttd/wiki/ACL-Design) ) 
+Improve: issues#74 - ACL Support and update [ACL Design Wiki](https://github.com/emqtt/emqttd/wiki/ACL-Design) 
 
 ## Version 0.6.0-alpha 
 
 *Release Date: 2015-04-17*
 
-ACL Support Now: [ACL-Design Wiki]( [ https://github.com/emqtt/emqttd/wiki/ACL-Design ](https://github.com/emqtt/emqttd/wiki/ACL-Design) ) 
+ACL Support Now: [ACL-Design Wiki](https://github.com/emqtt/emqttd/wiki/ACL-Design) 
 
-Authentication with username, clientid Now: [Authentication Wiki]( [ https://github.com/emqtt/emqttd/wiki/Authentication ](https://github.com/emqtt/emqttd/wiki/Authentication) ) 
+Authentication with username, clientid Now: [Authentication Wiki](https://github.com/emqtt/emqttd/wiki/Authentication) 
 
 Seperate common MQTT library to 'emqtt' application 
 
@@ -5365,7 +5365,7 @@ Change: upgrade esockd to v1.2.0-beta, rename 'acceptor_pool' to 'acceptors'
 
 RENAME 'emqtt' to 'emqttd'! 
 
-Support [Broker Bridge]( [ https://github.com/emqtt/emqttd/wiki/Bridge-Design ](https://github.com/emqtt/emqttd/wiki/Bridge-Design) ) Now! 
+Support [Broker Bridge](https://github.com/emqtt/emqttd/wiki/Bridge-Design) Now! 
 
 Change: rename project from 'emqtt' to 'emqttd' 
 
@@ -5391,7 +5391,7 @@ Test: emqttd_topic_tests add more '_match_test'
 
 *Release Date: 2015-03-10*
 
-Support [$SYS Topics of Broker]( [ https://github.com/emqtt/emqttd/wiki/$SYS-Topics-of-Broker ](https://github.com/emqtt/emqttd/wiki/$SYS-Topics-of-Broker) ) Now! 
+Support [$SYS Topics of Broker](https://github.com/emqtt/emqttd/wiki/$SYS-Topics-of-Broker) Now! 
 
 Feature: emqtt_broker to publish version, uptime, datetime to $SYS/brokers/# topics 
 
@@ -5509,7 +5509,7 @@ Makefile: deps -> get-deps
 
 rebar.config: fix mochiweb git url 
 
-tag emqtt release accoding to [Semantic Versioning]( [ http://semver.org/ ](http://semver.org/) ) 
+tag emqtt release accoding to [Semantic Versioning](http://semver.org/) 
 
 max clientId length is 1024 now. 
 

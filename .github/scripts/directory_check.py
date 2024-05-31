@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import re
+from urllib.parse import urlparse
 
 directory_file = sys.argv[1]
 docs_path = sys.argv[2]
@@ -28,9 +29,12 @@ def check_md_content(md_file):
     for url in url_list:
         if url[0].endswith('!'):
             continue
-        if url[2].startswith(('http://', 'https://', '<', '#', 'mailto:', 'tel:')):
+        url_link = url[2].strip()
+        if url_link.strip().startswith(('http://', 'https://', '<', '#', 'mailto:', 'tel:')):
             continue
-        url_path = url[2].split('.md')[0]
+        if urlparse(url_link).path.endswith('.html'):
+            continue
+        url_path = url_link.split('.md')[0]
         ref_md_path = os.path.join(f'{"/".join(md_file.split("/")[:-1])}/', f'{url_path}.md')
 
         if not os.path.exists(ref_md_path):
@@ -62,7 +66,7 @@ def get_md_files(dir_config, path):
             if md_name.startswith(('http://', 'https://')):
                 continue
             elif md_name == './':
-                md_list.append(f'{docs_path}/{path}/README.md')
+                md_list.append(f'{docs_path}/{path}/index.md')
             else:
                 md_list.append(f'{docs_path}/{path}/{md_name}.md')
 

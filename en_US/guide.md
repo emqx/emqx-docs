@@ -44,7 +44,7 @@ For example, using the mosquitto_sub/pub client on command line to publish and t
 
 ## Authentication and Access Control 
 
-EMQ X Broker provides **Connection Authentication** and **Access Control** using a series of authentication plugins, whose name conforms to the pattern of [ emqx_auth ]() \<name>. 
+EMQ X Broker provides **Connection Authentication** and **Access Control** using a series of authentication plugins, whose name conforms to the pattern of emqx_auth\<name>. 
 
 In EMQ X, these two functions are: 
 
