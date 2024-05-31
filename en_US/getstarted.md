@@ -80,7 +80,7 @@ Publishers can only post messages to 'topic names', and Subscribers can subscrib
 
 For each version EMQ X will be released as installation packages or zip packages for diverse OSes and platforms, including CentOS, Ubuntu, Debian, FreeBSD, macOS, Windows and etc. It is also available as Docker image. 
 
-Download address: [ https://www.emqx.io/downloads/broker?osType=Linux ](https://www.emqx.io/downloads/broker?osType=Linux)
+Download address: [https://www.emqx.io/downloads/broker?osType=Linux](https://www.emqx.io/downloads/broker?osType=Linux)
 
 Once the package is downloaded and installed (or unzipped), the EQM X is ready to start. Taking the zip package for Mac as an example: 
     
@@ -100,22 +100,22 @@ After EMQ X is started, the MQTT client can connect to it through port 1883. By 
 
 EMQ X loads the Dashboard plugin and launches the web management console by default. Users can check the broker running status, statistics, connections, sessions, topics, subscriptions, and plugins through the web console. 
 
-Console address: [ http://127.0.0.1:18083，default ](http://127.0.0.1:18083，default) username: admin，password:public 
+Console address: [http://127.0.0.1:18083，default](http://127.0.0.1:18083，default) username: admin，password:public 
 
 ![image](./_static/images/dashboard.png)
 
 ## Open Source MQTT Client Project 
 
-GitHub: [ https://github.com/emqtt ](https://github.com/emqtt)
+GitHub: [https://github.com/emqtt](https://github.com/emqtt)
 
-[ emqttc ](https://github.com/emqtt/emqttc)                   |  Erlang MQTT client library         
+[ emqttc](https://github.com/emqtt/emqttc)                   |  Erlang MQTT client library         
 --------------------------------------------------------------|-------------------------------------
-[ CocoaMQTT ](https://github.com/emqtt/CocoaMQTT)             |  Swift Language MQTT Client Library 
-[ QMQTT ](https://github.com/emqtt/qmqtt)                     |  QT framework MQTT client library   
-[ emqtt_benchmark ](https://github.com/emqtt/emqtt_benchmark) |  MQTT benchmark tool                
+[ CocoaMQTT](https://github.com/emqtt/CocoaMQTT)             |  Swift Language MQTT Client Library 
+[ QMQTT](https://github.com/emqtt/qmqtt)                     |  QT framework MQTT client library   
+[ emqtt_benchmark](https://github.com/emqtt/emqtt_benchmark) |  MQTT benchmark tool                
 
 
 
-Eclipse Paho: [ https://www.eclipse.org/paho/ ](https://www.eclipse.org/paho/)
+Eclipse Paho: [https://www.eclipse.org/paho/](https://www.eclipse.org/paho/)
 
-MQTT.org: [ https://github.com/mqtt/mqtt.github.io/wiki/libraries ](https://github.com/mqtt/mqtt.github.io/wiki/libraries)
+MQTT.org: [https://github.com/mqtt/mqtt.github.io/wiki/libraries](https://github.com/mqtt/mqtt.github.io/wiki/libraries)

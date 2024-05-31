@@ -77,7 +77,7 @@ MQTT 是基于 **发布(Publish)/订阅(Subscribe)** 模式来进行通信及数
 
 EMQ X 的每个版本都会发布 CentOS、Ubuntu、Debian、FreeBSD、macOS、Windows、openSUSE 平台程序包与 Docker 镜像。
 
-下载地址: [ https://www.emqx.io/downloads/broker?osType=Linux ](https://www.emqx.io/downloads/broker?osType=Linux)
+下载地址: [https://www.emqx.io/downloads/broker?osType=Linux](https://www.emqx.io/downloads/broker?osType=Linux)
 
 程序包下载后，可直接解压启动运行，例如 Mac 平台:
 
@@ -96,20 +96,20 @@ EMQ X 启动后，MQTT 客户端可通过 1883 端口接入系统。运行日志
 
 EMQ X 默认加载 Dashboard 插件，启动 Web 管理控制台。用户可通过 Web 控制台，查看服务器运行状态、统计数据、连接(Connections)、会话(Sessions)、主题(Topics)、订阅(Subscriptions)、插件(Plugins)等。
 
-控制台地址: [ http://127.0.0.1:18083](http://127.0.0.1:18083)，默认用户名  : admin，密码：public
+控制台地址: [http://127.0.0.1:18083](http://127.0.0.1:18083)，默认用户名  : admin，密码：public
 
 ![image](./_static/images/dashboard.png)
 
 ## 开源 MQTT 客户端项目
 
-GitHub: [ https://github.com/emqtt ](https://github.com/emqtt)
+GitHub: [https://github.com/emqtt](https://github.com/emqtt)
 
-| [ emqttc ](https://github.com/emqtt/emqttc)                   | Erlang MQTT 客户端库     |
+| [ emqttc](https://github.com/emqtt/emqttc)                   | Erlang MQTT 客户端库     |
 | ------------------------------------------------------------- | ------------------------ |
-| [ CocoaMQTT ](https://github.com/emqtt/CocoaMQTT)             | Swift 语言 MQTT 客户端库 |
-| [ QMQTT ](https://github.com/emqtt/qmqtt)                     | QT 框架 MQTT 客户端库    |
-| [ emqtt_benchmark ](https://github.com/emqtt/emqtt_benchmark) | MQTT 连接测试工具        |
+| [ CocoaMQTT](https://github.com/emqtt/CocoaMQTT)             | Swift 语言 MQTT 客户端库 |
+| [ QMQTT](https://github.com/emqtt/qmqtt)                     | QT 框架 MQTT 客户端库    |
+| [ emqtt_benchmark](https://github.com/emqtt/emqtt_benchmark) | MQTT 连接测试工具        |
 
-Eclipse Paho: [ https://www.eclipse.org/paho/ ](https://www.eclipse.org/paho/)
+Eclipse Paho: [https://www.eclipse.org/paho/](https://www.eclipse.org/paho/)
 
-MQTT.org: [ https://github.com/mqtt/mqtt.github.io/wiki/libraries ](https://github.com/mqtt/mqtt.github.io/wiki/libraries)
+MQTT.org: [https://github.com/mqtt/mqtt.github.io/wiki/libraries](https://github.com/mqtt/mqtt.github.io/wiki/libraries)

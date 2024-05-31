@@ -2,7 +2,7 @@
 
 ## Start EMQ X Broker 
 
-The EMQ X Broker can be downloaded at: [ https://www.emqx.io/downloads/broker?osType=Linux ](https://www.emqx.io/downloads/broker?osType=Linux)
+The EMQ X Broker can be downloaded at: [https://www.emqx.io/downloads/broker?osType=Linux](https://www.emqx.io/downloads/broker?osType=Linux)
 
 After downloading the package, it can be installed or unzipped directly to start running. Taking the zip package for MacOS platform as an example: 
     
@@ -28,13 +28,13 @@ The default TCP ports used by the EMQ X message server include:
 
 ## MQTT publish and subscription 
 
-EMQ X Broker is a lightweight publish-subscribe message broker designed for the mobile Internet and the IoT, it currently supports MQTT [ v3.1.1 ](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html) and [ v5.0 ](http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html) : 
+EMQ X Broker is a lightweight publish-subscribe message broker designed for the mobile Internet and the IoT, it currently supports MQTT [ v3.1.1](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html) and [ v5.0](http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html) : 
 
 ![image](./_static/images/guide_1.png)
 
 After EMQ X is started, devices and clients can connect to the broker through the MQTT protocol and exchange messages via Publish/Subscribe. 
 
-Some popular MQTT client libraries can be found here: [ https://github.com/mqtt/mqtt.github.io/wiki/libraries ](https://github.com/mqtt/mqtt.github.io/wiki/libraries)
+Some popular MQTT client libraries can be found here: [https://github.com/mqtt/mqtt.github.io/wiki/libraries](https://github.com/mqtt/mqtt.github.io/wiki/libraries)
 
 For example, using the mosquitto_sub/pub client on command line to publish and to subscribe to messages: 
     
@@ -44,7 +44,7 @@ For example, using the mosquitto_sub/pub client on command line to publish and t
 
 ## Authentication and Access Control 
 
-EMQ X Broker provides **Connection Authentication** and **Access Control** using a series of authentication plugins, whose name conforms to the pattern of [ emqx_auth ]() \<name>. 
+EMQ X Broker provides **Connection Authentication** and **Access Control** using a series of authentication plugins, whose name conforms to the pattern of [emqx_auth]() \<name>. 
 
 In EMQ X, these two functions are: 
 
@@ -115,25 +115,25 @@ The authentication plugins provided by EMQ X include:
 
 plugins                                                            |  description                                 
 -------------------------------------------------------------------|----------------------------------------------
-[ emqx_auth_clientid ](https://github.com/emqx/emqx-auth-clientid) |  ClientId authentication plugin              
-[ emqx_auth_username ](https://github.com/emqx/emqx-auth-username) |  username and password authentication plugin 
-[ emqx_auth_jwt ](https://github.com/emqx/emqx-auth-jwt)           |  JWT authentication plugin                   
-[ emqx_auth_ldap ](https://github.com/emqx/emqx-auth-ldap)         |  LDAP authentication plugin                  
-[ emqx_auth_http ](https://github.com/emqx/emqx-auth-http)         |  HTTP authentication plugin                  
-[ emqx_auth_mysql ](https://github.com/emqx/emqx-auth-mysql)       |  MySQL authentication plugin                 
-[ emqx_auth_pgsql ](https://github.com/emqx/emqx-auth-pgsql)       |  PostgreSQL authentication plugin               
-[ emqx_auth_redis ](https://github.com/emqx/emqx-auth-redis)       |  Redis authentication plugin                 
-[ emqx_auth_mongo ](https://github.com/emqx/emqx-auth-mongo)       |  MongoDB authentication plugin               
+[emqx_auth_clientid](https://github.com/emqx/emqx-auth-clientid) |  ClientId authentication plugin              
+[emqx_auth_username](https://github.com/emqx/emqx-auth-username) |  username and password authentication plugin 
+[emqx_auth_jwt](https://github.com/emqx/emqx-auth-jwt)           |  JWT authentication plugin                   
+[emqx_auth_ldap](https://github.com/emqx/emqx-auth-ldap)         |  LDAP authentication plugin                  
+[emqx_auth_http](https://github.com/emqx/emqx-auth-http)         |  HTTP authentication plugin                  
+[emqx_auth_mysql](https://github.com/emqx/emqx-auth-mysql)       |  MySQL authentication plugin                 
+[emqx_auth_pgsql](https://github.com/emqx/emqx-auth-pgsql)       |  PostgreSQL authentication plugin               
+[emqx_auth_redis](https://github.com/emqx/emqx-auth-redis)       |  Redis authentication plugin                 
+[emqx_auth_mongo](https://github.com/emqx/emqx-auth-mongo)       |  MongoDB authentication plugin               
 
 
 
-For the configuration and usage of each authentication plug-in, please refer to authentication section of the [ Plugins ](https://docs.emqx.io/broker/v3/en/plugins.html) . 
+For the configuration and usage of each authentication plug-in, please refer to authentication section of the [ Plugins](https://docs.emqx.io/broker/v3/en/plugins.html) . 
 
 ::: tip Tip
 Multiple auth plug-ins can be started at the same time. The plug-in that starts first checks first. 
 :::
 
-In addition, EMQ X also supports the use of PSK (Pre-shared Key) for authentication. However, the authentication chain mentioned above is not used in this case. The verification is done during the SSL handshake. For details please refer to [ Pre-shared Key ](https://en.wikipedia.org/wiki/Pre-shared_key) and [ emqx_psk_file ](https://github.com/emqx/emqx-psk-file)
+In addition, EMQ X also supports the use of PSK (Pre-shared Key) for authentication. However, the authentication chain mentioned above is not used in this case. The verification is done during the SSL handshake. For details please refer to [ Pre-shared Key](https://en.wikipedia.org/wiki/Pre-shared_key) and [emqx_psk_file](https://github.com/emqx/emqx-psk-file)
 
 ## Shared Subscription 
 
@@ -448,7 +448,7 @@ payload   |  message payload
 
 
 ::: tip Tip
-HTTP publishing interface uses authentication of [ Basic ](https://en.wikipedia.org/wiki/basic_access_authentication) . The user and password in the above example are from the AppId and password in the Applications of Dashboard. 
+HTTP publishing interface uses authentication of [ Basic](https://en.wikipedia.org/wiki/basic_access_authentication) . The user and password in the above example are from the AppId and password in the Applications of Dashboard. 
 :::
 
 ## MQTT WebSocket Connection 

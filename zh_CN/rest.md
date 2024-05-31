@@ -554,7 +554,7 @@ API 定义:
           "path": "/rule_events/",
           "descr": "List all events with detailed info"
         }
-      ]
+     ]
     }
 
 ## 集群与节点
@@ -583,7 +583,7 @@ API 定义:
           "uptime": "3 minutes, 59 seconds",
           "version": "v3.1.0"
         }
-      ]
+     ]
     }
 
 ### 获取节点基本信息
@@ -642,7 +642,7 @@ API 定义:
           "uptime": "1 days,18 hours, 45 minutes, 1 seconds",
           "version": "v3.1.0"
         }
-      ]
+     ]
     }
 
 ### 获取节点监控数据
@@ -722,7 +722,7 @@ API 定义:
           "username": "undefined",
           "zone": "external"
         }
-      ],
+     ],
       "meta": {
         "page": 1,
         "limit": 10000,
@@ -773,7 +773,7 @@ API 定义:
          "username": "undefined",
          "zone": "external"
        }
-      ],
+     ],
       "meta": {
         "page": 1,
         "limit": 10000,
@@ -824,7 +824,7 @@ API 定义:
           "username": "undefined",
           "zone": "external"
         }
-      ]
+     ]
     }
 
 ### 获取节点指定连接信息
@@ -870,7 +870,7 @@ API 定义:
           "username": "undefined",
           "zone": "external"
         }
-      ]
+     ]
     }
 
 ### 断开指定连接
@@ -952,7 +952,7 @@ API 定义:
           "subscriptions_count": 0,
           "username": "undefined"
         }
-      ],
+     ],
       "meta": {
         "page": 1,
         "limit": 10000,
@@ -998,7 +998,7 @@ API 定义:
           "subscriptions_count": 1,
           "username": "undefined"
         }
-      ]
+     ]
     }
 
 ### 获取节点会话信息
@@ -1062,7 +1062,7 @@ API 定义:
           "subscriptions_count": 1,
           "username": "undefined"
         }
-      ],
+     ],
       "meta": {
         "page": 1,
         "limit": 10000,
@@ -1118,7 +1118,7 @@ API 定义:
           "subscriptions_count": 0,
           "username": "mosquitto_mqtt"
         }
-      ]
+     ]
     }
 
 ## 订阅(Subscriptions)
@@ -1150,7 +1150,7 @@ API 定义:
           "qos": 0,
           "topic": "t"
         }
-      ],
+     ],
       "meta": {
         "page": 1,
         "limit": 10000,
@@ -1179,7 +1179,7 @@ API 定义:
           "qos": 0,
           "topic": "t"
         }
-      ]
+     ]
     }
 
 ### 获取节点订阅信息
@@ -1209,7 +1209,7 @@ API 定义:
           "qos": 0,
           "topic": "t"
         }
-      ],
+     ],
       "meta": {
         "page": 1,
         "limit": 10000,
@@ -1238,7 +1238,7 @@ API 定义:
           "qos": 0,
           "topic": "t"
         }
-      ]
+     ]
     }
 
 ## 路由(Routes)
@@ -1266,7 +1266,7 @@ API 定义:
           "node": "emqx@127.0.0.1",
           "topic": "t"
         }
-      ],
+     ],
       "meta": {
         "page": 1,
         "limit": 10000,
@@ -1293,7 +1293,7 @@ API 定义:
           "node": "emqx@127.0.0.1",
           "topic": "t"
         }
-      ]
+     ]
     }
 
 ## 发布/订阅/取消订阅
@@ -1541,9 +1541,9 @@ API 定义:
               "description": "EMQ X Webhook Plugin",
               "active": false
             }
-          ]
+         ]
         }
-      ]
+     ]
     }
 
 ### 获取节点插件列表
@@ -1711,7 +1711,7 @@ API 定义:
           "description": "EMQ X Webhook Plugin",
           "active": false
         }
-      ]
+     ]
     }
 
 ### 启用节点指定插件
@@ -1771,7 +1771,7 @@ API 定义:
               "listen_on": "8883",
               "max_conns": 102400,
               "protocol": "mqtt:ssl",
-              "shutdown_count": [ ]
+              "shutdown_count": []
             },
             {
               "acceptors": 8,
@@ -1790,7 +1790,7 @@ API 定义:
               "listen_on": "127.0.0.1:11883",
               "max_conns": 10240000,
               "protocol": "mqtt:tcp",
-              "shutdown_count": [ ]
+              "shutdown_count": []
             },
             {
               "acceptors": 4,
@@ -1798,7 +1798,7 @@ API 定义:
               "listen_on": "18083",
               "max_conns": 512,
               "protocol": "http:dashboard",
-              "shutdown_count": [ ]
+              "shutdown_count": []
             },
             {
               "acceptors": 2,
@@ -1806,7 +1806,7 @@ API 定义:
               "listen_on": "8080",
               "max_conns": 512,
               "protocol": "http:management",
-              "shutdown_count": [ ]
+              "shutdown_count": []
             },
             {
               "acceptors": 4,
@@ -1814,7 +1814,7 @@ API 定义:
               "listen_on": "8083",
               "max_conns": 102400,
               "protocol": "mqtt:ws",
-              "shutdown_count": [ ]
+              "shutdown_count": []
             },
             {
               "acceptors": 4,
@@ -1822,12 +1822,12 @@ API 定义:
               "listen_on": "8084",
               "max_conns": 16,
               "protocol": "mqtt:wss",
-              "shutdown_count": [ ]
+              "shutdown_count": []
             }
-          ],
+         ],
           "node": "emqx@127.0.0.1"
         }
-      ]
+     ]
     }
 
 ### 获取节点监听器列表
@@ -1851,7 +1851,7 @@ API 定义:
           "listen_on": "8883",
           "max_conns": 102400,
           "protocol": "mqtt:ssl",
-          "shutdown_count": [ ]
+          "shutdown_count": []
         },
         {
           "acceptors": 8,
@@ -1870,7 +1870,7 @@ API 定义:
           "listen_on": "127.0.0.1:11883",
           "max_conns": 10240000,
           "protocol": "mqtt:tcp",
-          "shutdown_count": [ ]
+          "shutdown_count": []
         },
         {
           "acceptors": 4,
@@ -1878,7 +1878,7 @@ API 定义:
           "listen_on": "18083",
           "max_conns": 512,
           "protocol": "http:dashboard",
-          "shutdown_count": [ ]
+          "shutdown_count": []
         },
         {
           "acceptors": 2,
@@ -1886,7 +1886,7 @@ API 定义:
           "listen_on": "8080",
           "max_conns": 512,
           "protocol": "http:management",
-          "shutdown_count": [ ]
+          "shutdown_count": []
         },
         {
           "acceptors": 4,
@@ -1894,7 +1894,7 @@ API 定义:
           "listen_on": "8083",
           "max_conns": 102400,
           "protocol": "mqtt:ws",
-          "shutdown_count": [ ]
+          "shutdown_count": []
         },
         {
           "acceptors": 4,
@@ -1902,9 +1902,9 @@ API 定义:
           "listen_on": "8084",
           "max_conns": 16,
           "protocol": "mqtt:wss",
-          "shutdown_count": [ ]
+          "shutdown_count": []
         }
-      ]
+     ]
     }
 
 ## 收发报文统计
@@ -1972,7 +1972,7 @@ API 定义:
             "packets/pubcomp/sent": 0
           }
         }
-      ]
+     ]
     }
 
 ### 获取节点收发报文统计
@@ -2074,7 +2074,7 @@ API 定义:
           "subscribers/count": 0,
           "connections/count": 0
         }
-      ]
+     ]
     }
 
 ### 获取节点连接会话统计
@@ -2134,7 +2134,7 @@ API 定义:
           "alarms": [],
           "node": "emqx@127.0.0.1"
         }
-      ]
+     ]
     }
 
 ### 获取节点当前告警信息
@@ -2176,10 +2176,10 @@ API 定义:
               "desc": "82.60344181007542",
               "id": "cpu_high_watermark"
             }
-          ],
+         ],
           "node": "emqx@127.0.0.1"
         }
-      ]
+     ]
     }
 
 ### 获取节点历史告警信息
@@ -2202,7 +2202,7 @@ API 定义:
           "desc": "82.60344181007542",
           "id": "cpu_high_watermark"
         }
-      ]
+     ]
     }
 
 ## 黑名单

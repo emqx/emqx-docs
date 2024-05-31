@@ -36,11 +36,11 @@ The communication via these ports are secured by the cookie, so that one cannot 
     
     node.cookie = emqxsecretcookie
 
-It is recommended that only keep your cluster in a sub-network behind a firewall, not across data-centers. But if you do want to, you could secure you distributed erlang via SSL, by configuring the  etc/ssl_dist.conf  . For more information, see [ ssl_distribution ](http://erlang.org/doc/apps/ssl/ssl_distribution.html)
+It is recommended that only keep your cluster in a sub-network behind a firewall, not across data-centers. But if you do want to, you could secure you distributed erlang via SSL, by configuring the  etc/ssl_dist.conf  . For more information, see [ ssl_distribution](http://erlang.org/doc/apps/ssl/ssl_distribution.html)
 
 ## How do I config the ACL? 
 
-Follow this doc: [ emqx_guide#acl ](https://developer.emqx.io/docs/broker/v3/en/guide.html#acl)
+Follow this doc: [emqx_guide#acl](https://developer.emqx.io/docs/broker/v3/en/guide.html#acl)
 
 Start with the simplest one using etc/acl.conf: 
     
@@ -67,7 +67,7 @@ Yes. The core features are solid and stable. A full-time team and many contribut
 
 Check out the benchmark report here: 
 
-[ emqx-benchmark ](https://emq-xmeter-benchmark-en.readthedocs.io/en/latest/)
+[emqx-benchmark](https://emq-xmeter-benchmark-en.readthedocs.io/en/latest/)
 
 ## Is 'session' identified by ClientID? What will happen when session is expired? 
 

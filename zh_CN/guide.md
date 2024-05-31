@@ -2,7 +2,7 @@
 
 ## 程序启动
 
-下载地址: [ https://www.emqx.io/downloads/broker?osType=Linux ](https://www.emqx.io/downloads/broker?osType=Linux)
+下载地址: [https://www.emqx.io/downloads/broker?osType=Linux](https://www.emqx.io/downloads/broker?osType=Linux)
 
 程序包下载后，可直接解压启动运行，例如 macOS 平台:
 
@@ -25,13 +25,13 @@ EMQ X 消息服务器默认占用的 TCP 端口包括:
 
 ## MQTT 发布订阅
 
-MQTT 是为移动互联网、物联网设计的轻量发布订阅模式的消息服务器，目前支持 MQTT [ v3.1.1 ](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html) 和 [ v5.0 ](http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html) :
+MQTT 是为移动互联网、物联网设计的轻量发布订阅模式的消息服务器，目前支持 MQTT [ v3.1.1](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html) 和 [ v5.0](http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html) :
 
 ![image](./_static/images/guide_1.png)
 
 EMQ X 启动后，任何设备或终端可通过 MQTT 协议连接到服务器，通过 **发布(Publish)/订阅(Subscribe)** 进行交换消息。
 
-MQTT 客户端库: [ https://github.com/mqtt/mqtt.github.io/wiki/libraries ](https://github.com/mqtt/mqtt.github.io/wiki/libraries)
+MQTT 客户端库: [https://github.com/mqtt/mqtt.github.io/wiki/libraries](https://github.com/mqtt/mqtt.github.io/wiki/libraries)
 
 例如，mosquitto_sub/pub 命令行发布订阅消息:
 
@@ -105,23 +105,23 @@ EMQ X 提供的认证插件包括:
 
 | 插件                                                               | 说明                    |
 | ------------------------------------------------------------------ | ----------------------- |
-| [ emqx_auth_clientid ](https://github.com/emqx/emqx-auth-clientid) | ClientId 认证/鉴权插件  |
-| [ emqx_auth_username ](https://github.com/emqx/emqx-auth-username) | 用户名密码认证/鉴权插件 |
-| [ emqx_auth_jwt ](https://github.com/emqx/emqx-auth-jwt)           | JWT 认证/鉴权插件       |
-| [ emqx_auth_ldap ](https://github.com/emqx/emqx-auth-ldap)         | LDAP 认证/鉴权插件      |
-| [ emqx_auth_http ](https://github.com/emqx/emqx-auth-http)         | HTTP 认证/鉴权插件      |
-| [ emqx_auth_mysql ](https://github.com/emqx/emqx-auth-mysql)       | MySQ L 认证/鉴权插件    |
-| [ emqx_auth_pgsql ](https://github.com/emqx/emqx-auth-pgsql)       | Postgre 认证/鉴权插件   |
-| [ emqx_auth_redis ](https://github.com/emqx/emqx-auth-redis)       | Redis 认证/鉴权插件     |
-| [ emqx_auth_mongo ](https://github.com/emqx/emqx-auth-mongo)       | MongoDB 认证/鉴权插件   |
+| [emqx_auth_clientid](https://github.com/emqx/emqx-auth-clientid) | ClientId 认证/鉴权插件  |
+| [emqx_auth_username](https://github.com/emqx/emqx-auth-username) | 用户名密码认证/鉴权插件 |
+| [emqx_auth_jwt](https://github.com/emqx/emqx-auth-jwt)           | JWT 认证/鉴权插件       |
+| [emqx_auth_ldap](https://github.com/emqx/emqx-auth-ldap)         | LDAP 认证/鉴权插件      |
+| [emqx_auth_http](https://github.com/emqx/emqx-auth-http)         | HTTP 认证/鉴权插件      |
+| [emqx_auth_mysql](https://github.com/emqx/emqx-auth-mysql)       | MySQ L 认证/鉴权插件    |
+| [emqx_auth_pgsql](https://github.com/emqx/emqx-auth-pgsql)       | Postgre 认证/鉴权插件   |
+| [emqx_auth_redis](https://github.com/emqx/emqx-auth-redis)       | Redis 认证/鉴权插件     |
+| [emqx_auth_mongo](https://github.com/emqx/emqx-auth-mongo)       | MongoDB 认证/鉴权插件   |
 
-其中，关于每个认证插件的配置及用法，可参考 [ 扩展插件 (Plugins) ](https://docs.emqx.io/broker/v3/cn/plugins.html) 关于认证部分。
+其中，关于每个认证插件的配置及用法，可参考 [ 扩展插件 (Plugins)](https://docs.emqx.io/broker/v3/cn/plugins.html) 关于认证部分。
 
 ::: tip
 auth 插件可以同时启动多个。每次检查的时候，按照优先级从高到低依次检查，同一优先级的，先启动的插件先检查。
 :::
 
-此外 EMQ X 还支持使用 **PSK (Pre-shared Key)** 的方式来控制客户端的接入，但它并不是使用的上述的 _连接认证_ 链的方式，而是在 SSL 握手期间进行验证。详情参考 [ Pre-shared Key ](https://en.wikipedia.org/wiki/Pre-shared_key) 和 [ emqx_psk_file ](https://github.com/emqx/emqx-psk-file)
+此外 EMQ X 还支持使用 **PSK (Pre-shared Key)** 的方式来控制客户端的接入，但它并不是使用的上述的 _连接认证_ 链的方式，而是在 SSL 握手期间进行验证。详情参考 [ Pre-shared Key](https://en.wikipedia.org/wiki/Pre-shared_key) 和 [emqx_psk_file](https://github.com/emqx/emqx-psk-file)
 
 ## 共享订阅 (Shared Subscription)
 
@@ -403,7 +403,7 @@ HTTP 接口参数:
 | payload   | 消息载荷       |
 
 ::: tip
-HTTP 发布接口采用 [ Basic ](https://en.wikipedia.org/wiki/Basic_access_authentication) 认证。上例中的 `user` 和 `password` 是来自于 Dashboard 下的 Applications 内的 AppId 和密码
+HTTP 发布接口采用 [ Basic](https://en.wikipedia.org/wiki/Basic_access_authentication) 认证。上例中的 `user` 和 `password` 是来自于 Dashboard 下的 Applications 内的 AppId 和密码
 :::
 
 ## MQTT WebSocket 连接

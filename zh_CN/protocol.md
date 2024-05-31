@@ -6,9 +6,9 @@
 
 MQTT 是一个轻量的发布订阅模式消息传输协议，专门针对低带宽和不稳定网络环境的物联网应用设计。
 
-MQTT 官网: [ http://mqtt.org ](http://mqtt.org)
+MQTT 官网: [http://mqtt.org](http://mqtt.org)
 
-MQTT V3.1.1 协议规范: [ http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html ](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)
+MQTT V3.1.1 协议规范: [http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)
 
 ### 特点
 
@@ -192,20 +192,20 @@ MQTT 协议的 WebSocket 连接，必须采用 binary 模式，并携带子协�
 
 ### emqtt 客户端库
 
-emqtt 项目组: [ https://github.com/emqtt ](https://github.com/emqtt)
+emqtt 项目组: [https://github.com/emqtt](https://github.com/emqtt)
 
-| [ emqttc ](https://github.com/emqtt/emqttc)       | Erlang MQTT 客户端库     |
+| [ emqttc](https://github.com/emqtt/emqttc)       | Erlang MQTT 客户端库     |
 | ------------------------------------------------- | ------------------------ |
-| [ CocoaMQTT ](https://github.com/emqtt/CocoaMQTT) | Swift 语言 MQTT 客户端库 |
-| [ QMQTT ](https://github.com/emqtt/qmqtt)         | QT 框架 MQTT 客户端库    |
+| [ CocoaMQTT](https://github.com/emqtt/CocoaMQTT) | Swift 语言 MQTT 客户端库 |
+| [ QMQTT](https://github.com/emqtt/qmqtt)         | QT 框架 MQTT 客户端库    |
 
 ### Eclipse Paho 客户端库
 
-Paho 官网: [ http://www.eclipse.org/paho/ ](http://www.eclipse.org/paho/)
+Paho 官网: [http://www.eclipse.org/paho/](http://www.eclipse.org/paho/)
 
 ### mqtt.org 官网客户端库
 
-mqtt.org: [ https://github.com/mqtt/mqtt.github.io/wiki/libraries ](https://github.com/mqtt/mqtt.github.io/wiki/libraries)
+mqtt.org: [https://github.com/mqtt/mqtt.github.io/wiki/libraries](https://github.com/mqtt/mqtt.github.io/wiki/libraries)
 
 ## MQTT 与 XMPP 协议对比
 
@@ -222,7 +222,7 @@ MQTT 协议设计简单轻量、路由灵活，将在移动互联网物联网消
 
 MQTT-SN 协议是 MQTT 的直系亲属，它使用 UDP 进行通信，标准的端口是 1884。MQTT-SN 的主要目的是为了适应受限的设备和网络，比如一些传感器，只有很小的内存和 CPU，TCP 对于这些设备来说非常奢侈。还有一些网络，比如 ZIGBEE，报文的长度在 300 字节以下，无法承载太大的数据包。所以 MQTT-SN 的数据包更小巧。
 
-MQTT-SN 的官方标准下载地址: [ http://mqtt.org/new/wp-content/uploads/2009/06/MQTT-SN_spec_v1.2.pdf ](http://mqtt.org/new/wp-content/uploads/2009/06/MQTT-SN_spec_v1.2.pdf)
+MQTT-SN 的官方标准下载地址: [http://mqtt.org/new/wp-content/uploads/2009/06/MQTT-SN_spec_v1.2.pdf](http://mqtt.org/new/wp-content/uploads/2009/06/MQTT-SN_spec_v1.2.pdf)
 
 ### MQTT-SN 和 MQTT 的区别
 
@@ -267,14 +267,14 @@ File: etc/plugins/emqx_sn.conf:
 
 ### MQTT-SN 客户端库
 
-1. [ https://github.com/eclipse/paho.mqtt-sn.embedded-c/ ](https://github.com/eclipse/paho.mqtt-sn.embedded-c/)
-2. [ https://github.com/ty4tw/MQTT-SN ](https://github.com/ty4tw/MQTT-SN)
-3. [ https://github.com/njh/mqtt-sn-tools ](https://github.com/njh/mqtt-sn-tools)
-4. [ https://github.com/arobenko/mqtt-sn ](https://github.com/arobenko/mqtt-sn)
+1. [https://github.com/eclipse/paho.mqtt-sn.embedded-c/](https://github.com/eclipse/paho.mqtt-sn.embedded-c/)
+2. [https://github.com/ty4tw/MQTT-SN](https://github.com/ty4tw/MQTT-SN)
+3. [https://github.com/njh/mqtt-sn-tools](https://github.com/njh/mqtt-sn-tools)
+4. [https://github.com/arobenko/mqtt-sn](https://github.com/arobenko/mqtt-sn)
 
 ## LWM2M 协议
 
-LwM2M 全称是 Lightweight Machine-To-Machine，是由 Open Mobile Alliance(OMA) 定义的一套适用于物联网的轻量级协议，它提供了设备管理和通讯的功能，尤其适用于资源有限的终端设备。协议可以在 [ 这里 ](http://www.openmobilealliance.org/wp/) 下载。
+LwM2M 全称是 Lightweight Machine-To-Machine，是由 Open Mobile Alliance(OMA) 定义的一套适用于物联网的轻量级协议，它提供了设备管理和通讯的功能，尤其适用于资源有限的终端设备。协议可以在 [ 这里](http://www.openmobilealliance.org/wp/) 下载。
 
 LwM2M 基于 REST 架构，使用 CoAP 作为底层的传输协议，承载在 UDP 或者 SMS 上，因而报文结构简单小巧，并且在网络资源有限及无法确保设备始终在线的环境里同样适用。
 
@@ -298,7 +298,7 @@ LwM2M Client 作为客户端，部署在各个 LwM2M 设备上。
 
 ![image](./_static/images/lwm2m_arch.png)
 
-LwM2M 把设备上的服务抽象为 Object 和 Resource, 在 XML 文件中定义各种 Object 的属性和功能。可以在 [ 这里 ](http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html) 找到 XML 的各种定义。
+LwM2M 把设备上的服务抽象为 Object 和 Resource, 在 XML 文件中定义各种 Object 的属性和功能。可以在 [ 这里](http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html) 找到 XML 的各种定义。
 
 LwM2M 协议预定义了 8 种 Object 来满足基本的需求，分别是：
 
@@ -353,7 +353,7 @@ File: etc/emqx_lwm2m.conf:
 
 ### LwM2M 的客户端库
 
-- [ https://github.com/eclipse/wakaama ](https://github.com/eclipse/wakaama)
-- [ https://github.com/OpenMobileAlliance/OMA-LWM2M-DevKit ](https://github.com/OpenMobileAlliance/OMA-LWM2M-DevKit)
-- [ https://github.com/AVSystem/Anjay ](https://github.com/AVSystem/Anjay)
-- [ http://www.eclipse.org/leshan/ ](http://www.eclipse.org/leshan/)
+- [https://github.com/eclipse/wakaama](https://github.com/eclipse/wakaama)
+- [https://github.com/OpenMobileAlliance/OMA-LWM2M-DevKit](https://github.com/OpenMobileAlliance/OMA-LWM2M-DevKit)
+- [https://github.com/AVSystem/Anjay](https://github.com/AVSystem/Anjay)
+- [http://www.eclipse.org/leshan/](http://www.eclipse.org/leshan/)

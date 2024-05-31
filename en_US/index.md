@@ -12,7 +12,7 @@ EMQ X Broker is previously known as emqtt, since R3.1, the name is officially ch
 MQTT-SN and CoAP plugins are released in 2.0-RC.1, LwM2M and LoRaWan are released in 3.0. 
 :::
 
-Please visit [ emqx.io ](https://www.emqx.io) for more service. Follow us on Twitter: [ @emqtt ](https://twitter.com/emqtt)
+Please visit [emqx.io](https://www.emqx.io) for more service. Follow us on Twitter: [ @emqtt](https://twitter.com/emqtt)
 
 ![image](./_static/images/emqtt.png)
 

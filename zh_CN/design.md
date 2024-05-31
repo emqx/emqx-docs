@@ -10,7 +10,7 @@ EMQ X 消息服务器在设计上，首先分离了前端协议(FrontEnd)与后�
 
 多核服务器和现代操作系统内核层面，可以很轻松支持 100 万 TCP 连接，核心问题是应用层面如何处理业务瓶颈。
 
-EMQ X 消息服务器在业务和应用层面，解决了单节点承载 100 万连接的各类瓶颈问题。连接测试的操作系统内核、TCP 协议栈、Erlang 虚拟机参数参见: [ http://docs.emqtt.cn/zh_CN/latest/tune.html ](http://docs.emqtt.cn/zh_CN/latest/tune.html)
+EMQ X 消息服务器在业务和应用层面，解决了单节点承载 100 万连接的各类瓶颈问题。连接测试的操作系统内核、TCP 协议栈、Erlang 虚拟机参数参见: [http://docs.emqtt.cn/zh_CN/latest/tune.html](http://docs.emqtt.cn/zh_CN/latest/tune.html)
 
 ### 全异步架构
 
@@ -64,7 +64,7 @@ EMQ X 消息服务器概念上更像一台网络路由器(Router)或交换机(Sw
 
 连接层处理服务端 Socket 连接与 MQTT 协议编解码：
 
-1. 基于 [ eSockd ](https://github.com/emqx/esockd) 框架的异步 TCP 服务端
+1. 基于 [ eSockd](https://github.com/emqx/esockd) 框架的异步 TCP 服务端
 2. TCP Acceptor 池与异步 TCP Accept
 3. TCP/SSL, WebSocket/SSL 连接支持
 4. 最大并发连接数限制
@@ -150,11 +150,11 @@ EMQ X 消息服务器在客户端上下线、主题订阅、消息收发位置�
 | message.acked        | MQTT 消息回执        |
 | client.disconnected  | 客户端连接断开       |
 
-钩子(Hook) 采用职责链设计模式( [ Chain-of-responsibility_pattern ](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern) )，扩展模块或插件向钩子注册回调函数，系统在客户端上下线、主题订阅或消息发布确认时，触发钩子顺序执行回调函数:
+钩子(Hook) 采用职责链设计模式( [ Chain-of-responsibility_pattern](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern) )，扩展模块或插件向钩子注册回调函数，系统在客户端上下线、主题订阅或消息发布确认时，触发钩子顺序执行回调函数:
 
 ![image](./_static/images/design_10.png)
 
-不同钩子的回调函数输入参数不同，用户可参考插件模版的 [ emqx_plugin_template ](https://github.com/emqx/emqx_plugin_template/blob/master/src/emqx_plugin_template.erl) 模块，每个回调函数应该返回:
+不同钩子的回调函数输入参数不同，用户可参考插件模版的 [emqx_plugin_template](https://github.com/emqx/emqx_plugin_template/blob/master/src/emqx_plugin_template.erl) 模块，每个回调函数应该返回:
 
 | 返回           | 说明                 |
 | -------------- | -------------------- |
@@ -199,7 +199,7 @@ emqx 模块封装了 Hook 接口:
 
 ### 钩子(Hook)使用
 
-[ emqx_plugin_template ](https://github.com/emqx/emqx_plugin_template/blob/master/src/emqx_plugin_template.erl) 提供了全部钩子的使用示例，例如端到端的消息处理回调:
+[emqx_plugin_template](https://github.com/emqx/emqx_plugin_template/blob/master/src/emqx_plugin_template.erl) 提供了全部钩子的使用示例，例如端到端的消息处理回调:
 
     -module(emqx_plugin_template).
 
@@ -332,7 +332,7 @@ emqx_plugins 模块实现插件机制，提供加载卸载插件 API :
 
     ./bin/emqx_ctl plugins unload \<plugin name>
 
-开发者请参考模版插件: [ http://github.com/emqx/emqx_plugin_template ](http://github.com/emqx/emqx_plugin_template)
+开发者请参考模版插件: [http://github.com/emqx/emqx_plugin_template](http://github.com/emqx/emqx_plugin_template)
 
 ## Mnesia/ETS 表设计
 
@@ -358,7 +358,7 @@ emqx_plugins 模块实现插件机制，提供加载卸载插件 API :
 
 ## Erlang 设计相关
 
-1. 使用 Pool, Pool, Pool... 推荐 GProc 库: [ https://github.com/uwiger/gproc ](https://github.com/uwiger/gproc)
+1. 使用 Pool, Pool, Pool... 推荐 GProc 库: [https://github.com/uwiger/gproc](https://github.com/uwiger/gproc)
 2. 异步，异步，异步消息...连接层到路由层异步消息，同步请求用于负载保护
 3. 避免进程 Mailbox 累积消息
 4. 消息流经的 Socket 连接、会话进程必须 Hibernate，主动回收 binary 句柄

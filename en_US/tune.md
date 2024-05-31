@@ -118,4 +118,4 @@ Tune the client machine to benchmark emqx broker:
 
 ## emqtt_benchmark 
 
-Test tool for concurrent connections: [ http://github.com/emqtt/emqtt_benchmark ](http://github.com/emqtt/emqtt_benchmark)
+Test tool for concurrent connections: [http://github.com/emqtt/emqtt_benchmark](http://github.com/emqtt/emqtt_benchmark)

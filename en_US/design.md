@@ -43,7 +43,7 @@ Route MQTT messages among clustered nodes.
 
 ## Connection Layer 
 
-This layer is built on the [ eSockd ](https://github.com/emqx/esockd) library which is a general Non-blocking TCP/SSL Socket Server: 
+This layer is built on the [ eSockd](https://github.com/emqx/esockd) library which is a general Non-blocking TCP/SSL Socket Server: 
 
   * Acceptor Pool and Asynchronous TCP Accept 
   * Parameterized Connection Module 
@@ -169,7 +169,7 @@ client.disconnected  |  Run when client disconnected from broker
 
 
 
-The *EMQ* broker uses the [ Chain-of-responsibility_pattern ](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern) to implement hook mechanism. The callback functions registered to hook will be executed one by one: 
+The *EMQ* broker uses the [ Chain-of-responsibility_pattern](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern) to implement hook mechanism. The callback functions registered to hook will be executed one by one: 
 
 ![image](./_static/images/design_9.png)
 
@@ -184,7 +184,7 @@ stop           |  Break
 
 
 
-The input arguments for a callback function depends on the types of hook. Checkout the [ emqx_plugin_template ](https://github.com/emqx/emqx_plugin_template/blob/master/src/emqx_plugin_template.erl) project to see the hook examples in detail. 
+The input arguments for a callback function depends on the types of hook. Checkout the [emqx_plugin_template](https://github.com/emqx/emqx_plugin_template/blob/master/src/emqx_plugin_template.erl) project to see the hook examples in detail. 
 
 ### Hook Implementation 
 
@@ -223,7 +223,7 @@ The hook APIs are defined in the ` emqx ` module:
 
 ### Hook Usage 
 
-The [ emqx_plugin_template ](https://github.com/emqx/emqx_plugin_template/blob/master/src/emqx_plugin_template.erl) project provides the examples for hook usage: 
+The [emqx_plugin_template](https://github.com/emqx/emqx_plugin_template/blob/master/src/emqx_plugin_template.erl) project provides the examples for hook usage: 
     
     
     -module(emqx_plugin_template).
@@ -373,7 +373,7 @@ Use './bin/emqx_ctl' CLI to load/unload a plugin:
 
 ### Plugin Template 
 
-[ http://github.com/emqx/emqx_plugin_template ](http://github.com/emqx/emqx_plugin_template)
+[http://github.com/emqx/emqx_plugin_template](http://github.com/emqx/emqx_plugin_template)
 
 ## Mnesia/ETS Tables 
 

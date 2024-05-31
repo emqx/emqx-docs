@@ -10,7 +10,7 @@ It is recommended to deploy EMQ X on Linux for production environment.
 
 Each version of the EMQ X broker will release packages of CentOS, Ubuntu, Debian, openSUSE, FreeBSD, macOS, Windows platform and Docker images. 
 
-Download address: [ https://www.emqx.io/downloads ](https://www.emqx.io/downloads)
+Download address: [https://www.emqx.io/downloads](https://www.emqx.io/downloads)
 
 ## CentOS 
 
@@ -642,7 +642,7 @@ In the case where multiple EMQ X repositories are enabled, and the apt install a
 
   1. Get docker image 
 
-     * Through [ Docker Hub ](https://hub.docker.com/r/emqx/emqx)
+     * Through [ Docker Hub](https://hub.docker.com/r/emqx/emqx)
         
            $ docker pull emqx/emqx:v3.1.0
 
@@ -659,7 +659,7 @@ In the case where multiple EMQ X repositories are enabled, and the apt install a
 
 
 
-For more information about EMQ X Docker, please check [ Docker Hub ](https://hub.docker.com/r/emqx/emqx) or [ EMQ X Docker ](https://github.com/emqx/emqx-docker) . 
+For more information about EMQ X Docker, please check [ Docker Hub](https://hub.docker.com/r/emqx/emqx) or [ EMQ X Docker](https://github.com/emqx/emqx-docker) . 
 
 ## Source Code Compilation and Installation 
 
@@ -671,9 +671,9 @@ EMQ X broker is developed on the Erlang/OTP platform. The project is maintained 
 EMQ X relies on the Erlang R21.2+ version 
 :::
 
-Erlang Install: [ http://www.erlang.org/ ](http://www.erlang.org/)
+Erlang Install: [http://www.erlang.org/](http://www.erlang.org/)
 
-Git client: [ http://www.git-scm.com/ ](http://www.git-scm.com/)
+Git client: [http://www.git-scm.com/](http://www.git-scm.com/)
 
 ### Compile and Install EMQ X 
 
@@ -704,9 +704,9 @@ Git client: [ http://www.git-scm.com/ ](http://www.git-scm.com/)
 
 ## Windows source code compilation and installation 
 
-Erlang install: [ http://www.erlang.org/ ](http://www.erlang.org/)
+Erlang install: [http://www.erlang.org/](http://www.erlang.org/)
 
-scoop install: [ http://scoop.sh/ ](http://scoop.sh/)
+scoop install: [http://scoop.sh/](http://scoop.sh/)
 
 After the scoop is installed, the Git, Make and erlang can be installed using the scoop package management tool. 
     

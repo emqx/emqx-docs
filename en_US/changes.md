@@ -12,7 +12,7 @@ Enhancements:
 
   * Resupport to configure the default ` username ` through the configuration file 
 
-Github PR: [ emqx/emqx-auth-username#127 ](https://github.com/emqx/emqx-auth-username/pull/127)
+Github PR: [emqx/emqx-auth-username#127](https://github.com/emqx/emqx-auth-username/pull/127)
 
 
 
@@ -23,7 +23,7 @@ Enhancements:
 
   * Resupport to configure the default ` clientid ` through the configuration file 
 
-Github PR: [ emqx/emqx-auth-clientid#123 ](https://github.com/emqx/emqx-auth-clientid/pull/123)
+Github PR: [emqx/emqx-auth-clientid#123](https://github.com/emqx/emqx-auth-clientid/pull/123)
 
 
 
@@ -40,11 +40,11 @@ Bug fixes:
 
   * Fix the issue that messages maybe disordered when forwarding messages to remote nodes via ` gen_rpc `
 
-Github PR: [ emqx/emqx#3049 ](https://github.com/emqx/emqx/pull/3049)
+Github PR: [emqx/emqx#3049](https://github.com/emqx/emqx/pull/3049)
 
   * Fix ` emqx ` crash caused by the crash of auth plugin 
 
-Github PR: [ emqx/emqx#3048 ](https://github.com/emqx/emqx/pull/3048)
+Github PR: [emqx/emqx#3048](https://github.com/emqx/emqx/pull/3048)
 
 
 
@@ -61,11 +61,11 @@ Enhancements:
 
   * Any Client that detects flapping will be banned 
 
-Github PR: [ emqx/emqx#3033 ](https://github.com/emqx/emqx/pull/3033)
+Github PR: [emqx/emqx#3033](https://github.com/emqx/emqx/pull/3033)
 
   * Improve the ` emqx_vm ` module and update test cases 
 
-Github PR: [ emqx/emqx#3034 ](https://github.com/emqx/emqx/pull/3034)
+Github PR: [emqx/emqx#3034](https://github.com/emqx/emqx/pull/3034)
 
 
 
@@ -76,7 +76,7 @@ Enhancements:
 
   * Update banned API 
 
-Github PR: [ emqx/emqx-management#141 ](https://github.com/emqx/emqx-management/pull/141)
+Github PR: [emqx/emqx-management#141](https://github.com/emqx/emqx-management/pull/141)
 
 
 
@@ -85,7 +85,7 @@ Bug fixes:
 
   * Fix some bad return values 
 
-Github PR: [ emqx/emqx-management#142 ](https://github.com/emqx/emqx-management/pull/142)
+Github PR: [emqx/emqx-management#142](https://github.com/emqx/emqx-management/pull/142)
 
 
 
@@ -96,7 +96,7 @@ Bug fixes:
 
   * Add error handling and log 
 
-Github PR: [ emqx/minirest#20 ](https://github.com/emqx/minirest/pull/20)
+Github PR: [emqx/minirest#20](https://github.com/emqx/minirest/pull/20)
 
 
 
@@ -107,7 +107,7 @@ Enhancements:
 
   * Adjust some interfaces and add test cases 
 
-Github PR: [ emqx/esockd#124 ](https://github.com/emqx/esockd/pull/124)
+Github PR: [emqx/esockd#124](https://github.com/emqx/esockd/pull/124)
 
 
 
@@ -118,7 +118,7 @@ Enhancements:
 
   * Adjust some interfaces and add test cases 
 
-Github PR: [ emqx/ekka#67 ](https://github.com/emqx/ekka/pull/67)
+Github PR: [emqx/ekka#67](https://github.com/emqx/ekka/pull/67)
 
 
 
@@ -135,27 +135,27 @@ Bug fixes:
 
   * Support rule SQL: FOREACH/DO/INCASE 
 
-Github Commit: [ emqx/emqx-rule-engine#a962e3 ](https://github.com/emqx/emqx-rule-engine/commit/a962e364cfde9a7f9bbde3d4d6613625b8d00ce7)
+Github Commit: [emqx/emqx-rule-engine#a962e3](https://github.com/emqx/emqx-rule-engine/commit/a962e364cfde9a7f9bbde3d4d6613625b8d00ce7)
 
   * Support rule SQL: CASE/WHEN 
 
-Github Commit: [ emqx/emqx-rule-engine#40e68e ](https://github.com/emqx/emqx-rule-engine/commit/40e68e9607198613cc93d001488d40b2bfb4f23e)
+Github Commit: [emqx/emqx-rule-engine#40e68e](https://github.com/emqx/emqx-rule-engine/commit/40e68e9607198613cc93d001488d40b2bfb4f23e)
 
   * Support comparing atom to binary in WHERE SQL clause 
 
-Github Commit: [ emqx/emqx-rule-engine#b240cc ](https://github.com/emqx/emqx-rule-engine/commit/b240cc0434815bafb5cfcd366692257336d26e8c)
+Github Commit: [emqx/emqx-rule-engine#b240cc](https://github.com/emqx/emqx-rule-engine/commit/b240cc0434815bafb5cfcd366692257336d26e8c)
 
   * Fix column validation failure in select and foreach 
 
-Github Commit: [ emqx/emqx-rule-engine#6a1267 ](https://github.com/emqx/emqx-rule-engine/commit/6a1267cb1530d00972899ecb3abb7a3220e28175)
+Github Commit: [emqx/emqx-rule-engine#6a1267](https://github.com/emqx/emqx-rule-engine/commit/6a1267cb1530d00972899ecb3abb7a3220e28175)
 
   * Fix race-conditions when re-build rules 
 
-Github Commit: [ emqx/emqx-rule-engine#af8967 ](https://github.com/emqx/emqx-rule-engine/commit/af8967793d4f554134955c620d9e31b8c3876445)
+Github Commit: [emqx/emqx-rule-engine#af8967](https://github.com/emqx/emqx-rule-engine/commit/af8967793d4f554134955c620d9e31b8c3876445)
 
   * Fix incorrect publish message by adding default flags in republish action 
 
-Github Commit: [ emqx/emqx-rule-engine#60e45c ](https://github.com/emqx/emqx-rule-engine/commit/60e45c28596a6cb42437043fbba5509502a3cf41)
+Github Commit: [emqx/emqx-rule-engine#60e45c](https://github.com/emqx/emqx-rule-engine/commit/60e45c28596a6cb42437043fbba5509502a3cf41)
 
 
 
@@ -166,7 +166,7 @@ Bug fixes:
 
   * Fix missing error data in log 
 
-Github PR: [ emqx/minirest#20 ](https://github.com/emqx/minirest/pull/20)
+Github PR: [emqx/minirest#20](https://github.com/emqx/minirest/pull/20)
 
 
 
@@ -177,7 +177,7 @@ Bug fixes:
 
   * Fix bad match 
 
-Github Commit: [ emqx/emqx-web-hook#3dd041 ](https://github.com/emqx/emqx-web-hook/commit/3dd041afaf39eabe71ab473648d57f4b55735224)
+Github Commit: [emqx/emqx-web-hook#3dd041](https://github.com/emqx/emqx-web-hook/commit/3dd041afaf39eabe71ab473648d57f4b55735224)
 
 
 
@@ -192,7 +192,7 @@ Bug fixes:
 
   * Fix message out-of-order issues when forwarding across clusters 
 
-Github PR: [ emqx/emqx#3000 ](https://github.com/emqx/emqx/pull/3000)
+Github PR: [emqx/emqx#3000](https://github.com/emqx/emqx/pull/3000)
 
 
 
@@ -203,7 +203,7 @@ Enhancements:
 
   * REST API supports IPv6 
 
-Github PR: [ emqx/emqx-management#135 ](https://github.com/emqx/emqx-management/pull/135)
+Github PR: [emqx/emqx-management#135](https://github.com/emqx/emqx-management/pull/135)
 
 
 
@@ -212,7 +212,7 @@ Bug fixes:
 
   * Fix the issue that encoded URI isn't handled correctly 
 
-Github PR: [ emqx/emqx-management#137 ](https://github.com/emqx/emqx-management/pull/137)
+Github PR: [emqx/emqx-management#137](https://github.com/emqx/emqx-management/pull/137)
 
 
 
@@ -223,7 +223,7 @@ Enhancements:
 
   * Support for IPv6 access to Dashbaord 
 
-Github PR: [ emqx/emqx-dashboard#162 ](https://github.com/emqx/emqx-dashboard/pull/162)
+Github PR: [emqx/emqx-dashboard#162](https://github.com/emqx/emqx-dashboard/pull/162)
 
 
 
@@ -234,13 +234,13 @@ Bug fixes:
 
   * Fix the issue that the plugin can only start one in cluster 
 
-Github PR: [ emqx/emqx-delay-publish#50 ](https://github.com/emqx/emqx-delay-publish/pull/50)
+Github PR: [emqx/emqx-delay-publish#50](https://github.com/emqx/emqx-delay-publish/pull/50)
 
-  * Fix the issue that delayed messages are published disorderly, thanks contribution of [ soldag ](https://github.com/soldag)
+  * Fix the issue that delayed messages are published disorderly, thanks contribution of [ soldag](https://github.com/soldag)
 
-Github PR: [ emqx/emqx-delay-publish#49 ](https://github.com/emqx/emqx-delay-publish/pull/49)
+Github PR: [emqx/emqx-delay-publish#49](https://github.com/emqx/emqx-delay-publish/pull/49)
 
-Github Issue: [ emqx/emqx-delay-publish#15 ](https://github.com/emqx/emqx-delay-publish/issues/15)
+Github Issue: [emqx/emqx-delay-publish#15](https://github.com/emqx/emqx-delay-publish/issues/15)
 
 
 
@@ -255,9 +255,9 @@ Bug fixes:
 
   * Fix the issue that 'max_subscriptions' don't working 
 
-Github PR: [ emqx/emqx#2922 ](https://github.com/emqx/emqx/pull/2922)
+Github PR: [emqx/emqx#2922](https://github.com/emqx/emqx/pull/2922)
 
-Github Issue: [ emqx/emqx#2908 ](https://github.com/emqx/emqx/issues/2908)
+Github Issue: [emqx/emqx#2908](https://github.com/emqx/emqx/issues/2908)
 
 
 
@@ -268,9 +268,9 @@ Bug fixes:
 
   * Gets the value corresponding to placeholders more securely 
 
-Github PR: [ emqx/emqx-auth-mysql#180 ](https://github.com/emqx/emqx-auth-mysql/pull/180)
+Github PR: [emqx/emqx-auth-mysql#180](https://github.com/emqx/emqx-auth-mysql/pull/180)
 
-Github Issue: [ emqx/emqx#2937 ](https://github.com/emqx/emqx/issues/2937)
+Github Issue: [emqx/emqx#2937](https://github.com/emqx/emqx/issues/2937)
 
 
 
@@ -281,7 +281,7 @@ Enhancements:
 
   * Support for IPv6 access to Dashbaord 
 
-Github PR: [ emqx/emqx-dashboard#161 ](https://github.com/emqx/emqx-dashboard/pull/161)
+Github PR: [emqx/emqx-dashboard#161](https://github.com/emqx/emqx-dashboard/pull/161)
 
 
 
@@ -292,7 +292,7 @@ Enhancements:
 
   * REST API supports IPv6 
 
-Github PR: [ emqx/emqx-management#134 ](https://github.com/emqx/emqx-management/pull/134)
+Github PR: [emqx/emqx-management#134](https://github.com/emqx/emqx-management/pull/134)
 
 
 
@@ -301,11 +301,11 @@ Github PR: [ emqx/emqx-management#134 ](https://github.com/emqx/emqx-management/
 
 Bug fixes: 
 
-  * Fix the issue that delayed messages are published disorderly, thanks contribution of [ soldag ](https://github.com/soldag)
+  * Fix the issue that delayed messages are published disorderly, thanks contribution of [ soldag](https://github.com/soldag)
 
-Github PR: [ emqx/emqx-delay-publish#49 ](https://github.com/emqx/emqx-delay-publish/pull/49)
+Github PR: [emqx/emqx-delay-publish#49](https://github.com/emqx/emqx-delay-publish/pull/49)
 
-Github Issue: [ emqx/emqx-delay-publish#15 ](https://github.com/emqx/emqx-delay-publish/issues/15)
+Github Issue: [emqx/emqx-delay-publish#15](https://github.com/emqx/emqx-delay-publish/issues/15)
 
 
 
@@ -316,7 +316,7 @@ Enhancements:
 
   * Improved the SQL syntax for decoding the payload of JSON format 
 
-Github Repository: [ emqx/emqx-rule-engine ](https://github.com/emqx/emqx-rule-engine)
+Github Repository: [emqx/emqx-rule-engine](https://github.com/emqx/emqx-rule-engine)
 
 
 
@@ -331,11 +331,11 @@ Bug fixes:
 
   * Fix the issue that failure of SSL handshake could cause crash 
 
-Github PR: [ emqx/emqx#2963 ](https://github.com/emqx/emqx/pull/2963)
+Github PR: [emqx/emqx#2963](https://github.com/emqx/emqx/pull/2963)
 
   * Check topic level for PUBLISH packet 
 
-Github PR: [ emqx/emqx#2964 ](https://github.com/emqx/emqx/pull/2964)
+Github PR: [emqx/emqx#2964](https://github.com/emqx/emqx/pull/2964)
 
 
 
@@ -346,7 +346,7 @@ Enhancements:
 
   * Implement the command line interface 
 
-Github PR: [ emqx/emqtt#91 ](https://github.com/emqx/emqtt/pull/91)
+Github PR: [emqx/emqtt#91](https://github.com/emqx/emqtt/pull/91)
 
 
 
@@ -357,7 +357,7 @@ Bug fixes:
 
   * Upgrade the MQTT-SN plugin to version 4.0 
 
-Github PR: [ emqx/emqx-sn#145 ](https://github.com/emqx/emqx-sn/pull/145)
+Github PR: [emqx/emqx-sn#145](https://github.com/emqx/emqx-sn/pull/145)
 
 
 
@@ -368,7 +368,7 @@ Bug fixes:
 
   * Upgrade the CoAP plugin to version 4.0 
 
-Github Commit: [ emqx/emqx-coap#c7c175 ](https://github.com/emqx/emqx-coap/commit/c7c17540c1248dcdd402b41323c23a211e8292fc) , [ emqx/emqx-coap#9b8ede ](https://github.com/emqx/emqx-coap/commit/9b8ede093cfc3b7211663520e496c579c11611f6)
+Github Commit: [emqx/emqx-coap#c7c175](https://github.com/emqx/emqx-coap/commit/c7c17540c1248dcdd402b41323c23a211e8292fc) , [emqx/emqx-coap#9b8ede](https://github.com/emqx/emqx-coap/commit/9b8ede093cfc3b7211663520e496c579c11611f6)
 
 
 
@@ -389,15 +389,15 @@ Bug fixes:
 
   * Fix the issue that the alarm of CPU usage triggered abnormally when emqx container is running 
 
-GitHub Commit: [ emqx/emqx#9cdaa7 ](https://github.com/emqx/emqx/commit/9cdaa71a66c44d6bfd7606f8e64bc6670f619cdf)
+GitHub Commit: [emqx/emqx#9cdaa7](https://github.com/emqx/emqx/commit/9cdaa71a66c44d6bfd7606f8e64bc6670f619cdf)
 
   * Fix the issue that the mechanism of message expiration doesn't take effect 
 
-Github Commit: [ emqx/emqx#31671f ](https://github.com/emqx/emqx/commit/31671f5ee5516e04ca6c648679f030b790c84fd9)
+Github Commit: [emqx/emqx#31671f](https://github.com/emqx/emqx/commit/31671f5ee5516e04ca6c648679f030b790c84fd9)
 
   * Fix the issue thar placeholder like '%c' in mountpoint doesn't take effect 
 
-Github Commit: [ emqx/emqx#58ba22 ](https://github.com/emqx/emqx/commit/58ba22dfc79ce81ac74fffae60a624d2238585ca)
+Github Commit: [emqx/emqx#58ba22](https://github.com/emqx/emqx/commit/58ba22dfc79ce81ac74fffae60a624d2238585ca)
 
 
 
@@ -408,7 +408,7 @@ Bug fixes:
 
   * Fix the issue that the function of SSL is unavailable 
 
-Github Commit: [ emqx/emqx-dashboard#272a42 ](https://github.com/emqx/emqx-dashboard/commit/272a42b5ac7b28f52e5e71fae540e47278fac9d5)
+Github Commit: [emqx/emqx-dashboard#272a42](https://github.com/emqx/emqx-dashboard/commit/272a42b5ac7b28f52e5e71fae540e47278fac9d5)
 
 
 
@@ -423,7 +423,7 @@ Enhancements:
 
   * Extends configurations of ` gen_rpc `
 
-Github PR: [ emqx/emqx#2732 ](https://github.com/emqx/emqx/pull/2732)
+Github PR: [emqx/emqx#2732](https://github.com/emqx/emqx/pull/2732)
 
 
 
@@ -434,7 +434,7 @@ Bug fixes:
 
   * Fix the issue testing URL connectivity 
 
-Github PR: [ emqx/emqx-rule-engine#88 ](https://github.com/emqx/emqx-rule-engine/pull/88)
+Github PR: [emqx/emqx-rule-engine#88](https://github.com/emqx/emqx-rule-engine/pull/88)
 
 
 
@@ -453,7 +453,7 @@ Bug fixes:
 
   * Fix the issue that releasing lock could causes crash 
 
-Github PR: [ emqx/ekka#60 ](https://github.com/emqx/ekka/pull/60)
+Github PR: [emqx/ekka#60](https://github.com/emqx/ekka/pull/60)
 
 
 
@@ -468,15 +468,15 @@ Enhancements:
 
   * Optimize the performance of ` gen_rpc `
 
-Github PR: [ emqx/emqx#2694 ](https://github.com/emqx/emqx/pull/2694)
+Github PR: [emqx/emqx#2694](https://github.com/emqx/emqx/pull/2694)
 
   * Support using hostname to automatically discover k8s cluster 
 
-Github PR: [ emqx/emqx#2699 ](https://github.com/emqx/emqx/pull/2699)
+Github PR: [emqx/emqx#2699](https://github.com/emqx/emqx/pull/2699)
 
   * Change the default uptime heartbeat interval to 30s 
 
-Github PR: [ emqx/emqx#2696 ](https://github.com/emqx/emqx/pull/2696)
+Github PR: [emqx/emqx#2696](https://github.com/emqx/emqx/pull/2696)
 
 
 
@@ -485,11 +485,11 @@ Bug fixes:
 
   * Fix the issue that encouter crash when Websocket sessions go offline abnormally 
 
-Github PR: [ emqx/emqx#2697 ](https://github.com/emqx/emqx/pull/2697)
+Github PR: [emqx/emqx#2697](https://github.com/emqx/emqx/pull/2697)
 
   * Fix the issue that ws_channel is still online when session closed on exception 
 
-Github PR: [ emqx/emqx#2704 ](https://github.com/emqx/emqx/pull/2704)
+Github PR: [emqx/emqx#2704](https://github.com/emqx/emqx/pull/2704)
 
 
 
@@ -500,7 +500,7 @@ Enhancements:
 
   * Improve parameters for republish action 
 
-Github PR: [ emqx/emqx-rule-engine#81 ](https://github.com/emqx/emqx-rule-engine/pull/81)
+Github PR: [emqx/emqx-rule-engine#81](https://github.com/emqx/emqx-rule-engine/pull/81)
 
 
 
@@ -509,7 +509,7 @@ Bug fixes:
 
   * Fix the issue that fail to select payload fields using '.' 
 
-Github PR: [ emqx/emqx-rule-engine#83 ](https://github.com/emqx/emqx-rule-engine/pull/83)
+Github PR: [emqx/emqx-rule-engine#83](https://github.com/emqx/emqx-rule-engine/pull/83)
 
 
 
@@ -520,7 +520,7 @@ Bug fixes:
 
   * Fix the issue rendering resources list incorrectly in Dashboard on Safari 
 
-Github PR: [ emqx/emqx-dashboard#124 ](https://github.com/emqx/emqx-dashboard/pull/124) , [ emqx/emqx-dashboard#125 ](https://github.com/emqx/emqx-dashboard/pull/125) , [ emqx/emqx-dashboard#126 ](https://github.com/emqx/emqx-dashboard/pull/126)
+Github PR: [emqx/emqx-dashboard#124](https://github.com/emqx/emqx-dashboard/pull/124) , [emqx/emqx-dashboard#125](https://github.com/emqx/emqx-dashboard/pull/125) , [emqx/emqx-dashboard#126](https://github.com/emqx/emqx-dashboard/pull/126)
 
 
 
@@ -531,7 +531,7 @@ Enhancements:
 
   * Compatible with client login using LwM2M v1.1 
 
-Github Commit: [ emqx/emqx-lwm2m#1c03bf ](https://github.com/emqx/emqx-lwm2m/commit/1c03bf3b6a9cae7ed52f87ee219e9dd9d8824892)
+Github Commit: [emqx/emqx-lwm2m#1c03bf](https://github.com/emqx/emqx-lwm2m/commit/1c03bf3b6a9cae7ed52f87ee219e9dd9d8824892)
 
 
 
@@ -542,11 +542,11 @@ Enhancements:
 
   * Support building ` emqx-rel ` with built-in rebar3 
 
-Github PR: [ emqx/emqx-rel#394 ](https://github.com/emqx/emqx-rel/pull/394)
+Github PR: [emqx/emqx-rel#394](https://github.com/emqx/emqx-rel/pull/394)
 
   * Delay EMQ X windows service auto start 
 
-Github PR: [ emqx/emqx-rel#395 ](https://github.com/emqx/emqx-rel/pull/395)
+Github PR: [emqx/emqx-rel#395](https://github.com/emqx/emqx-rel/pull/395)
 
 
 
@@ -589,9 +589,9 @@ EMQ X 3.2-rc.3 is now available. We've enhanced features and fixed bugs.
 
 Bug fixes: 
 
-  * Fix [ emqx/emqx: issue#2635 ](https://github.com/emqx/emqx/issues/2635)
+  * Fix [emqx/emqx: issue#2635](https://github.com/emqx/emqx/issues/2635)
 
-Github PR: [ emqx/emqx#2663 ](https://github.com/emqx/emqx/pull/2663)
+Github PR: [emqx/emqx#2663](https://github.com/emqx/emqx/pull/2663)
 
 
 
@@ -602,7 +602,7 @@ Bug fixes:
 
   * Fix the issue that the count of ` actions.failure ` doesn't grow 
 
-Github PR: [ emqx/emqx-web-hook#137 ](https://github.com/emqx/emqx-web-hook/pull/137)
+Github PR: [emqx/emqx-web-hook#137](https://github.com/emqx/emqx-web-hook/pull/137)
 
 
 
@@ -613,7 +613,7 @@ Enhancements:
 
   * Add the option of bridge mode 
 
-Github PR: [ emqx/emqx-bridge-mqtt#6 ](https://github.com/emqx/emqx-bridge-mqtt/pull/6)
+Github PR: [emqx/emqx-bridge-mqtt#6](https://github.com/emqx/emqx-bridge-mqtt/pull/6)
 
   * Optimize the ACK mechanism for RPC messages 
 
@@ -621,7 +621,7 @@ Github PR: [ emqx/emqx-bridge-mqtt#6 ](https://github.com/emqx/emqx-bridge-mqtt/
 
   * Fix the issue that MQTT/RPC Bridge of Rule Engine can’t bridge to remote EMQ X node 
 
-Github PR: [ emqx/emqx-bridge-mqtt#7 ](https://github.com/emqx/emqx-bridge-mqtt/pull/7)
+Github PR: [emqx/emqx-bridge-mqtt#7](https://github.com/emqx/emqx-bridge-mqtt/pull/7)
 
 
 
@@ -632,11 +632,11 @@ Enhancements:
 
   * Add cluster support for rules and resource API 
 
-Github PR: [ emqx/emqx-rule-engine#75 ](https://github.com/emqx/emqx-rule-engine/pull/75)
+Github PR: [emqx/emqx-rule-engine#75](https://github.com/emqx/emqx-rule-engine/pull/75)
 
   * Add API for returning available columns of trigger events 
 
-Github PR: [ emqx/emqx-rule-engine#74 ](https://github.com/emqx/emqx-rule-engine/pull/74) , [ emqx/emqx-rule-engine#77 ](https://github.com/emqx/emqx-rule-engine/pull/77)
+Github PR: [emqx/emqx-rule-engine#74](https://github.com/emqx/emqx-rule-engine/pull/74) , [emqx/emqx-rule-engine#77](https://github.com/emqx/emqx-rule-engine/pull/77)
 
 
 
@@ -645,7 +645,7 @@ Bug fixes:
 
   * Fix the issue caused by fetching resource status timeout 
 
-Github PR: [ emqx/emqx-rule-engine#76 ](https://github.com/emqx/emqx-rule-engine/pull/76)
+Github PR: [emqx/emqx-rule-engine#76](https://github.com/emqx/emqx-rule-engine/pull/76)
 
 
 
@@ -656,7 +656,7 @@ Enhancements:
 
   * Rules engine metrics are subdivided into nodes 
 
-Github PR: [ emqx/emqx-dashboard#114 ](https://github.com/emqx/emqx-dashboard/pull/114)
+Github PR: [emqx/emqx-dashboard#114](https://github.com/emqx/emqx-dashboard/pull/114)
 
 
 
@@ -665,7 +665,7 @@ Bug fixes:
 
   * Fix bugs in resource creation 
 
-Github PR: [ emqx/emqx-dashboard#114 ](https://github.com/emqx/emqx-dashboard/pull/114)
+Github PR: [emqx/emqx-dashboard#114](https://github.com/emqx/emqx-dashboard/pull/114)
 
 
 
@@ -680,11 +680,11 @@ Enhancements:
 
   * Change the default logger level to **warning**
 
-Github PR: [ emqx/emqx#2657 ](https://github.com/emqx/emqx/pull/2657)
+Github PR: [emqx/emqx#2657](https://github.com/emqx/emqx/pull/2657)
 
   * Add history alarm list API 
 
-Github PRs: [ emqx/emqx#2660 ](https://github.com/emqx/emqx/pull/2660) [ emqx/emqx-management#98 ](https://github.com/emqx/emqx-management/pull/98)
+Github PRs: [emqx/emqx#2660](https://github.com/emqx/emqx/pull/2660) [emqx/emqx-management#98](https://github.com/emqx/emqx-management/pull/98)
 
 
 
@@ -693,13 +693,13 @@ Bug fixes:
 
   * Clean the stale sessions: 
 
-Github PR: [ emqx/emqx#2655 ](https://github.com/emqx/emqx/pull/2655)
+Github PR: [emqx/emqx#2655](https://github.com/emqx/emqx/pull/2655)
 
   * Fix the massages order when batch dispatching: 
 
-Github PR: [ emqx/emqx#2650 ](https://github.com/emqx/emqx/pull/2650)
+Github PR: [emqx/emqx#2650](https://github.com/emqx/emqx/pull/2650)
 
-Thank the contributions from [ tradingtrace ](https://github.com/tradingtrace) ! 
+Thank the contributions from [ tradingtrace](https://github.com/tradingtrace) ! 
 
 
 
@@ -710,11 +710,11 @@ Enhancements:
 
   * Add an action "do nothing" for debug purpose. 
 
-Github PR: [ emqx/emqx-rule-engine#70 ](https://github.com/emqx/emqx-rule-engine/pull/70)
+Github PR: [emqx/emqx-rule-engine#70](https://github.com/emqx/emqx-rule-engine/pull/70)
 
   * Change data type of the ` retain ` flag to integer 
 
-Github RP: [ emqx/emqx-rule-engine#72 ](https://github.com/emqx/emqx-rule-engine/pull/72)
+Github RP: [emqx/emqx-rule-engine#72](https://github.com/emqx/emqx-rule-engine/pull/72)
 
 
 
@@ -723,7 +723,7 @@ Bug fixes:
 
   * Escape SQL reserved keyword timestamp: 
 
-Github PR: [ emqx/emqx-rule-engine#71 ](https://github.com/emqx/emqx-rule-engine/pull/71)
+Github PR: [emqx/emqx-rule-engine#71](https://github.com/emqx/emqx-rule-engine/pull/71)
 
 
 
@@ -732,7 +732,7 @@ Github PR: [ emqx/emqx-rule-engine#71 ](https://github.com/emqx/emqx-rule-engine
 
   * Migrate the MQTT bridge from emqx project to a separated plugin: 
 
-Github PR: [ emqx/emqx-bridge-mqtt#2 ](https://github.com/emqx/emqx-bridge-mqtt/pull/2)
+Github PR: [emqx/emqx-bridge-mqtt#2](https://github.com/emqx/emqx-bridge-mqtt/pull/2)
 
 
 
@@ -743,7 +743,7 @@ Bug fixes:
 
   * Fixed a windows service register bug: 
 
-Github PR: [ emqx/emqx-rel#381 ](https://github.com/emqx/emqx-rel/pull/381)
+Github PR: [emqx/emqx-rel#381](https://github.com/emqx/emqx-rel/pull/381)
 
 
 
@@ -758,15 +758,15 @@ Enhancements:
 
   * Support setting prefix of log message 
 
-Github PR: [ emqx/emqx#2627 ](https://github.com/emqx/emqx/pull/2627)
+Github PR: [emqx/emqx#2627](https://github.com/emqx/emqx/pull/2627)
 
   * Improve precision of the timestamp of clients' connecting and disconnecting in system messages 
 
-Github PR: [ emqx/emqx#2641 ](https://github.com/emqx/emqx/pull/2641)
+Github PR: [emqx/emqx#2641](https://github.com/emqx/emqx/pull/2641)
 
   * Optimize develop workflow and support ` make run `
 
-Github PR: [ emqx/emqx#2644 ](https://github.com/emqx/emqx/pull/2644)
+Github PR: [emqx/emqx#2644](https://github.com/emqx/emqx/pull/2644)
 
 
 
@@ -775,15 +775,15 @@ Bug fixes:
 
   * Fix the issue that flapping module can't read configuration correctly 
 
-Github PR: [ emqx/emqx#2628 ](https://github.com/emqx/emqx/pull/2628)
+Github PR: [emqx/emqx#2628](https://github.com/emqx/emqx/pull/2628)
 
   * Fix the issue that unavailable ` cpu_sup:util/0 ` result in crash in Windows 
 
-Github PR: [ emqx/emqx#2629 ](https://github.com/emqx/emqx/pull/2629)
+Github PR: [emqx/emqx#2629](https://github.com/emqx/emqx/pull/2629)
 
-  * Fix [ emqx/emqx: issue#2619 ](https://github.com/emqx/emqx/issues/2619)
+  * Fix [emqx/emqx: issue#2619](https://github.com/emqx/emqx/issues/2619)
 
-Github PR: [ emqx/emqx#2646 ](https://github.com/emqx/emqx/pull/2646)
+Github PR: [emqx/emqx#2646](https://github.com/emqx/emqx/pull/2646)
 
 
 
@@ -794,7 +794,7 @@ Enhancements:
 
   * Support fetching resource status periodically and setting alarms 
 
-Github PR: [ emqx/emqx-rule-engine#67 ](https://github.com/emqx/emqx-rule-engine/pull/67)
+Github PR: [emqx/emqx-rule-engine#67](https://github.com/emqx/emqx-rule-engine/pull/67)
 
 
 
@@ -805,15 +805,15 @@ Bug fixes:
 
   * Fix the misjudgement of ` keepalive_timeout `
 
-Github PR: [ emqx/emqx-sn#127 ](https://github.com/emqx/emqx-sn/pull/127)
+Github PR: [emqx/emqx-sn#127](https://github.com/emqx/emqx-sn/pull/127)
 
   * Fix the issue that don't read ` idle_timeout ` correctly 
 
-Github PR: [ emqx/emqx-sn#128 ](https://github.com/emqx/emqx-sn/pull/128)
+Github PR: [emqx/emqx-sn#128](https://github.com/emqx/emqx-sn/pull/128)
 
   * Fix the test case 
 
-Github PR: [ emqx/emqx-sn#130 ](https://github.com/emqx/emqx-sn/pull/130)
+Github PR: [emqx/emqx-sn#130](https://github.com/emqx/emqx-sn/pull/130)
 
 
 
@@ -824,7 +824,7 @@ Bug fixes:
 
   * Read pubkey correctly 
 
-Github PR: [ emqx/emqx-auth-jwt#88 ](https://github.com/emqx/emqx-auth-jwt/pull/88)
+Github PR: [emqx/emqx-auth-jwt#88](https://github.com/emqx/emqx-auth-jwt/pull/88)
 
 
 
@@ -835,7 +835,7 @@ Enhancements:
 
   * Make the building more intelligent and robust 
 
-GitHub PR: [ emqx/emqx-rel#375 ](https://github.com/emqx/emqx-rel/pull/375) , [ emqx/emqx-rel#376 ](https://github.com/emqx/emqx-rel/pull/376)
+GitHub PR: [emqx/emqx-rel#375](https://github.com/emqx/emqx-rel/pull/375) , [emqx/emqx-rel#376](https://github.com/emqx/emqx-rel/pull/376)
 
 
 
@@ -852,19 +852,19 @@ Bug fixes:
 
   * Fix the issue that not checking ` Will Retain ` flag 
 
-Github PR: [ emqx/emqx#2607 ](https://github.com/emqx/emqx/pull/2607)
+Github PR: [emqx/emqx#2607](https://github.com/emqx/emqx/pull/2607)
 
-  * Fix [ emqx/emqx: issue#2591 ](https://github.com/emqx/emqx/issues/2591)
+  * Fix [emqx/emqx: issue#2591](https://github.com/emqx/emqx/issues/2591)
 
-Github PR: [ emqx/emqx#2615 ](https://github.com/emqx/emqx/pull/2615)
+Github PR: [emqx/emqx#2615](https://github.com/emqx/emqx/pull/2615)
 
   * Remove characters limit for logging by default 
 
-Github PR: [ emqx/emqx#2617 ](https://github.com/emqx/emqx/pull/2617)
+Github PR: [emqx/emqx#2617](https://github.com/emqx/emqx/pull/2617)
 
   * Fix the issue that can’t handle fragmented tcp packet correctly 
 
-Github PR: [ emqx/emqx#2611 ](https://github.com/emqx/emqx/pull/2611)
+Github PR: [emqx/emqx#2611](https://github.com/emqx/emqx/pull/2611)
 
 
 
@@ -875,7 +875,7 @@ Enhancements:
 
   * Support metrics like count of rule matched 
 
-Github PR: [ emqx/emqx-rule-engine#63 ](https://github.com/emqx/emqx-rule-engine/pull/63)
+Github PR: [emqx/emqx-rule-engine#63](https://github.com/emqx/emqx-rule-engine/pull/63)
 
 
 
@@ -886,7 +886,7 @@ Bug fixes:
 
   * Fix the issue that CLI kicks websocket connection failed 
 
-Github PR: [ emqx/emqx-management#93 ](https://github.com/emqx/emqx-management/pull/93)
+Github PR: [emqx/emqx-management#93](https://github.com/emqx/emqx-management/pull/93)
 
 
 
@@ -901,9 +901,9 @@ EMQ X 3.2-beta.2 is now available. We've improved rule engine and fixed bugs.
 
 Bug fixes: 
 
-  * Fix [ emqx/emqx: issue#2553 ](https://github.com/emqx/emqx/issues/2553)
+  * Fix [emqx/emqx: issue#2553](https://github.com/emqx/emqx/issues/2553)
 
-Github PR: [ emqx/emqx#2596 ](https://github.com/emqx/emqx/pull/2596)
+Github PR: [emqx/emqx#2596](https://github.com/emqx/emqx/pull/2596)
 
 
 
@@ -914,27 +914,27 @@ Enhancements:
 
   * Support testing SQL in the dashboard 
 
-Github Commit: [ emqx/emqx-rule-engine#3e7c4c ](https://github.com/emqx/emqx-rule-engine/commit/3e7c4cbe275d8f120ad8efb83fd23ee571d465db)
+Github Commit: [emqx/emqx-rule-engine#3e7c4c](https://github.com/emqx/emqx-rule-engine/commit/3e7c4cbe275d8f120ad8efb83fd23ee571d465db)
 
   * Preprocess prepared statement for better performance 
 
-Github Commit: [ emqx/emqx-rule-engine#fa3720 ](https://github.com/emqx/emqx-rule-engine/commit/fa37205850c6efe9af5f8ca2f230e17c7de2adb4) , [ emqx/emqx-rule-engine#b00fad ](https://github.com/emqx/emqx-rule-engine/commit/b00fad45c283fa2ec3aa57353bbe161960547461)
+Github Commit: [emqx/emqx-rule-engine#fa3720](https://github.com/emqx/emqx-rule-engine/commit/fa37205850c6efe9af5f8ca2f230e17c7de2adb4) , [emqx/emqx-rule-engine#b00fad](https://github.com/emqx/emqx-rule-engine/commit/b00fad45c283fa2ec3aa57353bbe161960547461)
 
   * Adapt rule engine to emqx cluster 
 
-Github Commit: [ emqx/emqx-rule-engine#3da7fe ](https://github.com/emqx/emqx-rule-engine/commit/3da7fed60d92c9a994c2aed5f34509c0d0d4eff4) , [ emqx/emqx-rule-engine#4963b0 ](https://github.com/emqx/emqx-rule-engine/commit/4963b0ee3a6114ebe74b48876d25723137df14ad)
+Github Commit: [emqx/emqx-rule-engine#3da7fe](https://github.com/emqx/emqx-rule-engine/commit/3da7fed60d92c9a994c2aed5f34509c0d0d4eff4) , [emqx/emqx-rule-engine#4963b0](https://github.com/emqx/emqx-rule-engine/commit/4963b0ee3a6114ebe74b48876d25723137df14ad)
 
   * Support showing resource status from dashboard 
 
-Github Commit: [ emqx/emqx-rule-engine#dd9a8d ](https://github.com/emqx/emqx-rule-engine/commit/dd9a8d4801f650c1ac888f7420f5497f7d0d6c73) , [ emqx/emqx-rule-engine#d16224 ](https://github.com/emqx/emqx-rule-engine/commit/d162246c0b630e059c21f7b36e50154f3d7832e3) , [ emqx/emqx-rule-engine#e4574c ](https://github.com/emqx/emqx-rule-engine/commit/e4574c9554d7e7d79a8ce55a6c9e4089ee00db79)
+Github Commit: [emqx/emqx-rule-engine#dd9a8d](https://github.com/emqx/emqx-rule-engine/commit/dd9a8d4801f650c1ac888f7420f5497f7d0d6c73) , [emqx/emqx-rule-engine#d16224](https://github.com/emqx/emqx-rule-engine/commit/d162246c0b630e059c21f7b36e50154f3d7832e3) , [emqx/emqx-rule-engine#e4574c](https://github.com/emqx/emqx-rule-engine/commit/e4574c9554d7e7d79a8ce55a6c9e4089ee00db79)
 
   * Support restarting resources in dashboard 
 
-Github Commit: [ emqx/emqx-rule-engine#ccbffd ](https://github.com/emqx/emqx-rule-engine/commit/ccbffd7d5db514adf6cd20e8d139e73f80bc1c96)
+Github Commit: [emqx/emqx-rule-engine#ccbffd](https://github.com/emqx/emqx-rule-engine/commit/ccbffd7d5db514adf6cd20e8d139e73f80bc1c96)
 
   * Support check HTTP connectivity 
 
-Github Commit: [ emqx/emqx-rule-engine#3feffc ](https://github.com/emqx/emqx-rule-engine/commit/3feffcd5a3f0da78725f1208594cea1b3273ec0b)
+Github Commit: [emqx/emqx-rule-engine#3feffc](https://github.com/emqx/emqx-rule-engine/commit/3feffcd5a3f0da78725f1208594cea1b3273ec0b)
 
 
 
@@ -943,15 +943,15 @@ Bug fixes:
 
   * Fix check dependency error before deleting resources 
 
-Github Commit: [ emqx/emqx-rule-engine#3265ff ](https://github.com/emqx/emqx-rule-engine/commit/3265ffe10584f0edccc084e6f78ae035ba310c07)
+Github Commit: [emqx/emqx-rule-engine#3265ff](https://github.com/emqx/emqx-rule-engine/commit/3265ffe10584f0edccc084e6f78ae035ba310c07)
 
   * Fix resources never destroyed 
 
-Github Commit: [ emqx/emqx-rule-engine#58a1ce ](https://github.com/emqx/emqx-rule-engine/commit/58a1ce45e1cf96cf05481d8ed076febef0d41976)
+Github Commit: [emqx/emqx-rule-engine#58a1ce](https://github.com/emqx/emqx-rule-engine/commit/58a1ce45e1cf96cf05481d8ed076febef0d41976)
 
   * Fix SQL nested put failure 
 
-Github Commit: [ emqx/emqx-rule-engine#64776a ](https://github.com/emqx/emqx-rule-engine/commit/64776aebde1fe48c1038fba3b61f457590ab4408)
+Github Commit: [emqx/emqx-rule-engine#64776a](https://github.com/emqx/emqx-rule-engine/commit/64776aebde1fe48c1038fba3b61f457590ab4408)
 
 
 
@@ -962,7 +962,7 @@ Enhancements:
 
   * Support HTTPS 
 
-Github PR: [ emqx/emqx-auth-http#133 ](https://github.com/emqx/emqx-auth-http/pull/133)
+Github PR: [emqx/emqx-auth-http#133](https://github.com/emqx/emqx-auth-http/pull/133)
 
 
 
@@ -971,9 +971,9 @@ Github PR: [ emqx/emqx-auth-http#133 ](https://github.com/emqx/emqx-auth-http/pu
 
 Bug fixes: 
 
-  * Fix [ emqx/emqx-docker: issue#115 ](https://github.com/emqx/emqx-docker/issues/115)
+  * Fix [emqx/emqx-docker: issue#115](https://github.com/emqx/emqx-docker/issues/115)
 
-Github Commit: [ emqx/emqx-docker#f3c219 ](https://github.com/emqx/emqx-docker/commit/f3c21978f5ffefd5d419bc78a1caf1ad71de9c91)
+Github Commit: [emqx/emqx-docker#f3c219](https://github.com/emqx/emqx-docker/commit/f3c21978f5ffefd5d419bc78a1caf1ad71de9c91)
 
 
 
@@ -984,7 +984,7 @@ Bug fixes:
 
   * Fix the issue of reloading plugin 
 
-Github PR: [ emqx/emqx-management#91 ](https://github.com/emqx/emqx-management/pull/91)
+Github PR: [emqx/emqx-management#91](https://github.com/emqx/emqx-management/pull/91)
 
 
 
@@ -995,7 +995,7 @@ Bug fixes:
 
   * Fix the issue makes  emqx_sm_locker  crash 
 
-Github Commit: [ emqx/ekka#2d5bf2 ](https://github.com/emqx/ekka/commit/2d5bf2a1f10d84408e4b35d3e274a49f395056c3)
+Github Commit: [emqx/ekka#2d5bf2](https://github.com/emqx/ekka/commit/2d5bf2a1f10d84408e4b35d3e274a49f395056c3)
 
 
 
@@ -1012,19 +1012,19 @@ Enhancements:
 
   * Build with rebar3 
 
-Github PR: [ emqx/emqx#2475 ](https://github.com/emqx/emqx/pull/2475) , [ emqx/emqx#2510 ](https://github.com/emqx/emqx/pull/2510) , [ emqx/emqx#2518 ](https://github.com/emqx/emqx/pull/2518) , [ emqx/emqx#2521 ](https://github.com/emqx/emqx/pull/2521)
+Github PR: [emqx/emqx#2475](https://github.com/emqx/emqx/pull/2475) , [emqx/emqx#2510](https://github.com/emqx/emqx/pull/2510) , [emqx/emqx#2518](https://github.com/emqx/emqx/pull/2518) , [emqx/emqx#2521](https://github.com/emqx/emqx/pull/2521)
 
   * Support  {active, N}  for SSL connection 
 
-Github PR: [ emqx/emqx#2531 ](https://github.com/emqx/emqx/pull/2531)
+Github PR: [emqx/emqx#2531](https://github.com/emqx/emqx/pull/2531)
 
   * Improve the behaviour of anonymous access 
 
-Github PR: [ emqx/emqx#2355 ](https://github.com/emqx/emqx/pull/2355)
+Github PR: [emqx/emqx#2355](https://github.com/emqx/emqx/pull/2355)
 
   * Speed up zone access 
 
-Github PR: [ emqx/emqx#2548 ](https://github.com/emqx/emqx/pull/2548)
+Github PR: [emqx/emqx#2548](https://github.com/emqx/emqx/pull/2548)
 
 
 
@@ -1033,11 +1033,11 @@ Bug fixes:
 
   * Fixed a fatal error in the  emqx_sm 
 
-Github PR: [ emqx/emqx#2559 ](https://github.com/emqx/emqx/pull/2559)
+Github PR: [emqx/emqx#2559](https://github.com/emqx/emqx/pull/2559)
 
   * Fixed an error when publishing MQTT-SN, CoAP messages 
 
-Github PR: [ emqx/emqx#2556 ](https://github.com/emqx/emqx/pull/2556)
+Github PR: [emqx/emqx#2556](https://github.com/emqx/emqx/pull/2556)
 
 
 
@@ -1048,7 +1048,7 @@ Enhancements:
 
   * Better rule engine 
 
-Github Repository: [ emqx/emqx-rule-engine ](https://github.com/emqx/emqx-rule-engine)
+Github Repository: [emqx/emqx-rule-engine](https://github.com/emqx/emqx-rule-engine)
 
 
 
@@ -1059,7 +1059,7 @@ Enhancements:
 
   * Add an option for encoding payload field 
 
-Github PR: [ emqx/emqx-web-hook#119 ](https://github.com/emqx/emqx-web-hook/pull/119)
+Github PR: [emqx/emqx-web-hook#119](https://github.com/emqx/emqx-web-hook/pull/119)
 
 
 
@@ -1070,7 +1070,7 @@ Enhancements:
 
   * More opts for http request 
 
-Github PR: [ emqx/emqx-auth-http#128 ](https://github.com/emqx/emqx-auth-http/pull/128)
+Github PR: [emqx/emqx-auth-http#128](https://github.com/emqx/emqx-auth-http/pull/128)
 
 
 
@@ -1081,7 +1081,7 @@ Bug fixes:
 
   * Fix wrong function call 
 
-Github PR: [ emqx/emqx-sn#118 ](https://github.com/emqx/emqx-sn/pull/118)
+Github PR: [emqx/emqx-sn#118](https://github.com/emqx/emqx-sn/pull/118)
 
 
 
@@ -1096,21 +1096,21 @@ EMQ X 3.1.2 is now available. We've fixed bugs and improved stability.
 
 Bug fixes: 
 
-  * Fix [ emqx/emqx: issue #2595 ](https://github.com/emqx/emqx/issues/2595)
+  * Fix [emqx/emqx: issue #2595](https://github.com/emqx/emqx/issues/2595)
 
-Github PR: [ emqx/emqx#2601 ](https://github.com/emqx/emqx/pull/2601)
+Github PR: [emqx/emqx#2601](https://github.com/emqx/emqx/pull/2601)
 
   * Fix the issue that failed when setting the log level 
 
-Github PR: [ emqx/emqx#2600 ](https://github.com/emqx/emqx/pull/2600)
+Github PR: [emqx/emqx#2600](https://github.com/emqx/emqx/pull/2600)
 
   * Fix the issue that doesn't match the return value 
 
-Github PR: [ emqx/emqx#2560 ](https://github.com/emqx/emqx/pull/2560)
+Github PR: [emqx/emqx#2560](https://github.com/emqx/emqx/pull/2560)
 
   * Hotfix for ` emqx_sn ` and ` emqx_coap ` plugins 
 
-Github PR: [ emqx/emqx#2556 ](https://github.com/emqx/emqx/pull/2556)
+Github PR: [emqx/emqx#2556](https://github.com/emqx/emqx/pull/2556)
 
 
 
@@ -1121,7 +1121,7 @@ Bug fixes:
 
   * Fix the issue that messages can't be published 
 
-Github PR: [ emqx/emqx-coap#120 ](https://github.com/emqx/emqx-coap/pull/120)
+Github PR: [emqx/emqx-coap#120](https://github.com/emqx/emqx-coap/pull/120)
 
 
 
@@ -1132,15 +1132,15 @@ Bug fixes:
 
   * Fix the issue makes ` emqx_sm_locker ` crash 
 
-Github PR: [ emqx/ekka#54 ](https://github.com/emqx/ekka/pull/54)
+Github PR: [emqx/ekka#54](https://github.com/emqx/ekka/pull/54)
 
   * Fix the issue that k8s can't use dns cluster 
 
-Github PR: [ emqx/ekka#53 ](https://github.com/emqx/ekka/pull/53)
+Github PR: [emqx/ekka#53](https://github.com/emqx/ekka/pull/53)
 
   * Fix the issue that etcd cluster is unusable 
 
-Github PR: [ emqx/ekka#52 ](https://github.com/emqx/ekka/pull/52)
+Github PR: [emqx/ekka#52](https://github.com/emqx/ekka/pull/52)
 
 
 
@@ -1157,11 +1157,11 @@ Enhancements:
 
   * Enlarge the maximum number of characters printed by each log event 
 
-Github PR: [ emqx/emqx#2509 ](https://github.com/emqx/emqx/pull/2509)
+Github PR: [emqx/emqx#2509](https://github.com/emqx/emqx/pull/2509)
 
   * ` force_shutdown_policy ` will use a different value according to digits of system 
 
-Github PR: [ emqx/emqx#2515 ](https://github.com/emqx/emqx/pull/2515)
+Github PR: [emqx/emqx#2515](https://github.com/emqx/emqx/pull/2515)
 
 
 
@@ -1170,11 +1170,11 @@ Bug fixes:
 
   * Configure and use ` long_gc ` 与 ` long_schedule ` correctly 
 
-Github PR: [ emqx/emqx#2504 ](https://github.com/emqx/emqx/pull/2504) , [ emqx/emqx#2513 ](https://github.com/emqx/emqx/pull/2513)
+Github PR: [emqx/emqx#2504](https://github.com/emqx/emqx/pull/2504) , [emqx/emqx#2513](https://github.com/emqx/emqx/pull/2513)
 
   * Fix the issue ` suboptions/count ` not been updated 
 
-Github PR: [ emqx/emqx#2507 ](https://github.com/emqx/emqx/pull/2507)
+Github PR: [emqx/emqx#2507](https://github.com/emqx/emqx/pull/2507)
 
 
 
@@ -1185,11 +1185,11 @@ Bug fixes:
 
   * Fix the issue that mountpoint didn't take effect 
 
-Github PR: [ emqx/emqx-lwm2m#34 ](https://github.com/emqx/emqx-lwm2m/pull/34)
+Github PR: [emqx/emqx-lwm2m#34](https://github.com/emqx/emqx-lwm2m/pull/34)
 
   * Fix the issue that message couldn't be forwarded by ` emqx-web-hook `
 
-Github PR: [ emqx/emqx-lwm2m#35 ](https://github.com/emqx/emqx-lwm2m/pull/35)
+Github PR: [emqx/emqx-lwm2m#35](https://github.com/emqx/emqx-lwm2m/pull/35)
 
 
 
@@ -1206,11 +1206,11 @@ Enhancements:
 
   * Add emqx_ct_helpers as deps and refactor test suites 
 
-Github PR: [ emqx/emqx#2480 ](https://github.com/emqx/emqx/pull/2480)
+Github PR: [emqx/emqx#2480](https://github.com/emqx/emqx/pull/2480)
 
   * Refactor flapping code 
 
-Github PR: [ emqx/emqx#2476 ](https://github.com/emqx/emqx/pull/2476)
+Github PR: [emqx/emqx#2476](https://github.com/emqx/emqx/pull/2476)
 
 
 
@@ -1221,7 +1221,7 @@ Bug fixes:
 
   * Fixed listeners acceptors is undefined 
 
-Github PR: [ emqx/emqx-management#76 ](https://github.com/emqx/emqx-management/pull/76)
+Github PR: [emqx/emqx-management#76](https://github.com/emqx/emqx-management/pull/76)
 
 
 
@@ -1232,19 +1232,19 @@ Enhancements:
 
   * Support validation of rule action params 
 
-Github PR: [ emqx/emqx-rule-engine#b28318 ](https://github.com/emqx/emqx-rule-engine/commit/b283184dcbb207e8d58ac308c027a093a4f4ab88)
+Github PR: [emqx/emqx-rule-engine#b28318](https://github.com/emqx/emqx-rule-engine/commit/b283184dcbb207e8d58ac308c027a093a4f4ab88)
 
   * Check dependency when deleting resources 
 
-Github PR: [ emqx/emqx-rule-engine#fa75b9 ](https://github.com/emqx/emqx-rule-engine/commit/fa75b952efb7951bc57242adc8e953dbbba6b2ed)
+Github PR: [emqx/emqx-rule-engine#fa75b9](https://github.com/emqx/emqx-rule-engine/commit/fa75b952efb7951bc57242adc8e953dbbba6b2ed)
 
   * Remove ` from ` param from republish action 
 
-Github PR: [ emqx/emqx-rule-engine#8721eb ](https://github.com/emqx/emqx-rule-engine/commit/8721ebe583d5426f239b5b1f044fe381bf4ea0b7)
+Github PR: [emqx/emqx-rule-engine#8721eb](https://github.com/emqx/emqx-rule-engine/commit/8721ebe583d5426f239b5b1f044fe381bf4ea0b7)
 
   * Fix where clause of SQL cannot handle integers 
 
-Github PR: [ emqx/emqx-rule-engine#c9c761 ](https://github.com/emqx/emqx-rule-engine/commit/c9c7616f86019657861dff408854e9c5238d666b)
+Github PR: [emqx/emqx-rule-engine#c9c761](https://github.com/emqx/emqx-rule-engine/commit/c9c7616f86019657861dff408854e9c5238d666b)
 
 
 
@@ -1255,7 +1255,7 @@ Enhancements:
 
   * Support edge storm 
 
-Github Repository: [ emqx/emqx-storm ](https://github.com/emqx/emqx-storm)
+Github Repository: [emqx/emqx-storm](https://github.com/emqx/emqx-storm)
 
 
 
@@ -1276,11 +1276,11 @@ Enhancements:
 
   * Support flapping detection for clients, and banning abnormal clients 
 
-Github PR: [ emqx/emqx#2438 ](https://github.com/emqx/emqx/pull/2438)
+Github PR: [emqx/emqx#2438](https://github.com/emqx/emqx/pull/2438)
 
   * Support configuring output length of log 
 
-Github PR: [ emqx/emqx#2461 ](https://github.com/emqx/emqx/pull/2461)
+Github PR: [emqx/emqx#2461](https://github.com/emqx/emqx/pull/2461)
 
 
 
@@ -1289,7 +1289,7 @@ Bug fixes:
 
   * Fix an issue that ` emqx_client ` doesn't set Keep Alive field correctly for CONNECT packet 
 
-Github PR: [ emqx/emqx#2443 ](https://github.com/emqx/emqx/pull/2443)
+Github PR: [emqx/emqx#2443](https://github.com/emqx/emqx/pull/2443)
 
 
 
@@ -1300,7 +1300,7 @@ Enhancements:
 
   * Support proxysql 
 
-Github PR: [ emqx/emqx-auth-mysql#134 ](https://github.com/emqx/emqx-auth-mysql/pull/134)
+Github PR: [emqx/emqx-auth-mysql#134](https://github.com/emqx/emqx-auth-mysql/pull/134)
 
 
 
@@ -1311,7 +1311,7 @@ Bug fixes:
 
   * Fix an Windows compatibility issue 
 
-Github PR: [ emqx/emqx-statsd#24 ](https://github.com/emqx/emqx-statsd/pull/24)
+Github PR: [emqx/emqx-statsd#24](https://github.com/emqx/emqx-statsd/pull/24)
 
 
 
@@ -1322,15 +1322,15 @@ Enhancements:
 
   * Support event actions in webhook 
 
-Github Commit: [ emqx/emqx-web-hook#8367e0 ](https://github.com/emqx/emqx-web-hook/commit/8367e02f5ccafc7df9600c258348461a67c171bd)
+Github Commit: [emqx/emqx-web-hook#8367e0](https://github.com/emqx/emqx-web-hook/commit/8367e02f5ccafc7df9600c258348461a67c171bd)
 
   * Improve specs of webhook resource 
 
-Github Commit: [ emqx/emqx-web-hook#5a1345 ](https://github.com/emqx/emqx-web-hook/commit/5a13457d4f823fa80df1c7eab9a8e945ae6a0701)
+Github Commit: [emqx/emqx-web-hook#5a1345](https://github.com/emqx/emqx-web-hook/commit/5a13457d4f823fa80df1c7eab9a8e945ae6a0701)
 
   * Support search actions by hook type 
 
-Github Commit: [ emqx/emqx-web-hook#fb3b1b ](https://github.com/emqx/emqx-web-hook/commit/fb3b1ba98ca3f2557a51be98a06537781119132c)
+Github Commit: [emqx/emqx-web-hook#fb3b1b](https://github.com/emqx/emqx-web-hook/commit/fb3b1ba98ca3f2557a51be98a06537781119132c)
 
 
 
@@ -1341,15 +1341,15 @@ Enhancements:
 
   * Support search actoins by resource type 
 
-Github PR: [ emqx/emqx-rule-engine#25 ](https://github.com/emqx/emqx-rule-engine/pull/25)
+Github PR: [emqx/emqx-rule-engine#25](https://github.com/emqx/emqx-rule-engine/pull/25)
 
   * Load resource providers instead of register providers 
 
-Github PR: [ emqx/emqx-rule-engine#26 ](https://github.com/emqx/emqx-rule-engine/pull/26)
+Github PR: [emqx/emqx-rule-engine#26](https://github.com/emqx/emqx-rule-engine/pull/26)
 
   * Improve the input data for actions 
 
-Github PR: [ emqx/emqx-rule-engine#27 ](https://github.com/emqx/emqx-rule-engine/pull/27)
+Github PR: [emqx/emqx-rule-engine#27](https://github.com/emqx/emqx-rule-engine/pull/27)
 
 
 
@@ -1360,7 +1360,7 @@ Bug fixes:
 
   * Fix start fail after changing log.rotation.size 
 
-Github PR: [ emqx/emqx-rel#336 ](https://github.com/emqx/emqx-rel/pull/336)
+Github PR: [emqx/emqx-rel#336](https://github.com/emqx/emqx-rel/pull/336)
 
 
 
@@ -1377,11 +1377,11 @@ Enhancements:
 
   * Redesign ` ensure_start ` and ` ensure_stop ` api of ` emqx_bridge `
 
-Github PR: [ emqx/emqx#2423 ](https://github.com/emqx/emqx/pull/2423)
+Github PR: [emqx/emqx#2423](https://github.com/emqx/emqx/pull/2423)
 
   * Expose handler of ` emqx_bridge `
 
-Github PR: [ emqx/emqx#2414 ](https://github.com/emqx/emqx/pull/2414)
+Github PR: [emqx/emqx#2414](https://github.com/emqx/emqx/pull/2414)
 
 
 
@@ -1390,11 +1390,11 @@ Bug fixes:
 
   * Fix an issue that metrics are missed in statistics when session terminated 
 
-Github PR: [ emqx/emqx#2416 ](https://github.com/emqx/emqx/pull/2416)
+Github PR: [emqx/emqx#2416](https://github.com/emqx/emqx/pull/2416)
 
   * Check log level before tracing 
 
-Github PR: [ emqx/emqx#2408 ](https://github.com/emqx/emqx/pull/2408)
+Github PR: [emqx/emqx#2408](https://github.com/emqx/emqx/pull/2408)
 
 
 
@@ -1405,7 +1405,7 @@ Enhancements:
 
   * Support updating ` mountpoint ` from user's Web Server in credentials 
 
-Github PR: [ emqx/emqx-auth-http#116 ](https://github.com/emqx/emqx-auth-http/pull/116)
+Github PR: [emqx/emqx-auth-http#116](https://github.com/emqx/emqx-auth-http/pull/116)
 
 
 
@@ -1416,7 +1416,7 @@ Enhancements:
 
   * Remove the function that configures username in the emqx_auth_username.conf 
 
-Github PR: [ emqx/emqx-auth-username#96 ](https://github.com/emqx/emqx-auth-username/pull/96)
+Github PR: [emqx/emqx-auth-username#96](https://github.com/emqx/emqx-auth-username/pull/96)
 
 
 
@@ -1427,7 +1427,7 @@ Enhancements:
 
   * Remove the function that configures clientid in the emqx_auth_clientid.conf 
 
-Github PR: [ emqx/emqx-auth-clientid#81 ](https://github.com/emqx/emqx-auth-clientid/pull/81)
+Github PR: [emqx/emqx-auth-clientid#81](https://github.com/emqx/emqx-auth-clientid/pull/81)
 
 
 
@@ -1438,7 +1438,7 @@ Enhancements:
 
   * Support Posix-Style CLI in rule engine CLI 
 
-Github PR: [ emqx/emqx-rule-engine#23 ](https://github.com/emqx/emqx-rule-engine/pull/23)
+Github PR: [emqx/emqx-rule-engine#23](https://github.com/emqx/emqx-rule-engine/pull/23)
 
 
 
@@ -1447,7 +1447,7 @@ Bug fixes:
 
   * Fix some Bugs in HTTP APIs 
 
-Github PR: [ emqx/emqx-rule-engine#21 ](https://github.com/emqx/emqx-rule-engine/pull/21)
+Github PR: [emqx/emqx-rule-engine#21](https://github.com/emqx/emqx-rule-engine/pull/21)
 
 
 
@@ -1458,7 +1458,7 @@ Bug fixes:
 
   * Fix issue that EMQ X boots abortively on CentOS 
 
-Github Commit: [ emqx/emqx-packages#64760523ea29ca0ad1d85b763f0e8a8e6954db9c ](https://github.com/emqx/emqx-packages/commit/64760523ea29ca0ad1d85b763f0e8a8e6954db9c)
+Github Commit: [emqx/emqx-packages#64760523ea29ca0ad1d85b763f0e8a8e6954db9c](https://github.com/emqx/emqx-packages/commit/64760523ea29ca0ad1d85b763f0e8a8e6954db9c)
 
 
 
@@ -1469,11 +1469,11 @@ Enhancements:
 
   * Add interactive web interface for Rule-Engine 
 
-Github PR: [ emqx/emqx-dashboard#50 ](https://github.com/emqx/emqx-dashboard/pull/50)
+Github PR: [emqx/emqx-dashboard#50](https://github.com/emqx/emqx-dashboard/pull/50)
 
   * Support managing users of Dashboard in cluster 
 
-Github PR: [ emqx/emqx-dashboard#48 ](https://github.com/emqx/emqx-dashboard/pull/48)
+Github PR: [emqx/emqx-dashboard#48](https://github.com/emqx/emqx-dashboard/pull/48)
 
 
 
@@ -1490,15 +1490,15 @@ Enhancements:
 
   * Support compress websocket message 
 
-Github PR: [ emqx/emqx#2356 ](https://github.com/emqx/emqx/pull/2356)
+Github PR: [emqx/emqx#2356](https://github.com/emqx/emqx/pull/2356)
 
   * etcd  cluster support SSL connection 
 
-Github PR: [ emqx/emqx#2367 ](https://github.com/emqx/emqx/pull/2367)
+Github PR: [emqx/emqx#2367](https://github.com/emqx/emqx/pull/2367)
 
   * Support proxy protocol of websocket 
 
-Github PR: [ emqx/emqx#2372 ](https://github.com/emqx/emqx/pull/2372)
+Github PR: [emqx/emqx#2372](https://github.com/emqx/emqx/pull/2372)
 
 
 
@@ -1507,19 +1507,19 @@ Bug fixes:
 
   * Fix the error logic in the monitor modules 
 
-Github PR: [ emqx/emqx#2353 ](https://github.com/emqx/emqx/pull/2353)
+Github PR: [emqx/emqx#2353](https://github.com/emqx/emqx/pull/2353)
 
   * Fix  allow_anonymous  behavoir error 
 
-Github PR: [ emqx/emqx#2355 ](https://github.com/emqx/emqx/pull/2355)
+Github PR: [emqx/emqx#2355](https://github.com/emqx/emqx/pull/2355)
 
   * Fix drain the session process mailbox handling error 
 
-Github PR: [ emqx/emqx#2373 ](https://github.com/emqx/emqx/pull/2373)
+Github PR: [emqx/emqx#2373](https://github.com/emqx/emqx/pull/2373)
 
   * Fix the problem that  message.dropped  hook will not be triggered in some cases 
 
-Github PR: [ emqx/emqx#2399 ](https://github.com/emqx/emqx/pull/2399)
+Github PR: [emqx/emqx#2399](https://github.com/emqx/emqx/pull/2399)
 
 
 
@@ -1530,7 +1530,7 @@ Enhancements:
 
   * Support for using Subject Name and Common Name for authentication 
 
-Github PR: [ emqx/emqx-auth-http ](https://github.com/emqx/emqx-auth-http/pull/113)
+Github PR: [emqx/emqx-auth-http](https://github.com/emqx/emqx-auth-http/pull/113)
 
 
 
@@ -1541,7 +1541,7 @@ Enhancements:
 
   * Support for operating ClientId via REST API 
 
-Github PR: [ emqx/emqx-auth-clientid ](https://github.com/emqx/emqx-auth-clientid/pull/78)
+Github PR: [emqx/emqx-auth-clientid](https://github.com/emqx/emqx-auth-clientid/pull/78)
 
 
 
@@ -1552,7 +1552,7 @@ Enhancements:
 
   * Support to verify the specified claims fields 
 
-Github PR: [ emqx/emqx-auth-jwt#69 ](https://github.com/emqx/emqx-auth-jwt/pull/69)
+Github PR: [emqx/emqx-auth-jwt#69](https://github.com/emqx/emqx-auth-jwt/pull/69)
 
 
 
@@ -1563,7 +1563,7 @@ Enhancements:
 
   * Improve rule engine 
 
-Github Repository: [ emqx/emqx-rule-engine ](https://github.com/emqx/emqx-rule-engine)
+Github Repository: [emqx/emqx-rule-engine](https://github.com/emqx/emqx-rule-engine)
 
 
 
@@ -1574,11 +1574,11 @@ Bug fixes:
 
   * Fix windows boot twice problem 
 
-Github Commit: [ emqx/emqx-rel#75de3441db9bf03d489609dcbb340a74de263508 ](https://github.com/emqx/emqx-rel/commit/75de3441db9bf03d489609dcbb340a74de263508)
+Github Commit: [emqx/emqx-rel#75de3441db9bf03d489609dcbb340a74de263508](https://github.com/emqx/emqx-rel/commit/75de3441db9bf03d489609dcbb340a74de263508)
 
   * Fix the problem when boot path contains spaces or chinese character 
 
-Github Commit: [ emqx/emqx-rel#75de3441db9bf03d489609dcbb340a74de263508 ](https://github.com/emqx/emqx-rel/commit/75de3441db9bf03d489609dcbb340a74de263508)
+Github Commit: [emqx/emqx-rel#75de3441db9bf03d489609dcbb340a74de263508](https://github.com/emqx/emqx-rel/commit/75de3441db9bf03d489609dcbb340a74de263508)
 
 
 
@@ -1595,7 +1595,7 @@ Enhancements:
 
   * Improve plugin discovery mechanism 
 
-Github PR: [ emqx/emqx#2339 ](https://github.com/emqx/emqx/pull/2339)
+Github PR: [emqx/emqx#2339](https://github.com/emqx/emqx/pull/2339)
 
 
 
@@ -1604,15 +1604,15 @@ Bug fixes:
 
   * Fix bug of clearing alarm repeatedly 
 
-Github PR: [ emqx/emqx#2332 ](https://github.com/emqx/emqx/pull/2332)
+Github PR: [emqx/emqx#2332](https://github.com/emqx/emqx/pull/2332)
 
   * Fix bug of parsing sticky package failure 
 
-Github PR: [ emqx/emqx#2333 ](https://github.com/emqx/emqx/pull/2333)
+Github PR: [emqx/emqx#2333](https://github.com/emqx/emqx/pull/2333)
 
   * Set DUP flag in PUBLISH packet correctly 
 
-Github PR: [ emqx/emqx#2337 ](https://github.com/emqx/emqx/pull/2337)
+Github PR: [emqx/emqx#2337](https://github.com/emqx/emqx/pull/2337)
 
 
 
@@ -1623,7 +1623,7 @@ Enhancements:
 
   * Implement prototype of rule engine 
 
-Github Repository: [ emqx/emqx-rule-engine ](https://github.com/emqx/emqx-rule-engine)
+Github Repository: [emqx/emqx-rule-engine](https://github.com/emqx/emqx-rule-engine)
 
 
 
@@ -1634,7 +1634,7 @@ Enhancements:
 
   * Add auth and acl hook 
 
-Github PR: [ emqx/emqx-lua-hook#63 ](https://github.com/emqx/emqx-lua-hook/pull/63)
+Github PR: [emqx/emqx-lua-hook#63](https://github.com/emqx/emqx-lua-hook/pull/63)
 
 
 
@@ -1645,7 +1645,7 @@ Bug fixes:
 
   * Fix bug that ACL could not be loaded 
 
-Github PR: [ emqx/emqx-auth-mysql#130 ](https://github.com/emqx/emqx-auth-mysql/pull/130) , [ emqx/emqx-auth-mysql#128 ](https://github.com/emqx/emqx-auth-mysql/pull/128)
+Github PR: [emqx/emqx-auth-mysql#130](https://github.com/emqx/emqx-auth-mysql/pull/130) , [emqx/emqx-auth-mysql#128](https://github.com/emqx/emqx-auth-mysql/pull/128)
 
 
 
@@ -1662,15 +1662,15 @@ Enhancements:
 
   * Improve emqx hooks and credentials 
 
-Github PR: [ emqx/emqx#2309 ](https://github.com/emqx/emqx/pull/2309)
+Github PR: [emqx/emqx#2309](https://github.com/emqx/emqx/pull/2309)
 
   * Support TLS/DTLS PSK 
 
-Github PR: [ emqx/emqx#2297 ](https://github.com/emqx/emqx/pull/2297)
+Github PR: [emqx/emqx#2297](https://github.com/emqx/emqx/pull/2297)
 
   * Move request response out of emqx client 
 
-Github PR: [ emqx/emqx#2293 ](https://github.com/emqx/emqx/pull/2293)
+Github PR: [emqx/emqx#2293](https://github.com/emqx/emqx/pull/2293)
 
 
 
@@ -1679,23 +1679,23 @@ Bug fixes:
 
   * Broker crash when forwarding message in cluster 
 
-Github issues: [ emqx/emqx#2290 ](https://github.com/emqx/emqx/issues/2290)
+Github issues: [emqx/emqx#2290](https://github.com/emqx/emqx/issues/2290)
 
-Github PR: [ emqx/emqx#2320 ](https://github.com/emqx/emqx/pull/2320)
+Github PR: [emqx/emqx#2320](https://github.com/emqx/emqx/pull/2320)
 
   * Unload emqx_alarm_handler before unloading plugins when shutting down 
 
-Github PR: [ emqx/emqx#2316 ](https://github.com/emqx/emqx/pull/2316)
+Github PR: [emqx/emqx#2316](https://github.com/emqx/emqx/pull/2316)
 
   * Fixed a bug related to emqx bridge 
 
-Github issues: [ emqx/emqx#2312 ](https://github.com/emqx/emqx/issues/2312)
+Github issues: [emqx/emqx#2312](https://github.com/emqx/emqx/issues/2312)
 
-Github PR: [ emqx/emqx#2313 ](https://github.com/emqx/emqx/pull/2313)
+Github PR: [emqx/emqx#2313](https://github.com/emqx/emqx/pull/2313)
 
   * Eliminate inflight full error 
 
-Github PR: [ emqx/emqx#2281 ](https://github.com/emqx/emqx/pull/2281)
+Github PR: [emqx/emqx#2281](https://github.com/emqx/emqx/pull/2281)
 
 
 
@@ -1706,21 +1706,21 @@ Enhancements:
 
   * Add default application secret configuration 
 
-Github PR: [ emqx/emqx-management#58 ](https://github.com/emqx/emqx-management/pull/58)
+Github PR: [emqx/emqx-management#58](https://github.com/emqx/emqx-management/pull/58)
 
   * Fix plugin reload error when plugin is not started 
 
-Github PR: [ emqx/emqx-management#59 ](https://github.com/emqx/emqx-management/pull/59)
+Github PR: [emqx/emqx-management#59](https://github.com/emqx/emqx-management/pull/59)
 
   * Move plugin-related HTTP APIs to each plugin 
 
-Github PR: [ emqx/emqx-management#57 ](https://github.com/emqx/emqx-management/pull/57)
+Github PR: [emqx/emqx-management#57](https://github.com/emqx/emqx-management/pull/57)
 
   * Fix io/max_fds undefined issue 
 
-Github issues: [ emqx/emqx-management#2222 ](https://github.com/emqx/emqx-management/issues/2222)
+Github issues: [emqx/emqx-management#2222](https://github.com/emqx/emqx-management/issues/2222)
 
-Github PR: [ emqx/emqx-management#54 ](https://github.com/emqx/emqx-management/pull/54)
+Github PR: [emqx/emqx-management#54](https://github.com/emqx/emqx-management/pull/54)
 
 
 
@@ -1731,7 +1731,7 @@ Enhancements:
 
   * Improve the JWT Auth plugin 
 
-Github PR: [ emqx/emqx-auth-jwt#63 ](https://github.com/emqx/emqx-auth-jwt/pull/63)
+Github PR: [emqx/emqx-auth-jwt#63](https://github.com/emqx/emqx-auth-jwt/pull/63)
 
 
 
@@ -1742,7 +1742,7 @@ Enhancements:
 
   * Add CURD HTTP API for managing usernames 
 
-Github PR: [ emqx/emqx-auth-username#82 ](https://github.com/emqx/emqx-auth-username/pull/82)
+Github PR: [emqx/emqx-auth-username#82](https://github.com/emqx/emqx-auth-username/pull/82)
 
 
 
@@ -1753,9 +1753,9 @@ Bug fixes:
 
   * Fix bug when formatting message 
 
-Github issues: [ emqx/emqx-web-hook#93 ](https://github.com/emqx/emqx-web-hook/issues/93)
+Github issues: [emqx/emqx-web-hook#93](https://github.com/emqx/emqx-web-hook/issues/93)
 
-Github PR: [ emqx/emqx-web-hook#96 ](https://github.com/emqx/emqx-web-hook/pull/96)
+Github PR: [emqx/emqx-web-hook#96](https://github.com/emqx/emqx-web-hook/pull/96)
 
 
 
@@ -1766,7 +1766,7 @@ Bug fixes:
 
   * Filter the API for plugins that not started 
 
-Github PR: [ emqx/minirest#12 ](https://github.com/emqx/minirest/pull/12)
+Github PR: [emqx/minirest#12](https://github.com/emqx/minirest/pull/12)
 
 
 
@@ -1777,7 +1777,7 @@ Bug fixes:
 
   * Fix raw socket flags for 'gen_tcp' 
 
-Github PR: [ emqx/gen_rpc#5 ](https://github.com/emqx/gen_rpc/pull/5)
+Github PR: [emqx/gen_rpc#5](https://github.com/emqx/gen_rpc/pull/5)
 
 
 
@@ -1794,19 +1794,19 @@ Enhancements:
 
   * Introduce new bridge implement 
 
-Github PR: [ emqx/emqx#2199 ](https://github.com/emqx/emqx/pull/2199)
+Github PR: [emqx/emqx#2199](https://github.com/emqx/emqx/pull/2199)
 
   * Support batch delivery 
 
-Github PR: [ emqx/emqx#2253 ](https://github.com/emqx/emqx/pull/2253)
+Github PR: [emqx/emqx#2253](https://github.com/emqx/emqx/pull/2253)
 
   * Improve the  emqx_connection  module by using gen_statem behaviour 
 
-Github PR: [ emqx/emqx#2235 ](https://github.com/emqx/emqx/pull/2235)
+Github PR: [emqx/emqx#2235](https://github.com/emqx/emqx/pull/2235)
 
   * Add monitors and improve alarm handler 
 
-Github PR: [ emqx/emqx#2266 ](https://github.com/emqx/emqx/pull/2266)
+Github PR: [emqx/emqx#2266](https://github.com/emqx/emqx/pull/2266)
 
 
 
@@ -1817,7 +1817,7 @@ Enhancements:
 
   * Support redis cluster 
 
-Github PR: [ emqx/emqx-auth-redis#93 ](https://github.com/emqx/emqx-auth-redis/pull/93)
+Github PR: [emqx/emqx-auth-redis#93](https://github.com/emqx/emqx-auth-redis/pull/93)
 
 
 
@@ -1828,7 +1828,7 @@ Enhancements:
 
   * Add test cases for  emqx_dashboard_cli  module 
 
-Github PR: [ emqx/emqx-dashboard#34 ](https://github.com/emqx/emqx-dashboard/pull/34)
+Github PR: [emqx/emqx-dashboard#34](https://github.com/emqx/emqx-dashboard/pull/34)
 
 
 
@@ -1839,7 +1839,7 @@ Enhancements:
 
   * Add new cli to update username 
 
-Github PR: [ emqx/emqx-auth-username#74 ](https://github.com/emqx/emqx-auth-username/pull/74)
+Github PR: [emqx/emqx-auth-username#74](https://github.com/emqx/emqx-auth-username/pull/74)
 
 
 
@@ -1850,7 +1850,7 @@ Enhancements:
 
   * Add new cli to update clientid 
 
-Github PR: [ emqx/emqx-auth-clientid#59 ](https://github.com/emqx/emqx-auth-clientid/pull/59)
+Github PR: [emqx/emqx-auth-clientid#59](https://github.com/emqx/emqx-auth-clientid/pull/59)
 
 
 
@@ -1867,35 +1867,35 @@ Enhancements:
 
   * Add +L vm args for reducing some memory for emqx edge 
 
-Github PR: [ emqx/emqx#2110 ](https://github.com/emqx/emqx/pull/2110)
+Github PR: [emqx/emqx#2110](https://github.com/emqx/emqx/pull/2110)
 
   * Change logger level in a single command 
 
-Github PR: [ emqx/emqx#2115 ](https://github.com/emqx/emqx/pull/2115)
+Github PR: [emqx/emqx#2115](https://github.com/emqx/emqx/pull/2115)
 
   * Refactor the emqx bridge; Support bridge message persistence. 
 
-Github PR: [ emqx/emqx#2160 ](https://github.com/emqx/emqx/pull/2160) , [ emqx/emqx#2117 ](https://github.com/emqx/emqx/pull/2117) , [ emqx/emqx#2113 ](https://github.com/emqx/emqx/pull/2113) , [ emqx/emqx#2108 ](https://github.com/emqx/emqx/pull/2108) , [ emqx/emqx#2053 ](https://github.com/emqx/emqx/pull/2053)
+Github PR: [emqx/emqx#2160](https://github.com/emqx/emqx/pull/2160) , [emqx/emqx#2117](https://github.com/emqx/emqx/pull/2117) , [emqx/emqx#2113](https://github.com/emqx/emqx/pull/2113) , [emqx/emqx#2108](https://github.com/emqx/emqx/pull/2108) , [emqx/emqx#2053](https://github.com/emqx/emqx/pull/2053)
 
   * Optimize route matching 
 
-Github PR: [ emqx/emqx#2124 ](https://github.com/emqx/emqx/pull/2124)
+Github PR: [emqx/emqx#2124](https://github.com/emqx/emqx/pull/2124)
 
   * Improve the design of 'emqx_client' module 
 
-Github PR: [ emqx/emqx#2137 ](https://github.com/emqx/emqx/pull/2137)
+Github PR: [emqx/emqx#2137](https://github.com/emqx/emqx/pull/2137)
 
   * Improve the design of 'emqx_pool' module 
 
-Github PR: [ emqx/emqx#2138 ](https://github.com/emqx/emqx/pull/2138)
+Github PR: [emqx/emqx#2138](https://github.com/emqx/emqx/pull/2138)
 
   * Improve shared subscribe dispatch implementation 
 
-Github PR: [ emqx/emqx#2144 ](https://github.com/emqx/emqx/pull/2144)
+Github PR: [emqx/emqx#2144](https://github.com/emqx/emqx/pull/2144)
 
   * Re-generate the configuration when restarting emqx 
 
-Github PR: [ emqx/emqx#2175 ](https://github.com/emqx/emqx/pull/2175)
+Github PR: [emqx/emqx#2175](https://github.com/emqx/emqx/pull/2175)
 
 
 
@@ -1904,11 +1904,11 @@ Bug Fixes:
 
   * Fix crash if peer closed the connection 
 
-Github PR: [ emqx/emqx#2120 ](https://github.com/emqx/emqx/pull/2120)
+Github PR: [emqx/emqx#2120](https://github.com/emqx/emqx/pull/2120)
 
   * Fix the bug that send will message unexpectedly 
 
-Github PR: [ emqx/emqx#2156 ](https://github.com/emqx/emqx/pull/2156)
+Github PR: [emqx/emqx#2156](https://github.com/emqx/emqx/pull/2156)
 
 
 
@@ -1919,7 +1919,7 @@ Bug Fixes:
 
   * Remove authentication for LwM2M 
 
-GitHub PR: [ emqx/emqx-lwm2m#14 ](https://github.com/emqx/emqx-lwm2m/pull/14)
+GitHub PR: [emqx/emqx-lwm2m#14](https://github.com/emqx/emqx-lwm2m/pull/14)
 
 
 
@@ -1930,7 +1930,7 @@ Enhancements:
 
   * Support optional encryption modes 
 
-GitHub PR: [ emqx/emqx-auth-usernmae#64 ](https://github.com/emqx/emqx-auth-username/pull/64)
+GitHub PR: [emqx/emqx-auth-usernmae#64](https://github.com/emqx/emqx-auth-username/pull/64)
 
 
 
@@ -1941,7 +1941,7 @@ Enhancements:
 
   * Support optional encryption modes 
 
-GitHub PR: [ emqx/emqx-auth-clientid#52 ](https://github.com/emqx/emqx-auth-username/pull/52)
+GitHub PR: [emqx/emqx-auth-clientid#52](https://github.com/emqx/emqx-auth-username/pull/52)
 
 
 
@@ -1952,7 +1952,7 @@ Enhancements:
 
   * Add a new CLI 'plugins reload \<Name>'; Re-generate the configuration when reloading emqx plugin 
 
-Github PR: [ emqx/emqx-management#30 ](https://github.com/emqx/emqx-management/pull/30)
+Github PR: [emqx/emqx-management#30](https://github.com/emqx/emqx-management/pull/30)
 
 
 
@@ -1969,35 +1969,35 @@ Enhancements:
 
   * Move addtional vm args to a separate vm.args file 
 
-Github PR: [ emqx/emqx#2033 ](https://github.com/emqx/emqx/pull/2033) , [ emqx/emqx#2057 ](https://github.com/emqx/emqx/pull/2057) , [ emqx/emqx#2070 ](https://github.com/emqx/emqx/pull/2070)
+Github PR: [emqx/emqx#2033](https://github.com/emqx/emqx/pull/2033) , [emqx/emqx#2057](https://github.com/emqx/emqx/pull/2057) , [emqx/emqx#2070](https://github.com/emqx/emqx/pull/2070)
 
   * Add will topic validation and acl check 
 
-Github PR: [ emqx/emqx#2075 ](https://github.com/emqx/emqx/pull/2075)
+Github PR: [emqx/emqx#2075](https://github.com/emqx/emqx/pull/2075)
 
   * Add option to disconnect client in case of ACL denied 
 
-Github PR: [ emqx/emqx#2059 ](https://github.com/emqx/emqx/pull/2059)
+Github PR: [emqx/emqx#2059](https://github.com/emqx/emqx/pull/2059)
 
   * Implement a new session supervisor 
 
-Github PR: [ emqx/emqx#2077 ](https://github.com/emqx/emqx/pull/2077)
+Github PR: [emqx/emqx#2077](https://github.com/emqx/emqx/pull/2077)
 
   * Add 'active_n' option to optimize the CPU usage of  emqx_connection 
 
-Github PR: [ emqx/emqx#2060 ](https://github.com/emqx/emqx/pull/2060)
+Github PR: [emqx/emqx#2060](https://github.com/emqx/emqx/pull/2060)
 
   * Supports batch processing 'DOWN' events 
 
-Github PR: [ emqx/emqx#2060 ](https://github.com/emqx/emqx/pull/2060)
+Github PR: [emqx/emqx#2060](https://github.com/emqx/emqx/pull/2060)
 
   * Add sharding for subscription tables 
 
-Github PR: [ emqx/emqx#2044 ](https://github.com/emqx/emqx/pull/2044)
+Github PR: [emqx/emqx#2044](https://github.com/emqx/emqx/pull/2044)
 
   * Implement a new 'emqx_gc' module 
 
-Github PR: [ emqx/emqx#2090 ](https://github.com/emqx/emqx/pull/2090)
+Github PR: [emqx/emqx#2090](https://github.com/emqx/emqx/pull/2090)
 
 
 
@@ -2006,11 +2006,11 @@ Bug Fixes:
 
   * Fix bug for  Topic Alias Maximum 
 
-Github PR: [ emqx/emqx#2074 ](https://github.com/emqx/emqx/pull/2074)
+Github PR: [emqx/emqx#2074](https://github.com/emqx/emqx/pull/2074)
 
   * Fix a bug that would not send a will message in some cases 
 
-Github PR: [ emqx/emqx#2068 ](https://github.com/emqx/emqx/pull/2068)
+Github PR: [emqx/emqx#2068](https://github.com/emqx/emqx/pull/2068)
 
 
 
@@ -2021,7 +2021,7 @@ Enhancements:
 
   * Better design 
 
-GitHub PR: [ emqx/emqx-auth-ldap#46 ](https://github.com/emqx/emqx-auth-ldap/pull/46)
+GitHub PR: [emqx/emqx-auth-ldap#46](https://github.com/emqx/emqx-auth-ldap/pull/46)
 
 
 
@@ -2032,7 +2032,7 @@ Bug Fixes:
 
   * Make all test cases pass 
 
-GitHub PR: [ emqx/emqx-lua-hook#45 ](https://github.com/emqx/emqx-lua-hook/pull/45)
+GitHub PR: [emqx/emqx-lua-hook#45](https://github.com/emqx/emqx-lua-hook/pull/45)
 
 
 
@@ -2043,7 +2043,7 @@ Enhancements:
 
   * Add test cases for rest api and better design for the format of response 
 
-GitHub PR: [ emqx/emqx-management#21 ](https://github.com/emqx/emqx-management/pull/21)
+GitHub PR: [emqx/emqx-management#21](https://github.com/emqx/emqx-management/pull/21)
 
 
 
@@ -2060,15 +2060,15 @@ Enhancements:
 
   * Reduce dependencies' size 
 
-Github PR: [ emqx/emqx#1981 ](https://github.com/emqx/emqx/pull/1981)
+Github PR: [emqx/emqx#1981](https://github.com/emqx/emqx/pull/1981)
 
   * Support batch update of metrics 
 
-Github PR: [ emqx/emqx#2001 ](https://github.com/emqx/emqx/pull/2001)
+Github PR: [emqx/emqx#2001](https://github.com/emqx/emqx/pull/2001)
 
   * Optimize read/write concurrency of  mnesia/ets  tables 
 
-Github PR: [ emqx/emqx#2006 ](https://github.com/emqx/emqx/pull/2006)
+Github PR: [emqx/emqx#2006](https://github.com/emqx/emqx/pull/2006)
 
 
 
@@ -2077,15 +2077,15 @@ Bug Fixes:
 
   * Fix 'function_clause' in  emqx_router 
 
-Github PR: [ emqx/emqx#1998 ](https://github.com/emqx/emqx/pull/1998)
+Github PR: [emqx/emqx#1998](https://github.com/emqx/emqx/pull/1998)
 
   * Remove  simple log handler  at startup 
 
-Github PR: [ emqx/emqx#2000 ](https://github.com/emqx/emqx/pull/2000)
+Github PR: [emqx/emqx#2000](https://github.com/emqx/emqx/pull/2000)
 
   * Fix the atom leaks in  emqx_reason_codes  module 
 
-Github PR: [ emqx/emqx#2008 ](https://github.com/emqx/emqx/pull/2008)
+Github PR: [emqx/emqx#2008](https://github.com/emqx/emqx/pull/2008)
 
 
 
@@ -2096,7 +2096,7 @@ Enhancements:
 
   * Support  Rebar3 
 
-GitHub PR: [ emqx/emqx-passwd#6 ](https://github.com/emqx/emqx-passwd/pull/6)
+GitHub PR: [emqx/emqx-passwd#6](https://github.com/emqx/emqx-passwd/pull/6)
 
 
 
@@ -2107,7 +2107,7 @@ Enhancements:
 
   * Support  Rebar3 
 
-GitHub PR: [ emqx/emqx-web-hook#77 ](https://github.com/emqx/emqx-web-hook/pull/77)
+GitHub PR: [emqx/emqx-web-hook#77](https://github.com/emqx/emqx-web-hook/pull/77)
 
 
 
@@ -2116,7 +2116,7 @@ Bug Fixes:
 
   * username  and  clientid  in http request is empty in  emqx-web-hook 
 
-GitHub PR: [ emqx/emqx-web-hook#77 ](https://github.com/emqx/emqx-web-hook/pull/77)
+GitHub PR: [emqx/emqx-web-hook#77](https://github.com/emqx/emqx-web-hook/pull/77)
 
 
 
@@ -2127,7 +2127,7 @@ Bug Fixes:
 
   * Firefox browser can not copy application info. 
 
-GitHub PR: [ emqx/emqx-dashboard#12 ](https://github.com/emqx/emqx-dashboard/pull/12)
+GitHub PR: [emqx/emqx-dashboard#12](https://github.com/emqx/emqx-dashboard/pull/12)
 
 
 
@@ -2138,7 +2138,7 @@ Bug Fixes:
 
   * Fix the crash caused by  clients  CLI. 
 
-GitHub PR: [ emqx/emqx-management#16 ](https://github.com/emqx/emqx-management/pull/16)
+GitHub PR: [emqx/emqx-management#16](https://github.com/emqx/emqx-management/pull/16)
 
 
 
@@ -2155,27 +2155,27 @@ Enhancements:
 
   * Add  ignore_loop_deliver  flag for client with  MQTT v3.1.1  to avoid loop delivery 
 
-Github PR: [ emqx/emqx#1964 ](https://github.com/emqx/emqx/pull/1964)
+Github PR: [emqx/emqx#1964](https://github.com/emqx/emqx/pull/1964)
 
   * Support using  username  to replace  client_id  , disabled by default 
 
-Github PR: [ emqx/emqx#1961 ](https://github.com/emqx/emqx/pull/1961)
+Github PR: [emqx/emqx#1961](https://github.com/emqx/emqx/pull/1961)
 
   * Enable  emqx.log  by default 
 
-Github PR: [ emqx/emqx#1979 ](https://github.com/emqx/emqx/pull/1979)
+Github PR: [emqx/emqx#1979](https://github.com/emqx/emqx/pull/1979)
 
   * Add  CLI  for log level 
 
-Github PR: [ emqx/emqx#1977 ](https://github.com/emqx/emqx/pull/1977)
+Github PR: [emqx/emqx#1977](https://github.com/emqx/emqx/pull/1977)
 
   * Improve  CLI  for log tracer 
 
-Github PR: [ emqx/emqx#1973 ](https://github.com/emqx/emqx/pull/1973)
+Github PR: [emqx/emqx#1973](https://github.com/emqx/emqx/pull/1973)
 
   * Optimize log performance 
 
-Github PR: [ emqx/emqx#1960 ](https://github.com/emqx/emqx/pull/1960)
+Github PR: [emqx/emqx#1960](https://github.com/emqx/emqx/pull/1960)
 
 
 
@@ -2184,15 +2184,15 @@ Bug Fixes:
 
   * Fix type validation for  User-Property 
 
-Github PR: [ emqx/emqx#1969 ](https://github.com/emqx/emqx/pull/1969)
+Github PR: [emqx/emqx#1969](https://github.com/emqx/emqx/pull/1969)
 
   * Fix wrong description for  max_topic_alias 
 
-Github PR: [ emqx/emqx#1962 ](https://github.com/emqx/emqx/pull/1962)
+Github PR: [emqx/emqx#1962](https://github.com/emqx/emqx/pull/1962)
 
   * Update proc meta-data for empty  client_id 
 
-Github PR: [ emqx/emqx#1980 ](https://github.com/emqx/emqx/pull/1980)
+Github PR: [emqx/emqx#1980](https://github.com/emqx/emqx/pull/1980)
 
 
 
@@ -2203,7 +2203,7 @@ Enhancements:
 
   * Support  Rebar3 
 
-GitHub PR: [ emqx/emqx-coap#89 ](https://github.com/emqx/emqx-coap/pull/89)
+GitHub PR: [emqx/emqx-coap#89](https://github.com/emqx/emqx-coap/pull/89)
 
 
 
@@ -2212,7 +2212,7 @@ Bug fixes:
 
   * Fix bad using of  sendfun 
 
-GitHub PR: [ emqx/emqx-coap#89 ](https://github.com/emqx/emqx-coap/pull/89)
+GitHub PR: [emqx/emqx-coap#89](https://github.com/emqx/emqx-coap/pull/89)
 
 
 
@@ -2223,7 +2223,7 @@ Bug fixes:
 
   * Fix the unstable rest api for lookup connection in cluster mode 
 
-GitHub PR: [ emqx/emqx-management#11 ](https://github.com/emqx/emqx-management/pull/11)
+GitHub PR: [emqx/emqx-management#11](https://github.com/emqx/emqx-management/pull/11)
 
 
 
@@ -2234,7 +2234,7 @@ Bug Fixes:
 
   * Fix bug in distributed lock 
 
-GitHub PR: [ emqx/ekka#39 ](https://github.com/emqx/ekka/pull/39)
+GitHub PR: [emqx/ekka#39](https://github.com/emqx/ekka/pull/39)
 
 
 
@@ -2245,7 +2245,7 @@ Enhancements:
 
   * Support  Rebar3 
 
-GitHub PR: [ emqx/minirest#6 ](https://github.com/emqx/minirest/pull/6)
+GitHub PR: [emqx/minirest#6](https://github.com/emqx/minirest/pull/6)
 
 
 
@@ -2256,7 +2256,7 @@ Bug fixes:
 
   * Change default logger to  std_error 
 
-GitHub PR: [ emqx/cuttlefish#4 ](https://github.com/emqx/cuttlefish/pull/4)
+GitHub PR: [emqx/cuttlefish#4](https://github.com/emqx/cuttlefish/pull/4)
 
 
 
@@ -2267,11 +2267,11 @@ Enhancements:
 
   * Build with  cuttlefish 
 
-GitHub PR: [ emqx/emqx-rel#253 ](https://github.com/emqx/emqx-rel/pull/253)
+GitHub PR: [emqx/emqx-rel#253](https://github.com/emqx/emqx-rel/pull/253)
 
   * delay_publish  plugin is disabled by default 
 
-GitHub PR: [ emqx/emqx-rel#251 ](https://github.com/emqx/emqx-rel/pull/251)
+GitHub PR: [emqx/emqx-rel#251](https://github.com/emqx/emqx-rel/pull/251)
 
 
 
@@ -2288,19 +2288,19 @@ Enhancements:
 
   * Replace macro  QOS$i  to  QOS_$i 
 
-Github PR: [ emqx/emqx#1948 ](https://github.com/emqx/emqx/pull/1948)
+Github PR: [emqx/emqx#1948](https://github.com/emqx/emqx/pull/1948)
 
   * Fix config descriptions of  ACL cache 
 
-Github PR: [ emqx/emqx#1950 ](https://github.com/emqx/emqx/pull/1950)
+Github PR: [emqx/emqx#1950](https://github.com/emqx/emqx/pull/1950)
 
   * Rewrite  emqx_mqueue  module 
 
-Github PR: [ emqx/emqx#1926 ](https://github.com/emqx/emqx/pull/1926)
+Github PR: [emqx/emqx#1926](https://github.com/emqx/emqx/pull/1926)
 
   * Change  lager  to  logger 
 
-Github PR: [ emqx/emqx#1898 ](https://github.com/emqx/emqx/pull/1898)
+Github PR: [emqx/emqx#1898](https://github.com/emqx/emqx/pull/1898)
 
 
 
@@ -2309,15 +2309,15 @@ Bug Fixes:
 
   * Fix 'badarg' bug with duplicate subscriptions 
 
-Github PR: [ emqx/emqx#1943 ](https://github.com/emqx/emqx/pull/1943)
+Github PR: [emqx/emqx#1943](https://github.com/emqx/emqx/pull/1943)
 
   * Fix 'badarg' in  io_lib:format/2  when 'from' field is tuple 
 
-Github PR: [ emqx/emqx#1954 ](https://github.com/emqx/emqx/pull/1954)
+Github PR: [emqx/emqx#1954](https://github.com/emqx/emqx/pull/1954)
 
   * MQTT bridge  via  TLS 
 
-Github PR: [ emqx/emqx#1949 ](https://github.com/emqx/emqx/pull/1949)
+Github PR: [emqx/emqx#1949](https://github.com/emqx/emqx/pull/1949)
 
 
 
@@ -2328,7 +2328,7 @@ Enhancements:
 
   * Improve support for  receipt  frame, and add test cases 
 
-GitHub PR: [ emqx/emqx-stomp#53 ](https://github.com/emqx/emqx-stomp/pull/53)
+GitHub PR: [emqx/emqx-stomp#53](https://github.com/emqx/emqx-stomp/pull/53)
 
 
 
@@ -2339,7 +2339,7 @@ Enhancements:
 
   * Improve support for  MQTT-SN  protocol 
 
-GitHub PR: [ emqx/emqx-sn#90 ](https://github.com/emqx/emqx-sn/pull/90)
+GitHub PR: [emqx/emqx-sn#90](https://github.com/emqx/emqx-sn/pull/90)
 
 
 
@@ -2350,7 +2350,7 @@ Bug Fixes:
 
   * Fix errors when load/unload lua hooks 
 
-GitHub PR: [ emqx/emqx-lua-hook#41 ](https://github.com/emqx/emqx-lua-hook/pull/41)
+GitHub PR: [emqx/emqx-lua-hook#41](https://github.com/emqx/emqx-lua-hook/pull/41)
 
 
 
@@ -2361,7 +2361,7 @@ Enhancements:
 
   * Add metrics 
 
-GitHub PR: [ emqx/emqx-statsd#4 ](https://github.com/emqx/emqx-statsd/pull/4)
+GitHub PR: [emqx/emqx-statsd#4](https://github.com/emqx/emqx-statsd/pull/4)
 
 
 
@@ -2372,7 +2372,7 @@ Enhancements:
 
   * Add  qos2/forward  metric 
 
-GitHub PR: [ emqx/emqx-dashboard#7 ](https://github.com/emqx/emqx-dashboard/pull/7)
+GitHub PR: [emqx/emqx-dashboard#7](https://github.com/emqx/emqx-dashboard/pull/7)
 
 
 
@@ -2383,7 +2383,7 @@ Enhancements:
 
   * Improve concurrency performance in  emqx-auth-pgsql 
 
-GitHub PR: [ emqx/emqx-auth-pgsql#94 ](https://github.com/emqx/emqx-auth-pgsql/pull/94)
+GitHub PR: [emqx/emqx-auth-pgsql#94](https://github.com/emqx/emqx-auth-pgsql/pull/94)
 
 
 
@@ -2400,15 +2400,15 @@ Enhancements:
 
   * Improve publish mechanism of  Will Message 
 
-Github PR: [ emqx/emqx#1889 ](https://github.com/emqx/emqx/pull/1889)
+Github PR: [emqx/emqx#1889](https://github.com/emqx/emqx/pull/1889)
 
   * Support for using  ssl  certificate as  MQTT  username 
 
-Github PR: [ emqx/emqx#1913 ](https://github.com/emqx/emqx/pull/1913)
+Github PR: [emqx/emqx#1913](https://github.com/emqx/emqx/pull/1913)
 
   * Improve test coverage for modules 
 
-Github PR: [ emqx/emqx#1921 ](https://github.com/emqx/emqx/pull/1921)
+Github PR: [emqx/emqx#1921](https://github.com/emqx/emqx/pull/1921)
 
 
 
@@ -2417,7 +2417,7 @@ Bug Fixes:
 
   * Fix 'bad argument' error when  emqx_broker:subscribed  is called 
 
-Github PR: [ emqx/emqx#1921 ](https://github.com/emqx/emqx/pull/1921)
+Github PR: [emqx/emqx#1921](https://github.com/emqx/emqx/pull/1921)
 
 
 
@@ -2434,19 +2434,19 @@ Enhancements:
 
   * Add  request  & response  support for  CONNECT  & CONNACK 
 
-Github PR: [ emqx/emqx#1819 ](https://github.com/emqx/emqx/pull/1819)
+Github PR: [emqx/emqx#1819](https://github.com/emqx/emqx/pull/1819)
 
   * Add warning logs for unauthorized subscribe 
 
 Gihub PR: 
 
-[ emqx/emqx#1878 ](https://github.com/emqx/emqx/pull/1878)
+[emqx/emqx#1878](https://github.com/emqx/emqx/pull/1878)
 
   * Improve coverage for  emqx_hooks  , and add test case for  emqx_mod_sup 
 
 Gihub PR: 
 
-[ emqx/emqx#1892 ](https://github.com/emqx/emqx/pull/1892)
+[emqx/emqx#1892](https://github.com/emqx/emqx/pull/1892)
 
 
 
@@ -2455,19 +2455,19 @@ Bug Fixes:
 
   * Fix the bad link to ACL doc 
 
-Github PR: [ emqx/emqx#1899 ](https://github.com/emqx/emqx/pull/1899)
+Github PR: [emqx/emqx#1899](https://github.com/emqx/emqx/pull/1899)
 
   * Fix bug in validating publish packet 
 
-Github PR: [ emqx/emqx#1888 ](https://github.com/emqx/emqx/pull/1888)
+Github PR: [emqx/emqx#1888](https://github.com/emqx/emqx/pull/1888)
 
   * Fix bugs that not deliver  Reason Code  to client 
 
-Github PR: [ emqx/emqx#1819 ](https://github.com/emqx/emqx/pull/1819)
+Github PR: [emqx/emqx#1819](https://github.com/emqx/emqx/pull/1819)
 
   * Fix compatibility problems in  emqx_client  module 
 
-Github PR: [ emqx/emqx#1819 ](https://github.com/emqx/emqx/pull/1819)
+Github PR: [emqx/emqx#1819](https://github.com/emqx/emqx/pull/1819)
 
 
 
@@ -2476,7 +2476,7 @@ Github PR: [ emqx/emqx#1819 ](https://github.com/emqx/emqx/pull/1819)
 
   * Update LwM2M plugin for EMQ X 3.0 
 
-Github PR: [ emqx/emqx-lwm2m#3 ](https://github.com/emqx/emqx-lwm2m/pull/3)
+Github PR: [emqx/emqx-lwm2m#3](https://github.com/emqx/emqx-lwm2m/pull/3)
 
 
 
@@ -2493,23 +2493,23 @@ Enhancements:
 
   * Add  max_heap_size  for process 
 
-GitHub PR: [ emqx/emqx#1855 ](https://github.com/emqx/emqx/pull/1855)
+GitHub PR: [emqx/emqx#1855](https://github.com/emqx/emqx/pull/1855)
 
   * Improve handling of  Topic Alias Maximum  and  Receive Maximum  properties 
 
-Github PR: [ emqx/emqx#1873 ](https://github.com/emqx/emqx/pull/1873)
+Github PR: [emqx/emqx#1873](https://github.com/emqx/emqx/pull/1873)
 
   * Add  Mountpoint  to zone 
 
-Github PR: [ emqx/emqx#1869 ](https://github.com/emqx/emqx/pull/1869)
+Github PR: [emqx/emqx#1869](https://github.com/emqx/emqx/pull/1869)
 
   * Improve travis build to support  rebar3 xref 
 
-Github PR: [ emqx/emqx#1861 ](https://github.com/emqx/emqx/pull/1861)
+Github PR: [emqx/emqx#1861](https://github.com/emqx/emqx/pull/1861)
 
   * Upgrade dependency  esockd  to v5.4.2 
 
-Github PR: [ emqx/emqx#1875 ](https://github.com/emqx/emqx/pull/1875)
+Github PR: [emqx/emqx#1875](https://github.com/emqx/emqx/pull/1875)
 
 
 
@@ -2518,15 +2518,15 @@ Bug Fixes:
 
   * Fix sticky strategy when two or more shared subscriber groups 
 
-GitHub PR: [ emqx/emqx#1871 ](https://github.com/emqx/emqx/pull/1871)
+GitHub PR: [emqx/emqx#1871](https://github.com/emqx/emqx/pull/1871)
 
   * Fix errors when running  make app.config 
 
-GitHub PR: [ emqx/emqx#1868 ](https://github.com/emqx/emqx/pull/1868)
+GitHub PR: [emqx/emqx#1868](https://github.com/emqx/emqx/pull/1868)
 
   * Fix incorrect args 
 
-GitHub PR: [ emqx/emqx#1866 ](https://github.com/emqx/emqx/pull/1866)
+GitHub PR: [emqx/emqx#1866](https://github.com/emqx/emqx/pull/1866)
 
 
 
@@ -2537,7 +2537,7 @@ Enhancements:
 
   * Upgrade dependency  erlang-bcrypt  to v0.5.1 and expose  check_pass  for the use of various auth plugins 
 
-GitHub PR: [ emqx/emqx-passwd#3 ](https://github.com/emqx/emqx-passwd/pull/3)
+GitHub PR: [emqx/emqx-passwd#3](https://github.com/emqx/emqx-passwd/pull/3)
 
 
 
@@ -2548,7 +2548,7 @@ Bug Fixes:
 
   * Fix incorrect matching 
 
-GitHub PR: [ emqx/emqx-delayed-publish#5 ](https://github.com/emqx/emqx-delayed-publish/pull/5)
+GitHub PR: [emqx/emqx-delayed-publish#5](https://github.com/emqx/emqx-delayed-publish/pull/5)
 
 
 
@@ -2559,7 +2559,7 @@ Enhancements:
 
   * Add $2b, $2x and $2y prefixes support 
 
-GitHub PR: [ emqx/erlang-bcrypt#1 ](https://github.com/emqx/erlang-bcrypt/pull/1)
+GitHub PR: [emqx/erlang-bcrypt#1](https://github.com/emqx/erlang-bcrypt/pull/1)
 
 
 
@@ -2570,11 +2570,11 @@ Enhancements:
 
   * Add examples for DTLS PSK 
 
-GitHub PR: [ emqx/esockd#88 ](https://github.com/emqx/esockd/pull/88)
+GitHub PR: [emqx/esockd#88](https://github.com/emqx/esockd/pull/88)
 
   * Improve start of SSL 
 
-Github PR: [ emqx/esockd#90 ](https://github.com/emqx/esockd/pull/90)
+Github PR: [emqx/esockd#90](https://github.com/emqx/esockd/pull/90)
 
 
 
@@ -2583,7 +2583,7 @@ Bug Fixes:
 
   * Fix DTLS start failure 
 
-GitHub PR: [ emqx/esockd#89 ](https://github.com/emqx/esockd/pull/89)
+GitHub PR: [emqx/esockd#89](https://github.com/emqx/esockd/pull/89)
 
 
 
@@ -2600,39 +2600,39 @@ Enhancements:
 
   * Improve the  force_gc_policy  config 
 
-GitHub issues: [ emqx/emqx#1851 ](https://github.com/emqx/emqx/pull/1851)
+GitHub issues: [emqx/emqx#1851](https://github.com/emqx/emqx/pull/1851)
 
   * Improve design of bridges 
 
-GitHub issues: [ emqx/emqx#1849 ](https://github.com/emqx/emqx/pull/1849)
+GitHub issues: [emqx/emqx#1849](https://github.com/emqx/emqx/pull/1849)
 
   * Add force shutdown policy 
 
-GitHub issues: [ emqx/emqx#1836 ](https://github.com/emqx/emqx/pull/1836)
+GitHub issues: [emqx/emqx#1836](https://github.com/emqx/emqx/pull/1836)
 
   * Add new shared subscription dispatch strategy 
 
-GitHub issues: [ emqx/emqx#1823 ](https://github.com/emqx/emqx/pull/1823)
+GitHub issues: [emqx/emqx#1823](https://github.com/emqx/emqx/pull/1823)
 
   * Improve the design of  esockd_connection_sup  module 
 
-GitHub issues: [ emqx/emqx#86 ](https://github.com/emqx/esockd/pull/86)
+GitHub issues: [emqx/emqx#86](https://github.com/emqx/esockd/pull/86)
 
   * Configurable websocket path 
 
-GitHub issues: [ emqx/emqx#1809 ](https://github.com/emqx/emqx/pull/1809) , [ emqx/emqx#1814 ](https://github.com/emqx/emqx/pull/1814)
+GitHub issues: [emqx/emqx#1809](https://github.com/emqx/emqx/pull/1809) , [emqx/emqx#1814](https://github.com/emqx/emqx/pull/1814)
 
   * Improve handling of  Message Expiry Interval  property 
 
-GitHub issues: [ emqx/emqx#1813 ](https://github.com/emqx/emqx/pull/1813)
+GitHub issues: [emqx/emqx#1813](https://github.com/emqx/emqx/pull/1813)
 
   * Support more gc enforcement policies 
 
-GitHub issues: [ emqx/emqx#1808 ](https://github.com/emqx/emqx/pull/1808)
+GitHub issues: [emqx/emqx#1808](https://github.com/emqx/emqx/pull/1808)
 
   * Rebar3 and erlang.mk dual support 
 
-GitHub issues: [ emqx/emqx#1806 ](https://github.com/emqx/emqx/pull/1806)
+GitHub issues: [emqx/emqx#1806](https://github.com/emqx/emqx/pull/1806)
 
 
 
@@ -2641,27 +2641,27 @@ Bug Fixes:
 
   * Fix incorrect value of  Maximum QoS  property 
 
-GitHub issues: [ emqx/emqx#1848 ](https://github.com/emqx/emqx/issues/1848) , [ emqx/emqx#1857 ](https://github.com/emqx/emqx/pull/1857)
+GitHub issues: [emqx/emqx#1848](https://github.com/emqx/emqx/issues/1848) , [emqx/emqx#1857](https://github.com/emqx/emqx/pull/1857)
 
   * Fix the handling for  Session Expiry Interval  property 
 
-GitHub issues: [ emqx/emqx#1833 ](https://github.com/emqx/emqx/issues/1833) , [ emqx/emqx#1834 ](https://github.com/emqx/emqx/issues/1834) , [ emqx/emqx#1845 ](https://github.com/emqx/emqx/pull/1845)
+GitHub issues: [emqx/emqx#1833](https://github.com/emqx/emqx/issues/1833) , [emqx/emqx#1834](https://github.com/emqx/emqx/issues/1834) , [emqx/emqx#1845](https://github.com/emqx/emqx/pull/1845)
 
   * Fix an issue about  Publish Limit  config 
 
-GitHub issues: [ emqx/emqx#1847 ](https://github.com/emqx/emqx/issues/1847) , [ emqx/emqx#1856 ](https://github.com/emqx/emqx/pull/1856)
+GitHub issues: [emqx/emqx#1847](https://github.com/emqx/emqx/issues/1847) , [emqx/emqx#1856](https://github.com/emqx/emqx/pull/1856)
 
   * Fix message delivery to remote connections 
 
-GitHub issues: [ emqx/emqx#1846 ](https://github.com/emqx/emqx/pull/1846)
+GitHub issues: [emqx/emqx#1846](https://github.com/emqx/emqx/pull/1846)
 
   * Fix an issue in travis build 
 
-GitHub issues: [ emqx/emqx#1818 ](https://github.com/emqx/emqx/pull/1818)
+GitHub issues: [emqx/emqx#1818](https://github.com/emqx/emqx/pull/1818)
 
   * Fix an issue when handling MQTT packages 
 
-GitHub issues: [ emqx/emqx#1811 ](https://github.com/emqx/emqx/issues/1811) , [ emqx/emqx#1817 ](https://github.com/emqx/emqx/pull/1817)
+GitHub issues: [emqx/emqx#1811](https://github.com/emqx/emqx/issues/1811) , [emqx/emqx#1817](https://github.com/emqx/emqx/pull/1817)
 
 
 
@@ -2672,7 +2672,7 @@ Enhancements:
 
   * Support message level TTL for retained message 
 
-GitHub issues: [ emqx/emqx-retainer#52 ](https://github.com/emqx/emqx-retainer/issues/52) , [ emqx/emqx-retainer#60 ](https://github.com/emqx/emqx-retainer/pull/60)
+GitHub issues: [emqx/emqx-retainer#52](https://github.com/emqx/emqx-retainer/issues/52) , [emqx/emqx-retainer#60](https://github.com/emqx/emqx-retainer/pull/60)
 
 
 
@@ -2683,7 +2683,7 @@ Bug Fixes:
 
   * Fix metrics field 
 
-GitHub issues: [ emqx/emqx-dashboard#5 ](https://github.com/emqx/emqx-dashboard/pull/5)
+GitHub issues: [emqx/emqx-dashboard#5](https://github.com/emqx/emqx-dashboard/pull/5)
 
 
 
@@ -2694,11 +2694,11 @@ Bug Fixes:
 
   * Fix subscription error 
 
-GitHub issues: [ emqx/emqx-management#7 ](https://github.com/emqx/emqx-management/pull/7)
+GitHub issues: [emqx/emqx-management#7](https://github.com/emqx/emqx-management/pull/7)
 
   * Improve CLI for bridges 
 
-GitHub commit: [ emqx/emqx-management#a8d0b397 ](https://github.com/emqx/emqx-management/commit/a8d0b3978ee3d51119d0fb22a12286a83d30c5ff)
+GitHub commit: [emqx/emqx-management#a8d0b397](https://github.com/emqx/emqx-management/commit/a8d0b3978ee3d51119d0fb22a12286a83d30c5ff)
 
 
 
@@ -2709,7 +2709,7 @@ Bug Fixes:
 
   * Fix load plugin error 
 
-GitHub commit: [ emqx/emqx-web-hook#331ca26 ](https://github.com/emqx/emqx-web-hook/commit/331ca26550931d691c98173501ca0fb4780d7a9a)
+GitHub commit: [emqx/emqx-web-hook#331ca26](https://github.com/emqx/emqx-web-hook/commit/331ca26550931d691c98173501ca0fb4780d7a9a)
 
 
 
@@ -2720,7 +2720,7 @@ Enhancements:
 
   * Introduce emqx-coap into EMQ X 3.0 
 
-GitHub issues: [ emqx/emqx-coap#86 ](https://github.com/emqx/emqx-coap/pull/86) , [ emqx/gen_coap#8 ](https://github.com/emqx/gen_coap/pull/8)
+GitHub issues: [emqx/emqx-coap#86](https://github.com/emqx/emqx-coap/pull/86) , [emqx/gen_coap#8](https://github.com/emqx/gen_coap/pull/8)
 
 
 
@@ -2731,7 +2731,7 @@ Enhancements:
 
   * Optimize docker file 
 
-GitHub issues: [ emqx/emqx-docker#71 ](https://github.com/emqx/emqx-docker/pull/71)
+GitHub issues: [emqx/emqx-docker#71](https://github.com/emqx/emqx-docker/pull/71)
 
 
 
@@ -2748,23 +2748,23 @@ Enhancements:
 
   * Support subscription options of MQTT 5.0 
 
-GitHub issues: [ emqx/emqx#1788 ](https://github.com/emqx/emqx/pull/1788) , [ emqx/emqx-retainer#58 ](https://github.com/emqx/emqx-retainer/pull/58) , [ emqx/emqx#1803 ](https://github.com/emqx/emqx/pull/1803)
+GitHub issues: [emqx/emqx#1788](https://github.com/emqx/emqx/pull/1788) , [emqx/emqx-retainer#58](https://github.com/emqx/emqx-retainer/pull/58) , [emqx/emqx#1803](https://github.com/emqx/emqx/pull/1803)
 
   * Add validations for 'Topic-Alias' of MQTT 5.0 
 
-GitHub issues: [ emqx/emqx#1789 ](https://github.com/emqx/emqx/pull/1789) , [ emqx/emqx#1802 ](https://github.com/emqx/emqx/pull/1802)
+GitHub issues: [emqx/emqx#1789](https://github.com/emqx/emqx/pull/1789) , [emqx/emqx#1802](https://github.com/emqx/emqx/pull/1802)
 
   * Improve the design of hooks 
 
-GitHub issue: [ emqx/emqx#1790 ](https://github.com/emqx/emqx/pull/1790)
+GitHub issue: [emqx/emqx#1790](https://github.com/emqx/emqx/pull/1790)
 
   * Rename 'emqx_mqtt_properties' module to 'emqx_mqtt_props' 
 
-GitHub issue: [ emqx/emqx#1791 ](https://github.com/emqx/emqx/pull/1791)
+GitHub issue: [emqx/emqx#1791](https://github.com/emqx/emqx/pull/1791)
 
   * Update emqx_zone 
 
-GitHub issue: [ emqx/emqx#1795 ](https://github.com/emqx/emqx/pull/1795)
+GitHub issue: [emqx/emqx#1795](https://github.com/emqx/emqx/pull/1795)
 
 
 
@@ -2773,15 +2773,15 @@ Bug Fixes:
 
   * Fix issues about 'Will Delay Interval' property 
 
-GitHub issues: [ emqx/emqx#1800 ](https://github.com/emqx/emqx/pull/1800) , [ emqx/emqx-delayed-publish#3 ](https://github.com/emqx/emqx-delayed-publish/pull/3)
+GitHub issues: [emqx/emqx#1800](https://github.com/emqx/emqx/pull/1800) , [emqx/emqx-delayed-publish#3](https://github.com/emqx/emqx-delayed-publish/pull/3)
 
   * Fix an issue about 'Reserved' flag 
 
-GitHub issue: [ emqx/emqx#1783 ](https://github.com/emqx/emqx/pull/1783)
+GitHub issue: [emqx/emqx#1783](https://github.com/emqx/emqx/pull/1783)
 
   * Generate a config file for unit test 
 
-GitHub issue: [ emqx/emqx#1794 ](https://github.com/emqx/emqx/pull/1794)
+GitHub issue: [emqx/emqx#1794](https://github.com/emqx/emqx/pull/1794)
 
 
 
@@ -2792,7 +2792,7 @@ Enhancements:
 
   * Add restful APIs for banned function 
 
-GitHub issue: [ emqx/emqx-management#6 ](https://github.com/emqx/emqx-management/pull/6)
+GitHub issue: [emqx/emqx-management#6](https://github.com/emqx/emqx-management/pull/6)
 
 
 
@@ -2803,7 +2803,7 @@ Enhancements:
 
   * Refactor the code 
 
-GitHub issue: [ emqx/emqx-delayed-publish#4 ](https://github.com/emqx/emqx-delayed-publish/pull/4)
+GitHub issue: [emqx/emqx-delayed-publish#4](https://github.com/emqx/emqx-delayed-publish/pull/4)
 
 
 
@@ -2814,7 +2814,7 @@ Enhancements:
 
   * Pass both query and body params to the callback functions 
 
-GitHub issue: [ emqx/minirest#4 ](https://github.com/emqx/minirest/pull/4)
+GitHub issue: [emqx/minirest#4](https://github.com/emqx/minirest/pull/4)
 
 
 
@@ -2825,7 +2825,7 @@ Enhancements:
 
   * Check OTP version while compiling. 
 
-GitHub issue: [ emqx/emqx-rel#217 ](https://github.com/emqx/emqx-rel/pull/217)
+GitHub issue: [emqx/emqx-rel#217](https://github.com/emqx/emqx-rel/pull/217)
 
 
 
@@ -3457,7 +3457,7 @@ Improve the design LDAP authentication.
 
 ### emq-coap Plugin (emq-coap#51) 
 
-Support CoAP PubSub Specification ( [ https://www.ietf.org/id/draft-ietf-core-coap-pubsub-02.txt ](https://www.ietf.org/id/draft-ietf-core-coap-pubsub-02.txt) ) 
+Support CoAP PubSub Specification ( [https://www.ietf.org/id/draft-ietf-core-coap-pubsub-02.txt](https://www.ietf.org/id/draft-ietf-core-coap-pubsub-02.txt) ) 
 
 ## Version 2.3-beta.1 
 
@@ -3510,7 +3510,7 @@ Lightweight M2M (LWM2M) is a set of protocols defined by the Open Mobile Allianc
 
 ### JWT Authentication 
 
-EMQ R2.3 supports JWT(JSON Web Token) Authentication with [ emq-auth-jwt ](https://github.com/emqtt/emq-auth-jwt) plugin. 
+EMQ R2.3 supports JWT(JSON Web Token) Authentication with [ emq-auth-jwt](https://github.com/emqtt/emq-auth-jwt) plugin. 
 
 ### Retainer Plugin 
 
@@ -3646,7 +3646,7 @@ Update README of emq-auth-mongo: change 'aclquery' to 'acl_query' (emq-auth-mong
 
 ### Elixir Plugin 
 
-Add a new plugin [ emq-elixir-plugin ](https://github.com/emqtt/emq-elixir-plugin) to support Elixir language. 
+Add a new plugin [ emq-elixir-plugin](https://github.com/emqtt/emq-elixir-plugin) to support Elixir language. 
 
 ## Version 2.2-beta.1 
 
@@ -3698,11 +3698,11 @@ Enable Proxy Protocol support for MQTT Listener:
 
 ### Web Hook Plugin 
 
-The Web Hook plugin [ emq-web-hook ](https://github.com/emqtt/emq-web-hook) can trigger a webhook callback when a MQTT client connected to or disconnected from the broker, a MQTT message is published or acked. 
+The Web Hook plugin [ emq-web-hook](https://github.com/emqtt/emq-web-hook) can trigger a webhook callback when a MQTT client connected to or disconnected from the broker, a MQTT message is published or acked. 
 
 ### Lua Hook Plugin 
 
-The Lua Hook plugin [ emq-lua-hook ](https://github.com/emqtt/emq-lua-hook) make it possible to extend the broker and write business logic with Lua script. 
+The Lua Hook plugin [ emq-lua-hook](https://github.com/emqtt/emq-lua-hook) make it possible to extend the broker and write business logic with Lua script. 
 
 ### Improve the Auth/ACL Chain 
 
@@ -3825,7 +3825,7 @@ EMQ v2.1.0-beta.1 is now available.
 EMQ 2.1+ Requires Erlang/OTP R19+ to build. 
 :::
 
-Since 2.1.0 release, we will tag EMQ versions accoding to the [ Semantic Versioning 2.0.0 ](http://semver.org) principles. And we will release EMQ versions monthly, odd number releases for bugfix and optimization, and even number releases for bugfix and new features. 
+Since 2.1.0 release, we will tag EMQ versions accoding to the [ Semantic Versioning 2.0.0](http://semver.org) principles. And we will release EMQ versions monthly, odd number releases for bugfix and optimization, and even number releases for bugfix and new features. 
 
 ### Tuning GC 
 
@@ -3932,7 +3932,7 @@ Change the datatype of 'reloader.interval' to duration
 
 The Last Maintenance Release for EMQ 2.0, and support to build RPM/DEB Packages. 
 
-Create the emq-package project: [ https://github.com/emqtt/emq-package ](https://github.com/emqtt/emq-package)
+Create the emq-package project: [https://github.com/emqtt/emq-package](https://github.com/emqtt/emq-package)
 
 emq-auth-http#9: Update the priv/emq_auth_http.schema,  cuttlefish:unset()  if no super_req/acl_req config exists 
 
@@ -3954,7 +3954,7 @@ emqttd#856: Support variables in etc/emq.conf: {{ runner_etc_dir }}, {{ runner_e
 
 *Release Date: 2017-01-08*
 
-Upgrade the [ esockd ](https://github.com/emqtt/esockd) library to v4.1.1 
+Upgrade the [ esockd](https://github.com/emqtt/esockd) library to v4.1.1 
 
 esockd#41: Fast close the TCP socket if ssl:ssl_accept failed 
 
@@ -4080,19 +4080,19 @@ Usage: subscribe a topic with  $local/  prefix.
 
 ### erlang.mk and relx 
 
-The *EMQ* 2.0 adopts [ erlang.mk ](https://erlang.mk) and [ relx ](https://github.com/erlware/relx) tools to build the whole projects on Linux, Unix and Windows. 
+The *EMQ* 2.0 adopts [ erlang.mk](https://erlang.mk) and [ relx](https://github.com/erlware/relx) tools to build the whole projects on Linux, Unix and Windows. 
 
 ### CoAP Support 
 
 The *EMQ* 2.0 supports CoAP(RFC7252) protocol/gateway now, and supports communication between CoAP, MQTT-SN and MQTT clients. 
 
-CoAP Protocol Plugin: [ https://github.com/emqtt/emqttd_coap ](https://github.com/emqtt/emqttd_coap)
+CoAP Protocol Plugin: [https://github.com/emqtt/emqttd_coap](https://github.com/emqtt/emqttd_coap)
 
 ### MQTT-SN Support 
 
 The *EMQ* 2.0 now supports MQTT-SN protocol/gateway. 
 
-MQTT-SN Plugin: [ https://github.com/emqtt/emq_sn ](https://github.com/emqtt/emq_sn)
+MQTT-SN Plugin: [https://github.com/emqtt/emq_sn](https://github.com/emqtt/emq_sn)
 
 ### New Configuration File 
 
@@ -4130,7 +4130,7 @@ EMQ_HTTPS_PORT  |  HTTPS/WebSocket Port, Default: 8084
 
 ### Docker Image 
 
-We released an official Docker Image for *EMQ* 2.0. The open source project for Dockerfile: [ https://github.com/emqtt/emq_docker ](https://github.com/emqtt/emq_docker) . 
+We released an official Docker Image for *EMQ* 2.0. The open source project for Dockerfile: [https://github.com/emqtt/emq_docker](https://github.com/emqtt/emq_docker) . 
 
 ### Full Support for Windows 
 
@@ -4152,26 +4152,26 @@ The *EMQ* 2.0 fully supports Windows platform. You can run 'emqttd_ctl' command 
 
 Plugin                                                                  |  Description                   
 ------------------------------------------------------------------------|--------------------------------
-[ emq_dashboard ](https://github.com/emqtt/emqttd_dashboard)            |  Web Dashboard                 
-[ emq_auth_clientid ](https://github.com/emqtt/emq_auth_clientid)       |  ClientId Auth Plugin          
-[ emq_auth_username ](https://github.com/emqtt/emq_auth_username)       |  Username/Password Auth Plugin 
-[ emq_auth_ldap ](https://github.com/emqtt/emq_auth_ldap)               |  LDAP Auth                     
-[ emq_auth_http ](https://github.com/emqtt/emq_auth_http)               |  HTTP Auth/ACL Plugin          
-[ emq_auth_mysql ](https://github.com/emqtt/emq_auth_mysql)             |  MySQL Auth/ACL Plugin         
-[ emq_auth_pgsql ](https://github.com/emqtt/emq_auth_pgsql)             |  PostgreSQL Auth/ACL Plugin    
-[ emq_auth_redis ](https://github.com/emqtt/emq_auth_redis)             |  Redis Auth/ACL Plugin         
-[ emq_auth_mongo ](https://github.com/emqtt/emq_auth_mongo)             |  MongoDB Auth/ACL Plugin       
-[ emq_mod_presence ](https://github.com/emqtt/emq_mod_presence)         |  Presence Module               
-[ emq_mod_retainer ](https://github.com/emqtt/emq_mod_retainer)         |  Retainer Module               
-[ emq_mod_rewrite ](https://github.com/emqtt/emq_mod_rewrite)           |  Topic Rewrite Module          
-[ emq_mod_subscription ](https://github.com/emqtt/emq_mod_subscription) |  Subscription Module           
-[ emq_coap ](https://github.com/emqtt/emq_coap)                         |  CoAP Protocol Plugin          
-[ emq_sn ](https://github.com/emqtt/emq_sn)                             |  MQTT-SN Protocol Plugin       
-[ emq_stomp ](https://github.com/emqtt/emq_stomp)                       |  STOMP Protocol Plugin         
-[ emq_sockjs ](https://github.com/emqtt/emq_sockjs)                     |  STOMP over SockJS Plugin      
-[ emq_recon ](https://github.com/emqtt/emq_recon)                       |  Recon Plugin                  
-[ emq_reloader ](https://github.com/emqtt/emq_reloader)                 |  Reloader Plugin               
-[ emq_plugin_template ](https://github.com/emqtt/emq_plugin_template)   |  Template Plugin               
+[ emq_dashboard](https://github.com/emqtt/emqttd_dashboard)            |  Web Dashboard                 
+[ emq_auth_clientid](https://github.com/emqtt/emq_auth_clientid)       |  ClientId Auth Plugin          
+[ emq_auth_username](https://github.com/emqtt/emq_auth_username)       |  Username/Password Auth Plugin 
+[ emq_auth_ldap](https://github.com/emqtt/emq_auth_ldap)               |  LDAP Auth                     
+[ emq_auth_http](https://github.com/emqtt/emq_auth_http)               |  HTTP Auth/ACL Plugin          
+[ emq_auth_mysql](https://github.com/emqtt/emq_auth_mysql)             |  MySQL Auth/ACL Plugin         
+[ emq_auth_pgsql](https://github.com/emqtt/emq_auth_pgsql)             |  PostgreSQL Auth/ACL Plugin    
+[ emq_auth_redis](https://github.com/emqtt/emq_auth_redis)             |  Redis Auth/ACL Plugin         
+[ emq_auth_mongo](https://github.com/emqtt/emq_auth_mongo)             |  MongoDB Auth/ACL Plugin       
+[ emq_mod_presence](https://github.com/emqtt/emq_mod_presence)         |  Presence Module               
+[ emq_mod_retainer](https://github.com/emqtt/emq_mod_retainer)         |  Retainer Module               
+[ emq_mod_rewrite](https://github.com/emqtt/emq_mod_rewrite)           |  Topic Rewrite Module          
+[ emq_mod_subscription](https://github.com/emqtt/emq_mod_subscription) |  Subscription Module           
+[ emq_coap](https://github.com/emqtt/emq_coap)                         |  CoAP Protocol Plugin          
+[ emq_sn](https://github.com/emqtt/emq_sn)                             |  MQTT-SN Protocol Plugin       
+[ emq_stomp](https://github.com/emqtt/emq_stomp)                       |  STOMP Protocol Plugin         
+[ emq_sockjs](https://github.com/emqtt/emq_sockjs)                     |  STOMP over SockJS Plugin      
+[ emq_recon](https://github.com/emqtt/emq_recon)                       |  Recon Plugin                  
+[ emq_reloader](https://github.com/emqtt/emq_reloader)                 |  Reloader Plugin               
+[ emq_plugin_template](https://github.com/emqtt/emq_plugin_template)   |  Template Plugin               
 
 
 
@@ -4181,10 +4181,10 @@ Plugin                                                                  |  Descr
 
   1. Change the three modules(Presence, Retainer, Subscription) to standalone plugins: 
 
-[ emq_mod_retainer ](https://github.com/emqtt/emq_mod_retainer)         |  Retained Message Storage                                                      
+[ emq_mod_retainer](https://github.com/emqtt/emq_mod_retainer)         |  Retained Message Storage                                                      
 ------------------------------------------------------------------------|--------------------------------------------------------------------------------
-[ emq_mod_presence ](https://github.com/emqtt/emq_mod_presence)         |  Publish presence message to $SYS topics when client connected or disconnected 
-[ emq_mod_subscription ](https://github.com/emqtt/emq_mod_subscription) |  Subscribe topics automatically when client connected                          
+[ emq_mod_presence](https://github.com/emqtt/emq_mod_presence)         |  Publish presence message to $SYS topics when client connected or disconnected 
+[ emq_mod_subscription](https://github.com/emqtt/emq_mod_subscription) |  Subscribe topics automatically when client connected                          
 
 
 
@@ -4276,7 +4276,7 @@ Remove 'emqttd' application from dependencies (emqttd_coap PR#3)
 
 ### CoAP Support 
 
-Release an experimental CoAP Gateway: [ https://github.com/emqtt/emqttd_coap ](https://github.com/emqtt/emqttd_coap)
+Release an experimental CoAP Gateway: [https://github.com/emqtt/emqttd_coap](https://github.com/emqtt/emqttd_coap)
 
 ### API Breaking Changes 
 
@@ -4314,7 +4314,7 @@ In order to iterate the project fast, we will adopt a new release management str
 
 We split the emqttd 1.x project into two projects since 2.0-beta1 release to resolve the plugins' dependency issue. 
 
-A new project named [ emqttd-relx ](https://github.com/emqtt/emqttd-relx) is created and responsible for buiding the emqttd application and the plugins: 
+A new project named [ emqttd-relx](https://github.com/emqtt/emqttd-relx) is created and responsible for buiding the emqttd application and the plugins: 
     
     
     git clone https://github.com/emqtt/emqttd-relx.git
@@ -4325,9 +4325,9 @@ A new project named [ emqttd-relx ](https://github.com/emqtt/emqttd-relx) is cre
 
 ### erlang.mk and relx 
 
-The rebar which is used in 1.x release is replaced by [ erlang.mk ](https://erlang.mk) and [ relx ](https://github.com/erlware/relx) tools since 2.0-beta1 release. 
+The rebar which is used in 1.x release is replaced by [ erlang.mk](https://erlang.mk) and [ relx](https://github.com/erlware/relx) tools since 2.0-beta1 release. 
 
-You can check the 'Makefile' and 'relx.config' in the release project of the borker: [ emqttd-relx ](https://github.com/emqtt/emqttd-relx) . 
+You can check the 'Makefile' and 'relx.config' in the release project of the borker: [ emqttd-relx](https://github.com/emqtt/emqttd-relx) . 
 
 ### Improve Git Branch Management 
 
@@ -4359,7 +4359,7 @@ etc/emqttd.conf for example:
 
 ### MQTT-SN Protocol Plugin 
 
-The MQTT-SN Protocol Plugin [ emqttd_sn ](https://github.com/emqtt/emqttd_sn) has been ready in 2.0-beta1 release. The default UDP port of MQTT-SN is 1884. 
+The MQTT-SN Protocol Plugin [ emqttd_sn](https://github.com/emqtt/emqttd_sn) has been ready in 2.0-beta1 release. The default UDP port of MQTT-SN is 1884. 
 
 Load the plugin: 
     
@@ -4372,9 +4372,9 @@ Load the plugin:
 
 ### Improve the Plugin Management 
 
-The plugin of EMQ 2.0 broker is a normal erlang application which depends on and extends 'emqttd'. You can create a standalone plugin application project, and add it to [ emqttd-relx ](https://github.com/emqtt/emqttd-relx) Makefile as a DEP. 
+The plugin of EMQ 2.0 broker is a normal erlang application which depends on and extends 'emqttd'. You can create a standalone plugin application project, and add it to [ emqttd-relx](https://github.com/emqtt/emqttd-relx) Makefile as a DEP. 
 
-All the plugins' config files will be copied to emqttd/etc/plugins/ folder when making emqttd brinary packages in [ emqttd-relx ](https://github.com/emqtt/emqttd-relx) project: 
+All the plugins' config files will be copied to emqttd/etc/plugins/ folder when making emqttd brinary packages in [ emqttd-relx](https://github.com/emqtt/emqttd-relx) project: 
     
     
     ▾ emqttd/
@@ -4398,7 +4398,7 @@ All the plugins' config files will be copied to emqttd/etc/plugins/ folder when 
 
 ### EMQ 2.0 Documentation 
 
-[ https://docs.emqx.io/broker/v2/en/index.html ](https://docs.emqx.io/broker/v2/en/index.html)
+[https://docs.emqx.io/broker/v2/en/index.html](https://docs.emqx.io/broker/v2/en/index.html)
 
 ## Version 1.1.3 
 
@@ -4455,7 +4455,7 @@ Support to listen on specific IP Address:
     
     {mqtt, {"192.168.1.20", 1883}, [
         ...
-    ]},
+   ]},
 
 Add MongoDB, HTTP Authentication/ACL Plugins 
 
@@ -4497,7 +4497,7 @@ Add './bin/emqttd_ctl admins' CLI, support to add/delete admins
 
 ### HTTP Auth Plugin 
 
-Authentication/ACL by HTTP API: [ https://github.com/emqtt/emqttd_auth_http ](https://github.com/emqtt/emqttd_auth_http)
+Authentication/ACL by HTTP API: [https://github.com/emqtt/emqttd_auth_http](https://github.com/emqtt/emqttd_auth_http)
 
 ### MongoDB Plugin 
 
@@ -4582,19 +4582,19 @@ Do not expire the retained messages from $SYS/# topics (#500)
 
 ### Documentation 
 
-[ https://docs.emqx.io/broker/v2/en/index.html ](https://docs.emqx.io/broker/v2/en/index.html)
+[https://docs.emqx.io/broker/v2/en/index.html](https://docs.emqx.io/broker/v2/en/index.html)
 
-[ http://docs.emqtt.com/ ](http://docs.emqtt.com/)
+[http://docs.emqtt.com/](http://docs.emqtt.com/)
 
 ### Thanks 
 
-Thank Ericsson for the Great Erlang/OTP Platform ( [ http://erlang.org/ ](http://erlang.org/) )! 
+Thank Ericsson for the Great Erlang/OTP Platform ( [http://erlang.org/](http://erlang.org/) )! 
 
 Contributors on GitHub: @callbay @lsxredrain @hejin1026 @desoulter @turtleDeng @Hades32 @huangdan @phanimahesh @dvliman @Prots @joaohf 
 
-Partners: EACG ( [ http://eacg.de/ ](http://eacg.de/) ) 
+Partners: EACG ( [http://eacg.de/](http://eacg.de/) ) 
 
-Favorite Band: The Seven Mile Journey ( [ http://www.thesevenmilejourney.dk/ ](http://www.thesevenmilejourney.dk/) ) 
+Favorite Band: The Seven Mile Journey ( [http://www.thesevenmilejourney.dk/](http://www.thesevenmilejourney.dk/) ) 
 
 ## Version 0.17.1-beta 
 
@@ -4614,11 +4614,11 @@ Code Review and improve the design of Dashboard.
 
 ### Highlights 
 
-Installation and Configuration Guide released on [ http://docs.emqtt.com ](http://docs.emqtt.com)
+Installation and Configuration Guide released on [http://docs.emqtt.com](http://docs.emqtt.com)
 
 Improve and Consolidate the design of Hook, Server, PubSub and Router 
 
-Upgrade the [Web Dashboard]( [ https://github.com/emqtt/emqttd_dashboard ](https://github.com/emqtt/emqttd_dashboard) ) to support pagination 
+Upgrade the [Web Dashboard]( [https://github.com/emqtt/emqttd_dashboard](https://github.com/emqtt/emqttd_dashboard) ) to support pagination 
 
 Bridge emqttd broker to another emqttd broker & emqttd to mosquitto bridge (#438) 
 
@@ -4799,7 +4799,7 @@ BugFix: emqttd_plugin_pgsql - error using same query with latest update plugin (
 
 ### Highlights 
 
-Rate Limiting based on [Token Bucket]( [ https://en.wikipedia.org/wiki/Token_bucket ](https://en.wikipedia.org/wiki/Token_bucket) ) and [Leaky Bucket]( [ https://en.wikipedia.org/wiki/Leaky_bucket#The_Leaky_Bucket_Algorithm_as_a_Meter ](https://en.wikipedia.org/wiki/Leaky_bucket#The_Leaky_Bucket_Algorithm_as_a_Meter) ) Algorithm 
+Rate Limiting based on [Token Bucket]( [https://en.wikipedia.org/wiki/Token_bucket](https://en.wikipedia.org/wiki/Token_bucket) ) and [Leaky Bucket]( [https://en.wikipedia.org/wiki/Leaky_bucket#The_Leaky_Bucket_Algorithm_as_a_Meter](https://en.wikipedia.org/wiki/Leaky_bucket#The_Leaky_Bucket_Algorithm_as_a_Meter) ) Algorithm 
 
 Upgrade eSockd and MochiWeb libraries to support Parameterized Connection Module 
 
@@ -4817,7 +4817,7 @@ TCP sndbuf, recbuf, buffer tuning (#359)
 
 emqttd_client.erl to handle 'inet_async', 'inet_reply' properly (#360) 
 
-Refator the [client/session management design]( [ https://github.com/emqtt/emqttd/blob/master/doc/design/ClientSession.md ](https://github.com/emqtt/emqttd/blob/master/doc/design/ClientSession.md) ) 
+Refator the [client/session management design]( [https://github.com/emqtt/emqttd/blob/master/doc/design/ClientSession.md](https://github.com/emqtt/emqttd/blob/master/doc/design/ClientSession.md) ) 
 
 ### Bugfix 
 
@@ -4825,11 +4825,11 @@ Cannot kick transient client out when clientId collision (#357)
 
 Fix the order of emqttd_app:start_server/1 (#367) 
 
-emqttd_ [ session:subscribe/2 ](session:subscribe/2) will crash (#374) 
+emqttd_ [ session:subscribe/2](session:subscribe/2) will crash (#374) 
 
 ### Benchmark 
 
-[benchmark for 0.13.0 release]( [ https://github.com/emqtt/emqttd/wiki/benchmark-for-0.13.0-release ](https://github.com/emqtt/emqttd/wiki/benchmark-for-0.13.0-release) ) 
+[benchmark for 0.13.0 release]( [https://github.com/emqtt/emqttd/wiki/benchmark-for-0.13.0-release](https://github.com/emqtt/emqttd/wiki/benchmark-for-0.13.0-release) ) 
 
 3.1G memory and 50+ CPU/core: 
     
@@ -4884,7 +4884,7 @@ Benchmark: About 900K concurrent connections established on a 20Core, 32G CentOS
 
 Enhance the **emqttd_ctl** module to allow plugins to register new commands (#256) 
 
-Add [emqttd_recon plugin]( [ https://github.com/emqtt/emqttd_recon ](https://github.com/emqtt/emqttd_recon) ) to debug/optimize the broker (#235) 
+Add [emqttd_recon plugin]( [https://github.com/emqtt/emqttd_recon](https://github.com/emqtt/emqttd_recon) ) to debug/optimize the broker (#235) 
 
 Add **'./bin/emqttd_ctl broker pubsub'** command to check the status of core pubsub processes 
 
@@ -4912,7 +4912,7 @@ Behaviour emqttd_auth_mod is missing init callback (#318)
 
 ### Benchmark 
 
-Write a new [benchmark tool]( [ https://github.com/emqtt/emqtt_benchmark ](https://github.com/emqtt/emqtt_benchmark) ) to benchmark this release 
+Write a new [benchmark tool]( [https://github.com/emqtt/emqtt_benchmark](https://github.com/emqtt/emqtt_benchmark) ) to benchmark this release 
 
 Hw requirements - 5K users, 25-50 msgs/sec, QoS=1 (#209) 
 
@@ -4924,7 +4924,7 @@ Supported Number of Connections Greatly Reduced When Clients are Subscribing (#3
 
 Highlight: Rebar to manage plugin dependencies. 
 
-Highlight: [Stomp]( [ https://github.com/emqtt/emqttd_stomp ](https://github.com/emqtt/emqttd_stomp) ) and [SockJS]( [ https://github.com/emqtt/emqttd_sockjs ](https://github.com/emqtt/emqttd_sockjs) ) Plugins! 
+Highlight: [Stomp]( [https://github.com/emqtt/emqttd_stomp](https://github.com/emqtt/emqttd_stomp) ) and [SockJS]( [https://github.com/emqtt/emqttd_sockjs](https://github.com/emqtt/emqttd_sockjs) ) Plugins! 
 
 Improve: add rel/files/emqttd.config.development|production. 
 
@@ -4950,7 +4950,7 @@ Bugfix: issue#312 - unsubcribe will lead to crash if emqttd_plugin_template plug
 
 Optimize session management and upgrade eSockd library to 2.7.1 
 
-[Benchmark for 0.10.4 release]( [ https://github.com/emqtt/emqttd/wiki/benchmark-for-0.10.4-release ](https://github.com/emqtt/emqttd/wiki/benchmark-for-0.10.4-release) ) 
+[Benchmark for 0.10.4 release]( [https://github.com/emqtt/emqttd/wiki/benchmark-for-0.10.4-release](https://github.com/emqtt/emqttd/wiki/benchmark-for-0.10.4-release) ) 
 
 Improve: issue#294 - [error] failed to start connection on 0.0.0.0:1883 - enotconn 
 
@@ -4982,19 +4982,19 @@ Improve: issue#257 - After the node name changed, the broker cannot restart for 
 
 Bugfix: issue#259 - when clustered the emqttd_dashboard port is close, and the 'emqttd' application cannot stop normally. 
 
-Feature: issue#262 - Add ' [ http://host:8083/mqtt/status ](http://host:8083/mqtt/status) ' Page for health check 
+Feature: issue#262 - Add ' [http://host:8083/mqtt/status](http://host:8083/mqtt/status) ' Page for health check 
 
 ## Version 0.10.0-beta 
 
 *Release Date: 2015-08-20*
 
-[Web Dashboard]( [ https://github.com/emqtt/emqttd_dashboard ](https://github.com/emqtt/emqttd_dashboard) ) and [MySQL]( [ https://github.com/emqtt/emqttd_plugin_mysql ](https://github.com/emqtt/emqttd_plugin_mysql) ), [PostgreSQL]( [ https://github.com/emqtt/emqttd_plugin_pgsql ](https://github.com/emqtt/emqttd_plugin_pgsql) ) Authentication/ACL Plugins! 
+[Web Dashboard]( [https://github.com/emqtt/emqttd_dashboard](https://github.com/emqtt/emqttd_dashboard) ) and [MySQL]( [https://github.com/emqtt/emqttd_plugin_mysql](https://github.com/emqtt/emqttd_plugin_mysql) ), [PostgreSQL]( [https://github.com/emqtt/emqttd_plugin_pgsql](https://github.com/emqtt/emqttd_plugin_pgsql) ) Authentication/ACL Plugins! 
 
 Highlight: Web Dashboard to monitor Statistics, Metrics, Clients, Sessions and Topics of the broker. 
 
 Highlight: JSON/HTTP API to query all clients connected to broker. 
 
-Highlight: A new [Plugin Design]( [ https://github.com/emqtt/emqttd/wiki/Plugin%20Design ](https://github.com/emqtt/emqttd/wiki/Plugin%20Design) ) and a [Template project]( [ https://github.com/emqtt/emqttd_plugin_template ](https://github.com/emqtt/emqttd_plugin_template) ) for plugin development. 
+Highlight: A new [Plugin Design]( [https://github.com/emqtt/emqttd/wiki/Plugin%20Design](https://github.com/emqtt/emqttd/wiki/Plugin%20Design) ) and a [Template project]( [https://github.com/emqtt/emqttd_plugin_template](https://github.com/emqtt/emqttd_plugin_template) ) for plugin development. 
 
 Highlight: Authentication/ACL with MySQL, PostreSQl databases (#194, #172) 
 
@@ -5034,7 +5034,7 @@ Bugfix: emqttd_pooler cannot work
 
 *Release Date: 2015-07-25*
 
-Wiki: [Bridge]( [ https://github.com/emqtt/emqttd/wiki/Bridge ](https://github.com/emqtt/emqttd/wiki/Bridge) ) 
+Wiki: [Bridge]( [https://github.com/emqtt/emqttd/wiki/Bridge](https://github.com/emqtt/emqttd/wiki/Bridge) ) 
 
 Improve: emqttd_protocol.hrl to define 'QOS_I' 
 
@@ -5062,7 +5062,7 @@ Bugfix: issue #193 - 'client.ack' hook should be renamed to 'message.acked', and
 
 *Release Date: 2015-07-09*
 
-[Session, Queue, Inflight Window, Hooks, Global MessageId and More Protocol Compliant]( [ https://github.com/emqtt/emqttd/releases/tag/0.9.0-alpha ](https://github.com/emqtt/emqttd/releases/tag/0.9.0-alpha) ) Now! 
+[Session, Queue, Inflight Window, Hooks, Global MessageId and More Protocol Compliant]( [https://github.com/emqtt/emqttd/releases/tag/0.9.0-alpha](https://github.com/emqtt/emqttd/releases/tag/0.9.0-alpha) ) Now! 
 
 Feature: Session/Queue/Inflight Window Design (#145). 
 
@@ -5094,7 +5094,7 @@ Improve: issue #174 - add 'from' field to mqtt_message record.
 
 Improve: issue #170 - $SYS Topics should support alarms. 
 
-Improve: issue #169 - Add More [Hooks]( [ https://github.com/emqtt/emqttd/wiki/Hooks-Design ](https://github.com/emqtt/emqttd/wiki/Hooks-Design) ) 
+Improve: issue #169 - Add More [Hooks]( [https://github.com/emqtt/emqttd/wiki/Hooks-Design](https://github.com/emqtt/emqttd/wiki/Hooks-Design) ) 
 
 Improve: issue #167 - Inflight window to assure message ordering. 
 
@@ -5156,7 +5156,7 @@ Bugfix: issue #146 - emqttd_auth_ldap: fill(Username, UserDn) is not right
 
 *Release Date: 2015-05-28*
 
-Client [Presence]( [ https://github.com/emqtt/emqttd/wiki/Presence ](https://github.com/emqtt/emqttd/wiki/Presence) ) Support and [$SYS Topics]( [ https://github.com/emqtt/emqttd/wiki/$SYS-Topics ](https://github.com/emqtt/emqttd/wiki/$SYS-Topics) ) Redesigned! 
+Client [Presence]( [https://github.com/emqtt/emqttd/wiki/Presence](https://github.com/emqtt/emqttd/wiki/Presence) ) Support and [$SYS Topics]( [https://github.com/emqtt/emqttd/wiki/$SYS-Topics](https://github.com/emqtt/emqttd/wiki/$SYS-Topics) ) Redesigned! 
 
 Bugfix: issue #138 - when client disconnected normally, broker will not publish disconnected $SYS message 
 
@@ -5170,7 +5170,7 @@ Improve: rel/reltool.config to exclude unnecessary apps.
 
 *Release Date: 2015-05-25*
 
-[Hooks]( [ https://github.com/emqtt/emqttd/wiki/Hooks%20Design ](https://github.com/emqtt/emqttd/wiki/Hooks%20Design) ), Modules and [Plugins]( [ https://github.com/emqtt/emqttd/wiki/Plugin%20Design ](https://github.com/emqtt/emqttd/wiki/Plugin%20Design) ) to extend the broker Now! 
+[Hooks]( [https://github.com/emqtt/emqttd/wiki/Hooks%20Design](https://github.com/emqtt/emqttd/wiki/Hooks%20Design) ), Modules and [Plugins]( [https://github.com/emqtt/emqttd/wiki/Plugin%20Design](https://github.com/emqtt/emqttd/wiki/Plugin%20Design) ) to extend the broker Now! 
 
 Plugin: emqttd_auth_mysql - MySQL authentication plugin (issues #116, #120) 
 
@@ -5212,11 +5212,11 @@ Bugfix: fix errors found by dialyzer
 
 *Release Date: 2015-05-02*
 
-[MQTT over WebSocket(SSL)]( [ https://github.com/emqtt/emqttd/wiki/MQTT-Over-WebSocket ](https://github.com/emqtt/emqttd/wiki/MQTT-Over-WebSocket) ) Now! 
+[MQTT over WebSocket(SSL)]( [https://github.com/emqtt/emqttd/wiki/MQTT-Over-WebSocket](https://github.com/emqtt/emqttd/wiki/MQTT-Over-WebSocket) ) Now! 
 
-[Plugin Achitecture]( [ https://github.com/emqtt/emqttd/wiki/Plugin%20Design ](https://github.com/emqtt/emqttd/wiki/Plugin%20Design) ) based on OTP application 
+[Plugin Achitecture]( [https://github.com/emqtt/emqttd/wiki/Plugin%20Design](https://github.com/emqtt/emqttd/wiki/Plugin%20Design) ) based on OTP application 
 
-[Trace MQTT Packets or Messages]( [ https://github.com/emqtt/emqttd/wiki/Trace%20Design ](https://github.com/emqtt/emqttd/wiki/Trace%20Design) ) to log files 
+[Trace MQTT Packets or Messages]( [https://github.com/emqtt/emqttd/wiki/Trace%20Design](https://github.com/emqtt/emqttd/wiki/Trace%20Design) ) to log files 
 
 Feature: issue #40, #115 - WebSocket/SSL Support 
 
@@ -5258,7 +5258,7 @@ Improve: move mnesia dir config from etc/app.config to etc/vm.args
 
 *Release Date: 2015-04-20*
 
-Integrate with [gproc library]( [ https://github.com/uwiger/gproc ](https://github.com/uwiger/gproc) ) to support pool 
+Integrate with [gproc library]( [https://github.com/uwiger/gproc](https://github.com/uwiger/gproc) ) to support pool 
 
 Feature: issues#91 - should use worker_pool to handle some async work? 
 
@@ -5266,15 +5266,15 @@ Feature: issues#95 - Topic filters in ACL rule should support 'eq' tag
 
 Improve: issues#84 - emqttd_pubsub is redesigned again to protect mnesia transaction 
 
-Improve: issues#74 - ACL Support and update [ACL Design Wiki]( [ https://github.com/emqtt/emqttd/wiki/ACL-Design ](https://github.com/emqtt/emqttd/wiki/ACL-Design) ) 
+Improve: issues#74 - ACL Support and update [ACL Design Wiki]( [https://github.com/emqtt/emqttd/wiki/ACL-Design](https://github.com/emqtt/emqttd/wiki/ACL-Design) ) 
 
 ## Version 0.6.0-alpha 
 
 *Release Date: 2015-04-17*
 
-ACL Support Now: [ACL-Design Wiki]( [ https://github.com/emqtt/emqttd/wiki/ACL-Design ](https://github.com/emqtt/emqttd/wiki/ACL-Design) ) 
+ACL Support Now: [ACL-Design Wiki]( [https://github.com/emqtt/emqttd/wiki/ACL-Design](https://github.com/emqtt/emqttd/wiki/ACL-Design) ) 
 
-Authentication with username, clientid Now: [Authentication Wiki]( [ https://github.com/emqtt/emqttd/wiki/Authentication ](https://github.com/emqtt/emqttd/wiki/Authentication) ) 
+Authentication with username, clientid Now: [Authentication Wiki]( [https://github.com/emqtt/emqttd/wiki/Authentication](https://github.com/emqtt/emqttd/wiki/Authentication) ) 
 
 Seperate common MQTT library to 'emqtt' application 
 
@@ -5333,7 +5333,7 @@ Benchmark this release on a ubuntu/14.04 server with 8 cores, 32G memory from Qi
     
     Consumed 7G memory, 40% CPU/core
 
-Benchmark code: [ https://github.com/emqtt/emqttd_benchmark ](https://github.com/emqtt/emqttd_benchmark)
+Benchmark code: [https://github.com/emqtt/emqttd_benchmark](https://github.com/emqtt/emqttd_benchmark)
 
 Change: rewrite emqttd_pubsub to handle more concurrent subscribe requests. 
 
@@ -5365,7 +5365,7 @@ Change: upgrade esockd to v1.2.0-beta, rename 'acceptor_pool' to 'acceptors'
 
 RENAME 'emqtt' to 'emqttd'! 
 
-Support [Broker Bridge]( [ https://github.com/emqtt/emqttd/wiki/Bridge-Design ](https://github.com/emqtt/emqttd/wiki/Bridge-Design) ) Now! 
+Support [Broker Bridge]( [https://github.com/emqtt/emqttd/wiki/Bridge-Design](https://github.com/emqtt/emqttd/wiki/Bridge-Design) ) Now! 
 
 Change: rename project from 'emqtt' to 'emqttd' 
 
@@ -5391,7 +5391,7 @@ Test: emqttd_topic_tests add more '_match_test'
 
 *Release Date: 2015-03-10*
 
-Support [$SYS Topics of Broker]( [ https://github.com/emqtt/emqttd/wiki/$SYS-Topics-of-Broker ](https://github.com/emqtt/emqttd/wiki/$SYS-Topics-of-Broker) ) Now! 
+Support [$SYS Topics of Broker]( [https://github.com/emqtt/emqttd/wiki/$SYS-Topics-of-Broker](https://github.com/emqtt/emqttd/wiki/$SYS-Topics-of-Broker) ) Now! 
 
 Feature: emqtt_broker to publish version, uptime, datetime to $SYS/brokers/# topics 
 
@@ -5509,7 +5509,7 @@ Makefile: deps -> get-deps
 
 rebar.config: fix mochiweb git url 
 
-tag emqtt release accoding to [Semantic Versioning]( [ http://semver.org/ ](http://semver.org/) ) 
+tag emqtt release accoding to [Semantic Versioning]( [http://semver.org/](http://semver.org/) ) 
 
 max clientId length is 1024 now. 
 

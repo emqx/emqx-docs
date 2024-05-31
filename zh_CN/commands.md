@@ -634,7 +634,7 @@ vm 命令用于查询 Erlang 虚拟机负载、内存、进程、IO 信息。
 
 ## log 命令
 
-log 命令用于设置日志等级。访问 [ Documentation of logger ](http://erlang.org/doc/apps/kernel/logger_chapter.html) 以获取详细信息
+log 命令用于设置日志等级。访问 [ Documentation of logger](http://erlang.org/doc/apps/kernel/logger_chapter.html) 以获取详细信息
 
 | log set-level \<Level>                       | 设置主日志等级和所有 Handlers 日志等级 |
 | -------------------------------------------- | -------------------------------------- |
@@ -1003,7 +1003,7 @@ listener 参数说明:
 | recon node_stats      | recon:node_stats(10, 1000)                       |
 | recon remote_load Mod | recon:remote_load(Mod)                           |
 
-访问 [ Documentation for recon ](http://ferd.github.io/recon/) 以获取详细信息。
+访问 [ Documentation for recon](http://ferd.github.io/recon/) 以获取详细信息。
 
 ### recon memory
 

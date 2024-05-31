@@ -707,7 +707,7 @@ Query the mnesia database system status.
 
 ## log 
 
-The log command is used to set the log level. Visit the [ Documentation of logger ](http://erlang.org/doc/apps/kernel/logger_chapter.html) for more information 
+The log command is used to set the log level. Visit the [ Documentation of logger](http://erlang.org/doc/apps/kernel/logger_chapter.html) for more information 
 
 log set-level \<Level>                      |  Set the primary log level and all Handlers log levels 
 -------------------------------------------|--------------------------------------------------------
@@ -1119,7 +1119,7 @@ recon remote_load Mod |  recon:remote_load(Mod)
 
 
 
-See [ Documentation for recon ](http://ferd.github.io/recon/) for more information. 
+See [ Documentation for recon](http://ferd.github.io/recon/) for more information. 
 
 ### recon memory 
 

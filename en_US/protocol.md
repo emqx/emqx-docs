@@ -4,9 +4,9 @@
 
 MQTT is a lightweight publish-subscribe mode messaging protocol which is designed for IoT applications in low-bandwidth and unstable network environments. 
 
-MQTT official website: [ http://mqtt.org ](http://mqtt.org)
+MQTT official website: [http://mqtt.org](http://mqtt.org)
 
-MQTT V3.1.1 protocol specification: [ http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html ](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)
+MQTT V3.1.1 protocol specification: [http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)
 
 ## Feature 
 
@@ -211,22 +211,22 @@ The the binary mode must be used in WebSocket connection of the MQTT protocol wi
 
 ### emqtt client library 
 
-emqtt project team: [ https://github.com/emqtt ](https://github.com/emqtt)
+emqtt project team: [https://github.com/emqtt](https://github.com/emqtt)
 
-[ emqttc ](https://github.com/emqtt/emqttc)       |  Erlang MQTT client library         
+[ emqttc](https://github.com/emqtt/emqttc)       |  Erlang MQTT client library         
 --------------------------------------------------|-------------------------------------
-[ CocoaMQTT ](https://github.com/emqtt/CocoaMQTT) |  Swift language MQTT client library 
-[ QMQTT ](https://github.com/emqtt/qmqtt)         |  QTQT framework MQTT client library 
+[ CocoaMQTT](https://github.com/emqtt/CocoaMQTT) |  Swift language MQTT client library 
+[ QMQTT](https://github.com/emqtt/qmqtt)         |  QTQT framework MQTT client library 
 
 
 
 ### Eclipse Paho client library 
 
-Paho official website: [ http://www.eclipse.org/paho/ ](http://www.eclipse.org/paho/)
+Paho official website: [http://www.eclipse.org/paho/](http://www.eclipse.org/paho/)
 
 ### mqtt.org official website client library 
 
-mqtt.org: [ https://github.com/mqtt/mqtt.github.io/wiki/libraries ](https://github.com/mqtt/mqtt.github.io/wiki/libraries)
+mqtt.org: [https://github.com/mqtt/mqtt.github.io/wiki/libraries](https://github.com/mqtt/mqtt.github.io/wiki/libraries)
 
 ## Comparison between MQTT and XMPP protocols 
 
@@ -245,7 +245,7 @@ MQTT-SN stands for "MQTT for Sensor Networks" which aims at embedded devices on 
 
 MQTT-SN is a publish/subscribe messaging protocol for wireless sensor networks (WSN), with the aim of extending the MQTT protocol beyond the reach of TCP/IP infrastructure for Sensor and Actuator solutions. 
 
-MQTT-SN specification can be downloaded from [ http://mqtt.org/new/wp-content/uploads/2009/06/MQTT-SN_spec_v1.2.pdf ](http://mqtt.org/new/wp-content/uploads/2009/06/MQTT-SN_spec_v1.2.pdf) . 
+MQTT-SN specification can be downloaded from [http://mqtt.org/new/wp-content/uploads/2009/06/MQTT-SN_spec_v1.2.pdf](http://mqtt.org/new/wp-content/uploads/2009/06/MQTT-SN_spec_v1.2.pdf) . 
 
 ## MQTT-SN vs MQTT 
 
@@ -294,16 +294,16 @@ mqtt.sn.password           |  This parameter is optional. Pair with username abo
 
 ## MQTT-SN Client Library 
 
-  1. [ https://github.com/eclipse/paho.mqtt-sn.embedded-c/ ](https://github.com/eclipse/paho.mqtt-sn.embedded-c/)
-  2. [ https://github.com/ty4tw/MQTT-SN ](https://github.com/ty4tw/MQTT-SN)
-  3. [ https://github.com/njh/mqtt-sn-tools ](https://github.com/njh/mqtt-sn-tools)
-  4. [ https://github.com/arobenko/mqtt-sn ](https://github.com/arobenko/mqtt-sn)
+  1. [https://github.com/eclipse/paho.mqtt-sn.embedded-c/](https://github.com/eclipse/paho.mqtt-sn.embedded-c/)
+  2. [https://github.com/ty4tw/MQTT-SN](https://github.com/ty4tw/MQTT-SN)
+  3. [https://github.com/njh/mqtt-sn-tools](https://github.com/njh/mqtt-sn-tools)
+  4. [https://github.com/arobenko/mqtt-sn](https://github.com/arobenko/mqtt-sn)
 
 
 
 ## LWM2M Protocol 
 
-Lightweight M2M (LWM2M) is a set of protocols defined by the Open Mobile Alliance (OMA) for machine-to-machine (M2M) or Internet of Things (IoT) device management and communications. It can be found [ here ](http://www.openmobilealliance.org/wp/) . 
+Lightweight M2M (LWM2M) is a set of protocols defined by the Open Mobile Alliance (OMA) for machine-to-machine (M2M) or Internet of Things (IoT) device management and communications. It can be found [ here](http://www.openmobilealliance.org/wp/) . 
 
 LWM2M is based on CoAP protocol, and can be carried on UDP or SMS. 
 
@@ -314,7 +314,7 @@ There are two types of servers:
 
 
 
-LWM2M defines service on a device as Object and Resource, which is represented in an XML file. A list of registered XML Objects can be found [ here ](http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html) . 
+LWM2M defines service on a device as Object and Resource, which is represented in an XML file. A list of registered XML Objects can be found [ here](http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html) . 
 
 ## EMQX-LWM2M plugin 
 
@@ -364,10 +364,10 @@ lwm2m.xml_dir  |  A directory to store XML files which define LWM2M Objects
 
 ### LWM2M clients 
 
-  * [ https://github.com/eclipse/wakaama ](https://github.com/eclipse/wakaama)
-  * [ https://github.com/OpenMobileAlliance/OMA-LWM2M-DevKit ](https://github.com/OpenMobileAlliance/OMA-LWM2M-DevKit)
-  * [ https://github.com/AVSystem/Anjay ](https://github.com/AVSystem/Anjay)
-  * [ https://github.com/ConnectivityFoundry/AwaLWM2M ](https://github.com/ConnectivityFoundry/AwaLWM2M)
-  * [ http://www.eclipse.org/leshan/ ](http://www.eclipse.org/leshan/)
+  * [https://github.com/eclipse/wakaama](https://github.com/eclipse/wakaama)
+  * [https://github.com/OpenMobileAlliance/OMA-LWM2M-DevKit](https://github.com/OpenMobileAlliance/OMA-LWM2M-DevKit)
+  * [https://github.com/AVSystem/Anjay](https://github.com/AVSystem/Anjay)
+  * [https://github.com/ConnectivityFoundry/AwaLWM2M](https://github.com/ConnectivityFoundry/AwaLWM2M)
+  * [http://www.eclipse.org/leshan/](http://www.eclipse.org/leshan/)
 
 

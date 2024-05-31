@@ -6,31 +6,31 @@ The official plug-ins provided by EMQ X include:
 
 Plugin                                                                    |  Configuration file                    |  Description                        
 --------------------------------------------------------------------------|----------------------------------------|-------------------------------------
-[ emqx_dashboard ](https://github.com/emqx/emqx-dashboard) \+             |  etc/plugins/emqx_dashbord.conf        |  Web dashboard Plugin (Default)     
-[ emqx_management ](https://github.com/emqx/emqx-management) \+           |  etc/plugins/emqx_management.conf      |  HTTP API and CLI Management Plugin 
-[ emqx_auth_clientid ](https://github.com/emqx/emqx-auth-clientid) \+     |  etc/plugins/emqx_auth_clientid.conf   |  ClientId Auth Plugin               
-[ emqx_auth_username ](https://github.com/emqx/emqx-auth-username) \+     |  etc/plugins/emqx_auth_username.conf   |  Username/Password Auth Plugin      
-[ emqx_auth_jwt ](https://github.com/emqx/emqx-auth-jwt) \+               |  etc/plugins/emqx_auth_jwt.conf        |  JWT Auth/access control            
-[ emqx_auth_ldap ](https://github.com/emqx/emqx-auth-ldap) \+             |  etc/plugins/emqx_auth_ldap.conf       |  LDAP Auth/access control           
-[ emqx_auth_http ](https://github.com/emqx/emqx-auth-http) \+             |  etc/plugins/emqx_auth_http.conf       |  HTTP Auth/access control           
-[ emqx_auth_mongo ](https://github.com/emqx/emqx-auth-mongo) \+           |  etc/plugins/emqx_auth_mongo.conf      |  MongoDB Auth/access control        
-[ emqx_auth_mysql ](https://github.com/emqx/emqx-auth-mysql) \+           |  etc/plugins/emqx_auth_mysql.conf      |  MySQL Auth/access control          
-[ emqx_auth_pgsql ](https://github.com/emqx/emqx-auth-pgsql) \+           |  etc/plugins/emqx_auth_pgsql.conf      |  PostgreSQL Auth/access control     
-[ emqx_auth_redis ](https://github.com/emqx/emqx-auth-redis) \+           |  etc/plugins/emqx_auth_redis.conf      |  Redis Auth/access control          
-[ emqx_psk_file ](https://github.com/emqx/emqx-psk-file) \+               |  etc/plugins/emqx_psk_file.conf        |  PSK support                        
-[ emqx_web_hook ](https://github.com/emqx/emqx-web-hook) \+               |  etc/plugins/emqx_web_hook.conf        |  Web Hook Plugin                    
-[ emqx_lua_hook ](https://github.com/emqx/emqx-lua-hook) \+               |  etc/plugins/emqx_lua_hook.conf        |  Lua Hook Plugin                    
-[ emqx_retainer ](https://github.com/emqx/emqx-retainer) \+               |  etc/plugins/emqx_retainer.conf        |  Retain Message storage module      
-[ emqx_rule_engine ](https://github.com/emqx/emqx-rule-engine) \+         |  etc/plugins/emqx_rule_engine.conf     |  Rule engine                        
-[ emqx_bridge_mqtt ](https://github.com/emqx/emqx-bridge-mqtt) \+         |  etc/plugins/emqx_bridge_mqtt.conf     |  MQTT Message Bridge Plugin         
-[ emqx_delayed_publish ](https://github.com/emqx/emqx-delayed-publish) \+ |  etc/plugins/emqx_delayed_publish.conf |  Delayed publish support            
-[ emqx_coap ](https://github.com/emqx/emqx-coap) \+                       |  etc/plugins/emqx_coap.conf            |  CoAP protocol support              
-[ emqx_lwm2m ](https://github.com/emqx/emqx-lwm2m) \+                     |  etc/plugins/emqx_lwm2m.conf           |  LwM2M protocol support             
-[ emqx_sn ](https://github.com/emqx/emqx-sn) \+                           |  etc/plugins/emqx_sn.conf              |  MQTT-SN protocol support           
-[ emqx_stomp ](https://github.com/emqx/emqx-stomp) \+                     |  etc/plugins/emqx_stomp.conf           |  Stomp protocol support             
-[ emqx_recon ](https://github.com/emqx/emqx-recon) \+                     |  etc/plugins/emqx_recon.conf           |  Recon performance debugging        
-[ emqx_reloader ](https://github.com/emqx/emqx-reloader) \+               |  etc/plugins/emqx_reloader.conf        |  Hot load plugin                    
-[ emqx_plugin_template ](https://github.com/emqx/emqx-plugin-template) \+ |  etc/plugins/emqx_plugin_template.conf |  plugin develop template            
+[emqx_dashboard](https://github.com/emqx/emqx-dashboard) \+             |  etc/plugins/emqx_dashbord.conf        |  Web dashboard Plugin (Default)     
+[emqx_management](https://github.com/emqx/emqx-management) \+           |  etc/plugins/emqx_management.conf      |  HTTP API and CLI Management Plugin 
+[emqx_auth_clientid](https://github.com/emqx/emqx-auth-clientid) \+     |  etc/plugins/emqx_auth_clientid.conf   |  ClientId Auth Plugin               
+[emqx_auth_username](https://github.com/emqx/emqx-auth-username) \+     |  etc/plugins/emqx_auth_username.conf   |  Username/Password Auth Plugin      
+[emqx_auth_jwt](https://github.com/emqx/emqx-auth-jwt) \+               |  etc/plugins/emqx_auth_jwt.conf        |  JWT Auth/access control            
+[emqx_auth_ldap](https://github.com/emqx/emqx-auth-ldap) \+             |  etc/plugins/emqx_auth_ldap.conf       |  LDAP Auth/access control           
+[emqx_auth_http](https://github.com/emqx/emqx-auth-http) \+             |  etc/plugins/emqx_auth_http.conf       |  HTTP Auth/access control           
+[emqx_auth_mongo](https://github.com/emqx/emqx-auth-mongo) \+           |  etc/plugins/emqx_auth_mongo.conf      |  MongoDB Auth/access control        
+[emqx_auth_mysql](https://github.com/emqx/emqx-auth-mysql) \+           |  etc/plugins/emqx_auth_mysql.conf      |  MySQL Auth/access control          
+[emqx_auth_pgsql](https://github.com/emqx/emqx-auth-pgsql) \+           |  etc/plugins/emqx_auth_pgsql.conf      |  PostgreSQL Auth/access control     
+[emqx_auth_redis](https://github.com/emqx/emqx-auth-redis) \+           |  etc/plugins/emqx_auth_redis.conf      |  Redis Auth/access control          
+[emqx_psk_file](https://github.com/emqx/emqx-psk-file) \+               |  etc/plugins/emqx_psk_file.conf        |  PSK support                        
+[emqx_web_hook](https://github.com/emqx/emqx-web-hook) \+               |  etc/plugins/emqx_web_hook.conf        |  Web Hook Plugin                    
+[emqx_lua_hook](https://github.com/emqx/emqx-lua-hook) \+               |  etc/plugins/emqx_lua_hook.conf        |  Lua Hook Plugin                    
+[emqx_retainer](https://github.com/emqx/emqx-retainer) \+               |  etc/plugins/emqx_retainer.conf        |  Retain Message storage module      
+[emqx_rule_engine](https://github.com/emqx/emqx-rule-engine) \+         |  etc/plugins/emqx_rule_engine.conf     |  Rule engine                        
+[emqx_bridge_mqtt](https://github.com/emqx/emqx-bridge-mqtt) \+         |  etc/plugins/emqx_bridge_mqtt.conf     |  MQTT Message Bridge Plugin         
+[emqx_delayed_publish](https://github.com/emqx/emqx-delayed-publish) \+ |  etc/plugins/emqx_delayed_publish.conf |  Delayed publish support            
+[emqx_coap](https://github.com/emqx/emqx-coap) \+                       |  etc/plugins/emqx_coap.conf            |  CoAP protocol support              
+[emqx_lwm2m](https://github.com/emqx/emqx-lwm2m) \+                     |  etc/plugins/emqx_lwm2m.conf           |  LwM2M protocol support             
+[emqx_sn](https://github.com/emqx/emqx-sn) \+                           |  etc/plugins/emqx_sn.conf              |  MQTT-SN protocol support           
+[emqx_stomp](https://github.com/emqx/emqx-stomp) \+                     |  etc/plugins/emqx_stomp.conf           |  Stomp protocol support             
+[emqx_recon](https://github.com/emqx/emqx-recon) \+                     |  etc/plugins/emqx_recon.conf           |  Recon performance debugging        
+[emqx_reloader](https://github.com/emqx/emqx-reloader) \+               |  etc/plugins/emqx_reloader.conf        |  Hot load plugin                    
+[emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) \+ |  etc/plugins/emqx_plugin_template.conf |  plugin develop template            
 
 
 
@@ -77,7 +77,7 @@ If Dashboard plugin is started (by default), the plugins can be also managed on 
 
 ## Dashboard Plugin 
 
-[ emqx_dashboard ](https://github.com/emqx/emqx-dashboard) is the web management console for the EMQ X broker, which is enabled by default. When EMQ X starts successfully, user can access it by visiting ` http://localhost:18083 ` with the default username/password: admin/public. 
+[emqx_dashboard](https://github.com/emqx/emqx-dashboard) is the web management console for the EMQ X broker, which is enabled by default. When EMQ X starts successfully, user can access it by visiting ` http://localhost:18083 ` with the default username/password: admin/public. 
 
 > The basic information, statistics, and load status of the EMQ X broker, as well as the current client list (Connections), Sessions, Routing Table (Topics), and Subscriptions can be queried through dashboard. 
 
@@ -112,7 +112,7 @@ etc/plugins/emqx_dashboard.conf:
 
 ## HTTP API and CLI Management Plugin 
 
-[ emqx_management ](https://github.com/emqx/emqx-management) is the HTTP API and CLI management plugin of the *EMQ X* broker，which is enabled by default. When *EMQ X* starts successfully, users can query the current client list and other operations via the HTTP API and CLI provided by this plugin. For details see ` rest_api ` and ` commands ` . 
+[emqx_management](https://github.com/emqx/emqx-management) is the HTTP API and CLI management plugin of the *EMQ X* broker，which is enabled by default. When *EMQ X* starts successfully, users can query the current client list and other operations via the HTTP API and CLI provided by this plugin. For details see ` rest_api ` and ` commands ` . 
 
 ### HTTP API and CLI Management Configuration 
 
@@ -148,7 +148,7 @@ etc/plugins/emqx_management.conf:
 
 ## ClientID authentication plugin 
 
-[ emqx_auth_clientid ](https://github.com/emqx/emqx-auth-clientid) currently only supports connection authentication, it authenticates the client through ` clientid ` and ` password ` . When the password is stored, it can be encrypted according the configuration. 
+[emqx_auth_clientid](https://github.com/emqx/emqx-auth-clientid) currently only supports connection authentication, it authenticates the client through ` clientid ` and ` password ` . When the password is stored, it can be encrypted according the configuration. 
 
 ### ClientID Authentication Configuration 
 
@@ -171,7 +171,7 @@ etc/plugins/emqx_auth_clientid.conf:
 
 ## Username Authentication Plugin 
 
-[ emqx_auth_username ](https://github.com/emqx/emqx-auth-username) currently only supports connection authentication, it authenticates the client through ` username ` and ` password ` . When the password is stored, it can be encrypted according the configuration. 
+[emqx_auth_username](https://github.com/emqx/emqx-auth-username) currently only supports connection authentication, it authenticates the client through ` username ` and ` password ` . When the password is stored, it can be encrypted according the configuration. 
 
 ### Username Authentication Configuration 
 
@@ -192,7 +192,7 @@ etc/plugins/emqx_auth_username.conf:
 
 ## JWT Authentication Plugin 
 
-[ emqx_auth_jwt ](https://github.com/emqx/emqx-auth-jwt) supports a [ JWT ](https://jwt.io) -based way to authenticate connected clients and only supports connection authentication. It parses and verifies the legitimacy and timeliness of the Token, and allows connection when satisfied. 
+[emqx_auth_jwt](https://github.com/emqx/emqx-auth-jwt) supports a [ JWT](https://jwt.io) -based way to authenticate connected clients and only supports connection authentication. It parses and verifies the legitimacy and timeliness of the Token, and allows connection when satisfied. 
 
 ### JWT Authentication Configuration 
 
@@ -211,7 +211,7 @@ etc/plugins/emqx_auth_jwt.conf:
 
 ## LDAP Authentication/Access Control Plugin 
 
-[ emqx_auth_ldap ](https://github.com/emqx/emqx-auth-ldap) Emqx_auth_ldap supports access to [ LDAP ](https://ldap.com) for connection authentication and access control. 
+[emqx_auth_ldap](https://github.com/emqx/emqx-auth-ldap) Emqx_auth_ldap supports access to [ LDAP](https://ldap.com) for connection authentication and access control. 
 
 ### LDAP Authentication Plugin Configuration 
 
@@ -252,7 +252,7 @@ etc/plugins/emqx_auth_ldap.conf:
 
 ## HTTP Authentication/Access Control Plugin 
 
-[ emqx_auth_http ](https://github.com/emqx/emqx-auth-http) implements connection authentication and access control via HTTP. It sends request to a specified HTTP service and determines whether it has access rights by the return value. 
+[emqx_auth_http](https://github.com/emqx/emqx-auth-http) implements connection authentication and access control via HTTP. It sends request to a specified HTTP service and determines whether it has access rights by the return value. 
 
 This plugin supports three requests: 
 
@@ -359,7 +359,7 @@ etc/plugins/emqx_auth_http.conf:
 
 ## MySQL Authentication/Access Control Plugin 
 
-[ emqx_auth_mysql ](https://github.com/emqx/emqx-auth-mysql) supports accessing MySQL for connection authentication and access control. To use these features, it is necessary to create two tables in MySQL as following: 
+[emqx_auth_mysql](https://github.com/emqx/emqx-auth-mysql) supports accessing MySQL for connection authentication and access control. To use these features, it is necessary to create two tables in MySQL as following: 
 
 ### MQTT user table 
     
@@ -461,7 +461,7 @@ To prevent the security issue caused by password being too simple, the plugin al
 
 ## PostgreSQL Authentication Plugin 
 
-[ emqx_auth_pgsql ](https://github.com/emqx/emqx-auth-pgsql) implements connection authentication and access control by PostgreSQL. Two tables are required to be created as follows: 
+[emqx_auth_pgsql](https://github.com/emqx/emqx-auth-pgsql) implements connection authentication and access control by PostgreSQL. Two tables are required to be created as follows: 
 
 ### Postgres MQTT User Table 
     
@@ -567,7 +567,7 @@ Enable the following configuration to support TLS connections to PostgreSQL:
 
 ## Redis Authentication/Access Control Plugin 
 
-[ emqx_auth_redis ](https://github.com/emqx/emqx-auth-redis) implements connection authentication and access control functions by Redis. 
+[emqx_auth_redis](https://github.com/emqx/emqx-auth-redis) implements connection authentication and access control functions by Redis. 
 
 ### Redis Authentication Plugin Configuration 
 
@@ -661,7 +661,7 @@ The default authentication is User Hash:
 
 ## MongoDB Authentication/Access Control Plugin 
 
-[ emqx_auth_mongo ](https://github.com/emqx/emqx-auth-mongo) implements connection authentication and access control by MongoDB. 
+[emqx_auth_mongo](https://github.com/emqx/emqx-auth-mongo) implements connection authentication and access control by MongoDB. 
 
 ### MongoDB authentication plugin configuration 
 
@@ -768,7 +768,7 @@ Example:
 
 ## PSK Authentication Plugin 
 
-[ emqx_psk_file ](https://github.com/emqx/emqx-psk-file) mainly provides PSK support that aimes to implement connection authentication through PSK when the client establishes a TLS/DTLS connection. 
+[emqx_psk_file](https://github.com/emqx/emqx-psk-file) mainly provides PSK support that aimes to implement connection authentication through PSK when the client establishes a TLS/DTLS connection. 
 
 ### PSK Authentication Plugin Configuration 
 
@@ -779,7 +779,7 @@ etc/plugins/emqx_psk_file.conf:
 
 ## WebHook Plugin 
 
-[ emqx_web_hook ](https://github.com/emqx/emqx-web-hook) can send all EMQ X events and messages to the specified HTTP server. 
+[emqx_web_hook](https://github.com/emqx/emqx-web-hook) can send all EMQ X events and messages to the specified HTTP server. 
 
 ### WebHook plugin configuration 
 
@@ -809,11 +809,11 @@ etc/plugins/emqx_web_hook.conf:
 
 ## Lua Plugin 
 
-[ emqx_lua_hook ](https://github.com/emqx/emqx-lua-hook) sends all events and messages to the specified Lua function. See its README for specific use. 
+[emqx_lua_hook](https://github.com/emqx/emqx-lua-hook) sends all events and messages to the specified Lua function. See its README for specific use. 
 
 ## Retainer Plugin 
 
-[ emqx_retainer ](https://github.com/emqx/emqx-retainer) is set to start by default and provides Retained type message support for EMQ X. It stores the Retained messages for all topics in the cluster's database and posts the message when the client subscribes to the topic 
+[emqx_retainer](https://github.com/emqx/emqx-retainer) is set to start by default and provides Retained type message support for EMQ X. It stores the Retained messages for all topics in the cluster's database and posts the message when the client subscribes to the topic 
 
 ### Retainer Plugin Configuration 
 
@@ -962,11 +962,11 @@ etc/plugins/emqx_bridge_mqtt.conf
 
 ## Delayed Publish Plugin 
 
-[ emqx_delayed_publish ](https://github.com/emqx/emqx-delayed-publish) provides the function to delay publishing messages. When the client posts a message to EMQ X using the special topic prefix ` $delayed/\<seconds>/ ` , EMQ X will publish this message after \<seconds> seconds. 
+[emqx_delayed_publish](https://github.com/emqx/emqx-delayed-publish) provides the function to delay publishing messages. When the client posts a message to EMQ X using the special topic prefix ` $delayed/\<seconds>/ ` , EMQ X will publish this message after \<seconds> seconds. 
 
 ## CoAP Protocol Plugin 
 
-[ emqx_coap ](https://github.com/emqx/emqx-coap) provides support for the CoAP protocol (RFC 7252)。 
+[emqx_coap](https://github.com/emqx/emqx-coap) provides support for the CoAP protocol (RFC 7252)。 
 
 ### CoAP protocol Plugin Configuration 
 
@@ -995,7 +995,7 @@ DTLS can be enabled if the following two configuration items are set:
 
 ### Test the CoAP Plugin 
 
-A CoAP client is necessary to test CoAP plugin. In following example the [ libcoap ](https://github.com/obgm/libcoap) is used. 
+A CoAP client is necessary to test CoAP plugin. In following example the [ libcoap](https://github.com/obgm/libcoap) is used. 
     
     
     yum install libcoap
@@ -1005,7 +1005,7 @@ A CoAP client is necessary to test CoAP plugin. In following example the [ libco
 
 ## LwM2M Protocol Plugin 
 
-[ emqx_lwm2m ](https://github.com/emqx/emqx-lwm2m) provides support for the LwM2M protocol. 
+[emqx_lwm2m](https://github.com/emqx/emqx-lwm2m) provides support for the LwM2M protocol. 
 
 ### LwM2M plugin configuration 
 
@@ -1065,7 +1065,7 @@ DTLS support can be enabled with the following configuration:
 
 ## MQTT-SN Protocol Plugin 
 
-[ emqx_sn ](https://github.com/emqx/emqx-sn) provides support for the MQTT-SN protocol 
+[emqx_sn](https://github.com/emqx/emqx-sn) provides support for the MQTT-SN protocol 
 
 ### MQTT-SN protocol plugin configuration 
 
@@ -1076,7 +1076,7 @@ etc/plugins/emqx_sn.conf:
 
 ## Stomp Protocol Plugin 
 
-[ emqx_stomp ](https://github.com/emqx/emqx-stomp) provides support for the Stomp protocol. Clients connect to EMQ X through Stomp 1.0/1.1/1.2 protocol, publish and subscribe to MQTT message. 
+[emqx_stomp](https://github.com/emqx/emqx-stomp) provides support for the Stomp protocol. Clients connect to EMQ X through Stomp 1.0/1.1/1.2 protocol, publish and subscribe to MQTT message. 
 
 ### Stomp plugin configuration 
 
@@ -1107,7 +1107,7 @@ etc/plugins/emqx_stomp.conf:
 
 ## Recon Performance Debugging Plugin 
 
-[ emqx_recon ](https://github.com/emqx/emqx-recon) integrates the recon performance tuning library to view status information about the current system, for example: 
+[emqx_recon](https://github.com/emqx/emqx-recon) integrates the recon performance tuning library to view status information about the current system, for example: 
     
     
     ./bin/emqx_ctl recon
@@ -1128,7 +1128,7 @@ etc/plugins/emqx_recon.conf:
 
 ## Reloader Hot Reload Plugin 
 
-[ emqx_reloader ](https://github.com/emqx/emqx-reloader) is used for code hot-upgrade during impelementation and debugging. After loading this plug-in, EMQ X updates the codes automatically according to the configuration interval. 
+[emqx_reloader](https://github.com/emqx/emqx-reloader) is used for code hot-upgrade during impelementation and debugging. After loading this plug-in, EMQ X updates the codes automatically according to the configuration interval. 
 
 A CLI command is also provided to force a module to reload: 
     
@@ -1150,7 +1150,7 @@ etc/plugins/emqx_reloader.conf:
 
 ## Plugin Development Template 
 
-[ emqx_plugin_template ](https://github.com/emqx/emqx-plugin-template) is an EMQ X plugin template and provides no functionality by itself. 
+[emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) is an EMQ X plugin template and provides no functionality by itself. 
 
 When developers need to customize a plugin, they can view this plugin's code and structure to deliver a standard EMQ X plugin faster. The plugin is actually a normal ` Erlang Application ` with the configuration file: ` etc/${PluginName}.config ` . 
 
@@ -1158,7 +1158,7 @@ When developers need to customize a plugin, they can view this plugin's code and
 
 ### Create a Plugin Project 
 
-For creating a new plugin project please refer to the [ emqx_plugin_template ](https://github.com/emqx/emqx-plugin-template) . .. 
+For creating a new plugin project please refer to the [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) . .. 
 
 ::: tip Tip
 The tag ` -emqx_plugin(?MODULE). ` must be added to the ` \<plugin name>_app.erl ` file to indicate that this is a plugin for EMQ X. 
@@ -1174,7 +1174,7 @@ A demo of authentication module - emqx_auth_demo.erl
     -export([ init/1
             , check/2
             , description/0
-            ]).
+           ]).
     
     init(Opts) -> {ok, Opts}.
     
@@ -1196,7 +1196,7 @@ A demo of access control module - emqx_acl_demo.erl
             , check_acl/5
             , reload_acl/1
             , description/0
-            ]).
+           ]).
     
     init(Opts) ->
         {ok, Opts}.
@@ -1297,8 +1297,8 @@ The plugin comes with a configuration file placed in ` etc/${plugin_name}.conf|c
         [
       {plugin_name, [
         {key, value}
-      ]}
-    ].
+     ]}
+   ].
 
   2. sysctl's ` k = v ` universal forma - ` ${plugin_name}.conf ` : 
     
@@ -1329,7 +1329,7 @@ The plugin comes with a configuration file placed in ` etc/${plugin_name}.conf|c
        [ {plugin_name, {git, "url_of_plugin", {tag, "tag_of_plugin"}}}
        , ....
        ....
-       ]
+      ]
     }
 
   3. The relx paragraph in rebar.config is added: 
@@ -1343,7 +1343,7 @@ The plugin comes with a configuration file placed in ` etc/${plugin_name}.conf|c
         , {release, {emqx, git_describe},
            [
              {plugin_name, load},
-           ]
+          ]
           }
-        ]
+       ]
     }

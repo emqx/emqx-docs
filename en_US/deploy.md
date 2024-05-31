@@ -16,9 +16,9 @@ LB products of public cloud providers:
 
 Cloud provider                       |  SSL Termination |  LB Product DOC/URL                                                                                         
 -------------------------------------|------------------|-------------------------------------------------------------------------------------------------------------
-[ QingCloud ](https://qingcloud.com) |  Y               |  [ https://docs.qingcloud.com/guide/loadbalancer.html ](https://docs.qingcloud.com/guide/loadbalancer.html) 
-[ AWS ](https://aws.amazon.com)      |  Y               |  [ https://aws.amazon.com/cn/elasticloadbalancing/ ](https://aws.amazon.com/cn/elasticloadbalancing/)       
-[ aliyun ](https://www.aliyun.com)   |  N               |  [ https://www.aliyun.com/product/slb ](https://www.aliyun.com/product/slb)                                 
+[ QingCloud](https://qingcloud.com) |  Y               |  [https://docs.qingcloud.com/guide/loadbalancer.html](https://docs.qingcloud.com/guide/loadbalancer.html) 
+[ AWS](https://aws.amazon.com)      |  Y               |  [https://aws.amazon.com/cn/elasticloadbalancing/](https://aws.amazon.com/cn/elasticloadbalancing/)       
+[ aliyun](https://www.aliyun.com)   |  N               |  [https://www.aliyun.com/product/slb](https://www.aliyun.com/product/slb)                                 
 
 
 
@@ -26,8 +26,8 @@ LBs for Private Cloud:
 
 Open-Source LB                       |  SSL Termination |  DOC/URL                                                                                                          
 -------------------------------------|------------------|-------------------------------------------------------------------------------------------------------------------
-[ HAProxy ](https://www.haproxy.org) |  Y               |  [ https://www.haproxy.com/solutions/load-balancing.html ](https://www.haproxy.com/solutions/load-balancing.html) 
-[ NGINX ](https://www.nginx.com)     |  PLUS Edition    |  [ https://www.nginx.com/solutions/load-balancing/ ](https://www.nginx.com/solutions/load-balancing/)             
+[ HAProxy](https://www.haproxy.org) |  Y               |  [https://www.haproxy.com/solutions/load-balancing.html](https://www.haproxy.com/solutions/load-balancing.html) 
+[ NGINX](https://www.nginx.com)     |  PLUS Edition    |  [https://www.nginx.com/solutions/load-balancing/](https://www.nginx.com/solutions/load-balancing/)             
 
 
 
@@ -172,7 +172,7 @@ emqx2 |  192.168.0.3
 
 NGINX Plus serves as a LB for *EMQ X* cluster and terminates the SSL connections: 
 
-  1. Install the NGINX Plus. An instruction for Ubuntu: [ https://cs.nginx.com/repo_setup ](https://cs.nginx.com/repo_setup)
+  1. Install the NGINX Plus. An instruction for Ubuntu: [https://cs.nginx.com/repo_setup](https://cs.nginx.com/repo_setup)
   2. Create *EMQ X* cluster nodes like following: 
 
 node  |  IP          

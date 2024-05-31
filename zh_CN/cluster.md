@@ -48,7 +48,7 @@ Erlang 节点 Cookie 设置:
 
     2. erl -setcookie \<Cookie>
 
-本节内容来自: [ http://erlang.org/doc/reference_manual/distributed.html ](http://erlang.org/doc/reference_manual/distributed.html)
+本节内容来自: [http://erlang.org/doc/reference_manual/distributed.html](http://erlang.org/doc/reference_manual/distributed.html)
 
 ### 连接
 
@@ -250,7 +250,7 @@ EMQ X 支持多种策略创建集群:
 
 ### 基于 etcd 自动集群
 
-基于 [ etcd ](https://coreos.com/etcd/) 自动发现并创建集群:
+基于 [ etcd](https://coreos.com/etcd/) 自动发现并创建集群:
 
     cluster.discovery = etcd
 
@@ -262,7 +262,7 @@ EMQ X 支持多种策略创建集群:
 
 ### 基于 Kubernetes 自动集群
 
-[ Kubernetes ](https://kubernetes.io/) 下自动发现并创建集群:
+[ Kubernetes](https://kubernetes.io/) 下自动发现并创建集群:
 
     cluster.discovery = k8s
 

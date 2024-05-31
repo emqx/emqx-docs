@@ -16,18 +16,18 @@ LB (负载均衡器) 负责分发设备的 MQTT 连接与消息到 EMQ X 集群�
 
 | 云计算厂商                         | 是否支持 TLS 终结 | LB 产品介绍                                                                                                |
 | ---------------------------------- | ----------------- | ---------------------------------------------------------------------------------------------------------- |
-| [ 青云 ](https://qingcloud.com)    | 是                | [ https://docs.qingcloud.com/guide/loadbalancer.html ](https://docs.qingcloud.com/guide/loadbalancer.html) |
-| [ AWS ](https://aws.amazon.com)    | 是                | [ https://aws.amazon.com/cn/elasticloadbalancing/ ](https://aws.amazon.com/cn/elasticloadbalancing/)       |
-| [ 阿里云 ](https://www.aliyun.com) | 否                | [ https://www.aliyun.com/product/slb ](https://www.aliyun.com/product/slb)                                 |
-| [ UCloud ](https://ucloud.cn)      | 未知              | [ https://ucloud.cn/site/product/ulb.html ](https://ucloud.cn/site/product/ulb.html)                       |
-| [ QCloud ](https://www.qcloud.com) | 未知              | [ https://www.qcloud.com/product/clb ](https://www.qcloud.com/product/clb)                                 |
+| [ 青云](https://qingcloud.com)    | 是                | [https://docs.qingcloud.com/guide/loadbalancer.html](https://docs.qingcloud.com/guide/loadbalancer.html) |
+| [ AWS](https://aws.amazon.com)    | 是                | [https://aws.amazon.com/cn/elasticloadbalancing/](https://aws.amazon.com/cn/elasticloadbalancing/)       |
+| [ 阿里云](https://www.aliyun.com) | 否                | [https://www.aliyun.com/product/slb](https://www.aliyun.com/product/slb)                                 |
+| [ UCloud](https://ucloud.cn)      | 未知              | [https://ucloud.cn/site/product/ulb.html](https://ucloud.cn/site/product/ulb.html)                       |
+| [ QCloud](https://www.qcloud.com) | 未知              | [https://www.qcloud.com/product/clb](https://www.qcloud.com/product/clb)                                 |
 
 私有部署 LB 服务器:
 
 | 开源 LB                              | 是否支持 TLS 终结 | 方案介绍                                                                                                         |
 | ------------------------------------ | ----------------- | ---------------------------------------------------------------------------------------------------------------- |
-| [ HAProxy ](https://www.haproxy.org) | 是                | [ https://www.haproxy.com/solutions/load-balancing.html ](https://www.haproxy.com/solutions/load-balancing.html) |
-| [ NGINX ](https://www.nginx.com)     | PLUS 产品支持     | [ https://www.nginx.com/solutions/load-balancing/ ](https://www.nginx.com/solutions/load-balancing/)             |
+| [ HAProxy](https://www.haproxy.org) | 是                | [https://www.haproxy.com/solutions/load-balancing.html](https://www.haproxy.com/solutions/load-balancing.html) |
+| [ NGINX](https://www.nginx.com)     | PLUS 产品支持     | [https://www.nginx.com/solutions/load-balancing/](https://www.nginx.com/solutions/load-balancing/)             |
 
 国内公有云部署推荐青云(EMQ X 合作伙伴)，国外部署推荐 AWS 。私有部署推荐使用 HAProxy 作为 LB。
 
@@ -162,7 +162,7 @@ HAProxy 作为 LB 部署 EMQ X 集群，并终结 SSL 连接:
 
 NGINX Plus 产品作为 EMQ X 集群 LB，并终结 SSL 连接:
 
-1. 注册 NGINX Plus 试用版，Ubuntu 下安装: [ https://cs.nginx.com/repo_setup ](https://cs.nginx.com/repo_setup)
+1. 注册 NGINX Plus 试用版，Ubuntu 下安装: [https://cs.nginx.com/repo_setup](https://cs.nginx.com/repo_setup)
 2. 创建 EMQ X 节点集群，例如:
 
 | 节点  | IP 地址     |

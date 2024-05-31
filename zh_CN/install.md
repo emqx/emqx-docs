@@ -10,7 +10,7 @@ EMQ X 消息服务器可跨平台运行在 Linux、FreeBSD、macOS、Windows 或
 
 EMQ X 消息服务器每个版本会发布 CentOS、Ubuntu、Debian、FreeBSD、macOS、Windows 、openSUSE 平台程序包与 Docker 镜像。
 
-下载地址: [ https://www.emqx.io/downloads ](https://www.emqx.io/downloads)
+下载地址: [https://www.emqx.io/downloads](https://www.emqx.io/downloads)
 
 ## CentOS
 
@@ -78,7 +78,7 @@ EMQ X 消息服务器每个版本会发布 CentOS、Ubuntu、Debian、FreeBSD、
 
 ### 使用 rpm 包安装 EMQ X
 
-1. 通过 [ emqx.io ](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github ](https://github.com/emqx/emqx/releases) 选择 CentOS 版本，然后下载要安装的 EMQ X 版本的 rpm 包。
+1. 通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github](https://github.com/emqx/emqx/releases) 选择 CentOS 版本，然后下载要安装的 EMQ X 版本的 rpm 包。
 
 2. 安装 EMQ X
 
@@ -113,7 +113,7 @@ EMQ X 消息服务器每个版本会发布 CentOS、Ubuntu、Debian、FreeBSD、
 
 ### 使用 zip 包安装 EMQ X
 
-1. 通过 [ emqx.io ](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github ](https://github.com/emqx/emqx/releases) 选择 Centos 版本，然后下载要安装的 EMQ X 版本的 zip 包。
+1. 通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github](https://github.com/emqx/emqx/releases) 选择 Centos 版本，然后下载要安装的 EMQ X 版本的 zip 包。
 
 2. 解压程序包
 
@@ -225,7 +225,7 @@ lsb_release -cs 子命令返回 Ubuntu 发行版的名称，例如 xenial。 有
 
 ### 使用 deb 包安装 EMQ X
 
-1. 通过 [ emqx.io ](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github ](https://github.com/emqx/emqx/releases) 选择 Ubuntu 版本，然后下载要安装的 EMQ X 版本的 deb 包。
+1. 通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github](https://github.com/emqx/emqx/releases) 选择 Ubuntu 版本，然后下载要安装的 EMQ X 版本的 deb 包。
 
 2. 安装 EMQ X
 
@@ -260,7 +260,7 @@ lsb_release -cs 子命令返回 Ubuntu 发行版的名称，例如 xenial。 有
 
 ### 使用 zip 包安装 EMQ X
 
-1. 通过 [ emqx.io ](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github ](https://github.com/emqx/emqx/releases) 选择 Ubuntu 版本，然后下载要安装的 EMQ X 版本的 zip 包。
+1. 通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github](https://github.com/emqx/emqx/releases) 选择 Ubuntu 版本，然后下载要安装的 EMQ X 版本的 zip 包。
 
 2. 解压程序包
 
@@ -370,7 +370,7 @@ lsb_release -cs 子命令返回 Debian 发行版的名称，例如 helium。 有
 
 ### 使用 deb 包安装 EMQ X
 
-1. 通过 [ emqx.io ](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github ](https://github.com/emqx/emqx/releases) 选择 Debian 版本，然后下载要安装的 EMQ X 版本的 deb 包。
+1. 通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github](https://github.com/emqx/emqx/releases) 选择 Debian 版本，然后下载要安装的 EMQ X 版本的 deb 包。
 
 2. 安装 EMQ X
 
@@ -405,7 +405,7 @@ lsb_release -cs 子命令返回 Debian 发行版的名称，例如 helium。 有
 
 ### 使用 zip 包安装 EMQ X
 
-1. 通过 [ emqx.io ](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github ](https://github.com/emqx/emqx/releases) 选择 Debian 版本，然后下载要安装的 EMQ X 版本的 zip 包。
+1. 通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github](https://github.com/emqx/emqx/releases) 选择 Debian 版本，然后下载要安装的 EMQ X 版本的 zip 包。
 
 2. 解压程序包
 
@@ -446,7 +446,7 @@ lsb_release -cs 子命令返回 Debian 发行版的名称，例如 helium。 有
 
 ### 使用 zip 包安装 EMQ X
 
-1.  通过 [ emqx.io ](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github ](https://github.com/emqx/emqx/releases) ，选择 EMQ X 版本，然后下载要安装的 zip 包。
+1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github](https://github.com/emqx/emqx/releases) ，选择 EMQ X 版本，然后下载要安装的 zip 包。
 
 2.  解压压缩包
 
@@ -465,7 +465,7 @@ lsb_release -cs 子命令返回 Debian 发行版的名称，例如 helium。 有
 
 ## Windows
 
-1.  通过 [ emqx.io ](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github ](https://github.com/emqx/emqx/releases) 选择 Windows 版本，然后下载要安装的 .zip 包。
+1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github](https://github.com/emqx/emqx/releases) 选择 Windows 版本，然后下载要安装的 .zip 包。
 
 2.  解压压缩包
 
@@ -535,7 +535,7 @@ lsb_release -cs 子命令返回 Debian 发行版的名称，例如 helium。 有
 
 ### 使用 rpm 包安装 EMQ X
 
-1. 通过 [ emqx.io ](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github ](https://github.com/emqx/emqx/releases) 选择 openSUSE，然后下载要安装的 EMQ X 版本的 rpm 包。
+1. 通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github](https://github.com/emqx/emqx/releases) 选择 openSUSE，然后下载要安装的 EMQ X 版本的 rpm 包。
 
 2. 安装 EMQ X，将下面的路径更改为您下载 EMQ X 软件包的路径。
 
@@ -570,7 +570,7 @@ lsb_release -cs 子命令返回 Debian 发行版的名称，例如 helium。 有
 
 ### 使用 zip 包安装 EMQ X
 
-1. 通过 [ emqx.io ](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github ](https://github.com/emqx/emqx/releases) 选择 openSUSE，然后下载要安装的 EMQ X 版本的 zip 包。
+1. 通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github](https://github.com/emqx/emqx/releases) 选择 openSUSE，然后下载要安装的 EMQ X 版本的 zip 包。
 
 2. 解压压缩包
 
@@ -591,7 +591,7 @@ lsb_release -cs 子命令返回 Debian 发行版的名称，例如 helium。 有
 
 ### 使用 zip 包安装 EMQ X
 
-1.  通过 [ emqx.io ](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github ](https://github.com/emqx/emqx/releases) 选择 FreeBSD，然后下载要安装的 EMQ X 版本的 zip 包。
+1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github](https://github.com/emqx/emqx/releases) 选择 FreeBSD，然后下载要安装的 EMQ X 版本的 zip 包。
 
 2.  解压压缩包
 
@@ -611,11 +611,11 @@ lsb_release -cs 子命令返回 Debian 发行版的名称，例如 helium。 有
 1. 获取 docker 镜像
 
 
-    * 通过 [ Docker Hub ](https://hub.docker.com/r/emqx/emqx) 获取
+    * 通过 [ Docker Hub](https://hub.docker.com/r/emqx/emqx) 获取
 
           $ docker pull emqx/emqx:v3.1.0
 
-    * 通过 [ emqx.io ](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github ](https://github.com/emqx/emqx/releases) 手动下载 docker 镜像，并手动加载
+    * 通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [ github](https://github.com/emqx/emqx/releases) 手动下载 docker 镜像，并手动加载
       
           $ wget -O emqx-docker.zip https://www.emqx.io/downloads/v3/latest/emqx-docker.zip
           $ unzip emqx-docker.zip
@@ -625,7 +625,7 @@ lsb_release -cs 子命令返回 Debian 发行版的名称，例如 helium。 有
 
        $ docker run -d --name emqx31 -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:v3.1.0
 
-更多关于 EMQ X Docker 的信息请查看 [ Docker Hub ](https://hub.docker.com/r/emqx/emqx) 或 [ EMQ X Docker ](https://github.com/emqx/emqx-docker)
+更多关于 EMQ X Docker 的信息请查看 [ Docker Hub](https://hub.docker.com/r/emqx/emqx) 或 [ EMQ X Docker](https://github.com/emqx/emqx-docker)
 
 ## 源码编译安装
 
@@ -637,9 +637,9 @@ EMQ X 消息服务器基于 Erlang/OTP 平台开发，项目托管的 GitHub 管
 EMQ X 依赖 Erlang R21.2+ 版本
 :::
 
-Erlang 安装: [ http://www.erlang.org/ ](http://www.erlang.org/)
+Erlang 安装: [http://www.erlang.org/](http://www.erlang.org/)
 
-Git 客户端: [ http://www.git-scm.com/ ](http://www.git-scm.com/)
+Git 客户端: [http://www.git-scm.com/](http://www.git-scm.com/)
 
 ### 编译安装 EMQ X
 
@@ -667,9 +667,9 @@ Git 客户端: [ http://www.git-scm.com/ ](http://www.git-scm.com/)
 
 ## Windows 源码编译安装
 
-Erlang 安装: [ http://www.erlang.org/ ](http://www.erlang.org/)
+Erlang 安装: [http://www.erlang.org/](http://www.erlang.org/)
 
-scoop 安装: [ https://scoop.sh/ ](https://scoop.sh/)
+scoop 安装: [https://scoop.sh/](https://scoop.sh/)
 
 scoop 安装完成后，使用 scoop 来安装 Git、 Make、curl、erlang
 

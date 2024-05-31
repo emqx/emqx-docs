@@ -51,7 +51,7 @@ Erlang nodes authenticate each other by a magic cookie when communicating. The c
     2. erl -setcookie \<Cookie>
 
 ::: tip Tip
-Content of this chapter is from: [ http://erlang.org/doc/reference_manual/distributed.html ](http://erlang.org/doc/reference_manual/distributed.html)
+Content of this chapter is from: [http://erlang.org/doc/reference_manual/distributed.html](http://erlang.org/doc/reference_manual/distributed.html)
 :::
 
 ### Distribution Protocol 

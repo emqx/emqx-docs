@@ -558,7 +558,7 @@ Response:
           "path": "/rule_events/",
           "descr": "List all events with detailed info"
         }
-      ]
+     ]
     }
 
 ## Cluster and Node 
@@ -590,7 +590,7 @@ Response:
           "uptime": "3 minutes, 59 seconds",
           "version": "v3.1.0"
         }
-      ]
+     ]
     }
 
 ### Retrieve Info of a Node 
@@ -655,7 +655,7 @@ Response:
           "uptime": "1 days,18 hours, 45 minutes, 1 seconds",
           "version": "v3.1.0"
         }
-      ]
+     ]
     }
 
 ### Retrieve Statistics of a Specific Node 
@@ -741,7 +741,7 @@ Response:
           "username": "undefined",
           "zone": "external"
         }
-      ],
+     ],
       "meta": {
         "page": 1,
         "limit": 10000,
@@ -795,7 +795,7 @@ Response:
          "username": "undefined",
          "zone": "external"
        }
-      ],
+     ],
       "meta": {
         "page": 1,
         "limit": 10000,
@@ -849,7 +849,7 @@ Response:
           "username": "undefined",
           "zone": "external"
         }
-      ]
+     ]
     }
 
 ### Retrieve a Connection on a Node 
@@ -898,7 +898,7 @@ Response:
           "username": "undefined",
           "zone": "external"
         }
-      ]
+     ]
     }
 
 ### Kick-out a Specified Connection in Cluster 
@@ -986,7 +986,7 @@ Response:
           "subscriptions_count": 0,
           "username": "undefined"
         }
-      ],
+     ],
       "meta": {
         "page": 1,
         "limit": 10000,
@@ -1035,7 +1035,7 @@ Response:
           "subscriptions_count": 1,
           "username": "undefined"
         }
-      ]
+     ]
     }
 
 ### List all Sessions on a Node 
@@ -1102,7 +1102,7 @@ Response:
           "subscriptions_count": 1,
           "username": "undefined"
         }
-      ],
+     ],
       "meta": {
         "page": 1,
         "limit": 10000,
@@ -1162,7 +1162,7 @@ Response:
           "subscriptions_count": 0,
           "username": "mosquitto_mqtt"
         }
-      ]
+     ]
     }
 
 ## Subscriptions 
@@ -1197,7 +1197,7 @@ Response:
           "qos": 0,
           "topic": "t"
         }
-      ],
+     ],
       "meta": {
         "page": 1,
         "limit": 10000,
@@ -1229,7 +1229,7 @@ Response:
           "qos": 0,
           "topic": "t"
         }
-      ]
+     ]
     }
 
 ### List all Subscriptions of a Node 
@@ -1262,7 +1262,7 @@ Response:
           "qos": 0,
           "topic": "t"
         }
-      ],
+     ],
       "meta": {
         "page": 1,
         "limit": 10000,
@@ -1294,7 +1294,7 @@ Response:
           "qos": 0,
           "topic": "t"
         }
-      ]
+     ]
     }
 
 ## Routes 
@@ -1325,7 +1325,7 @@ Response:
           "node": "emqx@127.0.0.1",
           "topic": "t"
         }
-      ],
+     ],
       "meta": {
         "page": 1,
         "limit": 10000,
@@ -1355,7 +1355,7 @@ Response:
           "node": "emqx@127.0.0.1",
           "topic": "t"
         }
-      ]
+     ]
     }
 
 ## Publish/Subscribe 
@@ -1618,9 +1618,9 @@ Response:
               "description": "EMQ X Webhook Plugin",
               "active": false
             }
-          ]
+         ]
         }
-      ]
+     ]
     }
 
 ### List all Plugins of a Node 
@@ -1791,7 +1791,7 @@ Response:
           "description": "EMQ X Webhook Plugin",
           "active": false
         }
-      ]
+     ]
     }
 
 ### Start a Plugin 
@@ -1860,7 +1860,7 @@ Response:
               "listen_on": "8883",
               "max_conns": 102400,
               "protocol": "mqtt:ssl",
-              "shutdown_count": [ ]
+              "shutdown_count": []
             },
             {
               "acceptors": 8,
@@ -1879,7 +1879,7 @@ Response:
               "listen_on": "127.0.0.1:11883",
               "max_conns": 10240000,
               "protocol": "mqtt:tcp",
-              "shutdown_count": [ ]
+              "shutdown_count": []
             },
             {
               "acceptors": 4,
@@ -1887,7 +1887,7 @@ Response:
               "listen_on": "18083",
               "max_conns": 512,
               "protocol": "http:dashboard",
-              "shutdown_count": [ ]
+              "shutdown_count": []
             },
             {
               "acceptors": 2,
@@ -1895,7 +1895,7 @@ Response:
               "listen_on": "8080",
               "max_conns": 512,
               "protocol": "http:management",
-              "shutdown_count": [ ]
+              "shutdown_count": []
             },
             {
               "acceptors": 4,
@@ -1903,7 +1903,7 @@ Response:
               "listen_on": "8083",
               "max_conns": 102400,
               "protocol": "mqtt:ws",
-              "shutdown_count": [ ]
+              "shutdown_count": []
             },
             {
               "acceptors": 4,
@@ -1911,12 +1911,12 @@ Response:
               "listen_on": "8084",
               "max_conns": 16,
               "protocol": "mqtt:wss",
-              "shutdown_count": [ ]
+              "shutdown_count": []
             }
-          ],
+         ],
           "node": "emqx@127.0.0.1"
         }
-      ]
+     ]
     }
 
 ### list all Listeners of a Node 
@@ -1943,7 +1943,7 @@ Response:
           "listen_on": "8883",
           "max_conns": 102400,
           "protocol": "mqtt:ssl",
-          "shutdown_count": [ ]
+          "shutdown_count": []
         },
         {
           "acceptors": 8,
@@ -1962,7 +1962,7 @@ Response:
           "listen_on": "127.0.0.1:11883",
           "max_conns": 10240000,
           "protocol": "mqtt:tcp",
-          "shutdown_count": [ ]
+          "shutdown_count": []
         },
         {
           "acceptors": 4,
@@ -1970,7 +1970,7 @@ Response:
           "listen_on": "18083",
           "max_conns": 512,
           "protocol": "http:dashboard",
-          "shutdown_count": [ ]
+          "shutdown_count": []
         },
         {
           "acceptors": 2,
@@ -1978,7 +1978,7 @@ Response:
           "listen_on": "8080",
           "max_conns": 512,
           "protocol": "http:management",
-          "shutdown_count": [ ]
+          "shutdown_count": []
         },
         {
           "acceptors": 4,
@@ -1986,7 +1986,7 @@ Response:
           "listen_on": "8083",
           "max_conns": 102400,
           "protocol": "mqtt:ws",
-          "shutdown_count": [ ]
+          "shutdown_count": []
         },
         {
           "acceptors": 4,
@@ -1994,9 +1994,9 @@ Response:
           "listen_on": "8084",
           "max_conns": 16,
           "protocol": "mqtt:wss",
-          "shutdown_count": [ ]
+          "shutdown_count": []
         }
-      ]
+     ]
     }
 
 ## Statistics of packet sent and received 
@@ -2067,7 +2067,7 @@ Response:
             "packets/pubcomp/sent": 0
           }
         }
-      ]
+     ]
     }
 
 ### Get Statistics of a specified Node 
@@ -2175,7 +2175,7 @@ Response:
           "subscribers/count": 0,
           "connections/count": 0
         }
-      ]
+     ]
     }
 
 ### Get Statistics of connected session on specified node 
@@ -2241,7 +2241,7 @@ Response:
           "alarms": [],
           "node": "emqx@127.0.0.1"
         }
-      ]
+     ]
     }
 
 ### Get Current Alarms of Specified Node 
@@ -2289,10 +2289,10 @@ Response:
               "desc": "82.60344181007542",
               "id": "cpu_high_watermark"
             }
-          ],
+         ],
           "node": "emqx@127.0.0.1"
         }
-      ]
+     ]
     }
 
 ### Get Alarms History of Specified Node 
@@ -2318,7 +2318,7 @@ Response:
           "desc": "82.60344181007542",
           "id": "cpu_high_watermark"
         }
-      ]
+     ]
     }
 
 ## Banned 
