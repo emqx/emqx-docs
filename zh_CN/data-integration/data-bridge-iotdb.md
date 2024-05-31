@@ -1,15 +1,18 @@
 # 将 MQTT 数据写入到 Apache IoTDB
 
 {% emqxce %}
-:::tip 
+:::tip
 
 Apache IoTDB 数据集成是 EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
 
-::: 
+:::
 
 {% endemqxce %}
 
-[Apache IoTDB](https://iotdb.apache.org/)）是一个高性能、可扩展的时序数据库，专为处理由各种物联网设备和系统生成的大量时序数据而设计。EMQX 支持与Apache IoTDB 的数据集成，使您能够通过轻量级的 MQTT 协议，使用 [REST API V2](https://iotdb.apache.org/UserGuide/Master/API/RestServiceV2.html) 无缝地将数据转发到 Apache IoTDB。这种数据集成确保了数据的单向流动。来自 EMQX 的 MQTT 消息被写入 IoTDB 数据库，利用 EMQX 卓越的实时数据摄取能力和 IoTDB 专有的时序数据存储和查询性能。这种强大的组合为希望有效管理其物联网数据的企业提供了坚实的基础。
+[Apache IoTDB](https://iotdb.apache.org/) 是一个高性能、可扩展的时序数据库，专为处理由各种物联网设备和系统生成的大量时序数据而设计。
+EMQX 支持与 Apache IoTDB 的数据集成，使您能够通过轻量级的 MQTT 协议，使用 [REST API V2](https://iotdb.apache.org/UserGuide/latest/API/RestServiceV2.html) 无缝地将数据转发到 Apache IoTDB。
+这种数据集成确保了数据的单向流动。来自 EMQX 的 MQTT 消息被写入 IoTDB 数据库，利用 EMQX 卓越的实时数据摄取能力和 IoTDB 专有的时序数据存储和查询性能。
+这种强大的组合为希望有效管理其物联网数据的企业提供了坚实的基础。
 
 本页面提供了关于 EMQX 和 Apache IoTDB 之间数据集成的全面介绍，并附有创建和验证数据集成的实用指南。
 
@@ -267,7 +270,7 @@ docker run -d --name iotdb-service \
 
 1. 在 Dashboard 页面，点击左侧导航目录中的 **问题分析** -> **WebSocket 客户端**。
 
-2. 填写当前 EMQX 的连接信息。 
+2. 填写当前 EMQX 的连接信息。
 
    - 如果 EMQX 在本地运行，可直接使用默认配置。
    - 如果您修改过 EMQX 的默认配置，如修改过访问规则的配置，则需要输入用户名和密码。
@@ -278,7 +281,7 @@ docker run -d --name iotdb-service \
 
    - **主题**：`root/test`
 
-   - **Payload**: 
+   - **Payload**:
 
      ```json
      {
@@ -288,7 +291,7 @@ docker run -d --name iotdb-service \
        "device_id": "root.sg27"
      }
      ```
-   
+
    - **QoS**: `2`
 
 5. 点击**发布**完成消息的发送。
@@ -296,15 +299,15 @@ docker run -d --name iotdb-service \
 6. 您也可以在主题中设置设备 ID， 并再次发布消息：
 
    - **主题**：`root/sg27`
-   
+
      :::tip
-   
+
       如果主题不以 `root` 开头，系统将自动为其添加前缀。例如，如果您将消息发布到 `test/sg27`，生成的设备名称将为 `root.test.sg27`。请确保您的规则和主题已正确配置，以便将来自该主题的消息转发到 Sink。
-   
+
         :::
-   
+
    - **Payload**:
-   
+
      ```json
      {
        "measurement": "temp",
@@ -312,12 +315,12 @@ docker run -d --name iotdb-service \
        "value": "36.6"
      }
      ```
-   
+
    - **QoS**: `2`
 
 7. 点击**发布**完成消息的发送。
 
-   如果 Sink 和规则创建成功，消息应该已被转发至 Apache IoTDB 服务器里指定的时序数据表中。 
+   如果 Sink 和规则创建成功，消息应该已被转发至 Apache IoTDB 服务器里指定的时序数据表中。
 
 8. 您可以使用 IoTDB 的命令行查看。如果服务器在 docker 中运行，可以使用下面的命令连接服务器：
 
@@ -332,7 +335,7 @@ docker run -d --name iotdb-service \
    ```
 
    您将能看到以下返回结果：
-   
+
    ```
    +------------------------+--------------+
    |                    Time|root.sg27.temp|
@@ -367,4 +370,4 @@ EMQX 提供了许多关于与 Apache IoTDB 数据集成的学习资源。查看�
 
 **博客：**
 
-[如何将 MQTT 与时序数据库高效应用于物联网场景](https://www.emqx.com/zh/blog/time-series-database-for-iot-the-missing-piece) 
+[如何将 MQTT 与时序数据库高效应用于物联网场景](https://www.emqx.com/zh/blog/time-series-database-for-iot-the-missing-piece)
