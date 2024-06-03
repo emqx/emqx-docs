@@ -98,7 +98,7 @@ The file transfer allows exporting uploaded files to an S3-compatible object sto
 
 ::: tip Prerequisite
 
-Before you start, you need to ensure that `s3cmd` is installed and configured correctly. You can refer to [Official s3cmd repo)](https://github.com/s3tools/s3cmd) for more information.
+Before you start, you need to ensure that `s3cmd` is installed and configured correctly. You can refer to [Official s3cmd repo](https://github.com/s3tools/s3cmd) for more information.
 
 :::
 
