@@ -182,14 +182,14 @@ This generates a new tarball, `my_emqx_plugin-1.0.0.tar.gz`, which you can uploa
 #### Write Configuration Schema for the Plugin (Optional)
 
 EMQX version 5.7.0 introduced REST API for plugin configuration management and Avro Schema for configuration validation, enhancing the ability to update plugin configurations dynamically during runtime.
-In addition, if you write an Avro Schema to validate the plugin's configuration, you are required to provide a default configuration file that matches the Avro Schema rules. This file should be located in `priv/config.hocon`.
+In addition, if you write an Avro Schema to validate the plugin's configuration, you are required to provide a default configuration file that matches the Avro Schema rules. This file should be located at `priv/config.hocon`.
 
 Configuration updates made at runtime will be written in HOCON format to `data/plugins/<PLUGIN_NAME>/config.hocon`, and the old configuration file will be backed up each time the configuration is updated.
 
 
 ::: tip **Tip**
 
-Check out the example files located in your project directory: `priv/config.hocon.example`, `priv/config_schema.avsc.example`, `priv/config_schema.avsc.enterprise.example` and `priv/config_i18n.json.example`.
+Check out the example files in your project directory: `priv/config.hocon.example`, `priv/config_schema.avsc.example`, `priv/config_schema.avsc.enterprise.example` and `priv/config_i18n.json.example`.
 Plugins that support configuration and configuration validation can be written based on these files.
 
 {% emqxce %}
@@ -202,7 +202,7 @@ Using UI declarations to render plugin configuration form pages is an enterprise
 :::
 
 
-Your plugin package needs to include an Avro Schema configuration file, located at `priv/config_schema.avsc`. This file must adhere to the [Apache Avro specification](https://avro.apache.org/docs/1.11.1/specification/).
+Your plugin package needs to include an Avro Schema configuration file, located at the relative path `priv/config_schema.avsc`. This file must adhere to the [Apache Avro specification](https://avro.apache.org/docs/1.11.1/specification/).
 
 {% emqxee %}
 
