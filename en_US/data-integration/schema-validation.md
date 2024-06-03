@@ -1,5 +1,11 @@
 # Schema Validation
 
+::: tip Note
+
+Schema Validation is an EMQX Enterprise feature.
+
+:::
+
 EMQX includes built-in schema validation capabilities to ensure that only messages conforming to predefined data formats are published to subscribers from specified topics. Schema validation supports multiple schema formats such as JSON Schema, Protobuf, and Avro and built-in SQL statement validation. This page describes the schema validation feature and how to use it.
 
 ## Why Validate Data

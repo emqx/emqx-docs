@@ -1,5 +1,11 @@
 # Sparkplug B
 
+::: tip Note
+
+Schema Registry is an EMQX Enterprise feature. Currently, only the EMQX Enterprise supports the encoding and decoding of the Sparkplug B data format.
+
+:::
+
 [Sparkplug](https://www.eclipse.org/tahu/spec/sparkplug_spec.pdf) is an open-source specification developed by the [Eclipse Foundation's TAHU project](https://www.eclipse.org/tahu/), designed to provide a well-defined payload and state management system for MQTT. The primary aim is to achieve interoperability and consistency within the industrial IoT sector.
 
 Sparkplug encoding scheme version B (Sparkplug B) defines the MQTT namespace for Supervisory Control and Data Acquisition (SCADA) systems, real-time control systems, and devices. It ensures standardized data transmission by encapsulating a structured data format that includes metrics, process variables, and device status information in a concise and easy-to-process format. By using Sparkplug B, organizations can improve their operational efficiency, avoid data silos, and enable seamless communication between devices within an MQTT network.

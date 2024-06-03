@@ -1,5 +1,11 @@
 # Schema 验证
 
+::: tip 注意
+
+Schema 验证是 EMQX 企业版功能。
+
+:::
+
 EMQX 内置了 Schema 验证功能，以确保只有符合预定数据格式的消息才会发布到订阅端。Schema 验证可使用 JSON Schema、Protobuf 和 Avro 等多种格式的模式，或使用内置的 SQL 语句验证来自指定主题的消息格式。本页介绍了 Schema 验证功能以及如何使用和配置该功能。
 
 ## 为什么要对数据做 Schema 验证

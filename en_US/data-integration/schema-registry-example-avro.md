@@ -1,5 +1,11 @@
 # Schema Registry Example - Avro
 
+::: tip Note
+
+Schema Registry is an EMQX Enterprise feature.
+
+:::
+
 This page demonstrates how the schema registry and rule engine support message encoding and decoding in Avro format.
 
 ## Decoding Scenario
@@ -177,7 +183,7 @@ def on_message(client, userdata, msg):
 
    ```shell
    $ pip3 install avro paho-mqtt
-
+   
    $ python3 avro_mqtt_sub.py
    Connected with result code 0
    msg payload b'\nShawn\x00\xb4\n\x00\x06red'

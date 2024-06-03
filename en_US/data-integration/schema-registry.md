@@ -1,5 +1,10 @@
-# Introduction to Schema Registry
+# Schema Registry
 
+::: tip Note
+
+Schema Registry is an EMQX Enterprise feature.
+
+:::
 
 Because of the variety of IoT device terminals and the different coding formats used by various manufacturers, the need for a unified data format arises when accessing the IoT platform for device management by the applications on the platform.
 
