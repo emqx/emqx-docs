@@ -172,23 +172,23 @@
       path: admin/api
       collapsed: true
       children:
-        - title_en: API Docs
-          title_cn: API 文档
+        - title_en: EMQX Open Source API Docs
+          title_cn: EMQX Open Source API 文档
           lang: en
           edition: ce
-          path: https://www.emqx.io/docs/en/v${CE_MINOR_VERSION}/admin/api-docs.html
-        - title_en: API Docs
-          title_cn: API 文档
+          path: https://docs.emqx.com/en/emqx/v${CE_MINOR_VERSION}/admin/api-docs.html
+        - title_en: EMQX Open Source API Docs
+          title_cn: EMQX Open Source API 文档
           lang: cn
           edition: ce
-          path: https://www.emqx.io/docs/zh/v${CE_MINOR_VERSION}/admin/api-docs.html
-        - title_en: API Docs
-          title_cn: API 文档
+          path: https://docs.emqx.com/zh/emqx/v${CE_MINOR_VERSION}/admin/api-docs.html
+        - title_en: EMQX Enterprise API Docs
+          title_cn: EMQX Enterprise API 文档
           lang: en
           edition: ee
           path: https://docs.emqx.com/en/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
-        - title_en: API Docs
-          title_cn: API 文档
+        - title_en: EMQX Enterprise API Docs
+          title_cn: EMQX Enterprise API 文档
           lang: cn
           edition: ee
           path: https://docs.emqx.com/zh/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
