@@ -101,9 +101,10 @@ keepalive_backoff = 0.75
 ```
 
 Where, **Keep Alive Backoff** (`keepalive_backoff`) is the coefficient EMQX uses to confirm whether the keep alive duration of the client expires. Default: `0.75`. The calculation formular is as follows:
-$$
+
+```
 Keep Alive * Backoff * 2
-$$
+```
 
 ## Session Settings
 
