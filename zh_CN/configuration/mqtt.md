@@ -99,9 +99,10 @@ keepalive_backoff = 0.75
 ```
 
 其中，**Keep Alive Backoff**（`keepalive_backoff`）是 EMQX 用来确认客户端 Keep Alive 时长是否过期的系数。默认值：`0.75`。计算公式如下：
-$$
+
+```
 Keep Alive * Backoff * 2
-$$
+```
 
 ## 会话设置
 
