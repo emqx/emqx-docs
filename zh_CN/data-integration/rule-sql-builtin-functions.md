@@ -755,6 +755,14 @@ mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"a": {"b": 1}}'))) = 2
 mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"c": 1}'))) = 2
 ```
 
+### map_to_redis_hset_args(Map) -> list (5.7.1 引入)
+
+此函数将映射转换为字段名称和值的列表，用于格式化 Redis 的 `HSET`（或 `HMSET`）命令。
+转换规则如 `SELECT map_to_redis_hset_args(payload.value) as hset_fields FROM t/1`，
+这样可以准备好 `hset_fields` 变量，以便集成到 Redis 动作命令模板中，格式为 `HMSET name1 ${hset_fields}`。
+例如，如果 `payload.value` 是映射 `{"a" : 1, "b": 2}`，则生成的命令可能为 `HMSET name1 b 2 a 1`。
+请注意，映射中的字段顺序是不确定的。
+
 ## 数组操作函数
 
 ### contains(Item: any, Array: array) -> boolean
