@@ -556,7 +556,6 @@
     - title_en: Telemetry
       title_cn: 遥测
       path: telemetry/telemetry
-      edition: ce
 
 - title_en: Advanced Features
   title_cn: 高级功能
