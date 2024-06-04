@@ -1,22 +1,10 @@
 # Configuration Files
 
-{% emqxce %}
+Users can configure EMQX with configuration files or environment variables. This section introduces the EMQX configuration files. It also provides the basic configuration instructions for the most commonly used functions in EMQX. For comprehensive configuration items with detailed explanations, see [EMQX Open Source Configuration Manual](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
-Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
+## Main Configuration File
 
-{% endemqxce %}
-
-{% emqxee %}
-
-Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
-
-{% endemqxee %}
-
-## Introduction
-
-### **Main Configuration File**
-
-EMQX will create a group of directories after installation, among which, `etc` is the folder that keeps all the configuration files. This section will focus on the main configuration file: `emqx.conf`.
+EMQX creates a group of directories after installation, among which, `etc` is the folder that keeps all the configuration files. This section will focus on the main configuration file: `emqx.conf`.
 
 Depending on your installation mode, `emqx.conf` is stored in:
 
@@ -26,18 +14,15 @@ Depending on your installation mode, `emqx.conf` is stored in:
 | Running in docker container                | `/opt/emqx/etc/emqx.conf` |
 | Extracted from portable compressed package | `./etc/emqx.conf`         |
 
-
 As the main configuration file, `emqx.conf` contains most of the commonly used configuration items.
 You can follow the examples provided in the `examples` directory (located within the same directory) to customize the settings.
 EMQX uses the default settings if a config item is not found in the config files.
 
-### Configuration Rewrite File
+## Configuration Rewrite File
 
-`emqx.conf` defines settings at a global level, for cases where you need to customize the settings for a cluster or a node, EMQX also provides a configuration rewrite file that extends but does not override `emqx.conf`:
+The `emqx.conf` file defines settings at a global level. In such cases as you need to customize the settings for a cluster or a node, EMQX also provides a configuration rewrite file **`cluster.hocon`** to extend but does not override `emqx.conf`.
 
-**`cluster.hocon`**
-
-Contains configuration items for the entire cluster, configuration changes made from Dashboard, REST API, and CLI will be persisted to this file.
+The `cluster.hocon` file contains configuration items for the entire cluster. Configuration changes made from Dashboard, REST API, and CLI will be persisted to this file.
 
 If a certain cluster node is restarted or some new nodes are added, the node will automatically copy and apply the configuration file from other nodes within the cluster, therefore there is no need nor recommended to configure it manually.
 
@@ -61,13 +46,11 @@ For override rules, see [Configure override rules](#configure-override-rules).
 Some configuration items cannot be overridden, for example, `node.name`.
 :::
 
-Since version 5.1, when cluster configuration changes, EMQX backups the `cluster.hocon` file before overwriting it.
-The backup files are suffixed with a timestamp of the node's local time.
-At most 10 backup files can be kept.
+Since version 5.1, when cluster configuration changes, EMQX backups the `cluster.hocon` file before overwriting it. The backup files are suffixed with a timestamp of the node's local time. At most 10 backup files can be kept.
 
 ## HOCON Configuration Format
 
-Since EMQX 5.0, we have begun to use [Human-Optimized Config Object Notation (HOCON)](https://github.com/emqx/hocon) as the configuration file format.
+From EMQX v5.0, EMQX uses [Human-Optimized Config Object Notation (HOCON)](https://github.com/emqx/hocon) as the configuration file format.
 
 HOCON is a format for human-readable data and a superset of JSON. With features like inheritance, combined, and quotes, HOCON further simplifies the configuration work.
 

@@ -105,7 +105,13 @@ $$
 
 ## 会话设置
 
-本节介绍如何配置会话。在 MQTT 中，会话指的是客户端与代理之间的连接。如在 EMQX 中，当客户端连接到 EMQX 时，它建立了一个会话，允许它订阅主题并接收消息，以及向 EMQX 发布消息。
+本节介绍如何配置会话。在 MQTT 中，会话指的是客户端与消息服务器之间的连接。如在 EMQX 中，当客户端连接到 EMQX 时，它建立了一个会话，允许它订阅主题并接收消息，以及向 EMQX 发布消息。
+
+::: tip
+
+您也可以在 EMQX Dashboard 中找到对应的配置项（**管理** -> **MQTT 配置** -> **会话**和**会话持久化**）。一旦您通过 Dashboard 配置了这些项，您的设置将覆盖 `emqx.conf` 中的相同配置项。
+
+:::
 
 **示例代码：**
 
@@ -157,26 +163,8 @@ session {
 | `force_gc.count`                      | --                   | 此设置将触发强制垃圾回收的接收消息数量。                     | `16000`                                                      | `0` - `infinity`                    |
 | `force_gc.bytes`                      | --                   | 此设置将触发强制垃圾回收的接收字节数量。                     | `16 MB`<br />单位: `MB`                                      | --                                  |
 
-{% emqxce %}
+::: tip
 
-:::tip
-
-要通过 Dashboard 配置 MQTT，请点击 Dashboard 左侧导航菜单的 **管理** -> **MQTT 配置**。一旦您通过 Dashboard 配置了这些项，您的设置将覆盖 `emqx.conf` 中的相同配置项。
-
-EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参见[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
+EMQX 提供了更多配置项以更好地满足定制化需求。详情请参见 [EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 :::
-
-{% endemqxce %}
-
-{% emqxee %}
-
-:::tip
-
-要通过 Dashboard 配置 MQTT，请点击 Dashboard 左侧导航菜单的 **管理** -> **MQTT 配置**。一旦您通过 Dashboard 配置了这些项，您的设置将覆盖 `emqx.conf` 中的相同配置项。
-
-EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参见[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
-
-:::
-
-{% endemqxee %}

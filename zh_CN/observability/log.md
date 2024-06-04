@@ -44,17 +44,7 @@ debug < info < notice < warning < error < critical < alert < emergency
 
 在**日志**页面，选择**控制台日志**页签。
 
-{% emqxee %}
-
 <img src="./assets/config-console-log-1-ee.png" alt="config-console-log-1-ee" style="zoom:67%;" />
-
-{% endemqxee %}
-
-{% emqxce %}
-
-<img src="./assets/config-console-log-1-ce.png" alt="config-console-log-1-ce" style="zoom:67%;" />
-
-{% endemqxce %}
 
 配置控制台日志处理进程的选项：
 
@@ -74,17 +64,7 @@ debug < info < notice < warning < error < critical < alert < emergency
 
 在**日志**页面，选择**文件日志**页签。
 
-{% emqxee %}
-
 <img src="./assets/config-file-log-1-ee.png" alt="config-file-log-1-ee" style="zoom:67%;" />
-
-{% endemqxee %}
-
-{% emqxce %}
-
-<img src="./assets/config-file-log-1-ce.png" alt="config-file-log-1-ce" style="zoom:67%;" />
-
-{% endemqxce %}
 
 配置文件日志处理进程的选项：
 

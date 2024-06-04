@@ -1,6 +1,12 @@
-# MQTT Durable Sessions
+# MQTT Durable Session
 
-EMQX includes a durable sessions feature, which allows MQTT sessions and messages to be persistently stored on disk, providing high-availability replicas to ensure data redundancy and consistency. With session durability, effective failover and recovery mechanisms can be implemented, ensuring service continuity and availability, thereby improving system reliability.
+::: tip
+
+The Durable Session feature is an EMQX Enterprise feature.
+
+:::
+
+EMQX includes a Durable Session feature, which allows MQTT sessions and messages to be persistently stored on disk, providing high-availability replicas to ensure data redundancy and consistency. With session durability, effective failover and recovery mechanisms can be implemented, ensuring service continuity and availability, thereby improving system reliability.
 
 This page introduces the concepts, principles, and usage of session persistence in EMQX.
 
@@ -12,7 +18,7 @@ This feature is available starting from EMQX v5.7.0. However, it does not yet su
 
 ## Basic Concepts
 
-Before learning the durable sessions feature in EMQX, it's essential to understand some basic concepts about EMQX.
+Before learning the Durable Session feature in EMQX, it's essential to understand some basic concepts about EMQX.
 
 ### Sessions and Durable Storage
 
@@ -88,9 +94,9 @@ However, there are some disadvantages:
 - Storing messages on disk results in lower overall system throughput.
 - Durable sessions have higher latency compared to regular sessions because both writing and reading MQTT messages are performed in batches. While batching improves throughput, it also increases end-to-end latency (the delay before clients see the published messages).
 
-## Quick Start with Durable Sessions
+## Quick Start with Durable Session
 
-This section will help you quickly understand how to use the durable sessions on EMQX and MQTT clients, and introduce a simple workflow of durable sessions.
+This section will help you quickly understand how to use the Durable Session feature on EMQX and MQTT clients, and introduce a simple workflow of durable sessions.
 
 ::: tip Note
 
@@ -98,9 +104,9 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
 
 :::
 
-1. Enable the durable sessions feature on EMQX.
+1. Enable the Durable Session feature on EMQX.
 
-   By default, EMQX does not enable durable sessions. You need to modify the `etc/emqx.conf` file and add the following configuration to enable this feature:
+   By default, EMQX does not enable the durable session. You need to modify the `etc/emqx.conf` file and add the following configuration to enable this feature:
 
    ```bash
    durable_sessions {
@@ -209,7 +215,7 @@ The disk space requirements can be estimated according to the following guidelin
 
 ## Next Steps
 
-To learn how to configure and manage the durable sessions feature, as well as how to initially set up and modify durable sessions in an EMQX cluster, please refer to the following pages:
+To learn how to configure and manage the Durable Session feature, as well as how to initially set up and modify durable sessions in an EMQX cluster, please refer to the following pages:
 
 - [Manage Replication](./managing-replication.md)
 - [Configure and Manage Durable Sessions](./management.md)

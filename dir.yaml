@@ -446,23 +446,23 @@
           title_cn: License
           path: configuration/license
           edition: ee
-    - title_en: Configuration Manual
-      title_cn: 配置手册
+    - title_en: EMQX Open Source Configuration Manual
+      title_cn: EMQX 开源版配置手册
       lang: cn
       edition: ce
-      path: https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/
-    - title_en: Configuration Manual
-      title_cn: 配置手册
+      path: https://docs.emqx.com/zh/emqx/v${CE_VERSION}/hocon/
+    - title_en: EMQX Open Source Configuration Manual
+      title_cn: EMQX 开源版配置手册
       lang: en
       edition: ce
-      path: https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/
-    - title_en: Configuration Manual
-      title_cn: 配置手册
+      path: https://docs.emqx.com/en/emqx/v${CE_VERSION}/hocon/
+    - title_en: EMQX Enterprise Configuration Manual
+      title_cn: EMQX 企业版配置手册
       lang: cn
       edition: ee
       path: https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/
-    - title_en: Configuration Manual
-      title_cn: 配置手册
+    - title_en: EMQX Enterprise Configuration Manual
+      title_cn: EMQX 企业版配置手册
       lang: en
       edition: ee
       path: https://docs.emqx.com/en/enterprise/v${EE_VERSION}/hocon/

@@ -1,16 +1,6 @@
 # 配置文件简介
 
-{% emqxce %}
-
-EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX，本章节将介绍 EMQX 配置文件基本信息，配置项以及详细的介绍请参考[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
-
-{% endemqxce %}
-
-{% emqxee %}
-
-EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX，本章节将介绍 EMQX 配置文件基本信息，配置项以及详细的介绍请参考[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
-
-{% endemqxee %}
+EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX。本章节介绍了 EMQX 配置文件的基本信息，同时提供了 EMQX 中常用功能的基本配置指导。想要了解全面的配置项以及配置项的详细介绍，请参考 [EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 ## 配置文件介绍
 
@@ -26,8 +16,7 @@ EMQX 主配置文件为 `emqx.conf`，根据安装方式其所在位置有所不
 所有可用的配置项及其说明可参考主配置同路径下的 `examples` 文件夹。
 
 从 5.1 开始, 当集群配置发生变化时，EMQX 在写入 `cluster.hocon` 文件前会对老的文件进行备份。
-备份文件名称会带上节点本地的一个时间戳作为后缀。
-系统最多保留10个历史备份文件。
+备份文件名称会带上节点本地的一个时间戳作为后缀。系统最多保留10个历史备份文件。
 
 ### 配置重写
 

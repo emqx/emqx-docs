@@ -22,7 +22,7 @@ The levels are defined from development perspectives and are only for a recommen
 
 :::
 
-{% emqxce %}
+**Alarm list for EMQX Open Source edition:**
 
 | **Alarm**                 | Level    | Description                                                  | **Details**                              | **Threshold**                                                |
 | :------------------------ | -------- | :----------------------------------------------------------- | :--------------------------------------- | :----------------------------------------------------------- |
@@ -34,9 +34,7 @@ The levels are defined from development perspectives and are only for a recommen
 | resource                  | Critical | Resource is disconnected                                     | Resource ~s(~s) is down                  | -                                                            |
 | conn_congestion           | Critical | Connection process congestion                                | connection congested                     | -                                                            |
 
-{% endemqxce %}
-
-{% emqxee %}
+**Alarm list for EMQX Enterprise edition:**
 
 | **Alarm**                 | Level    | Description                                                  | **Details**                                  | **Threshold**                                                |
 | :------------------------ | -------- | :----------------------------------------------------------- | :------------------------------------------- | :----------------------------------------------------------- |
@@ -49,8 +47,6 @@ The levels are defined from development perspectives and are only for a recommen
 | partition                 | Critical | Partition occurs at node                                     | Partition occurs at node ~s                  | -                                                            |
 | resource                  | Critical | Resource is disconnected                                     | Resource ~s(~s) is down                      | -                                                            |
 | conn_congestion           | Critical | Connection process congestion                                | Connection congested                         | -                                                            |
-
-{% endemqxee %}
 
 ## Get Alarms
 
@@ -177,12 +173,9 @@ You can also configure alarm thresholds by modifying the configuration items for
 | sysmon.top.sample_interlval       | Check interval for top processes                             | `2s`          |
 | sysmon.top.max_procs              | Stop collecting data when the number of processes in the VM exceeds this value | `1000000`     |
 
-{% emqxee %}
-EMQX Enterprise will raise an alarm when the license expires in less than 30 days, or if the number of connections exceeds the high watermark. You can adjust the high/low watermark for the number of connections by modifying the following configuration items in `emqx.conf` file. For more information on how to configure settings for the license, see [License](../configuration/license.md).
+The EMQX Enterprise will raise an alarm when the license expires in less than 30 days, or if the number of connections exceeds the high watermark. You can adjust the high/low watermark for the number of connections by modifying the following configuration items in `emqx.conf` file. For more information on how to configure settings for the license, see [License](../configuration/license.md).
 
 | Configuration item                      | Description                                                  | Default value |
 | --------------------------------------- | ------------------------------------------------------------ | ------------- |
 | license.connection_high_watermark_alarm | The high watermark of the max connections the license supports. The alarm is activated when this threshold is reached. Measured as a ratio of active connections/max connections. | `80%`         |
 | license.connection_low_watermark_alarm  | The low watermark of the max connections the license supports. The alarm is deactivated when it goes below this threshold. Measured as a ratio of active connections/max connections. | `75%`         |
-
-{% endemqxee %}
