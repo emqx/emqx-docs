@@ -1,10 +1,10 @@
 # 将 MQTT 数据写入到 Elasticsearch
 
-{% emqxce %}
-:::tip
-EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+::: tip
+
+Elasticsearch 数据集成是 EMQX 企业版功能。
+
 :::
-{% endemqxce %}
 
 [Elasticsearch](https://www.elastic.co/elasticsearch/) 是一个分布式的搜索和数据分析引擎，提供了多样化数据的全文搜索、结构化搜索以及分析等功能。EMQX 通过与 Elasticsearch 集成，能够将 MQTT 数据无缝的集成到 Elasticsearch 进行存储，并借助其强大的可扩展性和分析能力，为物联网应用提供了高效、可扩展的数据存储和分析解决方案。
 

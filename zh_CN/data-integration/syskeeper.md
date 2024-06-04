@@ -1,12 +1,10 @@
 # MQTT 数据穿透 Nari SysKeeper 进行桥接
 
-{% emqxce %}
 ::: tip
 
-Nari SysKeeper 数据集成是 EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
-:::
+Nari SysKeeper 数据桥接是 EMQX 企业版功能。
 
-{% endemqxce %}
+:::
 
 Nari SysKeeper 2000 是一种网络物理隔离设备。作为一种安全管理系统，它广泛应用于各个行业，特别是在需要高级别安全措施的领域，如关键基础设施和企业 IT 系统。EMQX 支持部署在不同生产区的 EMQX 集群之间的数据桥接。生产区按照安全级别划分为 I-III 3种类型，安全区 I-II 是更安全、受控的区域，而安全区 III 是一个限制较少的区域，充当了面向公众服务与更安全内部区域之间的桥梁。通常安全区 I-II 和安全区 III 之间是隔离的。通过数据桥接，MQTT 消息可以穿透安全区 I-II 与安全区 III 之间的单向 SysKeeper 网闸，与另一个安全区的 EMQX 集群进行桥接。
 

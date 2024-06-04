@@ -1,12 +1,10 @@
 # 将 MQTT 数据传输到 RabbitMQ
 
-{% emqxce %}
-:::tip
+::: tip
 
-RabbitMQ Sink 是 EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+RabbitMQ 数据集成是 EMQX 企业版功能。
 
 :::
-{% endemqxce %}
 
 作为一款广泛使用的开源消息代理，[RabbitMQ](https://www.rabbitmq.com/) 应用了高级消息队列协议（AMQP），为分布式系统之间的消息传递提供了一个强大而可扩展的平台。EMQX 支持与 RabbitMQ 的数据集成，能够让您将 MQTT 消息和事件转发至 RabbitMQ，还能够实现从 RabbitMQ Server 中消费数据，并发布到 EMQX 特定主题中，实现 RabbitMQ 到 MQTT 的消息下发。
 

@@ -1,24 +1,20 @@
 # 将 MQTT 数据写入到 HStreamDB
 
-{% emqxce %}
-:::tip
-EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+::: tip
+
+HStreamDB 数据集成是 EMQX 企业版功能。
+
 :::
-{% endemqxce %}
 
 [HStreamDB](https://hstream.io/) 是一个开源的流数据平台，使您能够在一个统一的平台中高效地摄取、存储、处理和分发所有实时消息、事件和其他数据流。通过 EMQX 与 HStreamDB 的集成，您可以将 MQTT 消息和客户端事件保存到 HStreamDB 中，实现大规模物联网数据的采集、传输与存储，并使用标准 SQL 和物化视图对数据流进行实时处理以及监测和分析。
 
 本页详细介绍了 EMQX 与 HStreamDB 的数据集成并提供了实用的规则和 Sink 创建指导。
-
-{% emqxee %}
 
 ::: tip
 
 仅 EMQX 5.2.0 及以上版本支持 HStreamDB Sink 功能。
 
 :::
-
-{% emqxee %}
 
 ## 工作原理
 
