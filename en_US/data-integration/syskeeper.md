@@ -1,12 +1,10 @@
 # Bridge MQTT Data through Nari SysKeeper
 
-{% emqxce %}
 ::: tip
 
-The Nari SysKeeper data integration is an EMQX Enterprise Edition feature. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
-:::
+The Nari SysKeeper data integration is an EMQX Enterprise edition feature.
 
-{% endemqxce %}
+:::
 
 Nari SysKeeper 2000 is a network physical isolation device. As a security management system, it is widely used in various industries, especially in fields requiring high-level security measures such as critical infrastructure and enterprise IT systems. EMQX supports data bridges between EMQX clusters deployed in different production zones. Production zones are divided into three security levels: I-III, where Security Zone I-II represents more secure, controlled areas, and Security Zone III is a less restrictive area, acting as a bridge between public-facing services and more secure internal areas. Typically, Security Zones I-II and III are isolated from each other. Through data bridging, MQTT messages can pass through the one-way SysKeeper network gate between Security Zones I-II and III, bridging with another EMQX cluster in a different security zone.
 

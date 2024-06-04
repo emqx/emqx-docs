@@ -1,24 +1,20 @@
 # Stream MQTT Data into HStreamDB
 
-{% emqxce %}
-:::tip
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+::: tip
+
+The HStreamDB data integration is an EMQX Enterprise edition feature.
+
 :::
-{% endemqxce %}
 
 [HStreamDB](https://hstream.io/) is an open-source streaming data platform that enables you to efficiently ingest, store, process, and distribute all real-time messages, events, and other data streams in one unified platform. Through EMQX's integration with HStreamDB, you can save MQTT messages and client events to HStreamDB, achieving large-scale IoT data collection, transmission, and storage, and enabling real-time processing, monitoring, and analysis of data streams using standard SQL and materialized views.
 
 This page provides a comprehensive introduction to the data integration between EMQX and HStreamDB with practical instructions on creating and validating the data integration.
-
-{% emqxee %}
 
 ::: tip
 
 HSreamDB data integration is only supported in EMQX 5.2.0 and above.
 
 :::
-
-{% emqxee %}
 
 ## How It Works
 
