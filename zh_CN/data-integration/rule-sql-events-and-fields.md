@@ -94,6 +94,7 @@ FROM
 | [客户端连接断开事件](#客户端连接断开事件-events-client-disconnected)                      | $events/client_disconnected         | 连接断开                 |
 | [连接确认事件](#连接确认事件-events-client-connack)                                   | $events/client_connack              | 连接确认                 |
 | [鉴权完成事件](#鉴权完成事件-events-client-check-authz-complete)                      | $events/client_check_authz_complete | 鉴权完成                 |
+| [认证完成事件](#认证完成事件-events-client-check-authn-complete)                      | $events/client_check_authn_complete | 认证完成                 |
 | [客户端订阅成功事件](#客户端订阅成功事件-events-session-subscribed)                       | $events/session_subscribed          | 订阅                     |
 | [客户端取消订阅成功事件](#客户端取消订阅成功事件-events-session-unsubscribed)             | $events/session_unsubscribed        | 取消订阅                 |
 
@@ -494,6 +495,44 @@ FROM
   "authz_source": "cache",
   "node": "emqx@127.0.0.1",
   "clientid": "c_emqx"
+}
+```
+
+### 认证完成事件 ("$events/client_check_authn_complete")
+
+当客户端认证结束时触发规则。
+
+| 字段          | 解释                                   |
+| ------------- | :------------------------------------- |
+| clientid      | 消息目的 Client ID                     |
+| username      | 消息目的用户名                         |
+| peername      | 客户端的 IPAddress                     |
+| `reason_code`     | 认证结果                           |
+| `is_superuser`    | 是否是超级用户                      |
+| `is_anonymous`    | 是否是匿名用户                      |
+
+示例
+
+```sql
+SELECT
+  clientid,
+  username,
+  reason_code,
+  is_superuser,
+  is_anonymous
+FROM
+  "$events/client_check_authn_complete"
+```
+
+输出
+
+```json
+{
+  "clientid": "c_emqx",
+  "username": "u_emqx",
+  "reason_code": "success",
+  "is_superuser": true,
+  "is_anonymous": false
 }
 ```
 
