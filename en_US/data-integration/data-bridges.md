@@ -9,7 +9,14 @@ This process allows EMQX to extend beyond just message transmission between IoT 
 ::: tip Note
 
 - Starting from EMQX v5.4.0, the original data bridge was separated according to the data flow direction and renamed as Sink and Source.
-- Currently, EMQX only supports MQTT, Kafka, and GCP PubSub Sources.
+
+- Currently, EMQX only supports the following external data systems to be served as Source:
+
+  - MQTT Services
+  - Kafka 
+  - GCP PubSub
+
+  Among them, Kafka and GCP PubSub Sources are only supported in the EMQX Enterprise edition.
 
 :::
 

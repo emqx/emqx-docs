@@ -10,7 +10,7 @@
 
 - 自 EMQX v5.4.0 版本开始，原数据桥接按照数据流方向拆分并重命名为 Sink 与 Source。
 
-- 目前，EMQX 仅支持 MQTT、Kafka 和 GCP PubSub Source。
+- 目前，EMQX 支持 MQTT 服务、Kafka 和 GCP PubSub 这三种外部数据系统作为 Source，其中，Kafka 和 GCP PubSub Source 仅在企业版中支持。
 
 :::
 
