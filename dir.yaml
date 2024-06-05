@@ -752,10 +752,10 @@
       title_cn: 不兼容变更
       collapsed: true
       children:
-        - changes/breaking-changes-5.7
-        - changes/breaking-changes-5.6
-        - changes/breaking-changes-5.5
-        - changes/breaking-changes-5.4
+        - changes/breaking-changes-ee-5.7
+        - changes/breaking-changes-ee-5.6
+        - changes/breaking-changes-ee-5.5
+        - changes/breaking-changes-ee-5.4
         - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
           title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
           path: changes/breaking-changes-5.1.0
