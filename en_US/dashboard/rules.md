@@ -49,6 +49,7 @@ For other events, we can select different client and session events to simulate 
 - Client disconnected ($events/client_disconnected)
 - Client connack ($events/client_connack)
 - Client check authorization complete ($events/client_check_authz_complete)
+- Client check authentication complete ($events/client_check_authn_complete)
 - Subscribed ($events/session_subscribed)
 - Unsubscribed ($events/session_unsubscribed)
 
