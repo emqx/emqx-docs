@@ -755,7 +755,7 @@ mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"a": {"b": 1}}'))) = 2
 mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"c": 1}'))) = 2
 ```
 
-### map_to_redis_hset_args(Map) -> list (5.7.1 引入)
+### map_to_redis_hset_args(Map) -> list (v5.7.1 引入)
 
 此函数将映射转换为字段名称和值的列表，用于格式化 Redis 的 `HSET`（或 `HMSET`）命令。
 转换规则如 `SELECT map_to_redis_hset_args(payload.value) as hset_fields FROM t/1`，
