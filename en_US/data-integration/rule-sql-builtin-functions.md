@@ -752,7 +752,7 @@ mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"a": {"b": 1}}'))) = 2
 mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"c": 1}'))) = 2
 ```
 
-### map_to_redis_hset_args(Map) -> list (since 5.7.1)
+### map_to_redis_hset_args(Map) -> list (since v5.7.1)
 
 This function transforms a map into a list of field names and values, used for formatting the Redis `HSET` (or `HMSET`) command.
 The conversion is specified by a rule such as `SELECT map_to_redis_hset_args(payload.value) as hset_fields FROM t/1`.
