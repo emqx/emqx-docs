@@ -1,16 +1,6 @@
 # CRL Check
 
-{% emqxce %}
-
-Since EMQX 5.0.22, CRL(Certification Revocation List) Check is supported for MQTT SSL listeners.  Note that those do not include Secure WebSocket nor QUIC listeners: only listeners of type `ssl` support this feature.
-
-{% endemqxce %}
-
-{% emqxee %}
-
-Since EMQX 5.0.3,  CRL(Certification Revocation List) Check is supported for MQTT SSL listeners.  Note that those do not include Secure WebSocket nor QUIC listeners: only listeners of type `ssl` support this feature.
-
-{% endemqxee %}
+Since EMQX Open Source v5.0.22 and EMQX Enterprise v5.0.3, Certification Revocation List (CRL) Check is supported for MQTT SSL listeners.  Note that those do not include Secure WebSocket nor QUIC listeners: only listeners of type `ssl` support this feature.
 
 With this feature enabled, EMQX will attempt to verify if connecting client certificates are not revoked according to the CRL Distribution Point described in the client's certificate, and deny connection to revoked client certificates during the SSL/TLS handshake phase of the connection.  Note that the CRL itself must contain the ["Issuing Distribution Point" extension](https://www.rfc-editor.org/rfc/rfc3280#section-5.2.5) in order for the revocation check to be enforced.
 

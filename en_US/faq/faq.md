@@ -183,8 +183,6 @@ $ brew install openssl@1.1
 
 After the installation is complete, you can start EMQX normally.
 
-{% emqxce %}
-
 ## SSL Connection Error
 
 ### Phenomenon

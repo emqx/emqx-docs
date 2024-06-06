@@ -76,17 +76,7 @@ The attribute expression supports the configuration of the following values:
 
 - `zone`: The zone name inherited from MQTT listener
 
-{% emqxce %}
-
-For detailed information about the client attributes configurations, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
-
-{% endemqxce %}
-
-{% emqxee %}
-
-For detailed information about the client attributes configuration, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
-
-{% endemqxee %}
+For detailed information about the client attributes configurations, see [EMQX Open Source Configuration Manual](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 ### Set During the Client Authentication Process
 

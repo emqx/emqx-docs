@@ -73,11 +73,7 @@ The project also includes an example module demonstrating how to add custom `emq
 
 ### Test Your Development Environment
 
-{% emqxce %}
-
-Ensure your development environment is correctly set up by referring to the [Install from Source Code](../deploy/install-source.md) guide.
-
-{% endemqxce %}
+If you are using the EMQX Open Source edition, ensure your development environment is correctly set up. You can refer to the information in [Install from Source Code](../deploy/install-source.md).
 
 Execute the following command to verify if your plugin compiles and packages successfully:
 
@@ -187,42 +183,30 @@ In addition, if you write an Avro Schema to validate the plugin's configuration,
 Configuration updates made at runtime will be written in HOCON format to `data/plugins/<PLUGIN_NAME>/config.hocon`, and the old configuration file will be backed up each time the configuration is updated.
 
 
-::: tip **Tip**
+::: tip
 
 Check out the example files in your project directory: `priv/config.hocon.example`, `priv/config_schema.avsc.example`, `priv/config_schema.avsc.enterprise.example` and `priv/config_i18n.json.example`.
 Plugins that support configuration and configuration validation can be written based on these files.
 
-{% emqxce %}
-
-Note that `priv/config_schema.avsc.enterprise.example` and `priv/config_i18n.json.example` contain the UI declarations and their internationalization configurations.
-Using UI declarations to render plugin configuration form pages is an enterprise edition feature.
-
-{% endemqxce %}
+Note that `priv/config_schema.avsc.enterprise.example` and `priv/config_i18n.json.example` contain the UI declarations and their internationalization configurations. Using UI declarations to render plugin configuration form pages is an EMQX Enterprise edition feature.
 
 :::
 
 
 Your plugin package needs to include an Avro Schema configuration file, located at the relative path `priv/config_schema.avsc`. This file must adhere to the [Apache Avro specification](https://avro.apache.org/docs/1.11.1/specification/).
 
-{% emqxee %}
-
 Additionally, it also includes descriptive declarations about the UI. Specifically, an `$ui` field can be configured using the metadata of the Avro Schema. The EMQX Dashboard will generate a configuration form page based on the information provided in the `$ui` field.
-
-{% endemqxee %}
 
 
 #### Declarative UI Usage Reference (Optional)
 
-{% emqxce %}
-::: tip **TIP**
+::: tip
 
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+Using the declarative UI components is an EMQX Enterprise edition feature.
 
 :::
-{% endemqxce %}
 
-Declarative UI components enable dynamic form rendering within the Dashboard, accommodating a variety of field types and custom components.
-Below is a description of the available components and their configurations.
+Declarative UI components enable dynamic form rendering within the Dashboard, accommodating a variety of field types and custom components. Below is a description of the available components and their configurations.
 
 UI declarations are used for dynamic form rendering, allowing the EMQX Dashboard to dynamically generate configuration forms, making it easier to configure and manage plugins. Various field types and custom components are supported. Below are the available components and their configuration descriptions.
 

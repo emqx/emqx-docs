@@ -1127,9 +1127,13 @@ Converts a string of hexadecimal digits to the corresponding binary data. Exampl
 unzip(hexstr2bin('CB48CDC9C90700')) = 'hello'
 ```
 
-{% emqxee %}
-
 ### Schema Registry Functions
+
+::: tip
+
+The Schema Resigtry is an EMQX Enterprise edition feature.
+
+:::
 
 EMQX Enterprise also supports using `schema_encode` and `schema_decode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data according to a specified schema. You can read more about these functions in [Schema Registry](./schema-registry.md). 
 
@@ -1154,8 +1158,6 @@ Decodes `Bin` using the specified Protobuf Schema. Create a schema in the Schema
 ### **Sparkplug B Functions**
 
 In EMQX Enterprise, there are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about the sparkplug functions in [Sparkplug B](./sparkplug.md).
-
-{% endemqxee %}
 
 ## Date and Time Conversion Functions
 
@@ -1308,9 +1310,13 @@ Same as `unix_ts_to_rfc3339/0`, but you can use `Unit` to specify the time unit,
 unix_ts_to_rfc3339(1708671600766, 'millisecond') = '2024-02-23T15:00:00.766+08:00'
 ```
 
-{% emqxee %}
-
 ### MongoDB Time Functions
+
+::: tip
+
+Functions in this section applies to the EMQX Enterprise edition only.
+
+:::
 
 ### mongo_date() -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
 
@@ -1349,8 +1355,6 @@ Example:
 mongo_date(now_timestamp('microsecond'), 'microsecond') = 'ISODate(2024-02-23T15:51:01.232Z)'
 ```
 
-{% endemqxee %}
-
 ## UUID Functions
 
 ### uuid_v4() -> string
@@ -1369,10 +1373,6 @@ Generates a version 4 UUID without hyphens. Example:
 uuid_v4_no_hyphen() = 'd7a39aa4195a42068b962eb9a665503e'
 ```
 
-{% emqxee %}
-
 ## <!--Schema Registry and Sparkplug B Functions-->
 
 <!--In the enterprise version of EMQX, the [schema registry](./schema-registry.md) provide the `schema_decode` and `schema_encode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data. You can read more about these functions in [Schema registry](./schema-registry.md). There are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about [the sparkplug function on their documentation page](./sparkplug.md).-->
-
-{% endemqxee %}

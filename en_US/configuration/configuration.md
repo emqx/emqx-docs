@@ -293,17 +293,7 @@ listeners.tcp.default {
 
 To make the HOCON objects type-safe, EMQX introduced a schema for it. This schema defines data types, field names, and metadata, allowing for configuration value validation and more.
 
-{% emqxee %}
-
-The [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) is generated from the schema.
-
-{% endemqxee %}
-
-{% emqxce %}
-
-The [Configuration Manual](https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/) is generated from the schema.
-
-{% endemqxce %}
+The [EMQX Open Source Configuration Manual](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) are generated from the schema.
 
 ::: tip
 The zone configuration schema is not included in the configuration manual because it is identical for each group. For example, `zones.my_zone1.mqtt {...}` has the same schema as `mqtt {...}`.

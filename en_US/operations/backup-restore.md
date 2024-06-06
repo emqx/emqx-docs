@@ -11,11 +11,7 @@ EMQX provides CLI commands for data import and export to implement backup and re
 - In EMQX 4.x, a single JSON file was used to save all necessary data of EMQX configuration and the built-in database.
 - In EMQX 5.x, the exported data is compressed into a tar file format, allowing for more efficient and structured handling of potentially large amounts of user data.
 
-{% emqxee %}
-
-In addition to CLI commands, EMQX Enterprise Edition also offers a data backup and recovery page on the Dashboard, where you can perform data import and export operations.
-
-{% endemqxee %}
+In addition to CLI commands, the EMQX Enterprise edition also offers a data backup and recovery page on the Dashboard, where you can perform data import and export operations.
 
 The data that EMQX supports for import and export includes:
 
@@ -64,9 +60,13 @@ Therefore, importing data into an EMQX cluster without clearing data may require
 
 :::
 
-{% emqxee %}
-
 ## Dashboard Example
+
+::: tip
+
+This section only applies to the EMQX Enterprise edition.
+
+:::
 
 This section explains how to perform data import and export operations on the Dashboard.
 
@@ -91,8 +91,6 @@ This section explains how to perform data import and export operations on the Da
 3. To import data, click the **Upload** button in the top right corner to upload a backup file to the current EMQX cluster. The file will not be restored immediately upon upload. You can go to the **Actions** column in the backup file list and click **Restore** to import the backup file into the current EMQX cluster.
 
 ![EMQX backup & restore](./assets/backup-restore.png)
-
-{% endemqxee %}
 
 ## CLI Example
 
