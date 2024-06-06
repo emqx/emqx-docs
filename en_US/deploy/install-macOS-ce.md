@@ -1,13 +1,13 @@
 # Install EMQX Open Source on macOS
 
-This page guides you on installing and starting the EMQX Open Source edition on macOS with a zip file.
+This page guides you on installing and starting the EMQX Open Source edition on macOS.
 
-Supported versions:
+The supported versions are:
 
 - macOS 14
 - macOS 13
 
-The instructions below will take macOS 13 as an example to illustrate how to download the latest version of EMQX. If you want to install a different version or in a different system, visit the [EMQX Deployment page](https://www.emqx.com/en/try?product=broker). 
+For installation on other systems or to install other versions, visit the [EMQX Open Source download site](https://www.emqx.com/en/downloads-and-install/broker).
 
 ## Install EMQX with Homebrew
 
@@ -27,13 +27,9 @@ The instructions below will take macOS 13 as an example to illustrate how to dow
 
 ## Install EMQX from Zip Package
 
-1. Go to the [official site for EMQX](https://www.emqx.com/en/try?product=broker).
-
-2. Select `@CE_VERSION@` for **Version** and `macOS 13` for **OS**, and click the **Download** button.
-
-3. On the Downloads and Install page, select `zip` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Click **Download Now**.
-
-   You can also follow the command instructions on the page.
+1. Go to the download site and select the [**macOS** tab](https://www.emqx.com/en/downloads-and-install/broker?os=macOS).
+2. Select the latest version `@CE_VERSION@`. From the **Package Type** dropdown, select the `zip` package according to the macOS version and CPU architecture as you need.
+3. Click the link below for downloading. You can also follow the command instructions on the page.
 
 ## Start and Stop EMQX
 

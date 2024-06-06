@@ -10,15 +10,13 @@ Supported versions:
 - Rocky Linux 8 (RHEL 8)
 - CentOS 7 (RHEL 7)
 
+The following sections demonstrate how to download the latest version of EMQX for installation on the CentOS 8 system as an example. For installation on other systems or to install other versions, visit the [EMQX Enterprise download site](https://www.emqx.com/en/downloads-and-install/enterprise) for detailed information.
+
 ## Install with rpm
 
-1. Go to the [official site for EMQX](https://www.emqx.com/en/try?product=enterprise).
-
-2. Select `@EE_VERSION@` for **Version** and `CentOS` for **OS**, and click the **Download** button.
-
-3. On the Downloads and Install page, select `rpm` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Click **Download Now**.
-
-   You can also follow the command instructions on the page.
+1. Go to the official download page and select the [**CentOS/RHEL** tab](https://www.emqx.com/en/downloads-and-install/enterprise?os=RHEL).
+2. Select the latest version `@EE_VERSION@`. From the **Package Type** dropdown, select the `RHEL 8 (CentOS 8) amd64` or `RHEL 8 (CentOS 8) arm64` -> `rpm` package according to the required CPU architecture.
+3. Click the link below for downloading. You can also follow the command-line guide steps for downloading and installing.
 
 ### Start EMQX
 
@@ -37,11 +35,9 @@ sudo yum remove emqx
 
 ## Install with tar.gz
 
-1. Go to the [official site for EMQX](https://www.emqx.com/en/try?product=enterprise).
-2. Select `@EE_VERSION@` for **Version** and `CentOS` for **OS**, and click the **Download** button.
-3. On the Downloads and Install page, select `tar.gz` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Click **Download Now**.
-
-   You can also follow the command instructions on the page.
+1. Go to the official download page and select the [**CentOS/RHEL** tab](https://www.emqx.com/en/downloads-and-install/enterprise?os=RHEL).
+2. Select the latest version `@EE_VERSION@`. From the **Package Type** dropdown, select the `RHEL 8 (CentOS 8) amd64` or `RHEL 8 (CentOS 8) arm64` -> `tar.gz` package according to the required CPU architecture.
+3. Click the link below for downloading. You can also follow the command-line guide steps for downloading and installing.
 
 ### Start EMQX
 

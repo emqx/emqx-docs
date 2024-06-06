@@ -1,6 +1,6 @@
 # Install EMQX Enterprise on Debian
 
-This page guides you on installing and starting the EMQX Enterprise edition on the Debian system.
+This page guides you on installing and starting the latest EMQX on the Debian system.
 
 Supported versions:
 
@@ -8,15 +8,14 @@ Supported versions:
 - Debian 11
 - Debian 10
 
-The section below will take Debian 11 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.com/en/try?product=enterprise). 
+For installation on other systems or to install other versions, visit the [EMQX Enterprise download site](https://www.emqx.com/en/downloads-and-install/enterprise). 
 
 ## Install with deb
 
-1. Go to the [official site for EMQX](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=Debian=currentOS=Debian12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
-2. Select `@EE_VERSION@` for **Version** and `Debian` for **OS**, and click the **Download** button.
-3. On the Downloads and Install page, select `deb` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Click **Download Now**.
+1. Go to the download site and select the [**Debian** tab](https://www.emqx.com/en/downloads-and-install/enterprise?os=Debian).
+2. Select the latest version `@EE_VERSION@`. From the **Package Type** dropdown, select the `deb` package according to the Debian version and CPU architecture as you need.
+3. Click the link below for downloading. You can also follow the command instructions on the page.
 
-   You can also follow the command instructions on the page.
 
 ### Start EMQX
 
@@ -36,13 +35,9 @@ sudo apt remove --purge emqx
 
 ## Install with tar.gz
 
-1. Go to the [official site for EMQX](https://www.emqx.com/en/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=Debian=currentOS=Debian12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise).
-
-2. Select `@EE_VERSION@` for **Version** and `Debian` for **OS**, and click the **Download** button.
-
-3. On the Downloads and Install page, select `tar.gz` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Click **Download Now**.
-
-   You can also follow the command instructions on the page.
+1. Go to the download site and select the [**Debian** tab](https://www.emqx.com/en/downloads-and-install/enterprise?os=Debian).
+2. Select the latest version `@EE_VERSION@`. From the **Package Type** dropdown, select the `tar.gz` package according to the Debian version and CPU architecture as you need.
+3. Click the link below for downloading. You can also follow the command instructions on the page.
 
 ### Start EMQX
 

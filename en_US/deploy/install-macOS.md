@@ -6,17 +6,13 @@ Supported versions:
 - macOS 14
 - macOS 13
 
-The instructions below will take macOS 13 as an example to illustrate how to download the latest version of EMQX. If you want to install a different version or in a different system, visit the [EMQX Deployment page](https://www.emqx.com/en/try?product=enterprise). 
+For installation on other systems or to install other versions, visit the [EMQX Enterprise download site](https://www.emqx.com/en/downloads-and-install/enterprise).
 
 ## Install EMQX Enterprise
 
-1. Go to the [official site for EMQX](https://www.emqx.com/en/try?product=enterprise).
-
-2. Select `@EE_VERSION@` for **Version** and `macOS 13` for **OS**, and click the **Download** button.
-
-3. On the Downloads and Install page, select `zip` as the **Install Method** and select the proper **CPU Architecture** that matches your system. Click **Download Now**.
-
-   You can also follow the command instructions on the page.
+1. Go to the download site and select the [**macOS** tab](https://www.emqx.com/en/downloads-and-install/enterprise?os=macOS).
+2. Select the latest version `@EE_VERSION@`. From the **Package Type** dropdown, select the `zip` package according to the macOS version and CPU architecture as you need.
+3. Click the link below for downloading. You can also follow the command instructions on the page.
 
 ## Start and Stop EMQX
 

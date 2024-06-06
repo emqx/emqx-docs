@@ -41,45 +41,11 @@ EMQX 支持通过 Yum 源安装，您可通过以下 Yum 命令从中自动下�
 
 ## 通过 rpm 安装
 
-EMQX 同时支持通过下载 rpm 安装包进行安装。本节以 CentOS 8 系统为例演示如何下载最新版 EMQX。如希望在其他支持系统中进行安装，或体验其他版本，可前往 [EMQX 下载页面](https://www.emqx.com/zh/try?product=broker)获取详细安装信息。
+EMQX 同时支持通过下载 rpm 安装包进行安装。本节以 CentOS 8 系统为例演示如何下载最新版 EMQX。如希望在其他支持系统中进行安装，或体验其他版本，可前往 [EMQX 开源版下载页面](https://www.emqx.com/zh/downloads-and-install/broker)获取详细安装信息。
 
-请根据 CPU 架构选择对应安装方式。
-
-:::: tabs type:card
-
-::: tab amd64
-
-1. 下载 [emqx-@CE_VERSION@-el8-amd64.rpm](https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-amd64.rpm)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-amd64.rpm
-   ```
-
-2. 安装 EMQX。
-
-   ```bash
-   sudo yum install emqx-@CE_VERSION@-el8-amd64.rpm -y
-   ```
-
-:::
-
-::: tab arm64
-
-1. 下载 [emqx-@CE_VERSION@-el8-arm64.rpm](https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-arm64.rpm)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-arm64.rpm
-   ```
-
-2. 安装 EMQX。
-
-   ```bash
-   sudo yum install emqx-@CE_VERSION@-el8-arm64.rpm -y
-   ```
-
-:::
-
-::::
+1. 前往官方下载页面，选择 [CentOS/RHEL 页签](https://www.emqx.com/zh/downloads-and-install/broker?os=RHEL)，选择 **Package**。
+2. 选择最新版本 `@CE_VERSION@`，在**安装包类型**中根据所需的 CPU 架构选择 `RHEL 8 (CentOS 8) amd64` 或 `RHEL 8 (CentOS 8) arm64` -> `rpm` 安装包。
+3. 点击下方的下载链接。您也可以参照命令行指导步骤进行下载与安装。
 
 ### 启动 EMQX
 
@@ -99,45 +65,11 @@ sudo yum remove emqx
 
 ## 通过 tar.gz 安装
 
-EMQX 同时支持通过下载 tar.gz 安装包进行安装。本节以 CentOS 8 系统为例演示如何下载最新版 EMQX。如希望在其他支持系统中进行安装，或体验其他版本，可前往 [EMQX 下载页面](https://www.emqx.com/zh/try?product=broker)获取详细安装信息。
+EMQX 同时支持通过下载 tar.gz 安装包进行安装。本节以 CentOS 8 系统为例演示如何下载最新版 EMQX。如希望在其他支持系统中进行安装，或体验其他版本，可前往 [EMQX 开源版下载页面](https://www.emqx.com/zh/downloads-and-install/broker)获取详细安装信息。
 
-请根据 CPU 架构选择对应安装方式。
-
-:::: tabs type:card
-
-::: tab amd64
-
-1. 下载 [emqx-@CE_VERSION@-el8-amd64.tar.gz](https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-amd64.tar.gz)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-amd64.tar.gz
-   ```
-
-2. 安装 EMQX。
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-@CE_VERSION@-el8-amd64.tar.gz -C emqx
-   ```
-
-:::
-
-::: tab arm64
-
-1. 下载 [emqx-@CE_VERSION@-el8-arm64.tar.gz](https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-arm64.tar.gz)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-arm64.tar.gz
-   ```
-
-2. 安装 EMQX。
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-@CE_VERSION@-el8-arm64.tar.gz -C emqx
-   ```
-
-:::
-
-::::
+1. 前往官方下载页面，选择 [CentOS/RHEL 页签](https://www.emqx.com/zh/downloads-and-install/broker?os=RHEL)，选择 **Package**。
+2. 选择最新版本 `@CE_VERSION@`，在**安装包类型**中根据所需的 CPU 架构选择 `RHEL 8 (CentOS 8) amd64` 或 `RHEL 8 (CentOS 8) arm64` -> `tar.gz` 安装包。
+3. 点击下方的下载链接。您也可以参照命令行指导步骤进行下载与安装。
 
 ### 启动 EMQX
 

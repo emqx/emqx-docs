@@ -44,43 +44,11 @@ EMQX supports installing with Yum source to provide our users with a convenient 
 
 EMQX offers rpm installation packages for different CPU architectures.
 
-This section takes CentOS 8 as an example to illustrate how to download the latest version of EMQX. For other system versions, please visit the [EMQX Deployment page](https://www.emqx.io/downloads?os=CentOS). 
+This section demonstrates how to download the latest version of EMQX for installation on the CentOS 8 system as an example. For installation on other systems or to install other versions, visit the [EMQX Open Source download site](https://www.emqx.com/en/downloads-and-install/broker) for detailed installation information.
 
-:::: tabs type:card
-
-::: tab amd64
-
-1. Download [emqx-@CE_VERSION@-el8-amd64.rpm](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-amd64.rpm). 
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-amd64.rpm
-   ```
-
-2. Install EMQX. 
-
-   ```bash
-   sudo yum install emqx-@CE_VERSION@-el8-amd64.rpm -y
-   ```
-
-:::
-
-::: tab arm64
-
-1. Download [emqx-@CE_VERSION@-el8-arm64.rpm](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-arm64.rpm). 
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-arm64.rpm
-   ```
-
-2. Install EMQX. 
-
-   ```bash
-   sudo yum install emqx-@CE_VERSION@-el8-arm64.rpm -y
-   ```
-
-:::
-
-::::
+1. Go to the official download page and select the [**CentOS/RHEL** tab](https://www.emqx.com/en/downloads-and-install/broker?os=RHEL). Then, select **Package**.
+2. Select the latest version `@CE_VERSION@`. From the **Package Type** dropdown, select the `RHEL 8 (CentOS 8) amd64` or `RHEL 8 (CentOS 8) arm64` -> `rpm` package according to the required CPU architecture.
+3. Click the link below for downloading. You can also follow the command-line guide steps for downloading and installing.
 
 ### Start EMQX
 
@@ -102,43 +70,11 @@ sudo yum remove emqx
 
 EMQX offers tar.gz installation packages for different CPU architectures.
 
-This section takes CentOS 8 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.io/downloads?os=CentOS). 
+This section demonstrates how to download the latest version of EMQX for installation on the CentOS 8 system as an example. For installation on other systems or to install other versions, visit the [EMQX Open Source download site](https://www.emqx.com/en/downloads-and-install/broker) for detailed installation information.
 
-:::: tabs type:card
-
-::: tab amd64
-
-1. Download [emqx-@CE_VERSION@-el8-amd64.tar.gz](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-amd64.tar.gz). 
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-amd64.tar.gz
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-@CE_VERSION@-el8-amd64.tar.gz -C emqx
-   ```
-
-:::
-
-::: tab arm64
-
-1. Download [emqx-@CE_VERSION@-el8-arm64.tar.gz](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-arm64.tar.gz). 
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-el8-arm64.tar.gz
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-@CE_VERSION@-el8-arm64.tar.gz -C emqx
-   ```
-
-:::
-
-::::
+1. Go to the official download page and select the [**CentOS/RHEL** tab](https://www.emqx.com/en/downloads-and-install/broker?os=RHEL). Then, select **Package**.
+2. Select the latest version `@CE_VERSION@`. From the **Package Type** dropdown, select the `RHEL 8 (CentOS 8) amd64` or `RHEL 8 (CentOS 8) arm64` -> `tar.gz` package according to the required CPU architecture.
+3. Click the link below for downloading. You can also follow the command-line guide steps for downloading and installing.
 
 ### Start EMQX
 

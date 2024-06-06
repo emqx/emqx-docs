@@ -1,7 +1,7 @@
 # Install EMQX Open Source on Debian
 
 
-This page guides you on installing and starting the EMQX Open Source edition on the Debian system.
+This page guides you on installing and starting the latest EMQX on the Debian system.
 
 Supported versions:
 
@@ -33,47 +33,13 @@ EMQX supports installing with Apt source to provide our users with a convenient 
 
 ## Install with Package
 
-The section below will take Debian 11 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.io/downloads?os=Debian). 
+The section below illustrate how to download the latest version of EMQX. For other versions, visit the [EMQX Open Source download site](https://www.emqx.com/en/downloads-and-install/broker). 
 
 ### Install with deb
 
-EMQX offers different installation packages for different CPU architectures. 
-
-:::: tabs type:card
-
-::: tab amd64
-
-1. Download [emqx-@CE_VERSION@-debian11-amd64.deb](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-amd64.deb).
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-amd64.deb
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   sudo apt install ./emqx-@CE_VERSION@-debian11-amd64.deb
-   ```
-
-:::
-
-::: tab arm64
-
-1. Download [emqx-@CE_VERSION@-debian11-arm64.deb](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-arm64.deb). 
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-arm64.deb
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   sudo apt install ./emqx-@CE_VERSION@-debian11-arm64.deb
-   ```
-
-:::
-
-::::
+1. Go to the download site and select the [**Debian** tab](https://www.emqx.com/en/downloads-and-install/broker?os=Debian). Then, select **Package**.
+2. Select the latest version `@CE_VERSION@`. From the **Package Type** dropdown, select the `deb` package according to the Debian version and CPU architecture as you need.
+3. Click the link below for downloading. You can also follow the command instructions on the page.
 
 #### Start EMQX
 
@@ -93,43 +59,9 @@ sudo apt remove --purge emqx
 
 ### Install with tar.gz
 
-EMQX offers different installation packages for different CPU architectures. 
-
-:::: tabs type:card
-
-::: tab amd64
-
-1. Download [emqx-@CE_VERSION@-debian11-amd64.tar.gz](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-amd64.tar.gz). 
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-amd64.tar.gz
-   ```
-
-2. Install EMQX. 
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-@CE_VERSION@-debian11-amd64.tar.gz -C emqx
-   ```
-
-:::
-
-::: tab arm64
-
-1. Download [emqx-@CE_VERSION@-debian11-arm64.tar.gz](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-arm64.tar.gz). 
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-debian11-arm64.tar.gz
-   ```
-
-2. Install EMQX. 
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-@CE_VERSION@-debian11-arm64.tar.gz -C emqx
-   ```
-
-:::
-
-::::
+1. Go to the download site and select the [**Debian** tab](https://www.emqx.com/en/downloads-and-install/broker?os=Debian). Then, select **Package**.
+2. Select the latest version `@CE_VERSION@`. From the **Package Type** dropdown, select the `tar.gz` package according to the Debian version and CPU architecture as you need.
+3. Click the link below for downloading. You can also follow the command instructions on the page.
 
 #### Start EMQX
 

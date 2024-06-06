@@ -1,23 +1,19 @@
 # macOS
 
-本页将指导您如何通过 zip 包在 macOS 系统中下载安装并启动 EMQX。
+本页将指导您如何通过 zip 包在 macOS 系统中下载安装并启动最新版 EMQX。
 
 支持的操作系统：
 
 - macOS 14
 - macOS 13
 
-以下步骤将以 macOS 13 为例，说明如何下载最新版本的 EMQX。如果您想安装不同版本或在不同系统中安装，请访问 [EMQX 下载页面](https://www.emqx.com/en/try?product=enterprise)。
+如果您想安装不同版本或在不同系统中安装，请访问 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)。
 
 ## 安装 EMQX
 
-1. 前往 [EMQX 官方下载页面](https://www.emqx.com/zh/try?product=enterprise&currentVersion=@EE_VERSION@&currentOS=macOS=currentOS=macOS12&utm_source=docs.emqx.com&utm_medium=referral&utm_campaign=enterprise-docs-install-to-try-enterprise)。
-
-2. 在**下载 EMQX Enterprise** 中，**版本**选择 `@EE_VERSION@`，**系统**选择 `macOS 13`，点击**免费下载**按钮。
-
-3. 在安装与下载页面中，**安装方式**选择 `zip`，选择合适的 **CPU 架构**，点击**立即下载**。
-
-   您也可以参照命令行指导步骤进行下载与安装。
+1. 前往官方下载页面，选择 [macOS 页签](https://www.emqx.com/zh/downloads-and-install/enterprise?os=macOS)。
+2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中根据需要的版本和 CPU 架构选择 `zip` 安装包。
+3. 点击下方的下载链接。您也可以参照命令行指导步骤进行下载与安装。
 
 ## 启动和停止 EMQX
 

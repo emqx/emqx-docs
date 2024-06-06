@@ -29,24 +29,6 @@
 
    关于 EMQX 目录结构的详细信息请参考 [EMQX 文件和目录](./install.md#文件和目录)。
 
-   {% emqxce %}
-
-   启动容器并挂载目录：
-
-   ```bash
-   docker run -d --name emqx \
-     -p 1883:1883 -p 8083:8083 \
-     -p 8084:8084 -p 8883:8883 \
-     -p 18083:18083 \
-     -v $PWD/data:/opt/emqx/data \
-     -v $PWD/log:/opt/emqx/log \
-     emqx/emqx:@CE_VERSION@
-   ```
-
-   {% endemqxce %}
-
-   {% emqxee %}
-
    启动容器并挂载目录：
 
    ```bash
@@ -58,9 +40,7 @@
      -v $PWD/log:/opt/emqx/log \
      emqx/emqx-enterprise:@EE_VERSION@
    ```
-
-   {% endemqxee %}
-
+   
 2. Docker 内的 `localhost` 或 `127.0.0.1` 指向的是容器内部地址，如需访问宿主机地址请使用宿主机的真实 IP 或使用 [host 网络模式](https://docs.docker.com/network/host/)。如果您使用的是 Docker for Mac 或 Docker for Windows，可以使用 `host.docker.internal` 作为宿主机地址。
 
 3. 由于 EMQX 使用 `data/mnesia/<节点名>` 作为数据存储目录，请使用 hostname 或者 FQDN 等固定的信息作为节点名，避免因为节点名称变动导致数据丢失。

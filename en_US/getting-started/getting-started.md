@@ -49,7 +49,6 @@ Container deployment is the quickest way to start exploring EMQX. This quick sta
    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
    ```
    
-
 2. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../dashboard/introduction.md), from where you can connect to your clients or check the running status.
 
    Default user name and password:
@@ -87,11 +86,11 @@ Container deployment is the quickest way to start exploring EMQX. This quick sta
 
 ### Install EMQX Using Installation Package
 
-You can also install EMQX with zip/tar.gz files on a computer or VM and easily adjust the configurations or run performance tuning. The instructions below use macOS13 amd64 as an example to illustrate the installation steps.
+You can also install EMQX using installation packages on a computer or VM and easily adjust the configurations or run performance tuning. The instructions below use macOS13 amd64 as an example to illustrate the installation steps.
 
 ::: tip
 
-Considering all the runtime dependencies, it is recommended to use zip/tar.gz files for testing and hot upgrades, and **NOT** recommended in a production environment.
+Considering all the runtime dependencies, it is recommended to use installation packages for testing and hot upgrades, and **NOT** recommended in a production environment.
 
 :::
 
@@ -99,13 +98,11 @@ Considering all the runtime dependencies, it is recommended to use zip/tar.gz fi
 
 ::: tab EMQX Open Source
 
-1. Go to the [official site for EMQX](https://www.emqx.com/en/try?product=broker).
+1. Go to the [macOS tab of the official download site](https://www.emqx.com/en/downloads-and-install/broker?os=macOS).
 
-2. Select `@CE_VERSION@` for **Version** and `macOS 13` for **OS**, and click the **Download** button.
+2. Select the latest version `@CE_VERSION@` and select `macOS 13 amd64 / zip` from **Package Type**.
 
-3. On the Downloads and Install page, select `zip` as the **Install Method** and select the proper **CPU Architecture** that matches your system. 
-
-4. Download and install the package. You can also refer to the command instructions on the page.
+2. Click the link below to download and install the package. You can also refer to the command instructions on the page.
 
 5. To run EMQX, enter:
 
@@ -136,13 +133,11 @@ To uninstall EMQX after your testing, simply delete the EMQX folder.
 
 ::: tab EMQX Enterprise
 
-1. Go to the [official site for EMQX](https://www.emqx.com/en/try?product=enterprise).
+1. Go to the [macOS tab of the official download site](https://www.emqx.com/en/downloads-and-install/enterprise?os=macOS).
 
-2. Select `@EE_VERSION@` for **Version** and `macOS 13` for **OS**, and click the **Download** button.
+2. Select the latest version `@EE_VERSION@` and select `macOS 13 amd64 / zip` from **Package Type**.
 
-3. On the Downloads and Install page, select `zip` as the **Install Method** and select the proper **CPU Architecture** that matches your system. 
-
-4. Download and install the package. You can also refer to the command instructions on the page.
+3. Click the link below to download and install the package. You can also refer to the command instructions on the page.
 
 5. To run EMQX, enter:
 

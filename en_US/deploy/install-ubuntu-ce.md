@@ -5,6 +5,7 @@ This page guides you on installing and starting the EMQX Open Source edition on 
 
 Supported versions:
 
+- Ubuntu 24.04
 - Ubuntu 22.04
 - Ubuntu 20.04
 - Ubuntu 18.04
@@ -33,49 +34,15 @@ EMQX supports installing with Apt source to provide our users with a convenient 
 
 ## Install with Package
 
-The section below will take Ubuntu 22.04 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.io/downloads?os=Ubuntu). 
+EMQX supports installation via deb packages or tar.gz packages. For installation on other supported systems or to try other versions, please visit the [EMQX Open Source download site](https://www.emqx.com/en/downloads-and-install/broker) for installation information.
 
-## Install with deb
+### Install with deb
 
-EMQX offers different installation packages for different CPU architectures. 
+1. Go to the official download page and select the [**Ubuntu** tab](https://www.emqx.com/en/downloads-and-install/broker?os=Ubuntu), then select **Package**.
+2. Select the latest version `@CE_VERSION@` and select the `deb` package according to the required version and CPU architecture in the **Package Type** dropdown.
+3. Click the link below for downloading. You can also follow the command-line guide steps for downloading and installing.
 
-:::: tabs type:card
-
-::: tab amd64
-
-1. Download [emqx-@CE_VERSION@-ubuntu22.04-amd64.deb](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-amd64.deb).
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-amd64.deb
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   sudo apt install ./emqx-@CE_VERSION@-ubuntu22.04-amd64.deb
-   ```
-
-:::
-
-::: tab arm64
-
-1. Download [emqx-@CE_VERSION@-ubuntu22.04-arm64.deb](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-arm64.deb).
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-arm64.deb
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   sudo apt install ./emqx-@CE_VERSION@-ubuntu22.04-arm64.deb
-   ```
-
-:::
-
-::::
-
-### Start EMQX
+#### Start EMQX
 
 Start EMQX as a systemctl service.
 
@@ -83,7 +50,7 @@ Start EMQX as a systemctl service.
 sudo systemctl start emqx
 ```
 
-### Uninstall EMQX
+#### Uninstall EMQX
 
 To uninstall EMQX, run:
 
@@ -91,47 +58,13 @@ To uninstall EMQX, run:
 sudo apt remove --purge emqx
 ```
 
-## Install with tar.gz 
+### Install with tar.gz 
 
-EMQX offers different installation packages for different CPU architectures. 
+1. Go to the official download page and select the [**Ubuntu** tab](https://www.emqx.com/en/downloads-and-install/broker?os=Ubuntu), then select **Package**.
+2. Select the latest version `@CE_VERSION@` and select the `tar.gz` package according to the required version and CPU architecture in the **Package Type** dropdown.
+3. Click the link below for downloading. You can also follow the command-line guide steps for downloading and installing.
 
-:::: tabs type:card
-
-::: tab amd64
-
-1. Download [emqx-@CE_VERSION@-ubuntu22.04-amd64.tar.gz](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-amd64.tar.gz).
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-amd64.tar.gz
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-@CE_VERSION@-ubuntu22.04-amd64.tar.gz -C emqx
-   ```
-
-:::
-
-::: tab arm64
-
-1. Download [emqx-@CE_VERSION@-ubuntu22.04-arm64.tar.gz](https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-arm64.tar.gz)。
-
-   ```bash
-   wget https://www.emqx.com/en/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-arm64.tar.gz
-   ```
-
-2. Install EMQX.
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-@CE_VERSION@-ubuntu22.04-arm64.tar.gz -C emqx
-   ```
-
-:::
-
-::::
-
-### Start EMQX
+#### Start EMQX
 
 After the installation, run the command below to start EMQX.
 

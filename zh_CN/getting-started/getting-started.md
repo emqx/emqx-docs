@@ -75,9 +75,9 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 ::::
 
-### 通过 zip/tar.gz 压缩包快速安装
+### 通过安装包快速安装
 
-您也可以选择通过 zip/tar.gz 压缩包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。以下步骤将以 macOS13 amd64 为例演示如何下载并安装 EMQX。
+您也可以选择通过安装包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。以下步骤将以 macOS13 amd64 为例演示如何下载并安装 EMQX。
 
 由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，**不建议**在生产环境中使用。
 
@@ -85,13 +85,11 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 ::: tab EMQX 开源版
 
-1. 前往 [EMQX 官方下载页面](https://www.emqx.com/zh/try?product=broker)。
+1. 前往 [EMQX 官方下载页面的 macOS 页签](https://www.emqx.com/zh/downloads-and-install/broker?os=macOS)。
 
-2. 在**下载 EMQX 开源版** 中，**版本**选择 `@CE_VERSION@`，**系统**选择 `macOS 13`，点击**免费下载**按钮。
+2. 选择最新版本 `@CE_VERSION@`，在**安装包类型**中选择 `macOS 13 amd64 / zip`。
 
-3. 在下载与安装页面中，**安装方式**选择 `zip`，选择合适的 **CPU 架构**，点击**立即下载**。
-
-   您也可以参照页面中的命令指导步骤进行下载与安装。
+2. 直接点击下方的下载链接。您也可以参照页面中的命令指导步骤进行下载与安装。
 
 4. 运行以下命令启动 EMQX。
 
@@ -125,15 +123,13 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 :::
 
-::: tab EMQX Enterprise
+::: tab EMQX 企业版
 
-1. 前往 [EMQX 官方下载页面](https://www.emqx.com/zh/try?product=enterprise)。
+1. 前往 [EMQX 官方下载页面的 macOS 页签](https://www.emqx.com/zh/downloads-and-install/enterprise?os=macOS)。
 
-2. 在**下载 EMQX Enterprise** 中，**版本**选择 `@EE_VERSION@`，**系统**选择 `macOS 13`，点击**免费下载**按钮。
+2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中选择 `macOS 13 amd64 / zip`。
 
-3. 在下载与安装页面中，**安装方式**选择 `zip`，选择合适的 **CPU 架构**，点击**立即下载**。
-
-   您也可以参照页面中的命令指导步骤进行下载与安装。
+3. 直接点击下方的下载链接。您也可以参照页面中的命令指导步骤进行下载与安装。
 
 4. 运行以下命令启动 EMQX。
 
@@ -169,7 +165,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 ## 通过 MQTTX 快速验证
 [MQTTX](https://mqttx.app/zh) 是一款开源的跨平台 MQTT 5.0 客户端工具，它支持 macOS、Linux 并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。您可通过 MQTTX 一键式的连接方式和图形界面，您可轻松测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。
 
-本节介绍如何使用 [MQTTX Web 版](https://mqttx.app/zh/web) 模拟客户端快速连接到 EMQX，无需下载或安装任何程序。
+本节介绍如何使用 [MQTTX Web 版](https://mqttx.app/zh/web)模拟客户端快速连接到 EMQX，无需下载或安装任何程序。
 
 :::tip 前置准备
 

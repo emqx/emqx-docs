@@ -4,6 +4,7 @@
 
 支持的 Ubuntu 版本：
 
+- Ubuntu 24.04
 - Ubuntu 22.04
 - Ubuntu 20.04
 - Ubuntu 18.04
@@ -33,47 +34,13 @@ EMQX 支持通过 Apt 源安装，免除了用户需要手动处理依赖关系�
 
 ## 通过下载包安装
 
-EMQX 支持通过 deb 包或 tar.gz 包进行安装。下文将以 Ubuntu 22.04 系统为例演示如何下载最新版 EMQX。如希望在其他支持系统中进行安装，或体验其他版本，请可前往 [EMQX 下载页面](https://www.emqx.com/zh/try?product=broker) 获取安装信息。
+EMQX 支持通过 deb 包或 tar.gz 包进行安装。如希望在其他支持系统中进行安装，或体验其他版本，请可前往 [EMQX 开源版下载页面](https://www.emqx.com/zh/downloads-and-install/broker) 获取安装信息。
 
 ### 通过 deb 安装
 
-请根据 CPU 架构选择对应安装方式。
-
-:::: tabs type:card
-
-::: tab amd64
-
-1. 下载 [emqx-@CE_VERSION@-ubuntu22.04-amd64.deb](https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-amd64.deb)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-amd64.deb
-   ```
-
-2. 安装 EMQX。
-
-   ```bash
-   sudo apt install ./emqx-@CE_VERSION@-ubuntu22.04-amd64.deb
-   ```
-
-:::
-
-::: tab arm64
-
-1. 下载 [emqx-@CE_VERSION@-ubuntu22.04-arm64.deb](https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-arm64.deb)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-arm64.deb
-   ```
-
-2. 安装 EMQX。
-
-   ```bash
-   sudo apt install ./emqx-@CE_VERSION@-ubuntu22.04-arm64.deb
-   ```
-
-:::
-
-::::
+1. 前往官方下载页面，选择 [Ubuntu 页签](https://www.emqx.com/zh/downloads-and-install/broker?os=Ubuntu)，选择 **Package**。
+2. 选择最新版本 `@CE_VERSION@`，在**安装包类型**中根据需要的版本和 CPU 架构选择 `deb` 安装包。
+3. 点击下方的下载链接。您也可以参照命令行指导步骤进行下载与安装。
 
 #### 启动 EMQX
 
@@ -93,43 +60,9 @@ sudo apt remove --purge emqx
 
 ### 通过 tar.gz 安装
 
-请根据 CPU 架构选择对应安装方式。
-
-:::: tabs type:card
-
-::: tab amd64
-
-1. 下载 [emqx-@CE_VERSION@-ubuntu22.04-amd64.tar.gz](https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-amd64.tar.gz)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-amd64.tar.gz
-   ```
-
-2. 安装 EMQX。
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-@CE_VERSION@-ubuntu22.04-amd64.tar.gz -C emqx
-   ```
-
-:::
-
-::: tab arm64
-
-1. 下载 [emqx-@CE_VERSION@-ubuntu22.04-arm64.tar.gz](https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-arm64.tar.gz)。
-
-   ```bash
-   wget https://www.emqx.com/zh/downloads/broker/@CE_VERSION@/emqx-@CE_VERSION@-ubuntu22.04-arm64.tar.gz
-   ```
-
-2. 安装 EMQX。
-
-   ```bash
-   mkdir -p emqx && tar -zxvf emqx-@CE_VERSION@-ubuntu22.04-arm64.tar.gz -C emqx
-   ```
-
-:::
-
-::::
+1. 前往官方下载页面，选择 [Ubuntu 页签](https://www.emqx.com/zh/downloads-and-install/broker?os=Ubuntu)，选择 **Package**。
+2. 选择最新版本 `@CE_VERSION@`，在**安装包类型**中根据需要的版本和 CPU 架构选择 `tar.gz` 安装包。
+3. 点击下方的下载链接。您也可以参照命令行指导步骤进行下载与安装。
 
 安装完成后，可通过如下命令启动 EMQX。
 
