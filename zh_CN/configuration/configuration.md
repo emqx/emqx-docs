@@ -293,17 +293,7 @@ listeners.tcp.default {
 
 为了确保配置正确，EMQX 引入了 schema。schema 定义了数据类型，以及数据字段的名称和元数据，用于配置值的类型检查等。
 
-{% emqxee %}
-
-EMQX 的 [配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/) 就是从这个 Schema 生成的。
-
-{% endemqxee %}
-
-{% emqxce %}
-
-EMQX 的 [配置手册](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/) 就是从这个 Schema 生成的。
-
-{% endemqxce %}
+[EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/) 就是从这个 Schema 生成的。
 
 ::: tip
 

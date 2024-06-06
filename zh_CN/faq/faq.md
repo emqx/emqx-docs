@@ -4,13 +4,9 @@
 
 主题使用没有数量限制，主题数量增长对性能影响不大，可以放心使用。
 
-{% emqxce %}
-
 ## EMQX 开源版怎么存储数据？
 
 开源版不支持数据存储功能，可以使用企业版，或者使用外部程序订阅主题/Webhook 的方式获取数据，然后写入到数据库。
-
-{% endemqxce %}
 
 ## EMQX 与物联网应用的关系是什么？
 
@@ -399,8 +395,6 @@ Root: /usr/lib/emqx
 - `proto_unexpected_c`：在已经有一条 MQTT 连接的情况下重复收到了 MQTT 连接请求
 - `idle_timeout`： TCP 连接建立 15s 之后，还没收到 connect 报文
 
-{% emqxce %}
-
 ## EMQX 推荐部署的操作系统是什么？
 
 EMQX 支持跨平台部署在 Linux、MacOS、ARM 嵌入系统，生产系推荐在 CentOS、Ubuntu、Debian 等 Linux 发行版上部署。
@@ -408,8 +402,6 @@ EMQX 支持跨平台部署在 Linux、MacOS、ARM 嵌入系统，生产系推荐
 ## EMQX 支持 Windows 操作系统吗？
 
 不支持。
-
-{% endemqxce %}
 
 ## EMQX 如何预估资源的使用？
 

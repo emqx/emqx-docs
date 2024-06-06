@@ -68,17 +68,7 @@ mqtt {
 - `user_property.*`：从 MQTT CONNECT 数据包的 User-Property 中提取属性值，例如 `user_property.foo`
 - `zone`：继承自 MQTT 监听器的 zone 名称
 
-{% emqxce %}
-
-更多客户端属性配置的详细信息，请参见[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
-
-{% endemqxce %}
-
-{% emqxee %}
-
-更多客户端属性配置的详细信息，请参见[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
-
-{% endemqxee %}
+更多客户端属性配置的详细信息，请参见 [EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 ### 在客户端认证过程中设置
 

@@ -106,7 +106,7 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
 
 2. 启动第一个节点，通过环境变量设置节点名。EMQX 默认的集群方式是手动集群，因此不需要进行额外设置。将节点添加到 Docker 网络中，并设置与节点 host 相同的网络别名。
 
-   {% emqxce %}
+   对于 EMQX 开源版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -122,9 +122,7 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
        emqx/emqx:@CE_VERSION@
    ```
 
-   {% endemqxce %}
-
-   {% emqxee %}
+   对于 EMQX 企业版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -137,14 +135,12 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
        -p 8084:8084 \
        -p 8883:8883 \
        -p 18083:18083 \
-       emqx/emqx-enterprise:@CE_VERSION@
+       emqx/emqx-enterprise:@EE_VERSION@
    ```
-
-   {% endemqxee %}
-
+   
 3. 当第一个节点启动完成后，启动第二个节点。新节点需要加入与第一个节点相同的网络，由于第一个节点已经占用了 1883 等端口，此处不再映射端口。
 
-   {% emqxce %}
+   对于 EMQX 开源版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -155,9 +151,7 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
        emqx/emqx:@CE_VERSION@
    ```
 
-   {% endemqxce %}
-
-   {% emqxee %}
+   对于 EMQX 企业版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -165,11 +159,9 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
        -e "EMQX_NODE_NAME=emqx@node2.emqx.com" \
        --network emqx-bridge \
        --network-alias node2.emqx.com \
-       emqx/emqx-enterprise:@CE_VERSION@
+       emqx/emqx-enterprise:@EE_VERSION@
    ```
-
-   {% endemqxee %}
-
+   
 4. 在任意一个节点上执行[手动创建集群](#手动创建集群)的命令，将当前节点与另一节点连接创建集群：
 
    ```bash
@@ -195,7 +187,7 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
 
    还需要将节点加入到 Docker 网络中，并设置与节点 host 相同的网络别名。
 
-   {% emqxce %}
+   对于 EMQX 开源版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -213,9 +205,7 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
        emqx/emqx:@CE_VERSION@
    ```
 
-   {% endemqxce %}
-
-   {% emqxee %}
+   对于 EMQX 企业版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -230,14 +220,12 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
        -p 8084:8084 \
        -p 8883:8883 \
        -p 18083:18083 \
-       emqx/emqx-enterprise:@CE_VERSION@
+       emqx/emqx-enterprise:@EE_VERSION@
    ```
-
-   {% endemqxee %}
-
+   
 3. 当第一个节点启动完成后，启动第二个节点。集群方式以及新节点需要加入与第一个节点相同的网络，由于第一个节点已经占用了 1883 等端口，此处不再映射端口。
 
-   {% emqxce %}
+   对于 EMQX 开源版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -250,9 +238,7 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
        emqx/emqx:@CE_VERSION@
    ```
 
-   {% endemqxce %}
-
-   {% emqxee %}
+   对于 EMQX 企业版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -262,10 +248,9 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
       -e "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]" \
       --network emqx-bridge \
       --network-alias node2.emqx.com \
-      emqx/emqx-enterprise:@CE_VERSION@
+      emqx/emqx-enterprise:@EE_VERSION@
    ```
-
-   {% endemqxee %}
+   
 
 :::
 

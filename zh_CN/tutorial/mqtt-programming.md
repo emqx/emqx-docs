@@ -34,20 +34,6 @@
 - [Android 使用 Kotlin 连接 MQTT](https://www.emqx.com/zh/blog/android-connects-mqtt-using-kotlin) 
 - [Android MQTT TLS/SSL 认证](https://www.emqx.com/zh/blog/android-mqtt-ssl-tls-authentication) 
 
-{% emqxee %}
-
-**嵌入式硬件开发**
-
-- [在树莓派上使用 MQTT](https://www.emqx.com/zh/blog/use-mqtt-with-raspberry-pi) 
-- [在树莓派中使用 MicroPython 接入 MQTT](https://www.emqx.com/zh/blog/micro-python-mqtt-tutorial-based-on-raspberry-pi) 
-- [ESP32 连接到免费的公共 MQTT 服务器](https://www.emqx.com/zh/blog/esp32-connects-to-the-free-public-mqtt-broker) 
-- [ESP8266 连接到免费的公共 MQTT 服务器](https://www.emqx.com/zh/blog/esp8266-connects-to-the-public-mqtt-broker) 
-- [ESP8266 + MQTT ：如何实现 LED 灯的远程控制](https://www.emqx.com/zh/blog/esp8266_mqtt_led) 
-
-{% endemqxee %}
-
-{% emqxce %}
-
 **嵌入式硬件开发**
 
 - [在树莓派上使用 MQTT](https://www.emqx.com/zh/blog/use-mqtt-with-raspberry-pi) 
@@ -56,5 +42,3 @@
 - [ESP8266 连接到免费的公共 MQTT 服务器](https://www.emqx.com/zh/blog/esp8266-connects-to-the-public-mqtt-broker) 
 - [ESP8266 + MQTT ：如何实现 LED 灯的远程控制](https://www.emqx.com/zh/blog/esp8266_mqtt_led) 
 - [通过 NodeMCU (ESP8266) 将传感器数据上传至 MQTT 云服务](https://www.emqx.com/zh/blog/upload-sensor-data-to-mqtt-cloud-service-via-nodemcu-esp8266) 
-
-{% endemqxce %}

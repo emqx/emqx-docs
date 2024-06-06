@@ -306,19 +306,15 @@ Rule SQL 与 EMQX 4.x 语法完全兼容，但规则下的操作被分为内置�
 
 WebHook 插件（`emqx_web_hook`）已转换为内置功能，现在称为 "HTTP 服务" 动作。
 
-{% emqxee %}
-
 ## 离线消息
 
-在 EMQX 4.x 中提供的[离线消息](https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_redis.html)基于外部数据库。EMQX 计划在以后的版本中提供基于内置数据库的本地离线消息支持，因此在版本 5.x 中不再支持外部数据库的离线消息。
+在 EMQX 企业版 4.x 版本中提供的[离线消息](https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_redis.html)基于外部数据库。EMQX 计划在以后的版本中提供基于内置数据库的本地离线消息支持，因此在版本 5.x 中不再支持外部数据库的离线消息。
 
 即将推出的本地离线消息功能将提供更高的性能，并降低使用和维护成本。敬请关注更多更新。
 
 ## 自动订阅（服务器端订阅）
 
-从版本 5.0.0 开始，EMQX 不再基于外部数据库提供[自动订阅](https://docs.emqx.com/zh/enterprise/v4.4/rule/get_subs_from_redis.html)（服务器端订阅）。
-
-{% endemqxee %}
+从 EMQX 企业版 5.0.0 版本开始，EMQX 不再基于外部数据库提供[自动订阅](https://docs.emqx.com/zh/enterprise/v4.4/rule/get_subs_from_redis.html)（服务器端订阅）。
 
 ## 数据持久化
 
