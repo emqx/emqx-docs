@@ -13,7 +13,10 @@ This is easily achievable if those clusters:
 
 Last point is crucial. Cluster Linking requires both `cluster-us-east` MQTT listener to be reachable from the `cluster-eu-west` network, and vice versa, otherwise the link will not be fully operational. While not strictly necessary, it is strongly recommended to put those MQTT listeners behind a load balancer, to ensure even distribution of Cluster Linking protocol traffic.
 
-For simplicity, suppose also that the clusters will talk to each other over a VPN or similar mechanism, essentially taking care of most of the security concerns, thus simplifying the cluster configuration.
+For simplicity, suppose also that the clusters will talk to each other over a VPN or similar mechanism, essentially taking care of most of the security concerns, thus simplifying all our example configurations. If you are going to use the public internet in your setup, make sure to secure the communication between the clusters using [TLS][1], and strict [TLS or MQTT client authentication][2].
+
+[1]: ./configuration.md
+[2]: ../access-control/authn/authn.md
 
 ## Spin up first cluster
 
