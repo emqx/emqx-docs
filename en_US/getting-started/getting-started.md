@@ -185,7 +185,7 @@ The broker address and the port information should be prepared before testing th
 
 ### Create a Connection
 
-1. Click [MQTTX Web](http://www.emqx.io/online-mqtt-client#/recent_connections) to visit the browser-based MQTTX.
+1. Click [MQTTX Web](http://mqtt-client.emqx.com/#/recent_connections) to visit the browser-based MQTTX.
 
 2. Configure and establish the MQTT connection. Click the **+ New Connection** button to enter the configure page:
 

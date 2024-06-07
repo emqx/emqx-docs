@@ -416,7 +416,7 @@
 
 - Fixed the issue where `Erlang distribution` could not use TLS [#9981](https://github.com/emqx/emqx/pull/9981).
 
-  For more information on `Erlang distribution`, see [here](https://www.emqx.io/docs/en/v4.4/advanced/cluster.html).
+  For more information on `Erlang distribution`, see [here](https://docs.emqx.com/en/enterprise/v4.4/advanced/cluster.html).
 
 - Fixed the issue where MQTT bridging could not verify TLS certificates with wildcard domains on the peer side [#10094](https://github.com/emqx/emqx/pull/10094).
 
@@ -900,7 +900,7 @@ a node restart (and configuration change) is required.
 
 - More rigorous checking of flapping to improve stability of the system [#9045](https://github.com/emqx/emqx/pull/9045).
   Previsouly only normal disconnects are counted, now the connection rejections (e.g. authentication failure) is also included.
-  Find more about flapping detection in [EMQX document](https://www.emqx.io/docs/en/v4.3/configuration/configuration.html#flapping-detect-policy)
+  Find more about flapping detection in [EMQX document](https://docs.emqx.com/en/enterprise/v4.3/configuration/configuration.html#flapping-detect-policy)
 
 - QoS1 and QoS2 messages in session's buffer are re-dispatched to other members in the group
   when the session terminates [#9094](https://github.com/emqx/emqx/pull/9094).

@@ -43,7 +43,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/messaging/mqtt-shared-subscription.html">Shared subscription</a><br><a href="https://www.emqx.io/docs/en/latest/messaging/mqtt-exclusive-subscription.html">Exclusive subscription</a><br><a href="https://www.emqx.io/docs/en/latest/messaging/mqtt-delayed-publish.html">Delayed publish</a><br><a href="https://www.emqx.io/docs/en/latest/messaging/mqtt-auto-subscription.html">Auto-subscription</a><br><a href="https://www.emqx.io/docs/en/latest/messaging/mqtt-topic-rewrite.html">Topic rewrite</a></td>
+    <td><a href="https://docs.emqx.com/en/enterprise/latest/messaging/mqtt-shared-subscription.html">Shared subscription</a><br><a href="https://docs.emqx.com/en/enterprise/latest/messaging/mqtt-exclusive-subscription.html">Exclusive subscription</a><br><a href="https://docs.emqx.com/en/enterprise/latest/messaging/mqtt-delayed-publish.html">Delayed publish</a><br><a href="https://docs.emqx.com/en/enterprise/latest/messaging/mqtt-auto-subscription.html">Auto-subscription</a><br><a href="https://docs.emqx.com/en/enterprise/latest/messaging/mqtt-topic-rewrite.html">Topic rewrite</a></td>
   </tr>
   <tr>
     <td><b>Multi-protocol Gateways</b></td>
@@ -59,7 +59,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/getting-started/roadmap.html">In Product Roadmap</a></td>
+    <td><a href="https://docs.emqx.com/en/enterprise/latest/getting-started/roadmap.html">In Product Roadmap</a></td>
   </tr>
   <tr>
     <td><b>Data Persistence</b></td>
@@ -132,7 +132,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/observability/tracer.html">Log Trace</a><br><a href="https://www.emqx.io/docs/en/latest/observability/slow-subscribers-statistics.html">Slow Subscriptions</a></td>
+    <td><a href="https://docs.emqx.com/en/enterprise/latest/observability/tracer.html">Log Trace</a><br><a href="https://docs.emqx.com/en/enterprise/latest/observability/slow-subscribers-statistics.html">Slow Subscriptions</a></td>
   </tr>
   <tr>
     <td><b>Cloud-Native &amp; K8s</b></td>
@@ -148,11 +148,12 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://neugates.io/">Neuron</a><br><a href="https://nanomq.io/">NanoMQ</a></td>
+    <td><a href="https://www.emqx.com/en/products/neuronex">Neuron</a><br><a href="https://www.emqx.com/en/products/nanomq">NanoMQ</a></td>
   </tr>
 </tbody>
 </table>
 </div>
+
 
 
 ## Scalability and Performance

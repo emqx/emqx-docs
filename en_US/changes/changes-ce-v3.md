@@ -1421,7 +1421,7 @@ Do not expire the retained messages from $SYS/# topics (#500)
 
 ### Documentation
 
-[https://docs.emqx.io/broker/v2/en/index.html](https://docs.emqx.io/broker/v2/en/index.html)
+[https://docs.emqx.com/en/emqx/v2.0/](https://docs.emqx.com/en/emqx/v2.0/)
 
 [http://docs.emqtt.com/](http://docs.emqtt.com/)
 
