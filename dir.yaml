@@ -173,19 +173,19 @@
       collapsed: true
       children:
         - title_en: EMQX Open Source API Docs
-          title_cn: EMQX Open Source API 文档
+          title_cn: EMQX Open Source API Docs
           lang: en
           path: https://docs.emqx.com/en/emqx/v${CE_MINOR_VERSION}/admin/api-docs.html
-        - title_en: EMQX Open Source API Docs
-          title_cn: EMQX Open Source API 文档
+        - title_en: EMQX 开源版 API 文档
+          title_cn: EMQX 开源版 API 文档
           lang: cn
           path: https://docs.emqx.com/zh/emqx/v${CE_MINOR_VERSION}/admin/api-docs.html
         - title_en: EMQX Enterprise API Docs
-          title_cn: EMQX Enterprise API 文档
+          title_cn: EMQX Enterprise API Docs
           lang: en
           path: https://docs.emqx.com/en/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
-        - title_en: EMQX Enterprise API Docs
-          title_cn: EMQX Enterprise API 文档
+        - title_en: EMQX 企业版 API 文档
+          title_cn: EMQX 企业版 API 文档
           lang: cn
           path: https://docs.emqx.com/zh/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
 
@@ -409,7 +409,7 @@
   path: admin/admin-guide
   collapsed: true
   children:
-    - title_en: Configuration
+    - title_en: Configuration Files
       title_cn: 配置文件
       path: configuration/configuration
       collapsed: true
