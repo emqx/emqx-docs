@@ -1,7 +1,3 @@
----
-titleTemplate: false
----
-
 # EMQX 企业版概览
 [EMQX 企业版](https://www.emqx.com/zh/products/emqx)是一款「无限连接，任意集成，随处运行」的大规模分布式物联网接入平台，同时作为一个高性能、可扩展的 MQTT 消息服务器，它可以为物联网（IoT）应用提供可靠的实时消息传输和设备连接解决方案。通过强大的内置规则引擎和数据集成功能，EMQX 企业版可以对海量 IoT 数据进行实时数据处理、数据转换和路由，还可以将 IoT 数据无缝集成到各种后端数据库和分析工具中，助力企业快速构建关键业务的 IoT 平台与应用。
 
@@ -68,7 +64,7 @@ EMQX 企业版包含一个强大的[规则引擎](./data-integration/rules.md)�
 
 EMQX 企业版提供图形化的管理系统 [Dashboard](./dashboard/introduction.md)，能够实时监控关键指标与运行状态，轻松管理客户端连接与功能配置。它还允许对客户端和集群异常行为进行诊断与调试，在线进行 MQTT 设备端到端的问题分析，大大缩短故障排查的时间。除此之外，还支持将可观测性指标集成到外部 Prometheus，Datadog 以及支持 OpenTelemetry 的服务中，实现更完善的运维监控能力。
 
-## 产品对比
+## 部署模式和版本对比
 
 EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless 和 EMQX Cloud 专有版）和两种自托管模式（EMQX 开源版 和 EMQX 企业版）。以下表格列出了这些部署模式的对比，以帮助您根据业务需求进行选择。想进一步了解具体的功能对比，参考[功能对比](./getting-started/feature-comparison.md)。
 
@@ -100,8 +96,6 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
   </tr>
 </tbody>
 </table>
-<!-- 
-
 以下列出了 EMQX 企业版和开源版的主要功能对比。
 
 | **项目**                 | **EMQX 企业版**                                             | **EMQX 开源版**                                             |
@@ -124,8 +118,6 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
 | **企业系统集成**         | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
 | **故障排查**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 | **云原生 & K8s**         | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-
--->
 
 ## 典型用例
 
@@ -257,7 +249,7 @@ EMQ 智能工厂解决方案旨在建立全面的数据收集、传输、分发�
 
 EMQ 为石油行业提供物联网数据收集解决方案，支持油田物联网终端设备的实时数据收集和云端协同管理。[**了解更多 →**](https://www.emqx.com/zh/use-cases/oil-extraction-transportation)
 
-![use_case_11](./assets/use_case_12.png)
+![use_case_12](./assets/use_case_12.png)
 
 ### 金融与支付
 

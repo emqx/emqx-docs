@@ -1,7 +1,3 @@
----
-titleTemplate: false
----
-
 # EMQX Enterprise Overview
 [EMQX Enterprise](https://www.emqx.com/en/products/emqx) is a large-scale distributed MQTT messaging platform that offers "unlimited connections, seamless integration, and anywhere deployment." As a high-performance, scalable MQTT message server, EMQX Enterprise provides reliable real-time message transmission and device connectivity solutions for IoT applications. With its robust built-in rule engine and data integration capabilities, EMQX Enterprise can perform real-time data processing, transformation, and routing for massive IoT data. It seamlessly integrates IoT data with various backend databases and analytics tools, enabling enterprises to build IoT platforms and applications rapidly with leading competitiveness.
 
@@ -69,7 +65,7 @@ Through out-of-the-box Webhooks and Sink/Source, you can seamlessly [integrate](
 
 EMQX Enterprise provides a graphical management system called the [Dashboard](./dashboard/introduction.md), allowing you to monitor key metrics and operational statuses in real time. It simplifies the management of client connections and feature configurations. The Dashboard also enables diagnostics and debugging of client and cluster anomalies, facilitating end-to-end troubleshooting of MQTT devices online, significantly reducing troubleshooting time. In addition, it supports the integration of observability metrics into external services such as Prometheus, Datadog, and services supporting OpenTelemetry, enhancing operational monitoring capabilities.
 
-## Product Comparison
+## Deployment Modes and Edition Comparison
 
 EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud Serverless and EMQX Dedicated Cloud) and two self-hosted options (EMQX Open Source and EMQX Enterprise). To help you choose the best deployment option for your requirements, the following table lists a comparison of feature support across different deployment types. For a comparison of supported features in detail, refer to [Feature Comparison](./getting-started/feature-comparison.md). 
 
@@ -101,9 +97,9 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
   </tr>
 </tbody>
 </table>
-<!-- 
 
 The following is a list of feature comparisons between EMQX Enterprise and Open Source edition.
+
 
 | **Items**                         | **EMQX Enterprise**                                         | **EMQX Open Source**                                        |
 | :-------------------------------- | :---------------------------------------------------------- | :---------------------------------------------------------- |
@@ -126,7 +122,6 @@ The following is a list of feature comparisons between EMQX Enterprise and Open 
 | **Troubleshooting**               | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
 | **Cloud-Native & K8s**            | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
 
--->
 
 ## Use Cases
 
@@ -258,7 +253,7 @@ EMQ smart factory solution is designed to establish comprehensive data collectio
 
 EMQ provides IoT data collection solutions for the oil industry that support real-time data collection and cloud-side collaborative management of oilfield IoT terminal devices. [**Learn More →**](https://www.emqx.com/en/use-cases/oil-extraction-transportation)
 
-![use_case_11](./assets/use_case_12.png)
+![use_case_12](./assets/use_case_12.png)
 
 ### Finance and Payment
 
