@@ -542,6 +542,22 @@ regex_replace('hello 123', '\d+', 'world') = 'hello world'
 regex_replace('a;b; c', ';\s*', ',') = 'a,b,c'
 ```
 
+### regex_extract(String: string, Expression: string) -> [string] (v5.7.1 引入)
+
+在字符串中搜索由正则表达式指定的模式。
+如果找到匹配项，则返回这些匹配项中所有捕获组的列表。
+如果没有找到匹配项或没有捕获到任何组，则返回空列表。
+此函数可用于根据正则表达式提取字符串的部分，但不包括完整匹配项。
+
+示例：
+
+```
+regex_extract("Number: 12345", "(\d+)") -> [<<"12345">>]
+regex_extract("Hello, world!", "(\w+)") -> [<<"Hello">>, <<"world">>]
+regex_extract("No numbers here!", "(\d+)") -> []
+regex_extract("Date: 2021-05-20", "(\d{4})-(\d{2})-(\d{2})") -> [<<"2021">>, <<"05">>, <<"20">>]
+```
+
 ### replace(String: string, SearchPattern: string, Replacement: string) -> string
 
 将 String 中的所有 SearchPattern 都替换为 Replacement。示例：
