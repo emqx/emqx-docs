@@ -542,12 +542,18 @@ regex_replace('hello 123', '\d+', 'world') = 'hello world'
 regex_replace('a;b; c', ';\s*', ',') = 'a,b,c'
 ```
 
-### regex_extract(String: string, Expression: string) -> [string] (v5.7.1 引入)
+### regex_extract(String: string, Expression: string) -> [string]
 
-在字符串中搜索由正则表达式指定的模式。
-如果找到匹配项，则返回这些匹配项中所有捕获组的列表。
-如果没有找到匹配项或没有捕获到任何组，则返回空列表。
-此函数可用于根据正则表达式提取字符串的部分，但不包括完整匹配项。
+::: tip
+
+此函数在 EMQX v5.7.1 中引入。
+
+:::
+
+此函数在字符串中搜索由正则表达式指定的模式，可用于根据正则表达式提取字符串的部分，但不包括完整匹配项。
+
+如果找到匹配项，则返回这些匹配项中所有捕获组的列表。如果没有找到匹配项或没有捕获到任何组，则返回空列表。
+
 
 示例：
 
@@ -771,7 +777,13 @@ mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"a": {"b": 1}}'))) = 2
 mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"c": 1}'))) = 2
 ```
 
-### map_to_redis_hset_args(Map) -> list (v5.7.1 引入)
+### map_to_redis_hset_args(Map) -> list
+
+::: tip
+
+此函数在 EMQX v5.7.1 中引入。
+
+:::
 
 此函数将映射转换为字段名称和值的列表，用于格式化 Redis 的 `HSET`（或 `HMSET`）命令。
 转换规则如 `SELECT map_to_redis_hset_args(payload.value) as hset_fields FROM t/1`，
