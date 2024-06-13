@@ -522,7 +522,7 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
 
 - **字符串函数**：
   - [字符串操作函数](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
-  - 还添加了一个新函数 any_to_string/1，用于将任何中间非字符串值转换为字符串。
+  - 还添加了一个新函数 `any_to_string/1`，用于将任何中间非字符串值转换为字符串。
 - **数组函数**：[nth/2](../data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
 - **随机函数**：rand_str, rand_int
 - **无模式编码/解码函数**：

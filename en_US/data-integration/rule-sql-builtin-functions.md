@@ -539,6 +539,27 @@ regex_replace('hello 123', '\d+', 'world') = 'hello world'
 regex_replace('a;b; c', ';\s*', ',') = 'a,b,c'
 ```
 
+### regex_extract(String: string, Expression: string) -> [string]
+
+::: tip
+
+This function has been introduced since EMQX v5.7.1.
+
+:::
+
+This function searches the string for patterns specified by the regex pattern. It can be used to extract parts of a string based on a regular expression, excluding the complete match itself.
+
+If matches are found, it returns a list of all captured groups from these matches. If no matches are found or there are no groups captured, it returns an empty list.
+
+Examples:
+
+```
+regex_extract("Number: 12345", "(\\d+)") -> [<<"12345">>]
+regex_extract("Hello, world!", "(\\w+)") -> [<<"Hello">>, <<"world">>]
+regex_extract("No numbers here!", "(\\d+)") -> []
+regex_extract("Date: 2021-05-20", "(\\d{4})-(\\d{2})-(\\d{2})") -> [<<"2021">>, <<"05">>, <<"20">>]
+```
+
 ### replace(String: string, SearchPattern: string, Replacement: string) -> string
 
 Replaces all `SearchPatterns` in `String` with `Replacement`. Example:
@@ -752,7 +773,13 @@ mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"a": {"b": 1}}'))) = 2
 mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"c": 1}'))) = 2
 ```
 
-### map_to_redis_hset_args(Map) -> list (since v5.7.1)
+### map_to_redis_hset_args(Map) -> list
+
+::: tip 
+
+This function has been introduced since EMQX v5.7.1.
+
+:::
 
 This function transforms a map into a list of field names and values, used for formatting the Redis `HSET` (or `HMSET`) command.
 The conversion is specified by a rule such as `SELECT map_to_redis_hset_args(payload.value) as hset_fields FROM t/1`.
