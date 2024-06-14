@@ -35,7 +35,7 @@ EMQX has [3 products](https://www.emqx.com/en/products/emqx) in total. The diffe
 
 The EMQX or MQTT protocols do not directly limit the rate at which each client can receive messages. However, when too many messages are received and cannot be processed by the client in time, the messages may get heaped up and eventually discarded. To ensure system stability and message reliability, it is recommended that each client subscribe to receive messages at a rate of no more than 1500 messages/second (1KB per message).
 
-If the message receive rate exceeds this recommendation, you can use [Shared Subscription](../messaging/mqtt-shared-subscription.md) to add multiple subscribers to spread the load and reduce the rate of messages received by a single subscriber.
+If the message receive rate exceeds this recommendation, you can use [Shared Subscription](../advanced/shared-subscriptions.md) to add multiple subscribers to spread the load and reduce the rate of messages received by a single subscriber.
 
 
 ## What are EMQX's authentication options?
