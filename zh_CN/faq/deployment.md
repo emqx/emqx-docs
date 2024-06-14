@@ -48,7 +48,9 @@ EMQX 启动失败时，可以查看 [日志目录](../deploy/install.md#文件�
 
 该日志表示 EMQX 依赖的 Erlang/OTP 中的 `crypto` 应用启动失败，这通常是当前系统安装的 OpenSSL 版本与 EMQX 依赖的 OpenSSL 版本不同，或者当前系统并未安装 OpenSSL 导致的。
 
-#### Linux
+:::: tabs
+
+::: tab Linux
 
 进入到 EMQX 的安装目录（如果使用包管理工具安装 EMQX，则应该进入与 EMQX 的 `lib` 目录同级的位置）
 
@@ -99,7 +101,9 @@ $ ln -s /usr/local/lib64/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1
 
 完成后，执行在 EMQX 的 lib 同级目录下执行 `ldd lib/crypto-*/priv/lib/crypto.so` ，检查是否已能正确识别。如果不再有 `not found` 的 `.so` 库，即可正常启动 EMQX。
 
-#### macOS
+:::
+
+::: tab macOS
 
 进入到 EMQX 的安装目录：
 
@@ -135,6 +139,10 @@ brew install openssl@1.1
 ```
 
 安装完成后，即可正常启动 EMQX。
+
+:::
+
+::::
 
 ## EMQX 启动失败，日志提示 “libatomic.so.1: cannot open shared object file: No such file or directory”
 

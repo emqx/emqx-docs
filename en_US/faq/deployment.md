@@ -58,19 +58,21 @@ FATAL: Unable to start Erlang.
 Please make sure openssl-1.1.1 (libcrypto) and libncurses are installed.
 ```
 
-It indicates that the "crypto" application in Erlang/OTP that EMQX depends on failed to start because the required openssl dynamic lib (.so) is not found.
+It indicates that the "crypto" application in Erlang/OTP that EMQX depends on failed to start because the required openssl dynamic lib (.so) is not found. The solution is as follows:
 
-The solutions in different systems are as follows
+:::: tabs
 
-#### CentOS (install from epel-relese, using CentOS7 as example)
+::: tab CentOS
 
-Extra Packages for Enterprise Linux (or EPEL) is a Fedora Special Interest Group that creates, maintains, and manages a high quality set of additional packages for Enterprise Linux.
+Extra Packages for Enterprise Linux (or EPEL) is a Fedora Special Interest Group that creates, maintains, and manages a high quality set of additional packages for Enterprise Linux. Using CentOS 7 as example:
 
 1. To install the RPM repos, execute `yum install epel-release`
 1. If failed to install, follow the instructions here: https://docs.fedoraproject.org/en-US/epel/#_el7 to ensure the yum repos are added, and try step 1 again
 1. Execute `yum install openssl11` to install openssl-1.1
 
-#### Linux (compile openssl-1.1 from source code)
+:::
+
+::: tab Linux
 
 Go to the installation directory of EMQX (If you use the package management tool to install EMQX, you should enter the same level directory as the `lib` of EMQX)
 
@@ -122,7 +124,9 @@ $ ln -s /usr/local/lib64/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1
 
 After the completion, execute `ldd lib/crypto-*/priv/lib/crypto.so` in the lib-level directory of EMQX to check whether it can be correctly identified. If there is no `.so` library in `not found`, you can start EMQX normally.
 
-#### macOS
+:::
+
+::: tab macOS
 
 Go to the installation directory of EMQX:
 
@@ -181,6 +185,10 @@ libatomic is needed by emqx-5.7.0-el8-amd64.rpm
 The solution is still to manually install the dependency libatomic first.
 
 Of course, the most recommended installation method is to use the package manager (yum, apt, etc.), which will automatically install the required dependencies without us having to worry about it.
+
+:::
+
+::::
 
 ## Failed to start EMQX with Docker, log prompts "Permission denied"
 
