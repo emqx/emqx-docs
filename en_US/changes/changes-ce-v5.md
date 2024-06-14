@@ -1639,7 +1639,7 @@ _Release Date: 2023-04-18_
 - [#10426](https://github.com/emqx/emqx/pull/10426) Optimize the configuration priority mechanism to fix the issue where the configuration
   changes made to `etc/emqx.conf` do not take effect after restarting EMQX.
 
-  More introduction about the new mechanism: [Configure Override Rules](https://www.emqx.io/docs/en/v5.0/configuration/configuration.html#configure-override-rules)
+  More introduction about the new mechanism: [Configure Override Rules](https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration.html#configure-override-rules)
 
 - [#10376](https://github.com/emqx/emqx/pull/10376) Simplify the configuration of the limiter feature and optimize some codes
 

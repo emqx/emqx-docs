@@ -87,7 +87,7 @@ Since the example plugin depends on the EMQX core application, you must download
 
 ### Customize the Example Project
 
-After verifying that your setup works correctly, you can start tailoring the example project to meet your specific requirements. The initial template provides a core module at `src/my_emqx_plugin.erl`, which includes registration for all [currently known hooks](https://www.emqx.io/docs/en/v5.0/extensions/hooks.html). Begin by removing any hooks that are not needed and implement your own logic in the callbacks for the ones you retain.
+After verifying that your setup works correctly, you can start tailoring the example project to meet your specific requirements. The initial template provides a core module at `src/my_emqx_plugin.erl`, which includes registration for all [currently known hooks](./hooks.md). Begin by removing any hooks that are not needed and implement your own logic in the callbacks for the ones you retain.
 
 #### Example Customization for Authentication and Access Control
 

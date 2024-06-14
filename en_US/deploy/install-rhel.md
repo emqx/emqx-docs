@@ -1,4 +1,4 @@
-# Install EMQX Enterprise on CentOS/RHEL
+# Install EMQX on CentOS/RHEL
 
 This page guides you on installing and starting EMQX on CentOS/RHEL system.
 

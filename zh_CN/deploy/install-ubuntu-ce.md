@@ -1,4 +1,4 @@
-# 在 Ubuntu 上安装 EMQX 开源版
+# 在 Ubuntu 上安装 EMQX
 
 本页将指导您如何在 Ubuntu 系统中下载安装并启动 EMQX。
 

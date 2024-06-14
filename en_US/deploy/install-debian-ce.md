@@ -1,4 +1,4 @@
-# Install EMQX Open Source on Debian
+# Install EMQX on Debian
 
 
 This page guides you on installing and starting the latest EMQX on the Debian system.

@@ -1,4 +1,4 @@
-# Install EMQX Open Source on macOS
+# Install EMQX on macOS
 
 This page guides you on installing and starting the EMQX Open Source edition on macOS.
 

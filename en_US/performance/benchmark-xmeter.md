@@ -8,7 +8,7 @@ This page introduces how to use XMeter Cloud to conduct performance tests on EMQ
 
 You will need the following software or tools.
 
-- [EMQX](https://emqx.io/): A highly scalable MQTT Broker, designed specifically for IoT and real-time communication applications.
+- [EMQX](https://www.emqx.com/en/try?tab=self-managed): A highly scalable MQTT Broker, designed specifically for IoT and real-time communication applications.
 - [XMeter Cloud](https://www.emqx.com/en/products/xmeter): A fully managed MQTT load testing cloud service, built on the Apache open source project JMeter, which can quickly run various MQTT load and scenario tests.
 - [collectd](https://github.com/collectd/collectd): A daemon running on the system that collects information such as CPU, memory, disk usage, and network traffic, and send these collected data to the designated storage.
 - [InfluxDB](https://www.influxdata.com/): An open-source time-series database for storing and analyzing time-series data.
@@ -45,7 +45,7 @@ sudo yum install emqx-5.3.0-el7-amd64.rpm -y
 sudo systemctl start emqx
 ```
 
-> The actual command may vary depending on the OS version and installation method. Please refer to the commands provided on the [download](https://www.emqx.io/downloads) page.
+> The actual command may vary depending on the OS version and installation method. Please refer to the commands provided on the [download](https://www.emqx.com/en/downloads-and-install/broker) page.
 
 ### Install and Configure collectd
 

@@ -1,4 +1,4 @@
-# Install EMQX Open Source on CentOS/RHEL
+# Install EMQX on CentOS/RHEL
 
 
 This page guides you on installing and starting the EMQX Open Source edition on CentOS/RHEL system.

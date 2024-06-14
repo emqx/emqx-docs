@@ -609,7 +609,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/access-control/authn/pwoverview.html">Password-Based Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/enterprise/latest/access-control/authn/pwoverview.html">Password-Based Authentication</a></td>
   </tr>
   <tr>
     <td><b>JWT</b></td>
@@ -617,7 +617,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/access-control/authn/jwt.html">JWT Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/enterprise/latest/access-control/authn/jwt.html">JWT Authentication</a></td>
   </tr>
   <tr>
     <td><b>MQTT 5.0 Enhanced Authentication</b></td>
@@ -625,7 +625,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://www.emqx.io/docs/en/latest/access-control/authn/scram.html">MQTT 5.0 Enhanced Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/enterprise/latest/access-control/authn/scram.html">MQTT 5.0 Enhanced Authentication</a></td>
   </tr>
    <tr>
     <td><b>LDAP Authentication</b></td>
@@ -641,7 +641,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/network/psk-authentication.html#enable-psk-authentication">Enable PSK Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/enterprise/latest/network/psk-authentication.html#enable-psk-authentication">Enable PSK Authentication</a></td>
   </tr>
   <tr>
     <td><b>X.509 Certificates</b></td>
@@ -657,7 +657,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/dashboard/sso.html">Single Sign-On</a> </td>
+    <td><a href="https://docs.emqx.com/en/enterprise/latest/dashboard/sso.html">Single Sign-On</a> </td>
   </tr>
   <tr>
     <td><b>RBAC</b></td>
@@ -694,6 +694,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 
 ## Data Integration
 

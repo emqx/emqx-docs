@@ -117,7 +117,7 @@
 
 - 修复 `Erlang distribution` 无法使用 TLS 的问题 [#9981](https://github.com/emqx/emqx/pull/9981)。
 
-  关于 `Erlang distribution`, 详见 [这里](https://www.emqx.io/docs/zh/v4.4/advanced/cluster.html)。
+  关于 `Erlang distribution`, 详见[这里](https://docs.emqx.com/zh/enterprise/v4.4/advanced/cluster.html)。
 
 - 修复 MQTT 桥接无法验证对端带通配符的 TLS 证书的问题 [#10094](https://github.com/emqx/emqx/pull/10094)。
 
@@ -733,7 +733,7 @@
 
 - 使规则引擎 API 在 HTTP 请求路径中支持百分号编码的 `rule_id` 及 `resource_id` [#9190](https://github.com/emqx/emqx/pull/9190)。
   注意在创建规则或资源时，HTTP body 中的 `id` 字段仍为字面值，而不是编码之后的值。
-  详情请参考 [创建规则](https://www.emqx.io/docs/zh/v4.3/advanced/http-api.html#post-api-v4-rules) 和 [创建资源](https://www.emqx.io/docs/zh/v4.3/advanced/http-api.html#post-api-v4-resources)。
+  详情请参考 [创建规则](https://docs.emqx.com/zh/enterprise/v4.3/advanced/http-api.html#post-api-v4-rules) 和 [创建资源](https://docs.emqx.com/zh/enterprise/v4.3/advanced/http-api.html#post-api-v4-resources)。
 
 - 修复调用 'DELETE /alarms/deactivated' 只在单个节点上生效的问题，现在将会删除所有节点上的非活跃警告 [#9280](https://github.com/emqx/emqx/pull/9280)。
 
@@ -2098,7 +2098,7 @@ EMQX 4.0.9 现已发布，主要修复了 MQTT 消息解析的问题。
 *发布日期: 2020-04-22*
 
 EMQX 4.0.6 现已发布，主要包含以下改动：
-  
+
 ### emqx
 
 **错误修复:**
@@ -2154,7 +2154,7 @@ EMQX 4.0.5 现已发布。此版本主要进行了错误修复。
 
  Github issue: [emqx/emqx#3274](https://github.com/emqx/emqx/pull/3274)
   Github PR: [emqx/emqx-rel#462](https://github.com/emqx/emqx-rel/pull/462)
-  
+
 - 修复配置文件中 node.* 配置项不生效的问题
 
   Github issue: [emqx/emqx#3302](https://github.com/emqx/emqx/pull/3302)

@@ -640,7 +640,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="https://www.emqx.io/docs/zh/latest/network/psk-authentication.html">启用 PSK 验证</a></td>
+    <td><a src="https://docs.emqx.com/zh/enterprise/latest/network/psk-authentication.html">启用 PSK 验证</a></td>
   </tr>
   <tr>
     <td><b>X.509 证书</b></td>
@@ -656,7 +656,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="https://www.emqx.io/docs/zh/latest/dashboard/sso.html">单点登录（SSO)</a> </td>
+    <td><a src="https://docs.emqx.com/zh/enterprise/latest/dashboard/sso.html">单点登录（SSO)</a> </td>
   </tr>
   <tr>
     <td><b>RBAC</b></td>

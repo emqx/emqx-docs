@@ -1,4 +1,4 @@
-# 在 macOS 上安装 EMQX 开源版
+# 在 macOS 上安装 EMQX
 
 本页将指导您如何通过 zip 包在 macOS 系统中下载安装并启动 EMQX。
 

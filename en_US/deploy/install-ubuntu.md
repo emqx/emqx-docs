@@ -1,4 +1,4 @@
-# Install EMQX Enterprise on Ubuntu
+# Install EMQX on Ubuntu
 
 This page guides you on installing and starting EMQX on the Ubuntu system.
 

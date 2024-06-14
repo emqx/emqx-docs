@@ -1,4 +1,4 @@
-# Install EMQX Enterprise on macOS
+# Install EMQX on macOS
 This page guides you on installing and starting EMQX on macOS with a zip file.
 
 Supported versions:

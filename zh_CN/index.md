@@ -1,5 +1,7 @@
-# EMQX 企业版概览
-[EMQX 企业版](https://www.emqx.com/zh/products/emqx)是一款「无限连接，任意集成，随处运行」的大规模分布式物联网接入平台，同时作为一个高性能、可扩展的 MQTT 消息服务器，它可以为物联网（IoT）应用提供可靠的实时消息传输和设备连接解决方案。通过强大的内置规则引擎和数据集成功能，EMQX 企业版可以对海量 IoT 数据进行实时数据处理、数据转换和路由，还可以将 IoT 数据无缝集成到各种后端数据库和分析工具中，助力企业快速构建关键业务的 IoT 平台与应用。
+# EMQX 概览
+EMQX 是一款「无限连接，任意集成，随处运行」的大规模分布式物联网接入平台，同时作为一个高性能、可扩展的 MQTT 消息服务器，它可以为物联网（IoT）应用提供可靠的实时消息传输和设备连接解决方案。
+
+[EMQX 企业版](https://www.emqx.com/zh/products/emqx)是 EMQX 的商业版本，通过强大的内置规则引擎和数据集成功能，EMQX 企业版可以对海量 IoT 数据进行实时数据处理、数据转换和路由，还可以将 IoT 数据无缝集成到各种后端数据库和分析工具中，助力企业快速构建关键业务的 IoT 平台与应用。
 
 <img src="./assets/EMQX-enterprise.png" alt="EMQX-enterprise" style="zoom:50%;" />
 
@@ -83,8 +85,8 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
     <td>EMQX Cloud 专有版</td>
   </tr>
   <tr>
-    <td><a href="https://www.emqx.com/en/try?product=broker">立即下载</a></td>
-    <td><a href="https://www.emqx.com/en/apply-licenses/emqx">免费试用</a></td>
+    <td><a href="https://www.emqx.com/zh/try?product=broker">立即下载</a></td>
+    <td><a href="https://www.emqx.com/zh/apply-licenses/emqx">免费试用</a></td>
     <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">免费使用 Serverless</a></td>
     <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">14 天免费试用</a></td>
   </tr>
@@ -96,6 +98,7 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
   </tr>
 </tbody>
 </table>
+
 以下列出了 EMQX 企业版和开源版的主要功能对比。
 
 | **项目**                 | **EMQX 企业版**                                             | **EMQX 开源版**                                             |

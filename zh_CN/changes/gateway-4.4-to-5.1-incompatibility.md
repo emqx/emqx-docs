@@ -48,9 +48,9 @@ gateway.stomp {
 
 而在 EMQX 5.x 版本中，我们提供了更多专有的接口来完成这些功能。例如，`GET /api/v5/gateways/mqttsn/clients`，以及更多新增的 HTTP API：
 
-- [Gateways](https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html#tag/Gateways)
-- [Gateway-Authentication](https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html#tag/Gateway-Authentication)
-- [Gateway-Clients](https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html#tag/Gateway-Clients)
+- [Gateways](https://docs.emqx.com/zh/emqx/v5.0/admin/api-docs.html#tag/Gateways)
+- [Gateway-Authentication](https://docs.emqx.com/zh/emqx/v5.0/admin/api-docs.html#tag/Gateway-Authentication)
+- [Gateway-Clients](https://docs.emqx.com/zh/emqx/v5.0/admin/api-docs.html#tag/Gateway-Clients)
 
 此外，还提供了专用的 Dashboard 页面，用于管理客户端、网关配置、监听器等功能。
 

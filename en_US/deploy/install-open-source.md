@@ -13,28 +13,28 @@ These pages provide instructions to install the EMQX Open Source edition.
 
 **[Install Using Docker](./install-docker-ce.md)**
 
-Use the official Docker image to install and run EMQX Open Source and use Docker Compose to build an EMQX Cluster.
+Use the official Docker image to install and run EMQX and use Docker Compose to build an EMQX Cluster.
 
 **[Install on Debian](./install-debian-ce.md)**
 
-Install the EMQX Open Source on the Debian system with Apt source and package.
+Install the EMQX on the Debian system with Apt source and package.
 
 **[Install on Ubuntu](./install-ubuntu-ce.md)**
 
-Install the EMQX Open Source on the Ubuntu system with Apt source, Package, deb, and tar.gz.
+Install the EMQX on the Ubuntu system with Apt source, Package, deb, and tar.gz.
 
 **[Install on CentOS/RHEL](./install-rhel-ce.md)**
 
-Install the EMQX Open Source on CentOS/RHEL system with Yum source, rpm, and tar.gz.
+Install the EMQX on CentOS/RHEL system with Yum source, rpm, and tar.gz.
 
 **[Install on macOS](./install-macOS-ce.md)**
 
-Install the EMQX Open Source on macOS with Homebrew and a zip package.
+Install the EMQX on macOS with Homebrew and a zip package.
 
 **[Deploy on Kubernets](https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html)**
 
-Use the EMQX Operator to deploy the EMQX Open Source.
+Use the EMQX Operator to deploy the EMQX.
 
 **[Install from Source Code](./install-source.md)**
 
-Use the EMQX Builder to compile and install EMQX Open Source from source code.
+Use the EMQX Builder to compile and install EMQX from source code.

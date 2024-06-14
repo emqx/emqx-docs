@@ -178,7 +178,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 ### 创建连接
 
-1. 访问  [MQTTX Web](http://www.emqx.io/online-mqtt-client#/recent_connections) 页面。
+1. 访问 [MQTTX Web](http://mqtt-client.emqx.com/#/recent_connections) 页面。
 
 2. 配置并建立 MQTT 连接。点击 **+** **新建连接** 进入配置页面，您只需配置：
 

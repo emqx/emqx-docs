@@ -1,4 +1,4 @@
-# Install EMQX Open Source on Ubuntu
+# Install EMQX on Ubuntu
 
 
 This page guides you on installing and starting the EMQX Open Source edition on the Ubuntu system.

@@ -3,7 +3,7 @@ description: This page introduces how to use the official Docker image to instal
 
 ---
 
-# Install EMQX Open Source Using Docker
+# Install EMQX Using Docker
 
 This page introduces how to use the official Docker image to install and run the EMQX Open Source edition, and how to use Docker Compose to build an EMQX cluster.
 
