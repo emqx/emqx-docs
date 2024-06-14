@@ -159,6 +159,55 @@ $ brew install openssl@1.1
 
 After the installation is complete, you can start EMQX normally.
 
+## EMQX failed to start with log message "libatomic.so.1: cannot open shared object file: No such file or directory"
+
+The reason for this error is that the current system lacks the dependency libatomic. The solution is to install this dependency:
+
+```
+# Rocky Linux, CentOS, ...
+yum install -y libatomic
+# Debian, Ubuntu, ...
+apt install -y libatomic
+```
+
+If you install the RPM or DEB package manually, you may encounter the following prompt during installation:
+
+```
+$ rpm -ivh emqx-5.7.0-el8-amd64.rpm
+error: Failed dependencies:
+libatomic is needed by emqx-5.7.0-el8-amd64.rpm
+```
+
+The solution is still to manually install the dependency libatomic first.
+
+Of course, the most recommended installation method is to use the package manager (yum, apt, etc.), which will automatically install the required dependencies without us having to worry about it.
+
+## Failed to start EMQX with Docker, log prompts "Permission denied"
+
+When you intend to persist EMQX data by mounting directory:
+
+```
+sudo docker run -d --name emqx -p 18083:18083 -p 1883:1883 -v /emqx/data:/opt/emqx/data -v /emqx/log:/opt/emqx/log emqx:latest
+```
+
+You may encounter a container startup failure with the following error:
+
+```
+mkdir: cannot create directory '/opt/emqx/data/configs': Permission denied
+```
+
+This is because EMQX runs as Linux user `emqx` in the container, while the directories in your host may be created using the `root` user, so EMQX cannot create directories or files in these directories.
+
+To solve this problem, you can create an `emqx` user in the host, and then let the user create the directory to be mounted, or directly change the permissions of the created data and log directories to 777.
+
+Of course, the most recommended way to implement EMQX data persistence is to use named data volume, so you don’t have to worry about permission anymore:
+
+```
+sudo docker volume create --name emqx-data
+sudo docker volume create --name emqx-log
+sudo docker run -d --name emqx -p 18083:18083 -p 1883:1883 -v emqx-data:/opt/emqx/data -v emqx-log:/opt/emqx/log emqx:latest
+```
+
 ## What should I do if EMQX prompts that the port is occupied (eaddrinuse) when starting?
 
 By default, EMQX will occupy 7 ports when it starts. They are:

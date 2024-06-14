@@ -170,7 +170,7 @@ sudo docker run -d --name emqx -p 18083:18083 -p 1883:1883 -v /emqx/data:/opt/em
 你可能会遇到容器启动失败，并提示以下错误：
 
 ```
-mkdir: cannot create directory ‘/opt/emqx/data/configs’: Permission denied
+mkdir: cannot create directory '/opt/emqx/data/configs': Permission denied
 ```
 
 这是因为 EMQX 在容器中以 Linux 用户 `emqx` 运行，而你宿主机中的目录却可能是在 `root` 用户下创建的，因此 EMQX 自然无法在这些目录下创建目录或文件。
