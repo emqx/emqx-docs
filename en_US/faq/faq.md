@@ -13,6 +13,12 @@ EMQX has [3 products](https://www.emqx.com/en/products/emqx) in total. The diffe
 - EMQX Enterprise: EMQX enterprise version. It is based on the open source version, and adds data persistence (support Redis, MySQL, MongoDB or PostgreSQL), data bridge to Kafka, LoRaWAN support, EMQX monitoring, Kubernetes deployment etc. It supports 1 million concurrent MQTT connections.
 - EMQX Cloud: [EMQX Cloud](https://www.emqx.com/cloud) is an MQTT middleware for the IoT from EMQ. As the world's first fully managed MQTT 5.0 public cloud service, EMQX Cloud provides a one-stop O&M colocation and a unique isolated environment for MQTT services. In the era of Internet of Everything, EMQX Cloud can help you quickly build industry applications and easily realize the collection, transmission, computation and persistence of IoT data.
 
+## Is there a limit to the message receive rate for EMQX clients?
+
+The EMQX or MQTT protocols do not directly limit the rate at which each client can receive messages. However, when too many messages are received and cannot be processed by the client in time, the messages may get heaped up and eventually discarded. To ensure system stability and message reliability, it is recommended that each client subscribe to receive messages at a rate of no more than 1500 messages/second (1KB per message).
+
+If the message receive rate exceeds this recommendation, you can use [Shared Subscription](../messaging/mqtt-shared-subscription.md) to add multiple subscribers to spread the load and reduce the rate of messages received by a single subscriber.
+
 ## What are EMQX's authentication options?
 
 When a client connects to an EMQX server, the EMQX server can authenticate it in different ways. EMQX supports the following 3 approaches:
