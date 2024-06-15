@@ -105,6 +105,11 @@ Placeholders can be used as topic segments, like `a/b/${username}/c/d`.
 
 To avoid placeholder interpolation, one may use special `eq` syntax: `eq a/b/${username}/c/d`. This topic is treated as `a/b/${username}/c/d` literally, without interpolation.
 
+::: tip
+`eq` syntax is to match exactly a topic filter, but not any topic which matches the filter.
+For example, `eq t/#` matches `t/#`, but not `t/1` or `t/2` and so on.
+:::
+
 ### Authorization Check Priority
 
 Besides the cache and authorization checker, the authorization result may also be affected by the [Super User Role and Permission](../authn/authn.md) set during the authentication phase.
