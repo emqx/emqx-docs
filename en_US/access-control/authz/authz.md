@@ -103,7 +103,7 @@ EMQX also allows placeholders to be used in topics to support dynamic themes. Th
 
 Placeholders can be used as topic segments, like `a/b/${username}/c/d`.
 
-To avoid placeholder interpolation, starting from 5.4, one may escape `$` as `${$}`.
+To avoid placeholder interpolation, starting from version 5.4, you can escape `$` as `${$}`.
 For example `t/${$}{username}` is treated as `t/${username}` literally, without interpolation.
 
 ::: tip
