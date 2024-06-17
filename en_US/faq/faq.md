@@ -38,6 +38,16 @@ The EMQX or MQTT protocols do not directly limit the rate at which each client c
 If the message receive rate exceeds this recommendation, you can use [Shared Subscription](../advanced/shared-subscriptions.md) to add multiple subscribers to spread the load and reduce the rate of messages received by a single subscriber.
 
 
+## How to Improve Data Throughput and Reliability When Integrating Server with EMQX Using MQTT?
+
+When application services integrate with EMQX using the MQTT protocol, each client typically handles a high load. To fully leverage client performance and ensure system availability, here are some best practice recommendations:
+
+1. **Separate Message Subscription and Publishing**: Avoid having a single client act as both publisher and subscriber.
+2. **Use Shared Subscriptions**: Prioritize using shared subscriptions to receive messages, and set the number of subscriber clients based on the business scenario and message volume.
+3. **Use Multiple Clients for Publishing Messages**: Configure the number of clients for publishing messages according to business needs and message volume, and implement a load balancing strategy.
+
+The core principle is to reduce the message load on a single client. By using multiple channels for MQTT interaction, overall message throughput performance can be enhanced, and system high availability can be increased.
+
 ## What are EMQX's authentication options?
 
 **Tags:** [*Auth*](tags.md#auth)
@@ -53,6 +63,9 @@ When a client connects to an EMQX server, the EMQX server can authenticate it in
 
 Besides using the configuration file (to configure authentication), EMQX can also use database and integration with external applications, such as MySQL, PostgreSQL, Redis, MongoDB, HTTP and LDAP.
 
+## Is There a Limit on the Number of ACLs for a Single Client?
+
+Theoretically, there is no limit. However, to improve the performance of message subscription and publishing, it is advisable to avoid having too many ACL rules. It is recommended that a single client have no more than 10 ACLs. Using wildcard rules can help reduce the number of ACL entries.
 
 
 
