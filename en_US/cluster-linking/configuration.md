@@ -1,6 +1,6 @@
 # Configuration
 
-You can set up zero or more links between clusters by populating the `cluster.links` list in EMQX configuration. Each link must have unique `upstream` remote cluster name, and can be enabled or disabled individually.
+You can set up zero or more links between clusters by populating the `cluster.links` list in EMQX configuration. Each link must have unique remote cluster name, and can be enabled or disabled individually.
 
 Cluster Linking employs regular MQTT as the underlying protocol, so you have to specify the remote cluster's MQTT listener endpoint as `server`. Several aspects of MQTT protocol related to authentication and authorization (`username`, `password`) are configurable as well. Depending on the cluster size and configuration, several MQTT client connections may be established, `clientid` is used as a _ClientID prefix_ for these connections.
 
@@ -11,7 +11,7 @@ cluster {
   name = "emqx-us-east"
   links = [
     { enable = true
-      upstream = "emqx-eu-west"
+      name = "emqx-eu-west"
       server = "emqx.us-east.myinfra.net"
       username = "clink-user:us-east"
       password = "clink-password-no-one-knows"

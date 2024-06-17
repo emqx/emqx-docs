@@ -31,7 +31,7 @@ cluster {
   links = [
     { enable = true
       # Name of the second cluster
-      upstream = "cluster-eu-west"
+      name = "cluster-eu-west"
       # Endpoint of the second cluster's MQTT listener
       server = "emqx.us-east.myinfra.net:11883"
       clientid = "clink-us-east"
@@ -65,7 +65,7 @@ cluster {
   name = "cluster-eu-west"
   links = [
     { enable = true
-      upstream = "cluster-us-east"
+      name = "cluster-us-east"
       server = "emqx.eu-west.myinfra.net:11883"
       clientid = "clink-eu-west"
       topics = ["#"]
@@ -149,7 +149,7 @@ cluster {
   name = "cluster-eu-west"
   links = [
     { enable = true
-      upstream = "cluster-us-east"
+      name = "cluster-us-east"
       server = "emqx.eu-west.myinfra.net:11883"
       clientid = "clink-eu-west"
       topics = []
