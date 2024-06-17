@@ -2,7 +2,7 @@
 description: This chapter gives you a tour of how to download and install EMQX and how to test the connecting and messaging services with our built-in WebSocket tool.
 ---
 
-# Get Started with EMQX Enterprise
+# Get Started with EMQX
 
 EMQX is the world’s most scalable and reliable MQTT messaging platform that can help you to connect, move, and process your business data reliably in real-time. With this all-in-one MQTT platform, you can easily build your Internet of Things (IoT) applications with significant business impacts.
 
