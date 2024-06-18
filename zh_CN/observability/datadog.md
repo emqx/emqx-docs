@@ -2,7 +2,7 @@
 
 [Datadog](https://www.datadoghq.com/) 是一款基于云服务的可观测性和安全平台，提供自动化基础设施监控、应用程序性能监控、日志管理、真实用户监控等功能。它为应用程序提供统一、实时的可观测性和安全性解决方案，帮助开发人员轻松监控、分析和优化其应用程序的性能和可靠性。
 
-EMQX 提供了开箱即用的 [Datadog 集成](https://docs.datadoghq.com/integrations/emqx/)，方便用户更好地了解当 EMQX 的状态，并监测和排除系统性能问题，更好地构建高效、可靠和实时数据传输的物联网应用。
+EMQX 提供了开箱即用的 [Datadog 集成](https://docs.datadoghq.com/integrations/emqx/)，方便用户更好地了解 EMQX 的状态，并监测和排查系统性能问题，更好地构建高效、可靠和实时数据传输的物联网应用。
 
 ## 工作原理
 
@@ -18,11 +18,9 @@ EMQX 与 Datadog 的集成不是一个新的功能，它充分利用了 EMQX 现
 
 ## 安装 Datadog Agent
 
-要开始使用 Datadog，请访问 [Datadog](https://www.datadoghq.com/) 创建一个帐户并登录进入 Datadog 控制台。
+[Datadog Agent](https://docs.datadoghq.com/getting_started/agent/) 用于收集 EMQX 指标并将指标发送到 Datadog 云端，需要部署在 EMQX 集群所在服务器或能够访问 EMQX 节点的服务器上。
 
-接下来，您需要在 EMQX 所在的服务器上安装 [Datadog Agent](https://docs.datadoghq.com/getting_started/agent/)。
-
-[Datadog Agent](https://docs.datadoghq.com/getting_started/agent/) 用于收集 EMQX 指标并将指标发送到 Datadog 云端，需要部署在 EMQX 集群所在服务器或能够访问 EMQX 节点的服务器上。如果您还未安装 Agent，可以按照以下步骤进行操作：
+如果第一次使用 Datadog，先访问 [Datadog](https://www.datadoghq.com/) 创建一个帐户并登录进入 Datadog 控制台。接下来，您需要在 EMQX 所在的服务器上安装 Datadog Agent。可以按照以下步骤进行操作：
 
 1. 菜单栏选择 **Integrations** → **Agent** 打开 Agent 安装说明页面。
 
@@ -36,7 +34,7 @@ EMQX 提供了开箱即用的 [Datadog 集成](https://docs.datadoghq.com/integ
 
 1. 菜单栏选择 **Integrations** → **Integrations** 打开集成页面。
 
-2. 在 **Search Integrations** 搜索框中，输入 EMQX，找到同名且作者是 EMQX 的集成。
+2. 在搜索框中，输入 EMQX，找到同名且作者是 EMQX 的集成。
 
 3. 打开集成，在弹出框中点击右上角 **Install Integration** 按钮，即可将集成添加到 Datadog 中。
 
@@ -56,7 +54,7 @@ EMQX 提供了开箱即用的 [Datadog 集成](https://docs.datadoghq.com/integ
     datadog-agent integration install -t datadog-emqx==1.1.0
     ```
 
-2. 安装完成后，修改 Agnet 配置文件以启用 EMQX 集成：
+2. 安装完成后，修改 Agnet 配置文件以启用 EMQX 集成。
 
     打开 Agent 配置目录（默认是 `/opt/datadog-agent/etc/conf.d/`），找到目录下的 `emqx.d` 目录，可以看到 `emqx.d` 目录下有一个示例配置文件 `conf.yaml.example`。
 
@@ -65,29 +63,29 @@ EMQX 提供了开箱即用的 [Datadog 集成](https://docs.datadoghq.com/integ
     ```bash
     instances:
       - openmetrics_endpoint: http://localhost:18083/api/v5/prometheus/stats?mode=all_nodes_aggregated
-
+    
     ```
 
     `openmetrics_endpoint` 选项是 Datadog Agnet 提取 OpenMetrics 格式的指标数据的地址，这里设置的是 EMQX 的 HTTP API 地址。实际使用中，请修改为 Datadog Agent 能够访问到的地址。
 
     该 API 还支持通过 `mode` 查询参数指定拉取的指标范围，每个参数的含义如下：
+    
+    | **参数**               | **说明**                                                     |
+    | ---------------------- | ------------------------------------------------------------ |
+    | node                   | 返回当前请求的节点的指标，没有指定 `mode` 参数时默认使用这个值。 |
+    | all_nodes_unaggregated | 返回集群中每个节点的指标，保持指标的独立性，同时在返回结果中包含节点名称，以便区分各个节点。 |
+    | all_nodes_aggregated   | 返回集群中所有节点聚合后的指标值。                           |
+    
+    为方便统一查看，此处使用 mode=all_nodes_aggregated 配置，Datadog 控制上将看到整个集群的值。
 
-| **参数** | **说明** |
-| --- |  --- |
-| node | 返回当前请求的节点的指标，没有指定 `mode` 参数时默认使用这个值。 |
-| all_nodes_unaggregated | 返回集群中每个节点的指标，保持指标的独立性，同时在返回结果中包含节点名称，以便区分各个节点。 |
-| all_nodes_aggregated | 返回集群中所有节点聚合后的指标值。 |
-
-  为方便统一查看，此处使用 mode=all_nodes_aggregated 配置，Datadog 控制上将看到整个集群的值。
-
-3. 参考此处[重启 Agent](https://docs.datadoghq.com/agent/guide/agent-commands/#start-stop-and-restart-the-agent)，以 macOS 为例：
+3. 参考[此文档](https://docs.datadoghq.com/agent/guide/agent-commands/#start-stop-and-restart-the-agent)重启 Agent，以 macOS 为例：
 
     ```bash
     launchctl stop com.datadoghq.agent
     launchctl start com.datadoghq.agent
     ```
 
-2. 重启后使用以下命令检查 EMQX 集成是否成功启用，当看到 `Instance ID: ... [OK]` 时表示已经启用成功：
+4. 重启后使用以下命令检查 EMQX 集成是否成功启用，当看到 `Instance ID: ... [OK]` 时表示已经启用成功：
 
     ```bash
     $ datadog-agent status | grep emqx -A 4
@@ -102,7 +100,7 @@ EMQX 提供了开箱即用的 [Datadog 集成](https://docs.datadoghq.com/integ
           Average Execution Time : 43ms
           Last Execution Date : 2024-05-11 17:35:41 CST / 2024-05-11 09:35:41 UTC (1715420141000)
           Last Successful Execution Date : 2024-05-11 17:35:41 CST / 2024-05-11 09:35:41 UTC (1715420141000)
-
+    
     ```
 
 至此，您已经完成 Datadog Agnet 端的所有配置，Agent 将定期收集 EMQX 运行数据，并发送到 Datadog 中。接下来，我们到 Datadog 控制台中查看指标是否正确收集。
@@ -119,7 +117,7 @@ Datadog Agnet 的 EMQX 集成提供了一个开箱即用的 Dashboard 图表，�
 
     ![Monitoring Resources 标签页](./assets/datadog-dashboard-overview.png)
 
-**图表包含以下内容**
+**图表包含以下内容**：
 
 - OpenMetrics Health: 活跃的指标收集器数量
 - Total Connections：总连接数，包含已断开但保留会话的连接
@@ -147,11 +145,9 @@ Datadog Agnet 的 EMQX 集成提供了一个开箱即用的 Dashboard 图表，�
   - Sub&UnSub：订阅和取消订阅速率
   - AuthN&AuthZ：认证和授权速率
   - Delivery Dropped：丢弃的传递消息数
-- Mria：Mria 事务数量
+- Mria： Mria 事务数量
 
-以下是部分图表的截图，当 EMQX 负载和客户端情况发生变化后，相应的数值也会变化。
-
-概览指标
+以下是部分概览指标图表的截图，当 EMQX 负载和客户端情况发生变化后，相应的数值也会变化。
 
 ![概览指标](./assets/datadog-dashboard-detail.png)
 
