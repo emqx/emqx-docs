@@ -71,10 +71,11 @@ Example:
       "topic": "t/${clientid}"
     },
     {
-      // Allows the client to subscribe to the topic t/1 with QoS 1, while QoS 0 or 2 is allowed
-      "permission": "deny",
+      "permission": "allow",
       "action": "subscribe",
-      "topic": "t/1",
+      // The 'eq' prefix means the rule matches 't/1/#', but not 't/1/x' or 't/1/y'
+      "topic": "eq t/1/#",
+      // Matches QoS 1, but not QoS 0 or 2
       "qos": [1]
     },
     {
