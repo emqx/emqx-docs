@@ -107,10 +107,10 @@ To avoid placeholder interpolation, starting from EMQX 5.4, you can escape `$` a
 For example, `t/${$}{username}` is treated as `t/${username}` literally without interpolation, rather than the topic name with `username` replaced.
 
 ::: tip
-`eq` syntax is to match exactly a topic filter, but not any topic which matches the filter.
-For example, `eq t/#` matches `t/#`, but not `t/1` or `t/2` and so on.
 
-Note that the topic following `eq` does not support placeholder interpolation, and this behavior can change in future versions.
+If you use the `eq` syntax in query statements, note that the topic following `eq` does not support placeholder interpolation. This behavior can change in future versions.
+
+The `eq` syntax is to match exactly a topic filter, but not any topic that matches the filter. For example, `eq t/#` matches `t/#`, but not `t/1` or `t/2` and so on.
 :::
 
 ### Authorization Check Priority
