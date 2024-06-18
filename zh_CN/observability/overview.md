@@ -16,6 +16,10 @@ EMQX 通过包括日志在内的一系列的可观测性功能帮助用户进行
 
   [Prometheus](https://prometheus.io/) 是由 SoundCloud 开源的监控告警解决方案，支持多维数据模型、灵活的查询语言、强大的告警管理等特性。EMQX 支持集成 Prometheus 用于监测系统指标，同时还支持向 `pushgateway` 推送指标。
 
+- [集成 Datadog](./datadog.md)
+
+  [Datadog](https://www.datadoghq.com/) 是一款可观测性平台，它为应用程序提供统一、实时的可观测性和安全性解决方案。EMQX 支持集成 Datadog 用于了解 EMQX 运行状态、监测和排查系统性能问题，还可以在 Datadog 控制台上查看 EMQX 指标。
+
 - [日志追踪](./tracer.md)
 
   EMQX 5.x 新增了在线日志追踪(Trace)功能，支持用户指定客户端 ID、主题或 IP 实时过滤输出 **DEBUG** 级别日志，提升问题排查效率。
