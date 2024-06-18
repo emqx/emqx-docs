@@ -106,7 +106,7 @@ To avoid placeholder interpolation, starting from EMQX 5.4, you can escape `$` a
 
 ::: tip
 
-If you use `eq` syntax in query statements, note that the topic following `eq` does not support placeholder interpolation, and this behavior can change in future versions. 
+If you use the `eq` syntax in query statements, note that the topic following `eq` does not support placeholder interpolation. This behavior can change in future versions. 
 
 `eq` syntax is to match exactly a topic filter, but not any topic that matches the filter. For example, `eq t/#` matches `t/#`, not `t/1` or `t/2`.
 
