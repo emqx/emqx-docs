@@ -65,10 +65,11 @@
       "topic": "t/${clientid}"
     },
     {
-      // 允许客户端以 QoS 1 订阅 t/1 主题，使用 QoS 0 或 2 则是允许的
-      "permission": "deny",
+      "permission": "allow",
       "action": "subscribe",
-      "topic": "t/1",
+      // `eq` 前缀意味着该规则仅适用于主题过滤器 t/1/#，但不适用于 t/1/x 或 t/1/y 等
+      "topic": "eq t/1/#",
+      // 该规则只匹配 QoS 1 但不匹配 QoS 0 或 2
       "qos": [1]
     },
     {
