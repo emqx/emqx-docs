@@ -46,37 +46,6 @@
   path: deploy/install
   collapsed: true
   children:
-    - title_en: Install EMQX Open Source
-      title_cn: 安装 EMQX 开源版
-      path: deploy/install-open-source
-      collapsed: true
-      children:
-        - title_en: Deploy
-          title_cn: Docker
-          path: deploy/install-docker-ce
-        - title_en: Debian
-          title_cn: Debian
-          path: deploy/install-debian-ce
-        - title_en: Ubuntu
-          title_cn: Ubuntu
-          path: deploy/install-ubuntu-ce
-        - title_en: CentOS/RHEL
-          title_cn: CentOS/RHEL
-          path: deploy/install-rhel-ce
-        - title_en: macOS
-          title_cn: macOS
-          path: deploy/install-macOS-ce
-        - title_en: Kubernetes
-          title_cn: Kubernetes
-          lang: en
-          path: 'https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html'
-        - title_en: Kubernetes
-          title_cn: Kubernetes
-          lang: cn
-          path: 'https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html'
-        - title_en: Install from Source Code
-          title_cn: 源码编译安装
-          path: deploy/install-source
     - title_en: Install EMQX Enterprise
       title_cn: 安装 EMQX 企业版
       path: deploy/install-enterprise
@@ -109,6 +78,37 @@
         - title_en: Work with License
           title_cn: 配置 License
           path: deploy/license
+    - title_en: Install EMQX Open Source
+      title_cn: 安装 EMQX 开源版
+      path: deploy/install-open-source
+      collapsed: true
+      children:
+        - title_en: Deploy
+          title_cn: Docker
+          path: deploy/install-docker-ce
+        - title_en: Debian
+          title_cn: Debian
+          path: deploy/install-debian-ce
+        - title_en: Ubuntu
+          title_cn: Ubuntu
+          path: deploy/install-ubuntu-ce
+        - title_en: CentOS/RHEL
+          title_cn: CentOS/RHEL
+          path: deploy/install-rhel-ce
+        - title_en: macOS
+          title_cn: macOS
+          path: deploy/install-macOS-ce
+        - title_en: Kubernetes
+          title_cn: Kubernetes
+          lang: en
+          path: 'https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html'
+        - title_en: Kubernetes
+          title_cn: Kubernetes
+          lang: cn
+          path: 'https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html'
+        - title_en: Install from Source Code
+          title_cn: 源码编译安装
+          path: deploy/install-source
     - title_en: Upgrade Guide
       title_cn: 升级指南
       collapsed: true
@@ -172,14 +172,6 @@
       path: admin/api
       collapsed: true
       children:
-        - title_en: EMQX Open Source API Docs
-          title_cn: EMQX Open Source API Docs
-          lang: en
-          path: https://docs.emqx.com/en/emqx/v${CE_MINOR_VERSION}/admin/api-docs.html
-        - title_en: EMQX 开源版 API 文档
-          title_cn: EMQX 开源版 API 文档
-          lang: cn
-          path: https://docs.emqx.com/zh/emqx/v${CE_MINOR_VERSION}/admin/api-docs.html
         - title_en: EMQX Enterprise API Docs
           title_cn: EMQX Enterprise API Docs
           lang: en
@@ -188,6 +180,14 @@
           title_cn: EMQX 企业版 API 文档
           lang: cn
           path: https://docs.emqx.com/zh/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
+        - title_en: EMQX Open Source API Docs
+          title_cn: EMQX Open Source API Docs
+          lang: en
+          path: https://docs.emqx.com/en/emqx/v${CE_MINOR_VERSION}/admin/api-docs.html
+        - title_en: EMQX 开源版 API 文档
+          title_cn: EMQX 开源版 API 文档
+          lang: cn
+          path: https://docs.emqx.com/zh/emqx/v${CE_MINOR_VERSION}/admin/api-docs.html
 
 - title_en: EMQX Clustering
   title_cn: 构建集群
@@ -441,14 +441,6 @@
         - title_en: License
           title_cn: License
           path: configuration/license
-    - title_en: EMQX Open Source Configuration Manual
-      title_cn: EMQX 开源版配置手册
-      lang: cn
-      path: https://docs.emqx.com/zh/emqx/v${CE_VERSION}/hocon/
-    - title_en: EMQX Open Source Configuration Manual
-      title_cn: EMQX 开源版配置手册
-      lang: en
-      path: https://docs.emqx.com/en/emqx/v${CE_VERSION}/hocon/
     - title_en: EMQX Enterprise Configuration Manual
       title_cn: EMQX 企业版配置手册
       lang: cn
@@ -457,6 +449,14 @@
       title_cn: EMQX 企业版配置手册
       lang: en
       path: https://docs.emqx.com/en/enterprise/v${EE_VERSION}/hocon/
+    - title_en: EMQX Open Source Configuration Manual
+      title_cn: EMQX 开源版配置手册
+      lang: cn
+      path: https://docs.emqx.com/zh/emqx/v${CE_VERSION}/hocon/
+    - title_en: EMQX Open Source Configuration Manual
+      title_cn: EMQX 开源版配置手册
+      lang: en
+      path: https://docs.emqx.com/en/emqx/v${CE_VERSION}/hocon/
     - title_en: Command Line Interface
       title_cn: 命令行接口
       path: admin/cli
@@ -710,6 +710,29 @@
       title_cn: MQTT 原因码
       path: https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack
 
+- title_en: EMQX Enterprise Release Notes
+  title_cn: EMQX 企业版版本发布历史
+  collapsed: true
+  path: changes/all-changes-ee
+  children:
+    - changes/changes-ee-v5
+    - changes/changes-ee-v4
+    - title_en: Incompatible Changes
+      title_cn: 不兼容变更
+      collapsed: true
+      children:
+        - changes/breaking-changes-ee-5.7
+        - changes/breaking-changes-ee-5.6
+        - changes/breaking-changes-ee-5.5
+        - changes/breaking-changes-ee-5.4
+        - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
+          title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
+          path: changes/breaking-changes-5.1.0
+          collapsed: true
+          children:
+            - changes/auth-4.4-to-5.1-compatibility
+            - changes/data-integration-4.4-to-5.1-incompatibility
+            - changes/gateway-4.4-to-5.1-incompatibility
 - title_en: EMQX Open Source Release Notes
   title_cn: EMQX 开源版版本发布历史
   collapsed: true
@@ -728,30 +751,6 @@
         - changes/breaking-changes-ce-5.6
         - changes/breaking-changes-ce-5.5
         - changes/breaking-changes-ce-5.4
-        - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
-          title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
-          path: changes/breaking-changes-5.1.0
-          collapsed: true
-          children:
-            - changes/auth-4.4-to-5.1-compatibility
-            - changes/data-integration-4.4-to-5.1-incompatibility
-            - changes/gateway-4.4-to-5.1-incompatibility
-
-- title_en: EMQX Enterprise Release Notes
-  title_cn: EMQX 企业版版本发布历史
-  collapsed: true
-  path: changes/all-changes-ee
-  children:
-    - changes/changes-ee-v5
-    - changes/changes-ee-v4
-    - title_en: Incompatible Changes
-      title_cn: 不兼容变更
-      collapsed: true
-      children:
-        - changes/breaking-changes-ee-5.7
-        - changes/breaking-changes-ee-5.6
-        - changes/breaking-changes-ee-5.5
-        - changes/breaking-changes-ee-5.4
         - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
           title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
           path: changes/breaking-changes-5.1.0

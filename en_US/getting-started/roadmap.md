@@ -5,35 +5,38 @@ description: Dive into the roadmap of EMQX and stay updated with its latest feat
 
 # EMQX Product Roadmap
 
-## 2023 Roadmap
+## 2024 Roadmap
 
-* Dashboard improvements
-  * Flow Designer for Data Integrations
-  * Support LDAP authentication (MS Active Directory)
-  * Support SAML (Okta)
-* New Webhook
-* [Session persistence with RocksDB](https://github.com/emqx/eip/blob/main/active/0023-rocksdb-message-persistence.md)
-* Operations (DevOps) and observability improvements
-  * OpenTelemetry & Datadog Integration
-  * End-to-end tracing of MQTT packets
-  * Expose additional metrics
-* SparkplugB support in Rule Engine
-* New authorization mechanisms for clients
-  * Control permissions on QoS and Retain flags
-  * Support OAuth 2.0 authorization
-* New Data Integrations
-  * AWS Kinesis
-  * GCP PubSub
-  * Azure EventHub
-  * HStreamDB
-  * SAP EventMesh
-* Support for configuration and data migration from 4.4 to 5.1
+- **Rule Engine Debug and Tracing**: End-to-end testing and tracing of rules and data integration.
 
-## Future Versions
+- **Event History**: Save events such as client online/offline status, subscriptions/unsubscriptions, and message discards.
 
-* Cross-datacenter Cluster Linking support
-* Multi-cloud clusters
-* Global Multi-Region Geo-Distributed clusters
-* Elixir releases by default
-* Use QUIC protocol for backplane traffic
-* Support functions in other languages and external runtimes in Rule Engine (e.g. JS, Python)
+- **Cluster Connection**: Clusters in different regions can connect as a federated cluster in a unified namespace.
+
+- **Message Validation**: Use Schema Registry to verify if messages meet expectations.
+
+- **Message Transformation**: Transform, enrich, and restructure message content and format.
+
+- **Message Queue**: Implement message queue functionality with a producer/consumer model using persistent queues.
+
+- **MQTT Stream**: Persistently stores published messages into built-in streams, which other services can consume.
+
+- **Hot Upgrades and Patches**: Perform incremental upgrades and patch installations via the Dashboard.
+
+- **Multi-Tenancy**: Cluster reuse functionality within a unified namespace.
+
+- **OIDC SSO**: The Dashboard supports the OIDC SSO protocol.
+
+- **Kerberos Authentication**: Client access supports Kerberos authentication.
+
+- **More Data Integrations**:
+
+  - AWS S3 Data Integration
+
+  - CouchBase Data Integration
+
+  - Snowflake Data Integration
+
+  - Azure Blob Storage Data Integration
+
+  - Database CDC Data Integration

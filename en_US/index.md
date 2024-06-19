@@ -1,11 +1,9 @@
 # EMQX Overview
-EMQX is a large-scale distributed MQTT messaging platform that offers "unlimited connections, seamless integration, and anywhere deployment." As a high-performance, scalable MQTT message server, EMQX Enterprise provides reliable real-time message transmission and device connectivity solutions for IoT applications. 
+EMQX is a large-scale distributed MQTT messaging platform that offers "unlimited connections, seamless integration, and anywhere deployment." As a high-performance, scalable MQTT message server, EMQX Enterprise provides reliable real-time message transmission and device connectivity solutions for IoT applications. EMQX has accumulated more than 20,000 corporate users from more than 50 countries, connecting more than 100 million IoT devices worldwide, serving enterprises' digital, real-time, and intelligent transformation.
 
 [EMQX Enterprise](https://www.emqx.com/en/products/emqx) is the commercial version of EMQX. With its robust built-in rule engine and data integration capabilities, EMQX Enterprise can perform real-time data processing, transformation, and routing for massive IoT data. It seamlessly integrates IoT data with various backend databases and analytics tools, enabling enterprises to rapidly build IoT platforms and applications with leading competitiveness.
 
 <img src="./assets/EMQX-enterprise.png" alt="EMQX-enterprise" style="zoom:50%;" />
-
-EMQX supports up to 100 million concurrent IoT device connections per cluster while maintaining a throughput of 1 million messages per second and millisecond latency. EMQX has been adopted by over 20,000 enterprise users, connecting more than 100 million IoT devices.
 
 ## Key Benefits
 
@@ -107,9 +105,9 @@ The following is a list of feature comparisons between EMQX Enterprise and Open 
 
 | **Items**                         | **EMQX Enterprise**                                         | **EMQX Open Source**                                        |
 | :-------------------------------- | :---------------------------------------------------------- | :---------------------------------------------------------- |
-| **Scalability**                   | Up to 100M MQTT connections per cluster                     | Up to 100M MQTT connections per cluster                     |
-| **Performance**                   | 5M+ MQTT messages per second                                | 5M+ MQTT messages per second                                |
-| **Reliability**                   | Data persistence in RocksDB (Coming soon)                   | Data storage in memory                                      |
+| **Scalability**                   | Up to 100M MQTT connections per cluster                     | Up to 100,000 MQTT connections per cluster                  |
+| **Performance**                   | 5M+ MQTT messages per second                                | 100,000+ MQTT messages per second                           |
+| **Reliability**                   | RocksDB message durability with high availability replicas  | RocksDB message durability                                  |
 | **Latency**                       | 1~5 millisecond                                             | 1~5 millisecond                                             |
 | **Integrations (Out-of-the-box)** | 40+                                                         | 2                                                           |
 | **License Model**                 | Commercial license (Business source license)                | Apache Version 2.0                                          |

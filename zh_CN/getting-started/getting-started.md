@@ -31,28 +31,6 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 :::: tabs type:card
 
-::: tab EMQX 开源版
-
-1. 在命令行工具中输入如下命令，下载并运行最新版 EMQX。
-
-   运行此命令前，请确保 [Docker](https://www.docker.com/) 已安装且已启动。
-
-   ```bash
-   docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
-   ```
-   
-2. 通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
-
-​        默认用户名及密码：
-
-​       `admin`
-
-​       `public`
-
-<!--后续补上 dashboard的截图-->
-
-:::
-
 ::: tab EMQX 企业版
 
 1. 在命令行工具中输入如下命令，下载并运行最新版 EMQX。
@@ -73,6 +51,28 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 :::
 
+::: tab EMQX 开源版
+
+1. 在命令行工具中输入如下命令，下载并运行最新版 EMQX。
+
+   运行此命令前，请确保 [Docker](https://www.docker.com/) 已安装且已启动。
+
+   ```bash
+   docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
+   ```
+
+2. 通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
+
+​        默认用户名及密码：
+
+​       `admin`
+
+​       `public`
+
+<!--后续补上 dashboard的截图-->
+
+:::
+
 ::::
 
 ### 通过安装包快速安装
@@ -83,24 +83,21 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 :::: tabs type:card
 
-::: tab EMQX 开源版
+::: tab EMQX 企业版
 
-1. 前往 [EMQX 官方下载页面的 macOS 页签](https://www.emqx.com/zh/downloads-and-install/broker?os=macOS)。
+1. 前往 [EMQX 官方下载页面的 macOS 页签](https://www.emqx.com/zh/downloads-and-install/enterprise?os=macOS)。
 
-2. 选择最新版本 `@CE_VERSION@`，在**安装包类型**中选择 `macOS 13 amd64 / zip`。
+2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中选择 `macOS 13 amd64 / zip`。
 
-2. 直接点击下方的下载链接。您也可以参照页面中的命令指导步骤进行下载与安装。
+3. 直接点击下方的下载链接。您也可以参照页面中的命令指导步骤进行下载与安装。
 
 4. 运行以下命令启动 EMQX。
 
    前台启动
-
    ```bash
    ./emqx/bin/emqx foreground
    ```
-
    或后台（不推荐）启动
-
    ```bash
    ./emqx/bin/emqx start
    ```
@@ -123,21 +120,24 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 :::
 
-::: tab EMQX 企业版
+::: tab EMQX 开源版
 
-1. 前往 [EMQX 官方下载页面的 macOS 页签](https://www.emqx.com/zh/downloads-and-install/enterprise?os=macOS)。
+1. 前往 [EMQX 官方下载页面的 macOS 页签](https://www.emqx.com/zh/downloads-and-install/broker?os=macOS)。
 
-2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中选择 `macOS 13 amd64 / zip`。
+2. 选择最新版本 `@CE_VERSION@`，在**安装包类型**中选择 `macOS 13 amd64 / zip`。
 
 3. 直接点击下方的下载链接。您也可以参照页面中的命令指导步骤进行下载与安装。
 
 4. 运行以下命令启动 EMQX。
 
    前台启动
+
    ```bash
    ./emqx/bin/emqx foreground
    ```
+
    或后台（不推荐）启动
+
    ```bash
    ./emqx/bin/emqx start
    ```
