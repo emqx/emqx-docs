@@ -20,9 +20,7 @@ ref: undefinedBasic concept
 EMQX is an open-source, distributed [MQTT](https://mqtt.org/) messaging broker that can support millions of concurrent MQTT connections. EMQX can be used for connecting to devices that support MQTT protocol, and EMQX can also be used for delivering messages from a server to a client (e.g., a device).
 
 
-
-
-## Which products do we offer?
+## Which Products Do We Offer?
 
 
 EMQX has [3 products](https://www.emqx.com/en/products/emqx) in total. The different products support different number of connections, features, services, etc.
@@ -31,7 +29,7 @@ EMQX has [3 products](https://www.emqx.com/en/products/emqx) in total. The diffe
 - EMQX Enterprise: EMQX enterprise version. It is based on the open source version, and adds data persistence (support Redis, MySQL, MongoDB or PostgreSQL), data bridge to Kafka, LoRaWAN support, EMQX monitoring, Kubernetes deployment etc. It supports 1 million concurrent MQTT connections.
 - EMQX Cloud: [EMQX Cloud](https://www.emqx.com/cloud) is an MQTT middleware for the IoT from EMQ. As the world's first fully managed MQTT 5.0 public cloud service, EMQX Cloud provides a one-stop O&M colocation and a unique isolated environment for MQTT services. In the era of Internet of Everything, EMQX Cloud can help you quickly build industry applications and easily realize the collection, transmission, computation and persistence of IoT data.
 
-## Is there a limit to the message receive rate for EMQX clients?
+## Is There a Limit to the Message Receive Rate for EMQX Clients?
 
 The EMQX or MQTT protocols do not directly limit the rate at which each client can receive messages. However, when too many messages are received and cannot be processed by the client in time, the messages may get heaped up and eventually discarded. To ensure system stability and message reliability, it is recommended that each client subscribe to receive messages at a rate of no more than 1500 messages/second (1KB per message).
 
@@ -44,11 +42,11 @@ When application services integrate with EMQX using the MQTT protocol, each clie
 
 1. **Separate Message Subscription and Publishing**: Avoid having a single client act as both publisher and subscriber.
 2. **Use Shared Subscriptions**: Prioritize using shared subscriptions to receive messages, and set the number of subscriber clients based on the business scenario and message volume.
-3. **Use Multiple Clients for Publishing Messages**: Configure the number of clients for publishing messages according to business needs and message volume, and implement a load balancing strategy.
+3. **Use Multiple Clients for Publishing Messages**: Configure the number of clients for publishing messages according to business needs and message volume, and implement a load-balancing strategy.
 
 The core principle is to reduce the message load on a single client. By using multiple channels for MQTT interaction, overall message throughput performance can be enhanced, and system high availability can be increased.
 
-## What are EMQX's authentication options?
+## What are EMQX's Authentication Options?
 
 **Tags:** [*Auth*](tags.md#auth)
 
@@ -67,9 +65,7 @@ Besides using the configuration file (to configure authentication), EMQX can als
 
 Theoretically, there is no limit. However, to improve the performance of message subscription and publishing, it is advisable to avoid having too many ACL rules. It is recommended that a single client have no more than 10 ACLs. Using wildcard rules can help reduce the number of ACL entries.
 
-
-
-## What's a Hook and when is a Hook useful?
+## What's a Hook and When is a Hook Useful?
 
 **Tags:** [*WebHook*](tags.md#webhook)
 
@@ -93,7 +89,7 @@ A Hook is an interface provided by EMQX, which will be triggered when a connecti
 
 
 
-## What's a mqueue? How to configure mqueues in EMQX?
+## What's a mqueue? How to Configure mqueues in EMQX?
 
 **Tags:** [*Message Queue*](tags.md#message-queue)
 
@@ -103,17 +99,17 @@ A mqueue is a message queue that store messages for a session. If the clean sess
 
 
 
-## What's a WebSocket? When to use a Websocket to connect to EMQX?
+## What's a WebSocket? When to Use a Websocket to Connect to EMQX?
 
 **Tags:** [*WebSocket*](tags.md#websocket)
 
 
-WebSocket is a full-duplex communication protocol with an API supported by modern web browsers. A user can use the WebSocket API to create a dual direction communication channel between a web browser and a server. Through a WebSocket, the server can push messages to the web browser. EMQX provides support for WebSocket. This means that users can publish to MQTT topics and subscribe to MQTT topics from browsers.
+WebSocket is a full-duplex communication protocol with an API supported by modern web browsers. A user can use the WebSocket API to create a dual-direction communication channel between a web browser and a server. Through a WebSocket, the server can push messages to the web browser. EMQX provides support for WebSocket. This means that users can publish to MQTT topics and subscribe to MQTT topics from browsers.
 
 
 
 
-## What's a shared subscription, and when is it useful?
+## What's a Shared Subscription, and When Is It Useful?
 
 **Tags:** [*Shared Subscription*](tags.md#shared-subscription)  [*Pub/Sub*](tags.md#pub-sub)
 
@@ -125,7 +121,7 @@ Shared subscription is very useful in data collection and centralized data analy
 
 
 
-## What is off-line message?
+## What is an Off-Line Message?
 
 **Tags:** [*Retain*](tags.md#retain)
 
@@ -137,7 +133,7 @@ Off-line messages are useful when the connection is not stable, or the applicati
 
 
 
-## What is Subscription by Broker? And its use scenario?
+## What is Subscription by Broker? And Its Use Scenario?
 
 **Tags:** [*Subscription by Broke*](tags.md#subscription-by-broke)
 
@@ -153,7 +149,7 @@ Currently this feature is available in the EMQX Enterprise.
 
 
 
-## What is the usage of system topics? What system topics are available?
+## What Is the Usage of System Topics? What System Topics Are Available?
 
 **Tags:** [*System Topic*](tags.md#system-topic)
 
@@ -168,7 +164,7 @@ Here are some examples of system topics (for a complete list of system topic ple
 - $SYS/broker/${node}/stats/sessions/count: Number of sessions on a node
 
 
-## Why can a client without username and password still connect after authentication is enabled?
+## Why Can a Client without Username and Password Still Connect After Authentication is Enabled?
 
 **Tags:** [*Auth*](tags.md#auth)
 
