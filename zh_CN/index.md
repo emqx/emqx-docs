@@ -1,11 +1,13 @@
 # EMQX 概览
+
 EMQX 是一款「无限连接，任意集成，随处运行」的大规模分布式物联网接入平台，同时作为一个高性能、可扩展的 MQTT 消息服务器，它可以为物联网（IoT）应用提供可靠的实时消息传输和设备连接解决方案。
 
-[EMQX 企业版](https://www.emqx.com/zh/products/emqx)是 EMQX 的商业版本，通过强大的内置规则引擎和数据集成功能，EMQX 企业版可以对海量 IoT 数据进行实时数据处理、数据转换和路由，还可以将 IoT 数据无缝集成到各种后端数据库和分析工具中，助力企业快速构建关键业务的 IoT 平台与应用。
+EMQX 累计拥有来自 50 多个国家的 20,000 多家企业用户，连接全球超过 1 亿台物联网设备，服务企业数字化、实时化、智能化转型。
+
+[EMQX 企业版](https://www.emqx.com/zh/products/emqx)是 EMQX 的商业版本，单集群支持 MQTT 并发连接数高达 1 亿条，单服务器的传输与处理吞吐量可达每秒百万级 MQTT 消息，同时保证毫秒级的低时延。
+通过强大的内置规则引擎和数据集成功能，EMQX 企业版可以对海量 IoT 数据进行实时数据处理、数据转换和路由，还可以将 IoT 数据无缝集成到各种后端数据库和分析工具中，助力企业快速构建关键业务的 IoT 平台与应用。
 
 <img src="./assets/EMQX-enterprise.png" alt="EMQX-enterprise" style="zoom:50%;" />
-
-EMQ 还提供了一款[开源](https://github.com/emqx/emqx)的大规模分布式 MQTT 消息服务器，即 “EMQX 开源版”，它具备丰富的功能，专为物联网和实时通信应用而设计。EMQX 5.0 单集群支持 MQTT 并发连接数高达 1 亿条，单服务器的传输与处理吞吐量可达每秒百万级 MQTT 消息，同时保证毫秒级的低时延。EMQX 拥有来自 50 多个国家的 20,000 多家企业用户，连接全球超过 1 亿台物联网设备，服务企业数字化、实时化、智能化转型。
 
 ## 产品优势
 
@@ -91,21 +93,23 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
     <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">14 天免费试用</a></td>
   </tr>
   <tr>
-    <td>✔️ Apache Version 2.0<br>✔️ MQTT over QUIC<br>✔️ 数据存储在内存中<br>✔️ 支持 Webhook 和 MQTT 数据桥接<br>✔️ 多协议网关支持，包括 MQTT-SN, STOMP 和 CoAP<br>✔️ 社区和论坛<br> </td>
-    <td>✔️ 商业许可证（商业源代码许可证）<br>✔️ 基于 RocksDB 的会话持久化<br>✔️ 与 40 多种企业系统双向数据集成，包括 Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis 等<br>✔️ 审计日志和单点登录<br>✔️ 基于角色的访问控制 （RBAC）<br>✔️ 文件传输<br>✔️ 消息编解码<br>✔️ 多协议网关支持，包括额外支持 OCPP, JT/808 和 GBT32960<br>✔️ 7x24 技术支持<br> </td>
+    <td>✔️ Apache Version 2.0<br>✔️ MQTT over QUIC<br>✔️ 支持 Webhook 和 MQTT 数据桥接<br>✔️ 多协议网关支持，包括 MQTT-SN, STOMP 和 CoAP<br>✔️ 社区和论坛<br> </td>
+    <td>✔️ 商业许可证（商业源代码许可证）<br>✔️ 高可用副本持久存储<br>✔️ 先进集群架构、跨 IDC 集群<br>✔️ 与 40 多种企业系统双向数据集成，包括 Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis 等<br>✔️ 可视化 Flow 设计器<br>✔️ 审计日志和单点登录<br>✔️ 基于角色的访问控制 （RBAC）<br>✔️ 文件传输<br>✔️ 消息验证<br>✔️ 消息转换与编解码<br>✔️ 消息队列与流处理<br>✔️ 多协议网关支持，包括额外支持 OCPP, JT/808 和 GBT32960<br>✔️ 7x24 技术支持<br> </td>
     <td>✔️ 即用即付<br>✔️ 每月免费的使用额度<br>✔️ 最高 1000 同时在线连接<br>✔️ 极速部署<br>✔️ 自动伸缩<br>✔️ 5x8 技术支持</td>
     <td>✔️ 14 天免费试用<br>✔️ 按小时计费<br>✔️ 主流云平台多区域部署<br>✔️ 多种连接规格可选，连接无上限<br>✔️ VPC 对等连接, 数据集成等更多功能<br>✔️ 40+ 种完备的数据集成链路<br>✔️ 7x24 技术支持<br> </td>
   </tr>
 </tbody>
 </table>
 
+<!-- 
+
 以下列出了 EMQX 企业版和开源版的主要功能对比。
 
 | **项目**                 | **EMQX 企业版**                                             | **EMQX 开源版**                                             |
 | ------------------------ | ----------------------------------------------------------- | ----------------------------------------------------------- |
-| **伸缩性**               | 单集群至多 1 亿 MQTT 连接                                   | 单集群至多 1 亿 MQTT 连接                                   |
-| **性能**                 | > 500 万 MQTT 消息每秒                                      | > 500 万 MQTT 消息每秒                                      |
-| **可靠性**               | RocksDB 数据存储（即将支持）                                | 内存数据存储                                                |
+| **伸缩性**               | 单集群至多 1 亿 MQTT 连接                                   | 单集群至多 10 万 MQTT 连接                                   |
+| **性能**                 | > 500 万 MQTT 消息每秒                                      | > 10 万 MQTT 消息每秒                                      |
+| **可靠性**               | RocksDB 消息持久化，具备高可用副本                                | RocksDB 消息持久化                                                |
 | **延迟**                 | 1~5 毫秒                                                    | 1~5 毫秒                                                    |
 | **数据集成（开箱即用）** | 40+                                                         | 2                                                           |
 | **License**              | Commercial License (Business source license)                | Apache Version 2.0                                          |
@@ -121,6 +125,8 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
 | **企业系统集成**         | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
 | **故障排查**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 | **云原生 & K8s**         | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+
+-->
 
 ## 典型用例
 

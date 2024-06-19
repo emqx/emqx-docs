@@ -1,35 +1,21 @@
 # 产品路线图
 
-## 2023 路线图
+## 2024 路线图
 
-* Dashboard 改进
-  * 数据集成 Flow 设计 
-  * 支持 LDAP 认证 (MS Active Directory)
-  * 支持 SAML (Okta)
-* 新的 Webhook
-* [通过 RocksDB 实现会话持久化](https://github.com/emqx/eip/blob/main/active/0023-rocksdb-message-persistence.md)
-* 运维 (DevOps) 和可观测行改进
-  * OpenTelemetry 和 Datadog 集成
-  * MQTT 数据包的端对端跟踪
-  * 提供额外的指标
-* 规则引擎支持 SparkplugB 
-* 针对客户端的新授权机制
-  * QoS 和 Retain 标志的控制权限
-  * 支持 OAuth 2.0 授权
-* 新增的数据集成
-  * AWS Kinesis
-  * GCP PubSub
-  * Azure EventHub
-  * HStreamDB
-  * SAP EventMesh
-* 支持从4.4迁移至5.1的配置和数据迁移
-
-## 未来版本
-
-* 支持跨数据中心集群链接
-* 多云集群
-* 全球多区域地理分布式集群
-* 默认使用 Elixir 发布版本
-* 在后台通信中使用 QUIC 协议
-* 在规则引擎中支持其他语言和外部运行时（例如 JavaScript、Python）
-
+- 规则引擎 DEBUG 和 Tracing：规则和数据集成端到端的测试与追踪
+- 事件历史：保存客户端上下线、订阅/取消订阅和消息丢弃事件
+- 集群连接：不同的区域中的集群可以连接为一个统一的命名空间的联合集群
+- 消息验证：使用 Schema Registry 验证消息是否符合预期
+- 消息转换：转换、丰富和重组消息内容和格式
+- 消息队列：使用持久化队列实现生产/消费模型的消息队列功能
+- MQTT 流：将发布的消息持久存储到内置流中，可以被其他服务消费
+- 热升级与热补丁：在 Dashboard 上进行增量升级与补丁安装
+- 多租户：统一命名空间的集群复用功能
+- OIDC SSO：Dashboard 支持 OIDC SSO 协议
+- Kerberos 认证：客户端接入支持 Kerberos 认证
+- 更多数据集成：
+  - AWS S3 数据集成
+  - CouchBase 数据集成
+  - Snowflake 数据集成
+  - Azure Blob Storage 数据集成
+  - 数据库 CDC 数据集成

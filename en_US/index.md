@@ -5,7 +5,7 @@ EMQX is a large-scale distributed MQTT messaging platform that offers "unlimited
 
 <img src="./assets/EMQX-enterprise.png" alt="EMQX-enterprise" style="zoom:50%;" />
 
-EMQ also provides an [Open Source](https://github.com/emqx/emqx) edition, a highly scalable, and feature-rich MQTT broker designed for IoT and real-time messaging applications. It supports up to 100 million concurrent IoT device connections per cluster while maintaining a throughput of 1 million messages per second and millisecond latency. EMQX has been adopted by over 20,000 enterprise users, connecting more than 100 million IoT devices.
+EMQX supports up to 100 million concurrent IoT device connections per cluster while maintaining a throughput of 1 million messages per second and millisecond latency. EMQX has been adopted by over 20,000 enterprise users, connecting more than 100 million IoT devices.
 
 ## Key Benefits
 
@@ -100,6 +100,8 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
 </tbody>
 </table>
 
+<!-- 
+
 The following is a list of feature comparisons between EMQX Enterprise and Open Source edition.
 
 
@@ -124,6 +126,7 @@ The following is a list of feature comparisons between EMQX Enterprise and Open 
 | **Troubleshooting**               | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
 | **Cloud-Native & K8s**            | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
 
+-->
 
 ## Use Cases
 
