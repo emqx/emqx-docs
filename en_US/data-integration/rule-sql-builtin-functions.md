@@ -547,7 +547,8 @@ This function has been introduced since EMQX v5.7.1.
 
 :::
 
-This function searches the string for patterns specified by the regex pattern. It can be used to extract parts of a string based on a regular expression, excluding the complete match itself.
+This function non-global searches for the regular expression pattern with capture groups in the given string.
+It can be used to extract parts of a string based on a regular expression, excluding the complete match itself.
 
 If matches are found, it returns a list of all captured groups from these matches. If no matches are found or there are no groups captured, it returns an empty list.
 
