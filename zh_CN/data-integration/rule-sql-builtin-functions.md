@@ -558,10 +558,10 @@ regex_replace('a;b; c', ';\s*', ',') = 'a,b,c'
 示例：
 
 ```
-regex_extract("Number: 12345", "(\d+)") -> [<<"12345">>]
-regex_extract("Hello, world!", "(\w+)") -> [<<"Hello">>, <<"world">>]
-regex_extract("No numbers here!", "(\d+)") -> []
-regex_extract("Date: 2021-05-20", "(\d{4})-(\d{2})-(\d{2})") -> [<<"2021">>, <<"05">>, <<"20">>]
+regex_extract('Number: 12345', '(\d+)') -> ['12345']
+regex_extract('Hello, world!', '(\w+).*\s(\w+)') -> ['Hello', 'world']
+regex_extract('No numbers here!', '(\d+)') -> []
+regex_extract('Date: 2021-05-20', '(\d{4})-(\d{2})-(\d{2})') -> ['2021', '05', '20']
 ```
 
 ### replace(String: string, SearchPattern: string, Replacement: string) -> string
