@@ -1,5 +1,27 @@
 # 常见使用问题解答
 
+## License 到期没有及时续费会发生什么？
+
+如果您是 EMQX 企业版用户，当您的 license 到期时，每次启动节点时都会出现警告以提醒您 license 的到期情况。根据您的 license 类型，可能会有不同的限制：
+
+- **对于面向"小型"客户或试用的 license：** 即使连接总数低于 License 中指定的限制，也将不允许创建新的 MQTT 连接。现有连接不会被断开，但如果它们断开连接，将无法重新连接。
+- **对于非"小型"客户或非试用的 license：** 只要总数保持在最大限制以下，仍然允许创建新的 MQTT 连接。
+
+如果您不确定自己的 license 类型，请与您的客户经理确认。
+
+## 如何更新 license？
+
+您可以使用以下命令来更新您的 EMQX 企业版 license：
+
+```bash
+./bin/emqx ctl 
+
+    license info             # 显示 license 信息 
+    license update <License> # 更新 license，<License> 为 license 字符串
+```
+
+您还可以通过 Dashboard 来更新 license。有关如何申请 licnese 以及通过 Dashboard 更新许可证，请参见[使用 EMQX 企业版 License](../deploy/license.md)。
+
 ## 为什么共享订阅时收不到保留消息？
 
 MQTT 协议规定了服务端不能发送保留消息给共享订阅。
@@ -14,19 +36,19 @@ MQTT 协议规定了服务端不能发送保留消息给共享订阅。
 
 通常 SSL/TLS 连接握手失败时，EMQX 会在 [日志](../observability/log.md) 中输出相应的失败原因，以下是一些日志中常见的关键字及其对应的含义：
 
-1. certificate_expired
+- certificate_expired
 
    日志中出现 `certificate_expired` 关键字，说明证书已经过期，请及时续签。
 
-2. no_suitable_cipher
+- no_suitable_cipher
 
    日志中出现 `no_suitable_cipher` 关键字，说明握手过程中没有找到合适的密码套件，可能原因有证书类型与密码套件不匹配、没有找到服务端和客户端同时支持的密码套件等等。
 
-3. handshake_failure
+- handshake_failure
 
    日志中出现 `handshake_failure` 关键字，原因有很多，可能要结合客户端的报错来分析，例如，可能是客户端发现连接的服务器地址与服务器证书中的域名不匹配。
 
-4. unknown_ca
+- unknown_ca
 
    日志中出现 `unknown_ca` 关键字，意味着证书校验失败，常见原因有遗漏了中间 CA 证书、未指定 Root CA 证书或者指定了错误的 Root CA 证书。在双向认证中我们可以根据日志中的其他信息来判断是服务端还是客户端的证书配置出错。如果是服务端证书存在问题，那么报错日志通常为：
 
@@ -44,22 +66,9 @@ MQTT 协议规定了服务端不能发送保留消息给共享订阅。
 
    `SERVER ALERT` 表示服务端在检查客户端证书时发现该证书无法通过认证，而客户端将收到来自服务端的警告信息。
 
-5. protocol_version
+- protocol_version
 
    日志中出现 `protocol_version` 关键字，说明客户端与服务器支持的 TLS 协议版本不匹配。
-
-{% emqxee %}
-
-## License 到期没有及时续费会发生什么？
-
-当您的 License 到期时，每次启动节点时都会出现警告以提醒您 License 的到期情况。根据您的 License 类型，可能会有不同的限制：
-
-- **对于面向"小型"客户或试用的 License：** 即使连接总数低于 License 中指定的限制，也将不允许创建新的 MQTT 连接。现有连接不会被断开，但如果它们断开连接，将无法重新连接。
-- **对于非"小型"客户或非试用的 License：** 只要总数保持在最大限制以下，仍然允许创建新的 MQTT 连接。
-
-如果您不确定自己的 License 类型，请与您的客户经理确认。
-
-{% endemqxee %}
 
 ## MQTT 客户端连接异常断开该怎么排查？
 

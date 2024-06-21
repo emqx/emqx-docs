@@ -1,5 +1,9 @@
 # Feature FAQs
 
+## Is there a limit on the number of ACLs for a single client?
+
+Theoretically, there is no limit. However, to improve the performance of message subscription and publishing, it is advisable to avoid having too many ACL rules. It is recommended that a single client have no more than 10 ACLs. Using wildcard rules can help reduce the number of ACL entries.
+
 ## Can EMQX store messages to database?
 
 The EMQX Enterprise supports data persistence. Please refer to [Data Integration](../data-integration/data-bridges.md).
@@ -54,23 +58,21 @@ For a complete introduction to authorization, please refer to [here](../access-c
 
 Yes. EMQX supports connection rate and message inflow rate control to avoid system overload at the inlet. For a complete introduction, please refer to [here](../rate-limit/rate-limit.md).
 
+## Is there a limit to the message receive rate for EMQX clients?
+
+The EMQX or MQTT protocols do not directly limit the rate at which each client can receive messages. However, when too many messages are received and cannot be processed by the client in time, the messages may get heaped up and eventually discarded. To ensure system stability and message reliability, it is recommended that each client subscribe to receive messages at a rate of no more than 1500 messages/second (1KB per message).
+
+If the message receive rate exceeds this recommendation, you can use [Shared Subscription](../messaging/mqtt-shared-subscription.md) to add multiple subscribers to spread the load and reduce the rate of messages received by a single subscriber.
+
 ## Does EMQX support cluster autodiscovery? What are the implementation methods?
 
 In addition to creating clusters manually, EMQX also supports DNS, etcd and other node discovery strategies to achieve automatic clustering, see [Create and Manage Cluster](../deploy/cluster/create-cluster.md).
 
 ## Does EMQX support users to actively disconnect MQTT connections on the server side?
 
-{% emqxce %}
+Yes. EMQX provides the [Command Line Interface](../admin/cli.md#clients) `emqx ctl clients kick <Client ID>` and the [REST API](https://docs.emqx.com/en/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html) `DELETE /clients/{clientid}`, allowing users to manually kick MQTT connections. Users can also complete this operation on the clients page of the Dashboard.
 
-Yes. EMQX provides the [Command Line Interface](../admin/cli.md#clients) `emqx ctl clients kick <Client ID>` and the [HTTP API](https://docs.emqx.com/en/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html) `DELETE /clients/{clientid}`, allowing users to manually kick MQTT connections. Users can also complete this operation on the clients page of the Dashboard.
-
-{% endemqxce %}
-
-{% emqxee %}
-
-Yes. EMQX provides the [Command Line Interface](../admin/cli.md#clients) `emqx ctl clients kick <Client ID>` and the [HTTP API](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html) `DELETE /clients/{clientid}`, allowing users to manually kick MQTT connections. Users can also complete this operation on the clients page of the Dashboard.
-
-{% endemqxee %}
+For detailed instructions on the REST API, see [EMQX Open Source API](https://docs.emqx.com/en/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html) and [EMQX Enterprise API](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
 
 ## I want to monitor the online and offline events of the device, how can I do it?
 
@@ -79,3 +81,13 @@ EMQX provides three ways to monitor the online and offline events of the device:
 - Use the [WebHook](../data-integration/data-bridge-webhook.md) to forward the online and offline event messages to the external HTTP service.
 - Use the MQTT client to subscribe to the [System Topic](../observability/mqtt-system-topics.md) to obtain the online and offline event notifications.
 - Use the [Rule Engine](../data-integration/rules.md) to monitor the `client.connected` and `client.disconnected` events, and cooperate with the [Data Integration](../data-integration/data-bridges.md) to write the event messages to the specified database. (EMQX Enterprise only)
+
+## How can data throughput and reliability be improved when integrating server with EMQX using MQTT?
+
+When application services integrate with EMQX using the MQTT protocol, each client typically handles a high load. To fully leverage client performance and ensure system availability, here are some best practice recommendations:
+
+1. **Separate Message Subscription and Publishing**: Avoid having a single client act as both publisher and subscriber.
+2. **Use Shared Subscriptions**: Prioritize using shared subscriptions to receive messages, and set the number of subscriber clients based on the business scenario and message volume.
+3. **Use Multiple Clients for Publishing Messages**: Configure the number of clients for publishing messages according to business needs and message volume, and implement a load-balancing strategy.
+
+The core principle is to reduce the message load on a single client. By using multiple channels for MQTT interaction, overall message throughput performance can be enhanced, and system high availability can be increased.

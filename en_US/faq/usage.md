@@ -1,56 +1,26 @@
 # Usage FAQs
 
-## How to use EMQX?
-
-EMQX Broker is free and it can be download at [https://www.emqx.com/en/try?product=broker](https://www.emqx.com/en/try?product=broker).
-
-EMQX Enterprise can be downloaded and evaluated for free. You can download it from [https://www.emqx.com/en/try?product=enterprise](https://www.emqx.com/en/try?product=enterprise), and then apply trial license at [https://www.emqx.com/en/apply-licenses/emqx](https://www.emqx.com/en/apply-licenses/emqx).
-
-Also you can use the EMQX enterprise version through public cloud service.
-
-- [AWS](https://aws.amazon.com/marketplace/pp/B07N2ZFVLX?qid=1552872864456&)
-
-## How to update EMQX license?
-
-You need to two steps:
-
-1. The license file will be sent by email, find the attached zip file and unzip it.
-
-2. Extract the license file (emqx.lic) from the zip file to a directory readable by the EMQX user.
-
-After the extraction is complete, the license needs to be reloaded from the command line to complete the update:
-
-```
-emqx ctl license reload [license file path]
-```
-
-The update commands for different installation modes:
-
-```
-## zip packages
-./bin/emqx ctl license reload path/to/emqx.lic
-
-## DEB/RPM
-emqx ctl license reload path/to/emqx.lic
-
-## Docker
-docker exec -it emqx-ee emqx ctl license reload path/to/emqx.lic
-```
-
-::: tip
-On a multi-node cluster, the `emqx ctl license reload` command needs to be executed only on one of the nodes, as the license will be replicated and applied to all members. Each one will contain a copy of the new license under the configured data directory for EMQX, as well as a backup of the old license, if any.
-
-Note that this command only takes effect _on the local node_ executing the command for EMQX versions prior to e4.3.10, so this command will require being executed on each node of the cluster for those older versions.
-:::
-
 ## What happens when my license expires?
 
-When your license reaches its expiration date, a warning starts to appear each time the node is started to remind you of the expiration.  Depending on your license type, additional restrictions may apply:
+If you are an EMQX Enterprise user, when your license reaches its expiration date, a warning starts to appear each time the node is started to remind you of the expiration.  Depending on your license type, additional restrictions may apply:
 
 - **For licenses issued for "small" customers or trial licenses:** No new MQTT connections are allowed, even if the total number of connections is less than the limit specified in the license.  Existing connections won't be disconnected, but they won't be able to reconnect if they drop.
 - **For licenses not issued for "small" customers or trial licenses**: New MQTT connections are still permitted, as long as the total count remains below the maximum limit.
 
 If you are unsure which type of license you have, please confirm with your account manager.
+
+## How do I update my license?
+
+You can use the following command to update your EMQX Enterprise License:
+
+```bash
+./bin/emqx ctl 
+
+    license info             # Show license info 
+    license update <License> # Update license given as a string
+```
+
+You can also update your license through the Dashboard. For how to apply for a license and update it through the Dashboard, see [Work with EMQX Enterprise License](../deploy/license.md).
 
 ## Why can't I receive retained messages when using shared subscriptions?
 
@@ -66,19 +36,19 @@ If it is confirmed that the above situation does not exist, yet the issue of mes
 
 Usually when the SSL/TLS connection handshake fails, EMQX will output the corresponding failure reason in the [Log](../observability/log.md). The following are some common keywords in the log and their corresponding meanings:
 
-1. certificate_expired
+- certificate_expired
 
    The `certificate_expired` keyword appears in the log, indicating that the certificate has expired, please renew it in time.
 
-2. no_suitable_cipher
+- no_suitable_cipher
 
    The `no_suitable_cipher` keyword appears in the log, indicating that a suitable cipher suite was not found during the handshake process. The possible reasons are that the certificate type does not match the cipher suite, the cipher suite supported by both the server and the client was not found, and so on.
 
-3. handshake_failure
+- handshake_failure
 
    The `handshake_failure` keyword appears in the log. There are many reasons, which may be analyzed in conjunction with the error reported by the client. For example, the client may find that the connected server address does not match the domain name in the server certificate.
 
-4. unknown_ca
+- unknown_ca
 
    The `unknown_ca` keyword appears in the log, which means that the certificate verification fails. Common reasons are that the intermediate CA certificate is omitted, the Root CA certificate is not specified, or the wrong Root CA certificate is specified. In the two-way authentication, we can judge whether the certificate configuration of the server or the client is wrong according to other information in the log. If there is a problem with the server certificate, the error log is usually:
 
@@ -96,7 +66,7 @@ Usually when the SSL/TLS connection handshake fails, EMQX will output the corres
 
    `SERVER ALERT` means that the server finds that the client certificate cannot pass the authentication when checking the client certificate, and the client will receive this warning message from the server.
 
-5. protocol_version
+- protocol_version
 
    The `protocol_version` keyword appears in the log, indicating a mismatch between the TLS protocol versions supported by the client and server.
 
@@ -126,11 +96,11 @@ Here are some common disconnection reasons:
 
 You can also use the [Log Trace](../observability/tracer.md) to trace all the logs related to the Client ID, IP, and topic you specify, and then you can analyze why the client disconnected based on these logs.
 
-## When I was executing stress test, the connection number and throughput are lower than expected. How can I tune the system to make full use of it?
+## When I was executing the stress test, the connection number and throughput were lower than expected. How can I tune the system to make full use of it?
 
-When executing a stress test, besides ensuring the necessary hardware resource, it is also necessary to tune the OS and the Erlang VM to make the maximum use of the resource. The most common tuning is to modify the global limitation of file handles, the user limitation of file handles, the TCP backlog and buffer, the limitation of process number of Erlang VM and so on. You will also need to tune the client machine to ensure it has the ability and resource to handle all the subs and pubs.
+When executing a stress test, besides ensuring the necessary hardware resources, it is also necessary to tune the OS and the Erlang VM to make maximum use of the resources. The most common tuning is to modify the global limitation of file handles, the user limitation of file handles, the TCP backlog and buffer, the limitation of process number of Erlang VM, and so on. You will also need to tune the client machine to ensure it has the ability and resources to handle all the subs and pubs.
 
-Different use cases require different tuning. In the EMQX document there is a chapter about tuning the system for general purpose. Please refer to [Performance Tuning](../performance/tune.md).
+Different use cases require different tuning. Refer to [Performance Tuning](../performance/tune.md) for tuning the system for general purposes.
 
 ## When I encounter problems related to client connection, publishing, and subscription, such as failure to connect, abnormal disconnection, etc., how should I troubleshoot?
 

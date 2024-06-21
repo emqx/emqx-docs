@@ -43,9 +43,9 @@ $ apt-get install bsdutils
 ## EMQX failed to start with log message "...{on_load_function_failed,crypto}..."
 
 For better security, starting from version 4.3, EMQX runs on openssl-1.1.
-This may cause some troulbes for users running EMQX on some old linux distributions,
+This may cause some troubles for users running EMQX on some old Linux distributions,
 
-For EMQX version earlier to v4.3.10 and EMQX Enterprise version earlier than e4.3.5, you may see the following error messages:
+For EMQX version earlier than v4.3.10 and EMQX Enterprise version earlier than e4.3.5, you may see the following error messages:
 
 ```bash
 {application_start_failure,kernel,{{shutdown,{failed_to_start_child,kernel_safe_sup,{on_load_function_failed,crypto}}}, ..}
@@ -64,11 +64,11 @@ It indicates that the "crypto" application in Erlang/OTP that EMQX depends on fa
 
 ::: tab CentOS
 
-Extra Packages for Enterprise Linux (or EPEL) is a Fedora Special Interest Group that creates, maintains, and manages a high quality set of additional packages for Enterprise Linux. Using CentOS 7 as example:
+Extra Packages for Enterprise Linux (or EPEL) is a Fedora Special Interest Group that creates, maintains, and manages a high-quality set of additional packages for Enterprise Linux. Using CentOS 7 as an example:
 
-1. To install the RPM repos, execute `yum install epel-release`
-1. If failed to install, follow the instructions here: https://docs.fedoraproject.org/en-US/epel/#_el7 to ensure the yum repos are added, and try step 1 again
-1. Execute `yum install openssl11` to install openssl-1.1
+1. To install the RPM repos, execute `yum install epel-release`.
+1. If failed to install, follow the instructions here: https://docs.fedoraproject.org/en-US/epel/#_el7 to ensure the yum repos are added, and try step 1 again.
+1. Execute `yum install openssl11` to install openssl-1.1.
 
 :::
 
@@ -192,7 +192,7 @@ Of course, the most recommended installation method is to use the package manage
 
 ## Failed to start EMQX with Docker, log prompts "Permission denied"
 
-When you intend to persist EMQX data by mounting directory:
+When you intend to persist EMQX data by mounting the directory:
 
 ```
 sudo docker run -d --name emqx -p 18083:18083 -p 1883:1883 -v /emqx/data:/opt/emqx/data -v /emqx/log:/opt/emqx/log emqx:latest

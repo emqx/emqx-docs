@@ -1,7 +1,5 @@
 # 常见安装部署问题解答
 
-{% emqxce %}
-
 ## 推荐在哪些操作系统上部署 EMQX？
 
 EMQX 支持在多种操作系统和硬件平台上运行，考虑到企业级部署的稳定性和可靠性，一般来说，我们推荐在 CentOS、Ubuntu、Debian 等 Linux 发行版上部署。
@@ -10,13 +8,11 @@ EMQX 支持在多种操作系统和硬件平台上运行，考虑到企业级部
 
 不支持。Windows 下建议使用 Docker 来部署 EMQX。
 
-{% endemqxce %}
-
 ## EMQX 推荐的部署方案是什么？
 
-我们推荐以集群方式部署 EMQX，并在集群前端部署负载均衡（Nginx、HAProxy等）使连接均衡地落到集群的每个节点上。
+我们推荐以集群方式部署 EMQX，并在集群前端部署负载均衡（Nginx、HAProxy 等）使连接均衡地落到集群的每个节点上。
 
-对于通信安全有较高要求的用户，我们建议为客户端启用 TLS 连接，并在 LB 侧终结 TLS 连接，即客户端与 LB 之间采用 TLS 加密通信，LB 与 EMQX 节点之间则仍然采用 TCP 通信
+对于通信安全有较高要求的用户，我们建议为客户端启用 TLS 连接，并在 LB 侧终结 TLS 连接，即客户端与 LB 之间采用 TLS 加密通信，LB 与 EMQX 节点之间则仍然采用 TCP 通信。
 
 由于 EMQX 节点并不对公网暴露端口，因此并不会降低整体的安全性，但通过 TLS 卸载，可以有效节省 EMQX 的资源消耗。
 
@@ -52,7 +48,7 @@ EMQX 启动失败时，可以查看 [日志目录](../deploy/install.md#文件�
 
 ::: tab Linux
 
-进入到 EMQX 的安装目录（如果使用包管理工具安装 EMQX，则应该进入与 EMQX 的 `lib` 目录同级的位置）
+进入到 EMQX 的安装目录（如果使用包管理工具安装 EMQX，则应该进入与 EMQX 的 `lib` 目录同级的位置）：
 
 ```bash
 ## 安装包安装
@@ -81,7 +77,7 @@ lib/crypto-4.6/priv/lib/crypto.so: /lib64/libcrypto.so.10: version `OPENSSL_1.1.
 源码编译安装 OPENSSL 1.1.1，并将其 `.so` 文件放置到可以被系统识别的路径：
 
 ```bash
-## 下在最新版本 1.1.1
+## 下载最新版本 1.1.1
 $ wget https://www.openssl.org/source/openssl-1.1.1c.tar.gz
 
 ## 上传至 ct-test-ha
@@ -99,7 +95,7 @@ $ ln -s /usr/local/lib64/libssl.so.1.1 /usr/lib64/libssl.so.1.1
 $ ln -s /usr/local/lib64/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1
 ```
 
-完成后，执行在 EMQX 的 lib 同级目录下执行 `ldd lib/crypto-*/priv/lib/crypto.so` ，检查是否已能正确识别。如果不再有 `not found` 的 `.so` 库，即可正常启动 EMQX。
+完成后，在 EMQX 的 lib 同级目录下执行 `ldd lib/crypto-*/priv/lib/crypto.so` ，检查是否已能正确识别。如果不再有 `not found` 的 `.so` 库，即可正常启动 EMQX。
 
 :::
 
@@ -197,11 +193,11 @@ sudo docker run -d --name emqx -p 18083:18083 -p 1883:1883 -v emqx-data:/opt/emq
 
 默认情况下，EMQX 启动时会占用 7 个端口，它们分别是：
 
-1. 1883，用于 MQTT over TCP 监听器，可通过配置修改
-2. 8883，用于 MQTT over SSL/TLS 监听器，可通过配置修改
-3. 8083，用于 MQTT over WebSocket 监听器，可通过配置修改
-4. 8084，用于 MQTT over WSS (WebSocket over SSL) 监听器，可通过配置修改
-5. 18083，HTTP API 服务的默认监听端口，Dashboard 功能也依赖于这个端口，可通过配置修改
+1. 1883，用于 MQTT over TCP 监听器，可通过配置修改。
+2. 8883，用于 MQTT over SSL/TLS 监听器，可通过配置修改。
+3. 8083，用于 MQTT over WebSocket 监听器，可通过配置修改。
+4. 8084，用于 MQTT over WSS (WebSocket over SSL) 监听器，可通过配置修改。
+5. 18083，HTTP API 服务的默认监听端口，Dashboard 功能也依赖于这个端口，可通过配置修改。
 6. 4370，用于 EMQX 分布式集群远程函数调用、Mnesia 数据同步等。即便没有组成集群，这个端口也会被默认占用。这个监听端口实际上应该是 `BasePort (4370) + Offset`，4370 固定无法修改，Offset 则由节点名称（`Name@Host`）中 Name 部分的数字后缀决定，没有数字后缀则默认为 0。例如 `emqx@127.0.0.1` 的 Offset 为 0，`emqx1@127.0.0.1` 的 Offset 为 1。
 7. 5370，用于分担上一端口压力的集群 RPC 端口，主要用于节点间转发 MQTT 消息。与 4370 端口类似，即便没有组成集群，这个端口也会被默认占用，并且它实际上应该是 `BasePort (5370) + Offset`，5370 固定无法修改，Offset 则由节点名称（`Name@Host`）中 Name 部分的数字后缀决定，没有数字后缀则默认为 0。
 
