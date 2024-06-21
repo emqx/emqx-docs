@@ -41,8 +41,8 @@
       title_cn: 产品路线图
       path: getting-started/roadmap
 
-- title_en: Installation and Migration
-  title_cn: 安装部署和迁移
+- title_en: Installation and Deployment
+  title_cn: 安装部署
   path: deploy/install
   collapsed: true
   children:
@@ -710,52 +710,56 @@
       title_cn: MQTT 原因码
       path: https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack
 
-- title_en: EMQX Enterprise Release Notes
-  title_cn: EMQX 企业版版本发布历史
-  collapsed: true
-  path: changes/all-changes-ee
-  children:
-    - changes/changes-ee-v5
-    - changes/changes-ee-v4
-    - title_en: Incompatible Changes
-      title_cn: 不兼容变更
-      collapsed: true
-      children:
-        - changes/breaking-changes-ee-5.7
-        - changes/breaking-changes-ee-5.6
-        - changes/breaking-changes-ee-5.5
-        - changes/breaking-changes-ee-5.4
-        - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
-          title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
-          path: changes/breaking-changes-5.1.0
-          collapsed: true
-          children:
-            - changes/auth-4.4-to-5.1-compatibility
-            - changes/data-integration-4.4-to-5.1-incompatibility
-            - changes/gateway-4.4-to-5.1-incompatibility
-- title_en: EMQX Open Source Release Notes
-  title_cn: EMQX 开源版版本发布历史
-  collapsed: true
-  path: changes/all-changes-ce
-  children:
-    - changes/changes-ce-v5
-    - changes/changes-ce-v4
-    - title_en: Version 0.1 to 3.x
-      title_cn: v0.1-v3.x 版本
-      path: changes/changes-ce-v3
-    - title_en: Incompatible Changes
-      title_cn: 不兼容变更
-      collapsed: true
-      children:
-        - changes/breaking-changes-ce-5.7
-        - changes/breaking-changes-ce-5.6
-        - changes/breaking-changes-ce-5.5
-        - changes/breaking-changes-ce-5.4
-        - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
-          title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
-          path: changes/breaking-changes-5.1.0
-          collapsed: true
-          children:
-            - changes/auth-4.4-to-5.1-compatibility
-            - changes/data-integration-4.4-to-5.1-incompatibility
-            - changes/gateway-4.4-to-5.1-incompatibility
+-  title_en: Release Notes
+   title_cn: 版本发布历史
+   collapsed: true
+   children:
+       - title_en: EMQX Enterprise Release Notes
+         title_cn: EMQX 企业版版本发布历史
+         collapsed: true
+         path: changes/all-changes-ee
+         children:
+             - changes/changes-ee-v5
+             - changes/changes-ee-v4
+             - title_en: Incompatible Changes
+               title_cn: 不兼容变更
+               collapsed: true
+               children:
+                   - changes/breaking-changes-ee-5.7
+                   - changes/breaking-changes-ee-5.6
+                   - changes/breaking-changes-ee-5.5
+                   - changes/breaking-changes-ee-5.4
+                   - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
+                     title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
+                     path: changes/breaking-changes-5.1.0
+                     collapsed: true
+                     children:
+                         - changes/auth-4.4-to-5.1-compatibility
+                         - changes/data-integration-4.4-to-5.1-incompatibility
+                         - changes/gateway-4.4-to-5.1-incompatibility
+       - title_en: EMQX Open Source Release Notes
+         title_cn: EMQX 开源版版本发布历史
+         collapsed: true
+         path: changes/all-changes-ce
+         children:
+             - changes/changes-ce-v5
+             - changes/changes-ce-v4
+             - title_en: Version 0.1 to 3.x
+               title_cn: v0.1-v3.x 版本
+               path: changes/changes-ce-v3
+             - title_en: Incompatible Changes
+               title_cn: 不兼容变更
+               collapsed: true
+               children:
+                   - changes/breaking-changes-ce-5.7
+                   - changes/breaking-changes-ce-5.6
+                   - changes/breaking-changes-ce-5.5
+                   - changes/breaking-changes-ce-5.4
+                   - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
+                     title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
+                     path: changes/breaking-changes-5.1.0
+                     collapsed: true
+                     children:
+                         - changes/auth-4.4-to-5.1-compatibility
+                         - changes/data-integration-4.4-to-5.1-incompatibility
+                         - changes/gateway-4.4-to-5.1-incompatibility

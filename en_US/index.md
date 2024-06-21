@@ -3,7 +3,7 @@ EMQX is a large-scale distributed MQTT messaging platform that offers "unlimited
 
 [EMQX Enterprise](https://www.emqx.com/en/products/emqx) is the commercial version of EMQX. With its robust built-in rule engine and data integration capabilities, EMQX Enterprise can perform real-time data processing, transformation, and routing for massive IoT data. It seamlessly integrates IoT data with various backend databases and analytics tools, enabling enterprises to rapidly build IoT platforms and applications with leading competitiveness.
 
-<img src="./assets/EMQX-enterprise.png" alt="EMQX-enterprise" style="zoom:50%;" />
+<img src="./assets/emqx_platform.jpg" alt="emqx_platform" style="zoom:70%;" />
 
 ## Key Benefits
 
@@ -140,9 +140,9 @@ EMQX Enterprise supports connections between various devices and application end
 
 Bidirectional communication in mission-critical applications brings you key benefits as follows:
 
-- **Topic-Based Pub/Sub Messaging:** EMQX's topic-based publish/subscribe model streamlines the data flow to ensure efficient and flexible message routing.
-- **Ultra-Low Latency Delivery:** Achieve rapid data transfer with latencies as low as 1 millisecond, ensuring real-time responsiveness.
-- **Comprehensive Quality of Service (QoS) Guarantees:** EMQX offers end-to-end multi-level QoS guarantees, providing reliable and flexible message delivery.
+- **Topic-Based Pub/Sub Messaging**: EMQX's topic-based publish/subscribe model streamlines the data flow to ensure efficient and flexible message routing.
+- **Ultra-Low Latency Delivery**: Achieve rapid data transfer with latencies as low as 1 millisecond, ensuring real-time responsiveness.
+- **Comprehensive Quality of Service (QoS) Guarantees**: EMQX offers end-to-end multi-level QoS guarantees, providing reliable and flexible message delivery.
 
 Below are more specific using scenarios:
 
