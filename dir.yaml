@@ -133,7 +133,6 @@
     # - deploy/install-marketplace
     - title_en: Work with License
       title_cn: 配置 License
-      edition: ee
       path: deploy/license
     - title_en: Upgrade Guide
       title_cn: 升级指南
