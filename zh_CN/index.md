@@ -102,26 +102,28 @@ EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless
 
 以下列出了 EMQX 企业版和开源版的主要功能对比。
 
-| **项目**                 | **EMQX 企业版**                                             | **EMQX 开源版**                                             |
-| ------------------------ | ----------------------------------------------------------- | ----------------------------------------------------------- |
-| **伸缩性**               | 单集群至多 1 亿 MQTT 连接                                   | 单集群至多 10 万 MQTT 连接                                   |
-| **性能**                 | > 500 万 MQTT 消息每秒                                      | > 10 万 MQTT 消息每秒                                      |
-| **可靠性**               | RocksDB 消息持久化，具备高可用副本                                | RocksDB 消息持久化                                                |
-| **延迟**                 | 1~5 毫秒                                                    | 1~5 毫秒                                                    |
-| **数据集成（开箱即用）** | 40+                                                         | 2                                                           |
-| **License**              | Commercial License (Business source license)                | Apache Version 2.0                                          |
-| **技术支持**             | 7x24 全球支持                                               | 开源社区                                                    |
-| **MQTT 5.0**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **MQTT over QUIC**       | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **MQTT 扩展**            | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **多协议网关**           | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **Schema Registry**      | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **消息编解码**           | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **规则引擎**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **文件传输**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **企业系统集成**         | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **故障排查**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **云原生 & K8s**         | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **项目**                 | **EMQX 企业版**                                              | **EMQX 开源版**                                              |
+| ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **定位**                 | 可靠且可扩展的企业级 MQTT 平台                               | 全球第一的开源 MQTT Broker                                   |
+| **伸缩性**               | 支持最多 100 个节点的集群<br />每个集群最多支持 1 亿个 MQTT 连接 | 支持最多 3 个节点的集群<br />在生产环境中支持最多 100,000 个连接 |
+| **性能**                 | 500 万 MQTT 消息每秒                                         | 10 万 MQTT 消息每秒                                          |
+| **可用性**               | 核心-副本集群                                                | 无主集群                                                     |
+| **可靠性**               | RocksDB 消息持久化，具备高可用副本                           | 会话持久化                                                   |
+| **延迟**                 | 1~5 毫秒                                                     | 1~5 毫秒                                                     |
+| **数据集成（开箱即用）** | 40+                                                          | 2                                                            |
+| **License**              | Commercial License (Business source license)                 | Apache Version 2.0                                           |
+| **技术支持**             | 7x24 全球支持                                                | 开源社区                                                     |
+| **MQTT 5.0**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  |
+| **MQTT over QUIC**       | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  |
+| **MQTT 扩展**            | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  |
+| **多协议网关**           | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  |
+| **Schema Registry**      | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />   |
+| **消息编解码**           | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />   |
+| **规则引擎**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  |
+| **文件传输**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />   |
+| **企业系统集成**         | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />   |
+| **故障排查**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  |
+| **云原生 & K8s**         | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  |
 
 -->
 
