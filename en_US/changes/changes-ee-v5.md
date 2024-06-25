@@ -10,7 +10,7 @@
 
   This option is to be used with endpoints that do not support the prepared statements session feature, such as PGBouncer and Supabase in Transaction mode.
 
-- [#13180](https://github.com/emqx/emqx/pull/13180) Improve client message handling performance when running on OTP 26.
+- [#13180](https://github.com/emqx/emqx/pull/13180) Improve client message handling performance when running on OTP 26.  Increased message throughput by 10% in fan-in mode.
 
 - [#13191](https://github.com/emqx/emqx/pull/13191) Upgrade EMQX Docker images to run on Erlang/OTP 26.
 
