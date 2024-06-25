@@ -1,6 +1,7 @@
 # SQL 语法与示列
 
 ## SQL 语法
+
 ### FROM、SELECT 和 WHERE 子句
 
 规则的 SQL 语句基本格式为:
@@ -9,36 +10,36 @@
 SELECT <字段名> FROM <主题> [WHERE <条件>]
 ```
 
-- `FROM` 子句将规则挂载到某个主题上
+- `FROM` 子句用于选择消息或事件来源，如果是消息发布则填写消息的主题，如果是事件则填写对应的事件主题
 - `SELECT` 子句用于对数据进行变换，并选择出感兴趣的字段
 - `WHERE` 子句用于对 SELECT 选择出来的某个字段施加条件过滤
 
+SELECT 语句用于决定最终的输出结果里的字段。比如:
+
+1. 选取 username 为 'abc' 的终端发来的消息，输出结果为所有可用字段:
+
 ```sql
-## SELECT 语句用于决定最终的输出结果里的字段。比如:
-## 下面 SQL 的输出结果中将只有两个字段 "a" 和 "b":
-
-SELECT a, b FROM "t/#"
-
-# 选取 username 为 'abc' 的终端发来的消息，输出结果为所有可用字段:
-
 SELECT * FROM "#" WHERE username = 'abc'
-
-## 选取 clientid 为 'abc' 的终端发来的消息，输出结果将只有 cid 一个字段。
-## 注意 cid 变量是在 SELECT 语句中定义的，故可在 WHERE 语句中使用:
-
-SELECT clientid as cid FROM "#" WHERE cid = 'abc'
-
-## 选取 username 为 'abc' 的终端发来的消息，输出结果将只有 cid 一个字段。
-## 注意虽然 SELECT 语句中只选取了 cid 一个字段，所有消息发布事件中的可用字段 (比如 clientid、username 等) 仍然可以在 WHERE 语句中使用:
-
-SELECT clientid as cid FROM "#" WHERE username = 'abc'
-
-## 但下面这个 SQL 语句就不能工作了，因为变量 xyz 既不是消息发布事件中的可用字段，又没有在 SELECT 语句中定义:
-
-SELECT clientid as cid FROM "#" WHERE xyz = 'abc'
 ```
 
-FROM 语句用于选择事件来源。如果是消息发布则填写消息的主题，如果是事件则填写对应的事件主题。
+2. 选取 clientid 为 'abc' 的终端发来的消息，输出结果将只有 cid 一个字段。注意 cid 变量是在 SELECT 语句中定义的，故可在 WHERE 语句中使用:
+
+```sql
+SELECT clientid as cid FROM "#" WHERE cid = 'abc'
+```
+
+3. 选取 username 为 'abc' 的终端发来的消息，输出结果将只有 cid 一个字段。注意虽然 SELECT 语句中只选取了 cid 一个字段，所有消息发布事件中的可用字段 (比如 clientid、username 等) 仍然可以在 WHERE 语句中使用:
+
+```sql
+SELECT clientid as cid FROM "#" WHERE username = 'abc'
+```
+
+4. 但下面这个 SQL 语句就不能工作了，因为变量 xyz 既不是消息发布事件中的可用字段，又没有在 SELECT 语句中定义:
+
+```sql
+-- 错误示例
+SELECT clientid as cid FROM "#" WHERE xyz = 'abc'
+```
 
 ### FOREACH、DO 和 INCASE 子句
 
@@ -64,9 +65,11 @@ INCASE                  ## INCASE 相当于针对当前循环中对象的 WHERE 
     e.idx >= 1          ## 对DO选择出来的某个字段施加条件过滤
 FROM "t/#"              ## 子句将规则挂载到某个主题上
 ```
+
 其中 DO 和 INCASE 子句都是可选的。
 
 ### 运算符号
+
 | 函数名 |   函数作用            |   返回值   |
 | ------ | ------------------- | ---------- |
 | `+`    | 加法，或字符串拼接     | 加和，或拼接之后的字符串 |
@@ -90,6 +93,7 @@ FROM "t/#"              ## 子句将规则挂载到某个主题上
 | `!=` | 不等于 | true/false |
 
 ## SQL 语句示例
+
 ### 基本语法举例
 
 - 从 topic 为 "t/a" 的消息中提取所有字段:
