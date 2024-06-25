@@ -226,7 +226,7 @@ EMQ provides a comprehensive data-driven solution for logistics asset management
 
 With the logistics industry's complex and dynamic nature, effective monitoring, scheduling, and optimization of vehicle fleets are essential throughout the transportation and delivery processes. The timely and reliable delivery of goods, cost optimization, and customer satisfaction heavily rely on efficient fleet management practices. [**Learn More →**](https://www.emqx.com/en/blog/how-emqx-revolutionizes-logistics-fleet-management)
 
-![design_9](./assets/use_case_9.png)
+<img src="./assets/use_case_9.png" alt="design_9" style="zoom:70%;" />
 
 #### Vehicle to Everything Communication (V2X)
 

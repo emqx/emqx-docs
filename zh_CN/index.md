@@ -224,7 +224,7 @@ EMQX 提供一个全面的数据驱动解决方案，用于物流资产管理，
 
 鉴于物流行业的复杂和动态性质，有效地监控、调度和优化车队在运输和交付过程中至关重要。及时可靠的货物交付、成本优化和顾客满意度都严重依赖于高效的车队管理实践。[**了解更多 →**](https://www.emqx.com/zh/blog/how-emqx-revolutionizes-logistics-fleet-management)
 
-![design_9](./assets/use_case_9.png)
+<img src="./assets/use_case_9.png" alt="design_9" style="zoom:70%;" />
 
 #### 车辆与一切通信 (V2X)
 
