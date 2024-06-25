@@ -31,7 +31,7 @@ This page lists features supported across different deployment types in detail.
   </tr>
   <tr>
     <td><b>MQTT over QUIC</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -57,23 +57,23 @@ This page lists features supported across different deployment types in detail.
     <td><b>Multi-tenancy</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Higer system flexibility and utilization</td>
+    <td> Higer system flexibility and utilization<br>(Coming soon)</td>
   </tr>
   <tr>
     <td><b>Cluster Linking</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Seamless connection of devices and application data</td>
+    <td> Seamless connection of devices and application data<br>(Coming soon)</td>
   </tr>
   <tr>
     <td><b>Event History</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> Client fault diagnosis and behavioral audit</td>
   </tr>
@@ -81,17 +81,17 @@ This page lists features supported across different deployment types in detail.
     <td><b>Message Queuing</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Unified architecture for data transmission and analysis</td>
+    <td> Unified architecture for data transmission and analysis<br>(Coming soon)</td>
   </tr>
   <tr>
     <td><b>Stream Processing</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Higher reliability and disaster recovery capabilities</td>
+    <td> Higher reliability and disaster recovery capabilities<br>(Coming soon)</td>
   </tr>
   <tr>
     <td><b>Data Persistence</b></td>
@@ -99,7 +99,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> Built-in RocksDB backend or external databases</td>
     <td>N/A</td>
     <td>N/A</td>
-    <td> Improved stability and reliability</a></td>
+    <td> <a href="https://docs.emqx.com/en/enterprise/latest/durability/durability_introduction.html">Improved stability and reliability</a></td>
   </tr>
   <tr>
     <td><b>Schema Registry</b></td>
@@ -122,7 +122,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
     <td> Ensuring integrity and legality of messages</td>
   </tr>
   <tr>
@@ -137,7 +137,7 @@ This page lists features supported across different deployment types in detail.
     <td><b>Flow Designer</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
     <td><a href="https://docs.emqx.com/en/enterprise/latest/flow-designer/introduction.html">Easy orchestration of data integration</a></td>
   </tr>
@@ -145,7 +145,7 @@ This page lists features supported across different deployment types in detail.
     <td><b>File Transfer</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
     <td>Unified platform data transmission</td>
   </tr>
@@ -169,7 +169,7 @@ This page lists features supported across different deployment types in detail.
     <td><b>Troubleshooting</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><a href="https://docs.emqx.com/en/enterprise/latest/observability/tracer.html">Log Trace</a><br><a href="https://docs.emqx.com/en/enterprise/latest/observability/slow-subscribers-statistics.html">Slow Subscriptions</a></td>
   </tr>
@@ -195,7 +195,6 @@ This page lists features supported across different deployment types in detail.
 
 
 
-
 ## Scalability and Performance
 
 <div style="text-align: center;">
@@ -217,8 +216,8 @@ This page lists features supported across different deployment types in detail.
 <tbody>
   <tr>
     <td><b>Scalability</b></td>
-    <td><span style="font-weight:normal">Up to 100M MQTT connections per cluster</span></td>
-    <td><span style="font-weight:normal">Up to 100M MQTT connections per cluster</span></td>
+    <td><span style="font-weight:normal">Up to 3 nodes cluster<br>Up to 100,000 connections in production</span></td>
+    <td><span style="font-weight:normal">Up to 100 nodes cluster<br>Up to 100 million MQTT connections per cluster</span></td>
     <td><span style="font-weight:normal">1000 auto scale</span></td>
     <td><span style="font-weight:normal">1000 - unlimited</span></td>
     <td><a href="https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0">Reaching 100M MQTT connections with EMQX 5.0</a></td>
@@ -226,22 +225,22 @@ This page lists features supported across different deployment types in detail.
   <tr>
     <td><b>Availability</b></td>
     <td><span style="font-weight:normal">Masterless cluster</span></td>
-    <td><span style="font-weight:normal">Masterless cluster</span></td>
+    <td><span style="font-weight:normal">Core-Replica cluster</span></td>
     <td><span style="font-weight:normal">Masterless cluster</span></td>
     <td><span style="font-weight:normal">Masterless cluster</span></td>
     <td><span style="font-weight:normal"> </span></td>
   </tr>
   <tr>
     <td><b>Reliability</b></td>
-    <td><span style="font-weight:normal">Data storage in memory</span></td>
-    <td><span style="font-weight:normal">Data persistence in RocksDB</span></td>
-    <td><span style="font-weight:normal">N/A</span></td>
-    <td><span style="font-weight:normal">N/A</span></td>
+    <td><span style="font-weight:normal">Session persistence</span></td>
+    <td><span style="font-weight:normal">Data persistence in RocksDB with highly available replication</span></td>
+    <td><span style="font-weight:normal">Session persistence</span></td>
+    <td><span style="font-weight:normal">Session persistence</span></td>
     <td><a href="https://www.emqx.com/en/blog/mqtt-persistence-based-on-rocksdb">Highly Reliable MQTT Data Persistence Based on RocksDB</a></td>
   </tr>
   <tr>
     <td><b>Performance</b></td>
-    <td><span style="font-weight:normal">5M+ MQTT messages per second</span></td>
+    <td><span style="font-weight:normal">100,000 MQTT messages per second</span></td>
     <td><span style="font-weight:normal">5M+ MQTT messages per second</span></td>
     <td><span style="font-weight:normal">1000 MQTT messages per second</span></td>
     <td><span style="font-weight:normal">5M+ MQTT messages per second</span></td>
@@ -266,6 +265,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 ## Clustering Architecture
 
@@ -328,7 +328,7 @@ This page lists features supported across different deployment types in detail.
   </tr>
   <tr>
     <td><b>Network Split Recovery</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -368,7 +368,7 @@ This page lists features supported across different deployment types in detail.
   </tr>
   <tr>
     <td><b>Overload Protection</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
@@ -393,6 +393,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 
 ## MQTT and Connectivity
@@ -466,8 +467,8 @@ This page lists features supported across different deployment types in detail.
     <td><b>MQTT over QUIC</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>EMQX is now the only MQTT broker in the world that supports QUIC transport.</td>
   </tr>
   <tr>
@@ -477,6 +478,14 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>Proxy protocol v1, v2</td>
+  </tr>
+  <tr>
+    <td><b>LB (Custom)</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td>GmSSL<br>Smooth connection migration</td>
   </tr>
   <tr>
     <td><b>IPv6 Support</b></td>
@@ -545,7 +554,7 @@ This page lists features supported across different deployment types in detail.
   <tr>
     <td><b>JT/808</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> Coming in EMQX v5.4</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
@@ -553,7 +562,7 @@ This page lists features supported across different deployment types in detail.
   <tr>
     <td><b>GBT32960</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> Coming in EMQX v5.4</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
@@ -561,6 +570,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 ## Security
 
@@ -593,7 +603,7 @@ This page lists features supported across different deployment types in detail.
     <td><b>QUIC</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> Enhance efficiency of weak network and mobile network data transmission</td>
   </tr>
@@ -601,7 +611,7 @@ This page lists features supported across different deployment types in detail.
     <td><b>OCSP Stapling</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> Provide more flexible security practices</td>
   </tr>
@@ -610,7 +620,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
     <td> Detect and intercept frequent online and offline connections</td>
   </tr>
   <tr>
@@ -648,6 +658,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 
 ## Authentication and Authorization
@@ -718,22 +729,6 @@ This page lists features supported across different deployment types in detail.
     <td> </td>
   </tr>
   <tr>
-    <td><b>SSO</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/dashboard/sso.html">Single Sign-On</a> </td>
-  </tr>
-  <tr>
-    <td><b>RBAC</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/dashboard/system.html#users">Role-Based Access Control</a> </td>
-  </tr>
-  <tr>
     <td><b>Fine-grained Access Control</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -745,7 +740,7 @@ This page lists features supported across different deployment types in detail.
     <td><b>Authentication Database Backends</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
@@ -753,13 +748,14 @@ This page lists features supported across different deployment types in detail.
     <td><b>ACL Database Backends</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
 </tbody>
 </table>
 </div>
+
 
 
 ## Data Integration
@@ -912,7 +908,6 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
   </tr>
   <tr>
     <td><b>OpenTSDB</b></td>
@@ -1132,7 +1127,15 @@ This page lists features supported across different deployment types in detail.
     <td><a href="https://www.emqx.io/docs/en/latest/extensions/plugins.html#plugins">Plugins</a></td>
   </tr>
   <tr>
-    <td><b>Plugin Hot-loading</b></td>
+    <td><b>Plugin Hot Loading</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td>N/A</td>
+    <td>N/A</td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>Plugin Hot Configuration</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
@@ -1158,6 +1161,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 ## Operability
 
@@ -1274,46 +1278,6 @@ This page lists features supported across different deployment types in detail.
     <td> </td>
   </tr>
   <tr>
-    <td><b>Cluster Metrics</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Alarm Alerts</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Slow Subscription Monitoring</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Topic Monitoring</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Client Monitoring</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
     <td><b>Prometheus</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -1325,13 +1289,70 @@ This page lists features supported across different deployment types in detail.
     <td><b>Datadog</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><b>OpenTelemetry</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td>Coming in EMQX Enterprise 5.4</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><b>Cluster Metrics</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td>N/A</td>
+    <td>N/A</td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>Alarm Alerts</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>Slow Subscription Monitoring</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>Topic Monitoring</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>Client Monitoring</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>Log Trace</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
   </tr>
 </tbody>
 </table>
 </div>
+
 
 ## Cloud Native and K8S
 
@@ -1379,6 +1400,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 ## Cloud Platform Availability
 
@@ -1434,7 +1456,7 @@ This page lists features supported across different deployment types in detail.
     <td><b>Azure</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td></td>
   </tr>
@@ -1449,6 +1471,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 ## MQTT Tools and SDKs
 

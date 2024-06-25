@@ -98,12 +98,11 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
 </tbody>
 </table>
 
-<!-- 
 
 The following is a list of feature comparisons between EMQX Enterprise and Open Source edition.
 
 
-| **Items**                         | **EMQX Platform**                                            | **EMQX Open Source**                                         |
+|                                   | **EMQX Platform**                                            | **EMQX Open Source**                                         |
 | :-------------------------------- | :----------------------------------------------------------- | :----------------------------------------------------------- |
 | **Positioning**                   | The reliable and scalable enterprise MQTT Platform           | The World's #1 open source MQTT Broker                       |
 | **Scalability**                   | Up to 100 nodes cluster<br />Up to 100 million MQTT connections per cluster | Up to 3 nodes cluster<br />Up to 100,000 connections in production |
@@ -114,19 +113,6 @@ The following is a list of feature comparisons between EMQX Enterprise and Open 
 | **Integrations (Out-of-the-box)** | 40+                                                          | 2                                                            |
 | **License Model**                 | Commercial license (Business source license)                 | Apache Version 2.0                                           |
 | **Technical Support**             | 24/7 Global support                                          | Open source community                                        |
-| **MQTT 5.0 Broker**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  |
-| **MQTT over QUIC**                | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  |
-| **MQTT Add-ons**                  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  |
-| **Multi-Protocol Gateways**       | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  |
-| **Schema Registry**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />   |
-| **Message Codec**                 | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />   |
-| **Rule Engine**                   | <img src="./assets/check_mark_64.png" style="zoom:40%;" />   | <img src="./assets/check_mark_64.png" style="zoom:40%;" />   |
-| **File Transfer**                 | <img src="./assets/check_mark_64.png" style="zoom:40%;" />   | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />   |
-| **Enterprise Integrations**       | <img src="./assets/check_mark_64.png" style="zoom:40%;" />   | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />   |
-| **Troubleshooting**               | <img src="./assets/check_mark_64.png" style="zoom:40%;" />   | <img src="./assets/check_mark_64.png" style="zoom:40%;" />   |
-| **Cloud-Native & K8s**            | <img src="./assets/check_mark_64.png" style="zoom:40%;" />   | <img src="./assets/check_mark_64.png" style="zoom:40%;" />   |
-
--->
 
 ## Use Cases
 
