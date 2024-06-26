@@ -10,32 +10,28 @@
 
   This option is to be used with endpoints that do not support the prepared statements session feature, such as PGBouncer and Supabase in Transaction mode.
 
-- [#13180](https://github.com/emqx/emqx/pull/13180) Improve client message handling performance when running on OTP 26.  Increased message throughput by 10% in fan-in mode.
+- [#13180](https://github.com/emqx/emqx/pull/13180) Improved client message handling performance when EMQX is running on Erlang/OTP 26 and increased message throughput by 10% in fan-in mode.
 
-- [#13191](https://github.com/emqx/emqx/pull/13191) Upgrade EMQX Docker images to run on Erlang/OTP 26.
+- [#13191](https://github.com/emqx/emqx/pull/13191) Upgraded EMQX Docker images to run on Erlang/OTP 26.
 
-  EMQX had been running on Erlang/OTP 26 since 5.5 except for docker images which were on Erlang/OTP 25.
-  Now all releases are on Erlang/OTP 26.
-
-  A known issue:
-  When an older version EMQX joins cluster with newer version nodes.
-  The older version node's schema registry may encounter an issue which emits logs like below:
-
+  EMQX had been running on Erlang/OTP 26 since v5.5 except for docker images which were on Erlang/OTP 25. Now all releases are on Erlang/OTP 26. This upgrade fixed the following known issue:
+  
+  When an older version of EMQX joins a cluster with newer version nodes, the Schema Registry of the older version node may encounter an issue, emitting logs like the following:
+  
   ```
   Error loading module '$schema_parser___CiYAWBja87PleCyKZ58h__SparkPlug_B_BUILT-IN':,
   This BEAM file was compiled for a later version of the runtime system than the current (Erlang/OTP 25).
   ```
-
-  This issue is fixed in newer version, however for older versions, a manual step is required.
-  Execute this in one of the clustered nodes before the older version EMQX joins the cluster.
-
+  
+  This issue is fixed in the newer version. However, for older versions, a manual step is required. Execute the following command on one of the clustered nodes before the older version EMQX joins the cluster:
+  
   ```shell
   emqx eval 'lists:foreach(fun(Key) -> mnesia:dirty_delete(emqx_ee_schema_registry_protobuf_cache_tab, Key) end, mnesia:dirty_all_keys(emqx_ee_schema_registry_protobuf_cache_tab)).'
   ```
 
-  Or if the older version EMQX is already in the cluster, execute the above command, and restart this node.
-
-- [#13242](https://github.com/emqx/emqx/pull/13242) Significantly increased the startup speed of EMQX dashboard listener.
+  If the older version of EMQX is already in the cluster, execute the above command and restart the affected node.
+  
+- [#13242](https://github.com/emqx/emqx/pull/13242) Significantly increased the startup speed of EMQX Dashboard listener.
 
 - [#13172](https://github.com/emqx/emqx/pull/13172) Added a rule function `map_to_redis_hset_args` to help preparing redis HSET (or HMSET) multi-fields values.
 
@@ -43,113 +39,78 @@
   this rule `SELECT  map_to_redis_hset_args(payload.value) as hset_fields FROM  "t/#"` can prepare `hset_fields`
   for redis action to render the command template like `HMSET name1 ${hset_fields}`.
 
-- [#13210](https://github.com/emqx/emqx/pull/13210) Now, when inserting or updating a Schema Validation, EMQX will check if the referenced schemas and message types exist in Schema Registry.
+- [#13210](https://github.com/emqx/emqx/pull/13210) EMQX now validates that referenced schemas and message types exist in the Schema Registry when inserting or updating a Schema Validation.
 
-- [#13211](https://github.com/emqx/emqx/pull/13211) Enhance TLS listener to support more flexible TLS verifications.
+- [#13211](https://github.com/emqx/emqx/pull/13211) Enhanced TLS listener to support more flexible TLS verifications.
 
-  - partial_chain support
+  - `partial_chain` support: If the option `partial_chain` is set to `true`, connections with incomplete certificate chains are allowed. Check the [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) for more details.
 
-  If the option `partial_chain` is set to `true`, allow connections with incomplete certificate chains.
-
-  Check the configuration manual document for more details.
-
-  - Certificate KeyUsage Validation
-
-  Added support for required Extended Key Usage defined in
-  [rfc5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.12).
-
-  Introduced a new option (`verify_peer_ext_key_usage`) to require specific key usages (like "serverAuth")
-  in peer certificates during the TLS handshake.
-  This strengthens security by ensuring certificates are used for their intended purposes.
-
-  example:
-  "serverAuth,OID:1.3.6.1.5.5.7.3.2"
-
-  Check the configuration manual document for more details.
+  - Certificate Key Usage validation: Added support for required Extended Key Usage as defined in
+    [rfc5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.12). A new option (`verify_peer_ext_key_usage`) has been introduced to enforce specific key usages (such as "serverAuth") in peer certificates during the TLS handshake. This enhances security by ensuring certificates are used for their intended purposes, for example, "serverAuth,OID:1.3.6.1.5.5.7.3.2". Check the [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) for more details.
+  
 
 
-- [#13274](https://github.com/emqx/emqx/pull/13274) The RocketMQ connector has got support for configuring SSL settings.
+- [#13274](https://github.com/emqx/emqx/pull/13274) The RocketMQ connector now supports configuring SSL settings.
 
 ### Bug Fixes
 
-- [#13140](https://github.com/emqx/emqx/pull/13140) The issue causing text traces for the republish action to crash and not display correctly has been resolved.
+- [#13156](https://github.com/emqx/emqx/pull/13156) Resolved an issue where the Dashboard Monitoring pages would crash following the update to EMQX v5.7.0. 
 
-- [#13148](https://github.com/emqx/emqx/pull/13148) Fixed an issue where a 500 HTTP status code could be returned by `/connectors/:connector-id/start` when there is a timeout waiting for the resource to be connected.
+- [#13164](https://github.com/emqx/emqx/pull/13164) Fixed HTTP authorization request body encoding.
 
-- [#13156](https://github.com/emqx/emqx/pull/13156) Fix crashes on monitor dashboard page happening after update to v5.7.0.
-
-- [#13164](https://github.com/emqx/emqx/pull/13164) Fix HTTP authorization request body encoding.
-
-  Prior to this fix, the HTTP authorization request body encoding format was taken from the `accept` header.
-  The fix is to respect the `content-type` header instead.
-  Also added `access` templating variable for v4 compatibility.
-  The access code of SUBSCRIBE action is `1` and PUBLISH action is `2`.
-
-- [#13181](https://github.com/emqx/emqx/pull/13181) Now, when attempting to stop a connector, if such operation times out, we forcefully shut down the connector process.
-
-  Error messages when attempting to disable an action/source when its underlying connector is stuck were also improved.
-
-- [#13189](https://github.com/emqx/emqx/pull/13189) Fixed an issue where the data integration with Microsoft SQL Server or MySQL could not use SQL templates with substring `values` in table name or column name.
-
-- [#13216](https://github.com/emqx/emqx/pull/13216) Respcet `clientid_prefix` config for MQTT bridges.
-
-  As of version 5.4.1, EMQX limits MQTT client ID lengths to 23 bytes.
-  Previously, the system included the `clientid_prefix` in the hash calculation of the original unique, but long client ID, thereby impacting the resulting shortened ID.
-
-  Change Details:
-  - Without Prefix: Behavior remains unchanged; EMQX will hash the long (> 23 bytes) client ID into a 23-byte space.
-  - With Prefix:
-  - Prefix no more than 19 bytes: The prefix is preserved, and the client ID is hashed into a 4-byte space capping the length within 23 bytes.
-  - Prefix is 20 or more bytes: EMQX no longer attempts to shorten the client ID, respecting the configured prefix in its entirety.
+  Before this fix, the HTTP authorization request body encoding format was taken from the `accept` header. The fix is to respect the `content-type` header instead. Also added `access` templating variable for v4 compatibility. The access code of SUBSCRIBE action is `1` and PUBLISH action is `2`.
 
 - [#13238](https://github.com/emqx/emqx/pull/13238) Improved the logged error messages when an HTTP authorization request with an unsupported content-type header is returned.
 
-- [#13258](https://github.com/emqx/emqx/pull/13258) Fix an issue where the MQTT-SN gateway would not restart correctly due to incorrect startup order of gateway dependencies.
+- [#13258](https://github.com/emqx/emqx/pull/13258) Fixed an issue where the MQTT-SN gateway would not restart correctly due to incorrect startup order of gateway dependencies.
 
-- [#13273](https://github.com/emqx/emqx/pull/13273) Fixed and improved handling of URIs in several configurations.
-  Previously,
-  * In authentication or authorization configurations, valid pathless URIs (`https://example.com?q=x`) were not accepted as valid.
-  * In bridge connectors, some kinds of URIs that couldn't be correctly handled were nevertheless accepted. E.g., URIs with user info or fragment parts.
+- [#13273](https://github.com/emqx/emqx/pull/13273) Fixed and improved handling of URIs in several configurations. The fix includes the following improvement details:
 
-- [#13276](https://github.com/emqx/emqx/pull/13276) Fix an issue with durable message storage where parts of the internal storage state were not persisted during setup of new storage generation, a concept used internally for managing message expiration and cleanup. This could have manifested as messages being lost after a restart of the broker.
+  * Authentication and authorization configurations: Corrected a previous error where valid pathless URIs such as `https://example.com?q=x` were mistakenly rejected. These URIs are now properly recognized as valid.
+  * Connector configurations: Enhanced checks to ensure that URIs with potentially problematic components, such as user info or fragment parts, are no longer erroneously accepted. 
 
-- [#13290](https://github.com/emqx/emqx/pull/13290) The following command previously printed nothing if the rule had a data bridge action attached to it. This is now fixed.
-
-  $ bin/emqx ctl rules show rule_0hyd
+- [#13276](https://github.com/emqx/emqx/pull/13276) Fixed an issue in the durable message storage mechanism where parts of the internal storage state were not correctly persisted during the setup of new storage generations. The concept of "generation" is used internally and is crucial for managing message expiration and cleanup. This could have manifested as messages being lost after a restart of EMQX.
 
 - [#13291](https://github.com/emqx/emqx/pull/13291) Fixed an issue where durable storage sites that were down being reported as up.
 
-- [#13293](https://github.com/emqx/emqx/pull/13293) - Automatically re-index imported retained messages during restoring a data backup file. Previously, it was needed to manually trigger re-indexing with `emqx ctl retainer reindex start` CLI
-  after the data backup file is imported.
+- [#13290](https://github.com/emqx/emqx/pull/13290) Fixed an issue where the command `$ bin/emqx ctl rules show rule_0hyd` would produce no output when used to display rules with a data integration action attached.
 
-  - Allow exporting retained messages to a backup file if the configured storage_type (`retainer.backend.storage_type`) is `ram`. Previously, retained messages could be exported only if `disc` storage_type was configured.
+- [#13293](https://github.com/emqx/emqx/pull/13293) Improved the restoration process from data backups by automating the re-indexing of imported retained messages. Previously, re-indexing required manual intervention using the `emqx ctl retainer reindex start` CLI command after importing a data backup file. 
 
-- [#13070](https://github.com/emqx/emqx/pull/13070) Improve Kafka connector error logs.
+  This fix also extended the functionality to allow exporting retained messages to a backup file when the `retainer.backend.storage_type` is configured as `ram`. Previously, only setups with `disc` as the storage type supported exporting retained messages.
 
-  Previously, specific error details, such as unreachable advertised listeners, were not logged.
-  Now, error details are captured in the logs to provide more diagnostic information.
-  To manage log verbosity, only the first occurrence of an error is logged, accompanied by the total count of similar errors.
+- [#13147](https://github.com/emqx/emqx/pull/13147) Improved the error messages for decoding failures in the rule engine protobuf decode functions by adding clear descriptions to indicate what went wrong when message decoding failed.
 
-- [#13093](https://github.com/emqx/emqx/pull/13093) Improve Kafka consumer group stability.
+- [#13140](https://github.com/emqx/emqx/pull/13140) Fixed an issue that caused text traces for the republish action to crash and not display correctly.
 
-  Prior to this change, Kafka consumer group sometimes may need to rebalance twice after Kafka group coordinator restart.
+- [#13148](https://github.com/emqx/emqx/pull/13148) Fixed an issue where a 500 HTTP status code could be returned by `/connectors/:connector-id/start` when there is a timeout waiting for the resource to be connected.
 
-- [#13130](https://github.com/emqx/emqx/pull/13130) Traces for Redis action batch requests have got improved formatting. Spaces are now added between components of commands and semicolons are added between commands to make the trace message easier to read.
+- [#13181](https://github.com/emqx/emqx/pull/13181) EMQX now forcefully shut down the connector process when attempting to stop a connector, if such operation times out. This fix also improved the clarity of error messages when disabling an action or source fails due to an unresponsive underlying connector.
 
-- [#13136](https://github.com/emqx/emqx/pull/13136) The template-rendered traces for Oracle actions have been enhanced for better readability.
+- [#13216](https://github.com/emqx/emqx/pull/13216) Respect `clientid_prefix` config for MQTT bridges. Since EMQX v5.4.1, the MQTT client IDs are restricted to a maximum of 23 bytes. Previously, the system factored the `clientid_prefix` into the hash of the original, longer client ID, affecting the final shortened ID. The fix includes the following change details:
 
-- [#13147](https://github.com/emqx/emqx/pull/13147) Error messages for decoding failures in the rule engine protobuf decode functions have been improved by adding a clear descriptions to indicate what went wrong when message decoding fails.
+  - Without Prefix: The behavior remains unchanged. EMQX hashes the long client IDs (exceeding 23 bytes) to fit within the 23-byte limit.
+  - With Prefix:
+    - Prefix ≤ 19 bytes: The prefix is retained, and the remaining portion of the client ID is hashed into a 4-byte space, ensuring the total length does not exceed 23 bytes.
+    - Prefix ≥ 20 bytes: EMQX will not attempt to shorten the client ID, fully preserving the configured prefix regardless of length.
 
-- [#13197](https://github.com/emqx/emqx/pull/13197) Fixed an issue with S3 Bridge that prevented automatic saving of TLS certificates and key files to the file system, when they are supplied through the Dashboard UI or Connector API.
+- [#13189](https://github.com/emqx/emqx/pull/13189) Fixed an issue where the data integration with Microsoft SQL Server or MySQL could not use SQL templates with substring `values` in table name or column name.
 
-- [#13227](https://github.com/emqx/emqx/pull/13227) Fixed an issue with S3 Bridge when running in aggregated mode, where invalid key template in the configuration haven't been reported as an error during bridge setup, but instead caused a storm of hard to recover crashes later.
+- [#13070](https://github.com/emqx/emqx/pull/13070) Improved Kafka connector error logs to provide more diagnostic information by capturing specific error details, such as unreachable advertised listeners. To manage log verbosity, only the first occurrence of an error is logged, accompanied by the total count of similar errors.
 
-- [#13277](https://github.com/emqx/emqx/pull/13277) Improve Kafka producer error handling for `message_too_large`.
+- [#13093](https://github.com/emqx/emqx/pull/13093) Improved Kafka consumer group stability. Before this change, the Kafka consumer group sometimes needs to rebalance twice after the Kafka group coordinator restarted.
 
-  Prior to this change, Kafka producers would retry sending oversized batches (`message_too_large` error) in hopes of a server side configuration fix (`max.message.bytes`).
+- [#13277](https://github.com/emqx/emqx/pull/13277) Refined the error handling for Kafka producers when encountering the `message_too_large` error. Previously, Kafka producers would repeatedly attempt to resend oversized message batches, hoping for a server-side adjustment in `max.message.bytes`. 
 
-  Now, oversized messages are automatically split into single-message batches for retry.
-  If a message still exceeds size limits, it will be dropped to maintain data flow.
+  Now, oversized messages are automatically split into single-message batches for retry. If a message still exceeds size limits, it will be dropped to maintain data flow.
+
+- [#13130](https://github.com/emqx/emqx/pull/13130) Improved the trace message formatting for Redis action batch requests. Spaces are now added between components of commands and semicolons are added between commands to make the trace message easier to read.
+
+- [#13136](https://github.com/emqx/emqx/pull/13136) Improved the template-rendered traces for Oracle actions for better readability.
+
+- [#13197](https://github.com/emqx/emqx/pull/13197) Fixed an issue in AWS S3 data integration that prevented automatic saving of TLS certificates and key files to the file system when they are supplied through the Dashboard UI or Connector API.
+
+- [#13227](https://github.com/emqx/emqx/pull/13227) Fixed an issue in AWS S3 Sink running in aggregated mode. Before the fix, an invalid key template in the configuration was reported as an error during the Sink setup, but instead caused a storm of hard-to-recover crashes later.
 
 
 ## 5.7.0
