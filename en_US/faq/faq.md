@@ -67,7 +67,7 @@ Usually an MQTT client has to subscribe to the topics explicitly by itself, if i
 
 Usage of Subscription by Broker can ease the management of massive clients, and save computational resources and bandwidth for devices.
 
-## Is There a Limit on the Number of ACLs for a Single Client?
+## Is there a limit on the number of ACLs for a single client?
 
 Theoretically, there is no limit. However, to improve the performance of message subscription and publishing, it is advisable to avoid having too many ACL rules. It is recommended that a single client have no more than 10 ACLs. Using wildcard rules can help reduce the number of ACL entries.
 
