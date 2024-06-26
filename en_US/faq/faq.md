@@ -19,7 +19,7 @@ The EMQX or MQTT protocols do not directly limit the rate at which each client c
 
 If the message receive rate exceeds this recommendation, you can use [Shared Subscription](../messaging/mqtt-shared-subscription.md) to add multiple subscribers to spread the load and reduce the rate of messages received by a single subscriber.
 
-## How to Improve Data Throughput and Reliability When Integrating Server with EMQX Using MQTT?
+## How to improve data throughput and reliability when integrating server with EMQX using MQTT?
 
 When application services integrate with EMQX using the MQTT protocol, each client typically handles a high load. To fully leverage client performance and ensure system availability, here are some best practice recommendations:
 
