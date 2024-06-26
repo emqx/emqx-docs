@@ -6,7 +6,7 @@
 
 ### 增强
 
-- [#12983](https://github.com/emqx/emqx/pull/12983) Add new rule engine event `$events/client_check_authn_complete` for authentication completion event.
+- [#12983](https://github.com/emqx/emqx/pull/12983) 添加了新的规则引擎事件 `$events/client_check_authn_complete`，用于认证完成事件。
 
 - [#13180](https://github.com/emqx/emqx/pull/13180) 改进了 EMQX 在 Erlang/OTP 26 上运行时客户端消息处理性能，并在 fan-in 模式下将消息吞吐量提高了10%。
 
@@ -20,7 +20,7 @@
 
 - [#13156](https://github.com/emqx/emqx/pull/13156) 解决了更新至 EMQX v5.7.0 后，Dashboard 的监控页面崩溃的问题。
 
-- [#13164](https://github.com/emqx/emqx/pull/13164) [#13164](https://github.com/emqx/emqx/pull/13164) 修复了 HTTP 授权请求体编码问题。原本，HTTP 授权请求体的编码格式依据 `accept` 头部来设置。现在调整为根据 `content-type` 头部来确定编码格式。同时，为了兼容 v4 版本，添加了 `access` 模板变量。其中，SUBSCRIBE 操作的访问代码为 `1`，PUBLISH 操作的访问代码为 `2`。
+- [#13164](https://github.com/emqx/emqx/pull/13164) 修复了 HTTP 授权请求体编码问题。原本，HTTP 授权请求体的编码格式依据 `accept` 头部来设置。现在调整为根据 `content-type` 头部来确定编码格式。同时，为了兼容 v4 版本，添加了 `access` 模板变量。其中，SUBSCRIBE 操作的访问代码为 `1`，PUBLISH 操作的访问代码为 `2`。
 
 - [#13238](https://github.com/emqx/emqx/pull/13238) 优化了在返回不支持的内容类型头部的 HTTP 授权请求时的错误消息记录。
 
