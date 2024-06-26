@@ -12,22 +12,7 @@
 
 - [#13191](https://github.com/emqx/emqx/pull/13191) Upgraded EMQX Docker images to run on Erlang/OTP 26.
 
-  EMQX had been running on Erlang/OTP 26 since v5.5 except for docker images which were on Erlang/OTP 25. Now all releases are on Erlang/OTP 26. This upgrade fixed the following known issue:
-  
-  When an older version of EMQX joins a cluster with newer version nodes, the Schema Registry of the older version node may encounter an issue, emitting logs like the following:
-  
-  ```
-  Error loading module '$schema_parser___CiYAWBja87PleCyKZ58h__SparkPlug_B_BUILT-IN':,
-  This BEAM file was compiled for a later version of the runtime system than the current (Erlang/OTP 25).
-  ```
-  
-  This issue is fixed in the newer version. However, for older versions, a manual step is required. Execute the following command on one of the clustered nodes before the older version EMQX joins the cluster:
-  
-  ```shell
-  emqx eval 'lists:foreach(fun(Key) -> mnesia:dirty_delete(emqx_ee_schema_registry_protobuf_cache_tab, Key) end, mnesia:dirty_all_keys(emqx_ee_schema_registry_protobuf_cache_tab)).'
-  ```
-
-  If the older version of EMQX is already in the cluster, execute the above command and restart the affected node.
+  EMQX had been running on Erlang/OTP 26 since v5.5 except for docker images which were on Erlang/OTP 25. Now all releases are on Erlang/OTP 26.
 
 - [#13242](https://github.com/emqx/emqx/pull/13242) Significantly increased the startup speed of EMQX dashboard listener.
 
