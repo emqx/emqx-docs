@@ -4,7 +4,7 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的密
 
 ::: tip 前置准备：
 
-- 熟悉 [EMQX 认证基本概念](../authn/authn.md)
+熟悉 [EMQX 认证基本概念](../authn/authn.md)
 :::
 
 ## 通过 Dashboard 配置

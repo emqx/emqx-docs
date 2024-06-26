@@ -4,7 +4,7 @@ EMQX supports integrating with MySQL for password authentication.
 
 ::: tip
 
-- Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
+Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
 
 :::
 
@@ -62,13 +62,13 @@ query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username 
 
 You can use EMQX Dashboard to configure how to use MySQL for password authentication. 
 
-On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **Password-Based** as **Mechanism**, and **MySQL** as **Backend**, this will lead us to the **Configuration** tab, as shown below. 
+In the EMQX Dashboard, click **Access Control** -> **Authentication** from the left navigation menu. On the **Authentication** page, click **Create** at the top right corner. Click to select **Password-Based** as **Mechanism**, and **MySQL** as **Backend** to go to the **Configuration** tab, as shown below. 
 
 <img src="./assets/authn-mysql.png" alt="Authentication with MySQL" style="zoom:67%;" />
 
-Follow the instruction below on how to configure:
+Follow the instructions below on how to configure the authentication:
 
-**Connect**: Fill in the information needed to connect MySQL.
+**Connect**: Enter the information for connecting to MySQL.
 
 - **Server**: Specify the server address that EMQX is to connect (`host:port`).
 - **Database**: MySQL database name.
@@ -79,17 +79,19 @@ Follow the instruction below on how to configure:
 
 **Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
 
-- **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to MySQL. Default: **8**. 
+- **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to MySQL. Default: `8`. 
 - **Connect Timeout** (optional): Specify the waiting period before EMQX assumes the connection is timed out. Units supported include milliseconds, second, minute, and hour. 
 
-**Authentication configuration**: Fill in the authentication-related settings:
+**Authentication configuration**: Configure settings related to authentication:
 
-- **Password Hash**: Select the Hash function for storing the password in the database, for example, plain, md5, sha, bcrypt, pbkdf2. 
-  - If **plain**, **md5**, **sha**, **sha256** or **sha512** are selected, you also need to configure:
-    - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. You can keep the default value unless you are migrating user credentials from external storage into EMQX built-in database. Note: If **plain** is selected, the **Salt Position** should be **disable**. 
-  - If **pkbdf2** is selected, you also need to configure:
-    - **Pseudorandom Function**: Specify the Hush functions to generate the key, such as sha256. 
-    - **Iteration Count**: Specify the iteration times; Default: 4096
+- **Password Hash**: Select the hash function for storing passwords in the database, such as `plain`, `md5`, `sha`, `bcrypt`, or `pbkdf2`. Additional configuration depends on your selected function:
+  - For `plain`, `md5`, `sha`, `sha256`, or `sha512`:
+    - **Salt Position**: Determines how salt (random data) is added to the password. Options are `suffix`, `prefix`, or `disable`. Retain the default setting unless migrating credentials from external storage to the EMQX built-in database. Note: Set to `disable` if `plain` is chosen.
+  - For `bcrypt`:
+    - **Salt Rounds**: Set the number of times the hash function executes, denoted as 2^Salt Rounds, also known as the "cost factor". The default is `10`, with a range of `5` to `10`. A higher value is recommended for enhanced security. Note: Increasing the cost factor by 1 doubles the necessary time for authentication.
+  - For `pkbdf2`:
+    - **Pseudorandom Function**: Specify the Hash functions to generate the key, such as `sha256`. 
+    - **Iteration Count**: Specify the iteration times; Default: `4096`.
     - **Derived Key Length** (optional): Specify the length of the generated password. You can leave this field blank, then the key length will be determined by the pseudorandom function you selected. 
 - **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
 
