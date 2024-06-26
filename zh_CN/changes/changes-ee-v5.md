@@ -10,7 +10,7 @@
 
 - [#13175](https://github.com/emqx/emqx/pull/13175) 为基于 Postgres 的连接器添加了 `disable_prepared_statements` 选项。
 
-  此选项用于不支持预处理语句会话功能的端点，例如 PGBouncer 和 Transaction 模式下的 Supabase。
+  此选项适用于不支持像预处理语句这样的会话功能的端点，例如 PGBouncer 和 Transaction 模式下的 Supabase。
 
 - [#13180](https://github.com/emqx/emqx/pull/13180) 改进了 EMQX 在 Erlang/OTP 26 上运行时客户端消息处理性能，并在 fan-in 模式下将消息吞吐量提高了10%。
 
