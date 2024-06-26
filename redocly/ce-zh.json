@@ -1,6 +1,6 @@
 {
   "info": {
-    "version": "5.7.0",
+    "version": "5.7.1",
     "title": "EMQX API"
   },
   "components": {
@@ -58,6 +58,7 @@
               "items": {
                 "type": "string",
                 "enum": [
+                  "client_attrs",
                   "awaiting_rel_cnt",
                   "awaiting_rel_max",
                   "clean_start",
@@ -687,7 +688,7 @@
           "client_attrs_init": {
             "default": [],
             "type": "array",
-            "description": "Specify how to initialize client attributes.<br/>Each client attribute can be initialized as `client_attrs.{NAME}`,<br/>where `{NAME}` is the name of the attribute specified in the config field `set_as_attr`.<br/>The initialized client attribute will be stored in the `client_attrs` property with the specified name,<br/>and can be used as a placeholder in a template for authentication and authorization.<br/>For example, use `${client_attrs.alias}` to render an HTTP POST body when `set_as_attr = alias`,<br/>or render listener config `moutpoint = devices/${client_attrs.alias}/` to initialize a per-client topic namespace.",
+            "description": "指定如何初始化客户端属性。每个属性可被初始化为 `client_attrs.{NAME}` ，其中 `{NAME}` 是在配置字段 `set_as_attr` 中指定的属性名称。初始化的客户端属性将以指定的名称存储在 `client_attrs` 属性中。然后，它们可以在身份验证和授权过程的模板中用作占位符。例如，当 `set_as_attr = alias` 时，使用 `${client_attrs.alias}` 来渲染 HTTP POST 请求体，或者渲染监听器配置 `moutpoint = devices/${client_attrs.alias}/` 来初始化每个客户端独有的主题命名空间。",
             "items": {
               "$ref": "#/components/schemas/emqx.client_attrs_init"
             }
@@ -905,7 +906,7 @@
             "example": "0.0.0.0:18083"
           },
           "num_acceptors": {
-            "default": 8,
+            "default": 6,
             "type": "integer",
             "description": "TCP 协议的 Socket acceptor 池大小, 通常配置为 CPU 核数"
           },
@@ -2181,7 +2182,7 @@
           "zone": {
             "default": "default",
             "type": "string",
-            "description": "监听器所属的配置组。"
+            "description": "监听器所属的配置 zone。<br/>连接到此监听器的客户端将继承在此 zone 名称下创建的 zone 设置。<br/><br/>一个 zone 可以覆盖以下根名称下的配置：<br/>- `mqtt`<br/>- `force_shutdown`<br/>- `force_gc`<br/>- `flapping_detect`<br/>- `durable_sessions`"
           },
           "enable_authn": {
             "default": true,
@@ -2845,7 +2846,7 @@
           "zone": {
             "default": "default",
             "type": "string",
-            "description": "监听器所属的配置组。"
+            "description": "监听器所属的配置 zone。<br/>连接到此监听器的客户端将继承在此 zone 名称下创建的 zone 设置。<br/><br/>一个 zone 可以覆盖以下根名称下的配置：<br/>- `mqtt`<br/>- `force_shutdown`<br/>- `force_gc`<br/>- `flapping_detect`<br/>- `durable_sessions`"
           },
           "enable_authn": {
             "default": true,
@@ -2907,16 +2908,6 @@
       },
       "emqx_mgmt_api_metrics.aggregated_metrics": {
         "properties": {
-          "actions.failure": {
-            "type": "integer",
-            "description": "Number of failure executions of the rule engine action",
-            "minimum": 0
-          },
-          "actions.success": {
-            "type": "integer",
-            "description": "Number of successful executions of the rule engine action",
-            "minimum": 0
-          },
           "bytes.received": {
             "type": "integer",
             "description": "Number of bytes received ",
@@ -2927,119 +2918,214 @@
             "description": "Number of bytes sent on this connection",
             "minimum": 0
           },
-          "client.auth.anonymous": {
+          "packets.received": {
             "type": "integer",
-            "description": "Number of clients who log in anonymously",
+            "description": "Number of received packet",
             "minimum": 0
           },
-          "client.authenticate": {
+          "packets.sent": {
             "type": "integer",
-            "description": "Number of client authentications",
+            "description": "Number of sent packet",
             "minimum": 0
           },
-          "client.check_authz": {
+          "packets.connect.received": {
             "type": "integer",
-            "description": "Number of Authorization rule checks",
+            "description": "Number of received CONNECT packet",
             "minimum": 0
           },
-          "client.connack": {
+          "packets.connack.sent": {
             "type": "integer",
-            "description": "Number of CONNACK packet sent",
+            "description": "Number of sent CONNACK packet",
             "minimum": 0
           },
-          "client.connect": {
+          "packets.connack.error": {
             "type": "integer",
-            "description": "Number of client connections",
+            "description": "Number of received CONNECT packet with unsuccessful connections",
             "minimum": 0
           },
-          "client.connected": {
+          "packets.connack.auth_error": {
             "type": "integer",
-            "description": "Number of successful client connections",
+            "description": "Number of received CONNECT packet with failed Authentication",
             "minimum": 0
           },
-          "client.disconnected": {
+          "packets.publish.received": {
             "type": "integer",
-            "description": "Number of client disconnects",
+            "description": "Number of received PUBLISH packet",
             "minimum": 0
           },
-          "client.subscribe": {
+          "packets.publish.sent": {
             "type": "integer",
-            "description": "Number of client subscriptions",
+            "description": "Number of sent PUBLISH packet",
             "minimum": 0
           },
-          "client.unsubscribe": {
+          "packets.publish.inuse": {
             "type": "integer",
-            "description": "Number of client unsubscriptions",
+            "description": "Number of received PUBLISH packet with occupied identifiers",
             "minimum": 0
           },
-          "delivery.dropped": {
+          "packets.publish.error": {
             "type": "integer",
-            "description": "Total number of discarded messages when sending",
+            "description": "Number of received PUBLISH packet that cannot be published",
             "minimum": 0
           },
-          "delivery.dropped.expired": {
+          "packets.publish.auth_error": {
             "type": "integer",
-            "description": "Number of messages dropped due to message expiration on sending",
+            "description": "Number of received PUBLISH packets with failed the Authorization check",
             "minimum": 0
           },
-          "delivery.dropped.no_local": {
+          "packets.publish.dropped": {
             "type": "integer",
-            "description": "Number of messages that were dropped due to the No Local subscription option when sending",
+            "description": "Number of messages discarded due to the receiving limit",
             "minimum": 0
           },
-          "delivery.dropped.qos0_msg": {
+          "packets.puback.received": {
             "type": "integer",
-            "description": "Number of messages with QoS 0 that were dropped because the message queue was full when sending",
+            "description": "Number of received PUBACK packet",
             "minimum": 0
           },
-          "delivery.dropped.queue_full": {
+          "packets.puback.sent": {
             "type": "integer",
-            "description": "Number of messages with a non-zero QoS that were dropped because the message queue was full when sending",
+            "description": "Number of sent PUBACK packet",
             "minimum": 0
           },
-          "delivery.dropped.too_large": {
+          "packets.puback.inuse": {
             "type": "integer",
-            "description": "The number of messages that were dropped because the length exceeded the limit when sending",
+            "description": "Number of received PUBACK packet with occupied identifiers",
             "minimum": 0
           },
-          "messages.acked": {
+          "packets.puback.missed": {
             "type": "integer",
-            "description": "Number of received PUBACK and PUBREC packet",
+            "description": "Number of received packet with identifiers.",
             "minimum": 0
           },
-          "messages.delayed": {
+          "packets.pubrec.received": {
             "type": "integer",
-            "description": "Number of delay-published messages",
+            "description": "Number of received PUBREC packet",
             "minimum": 0
           },
-          "messages.delivered": {
+          "packets.pubrec.sent": {
             "type": "integer",
-            "description": "Number of messages forwarded to the subscription process internally",
+            "description": "Number of sent PUBREC packet",
             "minimum": 0
           },
-          "messages.dropped": {
+          "packets.pubrec.inuse": {
             "type": "integer",
-            "description": "Total number of messages dropped before forwarding to the subscription process",
+            "description": "Number of received PUBREC packet with occupied identifiers",
             "minimum": 0
           },
-          "messages.dropped.await_pubrel_timeout": {
+          "packets.pubrec.missed": {
             "type": "integer",
-            "description": "Number of messages dropped due to waiting PUBREL timeout",
+            "description": "Number of received PUBREC packet with unknown identifiers",
             "minimum": 0
           },
-          "messages.dropped.no_subscribers": {
+          "packets.pubrel.received": {
             "type": "integer",
-            "description": "Number of messages dropped due to no subscribers",
+            "description": "Number of received PUBREL packet",
             "minimum": 0
           },
-          "messages.forward": {
+          "packets.pubrel.sent": {
             "type": "integer",
-            "description": "Number of messages forwarded to other nodes",
+            "description": "Number of sent PUBREL packet",
             "minimum": 0
           },
-          "messages.publish": {
+          "packets.pubrel.missed": {
             "type": "integer",
-            "description": "Number of messages published in addition to system messages",
+            "description": "Number of received PUBREC packet with unknown identifiers",
+            "minimum": 0
+          },
+          "packets.pubcomp.received": {
+            "type": "integer",
+            "description": "Number of received PUBCOMP packet",
+            "minimum": 0
+          },
+          "packets.pubcomp.sent": {
+            "type": "integer",
+            "description": "Number of sent PUBCOMP packet",
+            "minimum": 0
+          },
+          "packets.pubcomp.inuse": {
+            "type": "integer",
+            "description": "Number of received PUBCOMP packet with occupied identifiers",
+            "minimum": 0
+          },
+          "packets.pubcomp.missed": {
+            "type": "integer",
+            "description": "Number of missed PUBCOMP packet",
+            "minimum": 0
+          },
+          "packets.subscribe.received": {
+            "type": "integer",
+            "description": "Number of received SUBSCRIBE packet",
+            "minimum": 0
+          },
+          "packets.subscribe.error": {
+            "type": "integer",
+            "description": "Number of received SUBSCRIBE packet with failed subscriptions",
+            "minimum": 0
+          },
+          "packets.subscribe.auth_error": {
+            "type": "integer",
+            "description": "Number of received SUBACK packet with failed Authorization check",
+            "minimum": 0
+          },
+          "packets.suback.sent": {
+            "type": "integer",
+            "description": "Number of sent SUBACK packet",
+            "minimum": 0
+          },
+          "packets.unsubscribe.received": {
+            "type": "integer",
+            "description": "Number of received UNSUBSCRIBE packet",
+            "minimum": 0
+          },
+          "packets.unsubscribe.error": {
+            "type": "integer",
+            "description": "Number of received UNSUBSCRIBE packet with failed unsubscriptions",
+            "minimum": 0
+          },
+          "packets.unsuback.sent": {
+            "type": "integer",
+            "description": "Number of sent UNSUBACK packet",
+            "minimum": 0
+          },
+          "packets.pingreq.received": {
+            "type": "integer",
+            "description": "Number of received PINGREQ packet",
+            "minimum": 0
+          },
+          "packets.pingresp.sent": {
+            "type": "integer",
+            "description": "Number of sent PUBRESP packet",
+            "minimum": 0
+          },
+          "packets.disconnect.received": {
+            "type": "integer",
+            "description": "Number of received DISCONNECT packet",
+            "minimum": 0
+          },
+          "packets.disconnect.sent": {
+            "type": "integer",
+            "description": "Number of sent DISCONNECT packet",
+            "minimum": 0
+          },
+          "packets.auth.received": {
+            "type": "integer",
+            "description": "Number of received AUTH packet",
+            "minimum": 0
+          },
+          "packets.auth.sent": {
+            "type": "integer",
+            "description": "Number of sent AUTH packet",
+            "minimum": 0
+          },
+          "messages.received": {
+            "type": "integer",
+            "description": "Number of messages received from the client, equal to the sum of messages.qos0.received, messages.qos1.received and messages.qos2.received",
+            "minimum": 0
+          },
+          "messages.sent": {
+            "type": "integer",
+            "description": "Number of messages sent to the client, equal to the sum of messages.qos0.sent, messages.qos1.sent and messages.qos2.sent",
             "minimum": 0
           },
           "messages.qos0.received": {
@@ -3072,229 +3158,149 @@
             "description": "Number of QoS 2 messages sent to clients",
             "minimum": 0
           },
-          "messages.received": {
+          "messages.publish": {
             "type": "integer",
-            "description": "Number of messages received from the client, equal to the sum of messages.qos0.received\fmessages.qos1.received and messages.qos2.received",
+            "description": "Number of messages published in addition to system messages",
             "minimum": 0
           },
-          "messages.sent": {
+          "messages.dropped": {
             "type": "integer",
-            "description": "Number of messages sent to the client, equal to the sum of messages.qos0.sent\fmessages.qos1.sent and messages.qos2.sent",
+            "description": "Number of messages dropped before forwarding to the subscription process",
             "minimum": 0
           },
-          "packets.auth.received": {
+          "messages.validation_failed": {
             "type": "integer",
-            "description": "Number of received AUTH packet",
+            "description": "Number of message validation failed",
             "minimum": 0
           },
-          "packets.auth.sent": {
+          "messages.validation_succeeded": {
             "type": "integer",
-            "description": "Number of sent AUTH packet",
+            "description": "Number of message validation successful",
             "minimum": 0
           },
-          "packets.connack.auth_error": {
+          "messages.transformation_failed": {
             "type": "integer",
-            "description": "Number of received CONNECT packet with failed authentication",
+            "description": "Number fo message transformation failed",
             "minimum": 0
           },
-          "packets.connack.error": {
+          "messages.transformation_succeeded": {
             "type": "integer",
-            "description": "Number of received CONNECT packet with unsuccessful connections",
+            "description": "Number fo message transformation succeeded",
             "minimum": 0
           },
-          "packets.connack.sent": {
+          "messages.dropped.await_pubrel_timeout": {
             "type": "integer",
-            "description": "Number of sent CONNACK packet",
+            "description": "Number of messages dropped due to waiting PUBREL timeout",
             "minimum": 0
           },
-          "packets.connect.received": {
+          "messages.dropped.no_subscribers": {
             "type": "integer",
-            "description": "Number of received CONNECT packet",
+            "description": "Number of messages dropped due to no subscribers",
             "minimum": 0
           },
-          "packets.disconnect.received": {
+          "messages.forward": {
             "type": "integer",
-            "description": "Number of received DISCONNECT packet",
+            "description": "Number of messages forwarded to other nodes",
             "minimum": 0
           },
-          "packets.disconnect.sent": {
+          "messages.delayed": {
             "type": "integer",
-            "description": "Number of sent DISCONNECT packet",
+            "description": "Number of delay-published messages",
             "minimum": 0
           },
-          "packets.pingreq.received": {
+          "messages.delivered": {
             "type": "integer",
-            "description": "Number of received PINGREQ packet",
+            "description": "Number of messages forwarded to the subscription process internally",
             "minimum": 0
           },
-          "packets.pingresp.sent": {
+          "messages.acked": {
             "type": "integer",
-            "description": "Number of sent PUBRESP packet",
+            "description": "Number of received PUBACK and PUBREC packet",
             "minimum": 0
           },
-          "packets.puback.inuse": {
+          "messages.persisted": {
             "type": "integer",
-            "description": "Number of received PUBACK packet with occupied identifiers",
+            "description": "Number of message persisted",
             "minimum": 0
           },
-          "packets.puback.missed": {
+          "delivery.dropped": {
             "type": "integer",
-            "description": "Number of received packet with identifiers.",
+            "description": "Total number of discarded messages when sending",
             "minimum": 0
           },
-          "packets.puback.received": {
+          "delivery.dropped.no_local": {
             "type": "integer",
-            "description": "Number of received PUBACK packet",
+            "description": "Number of messages that were dropped due to the No Local subscription option when sending",
             "minimum": 0
           },
-          "packets.puback.sent": {
+          "delivery.dropped.too_large": {
             "type": "integer",
-            "description": "Number of sent PUBACK packet",
+            "description": "The number of messages that were dropped because the length exceeded the limit when sending",
             "minimum": 0
           },
-          "packets.pubcomp.inuse": {
+          "delivery.dropped.qos0_msg": {
             "type": "integer",
-            "description": "Number of received PUBCOMP packet with occupied identifiers",
+            "description": "Number of messages with QoS 0 that were dropped because the message queue was full when sending",
             "minimum": 0
           },
-          "packets.pubcomp.missed": {
+          "delivery.dropped.queue_full": {
             "type": "integer",
-            "description": "Number of missed PUBCOMP packet",
+            "description": "Number of messages with a non-zero QoS that were dropped because the message queue was full when sending",
             "minimum": 0
           },
-          "packets.pubcomp.received": {
+          "delivery.dropped.expired": {
             "type": "integer",
-            "description": "Number of received PUBCOMP packet",
+            "description": "Number of messages dropped due to message expiration on sending",
             "minimum": 0
           },
-          "packets.pubcomp.sent": {
+          "client.connect": {
             "type": "integer",
-            "description": "Number of sent PUBCOMP packet",
+            "description": "Number of client connections",
             "minimum": 0
           },
-          "packets.publish.auth_error": {
+          "client.connack": {
             "type": "integer",
-            "description": "Number of received PUBLISH packets with failed the Authorization check",
+            "description": "Number of CONNACK packet sent",
             "minimum": 0
           },
-          "packets.publish.dropped": {
+          "client.connected": {
             "type": "integer",
-            "description": "Number of messages discarded due to the receiving limit",
+            "description": "Number of successful client connected",
             "minimum": 0
           },
-          "packets.publish.error": {
+          "client.authenticate": {
             "type": "integer",
-            "description": "Number of received PUBLISH packet that cannot be published",
+            "description": "Number of client Authentication",
             "minimum": 0
           },
-          "packets.publish.inuse": {
+          "client.auth.anonymous": {
             "type": "integer",
-            "description": "Number of received PUBLISH packet with occupied identifiers",
+            "description": "Number of clients who log in anonymously",
             "minimum": 0
           },
-          "packets.publish.received": {
+          "client.authorize": {
             "type": "integer",
-            "description": "Number of received PUBLISH packet",
+            "description": "Number of Authorization rule checks",
             "minimum": 0
           },
-          "packets.publish.sent": {
+          "client.subscribe": {
             "type": "integer",
-            "description": "Number of sent PUBLISH packet",
+            "description": "Number of client subscriptions",
             "minimum": 0
           },
-          "packets.pubrec.inuse": {
+          "client.unsubscribe": {
             "type": "integer",
-            "description": "Number of received PUBREC packet with occupied identifiers",
+            "description": "Number of client unsubscriptions",
             "minimum": 0
           },
-          "packets.pubrec.missed": {
+          "client.disconnected": {
             "type": "integer",
-            "description": "Number of received PUBREC packet with unknown identifiers",
-            "minimum": 0
-          },
-          "packets.pubrec.received": {
-            "type": "integer",
-            "description": "Number of received PUBREC packet",
-            "minimum": 0
-          },
-          "packets.pubrec.sent": {
-            "type": "integer",
-            "description": "Number of sent PUBREC packet",
-            "minimum": 0
-          },
-          "packets.pubrel.missed": {
-            "type": "integer",
-            "description": "Number of received PUBREC packet with unknown identifiers",
-            "minimum": 0
-          },
-          "packets.pubrel.received": {
-            "type": "integer",
-            "description": "Number of received PUBREL packet",
-            "minimum": 0
-          },
-          "packets.pubrel.sent": {
-            "type": "integer",
-            "description": "Number of sent PUBREL packet",
-            "minimum": 0
-          },
-          "packets.received": {
-            "type": "integer",
-            "description": "Number of received packet",
-            "minimum": 0
-          },
-          "packets.sent": {
-            "type": "integer",
-            "description": "Number of sent packet",
-            "minimum": 0
-          },
-          "packets.suback.sent": {
-            "type": "integer",
-            "description": "Number of sent SUBACK packet",
-            "minimum": 0
-          },
-          "packets.subscribe.auth_error": {
-            "type": "integer",
-            "description": "Number of received SUBACK packet with failed Authorization check",
-            "minimum": 0
-          },
-          "packets.subscribe.error": {
-            "type": "integer",
-            "description": "Number of received SUBSCRIBE packet with failed subscriptions",
-            "minimum": 0
-          },
-          "packets.subscribe.received": {
-            "type": "integer",
-            "description": "Number of received SUBSCRIBE packet",
-            "minimum": 0
-          },
-          "packets.unsuback.sent": {
-            "type": "integer",
-            "description": "Number of sent UNSUBACK packet",
-            "minimum": 0
-          },
-          "packets.unsubscribe.error": {
-            "type": "integer",
-            "description": "Number of received UNSUBSCRIBE packet with failed unsubscriptions",
-            "minimum": 0
-          },
-          "packets.unsubscribe.received": {
-            "type": "integer",
-            "description": "Number of received UNSUBSCRIBE packet",
-            "minimum": 0
-          },
-          "rules.matched": {
-            "type": "integer",
-            "description": "Number of rule matched",
+            "description": "Number of client disconnects",
             "minimum": 0
           },
           "session.created": {
             "type": "integer",
             "description": "Number of sessions created",
-            "minimum": 0
-          },
-          "session.discarded": {
-            "type": "integer",
-            "description": "Number of sessions dropped because Clean Session or Clean Start is true",
             "minimum": 0
           },
           "session.resumed": {
@@ -3307,9 +3313,74 @@
             "description": "Number of sessions takenover because Clean Session or Clean Start is false",
             "minimum": 0
           },
+          "session.discarded": {
+            "type": "integer",
+            "description": "Number of sessions dropped because Clean Session or Clean Start is true",
+            "minimum": 0
+          },
           "session.terminated": {
             "type": "integer",
             "description": "Number of terminated sessions",
+            "minimum": 0
+          },
+          "authorization.allow": {
+            "type": "integer",
+            "description": "Number of Authorization allow",
+            "minimum": 0
+          },
+          "authorization.deny": {
+            "type": "integer",
+            "description": "Number of Authorization deny",
+            "minimum": 0
+          },
+          "authorization.cache_hit": {
+            "type": "integer",
+            "description": "Number of Authorization hits the cache",
+            "minimum": 0
+          },
+          "authorization.cache_miss": {
+            "type": "integer",
+            "description": "Number of Authorization cache missing",
+            "minimum": 0
+          },
+          "authentication.success": {
+            "type": "integer",
+            "description": "Number of successful client Authentication",
+            "minimum": 0
+          },
+          "authentication.success.anonymous": {
+            "type": "integer",
+            "description": "Number of successful client Authentication due to anonymous",
+            "minimum": 0
+          },
+          "authentication.failure": {
+            "type": "integer",
+            "description": "Number of failed client Authentication",
+            "minimum": 0
+          },
+          "overload_protection.delay.ok": {
+            "type": "integer",
+            "description": "Number of overload protection delayed",
+            "minimum": 0
+          },
+          "overload_protection.delay.timeout": {
+            "type": "integer",
+            "description": "Number of overload protection delay timeout",
+            "minimum": 0
+          },
+          "overload_protection.hibernation": {
+            "type": "integer",
+            "description": "Number of overload protection hibernation",
+            "minimum": 0
+          },
+          "overload_protection.gc": {
+            "type": "integer",
+            "description": "Number of overload protection garbage collection",
+            "minimum": 0
+          },
+          "overload_protection.new_conn": {
+            "type": "integer",
+            "description": "Number of overload protection close new incoming connection",
             "minimum": 0
           }
         },
@@ -4140,7 +4211,7 @@
           "disconnect_after_expire": {
             "default": true,
             "type": "boolean",
-            "description": "Disconnect the client after the token expires."
+            "description": "在 token 过期后断开客户端连接。"
           },
           "from": {
             "default": "password",
@@ -4267,11 +4338,11 @@
         "properties": {
           "expression": {
             "type": "string",
-            "description": "A one line expression to evaluate a set of predefined string functions (like in the rule engine SQL statements).<br/>The expression can be a function call with nested calls as its arguments, or direct variable reference.<br/>So far, it does not provide user-defined variable binding (like `var a=1`) or user-defined functions.<br/>As an example, to extract the prefix of client ID delimited by a dot: `nth(1, tokens(clientid, '.'))`.<br/><br/>The variables pre-bound variables are:<br/>- `cn`: Client's TLS certificate common name.<br/>- `dn`: Client's TLS certificate distinguished name (the subject).<br/>- `clientid`: MQTT Client ID.<br/>- `username`: MQTT Client's username.<br/>- `user_property.{NAME}`: User properties in the CONNECT packet.<br/><br/>You can read more about variform expressions in EMQX docs."
+            "description": "单行表达式，用于求值一组预定义的字符串函数（类似规则引擎 SQL 语句中的函数）。<br/>表达式可以是带有嵌套调用的函数调用，或直接变量引用。<br/>目前，它不提供用户定义的变量绑定（如 `var a=1`）或用户定义的函数。<br/>例如，提取以点分隔的客户端 ID 的前缀：`nth(1, tokens(clientid, '.'))`。<br/><br/>预绑定的变量包括：<br/>- `cn`: 客户端 TLS 证书的常用名称。<br/>- `dn`: 客户端 TLS 证书的专有名称（主题）。<br/>- `clientid`: MQTT 客户端 ID。<br/>- `username`: MQTT 客户端的用户名。<br/>- `user_property.{NAME}`: CONNECT 包中的用户属性。<br/><br/>您可以在 EMQX 文档中了解更多关于各种表达式的信息。"
           },
           "set_as_attr": {
             "type": "string",
-            "description": "The name of the client attribute extracted from the client data.<br/>The extracted attribute will be stored in the `client_attrs` property with this name."
+            "description": "从客户端数据中提取的客户端属性的名称。<br/>提取的属性将以此名称存储在 `client_attrs` 属性中。"
           }
         },
         "type": "object"
@@ -5723,16 +5794,6 @@
             "type": "string",
             "description": "Node name"
           },
-          "actions.failure": {
-            "type": "integer",
-            "description": "Number of failure executions of the rule engine action",
-            "minimum": 0
-          },
-          "actions.success": {
-            "type": "integer",
-            "description": "Number of successful executions of the rule engine action",
-            "minimum": 0
-          },
           "bytes.received": {
             "type": "integer",
             "description": "Number of bytes received ",
@@ -5743,119 +5804,214 @@
             "description": "Number of bytes sent on this connection",
             "minimum": 0
           },
-          "client.auth.anonymous": {
+          "packets.received": {
             "type": "integer",
-            "description": "Number of clients who log in anonymously",
+            "description": "Number of received packet",
             "minimum": 0
           },
-          "client.authenticate": {
+          "packets.sent": {
             "type": "integer",
-            "description": "Number of client authentications",
+            "description": "Number of sent packet",
             "minimum": 0
           },
-          "client.check_authz": {
+          "packets.connect.received": {
             "type": "integer",
-            "description": "Number of Authorization rule checks",
+            "description": "Number of received CONNECT packet",
             "minimum": 0
           },
-          "client.connack": {
+          "packets.connack.sent": {
             "type": "integer",
-            "description": "Number of CONNACK packet sent",
+            "description": "Number of sent CONNACK packet",
             "minimum": 0
           },
-          "client.connect": {
+          "packets.connack.error": {
             "type": "integer",
-            "description": "Number of client connections",
+            "description": "Number of received CONNECT packet with unsuccessful connections",
             "minimum": 0
           },
-          "client.connected": {
+          "packets.connack.auth_error": {
             "type": "integer",
-            "description": "Number of successful client connections",
+            "description": "Number of received CONNECT packet with failed Authentication",
             "minimum": 0
           },
-          "client.disconnected": {
+          "packets.publish.received": {
             "type": "integer",
-            "description": "Number of client disconnects",
+            "description": "Number of received PUBLISH packet",
             "minimum": 0
           },
-          "client.subscribe": {
+          "packets.publish.sent": {
             "type": "integer",
-            "description": "Number of client subscriptions",
+            "description": "Number of sent PUBLISH packet",
             "minimum": 0
           },
-          "client.unsubscribe": {
+          "packets.publish.inuse": {
             "type": "integer",
-            "description": "Number of client unsubscriptions",
+            "description": "Number of received PUBLISH packet with occupied identifiers",
             "minimum": 0
           },
-          "delivery.dropped": {
+          "packets.publish.error": {
             "type": "integer",
-            "description": "Total number of discarded messages when sending",
+            "description": "Number of received PUBLISH packet that cannot be published",
             "minimum": 0
           },
-          "delivery.dropped.expired": {
+          "packets.publish.auth_error": {
             "type": "integer",
-            "description": "Number of messages dropped due to message expiration on sending",
+            "description": "Number of received PUBLISH packets with failed the Authorization check",
             "minimum": 0
           },
-          "delivery.dropped.no_local": {
+          "packets.publish.dropped": {
             "type": "integer",
-            "description": "Number of messages that were dropped due to the No Local subscription option when sending",
+            "description": "Number of messages discarded due to the receiving limit",
             "minimum": 0
           },
-          "delivery.dropped.qos0_msg": {
+          "packets.puback.received": {
             "type": "integer",
-            "description": "Number of messages with QoS 0 that were dropped because the message queue was full when sending",
+            "description": "Number of received PUBACK packet",
             "minimum": 0
           },
-          "delivery.dropped.queue_full": {
+          "packets.puback.sent": {
             "type": "integer",
-            "description": "Number of messages with a non-zero QoS that were dropped because the message queue was full when sending",
+            "description": "Number of sent PUBACK packet",
             "minimum": 0
           },
-          "delivery.dropped.too_large": {
+          "packets.puback.inuse": {
             "type": "integer",
-            "description": "The number of messages that were dropped because the length exceeded the limit when sending",
+            "description": "Number of received PUBACK packet with occupied identifiers",
             "minimum": 0
           },
-          "messages.acked": {
+          "packets.puback.missed": {
             "type": "integer",
-            "description": "Number of received PUBACK and PUBREC packet",
+            "description": "Number of received packet with identifiers.",
             "minimum": 0
           },
-          "messages.delayed": {
+          "packets.pubrec.received": {
             "type": "integer",
-            "description": "Number of delay-published messages",
+            "description": "Number of received PUBREC packet",
             "minimum": 0
           },
-          "messages.delivered": {
+          "packets.pubrec.sent": {
             "type": "integer",
-            "description": "Number of messages forwarded to the subscription process internally",
+            "description": "Number of sent PUBREC packet",
             "minimum": 0
           },
-          "messages.dropped": {
+          "packets.pubrec.inuse": {
             "type": "integer",
-            "description": "Total number of messages dropped before forwarding to the subscription process",
+            "description": "Number of received PUBREC packet with occupied identifiers",
             "minimum": 0
           },
-          "messages.dropped.await_pubrel_timeout": {
+          "packets.pubrec.missed": {
             "type": "integer",
-            "description": "Number of messages dropped due to waiting PUBREL timeout",
+            "description": "Number of received PUBREC packet with unknown identifiers",
             "minimum": 0
           },
-          "messages.dropped.no_subscribers": {
+          "packets.pubrel.received": {
             "type": "integer",
-            "description": "Number of messages dropped due to no subscribers",
+            "description": "Number of received PUBREL packet",
             "minimum": 0
           },
-          "messages.forward": {
+          "packets.pubrel.sent": {
             "type": "integer",
-            "description": "Number of messages forwarded to other nodes",
+            "description": "Number of sent PUBREL packet",
             "minimum": 0
           },
-          "messages.publish": {
+          "packets.pubrel.missed": {
             "type": "integer",
-            "description": "Number of messages published in addition to system messages",
+            "description": "Number of received PUBREC packet with unknown identifiers",
+            "minimum": 0
+          },
+          "packets.pubcomp.received": {
+            "type": "integer",
+            "description": "Number of received PUBCOMP packet",
+            "minimum": 0
+          },
+          "packets.pubcomp.sent": {
+            "type": "integer",
+            "description": "Number of sent PUBCOMP packet",
+            "minimum": 0
+          },
+          "packets.pubcomp.inuse": {
+            "type": "integer",
+            "description": "Number of received PUBCOMP packet with occupied identifiers",
+            "minimum": 0
+          },
+          "packets.pubcomp.missed": {
+            "type": "integer",
+            "description": "Number of missed PUBCOMP packet",
+            "minimum": 0
+          },
+          "packets.subscribe.received": {
+            "type": "integer",
+            "description": "Number of received SUBSCRIBE packet",
+            "minimum": 0
+          },
+          "packets.subscribe.error": {
+            "type": "integer",
+            "description": "Number of received SUBSCRIBE packet with failed subscriptions",
+            "minimum": 0
+          },
+          "packets.subscribe.auth_error": {
+            "type": "integer",
+            "description": "Number of received SUBACK packet with failed Authorization check",
+            "minimum": 0
+          },
+          "packets.suback.sent": {
+            "type": "integer",
+            "description": "Number of sent SUBACK packet",
+            "minimum": 0
+          },
+          "packets.unsubscribe.received": {
+            "type": "integer",
+            "description": "Number of received UNSUBSCRIBE packet",
+            "minimum": 0
+          },
+          "packets.unsubscribe.error": {
+            "type": "integer",
+            "description": "Number of received UNSUBSCRIBE packet with failed unsubscriptions",
+            "minimum": 0
+          },
+          "packets.unsuback.sent": {
+            "type": "integer",
+            "description": "Number of sent UNSUBACK packet",
+            "minimum": 0
+          },
+          "packets.pingreq.received": {
+            "type": "integer",
+            "description": "Number of received PINGREQ packet",
+            "minimum": 0
+          },
+          "packets.pingresp.sent": {
+            "type": "integer",
+            "description": "Number of sent PUBRESP packet",
+            "minimum": 0
+          },
+          "packets.disconnect.received": {
+            "type": "integer",
+            "description": "Number of received DISCONNECT packet",
+            "minimum": 0
+          },
+          "packets.disconnect.sent": {
+            "type": "integer",
+            "description": "Number of sent DISCONNECT packet",
+            "minimum": 0
+          },
+          "packets.auth.received": {
+            "type": "integer",
+            "description": "Number of received AUTH packet",
+            "minimum": 0
+          },
+          "packets.auth.sent": {
+            "type": "integer",
+            "description": "Number of sent AUTH packet",
+            "minimum": 0
+          },
+          "messages.received": {
+            "type": "integer",
+            "description": "Number of messages received from the client, equal to the sum of messages.qos0.received, messages.qos1.received and messages.qos2.received",
+            "minimum": 0
+          },
+          "messages.sent": {
+            "type": "integer",
+            "description": "Number of messages sent to the client, equal to the sum of messages.qos0.sent, messages.qos1.sent and messages.qos2.sent",
             "minimum": 0
           },
           "messages.qos0.received": {
@@ -5888,229 +6044,149 @@
             "description": "Number of QoS 2 messages sent to clients",
             "minimum": 0
           },
-          "messages.received": {
+          "messages.publish": {
             "type": "integer",
-            "description": "Number of messages received from the client, equal to the sum of messages.qos0.received\fmessages.qos1.received and messages.qos2.received",
+            "description": "Number of messages published in addition to system messages",
             "minimum": 0
           },
-          "messages.sent": {
+          "messages.dropped": {
             "type": "integer",
-            "description": "Number of messages sent to the client, equal to the sum of messages.qos0.sent\fmessages.qos1.sent and messages.qos2.sent",
+            "description": "Number of messages dropped before forwarding to the subscription process",
             "minimum": 0
           },
-          "packets.auth.received": {
+          "messages.validation_failed": {
             "type": "integer",
-            "description": "Number of received AUTH packet",
+            "description": "Number of message validation failed",
             "minimum": 0
           },
-          "packets.auth.sent": {
+          "messages.validation_succeeded": {
             "type": "integer",
-            "description": "Number of sent AUTH packet",
+            "description": "Number of message validation successful",
             "minimum": 0
           },
-          "packets.connack.auth_error": {
+          "messages.transformation_failed": {
             "type": "integer",
-            "description": "Number of received CONNECT packet with failed authentication",
+            "description": "Number fo message transformation failed",
             "minimum": 0
           },
-          "packets.connack.error": {
+          "messages.transformation_succeeded": {
             "type": "integer",
-            "description": "Number of received CONNECT packet with unsuccessful connections",
+            "description": "Number fo message transformation succeeded",
             "minimum": 0
           },
-          "packets.connack.sent": {
+          "messages.dropped.await_pubrel_timeout": {
             "type": "integer",
-            "description": "Number of sent CONNACK packet",
+            "description": "Number of messages dropped due to waiting PUBREL timeout",
             "minimum": 0
           },
-          "packets.connect.received": {
+          "messages.dropped.no_subscribers": {
             "type": "integer",
-            "description": "Number of received CONNECT packet",
+            "description": "Number of messages dropped due to no subscribers",
             "minimum": 0
           },
-          "packets.disconnect.received": {
+          "messages.forward": {
             "type": "integer",
-            "description": "Number of received DISCONNECT packet",
+            "description": "Number of messages forwarded to other nodes",
             "minimum": 0
           },
-          "packets.disconnect.sent": {
+          "messages.delayed": {
             "type": "integer",
-            "description": "Number of sent DISCONNECT packet",
+            "description": "Number of delay-published messages",
             "minimum": 0
           },
-          "packets.pingreq.received": {
+          "messages.delivered": {
             "type": "integer",
-            "description": "Number of received PINGREQ packet",
+            "description": "Number of messages forwarded to the subscription process internally",
             "minimum": 0
           },
-          "packets.pingresp.sent": {
+          "messages.acked": {
             "type": "integer",
-            "description": "Number of sent PUBRESP packet",
+            "description": "Number of received PUBACK and PUBREC packet",
             "minimum": 0
           },
-          "packets.puback.inuse": {
+          "messages.persisted": {
             "type": "integer",
-            "description": "Number of received PUBACK packet with occupied identifiers",
+            "description": "Number of message persisted",
             "minimum": 0
           },
-          "packets.puback.missed": {
+          "delivery.dropped": {
             "type": "integer",
-            "description": "Number of received packet with identifiers.",
+            "description": "Total number of discarded messages when sending",
             "minimum": 0
           },
-          "packets.puback.received": {
+          "delivery.dropped.no_local": {
             "type": "integer",
-            "description": "Number of received PUBACK packet",
+            "description": "Number of messages that were dropped due to the No Local subscription option when sending",
             "minimum": 0
           },
-          "packets.puback.sent": {
+          "delivery.dropped.too_large": {
             "type": "integer",
-            "description": "Number of sent PUBACK packet",
+            "description": "The number of messages that were dropped because the length exceeded the limit when sending",
             "minimum": 0
           },
-          "packets.pubcomp.inuse": {
+          "delivery.dropped.qos0_msg": {
             "type": "integer",
-            "description": "Number of received PUBCOMP packet with occupied identifiers",
+            "description": "Number of messages with QoS 0 that were dropped because the message queue was full when sending",
             "minimum": 0
           },
-          "packets.pubcomp.missed": {
+          "delivery.dropped.queue_full": {
             "type": "integer",
-            "description": "Number of missed PUBCOMP packet",
+            "description": "Number of messages with a non-zero QoS that were dropped because the message queue was full when sending",
             "minimum": 0
           },
-          "packets.pubcomp.received": {
+          "delivery.dropped.expired": {
             "type": "integer",
-            "description": "Number of received PUBCOMP packet",
+            "description": "Number of messages dropped due to message expiration on sending",
             "minimum": 0
           },
-          "packets.pubcomp.sent": {
+          "client.connect": {
             "type": "integer",
-            "description": "Number of sent PUBCOMP packet",
+            "description": "Number of client connections",
             "minimum": 0
           },
-          "packets.publish.auth_error": {
+          "client.connack": {
             "type": "integer",
-            "description": "Number of received PUBLISH packets with failed the Authorization check",
+            "description": "Number of CONNACK packet sent",
             "minimum": 0
           },
-          "packets.publish.dropped": {
+          "client.connected": {
             "type": "integer",
-            "description": "Number of messages discarded due to the receiving limit",
+            "description": "Number of successful client connected",
             "minimum": 0
           },
-          "packets.publish.error": {
+          "client.authenticate": {
             "type": "integer",
-            "description": "Number of received PUBLISH packet that cannot be published",
+            "description": "Number of client Authentication",
             "minimum": 0
           },
-          "packets.publish.inuse": {
+          "client.auth.anonymous": {
             "type": "integer",
-            "description": "Number of received PUBLISH packet with occupied identifiers",
+            "description": "Number of clients who log in anonymously",
             "minimum": 0
           },
-          "packets.publish.received": {
+          "client.authorize": {
             "type": "integer",
-            "description": "Number of received PUBLISH packet",
+            "description": "Number of Authorization rule checks",
             "minimum": 0
           },
-          "packets.publish.sent": {
+          "client.subscribe": {
             "type": "integer",
-            "description": "Number of sent PUBLISH packet",
+            "description": "Number of client subscriptions",
             "minimum": 0
           },
-          "packets.pubrec.inuse": {
+          "client.unsubscribe": {
             "type": "integer",
-            "description": "Number of received PUBREC packet with occupied identifiers",
+            "description": "Number of client unsubscriptions",
             "minimum": 0
           },
-          "packets.pubrec.missed": {
+          "client.disconnected": {
             "type": "integer",
-            "description": "Number of received PUBREC packet with unknown identifiers",
-            "minimum": 0
-          },
-          "packets.pubrec.received": {
-            "type": "integer",
-            "description": "Number of received PUBREC packet",
-            "minimum": 0
-          },
-          "packets.pubrec.sent": {
-            "type": "integer",
-            "description": "Number of sent PUBREC packet",
-            "minimum": 0
-          },
-          "packets.pubrel.missed": {
-            "type": "integer",
-            "description": "Number of received PUBREC packet with unknown identifiers",
-            "minimum": 0
-          },
-          "packets.pubrel.received": {
-            "type": "integer",
-            "description": "Number of received PUBREL packet",
-            "minimum": 0
-          },
-          "packets.pubrel.sent": {
-            "type": "integer",
-            "description": "Number of sent PUBREL packet",
-            "minimum": 0
-          },
-          "packets.received": {
-            "type": "integer",
-            "description": "Number of received packet",
-            "minimum": 0
-          },
-          "packets.sent": {
-            "type": "integer",
-            "description": "Number of sent packet",
-            "minimum": 0
-          },
-          "packets.suback.sent": {
-            "type": "integer",
-            "description": "Number of sent SUBACK packet",
-            "minimum": 0
-          },
-          "packets.subscribe.auth_error": {
-            "type": "integer",
-            "description": "Number of received SUBACK packet with failed Authorization check",
-            "minimum": 0
-          },
-          "packets.subscribe.error": {
-            "type": "integer",
-            "description": "Number of received SUBSCRIBE packet with failed subscriptions",
-            "minimum": 0
-          },
-          "packets.subscribe.received": {
-            "type": "integer",
-            "description": "Number of received SUBSCRIBE packet",
-            "minimum": 0
-          },
-          "packets.unsuback.sent": {
-            "type": "integer",
-            "description": "Number of sent UNSUBACK packet",
-            "minimum": 0
-          },
-          "packets.unsubscribe.error": {
-            "type": "integer",
-            "description": "Number of received UNSUBSCRIBE packet with failed unsubscriptions",
-            "minimum": 0
-          },
-          "packets.unsubscribe.received": {
-            "type": "integer",
-            "description": "Number of received UNSUBSCRIBE packet",
-            "minimum": 0
-          },
-          "rules.matched": {
-            "type": "integer",
-            "description": "Number of rule matched",
+            "description": "Number of client disconnects",
             "minimum": 0
           },
           "session.created": {
             "type": "integer",
             "description": "Number of sessions created",
-            "minimum": 0
-          },
-          "session.discarded": {
-            "type": "integer",
-            "description": "Number of sessions dropped because Clean Session or Clean Start is true",
             "minimum": 0
           },
           "session.resumed": {
@@ -6123,9 +6199,74 @@
             "description": "Number of sessions takenover because Clean Session or Clean Start is false",
             "minimum": 0
           },
+          "session.discarded": {
+            "type": "integer",
+            "description": "Number of sessions dropped because Clean Session or Clean Start is true",
+            "minimum": 0
+          },
           "session.terminated": {
             "type": "integer",
             "description": "Number of terminated sessions",
+            "minimum": 0
+          },
+          "authorization.allow": {
+            "type": "integer",
+            "description": "Number of Authorization allow",
+            "minimum": 0
+          },
+          "authorization.deny": {
+            "type": "integer",
+            "description": "Number of Authorization deny",
+            "minimum": 0
+          },
+          "authorization.cache_hit": {
+            "type": "integer",
+            "description": "Number of Authorization hits the cache",
+            "minimum": 0
+          },
+          "authorization.cache_miss": {
+            "type": "integer",
+            "description": "Number of Authorization cache missing",
+            "minimum": 0
+          },
+          "authentication.success": {
+            "type": "integer",
+            "description": "Number of successful client Authentication",
+            "minimum": 0
+          },
+          "authentication.success.anonymous": {
+            "type": "integer",
+            "description": "Number of successful client Authentication due to anonymous",
+            "minimum": 0
+          },
+          "authentication.failure": {
+            "type": "integer",
+            "description": "Number of failed client Authentication",
+            "minimum": 0
+          },
+          "overload_protection.delay.ok": {
+            "type": "integer",
+            "description": "Number of overload protection delayed",
+            "minimum": 0
+          },
+          "overload_protection.delay.timeout": {
+            "type": "integer",
+            "description": "Number of overload protection delay timeout",
+            "minimum": 0
+          },
+          "overload_protection.hibernation": {
+            "type": "integer",
+            "description": "Number of overload protection hibernation",
+            "minimum": 0
+          },
+          "overload_protection.gc": {
+            "type": "integer",
+            "description": "Number of overload protection garbage collection",
+            "minimum": 0
+          },
+          "overload_protection.new_conn": {
+            "type": "integer",
+            "description": "Number of overload protection close new incoming connection",
             "minimum": 0
           }
         },
@@ -6214,7 +6355,7 @@
           "zone": {
             "default": "default",
             "type": "string",
-            "description": "监听器所属的配置组。"
+            "description": "监听器所属的配置 zone。<br/>连接到此监听器的客户端将继承在此 zone 名称下创建的 zone 设置。<br/><br/>一个 zone 可以覆盖以下根名称下的配置：<br/>- `mqtt`<br/>- `force_shutdown`<br/>- `force_gc`<br/>- `flapping_detect`<br/>- `durable_sessions`"
           },
           "enable_authn": {
             "default": true,
@@ -6348,7 +6489,7 @@
           "zone": {
             "default": "default",
             "type": "string",
-            "description": "监听器所属的配置组。"
+            "description": "监听器所属的配置 zone。<br/>连接到此监听器的客户端将继承在此 zone 名称下创建的 zone 设置。<br/><br/>一个 zone 可以覆盖以下根名称下的配置：<br/>- `mqtt`<br/>- `force_shutdown`<br/>- `force_gc`<br/>- `flapping_detect`<br/>- `durable_sessions`"
           },
           "enable_authn": {
             "default": true,
@@ -6711,7 +6852,7 @@
           "zone": {
             "default": "default",
             "type": "string",
-            "description": "监听器所属的配置组。"
+            "description": "监听器所属的配置 zone。<br/>连接到此监听器的客户端将继承在此 zone 名称下创建的 zone 设置。<br/><br/>一个 zone 可以覆盖以下根名称下的配置：<br/>- `mqtt`<br/>- `force_shutdown`<br/>- `force_gc`<br/>- `flapping_detect`<br/>- `durable_sessions`"
           },
           "enable_authn": {
             "default": true,
@@ -6990,7 +7131,7 @@
           "zone": {
             "default": "default",
             "type": "string",
-            "description": "监听器所属的配置组。"
+            "description": "监听器所属的配置 zone。<br/>连接到此监听器的客户端将继承在此 zone 名称下创建的 zone 设置。<br/><br/>一个 zone 可以覆盖以下根名称下的配置：<br/>- `mqtt`<br/>- `force_shutdown`<br/>- `force_gc`<br/>- `flapping_detect`<br/>- `durable_sessions`"
           },
           "enable_authn": {
             "default": true,
@@ -7162,7 +7303,7 @@
           "disconnect_after_expire": {
             "default": true,
             "type": "boolean",
-            "description": "Disconnect the client after the token expires."
+            "description": "在 token 过期后断开客户端连接。"
           },
           "from": {
             "default": "password",
@@ -7731,7 +7872,7 @@
           "zone": {
             "default": "default",
             "type": "string",
-            "description": "监听器所属的配置组。"
+            "description": "监听器所属的配置 zone。<br/>连接到此监听器的客户端将继承在此 zone 名称下创建的 zone 设置。<br/><br/>一个 zone 可以覆盖以下根名称下的配置：<br/>- `mqtt`<br/>- `force_shutdown`<br/>- `force_gc`<br/>- `flapping_detect`<br/>- `durable_sessions`"
           },
           "enable_authn": {
             "default": true,
@@ -8103,7 +8244,7 @@
           "zone": {
             "default": "default",
             "type": "string",
-            "description": "监听器所属的配置组。"
+            "description": "监听器所属的配置 zone。<br/>连接到此监听器的客户端将继承在此 zone 名称下创建的 zone 设置。<br/><br/>一个 zone 可以覆盖以下根名称下的配置：<br/>- `mqtt`<br/>- `force_shutdown`<br/>- `force_gc`<br/>- `flapping_detect`<br/>- `durable_sessions`"
           },
           "enable_authn": {
             "default": true,
@@ -9857,7 +9998,7 @@
           "zone": {
             "default": "default",
             "type": "string",
-            "description": "监听器所属的配置组。"
+            "description": "监听器所属的配置 zone。<br/>连接到此监听器的客户端将继承在此 zone 名称下创建的 zone 设置。<br/><br/>一个 zone 可以覆盖以下根名称下的配置：<br/>- `mqtt`<br/>- `force_shutdown`<br/>- `force_gc`<br/>- `flapping_detect`<br/>- `durable_sessions`"
           },
           "enable_authn": {
             "default": true,
@@ -10038,6 +10179,11 @@
           "server": {
             "type": "string",
             "description": "要连接的 IPv4 或 IPv6 地址或主机名。<br/><br/>一个主机条目的格式为：Host[:Port]。<br/><br/>如果没有指定 [:Port]，将使用 PostgreSQL 默认端口 5432。"
+          },
+          "disable_prepared_statements": {
+            "default": false,
+            "type": "boolean",
+            "description": "在连接中禁用预处理语句的使用。<br/>某些端点，如 PGBouncer 或 Transaction 模式下的 Supabase，<br/>不支持像处理语句这样的会话功能。 <br/> 对于此类连接，应启用此选项。"
           },
           "database": {
             "type": "string",
@@ -10505,6 +10651,11 @@
             "type": "string",
             "description": "要连接的 IPv4 或 IPv6 地址或主机名。<br/><br/>一个主机条目的格式为：Host[:Port]。<br/><br/>如果没有指定 [:Port]，将使用 PostgreSQL 默认端口 5432。"
           },
+          "disable_prepared_statements": {
+            "default": false,
+            "type": "boolean",
+            "description": "在连接中禁用预处理语句的使用。<br/>某些端点，如 PGBouncer 或 Transaction 模式下的 Supabase，<br/>不支持像处理语句这样的会话功能。 <br/> 对于此类连接，应启用此选项。"
+          },
           "database": {
             "type": "string",
             "description": "数据库名字。"
@@ -10720,7 +10871,7 @@
           "zone": {
             "default": "default",
             "type": "string",
-            "description": "监听器所属的配置组。"
+            "description": "监听器所属的配置 zone。<br/>连接到此监听器的客户端将继承在此 zone 名称下创建的 zone 设置。<br/><br/>一个 zone 可以覆盖以下根名称下的配置：<br/>- `mqtt`<br/>- `force_shutdown`<br/>- `force_gc`<br/>- `flapping_detect`<br/>- `durable_sessions`"
           },
           "enable_authn": {
             "default": true,
@@ -11505,6 +11656,14 @@
             "type": "integer",
             "description": "Dropped messages per 10 seconds"
           },
+          "transformation_failed_rate": {
+            "type": "integer",
+            "description": "Message transformations failed per 10 seconds"
+          },
+          "transformation_succeeded_rate": {
+            "type": "integer",
+            "description": "Message transformations succeeded per 10 seconds"
+          },
           "validation_failed_rate": {
             "type": "integer",
             "description": "Schema validations failed per 10 seconds"
@@ -12229,6 +12388,14 @@
             "type": "integer",
             "description": "Schema validations failed last 10 seconds"
           },
+          "transformation_succeeded": {
+            "type": "integer",
+            "description": "Message transformations succeeded last 10 seconds"
+          },
+          "transformation_failed": {
+            "type": "integer",
+            "description": "Message transformations failed last 10 seconds"
+          },
           "dropped": {
             "type": "integer",
             "description": "Dropped messages last 10 seconds"
@@ -12341,7 +12508,7 @@
           "disconnect_after_expire": {
             "default": true,
             "type": "boolean",
-            "description": "Disconnect the client after the token expires."
+            "description": "在 token 过期后断开客户端连接。"
           },
           "from": {
             "default": "password",
@@ -12392,6 +12559,9 @@
               },
               {
                 "$ref": "#/components/schemas/rule_engine.ctx_bridge_mqtt"
+              },
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_check_authn_complete"
               },
               {
                 "$ref": "#/components/schemas/rule_engine.ctx_check_authz_complete"
@@ -12584,7 +12754,7 @@
           "zone": {
             "default": "default",
             "type": "string",
-            "description": "监听器所属的配置组。"
+            "description": "监听器所属的配置 zone。<br/>连接到此监听器的客户端将继承在此 zone 名称下创建的 zone 设置。<br/><br/>一个 zone 可以覆盖以下根名称下的配置：<br/>- `mqtt`<br/>- `force_shutdown`<br/>- `force_gc`<br/>- `flapping_detect`<br/>- `durable_sessions`"
           },
           "enable_authn": {
             "default": true,
@@ -12689,6 +12859,9 @@
                 "$ref": "#/components/schemas/rule_engine.ctx_bridge_mqtt"
               },
               {
+                "$ref": "#/components/schemas/rule_engine.ctx_check_authn_complete"
+              },
+              {
                 "$ref": "#/components/schemas/rule_engine.ctx_check_authz_complete"
               },
               {
@@ -12723,7 +12896,7 @@
           "stop_action_after_template_rendering": {
             "default": true,
             "type": "boolean",
-            "description": "Set this to true if the action should be stopped after its template has been rendered (default is true)."
+            "description": "如果操作在模板渲染后应该停止，请将此设置为 true（默认为 true）。"
           }
         },
         "type": "object"
@@ -12916,7 +13089,7 @@
           "zone": {
             "default": "default",
             "type": "string",
-            "description": "监听器所属的配置组。"
+            "description": "监听器所属的配置 zone。<br/>连接到此监听器的客户端将继承在此 zone 名称下创建的 zone 设置。<br/><br/>一个 zone 可以覆盖以下根名称下的配置：<br/>- `mqtt`<br/>- `force_shutdown`<br/>- `force_gc`<br/>- `flapping_detect`<br/>- `durable_sessions`"
           },
           "enable_authn": {
             "default": true,
@@ -13372,7 +13545,7 @@
             ]
           },
           "formatter": {
-            "description": "The formatter that will be used to format the trace log entries. Set this to text to format the log entries as plain text (default). Set it to json to format each log entry as a JSON object.",
+            "description": "用于格式化追踪日志条目的格式处理器。设置为 text 将日志条目格式化为纯文本（默认）。设置为 json 将每个日志条目格式化为 JSON 对象。",
             "example": "text",
             "oneOf": [
               {
@@ -14304,7 +14477,7 @@
           "zone": {
             "default": "default",
             "type": "string",
-            "description": "监听器所属的配置组。"
+            "description": "监听器所属的配置 zone。<br/>连接到此监听器的客户端将继承在此 zone 名称下创建的 zone 设置。<br/><br/>一个 zone 可以覆盖以下根名称下的配置：<br/>- `mqtt`<br/>- `force_shutdown`<br/>- `force_gc`<br/>- `flapping_detect`<br/>- `durable_sessions`"
           },
           "enable_authn": {
             "default": true,
@@ -14710,6 +14883,14 @@
           "received_msg_rate": {
             "type": "integer",
             "description": "Dropped messages per 10 seconds"
+          },
+          "transformation_failed_rate": {
+            "type": "integer",
+            "description": "Message transformations failed per 10 seconds"
+          },
+          "transformation_succeeded_rate": {
+            "type": "integer",
+            "description": "Message transformations succeeded per 10 seconds"
           },
           "validation_failed_rate": {
             "type": "integer",
@@ -16198,7 +16379,7 @@
           "zone": {
             "default": "default",
             "type": "string",
-            "description": "监听器所属的配置组。"
+            "description": "监听器所属的配置 zone。<br/>连接到此监听器的客户端将继承在此 zone 名称下创建的 zone 设置。<br/><br/>一个 zone 可以覆盖以下根名称下的配置：<br/>- `mqtt`<br/>- `force_shutdown`<br/>- `force_gc`<br/>- `flapping_detect`<br/>- `durable_sessions`"
           },
           "enable_authn": {
             "default": true,
@@ -17030,7 +17211,7 @@
             "$ref": "#/components/schemas/dashboard.ssl_options"
           },
           "num_acceptors": {
-            "default": 8,
+            "default": 6,
             "type": "integer",
             "description": "TCP 协议的 Socket acceptor 池大小, 通常配置为 CPU 核数"
           },
@@ -17099,6 +17280,45 @@
           "mtime": {
             "type": "integer",
             "description": "此文件最后一次修改的时间。"
+          }
+        },
+        "type": "object"
+      },
+      "rule_engine.ctx_check_authn_complete": {
+        "required": [
+          "event_type"
+        ],
+        "properties": {
+          "event_type": {
+            "type": "string",
+            "enum": [
+              "client_check_authn_complete"
+            ],
+            "description": "事件类型"
+          },
+          "clientid": {
+            "type": "string",
+            "description": "客户端 ID"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户名"
+          },
+          "reason_code": {
+            "type": "string",
+            "description": "原因代码"
+          },
+          "peername": {
+            "type": "string",
+            "description": "对等客户端的 IP 地址和端口"
+          },
+          "is_anonymous": {
+            "type": "boolean",
+            "description": "如果此用户是匿名的，则为 true。"
+          },
+          "is_superuser": {
+            "type": "boolean",
+            "description": "如果这是超级用户，则为 true。"
           }
         },
         "type": "object"
@@ -18096,7 +18316,7 @@
           "enable": {
             "default": false,
             "type": "boolean",
-            "description": "Use durable storage for client sessions persistence.<br/>If enabled, sessions configured to outlive client connections, along with their corresponding messages, will be durably stored and survive broker downtime.<br/><br/>:::warning<br/>This feature is currently experimental. Please don't enable it in the production environments that contain valuable data.<br/>:::"
+            "description": "使用持久存储来持久化客户端会话。<br/>如果启用，会话和相应的消息将被持久存储，并在服务器停机时保留。"
           },
           "batch_size": {
             "default": 100,
@@ -18241,7 +18461,7 @@
           },
           "validation": {
             "type": "string",
-            "description": "Validation"
+            "description": "验证"
           },
           "clientid": {
             "type": "string",
@@ -19159,6 +19379,7 @@
               "$events/message_delivered",
               "$events/message_acked",
               "$events/message_dropped",
+              "$events/message_transformation_failed",
               "$events/schema_validation_failed",
               "$events/delivery_dropped"
             ],
@@ -19284,7 +19505,7 @@
           "zone": {
             "default": "default",
             "type": "string",
-            "description": "监听器所属的配置组。"
+            "description": "监听器所属的配置 zone。<br/>连接到此监听器的客户端将继承在此 zone 名称下创建的 zone 设置。<br/><br/>一个 zone 可以覆盖以下根名称下的配置：<br/>- `mqtt`<br/>- `force_shutdown`<br/>- `force_gc`<br/>- `flapping_detect`<br/>- `durable_sessions`"
           },
           "enable_authn": {
             "default": true,
@@ -21428,6 +21649,7 @@
                     "vm_statistics": "disabled",
                     "vm_dist": "disabled"
                   },
+                  "enable_basic_auth": false,
                   "push_gateway": {
                     "interval": "15s",
                     "headers": {
@@ -21435,8 +21657,7 @@
                     },
                     "url": "http://127.0.0.1:9091",
                     "job_name": "${name}/instance/${name}~${host}"
-                  },
-                  "enable_basic_auth": false
+                  }
                 },
                 "schema": {
                   "$ref": "#/components/schemas/prometheus.recommend_setting"
@@ -21474,6 +21695,7 @@
                     "vm_statistics": "disabled",
                     "vm_dist": "disabled"
                   },
+                  "enable_basic_auth": false,
                   "push_gateway": {
                     "interval": "15s",
                     "headers": {
@@ -21481,8 +21703,7 @@
                     },
                     "url": "http://127.0.0.1:9091",
                     "job_name": "${name}/instance/${name}~${host}"
-                  },
-                  "enable_basic_auth": false
+                  }
                 },
                 "schema": {
                   "$ref": "#/components/schemas/prometheus.recommend_setting"
@@ -21505,6 +21726,7 @@
                       "vm_statistics": "disabled",
                       "vm_dist": "disabled"
                     },
+                    "enable_basic_auth": false,
                     "push_gateway": {
                       "interval": "15s",
                       "headers": {
@@ -21512,8 +21734,7 @@
                       },
                       "url": "http://127.0.0.1:9091",
                       "job_name": "${name}/instance/${name}~${host}"
-                    },
-                    "enable_basic_auth": false
+                    }
                   },
                   "summary": "recommend_setting"
                 },
@@ -22827,11 +23048,7 @@
                         }
                       }
                     ],
-                    "max_conn_rate": 1000,
-                    "access_rules": [
-                      "allow all"
-                    ],
-                    "max_connections": 1024000,
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "versions": [
@@ -22843,7 +23060,11 @@
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
                       "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
-                    "acceptors": 16
+                    "max_connections": 1024000,
+                    "access_rules": [
+                      "allow all"
+                    ],
+                    "max_conn_rate": 1000
                   },
                   {
                     "name": "ssl-def",
@@ -22881,12 +23102,12 @@
                         }
                       }
                     ],
-                    "max_conn_rate": 1000,
+                    "acceptors": 16,
+                    "max_connections": 1024000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_conn_rate": 1000
                   },
                   {
                     "name": "tcp-def",
@@ -22920,9 +23141,9 @@
                         }
                       }
                     ],
-                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_conn_rate": 1000
                   },
                   {
                     "name": "ws-def",
@@ -22965,9 +23186,9 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_conn_rate": 1000
                   },
                   {
                     "name": "ws-ssl-def",
@@ -23023,9 +23244,9 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_conn_rate": 1000
                   },
                   {
                     "name": "dtls-psk",
@@ -23046,8 +23267,7 @@
                         }
                       }
                     ],
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -23061,7 +23281,8 @@
                       "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
-                    "acceptors": 16
+                    "max_connections": 1024000,
+                    "max_conn_rate": 1000
                   },
                   {
                     "name": "tcp-with-authn",
@@ -23090,9 +23311,9 @@
                         }
                       }
                     ],
-                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_conn_rate": 1000
                   }
                 ],
                 "schema": {
@@ -23227,11 +23448,7 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "max_conn_rate": 1000,
-                      "access_rules": [
-                        "allow all"
-                      ],
-                      "max_connections": 1024000,
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "versions": [
@@ -23243,7 +23460,11 @@
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
                         "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
-                      "acceptors": 16
+                      "max_connections": 1024000,
+                      "access_rules": [
+                        "allow all"
+                      ],
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -23269,12 +23490,12 @@
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
                         "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
-                      "max_conn_rate": 1000,
+                      "acceptors": 16,
+                      "max_connections": 1024000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -23296,9 +23517,9 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple TCP listener example"
                   },
@@ -23329,9 +23550,9 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple WebSocket listener example"
                   },
@@ -23375,9 +23596,9 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple WebSocket/TLS listener example"
                   },
@@ -23386,8 +23607,7 @@
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000,
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -23401,7 +23621,8 @@
                         "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
-                      "acceptors": 16
+                      "max_connections": 1024000,
+                      "max_conn_rate": 1000
                     },
                     "summary": "A DTLS listener with PSK example"
                   },
@@ -23418,9 +23639,9 @@
                         },
                         "user_id_type": "username"
                       },
-                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_conn_rate": 1000
                     },
                     "summary": "A TCP listener with authentication example"
                   }
@@ -23524,11 +23745,7 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
-                    "max_conn_rate": 1000,
-                    "access_rules": [
-                      "allow all"
-                    ],
-                    "max_connections": 1024000,
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "versions": [
@@ -23540,7 +23757,11 @@
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
                       "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
-                    "acceptors": 16
+                    "max_connections": 1024000,
+                    "access_rules": [
+                      "allow all"
+                    ],
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple DTLS listener example"
                 },
@@ -23566,12 +23787,12 @@
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
                       "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
-                    "max_conn_rate": 1000,
+                    "acceptors": 16,
+                    "max_connections": 1024000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple SSL listener example"
                 },
@@ -23593,9 +23814,9 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
-                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple TCP listener example"
                 },
@@ -23626,9 +23847,9 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple WebSocket listener example"
                 },
@@ -23672,9 +23893,9 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple WebSocket/TLS listener example"
                 },
@@ -23683,8 +23904,7 @@
                     "name": "dtls-psk",
                     "type": "dtls",
                     "bind": "22214",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -23698,7 +23918,8 @@
                       "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
-                    "acceptors": 16
+                    "max_connections": 1024000,
+                    "max_conn_rate": 1000
                   },
                   "summary": "A DTLS listener with PSK example"
                 },
@@ -23715,9 +23936,9 @@
                       },
                       "user_id_type": "username"
                     },
-                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_conn_rate": 1000
                   },
                   "summary": "A TCP listener with authentication example"
                 }
@@ -26174,82 +26395,82 @@
                   "lwm2m_client": {
                     "value": {
                       "recv_oct": 56,
-                      "recv_pkt": 1,
-                      "awaiting_rel_max": "infinity",
-                      "mqueue_len": 0,
-                      "username": "guest",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "send_msg": 0,
-                      "endpoint_name": "urn:imei:154928475237123",
-                      "keepalive": 0,
-                      "is_bridge": false,
+                      "lifetime": 86400,
+                      "subscriptions_max": "infinity",
+                      "mailbox_len": 0,
+                      "proto_name": "LwM2M",
                       "mqueue_max": "infinity",
+                      "proto_ver": "1.0",
+                      "awaiting_rel_cnt": 0,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "recv_msg": 0,
+                      "send_pkt": 1,
+                      "keepalive": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "mqueue_dropped": 0,
-                      "disconnected_at": null,
-                      "expiry_interval": 0,
-                      "inflight_cnt": 0,
-                      "send_oct": 61,
-                      "inflight_max": "infinity",
-                      "heap_size": 4185,
-                      "awaiting_rel_cnt": 0,
-                      "port": 50675,
-                      "subscriptions_max": "infinity",
-                      "subscriptions_cnt": 0,
-                      "proto_name": "LwM2M",
+                      "recv_pkt": 1,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "clean_start": true,
-                      "proto_ver": "1.0",
-                      "lifetime": 86400,
                       "ip_address": "127.0.0.1",
-                      "send_pkt": 1,
-                      "recv_msg": 0,
+                      "mqueue_dropped": 0,
+                      "mqueue_len": 0,
+                      "endpoint_name": "urn:imei:154928475237123",
+                      "expiry_interval": 0,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "send_oct": 61,
+                      "username": "guest",
+                      "disconnected_at": null,
+                      "heap_size": 4185,
+                      "inflight_max": "infinity",
+                      "subscriptions_cnt": 0,
+                      "port": 50675,
+                      "awaiting_rel_max": "infinity",
+                      "is_bridge": false,
                       "connected": true,
                       "reductions": 72022,
                       "recv_cnt": 1,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "mailbox_len": 0
+                      "inflight_cnt": 0,
+                      "send_msg": 0
                     },
                     "summary": "LwM2M client info"
                   },
                   "general_client": {
                     "value": {
                       "recv_oct": 56,
-                      "recv_pkt": 1,
-                      "awaiting_rel_max": "infinity",
-                      "mqueue_len": 0,
-                      "username": "guest",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "send_msg": 0,
-                      "keepalive": 0,
-                      "is_bridge": false,
+                      "subscriptions_max": "infinity",
+                      "mailbox_len": 0,
+                      "proto_name": "STOMP",
                       "mqueue_max": "infinity",
+                      "proto_ver": "1.0",
+                      "awaiting_rel_cnt": 0,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "recv_msg": 0,
+                      "send_pkt": 1,
+                      "keepalive": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "mqueue_dropped": 0,
-                      "disconnected_at": null,
-                      "expiry_interval": 0,
-                      "inflight_cnt": 0,
-                      "send_oct": 61,
-                      "inflight_max": "infinity",
-                      "heap_size": 4185,
-                      "awaiting_rel_cnt": 0,
-                      "port": 50675,
-                      "subscriptions_max": "infinity",
-                      "subscriptions_cnt": 0,
-                      "proto_name": "STOMP",
+                      "recv_pkt": 1,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "clean_start": true,
-                      "proto_ver": "1.0",
                       "ip_address": "127.0.0.1",
-                      "send_pkt": 1,
-                      "recv_msg": 0,
+                      "mqueue_dropped": 0,
+                      "mqueue_len": 0,
+                      "expiry_interval": 0,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "send_oct": 61,
+                      "username": "guest",
+                      "disconnected_at": null,
+                      "heap_size": 4185,
+                      "inflight_max": "infinity",
+                      "subscriptions_cnt": 0,
+                      "port": 50675,
+                      "awaiting_rel_max": "infinity",
+                      "is_bridge": false,
                       "connected": true,
                       "reductions": 72022,
                       "recv_cnt": 1,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "mailbox_len": 0
+                      "inflight_cnt": 0,
+                      "send_msg": 0
                     },
                     "summary": "General client info"
                   }
@@ -27762,11 +27983,7 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "max_conn_rate": 1000,
-                      "access_rules": [
-                        "allow all"
-                      ],
-                      "max_connections": 1024000,
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "versions": [
@@ -27778,7 +27995,11 @@
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
                         "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
-                      "acceptors": 16
+                      "max_connections": 1024000,
+                      "access_rules": [
+                        "allow all"
+                      ],
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -27804,12 +28025,12 @@
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
                         "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
-                      "max_conn_rate": 1000,
+                      "acceptors": 16,
+                      "max_connections": 1024000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -27831,9 +28052,9 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple TCP listener example"
                   },
@@ -27864,9 +28085,9 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple WebSocket listener example"
                   },
@@ -27910,9 +28131,9 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple WebSocket/TLS listener example"
                   },
@@ -27921,8 +28142,7 @@
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000,
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -27936,7 +28156,8 @@
                         "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
-                      "acceptors": 16
+                      "max_connections": 1024000,
+                      "max_conn_rate": 1000
                     },
                     "summary": "A DTLS listener with PSK example"
                   },
@@ -27953,9 +28174,9 @@
                         },
                         "user_id_type": "username"
                       },
-                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_conn_rate": 1000
                     },
                     "summary": "A TCP listener with authentication example"
                   }
@@ -28105,11 +28326,7 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "max_conn_rate": 1000,
-                      "access_rules": [
-                        "allow all"
-                      ],
-                      "max_connections": 1024000,
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "versions": [
@@ -28121,7 +28338,11 @@
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
                         "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
-                      "acceptors": 16
+                      "max_connections": 1024000,
+                      "access_rules": [
+                        "allow all"
+                      ],
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -28147,12 +28368,12 @@
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
                         "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
-                      "max_conn_rate": 1000,
+                      "acceptors": 16,
+                      "max_connections": 1024000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -28174,9 +28395,9 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple TCP listener example"
                   },
@@ -28207,9 +28428,9 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple WebSocket listener example"
                   },
@@ -28253,9 +28474,9 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_conn_rate": 1000
                     },
                     "summary": "A simple WebSocket/TLS listener example"
                   },
@@ -28264,8 +28485,7 @@
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
-                      "max_conn_rate": 1000,
-                      "max_connections": 1024000,
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -28279,7 +28499,8 @@
                         "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
-                      "acceptors": 16
+                      "max_connections": 1024000,
+                      "max_conn_rate": 1000
                     },
                     "summary": "A DTLS listener with PSK example"
                   },
@@ -28296,9 +28517,9 @@
                         },
                         "user_id_type": "username"
                       },
-                      "max_conn_rate": 1000,
+                      "acceptors": 16,
                       "max_connections": 1024000,
-                      "acceptors": 16
+                      "max_conn_rate": 1000
                     },
                     "summary": "A TCP listener with authentication example"
                   }
@@ -28402,11 +28623,7 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
-                    "max_conn_rate": 1000,
-                    "access_rules": [
-                      "allow all"
-                    ],
-                    "max_connections": 1024000,
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "versions": [
@@ -28418,7 +28635,11 @@
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
                       "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
-                    "acceptors": 16
+                    "max_connections": 1024000,
+                    "access_rules": [
+                      "allow all"
+                    ],
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple DTLS listener example"
                 },
@@ -28444,12 +28665,12 @@
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
                       "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
-                    "max_conn_rate": 1000,
+                    "acceptors": 16,
+                    "max_connections": 1024000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple SSL listener example"
                 },
@@ -28471,9 +28692,9 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
-                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple TCP listener example"
                 },
@@ -28504,9 +28725,9 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple WebSocket listener example"
                 },
@@ -28550,9 +28771,9 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_conn_rate": 1000
                   },
                   "summary": "A simple WebSocket/TLS listener example"
                 },
@@ -28561,8 +28782,7 @@
                     "name": "dtls-psk",
                     "type": "dtls",
                     "bind": "22214",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -28576,7 +28796,8 @@
                       "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
-                    "acceptors": 16
+                    "max_connections": 1024000,
+                    "max_conn_rate": 1000
                   },
                   "summary": "A DTLS listener with PSK example"
                 },
@@ -28593,9 +28814,9 @@
                       },
                       "user_id_type": "username"
                     },
-                    "max_conn_rate": 1000,
+                    "acceptors": 16,
                     "max_connections": 1024000,
-                    "acceptors": 16
+                    "max_conn_rate": 1000
                   },
                   "summary": "A TCP listener with authentication example"
                 }
@@ -28787,7 +29008,7 @@
     },
     "/rules/{id}/test": {
       "post": {
-        "description": "Apply a rule with the given message and environment",
+        "description": "依据指定的消息内容和运行环境执行相应的规则。",
         "tags": [
           "Rules"
         ],
@@ -29193,8 +29414,8 @@
                         "rate_max": 0.0
                       },
                       "resource_metrics": {
-                        "matched": 0,
                         "success": 0,
+                        "matched": 0,
                         "failed": 0,
                         "rate": 0.0,
                         "rate_last5m": 0.0,
@@ -29219,8 +29440,8 @@
                         {
                           "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "matched": 0,
                             "success": 0,
+                            "matched": 0,
                             "failed": 0,
                             "rate": 0.0,
                             "rate_last5m": 0.0,
@@ -29461,6 +29682,7 @@
                         "current_connections": 0
                       }
                     ],
+                    "max_connections": 1024000,
                     "listeners": [
                       {
                         "id": "lwm2m:udp:default",
@@ -29469,7 +29691,6 @@
                         "type": "udp"
                       }
                     ],
-                    "max_connections": 1024000,
                     "created_at": "2021-12-08T14:41:26.171+08:00",
                     "current_connections": 0
                   },
@@ -29484,6 +29705,7 @@
                         "current_connections": 0
                       }
                     ],
+                    "max_connections": 1024000,
                     "listeners": [
                       {
                         "id": "mqttsn:udp:default",
@@ -29492,7 +29714,6 @@
                         "type": "udp"
                       }
                     ],
-                    "max_connections": 1024000,
                     "created_at": "2021-12-08T14:41:45.071+08:00",
                     "current_connections": 0,
                     "stopped_at": "2021-12-08T14:56:35.576+08:00"
@@ -29509,6 +29730,7 @@
                         "current_connections": 0
                       }
                     ],
+                    "max_connections": 1024000,
                     "listeners": [
                       {
                         "id": "stomp:tcp:default",
@@ -29517,7 +29739,6 @@
                         "type": "tcp"
                       }
                     ],
-                    "max_connections": 1024000,
                     "created_at": "2021-12-08T14:42:15.272+08:00",
                     "current_connections": 0
                   }
@@ -31305,8 +31526,8 @@
                         "rate_max": 0.0
                       },
                       "resource_metrics": {
-                        "matched": 0,
                         "success": 0,
+                        "matched": 0,
                         "failed": 0,
                         "rate": 0.0,
                         "rate_last5m": 0.0,
@@ -31330,8 +31551,8 @@
                         {
                           "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "matched": 0,
                             "success": 0,
+                            "matched": 0,
                             "failed": 0,
                             "rate": 0.0,
                             "rate_last5m": 0.0,
@@ -31622,13 +31843,13 @@
                     "backlog": 1024,
                     "active_n": 100
                   },
-                  "proxy_protocol_timeout": "3s",
+                  "acceptors": 16,
+                  "proxy_protocol": false,
+                  "max_connections": 204800,
                   "access_rules": [
                     "allow all"
                   ],
-                  "max_connections": 204800,
-                  "acceptors": 16,
-                  "proxy_protocol": false,
+                  "proxy_protocol_timeout": "3s",
                   "zone": "default",
                   "mountpoint": "/",
                   "current_connections": 10240
@@ -31697,13 +31918,13 @@
                   "backlog": 1024,
                   "active_n": 100
                 },
-                "proxy_protocol_timeout": "3s",
+                "acceptors": 16,
+                "proxy_protocol": false,
+                "max_connections": 204800,
                 "access_rules": [
                   "allow all"
                 ],
-                "max_connections": 204800,
-                "acceptors": 16,
-                "proxy_protocol": false,
+                "proxy_protocol_timeout": "3s",
                 "zone": "default",
                 "mountpoint": "/",
                 "current_connections": 10240
@@ -38063,7 +38284,7 @@
                     ]
                   },
                   "formatter": {
-                    "description": "The formatter that will be used to format the trace log entries. Set this to text to format the log entries as plain text (default). Set it to json to format each log entry as a JSON object.",
+                    "description": "用于格式化追踪日志条目的格式处理器。设置为 text 将日志条目格式化为纯文本（默认）。设置为 json 将每个日志条目格式化为 JSON 对象。",
                     "example": "text",
                     "oneOf": [
                       {
@@ -40232,8 +40453,8 @@
                           "name": "default",
                           "type": "udp",
                           "bind": "5683",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000
+                          "max_connections": 1024000,
+                          "max_conn_rate": 1000
                         }
                       ],
                       "idle_timeout": "30s",
@@ -40261,8 +40482,8 @@
                           "name": "default",
                           "type": "tcp",
                           "bind": "7993",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000
+                          "max_connections": 1024000,
+                          "max_conn_rate": 1000
                         }
                       ],
                       "idle_timeout": "30s",
@@ -40281,8 +40502,8 @@
                           "name": "default",
                           "type": "tcp",
                           "bind": "7325",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000
+                          "max_connections": 1024000,
+                          "max_conn_rate": 1000
                         }
                       ],
                       "mountpoint": "gbt32960/${clientid}",
@@ -40301,8 +40522,8 @@
                           "name": "default",
                           "type": "udp",
                           "bind": "5783",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000
+                          "max_connections": 1024000,
+                          "max_conn_rate": 1000
                         }
                       ],
                       "idle_timeout": "30s",
@@ -40354,8 +40575,8 @@
                           "name": "default",
                           "type": "udp",
                           "bind": "1884",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000
+                          "max_connections": 1024000,
+                          "max_conn_rate": 1000
                         }
                       ],
                       "idle_timeout": "30s",
@@ -40407,8 +40628,8 @@
                           "name": "default",
                           "type": "tcp",
                           "bind": "61613",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000
+                          "max_connections": 1024000,
+                          "max_conn_rate": 1000
                         }
                       ],
                       "idle_timeout": "30s",
@@ -44963,13 +45184,13 @@
                     "backlog": 1024,
                     "active_n": 100
                   },
-                  "proxy_protocol_timeout": "3s",
+                  "acceptors": 16,
+                  "proxy_protocol": false,
+                  "max_connections": 204800,
                   "access_rules": [
                     "allow all"
                   ],
-                  "max_connections": 204800,
-                  "acceptors": 16,
-                  "proxy_protocol": false,
+                  "proxy_protocol_timeout": "3s",
                   "zone": "default",
                   "mountpoint": "/",
                   "current_connections": 10240
@@ -45059,13 +45280,13 @@
                     "backlog": 1024,
                     "active_n": 100
                   },
-                  "proxy_protocol_timeout": "3s",
+                  "acceptors": 16,
+                  "proxy_protocol": false,
+                  "max_connections": 204800,
                   "access_rules": [
                     "allow all"
                   ],
-                  "max_connections": 204800,
-                  "acceptors": 16,
-                  "proxy_protocol": false,
+                  "proxy_protocol_timeout": "3s",
                   "zone": "default",
                   "mountpoint": "/",
                   "current_connections": 10240
@@ -45156,13 +45377,13 @@
                   "backlog": 1024,
                   "active_n": 100
                 },
-                "proxy_protocol_timeout": "3s",
+                "acceptors": 16,
+                "proxy_protocol": false,
+                "max_connections": 204800,
                 "access_rules": [
                   "allow all"
                 ],
-                "max_connections": 204800,
-                "acceptors": 16,
-                "proxy_protocol": false,
+                "proxy_protocol_timeout": "3s",
                 "zone": "default",
                 "mountpoint": "/",
                 "current_connections": 10240
