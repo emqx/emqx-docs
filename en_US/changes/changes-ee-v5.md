@@ -6,6 +6,8 @@
 
 ### Enhancements
 
+- [#12983](https://github.com/emqx/emqx/pull/12983) Add new rule engine event `$events/client_check_authn_complete` for authentication completion event.
+
 - [#13175](https://github.com/emqx/emqx/pull/13175) Added the `disable_prepared_statements` option for Postgres-based connectors.
 
   This option is to be used with endpoints that do not support the prepared statements session feature, such as PGBouncer and Supabase in Transaction mode.
@@ -47,8 +49,6 @@
 
   - Certificate Key Usage validation: Added support for required Extended Key Usage as defined in
     [rfc5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.12). A new option (`verify_peer_ext_key_usage`) has been introduced to enforce specific key usages (such as "serverAuth") in peer certificates during the TLS handshake. This enhances security by ensuring certificates are used for their intended purposes, for example, "serverAuth,OID:1.3.6.1.5.5.7.3.2". Check the [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) for more details.
-  
-
 
 - [#13274](https://github.com/emqx/emqx/pull/13274) The RocketMQ connector now supports configuring SSL settings.
 
