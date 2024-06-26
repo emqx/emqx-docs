@@ -431,7 +431,7 @@ str(0.000000314159265359) = '0.0000003142'
 
 ## String Operation Functions
 
-String functions can be used for case transformations, space removal, substring extraction, replacement, and other operations.
+String functions can be used for case transformations, space removal, substring extraction, replacement, escaping/unescaping, and other operations.
 
 ### ascii(Char: string) -> integer
 
@@ -717,6 +717,76 @@ Removes leading and trailing characters from a `String` that should be considere
 trim('\t  hello  \n') = 'hello'
 trim('\t  hello \r\n') = 'hello'
 ```
+
+### unescape(String: string) -> string
+
+The unescape function converts escape sequences back to their represented characters. When escape sequences are used in SQL, this function should be used to unescape them first for proper processing.
+
+For example, when the Payload is a newline-separated string:
+
+```bash
+32A48702-1FA6-4E7C-97F7-8EA3EA48E8A3
+87.2
+12.3
+my-device
+```
+
+If you want to split the Payload into an array using `\n`. The following SQL will not execute as expected:
+
+```sql
+SELECT split(payload, '\n') as device_info FROM 't/#'
+```
+
+Output result:
+
+```json
+{
+  "device_info": [
+    "32A48702-1FA6-4E7C-97F7-8EA3EA48E8A3\n87.2\n12.3\nmy-device"
+  ]
+}
+```
+
+Using the unescape function to unescape `\n`, you can get the desired result:
+
+```sql
+SELECT split(payload, unescape('\n')) as device_info FROM 't/#'
+```
+
+Output result:
+
+```json
+{
+  "device_info": [
+    "32A48702-1FA6-4E7C-97F7-8EA3EA48E8A3",
+    "87.2",
+    "12.3",
+    "my-device"
+  ]
+}
+```
+
+**The unescape function supports the following escape sequences:**
+
+- Standard C escape sequences:
+
+  - `\n` for newline (LF)
+  - `\t` for horizontal tab (HT)
+  - `\r` for carriage return (CR)
+  - `\b` for backspace (BS)
+  - `\f` for formfeed (FF)
+  - `\v` for vertical tab (VT)
+  - `\'` for single quote (')
+  - `\"` for double quote (")
+  - `\\` for backslash ()
+  - `\?` for question mark (?)
+  - `\a` for alert (bell, BEL)
+
+- Hexadecimal escape codes:
+
+  - `\xH...` where `H...` is one or more hexadecimal digits (0-9, A-F, a-f), allowing for the encoding of arbitrary utf32 characters.
+
+If an escape sequence is not recognized, or if the hexadecimal escape does not form a valid Unicode character, the function throws an exception.
 
 ### upper(String: string) -> string
 

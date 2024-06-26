@@ -166,9 +166,10 @@ SELECT pub_props.'User-Property'.foo as foo FROM "t/#"
 
 - FROM 子句后面的主题需要用双引号 `""`，或者单引号 `''` 引起来。
 - WHERE 子句后面接筛选条件，如果使用到字符串需要用单引号 `''` 引起来。
-- FROM 子句里如有多个主题，需要用逗号 `","` 分隔。例如 SELECT * FROM "t/1", "t/2" 。
+- FROM 子句里如有多个主题，需要用逗号 `","` 分隔。例如 `SELECT * FROM "t/1", "t/2"` 。
 - 可以使用使用 `"."` 符号对 payload 进行嵌套选择。
-- 尽量不要给 payload 创建别名，否则会影响运行性能。即尽量不要这么写：`SELECT payload as p`
+- 尽量不要给 payload 创建别名，否则会影响运行性能。即尽量不要这么写：`SELECT payload as p`。
+- 一些转义字符使用时需要进行反转义，参考 [unescape 函数](./rule-sql-builtin-functions.md#unescapestring-string---string)。
 :::
 
 ### 遍历语法(FOREACH-DO-INCASE) 举例

@@ -4,7 +4,7 @@
 
 在本章节中，所有函数的声明都遵循以下格式：
 
-```
+```bash
 FuncName(Arg 1: Type 1 | ..., ...) -> Type 1 | ...
 ```
 
@@ -12,9 +12,10 @@ FuncName(Arg 1: Type 1 | ..., ...) -> Type 1 | ...
 
 注意，如果传入参数的值超出了限定范围或者使用了不支持的数据类型，将导致当前 SQL 执行失败，并使执行失败计数加 1。
 
-:::tip
+:::tip 提示
 
-从 EMQX 5.0 版本开始，EMQX 还支持使用 [jq 语法](https://stedolan.github.io/jq/manual/) 处理复杂的 JSON 数据，您可以阅读 [jq 函数](./rule-sql-jq.md) 部分了解更多信息。
+1. 如果函数中要使用
+2. 从 EMQX 5.0 版本开始，EMQX 还支持使用 [jq 语法](https://stedolan.github.io/jq/manual/) 处理复杂的 JSON 数据，您可以阅读 [jq 函数](./rule-sql-jq.md) 部分了解更多信息。
 
 :::
 
@@ -434,7 +435,7 @@ str(0.000000314159265359) = '0.0000003142'
 
 ## 字符串操作函数
 
-字符串函数可用于对字符串的大小写转换、空格删除、子串截取、替换等处理。
+字符串函数可用于对字符串的大小写转换、空格删除、子串截取、转义/反转义、替换等处理。
 
 ### ascii(Char: string) -> integer
 
@@ -720,6 +721,76 @@ tokens('a\rb\nc\r\nd', ';', 'nocrlf') = ['a', 'b', 'c', 'd']
 trim('\t  hello  \n') = 'hello'
 trim('\t  hello \r\n') = 'hello'
 ```
+
+### unescape(String: string) -> string
+
+反转义函数，用于将转义字符转换回它们表示的字符。当 SQL 中使用了转义字符时，需要首先使用该函数进行反转义才能正确使用。
+
+例如当 Payload 为换行字符串：
+
+```bash
+32A48702-1FA6-4E7C-97F7-8EA3EA48E8A3
+87.2
+12.3
+my-device
+```
+
+需要按照 `\n` 分割 Payload 为数组，如下 SQL 将无法按预期执行：
+
+```sql
+SELECT split(payload, '\n') as device_info FROM 't/#'
+```
+
+输出结果：
+
+```json
+{
+  "device_info": [
+    "32A48702-1FA6-4E7C-97F7-8EA3EA48E8A3\n87.2\n12.3\nmy-device"
+  ]
+}
+```
+
+使用 unescape 函数对 `\n` 反转义后，可以得到期望的结果：
+
+```sql
+SELECT split(payload, unescape('\n')) as device_info FROM 't/#'
+```
+
+输出结果：
+
+```json
+{
+  "device_info": [
+    "32A48702-1FA6-4E7C-97F7-8EA3EA48E8A3",
+    "87.2",
+    "12.3",
+    "my-device"
+  ]
+}
+```
+
+**unescape 函数支持以下转义字符：**
+
+标准 C 转义序列：
+
+- `\n` 表示换行符（LF）
+- `\t` 表示水平制表符（HT）
+- `\r` 表示回车符（CR）
+- `\b` 表示退格符（BS）
+- `\f` 表示换页符（FF）
+- `\v` 表示垂直制表符（VT）
+- `\'` 表示单引号（'）
+- `\"` 表示双引号（"）
+- `\\` 表示反斜杠
+- `\?` 表示问号（?）
+- `\a` 表示警告符（响铃符，BEL）
+
+十六进制转义码：
+
+- `\xH...` 其中 `H...` 是一个或多个十六进制数字（0-9, A-F, a-f），允许编码任意的 UTF-32 字符。
+
+如果传入未识别的转义符，或者十六进制转义码包含无效的 Unicode 字符，则该函数将抛出异常。
 
 ### upper(String: string) -> string
 
