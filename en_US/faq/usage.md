@@ -119,3 +119,11 @@ CENSYS is an internet scanning and reconnaissance tool that performs regular sca
 3. Enable TLS mutual authentication to allow access only to clients with valid certificates.
 4. Enable proper authorization mechanisms to restrict access to sensitive data for unauthorized devices.
 5. Configure your firewall to close unnecessary ports as much as possible.
+
+## How to reset the Dashboard login password if I forget it?
+
+The default username and password of the Dashboard are admin and public respectively. For security reasons, the Dashboard will force you to change your password when you log in for the first time. If you forget the password you set previously, you can use the following command to set a new password without providing the old password:
+
+```
+emqx ctl admin <Username> <New Password>
+```
