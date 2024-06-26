@@ -125,8 +125,9 @@ Before add PostgreSQL Sink, you need to create the PostgreSQL connector. It assu
 8. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to PostgreSQL and record client events. For detailed steps, see [Create a Rule with PostgreSQL Sink for Message Storage](#create-a-rule-with-postgresql-sink-for-message-storage) and [Create a Rule with PostgreSQL Sink for Events Recording](#create-a-rule-with-postgresql-for-events-recording).
 
 :::tip Note
-If you are using a PostgreSQL service that does not support prepared statements, such as PGBouncer in transaction mode or Supabase, please enable the **Disable Prepared Statements** option in the Advanced Settings.
-This option has been introduced since EMQX v5.7.1.
+
+EMQX v5.7.1 introduced a **Disable Prepared Statements** option. If you are using a PostgreSQL service that does not support prepared statements, such as PGBouncer in transaction mode or Supabase, enable this option in the Advanced Settings.
+
 :::
 
 ## Create a Rule with PostgreSQL Sink for Message Storage

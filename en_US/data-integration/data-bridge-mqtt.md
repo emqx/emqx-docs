@@ -91,7 +91,7 @@ To address this issue, from version 5.7.1 onwards, EMQX has implemented the foll
 - **No prefix**: Behavior remains unchanged; EMQX will hash the long (> 23 bytes) client ID into a 23-byte space.
 - **With prefix**:
   - **Prefix up to 19 bytes**: The prefix is preserved, and the remainder of the client ID is hashed into a 4-byte space capping the length within 23 bytes.
-  - **Prefix of 20 bytes or more**: EMQX no longer attempts to shorten the client ID, respecting the configured prefix in its entirety.
+  - **Prefix of 20 bytes or more**: EMQX will use the configured prefix, and no longer attempts to shorten the client ID.
 
 ## Create a Rule with MQTT Broker Sink
 

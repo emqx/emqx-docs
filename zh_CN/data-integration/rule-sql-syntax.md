@@ -16,25 +16,25 @@ SELECT <字段名> FROM <主题> [WHERE <条件>]
 
 SELECT 语句用于决定最终的输出结果里的字段。比如:
 
-1. 选取 username 为 'abc' 的终端发来的消息，输出结果为所有可用字段:
+选取 username 为 'abc' 的终端发来的消息，输出结果为所有可用字段:
 
 ```sql
 SELECT * FROM "#" WHERE username = 'abc'
 ```
 
-2. 选取 clientid 为 'abc' 的终端发来的消息，输出结果将只有 cid 一个字段。注意 cid 变量是在 SELECT 语句中定义的，故可在 WHERE 语句中使用:
+选取 clientid 为 'abc' 的终端发来的消息，输出结果将只有 cid 一个字段。注意， cid 变量是在 SELECT 语句中定义的，故可在 WHERE 语句中使用:
 
 ```sql
 SELECT clientid as cid FROM "#" WHERE cid = 'abc'
 ```
 
-3. 选取 username 为 'abc' 的终端发来的消息，输出结果将只有 cid 一个字段。注意虽然 SELECT 语句中只选取了 cid 一个字段，所有消息发布事件中的可用字段 (比如 clientid、username 等) 仍然可以在 WHERE 语句中使用:
+选取 username 为 'abc' 的终端发来的消息，输出结果将只有 cid 一个字段。注意，虽然 SELECT 语句中只选取了 cid 一个字段，所有消息发布事件中的可用字段 (比如 clientid、username 等) 仍然可以在 WHERE 语句中使用:
 
 ```sql
 SELECT clientid as cid FROM "#" WHERE username = 'abc'
 ```
 
-4. 但下面这个 SQL 语句就不能工作了，因为变量 xyz 既不是消息发布事件中的可用字段，又没有在 SELECT 语句中定义:
+但下面这个 SQL 语句将无法工作，因为变量 xyz 既不是消息发布事件中的可用字段，又没有在 SELECT 语句中定义:
 
 ```sql
 -- 错误示例
