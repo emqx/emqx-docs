@@ -122,7 +122,12 @@ Before add PostgreSQL Sink, you need to create the PostgreSQL connector. It assu
    - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
 6. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 7. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the PostgreSQL server.
-8. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to PostgreSQL and record client events. For detailed steps, see [Create a Rule with PostgreSQL Sink for Message Storage](#create-a-rule-with-postresql-sink-for-message-storage) and [Create a Rule with PostgreSQL Sink for Events Recording](#create-a-rule-with-postgresql-sink-for-events-recording).
+8. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to PostgreSQL and record client events. For detailed steps, see [Create a Rule with PostgreSQL Sink for Message Storage](#create-a-rule-with-postgresql-sink-for-message-storage) and [Create a Rule with PostgreSQL Sink for Events Recording](#create-a-rule-with-postgresql-for-events-recording).
+
+:::tip Note
+If you are using a PostgreSQL service that does not support prepared statements, such as PGBouncer in transaction mode or Supabase, please enable the **Disable Prepared Statements** option in the Advanced Settings.
+This option has been introduced since EMQX v5.7.1.
+:::
 
 ## Create a Rule with PostgreSQL Sink for Message Storage
 
