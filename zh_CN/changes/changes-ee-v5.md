@@ -56,9 +56,9 @@
 
 - [#13258](https://github.com/emqx/emqx/pull/13258) 修复了 MQTT-SN 网关因依赖启动顺序错误而无法正确重启的问题。
 
-- [#13273](https://github.com/emqx/emqx/pull/13273) 修复并改进了在以下几个配置中对URI的处理，具体包括：
+- [#13273](https://github.com/emqx/emqx/pull/13273) 修复并改进了在以下几个配置中对 URI 的处理，具体包括：
 
-  - 认证和授权配置：纠正了先前的错误，之前错误地拒绝了没有路径的有效 URI，如 `https://example.com?q=x`。这些URI现在被正确识别为有效。
+  - 认证和授权配置：纠正了先前的错误，之前错误地拒绝了没有路径的有效 URI，如 `https://example.com?q=x`。这些 URI 现在被正确识别为有效。
 
   - 连接器配置：增强了检查，确保不再错误接受包含潜在问题组件的 URI，如用户信息或片段部分。
 
