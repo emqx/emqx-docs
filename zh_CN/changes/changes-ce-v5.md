@@ -12,22 +12,7 @@
 
 - [#13191](https://github.com/emqx/emqx/pull/13191) 将 EMQX Docker 镜像升级至运行在Erlang/OTP 26上。
 
-  自 v5.5 版本以来，EMQX 一直在Erlang/OTP 26上运行，但 Docker 镜像仍在 Erlang/OTP 25 上。现在所有版本都升级到 Erlang/OTP 26。此升级解决了以下已知问题：
-
-  当 EMQX 的旧版本加入含有新版本节点的集群时，旧版本节点的 Schema Registry 可能会遇到问题，日志如下：
-
-  ```
-  Error loading module '$schema_parser___CiYAWBja87PleCyKZ58h__SparkPlug_B_BUILT-IN':,
-  This BEAM file was compiled for a later version of the runtime system than the current (Erlang/OTP 25).
-  ```
-
-  新版本已修复此问题。然而，对于旧版本，需要一个手动步骤。在旧版本 EMQX 加入集群之前，在集群的一个节点上执行以下命令：
-
-  ```shell
-  emqx eval 'lists:foreach(fun(Key) -> mnesia:dirty_delete(emqx_ee_schema_registry_protobuf_cache_tab, Key) end, mnesia:dirty_all_keys(emqx_ee_schema_registry_protobuf_cache_tab)).'
-  ```
-
-  如果旧版本的 EMQX 已经在集群中，请执行上述命令并重启受影响的节点。
+  自 v5.5 版本以来，EMQX 一直在Erlang/OTP 26上运行，但 Docker 镜像仍在 Erlang/OTP 25 上。现在所有版本都升级到 Erlang/OTP 26。
 
 - [#13242](https://github.com/emqx/emqx/pull/13242) 显著提高了 EMQX Dashboard 监听器的启动速度。
 
