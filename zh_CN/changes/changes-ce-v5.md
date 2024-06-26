@@ -1,5 +1,75 @@
 # v5 版本
 
+## 5.7.1
+
+*发布日期: 2024-06-26*
+
+### 增强
+
+- [#12983](https://github.com/emqx/emqx/pull/12983) Add new rule engine event `$events/client_check_authn_complete` for authentication completion event.
+
+- [#13180](https://github.com/emqx/emqx/pull/13180) 改进了 EMQX 在 Erlang/OTP 26 上运行时客户端消息处理性能，并在 fan-in 模式下将消息吞吐量提高了10%。
+
+- [#13191](https://github.com/emqx/emqx/pull/13191) 将 EMQX Docker 镜像升级至运行在Erlang/OTP 26上。
+
+  自 v5.5 版本以来，EMQX 一直在Erlang/OTP 26上运行，但 Docker 镜像仍在 Erlang/OTP 25 上。现在所有版本都升级到 Erlang/OTP 26。此升级解决了以下已知问题：
+
+  当 EMQX 的旧版本加入含有新版本节点的集群时，旧版本节点的 Schema Registry 可能会遇到问题，日志如下：
+
+  ```
+  Error loading module '$schema_parser___CiYAWBja87PleCyKZ58h__SparkPlug_B_BUILT-IN':,
+  This BEAM file was compiled for a later version of the runtime system than the current (Erlang/OTP 25).
+  ```
+
+  新版本已修复此问题。然而，对于旧版本，需要一个手动步骤。在旧版本 EMQX 加入集群之前，在集群的一个节点上执行以下命令：
+
+  ```shell
+  emqx eval 'lists:foreach(fun(Key) -> mnesia:dirty_delete(emqx_ee_schema_registry_protobuf_cache_tab, Key) end, mnesia:dirty_all_keys(emqx_ee_schema_registry_protobuf_cache_tab)).'
+  ```
+
+  如果旧版本的 EMQX 已经在集群中，请执行上述命令并重启受影响的节点。
+
+- [#13242](https://github.com/emqx/emqx/pull/13242) 显著提高了 EMQX Dashboard 监听器的启动速度。
+
+### 修复
+
+- [#13156](https://github.com/emqx/emqx/pull/13156) 解决了更新至 EMQX v5.7.0 后，Dashboard 的监控页面崩溃的问题。
+
+- [#13164](https://github.com/emqx/emqx/pull/13164) [#13164](https://github.com/emqx/emqx/pull/13164) 修复了 HTTP 授权请求体编码问题。原本，HTTP 授权请求体的编码格式依据 `accept` 头部来设置。现在调整为根据 `content-type` 头部来确定编码格式。同时，为了兼容 v4 版本，添加了 `access` 模板变量。其中，SUBSCRIBE 操作的访问代码为 `1`，PUBLISH 操作的访问代码为 `2`。
+
+- [#13238](https://github.com/emqx/emqx/pull/13238) 优化了在返回不支持的内容类型头部的 HTTP 授权请求时的错误消息记录。
+
+- [#13258](https://github.com/emqx/emqx/pull/13258) 修复了 MQTT-SN 网关因依赖启动顺序错误而无法正确重启的问题。
+
+- [#13273](https://github.com/emqx/emqx/pull/13273) 修复并改进了在以下几个配置中对URI的处理，具体包括：
+
+  - 认证和授权配置：纠正了先前的错误，之前错误地拒绝了没有路径的有效 URI，如 `https://example.com?q=x`。这些URI现在被正确识别为有效。
+
+  - 连接器配置：增强了检查，确保不再错误接受包含潜在问题组件的 URI，如用户信息或片段部分。
+
+- [#13276](https://github.com/emqx/emqx/pull/13276) 修复了在设置新的存储代时，部分内部存储状态未被正确持久化的问题。这里的“代”是内部用于管理消息过期和清理的一个关键概念。此问题可能会导致EMQX重启后消息丢失。
+
+- [#13291](https://github.com/emqx/emqx/pull/13291) 修复了一个问题，错误地将已宕机的持久存储站点报告为正常在线的情况。
+
+- [#13290](https://github.com/emqx/emqx/pull/13290) 修复了使用 `$ bin/emqx ctl rules show rule_0hyd` 命令显示带有数据集成动作的规则时无输出的问题。
+
+- [#13293](https://github.com/emqx/emqx/pull/13293) 通过自动重新索引导入到备份文件的保留消息，改进了数据备份恢复过程。之前，导入数据备份文件后需要手动使用 `emqx ctl retainer reindex start` 命令进行重新索引。
+
+  此修复还扩展了功能，当 `retainer.backend.storage_type` 配置为 `ram` 时，现在也支持将保留消息导出到备份文件。之前，只有将存储类型配置为 `disc` 的设置支持导出保留消息。
+
+- [#13140](https://github.com/emqx/emqx/pull/13140) 修复了导致消息重发布动作的文本追踪崩溃并无法正确显示的问题。
+
+- [#13148](https://github.com/emqx/emqx/pull/13148) 修复了在等待资源连接时 `/connectors/:connector-id/start` 可能返回 500 HTTP 状态码的问题。
+
+- [#13181](https://github.com/emqx/emqx/pull/13181) 当尝试停止连接器操作超时时，EMQX 现在会强制关闭连接器进程。此修复还提高了当底层连接器无响应导致无法停用动作或源时，错误消息的清晰性和准确性。
+
+- [#13216](https://github.com/emqx/emqx/pull/13216) 调整了 MQTT 桥接中 `clientid_prefix` 配置的处理方式。自 EMQX v5.4.1 起，MQTT 客户端 ID 的长度被限制为最多 23 字节。之前，系统将 `clientid_prefix` 计入原始更长客户端 ID 的哈希值中，这影响了最终的 ID 缩短处理。此修复涵盖以下具体变更：
+
+  - 无前缀情况：处理方式保持不变。EMQX 对超过 23 字节的长客户端 ID 进行哈希处理，以符合 23 字节的限制。
+  - 带前缀情况：
+    - 前缀长度 ≤ 19 字节：保留前缀，并将客户端 ID 的剩余部分缩减到 4 字节，确保总长度不超过 23 字节。
+    - 前缀长度 ≥ 20 字节：EMQX 将不尝试缩短客户端 ID，而是完全保留设定的前缀，无论其长度如何。
+
 ## 5.7.0
 
 *发布日期: 2024-05-27*
