@@ -14,7 +14,7 @@ FuncName(Arg 1: Type 1 | ..., ...) -> Type 1 | ...
 
 :::tip 提示
 
-1. 如果函数中要使用
+1. 一些转义字符使用时需要进行反转义，参考 [unescape 函数](#unescapestring-string---string)。
 2. 从 EMQX 5.0 版本开始，EMQX 还支持使用 [jq 语法](https://stedolan.github.io/jq/manual/) 处理复杂的 JSON 数据，您可以阅读 [jq 函数](./rule-sql-jq.md) 部分了解更多信息。
 
 :::

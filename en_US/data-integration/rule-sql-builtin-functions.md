@@ -14,7 +14,8 @@ Be aware that if the provided argument exceeds the stipulated range or employs a
 
 :::tip
 
-Since EMQX 5.0 version, EMQX also supports using  [jq Syntax](https://stedolan.github.io/jq/manual/) for complex data transformation, you may read the [jq Fucntion](./rule-sql-jq.md) section for more information.
+1. Some escape sequences need to be unescaped when used, see [unescape function](#unescapestring-string---string).
+2. Since EMQX 5.0 version, EMQX also supports using  [jq Syntax](https://stedolan.github.io/jq/manual/) for complex data transformation, you may read the [jq Fucntion](./rule-sql-jq.md) section for more information.
 
 :::
 
