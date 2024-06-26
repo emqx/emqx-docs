@@ -24,11 +24,11 @@ MQTT v5.0 协议为 CONNECT 报文新增了一个 `Receive Maximum` 的属性，
 
 ## 配置项
 
-| 配置项            | 类型    | 可取值            | 默认值                                     | 说明                                                   |
+| 配置项             | 类型     | 可取值          | 默认值                                     | 说明                                                   |
 | ----------------- | ------- | ----------------- | ------------------------------------------ | ------------------------------------------------------ |
-| max_inflight      | integer | >= 0              | 32 *(external)*,<br /> 128 *(internal)*    | 飞行窗口度限制，0 即无限制                    |
-| max_mqueue_len    | integer | >= 0              | 1000 *(external)*,<br />10000 *(internal)* | 消息队列长度限制，0 即无限制                     |
-| mqueue_store_qos0 | enum    | `true`, `false`   | true                                       | 客户端离线时 EMQX 是否存储 QoS 0 消息至消息队列 |
+| max_inflight      | integer | (0, 65536)      | 32 *(external)*,<br /> 128 *(internal)*    | 飞行窗口度限制，0 即无限制                    |
+| max_mqueue_len    | integer | [0, ∞)          | 1000 *(external)*,<br />10000 *(internal)* | 消息队列长度限制，0 即无限制                     |
+| mqueue_store_qos0 | enum    | `true`, `false` | true                                       | 客户端离线时 EMQX 是否存储 QoS 0 消息至消息队列 |
 
 
 
