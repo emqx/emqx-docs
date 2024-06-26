@@ -65,6 +65,7 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 - **数据库**：填入 PostgreSQL 的数据库名称。
 - **用户名**（可选）：填入用户名称。
 - **密码**（可选）：填入用户密码。
+- **禁用预处理**（可选）：如果您使用的是不支持预处理语句会话的 PostgreSQL 服务，例如在事务模式下的 PGBouncer 或 Supabase，请启用此项。这个选项在  EMQX v5.7.1 中引入。
 
 **TLS 配置**：配置是否启用 TLS。
 

@@ -72,6 +72,7 @@ Follow the instruction below on how to configure:
 - **Database**: PostgreSQL database name.
 - **Username** (optional): Specify user name. 
 - **Password** (optional): Specify user password. 
+- **Disable Prepared Statements** (optional): If you are using a PostgreSQL service that does not support prepared statements, such as PGBouncer in transaction mode or Supabase, please enable this option. This option was introduced in EMQ X v5.7.1.
 
 **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
 

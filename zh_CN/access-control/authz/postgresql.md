@@ -49,8 +49,33 @@ INSERT 0 1
 query = "SELECT permission, action, topic, qos, retain FROM mqtt_acl WHERE username = ${username}"
 ```
 
-## 配置项
+## 通过  Dashboard 配置
 
+您可以使用 EMQX Dashboard 配置如何使用 PostgreSQL 进行用户授权。
+
+1. 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication)，点击左侧目录上的 **访问控制** -> **客户端授权** 进入授权检查器页面。
+
+2. 点击右上角的**创建**，然后点击选择 **PostgreSQL**作为**数据源**。单击**下一步**。
+
+3. 按照以下说明进行配置。
+
+   **连接**：填写连接 PostgreSQL 所需的信息。
+
+   - **服务**：指定 EMQX 要连接的服务器地址（`host:port`）。
+   - **数据库**： PostgreSQL 数据库名称。
+   - **用户名**（可选）： 指定用户名。
+   - **密码**（可选）： 指定用户密码。
+   - **禁用预处理语句**（可选）：如果使用的 PostgreSQL 服务不支持预处理语句，如事务模式下的 PGBouncer 或 Supabase，请启用此选项。该选项在 EMQ X v5.7.1 中引入。
+
+   - **TLS 配置**：如果要启用 TLS，请启用此项。
+
+   - **连接池大小**（可选）： 输入一个整数值，以定义从 EMQX 节点到 PostgreSQL 的并发连接数。默认值： **8**.
+
+   - **SQL**： 根据数据模式填写查询语句。有关详细信息，请参阅 [表结构与查询语句](#表结构与查询语句)。
+
+4. 单击**创建**完成设置。
+
+## 配置项
 
 <!--详细配置请参考 [authz:postgresql](../../configuration/configuration-manual.html#authz:postgresql)。-->
 

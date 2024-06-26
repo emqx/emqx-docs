@@ -122,7 +122,7 @@ CREATE TABLE emqx_client_events (
 
 :::tip 提示
 如果您使用的是不支持预处理语句会话的 PostgreSQL 服务，例如在事务模式下的 PGBouncer 或 Supabase，请在高级设置中打开**禁用预处理语句**开关。
-这个选项在  EMQXv5.7.1 中引入。
+这个选项在  EMQX v5.7.1 中引入。
 :::
 
 ## 创建消息存储 Sink 规则
