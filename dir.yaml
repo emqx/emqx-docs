@@ -48,7 +48,7 @@
           path: faq/feature
         - title_en: Usage FAQs
           title_cn: 使用问题
-          path: faq/usage
+          path: faq/faq
     - title_en: Technical Support
       title_cn: 技术支持
       path: support/technical-support
@@ -90,7 +90,7 @@
           path: faq/feature
         - title_en: Usage FAQs
           title_cn: 使用问题
-          path: faq/usage
+          path: faq/faq
     - title_en: Technical Support
       title_cn: 技术支持
       path: support/technical-support
