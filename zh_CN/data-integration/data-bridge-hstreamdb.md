@@ -64,7 +64,11 @@ EMQX 通过规则引擎和配置的 Sink 将 MQTT 数据转发到 Apache HStream
 - 了解[规则](./rules.md)。
 - 了解[数据集成](./data-bridges.md)。
 
-### 启动 HStreamDB TCP 服务并创建 Stream
+### 启动 HStreamDB 服务并创建 Stream
+
+::::: tabs
+
+:::: tab 启动 HStreamDB TCP 服务并创建 Stream
 
 本节介绍了如何在本地的 Docker 环境中启动一个单节点的 HStreamDB TCP 服务并创建 Stream。
 
@@ -76,99 +80,98 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 
 1. 将以下 yaml 文件保存至 `docker-compose-tcp.yaml`。
 
-  <details>
-  <summary><code>docker-compose-tcp.yaml</code></summary>
+   ::: details `docker-compose-tcp.yaml`
 
-  ```yaml
-  version: "3.9"
+   ```yaml
+   version: "3.9"
 
-  services:
-    hserver:
-      image: hstreamdb/hstream:v0.17.0
-      container_name: quickstart-tcp-hserver
-      depends_on:
-        - zookeeper
-        - hstore
-      ports:
-        - "127.0.0.1:6570:6570"
-      expose:
-        - 6570
-      networks:
-        - quickstart-tcp
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - /tmp:/tmp
-        - data_store:/data/store
-      command:
-        - bash
-        - "-c"
-        - |
-          set -e
-          /usr/local/script/wait-for-storage.sh hstore 6440 zookeeper 2181 600 \
-          /usr/local/bin/hstream-server \
-          --bind-address 0.0.0.0 --port 6570 \
-          --internal-port 6571 \
-          --server-id 100 \
-          --seed-nodes "$$(hostname -I | awk '{print $$1}'):6571" \
-          --advertised-address $$(hostname -I | awk '{print $$1}') \
-          --metastore-uri zk://zookeeper:2181 \
-          --store-config /data/store/logdevice.conf \
-          --store-admin-host hstore --store-admin-port 6440 \
-          --store-log-level warning \
-          --io-tasks-path /tmp/io/tasks \
-          --io-tasks-network quickstart-tcp
+   services:
+     hserver:
+       image: hstreamdb/hstream:v0.17.0
+       container_name: quickstart-tcp-hserver
+       depends_on:
+         - zookeeper
+         - hstore
+       ports:
+         - "127.0.0.1:6570:6570"
+       expose:
+         - 6570
+       networks:
+         - quickstart-tcp
+       volumes:
+         - /var/run/docker.sock:/var/run/docker.sock
+         - /tmp:/tmp
+         - data_store:/data/store
+       command:
+         - bash
+         - "-c"
+         - |
+           set -e
+           /usr/local/script/wait-for-storage.sh hstore 6440 zookeeper 2181 600 \
+           /usr/local/bin/hstream-server \
+           --bind-address 0.0.0.0 --port 6570 \
+           --internal-port 6571 \
+           --server-id 100 \
+           --seed-nodes "$$(hostname -I | awk '{print $$1}'):6571" \
+           --advertised-address $$(hostname -I | awk '{print $$1}') \
+           --metastore-uri zk://zookeeper:2181 \
+           --store-config /data/store/logdevice.conf \
+           --store-admin-host hstore --store-admin-port 6440 \
+           --store-log-level warning \
+           --io-tasks-path /tmp/io/tasks \
+           --io-tasks-network quickstart-tcp
 
-    hstore:
-      image: hstreamdb/hstream:v0.17.0
-      container_name: quickstart-tcp-hstore
-      networks:
-        - quickstart-tcp
-      volumes:
-        - data_store:/data/store
-      command:
-        - bash
-        - "-c"
-        - |
-          set -ex
-          # N.B. "enable-dscp-reflection=false" is required for linux kernel which
-          # doesn't support dscp reflection, e.g. centos7.
-          /usr/local/bin/ld-dev-cluster --root /data/store \
-          --use-tcp --tcp-host $$(hostname -I | awk '{print $$1}') \
-          --user-admin-port 6440 \
-          --param enable-dscp-reflection=false \
-          --no-interactive
+     hstore:
+       image: hstreamdb/hstream:v0.17.0
+       container_name: quickstart-tcp-hstore
+       networks:
+         - quickstart-tcp
+       volumes:
+         - data_store:/data/store
+       command:
+         - bash
+         - "-c"
+         - |
+           set -ex
+           # N.B. "enable-dscp-reflection=false" is required for linux kernel which
+           # doesn't support dscp reflection, e.g. centos7.
+           /usr/local/bin/ld-dev-cluster --root /data/store \
+           --use-tcp --tcp-host $$(hostname -I | awk '{print $$1}') \
+           --user-admin-port 6440 \
+           --param enable-dscp-reflection=false \
+           --no-interactive
 
-    zookeeper:
-      image: zookeeper:3.8.1
-      container_name: quickstart-tcp-zk
-      expose:
-        - 2181
-      networks:
-        - quickstart-tcp
-      volumes:
-        - data_zk_data:/data
-        - data_zk_datalog:/datalog
+     zookeeper:
+       image: zookeeper:3.8.1
+       container_name: quickstart-tcp-zk
+       expose:
+         - 2181
+       networks:
+         - quickstart-tcp
+       volumes:
+         - data_zk_data:/data
+         - data_zk_datalog:/datalog
 
-  networks:
-    quickstart-tcp:
-      name: quickstart-tcp
+   networks:
+     quickstart-tcp:
+       name: quickstart-tcp
 
-  volumes:
-    data_store:
-      name: quickstart_tcp_data_store
-    data_zk_data:
-      name: quickstart_tcp_data_zk_data
-    data_zk_datalog:
-      name: quickstart_tcp_data_zk_datalog
-  ```
+   volumes:
+     data_store:
+       name: quickstart_tcp_data_store
+     data_zk_data:
+       name: quickstart_tcp_data_zk_data
+     data_zk_datalog:
+       name: quickstart_tcp_data_zk_datalog
+   ```
 
-  </details>
+   :::
 
 2. 执行以下 shell 命令以启动 HStreamDB TCP 服务。
 
-  ```bash
-  docker compose -f docker-compose-tcp.yaml up --build
-  ```
+   ```bash
+   docker compose -f docker-compose-tcp.yaml up --build
+   ```
 
 3. 进入 HStreamDB 容器并创建名为 `mqtt_connect` 和 `mqtt_message` 的两个 Stream。
 
@@ -178,39 +181,35 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 
    :::
 
-  <details>
-  <summary><b>进入 HStreamDB 容器创建 Stream 的命令</b></summary>
+   ```bash
+   $ docker container exec -it quickstart-tcp-hserver bash
+   # 创建 Stream `mqtt_connect`
+   root@9c7ce2f51860:/# hstream stream create mqtt_connect
+   +--------------+---------+----------------+-------------+
+   | Stream Name  | Replica | Retention Time | Shard Count |
+   +--------------+---------+----------------+-------------+
+   | mqtt_connect | 1       | 604800 seconds | 1           |
+   +--------------+---------+----------------+-------------+
+   # 创建 Stream `mqtt_message`
+   root@9c7ce2f51860:/# hstream stream create mqtt_message
+   +--------------+---------+----------------+-------------+
+   | Stream Name  | Replica | Retention Time | Shard Count |
+   +--------------+---------+----------------+-------------+
+   | mqtt_message | 1       | 604800 seconds | 1           |
+   +--------------+---------+----------------+-------------+
+   # 列出所有 Stream
+   root@9c7ce2f51860:/# hstream stream list
+   +--------------+---------+----------------+-------------+
+   | Stream Name  | Replica | Retention Time | Shard Count |
+   +--------------+---------+----------------+-------------+
+   | mqtt_message | 1       | 604800 seconds | 1           |
+   +--------------+---------+----------------+-------------+
+   | mqtt_connect | 1       | 604800 seconds | 1           |
+   +--------------+---------+----------------+-------------+
+   ```
 
-  ```bash
-  $ docker container exec -it quickstart-tcp-hserver bash
-  # 创建 Stream `mqtt_connect`
-  root@9c7ce2f51860:/# hstream stream create mqtt_connect
-  +--------------+---------+----------------+-------------+
-  | Stream Name  | Replica | Retention Time | Shard Count |
-  +--------------+---------+----------------+-------------+
-  | mqtt_connect | 1       | 604800 seconds | 1           |
-  +--------------+---------+----------------+-------------+
-  # 创建 Stream `mqtt_message`
-  root@9c7ce2f51860:/# hstream stream create mqtt_message
-  +--------------+---------+----------------+-------------+
-  | Stream Name  | Replica | Retention Time | Shard Count |
-  +--------------+---------+----------------+-------------+
-  | mqtt_message | 1       | 604800 seconds | 1           |
-  +--------------+---------+----------------+-------------+
-  # 列出所有 Stream
-  root@9c7ce2f51860:/# hstream stream list
-  +--------------+---------+----------------+-------------+
-  | Stream Name  | Replica | Retention Time | Shard Count |
-  +--------------+---------+----------------+-------------+
-  | mqtt_message | 1       | 604800 seconds | 1           |
-  +--------------+---------+----------------+-------------+
-  | mqtt_connect | 1       | 604800 seconds | 1           |
-  +--------------+---------+----------------+-------------+
-  ```
-
-  </details>
-
-#### 启动 HStreamDB TLS 服务并创建 Stream
+::::
+:::: tab 启动 HStreamDB TLS 服务并创建 Stream
 
 本节介绍了如何在本地的 Docker 环境中启动一个双节点的 HStreamDB TLS 服务并创建 Stream。
 
@@ -232,278 +231,279 @@ HStreamDB 资源已连接状态下，在 HStreamDB 中对 Stream 进行操作，
 
 2. 将以下 yaml 文件保存至 `tls-deploy/docker-compose-tls.yaml`。
 
-  <details>
-  <summary><code>docker-compose-tls.yaml</code></summary>
+   ::: details `docker-compose-tls.yaml`
 
-  ```yaml
-  version: "3.9"
+   ```yaml
+   version: "3.9"
 
-  services:
-    step-ca:
-      image: smallstep/step-ca:0.23.0
-      container_name: quickstart-tls-step-ca
-      networks:
-        - quickstart-tls
-      volumes:
-        - ${step_ca}:/home/step
-      environment:
-        - DOCKER_STEPCA_INIT_NAME=HStream
-        - DOCKER_STEPCA_INIT_DNS_NAMES=step-ca
+   services:
+     step-ca:
+       image: smallstep/step-ca:0.23.0
+       container_name: quickstart-tls-step-ca
+       networks:
+         - quickstart-tls
+       volumes:
+         - ${step_ca}:/home/step
+       environment:
+         - DOCKER_STEPCA_INIT_NAME=HStream
+         - DOCKER_STEPCA_INIT_DNS_NAMES=step-ca
 
-    generate-hstream-cert:
-      image: smallstep/step-ca:0.23.0
-      container_name: quickstart-tls-generate-hstream-cert
-      depends_on:
-        step-ca:
-          condition: service_healthy
-      networks:
-        - quickstart-tls
-      volumes:
-        - ${step_ca}:/home/step
-      command:
-        - bash
-        - "-c"
-        - |
-          sleep 1
-          if [ -f hstream.crt ]; then exit 0; fi
-          step ca certificate "hstream" hstream.crt hstream.key \
-          --provisioner-password-file secrets/password --ca-url https://step-ca:9000 \
-          --root certs/root_ca.crt \
-          --san localhost \
-          --san 127.0.0.1 \
-          --san 172.100.0.10 \
-          --san 172.100.0.11 \
-          --san quickstart-tls-hserver-0 \
-          --san quickstart-tls-hserver-1
+     generate-hstream-cert:
+       image: smallstep/step-ca:0.23.0
+       container_name: quickstart-tls-generate-hstream-cert
+       depends_on:
+         step-ca:
+           condition: service_healthy
+       networks:
+         - quickstart-tls
+       volumes:
+         - ${step_ca}:/home/step
+       command:
+         - bash
+         - "-c"
+         - |
+           sleep 1
+           if [ -f hstream.crt ]; then exit 0; fi
+           step ca certificate "hstream" hstream.crt hstream.key \
+           --provisioner-password-file secrets/password --ca-url https://step-ca:9000 \
+           --root certs/root_ca.crt \
+           --san localhost \
+           --san 127.0.0.1 \
+           --san 172.100.0.10 \
+           --san 172.100.0.11 \
+           --san quickstart-tls-hserver-0 \
+           --san quickstart-tls-hserver-1
 
-    hserver0:
-      image: hstreamdb/hstream:v0.17.0
-      container_name: quickstart-tls-hserver-0
-      depends_on:
-        - generate-hstream-cert
-        - zookeeper
-        - hstore
-      ports:
-        - "127.0.0.1:6570:6570"
-      networks:
-        quickstart-tls:
-          ipv4_address: 172.100.0.10
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - /tmp:/tmp
-        - data_store:/data/store
-        - ${step_ca}:/data/server
-      command:
-        - bash
-        - "-c"
-        - |
-          set -e
-          /usr/local/script/wait-for-storage.sh hstore 6440 zookeeper 2181 600; \
-          timeout=60; \
-          until ( \
-             [ -f /data/server/hstream.crt ] && [ -f /data/server/hstream.key ] \
-          ) >/dev/null 2>&1; do
-              >&2 echo 'Waiting for tls files ...'
-              sleep 1
-              timeout=$$((timeout - 1))
-              [ $$timeout -le 0 ] && echo 'Timeout!' && exit 1;
-          done; \
-          /usr/local/bin/hstream-server \
-          --bind-address 0.0.0.0 --port 26570 \
-          --internal-port 6571 \
-          --server-id 100 \
-          --seed-nodes "hserver0:6571,hserver1:6573" \
-          --advertised-address $$(hostname -I | awk '{print $$1}') \
-          --metastore-uri zk://zookeeper:2181 \
-          --store-config /data/store/logdevice.conf \
-          --store-admin-host hstore --store-admin-port 6440 \
-          --io-tasks-path /tmp/io/tasks \
-          --io-tasks-network quickstart-tls \
-          --tls-cert-path /data/server/hstream.crt \
-          --tls-key-path /data/server/hstream.key \
-          --advertised-listeners l1:hstream://172.100.0.10:6570 \
-          --listeners-security-protocol-map l1:tls
+     hserver0:
+       image: hstreamdb/hstream:v0.17.0
+       container_name: quickstart-tls-hserver-0
+       depends_on:
+         - generate-hstream-cert
+         - zookeeper
+         - hstore
+       ports:
+         - "127.0.0.1:6570:6570"
+       networks:
+         quickstart-tls:
+           ipv4_address: 172.100.0.10
+       volumes:
+         - /var/run/docker.sock:/var/run/docker.sock
+         - /tmp:/tmp
+         - data_store:/data/store
+         - ${step_ca}:/data/server
+       command:
+         - bash
+         - "-c"
+         - |
+           set -e
+           /usr/local/script/wait-for-storage.sh hstore 6440 zookeeper 2181 600; \
+           timeout=60; \
+           until ( \
+              [ -f /data/server/hstream.crt ] && [ -f /data/server/hstream.key ] \
+           ) >/dev/null 2>&1; do
+               >&2 echo 'Waiting for tls files ...'
+               sleep 1
+               timeout=$$((timeout - 1))
+               [ $$timeout -le 0 ] && echo 'Timeout!' && exit 1;
+           done; \
+           /usr/local/bin/hstream-server \
+           --bind-address 0.0.0.0 --port 26570 \
+           --internal-port 6571 \
+           --server-id 100 \
+           --seed-nodes "hserver0:6571,hserver1:6573" \
+           --advertised-address $$(hostname -I | awk '{print $$1}') \
+           --metastore-uri zk://zookeeper:2181 \
+           --store-config /data/store/logdevice.conf \
+           --store-admin-host hstore --store-admin-port 6440 \
+           --io-tasks-path /tmp/io/tasks \
+           --io-tasks-network quickstart-tls \
+           --tls-cert-path /data/server/hstream.crt \
+           --tls-key-path /data/server/hstream.key \
+           --advertised-listeners l1:hstream://172.100.0.10:6570 \
+           --listeners-security-protocol-map l1:tls
 
-          # NOTE:
-          # advertised-listeners ip addr should same as container addr for tls listener
+           # NOTE:
+           # advertised-listeners ip addr should same as container addr for tls listener
 
-    hserver1:
-      image: hstreamdb/hstream:v0.17.0
-      container_name: quickstart-tls-hserver-1
-      depends_on:
-        - zookeeper
-        - hstore
-      ports:
-        - "127.0.0.1:6572:6572"
-      expose:
-        - 6572
-        - 26572
-      networks:
-        quickstart-tls:
-          ipv4_address: 172.100.0.11
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - /tmp:/tmp
-        - data_store:/data/store
-        - ${step_ca}:/data/server
-      command:
-        - bash
-        - "-c"
-        - |
-          set -e
-          /usr/local/script/wait-for-storage.sh hstore 6440 zookeeper 2181 600; \
-          timeout=60; \
-          until ( \
-             [ -f /data/server/hstream.crt ] && [ -f /data/server/hstream.key ] \
-          ) >/dev/null 2>&1; do
-              >&2 echo 'Waiting for tls files ...'
-              sleep 1
-              timeout=$$((timeout - 1))
-              [ $$timeout -le 0 ] && echo 'Timeout!' && exit 1;
-          done; \
-          /usr/local/bin/hstream-server \
-          --bind-address 0.0.0.0 --port 26572 \
-          --internal-port 6573 \
-          --server-id 101 \
-          --seed-nodes "hserver0:6571,hserver1:6573" \
-          --advertised-address $$(hostname -I | awk '{print $$1}') \
-          --metastore-uri zk://zookeeper:2181 \
-          --store-config /data/store/logdevice.conf \
-          --store-admin-host hstore --store-admin-port 6440 \
-          --io-tasks-path /tmp/io/tasks \
-          --io-tasks-network quickstart-tls \
-          --tls-cert-path /data/server/hstream.crt \
-          --tls-key-path /data/server/hstream.key \
-          --advertised-listeners l1:hstream://172.100.0.11:6572 \
-          --listeners-security-protocol-map l1:tls
+     hserver1:
+       image: hstreamdb/hstream:v0.17.0
+       container_name: quickstart-tls-hserver-1
+       depends_on:
+         - zookeeper
+         - hstore
+       ports:
+         - "127.0.0.1:6572:6572"
+       expose:
+         - 6572
+         - 26572
+       networks:
+         quickstart-tls:
+           ipv4_address: 172.100.0.11
+       volumes:
+         - /var/run/docker.sock:/var/run/docker.sock
+         - /tmp:/tmp
+         - data_store:/data/store
+         - ${step_ca}:/data/server
+       command:
+         - bash
+         - "-c"
+         - |
+           set -e
+           /usr/local/script/wait-for-storage.sh hstore 6440 zookeeper 2181 600; \
+           timeout=60; \
+           until ( \
+              [ -f /data/server/hstream.crt ] && [ -f /data/server/hstream.key ] \
+           ) >/dev/null 2>&1; do
+               >&2 echo 'Waiting for tls files ...'
+               sleep 1
+               timeout=$$((timeout - 1))
+               [ $$timeout -le 0 ] && echo 'Timeout!' && exit 1;
+           done; \
+           /usr/local/bin/hstream-server \
+           --bind-address 0.0.0.0 --port 26572 \
+           --internal-port 6573 \
+           --server-id 101 \
+           --seed-nodes "hserver0:6571,hserver1:6573" \
+           --advertised-address $$(hostname -I | awk '{print $$1}') \
+           --metastore-uri zk://zookeeper:2181 \
+           --store-config /data/store/logdevice.conf \
+           --store-admin-host hstore --store-admin-port 6440 \
+           --io-tasks-path /tmp/io/tasks \
+           --io-tasks-network quickstart-tls \
+           --tls-cert-path /data/server/hstream.crt \
+           --tls-key-path /data/server/hstream.key \
+           --advertised-listeners l1:hstream://172.100.0.11:6572 \
+           --listeners-security-protocol-map l1:tls
 
-          # NOTE:
-          # advertised-listeners ip addr should same as container addr for tls listener
+           # NOTE:
+           # advertised-listeners ip addr should same as container addr for tls listener
 
-    hserver-init:
-      image: hstreamdb/hstream:v0.17.0
-      container_name: quickstart-tls-hserver-init
-      depends_on:
-        - hserver0
-        - hserver1
-      networks:
-        - quickstart-tls
-      command:
-        - bash
-        - "-c"
-        - |
-          timeout=60
-          until ( \
-              /usr/local/bin/hadmin server --host 172.100.0.10 --port 26570 status && \
-              /usr/local/bin/hadmin server --host 172.100.0.11 --port 26572 status \
-          ) >/dev/null 2>&1; do
-              >&2 echo 'Waiting for servers ...'
-              sleep 1
-              timeout=$$((timeout - 1))
-              [ $$timeout -le 0 ] && echo 'Timeout!' && exit 1;
-          done; \
-          /usr/local/bin/hadmin server --host hserver0 --port 26570 init
+     hserver-init:
+       image: hstreamdb/hstream:v0.17.0
+       container_name: quickstart-tls-hserver-init
+       depends_on:
+         - hserver0
+         - hserver1
+       networks:
+         - quickstart-tls
+       command:
+         - bash
+         - "-c"
+         - |
+           timeout=60
+           until ( \
+               /usr/local/bin/hadmin server --host 172.100.0.10 --port 26570 status && \
+               /usr/local/bin/hadmin server --host 172.100.0.11 --port 26572 status \
+           ) >/dev/null 2>&1; do
+               >&2 echo 'Waiting for servers ...'
+               sleep 1
+               timeout=$$((timeout - 1))
+               [ $$timeout -le 0 ] && echo 'Timeout!' && exit 1;
+           done; \
+           /usr/local/bin/hadmin server --host hserver0 --port 26570 init
 
-    hstore:
-      image: hstreamdb/hstream:v0.17.0
-      container_name: quickstart-tls-hstore
-      networks:
-        - quickstart-tls
-      volumes:
-        - data_store:/data/store
-      command:
-        - bash
-        - "-c"
-        - |
-          set -ex
-          /usr/local/bin/ld-dev-cluster --root /data/store \
-          --use-tcp --tcp-host $$(hostname -I | awk '{print $$1}') \
-          --user-admin-port 6440 \
-          --no-interactive
+     hstore:
+       image: hstreamdb/hstream:v0.17.0
+       container_name: quickstart-tls-hstore
+       networks:
+         - quickstart-tls
+       volumes:
+         - data_store:/data/store
+       command:
+         - bash
+         - "-c"
+         - |
+           set -ex
+           /usr/local/bin/ld-dev-cluster --root /data/store \
+           --use-tcp --tcp-host $$(hostname -I | awk '{print $$1}') \
+           --user-admin-port 6440 \
+           --no-interactive
 
-    zookeeper:
-      image: zookeeper:3.8.1
-      container_name: quickstart-tls-zk
-      expose:
-        - 2181
-      networks:
-        - quickstart-tls
-      volumes:
-        - data_zk_data:/data
-        - data_zk_datalog:/datalog
+     zookeeper:
+       image: zookeeper:3.8.1
+       container_name: quickstart-tls-zk
+       expose:
+         - 2181
+       networks:
+         - quickstart-tls
+       volumes:
+         - data_zk_data:/data
+         - data_zk_datalog:/datalog
 
-  networks:
-    quickstart-tls:
-      ipam:
-        driver: default
-        config:
-          - subnet: "172.100.0.0/24"
-      name: quickstart-tls
+   networks:
+     quickstart-tls:
+       ipam:
+         driver: default
+         config:
+           - subnet: "172.100.0.0/24"
+       name: quickstart-tls
 
-  volumes:
-    data_store:
-      name: quickstart_tls_data_store
-    data_zk_data:
-      name: quickstart_tls_data_zk_data
-    data_zk_datalog:
-      name: quickstart_tls_data_zk_datalog
-  ```
+   volumes:
+     data_store:
+       name: quickstart_tls_data_store
+     data_zk_data:
+       name: quickstart_tls_data_zk_data
+     data_zk_datalog:
+       name: quickstart_tls_data_zk_datalog
+   ```
 
-  </details>
+   :::
 
-  至此目录结构应为：
-  ```bash
-  $ tree tls-deploy
-  tls-deploy
-  ├── ca
-  └── docker-compose-tls.yaml
+   至此目录结构应为：
+   ```bash
+   $ tree tls-deploy
+   tls-deploy
+   ├── ca
+   └── docker-compose-tls.yaml
 
-  2 directories, 1 file
-  ```
+   2 directories, 1 file
+   ```
 
 3. 进入 `tls-deploy` 目录执行以下 shell 命令以启动 HStreamDB TLS 服务。
 
-  ```bash
-  env step_ca=$PWD/ca docker compose -f docker-compose-tls.yaml up --build
-  ```
+   ```bash
+   env step_ca=$PWD/ca docker compose -f docker-compose-tls.yaml up --build
+   ```
 
 4. 进入 HStreamDB 容器并创建名为 `mqtt_connect` 和 `mqtt_message` 的两个 Stream。
-    :::tip TLS 连接命令行选项
-    类似于 HStreamDB TCP 服务，此处仅需为命令行增加 `--tls-ca [CA_PATH]` 选项。
-    需要注意的是，如需在节点 `quickstart-tls-hserver-1` 中执行命令，需要额外指定选项 `--port 6572` 以保证与 docker-compose 文件中指定的端口一致。
-    :::
 
-  <details>
-  <summary><b>进入 HStreamDB 创建 Stream 的命令</b></summary>
+   ::: tip TLS 连接命令行选项
 
-```bash
-$ docker container exec -it quickstart-tls-hserver-0 bash
-# Create Stream `mqtt_connect`
-root@75c9351cbb38:/# hstream --tls-ca /data/server/certs/root_ca.crt stream create mqtt_connect
-+--------------+---------+----------------+-------------+
-| Stream Name  | Replica | Retention Time | Shard Count |
-+--------------+---------+----------------+-------------+
-| mqtt_connect | 1       | 604800 seconds | 1           |
-+--------------+---------+----------------+-------------+
-# Create Stream `mqtt_message`
-root@75c9351cbb38:/# hstream --tls-ca /data/server/certs/root_ca.crt stream create mqtt_message
-+--------------+---------+----------------+-------------+
-| Stream Name  | Replica | Retention Time | Shard Count |
-+--------------+---------+----------------+-------------+
-| mqtt_message | 1       | 604800 seconds | 1           |
-+--------------+---------+----------------+-------------+
-# List all Streams
-root@75c9351cbb38:/# hstream --tls-ca /data/server/certs/root_ca.crt stream list
-+--------------+---------+----------------+-------------+
-| Stream Name  | Replica | Retention Time | Shard Count |
-+--------------+---------+----------------+-------------+
-| mqtt_message | 1       | 604800 seconds | 1           |
-+--------------+---------+----------------+-------------+
-| mqtt_connect | 1       | 604800 seconds | 1           |
-+--------------+---------+----------------+-------------+
-```
+   类似于 HStreamDB TCP 服务，此处仅需为命令行增加 `--tls-ca [CA_PATH]` 选项。
+   需要注意的是，如需在节点 `quickstart-tls-hserver-1` 中执行命令，需要额外指定选项 `--port 6572` 以保证与 docker-compose 文件中指定的端口一致。
 
-</details>
+   :::
+
+   ```bash
+   $ docker container exec -it quickstart-tls-hserver-0 bash
+   # Create Stream `mqtt_connect`
+   root@75c9351cbb38:/# hstream --tls-ca /data/server/certs/root_ca.crt stream create mqtt_connect
+   +--------------+---------+----------------+-------------+
+   | Stream Name  | Replica | Retention Time | Shard Count |
+   +--------------+---------+----------------+-------------+
+   | mqtt_connect | 1       | 604800 seconds | 1           |
+   +--------------+---------+----------------+-------------+
+   # Create Stream `mqtt_message`
+   root@75c9351cbb38:/# hstream --tls-ca /data/server/certs/root_ca.crt stream create mqtt_message
+   +--------------+---------+----------------+-------------+
+   | Stream Name  | Replica | Retention Time | Shard Count |
+   +--------------+---------+----------------+-------------+
+   | mqtt_message | 1       | 604800 seconds | 1           |
+   +--------------+---------+----------------+-------------+
+   # List all Streams
+   root@75c9351cbb38:/# hstream --tls-ca /data/server/certs/root_ca.crt stream list
+   +--------------+---------+----------------+-------------+
+   | Stream Name  | Replica | Retention Time | Shard Count |
+   +--------------+---------+----------------+-------------+
+   | mqtt_message | 1       | 604800 seconds | 1           |
+   +--------------+---------+----------------+-------------+
+   | mqtt_connect | 1       | 604800 seconds | 1           |
+   +--------------+---------+----------------+-------------+
+   ```
+
+::::
+
+:::::
 
 ## 创建连接器
 
@@ -536,20 +536,20 @@ root@75c9351cbb38:/# hstream --tls-ca /data/server/certs/root_ca.crt stream list
 
 3. 输入规则 ID `my_rule`。在 **SQL 编辑器**中输入规则以实现对指定主题消息的转发。例如将 `t/#` 主题的 MQTT 消息存储至 HStreamDB，输入以下 SQL 语句：
    注意：如果您希望制定自己的 SQL 语句，需要确保规则选出的字段（SELECT 部分）包含之后配置的 HStream Record 模板中用到的所有变量。
-   
+
    ```sql
     SELECT
       *
     FROM
       "t/#"
    ```
-   
+
    ::: tip
 
    如果您初次使用 SQL，可以点击 **SQL 示例** 和**启用调试**来学习和测试规则 SQL 的结果。
 
    :::
-   
+
 4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。在**动作类型**下拉框中选择 `HStreamDB`，保持**动作**下拉框为默认的`创建动作`选项，您也可以选择一个之前已经创建好的 HStreamDB Sink。此处我们创建一个全新的 Sink 并添加到规则中。
 
 5. 输入 Sink 名称，名称应为大/小写字母和数字的组合。
@@ -561,7 +561,7 @@ root@75c9351cbb38:/# hstream --tls-ca /data/server/certs/root_ca.crt stream list
    ```json
    {"id": ${id}, "topic": "${topic}", "qos": ${qos}, "payload": "${payload}"}
    ```
-   
+
 8. 高级配置（可选），根据情况配置同步/异步模式，队列等参数，详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
 
 9. 点击**添加**按钮完成 Sink 创建，新建的 Sink 将被添加到**动作输出**列表中。

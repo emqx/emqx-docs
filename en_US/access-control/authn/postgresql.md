@@ -4,7 +4,7 @@ EMQX supports integrating with PostgreSQL for password authentication.
 
 ::: tip
 
-- Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
+Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
 
 :::
 
@@ -60,36 +60,34 @@ query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username 
 
 You can use EMQX Dashboard to configure how to use PostgreSQL for password authentication. 
 
-On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **Password-Based** as **Mechanism**, and **PostgreSQL** as **Backend**, this will lead us to the **Configuration** tab, as shown below. 
+In EMQX Dashboard, click **Access Control** -> **Authentication** from the left navigation menu. On the **Authentication** page, click **Create** at the top right corner. Click to select **Password-Based** as **Mechanism**, and **PostgreSQL** as **Backend** to go to the **Configuration** tab, as shown below. 
 
 <img src="./assets/authn-postgresql.png" alt="Authentication with postgresql" style="zoom:67%;" />
 
-Follow the instruction below on how to configure:
+Follow the instructions below on how to configure the authentication:
 
-**Connect**: Fill in the information needed to connect PostgreSQL.
+**Connect**: Enter the information for connecting to PostgreSQL.
 
 - **Server**: Specify the server address that EMQX is to connect (`host:port`).
 - **Database**: PostgreSQL database name.
 - **Username** (optional): Specify user name. 
 - **Password** (optional): Specify user password. 
+- **Disable Prepared Statements** (optional): If you are using a PostgreSQL service that does not support prepared statements, such as PGBouncer in transaction mode or Supabase, enable this option. This option was introduced in EMQX v5.7.1.
+- **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
 
-**TLS Configuration**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
+- **Pool size** (optional): Specify the number of concurrent connections from an EMQX node to a PostgreSQL server. Default: `8`. 
 
-**Connection Configuration**: Set the concurrent connections.
+**Authentication configuration**: Configure settings related to authentication:
 
-- **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to PostgreSQL. Default: **8**. 
-
-**Authentication configuration**: Fill in the authentication-related settings:
-
-- **Password Hash**: Select the Hash function for storing the password in the database, for example, plain, md5, sha, bcrypt, pbkdf2. 
-  - If **plain**, **md5**, **sha**, **sha256** or **sha512** are selected, we also need to configure:
-    - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. You can keep the default value unless you are migrating user credentials from external storage into EMQX built-in database. Note: If **plain** is selected, the **Salt Position** should be **disable**. 
-  - If **bcrypt** is selected, you also need to configure:
-    - **Salt Rounds**: Specify the calculation times of Hush function (2^Salt Rounds). Default value: **10**; Value range **4~31**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by 1 doubles the necessary time. 
-  - If **pkbdf2** is selected, we also need to configure:
-    - **Pseudorandom Function**: Specify the Hush functions to generate the key, such as sha256. 
-    - **Iteration Count**: Specify the iteration times; Default: **4096**.
-    - **Derived Key Length**: Specify the length of the generated password. You can leave this field blank, then the key length will be determined by the pseudorandom function you selected.
+- **Password Hash**: Select the hash function for storing passwords in the database. Options include `plain`, `md5`, `sha`, `bcrypt`, or `pbkdf2`. Additional configuration depends on your selected function:
+  - For `plain`, `md5`, `sha`, `sha256`, or `sha512`:
+    - **Salt Position**: Specify how salt (random data) should be added to the password. Options are `suffix`, `prefix`, or `disable`. Keep the default value unless you migrate user credentials from external storage into the EMQX built-in database. Note: For `plain`, the **Salt Position** should be set to `disable`.
+  - For `bcrypt`:
+    - **Salt Rounds**: Define the number of times the hash function is applied, represented as 2^Salt Rounds, also known as the "cost factor". The default is `10`, with a range of `5` to `10`. A higher setting is recommended for increased security. Note: Increasing the cost factor by 1 doubles the necessary time for authentication.
+  - For `pkbdf2`:
+    - **Pseudorandom Function**: Select the hash function used for key generation, such as `sha256`.
+    - **Iteration Count**: Indicate the number of hash iterations. Default:  `4096`.
+    - **Derived Key Length**: Set the desired length of the generated password. This field can be left blank, in which case the key length will default to the output of the selected pseudorandom function.
 - **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
 
 After you finish the settings, click **Create**.

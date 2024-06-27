@@ -77,10 +77,13 @@ CREATE TABLE emqx_messages (
   id INT AUTO_INCREMENT PRIMARY KEY,
   clientid VARCHAR(255),
   topic VARCHAR(255),
-  payload BLOB,
+  payload TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
   ```
+
+**注意**: 如果你需要使用 payload 来存储二进制数据，则应将其声明为 `BLOB`
+
 
 数据表 `emqx_client_events` 存储上下线的客户端 ID、事件类型以及事件发生时间：
 

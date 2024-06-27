@@ -30,6 +30,7 @@ The data that EMQX supports for import and export includes:
   - PSK authentication data
   - Authorization rules
   - Blacklist data
+  - Retained messages
 - SSL/TLS certificates stored in the EMQX data directory (`node.data_dir`)
 - Authorization acl.conf file stored in the EMQX data directory
 
@@ -37,6 +38,7 @@ The data that EMQX supports for import and export includes:
 
 1. The exported file only includes SSL/TLS certificates and acl.conf file stored in the EMQX data directory. If there are any certificates or acl.conf files located outside the data directory, manually copy them to the appropriate locations before importing data to ensure completeness and correctness.
 2. The exported file name format is `emqx-export-YYYY-MM-DD-HH-mm-ss.sss.tar.gz`, and the export directory is `<EMQX data directory>/backup`.
+3. Starting from EMQX v5.7.1, even if the storage method of retained messages is configured as ram (memory), it will also be backed up.
 
 :::
 

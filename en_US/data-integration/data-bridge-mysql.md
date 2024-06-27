@@ -78,10 +78,13 @@ use emqx_data;
      id INT AUTO_INCREMENT PRIMARY KEY,
      clientid VARCHAR(255),
      topic VARCHAR(255),
-     payload BLOB,
+     payload TEXT,
      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
    );
    ```
+
+**NOTE**: If you need a binary payload, you should declare it as "BLOB"
+
 
 2. Use the following SQL statements to create data table `emqx_client_events` in MySQL database for storing the client ID, event type, and creation time of every event.
 
