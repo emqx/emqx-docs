@@ -154,7 +154,7 @@ password_hash_algorithm {
 }
 ```
 
-Note that the performance of different hashing algorithms may vary significantly, so use your discretion. For reference, here are the average runtimes achieved after running each hashing algorithm 100 times on a 4-core 8GB machine:
+Note that there can be large performance differences between different hashing algorithms, so use your discretion. For reference, here are the average runtimes achieved after running each hashing algorithm 100 times on a 4-core 8GB machine:
 
 ![](./assets/hash-compare.png)
 
