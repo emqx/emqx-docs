@@ -136,11 +136,11 @@ password_hash_algorithm {
   name = pbkdf2
   mac_fun = sha256          # md4, md5, ripemd160, sha, sha224, sha384, sha512
   iterations = 4096
-  dk_length = 256           # optional
+  dk_length = 32           # optional, Unit: Byte
 }
 ```
 
-注意，不同散列算法之间的性能可能存在较大差异，请酌情选择。作为参考，以下是在 4 核 8GB 的机器中将各散列算法运行 100 次后取得的平均运行时间：
+注意，不同散列算法之间可能存在较大的性能差异，请酌情选择。作为参考，以下是在 4 核 8GB 的机器中将各散列算法运行 100 次后取得的平均运行时间：
 
 ![](./assets/hash-compare.png)
 
