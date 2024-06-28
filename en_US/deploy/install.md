@@ -15,67 +15,6 @@ This chapter also covers how to migrate from EMQX 4.4 to EMQX 5.1.
 
 {% endemqxce %}
 
-## Installation Environment
-
-The Erlang VM powering EMQX relies on system locale settings to enable Unicode support for various functionalities, including [filenames](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#unicode-filenames) and [terminal IO](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#the-interactive-shell) in interactive Erlang shells.
-
-If you use the Linux operating system, it is recommended to make sure that UTF-8 locale is enabled in the system environment before starting EMQX. Click the tabs to see how to enable the UTF-8 locale on different platforms:
-
-:::: tabs
-
-::: tab Amazon Linux
-
-Enable the UTF-8 locale with [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html#amazon-linux-cloud-init) configuration:
-
-```bash
-cat <<EOF | sudo tee /etc/cloud/cloud.cfg.d/99_locale.cfg
-#cloud-config
-locale: C.utf8
-EOF
-```
-
-:::
-
-::: tab CentOS
-
-It is usually enabled by `localectl` under systemd:
-
-```bash
-sudo localectl set-locale LANG=C.UTF-8
-```
-
-:::
-
-::: tab Debian
-
-Enable the UTF-8 locale in two ways:
-
-- It is usually enabled by [`localectl`](https://www.freedesktop.org/software/systemd/man/localectl.html) under systemd:
-
-  ```bash
-  sudo localectl set-locale LANG=C.UTF-8
-  ```
-
-- Otherwise, it can be enabled with [`update-locale`](https://manpages.debian.org/buster/locales/update-locale.8.en.html).
-
-  ```bash
-  sudo update-locale LANG=C.UTF-8
-  ```
-
-:::
-
-::: tab Ubuntu
-
-Enable the UTF-8 locale with [`update-locale`](https://manpages.ubuntu.com/manpages/jammy/man8/update-locale.8.html):
-
-```bash
-sudo update-locale LANG=C.UTF-8
-```
-
-:::
-
-::::
-
 ## Download
 
 {% emqxce %}
@@ -145,6 +84,69 @@ Below are hardware specifications for running EMQX with simple workloads, suppor
 In production environments, you can use the [Server Estimate](https://www.emqx.com/en/server-estimate) calculator to calculate the recommended hardware specification under various maximum connections and message throughput.
 
 ::: -->
+
+## Installation Environment
+
+The Erlang VM powering EMQX relies on system locale settings to enable Unicode support for various functionalities, including [filenames](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#unicode-filenames) and [terminal IO](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#the-interactive-shell) in interactive Erlang shells.
+
+If you use the Linux operating system, it is recommended to make sure that UTF-8 locale is enabled in the system environment before starting EMQX. Click the tabs to see how to enable the UTF-8 locale on different platforms:
+
+:::: tabs
+
+::: tab Amazon Linux
+
+Enable the UTF-8 locale with [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html#amazon-linux-cloud-init) configuration:
+
+```bash
+cat <<EOF | sudo tee /etc/cloud/cloud.cfg.d/99_locale.cfg
+#cloud-config
+locale: C.utf8
+EOF
+```
+
+:::
+
+::: tab CentOS
+
+It is usually enabled by `localectl` under systemd:
+
+```bash
+sudo localectl set-locale LANG=C.UTF-8
+```
+
+:::
+
+::: tab Debian
+
+Enable the UTF-8 locale in two ways:
+
+- It is usually enabled by [`localectl`](https://www.freedesktop.org/software/systemd/man/localectl.html) under systemd:
+
+  ```bash
+  sudo localectl set-locale LANG=C.UTF-8
+  ```
+
+- Otherwise, it can be enabled with [`update-locale`](https://manpages.debian.org/buster/locales/update-locale.8.en.html).
+
+  ```bash
+  sudo update-locale LANG=C.UTF-8
+  ```
+
+:::
+
+::: tab Ubuntu
+
+Enable the UTF-8 locale with [`update-locale`](https://manpages.ubuntu.com/manpages/jammy/man8/update-locale.8.html):
+
+```bash
+sudo update-locale LANG=C.UTF-8
+```
+
+:::
+
+::::
+
+<!-- TODO Port List -->
 
 ## Files and Directories
 
