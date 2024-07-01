@@ -146,7 +146,25 @@ sudo update-locale LANG=C.UTF-8
 
 ::::
 
-<!-- TODO Port List -->
+## Port Usage
+
+EMQX uses the following ports by default. Ensure these ports are not occupied by other applications, and open the firewall as needed to ensure EMQX runs properly.
+
+| Port  | Protocol | Description                                                  |
+| ----- | -------- | ------------------------------------------------------------ |
+| 1883  | TCP      | MQTT over TCP listener port, mainly used for unencrypted MQTT connections. |
+| 8883  | TCP      | MQTT over SSL/TLS listener port for encrypted MQTT connections. |
+| 8083  | TCP      | MQTT over WebSocket listener port for MQTT communication over WebSocket. |
+| 8084  | TCP      | MQTT over WSS (WebSocket over SSL) listener port for encrypted WebSocket connections. |
+| 18083 | HTTP     | EMQX Dashboard and REST API port for management console and API interfaces. |
+| 4370  | TCP      | Erlang distribution port, the actual port may be `BasePort (4370) + Offset` depending on the node name. |
+| 5370  | TCP      | Cluster RPC port (5369 in Docker environment), the actual port may be `BasePort (5370) + Offset` depending on the node name. |
+
+::: tip Note
+
+Even if a cluster is not formed, EMQX will still listen on ports 4370 and 5370. These two ports are fixed and cannot be modified. The Offset is determined by the numeric suffix of the Name part in the node name (`Name@Host`). If there is no numeric suffix, the default is 0. For more information, refer to [Port Mapping](./cluster/security.md#port-mapping).
+
+:::
 
 ## Files and Directories
 
