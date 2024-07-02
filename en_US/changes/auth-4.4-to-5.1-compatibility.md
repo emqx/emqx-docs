@@ -70,7 +70,7 @@ authentication {
 ### Built-in Database (Enhanced Authentication)
 
 - SHA1 hashing support used in EMQX 4.4 is no longer available. Use the `algorithm` parameter to choose between `sha512'`and `sha256` algorithms.
-- `iteration_count` can now be configured to specify the calculation times of Hush function (4096 was implicitly used in EMQX 4.4).
+- `iteration_count` can now be configured to specify the calculation times of hash function (4096 was implicitly used in EMQX 4.4).
 
 #### Example
 
