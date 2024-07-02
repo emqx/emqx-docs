@@ -1,10 +1,10 @@
-# Configure and Manage Durable Sessions
+# Configure and Manage Durable Session
 
-This document provides references and instructions for configuring, managing, and optimizing durable sessions within EMQX, including sessions and storage configuration.
+This document provides references and instructions for configuring, managing, and optimizing the [MQTT Durable Session](./durability_introduction.md) feature within EMQX, including sessions and storage configuration.
 
 ## Configuration Parameters
 
-Configuration for durable sessions is divided into 2 main categories:
+MQTT Durable Session configuration is divided into 2 main categories:
 
 - `durable_sessions`: Contains settings related to MQTT clients' sessions, including how they consume data from durable storage and data retention parameters.
 - `durable_storage` Manages the settings of the durable storage system holding the MQTT message data.

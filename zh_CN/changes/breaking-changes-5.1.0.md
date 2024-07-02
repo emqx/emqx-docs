@@ -148,10 +148,10 @@ API 经历了重大变化，其中一些 API 已经兼容。以下是常用 API 
 | emqx_sasl        | AuthN/AuthZ - MQTT 5 增强认证                     |
 | emqx_auth_ldap   | -                                                 |
 | emqx_rule_engine | 数据集成                                          |
-| emqx_bridge_mqtt | Sink - MQTT 桥接                              |
-| emqx_web_hook    | Sink - HTTP 服务                              |
+| emqx_bridge_mqtt | Sink - MQTT 桥接                                  |
+| emqx_web_hook    | Sink - HTTP 服务                                  |
 | emqx_coap        | CoAP 网关                                         |
-| emqx_dashboard   | 仪表板                                            |
+| emqx_dashboard   | Dashboard                                         |
 | emqx_exhook      | ExHook                                            |
 | emqx_exproto     | ExProto 网关                                      |
 | emqx_lwm2m       | LwM2M 网关                                        |

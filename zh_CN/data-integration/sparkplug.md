@@ -143,7 +143,7 @@ from t
 
 您可以使用 MQTTX 客户端工具模拟一个 MQTT 客户端，将 Sparkplug B 消息发布到主题 `my/sparkplug/topic`。然后，您可以验证该消息是否以 JSON 格式转换并转发到主题 `intresting_counters/counter1_run_updates`：
 
-1. 打开 MQTTX 客户端桌面版并连接到 EMQX 代理。有关使用 MQTTX 的详细信息，请参阅 [MQTTX](../messaging/publish-and-subscribe.md/#mqttx-client)。
+1. 打开 MQTTX 客户端桌面版并连接到 EMQX。有关使用 MQTTX 的详细信息，请参阅 [MQTTX](../messaging/publish-and-subscribe.md/#mqttx-client)。
 
 2. 创建新的订阅并订阅主题 `intresting_counters/counter1_run_updates`。
 
