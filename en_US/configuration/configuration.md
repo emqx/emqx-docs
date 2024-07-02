@@ -500,7 +500,7 @@ Below are the functions that can be used in the expressions:
 
 - **String functions**:
   - [String Operation Functions](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
-  - A new function any_to_string/1 is also added to convert any intermediate non-string value to a string.
+  - A new function `any_to_string/1` is also added to convert any intermediate non-string value to a string.
 - **Array functions**: [nth/2](../data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
 - **Random functions**: rand_str, rand_int
 - **Schema-less encode/decode functions**:

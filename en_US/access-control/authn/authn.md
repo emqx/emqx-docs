@@ -99,8 +99,6 @@ The current authenticator will also be skipped when the authenticator is in a di
 
 :::
 
-
-
 ![](./assets/authn-chain.png)
 
 ### Use Case
@@ -152,9 +150,13 @@ password_hash_algorithm {
   name = pbkdf2
   mac_fun = sha256          # md4, md5, ripemd160, sha, sha224, sha384, sha512
   iterations = 4096
-  dk_length = 256           # optional
+  dk_length = 32           # optional, Unit: Byte
 }
 ```
+
+Note that there can be large performance differences between different hashing algorithms, so use your discretion. For reference, here are the average runtimes achieved after running each hashing algorithm 100 times on a 4-core 8GB machine:
+
+![](./assets/hash-compare.png)
 
 ## Authentication Placeholders
 
