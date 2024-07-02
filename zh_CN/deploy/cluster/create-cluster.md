@@ -431,13 +431,13 @@ $ etcdctl ls /emqxcl/emqxcl --recursive
 
 如果你希望自行部署和管理 EMQX，依然可以通过 Kubernetes API 进行节点发现和自动集群。如希望使用此功能，需要先为 EMQX Pod 配置 RBAC，允许 EMQX 通过 endpoints 资源从 Kubernetes APIServer 获取集群节点信息，具体配置步骤，请参考 [使用 RBAC 鉴权](https://kubernetes.io/zh-cn/docs/reference/access-authn-authz/rbac/)。
 
-您需要为所有节点指定 Kubernetes API 服务器，EMQX 在 K8s 上的服务名，地址类型:
+您需要为所有节点指定 Kubernetes API 服务器，EMQX 在 k8s 上的服务名，地址类型:
 
 <!-- TODO 补充几个参数的作用介绍 -->
 
 ```bash
 cluster {
-    discovery_strategy = K8s
+    discovery_strategy = k8s
     K8s {
         apiserver = "http://10.110.111.204:8080"
         service_name = emqx
@@ -450,7 +450,7 @@ cluster {
 
 其中：
 
-- `discovery_strategy` 是节点发现策略，设置为 `K8s`。
+- `discovery_strategy` 是节点发现策略，设置为 `k8s`。
 - `cluster.K8s.apiserver` 是 Kubernetes API 端点 URL，默认值：`http://10.110.111.204:8080`。
 - `cluster.K8s.service_name` 是 EMQX 服务名称，默认值：`emqx`。
 - `cluster.K8s.address_type` 是连接发现节点的地址类型，默认值：`ip`，可选值：`ip`、`dns`、`hostname`。

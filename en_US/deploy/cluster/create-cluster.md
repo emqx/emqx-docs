@@ -444,7 +444,7 @@ To enable EMQX autocluster on Kubernetes, you can work with the `cluster.k8s` co
 
 ```bash
 cluster {
-    discovery_strategy = K8s
+    discovery_strategy = k8s
     K8s {
         apiserver = "http://10.110.111.204:8080"
         service_name = emqx
@@ -456,7 +456,7 @@ cluster {
 
 Where:
 
-- `discovery_strategy` is the node discovery strategy, set it to `K8s`
+- `discovery_strategy` is the node discovery strategy, set it to `k8s`
 - `cluster.K8s.apiserver` is the Kubernetes API endpoint URL, default: `http://10.110.111.204:8080`
 - `cluster.K8s.service_name` is the EMQX service name, default: `emqx`
 - `cluster.K8s.address_type` is the address type to connect the discovered nodes, default: `ip`, optional values: `ip`, `dns`, `hostname`
