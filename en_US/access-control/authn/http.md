@@ -16,6 +16,8 @@ The authentication process is similar to an HTTP API call where EMQX, as the req
 - The authentication result is marked by `result` in the body, option value: `allow`, `deny`, `ignore`.
 - Superuser is marked by `is_superuser` in the body, option value: `true`, `false`.
 - Starting from EMQX v5.7.0, you can set [client attributes](../../client-attributes/client-attributes.md) using the optional `client_attrs` field. Note that both keys and values must be strings.
+- Starting from EMQX v5.8.0, you can set an optional `acl` field in the response body to specify the permissions of the client. See [Access Control List (ACL)](./acl.md) for more information.
+- Starting from EMQX v5.8.0, you can set an optional `expire_at` field in the response body to specify the expiration time of the client's authenticity and force the client to disconnect hence get reauthenticated at reconnect. The value is a Unix timestamp in seconds.
 - The HTTP response status code `Status Code` should be `200` or `204`, the `4xx/5xx` status code returned will ignore the body and determine the result to be `ignore` and continue with the authentication chain.
 
 Example response:
@@ -26,12 +28,27 @@ Headers: Content-Type: application/json
 ...
 Body:
 {
-    "result": "allow", // options: "allow" | "deny" | "ignore"
+    "result": "allow", // "allow" | "deny" | "ignore"
     "is_superuser": true, // options: true | false, default value: false
-    "client_attrs": {
+    "client_attrs": { // optional (since v5.7.0)
         "role": "admin",
         "sn": "10c61f1a1f47"
     }
+    "expire_at": 1654254601, // optional (since v5.8.0)
+    "acl": // optional (since v5.8.0)
+    [
+        {
+            "permission": "allow",
+            "action": "subscribe",
+            "topic": "eq t/1/#",
+            "qos": [1]
+        },
+        {
+            "permission": "deny",
+            "action": "all",
+            "topic": "t/3"
+        }
+    ]
 }
 ```
 
