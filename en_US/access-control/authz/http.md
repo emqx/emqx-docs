@@ -1,5 +1,9 @@
 # Use HTTP Service
 
+::: tip Tip
+Starting from EMQX v5.8.0, the HTTP authenticator supports ACL rules in the response body. You are recommended to use the new format for better performance. For details, see [HTTP Authentication](../authn/http.md).
+:::
+
 EMQX supports the authorization based on the HTTP service. The user needs to build an external HTTP application as a data source by themselves. EMQX makes requests to the HTTP service and determines the authorization result based on the data returned by the HTTP API, thus achieving complex authorization logic.
 
 ::: tip Tip
@@ -61,7 +65,7 @@ In version 4.x, EMQX only used the status code returned by the HTTP API, while t
 
 :::
 
-::: tip 
+::: tip
 
 It is recommended to use the `POST` method. When using the `GET` method, some sensitive information may be exposed through HTTP server logs.
 
