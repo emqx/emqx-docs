@@ -679,10 +679,7 @@
       path: design/overview
       collapsed: true
       children:
-        - title_en: Clustering
-          title_cn: Clustering
-          lang: en
-          path: design/clustering
+        - design/clustering
         - design/inflight-window-and-message-queue
         - design/retransmission
       # - design/design
